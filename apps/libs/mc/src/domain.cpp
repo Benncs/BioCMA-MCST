@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cstddef>
+#include <iterator>
 #include <mc/domain.hpp>
 
 namespace MC
@@ -42,6 +43,18 @@ namespace MC
       this->_total_volume = other._total_volume;
     }
     return *this;
+  }
+
+
+  std::vector<size_t> ReactorDomain::getDistribution()
+  {
+    std::vector<size_t> distribution;
+    distribution.reserve(this->n_compartments());
+
+    std::transform(containers.begin(),containers.end(),std::back_inserter(distribution),[](auto&& cs){
+      return cs.n_cells;
+    });
+    return distribution;
   }
 
 } // namespace MC

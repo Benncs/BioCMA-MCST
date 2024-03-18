@@ -1,6 +1,8 @@
 #ifndef __MC_CONTAINER_STATE_HPP__
 #define __MC_CONTAINER_STATE_HPP__
 #include <cstddef>
+#include <span> 
+
 
 namespace MC
 {
@@ -9,6 +11,8 @@ namespace MC
     double volume;
     size_t n_cells;
     size_t id;
+
+    std::span<double const> concentrations;
   };
 } // namespace MC
 

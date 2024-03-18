@@ -1,53 +1,41 @@
-#include <messages/pmessage.hpp>
-#include <simulation/simulation.hpp>
+#include "common/execinfo.hpp"
 #include <common/common.hpp>
+#include <concepts>
+#include <cstddef>
 #include <flow_iterator.hpp>
 #include <iostream>
+#include <messages/pmessage.hpp>
 #include <mpi.h>
 #include <pinit.hpp>
+#include <simulation/simulation.hpp>
+#include <simulation/transport.hpp>
 #include <stdexcept>
 
-ExecInfo init_mpi(int argc, char **argv);
+#include <messages/init.hpp>
+
 SimulationParameters moc_cli(int argc, char **argv);
 
-void master_dispatch(ExecInfo &info, MPI_SIGNALS &&sign)
-{
+void host_process(ExecInfo &exec,
+                  Simulation::SimulationUnit &simulation,
+                  SimulationParameters &params,
+                  FlowIterator *_flow_handle);
 
-  // Send message to all other processes
-  for (size_t j = 1; j < info.n_rank; ++j)
-  {
-    MPI_Send(&sign, sizeof(sign), MPI_CHAR, j, 0, MPI_COMM_WORLD);
-  }
+void workers_process(ExecInfo &exec,
+                     Simulation::SimulationUnit &simulation,
+                     SimulationParameters &params);
 
-  // // Broadcast each element in args to all processes
-  // for (auto& arg : args) {
-  //     MPI_Bcast(&arg, 1, MPI_DOUBLE, 0, _comm);
-  // }
-}
+void sync_step(ExecInfo &exec, Simulation::SimulationUnit &simulation);
 
-void master_process(ExecInfo &exec,
-                    SimulationUnit &simulation,
-                    SimulationParameters &params,
-                    FlowIterator *_flow_handle);
-
-void slave_process(ExecInfo &exec,
-                   SimulationUnit &simulation,
-                   SimulationParameters &params);
-
-void sync_step(ExecInfo &exec, SimulationUnit &simulation);
+void sync_step_2(ExecInfo &exec, Simulation::SimulationUnit &simulation);
 
 int main(int argc, char **argv)
 {
 
-  auto exec_info = init_mpi(argc, argv);
-  srand(time(NULL) + exec_info.current_rank);
-
+  ExecInfo exec_info = init_mpi(argc, argv);
   SimulationParameters params = moc_cli(argc, argv);
 
   FlowIterator *_fd = nullptr;
   auto simulation = pinit(exec_info, params, &_fd);
-
-  test_common();
 
   if (exec_info.current_rank == 0)
   {
@@ -55,11 +43,11 @@ int main(int argc, char **argv)
     {
       throw std::runtime_error("Flow map are not loaded");
     }
-    master_process(exec_info, simulation, params, _fd);
+    host_process(exec_info, simulation, params, _fd);
   }
   else
   {
-    slave_process(exec_info, simulation, params);
+    workers_process(exec_info, simulation, params);
   }
 
   if (exec_info.current_rank == 0)
@@ -72,51 +60,66 @@ int main(int argc, char **argv)
   return 0;
 }
 
-ExecInfo init_mpi(int argc, char **argv)
-{
-  ExecInfo info;
-
-  int rank, size;
-
-  // Initialize MPI
-  MPI_Init(&argc, &argv);
-
-  // Get the rank of the current process
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
-  // Get the total number of processes
-  MPI_Comm_size(MPI_COMM_WORLD, &size);
-
-  info.current_rank = static_cast<size_t>(rank);
-  info.n_rank = static_cast<size_t>(size);
-
-  return info;
-}
-
-void master_process(ExecInfo &exec,
-                    SimulationUnit &simulation,
-                    SimulationParameters &params,
-                    FlowIterator *_flow_handle)
+void host_process(ExecInfo &exec,
+                  Simulation::SimulationUnit &simulation,
+                  SimulationParameters &params,
+                  FlowIterator *_flow_handle)
 {
   FlowInfo *f = _flow_handle->get();
+  auto dis = simulation.unit->domain.getDistribution();
+  for (auto &&i : dis)
+  {
+    std::cout << i << ", ";
+  }
+  std::cout << "----" << std::endl;
+
+  // size_t n_t = _flow_handle->totalSteps();
+  double d_t = params.d_t;
+  std::cout << simulation.getC() << std::endl;
 
   while (f != nullptr)
   {
-    // DO SOMETHING
-    master_dispatch(exec, MPI_SIGNALS::RUN);
-    simulation.cycle_process();
+
+    const auto mat_f = FlowmapToMat(f->flows.data(), f->flows.getN());
+    const auto mat_transition = Simulation::get_transition_matrix(mat_f);
+    host_dispatch(exec, MPI_SIGNALS::RUN, f->flows.data());
+
+    Simulation::MatFlow mf = {mat_f, mat_transition};
+    simulation.setFLows(&mf);
+    // TODO FIX UNIQUE PTR
+
+    simulation.cycle_process(d_t);
     _flow_handle->next(); // this could be done async ?
     sync_step(exec, simulation);
+
+    simulation.step(d_t);
+
+    sync_step_2(exec, simulation);
+
     f = _flow_handle->get();
   }
-  master_dispatch(exec, MPI_SIGNALS::STOP);
+  std::cout << simulation.getC() << std::endl;
+  dis = simulation.unit->domain.getDistribution();
+  size_t icc = 0;
+  for (auto &&i : dis)
+  {
+    std::cout << i << ", ";
+    icc += i;
+  }
+
+  std::cout << "---" << icc << std::endl;
+
+  host_dispatch(exec, MPI_SIGNALS::STOP);
   // DO SOMETHING
 }
 
-void slave_process(ExecInfo &exec,
-                   SimulationUnit &simulation,
-                   SimulationParameters &params)
+void workers_process(ExecInfo &exec,
+                     Simulation::SimulationUnit &simulation,
+                     SimulationParameters &params)
 {
+
+  double d_t = params.d_t;
+  size_t n_compartments = simulation.unit->domain.n_compartments();
   // DO SOMETHING
   MPI_Status status;
   while (true)
@@ -124,7 +127,6 @@ void slave_process(ExecInfo &exec,
     MPI_SIGNALS sign;
     MPI_Recv(
         &sign, sizeof(sign), MPI_CHAR, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-    int sender_rank = status.MPI_SOURCE;
 
     switch (sign)
     {
@@ -134,7 +136,28 @@ void slave_process(ExecInfo &exec,
     }
     case MPI_SIGNALS::RUN:
     {
-      simulation.cycle_process();
+      std::vector<double> flows;
+      size_t sf;
+      MPI_Recv(
+          &sf, 1, MPI_UNSIGNED_LONG, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+
+      flows.resize(sf);
+
+      MPI_Recv(flows.data(),
+               sf,
+               MPI_DOUBLE,
+               0,
+               MPI_ANY_TAG,
+               MPI_COMM_WORLD,
+               &status);
+
+      const auto mat_f = FlowmapToMat(flows, n_compartments);
+      const auto mat_transition = Simulation::get_transition_matrix(mat_f);
+
+      Simulation::MatFlow mf = {mat_f, mat_transition};
+      simulation.setFLows(&mf);
+
+      simulation.cycle_process(d_t);
       sync_step(exec, simulation);
       break;
     }
@@ -142,41 +165,41 @@ void slave_process(ExecInfo &exec,
   }
 }
 
-void sync_step(ExecInfo &exec, SimulationUnit &simulation)
+void sync_step(ExecInfo &exec, Simulation::SimulationUnit &simulation)
 {
   MPI_Barrier(MPI_COMM_WORLD);
 
-  std::vector<int> full_rng;
-  if (exec.current_rank == 0)
-  {
-    full_rng.resize(
-        exec.n_rank); // Assuming exec.n_rank is the number of MPI processes
-  }
-  // Gather the 'rng' integer from all processes into 'full_rng' on process 0
-  MPI_Gather(&simulation.rng,
-             1,
-             MPI_INT,
-             full_rng.data(),
-             1,
-             MPI_INT,
-             0,
-             MPI_COMM_WORLD);
-
-  // Broadcast 'full_rng' from rank 0 to all processes
-  MPI_Bcast(full_rng.data(), full_rng.size(), MPI_INT, 0, MPI_COMM_WORLD);
-
+  // std::vector<int> full_rng;
   // if (exec.current_rank == 0)
   // {
-  //   for (auto i : full_rng)
-  //   {
-  //     std::cout << i << std::endl;
-  //   }
+  //   full_rng.resize(
+  //       exec.n_rank); // Assuming exec.n_rank is the number of MPI processes
   // }
+  // // Gather the 'rng' integer from all processes into 'full_rng' on process 0
+  // MPI_Gather(&simulation.rng,
+  //            1,
+  //            MPI_INT,
+  //            full_rng.data(),
+  //            1,
+  //            MPI_INT,
+  //            0,
+  //            MPI_COMM_WORLD);
+
+  // // Broadcast 'full_rng' from rank 0 to all processes
+  // MPI_Bcast(full_rng.data(),
+  //           static_cast<int>(full_rng.size()),
+  //           MPI_INT,
+  //           0,
+  //           MPI_COMM_WORLD);
+}
+
+void sync_step_2(ExecInfo &exec, Simulation::SimulationUnit &simulation)
+{
 }
 
 SimulationParameters moc_cli(int argc, char **argv)
 {
   auto file = "/home/benjamin/Documenti/code/cpp/BIREM_Project/Example/"
               "Sanofi/CMA_export/35rpm_flowL.raw";
-  return {5'000'000, 10., {file}};
+  return {500'000, 4, 10., {file}};
 }

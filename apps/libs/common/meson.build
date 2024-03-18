@@ -5,12 +5,14 @@ common_sources = run_command('sh','-c', f'find @src_dir@ -type f -name *.cpp ').
 
 public_common  =  include_directories('public')
 
-incdirs = [public_common,'includes']
+incdirs = [public_common,'includes',eigen_includes]
+
+public_includes = [public_common,eigen_includes]
 
 common_lib = library(f'@project_name@_common', common_sources,include_directories :incdirs,pic:true)
 
 common_dependecy = declare_dependency(
-   include_directories : incdirs,
+   include_directories : public_includes,
    link_with : common_lib,
    sources : common_sources)
 

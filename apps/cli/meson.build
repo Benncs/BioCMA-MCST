@@ -21,20 +21,19 @@ cma_dep = cpp.find_library('cma_read_static', dirs:cma_lib_dir)
 
 
 
-
 mpi=dependency('mpi', language: 'cpp') 
 omp = dependency('openmp',language:'cpp')
 
-
+dep = [mpi, omp,cma_dep,mc_dependency,simu_dependency,common_dependecy,thread_dep]
 
 lib_app = static_library(f'@project_name@_cli_app',lib_sources,include_directories : [cma_public_dir,'./includes'],
-                            dependencies : [mpi, omp,cma_dep,mc_dependency,simu_dependency,common_dependecy])
+                            dependencies : dep)
 
 
 app_test_dependency  = declare_dependency(
    include_directories : [cma_public_dir,'./includes'], 
    link_with : lib_app,
-   dependencies:[mpi, omp,cma_dep,mc_dependency,simu_dependency,common_dependecy],
+   dependencies:dep,
    sources : lib_sources)
 
 app_cli = executable(f'@project_name@_cli_app',

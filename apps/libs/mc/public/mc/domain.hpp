@@ -10,6 +10,8 @@ namespace MC
   class ReactorDomain
   {
   public:
+    size_t id;
+
     ReactorDomain() = default;
     ReactorDomain(ReactorDomain &&other);
     ReactorDomain(NumberView volumes,
@@ -26,14 +28,42 @@ namespace MC
     }
 
     ReactorDomain &operator=(const ReactorDomain &other) = delete;
+    ReactorDomain &operator=(ReactorDomain &&other) noexcept;
 
-    double total_volume() const
+    decltype(auto) begin() const
+    {
+      return containers.begin();
+    }
+    decltype(auto) end() const
+    {
+      return containers.end();
+    }
+
+    decltype(auto) begin()
+    {
+      return containers.begin();
+    }
+    decltype(auto) end()
+    {
+      return containers.end();
+    }
+
+    inline auto n_compartments() const
+    {
+      return containers.size();
+    }
+
+    inline double total_volume() const
     {
       return this->_total_volume;
     }
-    ReactorDomain &operator=(ReactorDomain &&other) noexcept;
 
-    size_t id;
+    auto getNeighbors() const
+    {
+      return neighbors;
+    }
+
+    std::vector<size_t> getDistribution();
 
   private:
     double _total_volume;

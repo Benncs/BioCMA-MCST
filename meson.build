@@ -19,9 +19,22 @@ foreach opt: default_opts
 endforeach
 
 
-
+thread_dep = dependency('threads')
 cpp = meson.get_compiler('cpp')
-subdir('apps/libs')
-subdir('apps/cli')
+
+eigen_includes = include_directories('./subprojects/eigen/eigen')
+
+subdir('apps')
 
 run_command('sh','-c','ln -s builddir/compile_commands.json .')
+
+
+root = meson.project_source_root()
+run_target('run_shared',command:app_cli)
+run_target('bench_shared',command:['/bin/bash','-c', f'@root@/devutils/bench.sh '+ app_cli.full_path()])
+run_target('bench_distributed',command:['/bin/bash','-c', f'@root@/devutils/bench.sh mpiexec '+ app_cli.full_path()])
+
+
+run_target('run_distributed',command:['/bin/bash','-c','mpiexec '+ app_cli.full_path()])
+
+benchmark('bench_shared', find_program('./devutils/bench.sh'), args: [app_cli.full_path()],timeout:180)

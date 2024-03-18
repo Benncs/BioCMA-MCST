@@ -5,7 +5,7 @@
 #include <flow_iterator.hpp>
 #include <simulation/simulation.hpp>
 
-SimulationUnit
+Simulation::SimulationUnit
 pinit(ExecInfo &info, SimulationParameters &params, FlowIterator **it);
 
 #endif //__PROCESS_INIT_HPP__
