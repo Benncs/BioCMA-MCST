@@ -22,7 +22,7 @@ endforeach
 thread_dep = dependency('threads')
 cpp = meson.get_compiler('cpp')
 
-eigen_includes = include_directories('./subprojects/eigen/eigen')
+eigen_includes = include_directories('./subprojects/eigen')
 
 subdir('apps')
 
