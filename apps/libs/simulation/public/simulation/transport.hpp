@@ -15,6 +15,30 @@ namespace Simulation
   {
     Eigen::SparseMatrix<double> flows;
     Eigen::SparseMatrix<double> transition_matrix;
+
+    MatFlow()=default;
+    MatFlow(const Eigen::SparseMatrix<double> &&_flows,
+            const Eigen::SparseMatrix<double> &&_tm)
+    {
+      flows = std::move(_flows);
+      transition_matrix = std::move(_tm);
+    }
+
+    MatFlow &operator=(MatFlow &&rhs)
+    {
+      if (this != &rhs)
+      {
+        flows = std::move(rhs.flows);
+        transition_matrix = std::move(rhs.transition_matrix);
+      }
+      return *this;
+    }
+
+    MatFlow(MatFlow &&other)
+    {
+      flows = std::move(other.flows);
+      transition_matrix = std::move(other.transition_matrix);
+    }
   };
 
   using move_kernel =

@@ -11,7 +11,7 @@ ExecInfo init_mpi(int argc, char **argv);
 
 
 template <typename... Args>
-void host_dispatch(ExecInfo &info, MPI_SIGNALS &&sign, Args &&...args)
+void host_dispatch(const ExecInfo &info, MPI_SIGNALS &&sign, Args &&...args)
 {
 
   // Send message to all other processes

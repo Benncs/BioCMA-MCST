@@ -15,20 +15,20 @@ namespace MC
   ReactorDomain::ReactorDomain(NumberView volumes,
                                std::vector<std::vector<size_t>> &&_neighbors)
   {
-    double __total_volume = 0;
+    double totv = 0;
     std::transform(volumes.begin(),
                    volumes.end(),
                    std::back_inserter(this->containers),
-                   [&__total_volume, i = 0](auto &&v) mutable
+                   [&totv, i = 0](auto &&v) mutable
                    {
                      auto c = ContainerState();
                      c.volume = v;
                      c.id = i++;
-                     __total_volume += v;
+                     totv += v;
                      return c;
                    });
 
-    this->_total_volume = __total_volume;
+    this->_total_volume = totv;
 
     this->neighbors = std::move(_neighbors);
   }

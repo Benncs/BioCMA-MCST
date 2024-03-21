@@ -9,9 +9,9 @@ namespace MC
   {
   public:
     ParticlesContainer() = default;
-    ParticlesContainer(size_t capacity)
+    ParticlesContainer(size_t capacity,double weight)
     {
-      to_process = ParticlesList(capacity);
+      to_process = ParticlesList(capacity,weight);
     }
 
     ParticlesContainer(const ParticlesContainer &other) = delete;

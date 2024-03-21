@@ -17,12 +17,11 @@ message(lib_sources)
 cma_lib_dir = '/home/benjamin/Documenti/code/cpp/cma_read/builddir'
 cma_public_dir = '/home/benjamin/Documenti/code/cpp/cma_read/public'
 
-cma_dep = cpp.find_library('cma_read_static', dirs:cma_lib_dir)
+cma_dep = cpp.find_library('cma_read_shared', dirs:cma_lib_dir,static:false)
 
 
 
 mpi=dependency('mpi', language: 'cpp') 
-omp = dependency('openmp',language:'cpp')
 
 dep = [mpi, omp,cma_dep,mc_dependency,simu_dependency,common_dependecy,thread_dep]
 

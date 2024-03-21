@@ -1,5 +1,5 @@
 #include <mc/mcinit.hpp>
-
+#include <iostream>
 namespace MC
 {
 
@@ -14,7 +14,9 @@ namespace MC
       particle_per_process += remainder;
     }
 
-    return std::make_unique<ParticlesContainer>(particle_per_process);
+    size_t total_population = 10'000'000; // FIXME
+    double weight = static_cast<double>(n_particles)/static_cast<double>(total_population);
+    return std::make_unique<ParticlesContainer>(particle_per_process,1/weight);
   }
 
   std::unique_ptr<MonteCarloUnit>

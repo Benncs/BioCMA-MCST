@@ -16,7 +16,7 @@ concept IntegerType = requires(T n) {
 
 namespace MC
 {
-  template <IntegerType T> T intRand(const T &min, const T &max)
+  template <IntegerType T> T uniform_int_rand(const T &min, const T &max)
   {
     static thread_local std::mt19937 *generator_int = nullptr;
     if (!generator_int)
@@ -29,7 +29,7 @@ namespace MC
     return distribution(*generator_int);
   }
 
-  double doubleRand(const double &min, const double &max)
+  double uniform_double_rand(const double &min, const double &max)
   {
     static thread_local std::mt19937 *generator_double = nullptr;
     if (!generator_double)
@@ -40,6 +40,13 @@ namespace MC
     }
     std::uniform_real_distribution<> distribution(min, max);
     return distribution(*generator_double);
+  }
+
+  
+
+  double double_unfiform()
+  {
+    return uniform_double_rand(0., 1.);
   }
 
 } // namespace MC

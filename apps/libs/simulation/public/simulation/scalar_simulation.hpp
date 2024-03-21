@@ -14,9 +14,14 @@ namespace Simulation
     Eigen::MatrixXd C;
     Eigen::MatrixXd Mtot;
     Eigen::DiagonalMatrix<double, -1> V;
+
+    Eigen::MatrixXd biomass_contribution;
+    inline size_t n_species() const
+    {
+      return this->n_r;
+    }
     void performStep(double d_t,
-                     const Eigen::SparseMatrix<double> &m_transition,
-                     const Eigen::MatrixXd &phi_v);
+                     const Eigen::SparseMatrix<double> &m_transition);
 
   private:
     void updateC();

@@ -9,7 +9,7 @@ incdirs = [public_common,'includes',eigen_includes]
 
 public_includes = [public_common,eigen_includes]
 
-common_lib = library(f'@project_name@_common', common_sources,include_directories :incdirs,pic:true)
+common_lib = library(f'@project_name@_common', common_sources,include_directories :incdirs,pic:true,dependencies:[omp])
 
 common_dependecy = declare_dependency(
    include_directories : public_includes,

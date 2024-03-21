@@ -1,3 +1,4 @@
+#include "mc/particles/mcparticles.hpp"
 #include <mc/particles/particles_list.hpp>
 
 namespace MC
@@ -6,9 +7,9 @@ namespace MC
   // {
   // }
 
-  ParticlesList::ParticlesList(size_t capacity)
+  ParticlesList::ParticlesList(size_t capacity,double weight)
   {
-    this->data = std::vector<MC::Particles>(capacity);
+    this->data = std::vector<MC::Particles>(capacity,Particles(weight));
   }
 
   ParticlesList::ParticlesList(ParticlesList &&other) noexcept

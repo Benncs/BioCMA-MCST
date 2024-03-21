@@ -12,7 +12,7 @@ namespace MC
   public:
     ParticlesList() = default;
 
-    ParticlesList(size_t capacity);
+    ParticlesList(size_t capacity,double weight);
 
     ParticlesList(const ParticlesList &other) = delete;
     ParticlesList(ParticlesList &&other) noexcept;

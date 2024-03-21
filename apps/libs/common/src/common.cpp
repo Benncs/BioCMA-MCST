@@ -20,3 +20,4 @@ Eigen::SparseMatrix<double > FlowmapToMat(std::span<double>  data,size_t n_row){
   Eigen::Map<ColMajorDynMatrix<double>> matrix_view(data.data(), n_row, n_row); 
   return matrix_view.sparseView();
 }
+

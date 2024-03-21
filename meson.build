@@ -20,6 +20,8 @@ endforeach
 
 
 thread_dep = dependency('threads')
+omp = dependency('openmp',language:'cpp')
+
 cpp = meson.get_compiler('cpp')
 
 eigen_includes = include_directories('./subprojects/eigen')
