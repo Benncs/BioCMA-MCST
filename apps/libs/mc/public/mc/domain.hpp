@@ -58,7 +58,9 @@ namespace MC
       return this->_total_volume;
     }
 
-    auto getNeighbors() const
+    void setVolumes(std::span<double> volumesgas,std::span<double> volumesliq);
+
+    inline const std::vector<std::vector<size_t>>& getNeighbors() const
     {
       return neighbors;
     }

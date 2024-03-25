@@ -12,7 +12,7 @@ namespace Simulation
     this->C = std::move(other.C);
   }
 
-  ScalarSimulation::ScalarSimulation(size_t n_compartments, size_t n_species)
+  ScalarSimulation::ScalarSimulation(size_t n_compartments, size_t n_species):n_r(n_species),n_c(n_compartments)
   {
     
     V = Eigen::DiagonalMatrix<double, -1>(static_cast<int>(n_compartments));
@@ -27,24 +27,17 @@ namespace Simulation
     biomass_contribution = Eigen::MatrixXd(n_species, n_compartments);
     biomass_contribution.setZero();
 
-    for (size_t i = 0; i < n_compartments; ++i)
-    {
-      C.coeffRef(0, static_cast<int>(i)) = 150;
-    }
-
-    Mtot = C * V;
+    
   }
 
   void
   ScalarSimulation::performStep(double d_t,
-                                const Eigen::SparseMatrix<double> &m_transition)
+                                const Eigen::SparseMatrix<double> &m_transition,const Eigen::MatrixXd& transfer_g_l )
   {
     
+    Mtot = C * V;
     auto& Vinv = V.inverse();
-
-    Mtot = Mtot + d_t * (Mtot * Vinv * m_transition) + biomass_contribution*V;
-
-
+    Mtot = Mtot + d_t *( (Mtot * Vinv * m_transition) + biomass_contribution + transfer_g_l);
     C = Mtot * Vinv;
   }
 } // namespace Simulation

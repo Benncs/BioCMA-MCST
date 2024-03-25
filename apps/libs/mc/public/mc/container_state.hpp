@@ -8,7 +8,8 @@ namespace MC
 {
   struct ContainerState
   {
-    double volume;
+    double volume_liq;
+    double volume_gas;
     size_t n_cells;
     size_t id;
 

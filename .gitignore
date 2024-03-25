@@ -5,5 +5,12 @@
 compile_commands.json 
 
 
+#Benchs
+*.folder
+*.data*
+*.svg
 # Builds 
 builddir/
+
+# Python 
+__pycache__

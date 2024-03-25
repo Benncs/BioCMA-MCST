@@ -57,6 +57,7 @@ void SimpleModel::step(double d)
   *this->xi = *this->xi + *this->xi_dot * d;
 }
 
+
 void init_simple_model_(MC::Particles &p)
 {
   std::shared_ptr<SimpleModel> ptr = std::make_shared<SimpleModel>();
@@ -206,7 +207,10 @@ static double uptake_o2(std::shared_ptr<SimpleModel> &model, double O)
     double lhs = (O - Oi) / tau_m;
     return std::abs(rhs - lhs);
   };
-
+  if(O==0)
+  {
+    return 0;
+  }
   bool success = false;
   double Oi = naive_newton(get_phi, O, &success, 1e-5);
   if (Oi < 0 || !success)

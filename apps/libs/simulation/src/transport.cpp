@@ -9,41 +9,42 @@ namespace Simulation
                          int n_c,
                          const Simulation::MatFlow &flows)
   {
+    
+    //TODO CHECK STATIC 
+    static Eigen::MatrixXd probability_ij(n_c, n_c);
 
-    Eigen::MatrixXd probability_ij(n_c, n_c);
-
+    // Calculate probability_ij matrix
     for (int i = 0; i < n_c; ++i)
     {
+      double transition_coeff = flows.transition_matrix.coeff(i, i);
       for (int j = 0; j < n_c; ++j)
       {
-        if (flows.transition_matrix.coeff(i, i) == 0)
-        {
-          probability_ij(i, j) = 0.0; 
-        }
-        else
-        {
-          probability_ij.coeffRef(i, j) =
-              flows.flows.coeff(i, j) / (-flows.transition_matrix.coeff(i, i));
-        }
+        probability_ij(i, j) =
+            (transition_coeff == 0)
+                ? 0.0
+                : flows.flows.coeff(i, j) / (-transition_coeff);
       }
     }
-    auto n_neighbors = static_cast<int>(neighbors[0].size());
 
-    Eigen::MatrixXd cumulative_probability(n_c, n_neighbors);
+    // Calculate cumulative probability
+    static Eigen::MatrixXd cumulative_probability(n_c, neighbors[0].size());
 
-    for (int i_c = 0; i_c < static_cast<int>(neighbors.size()); ++i_c)
+    for (int i_c = 0; i_c < n_c; ++i_c)
     {
       double cumsum = 0;
-      for (int i_n = 0; i_n < n_neighbors; ++i_n)
+      for (size_t i_n = 0; i_n < neighbors[i_c].size(); ++i_n)
       {
-        cumsum +=
-            probability_ij.coeff(i_c, static_cast<int>(neighbors[i_c][i_n]));
-        cumulative_probability.coeffRef(i_c, i_n) = cumsum;
-      } 
-      //TO CHECK
-       if (cumsum != 0) {
-            cumulative_probability.row(i_c) /= cumsum;
+        int nn = static_cast<int>(neighbors[i_c][i_n]);
+        if (nn != i_c)
+        {
+          cumsum += probability_ij.coeff(i_c, nn);
+          cumulative_probability.coeffRef(i_c, i_n) = cumsum;
         }
+      }
+      if (cumsum != 0)
+      {
+        cumulative_probability.row(i_c) /= cumsum;
+      }
     }
 
     return cumulative_probability;
@@ -88,7 +89,6 @@ namespace Simulation
     auto cumulative_probability =
         get_CP(unit.domain.getNeighbors(), n_c, flows);
 
-
     auto &m_transition = flows.transition_matrix;
 
     auto move_kernel = [&unit,
@@ -101,10 +101,10 @@ namespace Simulation
     {
       const size_t i_compartment = particle.current_container;
       auto &current_container = unit.domain[i_compartment];
-      const auto i_neighbor = unit.domain.getNeighbors();
+      const auto &i_neighbor = unit.domain.getNeighbors();
       const int max_neighbor = static_cast<int>(i_neighbor[0].size());
 
-      const double &v_p = current_container.volume;
+      const double &v_p = current_container.volume_liq;
 
       const double leaving_flow = m_transition.coeff(
           static_cast<int>(i_compartment), static_cast<int>(i_compartment));
@@ -141,10 +141,10 @@ namespace Simulation
 
 #pragma omp atomic
         current_container.n_cells -= static_cast<size_t>(leaving);
-
-        particle.current_container = next;
 #pragma omp atomic
         unit.domain[next].n_cells += 1;
+
+        particle.current_container = next;
       }
     };
 

@@ -1,0 +1,1 @@
+option('use_dynamic_module', type: 'boolean', value: false)

@@ -7,40 +7,65 @@ app_sources = run_command('sh','-c', f'find @src_dir@ -type f -name *.cpp ').std
 
 lib_sources = []
 foreach item : app_sources
-  if item not in [f'@src_dir@/main.cpp']
+  if item not in [f'@src_dir@/main.cpp',f'@src_dir@/import_py.cpp']
     lib_sources += item
   endif
 endforeach
 
 message(lib_sources)
 
-cma_lib_dir = '/home/benjamin/Documenti/code/cpp/cma_read/builddir'
-cma_public_dir = '/home/benjamin/Documenti/code/cpp/cma_read/public'
-
-cma_dep = cpp.find_library('cma_read_shared', dirs:cma_lib_dir,static:false)
-
-
-
 mpi=dependency('mpi', language: 'cpp') 
 
+
+
 dep = [mpi, omp,cma_dep,mc_dependency,simu_dependency,common_dependecy,thread_dep]
-
-lib_app = static_library(f'@project_name@_cli_app',lib_sources,include_directories : [cma_public_dir,'./includes'],
-                            dependencies : dep)
+name = f'@project_name@_cli_app'
 
 
-app_test_dependency  = declare_dependency(
-   include_directories : [cma_public_dir,'./includes'], 
-   link_with : lib_app,
-   dependencies:dep,
-   sources : lib_sources)
+# Define static library and its dependency
+lib_app = static_library(name,
+                         lib_sources,
+                         include_directories: [cma_public_dir, './includes'],
+                         dependencies: dep,
+                         cpp_args: ['-UBIO_DYNAMIC_MODULE'])
 
-app_cli = executable(f'@project_name@_cli_app',
-                            f'@src_dir@/main.cpp',
-                            include_directories : [cma_public_dir,'./includes'],
-                            dependencies : [app_test_dependency])
-                            
+app_test_dependency = declare_dependency(
+    include_directories: [cma_public_dir, './includes'],
+    link_with: lib_app,
+    dependencies: dep,
+    sources: lib_sources
+)
 
+# Define executable
+app_cli = executable(name,
+                     f'@src_dir@/main.cpp',
+                     include_directories: [cma_public_dir, './includes'],
+                     dependencies: [app_test_dependency],
+                     cpp_args: ['-UBIO_DYNAMIC_MODULE'])
+
+# Conditional dynamic module build
+if get_option('use_dynamic_module')
+
+  name = name + '_dyn'
+
+  lib_app_dyn = static_library(name,
+                               lib_sources,
+                               include_directories: [cma_public_dir, './includes'],
+                               dependencies: dep)
+
+  app_test_dependency_dyn = declare_dependency(
+      include_directories: [cma_public_dir, './includes'],
+      link_with: lib_app_dyn,
+      dependencies: dep,
+      sources: lib_sources + [f'@src_dir@/import_py.cpp']
+  )
+
+  # Assuming py_dynamic_module is a valid dependency
+  app_cli_dyn = executable(name,
+                           f'@src_dir@/main.cpp',
+                           include_directories: [cma_public_dir, './includes'],
+                           dependencies: [app_test_dependency_dyn, py_dynamic_module])
+endif
 
 
 subdir('tests')

@@ -3,6 +3,8 @@
 #include <iterator>
 #include <mc/domain.hpp>
 
+#include <iostream>
+
 namespace MC
 {
   ReactorDomain::ReactorDomain(ReactorDomain &&other)
@@ -10,6 +12,17 @@ namespace MC
     if (this != &other)
     {
       this->containers = std::move(other.containers);
+    }
+  }
+  
+  void ReactorDomain::setVolumes(std::span<double> volumesgas,
+                                 std::span<double> volumesliq)
+  {
+// #pragma omp parallel for
+    for (size_t i_c = 0; i_c < volumesgas.size(); ++i_c)
+    {
+      containers[i_c].volume_liq = volumesliq[i_c];
+      containers[i_c].volume_gas = volumesgas[i_c];
     }
   }
   ReactorDomain::ReactorDomain(NumberView volumes,
@@ -22,7 +35,7 @@ namespace MC
                    [&totv, i = 0](auto &&v) mutable
                    {
                      auto c = ContainerState();
-                     c.volume = v;
+                     c.volume_liq = v;
                      c.id = i++;
                      totv += v;
                      return c;
@@ -45,15 +58,15 @@ namespace MC
     return *this;
   }
 
-
   std::vector<size_t> ReactorDomain::getDistribution()
   {
     std::vector<size_t> distribution;
     distribution.reserve(this->n_compartments());
 
-    std::transform(containers.begin(),containers.end(),std::back_inserter(distribution),[](auto&& cs){
-      return cs.n_cells;
-    });
+    std::transform(containers.begin(),
+                   containers.end(),
+                   std::back_inserter(distribution),
+                   [](auto &&cs) { return cs.n_cells; });
     return distribution;
   }
 

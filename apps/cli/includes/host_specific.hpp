@@ -13,7 +13,14 @@ void host_process(ExecInfo &exec,
                   SimulationParameters &params,
                   FlowIterator *_flow_handle);
 
-void computeLiquidFlow(const ExecInfo &info,Simulation::SimulationUnit &unit, FlowInfo &liq_flow);
+void computeLiquidFlow(const ExecInfo &info,
+                       Simulation::SimulationUnit &unit,
+                       FlowInfo &liq_flow);
 void computeGasFlow(Simulation::SimulationUnit &unit, FlowInfo &gas_flow);
+
+void main_loop(const SimulationParameters &params,
+               const ExecInfo &exec,
+               Simulation::SimulationUnit &simulation,
+               std::shared_ptr<FlowIterator> _flow_handle);
 
 #endif //__HOST_SPECIFIC_HPP__
