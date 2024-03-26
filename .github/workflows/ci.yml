@@ -10,7 +10,7 @@ on:
       - main  
 
 jobs:
-  get_dependencies_gcc:
+  test_gcc:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,35 +20,36 @@ jobs:
           submodules: recursive
           token: ${{ secrets.PAT_TOKEN }}
 
-      # - name: Setup Cpp (C++ / C)
-      #   uses: aminya/setup-cpp@v0.37.0
-      #   with:
-      #     compiler: 'gcc' 
-      #     ninja: true
-      #     meson: true
-      #     python: true
-      #     make: false
-      #     doxygen: false
+      - name: Setup Cpp (C++ / C)
+        uses: aminya/setup-cpp@v0.37.0
+        with:
+          compiler: 'gcc' 
+          ninja: true
+          meson: true
+          python: true
+          make: false
+          doxygen: false
 
-      # - name: Install Pybind11
-      #   run: pip install pybind11
+      - name: Install Pybind11
+        run: pip install pybind11
+
       - name: Configure and build project
         run: |
-          ls  
           cd subprojects/CMA_reader
+          mkdir build
+          meson setup build
+          meson compile -C build
+          cd ../
+      - name: Configure and build project
+        run: |
+            mkdir 
+            meson setup builddir/ --buildtype=release 
+            meson compile -C build
+      - name: Run unit tests
+        run: |
+            cd CMA_reader/build
+            meson test
 
-  # build_gcc_cma_read:
-  #   runs-on: ubuntu-latest
-  #   needs: get_dependencies_gcc
-  #   steps:
-      
-
-  #        cd subprojects/CMA_reader
-          
-  #        mkdir build
-   #       meson setup build
-    #      meson compile -C build
-     #     cd ../
 
   # build_app_gcc:
   #   runs-on: ubuntu-latest
