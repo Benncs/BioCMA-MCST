@@ -19,7 +19,8 @@ jobs:
         with:
           submodules: recursive
           token: ${{ secrets.PAT_TOKEN }}
-
+      - name: Initialize submodule
+        run: git submodule update --init
 
       - name: Setup Cpp (C++ / C)
         uses: aminya/setup-cpp@v0.37.0
@@ -40,7 +41,7 @@ jobs:
     steps:
       - name: Configure and build project
         run: |
-          cd ./subprojects/CMA_reader
+          cd subprojects/CMA_reader
           mkdir build
           meson setup build
           meson compile -C build
