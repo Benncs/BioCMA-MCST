@@ -51,7 +51,7 @@ jobs:
           make: false
           doxygen: false
       - name: Install Pybind11
-        run: pip install pybind11
+        run: pip install "pybind11[global]"
       - name: Configure and build project
         run: |
           mkdir builddir

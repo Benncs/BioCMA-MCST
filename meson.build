@@ -34,7 +34,7 @@ cpp = meson.get_compiler('cpp')
 eigen_includes = include_directories('./subprojects/eigen')
 
 
-cma_lib_dir = get_option('cma_lib_dir') # root+'/subprojects/CMA_reader/builddir' #get_option('cma_lib_dir')
+cma_lib_dir = root+'/subprojects/CMA_reader/builddir' #get_option('cma_lib_dir')
 cma_public_dir = './subprojects/CMA_reader/public' #get_option('cma_public_dir')
 
 cma_dep = cpp.find_library('cma_read_shared', dirs: cma_lib_dir, static: false)
