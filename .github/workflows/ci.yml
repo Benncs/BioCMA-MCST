@@ -45,7 +45,7 @@ jobs:
           mkdir builddir
           meson setup builddir/ --buildtype=release
           meson compile -C builddir
-      - name: Run unit tests for CMA_reader
+      - name: Run unit tests
         run: |
-          cd subprojects/CMA_reader/build
+          cd builddir
           meson test
