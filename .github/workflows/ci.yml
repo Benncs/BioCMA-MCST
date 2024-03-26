@@ -30,7 +30,7 @@ jobs:
       - name: Configure and build CMA_reader project
         run: |
           cd subprojects/CMA_reader
-          mkdir build
+          mkdir builddir
           meson setup build
           meson compile -C build
       - name: Configure and build project
