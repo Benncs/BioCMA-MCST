@@ -26,47 +26,18 @@ jobs:
           make: false
           doxygen: false
       - name: Install Pybind11
-        run: pip install "pybind11[global]"
+        run: 'pip install "pybind11[global]"'
       - name: Configure and build CMA_reader project
         run: |
           cd subprojects/CMA_reader
           mkdir build
           meson setup build
           meson compile -C build
-  build_release:
-    needs: dependency_gcc
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          token: '${{ secrets.PAT_TOKEN }}'
-      - name: Setup Cpp (C++ / C)
-        uses: aminya/setup-cpp@v0.37.0
-        with:
-          compiler: gcc
-          ninja: true
-          meson: true
-          python: true
-          make: false
-          doxygen: false
-      - name: Install Pybind11
-        run: pip install "pybind11[global]"
       - name: Configure and build project
         run: |
           mkdir builddir
           meson setup builddir/ --buildtype=release
           meson compile -C builddir
-  run_tests:
-    needs: build_release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          token: '${{ secrets.PAT_TOKEN }}'
       - name: Run unit tests for CMA_reader
         run: |
           cd subprojects/CMA_reader/build
