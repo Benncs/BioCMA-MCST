@@ -40,7 +40,8 @@ jobs:
       - name: Configure and build project
         run: |
           ls  
-          cd subprojects/CMA_reader
+
+  #        cd subprojects/CMA_reader
           
   #        mkdir build
    #       meson setup build
