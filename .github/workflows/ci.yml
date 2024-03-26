@@ -26,6 +26,11 @@ jobs:
           make: false
           doxygen: false
 
+      - name: OMP and MPI
+        run: sudo apt-get install -y libomp-dev libopenmpi-dev
+
+      - name: Install Python Development Packages
+        run:  sudo apt-get install -y python3-dev
       - name: Install Meson 
         run: pip3 install meson
       - name: Install Pybind11
