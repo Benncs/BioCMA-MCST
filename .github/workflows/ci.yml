@@ -8,7 +8,7 @@ name: CI
     branches:
       - main
 jobs:
-  test_gcc:
+  dependency_gcc:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -34,6 +34,7 @@ jobs:
           meson setup build
           meson compile -C build
   build_release:
+    needs: dependency_gcc
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -58,6 +59,7 @@ jobs:
           meson setup builddir/ --buildtype=release
           meson compile -C builddir
   run_tests:
+    needs: build_release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
