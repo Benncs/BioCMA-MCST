@@ -1,8 +1,8 @@
-[submodule "eigen"]
+[submodule "subprojects/eigen"]
 	path = subprojects/eigen
 	url = https://gitlab.com/libeigen/eigen.git
 
 
-[submodule "CMA_reader"]
+[submodule "subprojects/CMA_reader"]
 	path = subprojects/CMA_reader
 	url = git@github.com:Benncs/CMA_reader.git
