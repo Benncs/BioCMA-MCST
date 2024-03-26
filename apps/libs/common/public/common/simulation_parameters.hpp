@@ -12,6 +12,7 @@ struct SimulationParameters
   double final_time;
   std::vector<std::string> flow_files;
   double d_t = 0;
+  int n_threads =-1;
 };
 
 #endif //__SIMULATION_PARAMETERS_HPP__

@@ -13,6 +13,10 @@ default_options = {
 # Get default options based on the build type
 default_opts = default_options.get(build_type, [])
 
+if build_type == 'debug'
+    add_global_arguments('-DDEBUG', language : ['c','cpp'])
+endif
+
 # Add default options
 foreach opt: default_opts
     add_project_arguments(opt, language: 'c')

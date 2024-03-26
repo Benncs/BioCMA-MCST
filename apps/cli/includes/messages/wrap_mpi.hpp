@@ -3,6 +3,5 @@
 
 #include <messages/message_t.hpp>
 #include <messages/impl_op.hpp>
-#include <messages/init.hpp>
 
 #endif //__WRAP_MPI_HPP__

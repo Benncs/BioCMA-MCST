@@ -17,3 +17,4 @@ common_dependecy = declare_dependency(
    sources : common_sources)
 
 
+subdir('tests')

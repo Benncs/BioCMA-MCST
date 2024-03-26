@@ -4,6 +4,7 @@
 #include <any>
 #include <common/common.hpp>
 
+#include <exception>
 #include <host_specific.hpp>
 #include <memory>
 #include <siminit.hpp>
@@ -20,6 +21,7 @@
 #include <memory>
 #include <stdexcept>
 #include <sync.hpp>
+#include <rt_init.hpp>
 
 #ifdef BIO_DYNAMIC_MODULE
 #  include <import_py.hpp>
@@ -39,7 +41,7 @@ void workers_process(ExecInfo &exec,
 KModel load_model()
 {
 #ifdef BIO_DYNAMIC_MODULE
-  return get_python_module("modules.test");
+  return get_python_module("modules.simple_model");
 #else
   return simple_model;
 #endif
@@ -47,30 +49,45 @@ KModel load_model()
 
 int main(int argc, char **argv)
 {
+  try
+  {
 
 #ifdef BIO_DYNAMIC_MODULE
-  auto _module_handle = init_dynamic_module();
+    auto _module_handle = init_dynamic_module();
 #endif
 
-  ExecInfo exec_info = MPI_W::init_mpi(argc, argv);
+    SimulationParameters params = moc_cli(argc, argv);
+    ExecInfo exec_info = runtime_init(argc, argv,params);
 
-  SimulationParameters params = moc_cli(argc, argv);
+    
 
-  std::shared_ptr<FlowIterator> _fd = nullptr;
-  auto simulation = sim_init(exec_info, params, _fd, load_model());
+    std::shared_ptr<FlowIterator> _fd = nullptr;
+    auto simulation = sim_init(exec_info, params, _fd, load_model());
 
-  if (exec_info.current_rank == 0)
-  {
-    if (_fd == nullptr)
+    if (exec_info.current_rank == 0)
     {
-      throw std::runtime_error("Flow map are not loaded");
-    }
+      if (_fd == nullptr)
+      {
+        throw std::runtime_error("Flow map are not loaded");
+      }
 
-    host_process(exec_info, simulation, params, _fd);
+      host_process(exec_info, simulation, params, _fd);
+    }
+    else
+    {
+      workers_process(exec_info, simulation, params);
+    }
   }
-  else
+#ifdef DEBUG
+  catch (std::exception &e)
+
   {
-    workers_process(exec_info, simulation, params);
+    std::cerr << e.what() << std::endl;
+  }
+#endif
+  catch (...)
+  {
+    std::cerr << "Internal error" << std::endl;
   }
 
   return 0;
@@ -90,12 +107,11 @@ void show(Simulation::SimulationUnit &simulation)
       cs += p.weight * model->xi->mass;
     }
     std::cout << "mass: " << cs << std::endl;
-
-    std::cout << simulation.getCgas().row(1) << std::endl;
   }
   catch (...)
   {
   }
+  std::cout << simulation.getCgas().row(1) << std::endl;
 }
 
 void host_process(ExecInfo &exec,
@@ -148,5 +164,5 @@ void workers_process(ExecInfo &exec,
 SimulationParameters moc_cli(int argc, char **argv)
 {
   auto file = "/home/benjamin/Documenti/code/cpp/BIREM_generate/out/";
-  return {10, 3, 1., {file}};
+  return {1'000, 3, 10., {file}};
 }

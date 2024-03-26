@@ -56,7 +56,7 @@ if get_option('use_dynamic_module')
   app_test_dependency_dyn = declare_dependency(
       include_directories: [cma_public_dir, './includes'],
       link_with: lib_app_dyn,
-      dependencies: dep,
+      dependencies: [dep,py_dynamic_module],
       sources: lib_sources + [f'@src_dir@/import_py.cpp']
   )
 

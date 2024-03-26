@@ -11,4 +11,6 @@ Eigen::SparseMatrix<double>  FlowmapToMat(std::span<double> data,size_t n_row);
 
 void test_common();
 
+// #define TEST_ASSERT __asse
+
 #endif //__COMMON_EXPORT_HPP__

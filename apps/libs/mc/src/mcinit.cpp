@@ -1,5 +1,4 @@
 #include <mc/mcinit.hpp>
-#include <iostream>
 namespace MC
 {
 

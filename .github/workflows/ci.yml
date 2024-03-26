@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main  
+  pull_request:
+    branches:
+      - main  
+
+jobs:
+  build_gcc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up C++ and Python environments
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'  
+      - name: Install Pybind11
+        run: pip install pybind11
+
+      - name: Set up C++ build environment
+        uses: actions/setup-cpp@v2
+        with:
+          compiler: 'gcc' 
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y meson ninja-build
+
+      - name: Configure and build project
+        run: |
+          mkdir build
+          meson setup build
+          meson compile -C build
+  testing_gcc:
+    runs-on: ubuntu-latest
+    needs: build_gcc
+    steps:
+      - name: Run unit tests
+        run: |
+          cd build
+          meson test

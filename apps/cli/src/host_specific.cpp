@@ -4,7 +4,7 @@
 #include "simulation/transport.hpp"
 #include <common/common.hpp>
 #include <host_specific.hpp>
-#include <messages/init.hpp>
+#include <messages/wrap_mpi.hpp>
 #include <sync.hpp>
 #include <thread>
 

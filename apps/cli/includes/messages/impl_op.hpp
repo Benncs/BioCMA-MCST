@@ -1,6 +1,7 @@
 #ifndef __IMPL_MPI_OP_HPP__
 #define __IMPL_MPI_OP_HPP__
 
+#include <common/execinfo.hpp>
 #include <cstddef>
 #include <messages/message_t.hpp>
 #include <numeric>
@@ -181,6 +182,36 @@ namespace MPI_W
     }
 
     return total_data;
+  }
+
+  template <typename... Args>
+  void host_dispatch(const ExecInfo &info, SIGNALS &&sign, Args &&...args)
+  {
+
+    for (int j = 1; j < static_cast<int>(info.n_rank); ++j)
+    {
+      MPI_Send(&sign, sizeof(sign), MPI_CHAR, j, 0, MPI_COMM_WORLD);
+      (
+          [&]<typename T>(T &&arg)
+          {
+            size_t s;
+            void *buf;
+            if constexpr (std::is_same_v<std::decay_t<T>, std::span<double>>)
+            {
+              s = arg.size();
+              buf = arg.data();
+              MPI_Send(&s, 1, MPI_UNSIGNED_LONG, j, 0, MPI_COMM_WORLD);
+            }
+            else
+            {
+              s = sizeof(T);
+              buf = &arg;
+            }
+
+            MPI_Send(buf, s, MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
+          }(std::forward<Args>(args)),
+          ...);
+    }
   }
 
 } // namespace MPI_W

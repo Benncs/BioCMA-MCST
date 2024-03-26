@@ -14,8 +14,6 @@ namespace MC {
     return distribution(*generator_double);
   }
 
-  
-
   double double_unfiform()
   {
     return uniform_double_rand(0., 1.);
