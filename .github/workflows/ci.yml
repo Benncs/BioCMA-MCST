@@ -15,10 +15,11 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
           token: ${{ secrets.PAT_TOKEN }}
+
 
       - name: Setup Cpp (C++ / C)
         uses: aminya/setup-cpp@v0.37.0
