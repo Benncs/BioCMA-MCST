@@ -21,10 +21,13 @@ jobs:
         with:
           compiler: gcc
           ninja: true
-          meson: true
+          meson: false
           python: true
           make: false
           doxygen: false
+
+      - name: Install Meson 
+        run: pip3 install meson
       - name: Install Pybind11
         run: 'pip install "pybind11[global]"'
       - name: Configure and build CMA_reader project
