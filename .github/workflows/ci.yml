@@ -10,6 +10,8 @@ name: CI
 jobs:
   dependency_gcc:
     runs-on: ubuntu-latest
+    outputs:
+      RUNNER: ${{ runner.name }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,6 +27,7 @@ jobs:
           python: true
           make: false
           doxygen: false
+      
 
       - name: OMP and MPI
         run: sudo apt-get install -y libomp-dev libopenmpi-dev

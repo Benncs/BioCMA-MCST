@@ -16,7 +16,6 @@ message(lib_sources)
 
 mpi=dependency('mpi', language: 'cpp') 
 
-cma_public_dir = '../../subprojects/CMA_reader/public'
 
 dep = [mpi, omp,cma_dep,mc_dependency,simu_dependency,common_dependecy,thread_dep]
 name = f'@project_name@_cli_app'
@@ -25,12 +24,12 @@ name = f'@project_name@_cli_app'
 # Define static library and its dependency
 lib_app = static_library(name,
                          lib_sources,
-                         include_directories: [cma_public_dir, './includes'],
+                         include_directories: ['./includes'],
                          dependencies: dep,
                          cpp_args: ['-UBIO_DYNAMIC_MODULE'])
 
 app_test_dependency = declare_dependency(
-    include_directories: [cma_public_dir, './includes'],
+    include_directories: ['./includes'],
     link_with: lib_app,
     dependencies: dep,
     sources: lib_sources
@@ -39,7 +38,7 @@ app_test_dependency = declare_dependency(
 # Define executable
 app_cli = executable(name,
                      f'@src_dir@/main.cpp',
-                     include_directories: [cma_public_dir, './includes'],
+                     include_directories: [ './includes'],
                      dependencies: [app_test_dependency],
                      cpp_args: ['-UBIO_DYNAMIC_MODULE'])
 
@@ -50,11 +49,11 @@ if get_option('use_dynamic_module')
 
   lib_app_dyn = static_library(name,
                                lib_sources,
-                               include_directories: [cma_public_dir, './includes'],
+                               include_directories: [ './includes'],
                                dependencies: dep)
 
   app_test_dependency_dyn = declare_dependency(
-      include_directories: [cma_public_dir, './includes'],
+      include_directories: ['./includes'],
       link_with: lib_app_dyn,
       dependencies: [dep,py_dynamic_module],
       sources: lib_sources + [f'@src_dir@/import_py.cpp']
@@ -63,7 +62,7 @@ if get_option('use_dynamic_module')
   # Assuming py_dynamic_module is a valid dependency
   app_cli_dyn = executable(name,
                            f'@src_dir@/main.cpp',
-                           include_directories: [cma_public_dir, './includes'],
+                           include_directories: ['./includes'],
                            dependencies: [app_test_dependency_dyn, py_dynamic_module])
 endif
 

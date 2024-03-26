@@ -44,20 +44,6 @@ void set_openmp_threads(int rank,
     threads_per_process = static_cast<size_t>(num_core_per_node);
   }
   info.thread_per_process = threads_per_process;
-  // if (omp_n_thread >= info.n_rank)
-  // {
-  //   info.thread_per_process = omp_n_thread / info.n_rank;
-
-  //   if (omp_n_thread % info.n_rank != 0 && info.current_rank == info.n_rank -
-  //   1)
-  //   {
-  //     info.thread_per_process += omp_n_thread % info.n_rank;
-  //   }
-  // }
-  // else
-  // {
-  //   info.thread_per_process = 1;
-  // }
 
   omp_set_num_threads(static_cast<int>(info.thread_per_process));
 }

@@ -3,8 +3,11 @@
 #include "simulation/simulation.hpp"
 #include "simulation/transport.hpp"
 #include <common/common.hpp>
+#include <condition_variable>
+#include <future>
 #include <host_specific.hpp>
 #include <messages/wrap_mpi.hpp>
+#include <queue>
 #include <sync.hpp>
 #include <thread>
 
@@ -36,7 +39,7 @@ void main_loop(const SimulationParameters &params,
                std::shared_ptr<FlowIterator> _flow_handle)
 {
   ReactorState *f = _flow_handle->get();
-  
+
   double d_t = params.d_t;
   while (f != nullptr)
   {
@@ -44,25 +47,34 @@ void main_loop(const SimulationParameters &params,
     auto &liq_flow = f->liquid_flow;
     auto &gas_flow = f->gas_flow;
     // TODO THREAD POOL
-    std::thread _h_liquid(computeLiquidFlow,
-                          std::cref(exec),
-                          std::ref(simulation),
-                          std::ref(liq_flow));
-    std::thread _h_gas(
-        computeGasFlow, std::ref(simulation), std::ref(gas_flow));
 
-    _h_liquid.join();
-    _h_gas.join();
+    auto _future_flow = std::async(computeLiquidFlow,
+                                   std::cref(exec),
+                                   std::ref(simulation),
+                                   std::ref(liq_flow));
+    auto _future_flow_gas =
+        std::async(computeGasFlow, std::ref(simulation), std::ref(gas_flow));
+
+    _future_flow.wait();
+    _future_flow_gas.wait();
+
+    // std::thread _h_liquid(computeLiquidFlow,
+    //                       std::cref(exec),
+    //                       std::ref(simulation),
+    //                       std::ref(liq_flow));
+    // std::thread _h_gas(
+    //     computeGasFlow, std::ref(simulation), std::ref(gas_flow));
+
+    // _h_liquid.join();
+    // _h_gas.join();
 
     simulation.cycle_process(d_t);
 
     sync_step(exec, simulation);
     simulation.step(d_t);
     sync_prepare_next(exec, simulation);
-    
+
     _flow_handle->next(); // this could be done async ?
     f = _flow_handle->get();
-
-    
   }
 }

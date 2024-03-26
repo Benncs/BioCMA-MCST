@@ -29,23 +29,9 @@ omp = dependency('openmp',language:'cpp')
 cpp = meson.get_compiler('cpp')
 
 
-# eigen_dep = cmake.subproject('eigen')
+
 
 eigen_includes = include_directories('./subprojects/eigen')
-
-
-cma_lib_dir = root+'/subprojects/CMA_reader/builddir' #get_option('cma_lib_dir')
-cma_public_dir = './subprojects/CMA_reader/public' #get_option('cma_public_dir')
-
-cma_dep = cpp.find_library('cma_read_shared', dirs: cma_lib_dir, static: false)
-
-
-# message(cma_dep.get_variable('include_directories'))
-# cma_dep_2 = dependency('cma_read')
-
-# subproject('CMA_Reader')
-
-
 
 
 use_dynamic_module = get_option('use_dynamic_module')
@@ -62,7 +48,9 @@ message('Dynamic module feature activated')
     endif
 endif 
 
+cma_reader = subproject('CMA_reader')
 
+cma_dep = cma_reader.get_variable('shared_lib_dependency') 
 
 subdir('apps')
 

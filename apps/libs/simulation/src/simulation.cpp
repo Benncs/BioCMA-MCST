@@ -146,14 +146,21 @@ namespace Simulation
       const double rdn2 = MC::double_unfiform();
       const size_t i_contrib = omp_get_thread_num();
 
-      auto &mat = _contribs.at(i_contrib);
+      auto &thread_contrib = _contribs.at(i_contrib);
       const auto &concentrations = domain[p.current_container].concentrations;
 
       _move_kernel(rnd, rdn2, p, d_t);
 
       _kmodel.update_kernel(d_t, p, concentrations);
+
+      
+
       _kmodel.division_kernel(p);
-      _kmodel.contribution_kernel(p, mat);
+      _kmodel.contribution_kernel(p, thread_contrib);
+
+
+
+
     };
 
 #pragma omp parallel for

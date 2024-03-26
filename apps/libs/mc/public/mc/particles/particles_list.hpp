@@ -12,11 +12,17 @@ namespace MC
   public:
     ParticlesList() = default;
 
-    ParticlesList(size_t capacity,double weight);
+    ParticlesList(size_t capacity, double weight);
 
     ParticlesList(const ParticlesList &other) = delete;
     ParticlesList(ParticlesList &&other) noexcept;
     ~ParticlesList() = default;
+
+    /*std::vector forward */
+    void emplace_back(Particles &&p)
+    {
+      this->data.emplace_back(p);
+    }
 
     inline size_t size() const
     {

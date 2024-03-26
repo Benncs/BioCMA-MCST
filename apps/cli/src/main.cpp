@@ -1,51 +1,43 @@
-#include "messages/message_t.hpp"
-#include "simulation/models/simple_model.hpp"
-#include "simulation/models/types.hpp"
-#include <any>
-#include <common/common.hpp>
-
-#include <exception>
-#include <host_specific.hpp>
-#include <memory>
-#include <siminit.hpp>
-
-#include <flow_iterator.hpp>
-#include <messages/wrap_mpi.hpp>
-#include <mpi.h>
-#include <reactorstate.hpp>
+#include "cli_parser.hpp"
+#include <simulation/models/models.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/transport.hpp>
 
-#include <cstddef>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-#include <sync.hpp>
-#include <rt_init.hpp>
+#include <common/common.hpp>
 
+#include <flow_iterator.hpp>
+#include <reactorstate.hpp>
+
+#include <host_specific.hpp>
+#include <messages/wrap_mpi.hpp>
+#include <post_process.hpp>
+#include <rt_init.hpp>
+#include <siminit.hpp>
+#include <sync.hpp>
+#include <cli_parser.hpp>
 #ifdef BIO_DYNAMIC_MODULE
 #  include <import_py.hpp>
 #endif
 
-SimulationParameters moc_cli(int argc, char **argv);
+#include <cstddef>
+#include <exception>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
 
-void host_process(ExecInfo &exec,
-                  Simulation::SimulationUnit &simulation,
-                  SimulationParameters &params,
-                  std::shared_ptr<FlowIterator> _flow_handle);
 
-void workers_process(ExecInfo &exec,
-                     Simulation::SimulationUnit &simulation,
-                     SimulationParameters &params);
+static void workers_process(ExecInfo &exec,
+                            Simulation::SimulationUnit &simulation,
+                            SimulationParameters &params);
 
-KModel load_model()
-{
-#ifdef BIO_DYNAMIC_MODULE
-  return get_python_module("modules.simple_model");
-#else
-  return simple_model;
-#endif
-}
+static void host_process(ExecInfo &exec,
+                         Simulation::SimulationUnit &simulation,
+                         SimulationParameters &params,
+                         std::shared_ptr<FlowIterator> _flow_handle);
+
+static KModel load_model();
+
+static void exec(int argc, char **argv);
 
 int main(int argc, char **argv)
 {
@@ -56,44 +48,49 @@ int main(int argc, char **argv)
     auto _module_handle = init_dynamic_module();
 #endif
 
-    SimulationParameters params = moc_cli(argc, argv);
-    ExecInfo exec_info = runtime_init(argc, argv,params);
-
-    
-
-    std::shared_ptr<FlowIterator> _fd = nullptr;
-    auto simulation = sim_init(exec_info, params, _fd, load_model());
-
-    if (exec_info.current_rank == 0)
-    {
-      if (_fd == nullptr)
-      {
-        throw std::runtime_error("Flow map are not loaded");
-      }
-
-      host_process(exec_info, simulation, params, _fd);
-    }
-    else
-    {
-      workers_process(exec_info, simulation, params);
-    }
+    exec(argc, argv);
   }
 #ifdef DEBUG
   catch (std::exception &e)
 
   {
     std::cerr << e.what() << std::endl;
+    return -1;
   }
 #endif
   catch (...)
   {
     std::cerr << "Internal error" << std::endl;
+    return -1;
   }
 
   return 0;
 }
 
-void show(Simulation::SimulationUnit &simulation)
+static void exec(int argc, char **argv)
+{
+  SimulationParameters params = parseCLI(argc, argv);
+  ExecInfo exec_info = runtime_init(argc, argv, params);
+
+  std::shared_ptr<FlowIterator> _fd = nullptr;
+  auto simulation = sim_init(exec_info, params, _fd, load_model());
+
+  if (exec_info.current_rank == 0)
+  {
+    if (_fd == nullptr)
+    {
+      throw std::runtime_error("Flow map are not loaded");
+    }
+
+    host_process(exec_info, simulation, params, _fd);
+  }
+  else
+  {
+    workers_process(exec_info, simulation, params);
+  }
+}
+
+static void show(Simulation::SimulationUnit &simulation)
 {
   try
   {
@@ -110,14 +107,15 @@ void show(Simulation::SimulationUnit &simulation)
   }
   catch (...)
   {
+    std::cout << std::endl;
   }
   std::cout << simulation.getCgas().row(1) << std::endl;
 }
 
-void host_process(ExecInfo &exec,
-                  Simulation::SimulationUnit &simulation,
-                  SimulationParameters &params,
-                  std::shared_ptr<FlowIterator> _flow_handle)
+static void host_process(ExecInfo &exec,
+                         Simulation::SimulationUnit &simulation,
+                         SimulationParameters &params,
+                         std::shared_ptr<FlowIterator> _flow_handle)
 {
 
   show(simulation);
@@ -127,11 +125,13 @@ void host_process(ExecInfo &exec,
   show(simulation);
 
   host_dispatch(exec, MPI_W::SIGNALS::STOP);
+
+  post_process(simulation);
 }
 
-void workers_process(ExecInfo &exec,
-                     Simulation::SimulationUnit &simulation,
-                     SimulationParameters &params)
+static void workers_process(ExecInfo &exec,
+                            Simulation::SimulationUnit &simulation,
+                            SimulationParameters &params)
 {
 
   double d_t = params.d_t;
@@ -161,8 +161,12 @@ void workers_process(ExecInfo &exec,
   }
 }
 
-SimulationParameters moc_cli(int argc, char **argv)
+
+static KModel load_model()
 {
-  auto file = "/home/benjamin/Documenti/code/cpp/BIREM_generate/out/";
-  return {1'000, 3, 10., {file}};
+#ifdef BIO_DYNAMIC_MODULE
+  return get_python_module("modules.simple_model");
+#else
+  return simple_model;
+#endif
 }

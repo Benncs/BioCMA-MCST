@@ -6,9 +6,8 @@ simu_sources = run_command('sh','-c', f'find @src_dir@ -type f -name *.cpp ').st
 public_simu  =  include_directories('public')
 
 
-cma_public = '../../../subprojects/CMA_reader/public'
 
-public_include_dir = [public_simu,public_common,eigen_includes,cma_public]
+public_include_dir = [public_simu,public_common,eigen_includes]
 
 dep = [omp,mc_dependency,cma_dep]
 

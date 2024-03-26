@@ -25,6 +25,7 @@ namespace MC
     }
 
     ParticlesList to_process;
+    ParticlesList extra_process;
   };
 } // namespace MC
 
