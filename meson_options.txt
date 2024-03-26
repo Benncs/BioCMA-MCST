@@ -1,1 +1,3 @@
 option('use_dynamic_module', type: 'boolean', value: false)
+option('cma_lib_dir',type:'string')
+option('cma_public_dir',type:'string')

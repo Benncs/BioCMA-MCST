@@ -16,7 +16,7 @@ message(lib_sources)
 
 mpi=dependency('mpi', language: 'cpp') 
 
-
+cma_public_dir = '../../subprojects/CMA_reader/public'
 
 dep = [mpi, omp,cma_dep,mc_dependency,simu_dependency,common_dependecy,thread_dep]
 name = f'@project_name@_cli_app'
