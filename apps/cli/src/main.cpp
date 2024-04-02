@@ -47,8 +47,15 @@ int main(int argc, char **argv)
 #ifdef BIO_DYNAMIC_MODULE
     auto _module_handle = init_dynamic_module();
 #endif
-
+    init_environement();
     exec(argc, argv);
+  }
+  catch(std::invalid_argument &e)
+  {
+    std::cerr<<e.what()<<std::endl;
+    showHelp(std::cout);
+
+    return -1;
   }
 #ifdef DEBUG
   catch (std::exception &e)

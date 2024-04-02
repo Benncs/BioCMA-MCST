@@ -24,7 +24,7 @@ endforeach
 
 
 thread_dep = dependency('threads')
-omp = dependency('openmp',language:'cpp')
+omp = dependency('openmp',language:'cpp',required:true)
 
 cpp = meson.get_compiler('cpp')
 
