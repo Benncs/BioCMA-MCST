@@ -110,6 +110,8 @@ static void show(Simulation::SimulationUnit &simulation)
     std::cout << std::endl;
   }
   std::cout << simulation.getCgas().row(1) << std::endl;
+  std::cout<<"----Liquid---"<<std::endl;
+  std::cout << simulation.getCliq().row(0) << std::endl;
 }
 
 static void host_process(ExecInfo &exec,

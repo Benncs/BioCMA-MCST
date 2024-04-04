@@ -44,11 +44,12 @@ namespace Simulation
     this->liquid_scalar->biomass_contribution.setZero();
 
     // FIXME
-    for (auto i = 0; i < liquid_scalar->C.cols(); ++i)
-    {
-      liquid_scalar->C.coeffRef(0, i) = 10;
-      
-    }
+    // for (auto i = 0; i < liquid_scalar->C.cols(); ++i)
+    // {
+    //   liquid_scalar->C.coeffRef(0, i) = 10;
+    // }
+
+    
     if(gas_scalar)
         gas_scalar->C.coeffRef(1, 10) = 3;
   }

@@ -103,7 +103,7 @@ void init_module_function(KModel &model,
       return;
     }
   };
-  model.division_kernel = [](auto &&p) { return; };
+  model.division_kernel = [](auto &&p) { return MC::Particles(); };
 }
 
 KModel get_python_module(const std::string &module_path)

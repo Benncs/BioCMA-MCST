@@ -21,7 +21,27 @@ namespace MC
     /*std::vector forward */
     void emplace_back(Particles &&p)
     {
-      this->data.emplace_back(p);
+      this->data.emplace_back(std::move(p));
+    }
+
+    // template <typename Iterator> void insert(Iterator &&begin, Iterator
+    // &&end)
+    // {
+    //   this->data.insert(data.end(),begin, end);
+    // }
+
+    void insert(std::vector<MC::Particles> &&source)
+    {
+      data.insert(data.end(),
+                  std::make_move_iterator(source.begin()),
+                  std::make_move_iterator(source.end()));
+    }
+
+
+    
+    inline void insert(MC::ParticlesList &&data)
+    {
+      // TODO
     }
 
     inline size_t size() const

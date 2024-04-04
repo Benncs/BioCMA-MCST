@@ -1,3 +1,4 @@
+#include "mc/particles/mcparticles.hpp"
 #include "simulation/models/types.hpp"
 #include <algorithm>
 #include <cstdio>
@@ -53,7 +54,7 @@ namespace Simulation
     for (auto i = 0; i < liquid_scalar->C.cols(); ++i)
     {
       liquid_scalar->C.coeffRef(1, i) = 8e-3;
-      liquid_scalar->C.coeffRef(0, static_cast<int>(i)) = 150;
+      liquid_scalar->C.coeffRef(0, static_cast<int>(i)) = 0.01;
       if (host)
         gas_scalar->C.coeffRef(1, i) =
             321e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
@@ -135,32 +136,50 @@ namespace Simulation
 
     const auto &_kmodel = kmodel;
 
-    const auto &domain = this->unit->domain;
+    auto &domain = this->unit->domain;
 
     auto &_contribs = this->contribs;
 
+    std::vector<std::vector<MC::Particles>> extras(_contribs.size());
+
     const auto krnl =
-        [&_move_kernel, d_t, _kmodel, &domain, &_contribs](auto &&p)
+        [&_move_kernel, d_t, _kmodel, &domain, &_contribs, &extras](auto &&p)
     {
       const double rnd = MC::double_unfiform();
       const double rdn2 = MC::double_unfiform();
-      const size_t i_contrib = omp_get_thread_num();
+      const size_t i_thread = omp_get_thread_num();
 
-      auto &thread_contrib = _contribs.at(i_contrib);
+      auto &thread_contrib = _contribs.at(i_thread);
+      auto &thread_extra = extras.at(i_thread);
       const auto &concentrations = domain[p.current_container].concentrations;
 
       _move_kernel(rnd, rdn2, p, d_t);
 
       _kmodel.update_kernel(d_t, p, concentrations);
 
-      
+      if (p.status != MC::CellStatus::DEAD)
+      {
+        if (p.status == MC::CellStatus::CYTOKINESIS)
+        {
+          MC::Particles child = _kmodel.division_kernel(p);
 
-      _kmodel.division_kernel(p);
-      _kmodel.contribution_kernel(p, thread_contrib);
+          _kmodel.contribution_kernel(child, thread_contrib);
 
+#pragma omp atomic
+          domain[child.current_container].n_cells += 1;
 
+          thread_extra.emplace_back(std::move(child));
+        }
 
-
+        _kmodel.contribution_kernel(p, thread_contrib);
+      }
+      else
+      {
+// TODO CHECK POSSIBLE OVERFLOW
+#pragma omp atomic
+        domain[p.current_container].n_cells =
+            domain[p.current_container].n_cells - 1;
+      }
     };
 
 #pragma omp parallel for
@@ -171,10 +190,17 @@ namespace Simulation
       krnl(*it);
     }
 
-    for (auto &&i : _contribs)
+    for (size_t i_thread = 0; i_thread < contribs.size(); ++i_thread)
     {
-      this->liquid_scalar->biomass_contribution += i;
+      this->liquid_scalar->biomass_contribution += _contribs[i_thread];
+      this->container->extra_process.insert(std::move(extras[i_thread]));
     }
+
+    // for (auto &&i : _contribs)
+    // {
+    //   this->liquid_scalar->biomass_contribution += i;
+    //   this->container->extra_process.insert(auto begin, auto end)
+    // }
   }
 
 } // namespace Simulation

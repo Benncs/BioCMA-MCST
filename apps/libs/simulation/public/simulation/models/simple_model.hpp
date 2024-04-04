@@ -14,15 +14,16 @@ struct SimpleModel
   static constexpr double NPermease_max = 5e4;
   static constexpr double tauAu = 5.0;
   static constexpr double tauAd = 5.0;
-  static constexpr double tau_metabolisme = 1.0;
+  static constexpr double tau_metabolisme = 0.1;
   static constexpr double phi_pts_max = 4.454e-12;
   static constexpr double kpts = 1e-3;
   static constexpr double kppermease = 1e-2;
   static constexpr double psi_permease = 1.25e-13;
   static constexpr double YXS = 0.5;
-  static constexpr double YXO = 0.1;
-  static constexpr double YSA = 0.1;
+  static constexpr double YXO = 1e-4;
+  static constexpr double YSA = 1e-4;
   static constexpr double psi_o_meta = 1e-12;
+  static constexpr double critcal_division_mass = 1.7e-5;
   struct Xi;
   double phi_s_in;
   double phi_o_in;
@@ -57,7 +58,7 @@ void update_simple_model(double d_t,
                          MC::Particles &p,
                          std::span<double const> concentrations);
 
-void division_simple_model(MC::Particles &p);
+MC::Particles division_simple_model(MC::Particles &p);
 
 void contribution_simple_model(MC::Particles &p, Eigen::MatrixXd &contribution);
 

@@ -1,4 +1,5 @@
 #include "common/alg.hpp"
+#include "mc/particles/mcparticles.hpp"
 #include <cmath>
 #include <simulation/models/simple_model.hpp>
 #include <simulation/models/types.hpp>
@@ -57,14 +58,13 @@ void SimpleModel::step(double d)
   *this->xi = *this->xi + *this->xi_dot * d;
 }
 
-
 void init_simple_model_(MC::Particles &p)
 {
   std::shared_ptr<SimpleModel> ptr = std::make_shared<SimpleModel>();
   ptr->xi->mass = 1e-5;
   ptr->xi->a_permease = 0.5;
   ptr->xi->a_pts = 0.5l;
-  ptr->xi->mu_eff = 0;
+  ptr->xi->mu_eff = 1e-5;
   ptr->xi->n_permease = 1e3;
 
   ptr->mu_p = 0;
@@ -82,10 +82,17 @@ void update_simple_model(double d_t,
   double S = concentrations[0];
   unsigned n_permease = static_cast<unsigned>(model->xi->n_permease);
 
+  double gamma_PTS_S = uptake_glucose(model, n_permease, S);
+  ;
 
-  double gamma_PTS_S = uptake_glucose(model, n_permease, S);;
-  
   double phi_o_in = uptake_o2(model, concentrations[1]);
+
+  // Not enough substrate to stay alive
+  if (model->phi_s_in == 0 || phi_o_in == 0)
+  {
+    p.status = MC::CellStatus::DEAD;
+    return;
+  }
 
   double mu_p =
       std::min(SimpleModel::YXS * model->phi_s_in, SimpleModel::YXO * phi_o_in);
@@ -96,12 +103,20 @@ void update_simple_model(double d_t,
 
   update_xi_dot(model, gamma_PTS_S, n_permease, S);
 
-  update_kernel(d_t, model, concentrations);
+  model->step(d_t);
+
+  // Division has to occur
+  if (model->xi->mass >= SimpleModel::critcal_division_mass)
+  {
+    p.status = MC::CellStatus::CYTOKINESIS;
+  }
 }
 
-void division_simple_model(MC::Particles &p)
+MC::Particles division_simple_model(MC::Particles &p)
 {
   auto &model = std::any_cast<std::shared_ptr<SimpleModel> &>(p.data);
+  auto child = MC::Particles(p);
+  return child;
   // TODO
 }
 
@@ -125,7 +140,7 @@ static double phi_pts(std::shared_ptr<SimpleModel> &model, double S)
 static double
 phi_permease(std::shared_ptr<SimpleModel> &model, double n_permease, double S)
 {
-  return n_permease * SimpleModel::psi_permease * model->xi->a_permease *
+  return n_permease * SimpleModel::psi_permease * (model->xi->mass*1e3) * model->xi->a_permease *
          (SimpleModel::phi_pts_max * S / (SimpleModel::kppermease + S));
 }
 
@@ -134,9 +149,9 @@ static double uptake_glucose(std::shared_ptr<SimpleModel> &model,
                              double S)
 {
 
-  if(S==0)
+  if (S == 0)
   {
-    model->phi_s_in  =0.;
+    model->phi_s_in = 0.;
     return 0.;
   }
 
@@ -156,6 +171,7 @@ static double uptake_glucose(std::shared_ptr<SimpleModel> &model,
   {
     return 0;
   }
+
   double phi_s_pts = phi_pts(model, Si);
 
   double phi_s_in = phi_s_pts + phi_permease(model, n_permease, Si);
@@ -171,12 +187,13 @@ static double uptake_glucose(std::shared_ptr<SimpleModel> &model,
   return gamma_PTS_S;
 };
 
+#include <iostream>
 static void update_xi_dot(std::shared_ptr<SimpleModel> &model,
                           double gamma_PTS_S,
                           double n_permease,
                           double S)
 {
-  model->xi_dot->mass = model->xi->mu_eff;
+  model->xi_dot->mass = 1.5e-7;//model->xi->mu_eff;
   model->xi_dot->a_pts = (1.0 / SimpleModel::tauPTS) *
                          ((S / SimpleModel::kpts + S) - model->xi->a_pts);
 
@@ -207,7 +224,7 @@ static double uptake_o2(std::shared_ptr<SimpleModel> &model, double O)
     double lhs = (O - Oi) / tau_m;
     return std::abs(rhs - lhs);
   };
-  if(O==0)
+  if (O == 0)
   {
     return 0;
   }
@@ -218,7 +235,7 @@ static double uptake_o2(std::shared_ptr<SimpleModel> &model, double O)
     return 0;
   }
 
-  growth = 1;
+  growth = 1; //  Don't remove this, captured in get_phi TODO avoid side effect in get_phi  
   double Oi2 = naive_newton(get_phi, O, &success, 1e-5);
   if (Oi2 < 0 || !success)
   {
