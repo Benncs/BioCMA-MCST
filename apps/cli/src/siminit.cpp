@@ -11,61 +11,62 @@
 #include <mc/mcinit.hpp>
 #include <vector>
 
-Simulation::SimulationUnit sim_init(ExecInfo &info,
-                                    SimulationParameters &params,
-                                    std::shared_ptr<FlowIterator> &_flow_handle,
-                                    KModel &&model)
+Simulation::SimulationUnit sim_init(ExecInfo& info,
+    SimulationParameters& params,
+    std::shared_ptr<FlowIterator>& _flow_handle,
+    KModel&& model)
 {
 
-  std::vector<double> liq_volume;
-  std::vector<double> gas_volume;
-  std::vector<std::vector<size_t>> liquid_neighbors;
-  double d_t = 1e-2; // FIXME
-  size_t n_compartments;
-  if (info.current_rank == 0)
-  {
-    _flow_handle = std::make_shared<FlowIterator>(params.flow_files);
+    std::vector<double> liq_volume;
+    std::vector<double> gas_volume;
+    std::vector<std::vector<size_t>> liquid_neighbors;
+    size_t n_compartments;
+    if (info.current_rank == 0) {
+        ReactorState* fstate =nullptr;
+        try {
+            _flow_handle = std::make_shared<FlowIterator>(params.flow_files);
 
-    size_t n_t = static_cast<size_t>(params.final_time / d_t);
+            size_t n_t = static_cast<size_t>(params.final_time / params.d_t);
 
-    _flow_handle->setRepetition(n_t);
+            _flow_handle->setRepetition(n_t);
 
-    auto fstate = _flow_handle->get();
-    n_compartments = fstate->n_compartments;
-    liquid_neighbors = _flow_handle->get()->liquid_flow.neigbors;
+            fstate = _flow_handle->get();
+        } catch (const std::exception& e) {
+            throw std::runtime_error("Error while reading files");
+        }
 
-    liq_volume = fstate->liquidVolume;
-    gas_volume = fstate->gasVolume;
-  }
+        n_compartments = fstate->n_compartments;
+        liquid_neighbors = _flow_handle->get()->liquid_flow.neigbors;
 
-  MPI_W::broadcast(d_t, 0);
-  MPI_W::broadcast(liq_volume, 0, info.current_rank);
-  MPI_W::broadcast(gas_volume, 0, info.current_rank);
+        liq_volume = fstate->liquidVolume;
+        gas_volume = fstate->gasVolume;
+    }
 
-  if (info.current_rank != 0)
-  {
-    n_compartments = liq_volume.size();
-    liquid_neighbors.resize(n_compartments);
-  }
+    // MPI_W::broadcast(d_t, 0);
+    MPI_W::broadcast(liq_volume, 0, info.current_rank);
+    MPI_W::broadcast(gas_volume, 0, info.current_rank);
 
-  for (auto &&i : liquid_neighbors)
-  {
-    MPI_W::broadcast(i, 0, info.current_rank);
-  }
+    if (info.current_rank != 0) {
+        n_compartments = liq_volume.size();
+        liquid_neighbors.resize(n_compartments);
+    }
 
-  params.d_t = d_t;
-  auto unit = MC::init_unit(info, liq_volume, std::move(liquid_neighbors));
+    for (auto&& i : liquid_neighbors) {
+        MPI_W::broadcast(i, 0, info.current_rank);
+    }
 
-  auto container = MC::init_container(info, params.n_particules);
+    auto unit = MC::init_unit(info, liq_volume, std::move(liquid_neighbors));
 
-  auto simulation = Simulation::SimulationUnit(params.n_species,
-                                               std::move(unit),
-                                               std::move(container),
-                                               info,
-                                               info.current_rank == 0);
+    auto container = MC::init_container(info, params.n_particles);
 
-  simulation.setVolumes(std::move(gas_volume), std::move(liq_volume));
+    auto simulation = Simulation::SimulationUnit(params.n_species,
+        std::move(unit),
+        std::move(container),
+        info,
+        info.current_rank == 0);
 
-  simulation.post_init(std::move(model));
-  return simulation;
+    simulation.setVolumes(std::move(gas_volume), std::move(liq_volume));
+
+    simulation.post_init(std::move(model));
+    return simulation;
 }

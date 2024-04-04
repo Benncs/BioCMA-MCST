@@ -4,9 +4,13 @@
 .clang*
 compile_commands.json 
 
+# Env
+.bmc_info
+results/
+cma_data/
 
 #Benchs
-*.folder
+*.folded
 *.data*
 *.svg
 # Builds 

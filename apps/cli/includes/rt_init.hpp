@@ -5,6 +5,11 @@
 #include "common/simulation_parameters.hpp"
 #include <common/execinfo.hpp>
 
+
+void init_environement();
+
+
+
 void set_openmp_threads(int rank,
                           int size,
                           ExecInfo &info,

@@ -2,8 +2,10 @@
 #define __CLI_PARSER_HPP__
 
 #include <common/common.hpp>
+#include <iostream> 
+
 
 SimulationParameters parseCLI(int argc, char **argv);
-
+void showHelp(std::ostream& os);
 
 #endif //__CLI_PARSER_HPP__

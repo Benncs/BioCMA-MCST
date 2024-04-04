@@ -39,7 +39,11 @@ void main_loop(const SimulationParameters &params,
                std::shared_ptr<FlowIterator> _flow_handle)
 {
   ReactorState *f = _flow_handle->get();
-
+  if(f==nullptr)
+  {
+    return;
+  }
+ 
   double d_t = params.d_t;
   while (f != nullptr)
   {
