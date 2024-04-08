@@ -10,7 +10,7 @@ void post_process(Simulation::SimulationUnit &simulation)
   std::cout<<model->xi->mass<<std::endl;
   std::cout<<simulation.container->extra_process.size()<<std::endl;
 
-  auto d = simulation.unit->domain.getDistribution();
+  auto d = simulation.mc_unit->domain.getDistribution();
 
   size_t count = 0;
   for(auto && i :d)

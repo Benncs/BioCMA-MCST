@@ -1,4 +1,7 @@
 #include "cli_parser.hpp"
+#include "messages/impl_op.hpp"
+#include "mpi.h"
+#include "update_flows.hpp"
 #include <simulation/models/models.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/transport.hpp>
@@ -8,13 +11,13 @@
 #include <flow_iterator.hpp>
 #include <reactorstate.hpp>
 
+#include <cli_parser.hpp>
 #include <host_specific.hpp>
 #include <messages/wrap_mpi.hpp>
 #include <post_process.hpp>
 #include <rt_init.hpp>
 #include <siminit.hpp>
 #include <sync.hpp>
-#include <cli_parser.hpp>
 #ifdef BIO_DYNAMIC_MODULE
 #  include <import_py.hpp>
 #endif
@@ -25,6 +28,7 @@
 #include <memory>
 #include <stdexcept>
 
+#define SEND_MPI_SIG_STOP host_dispatch(exec, MPI_W::SIGNALS::STOP);
 
 static void workers_process(ExecInfo &exec,
                             Simulation::SimulationUnit &simulation,
@@ -50,9 +54,9 @@ int main(int argc, char **argv)
     init_environement();
     exec(argc, argv);
   }
-  catch(std::invalid_argument &e)
+  catch (std::invalid_argument &e)
   {
-    std::cerr<<e.what()<<std::endl;
+    std::cerr << e.what() << std::endl;
     showHelp(std::cout);
 
     return -1;
@@ -76,7 +80,7 @@ int main(int argc, char **argv)
 
 static void exec(int argc, char **argv)
 {
-  SimulationParameters params = parseCLI(argc, argv);
+  SimulationParameters params = parse_cli(argc, argv);
   ExecInfo exec_info = runtime_init(argc, argv, params);
 
   std::shared_ptr<FlowIterator> _fd = nullptr;
@@ -99,26 +103,34 @@ static void exec(int argc, char **argv)
 
 static void show(Simulation::SimulationUnit &simulation)
 {
-  try
-  {
-    std::vector<double> totmas(simulation.unit->domain.n_compartments(), 0.);
-    double cs = 0;
-    for (auto &&p : simulation.container->to_process)
-    {
-      auto model = std::any_cast<std::shared_ptr<SimpleModel> &>(p.data);
 
-      totmas[p.current_container] += p.weight * model->xi->mass;
-      cs += p.weight * model->xi->mass;
-    }
-    std::cout << "mass: " << cs << std::endl;
-  }
-  catch (...)
-  {
-    std::cout << std::endl;
-  }
-  std::cout << simulation.getCgas().row(1) << std::endl;
-  std::cout<<"----Liquid---"<<std::endl;
-  std::cout << simulation.getCliq().row(0) << std::endl;
+  // auto d = simulation.unit->domain.getDistribution();
+
+  // for(auto&& i : d)
+  // {
+  //   std::cout<<i<<", ";
+  // }
+  // std::cout<<std::endl;
+  // try
+  // {
+  //   std::vector<double> totmas(simulation.unit->domain.n_compartments(), 0.);
+  //   double cs = 0;
+  //   for (auto &&p : simulation.container->to_process)
+  //   {
+  //     auto model = std::any_cast<std::shared_ptr<SimpleModel> &>(p.data);
+
+  //     totmas[p.current_container] += p.weight * model->xi->mass;
+  //     cs += p.weight * model->xi->mass;
+  //   }
+  //   std::cout << "mass: " << cs << std::endl;
+  // }
+  // catch (...)
+  // {
+  //   std::cout << std::endl;
+  // }
+  // std::cout << simulation.getCgas().row(1) << std::endl;
+  // std::cout << "----Liquid---" << std::endl;
+  // std::cout << simulation.getCliq().row(0) << std::endl;
 }
 
 static void host_process(ExecInfo &exec,
@@ -133,7 +145,7 @@ static void host_process(ExecInfo &exec,
 
   show(simulation);
 
-  host_dispatch(exec, MPI_W::SIGNALS::STOP);
+  SEND_MPI_SIG_STOP;
 
   post_process(simulation);
 }
@@ -144,8 +156,13 @@ static void workers_process(ExecInfo &exec,
 {
 
   double d_t = params.d_t;
-  size_t n_compartments = simulation.unit->domain.n_compartments();
+  size_t n_compartments = simulation.mc_unit->domain.n_compartments();
   MPI_Status status;
+
+  size_t iteration_count = 0;
+  size_t n_loop = params.n_different_maps;
+  auto liquid_flows = Simulation::VecMatFlows(n_loop);
+
   while (true)
   {
 
@@ -158,18 +175,30 @@ static void workers_process(ExecInfo &exec,
 
     auto flows = MPI_W::try_recv_v<double>(0);
 
-    const auto mat_f = FlowmapToMat(flows, n_compartments);
-    const auto mat_transition = Simulation::get_transition_matrix(mat_f);
+    size_t number_neighbors = MPI_W::try_recv<size_t>(0);
+   
+    std::vector<std::vector<size_t>> liquid_neighbors(n_compartments);
+    for (auto&& neighbors : liquid_neighbors)
+    {
+        neighbors.resize(number_neighbors);
+        MPI_Recv(neighbors.data(),number_neighbors,MPI_UNSIGNED_LONG,0,0,MPI_COMM_WORLD,&status);
+       
+    }
 
-    simulation.setLiquidFlow(
-        Simulation::MatFlow(std::move(mat_f), std::move(mat_transition)));
+    simulation.mc_unit->domain.setLiquidNeighbors(liquid_neighbors);
+
+    update_flow(iteration_count,
+                n_loop,
+                simulation,
+                flows,
+                n_compartments,
+                liquid_flows);
 
     simulation.cycle_process(d_t);
     sync_step(exec, simulation);
     sync_prepare_next(exec, simulation);
   }
 }
-
 
 static KModel load_model()
 {

@@ -115,6 +115,8 @@ void update_simple_model(double d_t,
 MC::Particles division_simple_model(MC::Particles &p)
 {
   auto &model = std::any_cast<std::shared_ptr<SimpleModel> &>(p.data);
+  model->xi->mass = model->xi->mass/2;
+  p.status = MC::CellStatus::IDLE;
   auto child = MC::Particles(p);
   return child;
   // TODO

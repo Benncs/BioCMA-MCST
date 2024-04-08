@@ -1,24 +1,41 @@
 #include <cli_parser.hpp>
 #include <iostream>
 #include <string_view>
-
+#include <filesystem>
 // static void parseOptional(SimulationParameters& params, std::string_view arg);
-static void checkCLI(SimulationParameters& params);
-static void printGreen(std::ostream& os, std::string_view message);
-static void printRed(std::ostream& os, std::string_view message);
+static void check_cli(SimulationParameters& params);
+static void print_green(std::ostream& os, std::string_view message);
+static void print_red(std::ostream& os, std::string_view message);
 static void throw_bad_arg(std::string_view arg);
 
-static void parseArg(SimulationParameters& params, std::string_view current_param, std::string_view current_value);
+static void parseArg(SimulationParameters& params, std::string current_param, std::string_view current_value);
 
-SimulationParameters parseCLI(int argc, char** argv)
+
+static void recur_path(std::string_view rootPath,SimulationParameters& params)
+{
+    for (int i = 1; i <= 13; ++i) {
+        std::string dirName = "i_" + std::to_string(i)+ "/";
+        std::filesystem::path dirPath = std::string(rootPath) + dirName;
+        
+        if (std::filesystem::exists(dirPath) && std::filesystem::is_directory(dirPath)) {
+            params.flow_files.push_back(dirPath.string());
+        } 
+    }
+}
+
+SimulationParameters parse_cli(int argc, char** argv)
 {
     SimulationParameters params = SimulationParameters::m_default();
 
     params.n_species = 3;
+    params.flow_files.clear();
+    recur_path("/home/benjamin/Documenti/code/cpp/biomc/cma_data/test/",params);
+
+
 
     int iarg = 1;
     while (iarg < argc - 1) {
-        auto current_param = std::string_view(argv[iarg]);
+        auto current_param = std::string(argv[iarg]);
         auto current_value = std::string_view(argv[iarg + 1]);
         if (current_param.data() != nullptr && current_param[0] != '\0') {
 
@@ -30,11 +47,11 @@ SimulationParameters parseCLI(int argc, char** argv)
         iarg += 2;
     }
 
-    checkCLI(params);
+    check_cli(params);
     return params;
 }
 
-static void parseArg(SimulationParameters& params, std::string_view current_param, std::string_view current_value)
+static void parseArg(SimulationParameters& params, std::string current_param, std::string_view current_value)
 {   
     current_param = std::string(current_param.begin()+1,current_param.end());
     switch (current_param[0]) {
@@ -120,7 +137,7 @@ static void parseArg(SimulationParameters& params, std::string_view current_para
 //     }
 // }
 
-static void checkCLI(SimulationParameters& params)
+static void check_cli(SimulationParameters& params)
 {
     if (params.flow_files.size() == 0) {
         throw std::invalid_argument("Missing files path");
@@ -138,7 +155,7 @@ static void checkCLI(SimulationParameters& params)
 void showHelp(std::ostream& os)
 {
     os << "Usage: ";
-    printRed(os, "BIOCMA-MCST");
+    print_red(os, "BIOCMA-MCST");
     os << "  -np <number_of_particles> [-ff <flow_file_folder_path>] [OPTIONS] " << std::endl;
     os << "\nMandatory arguments:" << std::endl;
     os << "  -np <number>, --number-particles <number>\tNumber of particles" << std::endl;
@@ -155,12 +172,12 @@ void showHelp(std::ostream& os)
 }
 
 
-static void printGreen(std::ostream& os, std::string_view message)
+static void print_green(std::ostream& os, std::string_view message)
 {
     os << "\033[1;32m" << message << "\033[0m";
 }
 
-static void printRed(std::ostream& os, std::string_view message)
+static void print_red(std::ostream& os, std::string_view message)
 {
     os << "\033[1;31m" << message << "\033[0m"; // ANSI escape code for red color
 }

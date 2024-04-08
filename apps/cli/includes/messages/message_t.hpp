@@ -8,13 +8,14 @@
 namespace MPI_W
 {
   static bool is_mpi_init = false;
-  void critical_error() noexcept;
+  int critical_error() noexcept;
   void barrier()noexcept;
   void finalize()noexcept;
   enum class SIGNALS
   {
     STOP,
-    RUN
+    RUN,
+    NOP
   };
 
 } // namespace MPI_W

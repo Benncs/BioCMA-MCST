@@ -28,7 +28,7 @@ namespace Simulation
     SimulationUnit(SimulationUnit &&other) noexcept;
     SimulationUnit(const SimulationUnit &other) = delete;
 
-    std::unique_ptr<MC::MonteCarloUnit> unit;
+    std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     std::unique_ptr<MC::ParticlesContainer> container;
 
     void post_init(KModel &&_km);
@@ -65,6 +65,7 @@ namespace Simulation
     std::unique_ptr<ScalarSimulation> gas_scalar;
 
     std::vector<Eigen::MatrixXd> contribs;
+    std::vector<std::vector<MC::Particles>> extras_p;
   };
 
   inline void SimulationUnit::setLiquidFlow(MatFlow &&_flows_l)

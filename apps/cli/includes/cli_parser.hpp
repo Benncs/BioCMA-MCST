@@ -5,7 +5,7 @@
 #include <iostream> 
 
 
-SimulationParameters parseCLI(int argc, char **argv);
+SimulationParameters parse_cli(int argc, char **argv);
 void showHelp(std::ostream& os);
 
 #endif //__CLI_PARSER_HPP__

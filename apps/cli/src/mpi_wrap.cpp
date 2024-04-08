@@ -21,9 +21,9 @@ namespace MPI_W
     MPI_Finalize();
   }
 
-  void critical_error() noexcept
+  int critical_error() noexcept
   {
-    MPI_Abort(MPI_COMM_WORLD, 0);
+    return MPI_Abort(MPI_COMM_WORLD, 0);
   }
 
   void barrier() noexcept

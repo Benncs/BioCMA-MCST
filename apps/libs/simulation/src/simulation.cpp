@@ -8,13 +8,14 @@
 #include <omp.h>
 #include <simulation/scalar_simulation.hpp>
 #include <simulation/simulation.hpp>
+#include <Eigen/Core>
 
 namespace Simulation
 {
 
   SimulationUnit::SimulationUnit(SimulationUnit &&other) noexcept
   {
-    unit = std::move(other.unit);
+    mc_unit = std::move(other.mc_unit);
     container = std::move(other.container);
     host = other.host;
     flow_liquid = std::move(other.flow_liquid);
@@ -28,14 +29,18 @@ namespace Simulation
       std::unique_ptr<MC::ParticlesContainer> &&_container,
       const ExecInfo &info,
       bool _host)
-      : unit(std::move(_unit)), container(std::move(_container)), host(_host)
+      : mc_unit(std::move(_unit)), container(std::move(_container)), host(_host)
   {
+    
+
+
 
     this->liquid_scalar = std::make_unique<ScalarSimulation>(
-        unit->domain.n_compartments(), n_species);
+        mc_unit->domain.n_compartments(), n_species);
     np = info.thread_per_process;
 
     this->contribs.resize(info.thread_per_process);
+    this->extras_p.resize(info.thread_per_process);
     std::generate_n(contribs.begin(),
                     info.thread_per_process,
                     [this]()
@@ -47,7 +52,7 @@ namespace Simulation
                     });
 
     this->gas_scalar = (host) ? std::make_unique<ScalarSimulation>(
-                                    unit->domain.n_compartments(), n_species)
+                                    mc_unit->domain.n_compartments(), n_species)
                               : nullptr;
 
     // FIXME
@@ -59,6 +64,10 @@ namespace Simulation
         gas_scalar->C.coeffRef(1, i) =
             321e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
     }
+
+    liquid_scalar->Mtot = liquid_scalar->C*liquid_scalar->V;
+    if(host)
+      gas_scalar->Mtot = gas_scalar->C*gas_scalar->V;
   }
 
   void SimulationUnit::post_init(KModel &&_km)
@@ -78,7 +87,7 @@ namespace Simulation
     {
       this->gas_scalar->setV(std::move(volumesgas));
       vg = std::span<double>(gas_scalar->V.diagonal().data(),
-                             this->unit->domain.n_compartments());
+                             this->mc_unit->domain.n_compartments());
     }
     else
     {
@@ -87,17 +96,17 @@ namespace Simulation
 
     std::span<double> vl =
         std::span<double>(liquid_scalar->V.diagonal().data(),
-                          this->unit->domain.n_compartments());
+                          this->mc_unit->domain.n_compartments());
 
-    this->unit->domain.setVolumes(vg, vl);
+    this->mc_unit->domain.setVolumes(vg, vl);
   }
 
   void SimulationUnit::post_init_compartments()
   {
     int i = 0;
     size_t n_species = this->liquid_scalar->n_species();
-    std::for_each(unit->domain.begin(),
-                  unit->domain.end(),
+    std::for_each(mc_unit->domain.begin(),
+                  mc_unit->domain.end(),
                   [this, n_species, &i](auto &&cs)
                   {
                     cs.concentrations = std::span(
@@ -116,10 +125,9 @@ namespace Simulation
     {
       auto &&particle = *it;
       particle.current_container =
-          MC::uniform_int_rand(size_t(0), unit->domain.n_compartments() - 1);
+          MC::uniform_int_rand(size_t(0), mc_unit->domain.n_compartments() - 1);
 
-      auto &i_container = unit->domain[particle.current_container];
-      // kmodel.init_kernel(particle);
+      auto &i_container = mc_unit->domain[particle.current_container];
 
       kmodel.init_kernel(particle);
 
@@ -132,25 +140,24 @@ namespace Simulation
   {
 
     const move_kernel _move_kernel =
-        pbf(*this->unit, *this->container, flow_liquid);
+        pbf(*this->mc_unit, *this->container, flow_liquid);
 
     const auto &_kmodel = kmodel;
 
-    auto &domain = this->unit->domain;
+    auto &domain = this->mc_unit->domain;
 
     auto &_contribs = this->contribs;
-
-    std::vector<std::vector<MC::Particles>> extras(_contribs.size());
-
+    auto &_extras = this->extras_p;
+    
     const auto krnl =
-        [&_move_kernel, d_t, _kmodel, &domain, &_contribs, &extras](auto &&p)
+        [&_move_kernel, d_t, _kmodel, &domain, &_contribs, &_extras](auto &&p)
     {
       const double rnd = MC::double_unfiform();
       const double rdn2 = MC::double_unfiform();
       const size_t i_thread = omp_get_thread_num();
 
       auto &thread_contrib = _contribs.at(i_thread);
-      auto &thread_extra = extras.at(i_thread);
+      auto &thread_extra = _extras.at(i_thread);
       const auto &concentrations = domain[p.current_container].concentrations;
 
       _move_kernel(rnd, rdn2, p, d_t);
@@ -161,6 +168,7 @@ namespace Simulation
       {
         if (p.status == MC::CellStatus::CYTOKINESIS)
         {
+        
           MC::Particles child = _kmodel.division_kernel(p);
 
           _kmodel.contribution_kernel(child, thread_contrib);
@@ -182,7 +190,7 @@ namespace Simulation
       }
     };
 
-#pragma omp parallel for
+#pragma omp parallel for num_threads(_contribs.size())
     for (auto it = container->to_process.begin();
          it < container->to_process.end();
          ++it)
@@ -193,14 +201,11 @@ namespace Simulation
     for (size_t i_thread = 0; i_thread < contribs.size(); ++i_thread)
     {
       this->liquid_scalar->biomass_contribution += _contribs[i_thread];
-      this->container->extra_process.insert(std::move(extras[i_thread]));
+      this->container->extra_process.insert(std::move(_extras[i_thread]));
     }
 
-    // for (auto &&i : _contribs)
-    // {
-    //   this->liquid_scalar->biomass_contribution += i;
-    //   this->container->extra_process.insert(auto begin, auto end)
-    // }
+ 
+
   }
 
 } // namespace Simulation

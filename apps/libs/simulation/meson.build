@@ -9,7 +9,7 @@ public_simu  =  include_directories('public')
 
 public_include_dir = [public_simu,public_common,eigen_includes]
 
-dep = [omp,mc_dependency,cma_dep]
+dep = [omp,mc_dependency,cma_dep,blas]
 
 simu_lib = static_library(f'@project_name@_simulation', simu_sources,
 include_directories :[public_include_dir, 'includes'],dependencies:dep)

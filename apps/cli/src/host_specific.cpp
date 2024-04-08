@@ -1,37 +1,16 @@
 #include "common/execinfo.hpp"
 #include "messages/message_t.hpp"
+#include "mpi.h"
+#include "reactorstate.hpp"
 #include "simulation/simulation.hpp"
 #include "simulation/transport.hpp"
 #include <common/common.hpp>
-#include <condition_variable>
-#include <future>
+#include <cstddef>
 #include <host_specific.hpp>
 #include <messages/wrap_mpi.hpp>
-#include <queue>
 #include <sync.hpp>
-#include <thread>
 
-void computeLiquidFlow(const ExecInfo &info,
-                       Simulation::SimulationUnit &unit,
-                       FlowInfo &liq_flow)
-{
-  const auto mat_f_liq =
-      FlowmapToMat(liq_flow.flows.data(), liq_flow.flows.getN());
-  const auto mat_transition_liq = Simulation::get_transition_matrix(mat_f_liq);
-  host_dispatch(info, MPI_W::SIGNALS::RUN, liq_flow.flows.data());
-
-  unit.setLiquidFlow(
-      Simulation::MatFlow(std::move(mat_f_liq), std::move(mat_transition_liq)));
-}
-
-void computeGasFlow(Simulation::SimulationUnit &unit, FlowInfo &gas_flow)
-{
-  const auto mat_f_gas =
-      FlowmapToMat(gas_flow.flows.data(), gas_flow.flows.getN());
-  const auto mat_transition_gas = Simulation::get_transition_matrix(mat_f_gas);
-  unit.setGasFlow(
-      Simulation::MatFlow(std::move(mat_f_gas), std::move(mat_transition_gas)));
-}
+#include <update_flows.hpp>
 
 void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
@@ -39,38 +18,47 @@ void main_loop(const SimulationParameters &params,
                std::shared_ptr<FlowIterator> _flow_handle)
 {
   ReactorState *f = _flow_handle->get();
-  if(f==nullptr)
+
+  size_t iteration_count = 0;
+  size_t n_loop = params.n_different_maps;
+
+  auto liquid_flows = Simulation::VecMatFlows(n_loop);
+  auto gas_flows = Simulation::VecMatFlows(n_loop);
+
+  if (f == nullptr)
   {
     return;
   }
- 
+
   double d_t = params.d_t;
   while (f != nullptr)
   {
     simulation.state = f;
-    auto &liq_flow = f->liquid_flow;
-    auto &gas_flow = f->gas_flow;
-    // TODO THREAD POOL
 
-    auto _future_flow = std::async(computeLiquidFlow,
-                                   std::cref(exec),
-                                   std::ref(simulation),
-                                   std::ref(liq_flow));
-    auto _future_flow_gas =
-        std::async(computeGasFlow, std::ref(simulation), std::ref(gas_flow));
+    host_dispatch(exec, MPI_W::SIGNALS::RUN, f->liquid_flow.flows.data());
 
-    _future_flow.wait();
-    _future_flow_gas.wait();
+    // Send the size of the neighbor vectors to all processes
+    size_t neighbor_size = f->liquid_flow.neigbors[0].size();
+    for (int j = 1; j < static_cast<int>(exec.n_rank); ++j)
+    {
+      MPI_Send(&neighbor_size, 1, MPI_UNSIGNED_LONG, j, 0, MPI_COMM_WORLD);
+    }
 
-    // std::thread _h_liquid(computeLiquidFlow,
-    //                       std::cref(exec),
-    //                       std::ref(simulation),
-    //                       std::ref(liq_flow));
-    // std::thread _h_gas(
-    //     computeGasFlow, std::ref(simulation), std::ref(gas_flow));
+    // Send each neighbor vector to all processes
+    for (const auto &neighbor : f->liquid_flow.neigbors)
+    {
+      const unsigned long *buf = neighbor.data();
+      int size = neighbor.size();
+      for (int j = 1; j < static_cast<int>(exec.n_rank); ++j)
+      {
+        MPI_Send(buf, size, MPI_UNSIGNED_LONG, j, 0, MPI_COMM_WORLD);
+      }
+    }
 
-    // _h_liquid.join();
-    // _h_gas.join();
+    simulation.mc_unit->domain.setLiquidNeighbors(f->liquid_flow.neigbors);
+
+    update_flow(
+        iteration_count, n_loop, simulation, f, liquid_flows, gas_flows);
 
     simulation.cycle_process(d_t);
 

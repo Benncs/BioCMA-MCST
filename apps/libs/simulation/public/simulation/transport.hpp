@@ -11,12 +11,22 @@ namespace Simulation
   Eigen::SparseMatrix<double>
   get_transition_matrix(const Eigen::SparseMatrix<double> &flows);
 
+
+ 
   struct MatFlow
   {
     Eigen::SparseMatrix<double> flows;
     Eigen::SparseMatrix<double> transition_matrix;
 
     MatFlow()=default;
+
+    MatFlow(const Eigen::SparseMatrix<double> &_flows,
+            const Eigen::SparseMatrix<double> &_tm)
+    {
+      flows = _flows;
+      transition_matrix = _tm;
+    }
+
     MatFlow(const Eigen::SparseMatrix<double> &&_flows,
             const Eigen::SparseMatrix<double> &&_tm)
     {
@@ -40,6 +50,17 @@ namespace Simulation
       transition_matrix = std::move(other.transition_matrix);
     }
   };
+
+  struct VecMatFlows
+  {
+    std::vector<MatFlow> data;
+
+    VecMatFlows(size_t n)
+    {
+      data.resize(n);
+    }
+  };  
+
 
   using move_kernel =
       std::function<void(double, double, MC::Particles &, double)>;

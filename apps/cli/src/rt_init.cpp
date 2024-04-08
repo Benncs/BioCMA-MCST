@@ -59,6 +59,8 @@ ExecInfo runtime_init(int argc, char** argv, SimulationParameters& params)
 
     set_openmp_threads(rank, size, info, params);
 
+    Eigen::setNbThreads(static_cast<int>(info.thread_per_process));
+
     std::cout << "NUM thread per process " << info.thread_per_process
               << std::endl;
     std::atexit(MPI_W::finalize);

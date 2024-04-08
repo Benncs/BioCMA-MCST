@@ -30,9 +30,9 @@ cpp = meson.get_compiler('cpp')
 
 
 
-
+blas = dependency('blas')
 eigen_includes = include_directories('./subprojects/eigen')
-
+add_global_arguments('-DEIGEN_USE_BLAS', language : ['c','cpp'])
 
 use_dynamic_module = get_option('use_dynamic_module')
 if use_dynamic_module

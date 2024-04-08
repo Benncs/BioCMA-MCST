@@ -1,6 +1,8 @@
 #ifndef __IMPL_MPI_OP_HPP__
 #define __IMPL_MPI_OP_HPP__
 
+#include "messages/mpi_types.hpp"
+#include "mpi.h"
 #include <common/execinfo.hpp>
 #include <cstddef>
 #include <messages/message_t.hpp>
@@ -107,8 +109,21 @@ namespace MPI_W
 
   template <POD DataType> int broadcast(DataType &data, size_t root)
   {
-    return MPI_Bcast(&data, sizeof(DataType), MPI_BYTE, root, MPI_COMM_WORLD);
+    return MPI_Bcast(&data,
+                     sizeof(DataType),
+                     MPI_BYTE,
+                     static_cast<int>(root),
+                     MPI_COMM_WORLD);
   }
+
+  // template <> int broadcast(size_t &data, size_t root)
+  // {
+  //   return MPI_Bcast(&data,
+  //                    sizeof(size_t),
+  //                    MPI_UNSIGNED_LONG,
+  //                    static_cast<int>(root),
+  //                    MPI_COMM_WORLD);
+  // }
 
   template <typename T>
   int broadcast(std::vector<T> &data, size_t root, size_t current_rank)
@@ -125,8 +140,11 @@ namespace MPI_W
       data.resize(data_size);
     }
 
-    return MPI_Bcast(
-        data.data(), data_size, MPI_TYPES<T>::value, root, MPI_COMM_WORLD);
+    return MPI_Bcast(data.data(),
+                     data_size,
+                     MPI_TYPES<T>::value,
+                     static_cast<int>(root),
+                     MPI_COMM_WORLD);
   }
 
   template <typename T>
@@ -150,7 +168,11 @@ namespace MPI_W
     }
 
     // Broadcast operation
-    return MPI_Bcast(data, _size, MPI_TYPES<T>::value, root, MPI_COMM_WORLD);
+    return MPI_Bcast(data,
+                     _size,
+                     MPI_TYPES<T>::value,
+                     static_cast<int>(root),
+                     MPI_COMM_WORLD);
   }
 
   template <typename T> int broadcast_span(std::span<T> data, size_t root)
@@ -190,7 +212,11 @@ namespace MPI_W
 
     for (int j = 1; j < static_cast<int>(info.n_rank); ++j)
     {
-      MPI_Send(&sign, sizeof(sign), MPI_CHAR, j, 0, MPI_COMM_WORLD);
+      if (sign != MPI_W::SIGNALS::NOP)
+      {
+        MPI_Send(&sign, sizeof(sign), MPI_CHAR, j, 0, MPI_COMM_WORLD);
+      }
+
       (
           [&]<typename T>(T &&arg)
           {

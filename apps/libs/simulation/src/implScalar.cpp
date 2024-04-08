@@ -26,8 +26,6 @@ namespace Simulation
 
     biomass_contribution = Eigen::MatrixXd(n_species, n_compartments);
     biomass_contribution.setZero();
-
-    
   }
 
   void
@@ -35,9 +33,17 @@ namespace Simulation
                                 const Eigen::SparseMatrix<double> &m_transition,const Eigen::MatrixXd& transfer_g_l )
   {
     
-    Mtot = C * V;
-    auto& Vinv = V.inverse();
-    Mtot = Mtot + d_t *( (Mtot * Vinv * m_transition) + biomass_contribution + transfer_g_l);
+    // Mtot = C * V;
+    // auto& Vinv = V.inverse();
+    // Mtot = Mtot + d_t *( (Mtot * Vinv * m_transition) + biomass_contribution + transfer_g_l);
+    // C = Mtot * Vinv;
+
+    Eigen::MatrixXd Vinv = V.inverse();
+
+    Eigen::MatrixXd temp = Mtot * Vinv * m_transition;
+
+    Mtot += d_t * (temp + biomass_contribution + transfer_g_l);
+
     C = Mtot * Vinv;
   }
 } // namespace Simulation
