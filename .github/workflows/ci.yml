@@ -26,7 +26,7 @@ jobs:
             git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
             git submodule update --init --recursive
             
-
+   
       - name: Setup Cpp (C++ / C)
         uses: aminya/setup-cpp@v0.37.0
         with:
@@ -38,9 +38,10 @@ jobs:
           make: false 
           doxygen: false
       
-
+        
+      
       - name: OMP / MPI / Dependencies
-        run: sudo apt update -q && sudo apt-get install -y libomp-dev libopenmpi-dev libeigen3-dev 
+        run: sudo apt update -q && sudo apt-get install -y libomp-dev libopenmpi-dev libeigen3-dev  pkg-config
       - name: Install Python Development Packages
         run:  sudo apt-get install -y python3-dev python3 python3-pip 
       - name: Install Pybind11
