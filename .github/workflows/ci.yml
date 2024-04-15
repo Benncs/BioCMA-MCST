@@ -48,6 +48,7 @@ jobs:
         run: pip3 install meson 
       - name: Configure project
         run: |
+          ls /usr/lib/python3/
           mkdir builddir
           meson setup builddir/ --buildtype=release
       - name: Build project 
