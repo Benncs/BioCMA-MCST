@@ -25,8 +25,7 @@ jobs:
         run: |
             git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
             git submodule update --init --recursive
-            ls subprojects/birem
-            ls /usr/local/include
+            
 
       - name: Setup Cpp (C++ / C)
         uses: aminya/setup-cpp@v0.37.0
@@ -47,6 +46,7 @@ jobs:
         run: pip3 install meson 
       - name: Configure and build project
         run: |
+          ls /usr/local/include
           mkdir builddir
           meson setup builddir/ --buildtype=release
           meson compile -C builddir
