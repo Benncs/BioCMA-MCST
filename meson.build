@@ -7,7 +7,7 @@ build_type = get_option('buildtype')
 cpp = meson.get_compiler('cpp')
 
 default_options = {
-    'debug': ['b_sanitize=thread'],
+    # 'debug': ['b_sanitize=thread'],
     'release': ['b_lto=true'],
 }
 
