@@ -1,4 +1,4 @@
-project('BioCMA-MCST','cpp','c',version:'0.0.2',default_options:['warning_level=3','cpp_std=gnu++20','b_colorout=always'])
+project('BioCMA-MCST','cpp',version:'0.0.2',default_options:['warning_level=3','cpp_std=gnu++20','b_colorout=always'])
 
 
 root = meson.source_root()
