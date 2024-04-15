@@ -50,7 +50,8 @@ message('Dynamic module feature activated')
     endif
 endif 
 
-cma_reader = subproject('birem')
+
+cma_reader = subproject('birem',default_options:['warning_level=3','cpp_std=gnu++20','b_colorout=always','python_wrap=false'])
 
 cma_dep = cma_reader.get_variable('cma_read_shared_lib_dependency') 
 
