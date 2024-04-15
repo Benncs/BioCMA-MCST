@@ -14,11 +14,15 @@ jobs:
     outputs:
       RUNNER: ${{ runner.name }}
     steps:
+      - name: Configure Git for GitLab
+        run: |
+          git config --global credential.helper '!f() { echo "username=bencs;password='${{secrets.PAT_GITLAB}}'"; }; f'
+
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           submodules: recursive
-          token: '${{ secrets.PAT_TOKEN }},${{ secrets.PAT_GITLAB }}'
+          token: '${{ secrets.PAT_TOKEN }}'
       - name: Setup Cpp (C++ / C)
         uses: aminya/setup-cpp@v0.37.0
         with:
