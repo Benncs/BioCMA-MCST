@@ -26,7 +26,7 @@ jobs:
 
       - name: Clone GitLab submodule
         run: |
-            git config --global credential.helper '!f() { echo "username='${{secrets.USER_GITLAB}}';password=`${{secrets.PAT_GITLAB }}`"; }; f'
+            git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }};password=$(echo ${{ secrets.PAT_GITLAB }})"; }; f'
             git submodule update --init --recursive
 
  
