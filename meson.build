@@ -4,6 +4,7 @@ project('BioCMA-MCST','cpp',version:'0.0.2',default_options:['warning_level=3','
 root = meson.source_root()
 project_name = meson.project_name()
 build_type = get_option('buildtype')
+cpp = meson.get_compiler('cpp')
 
 default_options = {
     'debug': ['b_sanitize=thread'],
@@ -14,36 +15,33 @@ default_options = {
 default_opts = default_options.get(build_type, [])
 
 if build_type == 'debug'
-    add_global_arguments('-DDEBUG', language : ['c','cpp'])
+    add_global_arguments('-DDEBUG', language : 'cpp')
 endif
 
-# Add default options
 foreach opt: default_opts
-    add_project_arguments(opt, language: 'c')
+    add_project_arguments(opt, language: 'cpp')
 endforeach
 
 
 thread_dep = dependency('threads')
 omp = dependency('openmp',language:'cpp',required:true)
 
-cpp = meson.get_compiler('cpp')
 
 cpp_args = ['-march=native','-fno-math-errno']
 
 add_project_arguments(cpp_args, language : 'cpp')
 
 blas = dependency('blas')
-
 eigen_dep = dependency('eigen3')
+add_global_arguments('-DEIGEN_USE_BLAS', language : 'cpp')
 
-add_global_arguments('-DEIGEN_USE_BLAS', language : ['c','cpp'])
 
 use_dynamic_module = get_option('use_dynamic_module')
 if use_dynamic_module
 message('Dynamic module feature activated')
     pybind11_dep = dependency('pybind11', required : true)
     if pybind11_dep.found()
-        add_global_arguments('-DBIO_DYNAMIC_MODULE=ON', language : ['c','cpp'])
+        add_global_arguments('-DBIO_DYNAMIC_MODULE=ON', language : 'cpp')
         python_embded = declare_dependency(
             include_directories : include_directories('/usr/include/python3.10', pybind11_dep.get_pkgconfig_variable('includedir')),
             dependencies : [pybind11_dep],

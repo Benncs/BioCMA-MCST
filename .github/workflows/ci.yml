@@ -25,6 +25,8 @@ jobs:
         run: |
             git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
             git submodule update --init --recursive
+            ls subprojects/birem
+            ls /usr/local/include
 
       - name: Setup Cpp (C++ / C)
         uses: aminya/setup-cpp@v0.37.0
