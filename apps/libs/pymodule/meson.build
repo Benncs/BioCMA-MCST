@@ -8,7 +8,7 @@ if use_dynamic_module
    modfile = files(f'@src_dir@/pymodule.cpp') 
 
 
-   dependencies = [cma_dep,mc_dependency,common_dependecy,thread_dep,python_embded]
+   dependencies = [biomodel_dependency,cma_dep,mc_dependency,common_dependecy,thread_dep,python_embded]
    public='./public'
 
    indir = [public,'/usr/include/python3.10/']

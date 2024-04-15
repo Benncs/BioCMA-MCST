@@ -1,8 +1,8 @@
 #ifndef __MODELS_TYPES_HPP__
 #define __MODELS_TYPES_HPP__
 
-#include "common/cmodel_parameters.hpp"
-#include "mc/particles/mcparticles.hpp"
+#include <common/cmodel_parameters.hpp>
+#include <mc/particles/mcparticles.hpp>
 #include <Eigen/Dense>
 #include <memory>
 #include <span>

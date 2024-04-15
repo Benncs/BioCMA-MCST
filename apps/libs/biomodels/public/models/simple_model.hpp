@@ -1,7 +1,7 @@
 #ifndef __SIMPLE_MODEL_HPP__
 #define __SIMPLE_MODEL_HPP__
 
-#include "simulation/models/types.hpp"
+#include <models/types.hpp>
 #include <mc/particles/mcparticles.hpp>
 #include <memory>
 #include <span>

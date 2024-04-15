@@ -3,7 +3,7 @@
 
 #ifdef BIO_DYNAMIC_MODULE
 
-#  include <simulation/models/types.hpp>
+#  include <models/types.hpp>
 #  include <string>
 #  include <pybind11/embed.h>
 

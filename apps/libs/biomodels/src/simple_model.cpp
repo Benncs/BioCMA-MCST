@@ -1,8 +1,8 @@
-#include "common/alg.hpp"
-#include "mc/particles/mcparticles.hpp"
+#include <common/alg.hpp>
+#include <mc/particles/mcparticles.hpp>
 #include <cmath>
-#include <simulation/models/simple_model.hpp>
-#include <simulation/models/types.hpp>
+#include <models/simple_model.hpp>
+#include <models/types.hpp>
 
 #include <any>
 #include <memory>
@@ -189,7 +189,6 @@ static double uptake_glucose(std::shared_ptr<SimpleModel> &model,
   return gamma_PTS_S;
 };
 
-#include <iostream>
 static void update_xi_dot(std::shared_ptr<SimpleModel> &model,
                           double gamma_PTS_S,
                           double n_permease,

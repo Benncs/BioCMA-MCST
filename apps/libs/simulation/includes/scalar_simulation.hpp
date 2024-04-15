@@ -46,7 +46,7 @@ namespace Simulation
     this->biomass_contribution += this->contribs[i_thread];
   }
 
-  inline ScalarSimulation* newSS(size_t n_compartments, size_t n_species,size_t n_threads)
+  inline ScalarSimulation* makeScalarSimulation(size_t n_compartments, size_t n_species,size_t n_threads)
   {
     return new ScalarSimulation(n_compartments, n_species,n_threads);
   }

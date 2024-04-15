@@ -67,11 +67,11 @@ namespace Simulation
   {
 
     this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(
-        newSS(mc_unit->domain.n_compartments(), n_species, n_thread));
+        makeScalarSimulation(mc_unit->domain.n_compartments(), n_species, n_thread));
 
     this->gas_scalar = (host)
                            ? std::unique_ptr<ScalarSimulation, pimpl_deleter>(
-                                 newSS(mc_unit->domain.n_compartments(),
+                                 makeScalarSimulation(mc_unit->domain.n_compartments(),
                                        n_species,
                                        0)) // No contribs for gas
                            : nullptr;

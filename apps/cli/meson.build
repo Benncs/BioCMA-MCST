@@ -17,7 +17,7 @@ message(lib_sources)
 mpi=dependency('mpi', language: 'cpp') 
 
 
-dep = [mpi, omp,cma_dep,mc_dependency,simu_dependency,common_dependecy,thread_dep]
+dep = [mpi,biomodel_dependency, omp,cma_dep,mc_dependency,simu_dependency,common_dependecy,thread_dep]
 name = f'@project_name@_cli_app'
 
 
@@ -31,8 +31,7 @@ lib_app = static_library(name,
 app_test_dependency = declare_dependency(
     include_directories: ['./includes'],
     link_with: lib_app,
-    dependencies: dep,
-    sources: lib_sources
+    dependencies: dep
 )
 
 # Define executable

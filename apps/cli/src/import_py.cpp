@@ -12,7 +12,7 @@
 #  include <pybind11/pytypes.h>
 #  include <pybind11/stl.h>
 #  include <pymodule/opaque_type.hpp>
-#  include <simulation/models/types.hpp>
+#  include <models/types.hpp>
 #  include <stdexcept>
 
 namespace py = pybind11;

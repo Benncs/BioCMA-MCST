@@ -1,7 +1,7 @@
 #include <cli_parser.hpp>
 #include <simulation/update_flows.hpp>
 
-#include <simulation/models/models.hpp>
+#include <models/models.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/transport.hpp>
 
@@ -53,6 +53,7 @@ int main(int argc, char **argv)
     auto _module_handle = init_dynamic_module();
 #endif
     init_environement();
+    
     exec(argc, argv);
   }
   catch (std::invalid_argument &e)
@@ -85,8 +86,9 @@ static void exec(int argc, char **argv)
   ExecInfo exec_info = runtime_init(argc, argv, params);
 
   std::shared_ptr<FlowIterator> _fd = nullptr;
+ 
   auto simulation = sim_init(exec_info, params, _fd, load_model());
-
+  
   if (exec_info.current_rank == 0)
   {
     if (_fd == nullptr)

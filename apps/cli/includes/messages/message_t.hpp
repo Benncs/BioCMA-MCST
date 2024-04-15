@@ -7,7 +7,7 @@
 
 namespace MPI_W
 {
-  static bool is_mpi_init = false;
+  // static bool is_mpi_init = false;
   int critical_error() noexcept;
   void barrier()noexcept;
   void finalize()noexcept;

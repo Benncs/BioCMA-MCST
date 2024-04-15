@@ -1,4 +1,4 @@
-#include "simulation/models/simple_model.hpp"
+#include "models/simple_model.hpp"
 #include <any>
 #include <post_process.hpp>
 

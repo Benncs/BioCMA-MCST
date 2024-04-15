@@ -11,10 +11,9 @@ public_includes = [public_common]
 
 common_lib = library(f'@project_name@_common', common_sources,include_directories :incdirs,pic:true,dependencies:[omp])
 
-common_dependecy = declare_dependency(
+common_dependecy = declare_dependency(sources:common_sources,
    include_directories : public_includes,
-   link_with : common_lib,
-   sources : common_sources)
+   link_with : common_lib)
 
 
 subdir('tests')

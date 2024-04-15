@@ -1,4 +1,5 @@
 subdir('common')
 subdir('mc')
+subdir('biomodels')
 subdir('pymodule')
 subdir('simulation')
