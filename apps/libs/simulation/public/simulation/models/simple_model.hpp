@@ -23,7 +23,7 @@ struct SimpleModel
   static constexpr double YXO = 1e-4;
   static constexpr double YSA = 1e-4;
   static constexpr double psi_o_meta = 1e-12;
-  static constexpr double critcal_division_mass = 1.71e-5;
+  static constexpr double critcal_division_mass = 1.01e-5;
   struct Xi;
   double phi_s_in;
   double phi_o_in;
@@ -50,6 +50,7 @@ struct SimpleModel::Xi
   Xi() : mass(0.), mu_eff(0), a_pts(0), a_permease(0), n_permease(0)
   {
   }
+  Xi(const Xi& rhs):mass(rhs.mass),mu_eff(rhs.mu_eff),a_pts(rhs.a_pts),a_permease(rhs.a_permease),n_permease(rhs.n_permease){}
 };
 
 void init_simple_model_(MC::Particles &p);

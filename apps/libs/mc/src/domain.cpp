@@ -28,7 +28,7 @@ namespace MC
   ReactorDomain::ReactorDomain(NumberView volumes,
                                std::vector<std::vector<size_t>> &&_neighbors)
   {
-    double totv = 0;
+    double totv = 0.;
     std::transform(volumes.begin(),
                    volumes.end(),
                    std::back_inserter(this->containers),

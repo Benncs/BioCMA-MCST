@@ -48,8 +48,7 @@ namespace Simulation
     for (size_t i_thread = 0; i_thread < contribs.size(); ++i_thread)
     {
       this->liquid_scalar->biomass_contribution += this->contribs[i_thread];
-      this->container->extra_process.insert(
-          std::move(this->extras_p[i_thread]));
+      this->container->merge(i_thread);
     }
   }
 
@@ -63,11 +62,6 @@ namespace Simulation
     return std::span(this->liquid_scalar->biomass_contribution.data(), this->liquid_scalar->biomass_contribution.size());
   }
 
-  auto &SimulationUnit::getCliq()
-  {
-    return this->liquid_scalar->C;
-  }
-
   std::span<double> SimulationUnit::getCliqData()
   {
       auto data= this->liquid_scalar->C.data();
@@ -75,16 +69,12 @@ namespace Simulation
       return std::span<double>(data, this->liquid_scalar->C.size());
   }
 
-  auto &SimulationUnit::getCgas()
-  {
-    return this->gas_scalar->C;
-  }
 
   void SimulationUnit::reduce_contribs(std::span<double> data, size_t n_rank)
   {
 
-    size_t nr = this->getCliq().rows();
-    size_t nc = this->getCliq().cols();
+    size_t nr = this->liquid_scalar->C.rows();
+    size_t nc = this->gas_scalar->C.cols();
 
     this->liquid_scalar->biomass_contribution.setZero();
 

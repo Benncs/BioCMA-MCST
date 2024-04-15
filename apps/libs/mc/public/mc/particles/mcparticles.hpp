@@ -18,11 +18,22 @@ namespace MC
   class Particles
   {
   public:
-    Particles() = default;
-    Particles(double _weight)
+    Particles():current_container(0),current_domain(0),random_seed(0),id(0),status(CellStatus::IDLE),weight(0.) {};
+    Particles(double _weight):current_container(0),current_domain(0),random_seed(0),id(0),status(CellStatus::IDLE),weight(_weight) 
     {
-      weight = _weight;
     };
+
+    void clearState(MC::CellStatus _status = CellStatus::IDLE)
+    {
+      current_container=0;
+      current_domain = 0;
+      random_seed = 0;
+      id = 0;
+      status = _status;
+      weight = 0;
+      data.reset();
+    }
+    
     Particles(const Particles &p) = default; // Copy constructor
     Particles &
     operator=(const Particles &p) = default;     // Copy assignment operator

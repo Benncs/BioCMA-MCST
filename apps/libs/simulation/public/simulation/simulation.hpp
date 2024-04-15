@@ -7,14 +7,14 @@
 #include <mc/particles/particles_container.hpp>
 #include <mc/unit.hpp>
 #include <memory>
-#include <simulation/transport.hpp>
 #include <scalar_simulation.hpp>
 #include <simulation/models/types.hpp>
+#include <simulation/transport.hpp>
 
 namespace Simulation
 {
 
-  class ScalarSimulation; 
+  class ScalarSimulation;
 
   class SimulationUnit
   {
@@ -34,12 +34,7 @@ namespace Simulation
 
     void post_init(KModel &&_km);
 
-    auto &getCliq();
-
     std::span<double> getCliqData();
-
-
-    auto &getCgas();
 
     void setVolumes(std::vector<double> &&volumesgas,
                     std::vector<double> &&volumesliq);
@@ -53,14 +48,15 @@ namespace Simulation
 
     auto &get_contribution();
 
-    std::span<double>  get_contributionData();
+    std::span<double> get_contributionData();
 
-    void reduce_contribs(std::span<double> data ,size_t n_rank);
+    void reduce_contribs(std::span<double> data, size_t n_rank);
 
     void clear_contribution();
     ReactorState *state = nullptr;
 
   private:
+ 
     void post_init_container();
     void post_init_compartments();
 
@@ -70,6 +66,7 @@ namespace Simulation
     bool host;
     KModel kmodel;
     size_t np;
+    size_t n_thread;
 
     MatFlow flow_liquid; // TODO OPTI
     MatFlow flow_gas;    // TODO OPTI
@@ -90,20 +87,18 @@ namespace Simulation
     flow_gas = std::move(_flows_g);
   }
 
-  
-
-  inline void SimulationUnit::execute_process_knrl(const auto &f)
+  inline void SimulationUnit::execute_process_knrl(const auto &kernel)
   {
-#pragma omp parallel for num_threads(this->contribs.size())
+#pragma omp parallel for num_threads(n_thread)
     for (auto it = container->to_process.begin();
          it < container->to_process.end();
          ++it)
     {
-      f(*it);
+      kernel(*it);
     }
+
+   
   }
-
-
 
 } // namespace Simulation
 

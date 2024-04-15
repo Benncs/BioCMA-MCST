@@ -1,32 +1,37 @@
 #ifndef __PARTICLES_CONTAINER_HPP__
 #define __PARTICLES_CONTAINER_HPP__
 
+#include "mc/particles/mcparticles.hpp"
 #include <mc/particles/particles_list.hpp>
 
 namespace MC
 {
+  using STDVectorParticle = std::vector<MC::Particles>;
+
+  struct TheadSafeData{
+    STDVectorParticle extra_process;
+    std::vector<Particles*> dead;
+  }; 
+
+
   class ParticlesContainer
   {
+    
   public:
-    ParticlesContainer() = default;
-    ParticlesContainer(size_t capacity,double weight)
-    {
-      to_process = ParticlesList(capacity,weight);
-    }
+    explicit ParticlesContainer() = default;
+    explicit ParticlesContainer(size_t capacity,double weight)noexcept;
+    explicit ParticlesContainer(const ParticlesContainer &other) = delete;
+    explicit ParticlesContainer(ParticlesContainer &&other) noexcept;
 
-    ParticlesContainer(const ParticlesContainer &other) = delete;
-
-    ParticlesContainer(ParticlesContainer &&other) noexcept
-    {
-      if (this != &other)
-      {
-        to_process = std::move(other.to_process);
-      }
-    }
+    void merge(size_t i);
+    void init_extra(size_t n_extra);
 
     ParticlesList to_process;
-    ParticlesList extra_process;
+    std::vector<TheadSafeData> extras;
+
   };
+
+   
 } // namespace MC
 
 #endif

@@ -1,21 +1,22 @@
-#include <mc/domain.hpp>
-#include <mc/particles/mcparticles.hpp>
-#include <simulation/transport.hpp>
+#include "mc/particles/particles_container.hpp"
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
+#include <mc/domain.hpp>
+#include <mc/particles/mcparticles.hpp>
 #include <mc/prng.hpp>
 #include <memory>
 #include <omp.h>
 #include <scalar_simulation.hpp>
 #include <simulation/simulation.hpp>
+#include <simulation/transport.hpp>
 
 namespace Simulation
 {
 
   void p_kernel(MC::ReactorDomain &domain,
                 std::span<Eigen::MatrixXd> _contribs,
-                std::span<std::vector<MC::Particles>> _extras,
+                std::span<MC::TheadSafeData> _extras,
                 double d_t,
                 const KModel &_kmodel,
                 const Simulation::move_kernel &_move_kernel,
@@ -43,7 +44,7 @@ namespace Simulation
     this->liquid_scalar = std::make_unique<ScalarSimulation>(
         mc_unit->domain.n_compartments(), n_species);
     np = info.thread_per_process;
-
+    n_thread = info.thread_per_process;
     this->contribs.resize(info.thread_per_process);
     this->extras_p.resize(info.thread_per_process);
     std::generate_n(contribs.begin(),
@@ -151,7 +152,7 @@ namespace Simulation
 
     auto &domain = this->mc_unit->domain;
     auto &_contribs = this->contribs;
-    auto &_extras = this->extras_p;
+    auto &_extras = this->container->extras;
 
     const auto krnl =
         [&_move_kernel, d_t, _kmodel, &domain, &_contribs, &_extras](
@@ -163,17 +164,23 @@ namespace Simulation
   }
 
   void p_kernel(MC::ReactorDomain &domain,
-                       std::span<Eigen::MatrixXd> _contribs,
-                       std::span<std::vector<MC::Particles>> _extras,
-                       double d_t,
-                       const KModel &_kmodel,
-                       const move_kernel &_move_kernel,
-                       MC::Particles &p)
+                std::span<Eigen::MatrixXd> _contribs,
+                std::span<MC::TheadSafeData> _extras,
+                double d_t,
+                const KModel &_kmodel,
+                const move_kernel &_move_kernel,
+                MC::Particles &p)
   {
+
+    if(p.status == MC::CellStatus::DEAD)
+    {
+      return;
+    }
+    
     const double rnd = MC::double_unfiform();
     const double rdn2 = MC::double_unfiform();
     const size_t i_thread = omp_get_thread_num();
-
+    
     auto &thread_contrib = _contribs[i_thread];
     auto &thread_extra = _extras[i_thread];
     const auto &concentrations = domain[p.current_container].concentrations;
@@ -194,17 +201,19 @@ namespace Simulation
 #pragma omp atomic
         domain[child.current_container].n_cells += 1;
 
-        thread_extra.emplace_back(std::move(child));
+        thread_extra.extra_process.emplace_back(std::move(child));
       }
 
       _kmodel.contribution_kernel(p, thread_contrib);
     }
     else
     {
+      p.clearState(MC::CellStatus::DEAD);
+      thread_extra.dead.emplace_back(&p);
+
 // TODO CHECK POSSIBLE OVERFLOW
 #pragma omp atomic
-      domain[p.current_container].n_cells =
-          domain[p.current_container].n_cells - 1;
+      domain[p.current_container].n_cells -= 1;
     }
   };
 

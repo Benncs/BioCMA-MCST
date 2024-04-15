@@ -65,6 +65,7 @@ Simulation::SimulationUnit sim_init(ExecInfo &info,
   auto unit = MC::init_unit(info, liq_volume, std::move(liquid_neighbors));
 
   auto container = MC::init_container(info, params.n_particles);
+  container->init_extra(info.thread_per_process); //TODO Put it in the constructor 
 
   auto simulation = Simulation::SimulationUnit(params.n_species,
                                                std::move(unit),

@@ -10,44 +10,27 @@ namespace MC
   class ParticlesList
   {
   public:
-    ParticlesList() = default;
+    explicit ParticlesList() = default;
 
-    ParticlesList(size_t capacity, double weight);
+    explicit ParticlesList(size_t capacity, double weight);
 
-    ParticlesList(const ParticlesList &other) = delete;
-    ParticlesList(ParticlesList &&other) noexcept;
+    explicit ParticlesList(const ParticlesList &other) = delete;
+    explicit ParticlesList(ParticlesList &&other) noexcept;
     ~ParticlesList() = default;
 
     /*std::vector forward */
-    void emplace_back(Particles &&p)
-    {
-      this->data.emplace_back(std::move(p));
-    }
+    void emplace_back(Particles &&p);
 
-    // template <typename Iterator> void insert(Iterator &&begin, Iterator
-    // &&end)
-    // {
-    //   this->data.insert(data.end(),begin, end);
-    // }
+    void insert(std::vector<MC::Particles> &&source) noexcept;
 
-    void insert(std::vector<MC::Particles> &&source)
+    template <typename IT> void insert(IT &&begin, IT &&end) noexcept
     {
       data.insert(data.end(),
-                  std::make_move_iterator(source.begin()),
-                  std::make_move_iterator(source.end()));
+                  std::make_move_iterator(begin),
+                  std::make_move_iterator(end));
     }
 
-
-    
-    inline void insert(MC::ParticlesList &&data)
-    {
-      // TODO
-    }
-
-    inline size_t size() const
-    {
-      return data.size();
-    }
+    size_t size() const noexcept;
 
     decltype(auto) begin() const
     {
@@ -67,14 +50,9 @@ namespace MC
       return data.end();
     }
 
-    auto &operator[](size_t i)
-    {
-      return data[i];
-    }
-    auto &operator[](size_t i) const
-    {
-      return data[i];
-    }
+    auto &operator[](size_t i);
+
+    auto &operator[](size_t i) const;
 
     ParticlesList &operator=(const ParticlesList &other) = delete;
 
@@ -83,6 +61,34 @@ namespace MC
   private:
     std::vector<Particles> data;
   };
+
+  inline void ParticlesList::emplace_back(Particles &&p)
+  {
+    this->data.emplace_back(std::move(p));
+  }
+
+  inline size_t ParticlesList::size() const noexcept
+  {
+    return data.size();
+  }
+
+  inline auto &ParticlesList::operator[](size_t i)
+  {
+    return data[i];
+  }
+
+  inline auto &ParticlesList::operator[](size_t i) const
+  {
+    return data[i];
+  }
+
+  inline void
+  ParticlesList::insert(std::vector<MC::Particles> &&source) noexcept
+  {
+    data.insert(data.end(),
+                std::make_move_iterator(source.begin()),
+                std::make_move_iterator(source.end()));
+  }
 } // namespace MC
 
 #endif
