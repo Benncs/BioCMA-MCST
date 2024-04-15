@@ -47,17 +47,8 @@ jobs:
       - name: Install Pybind11
         run: |
           sudo apt-get install -y pybind11-dev python3-pybind11
-          sudo mkdir /usr/local/share/pkgconfig
-          sudo touch /usr/local/share/pkgconfig/pybind11.pc 
-          sudo echo "prefix=${pcfiledir}/../../
-          includedir=${prefix}/include
-
-          Name: pybind11
-          Description: Seamless operability between C++11 and Python
-          Version: 2.12.0
-          Cflags: -I${includedir}
-          " >>  /usr/local/share/pkgconfig/pybind11.pc
-
+          sudo chmod +x ./devutils/pybind11_config.sh 
+          sudo ./devutils/pybind11_config.sh 
         # git clone https://github.com/pybind/pybind11.git pybind11
           # cd pybind11
           # cmake -S . -B build
