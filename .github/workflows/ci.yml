@@ -49,7 +49,7 @@ jobs:
           pip install "pybind11[global]"
         
       - name: Install Meson 
-        run: pip3 install meson 
+        run: pip install meson 
       - name: Configure project
         run: |
           ls /usr/lib/python3/
