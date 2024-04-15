@@ -3,6 +3,7 @@
 	url = https://gitlab.com/libeigen/eigen.git
 
 
-[submodule "subprojects/CMA_reader"]
-	path = subprojects/CMA_reader
-	url = git@github.com:Benncs/CMA_reader.git
+[submodule "subprojects/birem"]
+	path = subprojects/birem
+	url = https://gitlab.com/seolane88/BIREM_Project.git
+	branch = refractor/python_interface

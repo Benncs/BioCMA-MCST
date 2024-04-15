@@ -1,60 +1,77 @@
+#include "simulation/matflows.hpp"
+#include <algorithm>
 #include <get_cumulative_proba.hpp>
+#include <numeric>
 #include <simulation/transport.hpp>
 
-#include <iostream>
 namespace Simulation
-{
+{ 
+  template <typename T>
+  using RowMajorDynMatrix =
+      Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
-  Eigen::MatrixXd get_CP(const std::vector<std::vector<size_t>> &neighbors,
-                         int n_c,
-                         const Simulation::MatFlow &flows)
+  template <typename T>
+  using ColMajorDynMatrix =
+      Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>;
+
+  FlowMatrixType FlowmapToMat(std::span<double> data, size_t n_row)
   {
-    
-    //TODO CHECK STATIC 
-    static Eigen::MatrixXd probability_ij(n_c, n_c);
-
-    // Calculate probability_ij matrix
-    for (int i = 0; i < n_c; ++i)
+    if (n_row * n_row != data.size())
     {
-      double transition_coeff = flows.transition_matrix.coeff(i, i);
-      for (int j = 0; j < n_c; ++j)
-      {
-        probability_ij(i, j) =
-            (transition_coeff == 0)
-                ? 0.0
-                : flows.flows.coeff(i, j) / (-transition_coeff);
-      }
+      throw std::invalid_argument("FlowMap should be square");
     }
+    Eigen::Map<ColMajorDynMatrix<double>> matrix_view(
+        data.data(), static_cast<int>(n_row), static_cast<int>(n_row));
 
-    // Calculate cumulative probability
-    static Eigen::MatrixXd cumulative_probability(n_c, neighbors[0].size());
+    // return matrix_view.sparseView();
 
-    for (int i_c = 0; i_c < n_c; ++i_c)
-    {
-      double cumsum = 0;
-      for (size_t i_n = 0; i_n < neighbors[i_c].size(); ++i_n)
-      {
-        int nn = static_cast<int>(neighbors[i_c][i_n]);
-        if (nn != i_c)
-        {
-          cumsum += probability_ij.coeff(i_c, nn);
-          cumulative_probability.coeffRef(i_c, i_n) = cumsum;
-        }
-      }
-      if (cumsum != 0)
-      {
-        cumulative_probability.row(i_c) /= cumsum;
-      }
-    }
-
-    return cumulative_probability;
+    return matrix_view;
   }
 
-  Eigen::SparseMatrix<double>
-  get_transition_matrix(const Eigen::SparseMatrix<double> &flows)
+  Eigen::MatrixXd get_CP(const std::vector<std::vector<size_t>> &neighbors,
+                         int nb_zone,
+                         const Simulation::MatFlow &flows)
+  {
+    // Initialize probability matrix
+    Eigen::MatrixXd P = Eigen::MatrixXd::Zero(nb_zone, neighbors[0].size());
+
+    // Calculate cumulative sum and probability matrix
+    for (int k = 0; k < nb_zone; ++k)
+    {
+      // Calculate cumulative sum
+      double cumsum = 0;
+      size_t last_n = 1e5; // Assuming a large enough initial value
+      int count_nei = 0;
+      for (auto &&i_neighbor : neighbors[k])
+      {
+        if (i_neighbor != last_n)
+        {
+          cumsum += flows.flows.coeff(k, (int)i_neighbor);
+        }
+        P.coeffRef(k, count_nei) = cumsum;
+        count_nei++;
+        last_n = i_neighbor;
+      }
+
+      // Normalize probabilities if cumsum is non-zero
+      if (cumsum != 0)
+      {
+        P.row(k) /= cumsum;
+      }
+      else
+      {
+        // Set all probabilities to zero if cumsum is zero
+        P.row(k).setZero();
+      }
+    }
+
+    return P;
+  }
+
+  FlowMatrixType get_transition_matrix(const FlowMatrixType &flows)
   {
     auto n_compartiments = flows.rows(); // It's SHOULD be square
-    Eigen::SparseMatrix<double> m_transition(n_compartiments, n_compartiments);
+    FlowMatrixType m_transition(n_compartiments, n_compartiments);
 
     // TODO OPTI
     for (int i = 0; i < n_compartiments; ++i)
@@ -76,7 +93,8 @@ namespace Simulation
         }
       }
     }
-    m_transition.makeCompressed();
+
+    // m_transition.makeCompressed();
     return m_transition;
   }
 
@@ -89,6 +107,7 @@ namespace Simulation
     auto cumulative_probability =
         get_CP(unit.domain.getNeighbors(), n_c, flows);
 
+    // std::cout<<cumulative_probability<<std::endl;
     auto &m_transition = flows.transition_matrix;
 
     auto move_kernel = [&unit,

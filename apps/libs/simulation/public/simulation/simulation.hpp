@@ -1,20 +1,21 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
-
-
-#include <reactorstate.hpp>
+#include "mc/particles/mcparticles.hpp"
+#include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <mc/particles/particles_container.hpp>
 #include <mc/unit.hpp>
 #include <memory>
 #include <simulation/transport.hpp>
-
+#include <scalar_simulation.hpp>
 #include <simulation/models/types.hpp>
-#include <simulation/scalar_simulation.hpp>
 
 namespace Simulation
 {
+
+  class ScalarSimulation; 
+
   class SimulationUnit
   {
   public:
@@ -35,6 +36,9 @@ namespace Simulation
 
     auto &getCliq();
 
+    std::span<double> getCliqData();
+
+
     auto &getCgas();
 
     void setVolumes(std::vector<double> &&volumesgas,
@@ -49,12 +53,20 @@ namespace Simulation
 
     auto &get_contribution();
 
+    std::span<double>  get_contributionData();
+
+    void reduce_contribs(std::span<double> data ,size_t n_rank);
+
     void clear_contribution();
     ReactorState *state = nullptr;
 
   private:
     void post_init_container();
     void post_init_compartments();
+
+    void post_process_reducing();
+    void execute_process_knrl(const auto &f);
+
     bool host;
     KModel kmodel;
     size_t np;
@@ -78,22 +90,20 @@ namespace Simulation
     flow_gas = std::move(_flows_g);
   }
 
-  inline auto &SimulationUnit::get_contribution()
-  {
-    return this->liquid_scalar->biomass_contribution;
-  };
+  
 
-  inline auto &SimulationUnit::getCliq()
+  inline void SimulationUnit::execute_process_knrl(const auto &f)
   {
-    return this->liquid_scalar->C;
+#pragma omp parallel for num_threads(this->contribs.size())
+    for (auto it = container->to_process.begin();
+         it < container->to_process.end();
+         ++it)
+    {
+      f(*it);
+    }
   }
 
-  inline auto &SimulationUnit::getCgas()
-  {
-    return this->gas_scalar->C;
-  }
 
- 
 
 } // namespace Simulation
 

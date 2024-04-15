@@ -1,5 +1,5 @@
 #include <Eigen/Dense>
-#include <simulation/scalar_simulation.hpp>
+#include <scalar_simulation.hpp>
 
 #include <iostream>
 
@@ -30,7 +30,7 @@ namespace Simulation
 
   void
   ScalarSimulation::performStep(double d_t,
-                                const Eigen::SparseMatrix<double> &m_transition,const Eigen::MatrixXd& transfer_g_l )
+                                const FlowMatrixType &m_transition,const Eigen::MatrixXd& transfer_g_l )
   {
     
     // Mtot = C * V;

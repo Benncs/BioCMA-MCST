@@ -1,4 +1,4 @@
-project('BioCMA-MCST','cpp','c',version:'0.0.1',default_options:['warning_level=3','cpp_std=gnu++20','b_colorout=always'])
+project('BioCMA-MCST','cpp','c',version:'0.0.2',default_options:['warning_level=3','cpp_std=gnu++20','b_colorout=always'])
 
 
 root = meson.source_root()
@@ -28,10 +28,14 @@ omp = dependency('openmp',language:'cpp',required:true)
 
 cpp = meson.get_compiler('cpp')
 
+cpp_args = ['-march=native','-fno-math-errno']
 
+add_project_arguments(cpp_args, language : 'cpp')
 
 blas = dependency('blas')
-eigen_includes = include_directories('./subprojects/eigen')
+
+eigen_dep = dependency('eigen3')
+
 add_global_arguments('-DEIGEN_USE_BLAS', language : ['c','cpp'])
 
 use_dynamic_module = get_option('use_dynamic_module')
@@ -48,9 +52,9 @@ message('Dynamic module feature activated')
     endif
 endif 
 
-cma_reader = subproject('CMA_reader')
+cma_reader = subproject('birem')
 
-cma_dep = cma_reader.get_variable('shared_lib_dependency') 
+cma_dep = cma_reader.get_variable('cma_read_shared_lib_dependency') 
 
 subdir('apps')
 

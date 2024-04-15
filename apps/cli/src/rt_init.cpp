@@ -1,7 +1,6 @@
 
 #include <rt_init.hpp>
 
-#include "common/simulation_parameters.hpp"
 #include <common/common.hpp>
 #include <cstdlib>
 #include <filesystem>
@@ -11,6 +10,9 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <Eigen/Core>
+
+void init_bmc_info(std::ofstream& fd);
 
 void set_openmp_threads(int rank,
     int size,
@@ -69,7 +71,7 @@ ExecInfo runtime_init(int argc, char** argv, SimulationParameters& params)
 }
 
 
-void init_bmc_info(std::ofstream& fd);
+
 void init_environement() {
     if (std::filesystem::exists(".bmc_info")) {
         return;

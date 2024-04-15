@@ -1,15 +1,14 @@
-#include "cli_parser.hpp"
-#include "messages/impl_op.hpp"
-#include "mpi.h"
-#include "update_flows.hpp"
+#include <cli_parser.hpp>
+#include <simulation/update_flows.hpp>
+
 #include <simulation/models/models.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/transport.hpp>
 
 #include <common/common.hpp>
 
-#include <flow_iterator.hpp>
-#include <reactorstate.hpp>
+#include <cma_read/flow_iterator.hpp>
+#include <cma_read/reactorstate.hpp>
 
 #include <cli_parser.hpp>
 #include <host_specific.hpp>
@@ -18,6 +17,8 @@
 #include <rt_init.hpp>
 #include <siminit.hpp>
 #include <sync.hpp>
+
+
 #ifdef BIO_DYNAMIC_MODULE
 #  include <import_py.hpp>
 #endif
@@ -104,13 +105,13 @@ static void exec(int argc, char **argv)
 static void show(Simulation::SimulationUnit &simulation)
 {
 
-  // auto d = simulation.unit->domain.getDistribution();
+  auto d = simulation.mc_unit->domain.getDistribution();
 
-  // for(auto&& i : d)
-  // {
-  //   std::cout<<i<<", ";
-  // }
-  // std::cout<<std::endl;
+  for(auto&& i : d)
+  {
+    std::cout<<i<<", ";
+  }
+  std::cout<<std::endl;
   // try
   // {
   //   std::vector<double> totmas(simulation.unit->domain.n_compartments(), 0.);
@@ -162,32 +163,27 @@ static void workers_process(ExecInfo &exec,
   size_t iteration_count = 0;
   size_t n_loop = params.n_different_maps;
   auto liquid_flows = Simulation::VecMatFlows(n_loop);
-
+  std::vector<std::vector<size_t>> liquid_neighbors(n_compartments);
   while (true)
   {
-
+    
     auto sign = MPI_W::try_recv<MPI_W::SIGNALS>(0, &status);
 
     if (sign == MPI_W::SIGNALS::STOP)
     {
       return;
     }
-
     auto flows = MPI_W::try_recv_v<double>(0);
 
-    size_t number_neighbors = MPI_W::try_recv<size_t>(0);
-   
-    std::vector<std::vector<size_t>> liquid_neighbors(n_compartments);
     for (auto&& neighbors : liquid_neighbors)
     {
-        neighbors.resize(number_neighbors);
-        MPI_Recv(neighbors.data(),number_neighbors,MPI_UNSIGNED_LONG,0,0,MPI_COMM_WORLD,&status);
-       
+        
+        neighbors = MPI_W::try_recv_v<size_t>(0,&status);
     }
 
     simulation.mc_unit->domain.setLiquidNeighbors(liquid_neighbors);
 
-    update_flow(iteration_count,
+    Simulation::update_flow(iteration_count,
                 n_loop,
                 simulation,
                 flows,

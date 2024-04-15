@@ -5,9 +5,9 @@ common_sources = run_command('sh','-c', f'find @src_dir@ -type f -name *.cpp ').
 
 public_common  =  include_directories('public')
 
-incdirs = [public_common,'includes',eigen_includes]
+incdirs = [public_common,'includes']
 
-public_includes = [public_common,eigen_includes]
+public_includes = [public_common]
 
 common_lib = library(f'@project_name@_common', common_sources,include_directories :incdirs,pic:true,dependencies:[omp])
 

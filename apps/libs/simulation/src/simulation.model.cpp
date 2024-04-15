@@ -1,9 +1,14 @@
-#include "mc/domain.hpp"
-#include "reactorstate.hpp"
+#include <cma_read/reactorstate.hpp>
+#include <mc/domain.hpp>
 #include <simulation/simulation.hpp>
 #include <stdexcept>
 
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
+
 #include <iostream>
+#include <scalar_simulation.hpp>
 
 static void mock_transfer(const MC::ReactorDomain &domain,
                           Eigen::ArrayXXd &vec,
@@ -29,7 +34,7 @@ static void mock_transfer(const MC::ReactorDomain &domain,
     //              (domain[i_c].volume_gas + domain[i_c].volume_liq);
     // double a = 6 * gas_fraction / db;
 
-    double kla = 1e-5;//kl*a;
+    double kla = 1e-5; // kl*a;
 
     vec.coeffRef(1, i_c) = kla;
   }
@@ -37,19 +42,68 @@ static void mock_transfer(const MC::ReactorDomain &domain,
 
 namespace Simulation
 {
+
+  void SimulationUnit::post_process_reducing()
+  {
+    for (size_t i_thread = 0; i_thread < contribs.size(); ++i_thread)
+    {
+      this->liquid_scalar->biomass_contribution += this->contribs[i_thread];
+      this->container->extra_process.insert(
+          std::move(this->extras_p[i_thread]));
+    }
+  }
+
+  auto &SimulationUnit::get_contribution()
+  {
+    return this->liquid_scalar->biomass_contribution;
+  };
+
+  std::span<double>  SimulationUnit::get_contributionData()
+  {
+    return std::span(this->liquid_scalar->biomass_contribution.data(), this->liquid_scalar->biomass_contribution.size());
+  }
+
+  auto &SimulationUnit::getCliq()
+  {
+    return this->liquid_scalar->C;
+  }
+
+  std::span<double> SimulationUnit::getCliqData()
+  {
+      auto data= this->liquid_scalar->C.data();
+
+      return std::span<double>(data, this->liquid_scalar->C.size());
+  }
+
+  auto &SimulationUnit::getCgas()
+  {
+    return this->gas_scalar->C;
+  }
+
+  void SimulationUnit::reduce_contribs(std::span<double> data, size_t n_rank)
+  {
+
+    size_t nr = this->getCliq().rows();
+    size_t nc = this->getCliq().cols();
+
+    this->liquid_scalar->biomass_contribution.setZero();
+
+    for (int i = 0; i < static_cast<int>(n_rank); ++i)
+    {
+      this->liquid_scalar->biomass_contribution += Eigen::Map<Eigen::MatrixXd>(
+          &data[i * nr * nc], static_cast<int>(nr), static_cast<int>(nc));
+    }
+  }
+
   void SimulationUnit::clear_contribution()
   {
-    for(size_t i =0;i<contribs.size();++i)
+    for (size_t i = 0; i < contribs.size(); ++i)
     {
       contribs[i].setZero();
       extras_p[i].clear();
     }
 
-
     this->liquid_scalar->biomass_contribution.setZero();
-    
-    if(gas_scalar)
-        gas_scalar->C.coeffRef(1, 10) = 3;
   }
 
   void SimulationUnit::step(double d_t)
@@ -67,11 +121,11 @@ namespace Simulation
     vec_kla.setZero();
     mock_transfer(mc_unit->domain, vec_kla, state);
 
-
-    auto c_star = 1.3e-5*gas_scalar->C.array()/32e-3*8.314*(273.15+30);
+    auto c_star =
+        1.3e-5 * gas_scalar->C.array() / 32e-3 * 8.314 * (273.15 + 30);
 
     auto transfer_g_liq = vec_kla * (c_star.array() - liquid_scalar->C.array());
-    auto mat_transfer_g_liq = transfer_g_liq.matrix()* liquid_scalar->V;
+    auto mat_transfer_g_liq = transfer_g_liq.matrix() * liquid_scalar->V;
 
     this->liquid_scalar->performStep(
         d_t, flow_liquid.transition_matrix, mat_transfer_g_liq);

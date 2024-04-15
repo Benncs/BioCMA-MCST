@@ -1,22 +1,19 @@
 #include <memory>
 #include <siminit.hpp>
 
-#include "common/simulation_parameters.hpp"
-#include "flow_iterator.hpp"
-#include "messages/impl_op.hpp"
-#include "messages/message_t.hpp"
-#include "simulation/models/types.hpp"
-#include "simulation/simulation.hpp"
+#include <cma_read/flow_iterator.hpp>
+#include <common/common.hpp>
 #include <cstdio>
 #include <messages/wrap_mpi.hpp>
-#include <simulation/models/simple_model.hpp>
+#include <simulation/simulation.hpp>
 
 #include <mc/mcinit.hpp>
 #include <stdexcept>
 #include <vector>
 
-static ReactorState *init_state(SimulationParameters &params,
-                                std::shared_ptr<FlowIterator> &_flow_handle);
+static ReactorState const *
+init_state(SimulationParameters &params,
+           std::shared_ptr<FlowIterator> &flow_handle);
 
 Simulation::SimulationUnit sim_init(ExecInfo &info,
                                     SimulationParameters &params,
@@ -29,24 +26,27 @@ Simulation::SimulationUnit sim_init(ExecInfo &info,
   std::vector<std::vector<size_t>> liquid_neighbors;
   size_t n_compartments;
   size_t nmap;
+  double opti_dt = params.d_t;
   if (info.current_rank == 0)
   {
-    ReactorState *fstate = init_state(params, _flow_handle);
+    const ReactorState *fstate = init_state(params, _flow_handle);
 
     n_compartments = fstate->n_compartments;
     liquid_neighbors = fstate->liquid_flow.neigbors;
     nmap = _flow_handle->loop_size();
     liq_volume = fstate->liquidVolume;
     gas_volume = fstate->gasVolume;
+    opti_dt = _flow_handle->MinLiquidResidenceTime() / 100.;
   }
 
   // MPI_W::broadcast(d_t, 0);
-  if (MPI_W::broadcast(nmap,0)!=0)
+  if (MPI_W::broadcast(nmap, 0) != 0)
   {
     MPI_W::critical_error();
   }
 
-
+  MPI_W::broadcast(opti_dt, 0);
+  params.d_t = opti_dt;
 
   MPI_W::broadcast(liq_volume, 0, info.current_rank);
   MPI_W::broadcast(gas_volume, 0, info.current_rank);
@@ -78,10 +78,11 @@ Simulation::SimulationUnit sim_init(ExecInfo &info,
   return simulation;
 }
 
-static ReactorState *init_state(SimulationParameters &params,
-                                std::shared_ptr<FlowIterator> &flow_handle)
+static ReactorState const *
+init_state(SimulationParameters &params,
+           std::shared_ptr<FlowIterator> &flow_handle)
 {
-  ReactorState *state = nullptr;
+  ReactorState const *state = nullptr;
   try
   {
     flow_handle = std::make_shared<FlowIterator>(params.flow_files);
@@ -90,7 +91,7 @@ static ReactorState *init_state(SimulationParameters &params,
 
     flow_handle->setRepetition(n_t);
 
-    state = flow_handle->get();
+    state = &flow_handle->operator()(0);
   }
   catch (const std::exception &e)
   {

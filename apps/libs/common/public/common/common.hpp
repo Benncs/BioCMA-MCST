@@ -6,8 +6,7 @@
 #include <common/simulation_parameters.hpp>
 #include <common/alg.hpp>
 
-#include <Eigen/Sparse>
-Eigen::SparseMatrix<double>  FlowmapToMat(std::span<double> data,size_t n_row);
+
 
 void test_common();
 

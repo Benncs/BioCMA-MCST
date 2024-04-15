@@ -1,0 +1,32 @@
+#include <simulation/matflows.hpp>
+
+namespace Simulation
+{
+  MatFlow::MatFlow(const FlowMatrixType &_flows, const FlowMatrixType &_tm)
+  {
+    flows = _flows;
+    transition_matrix = _tm;
+  }
+
+  MatFlow::MatFlow(const FlowMatrixType &&_flows, const FlowMatrixType &&_tm)
+  {
+    flows = std::move(_flows);
+    transition_matrix = std::move(_tm);
+  }
+
+  MatFlow &MatFlow::operator=(MatFlow &&rhs)
+  {
+    if (this != &rhs)
+    {
+      flows = std::move(rhs.flows);
+      transition_matrix = std::move(rhs.transition_matrix);
+    }
+    return *this;
+  }
+
+  MatFlow::MatFlow(MatFlow &&other)
+  {
+    flows = std::move(other.flows);
+    transition_matrix = std::move(other.transition_matrix);
+  }
+}; // namespace Simulation

@@ -1,8 +1,7 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
-#include <Eigen/Dense>
-#include <Eigen/Sparse>
+#include <simulation/matflows.hpp>
 
 namespace Simulation
 {
@@ -23,7 +22,7 @@ namespace Simulation
       return this->n_r;
     }
     void performStep(double d_t,
-                     const Eigen::SparseMatrix<double> &m_transition,const Eigen::MatrixXd& transfer_g_l );
+                     const FlowMatrixType &m_transition,const Eigen::MatrixXd& transfer_g_l );
 
   private:
     void updateC();

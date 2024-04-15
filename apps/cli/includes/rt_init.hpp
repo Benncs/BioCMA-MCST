@@ -2,8 +2,7 @@
 #define __RUNTIME_INIT_HPP__
 
 
-#include "common/simulation_parameters.hpp"
-#include <common/execinfo.hpp>
+#include <common/common.hpp>
 
 
 void init_environement();

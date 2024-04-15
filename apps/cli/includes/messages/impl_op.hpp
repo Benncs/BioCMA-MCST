@@ -9,6 +9,8 @@
 #include <numeric>
 #include <optional>
 #include <span>
+#include <stdexcept>
+#include <string>
 #include <vector>
 
 namespace MPI_W
@@ -76,14 +78,18 @@ namespace MPI_W
     // Resize the buffer
     buf.resize(buf_size);
 
+    MPI_Datatype datatype = get_type<T>();
+
     // Receive the vector data
     int recv_status = MPI_Recv(buf.data(),
                                static_cast<int>(buf_size),
-                               MPI_TYPES<T>::value,
+                               datatype,
                                src,
                                tag,
                                MPI_COMM_WORLD,
                                status);
+
+
     if (recv_status != MPI_SUCCESS)
     {
       return std::nullopt; // Return early if MPI_Recv fails

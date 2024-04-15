@@ -1,4 +1,4 @@
-#include "common/common.hpp"
+#include <simulation/transport.hpp>
 
 void test_valid_input() {
     std::vector<double> data = {1.0, 0.0, 0.0,
@@ -6,7 +6,7 @@ void test_valid_input() {
                                 0.0, 0.0, 3.0}; // Example square matrix data
     int n_row = 3; // Square root of the size of the data vector
     try {
-        Eigen::SparseMatrix<double> sparse_matrix = FlowmapToMat(data, n_row);
+        auto sparse_matrix = Simulation::FlowmapToMat(data, n_row);
         // Check if the resulting matrix is correct
         assert(sparse_matrix.rows() == n_row);
         assert(sparse_matrix.cols() == n_row);
@@ -30,7 +30,7 @@ void test_invalid_input() {
                                  0.0, 2.0, 0.0};
     int n_row = 2;
     try {
-        FlowmapToMat(data, n_row);
+        Simulation::FlowmapToMat(data, n_row);
          assert(false);
     } catch (const std::invalid_argument& e) {
         assert(true);

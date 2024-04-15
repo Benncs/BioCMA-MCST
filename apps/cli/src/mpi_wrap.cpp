@@ -1,5 +1,5 @@
-#include "messages/message_t.hpp"
-#include "messages/mpi_types.hpp"
+#include <messages/message_t.hpp>
+#include <messages/mpi_types.hpp>
 #include <common/common.hpp>
 #include <cstdlib>
 #include <messages/wrap_mpi.hpp>

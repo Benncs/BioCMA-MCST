@@ -1,5 +1,9 @@
 #include <common/common.hpp>
 #include <iostream>
+#include <cassert>
+#include <cmath>
+
+
 void validation_test()
 {
   auto sqrt_function = [](double x)
