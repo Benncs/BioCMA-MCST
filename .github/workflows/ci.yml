@@ -54,8 +54,8 @@ jobs:
         run: pip install meson 
       - name: Configure project
         run: |
-          ls /usr/local/lib/python3.10/dist-packages 
-          ls /usr/local/share/cmake/ 
+          ls /usr/local/share/cmake/pybind11 
+          ls /usr/local/share/pkgconfig/ 
           mkdir builddir
           meson setup builddir/ --buildtype=release
       - name: Build project 
