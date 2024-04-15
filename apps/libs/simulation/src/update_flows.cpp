@@ -40,9 +40,7 @@ namespace Simulation
       computeMatFlow(flows, nc, current_liq_matflow);
     }
 
-    unit.setLiquidFlow(
-        Simulation::MatFlow(std::cref(current_liq_matflow.flows),
-                            std::cref(current_liq_matflow.transition_matrix)));
+    unit.setLiquidFlow(&current_liq_matflow);
 
     iteration_count++;
   }
@@ -66,13 +64,11 @@ namespace Simulation
     }
 
     unit.mc_unit->domain.setLiquidNeighbors(f->liquid_flow.neigbors);
-    unit.setLiquidFlow(
-        Simulation::MatFlow(std::cref(current_liq_matflow.flows),
-                            std::cref(current_liq_matflow.transition_matrix)));
+    unit.setLiquidFlow(&current_liq_matflow);
+       
 
-    unit.setGasFlow(
-        Simulation::MatFlow(std::cref(current_gas_matflow.flows),
-                            std::cref(current_gas_matflow.transition_matrix)));
+    unit.setGasFlow(&current_gas_matflow);
+      
     iteration_count++;
   }
 

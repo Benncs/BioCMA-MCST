@@ -7,7 +7,6 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
-#include <iostream>
 #include <scalar_simulation.hpp>
 
 static void mock_transfer(const MC::ReactorDomain &domain,
@@ -45,17 +44,12 @@ namespace Simulation
 
   void SimulationUnit::post_process_reducing()
   {
-    for (size_t i_thread = 0; i_thread < contribs.size(); ++i_thread)
+    for (size_t i_thread = 0; i_thread < n_thread; ++i_thread)
     {
-      this->liquid_scalar->biomass_contribution += this->contribs[i_thread];
+      this->liquid_scalar->merge(i_thread);
       this->container->merge(i_thread);
     }
   }
-
-  auto &SimulationUnit::get_contribution()
-  {
-    return this->liquid_scalar->biomass_contribution;
-  };
 
   std::span<double>  SimulationUnit::get_contributionData()
   {
@@ -70,7 +64,7 @@ namespace Simulation
   }
 
 
-  void SimulationUnit::reduce_contribs(std::span<double> data, size_t n_rank)
+  void SimulationUnit::reduceContribs(std::span<double> data, size_t n_rank)
   {
 
     size_t nr = this->liquid_scalar->C.rows();
@@ -85,12 +79,12 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::clear_contribution()
+  void SimulationUnit::clearContribution()
   {
-    for (size_t i = 0; i < contribs.size(); ++i)
+    for (size_t i = 0; i < n_thread; ++i)
     {
-      contribs[i].setZero();
-      extras_p[i].clear();
+      this->liquid_scalar->contribs[i].setZero();
+      container->extras.clear();
     }
 
     this->liquid_scalar->biomass_contribution.setZero();
@@ -118,8 +112,8 @@ namespace Simulation
     auto mat_transfer_g_liq = transfer_g_liq.matrix() * liquid_scalar->V;
 
     this->liquid_scalar->performStep(
-        d_t, flow_liquid.transition_matrix, mat_transfer_g_liq);
+        d_t, flow_liquid->transition_matrix, mat_transfer_g_liq);
     this->gas_scalar->performStep(
-        d_t, flow_gas.transition_matrix, -1 * mat_transfer_g_liq);
+        d_t, flow_gas->transition_matrix, -1 * mat_transfer_g_liq);
   }
 } // namespace Simulation

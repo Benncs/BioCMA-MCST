@@ -31,6 +31,26 @@ namespace MPI_W
   }
 
   template <POD DataType>
+  int send_v(std::span<const DataType> data,
+             size_t dest,
+             size_t tag = MPI_ANY_TAG)
+  {
+    int status;
+    // status = send(data.size(), dest, tag);
+    // if (status == MPI_SUCCESS)
+    {
+      status = MPI_Send(data.data(),
+                        data.size(),
+                        get_type<DataType>(),
+                        dest,
+                        tag,
+                        MPI_COMM_WORLD);
+    }
+
+    return status;
+  }
+
+  template <POD DataType>
   std::optional<DataType>
   recv(size_t src, MPI_Status *status = nullptr, size_t tag = MPI_ANY_TAG)
   {
@@ -88,7 +108,6 @@ namespace MPI_W
                                tag,
                                MPI_COMM_WORLD,
                                status);
-
 
     if (recv_status != MPI_SUCCESS)
     {

@@ -23,7 +23,7 @@ struct SimpleModel
   static constexpr double YXO = 1e-4;
   static constexpr double YSA = 1e-4;
   static constexpr double psi_o_meta = 1e-12;
-  static constexpr double critcal_division_mass = 1.01e-5;
+  static constexpr double critcal_division_mass = 1.71e-5;
   struct Xi;
   double phi_s_in;
   double phi_o_in;

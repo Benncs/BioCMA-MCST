@@ -24,7 +24,7 @@ namespace Simulation
 
   move_kernel pbf(MC::MonteCarloUnit &unit,
                   MC::ParticlesContainer &container,
-                  const MatFlow &flows);
+                  const MatFlow *flows);
 } // namespace Simulation
 
 #endif //__TRANSPORT_HPP__

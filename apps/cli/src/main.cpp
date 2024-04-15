@@ -190,7 +190,7 @@ static void workers_process(ExecInfo &exec,
                 n_compartments,
                 liquid_flows);
 
-    simulation.cycle_process(d_t);
+    simulation.cycleProcess(d_t);
     sync_step(exec, simulation);
     sync_prepare_next(exec, simulation);
   }

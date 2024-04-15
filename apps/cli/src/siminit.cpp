@@ -37,6 +37,8 @@ Simulation::SimulationUnit sim_init(ExecInfo &info,
     liq_volume = fstate->liquidVolume;
     gas_volume = fstate->gasVolume;
     opti_dt = _flow_handle->MinLiquidResidenceTime() / 100.;
+    size_t n_t = static_cast<size_t>(params.final_time / opti_dt);
+    _flow_handle->setRepetition(n_t / nmap);
   }
 
   // MPI_W::broadcast(d_t, 0);
@@ -65,17 +67,18 @@ Simulation::SimulationUnit sim_init(ExecInfo &info,
   auto unit = MC::init_unit(info, liq_volume, std::move(liquid_neighbors));
 
   auto container = MC::init_container(info, params.n_particles);
-  container->init_extra(info.thread_per_process); //TODO Put it in the constructor 
+  container->init_extra(
+      info.thread_per_process); // TODO Put it in the constructor
 
-  auto simulation = Simulation::SimulationUnit(params.n_species,
+  auto simulation = Simulation::SimulationUnit(info,
                                                std::move(unit),
                                                std::move(container),
-                                               info,
+                                               params.n_species,
                                                info.current_rank == 0);
 
   simulation.setVolumes(std::move(gas_volume), std::move(liq_volume));
 
-  simulation.post_init(std::move(model));
+  simulation.postInit(std::move(model));
   return simulation;
 }
 
@@ -87,10 +90,6 @@ init_state(SimulationParameters &params,
   try
   {
     flow_handle = std::make_shared<FlowIterator>(params.flow_files);
-
-    size_t n_t = static_cast<size_t>(params.final_time / params.d_t);
-
-    flow_handle->setRepetition(n_t);
 
     state = &flow_handle->operator()(0);
   }

@@ -19,14 +19,14 @@ void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
 
   if (exec.current_rank == 0)
   {
-    simulation.reduce_contribs(total_contrib_data, exec.n_rank);
+    simulation.reduceContribs(total_contrib_data, exec.n_rank);
   }
 }
 void sync_prepare_next(const ExecInfo &exec,
                        Simulation::SimulationUnit &simulation)
 {
   MPI_W::barrier();
-  simulation.clear_contribution();
+  simulation.clearContribution();
 
   auto data = simulation.getCliqData();//Get concentration ptr wrapped into span  
 

@@ -11,8 +11,34 @@
 #include <simulation/simulation.hpp>
 #include <simulation/transport.hpp>
 
+
+
 namespace Simulation
 {
+  void pimpl_deleter::operator()(ScalarSimulation *ptr) const
+  {
+    delete ptr;
+  }
+
+  void initF(pimp_ptr_t &liq, pimp_ptr_t &gas)
+  {
+    bool host = gas != nullptr;
+    for (auto i = 0; i < liq->C.cols(); ++i)
+    {
+      liq->C.coeffRef(1, i) = 8e-3;
+      liq->C.coeffRef(0, static_cast<int>(i)) = 0.01;
+      if (host)
+      {
+        gas->C.coeffRef(1, i) = 321e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
+      }
+    }
+
+    liq->Mtot = liq->C * liq->V;
+    if (host)
+    {
+      gas->Mtot = gas->C * gas->V;
+    }
+  }
 
   void p_kernel(MC::ReactorDomain &domain,
                 std::span<Eigen::MatrixXd> _contribs,
@@ -23,60 +49,38 @@ namespace Simulation
                 MC::Particles &p);
 
   SimulationUnit::SimulationUnit(SimulationUnit &&other) noexcept
+      : mc_unit(std::move(other.mc_unit)),
+        container(std::move(other.container)), host(other.host),
+        flow_liquid(std::move(other.flow_liquid)),
+        flow_gas(std::move(other.flow_gas)), kmodel(other.kmodel)
   {
-    mc_unit = std::move(other.mc_unit);
-    container = std::move(other.container);
-    host = other.host;
-    flow_liquid = std::move(other.flow_liquid);
-    flow_gas = std::move(other.flow_gas);
-    kmodel = other.kmodel;
   }
 
   SimulationUnit::SimulationUnit(
-      size_t n_species,
+      const ExecInfo &info,
       std::unique_ptr<MC::MonteCarloUnit> &&_unit,
       std::unique_ptr<MC::ParticlesContainer> &&_container,
-      const ExecInfo &info,
+      size_t n_species,
       bool _host)
-      : mc_unit(std::move(_unit)), container(std::move(_container)), host(_host)
+      : mc_unit(std::move(_unit)), container(std::move(_container)),
+        host(_host), n_thread(info.thread_per_process)
   {
 
-    this->liquid_scalar = std::make_unique<ScalarSimulation>(
-        mc_unit->domain.n_compartments(), n_species);
-    np = info.thread_per_process;
-    n_thread = info.thread_per_process;
-    this->contribs.resize(info.thread_per_process);
-    this->extras_p.resize(info.thread_per_process);
-    std::generate_n(contribs.begin(),
-                    info.thread_per_process,
-                    [this]()
-                    {
-                      auto m = Eigen::MatrixXd(liquid_scalar->C.rows(),
-                                               liquid_scalar->C.cols());
-                      m.setZero();
-                      return m;
-                    });
+    this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(
+        newSS(mc_unit->domain.n_compartments(), n_species, n_thread));
 
-    this->gas_scalar = (host) ? std::make_unique<ScalarSimulation>(
-                                    mc_unit->domain.n_compartments(), n_species)
-                              : nullptr;
+    this->gas_scalar = (host)
+                           ? std::unique_ptr<ScalarSimulation, pimpl_deleter>(
+                                 newSS(mc_unit->domain.n_compartments(),
+                                       n_species,
+                                       0)) // No contribs for gas
+                           : nullptr;
 
     // FIXME
-    for (auto i = 0; i < liquid_scalar->C.cols(); ++i)
-    {
-      liquid_scalar->C.coeffRef(1, i) = 8e-3;
-      liquid_scalar->C.coeffRef(0, static_cast<int>(i)) = 0.01;
-      if (host)
-        gas_scalar->C.coeffRef(1, i) =
-            321e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
-    }
-
-    liquid_scalar->Mtot = liquid_scalar->C * liquid_scalar->V;
-    if (host)
-      gas_scalar->Mtot = gas_scalar->C * gas_scalar->V;
+    initF(liquid_scalar, gas_scalar);
   }
 
-  void SimulationUnit::post_init(KModel &&_km)
+  void SimulationUnit::postInit(KModel &&_km)
   {
     kmodel = std::move(_km);
     post_init_container();
@@ -142,7 +146,7 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::cycle_process(const double d_t)
+  void SimulationUnit::cycleProcess(const double d_t)
   {
 
     const move_kernel _move_kernel =
@@ -151,7 +155,7 @@ namespace Simulation
     const auto &_kmodel = kmodel;
 
     auto &domain = this->mc_unit->domain;
-    auto &_contribs = this->contribs;
+    auto &_contribs = this->liquid_scalar->contribs;
     auto &_extras = this->container->extras;
 
     const auto krnl =
@@ -172,15 +176,15 @@ namespace Simulation
                 MC::Particles &p)
   {
 
-    if(p.status == MC::CellStatus::DEAD)
+    if (p.status == MC::CellStatus::DEAD)
     {
       return;
     }
-    
+
     const double rnd = MC::double_unfiform();
     const double rdn2 = MC::double_unfiform();
     const size_t i_thread = omp_get_thread_num();
-    
+
     auto &thread_contrib = _contribs[i_thread];
     auto &thread_extra = _extras[i_thread];
     const auto &concentrations = domain[p.current_container].concentrations;
@@ -209,7 +213,7 @@ namespace Simulation
     else
     {
       p.clearState(MC::CellStatus::DEAD);
-      thread_extra.dead.emplace_back(&p);
+      thread_extra.in_dead_state.emplace_back(&p);
 
 // TODO CHECK POSSIBLE OVERFLOW
 #pragma omp atomic

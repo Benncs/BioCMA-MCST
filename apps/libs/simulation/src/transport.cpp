@@ -100,15 +100,15 @@ namespace Simulation
 
   move_kernel pbf(MC::MonteCarloUnit &unit,
                   MC::ParticlesContainer &container,
-                  const MatFlow &flows)
+                  const MatFlow *flows)
   {
     auto n_c = static_cast<int>(unit.domain.n_compartments());
 
     auto cumulative_probability =
-        get_CP(unit.domain.getNeighbors(), n_c, flows);
+        get_CP(unit.domain.getNeighbors(), n_c, *flows);
 
     // std::cout<<cumulative_probability<<std::endl;
-    auto &m_transition = flows.transition_matrix;
+    auto &m_transition = flows->transition_matrix;
 
     auto move_kernel = [&unit,
                         &m_transition,

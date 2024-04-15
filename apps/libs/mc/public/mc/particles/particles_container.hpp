@@ -10,7 +10,7 @@ namespace MC
 
   struct TheadSafeData{
     STDVectorParticle extra_process;
-    std::vector<Particles*> dead;
+    std::vector<Particles*> in_dead_state;
   }; 
 
 

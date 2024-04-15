@@ -4,7 +4,7 @@ namespace MC
 {
   void ParticlesContainer::merge(size_t i_thread)
   {
-    auto& dead = this->extras[i_thread].dead;
+    auto& dead = this->extras[i_thread].in_dead_state;
     auto & new_p =  this->extras[i_thread].extra_process;
     int count = static_cast<int>(dead.size());
     int initial_size = count;
@@ -20,8 +20,8 @@ namespace MC
         }
       }
     }
-    dead.clear();
     this->to_process.insert(new_p.begin()+initial_size,new_p.end());
+    dead.clear();
     new_p.clear();
   }
 
