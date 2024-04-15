@@ -14,16 +14,24 @@ jobs:
     outputs:
       RUNNER: ${{ runner.name }}
     steps:
-      - name: Configure Git for GitLab
-        run: |
-          git config --global user.username bencs
-          git config --global user.password "${{ secrets.PAT_GITLAB }}"
+      # - name: Configure Git for GitLab
+      #   run: |
+      #     git config --global user.username bencs
+      #     git config --global user.password "${{ secrets.PAT_GITLAB }}"
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          submodules: recursive
           token: '${{ secrets.PAT_TOKEN }}'
+
+      - name: Clone GitLab submodule
+        run: |
+            git config --global credential.helper '!f() { echo "username=bencs;password=`${{secrets.PAT_GITLAB }}`"; }; f'
+            git submodule add https://gitlab.com/seolane88/BIREM_Project subprojects/birem
+            git submodule update --init --recursive
+
+ 
+
       - name: Setup Cpp (C++ / C)
         uses: aminya/setup-cpp@v0.37.0
         with:
