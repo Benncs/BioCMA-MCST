@@ -16,7 +16,8 @@ jobs:
     steps:
       - name: Configure Git for GitLab
         run: |
-          git config --global credential.helper '!f() { echo "username=bencs;password='${{secrets.PAT_GITLAB}}'"; }; f'
+          git config --global user.username bencs
+          git config --global user.password "${{ secrets.PAT_GITLAB }}"
 
       - name: Checkout code
         uses: actions/checkout@v3
