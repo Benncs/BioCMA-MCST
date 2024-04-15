@@ -37,6 +37,10 @@ add_global_arguments('-DEIGEN_USE_BLAS', language : 'cpp')
 
 
 use_dynamic_module = get_option('use_dynamic_module')
+py = import('python').find_installation(pure: false)# JUST FOR TESTING
+pybind11_dep = dependency('pybind11', required : true) # JUST FOR TESTING
+
+
 if use_dynamic_module
     message('Dynamic module feature activated')
     pybind11_dep = dependency('pybind11', required : true)
