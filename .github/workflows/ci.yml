@@ -4,6 +4,7 @@ name: CI
     branches:
       - main
       - v0/**
+      - poc/
   pull_request:
     branches:
       - main
