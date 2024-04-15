@@ -46,13 +46,15 @@ jobs:
       - name: Install Pybind11
         run: |
           sudo apt-get install -y pybind11-dev python3-pybind11
-          pip install "pybind11[global]"
+          sudo pip install "pybind11[global]"
+          pip show pybind11
         
       - name: Install Meson 
         run: pip install meson 
       - name: Configure project
         run: |
-          ls /usr/lib/python3/
+          ls /usr/local/lib/python3.10/dist-packages 
+          ls /usr/local/share/cmake/ 
           mkdir builddir
           meson setup builddir/ --buildtype=release
       - name: Build project 

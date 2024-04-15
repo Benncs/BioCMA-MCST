@@ -7,6 +7,11 @@ if use_dynamic_module
    python_module_name = 'pyBioCMAMCST'
    modfile = files(f'@src_dir@/pymodule.cpp') 
 
+   # Extension modules for Python
+  
+
+
+
 
    dependencies = [biomodel_dependency,cma_dep,mc_dependency,common_dependecy,thread_dep,python_embded]
    public='./public'

@@ -38,10 +38,10 @@ add_global_arguments('-DEIGEN_USE_BLAS', language : 'cpp')
 
 use_dynamic_module = get_option('use_dynamic_module')
 if use_dynamic_module
-message('Dynamic module feature activated')
+    message('Dynamic module feature activated')
     pybind11_dep = dependency('pybind11', required : true)
     if pybind11_dep.found()
-        add_global_arguments('-DBIO_DYNAMIC_MODULE=ON', language : 'cpp')
+    add_global_arguments('-DBIO_DYNAMIC_MODULE=ON', language : 'cpp')
         python_embded = declare_dependency(
             include_directories : include_directories('/usr/include/python3.10', pybind11_dep.get_pkgconfig_variable('includedir')),
             dependencies : [pybind11_dep],
