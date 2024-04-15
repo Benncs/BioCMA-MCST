@@ -26,8 +26,7 @@ jobs:
 
       - name: Clone GitLab submodule
         run: |
-            git config --global credential.helper '!f() { echo "username=bencs;password=`${{secrets.PAT_GITLAB }}`"; }; f'
-            git submodule add https://gitlab.com/seolane88/BIREM_Project subprojects/birem
+            git config --global credential.helper '!f() { echo "username='${{secrets.USER_GITLAB}}';password=`${{secrets.PAT_GITLAB }}`"; }; f'
             git submodule update --init --recursive
 
  
