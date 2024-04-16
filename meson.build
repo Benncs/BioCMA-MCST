@@ -69,6 +69,8 @@ root = meson.project_source_root()
 clangtidy = find_program('clang-tidy', required: false)
 clangfiy = find_program('clang-format', required: false)
 
+
+
 # run_target('run_shared',command:app_cli)
 # run_target('bench_shared',command:['/bin/bash','-c', f'@root@/devutils/bench.sh '+ app_cli.full_path()])
 # run_target('bench_distributed',command:['/bin/bash','-c', f'@root@/devutils/bench.sh mpiexec '+ app_cli.full_path()])
