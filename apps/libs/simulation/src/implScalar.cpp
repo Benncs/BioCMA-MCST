@@ -24,6 +24,9 @@ namespace Simulation
     this->C = Eigen::MatrixXd(n_species, n_compartments);
     this->C.setZero();
 
+    this->vec_kla = Eigen::ArrayXXd(n_species,n_compartments);
+    vec_kla.setZero();
+
     biomass_contribution = Eigen::MatrixXd(n_species, n_compartments);
     biomass_contribution.setZero();
 
@@ -40,20 +43,14 @@ namespace Simulation
 
   void ScalarSimulation::performStep(double d_t,
                                      const FlowMatrixType &m_transition,
-                                     const Eigen::MatrixXd &transfer_g_l)
+                                     const Eigen::MatrixXd &transfer_gas_liquid)
   {
 
-    // Mtot = C * V;
-    // auto& Vinv = V.inverse();
-    // Mtot = Mtot + d_t *( (Mtot * Vinv * m_transition) + biomass_contribution
-    // + transfer_g_l); C = Mtot * Vinv;
+  
+    Eigen::MatrixXd v_inverse = V.inverse();
 
-    Eigen::MatrixXd Vinv = V.inverse();
+    Mtot += d_t * (Mtot * v_inverse * m_transition + biomass_contribution + transfer_gas_liquid);
 
-    Eigen::MatrixXd temp = Mtot * Vinv * m_transition;
-
-    Mtot += d_t * (temp + biomass_contribution + transfer_g_l);
-
-    C = Mtot * Vinv;
+    C = Mtot * v_inverse;
   }
 } // namespace Simulation

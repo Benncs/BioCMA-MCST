@@ -6,12 +6,11 @@
 #include <common/execinfo.hpp>
 #include <cstddef>
 #include <messages/message_t.hpp>
-#include <numeric>
 #include <optional>
 #include <span>
 #include <stdexcept>
-#include <string>
 #include <vector>
+#include <limits>
 
 namespace MPI_W
 {
@@ -155,7 +154,7 @@ namespace MPI_W
   int broadcast(std::vector<T> &data, size_t root, size_t current_rank)
   {
 
-    size_t data_size;
+    size_t data_size = 0;
     if (current_rank == root)
     {
       data_size = data.size();
@@ -186,7 +185,7 @@ namespace MPI_W
       throw std::invalid_argument("Error size");
     }
 
-    int comm_size;
+    int comm_size = 0;
     MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
     if (root >= static_cast<size_t>(comm_size))
     {
@@ -214,7 +213,7 @@ namespace MPI_W
     std::vector<T> total_data(src_size * n_rank);
     T *src_data = local_data.data();
     T *dest_data = total_data.data();
-    auto mpi_type = MPI_TYPES<T>::value;
+    auto mpi_type = get_type<T>();
 
     int gather_result = MPI_Gather(src_data,
                                    src_size,
@@ -246,8 +245,8 @@ namespace MPI_W
       (
           [&]<typename T>(T &&arg)
           {
-            size_t s;
-            void *buf;
+            size_t s = 0;
+            void *buf = nullptr;
             if constexpr (std::is_same_v<std::decay_t<T>, std::span<double>>)
             {
               s = arg.size();
@@ -260,7 +259,7 @@ namespace MPI_W
               buf = &arg;
             }
 
-            MPI_Send(buf, s, MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
+            MPI_Send(buf, static_cast<int>(s), MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
           }(std::forward<Args>(args)),
           ...);
     }

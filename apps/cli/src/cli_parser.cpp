@@ -5,7 +5,7 @@
 // static void parseOptional(SimulationParameters& params, std::string_view
 // arg);
 static void check_cli(SimulationParameters &params);
-static void print_green(std::ostream &os, std::string_view message);
+// static void print_green(std::ostream &os, std::string_view message);
 static void print_red(std::ostream &os, std::string_view message);
 static void throw_bad_arg(std::string_view arg);
 
@@ -34,7 +34,8 @@ SimulationParameters parse_cli(int argc, char **argv)
 
   params.n_species = 3;
   params.flow_files.clear();
-  recur_path("/home/benjamin/Documenti/code/cpp/biomc/cma_data/test/", params);
+  // recur_path("/home/benjamin/Documenti/code/cpp/biomc/cma_data/test2/", params);
+  params.flow_files.emplace_back("/home/benjamin/Documenti/code/cpp/biomc/cma_data/raw_6612/");
 
   int iarg = 1;
   while (iarg < argc - 1)
@@ -195,10 +196,10 @@ void showHelp(std::ostream &os)
   os << "  BIOCMA-MCST -np 100 -ff /path/to/flow_file_folder/ [-v]" << '\n';
 }
 
-static void print_green(std::ostream &os, std::string_view message)
-{
-  os << "\033[1;32m" << message << "\033[0m";
-}
+// static void print_green(std::ostream &os, std::string_view message)
+// {
+//   os << "\033[1;32m" << message << "\033[0m";
+// }
 
 static void print_red(std::ostream &os, std::string_view message)
 {

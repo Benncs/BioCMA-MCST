@@ -1,11 +1,15 @@
 #include <cmath>
 #include <common/alg.hpp>
 #include <mc/particles/mcparticles.hpp>
+#include <Eigen/Dense>
+#define EEIGEN
 #include <models/simple_model.hpp>
-#include <models/types.hpp>
+// #include <models/types.hpp>
 
 #include <any>
 #include <memory>
+
+
 
 static double phi_pts(std::shared_ptr<SimpleModel> &model, double S);
 static double

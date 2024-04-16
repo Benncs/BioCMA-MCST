@@ -1,7 +1,6 @@
 #ifndef __MC_PRNG_HPP__
 #define __MC_PRNG_HPP__
 
-#include <concepts>
 #include <random>
 #include <thread>
 #include <time.h>
@@ -32,7 +31,7 @@ namespace MC
   inline double uniform_double_rand(const double &min, const double &max)
   {
     static thread_local std::mt19937 *generator_double = nullptr;
-    if (!generator_double)
+    if (generator_double == nullptr)
     {
       std::hash<std::thread::id> hasher;
       generator_double =

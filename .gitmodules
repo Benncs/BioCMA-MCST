@@ -1,8 +1,3 @@
-[submodule "subprojects/eigen"]
-	path = subprojects/eigen
-	url = https://gitlab.com/libeigen/eigen.git
-
-
 [submodule "subprojects/birem"]
 	path = subprojects/birem
 	url = https://gitlab.com/seolane88/BIREM_Project.git

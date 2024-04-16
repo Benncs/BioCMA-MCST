@@ -49,7 +49,7 @@ namespace Simulation
 
     void step(double d_t);
 
-    void cycleProcess(const double d_t);
+    void cycleProcess(double d_t);
 
     void setLiquidFlow(MatFlow *_flows_l);
 
@@ -66,7 +66,7 @@ namespace Simulation
     void post_init_compartments();
 
     void post_process_reducing();
-    void execute_process_knrl(const auto &f);
+    void execute_process_knrl(const auto &kernel);
 
     bool host;
     size_t n_thread;

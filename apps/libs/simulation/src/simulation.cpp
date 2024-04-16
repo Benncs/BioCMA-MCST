@@ -49,8 +49,8 @@ namespace Simulation
   SimulationUnit::SimulationUnit(SimulationUnit &&other) noexcept
       : mc_unit(std::move(other.mc_unit)),
         container(std::move(other.container)), host(other.host),
-        flow_liquid(std::move(other.flow_liquid)),
-        flow_gas(std::move(other.flow_gas)), kmodel(other.kmodel)
+        flow_liquid(other.flow_liquid),
+        flow_gas(other.flow_gas), kmodel(other.kmodel)
   {
   }
 
@@ -81,7 +81,7 @@ namespace Simulation
 
   void SimulationUnit::postInit(KModel &&_km)
   {
-    kmodel = std::move(_km);
+    kmodel = _km;
     post_init_container();
     post_init_compartments();
   }

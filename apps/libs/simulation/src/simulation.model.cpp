@@ -7,9 +7,14 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
+#include <iostream>
 #include <scalar_simulation.hpp>
 
-static void mock_transfer(Eigen::ArrayXXd &vec, ReactorState *const state)
+static Eigen::MatrixXd mock_transfer(Eigen::ArrayXXd &res_kla,
+                                     const Eigen::MatrixXd &Vliq,
+                                     const Eigen::ArrayXXd &liq_scalar_as_array,
+                                     const Eigen::ArrayXXd &gas_scalar_as_array,
+                                     ReactorState *const state)
 {
 
   double kinematic_viscosity = 1.0023e-06;
@@ -21,21 +26,28 @@ static void mock_transfer(Eigen::ArrayXXd &vec, ReactorState *const state)
 
   for (int i_c = 0; i_c < static_cast<int>(state->n_compartments); ++i_c)
   {
-    // double eps_turb = state->energy_dissipation[i_c];
-    // double kl =
-    //     0.3 *
-    //     std::pow(eps_turb * kinematic_viscosity, 0.25) *
-    //     std::pow(schmidtnumber, -0.5);
 
-    // double gas_fraction = domain[i_c].volume_gas /
-    //              (domain[i_c].volume_gas + domain[i_c].volume_liq);
-    // double a = 6 * gas_fraction / db;
+    const double eps_turb = state->energy_dissipation[i_c];
+    const double kl = 0.3 * std::pow(eps_turb * kinematic_viscosity, 0.25) *
+                      std::pow(schmidtnumber, -0.5);
 
-    double kla = 1e-5; // kl*a;
+    const double gas_fraction =
+        state->gasVolume[i_c] /
+        (state->liquidVolume[i_c] + state->gasVolume[i_c]);
+    const double a = 6 * gas_fraction / db;
 
-    vec.coeffRef(1, i_c) = kla;
+    const double kla = kl * a;
+
+    res_kla.coeffRef(1, i_c) = kla;
   }
+
+//LAZY EVALUATION
+#define c_star (1.3e-5 * gas_scalar_as_array / 32e-3 * 8.314 * (273.15 + 30))
+#define transfer_g_liq (res_kla * (c_star - liq_scalar_as_array))
+
+  return (transfer_g_liq.matrix() * Vliq).eval();
 }
+// double kla = 1e-5; //MOCK USING WRONG FLOWMAP
 
 namespace Simulation
 {
@@ -83,6 +95,7 @@ namespace Simulation
     {
       this->liquid_scalar->contribs[i].setZero();
       container->extras.clear();
+      this->liquid_scalar->vec_kla.setZero();
     }
 
     this->liquid_scalar->biomass_contribution.setZero();
@@ -95,19 +108,12 @@ namespace Simulation
     {
       throw std::runtime_error("Error no given reactor state");
     }
-    int n_species = this->liquid_scalar->n_species();
-    int n_compartments = this->mc_unit->domain.n_compartments();
 
-    Eigen::ArrayXXd vec_kla;
-    vec_kla.resize(n_species, n_compartments);
-    vec_kla.setZero();
-    mock_transfer(vec_kla, state);
-
-    auto c_star =
-        1.3e-5 * gas_scalar->C.array() / 32e-3 * 8.314 * (273.15 + 30);
-
-    auto transfer_g_liq = vec_kla * (c_star.array() - liquid_scalar->C.array());
-    auto mat_transfer_g_liq = transfer_g_liq.matrix() * liquid_scalar->V;
+    auto mat_transfer_g_liq = mock_transfer(this->liquid_scalar->vec_kla,
+                                            liquid_scalar->V,
+                                            liquid_scalar->C.array(),
+                                            gas_scalar->C.array(),
+                                            state);
 
     this->liquid_scalar->performStep(
         d_t, flow_liquid->transition_matrix, mat_transfer_g_liq);

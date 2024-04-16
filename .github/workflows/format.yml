@@ -3,11 +3,11 @@ name: Format
   push:
     branches:
       - main
-      - v0/**
-      - poc/**
+      - v*/**
   pull_request:
     branches:
       - main
+      - v*/**
 permissions:
   contents: read
 jobs:

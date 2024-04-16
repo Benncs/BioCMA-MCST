@@ -1,4 +1,4 @@
-project('BioCMA-MCST','cpp',version:'0.0.2',default_options:['warning_level=3','cpp_std=gnu++20','b_colorout=always'])
+project('BioCMA-MCST','cpp',version:'0.0.2',default_options:['warning_level=3','cpp_std=gnu++20','b_colorout=always','b_coverage=true'])
 
 
 root = meson.source_root()
@@ -6,21 +6,22 @@ project_name = meson.project_name()
 build_type = get_option('buildtype')
 cpp = meson.get_compiler('cpp')
 
-default_options = {
-    # 'debug': ['b_sanitize=thread'],
-    # 'release': ['b_lto=true'],
+project_custom_options = {
+    'debug': [],
+    'release': [],
 }
 
 # Get default options based on the build type
-default_opts = default_options.get(build_type, [])
+target_custom_options = project_custom_options.get(build_type, [])
 
 if build_type == 'debug'
     add_global_arguments('-DDEBUG', language : 'cpp')
 endif
 
-foreach opt: default_opts
-    add_project_arguments(opt, language: 'cpp')
-endforeach
+# foreach opt: target_custom_options
+#     add_project_arguments(opt, language: 'cpp')
+#     message(opt)
+# endforeach
 
 
 thread_dep = dependency('threads')
@@ -55,7 +56,8 @@ if use_dynamic_module
 endif 
 
 
-cma_reader = subproject('birem',default_options:['warning_level=3','cpp_std=gnu++20','b_colorout=always','python_wrap=false'])
+cma_reader = subproject('birem',
+default_options:['warning_level=3','cpp_std=gnu++20','b_colorout=always','build_all=false','python_wrap=false','build_executable=false','build_test=false'])
 
 cma_dep = cma_reader.get_variable('cma_read_shared_lib_dependency') 
 
@@ -66,9 +68,9 @@ run_command('sh','-c','ln -s builddir/compile_commands.json .')
 
 root = meson.project_source_root()
 
-clangfiy = find_program('clang-format', required: false)
+# clangfiy = find_program('clang-format', required: false)
 
-all_sources = run_command('sh','-c', f'find apps/ -type f -name *.cpp ').stdout().splitlines()
+# all_sources = run_command('sh','-c', f'find apps/ -type f -name *.cpp ').stdout().splitlines()
 
 
 # run_target('run_shared',command:app_cli)

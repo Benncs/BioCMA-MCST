@@ -11,7 +11,7 @@
 void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
                Simulation::SimulationUnit &simulation,
-               std::shared_ptr<FlowIterator> _flow_handle)
+               std::shared_ptr<FlowIterator>&& _flow_handle)
 {
 
   size_t iteration_count = 0;
@@ -22,11 +22,12 @@ void main_loop(const SimulationParameters &params,
 
   double d_t = params.d_t;
   std::cout << params.final_time << " " << d_t << '\n';
+  _flow_handle->toggleVerbose();
   for (auto &&f : *_flow_handle)
   {
 #ifdef DEBUG
     static size_t __debug_loop_cntr = 0;
-    std::cout << __debug_loop_cntr << std::endl;
+    std::cout << __debug_loop_cntr << '\n';
     __debug_loop_cntr++;
 #endif
 

@@ -7,10 +7,7 @@ namespace Simulation
   {
   }
 
-  MatFlow::MatFlow(const FlowMatrixType &&_flows, const FlowMatrixType &&_tm)
-      : flows(std::move(_flows)), transition_matrix(std::move(_tm))
-  {
-  }
+ 
 
   MatFlow &MatFlow::operator=(MatFlow &&rhs) noexcept
   {

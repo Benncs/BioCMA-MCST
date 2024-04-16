@@ -1,11 +1,11 @@
 #ifndef __MODELS_TYPES_HPP__
 #define __MODELS_TYPES_HPP__
 
-#include <Eigen/Dense>
 #include <common/cmodel_parameters.hpp>
 #include <mc/particles/mcparticles.hpp>
-#include <memory>
 #include <span>
+
+#include <Eigen/Core>
 
 #ifdef BIO_DYNAMIC_MODULE
 #  include <functional>

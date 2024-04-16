@@ -4,7 +4,7 @@
 #include <cma_read/reactorstate.hpp>
 #include <cstddef>
 #include <simulation/simulation.hpp>
-#include <simulation/transport.hpp>
+#include <simulation/vecmatflows.hpp>
 
 namespace Simulation
 {

@@ -21,6 +21,8 @@ namespace Simulation
 
     void merge(size_t i_thread);
 
+    Eigen::ArrayXXd vec_kla; // TODO : Clean this
+
     Eigen::MatrixXd biomass_contribution;
     inline size_t n_species() const
     {
@@ -28,7 +30,7 @@ namespace Simulation
     }
     void performStep(double d_t,
                      const FlowMatrixType &m_transition,
-                     const Eigen::MatrixXd &transfer_g_l);
+                     const Eigen::MatrixXd &transfer_gas_liquid);
 
   private:
     void updateC();

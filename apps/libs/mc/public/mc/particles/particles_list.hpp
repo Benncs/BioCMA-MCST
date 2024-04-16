@@ -15,7 +15,7 @@ namespace MC
     explicit ParticlesList(size_t capacity, double weight);
 
     explicit ParticlesList(const ParticlesList &other) = delete;
-    explicit ParticlesList(ParticlesList &&other) noexcept;
+    ParticlesList(ParticlesList &&other) noexcept;
     ~ParticlesList() = default;
 
     /*std::vector forward */

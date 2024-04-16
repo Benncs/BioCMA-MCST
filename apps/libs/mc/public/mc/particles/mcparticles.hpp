@@ -4,7 +4,6 @@
 #include <any>
 #include <cstddef>
 
-#include <variant>
 
 namespace MC
 {
@@ -21,7 +20,7 @@ namespace MC
     Particles()
         : current_container(0), current_domain(0), random_seed(0), id(0),
           status(CellStatus::IDLE), weight(0.){};
-    Particles(double _weight)
+    explicit Particles(double _weight)
         : current_container(0), current_domain(0), random_seed(0), id(0),
           status(CellStatus::IDLE), weight(_weight){};
 
@@ -47,7 +46,7 @@ namespace MC
     size_t current_domain;
     size_t random_seed;
     size_t id;
-    MC::CellStatus status = CellStatus::IDLE;
+    MC::CellStatus status;
     double weight;
     std::any data;
   };
