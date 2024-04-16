@@ -47,6 +47,7 @@ jobs:
    
     - name: Clang-Tidy
       run: | 
+        ls /usr/bin/clang-* -la 
         ninja -C builddir/ clang-tidy 
 
     - name: Clang-Format
