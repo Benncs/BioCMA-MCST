@@ -8,33 +8,33 @@
 # -----------------------------------------------------------------------------
 
 
-# # Define LLVM version
-# LLVM_VERSION=17
+# Define LLVM version
+LLVM_VERSION=17
 
-# # Download LLVM installation script
-# wget -q https://apt.llvm.org/llvm.sh 
+# Download LLVM installation script
+wget -q https://apt.llvm.org/llvm.sh 
 
-# # Check if download was successful
-# if [ $? -ne 0 ]; then
-#     echo "Error: Failed to download LLVM installation script."
-#     exit 1
-# fi
+# Check if download was successful
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to download LLVM installation script."
+    exit 1
+fi
 
-# # Make the script executable
-# chmod +x llvm.sh 
+# Make the script executable
+chmod +x llvm.sh 
 
-# # Run the LLVM installation script with the specified version
-# ./llvm.sh $LLVM_VERSION 
+# Run the LLVM installation script with the specified version
+./llvm.sh $LLVM_VERSION 
 
-# # Check if installation was successful
-# if [ $? -ne 0 ]; then
-#     echo "Error: LLVM installation failed."
-#     exit 1
-# fi
+# Check if installation was successful
+if [ $? -ne 0 ]; then
+    echo "Error: LLVM installation failed."
+    exit 1
+fi
 
 # Install clang-format and clang-tidy
-apt-get install -y clang-format clang-tidy 
-# apt-get install -y clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION 
+# apt-get install -y clang-format clang-tidy 
+apt-get install -y clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION 
 
 # Check if installation was successful
 if [ $? -ne 0 ]; then
@@ -42,15 +42,15 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# # Create symbolic links for convenience
-# ln -sf /usr/bin/clang-tidy-$LLVM_VERSION /usr/bin/clang-tidy 
-# ln -sf /usr/bin/clang-format-$LLVM_VERSION /usr/bin/clang-format 
-# ln -sf /usr/bin/run-clang-tidy-$LLVM_VERSION /usr/bin/run-clang-tidy
+# Create symbolic links for convenience
+ln -sf /usr/bin/clang-tidy-$LLVM_VERSION /usr/bin/clang-tidy 
+ln -sf /usr/bin/clang-format-$LLVM_VERSION /usr/bin/clang-format 
+ln -sf /usr/bin/run-clang-tidy-$LLVM_VERSION /usr/bin/run-clang-tidy
 
 # Check if symbolic links were created successfully
-# if [ $? -ne 0 ]; then
-#     echo "Error: Failed to create symbolic links."
-#     exit 1
-# fi
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to create symbolic links."
+    exit 1
+fi
 
 echo "LLVM, clang-format, and clang-tidy setup completed successfully."

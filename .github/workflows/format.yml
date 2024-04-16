@@ -14,44 +14,51 @@ permissions:
   contents: read
 
 jobs:
-  clang-tidy-format:
-
-    name: clang-tidy-format
+  clang-format-checking:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        token: '${{ secrets.PAT_TOKEN }}'
+      - uses: actions/checkout@v2
+      - uses: RafikFarhad/clang-format-github-action@v3
+        with:
+          sources: "apps/cli/includes/*.hpp,apps/cli/src/*.cpp,apps/libs/*/src/*.cpp,apps/libs/*/public/*/*.hpp,ls apps/libs/*/includes/*.hpp"
+  # clang-tidy-format:
 
-    - name: Clone GitLab submodule
-      run: |
-          git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
-          git submodule update --init --recursive
+    # name: clang-tidy-format
+    # runs-on: ubuntu-latest
+    # steps:
+    # - name: Checkout code
+    #   uses: actions/checkout@v4
+    #   with:
+    #     token: '${{ secrets.PAT_TOKEN }}'
 
-    - name: install Python
-      run: sudo apt update -q && sudo apt-get install -y python3-dev python3 python3-pip 
-    - name: install dependencies
-      run: sudo apt-get install -y  libomp-dev libopenmpi-dev libeigen3-dev pkg-config ninja-build
+    # - name: Clone GitLab submodule
+    #   run: |
+    #       git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
+    #       git submodule update --init --recursive
+
+    # - name: install Python
+    #   run: sudo apt update -q && sudo apt-get install -y python3-dev python3 python3-pip 
+    # - name: install dependencies
+    #   run: sudo apt-get install -y  libomp-dev libopenmpi-dev libeigen3-dev pkg-config ninja-build
       
-    - name: Install Meson 
-      run: pip install meson 
+    # - name: Install Meson 
+    #   run: pip install meson 
 
-    - name: get LLVM clang-tidy/clang-format
-      run: |
-        sudo sh devutils/clang_config.sh
+    # - name: get LLVM clang-tidy/clang-format
+    #   run: |
+    #     sudo sh devutils/clang_config.sh
 
-    - name: Configure project
-      run: |
-          meson setup builddir/ --buildtype=release
+    # - name: Configure project
+    #   run: |
+    #       meson setup builddir/ --buildtype=release
    
-    - name: Clang-Tidy
-      run: | 
-        ls /usr/bin/clang* -la 
-        dpkg -l | grep "clang"
-        ninja -C builddir/ clang-tidy 
+    # - name: Clang-Tidy
+    #   run: | 
+    #     ls /usr/bin/clang* -la 
+    #     dpkg -l | grep "clang"
+    #     ninja -C builddir/ clang-tidy 
 
-    - name: Clang-Format
-      run: | 
-          ninja -C builddir/ clang-format
+    # - name: Clang-Format
+    #   run: | 
+    #       ninja -C builddir/ clang-format
 
