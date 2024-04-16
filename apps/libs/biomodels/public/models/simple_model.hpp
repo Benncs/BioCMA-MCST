@@ -6,8 +6,7 @@
 #include <models/types.hpp>
 #include <span>
 
-struct SimpleModel
-{
+struct SimpleModel{
   static constexpr double tauPTS = 25.0;
   static constexpr double tau_f = 5.0;
   static constexpr double tau_d = 5.0;

@@ -47,8 +47,6 @@ jobs:
     - name: get LLVM clang-tidy/clang-format
       run: |
         sudo sh devutils/clang_config.sh
-        
-
         python3 -m pip install clang-format 
         python3 -m pip install clang-tidy
 
@@ -58,11 +56,9 @@ jobs:
    
     - name: Clang-Tidy
       run: | 
-        ls /usr/bin/clang* -la 
-        dpkg -l | grep "clang"
-        ninja -C builddir/ clang-tidy 
+        /usr/local/bin/meson --internal clangtidy $(pwd) $(pwd)builddir/debug
 
     - name: Clang-Format
       run: | 
-          ninja -C builddir/ clang-format
+        /usr/local/bin/meson --internal clangformat $(pwd) $(pwd)builddir/debug --check
 

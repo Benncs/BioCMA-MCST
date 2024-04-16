@@ -43,14 +43,13 @@ if [ $? -ne 0 ]; then
 fi
 
 # # Create symbolic links for convenience
-# ln -sf /usr/bin/clang-tidy-$LLVM_VERSION /usr/bin/clang-tidy 
-# ln -sf /usr/bin/clang-format-$LLVM_VERSION /usr/bin/clang-format 
-# ln -sf /usr/bin/run-clang-tidy-$LLVM_VERSION /usr/bin/run-clang-tidy
+ln -sf /usr/bin/clang-tidy-$LLVM_VERSION /usr/bin/clang-tidy 
+ln -sf /usr/bin/clang-format-$LLVM_VERSION /usr/bin/clang-format 
+ln -sf /usr/bin/run-clang-tidy-$LLVM_VERSION /usr/bin/run-clang-tidy
 
 # Check if symbolic links were created successfully
 if [ $? -ne 0 ]; then
     echo "Error: Failed to create symbolic links."
     exit 1
 fi
-export PATH="/usr/lib/llvm-$LLVM_VERSION/bin:$PATH"
 echo "LLVM, clang-format, and clang-tidy setup completed successfully."
