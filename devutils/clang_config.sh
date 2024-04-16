@@ -25,4 +25,6 @@ apt-get install -y clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION && \
 
 # Create symbolic links for convenience
 ln -sf /usr/bin/clang-tidy-$LLVM_VERSION /usr/bin/clang-tidy && \
+ln -sf /usr/bin/clang-format-$LLVM_VERSION /usr/bin/clang-format && \
 ln -sf /usr/bin/run-clang-tidy-$LLVM_VERSION /usr/bin/run-clang-tidy
+
