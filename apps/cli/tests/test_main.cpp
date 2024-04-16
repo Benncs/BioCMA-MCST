@@ -5,6 +5,6 @@ int main()
 {
   test_common();
 
-  assert(2 == (1 + 1));
+  static_assert(2 == (1 + 1));
   return 0;
 }

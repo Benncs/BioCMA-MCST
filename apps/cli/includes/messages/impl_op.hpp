@@ -36,7 +36,7 @@ namespace MPI_W
              size_t dest,
              size_t tag = MPI_ANY_TAG)
   {
-    int status;
+    int status{};
     status = send<size_t>(data.size(), dest, tag);
     if (status == MPI_SUCCESS)
     {

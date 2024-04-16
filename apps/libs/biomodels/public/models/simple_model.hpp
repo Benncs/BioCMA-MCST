@@ -32,7 +32,7 @@ struct SimpleModel
   std::unique_ptr<Xi> xi_dot;
   void step(double d);
   SimpleModel():xi(std::make_unique<Xi>()),xi_dot(std::make_unique<Xi>()){}
-  SimpleModel &operator=(SimpleModel &&other);
+  SimpleModel &operator=(SimpleModel &&other) noexcept ;
 };
 
 struct SimpleModel::Xi

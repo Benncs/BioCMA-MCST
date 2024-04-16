@@ -15,7 +15,7 @@ namespace MPI_W
 
   template <typename T> constexpr MPI_Datatype get_type()
   {
-    MPI_Datatype datatype;
+    MPI_Datatype datatype = MPI_BYTE;
     if constexpr (std::is_same_v<T, size_t>)
     {
       datatype = MPI_UNSIGNED_LONG;

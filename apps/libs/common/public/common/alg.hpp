@@ -3,5 +3,8 @@
 #include <functional>
 #include <limits>
 
-double naive_newton(const std::function<double(double)>& f, double x_init, bool *sucess,double tolerance = std::numeric_limits<double>::epsilon()) ;
+double naive_newton(const std::function<double(double)> &f,
+                    double x_init,
+                    bool *success,
+                    double tolerance = std::numeric_limits<double>::epsilon());
 #endif //__COMMON_ALG_HPP__

@@ -24,8 +24,8 @@ Simulation::SimulationUnit init_simulation(ExecInfo &info,
   std::vector<double> liq_volume;
   std::vector<double> gas_volume;
   std::vector<std::vector<size_t>> liquid_neighbors;
-  size_t n_compartments;
-  size_t nmap;
+  size_t n_compartments = 0;
+  size_t nmap = 0;
   double opti_dt = params.d_t;
   if (info.current_rank == 0)
   {
@@ -37,7 +37,7 @@ Simulation::SimulationUnit init_simulation(ExecInfo &info,
     liq_volume = fstate->liquidVolume;
     gas_volume = fstate->gasVolume;
     opti_dt = _flow_handle->MinLiquidResidenceTime() / 100.;
-    size_t n_t = static_cast<size_t>(params.final_time / opti_dt);
+    auto n_t = static_cast<size_t>(params.final_time / opti_dt);
     _flow_handle->setRepetition(n_t / nmap);
   }
 

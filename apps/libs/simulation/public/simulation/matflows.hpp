@@ -21,16 +21,16 @@ namespace Simulation
 
     MatFlow(const FlowMatrixType &&_flows, const FlowMatrixType &&_tm);
 
-    MatFlow &operator=(MatFlow &&rhs);
+    MatFlow &operator=(MatFlow &&rhs)noexcept;
 
-    MatFlow(MatFlow &&other);
+    MatFlow(MatFlow &&other)noexcept;
   };
 
   struct VecMatFlows
   {
     std::vector<MatFlow> data;
 
-    VecMatFlows(size_t n)
+    explicit VecMatFlows(size_t n)noexcept
     {
       data.resize(n);
     }

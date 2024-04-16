@@ -8,7 +8,7 @@ void post_process(Simulation::SimulationUnit &simulation)
 {
   // auto model = std::any_cast<std::shared_ptr<SimpleModel> &>(simulation.container->to_process[0].data);
   // std::cout<<model->xi->mass<<std::endl;
-  std::cout<<simulation.container->to_process.size()<<std::endl;
+  std::cout << simulation.container->to_process.size() << '\n';
 
   auto d = simulation.mc_unit->domain.getDistribution();
 
@@ -18,7 +18,7 @@ void post_process(Simulation::SimulationUnit &simulation)
     std::cout<<i<<" ";
     count+=i;
   }
-  std::cout<<std::endl;
-  std::cout<<count<<std::endl;
+  std::cout << '\n';
+  std::cout << count << '\n';
   //TODO
 }

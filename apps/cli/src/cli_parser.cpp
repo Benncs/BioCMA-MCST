@@ -139,9 +139,10 @@ static void parseArg(SimulationParameters& params, std::string current_param, st
 
 static void check_cli(SimulationParameters& params)
 {
-    if (params.flow_files.size() == 0) {
-        throw std::invalid_argument("Missing files path");
-    }
+  if (params.flow_files.empty())
+  {
+    throw std::invalid_argument("Missing files path");
+  }
 
     if (params.n_particles == 0) {
         throw std::invalid_argument("Missing number of particles");
@@ -156,19 +157,25 @@ void showHelp(std::ostream& os)
 {
     os << "Usage: ";
     print_red(os, "BIOCMA-MCST");
-    os << "  -np <number_of_particles> [-ff <flow_file_folder_path>] [OPTIONS] " << std::endl;
-    os << "\nMandatory arguments:" << std::endl;
-    os << "  -np <number>, --number-particles <number>\tNumber of particles" << std::endl;
-    os << "  -d <number>, --duration <number>\tSimulation duration" << std::endl;
-    os << "  -ff <flow_file_folder_path>\t\tPath to flow file (Default: ./rawdata)" << std::endl;
+    os << "  -np <number_of_particles> [-ff <flow_file_folder_path>] [OPTIONS] "
+       << '\n';
+    os << "\nMandatory arguments:" << '\n';
+    os << "  -np <number>, --number-particles <number>\tNumber of particles"
+       << '\n';
+    os << "  -d <number>, --duration <number>\tSimulation duration" << '\n';
+    os << "  -ff <flow_file_folder_path>\t\tPath to flow file (Default: "
+          "./rawdata)"
+       << '\n';
 
-    os << "\nOptional arguments:" << std::endl;
-    os << "  -h, --help\t\tDisplay this help message" << std::endl;
-    os << "  -v, --verbose\t\tVerbose mode" << std::endl;
-    os << "  -nt <number>, --number-threads <number>\tNumber of threads per process" << std::endl;
+    os << "\nOptional arguments:" << '\n';
+    os << "  -h, --help\t\tDisplay this help message" << '\n';
+    os << "  -v, --verbose\t\tVerbose mode" << '\n';
+    os << "  -nt <number>, --number-threads <number>\tNumber of threads per "
+          "process"
+       << '\n';
 
-    os << "\nExample:" << std::endl;
-    os << "  BIOCMA-MCST -np 100 -ff /path/to/flow_file_folder/ [-v]" << std::endl;
+    os << "\nExample:" << '\n';
+    os << "  BIOCMA-MCST -np 100 -ff /path/to/flow_file_folder/ [-v]" << '\n';
 }
 
 

@@ -28,6 +28,7 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <utility>
 
 #define SEND_MPI_SIG_STOP host_dispatch(exec, MPI_W::SIGNALS::STOP);
 
@@ -58,7 +59,7 @@ int main(int argc, char **argv)
   }
   catch (std::invalid_argument &e)
   {
-    std::cerr << e.what() << std::endl;
+    std::cerr << e.what() << '\n';
     showHelp(std::cout);
 
     return -1;
@@ -73,7 +74,7 @@ int main(int argc, char **argv)
 #endif
   catch (...)
   {
-    std::cerr << "Internal error" << std::endl;
+    std::cerr << "Internal error" << '\n';
     return -1;
   }
 
@@ -113,7 +114,7 @@ static void show(Simulation::SimulationUnit &simulation)
   {
     std::cout<<i<<", ";
   }
-  std::cout<<std::endl;
+  std::cout << '\n';
   // try
   // {
   //   std::vector<double> totmas(simulation.unit->domain.n_compartments(), 0.);
@@ -144,7 +145,7 @@ static void host_process(ExecInfo &exec,
 
   show(simulation);
 
-  main_loop(params, exec, simulation, _flow_handle);
+  main_loop(params, exec, simulation, std::move(_flow_handle));
 
   show(simulation);
 

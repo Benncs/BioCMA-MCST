@@ -5,18 +5,9 @@
 
 // #include <Eigen/Core>
 
-#define lin_index(i_r, i_c, n_x) (i_r) * (n_x) + (i_c)
-
-
-
+#define lin_index(i_r, i_c, n_x) ((i_r) * (n_x) + (i_c))
 
 void test_common()
 {
-  std::cout << "from common lib" << std::endl;
-
-
- 
-
-
-
+  std::cout << "from common lib" << '\n';
 }

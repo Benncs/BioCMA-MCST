@@ -7,14 +7,14 @@
 
 namespace MC
 {
-  ReactorDomain::ReactorDomain(ReactorDomain &&other)
+  ReactorDomain::ReactorDomain(ReactorDomain &&other) noexcept
   {
     if (this != &other)
     {
       this->containers = std::move(other.containers);
     }
   }
-  
+
   void ReactorDomain::setVolumes(std::span<double> volumesgas,
                                  std::span<double> volumesliq)
   {
@@ -27,6 +27,7 @@ namespace MC
   }
   ReactorDomain::ReactorDomain(NumberView volumes,
                                std::vector<std::vector<size_t>> &&_neighbors)
+      : neighbors(std::move(_neighbors))
   {
     double totv = 0.;
     std::transform(volumes.begin(),
@@ -42,8 +43,6 @@ namespace MC
                    });
 
     this->_total_volume = totv;
-
-    this->neighbors = std::move(_neighbors);
   }
 
   ReactorDomain &ReactorDomain::operator=(ReactorDomain &&other) noexcept

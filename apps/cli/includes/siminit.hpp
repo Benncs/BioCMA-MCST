@@ -6,7 +6,10 @@
 #include <simulation/simulation.hpp>
 #include <memory>
 
-Simulation::SimulationUnit 
-init_simulation(ExecInfo &info, SimulationParameters &params, std::shared_ptr<FlowIterator>& it,KModel&& model);
+Simulation::SimulationUnit
+init_simulation(ExecInfo &info,
+                SimulationParameters &params,
+                std::shared_ptr<FlowIterator> &_flow_handle,
+                KModel &&model);
 
 #endif //__PROCESS_INIT_HPP__

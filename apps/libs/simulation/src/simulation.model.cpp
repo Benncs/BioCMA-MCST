@@ -9,9 +9,7 @@
 
 #include <scalar_simulation.hpp>
 
-static void mock_transfer(const MC::ReactorDomain &domain,
-                          Eigen::ArrayXXd &vec,
-                          ReactorState *const state)
+static void mock_transfer(Eigen::ArrayXXd &vec, ReactorState *const state)
 {
 
   double kinematic_viscosity = 1.0023e-06;
@@ -58,9 +56,9 @@ namespace Simulation
 
   std::span<double> SimulationUnit::getCliqData()
   {
-      auto data= this->liquid_scalar->C.data();
+    auto *data = this->liquid_scalar->C.data();
 
-      return std::span<double>(data, this->liquid_scalar->C.size());
+    return std::span<double>(data, this->liquid_scalar->C.size());
   }
 
 
@@ -93,7 +91,7 @@ namespace Simulation
   void SimulationUnit::step(double d_t)
   {
 
-    if (!state)
+    if (state == nullptr)
     {
       throw std::runtime_error("Error no given reactor state");
     }
@@ -103,7 +101,7 @@ namespace Simulation
     Eigen::ArrayXXd vec_kla;
     vec_kla.resize(n_species, n_compartments);
     vec_kla.setZero();
-    mock_transfer(mc_unit->domain, vec_kla, state);
+    mock_transfer(vec_kla, state);
 
     auto c_star =
         1.3e-5 * gas_scalar->C.array() / 32e-3 * 8.314 * (273.15 + 30);

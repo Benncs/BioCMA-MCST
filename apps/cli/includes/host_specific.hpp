@@ -10,8 +10,6 @@ void host_process(ExecInfo &exec,
                   SimulationParameters &params,
                   FlowIterator *_flow_handle);
 
-
-
 void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
                Simulation::SimulationUnit &simulation,

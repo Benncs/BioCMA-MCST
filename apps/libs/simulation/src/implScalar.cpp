@@ -5,10 +5,9 @@ namespace Simulation
 {
 
   ScalarSimulation::ScalarSimulation(ScalarSimulation &&other) noexcept
+      : C(std::move(other.C)), Mtot(std::move(other.Mtot)),
+        V(other.V)
   {
-    this->Mtot = std::move(other.Mtot);
-    this->V = std::move(other.V);
-    this->C = std::move(other.C);
   }
 
   ScalarSimulation::ScalarSimulation(size_t n_compartments,

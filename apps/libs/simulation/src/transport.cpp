@@ -99,7 +99,7 @@ namespace Simulation
   }
 
   move_kernel pbf(MC::MonteCarloUnit &unit,
-                  MC::ParticlesContainer &container,
+                  MC::ParticlesContainer & /*container*/,
                   const MatFlow *flows)
   {
     auto n_c = static_cast<int>(unit.domain.n_compartments());
@@ -108,7 +108,7 @@ namespace Simulation
         get_CP(unit.domain.getNeighbors(), n_c, *flows);
 
     // std::cout<<cumulative_probability<<std::endl;
-    auto &m_transition = flows->transition_matrix;
+    const auto &m_transition = flows->transition_matrix;
 
     auto move_kernel = [&unit,
                         &m_transition,
@@ -138,33 +138,31 @@ namespace Simulation
       {
         return;
       }
-      else
+
+      leaving = true;
+      size_t next = i_neighbor[i_compartment][0];
+      for (int k = 1; k < max_neighbor - 1; ++k)
       {
-        leaving = true;
-        size_t next = i_neighbor[i_compartment][0];
-        for (int k = 1; k < max_neighbor - 1; ++k)
+
+        auto prec = cumulative_probability.coeff(
+                        static_cast<int>(i_compartment), k) < random_number2;
+
+        auto nxt = random_number2 < cumulative_probability.coeff(
+                                        static_cast<int>(i_compartment), k + 1);
+
+        if (prec && nxt)
         {
-
-          auto prec = cumulative_probability.coeff(
-                          static_cast<int>(i_compartment), k) < random_number2;
-
-          auto nxt =
-              random_number2 < cumulative_probability.coeff(
-                                   static_cast<int>(i_compartment), k + 1);
-
-          if (prec && nxt)
-          {
-            next = i_neighbor[i_compartment][k];
-          }
+          next = i_neighbor[i_compartment][k];
         }
-
-#pragma omp atomic
-        current_container.n_cells -= static_cast<size_t>(leaving);
-#pragma omp atomic
-        unit.domain[next].n_cells += 1;
-
-        particle.current_container = next;
       }
+
+#pragma omp atomic
+      current_container.n_cells -= static_cast<size_t>(leaving);
+#pragma omp atomic
+      unit.domain[next].n_cells += 1;
+
+      particle.current_container = next;
+     
     };
 
     return move_kernel;

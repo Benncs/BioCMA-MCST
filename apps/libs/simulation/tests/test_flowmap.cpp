@@ -33,7 +33,7 @@ void test_invalid_input() {
         Simulation::FlowmapToMat(data, n_row);
          assert(false);
     } catch (const std::invalid_argument& e) {
-        assert(true);
+      static_assert(true);
     }
 }
 

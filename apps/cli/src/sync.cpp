@@ -13,7 +13,7 @@ void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
   // TODO: As we just gather we could use const data 
   auto local_contribution = simulation.get_contributionData();
 
-  //Move span is useless but to keep gather idea of "moving" data 
+  //Move span is useless but to keep gather idea of "moving" data
   std::vector<double> total_contrib_data =
       MPI_W::gather<double>(std::move(local_contribution), exec.n_rank);
 
@@ -22,7 +22,7 @@ void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
     simulation.reduceContribs(total_contrib_data, exec.n_rank);
   }
 }
-void sync_prepare_next(const ExecInfo &exec,
+void sync_prepare_next(const ExecInfo & /*exec*/,
                        Simulation::SimulationUnit &simulation)
 {
   MPI_W::barrier();

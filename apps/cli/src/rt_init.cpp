@@ -52,7 +52,7 @@ ExecInfo runtime_init(int argc, char** argv, SimulationParameters& params)
 {
     ExecInfo info;
 
-    int rank, size;
+    int rank = 0, size = 0;
 
     MPI_Init(&argc, &argv);
 
@@ -62,8 +62,7 @@ ExecInfo runtime_init(int argc, char** argv, SimulationParameters& params)
 
     set_openmp_threads(rank, size, info, params);
 
-    std::cout << "NUM thread per process " << info.thread_per_process
-              << std::endl;
+    std::cout << "NUM thread per process " << info.thread_per_process << '\n';
     std::atexit(MPI_W::finalize);
 
     // MPI_W::is_mpi_init = true;
@@ -87,14 +86,14 @@ void init_environement() {
         std::filesystem::permissions(".bmc_info", std::filesystem::perms::owner_read);
         init_bmc_info(bmc_info_file);
         bmc_info_file.close();
-        std::cout << "Done" << std::endl;
+        std::cout << "Done" << '\n';
     } else {
-        std::cout << "Failed to create .bmc_info file" << std::endl;
+      std::cout << "Failed to create .bmc_info file" << '\n';
     }
 }
 
 
 void init_bmc_info(std::ofstream& fd) {
     auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    fd  << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S") << std::endl;
+    fd << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S") << '\n';
 }

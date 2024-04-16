@@ -20,7 +20,7 @@ static void update_xi_dot(std::shared_ptr<SimpleModel> &model,
 
 static double uptake_o2(std::shared_ptr<SimpleModel> &model, double O);
 
-SimpleModel &SimpleModel::operator=(SimpleModel &&other)
+SimpleModel &SimpleModel::operator=(SimpleModel &&other) noexcept
 {
   if (this != &other)
   {
@@ -53,7 +53,7 @@ SimpleModel::Xi SimpleModel::Xi::operator*(double scalar) const
   return result;
 }
 
-void SimpleModel::step(double d)
+void SimpleModel::step(double d) 
 {
   *this->xi = *this->xi + *this->xi_dot * d;
 }
@@ -80,7 +80,7 @@ void update_simple_model(double d_t,
   auto &model = std::any_cast<std::shared_ptr<SimpleModel> &>(p.data);
 
   double S = concentrations[0];
-  unsigned n_permease = static_cast<unsigned>(model->xi->n_permease);
+  auto n_permease = static_cast<unsigned>(model->xi->n_permease);
 
   double gamma_PTS_S = uptake_glucose(model, n_permease, S);
   ;
@@ -242,9 +242,7 @@ static double uptake_o2(std::shared_ptr<SimpleModel> &model, double O)
   {
     return SimpleModel::psi_o_meta;
   }
-  else
-  {
-    double phi_o_growth = SimpleModel::YXO * model->xi->mu_eff;
-    return SimpleModel::psi_o_meta + growth * phi_o_growth;
-  }
+
+  double phi_o_growth = SimpleModel::YXO * model->xi->mu_eff;
+  return SimpleModel::psi_o_meta + growth * phi_o_growth;
 }

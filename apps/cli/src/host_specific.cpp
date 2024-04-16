@@ -21,7 +21,7 @@ void main_loop(const SimulationParameters &params,
   auto gas_flows = Simulation::VecMatFlows(n_loop);
 
   double d_t = params.d_t;
-    std::cout<<params.final_time<<" "<<d_t<<std::endl;
+  std::cout << params.final_time << " " << d_t << '\n';
   for (auto &&f : *_flow_handle)
   {
 #ifdef DEBUG
@@ -34,17 +34,13 @@ void main_loop(const SimulationParameters &params,
 
     host_dispatch(exec, MPI_W::SIGNALS::RUN, f.liquid_flow.flows.data());
 
-    // Send the size of the neighbor vectors to all processes
-    size_t neighbor_size = f.liquid_flow.neigbors[0].size();
-
     // Send each neighbor vector to all processes
     for (const auto &neighbor : f.liquid_flow.neigbors)
     {
-   
+
       for (int j = 1; j < static_cast<int>(exec.n_rank); ++j)
       {
-        MPI_W::send_v<size_t>(neighbor, j,0);
-    
+        MPI_W::send_v<size_t>(neighbor, j, 0);
       }
     }
 
@@ -58,6 +54,5 @@ void main_loop(const SimulationParameters &params,
     sync_step(exec, simulation);
     simulation.step(d_t);
     sync_prepare_next(exec, simulation);
-
   }
 }

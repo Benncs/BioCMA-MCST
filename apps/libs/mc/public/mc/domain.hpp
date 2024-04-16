@@ -13,7 +13,7 @@ namespace MC
     size_t id;
 
     ReactorDomain() = default;
-    ReactorDomain(ReactorDomain &&other);
+    ReactorDomain(ReactorDomain &&other) noexcept;
     ReactorDomain(NumberView volumes,
                   std::vector<std::vector<size_t>> &&_neighbors);
     ReactorDomain(const ReactorDomain &other) = delete;

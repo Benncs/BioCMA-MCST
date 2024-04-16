@@ -3,18 +3,16 @@
 namespace Simulation
 {
   MatFlow::MatFlow(const FlowMatrixType &_flows, const FlowMatrixType &_tm)
+      : flows(_flows), transition_matrix(_tm)
   {
-    flows = _flows;
-    transition_matrix = _tm;
   }
 
   MatFlow::MatFlow(const FlowMatrixType &&_flows, const FlowMatrixType &&_tm)
+      : flows(std::move(_flows)), transition_matrix(std::move(_tm))
   {
-    flows = std::move(_flows);
-    transition_matrix = std::move(_tm);
   }
 
-  MatFlow &MatFlow::operator=(MatFlow &&rhs)
+  MatFlow &MatFlow::operator=(MatFlow &&rhs) noexcept
   {
     if (this != &rhs)
     {
@@ -24,9 +22,9 @@ namespace Simulation
     return *this;
   }
 
-  MatFlow::MatFlow(MatFlow &&other)
+  MatFlow::MatFlow(MatFlow &&other) noexcept
+      : flows(std::move(other.flows)),
+        transition_matrix(std::move(other.transition_matrix)) 
   {
-    flows = std::move(other.flows);
-    transition_matrix = std::move(other.transition_matrix);
   }
 }; // namespace Simulation

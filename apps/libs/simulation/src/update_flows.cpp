@@ -10,8 +10,8 @@ namespace Simulation
         Simulation::FlowmapToMat(flow.flows.data(), flow.flows.getN());
     const auto _mat_transition_liq =
         Simulation::get_transition_matrix(mat_f_liq);
-    matflow.flows = std::move(mat_f_liq);
-    matflow.transition_matrix = std::move(_mat_transition_liq);
+    matflow.flows = mat_f_liq;
+    matflow.transition_matrix = _mat_transition_liq;
   }
 
   static void computeMatFlow(std::span<double> flows,
@@ -21,8 +21,8 @@ namespace Simulation
     const auto mat_f_liq = Simulation::FlowmapToMat(flows, nc);
     const auto _mat_transition_liq =
         Simulation::get_transition_matrix(mat_f_liq);
-    matflow.flows = std::move(mat_f_liq);
-    matflow.transition_matrix = std::move(_mat_transition_liq);
+    matflow.flows = mat_f_liq;
+    matflow.transition_matrix = _mat_transition_liq;
   }
 
   void update_flow(size_t &iteration_count,

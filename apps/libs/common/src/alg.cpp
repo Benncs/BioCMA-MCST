@@ -23,16 +23,20 @@ double naive_newton(const std::function<double(double)> &f,
     double val = f(x_init);
     if (std::isnan(val))
     {
-      if (success)
+      if (success != nullptr)
+      {
         *success = false;
+      }
       return x_init;
     }
 
     double derivative_val = d(x_init);
     if (std::abs(derivative_val) < std::numeric_limits<double>::epsilon())
     {
-      if (success)
+      if (success != nullptr)
+      {
         *success = false;
+      }
       return x_init;
     }
 
@@ -41,13 +45,17 @@ double naive_newton(const std::function<double(double)> &f,
 
     if (std::abs(val) < tolerance)
     {
-      if (success)
+      if (success != nullptr)
+      {
         *success = true;
+      }
       return x_init;
     }
   }
 
-  if (success)
+  if (success != nullptr)
+  {
     *success = false;
+  }
   return x_init;
 }

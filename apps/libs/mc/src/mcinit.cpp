@@ -19,7 +19,7 @@ namespace MC
   }
 
   std::unique_ptr<MonteCarloUnit>
-  init_unit(ExecInfo &info,
+  init_unit(ExecInfo & /*info*/,
             NumberView volumes,
             std::vector<std::vector<size_t>> &&neighbors)
   {
