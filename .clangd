@@ -1,4 +1,0 @@
-If:
-  PathMatch: .*(subprojects|folder).*
-Index:
-  Background: Skip

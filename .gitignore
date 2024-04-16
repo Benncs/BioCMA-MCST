@@ -3,6 +3,7 @@
 .cache/
 compile_commands.json 
 
+
 # Env
 .bmc_info
 results/
@@ -17,3 +18,4 @@ builddir/
 
 # Python 
 __pycache__
+.clangd
