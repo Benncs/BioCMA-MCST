@@ -11,8 +11,6 @@
 #include <simulation/simulation.hpp>
 #include <simulation/transport.hpp>
 
-
-
 namespace Simulation
 {
   void pimpl_deleter::operator()(ScalarSimulation *ptr) const
@@ -66,15 +64,16 @@ namespace Simulation
         host(_host), n_thread(info.thread_per_process)
   {
 
-    this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(
-        makeScalarSimulation(mc_unit->domain.n_compartments(), n_species, n_thread));
+    this->liquid_scalar =
+        std::unique_ptr<ScalarSimulation, pimpl_deleter>(makeScalarSimulation(
+            mc_unit->domain.n_compartments(), n_species, n_thread));
 
-    this->gas_scalar = (host)
-                           ? std::unique_ptr<ScalarSimulation, pimpl_deleter>(
-                                 makeScalarSimulation(mc_unit->domain.n_compartments(),
-                                       n_species,
-                                       0)) // No contribs for gas
-                           : nullptr;
+    this->gas_scalar =
+        (host) ? std::unique_ptr<ScalarSimulation, pimpl_deleter>(
+                     makeScalarSimulation(mc_unit->domain.n_compartments(),
+                                          n_species,
+                                          0)) // No contribs for gas
+               : nullptr;
 
     // FIXME
     initF(liquid_scalar, gas_scalar);

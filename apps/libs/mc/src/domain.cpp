@@ -18,7 +18,7 @@ namespace MC
   void ReactorDomain::setVolumes(std::span<double> volumesgas,
                                  std::span<double> volumesliq)
   {
-// #pragma omp parallel for
+    // #pragma omp parallel for
     for (size_t i_c = 0; i_c < volumesgas.size(); ++i_c)
     {
       containers[i_c].volume_liq = volumesliq[i_c];

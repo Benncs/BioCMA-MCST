@@ -31,14 +31,14 @@ cpp_args = ['-march=native','-fno-math-errno']
 
 add_project_arguments(cpp_args, language : 'cpp')
 
-blas = dependency('blas')
+blas = dependency('blas',required:false)
 eigen_dep = dependency('eigen3')
+if blas.found()
 add_global_arguments('-DEIGEN_USE_BLAS', language : 'cpp')
-
+endif
 
 use_dynamic_module = get_option('use_dynamic_module')
-py = import('python').find_installation(pure: false)# JUST FOR TESTING
-pybind11_dep = dependency('pybind11', required : true) # JUST FOR TESTING
+
 
 
 if use_dynamic_module
@@ -65,14 +65,14 @@ run_command('sh','-c','ln -s builddir/compile_commands.json .')
 
 
 root = meson.project_source_root()
-run_target('run_shared',command:app_cli)
-run_target('bench_shared',command:['/bin/bash','-c', f'@root@/devutils/bench.sh '+ app_cli.full_path()])
-run_target('bench_distributed',command:['/bin/bash','-c', f'@root@/devutils/bench.sh mpiexec '+ app_cli.full_path()])
+# run_target('run_shared',command:app_cli)
+# run_target('bench_shared',command:['/bin/bash','-c', f'@root@/devutils/bench.sh '+ app_cli.full_path()])
+# run_target('bench_distributed',command:['/bin/bash','-c', f'@root@/devutils/bench.sh mpiexec '+ app_cli.full_path()])
 
 
-run_target('run_distributed',command:['/bin/bash','-c','mpiexec '+ app_cli.full_path()])
+# run_target('run_distributed',command:['/bin/bash','-c','mpiexec '+ app_cli.full_path()])
 
-benchmark('bench_shared', find_program('./devutils/bench.sh'), args: [app_cli.full_path()],timeout:180)
+# benchmark('bench_shared', find_program('./devutils/bench.sh'), args: [app_cli.full_path()],timeout:180)
 clangtidy = find_program('clang-tidy', required: false)
 # all_source = run_command('sh','-c', f'find apps/** -type f -name *.cpp ').stdout().splitlines()
 

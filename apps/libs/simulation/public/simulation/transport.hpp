@@ -1,12 +1,10 @@
 #ifndef __TRANSPORT_HPP__
 #define __TRANSPORT_HPP__
 
-
 #include <functional>
 #include <mc/particles/particles_container.hpp>
 #include <mc/unit.hpp>
 #include <simulation/matflows.hpp>
-
 
 namespace Simulation
 {

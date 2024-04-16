@@ -7,9 +7,9 @@ namespace MC
   // {
   // }
 
-  ParticlesList::ParticlesList(size_t capacity,double weight)
+  ParticlesList::ParticlesList(size_t capacity, double weight)
   {
-    this->data = std::vector<MC::Particles>(capacity,Particles(weight));
+    this->data = std::vector<MC::Particles>(capacity, Particles(weight));
   }
 
   ParticlesList::ParticlesList(ParticlesList &&other) noexcept

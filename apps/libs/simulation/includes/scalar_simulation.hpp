@@ -10,7 +10,7 @@ namespace Simulation
   {
   public:
     ScalarSimulation(ScalarSimulation &&other) noexcept;
-    ScalarSimulation(size_t n_compartments, size_t n_species,size_t n_threads);
+    ScalarSimulation(size_t n_compartments, size_t n_species, size_t n_threads);
     Eigen::MatrixXd C;
     Eigen::MatrixXd Mtot;
     std::vector<Eigen::MatrixXd> contribs;
@@ -27,7 +27,8 @@ namespace Simulation
       return this->n_r;
     }
     void performStep(double d_t,
-                     const FlowMatrixType &m_transition,const Eigen::MatrixXd& transfer_g_l );
+                     const FlowMatrixType &m_transition,
+                     const Eigen::MatrixXd &transfer_g_l);
 
   private:
     void updateC();
@@ -41,14 +42,16 @@ namespace Simulation
         volumes.data(), static_cast<int>(volumes.size()));
   }
 
-   inline void ScalarSimulation::merge(size_t i_thread)
+  inline void ScalarSimulation::merge(size_t i_thread)
   {
     this->biomass_contribution += this->contribs[i_thread];
   }
 
-  inline ScalarSimulation* makeScalarSimulation(size_t n_compartments, size_t n_species,size_t n_threads)
+  inline ScalarSimulation *makeScalarSimulation(size_t n_compartments,
+                                                size_t n_species,
+                                                size_t n_threads)
   {
-    return new ScalarSimulation(n_compartments, n_species,n_threads);
+    return new ScalarSimulation(n_compartments, n_species, n_threads);
   }
 
 } // namespace Simulation

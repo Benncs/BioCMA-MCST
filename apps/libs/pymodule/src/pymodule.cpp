@@ -12,7 +12,6 @@ namespace py = pybind11;
 PYBIND11_MODULE(pyBioCMAMCST, m)
 {
 
-
   py::class_<MC::Particles>(m, "Particles")
       .def_readwrite("current_container",
                      &MC::Particles::current_container,
@@ -22,15 +21,15 @@ PYBIND11_MODULE(pyBioCMAMCST, m)
       .def_readwrite("id", &MC::Particles::id)
       .def_readwrite("weight", &MC::Particles::weight)
 
-      .def("getOpaque",[](MC::Particles& p){
-        return std::any_cast<std::shared_ptr<OpaquePointer>>(p.data);
-      });
-      // .def("setmodel",
-      //      [](MC::Particles &p, const PythonCustomModel &new_model)
-      //      { p.data = new_model; })
-      // .def("getModel",
-      //      [](MC::Particles &p)
-      //      { return std::any_cast<PythonCustomModel>(p.data); });
+      .def("getOpaque",
+           [](MC::Particles &p)
+           { return std::any_cast<std::shared_ptr<OpaquePointer>>(p.data); });
+  // .def("setmodel",
+  //      [](MC::Particles &p, const PythonCustomModel &new_model)
+  //      { p.data = new_model; })
+  // .def("getModel",
+  //      [](MC::Particles &p)
+  //      { return std::any_cast<PythonCustomModel>(p.data); });
 
   py::class_<OpaquePointer, std::shared_ptr<OpaquePointer>>(
       m, "OpaquePointer", py::call_guard<py::gil_scoped_release>())
@@ -49,9 +48,8 @@ PYBIND11_MODULE(pyBioCMAMCST, m)
           {
             if (opaque_ptr.ptr)
             {
-              py::object *obj_ptr = static_cast<py::object
-              *>(opaque_ptr.ptr); return
-              py::reinterpret_borrow<py::object>(*obj_ptr);
+              py::object *obj_ptr = static_cast<py::object *>(opaque_ptr.ptr);
+              return py::reinterpret_borrow<py::object>(*obj_ptr);
             }
             else
             {

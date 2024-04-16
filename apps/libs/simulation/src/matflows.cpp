@@ -24,7 +24,7 @@ namespace Simulation
 
   MatFlow::MatFlow(MatFlow &&other) noexcept
       : flows(std::move(other.flows)),
-        transition_matrix(std::move(other.transition_matrix)) 
+        transition_matrix(std::move(other.transition_matrix))
   {
   }
 }; // namespace Simulation

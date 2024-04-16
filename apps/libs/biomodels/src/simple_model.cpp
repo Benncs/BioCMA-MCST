@@ -1,6 +1,6 @@
+#include <cmath>
 #include <common/alg.hpp>
 #include <mc/particles/mcparticles.hpp>
-#include <cmath>
 #include <models/simple_model.hpp>
 #include <models/types.hpp>
 
@@ -53,7 +53,7 @@ SimpleModel::Xi SimpleModel::Xi::operator*(double scalar) const
   return result;
 }
 
-void SimpleModel::step(double d) 
+void SimpleModel::step(double d)
 {
   *this->xi = *this->xi + *this->xi_dot * d;
 }
@@ -115,7 +115,7 @@ void update_simple_model(double d_t,
 MC::Particles division_simple_model(MC::Particles &p)
 {
   auto &model = std::any_cast<std::shared_ptr<SimpleModel> &>(p.data);
-  model->xi->mass = model->xi->mass/2;
+  model->xi->mass = model->xi->mass / 2;
   p.status = MC::CellStatus::IDLE;
   auto child = MC::Particles(p);
   return child;
@@ -142,7 +142,8 @@ static double phi_pts(std::shared_ptr<SimpleModel> &model, double S)
 static double
 phi_permease(std::shared_ptr<SimpleModel> &model, double n_permease, double S)
 {
-  return n_permease * SimpleModel::psi_permease * (model->xi->mass*1e3) * model->xi->a_permease *
+  return n_permease * SimpleModel::psi_permease * (model->xi->mass * 1e3) *
+         model->xi->a_permease *
          (SimpleModel::phi_pts_max * S / (SimpleModel::kppermease + S));
 }
 
@@ -194,7 +195,7 @@ static void update_xi_dot(std::shared_ptr<SimpleModel> &model,
                           double n_permease,
                           double S)
 {
-  model->xi_dot->mass = 1.5e-7;//model->xi->mu_eff;
+  model->xi_dot->mass = 1.5e-7; // model->xi->mu_eff;
   model->xi_dot->a_pts = (1.0 / SimpleModel::tauPTS) *
                          ((S / SimpleModel::kpts + S) - model->xi->a_pts);
 
@@ -236,7 +237,8 @@ static double uptake_o2(std::shared_ptr<SimpleModel> &model, double O)
     return 0;
   }
 
-  growth = 1; //  Don't remove this, captured in get_phi TODO avoid side effect in get_phi  
+  growth = 1; //  Don't remove this, captured in get_phi TODO avoid side effect
+              //  in get_phi
   double Oi2 = naive_newton(get_phi, O, &success, 1e-5);
   if (Oi2 < 0 || !success)
   {

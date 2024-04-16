@@ -5,7 +5,7 @@
 #include <simulation/transport.hpp>
 
 namespace Simulation
-{ 
+{
   template <typename T>
   using RowMajorDynMatrix =
       Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
@@ -162,7 +162,6 @@ namespace Simulation
       unit.domain[next].n_cells += 1;
 
       particle.current_container = next;
-     
     };
 
     return move_kernel;

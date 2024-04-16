@@ -9,7 +9,6 @@ using FlowMatrixType = Eigen::MatrixXd;
 namespace Simulation
 {
 
-
   struct MatFlow
   {
     FlowMatrixType flows;
@@ -21,16 +20,16 @@ namespace Simulation
 
     MatFlow(const FlowMatrixType &&_flows, const FlowMatrixType &&_tm);
 
-    MatFlow &operator=(MatFlow &&rhs)noexcept;
+    MatFlow &operator=(MatFlow &&rhs) noexcept;
 
-    MatFlow(MatFlow &&other)noexcept;
+    MatFlow(MatFlow &&other) noexcept;
   };
 
   struct VecMatFlows
   {
     std::vector<MatFlow> data;
 
-    explicit VecMatFlows(size_t n)noexcept
+    explicit VecMatFlows(size_t n) noexcept
     {
       data.resize(n);
     }

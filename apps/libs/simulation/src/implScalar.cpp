@@ -5,8 +5,7 @@ namespace Simulation
 {
 
   ScalarSimulation::ScalarSimulation(ScalarSimulation &&other) noexcept
-      : C(std::move(other.C)), Mtot(std::move(other.Mtot)),
-        V(other.V)
+      : C(std::move(other.C)), Mtot(std::move(other.Mtot)), V(other.V)
   {
   }
 
@@ -38,8 +37,6 @@ namespace Simulation
                       return m;
                     });
   }
-
- 
 
   void ScalarSimulation::performStep(double d_t,
                                      const FlowMatrixType &m_transition,

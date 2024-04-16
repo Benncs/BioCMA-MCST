@@ -4,6 +4,7 @@
 #  include "mc/particles/mcparticles.hpp"
 #  include <import_py.hpp>
 #  include <memory>
+#  include <models/types.hpp>
 #  include <omp.h>
 #  include <pybind11/eigen.h>
 #  include <pybind11/embed.h>
@@ -12,7 +13,6 @@
 #  include <pybind11/pytypes.h>
 #  include <pybind11/stl.h>
 #  include <pymodule/opaque_type.hpp>
-#  include <models/types.hpp>
 #  include <stdexcept>
 
 namespace py = pybind11;

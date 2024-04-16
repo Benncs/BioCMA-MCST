@@ -1,8 +1,7 @@
 #ifndef __MC_CONTAINER_STATE_HPP__
 #define __MC_CONTAINER_STATE_HPP__
 #include <cstddef>
-#include <span> 
-
+#include <span>
 
 namespace MC
 {

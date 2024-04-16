@@ -8,18 +8,18 @@ namespace MC
 {
   using STDVectorParticle = std::vector<MC::Particles>;
 
-  struct TheadSafeData{
+  struct TheadSafeData
+  {
     STDVectorParticle extra_process;
-    std::vector<Particles*> in_dead_state;
-  }; 
-
+    std::vector<Particles *> in_dead_state;
+  };
 
   class ParticlesContainer
   {
-    
+
   public:
     explicit ParticlesContainer() = default;
-    explicit ParticlesContainer(size_t capacity,double weight)noexcept;
+    explicit ParticlesContainer(size_t capacity, double weight) noexcept;
     explicit ParticlesContainer(const ParticlesContainer &other) = delete;
     explicit ParticlesContainer(ParticlesContainer &&other) noexcept;
 
@@ -28,10 +28,8 @@ namespace MC
 
     ParticlesList to_process;
     std::vector<TheadSafeData> extras;
-
   };
 
-   
 } // namespace MC
 
 #endif

@@ -18,7 +18,6 @@
 #include <siminit.hpp>
 #include <sync.hpp>
 
-
 #ifdef BIO_DYNAMIC_MODULE
 #  include <import_py.hpp>
 #endif
@@ -54,7 +53,7 @@ int main(int argc, char **argv)
     auto _module_handle = init_dynamic_module();
 #endif
     init_environement();
-    
+
     exec(argc, argv);
   }
   catch (std::invalid_argument &e)
@@ -87,9 +86,9 @@ static void exec(int argc, char **argv)
   ExecInfo exec_info = runtime_init(argc, argv, params);
 
   std::shared_ptr<FlowIterator> _fd = nullptr;
- 
+
   auto simulation = init_simulation(exec_info, params, _fd, load_model());
-  
+
   if (exec_info.current_rank == 0)
   {
     if (_fd == nullptr)
@@ -110,9 +109,9 @@ static void show(Simulation::SimulationUnit &simulation)
 
   auto d = simulation.mc_unit->domain.getDistribution();
 
-  for(auto&& i : d)
+  for (auto &&i : d)
   {
-    std::cout<<i<<", ";
+    std::cout << i << ", ";
   }
   std::cout << '\n';
   // try
@@ -169,7 +168,7 @@ static void workers_process(ExecInfo &exec,
   std::vector<std::vector<size_t>> liquid_neighbors(n_compartments);
   while (true)
   {
-    
+
     auto sign = MPI_W::try_recv<MPI_W::SIGNALS>(0, &status);
 
     if (sign == MPI_W::SIGNALS::STOP)
@@ -178,20 +177,20 @@ static void workers_process(ExecInfo &exec,
     }
     auto flows = MPI_W::try_recv_v<double>(0);
 
-    for (auto&& neighbors : liquid_neighbors)
+    for (auto &&neighbors : liquid_neighbors)
     {
-        
-        neighbors = MPI_W::try_recv_v<size_t>(0,&status);
+
+      neighbors = MPI_W::try_recv_v<size_t>(0, &status);
     }
 
     simulation.mc_unit->domain.setLiquidNeighbors(liquid_neighbors);
 
     Simulation::update_flow(iteration_count,
-                n_loop,
-                simulation,
-                flows,
-                n_compartments,
-                liquid_flows);
+                            n_loop,
+                            simulation,
+                            flows,
+                            n_compartments,
+                            liquid_flows);
 
     simulation.cycleProcess(d_t);
     sync_step(exec, simulation);

@@ -4,8 +4,8 @@
 #ifdef BIO_DYNAMIC_MODULE
 
 #  include <models/types.hpp>
-#  include <string>
 #  include <pybind11/embed.h>
+#  include <string>
 
 KModel get_python_module(const std::string &module_path);
 pybind11::scoped_interpreter init_dynamic_module();

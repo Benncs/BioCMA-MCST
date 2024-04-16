@@ -1,9 +1,9 @@
 #ifndef __SIMPLE_MODEL_HPP__
 #define __SIMPLE_MODEL_HPP__
 
-#include <models/types.hpp>
 #include <mc/particles/mcparticles.hpp>
 #include <memory>
+#include <models/types.hpp>
 #include <span>
 
 struct SimpleModel
@@ -31,8 +31,10 @@ struct SimpleModel
   std::unique_ptr<Xi> xi;
   std::unique_ptr<Xi> xi_dot;
   void step(double d);
-  SimpleModel():xi(std::make_unique<Xi>()),xi_dot(std::make_unique<Xi>()){}
-  SimpleModel &operator=(SimpleModel &&other) noexcept ;
+  SimpleModel() : xi(std::make_unique<Xi>()), xi_dot(std::make_unique<Xi>())
+  {
+  }
+  SimpleModel &operator=(SimpleModel &&other) noexcept;
 };
 
 struct SimpleModel::Xi
@@ -50,7 +52,11 @@ struct SimpleModel::Xi
   Xi() : mass(0.), mu_eff(0), a_pts(0), a_permease(0), n_permease(0)
   {
   }
-  Xi(const Xi& rhs):mass(rhs.mass),mu_eff(rhs.mu_eff),a_pts(rhs.a_pts),a_permease(rhs.a_permease),n_permease(rhs.n_permease){}
+  Xi(const Xi &rhs)
+      : mass(rhs.mass), mu_eff(rhs.mu_eff), a_pts(rhs.a_pts),
+        a_permease(rhs.a_permease), n_permease(rhs.n_permease)
+  {
+  }
 };
 
 void init_simple_model_(MC::Particles &p);

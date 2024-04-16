@@ -15,10 +15,11 @@ static ReactorState const *
 init_state(SimulationParameters &params,
            std::shared_ptr<FlowIterator> &flow_handle);
 
-Simulation::SimulationUnit init_simulation(ExecInfo &info,
-                                    SimulationParameters &params,
-                                    std::shared_ptr<FlowIterator> &_flow_handle,
-                                    KModel &&model)
+Simulation::SimulationUnit
+init_simulation(ExecInfo &info,
+                SimulationParameters &params,
+                std::shared_ptr<FlowIterator> &_flow_handle,
+                KModel &&model)
 {
 
   std::vector<double> liq_volume;

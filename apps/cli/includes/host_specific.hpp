@@ -1,8 +1,8 @@
 #ifndef __HOST_SPECIFIC_HPP__
 #define __HOST_SPECIFIC_HPP__
 
-#include <common/common.hpp>
 #include <cma_read/flow_iterator.hpp>
+#include <common/common.hpp>
 #include <simulation/simulation.hpp>
 
 void host_process(ExecInfo &exec,

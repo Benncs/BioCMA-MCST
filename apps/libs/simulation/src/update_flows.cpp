@@ -65,10 +65,9 @@ namespace Simulation
 
     unit.mc_unit->domain.setLiquidNeighbors(f->liquid_flow.neigbors);
     unit.setLiquidFlow(&current_liq_matflow);
-       
 
     unit.setGasFlow(&current_gas_matflow);
-      
+
     iteration_count++;
   }
 

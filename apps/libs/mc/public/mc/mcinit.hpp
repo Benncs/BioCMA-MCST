@@ -8,7 +8,6 @@
 #include <mc/particles/particles_container.hpp>
 #include <memory>
 
-
 namespace MC
 {
   std::unique_ptr<ParticlesContainer> init_container(ExecInfo &info,

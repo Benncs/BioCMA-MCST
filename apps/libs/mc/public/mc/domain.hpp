@@ -58,14 +58,14 @@ namespace MC
       return this->_total_volume;
     }
 
-    void setVolumes(std::span<double> volumesgas,std::span<double> volumesliq);
+    void setVolumes(std::span<double> volumesgas, std::span<double> volumesliq);
 
     void setLiquidNeighbors(std::vector<std::vector<size_t>> data)
     {
       neighbors = std::move(data);
     }
 
-    inline const std::vector<std::vector<size_t>>& getNeighbors() const
+    inline const std::vector<std::vector<size_t>> &getNeighbors() const
     {
       return neighbors;
     }

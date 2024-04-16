@@ -1,12 +1,10 @@
-#include <messages/message_t.hpp>
-#include <messages/mpi_types.hpp>
 #include <common/common.hpp>
 #include <cstdlib>
+#include <messages/message_t.hpp>
+#include <messages/mpi_types.hpp>
 #include <messages/wrap_mpi.hpp>
 #include <mpi.h>
 #include <omp.h>
-
-
 
 namespace MPI_W
 {
@@ -16,7 +14,7 @@ namespace MPI_W
 
   template <> MPI_Datatype MPI_TYPES<size_t>::value = MPI_UNSIGNED_LONG;
 
-  void finalize()noexcept
+  void finalize() noexcept
   {
     MPI_Finalize();
   }
@@ -28,7 +26,7 @@ namespace MPI_W
 
   void barrier() noexcept
   {
-    if(MPI_Barrier(MPI_COMM_WORLD)!=MPI_SUCCESS)
+    if (MPI_Barrier(MPI_COMM_WORLD) != MPI_SUCCESS)
     {
       critical_error();
     }

@@ -49,9 +49,10 @@ namespace Simulation
     }
   }
 
-  std::span<double>  SimulationUnit::get_contributionData()
+  std::span<double> SimulationUnit::get_contributionData()
   {
-    return std::span(this->liquid_scalar->biomass_contribution.data(), this->liquid_scalar->biomass_contribution.size());
+    return std::span(this->liquid_scalar->biomass_contribution.data(),
+                     this->liquid_scalar->biomass_contribution.size());
   }
 
   std::span<double> SimulationUnit::getCliqData()
@@ -60,7 +61,6 @@ namespace Simulation
 
     return std::span<double>(data, this->liquid_scalar->C.size());
   }
-
 
   void SimulationUnit::reduceContribs(std::span<double> data, size_t n_rank)
   {

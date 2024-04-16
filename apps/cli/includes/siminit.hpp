@@ -1,10 +1,10 @@
 #ifndef __PROCESS_INIT_HPP__
 #define __PROCESS_INIT_HPP__
 
-#include <common/common.hpp>
 #include <cma_read/flow_iterator.hpp>
-#include <simulation/simulation.hpp>
+#include <common/common.hpp>
 #include <memory>
+#include <simulation/simulation.hpp>
 
 Simulation::SimulationUnit
 init_simulation(ExecInfo &info,

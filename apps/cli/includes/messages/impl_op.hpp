@@ -24,7 +24,7 @@ namespace MPI_W
 
   template <POD DataType>
   int send(DataType &&data, size_t dest, size_t tag = MPI_ANY_TAG)
-  { 
+  {
 
     int status =
         MPI_Send(&data, 1, get_type<DataType>(), dest, tag, MPI_COMM_WORLD);

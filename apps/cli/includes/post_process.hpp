@@ -5,5 +5,4 @@
 
 void post_process(Simulation::SimulationUnit &simulation);
 
-
 #endif //__HOST_POST_PROCESS _HPP__
