@@ -24,5 +24,5 @@ chmod +x llvm.sh && \
 apt-get install -y clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION && \
 
 # Create symbolic links for convenience
-ln -s /usr/bin/clang-tidy-$LLVM_VERSION /usr/bin/clang-tidy && \
-ln -s /usr/bin/run-clang-tidy-$LLVM_VERSION /usr/bin/run-clang-tidy
+ln -sf /usr/bin/clang-tidy-$LLVM_VERSION /usr/bin/clang-tidy && \
+ln -sf /usr/bin/run-clang-tidy-$LLVM_VERSION /usr/bin/run-clang-tidy
