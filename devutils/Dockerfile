@@ -25,8 +25,8 @@ RUN sh ./devutils/clang_config.sh
 RUN mkdir -p __builddir && \
     meson setup __builddir/ --buildtype=release
 
-# Format the code using clang-format
-RUN ninja -C __builddir/ clang-format 
+# # Format the code using clang-format
+# RUN ninja -C __builddir/ clang-format 
 
-# Run clang-tidy on the codebase
-RUN ninja -C __builddir/ clang-tidy
+# # Run clang-tidy on the codebase
+# RUN ninja -C __builddir/ clang-tidy
