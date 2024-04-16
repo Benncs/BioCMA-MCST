@@ -33,6 +33,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Install clang-format and clang-tidy
+apt-get install -y clang-format clang-tidy 
 apt-get install -y clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION 
 
 # Check if installation was successful
