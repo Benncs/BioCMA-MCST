@@ -1,0 +1,9 @@
+BasedOnStyle: LLVM
+BreakBeforeBraces: Allman
+BraceWrapping:
+  AfterFunction: true
+AllowShortFunctionsOnASingleLine: None
+BinPackArguments: false
+BinPackParameters: false
+NamespaceIndentation: All
+IndentPPDirectives: AfterHash

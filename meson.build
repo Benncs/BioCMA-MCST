@@ -66,9 +66,9 @@ run_command('sh','-c','ln -s builddir/compile_commands.json .')
 
 root = meson.project_source_root()
 
-clangtidy = find_program('clang-tidy', required: false)
 clangfiy = find_program('clang-format', required: false)
 
+all_sources = run_command('sh','-c', f'find apps/ -type f -name *.cpp ').stdout().splitlines()
 
 
 # run_target('run_shared',command:app_cli)

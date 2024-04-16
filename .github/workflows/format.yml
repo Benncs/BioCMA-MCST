@@ -44,10 +44,8 @@ jobs:
           meson setup builddir/ --buildtype=release
       - name: Clang-Tidy
         run: |
-          which meson
-          exec=$(which meson)
-          $exec --internal clangtidy $(pwd) $(pwd)/builddir/debug
-          
+          ninja -C builddir clang-tidy 
+
   clang-format:
     name: clang-format
     runs-on: ubuntu-latest
@@ -81,6 +79,9 @@ jobs:
           meson setup builddir/ --buildtype=release
       - name: Clang-Format
         run: |
-          which meson
-          exec=$(which meson)
-          $exec  --internal clangformat $(pwd) $(pwd)/builddir/debug --check
+          ninja -C builddir clang-format-check 
+
+        
+        # which meson
+          # exec=$(which meson)
+          # $exec  --internal clangformat $(pwd) $(pwd)/builddir/debug --check

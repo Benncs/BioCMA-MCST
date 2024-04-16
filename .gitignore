@@ -1,7 +1,6 @@
 # LSP AND IDE 
 .vscode/ 
 .cache/
-.clang*
 compile_commands.json 
 
 # Env
