@@ -1,5 +1,4 @@
 name: Format
-
 'on':
   push:
     branches:
@@ -9,60 +8,79 @@ name: Format
   pull_request:
     branches:
       - main
-
 permissions:
   contents: read
-
 jobs:
-  # clang-format-checking:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: RafikFarhad/clang-format-github-action@v3
-  #       with:
-  #         sources: "apps/cli/includes/*.hpp,apps/cli/src/*.cpp,apps/libs/*/src/*.cpp,apps/libs/*/public/*/*.hpp,ls apps/libs/*/includes/*.hpp"
-  clang-tidy-format:
-
-    name: clang-tidy-format
+  clang-tidy:
+    name: clang-tidy
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        token: '${{ secrets.PAT_TOKEN }}'
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: '${{ secrets.PAT_TOKEN }}'
+      - name: Clone GitLab submodule
+        run: >
+          git config --global credential.helper '!f() { echo "username=${{
+          secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; };
+          f'
 
-    - name: Clone GitLab submodule
-      run: |
-          git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
           git submodule update --init --recursive
-
-    - name: install Python
-      run: sudo apt-get install python3 python3-pip python3-setuptools python3-wheel ninja-build
-    - name: install dependencies
-      run: sudo apt-get install -y  libomp-dev libopenmpi-dev libeigen3-dev pkg-config ninja-build
-      
-    - name: Install Meson 
-      run: pip3 install meson
-
-    - name: get LLVM clang-tidy/clang-format
-      run: |
-        sudo sh devutils/clang_config.sh
-        python3 -m pip install clang-format 
-        python3 -m pip install clang-tidy
-
-    - name: Configure project
-      run: |
+      - name: install Python
+        run: >-
+          sudo apt-get install python3 python3-pip python3-setuptools
+          python3-wheel ninja-build
+      - name: install dependencies
+        run: >-
+          sudo apt-get install -y  libomp-dev libopenmpi-dev libeigen3-dev
+          pkg-config ninja-build
+      - name: Install Meson
+        run: pip3 install meson
+      - name: get LLVM clang-tidy/clang-format
+        run: |
+          sudo sh devutils/clang_config.sh
+      - name: Configure project
+        run: |
           meson setup builddir/ --buildtype=release
-   
-    - name: Clang-Tidy
-      run: | 
-        which meson
-        exec=$(which meson)
-        $exec --internal clangtidy $(pwd) $(pwd)/builddir/debug
+      - name: Clang-Tidy
+        run: |
+          which meson
+          exec=$(which meson)
+          $exec --internal clangtidy $(pwd) $(pwd)/builddir/debug
+          
+  clang-format:
+    name: clang-format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: '${{ secrets.PAT_TOKEN }}'
+      - name: Clone GitLab submodule
+        run: >
+          git config --global credential.helper '!f() { echo "username=${{
+          secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; };
+          f'
 
-    - name: Clang-Format
-      run: | 
-        which meson
-        exec=$(which meson)
-        $exec  --internal clangformat $(pwd) $(pwd)/builddir/debug --check
-
+          git submodule update --init --recursive
+      - name: install Python
+        run: >-
+          sudo apt-get install python3 python3-pip python3-setuptools
+          python3-wheel ninja-build
+      - name: install dependencies
+        run: >-
+          sudo apt-get install -y  libomp-dev libopenmpi-dev libeigen3-dev
+          pkg-config ninja-build
+      - name: Install Meson
+        run: pip3 install meson
+      - name: get LLVM clang-tidy/clang-format
+        run: |
+          sudo sh devutils/clang_config.sh
+      - name: Configure project
+        run: |
+          meson setup builddir/ --buildtype=release
+      - name: Clang-Format
+        run: |
+          which meson
+          exec=$(which meson)
+          $exec  --internal clangformat $(pwd) $(pwd)/builddir/debug --check
