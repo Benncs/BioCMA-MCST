@@ -87,7 +87,7 @@ static void exec(int argc, char **argv)
 
   std::shared_ptr<FlowIterator> _fd = nullptr;
  
-  auto simulation = sim_init(exec_info, params, _fd, load_model());
+  auto simulation = init_simulation(exec_info, params, _fd, load_model());
   
   if (exec_info.current_rank == 0)
   {

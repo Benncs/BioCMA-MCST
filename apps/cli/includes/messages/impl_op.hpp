@@ -24,9 +24,10 @@ namespace MPI_W
 
   template <POD DataType>
   int send(DataType &&data, size_t dest, size_t tag = MPI_ANY_TAG)
-  {
+  { 
+
     int status =
-        MPI_Send(&data, sizeof(DataType), MPI_BYTE, dest, tag, MPI_COMM_WORLD);
+        MPI_Send(&data, 1, get_type<DataType>(), dest, tag, MPI_COMM_WORLD);
     return status;
   }
 
@@ -36,8 +37,8 @@ namespace MPI_W
              size_t tag = MPI_ANY_TAG)
   {
     int status;
-    // status = send(data.size(), dest, tag);
-    // if (status == MPI_SUCCESS)
+    status = send<size_t>(data.size(), dest, tag);
+    if (status == MPI_SUCCESS)
     {
       status = MPI_Send(data.data(),
                         data.size(),
@@ -81,14 +82,14 @@ namespace MPI_W
   }
 
   template <typename T>
-  std::optional<std::vector<T>> recv_v(size_t src,
+  std::optional<std::vector<T>> recv_v(size_t source,
                                        MPI_Status *status = nullptr,
                                        size_t tag = MPI_ANY_TAG) noexcept
   {
     std::vector<T> buf;
 
     // Receive the size of the vector
-    auto opt_size = recv<size_t>(src, status, tag);
+    auto opt_size = recv<size_t>(source, status, tag);
     if (!opt_size.has_value())
     {
       return std::nullopt; // Return early if size reception fails
@@ -104,7 +105,7 @@ namespace MPI_W
     int recv_status = MPI_Recv(buf.data(),
                                static_cast<int>(buf_size),
                                datatype,
-                               src,
+                               source,
                                tag,
                                MPI_COMM_WORLD,
                                status);

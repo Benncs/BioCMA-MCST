@@ -15,7 +15,7 @@ static ReactorState const *
 init_state(SimulationParameters &params,
            std::shared_ptr<FlowIterator> &flow_handle);
 
-Simulation::SimulationUnit sim_init(ExecInfo &info,
+Simulation::SimulationUnit init_simulation(ExecInfo &info,
                                     SimulationParameters &params,
                                     std::shared_ptr<FlowIterator> &_flow_handle,
                                     KModel &&model)
