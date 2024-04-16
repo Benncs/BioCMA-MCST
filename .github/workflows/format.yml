@@ -56,9 +56,11 @@ jobs:
    
     - name: Clang-Tidy
       run: | 
-        /usr/bin/meson --internal clangtidy $(pwd) $(pwd)builddir/debug
+        which meson
+        exec=$(which meson)
+        exec --internal clangtidy $(pwd) $(pwd)builddir/debug
 
     - name: Clang-Format
       run: | 
-        /usr/bin/meson --internal clangformat $(pwd) $(pwd)builddir/debug --check
+       exec --internal clangformat $(pwd) $(pwd)builddir/debug --check
 
