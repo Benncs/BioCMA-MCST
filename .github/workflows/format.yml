@@ -48,7 +48,7 @@ jobs:
     
     - name: format
       run: | 
-        ninja -C builddir/ clang-format 
+        ninja -C builddir/ clang-format
     - name: Clang-Tidy
       run: | 
         ninja -C builddir/ clang-tidy 

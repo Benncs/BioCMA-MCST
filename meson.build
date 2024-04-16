@@ -73,14 +73,4 @@ root = meson.project_source_root()
 # run_target('run_distributed',command:['/bin/bash','-c','mpiexec '+ app_cli.full_path()])
 
 # benchmark('bench_shared', find_program('./devutils/bench.sh'), args: [app_cli.full_path()],timeout:180)
-clangtidy = find_program('clang-tidy', required: false)
-# all_source = run_command('sh','-c', f'find apps/** -type f -name *.cpp ').stdout().splitlines()
 
-# tidy_target = custom_target(
-#     'run-clang-tidy',
-#     command: [clangtidy, '-p', 'build', '@INPUT@'],
-#     input: [all_source],
-#     build_by_default: false
-# )
-
-# add_global_arguments('-Drun-clang-tidy=true', language: 'cpp')
