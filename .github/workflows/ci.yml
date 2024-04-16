@@ -30,6 +30,8 @@ jobs:
       - name: Setup Cpp (C++ / C)
         uses: aminya/setup-cpp@v0.37.0
         with:
+          clangtidy: true
+          clangformat: true
           cmake: true
           compiler: gcc
           ninja: true
@@ -55,6 +57,9 @@ jobs:
         run: |
           mkdir builddir
           meson setup builddir/ --buildtype=release
+      - name: format
+        run: |
+          ninja -C builddir clang-format 
       - name: Build project 
         run : meson compile -C builddir
       - name: Run unit tests
