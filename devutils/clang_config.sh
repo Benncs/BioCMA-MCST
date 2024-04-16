@@ -20,14 +20,12 @@ chmod +x llvm.sh && \
 # Run the LLVM installation script with the specified version
 ./llvm.sh $LLVM_VERSION && \
 
-apt-get install -y clang-format clang-tidy
+# Install clang-format and clang-tidy
+apt install -y clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION && \ 
 
-# # Install clang-format and clang-tidy
-# apt-get install -y clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION 
-
-# # Create symbolic links for convenience
-# ln -sf /usr/bin/clang-tidy-$LLVM_VERSION /usr/bin/clang-tidy && \
-# ln -sf /usr/bin/clang-format-$LLVM_VERSION /usr/bin/clang-format && \
-# ln -sf /usr/bin/run-clang-tidy-$LLVM_VERSION /usr/bin/run-clang-tidy
+# Create symbolic links for convenience
+ln -sf /usr/bin/clang-tidy-$LLVM_VERSION /usr/bin/clang-tidy && \
+ln -sf /usr/bin/clang-format-$LLVM_VERSION /usr/bin/clang-format && \
+ln -sf /usr/bin/run-clang-tidy-$LLVM_VERSION /usr/bin/run-clang-tidy
 
 
