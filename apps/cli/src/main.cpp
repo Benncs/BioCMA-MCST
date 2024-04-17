@@ -1,3 +1,5 @@
+#include "messages/iteration_payload.hpp"
+#include "messages/message_t.hpp"
 #include <cli_parser.hpp>
 #include <simulation/update_flows.hpp>
 
@@ -10,7 +12,6 @@
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/reactorstate.hpp>
 
-#include <cli_parser.hpp>
 #include <host_specific.hpp>
 #include <messages/wrap_mpi.hpp>
 #include <post_process.hpp>
@@ -42,26 +43,26 @@ static void host_process(ExecInfo &exec,
 
 static KModel load_model();
 
-static void exec(int argc, char **argv);
+static void exec(int argc, char **argv, SimulationParameters params);
 
 int main(int argc, char **argv)
 {
+  init_environement();
+  // SimulationParameters params =  parse_cli(argc, argv);
+  auto params_opt = parse_cli(argc, argv);
+  if (!params_opt.has_value())
+  {
+    showHelp(std::cout);
+    return -1;
+  }
+
   try
   {
 
 #ifdef BIO_DYNAMIC_MODULE
     auto _module_handle = init_dynamic_module();
 #endif
-    init_environement();
-
-    exec(argc, argv);
-  }
-  catch (std::invalid_argument &e)
-  {
-    std::cerr << e.what() << '\n';
-    showHelp(std::cout);
-
-    return -1;
+    exec(argc, argv, std::move(params_opt.value()));
   }
 #ifdef DEBUG
   catch (std::exception &e)
@@ -80,9 +81,9 @@ int main(int argc, char **argv)
   return 0;
 }
 
-static void exec(int argc, char **argv)
+static void exec(int argc, char **argv, SimulationParameters params)
 {
-  SimulationParameters params = parse_cli(argc, argv);
+
   ExecInfo exec_info = runtime_init(argc, argv, params);
 
   std::shared_ptr<FlowIterator> _fd = nullptr;
@@ -100,6 +101,7 @@ static void exec(int argc, char **argv)
   }
   else
   {
+
     workers_process(exec_info, simulation, params);
   }
 }
@@ -107,9 +109,9 @@ static void exec(int argc, char **argv)
 static void show(Simulation::SimulationUnit &simulation)
 {
 
-  auto d = simulation.mc_unit->domain.getDistribution();
+  auto distribution = simulation.mc_unit->domain.getDistribution();
 
-  for (auto &&i : d)
+  for (auto &&i : distribution)
   {
     std::cout << i << ", ";
   }
@@ -163,9 +165,13 @@ static void workers_process(ExecInfo &exec,
   MPI_Status status;
 
   size_t iteration_count = 0;
-  size_t n_loop = params.n_different_maps;
-  auto liquid_flows = Simulation::VecMatFlows(n_loop);
+  const size_t n_loop = params.n_different_maps;
+  auto liquid_flows = Simulation::BasicCacheMatflows(n_loop);
   std::vector<std::vector<size_t>> liquid_neighbors(n_compartments);
+
+  MPI_W::IterationPayload payload(n_compartments * n_compartments,
+                                  n_compartments);
+
   while (true)
   {
 
@@ -175,22 +181,24 @@ static void workers_process(ExecInfo &exec,
     {
       return;
     }
-    auto flows = MPI_W::try_recv_v<double>(0);
+    payload.recv(0, &status);
 
+    // Neighbors could change during iteration so we have to allocate new
+    // neighbors each time
     for (auto &&neighbors : liquid_neighbors)
     {
-
       neighbors = MPI_W::try_recv_v<size_t>(0, &status);
     }
-
-    simulation.mc_unit->domain.setLiquidNeighbors(liquid_neighbors);
 
     Simulation::update_flow(iteration_count,
                             n_loop,
                             simulation,
-                            flows,
+                            payload.liquid_flows,
                             n_compartments,
                             liquid_flows);
+
+    simulation.mc_unit->domain.setLiquidNeighbors(liquid_neighbors);
+    simulation.setVolumes(payload.gas_volumes, payload.liquid_volumes);
 
     simulation.cycleProcess(d_t);
     sync_step(exec, simulation);

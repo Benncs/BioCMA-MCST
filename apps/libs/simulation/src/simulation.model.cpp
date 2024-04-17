@@ -1,13 +1,11 @@
 #include <cma_read/reactorstate.hpp>
 #include <mc/domain.hpp>
 #include <simulation/simulation.hpp>
-#include <stdexcept>
 
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
-#include <iostream>
 #include <scalar_simulation.hpp>
 
 static Eigen::MatrixXd mock_transfer(Eigen::ArrayXXd &res_kla,
@@ -101,19 +99,19 @@ namespace Simulation
     this->liquid_scalar->biomass_contribution.setZero();
   }
 
-  void SimulationUnit::step(double d_t)
+  void SimulationUnit::step(double d_t,ReactorState& state)
   {
 
-    if (state == nullptr)
-    {
-      throw std::runtime_error("Error no given reactor state");
-    }
+    // if (state == nullptr)
+    // {
+    //   throw std::runtime_error("Error no given reactor state");
+    // }
 
     auto mat_transfer_g_liq = mock_transfer(this->liquid_scalar->vec_kla,
-                                            liquid_scalar->V,
+                                            liquid_scalar->m_volumes,
                                             liquid_scalar->C.array(),
                                             gas_scalar->C.array(),
-                                            state);
+                                            &state);
 
     this->liquid_scalar->performStep(
         d_t, flow_liquid->transition_matrix, mat_transfer_g_liq);

@@ -35,19 +35,21 @@ namespace Simulation
 
     SimulationUnit(SimulationUnit &&other) noexcept;
     SimulationUnit(const SimulationUnit &other) = delete;
+    SimulationUnit &operator=(SimulationUnit &&rhs) =delete;
+    SimulationUnit &operator=(const SimulationUnit &rhs) =delete;
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     std::unique_ptr<MC::ParticlesContainer> container;
-    ReactorState *state = nullptr;
+    
 
-    void postInit(KModel &&_km);
+    void postInit(KModel _km);
 
     std::span<double> getCliqData();
 
-    void setVolumes(std::vector<double> &&volumesgas,
-                    std::vector<double> &&volumesliq);
+    void setVolumes(std::span<double> volumesgas,
+                    std::span<double> volumesliq);
 
-    void step(double d_t);
+    void step(double d_t,ReactorState& state);
 
     void cycleProcess(double d_t);
 
@@ -91,7 +93,7 @@ namespace Simulation
 
   inline void SimulationUnit::execute_process_knrl(const auto &kernel)
   {
-#pragma omp parallel for num_threads(n_thread)
+#pragma omp parallel for num_threads(n_thread) default(none) shared(kernel)
     for (auto it = container->to_process.begin();
          it < container->to_process.end();
          ++it)

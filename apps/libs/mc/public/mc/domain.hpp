@@ -60,9 +60,9 @@ namespace MC
 
     void setVolumes(std::span<double> volumesgas, std::span<double> volumesliq);
 
-    void setLiquidNeighbors(std::vector<std::vector<size_t>> data)
+    void setLiquidNeighbors(const std::vector<std::vector<size_t>>& data)
     {
-      neighbors = std::move(data);
+      neighbors = data;
     }
 
     inline const std::vector<std::vector<size_t>> &getNeighbors() const

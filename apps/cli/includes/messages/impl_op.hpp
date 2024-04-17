@@ -1,73 +1,98 @@
 #ifndef __IMPL_MPI_OP_HPP__
 #define __IMPL_MPI_OP_HPP__
 
-#include "messages/mpi_types.hpp"
+#include <messages/mpi_types.hpp>
+#include <messages/message_t.hpp>
+
 #include "mpi.h"
 #include <common/execinfo.hpp>
 #include <cstddef>
-#include <messages/message_t.hpp>
+#include <limits>
 #include <optional>
 #include <span>
 #include <stdexcept>
 #include <vector>
-#include <limits>
 
 namespace MPI_W
 {
 
   template <typename T>
-  concept POD = std::is_standard_layout<T>::value &&
-                std::is_trivially_copyable<T>::value &&
-                std::is_trivially_destructible<T>::value &&
-                std::is_trivially_default_constructible<T>::value;
+  concept POD = std::is_standard_layout_v<T> &&
+                std::is_trivially_copyable_v<T> &&
+                std::is_trivially_destructible_v<T> &&
+                std::is_trivially_default_constructible_v<T>;
+
+  // SENDING
 
   template <POD DataType>
-  int send(DataType &&data, size_t dest, size_t tag = MPI_ANY_TAG)
-  {
+  [[nodiscard]] static int _send_unsafe(DataType *buf,
+                                        size_t buf_size,
+                                        size_t dest,
+                                        size_t tag = 0);
 
-    int status =
-        MPI_Send(&data, 1, get_type<DataType>(), dest, tag, MPI_COMM_WORLD);
-    return status;
-  }
+  template <POD DataType>
+  int send(DataType data, size_t dest, size_t tag = 0);
 
   template <POD DataType>
   int send_v(std::span<const DataType> data,
              size_t dest,
-             size_t tag = MPI_ANY_TAG)
-  {
-    int status{};
-    status = send<size_t>(data.size(), dest, tag);
-    if (status == MPI_SUCCESS)
-    {
-      status = MPI_Send(data.data(),
-                        data.size(),
-                        get_type<DataType>(),
-                        dest,
-                        tag,
-                        MPI_COMM_WORLD);
-    }
+             size_t tag = 0,
+             bool send_size = true);
 
-    return status;
-  }
+  // RECEIVE
 
   template <POD DataType>
   std::optional<DataType>
-  recv(size_t src, MPI_Status *status = nullptr, size_t tag = MPI_ANY_TAG)
-  {
-    DataType buf;
+  recv(size_t src, MPI_Status *status = nullptr, size_t tag = 0);
 
-    int recv_status = MPI_Recv(
-        &buf, sizeof(DataType), MPI_BYTE, src, tag, MPI_COMM_WORLD, status);
-    if (recv_status != MPI_SUCCESS)
-    {
-      return std::nullopt;
-    }
-    return buf;
-  }
+  template <POD DataType>
+  int recv_span(std::span<DataType> buf,
+                size_t src,
+                MPI_Status *status = nullptr,
+                size_t tag = 0);
 
   template <POD DataType>
   DataType
-  try_recv(size_t src, MPI_Status *status = nullptr, size_t tag = MPI_ANY_TAG)
+  try_recv(size_t src, MPI_Status *status = nullptr, size_t tag = 0);
+
+  template <typename T>
+  std::optional<std::vector<T>> recv_v(size_t source,
+                                       MPI_Status *status = nullptr,
+                                       size_t tag = 0) noexcept;
+
+  template <typename T>
+  std::vector<T> try_recv_v(size_t src,
+                            MPI_Status *status = nullptr,
+                            size_t tag = 0);
+
+  // BROADCASTING
+
+  template <POD DataType> int broadcast(DataType &data, size_t root);
+
+  template <typename T>
+  [[nodiscard]] int _broadcast_unsafe(T *data, size_t _size, size_t root);
+
+  template <typename T> int broadcast_span(std::span<T> data, size_t root);
+
+  template <typename... Args>
+  void host_dispatch(const ExecInfo &info, SIGNALS sign, Args &&...args);
+
+  template <typename T>
+  std::vector<T>
+  gather(std::span<T> local_data, size_t n_rank, size_t root = 0);
+
+  // IMPL
+
+  template <POD DataType>
+  static int
+  _send_unsafe(DataType *buf, size_t buf_size, size_t dest, size_t tag)
+  {
+    return MPI_Send(
+        buf, buf_size, get_type<DataType>(), dest, tag, MPI_COMM_WORLD);
+  }
+
+  template <POD DataType>
+  DataType try_recv(size_t src, MPI_Status *status, size_t tag)
   {
     auto opt_data = MPI_W::recv<DataType>(src, status, tag);
     if (!opt_data.has_value())
@@ -81,9 +106,8 @@ namespace MPI_W
   }
 
   template <typename T>
-  std::optional<std::vector<T>> recv_v(size_t source,
-                                       MPI_Status *status = nullptr,
-                                       size_t tag = MPI_ANY_TAG) noexcept
+  std::optional<std::vector<T>>
+  recv_v(size_t source, MPI_Status *status, size_t tag) noexcept
   {
     std::vector<T> buf;
 
@@ -117,9 +141,23 @@ namespace MPI_W
     return buf; // Return the received vector
   }
 
+  template <POD DataType>
+  int recv_span(std::span<DataType> buf,
+                size_t src,
+                MPI_Status *status,
+                size_t tag)
+  {
+    return MPI_Recv(buf.data(),
+                    buf.size(),
+                    get_type<DataType>(),
+                    src,
+                    tag,
+                    MPI_COMM_WORLD,
+                    status);
+  }
+
   template <typename T>
-  std::vector<T>
-  try_recv_v(size_t src, MPI_Status *status = nullptr, size_t tag = MPI_ANY_TAG)
+  std::vector<T> try_recv_v(size_t src, MPI_Status *status, size_t tag)
   {
     auto opt_data = MPI_W::recv_v<T>(src, status, tag);
     if (!opt_data.has_value())
@@ -167,7 +205,7 @@ namespace MPI_W
 
     return MPI_Bcast(data.data(),
                      data_size,
-                     MPI_TYPES<T>::value,
+                     get_type<T>(),
                      static_cast<int>(root),
                      MPI_COMM_WORLD);
   }
@@ -195,7 +233,7 @@ namespace MPI_W
     // Broadcast operation
     return MPI_Bcast(data,
                      _size,
-                     MPI_TYPES<T>::value,
+                     get_type<T>(),
                      static_cast<int>(root),
                      MPI_COMM_WORLD);
   }
@@ -206,8 +244,7 @@ namespace MPI_W
   }
 
   template <typename T>
-  std::vector<T>
-  gather(std::span<T> &&local_data, size_t n_rank, size_t root = 0)
+  std::vector<T> gather(std::span<T> local_data, size_t n_rank, size_t root)
   {
     int src_size = static_cast<int>(local_data.size());
     std::vector<T> total_data(src_size * n_rank);
@@ -232,7 +269,7 @@ namespace MPI_W
   }
 
   template <typename... Args>
-  void host_dispatch(const ExecInfo &info, SIGNALS &&sign, Args &&...args)
+  void host_dispatch(const ExecInfo &info, SIGNALS sign, Args &&...args)
   {
 
     for (int j = 1; j < static_cast<int>(info.n_rank); ++j)
@@ -243,7 +280,7 @@ namespace MPI_W
       }
 
       (
-          [&]<typename T>(T &&arg)
+          [&]<typename T>(T &arg)
           {
             size_t s = 0;
             void *buf = nullptr;
@@ -259,10 +296,50 @@ namespace MPI_W
               buf = &arg;
             }
 
-            MPI_Send(buf, static_cast<int>(s), MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
+            MPI_Send(
+                buf, static_cast<int>(s), MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
           }(std::forward<Args>(args)),
           ...);
     }
+  }
+
+  template <POD DataType> int send(DataType data, size_t dest, size_t tag)
+  {
+    return _send_unsafe<DataType>(&data, 1, dest, tag);
+  }
+
+  template <POD DataType>
+  int send_v(std::span<const DataType> data,
+             size_t dest,
+             size_t tag,
+             bool send_size)
+  {
+    int send_status = MPI_SUCCESS;
+    if (send_size)
+    {
+      send_status = send<size_t>(data.size(), dest, tag);
+    }
+
+    if (send_status == MPI_SUCCESS)
+    {
+      send_status = _send_unsafe(data.data(), data.size(), dest, tag);
+    }
+
+    return send_status;
+  }
+
+  template <POD DataType>
+  std::optional<DataType> recv(size_t src, MPI_Status *status, size_t tag)
+  {
+    DataType buf;
+
+    int recv_status = MPI_Recv(
+        &buf, sizeof(DataType), MPI_BYTE, src, tag, MPI_COMM_WORLD, status);
+    if (recv_status != MPI_SUCCESS)
+    {
+      return std::nullopt;
+    }
+    return buf;
   }
 
 } // namespace MPI_W

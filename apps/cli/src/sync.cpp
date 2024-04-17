@@ -1,6 +1,3 @@
-
-
-#include <cstddef>
 #include <messages/wrap_mpi.hpp>
 #include <mpi.h>
 #include <sync.hpp>
@@ -13,9 +10,9 @@ void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
   //  TODO: As we just gather we could use const data
   auto local_contribution = simulation.get_contributionData();
 
-  // Move span is useless but to keep gather idea of "moving" data
+  // Move span is useless but keep im mind gather idea of "moving" data
   std::vector<double> total_contrib_data =
-      MPI_W::gather<double>(std::move(local_contribution), exec.n_rank);
+      MPI_W::gather<double>(local_contribution, exec.n_rank);
 
   if (exec.current_rank == 0)
   {

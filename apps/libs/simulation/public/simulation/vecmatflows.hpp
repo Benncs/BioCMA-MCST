@@ -3,15 +3,15 @@
 #include <vector>
 
 #include <simulation/matflows.hpp>
+
 namespace Simulation
 {
   
-
-  struct VecMatFlows
+  struct BasicCacheMatflows
   {
     std::vector<MatFlow> data;
 
-    explicit VecMatFlows(size_t n) noexcept
+    explicit BasicCacheMatflows(size_t n) noexcept
     {
       data.resize(n);
     }

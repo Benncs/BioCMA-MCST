@@ -11,16 +11,16 @@ namespace Simulation
   void update_flow(size_t &iteration_count,
                    size_t n_loop,
                    Simulation::SimulationUnit &unit,
-                   ReactorState *f,
-                   Simulation::VecMatFlows &liq,
-                   Simulation::VecMatFlows &gas);
+                   ReactorState &reactor_state,
+                   Simulation::BasicCacheMatflows &liquid_flows,
+                   Simulation::BasicCacheMatflows &gas_flows);
 
   void update_flow(size_t &iteration_count,
                    size_t n_loop,
                    Simulation::SimulationUnit &unit,
                    std::span<double> flows,
                    size_t nc,
-                   Simulation::VecMatFlows &liq);
+                   Simulation::BasicCacheMatflows &liq);
 } // namespace Simulation
 
 #endif //__CLI_UPDATE_FLOWS_HPP__

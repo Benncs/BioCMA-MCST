@@ -1,41 +1,45 @@
 #ifndef __MPI_TYPES_HPP__
 #define __MPI_TYPES_HPP__
 
+#include "messages/message_t.hpp"
 #include <mpi.h>
+#include <stdexcept>
+#include <type_traits>
 
 namespace MPI_W
 {
-  template <typename T> struct MPI_TYPES
-  {
-    static_assert(std::is_same_v<T, int> || std::is_same_v<T, double> ||
-                      std::is_same_v<T, size_t>,
-                  "Unsupported type ");
-    static MPI_Datatype value;
-  };
 
-  template <typename T> constexpr MPI_Datatype get_type()
+  template <typename T> consteval MPI_Datatype get_type()
   {
-    MPI_Datatype datatype = MPI_BYTE;
-    if constexpr (std::is_same_v<T, size_t>)
+    MPI_Datatype datatype = MPI_DATATYPE_NULL;
+
+    using _type = std::remove_const_t<std::remove_reference_t<T>>;
+
+    if constexpr (std::is_same_v<_type, size_t>)
     {
+
       datatype = MPI_UNSIGNED_LONG;
     }
-    else if constexpr (std::is_same_v<T, double>)
+    else if constexpr (std::is_same_v<_type, double>)
     {
       datatype = MPI_DOUBLE;
     }
-    else if constexpr (std::is_same_v<T, int>)
+    else if constexpr (std::is_same_v<_type, int>)
     {
       datatype = MPI_INT;
     }
-    else if constexpr (std::is_same_v<T, char>)
+    else if constexpr (std::is_same_v<_type, char> ||
+                       std::is_same_v<_type, MPI_W::SIGNALS>)
     {
       datatype = MPI_BYTE;
     }
     else
     {
-
-      throw std::runtime_error("Error");
+      []<bool flag = false>()
+      {
+        static_assert(flag, "no match");
+      }
+      ();
     }
 
     return datatype;

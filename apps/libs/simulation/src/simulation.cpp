@@ -1,5 +1,7 @@
 #include "mc/particles/particles_container.hpp"
+#include "models/types.hpp"
 #include <algorithm>
+#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <mc/domain.hpp>
@@ -31,10 +33,10 @@ namespace Simulation
       }
     }
 
-    liq->Mtot = liq->C * liq->V;
+    liq->Mtot = liq->C * liq->m_volumes;
     if (host)
     {
-      gas->Mtot = gas->C * gas->V;
+      gas->Mtot = gas->C * gas->m_volumes;
     }
   }
 
@@ -49,8 +51,8 @@ namespace Simulation
   SimulationUnit::SimulationUnit(SimulationUnit &&other) noexcept
       : mc_unit(std::move(other.mc_unit)),
         container(std::move(other.container)), host(other.host),
-        flow_liquid(other.flow_liquid),
-        flow_gas(other.flow_gas), kmodel(other.kmodel)
+        n_thread(other.n_thread),
+        flow_liquid(other.flow_liquid), flow_gas(other.flow_gas),kmodel(other.kmodel)
   {
   }
 
@@ -61,7 +63,7 @@ namespace Simulation
       size_t n_species,
       bool _host)
       : mc_unit(std::move(_unit)), container(std::move(_container)),
-        host(_host), n_thread(info.thread_per_process)
+        host(_host), n_thread(info.thread_per_process),flow_liquid(nullptr),flow_gas(nullptr),kmodel()
   {
 
     this->liquid_scalar =
@@ -79,23 +81,23 @@ namespace Simulation
     initF(liquid_scalar, gas_scalar);
   }
 
-  void SimulationUnit::postInit(KModel &&_km)
+  void SimulationUnit::postInit(KModel _km)
   {
     kmodel = _km;
     post_init_container();
     post_init_compartments();
   }
 
-  void SimulationUnit::setVolumes(std::vector<double> &&volumesgas,
-                                  std::vector<double> &&volumesliq)
+  void SimulationUnit::setVolumes(std::span<double> volumesgas,
+                                  std::span<double> volumesliq)
   {
 
     std::span<double> vg;
-    this->liquid_scalar->setV(std::move(volumesliq));
+    this->liquid_scalar->setVolumes(volumesliq,flow_liquid->inverse_volume);
     if (gas_scalar)
     {
-      this->gas_scalar->setV(std::move(volumesgas));
-      vg = std::span<double>(gas_scalar->V.diagonal().data(),
+      this->gas_scalar->setVolumes(volumesgas,flow_gas->inverse_volume);
+      vg = std::span<double>(gas_scalar->m_volumes.diagonal().data(),
                              this->mc_unit->domain.n_compartments());
     }
     else
@@ -104,7 +106,7 @@ namespace Simulation
     }
 
     std::span<double> vl =
-        std::span<double>(liquid_scalar->V.diagonal().data(),
+        std::span<double>(liquid_scalar->m_volumes.diagonal().data(),
                           this->mc_unit->domain.n_compartments());
 
     this->mc_unit->domain.setVolumes(vg, vl);
@@ -127,14 +129,14 @@ namespace Simulation
   void SimulationUnit::post_init_container()
   {
 
-#pragma omp parallel for
+#pragma omp parallel for default(none)
     for (auto it = container->to_process.begin();
          it < container->to_process.end();
          ++it)
     {
       auto &&particle = *it;
       particle.current_container =
-          MC::uniform_int_rand(size_t(0), mc_unit->domain.n_compartments() - 1);
+          MC::uniform_int_rand(static_cast<size_t>(0), mc_unit->domain.n_compartments() - 1);
 
       auto &i_container = mc_unit->domain[particle.current_container];
 

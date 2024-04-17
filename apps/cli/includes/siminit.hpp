@@ -10,6 +10,6 @@ Simulation::SimulationUnit
 init_simulation(ExecInfo &info,
                 SimulationParameters &params,
                 std::shared_ptr<FlowIterator> &_flow_handle,
-                KModel &&model);
+                KModel model);
 
 #endif //__PROCESS_INIT_HPP__

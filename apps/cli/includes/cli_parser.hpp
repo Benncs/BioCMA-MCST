@@ -3,8 +3,9 @@
 
 #include <common/common.hpp>
 #include <iostream>
+#include <optional>
 
-SimulationParameters parse_cli(int argc, char **argv);
+std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept;
 void showHelp(std::ostream &os);
 
 #endif //__CLI_PARSER_HPP__

@@ -1,3 +1,4 @@
+#include <common/common.hpp>
 #include <Eigen/Dense>
 #include <scalar_simulation.hpp>
 
@@ -5,7 +6,7 @@ namespace Simulation
 {
 
   ScalarSimulation::ScalarSimulation(ScalarSimulation &&other) noexcept
-      : C(std::move(other.C)), Mtot(std::move(other.Mtot)), V(other.V)
+      : C(std::move(other.C)), Mtot(std::move(other.Mtot)), m_volumes(other.m_volumes),n_r(other.n_r),n_c(other.n_c)
   {
   }
 
@@ -14,9 +15,12 @@ namespace Simulation
                                      size_t n_thread)
       : n_r(n_species), n_c(n_compartments)
   {
-    Eigen::setNbThreads(static_cast<int>(n_thread));
-    V = Eigen::DiagonalMatrix<double, -1>(static_cast<int>(n_compartments));
-    V.setIdentity();
+    Eigen::setNbThreads(EIGEN_INDEX(n_thread));
+    m_volumes = Eigen::DiagonalMatrix<double, -1>(EIGEN_INDEX(n_compartments));
+    m_volumes.setIdentity();
+
+    volumes_inverse = Eigen::DiagonalMatrix<double, -1>(EIGEN_INDEX(n_compartments));
+    volumes_inverse.setIdentity();
 
     this->Mtot = Eigen::MatrixXd(n_species, n_compartments);
     this->Mtot.setZero();
@@ -47,10 +51,8 @@ namespace Simulation
   {
 
   
-    Eigen::MatrixXd v_inverse = V.inverse();
+    Mtot += d_t * (Mtot * volumes_inverse * m_transition + biomass_contribution + transfer_gas_liquid);
 
-    Mtot += d_t * (Mtot * v_inverse * m_transition + biomass_contribution + transfer_gas_liquid);
-
-    C = Mtot * v_inverse;
+    C = Mtot * volumes_inverse;
   }
 } // namespace Simulation

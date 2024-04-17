@@ -13,6 +13,6 @@ void host_process(ExecInfo &exec,
 void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
                Simulation::SimulationUnit &simulation,
-               std::shared_ptr<FlowIterator>&& _flow_handle);
+               std::shared_ptr<FlowIterator> _flow_handle);
 
 #endif //__HOST_SPECIFIC_HPP__

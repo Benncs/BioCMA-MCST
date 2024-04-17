@@ -1,7 +1,6 @@
 #ifndef __PMESSAGE_HPP__
 #define __PMESSAGE_HPP__
 
-#include <messages/mpi_types.hpp>
 
 namespace MPI_W
 {
@@ -15,6 +14,8 @@ namespace MPI_W
     RUN,
     NOP
   };
+
+
 
 } // namespace MPI_W
 

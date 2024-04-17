@@ -53,9 +53,10 @@ void set_openmp_threads(int rank,
 
 ExecInfo runtime_init(int argc, char **argv, SimulationParameters &params)
 {
-  ExecInfo info;
+  ExecInfo info{};
 
-  int rank = 0, size = 0;
+  int rank = 0;
+  int size = 0;
 
   MPI_Init(&argc, &argv);
 

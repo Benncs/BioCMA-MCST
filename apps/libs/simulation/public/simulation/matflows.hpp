@@ -14,14 +14,18 @@ namespace Simulation
   {
     FlowMatrixType flows;
     FlowMatrixType transition_matrix;
+    std::vector<double> inverse_volume;
 
     MatFlow() = default;
+    ~MatFlow()=default;
 
     MatFlow(const FlowMatrixType &_flows, const FlowMatrixType &_tm);
 
     MatFlow &operator=(MatFlow &&rhs) noexcept;
+    MatFlow &operator=(const MatFlow &rhs) =delete;
 
     MatFlow(MatFlow &&other) noexcept;
+    MatFlow(const MatFlow &other) =delete;
   };
 
 } // namespace Simulation

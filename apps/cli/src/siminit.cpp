@@ -1,3 +1,4 @@
+#include "models/types.hpp"
 #include <memory>
 #include <siminit.hpp>
 
@@ -19,7 +20,7 @@ Simulation::SimulationUnit
 init_simulation(ExecInfo &info,
                 SimulationParameters &params,
                 std::shared_ptr<FlowIterator> &_flow_handle,
-                KModel &&model)
+                KModel model)
 {
 
   std::vector<double> liq_volume;
@@ -77,9 +78,9 @@ init_simulation(ExecInfo &info,
                                                params.n_species,
                                                info.current_rank == 0);
 
-  simulation.setVolumes(std::move(gas_volume), std::move(liq_volume));
+  // simulation.setVolumes(std::move(gas_volume), std::move(liq_volume));
 
-  simulation.postInit(std::move(model));
+  simulation.postInit(model);
   return simulation;
 }
 

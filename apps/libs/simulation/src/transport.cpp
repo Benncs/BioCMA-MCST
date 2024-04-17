@@ -1,5 +1,4 @@
 #include "simulation/matflows.hpp"
-#include <algorithm>
 #include <get_cumulative_proba.hpp>
 #include <numeric>
 #include <simulation/transport.hpp>
@@ -33,7 +32,7 @@ namespace Simulation
                          const Simulation::MatFlow &flows)
   {
     // Initialize probability matrix
-    Eigen::MatrixXd P = Eigen::MatrixXd::Zero(nb_zone, neighbors[0].size());
+    Eigen::MatrixXd P = Eigen::MatrixXd::Zero(nb_zone, static_cast<int>(neighbors[0].size()));
 
     // Calculate cumulative sum and probability matrix
     for (int k = 0; k < nb_zone; ++k)

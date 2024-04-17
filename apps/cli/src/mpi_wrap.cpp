@@ -8,12 +8,7 @@
 
 namespace MPI_W
 {
-  template <> MPI_Datatype MPI_TYPES<int>::value = MPI_INT;
-
-  template <> MPI_Datatype MPI_TYPES<double>::value = MPI_DOUBLE;
-
-  template <> MPI_Datatype MPI_TYPES<size_t>::value = MPI_UNSIGNED_LONG;
-
+  
   void finalize() noexcept
   {
     MPI_Finalize();

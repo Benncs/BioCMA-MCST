@@ -1,6 +1,8 @@
 #include <cli_parser.hpp>
+#include <exception>
 #include <filesystem>
 #include <iostream>
+#include <optional>
 #include <string_view>
 // static void parseOptional(SimulationParameters& params, std::string_view
 // arg);
@@ -28,33 +30,48 @@ static void recur_path(std::string_view rootPath, SimulationParameters &params)
   }
 }
 
-SimulationParameters parse_cli(int argc, char **argv)
+std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
 {
   SimulationParameters params = SimulationParameters::m_default();
 
   params.n_species = 3;
   params.flow_files.clear();
-  // recur_path("/home/benjamin/Documenti/code/cpp/biomc/cma_data/test2/", params);
-  params.flow_files.emplace_back("/home/benjamin/Documenti/code/cpp/biomc/cma_data/raw_6612/");
+  // recur_path("/home/benjamin/Documenti/code/cpp/biomc/cma_data/test2/",
+  // params);
+  params.flow_files.emplace_back(
+      "/home/benjamin/Documenti/code/cpp/biomc/cma_data/raw_6612/");
 
-  int iarg = 1;
-  while (iarg < argc - 1)
+  try
   {
-    auto current_param = std::string(argv[iarg]);
-    auto current_value = std::string_view(argv[iarg + 1]);
-    if (current_param.data() != nullptr && current_param[0] != '\0')
+    int iarg = 1;
+    while (iarg < argc - 1)
     {
+      auto current_param = std::string(argv[iarg]);
+      auto current_value = std::string_view(argv[iarg + 1]);
+      if (current_param.data() != nullptr && current_param[0] != '\0')
+      {
 
-      parseArg(params, current_param, current_value);
+        parseArg(params, current_param, current_value);
+      }
+      else
+      {
+        throw_bad_arg("");
+      }
+      iarg += 2;
     }
-    else
-    {
-      throw_bad_arg("");
-    }
-    iarg += 2;
+
+    check_cli(params);
   }
-
-  check_cli(params);
+  catch (std::invalid_argument &e)
+  {
+    std::cerr << e.what() << '\n';
+    return std::nullopt;
+  }
+  catch (std::exception& e)
+  {
+    std::cerr << e.what() << '\n';
+    return std::nullopt;
+  }
   return params;
 }
 
