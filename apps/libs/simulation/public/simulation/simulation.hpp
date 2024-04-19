@@ -57,7 +57,7 @@ namespace Simulation
 
     void setGasFlow(MatFlow *_flows_g);
 
-    std::span<double> get_contributionData();
+    [[nodiscard]] std::span<double> getContributionData();
 
     void reduceContribs(std::span<double> data, size_t n_rank);
 

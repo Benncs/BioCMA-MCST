@@ -5,7 +5,6 @@
 
 #include <models/models.hpp>
 #include <simulation/simulation.hpp>
-#include <simulation/transport.hpp>
 
 #include <common/common.hpp>
 
@@ -65,7 +64,7 @@ int main(int argc, char **argv)
     exec(argc, argv, std::move(params_opt.value()));
   }
 #ifdef DEBUG
-  catch (std::exception &e)
+  catch (std::exception const &e)
 
   {
     std::cerr << e.what() << '\n';
@@ -109,13 +108,13 @@ static void exec(int argc, char **argv, SimulationParameters params)
 static void show(Simulation::SimulationUnit &simulation)
 {
 
-  auto distribution = simulation.mc_unit->domain.getDistribution();
+  // auto distribution = simulation.mc_unit->domain.getDistribution();
 
-  for (auto &&i : distribution)
-  {
-    std::cout << i << ", ";
-  }
-  std::cout << '\n';
+  // for (auto &&i : distribution)
+  // {
+  //   std::cout << i << ", ";
+  // }
+  // std::cout << '\n';
   // try
   // {
   //   std::vector<double> totmas(simulation.unit->domain.n_compartments(), 0.);

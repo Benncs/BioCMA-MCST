@@ -1,7 +1,7 @@
 #ifndef __GET_CUMULATIVE_PROBABILITY_HPP__
 #define __GET_CUMULATIVE_PROBABILITY_HPP__
 
-#include <simulation/transport.hpp>
+#include <transport.hpp>
 #include <vector>
 
 namespace Simulation

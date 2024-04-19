@@ -3,8 +3,6 @@
 #include <iterator>
 #include <mc/domain.hpp>
 
-
-
 namespace MC
 {
   ReactorDomain::ReactorDomain(ReactorDomain &&other) noexcept
@@ -12,11 +10,13 @@ namespace MC
     if (this != &other)
     {
       this->containers = std::move(other.containers);
+      this->id = other.id;
+      this->_total_volume = other._total_volume;
     }
   }
 
-  void ReactorDomain::setVolumes(std::span<double> volumesgas,
-                                 std::span<double> volumesliq)
+  void ReactorDomain::setVolumes(std::span<double const> volumesgas,
+                                 std::span<double const> volumesliq)
   {
     // #pragma omp parallel for
     for (size_t i_c = 0; i_c < volumesgas.size(); ++i_c)
@@ -27,7 +27,7 @@ namespace MC
   }
   ReactorDomain::ReactorDomain(NumberView volumes,
                                std::vector<std::vector<size_t>> &&_neighbors)
-      : neighbors(std::move(_neighbors))
+      : id(0),neighbors(std::move(_neighbors))
   {
     double totv = 0.;
     std::transform(volumes.begin(),

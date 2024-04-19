@@ -8,7 +8,7 @@ void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
 
   // Just use pointer to data wraped into span
   //  TODO: As we just gather we could use const data
-  auto local_contribution = simulation.get_contributionData();
+  auto local_contribution = simulation.getContributionData();
 
   // Move span is useless but keep im mind gather idea of "moving" data
   std::vector<double> total_contrib_data =

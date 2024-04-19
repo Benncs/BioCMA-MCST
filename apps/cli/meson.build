@@ -35,7 +35,7 @@ app_test_dependency = declare_dependency(
 )
 
 # Define executable
-app_cli = executable(name,
+executable(name,
                      f'@src_dir@/main.cpp',
                      include_directories: [ './includes'],
                      dependencies: [app_test_dependency],
@@ -59,7 +59,7 @@ if get_option('use_dynamic_module')
   )
 
   # Assuming py_dynamic_module is a valid dependency
-  app_cli_dyn = executable(name,
+  executable(name,
                            f'@src_dir@/main.cpp',
                            include_directories: ['./includes'],
                            dependencies: [app_test_dependency_dyn, py_dynamic_module])

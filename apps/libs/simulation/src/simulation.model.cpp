@@ -39,7 +39,7 @@ static Eigen::MatrixXd mock_transfer(Eigen::ArrayXXd &res_kla,
     res_kla.coeffRef(1, i_c) = kla;
   }
 
-//LAZY EVALUATION
+// LAZY EVALUATION
 #define c_star (1.3e-5 * gas_scalar_as_array / 32e-3 * 8.314 * (273.15 + 30))
 #define transfer_g_liq (res_kla * (c_star - liq_scalar_as_array))
 
@@ -59,24 +59,22 @@ namespace Simulation
     }
   }
 
-  std::span<double> SimulationUnit::get_contributionData()
+  std::span<double> SimulationUnit::getContributionData()
   {
-    return std::span(this->liquid_scalar->biomass_contribution.data(),
-                     this->liquid_scalar->biomass_contribution.size());
+
+    return liquid_scalar->getContributionData();
   }
 
   std::span<double> SimulationUnit::getCliqData()
   {
-    auto *data = this->liquid_scalar->C.data();
-
-    return std::span<double>(data, this->liquid_scalar->C.size());
+    return this->liquid_scalar->getCliqData();
   }
 
   void SimulationUnit::reduceContribs(std::span<double> data, size_t n_rank)
   {
 
     size_t nr = this->liquid_scalar->C.rows();
-    size_t nc = this->gas_scalar->C.cols();
+    size_t nc = this->liquid_scalar->C.cols();
 
     this->liquid_scalar->biomass_contribution.setZero();
 
@@ -91,7 +89,7 @@ namespace Simulation
   {
     for (size_t i = 0; i < n_thread; ++i)
     {
-      this->liquid_scalar->contribs[i].setZero();
+      this->liquid_scalar->getThreadContribs()[i].setZero();
       container->extras.clear();
       this->liquid_scalar->vec_kla.setZero();
     }
@@ -99,7 +97,7 @@ namespace Simulation
     this->liquid_scalar->biomass_contribution.setZero();
   }
 
-  void SimulationUnit::step(double d_t,ReactorState& state)
+  void SimulationUnit::step(double d_t, ReactorState &state)
   {
 
     // if (state == nullptr)
@@ -108,7 +106,7 @@ namespace Simulation
     // }
 
     auto mat_transfer_g_liq = mock_transfer(this->liquid_scalar->vec_kla,
-                                            liquid_scalar->m_volumes,
+                                            liquid_scalar->getVolume(),
                                             liquid_scalar->C.array(),
                                             gas_scalar->C.array(),
                                             &state);

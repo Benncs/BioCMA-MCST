@@ -17,6 +17,7 @@ namespace MC
     ReactorDomain(NumberView volumes,
                   std::vector<std::vector<size_t>> &&_neighbors);
     ReactorDomain(const ReactorDomain &other) = delete;
+    ~ReactorDomain()=default;
 
     inline auto &operator[](size_t i_c)
     {
@@ -30,11 +31,11 @@ namespace MC
     ReactorDomain &operator=(const ReactorDomain &other) = delete;
     ReactorDomain &operator=(ReactorDomain &&other) noexcept;
 
-    decltype(auto) begin() const
+    [[nodiscard]] decltype(auto) begin() const
     {
       return containers.begin();
     }
-    decltype(auto) end() const
+    [[nodiscard]] decltype(auto) end() const
     {
       return containers.end();
     }
@@ -48,24 +49,24 @@ namespace MC
       return containers.end();
     }
 
-    inline auto n_compartments() const
+    [[nodiscard]] inline auto n_compartments() const
     {
       return containers.size();
     }
 
-    inline double total_volume() const
+    [[nodiscard]] inline double total_volume() const
     {
       return this->_total_volume;
     }
 
-    void setVolumes(std::span<double> volumesgas, std::span<double> volumesliq);
+    void setVolumes(std::span<double const> volumesgas, std::span<double const> volumesliq);
 
     void setLiquidNeighbors(const std::vector<std::vector<size_t>>& data)
     {
       neighbors = data;
     }
 
-    inline const std::vector<std::vector<size_t>> &getNeighbors() const
+    [[nodiscard]] inline const std::vector<std::vector<size_t>> &getNeighbors() const
     {
       return neighbors;
     }

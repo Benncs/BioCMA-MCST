@@ -18,7 +18,7 @@ if use_dynamic_module
 
    indir = [public,'/usr/include/python3.10/']
 
-   py = shared_library(python_module_name,
+   shared_library(python_module_name,
                      modfile,
                      name_suffix: python_extension_suffix,
                      name_prefix: '',

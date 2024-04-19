@@ -9,7 +9,7 @@
 namespace Simulation
 {
 
-  FlowMatrixType FlowmapToMat(std::span<double> data, size_t n_row);
+  FlowMatrixType flowmap_to_matrix(std::span<double> data, size_t n_row);
 
   FlowMatrixType get_transition_matrix(const FlowMatrixType &flows);
 

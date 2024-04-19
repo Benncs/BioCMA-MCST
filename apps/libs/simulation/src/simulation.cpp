@@ -11,7 +11,7 @@
 #include <omp.h>
 #include <scalar_simulation.hpp>
 #include <simulation/simulation.hpp>
-#include <simulation/transport.hpp>
+#include <transport.hpp>
 
 namespace Simulation
 {
@@ -33,10 +33,10 @@ namespace Simulation
       }
     }
 
-    liq->Mtot = liq->C * liq->m_volumes;
+    liq->Mtot = liq->C * liq->getVolume();
     if (host)
     {
-      gas->Mtot = gas->C * gas->m_volumes;
+      gas->Mtot = gas->C * gas->getVolume();
     }
   }
 
@@ -92,22 +92,21 @@ namespace Simulation
                                   std::span<double> volumesliq)
   {
 
-    std::span<double> vg;
+    std::span<double const> vg;
     this->liquid_scalar->setVolumes(volumesliq,flow_liquid->inverse_volume);
     if (gas_scalar)
     {
       this->gas_scalar->setVolumes(volumesgas,flow_gas->inverse_volume);
-      vg = std::span<double>(gas_scalar->m_volumes.diagonal().data(),
-                             this->mc_unit->domain.n_compartments());
+      vg = gas_scalar->getVolumeData();
+
     }
     else
     {
       vg = volumesgas;
     }
 
-    std::span<double> vl =
-        std::span<double>(liquid_scalar->m_volumes.diagonal().data(),
-                          this->mc_unit->domain.n_compartments());
+    std::span<double const> vl = liquid_scalar->getVolumeData();
+  
 
     this->mc_unit->domain.setVolumes(vg, vl);
   }
@@ -156,7 +155,7 @@ namespace Simulation
     const auto &_kmodel = kmodel;
 
     auto &domain = this->mc_unit->domain;
-    auto &_contribs = this->liquid_scalar->contribs;
+    auto _contribs = this->liquid_scalar->getThreadContribs();
     auto &_extras = this->container->extras;
 
     const auto krnl =

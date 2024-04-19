@@ -1,4 +1,4 @@
-#include <simulation/transport.hpp>
+#include <transport.hpp>
 
 void test_valid_input()
 {
@@ -14,7 +14,7 @@ void test_valid_input()
   int n_row = 3; // Square root of the size of the data vector
   try
   {
-    auto sparse_matrix = Simulation::FlowmapToMat(data, n_row);
+    auto sparse_matrix = Simulation::flowmap_to_matrix(data, n_row);
     // Check if the resulting matrix is correct
     assert(sparse_matrix.rows() == n_row);
     assert(sparse_matrix.cols() == n_row);
@@ -51,7 +51,7 @@ void test_invalid_input()
   int n_row = 2;
   try
   {
-    Simulation::FlowmapToMat(data, n_row);
+    Simulation::flowmap_to_matrix(data, n_row);
     assert(false);
   }
   catch (const std::invalid_argument &e)

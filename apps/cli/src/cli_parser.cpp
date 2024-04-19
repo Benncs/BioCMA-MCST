@@ -67,7 +67,7 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
     std::cerr << e.what() << '\n';
     return std::nullopt;
   }
-  catch (std::exception& e)
+  catch (std::exception const & e)
   {
     std::cerr << e.what() << '\n';
     return std::nullopt;

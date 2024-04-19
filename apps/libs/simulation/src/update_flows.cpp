@@ -1,4 +1,4 @@
-#include <simulation/transport.hpp>
+#include <transport.hpp>
 #include <simulation/update_flows.hpp>
 
 namespace Simulation
@@ -19,7 +19,7 @@ namespace Simulation
   static void compute_MatFlow(FlowInfo &flow, Simulation::MatFlow &matflow)
   {
     const auto mat_f_liq =
-        Simulation::FlowmapToMat(flow.flows.data(), flow.flows.getN());
+        Simulation::flowmap_to_matrix(flow.flows.data(), flow.flows.getN());
     const auto _mat_transition_liq =
         Simulation::get_transition_matrix(mat_f_liq);
 
@@ -34,7 +34,7 @@ namespace Simulation
                              size_t nc,
                              Simulation::MatFlow &matflow)
   {
-    const auto mat_f_liq = Simulation::FlowmapToMat(flows, nc);
+    const auto mat_f_liq = Simulation::flowmap_to_matrix(flows, nc);
     const auto _mat_transition_liq =
         Simulation::get_transition_matrix(mat_f_liq);
     matflow.flows = mat_f_liq;
