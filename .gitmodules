@@ -1,4 +1,4 @@
 [submodule "subprojects/birem"]
 	path = subprojects/birem
 	url = https://gitlab.com/seolane88/BIREM_Project.git
-	branch = refractor/python_interface
+	branch = refractor/2.0

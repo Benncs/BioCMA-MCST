@@ -5,8 +5,13 @@
 
 #include <mc/particles/mcparticles.hpp>
 
+#define __MC_MAX_PARTICLES_PER_PROCESS__ 50e6
+
 namespace MC
 {
+
+  static constexpr size_t MAX_PARTICLE_BUFFER = __MC_MAX_PARTICLES_PER_PROCESS__;
+
   class ParticlesList
   {
   public:
@@ -30,9 +35,9 @@ namespace MC
                   std::make_move_iterator(end));
     }
 
-    size_t size() const noexcept;
+    [[nodiscard]] size_t size() const noexcept;
 
-    decltype(auto) begin() const
+    [[nodiscard]] decltype(auto) begin() const
     {
       return data.begin();
     }
@@ -59,6 +64,7 @@ namespace MC
     ParticlesList &operator=(ParticlesList &&other) noexcept;
 
   private:
+  
     std::vector<Particles> data;
   };
 

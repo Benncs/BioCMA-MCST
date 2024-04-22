@@ -39,7 +39,7 @@ executable(name,
                      f'@src_dir@/main.cpp',
                      include_directories: [ './includes'],
                      dependencies: [app_test_dependency],
-                     cpp_args: ['-UBIO_DYNAMIC_MODULE'],cpp_args:target_custom_options)
+                     cpp_args: ['-UBIO_DYNAMIC_MODULE',target_custom_options])
 
 # Conditional dynamic module build
 if get_option('use_dynamic_module')

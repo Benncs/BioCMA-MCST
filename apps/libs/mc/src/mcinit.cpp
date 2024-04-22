@@ -17,17 +17,18 @@ namespace MC
     double weight = static_cast<double>(n_particles) /
                     static_cast<double>(total_population);
     return std::make_unique<ParticlesContainer>(particle_per_process,
-                                                1 / weight);
+                                                1 / weight,info.thread_per_process);
   }
 
   std::unique_ptr<MonteCarloUnit>
-  init_unit(ExecInfo & /*info*/,
+  init_unit(ExecInfo & info,
             NumberView volumes,
             std::vector<std::vector<size_t>> &&neighbors)
   {
 
     auto unit = std::make_unique<MonteCarloUnit>();
     unit->domain = ReactorDomain(volumes, std::move(neighbors));
+    unit->ts_events.resize(info.thread_per_process);
 
     return unit;
   }

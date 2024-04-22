@@ -1,7 +1,7 @@
 project('BioCMA-MCST','cpp',version:'0.0.2',default_options:['warning_level=3','cpp_std=gnu++20','b_colorout=always','b_coverage=true'])
 
 
-root = meson.source_root()
+root = meson.project_source_root()
 project_name = meson.project_name()
 build_type = get_option('buildtype')
 cpp = meson.get_compiler('cpp')

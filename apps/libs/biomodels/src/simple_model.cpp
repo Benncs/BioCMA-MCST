@@ -1,15 +1,17 @@
+#include "mc/prng.hpp"
+#include <Eigen/Dense>
 #include <cmath>
 #include <common/alg.hpp>
 #include <mc/particles/mcparticles.hpp>
-#include <Eigen/Dense>
 #define EEIGEN
 #include <models/simple_model.hpp>
 // #include <models/types.hpp>
 
 #include <any>
+#include <iostream>
 #include <memory>
 
-
+constexpr double SOLVER_TOLERANCE = 1e-5;
 
 static double phi_pts(std::shared_ptr<SimpleModel> &model, double S);
 static double
@@ -28,13 +30,13 @@ SimpleModel &SimpleModel::operator=(SimpleModel &&other) noexcept
 {
   if (this != &other)
   {
-    *xi = *other.xi;
-    *xi_dot = *other.xi_dot;
+    xi = other.xi;
+    xi_dot = other.xi_dot;
   }
   return *this;
 }
 
-SimpleModel::Xi SimpleModel::Xi::operator+(const Xi &rhs) const
+Xi Xi::operator+(const Xi &rhs) const
 {
   Xi result;
   result.mass = mass + rhs.mass;
@@ -46,7 +48,7 @@ SimpleModel::Xi SimpleModel::Xi::operator+(const Xi &rhs) const
 }
 
 // Scalar multiplication operator for Xi
-SimpleModel::Xi SimpleModel::Xi::operator*(double scalar) const
+Xi Xi::operator*(double scalar) const
 {
   Xi result;
   result.mass = mass * scalar;
@@ -57,34 +59,39 @@ SimpleModel::Xi SimpleModel::Xi::operator*(double scalar) const
   return result;
 }
 
-void SimpleModel::step(double d)
+void SimpleModel::step(double d) 
 {
-  *this->xi = *this->xi + *this->xi_dot * d;
+  this->xi = this->xi + this->xi_dot * d;
 }
 
 void init_simple_model_(MC::Particles &p)
 {
   std::shared_ptr<SimpleModel> ptr = std::make_shared<SimpleModel>();
-  ptr->xi->mass = 1e-5;
-  ptr->xi->a_permease = 0.5;
-  ptr->xi->a_pts = 0.5l;
-  ptr->xi->mu_eff = 1e-5;
-  ptr->xi->n_permease = 1e3;
+  // ptr->xi.mass =
+  //     std::max(1e-7,
+  //              MC::normal_double_rand(SimpleModel::critcal_division_mass * 0.7,
+  //                                     std::sqrt(1e-7)));
 
-  ptr->mu_p = 0;
+  ptr->xi.mass = MC::uniform_double_rand(1e-7, SimpleModel::critcal_division_mass);
+  ptr->xi.a_permease = 0.5;
+  ptr->xi.a_pts = 0.5l;
+  ptr->xi.mu_eff = 1e-5;
+  ptr->xi.n_permease = 1e3;
+
+  ptr->mu_p = 1e-5;
   ptr->phi_o_in = 0;
   ptr->phi_s_in = 0;
+  assert(ptr->xi.mass > 0);
+  // std::cout<< ptr->xi->mass <<std::endl;
   p.data = ptr;
 }
-
 void update_simple_model(double d_t,
                          MC::Particles &p,
                          std::span<double const> concentrations)
 {
   auto &model = std::any_cast<std::shared_ptr<SimpleModel> &>(p.data);
-
   double S = concentrations[0];
-  auto n_permease = static_cast<unsigned>(model->xi->n_permease);
+  auto n_permease = static_cast<unsigned>(model->xi.n_permease);
 
   double gamma_PTS_S = uptake_glucose(model, n_permease, S);
   ;
@@ -100,7 +107,6 @@ void update_simple_model(double d_t,
 
   double mu_p =
       std::min(SimpleModel::YXS * model->phi_s_in, SimpleModel::YXO * phi_o_in);
-
   model->mu_p = mu_p;
 
   model->phi_o_in = phi_o_in;
@@ -110,7 +116,7 @@ void update_simple_model(double d_t,
   model->step(d_t);
 
   // Division has to occur
-  if (model->xi->mass >= SimpleModel::critcal_division_mass)
+  if (model->xi.mass >= SimpleModel::critcal_division_mass)
   {
     p.status = MC::CellStatus::CYTOKINESIS;
   }
@@ -119,9 +125,11 @@ void update_simple_model(double d_t,
 MC::Particles division_simple_model(MC::Particles &p)
 {
   auto &model = std::any_cast<std::shared_ptr<SimpleModel> &>(p.data);
-  model->xi->mass = model->xi->mass / 2;
+  model->xi.mass = model->xi.mass / 2;
+
   p.status = MC::CellStatus::IDLE;
-  auto child = MC::Particles(p);
+  MC::Particles child(p);
+  child.data = std::make_shared<SimpleModel>(*model);
   return child;
   // TODO
 }
@@ -133,21 +141,21 @@ void contribution_simple_model(MC::Particles &p, Eigen::MatrixXd &contribution)
   contribution.coeffRef(0, ic) += -model->phi_s_in * p.weight;
   contribution.coeffRef(1, ic) += -model->phi_o_in * p.weight;
   contribution.coeffRef(2, ic) +=
-      SimpleModel::YSA * std::max(0., model->mu_p - model->xi->mu_eff) *
+      SimpleModel::YSA * std::max(0., model->mu_p - model->xi.mu_eff) *
       p.weight;
 }
 
 static double phi_pts(std::shared_ptr<SimpleModel> &model, double S)
 {
-  return model->xi->a_pts *
+  return model->xi.a_pts *
          (SimpleModel::phi_pts_max * S / (SimpleModel::kpts + S));
 }
 
 static double
 phi_permease(std::shared_ptr<SimpleModel> &model, double n_permease, double S)
 {
-  return n_permease * SimpleModel::psi_permease * (model->xi->mass * 1e3) *
-         model->xi->a_permease *
+  return n_permease * SimpleModel::psi_permease * (model->xi.mass * 1e3) *
+         model->xi.a_permease *
          (SimpleModel::phi_pts_max * S / (SimpleModel::kppermease + S));
 }
 
@@ -199,22 +207,23 @@ static void update_xi_dot(std::shared_ptr<SimpleModel> &model,
                           double n_permease,
                           double S)
 {
-  model->xi_dot->mass = 1.5e-7; // model->xi->mu_eff;
-  model->xi_dot->a_pts = (1.0 / SimpleModel::tauPTS) *
-                         ((S / SimpleModel::kpts + S) - model->xi->a_pts);
+  model->xi_dot.mass = model->xi.mu_eff;
 
-  model->xi_dot->a_permease =
+  model->xi_dot.a_pts = (1.0 / SimpleModel::tauPTS) *
+                         ((S / SimpleModel::kpts + S) - model->xi.a_pts);
+
+  model->xi_dot.a_permease =
       ((1.0 / SimpleModel::tauAu) * gamma_PTS_S +
        (1.0 / SimpleModel::tauAd) * (1.0 - gamma_PTS_S)) *
-      (1.0 - gamma_PTS_S - model->xi->a_permease);
+      (1.0 - gamma_PTS_S - model->xi.a_permease);
 
-  model->xi_dot->n_permease =
+  model->xi_dot.n_permease =
       (1.0 / SimpleModel::tau_f) *
           (SimpleModel::kppermease / (SimpleModel::kppermease + S)) +
       (1.0 / SimpleModel::tau_d) * (S / (SimpleModel::kpts + S)) *
           (SimpleModel::NPermease_max * (1.0 - gamma_PTS_S) - n_permease);
-  model->xi_dot->mu_eff =
-      (1.0 / SimpleModel::tau_metabolisme) * (model->mu_p - model->xi->mu_eff);
+  model->xi_dot.mu_eff =
+      (1.0 / SimpleModel::tau_metabolisme) * (model->mu_p - model->xi.mu_eff);
 }
 
 static double uptake_o2(std::shared_ptr<SimpleModel> &model, double O)
@@ -224,8 +233,9 @@ static double uptake_o2(std::shared_ptr<SimpleModel> &model, double O)
 
   auto get_phi = [&model, O, &growth](double Oi)
   {
-    double phi_o_growth = SimpleModel::YXO * model->xi->mu_eff;
-    double phi_o_in = SimpleModel::psi_o_meta + growth * phi_o_growth;
+    double phi_o_growth = SimpleModel::YXO * model->xi.mu_eff;
+    double phi_o_in =
+        model->xi.mass * SimpleModel::psi_o_meta + growth * phi_o_growth;
     double rhs = phi_o_growth + phi_o_in;
     double lhs = (O - Oi) / tau_m;
     return std::abs(rhs - lhs);
@@ -235,7 +245,7 @@ static double uptake_o2(std::shared_ptr<SimpleModel> &model, double O)
     return 0;
   }
   bool success = false;
-  double Oi = naive_newton(get_phi, O, &success, 1e-5);
+  double Oi = naive_newton(get_phi, O, &success, SOLVER_TOLERANCE);
   if (Oi < 0 || !success)
   {
     return 0;
@@ -243,12 +253,12 @@ static double uptake_o2(std::shared_ptr<SimpleModel> &model, double O)
 
   growth = 1; //  Don't remove this, captured in get_phi TODO avoid side effect
               //  in get_phi
-  double Oi2 = naive_newton(get_phi, O, &success, 1e-5);
+  double Oi2 = naive_newton(get_phi, O, &success, SOLVER_TOLERANCE);
   if (Oi2 < 0 || !success)
   {
     return SimpleModel::psi_o_meta;
   }
 
-  double phi_o_growth = SimpleModel::YXO * model->xi->mu_eff;
+  double phi_o_growth = SimpleModel::YXO * model->xi.mu_eff;
   return SimpleModel::psi_o_meta + growth * phi_o_growth;
 }

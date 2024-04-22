@@ -66,7 +66,7 @@ ExecInfo runtime_init(int argc, char **argv, SimulationParameters &params)
 
   set_openmp_threads(rank, size, info, params);
 
-  std::cout << "NUM thread per process " << info.thread_per_process << '\n';
+  std::cout << "NUM thread per process " << info.thread_per_process << std::endl;
   std::atexit(MPI_W::finalize);
 
   // MPI_W::is_mpi_init = true;

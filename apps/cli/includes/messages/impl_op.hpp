@@ -98,6 +98,7 @@ namespace MPI_W
     if (!opt_data.has_value())
     {
       MPI_W::critical_error();
+      exit(-1); //critical_error should exit before reaching this statement 
     }
     else
     {

@@ -28,7 +28,7 @@ namespace MC
     return distribution(*generator_int);
   }
 
-  inline double uniform_double_rand(const double &min, const double &max)
+  inline double uniform_double_rand(double min, double max)
   {
     static thread_local std::mt19937 *generator_double = nullptr;
     if (generator_double == nullptr)
@@ -38,6 +38,19 @@ namespace MC
           new std::mt19937(clock() + hasher(std::this_thread::get_id()));
     }
     std::uniform_real_distribution<> distribution(min, max);
+    return distribution(*generator_double);
+  }
+
+  inline double normal_double_rand(double mean,  double stddev)
+  {
+    static thread_local std::mt19937 *generator_double = nullptr;
+    if (generator_double == nullptr)
+    {
+      std::hash<std::thread::id> hasher;
+      generator_double =
+          new std::mt19937(clock() + hasher(std::this_thread::get_id()));
+    }
+    std::normal_distribution<> distribution(mean, stddev);
     return distribution(*generator_double);
   }
 

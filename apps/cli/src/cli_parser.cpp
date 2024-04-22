@@ -13,20 +13,23 @@ static void throw_bad_arg(std::string_view arg);
 
 static void parseArg(SimulationParameters &params,
                      std::string current_param,
-                     std::string_view current_value);
+                     std::string_view current_value,
+                     bool &recur);
 
 static void recur_path(std::string_view rootPath, SimulationParameters &params)
 {
-  for (int i = 1; i <= 13; ++i)
+  size_t count = 1;
+  std::string dirName = "i_" + std::to_string(count) + "/";
+  std::filesystem::path dirPath = std::string(rootPath) + dirName;
+  while (std::filesystem::exists(dirPath) &&
+         std::filesystem::is_directory(dirPath))
   {
-    std::string dirName = "i_" + std::to_string(i) + "/";
-    std::filesystem::path dirPath = std::string(rootPath) + dirName;
+    ++count;
+    params.flow_files.push_back(dirPath.string());
+    dirName = "i_" + std::to_string(count) + "/";
+    dirPath = std::string(rootPath) + dirName;
 
-    if (std::filesystem::exists(dirPath) &&
-        std::filesystem::is_directory(dirPath))
-    {
-      params.flow_files.push_back(dirPath.string());
-    }
+
   }
 }
 
@@ -38,9 +41,9 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
   params.flow_files.clear();
   // recur_path("/home/benjamin/Documenti/code/cpp/biomc/cma_data/test2/",
   // params);
-  params.flow_files.emplace_back(
-      "/home/benjamin/Documenti/code/cpp/biomc/cma_data/raw_6612/");
-
+  // params.flow_files.emplace_back(
+  //     "/home/benjamin/Documenti/code/cpp/biomc/cma_data/raw_6612/");
+  bool recur = false;
   try
   {
     int iarg = 1;
@@ -51,7 +54,7 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
       if (current_param.data() != nullptr && current_param[0] != '\0')
       {
 
-        parseArg(params, current_param, current_value);
+        parseArg(params, current_param, current_value, recur);
       }
       else
       {
@@ -59,7 +62,12 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
       }
       iarg += 2;
     }
-
+    if (params.flow_files.size() == 1 && recur)
+    {
+      auto root = params.flow_files[0];
+      params.flow_files.clear();
+      recur_path(root, params);
+    }
     check_cli(params);
   }
   catch (std::invalid_argument &e)
@@ -67,22 +75,26 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
     std::cerr << e.what() << '\n';
     return std::nullopt;
   }
-  catch (std::exception const & e)
+  catch (std::exception const &e)
   {
     std::cerr << e.what() << '\n';
     return std::nullopt;
   }
+
   return params;
 }
 
 static void parseArg(SimulationParameters &params,
                      std::string current_param,
-                     std::string_view current_value)
+                     std::string_view current_value,
+                     bool &recur)
 {
+  std::string path;
   current_param = std::string(current_param.begin() + 1, current_param.end());
   switch (current_param[0])
   {
   case 'n':
+  {
     if (current_param == "nt")
     {
       params.n_threads = std::stoi(std::string(current_value));
@@ -92,7 +104,9 @@ static void parseArg(SimulationParameters &params,
       params.n_particles = std::stol(std::string(current_value));
     }
     break;
+  }
   case 'd':
+  {
     if (current_param == "dt")
     {
       params.d_t = std::stod(std::string(current_value));
@@ -101,8 +115,20 @@ static void parseArg(SimulationParameters &params,
     {
       params.final_time = std::stod(std::string(current_value));
     }
+    break;
+  }
+  case 'r':
+  {
+    recur = true;
+    break;
+  }
+  case 'f':
+  {
+    params.flow_files.emplace_back(current_value);
 
     break;
+  }
+
   default:
     throw_bad_arg(current_param);
     break;

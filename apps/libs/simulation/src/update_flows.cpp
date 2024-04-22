@@ -19,12 +19,9 @@ namespace Simulation
   static void compute_MatFlow(FlowInfo &flow, Simulation::MatFlow &matflow)
   {
     const auto mat_f_liq =
-        Simulation::flowmap_to_matrix(flow.flows.data(), flow.flows.getN());
+        Simulation::flowmap_to_matrix(flow.flows.data(), flow.flows.getNRow());
     const auto _mat_transition_liq =
         Simulation::get_transition_matrix(mat_f_liq);
-
-
-
 
     matflow.flows = mat_f_liq;
     matflow.transition_matrix = _mat_transition_liq;

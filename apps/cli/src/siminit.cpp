@@ -38,7 +38,7 @@ init_simulation(ExecInfo &info,
     nmap = _flow_handle->loop_size();
     liq_volume = fstate->liquidVolume;
     gas_volume = fstate->gasVolume;
-    opti_dt = _flow_handle->MinLiquidResidenceTime() / 100.;
+   // opti_dt = _flow_handle->MinLiquidResidenceTime() / 100.;
     auto n_t = static_cast<size_t>(params.final_time / opti_dt);
     _flow_handle->setRepetition(n_t / nmap);
   }
@@ -69,8 +69,7 @@ init_simulation(ExecInfo &info,
   auto unit = MC::init_unit(info, liq_volume, std::move(liquid_neighbors));
 
   auto container = MC::init_container(info, params.n_particles);
-  container->init_extra(
-      info.thread_per_process); // TODO Put it in the constructor
+
 
   auto simulation = Simulation::SimulationUnit(info,
                                                std::move(unit),
@@ -92,6 +91,7 @@ init_state(SimulationParameters &params,
   try
   {
     flow_handle = std::make_shared<FlowIterator>(params.flow_files);
+    std::cout<<"Flowmap loaded: "<<flow_handle->loop_size()<<std::endl;
 
     state = &flow_handle->operator()(0);
   }

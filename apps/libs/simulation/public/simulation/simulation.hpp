@@ -19,7 +19,7 @@ namespace Simulation
 
   using pimp_ptr_t = std::unique_ptr<ScalarSimulation, pimpl_deleter>;
 
-  void initF(pimp_ptr_t &liq, pimp_ptr_t &gas);
+  void initF(pimp_ptr_t &liq, pimp_ptr_t &gas); //TODO Delete 
 
   class SimulationUnit
   {
@@ -39,7 +39,7 @@ namespace Simulation
     SimulationUnit &operator=(const SimulationUnit &rhs) =delete;
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
-    std::unique_ptr<MC::ParticlesContainer> container;
+    std::unique_ptr<MC::ParticlesContainer> mc_container;
     
 
     void postInit(KModel _km);
@@ -94,8 +94,8 @@ namespace Simulation
   inline void SimulationUnit::execute_process_knrl(const auto &kernel)
   {
 #pragma omp parallel for num_threads(n_thread) default(none) shared(kernel)
-    for (auto it = container->to_process.begin();
-         it < container->to_process.end();
+    for (auto it = mc_container->to_process.begin();
+         it < mc_container->to_process.end();
          ++it)
     {
       kernel(*it);
