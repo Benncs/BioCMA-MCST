@@ -1,15 +1,14 @@
 #ifndef __MPI_TYPES_HPP__
 #define __MPI_TYPES_HPP__
 
-#include "messages/message_t.hpp"
+#include <messages/message_t.hpp>
 #include <mpi.h>
-#include <stdexcept>
 #include <type_traits>
 
 namespace MPI_W
 {
 
-  template <typename T> consteval MPI_Datatype get_type()
+  template <typename T> constexpr MPI_Datatype get_type()
   {
     MPI_Datatype datatype{};
 
