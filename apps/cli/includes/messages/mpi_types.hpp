@@ -11,7 +11,7 @@ namespace MPI_W
 
   template <typename T> consteval MPI_Datatype get_type()
   {
-    MPI_Datatype datatype = MPI_DATATYPE_NULL;
+    MPI_Datatype datatype{};
 
     using _type = std::remove_const_t<std::remove_reference_t<T>>;
 
