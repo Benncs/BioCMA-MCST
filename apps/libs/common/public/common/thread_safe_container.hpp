@@ -4,6 +4,20 @@
 #include <vector>
 #include <cstddef>
 
+
+#define __ATOM_INCR__(__val__) {\
+_Pragma("omp atomic") \
+__val__++;\
+}
+
+#define __ATOM_DECR__(__val__) {\
+_Pragma("omp atomic") \
+__val__--;\
+}
+
+
+
+
 // template<typename T,typename F_merge>
 // class ThreadSafeDataContainer
 // {

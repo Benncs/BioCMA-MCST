@@ -19,10 +19,12 @@ namespace MC
                                  std::span<double const> volumesliq)
   {
     // #pragma omp parallel for
+    this->_total_volume = 0;
     for (size_t i_c = 0; i_c < volumesgas.size(); ++i_c)
     {
       containers[i_c].volume_liq = volumesliq[i_c];
       containers[i_c].volume_gas = volumesgas[i_c];
+      this->_total_volume+=volumesliq[i_c];
     }
   }
   ReactorDomain::ReactorDomain(NumberView volumes,

@@ -1,7 +1,13 @@
+#include "common/thread_safe_container.hpp"
+#include "mc/domain.hpp"
+#include "mc/unit.hpp"
 #include "simulation/matflows.hpp"
 #include <get_cumulative_proba.hpp>
 #include <numeric>
 #include <transport.hpp>
+
+// TODO REMOVE
+#include <iostream>
 
 namespace Simulation
 {
@@ -101,80 +107,75 @@ namespace Simulation
           m_transition.coeffRef(i, i) =
               -sum_i; // Set the diagonal element of the transition matrix
         }
-      
-    }
-  }
-
-  // m_transition.makeCompressed();
-  return m_transition;
-}
-
-move_kernel pbf(MC::MonteCarloUnit &unit,
-                MC::ParticlesContainer & /*container*/,
-                const MatFlow *flows)
-{
-  auto n_c = static_cast<int>(unit.domain.n_compartments());
-
-  auto cumulative_probability = get_CP(unit.domain.getNeighbors(), n_c, *flows);
-
-  // std::cout<<cumulative_probability<<std::endl;
-  const auto &m_transition = flows->transition_matrix;
-
-  auto move_kernel = [&unit,
-                      &m_transition,
-                      cumulative_probability = std::move(
-                          cumulative_probability)](double random_number,
-                                                   double random_number2,
-                                                   MC::Particles &particle,
-                                                   double d_t) -> void
-  {
-    const size_t i_compartment = particle.current_container;
-    auto &current_container = unit.domain[i_compartment];
-    const auto &i_neighbor = unit.domain.getNeighbors();
-    const int max_neighbor = static_cast<int>(i_neighbor[0].size());
-
-    const double &v_p = current_container.volume_liq;
-
-    const double leaving_flow = m_transition.coeff(
-        static_cast<int>(i_compartment), static_cast<int>(i_compartment));
-
-    double theta_p = -v_p / leaving_flow;
-
-    double probability = std::exp(-d_t / theta_p);
-
-    bool leaving = false;
-
-    if (random_number > probability)
-    {
-      return;
-    }
-
-    leaving = true;
-    size_t next = i_neighbor[i_compartment][0];
-    for (int k = 1; k < max_neighbor - 1; ++k)
-    {
-
-      auto prec = cumulative_probability.coeff(static_cast<int>(i_compartment),
-                                               k) < random_number2;
-
-      auto nxt = random_number2 < cumulative_probability.coeff(
-                                      static_cast<int>(i_compartment), k + 1);
-
-      if (prec && nxt)
-      {
-        next = i_neighbor[i_compartment][k];
       }
     }
 
-#pragma omp atomic
-    current_container.n_cells -= static_cast<size_t>(leaving);
-#pragma omp atomic
-    unit.domain[next].n_cells += 1;
+    // m_transition.makeCompressed();
+    return m_transition;
+  }
+  move_kernel population_balance_flow(MC::ReactorDomain &domain,
+                                      MC::ParticlesContainer & /*container*/,
+                                      const MatFlow *flows)
+  {
+    const int n_c = static_cast<int>(domain.n_compartments());
 
-    particle.current_container = next;
-  };
+    auto __cumulative_probability = get_CP(domain.getNeighbors(), n_c, *flows);
 
-  return move_kernel;
-}
+    // std::cout<<cumulative_probability<<std::endl;
+    const auto &m_transition = flows->transition_matrix;
+
+    auto move_kernel =
+        [&m_transition,
+         cumulative_probability =
+             std::move(__cumulative_probability)](double random_number,
+                                                  double random_number2,
+                                                  MC::ReactorDomain &domain,
+                                                  MC::Particles &particle,
+                                                  double d_t) -> void
+    {
+      const size_t i_compartment = particle.current_container;
+      auto &current_container = domain[i_compartment];
+      const std::span<const size_t> i_neighbor =
+          domain.getNeighbors(i_compartment);
+      const int max_neighbor = static_cast<int>(i_neighbor.size());
+
+      const double &v_p = current_container.volume_liq;
+
+      const double leaving_flow = m_transition.coeff(
+          static_cast<int>(i_compartment), static_cast<int>(i_compartment));
+
+      const double theta_p = -v_p / leaving_flow;
+
+      const double probability = std::exp(-d_t / theta_p);
+
+      if (random_number > probability)
+      {
+        return;
+      }
+
+      size_t next = i_neighbor[0];
+      for (int k = 1; k < max_neighbor - 1; ++k)
+      {
+
+        auto prec = cumulative_probability.coeff(
+                        static_cast<int>(i_compartment), k) < random_number2;
+
+        auto nxt = random_number2 < cumulative_probability.coeff(
+                                        static_cast<int>(i_compartment), k + 1);
+
+        if (prec && nxt)
+        {
+          next = i_neighbor[k];
+        }
+      }
+
+      __ATOM_DECR__(current_container.n_cells)
+      __ATOM_INCR__(domain[next].n_cells);
+
+      particle.current_container = next;
+    };
+
+    return move_kernel;
+  }
 
 } // namespace Simulation

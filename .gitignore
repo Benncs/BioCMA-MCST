@@ -13,9 +13,11 @@ cma_data/
 *.folded
 *.data*
 *.svg
+callgrind.*
 # Builds 
 builddir/
 
 # Python 
 __pycache__
 .clangd
+

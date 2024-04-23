@@ -11,7 +11,16 @@
 #include <iostream>
 #include <messages/wrap_mpi.hpp>
 #include <mpi.h>
+
+
+#ifndef USE_PYTHON_MODULE
 #include <omp.h>
+
+#else 
+#define omp_get_max_threads() 1 //1 thread 
+#define omp_get_num_procs() 1 
+#define omp_set_num_threads(__arg__) 
+#endif 
 
 void init_bmc_info(std::ofstream &fd);
 
@@ -57,16 +66,21 @@ ExecInfo runtime_init(int argc, char **argv, SimulationParameters &params)
 
   int rank = 0;
   int size = 0;
-
-  MPI_Init(&argc, &argv);
+  int mpi_thread_level{};
+  MPI_Init_thread(&argc, &argv,MPI_THREAD_SINGLE,&mpi_thread_level);
 
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
   MPI_Comm_size(MPI_COMM_WORLD, &size);
 
   set_openmp_threads(rank, size, info, params);
-
-  std::cout << "NUM thread per process " << info.thread_per_process << std::endl;
+  Eigen::setNbThreads(EIGEN_INDEX(info.thread_per_process));
+#ifdef USE_PYTHON_MODULE
+  info.thread_per_process = 1; // Set one thread because of PYthon GIL
+#endif
+                               // TODO FIXME : disable OMP feature
+  std::cout << "NUM thread per process " << info.thread_per_process
+            << std::endl;
   std::atexit(MPI_W::finalize);
 
   // MPI_W::is_mpi_init = true;

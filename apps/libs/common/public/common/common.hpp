@@ -10,8 +10,7 @@ void test_common();
 
 #define EIGEN_INDEX(__VALUE__) static_cast<int>(__VALUE__)
 
-// consteval int eigen_i(size_t v){return static_cast<int>(v);}
 
-// #define TEST_ASSERT __asse
+
 
 #endif //__COMMON_EXPORT_HPP__

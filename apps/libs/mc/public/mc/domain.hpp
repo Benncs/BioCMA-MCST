@@ -10,7 +10,7 @@ namespace MC
   class ReactorDomain
   {
   public:
-    size_t id;
+    size_t id{};
 
     ReactorDomain() = default;
     ReactorDomain(ReactorDomain &&other) noexcept;
@@ -71,10 +71,16 @@ namespace MC
       return neighbors;
     }
 
+    [[nodiscard]] inline std::span<const size_t> getNeighbors(size_t i) const
+    {
+      return neighbors[i];
+    }
+
+
     std::vector<size_t> getDistribution();
 
   private:
-    double _total_volume;
+    double _total_volume{};
 
     std::vector<ContainerState> containers;
     std::vector<std::vector<size_t>> neighbors;

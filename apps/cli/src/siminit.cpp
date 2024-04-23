@@ -10,6 +10,7 @@
 
 #include <mc/mcinit.hpp>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 static ReactorState const *
@@ -38,7 +39,8 @@ init_simulation(ExecInfo &info,
     nmap = _flow_handle->loop_size();
     liq_volume = fstate->liquidVolume;
     gas_volume = fstate->gasVolume;
-   // opti_dt = _flow_handle->MinLiquidResidenceTime() / 100.;
+    opti_dt = (params.d_t == 0.) ? _flow_handle->MinLiquidResidenceTime() / 100.
+                                 : params.d_t;
     auto n_t = static_cast<size_t>(params.final_time / opti_dt);
     _flow_handle->setRepetition(n_t / nmap);
   }
@@ -70,16 +72,13 @@ init_simulation(ExecInfo &info,
 
   auto container = MC::init_container(info, params.n_particles);
 
-
   auto simulation = Simulation::SimulationUnit(info,
                                                std::move(unit),
                                                std::move(container),
                                                params.n_species,
+                                               std::move(model),
                                                info.current_rank == 0);
 
-  // simulation.setVolumes(std::move(gas_volume), std::move(liq_volume));
-
-  simulation.postInit(model);
   return simulation;
 }
 
@@ -91,7 +90,7 @@ init_state(SimulationParameters &params,
   try
   {
     flow_handle = std::make_shared<FlowIterator>(params.flow_files);
-    std::cout<<"Flowmap loaded: "<<flow_handle->loop_size()<<std::endl;
+    std::cout << "Flowmap loaded: " << flow_handle->loop_size() << std::endl;
 
     state = &flow_handle->operator()(0);
   }

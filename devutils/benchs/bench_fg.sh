@@ -2,9 +2,9 @@
 
 process_name="BioCMA-MCST_cli"
 
-flamegraph_path="../../../tools/FlameGraph/"
+flamegraph_path="../../../../tools/FlameGraph/"
 
-PID=15041   
+PID=45308   
 #$(pgrep $process_name)
 
 # Check if PID is empty
@@ -21,7 +21,7 @@ fi
 
 DURATION="$1"
 
-# Record performance data using perf
+# # Record performance data using perf
 echo "Recording performance data for PID $PID for $DURATION seconds..."
 sudo perf record -F 99 -g -p "$PID" -a -- sleep "$DURATION"
 

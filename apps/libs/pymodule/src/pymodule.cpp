@@ -12,6 +12,11 @@ namespace py = pybind11;
 PYBIND11_MODULE(pyBioCMAMCST, m)
 {
 
+  py::enum_<MC::CellStatus>(m, "CellStatus")
+      .value("IDLE", MC::CellStatus::IDLE)
+      .value("DEAD", MC::CellStatus::DEAD)
+      .value("CYTOKINESIS", MC::CellStatus::CYTOKINESIS);
+
   py::class_<MC::Particles>(m, "Particles")
       .def_readwrite("current_container",
                      &MC::Particles::current_container,
@@ -20,41 +25,17 @@ PYBIND11_MODULE(pyBioCMAMCST, m)
       .def_readwrite("random_seed", &MC::Particles::random_seed)
       .def_readwrite("id", &MC::Particles::id)
       .def_readwrite("weight", &MC::Particles::weight)
+      .def_readwrite("status", &MC::Particles::status)
+      // .def("child",
+      //      [](MC::Particles &p)
+      //      {
+      //        MC::Particles child(p);
+      //        return child;
+      //      })
 
       .def("getOpaque",
            [](MC::Particles &p)
            { return std::any_cast<std::shared_ptr<OpaquePointer>>(p.data); });
-  // .def("setmodel",
-  //      [](MC::Particles &p, const PythonCustomModel &new_model)
-  //      { p.data = new_model; })
-  // .def("getModel",
-  //      [](MC::Particles &p)
-  //      { return std::any_cast<PythonCustomModel>(p.data); });
 
-  py::class_<OpaquePointer, std::shared_ptr<OpaquePointer>>(
-      m, "OpaquePointer", py::call_guard<py::gil_scoped_release>())
-      .def(py::init<>())
-
-      .def_readwrite("ptr", &OpaquePointer::ptr)
-      .def(
-          "init",
-          [](OpaquePointer &opaque_ptr, py::object obj)
-          { opaque_ptr.ptr = new py::object(obj); },
-          py::return_value_policy::reference_internal)
-
-      .def(
-          "cast",
-          [](OpaquePointer &opaque_ptr)
-          {
-            if (opaque_ptr.ptr)
-            {
-              py::object *obj_ptr = static_cast<py::object *>(opaque_ptr.ptr);
-              return py::reinterpret_borrow<py::object>(*obj_ptr);
-            }
-            else
-            {
-              return py::reinterpret_borrow<py::object>(nullptr);
-            }
-          },
-          pybind11::return_value_policy::reference);
+  declare_opaque(m);
 }

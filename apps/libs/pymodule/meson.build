@@ -1,30 +1,42 @@
-src_dir = './src'
-use_dynamic_module = get_option('use_dynamic_module')
 
-if use_dynamic_module
-   python_extension_suffix = run_command('python3-config', '--extension-suffix').stdout().strip()
-   python_extension_suffix = python_extension_suffix.substring(1)
+
+   src_dir = './src'
+   message('Dynamic module feature activated')
+   py = import('python').find_installation(pure: false)
+   pybind11_dep = dependency('pybind11', required: true)
+   pydep = py.dependency(embed:true)
+
    python_module_name = 'pyBioCMAMCST'
-   modfile = files(f'@src_dir@/pymodule.cpp') 
+   modfile = files(f'@src_dir@/pymodule.cpp',f'@src_dir@/opaque_type.cpp')
 
-   # Extension modules for Python
-  
+   python_sources = files(f'@root@/modules/simple_model.py')
 
+   # Install Python sources to 'birem' subdirectory
+   py.install_sources(python_sources, subdir: python_module_name)
 
+   dependencies = [
+      biomodel_dependency,
+      cma_dep,
+      mc_dependency,
+      common_dependecy,
+      thread_dep,
+      pydep,pybind11_dep,
+   ]
+   public = './public'
 
+   indir = [public]
 
-   dependencies = [biomodel_dependency,cma_dep,mc_dependency,common_dependecy,thread_dep,python_embded]
-   public='./public'
-
-   indir = [public,'/usr/include/python3.10/']
-
-   shared_library(python_module_name,
-                     modfile,
-                     name_suffix: python_extension_suffix,
-                     name_prefix: '',
-                     include_directories: indir,
-                     dependencies: [dependencies],link_args : ['-L/usr/lib', '-lpython3.10'])
+   py.extension_module(
+      python_module_name,
+      modfile,
+      include_directories: indir,
+      dependencies: [dependencies],
+      install: true,subdir: python_module_name
+   )
 
    py_dynamic_module = declare_dependency(
-      include_directories : indir,dependencies:python_embded,link_args : ['-L/usr/lib', '-lpython3.10'])
-endif 
+      include_directories: indir,
+      dependencies: [pybind11_dep, pydep],
+      sources:[f'@src_dir@/import_py.cpp'],compile_args:[use_python_define]
+   )
+

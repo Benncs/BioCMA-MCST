@@ -28,7 +28,7 @@ namespace Simulation
         const ExecInfo &info,
         std::unique_ptr<MC::MonteCarloUnit> &&_unit,
         std::unique_ptr<MC::ParticlesContainer> &&_container,
-        size_t n_species,
+        size_t n_species,KModel _km,
         bool host = false);
 
     ~SimulationUnit() = default;
@@ -41,8 +41,7 @@ namespace Simulation
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     std::unique_ptr<MC::ParticlesContainer> mc_container;
     
-
-    void postInit(KModel _km);
+    [[nodiscard]] const KModel& getModel()const;
 
     std::span<double> getCliqData();
 
@@ -80,6 +79,11 @@ namespace Simulation
     std::unique_ptr<ScalarSimulation, pimpl_deleter> liquid_scalar;
     std::unique_ptr<ScalarSimulation, pimpl_deleter> gas_scalar;
   };
+
+  inline const KModel& SimulationUnit::getModel()const
+  {
+    return kmodel;
+  }
 
   inline void SimulationUnit::setLiquidFlow(MatFlow *_flows_l)
   {

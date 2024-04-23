@@ -105,4 +105,5 @@ void main_loop(const SimulationParameters &params,
     simulation.step(d_t, reactor_state);
     sync_prepare_next(exec, simulation);
   }
+
 }

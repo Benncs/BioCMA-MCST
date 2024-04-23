@@ -9,26 +9,46 @@ namespace py = pybind11;
 struct OpaquePointer
 {
   void *ptr;
+  OpaquePointer():ptr(nullptr){};
+  OpaquePointer(const OpaquePointer &) = delete;
+  OpaquePointer(OpaquePointer &&rhs) noexcept : ptr(rhs.ptr)
+  {
+
+    rhs.ptr = nullptr;
+  };
+
+  OpaquePointer &operator=(OpaquePointer &&rhs)
+  {
+    if (&rhs != this)
+    {
+      ptr = rhs.ptr;
+      rhs.ptr = nullptr;
+    }
+    return *this;
+  };
+  OpaquePointer &operator=(const OpaquePointer &&) = delete;
 
   ~OpaquePointer()
   {
-    if (ptr)
+    if (ptr != nullptr)
     {
-      py::object *obj = static_cast<py::object *>(ptr);
+      auto *obj = static_cast<py::object *>(ptr);
       delete obj;
     }
   }
 };
 
-#define GIL_RELEASE pybind11::gil_scoped_release release;
-#define GIL_ACQUIRE pybind11::gil_scoped_acquire acquire;
+void declare_opaque(py::module &m);
 
-#define PY_SAFE_CONTEXT(expr)                                                  \
-  {                                                                            \
-    Py_BEGIN_ALLOW_THREADS;                                                    \
-    gstate = PyGILState_Ensure();                                              \
-    expr PyGILState_Release(gstate);                                           \
-    Py_END_ALLOW_THREADS                                                       \
-  }
+// #define GIL_RELEASE pybind11::gil_scoped_release release;
+// #define GIL_ACQUIRE pybind11::gil_scoped_acquire acquire;
+
+// #define PY_SAFE_CONTEXT(expr)                                                  \
+//   {                                                                            \
+//     Py_BEGIN_ALLOW_THREADS;                                                    \
+//     gstate = PyGILState_Ensure();                                              \
+//     expr PyGILState_Release(gstate);                                           \
+//     Py_END_ALLOW_THREADS                                                       \
+//   }
 
 #endif //__PY_OPAQUE_HPP__

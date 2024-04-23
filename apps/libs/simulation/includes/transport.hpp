@@ -1,6 +1,7 @@
 #ifndef __TRANSPORT_HPP__
 #define __TRANSPORT_HPP__
 
+#include "mc/domain.hpp"
 #include <functional>
 #include <mc/particles/particles_container.hpp>
 #include <mc/unit.hpp>
@@ -18,9 +19,9 @@ namespace Simulation
                          const Simulation::MatFlow &flows);
 
   using move_kernel =
-      std::function<void(double, double, MC::Particles &, double)>;
+      std::function<void(double, double,MC::ReactorDomain &, MC::Particles &, double)>;
 
-  move_kernel pbf(MC::MonteCarloUnit &unit,
+  move_kernel population_balance_flow(MC::ReactorDomain &domain,
                   MC::ParticlesContainer &container,
                   const MatFlow *flows);
 } // namespace Simulation

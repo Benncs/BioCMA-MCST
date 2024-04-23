@@ -15,7 +15,7 @@ namespace Simulation
                                      size_t n_thread)
       : n_r(n_species), n_c(n_compartments)
   {
-    Eigen::setNbThreads(EIGEN_INDEX(n_thread));
+ 
     m_volumes = Eigen::DiagonalMatrix<double, -1>(EIGEN_INDEX(n_compartments));
     m_volumes.setIdentity();
 

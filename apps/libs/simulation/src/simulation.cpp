@@ -1,3 +1,4 @@
+#include "common/thread_safe_container.hpp"
 #include "mc/particles/particles_container.hpp"
 #include "mc/unit.hpp"
 #include "models/types.hpp"
@@ -10,13 +11,22 @@
 #include <mc/particles/mcparticles.hpp>
 #include <mc/prng.hpp>
 #include <memory>
-#include <omp.h>
+
 #include <scalar_simulation.hpp>
 #include <simulation/simulation.hpp>
 #include <stdexcept>
 #include <transport.hpp>
 
+#ifndef USE_PYTHON_MODULE
+#include <omp.h>
+#else 
+#define omp_get_thread_num() 0 //1 thread 
+#endif 
 
+
+// TODO REMOVE
+#include <iostream>
+#include <utility>
 
 namespace Simulation
 {
@@ -57,7 +67,7 @@ namespace Simulation
       : mc_unit(std::move(other.mc_unit)),
         mc_container(std::move(other.mc_container)), host(other.host),
         n_thread(other.n_thread), flow_liquid(other.flow_liquid),
-        flow_gas(other.flow_gas), kmodel(other.kmodel)
+        flow_gas(other.flow_gas), kmodel(std::move(other.kmodel))
   {
   }
 
@@ -66,10 +76,11 @@ namespace Simulation
       std::unique_ptr<MC::MonteCarloUnit> &&_unit,
       std::unique_ptr<MC::ParticlesContainer> &&_container,
       size_t n_species,
+      KModel _km,
       bool _host)
       : mc_unit(std::move(_unit)), mc_container(std::move(_container)),
         host(_host), n_thread(info.thread_per_process), flow_liquid(nullptr),
-        flow_gas(nullptr), kmodel()
+        flow_gas(nullptr), kmodel(std::move(_km))
   {
     if (this->mc_container->extras.empty())
     {
@@ -89,11 +100,7 @@ namespace Simulation
 
     // FIXME
     initF(liquid_scalar, gas_scalar);
-  }
 
-  void SimulationUnit::postInit(KModel _km)
-  {
-    kmodel = _km;
     post_init_container();
     post_init_compartments();
   }
@@ -149,23 +156,21 @@ namespace Simulation
 
       kmodel.init_kernel(particle);
 
-#pragma omp atomic
-      i_container.n_cells += 1;
+      __ATOM_INCR__(i_container.n_cells);
     }
   }
 
   void SimulationUnit::cycleProcess(const double d_t)
   {
 
-    const move_kernel _move_kernel =
-        pbf(*this->mc_unit, *this->mc_container, flow_liquid);
+    const move_kernel _move_kernel = population_balance_flow(
+        this->mc_unit->domain, *this->mc_container, this->flow_liquid);
 
     const auto &_kmodel = kmodel;
 
     auto &unit = *this->mc_unit;
     auto _contribs = this->liquid_scalar->getThreadContribs();
     auto &_extras = this->mc_container->extras;
-
     const auto krnl =
         [&_move_kernel, d_t, _kmodel, &unit, &_contribs, &_extras](
             auto &&p) -> void
@@ -174,6 +179,7 @@ namespace Simulation
     execute_process_knrl(krnl);
     post_process_reducing();
   }
+
   void p_kernel(MC::MonteCarloUnit &unit,
                 std::span<Eigen::MatrixXd> _contribs,
                 std::span<MC::TheadSafeData> _extras,
@@ -192,48 +198,38 @@ namespace Simulation
     const double rnd = MC::double_unfiform();
     const double rdn2 = MC::double_unfiform();
     const size_t i_thread = omp_get_thread_num();
-
-    auto& events = unit.ts_events[i_thread];
+    auto &events = unit.ts_events[i_thread];
     auto &thread_contrib = _contribs[i_thread];
     auto &thread_extra = _extras[i_thread];
     const auto &concentrations = domain[p.current_container].concentrations;
 
-    _move_kernel(rnd, rdn2, p, d_t);
+
+    _move_kernel(rnd, rdn2, domain, p, d_t);
 
     _kmodel.update_kernel(d_t, p, concentrations);
-    
-    if (p.status != MC::CellStatus::DEAD)
+
+    if (p.status == MC::CellStatus::DEAD)
     {
-      if (p.status == MC::CellStatus::CYTOKINESIS)
-      {
-
-        // events.get_mut<MC::EventType::NewParticle>()++;
-        events.incr<MC::EventType::NewParticle>();
-        MC::Particles child = _kmodel.division_kernel(p);
-
-        
-        assert(&child.data!=&p.data);
-  
-        _kmodel.contribution_kernel(child, thread_contrib);
-
-#pragma omp atomic
-        domain[child.current_container].n_cells += 1;
-
-        thread_extra.extra_process.emplace_back(std::move(child));
-      }
-
-      _kmodel.contribution_kernel(p, thread_contrib);
+      events.incr<MC::EventType::Death>();
+        __ATOM_DECR__(domain[p.current_container].n_cells)
+      p.clearState(MC::CellStatus::DEAD);
+      thread_extra.in_dead_state.emplace_back(&p);
+      // TODO: check overflow
+    
     }
     else
     {
-      // events.get_mut<MC::EventType::Death>()++;
-              events.incr<MC::EventType::Death>();
-      p.clearState(MC::CellStatus::DEAD);
-      thread_extra.in_dead_state.emplace_back(&p);
+      if (p.status == MC::CellStatus::CYTOKINESIS)
+      {
+        events.incr<MC::EventType::NewParticle>();
+        MC::Particles child = _kmodel.division_kernel(p);
+        _kmodel.contribution_kernel(child, thread_contrib);
+        __ATOM_INCR__(domain[child.current_container].n_cells)
+        thread_extra.extra_process.emplace_back(std::move(child));
+       
+      }
 
-// TODO CHECK POSSIBLE OVERFLOW
-#pragma omp atomic
-      domain[p.current_container].n_cells -= 1;
+      _kmodel.contribution_kernel(p, thread_contrib);
     }
   };
 

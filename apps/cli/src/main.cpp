@@ -18,8 +18,8 @@
 #include <siminit.hpp>
 #include <sync.hpp>
 
-#ifdef BIO_DYNAMIC_MODULE
-#  include <import_py.hpp>
+#ifdef USE_PYTHON_MODULE
+#  include <pymodule/import_py.hpp>
 #endif
 
 #include <cstddef>
@@ -47,7 +47,6 @@ static void exec(int argc, char **argv, SimulationParameters params);
 int main(int argc, char **argv)
 {
   init_environement();
-  // SimulationParameters params =  parse_cli(argc, argv);
   auto params_opt = parse_cli(argc, argv);
   if (!params_opt.has_value())
   {
@@ -55,12 +54,11 @@ int main(int argc, char **argv)
     return -1;
   }
 
-  
   try
   {
 
-#ifdef BIO_DYNAMIC_MODULE
-    auto _module_handle = init_dynamic_module();
+#ifdef USE_PYTHON_MODULE
+    auto _interpreter_handle= init_python_interpreter();
 #endif
     exec(argc, argv, std::move(params_opt.value()));
   }
@@ -148,11 +146,12 @@ static void host_process(ExecInfo &exec,
 
   main_loop(params, exec, simulation, std::move(_flow_handle));
 
+  SEND_MPI_SIG_STOP;
+  last_sync(exec, simulation);
+
   show(simulation);
 
-  SEND_MPI_SIG_STOP;
-
-  post_process(simulation);
+  post_process(params,simulation);
 }
 
 static void workers_process(ExecInfo &exec,
@@ -179,8 +178,10 @@ static void workers_process(ExecInfo &exec,
 
     if (sign == MPI_W::SIGNALS::STOP)
     {
+      last_sync(exec, simulation);
       return;
     }
+    
     payload.recv(0, &status);
 
     // Neighbors could change during iteration so we have to allocate new
@@ -204,13 +205,17 @@ static void workers_process(ExecInfo &exec,
     sync_step(exec, simulation);
     sync_prepare_next(exec, simulation);
   }
+
+
+
 }
 
 static KModel load_model()
 {
-#ifdef BIO_DYNAMIC_MODULE
-  return get_python_module("modules.simple_model");
+#ifdef USE_PYTHON_MODULE
+std::cout<<"LOADING modules.simple_model"<<std::endl;
+  return get_python_module("modules.simple_model_opt");
 #else
-  return simple_model;
+  return get_simple_model();
 #endif
 }

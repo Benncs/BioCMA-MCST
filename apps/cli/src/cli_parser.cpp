@@ -28,8 +28,6 @@ static void recur_path(std::string_view rootPath, SimulationParameters &params)
     params.flow_files.push_back(dirPath.string());
     dirName = "i_" + std::to_string(count) + "/";
     dirPath = std::string(rootPath) + dirName;
-
-
   }
 }
 
@@ -201,6 +199,11 @@ static void check_cli(SimulationParameters &params)
   if (params.flow_files.empty())
   {
     throw std::invalid_argument("Missing files path");
+  }
+
+  if (params.d_t < 0)
+  {
+    throw std::invalid_argument("Wrongtime step (d_t<0)");
   }
 
   if (params.n_particles == 0)

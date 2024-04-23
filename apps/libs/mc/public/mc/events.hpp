@@ -21,6 +21,8 @@ namespace MC
     return static_cast<size_t>(event);
   }
 
+ 
+
   struct EventContainer
   {
     std::array<size_t, n_event_type> events{0, 0, 0};
@@ -41,7 +43,8 @@ namespace MC
       events[eventIndex<event>()]++;
     }
 
-    static EventContainer reduce(std::span<EventContainer> _data);
+    static EventContainer reduce_local(std::span<EventContainer> _data);
+    static EventContainer reduce(std::span<size_t> _data);
   };
 
 

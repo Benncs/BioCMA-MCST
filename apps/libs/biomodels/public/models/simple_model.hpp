@@ -78,9 +78,9 @@ MC::Particles division_simple_model(MC::Particles &p);
 
 void contribution_simple_model(MC::Particles &p, Eigen::MatrixXd &contribution);
 
-static constexpr KModel simple_model = {&init_simple_model_,
-                                        &update_simple_model,
-                                        &division_simple_model,
-                                        &contribution_simple_model};
+
+KModel get_simple_model();
+
+
 
 #endif //__SIMPLE_MODEL_HPP__
