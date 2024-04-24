@@ -1,1 +1,3 @@
-runtime_container/
+runtime_container/*
+!runtime_container/
+
