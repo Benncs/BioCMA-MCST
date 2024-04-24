@@ -13,7 +13,6 @@ namespace MC
     ReactorDomain domain;
     std::vector<EventContainer> ts_events;
 
-    
     MonteCarloUnit(const MonteCarloUnit &other) = delete;
     MonteCarloUnit(MonteCarloUnit &&other) = default;
     MonteCarloUnit &operator=(MonteCarloUnit &&other) = default;

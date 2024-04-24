@@ -1,52 +1,77 @@
+# Directory containing simulation source files
+simulation_src_dir = './src'
 
-src_dir = './src'
+# Find all source files in the simulation source directory
+simulation_sources = run_command(
+   'sh',
+   '-c',
+   f'find @simulation_src_dir@ -type f -name *.cpp',
+).stdout().splitlines()
 
-simu_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ').stdout().splitlines()
+lib_name = f'@project_name@_simulation'
 
-public_simu = include_directories('public')
+public_simulation_includes = include_directories('public')
 
-
-private_simu_includes = include_directories('./includes')
-public_include_dir = [public_simu]
+private_simulation_includes = include_directories('./includes')
 
 project_dependencies = [biomodel_dependency, mc_dependency, common_dependecy]
-private_dep = [eigen_dep]
-external_dependcies = [cma_dep, blas, eigen_dep]
-simulation_public_dep = [project_dependencies, external_dependcies]
+
+# Private dependencies needed to compile .so 
+private_dependencies = [eigen_dep]
+
+external_dependcies = [cma_dep, blas]
+
+simulation_public_dependencies = [
+   project_dependencies,
+   omp,
+   external_dependcies,
+]
 
 simulation_dyn_public_dep = [project_dependencies, external_dependcies]
 
-simu_lib = library(
-   f'@project_name@_simulation',
-   simu_sources,
-   include_directories: [public_include_dir, private_simu_includes],
-   dependencies: [simulation_public_dep, omp, private_dep],
+# Create the simulation library
+simulation_lib = library(
+   lib_name,
+   simulation_sources,
+   include_directories: [
+      public_simulation_includes,
+      private_simulation_includes,
+   ],
+   dependencies: [simulation_public_dependencies, private_dependencies],
    pic: true,
 )
 
-simu_dependency = declare_dependency(
-   include_directories: [public_include_dir],
-   link_with: simu_lib,
-   dependencies: simulation_public_dep,
+
+simulation_lib_dependency = declare_dependency(
+   include_directories: [public_simulation_includes],
+   link_with: simulation_lib,
+   dependencies: simulation_public_dependencies,
 )
 
+# Check if the dynamic module is enabled
 if use_dynamic_module
-
-   simu_lib_dyn = library(
-      f'@project_name@_simulation_dyn',
-      simu_sources,
-      include_directories: [public_include_dir, private_simu_includes],
-      dependencies: [simulation_dyn_public_dep, private_dep],cpp_args:[use_python_define],
+   # Create the dynamic simulation library
+   simulation_lib_dyn = library(
+      f'@lib_name@_dyn',
+      simulation_sources,
+      include_directories: [
+         public_simulation_includes,
+         private_simulation_includes,
+      ],
+      dependencies: [simulation_dyn_public_dep, private_dependencies],
+      cpp_args: [use_python_define],
       pic: true,
    )
 
+   # Declare dependency for the dynamic simulation library
    simu_dyn_dependency = declare_dependency(
-      include_directories: [public_include_dir],
-      link_with: simu_lib_dyn,
+      include_directories: [public_simulation_includes],
+      link_with: simulation_lib_dyn,
       dependencies: simulation_dyn_public_dep,
       compile_args: [use_python_define],
    )
 endif
+
 
 
 subdir('tests')

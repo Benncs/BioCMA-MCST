@@ -10,9 +10,10 @@ namespace MC
 
   ParticlesList::ParticlesList(size_t capacity, double weight)
   {
-    if(capacity>MAX_PARTICLE_BUFFER)
+    if (capacity > MAX_PARTICLE_BUFFER)
     {
-      throw std::length_error("Required size for particleList buffer bigger than limits");
+      throw std::length_error(
+          "Required size for particleList buffer bigger than limits");
     }
     this->data = std::vector<MC::Particles>(capacity, Particles(weight));
   }

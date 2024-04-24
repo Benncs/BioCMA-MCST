@@ -53,7 +53,7 @@ struct SimpleModel
   double mu_p = 0;
   Xi xi;
   Xi xi_dot;
-  void step(double d) ;
+  void step(double d);
   SimpleModel() = default;
 
   ~SimpleModel() = default;
@@ -78,9 +78,6 @@ MC::Particles division_simple_model(MC::Particles &p);
 
 void contribution_simple_model(MC::Particles &p, Eigen::MatrixXd &contribution);
 
-
 KModel get_simple_model();
-
-
 
 #endif //__SIMPLE_MODEL_HPP__

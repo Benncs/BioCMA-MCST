@@ -3,7 +3,7 @@
 
 #include <array>
 #include <cstddef>
-#include <span> 
+#include <span>
 
 namespace MC
 {
@@ -21,13 +21,10 @@ namespace MC
     return static_cast<size_t>(event);
   }
 
- 
-
   struct EventContainer
   {
     std::array<size_t, n_event_type> events{0, 0, 0};
 
- 
     template <EventType event> [[nodiscard]] constexpr size_t get() const
     {
       return events[eventIndex<event>()];
@@ -46,8 +43,6 @@ namespace MC
     static EventContainer reduce_local(std::span<EventContainer> _data);
     static EventContainer reduce(std::span<size_t> _data);
   };
-
-
 
 }; // namespace MC
 

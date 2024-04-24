@@ -26,7 +26,7 @@ dep_all = [
 
 
 
-dep_static_module = [dep_all,simu_dependency,omp]
+dep_static_module = [dep_all, simulation_lib_dependency, omp]
 
 
 name = f'@project_name@_cli_app'
@@ -59,7 +59,7 @@ executable(
 
 # Conditional dynamic module build
 if use_dynamic_module
-  dep_dynamic_module = [dep_all,simu_dyn_dependency,py_dynamic_module]
+  dep_dynamic_module = [dep_all, simu_dyn_dependency, py_dynamic_module]
   name = name + '_dyn'
 
   lib_app_dyn = static_library(
@@ -81,7 +81,8 @@ if use_dynamic_module
     name,
     f'@src_dir@/main.cpp',
     include_directories: ['./includes'],
-    dependencies: app_test_dependency_dyn,cpp_args: [use_python_define]
+    dependencies: app_test_dependency_dyn,
+    cpp_args: [use_python_define],
   )
 endif
 

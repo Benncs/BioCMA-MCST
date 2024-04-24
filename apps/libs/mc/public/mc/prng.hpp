@@ -41,7 +41,7 @@ namespace MC
     return distribution(*generator_double);
   }
 
-  inline double normal_double_rand(double mean,  double stddev)
+  inline double normal_double_rand(double mean, double stddev)
   {
     static thread_local std::mt19937 *generator_double = nullptr;
     if (generator_double == nullptr)

@@ -67,7 +67,7 @@ namespace Simulation
     // {
     //   throw std::runtime_error("Error no given reactor state");
     // }
-    
+
     auto mat_transfer_g_liq =
         gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,
                                  liquid_scalar->getVolume(),

@@ -33,7 +33,7 @@ using ModelContribution = void (*)(MC::Particles &, Eigen::MatrixXd &);
 
 // #ifdef DEBUG
 using ModelDebug = std::function<void(MC::Particles &)>;
-inline void defaut_dgb(MC::Particles &  /*unused*/){};
+inline void defaut_dgb(MC::Particles & /*unused*/){};
 // #endif
 
 struct KModel
@@ -42,9 +42,9 @@ struct KModel
   ModelUpdate update_kernel;
   ModelDivision division_kernel;
   ModelContribution contribution_kernel;
-// #ifdef DEBUG
+  // #ifdef DEBUG
   ModelDebug f_dbg = defaut_dgb;
-// #endif
+  // #endif
 };
 
 // template <ModelParameter M>

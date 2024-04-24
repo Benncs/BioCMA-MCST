@@ -8,7 +8,7 @@
 
 namespace MPI_W
 {
-  
+
   void finalize() noexcept
   {
     MPI_Finalize();

@@ -21,9 +21,8 @@ namespace Simulation
     Eigen::MatrixXd C;
     Eigen::MatrixXd Mtot;
 
-
-    //Getters 
-    [[nodiscard]] std::span<double const> getVolumeData()const;
+    // Getters
+    [[nodiscard]] std::span<double const> getVolumeData() const;
 
     [[nodiscard]] std::span<double> getContributionData();
 
@@ -35,18 +34,15 @@ namespace Simulation
 
     [[nodiscard]] inline size_t n_species() const;
 
-    //Setters 
-  
+    // Setters
+
     void setVolumes(std::span<double> volumes, std::span<double> inv_volumes);
 
-  
     void merge(size_t i_thread);
 
     Eigen::ArrayXXd vec_kla; // TODO : Clean this
 
     Eigen::MatrixXd biomass_contribution;
-
-    
 
     void performStep(double d_t,
                      const FlowMatrixType &m_transition,
@@ -83,13 +79,13 @@ namespace Simulation
     return {this->C.data(), static_cast<size_t>(this->C.size())};
   }
 
-  inline std::span<double > ScalarSimulation::getContributionData()
+  inline std::span<double> ScalarSimulation::getContributionData()
   {
     return {this->biomass_contribution.data(),
             static_cast<size_t>(this->biomass_contribution.size())};
   }
 
-  inline std::span<double const> ScalarSimulation::getVolumeData()const
+  inline std::span<double const> ScalarSimulation::getVolumeData() const
   {
     return {m_volumes.diagonal().data(), static_cast<size_t>(m_volumes.rows())};
   }

@@ -16,12 +16,12 @@ namespace MC
     size_t total_population = 10'000'000; // FIXME
     double weight = static_cast<double>(n_particles) /
                     static_cast<double>(total_population);
-    return std::make_unique<ParticlesContainer>(particle_per_process,
-                                                1 / weight,info.thread_per_process);
+    return std::make_unique<ParticlesContainer>(
+        particle_per_process, 1 / weight, info.thread_per_process);
   }
 
   std::unique_ptr<MonteCarloUnit>
-  init_unit(ExecInfo & info,
+  init_unit(ExecInfo &info,
             NumberView volumes,
             std::vector<std::vector<size_t>> &&neighbors)
   {

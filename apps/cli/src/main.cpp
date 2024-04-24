@@ -34,16 +34,14 @@
 #define SEND_MPI_SIG_STOP host_dispatch(exec, MPI_W::SIGNALS::STOP);
 
 /*The following should be remove or moved */
-constexpr bool verbose = true;  // TODO REMOVE
-constexpr bool redirect = false; // TODO REMOVE
+constexpr bool verbose = true;                    // TODO REMOVE
+constexpr bool redirect = false;                  // TODO REMOVE
 static std::streambuf *original_buffer = nullptr; // TODO FIXME
 static bool is_stdout_redirect = false;
 static int original_stdout_fd = -1;
 static void redirect_stdout(std::stringstream &variable_stream);
 static void restore_stdout();
 static void register_run(ExecInfo &exec, SimulationParameters &params);
-
-
 
 static void workers_process(ExecInfo &exec,
                             Simulation::SimulationUnit &simulation,

@@ -1,8 +1,8 @@
 #ifndef __IMPL_MPI_OP_HPP__
 #define __IMPL_MPI_OP_HPP__
 
-#include <messages/mpi_types.hpp>
 #include <messages/message_t.hpp>
+#include <messages/mpi_types.hpp>
 
 #include "mpi.h"
 #include <common/execinfo.hpp>
@@ -17,21 +17,18 @@ namespace MPI_W
 {
 
   template <typename T>
-  concept POD = std::is_standard_layout_v<T> &&
-                std::is_trivially_copyable_v<T> &&
-                std::is_trivially_destructible_v<T> &&
-                std::is_trivially_default_constructible_v<T>;
+  concept POD =
+      std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T> &&
+      std::is_trivially_destructible_v<T> &&
+      std::is_trivially_default_constructible_v<T>;
 
   // SENDING
 
   template <POD DataType>
-  [[nodiscard]] static int _send_unsafe(DataType *buf,
-                                        size_t buf_size,
-                                        size_t dest,
-                                        size_t tag = 0);
+  [[nodiscard]] static int
+  _send_unsafe(DataType *buf, size_t buf_size, size_t dest, size_t tag = 0);
 
-  template <POD DataType>
-  int send(DataType data, size_t dest, size_t tag = 0);
+  template <POD DataType> int send(DataType data, size_t dest, size_t tag = 0);
 
   template <POD DataType>
   int send_v(std::span<const DataType> data,
@@ -52,18 +49,15 @@ namespace MPI_W
                 size_t tag = 0);
 
   template <POD DataType>
-  DataType
-  try_recv(size_t src, MPI_Status *status = nullptr, size_t tag = 0);
+  DataType try_recv(size_t src, MPI_Status *status = nullptr, size_t tag = 0);
 
   template <typename T>
-  std::optional<std::vector<T>> recv_v(size_t source,
-                                       MPI_Status *status = nullptr,
-                                       size_t tag = 0) noexcept;
+  std::optional<std::vector<T>>
+  recv_v(size_t source, MPI_Status *status = nullptr, size_t tag = 0) noexcept;
 
   template <typename T>
-  std::vector<T> try_recv_v(size_t src,
-                            MPI_Status *status = nullptr,
-                            size_t tag = 0);
+  std::vector<T>
+  try_recv_v(size_t src, MPI_Status *status = nullptr, size_t tag = 0);
 
   // BROADCASTING
 
@@ -98,7 +92,7 @@ namespace MPI_W
     if (!opt_data.has_value())
     {
       MPI_W::critical_error();
-      exit(-1); //critical_error should exit before reaching this statement 
+      exit(-1); // critical_error should exit before reaching this statement
     }
     else
     {
@@ -232,11 +226,8 @@ namespace MPI_W
     }
 
     // Broadcast operation
-    return MPI_Bcast(data,
-                     _size,
-                     get_type<T>(),
-                     static_cast<int>(root),
-                     MPI_COMM_WORLD);
+    return MPI_Bcast(
+        data, _size, get_type<T>(), static_cast<int>(root), MPI_COMM_WORLD);
   }
 
   template <typename T> int broadcast_span(std::span<T> data, size_t root)

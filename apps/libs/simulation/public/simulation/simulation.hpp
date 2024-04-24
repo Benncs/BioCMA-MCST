@@ -19,7 +19,7 @@ namespace Simulation
 
   using pimp_ptr_t = std::unique_ptr<ScalarSimulation, pimpl_deleter>;
 
-  void initF(pimp_ptr_t &liq, pimp_ptr_t &gas); //TODO Delete 
+  void initF(pimp_ptr_t &liq, pimp_ptr_t &gas); // TODO Delete
 
   class SimulationUnit
   {
@@ -28,27 +28,27 @@ namespace Simulation
         const ExecInfo &info,
         std::unique_ptr<MC::MonteCarloUnit> &&_unit,
         std::unique_ptr<MC::ParticlesContainer> &&_container,
-        size_t n_species,KModel _km,
+        size_t n_species,
+        KModel _km,
         bool host = false);
 
     ~SimulationUnit() = default;
 
     SimulationUnit(SimulationUnit &&other) noexcept;
     SimulationUnit(const SimulationUnit &other) = delete;
-    SimulationUnit &operator=(SimulationUnit &&rhs) =delete;
-    SimulationUnit &operator=(const SimulationUnit &rhs) =delete;
+    SimulationUnit &operator=(SimulationUnit &&rhs) = delete;
+    SimulationUnit &operator=(const SimulationUnit &rhs) = delete;
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     std::unique_ptr<MC::ParticlesContainer> mc_container;
-    
-    [[nodiscard]] const KModel& getModel()const;
+
+    [[nodiscard]] const KModel &getModel() const;
 
     std::span<double> getCliqData();
 
-    void setVolumes(std::span<double> volumesgas,
-                    std::span<double> volumesliq);
+    void setVolumes(std::span<double> volumesgas, std::span<double> volumesliq);
 
-    void step(double d_t,ReactorState& state);
+    void step(double d_t, ReactorState &state);
 
     void cycleProcess(double d_t);
 
@@ -80,7 +80,7 @@ namespace Simulation
     std::unique_ptr<ScalarSimulation, pimpl_deleter> gas_scalar;
   };
 
-  inline const KModel& SimulationUnit::getModel()const
+  inline const KModel &SimulationUnit::getModel() const
   {
     return kmodel;
   }

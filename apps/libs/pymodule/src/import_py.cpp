@@ -87,10 +87,10 @@ void init_module_function(KModel &model,
     assert(s != s2);
     return child;
   };
-// #ifdef DEBUG
+  // #ifdef DEBUG
   model.f_dbg = [__debug = std::move(__debug)](auto &&p)
   { PY_TRY_LOCK_KRNL(__debug(std::ref(p))); };
-// #endif
+  // #endif
 }
 
 KModel get_python_module(const std::string &module_path)

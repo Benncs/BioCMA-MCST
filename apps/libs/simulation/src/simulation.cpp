@@ -18,11 +18,10 @@
 #include <transport.hpp>
 
 #ifndef USE_PYTHON_MODULE
-#include <omp.h>
-#else 
-#define omp_get_thread_num() 0 //1 thread 
-#endif 
-
+#  include <omp.h>
+#else
+#  define omp_get_thread_num() 0 // 1 thread
+#endif
 
 // TODO REMOVE
 #include <iostream>
@@ -203,7 +202,6 @@ namespace Simulation
     auto &thread_extra = _extras[i_thread];
     const auto &concentrations = domain[p.current_container].concentrations;
 
-
     _move_kernel(rnd, rdn2, domain, p, d_t);
 
     _kmodel.update_kernel(d_t, p, concentrations);
@@ -211,11 +209,10 @@ namespace Simulation
     if (p.status == MC::CellStatus::DEAD)
     {
       events.incr<MC::EventType::Death>();
-        __ATOM_DECR__(domain[p.current_container].n_cells)
+      __ATOM_DECR__(domain[p.current_container].n_cells)
       p.clearState(MC::CellStatus::DEAD);
       thread_extra.in_dead_state.emplace_back(&p);
       // TODO: check overflow
-    
     }
     else
     {
@@ -226,7 +223,6 @@ namespace Simulation
         _kmodel.contribution_kernel(child, thread_contrib);
         __ATOM_INCR__(domain[child.current_container].n_cells)
         thread_extra.extra_process.emplace_back(std::move(child));
-       
       }
 
       _kmodel.contribution_kernel(p, thread_contrib);

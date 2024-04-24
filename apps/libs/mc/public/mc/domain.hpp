@@ -17,7 +17,7 @@ namespace MC
     ReactorDomain(NumberView volumes,
                   std::vector<std::vector<size_t>> &&_neighbors);
     ReactorDomain(const ReactorDomain &other) = delete;
-    ~ReactorDomain()=default;
+    ~ReactorDomain() = default;
 
     inline auto &operator[](size_t i_c)
     {
@@ -59,14 +59,16 @@ namespace MC
       return this->_total_volume;
     }
 
-    void setVolumes(std::span<double const> volumesgas, std::span<double const> volumesliq);
+    void setVolumes(std::span<double const> volumesgas,
+                    std::span<double const> volumesliq);
 
-    void setLiquidNeighbors(const std::vector<std::vector<size_t>>& data)
+    void setLiquidNeighbors(const std::vector<std::vector<size_t>> &data)
     {
       neighbors = data;
     }
 
-    [[nodiscard]] inline const std::vector<std::vector<size_t>> &getNeighbors() const
+    [[nodiscard]] inline const std::vector<std::vector<size_t>> &
+    getNeighbors() const
     {
       return neighbors;
     }
@@ -76,8 +78,7 @@ namespace MC
       return neighbors[i];
     }
 
-
-    [[nodiscard]] std::vector<size_t> getDistribution()const;
+    [[nodiscard]] std::vector<size_t> getDistribution() const;
 
   private:
     double _total_volume{};
@@ -86,7 +87,6 @@ namespace MC
     std::vector<std::vector<size_t>> neighbors;
   };
 
-  
 } // namespace MC
 
 #endif //__MC_REACTORDOMAIN_HPP__

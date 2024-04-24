@@ -20,7 +20,7 @@ namespace MPI_W
     int rc2 = MPI_W::send_v<double>(liquid_volumes, rank, 1, false);
 
     int rc3 = MPI_W::send_v<double>(gas_volumes, rank, 2, false);
-    
+
     if (rc1 != MPI_SUCCESS || rc2 != MPI_SUCCESS || rc3 != MPI_SUCCESS)
     {
       MPI_W::critical_error();

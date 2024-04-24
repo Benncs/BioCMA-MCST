@@ -12,21 +12,18 @@
 #include <sync.hpp>
 
 #ifdef DEBUG
-#define DEBUG_INSTRUCTION \
+#  define DEBUG_INSTRUCTION                                                    \
     // static size_t __debug_loop_cntr = 0; \
     // std::cout << __debug_loop_cntr << '\n'; \
     // __debug_loop_cntr++;
 #else
-#define DEBUG_INSTRUCTION
+#  define DEBUG_INSTRUCTION
 #endif
 
-
-
-
-#define FILL_PAYLOAD \
-    payload.liquid_flows = reactor_state.liquid_flow.flows.data(); \
-    payload.liquid_volumes = reactor_state.liquidVolume; \
-    payload.gas_volumes = reactor_state.gasVolume; \
+#define FILL_PAYLOAD                                                           \
+  payload.liquid_flows = reactor_state.liquid_flow.flows.data();               \
+  payload.liquid_volumes = reactor_state.liquidVolume;                         \
+  payload.gas_volumes = reactor_state.gasVolume;
 
 void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
@@ -55,9 +52,9 @@ void main_loop(const SimulationParameters &params,
 
     for (size_t j = 1; j < exec.n_rank; ++j)
     {
-      MPI_W::send(MPI_W::SIGNALS::RUN,j);
+      MPI_W::send(MPI_W::SIGNALS::RUN, j);
       // MPI_Send(&sign ,sizeof(sign), MPI_CHAR, j, 0, MPI_COMM_WORLD);
-   
+
       payload.send(j);
     }
     // Send each neighbor vector to all processes
@@ -105,5 +102,4 @@ void main_loop(const SimulationParameters &params,
     simulation.step(d_t, reactor_state);
     sync_prepare_next(exec, simulation);
   }
-
 }

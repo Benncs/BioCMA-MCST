@@ -13,9 +13,11 @@ struct ExecInfo
   size_t run_id;
 };
 
-inline std::ostream &operator<< (std::ostream &stream, const ExecInfo & obj) {
-    stream<<obj.run_id<<"\t"<<obj.n_rank<<"\t"<<obj.thread_per_process<<"\t";
-    return stream;
+inline std::ostream &operator<<(std::ostream &stream, const ExecInfo &obj)
+{
+  stream << obj.run_id << "\t" << obj.n_rank << "\t" << obj.thread_per_process
+         << "\t";
+  return stream;
 }
 
 #endif //__EXEC_INFO_HPP__

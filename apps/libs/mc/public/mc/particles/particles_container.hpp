@@ -18,14 +18,15 @@ namespace MC
 
   public:
     explicit ParticlesContainer() = default;
-    explicit ParticlesContainer(size_t capacity, double weight,size_t n_extra) noexcept;
+    explicit ParticlesContainer(size_t capacity,
+                                double weight,
+                                size_t n_extra) noexcept;
     explicit ParticlesContainer(const ParticlesContainer &other) = delete;
     ParticlesContainer(ParticlesContainer &&other) noexcept;
-    ~ParticlesContainer()=default;
+    ~ParticlesContainer() = default;
 
-    ParticlesContainer& operator=(const ParticlesContainer&)=delete;
-    ParticlesContainer& operator=(ParticlesContainer&&)=default;
-
+    ParticlesContainer &operator=(const ParticlesContainer &) = delete;
+    ParticlesContainer &operator=(ParticlesContainer &&) = default;
 
     void merge(size_t i);
     void init_extra(size_t n_extra);

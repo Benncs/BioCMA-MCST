@@ -4,7 +4,6 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
-
 using FlowMatrixType = Eigen::MatrixXd;
 
 namespace Simulation
@@ -17,15 +16,15 @@ namespace Simulation
     std::vector<double> inverse_volume;
 
     MatFlow() = default;
-    ~MatFlow()=default;
+    ~MatFlow() = default;
 
     MatFlow(const FlowMatrixType &_flows, const FlowMatrixType &_tm);
 
     MatFlow &operator=(MatFlow &&rhs) noexcept;
-    MatFlow &operator=(const MatFlow &rhs) =delete;
+    MatFlow &operator=(const MatFlow &rhs) = delete;
 
     MatFlow(MatFlow &&other) noexcept;
-    MatFlow(const MatFlow &other) =delete;
+    MatFlow(const MatFlow &other) = delete;
   };
 
 } // namespace Simulation

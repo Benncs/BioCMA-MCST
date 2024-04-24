@@ -133,7 +133,7 @@ MC::Particles division_simple_model(MC::Particles &p)
   MC::Particles child(p);
   child.status = MC::CellStatus::IDLE;
   child.data = std::make_shared<SimpleModel>(*model);
-  
+
   return child;
   // TODO
 }

@@ -10,7 +10,8 @@
   NUMBER OF
 */
 
-void post_process(SimulationParameters &params,Simulation::SimulationUnit &simulation)
+void post_process(SimulationParameters &params,
+                  Simulation::SimulationUnit &simulation)
 {
 
   const size_t process_size = simulation.mc_container->to_process.size();
@@ -48,10 +49,8 @@ void post_process(SimulationParameters &params,Simulation::SimulationUnit &simul
   }
   std::cout << '\n';
   std::cout << count << std::endl;
-  assert(count==process_size-death_events);
-  assert(count==params.n_particles+new_events-death_events);
-
- 
+  assert(count == process_size - death_events);
+  assert(count == params.n_particles + new_events - death_events);
 
   // TODO
 }

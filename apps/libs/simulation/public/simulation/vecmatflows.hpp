@@ -6,7 +6,7 @@
 
 namespace Simulation
 {
-  
+
   struct BasicCacheMatflows
   {
     std::vector<MatFlow> data;

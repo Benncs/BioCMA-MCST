@@ -10,7 +10,8 @@
 namespace MC
 {
 
-  static constexpr size_t MAX_PARTICLE_BUFFER = __MC_MAX_PARTICLES_PER_PROCESS__;
+  static constexpr size_t MAX_PARTICLE_BUFFER =
+      __MC_MAX_PARTICLES_PER_PROCESS__;
 
   class ParticlesList
   {
@@ -64,7 +65,6 @@ namespace MC
     ParticlesList &operator=(ParticlesList &&other) noexcept;
 
   private:
-  
     std::vector<Particles> data;
   };
 

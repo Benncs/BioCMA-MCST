@@ -1,20 +1,28 @@
-#include <transport.hpp>
 #include <simulation/update_flows.hpp>
+#include <transport.hpp>
 
 namespace Simulation
 {
-  static std::vector<double> compute_inverse_diagonal(std::span<double> volumes) {
+  static std::vector<double> compute_inverse_diagonal(std::span<double> volumes)
+  {
     std::vector<double> inverse_diagonal(volumes.size());
-    
-    std::transform(volumes.begin(), volumes.end(), inverse_diagonal.begin(), [](double volume) {
-        if (volume == 0) {
-            throw std::invalid_argument("Setvolume: Null value of volume, matrix is not invertible");
-        }
-        return 1.0 / volume;
-    });
+
+    std::transform(
+        volumes.begin(),
+        volumes.end(),
+        inverse_diagonal.begin(),
+        [](double volume)
+        {
+          if (volume == 0)
+          {
+            throw std::invalid_argument(
+                "Setvolume: Null value of volume, matrix is not invertible");
+          }
+          return 1.0 / volume;
+        });
 
     return inverse_diagonal;
-}
+  }
 
   static void compute_MatFlow(FlowInfo &flow, Simulation::MatFlow &matflow)
   {
@@ -28,8 +36,8 @@ namespace Simulation
   }
 
   static void compute_MatFlow(std::span<double> flows,
-                             size_t nc,
-                             Simulation::MatFlow &matflow)
+                              size_t nc,
+                              Simulation::MatFlow &matflow)
   {
     const auto mat_f_liq = Simulation::flowmap_to_matrix(flows, nc);
     const auto _mat_transition_liq =
@@ -72,17 +80,19 @@ namespace Simulation
     if (iteration_count < n_loop)
     {
       compute_MatFlow(reactor_state.liquid_flow, current_liq_matflow);
-     
+
       compute_MatFlow(reactor_state.gas_flow, current_gas_matflow);
-  
-      current_liq_matflow.inverse_volume = compute_inverse_diagonal(reactor_state.liquidVolume);
-      current_gas_matflow.inverse_volume = compute_inverse_diagonal(reactor_state.gasVolume);
+
+      current_liq_matflow.inverse_volume =
+          compute_inverse_diagonal(reactor_state.liquidVolume);
+      current_gas_matflow.inverse_volume =
+          compute_inverse_diagonal(reactor_state.gasVolume);
     }
 
-    unit.mc_unit->domain.setLiquidNeighbors(std::cref(reactor_state.liquid_flow.neigbors));
+    unit.mc_unit->domain.setLiquidNeighbors(
+        std::cref(reactor_state.liquid_flow.neigbors));
     unit.setLiquidFlow(&current_liq_matflow);
     unit.setGasFlow(&current_gas_matflow);
-   
 
     iteration_count++;
   }

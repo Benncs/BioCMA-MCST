@@ -7,8 +7,6 @@ namespace Simulation
   {
   }
 
- 
-
   MatFlow &MatFlow::operator=(MatFlow &&rhs) noexcept
   {
     if (this != &rhs)

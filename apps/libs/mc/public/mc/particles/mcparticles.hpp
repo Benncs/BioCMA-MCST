@@ -4,7 +4,6 @@
 #include <any>
 #include <cstddef>
 
-
 namespace MC
 {
   enum class CellStatus

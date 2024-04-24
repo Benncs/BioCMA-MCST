@@ -10,7 +10,4 @@ void test_common();
 
 #define EIGEN_INDEX(__VALUE__) static_cast<int>(__VALUE__)
 
-
-
-
 #endif //__COMMON_EXPORT_HPP__

@@ -37,10 +37,7 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
 
   params.n_species = 3;
   params.flow_files.clear();
-  // recur_path("/home/benjamin/Documenti/code/cpp/biomc/cma_data/test2/",
-  // params);
-  // params.flow_files.emplace_back(
-  //     "/home/benjamin/Documenti/code/cpp/biomc/cma_data/raw_6612/");
+
   bool recur = false;
   try
   {

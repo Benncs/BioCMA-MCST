@@ -61,14 +61,14 @@ namespace MC
     return *this;
   }
 
-  std::vector<size_t> ReactorDomain::getDistribution()const
+  std::vector<size_t> ReactorDomain::getDistribution() const
   {
 
     auto view =
         containers | std::views::transform([](const MC::ContainerState &cs)
                                            { return cs.n_cells; });
 
-    return {view.begin(),view.end()};
+    return {view.begin(), view.end()};
   }
 
 } // namespace MC

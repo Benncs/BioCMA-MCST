@@ -17,9 +17,7 @@ void test_get_transition_matrix()
 
   // Test case 2: 3x3 matrix
   FlowMatrixType flows_3x3(3, 3);
-  flows_3x3 << 1, 2, 3,
-                4, 5, 6,
-                  7, 8, 9;
+  flows_3x3 << 1, 2, 3, 4, 5, 6, 7, 8, 9;
 
   FlowMatrixType expected_3x3(3, 3);
   expected_3x3 << -5, 2, 3, 4, -10, 6, 7, 8, -15;
@@ -31,17 +29,19 @@ void test_get_transition_matrix()
 void test_get_transition_matrix_integrety()
 {
 
-   Eigen::MatrixXd flows_2x2 = Eigen::MatrixXd::Random(2, 2); // Generate random 2x2 matrix
-    Eigen::MatrixXd flows_n_n = Eigen::MatrixXd::Random(5, 5); // Generate random 5x5 matrix
+  Eigen::MatrixXd flows_2x2 =
+      Eigen::MatrixXd::Random(2, 2); // Generate random 2x2 matrix
+  Eigen::MatrixXd flows_n_n =
+      Eigen::MatrixXd::Random(5, 5); // Generate random 5x5 matrix
 
-    // Scale the random numbers to be between 0 and 10
-    flows_2x2 = (flows_2x2.array() + 1.0) * 5.0; // Scale to be between 0 and 10
-    flows_n_n = (flows_n_n.array() + 1.0) * 5.0; // Scale to be between 0 and 10
+  // Scale the random numbers to be between 0 and 10
+  flows_2x2 = (flows_2x2.array() + 1.0) * 5.0; // Scale to be between 0 and 10
+  flows_n_n = (flows_n_n.array() + 1.0) * 5.0; // Scale to be between 0 and 10
   auto check = [](auto &f)
-  { 
-    std::cout<<f <<std::endl;
+  {
+    std::cout << f << std::endl;
     auto transition = Simulation::get_transition_matrix(f);
-    std::cout<<transition <<std::endl;
+    std::cout << transition << std::endl;
     // Check if diagonal elements match the definition
     for (int i = 0; i < f.rows(); ++i)
     {
@@ -54,12 +54,12 @@ void test_get_transition_matrix_integrety()
         }
       }
       sum_i_j = -sum_i_j;
-      
+
       std::cerr << transition(i, i) << " " << sum_i_j << std::endl;
       assert(std::abs(transition(i, i) - sum_i_j) < 1e-5);
     }
   };
- 
+
   check(flows_2x2);
   check(flows_n_n);
 }
