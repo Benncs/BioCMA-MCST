@@ -1,7 +1,6 @@
 #include <cmath>
 #include <common/alg.hpp>
 
-#include <cmath>
 #include <functional>
 
 double naive_newton(const std::function<double(double)> &f,

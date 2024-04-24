@@ -1,6 +1,8 @@
 #include "messages/iteration_payload.hpp"
 #include "messages/message_t.hpp"
 #include <cli_parser.hpp>
+#include <fstream>
+#include <ios>
 #include <simulation/update_flows.hpp>
 
 #include <models/models.hpp>
@@ -31,6 +33,18 @@
 
 #define SEND_MPI_SIG_STOP host_dispatch(exec, MPI_W::SIGNALS::STOP);
 
+/*The following should be remove or moved */
+constexpr bool verbose = true;  // TODO REMOVE
+constexpr bool redirect = false; // TODO REMOVE
+static std::streambuf *original_buffer = nullptr; // TODO FIXME
+static bool is_stdout_redirect = false;
+static int original_stdout_fd = -1;
+static void redirect_stdout(std::stringstream &variable_stream);
+static void restore_stdout();
+static void register_run(ExecInfo &exec, SimulationParameters &params);
+
+
+
 static void workers_process(ExecInfo &exec,
                             Simulation::SimulationUnit &simulation,
                             SimulationParameters &params);
@@ -46,7 +60,7 @@ static void exec(int argc, char **argv, SimulationParameters params);
 
 int main(int argc, char **argv)
 {
-  init_environement();
+  init_environment();
   auto params_opt = parse_cli(argc, argv);
   if (!params_opt.has_value())
   {
@@ -58,9 +72,25 @@ int main(int argc, char **argv)
   {
 
 #ifdef USE_PYTHON_MODULE
-    auto _interpreter_handle= init_python_interpreter();
+    auto _interpreter_handle = init_python_interpreter();
 #endif
-    exec(argc, argv, std::move(params_opt.value()));
+    // TODO REMOVE
+    if constexpr (redirect)
+    {
+      std::stringstream output_variable;
+      output_variable.str("");
+      redirect_stdout(output_variable);
+      exec(argc, argv, std::move(params_opt.value()));
+      restore_stdout();
+      if constexpr (verbose)
+      {
+        std::cout << output_variable.str() << std::endl;
+      }
+    }
+    else
+    {
+      exec(argc, argv, std::move(params_opt.value()));
+    }
   }
 #ifdef DEBUG
   catch (std::exception const &e)
@@ -90,11 +120,12 @@ static void exec(int argc, char **argv, SimulationParameters params)
 
   if (exec_info.current_rank == 0)
   {
+
     if (_fd == nullptr)
     {
       throw std::runtime_error("Flow map are not loaded");
     }
-
+    register_run(exec_info, params);
     host_process(exec_info, simulation, params, _fd);
   }
   else
@@ -151,7 +182,7 @@ static void host_process(ExecInfo &exec,
 
   show(simulation);
 
-  post_process(params,simulation);
+  post_process(params, simulation);
 }
 
 static void workers_process(ExecInfo &exec,
@@ -181,7 +212,7 @@ static void workers_process(ExecInfo &exec,
       last_sync(exec, simulation);
       return;
     }
-    
+
     payload.recv(0, &status);
 
     // Neighbors could change during iteration so we have to allocate new
@@ -205,17 +236,64 @@ static void workers_process(ExecInfo &exec,
     sync_step(exec, simulation);
     sync_prepare_next(exec, simulation);
   }
-
-
-
 }
 
 static KModel load_model()
 {
 #ifdef USE_PYTHON_MODULE
-std::cout<<"LOADING modules.simple_model"<<std::endl;
+  std::cout << "LOADING modules.simple_model" << std::endl;
   return get_python_module("modules.simple_model_opt");
 #else
   return get_simple_model();
 #endif
+}
+
+static void register_run(ExecInfo &exec, SimulationParameters &params)
+{
+  // Open the file in append mode
+  std::ofstream env(env_file_path(), std::ios_base::app);
+  if (env.is_open())
+  {
+    append_date_time(env);
+    env << exec;
+    env << params;
+    env << std::endl;
+  }
+  else
+  {
+    std::cerr << "Error: Unable to open file for writing\n";
+  }
+}
+
+static void restore_stdout()
+{
+  if (is_stdout_redirect)
+  {
+    std::cout.rdbuf(original_buffer);
+    fflush(stdout); // Flush the buffer to ensure all previous output is written
+    dup2(original_stdout_fd,
+         fileno(stdout)); // Restore the original file descriptor of stdout
+
+    is_stdout_redirect = false;
+  }
+}
+
+static void redirect_stdout(std::stringstream &variable_stream)
+{
+  // Check if redirection is already active
+  if (!is_stdout_redirect)
+  {
+    // Save the original buffer of std::cout
+    original_buffer = std::cout.rdbuf();
+    // Redirect std::cout to the stringstream
+    std::cout.rdbuf(variable_stream.rdbuf());
+
+    fflush(stdout); // Flush the buffer to ensure all previous output is written
+    original_stdout_fd =
+        dup(fileno(stdout)); // Save the original file descriptor of stdout
+    freopen("/dev/null", "w", stdout); // Redirect stdout to /dev/null
+
+    // Set the flag to indicate that redirection is active
+    is_stdout_redirect = true;
+  }
 }

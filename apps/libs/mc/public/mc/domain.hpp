@@ -77,7 +77,7 @@ namespace MC
     }
 
 
-    std::vector<size_t> getDistribution();
+    [[nodiscard]] std::vector<size_t> getDistribution()const;
 
   private:
     double _total_volume{};
@@ -85,6 +85,8 @@ namespace MC
     std::vector<ContainerState> containers;
     std::vector<std::vector<size_t>> neighbors;
   };
+
+  
 } // namespace MC
 
 #endif //__MC_REACTORDOMAIN_HPP__

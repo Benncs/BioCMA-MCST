@@ -1,7 +1,9 @@
+#include "mc/container_state.hpp"
 #include <algorithm>
 #include <cstddef>
 #include <iterator>
 #include <mc/domain.hpp>
+#include <ranges>
 
 namespace MC
 {
@@ -24,12 +26,12 @@ namespace MC
     {
       containers[i_c].volume_liq = volumesliq[i_c];
       containers[i_c].volume_gas = volumesgas[i_c];
-      this->_total_volume+=volumesliq[i_c];
+      this->_total_volume += volumesliq[i_c];
     }
   }
   ReactorDomain::ReactorDomain(NumberView volumes,
                                std::vector<std::vector<size_t>> &&_neighbors)
-      : id(0),neighbors(std::move(_neighbors))
+      : id(0), neighbors(std::move(_neighbors))
   {
     double totv = 0.;
     std::transform(volumes.begin(),
@@ -59,16 +61,14 @@ namespace MC
     return *this;
   }
 
-  std::vector<size_t> ReactorDomain::getDistribution()
+  std::vector<size_t> ReactorDomain::getDistribution()const
   {
-    std::vector<size_t> distribution;
-    distribution.reserve(this->n_compartments());
 
-    std::transform(containers.begin(),
-                   containers.end(),
-                   std::back_inserter(distribution),
-                   [](auto &&cs) { return cs.n_cells; });
-    return distribution;
+    auto view =
+        containers | std::views::transform([](const MC::ContainerState &cs)
+                                           { return cs.n_cells; });
+
+    return {view.begin(),view.end()};
   }
 
 } // namespace MC

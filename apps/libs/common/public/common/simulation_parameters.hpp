@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <string>
 #include <vector>
-
+#include <iostream>
 struct SimulationParameters
 {
   size_t n_particles;
@@ -17,5 +17,11 @@ struct SimulationParameters
   size_t n_different_maps;
   static SimulationParameters m_default();
 };
+
+inline std::ostream &operator<< (std::ostream &stream, const SimulationParameters & obj) {
+    stream<<obj.n_particles<<"\t"<<obj.final_time<<"\t"<<obj.d_t<<"\t"<<obj.n_different_maps<<"\t"<<obj.n_threads<<" ";
+    return stream;
+}
+
 
 #endif //__SIMULATION_PARAMETERS_HPP__

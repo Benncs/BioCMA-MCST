@@ -3,7 +3,9 @@
 
 #include <common/common.hpp>
 
-void init_environement();
+void init_environment();
+std::string env_file_path();
+void append_date_time(std::ofstream &fd);
 
 void set_openmp_threads(int rank,
                         int size,
