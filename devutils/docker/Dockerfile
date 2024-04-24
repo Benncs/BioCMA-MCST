@@ -1,4 +1,6 @@
 FROM ubuntu:latest
+ARG LLVM_VERSION=17
+
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     python3-dev \
@@ -16,10 +18,17 @@ RUN pip install meson
 WORKDIR /app
 
 # Copy all files and directories from the parent directory into /app
-COPY . /app
+COPY src/ /app
+COPY modules/ /app
+COPY devutils/ /app
+COPY subprojects/ /app
+COPY meson.build /app
+COPY .clang* /app
 
 # Install LLVM clang-tidy/clang-format
-RUN sh ./devutils/clang_config.sh
+RUN sh ./devutils/clang_config.sh $LLVM_VERSION
+
+RUN apt-get install -y clang-$LLVM_VERSION
 
 # Configure project with Meson
 RUN mkdir -p __builddir && \

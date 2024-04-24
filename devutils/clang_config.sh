@@ -8,8 +8,13 @@
 # -----------------------------------------------------------------------------
 
 
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0  <VERSION>"
+    exit 1
+fi
+
 # Define LLVM version
-LLVM_VERSION=17
+LLVM_VERSION="$@"
 
 # Download LLVM installation script
 wget -q https://apt.llvm.org/llvm.sh 
