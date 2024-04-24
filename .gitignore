@@ -2,7 +2,7 @@
 .vscode/ 
 .cache/
 compile_commands.json 
-
+.clangd
 
 # Env
 .bmc_info
@@ -19,5 +19,5 @@ builddir/
 
 # Python 
 __pycache__
-.clangd
+
 
