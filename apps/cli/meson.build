@@ -38,7 +38,7 @@ lib_app = static_library(
   lib_sources,
   include_directories: ['./includes'],
   dependencies: dep_static_module,
-  cpp_args: [],
+  cpp_args: [],install_rpath:project_name
 )
 
 app_test_dependency = declare_dependency(
@@ -55,6 +55,8 @@ executable(
   include_directories: ['./includes'],
   dependencies: [app_test_dependency],
   cpp_args: [target_custom_options],
+  install: true,
+  install_rpath: global_install_dir
 )
 
 # Conditional dynamic module build
@@ -83,6 +85,7 @@ if use_dynamic_module
     include_directories: ['./includes'],
     dependencies: app_test_dependency_dyn,
     cpp_args: [use_python_define],
+    install: true,
   )
 endif
 

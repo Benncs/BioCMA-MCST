@@ -1,5 +1,5 @@
 project(
-  'BioCMA-MCST',
+  'biocma_mcst',
   'cpp',
   version: '0.0.2',
   meson_version: '>= 1.3.0',
@@ -16,6 +16,9 @@ root = meson.project_source_root()
 project_name = meson.project_name()
 build_type = get_option('buildtype')
 cpp = meson.get_compiler('cpp')
+
+global_install_dir = 'lib' # 'lib/'+project_name  # Relative  to /usr/local/
+includes_install_dir = 'include/'+project_name # Relative  to /usr/local/
 
 cpp_args = ['-march=native', '-fno-math-errno']
 add_project_arguments(cpp_args, language: 'cpp')
@@ -67,7 +70,7 @@ cma_reader = subproject(
     'python_wrap=false',
     'build_executable=false',
     'build_test=false',
-  ],
+  ]
 ) # We only need native birem library in order to read flowmap so, no python neither executable 
 
 cma_dep = cma_reader.get_variable('cma_read_shared_lib_dependency') # Get shared lib 

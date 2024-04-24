@@ -13,6 +13,8 @@ mc_lib = library(
    include_directories: [public_include_dir, 'includes'],
    dependencies: [omp],
    pic: true,
+   install: true,
+   install_dir: global_install_dir,
 )
 
 mc_dependency = declare_dependency(
@@ -20,4 +22,8 @@ mc_dependency = declare_dependency(
    link_with: mc_lib,
 )
 
+install_subdir(
+   'public',
+   install_dir: includes_install_dir,
+)
 

@@ -12,7 +12,14 @@ lib_name = f'@project_name@_simulation'
 
 public_simulation_includes = include_directories('public')
 
-private_simulation_includes = include_directories('./includes')
+install_subdir(
+   'public',
+   install_dir: includes_install_dir,
+)
+
+
+
+private_simulation_includes = include_directories('includes')
 
 project_dependencies = [biomodel_dependency, mc_dependency, common_dependecy]
 
@@ -39,6 +46,8 @@ simulation_lib = library(
    ],
    dependencies: [simulation_public_dependencies, private_dependencies],
    pic: true,
+   install: true,
+   install_dir: global_install_dir
 )
 
 
@@ -47,6 +56,8 @@ simulation_lib_dependency = declare_dependency(
    link_with: simulation_lib,
    dependencies: simulation_public_dependencies,
 )
+
+
 
 # Check if the dynamic module is enabled
 if use_dynamic_module
@@ -61,6 +72,8 @@ if use_dynamic_module
       dependencies: [simulation_dyn_public_dep, private_dependencies],
       cpp_args: [use_python_define],
       pic: true,
+      install: true,
+       install_dir: global_install_dir
    )
 
    # Declare dependency for the dynamic simulation library
@@ -69,6 +82,7 @@ if use_dynamic_module
       link_with: simulation_lib_dyn,
       dependencies: simulation_dyn_public_dep,
       compile_args: [use_python_define],
+      
    )
 endif
 

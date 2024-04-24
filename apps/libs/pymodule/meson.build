@@ -14,6 +14,12 @@
    # Install Python sources to 'birem' subdirectory
    py.install_sources(python_sources, subdir: python_module_name)
 
+   install_subdir(
+   'public',
+   install_dir: includes_install_dir,
+)
+
+
    dependencies = [
       biomodel_dependency,
       cma_dep,
