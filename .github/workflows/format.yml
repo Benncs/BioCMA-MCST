@@ -38,7 +38,7 @@ jobs:
         run: pip3 install meson
       - name: get LLVM clang-tidy/clang-format
         run: |
-          sudo sh devutils/clang_config.sh
+          sudo sh devutils/clang_config.sh 17
       - name: Configure project
         run: |
           meson setup builddir/ --buildtype=release
@@ -73,7 +73,7 @@ jobs:
         run: pip3 install meson
       - name: get LLVM clang-tidy/clang-format
         run: |
-          sudo sh devutils/clang_config.sh
+          sudo sh devutils/clang_config.sh 17
       - name: Configure project
         run: |
           meson setup builddir/ --buildtype=release

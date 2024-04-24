@@ -28,7 +28,7 @@ jobs:
             
 
       - name: Setup Cpp (C++ / C)
-        run: sudo apt update -q && sudo apt-get install -y pkg-config ninja-build build-essential
+        run: sudo apt-get update -q && sudo apt-get install -y pkg-config ninja-build build-essential
         
       
       - name: OMP / MPI / Dependencies

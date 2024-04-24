@@ -18,12 +18,12 @@ RUN pip install meson
 WORKDIR /app
 
 # Copy all files and directories from the parent directory into /app
-COPY src/ /app
-COPY modules/ /app
-COPY devutils/ /app
-COPY subprojects/ /app
-COPY meson.build /app
-COPY .clang* /app
+COPY ./src /app
+COPY ./modules /app
+COPY ./devutils /app
+COPY ./subprojects /app
+COPY ./meson.build /app
+COPY ./.clang* /app
 
 # Install LLVM clang-tidy/clang-format
 RUN sh ./devutils/clang_config.sh $LLVM_VERSION
