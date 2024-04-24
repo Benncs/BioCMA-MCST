@@ -31,54 +31,30 @@ namespace MC
     ReactorDomain &operator=(const ReactorDomain &other) = delete;
     ReactorDomain &operator=(ReactorDomain &&other) noexcept;
 
-    [[nodiscard]] decltype(auto) begin() const
-    {
-      return containers.begin();
-    }
-    [[nodiscard]] decltype(auto) end() const
-    {
-      return containers.end();
-    }
+    [[nodiscard]] decltype(auto) begin() const;
+    [[nodiscard]] decltype(auto) end() const;
 
-    decltype(auto) begin()
-    {
-      return containers.begin();
-    }
-    decltype(auto) end()
-    {
-      return containers.end();
-    }
+    decltype(auto) begin();
+    decltype(auto) end();
 
-    [[nodiscard]] inline auto n_compartments() const
-    {
-      return containers.size();
-    }
+    [[nodiscard]] auto n_compartments() const;
 
-    [[nodiscard]] inline double total_volume() const
-    {
-      return this->_total_volume;
-    }
+    [[nodiscard]] double total_volume() const;
 
     void setVolumes(std::span<double const> volumesgas,
                     std::span<double const> volumesliq);
 
-    void setLiquidNeighbors(const std::vector<std::vector<size_t>> &data)
-    {
-      neighbors = data;
-    }
+    void setLiquidNeighbors(const std::vector<std::vector<size_t>> &data);
 
-    [[nodiscard]] inline const std::vector<std::vector<size_t>> &
-    getNeighbors() const
-    {
-      return neighbors;
-    }
+    [[nodiscard]] const std::vector<std::vector<size_t>> &getNeighbors() const;
 
-    [[nodiscard]] inline std::span<const size_t> getNeighbors(size_t i) const
-    {
-      return neighbors[i];
-    }
+    [[nodiscard]] std::span<const size_t> getNeighbors(size_t i) const;
 
     [[nodiscard]] std::vector<size_t> getDistribution() const;
+
+    static ReactorDomain reduce(std::span<size_t> data,size_t original_size,size_t n_rank);
+
+    std::span<ContainerState> data();
 
   private:
     double _total_volume{};
@@ -86,6 +62,56 @@ namespace MC
     std::vector<ContainerState> containers;
     std::vector<std::vector<size_t>> neighbors;
   };
+
+  inline std::span<ContainerState> ReactorDomain::data()
+  {
+    return containers;
+  }
+
+  inline std::span<const size_t> ReactorDomain::getNeighbors(size_t i) const
+  {
+    return neighbors[i];
+  }
+
+  inline const std::vector<std::vector<size_t>> &
+  ReactorDomain::getNeighbors() const
+  {
+    return neighbors;
+  }
+
+  inline void ReactorDomain::setLiquidNeighbors(
+      const std::vector<std::vector<size_t>> &data)
+  {
+    neighbors = data;
+  }
+
+  inline auto ReactorDomain::n_compartments() const
+  {
+    return containers.size();
+  }
+
+  inline double ReactorDomain::total_volume() const
+  {
+    return this->_total_volume;
+  }
+
+  inline decltype(auto) ReactorDomain::begin() const
+  {
+    return containers.begin();
+  }
+  inline decltype(auto) ReactorDomain::end() const
+  {
+    return containers.end();
+  }
+
+  inline decltype(auto) ReactorDomain::begin()
+  {
+    return containers.begin();
+  }
+  inline decltype(auto) ReactorDomain::end()
+  {
+    return containers.end();
+  }
 
 } // namespace MC
 

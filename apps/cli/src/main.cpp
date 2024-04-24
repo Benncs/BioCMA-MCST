@@ -180,7 +180,7 @@ static void host_process(ExecInfo &exec,
 
   show(simulation);
 
-  post_process(params, simulation);
+  post_process(exec,params, simulation);
 }
 
 static void workers_process(ExecInfo &exec,

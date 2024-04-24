@@ -235,6 +235,9 @@ namespace MPI_W
     return _broadcast_unsafe(data.data(), data.size(), root);
   }
 
+
+ 
+
   template <typename T>
   std::vector<T> gather(std::span<T> local_data, size_t n_rank, size_t root)
   {

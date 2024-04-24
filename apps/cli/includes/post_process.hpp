@@ -3,7 +3,7 @@
 
 #include <simulation/simulation.hpp>
 
-void post_process(SimulationParameters &params,
+void post_process(ExecInfo& exec,SimulationParameters &params,
                   Simulation::SimulationUnit &simulation);
 
 #endif //__HOST_POST_PROCESS _HPP__

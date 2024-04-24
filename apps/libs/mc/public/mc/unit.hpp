@@ -1,7 +1,6 @@
 #ifndef __MC_UNIT_HPP
 #define __MC_UNIT_HPP
 
-#include <array>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
 

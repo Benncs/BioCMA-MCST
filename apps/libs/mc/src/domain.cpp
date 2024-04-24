@@ -4,6 +4,7 @@
 #include <iterator>
 #include <mc/domain.hpp>
 #include <ranges>
+#include <stdexcept>
 
 namespace MC
 {
@@ -70,5 +71,47 @@ namespace MC
 
     return {view.begin(), view.end()};
   }
+
+  ReactorDomain ReactorDomain::reduce(std::span<size_t> data,
+                                      size_t original_size,
+                                      size_t n_rank)
+  {
+    ReactorDomain reduced;
+    reduced.containers.resize(original_size);
+
+    if (data.size() != original_size * n_rank)
+    {
+      throw std::runtime_error("Cannot reduce different reactor type");
+    }
+    for (size_t i_rank = 0; i_rank < n_rank; ++i_rank)
+    {
+      for (size_t i_c = 0; i_c < original_size; ++i_c)
+      {
+        reduced.containers[i_c].n_cells += data[i_c + i_rank * original_size];
+      }
+    }
+
+    return reduced;
+  }
+
+  // ReactorDomain ReactorDomain::reduce(std::span<ReactorDomain> data)
+  // {
+  //   ReactorDomain reduced;
+  //   size_t size = data[0].containers.size();
+  //   auto& containers = reduced.containers;
+  //   for(auto&& domain : data)
+  //   {
+  //     if(size!=domain.n_compartments())
+  //     {
+  //       throw std::runtime_error("Cannot reduce diffferent reactor type");
+  //     }
+  //     for(size_t i =0 ;i<size;++i)
+  //     {
+  //       containers[i].n_cells+=domain.containers[i].n_cells;
+  //     }
+  //   }
+
+  //   return reduced;
+  // }
 
 } // namespace MC
