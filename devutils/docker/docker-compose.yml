@@ -1,0 +1,18 @@
+version: "3"
+services:
+  app:
+    image: biocma_mcst
+    build: .
+    container_name: biocma_mcst__dev
+    volumes:
+      - ./runtime_container:/app
+      - ../../apps/:/app/apps
+      - ../../subprojects:/app/subprojects
+      - ../../cma_data:/app/cma_data
+      - ../../modules:/app/modules
+      - ../../.clang-format:/app/.clang-format
+      - ../../.clang-tidy:/app/.clang-tidy
+      - ../../meson.build:/app/meson.build
+      - ../../meson_options.txt:/app/meson_options.txt
+
+
