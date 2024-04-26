@@ -11,9 +11,7 @@ namespace MC
     double volume_gas;
     size_t n_cells; // TODO: BE CAREFUL WHEN DECREMENT
     size_t id;
-    
     std::span<double const> concentrations;
-
   };
 } // namespace MC
 

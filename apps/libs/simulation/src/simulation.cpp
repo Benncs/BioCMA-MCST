@@ -40,7 +40,7 @@ namespace Simulation
     for (auto i = 0; i < liq->C.cols(); ++i)
     {
       liq->C.coeffRef(1, i) = 8e-3;
-      liq->C.coeffRef(0, static_cast<int>(i)) = 0.01;
+      liq->C.coeffRef(0, static_cast<int>(i)) = 0.5; //0.5 G/L Glucose 
       if (host)
       {
         gas->C.coeffRef(1, i) = 321e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
@@ -54,10 +54,10 @@ namespace Simulation
     }
   }
 
-  void p_kernel(MC::MonteCarloUnit &unit,
+  void p_kernel(double d_t,
+                MC::MonteCarloUnit &unit,
                 std::span<Eigen::MatrixXd> _contribs,
                 std::span<MC::TheadSafeData> _extras,
-                double d_t,
                 const KModel &_kmodel,
                 const Simulation::move_kernel &_move_kernel,
                 MC::Particles &p);
@@ -88,11 +88,11 @@ namespace Simulation
 
     this->liquid_scalar =
         std::unique_ptr<ScalarSimulation, pimpl_deleter>(makeScalarSimulation(
-            mc_unit->domain.n_compartments(), n_species, n_thread));
+            mc_unit->domain.getNumberCompartments(), n_species, n_thread));
 
     this->gas_scalar =
         (host) ? std::unique_ptr<ScalarSimulation, pimpl_deleter>(
-                     makeScalarSimulation(mc_unit->domain.n_compartments(),
+                     makeScalarSimulation(mc_unit->domain.getNumberCompartments(),
                                           n_species,
                                           0)) // No contribs for gas
                : nullptr;
@@ -107,7 +107,8 @@ namespace Simulation
   void SimulationUnit::setVolumes(std::span<double> volumesgas,
                                   std::span<double> volumesliq)
   {
-
+    
+   
     std::span<double const> vg;
     this->liquid_scalar->setVolumes(volumesliq, flow_liquid->inverse_volume);
     if (gas_scalar)
@@ -141,15 +142,15 @@ namespace Simulation
 
   void SimulationUnit::post_init_container()
   {
-
-#pragma omp parallel for default(none)
-    for (auto it = mc_container->to_process.begin();
-         it < mc_container->to_process.end();
-         ++it)
+    auto &to_process = mc_container->to_process;
+    const size_t n_compartments = mc_unit->domain.getNumberCompartments();
+#pragma omp parallel for default(none) shared(to_process, n_compartments)      \
+    num_threads(this->n_thread)
+    for (auto it = to_process.begin(); it < to_process.end(); ++it)
     {
       auto &&particle = *it;
-      particle.current_container = MC::uniform_int_rand(
-          static_cast<size_t>(0), mc_unit->domain.n_compartments() - 1);
+      particle.current_container =
+          MC::uniform_int_rand(static_cast<size_t>(0), n_compartments - 1);
 
       auto &i_container = mc_unit->domain[particle.current_container];
 
@@ -163,26 +164,30 @@ namespace Simulation
   {
 
     const move_kernel _move_kernel = population_balance_flow(
-        this->mc_unit->domain, *this->mc_container, this->flow_liquid);
+        this->mc_unit->domain, this->flow_liquid);
 
     const auto &_kmodel = kmodel;
 
     auto &unit = *this->mc_unit;
     auto _contribs = this->liquid_scalar->getThreadContribs();
     auto &_extras = this->mc_container->extras;
-    const auto krnl =
-        [&_move_kernel, d_t, _kmodel, &unit, &_contribs, &_extras](
-            auto &&p) -> void
-    { p_kernel(unit, _contribs, _extras, d_t, _kmodel, _move_kernel, p); };
+    auto &to_process = mc_container->to_process;
 
-    execute_process_knrl(krnl);
+#pragma omp parallel for num_threads(this->n_thread) default(none)             \
+    shared(to_process, unit, _contribs, _extras, _kmodel, _move_kernel, d_t)   \
+    schedule(static)
+    for (auto it = to_process.begin(); it < to_process.end(); ++it)
+    {
+      p_kernel(d_t, unit, _contribs, _extras, _kmodel, _move_kernel, *it);
+    }
+
     post_process_reducing();
   }
 
-  void p_kernel(MC::MonteCarloUnit &unit,
+  void p_kernel(double d_t,
+                MC::MonteCarloUnit &unit,
                 std::span<Eigen::MatrixXd> _contribs,
                 std::span<MC::TheadSafeData> _extras,
-                double d_t,
                 const KModel &_kmodel,
                 const move_kernel &_move_kernel,
                 MC::Particles &p)
@@ -209,10 +214,9 @@ namespace Simulation
     if (p.status == MC::CellStatus::DEAD)
     {
       events.incr<MC::EventType::Death>();
-      __ATOM_DECR__(domain[p.current_container].n_cells)
+      __ATOM_DECR__(domain[p.current_container].n_cells)   // TODO: check overflow
       p.clearState(MC::CellStatus::DEAD);
       thread_extra.in_dead_state.emplace_back(&p);
-      // TODO: check overflow
     }
     else
     {

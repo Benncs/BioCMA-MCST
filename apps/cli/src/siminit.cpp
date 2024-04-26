@@ -17,6 +17,9 @@ static ReactorState const *
 init_state(SimulationParameters &params,
            std::shared_ptr<FlowIterator> &flow_handle);
 
+ 
+
+
 Simulation::SimulationUnit
 init_simulation(ExecInfo &info,
                 SimulationParameters &params,
@@ -71,6 +74,11 @@ init_simulation(ExecInfo &info,
   auto unit = MC::init_unit(info, liq_volume, std::move(liquid_neighbors));
 
   auto container = MC::init_container(info, params.n_particles);
+
+
+  size_t unit_size = unit->domain.getNumberCompartments()*sizeof(unit->domain[0]) + sizeof(unit->domain.getNeighbors(0))*unit->domain.getNeighbors(0).size()*unit->domain.getNeighbors().size();
+  size_t container_size = container->to_process.size()*sizeof(container->to_process[0]);
+
 
   auto simulation = Simulation::SimulationUnit(info,
                                                std::move(unit),

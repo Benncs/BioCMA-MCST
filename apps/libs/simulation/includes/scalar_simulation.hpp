@@ -4,6 +4,9 @@
 #include <simulation/matflows.hpp>
 #include <span>
 
+//TODO REMOVE 
+#include <iostream>
+
 namespace Simulation
 {
 
@@ -90,6 +93,7 @@ namespace Simulation
     return {m_volumes.diagonal().data(), static_cast<size_t>(m_volumes.rows())};
   }
 
+
   inline void ScalarSimulation::setVolumes(std::span<double> volumes,
                                            std::span<double> inv_volumes)
   {
@@ -97,7 +101,7 @@ namespace Simulation
     // SIGFAULT ?
     this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(
         volumes.data(), static_cast<int>(volumes.size()));
-
+        
     this->volumes_inverse.diagonal() = Eigen::Map<const Eigen::VectorXd>(
         inv_volumes.data(), static_cast<int>(inv_volumes.size()));
   }

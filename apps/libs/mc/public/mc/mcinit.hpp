@@ -14,7 +14,7 @@ namespace MC
                                                      size_t n_particles);
   std::unique_ptr<MonteCarloUnit>
   init_unit(ExecInfo &info,
-            NumberView volumes,
+            std::span<double> volumes,
             std::vector<std::vector<size_t>> &&neighbors);
 } // namespace MC
 

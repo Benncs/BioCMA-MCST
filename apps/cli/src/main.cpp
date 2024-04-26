@@ -1,5 +1,7 @@
 #include "messages/iteration_payload.hpp"
 #include "messages/message_t.hpp"
+#include "models/light_model.hpp"
+#include <algorithm>
 #include <cli_parser.hpp>
 #include <fstream>
 #include <ios>
@@ -136,33 +138,32 @@ static void exec(int argc, char **argv, SimulationParameters params)
 static void show(Simulation::SimulationUnit &simulation)
 {
 
-  // auto distribution = simulation.mc_unit->domain.getDistribution();
+  auto d = simulation.mc_unit->domain.getDistribution();
+  std::vector<double> mass(simulation.mc_unit->domain.getNumberCompartments());
+  double totmass = 0.;
 
-  // for (auto &&i : distribution)
-  // {
-  //   std::cout << i << ", ";
-  // }
-  // std::cout << '\n';
-  // try
-  // {
-  //   std::vector<double> totmas(simulation.unit->domain.n_compartments(), 0.);
-  //   double cs = 0;
-  //   for (auto &&p : simulation.container->to_process)
-  //   {
-  //     auto model = std::any_cast<std::shared_ptr<SimpleModel> &>(p.data);
+  std::for_each(simulation.mc_container->to_process.begin(),
+                simulation.mc_container->to_process.end(),
+                [&mass, &totmass](auto &&p)
+                {
+                  auto &model = std::any_cast<LightModel &>(p.data);
+                  totmass += model.mass * p.weight;
+                  mass[p.current_container] += model.mass * p.weight;
+                });
 
-  //     totmas[p.current_container] += p.weight * model->xi->mass;
-  //     cs += p.weight * model->xi->mass;
-  //   }
-  //   std::cout << "mass: " << cs << std::endl;
-  // }
-  // catch (...)
-  // {
-  //   std::cout << std::endl;
-  // }
-  // std::cout << simulation.getCgas().row(1) << std::endl;
-  // std::cout << "----Liquid---" << std::endl;
-  // std::cout << simulation.getCliq().row(0) << std::endl;
+  std::cout << simulation.mc_unit->domain.getTotalVolume() * 1000 << std::endl;
+  auto concentration = totmass / (simulation.mc_unit->domain.getTotalVolume());
+  std::cout << "total mass: " << totmass << "\r\n"
+            << "Mean concentration: " << concentration << "\r\n\r\\n";
+  
+  for (size_t i = 0; i < simulation.mc_unit->domain.getNumberCompartments();
+       ++i)
+  {
+    double bio_concentrations =
+        mass[i] / (simulation.mc_unit->domain[i].volume_liq);
+    std::cout << bio_concentrations << " | ";
+  }
+  std::cout << std::endl;
 }
 
 static void host_process(ExecInfo &exec,
@@ -174,13 +175,12 @@ static void host_process(ExecInfo &exec,
   show(simulation);
 
   main_loop(params, exec, simulation, std::move(_flow_handle));
+  show(simulation);
 
   SEND_MPI_SIG_STOP;
   last_sync(exec, simulation);
 
-  show(simulation);
-
-  post_process(exec,params, simulation);
+  post_process(exec, params, simulation);
 }
 
 static void workers_process(ExecInfo &exec,
@@ -189,7 +189,7 @@ static void workers_process(ExecInfo &exec,
 {
 
   double d_t = params.d_t;
-  size_t n_compartments = simulation.mc_unit->domain.n_compartments();
+  size_t n_compartments = simulation.mc_unit->domain.getNumberCompartments();
   MPI_Status status;
 
   size_t iteration_count = 0;
@@ -199,7 +199,6 @@ static void workers_process(ExecInfo &exec,
 
   MPI_W::IterationPayload payload(n_compartments * n_compartments,
                                   n_compartments);
-
   while (true)
   {
 
@@ -208,7 +207,7 @@ static void workers_process(ExecInfo &exec,
     if (sign == MPI_W::SIGNALS::STOP)
     {
       last_sync(exec, simulation);
-      return;
+      break;
     }
 
     payload.recv(0, &status);
@@ -242,7 +241,7 @@ static KModel load_model()
   std::cout << "LOADING modules.simple_model" << std::endl;
   return get_python_module("modules.simple_model_opt");
 #else
-  return get_simple_model();
+  return get_light_model();
 #endif
 }
 

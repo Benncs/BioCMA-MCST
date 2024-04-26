@@ -6,6 +6,9 @@
 #include <ranges>
 #include <stdexcept>
 
+//TODO REMOVE
+#include <iostream>
+
 namespace MC
 {
   ReactorDomain::ReactorDomain(ReactorDomain &&other) noexcept
@@ -30,9 +33,9 @@ namespace MC
       this->_total_volume += volumesliq[i_c];
     }
   }
-  ReactorDomain::ReactorDomain(NumberView volumes,
+  ReactorDomain::ReactorDomain(std::span<double> volumes,
                                std::vector<std::vector<size_t>> &&_neighbors)
-      : id(0), neighbors(std::move(_neighbors))
+      :  neighbors(std::move(_neighbors))
   {
     double totv = 0.;
     std::transform(volumes.begin(),

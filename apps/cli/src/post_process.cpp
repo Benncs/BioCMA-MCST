@@ -11,6 +11,18 @@
   NUMBER OF
 */
 
+void model_specific(ExecInfo& exec,SimulationParameters &params,
+                  Simulation::SimulationUnit &simulation)
+{
+  #ifndef USE_PYTHON_MODULE
+  auto& model = std::any_cast<SimpleModel&>(
+      simulation.mc_container->to_process[0].data);
+  std::cout <<"mass: " <<model.xi.mass << std::endl;
+#else
+  simulation.getModel().f_dbg(simulation.mc_container->to_process[0]);
+#endif
+}
+
 void post_process(ExecInfo& exec,SimulationParameters &params,
                   Simulation::SimulationUnit &simulation)
 {
@@ -18,15 +30,16 @@ void post_process(ExecInfo& exec,SimulationParameters &params,
   const size_t process_size = simulation.mc_container->to_process.size();
 
   std::cout << "----END---" << std::endl;
-
+  
   // FIXME
-#ifndef USE_PYTHON_MODULE
-  auto model = std::any_cast<std::shared_ptr<SimpleModel> &>(
-      simulation.mc_container->to_process[0].data);
-  std::cout <<"mass: " <<model->xi.mass << std::endl;
-#else
-  simulation.getModel().f_dbg(simulation.mc_container->to_process[0]);
-#endif
+  try{
+    model_specific(exec, params, simulation);
+  }
+  catch(...)
+  {
+    ///
+  }
+
 
   auto total_events = simulation.mc_unit->ts_events[0];
   const size_t death_events = total_events.get<MC::EventType::Death>();
@@ -58,6 +71,7 @@ void post_process(ExecInfo& exec,SimulationParameters &params,
     assert(count == params.n_particles + new_events - death_events);
   }
 
+  
 
   // TODO
 }

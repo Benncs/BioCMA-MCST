@@ -8,14 +8,18 @@
 
 #include <span>
 
+
+using model_float_type_t = double;
+
+
 struct Xi
 {
 
-  double mass{};
-  double mu_eff{};
-  double a_pts{};
-  double a_permease{};
-  double n_permease{};
+  model_float_type_t mass{};
+  model_float_type_t mu_eff{};
+  model_float_type_t a_pts{};
+  model_float_type_t a_permease{};
+  model_float_type_t n_permease{};
 
   ~Xi() = default;
 
@@ -31,6 +35,23 @@ struct Xi
 
 struct SimpleModel
 {
+  // static constexpr double tauPTS = 25.0;
+  // static constexpr double tau_f = 5.0;
+  // static constexpr double tau_d = 5.0;
+  // static constexpr double NPermease_max = 5e4;
+  // static constexpr double tauAu = 5.0;
+  // static constexpr double tauAd = 5.0;
+  // static constexpr double tau_metabolisme = 0.1;
+  // static constexpr double phi_pts_max = 4.454e-12;
+  // static constexpr double kpts = 1e-2;
+  // static constexpr double kppermease = 1e-3;
+  // static constexpr double psi_permease = 1.25e-13;
+  // static constexpr double YXS = 0.42;
+  // static constexpr double YXO = 1e-4;
+  // static constexpr double YSA = 1e-4;
+  // static constexpr double psi_o_meta = 20e-3 / 3600 * 32e-3; // 20mmmol O2 /h;
+  // static constexpr double critcal_division_mass = 1.7e-7;
+
   static constexpr double tauPTS = 25.0;
   static constexpr double tau_f = 5.0;
   static constexpr double tau_d = 5.0;
@@ -48,9 +69,9 @@ struct SimpleModel
   static constexpr double psi_o_meta = 20e-3 / 3600 * 32e-3; // 20mmmol O2 /h;
   static constexpr double critcal_division_mass = 1.7e-5;
 
-  double phi_s_in = 0.;
-  double phi_o_in = 0.;
-  double mu_p = 0;
+  model_float_type_t phi_s_in = 0.;
+  model_float_type_t phi_o_in = 0.;
+  model_float_type_t mu_p = 0;
   Xi xi;
   Xi xi_dot;
   void step(double d);

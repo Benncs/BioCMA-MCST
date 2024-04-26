@@ -10,26 +10,25 @@ namespace MC
   class ReactorDomain
   {
   public:
-    size_t id{};
-
+    
     ReactorDomain() = default;
     ReactorDomain(ReactorDomain &&other) noexcept;
-    ReactorDomain(NumberView volumes,
+    ReactorDomain(std::span<double> volumes,
                   std::vector<std::vector<size_t>> &&_neighbors);
     ReactorDomain(const ReactorDomain &other) = delete;
     ~ReactorDomain() = default;
 
-    inline auto &operator[](size_t i_c)
-    {
-      return this->containers[i_c];
-    }
-    inline auto &operator[](size_t i_c) const
-    {
-      return this->containers[i_c];
-    }
-
     ReactorDomain &operator=(const ReactorDomain &other) = delete;
     ReactorDomain &operator=(ReactorDomain &&other) noexcept;
+
+    void setVolumes(std::span<double const> volumesgas,
+                    std::span<double const> volumesliq);
+
+    void setLiquidNeighbors(const std::vector<std::vector<size_t>> &data);
+
+    // GETTERS
+    auto &operator[](size_t i_c);
+    auto &operator[](size_t i_c) const;
 
     [[nodiscard]] decltype(auto) begin() const;
     [[nodiscard]] decltype(auto) end() const;
@@ -37,14 +36,9 @@ namespace MC
     decltype(auto) begin();
     decltype(auto) end();
 
-    [[nodiscard]] auto n_compartments() const;
+    [[nodiscard]] auto getNumberCompartments() const;
 
-    [[nodiscard]] double total_volume() const;
-
-    void setVolumes(std::span<double const> volumesgas,
-                    std::span<double const> volumesliq);
-
-    void setLiquidNeighbors(const std::vector<std::vector<size_t>> &data);
+    [[nodiscard]] double getTotalVolume() const;
 
     [[nodiscard]] const std::vector<std::vector<size_t>> &getNeighbors() const;
 
@@ -52,13 +46,14 @@ namespace MC
 
     [[nodiscard]] std::vector<size_t> getDistribution() const;
 
-    static ReactorDomain reduce(std::span<size_t> data,size_t original_size,size_t n_rank);
+    static ReactorDomain
+    reduce(std::span<size_t> data, size_t original_size, size_t n_rank);
 
     std::span<ContainerState> data();
 
   private:
-    double _total_volume{};
-
+    double _total_volume=0.;
+    size_t id=0;
     std::vector<ContainerState> containers;
     std::vector<std::vector<size_t>> neighbors;
   };
@@ -85,14 +80,23 @@ namespace MC
     neighbors = data;
   }
 
-  inline auto ReactorDomain::n_compartments() const
+  inline auto ReactorDomain::getNumberCompartments() const
   {
     return containers.size();
   }
 
-  inline double ReactorDomain::total_volume() const
+  inline double ReactorDomain::getTotalVolume() const
   {
     return this->_total_volume;
+  }
+
+  inline auto &ReactorDomain::operator[](size_t i_c)
+  {
+    return this->containers[i_c];
+  }
+  inline auto &ReactorDomain::operator[](size_t i_c) const
+  {
+    return this->containers[i_c];
   }
 
   inline decltype(auto) ReactorDomain::begin() const

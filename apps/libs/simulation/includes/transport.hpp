@@ -22,7 +22,6 @@ namespace Simulation
       double, double, MC::ReactorDomain &, MC::Particles &, double)>;
 
   move_kernel population_balance_flow(MC::ReactorDomain &domain,
-                                      MC::ParticlesContainer &container,
                                       const MatFlow *flows);
 } // namespace Simulation
 

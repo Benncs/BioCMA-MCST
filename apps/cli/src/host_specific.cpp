@@ -25,6 +25,20 @@
   payload.liquid_volumes = reactor_state.liquidVolume;                         \
   payload.gas_volumes = reactor_state.gasVolume;
 
+#define MPI_DISPATCH_MAIN                                                      \
+  for (size_t j = 1; j < exec.n_rank; ++j)                                     \
+  {                                                                            \
+    MPI_W::send(MPI_W::SIGNALS::RUN, j);                                       \
+    payload.send(j);                                                           \
+  }                                                                            \
+  for (const auto &neighbor : reactor_state.liquid_flow.neigbors)              \
+  { /*Send each neighbor vector to all processes*/                             \
+    for (size_t j = 1; j < exec.n_rank; ++j)                                   \
+    {                                                                          \
+      MPI_W::send_v<size_t>(neighbor, j, 0);                                   \
+    }                                                                          \
+  }
+
 void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
                Simulation::SimulationUnit &simulation,
@@ -43,28 +57,15 @@ void main_loop(const SimulationParameters &params,
   double d_t = params.d_t;
   std::cout << params.final_time << " " << d_t << '\n';
   _flow_handle->toggleVerbose();
+
   for (auto &&reactor_state : *_flow_handle)
   {
-
+    
     FILL_PAYLOAD
 
     DEBUG_INSTRUCTION
 
-    for (size_t j = 1; j < exec.n_rank; ++j)
-    {
-      MPI_W::send(MPI_W::SIGNALS::RUN, j);
-      // MPI_Send(&sign ,sizeof(sign), MPI_CHAR, j, 0, MPI_COMM_WORLD);
-
-      payload.send(j);
-    }
-    // Send each neighbor vector to all processes
-    for (const auto &neighbor : reactor_state.liquid_flow.neigbors)
-    {
-      for (size_t j = 1; j < exec.n_rank; ++j)
-      {
-        MPI_W::send_v<size_t>(neighbor, j, 0);
-      }
-    }
+    MPI_DISPATCH_MAIN
 
     /*
     For the two following function calls, pass non-owning data types:
@@ -98,6 +99,7 @@ void main_loop(const SimulationParameters &params,
     simulation.setVolumes(reactor_state.gasVolume, reactor_state.liquidVolume);
 
     simulation.cycleProcess(d_t);
+
     sync_step(exec, simulation);
     simulation.step(d_t, reactor_state);
     sync_prepare_next(exec, simulation);

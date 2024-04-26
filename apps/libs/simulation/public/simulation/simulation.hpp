@@ -97,9 +97,11 @@ namespace Simulation
 
   inline void SimulationUnit::execute_process_knrl(const auto &kernel)
   {
-#pragma omp parallel for num_threads(n_thread) default(none) shared(kernel)
-    for (auto it = mc_container->to_process.begin();
-         it < mc_container->to_process.end();
+    auto& container = mc_container;
+#pragma omp parallel for num_threads(n_thread) default(none)                   \
+    shared(kernel, container) schedule(static)
+    for (auto it = container->to_process.begin();
+         it < container->to_process.end();
          ++it)
     {
       kernel(*it);
