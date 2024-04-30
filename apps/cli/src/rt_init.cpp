@@ -1,5 +1,4 @@
 
-#include "messages/message_t.hpp"
 #include <rt_init.hpp>
 
 #include <Eigen/Core>
@@ -9,8 +8,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <messages/wrap_mpi.hpp>
-#include <mpi.h>
+#include <mpi_w/wrap_mpi.hpp>
 
 #ifndef USE_PYTHON_MODULE
 #  include <omp.h>
@@ -78,7 +76,10 @@ ExecInfo runtime_init(int argc, char **argv, SimulationParameters &params)
   MPI_Comm_size(MPI_COMM_WORLD, &size);
 
   set_openmp_threads(rank, size, info, params);
-  Eigen::setNbThreads(EIGEN_INDEX(info.thread_per_process));
+
+  Eigen::setNbThreads(std::min(4,EIGEN_INDEX(info.thread_per_process))); //FIXME: 4 threads is clearly enough for 500*500 matrix 
+  
+
 #ifdef USE_PYTHON_MODULE
   info.thread_per_process = 1; // Set one thread because of PYthon GIL
 #endif

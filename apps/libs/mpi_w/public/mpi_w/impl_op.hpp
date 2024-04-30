@@ -1,10 +1,10 @@
 #ifndef __IMPL_MPI_OP_HPP__
 #define __IMPL_MPI_OP_HPP__
 
-#include <messages/message_t.hpp>
-#include <messages/mpi_types.hpp>
+#include <mpi_w/message_t.hpp>
+#include <mpi_w/mpi_types.hpp>
 
-#include "mpi.h"
+#include <mpi.h>
 #include <common/execinfo.hpp>
 #include <cstddef>
 #include <limits>

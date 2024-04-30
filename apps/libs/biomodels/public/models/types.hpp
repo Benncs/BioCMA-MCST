@@ -43,7 +43,7 @@ struct KModel
   ModelDivision division_kernel;
   ModelContribution contribution_kernel;
   // #ifdef DEBUG
-  ModelDebug f_dbg = defaut_dgb;
+  // ModelDebug f_dbg = defaut_dgb;
   // #endif
 };
 

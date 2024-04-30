@@ -1,4 +1,5 @@
 #include "mc/particles/particles_list.hpp"
+#include <algorithm>
 #include <mc/particles/particles_container.hpp>
 #include <stdexcept>
 // #include <iostream>

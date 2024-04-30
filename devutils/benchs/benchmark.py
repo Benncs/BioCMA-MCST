@@ -18,14 +18,14 @@ import numpy as np
 import sys
 
 
-BENCH_OMP_THREADS = [1, 2, 4, 6, 8]  # List of thread numbers when running scaling
+BENCH_OMP_THREADS = [1, 8]  # List of thread numbers when running scaling
 EXECUTABLE_PATH = "./builddir/release/apps/cli"  # Path to executable to run
 EXECUTABLE_NAME = "biocma_mcst_cli_app"  # Name of executable to run
 BENCH_SCRIPT_PATH = "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
-FILENAME = "./devutils/benchs/benchbench_records.csv"  # Record filename
-OUTPUT_PDF = "./devutils/benchs/results_bench.pdf"  # Output path
-FINAL_TIME = 5  # Reference simulation time
-DELTA_TIME = 0.00743734  # Reference delta time fixed
+FILENAME = "./devutils/benchs/benchbench_records_light2.csv"  # Record filename
+OUTPUT_PDF = "./devutils/benchs/results_bench_light2.pdf"  # Output path
+FINAL_TIME = 1  # Reference simulation time
+DELTA_TIME = 1e-3  # Reference delta time fixed
 
 def format_cli(number_particle,final_time):
   return [f"{EXECUTABLE_PATH}/{EXECUTABLE_NAME}",f"-np",f"{number_particle}","-d",f"{final_time}","-dt",f"{DELTA_TIME}","-r","1","-f","./cma_data/bench/ "]
@@ -134,12 +134,12 @@ def plot_csv():
 
     # Extract data for plotting
     threads = np.array([int(row['Thread']) for row in data])
-    particles = np.array([int(row['particles']) for row in data])
+    particles = np.array([float(row['particles']) for row in data])
     iterations = np.array([float(row['iteration']) for row in data])
     records = np.array([float(row['Record']) for row in data])
     total_figs = []
 
-    pre_mask =  particles>=100000
+    pre_mask =  particles>=10000
 
     with PdfPages(OUTPUT_PDF) as pdf:
       add_to_pdf(pdf,plot_thread_vs_time(threads[pre_mask],particles[pre_mask],iterations[pre_mask],records[pre_mask]))
@@ -162,8 +162,8 @@ def main(args):
             print("Error: Invalid number of arguments for scale. Usage: python script.py scale [particle_n1] [particle_n2] [n_scale]")
             return
         
-        particle_n1 = int(args[1])
-        particle_n2 = int(args[2])
+        particle_n1 = float(args[1])
+        particle_n2 = float(args[2])
         n_scale = int(args[3])
         with keep.running():
           n_particles = np.linspace(particle_n1, particle_n2, num=n_scale, dtype=np.int32)

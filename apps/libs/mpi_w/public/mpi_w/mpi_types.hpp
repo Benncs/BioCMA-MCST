@@ -1,7 +1,7 @@
 #ifndef __MPI_TYPES_HPP__
 #define __MPI_TYPES_HPP__
 
-#include <messages/message_t.hpp>
+#include <mpi_w/message_t.hpp>
 #include <mpi.h>
 #include <type_traits>
 

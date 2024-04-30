@@ -9,7 +9,7 @@
 // TODO REMOVE
 #include <iostream>
 
-//TODO REMOVE 
+// TODO REMOVE
 template <typename T>
 using RowMajorDynMatrix =
     Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
@@ -27,52 +27,32 @@ namespace Simulation
                         std::span<const size_t> i_neighbor,
                         const Eigen::MatrixXd &cumulative_probability);
 
-  move_kernel population_balance_flow(MC::ReactorDomain &domain,
-            
-                                      const MatFlow *flows)
+  move_kernel_t population_balance_flow(MC::ReactorDomain &domain,
+
+                                        const MatFlow *flows)
   {
+
     const int n_c = static_cast<int>(domain.getNumberCompartments());
 
-    auto __cumulative_probability = get_CP(domain.getNeighbors(), n_c, *flows);
+    const auto cumulative_probability =
+        get_CP(domain.getNeighbors(), n_c, *flows);
 
     const auto &m_transition = flows->transition_matrix;
 
-    auto move_kernel =
-        [&m_transition,
-         cumulative_probability =
-             std::move(__cumulative_probability)](double random_number,
-                                                  double random_number2,
-                                                  MC::ReactorDomain &domain,
-                                                  MC::Particles &particle,
-                                                  double d_t) -> void
+    auto move_kernel = [m_transition,
+                        cumulative_probability](double random_number,
+                                                double random_number2,
+                                                MC::ReactorDomain &domain,
+                                                MC::Particles &particle,
+                                                double d_t) -> void
     {
-      const size_t i_compartment = particle.current_container;
-      auto &current_container = domain[i_compartment];
-      const std::span<const size_t> i_neighbor =
-          domain.getNeighbors(i_compartment);
-
-      const double &v_p = current_container.volume_liq;
-
-      const double leaving_flow = m_transition.coeff(
-          static_cast<int>(i_compartment), static_cast<int>(i_compartment));
-
-      const double theta_p = -v_p / leaving_flow;
-
-      const double probability = std::exp(-d_t / theta_p);
-
-      if (random_number > probability)
-      {
-        return;
-      }
-
-      size_t next = find_next_compartment(
-          i_compartment, random_number2, i_neighbor, cumulative_probability);
-
-      __ATOM_DECR__(current_container.n_cells) // Cell leaves current
-                                               // compartment
-      __ATOM_INCR__(domain[next].n_cells); // Cell go to new compartment
-
-      particle.current_container = next;
+      kernel_move(random_number,
+                  random_number2,
+                  domain,
+                  particle,
+                  d_t,
+                  m_transition,
+                  cumulative_probability);
     };
 
     return move_kernel;
@@ -82,8 +62,8 @@ namespace Simulation
                          int nb_zone,
                          const Simulation::MatFlow &flows)
   {
-    // Initialize probability matrix
-    static Eigen::MatrixXd P =
+
+    Eigen::MatrixXd P =
         Eigen::MatrixXd::Zero(nb_zone, static_cast<int>(neighbors[0].size()));
 
     // Calculate cumulative sum and probability matrix
@@ -142,6 +122,43 @@ namespace Simulation
       }
     }
     return next;
+  }
+
+  void kernel_move(double random_number,
+                   double random_number2,
+                   MC::ReactorDomain &domain,
+                   MC::Particles &particle,
+                   double d_t,
+                   const FlowMatrixType &m_transition,
+                   const Eigen::MatrixXd &cumulative_probability)
+  {
+    const size_t i_compartment = particle.current_container;
+    auto &current_container = domain[i_compartment];
+    const std::span<const size_t> i_neighbor =
+        domain.getNeighbors(i_compartment);
+
+    const double &v_p = current_container.volume_liq;
+
+    const double leaving_flow = m_transition.coeff(
+        static_cast<int>(i_compartment), static_cast<int>(i_compartment));
+
+    const double theta_p = -v_p / leaving_flow;
+
+    const double probability = std::exp(-d_t / theta_p);
+
+    if (random_number > probability)
+    {
+      return;
+    }
+
+    size_t next = find_next_compartment(
+        i_compartment, random_number2, i_neighbor, cumulative_probability);
+
+    __ATOM_DECR__(current_container.n_cells) // Cell leaves current
+                                             // compartment
+    __ATOM_INCR__(domain[next].n_cells);     // Cell go to new compartment
+
+    particle.current_container = next;
   }
 
   FlowMatrixType flowmap_to_matrix(std::span<double> data, size_t n_row)

@@ -1,9 +1,7 @@
 #include "mc/container_state.hpp"
 #include "mc/domain.hpp"
 #include "mc/events.hpp"
-#include "messages/impl_op.hpp"
-#include <messages/wrap_mpi.hpp>
-#include <mpi.h>
+#include <mpi_w/wrap_mpi.hpp>
 #include <sync.hpp>
 
 void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)

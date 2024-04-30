@@ -1,15 +1,14 @@
-#include "messages/impl_op.hpp"
-#include "messages/iteration_payload.hpp"
-#include "messages/message_t.hpp"
-#include "messages/mpi_types.hpp"
+
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <cstddef>
 #include <host_specific.hpp>
-#include <messages/wrap_mpi.hpp>
+#include <mpi_w/wrap_mpi.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/update_flows.hpp>
 #include <sync.hpp>
+
+constexpr size_t n_particle_trigger_parralel = 1e6;
 
 #ifdef DEBUG
 #  define DEBUG_INSTRUCTION                                                    \
@@ -46,62 +45,81 @@ void main_loop(const SimulationParameters &params,
 {
 
   size_t iteration_count = 0;
-  size_t n_loop = params.n_different_maps;
+  const size_t n_loop = params.n_different_maps;
+  const double d_t = params.d_t;
 
   auto liquid_flows = Simulation::BasicCacheMatflows(n_loop);
   auto gas_flows = Simulation::BasicCacheMatflows(n_loop);
 
-  // MPI_W::IterationPayload payload = init_payload(_flow_handle);
   MPI_W::HostIterationPayload payload;
 
-  double d_t = params.d_t;
   std::cout << params.final_time << " " << d_t << '\n';
-  _flow_handle->toggleVerbose();
 
-  for (auto &&reactor_state : *_flow_handle)
+  auto iterator = _flow_handle->begin();
+  const auto end = _flow_handle->end();
+  auto &reactor_state = *iterator;
+  bool end_flag = iterator != end;
+
+#pragma omp parallel default(shared) num_threads(exec.thread_per_process) 
   {
-    
-    FILL_PAYLOAD
 
-    DEBUG_INSTRUCTION
+    while (end_flag)
+    {
 
-    MPI_DISPATCH_MAIN
+#pragma omp single
+      {
 
-    /*
-    For the two following function calls, pass non-owning data types:
-    - 'volume' as a std::span
-    - 'flows' as a reference
+        reactor_state = *iterator;
 
-    It's important to ensure that the lifetime of the volumes
-    (reactor_state.gasVolume and reactor_state.liquidVolume)
-    and 'liquid_flows', 'gas_flows' extends at least until the 'simulation'
-    object finishes using them.
+        FILL_PAYLOAD
 
-    - For 'liquid_flows' and 'gas_flows':
-      These are used within the loop iteration (lifetime < 'loop_iteration')
-      and stored as cache in owning types outside of the loop (lifetime >
-    'loop_iteration'). This setup ensures that there are no lifetime issues.
+        DEBUG_INSTRUCTION
 
-    For 'volumes':
-      'reactor_state' has at least the lifetime of 'loop_iteration',
-      and the volumes are used during "cycleProcess" within the same
-    'loop_iteration' (lifetime < 'loop_iteration'). This usage pattern ensures
-    that the volumes are valid and accessible during the entire process of
-    'cycleProcess' within the loop iteration.
-*/
-    Simulation::update_flow(iteration_count,
-                            n_loop,
-                            simulation,
-                            reactor_state,
-                            liquid_flows,
-                            gas_flows);
+        MPI_DISPATCH_MAIN
 
-    simulation.setVolumes(reactor_state.gasVolume, reactor_state.liquidVolume);
+        /*
+        For the two following function calls, pass non-owning data types:
+        - 'volume' as a std::span
+        - 'flows' as a reference
 
-    simulation.cycleProcess(d_t);
+        It's important to ensure that the lifetime of the volumes
+        (reactor_state.gasVolume and reactor_state.liquidVolume)
+        and 'liquid_flows', 'gas_flows' extends at least until the 'simulation'
+        object finishes using them.
 
-    sync_step(exec, simulation);
-    simulation.step(d_t, reactor_state);
-    sync_prepare_next(exec, simulation);
+        - For 'liquid_flows' and 'gas_flows':
+          These are used within the loop iteration (lifetime < 'loop_iteration')
+          and stored as cache in owning types outside of the loop (lifetime >
+        'loop_iteration'). This setup ensures that there are no lifetime issues.
+
+        For 'volumes':
+          'reactor_state' has at least the lifetime of 'loop_iteration',
+          and the volumes are used during "cycleProcess" within the same
+        'loop_iteration' (lifetime < 'loop_iteration'). This usage pattern
+        ensures that the volumes are valid and accessible during the entire
+        process of 'cycleProcess' within the loop iteration.
+    */
+        Simulation::update_flow(iteration_count,
+                                n_loop,
+                                simulation,
+                                reactor_state,
+                                liquid_flows,
+                                gas_flows);
+
+        simulation.setVolumes(reactor_state.gasVolume,
+                              reactor_state.liquidVolume);
+      }
+
+      simulation.cycleProcess(d_t);
+
+#pragma omp single
+      {
+        sync_step(exec, simulation);
+        simulation.step(d_t, reactor_state);
+        sync_prepare_next(exec, simulation);
+        ++iterator;
+        end_flag = iterator != end;
+      }
+    }
   }
 }

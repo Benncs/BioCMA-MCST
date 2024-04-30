@@ -1,8 +1,8 @@
 #include <common/common.hpp>
 #include <cstdlib>
-#include <messages/message_t.hpp>
-#include <messages/mpi_types.hpp>
-#include <messages/wrap_mpi.hpp>
+#include <mpi_w/message_t.hpp>
+#include <mpi_w/mpi_types.hpp>
+#include <mpi_w/wrap_mpi.hpp>
 #include <mpi.h>
 #include <omp.h>
 

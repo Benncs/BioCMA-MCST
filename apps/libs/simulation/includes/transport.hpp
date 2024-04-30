@@ -18,11 +18,20 @@ namespace Simulation
                          int nb_zone,
                          const Simulation::MatFlow &flows);
 
-  using move_kernel = std::function<void(
+  using move_kernel_t = std::function<void(
       double, double, MC::ReactorDomain &, MC::Particles &, double)>;
 
-  move_kernel population_balance_flow(MC::ReactorDomain &domain,
-                                      const MatFlow *flows);
+  move_kernel_t population_balance_flow(MC::ReactorDomain &domain,
+                                        const MatFlow *flows);
+
+  void kernel_move(double random_number,
+                   double random_number2,
+                   MC::ReactorDomain &domain,
+                   MC::Particles &particle,
+                   double d_t,
+                   const FlowMatrixType &m_transition,
+                   const Eigen::MatrixXd &cumulative_probability);
+
 } // namespace Simulation
 
 #endif //__TRANSPORT_HPP__

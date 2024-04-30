@@ -7,7 +7,7 @@ project(
     'warning_level=3',
     'cpp_std=gnu++20',
     'b_colorout=always',
-    'b_coverage=true',
+    # 'b_coverage=true'
   ],
 )
 

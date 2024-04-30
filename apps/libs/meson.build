@@ -1,4 +1,5 @@
 subdir('common')
+subdir('mpi_w')
 subdir('mc')
 subdir('biomodels')
 

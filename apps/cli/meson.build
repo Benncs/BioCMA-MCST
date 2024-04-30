@@ -16,7 +16,7 @@ endforeach
 
 
 dep_all = [
-  mpi,
+  mpi_wrap_dependency,
   biomodel_dependency,
   cma_dep,
   mc_dependency,

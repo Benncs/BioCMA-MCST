@@ -5,20 +5,18 @@
 #include <cma_read/flow_iterator.hpp>
 #include <common/common.hpp>
 #include <cstdio>
-#include <messages/wrap_mpi.hpp>
+#include <mpi_w/wrap_mpi.hpp>
 #include <simulation/simulation.hpp>
-
+#include <rt_init.hpp>
 #include <mc/mcinit.hpp>
 #include <stdexcept>
 #include <utility>
 #include <vector>
-
+#include <fstream>
 static ReactorState const *
 init_state(SimulationParameters &params,
            std::shared_ptr<FlowIterator> &flow_handle);
-
- 
-
+static void register_run(ExecInfo &exec, SimulationParameters &params);
 
 Simulation::SimulationUnit
 init_simulation(ExecInfo &info,
@@ -46,6 +44,7 @@ init_simulation(ExecInfo &info,
                                  : params.d_t;
     auto n_t = static_cast<size_t>(params.final_time / opti_dt);
     _flow_handle->setRepetition(n_t / nmap);
+    register_run(info, params);
   }
 
   // MPI_W::broadcast(d_t, 0);
@@ -75,10 +74,11 @@ init_simulation(ExecInfo &info,
 
   auto container = MC::init_container(info, params.n_particles);
 
-
-  size_t unit_size = unit->domain.getNumberCompartments()*sizeof(unit->domain[0]) + sizeof(unit->domain.getNeighbors(0))*unit->domain.getNeighbors(0).size()*unit->domain.getNeighbors().size();
-  size_t container_size = container->to_process.size()*sizeof(container->to_process[0]);
-
+  // size_t unit_size =
+  // unit->domain.getNumberCompartments()*sizeof(unit->domain[0]) +
+  // sizeof(unit->domain.getNeighbors(0))*unit->domain.getNeighbors(0).size()*unit->domain.getNeighbors().size();
+  // size_t container_size =
+  // container->to_process.size()*sizeof(container->to_process[0]);
 
   auto simulation = Simulation::SimulationUnit(info,
                                                std::move(unit),
@@ -98,6 +98,10 @@ init_state(SimulationParameters &params,
   try
   {
     flow_handle = std::make_shared<FlowIterator>(params.flow_files);
+    if (flow_handle == nullptr)
+    {
+      throw std::runtime_error("Flow map are not loaded");
+    }
     std::cout << "Flowmap loaded: " << flow_handle->loop_size() << std::endl;
 
     state = &flow_handle->operator()(0);
@@ -112,4 +116,21 @@ init_state(SimulationParameters &params,
     throw std::runtime_error("Error while reading files");
   }
   return state;
+}
+
+static void register_run(ExecInfo &exec, SimulationParameters &params)
+{
+  // Open the file in append mode
+  std::ofstream env(env_file_path(), std::ios_base::app);
+  if (env.is_open())
+  {
+    append_date_time(env);
+    env << exec;
+    env << params;
+    env << std::endl;
+  }
+  else
+  {
+    std::cerr << "Error: Unable to open file for writing\n";
+  }
 }

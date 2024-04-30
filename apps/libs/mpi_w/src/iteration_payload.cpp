@@ -1,6 +1,7 @@
-#include "messages/impl_op.hpp"
-#include "messages/message_t.hpp"
-#include <messages/iteration_payload.hpp>
+
+#include <mpi_w/iteration_payload.hpp>
+#include <mpi_w/message_t.hpp>
+#include <mpi_w/impl_op.hpp>
 #include <mpi.h>
 
 namespace MPI_W

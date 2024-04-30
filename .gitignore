@@ -21,3 +21,4 @@ builddir/
 __pycache__
 
 
+*.old

@@ -1,22 +1,17 @@
-#include "messages/iteration_payload.hpp"
-#include "messages/message_t.hpp"
 #include "models/light_model.hpp"
-#include <algorithm>
+#include "models/simple_model.hpp"
 #include <cli_parser.hpp>
-#include <fstream>
-#include <ios>
-#include <simulation/update_flows.hpp>
 
+#include <simulation/update_flows.hpp>
 #include <models/models.hpp>
 #include <simulation/simulation.hpp>
-
 #include <common/common.hpp>
 
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/reactorstate.hpp>
 
 #include <host_specific.hpp>
-#include <messages/wrap_mpi.hpp>
+#include <mpi_w/wrap_mpi.hpp>
 #include <post_process.hpp>
 #include <rt_init.hpp>
 #include <siminit.hpp>
@@ -33,17 +28,19 @@
 #include <stdexcept>
 #include <utility>
 
+
+
 #define SEND_MPI_SIG_STOP host_dispatch(exec, MPI_W::SIGNALS::STOP);
 
 /*The following should be remove or moved */
-constexpr bool verbose = true;                    // TODO REMOVE
-constexpr bool redirect = false;                  // TODO REMOVE
-static std::streambuf *original_buffer = nullptr; // TODO FIXME
+constexpr bool verbose = true;   // TODO REMOVE
+constexpr bool redirect = false; // TODO REMOVE
 static bool is_stdout_redirect = false;
-static int original_stdout_fd = -1;
-static void redirect_stdout(std::stringstream &variable_stream);
-static void restore_stdout();
-static void register_run(ExecInfo &exec, SimulationParameters &params);
+
+static int redirect_stdout(std::streambuf *&original_buffer,
+                           std::stringstream &variable_stream);
+static void restore_stdout(int original_stdout,
+                           std::streambuf *&original_buffer);
 
 static void workers_process(ExecInfo &exec,
                             Simulation::SimulationUnit &simulation,
@@ -54,8 +51,7 @@ static void host_process(ExecInfo &exec,
                          SimulationParameters &params,
                          std::shared_ptr<FlowIterator> _flow_handle);
 
-static KModel load_model();
-
+static KModel load_model_(size_t index_model);
 static void exec(int argc, char **argv, SimulationParameters params);
 
 int main(int argc, char **argv)
@@ -79,9 +75,13 @@ int main(int argc, char **argv)
     {
       std::stringstream output_variable;
       output_variable.str("");
-      redirect_stdout(output_variable);
+      std::streambuf *original_buffer = nullptr;
+      auto original_stdout_fd =
+          redirect_stdout(original_buffer, output_variable);
+
       exec(argc, argv, std::move(params_opt.value()));
-      restore_stdout();
+
+      restore_stdout(original_stdout_fd, original_buffer);
       if constexpr (verbose)
       {
         std::cout << output_variable.str() << std::endl;
@@ -115,17 +115,12 @@ static void exec(int argc, char **argv, SimulationParameters params)
   ExecInfo exec_info = runtime_init(argc, argv, params);
 
   std::shared_ptr<FlowIterator> _fd = nullptr;
-
-  auto simulation = init_simulation(exec_info, params, _fd, load_model());
+  constexpr size_t i_model = 1;
+  const auto model = load_model_(i_model);
+  auto simulation = init_simulation(exec_info, params, _fd, model);
 
   if (exec_info.current_rank == 0)
   {
-
-    if (_fd == nullptr)
-    {
-      throw std::runtime_error("Flow map are not loaded");
-    }
-    register_run(exec_info, params);
     host_process(exec_info, simulation, params, _fd);
   }
   else
@@ -135,37 +130,6 @@ static void exec(int argc, char **argv, SimulationParameters params)
   }
 }
 
-static void show(Simulation::SimulationUnit &simulation)
-{
-
-  auto d = simulation.mc_unit->domain.getDistribution();
-  std::vector<double> mass(simulation.mc_unit->domain.getNumberCompartments());
-  double totmass = 0.;
-
-  std::for_each(simulation.mc_container->to_process.begin(),
-                simulation.mc_container->to_process.end(),
-                [&mass, &totmass](auto &&p)
-                {
-                  auto &model = std::any_cast<LightModel &>(p.data);
-                  totmass += model.mass * p.weight;
-                  mass[p.current_container] += model.mass * p.weight;
-                });
-
-  std::cout << simulation.mc_unit->domain.getTotalVolume() * 1000 << std::endl;
-  auto concentration = totmass / (simulation.mc_unit->domain.getTotalVolume());
-  std::cout << "total mass: " << totmass << "\r\n"
-            << "Mean concentration: " << concentration << "\r\n\r\\n";
-  
-  for (size_t i = 0; i < simulation.mc_unit->domain.getNumberCompartments();
-       ++i)
-  {
-    double bio_concentrations =
-        mass[i] / (simulation.mc_unit->domain[i].volume_liq);
-    std::cout << bio_concentrations << " | ";
-  }
-  std::cout << std::endl;
-}
-
 static void host_process(ExecInfo &exec,
                          Simulation::SimulationUnit &simulation,
                          SimulationParameters &params,
@@ -173,7 +137,10 @@ static void host_process(ExecInfo &exec,
 {
 
   show(simulation);
-
+  if (verbose)
+  {
+    _flow_handle->toggleVerbose();
+  }
   main_loop(params, exec, simulation, std::move(_flow_handle));
   show(simulation);
 
@@ -235,34 +202,11 @@ static void workers_process(ExecInfo &exec,
   }
 }
 
-static KModel load_model()
-{
-#ifdef USE_PYTHON_MODULE
-  std::cout << "LOADING modules.simple_model" << std::endl;
-  return get_python_module("modules.simple_model_opt");
-#else
-  return get_light_model();
-#endif
-}
 
-static void register_run(ExecInfo &exec, SimulationParameters &params)
-{
-  // Open the file in append mode
-  std::ofstream env(env_file_path(), std::ios_base::app);
-  if (env.is_open())
-  {
-    append_date_time(env);
-    env << exec;
-    env << params;
-    env << std::endl;
-  }
-  else
-  {
-    std::cerr << "Error: Unable to open file for writing\n";
-  }
-}
 
-static void restore_stdout()
+
+static void restore_stdout(int original_stdout_fd,
+                           std::streambuf *&original_buffer)
 {
   if (is_stdout_redirect)
   {
@@ -275,7 +219,8 @@ static void restore_stdout()
   }
 }
 
-static void redirect_stdout(std::stringstream &variable_stream)
+static int redirect_stdout(std::streambuf *&original_buffer,
+                           std::stringstream &variable_stream)
 {
   // Check if redirection is already active
   if (!is_stdout_redirect)
@@ -286,11 +231,35 @@ static void redirect_stdout(std::stringstream &variable_stream)
     std::cout.rdbuf(variable_stream.rdbuf());
 
     fflush(stdout); // Flush the buffer to ensure all previous output is written
-    original_stdout_fd =
+    int original_stdout_fd =
         dup(fileno(stdout)); // Save the original file descriptor of stdout
     freopen("/dev/null", "w", stdout); // Redirect stdout to /dev/null
 
     // Set the flag to indicate that redirection is active
     is_stdout_redirect = true;
+    return original_stdout_fd;
   }
+}
+
+static KModel load_model_(size_t index_model)
+{
+
+#ifdef USE_PYTHON_MODULE
+  constexpr bool use_python_module = USE_PYTHON_MODULE;
+  if constexpr (use_python_module)
+  {
+    std::cout << "LOADING modules.simple_model" << std::endl;
+    return get_python_module("modules.simple_model_opt");
+  }
+#endif
+
+  if (index_model == 0)
+  {
+    return get_simple_model();
+  }
+  if (index_model == 1)
+  {
+    return get_light_model();
+  }
+  throw std::invalid_argument("bad model");
 }

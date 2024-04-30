@@ -27,3 +27,4 @@ Checks: |
   -modernize-use-trailing-return-type,
   -readability-identifier-length,
   -google-readability-todo*,
+  -performance-avoid-endl

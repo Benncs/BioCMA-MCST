@@ -75,6 +75,7 @@ namespace Simulation
     MatFlow *flow_liquid; // TODO OPTI
     MatFlow *flow_gas;    // TODO OPTI
     KModel kmodel;
+    Eigen::MatrixXd cumulative_probability;
 
     std::unique_ptr<ScalarSimulation, pimpl_deleter> liquid_scalar;
     std::unique_ptr<ScalarSimulation, pimpl_deleter> gas_scalar;
