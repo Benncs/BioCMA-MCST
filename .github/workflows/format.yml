@@ -4,7 +4,6 @@ name: Format
     branches:
       - main
       - v*/**
-      - dev-0.0.3/**
   pull_request:
     branches:
       - main
