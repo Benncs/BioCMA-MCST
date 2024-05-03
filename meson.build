@@ -74,6 +74,7 @@ highfive_cmake_options.add_cmake_defines({'HIGHFIVE_USE_BOOST':false})
 highfive_proj = cmake.subproject('highfive',options:highfive_cmake_options,required: false)
 if highfive_proj.found()
 highfive_found=true
+add_project_arguments('-DUSE_HIGHFIVE', language: 'cpp')
 highfive_dependency = highfive_proj.dependency('HighFive')
 endif 
 endif 
