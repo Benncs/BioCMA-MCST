@@ -15,6 +15,7 @@ struct SimulationParameters
   int n_threads = -1;
   bool verbose;
   size_t n_different_maps;
+  size_t n_compartments;
   static SimulationParameters m_default();
 };
 

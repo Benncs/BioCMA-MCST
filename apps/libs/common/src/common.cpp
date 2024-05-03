@@ -10,5 +10,6 @@ SimulationParameters SimulationParameters::m_default()
   params.d_t = 0;
   params.n_threads = -1;
   params.verbose = false;
+  params.n_compartments = 0;
   return params;
 }

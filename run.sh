@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-executable=builddir/release/apps/cli/biocma_mcst_cli_app
+executable=builddir/debug/apps/cli/biocma_mcst_cli_app
 np=5000
 final_time=5
 

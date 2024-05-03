@@ -27,7 +27,17 @@ dep_all = [
 
 
 
-dep_static_module = [dep_all, simulation_lib_dependency, omp]
+if highfive_found
+  dep_all += highfive_proj.dependency('HighFive')
+endif
+
+
+
+dep_static_module = [
+  dep_all,
+  simulation_lib_dependency,
+  omp,
+]
 
 
 name = f'@project_name@_cli_app'
@@ -38,8 +48,9 @@ lib_app = static_library(
   name,
   lib_sources,
   include_directories: ['./includes'],
-  dependencies: dep_static_module,
-  cpp_args: [],install_rpath:project_name
+  dependencies: [dep_static_module],
+  cpp_args: [],
+  install_rpath: project_name,
 )
 
 app_test_dependency = declare_dependency(
@@ -57,7 +68,7 @@ executable(
   dependencies: [app_test_dependency],
   cpp_args: [target_custom_options],
   install: true,
-  install_rpath: global_install_dir
+  install_rpath: global_install_dir,
 )
 
 # Conditional dynamic module build

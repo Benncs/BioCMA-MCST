@@ -2,6 +2,7 @@
 #define __RUNTIME_INIT_HPP__
 
 #include <common/common.hpp>
+#include <data_exporter.hpp>
 
 void init_environment();
 std::string env_file_path();

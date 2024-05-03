@@ -137,6 +137,8 @@ static void host_process(ExecInfo &exec,
                          std::shared_ptr<FlowIterator> _flow_handle)
 {
 
+  DataExporter de(exec,params,"./results/test.h5");
+  
   show(simulation);
   if (verbose)
   {

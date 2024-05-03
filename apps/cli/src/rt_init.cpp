@@ -1,4 +1,5 @@
 
+#include "data_exporter.hpp"
 #include <rt_init.hpp>
 
 #include <Eigen/Core>
@@ -138,6 +139,7 @@ void init_environment()
 
     environment_initialized = true;
   }
+
 }
 
 void append_date_time(std::ofstream &fd)

@@ -40,12 +40,12 @@ init_simulation(ExecInfo &info,
   size_t worker_neighbor_data_size = 0;
 
   Neighbors::Neighbors_const_view_t liquid_neighbors;
-  size_t n_compartments = 0;
+  // size_t n_compartments = 0;
   if (info.current_rank == 0)
   {
     const ReactorState *fstate = init_state(params, _flow_handle);
 
-    n_compartments = fstate->n_compartments;
+    params.n_compartments = fstate->n_compartments;
     liquid_neighbors = fstate->liquid_flow.getViewNeighors();
 
     worker_neighbor_data_size = liquid_neighbors.size();
@@ -70,13 +70,14 @@ init_simulation(ExecInfo &info,
   }
 
   MPI_W::broadcast(params.d_t, 0);
+  MPI_W::broadcast(params.n_compartments, 0);
+  
   MPI_W::broadcast(worker_neighbor_data_size, 0);
   MPI_W::broadcast(liq_volume, 0, info.current_rank);
   MPI_W::broadcast(gas_volume, 0, info.current_rank);
 
   if (info.current_rank != 0)
   {
-    n_compartments = liq_volume.size();
     worker_neighbor_data.resize(worker_neighbor_data_size, 0);
     worker_neighbor_data_ptr = worker_neighbor_data.data();
   }
@@ -90,9 +91,9 @@ init_simulation(ExecInfo &info,
 
   if (info.current_rank != 0)
   {
-    auto n_col = worker_neighbor_data_size / n_compartments;
+    auto n_col = worker_neighbor_data_size / params.n_compartments;
     liquid_neighbors = L2DView<const size_t>(
-        worker_neighbor_data, n_compartments, n_col, false);
+        worker_neighbor_data, params.n_compartments, n_col, false);
   }
 
   MPI_W::barrier();
