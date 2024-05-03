@@ -2,7 +2,4 @@
 	path = subprojects/birem
 	url = https://gitlab.com/seolane88/BIREM_Project.git
 	branch = refractor/2.0
-[submodule "subprojects/highfive"]
-	path = subprojects/highfive
-	url = git@github.com:BlueBrain/HighFive.git
-	branch = v2.9.0
+
