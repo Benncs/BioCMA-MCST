@@ -168,8 +168,8 @@ namespace MPI_W
   template <POD DataType> int broadcast(DataType &data, size_t root)
   {
     return MPI_Bcast(&data,
-                     sizeof(DataType),
-                     MPI_BYTE,
+                     1,
+                     get_type<DataType>(),
                      static_cast<int>(root),
                      MPI_COMM_WORLD);
   }
@@ -310,11 +310,12 @@ namespace MPI_W
              bool send_size)
   {
     int send_status = MPI_SUCCESS;
+     
     if (send_size)
     {
       send_status = send<size_t>(data.size(), dest, tag);
     }
-
+  
     if (send_status == MPI_SUCCESS)
     {
       send_status = _send_unsafe(data.data(), data.size(), dest, tag);

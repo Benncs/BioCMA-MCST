@@ -15,7 +15,7 @@ namespace MC
   std::unique_ptr<MonteCarloUnit>
   init_unit(ExecInfo &info,
             std::span<double> volumes,
-            std::vector<std::vector<size_t>> &&neighbors);
+            Neighbors::Neighbors_const_view_t& neighbors);
 } // namespace MC
 
 #endif //__MC_INIT_HPP__

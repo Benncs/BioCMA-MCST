@@ -1,18 +1,24 @@
+#include "cma_read/light_2d_view.hpp"
+#include "cma_read/neighbors.hpp"
 #include "models/types.hpp"
+#include "mpi.h"
+#include "mpi_w/impl_op.hpp"
+#include "mpi_w/message_t.hpp"
+#include <cstddef>
 #include <memory>
 #include <siminit.hpp>
 
 #include <cma_read/flow_iterator.hpp>
 #include <common/common.hpp>
 #include <cstdio>
-#include <mpi_w/wrap_mpi.hpp>
-#include <simulation/simulation.hpp>
-#include <rt_init.hpp>
+#include <fstream>
 #include <mc/mcinit.hpp>
+#include <mpi_w/wrap_mpi.hpp>
+#include <rt_init.hpp>
+#include <simulation/simulation.hpp>
 #include <stdexcept>
 #include <utility>
 #include <vector>
-#include <fstream>
 static ReactorState const *
 init_state(SimulationParameters &params,
            std::shared_ptr<FlowIterator> &flow_handle);
@@ -27,50 +33,70 @@ init_simulation(ExecInfo &info,
 
   std::vector<double> liq_volume;
   std::vector<double> gas_volume;
-  std::vector<std::vector<size_t>> liquid_neighbors;
+  std::vector<size_t> worker_neighbor_data;
+
+  size_t *worker_neighbor_data_ptr = nullptr;
+
+  size_t worker_neighbor_data_size = 0;
+
+  Neighbors::Neighbors_const_view_t liquid_neighbors;
   size_t n_compartments = 0;
-  size_t nmap = 0;
-  double opti_dt = params.d_t;
   if (info.current_rank == 0)
   {
     const ReactorState *fstate = init_state(params, _flow_handle);
 
     n_compartments = fstate->n_compartments;
-    liquid_neighbors = fstate->liquid_flow.neigbors;
-    nmap = _flow_handle->loop_size();
+    liquid_neighbors = fstate->liquid_flow.getViewNeighors();
+
+    worker_neighbor_data_size = liquid_neighbors.size();
+    worker_neighbor_data_ptr = const_cast<size_t *>(
+        liquid_neighbors.data()
+            .data()); // TODO BIREM add rawdata() to get ptr directly
+
+    params.n_different_maps = _flow_handle->loop_size();
     liq_volume = fstate->liquidVolume;
     gas_volume = fstate->gasVolume;
-    opti_dt = (params.d_t == 0.) ? _flow_handle->MinLiquidResidenceTime() / 100.
-                                 : params.d_t;
-    auto n_t = static_cast<size_t>(params.final_time / opti_dt);
-    _flow_handle->setRepetition(n_t / nmap);
+    params.d_t = (params.d_t == 0.)
+                     ? _flow_handle->MinLiquidResidenceTime() / 100.
+                     : params.d_t;
+    auto n_t = static_cast<size_t>(params.final_time / params.d_t);
+    _flow_handle->setRepetition(n_t / params.n_different_maps);
     register_run(info, params);
   }
 
-  // MPI_W::broadcast(d_t, 0);
-  if (MPI_W::broadcast(nmap, 0) != 0)
+  if (MPI_W::broadcast(params.n_different_maps, 0) != 0)
   {
     MPI_W::critical_error();
   }
 
-  MPI_W::broadcast(opti_dt, 0);
-  params.d_t = opti_dt;
-
+  MPI_W::broadcast(params.d_t, 0);
+  MPI_W::broadcast(worker_neighbor_data_size, 0);
   MPI_W::broadcast(liq_volume, 0, info.current_rank);
   MPI_W::broadcast(gas_volume, 0, info.current_rank);
-  params.n_different_maps = nmap;
+
   if (info.current_rank != 0)
   {
     n_compartments = liq_volume.size();
-    liquid_neighbors.resize(n_compartments);
+    worker_neighbor_data.resize(worker_neighbor_data_size, 0);
+    worker_neighbor_data_ptr = worker_neighbor_data.data();
   }
 
-  for (auto &&i : liquid_neighbors)
+  if (MPI_W::_broadcast_unsafe(worker_neighbor_data_ptr,
+                               worker_neighbor_data_size,
+                               0) != MPI_SUCCESS)
   {
-    MPI_W::broadcast(i, 0, info.current_rank);
+    MPI_W::critical_error();
   }
 
-  auto unit = MC::init_unit(info, liq_volume, std::move(liquid_neighbors));
+  if (info.current_rank != 0)
+  {
+    auto n_col = worker_neighbor_data_size / n_compartments;
+    liquid_neighbors = L2DView<const size_t>(
+        worker_neighbor_data, n_compartments, n_col, false);
+  }
+
+  MPI_W::barrier();
+  auto unit = MC::init_unit(info, liq_volume, liquid_neighbors);
 
   auto container = MC::init_container(info, params.n_particles);
 
@@ -84,9 +110,8 @@ init_simulation(ExecInfo &info,
                                                std::move(unit),
                                                std::move(container),
                                                params.n_species,
-                                               std::move(model),
+                                               model,
                                                info.current_rank == 0);
-
   return simulation;
 }
 

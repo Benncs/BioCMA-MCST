@@ -146,12 +146,11 @@ namespace Simulation
     auto &to_process = mc_container->to_process;
     const size_t n_compartments = mc_unit->domain.getNumberCompartments();
 #pragma omp parallel for default(none) shared(to_process, n_compartments)      \
-    num_threads(this->n_thread)
+    num_threads(this->n_thread) schedule(static)
     for (auto it = to_process.begin(); it < to_process.end(); ++it)
     {
       auto &&particle = *it;
-      particle.current_container =
-          MC::uniform_int_rand(static_cast<size_t>(0), n_compartments - 1);
+      particle.current_container = mc_unit->rand.uniform_int_rand(static_cast<size_t>(0), n_compartments - 1);
 
       auto &i_container = mc_unit->domain[particle.current_container];
 
@@ -163,7 +162,6 @@ namespace Simulation
 
   void SimulationUnit::cycleProcess(const double d_t)
   {
-
 
 #pragma omp single
     {
@@ -197,7 +195,7 @@ namespace Simulation
                cumulative_probability);
     }
 
-#pragma omp single
+#pragma omp master
     post_process_reducing();
   }
 
@@ -206,7 +204,6 @@ namespace Simulation
                 std::span<Eigen::MatrixXd> _contribs,
                 std::span<MC::TheadSafeData> _extras,
                 const KModel &_kmodel,
-      
                 MC::Particles &particle,
                 auto &m_transition,
                 auto &cumulative_probability)
@@ -218,8 +215,8 @@ namespace Simulation
     }
 
     auto &domain = unit.domain;
-    const double rnd = MC::double_unfiform();
-    const double rdn2 = MC::double_unfiform();
+    const double rnd = unit.rand.double_unfiform();
+    const double rdn2 = unit.rand.double_unfiform();
     const size_t i_thread = omp_get_thread_num();
 
     // std::cout<<i_thread<<std::endl;
@@ -234,29 +231,29 @@ namespace Simulation
     kernel_move(
         rnd, rdn2, domain, particle, d_t, m_transition, cumulative_probability);
 
-    _kmodel.update_kernel(d_t, particle, concentrations);
+    // _kmodel.update_kernel(d_t, particle, concentrations);
 
-    if (particle.status == MC::CellStatus::DEAD)
-    {
-      events.incr<MC::EventType::Death>();
-      __ATOM_DECR__(
-          domain[particle.current_container].n_cells) // TODO: check overflow
-      particle.clearState(MC::CellStatus::DEAD);
-      thread_extra.in_dead_state.emplace_back(&particle);
-    }
-    else
-    {
-      if (particle.status == MC::CellStatus::CYTOKINESIS)
-      {
-        events.incr<MC::EventType::NewParticle>();
-        thread_extra.extra_process.emplace_back(particle);
-        auto &child = thread_extra.extra_process.back();
-        _kmodel.contribution_kernel(child, thread_contrib);
-        __ATOM_INCR__(domain[child.current_container].n_cells)
-      }
+    // if (particle.status == MC::CellStatus::DEAD)
+    // {
+    //   events.incr<MC::EventType::Death>();
+    //   __ATOM_DECR__(
+    //       domain[particle.current_container].n_cells) // TODO: check overflow
+    //   particle.clearState(MC::CellStatus::DEAD);
+    //   thread_extra.in_dead_state.emplace_back(&particle);
+    // }
+    // else
+    // {
+    //   if (particle.status == MC::CellStatus::CYTOKINESIS)
+    //   {
+    //     events.incr<MC::EventType::NewParticle>();
+    //     thread_extra.extra_process.emplace_back(particle);
+    //     auto &child = thread_extra.extra_process.back();
+    //     _kmodel.contribution_kernel(child, thread_contrib);
+    //     __ATOM_INCR__(domain[child.current_container].n_cells)
+    //   }
 
-      _kmodel.contribution_kernel(particle, thread_contrib);
-    }
+    //   _kmodel.contribution_kernel(particle, thread_contrib);
+    // }
   };
 
 } // namespace Simulation

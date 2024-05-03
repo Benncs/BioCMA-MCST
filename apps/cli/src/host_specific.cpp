@@ -1,4 +1,6 @@
 
+#include "mpi_w/impl_op.hpp"
+#include "mpi_w/message_t.hpp"
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <cstddef>
@@ -20,23 +22,24 @@ constexpr size_t n_particle_trigger_parralel = 1e6;
 #endif
 
 #define FILL_PAYLOAD                                                           \
-  payload.liquid_flows = reactor_state.liquid_flow.flows.data();               \
-  payload.liquid_volumes = reactor_state.liquidVolume;                         \
-  payload.gas_volumes = reactor_state.gasVolume;
+  payload.liquid_flows = reactor_state->liquid_flow.getViewFlows().data();      \
+  payload.liquid_volumes = reactor_state->liquidVolume;                         \
+  payload.gas_volumes = reactor_state->gasVolume;
 
-#define MPI_DISPATCH_MAIN                                                      \
-  for (size_t j = 1; j < exec.n_rank; ++j)                                     \
-  {                                                                            \
-    MPI_W::send(MPI_W::SIGNALS::RUN, j);                                       \
-    payload.send(j);                                                           \
-  }                                                                            \
-  for (const auto &neighbor : reactor_state.liquid_flow.neigbors)              \
-  { /*Send each neighbor vector to all processes*/                             \
-    for (size_t j = 1; j < exec.n_rank; ++j)                                   \
-    {                                                                          \
-      MPI_W::send_v<size_t>(neighbor, j, 0);                                   \
-    }                                                                          \
-  }
+// #define MPI_DISPATCH_MAIN                                                      \
+//   for (size_t j = 1; j < exec.n_rank; ++j)                                     \
+//   {                                                                            \
+//     MPI_W::send(MPI_W::SIGNALS::RUN, j);                                       \
+//     payload.send(j);                                                           \
+//   }
+
+// for (const auto &neighbor : reactor_state.liquid_flow.neigbors)              \
+  // { /*Send each neighbor vector to all processes*/                             \
+  //   for (size_t j = 1; j < exec.n_rank; ++j)                                   \
+  //   {                                                                          \
+  //     MPI_W::send_v<size_t>(neighbor, j, 0);                                   \
+  //   }                                                                          \
+  // }
 
 void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
@@ -54,28 +57,38 @@ void main_loop(const SimulationParameters &params,
   MPI_W::HostIterationPayload payload;
 
   std::cout << params.final_time << " " << d_t << '\n';
-
+  
   auto iterator = _flow_handle->begin();
   const auto end = _flow_handle->end();
-  auto &reactor_state = *iterator;
+  auto *reactor_state = &(*iterator);
   bool end_flag = iterator != end;
+  std::span<const size_t> data;
 
-#pragma omp parallel default(shared) num_threads(exec.thread_per_process) 
+#pragma omp parallel default(shared)
   {
 
     while (end_flag)
     {
 
+      DEBUG_INSTRUCTION
+
 #pragma omp single
       {
 
-        reactor_state = *iterator;
+        reactor_state = &(*iterator);
 
-        FILL_PAYLOAD
+        FILL_PAYLOAD;
 
-        DEBUG_INSTRUCTION
-
-        MPI_DISPATCH_MAIN
+        for (size_t j = 1; j < exec.n_rank; ++j)
+        {
+ 
+          MPI_W::send(MPI_W::SIGNALS::RUN, j);
+          payload.send(j);
+          data = reactor_state->liquid_flow.getViewNeighors().data();
+          MPI_W::send_v(data,j,88);
+        }
+        
+        
 
         /*
         For the two following function calls, pass non-owning data types:
@@ -102,12 +115,12 @@ void main_loop(const SimulationParameters &params,
         Simulation::update_flow(iteration_count,
                                 n_loop,
                                 simulation,
-                                reactor_state,
+                               * reactor_state,
                                 liquid_flows,
                                 gas_flows);
 
-        simulation.setVolumes(reactor_state.gasVolume,
-                              reactor_state.liquidVolume);
+        simulation.setVolumes(reactor_state->gasVolume,
+                              reactor_state->liquidVolume);
       }
 
       simulation.cycleProcess(d_t);
@@ -115,7 +128,7 @@ void main_loop(const SimulationParameters &params,
 #pragma omp single
       {
         sync_step(exec, simulation);
-        simulation.step(d_t, reactor_state);
+        simulation.step(d_t, *reactor_state);
         sync_prepare_next(exec, simulation);
         ++iterator;
         end_flag = iterator != end;

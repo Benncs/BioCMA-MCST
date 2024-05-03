@@ -44,7 +44,8 @@ namespace Simulation
 
     [[nodiscard]] const KModel &getModel() const;
 
-    std::span<double> getCliqData();
+    [[nodiscard]] std::span<double> getCliqData() const;
+    [[nodiscard]] std::span<double> getContributionData() const;
 
     void setVolumes(std::span<double> volumesgas, std::span<double> volumesliq);
 
@@ -55,8 +56,6 @@ namespace Simulation
     void setLiquidFlow(MatFlow *_flows_l);
 
     void setGasFlow(MatFlow *_flows_g);
-
-    [[nodiscard]] std::span<double> getContributionData();
 
     void reduceContribs(std::span<double> data, size_t n_rank);
 
@@ -98,7 +97,7 @@ namespace Simulation
 
   inline void SimulationUnit::execute_process_knrl(const auto &kernel)
   {
-    auto& container = mc_container;
+    auto &container = mc_container;
 #pragma omp parallel for num_threads(n_thread) default(none)                   \
     shared(kernel, container) schedule(static)
     for (auto it = container->to_process.begin();

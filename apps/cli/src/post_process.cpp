@@ -82,9 +82,17 @@ void post_process(ExecInfo &exec,
 void show(Simulation::SimulationUnit &simulation)
 {
 
-  auto d = simulation.mc_unit->domain.getDistribution();
   std::vector<double> mass(simulation.mc_unit->domain.getNumberCompartments());
   double totmass = 0.;
+
+  auto d = simulation.mc_unit->domain.getDistribution();
+  size_t count = 0;
+  for (auto &&i : d)
+  {
+    std::cout << i << " ";
+    count += i;
+  }
+  std::cout << '\n';
 
   // std::for_each(simulation.mc_container->to_process.begin(),
   //               simulation.mc_container->to_process.end(),

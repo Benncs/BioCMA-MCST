@@ -11,7 +11,7 @@ mc_lib = library(
    f'@project_name@_mc',
    mc_sources,
    include_directories: [public_include_dir, 'includes'],
-   dependencies: [omp],
+   dependencies: [omp,cma_dep],
    pic: true,
    install: true,
    install_dir: global_install_dir,
@@ -19,6 +19,7 @@ mc_lib = library(
 
 mc_dependency = declare_dependency(
    include_directories: public_include_dir,
+   dependencies:[omp,cma_dep],
    link_with: mc_lib,
 )
 

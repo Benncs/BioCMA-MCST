@@ -1,4 +1,5 @@
 
+#include "cma_read/neighbors.hpp"
 #include "transport.hpp"
 #include <Eigen/Dense>
 #include <cassert>
@@ -13,7 +14,8 @@ void check_args();
 int main()
 {
   check_args();
-  auto neighbors = get_neighbors();
+  const auto neighbors = Neighbors::fromData( get_neighbors());
+  auto view = neighbors.getView();
   // Initialize an empty vector to store flattened data
   std::vector<double> flattened_data;
   auto data = get_raw_data();
@@ -38,10 +40,10 @@ int main()
   f.flows = sparse;
 
   // Calculate the cumulative probability matrix
-  auto cp = Simulation::get_CP(neighbors, n_c, f);
+  auto cp = Simulation::get_CP(view, n_c, f);
 
   // Get the maximum index of neighbors
-  int neighbor_max = neighbors[0].size() - 1;
+  int neighbor_max = view.getNCol() - 1;
 
   // Loop through each row of the cumulative probability matrix 'cp'
   for (int j = 0; j < n_c; ++j)
@@ -53,7 +55,7 @@ int main()
     assert(last_value >= 0 && last_value <= 1);
 
     // Iterate through each neighbor
-    for (int k = 1; k < neighbors[0].size(); ++k)
+    for (int k = 1; k < view.getNCol(); ++k)
     {
       // Get the current probability value
       double current = cp.coeff(j, k);

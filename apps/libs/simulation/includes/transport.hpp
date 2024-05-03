@@ -14,7 +14,7 @@ namespace Simulation
 
   FlowMatrixType get_transition_matrix(const FlowMatrixType &flows);
 
-  Eigen::MatrixXd get_CP(const std::vector<std::vector<size_t>> &neighbors,
+  Eigen::MatrixXd get_CP(Neighbors::Neighbors_const_view_t neighbors,
                          int nb_zone,
                          const Simulation::MatFlow &flows);
 

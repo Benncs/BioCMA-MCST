@@ -25,9 +25,10 @@ namespace Simulation
   }
 
   static void compute_MatFlow(FlowInfo &flow, Simulation::MatFlow &matflow)
-  {
+  { 
+    auto view = flow.getViewFlows();
     const auto mat_f_liq =
-        Simulation::flowmap_to_matrix(flow.flows.data(), flow.flows.getNRow());
+        Simulation::flowmap_to_matrix(view.data(), view.getNRow());
     const auto _mat_transition_liq =
         Simulation::get_transition_matrix(mat_f_liq);
 
@@ -89,8 +90,7 @@ namespace Simulation
           compute_inverse_diagonal(reactor_state.gasVolume);
     }
 
-    unit.mc_unit->domain.setLiquidNeighbors(
-        std::cref(reactor_state.liquid_flow.neigbors));
+    unit.mc_unit->domain.setLiquidNeighbors(reactor_state.liquid_flow.getViewNeighors());
     unit.setLiquidFlow(&current_liq_matflow);
     unit.setGasFlow(&current_gas_matflow);
 

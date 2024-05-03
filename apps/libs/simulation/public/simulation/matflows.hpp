@@ -9,8 +9,9 @@ using FlowMatrixType = Eigen::MatrixXd;
 namespace Simulation
 {
 
-  struct MatFlow
+  class MatFlow
   {
+    public:
     FlowMatrixType flows;
     FlowMatrixType transition_matrix;
     std::vector<double> inverse_volume;

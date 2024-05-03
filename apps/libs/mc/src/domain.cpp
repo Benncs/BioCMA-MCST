@@ -1,3 +1,4 @@
+#include "cma_read/neighbors.hpp"
 #include "mc/container_state.hpp"
 #include <algorithm>
 #include <cstddef>
@@ -34,8 +35,8 @@ namespace MC
     }
   }
   ReactorDomain::ReactorDomain(std::span<double> volumes,
-                               std::vector<std::vector<size_t>> &&_neighbors)
-      :  neighbors(std::move(_neighbors))
+                               const Neighbors::Neighbors_const_view_t& _neighbors)
+      :  neighbors(_neighbors)
   {
     double totv = 0.;
     std::transform(volumes.begin(),
@@ -59,7 +60,7 @@ namespace MC
     {
       this->id = other.id;
       this->containers = std::move(other.containers);
-      this->neighbors = std::move(other.neighbors);
+      this->neighbors = other.neighbors;
       this->_total_volume = other._total_volume;
     }
     return *this;
@@ -86,6 +87,7 @@ namespace MC
     {
       throw std::runtime_error("Cannot reduce different reactor type");
     }
+    
     for (size_t i_rank = 0; i_rank < n_rank; ++i_rank)
     {
       for (size_t i_c = 0; i_c < original_size; ++i_c)

@@ -14,6 +14,9 @@ namespace MPI_W
     NOP
   };
 
+  
+
+
 } // namespace MPI_W
 
 #endif //__PMESSAGE_HPP__

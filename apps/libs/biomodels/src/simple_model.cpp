@@ -71,10 +71,11 @@ void init_simple_model_(MC::Particles &p)
   auto& model = std::any_cast<SimpleModel&>(p.data);
 
   static double n_part = p.weight;
-  static constexpr double total_volume  = 90/1000; //TODO FIXME 
+  static constexpr double total_volume  = 90./1000.; //TODO FIXME 
   static constexpr double avg_mass = SimpleModel::critcal_division_mass*0.1;
   static constexpr  double X_goal = 0.5;
-  p.weight = 1/(X_goal*(total_volume)/(n_part*avg_mass));
+  p.weight = (X_goal*(total_volume)/(n_part*avg_mass));
+
 
 
   // ptr->xi.mass =

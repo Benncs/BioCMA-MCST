@@ -1,3 +1,4 @@
+#include "cma_read/neighbors.hpp"
 #include <mc/mcinit.hpp>
 namespace MC
 {
@@ -27,11 +28,11 @@ namespace MC
   std::unique_ptr<MonteCarloUnit>
   init_unit(ExecInfo &info,
             std::span<double> volumes,
-            std::vector<std::vector<size_t>> &&neighbors)
+            Neighbors::Neighbors_const_view_t& neighbors)
   {
 
     auto unit = std::make_unique<MonteCarloUnit>();
-    unit->domain = ReactorDomain(volumes, std::move(neighbors));
+    unit->domain = ReactorDomain(volumes, neighbors);
     unit->ts_events.resize(info.thread_per_process);
 
     return unit;

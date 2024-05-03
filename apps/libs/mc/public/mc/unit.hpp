@@ -1,16 +1,18 @@
 #ifndef __MC_UNIT_HPP
 #define __MC_UNIT_HPP
 
+#include "mc/prng.hpp"
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
 
 namespace MC
 {
-
+  
   struct MonteCarloUnit
   {
     ReactorDomain domain;
     std::vector<EventContainer> ts_events;
+    PRNG rand;
 
     MonteCarloUnit(const MonteCarloUnit &other) = delete;
     MonteCarloUnit(MonteCarloUnit &&other) = default;

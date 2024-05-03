@@ -58,13 +58,13 @@ namespace Simulation
     return move_kernel;
   }
 
-  Eigen::MatrixXd get_CP(const std::vector<std::vector<size_t>> &neighbors,
+  Eigen::MatrixXd get_CP(Neighbors::Neighbors_const_view_t neighbors,
                          int nb_zone,
                          const Simulation::MatFlow &flows)
   {
 
     Eigen::MatrixXd P =
-        Eigen::MatrixXd::Zero(nb_zone, static_cast<int>(neighbors[0].size()));
+        Eigen::MatrixXd::Zero(nb_zone, static_cast<int>(neighbors.getNRow()));
 
     // Calculate cumulative sum and probability matrix
     for (int k = 0; k < nb_zone; ++k)
@@ -73,9 +73,10 @@ namespace Simulation
       double cumsum = 0;
       size_t last_n = UINT_MAX; // Assuming a large enough initial value
       int count_nei = 0;
-
-      for (auto &&i_neighbor : neighbors[k])
+      auto row = neighbors.getRow(k);
+      for (auto &&i_neighbor : row)
       {
+
         if (i_neighbor != last_n)
         {
           cumsum += flows.flows.coeff(k, static_cast<int>(i_neighbor));

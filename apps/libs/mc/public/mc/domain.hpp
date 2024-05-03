@@ -1,6 +1,7 @@
 #ifndef __MC_REACTORDOMAIN_HPP__
 #define __MC_REACTORDOMAIN_HPP__
 
+#include <cma_read/neighbors.hpp>
 #include <common/common_types.hpp>
 #include <mc/container_state.hpp>
 #include <vector>
@@ -14,7 +15,9 @@ namespace MC
     ReactorDomain() = default;
     ReactorDomain(ReactorDomain &&other) noexcept;
     ReactorDomain(std::span<double> volumes,
-                  std::vector<std::vector<size_t>> &&_neighbors);
+                  const Neighbors::Neighbors_const_view_t& _neighbors);
+
+
     ReactorDomain(const ReactorDomain &other) = delete;
     ~ReactorDomain() = default;
 
@@ -24,7 +27,7 @@ namespace MC
     void setVolumes(std::span<double const> volumesgas,
                     std::span<double const> volumesliq);
 
-    void setLiquidNeighbors(const std::vector<std::vector<size_t>> &data);
+    void setLiquidNeighbors(const Neighbors::Neighbors_view_t &data);
 
     // GETTERS
     auto &operator[](size_t i_c);
@@ -36,11 +39,11 @@ namespace MC
     decltype(auto) begin();
     decltype(auto) end();
 
-    [[nodiscard]] auto getNumberCompartments() const;
+    [[nodiscard]] auto getNumberCompartments() const; 
 
     [[nodiscard]] double getTotalVolume() const;
 
-    [[nodiscard]] const std::vector<std::vector<size_t>> &getNeighbors() const;
+    [[nodiscard]] const Neighbors::Neighbors_const_view_t  &getNeighbors() const;
 
     [[nodiscard]] std::span<const size_t> getNeighbors(size_t i) const;
 
@@ -55,7 +58,7 @@ namespace MC
     double _total_volume=0.;
     size_t id=0;
     std::vector<ContainerState> containers;
-    std::vector<std::vector<size_t>> neighbors;
+    Neighbors::Neighbors_const_view_t neighbors;
   };
 
   inline std::span<ContainerState> ReactorDomain::data()
@@ -65,19 +68,21 @@ namespace MC
 
   inline std::span<const size_t> ReactorDomain::getNeighbors(size_t i) const
   {
-    return neighbors[i];
+    return neighbors.getRow(i);
   }
 
-  inline const std::vector<std::vector<size_t>> &
+  inline const Neighbors::Neighbors_const_view_t &
   ReactorDomain::getNeighbors() const
   {
+    
     return neighbors;
   }
 
   inline void ReactorDomain::setLiquidNeighbors(
-      const std::vector<std::vector<size_t>> &data)
+      const Neighbors::Neighbors_view_t& data)
   {
-    neighbors = data;
+ 
+    neighbors = data.to_const();
   }
 
   inline auto ReactorDomain::getNumberCompartments() const

@@ -32,7 +32,7 @@ namespace MC
     void init_extra(size_t n_extra);
 
     ParticlesList to_process;
-    std::vector<TheadSafeData> extras;
+    std::vector<TheadSafeData> extras; //TODO move to unit 
   };
 
 } // namespace MC

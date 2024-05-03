@@ -4,7 +4,7 @@ process_name="BioCMA-MCST_cli"
 
 flamegraph_path="../../../../tools/FlameGraph/"
 
-PID=45308   
+PID=56681   
 #$(pgrep $process_name)
 
 # Check if PID is empty

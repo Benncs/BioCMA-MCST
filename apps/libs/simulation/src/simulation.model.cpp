@@ -23,13 +23,13 @@ namespace Simulation
     }
   }
 
-  std::span<double> SimulationUnit::getContributionData()
+  std::span<double> SimulationUnit::getContributionData()const
   {
 
     return liquid_scalar->getContributionData();
   }
 
-  std::span<double> SimulationUnit::getCliqData()
+  std::span<double> SimulationUnit::getCliqData()const
   {
     return this->liquid_scalar->getCliqData();
   }
