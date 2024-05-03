@@ -1,0 +1,4 @@
+[wrap-git]
+url = git@github.com:BlueBrain/HighFive.git
+revision = v2.9.0
+depth = 1
