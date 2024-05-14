@@ -1,7 +1,7 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
-#include <simulation/matflows.hpp>
+#include <simulation/pc_hydro.hpp>
 #include <span>
 
 //TODO REMOVE 
@@ -15,14 +15,14 @@ namespace Simulation
   public:
     ScalarSimulation(ScalarSimulation &&other) noexcept;
     ScalarSimulation(const ScalarSimulation &other) noexcept = delete;
-    ScalarSimulation(size_t n_compartments, size_t n_species, size_t n_threads);
+    ScalarSimulation(size_t n_compartments, size_t n_species, size_t n_threads,std::span<double> volume);
     ScalarSimulation operator=(const ScalarSimulation &other) = delete;
     ScalarSimulation operator=(ScalarSimulation &&other) = delete;
 
     ~ScalarSimulation() = default;
 
-    Eigen::MatrixXd C;
-    Eigen::MatrixXd Mtot;
+    Eigen::MatrixXd concentration;
+    Eigen::MatrixXd total_mass;
 
     // Getters
     [[nodiscard]] std::span<double const> getVolumeData() const;
@@ -33,7 +33,7 @@ namespace Simulation
 
     Eigen::DiagonalMatrix<double, -1> &getVolume();
 
-    std::span<double> getCliqData();
+    std::span<double> getCData();
 
     [[nodiscard]] inline size_t n_species() const;
 
@@ -76,10 +76,10 @@ namespace Simulation
     return this->n_r;
   }
 
-  inline std::span<double> ScalarSimulation::getCliqData()
+  inline std::span<double> ScalarSimulation::getCData()
   {
 
-    return {this->C.data(), static_cast<size_t>(this->C.size())};
+    return {this->concentration.data(), static_cast<size_t>(this->concentration.size())};
   }
 
   inline std::span<double> ScalarSimulation::getContributionData()
@@ -113,9 +113,9 @@ namespace Simulation
 
   inline ScalarSimulation *makeScalarSimulation(size_t n_compartments,
                                                 size_t n_species,
-                                                size_t n_threads)
+                                                size_t n_threads,std::span<double> volumes)
   {
-    return new ScalarSimulation(n_compartments, n_species, n_threads);
+    return new ScalarSimulation(n_compartments, n_species, n_threads,volumes);
   }
 
 } // namespace Simulation

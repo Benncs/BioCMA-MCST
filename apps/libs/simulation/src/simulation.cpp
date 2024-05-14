@@ -1,9 +1,9 @@
 #include "common/thread_safe_container.hpp"
 #include "mc/particles/particles_container.hpp"
+#include "mc/thread_private_data.hpp"
 #include "mc/unit.hpp"
 #include "models/types.hpp"
 #include <algorithm>
-#include <cassert>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
@@ -36,67 +36,77 @@ namespace Simulation
 
   void initF(pimp_ptr_t &liq, pimp_ptr_t &gas)
   {
+    auto rng = MC::PRNG();
     bool host = gas != nullptr;
-    for (auto i = 0; i < liq->C.cols(); ++i)
+    for (auto i = 0; i < liq->concentration.cols(); ++i)
     {
-      liq->C.coeffRef(1, i) = 8e-3;
-      liq->C.coeffRef(0, static_cast<int>(i)) = 0.5; // 0.5 G/L Glucose
+      liq->concentration.coeffRef(1, i) = 0;
+      // liq->concentration.coeffRef(0, static_cast<int>(i)) = 0.5; // 0.5 G/L Glucose
+      
+      double rngn = (i<liq->concentration.cols()/3) ? rng.uniform_double_rand(0,20) : rng.uniform_double_rand(10,15);
+      liq->concentration.coeffRef(0, static_cast<int>(i)) = rngn;
       if (host)
       {
-        gas->C.coeffRef(1, i) = 321e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
+        gas->concentration.coeffRef(1, i) = 15e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
       }
     }
 
-    liq->Mtot = liq->C * liq->getVolume();
+    liq->concentration.coeffRef(0, static_cast<int>(0)) = 10; // 0.5 G/L Glucose
+   
+
+    liq->total_mass = liq->concentration * liq->getVolume();
+    
     if (host)
     {
-      gas->Mtot = gas->C * gas->getVolume();
+      gas->total_mass = gas->concentration * gas->getVolume();
     }
   }
 
   void p_kernel(double d_t,
                 MC::MonteCarloUnit &unit,
                 std::span<Eigen::MatrixXd> _contribs,
-                std::span<MC::TheadSafeData> _extras,
+                std::span<MC::ThreadPrivateData> _extras,
                 const KModel &_kmodel,
                 MC::Particles &p,
                 auto &m_transition,
                 auto &cumulative_probability);
 
   SimulationUnit::SimulationUnit(SimulationUnit &&other) noexcept
-      : mc_unit(std::move(other.mc_unit)),
-        mc_container(std::move(other.mc_container)), host(other.host),
+      : mc_unit(std::move(other.mc_unit)), is_two_phase_flow(other.is_two_phase_flow),
         n_thread(other.n_thread), flow_liquid(other.flow_liquid),
         flow_gas(other.flow_gas), kmodel(other.kmodel)
   {
   }
 
-  SimulationUnit::SimulationUnit(
-      const ExecInfo &info,
-      std::unique_ptr<MC::MonteCarloUnit> &&_unit,
-      std::unique_ptr<MC::ParticlesContainer> &&_container,
-      size_t n_species,
-      KModel _km,
-      bool _host)
-      : mc_unit(std::move(_unit)), mc_container(std::move(_container)),
-        host(_host), n_thread(info.thread_per_process), flow_liquid(nullptr),
+  SimulationUnit::SimulationUnit(const ExecInfo &info,
+                                 std::unique_ptr<MC::MonteCarloUnit> &&_unit,
+                                 std::span<double> volumesgas,
+                                 std::span<double> volumesliq,
+                                 size_t n_species,
+                                 KModel _km,
+                                 bool _host)
+      : mc_unit(std::move(_unit)), is_two_phase_flow(_host),
+        n_thread(info.thread_per_process), flow_liquid(nullptr),
         flow_gas(nullptr), kmodel(_km)
   {
-    if (this->mc_container->extras.empty())
+    if (this->mc_unit->extras.empty())
     {
       throw std::runtime_error("Extra particle not initialised");
     }
 
-    this->liquid_scalar =
-        std::unique_ptr<ScalarSimulation, pimpl_deleter>(makeScalarSimulation(
-            mc_unit->domain.getNumberCompartments(), n_species, n_thread));
+    this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(
+        makeScalarSimulation(mc_unit->domain.getNumberCompartments(),
+                             n_species,
+                             n_thread,
+                             volumesliq));
 
     this->gas_scalar =
-        (host)
+        (is_two_phase_flow)
             ? std::unique_ptr<ScalarSimulation, pimpl_deleter>(
                   makeScalarSimulation(mc_unit->domain.getNumberCompartments(),
                                        n_species,
-                                       0)) // No contribs for gas
+                                       0,
+                                       volumesgas)) // No contribs for gas
             : nullptr;
 
     // FIXME
@@ -136,22 +146,27 @@ namespace Simulation
                   [this, n_species, &i](auto &&cs)
                   {
                     cs.concentrations = std::span(
-                        this->liquid_scalar->C.col(i).data(), n_species);
+                        this->liquid_scalar->concentration.col(i).data(), n_species);
                     ++i;
                   });
   }
 
   void SimulationUnit::post_init_container()
   {
-    auto &to_process = mc_container->to_process;
+    auto &to_process = mc_unit->container.to_process;
     const size_t n_compartments = mc_unit->domain.getNumberCompartments();
 #pragma omp parallel for default(none) shared(to_process, n_compartments)      \
     num_threads(this->n_thread) schedule(static)
     for (auto it = to_process.begin(); it < to_process.end(); ++it)
     {
       auto &&particle = *it;
-      particle.current_container = mc_unit->rand.uniform_int_rand(static_cast<size_t>(0), n_compartments - 1);
 
+      particle.current_container = 0;
+      // mc_unit->rand.uniform_int_rand(
+      //     static_cast<size_t>(0), n_compartments - 1);
+
+      // particle.current_container = n_compartments-2;
+     
       auto &i_container = mc_unit->domain[particle.current_container];
 
       kmodel.init_kernel(particle);
@@ -162,23 +177,17 @@ namespace Simulation
 
   void SimulationUnit::cycleProcess(const double d_t)
   {
+    
 
-#pragma omp single
-    {
-      const int n_c =
-          static_cast<int>(this->mc_unit->domain.getNumberCompartments());
-
-      cumulative_probability =
-          get_CP(this->mc_unit->domain.getNeighbors(), n_c, *this->flow_liquid);
-    }
+    const auto & cumulative_probability = flow_liquid->cumulative_probability;
 
     const auto &m_transition = this->flow_liquid->transition_matrix;
-    const auto &_kmodel = kmodel;
+    const auto &_kmodel = this->kmodel;
 
     auto &unit = *this->mc_unit;
-    auto _contribs = this->liquid_scalar->getThreadContribs();
-    auto &_extras = this->mc_container->extras;
-    auto &to_process = mc_container->to_process;
+    auto contribs = this->liquid_scalar->getThreadContribs();
+    auto &extras = this->mc_unit->extras;
+    auto &to_process = this->mc_unit->container.to_process;
 
 #pragma omp for
     for (auto particle = to_process.begin(); particle < to_process.end();
@@ -187,8 +196,8 @@ namespace Simulation
 
       p_kernel(d_t,
                unit,
-               _contribs,
-               _extras,
+               contribs,
+               extras,
                _kmodel,
                *particle,
                m_transition,
@@ -202,7 +211,7 @@ namespace Simulation
   void p_kernel(double d_t,
                 MC::MonteCarloUnit &unit,
                 std::span<Eigen::MatrixXd> _contribs,
-                std::span<MC::TheadSafeData> _extras,
+                std::span<MC::ThreadPrivateData> _extras,
                 const KModel &_kmodel,
                 MC::Particles &particle,
                 auto &m_transition,
@@ -219,7 +228,6 @@ namespace Simulation
     const double rdn2 = unit.rand.double_unfiform();
     const size_t i_thread = omp_get_thread_num();
 
-    // std::cout<<i_thread<<std::endl;
 
     auto &events = unit.ts_events[i_thread];
     auto &thread_contrib = _contribs[i_thread];
@@ -227,7 +235,6 @@ namespace Simulation
     const auto &concentrations =
         domain[particle.current_container].concentrations;
 
-    // _move_kernel(rnd, rdn2, domain, p, d_t);
     kernel_move(
         rnd, rdn2, domain, particle, d_t, m_transition, cumulative_probability);
 

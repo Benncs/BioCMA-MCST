@@ -1,9 +1,12 @@
+#include <cma_read/flowmap.hpp>
+#include <simulation/pc_hydro.hpp>
 #include <simulation/update_flows.hpp>
 #include <transport.hpp>
 
 namespace Simulation
 {
-  static std::vector<double> compute_inverse_diagonal(std::span<double> volumes)
+  static std::vector<double>
+  compute_inverse_diagonal(std::span<const double> volumes)
   {
     std::vector<double> inverse_diagonal(volumes.size());
 
@@ -24,26 +27,22 @@ namespace Simulation
     return inverse_diagonal;
   }
 
-  static void compute_MatFlow(FlowInfo &flow, Simulation::MatFlow &matflow)
-  { 
-    auto view = flow.getViewFlows();
-    const auto mat_f_liq =
-        Simulation::flowmap_to_matrix(view.data(), view.getNRow());
-    const auto _mat_transition_liq =
-        Simulation::get_transition_matrix(mat_f_liq);
+  // static void compute_MatFlow(const FlowInfo &flow,
+  // Simulation::PreCalculatedHydroState &matflow)
+  // {
+  //   auto view = flow.getViewFlows();
 
-    matflow.flows = mat_f_liq;
-    matflow.transition_matrix = _mat_transition_liq;
-  }
+  //   const auto _mat_transition_liq =
+  //       Simulation::get_transition_matrix(view);
 
-  static void compute_MatFlow(std::span<double> flows,
-                              size_t nc,
-                              Simulation::MatFlow &matflow)
+  //   matflow.transition_matrix = _mat_transition_liq;
+  // }
+
+  static void compute_MatFlow(const FlowMap::FlowMap_const_view_t &flows_view,
+                              Simulation::PreCalculatedHydroState &matflow)
   {
-    const auto mat_f_liq = Simulation::flowmap_to_matrix(flows, nc);
     const auto _mat_transition_liq =
-        Simulation::get_transition_matrix(mat_f_liq);
-    matflow.flows = mat_f_liq;
+        Simulation::get_transition_matrix(flows_view);
     matflow.transition_matrix = _mat_transition_liq;
   }
 
@@ -52,14 +51,17 @@ namespace Simulation
                    Simulation::SimulationUnit &unit,
                    std::span<double> flows,
                    size_t nc,
-                   Simulation::BasicCacheMatflows &liq)
+                   Simulation::BasicCacheHydro &liq)
   {
     size_t current_index_mat = iteration_count % n_loop;
     auto &current_liq_matflow = liq.data[current_index_mat];
-
+    const auto mat_f_liq_view = FlowMap::FlowMap_const_view_t(flows, nc);
     if (iteration_count < n_loop)
     {
-      compute_MatFlow(flows, nc, current_liq_matflow);
+      compute_MatFlow(mat_f_liq_view, current_liq_matflow);
+      current_liq_matflow.cumulative_probability =
+          get_CP(unit.mc_unit->domain.getNeighbors(),
+                 current_liq_matflow.transition_matrix);
     }
 
     unit.setLiquidFlow(&current_liq_matflow);
@@ -68,33 +70,49 @@ namespace Simulation
   }
 
   void update_flow(size_t &iteration_count,
+                   size_t n_per_flowmap,
                    size_t n_loop,
                    Simulation::SimulationUnit &unit,
-                   ReactorState &reactor_state,
-                   Simulation::BasicCacheMatflows &liquid_flows,
-                   Simulation::BasicCacheMatflows &gas_flows)
+                   const ReactorState &reactor_state,
+                   Simulation::BasicCacheHydro &liquid_flows,
+                   Simulation::BasicCacheHydro &gas_flows,
+                   bool tpf)
   {
+    static size_t element_count = 0;
+
     size_t current_index_mat = iteration_count % n_loop;
     auto &current_liq_matflow = liquid_flows.data[current_index_mat];
-
+    unit.mc_unit->domain.setLiquidNeighbors(
+        reactor_state.liquid_flow.getViewNeighors());
     auto &current_gas_matflow = gas_flows.data[current_index_mat];
     if (iteration_count < n_loop)
     {
-      compute_MatFlow(reactor_state.liquid_flow, current_liq_matflow);
-
-      compute_MatFlow(reactor_state.gas_flow, current_gas_matflow);
+      compute_MatFlow(reactor_state.liquid_flow.getViewFlows(),
+                      current_liq_matflow);
 
       current_liq_matflow.inverse_volume =
           compute_inverse_diagonal(reactor_state.liquidVolume);
-      current_gas_matflow.inverse_volume =
-          compute_inverse_diagonal(reactor_state.gasVolume);
+      if (tpf)
+      {
+        compute_MatFlow(reactor_state.gas_flow.getViewFlows(),
+                        current_gas_matflow);
+        current_gas_matflow.inverse_volume =
+            compute_inverse_diagonal(reactor_state.gasVolume);
+      }
+
+      current_liq_matflow.cumulative_probability =
+          get_CP(unit.mc_unit->domain.getNeighbors(),
+                 current_liq_matflow.transition_matrix);
     }
 
-    unit.mc_unit->domain.setLiquidNeighbors(reactor_state.liquid_flow.getViewNeighors());
     unit.setLiquidFlow(&current_liq_matflow);
     unit.setGasFlow(&current_gas_matflow);
 
-    iteration_count++;
+    if (++element_count == n_per_flowmap)
+    {
+      iteration_count++;
+      element_count = 0;
+    }
   }
 
 } // namespace Simulation

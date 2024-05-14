@@ -10,7 +10,7 @@
 
 namespace Simulation
 {
-  class MatFlow;
+  class PreCalculatedHydroState;
   class ScalarSimulation;
   struct pimpl_deleter
   {
@@ -24,13 +24,13 @@ namespace Simulation
   class SimulationUnit
   {
   public:
-    explicit SimulationUnit(
-        const ExecInfo &info,
-        std::unique_ptr<MC::MonteCarloUnit> &&_unit,
-        std::unique_ptr<MC::ParticlesContainer> &&_container,
-        size_t n_species,
-        KModel _km,
-        bool host = false);
+    explicit SimulationUnit(const ExecInfo &info,
+                            std::unique_ptr<MC::MonteCarloUnit> &&_unit,
+                            std::span<double> volumesgas,
+                            std::span<double> volumesliq,
+                            size_t n_species,
+                            KModel _km,
+                            bool _gas_flow = false);
 
     ~SimulationUnit() = default;
 
@@ -40,11 +40,12 @@ namespace Simulation
     SimulationUnit &operator=(const SimulationUnit &rhs) = delete;
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
-    std::unique_ptr<MC::ParticlesContainer> mc_container;
 
     [[nodiscard]] const KModel &getModel() const;
 
     [[nodiscard]] std::span<double> getCliqData() const;
+    [[nodiscard]] std::tuple<size_t, size_t> getDim() const;
+    [[nodiscard]] std::span<double> getCgasData() const;
     [[nodiscard]] std::span<double> getContributionData() const;
 
     void setVolumes(std::span<double> volumesgas, std::span<double> volumesliq);
@@ -53,9 +54,9 @@ namespace Simulation
 
     void cycleProcess(double d_t);
 
-    void setLiquidFlow(MatFlow *_flows_l);
+    void setLiquidFlow(PreCalculatedHydroState *_flows_l);
 
-    void setGasFlow(MatFlow *_flows_g);
+    void setGasFlow(PreCalculatedHydroState *_flows_g);
 
     void reduceContribs(std::span<double> data, size_t n_rank);
 
@@ -68,13 +69,12 @@ namespace Simulation
     void post_process_reducing();
     void execute_process_knrl(const auto &kernel);
 
-    bool host;
+    bool is_two_phase_flow;
     size_t n_thread;
 
-    MatFlow *flow_liquid; // TODO OPTI
-    MatFlow *flow_gas;    // TODO OPTI
+    PreCalculatedHydroState *flow_liquid; // TODO OPTI
+    PreCalculatedHydroState *flow_gas;    // TODO OPTI
     KModel kmodel;
-    Eigen::MatrixXd cumulative_probability;
 
     std::unique_ptr<ScalarSimulation, pimpl_deleter> liquid_scalar;
     std::unique_ptr<ScalarSimulation, pimpl_deleter> gas_scalar;
@@ -85,23 +85,23 @@ namespace Simulation
     return kmodel;
   }
 
-  inline void SimulationUnit::setLiquidFlow(MatFlow *_flows_l)
+  inline void SimulationUnit::setLiquidFlow(PreCalculatedHydroState *_flows_l)
   {
     flow_liquid = _flows_l;
   }
 
-  inline void SimulationUnit::setGasFlow(MatFlow *_flows_g)
+  inline void SimulationUnit::setGasFlow(PreCalculatedHydroState *_flows_g)
   {
     flow_gas = _flows_g;
   }
 
   inline void SimulationUnit::execute_process_knrl(const auto &kernel)
   {
-    auto &container = mc_container;
+    auto &container = mc_unit->container;
 #pragma omp parallel for num_threads(n_thread) default(none)                   \
     shared(kernel, container) schedule(static)
-    for (auto it = container->to_process.begin();
-         it < container->to_process.end();
+    for (auto it = container.to_process.begin();
+         it < container.to_process.end();
          ++it)
     {
       kernel(*it);

@@ -11,10 +11,11 @@ namespace MC
   {
     ChangeWeight = 0,
     NewParticle = 1,
-    Death = 2
+    Death = 2,
+    Move = 3
   };
 
-  constexpr size_t n_event_type = 3;
+  constexpr size_t n_event_type = 4;
 
   template <EventType event> consteval size_t eventIndex()
   {
@@ -23,7 +24,7 @@ namespace MC
 
   struct EventContainer
   {
-    std::array<size_t, n_event_type> events{0, 0, 0};
+    std::array<size_t, n_event_type> events{0, 0, 0,0};
 
     template <EventType event> [[nodiscard]] constexpr size_t get() const
     {

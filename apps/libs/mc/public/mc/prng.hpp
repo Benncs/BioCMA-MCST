@@ -22,12 +22,12 @@ namespace MC
 
     explicit PRNG()
     {
-      gen = std::mt19937(MC_RAND_DEFAULT_SEED);
+      gen = std::mt19937_64(MC_RAND_DEFAULT_SEED);
     }
 
     explicit PRNG(uint64_t seed)
     {
-      gen = std::mt19937(seed);
+      gen = std::mt19937_64(seed);
     }
 
     template <typename T> T uniform_int_rand(const T &min, const T &max)
@@ -52,7 +52,7 @@ namespace MC
     }
 
   private:
-    std::mt19937 gen;
+    std::mt19937_64 gen;
   };
 
   // template <IntegerType T> T uniform_int_rand(const T &min, const T &max)

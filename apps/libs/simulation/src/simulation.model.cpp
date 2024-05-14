@@ -8,8 +8,7 @@
 
 #include <hydro/mass_transfer.hpp>
 #include <scalar_simulation.hpp>
-
-// double kla = 1e-5; //MOCK USING WRONG FLOWMAP
+#include <stdexcept>
 
 namespace Simulation
 {
@@ -19,33 +18,49 @@ namespace Simulation
     for (size_t i_thread = 0; i_thread < n_thread; ++i_thread)
     {
       this->liquid_scalar->merge(i_thread);
-      this->mc_container->merge(i_thread);
+      this->mc_unit->merge(i_thread);
     }
   }
 
-  std::span<double> SimulationUnit::getContributionData()const
+  std::span<double> SimulationUnit::getContributionData() const
   {
 
     return liquid_scalar->getContributionData();
   }
 
-  std::span<double> SimulationUnit::getCliqData()const
+  std::span<double> SimulationUnit::getCliqData() const
   {
-    return this->liquid_scalar->getCliqData();
+    return this->liquid_scalar->getCData();
+  }
+
+  [[nodiscard]] std::span<double> SimulationUnit::getCgasData() const
+  {
+    if (!gas_scalar)
+    {
+      return {};
+    }
+    return this->gas_scalar->getCData();
+  }
+
+  [[nodiscard]] std::tuple<size_t, size_t> SimulationUnit::getDim() const
+  {
+    return {this->liquid_scalar->concentration.rows(),
+            this->liquid_scalar->concentration.cols()};
   }
 
   void SimulationUnit::reduceContribs(std::span<double> data, size_t n_rank)
   {
 
-    size_t nr = this->liquid_scalar->C.rows();
-    size_t nc = this->liquid_scalar->C.cols();
+    size_t nr = this->liquid_scalar->concentration.rows();
+    size_t nc = this->liquid_scalar->concentration.cols();
 
     this->liquid_scalar->biomass_contribution.setZero();
 
     for (int i = 0; i < static_cast<int>(n_rank); ++i)
     {
-      this->liquid_scalar->biomass_contribution += Eigen::Map<Eigen::MatrixXd>(
-          &data[i * nr * nc], static_cast<int>(nr), static_cast<int>(nc));
+      this->liquid_scalar->biomass_contribution.noalias() +=
+          Eigen::Map<Eigen::MatrixXd>(
+              &data[i * nr * nc], static_cast<int>(nr), static_cast<int>(nc));
     }
   }
 
@@ -69,15 +84,21 @@ namespace Simulation
     // }
 
     auto mat_transfer_g_liq =
-        gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,
-                                 liquid_scalar->getVolume(),
-                                 liquid_scalar->C.array(),
-                                 gas_scalar->C.array(),
-                                 state);
+        (is_two_phase_flow)
+            ? gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,
+                                       liquid_scalar->getVolume(),
+                                       liquid_scalar->concentration.array(),
+                                       gas_scalar->concentration.array(),
+                                       state)
+            : Eigen::MatrixXd(this->liquid_scalar->concentration.rows(),
+                              this->liquid_scalar->concentration.cols());
 
     this->liquid_scalar->performStep(
         d_t, flow_liquid->transition_matrix, mat_transfer_g_liq);
-    this->gas_scalar->performStep(
-        d_t, flow_gas->transition_matrix, -1 * mat_transfer_g_liq);
+    if (is_two_phase_flow)
+    {
+      this->gas_scalar->performStep(
+          d_t, flow_gas->transition_matrix, -1 * mat_transfer_g_liq);
+    }
   }
 } // namespace Simulation

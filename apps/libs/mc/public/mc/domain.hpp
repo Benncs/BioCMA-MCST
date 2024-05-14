@@ -27,7 +27,7 @@ namespace MC
     void setVolumes(std::span<double const> volumesgas,
                     std::span<double const> volumesliq);
 
-    void setLiquidNeighbors(const Neighbors::Neighbors_view_t &data);
+    void setLiquidNeighbors(const Neighbors::Neighbors_const_view_t &data);
 
     // GETTERS
     auto &operator[](size_t i_c);
@@ -79,7 +79,7 @@ namespace MC
   }
 
   inline void ReactorDomain::setLiquidNeighbors(
-      const Neighbors::Neighbors_view_t& data)
+      const Neighbors::Neighbors_const_view_t& data)
   {
  
     neighbors = data.to_const();

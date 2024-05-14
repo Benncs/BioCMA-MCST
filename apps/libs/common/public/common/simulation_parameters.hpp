@@ -16,6 +16,7 @@ struct SimulationParameters
   bool verbose;
   size_t n_different_maps;
   size_t n_compartments;
+  bool is_two_phase_flow = true;
   static SimulationParameters m_default();
 };
 

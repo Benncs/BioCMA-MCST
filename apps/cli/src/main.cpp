@@ -1,12 +1,13 @@
+#include "data_exporter.hpp"
 #include "models/light_model.hpp"
 #include "models/simple_model.hpp"
 #include "mpi_w/impl_op.hpp"
 #include <cli_parser.hpp>
 
-#include <simulation/update_flows.hpp>
+#include <common/common.hpp>
 #include <models/models.hpp>
 #include <simulation/simulation.hpp>
-#include <common/common.hpp>
+#include <simulation/update_flows.hpp>
 
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/reactorstate.hpp>
@@ -28,8 +29,6 @@
 #include <memory>
 #include <stdexcept>
 #include <utility>
-
-
 
 #define SEND_MPI_SIG_STOP host_dispatch(exec, MPI_W::SIGNALS::STOP);
 
@@ -126,7 +125,7 @@ static void exec(int argc, char **argv, SimulationParameters params)
   }
   else
   {
-    
+
     workers_process(exec_info, simulation, params);
   }
 }
@@ -136,50 +135,55 @@ static void host_process(ExecInfo &exec,
                          SimulationParameters &params,
                          std::shared_ptr<FlowIterator> _flow_handle)
 {
+  std::string name = "./results/test.h5";
+  DataExporter de(exec,
+                  params,
+                  name,
+                  simulation.getDim(),
+                  _flow_handle->totalSteps() * 500);
 
-  DataExporter de(exec,params,"./results/test.h5");
-  
   show(simulation);
   if (verbose)
   {
     _flow_handle->toggleVerbose();
   }
-  main_loop(params, exec, simulation, std::move(_flow_handle));
+
+  main_loop(params, exec, simulation, std::move(_flow_handle), &de);
+
   show(simulation);
 
   SEND_MPI_SIG_STOP;
   last_sync(exec, simulation);
 
-  post_process(exec, params, simulation);
+  post_process(exec, params, simulation, &de);
 }
 
 static void workers_process(ExecInfo &exec,
                             Simulation::SimulationUnit &simulation,
                             SimulationParameters &params)
 {
- 
+
   double d_t = params.d_t;
   size_t n_compartments = simulation.mc_unit->domain.getNumberCompartments();
   MPI_Status status;
 
   size_t iteration_count = 0;
   const size_t n_loop = params.n_different_maps;
-  auto liquid_flows = Simulation::BasicCacheMatflows(n_loop);
+  auto liquid_flows = Simulation::BasicCacheHydro(n_loop);
 
   std::vector<size_t> owning_liquid_neighbors(n_compartments);
-
 
   // size_t *worker_neighbor_data_ptr = nullptr;
 
   // size_t worker_neighbor_data_size = 0;
 
-  Neighbors::Neighbors_view_t liquid_neighbors;
+  Neighbors::Neighbors_const_view_t liquid_neighbors;
 
   MPI_W::IterationPayload payload(n_compartments * n_compartments,
                                   n_compartments);
   while (true)
   {
-       
+
     auto sign = MPI_W::try_recv<MPI_W::SIGNALS>(0, &status);
 
     if (sign == MPI_W::SIGNALS::STOP)
@@ -188,12 +192,12 @@ static void workers_process(ExecInfo &exec,
       break;
     }
 
-   
     payload.recv(0, &status);
 
-    owning_liquid_neighbors = MPI_W::try_recv_v<size_t>(0,&status,88);
-    size_t n_col = owning_liquid_neighbors.size()/n_compartments;
-    liquid_neighbors = Neighbors::Neighbors_view_t(owning_liquid_neighbors,n_compartments,n_col,true);
+    owning_liquid_neighbors = MPI_W::try_recv_v<size_t>(0, &status, 88);
+    size_t n_col = owning_liquid_neighbors.size() / n_compartments;
+    liquid_neighbors = Neighbors::Neighbors_const_view_t(
+        owning_liquid_neighbors, n_compartments, n_col, true);
 
     // Neighbors could change during iteration so we have to allocate new
     // neighbors each time
@@ -201,9 +205,9 @@ static void workers_process(ExecInfo &exec,
     // {
     //   neighbors = MPI_W::try_recv_v<size_t>(0, &status);
     // }
-  
-    // std::cout<<liquid_flows.data<<std::endl;
 
+    // std::cout<<liquid_flows.data<<std::endl;
+    simulation.mc_unit->domain.setLiquidNeighbors(liquid_neighbors);
     Simulation::update_flow(iteration_count,
                             n_loop,
                             simulation,
@@ -211,7 +215,6 @@ static void workers_process(ExecInfo &exec,
                             n_compartments,
                             liquid_flows);
 
-    simulation.mc_unit->domain.setLiquidNeighbors(liquid_neighbors);
     simulation.setVolumes(payload.gas_volumes, payload.liquid_volumes);
 
     simulation.cycleProcess(d_t);
@@ -219,9 +222,6 @@ static void workers_process(ExecInfo &exec,
     sync_prepare_next(exec, simulation);
   }
 }
-
-
-
 
 static void restore_stdout(int original_stdout_fd,
                            std::streambuf *&original_buffer)

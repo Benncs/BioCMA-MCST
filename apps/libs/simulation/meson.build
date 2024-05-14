@@ -47,7 +47,8 @@ simulation_lib = library(
    dependencies: [simulation_public_dependencies, private_dependencies],
    pic: true,
    install: true,
-   install_dir: global_install_dir
+   install_dir: global_install_dir,
+   link_args: ['-flto']
 )
 
 

@@ -78,7 +78,7 @@ ExecInfo runtime_init(int argc, char **argv, SimulationParameters &params)
 
   set_openmp_threads(rank, size, info, params);
 
-  Eigen::setNbThreads(std::min(4,EIGEN_INDEX(info.thread_per_process))); //FIXME: 4 threads is clearly enough for 500*500 matrix 
+  Eigen::setNbThreads(1); //FIXME: 4 threads is clearly enough for 500*500 matrix 
   
 
 #ifdef USE_PYTHON_MODULE

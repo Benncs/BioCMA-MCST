@@ -73,7 +73,7 @@ void init_simple_model_(MC::Particles &p)
   static double n_part = p.weight;
   static constexpr double total_volume  = 90./1000.; //TODO FIXME 
   static constexpr double avg_mass = SimpleModel::critcal_division_mass*0.1;
-  static constexpr  double X_goal = 0.5;
+  static constexpr  double X_goal = 10;
   p.weight = (X_goal*(total_volume)/(n_part*avg_mass));
 
 
@@ -111,11 +111,11 @@ void update_simple_model(double d_t,
   double phi_o_in = uptake_o2(model, concentrations[1]);
 
   // Not enough substrate to stay alive
-  if (model.phi_s_in == 0 || phi_o_in == 0)
-  {
-    p.status = MC::CellStatus::DEAD;
-    return;
-  }
+  // if (model.phi_s_in == 0 || phi_o_in == 0)
+  // {
+  //   p.status = MC::CellStatus::DEAD;
+  //   return;
+  // }
 
   double mu_p =
       std::min(SimpleModel::YXS * model.phi_s_in, SimpleModel::YXO * phi_o_in);
@@ -147,7 +147,6 @@ MC::Particles division_simple_model(MC::Particles &p)
   return child;
   // TODO
 }
-
 void contribution_simple_model(MC::Particles &p, Eigen::MatrixXd &contribution)
 {
   auto &model = std::any_cast<SimpleModel&> (p.data);
@@ -245,12 +244,13 @@ static double uptake_o2(SimpleModel&model, double O)
 {
   static constexpr double tau_m = 1e-3;
   int growth = 0;
+  double factor = 100; //TODO DELETE, JUST TO SEE OXYGENE COMSUMPTION
 
-  auto get_phi = [&model, O, &growth](double Oi)
+  auto get_phi = [&model, O, &growth,factor](double Oi)
   {
     double phi_o_growth = SimpleModel::YXO * model.xi.mu_eff;
     double phi_o_in =
-        model.xi.mass * SimpleModel::psi_o_meta + growth * phi_o_growth;
+        model.xi.mass * SimpleModel::psi_o_meta*factor + growth * phi_o_growth;
     double rhs = phi_o_growth + phi_o_in;
     double lhs = (O - Oi) / tau_m;
     return std::abs(rhs - lhs);
@@ -271,11 +271,11 @@ static double uptake_o2(SimpleModel&model, double O)
   double Oi2 = naive_newton(get_phi, O, &success, SOLVER_TOLERANCE);
   if (Oi2 < 0 || !success)
   {
-    return model.xi.mass * SimpleModel::psi_o_meta;
+    return model.xi.mass * SimpleModel::psi_o_meta*factor;
   }
 
   double phi_o_growth = SimpleModel::YXO * model.xi.mu_eff;
-  return model.xi.mass * SimpleModel::psi_o_meta + growth * phi_o_growth;
+  return model.xi.mass * SimpleModel::psi_o_meta*factor + growth * phi_o_growth;
 }
 
 KModel get_simple_model()

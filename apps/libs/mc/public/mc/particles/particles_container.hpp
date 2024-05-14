@@ -3,24 +3,19 @@
 
 #include "mc/particles/mcparticles.hpp"
 #include <mc/particles/particles_list.hpp>
+#include <mc/thread_private_data.hpp>
 
 namespace MC
 {
 
-  struct TheadSafeData
-  {
-    std::vector<MC::Particles> extra_process;
-    std::vector<Particles *> in_dead_state;
-  };
-
+ 
   class ParticlesContainer
   {
 
   public:
     explicit ParticlesContainer() = default;
     explicit ParticlesContainer(size_t capacity,
-                                double weight,
-                                size_t n_extra) noexcept;
+                                double weight) noexcept;
     explicit ParticlesContainer(const ParticlesContainer &other) = delete;
     ParticlesContainer(ParticlesContainer &&other) noexcept;
     ~ParticlesContainer() = default;
@@ -28,11 +23,10 @@ namespace MC
     ParticlesContainer &operator=(const ParticlesContainer &) = delete;
     ParticlesContainer &operator=(ParticlesContainer &&) = default;
 
-    void merge(size_t i);
+    void merge(ThreadPrivateData& i_data);
     void init_extra(size_t n_extra);
 
     ParticlesList to_process;
-    std::vector<TheadSafeData> extras; //TODO move to unit 
   };
 
 } // namespace MC

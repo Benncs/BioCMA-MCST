@@ -47,6 +47,10 @@ init_simulation(ExecInfo &info,
 
     params.n_compartments = fstate->n_compartments;
     liquid_neighbors = fstate->liquid_flow.getViewNeighors();
+    if(fstate->gas_flow.is_empty())
+    {
+      params.is_two_phase_flow=false;
+    }
 
     worker_neighbor_data_size = liquid_neighbors.size();
     worker_neighbor_data_ptr = const_cast<size_t *>(
@@ -54,13 +58,18 @@ init_simulation(ExecInfo &info,
             .data()); // TODO BIREM add rawdata() to get ptr directly
 
     params.n_different_maps = _flow_handle->loop_size();
+
     liq_volume = fstate->liquidVolume;
     gas_volume = fstate->gasVolume;
+    
     params.d_t = (params.d_t == 0.)
                      ? _flow_handle->MinLiquidResidenceTime() / 100.
                      : params.d_t;
-    auto n_t = static_cast<size_t>(params.final_time / params.d_t);
-    _flow_handle->setRepetition(n_t / params.n_different_maps);
+    const auto n_t = static_cast<size_t>(params.final_time / params.d_t);
+    const size_t n_repetition = n_t / params.n_different_maps;
+    const double t_per_flowmap = 0.0286;
+    const auto n_per_flowmap = 1;//static_cast<size_t>(t_per_flowmap/static_cast<double>(params.d_t));
+    _flow_handle->setRepetition(n_repetition,n_per_flowmap);
     register_run(info, params);
   }
 
@@ -71,9 +80,11 @@ init_simulation(ExecInfo &info,
 
   MPI_W::broadcast(params.d_t, 0);
   MPI_W::broadcast(params.n_compartments, 0);
-  
+  MPI_W::broadcast(params.is_two_phase_flow, 0);
+
   MPI_W::broadcast(worker_neighbor_data_size, 0);
   MPI_W::broadcast(liq_volume, 0, info.current_rank);
+  
   MPI_W::broadcast(gas_volume, 0, info.current_rank);
 
   if (info.current_rank != 0)
@@ -97,22 +108,21 @@ init_simulation(ExecInfo &info,
   }
 
   MPI_W::barrier();
-  auto unit = MC::init_unit(info, liq_volume, liquid_neighbors);
 
-  auto container = MC::init_container(info, params.n_particles);
+  auto mc_unit =
+      MC::init(info, params.n_particles, liq_volume, liquid_neighbors);
 
-  // size_t unit_size =
-  // unit->domain.getNumberCompartments()*sizeof(unit->domain[0]) +
-  // sizeof(unit->domain.getNeighbors(0))*unit->domain.getNeighbors(0).size()*unit->domain.getNeighbors().size();
-  // size_t container_size =
-  // container->to_process.size()*sizeof(container->to_process[0]);
+  bool tpf =  info.current_rank == 0 && params.is_two_phase_flow;
 
   auto simulation = Simulation::SimulationUnit(info,
-                                               std::move(unit),
-                                               std::move(container),
+                                               std::move(mc_unit),
+                                               gas_volume,
+                                               liq_volume,
                                                params.n_species,
                                                model,
-                                               info.current_rank == 0);
+                                               tpf);
+
+
   return simulation;
 }
 

@@ -27,6 +27,10 @@ namespace MPI_W
     {
       datatype = MPI_INT;
     }
+    else if constexpr (std::is_same_v<_type, bool>)
+    {
+      datatype = MPI_CXX_BOOL;
+    }
     else if constexpr (std::is_same_v<_type, char> ||
                        std::is_same_v<_type, MPI_W::SIGNALS>)
     {

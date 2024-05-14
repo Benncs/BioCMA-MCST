@@ -21,7 +21,7 @@ void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
     simulation.reduceContribs(total_contrib_data, exec.n_rank);
   }
 }
-void sync_prepare_next(const ExecInfo & /*exec*/,
+void sync_prepare_next(const ExecInfo &exec,
                        Simulation::SimulationUnit &simulation)
 {
   MPI_W::barrier();
@@ -32,6 +32,7 @@ void sync_prepare_next(const ExecInfo & /*exec*/,
 
   // We can use span here because we broadcast without changing size
   MPI_W::broadcast_span(data, 0);
+
 }
 
 void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)

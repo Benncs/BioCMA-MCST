@@ -5,10 +5,10 @@
 // #include <iostream>
 namespace MC
 {
-  void ParticlesContainer::merge(size_t i_thread)
+  void ParticlesContainer::merge(ThreadPrivateData &i_data)
   {
-    auto &dead = this->extras[i_thread].in_dead_state;
-    auto &new_p = this->extras[i_thread].extra_process;
+    auto &dead = i_data.in_dead_state;
+    auto &new_p = i_data.extra_process;
     int new_size = static_cast<int>(new_p.size());
     int dead_count = static_cast<int>(dead.size());
     if (to_process.size() + (new_size - dead_count) > MAX_PARTICLE_BUFFER)
@@ -55,15 +55,14 @@ namespace MC
   }
 
   ParticlesContainer::ParticlesContainer(size_t capacity,
-                                         double weight,
-                                         size_t n_extra) noexcept
+                                         double weight) noexcept
   {
     to_process = ParticlesList(capacity, weight);
-    init_extra(n_extra);
+    // init_extra(n_extra);
   }
 
-  void ParticlesContainer::init_extra(size_t n_extra)
-  {
-    extras.resize(n_extra);
-  }
+  // void ParticlesContainer::init_extra(size_t n_extra)
+  // {
+  //   extras.resize(n_extra);
+  // }
 } // namespace MC

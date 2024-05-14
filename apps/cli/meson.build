@@ -69,6 +69,7 @@ executable(
   cpp_args: [target_custom_options],
   install: true,
   install_rpath: global_install_dir,
+  link_args: ['-flto']
 )
 
 # Conditional dynamic module build

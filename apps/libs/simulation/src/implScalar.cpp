@@ -6,29 +6,32 @@ namespace Simulation
 {
 
   ScalarSimulation::ScalarSimulation(ScalarSimulation &&other) noexcept
-      : C(std::move(other.C)), Mtot(std::move(other.Mtot)),
-        m_volumes(other.m_volumes), n_r(other.n_r), n_c(other.n_c)
+      : concentration(std::move(other.concentration)),
+        total_mass(std::move(other.total_mass)), m_volumes(other.m_volumes),
+        n_r(other.n_r), n_c(other.n_c)
   {
   }
 
   ScalarSimulation::ScalarSimulation(size_t n_compartments,
                                      size_t n_species,
-                                     size_t n_thread)
+                                     size_t n_thread,
+                                     std::span<double> volumes)
       : n_r(n_species), n_c(n_compartments)
   {
 
     m_volumes = Eigen::DiagonalMatrix<double, -1>(EIGEN_INDEX(n_compartments));
-    m_volumes.setIdentity();
+    this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(
+        volumes.data(), static_cast<int>(volumes.size()));
 
     volumes_inverse =
         Eigen::DiagonalMatrix<double, -1>(EIGEN_INDEX(n_compartments));
     volumes_inverse.setIdentity();
 
-    this->Mtot = Eigen::MatrixXd(n_species, n_compartments);
-    this->Mtot.setZero();
+    this->total_mass = Eigen::MatrixXd(n_species, n_compartments);
+    this->total_mass.setZero();
 
-    this->C = Eigen::MatrixXd(n_species, n_compartments);
-    this->C.setZero();
+    this->concentration = Eigen::MatrixXd(n_species, n_compartments);
+    this->concentration.setZero();
 
     this->vec_kla = Eigen::ArrayXXd(n_species, n_compartments);
     vec_kla.setZero();
@@ -41,7 +44,8 @@ namespace Simulation
                     n_thread,
                     [this]()
                     {
-                      auto m = Eigen::MatrixXd(C.rows(), C.cols());
+                      auto m = Eigen::MatrixXd(concentration.rows(),
+                                               concentration.cols());
                       m.setZero();
                       return m;
                     });
@@ -52,10 +56,10 @@ namespace Simulation
                                      const Eigen::MatrixXd &transfer_gas_liquid)
   {
 
-    Mtot += d_t * (Mtot * volumes_inverse * m_transition +
-                   biomass_contribution + transfer_gas_liquid);
+    total_mass.noalias() +=
+        d_t * ((total_mass * volumes_inverse) * m_transition +
+                transfer_gas_liquid*m_volumes + biomass_contribution);
 
-    C = Mtot * volumes_inverse;
-  
+    concentration.noalias() = total_mass * volumes_inverse;
   }
 } // namespace Simulation

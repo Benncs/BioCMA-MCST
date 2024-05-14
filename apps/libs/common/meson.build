@@ -23,6 +23,7 @@ common_dependecy = declare_dependency(
    sources: common_sources,
    include_directories: public_includes,
    link_with: common_lib,
+   link_args: ['-flto']
 )
 
 install_subdir(
