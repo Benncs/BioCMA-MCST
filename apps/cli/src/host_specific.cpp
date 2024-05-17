@@ -68,7 +68,7 @@ void main_loop(const SimulationParameters &params,
 
   size_t dump_counter = 0;
   static const size_t dump_number =
-      std::min(_flow_handle->totalSteps(), static_cast<size_t>(500));
+      std::min(_flow_handle->totalSteps(), static_cast<size_t>(1000));
   static const size_t dump_interval = _flow_handle->totalSteps() / dump_number;
 
   Simulation::update_flow(iteration_count,
@@ -147,7 +147,7 @@ void main_loop(const SimulationParameters &params,
         dump_counter++;
         if (dump_counter >= dump_interval)
         {
-          exporter->append(simulation.getCliqData());
+          exporter->append(simulation.getCliqData(),simulation.mc_unit->domain.getDistribution());
           dump_counter = 0;
         }
       }

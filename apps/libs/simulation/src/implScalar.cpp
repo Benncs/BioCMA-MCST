@@ -56,10 +56,25 @@ namespace Simulation
                                      const Eigen::MatrixXd &transfer_gas_liquid)
   {
 
-    total_mass.noalias() +=
-        d_t * ((total_mass * volumes_inverse) * m_transition +
-                transfer_gas_liquid*m_volumes + biomass_contribution);
+    // total_mass.noalias() +=
+    //     d_t * ((total_mass * volumes_inverse) * m_transition +
+    //             transfer_gas_liquid*m_volumes + biomass_contribution);
+    // if(m_transition.size()==1)
+    // {
+    //   std::cout<<(transfer_gas_liquid)*m_volumes<<std::endl;
+    //   total_mass =  total_mass + d_t *(biomass_contribution + (transfer_gas_liquid)*m_volumes);
+    // }
+    // else
+    // {
+    //   total_mass.noalias() +=  d_t *( concentration*m_transition + biomass_contribution + (transfer_gas_liquid)*m_volumes);
+    // }
+    total_mass.noalias() +=  d_t *( concentration*m_transition + biomass_contribution + (transfer_gas_liquid)*m_volumes);
 
+    
+    // std::cout<<total_mass.diagonal()<<std::endl; ///
+
+    // exit(0);
+    //  total_mass.noalias() +=  d_t * ((biomass_contribution+transfer_gas_liquid)*m_volumes);
     concentration.noalias() = total_mass * volumes_inverse;
   }
 } // namespace Simulation

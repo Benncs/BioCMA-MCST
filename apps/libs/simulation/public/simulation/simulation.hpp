@@ -1,6 +1,8 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
+#include "mc/prng/prng.hpp"
+
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <mc/particles/particles_container.hpp>
@@ -29,7 +31,7 @@ namespace Simulation
                             std::span<double> volumesgas,
                             std::span<double> volumesliq,
                             size_t n_species,
-                            KModel _km,
+                            KModel _km,MC::DistributionVariantInt&& param,
                             bool _gas_flow = false);
 
     ~SimulationUnit() = default;
@@ -63,7 +65,7 @@ namespace Simulation
     void clearContribution();
 
   private:
-    void post_init_container();
+    void post_init_container(const MC::DistributionVariantInt& param);
     void post_init_compartments();
 
     void post_process_reducing();

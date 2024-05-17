@@ -88,19 +88,19 @@ void post_process(ExecInfo &exec,
 void show(Simulation::SimulationUnit &simulation)
 {
 
-  // std::vector<double>
-  // mass(simulation.mc_unit->domain.getNumberCompartments()); double totmass =
-  // 0.;
+  std::vector<double>
+  mass(simulation.mc_unit->domain.getNumberCompartments()); double totmass =
+  0.;
 
-  // auto d = simulation.mc_unit->domain.getDistribution();
+  auto d = simulation.mc_unit->domain.getDistribution();
 
 
-  //   for (auto &&i : d)
-  // {
-  //   std::cout << i << " ";
-  //   // count += i;
-  // }
-  // std::cout << '\n';
+    for (auto &&i : d)
+  {
+    std::cout << i << " ";
+    // count += i;
+  }
+  std::cout << '\n';
 
   // for(auto&& i : simulation.mc_unit->domain)
   // {

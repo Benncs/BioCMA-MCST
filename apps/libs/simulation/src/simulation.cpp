@@ -1,15 +1,16 @@
 #include "common/thread_safe_container.hpp"
-#include "mc/particles/particles_container.hpp"
-#include "mc/thread_private_data.hpp"
-#include "mc/unit.hpp"
+#include <mc/thread_private_data.hpp>
+#include <mc/unit.hpp>
 #include "models/types.hpp"
 #include <algorithm>
 #include <cstddef>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <mc/domain.hpp>
 #include <mc/particles/mcparticles.hpp>
-#include <mc/prng.hpp>
+#include "mc/prng/prng.hpp"
+
 #include <memory>
 
 #include <scalar_simulation.hpp>
@@ -40,22 +41,23 @@ namespace Simulation
     bool host = gas != nullptr;
     for (auto i = 0; i < liq->concentration.cols(); ++i)
     {
-      liq->concentration.coeffRef(1, i) = 0;
-      // liq->concentration.coeffRef(0, static_cast<int>(i)) = 0.5; // 0.5 G/L Glucose
-      
-      double rngn = (i<liq->concentration.cols()/3) ? rng.uniform_double_rand(0,20) : rng.uniform_double_rand(10,15);
+      // liq->concentration.coeffRef(1, i) = 0;
+      // liq->concentration.coeffRef(0, static_cast<int>(i)) = 0.5; // 0.5 G/L
+      // Glucose
+      double rngn = (i < liq->concentration.cols() / 3)
+                        ? rng.uniform_double_rand(0, 20)
+                        : rng.uniform_double_rand(10, 15);
       liq->concentration.coeffRef(0, static_cast<int>(i)) = rngn;
       if (host)
       {
-        gas->concentration.coeffRef(1, i) = 15e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
+        gas->concentration.coeffRef(1, i) =
+            15e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
       }
     }
 
-    liq->concentration.coeffRef(0, static_cast<int>(0)) = 10; // 0.5 G/L Glucose
-   
-
-    liq->total_mass = liq->concentration * liq->getVolume();
+    liq->concentration.coeffRef(0, static_cast<int>(0)) = 50; // 0.5 G/L Glucose
     
+    liq->total_mass = liq->concentration * liq->getVolume();
     if (host)
     {
       gas->total_mass = gas->concentration * gas->getVolume();
@@ -72,9 +74,10 @@ namespace Simulation
                 auto &cumulative_probability);
 
   SimulationUnit::SimulationUnit(SimulationUnit &&other) noexcept
-      : mc_unit(std::move(other.mc_unit)), is_two_phase_flow(other.is_two_phase_flow),
-        n_thread(other.n_thread), flow_liquid(other.flow_liquid),
-        flow_gas(other.flow_gas), kmodel(other.kmodel)
+      : mc_unit(std::move(other.mc_unit)),
+        is_two_phase_flow(other.is_two_phase_flow), n_thread(other.n_thread),
+        flow_liquid(other.flow_liquid), flow_gas(other.flow_gas),
+        kmodel(other.kmodel)
   {
   }
 
@@ -84,8 +87,9 @@ namespace Simulation
                                  std::span<double> volumesliq,
                                  size_t n_species,
                                  KModel _km,
-                                 bool _host)
-      : mc_unit(std::move(_unit)), is_two_phase_flow(_host),
+                                 MC::DistributionVariantInt &&param,
+                                 bool _gas_flow)
+      : mc_unit(std::move(_unit)), is_two_phase_flow(_gas_flow),
         n_thread(info.thread_per_process), flow_liquid(nullptr),
         flow_gas(nullptr), kmodel(_km)
   {
@@ -112,7 +116,7 @@ namespace Simulation
     // FIXME
     initF(liquid_scalar, gas_scalar);
 
-    post_init_container();
+    post_init_container(param);
     post_init_compartments();
   }
 
@@ -146,40 +150,47 @@ namespace Simulation
                   [this, n_species, &i](auto &&cs)
                   {
                     cs.concentrations = std::span(
-                        this->liquid_scalar->concentration.col(i).data(), n_species);
+                        this->liquid_scalar->concentration.col(i).data(),
+                        n_species);
                     ++i;
                   });
   }
 
-  void SimulationUnit::post_init_container()
+  void
+  SimulationUnit::post_init_container(const MC::DistributionVariantInt &param)
   {
     auto &to_process = mc_unit->container.to_process;
+
     const size_t n_compartments = mc_unit->domain.getNumberCompartments();
-#pragma omp parallel for default(none) shared(to_process, n_compartments)      \
-    num_threads(this->n_thread) schedule(static)
-    for (auto it = to_process.begin(); it < to_process.end(); ++it)
+    
+    
+
+#pragma omp parallel default(none),                                            \
+    shared(to_process, n_compartments, param)                            \
+    num_threads(this->n_thread)
     {
-      auto &&particle = *it;
+      auto prng = MC::PRNG::get_rng(omp_get_thread_num());
+      auto distribution = MC::get_distribution_int<size_t>(param);
+#pragma omp for schedule(static)
+      for (auto it = to_process.begin(); it < to_process.end(); ++it)
+      {
 
-      particle.current_container = 0;
-      // mc_unit->rand.uniform_int_rand(
-      //     static_cast<size_t>(0), n_compartments - 1);
+        auto &&particle = *it;
+        // const auto pos = distribution(prng);
+        particle.current_container = distribution(prng);
 
-      // particle.current_container = n_compartments-2;
-     
-      auto &i_container = mc_unit->domain[particle.current_container];
-
-      kmodel.init_kernel(particle);
-
-      __ATOM_INCR__(i_container.n_cells);
+        auto &i_container = mc_unit->domain[particle.current_container];
+        
+        kmodel.init_kernel(particle);
+        __ATOM_INCR__(i_container.n_cells);
+      }
     }
   }
 
   void SimulationUnit::cycleProcess(const double d_t)
   {
-    
 
-    const auto & cumulative_probability = flow_liquid->cumulative_probability;
+    const auto &cumulative_probability = flow_liquid->cumulative_probability;
 
     const auto &m_transition = this->flow_liquid->transition_matrix;
     const auto &_kmodel = this->kmodel;
@@ -188,12 +199,13 @@ namespace Simulation
     auto contribs = this->liquid_scalar->getThreadContribs();
     auto &extras = this->mc_unit->extras;
     auto &to_process = this->mc_unit->container.to_process;
+    const auto size = static_cast<double>(to_process.size());
 
 #pragma omp for
     for (auto particle = to_process.begin(); particle < to_process.end();
          ++particle)
     {
-
+      // particle->weight = 1./size;
       p_kernel(d_t,
                unit,
                contribs,
@@ -224,43 +236,46 @@ namespace Simulation
     }
 
     auto &domain = unit.domain;
-    const double rnd = unit.rand.double_unfiform();
-    const double rdn2 = unit.rand.double_unfiform();
+   
     const size_t i_thread = omp_get_thread_num();
-
-
     auto &events = unit.ts_events[i_thread];
     auto &thread_contrib = _contribs[i_thread];
     auto &thread_extra = _extras[i_thread];
+
+    auto& rng = thread_extra.rng;
+    const double rnd = rng.double_unfiform();
+    const double rdn2 = rng.double_unfiform();
+
+
     const auto &concentrations =
         domain[particle.current_container].concentrations;
 
     kernel_move(
         rnd, rdn2, domain, particle, d_t, m_transition, cumulative_probability);
 
-    // _kmodel.update_kernel(d_t, particle, concentrations);
+    _kmodel.update_kernel(d_t, particle, concentrations);
 
-    // if (particle.status == MC::CellStatus::DEAD)
-    // {
-    //   events.incr<MC::EventType::Death>();
-    //   __ATOM_DECR__(
-    //       domain[particle.current_container].n_cells) // TODO: check overflow
-    //   particle.clearState(MC::CellStatus::DEAD);
-    //   thread_extra.in_dead_state.emplace_back(&particle);
-    // }
-    // else
-    // {
-    //   if (particle.status == MC::CellStatus::CYTOKINESIS)
-    //   {
-    //     events.incr<MC::EventType::NewParticle>();
-    //     thread_extra.extra_process.emplace_back(particle);
-    //     auto &child = thread_extra.extra_process.back();
-    //     _kmodel.contribution_kernel(child, thread_contrib);
-    //     __ATOM_INCR__(domain[child.current_container].n_cells)
-    //   }
+    if (particle.status == MC::CellStatus::DEAD)
+    {
+      events.incr<MC::EventType::Death>();
+      __ATOM_DECR__(
+          domain[particle.current_container].n_cells) // TODO: check overflow
+      particle.clearState(MC::CellStatus::DEAD);
+      thread_extra.in_dead_state.emplace_back(&particle);
+    }
+    else
+    {
+      if (particle.status == MC::CellStatus::CYTOKINESIS)
+      {
+        auto child = _kmodel.division_kernel(particle);
+        events.incr<MC::EventType::NewParticle>();
+        _kmodel.contribution_kernel(child, thread_contrib);
+        __ATOM_INCR__(domain[child.current_container].n_cells)
+        thread_extra.extra_process.emplace_back(std::move(child));
+      }
 
-    //   _kmodel.contribution_kernel(particle, thread_contrib);
-    // }
+      _kmodel.contribution_kernel(particle, thread_contrib);
+    }
   };
 
 } // namespace Simulation

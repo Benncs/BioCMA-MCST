@@ -33,12 +33,12 @@ struct ExportData
 class DataExporter
 {
 public:
-   DataExporter(ExecInfo& info ,SimulationParameters& params,std::string& _filename,std::tuple<size_t,size_t> dim,size_t niter);
+   DataExporter(ExecInfo& info ,SimulationParameters& params,std::string& _filename,std::tuple<size_t,size_t> dim,size_t niter,std::span<size_t> distribution);
    DataExporter()=delete;
   ~DataExporter() = default;
   void write_final_results(const Simulation::SimulationUnit& simulation,std::span<size_t> distribution);
   void prepare();
-  void append(std::span<double> data);
+  void append(std::span<double> data,const std::vector<size_t>& distribution);
 
   DataExporter(DataExporter &&) = delete;
   DataExporter &operator=(DataExporter &&) = delete;

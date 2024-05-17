@@ -1,7 +1,10 @@
 #include "common/simulation_parameters.hpp"
 #include "highfive/H5File.hpp"
 #include "highfive/H5PropertyList.hpp"
+#include "models/monod.hpp"
 #include "simulation/simulation.hpp"
+#include <algorithm>
+#include <any>
 #include <data_exporter.hpp>
 #include <mc/events.hpp>
 
@@ -34,6 +37,25 @@ void DataExporter::write_final_results(
   };
 
   write_final_results(data, distribution);
+  try
+  {
+    {
+      HighFive::File file(filename, HighFive::File::ReadWrite);
+      std::vector<double> mass(simulation.mc_unit->container.to_process.size());
+      std::transform(simulation.mc_unit->container.to_process.begin(),
+                     simulation.mc_unit->container.to_process.end(),
+                     mass.begin(),
+                     [](auto &&p)
+                     {
+                       auto &model = std::any_cast<Monod &>(p.data);
+                       return model.l;
+                     });
+      file.createDataSet("final_results/integrated/mass ", mass);
+    }
+  }
+  catch (...)
+  {
+  }
 }
 
 //////////////////////
@@ -54,7 +76,8 @@ static void write_attributes(HighFive::File &file)
 
 static void write_initial(HighFive::File &file,
                           ExecInfo &info,
-                          SimulationParameters &params)
+                          SimulationParameters &params,
+                          std::span<size_t> distribution)
 {
   size_t n_0_particle = info.n_rank * params.n_particles;
 
@@ -62,6 +85,9 @@ static void write_initial(HighFive::File &file,
   file.createDataSet("initial_parameters/number_compartment",
                      params.n_compartments);
   file.createDataSet("initial_parameters/final_time", params.final_time);
+  file.createDataSet(
+      "initial_parameters/particle_distribution",
+      std::vector<size_t>(distribution.begin(), distribution.end()));
   file.createDataSet("initial_parameters/delta_time", params.d_t);
   file.createDataSet("initial_parameters/n_map", params.n_different_maps);
   file.createDataSet("misc/n_node_thread", info.thread_per_process);
@@ -72,12 +98,13 @@ DataExporter::DataExporter(ExecInfo &info,
                            SimulationParameters &params,
                            std::string &_filename,
                            std::tuple<size_t, size_t> dim,
-                           size_t niter)
+                           size_t niter,
+                           std::span<size_t> distribution)
     : n_row(get<0>(dim)), n_col(get<1>(dim)), n_iter(niter), filename(_filename)
 
 {
   HighFive::File file(filename, HighFive::File::Truncate);
-  write_initial(file, info, params);
+  write_initial(file, info, params, distribution);
   write_attributes(file);
   prepare();
 }
@@ -112,8 +139,6 @@ void DataExporter::write_final_results(ExportData &data,
                      data.event->get<MC::EventType::NewParticle>());
   file.createDataSet("final_results/events/total_death",
                      data.event->get<MC::EventType::Death>());
-  std::vector<double> mass = {0.};
-  file.createDataSet("final_results/integrated/mass ", mass);
 
   file.createDataSet<std::string>("biological_model/description ",
                                   std::string("Model description"));
@@ -142,15 +167,24 @@ void DataExporter::prepare()
                          dataspace,
                          HighFive::create_datatype<double>(),
                          props);
+                         HighFive::DataSet dataset_2 =
+      file.createDataSet("final_results/concentrations/records_distribution",
+                         dataspace,
+                         HighFive::create_datatype<size_t>(),
+                         props);
   file.flush();
 }
 
-void DataExporter::append(std::span<double> data)
+void DataExporter::append(std::span<double> data,const std::vector<size_t>& distribution)
 {
   HighFive::File file(filename, HighFive::File::ReadWrite);
   auto dataset = file.getDataSet("final_results/concentrations/records");
   dataset.resize({counter + 1, n_col, n_row});
   dataset.select({counter, 0, 0}, {1, n_col, n_row}).write_raw(data.data());
+
+  dataset = file.getDataSet("final_results/concentrations/records_distribution");
+  dataset.resize({counter + 1, n_col, n_row});
+  dataset.select({counter, 0, 0}, {1, n_col, n_row}).write_raw(distribution.data());
   counter++;
 }
 
@@ -159,14 +193,15 @@ DataExporter::DataExporter(ExecInfo &info,
                            SimulationParameters &params,
                            std::string &_filename,
                            std::tuple<size_t, size_t> dim,
-                           size_t niter)
+                           size_t niter,
+                           std::span<size_t> distribution)
     : filename(_filename.data())
 
 {
   // NOP
 }
 
-void DataExporter::append(std::span<double> data)
+void DataExporter::append(std::span<double> data,const std::vector<size_t>& distribution)
 {
 }
 

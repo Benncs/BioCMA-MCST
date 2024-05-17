@@ -2,7 +2,7 @@
 #define __MC_UNIT_HPP
 
 #include <mc/particles/particles_container.hpp>
-#include "mc/prng.hpp"
+#include <mc/prng/prng.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
 #include <mc/thread_private_data.hpp>
@@ -21,6 +21,7 @@ namespace MC
       container.merge(extras[i_thread]);
     }
     
+    // inline auto& rand(){return extras[0].rng;}
 
     MonteCarloUnit(const MonteCarloUnit &other) = delete;
     MonteCarloUnit(MonteCarloUnit &&other) = default;

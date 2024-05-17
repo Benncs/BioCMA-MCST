@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <mc/particles/particles_container.hpp>
 #include <stdexcept>
-// #include <iostream>
+#include <iostream>
 namespace MC
 {
   void ParticlesContainer::merge(ThreadPrivateData &i_data)

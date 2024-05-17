@@ -78,11 +78,6 @@ namespace Simulation
   void SimulationUnit::step(double d_t, ReactorState &state)
   {
 
-    // if (state == nullptr)
-    // {
-    //   throw std::runtime_error("Error no given reactor state");
-    // }
-
     auto mat_transfer_g_liq =
         (is_two_phase_flow)
             ? gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,
@@ -90,11 +85,12 @@ namespace Simulation
                                        liquid_scalar->concentration.array(),
                                        gas_scalar->concentration.array(),
                                        state)
-            : Eigen::MatrixXd(this->liquid_scalar->concentration.rows(),
+            : Eigen::MatrixXd::Zero(this->liquid_scalar->concentration.rows(),
                               this->liquid_scalar->concentration.cols());
 
     this->liquid_scalar->performStep(
         d_t, flow_liquid->transition_matrix, mat_transfer_g_liq);
+
     if (is_two_phase_flow)
     {
       this->gas_scalar->performStep(

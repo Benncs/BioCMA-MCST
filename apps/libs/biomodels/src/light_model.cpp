@@ -1,4 +1,4 @@
-#include "mc/prng.hpp"
+#include "mc/prng/prng.hpp"
 #include <models/light_model.hpp>
 
 #include <iostream>

@@ -1,5 +1,6 @@
 #include "cma_read/light_2d_view.hpp"
 #include "cma_read/neighbors.hpp"
+#include "mc/prng/prng.hpp"
 #include "models/types.hpp"
 #include "mpi.h"
 #include "mpi_w/impl_op.hpp"
@@ -62,9 +63,14 @@ init_simulation(ExecInfo &info,
     liq_volume = fstate->liquidVolume;
     gas_volume = fstate->gasVolume;
     
-    params.d_t = (params.d_t == 0.)
+    if(liq_volume.size()>1)
+    {
+          params.d_t = (params.d_t == 0.)
                      ? _flow_handle->MinLiquidResidenceTime() / 100.
                      : params.d_t;
+    }
+   
+
     const auto n_t = static_cast<size_t>(params.final_time / params.d_t);
     const size_t n_repetition = n_t / params.n_different_maps;
     const double t_per_flowmap = 0.0286;
@@ -114,12 +120,16 @@ init_simulation(ExecInfo &info,
 
   bool tpf =  info.current_rank == 0 && params.is_two_phase_flow;
 
+  auto law_param = MC::BoundedExponentialLaw{1/static_cast<double>(params.n_compartments),0,static_cast<double>(params.n_compartments-1)};
+
+  params.n_species = 1;
+
   auto simulation = Simulation::SimulationUnit(info,
                                                std::move(mc_unit),
                                                gas_volume,
                                                liq_volume,
                                                params.n_species,
-                                               model,
+                                               model,law_param,
                                                tpf);
 
 

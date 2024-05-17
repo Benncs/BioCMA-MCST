@@ -1,5 +1,6 @@
 #include "data_exporter.hpp"
 #include "models/light_model.hpp"
+#include "models/monod.hpp"
 #include "models/simple_model.hpp"
 #include "mpi_w/impl_op.hpp"
 #include <cli_parser.hpp>
@@ -115,7 +116,7 @@ static void exec(int argc, char **argv, SimulationParameters params)
   ExecInfo exec_info = runtime_init(argc, argv, params);
 
   std::shared_ptr<FlowIterator> _fd = nullptr;
-  constexpr size_t i_model = 0;
+  constexpr size_t i_model = 2;
   const auto model = load_model_(i_model);
   auto simulation = init_simulation(exec_info, params, _fd, model);
 
@@ -136,11 +137,12 @@ static void host_process(ExecInfo &exec,
                          std::shared_ptr<FlowIterator> _flow_handle)
 {
   std::string name = "./results/test.h5";
+  auto d = simulation.mc_unit->domain.getDistribution();
   DataExporter de(exec,
                   params,
                   name,
                   simulation.getDim(),
-                  _flow_handle->totalSteps() * 500);
+                  _flow_handle->totalSteps() * 1000,d);
 
   show(simulation);
   if (verbose)
@@ -278,6 +280,10 @@ static KModel load_model_(size_t index_model)
   if (index_model == 1)
   {
     return get_light_model();
+  }
+  if (index_model == 2)
+  {
+    return get_mond_model();
   }
   throw std::invalid_argument("bad model");
 }

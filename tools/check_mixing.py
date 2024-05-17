@@ -81,16 +81,16 @@ def plot_concentration_mixing(data):
 
     multipage("concentration_mixing.pdf",f,1500)
 
-pathres = './results/test.h5'
-distribution,cliq,data,tf,dt = import_results(pathres)
-
-# check_concentration_mixing(data)
-# plot_concentration_mixing(data)
+pathres = './results/20l_51010.h5'
+initial_distribution,distribution,cliq,data,tf,dt,npart,records_d = import_results(pathres)
+check_concentration_mixing(data)
+plot_concentration_mixing(data)
 
 # particle_distribution = norm_distribution(distribution)
 # volume_distribution = norm_distribution(volumes)
 
-
+plt.show()
+exit(0)
 import birem.birem_generate
 import birem 
 
@@ -102,8 +102,9 @@ ndiv = [5,10,10]
 volumes = np.array(vliq_bin) #birem.vtk.read_scalar(vtp_point_path,"Compartments_Volumes")
 
 particle_concentration = distribution/volumes
-normalized_particle_concentration = norm_distribution(particle_concentration)
-
+normalized_particle_concentration = particle_concentration/np.max(particle_concentration) # norm_distribution(particle_concentration)
+initial_p_c = (initial_distribution/volumes)/np.max(initial_distribution/volumes)
+print(initial_p_c)
 c0_norm = data[0,:,0]
 cend_norm = data[-1,:,0]
 
@@ -112,13 +113,21 @@ sc_cend = birem.vtk.mk_scalar(cend_norm,"Cend_norm")
 sc_p = birem.vtk.mk_scalar(normalized_particle_concentration,"particle_concentration")
 
 
+plt.plot(initial_distribution)
+
+plt.figure()
+plt.title("Normalized particule concentration")
+plt.plot(normalized_particle_concentration,label="Normalized particle concentration")
+plt.plot(initial_p_c,label="Initial normalized particle concentration")
+
+# plt.yscale("log")
+plt.legend()
+plt.show()
+
 # VTK export 
 # safe_points("6612_export",coordinates)
 # birem.vtk.append_vtk(vtp_point_path,vtp_result,sc_c0,sc_cend,sc_p)
 
-plt.figure()
-plt.plot(normalized_particle_concentration)
-plt.show()
 # plt.figure()
 # plt.title("Normalized distribution (min-max normalization)")
 # plt.plot(distribution,"*",label="particle distribution")

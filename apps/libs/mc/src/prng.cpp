@@ -1,1 +1,8 @@
-#include <mc/prng.hpp>
+#include <mc/prng/prng.hpp>
+#include <random>
+
+namespace MC
+{
+ 
+  
+} // namespace MC
