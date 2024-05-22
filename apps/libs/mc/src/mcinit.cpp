@@ -26,7 +26,7 @@ namespace MC
     double m_part = 1e-15;
 
     double weight = (x0 * v) / (n_particles * m_part);
-    std::cout<<"we"<<weight<<std::endl;
+    // std::cout<<"we"<<weight<<std::endl;
     unit->container = ParticlesContainer(particle_per_process,  weight);
     unit->extras.resize(info.thread_per_process);
     

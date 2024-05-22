@@ -87,6 +87,7 @@ namespace Simulation
     auto &current_gas_matflow = gas_flows.data[current_index_mat];
     if (iteration_count < n_loop)
     {
+      
       compute_MatFlow(reactor_state.liquid_flow.getViewFlows(),
                       current_liq_matflow);
 
@@ -107,9 +108,9 @@ namespace Simulation
 
     unit.setLiquidFlow(&current_liq_matflow);
     unit.setGasFlow(&current_gas_matflow);
-
     if (++element_count == n_per_flowmap)
     {
+      
       iteration_count++;
       element_count = 0;
     }

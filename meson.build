@@ -20,7 +20,8 @@ cpp = meson.get_compiler('cpp')
 global_install_dir = 'lib' # 'lib/'+project_name  # Relative  to /usr/local/
 includes_install_dir = ('include/' + project_name)
 
-cpp_args = ['-march=native', '-fno-math-errno']
+cpp_args = ['-march=native','-fno-math-errno']
+
 add_project_arguments(cpp_args, language: 'cpp')
 
 ## Get buildtype specific options

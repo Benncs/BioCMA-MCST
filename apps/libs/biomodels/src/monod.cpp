@@ -12,14 +12,14 @@ constexpr double interdivision_time = 20*60;
 constexpr double ln2 = 0.6931471805599453;
 constexpr double Ks = 486e-9;
 constexpr double k_pts = 1e-3;
-constexpr double phi_pts_max = 4.454e-12*1e-3/3600;
+constexpr double phi_pts_max = 4.454e-12*1e-3/3600*0.1 ;//*0.1 to divide cumption by 10;
 constexpr double YXS = 0.3;
 
 std::random_device rd{};
 std::mt19937 gen{rd()};
 static std::uniform_real_distribution<double> __model_dist(0., 1.);
 
-static std::normal_distribution<double> __model_n_dist(interdivision_time,interdivision_time/30.);
+static std::normal_distribution<double> __model_n_dist(interdivision_time,120);
 
 static double phi_pts(double S)
 {
@@ -45,15 +45,8 @@ void update_monod_model(double d_t,
   //  const auto lambda = model.age / model.interdivision_time;
   auto random = __model_dist(gen);
 
-  // bool division = MC::cdf_truncated_normal_check(random,model.age,model.interdivision_time,model.interdivision_time/10.) &&! almost_equal(s, 0.);
+  bool division = MC::cdf_truncated_normal_check(random,model.age,model.interdivision_time,model.interdivision_time/10.) &&! almost_equal(s, 0.);
 
-  double tt = __model_n_dist(gen);
-  while(tt<0)
-  {
-    tt = __model_n_dist(gen);
-  }
-
-  bool division = model.age>= tt && !almost_equal(s, 0.);
   if (division)
   {
     // std::cout<<model.age<<std::endl;

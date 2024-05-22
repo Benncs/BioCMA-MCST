@@ -44,11 +44,12 @@ public:
   DataExporter &operator=(DataExporter &&) = delete;
   DataExporter &operator=(const DataExporter &) = delete;
   DataExporter(const DataExporter &) = delete;
+  size_t n_iter;
   private:
   void write_final_results(ExportData& data,std::span<size_t> distribution);
   size_t n_row;
   size_t n_col;
-  size_t n_iter;
+
   std::string filename;
   size_t counter = 0;
 };

@@ -6,16 +6,17 @@ initial_distribution,distribution,cliq,data,tf,dt,npart,records_distribution = i
 
 
 n_t = data.shape[0]
+dt = tf/n_t
 t = np.linspace(0,tf,n_t)
-
+t2 = np.linspace(0,tf+1200)
 
 
 tau = 20*60 
 mu = np.log(2)/tau
 
-N = initial_distribution[0]*np.exp(t*mu)
+N = initial_distribution[0]*np.exp(t2*mu)
 
-plt.plot(t,N)
+plt.plot(t2,N)
 plt.plot(t,records_distribution[:,0,0])
 plt.show()
 

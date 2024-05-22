@@ -79,9 +79,8 @@ static void write_initial(HighFive::File &file,
                           SimulationParameters &params,
                           std::span<size_t> distribution)
 {
-  size_t n_0_particle = info.n_rank * params.n_particles;
 
-  file.createDataSet("initial_parameters/number_particles_0", n_0_particle);
+  file.createDataSet("initial_parameters/number_particles_0", params.n_particles);
   file.createDataSet("initial_parameters/number_compartment",
                      params.n_compartments);
   file.createDataSet("initial_parameters/final_time", params.final_time);

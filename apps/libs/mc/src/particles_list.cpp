@@ -15,11 +15,11 @@ namespace MC
       throw std::length_error(
           "Required size for particleList buffer bigger than limits");
     }
-    this->data = std::vector<MC::Particles>(capacity, Particles(weight));
+    this->m_data = std::vector<MC::Particles>(capacity, Particles(weight));
   }
 
   ParticlesList::ParticlesList(ParticlesList &&other) noexcept
-      : data(std::move(other.data))
+      : m_data(std::move(other.m_data))
   {
   }
 
@@ -35,7 +35,7 @@ namespace MC
   {
     if (this != &other)
     {
-      data = std::move(other.data);
+      m_data = std::move(other.m_data);
     }
     return *this;
   }

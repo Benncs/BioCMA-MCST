@@ -20,6 +20,12 @@ struct SimulationParameters
   static SimulationParameters m_default();
 };
 
+struct ExportParameters
+{
+  size_t n_save; 
+  std::string filename; 
+};
+
 inline std::ostream &operator<<(std::ostream &stream,
                                 const SimulationParameters &obj)
 {

@@ -1,11 +1,13 @@
 #include "cma_read/light_2d_view.hpp"
 #include "cma_read/neighbors.hpp"
+#include "mc/prng/distribution.hpp"
 #include "mc/prng/prng.hpp"
 #include "models/types.hpp"
 #include "mpi.h"
 #include "mpi_w/impl_op.hpp"
 #include "mpi_w/message_t.hpp"
 #include <cstddef>
+#include <cstdint>
 #include <memory>
 #include <siminit.hpp>
 
@@ -37,7 +39,6 @@ init_simulation(ExecInfo &info,
   std::vector<size_t> worker_neighbor_data;
 
   size_t *worker_neighbor_data_ptr = nullptr;
-
   size_t worker_neighbor_data_size = 0;
 
   Neighbors::Neighbors_const_view_t liquid_neighbors;
@@ -48,9 +49,9 @@ init_simulation(ExecInfo &info,
 
     params.n_compartments = fstate->n_compartments;
     liquid_neighbors = fstate->liquid_flow.getViewNeighors();
-    if(fstate->gas_flow.is_empty())
+    if (fstate->gas_flow.is_empty())
     {
-      params.is_two_phase_flow=false;
+      params.is_two_phase_flow = false;
     }
 
     worker_neighbor_data_size = liquid_neighbors.size();
@@ -62,20 +63,26 @@ init_simulation(ExecInfo &info,
 
     liq_volume = fstate->liquidVolume;
     gas_volume = fstate->gasVolume;
-    
-    if(liq_volume.size()>1)
-    {
-          params.d_t = (params.d_t == 0.)
-                     ? _flow_handle->MinLiquidResidenceTime() / 100.
-                     : params.d_t;
-    }
-   
 
+    if (liq_volume.size() > 1)
+    {
+      params.d_t = (params.d_t == 0.)
+                       ? _flow_handle->MinLiquidResidenceTime() / 100.
+                       : params.d_t;
+    }
+
+    // Calculate the total number of time steps
     const auto n_t = static_cast<size_t>(params.final_time / params.d_t);
-    const size_t n_repetition = n_t / params.n_different_maps;
+
+    // Define the duration of each flowmap and compute steps per flowmap
     const double t_per_flowmap = 0.0286;
-    const auto n_per_flowmap = 1;//static_cast<size_t>(t_per_flowmap/static_cast<double>(params.d_t));
-    _flow_handle->setRepetition(n_repetition,n_per_flowmap);
+    const auto n_per_flowmap =
+        static_cast<size_t>(t_per_flowmap / static_cast<double>(params.d_t));
+
+    // Calculate the number of repetitions
+    const size_t n_repetition = n_t / (params.n_different_maps * n_per_flowmap);
+
+    _flow_handle->setRepetition(n_repetition, n_per_flowmap);
     register_run(info, params);
   }
 
@@ -87,10 +94,8 @@ init_simulation(ExecInfo &info,
   MPI_W::broadcast(params.d_t, 0);
   MPI_W::broadcast(params.n_compartments, 0);
   MPI_W::broadcast(params.is_two_phase_flow, 0);
-
   MPI_W::broadcast(worker_neighbor_data_size, 0);
   MPI_W::broadcast(liq_volume, 0, info.current_rank);
-  
   MPI_W::broadcast(gas_volume, 0, info.current_rank);
 
   if (info.current_rank != 0)
@@ -118,9 +123,16 @@ init_simulation(ExecInfo &info,
   auto mc_unit =
       MC::init(info, params.n_particles, liq_volume, liquid_neighbors);
 
-  bool tpf =  info.current_rank == 0 && params.is_two_phase_flow;
+  bool tpf = info.current_rank == 0 && params.is_two_phase_flow;
 
-  auto law_param = MC::BoundedExponentialLaw{1/static_cast<double>(params.n_compartments),0,static_cast<double>(params.n_compartments-1)};
+  // auto law_param =
+  //     MC::BoundedExponentialLaw{1 /
+  //     static_cast<double>(params.n_compartments),
+  //                               0,
+  //                               static_cast<double>(params.n_compartments -
+  //                               1)};
+
+  auto law_param = MC::UniformLawINT{100, 150};
 
   params.n_species = 1;
 
@@ -129,9 +141,9 @@ init_simulation(ExecInfo &info,
                                                gas_volume,
                                                liq_volume,
                                                params.n_species,
-                                               model,law_param,
+                                               model,
+                                               law_param,
                                                tpf);
-
 
   return simulation;
 }

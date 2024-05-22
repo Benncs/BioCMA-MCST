@@ -1,6 +1,8 @@
 #include "mc/container_state.hpp"
 #include "mc/domain.hpp"
 #include "mc/events.hpp"
+#include "mc/particles/mcparticles.hpp"
+#include <cstddef>
 #include <mpi_w/wrap_mpi.hpp>
 #include <sync.hpp>
 
@@ -48,6 +50,13 @@ void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
   auto local = simulation.mc_unit->domain.getDistribution();
 
   auto local_size = local.size();
+
+  // auto local_particle = simulation.mc_unit->container.to_process.data();
+
+  auto total_particle =
+      MPI_W::gather_reduce<size_t>(simulation.mc_unit->container.to_process.size(), exec.n_rank);
+  
+
   auto tot = MPI_W::gather<size_t>(local, exec.n_rank, 0);
 
   if (exec.current_rank == 0)
@@ -55,6 +64,8 @@ void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
     tot_events = MC::EventContainer::reduce(total_contrib_data);
     auto reduced = MC::ReactorDomain::reduce(tot, local_size, exec.n_rank);
     simulation.mc_unit->domain = std::move(reduced);
+    std::cout<<"nparticle "<<total_particle<<std::endl;
+    // simulation.mc_unit->container.to_process.data() = total_particle;
   }
   simulation.mc_unit->ts_events = {
       tot_events}; // FIX IT because we will reduce twice (here + post process)

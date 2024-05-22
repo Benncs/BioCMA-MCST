@@ -1,4 +1,7 @@
 
+#include "cma_read/light_2d_view.hpp"
+#include "cma_read/neighbors.hpp"
+#include <cstddef>
 #include <mpi_w/iteration_payload.hpp>
 #include <mpi_w/message_t.hpp>
 #include <mpi_w/impl_op.hpp>
@@ -22,7 +25,11 @@ namespace MPI_W
 
     int rc3 = MPI_W::send_v<double>(gas_volumes, rank, 2, false);
 
-    if (rc1 != MPI_SUCCESS || rc2 != MPI_SUCCESS || rc3 != MPI_SUCCESS)
+    
+    int rc4 = MPI_W::send_v(neigbors.data(), rank,3,true);
+
+
+    if (rc1 != MPI_SUCCESS || rc2 != MPI_SUCCESS || rc3 != MPI_SUCCESS|| rc4 != MPI_SUCCESS)
     {
       MPI_W::critical_error();
     }
@@ -35,7 +42,18 @@ namespace MPI_W
     int rc2 = MPI_W::recv_span<double>(liquid_volumes, source, status, 1);
     int rc3 = MPI_W::recv_span<double>(gas_volumes, source, status, 2);
 
-    if (rc1 != MPI_SUCCESS || rc2 != MPI_SUCCESS || rc3 != MPI_SUCCESS)
+    auto opt  = MPI_W::recv_v<size_t>(source,status,3);
+    if(!opt.has_value())
+    {
+      MPI_W::critical_error();
+    }
+    raw_neigbors = opt.value();
+    auto n_col = raw_neigbors.size() / liquid_flows.size();
+    neigbors = Neighbors::Neighbors_const_view_t(
+        raw_neigbors, liquid_flows.size(), n_col, true);
+
+
+    if (rc1 != MPI_SUCCESS || rc2 != MPI_SUCCESS || rc3 != MPI_SUCCESS )
     {
       MPI_W::critical_error();
     }

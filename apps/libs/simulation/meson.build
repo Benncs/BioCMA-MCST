@@ -48,7 +48,8 @@ simulation_lib = library(
    pic: true,
    install: true,
    install_dir: global_install_dir,
-   link_args: ['-flto']
+   link_args: ['-flto'],
+   cpp_args:[]
 )
 
 

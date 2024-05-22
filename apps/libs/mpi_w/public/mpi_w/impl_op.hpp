@@ -1,13 +1,14 @@
 #ifndef __IMPL_MPI_OP_HPP__
 #define __IMPL_MPI_OP_HPP__
 
+#include "common/common.hpp"
 #include <mpi_w/message_t.hpp>
 #include <mpi_w/mpi_types.hpp>
 
-#include <mpi.h>
 #include <common/execinfo.hpp>
 #include <cstddef>
 #include <limits>
+#include <mpi.h>
 #include <optional>
 #include <span>
 #include <stdexcept>
@@ -17,9 +18,8 @@ namespace MPI_W
 {
 
   template <typename T>
-  concept POD =
-      std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T> &&
-      std::is_trivially_destructible_v<T> &&
+  concept POD = std::is_standard_layout_v<T> &&
+      std::is_trivially_copyable_v<T> && std::is_trivially_destructible_v<T> &&
       std::is_trivially_default_constructible_v<T>;
 
   // SENDING
@@ -73,7 +73,18 @@ namespace MPI_W
 
   template <typename T>
   std::vector<T>
+  _gather_unsafe(T *src_data, size_t size, size_t n_rank, size_t root = 0);
+
+  template <typename T>
+  std::vector<T>
   gather(std::span<T> local_data, size_t n_rank, size_t root = 0);
+
+  template <NumberType T>
+  T gather_reduce(T data, size_t n_rank, size_t root = 0);
+
+  template <typename T>
+  std::vector<T>
+  gather_v(const std::vector<T> &local_data, size_t n_rank, size_t root = 0);
 
   // IMPL
 
@@ -167,11 +178,8 @@ namespace MPI_W
 
   template <POD DataType> int broadcast(DataType &data, size_t root)
   {
-    return MPI_Bcast(&data,
-                     1,
-                     get_type<DataType>(),
-                     static_cast<int>(root),
-                     MPI_COMM_WORLD);
+    return MPI_Bcast(
+        &data, 1, get_type<DataType>(), static_cast<int>(root), MPI_COMM_WORLD);
   }
 
   // template <> int broadcast(size_t &data, size_t root)
@@ -235,15 +243,12 @@ namespace MPI_W
     return _broadcast_unsafe(data.data(), data.size(), root);
   }
 
-
- 
-
   template <typename T>
-  std::vector<T> gather(std::span<T> local_data, size_t n_rank, size_t root)
+  std::vector<T>
+  _gather_unsafe(T *src_data, size_t size, size_t n_rank, size_t root)
   {
-    int src_size = static_cast<int>(local_data.size());
+    int src_size = static_cast<int>(size);
     std::vector<T> total_data(src_size * n_rank);
-    T *src_data = local_data.data();
     T *dest_data = total_data.data();
     auto mpi_type = get_type<T>();
 
@@ -261,6 +266,29 @@ namespace MPI_W
     }
 
     return total_data;
+  }
+
+  template <typename T>
+  std::vector<T> gather(std::span<T> local_data, size_t n_rank, size_t root)
+  {
+    return _gather_unsafe(local_data.data(), local_data.size(), n_rank, root);
+  }
+
+  template <NumberType T> T gather_reduce(T data, size_t n_rank, size_t root)
+  {
+ 
+    T result{};
+   
+     MPI_Reduce(&data, &result, 1, MPI_W::get_type<T>(), MPI_SUM, 0, MPI_COMM_WORLD);
+
+    return result;
+  }
+
+  template <typename T>
+  std::vector<T>
+  gather_v(const std::vector<T> &local_data, size_t n_rank, size_t root)
+  {
+    return _gather_unsafe(local_data.data(), local_data.size(), n_rank, root);
   }
 
   template <typename... Args>
@@ -310,12 +338,12 @@ namespace MPI_W
              bool send_size)
   {
     int send_status = MPI_SUCCESS;
-     
+
     if (send_size)
     {
       send_status = send<size_t>(data.size(), dest, tag);
     }
-  
+
     if (send_status == MPI_SUCCESS)
     {
       send_status = _send_unsafe(data.data(), data.size(), dest, tag);

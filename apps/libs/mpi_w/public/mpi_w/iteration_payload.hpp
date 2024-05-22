@@ -4,6 +4,7 @@
 #include <mpi.h>
 #include <span>
 #include <vector>
+#include <cma_read/neighbors.hpp>
 
 namespace MPI_W
 {
@@ -14,7 +15,9 @@ namespace MPI_W
     std::vector<double> liquid_flows;
     std::vector<double> liquid_volumes;
     std::vector<double> gas_volumes;
-
+    std::vector<size_t> raw_neigbors;
+    Neighbors::Neighbors_const_view_t neigbors;
+    
     explicit IterationPayload(size_t size_flows, size_t volumes);
     // explicit IterationPayload()=delete;
     void recv(size_t source, MPI_Status *status);
@@ -26,6 +29,7 @@ namespace MPI_W
     std::span<double> liquid_flows;
     std::span<double> liquid_volumes;
     std::span<double> gas_volumes;
+    Neighbors::Neighbors_const_view_t neigbors;
     
 
     void send(size_t rank) const;

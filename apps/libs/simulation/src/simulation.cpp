@@ -42,7 +42,7 @@ namespace Simulation
     for (auto i = 0; i < liq->concentration.cols(); ++i)
     {
       // liq->concentration.coeffRef(1, i) = 0;
-      // liq->concentration.coeffRef(0, static_cast<int>(i)) = 0.5; // 0.5 G/L
+      // liq->concentration.coeffRef(0, static_cast<int>(i)) = 0.5; // 0.5 G/LP
       // Glucose
       double rngn = (i < liq->concentration.cols() / 3)
                         ? rng.uniform_double_rand(0, 20)
@@ -163,7 +163,25 @@ namespace Simulation
 
     const size_t n_compartments = mc_unit->domain.getNumberCompartments();
     
-    
+//     #pragma omp target data map(to: to_process[0:to_process.size()]) map(to: param) map(tofrom: mc_unit-&gt;domain)
+// {
+// #pragma omp target teams distribute parallel for schedule(static) \
+//     map(to: n_compartments) \
+//     num_threads(this-&gt;n_thread)
+//     for (auto it = to_process.begin(); it < to_process.end(); ++it)
+//     {
+//         auto prng = MC::PRNG::get_rng(omp_get_thread_num());
+//         auto distribution = MC::get_distribution_int&lt;size_t&gt;(param);
+
+//         auto &amp;&amp;particle = *it;
+//         particle.current_container = distribution(prng);
+
+//         auto &amp;i_container = mc_unit-&gt;domain[particle.current_container];
+
+//         kmodel.init_kernel(particle);
+//         __ATOM_INCR__(i_container.n_cells);
+//     }
+// }
 
 #pragma omp parallel default(none),                                            \
     shared(to_process, n_compartments, param)                            \
@@ -176,7 +194,6 @@ namespace Simulation
       {
 
         auto &&particle = *it;
-        // const auto pos = distribution(prng);
         particle.current_container = distribution(prng);
 
         auto &i_container = mc_unit->domain[particle.current_container];

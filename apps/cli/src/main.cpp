@@ -55,6 +55,8 @@ static void host_process(ExecInfo &exec,
 static KModel load_model_(size_t index_model);
 static void exec(int argc, char **argv, SimulationParameters params);
 
+static ExportParameters export_i = {100,"result.h5"};
+
 int main(int argc, char **argv)
 {
   init_environment();
@@ -116,7 +118,7 @@ static void exec(int argc, char **argv, SimulationParameters params)
   ExecInfo exec_info = runtime_init(argc, argv, params);
 
   std::shared_ptr<FlowIterator> _fd = nullptr;
-  constexpr size_t i_model = 2;
+  constexpr size_t i_model = 1;
   const auto model = load_model_(i_model);
   auto simulation = init_simulation(exec_info, params, _fd, model);
 
@@ -136,13 +138,13 @@ static void host_process(ExecInfo &exec,
                          SimulationParameters &params,
                          std::shared_ptr<FlowIterator> _flow_handle)
 {
-  std::string name = "./results/test.h5";
+  std::string name = "./results/"+export_i.filename;
   auto d = simulation.mc_unit->domain.getDistribution();
   DataExporter de(exec,
                   params,
                   name,
                   simulation.getDim(),
-                  _flow_handle->totalSteps() * 1000,d);
+                  export_i.n_save,d);
 
   show(simulation);
   if (verbose)
@@ -173,13 +175,8 @@ static void workers_process(ExecInfo &exec,
   const size_t n_loop = params.n_different_maps;
   auto liquid_flows = Simulation::BasicCacheHydro(n_loop);
 
-  std::vector<size_t> owning_liquid_neighbors(n_compartments);
 
-  // size_t *worker_neighbor_data_ptr = nullptr;
 
-  // size_t worker_neighbor_data_size = 0;
-
-  Neighbors::Neighbors_const_view_t liquid_neighbors;
 
   MPI_W::IterationPayload payload(n_compartments * n_compartments,
                                   n_compartments);
@@ -196,20 +193,7 @@ static void workers_process(ExecInfo &exec,
 
     payload.recv(0, &status);
 
-    owning_liquid_neighbors = MPI_W::try_recv_v<size_t>(0, &status, 88);
-    size_t n_col = owning_liquid_neighbors.size() / n_compartments;
-    liquid_neighbors = Neighbors::Neighbors_const_view_t(
-        owning_liquid_neighbors, n_compartments, n_col, true);
-
-    // Neighbors could change during iteration so we have to allocate new
-    // neighbors each time
-    // for (auto &&neighbors : liquid_neighbors)
-    // {
-    //   neighbors = MPI_W::try_recv_v<size_t>(0, &status);
-    // }
-
-    // std::cout<<liquid_flows.data<<std::endl;
-    simulation.mc_unit->domain.setLiquidNeighbors(liquid_neighbors);
+    simulation.mc_unit->domain.setLiquidNeighbors(payload.neigbors);
     Simulation::update_flow(iteration_count,
                             n_loop,
                             simulation,
