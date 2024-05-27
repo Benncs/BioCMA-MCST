@@ -45,8 +45,8 @@ namespace Simulation
       // liq->concentration.coeffRef(0, static_cast<int>(i)) = 0.5; // 0.5 G/LP
       // Glucose
       double rngn = (i < liq->concentration.cols() / 3)
-                        ? rng.uniform_double_rand(0, 20)
-                        : rng.uniform_double_rand(10, 15);
+                        ? rng.uniform_double_rand(0, 5)
+                        : rng.uniform_double_rand(0, 20);
       liq->concentration.coeffRef(0, static_cast<int>(i)) = rngn;
       if (host)
       {

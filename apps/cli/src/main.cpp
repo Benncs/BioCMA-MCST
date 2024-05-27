@@ -55,7 +55,7 @@ static void host_process(ExecInfo &exec,
 static KModel load_model_(size_t index_model);
 static void exec(int argc, char **argv, SimulationParameters params);
 
-static ExportParameters export_i = {100,"result.h5"};
+static ExportParameters export_i = {45*3,"result.h5"};
 
 int main(int argc, char **argv)
 {
