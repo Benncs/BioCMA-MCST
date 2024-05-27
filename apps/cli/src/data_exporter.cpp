@@ -23,7 +23,39 @@ std::string date_time()
   return ss.str();
 }
 
+void DataExporter::write_final_results(
+    const Simulation::SimulationUnit &simulation,
+    std::span<size_t> distribution)
+{
+  ExportData data = {
+      simulation.mc_unit->container.to_process.size(),
+      simulation.getCliqData(),
+      simulation.getCgasData(),
+      simulation.mc_unit->ts_events.data(),
+      simulation.getDim(),
+  };
 
+  write_final_results(data, distribution);
+  // try
+  // {
+  //   {
+  //     HighFive::File file(filename, HighFive::File::ReadWrite);
+  //     std::vector<double> mass(simulation.mc_unit->container.to_process.size());
+  //     std::transform(simulation.mc_unit->container.to_process.begin(),
+  //                    simulation.mc_unit->container.to_process.end(),
+  //                    mass.begin(),
+  //                    [](auto &&p)
+  //                    {
+  //                      auto &model = std::any_cast<Monod &>(p.data);
+  //                      return model.l;
+  //                    });
+  //     file.createDataSet("final_results/integrated/mass ", mass);
+  //   }
+  // }
+  // catch (...)
+  // {
+  // }
+}
 
 //////////////////////
 
@@ -115,39 +147,7 @@ void DataExporter::write_final_results(ExportData &data,
 
 
 
-void DataExporter::write_final_results(
-    const Simulation::SimulationUnit &simulation,
-    std::span<size_t> distribution)
-{
-  ExportData data = {
-      simulation.mc_unit->container.to_process.size(),
-      simulation.getCliqData(),
-      simulation.getCgasData(),
-      simulation.mc_unit->ts_events.data(),
-      simulation.getDim(),
-  };
 
-  write_final_results(data, distribution);
-  try
-  {
-    {
-      HighFive::File file(filename, HighFive::File::ReadWrite);
-      std::vector<double> mass(simulation.mc_unit->container.to_process.size());
-      std::transform(simulation.mc_unit->container.to_process.begin(),
-                     simulation.mc_unit->container.to_process.end(),
-                     mass.begin(),
-                     [](auto &&p)
-                     {
-                       auto &model = std::any_cast<Monod &>(p.data);
-                       return model.l;
-                     });
-      file.createDataSet("final_results/integrated/mass ", mass);
-    }
-  }
-  catch (...)
-  {
-  }
-}
 
 void DataExporter::prepare()
 {
