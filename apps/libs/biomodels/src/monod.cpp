@@ -42,14 +42,18 @@ void update_monod_model(double d_t,
   model.phi = std::max(0.,phi_pts(s));
 
   model.l+=d_t*model.phi/YXS;  
-  //  const auto lambda = model.age / model.interdivision_time;
-  auto random = __model_dist(gen);
+  // const auto lambda = (model.age / model.interdivision_time);
+  //  const auto lambda = (model.age * model.interdivision_time);
+  // auto random = __model_dist(gen);
+  // bool division = MC::cdf_exponential_check(random,lambda)&&! almost_equal(s, 0.);
 
-  bool division = MC::cdf_truncated_normal_check(random,model.age,model.interdivision_time,model.interdivision_time/10.) &&! almost_equal(s, 0.);
+  bool division = model.age>= model.interdivision_time &&! almost_equal(s, 0.);
+
+  // auto random = __model_dist(gen);
+  // bool division = MC::cdf_truncated_normal_check(random,model.age,model.interdivision_time,model.interdivision_time/6.) &&! almost_equal(s, 0.);
 
   if (division)
   {
-    // std::cout<<model.age<<std::endl;
     p.status = MC::CellStatus::CYTOKINESIS;
   }
 }

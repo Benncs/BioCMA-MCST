@@ -15,7 +15,7 @@ mc_lib = library(
    pic: true,
    install: true,
    install_dir: global_install_dir,
-   link_args: ['-flto']
+   link_args: [flto_flag]
 )
 
 mc_dependency = declare_dependency(

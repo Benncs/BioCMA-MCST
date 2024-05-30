@@ -5,13 +5,39 @@ project(
   meson_version: '>= 1.3.0',
   default_options: [
     'warning_level=3',
-    'cpp_std=gnu++20',
+    # 'cpp_std=c++20',
     'b_colorout=always',
     # 'b_coverage=true'
   ],
 )
 
-## Define main shared variables
+
+use_cuda = get_option('use_cuda')
+compiler = meson.get_compiler('cpp')
+arch_specific_args = []
+if use_cuda
+  arch_specific_args = ['-mp=gpu' ,'-gpu=cc35','-cudalib=cublas']
+  else
+  arch_specific_args = ['-march=native']
+endif 
+
+if compiler.has_argument('-fno-math-errno')
+arch_specific_args = [arch_specific_args,'-fno-math-errno']
+endif 
+
+flto_flag = ''
+
+if compiler.has_argument('-flto')
+flto_flag = '-flto'
+endif 
+
+compiler.has_argument('-fopenmp')
+
+## Define main shared variables\
+
+compiler.has_argument('--std=c++20',required: true)
+add_global_arguments('--std=c++20',language: 'cpp')
+
 root = meson.project_source_root()
 project_name = meson.project_name()
 build_type = get_option('buildtype')
@@ -20,7 +46,8 @@ cpp = meson.get_compiler('cpp')
 global_install_dir = 'lib' # 'lib/'+project_name  # Relative  to /usr/local/
 includes_install_dir = ('include/' + project_name)
 
-cpp_args = ['-march=native','-fno-math-errno']
+cpp_args = arch_specific_args 
+
 
 add_project_arguments(cpp_args, language: 'cpp')
 
@@ -49,12 +76,22 @@ use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  
 
 mpi = dependency('mpi', language: 'cpp', required: true)
 thread_dep = dependency('threads', required: true)
+
+if use_cuda
+omp = declare_dependency(link_args: ['-fopenmp'])
+else
 omp = dependency('openmp', language: 'cpp', required: true)
+endif 
+
+
+
 eigen_dep = dependency('eigen3', required: true)
 blas = dependency('blas', required: false) # Eigen can work without BLAS
-# if blas.found()
-#   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
-# endif
+
+
+if blas.found()
+  add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
+endif
 
 highfive_found = false
 cmake = import('cmake', required: false)
@@ -79,7 +116,7 @@ cma_reader = subproject(
   'birem',
   default_options: [
     'warning_level=3',
-    'cpp_std=gnu++20',
+    # 'cpp_std=c++20',
     'b_colorout=always',
     'b_coverage=false',
     'build_all=false',

@@ -55,7 +55,7 @@ static void host_process(ExecInfo &exec,
 static KModel load_model_(size_t index_model);
 static void exec(int argc, char **argv, SimulationParameters params);
 
-static ExportParameters export_i = {45*3,"result.h5"};
+static ExportParameters export_i = {10,"result_.h5"};
 
 int main(int argc, char **argv)
 {
@@ -138,6 +138,7 @@ static void host_process(ExecInfo &exec,
                          SimulationParameters &params,
                          std::shared_ptr<FlowIterator> _flow_handle)
 {
+  export_i.n_save = 1500;//static_cast<size_t>(params.final_time+1)*3;
   std::string name = "./results/"+export_i.filename;
   auto d = simulation.mc_unit->domain.getDistribution();
   DataExporter de(exec,

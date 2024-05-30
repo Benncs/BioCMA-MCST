@@ -14,6 +14,14 @@
 
 #include <iomanip>
 
+#ifdef USE_HIGHFIVE
+#  include "highfive/H5File.hpp"
+#  include "highfive/H5PropertyList.hpp"
+#  include <Eigen/Dense>
+#  include <highfive/eigen.hpp>
+#  include <highfive/highfive.hpp>
+#endif 
+
 std::string date_time()
 {
   std::stringstream ss;
@@ -36,35 +44,33 @@ void DataExporter::write_final_results(
   };
 
   write_final_results(data, distribution);
-  // try
-  // {
-  //   {
-  //     HighFive::File file(filename, HighFive::File::ReadWrite);
-  //     std::vector<double> mass(simulation.mc_unit->container.to_process.size());
-  //     std::transform(simulation.mc_unit->container.to_process.begin(),
-  //                    simulation.mc_unit->container.to_process.end(),
-  //                    mass.begin(),
-  //                    [](auto &&p)
-  //                    {
-  //                      auto &model = std::any_cast<Monod &>(p.data);
-  //                      return model.l;
-  //                    });
-  //     file.createDataSet("final_results/integrated/mass ", mass);
-  //   }
-  // }
-  // catch (...)
-  // {
-  // }
+  #ifdef USE_HIGHFIVE
+  try
+  {
+    {
+      HighFive::File file(filename, HighFive::File::ReadWrite);
+      std::vector<double> mass(simulation.mc_unit->container.to_process.size());
+      std::transform(simulation.mc_unit->container.to_process.begin(),
+                     simulation.mc_unit->container.to_process.end(),
+                     mass.begin(),
+                     [](auto &&p)
+                     {
+                       auto &model = std::any_cast<Monod &>(p.data);
+                       return model.l;
+                     });
+      file.createDataSet("final_results/integrated/mass ", mass);
+    }
+  }
+  catch (...)
+  {
+  }
+  #endif 
 }
 
 //////////////////////
 
 #ifdef USE_HIGHFIVE
-#  include "highfive/H5File.hpp"
-#  include "highfive/H5PropertyList.hpp"
-#  include <Eigen/Dense>
-#  include <highfive/eigen.hpp>
-#  include <highfive/highfive.hpp>
+
 static void write_attributes(HighFive::File &file)
 {
 
@@ -184,7 +190,9 @@ void DataExporter::prepare()
 void DataExporter::append(std::span<double> data,
                           const std::vector<size_t> &distribution)
 {
-  HighFive::File file(filename, HighFive::File::ReadWrite);
+  try
+  {
+     HighFive::File file(filename, HighFive::File::ReadWrite);
   auto dataset = file.getDataSet("final_results/concentrations/records");
   dataset.resize({counter + 1, n_col, n_row});
   dataset.select({counter, 0, 0}, {1, n_col, n_row}).write_raw(data.data());
@@ -195,6 +203,12 @@ void DataExporter::append(std::span<double> data,
   dataset.select({counter, 0, 0}, {1, n_col, n_row})
       .write_raw(distribution.data());
   counter++;
+  }
+  catch(...)
+  {
+    
+  }
+ 
 }
 
 #else

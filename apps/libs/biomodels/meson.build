@@ -15,13 +15,15 @@ model_lib = static_library(
    model_sources,
    include_directories: [public_include_dir, 'includes'],
    dependencies: dep,
-   link_args: ['-flto'],
+   link_args: [flto_flag],
+   pic:true
 )
 
 biomodel_dependency = declare_dependency(
    include_directories: [public_include_dir],
    link_with: model_lib,
    dependencies: dep,
+
 )
 
 install_subdir(

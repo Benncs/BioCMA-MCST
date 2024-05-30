@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM nvcr.io/nvidia/nvhpc:24.5-devel-cuda_multi-ubuntu22.04
 ARG LLVM_VERSION=17
 
 
@@ -12,8 +12,8 @@ RUN apt-get update && \
     gnupg \ 
     libomp-dev libopenmpi-dev libeigen3-dev  pkg-config ninja-build
 
-RUN apt-get install -y libblas-dev
-
+RUN apt-get install -y libblas-dev libhdf5-dev 
+RUN apt-get install -y libblas-dev libhdf5-dev libvtk9-dev
 
 # Install Meson
 RUN pip install meson

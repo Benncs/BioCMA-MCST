@@ -40,6 +40,7 @@ dep_static_module = [
 ]
 
 
+
 name = f'@project_name@_cli_app'
 
 
@@ -69,7 +70,7 @@ executable(
   cpp_args: [target_custom_options],
   install: true,
   install_rpath: global_install_dir,
-  link_args: ['-flto']
+  link_args: [flto_flag]
 )
 
 # Conditional dynamic module build

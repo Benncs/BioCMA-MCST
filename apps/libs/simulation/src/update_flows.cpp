@@ -110,7 +110,6 @@ namespace Simulation
     unit.setGasFlow(&current_gas_matflow);
     if (++element_count == n_per_flowmap)
     {
-      
       iteration_count++;
       element_count = 0;
     }

@@ -24,14 +24,16 @@ constexpr size_t n_particle_trigger_parralel = 1e6;
 #define FILL_PAYLOAD                                                           \
   mpi_payload.liquid_flows = reactor_state->liquid_flow.getViewFlows().data(); \
   mpi_payload.liquid_volumes = reactor_state->liquidVolume;                    \
-  mpi_payload.gas_volumes = reactor_state->gasVolume;
+  mpi_payload.gas_volumes = reactor_state->gasVolume;                          \
+  mpi_payload.neigbors =                                                       \
+      reactor_state->liquid_flow.getViewNeighors().to_const();
 
-// #define MPI_DISPATCH_MAIN                                                      \
-//   for (size_t j = 1; j < exec.n_rank; ++j)                                     \
-//   {                                                                            \
-//     MPI_W::send(MPI_W::SIGNALS::RUN, j);                                       \
-//     payload.send(j);                                                           \
-//   }
+#define MPI_DISPATCH_MAIN                                                      \
+  for (size_t __macro_j = 1; __macro_j < exec.n_rank; ++__macro_j)             \
+  {                                                                            \
+    MPI_W::send(MPI_W::SIGNALS::RUN, __macro_j);                               \
+    mpi_payload.send(__macro_j);                                               \
+  }
 
 // for (const auto &neighbor : reactor_state.liquid_flow.neigbors)              \
   // { /*Send each neighbor vector to all processes*/                             \
@@ -59,14 +61,22 @@ void main_loop(const SimulationParameters &params,
   MPI_W::HostIterationPayload mpi_payload;
 
   auto iterator = _flow_handle->begin();
+
   const auto end = _flow_handle->end();
+
+  const size_t n_iter = _flow_handle->totalSteps();
+
   auto *reactor_state = &(*iterator);
+
   bool end_flag = iterator != end;
 
   size_t dump_counter = 0;
-  static const size_t dump_number =
-      std::min(_flow_handle->totalSteps(), static_cast<size_t>(exporter->n_iter));
-  static const size_t dump_interval = _flow_handle->totalSteps() / dump_number;
+
+  const size_t dump_number = std::min(
+      n_iter, static_cast<size_t>(exporter->n_iter));
+
+  const size_t dump_interval = (n_iter) / (dump_number-1);
+
 
   Simulation::update_flow(iteration_count,
                           n_per_flowmap,
@@ -74,14 +84,16 @@ void main_loop(const SimulationParameters &params,
                           simulation,
                           *reactor_state,
                           cache_liquid_flows,
-                          cache_gas_flows,params.is_two_phase_flow);
+                          cache_gas_flows,
+                          params.is_two_phase_flow);
 
   simulation.setVolumes(reactor_state->gasVolume, reactor_state->liquidVolume);
 
 #pragma omp parallel default(shared)
   {
 
-    while (end_flag)
+    // while (end_flag)
+    for (size_t i = 0; i < n_iter; ++i)
     {
 
       DEBUG_INSTRUCTION
@@ -92,14 +104,8 @@ void main_loop(const SimulationParameters &params,
         reactor_state = &(*iterator);
 
         FILL_PAYLOAD;
-        mpi_payload.neigbors = reactor_state->liquid_flow.getViewNeighors().to_const();
 
-        for (size_t j = 1; j < exec.n_rank; ++j)
-        {
-          MPI_W::send(MPI_W::SIGNALS::RUN, j);
-          mpi_payload.send(j);
-        }
-
+        MPI_DISPATCH_MAIN;
 
         Simulation::update_flow(iteration_count,
                                 n_per_flowmap,
@@ -107,7 +113,8 @@ void main_loop(const SimulationParameters &params,
                                 simulation,
                                 *reactor_state,
                                 cache_liquid_flows,
-                                cache_gas_flows,params.is_two_phase_flow);
+                                cache_gas_flows,
+                                params.is_two_phase_flow);
 
         simulation.setVolumes(reactor_state->gasVolume,
                               reactor_state->liquidVolume);
@@ -118,9 +125,10 @@ void main_loop(const SimulationParameters &params,
 #pragma omp master
       {
         dump_counter++;
-        if (dump_counter >= dump_interval)
+        if (dump_counter == dump_interval)
         {
-          exporter->append(simulation.getCliqData(),simulation.mc_unit->domain.getDistribution());
+          exporter->append(simulation.getCliqData(),
+                           simulation.mc_unit->domain.getDistribution());
           dump_counter = 0;
         }
       }

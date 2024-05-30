@@ -71,15 +71,17 @@ init_simulation(ExecInfo &info,
                        : params.d_t;
     }
 
+
     // Calculate the total number of time steps
     const auto n_t = static_cast<size_t>(params.final_time / params.d_t);
 
     // Define the duration of each flowmap and compute steps per flowmap
     const double t_per_flowmap = 0.0286;
-    const auto n_per_flowmap =
-        static_cast<size_t>(t_per_flowmap / static_cast<double>(params.d_t));
+    const auto n_per_flowmap = static_cast<size_t>(t_per_flowmap / static_cast<double>(params.d_t));
 
     // Calculate the number of repetitions
+
+
     const size_t n_repetition = n_t / (params.n_different_maps * n_per_flowmap);
 
     _flow_handle->setRepetition(n_repetition, n_per_flowmap);
@@ -132,7 +134,7 @@ init_simulation(ExecInfo &info,
   //                               static_cast<double>(params.n_compartments -
   //                               1)};
 
-  auto law_param = MC::UniformLawINT{100, 150};
+  auto law_param = MC::UniformLawINT(0,1); //MC::UniformLawINT{0, static_cast<int64_t>((params.n_compartments-1)/2)};
 
   params.n_species = 1;
 

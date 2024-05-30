@@ -39,23 +39,23 @@ namespace Simulation
   {
     auto rng = MC::PRNG();
     bool host = gas != nullptr;
-    for (auto i = 0; i < liq->concentration.cols(); ++i)
-    {
-      // liq->concentration.coeffRef(1, i) = 0;
-      // liq->concentration.coeffRef(0, static_cast<int>(i)) = 0.5; // 0.5 G/LP
-      // Glucose
-      double rngn = (i < liq->concentration.cols() / 3)
-                        ? rng.uniform_double_rand(0, 5)
-                        : rng.uniform_double_rand(0, 20);
-      liq->concentration.coeffRef(0, static_cast<int>(i)) = rngn;
-      if (host)
-      {
-        gas->concentration.coeffRef(1, i) =
-            15e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
-      }
-    }
+    // for (auto i = 0; i < liq->concentration.cols(); ++i)
+    // {
+    //   // liq->concentration.coeffRef(1, i) = 0;
+    //   // liq->concentration.coeffRef(0, static_cast<int>(i)) = 0.5; // 0.5 G/LP
+    //   // Glucose
+    //   double rngn = (i < liq->concentration.cols() / 3)
+    //                     ? rng.uniform_double_rand(0, 5)
+    //                     : rng.uniform_double_rand(0, 20);
+    //   liq->concentration.coeffRef(0, static_cast<int>(i)) = rngn;
+    //   if (host)
+    //   {
+    //     gas->concentration.coeffRef(1, i) =
+    //         15e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
+    //   }
+    // }
 
-    liq->concentration.coeffRef(0, static_cast<int>(0)) = 50; // 0.5 G/L Glucose
+    liq->concentration.coeffRef(0, static_cast<int>(0)) = 100; // 0.5 G/L Glucose
     
     liq->total_mass = liq->concentration * liq->getVolume();
     if (host)
@@ -189,11 +189,13 @@ namespace Simulation
     {
       auto prng = MC::PRNG::get_rng(omp_get_thread_num());
       auto distribution = MC::get_distribution_int<size_t>(param);
+      const auto size_p = to_process.size();
 #pragma omp for schedule(static)
-      for (auto it = to_process.begin(); it < to_process.end(); ++it)
+      // for (auto it = to_process.begin(); it < to_process.end(); ++it)
+      for(size_t i_p = 0;i_p<size_p;i_p++)
       {
 
-        auto &&particle = *it;
+        auto &&particle = to_process[i_p]; //*it;
         particle.current_container = distribution(prng);
 
         auto &i_container = mc_unit->domain[particle.current_container];
@@ -216,11 +218,9 @@ namespace Simulation
     auto contribs = this->liquid_scalar->getThreadContribs();
     auto &extras = this->mc_unit->extras;
     auto &to_process = this->mc_unit->container.to_process;
-    const auto size = static_cast<double>(to_process.size());
-
-#pragma omp for
-    for (auto particle = to_process.begin(); particle < to_process.end();
-         ++particle)
+    const auto size = static_cast<size_t>(to_process.size());
+    #pragma omp for 
+    for(size_t i_particle=0; i_particle<size;++i_particle)
     {
       // particle->weight = 1./size;
       p_kernel(d_t,
@@ -228,7 +228,7 @@ namespace Simulation
                contribs,
                extras,
                _kmodel,
-               *particle,
+               to_process[i_particle],
                m_transition,
                cumulative_probability);
     }
@@ -236,6 +236,25 @@ namespace Simulation
 #pragma omp master
     post_process_reducing();
   }
+
+// #pragma omp for
+//     for (auto particle = to_process.begin(); particle < to_process.end();
+//          ++particle)
+//     {
+//       // particle->weight = 1./size;
+//       p_kernel(d_t,
+//                unit,
+//                contribs,
+//                extras,
+//                _kmodel,
+//                *particle,
+//                m_transition,
+//                cumulative_probability);
+//     }
+
+// #pragma omp master
+//     post_process_reducing();
+//   }
 
   void p_kernel(double d_t,
                 MC::MonteCarloUnit &unit,
