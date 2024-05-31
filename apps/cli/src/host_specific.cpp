@@ -11,7 +11,7 @@
 // constexpr size_t n_particle_trigger_parralel = 1e6;
 
 #ifdef DEBUG
-#  define DEBUG_INSTRUCTION                                                    \
+#  define DEBUG_INSTRUCTION
 
 #else
 #  define DEBUG_INSTRUCTION
@@ -31,7 +31,6 @@
     mpi_payload.send(__macro_j);                                               \
   }
 
-
 void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
                Simulation::SimulationUnit &simulation,
@@ -39,13 +38,12 @@ void main_loop(const SimulationParameters &params,
                DataExporter *exporter)
 {
 
-  size_t iteration_count = 0;
-  const size_t n_loop = params.n_different_maps;
   const double d_t = params.d_t;
-  const size_t n_per_flowmap = _flow_handle->n_p_element();
 
-  auto cache_liquid_flows = Simulation::BasicCacheHydro(n_loop);
-  auto cache_gas_flows = Simulation::BasicCacheHydro(n_loop);
+  auto transitioner = Simulation::FlowMapTransitioner(
+      params.n_different_maps,
+      _flow_handle->n_p_element(),
+      Simulation::FlowMapTransitioner::Discontinuous);
 
   MPI_W::HostIterationPayload mpi_payload;
 
@@ -57,25 +55,19 @@ void main_loop(const SimulationParameters &params,
 
   size_t dump_counter = 0;
 
-  const size_t dump_number = std::min(
-      n_iter_simulation, static_cast<size_t>(exporter->n_iter))-1;
+  const size_t dump_number =
+      std::min(n_iter_simulation, static_cast<size_t>(exporter->n_iter)) - 1;
 
-  const size_t dump_interval = (n_iter_simulation) / (dump_number)+1;
+  const size_t dump_interval = (n_iter_simulation) / (dump_number) + 1;
 
   double current_time = 0;
 
-  Simulation::update_flow(iteration_count,
-                          n_per_flowmap,
-                          n_loop,
-                          simulation,
-                          *reactor_state,
-                          cache_liquid_flows,
-                          cache_gas_flows,
-                          params.is_two_phase_flow);
+  Simulation::update_flow(
+      simulation, *reactor_state, transitioner, params.is_two_phase_flow);
 
   simulation.setVolumes(reactor_state->gasVolume, reactor_state->liquidVolume);
 
-#pragma omp parallel default(shared) 
+#pragma omp parallel default(shared)
   {
 
     // while (end_flag)
@@ -93,14 +85,8 @@ void main_loop(const SimulationParameters &params,
 
         MPI_DISPATCH_MAIN;
 
-        Simulation::update_flow(iteration_count,
-                                n_per_flowmap,
-                                n_loop,
-                                simulation,
-                                *reactor_state,
-                                cache_liquid_flows,
-                                cache_gas_flows,
-                                params.is_two_phase_flow);
+        Simulation::update_flow(
+            simulation, *reactor_state, transitioner, params.is_two_phase_flow);
 
         simulation.setVolumes(reactor_state->gasVolume,
                               reactor_state->liquidVolume);
@@ -111,10 +97,11 @@ void main_loop(const SimulationParameters &params,
 #pragma omp master
       {
         dump_counter++;
-        if (dump_counter == dump_interval )
+        if (dump_counter == dump_interval)
         {
-          exporter->append(current_time,simulation.getCliqData(),
-                           simulation.mc_unit->domain.getDistribution());                   
+          exporter->append(current_time,
+                           simulation.getCliqData(),
+                           simulation.mc_unit->domain.getDistribution());
           dump_counter = 0;
         }
       }
@@ -126,7 +113,7 @@ void main_loop(const SimulationParameters &params,
         simulation.step(d_t, *reactor_state);
         sync_prepare_next(exec, simulation);
         ++flow_map_iterator;
-        current_time+=d_t;
+        current_time += d_t;
         // end_flag = iterator != iterator_end;
       }
     }

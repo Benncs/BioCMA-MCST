@@ -91,11 +91,11 @@ def read_compute_norm(pathres,folder_root,sname):
 
 folder_root = "/home/benjamin/Documenti/code/cpp/biomc/cma_data/"
 
-sname = ["data_50K","data_1M","data_5M","data_10M"]
+# sname = ["data_50K","data_1M","data_5M","data_10M"]
 # pathres = ['./results/50k.h5','./results/1M.h5','./results/5M.h5',"./results/10M.h5"]
 #pathres = ['./results/50k.h5',"./results/1M.h5","./results/5M.h5"]
-pathres = [ "./results/result_.h5"]
-
+pathres = [ "./results/result_2024-05-31-11:48:50.h5"]
+sname = ["data_1M"]
 _,n_c ,_,pvc,t= read_compute_norm(pathres[0],folder_root,sname[0])
 plt.semilogy(t,pvc,label="liquid")
 for i in range(len(pathres)):
@@ -109,7 +109,7 @@ plt.legend()
 plt.title("Segregation index as a function of the time")
 plt.ylabel(r"\[ \frac{\sigma(t)}{\sigma(t_{0})}\]")
 plt.xlabel("time [s]")
-plt.savefig("./results/mixing_variance2.svg",dpi=1500)
+plt.savefig("./results/mixing_variance3.svg",dpi=1500)
 # plt.show()
 
 
