@@ -11,12 +11,14 @@ struct SimulationParameters
   size_t n_species;
   double final_time;
   std::vector<std::string> flow_files;
+  std::string root;
   double d_t = 0;
   int n_threads = -1;
   bool verbose;
   size_t n_different_maps;
   size_t n_compartments;
   bool is_two_phase_flow = true;
+  
   static SimulationParameters m_default();
 };
 

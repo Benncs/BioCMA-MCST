@@ -1,10 +1,39 @@
 #include <cma_read/flowmap.hpp>
 #include <simulation/pc_hydro.hpp>
 #include <simulation/update_flows.hpp>
+#include <stdexcept>
 #include <transport.hpp>
 
 namespace Simulation
 {
+
+  FlowMapTransitioner::FlowMapTransitioner(FlowmapTransitionMethod method)
+  {
+    switch (method)
+    {
+    case (FlowmapTransitionMethod::Discontinuous):
+    {
+      f_transition = [this] { discontinuous_transition(); };
+      break;
+    }
+    case (FlowMapTransitioner::InterpolationFO):
+    {
+      f_transition = [this] { first_order_interpolation_transition(); };
+      break;
+    }
+    }
+  }
+
+  void FlowMapTransitioner::first_order_interpolation_transition()
+  {
+    throw std::runtime_error("not implemented yet");
+  }
+
+  void FlowMapTransitioner::discontinuous_transition()
+  {
+    // nop
+  }
+
   static std::vector<double>
   compute_inverse_diagonal(std::span<const double> volumes)
   {
@@ -26,17 +55,6 @@ namespace Simulation
 
     return inverse_diagonal;
   }
-
-  // static void compute_MatFlow(const FlowInfo &flow,
-  // Simulation::PreCalculatedHydroState &matflow)
-  // {
-  //   auto view = flow.getViewFlows();
-
-  //   const auto _mat_transition_liq =
-  //       Simulation::get_transition_matrix(view);
-
-  //   matflow.transition_matrix = _mat_transition_liq;
-  // }
 
   static void compute_MatFlow(const FlowMap::FlowMap_const_view_t &flows_view,
                               Simulation::PreCalculatedHydroState &matflow)
@@ -87,7 +105,7 @@ namespace Simulation
     auto &current_gas_matflow = gas_flows.data[current_index_mat];
     if (iteration_count < n_loop)
     {
-      
+
       compute_MatFlow(reactor_state.liquid_flow.getViewFlows(),
                       current_liq_matflow);
 

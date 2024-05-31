@@ -35,7 +35,6 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
 {
   SimulationParameters params = SimulationParameters::m_default();
 
-  params.n_species = 3;
   params.flow_files.clear();
 
   bool recur = false;
@@ -57,6 +56,8 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
       }
       iarg += 2;
     }
+    auto root = params.flow_files[0];
+         params.root = std::string(root);
     if (params.flow_files.size() == 1 && recur)
     {
       auto root = params.flow_files[0];

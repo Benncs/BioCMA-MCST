@@ -83,33 +83,40 @@ def plot_concentration_mixing(data):
 
     multipage("concentration_mixing.pdf",f,1500)
 
-pathres = './results/result.h5'
-initial_distribution,distribution,cliq,data,tf,dt,npart,records_d = import_results(pathres)
+pathres = './results/result_.h5'
+results = import_results(pathres)
 
+# initial_distribution,distribution,cliq,data,tf,dt,npart,records_d
 
+# vtk_cma_mesh_path = "/home/benjamin/Documenti/cpp/BIREM_Project/out/sanofi/cma_mesh.vtu"
+# vtp_result = "./results/sanofi.vtu"
 
-vtk_cma_mesh_path = "/home/benjamin/Documenti/cpp/BIREM_Project/out/sanofi/cma_mesh.vtu"
-vtp_result = "./results/sanofi.vtu"
-
-liquid_glucose_concentration_tmp = data[:,:,0]
+liquid_glucose_concentration_tmp = results.data[:,:,0]
 liquid_glucose_concentration = np.zeros((liquid_glucose_concentration_tmp.shape[0]+1,liquid_glucose_concentration_tmp.shape[1]))
 liquid_glucose_concentration[1:]=liquid_glucose_concentration_tmp
 liquid_glucose_concentration[0]=liquid_glucose_concentration_tmp[0]
 
-records_d_2 = np.zeros((records_d.shape[0]+1,records_d.shape[1]))
-records_d_2[1:]=records_d[:,:,0]
-records_d_2[0]=initial_distribution
-records_d = records_d_2
+# records_d_2 = np.zeros((records_d.shape[0]+1,records_d.shape[1]))
+# records_d_2[1:]=records_d[:,:,0]
+# records_d_2[0]=initial_distribution
+# records_d = records_d_2
 # data = np.insert(data, 0, data[0])
 # volumes = birem.vtk.read_scalar(vtk_cma_mesh_path,"liquid_volume")
 
-liquid_volumes = birem.read_scalar("/home/benjamin/Documenti/cpp/BIREM_Project/out/sanofi/vofL.raw")
+# liquid_volumes = birem.read_scalar("/home/benjamin/Documenti/cpp/BIREM_Project/out/sanofi/vofL.raw")
 
-particle_concentration = records_d/liquid_volumes
-n_t = particle_concentration.shape[0]
+# particle_concentration = records_d/liquid_volumes
 
-t = np.linspace(0,tf,n_t)
+t = np.linspace(0,results.tf,results.n_t)
 
+
+var = np.var(liquid_glucose_concentration_tmp,axis=1)
+var= var/var[0]
+plt.semilogy(t,var)
+
+plt.figure()
+plt.plot(liquid_glucose_concentration_tmp[-1,:])
+plt.show()
 
 # c0_norm = data[0,:,0]
 # cend_norm = data[-1,:,0]
@@ -117,19 +124,12 @@ t = np.linspace(0,tf,n_t)
 # sc_cend = birem.vtk.mk_scalar(cend_norm,"Cend_norm")
 
 # write json like this :
-n = particle_concentration/np.max(particle_concentration,axis=1).reshape(-1,1) #norm_distribution(particle_concentration)
-nc = liquid_glucose_concentration/np.max(liquid_glucose_concentration,axis=1).reshape(-1,1) #norm_distribution(liquid_glucose_concentration)
+# n = particle_concentration/np.max(particle_concentration,axis=1).reshape(-1,1) #norm_distribution(particle_concentration)
+# nc = liquid_glucose_concentration/np.max(liquid_glucose_concentration,axis=1).reshape(-1,1) #norm_distribution(liquid_glucose_concentration)
 
 
-low = particle_concentration[:,particle_concentration[-1,:]<21600]
-high = particle_concentration[:,particle_concentration[-1,:]>=21600]
 
-print(np.where(particle_concentration[-1,:]>=21600))
 
-nl  = low/np.max(low,axis=1).reshape(-1,1)
-
-plt.plot(nl)
-plt.show()
 
 # birem.vtk.mk_series(vtk_cma_mesh_path,"./results/","sanofi",t,
 # [particle_concentration,"particle_concentration"],

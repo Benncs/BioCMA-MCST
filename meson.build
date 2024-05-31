@@ -89,9 +89,9 @@ eigen_dep = dependency('eigen3', required: true)
 blas = dependency('blas', required: false) # Eigen can work without BLAS
 
 
-if blas.found()
-  add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
-endif
+# if blas.found()
+#   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
+# endif
 
 highfive_found = false
 cmake = import('cmake', required: false)

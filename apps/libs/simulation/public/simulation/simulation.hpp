@@ -65,7 +65,7 @@ namespace Simulation
     void clearContribution();
 
   private:
-    void post_init_container(const MC::DistributionVariantInt& param);
+    void post_init_container(MC::DistributionVariantInt distribution_variant);
     void post_init_compartments();
 
     void post_process_reducing();

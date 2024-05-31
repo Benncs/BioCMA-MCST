@@ -20,7 +20,7 @@
 #  include <Eigen/Dense>
 #  include <highfive/eigen.hpp>
 #  include <highfive/highfive.hpp>
-#endif 
+#endif
 
 std::string date_time()
 {
@@ -44,7 +44,7 @@ void DataExporter::write_final_results(
   };
 
   write_final_results(data, distribution);
-  #ifdef USE_HIGHFIVE
+#ifdef USE_HIGHFIVE
   try
   {
     {
@@ -64,7 +64,7 @@ void DataExporter::write_final_results(
   catch (...)
   {
   }
-  #endif 
+#endif
 }
 
 //////////////////////
@@ -151,10 +151,6 @@ void DataExporter::write_final_results(ExportData &data,
                                   std::string("Model description"));
 }
 
-
-
-
-
 void DataExporter::prepare()
 {
   HighFive::File file(filename, HighFive::File::ReadWrite);
@@ -180,35 +176,46 @@ void DataExporter::prepare()
                          HighFive::create_datatype<double>(),
                          props);
   HighFive::DataSet dataset_2 =
-      file.createDataSet("final_results/concentrations/records_distribution",
+  file.createDataSet("final_results/concentrations/records_distribution",
                          dataspace,
                          HighFive::create_datatype<size_t>(),
+                         props);
+
+                        HighFive::DataSet dataset_3 =
+  file.createDataSet("final_results/time",
+                         dataspace,
+                         HighFive::create_datatype<double>(),
                          props);
   file.flush();
 }
 
-void DataExporter::append(std::span<double> data,
+void DataExporter::append(double t,std::span<double> data,
                           const std::vector<size_t> &distribution)
 {
   try
   {
-     HighFive::File file(filename, HighFive::File::ReadWrite);
-  auto dataset = file.getDataSet("final_results/concentrations/records");
-  dataset.resize({counter + 1, n_col, n_row});
-  dataset.select({counter, 0, 0}, {1, n_col, n_row}).write_raw(data.data());
+    HighFive::File file(filename, HighFive::File::ReadWrite);
+    auto dataset = file.getDataSet("final_results/concentrations/records");
+    dataset.resize({counter + 1, n_col, n_row});
+    dataset.select({counter, 0, 0}, {1, n_col, n_row}).write_raw(data.data());
 
-  dataset =
-      file.getDataSet("final_results/concentrations/records_distribution");
-  dataset.resize({counter + 1, n_col, n_row});
-  dataset.select({counter, 0, 0}, {1, n_col, n_row})
-      .write_raw(distribution.data());
-  counter++;
+    dataset =
+        file.getDataSet("final_results/concentrations/records_distribution");
+    dataset.resize({counter + 1, n_col, 1});
+    dataset.select({counter, 0, 0}, {1, n_col, 1})
+        .write_raw(distribution.data());
+
+    dataset =
+        file.getDataSet("final_results/time");
+    dataset.resize({counter + 1, 1, 1});
+    dataset.select({counter, 0, 0}, {1, 1, 1}).write_raw(&t);
+    // dataset.select({counter, 0, 0}, {1, 1, 1})
+    //     .write_raw(t);
+    counter++;
   }
-  catch(...)
+  catch (...)
   {
-    
   }
- 
 }
 
 #else

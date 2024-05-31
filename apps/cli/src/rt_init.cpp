@@ -1,5 +1,4 @@
 
-#include "data_exporter.hpp"
 #include <rt_init.hpp>
 
 #include <Eigen/Core>
@@ -10,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <mpi_w/wrap_mpi.hpp>
+#include <sstream>
 
 #ifndef USE_PYTHON_MODULE
 #  include <omp.h>
@@ -142,9 +142,38 @@ void init_environment()
 
 }
 
-void append_date_time(std::ofstream &fd)
+// void append_date_time(std::ofstream &fd)
+// {
+//   auto now =
+//       std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+//   fd << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
+// }
+
+std::string sappend_date_time(std::string_view string)
 {
-  auto now =
-      std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-  fd << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S") << "\t";
+  std::stringstream fd;
+  fd<<string;
+  auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+  fd << std::put_time(std::localtime(&now), "%Y-%m-%d-%H:%M:%S");
+  // append_date_time(fd);
+  return fd.str();
+
+}
+
+void register_run(ExecInfo &exec, SimulationParameters &params)
+{
+  // Open the file in append mode
+  std::ofstream env(env_file_path(), std::ios_base::app);
+  if (env.is_open())
+  {
+    append_date_time(env);
+    env<< "\t";
+    env << exec;
+    env << params;
+    env << std::endl;
+  }
+  else
+  {
+    std::cerr << "Error: Unable to open file for writing\n";
+  }
 }

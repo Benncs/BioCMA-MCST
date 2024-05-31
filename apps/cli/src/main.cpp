@@ -55,7 +55,7 @@ static void host_process(ExecInfo &exec,
 static KModel load_model_(size_t index_model);
 static void exec(int argc, char **argv, SimulationParameters params);
 
-static ExportParameters export_i = {10,"result_.h5"};
+// static ExportParameters export_i = {10,"result_.h5"};
 
 int main(int argc, char **argv)
 {
@@ -120,7 +120,9 @@ static void exec(int argc, char **argv, SimulationParameters params)
   std::shared_ptr<FlowIterator> _fd = nullptr;
   constexpr size_t i_model = 1;
   const auto model = load_model_(i_model);
-  auto simulation = init_simulation(exec_info, params, _fd, model);
+  MC::UniformLawINT law_param = {0, 1}; 
+
+  auto simulation = init_simulation(exec_info, params, _fd, model,std::move(law_param));
 
   if (exec_info.current_rank == 0)
   {
@@ -138,8 +140,11 @@ static void host_process(ExecInfo &exec,
                          SimulationParameters &params,
                          std::shared_ptr<FlowIterator> _flow_handle)
 {
-  export_i.n_save = 1500;//static_cast<size_t>(params.final_time+1)*3;
+  //TODO: clean 
+  std::string fn = sappend_date_time("result_")+std::string(".h5");
+  ExportParameters export_i = {static_cast<size_t>(params.final_time)*3,fn};
   std::string name = "./results/"+export_i.filename;
+
   auto d = simulation.mc_unit->domain.getDistribution();
   DataExporter de(exec,
                   params,

@@ -38,7 +38,7 @@ public:
   ~DataExporter() = default;
   void write_final_results(const Simulation::SimulationUnit& simulation,std::span<size_t> distribution);
   void prepare();
-  void append(std::span<double> data,const std::vector<size_t>& distribution);
+  void append(double t,std::span<double> data,const std::vector<size_t>& distribution);
 
   DataExporter(DataExporter &&) = delete;
   DataExporter &operator=(DataExporter &&) = delete;
