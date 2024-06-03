@@ -122,8 +122,8 @@ namespace Simulation
     post_init_compartments();
   }
 
-  void SimulationUnit::setVolumes(std::span<double> volumesgas,
-                                  std::span<double> volumesliq)
+  void SimulationUnit::setVolumes(std::span<const double> volumesgas,
+                                  std::span<const double> volumesliq)
   {
 
     std::span<double const> vg;

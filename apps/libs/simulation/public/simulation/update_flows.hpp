@@ -6,9 +6,13 @@
 #include "simulation/pc_hydro.hpp"
 #include <cma_read/reactorstate.hpp>
 #include <cstddef>
+#include <iomanip>
 #include <memory>
 #include <simulation/basic_cache_hydro.hpp>
 #include <simulation/simulation.hpp>
+
+
+
 
 namespace Simulation
 {
@@ -37,8 +41,7 @@ namespace Simulation
 
     ~FlowMapTransitioner() = default;
 
-    void update_flow(Simulation::SimulationUnit &unit,
-                     const ReactorState &reactor_state);
+    void update_flow(Simulation::SimulationUnit &unit);
 
     void update_flow(Simulation::SimulationUnit &unit,
                      std::span<double> flows,
@@ -49,10 +52,10 @@ namespace Simulation
       return this->n_timestep;
     };
 
-    inline void perform_transition()
-    {
-      f_transition();
-    }
+    // inline void perform_transition()
+    // {
+    //   f_transition();
+    // }
 
     [[nodiscard]] size_t getFlowIndex() const;
 
@@ -61,37 +64,46 @@ namespace Simulation
     {
       return iterator->size();
     }
-    ReactorState &get_unchecked_mut()
+    ReactorState &get_current_unchecked_mut()
     {
       return iterator->get_unchcked_mut(getFlowIndex());
     }
-    [[nodiscard]] const ReactorState &get_unchecked() const
+    [[nodiscard]] const ReactorState &get_current_unchecked() const
     {
-     
-      return iterator->get_unchcked(getFlowIndex());
+      
+      return iterator->get_unchecked(getFlowIndex());
     };
 
     ReactorState &get_unchecked_mut(size_t index)
     {
       return iterator->get_unchcked_mut(index);
     }
-    [[nodiscard]] const ReactorState &get_unchcked(size_t index) const
+    [[nodiscard]] const ReactorState &get_unchecked(size_t index) const
     {
-      return iterator->get_unchcked(index);
+      return iterator->get_unchecked(index);
     };
 
+    const ReactorState* getState(){return current_state;}
+
   private:
+    using f_transition_t = void (FlowMapTransitioner::*)();
+    using f_advance_t = void (FlowMapTransitioner::*)();
     void discontinuous_transition();
     void discontinuous_advance();
-    void first_order_interpolation_transition();
+    void linear_interpolation_transition();
+
+    void linear_interpolation_advance();
+
+    PreCalculatedHydroState linear_interpolation_pc_state(PreCalculatedHydroState& current,PreCalculatedHydroState& next);
+
+  
 
     void advance(Simulation::SimulationUnit &unit);
 
     bool tpf;
-    std::vector<PreCalculatedHydroState> liquid_flows;
-    std::vector<PreCalculatedHydroState> gas_flows;
 
-    std::vector<TransitionState> liquid_transtion_state;
+
+    std::vector<TransitionState> transtion_state;
     std::unique_ptr<FlowIterator> iterator = nullptr;
     size_t n_per_flowmap;
     size_t n_flowmap;
@@ -99,18 +111,27 @@ namespace Simulation
 
     size_t current_flowmap_count;
     size_t repetition_count;
-    std::function<void(void)> f_transition;
-    std::function<void(void)> f_advance;
+    f_transition_t f_transition;
+    void calculate_full_state(const ReactorState& reactor_state,const Simulation::SimulationUnit &unit);
+
+    void calculate_liquid_state(const FlowMap::FlowMap_const_view_t & mat_f_liq_view,const Simulation::SimulationUnit &unit);
+    f_advance_t f_advance;
 
     PreCalculatedHydroState *current_liq_matflow = nullptr;
     PreCalculatedHydroState *current_gas_matflow = nullptr;
     TransitionState *current_liquid_state = nullptr;
+    const ReactorState* current_state =nullptr;
+
+    
+    size_t current_index;
   };
 
   [[nodiscard]] inline size_t FlowMapTransitioner::getFlowIndex() const
   {
     return this->repetition_count % this->n_flowmap;
   }
+
+  
 
 } // namespace Simulation
 

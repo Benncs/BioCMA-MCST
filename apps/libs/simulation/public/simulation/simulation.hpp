@@ -50,9 +50,9 @@ namespace Simulation
     [[nodiscard]] std::span<double> getCgasData() const;
     [[nodiscard]] std::span<double> getContributionData() const;
 
-    void setVolumes(std::span<double> volumesgas, std::span<double> volumesliq);
+    void setVolumes(std::span<const double> volumesgas, std::span<const double> volumesliq);
 
-    void step(double d_t, ReactorState &state);
+    void step(double d_t, const ReactorState &state);
 
     void cycleProcess(double d_t);
 

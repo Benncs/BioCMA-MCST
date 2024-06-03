@@ -1,6 +1,6 @@
 
 
-#include "simulation/pc_hydro.hpp"
+#include "mpi_w/iteration_payload.hpp"
 #include <cstddef>
 #include <cstdio>
 #include <memory>
@@ -70,6 +70,7 @@ init_simulation(ExecInfo &info,
   MPI_W::broadcast(gas_volume, 0, info.current_rank);
   MPI_W::broadcast(worker_neighbor_data, 0, info.current_rank);
 
+  // MPI_W::bcst_iterator(_flow_handle, info.current_rank);
   if (info.current_rank != 0)
   {
 
@@ -187,7 +188,7 @@ init_state(SimulationParameters &params,
     }
     std::cout << "Flowmap loaded: " << flow_handle->size() << std::endl;
 
-    state = &flow_handle->get_unchcked(0);
+    state = &flow_handle->get_unchecked(0);
   }
   catch (const std::exception &e)
   {

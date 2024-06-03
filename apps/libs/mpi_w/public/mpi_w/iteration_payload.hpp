@@ -1,6 +1,8 @@
 #ifndef __ITERATION_PAYLOAD_HPP__
 #define __ITERATION_PAYLOAD_HPP__
 
+#include "cma_read/flow_iterator.hpp"
+#include <memory>
 #include <mpi.h>
 #include <span>
 #include <vector>
@@ -8,6 +10,8 @@
 
 namespace MPI_W
 {
+
+  void bcst_iterator(std::unique_ptr<FlowIterator>& iterator,size_t rank);
 
   class IterationPayload
   {
@@ -26,9 +30,9 @@ namespace MPI_W
   class HostIterationPayload
   {
   public:
-    std::span<double> liquid_flows;
-    std::span<double> liquid_volumes;
-    std::span<double> gas_volumes;
+    std::span<const double> liquid_flows;
+    std::span<const double> liquid_volumes;
+    std::span<const double> gas_volumes;
     Neighbors::Neighbors_const_view_t neigbors;
     
 

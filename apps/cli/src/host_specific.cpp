@@ -10,6 +10,29 @@
 
 // constexpr size_t n_particle_trigger_parralel = 1e6;
 
+constexpr size_t PROGRESS_BAR_WIDTH = 100;
+
+inline void
+update_progress_bar(size_t total, size_t currentPosition, bool verbose)
+{
+  std::ios::sync_with_stdio(false);
+  if (verbose)
+  {
+    std::string progressBar(PROGRESS_BAR_WIDTH, ' ');
+    size_t progress = (currentPosition * PROGRESS_BAR_WIDTH) / total;
+
+    for (size_t i = 0; i < progress; ++i)
+    {
+      progressBar[i] = '*';
+    }
+
+    std::cout << "Progress: [" << progressBar << "] " << std::fixed
+              << std::setprecision(2)
+              << (static_cast<float>(currentPosition) * 100.0 /
+                  static_cast<float>(total))
+              << "%\r" << std::flush;
+  }
+}
 
 #ifdef DEBUG
 #  define DEBUG_INSTRUCTION
@@ -33,11 +56,10 @@
     mpi_payload.send(__macro_j);                                               \
   }
 
-
 void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
                Simulation::SimulationUnit &simulation,
-   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
+               std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
                DataExporter *exporter)
 {
 
@@ -45,9 +67,7 @@ void main_loop(const SimulationParameters &params,
 
   MPI_W::HostIterationPayload mpi_payload;
 
-  auto *current_reactor_state = &transitioner->get_unchecked_mut(0);
-
-  ReactorState *next_reactor_state = nullptr;
+  const auto *current_reactor_state = &transitioner->get_unchecked(0);
 
   const size_t n_iter_simulation = transitioner->get_n_timestep();
 
@@ -59,12 +79,26 @@ void main_loop(const SimulationParameters &params,
   size_t dump_counter = 0;
   double current_time = 0.;
 
-  transitioner->update_flow(simulation, *current_reactor_state);
+  transitioner->update_flow(simulation);
 
   simulation.setVolumes(current_reactor_state->gasVolume,
                         current_reactor_state->liquidVolume);
+  exporter->append(current_time,
+                   simulation.getCliqData(),
+                   simulation.mc_unit->domain.getDistribution());
 
-#pragma omp parallel default(shared) shared(current_time)
+#pragma omp parallel default(none) shared(transitioner,                        \
+                                              simulation,                      \
+                                              dump_counter,                    \
+                                              current_time,                    \
+                                              n_iter_simulation,               \
+                                              mpi_payload,                     \
+                                              current_reactor_state,           \
+                                              dump_interval,                   \
+                                              dump_number,                     \
+                                              d_t,                             \
+                                              exec,                            \
+                                              exporter)
   {
 
     for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
@@ -75,16 +109,16 @@ void main_loop(const SimulationParameters &params,
 
 #pragma omp single
       {
+     
+        transitioner->update_flow(simulation);
+
         FILL_PAYLOAD;
 
         MPI_DISPATCH_MAIN;
 
-        current_reactor_state =
-            &transitioner->get_unchecked_mut();
+        current_reactor_state = transitioner->getState();
 
-        transitioner->update_flow(simulation, *current_reactor_state);
-        simulation.setVolumes(current_reactor_state->gasVolume,
-                              current_reactor_state->liquidVolume);
+
       }
 
       simulation.cycleProcess(d_t);
@@ -94,9 +128,8 @@ void main_loop(const SimulationParameters &params,
         dump_counter++;
         if (dump_counter == dump_interval)
         {
-
-          UPDATE_PROGRESS_BAR(n_iter_simulation, __loop_counter, true)
-          exporter->append((double)__loop_counter * d_t,
+          update_progress_bar(n_iter_simulation, __loop_counter, true);
+          exporter->append(current_time,
                            simulation.getCliqData(),
                            simulation.mc_unit->domain.getDistribution());
           dump_counter = 0;
@@ -113,4 +146,7 @@ void main_loop(const SimulationParameters &params,
       }
     }
   }
+  exporter->append(current_time,
+                   simulation.getCliqData(),
+                   simulation.mc_unit->domain.getDistribution());
 }

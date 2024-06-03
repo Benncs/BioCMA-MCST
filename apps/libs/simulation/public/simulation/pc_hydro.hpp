@@ -32,8 +32,9 @@ namespace Simulation
 
   struct TransitionState
   {
-    ReactorState state;
-    PreCalculatedHydroState pc;
+    const ReactorState* state;
+    PreCalculatedHydroState liquid_pc;
+    PreCalculatedHydroState gas_pc;
   };
 
 

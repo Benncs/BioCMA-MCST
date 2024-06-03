@@ -39,7 +39,7 @@ namespace Simulation
 
     // Setters
 
-    void setVolumes(std::span<double> volumes, std::span<double> inv_volumes);
+    void setVolumes(std::span<const double> volumes, std::span<const double> inv_volumes);
 
     void merge(size_t i_thread);
 
@@ -94,8 +94,8 @@ namespace Simulation
   }
 
 
-  inline void ScalarSimulation::setVolumes(std::span<double> volumes,
-                                           std::span<double> inv_volumes)
+  inline void ScalarSimulation::setVolumes(std::span<const double> volumes,
+                                           std::span<const double> inv_volumes)
   {
 
     // SIGFAULT ?

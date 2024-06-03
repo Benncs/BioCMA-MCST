@@ -75,7 +75,7 @@ namespace Simulation
     this->liquid_scalar->biomass_contribution.setZero();
   }
 
-  void SimulationUnit::step(double d_t, ReactorState &state)
+  void SimulationUnit::step(double d_t, const ReactorState &state)
   {
 
     auto mat_transfer_g_liq =
