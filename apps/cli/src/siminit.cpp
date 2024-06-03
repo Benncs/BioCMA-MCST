@@ -1,33 +1,35 @@
 
 
+#include "simulation/pc_hydro.hpp"
 #include <cstddef>
-#include <memory>
 #include <cstdio>
+#include <memory>
 #include <stdexcept>
 #include <utility>
 #include <vector>
 
-#include <siminit.hpp>
-#include <cma_read/flow_iterator.hpp>
-#include <common/common.hpp>
-#include <mc/mcinit.hpp>
-#include <rt_init.hpp>
-#include <simulation/simulation.hpp>
-#include <mc/prng/distribution.hpp>
 #include <birem_common/cma_case.hpp>
+#include <cma_read/flow_iterator.hpp>
 #include <cma_read/light_2d_view.hpp>
 #include <cma_read/neighbors.hpp>
+#include <common/common.hpp>
+#include <mc/mcinit.hpp>
+#include <mc/prng/distribution.hpp>
 #include <mpi_w/wrap_mpi.hpp>
+#include <rt_init.hpp>
+#include <siminit.hpp>
+#include <simulation/simulation.hpp>
+
+#include <simulation/update_flows.hpp>
 
 static ReactorState const *
 init_state(SimulationParameters &params,
-           std::shared_ptr<FlowIterator> &flow_handle,
+           std::unique_ptr<FlowIterator> &flow_handle,
            const cma_exported_paths_t &paths);
-
 
 static void init_host_only(ExecInfo &info,
                            SimulationParameters &params,
-                           std::shared_ptr<FlowIterator> &_flow_handle,
+                           std::unique_ptr<FlowIterator> &_flow_handle,
                            Neighbors::Neighbors_const_view_t liquid_neighbors,
                            std::vector<double> &liq_volume,
                            std::vector<double> &gas_volume,
@@ -36,7 +38,8 @@ static void init_host_only(ExecInfo &info,
 Simulation::SimulationUnit
 init_simulation(ExecInfo &info,
                 SimulationParameters &params,
-                std::shared_ptr<FlowIterator> &_flow_handle,
+
+                std::unique_ptr<Simulation::FlowMapTransitioner> &transitioner,
                 KModel model,
                 MC::DistributionVariantInt &&initial_particle_distribution)
 {
@@ -45,7 +48,7 @@ init_simulation(ExecInfo &info,
   std::vector<double> gas_volume;
   std::vector<size_t> worker_neighbor_data;
   Neighbors::Neighbors_const_view_t liquid_neighbors;
-
+  std::unique_ptr<FlowIterator> _flow_handle = nullptr;
   init_host_only(info,
                  params,
                  _flow_handle,
@@ -60,6 +63,7 @@ init_simulation(ExecInfo &info,
   }
 
   MPI_W::broadcast(params.d_t, 0);
+  MPI_W::broadcast(params.n_per_flowmap, 0);
   MPI_W::broadcast(params.n_compartments, 0);
   MPI_W::broadcast(params.is_two_phase_flow, 0);
   MPI_W::broadcast(liq_volume, 0, info.current_rank);
@@ -90,13 +94,25 @@ init_simulation(ExecInfo &info,
                                  model,
                                  std::move(initial_particle_distribution),
                                  tpf);
+    // Calculate the total number of time steps
+  const auto n_t = static_cast<size_t>(params.final_time / params.d_t) + 1;
+
+  
+  
+  transitioner = std::make_unique<Simulation::FlowMapTransitioner>(
+      params.n_different_maps,
+      params.n_per_flowmap,
+      Simulation::FlowMapTransitioner::Discontinuous,
+      n_t,
+      std::move(_flow_handle),
+      params.is_two_phase_flow);
 
   return simulation;
 }
 
 static void init_host_only(ExecInfo &info,
                            SimulationParameters &params,
-                           std::shared_ptr<FlowIterator> &_flow_handle,
+                           std::unique_ptr<FlowIterator> &_flow_handle,
                            Neighbors::Neighbors_const_view_t liquid_neighbors,
                            std::vector<double> &liq_volume,
                            std::vector<double> &gas_volume,
@@ -120,7 +136,7 @@ static void init_host_only(ExecInfo &info,
   worker_neighbor_data = std::vector<size_t>(liquid_neighbors.data().begin(),
                                              liquid_neighbors.data().end());
 
-  params.n_different_maps = _flow_handle->loop_size();
+  params.n_different_maps = _flow_handle->size();
 
   liq_volume = fstate->liquidVolume;
   gas_volume = fstate->gasVolume;
@@ -132,8 +148,8 @@ static void init_host_only(ExecInfo &info,
                      : params.d_t;
   }
 
-  // Calculate the total number of time steps
-  const auto n_t = static_cast<size_t>(params.final_time / params.d_t)+1;
+  // const auto n_t = static_cast<size_t>(params.final_time / params.d_t) + 1;
+
 
   // Define the duration of each flowmap and compute steps per flowmap
   const double t_per_flowmap = cma_case.time_per_flowmap;
@@ -142,31 +158,36 @@ static void init_host_only(ExecInfo &info,
       (t_per_flowmap == 0 || params.n_different_maps == 1)
           ? 1
           : static_cast<size_t>(t_per_flowmap /
-                                static_cast<double>(params.d_t))+1;
+                                static_cast<double>(params.d_t)) +
+                1;
 
-  // Calculate the number of repetitions
-  const size_t n_repetition = n_t / (params.n_different_maps * n_per_flowmap) +1;
+  // // Calculate the number of repetitions: Not needed anymore
+  // const size_t n_repetition =
+  //     n_t / (params.n_different_maps * n_per_flowmap) + 1;
 
-  _flow_handle->setRepetition(n_repetition, n_per_flowmap);
+  params.n_per_flowmap = n_per_flowmap;
+
+
+  // _flow_handle->setRepetition(n_repetition, n_per_flowmap);
   register_run(info, params);
 }
 
 static ReactorState const *
 init_state(SimulationParameters &params,
-           std::shared_ptr<FlowIterator> &flow_handle,
+           std::unique_ptr<FlowIterator> &flow_handle,
            const cma_exported_paths_t &paths)
 {
   ReactorState const *state = nullptr;
   try
   {
-    flow_handle = std::make_shared<FlowIterator>(params.flow_files, paths);
+    flow_handle = std::make_unique<FlowIterator>(params.flow_files, paths);
     if (flow_handle == nullptr)
     {
       throw std::runtime_error("Flow map are not loaded");
     }
-    std::cout << "Flowmap loaded: " << flow_handle->loop_size() << std::endl;
+    std::cout << "Flowmap loaded: " << flow_handle->size() << std::endl;
 
-    state = &flow_handle->operator()(0);
+    state = &flow_handle->get_unchcked(0);
   }
   catch (const std::exception &e)
   {
@@ -179,4 +200,3 @@ init_state(SimulationParameters &params,
   }
   return state;
 }
-

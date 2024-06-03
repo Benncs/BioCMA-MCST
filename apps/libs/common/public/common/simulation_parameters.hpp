@@ -18,6 +18,7 @@ struct SimulationParameters
   size_t n_different_maps;
   size_t n_compartments;
   bool is_two_phase_flow = true;
+  size_t n_per_flowmap;
   
   static SimulationParameters m_default();
 };

@@ -43,14 +43,11 @@ static int redirect_stdout(std::streambuf *&original_buffer,
 static void restore_stdout(int original_stdout,
                            std::streambuf *&original_buffer);
 
-static void workers_process(ExecInfo &exec,
-                            Simulation::SimulationUnit &simulation,
-                            SimulationParameters &params);
-
-static void host_process(ExecInfo &exec,
-                         Simulation::SimulationUnit &simulation,
-                         SimulationParameters &params,
-                         std::shared_ptr<FlowIterator> _flow_handle);
+static void
+workers_process(ExecInfo &exec,
+                Simulation::SimulationUnit &simulation,
+                SimulationParameters &params,
+                std::unique_ptr<Simulation::FlowMapTransitioner> transitioner);
 
 static KModel load_model_(size_t index_model);
 static void exec(int argc, char **argv, SimulationParameters params);
@@ -117,48 +114,47 @@ static void exec(int argc, char **argv, SimulationParameters params)
 
   ExecInfo exec_info = runtime_init(argc, argv, params);
 
-  std::shared_ptr<FlowIterator> _fd = nullptr;
+  std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
   constexpr size_t i_model = 1;
   const auto model = load_model_(i_model);
-  MC::UniformLawINT law_param = {0, 1}; 
+  MC::UniformLawINT law_param = {0, 1};
 
-  auto simulation = init_simulation(exec_info, params, _fd, model,std::move(law_param));
+  auto simulation = init_simulation(
+      exec_info, params, transitioner, model, std::move(law_param));
 
   if (exec_info.current_rank == 0)
   {
-    host_process(exec_info, simulation, params, _fd);
+    host_process(exec_info, simulation, params, std::move(transitioner));
   }
   else
   {
 
-    workers_process(exec_info, simulation, params);
+    workers_process(exec_info, simulation, params, std::move(transitioner));
   }
 }
 
-static void host_process(ExecInfo &exec,
-                         Simulation::SimulationUnit &simulation,
-                         SimulationParameters &params,
-                         std::shared_ptr<FlowIterator> _flow_handle)
+void host_process(
+    ExecInfo &exec,
+    Simulation::SimulationUnit &simulation,
+    SimulationParameters &params,
+    std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner
+  )
 {
-  //TODO: clean 
-  std::string fn = sappend_date_time("result_")+std::string(".h5");
-  ExportParameters export_i = {static_cast<size_t>(params.final_time)*3,fn};
-  std::string name = "./results/"+export_i.filename;
+  // TODO: clean
+  std::string fn = sappend_date_time("result_") + std::string(".h5");
+  ExportParameters export_i = {static_cast<size_t>(params.final_time) * 3, fn};
+  std::string name = "./results/" + export_i.filename;
 
   auto d = simulation.mc_unit->domain.getDistribution();
-  DataExporter de(exec,
-                  params,
-                  name,
-                  simulation.getDim(),
-                  export_i.n_save,d);
+  DataExporter de(exec, params, name, simulation.getDim(), export_i.n_save, d);
 
   show(simulation);
-  if (verbose)
-  {
-    _flow_handle->toggleVerbose();
-  }
 
-  main_loop(params, exec, simulation, std::move(_flow_handle), &de);
+  main_loop(params,
+            exec,
+            simulation,
+            std::move(transitioner),
+            &de);
 
   show(simulation);
 
@@ -168,21 +164,16 @@ static void host_process(ExecInfo &exec,
   post_process(exec, params, simulation, &de);
 }
 
-static void workers_process(ExecInfo &exec,
-                            Simulation::SimulationUnit &simulation,
-                            SimulationParameters &params)
+static void
+workers_process(ExecInfo &exec,
+                Simulation::SimulationUnit &simulation,
+                SimulationParameters &params,
+                std::unique_ptr<Simulation::FlowMapTransitioner> transitioner)
 {
 
   double d_t = params.d_t;
   size_t n_compartments = simulation.mc_unit->domain.getNumberCompartments();
   MPI_Status status;
-
-  size_t iteration_count = 0;
-  const size_t n_loop = params.n_different_maps;
-  auto liquid_flows = Simulation::BasicCacheHydro(n_loop);
-
-
-
 
   MPI_W::IterationPayload payload(n_compartments * n_compartments,
                                   n_compartments);
@@ -200,13 +191,7 @@ static void workers_process(ExecInfo &exec,
     payload.recv(0, &status);
 
     simulation.mc_unit->domain.setLiquidNeighbors(payload.neigbors);
-    Simulation::update_flow(iteration_count,
-                            n_loop,
-                            simulation,
-                            payload.liquid_flows,
-                            n_compartments,
-                            liquid_flows);
-
+    transitioner->update_flow(simulation, payload.liquid_flows, n_compartments);
     simulation.setVolumes(payload.gas_volumes, payload.liquid_volumes);
 
     simulation.cycleProcess(d_t);

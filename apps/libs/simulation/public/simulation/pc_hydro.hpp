@@ -1,6 +1,7 @@
 #ifndef __SIMUALTION__PC_HYDRO_HPP__
 #define __SIMUALTION__PC_HYDRO_HPP__
 
+#include "cma_read/reactorstate.hpp"
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
@@ -28,6 +29,14 @@ namespace Simulation
     PreCalculatedHydroState(PreCalculatedHydroState &&other) noexcept;
     PreCalculatedHydroState(const PreCalculatedHydroState &other) = delete;
   };
+
+  struct TransitionState
+  {
+    ReactorState state;
+    PreCalculatedHydroState pc;
+  };
+
+
 
 } // namespace Simulation
 

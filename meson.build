@@ -16,6 +16,7 @@ use_cuda = get_option('use_cuda')
 compiler = meson.get_compiler('cpp')
 arch_specific_args = []
 if use_cuda
+message('USING CUDA')
   arch_specific_args = ['-mp=gpu' ,'-gpu=cc35','-cudalib=cublas']
   else
   arch_specific_args = ['-march=native']
@@ -123,6 +124,7 @@ cma_reader = subproject(
     'python_wrap=false',
     'build_executable=false',
     'build_test=false',
+    f'use_cuda=@use_cuda@'
   ],
 ) # We only need native birem library in order to read flowmap so, no python neither executable
 

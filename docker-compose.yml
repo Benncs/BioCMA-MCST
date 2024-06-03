@@ -8,7 +8,7 @@ services:
       - ./devutils/docker/runtime_container:/app
       - ./apps/:/app/apps
       - ./subprojects:/app/subprojects
-      - ./cma_data:/app/cma_data
+      - ./cma_data/:/app/cma_data
       - ./modules:/app/modules
       - ./.clang-format:/app/.clang-format
       - ./.clang-tidy:/app/.clang-tidy
