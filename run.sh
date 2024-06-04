@@ -2,7 +2,7 @@
 
 executable=builddir/release/apps/cli/biocma_mcst_cli_app
 np=100000
-final_time=10
+final_time=60
 
 $executable -np $np -d $final_time -r 1  -f  ./cma_data/bench_2/ 
 

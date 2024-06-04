@@ -285,14 +285,14 @@ namespace Simulation
     auto &thread_extra = _extras[i_thread];
 
     auto &rng = thread_extra.rng;
-    const double rnd = rng.double_unfiform();
-    const double rdn2 = rng.double_unfiform();
+    const double random_number_1 = rng.double_unfiform();
+    const double random_number_2 = rng.double_unfiform();
 
     const auto &concentrations =
         domain[particle.current_container].concentrations;
 
     kernel_move(
-        rnd, rdn2, domain, particle, d_t, m_transition, cumulative_probability);
+        random_number_1, random_number_2, domain, particle, d_t, m_transition, cumulative_probability);
 
     _kmodel.update_kernel(d_t, particle, concentrations);
 

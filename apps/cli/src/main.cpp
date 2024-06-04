@@ -137,8 +137,7 @@ void host_process(
     ExecInfo &exec,
     Simulation::SimulationUnit &simulation,
     SimulationParameters &params,
-    std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner
-  )
+    std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner)
 {
   // TODO: clean
   std::string fn = sappend_date_time("result_") + std::string(".h5");
@@ -150,11 +149,7 @@ void host_process(
 
   show(simulation);
 
-  main_loop(params,
-            exec,
-            simulation,
-            std::move(transitioner),
-            &de);
+  main_loop(params, exec, simulation, std::move(transitioner), &de);
 
   show(simulation);
 
@@ -192,6 +187,8 @@ workers_process(ExecInfo &exec,
 
     simulation.mc_unit->domain.setLiquidNeighbors(payload.neigbors);
     transitioner->update_flow(simulation, payload.liquid_flows, n_compartments);
+    transitioner->advance(simulation);
+
     simulation.setVolumes(payload.gas_volumes, payload.liquid_volumes);
 
     simulation.cycleProcess(d_t);

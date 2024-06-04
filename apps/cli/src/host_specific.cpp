@@ -81,8 +81,8 @@ void main_loop(const SimulationParameters &params,
 
   transitioner->update_flow(simulation);
 
-  simulation.setVolumes(current_reactor_state->gasVolume,
-                        current_reactor_state->liquidVolume);
+  // simulation.setVolumes(current_reactor_state->gasVolume,
+  //                       current_reactor_state->liquidVolume);
   exporter->append(current_time,
                    simulation.getCliqData(),
                    simulation.mc_unit->domain.getDistribution());
@@ -109,7 +109,7 @@ void main_loop(const SimulationParameters &params,
 
 #pragma omp single
       {
-     
+
         transitioner->update_flow(simulation);
 
         FILL_PAYLOAD;
@@ -118,7 +118,7 @@ void main_loop(const SimulationParameters &params,
 
         current_reactor_state = transitioner->getState();
 
-
+        transitioner->advance(simulation);
       }
 
       simulation.cycleProcess(d_t);

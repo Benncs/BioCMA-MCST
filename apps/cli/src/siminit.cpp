@@ -124,7 +124,9 @@ static void init_host_only(ExecInfo &info,
   {
     return;
   }
-  const auto cma_case = CMACaseInfoReader::load_case(params.root + "/cma_case");
+  CMACaseInfo cma_case = CMACaseInfoReader::load_case(params.root + "/cma_case");
+
+
   const ReactorState *fstate = init_state(params, _flow_handle, cma_case.paths);
 
   params.n_compartments = fstate->n_compartments;

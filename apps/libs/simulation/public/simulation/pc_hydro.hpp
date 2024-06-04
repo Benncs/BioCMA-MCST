@@ -23,16 +23,16 @@ namespace Simulation
 
     explicit PreCalculatedHydroState(const FlowMatrixType &_tm);
 
-    PreCalculatedHydroState &operator=(PreCalculatedHydroState &&rhs) noexcept;
+    PreCalculatedHydroState &operator=(PreCalculatedHydroState &&rhs) =default;
     PreCalculatedHydroState &operator=(const PreCalculatedHydroState &rhs) = delete;
 
-    PreCalculatedHydroState(PreCalculatedHydroState &&other) noexcept;
+    PreCalculatedHydroState(PreCalculatedHydroState &&other) =default;
     PreCalculatedHydroState(const PreCalculatedHydroState &other) = delete;
   };
 
   struct TransitionState
   {
-    const ReactorState* state;
+    ReactorState state;
     PreCalculatedHydroState liquid_pc;
     PreCalculatedHydroState gas_pc;
   };
