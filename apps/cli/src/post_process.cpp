@@ -28,7 +28,7 @@ void model_specific(ExecInfo &exec,
 void post_process(ExecInfo &exec,
                   SimulationParameters &params,
                   Simulation::SimulationUnit &simulation,
-                  DataExporter *exporter)
+                  std::unique_ptr<DataExporter>& exporter)
 {
 
   const size_t process_size = simulation.mc_unit->container.to_process.size();

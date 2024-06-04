@@ -117,6 +117,7 @@ namespace Simulation
     }
 
     auto n_compartment = current_state->n_compartments;
+    //TODO CHECK move assigment 
     interpolated_state.state.liquid_flow = current_state->liquid_flow;
     const auto *current_r = &get_unchecked(current_index);
     const auto *next_r = &get_unchecked(next_index);

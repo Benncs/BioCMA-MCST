@@ -9,7 +9,7 @@ void save_results(ExecInfo& exec,SimulationParameters &params,
 
 
 void post_process(ExecInfo& exec,SimulationParameters &params,
-                  Simulation::SimulationUnit &simulation,DataExporter* exported);
+                  Simulation::SimulationUnit &simulation,std::unique_ptr<DataExporter>& exporter);
 
 
 void show(Simulation::SimulationUnit &simulation);

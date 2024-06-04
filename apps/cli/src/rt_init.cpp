@@ -155,7 +155,6 @@ std::string sappend_date_time(std::string_view string)
   fd<<string;
   auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
   fd << std::put_time(std::localtime(&now), "%Y-%m-%d-%H:%M:%S");
-  // append_date_time(fd);
   return fd.str();
 
 }

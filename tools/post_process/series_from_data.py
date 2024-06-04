@@ -82,28 +82,28 @@ def read_compute_norm(pathres,folder_root,sname,vtk_cma_mesh_path:Optional[str]=
 
 folder_root = "/home/benjamin/Documenti/code/cpp/biomc/cma_data/"
 
-# sname = ["data_50K","data_1M","data_5M","data_10M"]
-# pathres = ['./results/50k.h5','./results/1M.h5','./results/5M.h5',"./results/10M.h5"]
+sname = ["data_10M_n"]
+pathres = ["./results/10M.h5"]
 #pathres = ['./results/50k.h5',"./results/1M.h5","./results/5M.h5"]
-pathres = [ "/home/benjamin/Documenti/code/cpp/biomc/results/result_2024-06-04-11:14:49.h5"]
-sname = ["test_linterp"]
+# pathres = [ "/home/benjamin/Documenti/code/cpp/biomc/results/result_2024-06-04-11:14:49.h5"]
+# sname = ["test_linterp"]
 vtk_cma_mesh_path="/home/benjamin/Documenti/code/cpp/BIREM_new/out/sanofi/cma_mesh.vtu"
 
 
 _,n_c ,_,pvc,t= read_compute_norm(pathres[0],folder_root,sname[0])
-plt.semilogy(t,pvc,label="liquid")
+# plt.semilogy(t,pvc,label="liquid")
 for i in range(len(pathres)):
     n,n_c,par_var,_,t = read_compute_norm(pathres[i],folder_root,sname[i],vtk_cma_mesh_path)
-    plt.semilogy(t, par_var,label=sname[i])
+#     plt.semilogy(t, par_var,label=sname[i])
 
 
 
 
-plt.legend()
-plt.title("Segregation index as a function of the time")
-plt.ylabel(r"\[ \frac{\sigma(t)}{\sigma(t_{0})}\]")
-plt.xlabel("time [s]")
-# plt.savefig("./results/mixing_variance3.svg",dpi=1500)
-plt.show()
+# plt.legend()
+# plt.title("Segregation index as a function of the time")
+# plt.ylabel(r"\[ \frac{\sigma(t)}{\sigma(t_{0})}\]")
+# plt.xlabel("time [s]")
+# # plt.savefig("./results/mixing_variance3.svg",dpi=1500)
+# plt.show()
 
 

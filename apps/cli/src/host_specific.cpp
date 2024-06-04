@@ -60,7 +60,7 @@ void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
                Simulation::SimulationUnit &simulation,
                std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
-               DataExporter *exporter)
+               std::unique_ptr<DataExporter> &exporter)
 {
 
   const double d_t = params.d_t;
@@ -81,11 +81,11 @@ void main_loop(const SimulationParameters &params,
 
   transitioner->update_flow(simulation);
 
-  // simulation.setVolumes(current_reactor_state->gasVolume,
-  //                       current_reactor_state->liquidVolume);
   exporter->append(current_time,
                    simulation.getCliqData(),
-                   simulation.mc_unit->domain.getDistribution());
+                   simulation.mc_unit->domain.getDistribution(),
+                   current_reactor_state->liquidVolume,
+                   current_reactor_state->gasVolume);
 
 #pragma omp parallel default(none) shared(transitioner,                        \
                                               simulation,                      \
@@ -131,7 +131,9 @@ void main_loop(const SimulationParameters &params,
           update_progress_bar(n_iter_simulation, __loop_counter, true);
           exporter->append(current_time,
                            simulation.getCliqData(),
-                           simulation.mc_unit->domain.getDistribution());
+                           simulation.mc_unit->domain.getDistribution(),
+                           current_reactor_state->liquidVolume,
+                           current_reactor_state->gasVolume);
           dump_counter = 0;
         }
       }
@@ -142,11 +144,13 @@ void main_loop(const SimulationParameters &params,
         sync_step(exec, simulation);
         simulation.step(d_t, *current_reactor_state);
         sync_prepare_next(exec, simulation);
-        current_time += d_t; // FIXME
+        current_time += d_t; 
       }
     }
   }
   exporter->append(current_time,
                    simulation.getCliqData(),
-                   simulation.mc_unit->domain.getDistribution());
+                   simulation.mc_unit->domain.getDistribution(),
+                   current_reactor_state->liquidVolume,
+                   current_reactor_state->gasVolume);
 }

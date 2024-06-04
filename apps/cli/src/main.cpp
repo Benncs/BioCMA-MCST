@@ -1,3 +1,4 @@
+#include "birem_common/macro_constructor_assignment.hpp"
 #include "data_exporter.hpp"
 #include "models/light_model.hpp"
 #include "models/monod.hpp"
@@ -142,21 +143,22 @@ void host_process(
   // TODO: clean
   std::string fn = sappend_date_time("result_") + std::string(".h5");
   ExportParameters export_i = {static_cast<size_t>(params.final_time) * 3, fn};
+  export_i.n_save = 0;
   std::string name = "./results/" + export_i.filename;
 
   auto d = simulation.mc_unit->domain.getDistribution();
-  DataExporter de(exec, params, name, simulation.getDim(), export_i.n_save, d);
+  auto de = DataExporter::factory(exec, params, name, simulation.getDim(), export_i.n_save, d);
 
   show(simulation);
 
-  main_loop(params, exec, simulation, std::move(transitioner), &de);
+  main_loop(params, exec, simulation, std::move(transitioner), de);
 
   show(simulation);
 
   SEND_MPI_SIG_STOP;
   last_sync(exec, simulation);
 
-  post_process(exec, params, simulation, &de);
+  post_process(exec, params, simulation, de);
 }
 
 static void

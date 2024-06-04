@@ -101,7 +101,7 @@ init_simulation(ExecInfo &info,
   transitioner = std::make_unique<Simulation::FlowMapTransitioner>(
       params.n_different_maps,
       params.n_per_flowmap,
-      Simulation::FlowMapTransitioner::InterpolationFO,
+      Simulation::FlowMapTransitioner::Discontinuous,
       n_t,
       std::move(_flow_handle),
       params.is_two_phase_flow);
@@ -152,7 +152,7 @@ static void init_host_only(ExecInfo &info,
   // const auto n_t = static_cast<size_t>(params.final_time / params.d_t) + 1;
 
   // Define the duration of each flowmap and compute steps per flowmap
-  const double t_per_flowmap = cma_case.time_per_flowmap;
+  const double t_per_flowmap = 0;//cma_case.time_per_flowmap;
 
   const auto n_per_flowmap =
       (t_per_flowmap == 0 || params.n_different_maps == 1)
