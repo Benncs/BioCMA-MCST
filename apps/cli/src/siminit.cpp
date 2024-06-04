@@ -95,15 +95,13 @@ init_simulation(ExecInfo &info,
                                  model,
                                  std::move(initial_particle_distribution),
                                  tpf);
-    // Calculate the total number of time steps
+  // Calculate the total number of time steps
   const auto n_t = static_cast<size_t>(params.final_time / params.d_t) + 1;
 
-  
-  
   transitioner = std::make_unique<Simulation::FlowMapTransitioner>(
       params.n_different_maps,
       params.n_per_flowmap,
-      Simulation::FlowMapTransitioner::Discontinuous,
+      Simulation::FlowMapTransitioner::InterpolationFO,
       n_t,
       std::move(_flow_handle),
       params.is_two_phase_flow);
@@ -124,8 +122,8 @@ static void init_host_only(ExecInfo &info,
   {
     return;
   }
-  CMACaseInfo cma_case = CMACaseInfoReader::load_case(params.root + "/cma_case");
-
+  CMACaseInfo cma_case =
+      CMACaseInfoReader::load_case(params.root + "/cma_case");
 
   const ReactorState *fstate = init_state(params, _flow_handle, cma_case.paths);
 
@@ -153,7 +151,6 @@ static void init_host_only(ExecInfo &info,
 
   // const auto n_t = static_cast<size_t>(params.final_time / params.d_t) + 1;
 
-
   // Define the duration of each flowmap and compute steps per flowmap
   const double t_per_flowmap = cma_case.time_per_flowmap;
 
@@ -169,7 +166,6 @@ static void init_host_only(ExecInfo &info,
   //     n_t / (params.n_different_maps * n_per_flowmap) + 1;
 
   params.n_per_flowmap = n_per_flowmap;
-
 
   // _flow_handle->setRepetition(n_repetition, n_per_flowmap);
   register_run(info, params);

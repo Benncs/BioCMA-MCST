@@ -82,14 +82,10 @@ namespace Simulation
     }
 
   private:
-    using f_transition_t = void (FlowMapTransitioner::*)();
-    using f_advance_t = void (FlowMapTransitioner::*)();
+ 
     void discontinuous_transition();
     void linear_interpolation_transition();
-    PreCalculatedHydroState
-    linear_interpolation_pc_state(const PreCalculatedHydroState &current,
-                                  const PreCalculatedHydroState &next,
-                                  double t);
+
 
     bool two_phase_flow;
     std::unique_ptr<FlowIterator> iterator = nullptr;
@@ -100,7 +96,6 @@ namespace Simulation
 
     size_t current_flowmap_count;
     size_t repetition_count;
-    f_transition_t f_transition;
     void calculate_full_state(const ReactorState &reactor_state,
                               const Simulation::SimulationUnit &unit,
                               PreCalculatedHydroState *liq_hydro_state,
@@ -111,6 +106,12 @@ namespace Simulation
                            const Simulation::SimulationUnit &unit,
                            PreCalculatedHydroState *liq_hydro_state);
 
+    void (FlowMapTransitioner::*f_update)(Simulation::SimulationUnit &unit);
+
+
+    void update_flow_interpolation(Simulation::SimulationUnit &unit);
+
+    void update_flow_discontinous(Simulation::SimulationUnit &unit);
 
     std::vector<PreCalculatedHydroState> liquid_pc;
     std::vector<PreCalculatedHydroState> gas_pc;

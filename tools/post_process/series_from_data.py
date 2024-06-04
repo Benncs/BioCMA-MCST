@@ -4,25 +4,31 @@ import birem.vtk
 from read_results import * 
 import matplotlib.pyplot as plt 
 import scienceplots
+from typing import Optional,List
 # plt.style.use(['science','ieee','scatter','grid'])
 plt.style.use(['science','grid'])
 
-def norm(array):
-    min_val = np.min(array,axis=1).reshape(-1,1)
-    max_val = np.max(array,axis=1).reshape(-1,1)
+def write_vtk_results(vtk_cma_mesh_path:str,sname:List[str],t:float,
+                        full_volume:np.ndarray,
+                        p_concentration:np.ndarray,
+                        normalized_particle_concentration:np.ndarray,
+                        normalized_scalar_concentration:np.ndarray,
+                        concentration_record:np.ndarray):
+    birem.vtk.mk_series(vtk_cma_mesh_path,"./results/",sname,t,
+        [full_volume,"liquid_volume"],[p_concentration,"particle_concentration"],[normalized_particle_concentration,"normalized_particle_concentration"],[normalized_scalar_concentration,"normalized_liquid_concentration"],[concentration_record,"liquid_concentration"])
 
 
-    return array/max_val
-   
+def norm_concentration(raw_concentration,volumes):
+    
+    vtot = np.sum(volumes,axis=1)
+    mean_concentration = np.sum(raw_concentration * volumes, axis=1) / vtot
+    mean_concentration = mean_concentration.reshape(-1, 1)
+    variance = np.sum(np.power(raw_concentration - mean_concentration, 2) * volumes, axis=1) / vtot
+    return raw_concentration / mean_concentration,mean_concentration,variance
 
-def read_compute_norm(pathres,folder_root,sname):
+def read_compute_norm(pathres,folder_root,sname,vtk_cma_mesh_path:Optional[str]=None):
     # Import results from the given path
     results = import_results(pathres)
-
-    # initial_distribution, distribution, cliq, data, tf, dt, npart, records_p_dist
-
-    # Determine the number of time steps
-
 
     # Initialize array to store volume data
     read_volume = np.zeros((14, results.records_distribution.shape[1]))
@@ -37,7 +43,6 @@ def read_compute_norm(pathres,folder_root,sname):
         raw_volume = birem.read_scalar(f"{folder}/vofL.raw")
         read_volume[i] = raw_volume
     
- 
 
     # Reshape the records array
     records_p_dist = results.records_distribution.reshape(results.records_distribution.shape[0], results.records_distribution.shape[1])
@@ -64,29 +69,15 @@ def read_compute_norm(pathres,folder_root,sname):
         p_concentration[i] = records_p_dist[i] / read_volume[index]
 
     vtot = np.sum(full_volume,axis=1)
-    # Compute mean particle concentration
-    mean_p_c = (n_particle / vtot).reshape(-1,1)
+   
 
-    # Compute particle concentration variance
-    par_var = np.sum(np.power(p_concentration - mean_p_c, 2) * full_volume, axis=1) / vtot
-#    par_var = np.sqrt(par_var)
+    
+    normalized_scalar_concentration,mean_c,var_c = norm_concentration(concentration_record,full_volume) 
+    normalized_particle_concentration ,mean_p_c,par_var= norm_concentration(p_concentration,full_volume) 
 
-    # Compute mean concentration
-    mean_c = np.sum(concentration_record * full_volume, axis=1) / vtot
-    mean_c = mean_c.reshape(-1, 1)  # Reshape for broadcasting
-
-
-    # Compute concentration variance
-    var_c = np.sum(np.power(concentration_record - mean_c, 2) * full_volume, axis=1) / vtot
-
-#    var_c = np.sqrt(var_c)
-    # Normalize concentration record and particle concentration
-    normalized_scalar_concentration = concentration_record / mean_c
-    normalized_particle_concentration = p_concentration / mean_p_c
-
-    # vtk_cma_mesh_path="/home/benjamin/Documenti/code/cpp/BIREM_new/out/sanofi/cma_mesh.vtu"
-    # birem.vtk.mk_series(vtk_cma_mesh_path,"./results/",sname,results.t,
-    # [full_volume,"liquid_volume"],[p_concentration,"particle_concentration"],[normalized_particle_concentration,"normalized_particle_concentration"],[normalized_scalar_concentration,"normalized_liquid_concentration"],[concentration_record,"liquid_concentration"])
+    if vtk_cma_mesh_path is not None:
+        write_vtk_results(vtk_cma_mesh_path,sname,results.t,full_volume,p_concentration,normalized_particle_concentration,normalized_scalar_concentration,concentration_record)
+      
     return normalized_particle_concentration,normalized_scalar_concentration,par_var/par_var[0],var_c/var_c[0],results.t
 
 folder_root = "/home/benjamin/Documenti/code/cpp/biomc/cma_data/"
@@ -94,12 +85,15 @@ folder_root = "/home/benjamin/Documenti/code/cpp/biomc/cma_data/"
 # sname = ["data_50K","data_1M","data_5M","data_10M"]
 # pathres = ['./results/50k.h5','./results/1M.h5','./results/5M.h5',"./results/10M.h5"]
 #pathres = ['./results/50k.h5',"./results/1M.h5","./results/5M.h5"]
-pathres = [ "/home/benjamin/Documenti/code/cpp/biomc/devutils/docker/runtime_container/builddir/results/result_2024-05-31-15:51:41.h5"]
-sname = ["data_1M"]
+pathres = [ "/home/benjamin/Documenti/code/cpp/biomc/results/result_2024-06-04-11:14:49.h5"]
+sname = ["test_linterp"]
+vtk_cma_mesh_path="/home/benjamin/Documenti/code/cpp/BIREM_new/out/sanofi/cma_mesh.vtu"
+
+
 _,n_c ,_,pvc,t= read_compute_norm(pathres[0],folder_root,sname[0])
 plt.semilogy(t,pvc,label="liquid")
 for i in range(len(pathres)):
-    n,n_c,par_var,_,t = read_compute_norm(pathres[i],folder_root,sname[i])
+    n,n_c,par_var,_,t = read_compute_norm(pathres[i],folder_root,sname[i],vtk_cma_mesh_path)
     plt.semilogy(t, par_var,label=sname[i])
 
 
@@ -109,7 +103,7 @@ plt.legend()
 plt.title("Segregation index as a function of the time")
 plt.ylabel(r"\[ \frac{\sigma(t)}{\sigma(t_{0})}\]")
 plt.xlabel("time [s]")
-plt.savefig("./results/mixing_variance3.svg",dpi=1500)
-# plt.show()
+# plt.savefig("./results/mixing_variance3.svg",dpi=1500)
+plt.show()
 
 

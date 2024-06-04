@@ -13,6 +13,11 @@ double linter(double a, double b, double t)
 {
   return (1 - t) * a + t * b;
 }
+
+
+
+
+
 namespace Simulation
 {
 
@@ -61,43 +66,33 @@ namespace Simulation
     // transtion_state.resize(n_flowmap);
     this->liquid_pc.resize(n_flowmap);
     this->gas_pc.resize(n_flowmap);
-    // switch (method)
-    // {
-    // case (FlowmapTransitionMethod::Discontinuous):
-    // {
-    //   f_transition = &FlowMapTransitioner::discontinuous_transition;
-    //   break;
-    // }
-    // case (FlowMapTransitioner::InterpolationFO):
-    // {
-    //     f_transition = &FlowMapTransitioner::discontinuous_transition;
-    //   break;
-    // }
-    // }
-  }
-
-  PreCalculatedHydroState FlowMapTransitioner::linear_interpolation_pc_state(
-      const PreCalculatedHydroState &current,
-      const PreCalculatedHydroState &next,
-      double t)
-  {
-    PreCalculatedHydroState interpolated_state;
-    interpolated_state.inverse_volume.reserve(current.inverse_volume.size());
-
-    for (size_t i_v = 0; i_v < current.inverse_volume.size(); ++i_v)
+    switch (method)
     {
-      interpolated_state.inverse_volume.emplace_back(
-          linter(current.inverse_volume[i_v], next.inverse_volume[i_v], t));
+    case (FlowmapTransitionMethod::Discontinuous):
+    {
+      std::cout << "Using Discontinous transition\r\n";
+      f_update = &FlowMapTransitioner::update_flow_discontinous;
+      break;
     }
+    case (FlowMapTransitioner::InterpolationFO):
+    {
+      std::cout << "Using linear interpolation transition\r\n";
+      f_update = &FlowMapTransitioner::update_flow_interpolation;
+      break;
+    }
+    }
+  } 
 
-    interpolated_state.cumulative_probability =
+  void linter_eigen(const PreCalculatedHydroState& current,const PreCalculatedHydroState& next,PreCalculatedHydroState& interpolated,double t)
+  {
+    interpolated.cumulative_probability =
         (1 - t) * current.cumulative_probability +
         t * next.cumulative_probability;
 
-    interpolated_state.transition_matrix =
-        (1.0 - t) * current.transition_matrix + t * next.transition_matrix;
 
-    return interpolated_state;
+    interpolated.transition_matrix =
+        (1.0 - t) * current.transition_matrix +
+        t * next.transition_matrix;
   }
 
   void FlowMapTransitioner::linear_interpolation_transition()
@@ -108,15 +103,17 @@ namespace Simulation
 
     auto &current_l_state = this->liquid_pc[current_index];
     auto &next_l_state = this->liquid_pc[next_index];
-    interpolated_state.liquid_pc =
-        linear_interpolation_pc_state(current_l_state, next_l_state, t);
+
+    linter_eigen(current_l_state,next_l_state,interpolated_state.liquid_pc,t);
+
 
     if (two_phase_flow)
     {
       auto &current_g_state = this->gas_pc[current_index];
       auto &next_g_state = this->gas_pc[next_index];
-      interpolated_state.gas_pc =
-          linear_interpolation_pc_state(current_g_state, next_g_state, t);
+
+      linter_eigen(current_g_state,next_g_state,interpolated_state.gas_pc,t);
+
     }
 
     auto n_compartment = current_state->n_compartments;
@@ -127,9 +124,25 @@ namespace Simulation
     interpolated_state.state.liquidVolume.resize(n_compartment);
     interpolated_state.state.gasVolume.resize(n_compartment);
     interpolated_state.state.energy_dissipation.resize(n_compartment);
+    interpolated_state.liquid_pc.inverse_volume.resize(
+        current_l_state.inverse_volume.size());
 
     for (size_t is = 0; is < n_compartment; ++is)
     {
+
+      interpolated_state.liquid_pc.inverse_volume[is] =
+          linter(current_l_state.inverse_volume[is],
+                 next_l_state.inverse_volume[is],
+                 t);
+
+      if (two_phase_flow)
+      {
+        interpolated_state.gas_pc.inverse_volume[is] =
+            linter(this->gas_pc[current_index].inverse_volume[is],
+                   this->gas_pc[next_index].inverse_volume[is],
+                   t);
+      }
+
       interpolated_state.state.liquidVolume[is] =
           linter(current_r->liquidVolume[is], next_r->liquidVolume[is], t);
       interpolated_state.state.gasVolume[is] =
@@ -144,67 +157,70 @@ namespace Simulation
     current_state = &(interpolated_state.state);
   }
 
+  void FlowMapTransitioner::update_flow_interpolation(
+      Simulation::SimulationUnit &unit)
+  {
+    current_index = getFlowIndex();
+    if (this->repetition_count < this->n_flowmap - 1)
+    {
+
+      const auto *tmp_current_sate = &get_unchecked(current_index);
+      unit.mc_unit->domain.setLiquidNeighbors(
+          tmp_current_sate->liquid_flow.getViewNeighors());
+      calculate_full_state(*tmp_current_sate,
+                           unit,
+                           &this->liquid_pc[current_index],
+                           &this->gas_pc[current_index]);
+
+      // Calculate next state
+      auto next_index = current_index + 1;
+      const auto *next_state = &get_unchecked(next_index);
+      unit.mc_unit->domain.setLiquidNeighbors(
+          next_state->liquid_flow.getViewNeighors());
+      calculate_full_state(*next_state,
+                           unit,
+                           &this->liquid_pc[next_index],
+                           &this->gas_pc[next_index]);
+
+      current_state = tmp_current_sate;
+    }
+
+    linear_interpolation_transition();
+    unit.mc_unit->domain.setLiquidNeighbors(
+        current_state->liquid_flow.getViewNeighors());
+  }
+
+  void FlowMapTransitioner::update_flow_discontinous(
+      Simulation::SimulationUnit &unit)
+  {
+    current_index = getFlowIndex();
+
+    current_liq_hydro_state = &this->liquid_pc[current_index];
+    if (two_phase_flow)
+    {
+      current_gas_hydro_state = &this->gas_pc[current_index];
+    }
+
+    if (this->repetition_count < this->n_flowmap)
+    {
+      current_state = &get_unchecked(current_index);
+
+      calculate_full_state(*current_state,
+                           unit,
+                           current_liq_hydro_state,
+                           current_gas_hydro_state);
+    }
+
+    current_state = &get_unchecked(current_index);
+
+    unit.mc_unit->domain.setLiquidNeighbors(
+        current_state->liquid_flow.getViewNeighors());
+  }
+
   // MPI Host
   void FlowMapTransitioner::update_flow(Simulation::SimulationUnit &unit)
   {
-    constexpr bool linterp = true;
-
-    if constexpr (!linterp)
-    {
-      current_index = getFlowIndex();
-
-      current_liq_hydro_state = &this->liquid_pc[current_index];
-      if (two_phase_flow)
-      {
-        current_gas_hydro_state = &this->gas_pc[current_index];
-      }
-
-      if (this->repetition_count < this->n_flowmap)
-      {
-        current_state = &get_unchecked(current_index);
-
-        calculate_full_state(*current_state,
-                             unit,
-                             current_liq_hydro_state,
-                             current_gas_hydro_state);
-      }
-
-      current_state = &get_unchecked(current_index);
-
-      unit.mc_unit->domain.setLiquidNeighbors(
-          current_state->liquid_flow.getViewNeighors());
-    }
-    else
-    {
-      current_index = getFlowIndex();
-      if (this->repetition_count < this->n_flowmap - 1)
-      {
-
-        const auto *tmp_current_sate = &get_unchecked(current_index);
-        unit.mc_unit->domain.setLiquidNeighbors(
-            tmp_current_sate->liquid_flow.getViewNeighors());
-        calculate_full_state(*tmp_current_sate,
-                             unit,
-                             &this->liquid_pc[current_index],
-                             &this->gas_pc[current_index]);
-
-        // Calculate next state
-        auto next_index = current_index + 1;
-        const auto *next_state = &get_unchecked(next_index);
-        unit.mc_unit->domain.setLiquidNeighbors(
-            next_state->liquid_flow.getViewNeighors());
-        calculate_full_state(*next_state,
-                             unit,
-                             &this->liquid_pc[next_index],
-                             &this->gas_pc[next_index]);
-
-        current_state = tmp_current_sate;
-      }
-
-      linear_interpolation_transition();
-      unit.mc_unit->domain.setLiquidNeighbors(
-          current_state->liquid_flow.getViewNeighors());
-    }
+    (this->*f_update)(unit);
   }
 
   // MPI worker
