@@ -13,3 +13,10 @@ SimulationParameters SimulationParameters::m_default()
   params.n_compartments = 0;
   return params;
 }
+
+
+  UserControlParameters UserControlParameters::m_default()
+  {
+    return {"",false,0,0,0,"",-1};
+  }
+

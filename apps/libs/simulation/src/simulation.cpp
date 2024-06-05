@@ -55,8 +55,7 @@ namespace Simulation
     //   }
     // }
 
-    liq->concentration.coeffRef(0, static_cast<int>(0)) =
-        100000; // 0.5 G/L Glucose
+    liq->concentration.coeffRef(0, static_cast<int>(3)) = 100; // 0.5 G/L Glucose
 
     liq->total_mass = liq->concentration * liq->getVolume();
     if (host)

@@ -36,42 +36,44 @@ def read_compute_norm(pathres,folder_root,sname,vtk_cma_mesh_path:Optional[str]=
     # Define the flow map time step and number of steps per flow map
     t_per_flowmap = 0.0286
     n_per_flowmap = int(t_per_flowmap / results.dt)
-
-    # Read volume data from files and store in read_volume
-    for i in range(14):
-        folder = f"{folder_root}/bench_2/i_{i+1}"
-        raw_volume = birem.read_scalar(f"{folder}/vofL.raw")
-        read_volume[i] = raw_volume
-    
+    if(results.version ==1):
+        # Read volume data from files and store in read_volume
+        for i in range(14):
+            folder = f"{folder_root}/bench_2/i_{i+1}"
+            raw_volume = birem.read_scalar(f"{folder}/vofL.raw")
+            read_volume[i] = raw_volume
+        
 
     # Reshape the records array
-    records_p_dist = results.records_distribution.reshape(results.records_distribution.shape[0], results.records_distribution.shape[1])
-
+    if results.version ==1:
+        records_p_dist = results.records_distribution.reshape(results.records_distribution.shape[:-1])
+    else:
+        records_p_dist = results.records_distribution
     # Calculate the total number of particles at the initial time step
     n_particle = np.sum(records_p_dist[0])
 
     # Initialize arrays for particle concentration and full volume
-    p_concentration = np.zeros((records_p_dist.shape[0], records_p_dist.shape[1]))
+    p_concentration = np.zeros(records_p_dist.shape[:-1])
     full_volume = np.zeros_like(p_concentration)
 
     # Set initial full volume and particle concentration
-    full_volume[0] = np.copy(read_volume[0])
-    p_concentration[0] = records_p_dist[0] / read_volume[0]
+    # full_volume[0] = np.copy(read_volume[0])
+    # p_concentration[0] = records_p_dist[0] / read_volume[0]
 
     # Initialize array for concentration record and mass
     concentration_record = results.data[:, :, 0]
-
-    
+    if(results.version==2):
+        full_volume = results.volume_liquid
+        p_concentration = records_p_dist / full_volume
+    else:
     # Loop over each time step to compute volumes and concentrations
-    for i in range(0, results.n_t):
-        index = (i // n_per_flowmap) % 14
-        full_volume[i] = np.copy(read_volume[index])
-        p_concentration[i] = records_p_dist[i] / read_volume[index]
+        for i in range(0, results.n_t):
+            index = (i // n_per_flowmap) % 14
+            full_volume[i] = np.copy(read_volume[index])
+            p_concentration[i] = records_p_dist[i] / full_volume[i]
 
     vtot = np.sum(full_volume,axis=1)
    
-
-    
     normalized_scalar_concentration,mean_c,var_c = norm_concentration(concentration_record,full_volume) 
     normalized_particle_concentration ,mean_p_c,par_var= norm_concentration(p_concentration,full_volume) 
 
@@ -82,28 +84,36 @@ def read_compute_norm(pathres,folder_root,sname,vtk_cma_mesh_path:Optional[str]=
 
 folder_root = "/home/benjamin/Documenti/code/cpp/biomc/cma_data/"
 
-sname = ["data_10M_n"]
-pathres = ["./results/10M.h5"]
+# sname = ["test","test2","test3","sanofi"]
+# # pathres = ["./results/1M_new.h5"]
+# pathres = ["./results/result_2024-06-04-17:36:47.h5","./results/result_2024-06-04-17:41:26.h5","./results/result_2024-06-04-18:03:04.h5","./results/result_2024-06-04-18:23:35.h5",""]
+
+root_res = "./results/mixing/"
+
+name_results = ["mix_100K_init","mix_100K_init2","mix_1M_init2","mix_10M_init2"]
+
+pathres= [f"{root_res}{i}.h5" for i in name_results]
+
 #pathres = ['./results/50k.h5',"./results/1M.h5","./results/5M.h5"]
 # pathres = [ "/home/benjamin/Documenti/code/cpp/biomc/results/result_2024-06-04-11:14:49.h5"]
 # sname = ["test_linterp"]
-vtk_cma_mesh_path="/home/benjamin/Documenti/code/cpp/BIREM_new/out/sanofi/cma_mesh.vtu"
+vtk_cma_mesh_path= None #"/home/benjamin/Documenti/code/cpp/BIREM_new/out/sanofi/cma_mesh.vtu"
 
 
-_,n_c ,_,pvc,t= read_compute_norm(pathres[0],folder_root,sname[0])
+# _,n_c ,_,pvc,t= read_compute_norm(pathres[0],folder_root,sname[0])
 # plt.semilogy(t,pvc,label="liquid")
 for i in range(len(pathres)):
-    n,n_c,par_var,_,t = read_compute_norm(pathres[i],folder_root,sname[i],vtk_cma_mesh_path)
-#     plt.semilogy(t, par_var,label=sname[i])
+    n,n_c,par_var,pvc,t = read_compute_norm(pathres[i],folder_root,name_results[i],vtk_cma_mesh_path)
+    plt.semilogy(t, par_var,label=name_results[i])
+    plt.semilogy(t,pvc,label=f"liquid_{name_results[i]}")
 
 
 
-
-# plt.legend()
-# plt.title("Segregation index as a function of the time")
-# plt.ylabel(r"\[ \frac{\sigma(t)}{\sigma(t_{0})}\]")
-# plt.xlabel("time [s]")
-# # plt.savefig("./results/mixing_variance3.svg",dpi=1500)
-# plt.show()
+plt.legend()
+plt.title("Segregation index as a function of the time")
+plt.ylabel(r"\[ \frac{\sigma(t)}{\sigma(t_{0})}\]")
+plt.xlabel("time [s]")
+# plt.savefig("./results/mixing_variance3.svg",dpi=1500)
+plt.show()
 
 

@@ -112,13 +112,13 @@ int main(int argc, char **argv)
 
 static void exec(int argc, char **argv, SimulationParameters params)
 {
-
+  
   ExecInfo exec_info = runtime_init(argc, argv, params);
 
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
   constexpr size_t i_model = 1;
   const auto model = load_model_(i_model);
-  MC::UniformLawINT law_param = {0, 1};
+  MC::UniformLawINT law_param = {3, 3};
 
   auto simulation = init_simulation(
       exec_info, params, transitioner, model, std::move(law_param));
@@ -143,7 +143,7 @@ void host_process(
   // TODO: clean
   std::string fn = sappend_date_time("result_") + std::string(".h5");
   ExportParameters export_i = {static_cast<size_t>(params.final_time) * 3, fn};
-  export_i.n_save = 0;
+  // export_i.n_save = 0;
   std::string name = "./results/" + export_i.filename;
 
   auto d = simulation.mc_unit->domain.getDistribution();

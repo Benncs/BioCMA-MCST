@@ -43,7 +43,7 @@ DataExporter::DataExporter(ExecInfo &info,
 
 {
 
-  metadata["file_version"] = 1;
+  metadata["file_version"] = 2;
   metadata["creation_date"] = date_time();
   metadata["author"] = "someone";
   metadata["description"] = "Interesting results";
@@ -179,68 +179,107 @@ DataExportHighFive::DataExportHighFive(ExecInfo &info,
   write_attributes(file, metadata);
   prepare();
 }
-
+  constexpr size_t hdf5_max_compression = 9; 
 void DataExportHighFive::prepare()
 {
   HighFive::File file(filename, HighFive::File::ReadWrite);
 
-  HighFive::DataSpace dataspace = HighFive::DataSpace(
-      {
-          1,
-          n_col,
-          n_row,
-      },
-      {n_iter, n_col, n_row});
+  auto create_dataset = [&file](const std::string &name,
+                                const std::vector<size_t> &dims,
+                                const std::vector<size_t> &max_dims,
+                                const HighFive::DataType &dtype,
+                                const std::vector<hsize_t> &chunk_dims,size_t compression =hdf5_max_compression)
+  {
+    HighFive::DataSpace dataspace(dims, max_dims);
+    HighFive::DataSetCreateProps props;
+    props.add(HighFive::Chunking(chunk_dims));
+    props.add(HighFive::Shuffle());
+    props.add(HighFive::Deflate(compression));
+    return file.createDataSet(name, dataspace, dtype, props);
+  };
 
-  // Use chunking
-  HighFive::DataSetCreateProps props;
-  props.add(HighFive::Chunking(std::vector<hsize_t>{1, n_col, n_row}));
-  props.add(HighFive::Shuffle());
-  props.add(HighFive::Deflate(9));
+  auto double_type = HighFive::create_datatype<double>();
+  auto size_t_type = HighFive::create_datatype<size_t>();
+  create_dataset("records/concentration_liquid",
+                 {1, n_col, n_row},
+                 {n_iter, n_col, n_row},
+                 double_type,
+                 {1, n_col, n_row});
+  create_dataset("records/liquid_volume",
+                 {1, n_col},
+                 {n_iter, n_col},
+                 double_type,
+                 {1, n_col});
+  create_dataset("records/gas_volume",
+                 {1, n_col},
+                 {n_iter, n_col},
+                 double_type,
+                 {1, n_col});
+  create_dataset("records/distribution",
+                 {1, n_col},
+                 {n_iter, n_col},
+                 size_t_type,
+                 {1, n_col});
+  create_dataset(
+      "records/time", {1}, {n_iter}, double_type, {1});
 
-  HighFive::DataSpace dataspac_volume = HighFive::DataSpace(
-      {
-          1,
-          n_col,
-          1,
-      },
-      {n_iter, n_col, 1});
+  // HighFive::DataSpace dataspace = HighFive::DataSpace(
+  //     {
+  //         1,
+  //         n_col,
+  //         n_row,
+  //     },
+  //     {n_iter, n_col, n_row});
 
-  HighFive::DataSetCreateProps props_volume;
-  props_volume.add(HighFive::Chunking(std::vector<hsize_t>{1, n_col, 1}));
-  props_volume.add(HighFive::Shuffle());
-  props_volume.add(HighFive::Deflate(9));
+  // // Use chunking
+  // HighFive::DataSetCreateProps props;
+  // props.add(HighFive::Chunking(std::vector<hsize_t>{1, n_col, n_row}));
+  // props.add(HighFive::Shuffle());
+  // props.add(HighFive::Deflate(9));
 
-  // Create the dataset
-  HighFive::DataSet dataset =
-      file.createDataSet("records/concentration_liquid",
-                         dataspace,
-                         HighFive::create_datatype<double>(),
-                         props);
+  // HighFive::DataSpace dataspac_volume = HighFive::DataSpace(
+  //     {
+  //         1,
+  //         n_col,
+  //         1,
+  //     },
+  //     {n_iter, n_col, 1});
 
-  HighFive::DataSet dataset_v =
-      file.createDataSet("records/liquid_volume",
-                         dataspac_volume,
-                         HighFive::create_datatype<double>(),
-                         props_volume);
+  // HighFive::DataSetCreateProps props_volume;
+  // props_volume.add(HighFive::Chunking(std::vector<hsize_t>{1, n_col, 1}));
+  // props_volume.add(HighFive::Shuffle());
+  // props_volume.add(HighFive::Deflate(9));
 
-  HighFive::DataSet dataset_vg =
-      file.createDataSet("records/gas_volume",
-                         dataspac_volume,
-                         HighFive::create_datatype<double>(),
-                         props_volume);
+  // // Create the dataset
+  // HighFive::DataSet dataset =
+  //     file.createDataSet("records/concentration_liquid",
+  //                        dataspace,
+  //                        double_type,
+  //                        props);
 
-  HighFive::DataSet dataset_2 =
-      file.createDataSet("records/distribution",
-                         dataspace,
-                         HighFive::create_datatype<size_t>(),
-                         props);
+  // HighFive::DataSet dataset_v =
+  //     file.createDataSet("records/liquid_volume",
+  //                        dataspac_volume,
+  //                        double_type,
+  //                        props_volume);
 
-  HighFive::DataSet dataset_3 =
-      file.createDataSet("records/time",
-                         dataspace,
-                         HighFive::create_datatype<double>(),
-                         props);
+  // HighFive::DataSet dataset_vg =
+  //     file.createDataSet("records/gas_volume",
+  //                        dataspac_volume,
+  //                        double_type,
+  //                        props_volume);
+
+  // HighFive::DataSet dataset_2 =
+  //     file.createDataSet("records/distribution",
+  //                        dataspace,
+  //                        double_type,
+  //                        props);
+
+  // HighFive::DataSet dataset_3 =
+  //     file.createDataSet("records/time",
+  //                        dataspace,
+  //                        double_type,
+  //                        props);
   file.flush();
 }
 
@@ -252,33 +291,73 @@ void DataExportHighFive::append(double t,
 {
   try
   {
-    HighFive::File file(filename, HighFive::File::ReadWrite);
-    auto dataset = file.getDataSet("records/concentration_liquid");
-    dataset.resize({counter + 1, n_col, n_row});
-    dataset.select({counter, 0, 0}, {1, n_col, n_row}).write_raw(concentration_liquid.data());
+    // HighFive::File file(filename, HighFive::File::ReadWrite);
+    // auto dataset = file.getDataSet("records/concentration_liquid");
+    // dataset.resize({counter + 1, n_col, n_row});
+    // dataset.select({counter, 0, 0}, {1, n_col, n_row})
+    //     .write_raw(concentration_liquid.data());
 
-    auto dataset_v = file.getDataSet("records/liquid_volume");
-    dataset_v.resize({counter + 1, n_col, 1});
-    dataset_v.select({counter, 0, 0}, {1, n_col, 1})
-        .write_raw(liquid_volume.data());
+    // auto dataset_v = file.getDataSet("records/liquid_volume");
+    // dataset_v.resize({counter + 1, n_col, 1});
+    // dataset_v.select({counter, 0, 0}, {1, n_col, 1})
+    //     .write_raw(liquid_volume.data());
 
-      dataset_v = file.getDataSet("records/gas_volume");
-    dataset_v.resize({counter + 1, n_col, 1});
-    dataset_v.select({counter, 0, 0}, {1, n_col, 1})
-        .write_raw(volume_gas.data());
+    // dataset_v = file.getDataSet("records/gas_volume");
+    // dataset_v.resize({counter + 1, n_col, 1});
+    // dataset_v.select({counter, 0, 0}, {1, n_col, 1})
+    //     .write_raw(volume_gas.data());
 
-    dataset =
-        file.getDataSet("records/distribution");
-    dataset.resize({counter + 1, n_col, 1});
-    dataset.select({counter, 0, 0}, {1, n_col, 1})
-        .write_raw(distribution.data());
+    // dataset = file.getDataSet("records/distribution");
+    // dataset.resize({counter + 1, n_col});
+    // dataset.select({counter, 0}, {1, n_col})
+    //     .write_raw(distribution.data());
 
-    dataset = file.getDataSet("records/time");
-    dataset.resize({counter + 1, 1, 1});
-    dataset.select({counter, 0, 0}, {1, 1, 1}).write_raw(&t);
-    // dataset.select({counter, 0, 0}, {1, 1, 1})
-    //     .write_raw(t);
-    counter++;
+    // dataset = file.getDataSet("records/time");
+    // dataset.resize({counter + 1, 1});
+    // dataset.select({counter, 0}, {1, 1}).write_raw(&t);
+    // // dataset.select({counter, 0, 0}, {1, 1, 1})
+    // //     .write_raw(t);
+    // counter++;
+
+     HighFive::File file(filename, HighFive::File::ReadWrite);
+
+        auto write_dataset = [&file]<typename T>(const std::string& name, 
+                                           const std::vector<size_t>& new_size, 
+                                           const std::vector<size_t>& select_start, 
+                                           const std::vector<size_t>& select_size, 
+                                           std::span<T> data) {
+            auto dataset = file.getDataSet(name);
+            dataset.resize(new_size);
+            dataset.select(select_start, select_size).write_raw(data.data());
+        };
+
+        auto write_dataset_vector = [&file]<typename T>(const std::string& name, 
+                                           const std::vector<size_t>& new_size, 
+                                           const std::vector<size_t>& select_start, 
+                                           const std::vector<size_t>& select_size, 
+                                           const std::vector<T>& data) {
+            auto dataset = file.getDataSet(name);
+            dataset.resize(new_size);
+            dataset.select(select_start, select_size).write_raw(data.data());
+        };
+
+        auto write_dataset_real = [&file]<typename T>(const std::string& name, 
+                                           const std::vector<size_t>& new_size, 
+                                           const std::vector<size_t>& select_start, 
+                                           const std::vector<size_t>& select_size, 
+                                           const T* data) {
+            auto dataset = file.getDataSet(name);
+            dataset.resize(new_size);
+            dataset.select(select_start, select_size).write_raw(data);
+        };
+
+        write_dataset("records/concentration_liquid", {counter + 1, n_col, n_row}, {counter, 0, 0}, {1, n_col, n_row}, concentration_liquid);
+        write_dataset("records/liquid_volume", {counter + 1, n_col}, {counter, 0}, {1, n_col}, liquid_volume);
+        write_dataset("records/gas_volume", {counter + 1, n_col}, {counter, 0}, {1, n_col}, volume_gas);
+        write_dataset_vector("records/distribution", {counter + 1, n_col}, {counter, 0}, {1, n_col}, distribution);
+        write_dataset_real("records/time", {counter + 1}, {counter}, {1}, &t);
+
+        counter++;
   }
   catch (...)
   {

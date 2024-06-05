@@ -5,6 +5,23 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
+
+
+struct UserControlParameters
+{
+  std::string cma_case_path;
+  bool recursive;
+  double final_time;
+  uint64_t numper_particle;
+  double delta_time;
+  std::string results_file_name;
+  int n_thread;
+  static UserControlParameters m_default();
+};
+
+
+
 struct SimulationParameters
 {
   size_t n_particles;

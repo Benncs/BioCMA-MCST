@@ -152,7 +152,7 @@ static void init_host_only(ExecInfo &info,
   // const auto n_t = static_cast<size_t>(params.final_time / params.d_t) + 1;
 
   // Define the duration of each flowmap and compute steps per flowmap
-  const double t_per_flowmap = 0;//cma_case.time_per_flowmap;
+  const double t_per_flowmap = cma_case.time_per_flowmap;
 
   const auto n_per_flowmap =
       (t_per_flowmap == 0 || params.n_different_maps == 1)
@@ -160,6 +160,9 @@ static void init_host_only(ExecInfo &info,
           : static_cast<size_t>(t_per_flowmap /
                                 static_cast<double>(params.d_t)) +
                 1;
+
+  //  const auto n_per_flowmap =10;
+  //   params.d_t = 0.4/(double)n_per_flowmap/(double)params.n_different_maps;
 
   // // Calculate the number of repetitions: Not needed anymore
   // const size_t n_repetition =
