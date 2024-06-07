@@ -3,8 +3,7 @@ name: build_test
   push:
     branches:
       - main
-      - v0/**
-      - dev-0.0.3/**
+      - dev/0.0.4/**
   pull_request:
     branches:
       - main
