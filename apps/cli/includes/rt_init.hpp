@@ -28,7 +28,7 @@ std::string sappend_date_time(std::string_view string);
 void set_openmp_threads(int rank,
                         int size,
                         ExecInfo &info,
-                        SimulationParameters &params);
+                        UserControlParameters &params);
 
 ExecInfo runtime_init(int argc, char **argv, SimulationParameters &params);
 

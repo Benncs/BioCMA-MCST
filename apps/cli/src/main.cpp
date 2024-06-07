@@ -112,7 +112,7 @@ int main(int argc, char **argv)
 
 static void exec(int argc, char **argv, SimulationParameters params)
 {
-  
+
   ExecInfo exec_info = runtime_init(argc, argv, params);
 
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
@@ -140,14 +140,13 @@ void host_process(
     SimulationParameters &params,
     std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner)
 {
-  // TODO: clean
-  std::string fn = sappend_date_time("result_") + std::string(".h5");
-  ExportParameters export_i = {static_cast<size_t>(params.final_time) * 3, fn};
-  // export_i.n_save = 0;
-  std::string name = "./results/" + export_i.filename;
-
-  auto d = simulation.mc_unit->domain.getDistribution();
-  auto de = DataExporter::factory(exec, params, name, simulation.getDim(), export_i.n_save, d);
+  auto initial_distribution = simulation.mc_unit->domain.getDistribution();
+  auto de = DataExporter::factory(exec,
+                                  params,
+                                  params.results_file_name,
+                                  simulation.getDim(),
+                                  params.user_params.number_exported_result,
+                                  initial_distribution);
 
   show(simulation);
 

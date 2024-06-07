@@ -48,9 +48,9 @@ DataExporter::DataExporter(ExecInfo &info,
   metadata["author"] = "someone";
   metadata["description"] = "Interesting results";
 
-  initial_values["number_particles"] = params.n_particles;
+  initial_values["number_particles"] = params.user_params.numper_particle;
   initial_values["number_compartment"] = params.n_compartments;
-  initial_values["final_time"] = params.final_time;
+  initial_values["final_time"] = params.user_params.final_time;
   initial_values["particle_distribution"] =
       std::vector<size_t>(distribution.begin(), distribution.end());
   initial_values["delta_time"] = params.d_t;

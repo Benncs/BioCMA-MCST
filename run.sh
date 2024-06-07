@@ -1,10 +1,14 @@
 #!/bin/bash 
 
-executable=builddir/release/apps/cli/biocma_mcst_cli_app
-np=10000000
-final_time=30
+type=release
 
-$executable -np $np -d $final_time -r 1  -f  ./cma_data/bench_2/ 
+executable=builddir/$type/apps/cli/biocma_mcst_cli_app
+np=10000
+final_time=10
+
+# $executable -np $np -d $final_time -r 1  -f  ./cma_data/bench_2/ 
+
+$executable -np $np -d $final_time -f ./cma_data/avg_14/ -nex 1000 -dt 1e-2
 
 # $executable -np $np -d $final_time -r 1  -f  ./cma_data/bench_2/ 
 

@@ -1,4 +1,5 @@
 
+#include "common/simulation_parameters.hpp"
 #include <rt_init.hpp>
 
 #include <Eigen/Core>
@@ -30,15 +31,15 @@ size_t generate_run_id();
 void set_openmp_threads(int rank,
                         int size,
                         ExecInfo &info,
-                        SimulationParameters &params)
+                        UserControlParameters &params)
 {
   // Casting rank and size to size_t
   info.current_rank = static_cast<size_t>(rank);
   info.n_rank = static_cast<size_t>(size);
 
   // Determining the number of OpenMP threads
-  size_t omp_n_thread = (params.n_threads > 0)
-                            ? static_cast<size_t>(params.n_threads)
+  size_t omp_n_thread = (params.n_thread > 0)
+                            ? static_cast<size_t>(params.n_thread)
                             : static_cast<size_t>(omp_get_max_threads());
 
   int num_core_per_node = omp_get_num_procs();
@@ -76,9 +77,9 @@ ExecInfo runtime_init(int argc, char **argv, SimulationParameters &params)
 
   MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-  set_openmp_threads(rank, size, info, params);
+  set_openmp_threads(rank, size, info, params.user_params);
 
-  Eigen::setNbThreads(1); //FIXME: 4 threads is clearly enough for 500*500 matrix 
+  Eigen::setNbThreads(params.user_params.n_thread); //FIXME: 4 threads is clearly enough for 500*500 matrix 
   
 
 #ifdef USE_PYTHON_MODULE

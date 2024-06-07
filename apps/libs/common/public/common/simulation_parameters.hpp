@@ -17,6 +17,7 @@ struct UserControlParameters
   double delta_time;
   std::string results_file_name;
   int n_thread;
+  uint32_t number_exported_result;
   static UserControlParameters m_default();
 };
 
@@ -24,19 +25,17 @@ struct UserControlParameters
 
 struct SimulationParameters
 {
-  size_t n_particles;
+
+  UserControlParameters user_params;
+  double d_t;
   size_t n_species;
-  double final_time;
   std::vector<std::string> flow_files;
-  std::string root;
-  double d_t = 0;
-  int n_threads = -1;
   bool verbose;
   size_t n_different_maps;
   size_t n_compartments;
   bool is_two_phase_flow = true;
   size_t n_per_flowmap;
-  
+  std::string results_file_name;
   static SimulationParameters m_default();
 };
 
@@ -49,8 +48,8 @@ struct ExportParameters
 inline std::ostream &operator<<(std::ostream &stream,
                                 const SimulationParameters &obj)
 {
-  stream << obj.n_particles << "\t" << obj.final_time << "\t" << obj.d_t << "\t"
-         << obj.n_different_maps << "\t" << obj.n_threads << " ";
+  // stream << obj.n_particles << "\t" << obj.final_time << "\t" << obj.d_t << "\t"
+  //        << obj.n_different_maps << "\t" << obj.n_threads << " ";
   return stream;
 }
 

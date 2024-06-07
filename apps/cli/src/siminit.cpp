@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 #include <utility>
 #include <vector>
@@ -44,6 +45,8 @@ init_simulation(ExecInfo &info,
                 MC::DistributionVariantInt &&initial_particle_distribution)
 {
 
+  const auto& user_params = params.user_params;
+
   std::vector<double> liq_volume;
   std::vector<double> gas_volume;
   std::vector<size_t> worker_neighbor_data;
@@ -82,7 +85,7 @@ init_simulation(ExecInfo &info,
   MPI_W::barrier();
 
   auto mc_unit =
-      MC::init(info, params.n_particles, liq_volume, liquid_neighbors);
+      MC::init(info, user_params.numper_particle, liq_volume, liquid_neighbors);
 
   bool tpf = info.current_rank == 0 && params.is_two_phase_flow;
 
@@ -96,7 +99,7 @@ init_simulation(ExecInfo &info,
                                  std::move(initial_particle_distribution),
                                  tpf);
   // Calculate the total number of time steps
-  const auto n_t = static_cast<size_t>(params.final_time / params.d_t) + 1;
+  const auto n_t = static_cast<size_t>(user_params.final_time / params.d_t) + 1;
 
   transitioner = std::make_unique<Simulation::FlowMapTransitioner>(
       params.n_different_maps,
@@ -123,7 +126,7 @@ static void init_host_only(ExecInfo &info,
     return;
   }
   CMACaseInfo cma_case =
-      CMACaseInfoReader::load_case(params.root + "/cma_case");
+      CMACaseInfoReader::load_case(params.user_params.cma_case_path + "/cma_case");
 
   const ReactorState *fstate = init_state(params, _flow_handle, cma_case.paths);
 
@@ -144,9 +147,9 @@ static void init_host_only(ExecInfo &info,
 
   if (liq_volume.size() > 1)
   {
-    params.d_t = (params.d_t == 0.)
+    params.d_t = (params.user_params.delta_time == 0.)
                      ? _flow_handle->MinLiquidResidenceTime() / 100.
-                     : params.d_t;
+                     : params.user_params.delta_time;
   }
 
   // const auto n_t = static_cast<size_t>(params.final_time / params.d_t) + 1;
@@ -160,13 +163,6 @@ static void init_host_only(ExecInfo &info,
           : static_cast<size_t>(t_per_flowmap /
                                 static_cast<double>(params.d_t)) +
                 1;
-
-  //  const auto n_per_flowmap =10;
-  //   params.d_t = 0.4/(double)n_per_flowmap/(double)params.n_different_maps;
-
-  // // Calculate the number of repetitions: Not needed anymore
-  // const size_t n_repetition =
-  //     n_t / (params.n_different_maps * n_per_flowmap) + 1;
 
   params.n_per_flowmap = n_per_flowmap;
 
@@ -193,7 +189,10 @@ init_state(SimulationParameters &params,
   }
   catch (const std::exception &e)
   {
-    throw std::runtime_error("Error while reading files");
+    std::stringstream err;
+    err << "Error while reading files\t:"<<e.what();
+  
+    throw std::runtime_error(err.str());
   }
 
   if (state == nullptr)

@@ -6,5 +6,6 @@
   <numper_particle>100</numper_particle>
   </delta_time>0.1</delta_time>
   </results_file_name></results_file_name>
+  <number_exported_result></number_exported_result>
 </control>
 

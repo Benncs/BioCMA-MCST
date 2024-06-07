@@ -1,4 +1,5 @@
 #include "common/simulation_parameters.hpp"
+#include "rt_init.hpp"
 #include <cli_parser.hpp>
 #include <exception>
 #include <filesystem>
@@ -78,17 +79,28 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
     return std::nullopt;
   }
   auto control = *opt_control;
-
-  params.root = std::string(control.cma_case_path);
+  params.flow_files.clear();
   if (control.recursive)
   {
-    params.flow_files.clear();
     recur_path(control.cma_case_path, params);
   }
   else
   {
+    
     params.flow_files.emplace_back(control.cma_case_path);
   }
+
+  if (control.results_file_name.empty())
+  {
+    params.results_file_name =
+        "./results/" + sappend_date_time("result_") + std::string(".h5");
+  }
+  else
+  {
+    params.results_file_name = "./results/" + control.results_file_name+".h5";
+  }
+
+  params.user_params = std::move(control);
   check_cli(params);
 
   return params;
@@ -102,6 +114,14 @@ static void parseArg(UserControlParameters &user_controll,
   current_param = std::string(current_param.begin() + 1, current_param.end());
   switch (current_param[0])
   {
+  case 'e':
+  {
+    if (current_param == "er")
+    {
+      user_controll.results_file_name = std::string(current_value);
+    }
+    break;
+  }
   case 'n':
   {
     if (current_param == "nt")
@@ -111,6 +131,11 @@ static void parseArg(UserControlParameters &user_controll,
     else if (current_param == "np")
     {
       user_controll.numper_particle = std::stol(std::string(current_value));
+    }
+    else if (current_param == "nex")
+    {
+      user_controll.number_exported_result =
+          std::stol(std::string(current_value));
     }
     break;
   }
@@ -126,6 +151,7 @@ static void parseArg(UserControlParameters &user_controll,
     }
     break;
   }
+
   case 'r':
   {
     user_controll.recursive = true;
@@ -150,17 +176,17 @@ static void check_cli(SimulationParameters &params)
     throw std::invalid_argument("Missing files path");
   }
 
-  if (params.d_t < 0)
+  if (params.user_params.delta_time < 0)
   {
     throw std::invalid_argument("Wrongtime step (d_t<0)");
   }
 
-  if (params.n_particles == 0)
+  if (params.user_params.numper_particle == 0)
   {
     throw std::invalid_argument("Missing number of particles");
   }
 
-  if (params.final_time <= 0)
+  if (params.user_params.final_time <= 0)
   {
     throw std::invalid_argument("Final time must be positive");
   }

@@ -17,7 +17,6 @@ def write_vtk_results(vtk_cma_mesh_path:str,sname:List[str],t:float,
     birem.vtk.mk_series(vtk_cma_mesh_path,"./results/",sname,t,
         [full_volume,"liquid_volume"],[p_concentration,"particle_concentration"],[normalized_particle_concentration,"normalized_particle_concentration"],[normalized_scalar_concentration,"normalized_liquid_concentration"],[concentration_record,"liquid_concentration"])
 
-
 def norm_concentration(raw_concentration,volumes):
     
     vtot = np.sum(volumes,axis=1)
@@ -84,27 +83,24 @@ def read_compute_norm(pathres,folder_root,sname,vtk_cma_mesh_path:Optional[str]=
 
 folder_root = "/home/benjamin/Documenti/code/cpp/biomc/cma_data/"
 
-# sname = ["test","test2","test3","sanofi"]
-# # pathres = ["./results/1M_new.h5"]
-# pathres = ["./results/result_2024-06-04-17:36:47.h5","./results/result_2024-06-04-17:41:26.h5","./results/result_2024-06-04-18:03:04.h5","./results/result_2024-06-04-18:23:35.h5",""]
 
 root_res = "./results/mixing/"
-
-name_results = ["mix_100K_init","mix_100K_init2","mix_1M_init2","mix_10M_init2"]
-
+name_results = ["mix_100K_init","mix_100K_init2","mix_1M_init2","mix_10M_init2","mix_100K_init2_avg","mix_100K_init2_1fm"]
 pathres= [f"{root_res}{i}.h5" for i in name_results]
 
-#pathres = ['./results/50k.h5',"./results/1M.h5","./results/5M.h5"]
-# pathres = [ "/home/benjamin/Documenti/code/cpp/biomc/results/result_2024-06-04-11:14:49.h5"]
-# sname = ["test_linterp"]
-vtk_cma_mesh_path= None #"/home/benjamin/Documenti/code/cpp/BIREM_new/out/sanofi/cma_mesh.vtu"
+
+
+
+
+
+vtk_cma_mesh_path= "/home/benjamin/Documenti/code/cpp/BIREM_new/out/sanofi/cma_mesh.vtu"
 
 
 # _,n_c ,_,pvc,t= read_compute_norm(pathres[0],folder_root,sname[0])
 # plt.semilogy(t,pvc,label="liquid")
 for i in range(len(pathres)):
     n,n_c,par_var,pvc,t = read_compute_norm(pathres[i],folder_root,name_results[i],vtk_cma_mesh_path)
-    plt.semilogy(t, par_var,label=name_results[i])
+    plt.scatter(t, par_var,label=name_results[i])
     plt.semilogy(t,pvc,label=f"liquid_{name_results[i]}")
 
 
