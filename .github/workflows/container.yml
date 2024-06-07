@@ -32,5 +32,5 @@ jobs:
       with:
         compose-file: "./docker-compose.yml"
         services: | 
-          app 
+          biocma_app_task_test 
         
