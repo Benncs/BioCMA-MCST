@@ -3,7 +3,7 @@ services:
   biocma_app:
     &biocma_app
     image: bcasale/bio_cma_mc_runtime
-    build: ./devutils/docker
+    # build: ./devutils/docker
     container_name: biocma_mcst__dev
     volumes:
       - ./devutils/docker/runtime_container:/app
