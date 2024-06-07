@@ -118,7 +118,7 @@ endif
 
 default_option_cpp20 = 'cpp_std=none'
 if not use_cuda
-  default_option_cpp20 = 'bcpp_std=gnu++20'
+  default_option_cpp20 = 'b_cpp_std=gnu++20'
 endif 
 
 # Retrieve BIREM source code
