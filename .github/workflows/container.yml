@@ -25,8 +25,8 @@ jobs:
         git submodule update --init --recursive
     - name: prepare 
       run: > 
-      mkdir -p ./devutils/docker/runtime_container
-      mkdir -p ./cma_data
+        mkdir -p ./devutils/docker/runtime_container
+        mkdir -p ./cma_data
     - name: build
       uses: hoverkraft-tech/compose-action@v1.5.1
       with:
