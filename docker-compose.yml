@@ -1,6 +1,7 @@
 # version: "3.6"
 services:
-  app:
+  biocma_app:
+    &biocma_app
     image: biocma_mcst
     build: ./devutils/docker
     container_name: biocma_mcst__dev
@@ -15,4 +16,12 @@ services:
       - ./meson.build:/app/meson.build
       - ./meson_options.txt:/app/meson_options.txt
 
+  biocma_app_task_test:
+    <<: *biocma_app
+    command:
+      - /bin/sh
+      - -c
+      - |
+        meson setup builddir --buildtype=release -Duse_cuda=true --reconfigure
+        ninja -C builddir -j 1 test 
 

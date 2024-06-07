@@ -5,22 +5,26 @@ project(
   meson_version: '>= 1.3.0',
   default_options: [
     'warning_level=3',
-    # 'cpp_std=c++20',
     'b_colorout=always',
-    # 'b_coverage=true'
   ],
 )
 
-
 use_cuda = get_option('use_cuda')
-compiler = meson.get_compiler('cpp')
+
 arch_specific_args = []
 if use_cuda
-message('USING CUDA')
+  message('USING CUDA')
   arch_specific_args = ['-mp=gpu' ,'-gpu=cc35','-cudalib=cublas']
-  else
+  # add_project_arguments('cpp_std=gnu++20',language: 'cpp')
+  
+else
   arch_specific_args = ['-march=native']
+  cpp_version = get_option('cpp_std')
+  if cpp_version != 'gnu++20'
+    error('c++20 features should be available')
+  endif 
 endif 
+compiler = meson.get_compiler('cpp')
 
 if compiler.has_argument('-fno-math-errno')
 arch_specific_args = [arch_specific_args,'-fno-math-errno']
@@ -31,6 +35,7 @@ flto_flag = ''
 if compiler.has_argument('-flto')
 flto_flag = '-flto'
 endif 
+
 
 compiler.has_argument('-fopenmp')
 
@@ -59,7 +64,6 @@ project_custom_options = {
   'debug': [],
   'release': [],
 }
-
 target_custom_options = project_custom_options.get(build_type, [])
 # foreach opt: target_custom_options
 #     add_project_arguments(opt, language: 'cpp')
@@ -112,19 +116,24 @@ if cmake.found()
   endif
 endif
 
+default_option_cpp20 = 'cpp_std=none'
+if not use_cuda
+  default_option_cpp20 = 'bcpp_std=gnu++20'
+endif 
+
 # Retrieve BIREM source code
 cma_reader = subproject(
   'birem',
   default_options: [
     'warning_level=3',
-    # 'cpp_std=c++20',
     'b_colorout=always',
     'b_coverage=false',
     'build_all=false',
     'python_wrap=false',
     'build_executable=false',
     'build_test=false',
-    f'use_cuda=@use_cuda@'
+    f'use_cuda=@use_cuda@',
+    default_option_cpp20
   ],
 ) # We only need native birem library in order to read flowmap so, no python neither executable
 

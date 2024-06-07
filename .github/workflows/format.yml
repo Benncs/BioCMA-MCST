@@ -80,7 +80,7 @@ jobs:
       - name: Clang-Format
         run: |
           ninja -C builddir clang-format-check 
-
+  
         
         # which meson
           # exec=$(which meson)
