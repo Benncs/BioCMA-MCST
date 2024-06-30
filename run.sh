@@ -2,13 +2,17 @@
 
 type=release
 
-executable=builddir/$type/apps/cli/biocma_mcst_cli_app
-np=10000
-final_time=10
+executable=./builddir/$type/apps/cli/biocma_mcst_cli_app
+np=10000000
+final_time=50
 
 # $executable -np $np -d $final_time -r 1  -f  ./cma_data/bench_2/ 
 
-$executable -np $np -d $final_time -f ./cma_data/avg_14/ -nex 1000 -dt 1e-2
+# $executable -np $np -d $final_time -f ./cma_data/avg_14/ -nex 1000 -dt 1e-2
+
+# $executable -np $np -d $final_time -f ../compartment-modelling-tool/out/sanofi/ -nex 100 
+
+$executable -np $np -d $final_time -r 1 -f /mnt/c/Users/casale/Documents/cfd/flowmap_14/ -nex 100 
 
 # $executable -np $np -d $final_time -r 1  -f  ./cma_data/bench_2/ 
 

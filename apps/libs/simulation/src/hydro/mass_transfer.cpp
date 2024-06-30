@@ -11,7 +11,7 @@ gas_liquid_mass_transfer(Eigen::ArrayXXd &res_kla,
                          const Eigen::MatrixXd &Vliq,
                          const Eigen::ArrayXXd &liq_scalar_as_array,
                          const Eigen::ArrayXXd &gas_scalar_as_array,
-                         const ReactorState &state)
+                         const CmaRead::ReactorState &state)
 {
 
   double kinematic_viscosity = c_kinematic_viscosity(temperature);

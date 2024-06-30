@@ -21,7 +21,7 @@ double linter(double a, double b, double t)
 namespace Simulation
 {
 
-  static void compute_MatFlow(const FlowMap::FlowMap_const_view_t &flows_view,
+  static void compute_MatFlow(const CmaRead::FlowMap::FlowMap_const_view_t &flows_view,
                               Simulation::PreCalculatedHydroState &matflow)
   {
     const auto _mat_transition_liq =
@@ -56,7 +56,7 @@ namespace Simulation
       size_t _n_per_flowmap,
       FlowmapTransitionMethod method,
       size_t number_time_step,
-      std::unique_ptr<FlowIterator> &&_iterator,
+      std::unique_ptr<CmaRead::FlowIterator> &&_iterator,
       bool is_two_phase_flow)
       : two_phase_flow((is_two_phase_flow)), iterator(std::move(_iterator)),
         n_per_flowmap(_n_per_flowmap), n_flowmap(_n_flowmap),
@@ -240,7 +240,7 @@ namespace Simulation
     if (repetition_count < n_flowmap)
     {
       const auto mat_f_liq_view =
-          FlowMap::FlowMap_const_view_t(flows, n_compartment);
+          CmaRead::FlowMap::FlowMap_const_view_t(flows, n_compartment);
       calculate_liquid_state(mat_f_liq_view, unit, current_liq_hydro_state);
     }
   }
@@ -269,7 +269,7 @@ namespace Simulation
 
   // ok dont modify
   void FlowMapTransitioner::calculate_liquid_state(
-      const FlowMap::FlowMap_const_view_t &mat_f_liq_view,
+      const CmaRead::FlowMap::FlowMap_const_view_t &mat_f_liq_view,
       const Simulation::SimulationUnit &unit,
       PreCalculatedHydroState *liq_hydro_state)
   {
@@ -280,7 +280,7 @@ namespace Simulation
   }
   // ok dont modify
   void FlowMapTransitioner::calculate_full_state(
-      const ReactorState &reactor_state,
+      const CmaRead::ReactorState &reactor_state,
       const Simulation::SimulationUnit &unit,
       PreCalculatedHydroState *liq_hydro_state,
       PreCalculatedHydroState *gas_hydro_state)

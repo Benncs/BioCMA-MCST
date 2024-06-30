@@ -18,9 +18,9 @@ namespace Simulation
   //                                       const PreCalculatedHydroState *flows);
 
   FlowMatrixType
-  get_transition_matrix(const FlowMap::FlowMap_const_view_t &flows);
+  get_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t &flows);
 
-  Eigen::MatrixXd get_CP(Neighbors::Neighbors_const_view_t neighbors,
+  Eigen::MatrixXd get_CP(CmaRead::Neighbors::Neighbors_const_view_t neighbors,
                          const FlowMatrixType &m_transition);
 
  

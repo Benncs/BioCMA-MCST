@@ -14,7 +14,7 @@
 namespace MPI_W
 {
 
-  void bcst_reactor_state(ReactorState &data, size_t flow_size, size_t rank)
+  void bcst_reactor_state(CmaRead::ReactorState &data, size_t flow_size, size_t rank)
   {
     // Broadcast the pointer to ReactorState
     MPI_W::broadcast(data.n_compartments, 0);
@@ -34,23 +34,23 @@ namespace MPI_W
 
     if (rank != 0)
     {
-      auto liq = FlowMap(std::move(liquid_flow), flow_size);
-      auto ne = Neighbors(std::move(neighbor_data), flow_size, maxneighbor);
-      data.liquid_flow = FlowInfo(std::move(liq), std::move(ne));
+      auto liq = CmaRead::FlowMap(std::move(liquid_flow), flow_size);
+      auto ne = CmaRead::Neighbors(std::move(neighbor_data), flow_size, maxneighbor);
+      data.liquid_flow = CmaRead::FlowInfo(std::move(liq), std::move(ne));
     }
 
     MPI_W::broadcast(data.liquidVolume, 0, rank);
     MPI_W::broadcast(data.gasVolume, 0, rank);
   }
 
-  void bcst_iterator(std::unique_ptr<FlowIterator> &iterator, size_t rank)
+  void bcst_iterator(std::unique_ptr<CmaRead::FlowIterator> &iterator, size_t rank)
   {
     size_t flow_size = 0;
     if (rank == 0)
     {
 
       // Serialize the FlowIterator object
-      std::vector<ReactorState> &data = iterator->getdata();
+      std::vector<CmaRead::ReactorState> &data = iterator->getdata();
       flow_size = data[0].n_compartments;
       MPI_W::broadcast(flow_size, 0);
       size_t size_it = data.size();
@@ -69,13 +69,13 @@ namespace MPI_W
       size_t size_it = 0;
       MPI_Bcast(&size_it, sizeof(size_t), MPI_BYTE, 0, MPI_COMM_WORLD);
       // Resize the vector to accommodate the received data
-      std::vector<ReactorState> data(size_it);
+      std::vector<CmaRead::ReactorState> data(size_it);
       // Broadcast each ReactorState pointer
       for (auto &state : data)
       {
         bcst_reactor_state(state, flow_size, rank);
       }
-      iterator = std::make_unique<FlowIterator>(std::move(data));
+      // iterator = std::make_unique<CmaRead::FlowIterator>(std::move(data)); //FIXME
     }
   }
 
@@ -83,17 +83,17 @@ namespace MPI_W
   {
   public:
     explicit FlowIterator(std::span<std::string> folder,
-                          const cma_exported_paths_t &paths,
+                          const CmtCommons::cma_exported_paths_t &paths,
                           size_t n_count = 1);
 
-    explicit FlowIterator(std::vector<ReactorState> &&_data);
+    explicit FlowIterator(std::vector<CmaRead::ReactorState> &&_data);
     double MinLiquidResidenceTime();
     [[nodiscard]] size_t size() const;
-    ReactorState &get_unchcked_mut(size_t index);
-    [[nodiscard]] const ReactorState &get_unchecked(size_t index) const;
+    CmaRead::ReactorState &get_unchcked_mut(size_t index);
+    [[nodiscard]] const CmaRead::ReactorState &get_unchecked(size_t index) const;
 
   private:
-    std::vector<ReactorState> data;
+    std::vector<CmaRead::ReactorState> data;
   };
 
   IterationPayload::IterationPayload(size_t size_flows, size_t volumes)
@@ -134,7 +134,7 @@ namespace MPI_W
     }
     raw_neigbors = opt.value();
     auto n_col = raw_neigbors.size() / liquid_flows.size();
-    neigbors = Neighbors::Neighbors_const_view_t(
+    neigbors = CmaRead::Neighbors::Neighbors_const_view_t(
         raw_neigbors, liquid_flows.size(), n_col, true);
 
     if (rc1 != MPI_SUCCESS || rc2 != MPI_SUCCESS || rc3 != MPI_SUCCESS)

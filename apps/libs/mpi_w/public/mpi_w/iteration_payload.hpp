@@ -1,7 +1,7 @@
 #ifndef __ITERATION_PAYLOAD_HPP__
 #define __ITERATION_PAYLOAD_HPP__
 
-#include "cma_read/flow_iterator.hpp"
+#include <cma_read/flow_iterator.hpp>
 #include <memory>
 #include <mpi.h>
 #include <span>
@@ -11,7 +11,7 @@
 namespace MPI_W
 {
 
-  void bcst_iterator(std::unique_ptr<FlowIterator>& iterator,size_t rank);
+  void bcst_iterator(std::unique_ptr<CmaRead::FlowIterator>& iterator,size_t rank);
 
   class IterationPayload
   {
@@ -20,7 +20,7 @@ namespace MPI_W
     std::vector<double> liquid_volumes;
     std::vector<double> gas_volumes;
     std::vector<size_t> raw_neigbors;
-    Neighbors::Neighbors_const_view_t neigbors;
+    CmaRead::Neighbors::Neighbors_const_view_t neigbors;
     
     explicit IterationPayload(size_t size_flows, size_t volumes);
     // explicit IterationPayload()=delete;
@@ -33,7 +33,7 @@ namespace MPI_W
     std::span<const double> liquid_flows;
     std::span<const double> liquid_volumes;
     std::span<const double> gas_volumes;
-    Neighbors::Neighbors_const_view_t neigbors;
+    CmaRead::Neighbors::Neighbors_const_view_t neigbors;
     
 
     void send(size_t rank) const;

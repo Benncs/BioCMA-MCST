@@ -1,4 +1,3 @@
-#include "birem_common/macro_constructor_assignment.hpp"
 #include "data_exporter.hpp"
 #include "models/light_model.hpp"
 #include "models/monod.hpp"

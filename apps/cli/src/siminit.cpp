@@ -1,6 +1,5 @@
 
 
-#include "mpi_w/iteration_payload.hpp"
 #include <cstddef>
 #include <cstdio>
 #include <memory>
@@ -9,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-#include <birem_common/cma_case.hpp>
+#include <cmt_common/cma_case.hpp>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/light_2d_view.hpp>
 #include <cma_read/neighbors.hpp>
@@ -23,15 +22,15 @@
 
 #include <simulation/update_flows.hpp>
 
-static ReactorState const *
+static CmaRead::ReactorState const *
 init_state(SimulationParameters &params,
-           std::unique_ptr<FlowIterator> &flow_handle,
-           const cma_exported_paths_t &paths);
+           std::unique_ptr<CmaRead::FlowIterator> &flow_handle,
+           const CmtCommons::cma_exported_paths_t &paths);
 
 static void init_host_only(ExecInfo &info,
                            SimulationParameters &params,
-                           std::unique_ptr<FlowIterator> &_flow_handle,
-                           Neighbors::Neighbors_const_view_t liquid_neighbors,
+                           std::unique_ptr<CmaRead::FlowIterator> &_flow_handle,
+                           CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
                            std::vector<double> &liq_volume,
                            std::vector<double> &gas_volume,
                            std::vector<size_t> &worker_neighbor_data);
@@ -50,8 +49,8 @@ init_simulation(ExecInfo &info,
   std::vector<double> liq_volume;
   std::vector<double> gas_volume;
   std::vector<size_t> worker_neighbor_data;
-  Neighbors::Neighbors_const_view_t liquid_neighbors;
-  std::unique_ptr<FlowIterator> _flow_handle = nullptr;
+  CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors;
+  std::unique_ptr<CmaRead::FlowIterator> _flow_handle = nullptr;
   init_host_only(info,
                  params,
                  _flow_handle,
@@ -78,7 +77,7 @@ init_simulation(ExecInfo &info,
   {
 
     auto n_col = worker_neighbor_data.size() / params.n_compartments;
-    liquid_neighbors = L2DView<const size_t>(
+    liquid_neighbors = CmaRead::L2DView<const size_t>(
         worker_neighbor_data, params.n_compartments, n_col, false);
   }
 
@@ -114,8 +113,8 @@ init_simulation(ExecInfo &info,
 
 static void init_host_only(ExecInfo &info,
                            SimulationParameters &params,
-                           std::unique_ptr<FlowIterator> &_flow_handle,
-                           Neighbors::Neighbors_const_view_t liquid_neighbors,
+                           std::unique_ptr<CmaRead::FlowIterator> &_flow_handle,
+                           CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
                            std::vector<double> &liq_volume,
                            std::vector<double> &gas_volume,
                            std::vector<size_t> &worker_neighbor_data)
@@ -125,10 +124,11 @@ static void init_host_only(ExecInfo &info,
   {
     return;
   }
-  CMACaseInfo cma_case =
-      CMACaseInfoReader::load_case(params.user_params.cma_case_path + "/cma_case");
+  std::string case_name = params.user_params.cma_case_path + "/cma_case";
+  CmtCommons::CMACaseInfo cma_case =
+      CmtCommons::CMACaseInfoReader::load_case(case_name);
 
-  const ReactorState *fstate = init_state(params, _flow_handle, cma_case.paths);
+  const CmaRead::ReactorState *fstate = init_state(params, _flow_handle, cma_case.paths);
 
   params.n_compartments = fstate->n_compartments;
   liquid_neighbors = fstate->liquid_flow.getViewNeighors();
@@ -170,15 +170,15 @@ static void init_host_only(ExecInfo &info,
   register_run(info, params);
 }
 
-static ReactorState const *
+static CmaRead::ReactorState const *
 init_state(SimulationParameters &params,
-           std::unique_ptr<FlowIterator> &flow_handle,
-           const cma_exported_paths_t &paths)
+           std::unique_ptr<CmaRead::FlowIterator> &flow_handle,
+           const CmtCommons::cma_exported_paths_t &paths)
 {
-  ReactorState const *state = nullptr;
+  CmaRead::ReactorState const *state = nullptr;
   try
   {
-    flow_handle = std::make_unique<FlowIterator>(params.flow_files, paths);
+    flow_handle = std::make_unique<CmaRead::FlowIterator>(params.flow_files, paths);
     if (flow_handle == nullptr)
     {
       throw std::runtime_error("Flow map are not loaded");

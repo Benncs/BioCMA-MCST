@@ -1,7 +1,7 @@
 #ifndef __SIMUALTION__PC_HYDRO_HPP__
 #define __SIMUALTION__PC_HYDRO_HPP__
 
-#include "cma_read/reactorstate.hpp"
+#include <cma_read/reactorstate.hpp>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
@@ -32,7 +32,7 @@ namespace Simulation
 
   struct TransitionState
   {
-    ReactorState state;
+    CmaRead::ReactorState state;
     PreCalculatedHydroState liquid_pc;
     PreCalculatedHydroState gas_pc;
   };

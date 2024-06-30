@@ -52,7 +52,7 @@ namespace Simulation
 
     void setVolumes(std::span<const double> volumesgas, std::span<const double> volumesliq);
 
-    void step(double d_t, const ReactorState &state);
+    void step(double d_t, const CmaRead::ReactorState &state);
 
     void cycleProcess(double d_t);
 

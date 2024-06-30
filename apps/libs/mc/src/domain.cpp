@@ -1,4 +1,4 @@
-#include "cma_read/neighbors.hpp"
+#include <cma_read/neighbors.hpp>
 #include "mc/container_state.hpp"
 #include <algorithm>
 #include <cstddef>
@@ -35,7 +35,7 @@ namespace MC
     }
   }
   ReactorDomain::ReactorDomain(std::span<double> volumes,
-                               const Neighbors::Neighbors_const_view_t& _neighbors)
+                               const CmaRead::Neighbors::Neighbors_const_view_t& _neighbors)
       :  neighbors(_neighbors)
   {
     double totv = 0.;

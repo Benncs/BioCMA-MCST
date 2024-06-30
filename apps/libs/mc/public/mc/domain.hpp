@@ -15,7 +15,7 @@ namespace MC
     ReactorDomain() = default;
     ReactorDomain(ReactorDomain &&other) noexcept;
     ReactorDomain(std::span<double> volumes,
-                  const Neighbors::Neighbors_const_view_t& _neighbors);
+                  const CmaRead::Neighbors::Neighbors_const_view_t& _neighbors);
 
 
     ReactorDomain(const ReactorDomain &other) = delete;
@@ -27,7 +27,7 @@ namespace MC
     void setVolumes(std::span<double const> volumesgas,
                     std::span<double const> volumesliq);
 
-    void setLiquidNeighbors(const Neighbors::Neighbors_const_view_t &data);
+    void setLiquidNeighbors(const CmaRead::Neighbors::Neighbors_const_view_t &data);
 
     // GETTERS
     auto &operator[](size_t i_c);
@@ -43,7 +43,7 @@ namespace MC
 
     [[nodiscard]] double getTotalVolume() const;
 
-    [[nodiscard]] const Neighbors::Neighbors_const_view_t  &getNeighbors() const;
+    [[nodiscard]] const CmaRead::Neighbors::Neighbors_const_view_t  &getNeighbors() const;
 
     [[nodiscard]] std::span<const size_t> getNeighbors(size_t i) const;
 
@@ -58,7 +58,7 @@ namespace MC
     double _total_volume=0.;
     size_t id=0;
     std::vector<ContainerState> containers;
-    Neighbors::Neighbors_const_view_t neighbors;
+    CmaRead::Neighbors::Neighbors_const_view_t neighbors;
   };
 
   inline std::span<ContainerState> ReactorDomain::data()
@@ -71,7 +71,7 @@ namespace MC
     return neighbors.getRow(i);
   }
 
-  inline const Neighbors::Neighbors_const_view_t &
+  inline const CmaRead::Neighbors::Neighbors_const_view_t &
   ReactorDomain::getNeighbors() const
   {
     
@@ -79,7 +79,7 @@ namespace MC
   }
 
   inline void ReactorDomain::setLiquidNeighbors(
-      const Neighbors::Neighbors_const_view_t& data)
+      const CmaRead::Neighbors::Neighbors_const_view_t& data)
   {
  
     neighbors = data.to_const();

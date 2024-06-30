@@ -53,7 +53,7 @@ namespace Simulation
   //   return move_kernel;
   // }
 
-  Eigen::MatrixXd get_CP(Neighbors::Neighbors_const_view_t neighbors,
+  Eigen::MatrixXd get_CP(CmaRead::Neighbors::Neighbors_const_view_t neighbors,
                          const FlowMatrixType &m_transition)
   {
     size_t n_zone = neighbors.getNRow();
@@ -150,7 +150,7 @@ namespace Simulation
   }
 
   
-   FlowMatrixType get_transition_matrix(const FlowMap::FlowMap_const_view_t &flows)
+   FlowMatrixType get_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t &flows)
   {
     int n_compartiments = static_cast<int>(flows.getNRow()); // It SHOULD be square
     auto rd = flows.data();
