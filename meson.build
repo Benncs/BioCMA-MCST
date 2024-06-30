@@ -136,7 +136,7 @@ if cmt.found()
 endif 
 
 if f_cmt==false
-# Retrieve BIREM source code
+# Retrieve CMTOOL source code
 cma_reader = subproject(
   'cmtool',
   default_options: [
