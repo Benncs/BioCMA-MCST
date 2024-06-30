@@ -138,7 +138,7 @@ endif
 if f_cmt==false
 # Retrieve BIREM source code
 cma_reader = subproject(
-  'birem',
+  'cmtool',
   default_options: [
     'warning_level=3',
     'b_colorout=always',
