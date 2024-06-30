@@ -16,15 +16,16 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np 
 import sys
+from wakepy import keep
 
 
-BENCH_OMP_THREADS = [1, 8]  # List of thread numbers when running scaling
+BENCH_OMP_THREADS = [1, 4,8,12]  # List of thread numbers when running scaling
 EXECUTABLE_PATH = "./builddir/release/apps/cli"  # Path to executable to run
 EXECUTABLE_NAME = "biocma_mcst_cli_app"  # Name of executable to run
 BENCH_SCRIPT_PATH = "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
 FILENAME = "./devutils/benchs/benchbench_records_light2.csv"  # Record filename
 OUTPUT_PDF = "./devutils/benchs/results_bench_light2.pdf"  # Output path
-FINAL_TIME = 1  # Reference simulation time
+FINAL_TIME = 10  # Reference simulation time
 DELTA_TIME = 1e-3  # Reference delta time fixed
 
 def format_cli(number_particle,final_time):
@@ -48,7 +49,6 @@ def execute(n_thread,script_path, command):
     else:
         print("Time elapsed not found in the output.")
 
-from wakepy import keep
 
 def scalling(np,tf):
   records = []
@@ -165,10 +165,15 @@ def main(args):
         particle_n1 = float(args[1])
         particle_n2 = float(args[2])
         n_scale = int(args[3])
-        with keep.running():
-          n_particles = np.linspace(particle_n1, particle_n2, num=n_scale, dtype=np.int32)
-          for number in n_particles:
-              do_scale(number)
+        try:
+            with keep.running():
+                n_particles = np.linspace(particle_n1, particle_n2, num=n_scale, dtype=np.int32)
+                for number in n_particles:
+                    do_scale(number)
+        except:
+            n_particles = np.linspace(particle_n1, particle_n2, num=n_scale, dtype=np.int32)
+            for number in n_particles:
+                do_scale(number)
     else:
         print("Error: Invalid argument. Usage: python script.py [plot | scale]")
 

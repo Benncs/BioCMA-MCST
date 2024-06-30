@@ -1,4 +1,4 @@
 [submodule "subprojects/cmtool"]
 	path = subprojects/cmtool
-	url = https://gitlab.com/codes_tim/compartment-modelling-tool.git
+	url = https://gitlab.com/Bencs/mirror_cma.git
 	branch = dev_1.1_cuboid

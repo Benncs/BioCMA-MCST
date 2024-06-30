@@ -133,9 +133,9 @@ namespace MPI_W
       MPI_W::critical_error();
     }
     raw_neigbors = opt.value();
-    auto n_col = raw_neigbors.size() / liquid_flows.size();
+    auto n_col = raw_neigbors.size() / gas_volumes.size();
     neigbors = CmaRead::Neighbors::Neighbors_const_view_t(
-        raw_neigbors, liquid_flows.size(), n_col, true);
+        raw_neigbors, gas_volumes.size(), n_col, true);
 
     if (rc1 != MPI_SUCCESS || rc2 != MPI_SUCCESS || rc3 != MPI_SUCCESS)
     {

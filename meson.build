@@ -99,22 +99,22 @@ blas = dependency('blas', required: false) # Eigen can work without BLAS
 # endif
 
 highfive_found = false
-# cmake = import('cmake', required: false)
-# if cmake.found()
-#   highfive_cmake_options = cmake.subproject_options()
-#   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_EXAMPLES': false})
-#   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_UNIT_TESTS': false})
-#   highfive_cmake_options.add_cmake_defines({'HDF5_IS_PARALLEL': true})
-#   highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_STANDARD': '20'})
-#   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_USE_BOOST': false})
-#   highfive_cmake_options.add_cmake_defines({'HDF5_PREFER_PARALLEL': true})
-#   highfive_proj = cmake.subproject('highfive', options: highfive_cmake_options, required: false)
-#   if highfive_proj.found()
-#     highfive_found = true
-#     add_project_arguments('-DUSE_HIGHFIVE', language: 'cpp')
-#     highfive_dependency = highfive_proj.dependency('HighFive')
-#   endif
-# endif
+cmake = import('cmake', required: false)
+if cmake.found()
+  highfive_cmake_options = cmake.subproject_options()
+  highfive_cmake_options.add_cmake_defines({'HIGHFIVE_EXAMPLES': false})
+  highfive_cmake_options.add_cmake_defines({'HIGHFIVE_UNIT_TESTS': false})
+  highfive_cmake_options.add_cmake_defines({'HDF5_IS_PARALLEL': true})
+  highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_STANDARD': '20'})
+  highfive_cmake_options.add_cmake_defines({'HIGHFIVE_USE_BOOST': false})
+  highfive_cmake_options.add_cmake_defines({'HDF5_PREFER_PARALLEL': true})
+  highfive_proj = cmake.subproject('highfive', options: highfive_cmake_options, required: false)
+  if highfive_proj.found()
+    highfive_found = true
+    add_project_arguments('-DUSE_HIGHFIVE', language: 'cpp')
+    highfive_dependency = highfive_proj.dependency('HighFive')
+  endif
+endif
 
 default_option_cpp20 = 'cpp_std=none'
 if not use_cuda

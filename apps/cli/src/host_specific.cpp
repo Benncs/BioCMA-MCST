@@ -110,11 +110,13 @@ void main_loop(const SimulationParameters &params,
 
         transitioner->update_flow(simulation);
 
-        // FILL_PAYLOAD;
-
-        // MPI_DISPATCH_MAIN;
-
         current_reactor_state = transitioner->getState();
+
+        FILL_PAYLOAD;
+
+        MPI_DISPATCH_MAIN;
+
+        
 
         transitioner->advance(simulation);
       }
