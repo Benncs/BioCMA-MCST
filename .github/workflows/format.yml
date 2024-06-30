@@ -41,7 +41,7 @@ jobs:
           sudo sh devutils/clang_config.sh 17
       - name: Configure project
         run: |
-          meson setup builddir/ --buildtype=release
+          meson setup builddir/ --buildtype=release -Dcpp_std=gnu++20
       - name: Clang-Tidy
         run: |
           ninja -C builddir clang-tidy 
@@ -76,7 +76,7 @@ jobs:
           sudo sh devutils/clang_config.sh 17
       - name: Configure project
         run: |
-          meson setup builddir/ --buildtype=release
+          meson setup builddir/ --buildtype=release -Dcpp_std=gnu++20
       - name: Clang-Format
         run: |
           ninja -C builddir clang-format-check 
