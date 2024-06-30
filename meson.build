@@ -121,7 +121,7 @@ if not use_cuda
   default_option_cpp20 = 'cpp_std=gnu++20'
 endif 
 
-cmt = dependency('cmetool', required: false)
+cmt = dependency('cmtool', required: false)
 f_cmt = false
 
 if cmt.found()
