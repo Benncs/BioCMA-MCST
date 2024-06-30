@@ -52,8 +52,6 @@ workers_process(ExecInfo &exec,
 static KModel load_model_(size_t index_model);
 static void exec(int argc, char **argv, SimulationParameters params);
 
-// static ExportParameters export_i = {10,"result_.h5"};
-
 int main(int argc, char **argv)
 {
   init_environment();
@@ -121,6 +119,7 @@ static void exec(int argc, char **argv, SimulationParameters params)
 
   auto simulation = init_simulation(
       exec_info, params, transitioner, model, std::move(law_param));
+
 
   if (exec_info.current_rank == 0)
   {
