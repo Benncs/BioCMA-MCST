@@ -1,12 +1,11 @@
 #!/bin/bash 
 
 type=release
-
+name="$1"
 executable=./builddir/$type/apps/cli/biocma_mcst_cli_app
 
-cli_args=$(./tools/cli_formater.py)
-
-./builddir/$type/apps/cli/biocma_mcst_cli_app $cli_args
+cli_args=$(./tools/cli_formater.py $name)
+./builddir/$type/apps/cli/biocma_mcst_cli_app $cli_args  
 
 # np=1000
 # final_time=10

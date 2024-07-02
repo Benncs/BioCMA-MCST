@@ -35,7 +35,7 @@ def mk_pdf(data,name):
     plt.savefig(f"./results/pdf_{name}")
 
 
-res = import_results('./results/test_distrib.h5')
+res = import_results('./results/n14.h5')
 
 for key in res.bioparam:
     

@@ -5,10 +5,11 @@
       <final_time>1200</final_time>
       <numper_particle>1000</numper_particle>
       <delta_time>0</delta_time>
-      <results_file_name />
+      <results_file_name></results_file_name>
       <number_exported_result>100</number_exported_result>
       <model_name>model_monod</model_name>
    </control>
+   
    <control name="0d">
       <cma_case_path>/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/0d/</cma_case_path>
       <final_time>12000</final_time>
@@ -18,12 +19,13 @@
       <number_exported_result>100</number_exported_result>
       <model_name>model_monod</model_name>
    </control>
+
    <control name="test">
-      <cma_case_path>/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/0d/</cma_case_path>
-      <final_time>12000</final_time>
-      <numper_particle>5000</numper_particle>
-      <delta_time>0.5</delta_time>
-      <results_file_name>test_distrib</results_file_name>
+      <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
+      <final_time>3600</final_time>
+      <numper_particle>8000</numper_particle>
+      <delta_time>0</delta_time>
+      <results_file_name></results_file_name>
       <number_exported_result>100</number_exported_result>
       <model_name>model_monod</model_name>
    </control>

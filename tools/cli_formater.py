@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from lxml import etree
-
+import sys 
 
 def create_xml_parser():
     XSD_PATH = "devutils/datamodel/input_scheme_2.xsd"
@@ -73,10 +73,17 @@ def read_xml_values(xml_path, parser,target_name):
 
 
 if __name__ == "__main__":
-    xml_file_path = "/mnt/c/Users/casale/Documents/code/cpp/biomc/devutils/datamodel/input_scheme.xml"  
+    args = sys.argv
 
-    # Create XML parser with schema validation
-    parser = create_xml_parser()
 
-    # Read XML and extract values
-    read_xml_values(xml_file_path, parser,"test")
+    if(len(args))==2:
+        name = args[1]
+        xml_file_path = "/mnt/c/Users/casale/Documents/code/cpp/biomc/devutils/datamodel/input_scheme.xml"  
+
+        # Create XML parser with schema validation
+        parser = create_xml_parser()
+
+        # Read XML and extract values
+        read_xml_values(xml_file_path, parser,name)
+    else:
+        print("h 1")
