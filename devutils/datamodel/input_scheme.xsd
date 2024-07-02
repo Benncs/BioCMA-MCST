@@ -1,4 +1,9 @@
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="cases">
+    <xs:complexType>
+      <xs:sequence>
+
+
   <xs:element name="control">
     <xs:complexType>
       <xs:sequence>
@@ -19,5 +24,8 @@
         <xs:element type="xs:string" name="model_name"/>
       </xs:sequence>
     </xs:complexType>
+  </xs:element>
+
+   </xs:complexType>
   </xs:element>
 </xs:schema>

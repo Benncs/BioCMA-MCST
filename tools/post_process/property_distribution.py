@@ -12,7 +12,7 @@ def get_distribution_moment(data):
     return mean,variance_population,variance_sample
 
 def mk_histogram(data,name):
-    num_bins = 150
+    num_bins = 50
     plt.figure()
     plt.hist(data, bins=num_bins, density=True, alpha=0.7, color='blue', edgecolor='black')
     plt.xlabel('Value')

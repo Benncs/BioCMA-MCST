@@ -83,7 +83,8 @@ MC::Particles division_mond_model(MC::Particles &p)
       model); //= SimpleModel(model);//std::make_shared<SimpleModel>(*model);
 
   auto &child_model = std::any_cast<Monod &>(child.data);
-  child_model.interdivision_time = rand_division_time();
+  
+  child_model.interdivision_time = model.interdivision_time; //rand_division_time();
   return child;
 }
 

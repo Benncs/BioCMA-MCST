@@ -1,0 +1,31 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="cases">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="control" maxOccurs="unbounded" minOccurs="1">
+          <xs:complexType>
+            
+            <xs:sequence>
+              <xs:element name="cma_case_path">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:string" name="recursive" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+               <xs:element type="xs:double" name="final_time"/>
+               <xs:element type="xs:integer" name="numper_particle"/>
+               <xs:element type="xs:double" name="delta_time" minOccurs="0"/>
+               <xs:element type="xs:string" name="results_file_name" minOccurs="0"/>
+               <xs:element type="xs:integer" name="number_exported_result"/>
+               <xs:element type="xs:string" name="model_name"/>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="name" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
