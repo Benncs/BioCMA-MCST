@@ -1,3 +1,4 @@
+#include "cma_read/light_2d_view.hpp"
 #include "common/thread_safe_container.hpp"
 #include "mc/prng/prng.hpp"
 #include "models/types.hpp"
@@ -34,28 +35,38 @@ namespace Simulation
     delete ptr;
   }
 
+  void init_f_mat_liq(size_t i, CmaRead::L2DView<double>& liq)
+  {
+    if (i == 0)
+    {
+      
+      liq(0,i)=9.;
+      
+    }
+    else
+    {
+      liq(0,i)=5.;
+    }
+  }
+
+  void init_f_mat_gas(size_t i, CmaRead::L2DView<double>&& gas)
+  {
+    gas(1, i) = 15e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
+  }
+
   void initF(pimp_ptr_t &liq, pimp_ptr_t &gas)
   {
     auto rng = MC::PRNG();
     bool host = gas != nullptr;
-    // for (auto i = 0; i < liq->concentration.cols(); ++i)
-    // {
-    //   // liq->concentration.coeffRef(1, i) = 0;
-    //   // liq->concentration.coeffRef(0, static_cast<int>(i)) = 0.5; // 0.5
-    //   G/LP
-    //   // Glucose
-    //   double rngn = (i < liq->concentration.cols() / 3)
-    //                     ? rng.uniform_double_rand(0, 5)
-    //                     : rng.uniform_double_rand(0, 20);
-    //   liq->concentration.coeffRef(0, static_cast<int>(i)) = rngn;
-    //   if (host)
-    //   {
-    //     gas->concentration.coeffRef(1, i) =
-    //         15e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
-    //   }
-    // }
-
-    liq->concentration.coeffRef(0, static_cast<int>(0)) = 100; // 0.5 G/L Glucose
+    auto cliq = liq->getConcentrationView();
+    for (size_t i = 0; i < cliq.getNCol(); ++i)
+    {
+      init_f_mat_liq(i, cliq);
+      if (host)
+      {
+        init_f_mat_gas(i, gas->getConcentrationView());
+      }
+    }
 
     liq->total_mass = liq->concentration * liq->getVolume();
     if (host)
@@ -68,7 +79,7 @@ namespace Simulation
                 MC::MonteCarloUnit &unit,
                 std::span<Eigen::MatrixXd> _contribs,
                 std::span<MC::ThreadPrivateData> _extras,
-                 const std::vector<KModel> &p_models,
+                const KModel &_kmodels,
                 MC::Particles &p,
                 auto &m_transition,
                 auto &cumulative_probability);
@@ -77,7 +88,7 @@ namespace Simulation
       : mc_unit(std::move(other.mc_unit)),
         is_two_phase_flow(other.is_two_phase_flow), n_thread(other.n_thread),
         flow_liquid(other.flow_liquid), flow_gas(other.flow_gas),
-        kmodel(other.kmodel)
+        kmodel(std::move(other.kmodel))
   {
   }
 
@@ -88,19 +99,13 @@ namespace Simulation
       std::span<double> volumesliq,
       size_t n_species,
       KModel _km,
-      MC::DistributionVariantInt &&distribution_variant,
       bool _gas_flow)
       : mc_unit(std::move(_unit)), is_two_phase_flow(_gas_flow),
         n_thread(info.thread_per_process), flow_liquid(nullptr),
-        flow_gas(nullptr), kmodel(_km)
+        flow_gas(nullptr), kmodel(std::move(_km))
   {
 
-
-    for(size_t i=0;i<info.thread_per_process;++i)
-    {
-      private_models.emplace_back(kmodel);
-    }
-
+  
 
     if (this->mc_unit->extras.empty())
     {
@@ -125,7 +130,7 @@ namespace Simulation
     // FIXME
     initF(liquid_scalar, gas_scalar);
 
-    post_init_container(std::move(distribution_variant));
+    // post_init_container(std::move(distribution_variant));
     post_init_compartments();
   }
 
@@ -172,29 +177,6 @@ namespace Simulation
 
     const size_t n_compartments = mc_unit->domain.getNumberCompartments();
 
-    //     #pragma omp target data map(to: to_process[0:to_process.size()])
-    //     map(to: param) map(tofrom: mc_unit-&gt;domain)
-    // {
-    // #pragma omp target teams distribute parallel for schedule(static) \
-//     map(to: n_compartments) \
-//     num_threads(this-&gt;n_thread)
-    //     for (auto it = to_process.begin(); it < to_process.end(); ++it)
-    //     {
-    //         auto prng = MC::PRNG::get_rng(omp_get_thread_num());
-    //         auto distribution =
-    //         MC::get_distribution_int&lt;size_t&gt;(param);
-
-    //         auto &amp;&amp;particle = *it;
-    //         particle.current_container = distribution(prng);
-
-    //         auto &amp;i_container =
-    //         mc_unit-&gt;domain[particle.current_container];
-
-    //         kmodel.init_kernel(particle);
-    //         __ATOM_INCR__(i_container.n_cells);
-    //     }
-    // }
-
 #pragma omp parallel default(none),                                            \
     shared(to_process, n_compartments, distribution_variant)                   \
     num_threads(this->n_thread)
@@ -204,7 +186,6 @@ namespace Simulation
           MC::get_distribution_int<size_t>(distribution_variant);
       const auto size_p = to_process.size();
 #pragma omp for schedule(static)
-      // for (auto it = to_process.begin(); it < to_process.end(); ++it)
       for (size_t i_p = 0; i_p < size_p; i_p++)
       {
 
@@ -239,7 +220,7 @@ namespace Simulation
                unit,
                contribs,
                extras,
-               private_models,
+               kmodel,
                to_process[i_particle],
                m_transition,
                cumulative_probability);
@@ -272,7 +253,7 @@ namespace Simulation
                 MC::MonteCarloUnit &unit,
                 std::span<Eigen::MatrixXd> _contribs,
                 std::span<MC::ThreadPrivateData> _extras,
-                const std::vector<KModel> &p_models,
+                const KModel & _kmodel,
                 MC::Particles &particle,
                 auto &m_transition,
                 auto &cumulative_probability)
@@ -289,8 +270,6 @@ namespace Simulation
     auto &events = unit.ts_events[i_thread];
     auto &thread_contrib = _contribs[i_thread];
     auto &thread_extra = _extras[i_thread];
-    
-    const auto& _kmodel = p_models[i_thread];
 
     auto &rng = thread_extra.rng;
     const double random_number_1 = rng.double_unfiform();
@@ -299,8 +278,13 @@ namespace Simulation
     const auto &concentrations =
         domain[particle.current_container].concentrations;
 
-    kernel_move(
-        random_number_1, random_number_2, domain, particle, d_t, m_transition, cumulative_probability);
+    kernel_move(random_number_1,
+                random_number_2,
+                domain,
+                particle,
+                d_t,
+                m_transition,
+                cumulative_probability);
 
     _kmodel.update_kernel(d_t, particle, concentrations);
 
@@ -316,9 +300,9 @@ namespace Simulation
     {
       if (particle.status == MC::CellStatus::CYTOKINESIS)
       {
-        particle.status = MC::CellStatus::IDLE; 
+        particle.status = MC::CellStatus::IDLE;
         auto child = _kmodel.division_kernel(particle);
-        
+
         events.incr<MC::EventType::NewParticle>();
         _kmodel.contribution_kernel(child, thread_contrib);
         __ATOM_INCR__(domain[child.current_container].n_cells)

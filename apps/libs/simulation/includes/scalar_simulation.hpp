@@ -1,6 +1,7 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
+#include "cma_read/light_2d_view.hpp"
 #include <simulation/pc_hydro.hpp>
 #include <span>
 
@@ -33,7 +34,9 @@ namespace Simulation
 
     Eigen::DiagonalMatrix<double, -1> &getVolume();
 
-    std::span<double> getCData();
+    std::span<double> getConcentrationData();
+
+    CmaRead::L2DView<double> getConcentrationView();
 
     [[nodiscard]] inline size_t n_species() const;
 
@@ -59,7 +62,13 @@ namespace Simulation
     void updateC();
     size_t n_r;
     size_t n_c;
+    CmaRead::L2DView<double> view;
   };
+
+  inline CmaRead::L2DView<double> ScalarSimulation::getConcentrationView()
+  {
+    return view;
+  }
 
   inline std::span<Eigen::MatrixXd> ScalarSimulation::getThreadContribs()
   {
@@ -76,7 +85,7 @@ namespace Simulation
     return this->n_r;
   }
 
-  inline std::span<double> ScalarSimulation::getCData()
+  inline std::span<double> ScalarSimulation::getConcentrationData()
   {
 
     return {this->concentration.data(), static_cast<size_t>(this->concentration.size())};

@@ -43,7 +43,7 @@ def read_xml_values(xml_path, parser,target_name):
                 results_file_name = results_file_name_element.text if results_file_name_element is not None else None
                 number_exported_result = int(control.findtext("number_exported_result"))
                 model_name = control.findtext("model_name")
-
+                
                 cli_args = ""
                 if recursive:
                     cli_args+="-r 1 "
@@ -53,8 +53,12 @@ def read_xml_values(xml_path, parser,target_name):
                 cli_args+= f"-np {numper_particle} "
                 if(delta_time>0):
                     cli_args+= f"-dt {delta_time} "
-                if(results_file_name!=""):
+
+                
+
+                if(results_file_name!="" and results_file_name is not None):
                     cli_args+= f"-er {results_file_name} "
+
                 if(number_exported_result>0):
                     cli_args += f"-nex {number_exported_result} "
                 cli_args+=f"-mn {model_name}"

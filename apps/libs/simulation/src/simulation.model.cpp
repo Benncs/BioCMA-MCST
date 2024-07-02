@@ -30,7 +30,7 @@ namespace Simulation
 
   std::span<double> SimulationUnit::getCliqData() const
   {
-    return this->liquid_scalar->getCData();
+    return this->liquid_scalar->getConcentrationData();
   }
 
   [[nodiscard]] std::span<double> SimulationUnit::getCgasData() const
@@ -39,7 +39,7 @@ namespace Simulation
     {
       return {};
     }
-    return this->gas_scalar->getCData();
+    return this->gas_scalar->getConcentrationData();
   }
 
   [[nodiscard]] std::tuple<size_t, size_t> SimulationUnit::getDim() const

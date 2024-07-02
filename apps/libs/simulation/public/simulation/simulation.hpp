@@ -31,7 +31,7 @@ namespace Simulation
                             std::span<double> volumesgas,
                             std::span<double> volumesliq,
                             size_t n_species,
-                            KModel _km,MC::DistributionVariantInt&& param,
+                            KModel _km,
                             bool _gas_flow = false);
 
     ~SimulationUnit() = default;
@@ -69,7 +69,11 @@ namespace Simulation
     }
 
   private:
+    //MOVE IN INIT
     void post_init_container(MC::DistributionVariantInt distribution_variant);
+
+
+    
     void post_init_compartments();
 
     void post_process_reducing();
@@ -81,8 +85,6 @@ namespace Simulation
     PreCalculatedHydroState *flow_liquid; // TODO OPTI
     PreCalculatedHydroState *flow_gas;    // TODO OPTI
     KModel kmodel;
-
-    std::vector<KModel> private_models;
 
     std::unique_ptr<ScalarSimulation, pimpl_deleter> liquid_scalar;
     std::unique_ptr<ScalarSimulation, pimpl_deleter> gas_scalar;

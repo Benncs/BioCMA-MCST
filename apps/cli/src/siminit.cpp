@@ -8,10 +8,10 @@
 #include <utility>
 #include <vector>
 
-#include <cmt_common/cma_case.hpp>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/light_2d_view.hpp>
 #include <cma_read/neighbors.hpp>
+#include <cmt_common/cma_case.hpp>
 #include <common/common.hpp>
 #include <mc/mcinit.hpp>
 #include <mc/prng/distribution.hpp>
@@ -20,6 +20,7 @@
 #include <siminit.hpp>
 #include <simulation/simulation.hpp>
 
+
 #include <simulation/update_flows.hpp>
 
 static CmaRead::ReactorState const *
@@ -27,13 +28,14 @@ init_state(SimulationParameters &params,
            std::unique_ptr<CmaRead::FlowIterator> &flow_handle,
            const CmtCommons::cma_exported_paths_t &paths);
 
-static void init_host_only(const ExecInfo &info,
-                           SimulationParameters &params,
-                           std::unique_ptr<CmaRead::FlowIterator> &_flow_handle,
-                           CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
-                           std::vector<double> &liq_volume,
-                           std::vector<double> &gas_volume,
-                           std::vector<size_t> &worker_neighbor_data);
+static void
+init_host_only(const ExecInfo &info,
+               SimulationParameters &params,
+               std::unique_ptr<CmaRead::FlowIterator> &_flow_handle,
+               CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
+               std::vector<double> &liq_volume,
+               std::vector<double> &gas_volume,
+               std::vector<size_t> &worker_neighbor_data);
 
 std::unique_ptr<Simulation::SimulationUnit>
 init_simulation(const ExecInfo &info,
@@ -43,7 +45,7 @@ init_simulation(const ExecInfo &info,
                 MC::DistributionVariantInt &&initial_particle_distribution)
 {
 
-  const auto& user_params = params.user_params;
+  const auto &user_params = params.user_params;
 
   std::vector<double> liq_volume;
   std::vector<double> gas_volume;
@@ -82,20 +84,22 @@ init_simulation(const ExecInfo &info,
 
   MPI_W::barrier();
 
-  auto mc_unit =
-      MC::init(info, user_params.numper_particle, liq_volume, liquid_neighbors);
+  auto mc_unit = MC::init(model.init_kernel,info,
+                          user_params.numper_particle,
+                          liq_volume,
+                          liquid_neighbors,
+                          std::move(initial_particle_distribution));
 
   bool tpf = info.current_rank == 0 && params.is_two_phase_flow;
 
-  auto simulation =
-      std::make_unique<Simulation::SimulationUnit>(info,
-                                 std::move(mc_unit),
-                                 gas_volume,
-                                 liq_volume,
-                                 params.n_species,
-                                 model,
-                                 std::move(initial_particle_distribution),
-                                 tpf);
+  auto simulation = std::make_unique<Simulation::SimulationUnit>(
+      info,
+      std::move(mc_unit),
+      gas_volume,
+      liq_volume,
+      params.n_species,
+      model,
+      tpf);
   // Calculate the total number of time steps
   const auto n_t = static_cast<size_t>(user_params.final_time / params.d_t) + 1;
 
@@ -110,13 +114,14 @@ init_simulation(const ExecInfo &info,
   return simulation;
 }
 
-static void init_host_only(const ExecInfo &info,
-                           SimulationParameters &params,
-                           std::unique_ptr<CmaRead::FlowIterator> &_flow_handle,
-                           CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
-                           std::vector<double> &liq_volume,
-                           std::vector<double> &gas_volume,
-                           std::vector<size_t> &worker_neighbor_data)
+static void
+init_host_only(const ExecInfo &info,
+               SimulationParameters &params,
+               std::unique_ptr<CmaRead::FlowIterator> &_flow_handle,
+               CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
+               std::vector<double> &liq_volume,
+               std::vector<double> &gas_volume,
+               std::vector<size_t> &worker_neighbor_data)
 {
 
   if (info.current_rank != 0)
@@ -127,7 +132,8 @@ static void init_host_only(const ExecInfo &info,
   CmtCommons::CMACaseInfo cma_case =
       CmtCommons::CMACaseInfoReader::load_case(case_name);
 
-  const CmaRead::ReactorState *fstate = init_state(params, _flow_handle, cma_case.paths);
+  const CmaRead::ReactorState *fstate =
+      init_state(params, _flow_handle, cma_case.paths);
 
   params.n_compartments = fstate->n_compartments;
   liquid_neighbors = fstate->liquid_flow.getViewNeighors();
@@ -150,8 +156,9 @@ static void init_host_only(const ExecInfo &info,
                      ? _flow_handle->MinLiquidResidenceTime() / 100.
                      : params.user_params.delta_time;
   }
-  else {
-  params.d_t = params.user_params.delta_time;
+  else
+  {
+    params.d_t = params.user_params.delta_time;
   }
 
   // const auto n_t = static_cast<size_t>(params.final_time / params.d_t) + 1;
@@ -180,7 +187,8 @@ init_state(SimulationParameters &params,
   CmaRead::ReactorState const *state = nullptr;
   try
   {
-    flow_handle = std::make_unique<CmaRead::FlowIterator>(params.flow_files, paths);
+    flow_handle =
+        std::make_unique<CmaRead::FlowIterator>(params.flow_files, paths);
     if (flow_handle == nullptr)
     {
       throw std::runtime_error("Flow map are not loaded");
@@ -192,8 +200,8 @@ init_state(SimulationParameters &params,
   catch (const std::exception &e)
   {
     std::stringstream err;
-    err << "Error while reading files\t:"<<e.what();
-  
+    err << "Error while reading files\t:" << e.what();
+
     throw std::runtime_error(err.str());
   }
 
