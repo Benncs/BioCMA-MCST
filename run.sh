@@ -3,16 +3,21 @@
 type=release
 
 executable=./builddir/$type/apps/cli/biocma_mcst_cli_app
-np=1000
-final_time=10
 
-# $executable -np $np -d $final_time -r 1  -f  ./cma_data/bench_2/ 
+cli_args=$(./tools/cli_formater.py)
 
-# $executable -np $np -d $final_time -f ./cma_data/avg_14/ -nex 1000 -dt 1e-2
+./builddir/$type/apps/cli/biocma_mcst_cli_app $cli_args
 
-# $executable -np $np -d $final_time -f ../compartment-modelling-tool/out/sanofi/ -nex 100 
+# np=1000
+# final_time=10
 
-$executable -np $np -d $final_time -r 1 -f /mnt/c/Users/casale/Documents/cfd/flowmap_14/ -nex 1000 -mn model_monod
+# # $executable -np $np -d $final_time -r 1  -f  ./cma_data/bench_2/ 
+
+# # $executable -np $np -d $final_time -f ./cma_data/avg_14/ -nex 1000 -dt 1e-2
+
+# # $executable -np $np -d $final_time -f ../compartment-modelling-tool/out/sanofi/ -nex 100 
+
+# $executable -np $np -d $final_time -r 1 -f /mnt/c/Users/casale/Documents/cfd/flowmap_14/ -nex 1000 -mn model_monod
 
 # $executable -np $np -d $final_time -r 1  -f  ./cma_data/bench_2/ 
 

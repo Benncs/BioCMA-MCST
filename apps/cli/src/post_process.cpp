@@ -32,6 +32,7 @@ void post_process(const ExecInfo &exec,
                   Simulation::SimulationUnit &simulation,
                   std::unique_ptr<DataExporter> &exporter)
 {
+  std::cout<<"POST PROCESSING"<<std::endl;
   const auto &model_properties = simulation.getModel().get_properties;
   auto distribution = simulation.mc_unit->domain.getDistribution();
 

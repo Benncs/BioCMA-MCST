@@ -64,6 +64,10 @@ namespace Simulation
 
     void clearContribution();
 
+    void clear_mc(){
+      mc_unit.reset();
+    }
+
   private:
     void post_init_container(MC::DistributionVariantInt distribution_variant);
     void post_init_compartments();

@@ -45,7 +45,7 @@ DataExporter::DataExporter(const ExecInfo &info,
 
 {
 
-  metadata["file_version"] = 2;
+  metadata["file_version"] = 3;
   metadata["creation_date"] = date_time();
   metadata["author"] = "someone";
   metadata["description"] = "Interesting results";
@@ -61,7 +61,7 @@ DataExporter::DataExporter(const ExecInfo &info,
 }
 
 void DataExporter::write_final_results(
-    const Simulation::SimulationUnit &simulation,
+    Simulation::SimulationUnit &simulation,
     std::span<size_t> distribution,
     const std::unordered_map<std::string, std::vector<model_properties_t>>
         &properties,
@@ -79,6 +79,11 @@ void DataExporter::write_final_results(
   };
 
   write_final_results(data, distribution, properties, spatial_prop);
+  // Results depending on simulation are exported or copied into properties,
+  // clear montecarlo state to save memory
+  simulation.clear_mc();
+
+  write_final_particle_data(properties, spatial_prop);
 }
 
 #ifdef USE_HIGHFIVE
@@ -105,6 +110,11 @@ protected:
       ExportData &data,
       std::span<size_t> distribution,
       const std::unordered_map<std::string, std::vector<model_properties_t>> &,
+      const std::unordered_map<std::string, std::vector<double>> &) override;
+
+  void write_final_particle_data(
+      const std::unordered_map<std::string, std::vector<model_properties_t>>
+          &props,
       const std::unordered_map<std::string, std::vector<double>> &) override;
 
 private:
@@ -303,33 +313,6 @@ void DataExportHighFive::append(double t,
 {
   try
   {
-    // HighFive::File file(filename, HighFive::File::ReadWrite);
-    // auto dataset = file.getDataSet("records/concentration_liquid");
-    // dataset.resize({counter + 1, n_col, n_row});
-    // dataset.select({counter, 0, 0}, {1, n_col, n_row})
-    //     .write_raw(concentration_liquid.data());
-
-    // auto dataset_v = file.getDataSet("records/liquid_volume");
-    // dataset_v.resize({counter + 1, n_col, 1});
-    // dataset_v.select({counter, 0, 0}, {1, n_col, 1})
-    //     .write_raw(liquid_volume.data());
-
-    // dataset_v = file.getDataSet("records/gas_volume");
-    // dataset_v.resize({counter + 1, n_col, 1});
-    // dataset_v.select({counter, 0, 0}, {1, n_col, 1})
-    //     .write_raw(volume_gas.data());
-
-    // dataset = file.getDataSet("records/distribution");
-    // dataset.resize({counter + 1, n_col});
-    // dataset.select({counter, 0}, {1, n_col})
-    //     .write_raw(distribution.data());
-
-    // dataset = file.getDataSet("records/time");
-    // dataset.resize({counter + 1, 1});
-    // dataset.select({counter, 0}, {1, 1}).write_raw(&t);
-    // // dataset.select({counter, 0, 0}, {1, 1, 1})
-    // //     .write_raw(t);
-    // counter++;
 
     HighFive::File file(filename, HighFive::File::ReadWrite);
 
@@ -438,7 +421,15 @@ void DataExportHighFive::write_final_results(
 
   file.createDataSet<std::string>("biological_model/description ",
                                   std::string("Model description"));
+}
 
+void DataExportHighFive::write_final_particle_data(
+    const std::unordered_map<std::string, std::vector<model_properties_t>>
+        &props,
+    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
+{
+  HighFive::File file(filename, HighFive::File::ReadWrite);
+  std::cout << "EXPORTING PARTICLE DATA" << std::endl;
   HighFive::DataSetCreateProps ds_props;
   ds_props.add(HighFive::Chunking(props.size()));
   ds_props.add(HighFive::Shuffle());
@@ -453,18 +444,28 @@ void DataExportHighFive::write_final_results(
             const auto &sample_val)
         {
           using T = std::decay_t<decltype(sample_val)>;
-          std::vector<T> typed_values;
-          typed_values.reserve(values.size());
-
-          for (const auto &val : values)
+          if constexpr (std::is_same_v<T, double> || std::is_same_v < T, int>)
           {
-            if (auto *v = std::get_if<T>(&val))
-            {
-              typed_values.push_back(*v);
-            }
-          }
+            std::vector<size_t> dims{values.size()};
 
-          file.createDataSet("biological_model/" + key, typed_values, ds_props);
+            const auto *raw = reinterpret_cast<const T *>(values.data());
+            auto ds = file.createDataSet<T>("biological_model/" + key,
+                                            HighFive::DataSpace(dims));
+            ds.write_raw(raw);
+            //  file.createDataSet("biological_model/" + key, raw, ds_props);
+          }
+          // std::vector<T> typed_values;
+          // typed_values.reserve(values.size());
+
+          // for (const auto &val : values)
+          // {
+          //   if (auto *v = std::get_if<T>(&val))
+          //   {
+          //     typed_values.push_back(*v);
+          //   }
+          // }
+
+          // file.createDataSet("biological_model/" + key, values, ds_props);
         },
         values.front()); // Use the first value's type to determine the type for
                          // the vector
@@ -478,7 +479,6 @@ void DataExportHighFive::write_final_results(
   {
     file.createDataSet("biological_model/spatial/" + key, values);
   }
-  
 }
 
 #endif

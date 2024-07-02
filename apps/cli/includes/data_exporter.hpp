@@ -36,11 +36,13 @@ public:
 
   virtual ~DataExporter() = default;
   void write_final_results(
-      const Simulation::SimulationUnit &simulation,
+      Simulation::SimulationUnit &simulation,
       std::span<size_t> distribution,
       const std::unordered_map<std::string, std::vector<model_properties_t>>
           &props,
       const std::unordered_map<std::string, std::vector<double>> &);
+
+
 
   virtual void append(double t,
                       std::span<double> data,
@@ -81,6 +83,14 @@ protected:
   virtual void write_final_results(
       ExportData &data,
       std::span<size_t> distribution,
+      const std::unordered_map<std::string, std::vector<model_properties_t>>
+          &props,
+      const std::unordered_map<std::string, std::vector<double>> &)
+  {
+    std::cerr << "NO implementation specified";
+  }
+
+  virtual void write_final_particle_data(
       const std::unordered_map<std::string, std::vector<model_properties_t>>
           &props,
       const std::unordered_map<std::string, std::vector<double>> &)
