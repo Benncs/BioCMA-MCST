@@ -122,6 +122,14 @@ static void parseArg(UserControlParameters &user_controll,
     }
     break;
   }
+  case 'm':
+  {
+    if (current_param == "mn")
+    {
+      user_controll.model_name = std::string(current_value);
+    }
+    break;
+  }
   case 'n':
   {
     if (current_param == "nt")

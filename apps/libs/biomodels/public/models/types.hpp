@@ -7,8 +7,9 @@
 
 #include <Eigen/Core>
 #include <string>
+#include <unordered_map>
 #include <variant>
-#include <unordered_map> 
+
 
 #ifdef USE_PYTHON_MODULE
 #  include <functional>
@@ -36,19 +37,22 @@ using ModelContribution = void (*)(MC::Particles &, Eigen::MatrixXd &);
 
 // #ifdef DEBUG
 using ModelDebug = std::function<void(MC::Particles &)>;
-inline void defaut_dgb(MC::Particles & /*unused*/){};
+inline void defaut_dgb(MC::Particles & /*unused*/) {};
 // #endif
-
 
 using model_properties_t = std::variant<double, int, std::string>;
 
-using model_properties_detail_t = std::unordered_map<std::string, model_properties_t>;
+using model_properties_detail_t =
+    std::unordered_map<std::string, model_properties_t>;
 
 using ModelGetProperties =
     std::function<model_properties_detail_t(const MC::Particles &)>;
 
-
-inline model_properties_detail_t defaut_properties(const MC::Particles & /*unused*/){return {};};
+inline model_properties_detail_t
+defaut_properties(const MC::Particles & /*unused*/)
+{
+  return {{"description", "model description"}};
+};
 
 struct KModel
 {
