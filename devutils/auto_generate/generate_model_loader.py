@@ -29,7 +29,7 @@ def generate_includes(model_headers):
     """
     return "\n".join([f"#include <models/{header}>" for header in model_headers])
 
-def generate_function_body(model_files):
+def generate_loader_body(model_files):
     """
     Generates the body of the load_model_ function.
     """
@@ -47,7 +47,15 @@ def generate_function_body(model_files):
 
     return function_body
 
-def generate_cpp_file(template_path, output_path, includes, body):
+
+def generate_list_body(model_files):
+    function_body = ""
+    for model_name in model_files:
+        function_body+=f"list.emplace_back(\"{model_name}\");\r\n"
+    return function_body
+
+
+def generate_cpp_file(template_path, output_path, includes, body,list_body):
     """
     Generates the C++ file by replacing the placeholders in the template.
     """
@@ -58,6 +66,7 @@ def generate_cpp_file(template_path, output_path, includes, body):
         # Replace the placeholders
         content = template_content.replace("@INCLUDES@", includes)
         content = content.replace("@BODY@", body)
+        content = content.replace("@AM_BODY@",list_body)
 
         # Write the modified content to the output file
         with open(output_path, 'w') as output_file:
@@ -93,9 +102,11 @@ if __name__ == "__main__":
     files, headers = list_model_files(models_path)
 
     includes = generate_includes(headers)
-    body = generate_function_body(files)
+    loader_body = generate_loader_body(files)
+    list_body = generate_list_body(files)
+
 
     # Generate the C++ file
-    generate_cpp_file(source_template_path, source_output_path, includes, body)
+    generate_cpp_file(source_template_path, source_output_path, includes, loader_body,list_body)
 
     generate_header(header_template_path,header_output_path)

@@ -22,3 +22,11 @@ KModel load_model_(const std::string& name, bool use_python_module)
     #endif
     @BODY@
 }
+
+std::vector<std::string> get_available_models(bool use_python_module)
+{
+    std::vector<std::string> list;
+    @AM_BODY@
+
+    return list;
+}

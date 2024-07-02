@@ -78,6 +78,7 @@ int main(int argc, char **argv)
     showHelp(std::cout);
     return -1;
   }
+  
   auto params = params_opt.value();
   const ExecInfo exec_info = runtime_init(argc, argv, params);
   try
