@@ -55,11 +55,7 @@ void set_openmp_threads(int rank,
     }
   }
 
-  if (threads_per_process > static_cast<size_t>(num_core_per_node))
-  {
-    threads_per_process = static_cast<size_t>(num_core_per_node);
-  }
-  info.thread_per_process = threads_per_process;
+  info.thread_per_process = std::min(threads_per_process,static_cast<size_t>(num_core_per_node));;
 
   omp_set_num_threads(static_cast<int>(info.thread_per_process));
 }
@@ -160,7 +156,7 @@ std::string sappend_date_time(std::string_view string)
 
 }
 
-void register_run(ExecInfo &exec, SimulationParameters &params)
+void register_run(const ExecInfo &exec, SimulationParameters &params)
 {
   // Open the file in append mode
   std::ofstream env(env_file_path(), std::ios_base::app);

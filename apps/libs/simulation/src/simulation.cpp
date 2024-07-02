@@ -55,7 +55,7 @@ namespace Simulation
     //   }
     // }
 
-    liq->concentration.coeffRef(0, static_cast<int>(3)) = 100; // 0.5 G/L Glucose
+    liq->concentration.coeffRef(0, static_cast<int>(0)) = 100; // 0.5 G/L Glucose
 
     liq->total_mass = liq->concentration * liq->getVolume();
     if (host)
@@ -68,7 +68,7 @@ namespace Simulation
                 MC::MonteCarloUnit &unit,
                 std::span<Eigen::MatrixXd> _contribs,
                 std::span<MC::ThreadPrivateData> _extras,
-                const KModel &_kmodel,
+                 const std::vector<KModel> &p_models,
                 MC::Particles &p,
                 auto &m_transition,
                 auto &cumulative_probability);
@@ -94,6 +94,14 @@ namespace Simulation
         n_thread(info.thread_per_process), flow_liquid(nullptr),
         flow_gas(nullptr), kmodel(_km)
   {
+
+
+    for(size_t i=0;i<info.thread_per_process;++i)
+    {
+      private_models.emplace_back(kmodel);
+    }
+
+
     if (this->mc_unit->extras.empty())
     {
       throw std::runtime_error("Extra particle not initialised");
@@ -217,7 +225,6 @@ namespace Simulation
     const auto &cumulative_probability = flow_liquid->cumulative_probability;
 
     const auto &m_transition = this->flow_liquid->transition_matrix;
-    const auto &_kmodel = this->kmodel;
 
     auto &unit = *this->mc_unit;
     auto contribs = this->liquid_scalar->getThreadContribs();
@@ -232,7 +239,7 @@ namespace Simulation
                unit,
                contribs,
                extras,
-               _kmodel,
+               private_models,
                to_process[i_particle],
                m_transition,
                cumulative_probability);
@@ -265,7 +272,7 @@ namespace Simulation
                 MC::MonteCarloUnit &unit,
                 std::span<Eigen::MatrixXd> _contribs,
                 std::span<MC::ThreadPrivateData> _extras,
-                const KModel &_kmodel,
+                const std::vector<KModel> &p_models,
                 MC::Particles &particle,
                 auto &m_transition,
                 auto &cumulative_probability)
@@ -282,6 +289,8 @@ namespace Simulation
     auto &events = unit.ts_events[i_thread];
     auto &thread_contrib = _contribs[i_thread];
     auto &thread_extra = _extras[i_thread];
+    
+    const auto& _kmodel = p_models[i_thread];
 
     auto &rng = thread_extra.rng;
     const double random_number_1 = rng.double_unfiform();
@@ -307,7 +316,9 @@ namespace Simulation
     {
       if (particle.status == MC::CellStatus::CYTOKINESIS)
       {
+        particle.status = MC::CellStatus::IDLE; 
         auto child = _kmodel.division_kernel(particle);
+        
         events.incr<MC::EventType::NewParticle>();
         _kmodel.contribution_kernel(child, thread_contrib);
         __ATOM_INCR__(domain[child.current_container].n_cells)

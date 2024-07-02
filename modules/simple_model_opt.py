@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, './builddir/dynmod/apps/libs/pymodule')
+sys.path.insert(0, './builddir/pyrelease/apps/libs/pymodule')
 
 import pyBioCMAMCST
 import numpy as np

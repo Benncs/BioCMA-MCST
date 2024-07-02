@@ -1,8 +1,8 @@
-#include "data_exporter.hpp"
-#include "models/light_model.hpp"
-#include "models/monod.hpp"
-#include "models/simple_model.hpp"
+#include "common/execinfo.hpp"
+#include "common/simulation_parameters.hpp"
+#include "mpi.h"
 #include "mpi_w/impl_op.hpp"
+#include "mpi_w/message_t.hpp"
 #include <cli_parser.hpp>
 
 #include <common/common.hpp>
@@ -20,6 +20,9 @@
 #include <siminit.hpp>
 #include <sync.hpp>
 
+#include <model_list.hpp>
+
+
 #ifdef USE_PYTHON_MODULE
 #  include <pymodule/import_py.hpp>
 #endif
@@ -31,7 +34,19 @@
 #include <stdexcept>
 #include <utility>
 
-#define SEND_MPI_SIG_STOP host_dispatch(exec, MPI_W::SIGNALS::STOP);
+#ifdef USE_PYTHON_MODULE
+#define INTERPRETER_INIT auto _interpreter_handle = init_python_interpreter(); 
+#else
+#define INTERPRETER_INIT
+#endif 
+
+struct CaseData
+{
+  std::unique_ptr<Simulation::SimulationUnit> simulation;
+  SimulationParameters params;
+  std::unique_ptr<Simulation::FlowMapTransitioner> transitioner;
+  ExecInfo exec_info;
+};
 
 /*The following should be remove or moved */
 constexpr bool verbose = true;   // TODO REMOVE
@@ -44,13 +59,15 @@ static void restore_stdout(int original_stdout,
                            std::streambuf *&original_buffer);
 
 static void
-workers_process(ExecInfo &exec,
+workers_process(const ExecInfo &exec,
                 Simulation::SimulationUnit &simulation,
                 SimulationParameters &params,
                 std::unique_ptr<Simulation::FlowMapTransitioner> transitioner);
 
-static KModel load_model_(size_t index_model);
-static void exec(int argc, char **argv, SimulationParameters params);
+
+static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params);
+
+static void exec(const ExecInfo &exec_info, CaseData &&cased);
 
 int main(int argc, char **argv)
 {
@@ -61,13 +78,13 @@ int main(int argc, char **argv)
     showHelp(std::cout);
     return -1;
   }
-
+  auto params = params_opt.value();
+  const ExecInfo exec_info = runtime_init(argc, argv, params);
   try
   {
 
-#ifdef USE_PYTHON_MODULE
-    auto _interpreter_handle = init_python_interpreter();
-#endif
+    INTERPRETER_INIT
+
     // TODO REMOVE
     if constexpr (redirect)
     {
@@ -77,7 +94,8 @@ int main(int argc, char **argv)
       auto original_stdout_fd =
           redirect_stdout(original_buffer, output_variable);
 
-      exec(argc, argv, std::move(params_opt.value()));
+      auto case_data = prepare(exec_info, std::move(params));
+      exec(exec_info, std::move(case_data));
 
       restore_stdout(original_stdout_fd, original_buffer);
       if constexpr (verbose)
@@ -87,7 +105,8 @@ int main(int argc, char **argv)
     }
     else
     {
-      exec(argc, argv, std::move(params_opt.value()));
+      auto case_data = prepare(exec_info, std::move(params));
+      exec(exec_info, std::move(case_data));
     }
   }
 #ifdef DEBUG
@@ -107,59 +126,41 @@ int main(int argc, char **argv)
   return 0;
 }
 
-static void exec(int argc, char **argv, SimulationParameters params)
+static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params)
 {
 
-  ExecInfo exec_info = runtime_init(argc, argv, params);
-
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
-  constexpr size_t i_model = 1;
-  const auto model = load_model_(i_model);
-  MC::UniformLawINT law_param = {3, 3};
+  const auto model = load_model_(params.user_params.model_name);
+  MC::UniformLawINT law_param = {0, 0};
 
   auto simulation = init_simulation(
       exec_info, params, transitioner, model, std::move(law_param));
+  return {std::move(simulation), params, std::move(transitioner), exec_info};
+}
 
-
-  if (exec_info.current_rank == 0)
+static void exec(const ExecInfo &exec_info, CaseData &&cased)
+{
+  if (cased.exec_info.current_rank == 0)
   {
-    host_process(exec_info, simulation, params, std::move(transitioner));
+    host_process(exec_info,
+                 *cased.simulation,
+                 cased.params,
+                 std::move(cased.transitioner));
   }
   else
   {
 
-    workers_process(exec_info, simulation, params, std::move(transitioner));
+    return workers_process(exec_info,
+                           *cased.simulation,
+                           cased.params,
+                           std::move(cased.transitioner));
   }
 }
 
-void host_process(
-    ExecInfo &exec,
-    Simulation::SimulationUnit &simulation,
-    SimulationParameters &params,
-    std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner)
-{
-  auto initial_distribution = simulation.mc_unit->domain.getDistribution();
-  auto de = DataExporter::factory(exec,
-                                  params,
-                                  params.results_file_name,
-                                  simulation.getDim(),
-                                  params.user_params.number_exported_result,
-                                  initial_distribution);
 
-  show(simulation);
-
-  main_loop(params, exec, simulation, std::move(transitioner), de);
-
-  show(simulation);
-
-  SEND_MPI_SIG_STOP;
-  last_sync(exec, simulation);
-
-  post_process(exec, params, simulation, de);
-}
 
 static void
-workers_process(ExecInfo &exec,
+workers_process(const ExecInfo &exec,
                 Simulation::SimulationUnit &simulation,
                 SimulationParameters &params,
                 std::unique_ptr<Simulation::FlowMapTransitioner> transitioner)
@@ -171,28 +172,44 @@ workers_process(ExecInfo &exec,
 
   MPI_W::IterationPayload payload(n_compartments * n_compartments,
                                   n_compartments);
-  while (true)
+  bool stop = false;
+#pragma omp parallel
+  while (!stop)
   {
 
-    auto sign = MPI_W::try_recv<MPI_W::SIGNALS>(0, &status);
-
-    if (sign == MPI_W::SIGNALS::STOP)
+    MPI_W::SIGNALS sign;
+#pragma omp single
     {
-      last_sync(exec, simulation);
-      break;
+      sign = MPI_W::try_recv<MPI_W::SIGNALS>(0, &status);
+      if (sign == MPI_W::SIGNALS::STOP)
+      {
+        last_sync(exec, simulation);
+        stop = true;
+        
+        // MPI_Abort(MPI_COMM_WORLD, 0);
+      }
+    }
+    if(stop){break;}
+
+#pragma omp single
+    {
+      payload.recv(0, &status);
+
+      simulation.mc_unit->domain.setLiquidNeighbors(payload.neigbors);
+      transitioner->update_flow(
+          simulation, payload.liquid_flows, n_compartments);
+      transitioner->advance(simulation);
+
+      simulation.setVolumes(payload.gas_volumes, payload.liquid_volumes);
     }
 
-    payload.recv(0, &status);
-
-    simulation.mc_unit->domain.setLiquidNeighbors(payload.neigbors);
-    transitioner->update_flow(simulation, payload.liquid_flows, n_compartments);
-    transitioner->advance(simulation);
-
-    simulation.setVolumes(payload.gas_volumes, payload.liquid_volumes);
-
     simulation.cycleProcess(d_t);
-    sync_step(exec, simulation);
-    sync_prepare_next(exec, simulation);
+
+#pragma omp single
+    {
+      sync_step(exec, simulation);
+      sync_prepare_next(exec, simulation);
+    }
   }
 }
 
@@ -232,29 +249,3 @@ static int redirect_stdout(std::streambuf *&original_buffer,
   }
 }
 
-static KModel load_model_(size_t index_model)
-{
-
-#ifdef USE_PYTHON_MODULE
-  constexpr bool use_python_module = USE_PYTHON_MODULE;
-  if constexpr (use_python_module)
-  {
-    std::cout << "LOADING modules.simple_model" << std::endl;
-    return get_python_module("modules.simple_model_opt");
-  }
-#endif
-
-  if (index_model == 0)
-  {
-    return get_simple_model();
-  }
-  if (index_model == 1)
-  {
-    return get_light_model();
-  }
-  if (index_model == 2)
-  {
-    return get_mond_model();
-  }
-  throw std::invalid_argument("bad model");
-}

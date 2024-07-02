@@ -278,7 +278,7 @@ static double uptake_o2(SimpleModel&model, double O)
   return model.xi.mass * SimpleModel::psi_o_meta*factor + growth * phi_o_growth;
 }
 
-KModel get_simple_model()
+KModel get_model_simple()
 {
   return {&init_simple_model_,
           &update_simple_model,

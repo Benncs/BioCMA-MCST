@@ -23,6 +23,6 @@ MC::Particles division_light_model(MC::Particles &p);
 
 void contribution_light_model(MC::Particles &p, Eigen::MatrixXd &contribution);
 
-KModel get_light_model();
+KModel get_model_light();
 
 #endif

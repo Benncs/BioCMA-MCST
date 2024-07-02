@@ -3,8 +3,8 @@
 type=release
 
 executable=./builddir/$type/apps/cli/biocma_mcst_cli_app
-np=1000000
-final_time=5
+np=1000
+final_time=10
 
 # $executable -np $np -d $final_time -r 1  -f  ./cma_data/bench_2/ 
 
@@ -22,9 +22,10 @@ $executable -np $np -d $final_time -r 1 -f /mnt/c/Users/casale/Documents/cfd/flo
 
 # $executable -np $np -d $final_time -f /home/benjamin/Documenti/cpp/BIREM_Project/out/sanofi/ #-dt 0.0004231431780566232
 
-# $executable -np $np -d $final_time -f /home/benjamin/Documenti/code/cpp/biomc/cma_data/0d/ -dt 0.5
-
+# $executable -np $np -dt 0.5 -d $final_time -f /mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/0d/  -nex 1200
 
 
 
 # $executable -np $np -d $final_time -f  ../BIREM_new/out/ 
+
+

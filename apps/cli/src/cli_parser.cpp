@@ -72,7 +72,7 @@ static std::optional<UserControlParameters> parse_user_param(int argc,
 std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
 {
   SimulationParameters params = SimulationParameters::m_default();
-
+  params.n_species=3;
   auto opt_control = parse_user_param(argc, argv);
   if (!opt_control.has_value())
   {

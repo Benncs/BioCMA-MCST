@@ -78,6 +78,8 @@ namespace Simulation
     PreCalculatedHydroState *flow_gas;    // TODO OPTI
     KModel kmodel;
 
+    std::vector<KModel> private_models;
+
     std::unique_ptr<ScalarSimulation, pimpl_deleter> liquid_scalar;
     std::unique_ptr<ScalarSimulation, pimpl_deleter> gas_scalar;
   };

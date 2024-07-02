@@ -3,17 +3,19 @@
 #include "models/light_model.hpp"
 #include "models/simple_model.hpp"
 #include <any>
+#include <map>
 #include <post_process.hpp>
 
 #include <iostream>
 #include <stdexcept>
+#include <variant>
 
 /*
   NUMBER OF
 */
 
-void model_specific(ExecInfo &exec,
-                    SimulationParameters &params,
+void model_specific(const ExecInfo &exec,
+                    const SimulationParameters &params,
                     Simulation::SimulationUnit &simulation)
 {
 #ifndef USE_PYTHON_MODULE
@@ -25,111 +27,79 @@ void model_specific(ExecInfo &exec,
 #endif
 }
 
-void post_process(ExecInfo &exec,
-                  SimulationParameters &params,
+void post_process(const ExecInfo &exec,
+                  const SimulationParameters &params,
                   Simulation::SimulationUnit &simulation,
-                  std::unique_ptr<DataExporter>& exporter)
+                  std::unique_ptr<DataExporter> &exporter)
 {
-
-  const size_t process_size = simulation.mc_unit->container.to_process.size();
-
-  std::cout << "----END---" << std::endl;
-
-  // FIXME
-  try
-  {
-    model_specific(exec, params, simulation);
-  }
-  catch (...)
-  {
-    ///
-  }
-
-  auto total_events = simulation.mc_unit->ts_events[0];
-  const size_t death_events = total_events.get<MC::EventType::Death>();
-  const size_t new_events = total_events.get<MC::EventType::NewParticle>();
-
+  const auto &model_properties = simulation.getModel().get_properties;
   auto distribution = simulation.mc_unit->domain.getDistribution();
-  // size_t count = 0;
-  // for (auto &&i : d)
-  // {
-  //   std::cout << i << " ";
-  //   count += i;
-  // }
-  // std::cout << '\n';
 
-  // std::cout << "\r\n-------\r\n";
-  // std::cout << "Death events: " << death_events << std::endl;
-  // std::cout << "Division events: " << new_events << std::endl;
+  const auto& comp = simulation.mc_unit->domain.data();
 
-  // std::cout << "Starting number particle to process: " << params.n_particles
-  //           << std::endl;
-  // std::cout << "Ending number particle to process: "
-  //           << process_size * exec.n_rank << "(" << process_size << "*"
-  //           << exec.n_rank << ")" << std::endl;
 
-  // std::cout << "Number living particle : " << count << std::endl;
-  // std::cout << "\r\n-------\r\n" << std::endl;
+  std::unordered_map<std::string, std::vector<model_properties_t>>
+      aggregated_values;
+  const auto size = distribution.size();
+  std::unordered_map<std::string, std::vector<double>> spatial;
+
+  const auto &data = simulation.mc_unit->container.to_process.data();
+
+  const auto n_particle = data.size();
+
+  const auto prop_1 = model_properties(data.front());
+
+  for (const auto &[key, _value] : prop_1)
+  {
+    aggregated_values[key].resize(n_particle);
+    spatial[key].resize(distribution.size());
+  }
+
+#pragma omp parallel for shared(aggregated_values,                             \
+                                    n_particle,                                \
+                                    model_properties,                          \
+                                    data,                                      \
+                                    spatial,                                   \
+                                    size,comp) default(none)
+  for (size_t i = 0; i < n_particle; ++i)
+  {
+    auto prop = model_properties(data[i]);
+    const size_t i_container = data[i].current_container;
+
+    for (const auto &[key, value] : prop)
+    {
+      aggregated_values[key][i] = value;
+#pragma omp critical
+      {
+        if (const double *val = std::get_if<double>(&value))
+        {
+          spatial[key][i_container] += *val / static_cast<double>(comp[i_container].n_cells);
+        }
+      }
+    }
+  }
+
   if (exporter != nullptr)
   {
-    exporter->write_final_results(simulation,distribution);
+    exporter->write_final_results(simulation, distribution, aggregated_values,spatial);
   }
-
-  // if (exec.n_rank == 1)
-  // {
-  //   assert(count == process_size - death_events);
-  //   assert(count == params.n_particles + new_events - death_events);
-
-  // }
-
-  // TODO
 }
 
 void show(Simulation::SimulationUnit &simulation)
 {
 
-  std::vector<double>
-  mass(simulation.mc_unit->domain.getNumberCompartments()); double totmass =
-  0.;
+  std::vector<double> mass(simulation.mc_unit->domain.getNumberCompartments());
+  double totmass = 0.;
 
   auto d = simulation.mc_unit->domain.getDistribution();
 
-
-    for (auto &&i : d)
+  for (auto &&i : d)
   {
     std::cout << i << " ";
     // count += i;
   }
   std::cout << '\n';
 
-  // for(auto&& i : simulation.mc_unit->domain)
-  // {
-  //   std::cout<<i.volume_liq<<",";
-  // }
-  // std::cout<<"\r\n";
-  // // std::for_each(simulation.mc_container->to_process.begin(),
-  // //               simulation.mc_container->to_process.end(),
-  // //               [&mass, &totmass](auto &&p)
-  // //               {
-  // //                 auto &model = std::any_cast<LightModel &>(p.data);
-  // //                 totmass += model.mass * p.weight;
-  // //                 mass[p.current_container] += model.mass * p.weight;
-  // //               });
-
-  // std::cout << simulation.mc_unit->domain.getTotalVolume() * 1000 <<
-  // std::endl; auto concentration = totmass /
-  // (simulation.mc_unit->domain.getTotalVolume()); std::cout << "total mass: "
-  // << totmass << "\r\n"
-  //           << "Mean concentration: " << concentration << "\r\n\r\\n";
-
-  // for (size_t i = 0; i < simulation.mc_unit->domain.getNumberCompartments();
-  //      ++i)
-  // {
-  //   double bio_concentrations =
-  //       mass[i] / (simulation.mc_unit->domain[i].volume_liq);
-  //   std::cout << bio_concentrations << " | ";
-  // }
-  // std::cout << std::endl;
 }
 
 void save_results(ExecInfo &exec,

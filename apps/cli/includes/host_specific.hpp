@@ -8,9 +8,9 @@
 #include <memory>
 #include <simulation/simulation.hpp>
 
-void host_process(ExecInfo &exec,
+void host_process(const ExecInfo &exec,
                   Simulation::SimulationUnit &simulation,
-                  SimulationParameters &params,
+                  const SimulationParameters &params,
                   std::unique_ptr<Simulation::FlowMapTransitioner>&& transitioner);
 
 void main_loop(const SimulationParameters &params,

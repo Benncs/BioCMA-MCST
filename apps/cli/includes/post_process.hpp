@@ -4,11 +4,11 @@
 #include <simulation/simulation.hpp>
 #include <data_exporter.hpp>
 
-void save_results(ExecInfo& exec,SimulationParameters &params,
+void save_results(const ExecInfo& exec,const SimulationParameters &params,
                   Simulation::SimulationUnit &simulation);
 
 
-void post_process(ExecInfo& exec,SimulationParameters &params,
+void post_process(const ExecInfo& exec,const SimulationParameters &params,
                   Simulation::SimulationUnit &simulation,std::unique_ptr<DataExporter>& exporter);
 
 

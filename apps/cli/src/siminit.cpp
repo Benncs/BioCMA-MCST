@@ -27,7 +27,7 @@ init_state(SimulationParameters &params,
            std::unique_ptr<CmaRead::FlowIterator> &flow_handle,
            const CmtCommons::cma_exported_paths_t &paths);
 
-static void init_host_only(ExecInfo &info,
+static void init_host_only(const ExecInfo &info,
                            SimulationParameters &params,
                            std::unique_ptr<CmaRead::FlowIterator> &_flow_handle,
                            CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
@@ -35,10 +35,9 @@ static void init_host_only(ExecInfo &info,
                            std::vector<double> &gas_volume,
                            std::vector<size_t> &worker_neighbor_data);
 
-Simulation::SimulationUnit
-init_simulation(ExecInfo &info,
+std::unique_ptr<Simulation::SimulationUnit>
+init_simulation(const ExecInfo &info,
                 SimulationParameters &params,
-
                 std::unique_ptr<Simulation::FlowMapTransitioner> &transitioner,
                 KModel model,
                 MC::DistributionVariantInt &&initial_particle_distribution)
@@ -89,7 +88,7 @@ init_simulation(ExecInfo &info,
   bool tpf = info.current_rank == 0 && params.is_two_phase_flow;
 
   auto simulation =
-      Simulation::SimulationUnit(info,
+      std::make_unique<Simulation::SimulationUnit>(info,
                                  std::move(mc_unit),
                                  gas_volume,
                                  liq_volume,
@@ -111,7 +110,7 @@ init_simulation(ExecInfo &info,
   return simulation;
 }
 
-static void init_host_only(ExecInfo &info,
+static void init_host_only(const ExecInfo &info,
                            SimulationParameters &params,
                            std::unique_ptr<CmaRead::FlowIterator> &_flow_handle,
                            CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
@@ -150,6 +149,9 @@ static void init_host_only(ExecInfo &info,
     params.d_t = (params.user_params.delta_time == 0.)
                      ? _flow_handle->MinLiquidResidenceTime() / 100.
                      : params.user_params.delta_time;
+  }
+  else {
+  params.d_t = params.user_params.delta_time;
   }
 
   // const auto n_t = static_cast<size_t>(params.final_time / params.d_t) + 1;

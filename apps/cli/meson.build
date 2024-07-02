@@ -22,6 +22,7 @@ dep_all = [
   mc_dependency,
   common_dependecy,
   thread_dep,
+  model_selection_dep,
 ]
 
 
@@ -77,7 +78,7 @@ executable(
 if use_dynamic_module
   dep_dynamic_module = [dep_all, simu_dyn_dependency, py_dynamic_module]
   name = name + '_dyn'
-
+  
   lib_app_dyn = static_library(
     name,
     lib_sources,

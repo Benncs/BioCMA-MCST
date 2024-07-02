@@ -3,7 +3,7 @@
 namespace MC
 {
 
-  std::unique_ptr<MonteCarloUnit> init(ExecInfo &info,
+  std::unique_ptr<MonteCarloUnit> init(const ExecInfo &info,
                       size_t n_particles,
                       std::span<double> volumes,
                      CmaRead::Neighbors::Neighbors_const_view_t &neighbors)

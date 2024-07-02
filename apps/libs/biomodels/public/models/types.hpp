@@ -6,6 +6,9 @@
 #include <span>
 
 #include <Eigen/Core>
+#include <string>
+#include <variant>
+#include <unordered_map> 
 
 #ifdef USE_PYTHON_MODULE
 #  include <functional>
@@ -36,12 +39,24 @@ using ModelDebug = std::function<void(MC::Particles &)>;
 inline void defaut_dgb(MC::Particles & /*unused*/){};
 // #endif
 
+
+using model_properties_t = std::variant<double, int, std::string>;
+
+using model_properties_detail_t = std::unordered_map<std::string, model_properties_t>;
+
+using ModelGetProperties =
+    std::function<model_properties_detail_t(const MC::Particles &)>;
+
+
+inline model_properties_detail_t defaut_properties(const MC::Particles & /*unused*/){return {};};
+
 struct KModel
 {
   ModelInit init_kernel;
   ModelUpdate update_kernel;
   ModelDivision division_kernel;
   ModelContribution contribution_kernel;
+  ModelGetProperties get_properties = defaut_properties;
   // #ifdef DEBUG
   // ModelDebug f_dbg = defaut_dgb;
   // #endif

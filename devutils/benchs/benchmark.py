@@ -19,7 +19,7 @@ import sys
 from wakepy import keep
 
 
-BENCH_OMP_THREADS = [1, 4,8,12]  # List of thread numbers when running scaling
+BENCH_OMP_THREADS = [1,6,8,12]  # List of thread numbers when running scaling
 EXECUTABLE_PATH = "./builddir/release/apps/cli"  # Path to executable to run
 EXECUTABLE_NAME = "biocma_mcst_cli_app"  # Name of executable to run
 BENCH_SCRIPT_PATH = "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
@@ -35,7 +35,7 @@ def execute(n_thread,script_path, command):
     env_var = os.environ.copy()
     env_var["OMP_NUM_THREADS"]=str(n_thread)
   
-    commands = [BENCH_SCRIPT_PATH, *command]
+    commands = ['mpiexec','--allow-run-as-root','-n','2',BENCH_SCRIPT_PATH, *command]
 
     result = subprocess.run(commands, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, env=env_var)
     if(result.returncode!=0):
@@ -100,7 +100,46 @@ def plot_thread_vs_time(threads,particles,iterations,records):
               figs.append(f)
     return figs
 
+def plot_scaling(threads, particles, iterations, records):
+    unique_particles = np.unique(particles)
+    unique_iterations = np.unique(iterations)
+    figs = []
 
+    # Plot strong scaling efficiency (speedup) vs. number of threads for each particle and iteration combination
+    for particle in unique_particles:
+        for iteration in unique_iterations:
+            f = plt.figure()
+            plt.title(f"Speedup=f(num_thread) for n_particle={particle}, iteration={iteration}")
+            mask = (particles == particle) & (iterations == iteration)
+            if np.count_nonzero(mask) > 3:
+                # Extract the relevant data
+                selected_threads = threads[mask]
+                selected_times = records[mask]
+
+                # Find the time for single-thread execution (assuming we have this data point)
+                single_thread_time = selected_times[selected_threads == 1]
+                
+                if single_thread_time.size == 0:
+                    continue  # Skip if there's no single-thread data
+
+                single_thread_time = single_thread_time[0]  # There should be exactly one such entry
+                
+                # Compute speedup
+                speedup = single_thread_time / selected_times
+                
+                # Sort by the number of threads for a proper plot
+                sorted_indices = np.argsort(selected_threads)
+                sorted_threads = selected_threads[sorted_indices]
+                sorted_speedup = speedup[sorted_indices]
+
+                # Plot the speedup
+                plt.plot(sorted_threads, sorted_speedup, '-o')
+                plt.xlabel("Number of Threads")
+                plt.ylabel("Speedup (T(1)/T(n))")
+                plt.grid(True)
+                figs.append(f)
+
+    return figs
 def plot_particle_vs_time(threads, particles, iterations, records):
     unique_threads = np.unique(threads)
     unique_iterations = np.unique(iterations)
@@ -143,7 +182,8 @@ def plot_csv():
 
     with PdfPages(OUTPUT_PDF) as pdf:
       add_to_pdf(pdf,plot_thread_vs_time(threads[pre_mask],particles[pre_mask],iterations[pre_mask],records[pre_mask]))
-      add_to_pdf(pdf,plot_particle_vs_time(threads,particles,iterations,records))
+    #   add_to_pdf(pdf,plot_particle_vs_time(threads,particles,iterations,records))
+      add_to_pdf(pdf,plot_scaling(threads,particles,iterations,records))
 
 
 
@@ -166,10 +206,11 @@ def main(args):
         particle_n2 = float(args[2])
         n_scale = int(args[3])
         try:
-            with keep.running():
-                n_particles = np.linspace(particle_n1, particle_n2, num=n_scale, dtype=np.int32)
-                for number in n_particles:
-                    do_scale(number)
+            raise Exception("")
+            # with keep.running():
+            #     n_particles = np.linspace(particle_n1, particle_n2, num=n_scale, dtype=np.int32)
+            #     for number in n_particles:
+            #         do_scale(number)
         except:
             n_particles = np.linspace(particle_n1, particle_n2, num=n_scale, dtype=np.int32)
             for number in n_particles:

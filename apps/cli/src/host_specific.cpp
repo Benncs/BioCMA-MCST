@@ -7,6 +7,7 @@
 #include <simulation/simulation.hpp>
 #include <simulation/update_flows.hpp>
 #include <sync.hpp>
+#include <post_process.hpp>
 
 // constexpr size_t n_particle_trigger_parralel = 1e6;
 
@@ -55,29 +56,60 @@ update_progress_bar(size_t total, size_t currentPosition, bool verbose)
     mpi_payload.send(__macro_j);                                               \
   }
 
+#define SEND_MPI_SIG_STOP host_dispatch(exec, MPI_W::SIGNALS::STOP);
+
+void host_process(
+    const ExecInfo &exec,
+    Simulation::SimulationUnit &simulation,
+    const SimulationParameters &params,
+    std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner)
+{
+  auto initial_distribution = simulation.mc_unit->domain.getDistribution();
+  auto de = DataExporter::factory(exec,
+                                  params,
+                                  params.results_file_name,
+                                  simulation.getDim(),
+                                  params.user_params.number_exported_result,
+                                  initial_distribution);
+
+  show(simulation);
+ 
+  main_loop(params, exec, simulation, std::move(transitioner), de);
+
+  show(simulation);
+
+  SEND_MPI_SIG_STOP;
+  last_sync(exec, simulation);
+
+  post_process(exec, params, simulation, de);
+}
+
+
 void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
                Simulation::SimulationUnit &simulation,
                std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
                std::unique_ptr<DataExporter> &exporter)
 {
-
+    
   const double d_t = params.d_t;
-
+   
   const size_t n_iter_simulation = transitioner->get_n_timestep();
 
   const size_t dump_number =
       std::min(n_iter_simulation, static_cast<size_t>(exporter->n_iter)) - 1;
 
+
   const size_t dump_interval = (n_iter_simulation) / (dump_number) + 1;
 
   size_t dump_counter = 0;
   double current_time = 0.;
-
+ 
   MPI_W::HostIterationPayload mpi_payload;
   const auto *current_reactor_state = &transitioner->get_unchecked(0);
 
   transitioner->update_flow(simulation);
+ 
 
   exporter->append(current_time,
                    simulation.getCliqData(),

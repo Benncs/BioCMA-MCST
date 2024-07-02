@@ -57,12 +57,12 @@ void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
       MPI_W::gather_reduce<size_t>(simulation.mc_unit->container.to_process.size(), exec.n_rank);
   
 
-  auto tot = MPI_W::gather<size_t>(local, exec.n_rank, 0);
+  auto tot_distrib = MPI_W::gather<size_t>(local, exec.n_rank, 0);
 
   if (exec.current_rank == 0)
   {
     tot_events = MC::EventContainer::reduce(total_contrib_data);
-    auto reduced = MC::ReactorDomain::reduce(tot, local_size, exec.n_rank);
+    auto reduced = MC::ReactorDomain::reduce(tot_distrib, local_size, exec.n_rank);
     simulation.mc_unit->domain = std::move(reduced);
     std::cout<<"nparticle "<<total_particle<<std::endl;
     // simulation.mc_unit->container.to_process.data() = total_particle;

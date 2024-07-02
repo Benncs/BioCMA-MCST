@@ -13,7 +13,7 @@ struct Monod
   double interdivision_time;
   double age;
   double phi;
-  double l=6e-6;
+  double l;
 };
 
 void init_monod_model_(MC::Particles &p);
@@ -26,6 +26,8 @@ MC::Particles division_mond_model(MC::Particles &p);
 
 void contribution_mond_model(MC::Particles &p, Eigen::MatrixXd &contribution);
 
-KModel get_mond_model();
+model_properties_detail_t monod_properties(const MC::Particles &);
+
+KModel get_model_monod();
 
 #endif

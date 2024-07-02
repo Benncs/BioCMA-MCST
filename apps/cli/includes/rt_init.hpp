@@ -32,6 +32,6 @@ void set_openmp_threads(int rank,
 
 ExecInfo runtime_init(int argc, char **argv, SimulationParameters &params);
 
-void register_run(ExecInfo &exec, SimulationParameters &params);
+void register_run(const ExecInfo &exec, SimulationParameters &params);
 
 #endif //__RUNTIME_INIT_HPP__

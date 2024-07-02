@@ -10,7 +10,9 @@
 #include <Eigen/Core>
 #include <chrono>
 #include <nl_types.h>
+#include <numeric>
 #include <stdexcept>
+#include <string_view>
 #include <tuple>
 
 #include <iomanip>
@@ -32,9 +34,9 @@ std::string date_time()
   return ss.str();
 }
 
-DataExporter::DataExporter(ExecInfo &info,
-                           SimulationParameters &params,
-                           std::string &_filename,
+DataExporter::DataExporter(const ExecInfo &info,
+                           const SimulationParameters &params,
+                           std::string_view _filename,
                            std::tuple<size_t, size_t> dim,
                            size_t niter,
                            std::span<size_t> distribution)
@@ -60,17 +62,23 @@ DataExporter::DataExporter(ExecInfo &info,
 
 void DataExporter::write_final_results(
     const Simulation::SimulationUnit &simulation,
-    std::span<size_t> distribution)
+    std::span<size_t> distribution,
+    const std::unordered_map<std::string, std::vector<model_properties_t>>
+        &properties,
+    const std::unordered_map<std::string, std::vector<double>> &spatial_prop)
 {
+
+  size_t n_part = std::accumulate(distribution.begin(), distribution.end(), 0);
+
   ExportData data = {
-      simulation.mc_unit->container.to_process.size(),
+      n_part,
       simulation.getCliqData(),
       simulation.getCgasData(),
       simulation.mc_unit->ts_events.data(),
       simulation.getDim(),
   };
 
-  write_final_results(data, distribution);
+  write_final_results(data, distribution, properties, spatial_prop);
 }
 
 #ifdef USE_HIGHFIVE
@@ -78,9 +86,9 @@ void DataExporter::write_final_results(
 class DataExportHighFive : public DataExporter
 {
 public:
-  DataExportHighFive(ExecInfo &info,
-                     SimulationParameters &params,
-                     std::string &_filename,
+  DataExportHighFive(const ExecInfo &info,
+                     const SimulationParameters &params,
+                     std::string_view _filename,
                      std::tuple<size_t, size_t> dim,
                      size_t niter,
                      std::span<size_t> distribution);
@@ -93,22 +101,26 @@ public:
               std::span<const double> volume_gas) override;
 
 protected:
-  void write_final_results(ExportData &data,
-                           std::span<size_t> distribution) override;
+  void write_final_results(
+      ExportData &data,
+      std::span<size_t> distribution,
+      const std::unordered_map<std::string, std::vector<model_properties_t>> &,
+      const std::unordered_map<std::string, std::vector<double>> &) override;
 
 private:
   static void write_attributes(HighFive::File &file, export_metadata_kv &md);
 
-  static void
-  write_initial(HighFive::File &file, ExecInfo &info, export_initial_kv &kv);
+  static void write_initial(HighFive::File &file,
+                            const ExecInfo &info,
+                            export_initial_kv &kv);
 };
 
 #endif
 
 std::unique_ptr<DataExporter>
-DataExporter::factory(ExecInfo &info,
-                      SimulationParameters &params,
-                      std::string &_filename,
+DataExporter::factory(const ExecInfo &info,
+                      const SimulationParameters &params,
+                      std::string_view _filename,
                       std::tuple<size_t, size_t> dim,
                       size_t niter,
                       std::span<size_t> distribution)
@@ -144,7 +156,7 @@ void DataExportHighFive::write_attributes(HighFive::File &file,
 }
 
 void DataExportHighFive::write_initial(HighFive::File &file,
-                                       ExecInfo &info,
+                                       const ExecInfo &info,
                                        export_initial_kv &md)
 {
 
@@ -166,9 +178,9 @@ void DataExportHighFive::write_initial(HighFive::File &file,
   file.createDataSet("misc/n_rank", info.n_rank);
 }
 
-DataExportHighFive::DataExportHighFive(ExecInfo &info,
-                                       SimulationParameters &params,
-                                       std::string &_filename,
+DataExportHighFive::DataExportHighFive(const ExecInfo &info,
+                                       const SimulationParameters &params,
+                                       std::string_view _filename,
                                        std::tuple<size_t, size_t> dim,
                                        size_t niter,
                                        std::span<size_t> distribution)
@@ -179,7 +191,7 @@ DataExportHighFive::DataExportHighFive(ExecInfo &info,
   write_attributes(file, metadata);
   prepare();
 }
-  constexpr size_t hdf5_max_compression = 9; 
+constexpr size_t hdf5_max_compression = 9;
 void DataExportHighFive::prepare()
 {
   HighFive::File file(filename, HighFive::File::ReadWrite);
@@ -188,7 +200,8 @@ void DataExportHighFive::prepare()
                                 const std::vector<size_t> &dims,
                                 const std::vector<size_t> &max_dims,
                                 const HighFive::DataType &dtype,
-                                const std::vector<hsize_t> &chunk_dims,size_t compression =hdf5_max_compression)
+                                const std::vector<hsize_t> &chunk_dims,
+                                size_t compression = hdf5_max_compression)
   {
     HighFive::DataSpace dataspace(dims, max_dims);
     HighFive::DataSetCreateProps props;
@@ -220,8 +233,7 @@ void DataExportHighFive::prepare()
                  {n_iter, n_col},
                  size_t_type,
                  {1, n_col});
-  create_dataset(
-      "records/time", {1}, {n_iter}, double_type, {1});
+  create_dataset("records/time", {1}, {n_iter}, double_type, {1});
 
   // HighFive::DataSpace dataspace = HighFive::DataSpace(
   //     {
@@ -319,53 +331,79 @@ void DataExportHighFive::append(double t,
     // //     .write_raw(t);
     // counter++;
 
-     HighFive::File file(filename, HighFive::File::ReadWrite);
+    HighFive::File file(filename, HighFive::File::ReadWrite);
 
-        auto write_dataset = [&file]<typename T>(const std::string& name, 
-                                           const std::vector<size_t>& new_size, 
-                                           const std::vector<size_t>& select_start, 
-                                           const std::vector<size_t>& select_size, 
-                                           std::span<T> data) {
-            auto dataset = file.getDataSet(name);
-            dataset.resize(new_size);
-            dataset.select(select_start, select_size).write_raw(data.data());
-        };
+    auto write_dataset =
+        [&file]<typename T>(const std::string &name,
+                            const std::vector<size_t> &new_size,
+                            const std::vector<size_t> &select_start,
+                            const std::vector<size_t> &select_size,
+                            std::span<T> data)
+    {
+      auto dataset = file.getDataSet(name);
+      dataset.resize(new_size);
+      dataset.select(select_start, select_size).write_raw(data.data());
+    };
 
-        auto write_dataset_vector = [&file]<typename T>(const std::string& name, 
-                                           const std::vector<size_t>& new_size, 
-                                           const std::vector<size_t>& select_start, 
-                                           const std::vector<size_t>& select_size, 
-                                           const std::vector<T>& data) {
-            auto dataset = file.getDataSet(name);
-            dataset.resize(new_size);
-            dataset.select(select_start, select_size).write_raw(data.data());
-        };
+    auto write_dataset_vector =
+        [&file]<typename T>(const std::string &name,
+                            const std::vector<size_t> &new_size,
+                            const std::vector<size_t> &select_start,
+                            const std::vector<size_t> &select_size,
+                            const std::vector<T> &data)
+    {
+      auto dataset = file.getDataSet(name);
+      dataset.resize(new_size);
+      dataset.select(select_start, select_size).write_raw(data.data());
+    };
 
-        auto write_dataset_real = [&file]<typename T>(const std::string& name, 
-                                           const std::vector<size_t>& new_size, 
-                                           const std::vector<size_t>& select_start, 
-                                           const std::vector<size_t>& select_size, 
-                                           const T* data) {
-            auto dataset = file.getDataSet(name);
-            dataset.resize(new_size);
-            dataset.select(select_start, select_size).write_raw(data);
-        };
+    auto write_dataset_real =
+        [&file]<typename T>(const std::string &name,
+                            const std::vector<size_t> &new_size,
+                            const std::vector<size_t> &select_start,
+                            const std::vector<size_t> &select_size,
+                            const T *data)
+    {
+      auto dataset = file.getDataSet(name);
+      dataset.resize(new_size);
+      dataset.select(select_start, select_size).write_raw(data);
+    };
 
-        write_dataset("records/concentration_liquid", {counter + 1, n_col, n_row}, {counter, 0, 0}, {1, n_col, n_row}, concentration_liquid);
-        write_dataset("records/liquid_volume", {counter + 1, n_col}, {counter, 0}, {1, n_col}, liquid_volume);
-        write_dataset("records/gas_volume", {counter + 1, n_col}, {counter, 0}, {1, n_col}, volume_gas);
-        write_dataset_vector("records/distribution", {counter + 1, n_col}, {counter, 0}, {1, n_col}, distribution);
-        write_dataset_real("records/time", {counter + 1}, {counter}, {1}, &t);
+    write_dataset("records/concentration_liquid",
+                  {counter + 1, n_col, n_row},
+                  {counter, 0, 0},
+                  {1, n_col, n_row},
+                  concentration_liquid);
+    write_dataset("records/liquid_volume",
+                  {counter + 1, n_col},
+                  {counter, 0},
+                  {1, n_col},
+                  liquid_volume);
+    write_dataset("records/gas_volume",
+                  {counter + 1, n_col},
+                  {counter, 0},
+                  {1, n_col},
+                  volume_gas);
+    write_dataset_vector("records/distribution",
+                         {counter + 1, n_col},
+                         {counter, 0},
+                         {1, n_col},
+                         distribution);
+    write_dataset_real("records/time", {counter + 1}, {counter}, {1}, &t);
 
-        counter++;
+    counter++;
   }
   catch (...)
   {
   }
 }
 
-void DataExportHighFive::write_final_results(ExportData &data,
-                                             std::span<size_t> distribution)
+void DataExportHighFive::write_final_results(
+    ExportData &data,
+    std::span<size_t> distribution,
+    const std::unordered_map<std::string, std::vector<model_properties_t>>
+        &props,
+    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
 
 {
 
@@ -400,6 +438,47 @@ void DataExportHighFive::write_final_results(ExportData &data,
 
   file.createDataSet<std::string>("biological_model/description ",
                                   std::string("Model description"));
+
+  HighFive::DataSetCreateProps ds_props;
+  ds_props.add(HighFive::Chunking(props.size()));
+  ds_props.add(HighFive::Shuffle());
+  ds_props.add(HighFive::Deflate(hdf5_max_compression));
+  // Create datasets using the aggregated values
+  for (const auto &[key, values] : props)
+  {
+    // Determine the type of the values in the vector and call createDataSet
+    // accordingly
+    std::visit(
+        [&file, ds_props, key = std::move(key), values = std::move(values)](
+            const auto &sample_val)
+        {
+          using T = std::decay_t<decltype(sample_val)>;
+          std::vector<T> typed_values;
+          typed_values.reserve(values.size());
+
+          for (const auto &val : values)
+          {
+            if (auto *v = std::get_if<T>(&val))
+            {
+              typed_values.push_back(*v);
+            }
+          }
+
+          file.createDataSet("biological_model/" + key, typed_values, ds_props);
+        },
+        values.front()); // Use the first value's type to determine the type for
+                         // the vector
+  }
+
+  //   HighFive::DataSetCreateProps _ds_props;
+  // _ds_props.add(HighFive::Chunking(50));
+  // _ds_props.add(HighFive::Shuffle());
+  // _ds_props.add(HighFive::Deflate(hdf5_max_compression));
+  for (const auto &[key, values] : spatial_props)
+  {
+    file.createDataSet("biological_model/spatial/" + key, values);
+  }
+  
 }
 
 #endif

@@ -99,6 +99,6 @@ MC::Particles division_simple_model(MC::Particles &p);
 
 void contribution_simple_model(MC::Particles &p, Eigen::MatrixXd &contribution);
 
-KModel get_simple_model();
+KModel get_model_simple();
 
 #endif //__SIMPLE_MODEL_HPP__

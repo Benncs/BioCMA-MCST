@@ -18,6 +18,7 @@ struct UserControlParameters
   std::string results_file_name;
   int n_thread;
   uint32_t number_exported_result;
+  std::string model_name;
   static UserControlParameters m_default();
 };
 

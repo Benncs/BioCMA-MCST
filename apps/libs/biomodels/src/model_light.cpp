@@ -40,7 +40,7 @@ void contribution_light_model(MC::Particles &p, Eigen::MatrixXd &contribution)
   // NOP
 }
 
-KModel get_light_model()
+KModel get_model_light()
 {
   return {init_light_model_,
           update_light_model,
