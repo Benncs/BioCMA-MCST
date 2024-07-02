@@ -13,10 +13,10 @@
 
 <control>
   <cma_case_path>/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/0d/</cma_case_path>
-  <final_time>1000</final_time>
-  <numper_particle>100000</numper_particle>
+  <final_time>12000</final_time>
+  <numper_particle>1000</numper_particle>
   <delta_time>0.5</delta_time>
-  <results_file_name></results_file_name>
+  <results_file_name>test_distrib</results_file_name>
   <number_exported_result>1000</number_exported_result>
   <model_name>model_monod</model_name>
 </control>

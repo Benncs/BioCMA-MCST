@@ -9,12 +9,12 @@
 #include <random>
 
 
-constexpr double interdivision_time = 300;//20 * 60;
+constexpr double interdivision_time = 20 * 60;
 constexpr double ln2 = 0.6931471805599453;
 constexpr double Ks = 486e-9;
 constexpr double k_pts = 1e-3;
 constexpr double phi_pts_max =
-    4.454e-12 * 1e-3 / 3600 * 0.1; //*0.1 to divide cumption by 10;
+    4.454e-12 * 1e-3 / 3600 ; //*0.1 to divide cumption by 10;
 constexpr double YXS = 0.3;
 
 std::random_device rd{};
@@ -23,7 +23,7 @@ static std::uniform_real_distribution<double> __model_dist(0., 1.);
 
 static std::normal_distribution<double> __model_n_dist(interdivision_time, 120);
 
-static std::normal_distribution<double> n_dist(0.5, 0.1);
+static std::normal_distribution<double> n_dist(1, 0.1);
 
 static double phi_pts(double S)
 {

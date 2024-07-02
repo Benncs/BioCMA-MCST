@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import numpy as np
 import h5py
-from typing import Optional
+from typing import Dict, Optional
 
 @dataclass
 class RawResults:
@@ -34,6 +34,7 @@ class RawResults:
     records_distribution: Optional[np.ndarray] = None
     t: Optional[np.ndarray] = None
     n_t: Optional[int] = None
+    bioparam:Optional[Dict[str,np.ndarray]] = None
    
 
 def __import_v1(file):
@@ -76,6 +77,30 @@ def __import_v2(file):
         results.n_t = results.records_distribution.shape[0]
     return results
 
+
+def __import_v3(file):
+    results = RawResults(version=2,distribution=None, initial_distribution=None, cliq=None, data=None, tf=None, dt=None,
+                         npart=None, records_distribution=None, t=None, n_t=None)
+    results.distribution = np.array(file.get("records/distribution"))
+    results.volume_gas = np.array(file.get("records/gas_volume"))
+    results.volume_liquid = np.array(file.get("records/liquid_volume"))
+    results.data = np.array(file.get("records/concentration_liquid"))
+    results.tf = np.array(file.get('initial_parameters/final_time'))
+    results.dt = np.array(file.get('initial_parameters/delta_time'))
+    results.records_distribution = np.array(file.get("records/distribution"))
+    results.t =  np.array(file.get("records/time"))
+
+    bio = file.get("biological_model",None)
+    if bio is not None:
+        results.bioparam = {}
+        for key in bio:
+            results.bioparam[key]=np.array(bio[key])
+
+    # Calculate n_t if records_distribution is available
+    if results.records_distribution is not None:
+        results.n_t = results.records_distribution.shape[0]
+    return results
+
 def import_results(path:str)->RawResults:
     """
     Import results from an HDF5 file and store them in a RawResults dataclass.
@@ -101,6 +126,8 @@ def import_results(path:str)->RawResults:
                 return __import_v1(file)
             elif version==2:
                 return __import_v2(file)
+            elif version==3:
+                return __import_v3(file)
             else:
                 raise Exception("Unknown file version")
             

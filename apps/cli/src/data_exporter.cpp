@@ -1,5 +1,6 @@
 #include "common/simulation_parameters.hpp"
 
+#include "highfive/H5DataSpace.hpp"
 #include "models/monod.hpp"
 #include "simulation/simulation.hpp"
 #include <algorithm>
@@ -434,50 +435,73 @@ void DataExportHighFive::write_final_particle_data(
   ds_props.add(HighFive::Chunking(props.size()));
   ds_props.add(HighFive::Shuffle());
   ds_props.add(HighFive::Deflate(hdf5_max_compression));
-  // Create datasets using the aggregated values
+
   for (const auto &[key, values] : props)
   {
-    // Determine the type of the values in the vector and call createDataSet
-    // accordingly
+    auto v1 = values[0];
+    const auto size = values.size();
+
     std::visit(
-        [&file, ds_props, key = std::move(key), values = std::move(values)](
+        [&file, key = std::move(key), values = std::move(values), size](
             const auto &sample_val)
         {
           using T = std::decay_t<decltype(sample_val)>;
-          if constexpr (std::is_same_v<T, double> || std::is_same_v < T, int>)
+          if constexpr (std::is_same_v<T, double>)
           {
-            std::vector<size_t> dims{values.size()};
+            std::vector<size_t> dim({size});
+            std::vector<double> non_zero_values;
+            for (const auto &value : values)
+            {
+              if (std::holds_alternative<double>(value))
+              {
+                double val = std::get<double>(value);
+                if (val != 0.0)
+                {
+                  non_zero_values.push_back(val);
+                }
+              }
+            }
 
-            const auto *raw = reinterpret_cast<const T *>(values.data());
-            auto ds = file.createDataSet<T>("biological_model/" + key,
-                                            HighFive::DataSpace(dims));
-            ds.write_raw(raw);
-            //  file.createDataSet("biological_model/" + key, raw, ds_props);
+            auto ds = file.createDataSet("biological_model/" + key,
+                                                 non_zero_values);
           }
-          // std::vector<T> typed_values;
-          // typed_values.reserve(values.size());
-
-          // for (const auto &val : values)
-          // {
-          //   if (auto *v = std::get_if<T>(&val))
-          //   {
-          //     typed_values.push_back(*v);
-          //   }
-          // }
-
-          // file.createDataSet("biological_model/" + key, values, ds_props);
+          else
+          {
+            std::cout << sample_val << std::endl;
+          }
         },
-        values.front()); // Use the first value's type to determine the type for
-                         // the vector
+        v1);
   }
+  // std::visit(
+  //     [&file, ds_props, key = std::move(key), values = std::move(values)](
+  //         const auto &sample_val)
+  //     {
+  //       const auto size = values.size();
+  //       using T = std::decay_t<decltype(sample_val)>;
+  //       if constexpr (std::is_same_v<T, double>)
+  //       {
+  //         std::vector<size_t> dim({size});
+  //         const double *raw = reinterpret_cast<const double
+  //         *>(values.data());
 
-  //   HighFive::DataSetCreateProps _ds_props;
-  // _ds_props.add(HighFive::Chunking(50));
-  // _ds_props.add(HighFive::Shuffle());
-  // _ds_props.add(HighFive::Deflate(hdf5_max_compression));
+  //         double* non_cst_raw = const_cast<double*>(raw);
+
+  //         auto ds = file.createDataSet<double>("biological_model/" + key,
+  //         HighFive::DataSpace(dim));
+
+  //         ds.write_raw(non_cst_raw);
+  //       }
+  //     },
+  //     values.front());
+  // }
+
+  HighFive::DataSetCreateProps _ds_props;
+  _ds_props.add(HighFive::Chunking(1));
+  _ds_props.add(HighFive::Shuffle());
+  _ds_props.add(HighFive::Deflate(hdf5_max_compression));
   for (const auto &[key, values] : spatial_props)
   {
-    file.createDataSet("biological_model/spatial/" + key, values);
+    file.createDataSet("biological_model/spatial/" + key, values, _ds_props);
   }
 }
 
