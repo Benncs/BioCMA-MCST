@@ -34,7 +34,7 @@ int redirect_stdout(std::streambuf *&original_buffer,
     fflush(stdout); // Flush the buffer to ensure all previous output is written
     int original_stdout_fd =
         dup(fileno(stdout)); // Save the original file descriptor of stdout
-    freopen("/dev/null", "w", stdout); // Redirect stdout to /dev/null
+    auto *fd = freopen("/dev/null", "w", stdout); // Redirect stdout to /dev/null
 
     // Set the flag to indicate that redirection is active
     is_stdout_redirect = true;

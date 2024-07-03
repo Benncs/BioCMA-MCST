@@ -1,6 +1,6 @@
 #include "common/simulation_parameters.hpp"
 
-#include "highfive/H5DataSpace.hpp"
+
 #include "simulation/simulation.hpp"
 
 #include <data_exporter.hpp>
@@ -16,6 +16,7 @@
 #include <iomanip>
 
 #ifdef USE_HIGHFIVE
+#  include "highfive/H5DataSpace.hpp"
 #  include "highfive/H5File.hpp"
 #  include "highfive/H5PropertyList.hpp"
 #  include <Eigen/Dense>
