@@ -2,8 +2,7 @@ name: build_test
 'on':
   push:
     branches:
-      - main
-      - dev/0.0.4/**
+      - dev*
   pull_request:
     branches:
       - main
