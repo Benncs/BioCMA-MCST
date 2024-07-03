@@ -35,21 +35,20 @@ namespace Simulation
     delete ptr;
   }
 
-  void init_f_mat_liq(size_t i, CmaRead::L2DView<double>& liq)
+  void init_f_mat_liq(size_t i, CmaRead::L2DView<double> &liq)
   {
     if (i == 0)
     {
-      
-      liq(0,i)=9.;
-      
+
+      liq(0, i) = 9.;
     }
     else
     {
-      liq(0,i)=5.;
+      liq(0, i) = 5.;
     }
   }
 
-  void init_f_mat_gas(size_t i, CmaRead::L2DView<double>&& gas)
+  void init_f_mat_gas(size_t i, CmaRead::L2DView<double> &&gas)
   {
     gas(1, i) = 15e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
   }
@@ -92,20 +91,17 @@ namespace Simulation
   {
   }
 
-  SimulationUnit::SimulationUnit(
-      const ExecInfo &info,
-      std::unique_ptr<MC::MonteCarloUnit> &&_unit,
-      std::span<double> volumesgas,
-      std::span<double> volumesliq,
-      size_t n_species,
-      KModel _km,
-      bool _gas_flow)
+  SimulationUnit::SimulationUnit(const ExecInfo &info,
+                                 std::unique_ptr<MC::MonteCarloUnit> &&_unit,
+                                 std::span<double> volumesgas,
+                                 std::span<double> volumesliq,
+                                 size_t n_species,
+                                 KModel _km,
+                                 bool _gas_flow)
       : mc_unit(std::move(_unit)), is_two_phase_flow(_gas_flow),
         n_thread(info.thread_per_process), flow_liquid(nullptr),
         flow_gas(nullptr), kmodel(std::move(_km))
   {
-
-  
 
     if (this->mc_unit->extras.empty())
     {
@@ -170,36 +166,6 @@ namespace Simulation
                   });
   }
 
-  void SimulationUnit::post_init_container(
-      MC::DistributionVariantInt distribution_variant)
-  {
-    auto &to_process = mc_unit->container.to_process;
-
-    const size_t n_compartments = mc_unit->domain.getNumberCompartments();
-
-#pragma omp parallel default(none),                                            \
-    shared(to_process, n_compartments, distribution_variant)                   \
-    num_threads(this->n_thread)
-    {
-      auto prng = MC::PRNG::get_rng(omp_get_thread_num());
-      auto distribution =
-          MC::get_distribution_int<size_t>(distribution_variant);
-      const auto size_p = to_process.size();
-#pragma omp for schedule(static)
-      for (size_t i_p = 0; i_p < size_p; i_p++)
-      {
-
-        auto &&particle = to_process[i_p]; //*it;
-        particle.current_container = distribution(prng);
-
-        auto &i_container = mc_unit->domain[particle.current_container];
-
-        kmodel.init_kernel(particle);
-        __ATOM_INCR__(i_container.n_cells);
-      }
-    }
-  }
-
   void SimulationUnit::cycleProcess(const double d_t)
   {
 
@@ -253,7 +219,7 @@ namespace Simulation
                 MC::MonteCarloUnit &unit,
                 std::span<Eigen::MatrixXd> _contribs,
                 std::span<MC::ThreadPrivateData> _extras,
-                const KModel & _kmodel,
+                const KModel &_kmodel,
                 MC::Particles &particle,
                 auto &m_transition,
                 auto &cumulative_probability)

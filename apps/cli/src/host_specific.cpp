@@ -1,13 +1,16 @@
 
+#include "data_exporter.hpp"
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <cstddef>
 #include <host_specific.hpp>
+#include <memory>
 #include <mpi_w/wrap_mpi.hpp>
+#include <post_process.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/update_flows.hpp>
 #include <sync.hpp>
-#include <post_process.hpp>
+
 
 // constexpr size_t n_particle_trigger_parralel = 1e6;
 
@@ -36,8 +39,8 @@ update_progress_bar(size_t total, size_t currentPosition, bool verbose)
 }
 
 #ifdef DEBUG
-#  define DEBUG_INSTRUCTION 
-#    else
+#  define DEBUG_INSTRUCTION
+#else
 #  define DEBUG_INSTRUCTION
 #endif
 
@@ -64,26 +67,30 @@ void host_process(
     const SimulationParameters &params,
     std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner)
 {
-  auto initial_distribution = simulation.mc_unit->domain.getDistribution();
-  auto de = DataExporter::factory(exec,
-                                  params,
-                                  params.results_file_name,
-                                  simulation.getDim(),
-                                  params.user_params.number_exported_result,
-                                  initial_distribution);
+  std::unique_ptr<DataExporter> data_exporter;
+
+  {
+    auto initial_distribution = simulation.mc_unit->domain.getDistribution();
+    data_exporter =
+        DataExporter::factory(exec,
+                              params,
+                              params.results_file_name,
+                              simulation.getDim(),
+                              params.user_params.number_exported_result,
+                              initial_distribution);
+  }
 
   show(simulation);
- 
-  main_loop(params, exec, simulation, std::move(transitioner), de);
+
+  main_loop(params, exec, simulation, std::move(transitioner), data_exporter);
 
   show(simulation);
 
   SEND_MPI_SIG_STOP;
   last_sync(exec, simulation);
 
-  post_process(exec, params, simulation, de);
+  post_process(exec, params, simulation, data_exporter);
 }
-
 
 void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
@@ -91,25 +98,23 @@ void main_loop(const SimulationParameters &params,
                std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
                std::unique_ptr<DataExporter> &exporter)
 {
-    
+
   const double d_t = params.d_t;
-   
+
   const size_t n_iter_simulation = transitioner->get_n_timestep();
 
   const size_t dump_number =
-      std::min(n_iter_simulation, static_cast<size_t>(exporter->n_iter)) - 1;
-
+      std::min(n_iter_simulation, static_cast<size_t>(exporter->expectecNiteration())) - 1;
 
   const size_t dump_interval = (n_iter_simulation) / (dump_number) + 1;
 
   size_t dump_counter = 0;
   double current_time = 0.;
- 
+
   MPI_W::HostIterationPayload mpi_payload;
   const auto *current_reactor_state = &transitioner->get_unchecked(0);
 
   transitioner->update_flow(simulation);
- 
 
   exporter->append(current_time,
                    simulation.getCliqData(),
@@ -147,8 +152,6 @@ void main_loop(const SimulationParameters &params,
         FILL_PAYLOAD;
 
         MPI_DISPATCH_MAIN;
-
-        
 
         transitioner->advance(simulation);
       }

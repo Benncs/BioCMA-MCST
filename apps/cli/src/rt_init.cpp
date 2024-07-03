@@ -28,10 +28,10 @@ std::string env_file_path()
 
 size_t generate_run_id();
 
-void set_openmp_threads(int rank,
-                        int size,
+void set_openmp_threads(const int rank,
+                        const int size,
                         ExecInfo &info,
-                        UserControlParameters &params)
+                        const UserControlParameters &params)
 {
   // Casting rank and size to size_t
   info.current_rank = static_cast<size_t>(rank);
@@ -60,7 +60,7 @@ void set_openmp_threads(int rank,
   omp_set_num_threads(static_cast<int>(info.thread_per_process));
 }
 
-ExecInfo runtime_init(int argc, char **argv, SimulationParameters &params)
+ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
 {
   ExecInfo info{};
 

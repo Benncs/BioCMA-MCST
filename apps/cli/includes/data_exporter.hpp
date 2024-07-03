@@ -37,18 +37,19 @@ public:
   virtual ~DataExporter() = default;
   void write_final_results(
       Simulation::SimulationUnit &simulation,
-      std::span<size_t> distribution,
+      std::span<size_t> distribution);
+
+  virtual void write_final_particle_data(
       const std::unordered_map<std::string, std::vector<model_properties_t>>
-          &props,
-      const std::unordered_map<std::string, std::vector<double>> &);
+          & /*unused*/,
+      const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
+  };
 
-
-
-  virtual void append(double t,
-                      std::span<double> data,
-                      const std::vector<size_t> &distribution,
-                      std::span<const double> volume_liquid,
-                      std::span<const double> volume_gas) {};
+  virtual void append(double t ,
+                      std::span<double> data ,
+                      const std::vector<size_t> &distribution ,
+                      std::span<const double> volume_liquid ,
+                      std::span<const double> volume_gas ) {};
 
   static std::unique_ptr<DataExporter>
   factory(const ExecInfo &info,
@@ -60,8 +61,10 @@ public:
 
   DELETE_CONSTRUCTORS(DataExporter);
   DELETE_ASSIGMENT(DataExporter)
-
-  size_t n_iter;
+  size_t expectecNiteration() const
+  {
+    return n_iter;
+  }
 
 protected:
   using export_metadata_t = std::variant<int, std::string>;
@@ -79,24 +82,18 @@ protected:
   size_t n_row;
   size_t n_col;
   size_t counter = 0;
+  size_t n_iter;
 
   virtual void write_final_results(
       ExportData &data,
-      std::span<size_t> distribution,
-      const std::unordered_map<std::string, std::vector<model_properties_t>>
-          &props,
-      const std::unordered_map<std::string, std::vector<double>> &)
+      std::span<size_t> distribution)
   {
     std::cerr << "NO implementation specified";
   }
 
-  virtual void write_final_particle_data(
-      const std::unordered_map<std::string, std::vector<model_properties_t>>
-          &props,
-      const std::unordered_map<std::string, std::vector<double>> &)
-  {
-    std::cerr << "NO implementation specified";
-  }
+
 };
+
+
 
 #endif //__DATA_EXPORTER_HPP__

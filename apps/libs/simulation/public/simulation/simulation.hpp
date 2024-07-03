@@ -69,11 +69,9 @@ namespace Simulation
     }
 
   private:
-    //MOVE IN INIT
-    void post_init_container(MC::DistributionVariantInt distribution_variant);
 
 
-    
+
     void post_init_compartments();
 
     void post_process_reducing();

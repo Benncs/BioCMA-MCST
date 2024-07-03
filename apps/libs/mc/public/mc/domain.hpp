@@ -1,6 +1,7 @@
 #ifndef __MC_REACTORDOMAIN_HPP__
 #define __MC_REACTORDOMAIN_HPP__
 
+#include "cmt_common/macro_constructor_assignment.hpp"
 #include <cma_read/neighbors.hpp>
 #include <common/common_types.hpp>
 #include <mc/container_state.hpp>
@@ -12,16 +13,17 @@ namespace MC
   {
   public:
     
+
+    SET_NON_COPYABLE(ReactorDomain)
+
     ReactorDomain() = default;
     ReactorDomain(ReactorDomain &&other) noexcept;
     ReactorDomain(std::span<double> volumes,
                   const CmaRead::Neighbors::Neighbors_const_view_t& _neighbors);
 
 
-    ReactorDomain(const ReactorDomain &other) = delete;
     ~ReactorDomain() = default;
 
-    ReactorDomain &operator=(const ReactorDomain &other) = delete;
     ReactorDomain &operator=(ReactorDomain &&other) noexcept;
 
     void setVolumes(std::span<double const> volumesgas,
