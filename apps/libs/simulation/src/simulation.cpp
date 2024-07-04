@@ -40,12 +40,13 @@ namespace Simulation
     if (i == 0)
     {
 
-      liq(0, i) = 9.;
+      liq(0, i) = 100;
     }
     else
     {
-      liq(0, i) = 5.;
+      // liq(0, i) = 5.;
     }
+    
   }
 
   void init_f_mat_gas(size_t i, CmaRead::L2DView<double> &&gas)

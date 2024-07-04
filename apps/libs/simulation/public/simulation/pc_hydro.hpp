@@ -5,7 +5,9 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
-using FlowMatrixType = Eigen::MatrixXd;
+// using FlowMatrixType = Eigen::MatrixXd;
+
+using FlowMatrixType = Eigen::SparseMatrix<double>;
 
 namespace Simulation
 {
@@ -15,7 +17,7 @@ namespace Simulation
     public:
     // FlowMatrixType flows;
     FlowMatrixType transition_matrix;
-    FlowMatrixType cumulative_probability;
+    Eigen::MatrixXd cumulative_probability;
     std::vector<double> inverse_volume;
 
     PreCalculatedHydroState() = default;

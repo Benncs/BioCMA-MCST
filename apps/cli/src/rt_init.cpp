@@ -75,8 +75,8 @@ ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
 
   set_openmp_threads(rank, size, info, params.user_params);
 
-  Eigen::setNbThreads(params.user_params.n_thread); //FIXME: 4 threads is clearly enough for 500*500 matrix 
-  
+  Eigen::setNbThreads(omp_get_num_procs()); //FIXME
+  // Eigen::setNbThreads(1);
 
 #ifdef USE_PYTHON_MODULE
   info.thread_per_process = 1; // Set one thread because of PYthon GIL

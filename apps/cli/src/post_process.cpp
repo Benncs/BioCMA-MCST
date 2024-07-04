@@ -1,18 +1,11 @@
-#include "common/execinfo.hpp"
-#include "mc/unit.hpp"
-#include "models/light_model.hpp"
-#include "models/simple_model.hpp"
-#include <any>
-#include <map>
+#include <common/execinfo.hpp>
+#include <mc/unit.hpp>
 #include <post_process.hpp>
 
 #include <iostream>
-#include <stdexcept>
 #include <variant>
 
-/*
-  NUMBER OF
-*/
+
 
 static void get_particle_properties(
     Simulation::SimulationUnit &simulation,

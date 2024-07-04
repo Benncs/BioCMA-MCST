@@ -165,7 +165,7 @@ init_host_only(const ExecInfo &info,
 
   // Define the duration of each flowmap and compute steps per flowmap
   const double t_per_flowmap = cma_case.time_per_flowmap;
-
+  params.t_per_flow_map = t_per_flowmap;
   const auto n_per_flowmap =
       (t_per_flowmap == 0 || params.n_different_maps == 1)
           ? 1

@@ -70,7 +70,7 @@ namespace Simulation
       {
         // std::cout<<i_neighbor<<"\t";
         auto colId = static_cast<int>(i_neighbor);
-        if (colId == k_compartment)
+        if (colId == k_compartment) 
         {
           break;
         }
@@ -152,19 +152,35 @@ namespace Simulation
   
    FlowMatrixType get_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t &flows)
   {
-    int n_compartiments = static_cast<int>(flows.getNRow()); // It SHOULD be square
-    auto rd = flows.data();
-        // auto rd = flows.data();
-    std::vector<double> flow_copy = std::vector<double>(rd.begin(),rd.end());
-    FlowMatrixType m_transition = Eigen::Map<Eigen::MatrixXd>(flow_copy.data(),n_compartiments,n_compartiments);
-    // FlowMatrixType m_transition(n_compartiments, n_compartiments);
-    
+    int n_compartments = static_cast<int>(flows.getNRow()); // It SHOULD be square
 
-    for(int i =0;i<n_compartiments;++i)
+    //Uncomment with dense matrix
+    // auto rd = flows.data();
+    // std::vector<double> flow_copy = std::vector<double>(rd.begin(),rd.end());
+    // FlowMatrixType m_transition = Eigen::Map<Eigen::MatrixXd>(flow_copy.data(),n_compartiments,n_compartiments);
+    // FlowMatrixType m_transition(n_compartiments, n_compartiments);
+
+
+    FlowMatrixType m_transition = FlowMatrixType(n_compartments,n_compartments);
+
+    for(size_t i =0;i<n_compartments;++i)
+    {
+      for(size_t j=0;j<n_compartments;++j)
+      {
+        const auto val = flows(i,j);
+        if(val!=0.)
+        {
+          m_transition.coeffRef(i,j)+=val;
+        }
+      }
+    }
+
+    for(int i =0;i<n_compartments;++i)
     {
       m_transition.coeffRef(i,i) = -1.*m_transition.col(i).sum();
     }
 
+    m_transition.makeCompressed();
     // TODO OPTI
     // for (int i = 0; i < n_compartiments; ++i)
     // {

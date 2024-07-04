@@ -16,7 +16,7 @@ common_lib = library(
    pic: true,
    dependencies: [],
       install: true,
-   install_dir: global_install_dir,
+   install_rpath: global_install_dir,
 )
 
 common_dependecy = declare_dependency(

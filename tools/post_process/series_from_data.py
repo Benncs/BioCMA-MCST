@@ -1,12 +1,12 @@
-import birem 
+import cmtool 
 import numpy as np 
-import birem.vtk 
-from read_results import * 
+import cmtool.vtk 
+from read_results import import_results
 import matplotlib.pyplot as plt 
-import scienceplots
+# import scienceplots
 from typing import Optional,List
 # plt.style.use(['science','ieee','scatter','grid'])
-plt.style.use(['science','grid'])
+# plt.style.use(['science','grid'])
 
 def write_vtk_results(vtk_cma_mesh_path:str,sname:List[str],t:float,
                         full_volume:np.ndarray,
@@ -14,7 +14,7 @@ def write_vtk_results(vtk_cma_mesh_path:str,sname:List[str],t:float,
                         normalized_particle_concentration:np.ndarray,
                         normalized_scalar_concentration:np.ndarray,
                         concentration_record:np.ndarray):
-    birem.vtk.mk_series(vtk_cma_mesh_path,"./results/",sname,t,
+    cmtool.vtk.mk_series(vtk_cma_mesh_path,"./results/",sname,t,
         [full_volume,"liquid_volume"],[p_concentration,"particle_concentration"],[normalized_particle_concentration,"normalized_particle_concentration"],[normalized_scalar_concentration,"normalized_liquid_concentration"],[concentration_record,"liquid_concentration"])
 
 def norm_concentration(raw_concentration,volumes):
@@ -39,7 +39,7 @@ def read_compute_norm(pathres,folder_root,sname,vtk_cma_mesh_path:Optional[str]=
         # Read volume data from files and store in read_volume
         for i in range(14):
             folder = f"{folder_root}/bench_2/i_{i+1}"
-            raw_volume = birem.read_scalar(f"{folder}/vofL.raw")
+            raw_volume = cmtool.read_scalar(f"{folder}/vofL.raw")
             read_volume[i] = raw_volume
         
 
@@ -84,8 +84,8 @@ def read_compute_norm(pathres,folder_root,sname,vtk_cma_mesh_path:Optional[str]=
 folder_root = "/home/benjamin/Documenti/code/cpp/biomc/cma_data/"
 
 
-root_res = "./results/mixing/"
-name_results = ["mix_100K_init","mix_100K_init2","mix_1M_init2","mix_10M_init2","mix_100K_init2_avg","mix_100K_init2_1fm"]
+root_res = "./results/"
+name_results = ["n14"]
 pathres= [f"{root_res}{i}.h5" for i in name_results]
 
 
@@ -93,7 +93,7 @@ pathres= [f"{root_res}{i}.h5" for i in name_results]
 
 
 
-vtk_cma_mesh_path= "/home/benjamin/Documenti/code/cpp/BIREM_new/out/sanofi/cma_mesh.vtu"
+vtk_cma_mesh_path= "/mnt/c/Users/casale/Documents/code/cpp/compartment-modelling-tool/out/sanofi/cma_mesh.vtu"
 
 
 # _,n_c ,_,pvc,t= read_compute_norm(pathres[0],folder_root,sname[0])
@@ -109,7 +109,7 @@ plt.legend()
 plt.title("Segregation index as a function of the time")
 plt.ylabel(r"\[ \frac{\sigma(t)}{\sigma(t_{0})}\]")
 plt.xlabel("time [s]")
-# plt.savefig("./results/mixing_variance3.svg",dpi=1500)
-plt.show()
+plt.savefig("./results/mixing_variance3.svg",dpi=1500)
+# plt.show()
 
 

@@ -14,7 +14,7 @@ mc_lib = library(
    dependencies: [omp,cma_dep],
    pic: true,
    install: true,
-   install_dir: global_install_dir,
+   install_rpath: global_install_dir,
    link_args: [flto_flag]
 )
 

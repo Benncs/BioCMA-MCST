@@ -49,7 +49,8 @@ project_name = meson.project_name()
 build_type = get_option('buildtype')
 cpp = meson.get_compiler('cpp')
 
-global_install_dir = 'lib' # 'lib/'+project_name  # Relative  to /usr/local/
+# global_install_dir = 'lib' # 'lib/'+project_name  # Relative  to /usr/local/
+global_install_dir = get_option('prefix')+'/'+get_option('libdir')
 includes_install_dir = ('include/' + project_name)
 
 cpp_args = arch_specific_args 
@@ -64,6 +65,8 @@ project_custom_options = {
   'debug': [],
   'release': [],
 }
+
+
 target_custom_options = project_custom_options.get(build_type, [])
 # foreach opt: target_custom_options
 #     add_project_arguments(opt, language: 'cpp')
@@ -94,9 +97,9 @@ eigen_dep = dependency('eigen3', required: true)
 blas = dependency('blas', required: false) # Eigen can work without BLAS
 
 
-# if blas.found()
-#   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
-# endif
+if blas.found()
+  add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
+endif
 
 highfive_found = false
 cmake = import('cmake', required: false)

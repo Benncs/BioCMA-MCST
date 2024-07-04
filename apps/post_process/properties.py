@@ -1,8 +1,7 @@
-from read_results import import_results
+
 from scipy.stats import gaussian_kde
 import matplotlib.pyplot as plt
 import numpy as np 
-
 
 def get_distribution_moment(data):
     mean = np.mean(data)
@@ -33,19 +32,3 @@ def mk_pdf(data,name):
     plt.ylabel('Density')
     plt.title('Probability Density Function (PDF)')
     plt.savefig(f"./results/pdf_{name}")
-
-
-res = import_results('./results/test.h5')
-
-for key in res.bioparam:
-    
-    value = res.bioparam[key]
-    
-    if isinstance(value, np.ndarray) and np.issubdtype(value.dtype, float):
-       
-        mean,variance_population,variance_sample = get_distribution_moment(value)
-
-        print(mean,variance_population,variance_sample)
-
-        mk_histogram(value,key)
-

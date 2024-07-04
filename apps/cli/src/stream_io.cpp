@@ -1,7 +1,6 @@
 #include <iostream>
 #include <stream_io.hpp>
 #include <unistd.h>
-
 #include <sstream>
 
 static bool is_stdout_redirect = false;
@@ -34,7 +33,7 @@ int redirect_stdout(std::streambuf *&original_buffer,
     fflush(stdout); // Flush the buffer to ensure all previous output is written
     int original_stdout_fd =
         dup(fileno(stdout)); // Save the original file descriptor of stdout
-    auto *fd = freopen("/dev/null", "w", stdout); // Redirect stdout to /dev/null
+    auto *_dev_null_fd = freopen("/dev/null", "w", stdout); // Redirect stdout to /dev/null
 
     // Set the flag to indicate that redirection is active
     is_stdout_redirect = true;

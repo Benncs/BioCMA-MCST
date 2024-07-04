@@ -93,6 +93,7 @@ DataExporter::DataExporter(const ExecInfo &info,
       std::vector<size_t>(distribution.begin(), distribution.end());
   initial_values["delta_time"] = params.d_t;
   initial_values["n_map"] = params.n_different_maps;
+  initial_values["t_per_flow_map"] = params.t_per_flow_map;
 }
 
 void DataExporter::write_final_results(Simulation::SimulationUnit &simulation,

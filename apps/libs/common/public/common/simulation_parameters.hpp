@@ -33,6 +33,7 @@ struct SimulationParameters
   bool is_two_phase_flow = true;
   size_t n_per_flowmap;
   std::string results_file_name;
+  double t_per_flow_map;
   static SimulationParameters m_default();
 };
 
