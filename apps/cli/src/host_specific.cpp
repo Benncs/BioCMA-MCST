@@ -70,6 +70,7 @@ void host_process(
 
   {
     auto initial_distribution = simulation.mc_unit->domain.getDistribution();
+
     data_exporter =
         DataExporter::factory(exec,
                               params,
@@ -77,18 +78,20 @@ void host_process(
                               simulation.getDim(),
                               params.user_params.number_exported_result,
                               initial_distribution);
+
+    PostProcessing::save_initial(simulation, data_exporter);
   }
 
-  show(simulation);
+  PostProcessing::show(simulation);
 
   main_loop(params, exec, simulation, std::move(transitioner), data_exporter);
 
-  show(simulation);
+  PostProcessing::show(simulation);
 
   SEND_MPI_SIG_STOP;
   last_sync(exec, simulation);
 
-  post_process(exec, params, simulation, data_exporter);
+  PostProcessing::post_process(exec, params, simulation, data_exporter);
 }
 
 void main_loop(const SimulationParameters &params,
@@ -132,9 +135,9 @@ void main_loop(const SimulationParameters &params,
                                               current_reactor_state,           \
                                               dump_interval,                   \
                                               dump_number,                     \
-                                              d_t,                             \
                                               exec,                            \
-                                              exporter)
+                                              exporter),                       \
+    firstprivate(d_t)
   {
 
     for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;

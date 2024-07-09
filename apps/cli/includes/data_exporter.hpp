@@ -10,10 +10,6 @@
 #include <simulation/simulation.hpp>
 #include <unordered_map>
 
-enum class Dataset
-{
-
-};
 
 struct ExportData
 {
@@ -45,11 +41,18 @@ public:
       const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
   };
 
+
+   virtual void write_initial_particle_data(
+      const std::unordered_map<std::string, std::vector<model_properties_t>>
+          & /*unused*/,
+      const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
+  };
+
   virtual void append(double t ,
-                      std::span<double> data ,
-                      const std::vector<size_t> &distribution ,
-                      std::span<const double> volume_liquid ,
-                      std::span<const double> volume_gas ) {};
+                      std::span<double> /*unused*/ ,
+                      const std::vector<size_t> &/*unused*/ ,
+                      std::span<const double> /*unused*/ ,
+                      std::span<const double> /*unused*/ ) {};
 
   static std::unique_ptr<DataExporter>
   factory(const ExecInfo &info,
@@ -90,7 +93,8 @@ protected:
   {
     std::cerr << "NO implementation specified";
   }
-
+  private:
+  
 
 };
 

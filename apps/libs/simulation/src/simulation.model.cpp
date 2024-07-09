@@ -83,9 +83,9 @@ namespace Simulation
 
     liquid_feed.coeffRef(0, 50) = 5*10/3600;
 
-    for(int i =0 ;i<50;++i)
+    for(int i =1 ;i<this->liquid_scalar->concentration.cols()-2;++i)
     {
-      liquid_feed.coeffRef(0, i) = 5*10/3600;
+      liquid_feed.coeffRef(0, i) = 50*10/3600;
     }
 
     auto mat_transfer_g_liq =

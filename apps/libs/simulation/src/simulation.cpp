@@ -47,8 +47,6 @@ namespace Simulation
     gas(1, i) = 15e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
   }
 
-  
-
   void p_kernel(double d_t,
                 MC::MonteCarloUnit &unit,
                 std::span<Eigen::MatrixXd> _contribs,
@@ -196,7 +194,6 @@ namespace Simulation
     post_process_reducing();
   }
 
-
   void p_kernel(double d_t,
                 MC::MonteCarloUnit &unit,
                 std::span<Eigen::MatrixXd> _contribs,
@@ -261,10 +258,9 @@ namespace Simulation
     }
   };
 
-    void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation *ptr) const
+  void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation *ptr) const
   {
     delete ptr;
   }
-
 
 } // namespace Simulation

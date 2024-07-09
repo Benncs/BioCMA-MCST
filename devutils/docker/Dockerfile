@@ -13,7 +13,7 @@ RUN apt-get update && \
     libomp-dev libopenmpi-dev libeigen3-dev  pkg-config ninja-build
 
 RUN apt-get install -y libblas-dev libhdf5-dev 
-RUN apt-get install -y libblas-dev libhdf5-dev libvtk9-dev
+RUN apt-get install -y libvtk9-dev
 
 # Install Meson
 RUN pip install meson

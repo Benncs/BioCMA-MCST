@@ -133,7 +133,7 @@ def __import_v3(file):
     results.records_distribution = np.array(file.get("records/distribution"))
     results.t = np.array(file.get("records/time"))
     results.t_per_flow_map = np.array(file.get("initial_parameters/t_per_flow_map"))
-    bio = file.get("biological_model", None)
+    bio = file.get("biological_model/final", None)
 
     if results.dt is not None and results.t_per_flow_map is not None:
         results.n_per_flow_map = int(results.t_per_flow_map / results.dt)

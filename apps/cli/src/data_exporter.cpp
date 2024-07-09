@@ -1,5 +1,5 @@
+#include "cmt_common/macro_constructor_assignment.hpp"
 #include "common/simulation_parameters.hpp"
-
 
 #include "simulation/simulation.hpp"
 
@@ -45,7 +45,14 @@ public:
                      size_t niter,
                      std::span<size_t> distribution);
 
-  void prepare();
+  SET_NON_COPYABLE(DataExportHighFive);
+  SET_NON_MOVABLE(DataExportHighFive);
+
+  ~DataExportHighFive()
+  {
+    // delete _file;
+  }
+
   void append(double t,
               std::span<double> concentration_liquid,
               const std::vector<size_t> &distribution,
@@ -56,16 +63,30 @@ public:
       const std::unordered_map<std::string, std::vector<model_properties_t>> &,
       const std::unordered_map<std::string, std::vector<double>> &) override;
 
+  void write_initial_particle_data(
+      const std::unordered_map<std::string, std::vector<model_properties_t>>
+          & /*unused*/,
+      const std::unordered_map<std::string, std::vector<double>> & /*unused*/)
+      override;
+
 protected:
   void write_final_results(ExportData &data,
                            std::span<size_t> distribution) override;
 
 private:
+  void prepare();
   static void write_attributes(HighFive::File &file, export_metadata_kv &md);
 
   static void write_initial(HighFive::File &file,
                             const ExecInfo &info,
                             export_initial_kv &md);
+
+  void write_particle_data(
+      const std::unordered_map<std::string, std::vector<model_properties_t>> &,
+      const std::unordered_map<std::string, std::vector<double>> &,
+      const std::string &ds_name);
+
+  // HighFive::File *_file;
 };
 
 #endif
@@ -112,9 +133,6 @@ void DataExporter::write_final_results(Simulation::SimulationUnit &simulation,
   };
 
   write_final_results(data, distribution);
-  // Results depending on simulation are exported or copied into properties,
-  // clear montecarlo state to save memory
-  simulation.clear_mc();
 }
 
 std::unique_ptr<DataExporter>
@@ -134,9 +152,45 @@ DataExporter::factory(const ExecInfo &info,
 #endif
 }
 
-
-
 #ifdef USE_HIGHFIVE
+
+constexpr size_t hdf5_max_compression = 9;
+
+DataExportHighFive::DataExportHighFive(const ExecInfo &info,
+                                       const SimulationParameters &params,
+                                       std::string_view _filename,
+                                       std::tuple<size_t, size_t> dim,
+                                       size_t niter,
+                                       std::span<size_t> distribution)
+    : DataExporter(info, params, _filename, dim, niter, distribution)  
+{
+  auto _file = HighFive::File(filename, HighFive::File::Truncate);
+  write_initial(_file, info, initial_values);
+  write_attributes(_file, metadata);
+  prepare();
+}
+
+void DataExportHighFive::write_initial(HighFive::File &file,
+                                       const ExecInfo &info,
+                                       export_initial_kv &md)
+{
+
+  for (const auto &kv : md)
+  {
+    const std::string &attributeName = "initial_parameters/" + kv.first;
+    const export_initial_t &value = kv.second;
+    std::visit(
+        [&](const auto &val)
+        {
+          using T = std::decay_t<decltype(val)>; // Get the actual type T of
+          file.createDataSet<T>(attributeName, val);
+        },
+        value);
+  }
+
+  file.createDataSet("misc/n_node_thread", info.thread_per_process);
+  file.createDataSet("misc/n_rank", info.n_rank);
+}
 
 void DataExportHighFive::write_attributes(HighFive::File &file,
                                           export_metadata_kv &md)
@@ -157,43 +211,7 @@ void DataExportHighFive::write_attributes(HighFive::File &file,
   }
 }
 
-void DataExportHighFive::write_initial(HighFive::File &file,
-                                       const ExecInfo &info,
-                                       export_initial_kv &md)
-{
 
-  for (const auto &kv : md)
-  {
-    const std::string &attributeName = "initial_parameters/" + kv.first;
-    const export_initial_t &value = kv.second;
-    std::visit(
-        [&](const auto &val)
-        {
-          using T = std::decay_t<decltype(val)>; // Get the actual type T of
-          // the variant alternative
-          file.createDataSet<T>(attributeName, val);
-        },
-        value);
-  }
-
-  file.createDataSet("misc/n_node_thread", info.thread_per_process);
-  file.createDataSet("misc/n_rank", info.n_rank);
-}
-
-DataExportHighFive::DataExportHighFive(const ExecInfo &info,
-                                       const SimulationParameters &params,
-                                       std::string_view _filename,
-                                       std::tuple<size_t, size_t> dim,
-                                       size_t niter,
-                                       std::span<size_t> distribution)
-    : DataExporter(info, params, _filename, dim, niter, distribution)
-{
-  HighFive::File file(filename, HighFive::File::Truncate);
-  write_initial(file, info, initial_values);
-  write_attributes(file, metadata);
-  prepare();
-}
-constexpr size_t hdf5_max_compression = 9;
 void DataExportHighFive::prepare()
 {
   HighFive::File file(filename, HighFive::File::ReadWrite);
@@ -249,7 +267,7 @@ void DataExportHighFive::append(double t,
   try
   {
 
-    HighFive::File file(filename, HighFive::File::ReadWrite);
+     HighFive::File file(filename, HighFive::File::ReadWrite);
 
     auto write_dataset =
         [&file]<typename T>(const std::string &name,
@@ -325,7 +343,7 @@ void DataExportHighFive::write_final_results(ExportData &data,
   const auto nr = static_cast<size_t>(get<0>(dim));
   const auto nc = static_cast<size_t>(get<1>(dim));
 
-  HighFive::File file(filename, HighFive::File::ReadWrite);
+   HighFive::File file(filename, HighFive::File::ReadWrite);
 
   file.createDataSet("final_results/number_particles", data.number_particles);
 
@@ -354,12 +372,15 @@ void DataExportHighFive::write_final_results(ExportData &data,
                                   std::string("Model description"));
 }
 
-void DataExportHighFive::write_final_particle_data(
+void DataExportHighFive::write_particle_data(
     const std::unordered_map<std::string, std::vector<model_properties_t>>
         &props,
-    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
+    const std::unordered_map<std::string, std::vector<double>> &spatial_props,
+    const std::string &ds_name)
 {
-  HighFive::File file(filename, HighFive::File::ReadWrite);
+   HighFive::File file(filename, HighFive::File::ReadWrite);
+
+
   std::cout << "EXPORTING PARTICLE DATA" << std::endl;
   HighFive::DataSetCreateProps ds_props;
   ds_props.add(HighFive::Chunking(props.size()));
@@ -372,8 +393,11 @@ void DataExportHighFive::write_final_particle_data(
     const auto size = values.size();
 
     std::visit(
-        [&file, key = std::move(key), values = std::move(values), size](
-            const auto &sample_val)
+        [&file,
+         key = std::move(key),
+         values = std::move(values),
+         size,
+         ds_name](const auto &sample_val)
         {
           using T = std::decay_t<decltype(sample_val)>;
           if constexpr (std::is_same_v<T, double>)
@@ -391,8 +415,7 @@ void DataExportHighFive::write_final_particle_data(
                 }
               }
             }
-            auto ds =
-                file.createDataSet("biological_model/" + key, non_zero_values);
+            auto ds = file.createDataSet(ds_name + key, non_zero_values);
           }
           else
           {
@@ -408,8 +431,24 @@ void DataExportHighFive::write_final_particle_data(
   _ds_props.add(HighFive::Deflate(hdf5_max_compression));
   for (const auto &[key, values] : spatial_props)
   {
-    file.createDataSet("biological_model/spatial/" + key, values, _ds_props);
+    file.createDataSet(ds_name + "spatial/" + key, values, _ds_props);
   }
+}
+
+void DataExportHighFive::write_initial_particle_data(
+    const std::unordered_map<std::string, std::vector<model_properties_t>>
+        &props,
+    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
+{
+  write_particle_data(props, spatial_props, "biological_model/initial/");
+}
+
+void DataExportHighFive::write_final_particle_data(
+    const std::unordered_map<std::string, std::vector<model_properties_t>>
+        &props,
+    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
+{
+  write_particle_data(props, spatial_props, "biological_model/final/");
 }
 
 #endif
