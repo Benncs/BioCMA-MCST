@@ -45,6 +45,9 @@ if compiler.has_argument('-ffast-math')
   arch_specific_args= [arch_specific_args,'-ffast-math']
 endif 
 
+
+
+
 compiler.has_argument('-fopenmp')
 
 ## Define main shared variables\
@@ -84,6 +87,11 @@ target_custom_options = project_custom_options.get(build_type, [])
 
 if build_type == 'debug' or build_type == 'debugoptimized'
   add_global_arguments('-DDEBUG', language: 'cpp')
+  if compiler.has_argument('-pg')
+  arch_specific_args= [arch_specific_args,'-pg']
+  add_project_link_arguments('-pg',language: 'cpp')
+endif 
+
 else
   add_global_arguments('-DNDEBUG', language: 'cpp')
 endif

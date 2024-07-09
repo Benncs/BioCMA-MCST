@@ -83,6 +83,10 @@ namespace Simulation
 
     liquid_feed.coeffRef(0, 50) = 5*10/3600;
 
+    for(int i =0 ;i<50;++i)
+    {
+      liquid_feed.coeffRef(0, i) = 5*10/3600;
+    }
 
     auto mat_transfer_g_liq =
         (is_two_phase_flow)
