@@ -24,56 +24,30 @@
 #  define omp_get_thread_num() 0 // 1 thread
 #endif
 
-// TODO REMOVE
-#include <iostream>
 #include <utility>
 
 namespace Simulation
 {
-  void pimpl_deleter::operator()(ScalarSimulation *ptr) const
-  {
-    delete ptr;
-  }
 
   void init_f_mat_liq(size_t i, CmaRead::L2DView<double> &liq)
   {
     if (i == 0)
     {
 
-      liq(0, i) = 100;
+      liq(0, i) = 9;
     }
     else
     {
-      // liq(0, i) = 5.;
+      liq(0, i) = 5.;
     }
-    
   }
 
-  void init_f_mat_gas(size_t i, CmaRead::L2DView<double> &&gas)
+  void init_f_mat_gas(size_t i, CmaRead::L2DView<double> &gas)
   {
     gas(1, i) = 15e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
   }
 
-  void initF(pimp_ptr_t &liq, pimp_ptr_t &gas)
-  {
-    auto rng = MC::PRNG();
-    bool host = gas != nullptr;
-    auto cliq = liq->getConcentrationView();
-    for (size_t i = 0; i < cliq.getNCol(); ++i)
-    {
-      init_f_mat_liq(i, cliq);
-      if (host)
-      {
-        init_f_mat_gas(i, gas->getConcentrationView());
-      }
-    }
-
-    liq->total_mass = liq->concentration * liq->getVolume();
-    if (host)
-    {
-      gas->total_mass = gas->concentration * gas->getVolume();
-    }
-  }
+  
 
   void p_kernel(double d_t,
                 MC::MonteCarloUnit &unit,
@@ -124,10 +98,7 @@ namespace Simulation
                                        volumesgas)) // No contribs for gas
             : nullptr;
 
-    // FIXME
-    initF(liquid_scalar, gas_scalar);
-
-    // post_init_container(std::move(distribution_variant));
+    post_init_concentration();
     post_init_compartments();
   }
 
@@ -150,6 +121,34 @@ namespace Simulation
     std::span<double const> vl = liquid_scalar->getVolumeData();
 
     this->mc_unit->domain.setVolumes(vg, vl);
+  }
+
+  void SimulationUnit::post_init_concentration()
+  {
+    auto rng = MC::PRNG();
+    CmaRead::L2DView<double> cliq = this->liquid_scalar->getConcentrationView();
+    CmaRead::L2DView<double> *cgas = nullptr;
+    if (is_two_phase_flow)
+    {
+      *cgas = this->gas_scalar->getConcentrationView();
+    }
+
+    for (size_t i = 0; i < cliq.getNCol(); ++i)
+    {
+      init_f_mat_liq(i, cliq);
+      if (is_two_phase_flow)
+      {
+        init_f_mat_gas(i, *cgas);
+      }
+    }
+
+    this->liquid_scalar->total_mass =
+        this->liquid_scalar->concentration * this->liquid_scalar->getVolume();
+    if (is_two_phase_flow)
+    {
+      this->gas_scalar->total_mass =
+          this->gas_scalar->concentration * this->gas_scalar->getVolume();
+    }
   }
 
   void SimulationUnit::post_init_compartments()
@@ -197,24 +196,6 @@ namespace Simulation
     post_process_reducing();
   }
 
-  // #pragma omp for
-  //     for (auto particle = to_process.begin(); particle < to_process.end();
-  //          ++particle)
-  //     {
-  //       // particle->weight = 1./size;
-  //       p_kernel(d_t,
-  //                unit,
-  //                contribs,
-  //                extras,
-  //                _kmodel,
-  //                *particle,
-  //                m_transition,
-  //                cumulative_probability);
-  //     }
-
-  // #pragma omp master
-  //     post_process_reducing();
-  //   }
 
   void p_kernel(double d_t,
                 MC::MonteCarloUnit &unit,
@@ -279,5 +260,11 @@ namespace Simulation
       _kmodel.contribution_kernel(particle, thread_contrib);
     }
   };
+
+    void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation *ptr) const
+  {
+    delete ptr;
+  }
+
 
 } // namespace Simulation

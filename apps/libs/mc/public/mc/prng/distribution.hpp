@@ -1,14 +1,12 @@
 #ifndef __MC_DISTRIBUTION_HPP__
 #define __MC_DISTRIBUTION_HPP__
 
+#include <common/common.hpp>
 #include <cstdint>
 #include <functional>
 #include <random>
 #include <type_traits>
 #include <variant>
-#include <common/common.hpp>
-
-
 
 namespace MC
 {
@@ -54,8 +52,9 @@ namespace MC
   {
     using Ts::operator()...;
   };
+  
   // explicit deduction guide (not needed as of C++20)
-  template <class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+  // template <class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
   template <typename Val, typename... Ts> auto match(Val &&val, Ts... ts)
   {
@@ -65,9 +64,7 @@ namespace MC
   template <NumberType T>
   using distribution_t = std::function<T(std::mt19937 &)>;
 
-  template <NumberType T>
-  T
-  bounded_exponential(std::mt19937 &g, T min, T max);
+  template <NumberType T> T bounded_exponential(std::mt19937 &g, T min, T max);
 
   template <NumberType T>
   distribution_t<T> get_distribution(DistributionVariantReal params)
@@ -135,6 +132,6 @@ namespace MC
 
     return match(params, b_exp_func, exp_func, uniform_func);
   }
-}  // namespace MC
+} // namespace MC
 
 #endif //__MC_DISTRIBUTION_HPP__

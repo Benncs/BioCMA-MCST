@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-type=release
+type=debugoptmized
 name="$1"
 executable=./builddir/$type/apps/cli/biocma_mcst_cli_app
 

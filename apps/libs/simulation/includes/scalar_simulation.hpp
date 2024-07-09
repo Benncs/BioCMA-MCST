@@ -5,7 +5,7 @@
 #include <simulation/pc_hydro.hpp>
 #include <span>
 
-//TODO REMOVE 
+// TODO REMOVE
 #include <iostream>
 
 namespace Simulation
@@ -16,7 +16,10 @@ namespace Simulation
   public:
     ScalarSimulation(ScalarSimulation &&other) noexcept;
     ScalarSimulation(const ScalarSimulation &other) noexcept = delete;
-    ScalarSimulation(size_t n_compartments, size_t n_species, size_t n_threads,std::span<double> volume);
+    ScalarSimulation(size_t n_compartments,
+                     size_t n_species,
+                     size_t n_threads,
+                     std::span<double> volume);
     ScalarSimulation operator=(const ScalarSimulation &other) = delete;
     ScalarSimulation operator=(ScalarSimulation &&other) = delete;
 
@@ -42,7 +45,8 @@ namespace Simulation
 
     // Setters
 
-    void setVolumes(std::span<const double> volumes, std::span<const double> inv_volumes);
+    void setVolumes(std::span<const double> volumes,
+                    std::span<const double> inv_volumes);
 
     void merge(size_t i_thread);
 
@@ -52,7 +56,9 @@ namespace Simulation
 
     void performStep(double d_t,
                      const FlowMatrixType &m_transition,
-                     const Eigen::MatrixXd &transfer_gas_liquid);
+                     const Eigen::MatrixXd &transfer_gas_liquid,const Eigen::MatrixXd &feed);
+
+   
 
   private:
     Eigen::DiagonalMatrix<double, -1> volumes_inverse;
@@ -88,7 +94,8 @@ namespace Simulation
   inline std::span<double> ScalarSimulation::getConcentrationData()
   {
 
-    return {this->concentration.data(), static_cast<size_t>(this->concentration.size())};
+    return {this->concentration.data(),
+            static_cast<size_t>(this->concentration.size())};
   }
 
   inline std::span<double> ScalarSimulation::getContributionData()
@@ -102,7 +109,6 @@ namespace Simulation
     return {m_volumes.diagonal().data(), static_cast<size_t>(m_volumes.rows())};
   }
 
-
   inline void ScalarSimulation::setVolumes(std::span<const double> volumes,
                                            std::span<const double> inv_volumes)
   {
@@ -110,7 +116,7 @@ namespace Simulation
     // SIGFAULT ?
     this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(
         volumes.data(), static_cast<int>(volumes.size()));
-        
+
     this->volumes_inverse.diagonal() = Eigen::Map<const Eigen::VectorXd>(
         inv_volumes.data(), static_cast<int>(inv_volumes.size()));
   }
@@ -122,9 +128,10 @@ namespace Simulation
 
   inline ScalarSimulation *makeScalarSimulation(size_t n_compartments,
                                                 size_t n_species,
-                                                size_t n_threads,std::span<double> volumes)
+                                                size_t n_threads,
+                                                std::span<double> volumes)
   {
-    return new ScalarSimulation(n_compartments, n_species, n_threads,volumes);
+    return new ScalarSimulation(n_compartments, n_species, n_threads, volumes);
   }
 
 } // namespace Simulation

@@ -82,7 +82,7 @@ init_simulation(const ExecInfo &info,
         worker_neighbor_data, params.n_compartments, n_col, false);
   }
 
-  MPI_W::barrier();
+  // MPI_W::barrier(); //Useless ? 
 
   auto mc_unit = MC::init(model.init_kernel,info,
                           user_params.numper_particle,
@@ -90,7 +90,7 @@ init_simulation(const ExecInfo &info,
                           liquid_neighbors,
                           std::move(initial_particle_distribution));
 
-  bool tpf = info.current_rank == 0 && params.is_two_phase_flow;
+  bool f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
 
   auto simulation = std::make_unique<Simulation::SimulationUnit>(
       info,
@@ -99,7 +99,8 @@ init_simulation(const ExecInfo &info,
       liq_volume,
       params.n_species,
       model,
-      tpf);
+      f_init_gas_flow);
+
   // Calculate the total number of time steps
   const auto n_t = static_cast<size_t>(user_params.final_time / params.d_t) + 1;
 
@@ -108,8 +109,8 @@ init_simulation(const ExecInfo &info,
       params.n_per_flowmap,
       Simulation::FlowMapTransitioner::Discontinuous,
       n_t,
-      std::move(_flow_handle),
-      params.is_two_phase_flow);
+      std::move(_flow_handle),f_init_gas_flow);
+      // params.is_two_phase_flow);
 
   return simulation;
 }

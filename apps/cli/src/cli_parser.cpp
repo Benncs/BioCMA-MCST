@@ -14,7 +14,7 @@ static void check_cli(SimulationParameters &params);
 static void print_red(std::ostream &os, std::string_view message);
 static void throw_bad_arg(std::string_view arg);
 
-static void parseArg(UserControlParameters &params,
+static void parseArg(UserControlParameters &user_controll,
                      std::string current_param,
                      std::string_view current_value);
 
@@ -78,7 +78,7 @@ static std::optional<UserControlParameters> parse_user_param(int argc,
 std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
 {
   SimulationParameters params = SimulationParameters::m_default();
-  params.n_species = 3;
+  params.n_species = 3; //FIXME
   auto opt_control = parse_user_param(argc, argv);
   if (!opt_control.has_value())
   {
@@ -228,7 +228,7 @@ void showHelp(std::ostream &os)
      << '\n';
 
   os << "Available model:\r\n";
-  for (auto i : get_available_models())
+  for (const auto& i : get_available_models())
   {
     os << i << "\r\n";
   }

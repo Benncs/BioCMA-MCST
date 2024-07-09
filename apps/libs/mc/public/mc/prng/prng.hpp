@@ -2,23 +2,21 @@
 #define __MC_PRNG_HPP__
 
 #include <cstdint>
+#include <mc/prng/distribution.hpp>
 #include <random>
-#include <mc/prng//distribution.hpp>
 
+inline unsigned tau_step(unsigned &z, int S1, int S2, int S3, unsigned M)
+{
+  unsigned b = (((z << S1) ^ z) >> S2);
+  return z = (((z & M) << S3) ^ b);
+}
 
+inline unsigned LCGStep(unsigned &z, unsigned A, unsigned C)
+{
+  return z = (A * z + C);
+}
 namespace MC
 {
-
-  inline unsigned tau_step(unsigned &z, int S1, int S2, int S3, unsigned M)
-  {
-    unsigned b = (((z << S1) ^ z) >> S2);
-    return z = (((z & M) << S3) ^ b);
-  }
-
-  inline unsigned LCGStep(unsigned &z, unsigned A, unsigned C)
-  {
-    return z = (A * z + C);
-  }
 
   static constexpr size_t MC_RAND_DEFAULT_SEED = 10;
   class PRNG
@@ -26,7 +24,7 @@ namespace MC
   public:
     explicit PRNG()
     {
-      gen = std::mt19937(MC_RAND_DEFAULT_SEED);
+      gen = std::mt19937(std::random_device{}());
     }
 
     explicit PRNG(uint64_t seed)
@@ -44,14 +42,14 @@ namespace MC
 
     inline double double_unfiform()
     {
-      return step();
-      // return _uniform_double(gen);
+      // return step();
+      return _uniform_double(gen);
     }
 
     inline float step()
     {
       // Combined period is lcm(p1,p2,p3,p4)~ 2^121
-      //https://indico.cern.ch/event/93877/contributions/2118070/attachments/1104200/1575343/acat3_revised_final.pdf
+      // https://indico.cern.ch/event/93877/contributions/2118070/attachments/1104200/1575343/acat3_revised_final.pdf
       return 2.3283064365387e-10 *
              (                                            // Periods
                  tau_step(z1, 13, 19, 12, 4294967294UL) ^ // p1=2^31-1

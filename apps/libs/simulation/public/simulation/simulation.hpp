@@ -12,16 +12,19 @@
 
 namespace Simulation
 {
-  class PreCalculatedHydroState;
-  class ScalarSimulation;
-  struct pimpl_deleter
+  using init_scalar_f_t = void(*)(size_t , CmaRead::L2DView<double> &);
+  static constexpr init_scalar_f_t default_gas_init = [](size_t , CmaRead::L2DView<double> &){};
+
+  struct ScalarInitializer
   {
-    void operator()(ScalarSimulation *) const;
+    std::span<double> volumesgas;
+    std::span<double> volumesliq;
+    init_scalar_f_t liquid_f_init;
+    init_scalar_f_t gaz_f_init=default_gas_init;
   };
 
-  using pimp_ptr_t = std::unique_ptr<ScalarSimulation, pimpl_deleter>;
-
-  void initF(pimp_ptr_t &liq, pimp_ptr_t &gas); // TODO Delete
+  class PreCalculatedHydroState;
+  class ScalarSimulation;
 
   class SimulationUnit
   {
@@ -50,7 +53,8 @@ namespace Simulation
     [[nodiscard]] std::span<double> getCgasData() const;
     [[nodiscard]] std::span<double> getContributionData() const;
 
-    void setVolumes(std::span<const double> volumesgas, std::span<const double> volumesliq);
+    void setVolumes(std::span<const double> volumesgas,
+                    std::span<const double> volumesliq);
 
     void step(double d_t, const CmaRead::ReactorState &state);
 
@@ -64,13 +68,18 @@ namespace Simulation
 
     void clearContribution();
 
-    void clear_mc(){
+    void clear_mc()
+    {
       mc_unit.reset();
     }
 
   private:
+    struct pimpl_deleter
+    {
+      void operator()(ScalarSimulation *) const;
+    };
 
-
+    using pimp_ptr_t = std::unique_ptr<ScalarSimulation, pimpl_deleter>;
 
     void post_init_compartments();
 
@@ -84,8 +93,9 @@ namespace Simulation
     PreCalculatedHydroState *flow_gas;    // TODO OPTI
     KModel kmodel;
 
-    std::unique_ptr<ScalarSimulation, pimpl_deleter> liquid_scalar;
-    std::unique_ptr<ScalarSimulation, pimpl_deleter> gas_scalar;
+    pimp_ptr_t liquid_scalar;
+    pimp_ptr_t gas_scalar;
+    void post_init_concentration();
   };
 
   inline const KModel &SimulationUnit::getModel() const

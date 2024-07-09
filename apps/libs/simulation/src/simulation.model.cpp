@@ -77,6 +77,12 @@ namespace Simulation
 
   void SimulationUnit::step(double d_t, const CmaRead::ReactorState &state)
   {
+    Eigen::MatrixXd liquid_feed =
+        Eigen::MatrixXd::Zero(this->liquid_scalar->concentration.rows(),
+                              this->liquid_scalar->concentration.cols());
+
+    liquid_feed.coeffRef(0, 50) = 5*10/3600;
+
 
     auto mat_transfer_g_liq =
         (is_two_phase_flow)
@@ -86,15 +92,19 @@ namespace Simulation
                                        gas_scalar->concentration.array(),
                                        state)
             : Eigen::MatrixXd::Zero(this->liquid_scalar->concentration.rows(),
-                              this->liquid_scalar->concentration.cols());
+                                    this->liquid_scalar->concentration.cols());
 
     this->liquid_scalar->performStep(
-        d_t, flow_liquid->transition_matrix, mat_transfer_g_liq);
+        d_t, flow_liquid->transition_matrix, mat_transfer_g_liq, liquid_feed);
 
     if (is_two_phase_flow)
     {
+      Eigen::MatrixXd gas_feed =
+          Eigen::MatrixXd::Zero(this->gas_scalar->concentration.rows(),
+                                this->gas_scalar->concentration.cols());
+
       this->gas_scalar->performStep(
-          d_t, flow_gas->transition_matrix, -1 * mat_transfer_g_liq);
+          d_t, flow_gas->transition_matrix, -1 * mat_transfer_g_liq, gas_feed);
     }
   }
 } // namespace Simulation

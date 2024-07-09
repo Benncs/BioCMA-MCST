@@ -12,6 +12,7 @@ namespace MC
                            ReactorDomain &domain,
                            ParticlesList &p_list,
                            size_t n_compartment,
+                           std::span<ThreadPrivateData> _extras,
                            DistributionVariantInt distribution_variant);
 
   std::unique_ptr<MonteCarloUnit>
@@ -35,11 +36,11 @@ namespace MC
       particle_per_process += remainder;
     }
     // double weight = 1 / static_cast<double>(n_particles); // DUMMY INIT
-    double x0 = 0.05; // g/l
+    double x0 = 0.5; // g/l
     double v = 0.02;  // m3
     double m_part = 1e-15;
 
-    double weight = (x0 * v) / (n_particles * m_part);
+    double weight = 1000;//(x0 * v) / (n_particles * m_part);
     // std::cout<<"we"<<weight<<std::endl;
     unit->container = ParticlesContainer(particle_per_process, weight);
     unit->extras.resize(info.thread_per_process);
@@ -48,6 +49,7 @@ namespace MC
                         unit->domain,
                         unit->container.to_process,
                         unit->domain.getNumberCompartments(),
+                        unit->extras,
                         std::move(param));
     return unit;
   }
@@ -57,14 +59,15 @@ namespace MC
                            ReactorDomain &domain,
                            ParticlesList &p_list,
                            size_t n_compartment,
+                           std::span<ThreadPrivateData> _extras,
                            DistributionVariantInt distribution_variant)
   {
 
 #pragma omp parallel default(none),                                            \
-    shared(p_list, n_compartment, distribution_variant, domain,init_kernel),               \
+    shared(p_list, n_compartment, distribution_variant, domain,init_kernel,_extras),               \
     num_threads(n_thread)
     {
-      auto prng = MC::PRNG::get_rng(omp_get_thread_num());
+      auto& prng = _extras[omp_get_thread_num()].rng.rng();
       auto distribution =
           MC::get_distribution_int<size_t>(distribution_variant);
       const auto size_p = p_list.size();

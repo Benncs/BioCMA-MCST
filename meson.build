@@ -19,6 +19,7 @@ if use_cuda
   
 else
   arch_specific_args = ['-march=native']
+  # arch_specific_args=['-mavx2']
   cpp_version = get_option('cpp_std')
   if cpp_version != 'gnu++20'
     error('c++20 features should be available')
@@ -36,6 +37,13 @@ if compiler.has_argument('-flto')
 flto_flag = '-flto'
 endif 
 
+if compiler.has_argument('-mtune=native')
+arch_specific_args = [arch_specific_args,'-mtune=native']
+endif 
+
+if compiler.has_argument('-ffast-math')
+  arch_specific_args= [arch_specific_args,'-ffast-math']
+endif 
 
 compiler.has_argument('-fopenmp')
 
@@ -67,6 +75,7 @@ project_custom_options = {
 }
 
 
+
 target_custom_options = project_custom_options.get(build_type, [])
 # foreach opt: target_custom_options
 #     add_project_arguments(opt, language: 'cpp')
@@ -75,6 +84,8 @@ target_custom_options = project_custom_options.get(build_type, [])
 
 if build_type == 'debug' or build_type == 'debugoptimized'
   add_global_arguments('-DDEBUG', language: 'cpp')
+else
+  add_global_arguments('-DNDEBUG', language: 'cpp')
 endif
 
 use_dynamic_module = get_option('use_dynamic_module') # Use python module or not
@@ -97,9 +108,9 @@ eigen_dep = dependency('eigen3', required: true)
 blas = dependency('blas', required: false) # Eigen can work without BLAS
 
 
-if blas.found()
-  add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
-endif
+# if blas.found()
+#   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
+# endif
 
 highfive_found = false
 cmake = import('cmake', required: false)

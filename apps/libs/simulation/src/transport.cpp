@@ -157,8 +157,7 @@ namespace Simulation
     //Uncomment with dense matrix
     // auto rd = flows.data();
     // std::vector<double> flow_copy = std::vector<double>(rd.begin(),rd.end());
-    // FlowMatrixType m_transition = Eigen::Map<Eigen::MatrixXd>(flow_copy.data(),n_compartiments,n_compartiments);
-    // FlowMatrixType m_transition(n_compartiments, n_compartiments);
+    // FlowMatrixType m_transition = Eigen::Map<Eigen::MatrixXd>(flow_copy.data(),n_compartments,n_compartments);
 
 
     FlowMatrixType m_transition = FlowMatrixType(n_compartments,n_compartments);
@@ -181,20 +180,9 @@ namespace Simulation
     }
 
     m_transition.makeCompressed();
-    // TODO OPTI
-    // for (int i = 0; i < n_compartiments; ++i)
-    // {
-    //   double sum = 0.;
-    //   for (int j = 0; j < n_compartiments; ++j)
-    //   {
-    //     sum += flows(i, j);
-    //     if (i != j)
-    //     {
-    //       m_transition.coeffRef(i, j) = flows(i, j);
-    //     }
-    //   }
-    //   m_transition.coeffRef(i, i) = -sum;
-    // }
+
+
+
 
     return m_transition;
   }

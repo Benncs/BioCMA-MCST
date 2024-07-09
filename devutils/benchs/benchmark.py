@@ -23,14 +23,15 @@ EXECUTABLE_NAME = "biocma_mcst_cli_app"  # Name of executable to run
 BENCH_SCRIPT_PATH = (
     "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
 )
-FILENAME = "./devutils/benchs/benchbench_records_0d.csv"  # Record filename
-OUTPUT_PDF = "./devutils/benchs/results_bench_0d.pdf"  # Output path
+FILENAME = "./devutils/benchs/bench_records.csv"  # Record filename
+OUTPUT_PDF = "./devutils/benchs/results_bench.pdf"  # Output path
 MODEL_NAME = "model_light"
 FINAL_TIME = 10  # Reference simulation time
 DELTA_TIME = 1e-3  # Reference delta time fixed
-# CMA_DATA_PATH = "./cma_data/bench/"
-CMA_DATA_PATH = "./cma_data/0d/"
-RECURSIVE = False
+CMA_DATA_PATH = "./cma_data/bench/"
+# CMA_DATA_PATH = "./cma_data/0d/"
+RECURSIVE = True
+
 def format_cli(number_particle, final_time):
 
     rec  = [""]
@@ -275,7 +276,7 @@ def main(args):
             #     n_particles = np.linspace(particle_n1, particle_n2, num=n_scale, dtype=np.int32)
             #     for number in n_particles:
             #         do_scale(number)
-        except:
+        except:  
             n_particles = np.linspace(
                 particle_n1, particle_n2, num=n_scale, dtype=np.int32
             )

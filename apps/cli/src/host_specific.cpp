@@ -11,7 +11,6 @@
 #include <simulation/update_flows.hpp>
 #include <sync.hpp>
 
-
 // constexpr size_t n_particle_trigger_parralel = 1e6;
 
 constexpr size_t PROGRESS_BAR_WIDTH = 100;
@@ -104,7 +103,9 @@ void main_loop(const SimulationParameters &params,
   const size_t n_iter_simulation = transitioner->get_n_timestep();
 
   const size_t dump_number =
-      std::min(n_iter_simulation, static_cast<size_t>(exporter->expectecNiteration())) - 1;
+      std::min(n_iter_simulation,
+               static_cast<size_t>(exporter->expectecNiteration())) -
+      1;
 
   const size_t dump_interval = (n_iter_simulation) / (dump_number) + 1;
 
@@ -177,7 +178,9 @@ void main_loop(const SimulationParameters &params,
       {
 
         sync_step(exec, simulation);
+
         simulation.step(d_t, *current_reactor_state);
+
         sync_prepare_next(exec, simulation);
         current_time += d_t;
       }

@@ -65,7 +65,7 @@ def read_xml_values(xml_path, parser,target_name):
                 break
         if cli_args=="":
             raise Exception("Case not found")
-        print(cli_args)
+        return cli_args
                   
 
     except etree.XMLSyntaxError as e:
@@ -74,12 +74,7 @@ def read_xml_values(xml_path, parser,target_name):
         print(f"Invalid XML: {str(e)}")
 
 
-
-
-if __name__ == "__main__":
-    args = sys.argv
-
-
+def format_cli(args):
     if(len(args))==2:
         name = args[1]
         xml_file_path = "/mnt/c/Users/casale/Documents/code/cpp/biomc/devutils/datamodel/input_scheme.xml"  
@@ -88,6 +83,13 @@ if __name__ == "__main__":
         parser = create_xml_parser()
 
         # Read XML and extract values
-        read_xml_values(xml_file_path, parser,name)
+        return read_xml_values(xml_file_path, parser,name)
     else:
-        print("h 1")
+        return "h 1"
+
+if __name__ == "__main__":
+    args = sys.argv
+
+
+    cli = format_cli(args)
+    print(cli)
