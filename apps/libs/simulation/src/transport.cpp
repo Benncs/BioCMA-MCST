@@ -88,9 +88,16 @@ namespace Simulation
         count_nei++;
         cumsum += proba_out;
       }
-      // std::cout<<"\r\n";
     }
     return P;
+  }
+
+  bool probability_leaving(double random_number,double volume,double flow,double dt)
+  {
+    const double theta_p = volume / flow;
+    const double probability = 1 - std::exp(-dt / theta_p);
+    return random_number < probability; 
+          
   }
 
   void kernel_exit(double d_t,
@@ -98,8 +105,8 @@ namespace Simulation
                    MC::ReactorDomain &domain,
                    MC::Particles &particle)
   {
-    const std::vector<size_t> v_tmp_index_leaving_flow = {50};
-    const std::vector<double> v_tmp_leaving_flow = {0.000011758};
+    const std::vector<size_t> v_tmp_index_leaving_flow = {10};
+    const std::vector<double> v_tmp_leaving_flow = {0.000011758/10};
 
 
 
@@ -110,16 +117,12 @@ namespace Simulation
           {
             return;
           }
-
-          double theta_p = domain[index].volume_liq / flow;
-          const double probability = 1 - std::exp(-d_t / theta_p);
-
-          if (random_number >= probability)
+          
+          if(probability_leaving(random_number,domain[index].volume_liq,flow,d_t))
           {
-            return;
+            particle.status = MC::CellStatus::OUT;
           }
 
-          particle.status = MC::CellStatus::OUT;
         },
         v_tmp_index_leaving_flow,
         v_tmp_leaving_flow);
@@ -144,14 +147,21 @@ namespace Simulation
 
     const double leaving_flow = std::abs(m_transition.coeff(rowId, rowId));
 
-    const double theta_p = v_p / leaving_flow;
+    const bool leaving = probability_leaving(random_number,v_p,leaving_flow,d_t);
 
-    const double probability = 1 - std::exp(-d_t / theta_p);
-
-    if (random_number >= probability)
+    if(!leaving)
     {
       return;
     }
+
+    // const double theta_p = v_p / leaving_flow;
+
+    // const double probability = 1 - std::exp(-d_t / theta_p);
+
+    // if (random_number >= probability)
+    // {
+    //   return;
+    // }
 
     size_t next = find_next_compartment(
         rowId, random_number2, i_neighbor, cumulative_probability);

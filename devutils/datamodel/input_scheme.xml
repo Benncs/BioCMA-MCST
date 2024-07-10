@@ -45,11 +45,11 @@
    <control name="test_out_feed">
       <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
       <final_time>3600</final_time>
-      <numper_particle>10000</numper_particle>
+      <numper_particle>100000</numper_particle>
       <delta_time>0.01</delta_time>
-      <results_file_name>test_model_fed_out_sim</results_file_name>
+      <results_file_name>test_model_fed_out_monod</results_file_name>
       <number_exported_result>50</number_exported_result>
-      <model_name>model_simple</model_name>
+      <model_name>model_monod</model_name>
    </control>
 
 </cases>

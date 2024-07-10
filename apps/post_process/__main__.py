@@ -49,7 +49,7 @@ def assemble(res_folder: str, names: List[str]) -> List[str]:
 
 if __name__ == "__main__":
     root_res = "./results/"
-    name_results = ["simple_model_fed_out"]
+    name_results = ["test_model_fed_out"]
     pathres = assemble(root_res, name_results)
 
     vtu_path = (
