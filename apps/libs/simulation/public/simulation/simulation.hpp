@@ -1,7 +1,6 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
-#include "mc/prng/prng.hpp"
 
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
@@ -54,9 +53,9 @@ namespace Simulation
     [[nodiscard]] std::span<double> getContributionData() const;
 
     void setVolumes(std::span<const double> volumesgas,
-                    std::span<const double> volumesliq);
+                    std::span<const double> volumesliq)const;
 
-    void step(double d_t, const CmaRead::ReactorState &state);
+    void step(double d_t, const CmaRead::ReactorState &state)const;
 
     void cycleProcess(double d_t);
 
@@ -64,14 +63,13 @@ namespace Simulation
 
     void setGasFlow(PreCalculatedHydroState *_flows_g);
 
-    void reduceContribs(std::span<double> data, size_t n_rank);
+    void reduceContribs(std::span<double> data, size_t n_rank)const;
 
-    void clearContribution();
+    void clearContribution()const;
 
-    void clear_mc()
-    {
-      mc_unit.reset();
-    }
+    void update_feed(double d_t)const;
+
+    void clear_mc();
 
   private:
     struct pimpl_deleter
@@ -112,6 +110,11 @@ namespace Simulation
   {
     flow_gas = _flows_g;
   }
+
+  inline void SimulationUnit::clear_mc()
+    {
+      mc_unit.reset();
+    }
 
   inline void SimulationUnit::execute_process_knrl(const auto &kernel)
   {

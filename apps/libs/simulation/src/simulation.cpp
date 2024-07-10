@@ -48,7 +48,8 @@ namespace Simulation
   }
 
   void p_kernel(double d_t,
-                MC::MonteCarloUnit &unit,
+                MC::ReactorDomain &domain,
+                std::span<MC::EventContainer> ts_events,
                 std::span<Eigen::MatrixXd> _contribs,
                 std::span<MC::ThreadPrivateData> _extras,
                 const KModel &_kmodels,
@@ -101,7 +102,7 @@ namespace Simulation
   }
 
   void SimulationUnit::setVolumes(std::span<const double> volumesgas,
-                                  std::span<const double> volumesliq)
+                                  std::span<const double> volumesliq)const
   {
 
     std::span<double const> vg;
@@ -166,22 +167,23 @@ namespace Simulation
 
   void SimulationUnit::cycleProcess(const double d_t)
   {
+    auto &to_process = this->mc_unit->container.to_process;
 
-    const auto &cumulative_probability = flow_liquid->cumulative_probability;
+    const auto &cumulative_probability = this->flow_liquid->cumulative_probability;
 
     const auto &m_transition = this->flow_liquid->transition_matrix;
 
-    auto &unit = *this->mc_unit;
     auto contribs = this->liquid_scalar->getThreadContribs();
     auto &extras = this->mc_unit->extras;
-    auto &to_process = this->mc_unit->container.to_process;
+    auto& ts_events = this->mc_unit->ts_events;
     const auto size = static_cast<size_t>(to_process.size());
+    auto& domain = this->mc_unit->domain;
+
 #pragma omp for
     for (size_t i_particle = 0; i_particle < size; ++i_particle)
     {
-      // particle->weight = 1./size;
       p_kernel(d_t,
-               unit,
+               domain,ts_events,
                contribs,
                extras,
                kmodel,
@@ -195,7 +197,8 @@ namespace Simulation
   }
 
   void p_kernel(double d_t,
-                MC::MonteCarloUnit &unit,
+                MC::ReactorDomain &domain,
+                std::span<MC::EventContainer> ts_events,
                 std::span<Eigen::MatrixXd> _contribs,
                 std::span<MC::ThreadPrivateData> _extras,
                 const KModel &_kmodel,
@@ -209,10 +212,8 @@ namespace Simulation
       return;
     }
 
-    auto &domain = unit.domain;
-
     const size_t i_thread = omp_get_thread_num();
-    auto &events = unit.ts_events[i_thread];
+    auto &events = ts_events[i_thread];
     auto &thread_contrib = _contribs[i_thread];
     auto &thread_extra = _extras[i_thread];
 

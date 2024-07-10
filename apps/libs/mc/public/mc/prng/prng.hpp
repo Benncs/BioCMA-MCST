@@ -42,8 +42,8 @@ namespace MC
 
     inline double double_unfiform()
     {
-      // return step();
-      return _uniform_double(gen);
+      return step();
+      // return _uniform_double(gen);
     }
 
     inline float step()

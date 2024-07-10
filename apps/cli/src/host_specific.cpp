@@ -100,6 +100,9 @@ void main_loop(const SimulationParameters &params,
                std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
                std::unique_ptr<DataExporter> &exporter)
 {
+  simulation.update_feed(0);
+
+  // const size_t n_update_feed = 0; //TODO: move elsewhere 
 
   const double d_t = params.d_t;
 
@@ -114,6 +117,8 @@ void main_loop(const SimulationParameters &params,
 
   size_t dump_counter = 0;
   double current_time = 0.;
+  // size_t update_feed_counter = 0;
+  // const size_t update_feed_interval = (n_update_feed==0)? n_iter_simulation : (n_iter_simulation) / (n_update_feed) + 1;
 
   MPI_W::HostIterationPayload mpi_payload;
   const auto *current_reactor_state = &transitioner->get_unchecked(0);
@@ -181,8 +186,15 @@ void main_loop(const SimulationParameters &params,
       {
 
         sync_step(exec, simulation);
-
-        simulation.step(d_t, *current_reactor_state);
+        #pragma omp task default(none) shared(simulation,current_reactor_state),firstprivate(d_t)
+        {
+          // update_feed_counter++;
+          // if (update_feed_counter==update_feed_interval) {
+          //     simulation.update_feed(d_t);
+          // }
+          simulation.update_feed(d_t);
+          simulation.step(d_t, *current_reactor_state);
+        }
 
         sync_prepare_next(exec, simulation);
         current_time += d_t;

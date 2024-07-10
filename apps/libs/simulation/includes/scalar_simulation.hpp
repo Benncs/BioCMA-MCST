@@ -54,9 +54,11 @@ namespace Simulation
 
     Eigen::MatrixXd biomass_contribution;
 
+    Eigen::MatrixXd feed;
+
     void performStep(double d_t,
                      const FlowMatrixType &m_transition,
-                     const Eigen::MatrixXd &transfer_gas_liquid,const Eigen::MatrixXd &feed);
+                     const Eigen::MatrixXd &transfer_gas_liquid);
 
    
 

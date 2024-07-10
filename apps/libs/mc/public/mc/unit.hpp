@@ -16,9 +16,9 @@ namespace MC
   {
     ReactorDomain domain;
     ParticlesContainer container;
-    std::vector<EventContainer> ts_events;
+    std::vector<EventContainer> ts_events; //TODO Move to thread private 
     PRNG rand;
-    std::vector<ThreadPrivateData> extras; // TODO move to unit
+    std::vector<ThreadPrivateData> extras; 
     void merge(size_t i_thread)
     {
       container.merge(extras[i_thread]);

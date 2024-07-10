@@ -34,10 +34,10 @@
    
    <control name="simple">
       <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
-      <final_time>7200</final_time>
-      <numper_particle>20000</numper_particle>
-      <delta_time>0.01</delta_time>
-      <results_file_name>simple_model_fed</results_file_name>
+      <final_time>100</final_time>
+      <numper_particle>200000</numper_particle>
+      <delta_time>0</delta_time>
+      <results_file_name>simple_model_fed3</results_file_name>
       <number_exported_result>50</number_exported_result>
       <model_name>model_simple</model_name>
    </control>

@@ -48,7 +48,8 @@ namespace Simulation
             this->liquid_scalar->concentration.cols()};
   }
 
-  void SimulationUnit::reduceContribs(std::span<double> data, size_t n_rank)
+  void SimulationUnit::reduceContribs(std::span<double> data,
+                                      size_t n_rank) const
   {
 
     size_t nr = this->liquid_scalar->concentration.rows();
@@ -64,7 +65,7 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::clearContribution()
+  void SimulationUnit::clearContribution()const
   {
     for (size_t i = 0; i < n_thread; ++i)
     {
@@ -75,18 +76,19 @@ namespace Simulation
     this->liquid_scalar->biomass_contribution.setZero();
   }
 
-  void SimulationUnit::step(double d_t, const CmaRead::ReactorState &state)
+  void SimulationUnit::update_feed(double d_t) const
   {
-    Eigen::MatrixXd liquid_feed =
-        Eigen::MatrixXd::Zero(this->liquid_scalar->concentration.rows(),
-                              this->liquid_scalar->concentration.cols());
+    this->liquid_scalar->feed.coeffRef(0, 50) = 5 * 10 / 3600;
 
-    liquid_feed.coeffRef(0, 50) = 5*10/3600;
-
-    for(int i =1 ;i<this->liquid_scalar->concentration.cols()-2;++i)
+    for (int i = 1; i < this->liquid_scalar->concentration.cols() - 2; ++i)
     {
-      liquid_feed.coeffRef(0, i) = 50*10/3600;
+      this->liquid_scalar->feed.coeffRef(0, i) = 50 * 1 / 3600;
     }
+  }
+
+  void SimulationUnit::step(double d_t,
+                            const CmaRead::ReactorState &state) const
+  {
 
     auto mat_transfer_g_liq =
         (is_two_phase_flow)
@@ -99,16 +101,13 @@ namespace Simulation
                                     this->liquid_scalar->concentration.cols());
 
     this->liquid_scalar->performStep(
-        d_t, flow_liquid->transition_matrix, mat_transfer_g_liq, liquid_feed);
+        d_t, flow_liquid->transition_matrix, mat_transfer_g_liq);
 
     if (is_two_phase_flow)
     {
-      Eigen::MatrixXd gas_feed =
-          Eigen::MatrixXd::Zero(this->gas_scalar->concentration.rows(),
-                                this->gas_scalar->concentration.cols());
 
       this->gas_scalar->performStep(
-          d_t, flow_gas->transition_matrix, -1 * mat_transfer_g_liq, gas_feed);
+          d_t, flow_gas->transition_matrix, -1 * mat_transfer_g_liq);
     }
   }
 } // namespace Simulation

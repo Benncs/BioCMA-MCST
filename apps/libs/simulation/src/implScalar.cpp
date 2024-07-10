@@ -33,6 +33,8 @@ namespace Simulation
     this->concentration = Eigen::MatrixXd(n_species, n_compartments);
     this->concentration.setZero();
 
+    this->feed = Eigen::MatrixXd(n_species, n_compartments);
+
     this->vec_kla = Eigen::ArrayXXd(n_species, n_compartments);
     vec_kla.setZero();
 
@@ -60,7 +62,7 @@ namespace Simulation
 
   void ScalarSimulation::performStep(double d_t,
                                      const FlowMatrixType &m_transition,
-                                     const Eigen::MatrixXd &transfer_gas_liquid,const Eigen::MatrixXd &feed)
+                                     const Eigen::MatrixXd &transfer_gas_liquid)
   {
 
     total_mass.noalias() +=

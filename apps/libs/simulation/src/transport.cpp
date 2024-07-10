@@ -89,6 +89,12 @@ namespace Simulation
     return P;
   }
 
+  void kernel_exit(double random_number,MC::ReactorDomain &domain,MC::Particles &particle)
+  {
+    const size_t tmp_index_leaving_flow = 50;
+    const double tmp_leaving_flow = 0.00011758;
+  }
+
   void kernel_move(double random_number,
                    double random_number2,
                    MC::ReactorDomain &domain,
