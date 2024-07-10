@@ -165,7 +165,10 @@ void main_loop(const SimulationParameters &params,
         transitioner->advance(simulation);
       }
 
+    
       simulation.cycleProcess(d_t);
+    
+      
 
 #pragma omp master
       {

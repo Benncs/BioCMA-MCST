@@ -3,9 +3,11 @@
 #include "mc/prng/prng.hpp"
 #include "models/types.hpp"
 #include <algorithm>
+#include <atomic>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <execution>
 #include <mc/domain.hpp>
 #include <mc/particles/mcparticles.hpp>
 #include <mc/thread_private_data.hpp>
@@ -47,7 +49,8 @@ namespace Simulation
     gas(1, i) = 15e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
   }
 
-  void p_kernel(size_t current_i_particle,double d_t,
+  void p_kernel(size_t current_i_particle,
+                double d_t,
                 MC::ReactorDomain &domain,
                 std::span<MC::EventContainer> ts_events,
                 std::span<Eigen::MatrixXd> _contribs,
@@ -183,7 +186,8 @@ namespace Simulation
 #pragma omp for
     for (size_t i_particle = 0; i_particle < size; ++i_particle)
     {
-      p_kernel(i_particle,d_t,
+      p_kernel(i_particle,
+               d_t,
                domain,
                ts_events,
                contribs,
@@ -194,14 +198,36 @@ namespace Simulation
                cumulative_probability);
     }
 
+    // {
+
+    //   std::atomic<size_t> i_particle = 0;
+    //   std::for_each(std::execution::par_unseq,
+    //                 to_process.begin(),
+    //                 to_process.end(),
+    //                 [&](auto &&particle)
+    //                 {
+    //                   p_kernel(i_particle,
+    //                            d_t,
+    //                            domain,
+    //                            ts_events,
+    //                            contribs,
+    //                            extras,
+    //                            kmodel,
+    //                            particle,
+    //                            m_transition,
+    //                            cumulative_probability);
+    //                   i_particle++;
+    //                 });
+    // }
+
 #pragma omp single
-{
-   post_process_reducing();
-}
-   
+    {
+      post_process_reducing();
+    }
   }
 
-  void p_kernel(size_t current_i_particle,double d_t,
+  void p_kernel(size_t current_i_particle,
+                double d_t,
                 MC::ReactorDomain &domain,
                 std::span<MC::EventContainer> ts_events,
                 std::span<Eigen::MatrixXd> _contribs,
@@ -212,7 +238,6 @@ namespace Simulation
                 auto &cumulative_probability)
   {
 
-   
     if (particle.status == MC::CellStatus::DEAD)
     {
       return;
@@ -227,16 +252,14 @@ namespace Simulation
     const double random_number_1 = rng.double_unfiform();
     const double random_number_2 = rng.double_unfiform();
     const double random_number_3 = rng.double_unfiform();
-    
 
-     auto register_spawned_particle = [&](MC::Particles&& p)
+    auto register_spawned_particle = [&](MC::Particles &&p)
     {
-        events.incr<MC::EventType::NewParticle>();
-        _kmodel.contribution_kernel(p, thread_contrib);
-        __ATOM_INCR__(domain[p.current_container].n_cells)
-        thread_extra.extra_process.emplace_back(std::move(p));
+      events.incr<MC::EventType::NewParticle>();
+      _kmodel.contribution_kernel(p, thread_contrib);
+      __ATOM_INCR__(domain[p.current_container].n_cells)
+      thread_extra.extra_process.emplace_back(std::move(p));
     };
-
 
     kernel_move(random_number_1,
                 random_number_2,
@@ -246,8 +269,7 @@ namespace Simulation
                 m_transition,
                 cumulative_probability);
 
-    kernel_exit(d_t,random_number_3, domain, particle);
-    
+    kernel_exit(d_t, random_number_3, domain, particle);
 
     if (particle.status == MC::CellStatus::OUT)
     {
@@ -259,14 +281,15 @@ namespace Simulation
       return;
     }
 
-
-    _kmodel.update_kernel(d_t, particle,  domain[particle.current_container].concentrations);
+    _kmodel.update_kernel(
+        d_t, particle, domain[particle.current_container].concentrations);
 
     if (particle.status == MC::CellStatus::DEAD)
     {
       events.incr<MC::EventType::Death>();
       __ATOM_DECR__(
           domain[particle.current_container].n_cells) // TODO: check overflow
+
       particle.clearState(MC::CellStatus::DEAD);
       thread_extra.index_in_dead_state.emplace_back(current_i_particle);
     }
@@ -276,7 +299,6 @@ namespace Simulation
       {
         particle.status = MC::CellStatus::IDLE;
         register_spawned_particle(_kmodel.division_kernel(particle));
-   
       }
 
       _kmodel.contribution_kernel(particle, thread_contrib);

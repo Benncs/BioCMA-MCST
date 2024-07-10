@@ -28,7 +28,7 @@ private_dependencies = [eigen_dep]
 
 external_dependcies = [cma_dep, blas]
 
-simulation_public_dependencies = [
+simulation_public_dependencies = [tbb,
    project_dependencies,
    omp,
    external_dependcies,

@@ -109,7 +109,7 @@ omp = declare_dependency(link_args: ['-fopenmp'])
 else
 omp = dependency('openmp', language: 'cpp', required: true)
 endif 
-
+tbb = dependency('tbb', required: true)
 
 
 eigen_dep = dependency('eigen3', required: true)

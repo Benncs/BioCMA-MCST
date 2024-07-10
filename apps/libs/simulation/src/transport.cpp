@@ -108,8 +108,6 @@ namespace Simulation
     const std::vector<size_t> v_tmp_index_leaving_flow = {10};
     const std::vector<double> v_tmp_leaving_flow = {0.000011758/10};
 
-
-
     CmtCommons::foreach_zip(
         [&particle, random_number, &domain,d_t](auto &&index, auto &&flow)
         {

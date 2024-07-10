@@ -4,15 +4,28 @@
 #include <cstddef>
 #include <vector>
 
-#define __ATOM_INCR__(__val__)                                                 \
-  {                                                                            \
-    _Pragma("omp atomic") __val__++;                                           \
-  }
+#define USE_OMP_EXECUTOR 1
+#define USE_STL_EXEUCTOR 1
 
-#define __ATOM_DECR__(__val__)                                                 \
-  {                                                                            \
-    _Pragma("omp atomic") __val__--;                                           \
-  }
+#if defined(USE_OMP_EXECUTOR)
+#  define __ATOM_INCR__(__val__) _Pragma("omp atomic") __val__++;
+#elif defined(USE_STL_EXECUTOR)
+// Define behavior for STL executor (e.g., increment without atomic operation)
+#  define __ATOM_2INCR__(__val__) __val__++;
+#else
+#  error "Error: Neither USE_OMP_EXECUTOR nor USE_STL_EXECUTOR is defined"
+#endif
+
+#if defined(USE_OMP_EXECUTOR)
+#  define __ATOM_DECR__(__val__) _Pragma("omp atomic") __val__--;
+#elif defined(USE_STL_EXECUTOR)
+// Define behavior for STL executor (e.g., increment without atomic operation)
+#  define __ATOM_2INCR__(__val__) __val__++;
+#else
+#  error "Error: Neither USE_OMP_EXECUTOR nor USE_STL_EXECUTOR is defined"
+#endif
+
+
 
 // template<typename T,typename F_merge>
 // class ThreadSafeDataContainer

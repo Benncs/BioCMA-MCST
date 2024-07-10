@@ -22,7 +22,7 @@ dep_all = [
   mc_dependency,
   common_dependecy,
   thread_dep,
-  model_selection_dep,
+  model_selection_dep,tbb
 ]
 
 
@@ -37,7 +37,7 @@ endif
 dep_static_module = [
   dep_all,
   simulation_lib_dependency,
-  omp,
+  omp
 ]
 
 
