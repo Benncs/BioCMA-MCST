@@ -7,6 +7,7 @@
 #include <mc/particles/particles_container.hpp>
 #include <mc/unit.hpp>
 #include <simulation/pc_hydro.hpp>
+
 namespace Simulation
 {
 
@@ -23,7 +24,10 @@ namespace Simulation
   Eigen::MatrixXd get_CP(CmaRead::Neighbors::Neighbors_const_view_t neighbors,
                          const FlowMatrixType &m_transition);
 
- 
+  void kernel_exit(double d_t,
+                   double random_number,
+                   MC::ReactorDomain &domain,
+                   MC::Particles &particle);
 
   void kernel_move(double random_number,
                    double random_number2,

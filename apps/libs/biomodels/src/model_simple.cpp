@@ -104,7 +104,7 @@ void init_simple_model_(MC::Particles &p)
                         1.01 * SimpleModel::maximal_length));
 
   model.xi.a_permease = rng(gen);
-  model.xi.a_pts = 1-model.xi.a_permease;
+  model.xi.a_pts = rng(gen);
   model.xi.mu_eff = 1e-9;
   model.xi.n_permease = 1e3;
 

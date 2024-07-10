@@ -1,4 +1,5 @@
 #include <cma_read/reactorstate.hpp>
+#include <iterator>
 #include <mc/domain.hpp>
 #include <simulation/simulation.hpp>
 
@@ -9,6 +10,7 @@
 #include <hydro/mass_transfer.hpp>
 #include <scalar_simulation.hpp>
 #include <stdexcept>
+#include <iterator>
 
 namespace Simulation
 {
@@ -20,6 +22,8 @@ namespace Simulation
       this->liquid_scalar->merge(i_thread);
       this->mc_unit->merge(i_thread);
     }
+
+    
   }
 
   std::span<double> SimulationUnit::getContributionData() const
@@ -65,7 +69,7 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::clearContribution()const
+  void SimulationUnit::clearContribution() const
   {
     for (size_t i = 0; i < n_thread; ++i)
     {
@@ -82,7 +86,7 @@ namespace Simulation
 
     for (int i = 1; i < this->liquid_scalar->concentration.cols() - 2; ++i)
     {
-      this->liquid_scalar->feed.coeffRef(0, i) = 50 * 1 / 3600;
+      this->liquid_scalar->feed.coeffRef(0, i) = 50 * 0.00011758;
     }
   }
 

@@ -1,3 +1,4 @@
+#include "mc/particles/mcparticles.hpp"
 #include <common/execinfo.hpp>
 #include <mc/unit.hpp>
 #include <post_process.hpp>
@@ -24,8 +25,10 @@ namespace PostProcessing
           aggregated_values;
 
       std::unordered_map<std::string, std::vector<double>> spatial;
-      get_particle_properties(
-          simulation, aggregated_values, spatial, std::get<1>(simulation.getDim()));
+      get_particle_properties(simulation,
+                              aggregated_values,
+                              spatial,
+                              std::get<1>(simulation.getDim()));
 
       exporter->write_initial_particle_data(aggregated_values, spatial);
     }
@@ -36,6 +39,21 @@ namespace PostProcessing
                     Simulation::SimulationUnit &simulation,
                     std::unique_ptr<DataExporter> &exporter)
   {
+    auto distribution = simulation.mc_unit->domain.getDistribution();
+    #ifdef NDEBUG
+    {
+      auto tot = std::accumulate(
+          distribution.begin(), distribution.end(), static_cast<size_t>(0));
+      auto removed =
+          simulation.mc_unit->ts_events[0].get<MC::EventType::Death>() +
+          simulation.mc_unit->ts_events[0].get<MC::EventType::Exit>();
+      auto new_p =
+          simulation.mc_unit->ts_events[0].get<MC::EventType::NewParticle>();
+
+      assert(tot == (new_p - removed + params.user_params.numper_particle) &&
+             "Bad Results");
+    }
+    #endif 
 
     if (exporter != nullptr)
     {
@@ -43,7 +61,6 @@ namespace PostProcessing
           aggregated_values;
 
       std::unordered_map<std::string, std::vector<double>> spatial;
-      auto distribution = simulation.mc_unit->domain.getDistribution();
 
       get_particle_properties(
           simulation, aggregated_values, spatial, distribution.size());
@@ -87,11 +104,18 @@ namespace PostProcessing
 
     const auto &comp = simulation.mc_unit->domain.data();
 
-    const auto &data = simulation.mc_unit->container.to_process.data();
+    const auto &particles_data =
+        simulation.mc_unit->container.to_process.data();
 
-    const auto n_particle = data.size();
+    const auto n_particle = particles_data.size();
 
-    const auto prop_1 = model_properties(data.front());
+    size_t i_p = 0;
+    while (particles_data[i_p].status != MC::CellStatus::IDLE &&
+           i_p != particles_data.size())
+    {
+      i_p++;
+    }
+    const auto prop_1 = model_properties(particles_data[i_p]);
 
     for (const auto &[key, _value] : prop_1)
     {
@@ -102,24 +126,28 @@ namespace PostProcessing
 #pragma omp parallel for shared(aggregated_values,                             \
                                     n_particle,                                \
                                     model_properties,                          \
-                                    data,                                      \
+                                    particles_data,                            \
                                     spatial,                                   \
                                     size,                                      \
-                                    comp) default(none)
-    for (size_t i = 0; i < n_particle; ++i)
+                                    comp) default(none),                       \
+    firstprivate(i_p)
+    for (size_t i = i_p; i < n_particle; ++i)
     {
-      auto prop = model_properties(data[i]);
-      const size_t i_container = data[i].current_container;
-
-      for (const auto &[key, value] : prop)
+      if (particles_data[i].status == MC::CellStatus::IDLE)
       {
-        aggregated_values[key][i] = value;
-#pragma omp critical
+        auto prop = model_properties(particles_data[i]);
+        const size_t i_container = particles_data[i].current_container;
+
+        for (const auto &[key, value] : prop)
         {
-          if (const double *val = std::get_if<double>(&value))
+          aggregated_values[key][i] = value;
+#pragma omp critical
           {
-            spatial[key][i_container] +=
-                *val / static_cast<double>(comp[i_container].n_cells);
+            if (const double *val = std::get_if<double>(&value))
+            {
+              spatial[key][i_container] +=
+                  *val / static_cast<double>(comp[i_container].n_cells);
+            }
           }
         }
       }

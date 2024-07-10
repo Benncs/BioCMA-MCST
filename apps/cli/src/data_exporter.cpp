@@ -162,7 +162,7 @@ DataExportHighFive::DataExportHighFive(const ExecInfo &info,
                                        std::tuple<size_t, size_t> dim,
                                        size_t niter,
                                        std::span<size_t> distribution)
-    : DataExporter(info, params, _filename, dim, niter, distribution)  
+    : DataExporter(info, params, _filename, dim, niter, distribution)
 {
   auto _file = HighFive::File(filename, HighFive::File::Truncate);
   write_initial(_file, info, initial_values);
@@ -210,7 +210,6 @@ void DataExportHighFive::write_attributes(HighFive::File &file,
         value);
   }
 }
-
 
 void DataExportHighFive::prepare()
 {
@@ -267,7 +266,7 @@ void DataExportHighFive::append(double t,
   try
   {
 
-     HighFive::File file(filename, HighFive::File::ReadWrite);
+    HighFive::File file(filename, HighFive::File::ReadWrite);
 
     auto write_dataset =
         [&file]<typename T>(const std::string &name,
@@ -343,7 +342,7 @@ void DataExportHighFive::write_final_results(ExportData &data,
   const auto nr = static_cast<size_t>(get<0>(dim));
   const auto nc = static_cast<size_t>(get<1>(dim));
 
-   HighFive::File file(filename, HighFive::File::ReadWrite);
+  HighFive::File file(filename, HighFive::File::ReadWrite);
 
   file.createDataSet("final_results/number_particles", data.number_particles);
 
@@ -368,6 +367,9 @@ void DataExportHighFive::write_final_results(ExportData &data,
   file.createDataSet("final_results/events/total_death",
                      data.event->get<MC::EventType::Death>());
 
+  file.createDataSet("final_results/events/total_exit",
+                     data.event->get<MC::EventType::Exit>());
+
   file.createDataSet<std::string>("biological_model/description ",
                                   std::string("Model description"));
 }
@@ -378,8 +380,7 @@ void DataExportHighFive::write_particle_data(
     const std::unordered_map<std::string, std::vector<double>> &spatial_props,
     const std::string &ds_name)
 {
-   HighFive::File file(filename, HighFive::File::ReadWrite);
-
+  HighFive::File file(filename, HighFive::File::ReadWrite);
 
   std::cout << "EXPORTING PARTICLE DATA" << std::endl;
   HighFive::DataSetCreateProps ds_props;

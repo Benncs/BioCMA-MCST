@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 from matplotlib import pyplot as plt
 import numpy as np
 from apps.post_process.read_results import RawResults, import_results
@@ -27,10 +27,10 @@ def check_mixing(
     plt.savefig(f"{dest}/mixing_variance.svg", dpi=1500)
 
 
-def property_distribution(results:RawResults):
-    for key in results.bioparam:
+def property_distribution(biodict:Dict[str, np.ndarray],prefix:str=""):
+    for key in biodict:
     
-        value = results.bioparam[key]
+        value = biodict[key]
         
         if isinstance(value, np.ndarray) and np.issubdtype(value.dtype, float):
         
@@ -38,7 +38,9 @@ def property_distribution(results:RawResults):
 
             print(mean,variance_population,variance_sample)
 
-            mk_histogram(value,key)
+            mk_histogram(value,f"{prefix}_{key}")
+
+    
 
 
 def assemble(res_folder: str, names: List[str]) -> List[str]:
@@ -47,7 +49,7 @@ def assemble(res_folder: str, names: List[str]) -> List[str]:
 
 if __name__ == "__main__":
     root_res = "./results/"
-    name_results = ["simple_model_fed2"]
+    name_results = ["simple_model_fed_out"]
     pathres = assemble(root_res, name_results)
 
     vtu_path = (
@@ -55,4 +57,5 @@ if __name__ == "__main__":
     )
     check_mixing(name_results, pathres, root_res,vtu_path)
     results = import_results(pathres[0])
-    property_distribution(results)
+    property_distribution(results.initial_bioparam,"init")
+    property_distribution(results.final_bioparam,"final")

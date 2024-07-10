@@ -24,7 +24,8 @@ namespace MC
   public:
     explicit PRNG()
     {
-      gen = std::mt19937(std::random_device{}());
+      auto seed = MC_RAND_DEFAULT_SEED; //std::random_device{}()
+      gen = std::mt19937(seed);
     }
 
     explicit PRNG(uint64_t seed)

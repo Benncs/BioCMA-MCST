@@ -25,3 +25,5 @@ __pycache__
 
 suprojects/highfive
 llvm.sh
+
+*.out 

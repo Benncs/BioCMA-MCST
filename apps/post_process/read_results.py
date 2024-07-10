@@ -36,7 +36,8 @@ class RawResults:
     records_distribution: Optional[np.ndarray] = None
     t: Optional[np.ndarray] = None
     n_t: Optional[int] = None
-    bioparam: Optional[Dict[str, np.ndarray]] = None
+    final_bioparam: Optional[Dict[str, np.ndarray]] = None
+    initial_bioparam: Optional[Dict[str, np.ndarray]] = None
     t_per_flow_map: Optional[float] = None
     n_per_flow_map: Optional[int] = None
 
@@ -133,15 +134,21 @@ def __import_v3(file):
     results.records_distribution = np.array(file.get("records/distribution"))
     results.t = np.array(file.get("records/time"))
     results.t_per_flow_map = np.array(file.get("initial_parameters/t_per_flow_map"))
-    bio = file.get("biological_model/final", None)
+    final_bio = file.get("biological_model/final", None)
+    init_bio = file.get("biological_model/initial", None)
 
     if results.dt is not None and results.t_per_flow_map is not None:
         results.n_per_flow_map = int(results.t_per_flow_map / results.dt)
 
-    if bio is not None:
-        results.bioparam = {}
-        for key in bio:
-            results.bioparam[key] = np.array(bio[key])
+    if final_bio is not None:
+        results.final_bioparam = {}
+        for key in final_bio:
+            results.final_bioparam[key] = np.array(final_bio[key])
+
+    if init_bio is not None:
+        results.initial_bioparam = {}
+        for key in init_bio:
+            results.initial_bioparam[key] = np.array(init_bio[key])
 
     # Calculate n_t if records_distribution is available
     if results.records_distribution is not None:

@@ -1,8 +1,11 @@
 #include "common/thread_safe_container.hpp"
 #include "mc/domain.hpp"
-#include <simulation/pc_hydro.hpp>
+#include "mc/particles/mcparticles.hpp"
+#include <cmt_common/zip.hpp>
 #include <get_cumulative_proba.hpp>
+#include <simulation/pc_hydro.hpp>
 #include <transport.hpp>
+
 
 // TODO REMOVE
 #include <iostream>
@@ -30,7 +33,8 @@ namespace Simulation
   //                                       const PreCalculatedHydroState *flows)
   // {
 
-  //   const auto cumulative_probability = get_CP(domain.getNeighbors(), *flows);
+  //   const auto cumulative_probability = get_CP(domain.getNeighbors(),
+  //   *flows);
 
   //   const auto &m_transition = flows->transition_matrix;
 
@@ -70,7 +74,7 @@ namespace Simulation
       {
         // std::cout<<i_neighbor<<"\t";
         auto colId = static_cast<int>(i_neighbor);
-        if (colId == k_compartment) 
+        if (colId == k_compartment)
         {
           break;
         }
@@ -89,10 +93,36 @@ namespace Simulation
     return P;
   }
 
-  void kernel_exit(double random_number,MC::ReactorDomain &domain,MC::Particles &particle)
+  void kernel_exit(double d_t,
+                   double random_number,
+                   MC::ReactorDomain &domain,
+                   MC::Particles &particle)
   {
-    const size_t tmp_index_leaving_flow = 50;
-    const double tmp_leaving_flow = 0.00011758;
+    const std::vector<size_t> v_tmp_index_leaving_flow = {50};
+    const std::vector<double> v_tmp_leaving_flow = {0.000011758};
+
+
+
+    CmtCommons::foreach_zip(
+        [&particle, random_number, &domain,d_t](auto &&index, auto &&flow)
+        {
+          if (particle.current_container != index || particle.status!=MC::CellStatus::IDLE)
+          {
+            return;
+          }
+
+          double theta_p = domain[index].volume_liq / flow;
+          const double probability = 1 - std::exp(-d_t / theta_p);
+
+          if (random_number >= probability)
+          {
+            return;
+          }
+
+          particle.status = MC::CellStatus::OUT;
+        },
+        v_tmp_index_leaving_flow,
+        v_tmp_leaving_flow);
   }
 
   void kernel_move(double random_number,
@@ -109,7 +139,7 @@ namespace Simulation
     auto &current_container = domain[i_compartment];
     const std::span<const size_t> i_neighbor =
         domain.getNeighbors(i_compartment);
-    
+
     const double &v_p = current_container.volume_liq;
 
     const double leaving_flow = std::abs(m_transition.coeff(rowId, rowId));
@@ -139,7 +169,7 @@ namespace Simulation
   {
     const int max_neighbor = static_cast<int>(i_neighbor.size());
     size_t next = i_neighbor[0];
-   
+
     for (int k_neighbor = 0; k_neighbor < max_neighbor - 1; ++k_neighbor)
     {
       auto pi = cumulative_probability.coeff(i_compartment, k_neighbor);
@@ -155,40 +185,39 @@ namespace Simulation
     return next;
   }
 
-  
-   FlowMatrixType get_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t &flows)
+  FlowMatrixType
+  get_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t &flows)
   {
-    int n_compartments = static_cast<int>(flows.getNRow()); // It SHOULD be square
+    int n_compartments =
+        static_cast<int>(flows.getNRow()); // It SHOULD be square
 
-    //Uncomment with dense matrix
-    // auto rd = flows.data();
-    // std::vector<double> flow_copy = std::vector<double>(rd.begin(),rd.end());
-    // FlowMatrixType m_transition = Eigen::Map<Eigen::MatrixXd>(flow_copy.data(),n_compartments,n_compartments);
+    // Uncomment with dense matrix
+    //  auto rd = flows.data();
+    //  std::vector<double> flow_copy =
+    //  std::vector<double>(rd.begin(),rd.end()); FlowMatrixType m_transition =
+    //  Eigen::Map<Eigen::MatrixXd>(flow_copy.data(),n_compartments,n_compartments);
 
+    FlowMatrixType m_transition =
+        FlowMatrixType(n_compartments, n_compartments);
 
-    FlowMatrixType m_transition = FlowMatrixType(n_compartments,n_compartments);
-
-    for(size_t i =0;i<n_compartments;++i)
+    for (size_t i = 0; i < n_compartments; ++i)
     {
-      for(size_t j=0;j<n_compartments;++j)
+      for (size_t j = 0; j < n_compartments; ++j)
       {
-        const auto val = flows(i,j);
-        if(val!=0.)
+        const auto val = flows(i, j);
+        if (val != 0.)
         {
-          m_transition.coeffRef(i,j)+=val;
+          m_transition.coeffRef(i, j) += val;
         }
       }
     }
 
-    for(int i =0;i<n_compartments;++i)
+    for (int i = 0; i < n_compartments; ++i)
     {
-      m_transition.coeffRef(i,i) = -1.*m_transition.col(i).sum();
+      m_transition.coeffRef(i, i) = -1. * m_transition.col(i).sum();
     }
 
     m_transition.makeCompressed();
-
-
-
 
     return m_transition;
   }
