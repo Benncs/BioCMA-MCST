@@ -26,7 +26,7 @@ namespace Simulation
   find_next_compartment(int i_compartment,
                         double random_number,
                         std::span<const size_t> i_neighbor,
-                        CmaRead::L2DView<const double >cumulative_probability);
+                        CmaRead::L2DView<const double> cumulative_probability);
 
   // move_kernel_t population_balance_flow(MC::ReactorDomain &domain,
 
@@ -101,13 +101,14 @@ namespace Simulation
     return random_number < probability;
   }
 
+  static const std::vector<size_t> v_tmp_index_leaving_flow = {10};
+  static const std::vector<double> v_tmp_leaving_flow = {0.000011758 / 10};
+
   void kernel_exit(double d_t,
                    double random_number,
                    MC::ReactorDomain &domain,
                    MC::Particles &particle)
   {
-    const std::vector<size_t> v_tmp_index_leaving_flow = {10};
-    const std::vector<double> v_tmp_leaving_flow = {0.000011758 / 10};
 
     CmtCommons::foreach_zip(
         [&particle, random_number, &domain, d_t](auto &&index, auto &&flow)
@@ -134,7 +135,7 @@ namespace Simulation
                    MC::Particles &particle,
                    double d_t,
                    std::span<const double> diag_transition,
-                   CmaRead::L2DView<const double >cumulative_probability)
+                   CmaRead::L2DView<const double> cumulative_probability)
   {
     const size_t i_compartment = particle.current_container;
     const int rowId = static_cast<int>(i_compartment);
@@ -160,18 +161,19 @@ namespace Simulation
     particle.current_container = next;
   }
 
-  size_t find_next_compartment(int i_compartment,
-                               double random_number,
-                               std::span<const size_t> i_neighbor,
-                               CmaRead::L2DView<const double >cumulative_probability)
+  size_t
+  find_next_compartment(int i_compartment,
+                        double random_number,
+                        std::span<const size_t> i_neighbor,
+                        CmaRead::L2DView<const double> cumulative_probability)
   {
     const int max_neighbor = static_cast<int>(i_neighbor.size());
     size_t next = i_neighbor[0];
 
     for (int k_neighbor = 0; k_neighbor < max_neighbor - 1; ++k_neighbor)
     {
-      auto pi = cumulative_probability(i_compartment, k_neighbor);
-      auto pn = cumulative_probability(i_compartment, k_neighbor + 1);
+      const auto pi = cumulative_probability(i_compartment, k_neighbor);
+      const auto pn = cumulative_probability(i_compartment, k_neighbor + 1);
       if (random_number <= pn && pi <= random_number)
       {
         next = i_neighbor[k_neighbor + 1];

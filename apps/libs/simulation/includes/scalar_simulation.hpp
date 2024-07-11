@@ -65,6 +65,7 @@ namespace Simulation
   private:
     Eigen::DiagonalMatrix<double, -1> volumes_inverse;
     std::vector<Eigen::MatrixXd> contribs;
+    std::vector<CmaRead::L2DView<double>> view_contribs;
     Eigen::DiagonalMatrix<double, -1> m_volumes;
 
     void updateC();

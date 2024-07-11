@@ -1,3 +1,4 @@
+#include "cmt_common/zip.hpp"
 #include <Eigen/Dense>
 #include <common/common.hpp>
 #include <scalar_simulation.hpp>
@@ -42,15 +43,18 @@ namespace Simulation
     biomass_contribution.setZero();
 
     contribs.resize(n_thread);
-    std::generate_n(contribs.begin(),
-                    n_thread,
-                    [this]()
-                    {
-                      auto m = Eigen::MatrixXd(concentration.rows(),
-                                               concentration.cols());
-                      m.setZero();
-                      return m;
-                    });
+    view_contribs.resize(n_thread);
+
+    CmtCommons::foreach_zip(
+        [n_species, n_compartments](auto &matrix, auto &view)
+        {
+          matrix = Eigen::MatrixXd(n_species, n_compartments);
+          matrix.setZero();
+          view = get_eigen_view(matrix);
+        },
+
+        contribs,
+        view_contribs);
 
     view = CmaRead::L2DView<double>(
         {this->concentration.data(),
@@ -66,13 +70,10 @@ namespace Simulation
   {
 
     total_mass.noalias() +=
-        d_t * (concentration * m_transition + biomass_contribution + feed+
+        d_t * (concentration * m_transition + biomass_contribution + feed +
                (transfer_gas_liquid)*m_volumes);
-
-
 
     concentration.noalias() = total_mass * volumes_inverse;
   }
 
-    
 } // namespace Simulation

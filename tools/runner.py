@@ -9,7 +9,7 @@ def get_executable(type:str):
     return f"./builddir/{type}/apps/cli/biocma_mcst_cli_app"
 
 DEFAULT_TYPE="debugoptmized"
-MPI_COMMAND="mpiexec --allow-run-as-root "
+MPI_COMMAND="mpiexec --use-hwthread-cpus --allow-run-as-root "
 
 OMP_NUM_THREADS = 12
 

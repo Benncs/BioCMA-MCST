@@ -23,8 +23,8 @@
 
    <control name="test">
       <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
-      <final_time>50</final_time>
-      <numper_particle>500000</numper_particle>
+      <final_time>2</final_time>
+      <numper_particle>5000000</numper_particle>
       <delta_time>0</delta_time>
       <results_file_name>test2</results_file_name>
       <number_exported_result>10</number_exported_result>
@@ -48,6 +48,16 @@
       <numper_particle>100000</numper_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>model_fed_out_monod</results_file_name>
+      <number_exported_result>50</number_exported_result>
+      <model_name>model_monod</model_name>
+   </control>
+
+   <control name="b20l">
+      <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/b20l/</cma_case_path>
+      <final_time>360</final_time>
+      <numper_particle>100000</numper_particle>
+      <delta_time>0.01</delta_time>
+      <results_file_name>b20l_model_fed_out_monod</results_file_name>
       <number_exported_result>50</number_exported_result>
       <model_name>model_monod</model_name>
    </control>

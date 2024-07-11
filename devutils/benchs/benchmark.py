@@ -14,23 +14,23 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 import sys
-from wakepy import keep
+# from wakepy import keep
 
 
-BENCH_OMP_THREADS = [1, 6, 8, 12]  # List of thread numbers when running scaling
+BENCH_OMP_THREADS = [1, 6, 12]  # List of thread numbers when running scaling
 EXECUTABLE_PATH = "./builddir/release/apps/cli"  # Path to executable to run
 EXECUTABLE_NAME = "biocma_mcst_cli_app"  # Name of executable to run
 BENCH_SCRIPT_PATH = (
     "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
 )
-FILENAME = "./devutils/benchs/bench_records.csv"  # Record filename
-OUTPUT_PDF = "./devutils/benchs/results_bench.pdf"  # Output path
+FILENAME = "./devutils/benchs/bench_records_0d.csv"  # Record filename
+OUTPUT_PDF = "./devutils/benchs/results_bench_0d.pdf"  # Output path
 MODEL_NAME = "model_light"
-FINAL_TIME = 10  # Reference simulation time
+FINAL_TIME = 1  # Reference simulation time
 DELTA_TIME = 1e-3  # Reference delta time fixed
-CMA_DATA_PATH = "./cma_data/bench/"
-# CMA_DATA_PATH = "./cma_data/0d/"
-RECURSIVE = True
+# CMA_DATA_PATH = "./cma_data/bench/"
+CMA_DATA_PATH = "./cma_data/0d/"
+RECURSIVE = False
 
 def format_cli(number_particle, final_time):
 

@@ -82,12 +82,12 @@ namespace Simulation
 
   void SimulationUnit::update_feed(double d_t) const
   {
-    this->liquid_scalar->feed.coeffRef(0, 50) = 5 * 10 / 3600;
+    this->liquid_scalar->feed.coeffRef(0, 0) = 5 * 10 / 3600;
 
-    for (int i = 1; i < this->liquid_scalar->concentration.cols() - 2; ++i)
-    {
-      this->liquid_scalar->feed.coeffRef(0, i) = 50 * 10 / 3600;
-    }
+    // for (int i = 1; i < this->liquid_scalar->concentration.cols() - 2; ++i)
+    // {
+    //   this->liquid_scalar->feed.coeffRef(0, i) = 50 * 10 / 3600;
+    // }
   }
 
   void SimulationUnit::step(double d_t,
