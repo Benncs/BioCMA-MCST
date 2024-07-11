@@ -27,7 +27,8 @@ def format_rhs(match):
 
 def parse_cli(args):
     cli_args = {"type": DEFAULT_TYPE,"name":None}
-
+    
+    cli_args["n_thread"] = str(OMP_NUM_THREADS)
     if len(args) < 2:
         print("Usage: runner.py <type> [-r]")
         exit(0)
@@ -36,13 +37,16 @@ def parse_cli(args):
 
     if len(args) == 3 and args[2] == '-r':
         cli_args["type"] = "release"
+    
+    if len(args) == 4:
+        cli_args["n_thread"] = args[3]
 
     return cli_args
 
 
-def exec(command):
+def exec(command,n_thread):
     env_var = os.environ.copy()
-    env_var["OMP_NUM_THREADS"] = str(OMP_NUM_THREADS)
+    env_var["OMP_NUM_THREADS"] = n_thread
 
 
     result = command.replace("-", "\n-")
@@ -70,7 +74,7 @@ if __name__=="__main__":
 
     command = mpi_c+get_executable(cli_args["type"])+" "+run_cli
 
-    exec(command)
+    exec(command,cli_args["n_thread"])
 
     
 

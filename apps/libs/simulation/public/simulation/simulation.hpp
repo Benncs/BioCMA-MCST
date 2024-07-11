@@ -89,6 +89,7 @@ namespace Simulation
 
     PreCalculatedHydroState *flow_liquid; // TODO OPTI
     PreCalculatedHydroState *flow_gas;    // TODO OPTI
+    
     KModel kmodel;
 
     pimp_ptr_t liquid_scalar;

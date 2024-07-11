@@ -41,9 +41,6 @@ if compiler.has_argument('-mtune=native')
 arch_specific_args = [arch_specific_args,'-mtune=native']
 endif 
 
-if compiler.has_argument('-ffast-math')
-  arch_specific_args= [arch_specific_args,'-ffast-math']
-endif 
 
 
 
@@ -90,10 +87,13 @@ if build_type == 'debug' or build_type == 'debugoptimized'
   if compiler.has_argument('-pg')
   arch_specific_args= [arch_specific_args,'-pg']
   add_project_link_arguments('-pg',language: 'cpp')
-endif 
+  endif 
 
 else
   add_global_arguments('-DNDEBUG', language: 'cpp')
+    if compiler.has_argument('-ffast-math')
+  arch_specific_args= [arch_specific_args,'-ffast-math']
+  endif 
 endif
 
 use_dynamic_module = get_option('use_dynamic_module') # Use python module or not

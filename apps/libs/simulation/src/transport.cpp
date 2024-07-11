@@ -4,8 +4,8 @@
 #include <cmt_common/zip.hpp>
 #include <get_cumulative_proba.hpp>
 #include <simulation/pc_hydro.hpp>
+#include <stdexcept>
 #include <transport.hpp>
-
 
 // TODO REMOVE
 #include <iostream>
@@ -26,7 +26,7 @@ namespace Simulation
   find_next_compartment(int i_compartment,
                         double random_number,
                         std::span<const size_t> i_neighbor,
-                        const Eigen::MatrixXd &cumulative_probability);
+                        CmaRead::L2DView<const double >cumulative_probability);
 
   // move_kernel_t population_balance_flow(MC::ReactorDomain &domain,
 
@@ -91,13 +91,14 @@ namespace Simulation
     }
     return P;
   }
-
-  bool probability_leaving(double random_number,double volume,double flow,double dt)
+  inline bool probability_leaving(double random_number,
+                                  double volume,
+                                  double flow,
+                                  double dt)
   {
     const double theta_p = volume / flow;
     const double probability = 1 - std::exp(-dt / theta_p);
-    return random_number < probability; 
-          
+    return random_number < probability;
   }
 
   void kernel_exit(double d_t,
@@ -106,21 +107,22 @@ namespace Simulation
                    MC::Particles &particle)
   {
     const std::vector<size_t> v_tmp_index_leaving_flow = {10};
-    const std::vector<double> v_tmp_leaving_flow = {0.000011758/10};
+    const std::vector<double> v_tmp_leaving_flow = {0.000011758 / 10};
 
     CmtCommons::foreach_zip(
-        [&particle, random_number, &domain,d_t](auto &&index, auto &&flow)
+        [&particle, random_number, &domain, d_t](auto &&index, auto &&flow)
         {
-          if (particle.current_container != index || particle.status!=MC::CellStatus::IDLE)
+          if (particle.current_container != index ||
+              particle.status != MC::CellStatus::IDLE)
           {
             return;
           }
-          
-          if(probability_leaving(random_number,domain[index].volume_liq,flow,d_t))
+
+          if (probability_leaving(
+                  random_number, domain[index].volume_liq, flow, d_t))
           {
             particle.status = MC::CellStatus::OUT;
           }
-
         },
         v_tmp_index_leaving_flow,
         v_tmp_leaving_flow);
@@ -131,8 +133,8 @@ namespace Simulation
                    MC::ReactorDomain &domain,
                    MC::Particles &particle,
                    double d_t,
-                   const FlowMatrixType &m_transition,
-                   const Eigen::MatrixXd &cumulative_probability)
+                   std::span<const double> diag_transition,
+                   CmaRead::L2DView<const double >cumulative_probability)
   {
     const size_t i_compartment = particle.current_container;
     const int rowId = static_cast<int>(i_compartment);
@@ -141,27 +143,15 @@ namespace Simulation
     const std::span<const size_t> i_neighbor =
         domain.getNeighbors(i_compartment);
 
-    const double &v_p = current_container.volume_liq;
-
-    const double leaving_flow = std::abs(m_transition.coeff(rowId, rowId));
-
-    const bool leaving = probability_leaving(random_number,v_p,leaving_flow,d_t);
-
-    if(!leaving)
+    if (!probability_leaving(random_number,
+                             current_container.volume_liq,
+                             diag_transition[i_compartment],
+                             d_t))
     {
       return;
     }
 
-    // const double theta_p = v_p / leaving_flow;
-
-    // const double probability = 1 - std::exp(-d_t / theta_p);
-
-    // if (random_number >= probability)
-    // {
-    //   return;
-    // }
-
-    size_t next = find_next_compartment(
+    const size_t next = find_next_compartment(
         rowId, random_number2, i_neighbor, cumulative_probability);
 
     __ATOM_DECR__(current_container.n_cells) // Cell leaves current
@@ -173,15 +163,15 @@ namespace Simulation
   size_t find_next_compartment(int i_compartment,
                                double random_number,
                                std::span<const size_t> i_neighbor,
-                               const Eigen::MatrixXd &cumulative_probability)
+                               CmaRead::L2DView<const double >cumulative_probability)
   {
     const int max_neighbor = static_cast<int>(i_neighbor.size());
     size_t next = i_neighbor[0];
 
     for (int k_neighbor = 0; k_neighbor < max_neighbor - 1; ++k_neighbor)
     {
-      auto pi = cumulative_probability.coeff(i_compartment, k_neighbor);
-      auto pn = cumulative_probability.coeff(i_compartment, k_neighbor + 1);
+      auto pi = cumulative_probability(i_compartment, k_neighbor);
+      auto pn = cumulative_probability(i_compartment, k_neighbor + 1);
       if (random_number <= pn && pi <= random_number)
       {
         next = i_neighbor[k_neighbor + 1];
@@ -191,6 +181,16 @@ namespace Simulation
     }
 
     return next;
+  }
+
+  std::vector<double> get_diag_transition(const FlowMatrixType &m_transition)
+  {
+    std::vector<double> res(m_transition.rows());
+    for (int i = 0; i < m_transition.rows(); ++i)
+    {
+      res[i] = -m_transition.coeff(i, i);
+    }
+    return res;
   }
 
   FlowMatrixType

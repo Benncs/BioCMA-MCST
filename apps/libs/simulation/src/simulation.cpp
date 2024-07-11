@@ -57,7 +57,7 @@ namespace Simulation
                 std::span<MC::ThreadPrivateData> _extras,
                 const KModel &_kmodels,
                 MC::Particles &p,
-                auto &m_transition,
+                   const auto& diag,
                 auto &cumulative_probability);
 
   SimulationUnit::SimulationUnit(SimulationUnit &&other) noexcept
@@ -172,11 +172,14 @@ namespace Simulation
   {
     auto &to_process = this->mc_unit->container.to_process;
 
-    const auto &cumulative_probability =
-        this->flow_liquid->cumulative_probability;
+ 
 
-    const auto &m_transition = this->flow_liquid->transition_matrix;
+    auto view_cumulative_probability = this->flow_liquid->get_view_cum_prob();
 
+
+    
+
+    const auto& diag = this->flow_liquid->diag_transition;
     auto contribs = this->liquid_scalar->getThreadContribs();
     auto &extras = this->mc_unit->extras;
     auto &ts_events = this->mc_unit->ts_events;
@@ -194,33 +197,12 @@ namespace Simulation
                extras,
                kmodel,
                to_process[i_particle],
-               m_transition,
-               cumulative_probability);
+               diag,
+               view_cumulative_probability);
     }
 
-    // {
 
-    //   std::atomic<size_t> i_particle = 0;
-    //   std::for_each(std::execution::par_unseq,
-    //                 to_process.begin(),
-    //                 to_process.end(),
-    //                 [&](auto &&particle)
-    //                 {
-    //                   p_kernel(i_particle,
-    //                            d_t,
-    //                            domain,
-    //                            ts_events,
-    //                            contribs,
-    //                            extras,
-    //                            kmodel,
-    //                            particle,
-    //                            m_transition,
-    //                            cumulative_probability);
-    //                   i_particle++;
-    //                 });
-    // }
-
-#pragma omp single
+#pragma omp master
     {
       post_process_reducing();
     }
@@ -234,7 +216,7 @@ namespace Simulation
                 std::span<MC::ThreadPrivateData> _extras,
                 const KModel &_kmodel,
                 MC::Particles &particle,
-                auto &m_transition,
+                const auto& diag,
                 auto &cumulative_probability)
   {
 
@@ -266,7 +248,7 @@ namespace Simulation
                 domain,
                 particle,
                 d_t,
-                m_transition,
+                diag,
                 cumulative_probability);
 
     kernel_exit(d_t, random_number_3, domain, particle);

@@ -27,6 +27,9 @@ namespace Simulation
     const auto _mat_transition_liq =
         Simulation::get_transition_matrix(flows_view);
     matflow.transition_matrix = _mat_transition_liq;
+
+    matflow.diag_transition = get_diag_transition(matflow.transition_matrix);
+
   }
 
   static std::vector<double>
