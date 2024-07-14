@@ -61,6 +61,7 @@ namespace MC
     size_t id=0;
     std::vector<ContainerState> containers;
     CmaRead::Neighbors::Neighbors_const_view_t neighbors;
+    std::vector<std::span<const size_t>> row_neighbors;
   };
 
   inline std::span<ContainerState> ReactorDomain::data()
@@ -70,7 +71,7 @@ namespace MC
 
   inline std::span<const size_t> ReactorDomain::getNeighbors(size_t i) const
   {
-    return neighbors.getRow(i);
+    return row_neighbors[i];
   }
 
   inline const CmaRead::Neighbors::Neighbors_const_view_t &
@@ -85,6 +86,12 @@ namespace MC
   {
  
     neighbors = data.to_const();
+    for(size_t i =0;i<row_neighbors.size();++i)
+    {
+      row_neighbors[i]=neighbors.getRow(i);
+    }
+    
+    
   }
 
   inline auto ReactorDomain::getNumberCompartments() const

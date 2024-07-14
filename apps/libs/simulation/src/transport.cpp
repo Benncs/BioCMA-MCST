@@ -96,22 +96,34 @@ namespace Simulation
                                   double flow,
                                   double dt)
   {
-    const double theta_p = volume / flow;
-    const double probability = 1 - std::exp(-dt / theta_p);
-    return random_number < probability;
+    // const double theta_p = volume / flow;
+    // const double probability = 1 - std::exp(-dt / theta_p);
+    // bool p1 = random_number < probability;
+
+    // return (dt/theta_p)>(-std::log(1-random_number));
+    return (dt*flow/volume)>(-std::log(1-random_number));
+
+    // if(p1!=p2)
+    // {
+    //   throw std::runtime_error("ALED");
+    // }
+
+    // return p2;
   }
 
   static const std::vector<size_t> v_tmp_index_leaving_flow = {10};
   static const std::vector<double> v_tmp_leaving_flow = {0.000011758 / 10};
+
+  static auto [zip_it,zip_end] = CmtCommons::zip(v_tmp_index_leaving_flow,v_tmp_leaving_flow);
 
   void kernel_exit(double d_t,
                    double random_number,
                    MC::ReactorDomain &domain,
                    MC::Particles &particle)
   {
-
-    CmtCommons::foreach_zip(
-        [&particle, random_number, &domain, d_t](auto &&index, auto &&flow)
+    
+    
+    const auto lambda = [&particle, random_number, &domain, d_t](auto &&index, auto &&flow)
         {
           if (particle.current_container != index ||
               particle.status != MC::CellStatus::IDLE)
@@ -124,9 +136,19 @@ namespace Simulation
           {
             particle.status = MC::CellStatus::OUT;
           }
-        },
-        v_tmp_index_leaving_flow,
-        v_tmp_leaving_flow);
+        };
+
+    for(size_t i =0;i<v_tmp_index_leaving_flow.size();++i)
+    {
+      auto& index = v_tmp_index_leaving_flow[i];
+      auto& flow = v_tmp_leaving_flow[i];
+      lambda(index,flow);
+    }
+
+    // CmtCommons::foreach_zip(
+    //     lambda,
+    //     v_tmp_index_leaving_flow,
+    //     v_tmp_leaving_flow);
   }
 
   void kernel_move(double random_number,

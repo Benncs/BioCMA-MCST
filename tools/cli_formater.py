@@ -77,7 +77,7 @@ def read_xml_values(xml_path, parser,target_name):
 def format_cli(args):
     if(len(args))==2:
         name = args[1]
-        xml_file_path = "/mnt/c/Users/casale/Documents/code/cpp/biomc/devutils/datamodel/input_scheme.xml"  
+        xml_file_path = "./devutils/datamodel/input_scheme.xml"  
 
         # Create XML parser with schema validation
         parser = create_xml_parser()

@@ -183,7 +183,7 @@ namespace Simulation
 
     int chunk_size = std::max(1, static_cast<int>((contribs.size() / size)));
 
-#pragma omp for schedule(dynamic, chunk_size)
+#pragma omp for schedule(static, chunk_size)
     for (size_t i_particle = 0; i_particle < size; ++i_particle)
     {
       const size_t i_thread = omp_get_thread_num();
@@ -220,8 +220,8 @@ namespace Simulation
                   const auto &diag,
                   auto &cumulative_probability)
   {
-
-    if (particle.status == MC::CellStatus::DEAD)
+    auto& status = particle.status;
+    if ( status == MC::CellStatus::DEAD)
     {
       return;
     }
@@ -255,7 +255,7 @@ namespace Simulation
 
     kernel_exit(d_t, random_number_3, domain, particle);
 
-    if (particle.status == MC::CellStatus::OUT)
+    if (status == MC::CellStatus::OUT)
     {
       events.incr<MC::EventType::Exit>();
       handle_particle_removal(particle);
@@ -265,17 +265,17 @@ namespace Simulation
     _kmodel.update_kernel(
         d_t, particle, domain[particle.current_container].concentrations);
 
-    if (particle.status == MC::CellStatus::DEAD)
+    if (status == MC::CellStatus::DEAD)
     {
       events.incr<MC::EventType::Death>();
       handle_particle_removal(particle);
       return;
     }
 
-    if (particle.status == MC::CellStatus::CYTOKINESIS)
+    if (status== MC::CellStatus::CYTOKINESIS)
     {
       events.incr<MC::EventType::NewParticle>();
-      particle.status = MC::CellStatus::IDLE;
+      status = MC::CellStatus::IDLE;
       register_spawned_particle(_kmodel.division_kernel(particle));
     }
 

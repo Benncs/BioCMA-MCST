@@ -10,7 +10,7 @@
 #include <models/simple_model.hpp>
 
 #include <any>
-
+#include <mc/prng/prng.hpp>
 constexpr double SOLVER_TOLERANCE = 1e-5;
 
 static std::random_device rd{};
@@ -30,6 +30,8 @@ static void update_xi_dot(SimpleModel &model,
                           double S);
 
 static double uptake_o2(SimpleModel &model, double O);
+
+static MC::PRNG prng;
 
 SimpleModel &SimpleModel::operator=(SimpleModel &&other) noexcept
 {
@@ -94,7 +96,6 @@ void SimpleModel::step(double dt)
 
 void init_simple_model_(MC::Particles &p)
 {
-
   p.data = SimpleModel();
   auto &model = std::any_cast<SimpleModel &>(p.data);
 
@@ -143,8 +144,8 @@ void update_simple_model(double d_t,
   model.step(d_t);
 
   auto proba_div = (1. - std::exp(-gamma(model.xi) * d_t));
-  // std::cout<<proba_div<<std::endl;
-  if (rng(gen) < proba_div)
+
+  if (prng.double_unfiform() < proba_div)
   {
     p.status = MC::CellStatus::CYTOKINESIS;
   }

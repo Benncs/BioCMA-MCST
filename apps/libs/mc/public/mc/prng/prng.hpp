@@ -24,7 +24,7 @@ namespace MC
   public:
     explicit PRNG()
     {
-      auto seed = MC_RAND_DEFAULT_SEED; //std::random_device{}()
+      auto seed = std::random_device{}();
       gen = std::mt19937(seed);
     }
 
@@ -72,9 +72,9 @@ namespace MC
     };
 
   private:
-    unsigned z2 = 1;
-    unsigned z3 = 2;
-    unsigned z4 = 4;
+    unsigned z2 = std::random_device{}();
+    unsigned z3 = 25;
+    unsigned z4 = 81;
     std::mt19937 gen;
     unsigned z1 = 0;
 

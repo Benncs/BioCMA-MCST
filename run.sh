@@ -4,9 +4,9 @@ type=debugoptmized
 name="$1"
 executable=./builddir/$type/apps/cli/biocma_mcst_cli_app
 
-cli_args=$(./tools/cli_formater.py $name)
+cli_args=$(python3 ./tools/cli_formater.py $name)
 
-./builddir/$type/apps/cli/biocma_mcst_cli_app $cli_args  
+echo ./builddir/$type/apps/cli/biocma_mcst_cli_app $cli_args  
 
 # np=1000
 # final_time=10

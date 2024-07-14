@@ -79,11 +79,10 @@ init_simulation(const ExecInfo &info,
 
     auto n_col = worker_neighbor_data.size() / params.n_compartments;
     liquid_neighbors = CmaRead::L2DView<const size_t>(
-        worker_neighbor_data, params.n_compartments, n_col, false);
+        worker_neighbor_data, params.n_compartments, n_col, true);
   }
-
+  liquid_neighbors.set_row_major();
   // MPI_W::barrier(); //Useless ? 
-
   auto mc_unit = MC::init(model.init_kernel,info,
                           user_params.numper_particle,
                           liq_volume,
