@@ -72,11 +72,11 @@ namespace lb
         std::max(LenghtBasedModel::minimal_length,
                  std::min(rd_length, LenghtBasedModel::maximal_length));
 
-    model.xi[XI_N::a_permease] = model.prng.double_unfiform();
+    model.xi[XI_N::a_permease] = 0;
     model.xi[XI_N::a_pts] = model.prng.double_unfiform();
     model.xi[XI_N::n_permease] =
         model.prng.double_unfiform() * LenghtBasedModel::NPermease_init;
-    model.xi[XI_N::mu_eff] = 1e-8 * model.prng.double_unfiform();
+    model.xi[XI_N::mu_eff] = 1e-6 * model.prng.double_unfiform();
 
     // p.data = std::move(model);
   }
@@ -204,7 +204,7 @@ namespace lb
     auto &model = std::any_cast<LenghtBasedModel &>(p.data);
     auto &xi = model.xi;
     const double S = concentrations[0];
-
+    
     if constexpr (implicit)
     {
       xi = backward_euler_update(d_t, S, model);
@@ -218,6 +218,7 @@ namespace lb
     }
 
     model.contrib(0) = phi_pts(xi, S) + phi_permease(xi, S);
+    
 
     auto proba_div = (1. - std::exp(-division_gamma(xi) * d_t));
 
@@ -252,8 +253,8 @@ namespace lb
   {
     auto &model = std::any_cast<LenghtBasedModel &>(p.data);
     int ic = static_cast<int>(p.current_container);
+  
     contribution.col(ic) -= (p.weight * model.contrib);
-    // contribution.coeffRef(0,ic)-=p.weight * model.contrib[0];
   }
 
   model_properties_detail_t properties(const MC::Particles &p)

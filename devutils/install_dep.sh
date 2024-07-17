@@ -63,6 +63,12 @@ if ! pip install meson; then
   exit 1
 fi
 
+echo "Installing omp dev..."
+  if ! sudo apt-get install -y libomp-18-dev; then
+    error "Failed to install HDF5."
+    exit 1
+  fi
+
 # Run clang configuration script
 echo "Running clang configuration script..."
 if ! sh ./devutils/clang_config.sh $LLVM_VERSION; then

@@ -35,6 +35,7 @@ namespace Simulation
     this->concentration.setZero();
 
     this->feed = Eigen::MatrixXd(n_species, n_compartments);
+    this->feed.setZero();
 
     this->vec_kla = Eigen::ArrayXXd(n_species, n_compartments);
     vec_kla.setZero();
@@ -69,11 +70,12 @@ namespace Simulation
                                      const Eigen::MatrixXd &transfer_gas_liquid)
   {
   
-
     total_mass.noalias() +=
         d_t * (concentration * m_transition + biomass_contribution + feed +
                (transfer_gas_liquid)*m_volumes);
 
+
+  
     concentration.noalias() = total_mass * volumes_inverse;
   }
 

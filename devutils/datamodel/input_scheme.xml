@@ -16,17 +16,17 @@
       <numper_particle>100000</numper_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>lb_0d</results_file_name>
-      <number_exported_result>0</number_exported_result>
+      <number_exported_result>50</number_exported_result>
       <model_name>model_lb</model_name>
    </control>
 
    <control name="test">
       <cma_case_path recursive="true">./cma_data/bench/</cma_case_path>
       <final_time>1</final_time>
-      <numper_particle>1000000</numper_particle>
+      <numper_particle>100000</numper_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>test2</results_file_name>
-      <number_exported_result>2</number_exported_result>
+      <number_exported_result>20</number_exported_result>
       <model_name>model_simple</model_name>
    </control>
 
@@ -63,9 +63,9 @@
 
    <control name="b20l_lb">
       <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/b20l/</cma_case_path>
-      <final_time>3600</final_time>
-      <numper_particle>100000</numper_particle>
-      <delta_time>0.01</delta_time>
+      <final_time>36</final_time>
+      <numper_particle>1000</numper_particle>
+      <delta_time>0</delta_time>
       <results_file_name>lb_b20l_nofeed</results_file_name>
       <number_exported_result>50</number_exported_result>
       <model_name>model_lb</model_name>

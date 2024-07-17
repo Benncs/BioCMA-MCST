@@ -7,8 +7,11 @@ import re
 import time
 
 from cli_formater import format_cli
+# def get_executable(type:str):
+#     return f"./builddir/{type}/apps/cli/biocma_mcst_cli_app"
+
 def get_executable(type:str):
-    return f"./builddir/{type}/apps/cli/biocma_mcst_cli_app"
+    return f"./builddir/clang/apps/cli/biocma_mcst_cli_app"
 
 DEFAULT_TYPE="debugoptmized"
 MPI_COMMAND="mpiexec --use-hwthread-cpus --allow-run-as-root "

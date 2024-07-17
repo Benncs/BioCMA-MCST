@@ -203,9 +203,12 @@ namespace Simulation
                  view_cumulative_probability);
     }
 
-
-    
+    #pragma omp master
+    {
       post_process_reducing();
+    }
+
+      
     
   }
 

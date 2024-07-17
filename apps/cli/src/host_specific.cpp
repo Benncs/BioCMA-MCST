@@ -220,8 +220,8 @@ void main_loop(const SimulationParameters &params,
           sync_step(exec, simulation);
         }
 
-#pragma omp task default(none) shared(simulation, current_reactor_state),      \
-    firstprivate(d_t)
+// #pragma omp task default(none) shared(simulation, current_reactor_state),      \
+//     firstprivate(d_t)
         {
           // update_feed_counter++;
           // if (update_feed_counter==update_feed_interval) {
