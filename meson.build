@@ -1,6 +1,6 @@
 project(
   'biocma_mcst',
-  'cpp',
+  'cpp','c',
   version: '0.0.4',
   meson_version: '>= 1.3.0',
   default_options: [
@@ -107,7 +107,7 @@ thread_dep = dependency('threads', required: true)
 if use_cuda
 omp = declare_dependency(link_args: ['-fopenmp'])
 else
-omp = dependency('openmp', language: 'cpp', required: true)
+omp = dependency('openmp', language: 'c', required: true)
 endif 
 tbb = dependency('tbb', required: true)
 

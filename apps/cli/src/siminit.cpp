@@ -20,7 +20,6 @@
 #include <siminit.hpp>
 #include <simulation/simulation.hpp>
 
-
 #include <simulation/update_flows.hpp>
 
 static CmaRead::ReactorState const *
@@ -59,31 +58,34 @@ init_simulation(const ExecInfo &info,
                  liq_volume,
                  gas_volume,
                  worker_neighbor_data);
-
-  if (MPI_W::broadcast(params.n_different_maps, 0) != 0)
+  if constexpr (RT::use_mpi)
   {
-    MPI_W::critical_error();
-  }
+    if (MPI_W::broadcast(params.n_different_maps, 0) != 0)
+    {
+      MPI_W::critical_error();
+    }
 
-  MPI_W::broadcast(params.d_t, 0);
-  MPI_W::broadcast(params.n_per_flowmap, 0);
-  MPI_W::broadcast(params.n_compartments, 0);
-  MPI_W::broadcast(params.is_two_phase_flow, 0);
-  MPI_W::broadcast(liq_volume, 0, info.current_rank);
-  MPI_W::broadcast(gas_volume, 0, info.current_rank);
-  MPI_W::broadcast(worker_neighbor_data, 0, info.current_rank);
+    MPI_W::broadcast(params.d_t, 0);
+    MPI_W::broadcast(params.n_per_flowmap, 0);
+    MPI_W::broadcast(params.n_compartments, 0);
+    MPI_W::broadcast(params.is_two_phase_flow, 0);
+    MPI_W::broadcast(liq_volume, 0, info.current_rank);
+    MPI_W::broadcast(gas_volume, 0, info.current_rank);
+    MPI_W::broadcast(worker_neighbor_data, 0, info.current_rank);
+  }
 
   // MPI_W::bcst_iterator(_flow_handle, info.current_rank);
   if (info.current_rank != 0)
   {
 
     auto n_col = worker_neighbor_data.size() / params.n_compartments;
-    liquid_neighbors = CmaRead::L2DView<const size_t>(
-        worker_neighbor_data, params.n_compartments, n_col, true);
+    liquid_neighbors = CmaRead::Neighbors::Neighbors_const_view_t(
+        worker_neighbor_data, params.n_compartments, n_col);
   }
   liquid_neighbors.set_row_major();
-  // MPI_W::barrier(); //Useless ? 
-  auto mc_unit = MC::init(model.init_kernel,info,
+  // MPI_W::barrier(); //Useless ?
+  auto mc_unit = MC::init(model.init_kernel,
+                          info,
                           user_params.numper_particle,
                           liq_volume,
                           liquid_neighbors,
@@ -91,14 +93,14 @@ init_simulation(const ExecInfo &info,
 
   bool f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
 
-  auto simulation = std::make_unique<Simulation::SimulationUnit>(
-      info,
-      std::move(mc_unit),
-      gas_volume,
-      liq_volume,
-      params.n_species,
-      model,
-      f_init_gas_flow);
+  auto simulation =
+      std::make_unique<Simulation::SimulationUnit>(info,
+                                                   std::move(mc_unit),
+                                                   gas_volume,
+                                                   liq_volume,
+                                                   params.n_species,
+                                                   model,
+                                                   f_init_gas_flow);
 
   // Calculate the total number of time steps
   const auto n_t = static_cast<size_t>(user_params.final_time / params.d_t) + 1;
@@ -108,8 +110,9 @@ init_simulation(const ExecInfo &info,
       params.n_per_flowmap,
       Simulation::FlowMapTransitioner::Discontinuous,
       n_t,
-      std::move(_flow_handle),f_init_gas_flow);
-      // params.is_two_phase_flow);
+      std::move(_flow_handle),
+      f_init_gas_flow);
+  // params.is_two_phase_flow);
 
   return simulation;
 }

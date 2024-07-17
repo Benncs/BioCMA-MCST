@@ -1,5 +1,7 @@
 
+#include "common/execinfo.hpp"
 #include "data_exporter.hpp"
+#include "rt_init.hpp"
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <cstddef>
@@ -44,21 +46,30 @@ update_progress_bar(size_t total, size_t currentPosition, bool verbose)
 #endif
 
 #define FILL_PAYLOAD                                                           \
-  mpi_payload.liquid_flows =                                                   \
-      current_reactor_state->liquid_flow.getViewFlows().data();                \
-  mpi_payload.liquid_volumes = current_reactor_state->liquidVolume;            \
-  mpi_payload.gas_volumes = current_reactor_state->gasVolume;                  \
-  mpi_payload.neigbors =                                                       \
-      current_reactor_state->liquid_flow.getViewNeighors().to_const();
-
-#define MPI_DISPATCH_MAIN                                                      \
-  for (size_t __macro_j = 1; __macro_j < exec.n_rank; ++__macro_j)             \
+  if constexpr (RT::use_mpi)                                                   \
   {                                                                            \
-    MPI_W::send(MPI_W::SIGNALS::RUN, __macro_j);                               \
-    mpi_payload.send(__macro_j);                                               \
+    mpi_payload.liquid_flows =                                                 \
+        current_reactor_state->liquid_flow.getViewFlows().data();              \
+    mpi_payload.liquid_volumes = current_reactor_state->liquidVolume;          \
+    mpi_payload.gas_volumes = current_reactor_state->gasVolume;                \
+    mpi_payload.neigbors =                                                     \
+        current_reactor_state->liquid_flow.getViewNeighors().to_const();       \
+  }
+#define MPI_DISPATCH_MAIN                                                      \
+  if constexpr (RT::use_mpi)                                                   \
+  {                                                                            \
+    for (size_t __macro_j = 1; __macro_j < exec.n_rank; ++__macro_j)           \
+    {                                                                          \
+      MPI_W::send(MPI_W::SIGNALS::RUN, __macro_j);                             \
+      mpi_payload.send(__macro_j);                                             \
+    }                                                                          \
   }
 
-#define SEND_MPI_SIG_STOP host_dispatch(exec, MPI_W::SIGNALS::STOP);
+#define SEND_MPI_SIG_STOP                                                      \
+  if constexpr (RT::use_mpi)                                                   \
+  {                                                                            \
+    host_dispatch(exec, MPI_W::SIGNALS::STOP);                                 \
+  }
 
 void host_process(
     const ExecInfo &exec,
@@ -89,7 +100,10 @@ void host_process(
   PostProcessing::show(simulation);
 
   SEND_MPI_SIG_STOP;
-  last_sync(exec, simulation);
+  if constexpr (RT::use_mpi)
+  {
+    last_sync(exec, simulation);
+  }
 
   PostProcessing::post_process(exec, params, simulation, data_exporter);
 }
@@ -102,7 +116,7 @@ void main_loop(const SimulationParameters &params,
 {
   simulation.update_feed(0);
 
-  // const size_t n_update_feed = 0; //TODO: move elsewhere 
+  // const size_t n_update_feed = 0; //TODO: move elsewhere
 
   const double d_t = params.d_t;
 
@@ -118,7 +132,8 @@ void main_loop(const SimulationParameters &params,
   size_t dump_counter = 0;
   double current_time = 0.;
   // size_t update_feed_counter = 0;
-  // const size_t update_feed_interval = (n_update_feed==0)? n_iter_simulation : (n_iter_simulation) / (n_update_feed) + 1;
+  // const size_t update_feed_interval = (n_update_feed==0)? n_iter_simulation :
+  // (n_iter_simulation) / (n_update_feed) + 1;
 
   MPI_W::HostIterationPayload mpi_payload;
   const auto *current_reactor_state = &transitioner->get_unchecked(0);
@@ -165,31 +180,48 @@ void main_loop(const SimulationParameters &params,
         transitioner->advance(simulation);
       }
 
-    
       simulation.cycleProcess(d_t);
-    
-      
 
-#pragma omp master
-      {
-        dump_counter++;
-        if (dump_counter == dump_interval)
-        {
-          update_progress_bar(n_iter_simulation, __loop_counter, true);
-          exporter->append(current_time,
-                           simulation.getCliqData(),
-                           simulation.mc_unit->domain.getDistribution(),
-                           current_reactor_state->liquidVolume,
-                           current_reactor_state->gasVolume);
-          dump_counter = 0;
-        }
-      }
+      #pragma omp master
+            {
+              dump_counter++;
+              if (dump_counter == dump_interval)
+              {
+                update_progress_bar(n_iter_simulation, __loop_counter, true);
+                exporter->append(current_time,
+                                 simulation.getCliqData(),
+                                 simulation.mc_unit->domain.getDistribution(),
+                                 current_reactor_state->liquidVolume,
+                                 current_reactor_state->gasVolume);
+                dump_counter = 0;
+              }
+            }
+//       if (dump_counter == (dump_interval)) //WARNING CHECK OVERFLOW
+//       {
+// #pragma omp master
+//         {
+          
+          
+//           update_progress_bar(n_iter_simulation, __loop_counter, true);
+//           exporter->append(current_time,
+//                            simulation.getCliqData(),
+//                            simulation.mc_unit->domain.getDistribution(),
+//                            current_reactor_state->liquidVolume,
+//                            current_reactor_state->gasVolume);
+//           dump_counter = 0;
+//         }
+//       }
 
 #pragma omp single
       {
 
-        sync_step(exec, simulation);
-        #pragma omp task default(none) shared(simulation,current_reactor_state),firstprivate(d_t)
+        if constexpr (RT::use_mpi)
+        {
+          sync_step(exec, simulation);
+        }
+
+#pragma omp task default(none) shared(simulation, current_reactor_state),      \
+    firstprivate(d_t)
         {
           // update_feed_counter++;
           // if (update_feed_counter==update_feed_interval) {
@@ -201,6 +233,7 @@ void main_loop(const SimulationParameters &params,
 
         sync_prepare_next(exec, simulation);
         current_time += d_t;
+        // dump_counter++;
       }
     }
   }

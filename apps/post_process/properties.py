@@ -10,14 +10,14 @@ def get_distribution_moment(data):
 
     return mean,variance_population,variance_sample
 
-def mk_histogram(data,name):
+def mk_histogram(data,name,dest:str):
     num_bins = 50
     plt.figure()
     plt.hist(data, bins=num_bins, density=True, alpha=0.7, color='blue', edgecolor='black')
     plt.xlabel('Value')
     plt.ylabel('Density')
     plt.title('Histogram')
-    plt.savefig(f"./results/histogram_{name}")
+    plt.savefig(f"{dest}/histogram_{name}")
 
 
 def mk_pdf(data,name):

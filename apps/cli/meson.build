@@ -55,9 +55,25 @@ lib_app = static_library(
   install_rpath: project_name,
 )
 
+lib_app_shared = static_library(
+  f'@name@_shared',
+  lib_sources,
+  include_directories: ['./includes'],
+  dependencies: [dep_static_module],
+  cpp_args: ['-DNO_MPI'],
+  install_rpath: project_name,
+)
+
 app_test_dependency = declare_dependency(
   include_directories: ['./includes'],
   link_with: lib_app,
+  dependencies: dep_static_module,
+  compile_args: [],
+)
+
+app_shared_dependency = declare_dependency(
+  include_directories: ['./includes'],
+  link_with: lib_app_shared,
   dependencies: dep_static_module,
   compile_args: [],
 )
@@ -69,6 +85,17 @@ executable(
   include_directories: ['./includes'],
   dependencies: [app_test_dependency],
   cpp_args: [target_custom_options],
+  install: true,
+  install_rpath: global_install_dir,
+  link_args: [flto_flag]
+)
+
+executable(
+  f'@name@_shared',
+  f'@src_dir@/main.cpp',
+  include_directories: ['./includes'],
+  dependencies: [app_shared_dependency],
+  cpp_args: [target_custom_options,'-DNO_MPI'],
   install: true,
   install_rpath: global_install_dir,
   link_args: [flto_flag]

@@ -1,6 +1,7 @@
 #ifndef __MC_EVENTS_HPP__
 #define __MC_EVENTS_HPP__
 
+#include "common/execinfo.hpp"
 #include <array>
 #include <cstddef>
 #include <span>
@@ -23,9 +24,9 @@ namespace MC
     return static_cast<size_t>(event);
   }
 
-  struct EventContainer
+  struct alignas(ExecInfo::cache_line_size) EventContainer
   {
-    std::array<size_t, n_event_type> events{0, 0, 0,0,0};
+    std::array<size_t, n_event_type> events{0, 0, 0, 0, 0};
 
     template <EventType event> [[nodiscard]] constexpr size_t get() const
     {

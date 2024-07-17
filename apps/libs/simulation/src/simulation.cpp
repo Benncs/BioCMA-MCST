@@ -36,11 +36,11 @@ namespace Simulation
     if (i == 0)
     {
 
-      liq(0, i) = 100;
+      liq(0, i) = 9;
     }
     else
     {
-      // liq(0, i) = 5.;
+      liq(0, i) = 5.;
     }
   }
 
@@ -183,7 +183,7 @@ namespace Simulation
 
     int chunk_size = std::max(1, static_cast<int>((contribs.size() / size)));
 
-#pragma omp for schedule(static, chunk_size)
+#pragma omp for schedule(dynamic,chunk_size) 
     for (size_t i_particle = 0; i_particle < size; ++i_particle)
     {
       const size_t i_thread = omp_get_thread_num();
@@ -203,10 +203,10 @@ namespace Simulation
                  view_cumulative_probability);
     }
 
-#pragma omp master
-    {
+
+    
       post_process_reducing();
-    }
+    
   }
 
   void big_kernel(size_t current_i_particle,
@@ -235,6 +235,7 @@ namespace Simulation
     {
       _kmodel.contribution_kernel(p, thread_contrib);
       __ATOM_INCR__(domain[p.current_container].n_cells)
+      
       thread_extra.extra_process.emplace_back(std::move(p));
     };
 

@@ -160,17 +160,6 @@ MC::Particles division_simple_model(MC::Particles &p)
 
   child.status = MC::CellStatus::IDLE;
   child.data.emplace<SimpleModel>(model);
-  // auto child_model = std::any_cast<SimpleModel &>(child.data);
-  // child_model.xi.mass =model.xi.mass;
-
-  // child_model.xi.a_permease = 0.5;
-  // child_model.xi.a_pts = 0.5;
-  // child_model.xi.mu_eff = 1e-9;
-  // child_model.xi.n_permease = 1e3;
-
-  // child_model.mu_p = 1e-9;
-  // child_model.phi_o_in = 0;
-  // child_model.phi_s_in = 0;
 
   return child;
 }

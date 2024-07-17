@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import os
 import sys 
 import subprocess
@@ -37,7 +39,7 @@ def parse_cli(args):
 
     if len(args) == 3 and args[2] == '-r':
         cli_args["type"] = "release"
-    
+
     if len(args) == 4:
         cli_args["n_thread"] = args[3]
 

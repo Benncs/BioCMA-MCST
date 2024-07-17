@@ -1,12 +1,14 @@
 #ifndef __MC_CONTAINER_STATE_HPP__
 #define __MC_CONTAINER_STATE_HPP__
+#include "common/execinfo.hpp"
 #include <cstddef>
 #include <cstdint>
 #include <span>
 
+
 namespace MC
 {
-  struct ContainerState
+  struct alignas(ExecInfo::cache_line_size) ContainerState
   {
     double volume_liq;
     double volume_gas;

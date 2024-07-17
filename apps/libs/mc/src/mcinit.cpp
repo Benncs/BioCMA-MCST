@@ -36,11 +36,11 @@ namespace MC
       particle_per_process += remainder;
     }
     // double weight = 1 / static_cast<double>(n_particles); // DUMMY INIT
-    double x0 = 0.5; // g/l
+    double x0 = 5; // g/l
     double v = 0.02;  // m3
     double m_part = 1e-15;
 
-    double weight = 1000;//(x0 * v) / (n_particles * m_part);
+    double weight =  10; //(x0 * v) / (n_particles * m_part); //
     // std::cout<<"we"<<weight<<std::endl;
     unit->container = ParticlesContainer(particle_per_process, weight);
     unit->extras.resize(info.thread_per_process);

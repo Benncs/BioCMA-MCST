@@ -4,6 +4,7 @@
 #include <post_process.hpp>
 
 #include <iostream>
+#include <stdexcept>
 #include <variant>
 
 namespace PostProcessing
@@ -40,20 +41,16 @@ namespace PostProcessing
                     std::unique_ptr<DataExporter> &exporter)
   {
     auto distribution = simulation.mc_unit->domain.getDistribution();
-    #ifdef NDEBUG
-    {
-      auto tot = std::accumulate(
-          distribution.begin(), distribution.end(), static_cast<size_t>(0));
-      auto removed =
-          simulation.mc_unit->ts_events[0].get<MC::EventType::Death>() +
-          simulation.mc_unit->ts_events[0].get<MC::EventType::Exit>();
-      auto new_p =
-          simulation.mc_unit->ts_events[0].get<MC::EventType::NewParticle>();
 
-      assert(tot == (new_p - removed + params.user_params.numper_particle) &&
-             "Bad Results");
-    }
-    #endif 
+
+    auto tot = std::accumulate(
+        distribution.begin(), distribution.end(), static_cast<size_t>(0));
+    auto removed =
+        simulation.mc_unit->ts_events[0].get<MC::EventType::Death>() +
+        simulation.mc_unit->ts_events[0].get<MC::EventType::Exit>();
+    auto new_p =
+        simulation.mc_unit->ts_events[0].get<MC::EventType::NewParticle>();
+
 
     if (exporter != nullptr)
     {
@@ -73,6 +70,13 @@ namespace PostProcessing
 
       exporter->write_final_particle_data(aggregated_values, spatial);
     }
+
+    if(tot == (new_p - removed + params.user_params.numper_particle))
+    {
+      throw std::runtime_error("Results are not coherent (Bad particle balance)");
+    }
+
+    
   }
 
   void show(Simulation::SimulationUnit &simulation)
@@ -80,7 +84,6 @@ namespace PostProcessing
 
     std::vector<double> mass(
         simulation.mc_unit->domain.getNumberCompartments());
-    double totmass = 0.;
 
     auto d = simulation.mc_unit->domain.getDistribution();
 

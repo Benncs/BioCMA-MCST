@@ -4,7 +4,8 @@ import numpy as np
 from apps.post_process.read_results import RawResults, import_results
 from apps.post_process import process_norm
 from .properties import mk_histogram,get_distribution_moment
-
+import os 
+import cmtool.vtk
 def check_mixing(
     name_results, pathres: List[str], dest: str, vtk_cma_mesh_path: Optional[str] = None
 ):
@@ -26,8 +27,12 @@ def check_mixing(
     plt.xlabel("time [s]")
     plt.savefig(f"{dest}/mixing_variance.svg", dpi=1500)
 
+def append_resukts_scalar_vtk(filename:str,value:np.ndarray,name:str):
+    scalar = cmtool.vtk.mk_scalar(value,name)
+    cmtool.vtk.append_scalar(filename,filename,scalar)
+    pass
 
-def property_distribution(biodict:Dict[str, np.ndarray],prefix:str=""):
+def property_distribution(biodict:Dict[str, np.ndarray],prefix:str="",dest:str="./results/",vtk_cma_mesh_path: Optional[str] = None):
     for key in biodict:
     
         value = biodict[key]
@@ -38,7 +43,10 @@ def property_distribution(biodict:Dict[str, np.ndarray],prefix:str=""):
 
             print(mean,variance_population,variance_sample)
 
-            mk_histogram(value,f"{prefix}_{key}")
+            mk_histogram(value,f"{prefix}_{key}",dest)
+            if vtk_cma_mesh_path is not None:
+                print(vtk_cma_mesh_path)
+                append_resukts_scalar_vtk(vtk_cma_mesh_path,value,key)
 
     
 
@@ -47,15 +55,27 @@ def assemble(res_folder: str, names: List[str]) -> List[str]:
     return [f"{res_folder}{i}.h5" for i in names]
 
 
+
+
 if __name__ == "__main__":
     root_res = "./results/"
-    name_results = ["test",'test2']
+    dest = './results/lb_b20l/pp'
+    
+    if not os.path.exists(dest):
+        os.makedirs(dest)
+
+
+    name_results = ["lb_b20l"]
     pathres = assemble(root_res, name_results)
 
     vtu_path = (
         "/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/bench/cma_mesh.vtu"
     )
-    check_mixing(name_results, pathres, root_res,vtu_path)
-    results = import_results(pathres[0])
-    property_distribution(results.initial_bioparam,"init")
-    property_distribution(results.final_bioparam,"final")
+    check_mixing(name_results, pathres, dest,vtu_path)
+
+    for i ,p in enumerate(pathres):
+        results = import_results(p)
+        last_id = results.n_t-1
+        last_vtk_path = f"./results/{name_results[i]}/{name_results[i]}_{last_id}.vtu"
+        property_distribution(results.initial_bioparam,f"{name_results[i]}_init",dest)
+        property_distribution(results.final_bioparam,f"{name_results[i]}_final",dest,last_vtk_path)

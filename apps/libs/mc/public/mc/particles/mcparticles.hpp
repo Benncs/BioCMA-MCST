@@ -2,9 +2,12 @@
 #define __MC_PARTICLESHPP__
 
 #include "cmt_common/macro_constructor_assignment.hpp"
+#include "common/execinfo.hpp"
 #include <any>
 #include <cstddef>
 #include <cstdint>
+
+
 
 namespace MC
 {
@@ -16,7 +19,7 @@ namespace MC
     OUT
   };
 
-  class Particles
+  class alignas(ExecInfo::cache_line_size) Particles
   {
   public:
     Particles() noexcept

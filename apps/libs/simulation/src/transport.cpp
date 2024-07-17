@@ -112,9 +112,9 @@ namespace Simulation
   }
 
   static const std::vector<size_t> v_tmp_index_leaving_flow = {10};
-  static const std::vector<double> v_tmp_leaving_flow = {0.000011758 / 10};
+  static const std::vector<double> v_tmp_leaving_flow = {0.};//{0.000011758 / 10};
 
-  static auto [zip_it,zip_end] = CmtCommons::zip(v_tmp_index_leaving_flow,v_tmp_leaving_flow);
+  // static auto [zip_it,zip_end] = CmtCommons::zip(v_tmp_index_leaving_flow,v_tmp_leaving_flow);
 
   void kernel_exit(double d_t,
                    double random_number,
@@ -140,8 +140,8 @@ namespace Simulation
 
     for(size_t i =0;i<v_tmp_index_leaving_flow.size();++i)
     {
-      auto& index = v_tmp_index_leaving_flow[i];
-      auto& flow = v_tmp_leaving_flow[i];
+      const auto& index = v_tmp_index_leaving_flow[i];
+      const auto& flow = v_tmp_leaving_flow[i];
       lambda(index,flow);
     }
 
@@ -177,6 +177,7 @@ namespace Simulation
     const size_t next = find_next_compartment(
         rowId, random_number2, i_neighbor, cumulative_probability);
 
+    
     __ATOM_DECR__(current_container.n_cells) // Cell leaves current
                                              // compartment
     __ATOM_INCR__(domain[next].n_cells);     // Cell go to new compartment

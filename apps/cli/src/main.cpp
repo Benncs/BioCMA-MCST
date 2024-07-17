@@ -36,6 +36,8 @@
 #  define INTERPRETER_INIT
 #endif
 
+
+
 struct CaseData
 {
   std::unique_ptr<Simulation::SimulationUnit> simulation;
@@ -97,7 +99,7 @@ static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params)
 
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
   const auto model = load_model_(params.user_params.model_name);
-  MC::UniformLawINT law_param = {0, 0}; // FIXME
+  MC::UniformLawINT law_param = {0, 499}; // FIXME
 
   auto simulation = init_simulation(
       exec_info, params, transitioner, model, std::move(law_param));

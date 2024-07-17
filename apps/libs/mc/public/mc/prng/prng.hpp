@@ -77,7 +77,6 @@ namespace MC
     unsigned z4 = 81;
     std::mt19937 gen;
     unsigned z1 = 0;
-
     std::uniform_real_distribution<double> _uniform_double =
         std::uniform_real_distribution<double>(0., 1.);
   };

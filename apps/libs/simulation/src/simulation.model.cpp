@@ -8,22 +8,27 @@
 #include <Eigen/Sparse>
 
 #include <hydro/mass_transfer.hpp>
+#include <iterator>
 #include <scalar_simulation.hpp>
 #include <stdexcept>
-#include <iterator>
+
 
 namespace Simulation
 {
 
   void SimulationUnit::post_process_reducing()
   {
-    for (size_t i_thread = 0; i_thread < n_thread; ++i_thread)
+    #pragma omp critical
     {
+    // for (size_t i_thread = 0; i_thread < n_thread; ++i_thread)
+    {
+      const size_t i_thread = omp_get_thread_num();
+      
       this->liquid_scalar->merge(i_thread);
       this->mc_unit->merge(i_thread);
-    }
-
     
+    }
+    }
   }
 
   std::span<double> SimulationUnit::getContributionData() const
@@ -82,7 +87,7 @@ namespace Simulation
 
   void SimulationUnit::update_feed(double d_t) const
   {
-    this->liquid_scalar->feed.coeffRef(0, 0) = 5 * 10 / 3600;
+    // this->liquid_scalar->feed.coeffRef(0, 0) = 5 * 5 / 3600;
 
     // for (int i = 1; i < this->liquid_scalar->concentration.cols() - 2; ++i)
     // {
