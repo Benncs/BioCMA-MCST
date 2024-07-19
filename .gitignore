@@ -27,3 +27,5 @@ suprojects/highfive
 llvm.sh
 
 *.out 
+
+.ruff_cache

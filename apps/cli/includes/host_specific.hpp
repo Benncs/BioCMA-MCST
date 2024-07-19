@@ -1,7 +1,7 @@
 #ifndef __HOST_SPECIFIC_HPP__
 #define __HOST_SPECIFIC_HPP__
 
-#include "data_exporter.hpp"
+#include <dataexporter/factory.hpp>
 #include "simulation/update_flows.hpp"
 #include <cma_read/flow_iterator.hpp>
 #include <common/common.hpp>

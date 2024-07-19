@@ -55,3 +55,12 @@ def process_norm(
         norm_par_var,
         results.t,
     )
+
+
+def average_concentration(results: RawResults):
+    concentration_record = results.data[:, :, 0]
+
+    full_volume = results.volume_liquid
+
+    c_avg = np.sum(concentration_record * full_volume,axis=1) / np.sum(full_volume, axis=1)
+    return c_avg

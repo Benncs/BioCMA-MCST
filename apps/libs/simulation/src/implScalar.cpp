@@ -69,7 +69,6 @@ namespace Simulation
                                      const FlowMatrixType &m_transition,
                                      const Eigen::MatrixXd &transfer_gas_liquid)
   {
-  
     total_mass.noalias() +=
         d_t * (concentration * m_transition + biomass_contribution + feed +
                (transfer_gas_liquid)*m_volumes);

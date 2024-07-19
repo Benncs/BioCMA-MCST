@@ -7,8 +7,6 @@
 #include <cstddef>
 #include <cstdint>
 
-
-
 namespace MC
 {
   enum class CellStatus : char
@@ -47,26 +45,9 @@ namespace MC
     MC::CellStatus status;
     double weight;
     std::any data;
+
+   
   };
-
-  //   inline Particles::Particles(Particles &&p) noexcept
-  //     : current_container(std::move(p.current_container)),
-  //       current_domain(std::move(p.current_domain)),
-  //       random_seed(std::move(p.random_seed)),
-  //       id(std::move(p.id)),
-  //       status(std::move(p.status)),
-  //       weight(std::move(p.weight)),
-  //       data(std::move(p.data))
-  // {
-
-  //     p.current_container = 0;
-  //     p.current_domain = 0;
-  //     p.random_seed = 0;
-  //     p.id = 0;
-  //     p.status = MC::CellStatus::IDLE;
-  //     p.weight = 0.0;
-  //     p.data.reset();
-  // }
 
   inline void Particles::clearState(MC::CellStatus _status) noexcept
   {

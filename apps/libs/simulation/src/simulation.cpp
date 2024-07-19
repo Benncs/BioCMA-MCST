@@ -3,11 +3,9 @@
 #include "mc/prng/prng.hpp"
 #include "models/types.hpp"
 #include <algorithm>
-#include <atomic>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
-#include <execution>
 #include <mc/domain.hpp>
 #include <mc/particles/mcparticles.hpp>
 #include <mc/thread_private_data.hpp>
@@ -36,11 +34,11 @@ namespace Simulation
     if (i == 0)
     {
 
-      liq(0, i) = 9;
+      liq(0, i) = 1;
     }
     else
     {
-      liq(0, i) = 5.;
+      liq(0, i) = 1;
     }
   }
 
@@ -183,9 +181,15 @@ namespace Simulation
 
     int chunk_size = std::max(1, static_cast<int>((contribs.size() / size)));
 
+    
+    
+
 #pragma omp for schedule(dynamic,chunk_size) 
     for (size_t i_particle = 0; i_particle < size; ++i_particle)
     {
+
+
+
       const size_t i_thread = omp_get_thread_num();
       auto &events = ts_events[i_thread];
       auto &thread_contrib = contribs[i_thread];
@@ -208,7 +212,6 @@ namespace Simulation
       post_process_reducing();
     }
 
-      
     
   }
 
@@ -223,12 +226,13 @@ namespace Simulation
                   const auto &diag,
                   auto &cumulative_probability)
   {
+    
     auto& status = particle.status;
     if ( status == MC::CellStatus::DEAD)
     {
       return;
     }
-
+    
     auto &rng = thread_extra.rng;
     const double random_number_1 = rng.double_unfiform();
     const double random_number_2 = rng.double_unfiform();
@@ -261,6 +265,7 @@ namespace Simulation
 
     if (status == MC::CellStatus::OUT)
     {
+      
       events.incr<MC::EventType::Exit>();
       handle_particle_removal(particle);
       return;

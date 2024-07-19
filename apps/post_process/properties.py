@@ -13,10 +13,10 @@ def get_distribution_moment(data):
 def mk_histogram(data,name,dest:str):
     num_bins = 50
     plt.figure()
-    plt.hist(data, bins=num_bins, density=True, alpha=0.7, color='blue', edgecolor='black')
+    plt.hist(data, bins=num_bins, density=True,alpha=0.7, color='blue', edgecolor='black')
     plt.xlabel('Value')
     plt.ylabel('Density')
-    plt.title('Histogram')
+    plt.title(f"Histogram {name}")
     plt.savefig(f"{dest}/histogram_{name}")
 
 
@@ -32,3 +32,6 @@ def mk_pdf(data,name):
     plt.ylabel('Density')
     plt.title('Probability Density Function (PDF)')
     plt.savefig(f"./results/pdf_{name}")
+
+
+

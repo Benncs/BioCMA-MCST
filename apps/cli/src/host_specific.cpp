@@ -1,10 +1,10 @@
 
 #include "common/execinfo.hpp"
-#include "data_exporter.hpp"
 #include "rt_init.hpp"
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <cstddef>
+#include <dataexporter/factory.hpp>
 #include <host_specific.hpp>
 #include <memory>
 #include <mpi_w/wrap_mpi.hpp>
@@ -20,6 +20,7 @@ constexpr size_t PROGRESS_BAR_WIDTH = 100;
 inline void
 update_progress_bar(size_t total, size_t currentPosition, bool verbose)
 {
+  const auto default_precision{std::cout.precision()};
   std::ios::sync_with_stdio(false);
   if (verbose)
   {
@@ -35,7 +36,7 @@ update_progress_bar(size_t total, size_t currentPosition, bool verbose)
               << std::setprecision(2)
               << (static_cast<float>(currentPosition) * 100.0 /
                   static_cast<float>(total))
-              << "%\r" << std::flush;
+              << "%\r" << std::flush<< std::setprecision(default_precision);
   }
 }
 
@@ -83,7 +84,7 @@ void host_process(
     auto initial_distribution = simulation.mc_unit->domain.getDistribution();
 
     data_exporter =
-        DataExporter::factory(exec,
+        data_exporter_factory(exec,
                               params,
                               params.results_file_name,
                               simulation.getDim(),
@@ -182,35 +183,21 @@ void main_loop(const SimulationParameters &params,
 
       simulation.cycleProcess(d_t);
 
-      #pragma omp master
-            {
-              dump_counter++;
-              if (dump_counter == dump_interval)
-              {
-                update_progress_bar(n_iter_simulation, __loop_counter, true);
-                exporter->append(current_time,
-                                 simulation.getCliqData(),
-                                 simulation.mc_unit->domain.getDistribution(),
-                                 current_reactor_state->liquidVolume,
-                                 current_reactor_state->gasVolume);
-                dump_counter = 0;
-              }
-            }
-//       if (dump_counter == (dump_interval)) //WARNING CHECK OVERFLOW
-//       {
-// #pragma omp master
-//         {
-          
-          
-//           update_progress_bar(n_iter_simulation, __loop_counter, true);
-//           exporter->append(current_time,
-//                            simulation.getCliqData(),
-//                            simulation.mc_unit->domain.getDistribution(),
-//                            current_reactor_state->liquidVolume,
-//                            current_reactor_state->gasVolume);
-//           dump_counter = 0;
-//         }
-//       }
+#pragma omp master
+      {
+        dump_counter++;
+
+        if (dump_counter == dump_interval)
+        {
+          update_progress_bar(n_iter_simulation, __loop_counter, true);
+          exporter->append(current_time,
+                           simulation.getCliqData(),
+                           simulation.mc_unit->domain.getDistribution(),
+                           current_reactor_state->liquidVolume,
+                           current_reactor_state->gasVolume);
+          dump_counter = 0;
+        }
+      }
 
 #pragma omp single
       {
@@ -220,20 +207,16 @@ void main_loop(const SimulationParameters &params,
           sync_step(exec, simulation);
         }
 
-// #pragma omp task default(none) shared(simulation, current_reactor_state),      \
-//     firstprivate(d_t)
+#pragma omp task default(none) shared(simulation, current_reactor_state),      \
+    firstprivate(d_t)
         {
-          // update_feed_counter++;
-          // if (update_feed_counter==update_feed_interval) {
-          //     simulation.update_feed(d_t);
-          // }
+
           simulation.update_feed(d_t);
           simulation.step(d_t, *current_reactor_state);
         }
 
         sync_prepare_next(exec, simulation);
         current_time += d_t;
-        // dump_counter++;
       }
     }
   }

@@ -111,7 +111,7 @@ namespace Simulation
     // return p2;
   }
 
-  static const std::vector<size_t> v_tmp_index_leaving_flow = {10};
+  static const std::vector<size_t> v_tmp_index_leaving_flow = {10000};
   static const std::vector<double> v_tmp_leaving_flow = {0.};//{0.000011758 / 10};
 
   // static auto [zip_it,zip_end] = CmtCommons::zip(v_tmp_index_leaving_flow,v_tmp_leaving_flow);

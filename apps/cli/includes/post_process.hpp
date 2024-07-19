@@ -1,7 +1,7 @@
 #ifndef __HOST_POST_PROCESS_HPP__
 #define __HOST_POST_PROCESS_HPP__
 
-#include <data_exporter.hpp>
+#include <dataexporter/data_exporter.hpp>
 #include <simulation/simulation.hpp>
 
 namespace PostProcessing

@@ -1,158 +1,23 @@
-#include "cmt_common/macro_constructor_assignment.hpp"
-#include "common/simulation_parameters.hpp"
-
-#include "simulation/simulation.hpp"
-
-#include <data_exporter.hpp>
-#include <mc/events.hpp>
-
-#include <Eigen/Core>
-#include <chrono>
-#include <nl_types.h>
-#include <numeric>
-#include <string_view>
-#include <tuple>
-
-#include <iomanip>
-
 #ifdef USE_HIGHFIVE
+#  include "common/simulation_parameters.hpp"
+
+#  include <dataexporter/impl_dataexporter.hpp>
+#  include <mc/events.hpp>
+
+#  include <Eigen/Core>
+#  include <nl_types.h>
+#  include <string_view>
+#  include <tuple>
+
+
 #  include "highfive/H5DataSpace.hpp"
 #  include "highfive/H5File.hpp"
 #  include "highfive/H5PropertyList.hpp"
 #  include <Eigen/Dense>
 #  include <highfive/eigen.hpp>
 #  include <highfive/highfive.hpp>
-#endif
 
-std::string date_time()
-{
-  std::stringstream ss;
-  auto now =
-      std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-  ss << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
-  return ss.str();
-}
 
-#ifdef USE_HIGHFIVE
-
-class DataExportHighFive : public DataExporter
-{
-public:
-  DataExportHighFive(const ExecInfo &info,
-                     const SimulationParameters &params,
-                     std::string_view _filename,
-                     std::tuple<size_t, size_t> dim,
-                     size_t niter,
-                     std::span<size_t> distribution);
-
-  SET_NON_COPYABLE(DataExportHighFive);
-  SET_NON_MOVABLE(DataExportHighFive);
-
-  ~DataExportHighFive()
-  {
-    // delete _file;
-  }
-
-  void append(double t,
-              std::span<double> concentration_liquid,
-              const std::vector<size_t> &distribution,
-              std::span<const double> liquid_volume,
-              std::span<const double> volume_gas) override;
-
-  void write_final_particle_data(
-      const std::unordered_map<std::string, std::vector<model_properties_t>> &,
-      const std::unordered_map<std::string, std::vector<double>> &) override;
-
-  void write_initial_particle_data(
-      const std::unordered_map<std::string, std::vector<model_properties_t>>
-          & /*unused*/,
-      const std::unordered_map<std::string, std::vector<double>> & /*unused*/)
-      override;
-
-protected:
-  void write_final_results(ExportData &data,
-                           std::span<size_t> distribution) override;
-
-private:
-  void prepare();
-  static void write_attributes(HighFive::File &file, export_metadata_kv &md);
-
-  static void write_initial(HighFive::File &file,
-                            const ExecInfo &info,
-                            export_initial_kv &md);
-
-  void write_particle_data(
-      const std::unordered_map<std::string, std::vector<model_properties_t>> &,
-      const std::unordered_map<std::string, std::vector<double>> &,
-      const std::string &ds_name);
-
-  // HighFive::File *_file;
-};
-
-#endif
-
-DataExporter::DataExporter(const ExecInfo &info,
-                           const SimulationParameters &params,
-                           std::string_view _filename,
-                           std::tuple<size_t, size_t> dim,
-                           size_t niter,
-                           std::span<size_t> distribution)
-    : filename(_filename), n_row(get<0>(dim)), n_col(get<1>(dim)),
-      n_iter(niter + 2)
-
-{
-
-  metadata["file_version"] = 3;
-  metadata["creation_date"] = date_time();
-  metadata["author"] = "someone";
-  metadata["description"] = "Interesting results";
-
-  initial_values["number_particles"] = params.user_params.numper_particle;
-  initial_values["number_compartment"] = params.n_compartments;
-  initial_values["final_time"] = params.user_params.final_time;
-  initial_values["particle_distribution"] =
-      std::vector<size_t>(distribution.begin(), distribution.end());
-  initial_values["delta_time"] = params.d_t;
-  initial_values["n_map"] = params.n_different_maps;
-  initial_values["t_per_flow_map"] = params.t_per_flow_map;
-}
-
-void DataExporter::write_final_results(Simulation::SimulationUnit &simulation,
-                                       std::span<size_t> distribution)
-{
-
-  size_t n_part = std::accumulate(
-      distribution.begin(), distribution.end(), static_cast<size_t>(0));
-
-  ExportData data = {
-      n_part,
-      simulation.getCliqData(),
-      simulation.getCgasData(),
-      simulation.mc_unit->ts_events.data(),
-      simulation.getDim(),
-  };
-
-  write_final_results(data, distribution);
-}
-
-std::unique_ptr<DataExporter>
-DataExporter::factory(const ExecInfo &info,
-                      const SimulationParameters &params,
-                      std::string_view _filename,
-                      std::tuple<size_t, size_t> dim,
-                      size_t niter,
-                      std::span<size_t> distribution)
-{
-#ifdef USE_HIGHFIVE
-  return std::make_unique<DataExportHighFive>(
-      info, params, _filename, dim, niter, distribution);
-#else
-  return std::make_unique<DataExporter>(
-      info, params, _filename, dim, niter, distribution);
-#endif
-}
-
-#ifdef USE_HIGHFIVE
 
 constexpr size_t hdf5_max_compression = 9;
 
@@ -384,9 +249,9 @@ void DataExportHighFive::write_particle_data(
 
   std::cout << "EXPORTING PARTICLE DATA" << std::endl;
   HighFive::DataSetCreateProps ds_props;
-  ds_props.add(HighFive::Chunking(props.size()));
-  ds_props.add(HighFive::Shuffle());
-  ds_props.add(HighFive::Deflate(hdf5_max_compression));
+  // ds_props.add(HighFive::Chunking(props.size()));
+  // ds_props.add(HighFive::Shuffle());
+  // ds_props.add(HighFive::Deflate(hdf5_max_compression));
 
   for (const auto &[key, values] : props)
   {
@@ -394,7 +259,7 @@ void DataExportHighFive::write_particle_data(
     const auto size = values.size();
 
     std::visit(
-        [&file,
+        [&ds_props,&file,
          key = std::move(key),
          values = std::move(values),
          size,
@@ -416,7 +281,7 @@ void DataExportHighFive::write_particle_data(
                 }
               }
             }
-            auto ds = file.createDataSet(ds_name + key, non_zero_values);
+            auto ds = file.createDataSet(ds_name + key, non_zero_values,ds_props);
           }
           else
           {

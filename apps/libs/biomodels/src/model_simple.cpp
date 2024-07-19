@@ -11,6 +11,7 @@
 
 #include <any>
 #include <mc/prng/prng.hpp>
+#include <cassert>
 constexpr double SOLVER_TOLERANCE = 1e-5;
 
 static std::random_device rd{};

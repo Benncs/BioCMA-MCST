@@ -2,7 +2,6 @@
 #define __DATA_EXPORTER_HPP__
 
 #include "mc/events.hpp"
-#include <Eigen/Core>
 #include <cmt_common/macro_constructor_assignment.hpp>
 #include <common/common.hpp>
 #include <map>
@@ -48,19 +47,13 @@ public:
       const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
   };
 
-  virtual void append(double t ,
+  virtual void append(double t /*unused*/,
                       std::span<double> /*unused*/ ,
                       const std::vector<size_t> &/*unused*/ ,
                       std::span<const double> /*unused*/ ,
                       std::span<const double> /*unused*/ ) {};
 
-  static std::unique_ptr<DataExporter>
-  factory(const ExecInfo &info,
-          const SimulationParameters &params,
-          std::string_view _filename,
-          std::tuple<size_t, size_t> dim,
-          size_t niter,
-          std::span<size_t> distribution);
+
 
   DELETE_CONSTRUCTORS(DataExporter);
   DELETE_ASSIGMENT(DataExporter)
@@ -93,7 +86,6 @@ protected:
   {
     std::cerr << "NO implementation specified";
   }
-  private:
   
 
 };

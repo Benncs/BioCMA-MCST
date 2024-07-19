@@ -71,9 +71,10 @@ namespace PostProcessing
       exporter->write_final_particle_data(aggregated_values, spatial);
     }
 
-    if(tot == (new_p - removed + params.user_params.numper_particle))
+    if(tot != (new_p - removed + params.user_params.numper_particle))
     {
-      throw std::runtime_error("Results are not coherent (Bad particle balance)");
+      std::cerr<<("Results are not coherent (Bad particle balance): ");
+      std::cerr<<tot<<"="<<new_p<<"-"<<removed<<"+"<<params.user_params.numper_particle<<std::endl;;
     }
 
     

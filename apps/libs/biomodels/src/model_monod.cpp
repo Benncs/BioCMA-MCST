@@ -1,117 +1,184 @@
-#include "common/common.hpp"
-#include <Eigen/Core>
+#include "mc/prng/prng.hpp"
+#include <Eigen/Dense>
 #include <any>
-#include <cmath>
-#include <cstdlib>
-#include <iostream>
-#include <mc/prng/cdf.hpp>
+#include <backward_euler.hpp>
 #include <models/monod.hpp>
+
 #include <random>
-
-
-constexpr double interdivision_time = 1175;//20*60 ;
-constexpr double ln2 = 0.6931471805599453;
-constexpr double Ks = 486e-9;
-constexpr double k_pts = 1e-3;
-constexpr double phi_pts_max =
-    4.454e-12 * 1e-3 / 3600 ; //*0.1 to divide cumption by 10;
-constexpr double YXS = 0.3;
-
-std::random_device rd{};
-std::mt19937 gen{rd()};
-static std::uniform_real_distribution<double> __model_dist(0., 1.);
-
-static std::normal_distribution<double> __model_n_dist(interdivision_time, 120);
-
-static std::normal_distribution<double> n_dist(1, 0.1);
-
-static double phi_pts(double S)
+#include <stdexcept>
+namespace monod
 {
-  return (phi_pts_max * S / (k_pts + S));
-}
-
-double rand_division_time()
-{
-  return n_dist(gen) * interdivision_time;
-}
-
-void init_monod_model_(MC::Particles &p)
-{
-  p.data = Monod{rand_division_time(), 0., 0., 6e-2};
-}
-
-void update_monod_model(double d_t,
-                        MC::Particles &p,
-                        std::span<double const> concentrations)
-{
-  auto &model = std::any_cast<Monod &>(p.data);
-  model.age += d_t;
-
-  double s = concentrations[0];
-  model.phi = std::max(0., phi_pts(s));
-  model.l = model.l + d_t*model.phi / YXS; 
 
 
-  // const auto lambda = (model.age / model.interdivision_time);
-  //  const auto lambda = (model.age * model.interdivision_time);
-  // auto random = __model_dist(gen);
-  // bool division = MC::cdf_exponential_check(random,lambda)&&! almost_equal(s,
-  // 0.);
 
-  bool division = model.age >= model.interdivision_time && !almost_equal(s, 0.);
-  // auto random = __model_dist(gen);
-  // bool division =
-  // MC::cdf_truncated_normal_check(random,model.age,model.interdivision_time,model.interdivision_time/6.)
-  // &&! almost_equal(s, 0.);
 
-  if (division)
+  constexpr bool implicit = true;
+
+  static std::random_device rd{};
+  static std::mt19937 gen{rd()};
+  static std::normal_distribution<double> n_dist(1, 0.1);
+
+  enum XI_N
   {
-    p.status = MC::CellStatus::CYTOKINESIS;
+    lenght = 0,
+    mu_eff = 1,
+  };
+
+  constexpr size_t xi_t_size = 2;
+  using xi_t = Eigen::Vector<double, xi_t_size>;
+
+  struct MonodSimple
+  {
+
+    MC::PRNG prng;
+    xi_t xi;
+    Eigen::Vector<double, 3> contrib;
+
+    static constexpr double mu_max = 0.46/3600;
+
+    static constexpr double YXS = 0.5;
+
+    static constexpr double critcal_division_length = 11e-6;
+    static constexpr double minimal_length = 7e-6;
+    static constexpr double maximal_length = 18e-6;
+    static constexpr double tau_metabolism = 0.1*1.25/mu_max;
+    static constexpr double KS = 0.01;
+  };
+
+  void init_monod_model_(MC::Particles &p)
+  {
+
+    // auto model = MonodSimple();
+
+    p.data = MonodSimple();
+    auto &model = std::any_cast<MonodSimple &>(p.data);
+    model.contrib.setZero();
+    auto rd_length = (1+n_dist(gen)) *MonodSimple::minimal_length;
+
+    model.xi[XI_N::lenght] =
+        std::max(MonodSimple::minimal_length,
+                 std::min(rd_length, MonodSimple::maximal_length));
+
+    model.xi[XI_N::mu_eff] = 1e-6 * model.prng.double_unfiform();
   }
-}
 
-MC::Particles division_mond_model(MC::Particles &p)
-{
-  auto &model = std::any_cast<Monod &>(p.data);
-  model.age = 0.;
-  model.l = model.l / 2.;
-  p.status = MC::CellStatus::IDLE;
-  MC::Particles child(p);
+  inline double division_gamma(const auto &xi)
+  {
 
-  child.status = MC::CellStatus::IDLE;
-  child.data.emplace<Monod>(
-      model); //= SimpleModel(model);//std::make_shared<SimpleModel>(*model);
+    auto length = xi[XI_N::lenght];
+    if (length <= MonodSimple::minimal_length ||
+        length > MonodSimple::maximal_length)
+    {
+      return 0;
+    }
+    constexpr double kappa = 5;
 
-  auto &child_model = std::any_cast<Monod &>(child.data);
-  
-  child_model.interdivision_time = model.interdivision_time; //rand_division_time();
-  return child;
-}
+    return std::pow(length / MonodSimple::maximal_length, kappa);
+  }
 
-void contribution_mond_model(MC::Particles &p, Eigen::MatrixXd &contribution)
-{
-  auto &model = std::any_cast<Monod &>(p.data);
-  int ic = static_cast<int>(p.current_container);
-  const double weight = p.weight;
+  inline void u_xi_dot(double mu_p, double S, const xi_t &xi, xi_t &xi_dot)
+  {
+    xi_dot = {
+        xi[XI_N::mu_eff],
+        (1.0 / MonodSimple::tau_metabolism) * (mu_p - xi[XI_N::mu_eff]),
+    };
+  }
 
-  contribution.coeffRef(0, ic) -= model.phi * weight;
-}
+  void f(double s, const xi_t &xi, xi_t &xi_dot)
+  {
+    const double mu_p = std::max(0., MonodSimple::YXS* MonodSimple::mu_max * s / (MonodSimple::KS + s));
+    u_xi_dot(mu_p, s, xi, xi_dot);
+  }
 
-model_properties_detail_t monod_properties(const MC::Particles &p)
-{
-  const auto &model = std::any_cast<const Monod &>(p.data);
-  
-  return {{"age", model.age},
-          {"interdivision_time", model.interdivision_time},
-          {"lenght", model.l}};
-}
+  void update_monod_model(double d_t,
+                          MC::Particles &p,
+                          std::span<double const> concentrations)
+  {
+    auto &model = std::any_cast<MonodSimple &>(p.data);
+    auto &xi = model.xi;
+    const double S = concentrations[0];
+
+    if constexpr (implicit)
+    {
+      xi = backward_euler_update<xi_t_size>(d_t, S, model.xi, &f);
+    }
+    else
+    {
+      xi_t xi_dot;
+      xi_dot.setZero();
+      f(S, xi, xi_dot);
+      xi += d_t * xi_dot;
+    }
+
+    model.contrib(0) = std::max(0.,MonodSimple::mu_max * S / (MonodSimple::KS + S));
+
+    auto proba_div = (1. - std::exp(-division_gamma(xi) * d_t));
+
+    if (model.prng.double_unfiform() < proba_div)
+    {
+      p.status = MC::CellStatus::CYTOKINESIS;
+    }
+  }
+
+  MC::Particles division_monod_model(MC::Particles &p)
+  {
+    auto &parent_model = std::any_cast<MonodSimple &>(p.data);
+    const double div_length = parent_model.prng.double_unfiform();
+
+    const auto current_length  = parent_model.xi[XI_N::lenght];
+
+
+    
+    p.status = MC::CellStatus::IDLE;
+    MC::Particles child(p);
+
+    auto child_model = MonodSimple(parent_model);
+    child_model.xi = parent_model.xi;
+
+    // parent_model.xi[XI_N::lenght] = div_length * current_length;
+    // child_model.xi[XI_N::lenght] = (1 - div_length) * current_length;
+
+    parent_model.xi[XI_N::lenght] =  current_length/2.;
+    child_model.xi[XI_N::lenght] = current_length/2.;
+
+    child.status = MC::CellStatus::IDLE;
+
+    child.data.emplace<MonodSimple>(child_model);
+    if (child.weight != p.weight)
+    {
+      throw std::runtime_error("aled");
+    }
+    return child;
+  }
+
+  void contribution_monod_model(MC::Particles &p, Eigen::MatrixXd &contribution)
+  {
+    auto &model = std::any_cast<MonodSimple &>(p.data);
+
+    
+
+
+    int ic = static_cast<int>(p.current_container);
+
+    contribution.col(ic) -= (p.weight * model.contrib);
+  }
+
+  model_properties_detail_t properties(const MC::Particles &p)
+  {
+    const auto &model = std::any_cast<const MonodSimple &>(p.data);
+    const auto &xi = model.xi;
+    return {
+        {"lenght", xi[XI_N::lenght]},
+        {"mu_eff", xi[XI_N::mu_eff]},
+    };
+  }
+} // namespace monod
 
 KModel get_model_monod()
 {
-
-  return {init_monod_model_,
-          update_monod_model,
-          division_mond_model,
-          contribution_mond_model,
-          monod_properties};
+  return {&monod::init_monod_model_,
+          &monod::update_monod_model,
+          &monod::division_monod_model,
+          &monod::contribution_monod_model,
+          &monod::properties};
 }
