@@ -10,13 +10,18 @@ from cli_formater import format_cli
 # def get_executable(type:str):
 #     return f"./builddir/{type}/apps/cli/biocma_mcst_cli_app"
 
+current_file_path = os.path.abspath(__file__)
+current_directory = os.path.dirname(current_file_path)
+
+root = current_directory + "/.."
+
 
 def get_executable(type: str):
-    return f"./builddir/{type}/apps/cli/biocma_mcst_cli_app"
+    return f"{root}/builddir/{type}/apps/cli/biocma_mcst_cli_app"
 
 
 DEFAULT_TYPE = "debugoptmized"
-MPI_COMMAND = "mpiexec --use-hwthread-cpus --allow-run-as-root "
+MPI_COMMAND = "mpiexec --allow-run-as-root --bind-to core -np 5 "
 
 OMP_NUM_THREADS = 12
 
@@ -77,10 +82,10 @@ if __name__ == "__main__":
     cli_args = parse_cli(args)
 
     run_cli = format_cli(["_", cli_args["name"]])
-    use_mpi = False
+    use_mpi = True
     mpi_c = ""
     if use_mpi:
-        mpi_c = MPI_COMMAND
+        mpi_c = MPI_COMMAND + " "
 
     command = mpi_c + get_executable(cli_args["type"]) + " " + run_cli
 

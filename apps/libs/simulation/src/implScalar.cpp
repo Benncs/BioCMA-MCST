@@ -75,7 +75,7 @@ namespace Simulation
 
 
   
-    concentration.noalias() = total_mass * volumes_inverse;
+    concentration = total_mass * volumes_inverse;
   }
 
 } // namespace Simulation

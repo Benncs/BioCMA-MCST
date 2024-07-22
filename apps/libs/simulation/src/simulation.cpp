@@ -34,11 +34,11 @@ namespace Simulation
     if (i == 0)
     {
 
-      liq(0, i) = 1;
+      liq(0, i) = 1.;
     }
     else
     {
-      liq(0, i) = 1;
+      liq(0, i) = 0.1;
     }
   }
 

@@ -65,7 +65,7 @@ def assemble(res_folder: str, names: List[str]) -> List[str]:
 
 if __name__ == "__main__":
     root_res = "./results/"
-    dest = "./results/monod_0d/pp"
+    dest = "./results/monod_0d_/pp"
 
     if not os.path.exists(dest):
         os.makedirs(dest)

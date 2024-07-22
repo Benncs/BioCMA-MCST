@@ -2,32 +2,32 @@
 <cases>
    <control name="n14">
       <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
-      <final_time>1200</final_time>
-      <numper_particle>1000</numper_particle>
-      <delta_time>0.01</delta_time>
-      <results_file_name>lb_14_impl</results_file_name>
-      <number_exported_result>50</number_exported_result>
-      <model_name>model_lb</model_name>
+      <final_time>1000</final_time>
+      <numper_particle>10000</numper_particle>
+      <delta_time>0</delta_time>
+      <results_file_name>monod_14</results_file_name>
+      <number_exported_result>100</number_exported_result>
+      <model_name>model_monod</model_name>
    </control>
    
    <control name="0d">
       <cma_case_path>/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/0d/</cma_case_path>
-      <final_time>100</final_time>
-      <numper_particle>100</numper_particle>
-      <delta_time>0.001</delta_time>
+      <final_time>1000</final_time>
+      <numper_particle>10000</numper_particle>
+      <delta_time>0.01</delta_time>
       <results_file_name>monod_0d</results_file_name>
-      <number_exported_result>50</number_exported_result>
+      <number_exported_result>100</number_exported_result>
       <model_name>model_monod</model_name>
    </control>
 
    <control name="ts">
       <cma_case_path>./cma_data/two_stages/</cma_case_path>
-      <final_time>2500</final_time>
-      <numper_particle>10000</numper_particle>
+      <final_time>3600</final_time>
+      <numper_particle>100</numper_particle>
       <delta_time>0.1</delta_time>
-      <results_file_name>lb_ts_2</results_file_name>
-      <number_exported_result>100</number_exported_result>
-      <model_name>model_lb</model_name>
+      <results_file_name>monod_ts</results_file_name>
+      <number_exported_result>360</number_exported_result>
+      <model_name>model_monod</model_name>
    </control>
 
 

@@ -10,7 +10,7 @@ RUN apt-get update && \
     wget \
     software-properties-common \
     gnupg \ 
-    libomp-dev libopenmpi-dev libeigen3-dev  pkg-config ninja-build
+    libomp-dev libopenmpi-dev libeigen3-dev  pkg-config libtbb-dev ninja-build
 
 RUN apt-get install -y libblas-dev libhdf5-dev 
 RUN apt-get install -y libvtk9-dev

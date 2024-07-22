@@ -2,7 +2,7 @@
 #include <mc/prng/prng.hpp>
 #include <omp.h>
 #include <random>
-
+#include <chrono> 
 void calculate_correlation(const std::vector<double> &samples, size_t n_sample)
 {
   // Test de corrélation
