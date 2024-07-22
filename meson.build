@@ -19,6 +19,7 @@ if use_cuda
   
 else
   arch_specific_args = ['-march=native']
+  # arch_specific_args=['-mavx2']
   cpp_version = get_option('cpp_std')
   if cpp_version != 'gnu++20'
     error('c++20 features should be available')
@@ -36,6 +37,13 @@ if compiler.has_argument('-flto')
 flto_flag = '-flto'
 endif 
 
+if compiler.has_argument('-mtune=native')
+arch_specific_args = [arch_specific_args,'-mtune=native']
+endif 
+
+
+
+
 
 compiler.has_argument('-fopenmp')
 
@@ -49,7 +57,8 @@ project_name = meson.project_name()
 build_type = get_option('buildtype')
 cpp = meson.get_compiler('cpp')
 
-global_install_dir = 'lib' # 'lib/'+project_name  # Relative  to /usr/local/
+# global_install_dir = 'lib' # 'lib/'+project_name  # Relative  to /usr/local/
+global_install_dir = get_option('prefix')+'/'+get_option('libdir')
 includes_install_dir = ('include/' + project_name)
 
 cpp_args = arch_specific_args 
@@ -64,6 +73,9 @@ project_custom_options = {
   'debug': [],
   'release': [],
 }
+
+
+
 target_custom_options = project_custom_options.get(build_type, [])
 # foreach opt: target_custom_options
 #     add_project_arguments(opt, language: 'cpp')
@@ -72,6 +84,16 @@ target_custom_options = project_custom_options.get(build_type, [])
 
 if build_type == 'debug' or build_type == 'debugoptimized'
   add_global_arguments('-DDEBUG', language: 'cpp')
+  # if compiler.has_argument('-pg')
+  # arch_specific_args= [arch_specific_args,'-pg']
+  # add_project_link_arguments('-pg',language: 'cpp')
+  # endif 
+
+else
+  add_global_arguments('-DNDEBUG', language: 'cpp')
+    if compiler.has_argument('-ffast-math')
+  arch_specific_args= [arch_specific_args,'-ffast-math']
+  endif 
 endif
 
 use_dynamic_module = get_option('use_dynamic_module') # Use python module or not
@@ -87,16 +109,16 @@ omp = declare_dependency(link_args: ['-fopenmp'])
 else
 omp = dependency('openmp', language: 'cpp', required: true)
 endif 
-
+tbb = dependency('tbb', required: true)
 
 
 eigen_dep = dependency('eigen3', required: true)
 blas = dependency('blas', required: false) # Eigen can work without BLAS
 
 
-# if blas.found()
-#   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
-# endif
+if blas.found()
+  add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
+endif
 
 highfive_found = false
 cmake = import('cmake', required: false)
@@ -150,7 +172,7 @@ cma_reader = subproject(
     f'use_cuda=@use_cuda@',
     default_option_cpp20
   ],
-) # We only need native birem library in order to read flowmap so, no python neither executable
+) # We only need native cmtool library in order to read flowmap so, no python neither executable
 
 cma_dep = cma_reader.get_variable('cma_read_shared_lib_dependency') # Get shared lib
 

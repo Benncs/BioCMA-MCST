@@ -2,8 +2,7 @@ name: build_test
 'on':
   push:
     branches:
-      - main
-      - dev/0.0.4/**
+      - dev*
   pull_request:
     branches:
       - main
@@ -30,7 +29,7 @@ jobs:
           ninja-build build-essential
       - name: OMP / MPI / Dependencies
         run: >-
-          sudo apt-get install -y libomp-dev libopenmpi-dev libeigen3-dev 
+          sudo apt-get install -y libomp-dev libopenmpi-dev libeigen3-dev  libtbb-dev
           pkg-config
       - name: Install Python Development Packages
         run: sudo apt-get install -y python3-dev python3 python3-pip
@@ -45,7 +44,7 @@ jobs:
           mkdir builddir
           meson setup builddir/ --buildtype=release -Dcpp_std=gnu++20
       - name: Build project
-        run: meson compile -C builddir
+        run: ninja -k 1 -C builddir
       - name: Run unit tests
         run: |
           meson test -C builddir
@@ -71,7 +70,7 @@ jobs:
           ninja-build build-essential
       - name: OMP / MPI / Dependencies
         run: >-
-          sudo apt-get install -y libomp-dev libopenmpi-dev libeigen3-dev
+          sudo apt-get install -y libomp-dev libopenmpi-dev libeigen3-dev libtbb-dev
           libhdf5-dev pkg-config
       - name: Install Python Development Packages
         run: sudo apt-get install -y python3-dev python3 python3-pip
@@ -86,7 +85,7 @@ jobs:
           mkdir builddir
           meson setup builddir/ --buildtype=release -Dcpp_std=gnu++20
       - name: Build project
-        run: meson compile -C builddir
+        run:  ninja -k 1 -C builddir
       - name: Run unit tests
         run: |
           meson test -C builddir

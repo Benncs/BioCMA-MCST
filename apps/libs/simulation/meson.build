@@ -28,7 +28,7 @@ private_dependencies = [eigen_dep]
 
 external_dependcies = [cma_dep, blas]
 
-simulation_public_dependencies = [
+simulation_public_dependencies = [tbb,
    project_dependencies,
    omp,
    external_dependcies,
@@ -47,7 +47,7 @@ simulation_lib = library(
    dependencies: [simulation_public_dependencies, private_dependencies],
    pic: true,
    install: true,
-   install_dir: global_install_dir,
+   install_rpath: global_install_dir,
    link_args: [flto_flag],
    cpp_args:[]
 )
@@ -75,7 +75,7 @@ if use_dynamic_module
       cpp_args: [use_python_define],
       pic: true,
       install: true,
-       install_dir: global_install_dir
+       install_rpath: global_install_dir
    )
 
    # Declare dependency for the dynamic simulation library

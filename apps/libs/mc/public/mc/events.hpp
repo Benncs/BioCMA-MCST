@@ -1,6 +1,7 @@
 #ifndef __MC_EVENTS_HPP__
 #define __MC_EVENTS_HPP__
 
+#include "common/execinfo.hpp"
 #include <array>
 #include <cstddef>
 #include <span>
@@ -12,19 +13,20 @@ namespace MC
     ChangeWeight = 0,
     NewParticle = 1,
     Death = 2,
-    Move = 3
+    Move = 3,
+    Exit = 4
   };
 
-  constexpr size_t n_event_type = 4;
+  constexpr size_t n_event_type = 5;
 
   template <EventType event> consteval size_t eventIndex()
   {
     return static_cast<size_t>(event);
   }
 
-  struct EventContainer
+  struct alignas(ExecInfo::cache_line_size) EventContainer
   {
-    std::array<size_t, n_event_type> events{0, 0, 0,0};
+    std::array<size_t, n_event_type> events{0, 0, 0, 0, 0};
 
     template <EventType event> [[nodiscard]] constexpr size_t get() const
     {

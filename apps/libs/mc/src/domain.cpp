@@ -38,6 +38,14 @@ namespace MC
                                const CmaRead::Neighbors::Neighbors_const_view_t& _neighbors)
       :  neighbors(_neighbors)
   {
+
+    row_neighbors.resize(volumes.size());
+
+    for(size_t i =0;i<row_neighbors.size();++i)
+    {
+      row_neighbors[i]=neighbors.getRow(i);
+    }
+
     double totv = 0.;
     std::transform(volumes.begin(),
                    volumes.end(),
@@ -62,6 +70,7 @@ namespace MC
       this->containers = std::move(other.containers);
       this->neighbors = other.neighbors;
       this->_total_volume = other._total_volume;
+      this->row_neighbors = std::move(other.row_neighbors);
     }
     return *this;
   }

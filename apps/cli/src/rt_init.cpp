@@ -1,4 +1,5 @@
 
+#include "common/execinfo.hpp"
 #include "common/simulation_parameters.hpp"
 #include <rt_init.hpp>
 
@@ -28,10 +29,10 @@ std::string env_file_path()
 
 size_t generate_run_id();
 
-void set_openmp_threads(int rank,
-                        int size,
+void set_openmp_threads(const int rank,
+                        const int size,
                         ExecInfo &info,
-                        UserControlParameters &params)
+                        const UserControlParameters &params)
 {
   // Casting rank and size to size_t
   info.current_rank = static_cast<size_t>(rank);
@@ -55,32 +56,38 @@ void set_openmp_threads(int rank,
     }
   }
 
-  if (threads_per_process > static_cast<size_t>(num_core_per_node))
-  {
-    threads_per_process = static_cast<size_t>(num_core_per_node);
-  }
-  info.thread_per_process = threads_per_process;
+  info.thread_per_process =
+      std::min(threads_per_process, static_cast<size_t>(num_core_per_node));
+  ;
 
   omp_set_num_threads(static_cast<int>(info.thread_per_process));
 }
 
-ExecInfo runtime_init(int argc, char **argv, SimulationParameters &params)
+ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
 {
   ExecInfo info{};
 
   int rank = 0;
   int size = 0;
   int mpi_thread_level{};
-  MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &mpi_thread_level);
+  if constexpr (RT::use_mpi)
+  {
+    std::cout << "USING MPI" << std::endl;
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &mpi_thread_level);
 
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+  }
+  else
+  {
+    size = 1;
+  }
 
   set_openmp_threads(rank, size, info, params.user_params);
 
-  Eigen::setNbThreads(params.user_params.n_thread); //FIXME: 4 threads is clearly enough for 500*500 matrix 
-  
+  // Eigen::setNbThreads(std::min(omp_get_num_procs(), 2));
+    Eigen::setNbThreads(std::min(omp_get_num_procs(), 1));
 
 #ifdef USE_PYTHON_MODULE
   info.thread_per_process = 1; // Set one thread because of PYthon GIL
@@ -88,7 +95,11 @@ ExecInfo runtime_init(int argc, char **argv, SimulationParameters &params)
       // TODO FIXME : disable OMP feature
   std::cout << "Numberof thread per process " << info.thread_per_process
             << std::endl;
-  std::atexit(MPI_W::finalize);
+  if constexpr (RT::use_mpi)
+  {
+    std::atexit(MPI_W::finalize);
+  }
+
   info.run_id =
       static_cast<size_t>(time(nullptr) * size * info.thread_per_process);
   // MPI_W::is_mpi_init = true;
@@ -140,7 +151,6 @@ void init_environment()
 
     environment_initialized = true;
   }
-
 }
 
 // void append_date_time(std::ofstream &fd)
@@ -153,21 +163,21 @@ void init_environment()
 std::string sappend_date_time(std::string_view string)
 {
   std::stringstream fd;
-  fd<<string;
-  auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+  fd << string;
+  auto now =
+      std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
   fd << std::put_time(std::localtime(&now), "%Y-%m-%d-%H:%M:%S");
   return fd.str();
-
 }
 
-void register_run(ExecInfo &exec, SimulationParameters &params)
+void register_run(const ExecInfo &exec, SimulationParameters &params)
 {
   // Open the file in append mode
   std::ofstream env(env_file_path(), std::ios_base::app);
   if (env.is_open())
   {
     append_date_time(env);
-    env<< "\t";
+    env << "\t";
     env << exec;
     env << params;
     env << std::endl;

@@ -2,6 +2,7 @@
 #include "mc/domain.hpp"
 #include "mc/events.hpp"
 #include "mc/particles/mcparticles.hpp"
+#include "rt_init.hpp"
 #include <cstddef>
 #include <mpi_w/wrap_mpi.hpp>
 #include <sync.hpp>
@@ -26,15 +27,22 @@ void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
 void sync_prepare_next(const ExecInfo &exec,
                        Simulation::SimulationUnit &simulation)
 {
-  MPI_W::barrier();
-  simulation.clearContribution();
+  if constexpr (RT::use_mpi)
+  {
 
-  auto data =
-      simulation.getCliqData(); // Get concentration ptr wrapped into span
+    MPI_W::barrier();
+    simulation.clearContribution();
 
-  // We can use span here because we broadcast without changing size
-  MPI_W::broadcast_span(data, 0);
+    auto data =
+        simulation.getCliqData(); // Get concentration ptr wrapped into span
 
+    // We can use span here because we broadcast without changing size
+    MPI_W::broadcast_span(data, 0);
+  }
+  else
+  {
+    simulation.clearContribution();
+  }
 }
 
 void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
@@ -53,18 +61,18 @@ void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
 
   // auto local_particle = simulation.mc_unit->container.to_process.data();
 
-  auto total_particle =
-      MPI_W::gather_reduce<size_t>(simulation.mc_unit->container.to_process.size(), exec.n_rank);
-  
+  auto total_particle = MPI_W::gather_reduce<size_t>(
+      simulation.mc_unit->container.to_process.size(), exec.n_rank);
 
-  auto tot = MPI_W::gather<size_t>(local, exec.n_rank, 0);
+  auto tot_distrib = MPI_W::gather<size_t>(local, exec.n_rank, 0);
 
   if (exec.current_rank == 0)
   {
     tot_events = MC::EventContainer::reduce(total_contrib_data);
-    auto reduced = MC::ReactorDomain::reduce(tot, local_size, exec.n_rank);
+    auto reduced =
+        MC::ReactorDomain::reduce(tot_distrib, local_size, exec.n_rank);
     simulation.mc_unit->domain = std::move(reduced);
-    std::cout<<"nparticle "<<total_particle<<std::endl;
+    std::cout << "nparticle " << total_particle << std::endl;
     // simulation.mc_unit->container.to_process.data() = total_particle;
   }
   simulation.mc_unit->ts_events = {

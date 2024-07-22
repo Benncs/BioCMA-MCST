@@ -15,7 +15,7 @@ mpi_wrap_lib = library(
    dependencies: dep,
    pic: true,
    install: true,
-   install_dir: global_install_dir,
+   install_rpath: global_install_dir,
 )
 
 mpi_wrap_dependency = declare_dependency(

@@ -1,7 +1,6 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
-#include "mc/prng/prng.hpp"
 
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
@@ -12,16 +11,19 @@
 
 namespace Simulation
 {
-  class PreCalculatedHydroState;
-  class ScalarSimulation;
-  struct pimpl_deleter
+  using init_scalar_f_t = void(*)(size_t , CmaRead::L2DView<double> &);
+  static constexpr init_scalar_f_t default_gas_init = [](size_t , CmaRead::L2DView<double> &){};
+
+  struct ScalarInitializer
   {
-    void operator()(ScalarSimulation *) const;
+    std::span<double> volumesgas;
+    std::span<double> volumesliq;
+    init_scalar_f_t liquid_f_init;
+    init_scalar_f_t gaz_f_init=default_gas_init;
   };
 
-  using pimp_ptr_t = std::unique_ptr<ScalarSimulation, pimpl_deleter>;
-
-  void initF(pimp_ptr_t &liq, pimp_ptr_t &gas); // TODO Delete
+  class PreCalculatedHydroState;
+  class ScalarSimulation;
 
   class SimulationUnit
   {
@@ -31,7 +33,7 @@ namespace Simulation
                             std::span<double> volumesgas,
                             std::span<double> volumesliq,
                             size_t n_species,
-                            KModel _km,MC::DistributionVariantInt&& param,
+                            KModel _km,
                             bool _gas_flow = false);
 
     ~SimulationUnit() = default;
@@ -50,9 +52,10 @@ namespace Simulation
     [[nodiscard]] std::span<double> getCgasData() const;
     [[nodiscard]] std::span<double> getContributionData() const;
 
-    void setVolumes(std::span<const double> volumesgas, std::span<const double> volumesliq);
+    void setVolumes(std::span<const double> volumesgas,
+                    std::span<const double> volumesliq)const;
 
-    void step(double d_t, const CmaRead::ReactorState &state);
+    void step(double d_t, const CmaRead::ReactorState &state)const;
 
     void cycleProcess(double d_t);
 
@@ -60,12 +63,22 @@ namespace Simulation
 
     void setGasFlow(PreCalculatedHydroState *_flows_g);
 
-    void reduceContribs(std::span<double> data, size_t n_rank);
+    void reduceContribs(std::span<double> data, size_t n_rank)const;
 
-    void clearContribution();
+    void clearContribution()const;
+
+    void update_feed(double d_t)const;
+
+    void clear_mc();
 
   private:
-    void post_init_container(MC::DistributionVariantInt distribution_variant);
+    struct pimpl_deleter
+    {
+      void operator()(ScalarSimulation *) const;
+    };
+
+    using pimp_ptr_t = std::unique_ptr<ScalarSimulation, pimpl_deleter>;
+
     void post_init_compartments();
 
     void post_process_reducing();
@@ -76,10 +89,12 @@ namespace Simulation
 
     PreCalculatedHydroState *flow_liquid; // TODO OPTI
     PreCalculatedHydroState *flow_gas;    // TODO OPTI
+    
     KModel kmodel;
 
-    std::unique_ptr<ScalarSimulation, pimpl_deleter> liquid_scalar;
-    std::unique_ptr<ScalarSimulation, pimpl_deleter> gas_scalar;
+    pimp_ptr_t liquid_scalar;
+    pimp_ptr_t gas_scalar;
+    void post_init_concentration();
   };
 
   inline const KModel &SimulationUnit::getModel() const
@@ -96,6 +111,11 @@ namespace Simulation
   {
     flow_gas = _flows_g;
   }
+
+  inline void SimulationUnit::clear_mc()
+    {
+      mc_unit.reset();
+    }
 
   inline void SimulationUnit::execute_process_knrl(const auto &kernel)
   {

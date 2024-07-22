@@ -1,4 +1,5 @@
 #include <cma_read/reactorstate.hpp>
+#include <iterator>
 #include <mc/domain.hpp>
 #include <simulation/simulation.hpp>
 
@@ -7,6 +8,7 @@
 #include <Eigen/Sparse>
 
 #include <hydro/mass_transfer.hpp>
+#include <iterator>
 #include <scalar_simulation.hpp>
 #include <stdexcept>
 
@@ -15,10 +17,15 @@ namespace Simulation
 
   void SimulationUnit::post_process_reducing()
   {
-    for (size_t i_thread = 0; i_thread < n_thread; ++i_thread)
+    // #pragma omp critical
     {
-      this->liquid_scalar->merge(i_thread);
-      this->mc_unit->merge(i_thread);
+      for (size_t i_thread = 0; i_thread < n_thread; ++i_thread)
+      {
+        // const size_t i_thread = omp_get_thread_num();
+
+        this->liquid_scalar->merge(i_thread);
+        this->mc_unit->merge(i_thread);
+      }
     }
   }
 
@@ -30,7 +37,7 @@ namespace Simulation
 
   std::span<double> SimulationUnit::getCliqData() const
   {
-    return this->liquid_scalar->getCData();
+    return this->liquid_scalar->getConcentrationData();
   }
 
   [[nodiscard]] std::span<double> SimulationUnit::getCgasData() const
@@ -39,7 +46,7 @@ namespace Simulation
     {
       return {};
     }
-    return this->gas_scalar->getCData();
+    return this->gas_scalar->getConcentrationData();
   }
 
   [[nodiscard]] std::tuple<size_t, size_t> SimulationUnit::getDim() const
@@ -48,7 +55,8 @@ namespace Simulation
             this->liquid_scalar->concentration.cols()};
   }
 
-  void SimulationUnit::reduceContribs(std::span<double> data, size_t n_rank)
+  void SimulationUnit::reduceContribs(std::span<double> data,
+                                      size_t n_rank) const
   {
 
     size_t nr = this->liquid_scalar->concentration.rows();
@@ -64,7 +72,7 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::clearContribution()
+  void SimulationUnit::clearContribution() const
   {
     for (size_t i = 0; i < n_thread; ++i)
     {
@@ -75,7 +83,18 @@ namespace Simulation
     this->liquid_scalar->biomass_contribution.setZero();
   }
 
-  void SimulationUnit::step(double d_t, const CmaRead::ReactorState &state)
+  void SimulationUnit::update_feed(double d_t) const
+  {
+    // this->liquid_scalar->feed.coeffRef(0, 1) = 4. * 1. / 3600.*1e-3;
+
+    // for (int i = 1; i < this->liquid_scalar->concentration.cols() - 2; ++i)
+    // {
+    //   this->liquid_scalar->feed.coeffRef(0, i) = 50 * 10 / 3600;
+    // }
+  }
+
+  void SimulationUnit::step(double d_t,
+                            const CmaRead::ReactorState &state) const
   {
 
     auto mat_transfer_g_liq =
@@ -86,13 +105,14 @@ namespace Simulation
                                        gas_scalar->concentration.array(),
                                        state)
             : Eigen::MatrixXd::Zero(this->liquid_scalar->concentration.rows(),
-                              this->liquid_scalar->concentration.cols());
+                                    this->liquid_scalar->concentration.cols());
 
     this->liquid_scalar->performStep(
         d_t, flow_liquid->transition_matrix, mat_transfer_g_liq);
 
     if (is_two_phase_flow)
     {
+
       this->gas_scalar->performStep(
           d_t, flow_gas->transition_matrix, -1 * mat_transfer_g_liq);
     }

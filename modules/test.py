@@ -26,8 +26,9 @@ def update_kernel(dt, particle, concentrations):
     f = opaque.cast()
     print(f.a*100)
    
-def init_division_kernel(particle):
-    print("Initializing division_kernel")
+def contribution_kernel(p, contribution):
+    # print("Initializing division_kernel")
+    pass
 
 def init_contribution_kernel(particle, contrib):
     print("Initializing contribution_kernel")

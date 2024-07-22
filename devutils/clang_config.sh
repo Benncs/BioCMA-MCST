@@ -24,12 +24,12 @@ if [ $? -ne 0 ]; then
     echo "Error: Failed to download LLVM installation script."
     exit 1
 fi
-
+mv llvm.sh  /tmp/llvm.sh 
 # Make the script executable
-chmod +x llvm.sh 
+chmod +x /tmp/llvm.sh 
 
 # Run the LLVM installation script with the specified version
-./llvm.sh $LLVM_VERSION 
+/tmp/llvm.sh  $LLVM_VERSION  
 
 # Check if installation was successful
 if [ $? -ne 0 ]; then

@@ -1,10 +1,11 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
+#include "cma_read/light_2d_view.hpp"
 #include <simulation/pc_hydro.hpp>
 #include <span>
 
-//TODO REMOVE 
+// TODO REMOVE
 #include <iostream>
 
 namespace Simulation
@@ -15,7 +16,10 @@ namespace Simulation
   public:
     ScalarSimulation(ScalarSimulation &&other) noexcept;
     ScalarSimulation(const ScalarSimulation &other) noexcept = delete;
-    ScalarSimulation(size_t n_compartments, size_t n_species, size_t n_threads,std::span<double> volume);
+    ScalarSimulation(size_t n_compartments,
+                     size_t n_species,
+                     size_t n_threads,
+                     std::span<double> volume);
     ScalarSimulation operator=(const ScalarSimulation &other) = delete;
     ScalarSimulation operator=(ScalarSimulation &&other) = delete;
 
@@ -33,13 +37,16 @@ namespace Simulation
 
     Eigen::DiagonalMatrix<double, -1> &getVolume();
 
-    std::span<double> getCData();
+    std::span<double> getConcentrationData();
+
+    CmaRead::L2DView<double> getConcentrationView();
 
     [[nodiscard]] inline size_t n_species() const;
 
     // Setters
 
-    void setVolumes(std::span<const double> volumes, std::span<const double> inv_volumes);
+    void setVolumes(std::span<const double> volumes,
+                    std::span<const double> inv_volumes);
 
     void merge(size_t i_thread);
 
@@ -47,19 +54,30 @@ namespace Simulation
 
     Eigen::MatrixXd biomass_contribution;
 
+    Eigen::MatrixXd feed;
+
     void performStep(double d_t,
                      const FlowMatrixType &m_transition,
                      const Eigen::MatrixXd &transfer_gas_liquid);
 
+   
+
   private:
     Eigen::DiagonalMatrix<double, -1> volumes_inverse;
     std::vector<Eigen::MatrixXd> contribs;
+    std::vector<CmaRead::L2DView<double>> view_contribs;
     Eigen::DiagonalMatrix<double, -1> m_volumes;
 
     void updateC();
     size_t n_r;
     size_t n_c;
+    CmaRead::L2DView<double> view;
   };
+
+  inline CmaRead::L2DView<double> ScalarSimulation::getConcentrationView()
+  {
+    return view;
+  }
 
   inline std::span<Eigen::MatrixXd> ScalarSimulation::getThreadContribs()
   {
@@ -76,10 +94,11 @@ namespace Simulation
     return this->n_r;
   }
 
-  inline std::span<double> ScalarSimulation::getCData()
+  inline std::span<double> ScalarSimulation::getConcentrationData()
   {
 
-    return {this->concentration.data(), static_cast<size_t>(this->concentration.size())};
+    return {this->concentration.data(),
+            static_cast<size_t>(this->concentration.size())};
   }
 
   inline std::span<double> ScalarSimulation::getContributionData()
@@ -93,7 +112,6 @@ namespace Simulation
     return {m_volumes.diagonal().data(), static_cast<size_t>(m_volumes.rows())};
   }
 
-
   inline void ScalarSimulation::setVolumes(std::span<const double> volumes,
                                            std::span<const double> inv_volumes)
   {
@@ -101,7 +119,7 @@ namespace Simulation
     // SIGFAULT ?
     this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(
         volumes.data(), static_cast<int>(volumes.size()));
-        
+
     this->volumes_inverse.diagonal() = Eigen::Map<const Eigen::VectorXd>(
         inv_volumes.data(), static_cast<int>(inv_volumes.size()));
   }
@@ -113,9 +131,10 @@ namespace Simulation
 
   inline ScalarSimulation *makeScalarSimulation(size_t n_compartments,
                                                 size_t n_species,
-                                                size_t n_threads,std::span<double> volumes)
+                                                size_t n_threads,
+                                                std::span<double> volumes)
   {
-    return new ScalarSimulation(n_compartments, n_species, n_threads,volumes);
+    return new ScalarSimulation(n_compartments, n_species, n_threads, volumes);
   }
 
 } // namespace Simulation

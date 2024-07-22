@@ -1,3 +1,4 @@
+#include "cmt_common/zip.hpp"
 #include <Eigen/Dense>
 #include <common/common.hpp>
 #include <scalar_simulation.hpp>
@@ -33,6 +34,9 @@ namespace Simulation
     this->concentration = Eigen::MatrixXd(n_species, n_compartments);
     this->concentration.setZero();
 
+    this->feed = Eigen::MatrixXd(n_species, n_compartments);
+    this->feed.setZero();
+
     this->vec_kla = Eigen::ArrayXXd(n_species, n_compartments);
     vec_kla.setZero();
 
@@ -40,41 +44,38 @@ namespace Simulation
     biomass_contribution.setZero();
 
     contribs.resize(n_thread);
-    std::generate_n(contribs.begin(),
-                    n_thread,
-                    [this]()
-                    {
-                      auto m = Eigen::MatrixXd(concentration.rows(),
-                                               concentration.cols());
-                      m.setZero();
-                      return m;
-                    });
+    view_contribs.resize(n_thread);
+
+    CmtCommons::foreach_zip(
+        [n_species, n_compartments](auto &matrix, auto &view)
+        {
+          matrix = Eigen::MatrixXd(n_species, n_compartments);
+          matrix.setZero();
+          view = get_eigen_view(matrix);
+        },
+
+        contribs,
+        view_contribs);
+
+    view = CmaRead::L2DView<double>(
+        {this->concentration.data(),
+         static_cast<size_t>(this->concentration.size())},
+        concentration.rows(),
+        concentration.cols(),
+        false);
   }
 
   void ScalarSimulation::performStep(double d_t,
                                      const FlowMatrixType &m_transition,
                                      const Eigen::MatrixXd &transfer_gas_liquid)
   {
+    total_mass.noalias() +=
+        d_t * (concentration * m_transition + biomass_contribution + feed +
+               (transfer_gas_liquid)*m_volumes);
 
-    // total_mass.noalias() +=
-    //     d_t * ((total_mass * volumes_inverse) * m_transition +
-    //             transfer_gas_liquid*m_volumes + biomass_contribution);
-    // if(m_transition.size()==1)
-    // {
-    //   std::cout<<(transfer_gas_liquid)*m_volumes<<std::endl;
-    //   total_mass =  total_mass + d_t *(biomass_contribution + (transfer_gas_liquid)*m_volumes);
-    // }
-    // else
-    // {
-    //   total_mass.noalias() +=  d_t *( concentration*m_transition + biomass_contribution + (transfer_gas_liquid)*m_volumes);
-    // }
-    total_mass.noalias() +=  d_t *( concentration*m_transition + biomass_contribution + (transfer_gas_liquid)*m_volumes);
 
-    
-    // std::cout<<total_mass.diagonal()<<std::endl; ///
-
-    // exit(0);
-    //  total_mass.noalias() +=  d_t * ((biomass_contribution+transfer_gas_liquid)*m_volumes);
-    concentration.noalias() = total_mass * volumes_inverse;
+  
+    concentration = total_mass * volumes_inverse;
   }
+
 } // namespace Simulation

@@ -1,139 +1,161 @@
-#include "common/execinfo.hpp"
-#include "mc/unit.hpp"
-#include "models/light_model.hpp"
-#include "models/simple_model.hpp"
-#include <any>
+#include "mc/particles/mcparticles.hpp"
+#include <common/execinfo.hpp>
+#include <mc/unit.hpp>
 #include <post_process.hpp>
 
 #include <iostream>
 #include <stdexcept>
+#include <variant>
 
-/*
-  NUMBER OF
-*/
-
-void model_specific(ExecInfo &exec,
-                    SimulationParameters &params,
-                    Simulation::SimulationUnit &simulation)
-{
-#ifndef USE_PYTHON_MODULE
-  auto &model = std::any_cast<SimpleModel &>(
-      simulation.mc_unit->container.to_process[0].data);
-  std::cout << "mass: " << model.xi.mass << std::endl;
-#else
-  // simulation.getModel().f_dbg(simulation.mc_container->to_process[0]);
-#endif
-}
-
-void post_process(ExecInfo &exec,
-                  SimulationParameters &params,
-                  Simulation::SimulationUnit &simulation,
-                  std::unique_ptr<DataExporter>& exporter)
+namespace PostProcessing
 {
 
-  const size_t process_size = simulation.mc_unit->container.to_process.size();
+  static void get_particle_properties(
+      Simulation::SimulationUnit &simulation,
+      std::unordered_map<std::string, std::vector<model_properties_t>>
+          &aggregated_values,
+      std::unordered_map<std::string, std::vector<double>> &spatial,
+      size_t size);
 
-  std::cout << "----END---" << std::endl;
-
-  // FIXME
-  try
+  void save_initial(Simulation::SimulationUnit &simulation,
+                    std::unique_ptr<DataExporter> &exporter)
   {
-    model_specific(exec, params, simulation);
-  }
-  catch (...)
-  {
-    ///
-  }
+    if (exporter != nullptr)
+    {
+      std::unordered_map<std::string, std::vector<model_properties_t>>
+          aggregated_values;
 
-  auto total_events = simulation.mc_unit->ts_events[0];
-  const size_t death_events = total_events.get<MC::EventType::Death>();
-  const size_t new_events = total_events.get<MC::EventType::NewParticle>();
+      std::unordered_map<std::string, std::vector<double>> spatial;
+      get_particle_properties(simulation,
+                              aggregated_values,
+                              spatial,
+                              std::get<1>(simulation.getDim()));
 
-  auto distribution = simulation.mc_unit->domain.getDistribution();
-  // size_t count = 0;
-  // for (auto &&i : d)
-  // {
-  //   std::cout << i << " ";
-  //   count += i;
-  // }
-  // std::cout << '\n';
-
-  // std::cout << "\r\n-------\r\n";
-  // std::cout << "Death events: " << death_events << std::endl;
-  // std::cout << "Division events: " << new_events << std::endl;
-
-  // std::cout << "Starting number particle to process: " << params.n_particles
-  //           << std::endl;
-  // std::cout << "Ending number particle to process: "
-  //           << process_size * exec.n_rank << "(" << process_size << "*"
-  //           << exec.n_rank << ")" << std::endl;
-
-  // std::cout << "Number living particle : " << count << std::endl;
-  // std::cout << "\r\n-------\r\n" << std::endl;
-  if (exporter != nullptr)
-  {
-    exporter->write_final_results(simulation,distribution);
+      exporter->write_initial_particle_data(aggregated_values, spatial);
+    }
   }
 
-  // if (exec.n_rank == 1)
-  // {
-  //   assert(count == process_size - death_events);
-  //   assert(count == params.n_particles + new_events - death_events);
+  void post_process(const ExecInfo &exec,
+                    const SimulationParameters &params,
+                    Simulation::SimulationUnit &simulation,
+                    std::unique_ptr<DataExporter> &exporter)
+  {
+    auto distribution = simulation.mc_unit->domain.getDistribution();
 
-  // }
 
-  // TODO
-}
+    auto tot = std::accumulate(
+        distribution.begin(), distribution.end(), static_cast<size_t>(0));
+    auto removed =
+        simulation.mc_unit->ts_events[0].get<MC::EventType::Death>() +
+        simulation.mc_unit->ts_events[0].get<MC::EventType::Exit>();
+    auto new_p =
+        simulation.mc_unit->ts_events[0].get<MC::EventType::NewParticle>();
 
-void show(Simulation::SimulationUnit &simulation)
-{
 
-  std::vector<double>
-  mass(simulation.mc_unit->domain.getNumberCompartments()); double totmass =
-  0.;
+    if (exporter != nullptr)
+    {
+      std::unordered_map<std::string, std::vector<model_properties_t>>
+          aggregated_values;
 
-  auto d = simulation.mc_unit->domain.getDistribution();
+      std::unordered_map<std::string, std::vector<double>> spatial;
 
+      get_particle_properties(
+          simulation, aggregated_values, spatial, distribution.size());
+
+      exporter->write_final_results(simulation, distribution);
+
+      // Results depending on simulation are exported or copied into properties,
+      // clear montecarlo state to save memory
+      simulation.clear_mc();
+
+      exporter->write_final_particle_data(aggregated_values, spatial);
+    }
+
+    if(tot != (new_p - removed + params.user_params.numper_particle))
+    {
+      std::cerr<<("Results are not coherent (Bad particle balance): ");
+      std::cerr<<tot<<"="<<new_p<<"-"<<removed<<"+"<<params.user_params.numper_particle<<std::endl;;
+    }
+
+    
+  }
+
+  void show(Simulation::SimulationUnit &simulation)
+  {
+
+    std::vector<double> mass(
+        simulation.mc_unit->domain.getNumberCompartments());
+
+    auto d = simulation.mc_unit->domain.getDistribution();
 
     for (auto &&i : d)
-  {
-    std::cout << i << " ";
-    // count += i;
+    {
+      std::cout << i << " ";
+      // count += i;
+    }
+    std::cout << '\n';
   }
-  std::cout << '\n';
 
-  // for(auto&& i : simulation.mc_unit->domain)
-  // {
-  //   std::cout<<i.volume_liq<<",";
-  // }
-  // std::cout<<"\r\n";
-  // // std::for_each(simulation.mc_container->to_process.begin(),
-  // //               simulation.mc_container->to_process.end(),
-  // //               [&mass, &totmass](auto &&p)
-  // //               {
-  // //                 auto &model = std::any_cast<LightModel &>(p.data);
-  // //                 totmass += model.mass * p.weight;
-  // //                 mass[p.current_container] += model.mass * p.weight;
-  // //               });
+  void get_particle_properties(
+      Simulation::SimulationUnit &simulation,
+      std::unordered_map<std::string, std::vector<model_properties_t>>
+          &aggregated_values,
+      std::unordered_map<std::string, std::vector<double>> &spatial,
+      size_t size)
+  {
+    std::cout << "POST PROCESSING" << std::endl;
+    const auto &model_properties = simulation.getModel().get_properties;
 
-  // std::cout << simulation.mc_unit->domain.getTotalVolume() * 1000 <<
-  // std::endl; auto concentration = totmass /
-  // (simulation.mc_unit->domain.getTotalVolume()); std::cout << "total mass: "
-  // << totmass << "\r\n"
-  //           << "Mean concentration: " << concentration << "\r\n\r\\n";
+    const auto &comp = simulation.mc_unit->domain.data();
 
-  // for (size_t i = 0; i < simulation.mc_unit->domain.getNumberCompartments();
-  //      ++i)
-  // {
-  //   double bio_concentrations =
-  //       mass[i] / (simulation.mc_unit->domain[i].volume_liq);
-  //   std::cout << bio_concentrations << " | ";
-  // }
-  // std::cout << std::endl;
-}
+    const auto &particles_data =
+        simulation.mc_unit->container.to_process.data();
 
-void save_results(ExecInfo &exec,
-                  SimulationParameters &params,
-                  Simulation::SimulationUnit &simulation)
-{
-}
+    const auto n_particle = particles_data.size();
+
+    size_t i_p = 0;
+    while (particles_data[i_p].status != MC::CellStatus::IDLE &&
+           i_p != particles_data.size())
+    {
+      i_p++;
+    }
+    const auto prop_1 = model_properties(particles_data[i_p]);
+
+    for (const auto &[key, _value] : prop_1)
+    {
+      aggregated_values[key].resize(n_particle);
+      spatial[key].resize(size);
+    }
+
+#pragma omp parallel for shared(aggregated_values,                             \
+                                    n_particle,                                \
+                                    model_properties,                          \
+                                    particles_data,                            \
+                                    spatial,                                   \
+                                    size,                                      \
+                                    comp) default(none),                       \
+    firstprivate(i_p)
+    for (size_t i = i_p; i < n_particle; ++i)
+    {
+      if (particles_data[i].status == MC::CellStatus::IDLE)
+      {
+        auto prop = model_properties(particles_data[i]);
+        const size_t i_container = particles_data[i].current_container;
+
+        for (const auto &[key, value] : prop)
+        {
+          aggregated_values[key][i] = value;
+#pragma omp critical
+          {
+            if (const double *val = std::get_if<double>(&value))
+            {
+              spatial[key][i_container] +=
+                  *val / static_cast<double>(comp[i_container].n_cells);
+            }
+          }
+        }
+      }
+    }
+  }
+
+} // namespace PostProcessing

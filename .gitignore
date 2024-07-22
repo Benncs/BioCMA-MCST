@@ -24,3 +24,8 @@ __pycache__
 *.old
 
 suprojects/highfive
+llvm.sh
+
+*.out 
+
+.ruff_cache

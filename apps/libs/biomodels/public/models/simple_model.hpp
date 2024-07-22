@@ -2,7 +2,6 @@
 #define __SIMPLE_MODEL_HPP__
 
 #include <mc/particles/mcparticles.hpp>
-#include <memory>
 
 #include <models/types.hpp>
 
@@ -35,22 +34,9 @@ struct Xi
 
 struct SimpleModel
 {
-  // static constexpr double tauPTS = 25.0;
-  // static constexpr double tau_f = 5.0;
-  // static constexpr double tau_d = 5.0;
-  // static constexpr double NPermease_max = 5e4;
-  // static constexpr double tauAu = 5.0;
-  // static constexpr double tauAd = 5.0;
-  // static constexpr double tau_metabolisme = 0.1;
-  // static constexpr double phi_pts_max = 4.454e-12;
-  // static constexpr double kpts = 1e-2;
-  // static constexpr double kppermease = 1e-3;
-  // static constexpr double psi_permease = 1.25e-13;
-  // static constexpr double YXS = 0.42;
-  // static constexpr double YXO = 1e-4;
-  // static constexpr double YSA = 1e-4;
-  // static constexpr double psi_o_meta = 20e-3 / 3600 * 32e-3; // 20mmmol O2 /h;
-  // static constexpr double critcal_division_mass = 1.7e-7;
+
+  static constexpr double mass_to_length_c = 1.;
+  static constexpr double cell_diamater=1e-6;
 
   static constexpr double tauPTS = 25.0;
   static constexpr double tau_f = 5.0;
@@ -60,14 +46,19 @@ struct SimpleModel
   static constexpr double tauAd = 5.0;
   static constexpr double tau_metabolisme = 0.1;
   static constexpr double phi_pts_max = 4.454e-12;
-  static constexpr double kpts = 1e-3;
-  static constexpr double kppermease = 1e-2;
+  static constexpr double kpts = 1e-2;
+  static constexpr double kppermease = 1e-3;
   static constexpr double psi_permease = 1.25e-13;
   static constexpr double YXS = 0.5;
   static constexpr double YXO = 1e-4;
   static constexpr double YSA = 1e-4;
   static constexpr double psi_o_meta = 20e-3 / 3600 * 32e-3; // 20mmmol O2 /h;
-  static constexpr double critcal_division_mass = 1.7e-5;
+  static constexpr double critcal_division_mass = 5e-6;
+
+  static constexpr double critcal_division_length = 11e-6;
+
+  static constexpr double minimal_length = 7e-6;
+  static constexpr double maximal_length = 18e-6;
 
   model_float_type_t phi_s_in = 0.;
   model_float_type_t phi_o_in = 0.;
@@ -99,6 +90,6 @@ MC::Particles division_simple_model(MC::Particles &p);
 
 void contribution_simple_model(MC::Particles &p, Eigen::MatrixXd &contribution);
 
-KModel get_simple_model();
+KModel get_model_simple();
 
 #endif //__SIMPLE_MODEL_HPP__

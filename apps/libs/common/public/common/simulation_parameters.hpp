@@ -6,8 +6,6 @@
 #include <string>
 #include <vector>
 
-
-
 struct UserControlParameters
 {
   std::string cma_case_path;
@@ -18,10 +16,9 @@ struct UserControlParameters
   std::string results_file_name;
   int n_thread;
   uint32_t number_exported_result;
+  std::string model_name;
   static UserControlParameters m_default();
 };
-
-
 
 struct SimulationParameters
 {
@@ -36,19 +33,21 @@ struct SimulationParameters
   bool is_two_phase_flow = true;
   size_t n_per_flowmap;
   std::string results_file_name;
+  double t_per_flow_map;
   static SimulationParameters m_default();
 };
 
 struct ExportParameters
 {
-  size_t n_save; 
-  std::string filename; 
+  size_t n_save;
+  std::string filename;
 };
 
 inline std::ostream &operator<<(std::ostream &stream,
                                 const SimulationParameters &obj)
 {
-  // stream << obj.n_particles << "\t" << obj.final_time << "\t" << obj.d_t << "\t"
+  // stream << obj.n_particles << "\t" << obj.final_time << "\t" << obj.d_t <<
+  // "\t"
   //        << obj.n_different_maps << "\t" << obj.n_threads << " ";
   return stream;
 }

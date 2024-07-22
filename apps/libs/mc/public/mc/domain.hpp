@@ -1,6 +1,7 @@
 #ifndef __MC_REACTORDOMAIN_HPP__
 #define __MC_REACTORDOMAIN_HPP__
 
+#include "cmt_common/macro_constructor_assignment.hpp"
 #include <cma_read/neighbors.hpp>
 #include <common/common_types.hpp>
 #include <mc/container_state.hpp>
@@ -12,16 +13,17 @@ namespace MC
   {
   public:
     
+
+    SET_NON_COPYABLE(ReactorDomain)
+
     ReactorDomain() = default;
     ReactorDomain(ReactorDomain &&other) noexcept;
     ReactorDomain(std::span<double> volumes,
                   const CmaRead::Neighbors::Neighbors_const_view_t& _neighbors);
 
 
-    ReactorDomain(const ReactorDomain &other) = delete;
     ~ReactorDomain() = default;
 
-    ReactorDomain &operator=(const ReactorDomain &other) = delete;
     ReactorDomain &operator=(ReactorDomain &&other) noexcept;
 
     void setVolumes(std::span<double const> volumesgas,
@@ -59,6 +61,7 @@ namespace MC
     size_t id=0;
     std::vector<ContainerState> containers;
     CmaRead::Neighbors::Neighbors_const_view_t neighbors;
+    std::vector<std::span<const size_t>> row_neighbors;
   };
 
   inline std::span<ContainerState> ReactorDomain::data()
@@ -68,7 +71,7 @@ namespace MC
 
   inline std::span<const size_t> ReactorDomain::getNeighbors(size_t i) const
   {
-    return neighbors.getRow(i);
+    return row_neighbors[i];
   }
 
   inline const CmaRead::Neighbors::Neighbors_const_view_t &
@@ -83,6 +86,12 @@ namespace MC
   {
  
     neighbors = data.to_const();
+    for(size_t i =0;i<row_neighbors.size();++i)
+    {
+      row_neighbors[i]=neighbors.getRow(i);
+    }
+    
+    
   }
 
   inline auto ReactorDomain::getNumberCompartments() const

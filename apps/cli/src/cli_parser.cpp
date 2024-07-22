@@ -1,4 +1,5 @@
 #include "common/simulation_parameters.hpp"
+#include "model_list.hpp"
 #include "rt_init.hpp"
 #include <cli_parser.hpp>
 #include <exception>
@@ -13,7 +14,7 @@ static void check_cli(SimulationParameters &params);
 static void print_red(std::ostream &os, std::string_view message);
 static void throw_bad_arg(std::string_view arg);
 
-static void parseArg(UserControlParameters &params,
+static void parseArg(UserControlParameters &user_controll,
                      std::string current_param,
                      std::string_view current_value);
 
@@ -45,8 +46,13 @@ static std::optional<UserControlParameters> parse_user_param(int argc,
       auto current_param = std::string(argv[iarg]);
       auto current_value = std::string_view(argv[iarg + 1]);
       if (current_param.data() != nullptr && current_param[0] != '\0')
-      {
-
+      {   
+        if(current_param=="h")
+        {
+          showHelp(std::cout);
+          exit(0);
+        }
+        
         parseArg(control, current_param, current_value);
       }
       else
@@ -72,7 +78,7 @@ static std::optional<UserControlParameters> parse_user_param(int argc,
 std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
 {
   SimulationParameters params = SimulationParameters::m_default();
-
+  params.n_species = 1; //FIXME
   auto opt_control = parse_user_param(argc, argv);
   if (!opt_control.has_value())
   {
@@ -86,7 +92,7 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
   }
   else
   {
-    
+
     params.flow_files.emplace_back(control.cma_case_path);
   }
 
@@ -97,7 +103,7 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
   }
   else
   {
-    params.results_file_name = "./results/" + control.results_file_name+".h5";
+    params.results_file_name = "./results/" + control.results_file_name + ".h5";
   }
 
   params.user_params = std::move(control);
@@ -119,6 +125,14 @@ static void parseArg(UserControlParameters &user_controll,
     if (current_param == "er")
     {
       user_controll.results_file_name = std::string(current_value);
+    }
+    break;
+  }
+  case 'm':
+  {
+    if (current_param == "mn")
+    {
+      user_controll.model_name = std::string(current_value);
     }
     break;
   }
@@ -212,6 +226,12 @@ void showHelp(std::ostream &os)
   os << "  -nt <number>, --number-threads <number>\tNumber of threads per "
         "process"
      << '\n';
+
+  os << "Available model:\r\n";
+  for (const auto& i : get_available_models())
+  {
+    os << i << "\r\n";
+  }
 
   os << "\nExample:" << '\n';
   os << "  BIOCMA-MCST -np 100 -ff /path/to/flow_file_folder/ [-v]" << '\n';

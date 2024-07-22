@@ -3,7 +3,7 @@
 
 #include <common/execinfo.hpp>
 #include <simulation/simulation.hpp>
-#include "data_exporter.hpp"
+
 
 
 void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation);

@@ -1,6 +1,8 @@
 #ifndef __MC_PARTICLESHPP__
 #define __MC_PARTICLESHPP__
 
+#include "cmt_common/macro_constructor_assignment.hpp"
+#include "common/execinfo.hpp"
 #include <any>
 #include <cstddef>
 #include <cstdint>
@@ -11,10 +13,11 @@ namespace MC
   {
     IDLE,
     DEAD,
-    CYTOKINESIS
+    CYTOKINESIS,
+    OUT
   };
 
-  class Particles
+  class alignas(ExecInfo::cache_line_size) Particles
   {
   public:
     Particles() noexcept
@@ -25,17 +28,16 @@ namespace MC
         : current_container(0), current_domain(0), random_seed(0), id(0),
           status(CellStatus::IDLE), weight(_weight){};
 
-    void clearState(MC::CellStatus _status = CellStatus::IDLE)noexcept ;
+    void clearState(MC::CellStatus _status = CellStatus::IDLE) noexcept;
 
     Particles(const Particles &p) = default; // Copy constructor
     Particles &
-    operator=(const Particles &p) = default;     // Copy assignment operator
-    Particles(Particles &&p) noexcept = default; // Move constructor
+    operator=(const Particles &p) = default; // Copy assignment operator
+    Particles(Particles &&p) noexcept = default;
     Particles &
     operator=(Particles &&p) noexcept = default; // Move assignment operator
 
     ~Particles() = default;
-
     size_t current_container;
     size_t current_domain;
     size_t random_seed;
@@ -43,9 +45,11 @@ namespace MC
     MC::CellStatus status;
     double weight;
     std::any data;
+
+   
   };
 
-  inline void Particles::clearState(MC::CellStatus _status)noexcept
+  inline void Particles::clearState(MC::CellStatus _status) noexcept
   {
 
     current_container = 0;
