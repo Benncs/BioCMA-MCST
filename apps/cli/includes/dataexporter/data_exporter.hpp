@@ -55,7 +55,7 @@ public:
 
 
 
-  DELETE_CONSTRUCTORS(DataExporter);
+  DELETE_CONSTRUCTORS(DataExporter)
   DELETE_ASSIGMENT(DataExporter)
   size_t expectecNiteration() const
   {

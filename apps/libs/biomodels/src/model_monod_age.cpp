@@ -8,7 +8,13 @@
 #include <models/monod_age.hpp>
 #include <random>
 
-
+struct Monod
+{
+  double interdivision_time;
+  double age;
+  double phi;
+  double l;
+};
 constexpr double interdivision_time = 1175;//20*60 ;
 constexpr double ln2 = 0.6931471805599453;
 constexpr double Ks = 486e-9;

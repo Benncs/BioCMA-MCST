@@ -1,6 +1,6 @@
 project(
   'biocma_mcst',
-  'cpp','c',
+  'cpp',
   version: '0.0.4',
   meson_version: '>= 1.3.0',
   default_options: [
@@ -172,7 +172,7 @@ cma_reader = subproject(
     f'use_cuda=@use_cuda@',
     default_option_cpp20
   ],
-) # We only need native birem library in order to read flowmap so, no python neither executable
+) # We only need native cmtool library in order to read flowmap so, no python neither executable
 
 cma_dep = cma_reader.get_variable('cma_read_shared_lib_dependency') # Get shared lib
 
