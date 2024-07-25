@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.0.4',
+  version: '0.0.6',
   meson_version: '>= 1.3.0',
   default_options: [
     'warning_level=3',
@@ -115,6 +115,7 @@ tbb = dependency('tbb', required: true)
 eigen_dep = dependency('eigen3', required: true)
 blas = dependency('blas', required: false) # Eigen can work without BLAS
 
+kokkos = dependency('Kokkos')
 
 if blas.found()
   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
@@ -136,6 +137,21 @@ if cmake.found()
     add_project_arguments('-DUSE_HIGHFIVE', language: 'cpp')
     highfive_dependency = highfive_proj.dependency('HighFive')
   endif
+endif
+
+
+ceral_found = false
+if cmake.found()
+  # cereal_cmake_options = cmake.subproject_options()
+
+  # cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
+  
+  # cereal_dependency = cereal_proj.dependency('cereal')
+  cereal_dependency = declare_dependency(
+   include_directories: '../cereal/include'
+)
+
+  
 endif
 
 default_option_cpp20 = 'cpp_std=none'

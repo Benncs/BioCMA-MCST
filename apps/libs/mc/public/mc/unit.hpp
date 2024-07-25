@@ -24,6 +24,9 @@ namespace MC
       container.merge(extras[i_thread]);
     }
 
+    template <class Archive> void serialize(Archive &ar) { ar(container,domain); }
+    template <class Archive> void load(Archive &ar) { ar(container,domain); }
+
     SET_NON_COPYABLE(MonteCarloUnit)
     SET_DEFAULT_MOVABLE(MonteCarloUnit)
     MonteCarloUnit() = default;

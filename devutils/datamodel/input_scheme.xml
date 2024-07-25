@@ -30,16 +30,14 @@
       <model_name>model_monod</model_name>
    </control>
 
-
-
    <control name="test">
       <cma_case_path recursive="true">./cma_data/bench/</cma_case_path>
-      <final_time>1</final_time>
+      <final_time>3600</final_time>
       <numper_particle>100000</numper_particle>
-      <delta_time>0.01</delta_time>
+      <delta_time>0.1</delta_time>
       <results_file_name>test</results_file_name>
-      <number_exported_result>20</number_exported_result>
-      <model_name>model_simple</model_name>
+      <number_exported_result>100</number_exported_result>
+      <model_name>model_light</model_name>
    </control>
 
 

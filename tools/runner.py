@@ -20,6 +20,10 @@ def get_executable(type: str):
     return f"{root}/builddir/{type}/apps/cli/biocma_mcst_cli_app"
 
 
+# def get_executable(type: str):
+#     return f"{root}/builddir/clang/apps/cli/biocma_mcst_cli_app"
+
+
 DEFAULT_TYPE = "debugoptmized"
 MPI_COMMAND = "mpiexec --allow-run-as-root --bind-to core -np 5 "
 
@@ -82,7 +86,7 @@ if __name__ == "__main__":
     cli_args = parse_cli(args)
 
     run_cli = format_cli(["_", cli_args["name"]])
-    use_mpi = True
+    use_mpi = False
     mpi_c = ""
     if use_mpi:
         mpi_c = MPI_COMMAND + " "

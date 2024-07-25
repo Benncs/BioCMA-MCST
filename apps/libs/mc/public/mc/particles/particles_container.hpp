@@ -27,6 +27,8 @@ namespace MC
     void init_extra(size_t n_extra);
 
     ParticlesList to_process;
+
+    template <class Archive> void serialize(Archive &ar) { ar(to_process); }
   };
 
 } // namespace MC

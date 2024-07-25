@@ -44,6 +44,9 @@ namespace Simulation
     Eigen::MatrixXd cumulative_probability;
 
     [[nodiscard]] CmaRead::L2DView<const double> get_view_cum_prob() const;
+
+    [[nodiscard]] std::span<const double> get_diag_transition() const;
+
     std::vector<double> inverse_volume;
     std::vector<double> diag_transition;
 
@@ -64,6 +67,11 @@ namespace Simulation
   PreCalculatedHydroState::get_view_cum_prob() const
   {
     return get_eigen_view(cumulative_probability);
+  }
+
+  [[nodiscard]] inline std::span<const double> PreCalculatedHydroState::get_diag_transition() const
+  {
+    return diag_transition;
   }
 
   struct TransitionState

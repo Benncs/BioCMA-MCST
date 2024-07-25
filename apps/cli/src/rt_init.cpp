@@ -1,6 +1,7 @@
 
 #include "common/execinfo.hpp"
 #include "common/simulation_parameters.hpp"
+#include <Kokkos_Core.hpp>
 #include <rt_init.hpp>
 
 #include <Eigen/Core>
@@ -65,8 +66,9 @@ void set_openmp_threads(const int rank,
 
 ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
 {
-  ExecInfo info{};
 
+  ExecInfo info{};
+  
   int rank = 0;
   int size = 0;
   int mpi_thread_level{};
@@ -98,6 +100,7 @@ ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
   if constexpr (RT::use_mpi)
   {
     std::atexit(MPI_W::finalize);
+    std::atexit(Kokkos::finalize);
   }
 
   info.run_id =
@@ -108,6 +111,7 @@ ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
 
 void init_environment()
 {
+  
   const auto env_path = env_file_path();
 
   static const std::string cma_data_folder_path = "cma_data";

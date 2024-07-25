@@ -1,10 +1,15 @@
 
 #include "common/execinfo.hpp"
+#include "mc/unit.hpp"
 #include "rt_init.hpp"
+#include <cereal/archives/binary.hpp>
+#include <cereal/types/memory.hpp>
+#include <cereal/types/vector.hpp>
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <cstddef>
 #include <dataexporter/factory.hpp>
+#include <fstream>
 #include <host_specific.hpp>
 #include <memory>
 #include <mpi_w/wrap_mpi.hpp>
@@ -36,7 +41,7 @@ update_progress_bar(size_t total, size_t currentPosition, bool verbose)
               << std::setprecision(2)
               << (static_cast<float>(currentPosition) * 100.0 /
                   static_cast<float>(total))
-              << "%\r" << std::flush<< std::setprecision(default_precision);
+              << "%\r" << std::flush << std::setprecision(default_precision);
   }
 }
 
@@ -109,6 +114,36 @@ void host_process(
   PostProcessing::post_process(exec, params, simulation, data_exporter);
 }
 
+// DEV
+
+static bool save = false;
+
+#include <csignal>
+template <class Sim> void handle_sig(Sim &sim)
+{
+
+  if (save)
+  {
+    std::ofstream os("./out.cereal", std::ios::binary);
+    cereal::BinaryOutputArchive archive(os);
+    archive(*sim.mc_unit);
+    std::cout << "./out.cereal   " << sim.mc_unit->domain[0].n_cells
+              << std::endl;
+    int a;
+  }
+  save = false;
+}
+
+void handle_sig(int n)
+{
+#pragma omp critical
+  {
+    save = true;
+  }
+}
+
+// ENDDEV
+
 void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
                Simulation::SimulationUnit &simulation,
@@ -140,6 +175,7 @@ void main_loop(const SimulationParameters &params,
   const auto *current_reactor_state = &transitioner->get_unchecked(0);
 
   transitioner->update_flow(simulation);
+  signal(SIGUSR1, &handle_sig);
 
   exporter->append(current_time,
                    simulation.getCliqData(),
@@ -147,79 +183,53 @@ void main_loop(const SimulationParameters &params,
                    current_reactor_state->liquidVolume,
                    current_reactor_state->gasVolume);
 
-#pragma omp parallel default(none) shared(transitioner,                        \
-                                              simulation,                      \
-                                              dump_counter,                    \
-                                              current_time,                    \
-                                              n_iter_simulation,               \
-                                              mpi_payload,                     \
-                                              current_reactor_state,           \
-                                              dump_interval,                   \
-                                              dump_number,                     \
-                                              exec,                            \
-                                              exporter),                       \
-    firstprivate(d_t)
+  for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
+       ++__loop_counter)
   {
 
-    for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
-         ++__loop_counter)
+    DEBUG_INSTRUCTION
+
+    transitioner->update_flow(simulation);
+
+    current_reactor_state = transitioner->getState();
+
+    FILL_PAYLOAD;
+
+    MPI_DISPATCH_MAIN;
+
+    transitioner->advance(simulation);
+
+    simulation.cycleProcess(d_t);
+
+    dump_counter++;
+
+    if (dump_counter == dump_interval)
+    {
+      update_progress_bar(n_iter_simulation, __loop_counter, true);
+      exporter->append(current_time,
+                       simulation.getCliqData(),
+                       simulation.mc_unit->domain.getDistribution(),
+                       current_reactor_state->liquidVolume,
+                       current_reactor_state->gasVolume);
+      dump_counter = 0;
+    }
+
+    if constexpr (RT::use_mpi)
+    {
+      sync_step(exec, simulation);
+    }
+
     {
 
-      DEBUG_INSTRUCTION
-
-#pragma omp single
-      {
-
-        transitioner->update_flow(simulation);
-
-        current_reactor_state = transitioner->getState();
-
-        FILL_PAYLOAD;
-
-        MPI_DISPATCH_MAIN;
-
-        transitioner->advance(simulation);
-      }
-
-      simulation.cycleProcess(d_t);
-
-#pragma omp master
-      {
-        dump_counter++;
-
-        if (dump_counter == dump_interval)
-        {
-          update_progress_bar(n_iter_simulation, __loop_counter, true);
-          exporter->append(current_time,
-                           simulation.getCliqData(),
-                           simulation.mc_unit->domain.getDistribution(),
-                           current_reactor_state->liquidVolume,
-                           current_reactor_state->gasVolume);
-          dump_counter = 0;
-        }
-      }
-
-#pragma omp single
-      {
-
-        if constexpr (RT::use_mpi)
-        {
-          sync_step(exec, simulation);
-        }
-
-#pragma omp task default(none) shared(simulation, current_reactor_state),      \
-    firstprivate(d_t)
-        {
-
-          simulation.update_feed(d_t);
-          simulation.step(d_t, *current_reactor_state);
-        }
-
-        sync_prepare_next(exec, simulation);
-        current_time += d_t;
-      }
+      simulation.update_feed(d_t);
+      simulation.step(d_t, *current_reactor_state);
     }
+
+    sync_prepare_next(exec, simulation);
+    current_time += d_t;
+    handle_sig(simulation);
   }
+
   exporter->append(current_time,
                    simulation.getCliqData(),
                    simulation.mc_unit->domain.getDistribution(),

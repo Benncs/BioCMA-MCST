@@ -41,6 +41,8 @@ namespace MC
 
     auto data(){return m_data;}
 
+    std::span<Particles> data_span(){return m_data;}
+
     [[nodiscard]] size_t size() const noexcept;
 
     [[nodiscard]] decltype(auto) begin() const
@@ -68,6 +70,8 @@ namespace MC
     ParticlesList &operator=(const ParticlesList &other) = delete;
 
     ParticlesList &operator=(ParticlesList &&other) noexcept;
+
+    template <class Archive> void serialize(Archive &ar) { ar(m_data); }
 
   private:
     std::vector<Particles> m_data;

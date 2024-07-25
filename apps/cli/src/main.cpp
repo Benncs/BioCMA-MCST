@@ -1,6 +1,7 @@
 #include "common/execinfo.hpp"
 #include "common/simulation_parameters.hpp"
 
+#include <Kokkos_Core.hpp>
 #include <cli_parser.hpp>
 
 #include <common/common.hpp>
@@ -58,6 +59,8 @@ static int handle_catch(ExceptionType const &e);
 
 int main(int argc, char **argv)
 {
+    Kokkos::initialize(argc, argv);
+  Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
   init_environment();
   auto params_opt = parse_cli(argc, argv);
   if (!params_opt.has_value())

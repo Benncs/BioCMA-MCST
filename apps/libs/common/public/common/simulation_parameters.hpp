@@ -2,6 +2,7 @@
 #define __SIMULATION_PARAMETERS_HPP__
 
 #include <cstddef>
+#include <cstdint>
 #include <iostream>
 #include <string>
 #include <vector>

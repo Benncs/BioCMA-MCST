@@ -6,7 +6,7 @@
 #include <simulation/pc_hydro.hpp>
 #include <stdexcept>
 #include <transport.hpp>
-
+#include <Kokkos_Core.hpp>
 // TODO REMOVE
 #include <iostream>
 
@@ -159,12 +159,14 @@ namespace Simulation
                    std::span<const double> diag_transition,
                    CmaRead::L2DView<const double> cumulative_probability)
   {
+
     const size_t i_compartment = particle.current_container;
     const int rowId = static_cast<int>(i_compartment);
 
     auto &current_container = domain[i_compartment];
     const std::span<const size_t> i_neighbor =
         domain.getNeighbors(i_compartment);
+
 
     if (!probability_leaving(random_number,
                              current_container.volume_liq,

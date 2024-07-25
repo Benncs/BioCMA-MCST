@@ -46,7 +46,10 @@ namespace MC
     double weight;
     std::any data;
 
-   
+    template <class Archive> void serialize(Archive &ar)
+    {
+      ar(current_container, current_domain, random_seed, id, status, weight);
+    }
   };
 
   inline void Particles::clearState(MC::CellStatus _status) noexcept

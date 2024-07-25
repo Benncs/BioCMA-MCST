@@ -56,6 +56,8 @@ namespace MC
 
     std::span<ContainerState> data();
 
+    template <class Archive> void serialize(Archive &ar) { ar(containers); }
+
   private:
     double _total_volume=0.;
     size_t id=0;

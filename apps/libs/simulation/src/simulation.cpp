@@ -1,7 +1,9 @@
 #include "cma_read/light_2d_view.hpp"
 #include "common/thread_safe_container.hpp"
+#include "mc/particles/particles_list.hpp"
 #include "mc/prng/prng.hpp"
 #include "models/types.hpp"
+#include <Kokkos_Core.hpp>
 #include <algorithm>
 #include <cstddef>
 #include <cstdio>
@@ -11,11 +13,13 @@
 #include <mc/thread_private_data.hpp>
 #include <mc/unit.hpp>
 
+#include <Kokkos_Random.hpp>
 #include <memory>
-
+#include <random>
 #include <scalar_simulation.hpp>
 #include <simulation/simulation.hpp>
 #include <stdexcept>
+#include <traits/Kokkos_IterationPatternTrait.hpp>
 #include <transport.hpp>
 
 #ifndef USE_PYTHON_MODULE
@@ -168,51 +172,43 @@ namespace Simulation
 
   void SimulationUnit::cycleProcess(const double d_t)
   {
-    auto &to_process = this->mc_unit->container.to_process;
+    Kokkos::Random_XorShift1024_Pool<> random_pool(12345);
 
     auto view_cumulative_probability = this->flow_liquid->get_view_cum_prob();
 
-    const auto &diag = this->flow_liquid->diag_transition;
-    auto contribs = this->liquid_scalar->getThreadContribs();
-    auto &extras = this->mc_unit->extras;
-    auto &ts_events = this->mc_unit->ts_events;
-    const auto size = static_cast<size_t>(to_process.size());
-    auto &domain = this->mc_unit->domain;
-
-    int chunk_size = std::max(1, static_cast<int>((contribs.size() / size)));
+    auto diag = this->flow_liquid->get_diag_transition();
+    auto &domain = mc_unit->domain;
 
     
-    
+    auto to_process = this->mc_unit->container.to_process.data_span();
 
-#pragma omp for schedule(dynamic,chunk_size) 
-    for (size_t i_particle = 0; i_particle < size; ++i_particle)
+    auto lambda = [diag,
+                   &to_process,
+                   random_pool,
+                   d_t,
+                   view_cumulative_probability,
+                   &domain](auto &&i_particle)
     {
+      MC::Particles &particle = to_process[i_particle];
+      auto generator = random_pool.get_state();
+      const double random_number_1 = generator.drand(0., 1.);
+      const double random_number_2 = generator.drand(0., 1.);
 
+      random_pool.free_state(generator);
 
+      kernel_move(random_number_1,
+                  random_number_2,
+                  domain,
+                  particle,
+                  d_t,
+                  diag,
+                  view_cumulative_probability);
+    };
 
-      const size_t i_thread = omp_get_thread_num();
-      auto &events = ts_events[i_thread];
-      auto &thread_contrib = contribs[i_thread];
-      auto &thread_extra = extras[i_thread];
+    Kokkos::parallel_for("ProcessParticles", to_process.size(), lambda);
+ 
 
-      big_kernel(i_particle,
-                 d_t,
-                 domain,
-                 events,
-                 thread_contrib,
-                 thread_extra,
-                 kmodel,
-                 to_process[i_particle],
-                 diag,
-                 view_cumulative_probability);
-    }
-
-    #pragma omp master
-    {
-      post_process_reducing();
-    }
-
-    
+    post_process_reducing();
   }
 
   void big_kernel(size_t current_i_particle,
@@ -226,13 +222,13 @@ namespace Simulation
                   const auto &diag,
                   auto &cumulative_probability)
   {
-    
-    auto& status = particle.status;
-    if ( status == MC::CellStatus::DEAD)
+
+    auto &status = particle.status;
+    if (status == MC::CellStatus::DEAD)
     {
       return;
     }
-    
+
     auto &rng = thread_extra.rng;
     const double random_number_1 = rng.double_unfiform();
     const double random_number_2 = rng.double_unfiform();
@@ -242,7 +238,7 @@ namespace Simulation
     {
       _kmodel.contribution_kernel(p, thread_contrib);
       __ATOM_INCR__(domain[p.current_container].n_cells)
-      
+
       thread_extra.extra_process.emplace_back(std::move(p));
     };
 
@@ -265,7 +261,7 @@ namespace Simulation
 
     if (status == MC::CellStatus::OUT)
     {
-      
+
       events.incr<MC::EventType::Exit>();
       handle_particle_removal(particle);
       return;
@@ -281,7 +277,7 @@ namespace Simulation
       return;
     }
 
-    if (status== MC::CellStatus::CYTOKINESIS)
+    if (status == MC::CellStatus::CYTOKINESIS)
     {
       events.incr<MC::EventType::NewParticle>();
       status = MC::CellStatus::IDLE;

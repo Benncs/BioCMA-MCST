@@ -29,7 +29,7 @@ mv llvm.sh  /tmp/llvm.sh
 chmod +x /tmp/llvm.sh 
 
 # Run the LLVM installation script with the specified version
-/tmp/llvm.sh  $LLVM_VERSION  
+/tmp/llvm.sh  $LLVM_VERSION all 
 
 # Check if installation was successful
 if [ $? -ne 0 ]; then

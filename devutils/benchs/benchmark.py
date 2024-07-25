@@ -23,8 +23,8 @@ EXECUTABLE_NAME = "biocma_mcst_cli_app"  # Name of executable to run
 BENCH_SCRIPT_PATH = (
     "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
 )
-FILENAME = "./devutils/benchs/bench_records_0d.csv"  # Record filename
-OUTPUT_PDF = "./devutils/benchs/results_bench_0d.pdf"  # Output path
+FILENAME = "./devutils/benchs/bench_records_test_0d.csv"  # Record filename
+OUTPUT_PDF = "./devutils/benchs/results_bench_test_0d.pdf"  # Output path
 MODEL_NAME = "model_light"
 FINAL_TIME = 1  # Reference simulation time
 DELTA_TIME = 1e-3  # Reference delta time fixed

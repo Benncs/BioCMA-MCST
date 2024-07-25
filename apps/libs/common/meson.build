@@ -14,7 +14,7 @@ common_lib = library(
    common_sources,
    include_directories: incdirs,
    pic: true,
-   dependencies: [],
+   dependencies: [kokkos],
       install: true,
    install_rpath: global_install_dir,
 )

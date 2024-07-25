@@ -15,6 +15,8 @@ namespace MC
     size_t n_cells; // TODO: BE CAREFUL WHEN DECREMENT
     uint64_t id;
     std::span<double const> concentrations;
+
+    template <class Archive> void serialize(Archive &ar) { ar(volume_liq,volume_gas,n_cells,id); }
   };
 } // namespace MC
 
