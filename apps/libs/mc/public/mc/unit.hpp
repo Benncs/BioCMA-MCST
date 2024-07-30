@@ -16,13 +16,15 @@ namespace MC
   {
     ReactorDomain domain;
     ParticlesContainer container;
-    std::vector<EventContainer> ts_events; //TODO Move to thread private 
+    MC::EventContainer events;
+    std::vector<MC::Particles> extra_process;
+    // std::vector<EventContainer> ts_events; //TODO Move to thread private 
     PRNG rand;
-    std::vector<ThreadPrivateData> extras; 
-    void merge(size_t i_thread)
-    {
-      container.merge(extras[i_thread]);
-    }
+    // std::vector<ThreadPrivateData> extras; 
+    // void merge(size_t i_thread)
+    // {
+    //   container.merge(extras[i_thread]);
+    // }
 
     template <class Archive> void serialize(Archive &ar) { ar(container,domain); }
     template <class Archive> void load(Archive &ar) { ar(container,domain); }

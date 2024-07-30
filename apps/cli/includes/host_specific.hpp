@@ -9,7 +9,7 @@
 #include <simulation/simulation.hpp>
 
 void host_process(const ExecInfo &exec,
-                  Simulation::SimulationUnit &simulation,
+                  Simulation::SimulationUnit &&simulation,
                   const SimulationParameters &params,
                   std::unique_ptr<Simulation::FlowMapTransitioner>&& transitioner);
 

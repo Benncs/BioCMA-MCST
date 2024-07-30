@@ -1,6 +1,7 @@
 #ifndef __COMMON_THREAD_SAFE_CONTAINER_HPP__
 #define __COMMON_THREAD_SAFE_CONTAINER_HPP__
 
+
 #include <cstddef>
 #include <vector>
 
@@ -9,6 +10,8 @@
 
 #  define __ATOM_INCR__(__val__) Kokkos::atomic_increment(&__val__);
 #  define __ATOM_DECR__(__val__) Kokkos::atomic_decrement(&__val__);
+
+
 
 // #if defined(USE_OMP_EXECUTOR)
 // #  define __ATOM_INCR__(__val__) _Pragma("omp atomic") __val__++;

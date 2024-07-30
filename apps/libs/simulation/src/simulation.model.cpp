@@ -23,8 +23,8 @@ namespace Simulation
       {
         // const size_t i_thread = omp_get_thread_num();
 
-        this->liquid_scalar->merge(i_thread);
-        this->mc_unit->merge(i_thread);
+        // this->liquid_scalar->merge(i_thread);
+        // this->mc_unit->merge(i_thread);
       }
     }
   }
@@ -76,7 +76,7 @@ namespace Simulation
   {
     for (size_t i = 0; i < n_thread; ++i)
     {
-      this->liquid_scalar->getThreadContribs()[i].setZero();
+      // this->liquid_scalar->getThreadContribs()[i].setZero();
       this->liquid_scalar->vec_kla.setZero();
     }
 

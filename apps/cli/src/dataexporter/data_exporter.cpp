@@ -63,7 +63,7 @@ void DataExporter::write_final_results(Simulation::SimulationUnit &simulation,
       n_part,
       simulation.getCliqData(),
       simulation.getCgasData(),
-      simulation.mc_unit->ts_events.data(),
+      &simulation.mc_unit->events,
       simulation.getDim(),
   };
 

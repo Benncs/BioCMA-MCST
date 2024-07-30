@@ -3,6 +3,7 @@
 
 #include "cma_read/light_2d_view.hpp"
 #include "mc/domain.hpp"
+#include <Kokkos_Core.hpp>
 #include <cma_read/flowmap.hpp>
 #include <mc/particles/particles_container.hpp>
 #include <mc/unit.hpp>
@@ -21,16 +22,18 @@ namespace Simulation
 
   void kernel_exit(double d_t,
                    double random_number,
-                   MC::ReactorDomain &domain,
+                   Kokkos::View<MC::ContainerState *, Kokkos::LayoutStride> domain,
                    MC::Particles &particle);
 
-  void kernel_move(double random_number,
-                   double random_number2,
-                   MC::ReactorDomain &domain,
-                   MC::Particles &particle,
-                   double d_t,
-                   std::span<const double> diag_transition,
-                   CmaRead::L2DView<const double >cumulative_probability);
+  void kernel_move(
+      double random_number,
+      double random_number2,
+      MC::Particles &particle,
+      double d_t,
+      std::span<const double> diag_transition,
+      CmaRead::L2DView<const double> cumulative_probability,
+      Kokkos::View<MC::ContainerState *, Kokkos::LayoutStride> domain_view,
+      Kokkos::View<const size_t **, Kokkos::LayoutStride> view_neighbors);
 
 } // namespace Simulation
 

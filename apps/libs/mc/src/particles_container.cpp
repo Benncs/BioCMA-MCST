@@ -10,7 +10,7 @@
 namespace MC
 {
  
-  void ParticlesContainer::merge(ThreadPrivateData &i_data)
+  void ParticlesContainer::merge(Results& i_data)
   {
     auto &dead = i_data.index_in_dead_state;
     auto &new_p = i_data.extra_process;

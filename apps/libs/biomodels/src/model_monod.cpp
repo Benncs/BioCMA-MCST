@@ -24,29 +24,30 @@ namespace monod
   constexpr size_t xi_t_size = 2;
   using xi_t = Eigen::Vector<double, xi_t_size>;
 
-  struct MonodSimple
+  struct alignas(ExecInfo::cache_line_size) MonodSimple
   {
 
-    MC::PRNG prng;
     xi_t xi;
-    Eigen::Vector<double, 3> contrib;
+    Eigen::Vector<double, 1> contrib;
 
     static constexpr double mu_max = 0.46 / 3600;
 
     static constexpr double YXS = 0.5;
-
     static constexpr double critcal_division_length = 11e-6;
     static constexpr double minimal_length = 7e-6;
     static constexpr double maximal_length = 18e-6;
     static constexpr double tau_metabolism = 1.25 / mu_max;
     static constexpr double KS = 0.01;
+
+   
   };
 
   void init_monod_model_(MC::Particles &p)
   {
-
     // auto model = MonodSimple();
+    // std::cout<<sizeof(MonodSimple)<<std::endl;
 
+    
     p.data = MonodSimple();
     auto &model = std::any_cast<MonodSimple &>(p.data);
     model.contrib.setZero();
@@ -56,7 +57,8 @@ namespace monod
         std::max(MonodSimple::minimal_length,
                  std::min(rd_length, MonodSimple::maximal_length));
 
-    model.xi[XI_N::mu_eff] = MonodSimple::mu_max/100.  * (1.-model.prng.double_unfiform());
+    model.xi[XI_N::mu_eff] =
+        MonodSimple::mu_max / 100. * (1. - MC::KPRNG::getInstance().double_unfiform());
   }
 
   inline double division_gamma(const auto &xi)
@@ -74,7 +76,7 @@ namespace monod
 
   inline void u_xi_dot(double mu_p, double S, const xi_t &xi, xi_t &xi_dot)
   {
-    const auto tau_metabolism = 1.25/xi[XI_N::mu_eff];
+    const auto tau_metabolism = 1.25 / xi[XI_N::mu_eff];
     xi_dot = {
         MonodSimple::YXS * mu_p,
         (1.0 / tau_metabolism) * (mu_p - xi[XI_N::mu_eff]),
@@ -83,8 +85,7 @@ namespace monod
 
   void f(double s, const xi_t &xi, xi_t &xi_dot)
   {
-    const double mu_p =
-        xi[XI_N::mu_eff] * s / (MonodSimple::KS + s);
+    const double mu_p = xi[XI_N::mu_eff] * s / (MonodSimple::KS + s);
 
     u_xi_dot(mu_p, s, xi, xi_dot);
   }
@@ -119,18 +120,17 @@ namespace monod
 
     auto proba_div = (1. - std::exp(-division_gamma(xi) * d_t));
 
-    if (model.prng.double_unfiform() < proba_div)
+    if (MC::KPRNG::getInstance().double_unfiform() < proba_div)
     {
       p.status = MC::CellStatus::CYTOKINESIS;
     }
-
-  
   }
 
   MC::Particles division_monod_model(MC::Particles &p)
   {
+
     auto &parent_model = std::any_cast<MonodSimple &>(p.data);
-    const double div_length = parent_model.prng.double_unfiform();
+    const double div_length = MC::KPRNG::getInstance().double_unfiform();
 
     const auto current_length = parent_model.xi[XI_N::lenght];
 
@@ -140,28 +140,32 @@ namespace monod
     auto child_model = MonodSimple(parent_model);
     child_model.xi = parent_model.xi;
 
-    // parent_model.xi[XI_N::lenght]/=2.;
-    // p.weight*=2;
-
     parent_model.xi[XI_N::lenght] = div_length * current_length;
     child_model.xi[XI_N::lenght] = (1 - div_length) * current_length;
-    
-    parent_model.xi[XI_N::lenght] =  current_length/2.;
-    child_model.xi[XI_N::lenght] = current_length/2.;
+
+    parent_model.xi[XI_N::lenght] = current_length / 2.;
+    child_model.xi[XI_N::lenght] = current_length / 2.;
     child.status = MC::CellStatus::IDLE;
 
     child.data.emplace<MonodSimple>(child_model);
- 
+
+    
+
     return child;
+
+    // // parent_model.xi[XI_N::lenght]/=2.;
+    // // p.weight*=2;
   }
 
   void contribution_monod_model(MC::Particles &p, Eigen::MatrixXd &contribution)
   {
     auto &model = std::any_cast<MonodSimple &>(p.data);
 
-    int ic = static_cast<int>(p.current_container);
+    // int ic = static_cast<int>(p.current_container);
 
-    contribution.col(ic) -= (p.weight * model.contrib);
+    // contribution.col(0) -= (p.weight * model.contrib);
+
+    contribution(0, 0) -= (p.weight * model.contrib(0));
   }
 
   model_properties_detail_t properties(const MC::Particles &p)

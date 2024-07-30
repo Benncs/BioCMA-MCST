@@ -66,6 +66,7 @@ namespace MC
 
   template <NumberType T> T bounded_exponential(std::mt19937 &g, T min, T max);
 
+
   template <NumberType T>
   distribution_t<T> get_distribution(DistributionVariantReal params)
   {

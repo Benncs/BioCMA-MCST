@@ -2,25 +2,24 @@
 #define __MC_REACTORDOMAIN_HPP__
 
 #include "cmt_common/macro_constructor_assignment.hpp"
+#include <Kokkos_Core.hpp>
 #include <cma_read/neighbors.hpp>
 #include <common/common_types.hpp>
 #include <mc/container_state.hpp>
 #include <vector>
+
 
 namespace MC
 {
   class ReactorDomain
   {
   public:
-    
-
     SET_NON_COPYABLE(ReactorDomain)
 
     ReactorDomain() = default;
     ReactorDomain(ReactorDomain &&other) noexcept;
     ReactorDomain(std::span<double> volumes,
-                  const CmaRead::Neighbors::Neighbors_const_view_t& _neighbors);
-
+                  const CmaRead::Neighbors::Neighbors_const_view_t &_neighbors);
 
     ~ReactorDomain() = default;
 
@@ -29,7 +28,8 @@ namespace MC
     void setVolumes(std::span<double const> volumesgas,
                     std::span<double const> volumesliq);
 
-    void setLiquidNeighbors(const CmaRead::Neighbors::Neighbors_const_view_t &data);
+    void
+    setLiquidNeighbors(const CmaRead::Neighbors::Neighbors_const_view_t &data);
 
     // GETTERS
     auto &operator[](size_t i_c);
@@ -41,11 +41,12 @@ namespace MC
     decltype(auto) begin();
     decltype(auto) end();
 
-    [[nodiscard]] auto getNumberCompartments() const; 
+    [[nodiscard]] auto getNumberCompartments() const;
 
     [[nodiscard]] double getTotalVolume() const;
 
-    [[nodiscard]] const CmaRead::Neighbors::Neighbors_const_view_t  &getNeighbors() const;
+    [[nodiscard]] const CmaRead::Neighbors::Neighbors_const_view_t &
+    getNeighbors() const;
 
     [[nodiscard]] std::span<const size_t> getNeighbors(size_t i) const;
 
@@ -56,11 +57,15 @@ namespace MC
 
     std::span<ContainerState> data();
 
-    template <class Archive> void serialize(Archive &ar) { ar(containers); }
+    template <class Archive> void serialize(Archive &ar)
+    {
+      ar(containers);
+    }
 
   private:
-    double _total_volume=0.;
-    size_t id=0;
+    Kokkos::View<MC::ContainerState *, Kokkos::LayoutRight> view;
+    double _total_volume = 0.;
+    size_t id = 0;
     std::vector<ContainerState> containers;
     CmaRead::Neighbors::Neighbors_const_view_t neighbors;
     std::vector<std::span<const size_t>> row_neighbors;
@@ -79,21 +84,19 @@ namespace MC
   inline const CmaRead::Neighbors::Neighbors_const_view_t &
   ReactorDomain::getNeighbors() const
   {
-    
+
     return neighbors;
   }
 
   inline void ReactorDomain::setLiquidNeighbors(
-      const CmaRead::Neighbors::Neighbors_const_view_t& data)
+      const CmaRead::Neighbors::Neighbors_const_view_t &data)
   {
- 
+
     neighbors = data.to_const();
-    for(size_t i =0;i<row_neighbors.size();++i)
+    for (size_t i = 0; i < row_neighbors.size(); ++i)
     {
-      row_neighbors[i]=neighbors.getRow(i);
+      row_neighbors[i] = neighbors.getRow(i);
     }
-    
-    
   }
 
   inline auto ReactorDomain::getNumberCompartments() const

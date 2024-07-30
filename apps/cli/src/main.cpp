@@ -21,7 +21,6 @@
 #include <sync.hpp>
 #include <worker_specific.hpp>
 
-
 #ifdef USE_PYTHON_MODULE
 #  include <pymodule/import_py.hpp>
 #endif
@@ -37,8 +36,6 @@
 #  define INTERPRETER_INIT
 #endif
 
-
-
 struct CaseData
 {
   std::unique_ptr<Simulation::SimulationUnit> simulation;
@@ -47,20 +44,20 @@ struct CaseData
   ExecInfo exec_info;
 };
 
-constexpr bool verbose = true; // TODO REMOVE
+constexpr bool verbose = true;   // TODO REMOVE
 constexpr bool redirect = false; // TODO REMOVE
 
 static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params);
 
 static void exec(const ExecInfo &exec_info, CaseData &&cased);
 
-template<typename ExceptionType>
+template <typename ExceptionType>
 static int handle_catch(ExceptionType const &e);
 
 int main(int argc, char **argv)
 {
-    Kokkos::initialize(argc, argv);
-  Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
+  
+
   init_environment();
   auto params_opt = parse_cli(argc, argv);
   if (!params_opt.has_value())
@@ -102,10 +99,8 @@ static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params)
 
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
   const auto model = load_model_(params.user_params.model_name);
-  MC::UniformLawINT law_param = {0, 0}; // FIXME
 
-  auto simulation = init_simulation(
-      exec_info, params, transitioner, model, std::move(law_param));
+  auto simulation = init_simulation(exec_info, params, transitioner, model);
 
   return {std::move(simulation), params, std::move(transitioner), exec_info};
 }
@@ -115,14 +110,12 @@ static void exec(const ExecInfo &exec_info, CaseData &&cased)
   const auto f_run =
       (cased.exec_info.current_rank == 0) ? &host_process : &workers_process;
 
-  f_run(exec_info,
-        *cased.simulation,
-        cased.params,
-        std::move(cased.transitioner));
+  auto *sim = cased.simulation.release();
+  f_run(
+      exec_info, std::move(*sim), cased.params, std::move(cased.transitioner));
 }
 
-
-template<typename ExceptionType>
+template <typename ExceptionType>
 static int handle_catch(ExceptionType const &e)
 {
 #ifdef DEBUG

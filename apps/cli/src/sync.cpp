@@ -49,8 +49,8 @@ void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
 {
   MPI_W::barrier();
 
-  auto tot_events =
-      MC::EventContainer::reduce_local(simulation.mc_unit->ts_events);
+  auto& tot_events =simulation.mc_unit->events;
+      // MC::EventContainer::reduce_local(simulation.mc_unit->events);
 
   std::vector<size_t> total_contrib_data =
       MPI_W::gather<size_t>(tot_events.events, exec.n_rank);
@@ -75,6 +75,5 @@ void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
     std::cout << "nparticle " << total_particle << std::endl;
     // simulation.mc_unit->container.to_process.data() = total_particle;
   }
-  simulation.mc_unit->ts_events = {
-      tot_events}; // FIX IT because we will reduce twice (here + post process)
+  simulation.mc_unit->events = tot_events; // FIX IT because we will reduce twice (here + post process)
 }

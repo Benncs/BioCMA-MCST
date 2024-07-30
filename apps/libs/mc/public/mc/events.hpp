@@ -28,6 +28,24 @@ namespace MC
   {
     std::array<size_t, n_event_type> events{0, 0, 0, 0, 0};
 
+    constexpr void clear()
+    {
+      for (auto &&i : events)
+      {
+        i = 0;
+      }
+    }
+
+    void inplace_reduce(const EventContainer &other)
+    {
+      for (std::size_t i = 0; i < n_event_type; ++i)
+      {
+        events[i] += other.events[i];
+      }
+    }
+
+    
+
     template <EventType event> [[nodiscard]] constexpr size_t get() const
     {
       return events[eventIndex<event>()];
@@ -44,6 +62,7 @@ namespace MC
     }
 
     static EventContainer reduce_local(std::span<EventContainer> _data);
+
     static EventContainer reduce(std::span<size_t> _data);
   };
 

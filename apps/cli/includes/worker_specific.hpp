@@ -8,7 +8,7 @@
 
 void workers_process(
     const ExecInfo &exec,
-    Simulation::SimulationUnit &simulation,
+    Simulation::SimulationUnit &&simulation,
     const SimulationParameters &params,
     std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner);
 

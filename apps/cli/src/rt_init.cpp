@@ -57,9 +57,9 @@ void set_openmp_threads(const int rank,
     }
   }
 
-  info.thread_per_process =
-      std::min(threads_per_process, static_cast<size_t>(num_core_per_node));
-  ;
+  info.thread_per_process = threads_per_process;
+      // std::min(threads_per_process, static_cast<size_t>(num_core_per_node));
+  
 
   omp_set_num_threads(static_cast<int>(info.thread_per_process));
 }
@@ -87,9 +87,11 @@ ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
   }
 
   set_openmp_threads(rank, size, info, params.user_params);
+  Kokkos::initialize(argc, argv);
+  Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
 
-  // Eigen::setNbThreads(std::min(omp_get_num_procs(), 2));
-    Eigen::setNbThreads(std::min(omp_get_num_procs(), 1));
+  Eigen::setNbThreads(info.thread_per_process);
+    // Eigen::setNbThreads(std::min(omp_get_num_procs(), 1));
 
 #ifdef USE_PYTHON_MODULE
   info.thread_per_process = 1; // Set one thread because of PYthon GIL

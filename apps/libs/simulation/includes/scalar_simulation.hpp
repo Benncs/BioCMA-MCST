@@ -7,6 +7,7 @@
 
 // TODO REMOVE
 #include <iostream>
+#include <Kokkos_Core.hpp>
 
 namespace Simulation
 {
@@ -28,12 +29,14 @@ namespace Simulation
     Eigen::MatrixXd concentration;
     Eigen::MatrixXd total_mass;
 
+    Kokkos::View<double **, Kokkos::LayoutLeft> k_contribs;
+
     // Getters
     [[nodiscard]] std::span<double const> getVolumeData() const;
 
     [[nodiscard]] std::span<double> getContributionData();
 
-    std::span<Eigen::MatrixXd> getThreadContribs();
+    // std::span<Eigen::MatrixXd> getThreadContribs();
 
     Eigen::DiagonalMatrix<double, -1> &getVolume();
 
@@ -48,7 +51,7 @@ namespace Simulation
     void setVolumes(std::span<const double> volumes,
                     std::span<const double> inv_volumes);
 
-    void merge(size_t i_thread);
+    // void merge(size_t i_thread);
 
     Eigen::ArrayXXd vec_kla; // TODO : Clean this
 
@@ -64,8 +67,8 @@ namespace Simulation
 
   private:
     Eigen::DiagonalMatrix<double, -1> volumes_inverse;
-    std::vector<Eigen::MatrixXd> contribs;
-    std::vector<CmaRead::L2DView<double>> view_contribs;
+    // std::vector<Eigen::MatrixXd> contribs;
+    // std::vector<CmaRead::L2DView<double>> view_contribs;
     Eigen::DiagonalMatrix<double, -1> m_volumes;
 
     void updateC();
@@ -79,10 +82,10 @@ namespace Simulation
     return view;
   }
 
-  inline std::span<Eigen::MatrixXd> ScalarSimulation::getThreadContribs()
-  {
-    return contribs;
-  }
+  // inline std::span<Eigen::MatrixXd> ScalarSimulation::getThreadContribs()
+  // {
+  //   return contribs;
+  // }
 
   inline Eigen::DiagonalMatrix<double, -1> &ScalarSimulation::getVolume()
   {
@@ -124,10 +127,10 @@ namespace Simulation
         inv_volumes.data(), static_cast<int>(inv_volumes.size()));
   }
 
-  inline void ScalarSimulation::merge(size_t i_thread)
-  {
-    this->biomass_contribution += this->contribs[i_thread];
-  }
+  // inline void ScalarSimulation::merge(size_t i_thread)
+  // {
+  //   this->biomass_contribution += this->contribs[i_thread];
+  // }
 
   inline ScalarSimulation *makeScalarSimulation(size_t n_compartments,
                                                 size_t n_species,

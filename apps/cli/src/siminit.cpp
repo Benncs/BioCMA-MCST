@@ -40,8 +40,7 @@ std::unique_ptr<Simulation::SimulationUnit>
 init_simulation(const ExecInfo &info,
                 SimulationParameters &params,
                 std::unique_ptr<Simulation::FlowMapTransitioner> &transitioner,
-                KModel model,
-                MC::DistributionVariantInt &&initial_particle_distribution)
+                KModel model)
 {
 
   const auto &user_params = params.user_params;
@@ -83,13 +82,16 @@ init_simulation(const ExecInfo &info,
         worker_neighbor_data, params.n_compartments, n_col);
   }
   liquid_neighbors.set_row_major();
+
+  MC::UniformLawINT law_param = {0, static_cast<int>(params.n_compartments-1)}; 
+
   // MPI_W::barrier(); //Useless ?
   auto mc_unit = MC::init(model.init_kernel,
                           info,
                           user_params.numper_particle,
                           liq_volume,
                           liquid_neighbors,
-                          std::move(initial_particle_distribution));
+                          law_param);
 
   bool f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
 

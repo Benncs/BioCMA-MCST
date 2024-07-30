@@ -1,7 +1,7 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
-
+#include <Kokkos_Core.hpp>
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <mc/particles/particles_container.hpp>
@@ -9,17 +9,20 @@
 #include <memory>
 #include <models/types.hpp>
 
+class Kernel;
+
 namespace Simulation
 {
-  using init_scalar_f_t = void(*)(size_t , CmaRead::L2DView<double> &);
-  static constexpr init_scalar_f_t default_gas_init = [](size_t , CmaRead::L2DView<double> &){};
+  using init_scalar_f_t = void (*)(size_t, CmaRead::L2DView<double> &);
+  static constexpr init_scalar_f_t default_gas_init =
+      [](size_t, CmaRead::L2DView<double> &) {};
 
   struct ScalarInitializer
   {
     std::span<double> volumesgas;
     std::span<double> volumesliq;
     init_scalar_f_t liquid_f_init;
-    init_scalar_f_t gaz_f_init=default_gas_init;
+    init_scalar_f_t gaz_f_init = default_gas_init;
   };
 
   class PreCalculatedHydroState;
@@ -53,9 +56,9 @@ namespace Simulation
     [[nodiscard]] std::span<double> getContributionData() const;
 
     void setVolumes(std::span<const double> volumesgas,
-                    std::span<const double> volumesliq)const;
+                    std::span<const double> volumesliq) const;
 
-    void step(double d_t, const CmaRead::ReactorState &state)const;
+    void step(double d_t, const CmaRead::ReactorState &state) const;
 
     void cycleProcess(double d_t);
 
@@ -63,18 +66,34 @@ namespace Simulation
 
     void setGasFlow(PreCalculatedHydroState *_flows_g);
 
-    void reduceContribs(std::span<double> data, size_t n_rank)const;
+    void reduceContribs(std::span<double> data, size_t n_rank) const;
 
-    void clearContribution()const;
+    void clearContribution() const;
 
-    void update_feed(double d_t)const;
+    void update_feed(double d_t) const;
 
     void clear_mc();
 
+    void reset()
+    {
+        liquid_scalar.reset();
+        gas_scalar.reset();
+        flow_liquid = nullptr;
+        flow_gas = nullptr;
+        _kernel.reset();
+    }
+
   private:
+    Kokkos::View<MC::ContainerState *, Kokkos::LayoutRight> domain_view;
+    MC::Results thread_r;
     struct pimpl_deleter
     {
       void operator()(ScalarSimulation *) const;
+    };
+
+    struct pimpl_deleter_
+    {
+      void operator()(Kernel *) const;
     };
 
     using pimp_ptr_t = std::unique_ptr<ScalarSimulation, pimpl_deleter>;
@@ -89,9 +108,9 @@ namespace Simulation
 
     PreCalculatedHydroState *flow_liquid; // TODO OPTI
     PreCalculatedHydroState *flow_gas;    // TODO OPTI
-    
-    KModel kmodel;
 
+    KModel kmodel;
+    std::unique_ptr<Kernel, pimpl_deleter_> _kernel;
     pimp_ptr_t liquid_scalar;
     pimp_ptr_t gas_scalar;
     void post_init_concentration();
@@ -113,22 +132,11 @@ namespace Simulation
   }
 
   inline void SimulationUnit::clear_mc()
-    {
-      mc_unit.reset();
-    }
-
-  inline void SimulationUnit::execute_process_knrl(const auto &kernel)
   {
-    auto &container = mc_unit->container;
-#pragma omp parallel for num_threads(n_thread) default(none)                   \
-    shared(kernel, container) schedule(static)
-    for (auto it = container.to_process.begin();
-         it < container.to_process.end();
-         ++it)
-    {
-      kernel(*it);
-    }
+    mc_unit.reset();
   }
+
+ 
 
 } // namespace Simulation
 

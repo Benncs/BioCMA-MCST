@@ -7,8 +7,8 @@
 #include <map>
 #include <memory>
 #include <simulation/simulation.hpp>
+#include <string_view>
 #include <unordered_map>
-
 
 struct ExportData
 {
@@ -30,9 +30,8 @@ public:
                std::span<size_t> distribution);
 
   virtual ~DataExporter() = default;
-  void write_final_results(
-      Simulation::SimulationUnit &simulation,
-      std::span<size_t> distribution);
+  void write_final_results(Simulation::SimulationUnit &simulation,
+                           std::span<size_t> distribution);
 
   virtual void write_final_particle_data(
       const std::unordered_map<std::string, std::vector<model_properties_t>>
@@ -40,20 +39,34 @@ public:
       const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
   };
 
-
-   virtual void write_initial_particle_data(
+  virtual void write_initial_particle_data(
       const std::unordered_map<std::string, std::vector<model_properties_t>>
           & /*unused*/,
       const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
   };
 
+  virtual void *start_model_dataset()
+  {
+    return nullptr;
+  };
+
+  virtual void init_fill_model_dataset(void *fptr,std::string_view key, size_t expected_size)
+  {
+    
+  };
+
+  virtual void fill_model_dataset(uint64_t counter,
+                                    void *fptr,
+                                    std::string_view key,
+                                    double value) {};
+
+  virtual void stop_fill_model_dataset(void* fptr){};
+
   virtual void append(double t /*unused*/,
-                      std::span<double> /*unused*/ ,
-                      const std::vector<size_t> &/*unused*/ ,
-                      std::span<const double> /*unused*/ ,
-                      std::span<const double> /*unused*/ ) {};
-
-
+                      std::span<double> /*unused*/,
+                      const std::vector<size_t> & /*unused*/,
+                      std::span<const double> /*unused*/,
+                      std::span<const double> /*unused*/) {};
 
   DELETE_CONSTRUCTORS(DataExporter)
   DELETE_ASSIGMENT(DataExporter)
@@ -80,16 +93,11 @@ protected:
   size_t counter = 0;
   size_t n_iter;
 
-  virtual void write_final_results(
-      ExportData &data,
-      std::span<size_t> distribution)
+  virtual void write_final_results(ExportData &data,
+                                   std::span<size_t> distribution)
   {
     std::cerr << "NO implementation specified";
   }
-  
-
 };
-
-
 
 #endif //__DATA_EXPORTER_HPP__

@@ -6,7 +6,7 @@
 
 #include <mc/particles/mcparticles.hpp>
 
-#define __MC_MAX_PARTICLES_PER_PROCESS__ 50e6
+#define __MC_MAX_PARTICLES_PER_PROCESS__ 100e6
 
 namespace MC
 {

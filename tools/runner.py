@@ -25,9 +25,10 @@ def get_executable(type: str):
 
 
 DEFAULT_TYPE = "debugoptmized"
-MPI_COMMAND = "mpiexec --allow-run-as-root --bind-to core -np 5 "
+MPI_COMMAND = "mpiexec --allow-run-as-root --bind-to core -np 6 "
+# MPI_COMMAND = "mpiexec --allow-run-as-root --bind-to core --hostfile ~/mpi_hosts "
 
-OMP_NUM_THREADS = 12
+OMP_NUM_THREADS = 12    
 
 
 def format_rhs(match):
@@ -65,7 +66,9 @@ def parse_cli(args):
 
 def exec(command, n_thread):
     env_var = os.environ.copy()
-    env_var["OMP_NUM_THREADS"] = n_thread
+    env_var["OMP_PLACES"]="threads"
+    env_var["OMP_PROC_BIND"]="spread"
+    env_var["OMP_NUM_THREADS"]=n_thread
 
     result = command.replace("-", "\n-")
     pattern = re.compile(r"(-\w+\s)(\S+)")
@@ -86,13 +89,13 @@ if __name__ == "__main__":
     cli_args = parse_cli(args)
 
     run_cli = format_cli(["_", cli_args["name"]])
+
     use_mpi = False
     mpi_c = ""
     if use_mpi:
         mpi_c = MPI_COMMAND + " "
 
-    command = mpi_c + get_executable(cli_args["type"]) + " " + run_cli
-
+    command = mpi_c + get_executable(cli_args["type"]) + " " + run_cli + f" -nt {cli_args['n_thread']}"
     exec(command, cli_args["n_thread"])
 
 

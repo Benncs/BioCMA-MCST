@@ -23,7 +23,7 @@ namespace MC
     ParticlesContainer &operator=(const ParticlesContainer &) = delete;
     ParticlesContainer &operator=(ParticlesContainer &&) = default;
 
-    void merge(ThreadPrivateData& i_data);
+    void merge(MC::Results& i_data);
     void init_extra(size_t n_extra);
 
     ParticlesList to_process;

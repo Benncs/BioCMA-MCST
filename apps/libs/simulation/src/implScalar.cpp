@@ -43,19 +43,19 @@ namespace Simulation
     biomass_contribution = Eigen::MatrixXd(n_species, n_compartments);
     biomass_contribution.setZero();
 
-    contribs.resize(n_thread);
-    view_contribs.resize(n_thread);
+    // contribs.resize(n_thread);
+    // view_contribs.resize(n_thread);
 
-    CmtCommons::foreach_zip(
-        [n_species, n_compartments](auto &matrix, auto &view)
-        {
-          matrix = Eigen::MatrixXd(n_species, n_compartments);
-          matrix.setZero();
-          view = get_eigen_view(matrix);
-        },
+    // CmtCommons::foreach_zip(
+    //     [n_species, n_compartments](auto &matrix, auto &view)
+    //     {
+    //       matrix = Eigen::MatrixXd(n_species, n_compartments);
+    //       matrix.setZero();
+    //       view = get_eigen_view(matrix);
+    //     },
 
-        contribs,
-        view_contribs);
+    //     contribs,
+    //     view_contribs);
 
     view = CmaRead::L2DView<double>(
         {this->concentration.data(),
@@ -63,6 +63,11 @@ namespace Simulation
         concentration.rows(),
         concentration.cols(),
         false);
+
+    k_contribs = Kokkos::View<double **, Kokkos::LayoutLeft>(
+        biomass_contribution.data(),
+        biomass_contribution.rows(),
+        biomass_contribution.cols());
   }
 
   void ScalarSimulation::performStep(double d_t,
@@ -73,8 +78,6 @@ namespace Simulation
         d_t * (concentration * m_transition + biomass_contribution + feed +
                (transfer_gas_liquid)*m_volumes);
 
-
-  
     concentration = total_mass * volumes_inverse;
   }
 

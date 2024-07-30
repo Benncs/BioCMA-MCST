@@ -9,15 +9,12 @@
 #  include <string_view>
 #  include <tuple>
 
-
 #  include "highfive/H5DataSpace.hpp"
 #  include "highfive/H5File.hpp"
 #  include "highfive/H5PropertyList.hpp"
 #  include <Eigen/Dense>
 #  include <highfive/eigen.hpp>
 #  include <highfive/highfive.hpp>
-
-
 
 constexpr size_t hdf5_max_compression = 9;
 
@@ -259,7 +256,8 @@ void DataExportHighFive::write_particle_data(
     const auto size = values.size();
 
     std::visit(
-        [&ds_props,&file,
+        [&ds_props,
+         &file,
          key = std::move(key),
          values = std::move(values),
          size,
@@ -281,7 +279,8 @@ void DataExportHighFive::write_particle_data(
                 }
               }
             }
-            auto ds = file.createDataSet(ds_name + key, non_zero_values,ds_props);
+            auto ds =
+                file.createDataSet(ds_name + key, non_zero_values, ds_props);
           }
           else
           {
@@ -300,6 +299,45 @@ void DataExportHighFive::write_particle_data(
     file.createDataSet(ds_name + "spatial/" + key, values, _ds_props);
   }
 }
+
+void DataExportHighFive::init_fill_model_dataset(void *fptr,
+                                                 std::string_view key,
+                                                 size_t expected_size)
+{
+  auto *file = static_cast<HighFive::File *>(fptr);
+  HighFive::DataSpace dataspace({expected_size}, {expected_size});
+  HighFive::DataSetCreateProps props;
+  // props.add(HighFive::Chunking({expected_size}));
+  // props.add(HighFive::Shuffle());
+  // props.add(HighFive::Deflate(hdf5_max_compression));
+  auto double_type = HighFive::create_datatype<double>();
+  file->createDataSet(key.data(), dataspace, double_type, props);
+  file->flush();
+}
+
+void *DataExportHighFive::start_model_dataset()
+{
+  return new HighFive::File(filename, HighFive::File::ReadWrite);
+}
+
+void DataExportHighFive::fill_model_dataset(const uint64_t counter,
+                                            void *fptr,
+                                            std::string_view key,
+                                            double value)
+{
+  auto *file = static_cast<HighFive::File *>(fptr);
+  auto dataset = file->getDataSet(key.data());
+  dataset.select({counter}, {1}).write(value);
+  file->flush();
+
+}
+
+void DataExportHighFive::stop_fill_model_dataset(void *fptr)
+{
+  auto *file = static_cast<HighFive::File *>(fptr);
+  delete file;
+  fptr = nullptr;
+};
 
 void DataExportHighFive::write_initial_particle_data(
     const std::unordered_map<std::string, std::vector<model_properties_t>>

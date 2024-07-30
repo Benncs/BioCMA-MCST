@@ -37,7 +37,10 @@ MC::Particles division_light_model(MC::Particles &p)
 
 void contribution_light_model(MC::Particles &p, Eigen::MatrixXd &contribution)
 {
-  // NOP
+    int ic = static_cast<int>(p.current_container);
+    
+    
+    // contribution(0,0) -= (1e-5);
 }
 
 KModel get_model_light()

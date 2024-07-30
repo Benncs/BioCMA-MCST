@@ -46,7 +46,8 @@ update_progress_bar(size_t total, size_t currentPosition, bool verbose)
 }
 
 #ifdef DEBUG
-#  define DEBUG_INSTRUCTION
+#  define DEBUG_INSTRUCTION // std::cout << "it: " <<__loop_counter<<
+                            // std::endl;
 #else
 #  define DEBUG_INSTRUCTION
 #endif
@@ -79,7 +80,7 @@ update_progress_bar(size_t total, size_t currentPosition, bool verbose)
 
 void host_process(
     const ExecInfo &exec,
-    Simulation::SimulationUnit &simulation,
+    Simulation::SimulationUnit &&simulation,
     const SimulationParameters &params,
     std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner)
 {
@@ -111,7 +112,8 @@ void host_process(
     last_sync(exec, simulation);
   }
 
-  PostProcessing::post_process(exec, params, simulation, data_exporter);
+  PostProcessing::post_process(
+      exec, params, std::move(simulation), data_exporter);
 }
 
 // DEV
@@ -136,10 +138,7 @@ template <class Sim> void handle_sig(Sim &sim)
 
 void handle_sig(int n)
 {
-#pragma omp critical
-  {
-    save = true;
-  }
+  save = true;
 }
 
 // ENDDEV
@@ -168,8 +167,8 @@ void main_loop(const SimulationParameters &params,
   size_t dump_counter = 0;
   double current_time = 0.;
   // size_t update_feed_counter = 0;
-  // const size_t update_feed_interval = (n_update_feed==0)? n_iter_simulation :
-  // (n_iter_simulation) / (n_update_feed) + 1;
+  // const size_t update_feed_interval = (n_update_feed==0)? n_iter_simulation
+  // : (n_iter_simulation) / (n_update_feed) + 1;
 
   MPI_W::HostIterationPayload mpi_payload;
   const auto *current_reactor_state = &transitioner->get_unchecked(0);
@@ -200,7 +199,6 @@ void main_loop(const SimulationParameters &params,
     transitioner->advance(simulation);
 
     simulation.cycleProcess(d_t);
-
     dump_counter++;
 
     if (dump_counter == dump_interval)
@@ -235,4 +233,6 @@ void main_loop(const SimulationParameters &params,
                    simulation.mc_unit->domain.getDistribution(),
                    current_reactor_state->liquidVolume,
                    current_reactor_state->gasVolume);
+
+  transitioner.reset();
 }

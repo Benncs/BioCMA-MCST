@@ -1,21 +1,26 @@
 #include "cma_read/light_2d_view.hpp"
-#include "common/thread_safe_container.hpp"
+#include "mc/container_state.hpp"
+#include "mc/events.hpp"
 #include "mc/particles/particles_list.hpp"
 #include "mc/prng/prng.hpp"
 #include "models/types.hpp"
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Core_fwd.hpp>
+#include <Kokkos_Macros.hpp>
 #include <algorithm>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
+#include <impl/Kokkos_HostThreadTeam.hpp>
 #include <mc/domain.hpp>
 #include <mc/particles/mcparticles.hpp>
 #include <mc/thread_private_data.hpp>
 #include <mc/unit.hpp>
 
+#include <Kokkos_DynamicView.hpp>
 #include <Kokkos_Random.hpp>
 #include <memory>
-#include <random>
 #include <scalar_simulation.hpp>
 #include <simulation/simulation.hpp>
 #include <stdexcept>
@@ -29,6 +34,9 @@
 #endif
 
 #include <utility>
+
+#include <kernel.hpp>
+constexpr int random_seed = 12345;
 
 namespace Simulation
 {
@@ -51,17 +59,6 @@ namespace Simulation
     gas(1, i) = 15e-3 * 1e5 / (8.314 * (273.15 + 30)) * 0.2;
   }
 
-  void big_kernel(size_t current_i_particle,
-                  double d_t,
-                  MC::ReactorDomain &domain,
-                  MC::EventContainer &events,
-                  Eigen::MatrixXd &thread_contrib,
-                  MC::ThreadPrivateData &thread_extra,
-                  const KModel &_kmodel,
-                  MC::Particles &particle,
-                  const auto &diag,
-                  auto &cumulative_probability);
-
   SimulationUnit::SimulationUnit(SimulationUnit &&other) noexcept
       : mc_unit(std::move(other.mc_unit)),
         is_two_phase_flow(other.is_two_phase_flow), n_thread(other.n_thread),
@@ -82,11 +79,6 @@ namespace Simulation
         flow_gas(nullptr), kmodel(std::move(_km))
   {
 
-    if (this->mc_unit->extras.empty())
-    {
-      throw std::runtime_error("Extra particle not initialised");
-    }
-
     this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(
         makeScalarSimulation(mc_unit->domain.getNumberCompartments(),
                              n_species,
@@ -104,6 +96,14 @@ namespace Simulation
 
     post_init_concentration();
     post_init_compartments();
+
+    domain_view = Kokkos::View<MC::ContainerState *, Kokkos::LayoutRight>(
+        mc_unit->domain.data().data(), mc_unit->domain.getNumberCompartments());
+
+    Kokkos::Random_XorShift1024_Pool<> random_pool(random_seed);
+
+    _kernel = std::unique_ptr<Kernel, pimpl_deleter_>(
+        new Kernel(kmodel, random_pool, domain_view));
   }
 
   void SimulationUnit::setVolumes(std::span<const double> volumesgas,
@@ -172,124 +172,55 @@ namespace Simulation
 
   void SimulationUnit::cycleProcess(const double d_t)
   {
-    Kokkos::Random_XorShift1024_Pool<> random_pool(12345);
 
-    auto view_cumulative_probability = this->flow_liquid->get_view_cum_prob();
-
-    auto diag = this->flow_liquid->get_diag_transition();
-    auto &domain = mc_unit->domain;
-
-    
-    auto to_process = this->mc_unit->container.to_process.data_span();
-
-    auto lambda = [diag,
-                   &to_process,
-                   random_pool,
-                   d_t,
-                   view_cumulative_probability,
-                   &domain](auto &&i_particle)
+    const auto get_view_neighbor = [&]()
     {
-      MC::Particles &particle = to_process[i_particle];
-      auto generator = random_pool.get_state();
-      const double random_number_1 = generator.drand(0., 1.);
-      const double random_number_2 = generator.drand(0., 1.);
+      const auto view_neighbors = this->mc_unit->domain.getNeighbors();
 
-      random_pool.free_state(generator);
+      const Kokkos::LayoutStride layout(view_neighbors.getNRow(),
+                                        view_neighbors.getNCol(),
+                                        view_neighbors.getNCol(),
+                                        1);
 
-      kernel_move(random_number_1,
-                  random_number_2,
-                  domain,
-                  particle,
-                  d_t,
-                  diag,
-                  view_cumulative_probability);
+      return Kokkos::View<const size_t **, Kokkos::LayoutStride>(
+          this->mc_unit->domain.getNeighbors().data().data(), layout);
     };
 
-    Kokkos::parallel_for("ProcessParticles", to_process.size(), lambda);
- 
+    const auto view_cumulative_probability =
+        this->flow_liquid->get_view_cum_prob();
 
-    post_process_reducing();
+    const auto diag = this->flow_liquid->get_diag_transition();
+
+    const auto to_process = this->mc_unit->container.to_process.data_span();
+
+    const auto neighbors_view = get_view_neighbor();
+
+    const Kokkos::RangePolicy<> range(0, to_process.size());
+
+    _kernel->update(to_process,
+                    d_t,
+                    diag,
+                    view_cumulative_probability,
+                    neighbors_view,
+                    liquid_scalar->k_contribs);
+
+    Kokkos::parallel_reduce("ProcessParticles", range, *_kernel, thread_r);
+
+    Kokkos::fence();
+
+    mc_unit->events.inplace_reduce(thread_r.events);
+    mc_unit->container.merge(thread_r);
   }
-
-  void big_kernel(size_t current_i_particle,
-                  double d_t,
-                  MC::ReactorDomain &domain,
-                  MC::EventContainer &events,
-                  Eigen::MatrixXd &thread_contrib,
-                  MC::ThreadPrivateData &thread_extra,
-                  const KModel &_kmodel,
-                  MC::Particles &particle,
-                  const auto &diag,
-                  auto &cumulative_probability)
-  {
-
-    auto &status = particle.status;
-    if (status == MC::CellStatus::DEAD)
-    {
-      return;
-    }
-
-    auto &rng = thread_extra.rng;
-    const double random_number_1 = rng.double_unfiform();
-    const double random_number_2 = rng.double_unfiform();
-    const double random_number_3 = rng.double_unfiform();
-
-    const auto register_spawned_particle = [&](MC::Particles &&p)
-    {
-      _kmodel.contribution_kernel(p, thread_contrib);
-      __ATOM_INCR__(domain[p.current_container].n_cells)
-
-      thread_extra.extra_process.emplace_back(std::move(p));
-    };
-
-    const auto handle_particle_removal = [&](MC::Particles &p)
-    {
-      __ATOM_DECR__(domain[p.current_container].n_cells) // TODO: check overflow
-      p.clearState(MC::CellStatus::DEAD);
-      thread_extra.index_in_dead_state.emplace_back(current_i_particle);
-    };
-
-    kernel_move(random_number_1,
-                random_number_2,
-                domain,
-                particle,
-                d_t,
-                diag,
-                cumulative_probability);
-
-    kernel_exit(d_t, random_number_3, domain, particle);
-
-    if (status == MC::CellStatus::OUT)
-    {
-
-      events.incr<MC::EventType::Exit>();
-      handle_particle_removal(particle);
-      return;
-    }
-
-    _kmodel.update_kernel(
-        d_t, particle, domain[particle.current_container].concentrations);
-
-    if (status == MC::CellStatus::DEAD)
-    {
-      events.incr<MC::EventType::Death>();
-      handle_particle_removal(particle);
-      return;
-    }
-
-    if (status == MC::CellStatus::CYTOKINESIS)
-    {
-      events.incr<MC::EventType::NewParticle>();
-      status = MC::CellStatus::IDLE;
-      register_spawned_particle(_kmodel.division_kernel(particle));
-    }
-
-    _kmodel.contribution_kernel(particle, thread_contrib);
-  };
 
   void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation *ptr) const
   {
     delete ptr;
   }
 
+  void SimulationUnit::pimpl_deleter_::operator()(Kernel *ptr) const
+  {
+    delete ptr;
+  }
+
 } // namespace Simulation
+

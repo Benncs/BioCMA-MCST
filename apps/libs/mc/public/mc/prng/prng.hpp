@@ -1,6 +1,7 @@
 #ifndef __MC_PRNG_HPP__
 #define __MC_PRNG_HPP__
 
+#include <Kokkos_Random.hpp>
 #include <cstdint>
 #include <mc/prng/distribution.hpp>
 #include <random>
@@ -15,29 +16,70 @@ inline unsigned LCGStep(unsigned &z, unsigned A, unsigned C)
 {
   return z = (A * z + C);
 }
+
 namespace MC
 {
-
   static constexpr size_t MC_RAND_DEFAULT_SEED = 10;
+  class KPRNG
+  {
+  public:
+    static KPRNG &getInstance()
+    {
+      static KPRNG instance;
+      return instance;
+    }
+
+    inline double double_unfiform()
+    {
+      return step();
+    }
+
+    inline float step()
+    {
+
+      return 2.3283064365387e-10 *
+             (                                            
+                 tau_step(z1, 13, 19, 12, 4294967294UL) ^ 
+                 tau_step(z2, 2, 25, 4, 4294967288UL) ^   
+                 tau_step(z3, 3, 11, 17, 4294967280UL) ^  
+                 LCGStep(z4, 1664525, 1013904223UL)      
+             );
+    }
+
+    KPRNG(const KPRNG &) = delete;
+    KPRNG &operator=(const KPRNG &) = delete;
+
+  private:
+    KPRNG() = default;
+
+    unsigned z2 = std::random_device{}();
+    unsigned z3 = 25;
+    unsigned z4 = 81;
+    unsigned z1 = 0;
+  };
+
   class PRNG
   {
   public:
     explicit PRNG()
     {
-      auto seed = std::random_device{}();
-      gen = std::mt19937(seed);
+    }
+
+    ~PRNG()
+    {
+      // delete gen;
     }
 
     explicit PRNG(uint64_t seed)
     {
-      gen = std::mt19937(seed);
+      // gen = new std::mt19937(seed);
     }
 
     double uniform_double_rand(double min, double max)
     {
       double rn = 0;
       std::uniform_real_distribution<double> double_distribution(min, max);
-      rn = double_distribution(gen);
+      // rn = double_distribution(gen);
       return rn;
     }
 
@@ -60,10 +102,10 @@ namespace MC
              );
     }
 
-    auto &rng()
-    {
-      return gen;
-    };
+    // auto &rng()
+    // {
+    //   return *gen;
+    // };
 
     static inline auto get_rng(uint64_t seed = MC_RAND_DEFAULT_SEED)
     {
@@ -75,10 +117,12 @@ namespace MC
     unsigned z2 = std::random_device{}();
     unsigned z3 = 25;
     unsigned z4 = 81;
-    std::mt19937 gen;
     unsigned z1 = 0;
-    std::uniform_real_distribution<double> _uniform_double =
-        std::uniform_real_distribution<double>(0., 1.);
+
+    // std::mt19937* gen=nullptr;
+
+    // std::uniform_real_distribution<double> _uniform_double =
+    //     std::uniform_real_distribution<double>(0., 1.);
   };
 
 } // namespace MC

@@ -1,4 +1,4 @@
-BasedOnStyle: LLVM
+BasedOnStyle: llvm
 BreakBeforeBraces: Allman
 BraceWrapping:
   AfterFunction: true

@@ -16,8 +16,6 @@ MC::EventContainer::reduce_local(std::span<MC::EventContainer> _data)
   return results;
 }
 
-#include <iostream>
-
 MC::EventContainer MC::EventContainer::reduce(std::span<size_t> _data)
 {
   EventContainer results;

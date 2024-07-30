@@ -1,13 +1,13 @@
-#include <cma_read/neighbors.hpp>
 #include "mc/container_state.hpp"
 #include <algorithm>
+#include <cma_read/neighbors.hpp>
 #include <cstddef>
 #include <iterator>
 #include <mc/domain.hpp>
 #include <ranges>
 #include <stdexcept>
 
-//TODO REMOVE
+// TODO REMOVE
 #include <iostream>
 
 namespace MC
@@ -34,16 +34,17 @@ namespace MC
       this->_total_volume += volumesliq[i_c];
     }
   }
-  ReactorDomain::ReactorDomain(std::span<double> volumes,
-                               const CmaRead::Neighbors::Neighbors_const_view_t& _neighbors)
-      :  neighbors(_neighbors)
+  ReactorDomain::ReactorDomain(
+      std::span<double> volumes,
+      const CmaRead::Neighbors::Neighbors_const_view_t &_neighbors)
+      : neighbors(_neighbors)
   {
 
     row_neighbors.resize(volumes.size());
 
-    for(size_t i =0;i<row_neighbors.size();++i)
+    for (size_t i = 0; i < row_neighbors.size(); ++i)
     {
-      row_neighbors[i]=neighbors.getRow(i);
+      row_neighbors[i] = neighbors.getRow(i);
     }
 
     double totv = 0.;
@@ -60,6 +61,9 @@ namespace MC
                    });
 
     this->_total_volume = totv;
+
+    view = Kokkos::View<MC::ContainerState *, Kokkos::LayoutRight>(
+        this->data().data(), this->getNumberCompartments());
   }
 
   ReactorDomain &ReactorDomain::operator=(ReactorDomain &&other) noexcept
@@ -96,7 +100,7 @@ namespace MC
     {
       throw std::runtime_error("Cannot reduce different reactor type");
     }
-    
+
     for (size_t i_rank = 0; i_rank < n_rank; ++i_rank)
     {
       for (size_t i_c = 0; i_c < original_size; ++i_c)
