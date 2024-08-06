@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <mc/prng/distribution.hpp>
 #include <random>
+#include <type_traits>
 
 inline unsigned tau_step(unsigned &z, int S1, int S2, int S3, unsigned M)
 {
@@ -23,39 +24,44 @@ namespace MC
   class KPRNG
   {
   public:
-    static KPRNG &getInstance()
+    KPRNG()
     {
-      static KPRNG instance;
-      return instance;
+      random_pool = Kokkos::Random_XorShift64_Pool<>(std::random_device{}());
+    };
+
+    [[nodiscard]] inline double double_unfiform() const
+    {
+      auto generator = random_pool.get_state();
+      double x = generator.drand(0., 1.);
+      random_pool.free_state(generator);
+      return x;
     }
 
-    inline double double_unfiform()
+    inline double double_unfiform(double a, double b)
     {
-      return step();
+      auto generator = random_pool.get_state();
+      double x = generator.drand(a, b);
+      random_pool.free_state(generator);
+      return x;
     }
 
-    inline float step()
+    inline uint64_t uniform_u(uint64_t a, uint64_t b)
     {
-
-      return 2.3283064365387e-10 *
-             (                                            
-                 tau_step(z1, 13, 19, 12, 4294967294UL) ^ 
-                 tau_step(z2, 2, 25, 4, 4294967288UL) ^   
-                 tau_step(z3, 3, 11, 17, 4294967280UL) ^  
-                 LCGStep(z4, 1664525, 1013904223UL)      
-             );
+ 
+      auto generator = random_pool.get_state();
+      uint64_t x = generator.urand64(a, b);
+      random_pool.free_state(generator);
+      return x;
     }
 
-    KPRNG(const KPRNG &) = delete;
+    ~KPRNG() = default;
+    KPRNG(const KPRNG &) = default;
+    KPRNG(KPRNG &&) = delete;
     KPRNG &operator=(const KPRNG &) = delete;
+    KPRNG &operator=(KPRNG &&) = delete;
 
   private:
-    KPRNG() = default;
-
-    unsigned z2 = std::random_device{}();
-    unsigned z3 = 25;
-    unsigned z4 = 81;
-    unsigned z1 = 0;
+    Kokkos::Random_XorShift64_Pool<> random_pool;
   };
 
   class PRNG

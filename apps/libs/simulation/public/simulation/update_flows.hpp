@@ -8,7 +8,6 @@
 #include <cstddef>
 #include <iomanip>
 #include <memory>
-#include <simulation/basic_cache_hydro.hpp>
 #include <simulation/simulation.hpp>
 
 namespace Simulation

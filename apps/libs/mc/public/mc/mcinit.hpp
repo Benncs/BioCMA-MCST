@@ -3,9 +3,9 @@
 
 #include <common/common_types.hpp>
 #include <common/execinfo.hpp>
-#include <mc/unit.hpp>
 #include <common/thread_safe_container.hpp>
 #include <mc/particles/particles_container.hpp>
+#include <mc/unit.hpp>
 #include <memory>
 
 namespace MC
@@ -18,14 +18,13 @@ namespace MC
        CmaRead::Neighbors::Neighbors_const_view_t &neighbors);
 
   std::unique_ptr<MonteCarloUnit>
-  init(std::function<void(MC::Particles &)> init_kernel,const ExecInfo &info,
+  init(std::function<void(MC::Particles &)> init_kernel,
+       const ExecInfo &info,
        size_t n_particles,
        std::span<double> volumes,
        CmaRead::Neighbors::Neighbors_const_view_t &neighbors,
-       DistributionVariantInt &&param);
-
-
-
+       DistributionVariantInt &&param,
+       double x0);
 
   // std::unique_ptr<ParticlesContainer> init_container(ExecInfo &info,
   //                                                    size_t n_particles);

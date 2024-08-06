@@ -8,28 +8,25 @@
 #include <simulation/update_flows.hpp>
 #include <stdexcept>
 #include <transport.hpp>
+#include <get_cumulative_proba.hpp>
 
 double linter(double a, double b, double t)
 {
   return (1 - t) * a + t * b;
 }
 
-
-
-
-
 namespace Simulation
 {
 
-  static void compute_MatFlow(const CmaRead::FlowMap::FlowMap_const_view_t &flows_view,
-                              Simulation::PreCalculatedHydroState &matflow)
+  static void
+  compute_MatFlow(const CmaRead::FlowMap::FlowMap_const_view_t &flows_view,
+                  Simulation::PreCalculatedHydroState &matflow)
   {
     const auto _mat_transition_liq =
         Simulation::get_transition_matrix(flows_view);
     matflow.transition_matrix = _mat_transition_liq;
 
     matflow.diag_transition = get_diag_transition(matflow.transition_matrix);
-
   }
 
   static std::vector<double>
@@ -84,18 +81,19 @@ namespace Simulation
       break;
     }
     }
-  } 
+  }
 
-  void linter_eigen(const PreCalculatedHydroState& current,const PreCalculatedHydroState& next,PreCalculatedHydroState& interpolated,double t)
+  void linter_eigen(const PreCalculatedHydroState &current,
+                    const PreCalculatedHydroState &next,
+                    PreCalculatedHydroState &interpolated,
+                    double t)
   {
     interpolated.cumulative_probability =
         (1 - t) * current.cumulative_probability +
         t * next.cumulative_probability;
 
-
     interpolated.transition_matrix =
-        (1.0 - t) * current.transition_matrix +
-        t * next.transition_matrix;
+        (1.0 - t) * current.transition_matrix + t * next.transition_matrix;
   }
 
   void FlowMapTransitioner::linear_interpolation_transition()
@@ -107,20 +105,19 @@ namespace Simulation
     auto &current_l_state = this->liquid_pc[current_index];
     auto &next_l_state = this->liquid_pc[next_index];
 
-    linter_eigen(current_l_state,next_l_state,interpolated_state.liquid_pc,t);
-
+    linter_eigen(
+        current_l_state, next_l_state, interpolated_state.liquid_pc, t);
 
     if (two_phase_flow)
     {
       auto &current_g_state = this->gas_pc[current_index];
       auto &next_g_state = this->gas_pc[next_index];
 
-      linter_eigen(current_g_state,next_g_state,interpolated_state.gas_pc,t);
-
+      linter_eigen(current_g_state, next_g_state, interpolated_state.gas_pc, t);
     }
 
     auto n_compartment = current_state->n_compartments;
-    //TODO CHECK move assigment 
+    // TODO CHECK move assigment
     interpolated_state.state.liquid_flow = current_state->liquid_flow;
     const auto *current_r = &get_unchecked(current_index);
     const auto *next_r = &get_unchecked(next_index);
@@ -278,7 +275,7 @@ namespace Simulation
   {
     compute_MatFlow(mat_f_liq_view, *liq_hydro_state);
     liq_hydro_state->cumulative_probability =
-        get_CP(unit.mc_unit->domain.getNeighbors(),
+        get_cumulative_probabilities(unit.mc_unit->domain.getNeighbors(),
                liq_hydro_state->transition_matrix);
   }
   // ok dont modify

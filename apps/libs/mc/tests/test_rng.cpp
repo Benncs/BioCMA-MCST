@@ -1,8 +1,12 @@
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Macros.hpp>
+#include <chrono>
 #include <execution>
+#include <impl/Kokkos_HostThreadTeam.hpp>
 #include <mc/prng/prng.hpp>
 #include <omp.h>
 #include <random>
-#include <chrono> 
+#include <traits/Kokkos_IterationPatternTrait.hpp>
 void calculate_correlation(const std::vector<double> &samples, size_t n_sample)
 {
   // Test de corrélation
@@ -89,7 +93,6 @@ void check(std::vector<double> &theoretical,
 
 void fast_uniform_batch()
 {
-  MC::PRNG rng;
   constexpr size_t n_sample = 10'000;
   std::vector<double> samples(n_sample);
   std::vector<double> theoretical(n_sample);
@@ -97,7 +100,7 @@ void fast_uniform_batch()
 
   std::mt19937 seed(std::random_device{}());
   std::uniform_real_distribution<> dist(0.0, 1.0);
-
+  MC::KPRNG rng;
   for (size_t i = 0; i < n_sample; ++i)
   {
     samples[i] = rng.double_unfiform();
@@ -115,7 +118,6 @@ void fast_uniform_batch()
 
 void long_uniform_batch()
 {
-  // MC::PRNG rng;
   constexpr size_t n_sample = 100'000'000;
   std::vector<double> samples(n_sample);
   std::vector<double> theoretical(n_sample);
@@ -124,13 +126,12 @@ void long_uniform_batch()
   std::mt19937 seed(std::random_device{}());
   std::uniform_real_distribution<> dist(0.0, 1.0);
 
-  std::vector<MC::PRNG> rng(omp_get_max_threads());
+  MC::KPRNG rng;
 
-#pragma omp parallel for
   for (size_t i = 0; i < n_sample; ++i)
   {
-    samples[i] = rng[omp_get_thread_num()].double_unfiform();
-    theoretical[i] = static_cast<double>(i) / n_sample; // dist(seed);
+    samples[i] = rng.double_unfiform();
+    theoretical[i] = static_cast<double>(i) / n_sample;
     std_sample[i] = dist(seed);
   }
 
@@ -146,7 +147,7 @@ void bench()
 {
   std::cout << "BENCH SERIAL:" << std::endl;
 
-  MC::PRNG rng;
+  MC::KPRNG rng;
   constexpr size_t n_sample = 100'000'000;
 
   std::mt19937 seed(std::random_device{}());
@@ -167,7 +168,8 @@ void bench()
     std::cout << "MC:PRNG duration: " << duration.count() << " milliseconds"
               << std::endl;
 
-    std::cout << "MC::PRNG duration per sample " << static_cast<double>(duration.count())  / n_sample
+    std::cout << "MC::PRNG duration per sample "
+              << static_cast<double>(duration.count()) / n_sample
               << " milliseconds" << std::endl;
   }
 
@@ -186,17 +188,43 @@ void bench()
     std::cout << "STD duration: " << duration.count() << " milliseconds"
               << std::endl;
 
-    std::cout << "STD duration per sample " << static_cast<double>(duration.count()) / n_sample
+    std::cout << "STD duration per sample "
+              << static_cast<double>(duration.count()) / n_sample
               << " milliseconds" << std::endl;
+  }
+
+  std::cout << "BENCH PARALLEL:" << std::endl;
+
+  {
+    Kokkos::Timer timer;
+    double time1 = timer.seconds();
+    timer.reset();
+
+    Kokkos::View<double *> view("sample", n_sample);
+
+    Kokkos::parallel_for(
+        n_sample, KOKKOS_LAMBDA(auto &&i) { view[i] = rng.double_unfiform(); });
+    Kokkos::fence();
+    double time2 = timer.seconds();
+    double duration = time2 - time1;
+    std::cout << "MC:PRNG duration: " << duration << " milliseconds"
+              << std::endl;
+
+    std::cout << "MC::PRNG duration per sample "
+              << static_cast<double>(duration) / n_sample << " milliseconds"
+              << std::endl;
   }
 }
 
 int main()
 {
+  Kokkos::initialize();
+
   fast_uniform_batch();
 
   std::cout << "----LONG----" << std::endl;
   long_uniform_batch();
 
   bench();
+  Kokkos::finalize();
 }

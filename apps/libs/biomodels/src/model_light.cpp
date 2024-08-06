@@ -7,14 +7,16 @@
 // standard deviation affects the dispersion of generated values from the mean
 static double avg_mass = 1e-13;
 static double max_mass = 1e-11;
+
+
 void init_light_model_(MC::Particles &p)
 {
   std::random_device rd{};
   std::mt19937 gen{rd()};
   static double n_part = p.weight;
-  static constexpr double total_volume  = 90./1000.; //TODO FIXME 
-  static constexpr  double X_goal = 0.5;
-  p.weight = (X_goal*total_volume/(n_part*avg_mass));
+  static constexpr double total_volume = 90. / 1000.; // TODO FIXME
+  static constexpr double X_goal = 0.5;
+  p.weight = (X_goal * total_volume / (n_part * avg_mass));
 
   static auto d = std::normal_distribution<>(avg_mass, avg_mass / 10.);
 
@@ -37,10 +39,9 @@ MC::Particles division_light_model(MC::Particles &p)
 
 void contribution_light_model(MC::Particles &p, Eigen::MatrixXd &contribution)
 {
-    int ic = static_cast<int>(p.current_container);
-    
-    
-    // contribution(0,0) -= (1e-5);
+  int ic = static_cast<int>(p.current_container);
+
+  // contribution(0,0) -= (1e-5);
 }
 
 KModel get_model_light()

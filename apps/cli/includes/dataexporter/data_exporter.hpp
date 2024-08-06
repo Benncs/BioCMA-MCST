@@ -4,8 +4,6 @@
 #include "mc/events.hpp"
 #include <cmt_common/macro_constructor_assignment.hpp>
 #include <common/common.hpp>
-#include <map>
-#include <memory>
 #include <simulation/simulation.hpp>
 #include <string_view>
 #include <unordered_map>
@@ -45,23 +43,7 @@ public:
       const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
   };
 
-  virtual void *start_model_dataset()
-  {
-    return nullptr;
-  };
-
-  virtual void init_fill_model_dataset(void *fptr,std::string_view key, size_t expected_size)
-  {
-    
-  };
-
-  virtual void fill_model_dataset(uint64_t counter,
-                                    void *fptr,
-                                    std::string_view key,
-                                    double value) {};
-
-  virtual void stop_fill_model_dataset(void* fptr){};
-
+ 
   virtual void append(double t /*unused*/,
                       std::span<double> /*unused*/,
                       const std::vector<size_t> & /*unused*/,

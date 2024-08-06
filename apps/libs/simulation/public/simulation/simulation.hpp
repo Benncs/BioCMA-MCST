@@ -4,12 +4,11 @@
 #include <Kokkos_Core.hpp>
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
-#include <mc/particles/particles_container.hpp>
 #include <mc/unit.hpp>
 #include <memory>
 #include <models/types.hpp>
 
-class Kernel;
+struct Kernel;
 
 namespace Simulation
 {
@@ -76,16 +75,16 @@ namespace Simulation
 
     void reset()
     {
-        liquid_scalar.reset();
-        gas_scalar.reset();
-        flow_liquid = nullptr;
-        flow_gas = nullptr;
-        _kernel.reset();
+      liquid_scalar.reset();
+      gas_scalar.reset();
+      flow_liquid = nullptr;
+      flow_gas = nullptr;
+      _kernel.reset();
     }
 
   private:
     Kokkos::View<MC::ContainerState *, Kokkos::LayoutRight> domain_view;
-    MC::Results thread_r;
+    MC::Results kernel_results;
     struct pimpl_deleter
     {
       void operator()(ScalarSimulation *) const;
@@ -110,6 +109,7 @@ namespace Simulation
     PreCalculatedHydroState *flow_gas;    // TODO OPTI
 
     KModel kmodel;
+
     std::unique_ptr<Kernel, pimpl_deleter_> _kernel;
     pimp_ptr_t liquid_scalar;
     pimp_ptr_t gas_scalar;
@@ -135,8 +135,6 @@ namespace Simulation
   {
     mc_unit.reset();
   }
-
- 
 
 } // namespace Simulation
 

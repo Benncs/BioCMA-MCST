@@ -10,7 +10,6 @@ namespace monod
 {
 
   constexpr bool implicit = true;
-
   static std::random_device rd{};
   static std::mt19937 gen{rd()};
   static std::normal_distribution<double> n_dist(1, 0.1);
@@ -38,27 +37,24 @@ namespace monod
     static constexpr double maximal_length = 18e-6;
     static constexpr double tau_metabolism = 1.25 / mu_max;
     static constexpr double KS = 0.01;
-
-   
+    static MC::KPRNG rng;
   };
 
   void init_monod_model_(MC::Particles &p)
   {
-    // auto model = MonodSimple();
-    // std::cout<<sizeof(MonodSimple)<<std::endl;
 
-    
     p.data = MonodSimple();
     auto &model = std::any_cast<MonodSimple &>(p.data);
     model.contrib.setZero();
-    auto rd_length = (1 + n_dist(gen)) * MonodSimple::minimal_length;
 
-    model.xi[XI_N::lenght] =
-        std::max(MonodSimple::minimal_length,
-                 std::min(rd_length, MonodSimple::maximal_length));
+    model.xi[XI_N::lenght] = p.rng->double_unfiform(
+        MonodSimple::minimal_length, MonodSimple::maximal_length);
 
-    model.xi[XI_N::mu_eff] =
-        MonodSimple::mu_max / 100. * (1. - MC::KPRNG::getInstance().double_unfiform());
+    // model.xi[XI_N::mu_eff] =
+    //     MonodSimple::mu_max * (1. - p.rng->double_unfiform());
+
+    model.xi[XI_N::mu_eff]  = p.rng->double_unfiform(
+        1e-8, 0.90*MonodSimple::mu_max);
   }
 
   inline double division_gamma(const auto &xi)
@@ -76,9 +72,11 @@ namespace monod
 
   inline void u_xi_dot(double mu_p, double S, const xi_t &xi, xi_t &xi_dot)
   {
-    const auto tau_metabolism = 1.25 / xi[XI_N::mu_eff];
+    constexpr double cell_lenghtening = 6.51e-6;
+    const auto tau_metabolism = 3600;//1.25 / MonodSimple::mu_max;
+    // std::cout<<(mu_p - xi[XI_N::mu_eff])<<std::endl;
     xi_dot = {
-        MonodSimple::YXS * mu_p,
+        MonodSimple::YXS *  xi[XI_N::mu_eff] * cell_lenghtening,
         (1.0 / tau_metabolism) * (mu_p - xi[XI_N::mu_eff]),
     };
   }
@@ -86,6 +84,7 @@ namespace monod
   void f(double s, const xi_t &xi, xi_t &xi_dot)
   {
     const double mu_p = xi[XI_N::mu_eff] * s / (MonodSimple::KS + s);
+    
 
     u_xi_dot(mu_p, s, xi, xi_dot);
   }
@@ -120,7 +119,7 @@ namespace monod
 
     auto proba_div = (1. - std::exp(-division_gamma(xi) * d_t));
 
-    if (MC::KPRNG::getInstance().double_unfiform() < proba_div)
+    if (p.rng->double_unfiform() < proba_div)
     {
       p.status = MC::CellStatus::CYTOKINESIS;
     }
@@ -130,11 +129,10 @@ namespace monod
   {
 
     auto &parent_model = std::any_cast<MonodSimple &>(p.data);
-    const double div_length = MC::KPRNG::getInstance().double_unfiform();
+    const double div_length = p.rng->double_unfiform();
 
     const auto current_length = parent_model.xi[XI_N::lenght];
 
-    p.status = MC::CellStatus::IDLE;
     MC::Particles child(p);
 
     auto child_model = MonodSimple(parent_model);
@@ -143,13 +141,10 @@ namespace monod
     parent_model.xi[XI_N::lenght] = div_length * current_length;
     child_model.xi[XI_N::lenght] = (1 - div_length) * current_length;
 
-    parent_model.xi[XI_N::lenght] = current_length / 2.;
-    child_model.xi[XI_N::lenght] = current_length / 2.;
     child.status = MC::CellStatus::IDLE;
+    p.status = MC::CellStatus::IDLE;
 
     child.data.emplace<MonodSimple>(child_model);
-
-    
 
     return child;
 

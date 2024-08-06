@@ -1,8 +1,31 @@
+from typing import List
+from matplotlib import pyplot as plt
 import numpy as np
 from typing import Optional, Tuple
 import cmtool.vtk
-from .read_results import RawResults
+from .read_results import RawResults, import_results
 
+def check_mixing(
+    name_results, pathres: List[str], dest: str, vtk_cma_mesh_path: Optional[str] = None
+):
+    for i in range(len(pathres)):
+        results = import_results(pathres[i])
+        (
+            normalized_scalar_concentration,
+            norm_c_var,
+            normalized_particle_concentration,
+            norm_par_var,
+            t,
+        ) = process_norm(name_results[i], results, vtk_cma_mesh_path)
+        plt.scatter(t, norm_par_var, label=name_results[i])
+        plt.semilogy(t, norm_c_var, label=f"liquid_{name_results[i]}")
+
+    plt.legend()
+    plt.title("Segregation index as a function of the time")
+    plt.ylabel(r"\[ \frac{\sigma(t)}{\sigma(t_{0})}\]")
+    plt.xlabel("time [s]")
+    for i in dest:
+        plt.savefig(f"{i}/mixing_variance.svg", dpi=1500)
 
 def norm_concentration(
     raw_concentration: np.ndarray, volumes: np.ndarray
@@ -64,3 +87,13 @@ def average_concentration(results: RawResults):
 
     c_avg = np.sum(concentration_record * full_volume,axis=1) / np.sum(full_volume, axis=1)
     return c_avg
+
+
+def time_average_reaction_rate(duration:float,time_evolution_data:np.ndarray,time_evolution_volume):
+    def mass_func(i, x, v):
+        return np.sum(x[i, :] * v[i, :])
+    
+    # gram version x1000
+    m_init = mass_func(0,time_evolution_data,time_evolution_volume)*1e3 
+    m_end = mass_func(-1,time_evolution_data,time_evolution_volume)*1e3 
+    return (m_end-m_init)/duration,m_init,m_end

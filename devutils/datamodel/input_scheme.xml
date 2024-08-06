@@ -31,13 +31,13 @@
    </control>
 
    <control name="test">
-      <cma_case_path recursive="true">./cma_data/bench/</cma_case_path>
-      <!-- <cma_case_path>./cma_data/0d/</cma_case_path> -->
-      <final_time>0.5</final_time>
-      <numper_particle>50000</numper_particle>
-      <delta_time>0.1</delta_time>
-      <results_file_name>test</results_file_name>
-      <number_exported_result>0</number_exported_result>
+      <!-- <cma_case_path recursive="true">./cma_data/bench/</cma_case_path> -->
+      <cma_case_path>./cma_data/0d/</cma_case_path>
+      <final_time>10000</final_time>
+      <numper_particle>100</numper_particle>
+      <delta_time>0.01</delta_time>
+      <results_file_name>test_3</results_file_name>
+      <number_exported_result>720</number_exported_result>
       <model_name>model_monod</model_name>
    </control>
 
@@ -48,7 +48,7 @@
       <delta_time>1e-3</delta_time>
       <results_file_name>bench_14</results_file_name>
       <number_exported_result>0</number_exported_result>
-      <model_name>model_light</model_name>
+      <model_name>model_monod</model_name>
    </control>
 
    <control name="bench_0d">

@@ -19,8 +19,8 @@ public:
                      size_t niter,
                      std::span<size_t> distribution);
 
-  SET_NON_COPYABLE(DataExportHighFive);
-  SET_NON_MOVABLE(DataExportHighFive);
+  SET_NON_COPYABLE(DataExportHighFive)
+  SET_NON_MOVABLE(DataExportHighFive)
 
   ~DataExportHighFive()
   {
@@ -43,16 +43,7 @@ public:
       const std::unordered_map<std::string, std::vector<double>> & /*unused*/)
       override;
 
-  void *start_model_dataset() override;
- 
 
-  void init_fill_model_dataset(void *fptr,std::string_view key, size_t expected_size) override;
-  
-
-  void
-  fill_model_dataset(uint64_t counter,void *fptr, std::string_view key, double value) override;
-
-  void stop_fill_model_dataset(void* fptr)override;
 
 protected:
   void write_final_results(ExportData &data,

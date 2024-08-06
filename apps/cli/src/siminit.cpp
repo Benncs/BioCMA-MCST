@@ -83,15 +83,18 @@ init_simulation(const ExecInfo &info,
   }
   liquid_neighbors.set_row_major();
 
-  MC::UniformLawINT law_param = {0, static_cast<int>(params.n_compartments-1)}; 
+  MC::UniformLawINT law_param = {0,
+                                 static_cast<int>(params.n_compartments - 1)};
 
   // MPI_W::barrier(); //Useless ?
+  constexpr double x0 = 10; // g/l
   auto mc_unit = MC::init(model.init_kernel,
                           info,
                           user_params.numper_particle,
                           liq_volume,
                           liquid_neighbors,
-                          law_param);
+                          law_param,
+                          x0);
 
   bool f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
 

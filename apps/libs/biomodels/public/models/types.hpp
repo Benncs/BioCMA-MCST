@@ -7,9 +7,25 @@
 
 #include <Eigen/Core>
 #include <string>
+#include <type_traits>
 #include <unordered_map>
 #include <variant>
 
+
+//trivial && standard layour -> POD 
+template <typename T, typename DataType>
+concept BioModel = requires(std::is_trivial<T>,
+                            std::is_standard_layout<T>,
+                            T a,
+                            MC::BaseParticle<DataType> &p,
+                            double d_t,
+                            std::span<const double> concentrations,
+                            Eigen::MatrixXd &contributionMatrix) {
+  { a.init(p) } -> std::same_as<void>;
+  { a.update(d_t, p, concentrations) } -> std::same_as<void>;
+  { a.divisionl(p) } -> std::same_as<MC::BaseParticle<DataType>>;
+  { a.contribution(p, contributionMatrix) } -> std::same_as<void>;
+};
 
 #ifdef USE_PYTHON_MODULE
 #  include <functional>
@@ -61,18 +77,6 @@ struct KModel
   ModelDivision division_kernel;
   ModelContribution contribution_kernel;
   ModelGetProperties get_properties = defaut_properties;
-  // #ifdef DEBUG
-  // ModelDebug f_dbg = defaut_dgb;
-  // #endif
 };
-
-// template <ModelParameter M>
-// void update_kernel(double dt,
-//                    std::shared_ptr<M> &model,
-//                    std::span<const double>)
-// {
-
-//   model->step(dt);
-// }
 
 #endif //__MODELS_TYPES_HPP__

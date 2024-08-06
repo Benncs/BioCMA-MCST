@@ -1,8 +1,10 @@
 #include "cma_read/neighbors.hpp"
 #include "mc/particles/particles_list.hpp"
+#include "mc/prng/prng.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Macros.hpp>
 #include <Kokkos_Random.hpp>
+#include <cstddef>
 #include <decl/Kokkos_Declare_OPENMP.hpp>
 #include <mc/mcinit.hpp>
 #include <omp.h>
@@ -10,6 +12,11 @@
 
 namespace MC
 {
+
+  static double get_initial_weight(double scale_factor,
+                                   double particle_concentration,
+                                   double total_volume,
+                                   size_t n_particles);
 
   void
   post_init_container(const std::function<void(MC::Particles &)> &init_kernel,
@@ -25,7 +32,7 @@ namespace MC
        size_t n_particles,
        std::span<double> volumes,
        CmaRead::Neighbors::Neighbors_const_view_t &neighbors,
-       DistributionVariantInt &&param)
+       DistributionVariantInt &&param,double x0)
   {
 
     auto unit = std::make_unique<MonteCarloUnit>();
@@ -39,13 +46,9 @@ namespace MC
       particle_per_process += remainder;
     }
 
-    double x0 = 5;                            // g/l
-    double v = unit->domain.getTotalVolume(); // m3
-    double m_part = 1e-15;
-    // double weight = (x0 * v) / (n_particles); // (x0 * v) / (n_particles *
-    // m_part); // double weight = (x0 *
-    // v)/static_cast<double>(n_particles);//(x0 * v)/n_particles;
-    double weight = 1 / static_cast<double>(n_particles);
+
+    double weight =
+        get_initial_weight(1., x0, unit->domain.getTotalVolume(), n_particles);
 
     unit->container = ParticlesContainer(particle_per_process, weight);
     // unit->extras.resize(info.thread_per_process);
@@ -67,64 +70,43 @@ namespace MC
                       DistributionVariantInt distribution_variant)
   {
 
-    auto distribution = MC::get_distribution_int<size_t>(distribution_variant);
+    // auto distribution =
+    // MC::get_distribution_int<size_t>(distribution_variant);
 
     auto view_particle = p_list.data_span();
     Kokkos::View<MC::ContainerState *, Kokkos::LayoutRight> domain_view(
-        domain.data().data(), domain.getNumberCompartments());
+        domain.data().data(), n_compartment);
 
     const Kokkos::RangePolicy<> range(0, p_list.size());
 
-    auto max_compartment = domain.getNumberCompartments() - 1;
-
-    Kokkos::Random_XorShift1024_Pool<> random_pool(12345);
+    size_t max_compartment = (int)n_compartment;
+    auto rng = std::make_shared<MC::KPRNG>();
 
     Kokkos::parallel_for(
         range, KOKKOS_LAMBDA(auto &&i_p) {
-          auto seed = std::random_device{}();
-          auto gen = std::mt19937(seed);
           auto &&particle = view_particle[i_p];
-          // particle.current_container = distribution(gen);
-          auto generator = random_pool.get_state();
 
-          particle.current_container = generator.urand(0, max_compartment);
+          particle.current_container = rng->uniform_u(
+              0, max_compartment); // CAREFULL Kokkos rng in [0,n[
+          particle.rng = rng;
 
-          random_pool.free_state(generator);
           auto &i_container = domain_view[particle.current_container];
           init_kernel(particle);
           __ATOM_INCR__(i_container.n_cells);
         });
     Kokkos::fence();
+  }
 
-    // std::vector<MC::PRNG> rng(n_thread);
-    // #pragma omp parallel default(none), \
-    // shared(p_list, \
-    //            n_compartment, \
-    //            distribution_variant, \
-    //            domain, \
-    //            init_kernel, \
-    //            rng),                                                       \
-    // num_threads(n_thread)
-    //     {
-    //       auto &prng = rng[omp_get_thread_num()].rng();
-    //       auto distribution =
-    //           MC::get_distribution_int<size_t>(distribution_variant);
-    //       const auto size_p = p_list.size();
-    // #pragma omp for schedule(static)
-    //       for (size_t i_p = 0; i_p < size_p; i_p++)
-    //       {
-
-    //         auto &&particle = p_list[i_p]; //*it;
-    //         particle.current_container = distribution(prng);
-
-    //         auto &i_container = domain[particle.current_container];
-
-    //         init_kernel(particle);
-    //         // __ATOM_INCR__(i_container.n_cells);
-    //         #pragma omp atomic
-    //         i_container.n_cells++;
-    //       }
-    //     }
+  double get_initial_weight(double scale_factor,
+                            double particle_concentration,
+                            double total_volume,
+                            size_t n_particles)
+  {
+    //Scale factor is a fine tunning adjustement in case of misprediction of particle weight
+    //particle_concentration is expected to be the real cell concentration in g/L (kg/m3)
+    //Total volume is expected to be in m3
+    //As a result we can calculate the mass carried by each MC particle 
+    return scale_factor*particle_concentration*total_volume / static_cast<double>(n_particles);
   }
 
 } // namespace MC

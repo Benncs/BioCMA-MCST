@@ -149,6 +149,7 @@ void main_loop(const SimulationParameters &params,
                std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
                std::unique_ptr<DataExporter> &exporter)
 {
+  
   simulation.update_feed(0);
 
   // const size_t n_update_feed = 0; //TODO: move elsewhere
@@ -197,6 +198,7 @@ void main_loop(const SimulationParameters &params,
     MPI_DISPATCH_MAIN;
 
     transitioner->advance(simulation);
+
 
     simulation.cycleProcess(d_t);
     dump_counter++;

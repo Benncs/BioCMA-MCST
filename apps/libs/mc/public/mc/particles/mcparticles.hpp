@@ -3,6 +3,7 @@
 
 #include "cmt_common/macro_constructor_assignment.hpp"
 #include "common/execinfo.hpp"
+#include "mc/prng/prng.hpp"
 #include <any>
 #include <cstddef>
 #include <cstdint>
@@ -37,6 +38,8 @@ namespace MC
       status = _status;
       weight = 0;
 
+
+
       clearData();
     }
 
@@ -52,6 +55,7 @@ namespace MC
     size_t current_domain;
     size_t random_seed;
     uint32_t id;
+    std::shared_ptr<MC::KPRNG> rng;
     MC::CellStatus status;
     double weight;
     T data;

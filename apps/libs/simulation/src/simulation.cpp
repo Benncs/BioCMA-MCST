@@ -1,29 +1,26 @@
-#include "cma_read/light_2d_view.hpp"
-#include "mc/container_state.hpp"
-#include "mc/events.hpp"
-#include "mc/particles/particles_list.hpp"
-#include "mc/prng/prng.hpp"
-#include "models/types.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
+#include <Kokkos_DynamicView.hpp>
 #include <Kokkos_Macros.hpp>
+#include <Kokkos_Random.hpp>
 #include <algorithm>
+#include <cma_read/light_2d_view.hpp>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <impl/Kokkos_HostThreadTeam.hpp>
 #include <mc/domain.hpp>
+#include <mc/events.hpp>
 #include <mc/particles/mcparticles.hpp>
+#include <mc/prng/prng.hpp>
 #include <mc/thread_private_data.hpp>
 #include <mc/unit.hpp>
-
-#include <Kokkos_DynamicView.hpp>
-#include <Kokkos_Random.hpp>
 #include <memory>
+#include <models/types.hpp>
+#include <random>
 #include <scalar_simulation.hpp>
 #include <simulation/simulation.hpp>
-#include <stdexcept>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
 #include <transport.hpp>
 
@@ -36,7 +33,6 @@
 #include <utility>
 
 #include <kernel.hpp>
-constexpr int random_seed = 12345;
 
 namespace Simulation
 {
@@ -46,7 +42,7 @@ namespace Simulation
     if (i == 0)
     {
 
-      liq(0, i) = 1.;
+      liq(0, i) = 0.05;
     }
     else
     {
@@ -100,7 +96,7 @@ namespace Simulation
     domain_view = Kokkos::View<MC::ContainerState *, Kokkos::LayoutRight>(
         mc_unit->domain.data().data(), mc_unit->domain.getNumberCompartments());
 
-    Kokkos::Random_XorShift1024_Pool<> random_pool(random_seed);
+    Kokkos::Random_XorShift1024_Pool<> random_pool(std::random_device{}());
 
     _kernel = std::unique_ptr<Kernel, pimpl_deleter_>(
         new Kernel(kmodel, random_pool, domain_view));
@@ -183,33 +179,28 @@ namespace Simulation
                                         1);
 
       return Kokkos::View<const size_t **, Kokkos::LayoutStride>(
-          this->mc_unit->domain.getNeighbors().data().data(), layout);
+          view_neighbors.data().data(), layout);
     };
 
-    const auto view_cumulative_probability =
-        this->flow_liquid->get_view_cum_prob();
-
-    const auto diag = this->flow_liquid->get_diag_transition();
-
     const auto to_process = this->mc_unit->container.to_process.data_span();
-
-    const auto neighbors_view = get_view_neighbor();
 
     const Kokkos::RangePolicy<> range(0, to_process.size());
 
     _kernel->update(to_process,
                     d_t,
-                    diag,
-                    view_cumulative_probability,
-                    neighbors_view,
+                    this->flow_liquid->get_diag_transition(),
+                    this->flow_liquid->get_view_cum_prob(),
+                    get_view_neighbor(),
                     liquid_scalar->k_contribs);
 
-    Kokkos::parallel_reduce("ProcessParticles", range, *_kernel, thread_r);
+   
+    Kokkos::parallel_reduce(
+        "ProcessParticles", range, *_kernel, kernel_results);
 
     Kokkos::fence();
 
-    mc_unit->events.inplace_reduce(thread_r.events);
-    mc_unit->container.merge(thread_r);
+    mc_unit->events.inplace_reduce(kernel_results.events);
+    mc_unit->container.merge(kernel_results);
   }
 
   void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation *ptr) const
@@ -223,4 +214,3 @@ namespace Simulation
   }
 
 } // namespace Simulation
-

@@ -1,7 +1,6 @@
 #include "common/execinfo.hpp"
 #include "common/simulation_parameters.hpp"
 
-#include <Kokkos_Core.hpp>
 #include <cli_parser.hpp>
 
 #include <common/common.hpp>
@@ -27,7 +26,6 @@
 
 #include <iostream>
 #include <memory>
-#include <stdexcept>
 #include <stream_io.hpp>
 
 #ifdef USE_PYTHON_MODULE
@@ -49,14 +47,13 @@ constexpr bool redirect = false; // TODO REMOVE
 
 static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params);
 
-static void exec(const ExecInfo &exec_info, CaseData &&cased);
+static void exec(CaseData &&cased);
 
 template <typename ExceptionType>
 static int handle_catch(ExceptionType const &e);
 
 int main(int argc, char **argv)
 {
-  
 
   init_environment();
   auto params_opt = parse_cli(argc, argv);
@@ -75,8 +72,8 @@ int main(int argc, char **argv)
 
     REDIRECT_BLOCK(
         {
-          auto case_data = prepare(exec_info, std::move(params));
-          exec(exec_info, std::move(case_data));
+          auto case_data = prepare(exec_info, params);
+          exec(std::move(case_data));
         },
         verbose,
         redirect)
@@ -105,14 +102,16 @@ static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params)
   return {std::move(simulation), params, std::move(transitioner), exec_info};
 }
 
-static void exec(const ExecInfo &exec_info, CaseData &&cased)
+static void exec(CaseData &&case_data)
 {
-  const auto f_run =
-      (cased.exec_info.current_rank == 0) ? &host_process : &workers_process;
+  const auto f_run = (case_data.exec_info.current_rank == 0) ? &host_process
+                                                             : &workers_process;
 
-  auto *sim = cased.simulation.release();
-  f_run(
-      exec_info, std::move(*sim), cased.params, std::move(cased.transitioner));
+  auto *const sim = case_data.simulation.release();
+  f_run(case_data.exec_info,
+        std::move(*sim),
+        case_data.params,
+        std::move(case_data.transitioner));
 }
 
 template <typename ExceptionType>

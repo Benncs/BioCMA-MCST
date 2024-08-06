@@ -170,10 +170,12 @@ namespace PostProcessing
 
         for (const auto &[key, value] : prop)
         {
-          aggregated_values[key][i] = value;
+            aggregated_values[key][i] = value;
 
           if (const double *val = std::get_if<double>(&value))
           {
+            // double weighted_val = *val*particle.weight;
+            
 #pragma omp atomic
             spatial[key][i_container] +=
                 *val / static_cast<double>(compartments[i_container].n_cells);

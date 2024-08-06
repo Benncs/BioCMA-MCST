@@ -74,18 +74,15 @@ namespace Simulation
 
   void SimulationUnit::clearContribution() const
   {
-    for (size_t i = 0; i < n_thread; ++i)
-    {
-      // this->liquid_scalar->getThreadContribs()[i].setZero();
-      this->liquid_scalar->vec_kla.setZero();
-    }
+    
+    this->liquid_scalar->vec_kla.setZero();
 
     this->liquid_scalar->biomass_contribution.setZero();
   }
 
   void SimulationUnit::update_feed(double d_t) const
   {
-    // this->liquid_scalar->feed.coeffRef(0, 1) = 4. * 1. / 3600.*1e-3;
+    this->liquid_scalar->feed.coeffRef(0, 0) = 5 * 1. / 3600*1e-3;
 
     // for (int i = 1; i < this->liquid_scalar->concentration.cols() - 2; ++i)
     // {

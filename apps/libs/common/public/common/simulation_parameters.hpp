@@ -47,9 +47,9 @@ struct ExportParameters
 inline std::ostream &operator<<(std::ostream &stream,
                                 const SimulationParameters &obj)
 {
-  // stream << obj.n_particles << "\t" << obj.final_time << "\t" << obj.d_t <<
-  // "\t"
-  //        << obj.n_different_maps << "\t" << obj.n_threads << " ";
+  stream << obj.user_params.numper_particle << "\t" << obj.user_params.final_time << "\t" << obj.d_t <<
+  "\t"
+         << obj.n_different_maps << "\t" << obj.user_params.n_thread << " ";
   return stream;
 }
 

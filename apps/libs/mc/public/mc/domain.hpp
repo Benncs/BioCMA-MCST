@@ -8,7 +8,6 @@
 #include <mc/container_state.hpp>
 #include <vector>
 
-
 namespace MC
 {
   class ReactorDomain
@@ -25,8 +24,8 @@ namespace MC
 
     ReactorDomain &operator=(ReactorDomain &&other) noexcept;
 
-    void setVolumes(std::span<double const> volumesgas,
-                    std::span<double const> volumesliq);
+    void setVolumes(std::span<double const> volumes_gas,
+                    std::span<double const> volumes_liq);
 
     void
     setLiquidNeighbors(const CmaRead::Neighbors::Neighbors_const_view_t &data);
@@ -35,11 +34,10 @@ namespace MC
     auto &operator[](size_t i_c);
     auto &operator[](size_t i_c) const;
 
-    [[nodiscard]] decltype(auto) begin() const;
-    [[nodiscard]] decltype(auto) end() const;
-
-    decltype(auto) begin();
-    decltype(auto) end();
+    [[nodiscard]] auto begin() const;
+    [[nodiscard]] auto end() const;
+    auto begin();
+    auto end();
 
     [[nodiscard]] auto getNumberCompartments() const;
 
@@ -60,6 +58,11 @@ namespace MC
     template <class Archive> void serialize(Archive &ar)
     {
       ar(containers);
+    }
+
+    auto get_view()
+    {
+      return view;
     }
 
   private:
@@ -118,20 +121,20 @@ namespace MC
     return this->containers[i_c];
   }
 
-  inline decltype(auto) ReactorDomain::begin() const
+  inline auto ReactorDomain::begin() const
   {
     return containers.begin();
   }
-  inline decltype(auto) ReactorDomain::end() const
+  inline auto ReactorDomain::end() const
   {
     return containers.end();
   }
 
-  inline decltype(auto) ReactorDomain::begin()
+  inline auto ReactorDomain::begin()
   {
     return containers.begin();
   }
-  inline decltype(auto) ReactorDomain::end()
+  inline auto ReactorDomain::end()
   {
     return containers.end();
   }

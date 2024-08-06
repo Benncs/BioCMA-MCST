@@ -1,7 +1,7 @@
 #ifndef __MC_EVENTS_HPP__
 #define __MC_EVENTS_HPP__
 
-#include "common/execinfo.hpp"
+#include <common/execinfo.hpp>
 #include <array>
 #include <cstddef>
 #include <span>

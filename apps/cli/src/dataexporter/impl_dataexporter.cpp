@@ -300,44 +300,6 @@ void DataExportHighFive::write_particle_data(
   }
 }
 
-void DataExportHighFive::init_fill_model_dataset(void *fptr,
-                                                 std::string_view key,
-                                                 size_t expected_size)
-{
-  auto *file = static_cast<HighFive::File *>(fptr);
-  HighFive::DataSpace dataspace({expected_size}, {expected_size});
-  HighFive::DataSetCreateProps props;
-  // props.add(HighFive::Chunking({expected_size}));
-  // props.add(HighFive::Shuffle());
-  // props.add(HighFive::Deflate(hdf5_max_compression));
-  auto double_type = HighFive::create_datatype<double>();
-  file->createDataSet(key.data(), dataspace, double_type, props);
-  file->flush();
-}
-
-void *DataExportHighFive::start_model_dataset()
-{
-  return new HighFive::File(filename, HighFive::File::ReadWrite);
-}
-
-void DataExportHighFive::fill_model_dataset(const uint64_t counter,
-                                            void *fptr,
-                                            std::string_view key,
-                                            double value)
-{
-  auto *file = static_cast<HighFive::File *>(fptr);
-  auto dataset = file->getDataSet(key.data());
-  dataset.select({counter}, {1}).write(value);
-  file->flush();
-
-}
-
-void DataExportHighFive::stop_fill_model_dataset(void *fptr)
-{
-  auto *file = static_cast<HighFive::File *>(fptr);
-  delete file;
-  fptr = nullptr;
-};
 
 void DataExportHighFive::write_initial_particle_data(
     const std::unordered_map<std::string, std::vector<model_properties_t>>
