@@ -1,0 +1,163 @@
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -xc++ -E -v -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -xc++ -E -v -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -xc++ -E -v -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -xc++ -E -v -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -xc++ -E -v -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -xc++ -E -v -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -xc++ -E -v -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -xc++ -E -v -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  --version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -cpp -x c++ -E -dM -
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--version
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,-v
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--allow-shlib-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--as-needed
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -Wl,--no-undefined
+/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++  -xc++ -E -v -

@@ -1,92 +1,47 @@
 #ifndef __MC_PARTICLESHPP__
 #define __MC_PARTICLESHPP__
 
-#include "cmt_common/macro_constructor_assignment.hpp"
 #include "common/execinfo.hpp"
 #include "mc/prng/prng.hpp"
-#include <any>
 #include <cstddef>
 #include <cstdint>
-
+#include <mc/particles/data_holder.hpp>
 namespace MC
 {
 
-  enum class CellStatus : char
-  {
-    IDLE,
-    DEAD,
-    CYTOKINESIS,
-    OUT
+  template <typename T>
+  concept ParticleModel = requires(T model, ParticleDataHolder &p) {
+    { model.init(p) } -> std::same_as<void>;
+    { model.update(p) } -> std::same_as<void>;
+    { model.division(p) } -> std::same_as<void>;
+    { model.contribution(p) } -> std::same_as<void>;
   };
-  template <typename T> class alignas(ExecInfo::cache_line_size) BaseParticle
+
+  template <ParticleModel _Model>
+  class alignas(ExecInfo::cache_line_size) BaseParticle
   {
   public:
-    BaseParticle() noexcept
-        : current_container(0), current_domain(0), random_seed(0), id(0),
-          status(CellStatus::IDLE), weight(0.){};
 
-    explicit BaseParticle(double _weight) noexcept
-        : current_container(0), current_domain(0), random_seed(0), id(0),
-          status(CellStatus::IDLE), weight(_weight){};
+    using Model = _Model;
+
+    KOKKOS_INLINE_FUNCTION explicit BaseParticle(double _weight = 0) noexcept
+        : properties(_weight){};
 
     void clearState(MC::CellStatus _status = CellStatus::IDLE) noexcept
     {
-      current_container = 0;
-      current_domain = 0;
-      random_seed = 0;
-      id = 0;
-      status = _status;
-      weight = 0;
-
-
-
-      clearData();
+      properties.reset();
+      properties.status = _status;
     }
 
-    BaseParticle(const BaseParticle &p) = default; // Copy constructor
-    BaseParticle &
-    operator=(const BaseParticle &p) = default; // Copy assignment operator
-    BaseParticle(BaseParticle &&p) noexcept = default;
-    BaseParticle &
-    operator=(BaseParticle &&p) noexcept = default; // Move assignment operator
-
+    DEFAULT_COPY_MOVE_AC(BaseParticle<_Model>)
     ~BaseParticle() = default;
-    size_t current_container;
-    size_t current_domain;
-    size_t random_seed;
-    uint32_t id;
-    std::shared_ptr<MC::KPRNG> rng;
-    MC::CellStatus status;
-    double weight;
-    T data;
 
-    template <class Archive> void serialize(Archive &ar)
-    {
-      ar(current_container, current_domain, random_seed, id, status, weight);
-    }
-
-  private:
-    void clearData() noexcept
-    {
-
-      if constexpr (requires { data.clear(); })
-      {
-        data.clear();
-      }
-      else if constexpr (requires { data.reset(); })
-      {
-        data.reset();
-      }
-      else
-      {
-        data.~T();
-      }
-    }
+    ParticleDataHolder properties;
+    _Model data;
   };
 
-  using Particles = BaseParticle<std::any>;
+  template <ParticleModel Model> using Particle = BaseParticle<Model>;
 
-  
 } // namespace MC
 
 #endif

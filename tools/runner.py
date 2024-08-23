@@ -15,11 +15,11 @@ __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
 DEFAULT_TYPE = "debugoptimized"
 MPI_COMMAND = "mpiexec --allow-run-as-root -np 4 "
-OMP_NUM_THREADS = 1
+OMP_NUM_THREADS = "1"
 
 
 def get_executable(type: str):
-    return f"{ROOT}/builddir/{type}_clang/apps/cli/biocma_mcst_cli_app"
+    return f"{ROOT}/builddir/apps/cli/biocma_mcst_cli_app"
 
 def mk_parser():
     parser = argparse.ArgumentParser(description="Runner")
@@ -80,6 +80,7 @@ def exec(command, n_thread):
     result = command.replace("-", "\n-")
     pattern = re.compile(r"(-\w+\s)(\S+)")
     formatted_command = pattern.sub(format_rhs, result)
+    print("\r\n")
     print(formatted_command)
     print("\n")
     start_time = time.perf_counter()
@@ -94,7 +95,6 @@ def exec(command, n_thread):
 def main():
 
     cli_args = mk_parser().parse_args()
-    print(cli_args)
     r_type = DEFAULT_TYPE
     if cli_args.release_flag:
         r_type = "release"
@@ -106,7 +106,7 @@ def main():
         mpi_c = MPI_COMMAND + " "
 
     command = (
-        mpi_c + get_executable(r_type) + " " + run_cli + f" -nt {cli_args.n_threads}"
+        mpi_c + get_executable(r_type) + " " + run_cli + f" -nt {cli_args.n_threads}" + '--device_id=1'
     )
     exec(command, cli_args.n_threads)
 

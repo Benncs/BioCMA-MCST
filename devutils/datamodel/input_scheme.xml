@@ -11,8 +11,8 @@
    </control>
    
    <control name="0d">
-      <cma_case_path>/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/0d/</cma_case_path>
-      <final_time>1000</final_time>
+      <cma_case_path>/home/benjamin/Documenti/cpp/BioCMA-MCST/cma_data/0d/</cma_case_path>
+      <final_time>10</final_time>
       <numper_particle>10000</numper_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>monod_0d</results_file_name>

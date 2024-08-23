@@ -10,30 +10,28 @@
 
 namespace MC
 {
-  struct Results
-  {
-    MC::EventContainer events;
-    std::vector<MC::Particles> extra_process;
-    std::vector<std::int64_t> index_in_dead_state;
+  // struct Results
+  // {
+  //   MC::EventContainer events;
+  //   std::vector<MC::Particles> extra_process;
+  //   std::vector<std::int64_t> index_in_dead_state;
 
-    Results()=default;
-  };
+  //   Results()=default;
+  // };
 
-  inline void init_r(Results &val)
-  {
-    val.events.clear();
+  // inline void init_r(Results &val)
+  // {
+  //   val.events.clear();
 
-    // val.p.resize(0);
-  }
+  //   // val.p.resize(0);
+  // }
 
- 
-
-  struct alignas(ExecInfo::cache_line_size) ThreadPrivateData
-  {
-    std::vector<MC::Particles> extra_process;
-    std::vector<std::int64_t> index_in_dead_state;
-    MC::PRNG rng;
-  };
+  // struct alignas(ExecInfo::cache_line_size) ThreadPrivateData
+  // {
+  //   std::vector<MC::Particles> extra_process;
+  //   std::vector<std::int64_t> index_in_dead_state;
+  //   MC::PRNG rng;
+  // };
 } // namespace MC
 
 #endif //__MC__THREADS_PRIVATE_DATA_HPP__

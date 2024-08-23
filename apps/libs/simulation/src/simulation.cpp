@@ -17,7 +17,6 @@
 #include <mc/thread_private_data.hpp>
 #include <mc/unit.hpp>
 #include <memory>
-#include <models/types.hpp>
 #include <random>
 #include <scalar_simulation.hpp>
 #include <simulation/simulation.hpp>
@@ -31,8 +30,6 @@
 #endif
 
 #include <utility>
-
-#include <kernel.hpp>
 
 namespace Simulation
 {
@@ -58,8 +55,7 @@ namespace Simulation
   SimulationUnit::SimulationUnit(SimulationUnit &&other) noexcept
       : mc_unit(std::move(other.mc_unit)),
         is_two_phase_flow(other.is_two_phase_flow), n_thread(other.n_thread),
-        flow_liquid(other.flow_liquid), flow_gas(other.flow_gas),
-        kmodel(std::move(other.kmodel))
+        flow_liquid(other.flow_liquid), flow_gas(other.flow_gas)
   {
   }
 
@@ -68,11 +64,10 @@ namespace Simulation
                                  std::span<double> volumesgas,
                                  std::span<double> volumesliq,
                                  size_t n_species,
-                                 KModel _km,
                                  bool _gas_flow)
       : mc_unit(std::move(_unit)), is_two_phase_flow(_gas_flow),
         n_thread(info.thread_per_process), flow_liquid(nullptr),
-        flow_gas(nullptr), kmodel(std::move(_km))
+        flow_gas(nullptr)
   {
 
     this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(
@@ -98,8 +93,6 @@ namespace Simulation
 
     Kokkos::Random_XorShift1024_Pool<> random_pool(std::random_device{}());
 
-    _kernel = std::unique_ptr<Kernel, pimpl_deleter_>(
-        new Kernel(kmodel, random_pool, domain_view));
   }
 
   void SimulationUnit::setVolumes(std::span<const double> volumesgas,
@@ -169,38 +162,39 @@ namespace Simulation
   void SimulationUnit::cycleProcess(const double d_t)
   {
 
-    const auto get_view_neighbor = [&]()
-    {
-      const auto view_neighbors = this->mc_unit->domain.getNeighbors();
+    // const auto get_view_neighbor = [&]()
+    // {
+    //   const auto view_neighbors = this->mc_unit->domain.getNeighbors();
 
-      const Kokkos::LayoutStride layout(view_neighbors.getNRow(),
-                                        view_neighbors.getNCol(),
-                                        view_neighbors.getNCol(),
-                                        1);
+    //   const Kokkos::LayoutStride layout(view_neighbors.getNRow(),
+    //                                     view_neighbors.getNCol(),
+    //                                     view_neighbors.getNCol(),
+    //                                     1);
 
-      return Kokkos::View<const size_t **, Kokkos::LayoutStride>(
-          view_neighbors.data().data(), layout);
-    };
+    //   return Kokkos::View<const size_t **, Kokkos::LayoutStride>(
+    //       view_neighbors.data().data(), layout);
+    // };
 
-    const auto to_process = this->mc_unit->container.to_process.data_span();
+    // const Kokkos::RangePolicy<> range(0, to_process.size());
 
-    const Kokkos::RangePolicy<> range(0, to_process.size());
-
-    _kernel->update(to_process,
-                    d_t,
-                    this->flow_liquid->get_diag_transition(),
-                    this->flow_liquid->get_view_cum_prob(),
-                    get_view_neighbor(),
-                    liquid_scalar->k_contribs);
+    // _kernel->update(to_process,
+    //                 d_t,
+    //                 this->flow_liquid->get_diag_transition(),
+    //                 this->flow_liquid->get_view_cum_prob(),
+    //                 get_view_neighbor(),
+    //                 liquid_scalar->k_contribs);
 
    
-    Kokkos::parallel_reduce(
-        "ProcessParticles", range, *_kernel, kernel_results);
+    // // Kokkos::parallel_reduce(
+    // //     "ProcessParticles", range, *_kernel, kernel_results);
 
-    Kokkos::fence();
+    // // Kokkos::fence();
 
-    mc_unit->events.inplace_reduce(kernel_results.events);
-    mc_unit->container.merge(kernel_results);
+    // _kernel->operator(kernel_results);
+    
+
+    // mc_unit->events.inplace_reduce(kernel_results.events);
+    // mc_unit->container.merge(kernel_results);
   }
 
   void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation *ptr) const

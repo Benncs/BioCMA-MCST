@@ -41,42 +41,42 @@ using ModelContribution =
     std::function<void(MC::Particles &, Eigen::MatrixXd &)>;
 
 #else
-using ModelUpdate = void (*)(double, MC::Particles &, std::span<const double>);
+// using ModelUpdate = void (*)(double, MC::Particles &, std::span<const double>);
 
-using ModelDivision = MC::Particles (*)(MC::Particles &);
+// using ModelDivision = MC::Particles (*)(MC::Particles &);
 
-using ModelInit = void (*)(MC::Particles &);
+// using ModelInit = void (*)(MC::Particles &);
 
-using ModelContribution = void (*)(MC::Particles &, Eigen::MatrixXd &);
+// using ModelContribution = void (*)(MC::Particles &, Eigen::MatrixXd &);
 
-#endif
-
-// #ifdef DEBUG
-using ModelDebug = std::function<void(MC::Particles &)>;
-inline void defaut_dgb(MC::Particles & /*unused*/) {};
 // #endif
+
+// // #ifdef DEBUG
+// using ModelDebug = std::function<void(MC::Particles &)>;
+// inline void defaut_dgb(MC::Particles & /*unused*/) {};
+// // #endif
 
 using model_properties_t = std::variant<double, int, std::string>;
 
 using model_properties_detail_t =
     std::unordered_map<std::string, model_properties_t>;
 
-using ModelGetProperties =
-    std::function<model_properties_detail_t(const MC::Particles &)>;
+// using ModelGetProperties =
+//     std::function<model_properties_detail_t(const MC::Particles &)>;
 
-inline model_properties_detail_t
-defaut_properties(const MC::Particles & /*unused*/)
-{
-  return {{"description", "model description"}};
-};
+// inline model_properties_detail_t
+// defaut_properties(const MC::Particles & /*unused*/)
+// {
+//   return {{"description", "model description"}};
+// };
 
-struct KModel
-{
-  ModelInit init_kernel;
-  ModelUpdate update_kernel;
-  ModelDivision division_kernel;
-  ModelContribution contribution_kernel;
-  ModelGetProperties get_properties = defaut_properties;
-};
+// struct KModel
+// {
+//   ModelInit init_kernel;
+//   ModelUpdate update_kernel;
+//   ModelDivision division_kernel;
+//   ModelContribution contribution_kernel;
+//   ModelGetProperties get_properties = defaut_properties;
+// };
 
 #endif //__MODELS_TYPES_HPP__

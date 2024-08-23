@@ -149,7 +149,7 @@ void main_loop(const SimulationParameters &params,
                std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
                std::unique_ptr<DataExporter> &exporter)
 {
-  
+
   simulation.update_feed(0);
 
   // const size_t n_update_feed = 0; //TODO: move elsewhere
@@ -183,52 +183,57 @@ void main_loop(const SimulationParameters &params,
                    current_reactor_state->liquidVolume,
                    current_reactor_state->gasVolume);
 
-  for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
-       ++__loop_counter)
+  auto loop_functor = [&](auto &&local_container)
   {
-
-    DEBUG_INSTRUCTION
-
-    transitioner->update_flow(simulation);
-
-    current_reactor_state = transitioner->getState();
-
-    FILL_PAYLOAD;
-
-    MPI_DISPATCH_MAIN;
-
-    transitioner->advance(simulation);
-
-
-    simulation.cycleProcess(d_t);
-    dump_counter++;
-
-    if (dump_counter == dump_interval)
-    {
-      update_progress_bar(n_iter_simulation, __loop_counter, true);
-      exporter->append(current_time,
-                       simulation.getCliqData(),
-                       simulation.mc_unit->domain.getDistribution(),
-                       current_reactor_state->liquidVolume,
-                       current_reactor_state->gasVolume);
-      dump_counter = 0;
-    }
-
-    if constexpr (RT::use_mpi)
-    {
-      sync_step(exec, simulation);
-    }
-
+    for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
+         ++__loop_counter)
     {
 
-      simulation.update_feed(d_t);
-      simulation.step(d_t, *current_reactor_state);
-    }
+      DEBUG_INSTRUCTION
 
-    sync_prepare_next(exec, simulation);
-    current_time += d_t;
-    handle_sig(simulation);
-  }
+      transitioner->update_flow(simulation);
+
+      current_reactor_state = transitioner->getState();
+
+      FILL_PAYLOAD;
+
+      MPI_DISPATCH_MAIN;
+
+      transitioner->advance(simulation);
+
+      simulation.cycleProcess(container,d_t);
+
+      dump_counter++;
+
+      if (dump_counter == dump_interval)
+      {
+        update_progress_bar(n_iter_simulation, __loop_counter, true);
+        exporter->append(current_time,
+                         simulation.getCliqData(),
+                         simulation.mc_unit->domain.getDistribution(),
+                         current_reactor_state->liquidVolume,
+                         current_reactor_state->gasVolume);
+        dump_counter = 0;
+      }
+
+      if constexpr (RT::use_mpi)
+      {
+        sync_step(exec, simulation);
+      }
+
+      {
+
+        simulation.update_feed(d_t);
+        simulation.step(d_t, *current_reactor_state);
+      }
+
+      sync_prepare_next(exec, simulation);
+      current_time += d_t;
+      handle_sig(simulation);
+    }
+  };
+
+  std::visit(loop_functor, simulation.mc_unit->container);
 
   exporter->append(current_time,
                    simulation.getCliqData(),

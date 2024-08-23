@@ -16,8 +16,6 @@ if use_cuda
   message('USING CUDA')
   arch_specific_args = ['-mp=gpu', '-gpu=cc35', '-cudalib=cublas']
   # add_project_arguments('cpp_std=gnu++20',language: 'cpp')
-
-
 else
   arch_specific_args = ['-march=native']
   # arch_specific_args=['-mavx2']
@@ -125,9 +123,47 @@ eigen_dep = dependency('eigen3', required: true)
 blas = dependency('blas', required: false) # Eigen can work without BLAS
 
 
-_kokkos = dependency('Kokkos', required: true)
-hwloc = dependency('hwloc', required: true)
-kokkos = declare_dependency(dependencies: [_kokkos, hwloc])
+# hwloc = dependency('hwloc', required: true)
+
+# __cmake_kokkos_dep__ = dependency(
+#     'Kokkos',
+#     method: 'cmake',
+#     required: true
+# )
+
+# kokkos = declare_dependency(
+#     dependencies: [__cmake_kokkos_dep__,hwloc],
+#     compile_args: [
+#         '-std=c++20',
+#         '-DKOKKOS_DEPENDENCE',
+#         '-extended-lambda',
+#         '-Wext-lambda-captures-this',
+#         '-arch=native'
+#     ],
+  
+# )
+
+__cmake_kokkos_dep__ = dependency(
+    'Kokkos',
+    method: 'cmake',
+    required: false,
+    components: ['kokkoscore'],
+    modules: ['Kokkos::kokkoscore']
+)
+
+omp = dependency('openmp')
+hwloc = dependency('hwloc')
+kokkos = declare_dependency(
+    dependencies: [__cmake_kokkos_dep__,omp,hwloc],
+    compile_args: [
+        '-DKOKKOS_DEPENDENCE',
+        '-extended-lambda',
+        '-Wext-lambda-captures-this',
+        # '-arch=native'
+    ],
+  
+)
+
 if blas.found()
   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 endif
@@ -152,17 +188,18 @@ endif
 
 ceral_found = false
 if cmake.found()
-  # cereal_cmake_options = cmake.subproject_options()
+  cereal_cmake_options = cmake.subproject_options()
 
 
-  # cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
+  cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
 
 
   # cereal_dependency = cereal_proj.dependency('cereal')
 
-  cereal_dependency = declare_dependency(include_directories: '../cereal/include')
+  # cereal_dependency = declare_dependency(include_directories: '../cereal/include')
 
 endif
+cereal_dependency = declare_dependency(include_directories: 'subprojects/cereal/include/')
 
 default_option_cpp20 = 'cpp_std=none'
 if not use_cuda

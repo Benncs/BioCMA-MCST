@@ -2,11 +2,11 @@
 #define __SIMULATIONS_UNIT_HPP__
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Macros.hpp>
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <mc/unit.hpp>
 #include <memory>
-#include <models/types.hpp>
 
 struct Kernel;
 
@@ -35,7 +35,6 @@ namespace Simulation
                             std::span<double> volumesgas,
                             std::span<double> volumesliq,
                             size_t n_species,
-                            KModel _km,
                             bool _gas_flow = false);
 
     ~SimulationUnit() = default;
@@ -47,8 +46,6 @@ namespace Simulation
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
 
-    [[nodiscard]] const KModel &getModel() const;
-
     [[nodiscard]] std::span<double> getCliqData() const;
     [[nodiscard]] std::tuple<size_t, size_t> getDim() const;
     [[nodiscard]] std::span<double> getCgasData() const;
@@ -58,6 +55,18 @@ namespace Simulation
                     std::span<const double> volumesliq) const;
 
     void step(double d_t, const CmaRead::ReactorState &state) const;
+
+    void cycleProces(auto&& container,double d_t)
+    {
+      auto &list = container.get_compute();
+
+      Kokkos::parallel_for(
+          "process", list.size(), KOKKOS_LAMBDA(auto&& i){
+            //Do something 
+          });
+      Kokkos::fence();
+
+    }
 
     void cycleProcess(double d_t);
 
@@ -79,12 +88,11 @@ namespace Simulation
       gas_scalar.reset();
       flow_liquid = nullptr;
       flow_gas = nullptr;
-      _kernel.reset();
     }
 
   private:
     Kokkos::View<MC::ContainerState *, Kokkos::LayoutRight> domain_view;
-    MC::Results kernel_results;
+    // MC::Results kernel_results;
     struct pimpl_deleter
     {
       void operator()(ScalarSimulation *) const;
@@ -108,18 +116,13 @@ namespace Simulation
     PreCalculatedHydroState *flow_liquid; // TODO OPTI
     PreCalculatedHydroState *flow_gas;    // TODO OPTI
 
-    KModel kmodel;
 
-    std::unique_ptr<Kernel, pimpl_deleter_> _kernel;
     pimp_ptr_t liquid_scalar;
     pimp_ptr_t gas_scalar;
     void post_init_concentration();
   };
 
-  inline const KModel &SimulationUnit::getModel() const
-  {
-    return kmodel;
-  }
+  
 
   inline void SimulationUnit::setLiquidFlow(PreCalculatedHydroState *_flows_l)
   {

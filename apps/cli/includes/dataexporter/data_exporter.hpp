@@ -2,6 +2,7 @@
 #define __DATA_EXPORTER_HPP__
 
 #include "mc/events.hpp"
+#include "models/types.hpp"
 #include <cmt_common/macro_constructor_assignment.hpp>
 #include <common/common.hpp>
 #include <simulation/simulation.hpp>

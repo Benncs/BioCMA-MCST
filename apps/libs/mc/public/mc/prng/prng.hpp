@@ -45,7 +45,7 @@ namespace MC
       return x;
     }
 
-    inline uint64_t uniform_u(uint64_t a, uint64_t b)
+    [[nodiscard]] inline uint64_t uniform_u(uint64_t a, uint64_t b)const
     {
  
       auto generator = random_pool.get_state();

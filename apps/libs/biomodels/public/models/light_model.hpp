@@ -13,15 +13,15 @@ struct LightModel
   double mass;
 };
 
-void init_light_model_(MC::Particles &p);
+// void init_light_model_(MC::Particle &p);
 
-void update_light_model(double d_t,
-                         MC::Particles &p,
-                         std::span<double const> concentrations);
+// void update_light_model(double d_t,
+//                          MC::Particle &p,
+//                          std::span<double const> concentrations);
 
-MC::Particles division_light_model(MC::Particles &p);
+// MC::Particle division_light_model(MC::Particle &p);
 
-void contribution_light_model(MC::Particles &p, Eigen::MatrixXd &contribution);
+// void contribution_light_model(MC::Particle &p, Eigen::MatrixXd &contribution);
 
 KModel get_model_light();
 
