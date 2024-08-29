@@ -279,7 +279,7 @@ namespace MPI_W
  
     T result{};
    
-     MPI_Reduce(&data, &result, 1, MPI_W::get_type<T>(), MPI_SUM, 0, MPI_COMM_WORLD);
+     MPI_Reduce(&data, &result, 1, MPI_W::get_type<T>(), MPI_SUM, root, MPI_COMM_WORLD);
 
     return result;
   }

@@ -2,6 +2,7 @@
 #define __SCALAR_SIMULATION_HPP__
 
 #include "cma_read/light_2d_view.hpp"
+#include "common/kokkos_vector.hpp"
 #include <simulation/pc_hydro.hpp>
 #include <span>
 
@@ -26,6 +27,10 @@ namespace Simulation
 
     ~ScalarSimulation() = default;
 
+    Kokkos::View<double **, Kokkos::LayoutLeft,ComputeSpace> compute_concentration;
+
+    Kokkos::View<double **, Kokkos::LayoutLeft,HostSpace> host_concentration;
+
     Eigen::MatrixXd concentration;
     Eigen::MatrixXd total_mass;
 
@@ -35,8 +40,6 @@ namespace Simulation
     [[nodiscard]] std::span<double const> getVolumeData() const;
 
     [[nodiscard]] std::span<double> getContributionData();
-
-    // std::span<Eigen::MatrixXd> getThreadContribs();
 
     Eigen::DiagonalMatrix<double, -1> &getVolume();
 

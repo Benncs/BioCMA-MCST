@@ -1,14 +1,14 @@
+#include "common/kokkos_vector.hpp"
 #include "mc/container_state.hpp"
-#include <algorithm>
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Core_fwd.hpp>
+#include <Kokkos_DynamicView.hpp>
+#include <Kokkos_Macros.hpp>
+#include <Kokkos_Printf.hpp>
 #include <cma_read/neighbors.hpp>
 #include <cstddef>
-#include <iterator>
 #include <mc/domain.hpp>
-#include <ranges>
 #include <stdexcept>
-
-// TODO REMOVE
-#include <iostream>
 
 namespace MC
 {
@@ -16,28 +16,31 @@ namespace MC
   {
     if (this != &other)
     {
-      this->containers = std::move(other.containers);
+      this->size = other.size;
       this->id = other.id;
       this->_total_volume = other._total_volume;
+      this->shared_containers = other.shared_containers;
     }
   }
 
-  void ReactorDomain::setVolumes(std::span<double const> volumesgas,
-                                 std::span<double const> volumesliq)
+  void ReactorDomain::setVolumes(std::span<double const> volumes_gas,
+                                 std::span<double const> volumes_liq)
   {
     // #pragma omp parallel for
+    // Ok because of ShareSpace
+
     this->_total_volume = 0;
-    for (size_t i_c = 0; i_c < volumesgas.size(); ++i_c)
+    for (size_t i_c = 0; i_c < volumes_gas.size(); ++i_c)
     {
-      containers[i_c].volume_liq = volumesliq[i_c];
-      containers[i_c].volume_gas = volumesgas[i_c];
-      this->_total_volume += volumesliq[i_c];
+      shared_containers(i_c).volume_liq = volumes_liq[i_c];
+      shared_containers(i_c).volume_gas = volumes_gas[i_c];
+      this->_total_volume += volumes_liq[i_c];
     }
   }
   ReactorDomain::ReactorDomain(
       std::span<double> volumes,
       const CmaRead::Neighbors::Neighbors_const_view_t &_neighbors)
-      : neighbors(_neighbors)
+      : size(volumes.size()), neighbors(_neighbors)
   {
 
     row_neighbors.resize(volumes.size());
@@ -47,23 +50,30 @@ namespace MC
       row_neighbors[i] = neighbors.getRow(i);
     }
 
-    double totv = 0.;
-    std::transform(volumes.begin(),
-                   volumes.end(),
-                   std::back_inserter(this->containers),
-                   [&totv, i = 0](auto &&v) mutable
-                   {
-                     auto c = ContainerState();
-                     c.volume_liq = v;
-                     c.id = i++;
-                     totv += v;
-                     return c;
-                   });
+    Kokkos::View<double *, Kokkos::HostSpace> tmp_volume_host(volumes.data(),
+                                                              volumes.size());
 
-    this->_total_volume = totv;
+    auto volume_compute =
+        Kokkos::create_mirror_view_and_copy(ComputeSpace(), tmp_volume_host);
 
-    view = Kokkos::View<MC::ContainerState *, Kokkos::LayoutRight>(
-        this->data().data(), this->getNumberCompartments());
+    auto tmp_shared_containers =
+        Kokkos::View<ContainerState *, Kokkos::SharedSpace>("domain_containers",
+                                                            volumes.size());
+    Kokkos::View<double, ComputeSpace> _tmp_tot("domain_tmp_total_volume", 1);
+
+    Kokkos::parallel_for(
+        "init_domain", volumes.size(), KOKKOS_LAMBDA(const int i) {
+          auto &local_container = tmp_shared_containers(i);
+          local_container = ContainerState();
+          local_container.id = i;
+          local_container.n_cells=0;
+          local_container.volume_liq = volume_compute(i);
+          _tmp_tot() += local_container.volume_liq;
+        });
+    Kokkos::fence();
+    shared_containers = tmp_shared_containers;
+
+    this->_total_volume = _tmp_tot();
   }
 
   ReactorDomain &ReactorDomain::operator=(ReactorDomain &&other) noexcept
@@ -71,10 +81,11 @@ namespace MC
     if (this != &other)
     {
       this->id = other.id;
-      this->containers = std::move(other.containers);
+      this->size = other.size;
       this->neighbors = other.neighbors;
       this->_total_volume = other._total_volume;
       this->row_neighbors = std::move(other.row_neighbors);
+      this->shared_containers = other.shared_containers;
     }
     return *this;
   }
@@ -82,19 +93,25 @@ namespace MC
   std::vector<size_t> ReactorDomain::getDistribution() const
   {
 
-    auto view =
-        containers | std::views::transform([](const MC::ContainerState &cs)
-                                           { return cs.n_cells; });
+    std::vector<size_t> dist(shared_containers.extent(0));
 
-    return {view.begin(), view.end()};
+    auto host_view = Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(),
+                                                         shared_containers);
+
+    for (size_t i = 0LU; i < dist.size(); ++i)
+    {
+      dist[i] = static_cast<size_t>(host_view(i).n_cells);
+    }
+    return dist;
   }
 
   ReactorDomain ReactorDomain::reduce(std::span<size_t> data,
                                       size_t original_size,
                                       size_t n_rank)
   {
+    // OK because of sharedspace
     ReactorDomain reduced;
-    reduced.containers.resize(original_size);
+    Kokkos::resize(reduced.shared_containers, original_size);
 
     if (data.size() != original_size * n_rank)
     {
@@ -105,7 +122,8 @@ namespace MC
     {
       for (size_t i_c = 0; i_c < original_size; ++i_c)
       {
-        reduced.containers[i_c].n_cells += data[i_c + i_rank * original_size];
+        reduced.shared_containers(i_c).n_cells +=
+            data[i_c + i_rank * original_size];
       }
     }
 

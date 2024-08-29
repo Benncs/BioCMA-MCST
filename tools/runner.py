@@ -13,13 +13,13 @@ from cli_formater import format_cli
 __current_file_path = os.path.abspath(__file__)
 __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
-DEFAULT_TYPE = "debugoptimized"
-MPI_COMMAND = "mpiexec --allow-run-as-root -np 4 "
+DEFAULT_TYPE = "debug"
+MPI_COMMAND = "mpiexec --allow-run-as-root "
 OMP_NUM_THREADS = "1"
 
 
 def get_executable(type: str):
-    return f"{ROOT}/builddir/apps/cli/biocma_mcst_cli_app"
+    return f"{ROOT}/builddir/{type}_clang/apps/cli/biocma_mcst_cli_app"
 
 def mk_parser():
     parser = argparse.ArgumentParser(description="Runner")
@@ -45,6 +45,8 @@ def mk_parser():
         default=OMP_NUM_THREADS,
         help="Optional number of thread",
     )
+    
+    
 
     # Optional flag -mpi
     parser.add_argument(
@@ -77,6 +79,9 @@ def exec(command, n_thread):
     env_var["OMP_PROC_BIND"] = "spread"
     env_var["OMP_NUM_THREADS"] = n_thread
 
+    # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
+    # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_memory_events.so"
+
     result = command.replace("-", "\n-")
     pattern = re.compile(r"(-\w+\s)(\S+)")
     formatted_command = pattern.sub(format_rhs, result)
@@ -106,7 +111,7 @@ def main():
         mpi_c = MPI_COMMAND + " "
 
     command = (
-        mpi_c + get_executable(r_type) + " " + run_cli + f" -nt {cli_args.n_threads}" + '--device_id=1'
+        mpi_c + get_executable(r_type) + " " + run_cli + f" -nt {cli_args.n_threads}"
     )
     exec(command, cli_args.n_threads)
 

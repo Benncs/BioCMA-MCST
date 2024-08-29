@@ -1,14 +1,15 @@
+#include "common/kokkos_vector.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_DynamicView.hpp>
 #include <Kokkos_Macros.hpp>
 #include <Kokkos_Random.hpp>
-#include <algorithm>
 #include <cma_read/light_2d_view.hpp>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <decl/Kokkos_Declare_OPENMP.hpp>
 #include <impl/Kokkos_HostThreadTeam.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
@@ -17,7 +18,6 @@
 #include <mc/thread_private_data.hpp>
 #include <mc/unit.hpp>
 #include <memory>
-#include <random>
 #include <scalar_simulation.hpp>
 #include <simulation/simulation.hpp>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
@@ -39,7 +39,7 @@ namespace Simulation
     if (i == 0)
     {
 
-      liq(0, i) = 0.05;
+      liq(0, i) = 5;
     }
     else
     {
@@ -87,12 +87,12 @@ namespace Simulation
 
     post_init_concentration();
     post_init_compartments();
+    const std::size_t n_exit_flow = 1;
+    index_leaving_flow =
+        Kokkos::View<size_t *, ComputeSpace>("index_leaving_flow", n_exit_flow);
 
-    domain_view = Kokkos::View<MC::ContainerState *, Kokkos::LayoutRight>(
-        mc_unit->domain.data().data(), mc_unit->domain.getNumberCompartments());
-
-    Kokkos::Random_XorShift1024_Pool<> random_pool(std::random_device{}());
-
+    leaving_flow =
+        Kokkos::View<double *, ComputeSpace>("leaving_flow", n_exit_flow);
   }
 
   void SimulationUnit::setVolumes(std::span<const double> volumesgas,
@@ -116,9 +116,25 @@ namespace Simulation
     this->mc_unit->domain.setVolumes(vg, vl);
   }
 
+  Kokkos::View<const size_t **, Kokkos::LayoutStride, ComputeSpace>
+  SimulationUnit::get_view_neighbor() const
+  {
+    const auto view_neighbors = this->mc_unit->domain.getNeighbors();
+
+    const Kokkos::LayoutStride layout(view_neighbors.getNRow(),
+                                      view_neighbors.getNCol(),
+                                      view_neighbors.getNCol(),
+                                      1);
+
+    const auto host_view = Kokkos::View<const size_t **, Kokkos::LayoutStride>(
+        view_neighbors.data().data(), layout);
+
+    return Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_view);
+  }
+
   void SimulationUnit::post_init_concentration()
   {
-    auto rng = MC::PRNG();
+    // auto rng = MC::PRNG();
     CmaRead::L2DView<double> cliq = this->liquid_scalar->getConcentrationView();
     CmaRead::L2DView<double> *cgas = nullptr;
     if (is_two_phase_flow)
@@ -146,63 +162,79 @@ namespace Simulation
 
   void SimulationUnit::post_init_compartments()
   {
-    int i = 0;
-    size_t n_species = this->liquid_scalar->n_species();
-    std::for_each(mc_unit->domain.begin(),
-                  mc_unit->domain.end(),
-                  [this, n_species, &i](auto &&cs)
-                  {
-                    cs.concentrations = std::span(
-                        this->liquid_scalar->concentration.col(i).data(),
-                        n_species);
-                    ++i;
-                  });
+    auto _compute_concentration = liquid_scalar->compute_concentration;
+    auto _containers = mc_unit->domain.data();
+
+    Kokkos::parallel_for(
+        "post_init_compartments",
+        mc_unit->domain.getNumberCompartments(),
+        KOKKOS_LAMBDA(const int i) {
+          _containers(i).concentrations =
+              Kokkos::subview(_compute_concentration, i, Kokkos::ALL);
+        });
+    Kokkos::fence();
+    // int i = 0;
+    // size_t n_species = this->liquid_scalar->n_species();
+    // std::for_each(mc_unit->domain.begin(),
+    //               mc_unit->domain.end(),
+    //               [this, n_species, &i](auto &&cs)
+    //               {
+    //                 cs.concentrations = std::span(
+    //                     this->liquid_scalar->concentration.col(i).data(),
+    //                     n_species);
+    //                 ++i;
+    //               });
   }
 
-  void SimulationUnit::cycleProcess(const double d_t)
+  Kokkos::View<double *,
+               Kokkos::LayoutLeft,
+               HostSpace,
+               Kokkos::MemoryTraits<Kokkos::RandomAccess>>
+  SimulationUnit::get_dg()
   {
+    Kokkos::View<double *,
+                 Kokkos::LayoutLeft,
+                 HostSpace,
+                 Kokkos::MemoryTraits<Kokkos::RandomAccess>>
+        diag(this->flow_liquid->diag_transition.data(),
+             this->flow_liquid->diag_transition.size());
 
-    // const auto get_view_neighbor = [&]()
-    // {
-    //   const auto view_neighbors = this->mc_unit->domain.getNeighbors();
+    diag_transition = Kokkos::create_mirror_view_and_copy(ComputeSpace(), diag);
 
-    //   const Kokkos::LayoutStride layout(view_neighbors.getNRow(),
-    //                                     view_neighbors.getNCol(),
-    //                                     view_neighbors.getNCol(),
-    //                                     1);
+    return diag_transition;
+  }
 
-    //   return Kokkos::View<const size_t **, Kokkos::LayoutStride>(
-    //       view_neighbors.data().data(), layout);
-    // };
+  Kokkos::View<double **,
+               Kokkos::LayoutLeft,
+               HostSpace,
+               Kokkos::MemoryTraits<Kokkos::RandomAccess>>
+  SimulationUnit::get_cp()
+  {
+    auto &matrix = flow_liquid->cumulative_probability;
 
-    // const Kokkos::RangePolicy<> range(0, to_process.size());
+    Kokkos::View<double **,
+                 Kokkos::LayoutLeft,
+                 HostSpace,
+                 Kokkos::MemoryTraits<Kokkos::RandomAccess>>
+        rd(matrix.data(), matrix.rows(), matrix.cols());
 
-    // _kernel->update(to_process,
-    //                 d_t,
-    //                 this->flow_liquid->get_diag_transition(),
-    //                 this->flow_liquid->get_view_cum_prob(),
-    //                 get_view_neighbor(),
-    //                 liquid_scalar->k_contribs);
+    return Kokkos::create_mirror_view_and_copy(ComputeSpace(), rd);
+  }
 
-   
-    // // Kokkos::parallel_reduce(
-    // //     "ProcessParticles", range, *_kernel, kernel_results);
+  Kokkos::View<double **, Kokkos::LayoutLeft, ComputeSpace>
+  SimulationUnit::get_contribs()
+  {
+    return Kokkos::create_mirror_view_and_copy(ComputeSpace(),
+                                               liquid_scalar->k_contribs);
+  }
 
-    // // Kokkos::fence();
-
-    // _kernel->operator(kernel_results);
-    
-
-    // mc_unit->events.inplace_reduce(kernel_results.events);
-    // mc_unit->container.merge(kernel_results);
+  void SimulationUnit::set_contribs(
+      Kokkos::View<double **, Kokkos::LayoutLeft, ComputeSpace> c)
+  {
+    Kokkos::deep_copy(liquid_scalar->k_contribs, c);
   }
 
   void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation *ptr) const
-  {
-    delete ptr;
-  }
-
-  void SimulationUnit::pimpl_deleter_::operator()(Kernel *ptr) const
   {
     delete ptr;
   }

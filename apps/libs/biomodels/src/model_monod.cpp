@@ -1,184 +1,101 @@
-// #include "mc/prng/prng.hpp"
-// #include <Eigen/Dense>
-// #include <any>
-// #include <backward_euler.hpp>
-// #include <models/monod.hpp>
+#include <Kokkos_Printf.hpp>
+#include <common/common.hpp>
+#include <mc/particles/data_holder.hpp>
+#include <mc/particles/particle_model.hpp>
+#include <models/model_monod.hpp>
 
-// #include <random>
-// #include <stdexcept>
-// namespace monod
-// {
+namespace
+{
+  constexpr double Ks = 0.01;
+  constexpr double YXS = 0.5;
+  constexpr double critcal_division_length = 11e-6;
+  constexpr double maximal_length = 18e-6;
+  constexpr double minimal_length = 7e-6;
+  const double mu_max= 0.77 / 3600.;
+  KOKKOS_INLINE_FUNCTION double division_gamma(double lenght)
+  {
 
-//   constexpr bool implicit = true;
-//   static std::random_device rd{};
-//   static std::mt19937 gen{rd()};
-//   static std::normal_distribution<double> n_dist(1, 0.1);
+    const auto length = lenght;
+    if (length <= critcal_division_length)
+    {
+      return 0.;
+    }
+    constexpr double kappa = 1.;
 
-//   enum XI_N
-//   {
-//     lenght = 0,
-//     mu_eff = 1,
-//   };
+    return Kokkos::pow(length / critcal_division_length, kappa);
+  }
 
-//   constexpr size_t xi_t_size = 2;
-//   using xi_t = Eigen::Vector<double, xi_t_size>;
+} // namespace
 
-//   struct alignas(ExecInfo::cache_line_size) MonodSimple
-//   {
+namespace Models
+{
 
-//     xi_t xi;
-//     Eigen::Vector<double, 1> contrib;
+  KOKKOS_FUNCTION void Monod::init(MC::ParticleDataHolder &p,Kokkos::Random_XorShift64_Pool<> _rng)
+  {
+    this->age = 0;
+    auto generator = _rng.get_state();
+    this->l = critcal_division_length;//generator.drand(minimal_length,critcal_division_length); 
+    this->mu =  generator.drand(mu_max*0.9, mu_max*1.1); 
+    _rng.free_state(generator);
 
-//     static constexpr double mu_max = 0.46 / 3600;
+    this->contrib = 0.;
+  }
 
-//     static constexpr double YXS = 0.5;
-//     static constexpr double critcal_division_length = 11e-6;
-//     static constexpr double minimal_length = 7e-6;
-//     static constexpr double maximal_length = 18e-6;
-//     static constexpr double tau_metabolism = 1.25 / mu_max;
-//     static constexpr double KS = 0.01;
-//     static MC::KPRNG rng;
-//   };
+  KOKKOS_FUNCTION void
+  Monod::update(double d_t,
+                MC::ParticleDataHolder &p,
+                const LocalConcentrationView &concentration,
+                Kokkos::Random_XorShift64_Pool<> _rng)
+  {
+    const double s = concentration(0);
+    if (almost_equal(s, 0.))
+    {
+      return;
+    }
+    age += d_t;
+    constexpr double cell_lenghtening = 6.51e-6;
+    constexpr auto tau_metabolism = 3600;
+    const double mu_p = mu * s / (Ks + s);
 
-//   void init_monod_model_(MC::Particles &p)
-//   {
+    l += d_t * (YXS * mu * cell_lenghtening);
 
-//     p.data = MonodSimple();
-//     auto &model = std::any_cast<MonodSimple &>(p.data);
-//     model.contrib.setZero();
+    mu += d_t * (1.0 / tau_metabolism) * (mu_p - mu);
 
-//     model.xi[XI_N::lenght] = p.rng->double_unfiform(
-//         MonodSimple::minimal_length, MonodSimple::maximal_length);
+    contrib = mu * s / (Ks + s);
 
-//     // model.xi[XI_N::mu_eff] =
-//     //     MonodSimple::mu_max * (1. - p.rng->double_unfiform());
-
-//     model.xi[XI_N::mu_eff]  = p.rng->double_unfiform(
-//         1e-8, 0.90*MonodSimple::mu_max);
-//   }
-
-//   inline double division_gamma(const auto &xi)
-//   {
-
-//     const auto length = xi[XI_N::lenght];
-//     if (length <= MonodSimple::critcal_division_length)
-//     {
-//       return 0.;
-//     }
-//     constexpr double kappa = 5.;
-
-//     return std::pow(length / MonodSimple::maximal_length, kappa);
-//   }
-
-//   inline void u_xi_dot(double mu_p, double S, const xi_t &xi, xi_t &xi_dot)
-//   {
-//     constexpr double cell_lenghtening = 6.51e-6;
-//     const auto tau_metabolism = 3600;//1.25 / MonodSimple::mu_max;
-//     // std::cout<<(mu_p - xi[XI_N::mu_eff])<<std::endl;
-//     xi_dot = {
-//         MonodSimple::YXS *  xi[XI_N::mu_eff] * cell_lenghtening,
-//         (1.0 / tau_metabolism) * (mu_p - xi[XI_N::mu_eff]),
-//     };
-//   }
-
-//   void f(double s, const xi_t &xi, xi_t &xi_dot)
-//   {
-//     const double mu_p = xi[XI_N::mu_eff] * s / (MonodSimple::KS + s);
+    const double proba_div = division_gamma(l);//(1. - Kokkos::exp(-division_gamma(l) * d_t));
+    auto generator = _rng.get_state();
+    double x = generator.drand(0., 1.);
+    _rng.free_state(generator);
     
+    if (x < proba_div)
+    {
+      p.status = MC::CellStatus::CYTOKINESIS;
+    }
+  }
 
-//     u_xi_dot(mu_p, s, xi, xi_dot);
-//   }
+  KOKKOS_FUNCTION Monod Monod::division(MC::ParticleDataHolder &p)
+  {
+    age= 0;
+    const double original_lenght = l;
+    l = original_lenght / 2.;
 
-//   void update_monod_model(double d_t,
-//                           MC::Particles &p,
-//                           std::span<double const> concentrations)
-//   {
-//     auto &model = std::any_cast<MonodSimple &>(p.data);
-//     auto &xi = model.xi;
-//     double S = std::max(concentrations[0], 0.);
+    auto n = *this;
+    
+    return n;
+  }
 
-//     if (S < 1e-20)
-//     {
-//       S = 0.;
-//     }
+  KOKKOS_FUNCTION void Monod::contribution(MC::ParticleDataHolder &p,
+                                           ContributionView contribution)
+  {
+    contribution(0, p.current_container) -= contrib * p.weight;
+  }
 
-//     if constexpr (implicit)
-//     {
-//       xi = backward_euler_update<xi_t_size>(d_t, S, model.xi, &f);
-//     }
-//     else
-//     {
-//       xi_t xi_dot;
-//       xi_dot.setZero();
+  model_properties_detail_t Monod::get_properties()
+  {
+    return {{"mu", mu}, {"length", l},{"age",age}};
+  }
 
-//       f(S, xi, xi_dot);
-//       xi += d_t * xi_dot;
-//     }
+  static_assert(ParticleModel<Monod>, "Check Monod Model");
 
-//     model.contrib(0) = xi[XI_N::mu_eff] * S / (MonodSimple::KS + S);
-
-//     auto proba_div = (1. - std::exp(-division_gamma(xi) * d_t));
-
-//     if (p.rng->double_unfiform() < proba_div)
-//     {
-//       p.status = MC::CellStatus::CYTOKINESIS;
-//     }
-//   }
-
-//   MC::Particles division_monod_model(MC::Particles &p)
-//   {
-
-//     auto &parent_model = std::any_cast<MonodSimple &>(p.data);
-//     const double div_length = p.rng->double_unfiform();
-
-//     const auto current_length = parent_model.xi[XI_N::lenght];
-
-//     MC::Particles child(p);
-
-//     auto child_model = MonodSimple(parent_model);
-//     child_model.xi = parent_model.xi;
-
-//     parent_model.xi[XI_N::lenght] = div_length * current_length;
-//     child_model.xi[XI_N::lenght] = (1 - div_length) * current_length;
-
-//     child.status = MC::CellStatus::IDLE;
-//     p.status = MC::CellStatus::IDLE;
-
-//     child.data.emplace<MonodSimple>(child_model);
-
-//     return child;
-
-//     // // parent_model.xi[XI_N::lenght]/=2.;
-//     // // p.weight*=2;
-//   }
-
-//   void contribution_monod_model(MC::Particles &p, Eigen::MatrixXd &contribution)
-//   {
-//     auto &model = std::any_cast<MonodSimple &>(p.data);
-
-//     // int ic = static_cast<int>(p.current_container);
-
-//     // contribution.col(0) -= (p.weight * model.contrib);
-
-//     contribution(0, 0) -= (p.weight * model.contrib(0));
-//   }
-
-//   model_properties_detail_t properties(const MC::Particles &p)
-//   {
-//     const auto &model = std::any_cast<const MonodSimple &>(p.data);
-//     const auto &xi = model.xi;
-//     return {
-//         {"lenght", xi[XI_N::lenght]},
-//         {"mu_eff", xi[XI_N::mu_eff]},
-//     };
-//   }
-// } // namespace monod
-
-// KModel get_model_monod()
-// {
-//   return {&monod::init_monod_model_,
-//           &monod::update_monod_model,
-//           &monod::division_monod_model,
-//           &monod::contribution_monod_model,
-//           &monod::properties};
-// }
+} // namespace Models

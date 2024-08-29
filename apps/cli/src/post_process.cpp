@@ -1,5 +1,4 @@
 #include "mc/particles/mcparticles.hpp"
-#include "models/types.hpp"
 #include <common/execinfo.hpp>
 #include <mc/unit.hpp>
 #include <memory>
@@ -11,22 +10,22 @@
 
 namespace PostProcessing
 {
-  // static void get_particle_properties2(
-  //     std::unique_ptr<DataExporter> &exporter,
-  //     std::unique_ptr<MC::MonteCarloUnit> &mc_unit,
-  //     size_t size,
-  //     std::unordered_map<std::string, std::vector<double>> &spatial,
-  //     ModelGetProperties model_properties,
-  //     bool clean);
-
   static void get_particle_properties(
       std::unique_ptr<MC::MonteCarloUnit> &mc_unit,
       std::unordered_map<std::string, std::vector<model_properties_t>>
           &aggregated_values,
       std::unordered_map<std::string, std::vector<double>> &spatial,
       size_t size,
-      ModelGetProperties model_properties,
-      bool clean = false);
+      bool clean=true);
+
+  // static void get_particle_properties(
+  //     std::unique_ptr<MC::MonteCarloUnit> &mc_unit,
+  //     std::unordered_map<std::string, std::vector<model_properties_t>>
+  //         &aggregated_values,
+  //     std::unordered_map<std::string, std::vector<double>> &spatial,
+  //     size_t size,
+  //     ModelGetProperties model_properties,
+  //     bool clean = false);
 
   void save_initial(Simulation::SimulationUnit &simulation,
                     std::unique_ptr<DataExporter> &exporter)
@@ -37,11 +36,12 @@ namespace PostProcessing
           aggregated_values;
 
       std::unordered_map<std::string, std::vector<double>> spatial;
+      auto distribution = simulation.mc_unit->domain.getDistribution();
       get_particle_properties(simulation.mc_unit,
                               aggregated_values,
                               spatial,
-                              std::get<1>(simulation.getDim()),
-                              simulation.getModel().get_properties);
+                              distribution.size(),false);
+ 
 
       exporter->write_initial_particle_data(aggregated_values, spatial);
     }
@@ -74,14 +74,11 @@ namespace PostProcessing
       // clear montecarlo state to save memory
       auto unit = std::move(simulation.mc_unit);
 
-      const auto model_properties = simulation.getModel().get_properties;
 
       get_particle_properties(unit,
-
                               aggregated_values,
                               spatial,
                               distribution.size(),
-                              model_properties,
                               true);
       unit.reset();
       exporter->write_final_particle_data(aggregated_values, spatial);
@@ -118,13 +115,12 @@ namespace PostProcessing
           &aggregated_values,
       std::unordered_map<std::string, std::vector<double>> &spatial,
       size_t size,
-      const ModelGetProperties model_properties,
       bool clean)
   {
     auto find_first_idle_particle = [](const auto &particles_data)
     {
       size_t i_p = 0;
-      while (particles_data[i_p].status != MC::CellStatus::IDLE &&
+      while (particles_data[i_p].properties.status != MC::CellStatus::IDLE &&
              i_p != particles_data.size())
       {
         i_p++;
@@ -136,57 +132,53 @@ namespace PostProcessing
 
     const auto compartments = mc_unit->domain.data();
 
-    auto particles_data = mc_unit->container.to_process.data_span();
-
-    const auto n_particle = particles_data.size();
-
-    const size_t i_p = find_first_idle_particle(particles_data);
-
-    const auto first_property = model_properties(particles_data[i_p]);
-
-    std::for_each(first_property.begin(),
-                  first_property.end(),
-                  [&](auto &&_tuple)
-                  {
-                    const auto &[key, _value] = _tuple;
-                    aggregated_values[key].resize(n_particle);
-                    spatial[key].resize(size);
-                  });
-
-#pragma omp parallel for shared(aggregated_values,                             \
-                                    n_particle,                                \
-                                    model_properties,                          \
-                                    size,                                      \
-                                    spatial) default(none),                    \
-    firstprivate(i_p, particles_data, compartments, clean)
-
-    for (size_t i = i_p; i < n_particle; ++i)
+    auto functor = [&](auto &&container)
     {
-      auto &particle = particles_data[i];
-      if (particle.status == MC::CellStatus::IDLE)
-      {
-        auto prop = model_properties(particle);
-        const size_t i_container = particle.current_container;
+      auto particles_data = container.get_host();
 
-        for (const auto &[key, value] : prop)
+      const auto n_particle = particles_data.size();
+
+      const size_t i_p = find_first_idle_particle(particles_data);
+
+      const auto first_property = particles_data[i_p].data.get_properties();
+
+      std::for_each(first_property.begin(),
+                    first_property.end(),
+                    [&](auto &&_tuple)
+                    {
+                      const auto &[key, _value] = _tuple;
+                      aggregated_values[key].resize(n_particle);
+                      spatial[key].resize(size);
+                    });
+
+      for (size_t i = i_p; i < n_particle; ++i)
+      {
+        auto &particle = particles_data[i];
+        if (particle.properties.status == MC::CellStatus::IDLE)
         {
+          auto prop = particle.data.get_properties();
+          const size_t i_container = particle.properties.current_container;
+
+          for (const auto &[key, value] : prop)
+          {
             aggregated_values[key][i] = value;
 
-          if (const double *val = std::get_if<double>(&value))
+            if (const double *val = std::get_if<double>(&value))
+            {
+              // double weighted_val = *val*particle.weight;
+              spatial[key][i_container] +=
+                  *val / static_cast<double>(compartments[i_container].n_cells);
+            }
+          }
+          if (clean)
           {
-            // double weighted_val = *val*particle.weight;
-            
-#pragma omp atomic
-            spatial[key][i_container] +=
-                *val / static_cast<double>(compartments[i_container].n_cells);
+            particle.clearState();
           }
         }
-        if (clean)
-        {
-          particle.clearState();
-        }
       }
-    }
+    };
+
+    std::visit(functor, mc_unit->container);
   }
 
   //   void get_particle_properties2(

@@ -1,40 +1,72 @@
 #ifndef __MC_PARTICLE_MODEL_HPP__
 #define __MC_PARTICLE_MODEL_HPP__
 
+#include "common/kokkos_vector.hpp"
+#include "mc/prng/prng.hpp"
+#include <Kokkos_Core_fwd.hpp>
 #include <mc/particles/data_holder.hpp>
 
+using LocalConcentrationView =
+    Kokkos::Subview<Kokkos::View<const double **>, int, decltype(Kokkos::ALL)>;
+using ContributionView =
+    Kokkos::View<double **, Kokkos::LayoutLeft, Kokkos::DefaultExecutionSpace>;
+
+using model_properties_t = std::variant<double, std::string>;
+
+using model_properties_detail_t =
+    std::unordered_map<std::string, model_properties_t>;
+
 template <typename T>
-concept ParticleModel = requires(T model, MC::ParticleDataHolder &p) {
-  { model.init(p) } -> std::same_as<void>;
-  { model.update(p) } -> std::same_as<void>;
-  { model.division(p) } -> std::same_as<void>;
-  { model.contribution(p) } -> std::same_as<void>;
+concept ParticleModel = requires(T model,
+                                 MC::ParticleDataHolder &p,
+                                 double d_t,
+                                 const LocalConcentrationView &concentration,
+                                 ContributionView contrib,Kokkos::Random_XorShift64_Pool<> _rng) {
+  { model.init(p,_rng) } -> std::same_as<void>;
+  { model.update(d_t, p, concentration,_rng) } -> std::same_as<void>;
+  { model.division(p) } -> std::same_as<T>;
+  { model.contribution(p, contrib) } -> std::same_as<void>;
+  { model.get_properties() } -> std::same_as<model_properties_detail_t>;
 };
 
-struct DefaultModel
+
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+class DefaultModel
 {
 public:
-  KOKKOS_FUNCTION void init(MC::ParticleDataHolder &p)
+  KOKKOS_INLINE_FUNCTION void init(MC::ParticleDataHolder &p,Kokkos::Random_XorShift64_Pool<> _rng)
   {
     p.status = MC::CellStatus::IDLE;
   }
 
-  KOKKOS_FUNCTION void update(MC::ParticleDataHolder &p)
+  KOKKOS_INLINE_FUNCTION void
+  update(double d_t,
+         MC::ParticleDataHolder &p,
+         const LocalConcentrationView &concentration,Kokkos::Random_XorShift64_Pool<> _rng)
   {
-    p.current_container = (p.current_container + 1) % 5;
   }
 
-  KOKKOS_FUNCTION void division(MC::ParticleDataHolder &p)
+  KOKKOS_INLINE_FUNCTION DefaultModel division(MC::ParticleDataHolder & /*p*/)
   {
     // Division logic
+    return {};
   }
 
-  KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p)
+  KOKKOS_INLINE_FUNCTION void contribution(MC::ParticleDataHolder &p,
+                                           ContributionView contrib)
   {
     // Contribution logic
   }
+
+  inline model_properties_detail_t get_properties(){
+    return {};
+  }
 };
 
+static_assert(ParticleModel<DefaultModel>, "Check default model");
 
+#pragma clang diagnostic pop
 
 #endif

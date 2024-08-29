@@ -3,10 +3,12 @@
 
 #include "cmt_common/macro_constructor_assignment.hpp"
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Core_fwd.hpp>
 #include <cma_read/neighbors.hpp>
 #include <common/common_types.hpp>
 #include <mc/container_state.hpp>
 #include <vector>
+#include <Kokkos_StdAlgorithms.hpp>
 
 namespace MC
 {
@@ -52,32 +54,25 @@ namespace MC
 
     static ReactorDomain
     reduce(std::span<size_t> data, size_t original_size, size_t n_rank);
-
-    std::span<ContainerState> data();
-
-    template <class Archive> void serialize(Archive &ar)
-    {
-      ar(containers);
-    }
-
-    auto get_view()
-    {
-      return view;
-    }
-
+    auto& data(){return shared_containers;}
+    // std::span<ContainerState> data();
+    
   private:
-    Kokkos::View<MC::ContainerState *, Kokkos::LayoutRight> view;
     double _total_volume = 0.;
     size_t id = 0;
-    std::vector<ContainerState> containers;
+    size_t size=0;
+    Kokkos::View<ContainerState*,Kokkos::SharedSpace> shared_containers;
+
+
+    // std::vector<ContainerState> containers;
     CmaRead::Neighbors::Neighbors_const_view_t neighbors;
     std::vector<std::span<const size_t>> row_neighbors;
   };
 
-  inline std::span<ContainerState> ReactorDomain::data()
-  {
-    return containers;
-  }
+  // inline std::span<ContainerState> ReactorDomain::data()
+  // {
+  //   return containers;
+  // }
 
   inline std::span<const size_t> ReactorDomain::getNeighbors(size_t i) const
   {
@@ -104,7 +99,7 @@ namespace MC
 
   inline auto ReactorDomain::getNumberCompartments() const
   {
-    return containers.size();
+    return size;
   }
 
   inline double ReactorDomain::getTotalVolume() const
@@ -114,29 +109,35 @@ namespace MC
 
   inline auto &ReactorDomain::operator[](size_t i_c)
   {
-    return this->containers[i_c];
+    // return this->containers[i_c];
+    return this->shared_containers(i_c);
   }
   inline auto &ReactorDomain::operator[](size_t i_c) const
   {
-    return this->containers[i_c];
+    // return this->containers[i_c];
+    return this->shared_containers(i_c);
   }
-
+  
   inline auto ReactorDomain::begin() const
   {
-    return containers.begin();
+    return Kokkos::Experimental::begin(shared_containers);
+    // return containers.begin();
   }
   inline auto ReactorDomain::end() const
   {
-    return containers.end();
+    // return containers.end();
+    return Kokkos::Experimental::end(shared_containers);
   }
 
   inline auto ReactorDomain::begin()
   {
-    return containers.begin();
+    // return containers.begin();
+    return Kokkos::Experimental::begin(shared_containers);
   }
   inline auto ReactorDomain::end()
   {
-    return containers.end();
+    // return containers.end();
+    return Kokkos::Experimental::end(shared_containers);
   }
 
 } // namespace MC

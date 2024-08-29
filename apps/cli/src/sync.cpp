@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <mpi_w/wrap_mpi.hpp>
 #include <sync.hpp>
+#include <variant>
 
 void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
 {
@@ -15,7 +16,6 @@ void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
   //  TODO: As we just gather we could use const data
   auto local_contribution = simulation.getContributionData();
 
-  // Move span is useless but keep im mind gather idea of "moving" data
   std::vector<double> total_contrib_data =
       MPI_W::gather<double>(local_contribution, exec.n_rank);
 
@@ -49,11 +49,13 @@ void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
 {
   MPI_W::barrier();
 
-  auto& tot_events =simulation.mc_unit->events;
-      // MC::EventContainer::reduce_local(simulation.mc_unit->events);
+  auto &tot_events = simulation.mc_unit->events;
+  // MC::EventContainer::reduce_local(simulation.mc_unit->events);
+
+  auto span_events = std::span<size_t>(tot_events._events.data(),MC::EventContainer::number_event_type);
 
   std::vector<size_t> total_contrib_data =
-      MPI_W::gather<size_t>(tot_events.events, exec.n_rank);
+      MPI_W::gather<size_t>(span_events, exec.n_rank);
 
   auto local = simulation.mc_unit->domain.getDistribution();
 
@@ -61,8 +63,13 @@ void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
 
   // auto local_particle = simulation.mc_unit->container.to_process.data();
 
+  const auto visitor_sync = [&exec](auto &&container)
+  {
+    return MPI_W::gather_reduce<size_t>(container.process_size(), exec.n_rank);
+  };
+
   auto total_particle = MPI_W::gather_reduce<size_t>(
-      simulation.mc_unit->container.to_process.size(), exec.n_rank);
+      std::visit(visitor_sync, simulation.mc_unit->container), exec.n_rank);
 
   auto tot_distrib = MPI_W::gather<size_t>(local, exec.n_rank, 0);
 
@@ -75,5 +82,6 @@ void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
     std::cout << "nparticle " << total_particle << std::endl;
     // simulation.mc_unit->container.to_process.data() = total_particle;
   }
-  simulation.mc_unit->events = tot_events; // FIX IT because we will reduce twice (here + post process)
+  simulation.mc_unit->events =
+      tot_events; // FIX IT because we will reduce twice (here + post process)
 }

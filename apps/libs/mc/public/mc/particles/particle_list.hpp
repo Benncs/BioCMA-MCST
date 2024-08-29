@@ -3,6 +3,7 @@
 
 #include <common/kokkos_vector.hpp>
 #include <mc/particles/mcparticles.hpp>
+#include <mc/prng/prng.hpp>
 
 #define __MC_MAX_PARTICLES_PER_PROCESS__ 100e6
 
@@ -17,7 +18,8 @@ namespace MC
   {
   public:
     explicit ParticleList(size_t capacity, bool alloc = true)
-        : KokkosVector<Particle<Model>, MemorySpace>(capacity, alloc)
+        : KokkosVector<Particle<Model>, MemorySpace>(
+              capacity, alloc, "particle_list")
     {
     }
 
@@ -32,11 +34,10 @@ namespace MC
       return this->_owned_data(i);
     }
 
-    KOKKOS_INLINE_FUNCTION const Particle<Model>& operator[](size_t i) const
+    KOKKOS_INLINE_FUNCTION const Particle<Model> &operator[](size_t i) const
     {
-        return this->_owned_data(i);
+      return this->_owned_data(i);
     }
-
 
     auto d() const
     {
@@ -47,11 +48,11 @@ namespace MC
 
     KOKKOS_FUNCTION Particle<Model> *spawn()
     {
+      Kokkos::Random_XorShift64_Pool<> p_rng(4086); //FIXME
       if (this->emplace(std::move(Particle<Model>())))
       {
-
         auto &p = this->back();
-        p.init();
+        p.init(p_rng);
         return &p;
       }
       return nullptr;
@@ -59,6 +60,7 @@ namespace MC
 
     void init(double weight)
     {
+      Kokkos::Random_XorShift64_Pool<> p_rng(1024); //FIXME
       auto local_data = this->_owned_data;
       KPRNG rng;
 
@@ -66,10 +68,10 @@ namespace MC
           "InitializeParticles",
           Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, this->size()),
           KOKKOS_LAMBDA(const int i) {
-            auto p = Particles<Model>(weight);
+            auto p = Particle<Model>(weight);
 
             p.properties.current_container = rng.uniform_u(0, 4);
-            p.init();
+            p.init(p_rng);
             local_data(i) = std::move(p);
           });
 

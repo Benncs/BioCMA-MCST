@@ -22,10 +22,7 @@ namespace MC
         : weight(_weight)
     {
     }
-
-    DEFAULT_COPY_MOVE_AC(ParticleDataHolder)
-    ~ParticleDataHolder() = default;
-
+ 
     KOKKOS_INLINE_FUNCTION void reset()
     {
       current_container = default_container;
@@ -36,19 +33,17 @@ namespace MC
       weight = default_weight;
     }
 
-    
-
     size_t current_container = default_container;
     size_t current_domain = default_domain;
     size_t random_seed = 0;
     uint32_t id = 0;
-    MC::CellStatus status = default_status;
+    CellStatus status = default_status;
     double weight = default_weight;
 
   private:
     static constexpr size_t default_container = 0;
     static constexpr size_t default_domain = 0;
-    static constexpr MC::CellStatus default_status = CellStatus::IDLE;
+    static constexpr CellStatus default_status = CellStatus::IDLE;
     static constexpr double default_weight = 0.;
   };
 } // namespace MC

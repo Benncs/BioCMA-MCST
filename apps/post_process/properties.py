@@ -13,7 +13,14 @@ def get_distribution_moment(data):
 def mk_histogram(data,name,dest:str):
     num_bins = 50
     plt.figure()
-    plt.hist(data, bins=num_bins, density=True,alpha=0.7, color='blue', edgecolor='black')
+    #plt.hist(data, bins=num_bins, density=True,alpha=0.7, color='blue', edgecolor='black')
+    
+    counts, bin_edges = np.histogram(data, bins=num_bins, density=False)
+
+    counts_normalized = counts / counts.max()
+
+    plt.bar(bin_edges[:-1], counts_normalized, width=np.diff(bin_edges), edgecolor='black', alpha=0.7, color='blue')
+
     plt.xlabel('Value')
     plt.ylabel('Density')
     plt.title(f"Histogram {name}")

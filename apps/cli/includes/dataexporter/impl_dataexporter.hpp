@@ -34,8 +34,9 @@ public:
               std::span<const double> volume_gas) override;
 
   void write_final_particle_data(
-      const std::unordered_map<std::string, std::vector<model_properties_t>> &,
-      const std::unordered_map<std::string, std::vector<double>> &) override;
+      const std::unordered_map<std::string, std::vector<model_properties_t>>
+          & /*unused*/,
+      const std::unordered_map<std::string, std::vector<double>> & /*unused*/) override;
 
   void write_initial_particle_data(
       const std::unordered_map<std::string, std::vector<model_properties_t>>

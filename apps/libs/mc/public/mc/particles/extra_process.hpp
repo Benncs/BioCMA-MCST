@@ -7,26 +7,28 @@
 namespace MC
 {
 
-  template <typename MemorySpace, MC::ParticleModel T> struct Results
+  template <typename MemorySpace, ParticleModel T> struct Results
   {
 
     using ResultsVIew = Kokkos::View<Results<MemorySpace, T>, MemorySpace>;
 
-    MC::ParticleList<MemorySpace, T> extra_proces;
+    MC::ParticleList<MemorySpace, T> extra_process;
     int waiting_allocation_particle = 0;
 
     explicit Results(size_t capacity)
-        : extra_proces(
+        : extra_process(
               MC::ParticleList<MemorySpace, T>::with_capacity(capacity))
     {
+
+      
     }
 
     Results() = default;
 
     void clear(size_t capacity)
     {
-      extra_proces.resize(capacity);
-      extra_proces.clear();
+      extra_process.resize(capacity);
+      extra_process.clear();
       waiting_allocation_particle = 0;
     }
 
@@ -45,7 +47,7 @@ namespace MC
 
     void from_view(Kokkos::View<Results<MemorySpace, T>, MemorySpace> _r_v)
     {
-      extra_proces = _r_v().extra_proces;
+      extra_process = _r_v().extra_proces;
       waiting_allocation_particle = _r_v().waiting_allocation_particle;
     }
   };

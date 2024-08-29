@@ -9,17 +9,45 @@
 // #include <mc/mcinit.hpp>
 // #include <omp.h>
 // #include <utility>
+#include "models/model_monod.hpp"
+#include <mc/mcinit.hpp>
 
-// namespace MC
-// {
+namespace MC
+{
 
+  // std::unique_ptr<MonteCarloUnit> wrap_init_model_selector(
+  //     const ExecInfo &info,
+  //     size_t numper_particle,
+  //     std::span<double> liq_volume,
+  //     CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
+  //     double x0)
+  // {
+  //   int mock_selector = 1;
+
+  //   switch (mock_selector)
+  //   {
+    
+  //   case 1:
+  //   {
+  //     return MC::init<Models::Monod>(
+  //         info, numper_particle, liq_volume, liquid_neighbors, x0);
+  //   }
+  //   default:
+  //   {
+  //     return MC::init<DefaultModel>(
+  //         info, numper_particle, liq_volume, liquid_neighbors, x0);
+  //   }
+  //   }
+  // }
+} // namespace MC
 //   static double get_initial_weight(double scale_factor,
 //                                    double particle_concentration,
 //                                    double total_volume,
 //                                    size_t n_particles);
 
 //   void
-//   post_init_container(const std::function<void(MC::Particles &)> &init_kernel,
+//   post_init_container(const std::function<void(MC::Particles &)>
+//   &init_kernel,
 //                       size_t n_thread,
 //                       ReactorDomain &domain,
 //                       ParticlesList &p_list,
@@ -48,7 +76,8 @@
 //     }
 
 //     double weight =
-//         get_initial_weight(1., x0, unit->domain.getTotalVolume(), n_particles);
+//         get_initial_weight(1., x0, unit->domain.getTotalVolume(),
+//         n_particles);
 
 //     unit->container = ParticlesContainer(particle_per_process, weight);
 //     // unit->extras.resize(info.thread_per_process);
@@ -62,7 +91,8 @@
 //   }
 
 //   void
-//   post_init_container(const std::function<void(MC::Particles &)> &init_kernel,
+//   post_init_container(const std::function<void(MC::Particles &)>
+//   &init_kernel,
 //                       size_t n_thread,
 //                       ReactorDomain &domain,
 //                       ParticlesList &p_list,

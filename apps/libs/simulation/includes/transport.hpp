@@ -10,22 +10,11 @@
 #include <mc/unit.hpp>
 #include <simulation/pc_hydro.hpp>
 
-namespace
-{
-  inline bool probability_leaving(double random_number,
-                                  double volume,
-                                  double flow,
-                                  double dt)
-  {
-    return (dt * flow / volume) > (-std::log(1 - random_number));
-  }
 
-  
-
-} // namespace
 
 namespace Simulation
 {
+ 
   /**
    * @brief Finds the next compartment for a particle based on a random number
    * and cumulative probabilities.

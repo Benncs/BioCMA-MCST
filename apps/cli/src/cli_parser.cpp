@@ -1,5 +1,5 @@
 #include "common/simulation_parameters.hpp"
-#include "model_list.hpp"
+// #include "model_list.hpp"
 #include "rt_init.hpp"
 #include <cli_parser.hpp>
 #include <exception>
@@ -228,10 +228,11 @@ void showHelp(std::ostream &os)
      << '\n';
 
   os << "Available model:\r\n";
-  for (const auto& i : get_available_models())
-  {
-    os << i << "\r\n";
-  }
+   os << "WIP\r\n";
+  // for (const auto& i : get_available_models())
+  // {
+  //   os << i << "\r\n";
+  // }
 
   os << "\nExample:" << '\n';
   os << "  BIOCMA-MCST -np 100 -ff /path/to/flow_file_folder/ [-v]" << '\n';

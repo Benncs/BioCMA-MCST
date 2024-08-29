@@ -9,7 +9,7 @@ MC::EventContainer::reduce_local(std::span<MC::EventContainer> _data)
   {
     for (size_t i = 0; i < n_event_type; ++i)
     {
-      results.events[i] += partial.events[i];
+      results._events(i) += partial._events(i);
     }
   }
 
@@ -22,7 +22,7 @@ MC::EventContainer MC::EventContainer::reduce(std::span<size_t> _data)
   for (size_t i = 0; i < _data.size(); ++i)
   {
     size_t index = i % n_event_type;
-    results.events[index] += _data[i];
+    results._events(index) += _data[i];
   }
   return results;
 }

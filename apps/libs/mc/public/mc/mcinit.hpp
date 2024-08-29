@@ -1,6 +1,11 @@
 #ifndef __MC_INIT_HPP__
 #define __MC_INIT_HPP__
 
+#include "common/kokkos_vector.hpp"
+#include "mc/particles/extra_process.hpp"
+#include "mc/prng/prng.hpp"
+#include <Kokkos_Atomic.hpp>
+#include <Kokkos_DynamicView.hpp>
 #include <common/common_types.hpp>
 #include <common/execinfo.hpp>
 #include <common/thread_safe_container.hpp>
@@ -10,21 +15,6 @@
 
 namespace MC
 {
-
-  //   [[deprecated]] std::unique_ptr<MonteCarloUnit>
-  //   init(const ExecInfo &info,
-  //        size_t n_particles,
-  //        std::span<double> volumes,
-  //        CmaRead::Neighbors::Neighbors_const_view_t &neighbors);
-
-  //   std::unique_ptr<MonteCarloUnit>
-  //   init(std::function<void(MC::Particles &)> init_kernel,
-  //        const ExecInfo &info,
-  //        size_t n_particles,
-  //        std::span<double> volumes,
-  //        CmaRead::Neighbors::Neighbors_const_view_t &neighbors,
-  //        DistributionVariantInt &&param,
-  //        double x0);
 
   namespace
   {
@@ -40,19 +30,68 @@ namespace MC
       return scale_factor * particle_concentration * total_volume /
              static_cast<double>(n_particles);
     }
+
+    template <ParticleModel Model>
+    void impl_init(std::unique_ptr<MonteCarloUnit> &unit,
+                   double weight,
+                   size_t particle_per_process)
+    {
+      auto rng = unit->rng;
+      auto container = ParticlesContainer<Model>(particle_per_process);
+      auto& compartments = unit->domain.data();
+      auto& list = container.get_compute();
+
+      
+
+      constexpr double allocation_factor = 2.5;
+      list.set_allocation_factor(allocation_factor);
+      container.get_extra().extra_process.set_allocation_factor(allocation_factor);
+      container.get_extra() = Results<ComputeSpace, Model>(particle_per_process);
+
+      const auto n_compartments = unit->domain.getNumberCompartments();
+      
+      Kokkos::Random_XorShift64_Pool<> p_rng(512); //FIXME
+
+      Kokkos::parallel_for(
+          "mc_init",
+          Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(
+              0, particle_per_process),
+          KOKKOS_LAMBDA(const int i) {
+            auto p = Particle<Model>(weight);
+            p.properties.weight = weight;
+            auto location = rng.uniform_u(0, n_compartments);
+            p.properties.current_container = location;
+            Kokkos::atomic_increment(&compartments(location).n_cells);
+            p.init(p_rng);
+            
+            list._owned_data(i) = std::move(p);
+
+          });
+
+      Kokkos::fence();
+      unit->container= container;
+    }
+
   } // namespace
 
-  template <MC::ParticleModel Model>
-  std::unique_ptr<MonteCarloUnit> inite(const ExecInfo &info,
-                                        size_t n_particles,std::span<double> volumes,
-                                        CmaRead::Neighbors::Neighbors_const_view_t neighbors,
-                                        DistributionVariantInt &&param,
-                                        double x0)
+  // std::unique_ptr<MonteCarloUnit> wrap_init_model_selector(
+  //     const ExecInfo &info,
+  //     size_t numper_particle,
+  //     std::span<double> liq_volume,
+  //     CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
+  //     double x0);
+
+  template <ParticleModel Model>
+  std::unique_ptr<MonteCarloUnit>
+  init(const ExecInfo &info,
+       size_t n_particles,
+       std::span<double> volumes,
+       CmaRead::Neighbors::Neighbors_const_view_t neighbors,
+       double x0)
   {
     auto unit = std::make_unique<MonteCarloUnit>();
 
-    unit->domain =
-        ReactorDomain(volumes, neighbors);
+    unit->domain = ReactorDomain(volumes, neighbors);
 
     size_t particle_per_process = n_particles / info.n_rank;
 
@@ -64,17 +103,10 @@ namespace MC
 
     double weight =
         get_initial_weight(1., x0, unit->domain.getTotalVolume(), n_particles);
-
-    unit->container = ParticlesContainer<Model>(particle_per_process, weight);
+    impl_init<Model>(unit,weight,particle_per_process);
     return unit;
   }
 
-  // std::unique_ptr<ParticlesContainer> init_container(ExecInfo &info,
-  //                                                    size_t n_particles);
-  // std::unique_ptr<MonteCarloUnit>
-  // init_unit(ExecInfo &info,
-  //           std::span<double> volumes,
-  //           Neighbors::Neighbors_const_view_t& neighbors);
 } // namespace MC
 
 #endif //__MC_INIT_HPP__

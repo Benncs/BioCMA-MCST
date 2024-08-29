@@ -5,11 +5,11 @@
 #include <cstddef>
 #include <vector>
 
-#include <Kokkos_Core.hpp>
+// #include <Kokkos_Core.hpp>
 
 
-#  define __ATOM_INCR__(__val__) Kokkos::atomic_increment(&__val__);
-#  define __ATOM_DECR__(__val__) Kokkos::atomic_decrement(&__val__);
+// #  define __ATOM_INCR__(__val__) Kokkos::atomic_increment(&__val__);
+// #  define __ATOM_DECR__(__val__) Kokkos::atomic_decrement(&__val__);
 
 
 

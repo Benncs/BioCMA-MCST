@@ -126,12 +126,11 @@ template <class Sim> void handle_sig(Sim &sim)
 
   if (save)
   {
-    std::ofstream os("./out.cereal", std::ios::binary);
-    cereal::BinaryOutputArchive archive(os);
-    archive(*sim.mc_unit);
-    std::cout << "./out.cereal   " << sim.mc_unit->domain[0].n_cells
-              << std::endl;
-    int a;
+    // std::ofstream os("./out.cereal", std::ios::binary);
+    // cereal::BinaryOutputArchive archive(os);
+    // archive(*sim.mc_unit);
+    // std::cout << "./out.cereal   " << sim.mc_unit->domain[0].n_cells
+    //           << std::endl;
   }
   save = false;
 }
@@ -185,6 +184,10 @@ void main_loop(const SimulationParameters &params,
 
   auto loop_functor = [&](auto &&local_container)
   {
+
+    auto result = local_container.get_extra();
+    auto view_result = result.get_view();
+
     for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
          ++__loop_counter)
     {
@@ -201,8 +204,9 @@ void main_loop(const SimulationParameters &params,
 
       transitioner->advance(simulation);
 
-      simulation.cycleProcess(container,d_t);
-
+      simulation._cycleProces(local_container,view_result,d_t);
+      result.clear(local_container.n_particle());
+      result.update_view(view_result);
       dump_counter++;
 
       if (dump_counter == dump_interval)

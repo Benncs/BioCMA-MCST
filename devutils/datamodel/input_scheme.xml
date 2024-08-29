@@ -2,21 +2,21 @@
 <cases>
    <control name="n14">
       <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
-      <final_time>1</final_time>
-      <numper_particle>10000000</numper_particle>
+      <final_time>7200</final_time>
+      <numper_particle>10000</numper_particle>
       <delta_time>0</delta_time>
-      <results_file_name>monod_14</results_file_name>
-      <number_exported_result>100</number_exported_result>
+      <results_file_name>monod_14_long</results_file_name>
+      <number_exported_result>360</number_exported_result>
       <model_name>model_monod</model_name>
    </control>
    
    <control name="0d">
-      <cma_case_path>/home/benjamin/Documenti/cpp/BioCMA-MCST/cma_data/0d/</cma_case_path>
-      <final_time>10</final_time>
-      <numper_particle>10000</numper_particle>
-      <delta_time>0.01</delta_time>
-      <results_file_name>monod_0d</results_file_name>
-      <number_exported_result>100</number_exported_result>
+      <cma_case_path>/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/0d/</cma_case_path>
+      <final_time>5400</final_time>
+      <numper_particle>1000</numper_particle>
+      <delta_time>0.1</delta_time>
+      <results_file_name>monod_0d___</results_file_name>
+      <number_exported_result>2000</number_exported_result>
       <model_name>model_monod</model_name>
    </control>
 

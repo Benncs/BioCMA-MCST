@@ -17,35 +17,41 @@ void workers_process(
 
   MPI_W::IterationPayload payload(n_compartments * n_compartments,
                                   n_compartments);
-  bool stop = false;
-  while (!stop)
+
+  auto loop_functor = [&](auto &&container)
   {
-
-    MPI_W::SIGNALS sign{};
-
-    sign = MPI_W::try_recv<MPI_W::SIGNALS>(0, &status);
-    if (sign == MPI_W::SIGNALS::STOP)
+    bool stop = false;
+    while (!stop)
     {
-      last_sync(exec, simulation);
-      stop = true;
+
+      MPI_W::SIGNALS sign{};
+
+      sign = MPI_W::try_recv<MPI_W::SIGNALS>(0, &status);
+      if (sign == MPI_W::SIGNALS::STOP)
+      {
+        last_sync(exec, simulation);
+        stop = true;
+      }
+
+      if (stop)
+      {
+        break;
+      }
+
+      payload.recv(0, &status);
+
+      simulation.mc_unit->domain.setLiquidNeighbors(payload.neigbors);
+      transitioner->update_flow(
+          simulation, payload.liquid_flows, n_compartments);
+      transitioner->advance(simulation);
+
+      simulation.setVolumes(payload.gas_volumes, payload.liquid_volumes);
+
+      // simulation._cycleProces(container, d_t);
+
+      sync_step(exec, simulation);
+      sync_prepare_next(exec, simulation);
     }
-
-    if (stop)
-    {
-      break;
-    }
-
-    payload.recv(0, &status);
-
-    simulation.mc_unit->domain.setLiquidNeighbors(payload.neigbors);
-    transitioner->update_flow(simulation, payload.liquid_flows, n_compartments);
-    transitioner->advance(simulation);
-
-    simulation.setVolumes(payload.gas_volumes, payload.liquid_volumes);
-
-    simulation.cycleProcess(d_t);
-
-    sync_step(exec, simulation);
-    sync_prepare_next(exec, simulation);
-  }
+  };
+  std::visit(loop_functor, simulation.mc_unit->container);
 }

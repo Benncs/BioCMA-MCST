@@ -223,7 +223,8 @@ void DataExportHighFive::write_final_results(ExportData &data,
   file.createDataSet(
       "final_results/distribution",
       std::vector<double>(distribution.begin(), distribution.end()));
-
+  file.createDataSet("final_results/events/move",
+                     data.event->get<MC::EventType::Move>());
   file.createDataSet("final_results/events/total_division",
                      data.event->get<MC::EventType::NewParticle>());
   file.createDataSet("final_results/events/total_death",
@@ -289,7 +290,6 @@ void DataExportHighFive::write_particle_data(
         },
         v1);
   }
-
   HighFive::DataSetCreateProps _ds_props;
   _ds_props.add(HighFive::Chunking(1));
   _ds_props.add(HighFive::Shuffle());
@@ -299,7 +299,6 @@ void DataExportHighFive::write_particle_data(
     file.createDataSet(ds_name + "spatial/" + key, values, _ds_props);
   }
 }
-
 
 void DataExportHighFive::write_initial_particle_data(
     const std::unordered_map<std::string, std::vector<model_properties_t>>

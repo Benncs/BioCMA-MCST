@@ -84,7 +84,7 @@ target_custom_options = project_custom_options.get(build_type, [])
 
 
 if build_type == 'debug' or build_type == 'debugoptimized'
-  add_global_arguments('-DDEBUG', language: 'cpp')
+  add_global_arguments('-DNDEBUG', language: 'cpp')
   # if compiler.has_argument('-pg')
 
   # arch_specific_args= [arch_specific_args,'-pg']
@@ -95,7 +95,7 @@ if build_type == 'debug' or build_type == 'debugoptimized'
 
 
 else
-  add_global_arguments('-DNDEBUG', language: 'cpp')
+  # add_global_arguments('-DNDEBUG', language: 'cpp')
   if compiler.has_argument('-ffast-math')
     arch_specific_args = [arch_specific_args, '-ffast-math']
   endif
@@ -157,8 +157,8 @@ kokkos = declare_dependency(
     dependencies: [__cmake_kokkos_dep__,omp,hwloc],
     compile_args: [
         '-DKOKKOS_DEPENDENCE',
-        '-extended-lambda',
-        '-Wext-lambda-captures-this',
+        # '-extended-lambda',
+        # '-Wext-lambda-captures-this',
         # '-arch=native'
     ],
   
@@ -188,18 +188,17 @@ endif
 
 ceral_found = false
 if cmake.found()
-  cereal_cmake_options = cmake.subproject_options()
+  #cereal_cmake_options = cmake.subproject_options()
 
 
-  cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
+  #cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
 
 
   # cereal_dependency = cereal_proj.dependency('cereal')
 
-  # cereal_dependency = declare_dependency(include_directories: '../cereal/include')
+  cereal_dependency = declare_dependency(include_directories: '../cereal/include')
 
 endif
-cereal_dependency = declare_dependency(include_directories: 'subprojects/cereal/include/')
 
 default_option_cpp20 = 'cpp_std=none'
 if not use_cuda

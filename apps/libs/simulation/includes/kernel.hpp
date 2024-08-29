@@ -20,6 +20,52 @@
 // static const std::vector<double> v_tmp_leaving_flow = {
 //     0.}; //{0.000011758 / 10};
 
+// namespace Kernel
+// {
+  
+//   KOKKOS_FUNCTION void
+//   sub_kernel_move(double random_number,
+//                           double random_number2,
+//                           auto &particle) 
+
+//   {
+//     // Get the current compartment index and corresponding container state
+//     const size_t i_compartment = particle.properties.current_container;
+//     const int rowId = static_cast<int>(i_compartment);
+//     auto &current_container =
+//         domain(i_compartment); // Reference to the current container state
+
+//     // Retrieve the list of neighboring compartments for the current compartment
+//     const auto i_neighbor = std::span<const size_t>(
+//         Kokkos::subview(neighbors_view, i_compartment, Kokkos::ALL).data(),
+//         neighbors_view.extent(1));
+
+//     // Check if the particle will leave the current compartment
+//     if (!probability_leaving(random_number,
+//                              current_container.volume_liq,
+//                              diag[i_compartment],
+//                              d_t))
+//     {
+//       return; // Particle remains in the current compartment
+//     }
+
+//     // Find the next compartment based on the random number and cumulative
+//     // probabilities
+//     const size_t next = Simulation::find_next_compartment(
+//         rowId, random_number2, i_neighbor, view_cumulative_probability);
+
+//     // Atomically update the cell counts in the current and next compartments
+//     __ATOM_DECR__(
+//         current_container
+//             .n_cells); // Decrement cell count in the current compartment
+//     __ATOM_INCR__(
+//         domain(next).n_cells); // Increment cell count in the next compartment
+
+//     // Update the particle's current compartment
+//     particle.current_container = next;
+//   }
+// } // namespace Kernel
+
 // struct Kernel
 // {
 
@@ -66,21 +112,26 @@
 //    * based on probabilistic transitions.
 //    *
 //    * This function performs a move operation on a particle within a
-//    * compartmentalized system. It determines whether the particle should leave
+//    * compartmentalized system. It determines whether the particle should
+//    leave
 //    * its current compartment based on a probability check and updates its
-//    * position if necessary. The new compartment is determined based on a random
+//    * position if necessary. The new compartment is determined based on a
+//    random
 //    * number and transition probabilities.
 //    *
 //    * @tparam T Type of the particle.
-//    * @param random_number Random number used for deciding if the particle leaves
+//    * @param random_number Random number used for deciding if the particle
+//    leaves
 //    * the current compartment.
 //    * @param random_number2 Random number used for determining the next
 //    * compartment.
 //    * @param particle Reference to the particle being moved.
 //    * @param d_t Time step for the simulation.
-//    * @param diag_transition Array of diagonal transition probabilities for each
+//    * @param diag_transition Array of diagonal transition probabilities for
+//    each
 //    * compartment.
-//    * @param cumulative_probability Cumulative probability view used to determine
+//    * @param cumulative_probability Cumulative probability view used to
+//    determine
 //    * the next compartment.
 //    * @param domain_view Kokkos view of the current state of each compartment.
 //    * @param view_neighbors Kokkos view of the neighbors for each compartment.
@@ -113,8 +164,6 @@
 
 //     Eigen::MatrixXd local_contribs = Eigen::Map<Eigen::MatrixXd>(
 //         vlocal_contribs.data(), EIGEN_INDEX(contribs.extent(0)), 1);
-
-
 
 //     auto generator = random_pool.get_state();
 //     const double random_number_1 = generator.drand(0., 1.);
@@ -200,8 +249,8 @@
 //   auto &current_container =
 //       domain(i_compartment); // Reference to the current container state
 
-//   // Retrieve the list of neighboring compartments for the current compartment
-//   const auto i_neighbor = std::span<const size_t>(
+//   // Retrieve the list of neighboring compartments for the current
+//   compartment const auto i_neighbor = std::span<const size_t>(
 //       Kokkos::subview(neighbors_view, i_compartment, Kokkos::ALL).data(),
 //       neighbors_view.extent(1));
 
@@ -243,7 +292,8 @@
 //       return;
 //     }
 
-//     if (probability_leaving(random_number, domain[index].volume_liq, flow, d_t))
+//     if (probability_leaving(random_number, domain[index].volume_liq, flow,
+//     d_t))
 //     {
 //       particle.status = MC::CellStatus::OUT;
 //     }

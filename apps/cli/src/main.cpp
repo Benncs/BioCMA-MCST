@@ -4,7 +4,6 @@
 #include <cli_parser.hpp>
 
 #include <common/common.hpp>
-#include <models/models.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/update_flows.hpp>
 
@@ -12,7 +11,6 @@
 #include <cma_read/reactorstate.hpp>
 
 #include <host_specific.hpp>
-#include <model_list.hpp>
 #include <mpi_w/wrap_mpi.hpp>
 #include <post_process.hpp>
 #include <rt_init.hpp>
@@ -47,7 +45,7 @@ constexpr bool redirect = false; // TODO REMOVE
 
 static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params);
 
-static void exec(CaseData &&cased);
+static void exec(CaseData &&case_data);
 
 template <typename ExceptionType>
 static int handle_catch(ExceptionType const &e);
@@ -95,9 +93,8 @@ static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params)
 {
 
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
-  const auto model = load_model_(params.user_params.model_name);
 
-  auto simulation = init_simulation(exec_info, params, transitioner, model);
+  auto simulation = init_simulation(exec_info, params, transitioner);
 
   return {std::move(simulation), params, std::move(transitioner), exec_info};
 }

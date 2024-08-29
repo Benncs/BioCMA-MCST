@@ -32,7 +32,7 @@ def property_distribution(
         if isinstance(value, np.ndarray) and np.issubdtype(value.dtype, float):
             mean, variance_population, variance_sample = get_distribution_moment(value)
 
-            print(mean, variance_population, variance_sample)
+            print(key,": ", "mean: ",mean,"var: ", variance_population, "varred: ",variance_sample)
 
             mk_histogram(value, f"{prefix}_{key}", dest)
             if vtk_cma_mesh_path is not None:

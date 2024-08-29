@@ -4,8 +4,8 @@
 #include <common/execinfo.hpp>
 #include <cstddef>
 #include <cstdint>
-#include <span>
-
+#include <Kokkos_Core.hpp>
+#include <mc/particles/particle_model.hpp>
 
 namespace MC
 {
@@ -21,14 +21,15 @@ namespace MC
    */
   struct alignas(ExecInfo::cache_line_size) ContainerState
   {
-    double volume_liq; ///< Volume of liquid in the container.
-    double volume_gas; ///< Volume of gas in the container.
-    size_t n_cells; ///< Number of cells in the container. @warning Be careful
+    
+    double volume_liq{}; ///< Volume of liquid in the container.
+    double volume_gas{}; ///< Volume of gas in the container.
+    size_t n_cells{}; ///< Number of cells in the container. @warning Be careful
                     ///< when decrementing this value.
-    uint64_t id;    ///< Unique identifier for the container.
-    std::span<double const> concentrations; ///< Span of concentrations
+    uint64_t id{};    ///< Unique identifier for the container.
+    // std::span<double const> concentrations; ///< Span of concentrations
                                             ///< associated with the container.
-
+    LocalConcentrationView concentrations;
     /**
      * @brief Serializes the `ContainerState` data members.
      *
