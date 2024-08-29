@@ -2,6 +2,7 @@
 #define __MC_PARTICLESHPP__
 
 #include "common/kokkos_vector.hpp"
+#include "mc/prng/prng.hpp"
 #include <Kokkos_Printf.hpp>
 #include <mc/particles/data_holder.hpp>
 #include <mc/particles/particle_model.hpp>
@@ -29,7 +30,7 @@ namespace MC
     }
 
     KOKKOS_INLINE_FUNCTION void
-    update(double d_t, const LocalConcentrationView &concentration,Kokkos::Random_XorShift64_Pool<> _rng)
+    update(double d_t, const LocalConcentrationView &concentration,MC::KPRNG _rng)
     {
       data.update(d_t, properties, concentration,_rng);
     }
@@ -38,7 +39,7 @@ namespace MC
     {
       properties.status=CellStatus::IDLE;
       auto p = data.division(properties);
-   
+      // assert(p.properties.status==properties.status && properties.status==CellStatus::IDLE);
       
       return BaseParticle(properties, std::move(p));
     }

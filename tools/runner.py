@@ -18,8 +18,9 @@ MPI_COMMAND = "mpiexec --allow-run-as-root "
 OMP_NUM_THREADS = "1"
 
 
-def get_executable(type: str):
-    return f"{ROOT}/builddir/{type}_clang/apps/cli/biocma_mcst_cli_app"
+def get_executable(type: str,mpi:bool=True):
+    appname = "biocma_mcst_cli_app" if mpi else "biocma_mcst_cli_app_shared"
+    return f"{ROOT}/builddir/{type}_clang/apps/cli/{appname}"
 
 def mk_parser():
     parser = argparse.ArgumentParser(description="Runner")
@@ -79,7 +80,7 @@ def exec(command, n_thread):
     env_var["OMP_PROC_BIND"] = "spread"
     env_var["OMP_NUM_THREADS"] = n_thread
 
-    # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
+    env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
     # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_memory_events.so"
 
     result = command.replace("-", "\n-")
@@ -111,7 +112,7 @@ def main():
         mpi_c = MPI_COMMAND + " "
 
     command = (
-        mpi_c + get_executable(r_type) + " " + run_cli + f" -nt {cli_args.n_threads}"
+        mpi_c + get_executable(r_type,cli_args.use_mpi) + " " + run_cli + f" -nt {cli_args.n_threads}"
     )
     exec(command, cli_args.n_threads)
 

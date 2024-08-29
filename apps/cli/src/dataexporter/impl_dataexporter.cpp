@@ -1,3 +1,4 @@
+#include <string>
 #ifdef USE_HIGHFIVE
 #  include "common/simulation_parameters.hpp"
 
@@ -23,8 +24,8 @@ DataExportHighFive::DataExportHighFive(const ExecInfo &info,
                                        std::string_view _filename,
                                        std::tuple<size_t, size_t> dim,
                                        size_t niter,
-                                       std::span<size_t> distribution)
-    : DataExporter(info, params, _filename, dim, niter, distribution)
+                                       std::span<size_t> distribution,double weight)
+    : DataExporter(info, params, _filename, dim, niter, distribution,weight)
 {
   auto _file = HighFive::File(filename, HighFive::File::Truncate);
   write_initial(_file, info, initial_values);
@@ -298,6 +299,16 @@ void DataExportHighFive::write_particle_data(
   {
     file.createDataSet(ds_name + "spatial/" + key, values, _ds_props);
   }
+}
+
+void DataExportHighFive::append_particle_properties(
+    size_t counter /*unused*/,
+    const std::unordered_map<std::string, std::vector<model_properties_t>>
+        &props,
+    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
+{
+  auto ds_name = "biological_model/" + std::to_string(counter) + "/";
+  write_particle_data(props, spatial_props, ds_name);
 }
 
 void DataExportHighFive::write_initial_particle_data(

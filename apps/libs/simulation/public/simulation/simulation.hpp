@@ -82,7 +82,7 @@ namespace Simulation
       auto &local_rng = mc_unit->rng;
       auto events = mc_unit->events;
       auto contribs = get_contribs();
-
+      auto& particle_rng = mc_unit->particle_rng;
       impl_cycle_process(d_t,
                          list,
                          rview,
@@ -94,7 +94,7 @@ namespace Simulation
                          events,
                          local_index_leaving_flow,
                          local_leaving_flow,
-                         contribs);
+                         contribs,particle_rng);
 
       Kokkos::parallel_for(
           "update_compartment_number",
@@ -155,10 +155,10 @@ namespace Simulation
                                    auto &&events,
                                    auto &&local_index_leaving_flow,
                                    auto &&local_leaving_flow,
-                                   auto &&contribs)
+                                   auto &&contribs,auto&& particle_rng)
     {
 
-      Kokkos::Random_XorShift64_Pool<> p_rng(2024);
+      // Kokkos::Random_XorShift64_Pool<> p_rng(2024);
 
       auto local_const_number_simulation = const_number_simulation;
       Kokkos::parallel_for(
@@ -204,7 +204,7 @@ namespace Simulation
             }
 
             particle.update(
-                d_t, local_compartments(i_compartment).concentrations, p_rng);
+                d_t, local_compartments(i_compartment).concentrations, particle_rng);
             particle.contribution(contribs);
 
             if (status == MC::CellStatus::CYTOKINESIS)
@@ -221,6 +221,7 @@ namespace Simulation
                 }
                 else
                 {
+                  Kokkos::printf("SPAWNING OVERFLOW\r\n");
                   Kokkos::atomic_increment(
                       &rview().waiting_allocation_particle);
                 }

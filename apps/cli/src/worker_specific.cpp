@@ -3,6 +3,7 @@
 #include <sync.hpp>
 
 #include <worker_specific.hpp>
+#include <csignal>
 
 void workers_process(
     const ExecInfo &exec,
@@ -10,7 +11,6 @@ void workers_process(
     const SimulationParameters &params,
     std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner)
 {
-
   double d_t = params.d_t;
   size_t n_compartments = simulation.mc_unit->domain.getNumberCompartments();
   MPI_Status status;
@@ -20,10 +20,12 @@ void workers_process(
 
   auto loop_functor = [&](auto &&container)
   {
+    auto result = container.get_extra();
+    auto view_result = result.get_view();
     bool stop = false;
     while (!stop)
     {
-
+      
       MPI_W::SIGNALS sign{};
 
       sign = MPI_W::try_recv<MPI_W::SIGNALS>(0, &status);
@@ -47,7 +49,9 @@ void workers_process(
 
       simulation.setVolumes(payload.gas_volumes, payload.liquid_volumes);
 
-      // simulation._cycleProces(container, d_t);
+        simulation._cycleProces(container,view_result,d_t);
+      result.clear(container.n_particle());
+      result.update_view(view_result);
 
       sync_step(exec, simulation);
       sync_prepare_next(exec, simulation);

@@ -31,7 +31,7 @@ DataExporter::DataExporter(const ExecInfo &info,
                            std::string_view _filename,
                            std::tuple<size_t, size_t> dim,
                            size_t niter,
-                           std::span<size_t> distribution)
+                           std::span<size_t> distribution,double weight)
     : filename(_filename), n_row(get<0>(dim)), n_col(get<1>(dim)),
       n_iter(niter + 2)
 
@@ -43,6 +43,7 @@ DataExporter::DataExporter(const ExecInfo &info,
   metadata["description"] = "Interesting results";
 
   initial_values["number_particles"] = params.user_params.numper_particle;
+  initial_values["initial_weight"] = weight;
   initial_values["number_compartment"] = params.n_compartments;
   initial_values["final_time"] = params.user_params.final_time;
   initial_values["particle_distribution"] =

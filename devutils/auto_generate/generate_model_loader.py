@@ -1,15 +1,13 @@
 import os
 import sys
+from typing import Tuple,List
 
-
-def to_camel_case(snake_str):
-    # Split the string by underscores
+def to_camel_case(snake_str:str)->str:
     components = snake_str.split("_")
-    # Capitalize the first letter of each component and join them
     return "".join(x.capitalize() for x in components[1:])
 
 
-def list_model_files(directory):
+def list_model_files(directory:str)->Tuple[List[str],List[str]]:
     """
     Lists model source files and headers in the given directory.
     """
@@ -36,14 +34,14 @@ def list_model_files(directory):
         return [], []
 
 
-def generate_includes(model_headers):
+def generate_includes(model_headers:List[str])->str:
     """
     Generates include directives for the model headers.
     """
     return "\n".join([f"#include <models/{header}>" for header in model_headers])
 
 
-def generate_loader_body(model_files):
+def generate_loader_body(model_files:List[str])->str:
     """
     Generates the body of the load_model_ function.
     """
@@ -65,14 +63,22 @@ def generate_loader_body(model_files):
     return function_body
 
 
-def generate_list_body(model_files):
+def generate_list_body(model_files:List[str])->str:
     function_body = ""
     for model_name in model_files:
         function_body += f'list.emplace_back("{model_name}");\r\n'
     return function_body
 
+def generate_selection_body(model_files: List[str]) -> str:
+    body = ""
 
-def generate_cpp_file(template_path, output_path, includes, body, list_body):
+    map_elements = ", ".join([f'{{ "{name}", {index} }}' for index, name in enumerate(model_files)])
+
+    body += "static std::unordered_map<std::string_view, int> map{ {\"default\", -1},"+f"{map_elements}"+"};"
+
+    return body
+
+def generate_cpp_file(template_path, output_path, includes, body, map_selection):
     """
     Generates the C++ file by replacing the placeholders in the template.
     """
@@ -83,7 +89,8 @@ def generate_cpp_file(template_path, output_path, includes, body, list_body):
         # Replace the placeholders
         content = template_content.replace("@INCLUDES@", includes)
         content = content.replace("@SWITCH_BODY@", body)
-        content = content.replace("@AM_BODY@", list_body)
+        # content = content.replace("@AM_BODY@", list_body)
+        content = content.replace("@MODEL_INDEX_MAP@",map_selection)
 
         # Write the modified content to the output file
         with open(output_path, "w") as output_file:
@@ -117,6 +124,8 @@ def generate_variant(template_path: str, output_path: str, includes, model_files
 
             content = content.replace("@VARIANT_TYPE@", body)
 
+            
+
             with open(output_path, "w") as output_file:
                 output_file.write(content)
     except FileNotFoundError as e:
@@ -145,11 +154,12 @@ if __name__ == "__main__":
 
     includes = generate_includes(headers)
     loader_body = generate_loader_body(files)
-    list_body = generate_list_body(files)
+    # list_body = generate_list_body(files)
+    map_selection = generate_selection_body(files)
 
     # Generate the C++ file
     generate_cpp_file(
-        source_template_path, source_output_path, includes, loader_body, list_body
+        source_template_path, source_output_path, includes, loader_body, map_selection
     )
 
     generate_header(header_template_path, header_output_path)

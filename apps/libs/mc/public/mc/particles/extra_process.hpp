@@ -19,15 +19,16 @@ namespace MC
         : extra_process(
               MC::ParticleList<MemorySpace, T>::with_capacity(capacity))
     {
-
-      
     }
 
     Results() = default;
 
     void clear(size_t capacity)
     {
-      extra_process.resize(capacity);
+      if (extra_process.size() < extra_process.capacity())
+      {
+        extra_process.resize(capacity);
+      }
       extra_process.clear();
       waiting_allocation_particle = 0;
     }

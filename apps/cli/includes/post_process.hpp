@@ -20,14 +20,20 @@ namespace PostProcessing
   void save_initial(Simulation::SimulationUnit &simulation,
                     std::unique_ptr<DataExporter> &exporter);
 
+  void append_properties(int counter,
+                         Simulation::SimulationUnit &simulation,
+                         std::unique_ptr<DataExporter> &exporter);
+
+  
+  void user_triggered_properties_export(Simulation::SimulationUnit &sim, std::unique_ptr<DataExporter> &data_exporter);
 
   // get_particle_properties(unit,
 
-      //                         aggregated_values,
-      //                         spatial,
-      //                         distribution.size(),
-      //                         model_properties,
-      //                         true);                  
+  //                         aggregated_values,
+  //                         spatial,
+  //                         distribution.size(),
+  //                         model_properties,
+  //                         true);
 
 } // namespace PostProcessing
 

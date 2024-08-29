@@ -2,6 +2,7 @@
 #include "common/execinfo.hpp"
 #include "mc/unit.hpp"
 #include "rt_init.hpp"
+#include "signal_handling.hpp"
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/vector.hpp>
@@ -95,7 +96,8 @@ void host_process(
                               params.results_file_name,
                               simulation.getDim(),
                               params.user_params.number_exported_result,
-                              initial_distribution);
+                              initial_distribution,
+                              simulation.mc_unit->init_weight);
 
     PostProcessing::save_initial(simulation, data_exporter);
   }
@@ -117,28 +119,6 @@ void host_process(
 }
 
 // DEV
-
-static bool save = false;
-
-#include <csignal>
-template <class Sim> void handle_sig(Sim &sim)
-{
-
-  if (save)
-  {
-    // std::ofstream os("./out.cereal", std::ios::binary);
-    // cereal::BinaryOutputArchive archive(os);
-    // archive(*sim.mc_unit);
-    // std::cout << "./out.cereal   " << sim.mc_unit->domain[0].n_cells
-    //           << std::endl;
-  }
-  save = false;
-}
-
-void handle_sig(int n)
-{
-  save = true;
-}
 
 // ENDDEV
 
@@ -174,7 +154,6 @@ void main_loop(const SimulationParameters &params,
   const auto *current_reactor_state = &transitioner->get_unchecked(0);
 
   transitioner->update_flow(simulation);
-  signal(SIGUSR1, &handle_sig);
 
   exporter->append(current_time,
                    simulation.getCliqData(),
@@ -184,7 +163,7 @@ void main_loop(const SimulationParameters &params,
 
   auto loop_functor = [&](auto &&local_container)
   {
-
+    SignalHandler sig;
     auto result = local_container.get_extra();
     auto view_result = result.get_view();
 
@@ -204,7 +183,8 @@ void main_loop(const SimulationParameters &params,
 
       transitioner->advance(simulation);
 
-      simulation._cycleProces(local_container,view_result,d_t);
+      simulation._cycleProces(local_container, view_result, d_t);
+      // TODO PUT result clear/update in sync
       result.clear(local_container.n_particle());
       result.update_view(view_result);
       dump_counter++;
@@ -233,7 +213,10 @@ void main_loop(const SimulationParameters &params,
 
       sync_prepare_next(exec, simulation);
       current_time += d_t;
-      handle_sig(simulation);
+      if (SignalHandler::is_usr1_raised())
+      {
+        PostProcessing::user_triggered_properties_export(simulation, exporter);
+      }
     }
   };
 

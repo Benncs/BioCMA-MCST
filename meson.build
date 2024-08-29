@@ -84,7 +84,7 @@ target_custom_options = project_custom_options.get(build_type, [])
 
 
 if build_type == 'debug' or build_type == 'debugoptimized'
-  add_global_arguments('-DNDEBUG', language: 'cpp')
+  # add_global_arguments('-DNDEBUG', language: 'cpp')
   # if compiler.has_argument('-pg')
 
   # arch_specific_args= [arch_specific_args,'-pg']
@@ -95,7 +95,7 @@ if build_type == 'debug' or build_type == 'debugoptimized'
 
 
 else
-  # add_global_arguments('-DNDEBUG', language: 'cpp')
+  add_global_arguments('-DNDEBUG', language: 'cpp')
   if compiler.has_argument('-ffast-math')
     arch_specific_args = [arch_specific_args, '-ffast-math']
   endif

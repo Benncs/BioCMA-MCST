@@ -9,7 +9,7 @@ namespace HighFive
   class File;
 } // namespace HighFive
 
-class DataExportHighFive : public DataExporter
+class DataExportHighFive final : public DataExporter
 {
 public:
   DataExportHighFive(const ExecInfo &info,
@@ -17,7 +17,7 @@ public:
                      std::string_view _filename,
                      std::tuple<size_t, size_t> dim,
                      size_t niter,
-                     std::span<size_t> distribution);
+                     std::span<size_t> distribution,double weight);
 
   SET_NON_COPYABLE(DataExportHighFive)
   SET_NON_MOVABLE(DataExportHighFive)
@@ -31,24 +31,30 @@ public:
               std::span<double> concentration_liquid,
               const std::vector<size_t> &distribution,
               std::span<const double> liquid_volume,
-              std::span<const double> volume_gas) override;
+              std::span<const double> volume_gas) final;
 
   void write_final_particle_data(
       const std::unordered_map<std::string, std::vector<model_properties_t>>
           & /*unused*/,
-      const std::unordered_map<std::string, std::vector<double>> & /*unused*/) override;
+      const std::unordered_map<std::string, std::vector<double>> & /*unused*/)
+      final;
 
   void write_initial_particle_data(
       const std::unordered_map<std::string, std::vector<model_properties_t>>
           & /*unused*/,
       const std::unordered_map<std::string, std::vector<double>> & /*unused*/)
-      override;
+      final;
 
-
+  void append_particle_properties(
+      size_t counter /*unused*/,
+      const std::unordered_map<std::string, std::vector<model_properties_t>>
+          & /*unused*/,
+      const std::unordered_map<std::string, std::vector<double>> & /*unused*/)
+      final;
 
 protected:
   void write_final_results(ExportData &data,
-                           std::span<size_t> distribution) override;
+                           std::span<size_t> distribution) final;
 
 private:
   void prepare();

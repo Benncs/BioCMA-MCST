@@ -25,7 +25,7 @@ BENCH_SCRIPT_PATH = (
 )
 FILENAME = "./devutils/benchs/bench_records_test_0d.csv"  # Record filename
 OUTPUT_PDF = "./devutils/benchs/results_bench_test_0d.pdf"  # Output path
-MODEL_NAME = "model_light"
+MODEL_NAME = "default"
 FINAL_TIME = 1  # Reference simulation time
 DELTA_TIME = 1e-3  # Reference delta time fixed
 # CMA_DATA_PATH = "./cma_data/bench/"

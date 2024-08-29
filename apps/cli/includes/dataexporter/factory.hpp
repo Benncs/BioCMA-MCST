@@ -15,6 +15,6 @@ data_exporter_factory(const ExecInfo &info,
                       std::string_view _filename,
                       std::tuple<size_t, size_t> dim,
                       size_t niter,
-                      std::span<size_t> distribution);
+                      std::span<size_t> distribution,double weight=0.);
 
 #endif

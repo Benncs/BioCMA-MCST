@@ -39,7 +39,7 @@ namespace Simulation
     if (i == 0)
     {
 
-      liq(0, i) = 5;
+      liq(0, i) = 20;
     }
     else
     {

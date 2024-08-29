@@ -16,7 +16,7 @@ namespace PostProcessing
           &aggregated_values,
       std::unordered_map<std::string, std::vector<double>> &spatial,
       size_t size,
-      bool clean=true);
+      bool clean = true);
 
   // static void get_particle_properties(
   //     std::unique_ptr<MC::MonteCarloUnit> &mc_unit,
@@ -40,8 +40,8 @@ namespace PostProcessing
       get_particle_properties(simulation.mc_unit,
                               aggregated_values,
                               spatial,
-                              distribution.size(),false);
- 
+                              distribution.size(),
+                              false);
 
       exporter->write_initial_particle_data(aggregated_values, spatial);
     }
@@ -74,12 +74,8 @@ namespace PostProcessing
       // clear montecarlo state to save memory
       auto unit = std::move(simulation.mc_unit);
 
-
-      get_particle_properties(unit,
-                              aggregated_values,
-                              spatial,
-                              distribution.size(),
-                              true);
+      get_particle_properties(
+          unit, aggregated_values, spatial, distribution.size(), true);
       unit.reset();
       exporter->write_final_particle_data(aggregated_values, spatial);
     }
@@ -107,6 +103,37 @@ namespace PostProcessing
       // count += i;
     }
     std::cout << '\n';
+  }
+
+  void append_properties(int counter,Simulation::SimulationUnit &simulation,
+                         std::unique_ptr<DataExporter> &exporter)
+  {
+    if (exporter != nullptr)
+    {
+      std::unordered_map<std::string, std::vector<model_properties_t>>
+          aggregated_values;
+
+      std::unordered_map<std::string, std::vector<double>> spatial;
+      auto distribution = simulation.mc_unit->domain.getDistribution();
+      get_particle_properties(simulation.mc_unit,
+                              aggregated_values,
+                              spatial,
+                              distribution.size(),
+                              false);
+      exporter->append_particle_properties(counter, aggregated_values, spatial);
+    }
+  }
+
+  void user_triggered_properties_export(Simulation::SimulationUnit &sim, std::unique_ptr<DataExporter> &data_exporter)
+  {
+    static int counter = 0;
+    counter++;
+    PostProcessing::append_properties(counter, sim, data_exporter);
+    // std::ofstream os("./out.cereal", std::ios::binary);
+    // cereal::BinaryOutputArchive archive(os);
+    // archive(*sim.mc_unit);
+    // std::cout << "./out.cereal   " << sim.mc_unit->domain[0].n_cells
+    //           << std::endl;
   }
 
   void get_particle_properties(

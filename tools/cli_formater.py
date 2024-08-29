@@ -48,8 +48,8 @@ def read_xml_values(xml_path, parser,target_name):
                 results_file_name = results_file_name_element.text if results_file_name_element is not None else None
                 number_exported_result = int(control.findtext("number_exported_result"))
                 model_name = control.findtext("model_name")
-                
                 cli_args = ""
+
                 if recursive:
                     cli_args+="-r 1 "
                 cli_args+= f"-f { cma_case_path} "

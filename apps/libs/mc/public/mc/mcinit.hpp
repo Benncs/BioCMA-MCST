@@ -15,7 +15,7 @@
 
 namespace MC
 {
-
+  
   namespace
   {
     inline double get_initial_weight(double scale_factor,
@@ -30,6 +30,8 @@ namespace MC
       return scale_factor * particle_concentration * total_volume /
              static_cast<double>(n_particles);
     }
+
+    
 
     template <ParticleModel Model>
     void impl_init(std::unique_ptr<MonteCarloUnit> &unit,
@@ -74,12 +76,6 @@ namespace MC
 
   } // namespace
 
-  // std::unique_ptr<MonteCarloUnit> wrap_init_model_selector(
-  //     const ExecInfo &info,
-  //     size_t numper_particle,
-  //     std::span<double> liq_volume,
-  //     CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
-  //     double x0);
 
   template <ParticleModel Model>
   std::unique_ptr<MonteCarloUnit>
@@ -100,9 +96,11 @@ namespace MC
     {
       particle_per_process += remainder;
     }
-
+    
     double weight =
         get_initial_weight(1., x0, unit->domain.getTotalVolume(), n_particles);
+    
+    unit->init_weight = weight;
     impl_init<Model>(unit,weight,particle_per_process);
     return unit;
   }

@@ -1,20 +1,19 @@
-#ifndef __BIO_MODEL_MONOD__
-#define __BIO_MODEL_MONOD__
+#ifndef __BIO_MODEL_INTERDIVISION_TIME__
+#define __BIO_MODEL_INTERDIVISION_TIME__
 
-#include "common/kokkos_vector.hpp"
 #include "mc/prng/prng.hpp"
 #include <Kokkos_Core.hpp>
 #include <mc/particles/particle_model.hpp>
 namespace Models
 {
-  class Monod
+  class InterdivisionTime
   {
     double age;
     double mu;
     double l;
     double contrib;
-    private:
-    double _init_only_cell_lenghtening;
+    double interdivision_time;
+
   public:
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder &p,
                               Kokkos::Random_XorShift64_Pool<> _rng);
@@ -24,7 +23,7 @@ namespace Models
                                 const LocalConcentrationView &concentration,
                                 MC::KPRNG _rng);
 
-    KOKKOS_FUNCTION Monod division(MC::ParticleDataHolder &p);
+    KOKKOS_FUNCTION InterdivisionTime division(MC::ParticleDataHolder &p);
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
                                       ContributionView contri);

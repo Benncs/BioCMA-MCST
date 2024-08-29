@@ -18,6 +18,7 @@ struct UserControlParameters
   int n_thread;
   uint32_t number_exported_result;
   std::string model_name;
+  double biomass_initial_concentration;
   static UserControlParameters m_default();
 };
 

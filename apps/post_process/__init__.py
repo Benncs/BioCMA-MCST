@@ -9,7 +9,12 @@ def check_mixing(
     name_results, pathres: List[str], dest: str, vtk_cma_mesh_path: Optional[str] = None
 ):
     for i in range(len(pathres)):
+        
         results = import_results(pathres[i])
+
+        if(results is None):
+            break
+
         (
             normalized_scalar_concentration,
             norm_c_var,

@@ -25,7 +25,7 @@ public:
                std::string_view _filename,
                std::tuple<size_t, size_t> dim,
                size_t niter,
-               std::span<size_t> distribution);
+               std::span<size_t> distribution,double weight);
 
   virtual ~DataExporter() = default;
   void write_final_results(Simulation::SimulationUnit &simulation,
@@ -49,6 +49,10 @@ public:
                       const std::vector<size_t> & /*unused*/,
                       std::span<const double> /*unused*/,
                       std::span<const double> /*unused*/) {};
+
+  virtual void append_particle_properties(size_t counter/*unused*/,const std::unordered_map<std::string, std::vector<model_properties_t>>
+          & /*unused*/,
+      const std::unordered_map<std::string, std::vector<double>> & /*unused*/){};
 
   DELETE_CONSTRUCTORS(DataExporter)
   DELETE_ASSIGMENT(DataExporter)

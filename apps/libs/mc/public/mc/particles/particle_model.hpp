@@ -21,9 +21,9 @@ concept ParticleModel = requires(T model,
                                  MC::ParticleDataHolder &p,
                                  double d_t,
                                  const LocalConcentrationView &concentration,
-                                 ContributionView contrib,Kokkos::Random_XorShift64_Pool<> _rng) {
+                                 ContributionView contrib,Kokkos::Random_XorShift64_Pool<> _rng,MC::KPRNG rng2) {
   { model.init(p,_rng) } -> std::same_as<void>;
-  { model.update(d_t, p, concentration,_rng) } -> std::same_as<void>;
+  { model.update(d_t, p, concentration,rng2) } -> std::same_as<void>;
   { model.division(p) } -> std::same_as<T>;
   { model.contribution(p, contrib) } -> std::same_as<void>;
   { model.get_properties() } -> std::same_as<model_properties_detail_t>;
@@ -44,7 +44,7 @@ public:
   KOKKOS_INLINE_FUNCTION void
   update(double d_t,
          MC::ParticleDataHolder &p,
-         const LocalConcentrationView &concentration,Kokkos::Random_XorShift64_Pool<> _rng)
+         const LocalConcentrationView &concentration,MC::KPRNG _rng)
   {
   }
 
