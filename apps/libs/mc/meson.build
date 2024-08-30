@@ -9,7 +9,7 @@ models_list_def = include_directories('../biomodels/public')
 
 public_include_dir = [public_mc, public_common,models_list_def,'../']
 
-mc_lib = static_library(
+mc_lib = library(
    f'@project_name@_mc',
    mc_sources,
    include_directories: [public_include_dir, 'includes','../'],

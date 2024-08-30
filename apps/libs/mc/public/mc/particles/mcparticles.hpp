@@ -1,15 +1,16 @@
 #ifndef __MC_PARTICLESHPP__
 #define __MC_PARTICLESHPP__
 
-#include "common/kokkos_vector.hpp"
-#include "mc/prng/prng.hpp"
-#include <Kokkos_Printf.hpp>
+#include <common/kokkos_vector.hpp>
 #include <mc/particles/data_holder.hpp>
 #include <mc/particles/particle_model.hpp>
+#include <mc/prng/prng.hpp>
+#include <utility>
+
 namespace MC
 {
 
-  template <ParticleModel _Model> class BaseParticle
+  template <ParticleModel _Model> class alignas(ExecInfo::cache_line_size) BaseParticle
   {
   public:
     using Model = _Model;
@@ -24,23 +25,23 @@ namespace MC
       properties.status = _status;
     }
 
-    KOKKOS_INLINE_FUNCTION void init(Kokkos::Random_XorShift64_Pool<> _rng)
+    KOKKOS_INLINE_FUNCTION void init(KPRNG globalrng)
     {
-      data.init(properties,_rng);
+      data.init(properties, globalrng);
     }
 
     KOKKOS_INLINE_FUNCTION void
-    update(double d_t, const LocalConcentrationView &concentration,MC::KPRNG _rng)
+    update(double d_t,
+           const LocalConcentrationView &concentration,
+           KPRNG globalrng)
     {
-      data.update(d_t, properties, concentration,_rng);
+      data.update(d_t, properties, concentration, globalrng);
     }
 
     KOKKOS_INLINE_FUNCTION BaseParticle<_Model> division()
     {
-      properties.status=CellStatus::IDLE;
+      properties.status = CellStatus::IDLE;
       auto p = data.division(properties);
-      // assert(p.properties.status==properties.status && properties.status==CellStatus::IDLE);
-      
       return BaseParticle(properties, std::move(p));
     }
 

@@ -19,18 +19,17 @@ namespace
 namespace Models
 {
 
-  KOKKOS_FUNCTION void
-  InterdivisionTime::init(MC::ParticleDataHolder &p,
-                          Kokkos::Random_XorShift64_Pool<> _rng)
+  KOKKOS_FUNCTION void InterdivisionTime::init(MC::ParticleDataHolder &p,
+                                               MC::KPRNG _rng)
   {
     this->age = 0;
     this->interdivision_time = tau_division;
     this->contrib = 0.;
     {
-      auto generator = _rng.get_state();
+      auto generator = _rng.random_pool.get_state();
       this->mu = generator.drand(mu_max * 0.9, mu_max * 1.1);
       this->l = generator.drand(minimal_length, critical_division_length);
-      _rng.free_state(generator);
+      _rng.random_pool.free_state(generator);
     }
   }
 

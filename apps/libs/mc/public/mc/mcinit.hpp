@@ -15,7 +15,7 @@
 
 namespace MC
 {
-  
+
   namespace
   {
     inline double get_initial_weight(double scale_factor,
@@ -31,29 +31,27 @@ namespace MC
              static_cast<double>(n_particles);
     }
 
-    
-
     template <ParticleModel Model>
     void impl_init(std::unique_ptr<MonteCarloUnit> &unit,
                    double weight,
                    size_t particle_per_process)
     {
+
       auto rng = unit->rng;
       auto container = ParticlesContainer<Model>(particle_per_process);
-      auto& compartments = unit->domain.data();
-      auto& list = container.get_compute();
 
-      
+      auto &compartments = unit->domain.data();
+
+      auto &list = container.get_compute();
 
       constexpr double allocation_factor = 2.5;
       list.set_allocation_factor(allocation_factor);
-      container.get_extra().extra_process.set_allocation_factor(allocation_factor);
-      container.get_extra() = Results<ComputeSpace, Model>(particle_per_process);
-
+      container.get_extra().extra_process.set_allocation_factor(
+          allocation_factor);
+      container.get_extra() =
+          Results<ComputeSpace, Model>(particle_per_process);
       const auto n_compartments = unit->domain.getNumberCompartments();
-      
-      Kokkos::Random_XorShift64_Pool<> p_rng(512); //FIXME
-
+      auto __rng = list.rng_instance;
       Kokkos::parallel_for(
           "mc_init",
           Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(
@@ -64,18 +62,17 @@ namespace MC
             auto location = rng.uniform_u(0, n_compartments);
             p.properties.current_container = location;
             Kokkos::atomic_increment(&compartments(location).n_cells);
-            p.init(p_rng);
-            
-            list._owned_data(i) = std::move(p);
+            p.init(__rng);
 
+            list._owned_data(i) = std::move(p);
           });
 
       Kokkos::fence();
-      unit->container= container;
+
+      unit->container = container;
     }
 
   } // namespace
-
 
   template <ParticleModel Model>
   std::unique_ptr<MonteCarloUnit>
@@ -96,12 +93,11 @@ namespace MC
     {
       particle_per_process += remainder;
     }
-    
+
     double weight =
         get_initial_weight(1., x0, unit->domain.getTotalVolume(), n_particles);
-    
     unit->init_weight = weight;
-    impl_init<Model>(unit,weight,particle_per_process);
+    impl_init<Model>(unit, weight, particle_per_process);
     return unit;
   }
 

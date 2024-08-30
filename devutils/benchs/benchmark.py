@@ -15,11 +15,11 @@ from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 import sys
 # from wakepy import keep
-
+# from ..exec import exec
 
 BENCH_OMP_THREADS = [1, 6,12]  # List of thread numbers when running scaling
-EXECUTABLE_PATH = "./builddir/release/apps/cli"  # Path to executable to run
-EXECUTABLE_NAME = "biocma_mcst_cli_app"  # Name of executable to run
+EXECUTABLE_PATH = "./builddir/release_gcc/apps/cli"  # Path to executable to run
+EXECUTABLE_NAME = "biocma_mcst_cli_app_shared"  # Name of executable to run
 BENCH_SCRIPT_PATH = (
     "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
 )
@@ -60,7 +60,8 @@ def format_cli(number_particle, final_time):
 def execute(n_thread, script_path, command):
     env_var = os.environ.copy()
     env_var["OMP_NUM_THREADS"] = str(n_thread)
-
+    env_var["OMP_PLACES"] = "threads"
+    env_var["OMP_PROC_BIND"] = "spread"
     # commands = [
     #     "mpiexec",
     #     "--allow-run-as-root",
@@ -276,7 +277,7 @@ def main(args):
             #     n_particles = np.linspace(particle_n1, particle_n2, num=n_scale, dtype=np.int32)
             #     for number in n_particles:
             #         do_scale(number)
-        except:  
+        except:
             n_particles = np.linspace(
                 particle_n1, particle_n2, num=n_scale, dtype=np.int32
             )

@@ -1,21 +1,14 @@
-#include "cmt_common/macro_constructor_assignment.hpp"
-#include "common/simulation_parameters.hpp"
-
-#include "simulation/simulation.hpp"
-
-#include <dataexporter/data_exporter.hpp>
-#include <mc/events.hpp>
-
 #include <Eigen/Core>
 #include <chrono>
+#include <common/simulation_parameters.hpp>
+#include <dataexporter/data_exporter.hpp>
+#include <iomanip>
+#include <mc/events.hpp>
 #include <nl_types.h>
 #include <numeric>
+#include <simulation/simulation.hpp>
 #include <string_view>
 #include <tuple>
-
-#include <iomanip>
-
-
 
 static std::string date_time()
 {
@@ -31,7 +24,8 @@ DataExporter::DataExporter(const ExecInfo &info,
                            std::string_view _filename,
                            std::tuple<size_t, size_t> dim,
                            size_t niter,
-                           std::span<size_t> distribution,double weight)
+                           std::span<size_t> distribution,
+                           double weight)
     : filename(_filename), n_row(get<0>(dim)), n_col(get<1>(dim)),
       n_iter(niter + 2)
 
@@ -70,7 +64,3 @@ void DataExporter::write_final_results(Simulation::SimulationUnit &simulation,
 
   write_final_results(data, distribution);
 }
-
-
-
-

@@ -1,10 +1,10 @@
 #ifndef __MC_PARTICLE_MODEL_HPP__
 #define __MC_PARTICLE_MODEL_HPP__
 
-#include "common/kokkos_vector.hpp"
 #include "mc/prng/prng.hpp"
 #include <Kokkos_Core_fwd.hpp>
 #include <mc/particles/data_holder.hpp>
+#include <variant>
 
 using LocalConcentrationView =
     Kokkos::Subview<Kokkos::View<const double **>, int, decltype(Kokkos::ALL)>;
@@ -21,22 +21,21 @@ concept ParticleModel = requires(T model,
                                  MC::ParticleDataHolder &p,
                                  double d_t,
                                  const LocalConcentrationView &concentration,
-                                 ContributionView contrib,Kokkos::Random_XorShift64_Pool<> _rng,MC::KPRNG rng2) {
-  { model.init(p,_rng) } -> std::same_as<void>;
-  { model.update(d_t, p, concentration,rng2) } -> std::same_as<void>;
+                                 ContributionView contrib,
+                                 MC::KPRNG rng) {
+  { model.init(p, rng) } -> std::same_as<void>;
+  { model.update(d_t, p, concentration, rng) } -> std::same_as<void>;
   { model.division(p) } -> std::same_as<T>;
   { model.contribution(p, contrib) } -> std::same_as<void>;
   { model.get_properties() } -> std::same_as<model_properties_detail_t>;
 };
-
-
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
 class DefaultModel
 {
 public:
-  KOKKOS_INLINE_FUNCTION void init(MC::ParticleDataHolder &p,Kokkos::Random_XorShift64_Pool<> _rng)
+  KOKKOS_INLINE_FUNCTION void init(MC::ParticleDataHolder &p, MC::KPRNG _rng)
   {
     p.status = MC::CellStatus::IDLE;
   }
@@ -44,7 +43,8 @@ public:
   KOKKOS_INLINE_FUNCTION void
   update(double d_t,
          MC::ParticleDataHolder &p,
-         const LocalConcentrationView &concentration,MC::KPRNG _rng)
+         const LocalConcentrationView &concentration,
+         MC::KPRNG _rng)
   {
   }
 
@@ -60,7 +60,8 @@ public:
     // Contribution logic
   }
 
-  inline model_properties_detail_t get_properties(){
+  inline model_properties_detail_t get_properties()
+  {
     return {};
   }
 };

@@ -6,7 +6,6 @@
 #include "simulation/pc_hydro.hpp"
 #include <cma_read/reactorstate.hpp>
 #include <cstddef>
-#include <iomanip>
 #include <memory>
 #include <simulation/simulation.hpp>
 
@@ -33,7 +32,7 @@ namespace Simulation
     //                     FlowmapTransitionMethod method,
     //                     bool is_two_phase_flow = false);
 
-    DELETE_COPY_MOVE_AC(FlowMapTransitioner);
+    DELETE_COPY_MOVE_AC(FlowMapTransitioner)
 
     ~FlowMapTransitioner() = default;
 

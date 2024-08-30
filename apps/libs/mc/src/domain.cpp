@@ -105,7 +105,7 @@ namespace MC
     return dist;
   }
 
-  ReactorDomain ReactorDomain::reduce(std::span<size_t> data,
+  ReactorDomain ReactorDomain::reduce(std::span<const size_t> data,
                                       size_t original_size,
                                       size_t n_rank)
   {

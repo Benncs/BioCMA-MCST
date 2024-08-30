@@ -16,7 +16,7 @@ namespace Models
 
   public:
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder &p,
-                              Kokkos::Random_XorShift64_Pool<> _rng);
+                              MC::KPRNG _rng);
 
     KOKKOS_FUNCTION void update(double d_t,
                                 MC::ParticleDataHolder &p,

@@ -12,7 +12,7 @@
       size_t numper_particle,
       std::span<double> liq_volume,
       CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
-      double x0)
+      double x0) noexcept
   {
     switch (i_model)
     {
@@ -26,7 +26,7 @@
     }
   }
 
-  int get_model_index_from_name(std::string_view model_name)
+  int get_model_index_from_name(std::string_view model_name) noexcept
   {
     @MODEL_INDEX_MAP@
     
@@ -39,7 +39,7 @@
     return -1;
   }
 
-  std::vector<std::string> get_model_list()
+  std::vector<std::string> get_model_list() noexcept
   {
     return {};
   }

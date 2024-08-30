@@ -3,28 +3,16 @@ project(
   'cpp',
   version: '0.0.6',
   meson_version: '>= 1.3.0',
-  default_options: [
-    'warning_level=3',
-    'b_colorout=always',
-  ],
+  default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=gnu++20'],
 )
 
 use_cuda = get_option('use_cuda')
 
 arch_specific_args = []
-if use_cuda
-  message('USING CUDA')
-  arch_specific_args = ['-mp=gpu', '-gpu=cc35', '-cudalib=cublas']
-  # add_project_arguments('cpp_std=gnu++20',language: 'cpp')
-else
-  arch_specific_args = ['-march=native']
-  # arch_specific_args=['-mavx2']
-
-  cpp_version = get_option('cpp_std')
-  if cpp_version != 'gnu++20'
-    error('c++20 features should be available')
-  endif
+if not use_cuda
+arch_specific_args = ['-march=native']
 endif
+
 compiler = meson.get_compiler('cpp')
 
 if compiler.has_argument('-fno-math-errno')
@@ -45,7 +33,6 @@ compiler.has_argument('-fopenmp')
 
 ## Define main shared variables\
 
-
 compiler.has_argument('--std=c++20', required: true)
 add_global_arguments('--std=c++20', language: 'cpp')
 
@@ -53,8 +40,6 @@ root = meson.project_source_root()
 project_name = meson.project_name()
 build_type = get_option('buildtype')
 cpp = meson.get_compiler('cpp')
-
-# global_install_dir = 'lib' # 'lib/'+project_name  # Relative  to /usr/local/
 
 global_install_dir = get_option('prefix') + '/' + get_option('libdir')
 includes_install_dir = ('include/' + project_name)
@@ -64,7 +49,6 @@ cpp_args = arch_specific_args
 add_project_arguments(cpp_args, language: 'cpp')
 
 ## Get buildtype specific options
-
 
 #TODO FIXME
 
@@ -82,18 +66,11 @@ target_custom_options = project_custom_options.get(build_type, [])
 
 # endforeach
 
+add_global_arguments('-D__FLAG_APP_VERBOSE__',language: 'cpp')
 
 if build_type == 'debug' or build_type == 'debugoptimized'
-  # add_global_arguments('-DNDEBUG', language: 'cpp')
-  # if compiler.has_argument('-pg')
-
-  # arch_specific_args= [arch_specific_args,'-pg']
-
-  # add_project_link_arguments('-pg',language: 'cpp')
-
-  # endif 
-
-
+  # NOTHING
+  add_global_arguments('-DDEBUG',language: 'cpp')
 else
   add_global_arguments('-DNDEBUG', language: 'cpp')
   if compiler.has_argument('-ffast-math')
@@ -105,9 +82,7 @@ use_dynamic_module = get_option('use_dynamic_module') # Use python module or not
 
 use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  use_dynamic_module is true
 
-
 ## Checking all needed depencies (execpt Python)
-
 
 mpi = dependency('mpi', language: 'cpp', required: true)
 thread_dep = dependency('threads', required: true)
@@ -117,51 +92,37 @@ if use_cuda
 else
   omp = dependency('openmp', language: 'cpp', required: true)
 endif
+
 tbb = dependency('tbb', required: true)
 
 eigen_dep = dependency('eigen3', required: true)
 blas = dependency('blas', required: false) # Eigen can work without BLAS
 
-
-# hwloc = dependency('hwloc', required: true)
-
-# __cmake_kokkos_dep__ = dependency(
-#     'Kokkos',
-#     method: 'cmake',
-#     required: true
-# )
-
-# kokkos = declare_dependency(
-#     dependencies: [__cmake_kokkos_dep__,hwloc],
-#     compile_args: [
-#         '-std=c++20',
-#         '-DKOKKOS_DEPENDENCE',
-#         '-extended-lambda',
-#         '-Wext-lambda-captures-this',
-#         '-arch=native'
-#     ],
-  
-# )
-
 __cmake_kokkos_dep__ = dependency(
-    'Kokkos',
-    method: 'cmake',
-    required: false,
-    components: ['kokkoscore'],
-    modules: ['Kokkos::kokkoscore']
+  'Kokkos',
+  method: 'cmake',
+  required: false,
+  components: ['kokkoscore'],
+  modules: ['Kokkos::kokkoscore'],
 )
 
 omp = dependency('openmp')
 hwloc = dependency('hwloc')
+
+kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE']
+
+if use_cuda
+  kokkos_compile_arg = [
+    kokkos_compile_arg,
+    '-extended-lambda',
+    '-Wext-lambda-captures-this',
+    '-arch=native',
+  ]
+endif
+
 kokkos = declare_dependency(
-    dependencies: [__cmake_kokkos_dep__,omp,hwloc],
-    compile_args: [
-        '-DKOKKOS_DEPENDENCE',
-        # '-extended-lambda',
-        # '-Wext-lambda-captures-this',
-        # '-arch=native'
-    ],
-  
+  dependencies: [__cmake_kokkos_dep__, omp, hwloc],
+  compile_args: kokkos_compile_arg,
 )
 
 if blas.found()
@@ -190,9 +151,7 @@ ceral_found = false
 if cmake.found()
   #cereal_cmake_options = cmake.subproject_options()
 
-
   #cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
-
 
   # cereal_dependency = cereal_proj.dependency('cereal')
 
@@ -237,9 +196,7 @@ if f_cmt == false
     ],
   ) # We only need native cmtool library in order to read flowmap so, no python neither executable
 
-
   cma_dep = cma_reader.get_variable('cma_read_shared_lib_dependency') # Get shared lib
-
 
 endif
 subdir('apps')

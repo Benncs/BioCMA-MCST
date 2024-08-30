@@ -3,12 +3,11 @@
 
 #include "cmt_common/macro_constructor_assignment.hpp"
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Core_fwd.hpp>
+#include <Kokkos_StdAlgorithms.hpp>
 #include <cma_read/neighbors.hpp>
 #include <common/common_types.hpp>
 #include <mc/container_state.hpp>
 #include <vector>
-#include <Kokkos_StdAlgorithms.hpp>
 
 namespace MC
 {
@@ -41,9 +40,9 @@ namespace MC
     auto begin();
     auto end();
 
-    [[nodiscard]] auto getNumberCompartments() const;
+    [[nodiscard]] auto getNumberCompartments() const noexcept;
 
-    [[nodiscard]] double getTotalVolume() const;
+    [[nodiscard]] double getTotalVolume() const noexcept;
 
     [[nodiscard]] const CmaRead::Neighbors::Neighbors_const_view_t &
     getNeighbors() const;
@@ -53,16 +52,18 @@ namespace MC
     [[nodiscard]] std::vector<size_t> getDistribution() const;
 
     static ReactorDomain
-    reduce(std::span<size_t> data, size_t original_size, size_t n_rank);
-    auto& data(){return shared_containers;}
+    reduce(std::span<const size_t> data, size_t original_size, size_t n_rank);
+    auto &data()
+    {
+      return shared_containers;
+    }
     // std::span<ContainerState> data();
-    
+
   private:
     double _total_volume = 0.;
     size_t id = 0;
-    size_t size=0;
-    Kokkos::View<ContainerState*,Kokkos::SharedSpace> shared_containers;
-
+    size_t size = 0;
+    Kokkos::View<ContainerState *, Kokkos::SharedSpace> shared_containers;
 
     // std::vector<ContainerState> containers;
     CmaRead::Neighbors::Neighbors_const_view_t neighbors;
@@ -97,12 +98,12 @@ namespace MC
     }
   }
 
-  inline auto ReactorDomain::getNumberCompartments() const
+  inline auto ReactorDomain::getNumberCompartments() const noexcept
   {
     return size;
   }
 
-  inline double ReactorDomain::getTotalVolume() const
+  inline double ReactorDomain::getTotalVolume() const noexcept
   {
     return this->_total_volume;
   }
@@ -117,7 +118,7 @@ namespace MC
     // return this->containers[i_c];
     return this->shared_containers(i_c);
   }
-  
+
   inline auto ReactorDomain::begin() const
   {
     return Kokkos::Experimental::begin(shared_containers);

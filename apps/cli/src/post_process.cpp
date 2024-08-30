@@ -1,15 +1,19 @@
-#include "mc/particles/mcparticles.hpp"
+#include <Kokkos_Printf.hpp>
 #include <common/execinfo.hpp>
+#include <iostream>
 #include <mc/unit.hpp>
 #include <memory>
 #include <post_process.hpp>
-
-#include <iostream>
-#include <stdexcept>
 #include <variant>
+#include <simulation/simulation.hpp> 
+#include <dataexporter/data_exporter.hpp>
 
 namespace PostProcessing
 {
+  static void append_properties(int counter,
+                                Simulation::SimulationUnit &simulation,
+                                std::unique_ptr<DataExporter> &exporter);
+
   static void get_particle_properties(
       std::unique_ptr<MC::MonteCarloUnit> &mc_unit,
       std::unordered_map<std::string, std::vector<model_properties_t>>
@@ -18,17 +22,8 @@ namespace PostProcessing
       size_t size,
       bool clean = true);
 
-  // static void get_particle_properties(
-  //     std::unique_ptr<MC::MonteCarloUnit> &mc_unit,
-  //     std::unordered_map<std::string, std::vector<model_properties_t>>
-  //         &aggregated_values,
-  //     std::unordered_map<std::string, std::vector<double>> &spatial,
-  //     size_t size,
-  //     ModelGetProperties model_properties,
-  //     bool clean = false);
-
-  void save_initial(Simulation::SimulationUnit &simulation,
-                    std::unique_ptr<DataExporter> &exporter)
+  void save_initial_particle_state(Simulation::SimulationUnit &simulation,
+                                   std::unique_ptr<DataExporter> &exporter)
   {
     if (exporter != nullptr)
     {
@@ -47,7 +42,7 @@ namespace PostProcessing
     }
   }
 
-  void post_process(const ExecInfo &exec,
+  void final_post_processing(const ExecInfo &exec,
                     const SimulationParameters &params,
                     Simulation::SimulationUnit &&simulation,
                     std::unique_ptr<DataExporter> &exporter)
@@ -89,23 +84,19 @@ namespace PostProcessing
     }
   }
 
-  void show(Simulation::SimulationUnit &simulation)
+  void show_sumup_state(Simulation::SimulationUnit &simulation)
   {
-
-    std::vector<double> mass(
-        simulation.mc_unit->domain.getNumberCompartments());
-
-    auto d = simulation.mc_unit->domain.getDistribution();
-
-    for (auto &&i : d)
+    //Assuming domain data is in sharedSpace 
+    for(auto&& c : simulation.mc_unit->domain)
     {
-      std::cout << i << " ";
-      // count += i;
+      Kokkos::printf("%d ",c.n_cells);
     }
-    std::cout << '\n';
+    Kokkos::printf("\r\n");
+
   }
 
-  void append_properties(int counter,Simulation::SimulationUnit &simulation,
+  void append_properties(int counter,
+                         Simulation::SimulationUnit &simulation,
                          std::unique_ptr<DataExporter> &exporter)
   {
     if (exporter != nullptr)
@@ -124,7 +115,9 @@ namespace PostProcessing
     }
   }
 
-  void user_triggered_properties_export(Simulation::SimulationUnit &sim, std::unique_ptr<DataExporter> &data_exporter)
+  void
+  user_triggered_properties_export(Simulation::SimulationUnit &sim,
+                                   std::unique_ptr<DataExporter> &data_exporter)
   {
     static int counter = 0;
     counter++;

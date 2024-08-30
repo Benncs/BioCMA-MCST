@@ -4,19 +4,19 @@
 
 SignalHandler *SignalHandler::instance = nullptr;
 
-SignalHandler::SignalHandler() : do_save(false)
+SignalHandler::SignalHandler() : f_usr1_raised(false)
 {
   instance = this;
 
   std::signal(SIGUSR1, &SignalHandler::handle_SIGUSR1);
 
-  instance->do_save=false;
+  instance->f_usr1_raised = false;
 }
 
-void SignalHandler::handle_SIGUSR1(int /*unused*/)
+void SignalHandler::handle_SIGUSR1(int /*unused*/) noexcept
 {
   if (instance != nullptr)
   {
-    instance->do_save = true;
+    instance->f_usr1_raised = true;
   }
 }

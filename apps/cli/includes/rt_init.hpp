@@ -6,20 +6,29 @@
 #include <iomanip>
 
 
-void init_environment();
-std::string env_file_path();
-// void append_date_time(std::ofstream &fd);
 
-// std::string append_date_time(std::string_view string);
-namespace RT
+namespace FlagCompileTIme
 {
 #ifdef NO_MPI
   constexpr bool use_mpi = false;
 #else
   constexpr bool use_mpi = true;
 #endif
-} // namespace RT
+} // namespace FlagCompileTIme
 
+void set_n_thread_current_rank(int rank,
+                               int size,
+                               ExecInfo &info,
+                               const UserControlParameters &params);
+
+/**
+ * @brief Appends the current date and time to the given stream.
+ *
+
+ * @tparam Stream The type of the stream (e.g., `std::ostream`,
+ `std::stringstream`).
+ * @param stream The output stream to which the date and time will be appended.
+ */
 template <typename Stream> void append_date_time(Stream &stream)
 {
   auto now =
@@ -27,16 +36,41 @@ template <typename Stream> void append_date_time(Stream &stream)
   stream << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
 }
 
+/**
+ * @brief Appends the current date and time to a given string.
+ *
+ * @param string The string view to which the date and time will be appended.
+ * @return A `std::string` containing the original string with the appended date
+ * and time.
+ */
 std::string sappend_date_time(std::string_view string);
 
-void set_openmp_threads(int rank,
-                        int size,
-                        ExecInfo &info,
-                        const UserControlParameters &params);
-
+/**
+ * @brief Initializes the runtime environment based on command-line arguments
+ * and simulation parameters.
+ *
+ * This function sets up the necessary runtime environment for the simulation
+ * by:
+ * - Initializing MPI (Message Passing Interface) if applicable.
+ * - Setting up Kokkos for parallel programming.
+ * - Configuring functions to be executed upon program exit.
+ * - Handling signals to ensure proper shutdown and resource cleanup.
+ *
+ * The function uses the provided command-line arguments and simulation
+ * parameters to configure the runtime environment accordingly.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv The array of command-line arguments.
+ * @param params The `SimulationParameters` object containing configuration
+ * settings for the simulation.
+ * @return An `ExecInfo` object containing details about the initialized runtime
+ * environment, including execution context and other relevant metadata.
+ */
 ExecInfo
 runtime_init(int argc, char **argv, const SimulationParameters &params);
 
+/**
+ * @brief Print run metadata to log file before running */
 void register_run(const ExecInfo &exec, SimulationParameters &params);
 
 #endif //__RUNTIME_INIT_HPP__

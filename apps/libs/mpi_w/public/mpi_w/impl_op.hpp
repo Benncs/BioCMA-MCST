@@ -16,7 +16,7 @@
 
 namespace MPI_W
 {
-
+  
   template <typename T>
   concept POD = std::is_standard_layout_v<T> &&
       std::is_trivially_copyable_v<T> && std::is_trivially_destructible_v<T> &&

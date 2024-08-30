@@ -2,10 +2,30 @@
 #define __WORKER_SPECIFIC_HPP__
 
 
-#include <common/execinfo.hpp>
-#include <simulation/simulation.hpp>
-#include <simulation/update_flows.hpp>
+#include <common/common.hpp>
+#include <memory>
 
+// Foward declaration
+namespace Simulation
+{
+  class SimulationUnit;
+  class FlowMapTransitioner;
+} // namespace Simulation
+
+/**
+ * @brief Main program executed on rank >0.
+ *
+ * This function is the main processing routine that is executed exclusively on
+ * rank >0 : the workers 
+ * @param exec The `ExecInfo` object containing details about the execution
+ * environment.
+ * @param simulation The `Simulation::SimulationUnit` object representing the
+ * simulation.
+ * @param params The `SimulationParameters` object containing settings for the
+ * simulation.
+ * @param transitioner A unique pointer to the `Simulation::FlowMapTransitioner`
+ * for handling flow map transitions.
+ */
 void workers_process(
     const ExecInfo &exec,
     Simulation::SimulationUnit &&simulation,

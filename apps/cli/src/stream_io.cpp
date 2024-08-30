@@ -1,12 +1,12 @@
 #include <iostream>
+#include <sstream>
 #include <stream_io.hpp>
 #include <unistd.h>
-#include <sstream>
 
+// Status flag
 static bool is_stdout_redirect = false;
 
-void restore_stdout(int original_stdout_fd,
-                           std::streambuf *&original_buffer)
+void restore_stdout(int original_stdout_fd, std::streambuf *&original_buffer)
 {
   if (is_stdout_redirect)
   {
@@ -20,7 +20,7 @@ void restore_stdout(int original_stdout_fd,
 }
 
 int redirect_stdout(std::streambuf *&original_buffer,
-                           std::stringstream &variable_stream)
+                    std::stringstream &variable_stream)
 {
   // Check if redirection is already active
   if (!is_stdout_redirect)
@@ -33,7 +33,8 @@ int redirect_stdout(std::streambuf *&original_buffer,
     fflush(stdout); // Flush the buffer to ensure all previous output is written
     int original_stdout_fd =
         dup(fileno(stdout)); // Save the original file descriptor of stdout
-    auto *_dev_null_fd = freopen("/dev/null", "w", stdout); // Redirect stdout to /dev/null
+    auto *_dev_null_fd =
+        freopen("/dev/null", "w", stdout); // Redirect stdout to /dev/null
 
     // Set the flag to indicate that redirection is active
     is_stdout_redirect = true;
@@ -41,6 +42,3 @@ int redirect_stdout(std::streambuf *&original_buffer,
   }
   return fileno(stdout);
 }
-
-
-                           

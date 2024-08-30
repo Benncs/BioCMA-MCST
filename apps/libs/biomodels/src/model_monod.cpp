@@ -11,11 +11,11 @@ namespace
   constexpr double YXS = 0.5;
   constexpr double critcal_division_length = 11e-6;
   constexpr double maximal_length = 18e-6;
-  constexpr double minimal_length = critcal_division_length*0.5;
-  constexpr double mu_max = 10*0.77 / 3600.;
+  constexpr double minimal_length = critcal_division_length * 0.5;
+  constexpr double mu_max = 10 * 0.77 / 3600.;
   constexpr double tau_division_proba = 1e-7;
   constexpr double ln2 = 0.69314718056;
-  constexpr double tau_metabolism = 1./mu_max;
+  constexpr double tau_metabolism = 1. / mu_max;
   KOKKOS_INLINE_FUNCTION double division_gamma(double lenght)
   {
 
@@ -27,7 +27,7 @@ namespace
     constexpr double kappa = 1.;
 
     // return Kokkos::pow(length / critcal_division_length, kappa);
-    return length/critcal_division_length;
+    return length / critcal_division_length;
   }
 
 } // namespace
@@ -35,15 +35,14 @@ namespace
 namespace Models
 {
 
-  KOKKOS_FUNCTION void Monod::init(MC::ParticleDataHolder &p,
-                                   Kokkos::Random_XorShift64_Pool<> _rng)
+  KOKKOS_FUNCTION void Monod::init(MC::ParticleDataHolder &p, MC::KPRNG _rng)
   {
     this->age = 0;
-    auto generator = _rng.get_state();
-    this->l = generator.drand(minimal_length,critcal_division_length);
+    auto generator = _rng.random_pool.get_state();
+    this->l = generator.drand(minimal_length, critcal_division_length);
     this->mu = generator.drand(mu_max * 0.9, mu_max * 1.1);
-    _rng.free_state(generator);
-    _init_only_cell_lenghtening = 0.5*critcal_division_length/ln2;
+    _rng.random_pool.free_state(generator);
+    _init_only_cell_lenghtening = 0.5 * critcal_division_length / ln2;
     this->contrib = 0.;
   }
 
@@ -59,7 +58,7 @@ namespace Models
       return;
     }
     age += d_t;
-    
+
     const double mu_p = mu * s / (Ks + s);
 
     l += d_t * (YXS * mu * _init_only_cell_lenghtening);
@@ -71,7 +70,7 @@ namespace Models
     const double proba_div =
         (1 - Kokkos::exp(-d_t / tau_division_proba)) * division_gamma(l);
 
-    double x = _rng.double_unfiform();
+    double x = _rng.double_uniform();
     if (x < proba_div)
     {
       p.status = MC::CellStatus::CYTOKINESIS;

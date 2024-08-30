@@ -102,7 +102,7 @@ namespace Simulation::KernelInline
         Kokkos::subview(neighbors, i_compartment, Kokkos::ALL);
 
     // Need 2 random numbers, use index 0 and 1 to acess to
-    const auto random = local_rng.template double_unfiform<2>();
+    const auto random = local_rng.template double_uniform<2>();
 
     if (KernelInline::probability_leaving(random[0],
                                           current_container.volume_liq,

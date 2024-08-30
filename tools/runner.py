@@ -2,12 +2,13 @@
 
 import argparse
 import os
-import sys
-import subprocess
-import re
-import time
-
 from cli_formater import format_cli
+import sys
+
+dev_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "devutils"))
+sys.path.append(dev_path)
+
+from exec import exec    # noqa: E402
 
 
 __current_file_path = os.path.abspath(__file__)
@@ -18,9 +19,10 @@ MPI_COMMAND = "mpiexec --allow-run-as-root "
 OMP_NUM_THREADS = "1"
 
 
-def get_executable(type: str,mpi:bool=True):
+def get_executable(type: str, mpi: bool = True):
     appname = "biocma_mcst_cli_app" if mpi else "biocma_mcst_cli_app_shared"
-    return f"{ROOT}/builddir/{type}_clang/apps/cli/{appname}"
+    return f"{ROOT}/builddir/{type}_gcc/apps/cli/{appname}"
+
 
 def mk_parser():
     parser = argparse.ArgumentParser(description="Runner")
@@ -46,8 +48,6 @@ def mk_parser():
         default=OMP_NUM_THREADS,
         help="Optional number of thread",
     )
-    
-    
 
     # Optional flag -mpi
     parser.add_argument(
@@ -61,45 +61,7 @@ def mk_parser():
     return parser
 
 
-def format_rhs(match):
-    """
-    Function to format RHS values in green.
-
-    Args:
-        match (re.Match): Match object containing the regex match.
-
-    Returns:
-        str: Formatted string with ANSI escape codes for green text.
-    """
-    return f"{match.group(1)}\033[92m{match.group(2)}\033[0m"
-
-
-def exec(command, n_thread):
-    env_var = os.environ.copy()
-    env_var["OMP_PLACES"] = "threads"
-    env_var["OMP_PROC_BIND"] = "spread"
-    env_var["OMP_NUM_THREADS"] = n_thread
-
-    env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
-    # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_memory_events.so"
-
-    result = command.replace("-", "\n-")
-    pattern = re.compile(r"(-\w+\s)(\S+)")
-    formatted_command = pattern.sub(format_rhs, result)
-    print("\r\n")
-    print(formatted_command)
-    print("\n")
-    start_time = time.perf_counter()
-    process = subprocess.Popen(command, shell=True, env=env_var)
-    return_code = process.wait()
-    end_time = time.perf_counter()
-    elapsed_time = end_time - start_time
-    print(f"Command executed in \033[92m{elapsed_time:.6f}\033[0m seconds")
-    return return_code
-
-
 def main():
-
     cli_args = mk_parser().parse_args()
     r_type = DEFAULT_TYPE
     if cli_args.release_flag:
@@ -112,13 +74,14 @@ def main():
         mpi_c = MPI_COMMAND + " "
 
     command = (
-        mpi_c + get_executable(r_type,cli_args.use_mpi) + " " + run_cli + f" -nt {cli_args.n_threads}"
+        mpi_c
+        + get_executable(r_type, cli_args.use_mpi)
+        + " "
+        + run_cli
+        + f" -nt {cli_args.n_threads}"
     )
     exec(command, cli_args.n_threads)
 
+
 if __name__ == "__main__":
     main()
-
-
-
-

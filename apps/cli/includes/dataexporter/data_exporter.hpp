@@ -1,12 +1,18 @@
 #ifndef __DATA_EXPORTER_HPP__
 #define __DATA_EXPORTER_HPP__
 
-#include "mc/events.hpp"
 #include <cmt_common/macro_constructor_assignment.hpp>
 #include <common/common.hpp>
-#include <simulation/simulation.hpp>
+#include <mc/events.hpp>
+#include <mc/particles/particle_model.hpp>
 #include <string_view>
 #include <unordered_map>
+
+// Foraward declaration
+namespace Simulation
+{
+  class SimulationUnit;
+} // namespace Simulation
 
 struct ExportData
 {
@@ -25,7 +31,8 @@ public:
                std::string_view _filename,
                std::tuple<size_t, size_t> dim,
                size_t niter,
-               std::span<size_t> distribution,double weight);
+               std::span<size_t> distribution,
+               double weight);
 
   virtual ~DataExporter() = default;
   void write_final_results(Simulation::SimulationUnit &simulation,
@@ -43,16 +50,18 @@ public:
       const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
   };
 
- 
   virtual void append(double t /*unused*/,
                       std::span<double> /*unused*/,
                       const std::vector<size_t> & /*unused*/,
                       std::span<const double> /*unused*/,
                       std::span<const double> /*unused*/) {};
 
-  virtual void append_particle_properties(size_t counter/*unused*/,const std::unordered_map<std::string, std::vector<model_properties_t>>
+  virtual void append_particle_properties(
+      size_t /*unused*/,
+      const std::unordered_map<std::string, std::vector<model_properties_t>>
           & /*unused*/,
-      const std::unordered_map<std::string, std::vector<double>> & /*unused*/){};
+      const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
+  };
 
   DELETE_CONSTRUCTORS(DataExporter)
   DELETE_ASSIGMENT(DataExporter)
@@ -79,8 +88,8 @@ protected:
   size_t counter = 0;
   size_t n_iter;
 
-  virtual void write_final_results(ExportData &data,
-                                   std::span<size_t> distribution)
+  virtual void write_final_results(ExportData & /*data*/,
+                                   std::span<size_t>  /*distribution*/)
   {
     std::cerr << "NO implementation specified";
   }

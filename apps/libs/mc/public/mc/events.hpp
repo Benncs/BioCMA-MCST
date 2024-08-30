@@ -24,7 +24,7 @@ namespace MC
   };
 
   constexpr size_t n_event_type = 5;
-
+  constexpr size_t number_event_type = n_event_type;
   template <EventType event> consteval size_t eventIndex()
   {
     return static_cast<size_t>(event);
@@ -32,14 +32,21 @@ namespace MC
 
   struct alignas(ExecInfo::cache_line_size) EventContainer
   {
-    static constexpr size_t number_event_type = n_event_type;
 
-    Kokkos::View<size_t[n_event_type], Kokkos::SharedHostPinnedSpace> _events;  // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+    Kokkos::View<size_t[n_event_type], Kokkos::SharedHostPinnedSpace>
+        _events; // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
     EventContainer()
     {
-      _events = Kokkos::View<size_t[n_event_type],  Kokkos::SharedHostPinnedSpace>("events"); // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+      _events = Kokkos::View<size_t[n_event_type],
+                             Kokkos::SharedHostPinnedSpace>(
+          "events"); // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
       Kokkos::deep_copy(_events, 0);
+    }
+
+    [[nodiscard]] std::span<size_t> get_span() const
+    {
+      return {_events.data(), number_event_type};
     }
 
     void clear() const

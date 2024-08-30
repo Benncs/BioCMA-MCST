@@ -1,6 +1,8 @@
 #ifndef __MC_PARTICLE_LIST_HPP__
 #define __MC_PARTICLE_LIST_HPP__
 
+#include <Kokkos_Core_fwd.hpp>
+#include <Kokkos_DynamicView.hpp>
 #include <common/kokkos_vector.hpp>
 #include <mc/particles/mcparticles.hpp>
 #include <mc/prng/prng.hpp>
@@ -48,11 +50,11 @@ namespace MC
 
     KOKKOS_FUNCTION Particle<Model> *spawn()
     {
-      Kokkos::Random_XorShift64_Pool<> p_rng(4086); //FIXME
+
       if (this->emplace(std::move(Particle<Model>())))
       {
         auto &p = this->back();
-        p.init(p_rng);
+        p.init(rng_instance);
         return &p;
       }
       return nullptr;
@@ -60,18 +62,15 @@ namespace MC
 
     void init(double weight)
     {
-      Kokkos::Random_XorShift64_Pool<> p_rng(1024); //FIXME
       auto local_data = this->_owned_data;
       KPRNG rng;
-
       Kokkos::parallel_for(
           "InitializeParticles",
           Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, this->size()),
           KOKKOS_LAMBDA(const int i) {
             auto p = Particle<Model>(weight);
-
             p.properties.current_container = rng.uniform_u(0, 4);
-            p.init(p_rng);
+            p.init(rng);
             local_data(i) = std::move(p);
           });
 
@@ -84,8 +83,9 @@ namespace MC
       newlist.init(weight);
       this->insert(newlist);
     }
-
+    MC::KPRNG rng_instance;
   private:
+    
   };
 } // namespace MC
 

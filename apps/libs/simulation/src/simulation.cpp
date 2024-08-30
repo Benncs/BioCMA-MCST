@@ -1,9 +1,5 @@
 #include "common/kokkos_vector.hpp"
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Core_fwd.hpp>
-#include <Kokkos_DynamicView.hpp>
-#include <Kokkos_Macros.hpp>
-#include <Kokkos_Random.hpp>
 #include <cma_read/light_2d_view.hpp>
 #include <cstddef>
 #include <cstdio>
@@ -238,5 +234,7 @@ namespace Simulation
   {
     delete ptr;
   }
+
+  
 
 } // namespace Simulation

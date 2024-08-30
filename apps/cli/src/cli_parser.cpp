@@ -1,5 +1,4 @@
 #include "common/simulation_parameters.hpp"
-// #include "model_list.hpp"
 #include "rt_init.hpp"
 #include <cli_parser.hpp>
 #include <exception>
@@ -7,8 +6,7 @@
 #include <iostream>
 #include <optional>
 #include <string_view>
-// static void parseOptional(SimulationParameters& params, std::string_view
-// arg);
+
 static void check_cli(SimulationParameters &params);
 // static void print_green(std::ostream &os, std::string_view message);
 static void print_red(std::ostream &os, std::string_view message);
@@ -46,13 +44,13 @@ static std::optional<UserControlParameters> parse_user_param(int argc,
       auto current_param = std::string(argv[iarg]);
       auto current_value = std::string_view(argv[iarg + 1]);
       if (current_param.data() != nullptr && current_param[0] != '\0')
-      {   
-        if(current_param=="h")
+      {
+        if (current_param == "h")
         {
           showHelp(std::cout);
           exit(0);
         }
-        
+
         parseArg(control, current_param, current_value);
       }
       else
@@ -78,7 +76,7 @@ static std::optional<UserControlParameters> parse_user_param(int argc,
 std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
 {
   SimulationParameters params = SimulationParameters::m_default();
-  params.n_species = 1; //FIXME
+  params.n_species = 1; // FIXME
   auto opt_control = parse_user_param(argc, argv);
   if (!opt_control.has_value())
   {
@@ -206,7 +204,7 @@ static void check_cli(SimulationParameters &params)
   }
 }
 
-void showHelp(std::ostream &os)
+void showHelp(std::ostream &os) noexcept
 {
   os << "Usage: ";
   print_red(os, "BIOCMA-MCST");
@@ -228,7 +226,7 @@ void showHelp(std::ostream &os)
      << '\n';
 
   os << "Available model:\r\n";
-   os << "WIP\r\n";
+  os << "WIP\r\n";
   // for (const auto& i : get_available_models())
   // {
   //   os << i << "\r\n";
