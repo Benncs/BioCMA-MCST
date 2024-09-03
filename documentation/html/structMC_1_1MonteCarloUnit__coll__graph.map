@@ -1,6 +1,0 @@
-<map id="MC::MonteCarloUnit" name="MC::MonteCarloUnit">
-<area shape="rect" id="node1" title="General&#45;purpose Monte Carlo unit to carry out simulations." alt="" coords="154,95,307,121"/>
-<area shape="rect" id="node2" href="$classMC_1_1ReactorDomain.html" title="Represents the spatial domain where Monte Carlo particles can exist." alt="" coords="5,5,157,32"/>
-<area shape="rect" id="node3" href="$classMC_1_1KPRNG.html" title=" " alt="" coords="182,5,279,32"/>
-<area shape="rect" id="node4" href="$structMC_1_1EventContainer.html" title="Use to count events that occurs during Monte&#45;Carlo processing cycles." alt="" coords="303,5,454,32"/>
-</map>
