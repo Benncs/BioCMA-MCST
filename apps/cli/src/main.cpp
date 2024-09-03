@@ -1,15 +1,15 @@
-#include <common/execinfo.hpp>
-#include <common/simulation_parameters.hpp>
 #include <cli_parser.hpp>
-#include <common/common.hpp>
-#include <simulation/simulation.hpp>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/reactorstate.hpp>
+#include <common/common.hpp>
+#include <common/execinfo.hpp>
+#include <common/simulation_parameters.hpp>
 #include <host_specific.hpp>
 #include <mpi_w/wrap_mpi.hpp>
 #include <post_process.hpp>
 #include <rt_init.hpp>
 #include <siminit.hpp>
+#include <simulation/simulation.hpp>
 #include <sync.hpp>
 #include <worker_specific.hpp>
 
@@ -61,14 +61,13 @@ static int handle_catch(ExceptionType const &e);
 int main(int argc, char **argv)
 {
 
-  
   auto params_opt = parse_cli(argc, argv);
   if (!params_opt.has_value())
   {
     showHelp(std::cout);
     return -1;
   }
-  
+
   const auto params = params_opt.value();
   const ExecInfo exec_info = runtime_init(argc, argv, params);
   try
@@ -100,7 +99,6 @@ static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params)
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
   auto simulation = init_simulation(exec_info, params, transitioner);
   return {std::move(simulation), params, std::move(transitioner), exec_info};
-
 }
 
 static void exec(CaseData &&case_data)

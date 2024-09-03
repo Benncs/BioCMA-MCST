@@ -2,10 +2,10 @@
 <cases>
    <control name="n14">
       <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
-      <final_time>22000</final_time>
+      <final_time>28000</final_time>
       <numper_particle>1000</numper_particle>
       <delta_time>0.01</delta_time>
-      <results_file_name>monod_14_long_2</results_file_name>
+      <results_file_name>monod_14_long_3</results_file_name>
       <number_exported_result>100</number_exported_result>
       <model_name>model_monod</model_name>
    </control>

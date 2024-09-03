@@ -1,0 +1,44 @@
+\hypertarget{classMC_1_1KPRNG}{}\doxysection{MC\+::KPRNG Class Reference}
+\label{classMC_1_1KPRNG}\index{MC::KPRNG@{MC::KPRNG}}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classMC_1_1KPRNG_ab4228c23f9585dceca517dbe17402970}\label{classMC_1_1KPRNG_ab4228c23f9585dceca517dbe17402970}} 
+using {\bfseries Shared\+KPRNG} = Kokkos\+::\+View$<$ \mbox{\hyperlink{classMC_1_1KPRNG}{KPRNG}}, Compute\+Space $>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classMC_1_1KPRNG_aa0f2f52072c2b6836234a098c709dd97}\label{classMC_1_1KPRNG_aa0f2f52072c2b6836234a098c709dd97}} 
+{\bfseries KPRNG} (size\+\_\+t \+\_\+seed=0)
+\item 
+\mbox{\Hypertarget{classMC_1_1KPRNG_addf9fa60ea087d143ee5389a60dc8b99}\label{classMC_1_1KPRNG_addf9fa60ea087d143ee5389a60dc8b99}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION double {\bfseries double\+\_\+uniform} () const
+\item 
+\mbox{\Hypertarget{classMC_1_1KPRNG_a2e1ed129fdc147662ee20a8ae7ae98ad}\label{classMC_1_1KPRNG_a2e1ed129fdc147662ee20a8ae7ae98ad}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION double {\bfseries double\+\_\+uniform} (double a, double b) const
+\item 
+\mbox{\Hypertarget{classMC_1_1KPRNG_a6f04670114bc418789302204e3af4d2a}\label{classMC_1_1KPRNG_a6f04670114bc418789302204e3af4d2a}} 
+Kokkos\+::\+View$<$ double $\ast$, Compute\+Space $>$ {\bfseries double\+\_\+uniform} (size\+\_\+t n\+\_\+sample, double a=0., double b=1.) const
+\item 
+\mbox{\Hypertarget{classMC_1_1KPRNG_ab0f75128750a9f0ccc437857088fb3e1}\label{classMC_1_1KPRNG_ab0f75128750a9f0ccc437857088fb3e1}} 
+{\footnotesize template$<$size\+\_\+t n\+\_\+r$>$ }\\Kokkos\+::\+View$<$ double\mbox{[}n\+\_\+r\mbox{]}, Compute\+Space $>$ {\bfseries double\+\_\+uniform\+\_\+view} () const
+\item 
+\mbox{\Hypertarget{classMC_1_1KPRNG_a1caa0fc4fdebdef078f9542c925ce56c}\label{classMC_1_1KPRNG_a1caa0fc4fdebdef078f9542c925ce56c}} 
+{\footnotesize template$<$size\+\_\+t n\+\_\+r$>$ }\\KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION std\+::array$<$ double, n\+\_\+r $>$ {\bfseries double\+\_\+uniform} () const
+\item 
+\mbox{\Hypertarget{classMC_1_1KPRNG_a067a194948465c4a636c41ebe13d313d}\label{classMC_1_1KPRNG_a067a194948465c4a636c41ebe13d313d}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION uint64\+\_\+t {\bfseries uniform\+\_\+u} (uint64\+\_\+t a, uint64\+\_\+t b) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classMC_1_1KPRNG_a82a8023b45b01e9a00b2f2a80b01eebc}\label{classMC_1_1KPRNG_a82a8023b45b01e9a00b2f2a80b01eebc}} 
+Kokkos\+::\+Random\+\_\+\+Xor\+Shift64\+\_\+\+Pool {\bfseries random\+\_\+pool}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+apps/libs/mc/public/mc/prng/prng.\+hpp\item 
+apps/libs/mc/src/prng.\+cpp\end{DoxyCompactItemize}

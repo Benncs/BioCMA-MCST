@@ -1,3 +1,4 @@
+#include "models/utils.hpp"
 #include <Kokkos_Atomic.hpp>
 #include <Kokkos_Printf.hpp>
 #include <common/common.hpp>
@@ -36,8 +37,10 @@ namespace Models
     this->age = 0;
     auto generator = _rng.random_pool.get_state();
     // this->l = generator.drand(minimal_length, maximal_length);
-    this->l = Kokkos::max(generator.normal(critcal_division_length_half,critcal_division_length_half/5.),minimal_length);
-    this->mu = Kokkos::max(generator.normal(mu_max,mu_max/5.),0.);
+    this->l = Kokkos::max(generator.normal(critcal_division_length_half,
+                                           critcal_division_length_half / 5.),
+                          minimal_length);
+    this->mu = Kokkos::max(generator.normal(mu_max, mu_max / 5.), 0.);
     _rng.random_pool.free_state(generator);
     _init_only_cell_lenghtening =
         (critcal_division_length - critcal_division_length_half) / ln2;
@@ -66,11 +69,7 @@ namespace Models
 
     contrib = mu * s / (Ks + s);
 
-    const double proba_div =
-        (1 - Kokkos::exp(-d_t / tau_division_proba)) * division_gamma(l);
-
-    const double x = _rng.double_uniform();
-    if (x < proba_div)
+    if (Models::check_probability_division(d_t, division_gamma(l), _rng))
     {
       p.status = MC::CellStatus::CYTOKINESIS;
     }

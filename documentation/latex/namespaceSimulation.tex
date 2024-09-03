@@ -1,0 +1,113 @@
+\hypertarget{namespaceSimulation}{}\doxysection{Simulation Namespace Reference}
+\label{namespaceSimulation}\index{Simulation@{Simulation}}
+
+
+Namespace that contains classes and structures related to simulation handling.  
+
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structSimulation_1_1EigenData}{Eigen\+Data}}
+\item 
+class \mbox{\hyperlink{classSimulation_1_1ScalarSimulation}{Scalar\+Simulation}}
+\item 
+class \mbox{\hyperlink{classSimulation_1_1PreCalculatedHydroState}{Pre\+Calculated\+Hydro\+State}}
+\item 
+struct \mbox{\hyperlink{structSimulation_1_1TransitionState}{Transition\+State}}
+\item 
+struct \mbox{\hyperlink{structSimulation_1_1ScalarInitializer}{Scalar\+Initializer}}
+\item 
+class \mbox{\hyperlink{classSimulation_1_1SimulationUnit}{Simulation\+Unit}}
+\item 
+class \mbox{\hyperlink{classSimulation_1_1SimulationException}{Simulation\+Exception}}
+\item 
+class \mbox{\hyperlink{classSimulation_1_1FlowMapTransitioner}{Flow\+Map\+Transitioner}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespaceSimulation_a2d15fd68f3f7dbbcf96458a111a2584a}\label{namespaceSimulation_a2d15fd68f3f7dbbcf96458a111a2584a}} 
+using {\bfseries init\+\_\+scalar\+\_\+f\+\_\+t} = void($\ast$)(size\+\_\+t, Cma\+Read\+::\+L2\+DView$<$ double $>$ \&)
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespaceSimulation_afaa7a23513f9da60616c09d2e09717bd}\label{namespaceSimulation_afaa7a23513f9da60616c09d2e09717bd}} 
+enum class {\bfseries Error\+Codes} \{ {\bfseries Bad\+Concentration\+Init\+Liq}
+, {\bfseries Bad\+Concentration\+Init\+Gas}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Matrix\+Xd \mbox{\hyperlink{namespaceSimulation_a6657d37d940b109f439ae47c60ed5d92}{get\+\_\+cumulative\+\_\+probabilities}} (Cma\+Read\+::\+Neighbors\+::\+Neighbors\+\_\+const\+\_\+view\+\_\+t neighbors, const Flow\+Matrix\+Type \&m\+\_\+transition)
+\begin{DoxyCompactList}\small\item\em Computes the cumulative probability matrix from the transition matrix and neighbor information. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespaceSimulation_acecfb915fa57ccbb0f0bf36821dcebe6}\label{namespaceSimulation_acecfb915fa57ccbb0f0bf36821dcebe6}} 
+\mbox{\hyperlink{classSimulation_1_1ScalarSimulation}{Scalar\+Simulation}} $\ast$ {\bfseries make\+Scalar\+Simulation} (size\+\_\+t n\+\_\+compartments, size\+\_\+t n\+\_\+species, std\+::span$<$ double $>$ volumes)
+\item 
+size\+\_\+t \mbox{\hyperlink{namespaceSimulation_a4c3abcb4ce970e198d1fba23eb47d34f}{find\+\_\+next\+\_\+compartment}} (int i\+\_\+compartment, double random\+\_\+number, std\+::span$<$ const size\+\_\+t $>$ i\+\_\+neighbor, Cma\+Read\+::\+L2\+DView$<$ const double $>$ cumulative\+\_\+probability)
+\begin{DoxyCompactList}\small\item\em Finds the next compartment for a particle based on a random number and cumulative probabilities. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespaceSimulation_a308e9e5fa30566ad295c4401ad3ae299}\label{namespaceSimulation_a308e9e5fa30566ad295c4401ad3ae299}} 
+Flow\+Matrix\+Type {\bfseries get\+\_\+transition\+\_\+matrix} (const Cma\+Read\+::\+Flow\+Map\+::\+Flow\+Map\+\_\+const\+\_\+view\+\_\+t \&flows)
+\item 
+\mbox{\Hypertarget{namespaceSimulation_aca8df7647e2d3630b6bd7691ada77aad}\label{namespaceSimulation_aca8df7647e2d3630b6bd7691ada77aad}} 
+std\+::vector$<$ double $>$ {\bfseries get\+\_\+diag\+\_\+transition} (const Flow\+Matrix\+Type \&m\+\_\+transition)
+\item 
+\mbox{\Hypertarget{namespaceSimulation_a5495f0492c4f370ef99758b386c3c7ae}\label{namespaceSimulation_a5495f0492c4f370ef99758b386c3c7ae}} 
+void {\bfseries linter\+\_\+eigen} (const \mbox{\hyperlink{classSimulation_1_1PreCalculatedHydroState}{Pre\+Calculated\+Hydro\+State}} \&current, const \mbox{\hyperlink{classSimulation_1_1PreCalculatedHydroState}{Pre\+Calculated\+Hydro\+State}} \&next, \mbox{\hyperlink{classSimulation_1_1PreCalculatedHydroState}{Pre\+Calculated\+Hydro\+State}} \&interpolated, double t)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Namespace that contains classes and structures related to simulation handling. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespaceSimulation_a4c3abcb4ce970e198d1fba23eb47d34f}\label{namespaceSimulation_a4c3abcb4ce970e198d1fba23eb47d34f}} 
+\index{Simulation@{Simulation}!find\_next\_compartment@{find\_next\_compartment}}
+\index{find\_next\_compartment@{find\_next\_compartment}!Simulation@{Simulation}}
+\doxysubsubsection{\texorpdfstring{find\_next\_compartment()}{find\_next\_compartment()}}
+{\footnotesize\ttfamily size\+\_\+t Simulation\+::find\+\_\+next\+\_\+compartment (\begin{DoxyParamCaption}\item[{int}]{i\+\_\+compartment,  }\item[{double}]{random\+\_\+number,  }\item[{std\+::span$<$ const size\+\_\+t $>$}]{i\+\_\+neighbor,  }\item[{Cma\+Read\+::\+L2\+DView$<$ const double $>$}]{cumulative\+\_\+probability }\end{DoxyParamCaption})}
+
+
+
+Finds the next compartment for a particle based on a random number and cumulative probabilities. 
+
+This function determines the next compartment for a particle by comparing a random number against the cumulative probabilities of the neighboring compartments. It returns the index of the chosen next compartment based on the transition probabilities.
+
+
+\begin{DoxyParams}{Parameters}
+{\em i\+\_\+compartment} & Index of the current compartment. \\
+\hline
+{\em random\+\_\+number} & Random number used to decide the next compartment. \\
+\hline
+{\em i\+\_\+neighbor} & Span of indices representing neighboring compartments. \\
+\hline
+{\em cumulative\+\_\+probability} & 2D view of cumulative probabilities for the compartments.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The index of the next compartment for the particle. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceSimulation_a6657d37d940b109f439ae47c60ed5d92}\label{namespaceSimulation_a6657d37d940b109f439ae47c60ed5d92}} 
+\index{Simulation@{Simulation}!get\_cumulative\_probabilities@{get\_cumulative\_probabilities}}
+\index{get\_cumulative\_probabilities@{get\_cumulative\_probabilities}!Simulation@{Simulation}}
+\doxysubsubsection{\texorpdfstring{get\_cumulative\_probabilities()}{get\_cumulative\_probabilities()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix\+Xd Simulation\+::get\+\_\+cumulative\+\_\+probabilities (\begin{DoxyParamCaption}\item[{Cma\+Read\+::\+Neighbors\+::\+Neighbors\+\_\+const\+\_\+view\+\_\+t}]{neighbors,  }\item[{const Flow\+Matrix\+Type \&}]{m\+\_\+transition }\end{DoxyParamCaption})}
+
+
+
+Computes the cumulative probability matrix from the transition matrix and neighbor information. 
+
+This function calculates the cumulative probability matrix for each zone (or compartment) based on the transition probabilities and the neighboring information. The cumulative probability matrix is used for determining the likelihood of moving to different compartments.
+
+
+\begin{DoxyParams}{Parameters}
+{\em neighbors} & A view of the neighbors for each compartment. \\
+\hline
+{\em m\+\_\+transition} & The transition matrix that provides the probabilities of transitioning from one compartment to another.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An Eigen\+::\+Matrix\+Xd representing the cumulative probability matrix. 
+\end{DoxyReturn}

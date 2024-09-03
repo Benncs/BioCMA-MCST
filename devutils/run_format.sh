@@ -1,1 +1,0 @@
-find apps/ -type f -name *.cpp -exec clang-format -style=file -i {} \;

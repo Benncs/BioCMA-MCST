@@ -1,0 +1,74 @@
+\hypertarget{classSimulation_1_1ScalarSimulation}{}\doxysection{Simulation\+::Scalar\+Simulation Class Reference}
+\label{classSimulation_1_1ScalarSimulation}\index{Simulation::ScalarSimulation@{Simulation::ScalarSimulation}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_ae3d1a3a77a2e24806d409b80579c8255}\label{classSimulation_1_1ScalarSimulation_ae3d1a3a77a2e24806d409b80579c8255}} 
+{\bfseries Scalar\+Simulation} (\mbox{\hyperlink{classSimulation_1_1ScalarSimulation}{Scalar\+Simulation}} \&\&other) noexcept
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_a5608de40ed00444c146a71642f882473}\label{classSimulation_1_1ScalarSimulation_a5608de40ed00444c146a71642f882473}} 
+{\bfseries Scalar\+Simulation} (const \mbox{\hyperlink{classSimulation_1_1ScalarSimulation}{Scalar\+Simulation}} \&other) noexcept=delete
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_aa72818956090d90be703c0ba0ed932ee}\label{classSimulation_1_1ScalarSimulation_aa72818956090d90be703c0ba0ed932ee}} 
+{\bfseries Scalar\+Simulation} (size\+\_\+t n\+\_\+compartments, size\+\_\+t n\+\_\+species, std\+::span$<$ double $>$ volume)
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_a1b2df58cd259dcfc833a28fb41523483}\label{classSimulation_1_1ScalarSimulation_a1b2df58cd259dcfc833a28fb41523483}} 
+\mbox{\hyperlink{classSimulation_1_1ScalarSimulation}{Scalar\+Simulation}} {\bfseries operator=} (const \mbox{\hyperlink{classSimulation_1_1ScalarSimulation}{Scalar\+Simulation}} \&other)=delete
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_ad8d40e9ca3fdb498000508921375457b}\label{classSimulation_1_1ScalarSimulation_ad8d40e9ca3fdb498000508921375457b}} 
+\mbox{\hyperlink{classSimulation_1_1ScalarSimulation}{Scalar\+Simulation}} {\bfseries operator=} (\mbox{\hyperlink{classSimulation_1_1ScalarSimulation}{Scalar\+Simulation}} \&\&other)=delete
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_aacc87aec9f07e0f82032ae4270a188b7}\label{classSimulation_1_1ScalarSimulation_aacc87aec9f07e0f82032ae4270a188b7}} 
+std\+::span$<$ double const  $>$ {\bfseries get\+Volume\+Data} () const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_a889b6ee8814a8806f93cfea0264b0aa7}\label{classSimulation_1_1ScalarSimulation_a889b6ee8814a8806f93cfea0264b0aa7}} 
+std\+::span$<$ double $>$ {\bfseries get\+Contribution\+Data} ()
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_a48f614f3d0e6789e4edf4eade7b3e69b}\label{classSimulation_1_1ScalarSimulation_a48f614f3d0e6789e4edf4eade7b3e69b}} 
+Eigen\+::\+Diagonal\+Matrix$<$ double, -\/1 $>$ \& {\bfseries get\+Volume} ()
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_afcf9b11b8de7215be6b83ed6a2aceaf0}\label{classSimulation_1_1ScalarSimulation_afcf9b11b8de7215be6b83ed6a2aceaf0}} 
+std\+::span$<$ double $>$ {\bfseries get\+Concentration\+Data} ()
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_a8005a2e16795ada37b04f7f6bae0048d}\label{classSimulation_1_1ScalarSimulation_a8005a2e16795ada37b04f7f6bae0048d}} 
+Cma\+Read\+::\+L2\+DView$<$ double $>$ {\bfseries get\+Concentration\+View} ()
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_a6aa5431f36ab0ffd930b1bf41e24f8a9}\label{classSimulation_1_1ScalarSimulation_a6aa5431f36ab0ffd930b1bf41e24f8a9}} 
+size\+\_\+t {\bfseries n\+\_\+species} () const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_a45bff3c267cd20371ee730cb07ba4a37}\label{classSimulation_1_1ScalarSimulation_a45bff3c267cd20371ee730cb07ba4a37}} 
+void {\bfseries set\+Volumes} (std\+::span$<$ const double $>$ volumes, std\+::span$<$ const double $>$ inv\+\_\+volumes)
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_abaa93bd56b34068624d857a0a4c7cf8e}\label{classSimulation_1_1ScalarSimulation_abaa93bd56b34068624d857a0a4c7cf8e}} 
+void {\bfseries perform\+Step} (double d\+\_\+t, const Flow\+Matrix\+Type \&m\+\_\+transition, const Eigen\+::\+Matrix\+Xd \&transfer\+\_\+gas\+\_\+liquid)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_a00ef71127bb3c4e384c19c5b0a07ac97}\label{classSimulation_1_1ScalarSimulation_a00ef71127bb3c4e384c19c5b0a07ac97}} 
+Kokkos\+::\+View$<$ double $\ast$$\ast$, Kokkos\+::\+Layout\+Left, Compute\+Space $>$ {\bfseries compute\+\_\+concentration}
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_a84d3101a9b0312cce1f0322ec00439b8}\label{classSimulation_1_1ScalarSimulation_a84d3101a9b0312cce1f0322ec00439b8}} 
+Eigen\+::\+Matrix\+Xd {\bfseries concentration}
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_aa1d5694277aba4ce4f7b2bfd19b10e1a}\label{classSimulation_1_1ScalarSimulation_aa1d5694277aba4ce4f7b2bfd19b10e1a}} 
+Eigen\+::\+Matrix\+Xd {\bfseries total\+\_\+mass}
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_ab3f8e6fce6ab52c78aa16f6ccc82eb12}\label{classSimulation_1_1ScalarSimulation_ab3f8e6fce6ab52c78aa16f6ccc82eb12}} 
+Kokkos\+::\+View$<$ double $\ast$$\ast$, Kokkos\+::\+Layout\+Left $>$ {\bfseries k\+\_\+contribs}
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_a337314cf74c58d599eaac3719d7208e6}\label{classSimulation_1_1ScalarSimulation_a337314cf74c58d599eaac3719d7208e6}} 
+Eigen\+::\+Array\+XXd {\bfseries vec\+\_\+kla}
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_a26561c3fa68192dc0f02b709341601c5}\label{classSimulation_1_1ScalarSimulation_a26561c3fa68192dc0f02b709341601c5}} 
+Eigen\+::\+Matrix\+Xd {\bfseries biomass\+\_\+contribution}
+\item 
+\mbox{\Hypertarget{classSimulation_1_1ScalarSimulation_adada71c0e6e7ba3aea11f0fe11887bfb}\label{classSimulation_1_1ScalarSimulation_adada71c0e6e7ba3aea11f0fe11887bfb}} 
+Eigen\+::\+Matrix\+Xd {\bfseries feed}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+apps/libs/simulation/includes/scalar\+\_\+simulation.\+hpp\item 
+apps/libs/simulation/src/impl\+Scalar.\+cpp\end{DoxyCompactItemize}

@@ -82,7 +82,7 @@ def read_xml_values(xml_path, parser,target_name):
 def format_cli(args):
     if(len(args))==2:
         name = args[1]
-        xml_file_path = current_directory+"/../devutils/datamodel/input_scheme.xml"   
+        xml_file_path = current_directory+"/cases.xml"   
 
         # Create XML parser with schema validation
         parser = create_xml_parser()

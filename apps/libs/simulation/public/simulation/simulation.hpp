@@ -17,6 +17,13 @@
 
 static constexpr size_t trigger_const_particle_number = 1e6;
 static constexpr bool const_number_simulation = false;
+
+
+
+/**
+ * @namespace Simulation
+ * @brief Namespace that contains classes and structures related to simulation handling 
+ */
 namespace Simulation
 {
 

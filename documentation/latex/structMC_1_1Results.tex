@@ -1,0 +1,128 @@
+\hypertarget{structMC_1_1Results}{}\doxysection{MC\+::Results$<$ Memory\+Space, T $>$ Struct Template Reference}
+\label{structMC_1_1Results}\index{MC::Results$<$ MemorySpace, T $>$@{MC::Results$<$ MemorySpace, T $>$}}
+
+
+Helper class to handle data updated during kernel Monte\+Carlo process.  
+
+
+
+
+{\ttfamily \#include $<$extra\+\_\+process.\+hpp$>$}
+
+
+
+Collaboration diagram for MC\+::Results$<$ Memory\+Space, T $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=259pt]{structMC_1_1Results__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structMC_1_1Results_ac1f5bec7174473157b3fc9b289ccaf60}\label{structMC_1_1Results_ac1f5bec7174473157b3fc9b289ccaf60}} 
+using \mbox{\hyperlink{structMC_1_1Results_ac1f5bec7174473157b3fc9b289ccaf60}{Results\+VIew}} = Kokkos\+::\+View$<$ \mbox{\hyperlink{structMC_1_1Results}{Results}}$<$ Memory\+Space, T $>$, Memory\+Space $>$
+\begin{DoxyCompactList}\small\item\em Alias only for readibility. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structMC_1_1Results_ad15a2b59d8c389500206b1bbdb22b38b}{Results}} (size\+\_\+t capacity)
+\begin{DoxyCompactList}\small\item\em Main constructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structMC_1_1Results_a09bc3c4554b5d6a950a3372641571d96}{clear}} (size\+\_\+t new\+\_\+capacity)
+\begin{DoxyCompactList}\small\item\em Clear data after cycle to prepare next. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structMC_1_1Results_a9463f445cbbf66fc9621f8fc5adc4bbe}\label{structMC_1_1Results_a9463f445cbbf66fc9621f8fc5adc4bbe}} 
+void \mbox{\hyperlink{structMC_1_1Results_a9463f445cbbf66fc9621f8fc5adc4bbe}{update\+\_\+view}} (\mbox{\hyperlink{structMC_1_1Results_ac1f5bec7174473157b3fc9b289ccaf60}{Results\+VIew}} results\+\_\+view)
+\begin{DoxyCompactList}\small\item\em Update kernel view performing deepcopy. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structMC_1_1Results_a63e4644cc09f1c20d2f9a1eb2e8248f9}\label{structMC_1_1Results_a63e4644cc09f1c20d2f9a1eb2e8248f9}} 
+auto \mbox{\hyperlink{structMC_1_1Results_a63e4644cc09f1c20d2f9a1eb2e8248f9}{get\+\_\+view}} ()
+\begin{DoxyCompactList}\small\item\em Get correct view to be pass to kernel. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMC_1_1ParticleList}{MC\+::\+Particle\+List}}$<$ Memory\+Space, T $>$ \mbox{\hyperlink{structMC_1_1Results_aaec10411e6d081eaf3aaaff3756bde2a}{extra\+\_\+process}}
+\item 
+int \mbox{\hyperlink{structMC_1_1Results_add3778664a5fa45630274e12a7a4b115}{waiting\+\_\+allocation\+\_\+particle}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Memory\+Space, Particle\+Model T$>$\newline
+struct MC\+::\+Results$<$ Memory\+Space, T $>$}
+
+Helper class to handle data updated during kernel Monte\+Carlo process. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Memory\+Space} & In which memory space the results are updated \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structMC_1_1Results_ad15a2b59d8c389500206b1bbdb22b38b}\label{structMC_1_1Results_ad15a2b59d8c389500206b1bbdb22b38b}} 
+\index{MC::Results$<$ MemorySpace, T $>$@{MC::Results$<$ MemorySpace, T $>$}!Results@{Results}}
+\index{Results@{Results}!MC::Results$<$ MemorySpace, T $>$@{MC::Results$<$ MemorySpace, T $>$}}
+\doxysubsubsection{\texorpdfstring{Results()}{Results()}}
+{\footnotesize\ttfamily template$<$typename Memory\+Space , Particle\+Model T$>$ \\
+\mbox{\hyperlink{structMC_1_1Results}{MC\+::\+Results}}$<$ Memory\+Space, T $>$\+::\mbox{\hyperlink{structMC_1_1Results}{Results}} (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{capacity }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Main constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em capacity} & first size of buffer, must be adapated to expected particle division number during cycle. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+According to implementation, buffer itself can allocate more than capacity 
+\end{DoxyWarning}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{structMC_1_1Results_a09bc3c4554b5d6a950a3372641571d96}\label{structMC_1_1Results_a09bc3c4554b5d6a950a3372641571d96}} 
+\index{MC::Results$<$ MemorySpace, T $>$@{MC::Results$<$ MemorySpace, T $>$}!clear@{clear}}
+\index{clear@{clear}!MC::Results$<$ MemorySpace, T $>$@{MC::Results$<$ MemorySpace, T $>$}}
+\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily template$<$typename Memory\+Space , Particle\+Model T$>$ \\
+void \mbox{\hyperlink{structMC_1_1Results}{MC\+::\+Results}}$<$ Memory\+Space, T $>$\+::clear (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{new\+\_\+capacity }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Clear data after cycle to prepare next. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+\_\+capacity} & for new size of buffer, buffer doesn\textquotesingle{}t shrink, only grows \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structMC_1_1Results_aaec10411e6d081eaf3aaaff3756bde2a}\label{structMC_1_1Results_aaec10411e6d081eaf3aaaff3756bde2a}} 
+\index{MC::Results$<$ MemorySpace, T $>$@{MC::Results$<$ MemorySpace, T $>$}!extra\_process@{extra\_process}}
+\index{extra\_process@{extra\_process}!MC::Results$<$ MemorySpace, T $>$@{MC::Results$<$ MemorySpace, T $>$}}
+\doxysubsubsection{\texorpdfstring{extra\_process}{extra\_process}}
+{\footnotesize\ttfamily template$<$typename Memory\+Space , Particle\+Model T$>$ \\
+\mbox{\hyperlink{classMC_1_1ParticleList}{MC\+::\+Particle\+List}}$<$Memory\+Space, T$>$ \mbox{\hyperlink{structMC_1_1Results}{MC\+::\+Results}}$<$ Memory\+Space, T $>$\+::extra\+\_\+process}
+
+Fixed size buffer with particles spawnt during the current cycle that will be process at the end of the kernel \mbox{\Hypertarget{structMC_1_1Results_add3778664a5fa45630274e12a7a4b115}\label{structMC_1_1Results_add3778664a5fa45630274e12a7a4b115}} 
+\index{MC::Results$<$ MemorySpace, T $>$@{MC::Results$<$ MemorySpace, T $>$}!waiting\_allocation\_particle@{waiting\_allocation\_particle}}
+\index{waiting\_allocation\_particle@{waiting\_allocation\_particle}!MC::Results$<$ MemorySpace, T $>$@{MC::Results$<$ MemorySpace, T $>$}}
+\doxysubsubsection{\texorpdfstring{waiting\_allocation\_particle}{waiting\_allocation\_particle}}
+{\footnotesize\ttfamily template$<$typename Memory\+Space , Particle\+Model T$>$ \\
+int \mbox{\hyperlink{structMC_1_1Results}{MC\+::\+Results}}$<$ Memory\+Space, T $>$\+::waiting\+\_\+allocation\+\_\+particle}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{        0}
+
+\end{DoxyCode}
+Counter to know how many particle to allocate at the end at the kernel if extra\+\_\+process buffer is full. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+apps/libs/mc/public/mc/particles/extra\+\_\+process.\+hpp\end{DoxyCompactItemize}

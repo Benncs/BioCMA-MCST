@@ -1,0 +1,52 @@
+\hypertarget{classMC_1_1BaseParticle}{}\doxysection{MC\+::Base\+Particle$<$ \+\_\+\+Model $>$ Class Template Reference}
+\label{classMC_1_1BaseParticle}\index{MC::BaseParticle$<$ \_Model $>$@{MC::BaseParticle$<$ \_Model $>$}}
+
+
+Collaboration diagram for MC\+::Base\+Particle$<$ \+\_\+\+Model $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=280pt]{classMC_1_1BaseParticle__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classMC_1_1BaseParticle_ad7a0024dfbdab9d782eddc26754d0571}\label{classMC_1_1BaseParticle_ad7a0024dfbdab9d782eddc26754d0571}} 
+using {\bfseries Model} = \+\_\+\+Model
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classMC_1_1BaseParticle_a2611d4ec8c5f461def73db456410aba2}\label{classMC_1_1BaseParticle_a2611d4ec8c5f461def73db456410aba2}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION {\bfseries Base\+Particle} (double \+\_\+weight=0) noexcept
+\item 
+\mbox{\Hypertarget{classMC_1_1BaseParticle_acf4f02b63974f42705af17c8958dc569}\label{classMC_1_1BaseParticle_acf4f02b63974f42705af17c8958dc569}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION void {\bfseries clear\+State} (\mbox{\hyperlink{namespaceMC_af75a96b49a1ebe4f06627d63a176599b}{MC\+::\+Cell\+Status}} \+\_\+status=\mbox{\hyperlink{namespaceMC_af75a96b49a1ebe4f06627d63a176599baa5daf7f2ebbba4975d61dab1c40188c7}{Cell\+Status\+::\+IDLE}}) noexcept
+\item 
+\mbox{\Hypertarget{classMC_1_1BaseParticle_a4b400165fe7221b1aa56f6097489f274}\label{classMC_1_1BaseParticle_a4b400165fe7221b1aa56f6097489f274}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION void {\bfseries init} (\mbox{\hyperlink{classMC_1_1KPRNG}{KPRNG}} globalrng)
+\item 
+\mbox{\Hypertarget{classMC_1_1BaseParticle_a862934068c9237fb7156d1bfc082665b}\label{classMC_1_1BaseParticle_a862934068c9237fb7156d1bfc082665b}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION void {\bfseries update} (double d\+\_\+t, const Local\+Concentration\+View \&concentration, \mbox{\hyperlink{classMC_1_1KPRNG}{KPRNG}} globalrng)
+\item 
+\mbox{\Hypertarget{classMC_1_1BaseParticle_ac04cc600dba30363ff4c3c254f3dd709}\label{classMC_1_1BaseParticle_ac04cc600dba30363ff4c3c254f3dd709}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION \mbox{\hyperlink{classMC_1_1BaseParticle}{Base\+Particle}}$<$ \+\_\+\+Model $>$ {\bfseries division} ()
+\item 
+\mbox{\Hypertarget{classMC_1_1BaseParticle_a8bcbcb4c44eca6517039dd3335ac8bf2}\label{classMC_1_1BaseParticle_a8bcbcb4c44eca6517039dd3335ac8bf2}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION void {\bfseries contribution} (Contribution\+View contrib)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classMC_1_1BaseParticle_ab0d45569c2fdee678ac7561bb670b559}\label{classMC_1_1BaseParticle_ab0d45569c2fdee678ac7561bb670b559}} 
+\mbox{\hyperlink{classMC_1_1ParticleDataHolder}{Particle\+Data\+Holder}} {\bfseries properties}
+\item 
+\mbox{\Hypertarget{classMC_1_1BaseParticle_a4b3f83e6374a2dae848f9a6d14881e61}\label{classMC_1_1BaseParticle_a4b3f83e6374a2dae848f9a6d14881e61}} 
+\+\_\+\+Model {\bfseries data} \{\}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+apps/libs/mc/public/mc/particles/mcparticles.\+hpp\end{DoxyCompactItemize}

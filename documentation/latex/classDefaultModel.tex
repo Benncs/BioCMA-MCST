@@ -1,0 +1,37 @@
+\hypertarget{classDefaultModel}{}\doxysection{Default\+Model Class Reference}
+\label{classDefaultModel}\index{DefaultModel@{DefaultModel}}
+
+
+Default Model that implement Particle\+Model This model does nothing but is required to have correct compilation even if other models were not provided.  
+
+
+
+
+{\ttfamily \#include $<$particle\+\_\+model.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDefaultModel_ac339398c73b818594805d5bfa78bc5d5}\label{classDefaultModel_ac339398c73b818594805d5bfa78bc5d5}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION void {\bfseries init} (\mbox{\hyperlink{classMC_1_1ParticleDataHolder}{MC\+::\+Particle\+Data\+Holder}} \&p, \mbox{\hyperlink{classMC_1_1KPRNG}{MC\+::\+KPRNG}} \+\_\+rng)
+\item 
+\mbox{\Hypertarget{classDefaultModel_a5b2b98f7f85c117606691a635ffc6efd}\label{classDefaultModel_a5b2b98f7f85c117606691a635ffc6efd}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION void {\bfseries update} (double d\+\_\+t, \mbox{\hyperlink{classMC_1_1ParticleDataHolder}{MC\+::\+Particle\+Data\+Holder}} \&p, const Local\+Concentration\+View \&concentration, \mbox{\hyperlink{classMC_1_1KPRNG}{MC\+::\+KPRNG}} \+\_\+rng)
+\item 
+\mbox{\Hypertarget{classDefaultModel_a0e5e87422d485150fd64bac8bf7bebf1}\label{classDefaultModel_a0e5e87422d485150fd64bac8bf7bebf1}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION \mbox{\hyperlink{classDefaultModel}{Default\+Model}} {\bfseries division} (\mbox{\hyperlink{classMC_1_1ParticleDataHolder}{MC\+::\+Particle\+Data\+Holder}} \&)
+\item 
+\mbox{\Hypertarget{classDefaultModel_a9126f4f75ccecd9873e8e0273e4725f9}\label{classDefaultModel_a9126f4f75ccecd9873e8e0273e4725f9}} 
+KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION void {\bfseries contribution} (\mbox{\hyperlink{classMC_1_1ParticleDataHolder}{MC\+::\+Particle\+Data\+Holder}} \&p, Contribution\+View contrib)
+\item 
+\mbox{\Hypertarget{classDefaultModel_a951bf9823378f9366b2ca12e4e7bbc6e}\label{classDefaultModel_a951bf9823378f9366b2ca12e4e7bbc6e}} 
+model\+\_\+properties\+\_\+detail\+\_\+t {\bfseries get\+\_\+properties} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Default Model that implement Particle\+Model This model does nothing but is required to have correct compilation even if other models were not provided. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+apps/libs/mc/public/mc/particles/particle\+\_\+model.\+hpp\end{DoxyCompactItemize}

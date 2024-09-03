@@ -58,6 +58,7 @@ def process_norm(
     concentration_record = results.data[:, :, 0]
 
     full_volume = results.volume_liquid
+ 
     p_concentration = results.distribution / full_volume
 
     normalized_scalar_concentration, _, var_c = norm_concentration(

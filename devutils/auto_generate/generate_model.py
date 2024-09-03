@@ -1,7 +1,11 @@
 import re
+import os 
+current_file_path = os.path.abspath(__file__)
+current_directory = os.path.dirname(current_file_path)
 
-header_template_path = "/mnt/c/Users/casale/Documents/code/cpp/biomc/devutils/auto_generate/template_model.hxx"
-source_template_path = "/mnt/c/Users/casale/Documents/code/cpp/biomc/devutils/auto_generate/template_model.cxx"
+
+header_template_path = f"{current_directory}/template_model.hxx"
+source_template_path = f"{current_directory}/template_model.cxx"
 model_name = "model_test"
 
 

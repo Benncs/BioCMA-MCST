@@ -13,6 +13,7 @@ command_exists() {
   command -v "$1" &> /dev/null
 }
 
+
 # Check if apt-get is installed
 if ! command_exists apt-get; then
   error "apt-get could not be found. This script is for Ubuntu systems."

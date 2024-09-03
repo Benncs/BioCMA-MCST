@@ -1,0 +1,208 @@
+\hypertarget{namespaceMC}{}\doxysection{MC Namespace Reference}
+\label{namespaceMC}\index{MC@{MC}}
+
+
+Namespace that contains classes and structures related to Monte Carlo (\mbox{\hyperlink{namespaceMC}{MC}}) simulations.  
+
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structMC_1_1ContainerState}{Container\+State}}
+\begin{DoxyCompactList}\small\item\em A data structure representing the state of a container in the simulation. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classMC_1_1ReactorDomain}{Reactor\+Domain}}
+\begin{DoxyCompactList}\small\item\em Represents the spatial domain where Monte Carlo particles can exist. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMC_1_1EventContainer}{Event\+Container}}
+\begin{DoxyCompactList}\small\item\em Use to count events that occurs during Monte-\/\+Carlo processing cycles. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classMC_1_1ParticleDataHolder}{Particle\+Data\+Holder}}
+\begin{DoxyCompactList}\small\item\em Main properties carried by all Monte\+Carlo Particle These properties are handled for all particle in all cycles. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMC_1_1Results}{Results}}
+\begin{DoxyCompactList}\small\item\em Helper class to handle data updated during kernel Monte\+Carlo process. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classMC_1_1BaseParticle}{Base\+Particle}}
+\item 
+class \mbox{\hyperlink{classMC_1_1ParticleList}{Particle\+List}}
+\begin{DoxyCompactList}\small\item\em A container for managing a list of Monte-\/\+Carlo particles in a specified memory space. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classMC_1_1ParticlesContainer}{Particles\+Container}}
+\begin{DoxyCompactList}\small\item\em Main owning object for Monte-\/\+Carlo particles. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMC_1_1ExponentialLaw}{Exponential\+Law}}
+\item 
+struct \mbox{\hyperlink{structMC_1_1BoundedExponentialLaw}{Bounded\+Exponential\+Law}}
+\item 
+struct \mbox{\hyperlink{structMC_1_1NormalLaw}{Normal\+Law}}
+\item 
+struct \mbox{\hyperlink{structMC_1_1UniformLaw}{Uniform\+Law}}
+\item 
+struct \mbox{\hyperlink{structMC_1_1UniformLawINT}{Uniform\+Law\+INT}}
+\item 
+struct \mbox{\hyperlink{structMC_1_1overloaded}{overloaded}}
+\item 
+class \mbox{\hyperlink{classMC_1_1KPRNG}{KPRNG}}
+\item 
+struct \mbox{\hyperlink{structMC_1_1MonteCarloUnit}{Monte\+Carlo\+Unit}}
+\begin{DoxyCompactList}\small\item\em General-\/purpose Monte Carlo unit to carry out simulations. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespaceMC_ab27533162d4cbb67b11f7e38217b7007}\label{namespaceMC_ab27533162d4cbb67b11f7e38217b7007}} 
+{\footnotesize template$<$Particle\+Model Model$>$ }\\using {\bfseries Particle} = \mbox{\hyperlink{classMC_1_1BaseParticle}{Base\+Particle}}$<$ Model $>$
+\item 
+\mbox{\Hypertarget{namespaceMC_a290a3ddae9f99ae6c0ba0abea6d3c108}\label{namespaceMC_a290a3ddae9f99ae6c0ba0abea6d3c108}} 
+using {\bfseries Distribution\+Variant\+Real} = std\+::variant$<$ \mbox{\hyperlink{structMC_1_1ExponentialLaw}{Exponential\+Law}}, \mbox{\hyperlink{structMC_1_1NormalLaw}{Normal\+Law}}, \mbox{\hyperlink{structMC_1_1UniformLaw}{Uniform\+Law}} $>$
+\item 
+\mbox{\Hypertarget{namespaceMC_a358a834f387ad17e7291bee374bfce16}\label{namespaceMC_a358a834f387ad17e7291bee374bfce16}} 
+using {\bfseries Distribution\+Variant\+Int} = std\+::variant$<$ \mbox{\hyperlink{structMC_1_1ExponentialLaw}{Exponential\+Law}}, \mbox{\hyperlink{structMC_1_1BoundedExponentialLaw}{Bounded\+Exponential\+Law}}, \mbox{\hyperlink{structMC_1_1UniformLawINT}{Uniform\+Law\+INT}} $>$
+\item 
+\mbox{\Hypertarget{namespaceMC_a812d99c78206abe2d5197566fe7d1440}\label{namespaceMC_a812d99c78206abe2d5197566fe7d1440}} 
+{\footnotesize template$<$Number\+Type T$>$ }\\using {\bfseries distribution\+\_\+t} = std\+::function$<$ T(std\+::mt19937 \&)$>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8}{Event\+Type}} \+: char \{ \newline
+\mbox{\hyperlink{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8aff388cf92ac4efa80c5aac6d4c7852ae}{Change\+Weight}} = 0
+, \mbox{\hyperlink{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8ad647742db7fc3579a1034ec4919e4752}{New\+Particle}} = 1
+, \mbox{\hyperlink{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8a6097f89e3092d4ccd249c9d479785c1f}{Death}} = 2
+, \mbox{\hyperlink{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8a6bc362dbf494c61ea117fe3c71ca48a5}{Move}} = 3
+, \newline
+\mbox{\hyperlink{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8afef46e5063ce3dc78b8ae64fa474241d}{Exit}} = 4
+ \}
+\begin{DoxyCompactList}\small\item\em Enumeration that represents events that can occurs during a Monte-\/\+Carlo cycle. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{namespaceMC_af75a96b49a1ebe4f06627d63a176599b}{Cell\+Status}} \+: char \{ \mbox{\hyperlink{namespaceMC_af75a96b49a1ebe4f06627d63a176599baa5daf7f2ebbba4975d61dab1c40188c7}{IDLE}}
+, \mbox{\hyperlink{namespaceMC_af75a96b49a1ebe4f06627d63a176599babb4784231ff45108ee20bad16e4a2e8c}{DEAD}}
+, \mbox{\hyperlink{namespaceMC_af75a96b49a1ebe4f06627d63a176599ba77c5febf1292e2a11fc7f0f658b52586}{CYTOKINESIS}}
+, \mbox{\hyperlink{namespaceMC_af75a96b49a1ebe4f06627d63a176599baef373774188a51f80463f37b6bd9e83a}{OUT}}
+ \}
+\begin{DoxyCompactList}\small\item\em Enumeration that possible status for a MCParticle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespaceMC_ae91609aafa31939cedd6775cc5adafc4}\label{namespaceMC_ae91609aafa31939cedd6775cc5adafc4}} 
+{\footnotesize template$<$Event\+Type event$>$ }\\KOKKOS\+\_\+\+INLINE\+\_\+\+FUNCTION consteval size\+\_\+t \mbox{\hyperlink{namespaceMC_ae91609aafa31939cedd6775cc5adafc4}{event\+\_\+index}} ()
+\begin{DoxyCompactList}\small\item\em inline getter, converts event to its value in order to be use as array index \end{DoxyCompactList}\item 
+{\footnotesize template$<$Particle\+Model Model$>$ }\\std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{structMC_1_1MonteCarloUnit}{Monte\+Carlo\+Unit}} $>$ \mbox{\hyperlink{namespaceMC_acabb7733f02b0474d1a2f2aa516df57c}{init}} (const \mbox{\hyperlink{structExecInfo}{Exec\+Info}} \&info, size\+\_\+t n\+\_\+particles, std\+::span$<$ double $>$ volumes, Cma\+Read\+::\+Neighbors\+::\+Neighbors\+\_\+const\+\_\+view\+\_\+t neighbors, double x0)
+\begin{DoxyCompactList}\small\item\em Helper function to initialize a \mbox{\hyperlink{structMC_1_1MonteCarloUnit}{Monte\+Carlo\+Unit}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespaceMC_a1864ffd3dab089841322f3d6c73c7f21}\label{namespaceMC_a1864ffd3dab089841322f3d6c73c7f21}} 
+double {\bfseries pdf\+\_\+truncated\+\_\+normal} (double x, double mean, double stddev)
+\item 
+\mbox{\Hypertarget{namespaceMC_a8204f8c5376e5ab806d4768052642ad5}\label{namespaceMC_a8204f8c5376e5ab806d4768052642ad5}} 
+double {\bfseries cdf\+\_\+truncated\+\_\+normal} (double x, double mean, double stddev)
+\item 
+\mbox{\Hypertarget{namespaceMC_a75c90ebfc0d3ab86b80c433bea35b7dd}\label{namespaceMC_a75c90ebfc0d3ab86b80c433bea35b7dd}} 
+bool {\bfseries cdf\+\_\+truncated\+\_\+normal\+\_\+check} (double random, double x, double mean, double stddev)
+\item 
+\mbox{\Hypertarget{namespaceMC_a8215257a89763ac10e55d3b067af2280}\label{namespaceMC_a8215257a89763ac10e55d3b067af2280}} 
+double {\bfseries cdf\+\_\+exponential} (double x)
+\item 
+\mbox{\Hypertarget{namespaceMC_a8588e2211d5ec76935070b443beeca5b}\label{namespaceMC_a8588e2211d5ec76935070b443beeca5b}} 
+bool {\bfseries cdf\+\_\+exponential\+\_\+check} (double random, double x)
+\item 
+\mbox{\Hypertarget{namespaceMC_a239211cc751e81af17ff9f871ecdbc92}\label{namespaceMC_a239211cc751e81af17ff9f871ecdbc92}} 
+{\footnotesize template$<$typename Val , typename... Ts$>$ }\\auto {\bfseries match} (Val \&\&val, Ts... ts)
+\item 
+\mbox{\Hypertarget{namespaceMC_a800ce44790696df9959ef8c83678a596}\label{namespaceMC_a800ce44790696df9959ef8c83678a596}} 
+{\footnotesize template$<$Number\+Type T$>$ }\\T {\bfseries bounded\+\_\+exponential} (std\+::mt19937 \&g, T min, T max)
+\item 
+\mbox{\Hypertarget{namespaceMC_ad2e0e06788dd90b5889134f26e86f634}\label{namespaceMC_ad2e0e06788dd90b5889134f26e86f634}} 
+{\footnotesize template$<$Number\+Type T$>$ }\\distribution\+\_\+t$<$ T $>$ {\bfseries get\+\_\+distribution} (Distribution\+Variant\+Real params)
+\item 
+\mbox{\Hypertarget{namespaceMC_adefc5dfb2e8a87d6aa925f69f04ec1ab}\label{namespaceMC_adefc5dfb2e8a87d6aa925f69f04ec1ab}} 
+{\footnotesize template$<$typename Integer\+Type $>$ }\\distribution\+\_\+t$<$ Integer\+Type $>$ {\bfseries get\+\_\+distribution\+\_\+int} (Distribution\+Variant\+Int params)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespaceMC_a2bac73e9eee491093b7ac10969645bfa}\label{namespaceMC_a2bac73e9eee491093b7ac10969645bfa}} 
+constexpr size\+\_\+t {\bfseries number\+\_\+event\+\_\+type} = 5
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Namespace that contains classes and structures related to Monte Carlo (\mbox{\hyperlink{namespaceMC}{MC}}) simulations. 
+
+This namespace encapsulates all the components used in Monte Carlo simulations, including data structures for managing simulation state and results. 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespaceMC_af75a96b49a1ebe4f06627d63a176599b}\label{namespaceMC_af75a96b49a1ebe4f06627d63a176599b}} 
+\index{MC@{MC}!CellStatus@{CellStatus}}
+\index{CellStatus@{CellStatus}!MC@{MC}}
+\doxysubsubsection{\texorpdfstring{CellStatus}{CellStatus}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespaceMC_af75a96b49a1ebe4f06627d63a176599b}{MC\+::\+Cell\+Status}} \+: char\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Enumeration that possible status for a MCParticle. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{IDLE@{IDLE}!MC@{MC}}\index{MC@{MC}!IDLE@{IDLE}}}\mbox{\Hypertarget{namespaceMC_af75a96b49a1ebe4f06627d63a176599baa5daf7f2ebbba4975d61dab1c40188c7}\label{namespaceMC_af75a96b49a1ebe4f06627d63a176599baa5daf7f2ebbba4975d61dab1c40188c7}} 
+IDLE&No particular status (default) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DEAD@{DEAD}!MC@{MC}}\index{MC@{MC}!DEAD@{DEAD}}}\mbox{\Hypertarget{namespaceMC_af75a96b49a1ebe4f06627d63a176599babb4784231ff45108ee20bad16e4a2e8c}\label{namespaceMC_af75a96b49a1ebe4f06627d63a176599babb4784231ff45108ee20bad16e4a2e8c}} 
+DEAD&Non active (skipped) particle. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CYTOKINESIS@{CYTOKINESIS}!MC@{MC}}\index{MC@{MC}!CYTOKINESIS@{CYTOKINESIS}}}\mbox{\Hypertarget{namespaceMC_af75a96b49a1ebe4f06627d63a176599ba77c5febf1292e2a11fc7f0f658b52586}\label{namespaceMC_af75a96b49a1ebe4f06627d63a176599ba77c5febf1292e2a11fc7f0f658b52586}} 
+CYTOKINESIS&Particle has to divide at next cycle. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OUT@{OUT}!MC@{MC}}\index{MC@{MC}!OUT@{OUT}}}\mbox{\Hypertarget{namespaceMC_af75a96b49a1ebe4f06627d63a176599baef373774188a51f80463f37b6bd9e83a}\label{namespaceMC_af75a96b49a1ebe4f06627d63a176599baef373774188a51f80463f37b6bd9e83a}} 
+OUT&Non active, moved out of domain. \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8}\label{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8}} 
+\index{MC@{MC}!EventType@{EventType}}
+\index{EventType@{EventType}!MC@{MC}}
+\doxysubsubsection{\texorpdfstring{EventType}{EventType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8}{MC\+::\+Event\+Type}} \+: char\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Enumeration that represents events that can occurs during a Monte-\/\+Carlo cycle. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ChangeWeight@{ChangeWeight}!MC@{MC}}\index{MC@{MC}!ChangeWeight@{ChangeWeight}}}\mbox{\Hypertarget{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8aff388cf92ac4efa80c5aac6d4c7852ae}\label{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8aff388cf92ac4efa80c5aac6d4c7852ae}} 
+Change\+Weight&Update in weight. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NewParticle@{NewParticle}!MC@{MC}}\index{MC@{MC}!NewParticle@{NewParticle}}}\mbox{\Hypertarget{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8ad647742db7fc3579a1034ec4919e4752}\label{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8ad647742db7fc3579a1034ec4919e4752}} 
+New\+Particle&Spawn new particle. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Death@{Death}!MC@{MC}}\index{MC@{MC}!Death@{Death}}}\mbox{\Hypertarget{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8a6097f89e3092d4ccd249c9d479785c1f}\label{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8a6097f89e3092d4ccd249c9d479785c1f}} 
+Death&Remove particle from list. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Move@{Move}!MC@{MC}}\index{MC@{MC}!Move@{Move}}}\mbox{\Hypertarget{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8a6bc362dbf494c61ea117fe3c71ca48a5}\label{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8a6bc362dbf494c61ea117fe3c71ca48a5}} 
+Move&Move in domain. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Exit@{Exit}!MC@{MC}}\index{MC@{MC}!Exit@{Exit}}}\mbox{\Hypertarget{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8afef46e5063ce3dc78b8ae64fa474241d}\label{namespaceMC_a4abe28e303ac1f2bcdc889c01e9064b8afef46e5063ce3dc78b8ae64fa474241d}} 
+Exit&Remove particle from list due to move in domain. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespaceMC_acabb7733f02b0474d1a2f2aa516df57c}\label{namespaceMC_acabb7733f02b0474d1a2f2aa516df57c}} 
+\index{MC@{MC}!init@{init}}
+\index{init@{init}!MC@{MC}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily template$<$Particle\+Model Model$>$ \\
+std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{structMC_1_1MonteCarloUnit}{Monte\+Carlo\+Unit}}$>$ MC\+::init (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structExecInfo}{Exec\+Info}} \&}]{info,  }\item[{size\+\_\+t}]{n\+\_\+particles,  }\item[{std\+::span$<$ double $>$}]{volumes,  }\item[{Cma\+Read\+::\+Neighbors\+::\+Neighbors\+\_\+const\+\_\+view\+\_\+t}]{neighbors,  }\item[{double}]{x0 }\end{DoxyParamCaption})}
+
+
+
+Helper function to initialize a \mbox{\hyperlink{structMC_1_1MonteCarloUnit}{Monte\+Carlo\+Unit}}. 
+
+Since \mbox{\hyperlink{structMC_1_1MonteCarloUnit}{Monte\+Carlo\+Unit}} is not a generic type and the model type is resolved at runtime, no constructors are defined to avoid carrying template functions when using the unit. This function wraps the constructor externally, providing a convenient way to initialize a \mbox{\hyperlink{structMC_1_1MonteCarloUnit}{Monte\+Carlo\+Unit}} with the appropriate model type and parameters.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Model} & The particle model type, specified at compile time.\\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+A unique pointer to the initialized \mbox{\hyperlink{structMC_1_1MonteCarloUnit}{Monte\+Carlo\+Unit}}. 
+\end{DoxyReturn}

@@ -1,0 +1,141 @@
+\hypertarget{classMC_1_1ParticlesContainer}{}\doxysection{MC\+::Particles\+Container$<$ Model $>$ Class Template Reference}
+\label{classMC_1_1ParticlesContainer}\index{MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}}
+
+
+Main owning object for Monte-\/\+Carlo particles.  
+
+
+
+
+{\ttfamily \#include $<$particles\+\_\+container.\+hpp$>$}
+
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classMC_1_1ParticlesContainer_ac7a2519bfeea5192bb9e6a29254f1f88}\label{classMC_1_1ParticlesContainer_ac7a2519bfeea5192bb9e6a29254f1f88}} 
+using \mbox{\hyperlink{classMC_1_1ParticlesContainer_ac7a2519bfeea5192bb9e6a29254f1f88}{Used\+Model}} = Model
+\begin{DoxyCompactList}\small\item\em Alias for the model used by the container. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMC_1_1ParticlesContainer_a23696c7b8b024aa8544b5f4deca12ac3}{$\sim$\+Particles\+Container}} ()=default
+\begin{DoxyCompactList}\small\item\em Default copy and move constructors and assignment operators. \end{DoxyCompactList}\item 
+auto \& \mbox{\hyperlink{classMC_1_1ParticlesContainer_af7059091fab3637ccfbed1e27a69b2a8}{get\+\_\+compute}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a reference to the container holding the particles to be processed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMC_1_1ParticlesContainer_a300cbd0b90cb5f99487ecb1bdf8785dd}{Particles\+Container}} (size\+\_\+t capacity) noexcept
+\begin{DoxyCompactList}\small\item\em Constructs a \mbox{\hyperlink{classMC_1_1ParticlesContainer}{Particles\+Container}} with a specified capacity. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classMC_1_1ParticlesContainer_a5cb96e8b6261ad7873544d72b21fcf0d}{n\+\_\+particle}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Gets the number of particles in the container. \end{DoxyCompactList}\item 
+auto \& \mbox{\hyperlink{classMC_1_1ParticlesContainer_a097329a2974ea24fc7d7479744492970}{get\+\_\+host}} ()
+\begin{DoxyCompactList}\small\item\em Migrates particles from compute space to host space and returns a reference to the host container. A deep copy of main container is performed before returning. \end{DoxyCompactList}\item 
+auto \& \mbox{\hyperlink{classMC_1_1ParticlesContainer_a8f1e451ddb1869f88429fc105cb145f3}{get\+\_\+extra}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a reference to the extra results container. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$Particle\+Model Model$>$\newline
+class MC\+::\+Particles\+Container$<$ Model $>$}
+
+Main owning object for Monte-\/\+Carlo particles. 
+
+This class is responsible for managing and owning containers related to particles, providing access to them for processing in a Monte-\/\+Carlo simulation. It uses a templated model to define the behavior and properties of the particles.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Model} & The particle model type used for defining the behavior and properties of the particles. \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMC_1_1ParticlesContainer_a23696c7b8b024aa8544b5f4deca12ac3}\label{classMC_1_1ParticlesContainer_a23696c7b8b024aa8544b5f4deca12ac3}} 
+\index{MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}!````~ParticlesContainer@{$\sim$ParticlesContainer}}
+\index{````~ParticlesContainer@{$\sim$ParticlesContainer}!MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$ParticlesContainer()}{~ParticlesContainer()}}
+{\footnotesize\ttfamily template$<$Particle\+Model Model$>$ \\
+\mbox{\hyperlink{classMC_1_1ParticlesContainer}{MC\+::\+Particles\+Container}}$<$ Model $>$\+::$\sim$\mbox{\hyperlink{classMC_1_1ParticlesContainer}{Particles\+Container}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+Default copy and move constructors and assignment operators. 
+
+Default destructor. \mbox{\Hypertarget{classMC_1_1ParticlesContainer_a300cbd0b90cb5f99487ecb1bdf8785dd}\label{classMC_1_1ParticlesContainer_a300cbd0b90cb5f99487ecb1bdf8785dd}} 
+\index{MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}!ParticlesContainer@{ParticlesContainer}}
+\index{ParticlesContainer@{ParticlesContainer}!MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}}
+\doxysubsubsection{\texorpdfstring{ParticlesContainer()}{ParticlesContainer()}}
+{\footnotesize\ttfamily template$<$Particle\+Model Model$>$ \\
+\mbox{\hyperlink{classMC_1_1ParticlesContainer}{MC\+::\+Particles\+Container}}$<$ Model $>$\+::\mbox{\hyperlink{classMC_1_1ParticlesContainer}{Particles\+Container}} (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{capacity }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Constructs a \mbox{\hyperlink{classMC_1_1ParticlesContainer}{Particles\+Container}} with a specified capacity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em capacity} & The number of particles the container can initially hold. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMC_1_1ParticlesContainer_af7059091fab3637ccfbed1e27a69b2a8}\label{classMC_1_1ParticlesContainer_af7059091fab3637ccfbed1e27a69b2a8}} 
+\index{MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}!get\_compute@{get\_compute}}
+\index{get\_compute@{get\_compute}!MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}}
+\doxysubsubsection{\texorpdfstring{get\_compute()}{get\_compute()}}
+{\footnotesize\ttfamily template$<$Particle\+Model Model$>$ \\
+auto\& \mbox{\hyperlink{classMC_1_1ParticlesContainer}{MC\+::\+Particles\+Container}}$<$ Model $>$\+::get\+\_\+compute (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a reference to the container holding the particles to be processed. 
+
+\begin{DoxyReturn}{Returns}
+Reference to the particle list in the compute space. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classMC_1_1ParticlesContainer_a8f1e451ddb1869f88429fc105cb145f3}\label{classMC_1_1ParticlesContainer_a8f1e451ddb1869f88429fc105cb145f3}} 
+\index{MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}!get\_extra@{get\_extra}}
+\index{get\_extra@{get\_extra}!MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}}
+\doxysubsubsection{\texorpdfstring{get\_extra()}{get\_extra()}}
+{\footnotesize\ttfamily template$<$Particle\+Model Model$>$ \\
+auto\& \mbox{\hyperlink{classMC_1_1ParticlesContainer}{MC\+::\+Particles\+Container}}$<$ Model $>$\+::get\+\_\+extra (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a reference to the extra results container. 
+
+\begin{DoxyReturn}{Returns}
+Reference to the results list in the compute space. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classMC_1_1ParticlesContainer_a097329a2974ea24fc7d7479744492970}\label{classMC_1_1ParticlesContainer_a097329a2974ea24fc7d7479744492970}} 
+\index{MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}!get\_host@{get\_host}}
+\index{get\_host@{get\_host}!MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}}
+\doxysubsubsection{\texorpdfstring{get\_host()}{get\_host()}}
+{\footnotesize\ttfamily template$<$Particle\+Model Model$>$ \\
+auto\& \mbox{\hyperlink{classMC_1_1ParticlesContainer}{MC\+::\+Particles\+Container}}$<$ Model $>$\+::get\+\_\+host (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Migrates particles from compute space to host space and returns a reference to the host container. A deep copy of main container is performed before returning. 
+
+\begin{DoxyReturn}{Returns}
+Reference to the particle list in the host space. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classMC_1_1ParticlesContainer_a5cb96e8b6261ad7873544d72b21fcf0d}\label{classMC_1_1ParticlesContainer_a5cb96e8b6261ad7873544d72b21fcf0d}} 
+\index{MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}!n\_particle@{n\_particle}}
+\index{n\_particle@{n\_particle}!MC::ParticlesContainer$<$ Model $>$@{MC::ParticlesContainer$<$ Model $>$}}
+\doxysubsubsection{\texorpdfstring{n\_particle()}{n\_particle()}}
+{\footnotesize\ttfamily template$<$Particle\+Model Model$>$ \\
+size\+\_\+t \mbox{\hyperlink{classMC_1_1ParticlesContainer}{MC\+::\+Particles\+Container}}$<$ Model $>$\+::n\+\_\+particle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Gets the number of particles in the container. 
+
+\begin{DoxyReturn}{Returns}
+The number of particles currently in the to\+\_\+process container. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+apps/libs/mc/public/mc/particles/particles\+\_\+container.\+hpp\end{DoxyCompactItemize}

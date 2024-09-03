@@ -1,0 +1,55 @@
+\hypertarget{classSimulation_1_1FlowMapTransitioner}{}\doxysection{Simulation\+::Flow\+Map\+Transitioner Class Reference}
+\label{classSimulation_1_1FlowMapTransitioner}\index{Simulation::FlowMapTransitioner@{Simulation::FlowMapTransitioner}}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_a297d0f18e9370da071a20a084e67af4a}\label{classSimulation_1_1FlowMapTransitioner_a297d0f18e9370da071a20a084e67af4a}} 
+enum {\bfseries Flowmap\+Transition\+Method} \{ {\bfseries Discontinuous}
+, {\bfseries Interpolation\+FO}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_ac4dff783c52bbf53d94bf84d3519af90}\label{classSimulation_1_1FlowMapTransitioner_ac4dff783c52bbf53d94bf84d3519af90}} 
+{\bfseries Flow\+Map\+Transitioner} (size\+\_\+t n\+\_\+flowmap, size\+\_\+t \+\_\+n\+\_\+per\+\_\+flowmap, Flowmap\+Transition\+Method method, size\+\_\+t number\+\_\+time\+\_\+step, std\+::unique\+\_\+ptr$<$ Cma\+Read\+::\+Flow\+Iterator $>$ \&\&iterator=nullptr, bool is\+\_\+two\+\_\+phase\+\_\+flow=false)
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_a94dbe9f62c062e05c504f12c1c11005b}\label{classSimulation_1_1FlowMapTransitioner_a94dbe9f62c062e05c504f12c1c11005b}} 
+void {\bfseries update\+\_\+flow} (\mbox{\hyperlink{classSimulation_1_1SimulationUnit}{Simulation\+::\+Simulation\+Unit}} \&unit)
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_ad5064012beec863c78349898e9e3d7d3}\label{classSimulation_1_1FlowMapTransitioner_ad5064012beec863c78349898e9e3d7d3}} 
+void {\bfseries advance} (\mbox{\hyperlink{classSimulation_1_1SimulationUnit}{Simulation\+::\+Simulation\+Unit}} \&unit)
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_a08cb700de7ee0fa67399ba21c1d43169}\label{classSimulation_1_1FlowMapTransitioner_a08cb700de7ee0fa67399ba21c1d43169}} 
+void {\bfseries update\+\_\+flow} (\mbox{\hyperlink{classSimulation_1_1SimulationUnit}{Simulation\+::\+Simulation\+Unit}} \&unit, std\+::span$<$ double $>$ flows, size\+\_\+t n\+\_\+compartment)
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_a8a9180984ae73fe15c4b59e2b0b051f7}\label{classSimulation_1_1FlowMapTransitioner_a8a9180984ae73fe15c4b59e2b0b051f7}} 
+size\+\_\+t {\bfseries get\+\_\+n\+\_\+timestep} () const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_a33962d8ecfb4d0c2620696ec7768e5fc}\label{classSimulation_1_1FlowMapTransitioner_a33962d8ecfb4d0c2620696ec7768e5fc}} 
+size\+\_\+t {\bfseries get\+Flow\+Index} () const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_a7bfc202052baa40265ae5b28fc397fe7}\label{classSimulation_1_1FlowMapTransitioner_a7bfc202052baa40265ae5b28fc397fe7}} 
+size\+\_\+t {\bfseries size} () const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_aba6741dcb5711fb81c77dd6cb8f17b3d}\label{classSimulation_1_1FlowMapTransitioner_aba6741dcb5711fb81c77dd6cb8f17b3d}} 
+Cma\+Read\+::\+Reactor\+State \& {\bfseries get\+\_\+current\+\_\+unchecked\+\_\+mut} ()
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_a071c54b76e809778a82075ba8425b58c}\label{classSimulation_1_1FlowMapTransitioner_a071c54b76e809778a82075ba8425b58c}} 
+const Cma\+Read\+::\+Reactor\+State \& {\bfseries get\+\_\+current\+\_\+unchecked} () const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_a7e1e139a2b2c9ba82a29a143b4e74b2f}\label{classSimulation_1_1FlowMapTransitioner_a7e1e139a2b2c9ba82a29a143b4e74b2f}} 
+Cma\+Read\+::\+Reactor\+State \& {\bfseries get\+\_\+unchecked\+\_\+mut} (size\+\_\+t index)
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_aae29cd79e266c19b4b701d050bc30a62}\label{classSimulation_1_1FlowMapTransitioner_aae29cd79e266c19b4b701d050bc30a62}} 
+const Cma\+Read\+::\+Reactor\+State \& {\bfseries get\+\_\+unchecked} (size\+\_\+t index) const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1FlowMapTransitioner_a8f90652ad9a8213862d80dc62be7649c}\label{classSimulation_1_1FlowMapTransitioner_a8f90652ad9a8213862d80dc62be7649c}} 
+const Cma\+Read\+::\+Reactor\+State $\ast$ {\bfseries get\+State} ()
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+apps/libs/simulation/public/simulation/transitionner.\+hpp\item 
+apps/libs/simulation/src/update\+\_\+flows.\+cpp\end{DoxyCompactItemize}

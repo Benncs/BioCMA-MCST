@@ -150,7 +150,7 @@ init_simulation(const ExecInfo &info,
         if (i == 0)
         {
 
-          liq(0, i) = 5.;
+          liq(0, i) = 1;
         }
         else
         {
@@ -175,7 +175,6 @@ init_simulation(const ExecInfo &info,
       n_t,
       std::move(_flow_handle),
       f_init_gas_flow);
-  // params.is_two_phase_flow);
 
   std::cout << "INIT OK" << std::endl;
   return simulation;

@@ -1,0 +1,85 @@
+\hypertarget{structMC_1_1ContainerState}{}\doxysection{MC\+::Container\+State Struct Reference}
+\label{structMC_1_1ContainerState}\index{MC::ContainerState@{MC::ContainerState}}
+
+
+A data structure representing the state of a container in the simulation.  
+
+
+
+
+{\ttfamily \#include $<$container\+\_\+state.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class Archive $>$ }\\void \mbox{\hyperlink{structMC_1_1ContainerState_a2beea86167c66792935e8b7f45c85692}{serialize}} (Archive \&ar)
+\begin{DoxyCompactList}\small\item\em Serializes the {\ttfamily \mbox{\hyperlink{structMC_1_1ContainerState}{Container\+State}}} data members. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structMC_1_1ContainerState_ac4989bb248aa52ff670acbe16eb5a449}\label{structMC_1_1ContainerState_ac4989bb248aa52ff670acbe16eb5a449}} 
+double \mbox{\hyperlink{structMC_1_1ContainerState_ac4989bb248aa52ff670acbe16eb5a449}{volume\+\_\+liq}} \{\}
+\begin{DoxyCompactList}\small\item\em Volume of liquid in the container. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structMC_1_1ContainerState_ac61ff908ee85429592a1d169dabae734}\label{structMC_1_1ContainerState_ac61ff908ee85429592a1d169dabae734}} 
+double \mbox{\hyperlink{structMC_1_1ContainerState_ac61ff908ee85429592a1d169dabae734}{volume\+\_\+gas}} \{\}
+\begin{DoxyCompactList}\small\item\em Volume of gas in the container. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{structMC_1_1ContainerState_a4f97d9a94ad818ea262ba3941cf4f164}{n\+\_\+cells}} \{\}
+\begin{DoxyCompactList}\small\item\em when decrementing this value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structMC_1_1ContainerState_ac65a6106629499d4f00ca86c765ecc08}\label{structMC_1_1ContainerState_ac65a6106629499d4f00ca86c765ecc08}} 
+uint64\+\_\+t \mbox{\hyperlink{structMC_1_1ContainerState_ac65a6106629499d4f00ca86c765ecc08}{id}} \{\}
+\begin{DoxyCompactList}\small\item\em Unique identifier for the container. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structMC_1_1ContainerState_a76b8980abc243a22eea06859a5d3d78c}\label{structMC_1_1ContainerState_a76b8980abc243a22eea06859a5d3d78c}} 
+Local\+Concentration\+View \mbox{\hyperlink{structMC_1_1ContainerState_a76b8980abc243a22eea06859a5d3d78c}{concentrations}}
+\begin{DoxyCompactList}\small\item\em $<$ associated with the container. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A data structure representing the state of a container in the simulation. 
+
+The {\ttfamily \mbox{\hyperlink{structMC_1_1ContainerState}{Container\+State}}} struct stores information about the liquid and gas volumes, the number of cells, a unique identifier, and a span of concentrations. It is aligned to the cache line size specified by {\ttfamily Exec\+Info\+::cache\+\_\+line\+\_\+size}. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{structMC_1_1ContainerState_a2beea86167c66792935e8b7f45c85692}\label{structMC_1_1ContainerState_a2beea86167c66792935e8b7f45c85692}} 
+\index{MC::ContainerState@{MC::ContainerState}!serialize@{serialize}}
+\index{serialize@{serialize}!MC::ContainerState@{MC::ContainerState}}
+\doxysubsubsection{\texorpdfstring{serialize()}{serialize()}}
+{\footnotesize\ttfamily template$<$class Archive $>$ \\
+void MC\+::\+Container\+State\+::serialize (\begin{DoxyParamCaption}\item[{Archive \&}]{ar }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Serializes the {\ttfamily \mbox{\hyperlink{structMC_1_1ContainerState}{Container\+State}}} data members. 
+
+This function is used to serialize the state of the container, excluding the {\ttfamily concentrations} span, which is not serialized due to its nature as a view.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Archive} & The type of the archive used for serialization. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em ar} & Reference to the archive object. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structMC_1_1ContainerState_a4f97d9a94ad818ea262ba3941cf4f164}\label{structMC_1_1ContainerState_a4f97d9a94ad818ea262ba3941cf4f164}} 
+\index{MC::ContainerState@{MC::ContainerState}!n\_cells@{n\_cells}}
+\index{n\_cells@{n\_cells}!MC::ContainerState@{MC::ContainerState}}
+\doxysubsubsection{\texorpdfstring{n\_cells}{n\_cells}}
+{\footnotesize\ttfamily size\+\_\+t MC\+::\+Container\+State\+::n\+\_\+cells \{\}}
+
+
+
+when decrementing this value. 
+
+Number of cells in the container. \begin{DoxyWarning}{Warning}
+Be careful 
+\end{DoxyWarning}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+apps/libs/mc/public/mc/container\+\_\+state.\+hpp\end{DoxyCompactItemize}

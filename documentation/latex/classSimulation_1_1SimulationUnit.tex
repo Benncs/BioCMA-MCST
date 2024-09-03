@@ -1,0 +1,75 @@
+\hypertarget{classSimulation_1_1SimulationUnit}{}\doxysection{Simulation\+::Simulation\+Unit Class Reference}
+\label{classSimulation_1_1SimulationUnit}\index{Simulation::SimulationUnit@{Simulation::SimulationUnit}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a038187863dee1b880a50a7737ebfa5ac}\label{classSimulation_1_1SimulationUnit_a038187863dee1b880a50a7737ebfa5ac}} 
+{\bfseries Simulation\+Unit} (std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{structMC_1_1MonteCarloUnit}{MC\+::\+Monte\+Carlo\+Unit}} $>$ \&\&\+\_\+unit, \mbox{\hyperlink{structSimulation_1_1ScalarInitializer}{Scalar\+Initializer}} scalar\+\_\+init)
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_aa1fba49aec41255dbf01e2c07067df2a}\label{classSimulation_1_1SimulationUnit_aa1fba49aec41255dbf01e2c07067df2a}} 
+{\bfseries Simulation\+Unit} (\mbox{\hyperlink{classSimulation_1_1SimulationUnit}{Simulation\+Unit}} \&\&other) noexcept
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a8e019e0aff679d5c93b0b0e8a1f4542e}\label{classSimulation_1_1SimulationUnit_a8e019e0aff679d5c93b0b0e8a1f4542e}} 
+{\bfseries Simulation\+Unit} (const \mbox{\hyperlink{classSimulation_1_1SimulationUnit}{Simulation\+Unit}} \&other)=delete
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_af82ae9c3beefc2c467ac2e0e0674aaa4}\label{classSimulation_1_1SimulationUnit_af82ae9c3beefc2c467ac2e0e0674aaa4}} 
+\mbox{\hyperlink{classSimulation_1_1SimulationUnit}{Simulation\+Unit}} \& {\bfseries operator=} (\mbox{\hyperlink{classSimulation_1_1SimulationUnit}{Simulation\+Unit}} \&\&rhs)=delete
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_af048b16a5839fcd01a639fb875706629}\label{classSimulation_1_1SimulationUnit_af048b16a5839fcd01a639fb875706629}} 
+\mbox{\hyperlink{classSimulation_1_1SimulationUnit}{Simulation\+Unit}} \& {\bfseries operator=} (const \mbox{\hyperlink{classSimulation_1_1SimulationUnit}{Simulation\+Unit}} \&rhs)=delete
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a3d0ee29e0a425f79fa8cbc620d2abb99}\label{classSimulation_1_1SimulationUnit_a3d0ee29e0a425f79fa8cbc620d2abb99}} 
+std\+::span$<$ double $>$ {\bfseries get\+Cliq\+Data} () const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a8c984cc495d53ca55404e431a36204f3}\label{classSimulation_1_1SimulationUnit_a8c984cc495d53ca55404e431a36204f3}} 
+std\+::tuple$<$ size\+\_\+t, size\+\_\+t $>$ {\bfseries get\+Dim} () const noexcept
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a83c1a073e0b6255ffb9636bbddb2a27e}\label{classSimulation_1_1SimulationUnit_a83c1a073e0b6255ffb9636bbddb2a27e}} 
+std\+::span$<$ double $>$ {\bfseries get\+Cgas\+Data} () const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a6b413af5239790850953e3ac5c5e5945}\label{classSimulation_1_1SimulationUnit_a6b413af5239790850953e3ac5c5e5945}} 
+std\+::span$<$ double $>$ {\bfseries get\+Contribution\+Data} () const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a087014533fa3caacd3221f8825dffa6d}\label{classSimulation_1_1SimulationUnit_a087014533fa3caacd3221f8825dffa6d}} 
+void {\bfseries set\+Volumes} (std\+::span$<$ const double $>$ volumesgas, std\+::span$<$ const double $>$ volumesliq) const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a1ade64c6545ad44cb7b983396164ca69}\label{classSimulation_1_1SimulationUnit_a1ade64c6545ad44cb7b983396164ca69}} 
+void {\bfseries step} (double d\+\_\+t, const Cma\+Read\+::\+Reactor\+State \&state) const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_ae9a5d1c698bccb6db322467ada235c90}\label{classSimulation_1_1SimulationUnit_ae9a5d1c698bccb6db322467ada235c90}} 
+void {\bfseries cycle\+Process} (auto \&\&container, auto \&\&rview, double d\+\_\+t)
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a4f859e1cb842cfc99fb5d07f1439fd95}\label{classSimulation_1_1SimulationUnit_a4f859e1cb842cfc99fb5d07f1439fd95}} 
+void {\bfseries set\+Liquid\+Flow} (\mbox{\hyperlink{classSimulation_1_1PreCalculatedHydroState}{Pre\+Calculated\+Hydro\+State}} $\ast$\+\_\+flows\+\_\+l)
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a34429e60137e741494dc32aee027d8ba}\label{classSimulation_1_1SimulationUnit_a34429e60137e741494dc32aee027d8ba}} 
+void {\bfseries set\+Gas\+Flow} (\mbox{\hyperlink{classSimulation_1_1PreCalculatedHydroState}{Pre\+Calculated\+Hydro\+State}} $\ast$\+\_\+flows\+\_\+g)
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a1afa30ac189458f3d3d9cdbca591dce1}\label{classSimulation_1_1SimulationUnit_a1afa30ac189458f3d3d9cdbca591dce1}} 
+void {\bfseries reduce\+Contribs} (std\+::span$<$ double $>$ data, size\+\_\+t n\+\_\+rank) const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_aeb968caf58812bcab01534e72a63d552}\label{classSimulation_1_1SimulationUnit_aeb968caf58812bcab01534e72a63d552}} 
+void {\bfseries clear\+Contribution} () const noexcept
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_ad6a0b124d13ce2145fb5a1136791ee7e}\label{classSimulation_1_1SimulationUnit_ad6a0b124d13ce2145fb5a1136791ee7e}} 
+void {\bfseries update\+\_\+feed} (double d\+\_\+t) const
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a2a1623edb613aafcad4138001ae3ce97}\label{classSimulation_1_1SimulationUnit_a2a1623edb613aafcad4138001ae3ce97}} 
+void {\bfseries clear\+\_\+mc} ()
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_aa12b65d19fa7e3eb74152b0252591a4d}\label{classSimulation_1_1SimulationUnit_aa12b65d19fa7e3eb74152b0252591a4d}} 
+void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSimulation_1_1SimulationUnit_a6925f1d800356a29ab3b8e9cb3442672}\label{classSimulation_1_1SimulationUnit_a6925f1d800356a29ab3b8e9cb3442672}} 
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{structMC_1_1MonteCarloUnit}{MC\+::\+Monte\+Carlo\+Unit}} $>$ {\bfseries mc\+\_\+unit}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+apps/libs/simulation/public/simulation/simulation.\+hpp\item 
+apps/libs/simulation/src/simulation.\+cpp\item 
+apps/libs/simulation/src/simulation.\+model.\+cpp\end{DoxyCompactItemize}

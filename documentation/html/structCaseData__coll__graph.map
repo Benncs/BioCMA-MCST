@@ -1,0 +1,6 @@
+<map id="CaseData" name="CaseData">
+<area shape="rect" id="node1" title="Holds the data required to execute a simulation case." alt="" coords="123,184,208,211"/>
+<area shape="rect" id="node2" href="$structSimulationParameters.html" title=" " alt="" coords="9,95,175,121"/>
+<area shape="rect" id="node3" href="$structUserControlParameters.html" title=" " alt="" coords="5,5,179,32"/>
+<area shape="rect" id="node4" href="$structExecInfo.html" title=" " alt="" coords="200,95,277,121"/>
+</map>

@@ -1,0 +1,130 @@
+# name: build_test
+# 'on':
+#   push:
+#     branches:
+#       - dev*
+#   pull_request:
+#     branches:
+#       - main
+# jobs:
+#   Build:
+#     runs-on: ubuntu-latest
+#     outputs:
+#       RUNNER: '${{ runner.name }}'
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#         with:
+#           token: '${{ secrets.PAT_TOKEN }}'
+#       - name: Clone GitLab submodule
+#         run: >
+#           git config --global credential.helper '!f() { echo "username=${{
+#           secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; };
+#           f'
+
+#           git submodule update --init --recursive
+#       - name: Setup Cpp (C++ / C)
+#         run: >-
+#           sudo apt-get update -q && sudo apt-get install -y pkg-config
+#           ninja-build build-essential
+#       - name: OMP / MPI / Dependencies
+#         run: >-
+#           sudo apt-get install -y libomp-dev libopenmpi-dev libeigen3-dev  libtbb-dev
+#           pkg-config
+#       - name: Install Python Development Packages
+#         run: sudo apt-get install -y python3-dev python3 python3-pip
+#       - name: Install Pybind11
+#         run: |
+#           sudo chmod +x ./devutils/pybind11_config.sh 
+#           sudo ./devutils/pybind11_config.sh 
+#       - name: Install Meson
+#         run: pip install meson
+#       - name: Configure project
+#         run: |
+#           mkdir builddir
+#           meson setup builddir/ --buildtype=release -Dcpp_std=gnu++20
+#       - name: Build project
+#         run: ninja -k 1 -C builddir
+#       - name: Run unit tests
+#         run: |
+#           meson test -C builddir
+#   Build_with_export:
+#     runs-on: ubuntu-latest
+#     outputs:
+#       RUNNER: '${{ runner.name }}'
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#         with:
+#           token: '${{ secrets.PAT_TOKEN }}'
+#       - name: Clone GitLab submodule
+#         run: >
+#           git config --global credential.helper '!f() { echo "username=${{
+#           secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; };
+#           f'
+
+#           git submodule update --init --recursive
+#       - name: Setup Cpp (C++ / C)
+#         run: >-
+#           sudo apt-get update -q && sudo apt-get install -y pkg-config
+#           ninja-build build-essential
+#       - name: OMP / MPI / Dependencies
+#         run: >-
+#           sudo apt-get install -y libomp-dev libopenmpi-dev libeigen3-dev libtbb-dev
+#           libhdf5-dev pkg-config
+#       - name: Install Python Development Packages
+#         run: sudo apt-get install -y python3-dev python3 python3-pip
+#       - name: Install Pybind11
+#         run: |
+#           sudo chmod +x ./devutils/pybind11_config.sh 
+#           sudo ./devutils/pybind11_config.sh 
+#       - name: Install Meson
+#         run: pip install meson
+#       - name: Configure project
+#         run: |
+#           mkdir builddir
+#           meson setup builddir/ --buildtype=release -Dcpp_std=gnu++20
+#       - name: Build project
+#         run:  ninja -k 1 -C builddir
+#       - name: Run unit tests
+#         run: |
+#           meson test -C builddir
+
+
+
+# # name: containerized_test
+# # 'on':
+# #   push:
+# #     branches:
+# #       - main
+# #       - dev/0.0.4/**
+# #   pull_request:
+# #     branches:
+# #       - main
+
+# # jobs:
+# #   Build_container:
+# #     runs-on: ubuntu-latest
+# #     steps:
+# #     - name: Checkout code
+# #       uses: actions/checkout@v4
+# #       with:
+# #         token: '${{ secrets.PAT_TOKEN }}'
+# #     - name: Clone GitLab submodule
+# #       run: >
+# #         git config --global credential.helper '!f() { echo "username=${{
+# #         secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; };
+# #         f'
+
+# #         git submodule update --init --recursive
+# #     - name: prepare 
+# #       run: > 
+# #         mkdir -p ./devutils/docker/runtime_container
+# #         mkdir -p ./cma_data
+# #     - name: build
+# #       uses: hoverkraft-tech/compose-action@v1.5.1
+# #       with:
+# #         compose-file: "./docker-compose.yml"
+# #         services: | 
+# #           biocma_app_task_test 
+        
