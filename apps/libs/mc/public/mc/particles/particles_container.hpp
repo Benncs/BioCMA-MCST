@@ -4,7 +4,6 @@
 #include <mc/particles/extra_process.hpp>
 #include <mc/particles/particle_list.hpp>
 #include <mc/particles/particle_model.hpp>
-#include <mc/thread_private_data.hpp>
 
 namespace MC
 {
@@ -31,7 +30,7 @@ namespace MC
       // to_process.init(weight);
     }
 
-    [[nodiscard]] inline size_t n_particle()const{return to_process.n_used_elements;}
+    [[nodiscard]] inline size_t n_particle()const{return to_process.size();}
 
     auto &get_host()
     {

@@ -21,7 +21,7 @@ OMP_NUM_THREADS = "1"
 
 def get_executable(type: str, mpi: bool = True):
     appname = "biocma_mcst_cli_app" if mpi else "biocma_mcst_cli_app_shared"
-    return f"{ROOT}/builddir/{type}_gcc/apps/cli/{appname}"
+    return f"{ROOT}/builddir/{type}_clang/apps/cli/{appname}"
 
 
 def mk_parser():

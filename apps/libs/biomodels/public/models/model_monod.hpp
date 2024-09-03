@@ -16,6 +16,9 @@ namespace Models
     private:
     double _init_only_cell_lenghtening;
   public:
+    
+
+
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder &p,
                               MC::KPRNG _rng);
 

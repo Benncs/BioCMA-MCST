@@ -31,16 +31,7 @@ namespace MC
       return rhs;
     }
 
-    KOKKOS_INLINE_FUNCTION Particle<Model> &operator[](size_t i)
-    {
-      return this->_owned_data(i);
-    }
-
-    KOKKOS_INLINE_FUNCTION const Particle<Model> &operator[](size_t i) const
-    {
-      return this->_owned_data(i);
-    }
-
+  
     auto d() const
     {
       return this->ddata();
@@ -62,7 +53,7 @@ namespace MC
 
     void init(double weight)
     {
-      auto local_data = this->_owned_data;
+      auto local_data = this->data();
       KPRNG rng;
       Kokkos::parallel_for(
           "InitializeParticles",

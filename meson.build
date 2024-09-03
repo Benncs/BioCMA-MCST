@@ -78,6 +78,8 @@ else
   endif
 endif
 
+
+
 use_dynamic_module = get_option('use_dynamic_module') # Use python module or not
 
 use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  use_dynamic_module is true
@@ -133,6 +135,7 @@ highfive_found = false
 cmake = import('cmake', required: false)
 if cmake.found()
   highfive_cmake_options = cmake.subproject_options()
+  highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_COMPILER': 'clang++-18'})
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_EXAMPLES': false})
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_UNIT_TESTS': false})
   highfive_cmake_options.add_cmake_defines({'HDF5_IS_PARALLEL': true})

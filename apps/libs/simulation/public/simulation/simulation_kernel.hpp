@@ -1,18 +1,16 @@
 #ifndef __SIMULATION_MC_KERNEL_HPP
 #define __SIMULATION_MC_KERNEL_HPP
 
-#include "mc/particles/mcparticles.hpp"
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Macros.hpp>
-
-#include <Kokkos_Printf.hpp>
 #include <cassert>
 #include <common/kokkos_vector.hpp>
 #include <mc/container_state.hpp>
 #include <mc/events.hpp>
+#include <mc/particles/mcparticles.hpp>
 #include <mc/prng/prng.hpp>
 
-#ifdef NDEBUG
+#ifndef NDEBUG
+#  define ENABLE_KOKKOS_PROFILING
 #  include <Kokkos_Profiling_ScopedRegion.hpp>
 #endif
 
@@ -53,18 +51,18 @@ namespace Simulation::KernelInline
         // range
       }
     }
-
+    
     return next; // Return the index of the chosen next compartment
   }
 
   // TODO : CHECK THIS
   template <ParticleModel Model>
   KOKKOS_INLINE_FUNCTION void handle_exit(double random_number,
-                   double d_t,
-                   MC::Particle<Model> &particle,
-                   auto &&local_compartments,
-                   auto &&index,
-                   auto &&flow)
+                                          double d_t,
+                                          MC::Particle<Model> &particle,
+                                          auto &&local_compartments,
+                                          auto &&index,
+                                          auto &&flow)
   {
 
     if (particle.properties.current_container != index ||
@@ -114,8 +112,8 @@ namespace Simulation::KernelInline
       // probabilities
       const size_t next = KernelInline::__find_next_compartment(
           i_compartment, random[1], i_neighbor, cumulative_probability);
-             
-      // assert(Kokkos::atomic_load(&current_container.n_cells) > 0); // ??
+
+      assert(Kokkos::atomic_load(&current_container.n_cells) > 0); // ??
       Kokkos::atomic_decrement(&current_container.n_cells);
       Kokkos::atomic_increment(&local_compartments(next).n_cells);
       particle.properties.current_container = next;

@@ -1,7 +1,6 @@
 #ifndef __MC_PARTICLESHPP__
 #define __MC_PARTICLESHPP__
 
-#include <common/kokkos_vector.hpp>
 #include <mc/particles/data_holder.hpp>
 #include <mc/particles/particle_model.hpp>
 #include <mc/prng/prng.hpp>
@@ -42,6 +41,7 @@ namespace MC
     {
       properties.status = CellStatus::IDLE;
       auto p = data.division(properties);
+    
       return BaseParticle(properties, std::move(p));
     }
 

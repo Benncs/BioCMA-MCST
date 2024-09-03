@@ -12,6 +12,7 @@ from .properties import mk_histogram, get_distribution_moment
 import os
 import cmtool.vtk
 import argparse
+from . import mkdir
 
 RATIO_MASS_LENGTH = 0.45044876111074444 / 0.12477411510047276
 
@@ -57,9 +58,9 @@ def property_distribution(
 def property_space(i: int, biodict: Dict[str, np.ndarray], key1: str, key2: str):
     value1 = biodict[key1]
     value2 = biodict[key2]
-    MAX_SAMPLE = 1_000_000
-    sample_size = min(len(value1), MAX_SAMPLE)  # or any smaller number
-    idx = np.random.choice(range(len(value1)), size=sample_size, replace=False)
+    MAX_SAMPLE = 1_000
+    sample_size = min(len(value2), MAX_SAMPLE)  # or any smaller number
+    idx = np.random.choice(sample_size, size=sample_size, replace=False)
 
     if isinstance(value1, np.ndarray) and np.issubdtype(value1.dtype, float):
         if isinstance(value2, np.ndarray) and np.issubdtype(value2.dtype, float):
@@ -70,16 +71,43 @@ def plot_property_space(
     biodicts: List[Dict[str, np.ndarray]],
     key1: str,
     key2: str,
-    prefix: str = "",
     dest: str = "./results/",
 ):
+    plt.figure()
     for i, d in enumerate(biodicts):
-        plt.figure()
+        # plt.figure()
         property_space(i, d, key1, key2)
         plt.xlabel(key1)
         plt.ylabel(key2)
+        # plt.legend()
+    plt.savefig(f"{dest}/plot_{key1}_{key2}_{0}")
+
+
+def process_particle_data(
+    biodicts: List[Dict[str, np.ndarray]], dest_root: str = "./results/"
+):
+    dest = f"{dest_root}/properties"
+    keys = [k for k in biodicts[0].keys() if k != "spatial"]
+
+    plot_property_space(biodicts, "mu", "lenght", dest_root)
+
+    mean_samples = {k: np.zeros(len(biodicts)) for k in keys}
+
+    for i, bio_dict in enumerate(biodicts):
+        for k in keys:
+            if len(bio_dict[k]) > 0:
+                if not np.isnan(bio_dict[k][0]):
+                    mean_samples[k][i] = np.mean(bio_dict[k])
+    mkdir(dest)
+    for k, values in mean_samples.items():
+        plt.figure()
+        plt.plot(values, label=k)
+        plt.xlabel("Sample Index")
+        plt.ylabel("Mean Value")
+        plt.title(f"Mean Value of {k} Over Samples")
         plt.legend()
-        plt.savefig(f"{dest}/plot_{key1}_{key2}_{i}")
+        plt.savefig(f"{dest}/{k}.png")
+        plt.close()  # Close the plot to free memory
 
 
 def assemble(res_folder: str, names: List[str]) -> List[str]:
@@ -112,7 +140,7 @@ if __name__ == "__main__":
     name_results = args.name_results
     root_res = args.root_res
 
-    dest = [f"./results/{i}/pp" for i in name_results]
+    dest = [f"./results/{i}/postprocessing" for i in name_results]
 
     for d in dest:
         if not os.path.exists(d):
@@ -132,8 +160,10 @@ if __name__ == "__main__":
 
         init_mass = np.sum(X0 * results.volume_liquid[0, :])
         print("INITIAL MASS", init_mass)
-        final_mass = results.npart*results.weight/np.sum(results.volume_liquid[0, :])
-        print("FINAL CONCENTRATION",final_mass)
+        final_mass = (
+            results.npart * results.weight / np.sum(results.volume_liquid[0, :])
+        )
+        print("FINAL CONCENTRATION", final_mass)
 
         property_distribution(
             results.initial_bioparam, f"{name_results[i]}_init", dest[i]
@@ -153,9 +183,7 @@ if __name__ == "__main__":
         if results.final_bioparam is not None:
             dict_particles.append(results.final_bioparam)
 
-        plot_property_space(
-            dict_particles, "mu", "lenght", f"{name_results[i]}", dest[i]
-        )
+        process_particle_data(dict_particles, dest[i])
 
         np.set_printoptions(precision=10)
         plt.figure()

@@ -70,7 +70,7 @@ void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
     std::vector<size_t> total_events_data =
         MPI_W::gather<size_t>(local_events.get_span(), exec.n_rank);
 
-    auto local_distribution = simulation.mc_unit->domain.getDistribution();
+    auto local_distribution = simulation.mc_unit->domain.getRepartition();
 
     const std::size_t local_distribution_size = local_distribution.size();
 

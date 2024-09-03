@@ -1,20 +1,18 @@
 #ifndef __TRANSPORT_HPP__
 #define __TRANSPORT_HPP__
 
-#include "cma_read/light_2d_view.hpp"
-#include "common/thread_safe_container.hpp"
-#include "mc/domain.hpp"
+#include <cma_read/light_2d_view.hpp>
+#include <common/thread_safe_container.hpp>
+#include <mc/domain.hpp>
 #include <Kokkos_Core.hpp>
 #include <cma_read/flowmap.hpp>
 #include <mc/particles/particles_container.hpp>
 #include <mc/unit.hpp>
 #include <simulation/pc_hydro.hpp>
 
-
-
 namespace Simulation
 {
- 
+
   /**
    * @brief Finds the next compartment for a particle based on a random number
    * and cumulative probabilities.
@@ -42,10 +40,6 @@ namespace Simulation
   get_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t &flows);
 
   std::vector<double> get_diag_transition(const FlowMatrixType &m_transition);
-
-  
-
-  
 
   
 

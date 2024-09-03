@@ -1,4 +1,5 @@
 
+#include <cassert>
 #include <common/execinfo.hpp>
 #include <common/simulation_parameters.hpp>
 #include <Kokkos_Core.hpp>
@@ -56,6 +57,8 @@ void set_n_thread_current_rank(const int rank,
   }
 
   info.thread_per_process = threads_per_process;
+
+  assert(info.thread_per_process>0);
 
   omp_set_num_threads(static_cast<int>(info.thread_per_process));
 }

@@ -113,7 +113,7 @@ int main(int argc, char **argv)
     showHelp(std::cout);
     return -1;
   }
-
+  
   const auto params = params_opt.value();
   const ExecInfo exec_info = runtime_init(argc, argv, params);
   try
@@ -143,7 +143,6 @@ static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params)
 {
 
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
-
   auto simulation = init_simulation(exec_info, params, transitioner);
   return {std::move(simulation), params, std::move(transitioner), exec_info};
 

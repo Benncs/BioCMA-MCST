@@ -7,11 +7,21 @@
 #include <span>
 
 // TODO REMOVE
-#include <iostream>
 #include <Kokkos_Core.hpp>
+#include <iostream>
 
 namespace Simulation
 {
+  struct EigenData
+  {
+    Eigen::MatrixXd concentration;
+    Eigen::MatrixXd total_mass;
+
+    Eigen::MatrixXd biomass_contribution;
+
+    Eigen::MatrixXd feed;
+  };
+
 
   class ScalarSimulation
   {
@@ -20,16 +30,16 @@ namespace Simulation
     ScalarSimulation(const ScalarSimulation &other) noexcept = delete;
     ScalarSimulation(size_t n_compartments,
                      size_t n_species,
-                     size_t n_threads,
                      std::span<double> volume);
     ScalarSimulation operator=(const ScalarSimulation &other) = delete;
     ScalarSimulation operator=(ScalarSimulation &&other) = delete;
 
     ~ScalarSimulation() = default;
 
-    Kokkos::View<double **, Kokkos::LayoutLeft,ComputeSpace> compute_concentration;
+    Kokkos::View<double **, Kokkos::LayoutLeft, ComputeSpace>
+        compute_concentration;
 
-    Kokkos::View<double **, Kokkos::LayoutLeft,HostSpace> host_concentration;
+ 
 
     Eigen::MatrixXd concentration;
     Eigen::MatrixXd total_mass;
@@ -54,8 +64,6 @@ namespace Simulation
     void setVolumes(std::span<const double> volumes,
                     std::span<const double> inv_volumes);
 
-    // void merge(size_t i_thread);
-
     Eigen::ArrayXXd vec_kla; // TODO : Clean this
 
     Eigen::MatrixXd biomass_contribution;
@@ -66,9 +74,8 @@ namespace Simulation
                      const FlowMatrixType &m_transition,
                      const Eigen::MatrixXd &transfer_gas_liquid);
 
-   
-
   private:
+     Kokkos::View<double **, Kokkos::LayoutLeft, HostSpace> host_concentration;
     Eigen::DiagonalMatrix<double, -1> volumes_inverse;
     // std::vector<Eigen::MatrixXd> contribs;
     // std::vector<CmaRead::L2DView<double>> view_contribs;
@@ -84,11 +91,6 @@ namespace Simulation
   {
     return view;
   }
-
-  // inline std::span<Eigen::MatrixXd> ScalarSimulation::getThreadContribs()
-  // {
-  //   return contribs;
-  // }
 
   inline Eigen::DiagonalMatrix<double, -1> &ScalarSimulation::getVolume()
   {
@@ -130,17 +132,11 @@ namespace Simulation
         inv_volumes.data(), static_cast<int>(inv_volumes.size()));
   }
 
-  // inline void ScalarSimulation::merge(size_t i_thread)
-  // {
-  //   this->biomass_contribution += this->contribs[i_thread];
-  // }
-
   inline ScalarSimulation *makeScalarSimulation(size_t n_compartments,
                                                 size_t n_species,
-                                                size_t n_threads,
                                                 std::span<double> volumes)
   {
-    return new ScalarSimulation(n_compartments, n_species, n_threads, volumes);
+    return new ScalarSimulation(n_compartments, n_species, volumes);
   }
 
 } // namespace Simulation

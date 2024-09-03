@@ -31,7 +31,7 @@ namespace PostProcessing
           aggregated_values;
 
       std::unordered_map<std::string, std::vector<double>> spatial;
-      auto distribution = simulation.mc_unit->domain.getDistribution();
+      auto distribution = simulation.mc_unit->domain.getRepartition();
       get_particle_properties(simulation.mc_unit,
                               aggregated_values,
                               spatial,
@@ -47,7 +47,7 @@ namespace PostProcessing
                     Simulation::SimulationUnit &&simulation,
                     std::unique_ptr<DataExporter> &exporter)
   {
-    auto distribution = simulation.mc_unit->domain.getDistribution();
+    auto distribution = simulation.mc_unit->domain.getRepartition();
 
     auto tot = std::accumulate(
         distribution.begin(), distribution.end(), static_cast<size_t>(0));
@@ -105,7 +105,7 @@ namespace PostProcessing
           aggregated_values;
 
       std::unordered_map<std::string, std::vector<double>> spatial;
-      auto distribution = simulation.mc_unit->domain.getDistribution();
+      auto distribution = simulation.mc_unit->domain.getRepartition();
       get_particle_properties(simulation.mc_unit,
                               aggregated_values,
                               spatial,
@@ -159,6 +159,7 @@ namespace PostProcessing
       const auto n_particle = particles_data.size();
 
       const size_t i_p = find_first_idle_particle(particles_data);
+      
 
       const auto first_property = particles_data[i_p].data.get_properties();
 

@@ -4,15 +4,21 @@ import numpy as np
 from typing import Optional, Tuple
 import cmtool.vtk
 from .read_results import RawResults, import_results
+import os
+
+
+def mkdir(d):
+    if not os.path.exists(d):
+        os.makedirs(d)
+
 
 def check_mixing(
     name_results, pathres: List[str], dest: str, vtk_cma_mesh_path: Optional[str] = None
 ):
     for i in range(len(pathres)):
-        
         results = import_results(pathres[i])
 
-        if(results is None):
+        if results is None:
             break
 
         (
@@ -31,6 +37,7 @@ def check_mixing(
     plt.xlabel("time [s]")
     for i in dest:
         plt.savefig(f"{i}/mixing_variance.svg", dpi=1500)
+
 
 def norm_concentration(
     raw_concentration: np.ndarray, volumes: np.ndarray
@@ -90,15 +97,19 @@ def average_concentration(results: RawResults):
 
     full_volume = results.volume_liquid
 
-    c_avg = np.sum(concentration_record * full_volume,axis=1) / np.sum(full_volume, axis=1)
+    c_avg = np.sum(concentration_record * full_volume, axis=1) / np.sum(
+        full_volume, axis=1
+    )
     return c_avg
 
 
-def time_average_reaction_rate(duration:float,time_evolution_data:np.ndarray,time_evolution_volume):
+def time_average_reaction_rate(
+    duration: float, time_evolution_data: np.ndarray, time_evolution_volume
+):
     def mass_func(i, x, v):
         return np.sum(x[i, :] * v[i, :])
-    
+
     # gram version x1000
-    m_init = mass_func(0,time_evolution_data,time_evolution_volume)*1e3 
-    m_end = mass_func(-1,time_evolution_data,time_evolution_volume)*1e3 
-    return (m_end-m_init)/duration,m_init,m_end
+    m_init = mass_func(0, time_evolution_data, time_evolution_volume) * 1e3
+    m_end = mass_func(-1, time_evolution_data, time_evolution_volume) * 1e3
+    return (m_end - m_init) / duration, m_init, m_end

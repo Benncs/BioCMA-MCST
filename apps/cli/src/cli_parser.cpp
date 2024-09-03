@@ -7,7 +7,7 @@
 #include <optional>
 #include <string_view>
 
-static void check_cli(SimulationParameters &params);
+static void sanitise_check_cli(SimulationParameters &params);
 // static void print_green(std::ostream &os, std::string_view message);
 static void print_red(std::ostream &os, std::string_view message);
 static void throw_bad_arg(std::string_view arg);
@@ -105,7 +105,7 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
   }
 
   params.user_params = std::move(control);
-  check_cli(params);
+  sanitise_check_cli(params);
 
   return params;
 }
@@ -181,7 +181,7 @@ static void parseArg(UserControlParameters &user_controll,
   }
 }
 
-static void check_cli(SimulationParameters &params)
+static void sanitise_check_cli(SimulationParameters &params)
 {
   if (params.flow_files.empty())
   {

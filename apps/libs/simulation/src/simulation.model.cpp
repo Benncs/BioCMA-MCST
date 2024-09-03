@@ -35,7 +35,7 @@ namespace Simulation
     return this->gas_scalar->getConcentrationData();
   }
 
-  [[nodiscard]] std::tuple<size_t, size_t> SimulationUnit::getDim() const
+  [[nodiscard]] std::tuple<size_t, size_t> SimulationUnit::getDim() const noexcept
   {
     return {this->liquid_scalar->concentration.rows(),
             this->liquid_scalar->concentration.cols()};
@@ -58,7 +58,7 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::clearContribution() const
+  void SimulationUnit::clearContribution() const noexcept
   {
 
     this->liquid_scalar->vec_kla.setZero();

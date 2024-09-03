@@ -1,5 +1,6 @@
 #include <mc/prng/prng.hpp>
-
+#include <iostream>
+#include <cassert> 
 void test()
 {
   MC::KPRNG rng;

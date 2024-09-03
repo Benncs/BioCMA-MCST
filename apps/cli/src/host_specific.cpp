@@ -98,7 +98,7 @@ void host_process(
   std::unique_ptr<DataExporter> data_exporter;
 
   {
-    auto initial_distribution = simulation.mc_unit->domain.getDistribution(); 
+    auto initial_distribution = simulation.mc_unit->domain.getRepartition(); 
 
     data_exporter =
         data_exporter_factory(exec,
@@ -163,7 +163,7 @@ void main_loop(const SimulationParameters &params,
 
   exporter->append(current_time,
                    simulation.getCliqData(),
-                   simulation.mc_unit->domain.getDistribution(),
+                   simulation.mc_unit->domain.getRepartition(),
                    current_reactor_state->liquidVolume,
                    current_reactor_state->gasVolume);
 
@@ -196,9 +196,10 @@ void main_loop(const SimulationParameters &params,
         update_progress_bar(n_iter_simulation, __loop_counter);
         exporter->append(current_time,
                          simulation.getCliqData(),
-                         simulation.mc_unit->domain.getDistribution(),
+                         simulation.mc_unit->domain.getRepartition(),
                          current_reactor_state->liquidVolume,
                          current_reactor_state->gasVolume);
+        PostProcessing::user_triggered_properties_export(simulation, exporter);
         dump_counter = 0;
       }
 
@@ -223,7 +224,7 @@ void main_loop(const SimulationParameters &params,
 
   exporter->append(current_time,
                    simulation.getCliqData(),
-                   simulation.mc_unit->domain.getDistribution(),
+                   simulation.mc_unit->domain.getRepartition(),
                    current_reactor_state->liquidVolume,
                    current_reactor_state->gasVolume);
 

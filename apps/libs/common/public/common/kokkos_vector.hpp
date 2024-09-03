@@ -1,7 +1,7 @@
 #ifndef __COMMON_KOKKOS_VECTOR__
 #define __COMMON_KOKKOS_VECTOR__
 
-#include "cmt_common/macro_constructor_assignment.hpp"
+#include <cmt_common/macro_constructor_assignment.hpp>
 #include <Kokkos_Core.hpp>
 #include <cassert>
 #include <cmath>
@@ -9,7 +9,6 @@
 #include <cstdint>
 #include <decl/Kokkos_Declare_OPENMP.hpp>
 #include <impl/Kokkos_ViewCtor.hpp>
-#include <iostream>
 #include <utility>
 
 using ComputeSpace = Kokkos::DefaultExecutionSpace::memory_space;
@@ -23,9 +22,11 @@ public:
 
   DEFAULT_COPY_MOVE_AC(KokkosVector)
 
-
-  explicit KokkosVector(const size_t capacity, bool alloc = true,std::string label="")
-      : _owned_data(Kokkos::view_alloc(label+"_owned_data",Kokkos::WithoutInitializing))
+  explicit KokkosVector(const size_t capacity,
+                        bool alloc = true,
+                        std::string label = "")
+      : _owned_data(Kokkos::view_alloc(label + "_owned_data",
+                                       Kokkos::WithoutInitializing))
   {
     __allocate__(capacity);
     if (alloc)
@@ -82,6 +83,12 @@ public:
     return _owned_data(i);
   }
 
+
+  KOKKOS_INLINE_FUNCTION void set(size_t i,T&& data)const
+  {
+    _owned_data(i) = std::move(data);
+  }
+
   template <typename MS1, typename MS2>
   static void migrate(KokkosVector<T, MS1> src, KokkosVector<T, MS2> &dest)
   {
@@ -95,6 +102,7 @@ public:
   {
     return n_used_elements;
   }
+  
   KOKKOS_INLINE_FUNCTION auto capacity() const
   {
     return n_allocated_element;
@@ -143,8 +151,6 @@ public:
   }
 
   Kokkos::View<T *, Layout, Space> _owned_data{};
-  uint64_t n_allocated_element = 0;
-  uint64_t n_used_elements = 0;
 
 protected:
   auto data()
@@ -157,6 +163,8 @@ protected:
   }
 
 private:
+  uint64_t n_allocated_element = 0;
+  uint64_t n_used_elements = 0;
   double extra_allocation_factor = default_extra_allocation_factor;
 
   static constexpr double default_extra_allocation_factor = 1.5;

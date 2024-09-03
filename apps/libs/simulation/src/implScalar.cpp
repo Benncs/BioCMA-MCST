@@ -1,5 +1,4 @@
-#include "cmt_common/zip.hpp"
-#include "common/kokkos_vector.hpp"
+#include <common/kokkos_vector.hpp>
 #include <Eigen/Dense>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DynamicView.hpp>
@@ -18,7 +17,6 @@ namespace Simulation
 
   ScalarSimulation::ScalarSimulation(size_t n_compartments,
                                      size_t n_species,
-                                     size_t n_thread,
                                      std::span<double> volumes)
       : n_r(n_species), n_c(n_compartments)
   {
@@ -71,10 +69,7 @@ namespace Simulation
                                      const FlowMatrixType &m_transition,
                                      const Eigen::MatrixXd &transfer_gas_liquid)
   {
-    // std::cout<<biomass_contribution(0,0)<<std::endl;
-    // int a;
-    // std::cin>>a;
-
+ 
     total_mass.noalias() +=
         d_t * (concentration * m_transition + biomass_contribution + feed +
                (transfer_gas_liquid)*m_volumes);

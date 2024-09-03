@@ -110,7 +110,7 @@ void DataExportHighFive::prepare()
                  {n_iter, n_col},
                  double_type,
                  {1, n_col});
-  create_dataset("records/distribution",
+  create_dataset("records/number_particles",
                  {1, n_col},
                  {n_iter, n_col},
                  size_t_type,
@@ -182,7 +182,7 @@ void DataExportHighFive::append(double t,
                   {counter, 0},
                   {1, n_col},
                   volume_gas);
-    write_dataset_vector("records/distribution",
+    write_dataset_vector("records/number_particles",
                          {counter + 1, n_col},
                          {counter, 0},
                          {1, n_col},

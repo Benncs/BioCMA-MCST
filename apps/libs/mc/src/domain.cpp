@@ -5,6 +5,7 @@
 #include <Kokkos_DynamicView.hpp>
 #include <Kokkos_Macros.hpp>
 #include <Kokkos_Printf.hpp>
+#include <cassert>
 #include <cma_read/neighbors.hpp>
 #include <cstddef>
 #include <mc/domain.hpp>
@@ -26,12 +27,17 @@ namespace MC
   void ReactorDomain::setVolumes(std::span<double const> volumes_gas,
                                  std::span<double const> volumes_liq)
   {
-    // #pragma omp parallel for
-    // Ok because of ShareSpace
+    //Lot of assert to ensure validy of flowmap during MPI broadcast 
+    
+    assert(volumes_gas.size()==size);
+    assert(volumes_liq.size()==size);
 
+    // Ok because of ShareSpace
     this->_total_volume = 0;
     for (size_t i_c = 0; i_c < volumes_gas.size(); ++i_c)
     {
+      assert(volumes_liq[i_c]>=0);
+      assert(volumes_gas[i_c]>=0);
       shared_containers(i_c).volume_liq = volumes_liq[i_c];
       shared_containers(i_c).volume_gas = volumes_gas[i_c];
       this->_total_volume += volumes_liq[i_c];
@@ -43,12 +49,6 @@ namespace MC
       : size(volumes.size()), neighbors(_neighbors)
   {
 
-    row_neighbors.resize(volumes.size());
-
-    for (size_t i = 0; i < row_neighbors.size(); ++i)
-    {
-      row_neighbors[i] = neighbors.getRow(i);
-    }
 
     Kokkos::View<double *, Kokkos::HostSpace> tmp_volume_host(volumes.data(),
                                                               volumes.size());
@@ -84,13 +84,12 @@ namespace MC
       this->size = other.size;
       this->neighbors = other.neighbors;
       this->_total_volume = other._total_volume;
-      this->row_neighbors = std::move(other.row_neighbors);
       this->shared_containers = other.shared_containers;
     }
     return *this;
   }
 
-  std::vector<size_t> ReactorDomain::getDistribution() const
+  std::vector<size_t> ReactorDomain::getRepartition() const
   {
 
     std::vector<size_t> dist(shared_containers.extent(0));
