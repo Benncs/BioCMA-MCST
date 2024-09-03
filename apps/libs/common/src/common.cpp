@@ -15,7 +15,6 @@ SimulationParameters SimulationParameters::m_default()
 
 UserControlParameters UserControlParameters::m_default()
 {
-  return {"", 
-  false, 0, 
-  0, 0, "", -1, 0,"model_light"};
+  constexpr double x0 = 0.1;
+  return {"", false, 0, 0, 0, "", -1, 0, "model_light", x0};
 }

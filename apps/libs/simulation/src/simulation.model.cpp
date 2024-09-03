@@ -15,20 +15,6 @@
 namespace Simulation
 {
 
-  void SimulationUnit::post_process_reducing()
-  {
-    // #pragma omp critical
-    {
-      for (size_t i_thread = 0; i_thread < n_thread; ++i_thread)
-      {
-        // const size_t i_thread = omp_get_thread_num();
-
-        this->liquid_scalar->merge(i_thread);
-        this->mc_unit->merge(i_thread);
-      }
-    }
-  }
-
   std::span<double> SimulationUnit::getContributionData() const
   {
 
@@ -49,7 +35,7 @@ namespace Simulation
     return this->gas_scalar->getConcentrationData();
   }
 
-  [[nodiscard]] std::tuple<size_t, size_t> SimulationUnit::getDim() const
+  [[nodiscard]] std::tuple<size_t, size_t> SimulationUnit::getDim() const noexcept
   {
     return {this->liquid_scalar->concentration.rows(),
             this->liquid_scalar->concentration.cols()};
@@ -72,25 +58,26 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::clearContribution() const
+  void SimulationUnit::clearContribution() const noexcept
   {
-    for (size_t i = 0; i < n_thread; ++i)
-    {
-      this->liquid_scalar->getThreadContribs()[i].setZero();
-      this->liquid_scalar->vec_kla.setZero();
-    }
+
+    this->liquid_scalar->vec_kla.setZero();
 
     this->liquid_scalar->biomass_contribution.setZero();
   }
 
   void SimulationUnit::update_feed(double d_t) const
   {
-    // this->liquid_scalar->feed.coeffRef(0, 1) = 4. * 1. / 3600.*1e-3;
+
+    // this->liquid_scalar->feed.coeffRef(0, 0) = 5 * 1. / 3600 * 1e-1;
 
     // for (int i = 1; i < this->liquid_scalar->concentration.cols() - 2; ++i)
     // {
     //   this->liquid_scalar->feed.coeffRef(0, i) = 50 * 10 / 3600;
     // }
+
+    index_leaving_flow(0) = 0;
+    leaving_flow(0) = 0. * 0.000011758 / 10.;
   }
 
   void SimulationUnit::step(double d_t,

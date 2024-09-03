@@ -14,13 +14,14 @@ common_lib = library(
    common_sources,
    include_directories: incdirs,
    pic: true,
-   dependencies: [],
+   dependencies: [kokkos],
       install: true,
    install_rpath: global_install_dir,
 )
 
 common_dependecy = declare_dependency(
    sources: common_sources,
+   dependencies:[kokkos],
    include_directories: public_includes,
    link_with: common_lib,
    link_args: [flto_flag]

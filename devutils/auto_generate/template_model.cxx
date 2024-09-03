@@ -1,34 +1,34 @@
-#include "mc/prng/prng.hpp"
 #include <models/@__model__name__@.hpp>
 
-
-void init_@__model__name__@(MC::Particles &p)
+namespace Models
 {
-  p.data = __model__name__{};
-}
+  KOKKOS_FUNCTION void @__model__name__@::init(MC::ParticleDataHolder &p, MC::KPRNG _rng)
+  {
 
-void update_@__model__name__@(double d_t,
-                        MC::Particles &p,
-                        std::span<double const> concentrations)
-{
-  auto &model = std::any_cast<@__model__name__@ &>(p.data);
-  
-}
+  }
 
-MC::Particles division_@__model__name__@(MC::Particles &p)
-{
-  auto &model = std::any_cast<@__model__name__@ &>(p.data);
-}
+  KOKKOS_FUNCTION void @__model__name__@::update(double d_t,
+                              MC::ParticleDataHolder &p,
+                              const LocalConcentrationView &concentration,
+                              MC::KPRNG _rng)
+                              {
 
-void contribution_@__model__name__@(MC::Particles &p, Eigen::MatrixXd &contribution)
-{
-  auto &model = std::any_cast<@__model__name__@ &>(p.data);
-}
+                              }
 
-KModel get_@__model__name__@()
-{
-  return {init_@__model__name__@,
-          update_@__model__name__@,
-          division_@__model__name__@,
-          contribution_@__model__name__@};
-}
+  KOKKOS_FUNCTION @__model__name__@ @__model__name__@::division(MC::ParticleDataHolder &p)
+  {
+    return {};
+  }
+
+  KOKKOS_FUNCTION void @__model__name__@::contribution(MC::ParticleDataHolder &p,
+                                    ContributionView contri)
+                                    {
+
+                                    }
+
+  model_properties_detail_t @__model__name__@::get_properties()
+  {
+    return {};
+  }
+
+}; // namespace Models

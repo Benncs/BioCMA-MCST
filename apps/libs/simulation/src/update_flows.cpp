@@ -4,8 +4,10 @@
 #include <cma_read/flowmap.hpp>
 #include <cmath>
 #include <ctime>
+#include <get_cumulative_proba.hpp>
 #include <simulation/pc_hydro.hpp>
-#include <simulation/update_flows.hpp>
+#include <simulation/simulation.hpp>
+#include <simulation/transitionner.hpp>
 #include <stdexcept>
 #include <transport.hpp>
 
@@ -14,22 +16,18 @@ double linter(double a, double b, double t)
   return (1 - t) * a + t * b;
 }
 
-
-
-
-
 namespace Simulation
 {
 
-  static void compute_MatFlow(const CmaRead::FlowMap::FlowMap_const_view_t &flows_view,
-                              Simulation::PreCalculatedHydroState &matflow)
+  static void
+  compute_MatFlow(const CmaRead::FlowMap::FlowMap_const_view_t &flows_view,
+                  Simulation::PreCalculatedHydroState &matflow)
   {
     const auto _mat_transition_liq =
         Simulation::get_transition_matrix(flows_view);
     matflow.transition_matrix = _mat_transition_liq;
 
     matflow.diag_transition = get_diag_transition(matflow.transition_matrix);
-
   }
 
   static std::vector<double>
@@ -53,6 +51,10 @@ namespace Simulation
 
     return inverse_diagonal;
   }
+  FlowMapTransitioner::~FlowMapTransitioner()
+  {
+    delete interpolated_state;
+  }
 
   FlowMapTransitioner::FlowMapTransitioner(
       size_t _n_flowmap,
@@ -66,6 +68,8 @@ namespace Simulation
         n_timestep(number_time_step), current_flowmap_count(0),
         repetition_count(0), current_index(0)
   {
+    this->interpolated_state = new TransitionState;
+
     // transtion_state.resize(n_flowmap);
     this->liquid_pc.resize(n_flowmap);
     this->gas_pc.resize(n_flowmap);
@@ -84,18 +88,19 @@ namespace Simulation
       break;
     }
     }
-  } 
+  }
 
-  void linter_eigen(const PreCalculatedHydroState& current,const PreCalculatedHydroState& next,PreCalculatedHydroState& interpolated,double t)
+  void linter_eigen(const PreCalculatedHydroState &current,
+                    const PreCalculatedHydroState &next,
+                    PreCalculatedHydroState &interpolated,
+                    double t)
   {
     interpolated.cumulative_probability =
         (1 - t) * current.cumulative_probability +
         t * next.cumulative_probability;
 
-
     interpolated.transition_matrix =
-        (1.0 - t) * current.transition_matrix +
-        t * next.transition_matrix;
+        (1.0 - t) * current.transition_matrix + t * next.transition_matrix;
   }
 
   void FlowMapTransitioner::linear_interpolation_transition()
@@ -107,58 +112,57 @@ namespace Simulation
     auto &current_l_state = this->liquid_pc[current_index];
     auto &next_l_state = this->liquid_pc[next_index];
 
-    linter_eigen(current_l_state,next_l_state,interpolated_state.liquid_pc,t);
-
+    linter_eigen(
+        current_l_state, next_l_state, interpolated_state->liquid_pc, t);
 
     if (two_phase_flow)
     {
       auto &current_g_state = this->gas_pc[current_index];
       auto &next_g_state = this->gas_pc[next_index];
 
-      linter_eigen(current_g_state,next_g_state,interpolated_state.gas_pc,t);
-
+      linter_eigen(current_g_state, next_g_state, interpolated_state->gas_pc, t);
     }
 
     auto n_compartment = current_state->n_compartments;
-    //TODO CHECK move assigment 
-    interpolated_state.state.liquid_flow = current_state->liquid_flow;
+    // TODO CHECK move assigment
+    interpolated_state->state.liquid_flow = current_state->liquid_flow;
     const auto *current_r = &get_unchecked(current_index);
     const auto *next_r = &get_unchecked(next_index);
 
-    interpolated_state.state.liquidVolume.resize(n_compartment);
-    interpolated_state.state.gasVolume.resize(n_compartment);
-    interpolated_state.state.energy_dissipation.resize(n_compartment);
-    interpolated_state.liquid_pc.inverse_volume.resize(
+    interpolated_state->state.liquidVolume.resize(n_compartment);
+    interpolated_state->state.gasVolume.resize(n_compartment);
+    interpolated_state->state.energy_dissipation.resize(n_compartment);
+    interpolated_state->liquid_pc.inverse_volume.resize(
         current_l_state.inverse_volume.size());
 
     for (size_t is = 0; is < n_compartment; ++is)
     {
 
-      interpolated_state.liquid_pc.inverse_volume[is] =
+      interpolated_state->liquid_pc.inverse_volume[is] =
           linter(current_l_state.inverse_volume[is],
                  next_l_state.inverse_volume[is],
                  t);
 
       if (two_phase_flow)
       {
-        interpolated_state.gas_pc.inverse_volume[is] =
+        interpolated_state->gas_pc.inverse_volume[is] =
             linter(this->gas_pc[current_index].inverse_volume[is],
                    this->gas_pc[next_index].inverse_volume[is],
                    t);
       }
 
-      interpolated_state.state.liquidVolume[is] =
+      interpolated_state->state.liquidVolume[is] =
           linter(current_r->liquidVolume[is], next_r->liquidVolume[is], t);
-      interpolated_state.state.gasVolume[is] =
+      interpolated_state->state.gasVolume[is] =
           linter(current_r->gasVolume[is], next_r->gasVolume[is], t);
-      interpolated_state.state.energy_dissipation[is] = linter(
+      interpolated_state->state.energy_dissipation[is] = linter(
           current_r->energy_dissipation[is], next_r->energy_dissipation[is], t);
     }
 
-    interpolated_state.state.n_compartments = n_compartment;
-    current_liq_hydro_state = &interpolated_state.liquid_pc;
-    current_gas_hydro_state = &interpolated_state.gas_pc;
-    current_state = &(interpolated_state.state);
+    interpolated_state->state.n_compartments = n_compartment;
+    current_liq_hydro_state = &interpolated_state->liquid_pc;
+    current_gas_hydro_state = &interpolated_state->gas_pc;
+    current_state = &(interpolated_state->state);
   }
 
   void FlowMapTransitioner::update_flow_interpolation(
@@ -278,8 +282,8 @@ namespace Simulation
   {
     compute_MatFlow(mat_f_liq_view, *liq_hydro_state);
     liq_hydro_state->cumulative_probability =
-        get_CP(unit.mc_unit->domain.getNeighbors(),
-               liq_hydro_state->transition_matrix);
+        get_cumulative_probabilities(unit.mc_unit->domain.getNeighbors(),
+                                     liq_hydro_state->transition_matrix);
   }
   // ok dont modify
   void FlowMapTransitioner::calculate_full_state(

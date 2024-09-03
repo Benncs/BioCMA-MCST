@@ -1,0 +1,11 @@
+#!/bin/bash
+
+wrap_cxx="/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++"
+
+
+args="$@"
+args=$(echo "$args" | sed 's/-MQ /-MT /g')
+cmd="$wrap_cxx  $args"
+echo "$cmd" >> wrapper_log.log
+
+eval "$cmd"

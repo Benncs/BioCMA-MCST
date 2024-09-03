@@ -1,25 +1,17 @@
-#include "common/execinfo.hpp"
-#include "common/simulation_parameters.hpp"
-
 #include <cli_parser.hpp>
-
-#include <common/common.hpp>
-#include <models/models.hpp>
-#include <simulation/simulation.hpp>
-#include <simulation/update_flows.hpp>
-
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/reactorstate.hpp>
-
+#include <common/common.hpp>
+#include <common/execinfo.hpp>
+#include <common/simulation_parameters.hpp>
 #include <host_specific.hpp>
-#include <model_list.hpp>
 #include <mpi_w/wrap_mpi.hpp>
 #include <post_process.hpp>
 #include <rt_init.hpp>
 #include <siminit.hpp>
+#include <simulation/simulation.hpp>
 #include <sync.hpp>
 #include <worker_specific.hpp>
-
 
 #ifdef USE_PYTHON_MODULE
 #  include <pymodule/import_py.hpp>
@@ -27,7 +19,6 @@
 
 #include <iostream>
 #include <memory>
-#include <stdexcept>
 #include <stream_io.hpp>
 
 #ifdef USE_PYTHON_MODULE
@@ -36,29 +27,40 @@
 #  define INTERPRETER_INIT
 #endif
 
+#include <case_data.hpp>
 
-
-struct CaseData
-{
-  std::unique_ptr<Simulation::SimulationUnit> simulation;
-  SimulationParameters params;
-  std::unique_ptr<Simulation::FlowMapTransitioner> transitioner;
-  ExecInfo exec_info;
-};
-
-constexpr bool verbose = true; // TODO REMOVE
-constexpr bool redirect = false; // TODO REMOVE
-
+/**
+ * @brief Prepares the case data based on execution information and simulation
+ * parameters.
+ *
+ * This function processes the provided execution information and simulation
+ * parameters to prepare and return a `CaseData` object. It is designed to be
+ * called before the main simulation execution to ensure all necessary data is
+ * correctly initialized.
+ *
+ * @param exec_info The execution information containing details about the
+ * current simulation run, such as environment settings and execution context.
+ * @param params    The simulation parameters that configure various aspects of
+ * the simulation, including time steps, boundary conditions, and other relevant
+ * settings.
+ * @return A `CaseData` object containing the prepared data for the simulation.
+ */
 static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params);
 
-static void exec(const ExecInfo &exec_info, CaseData &&cased);
+/**
+ * @brief Start simulation
+ */
+static void exec(CaseData &&case_data);
 
-template<typename ExceptionType>
+/**
+ * @brief Wrapper to handle Excception raised in try/catch block
+ */
+template <typename ExceptionType>
 static int handle_catch(ExceptionType const &e);
 
 int main(int argc, char **argv)
 {
-  init_environment();
+
   auto params_opt = parse_cli(argc, argv);
   if (!params_opt.has_value())
   {
@@ -73,13 +75,10 @@ int main(int argc, char **argv)
 
     INTERPRETER_INIT
 
-    REDIRECT_BLOCK(
-        {
-          auto case_data = prepare(exec_info, std::move(params));
-          exec(exec_info, std::move(case_data));
-        },
-        verbose,
-        redirect)
+    REDIRECT_BLOCK({
+      auto case_data = prepare(exec_info, params);
+      exec(std::move(case_data));
+    })
   }
   catch (std::exception const &e)
   {
@@ -98,28 +97,24 @@ static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params)
 {
 
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
-  const auto model = load_model_(params.user_params.model_name);
-  MC::UniformLawINT law_param = {0, 0}; // FIXME
-
-  auto simulation = init_simulation(
-      exec_info, params, transitioner, model, std::move(law_param));
-
+  auto simulation = init_simulation(exec_info, params, transitioner);
   return {std::move(simulation), params, std::move(transitioner), exec_info};
 }
 
-static void exec(const ExecInfo &exec_info, CaseData &&cased)
+static void exec(CaseData &&case_data)
 {
-  const auto f_run =
-      (cased.exec_info.current_rank == 0) ? &host_process : &workers_process;
+  const auto f_run = (case_data.exec_info.current_rank == 0) ? &host_process
+                                                             : &workers_process;
 
-  f_run(exec_info,
-        *cased.simulation,
-        cased.params,
-        std::move(cased.transitioner));
+  auto *const sim = case_data.simulation.release();
+
+  f_run(case_data.exec_info,
+        std::move(*sim),
+        case_data.params,
+        std::move(case_data.transitioner));
 }
 
-
-template<typename ExceptionType>
+template <typename ExceptionType>
 static int handle_catch(ExceptionType const &e)
 {
 #ifdef DEBUG

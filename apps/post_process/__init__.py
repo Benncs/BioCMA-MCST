@@ -1,7 +1,42 @@
+from typing import List
+from matplotlib import pyplot as plt
 import numpy as np
 from typing import Optional, Tuple
 import cmtool.vtk
-from .read_results import RawResults
+from .read_results import RawResults, import_results
+import os
+
+RATIO_MASS_LENGTH = 0.45044876111074444 / 0.12477411510047276
+
+
+def mkdir(d):
+    if not os.path.exists(d):
+        os.makedirs(d)
+
+
+def check_mixing(
+    name_results, pathres: List[str], dest: str, vtk_cma_mesh_path: Optional[str] = None
+):
+    for i in range(len(pathres)):
+        results = import_results(pathres[i])
+        if results is None:
+            break
+        (
+            normalized_scalar_concentration,
+            norm_c_var,
+            normalized_particle_concentration,
+            norm_par_var,
+            t,
+        ) = process_norm(name_results[i], results, vtk_cma_mesh_path)
+        plt.scatter(t, norm_par_var, label=name_results[i])
+        plt.semilogy(t, norm_c_var, label=f"liquid_{name_results[i]}")
+
+    plt.legend()
+    plt.title("Segregation index as a function of the time")
+    plt.ylabel(r"\[ \frac{\sigma(t)}{\sigma(t_{0})}\]")
+    plt.xlabel("time [s]")
+    for i in dest:
+        plt.savefig(f"{i}/mixing_variance.svg", dpi=1500)
 
 
 def norm_concentration(
@@ -23,6 +58,7 @@ def process_norm(
     concentration_record = results.data[:, :, 0]
 
     full_volume = results.volume_liquid
+ 
     p_concentration = results.distribution / full_volume
 
     normalized_scalar_concentration, _, var_c = norm_concentration(
@@ -62,5 +98,19 @@ def average_concentration(results: RawResults):
 
     full_volume = results.volume_liquid
 
-    c_avg = np.sum(concentration_record * full_volume,axis=1) / np.sum(full_volume, axis=1)
+    c_avg = np.sum(concentration_record * full_volume, axis=1) / np.sum(
+        full_volume, axis=1
+    )
     return c_avg
+
+
+def time_average_reaction_rate(
+    duration: float, time_evolution_data: np.ndarray, time_evolution_volume
+):
+    def mass_func(i, x, v):
+        return np.sum(x[i, :] * v[i, :])
+
+    # gram version x1000
+    m_init = mass_func(0, time_evolution_data, time_evolution_volume) * 1e3
+    m_end = mass_func(-1, time_evolution_data, time_evolution_volume) * 1e3
+    return (m_end - m_init) / duration, m_init, m_end

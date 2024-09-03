@@ -1,31 +1,40 @@
 
-#include "common/execinfo.hpp"
-#include "rt_init.hpp"
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
+#include <common/execinfo.hpp>
 #include <cstddef>
 #include <dataexporter/factory.hpp>
 #include <host_specific.hpp>
+#include <mc/unit.hpp>
 #include <memory>
 #include <mpi_w/wrap_mpi.hpp>
 #include <post_process.hpp>
+#include <rt_init.hpp>
+#include <signal_handling.hpp>
 #include <simulation/simulation.hpp>
-#include <simulation/update_flows.hpp>
+#include <simulation/transitionner.hpp>
+#include <stream_io.hpp>
 #include <sync.hpp>
 
 // constexpr size_t n_particle_trigger_parralel = 1e6;
+constexpr bool dump_particle_state = true;
+static void
+main_loop(const SimulationParameters &params,
+          const ExecInfo &exec,
+          Simulation::SimulationUnit &simulation,
+          std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
+          std::unique_ptr<DataExporter> &exporter);
 
-constexpr size_t PROGRESS_BAR_WIDTH = 100;
+static constexpr size_t PROGRESS_BAR_WIDTH = 100;
 
-inline void
-update_progress_bar(size_t total, size_t currentPosition, bool verbose)
+inline static void update_progress_bar(size_t total, size_t current_position)
 {
   const auto default_precision{std::cout.precision()};
   std::ios::sync_with_stdio(false);
-  if (verbose)
+  if constexpr (FlagCompileTIme::verbose)
   {
     std::string progressBar(PROGRESS_BAR_WIDTH, ' ');
-    size_t progress = (currentPosition * PROGRESS_BAR_WIDTH) / total;
+    size_t progress = (current_position * PROGRESS_BAR_WIDTH) / total;
 
     for (size_t i = 0; i < progress; ++i)
     {
@@ -34,20 +43,22 @@ update_progress_bar(size_t total, size_t currentPosition, bool verbose)
 
     std::cout << "Progress: [" << progressBar << "] " << std::fixed
               << std::setprecision(2)
-              << (static_cast<float>(currentPosition) * 100.0 /
+              << (static_cast<float>(current_position) * 100.0 /
                   static_cast<float>(total))
-              << "%\r" << std::flush<< std::setprecision(default_precision);
+              << "%\r" << std::flush << std::setprecision(default_precision);
   }
 }
 
 #ifdef DEBUG
-#  define DEBUG_INSTRUCTION
+#  define DEBUG_INSTRUCTION // std::cout << "it: " <<__loop_counter<<
+                            // std::endl;
 #else
 #  define DEBUG_INSTRUCTION
 #endif
 
+// In multirank context, fill the struct that will be broadcast to other workers
 #define FILL_PAYLOAD                                                           \
-  if constexpr (RT::use_mpi)                                                   \
+  if constexpr (FlagCompileTIme::use_mpi)                                      \
   {                                                                            \
     mpi_payload.liquid_flows =                                                 \
         current_reactor_state->liquid_flow.getViewFlows().data();              \
@@ -56,8 +67,10 @@ update_progress_bar(size_t total, size_t currentPosition, bool verbose)
     mpi_payload.neigbors =                                                     \
         current_reactor_state->liquid_flow.getViewNeighors().to_const();       \
   }
+
+// In multirank context,  Send step payload to other workers
 #define MPI_DISPATCH_MAIN                                                      \
-  if constexpr (RT::use_mpi)                                                   \
+  if constexpr (FlagCompileTIme::use_mpi)                                      \
   {                                                                            \
     for (size_t __macro_j = 1; __macro_j < exec.n_rank; ++__macro_j)           \
     {                                                                          \
@@ -66,22 +79,24 @@ update_progress_bar(size_t total, size_t currentPosition, bool verbose)
     }                                                                          \
   }
 
+// In multirank context,  Send message to worker to ask them to return
 #define SEND_MPI_SIG_STOP                                                      \
-  if constexpr (RT::use_mpi)                                                   \
+  if constexpr (FlagCompileTIme::use_mpi)                                      \
   {                                                                            \
-    host_dispatch(exec, MPI_W::SIGNALS::STOP);                                 \
+    MPI_W::host_dispatch(exec, MPI_W::SIGNALS::STOP);                          \
   }
 
 void host_process(
     const ExecInfo &exec,
-    Simulation::SimulationUnit &simulation,
+    Simulation::SimulationUnit &&simulation,
     const SimulationParameters &params,
     std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner)
 {
+
   std::unique_ptr<DataExporter> data_exporter;
 
   {
-    auto initial_distribution = simulation.mc_unit->domain.getDistribution();
+    auto initial_distribution = simulation.mc_unit->domain.getRepartition();
 
     data_exporter =
         data_exporter_factory(exec,
@@ -89,24 +104,26 @@ void host_process(
                               params.results_file_name,
                               simulation.getDim(),
                               params.user_params.number_exported_result,
-                              initial_distribution);
+                              initial_distribution,
+                              simulation.mc_unit->init_weight);
 
-    PostProcessing::save_initial(simulation, data_exporter);
+    PostProcessing::save_initial_particle_state(simulation, data_exporter);
   }
 
-  PostProcessing::show(simulation);
+  PostProcessing::show_sumup_state(simulation);
 
   main_loop(params, exec, simulation, std::move(transitioner), data_exporter);
 
-  PostProcessing::show(simulation);
+  PostProcessing::show_sumup_state(simulation);
 
   SEND_MPI_SIG_STOP;
-  if constexpr (RT::use_mpi)
+  if constexpr (FlagCompileTIme::use_mpi)
   {
     last_sync(exec, simulation);
   }
 
-  PostProcessing::post_process(exec, params, simulation, data_exporter);
+  PostProcessing::final_post_processing(
+      exec, params, std::move(simulation), data_exporter);
 }
 
 void main_loop(const SimulationParameters &params,
@@ -115,6 +132,7 @@ void main_loop(const SimulationParameters &params,
                std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
                std::unique_ptr<DataExporter> &exporter)
 {
+
   simulation.update_feed(0);
 
   // const size_t n_update_feed = 0; //TODO: move elsewhere
@@ -133,8 +151,8 @@ void main_loop(const SimulationParameters &params,
   size_t dump_counter = 0;
   double current_time = 0.;
   // size_t update_feed_counter = 0;
-  // const size_t update_feed_interval = (n_update_feed==0)? n_iter_simulation :
-  // (n_iter_simulation) / (n_update_feed) + 1;
+  // const size_t update_feed_interval = (n_update_feed==0)? n_iter_simulation
+  // : (n_iter_simulation) / (n_update_feed) + 1;
 
   MPI_W::HostIterationPayload mpi_payload;
   const auto *current_reactor_state = &transitioner->get_unchecked(0);
@@ -143,23 +161,15 @@ void main_loop(const SimulationParameters &params,
 
   exporter->append(current_time,
                    simulation.getCliqData(),
-                   simulation.mc_unit->domain.getDistribution(),
+                   simulation.mc_unit->domain.getRepartition(),
                    current_reactor_state->liquidVolume,
                    current_reactor_state->gasVolume);
 
-#pragma omp parallel default(none) shared(transitioner,                        \
-                                              simulation,                      \
-                                              dump_counter,                    \
-                                              current_time,                    \
-                                              n_iter_simulation,               \
-                                              mpi_payload,                     \
-                                              current_reactor_state,           \
-                                              dump_interval,                   \
-                                              dump_number,                     \
-                                              exec,                            \
-                                              exporter),                       \
-    firstprivate(d_t)
+  auto loop_functor = [&](auto &&local_container)
   {
+    SignalHandler sig;
+    auto result = local_container.get_extra();
+    auto view_result = result.get_view();
 
     for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
          ++__loop_counter)
@@ -167,62 +177,59 @@ void main_loop(const SimulationParameters &params,
 
       DEBUG_INSTRUCTION
 
-#pragma omp single
+      transitioner->update_flow(simulation);
+
+      current_reactor_state = transitioner->getState();
+
+      FILL_PAYLOAD;
+
+      MPI_DISPATCH_MAIN;
+
+      transitioner->advance(simulation);
+
+      simulation.cycleProcess(local_container, view_result, d_t);
+
+      if (++dump_counter == dump_interval)
       {
+        update_progress_bar(n_iter_simulation, __loop_counter);
+        exporter->append(current_time,
+                         simulation.getCliqData(),
+                         simulation.mc_unit->domain.getRepartition(),
+                         current_reactor_state->liquidVolume,
+                         current_reactor_state->gasVolume);
+        if constexpr (dump_particle_state)
+        {
+          PostProcessing::user_triggered_properties_export(simulation,
+                                                           exporter);
+        }
 
-        transitioner->update_flow(simulation);
-
-        current_reactor_state = transitioner->getState();
-
-        FILL_PAYLOAD;
-
-        MPI_DISPATCH_MAIN;
-
-        transitioner->advance(simulation);
+        dump_counter = 0;
       }
 
-      simulation.cycleProcess(d_t);
+      sync_step(exec, simulation);
 
-#pragma omp master
+      result.clear(local_container.n_particle());
+      result.update_view(view_result);
+
+      simulation.update_feed(d_t);
+      simulation.step(d_t, *current_reactor_state);
+      sync_prepare_next(simulation);
+      current_time += d_t;
+
+      if (SignalHandler::is_usr1_raised())
       {
-        dump_counter++;
-
-        if (dump_counter == dump_interval)
-        {
-          update_progress_bar(n_iter_simulation, __loop_counter, true);
-          exporter->append(current_time,
-                           simulation.getCliqData(),
-                           simulation.mc_unit->domain.getDistribution(),
-                           current_reactor_state->liquidVolume,
-                           current_reactor_state->gasVolume);
-          dump_counter = 0;
-        }
-      }
-
-#pragma omp single
-      {
-
-        if constexpr (RT::use_mpi)
-        {
-          sync_step(exec, simulation);
-        }
-
-#pragma omp task default(none) shared(simulation, current_reactor_state),      \
-    firstprivate(d_t)
-        {
-
-          simulation.update_feed(d_t);
-          simulation.step(d_t, *current_reactor_state);
-        }
-
-        sync_prepare_next(exec, simulation);
-        current_time += d_t;
+        PostProcessing::user_triggered_properties_export(simulation, exporter);
       }
     }
-  }
+  };
+
+  std::visit(loop_functor, simulation.mc_unit->container);
+
   exporter->append(current_time,
                    simulation.getCliqData(),
-                   simulation.mc_unit->domain.getDistribution(),
+                   simulation.mc_unit->domain.getRepartition(),
                    current_reactor_state->liquidVolume,
                    current_reactor_state->gasVolume);
+
+  transitioner.reset();
 }

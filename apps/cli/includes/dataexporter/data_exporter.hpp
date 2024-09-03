@@ -1,14 +1,18 @@
 #ifndef __DATA_EXPORTER_HPP__
 #define __DATA_EXPORTER_HPP__
 
-#include "mc/events.hpp"
 #include <cmt_common/macro_constructor_assignment.hpp>
 #include <common/common.hpp>
-#include <map>
-#include <memory>
-#include <simulation/simulation.hpp>
+#include <mc/events.hpp>
+#include <mc/particles/particle_model.hpp>
+#include <string_view>
 #include <unordered_map>
 
+// Foraward declaration
+namespace Simulation
+{
+  class SimulationUnit;
+} // namespace Simulation
 
 struct ExportData
 {
@@ -27,33 +31,37 @@ public:
                std::string_view _filename,
                std::tuple<size_t, size_t> dim,
                size_t niter,
-               std::span<size_t> distribution);
+               std::span<size_t> distribution,
+               double weight);
 
   virtual ~DataExporter() = default;
-  void write_final_results(
-      Simulation::SimulationUnit &simulation,
-      std::span<size_t> distribution);
+  void write_final_results(Simulation::SimulationUnit &simulation,
+                           std::span<size_t> distribution);
 
   virtual void write_final_particle_data(
       const std::unordered_map<std::string, std::vector<model_properties_t>>
-          & /*unused*/,
-      const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
-  };
+          &props,
+      const std::unordered_map<std::string, std::vector<double>>
+          &spatial_props) = 0;
 
-
-   virtual void write_initial_particle_data(
+  virtual void write_initial_particle_data(
       const std::unordered_map<std::string, std::vector<model_properties_t>>
-          & /*unused*/,
-      const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
-  };
+          &props,
+      const std::unordered_map<std::string, std::vector<double>>
+          &spatial_props) = 0;
 
-  virtual void append(double t /*unused*/,
-                      std::span<double> /*unused*/ ,
-                      const std::vector<size_t> &/*unused*/ ,
-                      std::span<const double> /*unused*/ ,
-                      std::span<const double> /*unused*/ ) {};
+  virtual void append(double t,
+                      std::span<double> concentration_liquid,
+                      const std::vector<size_t> &distribution,
+                      std::span<const double> liquid_volume,
+                      std::span<const double> volume_gas) = 0;
 
-
+  virtual void append_particle_properties(
+      size_t counter,
+      const std::unordered_map<std::string, std::vector<model_properties_t>>
+          &props,
+      const std::unordered_map<std::string, std::vector<double>>
+          &spatial_props) = 0;
 
   DELETE_CONSTRUCTORS(DataExporter)
   DELETE_ASSIGMENT(DataExporter)
@@ -80,16 +88,11 @@ protected:
   size_t counter = 0;
   size_t n_iter;
 
-  virtual void write_final_results(
-      ExportData &data,
-      std::span<size_t> distribution)
+  virtual void write_final_results(ExportData & /*data*/,
+                                   std::span<size_t> /*distribution*/)
   {
     std::cerr << "NO implementation specified";
   }
-  
-
 };
-
-
 
 #endif //__DATA_EXPORTER_HPP__

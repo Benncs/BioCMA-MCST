@@ -1,3 +1,4 @@
+#include <string>
 #ifdef USE_HIGHFIVE
 #  include "common/simulation_parameters.hpp"
 
@@ -9,15 +10,12 @@
 #  include <string_view>
 #  include <tuple>
 
-
 #  include "highfive/H5DataSpace.hpp"
 #  include "highfive/H5File.hpp"
 #  include "highfive/H5PropertyList.hpp"
 #  include <Eigen/Dense>
 #  include <highfive/eigen.hpp>
 #  include <highfive/highfive.hpp>
-
-
 
 constexpr size_t hdf5_max_compression = 9;
 
@@ -26,8 +24,8 @@ DataExportHighFive::DataExportHighFive(const ExecInfo &info,
                                        std::string_view _filename,
                                        std::tuple<size_t, size_t> dim,
                                        size_t niter,
-                                       std::span<size_t> distribution)
-    : DataExporter(info, params, _filename, dim, niter, distribution)
+                                       std::span<size_t> distribution,double weight)
+    : DataExporter(info, params, _filename, dim, niter, distribution,weight)
 {
   auto _file = HighFive::File(filename, HighFive::File::Truncate);
   write_initial(_file, info, initial_values);
@@ -112,7 +110,7 @@ void DataExportHighFive::prepare()
                  {n_iter, n_col},
                  double_type,
                  {1, n_col});
-  create_dataset("records/distribution",
+  create_dataset("records/number_particles",
                  {1, n_col},
                  {n_iter, n_col},
                  size_t_type,
@@ -184,7 +182,7 @@ void DataExportHighFive::append(double t,
                   {counter, 0},
                   {1, n_col},
                   volume_gas);
-    write_dataset_vector("records/distribution",
+    write_dataset_vector("records/number_particles",
                          {counter + 1, n_col},
                          {counter, 0},
                          {1, n_col},
@@ -226,7 +224,8 @@ void DataExportHighFive::write_final_results(ExportData &data,
   file.createDataSet(
       "final_results/distribution",
       std::vector<double>(distribution.begin(), distribution.end()));
-
+  file.createDataSet("final_results/events/move",
+                     data.event->get<MC::EventType::Move>());
   file.createDataSet("final_results/events/total_division",
                      data.event->get<MC::EventType::NewParticle>());
   file.createDataSet("final_results/events/total_death",
@@ -259,7 +258,8 @@ void DataExportHighFive::write_particle_data(
     const auto size = values.size();
 
     std::visit(
-        [&ds_props,&file,
+        [&ds_props,
+         &file,
          key = std::move(key),
          values = std::move(values),
          size,
@@ -281,7 +281,8 @@ void DataExportHighFive::write_particle_data(
                 }
               }
             }
-            auto ds = file.createDataSet(ds_name + key, non_zero_values,ds_props);
+            auto ds =
+                file.createDataSet(ds_name + key, non_zero_values, ds_props);
           }
           else
           {
@@ -290,7 +291,6 @@ void DataExportHighFive::write_particle_data(
         },
         v1);
   }
-
   HighFive::DataSetCreateProps _ds_props;
   _ds_props.add(HighFive::Chunking(1));
   _ds_props.add(HighFive::Shuffle());
@@ -299,6 +299,16 @@ void DataExportHighFive::write_particle_data(
   {
     file.createDataSet(ds_name + "spatial/" + key, values, _ds_props);
   }
+}
+
+void DataExportHighFive::append_particle_properties(
+    size_t counter ,
+    const std::unordered_map<std::string, std::vector<model_properties_t>>
+        &props,
+    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
+{
+  auto ds_name = "biological_model/" + std::to_string(counter) + "/";
+  write_particle_data(props, spatial_props, ds_name);
 }
 
 void DataExportHighFive::write_initial_particle_data(

@@ -1,21 +1,14 @@
-#include "cmt_common/macro_constructor_assignment.hpp"
-#include "common/simulation_parameters.hpp"
-
-#include "simulation/simulation.hpp"
-
-#include <dataexporter/data_exporter.hpp>
-#include <mc/events.hpp>
-
 #include <Eigen/Core>
 #include <chrono>
+#include <common/simulation_parameters.hpp>
+#include <dataexporter/data_exporter.hpp>
+#include <iomanip>
+#include <mc/events.hpp>
 #include <nl_types.h>
 #include <numeric>
+#include <simulation/simulation.hpp>
 #include <string_view>
 #include <tuple>
-
-#include <iomanip>
-
-
 
 static std::string date_time()
 {
@@ -31,7 +24,8 @@ DataExporter::DataExporter(const ExecInfo &info,
                            std::string_view _filename,
                            std::tuple<size_t, size_t> dim,
                            size_t niter,
-                           std::span<size_t> distribution)
+                           std::span<size_t> distribution,
+                           double weight)
     : filename(_filename), n_row(get<0>(dim)), n_col(get<1>(dim)),
       n_iter(niter + 2)
 
@@ -43,6 +37,7 @@ DataExporter::DataExporter(const ExecInfo &info,
   metadata["description"] = "Interesting results";
 
   initial_values["number_particles"] = params.user_params.numper_particle;
+  initial_values["initial_weight"] = weight;
   initial_values["number_compartment"] = params.n_compartments;
   initial_values["final_time"] = params.user_params.final_time;
   initial_values["particle_distribution"] =
@@ -63,13 +58,9 @@ void DataExporter::write_final_results(Simulation::SimulationUnit &simulation,
       n_part,
       simulation.getCliqData(),
       simulation.getCgasData(),
-      simulation.mc_unit->ts_events.data(),
+      &simulation.mc_unit->events,
       simulation.getDim(),
   };
 
   write_final_results(data, distribution);
 }
-
-
-
-

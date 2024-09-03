@@ -1,6 +1,8 @@
 
-#include "common/execinfo.hpp"
-#include "common/simulation_parameters.hpp"
+#include <cassert>
+#include <common/execinfo.hpp>
+#include <common/simulation_parameters.hpp>
+#include <Kokkos_Core.hpp>
 #include <rt_init.hpp>
 
 #include <Eigen/Core>
@@ -22,17 +24,15 @@
 #  define omp_set_num_threads(__arg__)
 #endif
 
-std::string env_file_path()
-{
-  return ".bmc_info";
-}
-
+std::string env_file_path() noexcept;
+void init_environment();
 size_t generate_run_id();
 
-void set_openmp_threads(const int rank,
-                        const int size,
-                        ExecInfo &info,
-                        const UserControlParameters &params)
+
+void set_n_thread_current_rank(const int rank,
+                               const int size,
+                               ExecInfo &info,
+                               const UserControlParameters &params)
 {
   // Casting rank and size to size_t
   info.current_rank = static_cast<size_t>(rank);
@@ -43,7 +43,7 @@ void set_openmp_threads(const int rank,
                             ? static_cast<size_t>(params.n_thread)
                             : static_cast<size_t>(omp_get_max_threads());
 
-  int num_core_per_node = omp_get_num_procs();
+  // int num_core_per_node = omp_get_num_procs();
 
   size_t threads_per_process = 1;
 
@@ -56,21 +56,22 @@ void set_openmp_threads(const int rank,
     }
   }
 
-  info.thread_per_process =
-      std::min(threads_per_process, static_cast<size_t>(num_core_per_node));
-  ;
+  info.thread_per_process = threads_per_process;
+
+  assert(info.thread_per_process>0);
 
   omp_set_num_threads(static_cast<int>(info.thread_per_process));
 }
 
 ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
 {
+  init_environment();
   ExecInfo info{};
 
   int rank = 0;
   int size = 0;
   int mpi_thread_level{};
-  if constexpr (RT::use_mpi)
+  if constexpr (FlagCompileTIme::use_mpi)
   {
     std::cout << "USING MPI" << std::endl;
     MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &mpi_thread_level);
@@ -84,10 +85,12 @@ ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
     size = 1;
   }
 
-  set_openmp_threads(rank, size, info, params.user_params);
+  set_n_thread_current_rank(rank, size, info, params.user_params);
+  Kokkos::initialize(argc, argv);
+  Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
 
-  // Eigen::setNbThreads(std::min(omp_get_num_procs(), 2));
-    Eigen::setNbThreads(std::min(omp_get_num_procs(), 1));
+  Eigen::setNbThreads(static_cast<int>(info.thread_per_process));
+  // Eigen::setNbThreads(std::min(omp_get_num_procs(), 1));
 
 #ifdef USE_PYTHON_MODULE
   info.thread_per_process = 1; // Set one thread because of PYthon GIL
@@ -95,19 +98,21 @@ ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
       // TODO FIXME : disable OMP feature
   std::cout << "Numberof thread per process " << info.thread_per_process
             << std::endl;
-  if constexpr (RT::use_mpi)
+  if constexpr (FlagCompileTIme::use_mpi)
   {
     std::atexit(MPI_W::finalize);
   }
+  std::atexit(Kokkos::finalize);
 
   info.run_id =
       static_cast<size_t>(time(nullptr) * size * info.thread_per_process);
-  // MPI_W::is_mpi_init = true;
+
   return info;
 }
 
 void init_environment()
 {
+
   const auto env_path = env_file_path();
 
   static const std::string cma_data_folder_path = "cma_data";
@@ -170,8 +175,13 @@ std::string sappend_date_time(std::string_view string)
   return fd.str();
 }
 
-void register_run(const ExecInfo &exec, SimulationParameters &params)
+std::string env_file_path() noexcept
 {
+  return ".bmc_info";
+}
+
+void register_run(const ExecInfo &exec, SimulationParameters &params)
+{ 
   // Open the file in append mode
   std::ofstream env(env_file_path(), std::ios_base::app);
   if (env.is_open())

@@ -1,0 +1,19 @@
+hwloc = dependency('hwloc', required: true)
+
+__cmake_kokkos_dep__ = dependency(
+    'Kokkos',
+    method: 'cmake',
+    required: true
+)
+
+kokkos = declare_dependency(
+    dependencies: [__cmake_kokkos_dep__,hwloc],
+    compile_args: [
+        '-std=c++20',
+        '-DKOKKOS_DEPENDENCE',
+        '-extended-lambda',
+        '-Wext-lambda-captures-this',
+        '-arch=native'
+    ],
+  
+)

@@ -14,18 +14,24 @@ cma_data/
 *.data*
 *.svg
 callgrind.*
+*.dat
+*.mem*
+
+
 # Builds 
 builddir/
+build/
 
-# Python 
+# Python    
 __pycache__
-
-
 *.old
-
 suprojects/highfive
 llvm.sh
-
 *.out 
-
 .ruff_cache
+__old
+
+# Documentation 
+
+./Documentation/html
+./Documentation/latex

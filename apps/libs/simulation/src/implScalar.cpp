@@ -1,5 +1,7 @@
-#include "cmt_common/zip.hpp"
+#include <common/kokkos_vector.hpp>
 #include <Eigen/Dense>
+#include <Kokkos_Core.hpp>
+#include <Kokkos_DynamicView.hpp>
 #include <common/common.hpp>
 #include <scalar_simulation.hpp>
 
@@ -15,7 +17,6 @@ namespace Simulation
 
   ScalarSimulation::ScalarSimulation(size_t n_compartments,
                                      size_t n_species,
-                                     size_t n_thread,
                                      std::span<double> volumes)
       : n_r(n_species), n_c(n_compartments)
   {
@@ -43,39 +44,40 @@ namespace Simulation
     biomass_contribution = Eigen::MatrixXd(n_species, n_compartments);
     biomass_contribution.setZero();
 
-    contribs.resize(n_thread);
-    view_contribs.resize(n_thread);
-
-    CmtCommons::foreach_zip(
-        [n_species, n_compartments](auto &matrix, auto &view)
-        {
-          matrix = Eigen::MatrixXd(n_species, n_compartments);
-          matrix.setZero();
-          view = get_eigen_view(matrix);
-        },
-
-        contribs,
-        view_contribs);
-
     view = CmaRead::L2DView<double>(
         {this->concentration.data(),
          static_cast<size_t>(this->concentration.size())},
         concentration.rows(),
         concentration.cols(),
         false);
+
+    k_contribs = Kokkos::View<double **, Kokkos::LayoutLeft,HostSpace>(
+        biomass_contribution.data(),
+        biomass_contribution.rows(),
+        biomass_contribution.cols());
+
+    host_concentration = Kokkos::View<double **, Kokkos::LayoutLeft,HostSpace>(
+        concentration.data(),
+        concentration.rows(),
+        concentration.cols());
+    
+    compute_concentration = Kokkos::create_mirror_view_and_copy(ComputeSpace(),host_concentration);
+
   }
 
   void ScalarSimulation::performStep(double d_t,
                                      const FlowMatrixType &m_transition,
                                      const Eigen::MatrixXd &transfer_gas_liquid)
   {
+ 
     total_mass.noalias() +=
         d_t * (concentration * m_transition + biomass_contribution + feed +
                (transfer_gas_liquid)*m_volumes);
 
-
-  
     concentration = total_mass * volumes_inverse;
+
+    //Make accessible new computed concentration to ComputeSpace
+    Kokkos::deep_copy(compute_concentration,host_concentration);
   }
 
 } // namespace Simulation

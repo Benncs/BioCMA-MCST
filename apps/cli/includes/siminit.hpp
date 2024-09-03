@@ -1,17 +1,34 @@
 #ifndef __PROCESS_INIT_HPP__
 #define __PROCESS_INIT_HPP__
 
-#include "simulation/update_flows.hpp"
+#include <common/common.hpp>
 #include <memory>
 
-#include <cma_read/flow_iterator.hpp>
-#include <common/common.hpp>
-#include <simulation/simulation.hpp>
+// Forward declaration
+namespace Simulation
+{
+  class SimulationUnit;
+  class FlowMapTransitioner;
+}; // namespace Simulation
 
+/**
+ * @brief Initializes a simulation unit with the given parameters and
+ * transitioner.
+ *
+ * This function creates and configures a `Simulation::SimulationUnit` instance
+ * using the provided execution information, simulation parameters, and flow map
+ * transitioner.
+ *
+ * @param info The `ExecInfo` object containing details about the execution
+ * environment.
+ * @param params The `SimulationParameters` object with settings for the
+ * simulation.
+ * @param transitioner A unique pointer used to manage flowmap transitions.
+ * @return A unique pointer to the initialized `Simulation::SimulationUnit`.
+ */
 std::unique_ptr<Simulation::SimulationUnit>
 init_simulation(const ExecInfo &info,
                 SimulationParameters &params,
-                  std::unique_ptr<Simulation::FlowMapTransitioner>& transitioner,
-                KModel model,MC::DistributionVariantInt&& initial_particle_distribution);
+                std::unique_ptr<Simulation::FlowMapTransitioner> &transitioner);
 
 #endif //__PROCESS_INIT_HPP__

@@ -1,65 +1,67 @@
 #ifndef __MC_PARTICLESHPP__
 #define __MC_PARTICLESHPP__
 
-#include "cmt_common/macro_constructor_assignment.hpp"
-#include "common/execinfo.hpp"
-#include <any>
-#include <cstddef>
-#include <cstdint>
+#include <mc/particles/data_holder.hpp>
+#include <mc/particles/particle_model.hpp>
+#include <mc/prng/prng.hpp>
+#include <utility>
 
 namespace MC
 {
-  enum class CellStatus : char
-  {
-    IDLE,
-    DEAD,
-    CYTOKINESIS,
-    OUT
-  };
 
-  class alignas(ExecInfo::cache_line_size) Particles
+  template <ParticleModel _Model> class alignas(ExecInfo::cache_line_size) BaseParticle
   {
   public:
-    Particles() noexcept
-        : current_container(0), current_domain(0), random_seed(0), id(0),
-          status(CellStatus::IDLE), weight(0.){};
+    using Model = _Model;
 
-    explicit Particles(double _weight) noexcept
-        : current_container(0), current_domain(0), random_seed(0), id(0),
-          status(CellStatus::IDLE), weight(_weight){};
+    KOKKOS_INLINE_FUNCTION explicit BaseParticle(double _weight = 0) noexcept
+        : properties(_weight){};
 
-    void clearState(MC::CellStatus _status = CellStatus::IDLE) noexcept;
+    KOKKOS_INLINE_FUNCTION void
+    clearState(MC::CellStatus _status = CellStatus::IDLE) noexcept
+    {
+      properties.reset();
+      properties.status = _status;
+    }
 
-    Particles(const Particles &p) = default; // Copy constructor
-    Particles &
-    operator=(const Particles &p) = default; // Copy assignment operator
-    Particles(Particles &&p) noexcept = default;
-    Particles &
-    operator=(Particles &&p) noexcept = default; // Move assignment operator
+    KOKKOS_INLINE_FUNCTION void init(KPRNG globalrng)
+    {
+      data.init(properties, globalrng);
+    }
 
-    ~Particles() = default;
-    size_t current_container;
-    size_t current_domain;
-    size_t random_seed;
-    uint32_t id;
-    MC::CellStatus status;
-    double weight;
-    std::any data;
+    KOKKOS_INLINE_FUNCTION void
+    update(double d_t,
+           const LocalConcentrationView &concentration,
+           KPRNG globalrng)
+    {
+      data.update(d_t, properties, concentration, globalrng);
+    }
 
-   
+    KOKKOS_INLINE_FUNCTION BaseParticle<_Model> division()
+    {
+      properties.status = CellStatus::IDLE;
+      auto p = data.division(properties);
+    
+      return BaseParticle(properties, std::move(p));
+    }
+
+    KOKKOS_INLINE_FUNCTION void contribution(ContributionView contrib)
+    {
+      data.contribution(properties, contrib);
+    }
+
+    ParticleDataHolder properties;
+    _Model data{};
+
+  private:
+    BaseParticle(ParticleDataHolder props, _Model &&_model)
+        : properties(props), data(std::move(_model))
+    {
+    }
   };
 
-  inline void Particles::clearState(MC::CellStatus _status) noexcept
-  {
+  template <ParticleModel Model> using Particle = BaseParticle<Model>;
 
-    current_container = 0;
-    current_domain = 0;
-    random_seed = 0;
-    id = 0;
-    status = _status;
-    weight = 0;
-    data.reset();
-  }
 } // namespace MC
 
 #endif

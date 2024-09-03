@@ -1,84 +1,88 @@
 #ifndef __MC_PRNG_HPP__
 #define __MC_PRNG_HPP__
 
+#include <Kokkos_Random.hpp>
+#include <common/kokkos_vector.hpp>
 #include <cstdint>
-#include <mc/prng/distribution.hpp>
-#include <random>
 
-inline unsigned tau_step(unsigned &z, int S1, int S2, int S3, unsigned M)
-{
-  unsigned b = (((z << S1) ^ z) >> S2);
-  return z = (((z & M) << S3) ^ b);
-}
+// inline unsigned tau_step(unsigned &z, int S1, int S2, int S3, unsigned M)
+// {
+//   unsigned b = (((z << S1) ^ z) >> S2);
+//   return z = (((z & M) << S3) ^ b);
+// }
 
-inline unsigned LCGStep(unsigned &z, unsigned A, unsigned C)
-{
-  return z = (A * z + C);
-}
+// inline unsigned LCGStep(unsigned &z, unsigned A, unsigned C)
+// {
+//   return z = (A * z + C);
+// }
+
 namespace MC
 {
 
-  static constexpr size_t MC_RAND_DEFAULT_SEED = 10;
-  class PRNG
+  class KPRNG
   {
   public:
-    explicit PRNG()
+    using SharedKPRNG = Kokkos::View<KPRNG, ComputeSpace>;
+    explicit KPRNG(size_t _seed = 0);
+
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION double double_uniform() const
     {
-      auto seed = std::random_device{}();
-      gen = std::mt19937(seed);
+      auto generator = random_pool.get_state();
+      double x = generator.drand(0., 1.);
+      random_pool.free_state(generator);
+      return x;
     }
 
-    explicit PRNG(uint64_t seed)
+    KOKKOS_INLINE_FUNCTION double double_uniform(double a, double b) const
     {
-      gen = std::mt19937(seed);
+      auto generator = random_pool.get_state();
+      double x = generator.drand(a, b);
+      random_pool.free_state(generator);
+      return x;
     }
 
-    double uniform_double_rand(double min, double max)
+    [[nodiscard]] Kokkos::View<double *, ComputeSpace>
+    double_uniform(size_t n_sample, double a = 0., double b = 1.) const;
+
+    template <size_t n_r>
+    Kokkos::View<double[n_r], ComputeSpace> double_uniform_view() const
     {
-      double rn = 0;
-      std::uniform_real_distribution<double> double_distribution(min, max);
-      rn = double_distribution(gen);
-      return rn;
+      Kokkos::View<double[n_r], ComputeSpace> A("random");
+      Kokkos::fill_random(A, random_pool, 0., 1.);
+      return A;
     }
 
-    inline double double_unfiform()
+    template <size_t n_r>
+    KOKKOS_INLINE_FUNCTION std::array<double, n_r> double_uniform() const
     {
-      return step();
-      // return _uniform_double(gen);
+      return generate_uniform_impl<Kokkos::Random_XorShift64_Pool<>, n_r>(
+          random_pool, std::make_index_sequence<n_r>{});
     }
 
-    inline float step()
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION uint64_t uniform_u(uint64_t a,
+                                                            uint64_t b) const
     {
-      // Combined period is lcm(p1,p2,p3,p4)~ 2^121
-      // https://indico.cern.ch/event/93877/contributions/2118070/attachments/1104200/1575343/acat3_revised_final.pdf
-      return 2.3283064365387e-10 *
-             (                                            // Periods
-                 tau_step(z1, 13, 19, 12, 4294967294UL) ^ // p1=2^31-1
-                 tau_step(z2, 2, 25, 4, 4294967288UL) ^   // p2=2^30-1
-                 tau_step(z3, 3, 11, 17, 4294967280UL) ^  // p3=2^28-1
-                 LCGStep(z4, 1664525, 1013904223UL)       // p4=2^32
-             );
+
+      auto generator = random_pool.get_state();
+      uint64_t x = generator.urand64(a, b);
+      random_pool.free_state(generator);
+      return x;
     }
-
-    auto &rng()
-    {
-      return gen;
-    };
-
-    static inline auto get_rng(uint64_t seed = MC_RAND_DEFAULT_SEED)
-    {
-      std::mt19937 _gen(seed);
-      return _gen;
-    };
+    Kokkos::Random_XorShift64_Pool<> random_pool;
 
   private:
-    unsigned z2 = std::random_device{}();
-    unsigned z3 = 25;
-    unsigned z4 = 81;
-    std::mt19937 gen;
-    unsigned z1 = 0;
-    std::uniform_real_distribution<double> _uniform_double =
-        std::uniform_real_distribution<double>(0., 1.);
+    template <typename random_pool_t, size_t n_r, size_t... I>
+    KOKKOS_INLINE_FUNCTION std::array<double, n_r>
+    generate_uniform_impl(random_pool_t pool,
+                          std::index_sequence<I...> /*unused*/) const
+    {
+      // Constexpr loopunrolling to fill the array
+      auto generator = pool.get_state();
+      std::array<double, n_r> res = {
+          {(static_cast<void>(I), generator.drand(0., 1.))...}};
+      pool.free_state(generator);
+      return res;
+    }
   };
 
 } // namespace MC

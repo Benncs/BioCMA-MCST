@@ -16,13 +16,14 @@ endforeach
 
 
 dep_all = [
+  kokkos,
   mpi_wrap_dependency,
   biomodel_dependency,
   cma_dep,
   mc_dependency,
   common_dependecy,
   thread_dep,
-  model_selection_dep,tbb
+  model_selection_dep,cereal_dependency
 ]
 
 
@@ -37,7 +38,6 @@ endif
 dep_static_module = [
   dep_all,
   simulation_lib_dependency,
-  omp
 ]
 
 

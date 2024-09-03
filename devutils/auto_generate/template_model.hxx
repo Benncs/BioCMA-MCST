@@ -1,27 +1,30 @@
 #ifndef __BIO_@__model__name__@_HPP__
-#define __BIO_@__model__name__@_HPP__
+#  define __BIO_@__model__name__@_HPP__
 
-#include <mc/particles/mcparticles.hpp>
-#include <models/types.hpp>
-#include <span>
+#  include <mc/prng/prng.hpp>
+#  include <Kokkos_Core.hpp>
+#  include <common/kokkos_vector.hpp>
+#  include <mc/particles/particle_model.hpp>
 
-struct @__model__name__@
+namespace Models
 {
-  
-};
+  struct @__model__name__@
+  {
+    KOKKOS_FUNCTION void init(MC::ParticleDataHolder &p, MC::KPRNG _rng);
 
-void init_@__model__name__@(MC::Particles &p);
+  KOKKOS_FUNCTION void update(double d_t,
+                              MC::ParticleDataHolder &p,
+                              const LocalConcentrationView &concentration,
+                              MC::KPRNG _rng);
 
-void update_@__model__name__@(double d_t,
-                         MC::Particles &p,
-                         std::span<double const> concentrations);
+  KOKKOS_FUNCTION @__model__name__@ division(MC::ParticleDataHolder &p);
 
-MC::Particles division_@__model__name__@(MC::Particles &p);
+  KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
+                                    ContributionView contri);
 
-void contribution_@__model__name__@(MC::Particles &p, Eigen::MatrixXd &contribution);
+  model_properties_detail_t get_properties();
+}; 
+} // namespace Models
 
-KModel get_@__model__name__@();
+#endif //__BIO_@__model__name__@_HPP__
 
-
-
-#endif

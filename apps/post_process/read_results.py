@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import numpy as np
 import h5py
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 
 @dataclass
@@ -40,6 +40,8 @@ class RawResults:
     initial_bioparam: Optional[Dict[str, np.ndarray]] = None
     t_per_flow_map: Optional[float] = None
     n_per_flow_map: Optional[int] = None
+    extra_bioparam: Optional[List[Dict[str, np.ndarray]]] = None
+    weight: Optional[float] = None
 
 
 def __import_v1(file):
@@ -113,7 +115,7 @@ def __import_v2(file):
 
 def __import_v3(file):
     results = RawResults(
-        version=2,
+        version=3,
         distribution=None,
         initial_distribution=None,
         cliq=None,
@@ -125,17 +127,36 @@ def __import_v3(file):
         t=None,
         n_t=None,
     )
-    results.distribution = np.array(file.get("records/distribution"))
+    results.distribution = np.array(file.get("records/number_particles"))
     results.volume_gas = np.array(file.get("records/gas_volume"))
     results.volume_liquid = np.array(file.get("records/liquid_volume"))
     results.data = np.array(file.get("records/concentration_liquid"))
     results.tf = np.array(file.get("initial_parameters/final_time"))
     results.dt = np.array(file.get("initial_parameters/delta_time"))
-    results.records_distribution = np.array(file.get("records/distribution"))
+    results.records_distribution = np.array(file.get("records/number_particles"))
     results.t = np.array(file.get("records/time"))
     results.t_per_flow_map = np.array(file.get("initial_parameters/t_per_flow_map"))
     final_bio = file.get("biological_model/final", None)
     init_bio = file.get("biological_model/initial", None)
+    results.npart = np.array(file.get("final_results/number_particles"))
+
+    results.weight = np.array(file.get("initial_parameters/initial_weight"))
+
+    i_user_export = 1
+    user_export = []
+
+    while True:
+        node = file.get(f"biological_model/{i_user_export}", None)
+        if node is None:
+            break
+        d = {}
+
+        for key in node:
+            d[key] = np.array(node[key])
+
+        user_export.append(d)
+        i_user_export += 1
+    results.extra_bioparam = user_export
 
     if results.dt is not None and results.t_per_flow_map is not None:
         results.n_per_flow_map = int(results.t_per_flow_map / results.dt)

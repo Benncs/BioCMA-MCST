@@ -9,7 +9,7 @@ static ExecInfo c_test_set_openmp_threads(int rank, int size, int n_threads)
   ExecInfo info;
   SimulationParameters params;
   params.user_params.n_thread = n_threads;
-  set_openmp_threads(rank, size, info, params.user_params);
+  set_n_thread_current_rank(rank, size, info, params.user_params);
   std::cerr << "Number of threads: " << info.thread_per_process << '\n';
   return info;
 }

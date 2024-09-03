@@ -1,8 +1,17 @@
 #ifndef __HOST_POST_PROCESS_HPP__
 #define __HOST_POST_PROCESS_HPP__
 
-#include <dataexporter/data_exporter.hpp>
-#include <simulation/simulation.hpp>
+#include <common/execinfo.hpp>
+#include <common/simulation_parameters.hpp>
+#include <memory>
+
+
+// Forward Declaration
+class DataExporter;
+namespace Simulation
+{
+  class SimulationUnit;
+} // namespace Simulation
 
 namespace PostProcessing
 {
@@ -10,14 +19,27 @@ namespace PostProcessing
                     const SimulationParameters &params,
                     Simulation::SimulationUnit &simulation);
 
-  void post_process(const ExecInfo &exec,
+  void final_post_processing(const ExecInfo &exec,
                     const SimulationParameters &params,
-                    Simulation::SimulationUnit &simulation,
+                    Simulation::SimulationUnit &&simulation,
                     std::unique_ptr<DataExporter> &exporter);
 
-  void show(Simulation::SimulationUnit &simulation);
+  void show_sumup_state(Simulation::SimulationUnit &simulation);
 
-  void save_initial(Simulation::SimulationUnit &simulation,std::unique_ptr<DataExporter> &exporter);
+  void save_initial_particle_state(Simulation::SimulationUnit &simulation,
+                                   std::unique_ptr<DataExporter> &exporter);
+
+  void user_triggered_properties_export(
+      Simulation::SimulationUnit &sim,
+      std::unique_ptr<DataExporter> &data_exporter);
+
+  // get_particle_properties(unit,
+
+  //                         aggregated_values,
+  //                         spatial,
+  //                         distribution.size(),
+  //                         model_properties,
+  //                         true);
 
 } // namespace PostProcessing
 

@@ -1,7 +1,6 @@
-#include <dataexporter/factory.hpp>
 #include <dataexporter/data_exporter.hpp>
+#include <dataexporter/factory.hpp>
 #include <dataexporter/impl_dataexporter.hpp>
-
 
 std::unique_ptr<DataExporter>
 data_exporter_factory(const ExecInfo &info,
@@ -9,13 +8,14 @@ data_exporter_factory(const ExecInfo &info,
                       std::string_view _filename,
                       std::tuple<size_t, size_t> dim,
                       size_t niter,
-                      std::span<size_t> distribution)
+                      std::span<size_t> distribution,
+                      double weight)
 {
 #ifdef USE_HIGHFIVE
   return std::make_unique<DataExportHighFive>(
-      info, params, _filename, dim, niter, distribution);
+      info, params, _filename, dim, niter, distribution, weight);
 #else
   return std::make_unique<DataExporter>(
-      info, params, _filename, dim, niter, distribution);
+      info, params, _filename, dim, niter, distribution, weight);
 #endif
 }
