@@ -50,7 +50,7 @@ namespace Simulation
   FlowMatrixType
   get_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t &flows)
   {
-    int n_compartments =
+    int n_compartments = 
         static_cast<int>(flows.getNRow()); // It SHOULD be square
 
     // Uncomment with dense matrix
@@ -62,9 +62,9 @@ namespace Simulation
     FlowMatrixType m_transition =
         FlowMatrixType(n_compartments, n_compartments);
 
-    for (size_t i = 0; i < n_compartments; ++i)
+    for (int i = 0; i < n_compartments; ++i)
     {
-      for (size_t j = 0; j < n_compartments; ++j)
+      for (int j = 0; j < n_compartments; ++j)
       {
         const auto val = flows(i, j);
         if (val != 0.)

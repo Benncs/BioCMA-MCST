@@ -15,7 +15,7 @@
 #include <rt_init.hpp>
 #include <siminit.hpp>
 #include <simulation/simulation.hpp>
-#include <simulation/update_flows.hpp>
+#include <simulation/transitionner.hpp>
 #include <sstream>
 #include <stdexcept>
 #include <utility>
@@ -159,8 +159,8 @@ init_simulation(const ExecInfo &info,
       }};
 
   // Construct the main simulation object (one per rank)
-  auto simulation = std::make_unique<Simulation::SimulationUnit>(
-      info, std::move(mc_unit), init);
+  auto simulation =
+      std::make_unique<Simulation::SimulationUnit>(std::move(mc_unit), init);
 
   // Calculate the total number of time steps
   const auto n_t = static_cast<size_t>(user_params.final_time / params.d_t) + 1;

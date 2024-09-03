@@ -33,8 +33,7 @@ void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
   }
 }
 
-void sync_prepare_next(const ExecInfo &exec,
-                       Simulation::SimulationUnit &simulation)
+void sync_prepare_next(Simulation::SimulationUnit &simulation)
 {
   simulation.clearContribution();
   if constexpr (FlagCompileTIme::use_mpi)
@@ -58,7 +57,6 @@ void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
   if constexpr (FlagCompileTIme::use_mpi)
   {
     MPI_W::barrier();
-   
 
     // We first deal with event gathering, events can be broadcast and gather
     // easily as we deal with fixed sized array of integer

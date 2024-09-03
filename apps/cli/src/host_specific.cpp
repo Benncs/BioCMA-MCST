@@ -12,14 +12,12 @@
 #include <rt_init.hpp>
 #include <signal_handling.hpp>
 #include <simulation/simulation.hpp>
-#include <simulation/update_flows.hpp>
+#include <simulation/transitionner.hpp>
 #include <stream_io.hpp>
 #include <sync.hpp>
-// #include <cereal/archives/binary.hpp>
-// #include <cereal/types/memory.hpp>
-// #include <cereal/types/vector.hpp>
-// constexpr size_t n_particle_trigger_parralel = 1e6;
 
+// constexpr size_t n_particle_trigger_parralel = 1e6;
+constexpr bool dump_particle_state = true;
 static void
 main_loop(const SimulationParameters &params,
           const ExecInfo &exec,
@@ -94,11 +92,11 @@ void host_process(
     const SimulationParameters &params,
     std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner)
 {
-  
+
   std::unique_ptr<DataExporter> data_exporter;
 
   {
-    auto initial_distribution = simulation.mc_unit->domain.getRepartition(); 
+    auto initial_distribution = simulation.mc_unit->domain.getRepartition();
 
     data_exporter =
         data_exporter_factory(exec,
@@ -199,7 +197,12 @@ void main_loop(const SimulationParameters &params,
                          simulation.mc_unit->domain.getRepartition(),
                          current_reactor_state->liquidVolume,
                          current_reactor_state->gasVolume);
-        PostProcessing::user_triggered_properties_export(simulation, exporter);
+        if constexpr (dump_particle_state)
+        {
+          PostProcessing::user_triggered_properties_export(simulation,
+                                                           exporter);
+        }
+
         dump_counter = 0;
       }
 
@@ -210,7 +213,7 @@ void main_loop(const SimulationParameters &params,
 
       simulation.update_feed(d_t);
       simulation.step(d_t, *current_reactor_state);
-      sync_prepare_next(exec, simulation);
+      sync_prepare_next(simulation);
       current_time += d_t;
 
       if (SignalHandler::is_usr1_raised())

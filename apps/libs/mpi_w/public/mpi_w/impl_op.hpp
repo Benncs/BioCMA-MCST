@@ -16,10 +16,11 @@
 
 namespace MPI_W
 {
-  
+
   template <typename T>
-  concept POD = std::is_standard_layout_v<T> &&
-      std::is_trivially_copyable_v<T> && std::is_trivially_destructible_v<T> &&
+  concept POD =
+      std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T> &&
+      std::is_trivially_destructible_v<T> &&
       std::is_trivially_default_constructible_v<T>;
 
   // SENDING
@@ -79,8 +80,7 @@ namespace MPI_W
   std::vector<T>
   gather(std::span<T> local_data, size_t n_rank, size_t root = 0);
 
-  template <NumberType T>
-  T gather_reduce(T data, size_t n_rank, size_t root = 0);
+  template <NumberType T> T gather_reduce(T data, size_t root = 0);
 
   template <typename T>
   std::vector<T>
@@ -274,12 +274,13 @@ namespace MPI_W
     return _gather_unsafe(local_data.data(), local_data.size(), n_rank, root);
   }
 
-  template <NumberType T> T gather_reduce(T data, size_t n_rank, size_t root)
+  template <NumberType T> T gather_reduce(T data, size_t root)
   {
- 
+
     T result{};
-   
-     MPI_Reduce(&data, &result, 1, MPI_W::get_type<T>(), MPI_SUM, root, MPI_COMM_WORLD);
+
+    MPI_Reduce(
+        &data, &result, 1, MPI_W::get_type<T>(), MPI_SUM, root, MPI_COMM_WORLD);
 
     return result;
   }

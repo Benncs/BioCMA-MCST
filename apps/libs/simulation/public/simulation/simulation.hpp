@@ -26,7 +26,7 @@ namespace Simulation
   class SimulationUnit
   {
   public:
-    SimulationUnit(const ExecInfo &info,
+    SimulationUnit(
                    std::unique_ptr<MC::MonteCarloUnit> &&_unit,
                    ScalarInitializer scalar_init);
 
@@ -287,7 +287,7 @@ namespace Simulation
     list._spawn_alloc(n_new_alloc, new_weight);
 
     Kokkos::parallel_for(
-        "add_new_alloc", n_new_alloc, KOKKOS_LAMBDA(const int i) {
+        "add_new_alloc", n_new_alloc, KOKKOS_LAMBDA(const int ) {
           Kokkos::atomic_increment(&local_compartments(0).n_cells);
         });
     Kokkos::fence();

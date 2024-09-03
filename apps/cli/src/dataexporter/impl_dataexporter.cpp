@@ -302,7 +302,7 @@ void DataExportHighFive::write_particle_data(
 }
 
 void DataExportHighFive::append_particle_properties(
-    size_t counter /*unused*/,
+    size_t counter ,
     const std::unordered_map<std::string, std::vector<model_properties_t>>
         &props,
     const std::unordered_map<std::string, std::vector<double>> &spatial_props)

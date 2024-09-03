@@ -40,28 +40,28 @@ public:
 
   virtual void write_final_particle_data(
       const std::unordered_map<std::string, std::vector<model_properties_t>>
-          & /*unused*/,
-      const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
-  };
+          &props,
+      const std::unordered_map<std::string, std::vector<double>>
+          &spatial_props) = 0;
 
   virtual void write_initial_particle_data(
       const std::unordered_map<std::string, std::vector<model_properties_t>>
-          & /*unused*/,
-      const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
-  };
+          &props,
+      const std::unordered_map<std::string, std::vector<double>>
+          &spatial_props) = 0;
 
-  virtual void append(double t /*unused*/,
-                      std::span<double> /*unused*/,
-                      const std::vector<size_t> & /*unused*/,
-                      std::span<const double> /*unused*/,
-                      std::span<const double> /*unused*/) {};
+  virtual void append(double t,
+                      std::span<double> concentration_liquid,
+                      const std::vector<size_t> &distribution,
+                      std::span<const double> liquid_volume,
+                      std::span<const double> volume_gas) = 0;
 
   virtual void append_particle_properties(
-      size_t /*unused*/,
+      size_t counter,
       const std::unordered_map<std::string, std::vector<model_properties_t>>
-          & /*unused*/,
-      const std::unordered_map<std::string, std::vector<double>> & /*unused*/) {
-  };
+          &props,
+      const std::unordered_map<std::string, std::vector<double>>
+          &spatial_props) = 0;
 
   DELETE_CONSTRUCTORS(DataExporter)
   DELETE_ASSIGMENT(DataExporter)
@@ -89,7 +89,7 @@ protected:
   size_t n_iter;
 
   virtual void write_final_results(ExportData & /*data*/,
-                                   std::span<size_t>  /*distribution*/)
+                                   std::span<size_t> /*distribution*/)
   {
     std::cerr << "NO implementation specified";
   }

@@ -1,13 +1,20 @@
-#ifndef __CLI_UPDATE_FLOWS_HPP__
-#define __CLI_UPDATE_FLOWS_HPP__
+#ifndef __CLI_FLOWMAP_TRANSITIONNER_HPP__
+#define __CLI_FLOWMAP_TRANSITIONNER_HPP__
 
+#include <cma_read/flow_iterator.hpp>
 #include <cmt_common/macro_constructor_assignment.hpp>
-#include "cma_read/flow_iterator.hpp"
-#include "simulation/pc_hydro.hpp"
+
 #include <cma_read/reactorstate.hpp>
 #include <cstddef>
 #include <memory>
-#include <simulation/simulation.hpp>
+
+// Foward declaration
+namespace Simulation
+{
+  class SimulationUnit;
+  class PreCalculatedHydroState;
+  struct TransitionState;
+} // namespace Simulation
 
 namespace Simulation
 {
@@ -21,12 +28,13 @@ namespace Simulation
       InterpolationFO,
     };
 
-    FlowMapTransitioner(size_t n_flowmap,
-                        size_t _n_per_flowmap,
-                        FlowmapTransitionMethod method,
-                        size_t number_time_step,
-                        std::unique_ptr<CmaRead::FlowIterator> &&iterator = nullptr,
-                        bool is_two_phase_flow = false);
+    FlowMapTransitioner(
+        size_t n_flowmap,
+        size_t _n_per_flowmap,
+        FlowmapTransitionMethod method,
+        size_t number_time_step,
+        std::unique_ptr<CmaRead::FlowIterator> &&iterator = nullptr,
+        bool is_two_phase_flow = false);
 
     // FlowMapTransitioner(size_t n_flowmap,
     //                     FlowmapTransitionMethod method,
@@ -34,7 +42,7 @@ namespace Simulation
 
     DELETE_COPY_MOVE_AC(FlowMapTransitioner)
 
-    ~FlowMapTransitioner() = default;
+    ~FlowMapTransitioner();
 
     void update_flow(Simulation::SimulationUnit &unit);
     void advance(Simulation::SimulationUnit &unit);
@@ -80,10 +88,8 @@ namespace Simulation
     }
 
   private:
- 
     void discontinuous_transition();
     void linear_interpolation_transition();
-
 
     bool two_phase_flow;
     std::unique_ptr<CmaRead::FlowIterator> iterator = nullptr;
@@ -99,13 +105,12 @@ namespace Simulation
                               PreCalculatedHydroState *liq_hydro_state,
                               PreCalculatedHydroState *gas_hydro_state);
 
-    void
-    calculate_liquid_state(const CmaRead::FlowMap::FlowMap_const_view_t &mat_f_liq_view,
-                           const Simulation::SimulationUnit &unit,
-                           PreCalculatedHydroState *liq_hydro_state);
+    void calculate_liquid_state(
+        const CmaRead::FlowMap::FlowMap_const_view_t &mat_f_liq_view,
+        const Simulation::SimulationUnit &unit,
+        PreCalculatedHydroState *liq_hydro_state);
 
     void (FlowMapTransitioner::*f_update)(Simulation::SimulationUnit &unit);
-
 
     void update_flow_interpolation(Simulation::SimulationUnit &unit);
 
@@ -116,8 +121,8 @@ namespace Simulation
 
     PreCalculatedHydroState *current_liq_hydro_state = nullptr;
     PreCalculatedHydroState *current_gas_hydro_state = nullptr;
-    TransitionState interpolated_state;
-    
+    TransitionState *interpolated_state;
+
     const CmaRead::ReactorState *current_state = nullptr;
 
     size_t current_index;
@@ -130,4 +135,4 @@ namespace Simulation
 
 } // namespace Simulation
 
-#endif //__CLI_UPDATE_FLOWS_HPP__
+#endif //__CLI_FLOWMAP_TRANSITIONNER_HPP__

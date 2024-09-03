@@ -2,14 +2,9 @@
 #include <mpi_w/iteration_payload.hpp>
 #include <mpi_w/wrap_mpi.hpp>
 #include <simulation/simulation.hpp>
-#include <simulation/update_flows.hpp>
+#include <simulation/transitionner.hpp>
 #include <sync.hpp>
 #include <worker_specific.hpp>
-
-
-
-
-
 
 void workers_process(
     const ExecInfo &exec,
@@ -55,7 +50,7 @@ void workers_process(
       result.update_view(view_result);
 
       sync_step(exec, simulation);
-      sync_prepare_next(exec, simulation);
+      sync_prepare_next(simulation);
     }
   };
   std::visit(loop_functor, simulation.mc_unit->container);

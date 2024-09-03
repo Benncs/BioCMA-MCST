@@ -46,6 +46,10 @@ namespace MC
      * @brief Move constructor
      **/
     ReactorDomain(ReactorDomain &&other) noexcept;
+
+    /**
+    * @brief Main constructor
+    */
     ReactorDomain(std::span<double> volumes,
                   const CmaRead::Neighbors::Neighbors_const_view_t &_neighbors);
     /**
@@ -123,7 +127,7 @@ namespace MC
     /**
      * @brief Return the number of compartment in the domain
      */
-    [[nodiscard]] auto getNumberCompartments() const noexcept;
+    [[nodiscard]] size_t getNumberCompartments() const noexcept;
 
     /**
      * @brief Return total volume of domain
@@ -174,11 +178,6 @@ namespace MC
         neighbors; ///< Containers neighbors
   };
 
-  // inline std::span<const size_t> ReactorDomain::getNeighbors(size_t i) const
-  // {
-  //   return row_neighbors[i];
-  // }
-
   inline const CmaRead::Neighbors::Neighbors_const_view_t &
   ReactorDomain::getNeighbors() const
   {
@@ -193,7 +192,7 @@ namespace MC
     neighbors = data.to_const();
   }
 
-  inline auto ReactorDomain::getNumberCompartments() const noexcept
+  inline size_t ReactorDomain::getNumberCompartments() const noexcept
   {
     return size;
   }

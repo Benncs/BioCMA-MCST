@@ -34,22 +34,22 @@ public:
               std::span<const double> volume_gas) final;
 
   void write_final_particle_data(
-      const std::unordered_map<std::string, std::vector<model_properties_t>>
-          & /*unused*/,
-      const std::unordered_map<std::string, std::vector<double>> & /*unused*/)
+    const std::unordered_map<std::string, std::vector<model_properties_t>>
+        &props,
+    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
       final;
 
   void write_initial_particle_data(
-      const std::unordered_map<std::string, std::vector<model_properties_t>>
-          & /*unused*/,
-      const std::unordered_map<std::string, std::vector<double>> & /*unused*/)
+    const std::unordered_map<std::string, std::vector<model_properties_t>>
+        &props,
+    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
       final;
 
   void append_particle_properties(
-      size_t counter /*unused*/,
-      const std::unordered_map<std::string, std::vector<model_properties_t>>
-          & /*unused*/,
-      const std::unordered_map<std::string, std::vector<double>> & /*unused*/)
+    size_t counter ,
+    const std::unordered_map<std::string, std::vector<model_properties_t>>
+        &props,
+    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
       final;
 
 protected:

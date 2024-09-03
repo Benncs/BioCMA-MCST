@@ -29,12 +29,13 @@ if compiler.has_argument('-mtune=native')
   arch_specific_args = [arch_specific_args, '-mtune=native']
 endif
 
+if compiler.has_argument('-Wno-interference-size') # Disable cache line detection size 
+arch_specific_args = [arch_specific_args,'-Wno-interference-size']
+endif 
+
 compiler.has_argument('-fopenmp')
 
 ## Define main shared variables\
-
-compiler.has_argument('--std=c++20', required: true)
-add_global_arguments('--std=c++20', language: 'cpp')
 
 root = meson.project_source_root()
 project_name = meson.project_name()

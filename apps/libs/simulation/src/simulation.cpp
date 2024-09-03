@@ -36,7 +36,7 @@ namespace Simulation
   {
   }
 
-  SimulationUnit::SimulationUnit(const ExecInfo &info,
+  SimulationUnit::SimulationUnit(
                                  std::unique_ptr<MC::MonteCarloUnit> &&_unit,
                                  ScalarInitializer scalar_init)
       : mc_unit(std::move(_unit)), is_two_phase_flow(scalar_init.gas_flow),

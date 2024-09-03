@@ -3,7 +3,6 @@
 #include <cli_parser.hpp>
 #include <common/common.hpp>
 #include <simulation/simulation.hpp>
-#include <simulation/update_flows.hpp>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/reactorstate.hpp>
 #include <host_specific.hpp>
@@ -28,51 +27,7 @@
 #  define INTERPRETER_INIT
 #endif
 
-/**
- * @brief Holds the data required to execute a simulation case.
- *
- * The `CaseData` struct encapsulates all the necessary components needed to
- * perform a simulation. It includes the simulation unit, parameters,
- * transitioner, and execution information. This structure is typically used to
- * manage and transfer simulation data between different stages or components of
- * the simulation process.
- */
-struct CaseData
-{
-  /**
-   * @brief Unique pointer to the simulation unit.
-   *
-   * This is the core unit of the simulation, responsible for executing the
-   * main simulation logic.
-   */
-  std::unique_ptr<Simulation::SimulationUnit> simulation;
-
-  /**
-   * @brief Parameters that configure the simulation.
-   *
-   * The simulation parameters control various aspects of the simulation,
-   * such as time steps, boundary conditions, and solver configurations.
-   */
-  SimulationParameters params;
-
-  /**
-   * @brief Unique pointer to the flow map transitioner.
-   *
-   * The transitioner manages transitions between different flow states within
-   * the simulation, ensuring consistency and accuracy in the simulation's
-   * progression.
-   */
-  std::unique_ptr<Simulation::FlowMapTransitioner> transitioner;
-
-  /**
-   * @brief Information about the execution environment.
-   *
-   * The execution information contains details such as the execution context,
-   * environment settings, and other relevant metadata necessary for the
-   * simulation run.
-   */
-  ExecInfo exec_info;
-};
+#include <case_data.hpp>
 
 /**
  * @brief Prepares the case data based on execution information and simulation
