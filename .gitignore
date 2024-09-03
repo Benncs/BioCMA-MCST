@@ -20,6 +20,7 @@ callgrind.*
 
 # Builds 
 builddir/
+build/
 
 # Python 
 __pycache__

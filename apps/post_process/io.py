@@ -2,6 +2,10 @@ import cmtool.vtk
 from typing import List
 import numpy as np
 
+def append_resukts_scalar_vtk(filename: str, value: np.ndarray, name: str):
+    scalar = cmtool.vtk.mk_scalar(value, name)
+    cmtool.vtk.append_scalar(filename, filename, scalar)
+    pass
 
 def write_vtk_results(
     vtk_cma_mesh_path: str,

@@ -1,113 +1,16 @@
-from typing import Dict, List, Optional
+from typing import List
 from matplotlib import pyplot as plt
 import numpy as np
 from apps.post_process.read_results import import_results
 from apps.post_process import (
     average_concentration,
     check_mixing,
-    process_norm,
     time_average_reaction_rate,
 )
-from .properties import mk_histogram, get_distribution_moment
+from .properties import process_particle_data, property_distribution
 import os
-import cmtool.vtk
 import argparse
-from . import mkdir
 
-RATIO_MASS_LENGTH = 0.45044876111074444 / 0.12477411510047276
-
-
-def append_resukts_scalar_vtk(filename: str, value: np.ndarray, name: str):
-    scalar = cmtool.vtk.mk_scalar(value, name)
-    cmtool.vtk.append_scalar(filename, filename, scalar)
-    pass
-
-
-def property_distribution(
-    biodict: Dict[str, np.ndarray],
-    prefix: str = "",
-    dest: str = "./results/",
-    vtk_cma_mesh_path: Optional[str] = None,
-):
-    for key in biodict:
-        value = biodict[key]
-
-        if key == "lenght":
-            mass = np.sum(value) * RATIO_MASS_LENGTH
-            print("mass: ", mass)
-
-        if isinstance(value, np.ndarray) and np.issubdtype(value.dtype, float):
-            mean, variance_population, variance_sample = get_distribution_moment(value)
-
-            print(
-                key,
-                ": ",
-                "mean: ",
-                mean,
-                "var: ",
-                variance_population,
-                "varred: ",
-                variance_sample,
-            )
-
-            mk_histogram(value, f"{prefix}_{key}", dest)
-            if vtk_cma_mesh_path is not None:
-                append_resukts_scalar_vtk(vtk_cma_mesh_path, value, key)
-
-
-def property_space(i: int, biodict: Dict[str, np.ndarray], key1: str, key2: str):
-    value1 = biodict[key1]
-    value2 = biodict[key2]
-    MAX_SAMPLE = 1_000
-    sample_size = min(len(value2), MAX_SAMPLE)  # or any smaller number
-    idx = np.random.choice(sample_size, size=sample_size, replace=False)
-
-    if isinstance(value1, np.ndarray) and np.issubdtype(value1.dtype, float):
-        if isinstance(value2, np.ndarray) and np.issubdtype(value2.dtype, float):
-            plt.scatter(value1[idx], value2[idx], label=f"data {i}", s=1)
-
-
-def plot_property_space(
-    biodicts: List[Dict[str, np.ndarray]],
-    key1: str,
-    key2: str,
-    dest: str = "./results/",
-):
-    plt.figure()
-    for i, d in enumerate(biodicts):
-        # plt.figure()
-        property_space(i, d, key1, key2)
-        plt.xlabel(key1)
-        plt.ylabel(key2)
-        # plt.legend()
-    plt.savefig(f"{dest}/plot_{key1}_{key2}_{0}")
-
-
-def process_particle_data(
-    biodicts: List[Dict[str, np.ndarray]], dest_root: str = "./results/"
-):
-    dest = f"{dest_root}/properties"
-    keys = [k for k in biodicts[0].keys() if k != "spatial"]
-
-    plot_property_space(biodicts, "mu", "lenght", dest_root)
-
-    mean_samples = {k: np.zeros(len(biodicts)) for k in keys}
-
-    for i, bio_dict in enumerate(biodicts):
-        for k in keys:
-            if len(bio_dict[k]) > 0:
-                if not np.isnan(bio_dict[k][0]):
-                    mean_samples[k][i] = np.mean(bio_dict[k])
-    mkdir(dest)
-    for k, values in mean_samples.items():
-        plt.figure()
-        plt.plot(values, label=k)
-        plt.xlabel("Sample Index")
-        plt.ylabel("Mean Value")
-        plt.title(f"Mean Value of {k} Over Samples")
-        plt.legend()
-        plt.savefig(f"{dest}/{k}.png")
-        plt.close()  # Close the plot to free memory
 
 
 def assemble(res_folder: str, names: List[str]) -> List[str]:

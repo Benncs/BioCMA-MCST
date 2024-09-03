@@ -154,7 +154,7 @@ init_simulation(const ExecInfo &info,
         }
         else
         {
-          liq(0, i) = 0.1;
+          liq(0, i) = 5.;
         }
       }};
 

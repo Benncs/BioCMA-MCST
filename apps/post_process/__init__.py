@@ -6,6 +6,8 @@ import cmtool.vtk
 from .read_results import RawResults, import_results
 import os
 
+RATIO_MASS_LENGTH = 0.45044876111074444 / 0.12477411510047276
+
 
 def mkdir(d):
     if not os.path.exists(d):
@@ -17,10 +19,8 @@ def check_mixing(
 ):
     for i in range(len(pathres)):
         results = import_results(pathres[i])
-
         if results is None:
             break
-
         (
             normalized_scalar_concentration,
             norm_c_var,
