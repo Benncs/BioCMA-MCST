@@ -12,33 +12,10 @@ foreach item : app_sources
   endif
 endforeach
 
-
-
-
-dep_all = [
-  core_shared_dependency
-]
-
-
-
-
-if highfive_found
-  dep_all += highfive_proj.dependency('HighFive')
-endif
-
-
-
-dep_static_module = [
-  dep_all,
-  simulation_lib_dependency,
-]
-
-
-
 name = f'@project_name@_cli_app'
-
-
 # Define static library and its dependency
+
+
 lib_app = static_library(
   name,
   lib_sources,
@@ -53,7 +30,7 @@ lib_app_shared = static_library(
   lib_sources,
   include_directories: ['./includes'],
   dependencies: [core_shared_dependency],
-  cpp_args: ['-DNO_MPI'],
+  # cpp_args: ['-DNO_MPI'],
   install_rpath: project_name,
 )
 
@@ -88,7 +65,7 @@ executable(
   f'@src_dir@/main.cpp',
   include_directories: ['./includes'],
   dependencies: [app_shared_dependency],
-  cpp_args: [target_custom_options,'-DNO_MPI'],
+  cpp_args: [target_custom_options],
   install: true,
   install_rpath: global_install_dir,
   link_args: [flto_flag]

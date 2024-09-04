@@ -9,13 +9,13 @@ incdirs = [public_common, 'includes']
 
 public_includes = [public_common]
 
-common_lib = library(
+common_lib = static_library(
    f'@project_name@_common',
    common_sources,
    include_directories: incdirs,
    pic: true,
    dependencies: [kokkos],
-      install: true,
+      # install: true,
    install_rpath: global_install_dir,
 )
 

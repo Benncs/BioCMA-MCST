@@ -79,7 +79,8 @@ else
   endif
 endif
 
-
+no_mpi_flag = '-DNO_MPI'
+no_use_mpi_flag = '-DNO_USE_MPI'
 
 use_dynamic_module = get_option('use_dynamic_module') # Use python module or not
 
@@ -96,7 +97,6 @@ else
   omp = dependency('openmp', language: 'cpp', required: true)
 endif
 
-tbb = dependency('tbb', required: true)
 
 eigen_dep = dependency('eigen3', required: true)
 blas = dependency('blas', required: false) # Eigen can work without BLAS
@@ -124,7 +124,7 @@ if use_cuda
 endif
 
 kokkos = declare_dependency(
-  dependencies: [__cmake_kokkos_dep__, omp, hwloc],
+  dependencies: [__cmake_kokkos_dep__, omp, hwloc,thread_dep],
   compile_args: kokkos_compile_arg,
 )
 

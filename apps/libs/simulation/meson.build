@@ -36,7 +36,7 @@ simulation_public_dependencies = [
 simulation_dyn_public_dep = [project_dependencies, external_dependcies]
 
 # Create the simulation library
-simulation_lib = library(
+simulation_lib = static_library(
    lib_name,
    simulation_sources,
    include_directories: [
@@ -44,7 +44,7 @@ simulation_lib = library(
       private_simulation_includes,
    ],
    dependencies: [simulation_public_dependencies, private_dependencies],
-   pic: true,
+   # pic: true,
    install: true,
    install_rpath: global_install_dir,
    link_args: [flto_flag],
@@ -63,7 +63,7 @@ simulation_lib_dependency = declare_dependency(
 # Check if the dynamic module is enabled
 if use_dynamic_module
    # Create the dynamic simulation library
-   simulation_lib_dyn = library(
+   simulation_lib_dyn = static_library(
       f'@lib_name@_dyn',
       simulation_sources,
       include_directories: [
@@ -72,7 +72,7 @@ if use_dynamic_module
       ],
       dependencies: [simulation_dyn_public_dep, private_dependencies],
       cpp_args: [use_python_define],
-      pic: true,
+      # pic: true,
       install: true,
        install_rpath: global_install_dir
    )

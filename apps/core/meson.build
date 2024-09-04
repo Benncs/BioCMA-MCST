@@ -8,9 +8,7 @@ dep_core = [
     cma_dep,
     mc_dependency,
     common_dependecy,
-    thread_dep,
     model_selection_dep,
-    cereal_dependency,
     simulation_lib_dependency
 ]
 
@@ -24,26 +22,32 @@ dep_core_mpi = [dep_core,mpi_wrap_dependency]
 
 public_core_includes = include_directories('public')
 
-core_shared = static_library(
+private_core_includes = include_directories('includes')
+
+
+core_shared = library(
     'core_shared',
     core_source,
-    include_directories: ['./includes', public_core_includes],
+    include_directories: [private_core_includes, public_core_includes],
     dependencies: [dep_core],
-    cpp_args: ['-DNO_MPI'],
+    cpp_args: [no_mpi_flag],
+    pic: true,
 )
 
 core_shared_dependency = declare_dependency(
     include_directories: [public_core_includes],
     link_with: core_shared,
     dependencies: dep_core,
-    compile_args: ['-DNO_MPI'],
+    compile_args: [no_mpi_flag],
 )
 
-core_distributed = static_library(
+core_distributed = library(
     'core_distributed',
     core_source,
-    include_directories: ['./includes', public_core_includes],
-    dependencies: [dep_core_mpi],)
+    include_directories: [private_core_includes, public_core_includes],
+    dependencies: [dep_core_mpi], 
+    pic: true
+    )
 
 core_distributed_dependency = declare_dependency(
     include_directories: [public_core_includes],

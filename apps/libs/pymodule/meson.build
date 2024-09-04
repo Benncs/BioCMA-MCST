@@ -25,7 +25,6 @@
       cma_dep,
       mc_dependency,
       common_dependecy,
-      thread_dep,
       pydep,pybind11_dep,
    ]
    public = './public'

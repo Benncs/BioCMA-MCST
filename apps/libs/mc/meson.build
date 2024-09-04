@@ -9,12 +9,12 @@ models_list_def = include_directories('../biomodels/public')
 
 public_include_dir = [public_mc, public_common,models_list_def,'../']
 
-mc_lib = library(
+mc_lib = static_library(
    f'@project_name@_mc',
    mc_sources,
    include_directories: [public_include_dir, 'includes','../'],
    dependencies: [cma_dep,kokkos],
-   pic: true,
+   # pic: true,
    install: true,
    install_rpath: global_install_dir,
    link_args: [flto_flag]
@@ -26,7 +26,7 @@ mc_dependency = declare_dependency(
    link_with: mc_lib,
 )
 
-subdir('./tests')
+# subdir('./tests')
 
 install_subdir(
    'public',

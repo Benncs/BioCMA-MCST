@@ -40,7 +40,7 @@ endif
 message(cpp_args)
 
 #Static library that includes the generated files
-model_selection = library(
+model_selection = static_library(
     'model_selection',
     [generated_model_selection],
     include_directories: 'mc/public/',
