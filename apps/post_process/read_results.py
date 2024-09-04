@@ -195,7 +195,7 @@ def import_results(path: str) -> RawResults:
 
     try:
         with h5py.File(path, "r") as file:
-            attributes = list(file.attrs)
+            _attributes = list(file.attrs)
 
             version = file.attrs.get("file_version", -1)
             if version == 1:

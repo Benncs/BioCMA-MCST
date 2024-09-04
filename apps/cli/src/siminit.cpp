@@ -5,13 +5,13 @@
 #include <cmt_common/cma_case.hpp>
 #include <common/common.hpp>
 #include <common/simulation_parameters.hpp>
+#include <core/cp_flag.hpp>
 #include <cstddef>
 #include <cstdio>
 #include <exception>
 #include <mc/mcinit.hpp>
 #include <mc/prng/distribution.hpp>
 #include <memory>
-#include <mpi_w/wrap_mpi.hpp>
 #include <rt_init.hpp>
 #include <siminit.hpp>
 #include <simulation/simulation.hpp>
@@ -21,6 +21,15 @@
 #include <utility>
 #include <vector>
 #include <wrap_init_model_selector.hpp>
+
+#ifndef NO_MPI
+#  include <mpi_w/wrap_mpi.hpp>
+#else
+namespace MPI_W
+{
+ void barrier();
+};
+#endif
 
 /**
  * @brief Initializes and retrieves the reactor state based on provided
@@ -87,6 +96,7 @@ init_simulation(const ExecInfo &info,
   // After data being read, host send reactor and simulation data to workers
   if constexpr (FlagCompileTIme::use_mpi)
   {
+#ifndef NO_MPI
     // Check once if we can broadcast integer, if not quit
     if (MPI_W::broadcast(params.n_different_maps, 0) != 0)
     {
@@ -101,6 +111,7 @@ init_simulation(const ExecInfo &info,
     MPI_W::broadcast(liq_volume, 0, info.current_rank);
     MPI_W::broadcast(gas_volume, 0, info.current_rank);
     MPI_W::broadcast(worker_neighbor_data, 0, info.current_rank);
+#endif
   }
 
   // MPI_W::bcst_iterator(_flow_handle, info.current_rank);

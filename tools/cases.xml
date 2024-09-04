@@ -20,4 +20,14 @@
       <model_name>model_uptake</model_name> 
    </control>
 
+     <control name="test">
+      <cma_case_path>./cma_data/0d/</cma_case_path>
+      <final_time>1000</final_time>
+      <numper_particle>10</numper_particle>
+      <delta_time>0.1</delta_time>
+      <results_file_name>test</results_file_name>
+      <number_exported_result>10</number_exported_result>
+      <model_name>model_monod</model_name> 
+   </control>
+
    </cases>

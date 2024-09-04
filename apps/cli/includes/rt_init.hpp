@@ -7,14 +7,6 @@
 
 
 
-namespace FlagCompileTIme
-{
-#ifdef NO_MPI
-  constexpr bool use_mpi = false;
-#else
-  constexpr bool use_mpi = true;
-#endif
-} // namespace FlagCompileTIme
 
 void set_n_thread_current_rank(int rank,
                                int size,

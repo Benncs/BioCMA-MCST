@@ -26,11 +26,7 @@ namespace FlagCompileTIme
    * is defined at compile-time; otherwise, it is set to `false`.
    */
 
-#ifndef __FLAG_APP_VERBOSE__
-  constexpr bool verbose = false;
-#else
-  constexpr bool verbose = true;
-#endif
+
 
 #ifndef __FLAG_APP_REDIRECT_STDOUT__
   constexpr bool __f__redirect = false;

@@ -7,13 +7,16 @@
 #include <host_specific.hpp>
 #include <mc/unit.hpp>
 #include <memory>
-#include <mpi_w/wrap_mpi.hpp>
+
+#ifndef NO_MPI
+#  include <mpi_w/wrap_mpi.hpp>
+#endif
+
+#include <core/cp_flag.hpp>
 #include <post_process.hpp>
-#include <rt_init.hpp>
 #include <signal_handling.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/transitionner.hpp>
-#include <stream_io.hpp>
 #include <sync.hpp>
 
 // constexpr size_t n_particle_trigger_parralel = 1e6;
@@ -56,35 +59,51 @@ inline static void update_progress_bar(size_t total, size_t current_position)
 #  define DEBUG_INSTRUCTION
 #endif
 
+#ifndef NO_MPI
 // In multirank context, fill the struct that will be broadcast to other workers
-#define FILL_PAYLOAD                                                           \
-  if constexpr (FlagCompileTIme::use_mpi)                                      \
-  {                                                                            \
-    mpi_payload.liquid_flows =                                                 \
-        current_reactor_state->liquid_flow.getViewFlows().data();              \
-    mpi_payload.liquid_volumes = current_reactor_state->liquidVolume;          \
-    mpi_payload.gas_volumes = current_reactor_state->gasVolume;                \
-    mpi_payload.neigbors =                                                     \
-        current_reactor_state->liquid_flow.getViewNeighors().to_const();       \
-  }
-
-// In multirank context,  Send step payload to other workers
-#define MPI_DISPATCH_MAIN                                                      \
-  if constexpr (FlagCompileTIme::use_mpi)                                      \
-  {                                                                            \
-    for (size_t __macro_j = 1; __macro_j < exec.n_rank; ++__macro_j)           \
+#  define FILL_PAYLOAD                                                         \
+    if constexpr (FlagCompileTIme::use_mpi)                                    \
     {                                                                          \
-      MPI_W::send(MPI_W::SIGNALS::RUN, __macro_j);                             \
-      mpi_payload.send(__macro_j);                                             \
-    }                                                                          \
-  }
-
+      mpi_payload.liquid_flows =                                               \
+          current_reactor_state->liquid_flow.getViewFlows().data();            \
+      mpi_payload.liquid_volumes = current_reactor_state->liquidVolume;        \
+      mpi_payload.gas_volumes = current_reactor_state->gasVolume;              \
+      mpi_payload.neigbors =                                                   \
+          current_reactor_state->liquid_flow.getViewNeighors().to_const();     \
+    }
+#else
+#  define FILL_PAYLOAD
+#endif // MO_MPI
+#ifndef NO_MPI
+// In multirank context,  Send step payload to other workers
+#  define MPI_DISPATCH_MAIN                                                    \
+    if constexpr (FlagCompileTIme::use_mpi)                                    \
+    {                                                                          \
+      for (size_t __macro_j = 1; __macro_j < exec.n_rank; ++__macro_j)         \
+      {                                                                        \
+        MPI_W::send(MPI_W::SIGNALS::RUN, __macro_j);                           \
+        mpi_payload.send(__macro_j);                                           \
+      }                                                                        \
+    }
+#else
+#  define MPI_DISPATCH_MAIN
+#endif // NO_MPI
+#ifndef NO_MPI
 // In multirank context,  Send message to worker to ask them to return
-#define SEND_MPI_SIG_STOP                                                      \
-  if constexpr (FlagCompileTIme::use_mpi)                                      \
-  {                                                                            \
-    MPI_W::host_dispatch(exec, MPI_W::SIGNALS::STOP);                          \
-  }
+#  define SEND_MPI_SIG_STOP                                                    \
+    if constexpr (FlagCompileTIme::use_mpi)                                    \
+    {                                                                          \
+      MPI_W::host_dispatch(exec, MPI_W::SIGNALS::STOP);                        \
+    }
+#else
+#  define SEND_MPI_SIG_STOP
+#endif // NO_MPI
+
+#ifndef NO_MPI
+#  define INIT_PAYLOAD MPI_W::HostIterationPayload mpi_payload;
+#else
+#  define INIT_PAYLOAD
+#endif
 
 void host_process(
     const ExecInfo &exec,
@@ -154,7 +173,8 @@ void main_loop(const SimulationParameters &params,
   // const size_t update_feed_interval = (n_update_feed==0)? n_iter_simulation
   // : (n_iter_simulation) / (n_update_feed) + 1;
 
-  MPI_W::HostIterationPayload mpi_payload;
+  INIT_PAYLOAD
+
   const auto *current_reactor_state = &transitioner->get_unchecked(0);
 
   transitioner->update_flow(simulation);

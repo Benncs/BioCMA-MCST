@@ -1,0 +1,49 @@
+\documentclass{../docclass}
+
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{BioCMA-MCST CLI Documentation}
+\fancyhead[R]{\today}
+
+% Page layout
+\geometry{left=1in,right=1in,top=1in,bottom=1in}
+
+\title{BioCMA-MCST Command Line Interface (CLI) Documentation}
+\author{}
+\date{}
+
+\begin{document}
+
+\title{BioCMA-MCST CLI \\V \myversion}
+\author{CASALE Benjamin}
+\date{}
+\maketitle
+\tableofcontents 
+
+\section*{Introduction}
+
+The BioCMA-MCST Command Line Interface (CLI) provides essential features for running simulations in BioCMA-MCST. This CLI includes the basic and minimal features needed to execute a simulation. Please note that preprocessing and postprocessing are not directly supported through this interface and need to be executed manually.
+
+As the CLI is designed to be generic, direct usage can be cumbersome. The CLI can be used for running batches of simulations or integrated into an automated pipeline with inter-process communication (IPC). To facilitate communication, the underlying program used by the CLI does not require user action during simulation. The user can also directly use this CLI therefore, a wrapper Python script is provided to enhance user experience. 
+
+\subsection{Basic Command Structure}
+
+The general syntax for using the BioCMA-MCST CLI is as follows:
+
+\begin{verbatim}
+biocma-mcst [options] [arguments]
+\end{verbatim}
+
+
+
+\appendix
+
+
+
+\addListofFiguresTablesBibliography
+
+\end{document}

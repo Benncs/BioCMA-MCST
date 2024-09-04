@@ -1,19 +1,22 @@
 
+#include <Eigen/Core>
+#include <Kokkos_Core.hpp>
 #include <cassert>
+#include <common/common.hpp>
 #include <common/execinfo.hpp>
 #include <common/simulation_parameters.hpp>
-#include <Kokkos_Core.hpp>
-#include <rt_init.hpp>
-
-#include <Eigen/Core>
-#include <common/common.hpp>
+#include <core/cp_flag.hpp>
 #include <cstdlib>
 #include <ctime>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <mpi_w/wrap_mpi.hpp>
+#include <rt_init.hpp>
 #include <sstream>
+
+#ifndef NO_MPI
+#  include <mpi_w/wrap_mpi.hpp>
+#endif
 
 #ifndef USE_PYTHON_MODULE
 #  include <omp.h>
@@ -27,7 +30,6 @@
 std::string env_file_path() noexcept;
 void init_environment();
 size_t generate_run_id();
-
 
 void set_n_thread_current_rank(const int rank,
                                const int size,
@@ -58,7 +60,7 @@ void set_n_thread_current_rank(const int rank,
 
   info.thread_per_process = threads_per_process;
 
-  assert(info.thread_per_process>0);
+  assert(info.thread_per_process > 0);
 
   omp_set_num_threads(static_cast<int>(info.thread_per_process));
 }
@@ -73,12 +75,14 @@ ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
   int mpi_thread_level{};
   if constexpr (FlagCompileTIme::use_mpi)
   {
+#ifndef NO_MPI
     std::cout << "USING MPI" << std::endl;
     MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &mpi_thread_level);
 
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     MPI_Comm_size(MPI_COMM_WORLD, &size);
+#endif
   }
   else
   {
@@ -98,9 +102,12 @@ ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
       // TODO FIXME : disable OMP feature
   std::cout << "Numberof thread per process " << info.thread_per_process
             << std::endl;
+
   if constexpr (FlagCompileTIme::use_mpi)
   {
+#ifndef NO_MPI
     std::atexit(MPI_W::finalize);
+#endif
   }
   std::atexit(Kokkos::finalize);
 
@@ -181,7 +188,7 @@ std::string env_file_path() noexcept
 }
 
 void register_run(const ExecInfo &exec, SimulationParameters &params)
-{ 
+{
   // Open the file in append mode
   std::ofstream env(env_file_path(), std::ios_base::app);
   if (env.is_open())

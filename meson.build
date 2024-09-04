@@ -137,12 +137,15 @@ cmake = import('cmake', required: false)
 if cmake.found()
   highfive_cmake_options = cmake.subproject_options()
   highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_COMPILER': 'clang++-18'})
+  highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_STANDARD': '20'})
+
+  highfive_cmake_options.add_cmake_defines({'HIGHFIVE_USE_BOOST': false})
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_EXAMPLES': false})
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_UNIT_TESTS': false})
-  highfive_cmake_options.add_cmake_defines({'HDF5_IS_PARALLEL': true})
-  highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_STANDARD': '20'})
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_USE_BOOST': false})
+  ## MAYBE USE ?? IDK 
   highfive_cmake_options.add_cmake_defines({'HDF5_PREFER_PARALLEL': true})
+    highfive_cmake_options.add_cmake_defines({'HDF5_IS_PARALLEL': true})
   highfive_proj = cmake.subproject('highfive', options: highfive_cmake_options, required: false)
   if highfive_proj.found()
     highfive_found = true

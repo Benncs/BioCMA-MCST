@@ -1,9 +1,27 @@
 #include <cstddef>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
-#include <mpi_w/wrap_mpi.hpp>
-#include <rt_init.hpp>
+
+#include <core/cp_flag.hpp>
 #include <sync.hpp>
+
+#ifndef NO_MPI
+#  include <mpi_w/wrap_mpi.hpp>
+#else 
+
+//MOCK 
+namespace MPI_W
+{
+  void barrier(){};
+  template<typename T>
+  std::vector<T> gather(auto s,auto n,int i =0){};
+
+  void broadcast_span(auto data, auto n){};
+
+
+} //namespace MPI_W
+ 
+#endif
 
 void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
 {

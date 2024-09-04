@@ -16,14 +16,7 @@ endforeach
 
 
 dep_all = [
-  kokkos,
-  mpi_wrap_dependency,
-  biomodel_dependency,
-  cma_dep,
-  mc_dependency,
-  common_dependecy,
-  thread_dep,
-  model_selection_dep,cereal_dependency
+  core_shared_dependency
 ]
 
 
@@ -50,7 +43,7 @@ lib_app = static_library(
   name,
   lib_sources,
   include_directories: ['./includes'],
-  dependencies: [dep_static_module],
+  dependencies: [core_distributed_dependency],
   cpp_args: [],
   install_rpath: project_name,
 )
@@ -59,7 +52,7 @@ lib_app_shared = static_library(
   f'@name@_shared',
   lib_sources,
   include_directories: ['./includes'],
-  dependencies: [dep_static_module],
+  dependencies: [core_shared_dependency],
   cpp_args: ['-DNO_MPI'],
   install_rpath: project_name,
 )
@@ -67,14 +60,14 @@ lib_app_shared = static_library(
 app_test_dependency = declare_dependency(
   include_directories: ['./includes'],
   link_with: lib_app,
-  dependencies: dep_static_module,
+  dependencies: core_distributed_dependency,
   compile_args: [],
 )
 
 app_shared_dependency = declare_dependency(
   include_directories: ['./includes'],
   link_with: lib_app_shared,
-  dependencies: dep_static_module,
+  dependencies: core_shared_dependency,
   compile_args: [],
 )
 
