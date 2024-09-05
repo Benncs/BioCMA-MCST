@@ -2,3 +2,7 @@
 url = https://github.com/USCiLab/cereal.git
 revision = head
 depth = 1
+method = cmake
+
+[provide]
+cereal-1.0 = cereal_dep

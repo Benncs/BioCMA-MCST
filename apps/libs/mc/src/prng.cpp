@@ -30,7 +30,7 @@ namespace MC
   {
     Kokkos::View<double *, ComputeSpace> view("sample", n_sample);
     auto local_pool = random_pool;
-    Kokkos::parallel_for(
+    Kokkos::parallel_for("fill_sampl",
         n_sample, KOKKOS_LAMBDA(auto &&i) {
           auto generator = local_pool.get_state();
           view(i) = generator.drand(a, b);

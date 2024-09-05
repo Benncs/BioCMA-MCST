@@ -18,11 +18,10 @@
 static constexpr size_t trigger_const_particle_number = 1e6;
 static constexpr bool const_number_simulation = false;
 
-
-
 /**
  * @namespace Simulation
- * @brief Namespace that contains classes and structures related to simulation handling 
+ * @brief Namespace that contains classes and structures related to simulation
+ * handling
  */
 namespace Simulation
 {
@@ -33,9 +32,8 @@ namespace Simulation
   class SimulationUnit
   {
   public:
-    SimulationUnit(
-                   std::unique_ptr<MC::MonteCarloUnit> &&_unit,
-                   const ScalarInitializer& scalar_init);
+    SimulationUnit(std::unique_ptr<MC::MonteCarloUnit> &&_unit,
+                   const ScalarInitializer &scalar_init);
 
     ~SimulationUnit() = default;
 
@@ -130,7 +128,7 @@ namespace Simulation
 
     pimp_ptr_t liquid_scalar;
     pimp_ptr_t gas_scalar;
-    void post_init_concentration(const ScalarInitializer& scalar_init);
+    void post_init_concentration(const ScalarInitializer &scalar_init);
   };
 
   inline void SimulationUnit::reset()
@@ -180,21 +178,19 @@ namespace Simulation
           }
 
           const size_t i_compartment = particle.properties.current_container;
-
-          KernelInline::handle_move(i_compartment,
+          KernelInline::handle_move(
+                                    i_compartment,
                                     particle,
                                     local_compartments,
                                     neighbors,
-                                    local_rng,
                                     _diag_transition,
                                     cumulative_probability,
                                     events,
-                                    d_t);
-
-          const double random_number = local_rng.double_uniform();
+                                    d_t,local_rng);
 
           for (size_t i = 0; i < local_index_leaving_flow.size(); ++i)
           {
+            const double random_number = local_rng.double_uniform();
             const auto &index = local_index_leaving_flow(i);
             const auto &flow = local_leaving_flow(i);
             KernelInline::handle_exit(
@@ -239,8 +235,9 @@ namespace Simulation
                        .n_cells);
             }
 
-            assert(particle.properties.status!=MC::CellStatus::CYTOKINESIS);
-            assert(new_particle.properties.status!=MC::CellStatus::CYTOKINESIS);
+            assert(particle.properties.status != MC::CellStatus::CYTOKINESIS);
+            assert(new_particle.properties.status !=
+                   MC::CellStatus::CYTOKINESIS);
           }
           // assert(particle.data)
         });
@@ -263,6 +260,7 @@ namespace Simulation
     auto &local_rng = mc_unit->rng;
     auto events = mc_unit->events;
     auto contribs = get_kernel_contribution();
+
     impl_cycle_process(d_t,
                        list,
                        rview,
@@ -294,10 +292,10 @@ namespace Simulation
     list._spawn_alloc(n_new_alloc, new_weight);
 
     Kokkos::parallel_for(
-        "add_new_alloc", n_new_alloc, KOKKOS_LAMBDA(const int ) {
+        "add_new_alloc", n_new_alloc, KOKKOS_LAMBDA(const int) {
           Kokkos::atomic_increment(&local_compartments(0).n_cells);
         });
-    Kokkos::fence();
+    Kokkos::fence("Fence cycle process ");
 
     set_kernel_contribs_to_host(contribs);
   }

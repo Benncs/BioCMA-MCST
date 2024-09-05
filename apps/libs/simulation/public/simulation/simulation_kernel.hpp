@@ -51,7 +51,7 @@ namespace Simulation::KernelInline
         // range
       }
     }
-    
+
     return next; // Return the index of the chosen next compartment
   }
 
@@ -82,16 +82,16 @@ namespace Simulation::KernelInline
     }
   }
 
-  template <ParticleModel Model>
+
+    template <ParticleModel Model>
   KOKKOS_INLINE_FUNCTION void handle_move(const std::size_t i_compartment,
                                           MC::Particle<Model> &particle,
                                           auto &local_compartments,
                                           auto &neighbors,
-                                          auto &local_rng,
                                           auto &diag_transition,
                                           auto &cumulative_probability,
                                           auto &events,
-                                          double d_t)
+                                          double d_t,auto&& local_rng)
   {
 
     auto &current_container = local_compartments(i_compartment);

@@ -7,6 +7,7 @@
 #include <host_specific.hpp>
 #include <mc/unit.hpp>
 #include <memory>
+#include <iomanip>
 
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
@@ -20,7 +21,7 @@
 #include <sync.hpp>
 
 // constexpr size_t n_particle_trigger_parralel = 1e6;
-constexpr bool dump_particle_state = true;
+constexpr bool dump_particle_state = false;
 static void
 main_loop(const SimulationParameters &params,
           const ExecInfo &exec,

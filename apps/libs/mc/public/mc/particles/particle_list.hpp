@@ -42,6 +42,7 @@ namespace MC
         : KokkosVector<Particle<Model>, MemorySpace>(
               capacity, alloc, "particle_list")
     {
+ 
     }
 
     /**

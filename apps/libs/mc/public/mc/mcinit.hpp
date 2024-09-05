@@ -1,6 +1,7 @@
 #ifndef __MC_INIT_HPP__
 #define __MC_INIT_HPP__
 
+#include "mc/particles/mcparticles.hpp"
 #include <Kokkos_Atomic.hpp>
 #include <Kokkos_DynamicView.hpp>
 #include <cassert>
@@ -45,6 +46,7 @@ namespace MC
     {
 
       auto container = ParticlesContainer<Model>(particle_per_process);
+    
 
       auto &compartments = unit->domain.data();
       auto &list = container.get_compute();

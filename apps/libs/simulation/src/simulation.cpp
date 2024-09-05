@@ -44,6 +44,7 @@ namespace Simulation
 
         flow_liquid(nullptr), flow_gas(nullptr)
   {
+
     this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(
         makeScalarSimulation(mc_unit->domain.getNumberCompartments(),
                              scalar_init.n_species,
@@ -141,7 +142,6 @@ namespace Simulation
       {
         throw SimulationException(ErrorCodes::MismatchSize);
       }
-      
     }
 
     if ((this->liquid_scalar->concentration.array() < 0).any())
