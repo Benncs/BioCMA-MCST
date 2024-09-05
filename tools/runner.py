@@ -68,7 +68,6 @@ def main():
         r_type = "release"
 
     run_cli = format_cli(["_", cli_args.casename])
-
     mpi_c = ""
     if cli_args.use_mpi:
         mpi_c = MPI_COMMAND + " "

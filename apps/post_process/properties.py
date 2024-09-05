@@ -65,6 +65,8 @@ def property_distribution(
     dest: str = "./results/",
     vtk_cma_mesh_path: Optional[str] = None,  # noqa: F821
 ):
+    if(biodict is None):
+        return
     for key in biodict:
         value = biodict[key]
 
@@ -123,6 +125,10 @@ def process_particle_data(
     biodicts: List[Dict[str, np.ndarray]], dest_root: str = "./results/"
 ):
     dest = f"{dest_root}/properties"
+    for i in biodicts:
+        if i is None :
+            return
+
     keys = [k for k in biodicts[0].keys() if k != "spatial"]
 
     plot_property_space(biodicts, "mu", "lenght", dest_root)

@@ -22,7 +22,6 @@ namespace Simulation
     Eigen::MatrixXd feed;
   };
 
-
   class ScalarSimulation
   {
   public:
@@ -39,12 +38,12 @@ namespace Simulation
     Kokkos::View<double **, Kokkos::LayoutLeft, ComputeSpace>
         compute_concentration;
 
- 
-
     Eigen::MatrixXd concentration;
     Eigen::MatrixXd total_mass;
 
     Kokkos::View<double **, Kokkos::LayoutLeft> k_contribs;
+
+    bool deep_copy_liquid_concentration(const std::vector<double>& data);
 
     // Getters
     [[nodiscard]] std::span<double const> getVolumeData() const;
@@ -75,7 +74,7 @@ namespace Simulation
                      const Eigen::MatrixXd &transfer_gas_liquid);
 
   private:
-     Kokkos::View<double **, Kokkos::LayoutLeft, HostSpace> host_concentration;
+    Kokkos::View<double **, Kokkos::LayoutLeft, HostSpace> host_concentration;
     Eigen::DiagonalMatrix<double, -1> volumes_inverse;
     // std::vector<Eigen::MatrixXd> contribs;
     // std::vector<CmaRead::L2DView<double>> view_contribs;
@@ -86,6 +85,8 @@ namespace Simulation
     size_t n_c;
     CmaRead::L2DView<double> view;
   };
+
+
 
   inline CmaRead::L2DView<double> ScalarSimulation::getConcentrationView()
   {

@@ -35,7 +35,7 @@ namespace Simulation
   public:
     SimulationUnit(
                    std::unique_ptr<MC::MonteCarloUnit> &&_unit,
-                   ScalarInitializer scalar_init);
+                   const ScalarInitializer& scalar_init);
 
     ~SimulationUnit() = default;
 
@@ -130,7 +130,7 @@ namespace Simulation
 
     pimp_ptr_t liquid_scalar;
     pimp_ptr_t gas_scalar;
-    void post_init_concentration(init_scalar_f_t liquid, init_scalar_f_t gas);
+    void post_init_concentration(const ScalarInitializer& scalar_init);
   };
 
   inline void SimulationUnit::reset()

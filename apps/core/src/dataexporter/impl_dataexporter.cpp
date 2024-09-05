@@ -10,9 +10,9 @@
 #  include <string_view>
 #  include <tuple>
 
-#  include "highfive/H5DataSpace.hpp"
-#  include "highfive/H5File.hpp"
-#  include "highfive/H5PropertyList.hpp"
+#  include <highfive/H5DataSpace.hpp>
+#  include <highfive/H5File.hpp>
+#  include <highfive/H5PropertyList.hpp>
 #  include <Eigen/Dense>
 #  include <highfive/eigen.hpp>
 #  include <highfive/highfive.hpp>

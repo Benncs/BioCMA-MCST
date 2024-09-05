@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+//TODO Move to CORE 
 struct UserControlParameters
 {
   std::string cma_case_path;
@@ -19,9 +20,11 @@ struct UserControlParameters
   uint32_t number_exported_result;
   std::string model_name;
   double biomass_initial_concentration;
+  std::string initialiser_path;
   static UserControlParameters m_default();
 };
 
+//TODO Move to CORE 
 struct SimulationParameters
 {
 

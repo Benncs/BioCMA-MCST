@@ -1,133 +1,132 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<cases>
-   <control name="n14">
-      <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
-      <final_time>28000</final_time>
-      <numper_particle>1000</numper_particle>
-      <delta_time>0.01</delta_time>
-      <results_file_name>monod_14_long_3</results_file_name>
-      <number_exported_result>100</number_exported_result>
-      <model_name>model_monod</model_name>
-   </control>
-   
-   <control name="0d">
-      <cma_case_path>./cma_data/0d/</cma_case_path>
-      <final_time>22000</final_time>
-      <numper_particle>1000</numper_particle>
-      <delta_time>0.1</delta_time>
-      <results_file_name>simulation7</results_file_name>
-      <number_exported_result>100</number_exported_result>
-      <model_name>model_monod</model_name> 
-   </control>
-
-   <control name="test">
-      <cma_case_path>./cma_data/0d/</cma_case_path>
-      <final_time>20</final_time>
-      <numper_particle>1000</numper_particle>
-      <delta_time>0.1</delta_time>
-      <results_file_name>test</results_file_name>
-      <number_exported_result>10</number_exported_result>
-      <model_name>model_monod</model_name> 
-   </control>
-
-   <control name="0d_inter">
-      <cma_case_path>/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/0d/</cma_case_path>
-      <final_time>7200</final_time>
-      <numper_particle>100</numper_particle>
-      <delta_time>0.01</delta_time>
-      <results_file_name>interdivision_time_0d</results_file_name>
-      <number_exported_result>10000</number_exported_result>
-      <model_name>model_interdivision_time</model_name>
-   </control>
-
-   <control name="ts">
-      <cma_case_path>./cma_data/two_stages/</cma_case_path>
-      <final_time>3600</final_time>
-      <numper_particle>100</numper_particle>
-      <delta_time>0.1</delta_time>
-      <results_file_name>monod_ts</results_file_name>
-      <number_exported_result>360</number_exported_result>
-      <model_name>model_monod</model_name>
+   <?xml version="1.0" encoding="UTF-8"?>
+   <cases>
+      <control name="n14">
+         <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
+         <final_time>28000</final_time>
+         <numper_particle>1000</numper_particle>
+         <delta_time>0.01</delta_time>
+         <results_file_name>monod_14_long_3</results_file_name>
+         <number_exported_result>100</number_exported_result>
+         <model_name>model_monod</model_name>
+      </control>
       
-   </control>
+      <control name="0d">
+         <cma_case_path>./cma_data/0d/</cma_case_path>
+         <final_time>22000</final_time>
+         <numper_particle>1000</numper_particle>
+         <delta_time>0.1</delta_time>
+         <results_file_name>simulation7</results_file_name>
+         <number_exported_result>100</number_exported_result>
+         <model_name>model_monod</model_name> 
+      </control>
 
-   <control name="test">
-      <!-- <cma_case_path recursive="true">./cma_data/bench/</cma_case_path> -->
-      <cma_case_path>./cma_data/0d/</cma_case_path>
-      <final_time>10000</final_time>
-      <numper_particle>100</numper_particle>
-      <delta_time>0.01</delta_time>
-      <results_file_name>test_3</results_file_name>
-      <number_exported_result>720</number_exported_result>
-      <model_name>model_monod</model_name>
-      
-   </control>
+      <control name="test">
+         <cma_case_path>./cma_data/0d/</cma_case_path>
+         <final_time>20</final_time>
+         <numper_particle>1000</numper_particle>
+         <delta_time>0.1</delta_time>
+         <results_file_name>test</results_file_name>
+         <number_exported_result>10</number_exported_result>
+         <model_name>model_monod</model_name> 
+      </control>
 
-   <control name="bench_14">
-      <cma_case_path recursive="true">./cma_data/bench/</cma_case_path>
-      <final_time>1</final_time>
-      <numper_particle>1000000</numper_particle>
-      <delta_time>1e-3</delta_time>
-      <results_file_name>bench_14</results_file_name>
-      <number_exported_result>0</number_exported_result>
-      <model_name>model_monod</model_name>
-      
-   </control>
+      <control name="0d_inter">
+         <cma_case_path>/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/0d/</cma_case_path>
+         <final_time>7200</final_time>
+         <numper_particle>100</numper_particle>
+         <delta_time>0.01</delta_time>
+         <results_file_name>interdivision_time_0d</results_file_name>
+         <number_exported_result>10000</number_exported_result>
+         <model_name>model_interdivision_time</model_name>
+      </control>
 
-   <control name="bench_0d">
-      <cma_case_path>./cma_data/0d/</cma_case_path>
-      <final_time>1</final_time>
-      <numper_particle>10000000</numper_particle>
-      <delta_time>1e-3</delta_time>
-      <results_file_name>bench_0d</results_file_name>
-      <number_exported_result>0</number_exported_result>
-      <model_name>model_light</model_name>
-      
-   </control>
+      <control name="ts">
+         <cma_case_path>./cma_data/two_stages/</cma_case_path>
+         <final_time>3600</final_time>
+         <numper_particle>100</numper_particle>
+         <delta_time>0.1</delta_time>
+         <results_file_name>monod_ts</results_file_name>
+         <number_exported_result>360</number_exported_result>
+         <model_name>model_monod</model_name>
+         
+      </control>
+
+      <control name="test">
+         <!-- <cma_case_path recursive="true">./cma_data/bench/</cma_case_path> -->
+         <cma_case_path>./cma_data/0d/</cma_case_path>
+         <final_time>10000</final_time>
+         <numper_particle>100</numper_particle>
+         <delta_time>0.01</delta_time>
+         <results_file_name>test_3</results_file_name>
+         <number_exported_result>720</number_exported_result>
+         <model_name>model_monod</model_name>
+         
+      </control>
+
+      <control name="bench_14">
+         <cma_case_path recursive="true">./cma_data/bench/</cma_case_path>
+         <final_time>1</final_time>
+         <numper_particle>1000000</numper_particle>
+         <delta_time>1e-3</delta_time>
+         <results_file_name>bench_14</results_file_name>
+         <number_exported_result>0</number_exported_result>
+         <model_name>model_monod</model_name>
+         
+      </control>
+
+      <control name="bench_0d">
+         <cma_case_path>./cma_data/0d/</cma_case_path>
+         <final_time>1</final_time>
+         <numper_particle>10000000</numper_particle>
+         <delta_time>1e-3</delta_time>
+         <results_file_name>bench_0d</results_file_name>
+         <number_exported_result>0</number_exported_result>
+         <model_name>model_light</model_name>
+         
+      </control>
 
 
-   <control name="simple">
-      <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
-      <final_time>100</final_time>
-      <numper_particle>200000</numper_particle>
-      <delta_time>0</delta_time>
-      <results_file_name>simple_model_fed_out</results_file_name>
-      <number_exported_result>50</number_exported_result>
-      <model_name>model_simple</model_name>
-      
-   </control>
+      <control name="simple">
+         <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
+         <final_time>100</final_time>
+         <numper_particle>200000</numper_particle>
+         <delta_time>0</delta_time>
+         <results_file_name>simple_model_fed_out</results_file_name>
+         <number_exported_result>50</number_exported_result>
+         <model_name>model_simple</model_name>
+      </control>
 
-   <control name="test_out_feed">
-      <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
-      <final_time>3600</final_time>
-      <numper_particle>100000</numper_particle>
-      <delta_time>0.01</delta_time>
-      <results_file_name>model_fed_out_monod</results_file_name>
-      <number_exported_result>50</number_exported_result>
-      <model_name>model_monod</model_name>
-      
-   </control>
+      <control name="test_out_feed">
+         <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
+         <final_time>3600</final_time>
+         <numper_particle>100000</numper_particle>
+         <delta_time>0.01</delta_time>
+         <results_file_name>model_fed_out_monod</results_file_name>
+         <number_exported_result>50</number_exported_result>
+         <model_name>model_monod</model_name>
+         
+      </control>
 
-   <control name="b20l">
-      <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/b20l/</cma_case_path>
-      <final_time>360</final_time>
-      <numper_particle>100000</numper_particle>
-      <delta_time>0</delta_time>
-      <results_file_name>b20l_model_fed_out_monod</results_file_name>
-      <number_exported_result>50</number_exported_result>
-      <model_name>model_monod</model_name>
-      
-   </control>
+      <control name="b20l">
+         <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/b20l/</cma_case_path>
+         <final_time>360</final_time>
+         <numper_particle>100000</numper_particle>
+         <delta_time>0</delta_time>
+         <results_file_name>b20l_model_fed_out_monod</results_file_name>
+         <number_exported_result>50</number_exported_result>
+         <model_name>model_monod</model_name>
+         
+      </control>
 
-   <control name="b20l_lb">
-      <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/b20l/</cma_case_path>
-      <final_time>36</final_time>
-      <numper_particle>1000</numper_particle>
-      <delta_time>0</delta_time>
-      <results_file_name>lb_b20l_nofeed</results_file_name>
-      <number_exported_result>50</number_exported_result>
-      <model_name>model_lb</model_name>
-      
-   </control>
+      <control name="b20l_lb">
+         <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/b20l/</cma_case_path>
+         <final_time>36</final_time>
+         <numper_particle>1000</numper_particle>
+         <delta_time>0</delta_time>
+         <results_file_name>lb_b20l_nofeed</results_file_name>
+         <number_exported_result>50</number_exported_result>
+         <model_name>model_lb</model_name>
+         
+      </control>
 
-</cases>
+   </cases>

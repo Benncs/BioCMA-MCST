@@ -1,9 +1,10 @@
-#include <common/kokkos_vector.hpp>
 #include <Eigen/Dense>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DynamicView.hpp>
 #include <common/common.hpp>
+#include <common/kokkos_vector.hpp>
 #include <scalar_simulation.hpp>
+
 
 namespace Simulation
 {
@@ -35,6 +36,9 @@ namespace Simulation
     this->concentration = Eigen::MatrixXd(n_species, n_compartments);
     this->concentration.setZero();
 
+    // std::cout<<__FILE__<<" "<<concentration.rows()<<"
+    // "<<concentration.cols()<<std::endl;
+
     this->feed = Eigen::MatrixXd(n_species, n_compartments);
     this->feed.setZero();
 
@@ -51,33 +55,45 @@ namespace Simulation
         concentration.cols(),
         false);
 
-    k_contribs = Kokkos::View<double **, Kokkos::LayoutLeft,HostSpace>(
+    k_contribs = Kokkos::View<double **, Kokkos::LayoutLeft, HostSpace>(
         biomass_contribution.data(),
         biomass_contribution.rows(),
         biomass_contribution.cols());
 
-    host_concentration = Kokkos::View<double **, Kokkos::LayoutLeft,HostSpace>(
-        concentration.data(),
-        concentration.rows(),
-        concentration.cols());
-    
-    compute_concentration = Kokkos::create_mirror_view_and_copy(ComputeSpace(),host_concentration);
+    host_concentration = Kokkos::View<double **, Kokkos::LayoutLeft, HostSpace>(
+        concentration.data(), concentration.rows(), concentration.cols());
 
+    compute_concentration =
+        Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_concentration);
   }
 
   void ScalarSimulation::performStep(double d_t,
                                      const FlowMatrixType &m_transition,
                                      const Eigen::MatrixXd &transfer_gas_liquid)
   {
- 
+
     total_mass.noalias() +=
         d_t * (concentration * m_transition + biomass_contribution + feed +
                (transfer_gas_liquid)*m_volumes);
 
     concentration = total_mass * volumes_inverse;
 
-    //Make accessible new computed concentration to ComputeSpace
-    Kokkos::deep_copy(compute_concentration,host_concentration);
+    // Make accessible new computed concentration to ComputeSpace
+    Kokkos::deep_copy(compute_concentration, host_concentration);
   }
 
+  bool ScalarSimulation::deep_copy_liquid_concentration(
+      const std::vector<double> &data)
+  {
+    if (data.size() != n_c * n_r)
+    {
+      return false;
+    }
+
+    Eigen::Map<const Eigen::MatrixXd> temp_map(
+        data.data(), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
+    this->concentration = temp_map; //Performs deep copy 
+
+    return true;
+  }
 } // namespace Simulation

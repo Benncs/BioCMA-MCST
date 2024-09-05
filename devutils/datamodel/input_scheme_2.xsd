@@ -20,6 +20,7 @@
                <xs:element type="xs:string" name="results_file_name" minOccurs="0"/>
                <xs:element type="xs:integer" name="number_exported_result"/>
                <xs:element type="xs:string" name="model_name"/>
+               <xs:element type="xs:string" name="initialiser_path" minOccurs="0"/>
             </xs:sequence>
             <xs:attribute type="xs:string" name="name" use="optional"/>
           </xs:complexType>

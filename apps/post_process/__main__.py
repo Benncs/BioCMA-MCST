@@ -20,6 +20,7 @@ def assemble(res_folder: str, names: List[str]) -> List[str]:
 def mk_parser():
     parser = argparse.ArgumentParser(description="Post process tool")
 
+    
     parser.add_argument(
         dest="name_results",
         type=str,

@@ -13,8 +13,6 @@ foreach item : app_sources
 endforeach
 
 name = f'@project_name@_cli_app'
-# Define static library and its dependency
-
 
 lib_app = static_library(
   name,
@@ -73,7 +71,7 @@ executable(
 
 # Conditional dynamic module build
 if use_dynamic_module
-  dep_dynamic_module = [dep_all, simu_dyn_dependency, py_dynamic_module]
+  dep_dynamic_module = [core_distributed_dependency, simu_dyn_dependency, py_dynamic_module]
   name = name + '_dyn'
   
   lib_app_dyn = static_library(

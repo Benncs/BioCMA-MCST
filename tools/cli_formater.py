@@ -48,8 +48,11 @@ def read_xml_values(xml_path, parser,target_name):
                 results_file_name = results_file_name_element.text if results_file_name_element is not None else None
                 number_exported_result = int(control.findtext("number_exported_result"))
                 model_name = control.findtext("model_name")
+                initialiser_path = control.findtext("initialiser_path")
                 cli_args = ""
 
+                
+               
                 if recursive:
                     cli_args+="-r 1 "
                 cli_args+= f"-f { cma_case_path} "
@@ -66,6 +69,10 @@ def read_xml_values(xml_path, parser,target_name):
 
                 if(number_exported_result>0):
                     cli_args += f"-nex {number_exported_result} "
+
+                if initialiser_path!=""and initialiser_path is not None:
+                    cli_args+=f"-fi {initialiser_path} "
+
                 cli_args+=f"-mn {model_name}"
                 break
         if cli_args=="":

@@ -5,7 +5,7 @@ from typing import Optional, Tuple
 import cmtool.vtk
 from .read_results import RawResults, import_results
 import os
-
+from .initialiser import make_initial_concentration
 RATIO_MASS_LENGTH = 0.45044876111074444 / 0.12477411510047276
 
 

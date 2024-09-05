@@ -10,6 +10,7 @@ python_sources = files(
     './io.py',
     './read_results.py',
     './properties.py',
+    './initialiser.py',
 )
 
 

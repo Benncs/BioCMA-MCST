@@ -25,10 +25,10 @@ namespace MC
     }
   };
 
-  Kokkos::View<double *,ComputeSpace>
+  Kokkos::View<double *, ComputeSpace>
   KPRNG::double_uniform(size_t n_sample, double a, double b) const
   {
-    Kokkos::View<double *,ComputeSpace> view("sample", n_sample);
+    Kokkos::View<double *, ComputeSpace> view("sample", n_sample);
     auto local_pool = random_pool;
     Kokkos::parallel_for(
         n_sample, KOKKOS_LAMBDA(auto &&i) {
