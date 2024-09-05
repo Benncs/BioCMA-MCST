@@ -26,7 +26,7 @@ mc_dependency = declare_dependency(
    link_with: mc_lib,
 )
 
-# subdir('./tests')
+subdir('./tests')
 
 install_subdir(
    'public',

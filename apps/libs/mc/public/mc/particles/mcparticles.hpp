@@ -1,6 +1,7 @@
 #ifndef __MC_PARTICLESHPP__
 #define __MC_PARTICLESHPP__
 
+#include "common/has_serialize.hpp"
 #include <mc/particles/data_holder.hpp>
 #include <mc/particles/particle_model.hpp>
 #include <mc/prng/prng.hpp>
@@ -9,7 +10,8 @@
 namespace MC
 {
 
-  template <ParticleModel _Model> class alignas(ExecInfo::cache_line_size) BaseParticle
+  template <ParticleModel _Model>
+  class alignas(ExecInfo::cache_line_size) BaseParticle
   {
   public:
     using Model = _Model;
@@ -41,13 +43,23 @@ namespace MC
     {
       properties.status = CellStatus::IDLE;
       auto p = data.division(properties);
-    
+
       return BaseParticle(properties, std::move(p));
     }
 
     KOKKOS_INLINE_FUNCTION void contribution(ContributionView contrib)
     {
       data.contribution(properties, contrib);
+    }
+
+
+    template <class Archive> void serde(Archive &ar) 
+    {
+      properties.serde(ar);
+      if constexpr (has_serialize<_Model, Archive>())
+      {
+        data.serde(ar);
+      }
     }
 
     ParticleDataHolder properties;

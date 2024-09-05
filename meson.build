@@ -170,7 +170,7 @@ if cmake.found()
   if cereal_proj.found()
   ceral_found=true
   add_project_arguments('-DUSE_CEAREAL', language: 'cpp')
-  cereal_dp = cereal_proj.dependency('cereal')
+  cereal_dependency = cereal_proj.dependency('cereal')
   endif 
 
 endif

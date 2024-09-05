@@ -47,6 +47,11 @@ namespace MC
       weight = default_weight;
     }
 
+    template <class Archive> void serde(Archive &ar) 
+    {
+      ar(current_container, current_domain, random_seed, id, status, weight);
+    }
+
     size_t current_container =
         default_container; ///< Current position in the domain
 
