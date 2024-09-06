@@ -39,6 +39,15 @@ def mk_parser():
         help="Optional release",
     )
 
+    parser.add_argument(
+        "-p",
+        dest="post_process",
+        action="store_true",
+        required=False,
+        help="Do post process after",
+    )
+
+
     # Optional number argument
     parser.add_argument(
         "-n",
@@ -67,7 +76,7 @@ def main():
     if cli_args.release_flag:
         r_type = "release"
 
-    run_cli = format_cli(["_", cli_args.casename])
+    run_cli,res_file = format_cli(["_", cli_args.casename])
     mpi_c = ""
     if cli_args.use_mpi:
         mpi_c = MPI_COMMAND + " "
@@ -80,6 +89,8 @@ def main():
         + f" -nt {cli_args.n_threads}"
     )
     exec(command, cli_args.n_threads)
+
+  
 
 
 if __name__ == "__main__":

@@ -28,13 +28,14 @@ def wrap_timer(f,do_measure:bool):
         process = f()
         return process.wait()
 
-def exec(command, n_thread,do_measure:bool=True,**kwargs):
+def exec(command, n_thread,do_measure:bool=True,do_kokkos_measure=False,**kwargs):
     env_var = os.environ.copy()
     env_var["OMP_PLACES"] = "threads"
     env_var["OMP_PROC_BIND"] = "spread"
     env_var["OMP_NUM_THREADS"] = n_thread
-
-    env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
+    
+    if(do_kokkos_measure):
+        env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
     # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_memory_events.so"
 
     result = command.replace("-", "\n-")

@@ -9,6 +9,7 @@
 #include <common/common_types.hpp>
 #include <mc/container_state.hpp>
 #include <span>
+#include <cstdint> 
 
 namespace MC
 {
@@ -143,7 +144,7 @@ namespace MC
     /**
      * @brief Returns the number of particle per compartment
      */
-    [[nodiscard]] std::vector<size_t> getRepartition() const;
+    [[nodiscard]] std::vector<uint64_t> getRepartition() const;
 
     /**
     @brief Return a unique domain from data obtained with MPI gather

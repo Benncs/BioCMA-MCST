@@ -119,8 +119,6 @@ namespace Simulation
 
     void post_init_compartments();
 
-    void execute_process_knrl(const auto &kernel);
-
     bool is_two_phase_flow;
 
     PreCalculatedHydroState *flow_liquid; // TODO OPTI
@@ -178,15 +176,15 @@ namespace Simulation
           }
 
           const size_t i_compartment = particle.properties.current_container;
-          KernelInline::handle_move(
-                                    i_compartment,
+          KernelInline::handle_move(i_compartment,
                                     particle,
                                     local_compartments,
                                     neighbors,
                                     _diag_transition,
                                     cumulative_probability,
                                     events,
-                                    d_t,local_rng);
+                                    d_t,
+                                    local_rng);
 
           for (size_t i = 0; i < local_index_leaving_flow.size(); ++i)
           {

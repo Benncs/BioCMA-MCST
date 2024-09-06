@@ -2,10 +2,13 @@ from scipy.stats import gaussian_kde
 import matplotlib.pyplot as plt
 import numpy as np
 
-from apps.post_process.io import append_resukts_scalar_vtk
+from .io import append_resukts_scalar_vtk
 from . import mkdir
 from typing import Dict, List,Optional
 from . import RATIO_MASS_LENGTH
+
+def process_string_title(input_string):
+    return ' '.join([word.capitalize() for word in input_string.replace('_', ' ').split()])
 
 def get_distribution_moment(data):
     mean = np.mean(data)
@@ -16,20 +19,23 @@ def get_distribution_moment(data):
 
 
 def _mk_pdf(data, name, dest: str):
-    if len(data) == 0:
-        return
-    kde = gaussian_kde(data)
-    x_values = np.linspace(min(data), max(data), 1000)
-    pdf_values = kde(x_values)
-
-    # Plot PDF
-    plt.figure()
-    plt.plot(x_values, pdf_values, color="blue")
-    plt.xlabel("Value")
-    plt.ylabel("Density")
-    plt.title(f"Probability Density Function for {name} (PDF)")
-    mkdir(f"{dest}/pdf")
-    plt.savefig(f"{dest}/pdf/pdf_{name}")
+    try:
+        if len(data) == 0:
+            return
+        kde = gaussian_kde(data)
+        x_values = np.linspace(min(data), max(data), 1000)
+        pdf_values = kde(x_values)
+        title_name = process_string_title(name)
+        # Plot PDF
+        plt.figure()
+        plt.plot(x_values, pdf_values, color="blue")
+        plt.xlabel("Value")
+        plt.ylabel("Density")
+        plt.title(f"Probability Density Function for {title_name} (PDF)")
+        mkdir(f"{dest}/pdf")
+        plt.savefig(f"{dest}/pdf/pdf_{name}")
+    except:
+        pass
 
 
 def _mk_histogram(data, name, dest: str):
@@ -50,10 +56,10 @@ def _mk_histogram(data, name, dest: str):
         alpha=0.7,
         color="blue",
     )
-
+    title_name = process_string_title(name)
     plt.xlabel("Value")
     plt.ylabel("Density")
-    plt.title(f"Histogram {name}")
+    plt.title(f"Histogram {title_name}")
     plt.savefig(f"{dest}/histogram//histogram_{name}")
 
     _mk_pdf(data, name, dest)
@@ -98,9 +104,9 @@ def property_space(i: int, biodict: Dict[str, np.ndarray], key1: str, key2: str)
         value1 = biodict[key1]
         value2 = biodict[key2]
         MAX_SAMPLE = 1_000
-        sample_size = min(len(value2), MAX_SAMPLE)  # or any smaller number
-        idx = np.random.choice(sample_size, size=sample_size, replace=False)
-
+        min_s = min(len(value1),len(value2))
+        sample_size = min(min_s, MAX_SAMPLE)  
+        idx = np.random.choice(min_s, size=sample_size, replace=False)
         if isinstance(value1, np.ndarray) and np.issubdtype(value1.dtype, float):
             if isinstance(value2, np.ndarray) and np.issubdtype(value2.dtype, float):
                 plt.scatter(value1[idx], value2[idx], label=f"data {i}", s=1)
@@ -121,7 +127,7 @@ def plot_property_space(
     plt.savefig(f"{dest}/plot_{key1}_{key2}_{0}")
 
 
-def process_particle_data(
+def process_particle_data(t:np.ndarray,
     biodicts: List[Dict[str, np.ndarray]], dest_root: str = "./results/"
 ):
     dest = f"{dest_root}/properties"
@@ -143,10 +149,10 @@ def process_particle_data(
     mkdir(dest)
     for k, values in mean_samples.items():
         plt.figure()
-        plt.plot(values, label=k)
-        plt.xlabel("Sample Index")
+        plt.plot(t,values, label=k)
+        plt.xlabel("Time [s]")
         plt.ylabel("Mean Value")
-        plt.title(f"Mean Value of {k} Over Samples")
+        plt.title(f"Mean Value of {k} Over Time")
         plt.legend()
         plt.savefig(f"{dest}/{k}.png")
         plt.close()  # Close the plot to free memory

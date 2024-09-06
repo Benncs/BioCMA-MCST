@@ -23,8 +23,9 @@ biomodel_dependency = declare_dependency(
    include_directories: [public_include_dir],
    link_with: model_lib,
    dependencies: dep,
-
 )
+
+
 
 
 

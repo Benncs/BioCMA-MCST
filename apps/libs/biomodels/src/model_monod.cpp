@@ -1,5 +1,6 @@
 #include "models/utils.hpp"
 #include <Kokkos_Atomic.hpp>
+#include <Kokkos_Macros.hpp>
 #include <Kokkos_Printf.hpp>
 #include <common/common.hpp>
 #include <mc/particles/data_holder.hpp>
@@ -9,22 +10,21 @@
 namespace
 {
   constexpr double Ks = 0.01;
-  constexpr double critcal_division_length = 11e-6;
-  constexpr double maximal_length = 18e-6;
-  constexpr double critcal_division_length_half = critcal_division_length * 0.5;
-  constexpr double minimal_length = 4.e-6;
+  constexpr double l_1 = 18e-6;
+  constexpr double l_0 = 11e-6;
+  constexpr double minimal_length = 0.5e-6;
   constexpr double mu_max = 0.77 / 3600.;
-  constexpr double tau_division_proba = 1e-7;
   constexpr double ln2 = 0.69314718056;
   constexpr double tau_metabolism = (1. / mu_max);
 
   KOKKOS_INLINE_FUNCTION double division_gamma(double lenght)
   {
-    if (lenght < critcal_division_length)
+    if (lenght < l_0)
     {
       return 0.;
     }
-    return lenght / critcal_division_length;
+    static constexpr double denum = l_1 - l_0;
+    return (lenght - l_0) / denum;
   }
 
 } // namespace
@@ -36,14 +36,13 @@ namespace Models
   {
     this->age = 0;
     auto generator = _rng.random_pool.get_state();
-    // this->l = generator.drand(minimal_length, maximal_length);
-    this->l = Kokkos::max(generator.normal(critcal_division_length_half,
-                                           critcal_division_length_half / 5.),
-                          minimal_length);
-    this->mu = Kokkos::max(generator.normal(mu_max, mu_max / 5.), 0.);
+
+    this->l = Kokkos::max(minimal_length,
+                          Kokkos::max(generator.normal(l_0, l_0 / 5.), 0.));
+
+    this->mu = Kokkos::max(generator.normal(mu_max, mu_max / 5), 0.);
     _rng.random_pool.free_state(generator);
-    _init_only_cell_lenghtening =
-        (critcal_division_length - critcal_division_length_half) / ln2;
+    _init_only_cell_lenghtening = (l_1 - l_0) / ln2;
     this->contrib = 0.;
   }
 
@@ -61,13 +60,14 @@ namespace Models
 
     age += d_t;
 
-    const double mu_p = mu * s / (Ks + s);
+    const double mu_p = mu_max * s / (Ks + s);
+    const double mu_eff = Kokkos::min(mu, mu_p);
 
-    l += d_t * (std::min(mu, mu_p) * _init_only_cell_lenghtening);
+    l += d_t * (mu_eff * _init_only_cell_lenghtening);
 
     mu += d_t * (1.0 / tau_metabolism) * (mu_p - mu);
 
-    contrib = mu * s / (Ks + s);
+    contrib = mu_eff * s / (Ks + s);
 
     if (Models::check_probability_division(d_t, division_gamma(l), _rng))
     {

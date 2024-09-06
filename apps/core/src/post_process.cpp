@@ -1,12 +1,13 @@
 #include <Kokkos_Printf.hpp>
 #include <common/execinfo.hpp>
+#include <dataexporter/data_exporter.hpp>
 #include <iostream>
 #include <mc/unit.hpp>
 #include <memory>
 #include <post_process.hpp>
+#include <simulation/simulation.hpp>
 #include <variant>
-#include <simulation/simulation.hpp> 
-#include <dataexporter/data_exporter.hpp>
+
 
 namespace PostProcessing
 {
@@ -32,6 +33,7 @@ namespace PostProcessing
 
       std::unordered_map<std::string, std::vector<double>> spatial;
       auto distribution = simulation.mc_unit->domain.getRepartition();
+      std::cout << "EXPORTING PARTICLE DATA" << std::endl;
       get_particle_properties(simulation.mc_unit,
                               aggregated_values,
                               spatial,
@@ -43,10 +45,11 @@ namespace PostProcessing
   }
 
   void final_post_processing(const ExecInfo &exec,
-                    const SimulationParameters &params,
-                    Simulation::SimulationUnit &&simulation,
-                    std::unique_ptr<DataExporter> &exporter)
+                             const SimulationParameters &params,
+                             Simulation::SimulationUnit &&simulation,
+                             std::unique_ptr<DataExporter> &exporter)
   {
+        std::cout << "POST PROCESSING" << std::endl;
     auto distribution = simulation.mc_unit->domain.getRepartition();
 
     auto tot = std::accumulate(
@@ -68,10 +71,11 @@ namespace PostProcessing
       // Results depending on simulation are exported or copied into properties,
       // clear montecarlo state to save memory
       auto unit = std::move(simulation.mc_unit);
-
+      std::cout << "EXPORTING PARTICLE DATA" << std::endl;
       get_particle_properties(
           unit, aggregated_values, spatial, distribution.size(), true);
       unit.reset();
+
       exporter->write_final_particle_data(aggregated_values, spatial);
     }
 
@@ -86,13 +90,12 @@ namespace PostProcessing
 
   void show_sumup_state(Simulation::SimulationUnit &simulation)
   {
-    //Assuming domain data is in sharedSpace 
-    for(auto&& c : simulation.mc_unit->domain)
+    // Assuming domain data is in sharedSpace
+    for (auto &&c : simulation.mc_unit->domain)
     {
-      Kokkos::printf("%d ",c.n_cells);
+      Kokkos::printf("%d ", c.n_cells);
     }
     Kokkos::printf("\r\n");
-
   }
 
   void append_properties(int counter,
@@ -148,7 +151,7 @@ namespace PostProcessing
       return i_p;
     };
 
-    std::cout << "POST PROCESSING" << std::endl;
+
 
     const auto compartments = mc_unit->domain.data();
 
@@ -159,7 +162,6 @@ namespace PostProcessing
       const auto n_particle = particles_data.size();
 
       const size_t i_p = find_first_idle_particle(particles_data);
-      
 
       const auto first_property = particles_data[i_p].data.get_properties();
 

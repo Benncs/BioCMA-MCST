@@ -21,7 +21,7 @@
 #include <sync.hpp>
 
 // constexpr size_t n_particle_trigger_parralel = 1e6;
-constexpr bool dump_particle_state = false;
+constexpr bool dump_particle_state = true;
 static void
 main_loop(const SimulationParameters &params,
           const ExecInfo &exec,
@@ -49,7 +49,7 @@ inline static void update_progress_bar(size_t total, size_t current_position)
               << std::setprecision(2)
               << (static_cast<float>(current_position) * 100.0 /
                   static_cast<float>(total))
-              << "%\r" << std::flush << std::setprecision(default_precision);
+              << "%\r" << std::flush ;//<< std::setprecision(default_precision);
   }
 }
 

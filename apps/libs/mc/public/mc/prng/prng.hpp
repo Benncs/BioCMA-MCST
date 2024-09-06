@@ -68,6 +68,8 @@ namespace MC
       random_pool.free_state(generator);
       return x;
     }
+
+    
     Kokkos::Random_XorShift64_Pool<> random_pool;
 
   private:

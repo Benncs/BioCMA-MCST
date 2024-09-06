@@ -246,7 +246,7 @@ void DataExportHighFive::write_particle_data(
 {
   HighFive::File file(filename, HighFive::File::ReadWrite);
 
-  std::cout << "EXPORTING PARTICLE DATA" << std::endl;
+
   HighFive::DataSetCreateProps ds_props;
   // ds_props.add(HighFive::Chunking(props.size()));
   // ds_props.add(HighFive::Shuffle());

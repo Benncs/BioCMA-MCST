@@ -1,8 +1,8 @@
 from typing import List
 from matplotlib import pyplot as plt
 import numpy as np
-from apps.post_process.read_results import import_results
-from apps.post_process import (
+from .read_results import import_results
+from . import (
     average_concentration,
     check_mixing,
     time_average_reaction_rate,
@@ -10,7 +10,7 @@ from apps.post_process import (
 from .properties import process_particle_data, property_distribution
 import os
 import argparse
-
+from numpy.polynomial import Polynomial
 
 
 def assemble(res_folder: str, names: List[str]) -> List[str]:
@@ -37,13 +37,56 @@ def mk_parser():
     )
     return parser
 
+def detect_exponential_growth(t: np.ndarray, n: np.ndarray, threshold: float = 0.01):
+    """
+    Detect the index where exponential growth starts by analyzing the rate of change
+    in the logarithmic domain.
+    
+    Parameters:
+    t (np.ndarray): Time array
+    n (np.ndarray): Particle number array
+    threshold (float): Threshold for identifying the start of exponential growth
+    
+    Returns:
+    int: Index where exponential growth starts
+    """
+    log_n = np.log(n)
+    # Calculate the derivative (rate of change) of log(n) with respect to time
+    rate_of_change = np.gradient(log_n, t)
+    
+    # Detect where the rate of change stabilizes (exponential region)
+    for i in range(1, len(rate_of_change)):
+        if np.abs(rate_of_change[i] - rate_of_change[i-1]) < threshold:
+            return i
+    return 0  # Default to 0 if no stable growth is detected
 
-if __name__ == "__main__":
-    args = mk_parser().parse_args()
+def plot_grow_in_number(t: np.ndarray, n: np.ndarray, dest: str):
+    n = n.reshape(-1)
+    plt.figure()
+    plt.semilogy(t, n, "--", label="results")
+    plt.ylabel("Number of particles")
+    plt.xlabel("Time [s]")
+    plt.title("Particle number growth (Log-Scale)")
+    plt.grid(True)
+    
+    # start_index = detect_exponential_growth(t, n,0.05)
+   
+    # exp_t = t[start_index:]
+    # exp_n = n[start_index:]
 
-    name_results = args.name_results
-    root_res = args.root_res
+    # fitting = Polynomial.fit(exp_t, np.log(exp_n), 1)
+    
+    # coeff = fitting.convert().coef
+    
+    # y_exp = np.exp(coeff[0]) * np.exp(coeff[1] * t)
+    # plt.semilogy(t, y_exp, label="regression")
+    plt.legend()
+    
+    # Save the plot
+    plt.savefig(f"{dest}/num_grow")
+    plt.show()
 
+def main(name_results,root_res='./results/'):
     dest = [f"./results/{i}/postprocessing" for i in name_results]
 
     for d in dest:
@@ -55,8 +98,8 @@ if __name__ == "__main__":
     vtu_path = None  # ("/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/bench/cma_mesh.vtu")
     check_mixing(name_results, pathres, dest, vtu_path)
     X0 = 0.1
-    for i, p in enumerate(pathres):
-        results = import_results(p)
+    for i, current_path_res in enumerate(pathres):
+        results = import_results(current_path_res)
         last_id = results.n_t - 1
         last_vtk_path = (
             None  # f"./results/{name_results[i]}/{name_results[i]}_{last_id}.vtu"
@@ -87,8 +130,8 @@ if __name__ == "__main__":
         if results.final_bioparam is not None:
             dict_particles.append(results.final_bioparam)
 
-        process_particle_data(dict_particles, dest[i])
-
+        process_particle_data(results.t,dict_particles, dest[i])
+        plot_grow_in_number(results.t,results.records_distribution,dest[i])
         np.set_printoptions(precision=10)
         plt.figure()
         c_avg = np.array(average_concentration(results))
@@ -98,4 +141,16 @@ if __name__ == "__main__":
             )
         )
         plt.plot(results.t, c_avg)
+        plt.title("Average glucose concentration over time")
+        plt.ylabel("C [g/L]")
+        plt.xlabel("Time [s]")
         plt.savefig(dest[i] + "/c_avg.png")
+
+
+if __name__ == "__main__":
+    args = mk_parser().parse_args()
+
+    name_results = args.name_results
+    root_res = args.root_res
+    main(name_results,root_res)
+    

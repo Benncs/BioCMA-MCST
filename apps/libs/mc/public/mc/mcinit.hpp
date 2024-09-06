@@ -116,9 +116,9 @@ namespace MC
     {
       particle_per_process += remainder;
     }
-
+    constexpr double scale_factor = 1/1e-12; //1.
     double weight =
-        get_initial_weight(1., x0, unit->domain.getTotalVolume(), n_particles);
+        get_initial_weight(scale_factor, x0, unit->domain.getTotalVolume(), n_particles);
 
     assert(weight > 0);
     unit->init_weight = weight;

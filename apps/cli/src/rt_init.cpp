@@ -10,9 +10,11 @@
 #include <ctime>
 #include <filesystem>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <rt_init.hpp>
 #include <sstream>
+
 
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
@@ -111,8 +113,11 @@ ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
   }
   std::atexit(Kokkos::finalize);
 
-  info.run_id =
-      static_cast<size_t>(time(nullptr) * size * info.thread_per_process);
+  const auto id_seed = static_cast<size_t>(time(nullptr) * info.n_rank *
+                                           info.thread_per_process);
+  
+  std::string s = std::to_string(id_seed);
+  info.run_id = std::hash<std::string>{}(s);
 
   return info;
 }

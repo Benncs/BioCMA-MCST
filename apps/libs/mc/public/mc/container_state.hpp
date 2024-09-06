@@ -2,7 +2,6 @@
 #define __MC_CONTAINER_STATE_HPP__
 
 #include <common/execinfo.hpp>
-#include <cstddef>
 #include <cstdint>
 #include <Kokkos_Core.hpp>
 #include <mc/particles/particle_model.hpp>
@@ -24,7 +23,7 @@ namespace MC
     
     double volume_liq{}; ///< Volume of liquid in the container.
     double volume_gas{}; ///< Volume of gas in the container.
-    size_t n_cells{}; ///< Number of cells in the container. @warning Be careful
+    uint64_t n_cells{}; ///< Number of cells in the container. @warning Be careful
                     ///< when decrementing this value.
     uint64_t id{};    ///< Unique identifier for the container.
     // std::span<double const> concentrations; ///< Span of concentrations

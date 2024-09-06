@@ -71,7 +71,7 @@ public:
   }
 
 protected:
-  using export_metadata_t = std::variant<int, std::string>;
+  using export_metadata_t = std::variant<uint64_t,int, std::string>;
   using export_metadata_kv = std::unordered_map<std::string, export_metadata_t>;
 
   using export_initial_t =

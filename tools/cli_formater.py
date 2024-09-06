@@ -77,7 +77,7 @@ def read_xml_values(xml_path, parser,target_name):
                 break
         if cli_args=="":
             raise Exception("Case not found")
-        return cli_args
+        return cli_args,results_file_name
                   
 
     except etree.XMLSyntaxError as e:
@@ -86,10 +86,10 @@ def read_xml_values(xml_path, parser,target_name):
         print(f"Invalid XML: {str(e)}")
 
 
-def format_cli(args):
+def format_cli(args,file="cases.xml"):
     if(len(args))==2:
         name = args[1]
-        xml_file_path = current_directory+"/cases.xml"   
+        xml_file_path = current_directory+"/"+file   
 
         # Create XML parser with schema validation
         parser = create_xml_parser()
@@ -103,5 +103,5 @@ if __name__ == "__main__":
     args = sys.argv
 
 
-    cli = format_cli(args)
+    cli = format_cli(args)[0]
     print(cli)

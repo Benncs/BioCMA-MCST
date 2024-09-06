@@ -8,7 +8,7 @@ static constexpr double tauPTS = 25.0;
 static constexpr double tau_f = 5.0;
 static constexpr double tau_d = 5.0;
 static constexpr double NPermease_max = 5e4;
-static constexpr double NPermease_init = 1e4;
+static constexpr double NPermease_init = 1e3;
 static constexpr double tauAu = 5.0;
 static constexpr double tauAd = 5.0;
 static constexpr double tau_metabolism = 3600;
@@ -20,13 +20,21 @@ static constexpr double YXS = 0.5;
 static constexpr double YXO = 1e-4;
 static constexpr double YSA = 1e-4;
 static constexpr double psi_o_meta = 20e-3 / 3600 * 32e-3; // 20mmmol O2 /h;
-static constexpr double critcal_division_length = 11e-6;
-static constexpr double critcal_division_length_half =
-    0.5 * critcal_division_length;
-static constexpr double minimal_length = 7e-6;
-static constexpr double maximal_length = 18e-6;
-static constexpr double mu_max = 10.*0.77 / 3600.;
+static constexpr double minimal_length = 0.5e-6;
+static constexpr double mu_max = 0.77 / 3600.;
 static constexpr double ln2 = 0.69314718056;
+static constexpr double l_1 = 4e-6;
+static constexpr double l_0 = 3e-6;
+
+KOKKOS_INLINE_FUNCTION double division_gamma(double lenght)
+{
+  if (lenght < l_0)
+  {
+    return 0.;
+  }
+  static constexpr double denum = l_1 - l_0;
+  return (lenght - l_0) / denum;
+}
 
 KOKKOS_INLINE_FUNCTION double phi_pts(double a_pts, double S)
 {
@@ -46,20 +54,17 @@ namespace Models
   KOKKOS_FUNCTION void Uptake::init(MC::ParticleDataHolder &p, MC::KPRNG _rng)
   {
     auto generator = _rng.random_pool.get_state();
-    // this->l = generator.drand(minimal_length, maximal_length);
-    this->lenght =
-        Kokkos::max(generator.normal(critcal_division_length_half,
-                                     critcal_division_length_half / 3.),
-                    minimal_length);
+
+    this->lenght = Kokkos::max(
+        minimal_length, Kokkos::max(generator.normal(l_0, l_0 / 5.), 0.));
 
     this->a_permease = 1e-3;
     this->a_pts = generator.drand(0., 1.);
     this->n_permease = generator.drand(0., 1.) * NPermease_init;
-    this->mu_eff = Kokkos::max(generator.normal(mu_max, mu_max / 5.), 0.);
+    this->nu = Kokkos::max(generator.normal(mu_max / 2., mu_max / 5.), 0.);
     _rng.random_pool.free_state(generator);
 
-    _init_only_cell_lenghtening =
-        (critcal_division_length - critcal_division_length_half) / ln2;
+    _init_only_cell_lenghtening = (l_1 - l_0) / ln2;
     this->contrib = 0.;
   }
 
@@ -77,10 +82,10 @@ namespace Models
     const double phi_s_pts = phi_pts(a_pts, s);
     const double phi_s_in = phi_s_pts + phi_permease(n_permease, a_permease, s);
     const double gamma_PTS_S = phi_s_pts / phi_pts_max;
-    const double mu_p = YXS * phi_s_in;
-  
-    this->lenght += d_t * (mu_eff * _init_only_cell_lenghtening);
-    this->mu_eff += d_t * ((1.0 / tau_metabolism) * (mu_p - this->mu_eff));
+    const double nu_p = 1e12* phi_s_in;
+
+    this->lenght += d_t * (nu * _init_only_cell_lenghtening);
+    this->nu += d_t * ((1.0 / tau_metabolism) * (nu_p - this->nu));
     this->a_pts += d_t * ((1.0 / tauPTS) * ((s / (kpts + s)) - this->a_pts));
 
     this->a_permease +=
@@ -95,8 +100,7 @@ namespace Models
 
     this->contrib = phi_pts(a_pts, s) + phi_permease(n_permease, a_permease, s);
 
-    const double gamma = (lenght > critcal_division_length) ? 1 : 0;
-    if (Models::check_probability_division(d_t, gamma, _rng))
+    if (Models::check_probability_division(d_t, division_gamma(lenght), _rng))
     {
       p.status = MC::CellStatus::CYTOKINESIS;
     }
@@ -124,7 +128,7 @@ namespace Models
   {
     return {{"lenght", lenght},
             {"a_pts", a_pts},
-            {"mu_eff", mu_eff},
+            {"mu_eff", nu},
             {"a_permease", a_permease},
             {"n_permease", n_permease}};
   }

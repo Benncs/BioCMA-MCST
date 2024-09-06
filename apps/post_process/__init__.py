@@ -6,6 +6,7 @@ import cmtool.vtk
 from .read_results import RawResults, import_results
 import os
 from .initialiser import make_initial_concentration
+
 RATIO_MASS_LENGTH = 0.45044876111074444 / 0.12477411510047276
 
 
@@ -58,7 +59,7 @@ def process_norm(
     concentration_record = results.data[:, :, 0]
 
     full_volume = results.volume_liquid
- 
+
     p_concentration = results.distribution / full_volume
 
     normalized_scalar_concentration, _, var_c = norm_concentration(

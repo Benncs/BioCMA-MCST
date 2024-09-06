@@ -11,7 +11,7 @@ namespace Models
   struct Uptake
   {
     double lenght;
-    double mu_eff;
+    double nu;
     double a_pts;
     double a_permease;
     double n_permease;

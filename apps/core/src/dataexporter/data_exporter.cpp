@@ -10,6 +10,10 @@
 #include <string_view>
 #include <tuple>
 
+#ifdef __linux__
+#  include <unistd.h>
+#endif
+
 static std::string date_time()
 {
   std::stringstream ss;
@@ -17,6 +21,19 @@ static std::string date_time()
       std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
   ss << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
   return ss.str();
+}
+
+static std::string get_user_name()
+{
+  std::string_view res = "someone";
+#ifdef __linux__
+  char *buff = getlogin();
+  if (buff != nullptr)
+  {
+    res = buff;
+  }
+#endif
+  return std::string(res);
 }
 
 DataExporter::DataExporter(const ExecInfo &info,
@@ -33,8 +50,9 @@ DataExporter::DataExporter(const ExecInfo &info,
 
   metadata["file_version"] = 3;
   metadata["creation_date"] = date_time();
-  metadata["author"] = "someone";
+  metadata["author"] = get_user_name();
   metadata["description"] = "Interesting results";
+  metadata["run_id"] = info.run_id;
 
   initial_values["number_particles"] = params.user_params.numper_particle;
   initial_values["initial_weight"] = weight;
