@@ -19,12 +19,8 @@ namespace
 
   KOKKOS_INLINE_FUNCTION double division_gamma(double lenght)
   {
-    if (lenght < l_0)
-    {
-      return 0.;
-    }
     static constexpr double denum = l_1 - l_0;
-    return (lenght - l_0) / denum;
+    return (lenght < l_0) ? 0 : (lenght - l_0) / denum;
   }
 
 } // namespace
@@ -40,7 +36,7 @@ namespace Models
     this->l = Kokkos::max(minimal_length,
                           Kokkos::max(generator.normal(l_0, l_0 / 5.), 0.));
 
-    this->mu = Kokkos::max(generator.normal(mu_max, mu_max / 5), 0.);
+    this->mu = Kokkos::max(generator.normal(mu_max/2., mu_max / 5), 0.);
     _rng.random_pool.free_state(generator);
     _init_only_cell_lenghtening = (l_1 - l_0) / ln2;
     this->contrib = 0.;
@@ -52,16 +48,11 @@ namespace Models
                 const LocalConcentrationView &concentration,
                 MC::KPRNG _rng)
   {
-    double s = concentration(0);
-    if (almost_equal(s, 0.))
-    {
-      s = 0.;
-    }
-
-    age += d_t;
-
+    const double s = Kokkos::max(0., concentration(0));
     const double mu_p = mu_max * s / (Ks + s);
     const double mu_eff = Kokkos::min(mu, mu_p);
+
+    age += d_t;
 
     l += d_t * (mu_eff * _init_only_cell_lenghtening);
 
@@ -69,10 +60,8 @@ namespace Models
 
     contrib = mu_eff * s / (Ks + s);
 
-    if (Models::check_probability_division(d_t, division_gamma(l), _rng))
-    {
-      p.status = MC::CellStatus::CYTOKINESIS;
-    }
+    Models::update_division_status(
+        p.status, d_t, GammaDivision::threshold_linear(l, l_0, l_1), _rng);
   }
 
   KOKKOS_FUNCTION Monod Monod::division(MC::ParticleDataHolder &p)

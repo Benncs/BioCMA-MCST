@@ -16,15 +16,16 @@ import numpy as np
 import sys
 # from wakepy import keep
 # from ..exec import exec
-
+import datetime 
 BENCH_OMP_THREADS = [1, 6,12]  # List of thread numbers when running scaling
 EXECUTABLE_PATH = "./builddir/release_gcc/apps/cli"  # Path to executable to run
 EXECUTABLE_NAME = "biocma_mcst_cli_app_shared"  # Name of executable to run
 BENCH_SCRIPT_PATH = (
     "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
 )
-FILENAME = "./devutils/benchs/bench_records_test_0d.csv"  # Record filename
-OUTPUT_PDF = "./devutils/benchs/results_bench_test_0d.pdf"  # Output path
+date = datetime.datetime.today().strftime('%Y_%m_%d')
+FILENAME = f"./devutils/benchs/bench_records_{date}.csv"  # Record filename
+OUTPUT_PDF = f"./devutils/benchs/results_bench_{date}.pdf"  # Output path
 MODEL_NAME = "default"
 FINAL_TIME = 1  # Reference simulation time
 DELTA_TIME = 1e-3  # Reference delta time fixed

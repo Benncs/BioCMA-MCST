@@ -28,12 +28,8 @@ static constexpr double l_0 = 3e-6;
 
 KOKKOS_INLINE_FUNCTION double division_gamma(double lenght)
 {
-  if (lenght < l_0)
-  {
-    return 0.;
-  }
   static constexpr double denum = l_1 - l_0;
-  return (lenght - l_0) / denum;
+  return (lenght < l_0) ? 0 : (lenght - l_0) / denum;
 }
 
 KOKKOS_INLINE_FUNCTION double phi_pts(double a_pts, double S)
@@ -74,18 +70,14 @@ namespace Models
                  const LocalConcentrationView &concentration,
                  MC::KPRNG _rng)
   {
-    double s = concentration(0);
-    if (almost_equal(s, 0.))
-    {
-      s = 0.;
-    }
+    const double s = Kokkos::max(0., concentration(0));
     const double phi_s_pts = phi_pts(a_pts, s);
     const double phi_s_in = phi_s_pts + phi_permease(n_permease, a_permease, s);
     const double gamma_PTS_S = phi_s_pts / phi_pts_max;
-    const double nu_p = 1e12* phi_s_in;
+    const double nu_eff = Kokkos::min(1e12 * phi_s_in, nu);
 
-    this->lenght += d_t * (nu * _init_only_cell_lenghtening);
-    this->nu += d_t * ((1.0 / tau_metabolism) * (nu_p - this->nu));
+    this->lenght += d_t * (nu_eff * _init_only_cell_lenghtening);
+    this->nu += d_t * ((1.0 / tau_metabolism) * (nu_eff - this->nu));
     this->a_pts += d_t * ((1.0 / tauPTS) * ((s / (kpts + s)) - this->a_pts));
 
     this->a_permease +=
@@ -100,10 +92,8 @@ namespace Models
 
     this->contrib = phi_pts(a_pts, s) + phi_permease(n_permease, a_permease, s);
 
-    if (Models::check_probability_division(d_t, division_gamma(lenght), _rng))
-    {
-      p.status = MC::CellStatus::CYTOKINESIS;
-    }
+    Models::update_division_status(
+        p.status, d_t, GammaDivision::threshold_linear(lenght, l_0, l_1), _rng);
   }
 
   KOKKOS_FUNCTION Uptake Uptake::division(MC::ParticleDataHolder &p)

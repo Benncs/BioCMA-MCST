@@ -22,7 +22,7 @@ file_header = """<?xml version="1.0" encoding="UTF-8"?>
 """
 
 
-duration = [8*3600]
+duration = [500,3600,2*3600,4*3600,5*3600]
 
 rd = ""
 
@@ -33,7 +33,7 @@ for i, d in enumerate(duration):
         <final_time>{d}</final_time>
         <numper_particle>1000</numper_particle>
         <delta_time>0.1</delta_time>
-        <results_file_name>batch_fast_{i}</results_file_name>
+        <results_file_name>batch_correct_{i}</results_file_name>
         <number_exported_result>30</number_exported_result>
         <model_name>model_monod</model_name> 
         <initialiser_path>./cma_data/0d_init.h5</initialiser_path>

@@ -17,7 +17,8 @@ public:
                      std::string_view _filename,
                      std::tuple<size_t, size_t> dim,
                      size_t niter,
-                     std::span<size_t> distribution,double weight);
+                     std::span<size_t> distribution,
+                     double weight);
 
   SET_NON_COPYABLE(DataExportHighFive)
   SET_NON_MOVABLE(DataExportHighFive)
@@ -26,31 +27,22 @@ public:
   {
     // delete _file;
   }
-
   void append(double t,
               std::span<double> concentration_liquid,
               const std::vector<size_t> &distribution,
               std::span<const double> liquid_volume,
               std::span<const double> volume_gas) final;
 
-  void write_final_particle_data(
-    const std::unordered_map<std::string, std::vector<model_properties_t>>
-        &props,
-    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
-      final;
+  void write_particle_data(Kokkos::View<std::string *, HostSpace> names,
+                           Kokkos::View<double **, HostSpace> particle_values,
+                           Kokkos::View<double **, HostSpace> spatial_values,
+                           const std::string &ds_name)final;
 
-  void write_initial_particle_data(
-    const std::unordered_map<std::string, std::vector<model_properties_t>>
-        &props,
-    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
-      final;
-
-  void append_particle_properties(
-    size_t counter ,
-    const std::unordered_map<std::string, std::vector<model_properties_t>>
-        &props,
-    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
-      final;
+  // void append_particle_properties(
+  //     size_t counter,
+  //     Kokkos::View<std::string *, HostSpace> names,
+  //     Kokkos::View<double **, HostSpace> particle_values,
+  //     Kokkos::View<double **, HostSpace> spatial_values) final;
 
 protected:
   void write_final_results(ExportData &data,
@@ -64,10 +56,6 @@ private:
                             const ExecInfo &info,
                             export_initial_kv &md);
 
-  void write_particle_data(
-      const std::unordered_map<std::string, std::vector<model_properties_t>> &,
-      const std::unordered_map<std::string, std::vector<double>> &,
-      const std::string &ds_name);
 
   // HighFive::File *_file;
 };

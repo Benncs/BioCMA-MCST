@@ -1,6 +1,7 @@
 #ifndef __DATA_EXPORTER_HPP__
 #define __DATA_EXPORTER_HPP__
 
+#include "common/kokkos_vector.hpp"
 #include <cmt_common/macro_constructor_assignment.hpp>
 #include <common/common.hpp>
 #include <mc/events.hpp>
@@ -38,30 +39,17 @@ public:
   void write_final_results(Simulation::SimulationUnit &simulation,
                            std::span<size_t> distribution);
 
-  virtual void write_final_particle_data(
-      const std::unordered_map<std::string, std::vector<model_properties_t>>
-          &props,
-      const std::unordered_map<std::string, std::vector<double>>
-          &spatial_props) = 0;
-
-  virtual void write_initial_particle_data(
-      const std::unordered_map<std::string, std::vector<model_properties_t>>
-          &props,
-      const std::unordered_map<std::string, std::vector<double>>
-          &spatial_props) = 0;
-
   virtual void append(double t,
                       std::span<double> concentration_liquid,
                       const std::vector<size_t> &distribution,
                       std::span<const double> liquid_volume,
                       std::span<const double> volume_gas) = 0;
 
-  virtual void append_particle_properties(
-      size_t counter,
-      const std::unordered_map<std::string, std::vector<model_properties_t>>
-          &props,
-      const std::unordered_map<std::string, std::vector<double>>
-          &spatial_props) = 0;
+  virtual void
+  write_particle_data(Kokkos::View<std::string *, HostSpace> names,
+                      Kokkos::View<double **, HostSpace> particle_values,
+                      Kokkos::View<double **, HostSpace> spatial_values,
+                      const std::string &ds_name)  = 0;
 
   DELETE_CONSTRUCTORS(DataExporter)
   DELETE_ASSIGMENT(DataExporter)
@@ -71,7 +59,7 @@ public:
   }
 
 protected:
-  using export_metadata_t = std::variant<uint64_t,int, std::string>;
+  using export_metadata_t = std::variant<uint64_t, int, std::string>;
   using export_metadata_kv = std::unordered_map<std::string, export_metadata_t>;
 
   using export_initial_t =

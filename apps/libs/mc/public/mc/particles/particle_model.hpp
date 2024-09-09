@@ -32,7 +32,7 @@ using model_properties_t =
 
 using model_properties_detail_t =
     std::unordered_map<std::string,
-                       model_properties_t>; ///< Type of properties data that
+                       double>; ///< Type of properties data that
                                             ///< model can export
 
 /**

@@ -1,6 +1,14 @@
+#include "common/kokkos_vector.hpp"
+#include "mc/particles/particle_model.hpp"
+#include "mc/particles/particles_container.hpp"
+#include <Kokkos_Atomic.hpp>
+#include <Kokkos_Core.hpp>
+#include <Kokkos_DynamicView.hpp>
+#include <Kokkos_Macros.hpp>
 #include <Kokkos_Printf.hpp>
 #include <common/execinfo.hpp>
 #include <dataexporter/data_exporter.hpp>
+#include <impl/Kokkos_HostThreadTeam.hpp>
 #include <iostream>
 #include <mc/unit.hpp>
 #include <memory>
@@ -8,19 +16,17 @@
 #include <simulation/simulation.hpp>
 #include <variant>
 
-
 namespace PostProcessing
 {
   static void append_properties(int counter,
                                 Simulation::SimulationUnit &simulation,
                                 std::unique_ptr<DataExporter> &exporter);
 
-  static void get_particle_properties(
+  static void get_particle_properties_opti(
+      Kokkos::View<std::string *, HostSpace> &host_names,
+      Kokkos::View<double **, HostSpace> &host_particle_values,
+      Kokkos::View<double **, HostSpace> &host_spatial_values,
       std::unique_ptr<MC::MonteCarloUnit> &mc_unit,
-      std::unordered_map<std::string, std::vector<model_properties_t>>
-          &aggregated_values,
-      std::unordered_map<std::string, std::vector<double>> &spatial,
-      size_t size,
       bool clean = true);
 
   void save_initial_particle_state(Simulation::SimulationUnit &simulation,
@@ -34,13 +40,16 @@ namespace PostProcessing
       std::unordered_map<std::string, std::vector<double>> spatial;
       auto distribution = simulation.mc_unit->domain.getRepartition();
       std::cout << "EXPORTING PARTICLE DATA" << std::endl;
-      get_particle_properties(simulation.mc_unit,
-                              aggregated_values,
-                              spatial,
-                              distribution.size(),
-                              false);
 
-      exporter->write_initial_particle_data(aggregated_values, spatial);
+      Kokkos::View<std::string *, HostSpace> names;
+      Kokkos::View<double **, HostSpace> particle_values;
+      Kokkos::View<double **, HostSpace> spatial_values;
+
+      get_particle_properties_opti(
+          names, particle_values, spatial_values, simulation.mc_unit, false);
+      std::string ds_name = "biological_model/initial/";
+      exporter->write_particle_data(
+          names, particle_values, spatial_values, ds_name);
     }
   }
 
@@ -49,7 +58,7 @@ namespace PostProcessing
                              Simulation::SimulationUnit &&simulation,
                              std::unique_ptr<DataExporter> &exporter)
   {
-        std::cout << "POST PROCESSING" << std::endl;
+    std::cout << "POST PROCESSING" << std::endl;
     auto distribution = simulation.mc_unit->domain.getRepartition();
 
     auto tot = std::accumulate(
@@ -61,22 +70,22 @@ namespace PostProcessing
     if (exporter != nullptr)
     {
 
-      std::unordered_map<std::string, std::vector<model_properties_t>>
-          aggregated_values;
-
-      std::unordered_map<std::string, std::vector<double>> spatial;
-
       exporter->write_final_results(simulation, distribution);
 
       // Results depending on simulation are exported or copied into properties,
       // clear montecarlo state to save memory
       auto unit = std::move(simulation.mc_unit);
       std::cout << "EXPORTING PARTICLE DATA" << std::endl;
-      get_particle_properties(
-          unit, aggregated_values, spatial, distribution.size(), true);
-      unit.reset();
 
-      exporter->write_final_particle_data(aggregated_values, spatial);
+      Kokkos::View<std::string *, HostSpace> names;
+      Kokkos::View<double **, HostSpace> particle_values;
+      Kokkos::View<double **, HostSpace> spatial_values;
+
+      get_particle_properties_opti(
+          names, particle_values, spatial_values, unit, true);
+      std::string ds_name = "biological_model/final/";
+      exporter->write_particle_data(
+          names, particle_values, spatial_values, ds_name);
     }
 
     if (tot != (new_p - removed + params.user_params.numper_particle))
@@ -104,17 +113,15 @@ namespace PostProcessing
   {
     if (exporter != nullptr)
     {
-      std::unordered_map<std::string, std::vector<model_properties_t>>
-          aggregated_values;
+      Kokkos::View<std::string *, HostSpace> names;
+      Kokkos::View<double **, HostSpace> particle_values;
+      Kokkos::View<double **, HostSpace> spatial_values;
 
-      std::unordered_map<std::string, std::vector<double>> spatial;
-      auto distribution = simulation.mc_unit->domain.getRepartition();
-      get_particle_properties(simulation.mc_unit,
-                              aggregated_values,
-                              spatial,
-                              distribution.size(),
-                              false);
-      exporter->append_particle_properties(counter, aggregated_values, spatial);
+      get_particle_properties_opti(
+          names, particle_values, spatial_values, simulation.mc_unit, false);
+      std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
+      exporter->write_particle_data(
+          names, particle_values, spatial_values, ds_name);
     }
   }
 
@@ -122,8 +129,9 @@ namespace PostProcessing
   user_triggered_properties_export(Simulation::SimulationUnit &sim,
                                    std::unique_ptr<DataExporter> &data_exporter)
   {
-    static int counter = 0;
+    static int counter = 1;
     counter++;
+    std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
     PostProcessing::append_properties(counter, sim, data_exporter);
     // std::ofstream os("./out.cereal", std::ios::binary);
     // cereal::BinaryOutputArchive archive(os);
@@ -132,176 +140,88 @@ namespace PostProcessing
     //           << std::endl;
   }
 
-  void get_particle_properties(
+  void get_particle_properties_opti(
+      Kokkos::View<std::string *, HostSpace> &host_names,
+      Kokkos::View<double **, HostSpace> &host_particle_values,
+      Kokkos::View<double **, HostSpace> &host_spatial_values,
       std::unique_ptr<MC::MonteCarloUnit> &mc_unit,
-      std::unordered_map<std::string, std::vector<model_properties_t>>
-          &aggregated_values,
-      std::unordered_map<std::string, std::vector<double>> &spatial,
-      size_t size,
       bool clean)
   {
-    auto find_first_idle_particle = [](const auto &particles_data)
+
+    auto get_names = [&host_names](auto &host_particles_data)
     {
-      size_t i_p = 0;
-      while (particles_data[i_p].properties.status != MC::CellStatus::IDLE &&
-             i_p != particles_data.size())
+      const auto first_property = host_particles_data[0].data.get_properties();
+      const size_t n_keys = first_property.size();
+      host_names = Kokkos::View<std::string *, HostSpace>(
+          "host_particle_property_name", n_keys);
+
+      size_t i = 0;
+      for (auto &[k, v] : first_property)
       {
-        i_p++;
+        host_names(i) = std::move(k);
+        i++;
       }
-      return i_p;
     };
 
-
-
+    const size_t n_compartment = mc_unit->domain.getNumberCompartments();
     const auto compartments = mc_unit->domain.data();
-
-    auto functor = [&](auto &&container)
+    auto visitor = [clean,
+                    n_compartment,
+                    compartments,
+                    get_names,
+                    &host_names,
+                    &host_particle_values,
+                    &host_spatial_values](auto &&container)
     {
-      auto particles_data = container.get_host();
+      auto &compute_particles_data = container.get_compute();
+      auto &host_particles_data = container.get_host();
 
-      const auto n_particle = particles_data.size();
+      get_names(host_particles_data);
 
-      const size_t i_p = find_first_idle_particle(particles_data);
+      auto property_names =
+          Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_names);
 
-      const auto first_property = particles_data[i_p].data.get_properties();
+      size_t n_p = compute_particles_data.size();
+      Kokkos::View<double **> particle_values(
+          "host_property_values", property_names.size(), n_p);
 
-      std::for_each(first_property.begin(),
-                    first_property.end(),
-                    [&](auto &&_tuple)
-                    {
-                      const auto &[key, _value] = _tuple;
-                      aggregated_values[key].resize(n_particle);
-                      spatial[key].resize(size);
-                    });
+      Kokkos::View<double **> spatial_values(
+          "host_spatial_values", property_names.size(), n_compartment);
 
-      for (size_t i = i_p; i < n_particle; ++i)
-      {
-        auto &particle = particles_data[i];
-        if (particle.properties.status == MC::CellStatus::IDLE)
-        {
-          auto prop = particle.data.get_properties();
-          const size_t i_container = particle.properties.current_container;
-
-          for (const auto &[key, value] : prop)
-          {
-            aggregated_values[key][i] = value;
-
-            if (const double *val = std::get_if<double>(&value))
+      Kokkos::parallel_for(
+          "get_particle_properties", n_p, KOKKOS_LAMBDA(const int i) {
+            auto &particle = compute_particles_data._owned_data(i);
+            if (particle.properties.status == MC::CellStatus::IDLE)
             {
-              // double weighted_val = *val*particle.weight;
-              spatial[key][i_container] +=
-                  *val / static_cast<double>(compartments[i_container].n_cells);
+              auto prop = particle.data.get_properties();
+              const size_t i_container = particle.properties.current_container;
+
+              size_t i_key = 0;
+              for (const auto &[key, value] : prop)
+              {
+
+                particle_values(i_key, i) = value;
+
+                Kokkos::atomic_add(
+                    &spatial_values(i_key, i_container),
+                    value /
+                        static_cast<double>(compartments[i_container].n_cells));
+                i_key++;
+              }
             }
-          }
-          if (clean)
-          {
-            particle.clearState();
-          }
-        }
-      }
+            if (clean)
+            {
+              particle.clearState();
+            }
+          });
+
+      host_particle_values =
+          Kokkos::create_mirror_view_and_copy(HostSpace(), particle_values);
+      host_spatial_values =
+          Kokkos::create_mirror_view_and_copy(HostSpace(), spatial_values);
     };
 
-    std::visit(functor, mc_unit->container);
+    std::visit(visitor, mc_unit->container);
   }
-
-  //   void get_particle_properties2(
-  //       std::unique_ptr<DataExporter> &exporter,
-  //       std::unique_ptr<MC::MonteCarloUnit> &mc_unit,
-  //       size_t size,
-  //       std::unordered_map<std::string, std::vector<double>> &spatial,
-  //       const ModelGetProperties model_properties,
-  //       bool clean)
-  //   {
-  //     auto find_first_idle_particle = [](const auto &particles_data)
-  //     {
-  //       size_t i_p = 0;
-  //       while (particles_data[i_p].status != MC::CellStatus::IDLE &&
-  //              i_p != particles_data.size())
-  //       {
-  //         i_p++;
-  //       }
-  //       return i_p;
-  //     };
-
-  //     std::cout << "POST PROCESSING" << std::endl;
-
-  //     const auto compartments = mc_unit->domain.data();
-
-  //     auto particles_data = mc_unit->container.to_process.data_span();
-
-  //     const auto n_particle = particles_data.size();
-
-  //     const size_t i_p = find_first_idle_particle(particles_data);
-
-  //     const auto first_property = model_properties(particles_data[i_p]);
-
-  //     auto *handle = exporter->start_model_dataset();
-
-  //     std::for_each(first_property.begin(),
-  //                   first_property.end(),
-  //                   [&](auto &&_tuple)
-  //                   {
-  //                     const auto &[key, _value] = _tuple;
-  //                     exporter->init_fill_model_dataset(
-  //                         handle, "biological_model/final2/" + key,
-  //                         n_particle);
-  //                   });
-
-  //     // using model_properties_t = std::variant<double, int, std::string>;
-
-  //     // using model_properties_detail_t =
-  //     //     std::unordered_map<std::string, model_properties_t>;
-
-  //     // for (size_t idx = i_p; idx < n_particle; ++idx)
-  //     // {
-  //     //   auto &particle = particles_data[idx];
-  //     //   if (particle.status == MC::CellStatus::IDLE)
-  //     //   {
-  //     //     model_properties_detail_t properties =
-  //     model_properties(particle);
-
-  //     //   }
-  //     // }
-
-  // #pragma omp parallel for
-  //     for (size_t idx = i_p; idx < n_particle; ++idx)
-  //     {
-  //       auto &particle = particles_data[idx];
-  //       if (particle.status == MC::CellStatus::IDLE)
-  //       {
-  //         auto properties = model_properties(particle);
-  //         const size_t container_index = particle.current_container;
-
-  //         for (auto &&property : properties)
-  //         {
-  //           auto [key, value_variant] = property;
-  //           std::visit(
-  //               [&](auto &&sample_val)
-  //               {
-  //                 using T = std::decay_t<decltype(sample_val)>;
-  //                 if constexpr (std::is_same_v<T, double>)
-  //                 {
-  //                   double value = sample_val;
-  // #pragma omp critical
-  //                   {
-  //                     exporter->fill_model_dataset(
-  //                         idx, handle, "biological_model/final2/" + key,
-  //                         value);
-  //                   }
-  //                 }
-  //               },
-  //               value_variant);
-  //         }
-
-  //         if (clean)
-  //         {
-  //           particle.clearState();
-  //         }
-  //       }
-  //     }
-
-  // #pragma omp barrier
-  //     exporter->stop_fill_model_dataset(handle);
-  //   }
 
 } // namespace PostProcessing

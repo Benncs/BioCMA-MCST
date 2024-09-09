@@ -43,13 +43,21 @@ namespace Simulation::KernelInline
       const auto pi = cumulative_probability(i_compartment, k_neighbor);
       const auto pn = cumulative_probability(i_compartment, k_neighbor + 1);
 
-      // Check if the random number falls within the probability range
-      if (random_number <= pn && pi <= random_number)
-      {
-        next = i_neighbor(k_neighbor + 1); // Update to the next neighbor
-        // No need to break, as we're looking for the last valid neighbor in the
-        // range
-      }
+      // Use of a Condition mask to avoid branching.
+      // As the condition is not complex, ternary op manually guarantee that no
+      // branching/warp divergence occurs
+      next = (random_number <= pn && pi <= random_number)
+                 ? i_neighbor(k_neighbor + 1)
+                 : next;
+
+      // // Check if the random number falls within the probability range
+      // if (random_number <= pn && pi <= random_number)
+      // {
+      //   next = i_neighbor(k_neighbor + 1); // Update to the next neighbor
+      //   // No need to break, as we're looking for the last valid neighbor in
+      //   the
+      //   // range
+      // }
     }
 
     return next; // Return the index of the chosen next compartment
@@ -64,7 +72,7 @@ namespace Simulation::KernelInline
                                           auto &&index,
                                           auto &&flow)
   {
-
+    
     if (particle.properties.current_container != index ||
         particle.properties.status != MC::CellStatus::IDLE)
     {
@@ -82,8 +90,7 @@ namespace Simulation::KernelInline
     }
   }
 
-
-    template <ParticleModel Model>
+  template <ParticleModel Model>
   KOKKOS_INLINE_FUNCTION void handle_move(const std::size_t i_compartment,
                                           MC::Particle<Model> &particle,
                                           auto &local_compartments,
@@ -91,7 +98,8 @@ namespace Simulation::KernelInline
                                           auto &diag_transition,
                                           auto &cumulative_probability,
                                           auto &events,
-                                          double d_t,auto&& local_rng)
+                                          double d_t,
+                                          auto &&local_rng)
   {
 
     auto &current_container = local_compartments(i_compartment);

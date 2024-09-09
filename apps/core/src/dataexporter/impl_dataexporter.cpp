@@ -10,10 +10,10 @@
 #  include <string_view>
 #  include <tuple>
 
+#  include <Eigen/Dense>
 #  include <highfive/H5DataSpace.hpp>
 #  include <highfive/H5File.hpp>
 #  include <highfive/H5PropertyList.hpp>
-#  include <Eigen/Dense>
 #  include <highfive/eigen.hpp>
 #  include <highfive/highfive.hpp>
 
@@ -24,8 +24,9 @@ DataExportHighFive::DataExportHighFive(const ExecInfo &info,
                                        std::string_view _filename,
                                        std::tuple<size_t, size_t> dim,
                                        size_t niter,
-                                       std::span<size_t> distribution,double weight)
-    : DataExporter(info, params, _filename, dim, niter, distribution,weight)
+                                       std::span<size_t> distribution,
+                                       double weight)
+    : DataExporter(info, params, _filename, dim, niter, distribution, weight)
 {
   auto _file = HighFive::File(filename, HighFive::File::Truncate);
   write_initial(_file, info, initial_values);
@@ -120,6 +121,8 @@ void DataExportHighFive::prepare()
   file.flush();
 }
 
+
+
 void DataExportHighFive::append(double t,
                                 std::span<double> concentration_liquid,
                                 const std::vector<size_t> &distribution,
@@ -128,7 +131,6 @@ void DataExportHighFive::append(double t,
 {
   try
   {
-
     HighFive::File file(filename, HighFive::File::ReadWrite);
 
     auto write_dataset =
@@ -239,92 +241,45 @@ void DataExportHighFive::write_final_results(ExportData &data,
 }
 
 void DataExportHighFive::write_particle_data(
-    const std::unordered_map<std::string, std::vector<model_properties_t>>
-        &props,
-    const std::unordered_map<std::string, std::vector<double>> &spatial_props,
+    Kokkos::View<std::string *, HostSpace> names,
+    Kokkos::View<double **, HostSpace> particle_values,
+    Kokkos::View<double **, HostSpace> spatial_values,
     const std::string &ds_name)
 {
   HighFive::File file(filename, HighFive::File::ReadWrite);
-
-
   HighFive::DataSetCreateProps ds_props;
-  // ds_props.add(HighFive::Chunking(props.size()));
-  // ds_props.add(HighFive::Shuffle());
-  // ds_props.add(HighFive::Deflate(hdf5_max_compression));
+  const size_t n_particles = particle_values.extent(1);
+  const auto n_compartments = spatial_values.extent(1);
+  const auto data_space_particle = HighFive::DataSpace(n_particles);
+  HighFive::DataSetCreateProps _ds_props_spatial;
+  _ds_props_spatial.add(HighFive::Chunking(1));
+  _ds_props_spatial.add(HighFive::Shuffle());
+  _ds_props_spatial.add(HighFive::Deflate(hdf5_max_compression));
 
-  for (const auto &[key, values] : props)
+  for (size_t i_name = 0; i_name < names.size(); ++i_name)
   {
-    auto v1 = values[0];
-    const auto size = values.size();
+    auto *ptr_particles =
+        Kokkos::subview(particle_values, i_name, Kokkos::ALL).data();
 
-    std::visit(
-        [&ds_props,
-         &file,
-         key = std::move(key),
-         values = std::move(values),
-         size,
-         ds_name](const auto &sample_val)
-        {
-          using T = std::decay_t<decltype(sample_val)>;
-          if constexpr (std::is_same_v<T, double>)
-          {
-            std::vector<size_t> dim({size});
-            std::vector<double> non_zero_values;
-            for (const auto &value : values)
-            {
-              if (std::holds_alternative<double>(value))
-              {
-                double val = std::get<double>(value);
-                if (val != 0.0)
-                {
-                  non_zero_values.push_back(val);
-                }
-              }
-            }
-            auto ds =
-                file.createDataSet(ds_name + key, non_zero_values, ds_props);
-          }
-          else
-          {
-            return;
-          }
-        },
-        v1);
-  }
-  HighFive::DataSetCreateProps _ds_props;
-  _ds_props.add(HighFive::Chunking(1));
-  _ds_props.add(HighFive::Shuffle());
-  _ds_props.add(HighFive::Deflate(hdf5_max_compression));
-  for (const auto &[key, values] : spatial_props)
-  {
-    file.createDataSet(ds_name + "spatial/" + key, values, _ds_props);
+    auto *ptr_spatial =
+        Kokkos::subview(spatial_values, i_name, Kokkos::ALL).data();
+    {
+      auto dataset =
+          file.createDataSet<double>(ds_name + "spatial/" + names[i_name],
+                                     HighFive::DataSpace(n_compartments),
+                                     _ds_props_spatial);
+      dataset.write_raw(ptr_spatial);
+    }
+
+    {
+      auto ds = file.createDataSet<double>(
+          ds_name + names[i_name], data_space_particle, ds_props);
+      ds.write_raw(ptr_particles);
+    }
   }
 }
 
-void DataExportHighFive::append_particle_properties(
-    size_t counter ,
-    const std::unordered_map<std::string, std::vector<model_properties_t>>
-        &props,
-    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
-{
-  auto ds_name = "biological_model/" + std::to_string(counter) + "/";
-  write_particle_data(props, spatial_props, ds_name);
-}
 
-void DataExportHighFive::write_initial_particle_data(
-    const std::unordered_map<std::string, std::vector<model_properties_t>>
-        &props,
-    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
-{
-  write_particle_data(props, spatial_props, "biological_model/initial/");
-}
 
-void DataExportHighFive::write_final_particle_data(
-    const std::unordered_map<std::string, std::vector<model_properties_t>>
-        &props,
-    const std::unordered_map<std::string, std::vector<double>> &spatial_props)
-{
-  write_particle_data(props, spatial_props, "biological_model/final/");
-}
 
 #endif
