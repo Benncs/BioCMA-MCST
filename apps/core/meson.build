@@ -9,7 +9,8 @@ dep_core = [
     mc_dependency,
     common_dependecy,
     model_selection_dep,
-    simulation_lib_dependency
+    simulation_lib_dependency,
+    eigen_dep,blas
 ]
 
 if highfive_found

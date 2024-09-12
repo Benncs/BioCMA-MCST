@@ -137,10 +137,9 @@ void host_process(
   PostProcessing::show_sumup_state(simulation);
 
   SEND_MPI_SIG_STOP;
-  if constexpr (FlagCompileTIme::use_mpi)
-  {
-    last_sync(exec, simulation);
-  }
+
+  last_sync(exec, simulation);
+  
 
   PostProcessing::final_post_processing(
       exec, params, std::move(simulation), data_exporter);
@@ -167,6 +166,8 @@ void main_loop(const SimulationParameters &params,
       1;
 
   const size_t dump_interval = (n_iter_simulation) / (dump_number) + 1;
+  
+  Kokkos::View<double **, ComputeSpace> poc_probe("probe_rtd",dump_number,1);
 
   size_t dump_counter = 0;
   double current_time = 0.;

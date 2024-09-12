@@ -121,7 +121,7 @@ public:
    */
   KOKKOS_INLINE_FUNCTION T &operator[](size_t i)
   {
-    assert(
+    KOKKOS_ASSERT(
         i <
         n_used_elements); // Kokkos view is not bound checked when use release
     return _owned_data(i);
@@ -136,7 +136,7 @@ public:
   KOKKOS_INLINE_FUNCTION const T &operator[](size_t i) const
   {
     // Kokkos view is not bound checked when use release
-    assert(i < n_used_elements);
+    KOKKOS_ASSERT(i < n_used_elements);
     return _owned_data(i);
   }
 
@@ -151,7 +151,7 @@ public:
   KOKKOS_INLINE_FUNCTION void set(size_t i, T &&data) const
   {
     // Kokkos view is not bound checked when use release
-    assert(i < n_used_elements);
+    KOKKOS_ASSERT(i < n_used_elements);
 
     _owned_data(i) = std::move(data);
   }
@@ -241,6 +241,12 @@ protected:
     return _owned_data;
   }
 
+  void set_n_used_elements(uint64_t value)
+  {
+    KOKKOS_ASSERT(n_used_elements < n_allocated_element);
+    n_used_elements = value;
+  }
+
 private:
   uint64_t n_allocated_element = 0; ///< Number of allocated elements.
   uint64_t n_used_elements = 0;     ///< Number of elements currently in use.
@@ -325,7 +331,7 @@ KokkosVector<T, Space>::get_allocation_factor() const noexcept
 template <typename T, typename Space>
 void KokkosVector<T, Space>::set_allocation_factor(double value) noexcept
 {
-  assert(value >= 1);
+  KOKKOS_ASSERT(value >= 1);
   this->extra_allocation_factor = value;
 }
 

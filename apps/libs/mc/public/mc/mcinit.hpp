@@ -120,7 +120,7 @@ namespace MC
     double weight =
         get_initial_weight(scale_factor, x0, unit->domain.getTotalVolume(), n_particles);
 
-    assert(weight > 0);
+    KOKKOS_ASSERT(weight > 0);
     unit->init_weight = weight;
     impl_init<Model>(unit, weight, particle_per_process);
     return unit;

@@ -204,7 +204,6 @@ if f_cmt == false
       'python_wrap=false',
       'build_executable=false',
       'build_test=false',
-      default_option_cpp20,
     ],
   ) # We only need native cmtool library in order to read flowmap so, no python neither executable
 

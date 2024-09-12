@@ -19,7 +19,7 @@
 #include <stdexcept>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
 #include <transport.hpp>
-
+#include <simulation/alias.hpp>
 #ifndef USE_PYTHON_MODULE
 #  include <omp.h>
 #else
@@ -90,7 +90,7 @@ namespace Simulation
     this->mc_unit->domain.setVolumes(vg, vl);
   }
 
-  SimulationUnit::NeighborsViewCompute
+  NeighborsViewCompute
   SimulationUnit::get_kernel_neighbors() const
   {
     const auto view_neighbors = this->mc_unit->domain.getNeighbors();
@@ -194,7 +194,7 @@ namespace Simulation
     //               });
   }
 
-  SimulationUnit::DiagonalViewCompute SimulationUnit::get_kernel_diagonal()
+  DiagonalViewCompute SimulationUnit::get_kernel_diagonal()
   {
     DiagonalViewCompute diag(this->flow_liquid->diag_transition.data(),
                              this->flow_liquid->diag_transition.size());
@@ -202,7 +202,7 @@ namespace Simulation
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(), diag);
   }
 
-  SimulationUnit::CumulativeProbabilityViewCompute
+  CumulativeProbabilityViewCompute
   SimulationUnit::get_kernel_cumulative_proba()
   {
     auto &matrix = flow_liquid->cumulative_probability;
@@ -213,7 +213,7 @@ namespace Simulation
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(), rd);
   }
 
-  SimulationUnit::ContributionViewCompute
+  ContributionViewCompute
   SimulationUnit::get_kernel_contribution()
   {
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(),

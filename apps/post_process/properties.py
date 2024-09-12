@@ -137,23 +137,45 @@ def process_particle_data(t:np.ndarray,
 
     keys = [k for k in biodicts[0].keys() if k != "spatial"]
 
-    plot_property_space(biodicts, "mu", "lenght", dest_root)
+   # Initialize a clean list
+    clean_biodicts = biodicts
 
-    mean_samples = {k: np.zeros(len(biodicts)) for k in keys}
+    # for d in biodicts:
+    #     # Create a clean dictionary for each entry
+    #     clean_dict = {}
+    #     for key, value in d.items():
+    #         # Use np.unique to remove duplicates and filter out zeros
+    #         clean_value = np.unique([v for v in value if v != 0])
+            
+    #         # Only add non-zero values back into the dictionary
+    #         # if clean_value.size > 0:  # Check if the cleaned value is non-empty
+    #         clean_dict[key] = clean_value
+        
+    #     # Append the cleaned dictionary to the clean_biodicts list
+    #     clean_biodicts.append(clean_dict)
 
-    for i, bio_dict in enumerate(biodicts):
+    
+    plot_property_space(clean_biodicts, "mu", "lenght", dest_root)
+
+    mean_samples = {k: np.zeros(len(clean_biodicts)) for k in keys}
+   
+    for i, bio_dict in enumerate(clean_biodicts):
         for k in keys:
             if len(bio_dict[k]) > 0:
                 if not np.isnan(bio_dict[k][0]):
                     mean_samples[k][i] = np.mean(bio_dict[k])
-    mkdir(dest)
-    for k, values in mean_samples.items():
-        plt.figure()
-        plt.plot(t,values, label=k)
-        plt.xlabel("Time [s]")
-        plt.ylabel("Mean Value")
-        plt.title(f"Mean Value of {k} Over Time")
-        plt.legend()
-        plt.savefig(f"{dest}/{k}.png")
-        plt.close()  # Close the plot to free memory
-
+  
+        mkdir(dest)
+        for k, values in mean_samples.items():
+            try:
+                plt.figure()
+                plt.plot(t,values,'-bo' ,label=k)
+                plt.xlabel("Time [s]")
+                plt.ylabel("Mean Value")
+                plt.title(f"Mean Value of {k} Over Time")
+                plt.legend()
+                plt.savefig(f"{dest}/{k}.png")
+                plt.close()  # Close the plot to free memory
+            except:
+                plt.close()  # Close the plot to free memory    
+                print(f"ERROR Mean Value {k} Over Time")

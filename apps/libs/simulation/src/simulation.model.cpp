@@ -35,7 +35,8 @@ namespace Simulation
     return this->gas_scalar->getConcentrationData();
   }
 
-  [[nodiscard]] std::tuple<size_t, size_t> SimulationUnit::getDim() const noexcept
+  [[nodiscard]] std::tuple<size_t, size_t>
+  SimulationUnit::getDim() const noexcept
   {
     return {this->liquid_scalar->concentration.rows(),
             this->liquid_scalar->concentration.cols()};
@@ -69,7 +70,13 @@ namespace Simulation
   void SimulationUnit::update_feed(double d_t) const
   {
 
-    // this->liquid_scalar->feed.coeffRef(0, 0) = 5 * 1. / 3600 * 1e-1;
+    constexpr double aim = 0.2/3600.;
+    constexpr double flow =aim*20e-3; //mu/2*V
+    constexpr double tau = 1/(flow/20e-3);
+
+    constexpr double s_feed = 0.25; //g/l
+
+    this->liquid_scalar->feed.coeffRef(0, 0) = s_feed * flow;
 
     // for (int i = 1; i < this->liquid_scalar->concentration.cols() - 2; ++i)
     // {
@@ -77,7 +84,7 @@ namespace Simulation
     // }
 
     index_leaving_flow(0) = 0;
-    leaving_flow(0) = 0. * 0.000011758 / 10.;
+    leaving_flow(0) = flow;
   }
 
   void SimulationUnit::step(double d_t,

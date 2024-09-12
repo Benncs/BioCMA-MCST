@@ -8,7 +8,7 @@ public_model = include_directories('public')
 
 public_include_dir = [public_model]
 
-dep = [mc_dependency, blas, common_dependecy, eigen_dep,kokkos]
+dep = [mc_dependency, common_dependecy,kokkos]
 
 model_lib = static_library(
    f'@project_name@_bmodels',

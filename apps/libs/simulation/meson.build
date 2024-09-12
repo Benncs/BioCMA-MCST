@@ -24,7 +24,7 @@ private_simulation_includes = include_directories('includes')
 project_dependencies = [biomodel_dependency, mc_dependency, common_dependecy]
 
 # Private dependencies needed to compile .so 
-private_dependencies = [eigen_dep]
+private_dependencies = [eigen_dep,blas]
 
 external_dependcies = [cma_dep, blas,kokkos]
 
@@ -55,7 +55,7 @@ simulation_lib = static_library(
 simulation_lib_dependency = declare_dependency(
    include_directories: [public_simulation_includes],
    link_with: simulation_lib,
-   dependencies: simulation_public_dependencies,
+   dependencies: [simulation_public_dependencies,private_dependencies],
 )
 
 

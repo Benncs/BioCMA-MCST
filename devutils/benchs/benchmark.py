@@ -42,6 +42,7 @@ def format_cli(number_particle, final_time):
 
     return [
         f"{EXECUTABLE_PATH}/{EXECUTABLE_NAME}",
+        
         "-mn",
         MODEL_NAME,
         "-np",
@@ -160,13 +161,15 @@ def plot_scaling(threads, particles, iterations, records):
 
     # Plot strong scaling efficiency (speedup) vs. number of threads for each particle and iteration combination
     for particle in unique_particles:
+        
         for iteration in unique_iterations:
             f = plt.figure()
             plt.title(
                 f"Speedup=f(num_thread) for n_particle={particle}, iteration={iteration}"
             )
             mask = (particles == particle) & (iterations == iteration)
-            if np.count_nonzero(mask) > 3:
+            condition = True #np.count_nonzero(mask) >= 3
+            if condition:
                 # Extract the relevant data
                 selected_threads = threads[mask]
                 selected_times = records[mask]
@@ -235,10 +238,8 @@ def plot_csv():
     particles = np.array([float(row["particles"]) for row in data])
     iterations = np.array([float(row["iteration"]) for row in data])
     records = np.array([float(row["Record"]) for row in data])
-    total_figs = []
 
-    pre_mask = particles >= 10000
-
+    pre_mask = particles >= 150000
     with PdfPages(OUTPUT_PDF) as pdf:
         add_to_pdf(
             pdf,
@@ -249,8 +250,9 @@ def plot_csv():
                 records[pre_mask],
             ),
         )
-        #   add_to_pdf(pdf,plot_particle_vs_time(threads,particles,iterations,records))
         add_to_pdf(pdf, plot_scaling(threads, particles, iterations, records))
+        #   add_to_pdf(pdf,plot_particle_vs_time(threads,particles,iterations,records))
+        
 
 
 def do_scale(particles=1000000):

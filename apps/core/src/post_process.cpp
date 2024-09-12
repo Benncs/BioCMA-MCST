@@ -1,15 +1,10 @@
 #include "common/kokkos_vector.hpp"
-#include "mc/particles/particle_model.hpp"
-#include "mc/particles/particles_container.hpp"
-#include <Kokkos_Atomic.hpp>
 #include <Kokkos_Core.hpp>
-#include <Kokkos_DynamicView.hpp>
-#include <Kokkos_Macros.hpp>
-#include <Kokkos_Printf.hpp>
 #include <common/execinfo.hpp>
 #include <dataexporter/data_exporter.hpp>
 #include <impl/Kokkos_HostThreadTeam.hpp>
 #include <iostream>
+#include <mc/particles/particle_model.hpp>
 #include <mc/unit.hpp>
 #include <memory>
 #include <post_process.hpp>
@@ -34,11 +29,6 @@ namespace PostProcessing
   {
     if (exporter != nullptr)
     {
-      std::unordered_map<std::string, std::vector<model_properties_t>>
-          aggregated_values;
-
-      std::unordered_map<std::string, std::vector<double>> spatial;
-      auto distribution = simulation.mc_unit->domain.getRepartition();
       std::cout << "EXPORTING PARTICLE DATA" << std::endl;
 
       Kokkos::View<std::string *, HostSpace> names;
@@ -129,7 +119,7 @@ namespace PostProcessing
   user_triggered_properties_export(Simulation::SimulationUnit &sim,
                                    std::unique_ptr<DataExporter> &data_exporter)
   {
-    static int counter = 1;
+    static int counter = 0;
     counter++;
     std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
     PostProcessing::append_properties(counter, sim, data_exporter);
@@ -151,7 +141,9 @@ namespace PostProcessing
     auto get_names = [&host_names](auto &host_particles_data)
     {
       const auto first_property = host_particles_data[0].data.get_properties();
-      const size_t n_keys = first_property.size();
+      const size_t n_keys =
+          first_property.size() + 2; //+2 because of hydraulic and divison time
+                                     // in properties common for all model
       host_names = Kokkos::View<std::string *, HostSpace>(
           "host_particle_property_name", n_keys);
 
@@ -161,6 +153,8 @@ namespace PostProcessing
         host_names(i) = std::move(k);
         i++;
       }
+      host_names(i++) = "hydraulic_time";
+      host_names(i) = "age";
     };
 
     const size_t n_compartment = mc_unit->domain.getNumberCompartments();
@@ -195,26 +189,36 @@ namespace PostProcessing
             {
               auto prop = particle.data.get_properties();
               const size_t i_container = particle.properties.current_container;
-
+              const auto cast_n_cell =
+                  static_cast<double>(compartments[i_container].n_cells);
               size_t i_key = 0;
               for (const auto &[key, value] : prop)
               {
 
                 particle_values(i_key, i) = value;
 
-                Kokkos::atomic_add(
-                    &spatial_values(i_key, i_container),
-                    value /
-                        static_cast<double>(compartments[i_container].n_cells));
-                i_key++;
+                Kokkos::atomic_add(&spatial_values(i_key, i_container),
+                                   value / cast_n_cell);
+                ++i_key;
               }
+
+              particle_values(i_key, i) = particle.properties.hydraulic_time;
+              Kokkos::atomic_add(&spatial_values(i_key, i_container),
+                                 particle.properties.hydraulic_time /
+                                     cast_n_cell);
+              ++i_key;
+              particle_values(i_key, i) =
+                  particle.properties.interdivision_time;
+              Kokkos::atomic_add(&spatial_values(i_key, i_container),
+                                 particle.properties.interdivision_time /
+                                     cast_n_cell);
             }
             if (clean)
             {
               particle.clearState();
             }
           });
-
+      Kokkos::fence();
       host_particle_values =
           Kokkos::create_mirror_view_and_copy(HostSpace(), particle_values);
       host_spatial_values =

@@ -206,12 +206,12 @@ namespace MC
   inline auto &ReactorDomain::operator[](size_t i_c)
   {
     // Kokkos view is not bound checked when use release
-    assert(i_c < size);
+    KOKKOS_ASSERT(i_c < size);
     return this->shared_containers(i_c);
   }
   inline auto &ReactorDomain::operator[](size_t i_c) const
   {
-    assert(i_c < size);
+    KOKKOS_ASSERT(i_c < size);
     return this->shared_containers(i_c);
   }
 

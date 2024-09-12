@@ -9,6 +9,7 @@
 
 namespace
 {
+  constexpr double y_x_s = 0.5;
   constexpr double Ks = 0.01;
   constexpr double l_1 = 18e-6;
   constexpr double l_0 = 11e-6;
@@ -16,13 +17,6 @@ namespace
   constexpr double mu_max = 0.77 / 3600.;
   constexpr double ln2 = 0.69314718056;
   constexpr double tau_metabolism = (1. / mu_max);
-
-  KOKKOS_INLINE_FUNCTION double division_gamma(double lenght)
-  {
-    static constexpr double denum = l_1 - l_0;
-    return (lenght < l_0) ? 0 : (lenght - l_0) / denum;
-  }
-
 } // namespace
 
 namespace Models
@@ -30,13 +24,12 @@ namespace Models
 
   KOKKOS_FUNCTION void Monod::init(MC::ParticleDataHolder &p, MC::KPRNG _rng)
   {
-    this->age = 0;
     auto generator = _rng.random_pool.get_state();
 
     this->l = Kokkos::max(minimal_length,
-                          Kokkos::max(generator.normal(l_0, l_0 / 5.), 0.));
+                          Kokkos::max(generator.normal(l_0/2., l_0/2. / 5.), 0.));
 
-    this->mu = Kokkos::max(generator.normal(mu_max/2., mu_max / 5), 0.);
+    this->mu = Kokkos::max(generator.normal(mu_max / 2., mu_max / 4), 0.);
     _rng.random_pool.free_state(generator);
     _init_only_cell_lenghtening = (l_1 - l_0) / ln2;
     this->contrib = 0.;
@@ -52,13 +45,10 @@ namespace Models
     const double mu_p = mu_max * s / (Ks + s);
     const double mu_eff = Kokkos::min(mu, mu_p);
 
-    age += d_t;
-
     l += d_t * (mu_eff * _init_only_cell_lenghtening);
-
     mu += d_t * (1.0 / tau_metabolism) * (mu_p - mu);
 
-    contrib = mu_eff * s / (Ks + s);
+    contrib = mu_eff * s / (Ks + s)/y_x_s;
 
     Models::update_division_status(
         p.status, d_t, GammaDivision::threshold_linear(l, l_0, l_1), _rng);
@@ -66,7 +56,6 @@ namespace Models
 
   KOKKOS_FUNCTION Monod Monod::division(MC::ParticleDataHolder &p)
   {
-    age = 0;
     const double original_lenght = l;
 
     l = original_lenght / 2.;
@@ -85,7 +74,7 @@ namespace Models
 
   model_properties_detail_t Monod::get_properties()
   {
-    return {{"mu", mu}, {"lenght", l}, {"age", age}};
+    return {{"mu", mu}, {"lenght", l}};
   }
 
   static_assert(ParticleModel<Monod>, "Check Monod Model");

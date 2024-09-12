@@ -1,12 +1,14 @@
 #ifndef __MC_PARTICLE_LIST_HPP__
 #define __MC_PARTICLE_LIST_HPP__
 
+#include "mc/particles/data_holder.hpp"
 #include <Kokkos_Core.hpp>
 #include <common/kokkos_vector.hpp>
 #include <mc/particles/mcparticles.hpp>
 #include <mc/prng/prng.hpp>
 
 #define __MC_MAX_PARTICLES_PER_PROCESS__ 100e6
+#include <Kokkos_StdAlgorithms.hpp>
 
 namespace MC
 {
@@ -42,7 +44,6 @@ namespace MC
         : KokkosVector<Particle<Model>, MemorySpace>(
               capacity, alloc, "particle_list")
     {
- 
     }
 
     /**
@@ -117,6 +118,28 @@ namespace MC
       ParticleList<MemorySpace, Model> newlist(n);
       newlist.init(weight);
       this->insert(newlist);
+    }
+
+    void remove_dead()
+    {
+
+      auto pred = KOKKOS_LAMBDA(auto &p)
+      {
+        return p.properties.status == MC::CellStatus::DEAD ||
+                    p.properties.status == MC::CellStatus::OUT;
+  
+      };
+      auto beg = Kokkos::Experimental::begin(this->_owned_data);
+      auto end = beg+this->size();
+      auto res = Kokkos::Experimental::remove_if(
+          Kokkos::DefaultExecutionSpace(), beg,end, pred);
+
+      const auto stepsA = Kokkos::Experimental::distance(Kokkos::Experimental::begin(this->_owned_data), res);
+
+      KOKKOS_ASSERT(this->_owned_data.extent(0) == this->capacity());
+      this->set_n_used_elements(stepsA);
+      KOKKOS_ASSERT(this->size() <= this->capacity());
+   
     }
 
     MC::KPRNG rng_instance; ///< Instance of the random number generator used

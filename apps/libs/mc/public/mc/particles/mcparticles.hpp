@@ -36,15 +36,19 @@ namespace MC
            const LocalConcentrationView &concentration,
            KPRNG globalrng)
     {
+      properties.hydraulic_time += d_t;
+      properties.interdivision_time += d_t;
       data.update(d_t, properties, concentration, globalrng);
     }
 
     KOKKOS_INLINE_FUNCTION BaseParticle<_Model> division()
     {
-      properties.status = CellStatus::IDLE;
+      this->properties.status = CellStatus::IDLE;
+      this->properties.interdivision_time = 0;
       auto p = data.division(properties);
-
-      return BaseParticle(properties, std::move(p));
+      auto prop_child = this->properties;
+      prop_child.hydraulic_time = 0;
+      return BaseParticle(std::move(prop_child), std::move(p));
     }
 
     KOKKOS_INLINE_FUNCTION void contribution(ContributionView contrib)
@@ -52,8 +56,7 @@ namespace MC
       data.contribution(properties, contrib);
     }
 
-
-    template <class Archive> void serde(Archive &ar) 
+    template <class Archive> void serde(Archive &ar)
     {
       properties.serde(ar);
       if constexpr (has_serialize<_Model, Archive>())

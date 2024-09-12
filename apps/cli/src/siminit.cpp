@@ -133,10 +133,6 @@ init_simulation(const ExecInfo &info,
   }
   liquid_neighbors.set_row_major();
 
-  // MC::UniformLawINT law_param = {0,
-  //                                static_cast<int>(params.n_compartments -
-  //                                1)};
-
   if constexpr (FlagCompileTIme::use_mpi)
   {
     MPI_W::barrier(); // This barrier is probably useless
@@ -156,10 +152,6 @@ init_simulation(const ExecInfo &info,
   const bool f_init_gas_flow =
       info.current_rank == 0 && params.is_two_phase_flow;
 
-  // std::vector<double> concentrations = {1, 5};
-  // std::vector<size_t> indices = {0, 5, 1500};
-  // ScalarFactory::Local arg = {concentrations, indices};
-  // ScalarFactory::Uniform uniform = {concentrations, std::nullopt};
   ScalarFactory::ScalarVariant arg;
   if (params.user_params.initialiser_path == "")
   {

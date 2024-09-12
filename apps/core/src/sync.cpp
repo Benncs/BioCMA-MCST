@@ -70,6 +70,14 @@ void sync_prepare_next(Simulation::SimulationUnit &simulation)
 
 void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
 {
+  auto clean_list = [](auto&& container)
+  {
+    auto &list = container.get_compute();
+    list.remove_dead();
+  };
+  
+  std::visit(clean_list, simulation.mc_unit->container);
+
   // For the last synchronisation, the aim for the host rank is to retrive all
   // local information of worker ranks
   if constexpr (FlagCompileTIme::use_mpi)

@@ -45,11 +45,19 @@ namespace MC
       id = 0;
       status = default_status;
       weight = default_weight;
+      hydraulic_time = default_hydraulic_time;
+      interdivision_time = default_interdivision_time;
     }
 
-    template <class Archive> void serde(Archive &ar) 
+    template <class Archive> void serde(Archive &ar)
     {
-      ar(current_container, current_domain, random_seed, id, status, weight);
+      ar(current_container,
+         current_domain,
+         random_seed,
+         id,
+         status,
+         weight,
+         hydraulic_time);
     }
 
     size_t current_container =
@@ -58,6 +66,9 @@ namespace MC
     // current_domain is always 0 because current simulation only handles 1
     // domain
     size_t current_domain = default_domain; ///< In which domain particles lives
+
+    double hydraulic_time = default_hydraulic_time;
+    double interdivision_time = default_interdivision_time;
 
     // No used
     size_t random_seed = 0;
@@ -72,6 +83,8 @@ namespace MC
     static constexpr size_t default_domain = 0;
     static constexpr CellStatus default_status = CellStatus::IDLE;
     static constexpr double default_weight = 0.;
+    static constexpr double default_hydraulic_time = 0.;
+    static constexpr double default_interdivision_time = 0.;
   };
 
 } // namespace MC
