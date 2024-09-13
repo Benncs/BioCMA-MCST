@@ -13,7 +13,7 @@ struct UserControlParameters
   std::string cma_case_path;
   bool recursive;
   double final_time;
-  uint64_t numper_particle;
+  uint64_t number_particle;
   double delta_time;
   std::string results_file_name;
   int n_thread;
@@ -51,7 +51,7 @@ struct ExportParameters
 inline std::ostream &operator<<(std::ostream &stream,
                                 const SimulationParameters &obj)
 {
-  stream << obj.user_params.numper_particle << "\t" << obj.user_params.final_time << "\t" << obj.d_t <<
+  stream << obj.user_params.number_particle << "\t" << obj.user_params.final_time << "\t" << obj.d_t <<
   "\t"
          << obj.n_different_maps << "\t" << obj.user_params.n_thread << " ";
   return stream;

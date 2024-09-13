@@ -1,6 +1,7 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
+#include "simulation/probe.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <cassert>
@@ -21,8 +22,6 @@
 
 // TODO Clean
 static constexpr size_t trigger_const_particle_number = 1e6;
-// static constexpr bool const_number_simulation = false;
-static constexpr bool use_probe = true;
 
 /**
  * @namespace Simulation
@@ -75,8 +74,12 @@ namespace Simulation
     void clear_mc();
 
     void reset();
+    Probes probes;
 
+    void set_probes(Probes&& _probes){probes=std::move(_probes);}
   private:
+
+    
     bool const_number_simulation = true;
     uint64_t _internal_counter = 0;
 
@@ -191,7 +194,7 @@ namespace Simulation
   {
     auto &list = container.get_compute();
     const size_t n_particle = list.size();
-
+    
     const auto diag_transition = get_kernel_diagonal();
     const auto &local_leaving_flow = leaving_flow;
     const auto &local_index_leaving_flow = index_leaving_flow;
@@ -208,7 +211,6 @@ namespace Simulation
         "internal_counter");
 
     Kokkos::deep_copy(internal_counter_dead, _internal_counter);
-
     auto k = KernelInline::Kernel(d_t,
                                   list,
                                   rview,
@@ -221,7 +223,7 @@ namespace Simulation
                                   events,
                                   contribs,
                                   local_leaving_flow,
-                                  local_index_leaving_flow);
+                                  local_index_leaving_flow,probes);
     Kokkos::parallel_for(
         "cycle_process", Kokkos::RangePolicy<>(0, n_particle), k);
     Kokkos::fence("Fence cycle_process");

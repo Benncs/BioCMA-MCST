@@ -1,3 +1,4 @@
+#include "common/common.hpp"
 #include <string>
 #ifdef USE_HIGHFIVE
 #  include "common/simulation_parameters.hpp"
@@ -121,8 +122,6 @@ void DataExportHighFive::prepare()
   file.flush();
 }
 
-
-
 void DataExportHighFive::append(double t,
                                 std::span<double> concentration_liquid,
                                 const std::vector<size_t> &distribution,
@@ -198,6 +197,39 @@ void DataExportHighFive::append(double t,
   }
 }
 
+void DataExportHighFive::append_probes(uint64_t buffer_size,
+                                       const double *const ptr)
+{
+  HighFive::File file(filename, HighFive::File::ReadWrite);
+  static bool first = true;
+  static unsigned counter = 1;
+  constexpr std::string_view section_name = "probes";
+  if (first)
+  {
+    first = false;
+    HighFive::DataSetCreateProps props;
+    props.add(HighFive::Chunking({buffer_size}));
+    props.add(HighFive::Shuffle());
+    props.add(HighFive::Deflate(hdf5_max_compression));
+    HighFive::DataSpace dataspace({buffer_size}, {(n_iter + 1) * buffer_size});
+    auto dataset = file.createDataSet(section_name.data(),
+                                      dataspace,
+                                      HighFive::create_datatype<double>(),
+                                      props);
+    dataset.write_raw(ptr);
+  }
+  else
+  {
+    std::vector<size_t> new_size = {(counter + 1) * buffer_size};
+    auto dataset = file.getDataSet(section_name.data());
+    dataset.resize(new_size);
+    auto chunk = dataset.select({counter * buffer_size}, {buffer_size});
+    chunk.write_raw(ptr);
+      counter++;
+  }
+
+}
+
 void DataExportHighFive::write_final_results(ExportData &data,
                                              std::span<size_t> distribution)
 
@@ -211,15 +243,15 @@ void DataExportHighFive::write_final_results(ExportData &data,
 
   file.createDataSet("final_results/number_particles", data.number_particles);
 
-  auto cl =
-      Eigen::Map<Eigen::MatrixXd>(data.concentration_liquid.data(), nr, nc);
+  auto cl = Eigen::Map<Eigen::MatrixXd>(
+      data.concentration_liquid.data(), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
 
   file.createDataSet("final_results/concentrations/liquid", cl);
 
   if (!data.concentration_gas.empty())
   {
-    auto cg =
-        Eigen::Map<Eigen::MatrixXd>(data.concentration_gas.data(), nr, nc);
+    auto cg = Eigen::Map<Eigen::MatrixXd>(
+        data.concentration_gas.data(), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
     file.createDataSet("final_results/concentrations/gas", cg);
   }
 
@@ -246,10 +278,23 @@ void DataExportHighFive::write_particle_data(
     Kokkos::View<double **, HostSpace> spatial_values,
     const std::string &ds_name)
 {
-  HighFive::File file(filename, HighFive::File::ReadWrite);
-  HighFive::DataSetCreateProps ds_props;
   const size_t n_particles = particle_values.extent(1);
   const auto n_compartments = spatial_values.extent(1);
+  // constexpr std::size_t cacheSize = 10e9;//in bytes
+  // constexpr std::size_t numSlots = 521; //Should be prime 
+  //   ds_props.add(HighFive::Caching(numSlots,cacheSize));
+  constexpr std::size_t chunk_particle = 512000; //500bytes //4096 / sizeof(double);
+
+
+
+  HighFive::File file(filename, HighFive::File::ReadWrite);
+
+  HighFive::DataSetCreateProps ds_props;
+
+  ds_props.add(HighFive::Chunking(std::min(n_particles,chunk_particle)));
+  ds_props.add(HighFive::Shuffle());
+  // ds_props.add(HighFive::Deflate(hdf5_max_compression));
+
   const auto data_space_particle = HighFive::DataSpace(n_particles);
   HighFive::DataSetCreateProps _ds_props_spatial;
   _ds_props_spatial.add(HighFive::Chunking(1));
@@ -278,8 +323,5 @@ void DataExportHighFive::write_particle_data(
     }
   }
 }
-
-
-
 
 #endif

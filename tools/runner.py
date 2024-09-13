@@ -17,11 +17,11 @@ ROOT = __current_directory + "/.."
 DEFAULT_TYPE = "debug"
 MPI_COMMAND = "mpiexec --allow-run-as-root -np 2 "
 OMP_NUM_THREADS = "1"
-
+COMPILER_NAME="clang"
 
 def get_executable(type: str, mpi: bool = True):
     appname = "biocma_mcst_cli_app" if mpi else "biocma_mcst_cli_app_shared"
-    return f"{ROOT}/builddir/{type}_gcc/apps/cli/{appname}"
+    return f"{ROOT}/builddir/{type}_{COMPILER_NAME}/apps/cli/{appname}"
 
 
 def mk_parser():

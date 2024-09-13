@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.0.7',
+  version: '0.0.9',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=gnu++20'],
 )
@@ -73,13 +73,10 @@ target_custom_options = project_custom_options.get(build_type, [])
 
 # endforeach
 
-
-add_global_arguments('-D__FLAG_APP_VERBOSE__', language: 'cpp')
-
+CMAKE_TYPE='Release'
 if build_type == 'debug' or build_type == 'debugoptimized'
   # NOTHING
-
-
+  CMAKE_TYPE='Debug'
   add_global_arguments('-DDEBUG', language: 'cpp')
 else
   add_global_arguments('-DNDEBUG', language: 'cpp')
@@ -116,8 +113,8 @@ __cmake_kokkos_dep__ = dependency(
   'Kokkos',
   method: 'cmake',
   required: true,
-  components: ['kokkoscore'],
-  modules: ['Kokkos::kokkoscore'],
+  components: ['kokkos'],
+  modules: ['Kokkos::kokkos'],
 )
 
 kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE']
@@ -136,6 +133,8 @@ kokkos = declare_dependency(
   compile_args: kokkos_compile_arg,
 )
 
+
+
 highfive_found = false
 ceral_found = false
 cmake = import('cmake', required: false)
@@ -144,6 +143,7 @@ if cmake.found()
   highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_COMPILER': 'clang++-18'})
   highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_STANDARD': '20'})
 
+  highfive_cmake_options.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_USE_BOOST': false})
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_EXAMPLES': false})
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_UNIT_TESTS': false})
@@ -162,6 +162,7 @@ if cmake.found()
 
   cereal_cmake_options = cmake.subproject_options()
   cereal_cmake_options.add_cmake_defines({'SKIP_PERFORMANCE_COMPARISON': true})
+  cereal_cmake_options.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
   cereal_cmake_options.add_cmake_defines({'BUILD_DOC': false})
   cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})
   cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})

@@ -3,15 +3,17 @@ from matplotlib import pyplot as plt
 import numpy as np
 from .read_results import import_results
 from . import (
+    FIGURE_TYPE,
     average_concentration,
     check_mixing,
+    set_time_unit_to_hour,
     time_average_reaction_rate,
 )
 from .properties import process_particle_data, property_distribution
 import os
 import argparse
 from numpy.polynomial import Polynomial
-
+from . import get_time
 
 def assemble(res_folder: str, names: List[str]) -> List[str]:
     return [f"{res_folder}{i}.h5" for i in names]
@@ -63,9 +65,9 @@ def detect_exponential_growth(t: np.ndarray, n: np.ndarray, threshold: float = 0
 def plot_grow_in_number(t: np.ndarray, n: np.ndarray, dest: str):
     n = n.reshape(-1)
     plt.figure()
-    plt.semilogy(t, n, "--", label="results")
+    plt.semilogy(t, n, "-",color='black', label="results")
     plt.ylabel("Number of particles")
-    plt.xlabel("Time [s]")
+    plt.xlabel(f"Time [{get_time()}]")
     plt.title("Particle number growth (Log-Scale)")
     plt.grid(True)
     
@@ -80,10 +82,10 @@ def plot_grow_in_number(t: np.ndarray, n: np.ndarray, dest: str):
     
     # y_exp = np.exp(coeff[0]) * np.exp(coeff[1] * t)
     # plt.semilogy(t, y_exp, label="regression")
-    plt.legend()
+    # plt.legend()
     
     # Save the plot
-    plt.savefig(f"{dest}/num_grow")
+    plt.savefig(f"{dest}/num_grow{FIGURE_TYPE}")
     plt.show()
 
 def main(name_results,root_res='./results/'):
@@ -100,6 +102,13 @@ def main(name_results,root_res='./results/'):
     X0 = 0.1
     for i, current_path_res in enumerate(pathres):
         results = import_results(current_path_res)
+
+        #Conversion to hour 
+        
+        if results.t[-1]>10000:
+             results.t= results.t/3600
+             set_time_unit_to_hour()
+
         last_id = results.n_t - 1
         last_vtk_path = (
             None  # f"./results/{name_results[i]}/{name_results[i]}_{last_id}.vtu"
@@ -143,8 +152,8 @@ def main(name_results,root_res='./results/'):
         plt.plot(results.t, c_avg)
         plt.title("Average glucose concentration over time")
         plt.ylabel("C [g/L]")
-        plt.xlabel("Time [s]")
-        plt.savefig(dest[i] + "/c_avg.png")
+        plt.xlabel(f"Time [{get_time()}]")
+        plt.savefig(dest[i] + f"/c_avg{FIGURE_TYPE}")
 
 
 if __name__ == "__main__":

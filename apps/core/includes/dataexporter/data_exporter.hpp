@@ -51,6 +51,8 @@ public:
                       Kokkos::View<double **, HostSpace> spatial_values,
                       const std::string &ds_name)  = 0;
 
+  virtual void append_probes(uint64_t buffer_size,const double* ptr)=0;
+
   DELETE_CONSTRUCTORS(DataExporter)
   DELETE_ASSIGMENT(DataExporter)
   size_t expectecNiteration() const

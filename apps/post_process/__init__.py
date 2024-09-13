@@ -9,6 +9,15 @@ from .initialiser import make_initial_concentration
 
 RATIO_MASS_LENGTH = 0.45044876111074444 / 0.12477411510047276
 
+FIGURE_TYPE=".png"
+TIME_UNIT ="s"
+
+def set_time_unit_to_hour():
+    global TIME_UNIT
+    TIME_UNIT="h"
+
+def get_time():
+    return TIME_UNIT
 
 def mkdir(d):
     if not os.path.exists(d):
@@ -35,9 +44,9 @@ def check_mixing(
     plt.legend()
     plt.title("Segregation index as a function of the time")
     plt.ylabel(r"\[ \frac{\sigma(t)}{\sigma(t_{0})}\]")
-    plt.xlabel("time [s]")
+    plt.xlabel(f"time [{get_time()}]")
     for i in dest:
-        plt.savefig(f"{i}/mixing_variance.svg", dpi=1500)
+        plt.savefig(f"{i}/mixing_variance{FIGURE_TYPE}", dpi=1500)
 
 
 def norm_concentration(

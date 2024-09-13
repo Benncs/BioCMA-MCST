@@ -5,9 +5,9 @@ common_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ')
 
 public_common = include_directories('public')
 
-incdirs = [public_common, 'includes']
+incdirs = [public_common, 'includes',auto_generate_include]
 
-public_includes = [public_common]
+public_includes = [public_common,auto_generate_include]
 
 common_lib = static_library(
    f'@project_name@_common',

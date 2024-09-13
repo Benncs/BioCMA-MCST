@@ -37,12 +37,9 @@ public:
                            Kokkos::View<double **, HostSpace> particle_values,
                            Kokkos::View<double **, HostSpace> spatial_values,
                            const std::string &ds_name)final;
+  
+  void append_probes(uint64_t buffer_size,const double* ptr) final;
 
-  // void append_particle_properties(
-  //     size_t counter,
-  //     Kokkos::View<std::string *, HostSpace> names,
-  //     Kokkos::View<double **, HostSpace> particle_values,
-  //     Kokkos::View<double **, HostSpace> spatial_values) final;
 
 protected:
   void write_final_results(ExportData &data,

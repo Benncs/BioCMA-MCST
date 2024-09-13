@@ -54,7 +54,7 @@ DataExporter::DataExporter(const ExecInfo &info,
   metadata["description"] = "Interesting results";
   metadata["run_id"] = info.run_id;
 
-  initial_values["number_particles"] = params.user_params.numper_particle;
+  initial_values["number_particles"] = params.user_params.number_particle;
   initial_values["initial_weight"] = weight;
   initial_values["number_compartment"] = params.n_compartments;
   initial_values["final_time"] = params.user_params.final_time;

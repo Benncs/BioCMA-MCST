@@ -78,11 +78,11 @@ namespace PostProcessing
           names, particle_values, spatial_values, ds_name);
     }
 
-    if (tot != (new_p - removed + params.user_params.numper_particle))
+    if (tot != (new_p - removed + params.user_params.number_particle))
     {
       std::cerr << ("Results are not coherent (Bad particle balance): ");
       std::cerr << tot << "=" << new_p << "-" << removed << "+"
-                << params.user_params.numper_particle << std::endl;
+                << params.user_params.number_particle << std::endl;
       ;
     }
   }
@@ -168,6 +168,10 @@ namespace PostProcessing
                     &host_spatial_values](auto &&container)
     {
       auto &compute_particles_data = container.get_compute();
+      if(compute_particles_data.size()==0)
+      {
+        return;
+      }
       auto &host_particles_data = container.get_host();
 
       get_names(host_particles_data);

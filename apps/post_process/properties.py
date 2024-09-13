@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from .io import append_resukts_scalar_vtk
-from . import mkdir
+from . import FIGURE_TYPE, mkdir
 from typing import Dict, List,Optional
-from . import RATIO_MASS_LENGTH
+from . import RATIO_MASS_LENGTH,get_time
 
 def process_string_title(input_string):
     return ' '.join([word.capitalize() for word in input_string.replace('_', ' ').split()])
@@ -33,7 +33,7 @@ def _mk_pdf(data, name, dest: str):
         plt.ylabel("Density")
         plt.title(f"Probability Density Function for {title_name} (PDF)")
         mkdir(f"{dest}/pdf")
-        plt.savefig(f"{dest}/pdf/pdf_{name}")
+        plt.savefig(f"{dest}/pdf/pdf_{name}{FIGURE_TYPE}")
     except:
         pass
 
@@ -60,7 +60,7 @@ def _mk_histogram(data, name, dest: str):
     plt.xlabel("Value")
     plt.ylabel("Density")
     plt.title(f"Histogram {title_name}")
-    plt.savefig(f"{dest}/histogram//histogram_{name}")
+    plt.savefig(f"{dest}/histogram//histogram_{name}{FIGURE_TYPE}")
 
     _mk_pdf(data, name, dest)
 
@@ -124,7 +124,7 @@ def plot_property_space(
         plt.xlabel(key1)
         plt.ylabel(key2)
 
-    plt.savefig(f"{dest}/plot_{key1}_{key2}_{0}")
+    plt.savefig(f"{dest}/plot_{key1}_{key2}_{0}{FIGURE_TYPE}")
 
 
 def process_particle_data(t:np.ndarray,
@@ -169,12 +169,12 @@ def process_particle_data(t:np.ndarray,
         for k, values in mean_samples.items():
             try:
                 plt.figure()
-                plt.plot(t,values,'-bo' ,label=k)
-                plt.xlabel("Time [s]")
+                plt.plot(t,values,'-o' ,label=k,markersize=2,color="black")
+                plt.xlabel(f"Time [{get_time()}]")
                 plt.ylabel("Mean Value")
                 plt.title(f"Mean Value of {k} Over Time")
                 plt.legend()
-                plt.savefig(f"{dest}/{k}.png")
+                plt.savefig(f"{dest}/{k}{FIGURE_TYPE}")
                 plt.close()  # Close the plot to free memory
             except:
                 plt.close()  # Close the plot to free memory    

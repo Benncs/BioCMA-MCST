@@ -142,7 +142,7 @@ static void parseArg(UserControlParameters &user_controll,
     }
     else if (current_param == "np")
     {
-      user_controll.numper_particle = std::stol(std::string(current_value));
+      user_controll.number_particle = std::stol(std::string(current_value));
     }
     else if (current_param == "nex")
     {
@@ -200,7 +200,7 @@ static void sanitise_check_cli(SimulationParameters &params)
     throw std::invalid_argument("Wrongtime step (d_t<0)");
   }
 
-  if (params.user_params.numper_particle == 0)
+  if (params.user_params.number_particle == 0)
   {
     throw std::invalid_argument("Missing number of particles");
   }
