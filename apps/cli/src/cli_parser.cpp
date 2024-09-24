@@ -76,7 +76,6 @@ static std::optional<UserControlParameters> parse_user_param(int argc,
 std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
 {
   SimulationParameters params = SimulationParameters::m_default();
-  params.n_species = 1; // FIXME
   auto opt_control = parse_user_param(argc, argv);
   if (!opt_control.has_value())
   {
@@ -104,6 +103,8 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
     params.results_file_name = "./results/" + control.results_file_name + ".h5";
   }
 
+  
+
   params.user_params = std::move(control);
   sanitise_check_cli(params);
 
@@ -115,6 +116,7 @@ static void parseArg(UserControlParameters &user_controll,
                      std::string_view current_value)
 {
   std::string path;
+  //TODO need check that begin()+1 is not OOB 
   current_param = std::string(current_param.begin() + 1, current_param.end());
   switch (current_param[0])
   {
@@ -175,6 +177,10 @@ static void parseArg(UserControlParameters &user_controll,
     {
       user_controll.cma_case_path = current_value;
     }
+    else if(current_param =="force")
+    {
+      user_controll.force_override = true;
+    }
     else if (current_param == "fi")
     {
       user_controll.initialiser_path = current_value;
@@ -209,6 +215,8 @@ static void sanitise_check_cli(SimulationParameters &params)
   {
     throw std::invalid_argument("Final time must be positive");
   }
+
+ 
 }
 
 void showHelp(std::ostream &os) noexcept

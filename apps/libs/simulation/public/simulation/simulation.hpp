@@ -69,7 +69,7 @@ namespace Simulation
 
     void clearContribution() const noexcept;
 
-    void update_feed(double d_t) const;
+    void update_feed(double t,double d_t) const;
 
     void clear_mc();
 

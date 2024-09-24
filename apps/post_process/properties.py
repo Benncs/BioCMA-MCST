@@ -60,10 +60,15 @@ def _mk_histogram(data, name, dest: str):
     plt.xlabel("Value")
     plt.ylabel("Density")
     plt.title(f"Histogram {title_name}")
-    plt.savefig(f"{dest}/histogram//histogram_{name}{FIGURE_TYPE}")
+    plt.savefig(f"{dest}/histogram/histogram_{name}{FIGURE_TYPE}")
 
     _mk_pdf(data, name, dest)
 
+    plt.figure()
+    x = np.arange(1, len(data) + 1)
+    plt.scatter(x, data, color='blue', s=1, label='Temps de division')
+    plt.savefig(f"{dest}/histogram/test_{name}{FIGURE_TYPE}")
+    plt.close()
 
 def property_distribution(
     biodict: Dict[str, np.ndarray],

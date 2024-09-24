@@ -14,11 +14,30 @@ gas_liquid_mass_transfer(Eigen::ArrayXXd &res_kla,
                          const CmaRead::ReactorState &state)
 {
 
-  double kinematic_viscosity = c_kinematic_viscosity(temperature);
+  const double kinematic_viscosity = c_kinematic_viscosity(temperature);
 
-  double schmidtnumber = kinematic_viscosity / oxygen_diffusion_constant;
+  const double schmidtnumber = kinematic_viscosity / oxygen_diffusion_constant;
 
-  double db = 1e-3;
+  constexpr double db = 1e-3;
+  // const auto energy_dissipation_array =
+  //     Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.energy_dissipation.data()),
+  //                                 state.energy_dissipation.size());
+
+  // const auto gas_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.gasVolume.data()),
+  //                                 state.gasVolume.size());
+
+  // const auto liq_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.liquidVolume.data()),
+  //                                 state.liquidVolume.size());
+
+  // //LAZY 
+  // #define kl_array  (0.3 * (energy_dissipation_array * kinematic_viscosity).pow(0.25) * \
+  //           std::pow(schmidtnumber, -0.5))
+
+  // #define gas_fraction_array  ((gas_array)/(liq_array+gas_array))
+
+  // #define interfacial_area  (6*gas_fraction_array/db)
+
+  // #define res_kla kl_array*interfacial_area
 
   for (int i_c = 0; i_c < static_cast<int>(state.n_compartments); ++i_c)
   {

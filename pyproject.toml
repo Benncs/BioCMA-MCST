@@ -28,6 +28,7 @@ dependencies = [
   'vtk==9.3.0',
   'matplotlib==3.8.4',
   'cmtool>=1.0.0'
+  'h5py>=3.11.0'
 ]
 
 keywords = [

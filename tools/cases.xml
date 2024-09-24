@@ -1,48 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cases>
-<control name="n14">
+   <control name="n14">
       <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
-      <final_time>3600</final_time>
-      <numper_particle>1000</numper_particle>
-      <delta_time>0</delta_time>
-      <results_file_name>monod_14_long_4</results_file_name>
-      <number_exported_result>10</number_exported_result>
-      <model_name>model_monod</model_name>
-       <initialiser_path>./cma_data/n14_init.h5</initialiser_path>
-   </control>
-   
-   <control name="0d">
-      <cma_case_path>./cma_data/0d/</cma_case_path>
-      <!-- <final_time>43200</final_time> -->
-      <final_time>200000</final_time>
+      <final_time>50000</final_time>
       <numper_particle>50000</numper_particle>
-      <delta_time>0.1</delta_time>
-      <results_file_name>monod_str_4</results_file_name>
-      <number_exported_result>150</number_exported_result>
-      <model_name>model_monod</model_name> 
-      <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
-   </control>
-
-     <control name="test">
-      <cma_case_path>./cma_data/0d/</cma_case_path>
-      <final_time>200000</final_time>
-      <numper_particle>5000</numper_particle>
-      <delta_time>0.1</delta_time>
-      <results_file_name>monod_str_4_sts</results_file_name>
+      <delta_time>0.0114404</delta_time>
+      <results_file_name>monod_14_dts</results_file_name>
       <number_exported_result>100</number_exported_result>
-      <model_name>model_monod</model_name> 
-      <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
-   </control>
-
-    <control name="test14">
-      <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
-      <final_time>1.</final_time>
-      <numper_particle>2000</numper_particle>
-      <delta_time>0.1</delta_time>
-      <results_file_name>test14</results_file_name>
-      <number_exported_result>100</number_exported_result>
-      <model_name>model_monod</model_name> 
+      <model_name>None</model_name>
       <initialiser_path>./cma_data/n14_init.h5</initialiser_path>
    </control>
 
-   </cases>
+   <control name="0d">
+      <cma_case_path>./cma_data/0d/</cma_case_path>
+      <!-- <final_time>43200</final_time> -->
+      <final_time>20000</final_time>
+      <numper_particle>500000</numper_particle>
+      <delta_time>0.1</delta_time>
+      <results_file_name>monod_dts</results_file_name>
+      <number_exported_result>250</number_exported_result>
+      <model_name>None</model_name>
+      <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
+   </control>
+
+   <control name="test">
+      <cma_case_path>./cma_data/0d/</cma_case_path>
+      <final_time>200</final_time>
+      <numper_particle>5000</numper_particle>
+      <delta_time>0.1</delta_time>
+      <results_file_name>debug</results_file_name>
+      <number_exported_result>100</number_exported_result>
+      <model_name>model_monod</model_name>
+      <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
+   </control>
+
+   <control name="test14">
+      <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
+      <final_time>36000</final_time>
+      <numper_particle>300000</numper_particle>
+      <delta_time>0.01</delta_time>
+      <results_file_name>rtd_particle_rushton_2</results_file_name>
+      <number_exported_result>2000</number_exported_result>
+      <model_name>default</model_name>
+      <initialiser_path>./cma_data/n14_init.h5</initialiser_path>
+   </control>
+
+   <control name="test_pfr">
+      <cma_case_path >/mnt/c/Users/casale/Documents/code/python/JumbioApp/jumbio/out/1d/</cma_case_path>
+      <final_time>45</final_time>
+      <numper_particle>3000000</numper_particle>
+      <delta_time>0</delta_time>
+      <results_file_name>debug</results_file_name>
+      <number_exported_result>500</number_exported_result>
+      <model_name>default</model_name>
+      <initialiser_path>./cma_data/n50_init.h5</initialiser_path>
+   </control>
+
+   <control name="sanofi">
+      <cma_case_path >/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/sanofi/</cma_case_path>
+      <final_time>1000</final_time>
+      <numper_particle>10</numper_particle>
+      <delta_time>0</delta_time>
+      <results_file_name>sanofi</results_file_name>
+      <number_exported_result>500</number_exported_result>
+      <model_name>default</model_name>
+      <initialiser_path></initialiser_path>
+   </control>
+
+</cases>

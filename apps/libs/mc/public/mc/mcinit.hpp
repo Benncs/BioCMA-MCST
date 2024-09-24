@@ -18,6 +18,8 @@
 namespace MC
 {
 
+
+  constexpr bool uniform_init = false;
   namespace
   {
 
@@ -61,6 +63,15 @@ namespace MC
           Results<ComputeSpace, Model>(particle_per_process);
       const auto n_compartments = unit->domain.getNumberCompartments();
 
+      uint64_t min_c = 0;
+      uint64_t max_c = n_compartments;
+
+      if (!uniform_init)
+      {
+        min_c = 0;
+        max_c = 1;
+      }
+
       Kokkos::parallel_for(
           "mc_init",
           Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(
@@ -68,7 +79,7 @@ namespace MC
           KOKKOS_LAMBDA(const int i) {
             auto p = Particle<Model>(weight);
             p.properties.weight = weight;
-            const uint64_t location = rng.uniform_u(0, n_compartments);
+            const uint64_t location = rng.uniform_u(min_c, max_c);
             p.properties.current_container = location;
             Kokkos::atomic_increment(&compartments(location).n_cells);
             p.init(particle_rng);

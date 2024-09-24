@@ -19,14 +19,14 @@ import sys
 import datetime 
 BENCH_OMP_THREADS = [1, 6,12]  # List of thread numbers when running scaling
 EXECUTABLE_PATH = "./builddir/release_gcc/apps/cli"  # Path to executable to run
-EXECUTABLE_NAME = "biocma_mcst_cli_app_shared"  # Name of executable to run
+EXECUTABLE_NAME = "biocma_mcst_cli_app"  # Name of executable to run
 BENCH_SCRIPT_PATH = (
     "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
 )
 date = datetime.datetime.today().strftime('%Y_%m_%d')
-FILENAME = f"./devutils/benchs/bench_records_{date}.csv"  # Record filename
-OUTPUT_PDF = f"./devutils/benchs/results_bench_{date}.pdf"  # Output path
-MODEL_NAME = "default"
+FILENAME = f"./devutils/benchs/bench_records_3_{date}.csv"  # Record filename
+OUTPUT_PDF = f"./devutils/benchs/results_bench_3_{date}.pdf"  # Output path
+MODEL_NAME = "model_monod"
 FINAL_TIME = 1  # Reference simulation time
 DELTA_TIME = 1e-3  # Reference delta time fixed
 # CMA_DATA_PATH = "./cma_data/bench/"
@@ -55,7 +55,7 @@ def format_cli(number_particle, final_time):
         "-f",
         CMA_DATA_PATH,
         "-er",
-        "bench",
+        "bench","-force","1","-mpi","1"
     ]
 
 
@@ -64,19 +64,20 @@ def execute(n_thread, script_path, command):
     env_var["OMP_NUM_THREADS"] = str(n_thread)
     env_var["OMP_PLACES"] = "threads"
     env_var["OMP_PROC_BIND"] = "spread"
-    # commands = [
-    #     "mpiexec",
-    #     "--allow-run-as-root",
-    #     "-n",
-    #     "6",
-    #     BENCH_SCRIPT_PATH,
-    #     *command,
-    # ]
-
+    # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
     commands = [
+        "mpiexec",
+        "--allow-run-as-root",
+        "-n",
+        "3",
         BENCH_SCRIPT_PATH,
         *command,
     ]
+
+    # commands = [
+    #     BENCH_SCRIPT_PATH,
+    #     *command,
+    # ]
 
     result = subprocess.run(
         commands,

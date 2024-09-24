@@ -67,23 +67,25 @@ namespace Simulation
     this->liquid_scalar->biomass_contribution.setZero();
   }
 
-  void SimulationUnit::update_feed(double d_t) const
+  void SimulationUnit::update_feed(const double t,const double d_t) const
   {
-
-    constexpr double aim = 0.2/3600.;
-    constexpr double flow =aim*20e-3; //mu/2*V
-    constexpr double tau = 1/(flow/20e-3);
-
-    constexpr double s_feed = 0.25; //g/l
-
+    constexpr double v = 0.09;
+    constexpr double aim = 0.5/3600.;
+    constexpr double flow =0.;// 0.035;//aim*v; //mu/2*V
+    // constexpr double tau = 1/(flow/v);
+    constexpr uint64_t i_exit = 0;
+    constexpr double s_feed = 1.;//0.25; //g/l
+   
     this->liquid_scalar->feed.coeffRef(0, 0) = s_feed * flow;
-
+    
+    
+    this->liquid_scalar->sink.coeffRef(i_exit,i_exit) = flow;
     // for (int i = 1; i < this->liquid_scalar->concentration.cols() - 2; ++i)
     // {
     //   this->liquid_scalar->feed.coeffRef(0, i) = 50 * 10 / 3600;
     // }
 
-    index_leaving_flow(0) = 0;
+    index_leaving_flow(0) = i_exit;
     leaving_flow(0) = flow;
   }
 

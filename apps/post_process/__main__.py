@@ -63,7 +63,13 @@ def detect_exponential_growth(t: np.ndarray, n: np.ndarray, threshold: float = 0
     return 0  # Default to 0 if no stable growth is detected
 
 def plot_grow_in_number(t: np.ndarray, n: np.ndarray, dest: str):
-    n = n.reshape(-1)
+
+
+
+
+
+    n = np.sum(n,axis=1)
+   
     plt.figure()
     plt.semilogy(t, n, "-",color='black', label="results")
     plt.ylabel("Number of particles")
@@ -113,14 +119,15 @@ def main(name_results,root_res='./results/'):
         last_vtk_path = (
             None  # f"./results/{name_results[i]}/{name_results[i]}_{last_id}.vtu"
         )
-
-        init_mass = np.sum(X0 * results.volume_liquid[0, :])
-        print("INITIAL MASS", init_mass)
-        final_mass = (
-            results.npart * results.weight / np.sum(results.volume_liquid[0, :])
-        )
-        print("FINAL CONCENTRATION", final_mass)
-
+        try:
+            init_mass = np.sum(X0 * results.volume_liquid[0, :])
+            print("INITIAL MASS", init_mass)
+            final_mass = (
+                results.npart * results.weight / np.sum(results.volume_liquid[0, :])
+            )
+            print("FINAL CONCENTRATION", final_mass)
+        except:
+            pass
         property_distribution(
             results.initial_bioparam, f"{name_results[i]}_init", dest[i]
         )

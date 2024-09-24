@@ -5,7 +5,6 @@
 #include <common/kokkos_vector.hpp>
 #include <scalar_simulation.hpp>
 
-
 namespace Simulation
 {
 
@@ -36,14 +35,14 @@ namespace Simulation
     this->concentration = Eigen::MatrixXd(n_species, n_compartments);
     this->concentration.setZero();
 
-    // std::cout<<__FILE__<<" "<<concentration.rows()<<"
-    // "<<concentration.cols()<<std::endl;
-
-    this->feed = Eigen::MatrixXd(n_species, n_compartments);
+    this->feed = Eigen::SparseMatrix<double>(n_species, n_compartments);
     this->feed.setZero();
 
+    this->sink = Eigen::SparseMatrix<double>(n_compartments, n_compartments);
+    this->sink.setZero();
+
     this->vec_kla = Eigen::ArrayXXd(n_species, n_compartments);
-    vec_kla.setZero();
+    this->vec_kla.setZero();
 
     biomass_contribution = Eigen::MatrixXd(n_species, n_compartments);
     biomass_contribution.setZero();
@@ -73,8 +72,7 @@ namespace Simulation
   {
 
     total_mass.noalias() +=
-        d_t * (concentration * m_transition + biomass_contribution + feed +
-               (transfer_gas_liquid)*m_volumes);
+        d_t * (concentration * m_transition + biomass_contribution + feed + transfer_gas_liquid*m_volumes - concentration * sink);
 
     concentration = total_mass * volumes_inverse;
 
@@ -92,7 +90,7 @@ namespace Simulation
 
     Eigen::Map<const Eigen::MatrixXd> temp_map(
         data.data(), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
-    this->concentration = temp_map; //Performs deep copy 
+    this->concentration = temp_map; // Performs deep copy
 
     return true;
   }

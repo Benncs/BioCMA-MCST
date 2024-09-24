@@ -21,6 +21,7 @@ struct UserControlParameters
   std::string model_name;
   double biomass_initial_concentration;
   std::string initialiser_path;
+  bool force_override;
   static UserControlParameters m_default();
 };
 

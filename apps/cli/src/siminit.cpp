@@ -36,6 +36,10 @@ namespace MPI_W
 static const ScalarFactory::ScalarVariant DefaultIntialiser =
     ScalarFactory::Uniform({1.});
 
+static const ScalarFactory::ScalarVariant DefaultIntialiserTPF =
+    ScalarFactory::Uniform({6e-3},std::vector<double>({0.2}));
+
+
 /**
  * @brief Initializes and retrieves the reactor state based on provided
  * parameters and flow handle.
@@ -157,7 +161,7 @@ init_simulation(const ExecInfo &info,
   if (params.user_params.initialiser_path == "")
   {
     std::cerr << "WARNING: using Default Initialiser" << std::endl;
-    arg = DefaultIntialiser;
+    arg = f_init_gas_flow? DefaultIntialiserTPF:DefaultIntialiser;
   }
   else
   {
@@ -168,7 +172,6 @@ init_simulation(const ExecInfo &info,
   auto scalar_init = ScalarFactory::scalar_factory(
       f_init_gas_flow, gas_volume, liquid_volume, arg);
 
-  
 
   // Construct the main simulation object (one per rank)
   auto simulation = std::make_unique<Simulation::SimulationUnit>(

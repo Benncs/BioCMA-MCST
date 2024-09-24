@@ -39,7 +39,7 @@ def check_mixing(
             t,
         ) = process_norm(name_results[i], results, vtk_cma_mesh_path)
         plt.scatter(t, norm_par_var, label=name_results[i])
-        plt.semilogy(t, norm_c_var, label=f"liquid_{name_results[i]}")
+        plt.plot(t, norm_c_var, label=f"liquid_{name_results[i]}")
 
     plt.legend()
     plt.title("Segregation index as a function of the time")

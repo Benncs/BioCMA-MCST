@@ -17,7 +17,7 @@ ROOT = __current_directory + "/.."
 DEFAULT_TYPE = "debug"
 MPI_COMMAND = "mpiexec --allow-run-as-root -np 2 "
 OMP_NUM_THREADS = "1"
-COMPILER_NAME="clang"
+COMPILER_NAME="gcc"
 
 def get_executable(type: str, mpi: bool = True):
     appname = "biocma_mcst_cli_app" if mpi else "biocma_mcst_cli_app_shared"

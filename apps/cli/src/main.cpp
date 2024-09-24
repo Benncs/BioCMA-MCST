@@ -10,6 +10,7 @@
 #include <siminit.hpp>
 #include <stream_io.hpp>
 
+#include <filesystem>
 
 #ifdef USE_PYTHON_MODULE
 #  include <pymodule/import_py.hpp>
@@ -43,6 +44,11 @@ static Core::CaseData prepare(const ExecInfo &exec_info,
 template <typename ExceptionType>
 static int handle_catch(ExceptionType const &e);
 
+/**
+ * @brief Check if result path exist or not and ask for overriding if yes
+ * @return true if override results_path
+ */
+static bool override_result_path(const SimulationParameters &params);
 int main(int argc, char **argv)
 {
 
@@ -54,6 +60,12 @@ int main(int argc, char **argv)
   }
 
   const auto params = params_opt.value();
+
+  if (!override_result_path(params))
+  {
+    return -1;
+  }
+
   const ExecInfo exec_info = runtime_init(argc, argv, params);
   try
   {
@@ -97,4 +109,17 @@ static int handle_catch(ExceptionType const &e)
   std::cerr << "Internal error" << '\n';
   return -1;
 #endif
+}
+
+bool override_result_path(const SimulationParameters &params)
+{
+  if (std::filesystem::exists(params.results_file_name) &&
+      !params.user_params.force_override)
+  {
+    std::cout << "Override results ? (y/n)" << std::endl;
+    std::string res;
+    std::cin >> res;
+    return res == "y";
+  }
+  return true;
 }

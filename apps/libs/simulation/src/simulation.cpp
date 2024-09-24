@@ -49,7 +49,7 @@ namespace Simulation
         makeScalarSimulation(mc_unit->domain.getNumberCompartments(),
                              scalar_init.n_species,
                              scalar_init.volumesliq));
-
+    
     this->gas_scalar =
         (is_two_phase_flow)
             ? std::unique_ptr<ScalarSimulation, pimpl_deleter>(
@@ -58,9 +58,11 @@ namespace Simulation
                       scalar_init.n_species,
                       scalar_init.volumesgas)) // No contribs for gas
             : nullptr;
+        
 
     post_init_concentration(scalar_init);
     post_init_compartments();
+    
     const std::size_t n_exit_flow = 1;
     index_leaving_flow =
         Kokkos::View<size_t *, ComputeSpace>("index_leaving_flow", n_exit_flow);
@@ -111,23 +113,25 @@ namespace Simulation
   {
 
     CmaRead::L2DView<double> cliq = this->liquid_scalar->getConcentrationView();
-    CmaRead::L2DView<double> *cgas = nullptr;
-
+    CmaRead::L2DView<double> c;
     if (is_two_phase_flow)
     {
-      *cgas = this->gas_scalar->getConcentrationView();
+      assert(this->gas_scalar!=nullptr);
+      c = this->gas_scalar->getConcentrationView();
+      assert(c.size()!=0);
     }
 
     if (scalar_init.type == ScalarInitialiserType::Uniform ||
         scalar_init.type == ScalarInitialiserType::Local)
 
     {
+      std::cout<<cliq.getNCol()<<std::endl;
       for (size_t i = 0; i < cliq.getNCol(); ++i)
       {
         scalar_init.liquid_f_init.value()(i, cliq);
         if (is_two_phase_flow)
         {
-          scalar_init.gas_f_init.value()(i, *cgas);
+          scalar_init.gas_f_init.value()(i, c);
         }
       }
     }
