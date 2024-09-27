@@ -225,9 +225,8 @@ void DataExportHighFive::append_probes(uint64_t buffer_size,
     dataset.resize(new_size);
     auto chunk = dataset.select({counter * buffer_size}, {buffer_size});
     chunk.write_raw(ptr);
-      counter++;
+    counter++;
   }
-
 }
 
 void DataExportHighFive::write_final_results(ExportData &data,
@@ -281,17 +280,16 @@ void DataExportHighFive::write_particle_data(
   const size_t n_particles = particle_values.extent(1);
   const auto n_compartments = spatial_values.extent(1);
   // constexpr std::size_t cacheSize = 10e9;//in bytes
-  // constexpr std::size_t numSlots = 521; //Should be prime 
+  // constexpr std::size_t numSlots = 521; //Should be prime
   //   ds_props.add(HighFive::Caching(numSlots,cacheSize));
-  constexpr std::size_t chunk_particle = 512000; //500bytes //4096 / sizeof(double);
-
-
+  constexpr std::size_t chunk_particle =
+      512000; // 500bytes //4096 / sizeof(double);
 
   HighFive::File file(filename, HighFive::File::ReadWrite);
 
   HighFive::DataSetCreateProps ds_props;
 
-  ds_props.add(HighFive::Chunking(std::min(n_particles,chunk_particle)));
+  ds_props.add(HighFive::Chunking(std::min(n_particles, chunk_particle)));
   ds_props.add(HighFive::Shuffle());
   // ds_props.add(HighFive::Deflate(hdf5_max_compression));
 

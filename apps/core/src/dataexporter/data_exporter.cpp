@@ -11,6 +11,7 @@
 #include <tuple>
 
 #ifdef __linux__
+#  include <pwd.h>
 #  include <unistd.h>
 #endif
 
@@ -27,14 +28,17 @@ static std::string get_user_name()
 {
   std::string_view res = "someone";
 #ifdef __linux__
-  char *buff = getlogin();
-  if (buff != nullptr)
+  uid_t uid = geteuid();
+  passwd *pw = getpwuid(uid);
+  if (pw != nullptr)
   {
-    res = buff;
+    res = pw->pw_name;
   }
 #endif
+
   return std::string(res);
 }
+
 
 DataExporter::DataExporter(const ExecInfo &info,
                            const SimulationParameters &params,
@@ -47,7 +51,7 @@ DataExporter::DataExporter(const ExecInfo &info,
       n_iter(niter + 2)
 
 {
-  
+
   metadata["file_version"] = 3;
   metadata["creation_date"] = date_time();
   metadata["author"] = get_user_name();

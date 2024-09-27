@@ -16,7 +16,6 @@
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
 #endif
-
 #include <core/cp_flag.hpp>
 #include <post_process.hpp>
 #include <signal_handling.hpp>
@@ -119,6 +118,8 @@ inline static void update_progress_bar(size_t total, size_t current_position)
 #  define INIT_PAYLOAD
 #endif
 
+#include <dataexporter/main_exporter.hpp>
+#include <dataexporter/partial_exporter.hpp>
 void host_process(
     const ExecInfo &exec,
     Simulation::SimulationUnit &&simulation,
@@ -129,6 +130,16 @@ void host_process(
   std::unique_ptr<DataExporter> data_exporter;
 
   {
+
+    DE__WIP::MainExporter m(exec,"test.h5");
+    DE__WIP::PartialExporter mm(exec,"test_partial.h5");
+    // auto e = exec;
+    // e.n_rank = 1000;
+    // DE__WIP::MainExporter m2(e,"test2.h5");
+
+    // m._do_link("test2.h5", "/misc");
+
+    exit(0);
     auto initial_distribution = simulation.mc_unit->domain.getRepartition();
 
     data_exporter =
