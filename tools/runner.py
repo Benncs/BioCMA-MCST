@@ -88,7 +88,7 @@ def main():
         + run_cli
         + f" -nt {cli_args.n_threads}"
     )
-    exec(command, cli_args.n_threads)
+    exec(command, cli_args.n_threads,do_kokkos_measure=True)
 
   
 

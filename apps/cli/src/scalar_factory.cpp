@@ -1,3 +1,4 @@
+#include "highfive/H5DataSet.hpp"
 #include <algorithm>
 #include <filesystem>
 #include <optional>
@@ -94,10 +95,10 @@ namespace ScalarFactory
     {
       return [n_species,
               concentrations = std::forward<decltype(c)>(c),
-              indices = std::forward<decltype(i)>(i)](
+              _indices = std::forward<decltype(i)>(i)](
                  size_t i, CmaRead::L2DView<double> &view)
       {
-        if (std::ranges::find(indices, i) != indices.end())
+        if (std::ranges::find(_indices, i) != _indices.end())
         {
           for (size_t i_species = 0; i_species < n_species; ++i_species)
           {
@@ -124,30 +125,58 @@ namespace ScalarFactory
 #ifdef USE_HIGHFIVE
     auto res = Simulation::ScalarInitializer();
     res.type = Simulation::ScalarInitialiserType::File;
-    if(!std::filesystem::is_regular_file(arg.path))
+    if (!std::filesystem::is_regular_file(arg.path))
     {
-      throw std::invalid_argument("Unable to open provided concentration initaliser file");
+      throw std::invalid_argument(
+          "Unable to open provided concentration initaliser file");
     }
 
     HighFive::File file(arg.path.data(), HighFive::File::ReadOnly);
 
-    auto dataset = file.getDataSet("initial_liquid");
+    auto liquid_dataset = file.getDataSet("initial_liquid");
+
+    HighFive::DataSet gas_dataset;
+    bool gas = false;
+    if(file.exist("initial_gas"))
+    {
+      gas_dataset = file.getDataSet("initial_gas");
+      gas=true;
+    }
+
+    auto set_buffer = [&arg, &res](auto &dataset)
+    {
+      auto dims = dataset.getDimensions();
+
+      auto n_elements = dims[0] * dims[1];
+      if (n_elements >= arg.n_compartment)
+      {
+        auto nd_array = std::vector<double>(n_elements);
+        dataset.template read_raw<double>(nd_array.data());
+        res.n_species = n_elements / arg.n_compartment;
+        return nd_array;
+      }
+
+      throw std::invalid_argument(__FILE__ "Invalid file, size don't match");
+    };
+
+    res.liquid_buffer = set_buffer(liquid_dataset);
+    if (gas)
+    {
+      res.gas_buffer = set_buffer(gas_dataset);
+      res.gas_flow = true;
+    }
 
     // First read the dimensions.
-    auto dims = dataset.getDimensions();
+    // auto dims = liquid_dataset.getDimensions();
 
-    auto n_elements = dims[0] * dims[1];
-    if (n_elements >= arg.n_compartment)
-    {
-      auto nd_array = std::vector<double>(n_elements);
-      dataset.read_raw<double>(nd_array.data());
-      res.buffer = std::move(nd_array);
-      res.n_species = n_elements / arg.n_compartment;
-    }
-    else
-    {
-      throw std::invalid_argument(__FILE__ "Invalid file, size don't match");
-    }
+    // auto n_elements = dims[0] * dims[1];
+    // if (n_elements >= arg.n_compartment)
+    // {
+    //   auto nd_array = std::vector<double>(n_elements);
+    //   liquid_dataset.read_raw<double>(nd_array.data());
+    //   res.liquid_buffer = std::move(nd_array);
+    //   res.n_species = n_elements / arg.n_compartment;
+    // }
 
     return res;
 #else
@@ -169,7 +198,8 @@ bool sanitize(const Simulation::ScalarInitializer &res)
 
   auto test_functor = [](auto &&_res)
   {
-    bool _flag = _res.liquid_f_init.has_value() && !_res.buffer.has_value();
+    bool _flag =
+        _res.liquid_f_init.has_value() && !_res.liquid_buffer.has_value();
 
     if (_res.gas_flow)
     {
@@ -195,11 +225,11 @@ bool sanitize(const Simulation::ScalarInitializer &res)
   case Simulation::ScalarInitialiserType::File:
   {
 
-    flag = res.buffer.has_value() &&
+    flag = res.liquid_buffer.has_value() &&
            (!res.gas_f_init.has_value() && !res.liquid_f_init.has_value());
     if (flag)
     {
-      flag = res.buffer->size() != 0;
+      flag = res.liquid_buffer->size() != 0;
     }
     break;
   }

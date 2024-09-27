@@ -105,9 +105,11 @@ eigen_dep = dependency('eigen3', required: true)
 blas = dependency('blas', required: false) # Eigen can work without BLAS
 
 
-if blas.found()
-  add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
-endif
+# if blas.found()
+#   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
+# endif
+
+#add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
 __cmake_kokkos_dep__ = dependency(
   'Kokkos',
@@ -149,8 +151,6 @@ if cmake.found()
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_UNIT_TESTS': false})
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_USE_BOOST': false})
   ## MAYBE USE ?? IDK 
-
-
   highfive_cmake_options.add_cmake_defines({'HDF5_PREFER_PARALLEL': true})
   highfive_cmake_options.add_cmake_defines({'HDF5_IS_PARALLEL': true})
   highfive_proj = cmake.subproject('highfive', options: highfive_cmake_options, required: false)

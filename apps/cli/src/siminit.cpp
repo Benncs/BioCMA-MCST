@@ -1,4 +1,5 @@
 #include "scalar_factory.hpp"
+#include <biocma_cst_config.hpp>
 #include <cassert>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/light_2d_view.hpp>
@@ -22,7 +23,7 @@
 #include <utility>
 #include <vector>
 #include <wrap_init_model_selector.hpp>
-#include <biocma_cst_config.hpp>
+
 
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
@@ -37,8 +38,8 @@ static const ScalarFactory::ScalarVariant DefaultIntialiser =
     ScalarFactory::Uniform({1.});
 
 static const ScalarFactory::ScalarVariant DefaultIntialiserTPF =
-    ScalarFactory::Uniform({6e-3},std::vector<double>({0.2}));
-
+    ScalarFactory::Local(
+        {5., 0.}, {0}, std::vector<double>({0, 0.}), std::vector<size_t>({0}));
 
 /**
  * @brief Initializes and retrieves the reactor state based on provided
@@ -161,7 +162,7 @@ init_simulation(const ExecInfo &info,
   if (params.user_params.initialiser_path == "")
   {
     std::cerr << "WARNING: using Default Initialiser" << std::endl;
-    arg = f_init_gas_flow? DefaultIntialiserTPF:DefaultIntialiser;
+    arg = f_init_gas_flow ? DefaultIntialiserTPF : DefaultIntialiser;
   }
   else
   {
@@ -171,7 +172,6 @@ init_simulation(const ExecInfo &info,
 
   auto scalar_init = ScalarFactory::scalar_factory(
       f_init_gas_flow, gas_volume, liquid_volume, arg);
-
 
   // Construct the main simulation object (one per rank)
   auto simulation = std::make_unique<Simulation::SimulationUnit>(

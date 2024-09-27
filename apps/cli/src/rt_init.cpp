@@ -95,8 +95,8 @@ ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
   Kokkos::initialize(argc, argv);
   Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
 
-  Eigen::setNbThreads(static_cast<int>(info.thread_per_process));
-  // Eigen::setNbThreads(std::min(omp_get_num_procs(), 1));
+  // Eigen::setNbThreads(static_cast<int>(info.thread_per_process));
+  // Eigen::setNbThreads(std::min(omp_get_num_procs(), 4));
 
 #ifdef USE_PYTHON_MODULE
   info.thread_per_process = 1; // Set one thread because of PYthon GIL

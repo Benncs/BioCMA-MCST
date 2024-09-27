@@ -13,12 +13,6 @@
 #include <mc/prng/prng.hpp>
 
 
-#ifndef NDEBUG
-#  define ENABLE_KOKKOS_PROFILING
-#  include <Kokkos_Profiling_ScopedRegion.hpp>
-#  include <utility>
-#endif
-
 static constexpr bool const_number_simulation = false;
 
 #include <simulation/alias.hpp>
@@ -56,7 +50,7 @@ namespace Simulation::KernelInline
            DiagonalViewCompute _diag_transition,
            CumulativeProbabilityViewCompute _cumulative_probability,
            MC::EventContainer _events,
-           ContributionViewCompute _biomass_contribution,
+           ContributionView _biomass_contribution,
            LeavingFlowType _local_leaving_flow,
            LeavingFlowIndexType _local_index_leaving_flow,
            Probes prob)
@@ -85,7 +79,7 @@ namespace Simulation::KernelInline
     DiagonalViewCompute diag_transition;
     CumulativeProbabilityViewCompute cumulative_probability;
     MC::EventContainer events;
-    ContributionViewCompute biomass_contribution;
+    ContributionView biomass_contribution;
     LeavingFlowType local_leaving_flow;
     LeavingFlowIndexType local_index_leaving_flow;
     Probes probe_at_t;
@@ -124,8 +118,8 @@ namespace Simulation::KernelInline
     }
 
     handle_move(particle);
-
     handle_exit(status, particle);
+
     // Useless to try to reducing branhcing here because we're going to
     // early return so serializing will occur
     if (status == MC::CellStatus::OUT)
@@ -141,7 +135,9 @@ namespace Simulation::KernelInline
                     local_compartments(particle.properties.current_container)
                         .concentrations,
                     list.rng_instance);
+
     particle.contribution(biomass_contribution);
+
     handle_division(particle);
   }
 

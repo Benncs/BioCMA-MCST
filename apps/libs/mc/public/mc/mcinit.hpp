@@ -19,7 +19,7 @@ namespace MC
 {
 
 
-  constexpr bool uniform_init = false;
+  constexpr bool uniform_init = true;
   namespace
   {
 

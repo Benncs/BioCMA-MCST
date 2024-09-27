@@ -140,7 +140,7 @@ void host_process(
                               initial_distribution,
                               simulation.mc_unit->init_weight);
 
-    PostProcessing::save_initial_particle_state(simulation, data_exporter);
+    // PostProcessing::save_initial_particle_state(simulation, data_exporter);
   }
 
   PostProcessing::show_sumup_state(simulation);
@@ -153,8 +153,8 @@ void host_process(
 
   last_sync(exec, simulation);
 
-  PostProcessing::final_post_processing(
-      exec, params, std::move(simulation), data_exporter);
+  // PostProcessing::final_post_processing(
+  //     exec, params, std::move(simulation), data_exporter);
 }
 
 void main_loop(const SimulationParameters &params,
@@ -164,7 +164,7 @@ void main_loop(const SimulationParameters &params,
                std::unique_ptr<DataExporter> &exporter)
 {
 
-  simulation.update_feed(0,0);
+  simulation.update_feed(0, 0);
 
   // const size_t n_update_feed = 0; //TODO: move elsewhere
 
@@ -241,7 +241,7 @@ void main_loop(const SimulationParameters &params,
       result.clear(local_container.n_particle());
       result.update_view(view_result);
 
-      simulation.update_feed(current_time,d_t);
+      simulation.update_feed(current_time, d_t);
       simulation.step(d_t, *current_reactor_state);
       sync_prepare_next(simulation);
       current_time += d_t;

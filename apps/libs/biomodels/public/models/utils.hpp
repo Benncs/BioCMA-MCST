@@ -13,7 +13,7 @@ namespace Models
   {
     const double proba_div =
         (1 - Kokkos::exp(-d_t / tau_division_proba)) * gamma;
-
+    // double proba_div = gamma;
     const double x = _rng.double_uniform();
     return x < proba_div;
   }

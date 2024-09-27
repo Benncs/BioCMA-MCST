@@ -110,8 +110,12 @@ namespace Models
                                             ContributionView contribution)
   {
 
-    Kokkos::atomic_add_fetch(&contribution(0, p.current_container),
-                             -this->contrib * p.weight);
+    auto access_contribs = contribution.access();
+
+    // Kokkos::atomic_add(&contribution(0, p.current_container),
+    //                          -contrib * p.weight);
+
+    access_contribs(0,p.current_container)+= (-contrib*p.weight);
   }
 
   model_properties_detail_t Uptake::get_properties()

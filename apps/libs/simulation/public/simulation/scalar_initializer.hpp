@@ -29,9 +29,11 @@ namespace Simulation
 
     std::optional<init_scalar_f_t> liquid_f_init = std::nullopt;
     std::optional<init_scalar_f_t> gas_f_init = std::nullopt;
-    std::optional<std::vector<double>> buffer = std::nullopt;
+    std::optional<std::vector<double>> liquid_buffer = std::nullopt;
+    std::optional<std::vector<double>> gas_buffer = std::nullopt;
     bool gas_flow = false;
   };
+
 } // namespace Simulation
 
 #endif

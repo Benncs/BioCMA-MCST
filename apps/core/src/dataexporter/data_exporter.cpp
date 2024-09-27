@@ -47,7 +47,7 @@ DataExporter::DataExporter(const ExecInfo &info,
       n_iter(niter + 2)
 
 {
-
+  
   metadata["file_version"] = 3;
   metadata["creation_date"] = date_time();
   metadata["author"] = get_user_name();

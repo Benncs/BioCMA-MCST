@@ -2,11 +2,16 @@
 #define __MC_PARTICLE_MODEL_HPP__
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_ScatterView.hpp>
+#include <common/common.hpp>
 #include <common/kokkos_vector.hpp>
 #include <mc/particles/data_holder.hpp>
 #include <mc/prng/prng.hpp>
 #include <type_traits>
 #include <variant>
+
+
+WARN_EXPERIMENTAL
 
 #ifdef __GNUC__
 // Avoid tons of warnings with root code
@@ -20,11 +25,12 @@ using LocalConcentrationView =
                                             ///< current container that particle
                                             ///< can access
 
-using ContributionView =
-    Kokkos::View<double **,
-                 Kokkos::LayoutLeft,
-                 ComputeSpace>; ///< Contribution inside the particle's current
-                                ///< container
+using cv = Kokkos::View<double **, Kokkos::LayoutLeft, ComputeSpace>;
+
+using ContributionView = Kokkos::Experimental::
+    ScatterView<double **, Kokkos::LayoutLeft>; ///< Contribution inside the
+                                                ///< particle's current
+                                                ///< container
 
 using model_properties_t =
     std::variant<double,
@@ -33,7 +39,7 @@ using model_properties_t =
 using model_properties_detail_t =
     std::unordered_map<std::string,
                        double>; ///< Type of properties data that
-                                            ///< model can export
+                                ///< model can export
 
 /**
  * @brief Concept that defines the requirements for a Biological Model.

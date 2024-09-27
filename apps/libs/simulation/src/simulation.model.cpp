@@ -1,3 +1,4 @@
+#include "common/common.hpp"
 #include <cma_read/reactorstate.hpp>
 #include <iterator>
 #include <mc/domain.hpp>
@@ -38,16 +39,14 @@ namespace Simulation
   [[nodiscard]] std::tuple<size_t, size_t>
   SimulationUnit::getDim() const noexcept
   {
-    return {this->liquid_scalar->concentration.rows(),
-            this->liquid_scalar->concentration.cols()};
+    return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()};
   }
 
   void SimulationUnit::reduceContribs(std::span<double> data,
                                       size_t n_rank) const
   {
 
-    size_t nr = this->liquid_scalar->concentration.rows();
-    size_t nc = this->liquid_scalar->concentration.cols();
+    auto [nr, nc] = getDim();
 
     this->liquid_scalar->biomass_contribution.setZero();
 
@@ -55,7 +54,7 @@ namespace Simulation
     {
       this->liquid_scalar->biomass_contribution.noalias() +=
           Eigen::Map<Eigen::MatrixXd>(
-              &data[i * nr * nc], static_cast<int>(nr), static_cast<int>(nc));
+              &data[i * nr * nc], EIGEN_INDEX(nr), EIGEN_INDEX(nc));
     }
   }
 
@@ -67,50 +66,100 @@ namespace Simulation
     this->liquid_scalar->biomass_contribution.setZero();
   }
 
-  void SimulationUnit::update_feed(const double t,const double d_t) const
+  void SimulationUnit::update_feed(const double t, const double d_t)
   {
-    constexpr double v = 0.09;
-    constexpr double aim = 0.5/3600.;
-    constexpr double flow =0.;// 0.035;//aim*v; //mu/2*V
-    // constexpr double tau = 1/(flow/v);
-    constexpr uint64_t i_exit = 0;
-    constexpr double s_feed = 1.;//0.25; //g/l
-   
-    this->liquid_scalar->feed.coeffRef(0, 0) = s_feed * flow;
-    
-    
-    this->liquid_scalar->sink.coeffRef(i_exit,i_exit) = flow;
-    // for (int i = 1; i < this->liquid_scalar->concentration.cols() - 2; ++i)
+    // Get references to the index_leaving_flow and leaving_flow data members
+    auto &_index_leaving_flow = this->index_leaving_flow;
+    auto &_leaving_flow = this->leaving_flow;
+
+    // Get the index of the exit compartment
+    const uint64_t i_exit = mc_unit->domain.getNumberCompartments() - 1;
+
+    // Define the set_feed lambda function
+    auto set_feed =
+        [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow](
+            const pimp_ptr_t &scalar, auto &&descritor, bool mc_f = false)
+    {
+      double flow = 0.; // Initialize the flow variable
+
+      // Iterate through each current_feed in the descriptor
+      for (auto &&current_feed : descritor)
+      {
+        current_feed.update(t, d_t); // Update the current_feed
+        flow =
+            current_feed.flow_value; // Get the flow_value of the current_feed
+
+        // Iterate through the species, positions, and values of the
+        // current_feed
+        for (std::size_t i_f = 0; i_f < current_feed.n_v; ++i_f)
+        {
+          const std::size_t i_species = current_feed.species[i_f];
+          scalar->set_feed(i_species,
+                           current_feed.position[i_f],
+                           flow * current_feed.value[i_f]);
+        }
+      }
+
+      // Set the sink for the exit compartment
+      scalar->set_sink(i_exit, flow);
+
+      // Update Flow for mc particle
+      if (mc_f)
+      {
+        _index_leaving_flow(0) = i_exit;
+        _leaving_flow(0) = flow;
+      }
+    };
+
+    set_feed(this->liquid_scalar, feed.liquid, true);
+
+    // if (is_two_phase_flow && feed.gas.has_value())
     // {
-    //   this->liquid_scalar->feed.coeffRef(0, i) = 50 * 10 / 3600;
+    //   set_feed(this->gas_scalar, *feed.gas);
     // }
 
-    index_leaving_flow(0) = i_exit;
-    leaving_flow(0) = flow;
+    // this->liquid_scalar->set_feed(0, 0, s_feed * flow);
+    // constexpr double v = 0.09;
+    // constexpr double aim = 0.5 / 3600.;
+    // constexpr double flow =
+    //     0.03813511651379644; // 1.250000e-05; // 0.035;//aim*v; //mu/2*V
+    // // constexpr double tau = 1/(flow/v);
+    // const uint64_t i_exit = mc_unit->domain.getNumberCompartments() - 1;
+    // constexpr double s_feed = 0.25; // g/l
+    // // this->liquid_scalar->set_feed(0, 0, s_feed * flow);
+
+    // this->liquid_scalar->set_sink(i_exit, i_exit, flow);
+
+    // if (is_two_phase_flow)
+    // {
+    //   // this->gas_scalar->set_feed(0, 0, 0.21 * flow);
+    //   this->gas_scalar->set_sink(i_exit, i_exit, flow);
+    // }
+
+    // index_leaving_flow(0) = i_exit;
+    // leaving_flow(0) = flow;
   }
 
   void SimulationUnit::step(double d_t,
                             const CmaRead::ReactorState &state) const
   {
 
-    auto mat_transfer_g_liq =
-        (is_two_phase_flow)
-            ? gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,
-                                       liquid_scalar->getVolume(),
-                                       liquid_scalar->concentration.array(),
-                                       gas_scalar->concentration.array(),
-                                       state)
-            : Eigen::MatrixXd::Zero(this->liquid_scalar->concentration.rows(),
-                                    this->liquid_scalar->concentration.cols());
-
-    this->liquid_scalar->performStep(
-        d_t, flow_liquid->transition_matrix, mat_transfer_g_liq);
-
     if (is_two_phase_flow)
     {
+      this->liquid_scalar->mass_transfer =
+          gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,
+                                   liquid_scalar->getVolume(),
+                                   liquid_scalar->getConcentrationArray(),
+                                   gas_scalar->getConcentrationArray(),
+                                   state);
 
-      this->gas_scalar->performStep(
-          d_t, flow_gas->transition_matrix, -1 * mat_transfer_g_liq);
+      this->gas_scalar->performStep(d_t,
+                                    flow_gas->transition_matrix,
+                                    -1 * this->liquid_scalar->mass_transfer);
     }
+
+    this->liquid_scalar->performStep(d_t,
+                                     flow_liquid->transition_matrix,
+                                     this->liquid_scalar->mass_transfer);
   }
 } // namespace Simulation

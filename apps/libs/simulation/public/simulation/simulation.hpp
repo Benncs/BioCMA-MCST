@@ -1,16 +1,17 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
+#include "simulation/feed_descriptor.hpp"
 #include "simulation/probe.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Macros.hpp>
+#include <biocma_cst_config.hpp>
 #include <cassert>
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <common/kokkos_vector.hpp>
 #include <cstdint>
-#include <decl/Kokkos_Declare_OPENMP.hpp>
-#include <impl/Kokkos_HostThreadTeam.hpp>
 #include <mc/events.hpp>
 #include <mc/particles/extra_process.hpp>
 #include <mc/prng/prng.hpp>
@@ -19,6 +20,9 @@
 #include <simulation/alias.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation_kernel.hpp>
+
+
+#include <Kokkos_ScatterView.hpp>
 
 // TODO Clean
 static constexpr size_t trigger_const_particle_number = 1e6;
@@ -69,50 +73,48 @@ namespace Simulation
 
     void clearContribution() const noexcept;
 
-    void update_feed(double t,double d_t) const;
+    void update_feed(double t, double d_t);
 
     void clear_mc();
 
     void reset();
+
+    // FIXME
     Probes probes;
 
-    void set_probes(Probes&& _probes){probes=std::move(_probes);}
-  private:
+    void set_probes(Probes &&_probes)
+    {
+      probes = std::move(_probes);
+    }
 
-    
+    [[nodiscard]] auto counter()const{return _internal_counter;}
+
+  private:
+    Simulation::Feed::SimulationFeed feed;
+
     bool const_number_simulation = true;
     uint64_t _internal_counter = 0;
+    LeavingFlowIndexType index_leaving_flow;
+    LeavingFlowType leaving_flow;
+    PreCalculatedHydroState *flow_liquid; // TODO OPTI
+    PreCalculatedHydroState *flow_gas;    // TODO OPTI
+    bool is_two_phase_flow;
 
     DiagonalViewCompute get_kernel_diagonal();
 
     CumulativeProbabilityViewCompute get_kernel_cumulative_proba();
 
-    ContributionViewCompute get_kernel_contribution();
+    cv get_kernel_contribution();
 
-    void set_kernel_contribs_to_host(ContributionViewCompute c);
+    void set_kernel_contribs_to_host(cv c);
 
     [[nodiscard]] NeighborsViewCompute get_kernel_neighbors() const;
 
-    LeavingFlowIndexType index_leaving_flow;
-    LeavingFlowType leaving_flow;
-
-    struct pimpl_deleter
-    {
-      void operator()(ScalarSimulation *) const;
-    };
-
-    using pimp_ptr_t = std::unique_ptr<ScalarSimulation, pimpl_deleter>;
-
     void post_init_compartments();
-
-    bool is_two_phase_flow;
-
-    PreCalculatedHydroState *flow_liquid; // TODO OPTI
-    PreCalculatedHydroState *flow_gas;    // TODO OPTI
-
-    pimp_ptr_t liquid_scalar;
-    pimp_ptr_t gas_scalar;
     void post_init_concentration(const ScalarInitializer &scalar_init);
+
+    void post_init_concentration_functor(const ScalarInitializer &scalar_init);
+    void post_init_concentration_file(const ScalarInitializer &scalar_init);
 
     template <class ListType,
               class ResultViewType,
@@ -121,50 +123,15 @@ namespace Simulation
     inline void post_kernel_process(ListType &list,
                                     ResultViewType &rview,
                                     CompartmentListType &local_compartments,
-                                    ContribType &contribs)
+                                    ContribType &contribs);
+
+    struct pimpl_deleter
     {
-      Kokkos::parallel_for(
-          "update_compartment_number",
-          rview().extra_process.size(),
-          KOKKOS_LAMBDA(const int i) {
-            Kokkos::atomic_increment(
-                &local_compartments(rview()
-                                        .extra_process._owned_data(i)
-                                        .properties.current_container)
-                     .n_cells);
-          });
-
-      constexpr uint64_t min = 100;
-      constexpr double ratio = 0.005;
-      auto threshold = std::max(
-          min, static_cast<uint64_t>(static_cast<double>(list.size()) * ratio));
-
-      if (_internal_counter > threshold)
-      {
-#ifndef NDEBUG
-        const auto old_size = list.size();
-#endif
-        list.remove_dead();
-        KOKKOS_ASSERT(list.size() == old_size - _internal_counter);
-
-        _internal_counter = 0;
-      }
-
-      list.insert(rview().extra_process);
-      const auto n_new_alloc = rview().waiting_allocation_particle;
-      const double new_weight =
-          list._owned_data(0).properties.weight; // Weight is random, try to
-                                                 // find other initialisation
-      list._spawn_alloc(n_new_alloc, new_weight);
-
-      Kokkos::parallel_for(
-          "add_new_alloc", n_new_alloc, KOKKOS_LAMBDA(const int) {
-            Kokkos::atomic_increment(&local_compartments(0).n_cells);
-          });
-      Kokkos::fence("Fence cycle process ");
-
-      set_kernel_contribs_to_host(contribs);
-    }
+      void operator()(ScalarSimulation *) const;
+    };
+    using pimp_ptr_t = std::unique_ptr<ScalarSimulation, pimpl_deleter>;
+    pimp_ptr_t liquid_scalar;
+    pimp_ptr_t gas_scalar;
   };
 
   inline void SimulationUnit::reset()
@@ -191,10 +158,11 @@ namespace Simulation
   }
 
   void SimulationUnit::cycleProcess(auto &&container, auto &&rview, double d_t)
-  {
+  { 
+    PROFILE_SECTION("cycleProcess")
     auto &list = container.get_compute();
     const size_t n_particle = list.size();
-    
+
     const auto diag_transition = get_kernel_diagonal();
     const auto &local_leaving_flow = leaving_flow;
     const auto &local_index_leaving_flow = index_leaving_flow;
@@ -205,6 +173,8 @@ namespace Simulation
     auto &local_rng = mc_unit->rng;
     auto events = mc_unit->events;
     auto contribs = get_kernel_contribution();
+
+    ContributionView contribs_scatter(contribs);
 
     const_number_simulation = (n_particle > trigger_const_particle_number);
     Kokkos::View<size_t, Kokkos::SharedSpace> internal_counter_dead(
@@ -221,15 +191,72 @@ namespace Simulation
                                   diag_transition,
                                   cumulative_probability,
                                   events,
-                                  contribs,
+                                  contribs_scatter,
                                   local_leaving_flow,
-                                  local_index_leaving_flow,probes);
+                                  local_index_leaving_flow,
+                                  probes);
     Kokkos::parallel_for(
-        "cycle_process", Kokkos::RangePolicy<>(0, n_particle), k);
-    Kokkos::fence("Fence cycle_process");
+        "mc_cycle_process", Kokkos::RangePolicy<>(0, n_particle), k);
+    Kokkos::fence("fence_mc_cycle_process");
+
+    Kokkos::Experimental::contribute(contribs, contribs_scatter);
 
     _internal_counter = internal_counter_dead();
     post_kernel_process(list, rview, local_compartments, contribs);
+  }
+
+  template <class ListType,
+            class ResultViewType,
+            class CompartmentListType,
+            typename ContribType>
+  inline void
+  SimulationUnit::post_kernel_process(ListType &list,
+                                      ResultViewType &rview,
+                                      CompartmentListType &local_compartments,
+                                      ContribType &contribs)
+  {
+    Kokkos::parallel_for(
+        "update_compartment_number",
+        rview().extra_process.size(),
+        KOKKOS_LAMBDA(const int i) {
+          Kokkos::atomic_increment(
+              &local_compartments(rview()
+                                      .extra_process._owned_data(i)
+                                      .properties.current_container)
+                   .n_cells);
+        });
+
+    static constexpr uint64_t minimum_dead_particle_removal = 100;
+    const auto threshold = std::max(
+        minimum_dead_particle_removal,
+        static_cast<uint64_t>(static_cast<double>(list.size()) *
+                              AutoGenerated::dead_particle_ratio_threshold));
+
+    if (_internal_counter > threshold)
+    {
+#ifndef NDEBUG
+      const auto old_size = list.size();
+#endif
+      list.remove_dead(_internal_counter);
+      KOKKOS_ASSERT(list.size() == old_size - _internal_counter);
+
+      _internal_counter = 0;
+    }
+
+    list.insert(rview().extra_process);
+    const auto n_new_alloc = rview().waiting_allocation_particle;
+    const double new_weight =
+        list._owned_data(0).properties.weight; // Weight is random, try to
+                                               // find other initialisation
+    list._spawn_alloc(n_new_alloc, new_weight);
+
+    Kokkos::parallel_for(
+        "add_new_alloc", n_new_alloc, KOKKOS_LAMBDA(const int) {
+          Kokkos::atomic_increment(&local_compartments(0).n_cells);
+        });
+    Kokkos::fence("Fence cycle process ");
+
+    set_kernel_contribs_to_host(contribs);
   }
 
 } // namespace Simulation

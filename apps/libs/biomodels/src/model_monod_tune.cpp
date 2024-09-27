@@ -14,7 +14,7 @@ constexpr Models::MonodParameterSet default_set = {
 
 namespace Models
 {
-  MonodParameterSet MonodTune::parameters=default_set;
+  MonodParameterSet MonodTune::parameters = default_set;
   void MonodTune::set_parameters(MonodParameterSet &&values)
   {
     MonodTune::parameters = values;
@@ -79,8 +79,12 @@ namespace Models
   {
     // contribution(0, p.current_container) -= contrib * p.weight;
 
-    Kokkos::atomic_add_fetch(&contribution(0, p.current_container),
-                             -contrib * p.weight);
+    auto access_contribs = contribution.access();
+
+    // Kokkos::atomic_add(&contribution(0, p.current_container),
+    //                          -contrib * p.weight);
+
+    access_contribs(0, p.current_container) += (-contrib * p.weight);
   }
 
   model_properties_detail_t MonodTune::get_properties()

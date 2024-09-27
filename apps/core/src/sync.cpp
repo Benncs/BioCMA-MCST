@@ -70,10 +70,11 @@ void sync_prepare_next(Simulation::SimulationUnit &simulation)
 
 void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
 {
-  auto clean_list = [](auto &&container)
+  auto c =simulation.counter();
+  auto clean_list = [c](auto &&container)
   {
     auto &list = container.get_compute();
-    list.remove_dead();
+    list.remove_dead(c);
   };
 
   std::visit(clean_list, simulation.mc_unit->container);
