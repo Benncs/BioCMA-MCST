@@ -17,10 +17,10 @@
 #include <mc/prng/prng.hpp>
 #include <mc/unit.hpp>
 #include <memory>
+#include <optional>
 #include <simulation/alias.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation_kernel.hpp>
-
 
 #include <Kokkos_ScatterView.hpp>
 
@@ -55,7 +55,9 @@ namespace Simulation
 
     [[nodiscard]] std::span<double> getCliqData() const;
     [[nodiscard]] std::tuple<size_t, size_t> getDim() const noexcept;
-    [[nodiscard]] std::span<double> getCgasData() const;
+    [[deprecated]][[nodiscard]] std::span<double> getCgasData() const;
+
+    [[nodiscard]] std::optional<std::span<double>> _getCgasData() const;
     [[nodiscard]] std::span<double> getContributionData() const;
 
     void setVolumes(std::span<const double> volumesgas,
@@ -73,11 +75,15 @@ namespace Simulation
 
     void clearContribution() const noexcept;
 
-    void update_feed(double t, double d_t);
+    void update_feed(double t, double d_t,bool update_scalar=true);
+
+    
 
     void clear_mc();
 
     void reset();
+
+    [[nodiscard]] bool two_phase_flow()const{return is_two_phase_flow;}
 
     // FIXME
     Probes probes;
@@ -87,7 +93,10 @@ namespace Simulation
       probes = std::move(_probes);
     }
 
-    [[nodiscard]] auto counter()const{return _internal_counter;}
+    [[nodiscard]] auto counter() const
+    {
+      return _internal_counter;
+    }
 
   private:
     Simulation::Feed::SimulationFeed feed;
@@ -158,7 +167,7 @@ namespace Simulation
   }
 
   void SimulationUnit::cycleProcess(auto &&container, auto &&rview, double d_t)
-  { 
+  {
     PROFILE_SECTION("cycleProcess")
     auto &list = container.get_compute();
     const size_t n_particle = list.size();
@@ -238,7 +247,9 @@ namespace Simulation
       const auto old_size = list.size();
 #endif
       list.remove_dead(_internal_counter);
+#ifndef NDEBUG
       KOKKOS_ASSERT(list.size() == old_size - _internal_counter);
+#endif
 
       _internal_counter = 0;
     }

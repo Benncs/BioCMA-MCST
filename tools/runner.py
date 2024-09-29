@@ -15,7 +15,7 @@ __current_file_path = os.path.abspath(__file__)
 __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
 DEFAULT_TYPE = "debug"
-MPI_COMMAND = "mpiexec --allow-run-as-root -np 2 "
+MPI_COMMAND = "mpiexec -np 4 --bind-to core"
 OMP_NUM_THREADS = "1"
 COMPILER_NAME="gcc"
 
@@ -86,9 +86,9 @@ def main():
         + get_executable(r_type, cli_args.use_mpi)
         + " "
         + run_cli
-        + f" -nt {cli_args.n_threads}"
+        + f" -nt {cli_args.n_threads} " + "-force 1"
     )
-    exec(command, cli_args.n_threads,do_kokkos_measure=True)
+    exec(command, cli_args.n_threads,do_kokkos_measure=False)
 
   
 

@@ -4,7 +4,7 @@
 #ifndef __WORKER_SPECIFIC_HPP__
 #define __WORKER_SPECIFIC_HPP__
 
-
+#include <dataexporter/partial_exporter.hpp>
 #include <common/common.hpp>
 #include <memory>
 
@@ -33,7 +33,7 @@ void workers_process(
     const ExecInfo &exec,
     Simulation::SimulationUnit &&simulation,
     const SimulationParameters &params,
-    std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner);
+    std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner,CORE_DE::PartialExporter&mm);
 
 
 

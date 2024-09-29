@@ -70,13 +70,13 @@
    </control>
 
    <control name="debug">
-      <cma_case_path>./cma_data/0d/</cma_case_path>
-      <final_time>10</final_time>
-      <numper_particle>10</numper_particle>
+	   <cma_case_path>/home/benjamin/Documents/thesis/cfd-cma/0d_mono/</cma_case_path>
+      <final_time>2000</final_time>
+      <numper_particle>100000</numper_particle>
       <delta_time>0.1</delta_time>
-      <results_file_name>debug</results_file_name>
-      <number_exported_result>10</number_exported_result>
-      <model_name>None</model_name>
+      <results_file_name>debugg</results_file_name>
+      <number_exported_result>500</number_exported_result>
+      <model_name>model_monod</model_name>
       <initialiser_path></initialiser_path>
    </control>
 

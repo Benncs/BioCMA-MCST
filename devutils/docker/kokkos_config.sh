@@ -3,10 +3,10 @@
 set -e  # Exit immediately if a command exits with a non-zero status
 
 current_pwd=$(pwd)
-
+kokkos_version=4.4.00
 folder_name="kokkos-4.4.00"
 tar_name="${folder_name}.tar.gz"
-tar_url="https://github.com/kokkos/kokkos/releases/download/4.4.00/kokkos-4.4.00.tar.gz"
+tar_url="https://github.com/kokkos/kokkos/releases/download/$kokkos_version/kokkos-$kokkos_version.tar.gz"
 
 back_end_omp="1"
 back_end_cuda="0"
@@ -56,4 +56,7 @@ fi
 
 cmake $flag_cmake
 cmake --build .
+cmake --install .
 
+cd /tmp
+rm -rf /tmp/*

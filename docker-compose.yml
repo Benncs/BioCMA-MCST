@@ -2,19 +2,23 @@
 services:
   biocma_app:
     &biocma_app
-    image: bcasale/bio_cma_mc_runtime
-    # build: ./devutils/docker
+    # image: bcasale/bio_cma_mc_runtime
+    build: 
+      context: ./devutils/docker
+      dockerfile: Dockerfile.debian
     container_name: biocma_mcst__dev
     volumes:
-      - ./devutils/docker/runtime_container:/app
-      - ./apps/:/app/apps
-      - ./subprojects:/app/subprojects
-      - ./cma_data/:/app/cma_data
-      - ./modules:/app/modules
-      - ./.clang-format:/app/.clang-format
-      - ./.clang-tidy:/app/.clang-tidy
-      - ./meson.build:/app/meson.build
-      - ./meson_options.txt:/app/meson_options.txt
+      - ./devutils/docker/runtime_container:/app:Z
+      - ./apps/:/app/apps:Z
+      - ./subprojects:/app/subprojects:Z
+      - ./cma_data/:/app/cma_data:Z
+      - ./modules:/app/modules:Z
+      - ./.clang-format:/app/.clang-format:Z
+      - ./.clang-tidy:/app/.clang-tidy:Z
+      - ./meson.build:/app/meson.build:Z
+      - ./meson_options.txt:/app/meson_options.txt:Z
+      - ./devutils/auto_generate:/app/devutils/auto_generate:Z
+      
 
   biocma_app_task_test:
     <<: *biocma_app
@@ -22,6 +26,6 @@ services:
       - /bin/sh
       - -c
       - |
-        meson setup builddir --buildtype=release -Duse_cuda=true --reconfigure
-        ninja -C builddir -j 1 test 
+        meson setup builddir --buildtype=release --reconfigure
+        ninja -C builddir  test 
 

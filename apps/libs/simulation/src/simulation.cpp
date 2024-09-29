@@ -62,8 +62,8 @@ namespace Simulation
 
     post_init_concentration(scalar_init);
     post_init_compartments();
-    constexpr double expected_tau = 90e-3/0.00010087625032109857;//20e-3/1.6e-5;
-    Feed::FeedDescritor fl(0.00010087625032109857, {5}, {0}, {0}, Feed::Constant{});
+    constexpr double expected_tau = 20e-3/2.6e-6; //90e-3/0.00010087625032109857;//20e-3/1.6e-5;
+    Feed::FeedDescritor fl(2.6e-6, {5}, {0}, {0}, Feed::Constant{});
     Feed::FeedDescritor fg(
         0.03813511651379644, {0.21}, {0}, {1}, Feed::Constant{});
 

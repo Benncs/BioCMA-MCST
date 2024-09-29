@@ -27,7 +27,7 @@ namespace Models
     auto generator = _rng.random_pool.get_state();
 
     this->l = Kokkos::max(minimal_length,
-                          Kokkos::max(generator.normal(l_0/2., l_0/2. / 5.), 0.));
+        Kokkos::max(generator.normal(l_0/2., l_0/2. / 5.), 0.));
 
     this->mu = Kokkos::max(generator.normal(mu_max / 2., mu_max / 4), 0.);
     _rng.random_pool.free_state(generator);
@@ -36,23 +36,23 @@ namespace Models
   }
 
   KOKKOS_FUNCTION void
-  Monod::update(double d_t,
-                MC::ParticleDataHolder &p,
-                const LocalConcentrationView &concentration,
-                MC::KPRNG _rng)
-  {
-    const double s = Kokkos::max(0., concentration(0));
-    const double mu_p = mu_max * s / (Ks + s);
-    const double mu_eff = Kokkos::min(mu, mu_p);
+    Monod::update(double d_t,
+        MC::ParticleDataHolder &p,
+        const LocalConcentrationView &concentration,
+        MC::KPRNG _rng)
+    {
+      const double s = Kokkos::max(0., concentration(0));
+      const double mu_p = mu_max * s / (Ks + s);
+      const double mu_eff = Kokkos::min(mu, mu_p);
 
-    l += d_t * (mu_eff * _init_only_cell_lenghtening);
-    mu += d_t * (1.0 / tau_metabolism) * (mu_p - mu);
+      l += d_t * (mu_eff * _init_only_cell_lenghtening);
+      mu += d_t * (1.0 / tau_metabolism) * (mu_p - mu);
 
-    contrib = mu_eff * s / (Ks + s)/y_x_s;
+      contrib = mu_eff * s / (Ks + s)/y_x_s;
 
-    Models::update_division_status(
-        p.status, d_t, GammaDivision::threshold_linear(l, l_0, l_1), _rng);
-  }
+      Models::update_division_status(
+          p.status, d_t, GammaDivision::threshold_linear(l, l_0, l_1), _rng);
+    }
 
   KOKKOS_FUNCTION Monod Monod::division(MC::ParticleDataHolder &p)
   {
@@ -64,7 +64,7 @@ namespace Models
   }
 
   KOKKOS_FUNCTION void Monod::contribution(MC::ParticleDataHolder &p,
-                                           ContributionView contribution)
+      ContributionView contribution)
   {
     // contribution(0, p.current_container) -= contrib * p.weight;
     auto access_contribs = contribution.access();

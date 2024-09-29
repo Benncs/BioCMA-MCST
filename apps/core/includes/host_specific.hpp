@@ -2,9 +2,8 @@
 #define __HOST_SPECIFIC_HPP__
 
 #include <common/common.hpp>
+#include <dataexporter/partial_exporter.hpp>
 #include <memory>
-
-
 
 // Foward declaration
 namespace Simulation
@@ -31,6 +30,7 @@ void host_process(
     const ExecInfo &exec,
     Simulation::SimulationUnit &&simulation,
     const SimulationParameters &params,
-    std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner);
+    std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner,
+    CORE_DE::PartialExporter &partial_exporter);
 
 #endif //__HOST_SPECIFIC_HPP__

@@ -2,6 +2,7 @@
 #include <cma_read/reactorstate.hpp>
 #include <iterator>
 #include <mc/domain.hpp>
+#include <optional>
 #include <simulation/simulation.hpp>
 
 #include <Eigen/Core>
@@ -36,6 +37,16 @@ namespace Simulation
     return this->gas_scalar->getConcentrationData();
   }
 
+  [[nodiscard]] std::optional<std::span<double>>
+  SimulationUnit::_getCgasData() const
+  {
+    if (!gas_scalar)
+    {
+      return std::nullopt;
+    }
+    return this->gas_scalar->getConcentrationData();
+  }
+
   [[nodiscard]] std::tuple<size_t, size_t>
   SimulationUnit::getDim() const noexcept
   {
@@ -66,7 +77,8 @@ namespace Simulation
     this->liquid_scalar->biomass_contribution.setZero();
   }
 
-  void SimulationUnit::update_feed(const double t, const double d_t)
+
+  void SimulationUnit::update_feed(const double t, const double d_t,bool update_scalar)
   {
     // Get references to the index_leaving_flow and leaving_flow data members
     auto &_index_leaving_flow = this->index_leaving_flow;
@@ -76,9 +88,10 @@ namespace Simulation
     const uint64_t i_exit = mc_unit->domain.getNumberCompartments() - 1;
 
     // Define the set_feed lambda function
-    auto set_feed =
-        [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow](
-            const pimp_ptr_t &scalar, auto &&descritor, bool mc_f = false)
+    auto set_feed = [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow,update_scalar](
+                        const pimp_ptr_t &scalar,
+                        auto &&descritor,
+                        bool mc_f = false)
     {
       double flow = 0.; // Initialize the flow variable
 
@@ -89,19 +102,25 @@ namespace Simulation
         flow =
             current_feed.flow_value; // Get the flow_value of the current_feed
 
-        // Iterate through the species, positions, and values of the
-        // current_feed
-        for (std::size_t i_f = 0; i_f < current_feed.n_v; ++i_f)
+        if (update_scalar)
         {
-          const std::size_t i_species = current_feed.species[i_f];
-          scalar->set_feed(i_species,
-                           current_feed.position[i_f],
-                           flow * current_feed.value[i_f]);
+          // Iterate through the species, positions, and values of the
+          // current_feed
+          for (std::size_t i_f = 0; i_f < current_feed.n_v; ++i_f)
+          {
+            const std::size_t i_species = current_feed.species[i_f];
+            scalar->set_feed(i_species,
+                             current_feed.position[i_f],
+                             flow * current_feed.value[i_f]);
+          }
         }
       }
 
-      // Set the sink for the exit compartment
-      scalar->set_sink(i_exit, flow);
+      if (update_scalar)
+      {
+        // Set the sink for the exit compartment
+        scalar->set_sink(i_exit, flow);
+      }
 
       // Update Flow for mc particle
       if (mc_f)
@@ -113,14 +132,16 @@ namespace Simulation
 
     set_feed(this->liquid_scalar, feed.liquid, true);
 
-    // if (is_two_phase_flow && feed.gas.has_value())
-    // {
-    //   set_feed(this->gas_scalar, *feed.gas);
-    // }
+    if (is_two_phase_flow && feed.gas.has_value())
+    {
+      set_feed(this->gas_scalar, *feed.gas);
+    }
 
     // this->liquid_scalar->set_feed(0, 0, s_feed * flow);
-    // constexpr double v = 0.09;
+    // constexpr double v = 20e-3;
     // constexpr double aim = 0.5 / 3600.;
+    //  constexpr double flow =aim*v;
+    //  constexpr double tau = 1/(flow/v);
     // constexpr double flow =
     //     0.03813511651379644; // 1.250000e-05; // 0.035;//aim*v; //mu/2*V
     // // constexpr double tau = 1/(flow/v);

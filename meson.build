@@ -151,8 +151,8 @@ if cmake.found()
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_UNIT_TESTS': false})
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_USE_BOOST': false})
   ## MAYBE USE ?? IDK 
-  highfive_cmake_options.add_cmake_defines({'HDF5_PREFER_PARALLEL': true})
-  highfive_cmake_options.add_cmake_defines({'HDF5_IS_PARALLEL': true})
+  highfive_cmake_options.add_cmake_defines({'HDF5_PREFER_PARALLEL': false})
+  highfive_cmake_options.add_cmake_defines({'HDF5_IS_PARALLEL': false})
   highfive_proj = cmake.subproject('highfive', options: highfive_cmake_options, required: false)
   if highfive_proj.found()
     highfive_found = true
@@ -193,7 +193,7 @@ endif
 if f_cmt == false
   # Retrieve CMTOOL source code
 
-
+  # TODO: remove core build 
   cma_reader = subproject(
     'cmtool',
     required: true,

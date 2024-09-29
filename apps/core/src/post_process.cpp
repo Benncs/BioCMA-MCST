@@ -1,5 +1,6 @@
 #include "common/kokkos_vector.hpp"
 #include <Kokkos_Core.hpp>
+#include <algorithm>
 #include <common/execinfo.hpp>
 #include <dataexporter/data_exporter.hpp>
 #include <impl/Kokkos_HostThreadTeam.hpp>
@@ -7,15 +8,15 @@
 #include <mc/particles/particle_model.hpp>
 #include <mc/unit.hpp>
 #include <memory>
+#include <numeric>
 #include <post_process.hpp>
 #include <simulation/simulation.hpp>
 #include <variant>
-
 namespace PostProcessing
 {
   static void append_properties(int counter,
                                 Simulation::SimulationUnit &simulation,
-                                std::unique_ptr<DataExporter> &exporter);
+                                CORE_DE::PartialExporter &pde);
 
   static void get_particle_properties_opti(
       Kokkos::View<std::string *, HostSpace> &host_names,
@@ -24,29 +25,64 @@ namespace PostProcessing
       std::unique_ptr<MC::MonteCarloUnit> &mc_unit,
       bool clean = true);
 
-  void save_initial_particle_state(Simulation::SimulationUnit &simulation,
-                                   std::unique_ptr<DataExporter> &exporter)
+  // void save_initial(Simulation::SimulationUnit &simulation,
+  //                   CORE_DE::MainExporter &exporter)
+  // {
+  //   exporter.update_fields(0, std::span<double> concentration_liquid,
+  //   std::span<const double> liquid_volume, std::optional<std::span<const
+  //   double>> concentration_gas, std::optional<std::span<const double>>
+  //   volume_gas)
+  // }
+
+  void save_probes(Simulation::SimulationUnit &simulation,
+                   CORE_DE::PartialExporter &pde)
   {
-    if (exporter != nullptr)
+    auto &probes = simulation.probes;
+
+    if (probes.need_export())
     {
-      std::cout << "EXPORTING PARTICLE DATA" << std::endl;
-
-      Kokkos::View<std::string *, HostSpace> names;
-      Kokkos::View<double **, HostSpace> particle_values;
-      Kokkos::View<double **, HostSpace> spatial_values;
-
-      get_particle_properties_opti(
-          names, particle_values, spatial_values, simulation.mc_unit, false);
-      std::string ds_name = "biological_model/initial/";
-      exporter->write_particle_data(
-          names, particle_values, spatial_values, ds_name);
+      const double *const probe_ptr = probes.raw_get();
+      pde.write_probe({probe_ptr, Simulation::Probes::buffer_size});
+      probes.clear();
     }
+  }
+
+  void save_particle_sate(Simulation::SimulationUnit &simulation,
+                          CORE_DE::PartialExporter &pde,
+                          std::string suffix,
+                          bool clean)
+  {
+    std::cout << "EXPORTING PARTICLE DATA" << std::endl;
+
+    Kokkos::View<std::string *, HostSpace> names;
+    Kokkos::View<double **, HostSpace> particle_values;
+    Kokkos::View<double **, HostSpace> spatial_values;
+
+    get_particle_properties_opti(
+        names, particle_values, spatial_values, simulation.mc_unit, clean);
+    std::string ds_name = "biological_model/" + suffix + "/";
+    pde.write_particle_data({names.data(), names.extent(0)},
+                            particle_values,
+                            spatial_values,
+                            ds_name);
+  }
+
+  void save_final_particle_state(Simulation::SimulationUnit &simulation,
+                                 CORE_DE::PartialExporter &pde)
+  {
+    save_particle_sate(simulation, pde, "final", false);
+  }
+
+  void save_initial_particle_state(Simulation::SimulationUnit &simulation,
+                                   CORE_DE::PartialExporter &pde)
+  {
+    save_particle_sate(simulation, pde, "initial", false);
   }
 
   void final_post_processing(const ExecInfo &exec,
                              const SimulationParameters &params,
                              Simulation::SimulationUnit &&simulation,
-                             std::unique_ptr<DataExporter> &exporter)
+                             CORE_DE::MainExporter &mde)
   {
     std::cout << "POST PROCESSING" << std::endl;
     auto distribution = simulation.mc_unit->domain.getRepartition();
@@ -57,33 +93,16 @@ namespace PostProcessing
                    simulation.mc_unit->events.get<MC::EventType::Exit>();
     auto new_p = simulation.mc_unit->events.get<MC::EventType::NewParticle>();
 
-    if (exporter != nullptr)
-    {
+    // TODO CORE_DE::MainExporter& mde
 
-      exporter->write_final_results(simulation, distribution);
-
-      // Results depending on simulation are exported or copied into properties,
-      // clear montecarlo state to save memory
-      auto unit = std::move(simulation.mc_unit);
-      std::cout << "EXPORTING PARTICLE DATA" << std::endl;
-
-      Kokkos::View<std::string *, HostSpace> names;
-      Kokkos::View<double **, HostSpace> particle_values;
-      Kokkos::View<double **, HostSpace> spatial_values;
-
-      get_particle_properties_opti(
-          names, particle_values, spatial_values, unit, true);
-      std::string ds_name = "biological_model/final/";
-      exporter->write_particle_data(
-          names, particle_values, spatial_values, ds_name);
-    }
+    mde.write_final(simulation, distribution);
+    // exporter->write_final_results(simulation, distribution);
 
     if (tot != (new_p - removed + params.user_params.number_particle))
     {
       std::cerr << ("Results are not coherent (Bad particle balance): ");
       std::cerr << tot << "=" << new_p << "-" << removed << "+"
                 << params.user_params.number_particle << std::endl;
-      ;
     }
   }
 
@@ -99,9 +118,9 @@ namespace PostProcessing
 
   void append_properties(int counter,
                          Simulation::SimulationUnit &simulation,
-                         std::unique_ptr<DataExporter> &exporter)
+                         CORE_DE::PartialExporter &pde)
   {
-    if (exporter != nullptr)
+
     {
       Kokkos::View<std::string *, HostSpace> names;
       Kokkos::View<double **, HostSpace> particle_values;
@@ -110,19 +129,24 @@ namespace PostProcessing
       get_particle_properties_opti(
           names, particle_values, spatial_values, simulation.mc_unit, false);
       std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
-      exporter->write_particle_data(
-          names, particle_values, spatial_values, ds_name);
+      // exporter->write_particle_data(
+      //     names, particle_values, spatial_values, ds_name);
+
+      pde.write_particle_data({names.data(), names.extent(0)},
+                              particle_values,
+                              spatial_values,
+                              ds_name);
     }
   }
 
   void
   user_triggered_properties_export(Simulation::SimulationUnit &sim,
-                                   std::unique_ptr<DataExporter> &data_exporter)
+                                   CORE_DE::PartialExporter &pde)
   {
     static int counter = 0;
     counter++;
     std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
-    PostProcessing::append_properties(counter, sim, data_exporter);
+    PostProcessing::append_properties(counter, sim, pde);
     // std::ofstream os("./out.cereal", std::ios::binary);
     // cereal::BinaryOutputArchive archive(os);
     // archive(*sim.mc_unit);
@@ -168,7 +192,7 @@ namespace PostProcessing
                     &host_spatial_values](auto &&container)
     {
       auto &compute_particles_data = container.get_compute();
-      if(compute_particles_data.size()==0)
+      if (compute_particles_data.size() == 0)
       {
         return;
       }
