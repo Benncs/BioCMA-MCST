@@ -83,13 +83,13 @@ namespace Simulation
                                      const Eigen::MatrixXd &transfer_gas_liquid)
   {
 
-    // total_mass +=
-    //     d_t * ( alloc_concentrations * m_transition - alloc_concentrations *
-    //     sink + biomass_contribution + feed +
-    //            transfer_gas_liquid );
+    total_mass +=
+        d_t * ( alloc_concentrations * m_transition - alloc_concentrations *
+        sink + biomass_contribution + feed +
+               transfer_gas_liquid );
 
-    total_mass += d_t * (alloc_concentrations * m_transition -
-                         alloc_concentrations * sink + feed);
+    // total_mass += d_t * (alloc_concentrations * m_transition -
+    //                      alloc_concentrations * sink + feed);
 
     alloc_concentrations = total_mass * volumes_inverse;
 

@@ -82,7 +82,7 @@ namespace PostProcessing
   void final_post_processing(const ExecInfo &exec,
                              const SimulationParameters &params,
                              Simulation::SimulationUnit &&simulation,
-                             CORE_DE::MainExporter &mde)
+                             std::unique_ptr<CORE_DE::MainExporter> &mde)
   {
     std::cout << "POST PROCESSING" << std::endl;
     auto distribution = simulation.mc_unit->domain.getRepartition();
@@ -95,7 +95,7 @@ namespace PostProcessing
 
     // TODO CORE_DE::MainExporter& mde
 
-    mde.write_final(simulation, distribution);
+    mde->write_final(simulation, distribution);
     // exporter->write_final_results(simulation, distribution);
 
     if (tot != (new_p - removed + params.user_params.number_particle))

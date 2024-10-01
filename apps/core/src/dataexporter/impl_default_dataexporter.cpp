@@ -1,8 +1,7 @@
 // DEFAULT
 #ifndef USE_HIGHFIVE
-#include <dataexporter/data_exporter.hpp>
-#include <iostream>
-
+#  include <dataexporter/data_exporter.hpp>
+#  include <iostream>
 
 namespace CORE_DE
 {
@@ -10,21 +9,22 @@ namespace CORE_DE
   {
   };
   void DataExporter::do_link(std::string_view filename,
-                             std::string_view groupname)
+                             std::string_view link_name,
+                             std::string_view groupname, )
   {
   }
 
-  DataExporter::DataExporter(
-      const ExecInfo &info,
-      std::string_view _filename,
-      std::optional<export_metadata_t> user_description)
+  DataExporter::DataExporter(const ExecInfo &info,
+                             std::string_view _filename,
+                             std::optional<export_metadata_t> user_description)
   {
     std::cerr << "NOT DATAEXPORTER IMPLEMENTATION" << std::endl;
   }
   DataExporter::~DataExporter() = default;
 
   void DataExporter::write_matrix(std::string_view name,
-                                  std::span<const double> values,bool compress)
+                                  std::span<const double> values,
+                                  bool compress)
   {
   }
 
@@ -56,9 +56,14 @@ namespace CORE_DE
   {
   }
 
-  void DataExporter::write_simple(const export_initial_kv &values,std::string_view root){}
+  void DataExporter::write_simple(const export_initial_kv &values,
+                                  std::string_view root)
+  {
+  }
 
-    void DataExporter::write_simple(std::string specific_dataspace,
-                      const simple_export_t &values){}
+  void DataExporter::write_simple(std::string specific_dataspace,
+                                  const simple_export_t &values)
+  {
+  }
 } // namespace CORE_DE
 #endif

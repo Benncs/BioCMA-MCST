@@ -21,7 +21,7 @@ namespace PostProcessing
 
   void final_post_processing(const ExecInfo &exec,
                     const SimulationParameters &params,
-                    Simulation::SimulationUnit &&simulation,CORE_DE::MainExporter& mde);
+                    Simulation::SimulationUnit &&simulation,std::unique_ptr<CORE_DE::MainExporter>& mde);
 
   void show_sumup_state(Simulation::SimulationUnit &simulation);
 

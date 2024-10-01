@@ -1,7 +1,7 @@
 from typing import List
 from matplotlib import pyplot as plt
 import numpy as np
-from .read_results import import_results
+from .old_read_results import import_results
 from . import (
     FIGURE_TYPE,
     average_concentration,

@@ -18,8 +18,8 @@
 namespace MC
 {
 
-
   constexpr bool uniform_init = true;
+  constexpr double initial_mass_cell = 3.14 * (1e-6) * (1e-6)/4. * 7e-6 * 1000;
   namespace
   {
 
@@ -29,6 +29,7 @@ namespace MC
     inline double get_initial_weight(double scale_factor,
                                      double particle_concentration,
                                      double total_volume,
+                                     double mass_cell,
                                      size_t n_particles)
     {
       // Scale factor is a fine tunning adjustement in case of misprediction of
@@ -36,7 +37,7 @@ namespace MC
       // concentration in g/L (kg/m3) Total volume is expected to be in m3 As a
       // result we can calculate the mass carried by each MC particle
       return scale_factor * particle_concentration * total_volume /
-             static_cast<double>(n_particles);
+             static_cast<double>(n_particles) / mass_cell;
     }
 
     /**
@@ -127,8 +128,11 @@ namespace MC
       particle_per_process += remainder;
     }
     constexpr double scale_factor = 1.;
-    double weight = get_initial_weight(
-        scale_factor, x0, unit->domain.getTotalVolume(), n_particles);
+    double weight = get_initial_weight(scale_factor,
+                                       x0,
+                                       unit->domain.getTotalVolume(),
+                                       initial_mass_cell,
+                                       n_particles);
 
     KOKKOS_ASSERT(weight > 0);
     unit->init_weight = weight;

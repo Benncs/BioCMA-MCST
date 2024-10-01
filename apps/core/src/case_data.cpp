@@ -17,7 +17,7 @@ namespace Core
                            ? &host_process
                            : &workers_process;
 #endif
-
+    //  auto filename =CORE_DE::get_filename(case_data.params.results_file_name, case_data.exec_info.current_rank);
     //TODO Put this elsewere, clean function for either main and partial name
     auto filename =
         "./results/" + case_data.params.user_params.results_file_name +

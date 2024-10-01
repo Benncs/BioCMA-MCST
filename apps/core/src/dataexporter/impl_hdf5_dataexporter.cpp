@@ -78,6 +78,7 @@ namespace CORE_DE
   constexpr size_t hdf5_max_compression = 9;
   DataExporter::DataExporter(const ExecInfo &info,
                              std::string_view _filename,
+                 
                              std::optional<export_metadata_t> user_description)
       : pimpl(new impl(_filename))
   {
@@ -92,11 +93,11 @@ namespace CORE_DE
     metadata["run_id"] = info.run_id;
   }
 
-  void DataExporter::do_link(std::string_view filename,
+  void DataExporter::do_link(std::string_view filename,            std::string_view link_name,
                              std::string_view groupname)
   {
     pimpl->file.createExternalLink(
-        "tes_link", filename.data(), groupname.data());
+        link_name.data(), filename.data(), groupname.data());
   }
 
   void
@@ -118,6 +119,7 @@ namespace CORE_DE
           },
           value);
     }
+    pimpl->file.flush();
   }
 
   void DataExporter::prepare_matrix(MultiMatrixDescription description)
@@ -216,6 +218,7 @@ namespace CORE_DE
     auto dataset =
         pimpl->file.createDataSet<double>(name.data(), data_space, ds_props);
     dataset.write_raw(values.data());
+    pimpl->file.flush();
   }
 
   void DataExporter::write_matrix(std::string_view name,

@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 from typing import Optional, Tuple
 import cmtool.vtk
-from .read_results import RawResults, import_results
+from .old_read_results import RawResults, import_results
 import os
 from .initialiser import make_initial_concentration
 

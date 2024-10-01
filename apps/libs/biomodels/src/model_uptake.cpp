@@ -7,7 +7,7 @@
 static constexpr double tauPTS = 25.0;
 static constexpr double tau_f = 5.0;
 static constexpr double tau_d = 5.0;
-static constexpr double NPermease_max = 5e4;
+static constexpr double NPermease_max = 200;
 static constexpr double NPermease_init = 1e3;
 static constexpr double tauAu = 5.0;
 static constexpr double tauAd = 5.0;
@@ -15,7 +15,7 @@ static constexpr double tau_metabolism = 3600;
 static constexpr double phi_pts_max = 4.454e-12 / 3600.;
 static constexpr double kpts = 1e-2;
 static constexpr double kppermease = 1e-3;
-static constexpr double psi_permease = 1.25e-13 / 3600.;
+static constexpr double psi_permease = 1.25e-13 / 3600.; //par permease 
 static constexpr double YXS = 0.5;
 static constexpr double YXO = 1e-4;
 static constexpr double YSA = 1e-4;
@@ -74,7 +74,7 @@ namespace Models
     const double phi_s_pts = phi_pts(a_pts, s);
     const double phi_s_in = phi_s_pts + phi_permease(n_permease, a_permease, s);
     const double gamma_PTS_S = phi_s_pts / phi_pts_max;
-    const double nu_eff = Kokkos::min(1e12 * phi_s_in, nu);
+    const double nu_eff = Kokkos::min( phi_s_in, nu);
 
     this->lenght += d_t * (nu_eff * _init_only_cell_lenghtening);
     this->nu += d_t * ((1.0 / tau_metabolism) * (nu_eff - this->nu));

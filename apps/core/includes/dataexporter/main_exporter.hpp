@@ -11,6 +11,7 @@ namespace CORE_DE
   class MainExporter : private DataExporter
   {
   public:
+    MainExporter() = default;
     MainExporter(
         const ExecInfo &info,
         std::string_view _filename,
@@ -21,7 +22,7 @@ namespace CORE_DE
                        const std::vector<size_t> &distribution);
 
     void write_final(Simulation::SimulationUnit &simulation,
-                           std::span<const std::size_t> distribution);
+                     std::span<const std::size_t> distribution);
 
     void init_fields(uint64_t n_iter,
                      uint64_t n_compartments,
@@ -34,8 +35,11 @@ namespace CORE_DE
                        std::optional<std::span<const double>> concentration_gas,
                        std::optional<std::span<const double>> volume_gas);
 
-    void connect(std::string_view filename, std::string_view groupname);
-    private:
+    void connect(std::string_view filename,
+                 std::string_view link_name,
+                 std::string_view groupname);
+
+  private:
     static const std::string base_group_name;
   };
 

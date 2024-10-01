@@ -26,13 +26,20 @@ namespace CORE_DE
   using matrix_variant_t = std::
       variant<std::span<const double>, std::span<const std::size_t>, double>;
 
+  inline std::string get_filename(std::string_view filename,
+                                  std::size_t current_rank)
+  {
+    return "./results/" + std::string(filename) + "_partial_" +
+           std::to_string(current_rank) + ".h5";
+  }
+
   class DataExporter
   {
   public:
     DataExporter(const DataExporter &) = delete;
-    DataExporter(DataExporter &&) = delete;
-    DataExporter operator=(DataExporter &&) = delete;
     DataExporter operator=(const DataExporter &) = delete;
+
+    DataExporter() = default;
 
   protected:
     struct MultiMatrixDescription
@@ -45,7 +52,9 @@ namespace CORE_DE
       bool is_integer;
     };
 
-    void do_link(std::string_view filename, std::string_view groupname);
+    void do_link(std::string_view filename,
+                 std::string_view link_name,
+                 std::string_view groupname);
 
     explicit DataExporter(
         const ExecInfo &info,

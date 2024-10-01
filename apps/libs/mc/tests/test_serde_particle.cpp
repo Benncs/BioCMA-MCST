@@ -37,6 +37,7 @@ public:
   {
     return {};
   }
+  double mass()const{return 0;}
 };
 
 class SerdeModel
@@ -74,6 +75,7 @@ public:
   {
     return {};
   }
+   double mass()const{return 0;}
 };
 // NOLINTEND
 template <typename T> std::ostringstream wrap_ser(T &t)

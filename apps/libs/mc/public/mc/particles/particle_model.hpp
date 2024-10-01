@@ -5,6 +5,7 @@
 #include <Kokkos_ScatterView.hpp>
 #include <common/common.hpp>
 #include <common/kokkos_vector.hpp>
+#include <concepts>
 #include <mc/particles/data_holder.hpp>
 #include <mc/prng/prng.hpp>
 #include <type_traits>
@@ -40,6 +41,11 @@ using model_properties_detail_t =
     std::unordered_map<std::string,
                        double>; ///< Type of properties data that
                                 ///< model can export
+
+template <typename T>
+concept HasMass = requires(const T obj) {
+    { obj.mass() } -> std::convertible_to<double>;  // mass() must be callable on const object, returning something convertible to double
+};
 
 /**
  * @brief Concept that defines the requirements for a Biological Model.
@@ -77,7 +83,7 @@ using model_properties_detail_t =
  * MC::KPRNG, model_properties_detail_t
  */
 template <typename T>
-concept ParticleModel = requires(T model,
+concept ParticleModel = HasMass<T>&&requires(T model,
                                  std::is_default_constructible<T>,
                                  MC::ParticleDataHolder &p,
                                  double d_t,
@@ -89,6 +95,8 @@ concept ParticleModel = requires(T model,
   { model.division(p) } -> std::same_as<T>;
   { model.contribution(p, contrib) } -> std::same_as<void>;
   { model.get_properties() } -> std::same_as<model_properties_detail_t>;
+  { model.get_properties() } -> std::same_as<model_properties_detail_t>;
+   
 };
 
 /**
@@ -126,6 +134,7 @@ public:
   {
     return {};
   }
+  KOKKOS_INLINE_FUNCTION double mass()const{return 1.;}
 };
 
 static_assert(ParticleModel<DefaultModel>, "Check default model");

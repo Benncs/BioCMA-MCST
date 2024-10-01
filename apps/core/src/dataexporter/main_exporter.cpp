@@ -92,9 +92,10 @@ namespace CORE_DE
   }
 
   void MainExporter::connect(std::string_view filename,
+                             std::string_view link_name,
                              std::string_view groupname)
   {
-    do_link(filename, groupname); // TODO
+    do_link(filename, link_name, groupname); // TODO
   }
 
   void MainExporter::update_fields(

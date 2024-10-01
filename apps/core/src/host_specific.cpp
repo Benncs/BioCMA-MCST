@@ -1,3 +1,4 @@
+#include "dataexporter/data_exporter.hpp"
 #include <biocma_cst_config.hpp>
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
@@ -8,6 +9,7 @@
 #include <mc/unit.hpp>
 #include <memory>
 #include <optional>
+#include <string>
 
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
@@ -34,7 +36,7 @@ main_loop(const SimulationParameters &params,
           const ExecInfo &exec,
           Simulation::SimulationUnit &simulation,
           std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
-          CORE_DE::MainExporter &main_exporter,
+          std::unique_ptr<CORE_DE::MainExporter> &main_exporter,
           CORE_DE::PartialExporter &partial_exporter);
 
 static constexpr size_t PROGRESS_BAR_WIDTH = 100;
@@ -47,7 +49,7 @@ static void handle_export(const ExecInfo &exec,
                           double current_time,
                           Simulation::SimulationUnit &simulation,
                           auto &current_reactor_state,
-                          CORE_DE::MainExporter &mde,
+                          std::unique_ptr<CORE_DE::MainExporter> &main_exporter,
                           CORE_DE::PartialExporter &partial_exporter);
 
 inline static void update_progress_bar(size_t total, size_t current_position)
@@ -136,6 +138,27 @@ inline static void update_progress_bar(size_t total, size_t current_position)
 #  define INIT_PAYLOAD
 #endif
 
+
+std::unique_ptr<CORE_DE::MainExporter> make_main_exporter(const ExecInfo &exec,const SimulationParameters &params)
+{
+    std::unique_ptr<CORE_DE::MainExporter>  main_exporter = std::make_unique<CORE_DE::MainExporter>(exec, params.results_file_name);
+
+    for(std::size_t i_rank = 0;i_rank<exec.n_rank;++i_rank)
+    {
+      std::string group =  "files/"+std::to_string(i_rank);
+
+      auto filename =
+        "./results/" + params.user_params.results_file_name +
+        "_partial_" + std::to_string(i_rank) + ".h5";
+
+      main_exporter->connect(filename,group,"/" );
+    }
+  
+    return main_exporter;
+
+}
+
+
 void host_process(
     const ExecInfo &exec,
     Simulation::SimulationUnit &&simulation,
@@ -144,16 +167,19 @@ void host_process(
     CORE_DE::PartialExporter &partial_exporter)
 {
 
-  CORE_DE::MainExporter main_exporter(exec, params.results_file_name);
+  std::unique_ptr<CORE_DE::MainExporter> main_exporter= make_main_exporter(exec,params);
+
+
+  
 
   const auto [n_compartment, n_species] = simulation.getDim();
 
-  main_exporter.init_fields(params.user_params.number_exported_result,
+  main_exporter->init_fields(params.user_params.number_exported_result,
                             n_compartment,
                             n_species,
                             simulation.two_phase_flow());
 
-  main_exporter.write_initial(simulation.mc_unit->init_weight,
+  main_exporter->write_initial(simulation.mc_unit->init_weight,
                               params,
                               simulation.mc_unit->domain.getRepartition());
 
@@ -181,7 +207,7 @@ void main_loop(const SimulationParameters &params,
                const ExecInfo &exec,
                Simulation::SimulationUnit &simulation,
                std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
-               CORE_DE::MainExporter &main_exporter,
+               std::unique_ptr<CORE_DE::MainExporter> &main_exporter,
                CORE_DE::PartialExporter &partial_exporter)
 {
 
@@ -217,7 +243,7 @@ void main_loop(const SimulationParameters &params,
                         ? std::nullopt
                         : std::make_optional(current_reactor_state->gasVolume);
 
-  main_exporter.update_fields(current_time,
+  main_exporter->update_fields(current_time,
                               simulation.getCliqData(),
                               current_reactor_state->liquidVolume,
                               simulation._getCgasData(),
@@ -285,7 +311,7 @@ void main_loop(const SimulationParameters &params,
 
   SEND_MPI_SIG_DUMP
 
-  main_exporter.update_fields(current_time,
+  main_exporter->update_fields(current_time,
                               simulation.getCliqData(),
                               current_reactor_state->liquidVolume,
                               simulation._getCgasData(),
@@ -311,7 +337,7 @@ void handle_export(const ExecInfo &exec, /*/Exec is used for MPI **/
                    const double current_time,
                    Simulation::SimulationUnit &simulation,
                    auto &current_reactor_state,
-                   CORE_DE::MainExporter &mde,
+                   std::unique_ptr<CORE_DE::MainExporter> &main_exporter,
                    CORE_DE::PartialExporter &partial_exporter)
 // NOLINTEND
 {
@@ -323,7 +349,7 @@ void handle_export(const ExecInfo &exec, /*/Exec is used for MPI **/
                   : std::nullopt;
 
     update_progress_bar(n_iter_simulation, __loop_counter);
-    mde.update_fields(current_time,
+    main_exporter->update_fields(current_time,
                       simulation.getCliqData(),
                       current_reactor_state->liquidVolume,
                       simulation._getCgasData(),

@@ -35,6 +35,7 @@ namespace Models
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
                                       ContributionView contri);
+                                      KOKKOS_INLINE_FUNCTION double mass()const;
 
     model_properties_detail_t get_properties();
   };
