@@ -2,13 +2,19 @@ from scipy.stats import gaussian_kde
 import matplotlib.pyplot as plt
 import numpy as np
 
+from .read_results import Results, PartialResult
+
 from .io import append_resukts_scalar_vtk
 from . import FIGURE_TYPE, mkdir
-from typing import Dict, List,Optional
-from . import RATIO_MASS_LENGTH,get_time
+from typing import Dict, List, Optional
+from . import RATIO_MASS_LENGTH, get_time
+
 
 def process_string_title(input_string):
-    return ' '.join([word.capitalize() for word in input_string.replace('_', ' ').split()])
+    return " ".join(
+        [word.capitalize() for word in input_string.replace("_", " ").split()]
+    )
+
 
 def get_distribution_moment(data):
     mean = np.mean(data)
@@ -38,12 +44,22 @@ def _mk_pdf(data, name, dest: str):
         pass
 
 
-def _mk_histogram(data, name, dest: str):
+def _mk_histogram(
+    partials: List[PartialResult], key: str, index: int, name: str, dest: str
+):
     num_bins = 100
 
-    # plt.hist(data, bins=num_bins, density=True,alpha=0.7, color='blue', edgecolor='black')
+    # data = partials[0].extra_bioparam[index][key]
+    
+    # counts, bin_edges = np.histogram(data, bins=num_bins, density=False)
 
-    counts, bin_edges = np.histogram(data, bins=num_bins, density=False)
+    counts = np.zeros((num_bins,))
+    bin_edges = np.zeros((num_bins + 1,))
+    for i in partials:
+        init = i.extra_bioparam[index]
+        c, e = np.histogram(init[key], num_bins)
+        counts += c
+        bin_edges += e
 
     counts_normalized = counts / counts.max()
     mkdir(f"{dest}/histogram")
@@ -62,46 +78,43 @@ def _mk_histogram(data, name, dest: str):
     plt.title(f"Histogram {title_name}")
     plt.savefig(f"{dest}/histogram/histogram_{name}{FIGURE_TYPE}")
 
-    _mk_pdf(data, name, dest)
+    # _mk_pdf(data, name, dest)
 
-    plt.figure()
-    x = np.arange(1, len(data) + 1)
-    plt.scatter(x, data, color='blue', s=1, label='Temps de division')
-    plt.savefig(f"{dest}/histogram/test_{name}{FIGURE_TYPE}")
-    plt.close()
+    # plt.figure()
+    # x = np.arange(1, len(data) + 1)
+    # plt.scatter(x, data, color="blue", s=1, label="Temps de division")
+    # plt.savefig(f"{dest}/histogram/test_{name}{FIGURE_TYPE}")
+    # plt.close()
+
 
 def property_distribution(
-    biodict: Dict[str, np.ndarray],
+    partials: List[PartialResult],
+    index: int,
     prefix: str = "",
     dest: str = "./results/",
     vtk_cma_mesh_path: Optional[str] = None,  # noqa: F821
 ):
-    if(biodict is None):
-        return
-    for key in biodict:
-        value = biodict[key]
+    init = partials[0].extra_bioparam
+    keys = [k for k in init[0].keys() if k != "spatial"]
+    for key in keys:
+        # if isinstance(value, np.ndarray) and np.issubdtype(value.dtype, float):
+        # mean, variance_population, variance_sample = get_distribution_moment(value)
 
-        if key == "lenght":
-            mass = np.sum(value) * RATIO_MASS_LENGTH
-            print("mass: ", mass)
+        # print(
+        #     key,
+        #     ": ",
+        #     "mean: ",
+        #     mean,
+        #     "var: ",
+        #     variance_population,
+        #     "varred: ",
+        #     variance_sample,
+        # )
+        _mk_histogram(partials, key, index, f"{prefix}_{key}", dest)
 
-        if isinstance(value, np.ndarray) and np.issubdtype(value.dtype, float):
-            mean, variance_population, variance_sample = get_distribution_moment(value)
-
-            print(
-                key,
-                ": ",
-                "mean: ",
-                mean,
-                "var: ",
-                variance_population,
-                "varred: ",
-                variance_sample,
-            )
-
-            _mk_histogram(value, f"{prefix}_{key}", dest)
-            if vtk_cma_mesh_path is not None:
-                append_resukts_scalar_vtk(vtk_cma_mesh_path, value, key)
+        # TODO Need to merge into value
+        # if vtk_cma_mesh_path is not None:
+        #     append_resukts_scalar_vtk(vtk_cma_mesh_path, value, key)
 
 
 def property_space(i: int, biodict: Dict[str, np.ndarray], key1: str, key2: str):
@@ -109,8 +122,8 @@ def property_space(i: int, biodict: Dict[str, np.ndarray], key1: str, key2: str)
         value1 = biodict[key1]
         value2 = biodict[key2]
         MAX_SAMPLE = 1_000
-        min_s = min(len(value1),len(value2))
-        sample_size = min(min_s, MAX_SAMPLE)  
+        min_s = min(len(value1), len(value2))
+        sample_size = min(min_s, MAX_SAMPLE)
         idx = np.random.choice(min_s, size=sample_size, replace=False)
         if isinstance(value1, np.ndarray) and np.issubdtype(value1.dtype, float):
             if isinstance(value2, np.ndarray) and np.issubdtype(value2.dtype, float):
@@ -132,55 +145,68 @@ def plot_property_space(
     plt.savefig(f"{dest}/plot_{key1}_{key2}_{0}{FIGURE_TYPE}")
 
 
-def process_particle_data(t:np.ndarray,
-    biodicts: List[Dict[str, np.ndarray]], dest_root: str = "./results/"
-):
+def mean_partial(keys: List[str], partial: PartialResult):
+    n_export = len(partial.extra_bioparam)
+    sums = np.zeros((n_export, len(keys)))
+    for i in range(n_export):
+        current_export = partial.extra_bioparam[i]
+        for j, key in enumerate(keys):
+            sums[i][j] = np.sum(current_export[key])
+    return sums
+
+
+def plot_average(results: Results, dest: str):
+    init = results.partial[0].extra_bioparam
+    keys = [k for k in init[0].keys() if k != "spatial"]
+    n_keys = len(keys)
+
+    average = np.zeros((len(init), len(keys)))
+    for i in results.partial:
+        average += mean_partial(keys, i)
+
+    average = average / results.total_repartion
+
+    mkdir(dest)
+    for i, key in enumerate(keys):
+        try:
+            plt.figure()
+            plt.plot(
+                results.time,
+                average[:, i],
+                "-o",
+                label=key,
+                markersize=2,
+                color="black",
+            )
+            plt.xlabel(f"Time [{get_time()}]")
+            plt.ylabel("Mean Value")
+            plt.title(f"Mean Value of {key} Over Time")
+            plt.legend()
+            plt.savefig(f"{dest}/{key}{FIGURE_TYPE}")
+            plt.close()  # Close the plot to free memory
+        except Exception as e:
+            plt.close()  # Close the plot to free memory
+            print(f"ERROR Mean Value {key} Over Time")
+
+
+def process_particle_data(results: Results, dest_root: str = "./results/"):
     dest = f"{dest_root}/properties"
-    for i in biodicts:
-        if i is None :
-            return
 
-    keys = [k for k in biodicts[0].keys() if k != "spatial"]
+    if results.partial[0].extra_bioparam is None:
+        return
 
-   # Initialize a clean list
-    clean_biodicts = biodicts
+    property_distribution(
+        results.partial,
+        0,
+        "init",
+        dest,
+    )
 
-    # for d in biodicts:
-    #     # Create a clean dictionary for each entry
-    #     clean_dict = {}
-    #     for key, value in d.items():
-    #         # Use np.unique to remove duplicates and filter out zeros
-    #         clean_value = np.unique([v for v in value if v != 0])
-            
-    #         # Only add non-zero values back into the dictionary
-    #         # if clean_value.size > 0:  # Check if the cleaned value is non-empty
-    #         clean_dict[key] = clean_value
-        
-    #     # Append the cleaned dictionary to the clean_biodicts list
-    #     clean_biodicts.append(clean_dict)
+    property_distribution(
+        results.partial,
+        -1,
+        "final",
+        dest,
+    )
 
-    
-    plot_property_space(clean_biodicts, "mu", "lenght", dest_root)
-
-    mean_samples = {k: np.zeros(len(clean_biodicts)) for k in keys}
-   
-    for i, bio_dict in enumerate(clean_biodicts):
-        for k in keys:
-            if len(bio_dict[k]) > 0:
-                if not np.isnan(bio_dict[k][0]):
-                    mean_samples[k][i] = np.mean(bio_dict[k])
-  
-        mkdir(dest)
-        for k, values in mean_samples.items():
-            try:
-                plt.figure()
-                plt.plot(t,values,'-o' ,label=k,markersize=2,color="black")
-                plt.xlabel(f"Time [{get_time()}]")
-                plt.ylabel("Mean Value")
-                plt.title(f"Mean Value of {k} Over Time")
-                plt.legend()
-                plt.savefig(f"{dest}/{k}{FIGURE_TYPE}")
-                plt.close()  # Close the plot to free memory
-            except:
-                plt.close()  # Close the plot to free memory    
-                print(f"ERROR Mean Value {k} Over Time")
+    plot_average(results, dest)

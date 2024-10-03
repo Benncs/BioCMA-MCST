@@ -2,13 +2,13 @@
 #define __CORE_MAIN_EXPORTER_HPP__
 
 #include "simulation/simulation.hpp"
-#include <common/simulation_parameters.hpp>
+#include <core/simulation_parameters.hpp>
 #include <dataexporter/data_exporter.hpp>
 
 namespace CORE_DE
 {
 
-  class MainExporter : private DataExporter
+  class MainExporter : public DataExporter
   {
   public:
     MainExporter() = default;
@@ -18,7 +18,7 @@ namespace CORE_DE
         std::optional<export_metadata_t> user_description = std::nullopt);
 
     void write_initial(double weight,
-                       const SimulationParameters &params,
+                       const Core::SimulationParameters &params,
                        const std::vector<size_t> &distribution);
 
     void write_final(Simulation::SimulationUnit &simulation,
@@ -35,9 +35,6 @@ namespace CORE_DE
                        std::optional<std::span<const double>> concentration_gas,
                        std::optional<std::span<const double>> volume_gas);
 
-    void connect(std::string_view filename,
-                 std::string_view link_name,
-                 std::string_view groupname);
 
   private:
     static const std::string base_group_name;

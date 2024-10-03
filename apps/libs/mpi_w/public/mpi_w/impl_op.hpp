@@ -29,7 +29,8 @@ namespace MPI_W
   [[nodiscard]] static int
   _send_unsafe(DataType *buf, size_t buf_size, size_t dest, size_t tag = 0);
 
-  template <POD DataType> int send(DataType data, size_t dest, size_t tag = 0);
+  template <POD DataType>
+  int send(DataType data, size_t dest, size_t tag = 0);
 
   template <POD DataType>
   int send_v(std::span<const DataType> data,
@@ -62,12 +63,14 @@ namespace MPI_W
 
   // BROADCASTING
 
-  template <POD DataType> int broadcast(DataType &data, size_t root);
+  template <POD DataType>
+  int broadcast(DataType &data, size_t root);
 
   template <typename T>
   [[nodiscard]] int _broadcast_unsafe(T *data, size_t _size, size_t root);
 
-  template <typename T> int broadcast_span(std::span<T> data, size_t root);
+  template <typename T>
+  int broadcast_span(std::span<T> data, size_t root);
 
   template <typename... Args>
   void host_dispatch(const ExecInfo &info, SIGNALS sign, Args &&...args);
@@ -80,14 +83,17 @@ namespace MPI_W
   std::vector<T>
   gather(std::span<T> local_data, size_t n_rank, size_t root = 0);
 
-  template <NumberType T> T gather_reduce(T data, size_t root = 0);
+  template <NumberType T>
+  T gather_reduce(T data, size_t root = 0);
 
   template <typename T>
   std::vector<T>
   gather_v(const std::vector<T> &local_data, size_t n_rank, size_t root = 0);
 
-  // IMPL
 
+  //**
+  // IMPL
+  //**
   template <POD DataType>
   static int
   _send_unsafe(DataType *buf, size_t buf_size, size_t dest, size_t tag)
@@ -176,7 +182,8 @@ namespace MPI_W
     }
   }
 
-  template <POD DataType> int broadcast(DataType &data, size_t root)
+  template <POD DataType>
+  int broadcast(DataType &data, size_t root)
   {
     return MPI_Bcast(
         &data, 1, get_type<DataType>(), static_cast<int>(root), MPI_COMM_WORLD);
@@ -238,7 +245,8 @@ namespace MPI_W
         data, _size, get_type<T>(), static_cast<int>(root), MPI_COMM_WORLD);
   }
 
-  template <typename T> int broadcast_span(std::span<T> data, size_t root)
+  template <typename T>
+  int broadcast_span(std::span<T> data, size_t root)
   {
     return _broadcast_unsafe(data.data(), data.size(), root);
   }
@@ -274,7 +282,8 @@ namespace MPI_W
     return _gather_unsafe(local_data.data(), local_data.size(), n_rank, root);
   }
 
-  template <NumberType T> T gather_reduce(T data, size_t root)
+  template <NumberType T>
+  T gather_reduce(T data, size_t root)
   {
 
     T result{};
@@ -327,7 +336,8 @@ namespace MPI_W
     }
   }
 
-  template <POD DataType> int send(DataType data, size_t dest, size_t tag)
+  template <POD DataType>
+  int send(DataType data, size_t dest, size_t tag)
   {
     return _send_unsafe<DataType>(&data, 1, dest, tag);
   }

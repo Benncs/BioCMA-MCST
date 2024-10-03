@@ -15,7 +15,8 @@ conf_data = configuration_data(
         'default_particle_container_allocation_factor': '2.5',
         'MC_MAX_PARTICLE_BUFFER': '100e6',
         'debug_MC_RAND_DEFAULT_SEED': '2024',
-        '_dead_particle_ratio_threshold':'0.01'
+        '_dead_particle_ratio_threshold':'0.01',
+        'result_dir_path':'"./results/"'
     },
 )
 

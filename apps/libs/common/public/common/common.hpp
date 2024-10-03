@@ -4,7 +4,6 @@
 #include <common/alg.hpp>
 #include <common/common_types.hpp>
 #include <common/execinfo.hpp>
-#include <common/simulation_parameters.hpp>
 #include <biocma_cst_config.hpp>
 
 #ifdef ENABLE_KOKKOS_PROFILING

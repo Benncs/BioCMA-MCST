@@ -109,12 +109,12 @@ namespace Simulation
   {
     const auto view_neighbors = this->mc_unit->domain.getNeighbors();
 
-    const Kokkos::LayoutStride layout(view_neighbors.getNRow(),
+    const Kokkos::LayoutRight layout(view_neighbors.getNRow(),
                                       view_neighbors.getNCol(),
                                       view_neighbors.getNCol(),
                                       1);
 
-    const auto host_view = Kokkos::View<const size_t **, Kokkos::LayoutStride>(
+    const auto host_view = Kokkos::View<const size_t **, Kokkos::LayoutRight>(
         view_neighbors.data().data(), layout);
 
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_view);

@@ -1,7 +1,9 @@
 from typing import List
 from matplotlib import pyplot as plt
 import numpy as np
-from .old_read_results import import_results
+
+# from .old_read_results import import_results
+from .read_results import import_results, Results
 from . import (
     FIGURE_TYPE,
     average_concentration,
@@ -15,6 +17,7 @@ import argparse
 from numpy.polynomial import Polynomial
 from . import get_time
 
+
 def assemble(res_folder: str, names: List[str]) -> List[str]:
     return [f"{res_folder}{i}.h5" for i in names]
 
@@ -22,7 +25,6 @@ def assemble(res_folder: str, names: List[str]) -> List[str]:
 def mk_parser():
     parser = argparse.ArgumentParser(description="Post process tool")
 
-    
     parser.add_argument(
         dest="name_results",
         type=str,
@@ -39,62 +41,114 @@ def mk_parser():
     )
     return parser
 
+
 def detect_exponential_growth(t: np.ndarray, n: np.ndarray, threshold: float = 0.01):
     """
     Detect the index where exponential growth starts by analyzing the rate of change
     in the logarithmic domain.
-    
+
     Parameters:
     t (np.ndarray): Time array
     n (np.ndarray): Particle number array
     threshold (float): Threshold for identifying the start of exponential growth
-    
+
     Returns:
     int: Index where exponential growth starts
     """
     log_n = np.log(n)
     # Calculate the derivative (rate of change) of log(n) with respect to time
     rate_of_change = np.gradient(log_n, t)
-    
+
     # Detect where the rate of change stabilizes (exponential region)
     for i in range(1, len(rate_of_change)):
-        if np.abs(rate_of_change[i] - rate_of_change[i-1]) < threshold:
+        if np.abs(rate_of_change[i] - rate_of_change[i - 1]) < threshold:
             return i
     return 0  # Default to 0 if no stable growth is detected
 
+
 def plot_grow_in_number(t: np.ndarray, n: np.ndarray, dest: str):
-
-
-
-
-
-    n = np.sum(n,axis=1)
-   
+    n = np.sum(n, axis=1)
     plt.figure()
-    plt.semilogy(t, n, "-",color='black', label="results")
+    plt.semilogy(t, n, "-", color="black", label="results")
     plt.ylabel("Number of particles")
     plt.xlabel(f"Time [{get_time()}]")
     plt.title("Particle number growth (Log-Scale)")
     plt.grid(True)
-    
+
     # start_index = detect_exponential_growth(t, n,0.05)
-   
+
     # exp_t = t[start_index:]
     # exp_n = n[start_index:]
 
     # fitting = Polynomial.fit(exp_t, np.log(exp_n), 1)
-    
+
     # coeff = fitting.convert().coef
-    
+
     # y_exp = np.exp(coeff[0]) * np.exp(coeff[1] * t)
     # plt.semilogy(t, y_exp, label="regression")
     # plt.legend()
-    
+
     # Save the plot
     plt.savefig(f"{dest}/num_grow{FIGURE_TYPE}")
     plt.show()
 
-def main(name_results,root_res='./results/'):
+
+def check_time_unit(results: Results):
+    # Conversion to hour if duration too long
+    if results.main.time[-1] > 10000:
+        results.main.time = results.main.time / 3600.0
+        set_time_unit_to_hour()
+
+
+def calculate_mass(results: Results):
+    # try:
+    #     init_mass = np.sum(X0 * results.volume_liquid[0, :])
+    #     print("INITIAL MASS", init_mass)
+    #     final_mass = (
+    #             results.npart * results.weight / np.sum(results.volume_liquid[0, :])
+    #     )
+    #     print("FINAL CONCENTRATION", final_mass)
+    # except:
+    #         pass
+    # TODO
+    pass
+
+
+def get_spatial_average_concentration(results: Results, dest: str):
+    def phase_functor(concentration_record, full_volume, phase_name: str):
+        c_avg = np.array(average_concentration(concentration_record, full_volume))
+        plt.figure()
+        plt.plot(results.time, c_avg)
+        plt.title("Average glucose concentration over time")
+        plt.ylabel("C [g/L]")
+        plt.xlabel(f"Time [{get_time()}]")
+        plt.savefig(dest + f"/c_avg_{phase_name}_{FIGURE_TYPE}")
+
+    concentration_record = results.main.concentrations_liquid[:, :, 0]
+    full_volume = results.main.volume_liquid
+    phase_functor(concentration_record, full_volume, "liquid")
+
+    if results.main.concentrations_gas is not None:
+        concentration_record = results.main.concentrations_gas[:, :, 0]
+        full_volume = results.main.volumes_gas
+        phase_functor(concentration_record, full_volume, "gas")
+
+
+def get_vtk(id: int):
+    return None  # f"./results/{name_results[i]}/{name_results[i]}_{last_id}.vtu"
+
+
+def time_average_reaction_data(results):
+    # np.set_printoptions(precision=10)
+    # print(
+    #     time_average_reaction_rate(
+    #         results.time[-1], results.data[:, :, 0], results.volume_liquid
+    #     )
+    # )
+    pass
+
+
+def main(name_results, root_res="./results/"):
     dest = [f"./results/{i}/postprocessing" for i in name_results]
 
     for d in dest:
@@ -105,62 +159,20 @@ def main(name_results,root_res='./results/'):
 
     vtu_path = None  # ("/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/bench/cma_mesh.vtu")
     check_mixing(name_results, pathres, dest, vtu_path)
-    X0 = 0.1
+
     for i, current_path_res in enumerate(pathres):
-        results = import_results(current_path_res)
+        results: Results = import_results(current_path_res)
 
-        #Conversion to hour 
-        
-        if results.t[-1]>10000:
-             results.t= results.t/3600
-             set_time_unit_to_hour()
+        check_time_unit(results)
 
-        last_id = results.n_t - 1
-        last_vtk_path = (
-            None  # f"./results/{name_results[i]}/{name_results[i]}_{last_id}.vtu"
-        )
-        try:
-            init_mass = np.sum(X0 * results.volume_liquid[0, :])
-            print("INITIAL MASS", init_mass)
-            final_mass = (
-                results.npart * results.weight / np.sum(results.volume_liquid[0, :])
-            )
-            print("FINAL CONCENTRATION", final_mass)
-        except:
-            pass
-        property_distribution(
-            results.initial_bioparam, f"{name_results[i]}_init", dest[i]
-        )
+        last_id = results.main.n_export - 1
+        last_vtk_path = get_vtk(last_id)
 
-        if results.final_bioparam is not None:
-            property_distribution(
-                results.final_bioparam,
-                f"{name_results[i]}_final",
-                dest[i],
-                last_vtk_path,
-            )
+        calculate_mass(results)
+        plot_grow_in_number(results.time, results.total_repartion, dest[i])
+        get_spatial_average_concentration(results, dest[i])
 
-        dict_particles = [results.initial_bioparam]
-        if results.extra_bioparam is not None:
-            dict_particles = [*dict_particles, *results.extra_bioparam]
-        if results.final_bioparam is not None:
-            dict_particles.append(results.final_bioparam)
-
-        process_particle_data(results.t,dict_particles, dest[i])
-        plot_grow_in_number(results.t,results.records_distribution,dest[i])
-        np.set_printoptions(precision=10)
-        plt.figure()
-        c_avg = np.array(average_concentration(results))
-        print(
-            time_average_reaction_rate(
-                results.t[-1], results.data[:, :, 0], results.volume_liquid
-            )
-        )
-        plt.plot(results.t, c_avg)
-        plt.title("Average glucose concentration over time")
-        plt.ylabel("C [g/L]")
-        plt.xlabel(f"Time [{get_time()}]")
-        plt.savefig(dest[i] + f"/c_avg{FIGURE_TYPE}")
+        process_particle_data(results, dest[i])
 
 
 if __name__ == "__main__":
@@ -168,5 +180,4 @@ if __name__ == "__main__":
 
     name_results = args.name_results
     root_res = args.root_res
-    main(name_results,root_res)
-    
+    main(name_results, root_res)

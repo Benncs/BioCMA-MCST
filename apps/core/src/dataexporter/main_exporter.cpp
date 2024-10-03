@@ -18,12 +18,13 @@ namespace CORE_DE
   };
 
   void MainExporter::write_initial(const double weight,
-                                   const SimulationParameters &params,
+                                   const Core::SimulationParameters &params,
                                    const std::vector<size_t> &distribution)
   {
     export_initial_kv initial_values;
     initial_values["number_particles"] = params.user_params.number_particle;
     initial_values["initial_weight"] = weight;
+    initial_values["initial_biomass_concentration"] = params.user_params.biomass_initial_concentration;
     initial_values["number_compartment"] = params.n_compartments;
     initial_values["final_time"] = params.user_params.final_time;
     initial_values["particle_distribution"] =
@@ -91,13 +92,6 @@ namespace CORE_DE
                           false});
   }
 
-  void MainExporter::connect(std::string_view filename,
-                             std::string_view link_name,
-                             std::string_view groupname)
-  {
-    do_link(filename, link_name, groupname); // TODO
-  }
-
   void MainExporter::update_fields(
       double t,
       std::span<double> concentration_liquid,
@@ -146,7 +140,7 @@ namespace CORE_DE
                  n_col,
                  true);
 
-    auto opt_gas = simulation._getCgasData();
+    auto opt_gas = simulation.getCgasData();
     if (opt_gas.has_value())
     {
       write_matrix(

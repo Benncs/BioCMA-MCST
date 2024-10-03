@@ -6,6 +6,7 @@
 
 #include <dataexporter/partial_exporter.hpp>
 #include <common/common.hpp>
+#include <core/simulation_parameters.hpp>
 #include <memory>
 
 // Foward declaration
@@ -32,7 +33,7 @@ namespace Simulation
 void workers_process(
     const ExecInfo &exec,
     Simulation::SimulationUnit &&simulation,
-    const SimulationParameters &params,
+    const Core::SimulationParameters &params,
     std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner,CORE_DE::PartialExporter&mm);
 
 

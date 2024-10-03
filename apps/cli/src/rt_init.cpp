@@ -4,8 +4,7 @@
 #include <cassert>
 #include <common/common.hpp>
 #include <common/execinfo.hpp>
-#include <common/simulation_parameters.hpp>
-#include <core/cp_flag.hpp>
+#include <core/simulation_parameters.hpp>
 #include <cstdlib>
 #include <ctime>
 #include <filesystem>
@@ -36,7 +35,7 @@ size_t generate_run_id();
 void set_n_thread_current_rank(const int rank,
                                const int size,
                                ExecInfo &info,
-                               const UserControlParameters &params)
+                               const Core::UserControlParameters &params)
 {
   // Casting rank and size to size_t
   info.current_rank = static_cast<size_t>(rank);
@@ -64,12 +63,12 @@ void set_n_thread_current_rank(const int rank,
 
   assert(info.thread_per_process > 0);
   
-  // omp_set_num_threads(static_cast<int>(info.thread_per_process));
+  omp_set_num_threads(static_cast<int>(info.thread_per_process));
   
   
 }
 
-ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
+ExecInfo runtime_init(int argc, char **argv, const Core::SimulationParameters &params)
 {
   init_environment();
   ExecInfo info{};
@@ -84,7 +83,6 @@ ExecInfo runtime_init(int argc, char **argv, const SimulationParameters &params)
     // int mpi_thread_level{};
     // MPI_Init_thread(&argc, &argv, MPI_THREAD_SINGLE, &mpi_thread_level);
     // int mpi_thread_level{};
-
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
@@ -210,7 +208,7 @@ std::string env_file_path() noexcept
   return ".bmc_info";
 }
 
-void register_run(const ExecInfo &exec, SimulationParameters &params)
+void register_run(const ExecInfo &exec, Core::SimulationParameters &params)
 {
   // Open the file in append mode
   std::ofstream env(env_file_path(), std::ios_base::app);

@@ -3,7 +3,6 @@
 #include <mc/events.hpp>
 
 #include <biocma_cst_config.hpp>
-#include <core/cp_flag.hpp>
 #include <sync.hpp>
 
 

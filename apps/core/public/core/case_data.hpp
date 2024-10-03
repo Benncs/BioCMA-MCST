@@ -2,12 +2,11 @@
 #define __CASE_DATA__HPP__
 
 #include <common/execinfo.hpp>
-#include <common/simulation_parameters.hpp>
+#include <core/simulation_parameters.hpp>
 #include <memory>
-
-
 #include <simulation/simulation.hpp>
 #include <simulation/transitionner.hpp>
+
 
 namespace Core
 {

@@ -5,13 +5,13 @@
 #include <common/common.hpp>
 #include <iomanip>
 
-
+#include <core/simulation_parameters.hpp>
 
 
 void set_n_thread_current_rank(int rank,
                                int size,
                                ExecInfo &info,
-                               const UserControlParameters &params);
+                               const Core::UserControlParameters &params);
 
 /**
  * @brief Appends the current date and time to the given stream.
@@ -59,10 +59,10 @@ std::string sappend_date_time(std::string_view string);
  * environment, including execution context and other relevant metadata.
  */
 ExecInfo
-runtime_init(int argc, char **argv, const SimulationParameters &params);
+runtime_init(int argc, char **argv, const Core::SimulationParameters &params);
 
 /**
  * @brief Print run metadata to log file before running */
-void register_run(const ExecInfo &exec, SimulationParameters &params);
+void register_run(const ExecInfo &exec, Core::SimulationParameters &params);
 
 #endif //__RUNTIME_INIT_HPP__

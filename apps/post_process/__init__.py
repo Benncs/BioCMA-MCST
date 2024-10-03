@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 from typing import Optional, Tuple
 import cmtool.vtk
-from .old_read_results import RawResults, import_results
+from .read_results import  import_results,Results
 import os
 from .initialiser import make_initial_concentration
 
@@ -63,13 +63,13 @@ def norm_concentration(
 
 
 def process_norm(
-    name: str, results: RawResults, vtk_cma_mesh_path: Optional[str] = None
+    name: str, results: Results, vtk_cma_mesh_path: Optional[str] = None
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    concentration_record = results.data[:, :, 0]
+    concentration_record = results.main.concentrations_liquid[:, :, 0]
 
-    full_volume = results.volume_liquid
+    full_volume = results.main.volume_liquid
 
-    p_concentration = results.distribution / full_volume
+    p_concentration = results.total_repartion / full_volume
 
     normalized_scalar_concentration, _, var_c = norm_concentration(
         concentration_record, full_volume
@@ -86,7 +86,7 @@ def process_norm(
             vtk_cma_mesh_path,
             "./results/",
             name,
-            results.t,
+            results.main.time,
             [full_volume, "liquid_volume"],
             [p_concentration, "particle_concentration"],
             [normalized_particle_concentration, "normalized_particle_concentration"],
@@ -99,14 +99,12 @@ def process_norm(
         norm_c_var,
         normalized_particle_concentration,
         norm_par_var,
-        results.t,
+        results.main.time,
     )
 
 
-def average_concentration(results: RawResults):
-    concentration_record = results.data[:, :, 0]
-
-    full_volume = results.volume_liquid
+def average_concentration(concentration_record:np.ndarray,full_volume:np.ndarray):
+  
 
     c_avg = np.sum(concentration_record * full_volume, axis=1) / np.sum(
         full_volume, axis=1

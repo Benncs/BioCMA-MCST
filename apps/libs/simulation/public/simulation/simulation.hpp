@@ -55,9 +55,8 @@ namespace Simulation
 
     [[nodiscard]] std::span<double> getCliqData() const;
     [[nodiscard]] std::tuple<size_t, size_t> getDim() const noexcept;
-    [[deprecated]][[nodiscard]] std::span<double> getCgasData() const;
 
-    [[nodiscard]] std::optional<std::span<double>> _getCgasData() const;
+    [[nodiscard]] std::optional<std::span<double>> getCgasData() const;
     [[nodiscard]] std::span<double> getContributionData() const;
 
     void setVolumes(std::span<const double> volumesgas,

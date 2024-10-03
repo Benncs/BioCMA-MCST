@@ -28,17 +28,9 @@ namespace Simulation
     return this->liquid_scalar->getConcentrationData();
   }
 
-  [[nodiscard]] std::span<double> SimulationUnit::getCgasData() const
-  {
-    if (!gas_scalar)
-    {
-      return {};
-    }
-    return this->gas_scalar->getConcentrationData();
-  }
 
   [[nodiscard]] std::optional<std::span<double>>
-  SimulationUnit::_getCgasData() const
+  SimulationUnit::getCgasData() const
   {
     if (!gas_scalar)
     {

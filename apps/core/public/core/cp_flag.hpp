@@ -1,6 +1,0 @@
-#ifndef __CORE_COMPILE_TIME_FLAGS_HPP__
-#define __CORE_COMPILE_TIME_FLAGS_HPP__
-
-
-
-#endif

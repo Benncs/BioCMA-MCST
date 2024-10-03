@@ -6,6 +6,7 @@
 #include <mc/container_state.hpp>
 #include <mc/events.hpp>
 #include <mc/prng/prng.hpp>
+#include <traits/Kokkos_IterationPatternTrait.hpp>
 namespace Simulation
 {
 
@@ -20,24 +21,24 @@ namespace Simulation
 
   using CumulativeProbabilityViewCompute =
       Kokkos::View<double **,
-                   Kokkos::LayoutLeft,
+                   Kokkos::LayoutRight,
                    ComputeSpace,
                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
-//   using ContributionViewCompute =
-//       Kokkos::View<double **,
-//                    Kokkos::LayoutLeft,
-//                    ComputeSpace,
-//                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
-    // using ContributionViewCompute =
-    //   Kokkos::Experimental::ScatterView<double **,
-    //                Kokkos::LayoutLeft,
-    //                ComputeSpace,
-    //                Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
-                   
+  //   using ContributionViewCompute =
+  //       Kokkos::View<double **,
+  //                    Kokkos::LayoutLeft,
+  //                    ComputeSpace,
+  //                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+  // using ContributionViewCompute =
+  //   Kokkos::Experimental::ScatterView<double **,
+  //                Kokkos::LayoutLeft,
+  //                ComputeSpace,
+  //                Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+
   using NeighborsViewCompute =
       Kokkos::View<const size_t **,
-                   Kokkos::LayoutStride,
+                   Kokkos::LayoutRight,
                    ComputeSpace,
                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 

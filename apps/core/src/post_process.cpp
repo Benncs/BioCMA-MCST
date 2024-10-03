@@ -80,7 +80,7 @@ namespace PostProcessing
   }
 
   void final_post_processing(const ExecInfo &exec,
-                             const SimulationParameters &params,
+                             const Core::SimulationParameters &params,
                              Simulation::SimulationUnit &&simulation,
                              std::unique_ptr<CORE_DE::MainExporter> &mde)
   {
@@ -106,7 +106,7 @@ namespace PostProcessing
     }
   }
 
-  void show_sumup_state(Simulation::SimulationUnit &simulation)
+  void show_sumup_state(const Simulation::SimulationUnit &simulation) noexcept
   {
     // Assuming domain data is in sharedSpace
     for (auto &&c : simulation.mc_unit->domain)
@@ -118,7 +118,7 @@ namespace PostProcessing
 
   void append_properties(int counter,
                          Simulation::SimulationUnit &simulation,
-                         CORE_DE::PartialExporter &pde)
+                         CORE_DE::PartialExporter &partial_exporter)
   {
 
     {
@@ -129,29 +129,21 @@ namespace PostProcessing
       get_particle_properties_opti(
           names, particle_values, spatial_values, simulation.mc_unit, false);
       std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
-      // exporter->write_particle_data(
-      //     names, particle_values, spatial_values, ds_name);
 
-      pde.write_particle_data({names.data(), names.extent(0)},
-                              particle_values,
-                              spatial_values,
-                              ds_name);
+      partial_exporter.write_particle_data({names.data(), names.extent(0)},
+                                           particle_values,
+                                           spatial_values,
+                                           ds_name);
     }
   }
 
-  void
-  user_triggered_properties_export(Simulation::SimulationUnit &sim,
-                                   CORE_DE::PartialExporter &pde)
+  void user_triggered_properties_export(Simulation::SimulationUnit &sim,
+                                        CORE_DE::PartialExporter &pde)
   {
     static int counter = 0;
     counter++;
     std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
     PostProcessing::append_properties(counter, sim, pde);
-    // std::ofstream os("./out.cereal", std::ios::binary);
-    // cereal::BinaryOutputArchive archive(os);
-    // archive(*sim.mc_unit);
-    // std::cout << "./out.cereal   " << sim.mc_unit->domain[0].n_cells
-    //           << std::endl;
   }
 
   void get_particle_properties_opti(

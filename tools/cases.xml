@@ -39,7 +39,7 @@
    <control name="test14">
       <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
       <final_time>1</final_time>
-      <numper_particle>10000000</numper_particle> 
+      <numper_particle>1000</numper_particle> 
       <delta_time>0.02</delta_time>
       <results_file_name>debug</results_file_name>
       <number_exported_result>10</number_exported_result>
@@ -71,11 +71,22 @@
 
    <control name="debug">
 	   <cma_case_path>./cma_data/0d/</cma_case_path>
-      <final_time>90</final_time>
-      <numper_particle>10000</numper_particle>
+      <final_time>95000</final_time>
+      <numper_particle>100000</numper_particle>
       <delta_time>0.1</delta_time>
-      <results_file_name>debug</results_file_name>
-      <number_exported_result>200</number_exported_result>
+      <results_file_name>str_0d_monod_3</results_file_name>
+      <number_exported_result>100</number_exported_result>
+      <model_name>model_monod</model_name>
+      <initialiser_path></initialiser_path>
+   </control>
+
+   <control name="merge">
+	   <cma_case_path>/mnt/c/Users/casale/Documents/code/jumbio/jumbio_case/out/merged/</cma_case_path>
+      <final_time>9</final_time>
+      <numper_particle>10000</numper_particle>
+      <delta_time>0.001</delta_time>
+      <results_file_name>test_merge</results_file_name>
+      <number_exported_result>100</number_exported_result>
       <model_name>model_monod</model_name>
       <initialiser_path></initialiser_path>
    </control>

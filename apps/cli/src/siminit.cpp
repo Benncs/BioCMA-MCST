@@ -6,8 +6,7 @@
 #include <cma_read/neighbors.hpp>
 #include <cmt_common/cma_case.hpp>
 #include <common/common.hpp>
-#include <common/simulation_parameters.hpp>
-#include <core/cp_flag.hpp>
+#include <core/simulation_parameters.hpp>
 #include <cstddef>
 #include <cstdio>
 #include <exception>
@@ -59,7 +58,7 @@ static const ScalarFactory::ScalarVariant DefaultIntialiserTPF =
  * initialized state.
  */
 static CmaRead::ReactorState const *
-init_state(SimulationParameters &params,
+init_state(Core::SimulationParameters &params,
            std::unique_ptr<CmaRead::FlowIterator> &flow_handle,
            const CmtCommons::cma_exported_paths_t &paths);
 
@@ -68,7 +67,7 @@ init_state(SimulationParameters &params,
  */
 static void
 init_host_only(const ExecInfo &info,
-               SimulationParameters &params,
+               Core::SimulationParameters &params,
                std::unique_ptr<CmaRead::FlowIterator> &_flow_handle,
                CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
                std::vector<double> &liq_volume,
@@ -77,7 +76,7 @@ init_host_only(const ExecInfo &info,
 
 std::unique_ptr<Simulation::SimulationUnit>
 init_simulation(const ExecInfo &info,
-                SimulationParameters &params,
+                Core::SimulationParameters &params,
                 std::unique_ptr<Simulation::FlowMapTransitioner> &transitioner)
 {
 
@@ -197,7 +196,7 @@ init_simulation(const ExecInfo &info,
 
 static void
 init_host_only(const ExecInfo &info,
-               SimulationParameters &params,
+               Core::SimulationParameters &params,
                std::unique_ptr<CmaRead::FlowIterator> &_flow_handle,
                CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors,
                std::vector<double> &liq_volume,
@@ -271,7 +270,7 @@ init_host_only(const ExecInfo &info,
 }
 
 static CmaRead::ReactorState const *
-init_state(SimulationParameters &params,
+init_state(Core::SimulationParameters &params,
            std::unique_ptr<CmaRead::FlowIterator> &flow_handle,
            const CmtCommons::cma_exported_paths_t &paths)
 {

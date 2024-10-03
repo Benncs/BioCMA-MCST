@@ -1,22 +1,23 @@
-#include "common/simulation_parameters.hpp"
 #include "rt_init.hpp"
 #include <cli_parser.hpp>
+#include <core/simulation_parameters.hpp>
 #include <exception>
 #include <filesystem>
 #include <iostream>
 #include <optional>
 #include <string_view>
 
-static void sanitise_check_cli(SimulationParameters &params);
+
+static void sanitise_check_cli(Core::SimulationParameters &params);
 // static void print_green(std::ostream &os, std::string_view message);
 static void print_red(std::ostream &os, std::string_view message);
 static void throw_bad_arg(std::string_view arg);
 
-static void parseArg(UserControlParameters &user_controll,
+static void parseArg(Core::UserControlParameters &user_controll,
                      std::string current_param,
                      std::string_view current_value);
 
-static void recur_path(std::string_view rootPath, SimulationParameters &params)
+static void recur_path(std::string_view rootPath, Core::SimulationParameters &params)
 {
   size_t count = 1;
   std::string dirName = "i_" + std::to_string(count) + "/";
@@ -31,10 +32,10 @@ static void recur_path(std::string_view rootPath, SimulationParameters &params)
   }
 }
 
-static std::optional<UserControlParameters> parse_user_param(int argc,
+static std::optional<Core::UserControlParameters> parse_user_param(int argc,
                                                              char **argv)
 {
-  UserControlParameters control = UserControlParameters::m_default();
+  Core::UserControlParameters control = Core::UserControlParameters::m_default();
 
   try
   {
@@ -73,9 +74,9 @@ static std::optional<UserControlParameters> parse_user_param(int argc,
   }
 }
 
-std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
+std::optional<Core::SimulationParameters> parse_cli(int argc, char **argv) noexcept
 {
-  SimulationParameters params = SimulationParameters::m_default();
+  Core::SimulationParameters params = Core::SimulationParameters::m_default();
   auto opt_control = parse_user_param(argc, argv);
   if (!opt_control.has_value())
   {
@@ -103,20 +104,18 @@ std::optional<SimulationParameters> parse_cli(int argc, char **argv) noexcept
     params.results_file_name = "./results/" + control.results_file_name + ".h5";
   }
 
-  
-
   params.user_params = std::move(control);
   sanitise_check_cli(params);
 
   return params;
 }
 
-static void parseArg(UserControlParameters &user_controll,
+static void parseArg(Core::UserControlParameters &user_controll,
                      std::string current_param,
                      std::string_view current_value)
 {
   std::string path;
-  //TODO need check that begin()+1 is not OOB 
+  // TODO need check that begin()+1 is not OOB
   current_param = std::string(current_param.begin() + 1, current_param.end());
   switch (current_param[0])
   {
@@ -177,7 +176,7 @@ static void parseArg(UserControlParameters &user_controll,
     {
       user_controll.cma_case_path = current_value;
     }
-    else if(current_param =="force")
+    else if (current_param == "force")
     {
       user_controll.force_override = true;
     }
@@ -194,7 +193,7 @@ static void parseArg(UserControlParameters &user_controll,
   }
 }
 
-static void sanitise_check_cli(SimulationParameters &params)
+static void sanitise_check_cli(Core::SimulationParameters &params)
 {
   if (params.flow_files.empty())
   {
@@ -215,8 +214,6 @@ static void sanitise_check_cli(SimulationParameters &params)
   {
     throw std::invalid_argument("Final time must be positive");
   }
-
- 
 }
 
 void showHelp(std::ostream &os) noexcept

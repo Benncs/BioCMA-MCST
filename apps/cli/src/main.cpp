@@ -1,9 +1,8 @@
 #include <cli_parser.hpp>
 #include <common/common.hpp>
 #include <common/execinfo.hpp>
-#include <common/simulation_parameters.hpp>
+#include <core/simulation_parameters.hpp>
 #include <core/case_data.hpp>
-#include <core/cp_flag.hpp>
 #include <iostream>
 #include <memory>
 #include <rt_init.hpp>
@@ -36,7 +35,7 @@
  * @return A `CaseData` object containing the prepared data for the simulation.
  */
 static Core::CaseData prepare(const ExecInfo &exec_info,
-                              SimulationParameters params);
+                              Core::SimulationParameters params);
 
 /**
  * @brief Wrapper to handle Excception raised in try/catch block
@@ -48,7 +47,10 @@ static int handle_catch(ExceptionType const &e);
  * @brief Check if result path exist or not and ask for overriding if yes
  * @return true if override results_path
  */
-static bool override_result_path(const SimulationParameters &params);
+static bool override_result_path(const Core::SimulationParameters &params);
+
+
+
 int main(int argc, char **argv)
 {
 
@@ -91,7 +93,7 @@ int main(int argc, char **argv)
 }
 
 static Core::CaseData prepare(const ExecInfo &exec_info,
-                              SimulationParameters params)
+                              Core::SimulationParameters params)
 {
 
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
@@ -111,7 +113,7 @@ static int handle_catch(ExceptionType const &e)
 #endif
 }
 
-bool override_result_path(const SimulationParameters &params)
+bool override_result_path(const Core::SimulationParameters &params)
 {
   if (std::filesystem::exists(params.results_file_name) &&
       !params.user_params.force_override)

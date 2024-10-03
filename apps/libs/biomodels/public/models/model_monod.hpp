@@ -8,23 +8,17 @@
 namespace Models
 {
 
-
-
-
-
   class Monod
   {
     double mu;
     double l;
     double contrib;
-    private:
-    double _init_only_cell_lenghtening;
-  public:
-    
-    
 
-    KOKKOS_FUNCTION void init(MC::ParticleDataHolder &p,
-                              MC::KPRNG _rng);
+  private:
+    double _init_only_cell_lenghtening;
+
+  public:
+    KOKKOS_FUNCTION void init(MC::ParticleDataHolder &p, MC::KPRNG _rng);
 
     KOKKOS_FUNCTION void update(double d_t,
                                 MC::ParticleDataHolder &p,
@@ -35,7 +29,7 @@ namespace Models
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
                                       ContributionView contri);
-                                      KOKKOS_INLINE_FUNCTION double mass()const;
+    KOKKOS_INLINE_FUNCTION double mass() const;
 
     model_properties_detail_t get_properties();
   };

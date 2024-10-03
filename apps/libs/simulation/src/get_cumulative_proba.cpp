@@ -9,7 +9,8 @@ namespace Simulation
     const size_t n_compartment = neighbors.getNRow();
 
     // Initialize the cumulative probability matrix
-    Eigen::MatrixXd P = Eigen::MatrixXd::Zero(
+
+    Eigen::Matrix<double,-1,-1,Eigen::RowMajor> cumsum_proba = Eigen::MatrixXd::Zero(
         static_cast<int>(n_compartment), static_cast<int>(neighbors.getNCol()));
 
     // Iterate through each compartment to compute its cumulative probabilities
@@ -43,13 +44,13 @@ namespace Simulation
 
         // Compute the cumulative probability for the current neighbor
         const double p_cp = proba_out + cumsum;
-        P.coeffRef(k_compartment, count_neighbor) =
+        cumsum_proba.coeffRef(k_compartment, count_neighbor) =
             p_cp;            // Store the cumulative probability
         count_neighbor++;    // Increment the neighbor count
         cumsum += proba_out; // Update the cumulative sum
       }
     }
 
-    return P; // Return the computed cumulative probability matrix
+    return cumsum_proba; // Return the computed cumulative probability matrix
   }
 } // namespace Simulation

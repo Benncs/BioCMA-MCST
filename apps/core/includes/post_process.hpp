@@ -4,7 +4,7 @@
 #include "dataexporter/main_exporter.hpp"
 #include "dataexporter/partial_exporter.hpp"
 #include <common/execinfo.hpp>
-#include <common/simulation_parameters.hpp>
+#include <core/simulation_parameters.hpp>
 #include <memory>
 
 
@@ -16,14 +16,14 @@ namespace Simulation
 namespace PostProcessing
 {
   void save_results(const ExecInfo &exec,
-                    const SimulationParameters &params,
+                    const Core::SimulationParameters &params,
                     Simulation::SimulationUnit &simulation);
 
   void final_post_processing(const ExecInfo &exec,
-                    const SimulationParameters &params,
+                    const Core::SimulationParameters &params,
                     Simulation::SimulationUnit &&simulation,std::unique_ptr<CORE_DE::MainExporter>& mde);
 
-  void show_sumup_state(Simulation::SimulationUnit &simulation);
+  void show_sumup_state(const Simulation::SimulationUnit &simulation) noexcept;
 
   void save_initial_particle_state(Simulation::SimulationUnit &simulation,CORE_DE::PartialExporter& pde);
 

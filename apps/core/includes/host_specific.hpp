@@ -2,6 +2,7 @@
 #define __HOST_SPECIFIC_HPP__
 
 #include <common/common.hpp>
+#include <core/simulation_parameters.hpp>
 #include <dataexporter/partial_exporter.hpp>
 #include <memory>
 
@@ -29,7 +30,7 @@ namespace Simulation
 void host_process(
     const ExecInfo &exec,
     Simulation::SimulationUnit &&simulation,
-    const SimulationParameters &params,
+    const Core::SimulationParameters &params,
     std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner,
     CORE_DE::PartialExporter &partial_exporter);
 
