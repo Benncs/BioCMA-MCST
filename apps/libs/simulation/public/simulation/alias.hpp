@@ -19,28 +19,23 @@ namespace Simulation
                    ComputeSpace,
                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
-  using CumulativeProbabilityViewCompute =
+  template <typename Space>
+  using CumulativeProbabilityView =
       Kokkos::View<double **,
                    Kokkos::LayoutRight,
-                   ComputeSpace,
+                   Space,
                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
-  //   using ContributionViewCompute =
-  //       Kokkos::View<double **,
-  //                    Kokkos::LayoutLeft,
-  //                    ComputeSpace,
-  //                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
-  // using ContributionViewCompute =
-  //   Kokkos::Experimental::ScatterView<double **,
-  //                Kokkos::LayoutLeft,
-  //                ComputeSpace,
-  //                Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+  using CumulativeProbabilityViewCompute = CumulativeProbabilityView<ComputeSpace>;
 
-  using NeighborsViewCompute =
+  template <typename Space>
+  using NeighborsView =
       Kokkos::View<const size_t **,
-                   Kokkos::LayoutRight,
-                   ComputeSpace,
+                   Kokkos::LayoutStride,
+                   Space,
                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+
+  using NeighborsViewCompute = NeighborsView<ComputeSpace>;
 
   using LeavingFlowIndexType =
       Kokkos::View<size_t *, Kokkos::SharedHostPinnedSpace>;

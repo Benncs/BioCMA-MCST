@@ -5,7 +5,7 @@
 
 namespace Simulation
 {
-
+  using CumulativeProbaType= Eigen::Matrix<double, -1, -1, Eigen::RowMajor>;
   /**
    * @brief Computes the cumulative probability matrix from the transition
    * matrix and neighbor information.
@@ -21,7 +21,7 @@ namespace Simulation
    *
    * @return An Eigen::MatrixXd representing the cumulative probability matrix.
    */
-  Eigen::MatrixXd get_cumulative_probabilities(
+  CumulativeProbaType get_cumulative_probabilities(
       CmaRead::Neighbors::Neighbors_const_view_t neighbors,
       const FlowMatrixType &m_transition);
 

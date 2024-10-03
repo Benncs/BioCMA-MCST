@@ -1,8 +1,9 @@
 #include <get_cumulative_proba.hpp>
+#include <iostream>
 
 namespace Simulation
 {
-  Eigen::MatrixXd get_cumulative_probabilities(
+  CumulativeProbaType get_cumulative_probabilities(
       CmaRead::Neighbors::Neighbors_const_view_t neighbors,
       const FlowMatrixType &m_transition)
   {
@@ -10,7 +11,7 @@ namespace Simulation
 
     // Initialize the cumulative probability matrix
 
-    Eigen::Matrix<double,-1,-1,Eigen::RowMajor> cumsum_proba = Eigen::MatrixXd::Zero(
+    CumulativeProbaType cumsum_proba = CumulativeProbaType::Zero(
         static_cast<int>(n_compartment), static_cast<int>(neighbors.getNCol()));
 
     // Iterate through each compartment to compute its cumulative probabilities
@@ -36,11 +37,12 @@ namespace Simulation
           break;
         }
 
+        const double out_flow = m_transition.coeff(k_compartment, k_compartment);
         // Calculate the transition probability from the current compartment to
         // the neighbor
-        const double proba_out =
-            m_transition.coeff(k_compartment, colId) /
-            std::abs(m_transition.coeff(k_compartment, k_compartment));
+        const double proba_out = (out_flow != 0) ? m_transition.coeff(k_compartment, colId) /
+                                                       std::abs(out_flow)
+                                                 : 0;
 
         // Compute the cumulative probability for the current neighbor
         const double p_cp = proba_out + cumsum;
@@ -50,7 +52,6 @@ namespace Simulation
         cumsum += proba_out; // Update the cumulative sum
       }
     }
-
     return cumsum_proba; // Return the computed cumulative probability matrix
   }
 } // namespace Simulation

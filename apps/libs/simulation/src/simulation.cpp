@@ -65,7 +65,10 @@ namespace Simulation
     constexpr double expected_tau = 20e-3/2.6e-6; //90e-3/0.00010087625032109857;//20e-3/1.6e-5;
     constexpr double expected_mu = 1/expected_tau;
 
-    Feed::FeedDescritor fl(2.6e-6, {5}, {0}, {0}, Feed::Constant{});
+    //for 0d flow = 2e-6
+    //    1d flow = 0.01
+
+    Feed::FeedDescritor fl(0.01, {5}, {0}, {0}, Feed::Constant{});
     Feed::FeedDescritor fg(
         0.03813511651379644, {0.21}, {0}, {1}, Feed::Constant{});
 
@@ -74,14 +77,13 @@ namespace Simulation
 
     this->feed =
         Feed::SimulationFeed{{fl}, std::vector<Feed::FeedDescritor>({fg})};
-    // this->feed = Feed::SimulationFeed{{}, std::nullopt};
+    // this->feed = Feed::SimulationFeed{{fl}, std::nullopt};
 
-    const std::size_t n_exit_flow = 1;
     index_leaving_flow =
-        Kokkos::View<size_t *, ComputeSpace>("index_leaving_flow", n_exit_flow);
+        Kokkos::View<size_t *, ComputeSpace>("index_leaving_flow", 0);
 
     leaving_flow =
-        Kokkos::View<double *, ComputeSpace>("leaving_flow", n_exit_flow);
+        Kokkos::View<double *, ComputeSpace>("leaving_flow", 0);
   }
 
   void SimulationUnit::setVolumes(std::span<const double> volumesgas,
@@ -109,12 +111,16 @@ namespace Simulation
   {
     const auto view_neighbors = this->mc_unit->domain.getNeighbors();
 
-    const Kokkos::LayoutRight layout(view_neighbors.getNRow(),
+    const Kokkos::LayoutStride layout(view_neighbors.getNRow(),
                                       view_neighbors.getNCol(),
                                       view_neighbors.getNCol(),
                                       1);
 
-    const auto host_view = Kokkos::View<const size_t **, Kokkos::LayoutRight>(
+    
+    // const Kokkos::LayoutLeft layout(view_neighbors.getNRow(),
+    //                                   view_neighbors.getNCol());
+
+    const auto host_view = NeighborsView<HostSpace>(
         view_neighbors.data().data(), layout);
 
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_view);
@@ -244,7 +250,7 @@ namespace Simulation
   {
     auto &matrix = flow_liquid->cumulative_probability;
 
-    CumulativeProbabilityViewCompute rd(
+    CumulativeProbabilityView<HostSpace> rd(
         matrix.data(), matrix.rows(), matrix.cols());
 
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(), rd);
