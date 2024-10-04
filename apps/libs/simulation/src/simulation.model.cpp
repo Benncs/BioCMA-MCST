@@ -70,8 +70,9 @@ namespace Simulation
   }
 
 
-  void SimulationUnit::update_feed(const double t, const double d_t,bool update_scalar)
+  void SimulationUnit::update_feed(const double t, const double d_t,const bool update_scalar)noexcept
   {
+
     // Get references to the index_leaving_flow and leaving_flow data members
     auto &_index_leaving_flow = this->index_leaving_flow;
     auto &_leaving_flow = this->leaving_flow;
@@ -122,35 +123,18 @@ namespace Simulation
       }
     };
 
-    set_feed(this->liquid_scalar, feed.liquid, true);
+    if(feed.liquid.has_value())
+    {
+      set_feed(this->liquid_scalar, *feed.liquid, true);
+    }
+    
 
     if (is_two_phase_flow && feed.gas.has_value())
     {
       set_feed(this->gas_scalar, *feed.gas);
     }
 
-    // this->liquid_scalar->set_feed(0, 0, s_feed * flow);
-    // constexpr double v = 20e-3;
-    // constexpr double aim = 0.5 / 3600.;
-    //  constexpr double flow =aim*v;
-    //  constexpr double tau = 1/(flow/v);
-    // constexpr double flow =
-    //     0.03813511651379644; // 1.250000e-05; // 0.035;//aim*v; //mu/2*V
-    // // constexpr double tau = 1/(flow/v);
-    // const uint64_t i_exit = mc_unit->domain.getNumberCompartments() - 1;
-    // constexpr double s_feed = 0.25; // g/l
-    // // this->liquid_scalar->set_feed(0, 0, s_feed * flow);
 
-    // this->liquid_scalar->set_sink(i_exit, i_exit, flow);
-
-    // if (is_two_phase_flow)
-    // {
-    //   // this->gas_scalar->set_feed(0, 0, 0.21 * flow);
-    //   this->gas_scalar->set_sink(i_exit, i_exit, flow);
-    // }
-
-    // index_leaving_flow(0) = i_exit;
-    // leaving_flow(0) = flow;
   }
 
   void SimulationUnit::step(double d_t,

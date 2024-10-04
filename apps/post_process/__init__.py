@@ -27,26 +27,30 @@ def mkdir(d):
 def check_mixing(
     name_results, pathres: List[str], dest: str, vtk_cma_mesh_path: Optional[str] = None
 ):
-    for i in range(len(pathres)):
-        results = import_results(pathres[i])
-        if results is None:
-            break
-        (
-            normalized_scalar_concentration,
-            norm_c_var,
-            normalized_particle_concentration,
-            norm_par_var,
-            t,
-        ) = process_norm(name_results[i], results, vtk_cma_mesh_path)
-        plt.scatter(t, norm_par_var, label=name_results[i])
-        plt.plot(t, norm_c_var, label=f"liquid_{name_results[i]}")
+    try:
+        for i in range(len(pathres)):
+            results = import_results(pathres[i])
+            if results is None:
+                break
+            (
+                normalized_scalar_concentration,
+                norm_c_var,
+                normalized_particle_concentration,
+                norm_par_var,
+                t,
+            ) = process_norm(name_results[i], results, vtk_cma_mesh_path)
+            plt.scatter(t, norm_par_var, label=name_results[i])
+            plt.plot(t, norm_c_var, label=f"liquid_{name_results[i]}")
 
-    plt.legend()
-    plt.title("Segregation index as a function of the time")
-    plt.ylabel(r"\[ \frac{\sigma(t)}{\sigma(t_{0})}\]")
-    plt.xlabel(f"time [{get_time()}]")
-    for i in dest:
-        plt.savefig(f"{i}/mixing_variance{FIGURE_TYPE}", dpi=1500)
+        plt.legend()
+        plt.title("Segregation index as a function of the time")
+        plt.ylabel(r"\[ \frac{\sigma(t)}{\sigma(t_{0})}\]")
+        plt.xlabel(f"time [{get_time()}]")
+        for i in dest:
+            plt.savefig(f"{i}/mixing_variance{FIGURE_TYPE}", dpi=1500)
+    except:
+        pass
+
 
 
 def norm_concentration(

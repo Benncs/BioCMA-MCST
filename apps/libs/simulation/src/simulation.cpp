@@ -40,7 +40,7 @@ namespace Simulation
   }
 
   SimulationUnit::SimulationUnit(std::unique_ptr<MC::MonteCarloUnit> &&_unit,
-                                 const ScalarInitializer &scalar_init)
+                                 const ScalarInitializer &scalar_init,std::optional<Feed::SimulationFeed> _feed)
       : mc_unit(std::move(_unit)), flow_liquid(nullptr),
 
         flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow)
@@ -62,28 +62,23 @@ namespace Simulation
 
     post_init_concentration(scalar_init);
     post_init_compartments();
-    constexpr double expected_tau = 20e-3/2.6e-6; //90e-3/0.00010087625032109857;//20e-3/1.6e-5;
-    constexpr double expected_mu = 1/expected_tau;
 
-    //for 0d flow = 2e-6
-    //    1d flow = 0.01
 
-    Feed::FeedDescritor fl(0.01, {5}, {0}, {0}, Feed::Constant{});
-    Feed::FeedDescritor fg(
-        0.03813511651379644, {0.21}, {0}, {1}, Feed::Constant{});
-
-    // Feed::FeedDescritor fl{1e-5, {5}, {0}, {0}, Feed::Custom{}, 1};
-    // Feed::FeedDescritor fg{0., {0.21}, {0}, {1}, Feed::Custom{}, 1};
-
-    this->feed =
-        Feed::SimulationFeed{{fl}, std::vector<Feed::FeedDescritor>({fg})};
-    // this->feed = Feed::SimulationFeed{{fl}, std::nullopt};
-
+    if(_feed.has_value())
+    {
+        this->feed = std::move(*_feed);
+    }
+    else
+    {
+        this->feed = Feed::SimulationFeed{std::nullopt, std::nullopt};
+    }
+ 
+    const size_t n_flows = 1;
     index_leaving_flow =
-        Kokkos::View<size_t *, ComputeSpace>("index_leaving_flow", 0);
+        Kokkos::View<size_t *, ComputeSpace>("index_leaving_flow", n_flows);
 
     leaving_flow =
-        Kokkos::View<double *, ComputeSpace>("leaving_flow", 0);
+        Kokkos::View<double *, ComputeSpace>("leaving_flow", n_flows);
   }
 
   void SimulationUnit::setVolumes(std::span<const double> volumesgas,

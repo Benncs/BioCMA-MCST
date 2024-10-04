@@ -2,6 +2,8 @@ from typing import List
 from matplotlib import pyplot as plt
 import numpy as np
 
+from .rtd import get_scalar_rtd
+
 # from .old_read_results import import_results
 from .read_results import import_results, Results
 from . import (
@@ -167,10 +169,14 @@ def main(name_results, root_res="./results/"):
 
         last_id = results.main.n_export - 1
         last_vtk_path = get_vtk(last_id)
-
+        # get_scalar_rtd(dest[i],0.00011758,results,True) 
+        get_scalar_rtd(dest[i],0.035,results)
+        # get_scalar_rtd(dest[i],2.6e-5,results,True) 
         calculate_mass(results)
         plot_grow_in_number(results.time, results.total_repartion, dest[i])
         get_spatial_average_concentration(results, dest[i])
+
+        
 
         process_particle_data(results, dest[i])
 

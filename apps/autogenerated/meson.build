@@ -1,11 +1,13 @@
-v = meson.project_version().split('.')
-assert(v.length()==3)
+# Use to generate source/header file before compilation 
+
+version = meson.project_version().split('.')
+assert(version.length()==3)
 
 conf_data = configuration_data(
     {
-        '_BIOMC_VERSION_MAJOR': v[0],
-        '_BIOMC_VERSION_MINOR': v[1],
-        '_BIOMC_VERSION_DEV':  v[2],
+        '_BIOMC_VERSION_MAJOR': version[0],
+        '_BIOMC_VERSION_MINOR': version[1],
+        '_BIOMC_VERSION_DEV':  version[2],
         'probe_buffer_size': '10e3',
         '__f__redirect__': 'false',
         '__f_verbose__': 'true',
@@ -28,6 +30,10 @@ configure_file(
 
 prog_python = find_program('python3')
 
+model_loader = meson.current_source_dir()+'/model_loader.cxx'
+model_loader_header = meson.current_source_dir()+'/model_loader.hxx'
+variant_model = meson.current_source_dir()+'/variant_model.hxx'
+
 # custom target to generate model_loader.cpp and model_list.hpp
 generated_model_selection = custom_target(
     'generated_model_selection.[ch]',
@@ -41,11 +47,11 @@ generated_model_selection = custom_target(
         prog_python,
         '@INPUT@',
         f'@root@/apps/libs/biomodels',
-        f'@root@/devutils/auto_generate/model_loader.cxx',
+        model_loader,
         '@OUTPUT0@',
-        f'@root@/devutils/auto_generate/model_loader.hxx',
+        model_loader_header,
         '@OUTPUT1@',
-        f'@root@/devutils/auto_generate/variant_model.hxx',
+        variant_model,
         '@OUTPUT2@',
     ],
 )

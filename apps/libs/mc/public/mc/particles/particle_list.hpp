@@ -195,8 +195,7 @@ namespace MC
         return p.properties.status == MC::CellStatus::DEAD ||
                p.properties.status == MC::CellStatus::OUT;
       };
-      // auto beg = Kokkos::Experimental::begin(this->_owned_data);
-      // auto end = beg + this->size();
+
       uint64_t new_used_item = this->size() - count_dead;
       remove_if<Kokkos::DefaultExecutionSpace>(
           this->size(), count_dead, this->_owned_data, pred);
@@ -207,7 +206,7 @@ namespace MC
       // const auto stepsA = Kokkos::Experimental::distance(
       //     Kokkos::Experimental::begin(this->_owned_data), res);
 
-      KOKKOS_ASSERT(this->_owned_data.extent(0) == this->capacity());
+      KOKKOS_ASSERT(this->data().extent(0) == this->capacity());
       this->set_n_used_elements(new_used_item);
       KOKKOS_ASSERT(this->size() <= this->capacity());
     }

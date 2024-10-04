@@ -1,4 +1,3 @@
-#include "scalar_factory.hpp"
 #include <biocma_cst_config.hpp>
 #include <cassert>
 #include <cma_read/flow_iterator.hpp>
@@ -14,6 +13,7 @@
 #include <mc/prng/distribution.hpp>
 #include <memory>
 #include <rt_init.hpp>
+#include <scalar_factory.hpp>
 #include <siminit.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/transitionner.hpp>
@@ -73,6 +73,8 @@ init_host_only(const ExecInfo &info,
                std::vector<double> &liq_volume,
                std::vector<double> &gas_volume,
                std::vector<size_t> &worker_neighbor_data);
+
+static Simulation::Feed::SimulationFeed init_feed();
 
 std::unique_ptr<Simulation::SimulationUnit>
 init_simulation(const ExecInfo &info,
@@ -172,9 +174,11 @@ init_simulation(const ExecInfo &info,
   auto scalar_init = ScalarFactory::scalar_factory(
       f_init_gas_flow, gas_volume, liquid_volume, arg);
 
+  Simulation::Feed::SimulationFeed feed = init_feed();
+
   // Construct the main simulation object (one per rank)
   auto simulation = std::make_unique<Simulation::SimulationUnit>(
-      std::move(mc_unit), scalar_init);
+      std::move(mc_unit), scalar_init, feed);
 
   // Calculate the total number of time steps
   const auto n_t = static_cast<size_t>(user_params.final_time / params.d_t) + 1;
@@ -302,4 +306,19 @@ init_state(Core::SimulationParameters &params,
   }
 
   return state;
+}
+
+static Simulation::Feed::SimulationFeed init_feed()
+{
+
+  constexpr double expected_tau = 0.0900897522221489 / 0.000081758; // 90e-3/0.00010087625032109857;//20e-3/1.6e-5;
+  constexpr double expected_mu = 1 / expected_tau;
+  // for 0d flow = 2e-6
+  //     1d flow = 0.035
+
+  Simulation::Feed::FeedDescritor fl(0.035, {5}, {0}, {0}, Simulation::Feed::Constant{});
+  Simulation::Feed::FeedDescritor fg(
+      0.03813511651379644, {0.21}, {0}, {1}, Simulation::Feed::Constant{});
+
+  return {std::vector<Simulation::Feed::FeedDescritor>({fl}), std::vector<Simulation::Feed::FeedDescritor>({fg})};
 }

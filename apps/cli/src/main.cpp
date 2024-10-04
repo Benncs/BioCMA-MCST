@@ -1,15 +1,14 @@
 #include <cli_parser.hpp>
 #include <common/common.hpp>
 #include <common/execinfo.hpp>
-#include <core/simulation_parameters.hpp>
 #include <core/case_data.hpp>
+#include <core/simulation_parameters.hpp>
+#include <filesystem>
 #include <iostream>
 #include <memory>
 #include <rt_init.hpp>
 #include <siminit.hpp>
 #include <stream_io.hpp>
-
-#include <filesystem>
 
 #ifdef USE_PYTHON_MODULE
 #  include <pymodule/import_py.hpp>
@@ -41,15 +40,13 @@ static Core::CaseData prepare(const ExecInfo &exec_info,
  * @brief Wrapper to handle Excception raised in try/catch block
  */
 template <typename ExceptionType>
-static int handle_catch(ExceptionType const &e);
+static int handle_catch(ExceptionType const &e) noexcept;
 
 /**
  * @brief Check if result path exist or not and ask for overriding if yes
  * @return true if override results_path
  */
 static bool override_result_path(const Core::SimulationParameters &params);
-
-
 
 int main(int argc, char **argv)
 {
@@ -69,15 +66,16 @@ int main(int argc, char **argv)
   }
 
   const ExecInfo exec_info = runtime_init(argc, argv, params);
+
   try
   {
-
     INTERPRETER_INIT
 
-    REDIRECT_BLOCK({
-      auto case_data = prepare(exec_info, params);
-      exec(std::move(case_data));
-    })
+    REDIRECT_BLOCK(
+        {
+          auto case_data = prepare(exec_info, params);
+          exec(std::move(case_data));
+        })
   }
   catch (std::exception const &e)
   {
@@ -102,7 +100,7 @@ static Core::CaseData prepare(const ExecInfo &exec_info,
 }
 
 template <typename ExceptionType>
-static int handle_catch(ExceptionType const &e)
+static int handle_catch(ExceptionType const &e) noexcept
 {
 #ifdef DEBUG
   std::cerr << e.what() << '\n';
@@ -125,3 +123,25 @@ bool override_result_path(const Core::SimulationParameters &params)
   }
   return true;
 }
+
+// bool override_result_path(const Core::SimulationParameters &params)
+// {
+//   // Check if the results file exists and the user has not forced an override
+//   bool flag = false;
+//   if (std::filesystem::exists(params.results_file_name) &&
+//       !params.user_params.force_override)
+//   {
+//     std::cout << "Results file already exists: " << params.results_file_name
+//               << "\nDo you want to override it? (y/n): ";
+
+//     std::string response;
+//     std::cin >> response;
+
+//     if (response == "y" || response == "Y" || response == "yes")
+//     {
+//       flag = true;
+//     }
+//   }
+
+//   return flag;
+// }

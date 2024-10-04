@@ -1,4 +1,4 @@
-#include "models/utils.hpp"
+#include <models/utils.hpp>
 #include <Kokkos_Atomic.hpp>
 #include <Kokkos_Macros.hpp>
 #include <Kokkos_Printf.hpp>
@@ -22,7 +22,7 @@ namespace
 namespace Models
 {
 
-  KOKKOS_FUNCTION void Monod::init(MC::ParticleDataHolder &p, MC::KPRNG _rng)
+  KOKKOS_FUNCTION void Monod::init(MC::ParticleDataHolder &p, MC::KPRNG _rng) noexcept
   {
     auto generator = _rng.random_pool.get_state();
 
@@ -40,7 +40,7 @@ namespace Models
   Monod::update(double d_t,
                 MC::ParticleDataHolder &p,
                 const LocalConcentrationView &concentration,
-                MC::KPRNG _rng)
+                MC::KPRNG _rng) noexcept
   {
     const double s = Kokkos::max(0., concentration(0));
     const double mu_p = mu_max * s / (Ks + s);
@@ -55,7 +55,7 @@ namespace Models
         p.status, d_t, GammaDivision::threshold_linear(l, l_0, l_1), _rng);
   }
 
-  KOKKOS_FUNCTION Monod Monod::division(MC::ParticleDataHolder &p)
+  KOKKOS_FUNCTION Monod Monod::division(MC::ParticleDataHolder &p) noexcept
   {
     const double original_lenght = l;
 
@@ -65,7 +65,7 @@ namespace Models
   }
 
   KOKKOS_FUNCTION void Monod::contribution(MC::ParticleDataHolder &p,
-                                           ContributionView contribution)
+                                           ContributionView contribution) noexcept
   {
     // contribution(0, p.current_container) -= contrib * p.weight;
     auto access_contribs = contribution.access();
@@ -82,12 +82,12 @@ namespace Models
     //                          p.current_container), -contrib * p.weight);
   }
 
-  model_properties_detail_t Monod::get_properties()
+  model_properties_detail_t Monod::get_properties() noexcept
   {
     return {{"mu", mu}, {"lenght", l}, {"mass", mass()}};
   }
 
-  KOKKOS_INLINE_FUNCTION double Monod::mass() const
+  KOKKOS_INLINE_FUNCTION double Monod::mass() const noexcept
   {
     const double m =
         3.14 * (1e-6) * (1e-6) / 4. * l * 1000.; // m= rho*v; V= pi d2/4 l

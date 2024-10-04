@@ -164,7 +164,8 @@ def plot_average(results: Results, dest: str):
     for i in results.partial:
         average += mean_partial(keys, i)
 
-    average = average / results.total_repartion
+    indices = np.where(average!=0)
+    average = average / np.sum(results.total_repartion,axis=1).reshape(-1,1)
 
     mkdir(dest)
     for i, key in enumerate(keys):
@@ -208,5 +209,8 @@ def process_particle_data(results: Results, dest_root: str = "./results/"):
         "final",
         dest,
     )
-
-    plot_average(results, dest)
+    try:
+        plot_average(results, dest)
+    except Exception as e:
+        print("average: ",e)
+        pass #FIXME 

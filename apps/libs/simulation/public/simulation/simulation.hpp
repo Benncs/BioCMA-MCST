@@ -1,8 +1,8 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
-#include "simulation/feed_descriptor.hpp"
-#include "simulation/probe.hpp"
+#include <simulation/feed_descriptor.hpp>
+#include <simulation/probe.hpp>
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Macros.hpp>
@@ -42,7 +42,7 @@ namespace Simulation
   {
   public:
     SimulationUnit(std::unique_ptr<MC::MonteCarloUnit> &&_unit,
-                   const ScalarInitializer &scalar_init);
+                   const ScalarInitializer &scalar_init,std::optional<Feed::SimulationFeed> _feed=std::nullopt);
 
     ~SimulationUnit() = default;
 
@@ -74,7 +74,7 @@ namespace Simulation
 
     void clearContribution() const noexcept;
 
-    void update_feed(double t, double d_t,bool update_scalar=true);
+    void update_feed(double t, double d_t,bool update_scalar=true)noexcept;
 
     
 

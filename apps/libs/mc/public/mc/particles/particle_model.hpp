@@ -107,7 +107,7 @@ concept ParticleModel = HasMass<T>&&requires(T model,
 class DefaultModel
 {
 public:
-  KOKKOS_INLINE_FUNCTION void init(MC::ParticleDataHolder &p, MC::KPRNG _rng)
+  KOKKOS_INLINE_FUNCTION void init(MC::ParticleDataHolder &p, MC::KPRNG _rng)noexcept
   {
     p.status = MC::CellStatus::IDLE;
   }
@@ -120,21 +120,21 @@ public:
   {
   }
 
-  KOKKOS_INLINE_FUNCTION DefaultModel division(MC::ParticleDataHolder & /*p*/)
+  KOKKOS_INLINE_FUNCTION DefaultModel division(MC::ParticleDataHolder & /*p*/)noexcept
   {
     return {};
   }
 
   KOKKOS_INLINE_FUNCTION void contribution(MC::ParticleDataHolder &p,
-                                           ContributionView contrib)
+                                           ContributionView contrib)noexcept
   {
   }
 
-  inline model_properties_detail_t get_properties()
+  inline model_properties_detail_t get_properties()noexcept
   {
     return {};
   }
-  KOKKOS_INLINE_FUNCTION double mass()const{return 1.;}
+  KOKKOS_INLINE_FUNCTION double mass()const noexcept{return 1.;}
 };
 
 static_assert(ParticleModel<DefaultModel>, "Check default model");

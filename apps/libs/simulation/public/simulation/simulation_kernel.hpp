@@ -12,7 +12,6 @@
 #include <mc/particles/mcparticles.hpp>
 #include <mc/prng/prng.hpp>
 
-
 static constexpr bool const_number_simulation = false;
 
 #include <simulation/alias.hpp>
@@ -34,7 +33,8 @@ namespace
 
 namespace Simulation::KernelInline
 {
-  template <typename ListType, typename ResultViewType> class Kernel
+  template <typename ListType, typename ResultViewType>
+  class Kernel
   {
 
   public:
@@ -184,7 +184,6 @@ namespace Simulation::KernelInline
 
     const auto i_neighbor =
         Kokkos::subview(neighbors, i_compartment, Kokkos::ALL);
-
 
     // Need 2 random numbers, use index 0 and 1 to acess to
     const auto random = local_rng.template double_uniform<2>();

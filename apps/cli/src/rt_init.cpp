@@ -35,7 +35,7 @@ size_t generate_run_id();
 void set_n_thread_current_rank(const int rank,
                                const int size,
                                ExecInfo &info,
-                               const Core::UserControlParameters &params)
+                               const Core::UserControlParameters &params)noexcept
 {
   // Casting rank and size to size_t
   info.current_rank = static_cast<size_t>(rank);
@@ -68,7 +68,7 @@ void set_n_thread_current_rank(const int rank,
   
 }
 
-ExecInfo runtime_init(int argc, char **argv, const Core::SimulationParameters &params)
+ExecInfo runtime_init(int argc, char **argv, const Core::SimulationParameters &params)noexcept
 {
   init_environment();
   ExecInfo info{};
@@ -193,7 +193,7 @@ void init_environment()
 //   fd << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
 // }
 
-std::string sappend_date_time(std::string_view string)
+std::string sappend_date_time(std::string_view string)noexcept
 {
   std::stringstream fd;
   fd << string;
@@ -208,7 +208,7 @@ std::string env_file_path() noexcept
   return ".bmc_info";
 }
 
-void register_run(const ExecInfo &exec, Core::SimulationParameters &params)
+void register_run(const ExecInfo &exec, Core::SimulationParameters &params)noexcept
 {
   // Open the file in append mode
   std::ofstream env(env_file_path(), std::ios_base::app);

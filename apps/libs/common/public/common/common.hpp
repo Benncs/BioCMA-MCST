@@ -14,7 +14,7 @@
 #endif 
 
 #ifndef NDEBUG
-#define WARN_EXPERIMENTAL _Pragma("message( __FILE__ \" contains experimental Kokkos feature\")") // NOLINT
+#define WARN_EXPERIMENTAL _Pragma("message( __FILE__ \" contains experimental Kokkos feature\")")  // NOLINT
 #else
 #define WARN_EXPERIMENTAL
 

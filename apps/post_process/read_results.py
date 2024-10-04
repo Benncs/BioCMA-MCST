@@ -43,7 +43,7 @@ class MainExportResult(RawResults):
 
 
 class PartialResult(RawResults):
-    probes: np.ndarray
+    probes: Optional[np.ndarray]
     particle_repartition: np.ndarray
     extra_bioparam: Optional[List[Dict[str, np.ndarray]]] = None
 
@@ -54,7 +54,11 @@ class PartialResult(RawResults):
     def _read_bioparam(self, file):
         user_export = []
         b_node = file.get("biological_model")
-
+        dp = file.get("probes",None)
+        self.probes=None
+        if dp is not None:
+            self.probes = np.array(dp)
+            self.probes = self.probes[self.probes!=0]
 
         def get_dict(name:str):
             node = file.get("biological_model")[name]
@@ -71,8 +75,10 @@ class PartialResult(RawResults):
         #     if(ds_name!="initial" and ds_name!="final"):
         #         print(ds_name)
         #         get_dict(ds_name)
-
-        get_dict("final")
+        try:
+            get_dict("final")
+        except :
+            user_export.append(user_export[-1]) #FIXME
         self.extra_bioparam = user_export
 
 

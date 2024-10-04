@@ -36,7 +36,7 @@ namespace Simulation::Feed
         v);
   }
 
-  void FeedDescritor::update(double t, double d_t)
+  void FeedDescritor::update(double t, double d_t)noexcept
   {
   }
 

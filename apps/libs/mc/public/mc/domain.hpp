@@ -1,18 +1,18 @@
 #ifndef __MC_REACTORDOMAIN_HPP__
 #define __MC_REACTORDOMAIN_HPP__
 
-#include <common/common.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 #include <cassert>
 #include <cma_read/neighbors.hpp>
 #include <cmt_common/macro_constructor_assignment.hpp>
+#include <common/common.hpp>
 #include <common/common_types.hpp>
 #include <cstdint>
 #include <mc/container_state.hpp>
 #include <span>
-WARN_EXPERIMENTAL
 
+WARN_EXPERIMENTAL
 
 namespace MC
 {

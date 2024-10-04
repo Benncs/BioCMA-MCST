@@ -61,7 +61,7 @@ namespace Simulation::Feed
     feed_species_t species;
     FeedTypeVariant props;
     size_t n_v;
-    void update(double t, double d_t);
+    void update(double t, double d_t)noexcept;
 
   private:
     FeedType type;
@@ -71,9 +71,11 @@ namespace Simulation::Feed
   struct SimulationFeed
   {
 
-    std::vector<FeedDescritor> liquid;
+    std::optional<std::vector<FeedDescritor>> liquid;
     std::optional<std::vector<FeedDescritor>> gas;
   };
+
+  
 
   // struct Visitor
   // {

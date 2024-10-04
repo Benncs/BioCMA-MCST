@@ -11,6 +11,7 @@ python_sources = files(
     './read_results.py',
     './properties.py',
     './initialiser.py',
+    './rtd.py'
 )
 
 

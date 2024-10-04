@@ -18,20 +18,20 @@ namespace Models
     double _init_only_cell_lenghtening;
 
   public:
-    KOKKOS_FUNCTION void init(MC::ParticleDataHolder &p, MC::KPRNG _rng);
+    KOKKOS_FUNCTION void init(MC::ParticleDataHolder &p, MC::KPRNG _rng)noexcept;
 
     KOKKOS_FUNCTION void update(double d_t,
                                 MC::ParticleDataHolder &p,
                                 const LocalConcentrationView &concentration,
-                                MC::KPRNG _rng);
+                                MC::KPRNG _rng)noexcept;
 
-    KOKKOS_FUNCTION Monod division(MC::ParticleDataHolder &p);
+    KOKKOS_FUNCTION Monod division(MC::ParticleDataHolder &p)noexcept;
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
-                                      ContributionView contri);
-    KOKKOS_INLINE_FUNCTION double mass() const;
+                                      ContributionView contri)noexcept;
+    KOKKOS_INLINE_FUNCTION double mass() const noexcept;
 
-    model_properties_detail_t get_properties();
+    model_properties_detail_t get_properties() noexcept;
   };
 } // namespace Models
 
