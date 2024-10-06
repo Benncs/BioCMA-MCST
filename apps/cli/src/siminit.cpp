@@ -315,8 +315,8 @@ static Simulation::Feed::SimulationFeed init_feed()
   constexpr double expected_mu = 1 / expected_tau;
   // for 0d flow = 2e-6
   //     1d flow = 0.035
-
-  Simulation::Feed::FeedDescritor fl(0.035, {5}, {0}, {0}, Simulation::Feed::Constant{});
+  // sanofi 0.031653119013143756
+  Simulation::Feed::FeedDescritor fl(0.031653119013143756, {5}, {0}, {0}, Simulation::Feed::Constant{});
   Simulation::Feed::FeedDescritor fg(
       0.03813511651379644, {0.21}, {0}, {1}, Simulation::Feed::Constant{});
 

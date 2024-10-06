@@ -92,7 +92,6 @@ def plot_grow_in_number(t: np.ndarray, n: np.ndarray, dest: str):
 
     # Save the plot
     plt.savefig(f"{dest}/num_grow{FIGURE_TYPE}")
-    plt.show()
 
 
 def check_time_unit(results: Results):
@@ -130,10 +129,10 @@ def get_spatial_average_concentration(results: Results, dest: str):
     full_volume = results.main.volume_liquid
     phase_functor(concentration_record, full_volume, "liquid")
 
-    if results.main.concentrations_gas is not None:
-        concentration_record = results.main.concentrations_gas[:, :, 0]
-        full_volume = results.main.volumes_gas
-        phase_functor(concentration_record, full_volume, "gas")
+    # if results.main.concentrations_gas is not None:
+    #     concentration_record = results.main.concentrations_gas[:, :, 0]
+    #     full_volume = results.main.volumes_gas
+    #     phase_functor(concentration_record, full_volume, "gas")
 
 
 def get_vtk(id: int):
@@ -170,7 +169,8 @@ def main(name_results, root_res="./results/"):
         last_id = results.main.n_export - 1
         last_vtk_path = get_vtk(last_id)
         # get_scalar_rtd(dest[i],0.00011758,results,True) 
-        get_scalar_rtd(dest[i],0.035,results)
+        # get_scalar_rtd(dest[i],0.035,results)
+        get_scalar_rtd(dest[i],0.031653119013143756,results,True)
         # get_scalar_rtd(dest[i],2.6e-5,results,True) 
         calculate_mass(results)
         plot_grow_in_number(results.time, results.total_repartion, dest[i])

@@ -43,7 +43,6 @@ namespace CORE_DE
   {
     const uint64_t n_expected_export = n_iter + 2; // Add first + last
     constexpr uint32_t n_growing_arrays_phase = 2; // Concentration + volumes;
-
     // First is concentration second is volume
     constexpr std::size_t index_concentration = 0;
     constexpr std::size_t index_volumes = 1;
