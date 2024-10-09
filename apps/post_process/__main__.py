@@ -101,17 +101,18 @@ def check_time_unit(results: Results):
         set_time_unit_to_hour()
 
 
-def calculate_mass(results: Results):
-    # try:
-    #     init_mass = np.sum(X0 * results.volume_liquid[0, :])
-    #     print("INITIAL MASS", init_mass)
-    #     final_mass = (
-    #             results.npart * results.weight / np.sum(results.volume_liquid[0, :])
-    #     )
-    #     print("FINAL CONCENTRATION", final_mass)
-    # except:
-    #         pass
-    # TODO
+def calculate_mass(dest:str,results: Results):
+    if "mass" in results.partial[0].extra_bioparam[0].keys():
+        cx = np.zeros((results.main.n_export,))
+        for i in range(results.main.n_export):
+            total_mass = 0
+            for dataset in results.partial:
+                mass = dataset.extra_bioparam[i]["mass"]
+                total_mass += np.sum(mass)
+            cx[i] = results.main.weight*total_mass/results.main.volume_liquid[i,0]
+        plt.figure()
+        plt.plot(results.time,cx)
+        plt.savefig(dest+"/cx")
     pass
 
 
@@ -168,11 +169,13 @@ def main(name_results, root_res="./results/"):
 
         last_id = results.main.n_export - 1
         last_vtk_path = get_vtk(last_id)
+
         # get_scalar_rtd(dest[i],0.00011758,results,True) 
         # get_scalar_rtd(dest[i],0.035,results)
-        get_scalar_rtd(dest[i],0.031653119013143756,results,True)
+        # get_scalar_rtd(dest[i],0.031653119013143756,results,True)
         # get_scalar_rtd(dest[i],2.6e-5,results,True) 
-        calculate_mass(results)
+
+        calculate_mass(dest[i],results)
         plot_grow_in_number(results.time, results.total_repartion, dest[i])
         get_spatial_average_concentration(results, dest[i])
 

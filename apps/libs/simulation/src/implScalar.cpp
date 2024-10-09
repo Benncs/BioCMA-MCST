@@ -13,8 +13,8 @@ namespace Simulation
 {
 
   ScalarSimulation::ScalarSimulation(ScalarSimulation &&other) noexcept
-      : alloc_concentrations(std::move(other.alloc_concentrations)),
-        total_mass(std::move(other.total_mass)), m_volumes(other.m_volumes),
+      : total_mass(std::move(other.total_mass)),
+        m_volumes(other.m_volumes), alloc_concentrations(std::move(other.alloc_concentrations)),
         n_r(other.n_r), n_c(other.n_c)
   {
   }

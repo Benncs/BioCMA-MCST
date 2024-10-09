@@ -19,7 +19,7 @@ namespace MC
 {
 
   constexpr bool uniform_init = false;
-  constexpr double initial_mass_cell = 3.14 * (1e-6) * (1e-6)/4. * 7e-6 * 1000;
+  constexpr double initial_mass_cell = 3.14 * (0.8e-6) * (0.8e-6)/4. * 1e-6/2. * 1000;
   namespace
   {
 
@@ -37,7 +37,7 @@ namespace MC
       // concentration in g/L (kg/m3) Total volume is expected to be in m3 As a
       // result we can calculate the mass carried by each MC particle
       return scale_factor * particle_concentration * total_volume /
-             static_cast<double>(n_particles) / mass_cell;
+             static_cast<double>(n_particles)/ mass_cell;
     }
 
     /**

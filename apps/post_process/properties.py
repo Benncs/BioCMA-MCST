@@ -55,12 +55,19 @@ def _mk_histogram(
 
     counts = np.zeros((num_bins,))
     bin_edges = np.zeros((num_bins + 1,))
-    for i in partials:
+
+    # data = []
+    # for i in partials[0:-1]:
+    #     init = i.extra_bioparam[index]
+    #     data.append(init[key])
+    # fused_data = np.concatenate(data)
+
+    for i in partials[0:1]:
         init = i.extra_bioparam[index]
         c, e = np.histogram(init[key], num_bins)
         counts += c
         bin_edges += e
-
+    # counts, bin_edges = np.histogram(fused_data, num_bins)
     counts_normalized = counts / counts.max()
     mkdir(f"{dest}/histogram")
     plt.figure()
@@ -184,9 +191,9 @@ def plot_average(results: Results, dest: str):
             plt.title(f"Mean Value of {key} Over Time")
             plt.legend()
             plt.savefig(f"{dest}/{key}{FIGURE_TYPE}")
-            plt.close()  # Close the plot to free memory
+            plt.close()  
         except Exception as e:
-            plt.close()  # Close the plot to free memory
+            plt.close()  
             print(f"ERROR Mean Value {key} Over Time")
 
 
@@ -209,6 +216,10 @@ def process_particle_data(results: Results, dest_root: str = "./results/"):
         "final",
         dest,
     )
+
+
+
+
     try:
         plot_average(results, dest)
     except Exception as e:

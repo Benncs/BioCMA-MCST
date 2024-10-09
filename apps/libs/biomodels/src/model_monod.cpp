@@ -9,10 +9,10 @@
 
 namespace
 {
-  constexpr double y_x_s = 0.5;
+  constexpr double y_s_x = 2.;
   constexpr double Ks = 0.01;
-  constexpr double l_1 = 18e-6;
-  constexpr double l_0 = 11e-6;
+  constexpr double l_1 = 1.7e-6;
+  constexpr double l_0 = 0.9e-6;
   constexpr double minimal_length = 0.5e-6;
   constexpr double mu_max = 0.77 / 3600.;
   constexpr double ln2 = 0.69314718056;
@@ -32,7 +32,11 @@ namespace Models
 
     this->mu = Kokkos::max(generator.normal(mu_max / 2., mu_max / 4), 0.);
     _rng.random_pool.free_state(generator);
-    _init_only_cell_lenghtening = (l_1 - l_0) / ln2;
+    static_assert(l_1>l_0,"Monod: Bad Model Parameter " );
+    constexpr double ___init_only_cell_lenghtening = (l_1 - l_0) / ln2;
+    _init_only_cell_lenghtening = 4e-7 / ln2;
+
+    // p.weight = p.weight/mass();
     this->contrib = 0.;
   }
 
@@ -49,7 +53,7 @@ namespace Models
     l += d_t * (mu_eff * _init_only_cell_lenghtening);
     mu += d_t * (1.0 / tau_metabolism) * (mu_p - mu);
 
-    contrib = mass() * mu_eff * s / (Ks + s) / y_x_s;
+    contrib = mass()*mu_eff * s / (Ks + s)*y_s_x ;
 
     Models::update_division_status(
         p.status, d_t, GammaDivision::threshold_linear(l, l_0, l_1), _rng);
@@ -89,8 +93,9 @@ namespace Models
 
   KOKKOS_INLINE_FUNCTION double Monod::mass() const noexcept
   {
+    constexpr double d = 0.8e-6;
     const double m =
-        3.14 * (1e-6) * (1e-6) / 4. * l * 1000.; // m= rho*v; V= pi d2/4 l
+        3.14 * d*d / 4. * l * 1000.; // m= rho*v; V= pi d2/4 l
     return m;
   }
 

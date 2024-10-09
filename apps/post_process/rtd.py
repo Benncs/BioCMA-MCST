@@ -19,8 +19,7 @@ def get_particle_rtd(given_flow: float, results):
         if i.probes is not None:  # Ensure probes are not None
             probes = np.concatenate((probes, i.probes))
 
-     if results.main.time[-1] > 10000:
-        probes = probes
+
     c, e = np.histogram(probes, bins=num_bins,density=True)
     return c ,e
 
@@ -51,9 +50,6 @@ def get_scalar_rtd(dest_root:str,given_flow: float, results,is_str:bool=False) -
     tau_analytical = V / Q
     print(f"Analytical tau :{tau_analytical}s")
     
-    if results.main.time[-1] > 10000:
-        tau_analytical = tau_analytical/3600
-
     if(is_str):
         
         n_t_tau = np.where(np.abs((results.time - tau_analytical)) < 100)

@@ -311,12 +311,24 @@ init_state(Core::SimulationParameters &params,
 static Simulation::Feed::SimulationFeed init_feed()
 {
 
-  constexpr double expected_tau = 0.0900897522221489 / 0.000081758; // 90e-3/0.00010087625032109857;//20e-3/1.6e-5;
+  constexpr double flow = 3e-6;
+  constexpr double expected_tau = 20e-3 / flow; // 90e-3/0.00010087625032109857;//20e-3/1.6e-5;
   constexpr double expected_mu = 1 / expected_tau;
+  constexpr double sf = 2;
+
+
+   //1: 0.5 gl
+  //2: 2
+  //3: 3
+  //4: 5
+  //5: 10
+  //6: 12
+
+
   // for 0d flow = 2e-6
   //     1d flow = 0.035
   // sanofi 0.031653119013143756
-  Simulation::Feed::FeedDescritor fl(0.031653119013143756, {5}, {0}, {0}, Simulation::Feed::Constant{});
+  Simulation::Feed::FeedDescritor fl(flow, {sf}, {0}, {0}, Simulation::Feed::Constant{});
   Simulation::Feed::FeedDescritor fg(
       0.03813511651379644, {0.21}, {0}, {1}, Simulation::Feed::Constant{});
 

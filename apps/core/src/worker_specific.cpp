@@ -24,6 +24,8 @@ void workers_process(
   MPI_W::IterationPayload payload(n_compartments * n_compartments,
                                   n_compartments);
 
+
+
   const auto loop_functor = [&](auto &&container)
   {
     auto result = container.get_extra();
@@ -45,6 +47,8 @@ void workers_process(
         }
 
         last_sync(exec, simulation);
+        auto &list = container.get_compute();
+        list.remove_dead(simulation.counter());
         PostProcessing::save_final_particle_state(simulation, partial_exporter);
         stop = true;
 
