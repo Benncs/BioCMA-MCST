@@ -173,9 +173,10 @@ def plot_average(results: Results, dest: str):
 
     indices = np.where(average!=0)
     average = average / np.sum(results.total_repartion,axis=1).reshape(-1,1)
-
+  
     mkdir(dest)
     for i, key in enumerate(keys):
+        print(average[-1,i])
         try:
             plt.figure()
             plt.plot(

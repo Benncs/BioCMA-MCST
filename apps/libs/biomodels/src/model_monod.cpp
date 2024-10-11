@@ -26,14 +26,14 @@ namespace Models
   {
     auto generator = _rng.random_pool.get_state();
 
-    this->l =
-        Kokkos::max(minimal_length,
-                    Kokkos::max(generator.normal(l_0 / 2., l_0 / 2. / 5.), 0.));
+    this->l = l_0 / 2.;
+        // Kokkos::max(minimal_length,
+        //             Kokkos::max(generator.normal(l_0 / 2., l_0 / 2. / 5.), 0.));
 
     this->mu = Kokkos::max(generator.normal(mu_max / 2., mu_max / 4), 0.);
     _rng.random_pool.free_state(generator);
     static_assert(l_1>l_0,"Monod: Bad Model Parameter " );
-    constexpr double ___init_only_cell_lenghtening = (l_1 - l_0) / ln2;
+    constexpr double ___init_only_cell_lenghtening = 4e-7 / ln2;
     _init_only_cell_lenghtening = 4e-7 / ln2;
 
     // p.weight = p.weight/mass();

@@ -148,7 +148,7 @@ make_main_exporter(const ExecInfo &exec, const Core::SimulationParameters &param
   {
     std::string group = "files/" + std::to_string(i_rank);
 
-    auto filename = "./results/" + params.user_params.results_file_name +
+    auto filename = params.user_params.results_file_name +
                     "_partial_" + std::to_string(i_rank) + ".h5";
 
     main_exporter->do_link(filename, group, "/");

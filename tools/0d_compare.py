@@ -2,13 +2,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
 
-Q = 3e-6      
-se = 2
+import sys 
+
+se = 10
+if(len(sys.argv)==2):
+    se = float(sys.argv[1])
+
+
+    
 yx = 2    
-mumax = 0.77/3600     
+mumax = 0.75/3600 #0.77/3600     
 v = 20e-3
 taum = 1/mumax
-
+Q =   1e-6
 # l = np.linspace(0.1e-6, 5e-6, 1000)
 # l0 = 0.8e-6
 # l1 = 2e-6
@@ -18,18 +24,14 @@ taum = 1/mumax
 # p[l < l0] = 0
 # p[l > l1] = 1
 
-
-
-
-# # Affichage du résultat
 # plt.plot(l, p, label='Probabilité')
 
 # plt.show()
 # exit(0)
-
+Ks = 0.00828198380528109
 def model(t, y):
     s, x,mu = y  
-    mup = mumax*s/(0.01+s)
+    mup = mumax*s/(Ks+s)
     mueff = min(mup,mu)
     D = Q/v
     dsdt = D*(se-s)-mueff*yx*x
@@ -41,8 +43,8 @@ s0 = 0.0
 x0 = 1
 mu = mumax/2
 initial_conditions = [s0, x0,mu]
-
-t_span = (0, 100000)  
+tau =  v/Q
+t_span = (0, 150000)  
 t_eval = np.linspace(t_span[0], t_span[1], 500)  
 
 solution = solve_ivp(model, t_span, initial_conditions, t_eval=t_eval,method="BDF")
@@ -61,7 +63,10 @@ mxf = v*x[-1]
 
 n0=mx0/initial_mass_cell
 nf=mxf/initial_mass_cell
-print(nf/n0)
+# print(nf/n0)
+
+
+print(s[-1],x[-1],m[-1])
 
 plt.figure(figsize=(12, 6))
 plt.plot(t, s, label='Substrate Concentration (s)')

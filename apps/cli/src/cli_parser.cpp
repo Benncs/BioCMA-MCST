@@ -94,16 +94,6 @@ std::optional<Core::SimulationParameters> parse_cli(int argc, char **argv) noexc
     params.flow_files.emplace_back(control.cma_case_path);
   }
 
-  if (control.results_file_name.empty())
-  {
-    params.results_file_name =
-        "./results/" + sappend_date_time("result_") + std::string(".h5");
-  }
-  else
-  {
-    params.results_file_name = "./results/" + control.results_file_name + ".h5";
-  }
-
   params.user_params = std::move(control);
   sanitise_check_cli(params);
 

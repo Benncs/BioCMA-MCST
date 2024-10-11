@@ -18,7 +18,8 @@ conf_data = configuration_data(
         'MC_MAX_PARTICLE_BUFFER': '100e6',
         'debug_MC_RAND_DEFAULT_SEED': '2024',
         '_dead_particle_ratio_threshold':'0.01',
-        'result_dir_path':'"./results/"'
+        'result_dir_path':'"./results/"',
+        'cma_data_folder_path':'"cma_data"'
     },
 )
 

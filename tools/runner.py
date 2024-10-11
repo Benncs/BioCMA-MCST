@@ -15,7 +15,8 @@ __current_file_path = os.path.abspath(__file__)
 __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
 DEFAULT_TYPE = "debug"
-MPI_COMMAND = "mpiexec -np 4 --bind-to core"
+_MPI_ROOT_FLAG = " -allow-run-as-root"
+MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 6 --bind-to core"
 OMP_NUM_THREADS = "1"
 COMPILER_NAME="gcc"
 

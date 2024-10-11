@@ -58,7 +58,7 @@ std::string sappend_date_time(std::string_view string) noexcept;
  * environment, including execution context and other relevant metadata.
  */
 ExecInfo
-runtime_init(int argc, char **argv, const Core::SimulationParameters &params) noexcept;
+runtime_init(int argc, char **argv, Core::SimulationParameters &params) noexcept;
 
 /**
  * @brief Print run metadata to log file before running */

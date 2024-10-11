@@ -12,13 +12,12 @@
    </control>
 
    <control name="0d">
-      <cma_case_path>./cma_data/0d_mono/</cma_case_path>
-      <!-- <final_time>43200</final_time> -->
-      <final_time>72000</final_time>
+      <cma_case_path>./cma_data/0d/</cma_case_path>
+      <final_time>20000</final_time>
       <numper_particle>100000</numper_particle>
-      <delta_time>0.3</delta_time>
-      <results_file_name>steady_0d_2</results_file_name>
-      <number_exported_result>400</number_exported_result>
+      <delta_time>0.1</delta_time>
+      <results_file_name>batch_0d</results_file_name>
+      <number_exported_result>200</number_exported_result>
       <model_name>model_monod</model_name>
       <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
    </control>
@@ -83,10 +82,10 @@
 
    <control name="debug">
 	   <cma_case_path>./cma_data/0d/</cma_case_path>
-      <final_time>95000</final_time>
+      <final_time>95</final_time>
       <numper_particle>100000</numper_particle>
       <delta_time>0.1</delta_time>
-      <results_file_name>str_0d_monod_3</results_file_name>
+      <results_file_name>debug_t</results_file_name>
       <number_exported_result>100</number_exported_result>
       <model_name>model_monod</model_name>
       <initialiser_path></initialiser_path>

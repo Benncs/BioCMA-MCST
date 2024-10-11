@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     return -1;
   }
 
-  const auto params = params_opt.value();
+  auto params = params_opt.value();
 
   if (!override_result_path(params))
   {

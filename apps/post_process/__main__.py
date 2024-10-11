@@ -21,7 +21,7 @@ from . import get_time
 
 
 def assemble(res_folder: str, names: List[str]) -> List[str]:
-    return [f"{res_folder}{i}.h5" for i in names]
+    return [f"{res_folder}{i}/{i}.h5" for i in names]
 
 
 def mk_parser():
