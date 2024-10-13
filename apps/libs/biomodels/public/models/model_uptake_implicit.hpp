@@ -1,5 +1,5 @@
-#ifndef __BIO_model_test_HPP__
-#define __BIO_model_test_HPP__
+#ifndef __BIO_model_uptakeimplicit_HPP__
+#define __BIO_model_uptakeimplicit_HPP__
 
 #include "mc/prng/prng.hpp"
 #include <Kokkos_Core.hpp>
@@ -8,7 +8,7 @@
 
 namespace Models
 {
-  struct Uptake
+  struct UptakeImplicit
   {
     double lenght;
     double nu;
@@ -24,7 +24,7 @@ namespace Models
                                 const LocalConcentrationView &concentration,
                                 MC::KPRNG _rng);
 
-    KOKKOS_FUNCTION Uptake division(MC::ParticleDataHolder &p);
+    KOKKOS_FUNCTION UptakeImplicit division(MC::ParticleDataHolder &p);
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
                                       ContributionView contri);

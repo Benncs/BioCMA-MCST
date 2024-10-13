@@ -44,7 +44,6 @@ def exec(command, n_thread,do_measure:bool=True,do_kokkos_measure=False,**kwargs
     print("\r\n")
     print(formatted_command)
     print("\n")
-
     return wrap_timer(lambda :subprocess.Popen(command, shell=True, env=env_var,**kwargs),do_measure)
 
     

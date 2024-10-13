@@ -8,7 +8,7 @@
 namespace Models
 {
 
-  class Monod
+  class alignas(ExecInfo::cache_line_size) Monod
   {
     double mu;
     double l;
@@ -29,7 +29,7 @@ namespace Models
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
                                       ContributionView contri)noexcept;
-    KOKKOS_INLINE_FUNCTION double mass() const noexcept;
+    KOKKOS_FUNCTION [[nodiscard]] double mass() const noexcept;
 
     model_properties_detail_t get_properties() noexcept;
   };

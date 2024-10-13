@@ -204,19 +204,25 @@ def process_particle_data(results: Results, dest_root: str = "./results/"):
     if results.partial[0].extra_bioparam is None:
         return
 
-    property_distribution(
-        results.partial,
-        0,
-        "init",
-        dest,
-    )
-
-    property_distribution(
-        results.partial,
-        -1,
-        "final",
-        dest,
-    )
+    try:
+        property_distribution(
+            results.partial,
+            0,
+            "init",
+            dest,
+        )
+    except:
+        pass
+    
+    try:
+        property_distribution(
+            results.partial,
+            -1,
+            "final",
+            dest,
+        )
+    except:
+        pass
 
 
 

@@ -110,6 +110,8 @@ def calculate_mass(dest:str,results: Results):
                 mass = dataset.extra_bioparam[i]["mass"]
                 total_mass += np.sum(mass)
             cx[i] = results.main.weight*total_mass/results.main.volume_liquid[i,0]
+        
+        print("X/X0: ",cx[-1],cx[0],cx[-1]/cx[0])
         plt.figure()
         plt.plot(results.time,cx)
         plt.savefig(dest+"/cx")
@@ -170,7 +172,7 @@ def main(name_results, root_res="./results/"):
         last_id = results.main.n_export - 1
         last_vtk_path = get_vtk(last_id)
 
-        # get_scalar_rtd(dest[i],0.00011758,results,True) 
+        get_scalar_rtd(dest[i],0.5e-6,results,False) 
         # get_scalar_rtd(dest[i],0.035,results)
         # get_scalar_rtd(dest[i],0.031653119013143756,results,True)
         # get_scalar_rtd(dest[i],2.6e-5,results,True) 

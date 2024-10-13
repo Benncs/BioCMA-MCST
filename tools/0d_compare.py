@@ -11,10 +11,10 @@ if(len(sys.argv)==2):
 
     
 yx = 2    
-mumax = 0.75/3600 #0.77/3600     
+mumax = 0.77/3600     
 v = 20e-3
 taum = 1/mumax
-Q =   1e-6
+Q =   mumax*v
 # l = np.linspace(0.1e-6, 5e-6, 1000)
 # l0 = 0.8e-6
 # l1 = 2e-6
@@ -28,7 +28,7 @@ Q =   1e-6
 
 # plt.show()
 # exit(0)
-Ks = 0.00828198380528109
+Ks = 0.01
 def model(t, y):
     s, x,mu = y  
     mup = mumax*s/(Ks+s)
@@ -39,12 +39,12 @@ def model(t, y):
     dmudt = 1/taum*(mup-mu)
     return np.array([dsdt, dxdt,dmudt])  
 
-s0 = 0.0  
+s0 = 0
 x0 = 1
 mu = mumax/2
 initial_conditions = [s0, x0,mu]
-tau =  v/Q
-t_span = (0, 150000)  
+# tau =  v/Q
+t_span = (0, 75000)  
 t_eval = np.linspace(t_span[0], t_span[1], 500)  
 
 solution = solve_ivp(model, t_span, initial_conditions, t_eval=t_eval,method="BDF")
