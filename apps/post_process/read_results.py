@@ -79,6 +79,7 @@ class PartialResult(RawResults):
             get_dict("final")
         except :
             user_export.append(user_export[-1]) #FIXME
+            
         self.extra_bioparam = user_export
 
 

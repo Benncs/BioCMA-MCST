@@ -311,11 +311,10 @@ init_state(Core::SimulationParameters &params,
 static Simulation::Feed::SimulationFeed init_feed()
 {
     
-  constexpr double flow = 0.77/3600*20e-3;//3.5e-6;
-  constexpr double expected_tau = 20e-3 / flow; // 90e-3/0.00010087625032109857;//20e-3/1.6e-5;
-  constexpr double expected_mu = 1 / expected_tau;
+  constexpr double flow = 0.6/3600*20e-3;//0.77/3600*20e-3;//3.5e-6;
+  // constexpr double expected_tau = 20e-3 / flow; // 90e-3/0.00010087625032109857;//20e-3/1.6e-5;
+  // constexpr double expected_mu = 1 / expected_tau;
   constexpr double sf = 5;
-
 
   //1: 0.5 gl
   //2: 2
@@ -323,7 +322,6 @@ static Simulation::Feed::SimulationFeed init_feed()
   //4: 5
   //5: 10
   //6: 12
-
 
   // for 0d flow = 2e-6
   //     1d flow = 0.035

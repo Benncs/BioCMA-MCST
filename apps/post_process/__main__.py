@@ -1,5 +1,8 @@
 from typing import List
+
+import scienceplots
 from matplotlib import pyplot as plt
+
 import numpy as np
 
 from .rtd import get_scalar_rtd
@@ -70,12 +73,15 @@ def detect_exponential_growth(t: np.ndarray, n: np.ndarray, threshold: float = 0
 
 def plot_grow_in_number(t: np.ndarray, n: np.ndarray, dest: str):
     n = np.sum(n, axis=1)
+     
+
     plt.figure()
     plt.semilogy(t, n, "-", color="black", label="results")
     plt.ylabel("Number of particles")
     plt.xlabel(f"Time [{get_time()}]")
     plt.title("Particle number growth (Log-Scale)")
-    plt.grid(True)
+
+    plt.grid(True,"minor")
 
     # start_index = detect_exponential_growth(t, n,0.05)
 
@@ -107,12 +113,18 @@ def calculate_mass(dest:str,results: Results):
         for i in range(results.main.n_export):
             total_mass = 0
             for dataset in results.partial:
-                mass = dataset.extra_bioparam[i]["mass"]
-                total_mass += np.sum(mass)
+                try:
+                    mass = dataset.extra_bioparam[i]["mass"]
+                    total_mass += np.sum(mass)
+                except:
+                    pass
             cx[i] = results.main.weight*total_mass/results.main.volume_liquid[i,0]
         
         print("X/X0: ",cx[-1],cx[0],cx[-1]/cx[0])
         plt.figure()
+        plt.title("Biomass concentration over time")
+        plt.ylabel("C [g/L]")
+        plt.xlabel(f"Time [{get_time()}]")
         plt.plot(results.time,cx)
         plt.savefig(dest+"/cx")
     pass
@@ -162,7 +174,7 @@ def main(name_results, root_res="./results/"):
     pathres = assemble(root_res, name_results)
 
     vtu_path = None  # ("/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/bench/cma_mesh.vtu")
-    check_mixing(name_results, pathres, dest, vtu_path)
+    # check_mixing(name_results, pathres, dest, vtu_path)
 
     for i, current_path_res in enumerate(pathres):
         results: Results = import_results(current_path_res)
@@ -187,6 +199,7 @@ def main(name_results, root_res="./results/"):
 
 
 if __name__ == "__main__":
+    plt.style.use(['science','ieee','no-latex'])
     args = mk_parser().parse_args()
 
     name_results = args.name_results

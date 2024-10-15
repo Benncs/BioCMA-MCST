@@ -37,7 +37,7 @@ namespace MC
       // concentration in g/L (kg/m3) Total volume is expected to be in m3 As a
       // result we can calculate the mass carried by each MC particle
       return scale_factor * particle_concentration * total_volume /
-             static_cast<double>(n_particles)/ mass_cell;
+             static_cast<double>(n_particles) /mass_cell;
     }
 
     /**

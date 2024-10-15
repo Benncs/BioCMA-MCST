@@ -18,8 +18,8 @@ namespace
   constexpr double ln2 = 0.69314718056;
   constexpr double tau_metabolism = (1. / mu_max);
 } // namespace
-
-#define MASS() (1000 * 3.14 * (0.8e-6) * (0.8e-6) / 4. * l)
+static constexpr double factor =  1000 * 3.14 * (0.8e-6) * (0.8e-6) / 4.;
+#define MASS() (factor * l)
 
 namespace Models
 {
@@ -32,7 +32,7 @@ namespace Models
     // Kokkos::max(minimal_length,
     //             Kokkos::max(generator.normal(l_0 / 2., l_0 / 2. / 5.), 0.));
 
-    this->mu = Kokkos::max(generator.normal(mu_max / 2., mu_max / 4), 0.);
+    this->mu = Kokkos::max(generator.normal(mu_max/2. , mu_max / 4), 0.);
     _rng.random_pool.free_state(generator);
     static_assert(l_1 > l_0, "Monod: Bad Model Parameter ");
     constexpr double ___init_only_cell_lenghtening = 4e-7 / ln2;
@@ -51,7 +51,7 @@ namespace Models
     const double s = Kokkos::max(0., concentration(0));
     const double mu_p = mu_max * s / (Ks + s);
     const double mu_eff = Kokkos::min(mu, mu_p);
-    contrib = MASS() * mu_eff * s / (Ks + s) * y_s_x;
+    contrib = mu_eff *y_s_x*MASS() ;
     l += d_t * (mu_eff * _init_only_cell_lenghtening);
     mu += d_t * (1.0 / tau_metabolism) * (mu_p - mu);
 

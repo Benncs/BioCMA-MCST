@@ -14,10 +14,10 @@ yx = 2
 mumax = 0.77/3600     
 v = 20e-3
 taum = 1/mumax
-Q =   mumax*v
+Q = 0.4/3600*20e-3 #mumax*v
 # l = np.linspace(0.1e-6, 5e-6, 1000)
-# l0 = 0.8e-6
-# l1 = 2e-6
+# l0 = 0.9e-6
+# l1 = 3e-6
 
 # # Calcul de la probabilité
 # p = (l - l0) / (l1 - l0)
@@ -28,14 +28,20 @@ Q =   mumax*v
 
 # plt.show()
 # exit(0)
+
+
 Ks = 0.01
 def model(t, y):
     s, x,mu = y  
+    
     mup = mumax*s/(Ks+s)
     mueff = min(mup,mu)
     D = Q/v
     dsdt = D*(se-s)-mueff*yx*x
     dxdt = (mueff-D)*x
+    # if(s<Ks/10):
+    #     dsdt =0
+    #     dxdt =0
     dmudt = 1/taum*(mup-mu)
     return np.array([dsdt, dxdt,dmudt])  
 
@@ -44,8 +50,8 @@ x0 = 1
 mu = mumax/2
 initial_conditions = [s0, x0,mu]
 # tau =  v/Q
-t_span = (0, 75000)  
-t_eval = np.linspace(t_span[0], t_span[1], 500)  
+t_span = (0, 25000)  
+t_eval = np.linspace(t_span[0], t_span[1], 5000)  
 
 solution = solve_ivp(model, t_span, initial_conditions, t_eval=t_eval,method="BDF")
 initial_mass_cell = 3.14 * (0.8e-6) * (0.8e-6)/4. * 0.9e-6/2. * 1000
