@@ -56,7 +56,7 @@ def check_mixing(
             plt.semilogy(t, norm_c_var, label=f"liquid_{name_results[i]}")
             plt.semilogy() 
 
-        plt.legend()
+        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
         plt.title("Segregation index as a function of the time")
         plt.ylabel(r"$\frac{\sigma(t)}{\sigma(t_{0})}$")
         plt.xlabel(f"time [{get_time()}]")

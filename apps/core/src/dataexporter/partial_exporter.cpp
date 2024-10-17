@@ -73,9 +73,9 @@ namespace CORE_DE
       auto *ptr_spatial =
           Kokkos::subview(spatial_values, i_name, Kokkos::ALL).data();
 
-      this->write_matrix(ds_name + names[i_name], {ptr_particles, n_particles});
+      this->write_matrix(ds_name + names[i_name], {ptr_particles, n_particles},false);
       this->write_matrix(ds_name + "spatial/" + names[i_name],
-                         {ptr_spatial, n_compartments},true);
+                         {ptr_spatial, n_compartments},false);
     }
   }
 

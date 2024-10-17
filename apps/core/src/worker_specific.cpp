@@ -57,6 +57,7 @@ void workers_process(
 
       if (signal == MPI_W::SIGNALS::DUMP)
       {
+        PROFILE_SECTION("worker:dump")
         partial_exporter.write_number_particle(
             simulation.mc_unit->domain.getRepartition());
 

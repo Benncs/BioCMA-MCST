@@ -15,8 +15,8 @@ __current_file_path = os.path.abspath(__file__)
 __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
 DEFAULT_TYPE = "debug"
-_MPI_ROOT_FLAG ="" #" -allow-run-as-root"
-MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 4 --bind-to core"
+_MPI_ROOT_FLAG =" -allow-run-as-root"
+MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 6 --bind-to core"
 OMP_NUM_THREADS = "1"
 COMPILER_NAME="gcc"
 
@@ -92,7 +92,7 @@ def main():
     if(cli_args.use_mpi):
         input("confirm force?")
         command+= " -force 1"
-    exec(command, cli_args.n_threads,do_kokkos_measure=True)
+    exec(command, cli_args.n_threads,do_kokkos_measure=False)
 
   
 
