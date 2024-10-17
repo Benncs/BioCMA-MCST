@@ -46,7 +46,7 @@ cpp = meson.get_compiler('cpp')
 global_install_dir = get_option('prefix') + '/' + get_option('libdir')
 includes_install_dir = ('include/' + project_name)
 
-cpp_args = arch_specific_args
+cpp_args = [arch_specific_args,'-DENABLE_KOKKOS_PROFILING']
 
 add_project_arguments(cpp_args, language: 'cpp')
 

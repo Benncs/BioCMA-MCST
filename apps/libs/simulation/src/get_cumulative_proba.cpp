@@ -1,3 +1,4 @@
+#include "common/common.hpp"
 #include <get_cumulative_proba.hpp>
 #include <iostream>
 
@@ -7,6 +8,7 @@ namespace Simulation
       CmaRead::Neighbors::Neighbors_const_view_t neighbors,
       const FlowMatrixType &m_transition)
   {
+    PROFILE_SECTION("host:get_cumulative_probabilities")
     const size_t n_compartment = neighbors.getNRow();
 
     // Initialize the cumulative probability matrix

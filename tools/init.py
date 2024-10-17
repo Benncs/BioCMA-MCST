@@ -14,6 +14,9 @@ if __name__=="__main__":
 
     liquid_0d[0,0]=0.
     liquid_n14[:,0]=0.
+
+    liquid_n14[0,0]=5.
+
     liquid_n50[:,0]=0.
     make_initial_concentration("./cma_data/0d_init.h5",liquid_0d)
     

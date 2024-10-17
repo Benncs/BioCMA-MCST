@@ -1,5 +1,6 @@
 #include "cma_read/flowinfo.hpp"
 #include "cma_read/reactorstate.hpp"
+#include "common/common.hpp"
 #include "simulation/simulation.hpp"
 #include <cma_read/flowmap.hpp>
 #include <cmath>
@@ -23,8 +24,10 @@ namespace Simulation
   compute_MatFlow(const CmaRead::FlowMap::FlowMap_const_view_t &flows_view,
                   Simulation::PreCalculatedHydroState &matflow)
   {
+    PROFILE_SECTION("host:compute_MatFlow")
     const auto _mat_transition_liq =
         Simulation::get_transition_matrix(flows_view);
+        
     matflow.transition_matrix = _mat_transition_liq;
 
     matflow.diag_transition = get_diag_transition(matflow.transition_matrix);
@@ -33,6 +36,8 @@ namespace Simulation
   static std::vector<double>
   compute_inverse_diagonal(std::span<const double> volumes)
   {
+    PROFILE_SECTION("compute_inverse_diagonal")
+
     std::vector<double> inverse_diagonal(volumes.size());
 
     std::transform(
@@ -208,8 +213,8 @@ namespace Simulation
     {
       current_gas_hydro_state = &this->gas_pc[current_index];
     }
-
-    if (this->repetition_count < this->n_flowmap)
+    
+    if (this->repetition_count < this->n_flowmap && this->current_flowmap_count==0 )
     {
       current_state = &get_unchecked(current_index);
 
@@ -244,7 +249,7 @@ namespace Simulation
       current_gas_hydro_state = &this->gas_pc[current_index];
     }
 
-    if (repetition_count < n_flowmap)
+    if (repetition_count < n_flowmap && this->current_flowmap_count==0)
     {
       const auto mat_f_liq_view =
           CmaRead::FlowMap::FlowMap_const_view_t(flows, n_compartment);
@@ -266,7 +271,6 @@ namespace Simulation
 
       unit.setVolumes(current_state->gasVolume, current_state->liquidVolume);
     }
-
     if (++this->current_flowmap_count == this->n_per_flowmap)
     {
       this->repetition_count++;
@@ -280,6 +284,7 @@ namespace Simulation
       const Simulation::SimulationUnit &unit,
       PreCalculatedHydroState *liq_hydro_state)
   {
+    PROFILE_SECTION("host:calculate_liquid_state")
     compute_MatFlow(mat_f_liq_view, *liq_hydro_state);
     liq_hydro_state->cumulative_probability =
         get_cumulative_probabilities(unit.mc_unit->domain.getNeighbors(),
@@ -295,6 +300,7 @@ namespace Simulation
     calculate_liquid_state(
         reactor_state.liquid_flow.getViewFlows(), unit, liq_hydro_state);
 
+   
     liq_hydro_state->inverse_volume =
         compute_inverse_diagonal(reactor_state.liquidVolume);
 

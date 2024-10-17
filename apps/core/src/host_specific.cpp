@@ -267,7 +267,10 @@ void main_loop(const Core::SimulationParameters &params,
 
       DEBUG_INSTRUCTION
 
-      transitioner->update_flow(simulation);
+      {
+        PROFILE_SECTION("host:update_flow")
+        transitioner->update_flow(simulation);
+      }
 
       current_reactor_state = transitioner->getState();
 
@@ -275,7 +278,10 @@ void main_loop(const Core::SimulationParameters &params,
 
       MPI_DISPATCH_MAIN;
 
-      transitioner->advance(simulation);
+      {
+        PROFILE_SECTION("host:update_flow::advance")
+        transitioner->advance(simulation);
+      }
 
       simulation.cycleProcess(local_container, view_result, d_t);
 
@@ -289,14 +295,17 @@ void main_loop(const Core::SimulationParameters &params,
                     current_reactor_state,
                     main_exporter,
                     partial_exporter);
-      sync_step(exec, simulation);
 
-      result.clear(local_container.n_particle());
-      result.update_view(view_result);
-      simulation.update_feed(current_time, d_t);
-      simulation.step(d_t, *current_reactor_state);
-      sync_prepare_next(simulation);
-      current_time += d_t;
+      {
+        PROFILE_SECTION("host:sync")
+        sync_step(exec, simulation);
+        result.clear(local_container.n_particle());
+        result.update_view(view_result);
+        simulation.update_feed(current_time, d_t);
+        simulation.step(d_t, *current_reactor_state);
+        sync_prepare_next(simulation);
+        current_time += d_t;
+      }
 
       if (SignalHandler::is_usr1_raised())
       {
@@ -346,6 +355,7 @@ void handle_export(const ExecInfo &exec, /*/Exec is used for MPI **/
                    CORE_DE::PartialExporter &partial_exporter)
 // NOLINTEND
 {
+  PROFILE_SECTION("host:handle_export")
   if (++dump_counter == dump_interval)
   {
     SEND_MPI_SIG_DUMP

@@ -311,7 +311,7 @@ init_state(Core::SimulationParameters &params,
 static Simulation::Feed::SimulationFeed init_feed()
 {
     
-  constexpr double flow = 0.6/3600*20e-3;//0.77/3600*20e-3;//3.5e-6;
+  constexpr double flow = 0.;//0.6/3600*20e-3;//0.77/3600*20e-3;//3.5e-6;
   // constexpr double expected_tau = 20e-3 / flow; // 90e-3/0.00010087625032109857;//20e-3/1.6e-5;
   // constexpr double expected_mu = 1 / expected_tau;
   constexpr double sf = 5;

@@ -15,12 +15,12 @@ from . import (
     check_mixing,
     set_time_unit_to_hour,
     time_average_reaction_rate,
+    get_time,   evtk
 )
 from .properties import process_particle_data, property_distribution
 import os
 import argparse
 from numpy.polynomial import Polynomial
-from . import get_time
 
 
 def assemble(res_folder: str, names: List[str]) -> List[str]:
@@ -126,7 +126,8 @@ def calculate_mass(dest:str,results: Results):
         plt.ylabel("C [g/L]")
         plt.xlabel(f"Time [{get_time()}]")
         plt.plot(results.time,cx)
-        plt.savefig(dest+"/cx")
+        plt.savefig(f"{dest}/cx{FIGURE_TYPE}")
+        
     pass
 
 
@@ -164,6 +165,9 @@ def time_average_reaction_data(results):
     pass
 
 
+
+
+
 def main(name_results, root_res="./results/"):
     dest = [f"./results/{i}/postprocessing" for i in name_results]
 
@@ -173,13 +177,18 @@ def main(name_results, root_res="./results/"):
 
     pathres = assemble(root_res, name_results)
 
-    vtu_path = None  # ("/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/bench/cma_mesh.vtu")
-    # check_mixing(name_results, pathres, dest, vtu_path)
+    vtu_path = "/mnt/c/Users/casale/Documents/cfd/rushton/cma/out_500/cma_mesh.vtu"  # ("/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/bench/cma_mesh.vtu")
+    ret_tuple = check_mixing(name_results, pathres, dest)
+    n_res = len(name_results)
+    
+    
 
     for i, current_path_res in enumerate(pathres):
         results: Results = import_results(current_path_res)
-
+       
         check_time_unit(results)
+        if(n_res==1 and vtu_path is not None):
+            evtk(vtu_path,name_results[i],results.time,ret_tuple)
 
         last_id = results.main.n_export - 1
         last_vtk_path = get_vtk(last_id)
