@@ -11,9 +11,9 @@ namespace Models
   KOKKOS_INLINE_FUNCTION bool
   check_probability_division(double d_t, double gamma, MC::KPRNG &_rng)
   {
-    const double proba_div =
-        (1 - Kokkos::exp(-d_t / tau_division_proba)) * gamma;
-    // double proba_div = gamma;
+    // const double proba_div =
+    //     (1 - Kokkos::exp(-d_t / tau_division_proba)) * gamma;
+    double proba_div = gamma;
     const double x = _rng.double_uniform();
 
     return x < proba_div;

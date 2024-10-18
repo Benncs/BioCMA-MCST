@@ -18,6 +18,18 @@ static constexpr bool const_number_simulation = false;
 
 namespace
 {
+
+  KOKKOS_INLINE_FUNCTION float ln(float x)
+  {
+    unsigned int bx = *reinterpret_cast<unsigned int *>(&x);
+    const unsigned int ex = bx >> 23;
+    const signed int t = static_cast<signed int>(ex) - static_cast<signed int>(127);
+    unsigned int s = (t < 0) ? (-t) : t;
+    bx = 1065353216 | (bx & 8388607);
+    x = *reinterpret_cast<float *>(&bx);
+    return -1.49278 + (2.11263 + (-0.729104 + 0.10969 * x) * x) * x + 0.6931471806 * t;
+  }
+
   KOKKOS_INLINE_FUNCTION bool probability_leaving(double random_number,
                                                   double volume,
                                                   double flow,
@@ -27,7 +39,14 @@ namespace
     // return (dt * flow / volume) > (-Kokkos::log(1 - random_number));
 
     // We can use 1-random_number if we have enough particle
+
+    // return (dt * flow / volume) > (-ln(random_number));
+
     return (dt * flow / volume) > (-Kokkos::log(random_number));
+
+    // const double x = volume/flow;
+    // const double ax = dt/(volume/flow);
+    // return random_number<ax*(1-ax/2.);
   }
 } // namespace
 
@@ -109,7 +128,7 @@ namespace Simulation::KernelInline
     auto &particle = list._owned_data(i_particle);
     auto &status = particle.properties.status;
 
-    // TODO Test attribute
+    // // TODO Test attribute
     if (status == MC::CellStatus::DEAD) [[unlikely]]
     {
       // This warp divergence is not a priori a problem because it is a
@@ -120,8 +139,8 @@ namespace Simulation::KernelInline
     handle_move(particle);
     handle_exit(status, particle);
 
-    // Useless to try to reducing branhcing here because we're going to
-    // early return so serializing will occur
+    // // Useless to try to reducing branhcing here because we're going to
+    // // early return so serializing will occur
     if (status == MC::CellStatus::OUT)
     {
       events.template incr<MC::EventType::Exit>();

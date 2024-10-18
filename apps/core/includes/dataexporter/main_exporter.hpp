@@ -38,6 +38,7 @@ namespace CORE_DE
 
   private:
     static const std::string base_group_name;
+    uint64_t n_expected_export{};
   };
 
 } // namespace CORE_DE

@@ -82,7 +82,7 @@ namespace Simulation
                                      const FlowMatrixType &m_transition,
                                      const Eigen::MatrixXd &transfer_gas_liquid)
   {    
-
+    PROFILE_SECTION("performStep")
     total_mass +=
         d_t * ( alloc_concentrations * m_transition - alloc_concentrations *sink + biomass_contribution + feed +
                transfer_gas_liquid );

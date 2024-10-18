@@ -37,7 +37,6 @@ void remove_if(uint64_t i_max_used,
 
   Space space;
 
-  const uint64_t to_keep = i_max_used - remove_count;
 
   // Initialisation, make tmp view as keeping storage
   ViewType tmp_view(
@@ -62,7 +61,7 @@ void remove_if(uint64_t i_max_used,
       scan_count);
 
   Kokkos::fence("scan:remove_if");
-  KOKKOS_ASSERT(scan_count == to_keep);
+  KOKKOS_ASSERT(scan_count == (i_max_used - remove_count));
   Kokkos::parallel_for(
       "remove_if_parfor",
       Kokkos::RangePolicy<Space>(space, 0, i_max_used),
@@ -195,7 +194,6 @@ namespace MC
         return p.properties.status == MC::CellStatus::DEAD ||
                p.properties.status == MC::CellStatus::OUT;
       };
-
       uint64_t new_used_item = this->size() - count_dead;
       remove_if<Kokkos::DefaultExecutionSpace>(
           this->size(), count_dead, this->_owned_data, pred);

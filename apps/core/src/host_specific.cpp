@@ -226,8 +226,8 @@ void main_loop(const Core::SimulationParameters &params,
       std::min(n_iter_simulation,
                static_cast<size_t>(params.user_params.number_exported_result)) -
       1;
-
-  const size_t dump_interval = (n_iter_simulation) / (dump_number) + 1;
+  //FIXME when number_exported_result==0 and number_exported_result==1
+  const size_t dump_interval = (params.user_params.number_exported_result!=0)? (n_iter_simulation) / (dump_number) + 1:n_iter_simulation+1;
 
   size_t dump_counter = 0;
   double current_time = 0.;
@@ -296,16 +296,17 @@ void main_loop(const Core::SimulationParameters &params,
                     main_exporter,
                     partial_exporter);
 
+      sync_step(exec, simulation);
       {
-        PROFILE_SECTION("host:sync")
-        sync_step(exec, simulation);
+        PROFILE_SECTION("host:sync_update")
+
         result.clear(local_container.n_particle());
         result.update_view(view_result);
         simulation.update_feed(current_time, d_t);
         simulation.step(d_t, *current_reactor_state);
-        sync_prepare_next(simulation);
         current_time += d_t;
       }
+      sync_prepare_next(simulation);
 
       if (SignalHandler::is_usr1_raised())
       {

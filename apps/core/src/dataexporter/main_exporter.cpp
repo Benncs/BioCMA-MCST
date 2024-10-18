@@ -41,7 +41,7 @@ namespace CORE_DE
                                  uint64_t n_species,
                                  bool is_two_phase_flow)
   {
-    const uint64_t n_expected_export = n_iter + 2; // Add first + last
+    n_expected_export = n_iter + 2; // Add first + last
     constexpr uint32_t n_growing_arrays_phase = 2; // Concentration + volumes;
     // First is concentration second is volume
     constexpr std::size_t index_concentration = 0;
@@ -98,6 +98,10 @@ namespace CORE_DE
       std::optional<std::span<const double>> concentration_gas,
       std::optional<std::span<const double>> volume_gas)
   {
+    if(export_counter>=n_expected_export)
+    {
+      return;
+    }
     append_matrix(base_group_name + "concentration_liquid",
                   concentration_liquid);
     append_matrix(base_group_name + "volume_liquid", liquid_volume);
