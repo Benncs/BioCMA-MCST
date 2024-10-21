@@ -168,7 +168,7 @@ namespace Simulation::KernelInline
     {
       events.template incr<MC::EventType::NewParticle>();
 
-      const auto new_particle = particle.division();
+      const auto new_particle = particle.division(list.rng_instance);
       if constexpr (!const_number_simulation)
       {
         auto *np = rview().extra_process.spawn();

@@ -41,11 +41,11 @@ namespace MC
       data.update(d_t, properties, concentration, globalrng);
     }
 
-    KOKKOS_INLINE_FUNCTION BaseParticle<_Model> division()
+    KOKKOS_INLINE_FUNCTION BaseParticle<_Model> division(KPRNG globalrng)
     {
       this->properties.status = CellStatus::IDLE;
       this->properties.interdivision_time = 0;
-      auto p = data.division(properties);
+      auto p = data.division(properties,globalrng);
       auto prop_child = this->properties;
       prop_child.hydraulic_time = 0;
       return BaseParticle(std::move(prop_child), std::move(p));

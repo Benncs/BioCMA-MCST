@@ -24,7 +24,7 @@ namespace Models
                                 const LocalConcentrationView &concentration,
                                 MC::KPRNG _rng);
 
-    KOKKOS_FUNCTION UptakeImplicit division(MC::ParticleDataHolder &p);
+    KOKKOS_FUNCTION UptakeImplicit division(MC::ParticleDataHolder &p,MC::KPRNG);
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
                                       ContributionView contri);

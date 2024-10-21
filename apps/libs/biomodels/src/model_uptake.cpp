@@ -117,7 +117,7 @@ namespace Models
         p.status, d_t, GammaDivision::threshold_linear(lenght, l_0, l_1), _rng);
   }
 
-  KOKKOS_FUNCTION Uptake Uptake::division(MC::ParticleDataHolder &p)
+  KOKKOS_FUNCTION Uptake Uptake::division(MC::ParticleDataHolder &p,MC::KPRNG)
   {
     const double original_lenght = this->lenght;
     const double original_n_permease = this->n_permease;

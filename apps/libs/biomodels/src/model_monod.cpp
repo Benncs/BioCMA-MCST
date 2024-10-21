@@ -59,7 +59,7 @@ namespace Models
         p.status, d_t, GammaDivision::threshold_linear(l, l_0, l_1), _rng);
   }
 
-  KOKKOS_FUNCTION Monod Monod::division(MC::ParticleDataHolder &p) noexcept
+  KOKKOS_FUNCTION Monod Monod::division(MC::ParticleDataHolder &p,MC::KPRNG) noexcept
   {
     const double original_lenght = l;
 

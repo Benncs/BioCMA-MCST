@@ -25,7 +25,7 @@ namespace Models
                                 const LocalConcentrationView &concentration,
                                 MC::KPRNG _rng)noexcept;
 
-    KOKKOS_FUNCTION Monod division(MC::ParticleDataHolder &p)noexcept;
+    KOKKOS_FUNCTION Monod division(MC::ParticleDataHolder &p,MC::KPRNG)noexcept;
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
                                       ContributionView contri)noexcept;

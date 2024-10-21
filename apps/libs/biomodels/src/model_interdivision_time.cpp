@@ -62,7 +62,7 @@ namespace Models
   }
 
   KOKKOS_FUNCTION InterdivisionTime
-  InterdivisionTime::division(MC::ParticleDataHolder &p)
+  InterdivisionTime::division(MC::ParticleDataHolder &p,MC::KPRNG)
   {
     age = 0;
     const double original_lenght = l;

@@ -65,7 +65,7 @@ namespace Models
         _rng);
   }
 
-  KOKKOS_FUNCTION MonodTune MonodTune::division(MC::ParticleDataHolder &p)
+  KOKKOS_FUNCTION MonodTune MonodTune::division(MC::ParticleDataHolder &p,MC::KPRNG)
   {
     const double original_lenght = l;
 

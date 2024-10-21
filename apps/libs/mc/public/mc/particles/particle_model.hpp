@@ -92,7 +92,7 @@ concept ParticleModel = HasMass<T>&&requires(T model,
                                  MC::KPRNG rng) {
   { model.init(p, rng) } -> std::same_as<void>;
   { model.update(d_t, p, concentration, rng) } -> std::same_as<void>;
-  { model.division(p) } -> std::same_as<T>;
+  { model.division(p,rng) } -> std::same_as<T>;
   { model.contribution(p, contrib) } -> std::same_as<void>;
   { model.get_properties() } -> std::same_as<model_properties_detail_t>;
   { model.get_properties() } -> std::same_as<model_properties_detail_t>;
@@ -120,7 +120,7 @@ public:
   {
   }
 
-  KOKKOS_INLINE_FUNCTION DefaultModel division(MC::ParticleDataHolder & /*p*/)noexcept
+  KOKKOS_INLINE_FUNCTION DefaultModel division(MC::ParticleDataHolder & /*p*/,MC::KPRNG /*k*/)noexcept
   {
     return {};
   }

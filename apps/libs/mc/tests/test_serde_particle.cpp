@@ -24,7 +24,7 @@ public:
   {
   }
 
-  NonSerdeModel division(MC::ParticleDataHolder & /*p*/)
+  NonSerdeModel division(MC::ParticleDataHolder & /*p*/,MC::KPRNG)
   {
     return {};
   }
@@ -62,7 +62,7 @@ public:
   {
   }
 
-  SerdeModel division(MC::ParticleDataHolder & /*p*/)
+  SerdeModel division(MC::ParticleDataHolder & /*p*/,MC::KPRNG)
   {
     return {};
   }
