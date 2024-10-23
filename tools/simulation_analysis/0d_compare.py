@@ -4,7 +4,7 @@ from scipy.integrate import solve_ivp
 
 import sys 
 
-se = 10
+se = 10.8
 if(len(sys.argv)==2):
     se = float(sys.argv[1])
 
@@ -14,7 +14,7 @@ yx = 2
 mumax = 0.77/3600     
 v = 20e-3
 taum = 1/mumax
-Q = 0.4/3600*20e-3 #mumax*v
+Q = 0.15/3600*20e-3 #mumax*v
 # l = np.linspace(0.1e-6, 5e-6, 1000)
 # l0 = 0.9e-6
 # l1 = 3e-6
@@ -45,12 +45,12 @@ def model(t, y):
     dmudt = 1/taum*(mup-mu)
     return np.array([dsdt, dxdt,dmudt])  
 
-s0 = 0
+s0 = 0.1
 x0 = 1
 mu = mumax/2
 initial_conditions = [s0, x0,mu]
 # tau =  v/Q
-t_span = (0, 25000)  
+t_span = (0, 50*3600)  
 t_eval = np.linspace(t_span[0], t_span[1], 5000)  
 
 solution = solve_ivp(model, t_span, initial_conditions, t_eval=t_eval,method="BDF")

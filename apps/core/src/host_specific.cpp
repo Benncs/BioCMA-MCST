@@ -195,7 +195,10 @@ void host_process(
   auto clean_list = [&simulation](auto &&container)
   {
     auto &list = container.get_compute();
-    list.remove_dead(simulation.counter());
+    if (simulation.counter() != 0)
+    {
+      list.remove_dead(simulation.counter());
+    }
   };
 
   std::visit(clean_list, simulation.mc_unit->container);
@@ -226,8 +229,8 @@ void main_loop(const Core::SimulationParameters &params,
       std::min(n_iter_simulation,
                static_cast<size_t>(params.user_params.number_exported_result)) -
       1;
-  //FIXME when number_exported_result==0 and number_exported_result==1
-  const size_t dump_interval = (params.user_params.number_exported_result!=0)? (n_iter_simulation) / (dump_number) + 1:n_iter_simulation+1;
+  // FIXME when number_exported_result==0 and number_exported_result==1
+  const size_t dump_interval = (params.user_params.number_exported_result != 0) ? (n_iter_simulation) / (dump_number) + 1 : n_iter_simulation + 1;
 
   size_t dump_counter = 0;
   double current_time = 0.;

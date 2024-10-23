@@ -92,7 +92,7 @@ def main():
     if(cli_args.use_mpi):
         input("confirm force?")
         command+= " -force 1"
-    exec(command, cli_args.n_threads,do_kokkos_measure=True)
+    exec(command, cli_args.n_threads,do_kokkos_measure=False)
 
   
 

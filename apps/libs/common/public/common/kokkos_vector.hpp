@@ -228,10 +228,9 @@ public:
   void insert(const KokkosVector<T, Space> &rhs);
 
   /// The Kokkos View holding the data elements.
-  Kokkos::View<T *, Layout, Space> _owned_data{};
+  Kokkos::View<T *, Layout, Space,Kokkos::MemoryTraits<Kokkos::Restrict>> _owned_data{};
 
-protected:
-  /**
+   /**
    * @brief Gets the underlying data.
    *
    * @return A Kokkos View of the data.
@@ -241,6 +240,9 @@ protected:
     return _owned_data;
   }
 
+
+protected:
+ 
   void set_n_used_elements(uint64_t value)
   {
     KOKKOS_ASSERT(n_used_elements < n_allocated_element);

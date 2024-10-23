@@ -9,7 +9,7 @@ from .initialiser import make_initial_concentration
 
 RATIO_MASS_LENGTH = 0.45044876111074444 / 0.12477411510047276
 
-FIGURE_TYPE=".svg"
+FIGURE_TYPE=".png"
 TIME_UNIT ="s"
 
 def set_time_unit_to_hour():

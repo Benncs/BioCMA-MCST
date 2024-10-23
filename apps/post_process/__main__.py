@@ -177,7 +177,7 @@ def main(name_results, root_res="./results/"):
 
     pathres = assemble(root_res, name_results)
 
-    vtu_path = "/mnt/c/Users/casale/Documents/cfd/rushton/cma/out_500/cma_mesh.vtu"  # ("/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/bench/cma_mesh.vtu")
+    vtu_path = None #"/mnt/c/Users/casale/Documents/cfd/rushton/cma/out_500/cma_mesh.vtu"  # ("/mnt/c/Users/casale/Documents/code/cpp/biomc/cma_data/bench/cma_mesh.vtu")
     ret_tuple = check_mixing(name_results, pathres, dest)
     n_res = len(name_results)
     

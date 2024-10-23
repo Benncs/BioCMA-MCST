@@ -1,8 +1,6 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
-#include <simulation/feed_descriptor.hpp>
-#include <simulation/probe.hpp>
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Macros.hpp>
@@ -19,8 +17,11 @@
 #include <memory>
 #include <optional>
 #include <simulation/alias.hpp>
+#include <simulation/feed_descriptor.hpp>
+#include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation_kernel.hpp>
+
 
 #include <Kokkos_ScatterView.hpp>
 
@@ -42,7 +43,8 @@ namespace Simulation
   {
   public:
     SimulationUnit(std::unique_ptr<MC::MonteCarloUnit> &&_unit,
-                   const ScalarInitializer &scalar_init,std::optional<Feed::SimulationFeed> _feed=std::nullopt);
+                   const ScalarInitializer &scalar_init,
+                   std::optional<Feed::SimulationFeed> _feed = std::nullopt);
 
     ~SimulationUnit() = default;
 
@@ -74,15 +76,16 @@ namespace Simulation
 
     void clearContribution() const noexcept;
 
-    void update_feed(double t, double d_t,bool update_scalar=true)noexcept;
-
-    
+    void update_feed(double t, double d_t, bool update_scalar = true) noexcept;
 
     void clear_mc();
 
     void reset();
 
-    [[nodiscard]] bool two_phase_flow()const{return is_two_phase_flow;}
+    [[nodiscard]] bool two_phase_flow() const
+    {
+      return is_two_phase_flow;
+    }
 
     // FIXME
     Probes probes;
@@ -206,6 +209,18 @@ namespace Simulation
     Kokkos::parallel_for(
         "mc_cycle_process", Kokkos::RangePolicy<>(0, n_particle), k);
     Kokkos::fence("fence_mc_cycle_process");
+
+    // Kokkos::parallel_for(
+    //     "mc_cycle_process", Kokkos::RangePolicy<>(0, n_particle), KOKKOS_LAMBDA(const std::size_t i_particle) {
+    //       d(i_particle).properties.current_container +=1;
+    //       // d(i_particle).update(d_t,
+    //       //           local_compartments(d(i_particle).properties.current_container)
+    //       //               .concentrations,
+    //       //           list.rng_instance);
+
+    //       // Kokkos::atomic_increment(
+    //       //     &local_compartments(0).n_cells);
+    //     });
 
     Kokkos::Experimental::contribute(contribs, contribs_scatter);
 

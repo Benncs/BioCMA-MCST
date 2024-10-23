@@ -55,8 +55,8 @@ namespace Models
     l += d_t * (mu_eff * _init_only_cell_lenghtening);
     mu += d_t * (1.0 / tau_metabolism) * (mu_p - mu);
 
-    Models::update_division_status(
-        p.status, d_t, GammaDivision::threshold_linear(l, l_0, l_1), _rng);
+    // Models::update_division_status(
+    //     p.status, d_t, GammaDivision::threshold_linear(l, l_0, l_1), _rng);
   }
 
   KOKKOS_FUNCTION Monod Monod::division(MC::ParticleDataHolder &p,MC::KPRNG) noexcept

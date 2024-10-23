@@ -178,13 +178,14 @@ def plot_average(results: Results, dest: str):
     for i, key in enumerate(keys):
         print(average[-1,i])
         try:
+            # plt.figure(figsize=(16, 9), dpi=400)
             plt.figure()
             plt.plot(
                 results.time,
                 average[:, i],
-                "-o",
+                # "-o",
                 label=key,
-                markersize=2,
+                # markersize=1,
                 color="black",
             )
             plt.xlabel(f"Time [{get_time()}]")

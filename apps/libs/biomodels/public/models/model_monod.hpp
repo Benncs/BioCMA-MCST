@@ -8,7 +8,7 @@
 namespace Models
 {
 
-  class alignas(ExecInfo::cache_line_size) Monod
+  class Monod
   {
     double mu;
     double l;

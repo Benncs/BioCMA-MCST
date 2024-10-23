@@ -1,6 +1,7 @@
 #ifndef __MC_PARTICLESHPP__
 #define __MC_PARTICLESHPP__
 
+#include "common/execinfo.hpp"
 #include "common/has_serialize.hpp"
 #include <mc/particles/data_holder.hpp>
 #include <mc/particles/particle_model.hpp>

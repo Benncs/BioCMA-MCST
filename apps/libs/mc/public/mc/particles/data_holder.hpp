@@ -23,7 +23,7 @@ namespace MC
    * @brief Main properties carried by all MonteCarlo Particle
    * These properties are handled for all particle in all cycles
    */
-  class alignas(ExecInfo::cache_line_size) ParticleDataHolder
+  class ParticleDataHolder
   {
   public:
     /**
@@ -61,17 +61,17 @@ namespace MC
          hydraulic_time);
     }
 
-    size_t current_container = default_container; ///< Current position in the domain
+    
     // current_domain is always 0 because current simulation only handles 1 domain
     size_t current_domain = default_domain;       ///< In which domain particles live
     size_t random_seed = 0;
-
     uint32_t id = 0;
 
     double hydraulic_time = default_hydraulic_time;
     double interdivision_time = default_interdivision_time;
     double weight = default_weight; ///< Monte-Carlo weight
 
+    size_t current_container = default_container; ///< Current position in the domain
     CellStatus status = default_status; ///< Particle state
 
   private:

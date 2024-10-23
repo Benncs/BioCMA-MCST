@@ -113,7 +113,7 @@ public:
   }
 
   KOKKOS_INLINE_FUNCTION void
-  update(double d_t,
+  update(const double d_t,
          MC::ParticleDataHolder &p,
          const LocalConcentrationView &concentration,
          MC::KPRNG _rng)
