@@ -34,7 +34,7 @@ static constexpr double tauAu = 5.;
 static constexpr double tauAd = 15.;
 
 static constexpr double phi_pts_max = f_phi_pts_max(nu_max); // 5.1451e-12/ 3600. * 1e-3;
-static constexpr double pts = 1e-3;
+static constexpr double k_pts = 1e-3;
 // static constexpr double kpts = 1e-3;
 static constexpr double kppermease = 1e-2;
 static constexpr double psi_permease = phi_pts_max / 20.;
@@ -48,7 +48,7 @@ constexpr double minimal_length = 0.4e-6;
 
 KOKKOS_INLINE_FUNCTION double phi_pts(double a_pts, double S)
 {
-  return a_pts * MONOD_RATIO(phi_pts_max, S, pts);
+  return a_pts * MONOD_RATIO(phi_pts_max, S, k_pts);
 }
 
 KOKKOS_INLINE_FUNCTION double
