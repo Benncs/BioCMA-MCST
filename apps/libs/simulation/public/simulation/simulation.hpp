@@ -89,7 +89,6 @@ namespace Simulation
   private:
     Probes probes;
     Simulation::Feed::SimulationFeed feed;
-
     bool const_number_simulation = true;
     uint64_t _internal_counter = 0;
     LeavingFlowIndexType index_leaving_flow;

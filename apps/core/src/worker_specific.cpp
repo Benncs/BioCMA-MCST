@@ -1,6 +1,6 @@
-#include "biocma_cst_config.hpp"
-#ifndef NO_MPI
 
+#ifndef NO_MPI
+#  include "biocma_cst_config.hpp"
 #  include <csignal>
 #  include <mpi_w/iteration_payload.hpp>
 #  include <mpi_w/wrap_mpi.hpp>

@@ -57,12 +57,12 @@ namespace MC
       data.contribution(properties, contrib);
     }
 
-    template <class Archive> void serde(Archive &ar)
+    template <class Archive> void serialize(Archive &ar)
     {
-      properties.serde(ar);
+      properties.serialize(ar);
       if constexpr (has_serialize<_Model, Archive>())
       {
-        data.serde(ar);
+        data.serialize(ar);
       }
     }
 

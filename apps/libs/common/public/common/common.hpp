@@ -20,6 +20,9 @@
 
 #endif
 
+
+
+
 void test_common();
 
 double constexpr tolerance_equality_float = 1e-15;

@@ -32,8 +32,7 @@ namespace MC
    * @brief inline getter, converts event to its value in order to be use as
    * array index
    */
-  template <EventType event>
-  KOKKOS_INLINE_FUNCTION consteval size_t event_index()
+  template <EventType event> KOKKOS_INLINE_FUNCTION consteval size_t event_index()
   {
     return static_cast<size_t>(event);
   }
@@ -43,7 +42,6 @@ namespace MC
    */
   struct alignas(ExecInfo::cache_line_size) EventContainer
   {
-   
 
     // Use SharedHostPinnedSpace as this struct is meant to be small enough to
     // be shared between Host and Device According to SharedHostPinnedSpace
@@ -52,11 +50,7 @@ namespace MC
     Kokkos::View<size_t[number_event_type], Kokkos::SharedHostPinnedSpace>
         _events; // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
-    static_assert(sizeof(size_t[number_event_type]) <=
-                      ExecInfo::cache_line_size,
-                  "Size of Eventcontainer::_event fits into cache line");
-
-    
+    static_assert(sizeof(size_t[number_event_type]) <= ExecInfo::cache_line_size, "Size of Eventcontainer::_event fits into cache line");
 
     /**
      * @brief Default container, initalise counter
@@ -64,9 +58,8 @@ namespace MC
     EventContainer()
     {
       _events = Kokkos::View<size_t[number_event_type],
-                             Kokkos::SharedHostPinnedSpace>(
-          "events"); // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-      Kokkos::deep_copy(_events, 0); // Ensure all event to 0 occurence
+                             Kokkos::SharedHostPinnedSpace>("events"); // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+      Kokkos::deep_copy(_events, 0);                                   // Ensure all event to 0 occurence
     }
     /**
      * @brief Get std const view of _events counter
@@ -115,8 +108,7 @@ namespace MC
      * @tparam Event to get
      *
      */
-    template <EventType event>
-    KOKKOS_INLINE_FUNCTION constexpr void incr() const
+    template <EventType event> KOKKOS_INLINE_FUNCTION constexpr void incr() const
     {
       Kokkos::atomic_increment(&_events(event_index<event>()));
     }
@@ -128,10 +120,32 @@ namespace MC
      * @warning _data size has to be a multiple of number_event_type
      */
     static EventContainer reduce(std::span<size_t> _data);
+
+    // Either for save and load, as number_event_type is small and data is located in host, we can loop over array
+
+    template <class Archive> void save(Archive &ar) const
+    {
+      std::array<size_t, number_event_type> array{};
+      for (size_t i = 0; i < number_event_type; ++i)
+      {
+        array[i] = _events[i];
+      }
+
+      ar(array);
+    }
+
+    template <class Archive> void load(Archive &ar)
+    {
+      std::array<size_t, number_event_type> array{};
+      ar(array);
+      for (size_t i = 0; i < number_event_type; ++i)
+      {
+        _events(i) = array[i];
+      }
+    }
   };
 
-  static_assert(sizeof(EventContainer) <= 2 * ExecInfo::cache_line_size,
-                "Check size of Eventcontainer");
+  static_assert(sizeof(EventContainer) <= 2 * ExecInfo::cache_line_size, "Check size of Eventcontainer");
 
 }; // namespace MC
 

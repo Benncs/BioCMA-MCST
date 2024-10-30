@@ -3,7 +3,9 @@ test_rng = executable('test_rng', 'test_rng.cpp',dependencies:[mc_dependency])
 
 if ceral_found
 test_serde_particle = executable('test_serde_particle', 'test_serde_particle.cpp',dependencies:[mc_dependency,cereal_dependency])
+test_serde_list = executable('test_serde_list', 'test_serde_list.cpp',dependencies:[mc_dependency,cereal_dependency])
 test('test_serde_particle',test_serde_particle)
+test('test_serde_list',test_serde_list)
 endif 
 test('test_rng',test_rng)
 

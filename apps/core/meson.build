@@ -14,9 +14,12 @@ dep_core = [
 ]
 
 if highfive_found
-    dep_core += highfive_proj.dependency('HighFive')
+    dep_core += highfive_dependency
 endif
 
+if ceral_found
+    dep_core += cereal_dependency
+endif
 
 dep_core_mpi = [dep_core,mpi_wrap_dependency]
 
