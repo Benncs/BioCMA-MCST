@@ -20,7 +20,7 @@ namespace MPI_W
     MPI_W::broadcast(data.n_compartments, 0);
     size_t fs = data.n_compartments * data.n_compartments;
     std::vector<double> liquid_flow(fs);
-    size_t maxneighbor=0;
+    size_t maxneighbor = 0;
     std::vector<size_t> neighbor_data;
     if (rank == 0)
     {
@@ -54,6 +54,7 @@ namespace MPI_W
       flow_size = data[0].n_compartments;
       MPI_W::broadcast(flow_size, 0);
       size_t size_it = data.size();
+
       // Broadcast the size of the data
       MPI_Bcast(&size_it, sizeof(size_t), MPI_BYTE, 0, MPI_COMM_WORLD);
       // Broadcast each ReactorState pointer
@@ -82,9 +83,7 @@ namespace MPI_W
   class FlowIterator
   {
   public:
-    explicit FlowIterator(std::span<std::string> folder,
-                          const CmtCommons::cma_exported_paths_t &paths,
-                          size_t n_count = 1);
+    explicit FlowIterator(std::span<std::string> folder, const CmtCommons::cma_exported_paths_t &paths, size_t n_count = 1);
 
     explicit FlowIterator(std::vector<CmaRead::ReactorState> &&_data);
     double MinLiquidResidenceTime();
@@ -113,8 +112,7 @@ namespace MPI_W
 
     int rc4 = MPI_W::send_v(neigbors.data(), rank, 3, true);
 
-    if (rc1 != MPI_SUCCESS || rc2 != MPI_SUCCESS || rc3 != MPI_SUCCESS ||
-        rc4 != MPI_SUCCESS)
+    if (rc1 != MPI_SUCCESS || rc2 != MPI_SUCCESS || rc3 != MPI_SUCCESS || rc4 != MPI_SUCCESS)
     {
       MPI_W::critical_error();
     }
@@ -134,8 +132,7 @@ namespace MPI_W
     }
     raw_neigbors = opt.value();
     auto n_col = raw_neigbors.size() / gas_volumes.size();
-    neigbors = CmaRead::Neighbors::Neighbors_const_view_t(
-        raw_neigbors, gas_volumes.size(), n_col, true);
+    neigbors = CmaRead::Neighbors::Neighbors_const_view_t(raw_neigbors, gas_volumes.size(), n_col, true);
 
     if (rc1 != MPI_SUCCESS || rc2 != MPI_SUCCESS || rc3 != MPI_SUCCESS)
     {
