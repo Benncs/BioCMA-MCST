@@ -15,8 +15,7 @@ namespace Models
     double a_pts;
     double a_permease;
     double n_permease;
-    double _init_only_cell_lenghtening;
-    double contrib;
+    std::array<double,2> contribs{0,0};
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder &p, MC::KPRNG _rng);
 
     KOKKOS_FUNCTION void update(double d_t,

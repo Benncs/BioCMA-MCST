@@ -74,8 +74,7 @@ namespace Models
     this->nu = Kokkos::max(generator.normal(nu_max / 5., nu_max / 5. / 5.), 0.);
     _rng.random_pool.free_state(generator);
 
-    _init_only_cell_lenghtening = l_0 / 2. / ln2;
-    this->contrib = 0.;
+    
   }
 
   KOKKOS_FUNCTION void
@@ -94,7 +93,7 @@ namespace Models
 
     this->lenght += d_t * nu_eff;
     this->nu += d_t * (1.0 / tau_metabolism) * (nu_p - this->nu);
-    this->a_pts += d_t * 1.0 / tauPTS * (MONOD_RATIO(1., s, pts) - this->a_pts);
+    this->a_pts += d_t * 1.0 / tauPTS * (MONOD_RATIO(1., s, k_pts) - this->a_pts);
 
     this->a_permease +=
         d_t *
@@ -102,9 +101,10 @@ namespace Models
          (1.0 - gamma_PTS_S - a_permease));
 
     this->n_permease += d_t *
-                        (MONOD_RATIO(1. / tau_f, pts, s) + MONOD_RATIO(1. / tau_d, s, pts)) * (MONOD_RATIO(NPermease_max, pts, s) - n_permease);
+                        (MONOD_RATIO(1. / tau_f, k_pts, s) + MONOD_RATIO(1. / tau_d, s, k_pts)) * (MONOD_RATIO(NPermease_max, k_pts, s) - n_permease);
 
-    this->contrib = phi_s_in;
+    contribs[0]=-phi_s_in;
+    contribs[1]=Kokkos::max((nu_p-nu_eff)*factor*YXS,0.);
 
     Models::update_division_status(
         p.status, d_t, GammaDivision::threshold_linear(lenght, l_0, l_1), _rng);
@@ -144,8 +144,12 @@ namespace Models
 
     // Kokkos::atomic_add(&contribution(0, p.current_container),
     //                          -contrib * p.weight);
+    for(int i=0;i<2;++i)
+    {
+      access_contribs(i, p.current_container) += contribs[i] * p.weight;
+    }
 
-    access_contribs(0, p.current_container) += -contrib * p.weight;
+    // access_contribs(0, p.current_container) += -contrib * p.weight;
   }
 
   model_properties_detail_t Uptake::get_properties()
