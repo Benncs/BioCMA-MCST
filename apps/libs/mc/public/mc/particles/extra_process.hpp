@@ -66,22 +66,25 @@ namespace MC
     }
 
     /**
-     * @brief Get correct view to be pass to kernel 
+     * @brief Get correct view to be pass to kernel
      */
     auto get_view()
     {
+      // ResultsVIew results("Results_view");
       Kokkos::View<Results<MemorySpace, T>, MemorySpace> results(
-          "Results_view");
+          Kokkos::view_alloc("Results_view", Kokkos::WithoutInitializing));
+      new (&results()) Results(*this);
       update_view(results);
       return results;
     }
-
 
     // void from_view(Kokkos::View<Results<MemorySpace, T>, MemorySpace> _r_v)
     // {
     //   extra_process = _r_v().extra_proces;
     //   waiting_allocation_particle = _r_v().waiting_allocation_particle;
     // }
+
+    
   };
 
 } // namespace MC

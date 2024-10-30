@@ -5,4 +5,5 @@
 #include <mpi_w/message_t.hpp>
 #include <mpi_w/iteration_payload.hpp>
 
+
 #endif //__WRAP_MPI_HPP__

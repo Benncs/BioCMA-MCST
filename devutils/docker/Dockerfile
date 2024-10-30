@@ -1,6 +1,6 @@
 FROM nvcr.io/nvidia/nvhpc:24.5-devel-cuda_multi-ubuntu22.04
 ARG LLVM_VERSION=17
-
+ARG KOKKOS_VERSION=4.4.0
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -12,8 +12,7 @@ RUN apt-get update && \
     gnupg \ 
     libomp-dev libopenmpi-dev libeigen3-dev  pkg-config libtbb-dev ninja-build
 
-RUN apt-get install -y libblas-dev libhdf5-dev 
-RUN apt-get install -y libvtk9-dev
+RUN apt-get install -y libhdf5-dev 
 
 # Install Meson
 RUN pip install meson
@@ -23,7 +22,7 @@ WORKDIR /app
 COPY clang_config.sh /app
 # Install LLVM clang-tidy/clang-format
 RUN sh ./clang_config.sh $LLVM_VERSION
-
+RUN sh ./kokkos_config.sh $KOKKOS_VERSION 
 
 
 RUN apt-get install -y clang-$LLVM_VERSION

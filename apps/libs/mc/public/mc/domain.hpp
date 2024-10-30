@@ -2,13 +2,19 @@
 #define __MC_REACTORDOMAIN_HPP__
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Macros.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 #include <cassert>
 #include <cma_read/neighbors.hpp>
 #include <cmt_common/macro_constructor_assignment.hpp>
+#include <common/common.hpp>
 #include <common/common_types.hpp>
+#include <cstddef>
+#include <cstdint>
 #include <mc/container_state.hpp>
 #include <span>
+
+WARN_EXPERIMENTAL
 
 namespace MC
 {
@@ -48,8 +54,8 @@ namespace MC
     ReactorDomain(ReactorDomain &&other) noexcept;
 
     /**
-    * @brief Main constructor
-    */
+     * @brief Main constructor
+     */
     ReactorDomain(std::span<double> volumes,
                   const CmaRead::Neighbors::Neighbors_const_view_t &_neighbors);
     /**
@@ -143,7 +149,7 @@ namespace MC
     /**
      * @brief Returns the number of particle per compartment
      */
-    [[nodiscard]] std::vector<size_t> getRepartition() const;
+    [[nodiscard]] std::vector<uint64_t> getRepartition() const;
 
     /**
     @brief Return a unique domain from data obtained with MPI gather
@@ -205,12 +211,12 @@ namespace MC
   inline auto &ReactorDomain::operator[](size_t i_c)
   {
     // Kokkos view is not bound checked when use release
-    assert(i_c < size);
+    KOKKOS_ASSERT(i_c < size);
     return this->shared_containers(i_c);
   }
   inline auto &ReactorDomain::operator[](size_t i_c) const
   {
-    assert(i_c < size);
+    KOKKOS_ASSERT(i_c < size);
     return this->shared_containers(i_c);
   }
 

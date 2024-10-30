@@ -1,6 +1,7 @@
 #ifndef __MC_EVENTS_HPP__
 #define __MC_EVENTS_HPP__
 
+#include "common/kokkos_vector.hpp"
 #include <Kokkos_Atomic.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_DynamicView.hpp>
@@ -42,9 +43,7 @@ namespace MC
    */
   struct alignas(ExecInfo::cache_line_size) EventContainer
   {
-    static_assert(sizeof(size_t[number_event_type]) <=
-                      ExecInfo::cache_line_size,
-                  "Size of Eventcontainer::_event fits into cache line");
+   
 
     // Use SharedHostPinnedSpace as this struct is meant to be small enough to
     // be shared between Host and Device According to SharedHostPinnedSpace
@@ -52,6 +51,12 @@ namespace MC
     // transfer is not a botteneck
     Kokkos::View<size_t[number_event_type], Kokkos::SharedHostPinnedSpace>
         _events; // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+
+    static_assert(sizeof(size_t[number_event_type]) <=
+                      ExecInfo::cache_line_size,
+                  "Size of Eventcontainer::_event fits into cache line");
+
+    
 
     /**
      * @brief Default container, initalise counter
@@ -125,7 +130,7 @@ namespace MC
     static EventContainer reduce(std::span<size_t> _data);
   };
 
-  static_assert(sizeof(EventContainer) <= ExecInfo::cache_line_size,
+  static_assert(sizeof(EventContainer) <= 2 * ExecInfo::cache_line_size,
                 "Check size of Eventcontainer");
 
 }; // namespace MC

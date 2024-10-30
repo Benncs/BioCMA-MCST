@@ -3,14 +3,15 @@
 
 #include <cstddef>
 #include <iostream>
+#include <cstdint> 
 
 struct ExecInfo
 {
-  size_t n_rank;
-  size_t current_rank;
-  size_t thread_per_process;
+  uint32_t n_rank;
+  uint32_t current_rank;
+  uint32_t thread_per_process;
   bool verbose;
-  size_t run_id;
+  uint64_t run_id;
 #if defined(__cpp_lib_hardware_interference_size)
   // default cacheline size from runtime
   static constexpr size_t cache_line_size =

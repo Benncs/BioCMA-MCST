@@ -1,49 +1,44 @@
-#include "models/utils.hpp"
 #include <Kokkos_Atomic.hpp>
+#include <Kokkos_Macros.hpp>
 #include <Kokkos_Printf.hpp>
 #include <common/common.hpp>
 #include <mc/particles/data_holder.hpp>
 #include <mc/particles/particle_model.hpp>
 #include <models/model_monod.hpp>
+#include <models/utils.hpp>
 
 namespace
 {
+  constexpr double y_s_x = 2.;
   constexpr double Ks = 0.01;
-  constexpr double critcal_division_length = 11e-6;
-  constexpr double maximal_length = 18e-6;
-  constexpr double critcal_division_length_half = critcal_division_length * 0.5;
-  constexpr double minimal_length = 4.e-6;
+  constexpr double l_1 = 1.7e-6;
+  constexpr double l_0 = 0.9e-6;
+  constexpr double minimal_length = 0.5e-6;
   constexpr double mu_max = 0.77 / 3600.;
-  constexpr double tau_division_proba = 1e-7;
   constexpr double ln2 = 0.69314718056;
   constexpr double tau_metabolism = (1. / mu_max);
-
-  KOKKOS_INLINE_FUNCTION double division_gamma(double lenght)
-  {
-    if (lenght < critcal_division_length)
-    {
-      return 0.;
-    }
-    return lenght / critcal_division_length;
-  }
-
 } // namespace
+static constexpr double factor =  1000 * 3.14 * (0.8e-6) * (0.8e-6) / 4.;
+#define MASS() (factor * l)
 
 namespace Models
 {
 
-  KOKKOS_FUNCTION void Monod::init(MC::ParticleDataHolder &p, MC::KPRNG _rng)
+  KOKKOS_FUNCTION void Monod::init(MC::ParticleDataHolder &p, MC::KPRNG _rng) noexcept
   {
-    this->age = 0;
     auto generator = _rng.random_pool.get_state();
-    // this->l = generator.drand(minimal_length, maximal_length);
-    this->l = Kokkos::max(generator.normal(critcal_division_length_half,
-                                           critcal_division_length_half / 5.),
-                          minimal_length);
-    this->mu = Kokkos::max(generator.normal(mu_max, mu_max / 5.), 0.);
+
+    this->l = l_0 / 2.;
+    // Kokkos::max(minimal_length,
+    //             Kokkos::max(generator.normal(l_0 / 2., l_0 / 2. / 5.), 0.));
+
+    this->mu = Kokkos::max(generator.normal(mu_max/2. , mu_max / 4), 0.);
     _rng.random_pool.free_state(generator);
-    _init_only_cell_lenghtening =
-        (critcal_division_length - critcal_division_length_half) / ln2;
+    static_assert(l_1 > l_0, "Monod: Bad Model Parameter ");
+    constexpr double ___init_only_cell_lenghtening = 4e-7 / ln2;
+    _init_only_cell_lenghtening =l_0/2. / ln2;
+
+    // p.weight = p.weight/mass();
     this->contrib = 0.;
   }
 
@@ -51,33 +46,21 @@ namespace Models
   Monod::update(double d_t,
                 MC::ParticleDataHolder &p,
                 const LocalConcentrationView &concentration,
-                MC::KPRNG _rng)
+                MC::KPRNG _rng) noexcept
   {
-    double s = concentration(0);
-    if (almost_equal(s, 0.))
-    {
-      s = 0.;
-    }
-
-    age += d_t;
-
-    const double mu_p = mu * s / (Ks + s);
-
-    l += d_t * (std::min(mu, mu_p) * _init_only_cell_lenghtening);
-
+    const double s = Kokkos::max(0., concentration(0));
+    const double mu_p = mu_max * s / (Ks + s);
+    const double mu_eff = Kokkos::min(mu, mu_p);
+    contrib = mu_eff *y_s_x*MASS() ;
+    l += d_t * (mu_eff * _init_only_cell_lenghtening);
     mu += d_t * (1.0 / tau_metabolism) * (mu_p - mu);
 
-    contrib = mu * s / (Ks + s);
-
-    if (Models::check_probability_division(d_t, division_gamma(l), _rng))
-    {
-      p.status = MC::CellStatus::CYTOKINESIS;
-    }
+    // Models::update_division_status(
+    //     p.status, d_t, GammaDivision::threshold_linear(l, l_0, l_1), _rng);
   }
 
-  KOKKOS_FUNCTION Monod Monod::division(MC::ParticleDataHolder &p)
+  KOKKOS_FUNCTION Monod Monod::division(MC::ParticleDataHolder &p,MC::KPRNG) noexcept
   {
-    age = 0;
     const double original_lenght = l;
 
     l = original_lenght / 2.;
@@ -86,17 +69,32 @@ namespace Models
   }
 
   KOKKOS_FUNCTION void Monod::contribution(MC::ParticleDataHolder &p,
-                                           ContributionView contribution)
+                                           ContributionView contribution) noexcept
   {
     // contribution(0, p.current_container) -= contrib * p.weight;
+    auto access_contribs = contribution.access();
 
-    Kokkos::atomic_add_fetch(&contribution(0, p.current_container),
-                             -contrib * p.weight);
+    // Kokkos::atomic_add(&contribution(0, p.current_container),
+    //                          -contrib * p.weight);
+
+    access_contribs(0, p.current_container) += (-contrib * p.weight);
+
+    // Kokkos::atomic_add_fetch(&contribution(0, p.current_container),
+    //                          -contrib * p.weight);
+
+    //                          Kokkos::atomic_add(&contribution(0,
+    //                          p.current_container), -contrib * p.weight);
   }
 
-  model_properties_detail_t Monod::get_properties()
+  model_properties_detail_t Monod::get_properties() noexcept
   {
-    return {{"mu", mu}, {"lenght", l}, {"age", age}};
+    return {{"mu", mu}, {"lenght", l}, {"mass", mass()}};
+  }
+
+  KOKKOS_FUNCTION double Monod::mass() const noexcept
+  {
+
+    return MASS();
   }
 
   static_assert(ParticleModel<Monod>, "Check Monod Model");

@@ -4,22 +4,12 @@
 #include <chrono>
 #include <common/common.hpp>
 #include <iomanip>
-
-
-
-namespace FlagCompileTIme
-{
-#ifdef NO_MPI
-  constexpr bool use_mpi = false;
-#else
-  constexpr bool use_mpi = true;
-#endif
-} // namespace FlagCompileTIme
+#include <core/simulation_parameters.hpp>
 
 void set_n_thread_current_rank(int rank,
                                int size,
                                ExecInfo &info,
-                               const UserControlParameters &params);
+                               const Core::UserControlParameters &params) noexcept;
 
 /**
  * @brief Appends the current date and time to the given stream.
@@ -29,7 +19,8 @@ void set_n_thread_current_rank(int rank,
  `std::stringstream`).
  * @param stream The output stream to which the date and time will be appended.
  */
-template <typename Stream> void append_date_time(Stream &stream)
+template <typename Stream>
+void append_date_time(Stream &stream) noexcept
 {
   auto now =
       std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -43,7 +34,7 @@ template <typename Stream> void append_date_time(Stream &stream)
  * @return A `std::string` containing the original string with the appended date
  * and time.
  */
-std::string sappend_date_time(std::string_view string);
+std::string sappend_date_time(std::string_view string) noexcept;
 
 /**
  * @brief Initializes the runtime environment based on command-line arguments
@@ -67,10 +58,10 @@ std::string sappend_date_time(std::string_view string);
  * environment, including execution context and other relevant metadata.
  */
 ExecInfo
-runtime_init(int argc, char **argv, const SimulationParameters &params);
+runtime_init(int argc, char **argv, Core::SimulationParameters &params) noexcept;
 
 /**
  * @brief Print run metadata to log file before running */
-void register_run(const ExecInfo &exec, SimulationParameters &params);
+void register_run(const ExecInfo &exec, Core::SimulationParameters &params) noexcept;
 
 #endif //__RUNTIME_INIT_HPP__

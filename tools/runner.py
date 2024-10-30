@@ -15,13 +15,14 @@ __current_file_path = os.path.abspath(__file__)
 __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
 DEFAULT_TYPE = "debug"
-MPI_COMMAND = "mpiexec --allow-run-as-root -np 2 "
+_MPI_ROOT_FLAG ="--allow-run-as-root"
+MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 6 --bind-to core"
 OMP_NUM_THREADS = "1"
-
+COMPILER_NAME="gcc"
 
 def get_executable(type: str, mpi: bool = True):
     appname = "biocma_mcst_cli_app" if mpi else "biocma_mcst_cli_app_shared"
-    return f"{ROOT}/builddir/{type}_gcc/apps/cli/{appname}"
+    return f"{ROOT}/builddir/{type}_{COMPILER_NAME}/apps/cli/{appname}"
 
 
 def mk_parser():
@@ -38,6 +39,15 @@ def mk_parser():
         required=False,
         help="Optional release",
     )
+
+    parser.add_argument(
+        "-p",
+        dest="post_process",
+        action="store_true",
+        required=False,
+        help="Do post process after",
+    )
+
 
     # Optional number argument
     parser.add_argument(
@@ -67,8 +77,7 @@ def main():
     if cli_args.release_flag:
         r_type = "release"
 
-    run_cli = format_cli(["_", cli_args.casename])
-
+    run_cli,res_file = format_cli(["_", cli_args.casename])
     mpi_c = ""
     if cli_args.use_mpi:
         mpi_c = MPI_COMMAND + " "
@@ -78,9 +87,14 @@ def main():
         + get_executable(r_type, cli_args.use_mpi)
         + " "
         + run_cli
-        + f" -nt {cli_args.n_threads}"
+        + f" -nt {cli_args.n_threads} " #+ "-force 1"
     )
-    exec(command, cli_args.n_threads)
+    # if(cli_args.use_mpi):
+    #     input("confirm force?")
+    #     command+= " -force 1"
+    exec(command, cli_args.n_threads,do_kokkos_measure=False)
+
+  
 
 
 if __name__ == "__main__":

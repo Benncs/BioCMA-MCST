@@ -16,16 +16,17 @@ import numpy as np
 import sys
 # from wakepy import keep
 # from ..exec import exec
-
+import datetime 
 BENCH_OMP_THREADS = [1, 6,12]  # List of thread numbers when running scaling
 EXECUTABLE_PATH = "./builddir/release_gcc/apps/cli"  # Path to executable to run
-EXECUTABLE_NAME = "biocma_mcst_cli_app_shared"  # Name of executable to run
+EXECUTABLE_NAME = "biocma_mcst_cli_app"  # Name of executable to run
 BENCH_SCRIPT_PATH = (
     "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
 )
-FILENAME = "./devutils/benchs/bench_records_test_0d.csv"  # Record filename
-OUTPUT_PDF = "./devutils/benchs/results_bench_test_0d.pdf"  # Output path
-MODEL_NAME = "default"
+date = datetime.datetime.today().strftime('%Y_%m_%d')
+FILENAME = f"./devutils/benchs/bench_records_3_{date}.csv"  # Record filename
+OUTPUT_PDF = f"./devutils/benchs/results_bench_3_{date}.pdf"  # Output path
+MODEL_NAME = "model_monod"
 FINAL_TIME = 1  # Reference simulation time
 DELTA_TIME = 1e-3  # Reference delta time fixed
 # CMA_DATA_PATH = "./cma_data/bench/"
@@ -41,6 +42,7 @@ def format_cli(number_particle, final_time):
 
     return [
         f"{EXECUTABLE_PATH}/{EXECUTABLE_NAME}",
+        
         "-mn",
         MODEL_NAME,
         "-np",
@@ -53,7 +55,7 @@ def format_cli(number_particle, final_time):
         "-f",
         CMA_DATA_PATH,
         "-er",
-        "bench",
+        "bench","-force","1","-mpi","1"
     ]
 
 
@@ -62,19 +64,20 @@ def execute(n_thread, script_path, command):
     env_var["OMP_NUM_THREADS"] = str(n_thread)
     env_var["OMP_PLACES"] = "threads"
     env_var["OMP_PROC_BIND"] = "spread"
-    # commands = [
-    #     "mpiexec",
-    #     "--allow-run-as-root",
-    #     "-n",
-    #     "6",
-    #     BENCH_SCRIPT_PATH,
-    #     *command,
-    # ]
-
+    # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
     commands = [
+        "mpiexec",
+        "--allow-run-as-root",
+        "-n",
+        "3",
         BENCH_SCRIPT_PATH,
         *command,
     ]
+
+    # commands = [
+    #     BENCH_SCRIPT_PATH,
+    #     *command,
+    # ]
 
     result = subprocess.run(
         commands,
@@ -159,13 +162,15 @@ def plot_scaling(threads, particles, iterations, records):
 
     # Plot strong scaling efficiency (speedup) vs. number of threads for each particle and iteration combination
     for particle in unique_particles:
+        
         for iteration in unique_iterations:
             f = plt.figure()
             plt.title(
                 f"Speedup=f(num_thread) for n_particle={particle}, iteration={iteration}"
             )
             mask = (particles == particle) & (iterations == iteration)
-            if np.count_nonzero(mask) > 3:
+            condition = True #np.count_nonzero(mask) >= 3
+            if condition:
                 # Extract the relevant data
                 selected_threads = threads[mask]
                 selected_times = records[mask]
@@ -234,10 +239,8 @@ def plot_csv():
     particles = np.array([float(row["particles"]) for row in data])
     iterations = np.array([float(row["iteration"]) for row in data])
     records = np.array([float(row["Record"]) for row in data])
-    total_figs = []
 
-    pre_mask = particles >= 10000
-
+    pre_mask = particles >= 150000
     with PdfPages(OUTPUT_PDF) as pdf:
         add_to_pdf(
             pdf,
@@ -248,8 +251,9 @@ def plot_csv():
                 records[pre_mask],
             ),
         )
-        #   add_to_pdf(pdf,plot_particle_vs_time(threads,particles,iterations,records))
         add_to_pdf(pdf, plot_scaling(threads, particles, iterations, records))
+        #   add_to_pdf(pdf,plot_particle_vs_time(threads,particles,iterations,records))
+        
 
 
 def do_scale(particles=1000000):

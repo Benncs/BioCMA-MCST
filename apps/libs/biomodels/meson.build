@@ -8,7 +8,7 @@ public_model = include_directories('public')
 
 public_include_dir = [public_model]
 
-dep = [mc_dependency, blas, common_dependecy, eigen_dep,kokkos]
+dep = [mc_dependency, common_dependecy,kokkos]
 
 model_lib = static_library(
    f'@project_name@_bmodels',
@@ -16,15 +16,16 @@ model_lib = static_library(
    include_directories: [public_include_dir, 'includes'],
    dependencies: dep,
    link_args: [flto_flag],
-   pic:true
+   # pic:true
 )
 
 biomodel_dependency = declare_dependency(
    include_directories: [public_include_dir],
    link_with: model_lib,
    dependencies: dep,
-
 )
+
+
 
 
 

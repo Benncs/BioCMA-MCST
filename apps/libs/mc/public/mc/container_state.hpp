@@ -2,7 +2,6 @@
 #define __MC_CONTAINER_STATE_HPP__
 
 #include <common/execinfo.hpp>
-#include <cstddef>
 #include <cstdint>
 #include <Kokkos_Core.hpp>
 #include <mc/particles/particle_model.hpp>
@@ -19,17 +18,18 @@ namespace MC
    * concentrations. It is aligned to the cache line size specified by
    * `ExecInfo::cache_line_size`.
    */
-  struct alignas(ExecInfo::cache_line_size) ContainerState
+  struct ContainerState
   {
     
     double volume_liq{}; ///< Volume of liquid in the container.
     double volume_gas{}; ///< Volume of gas in the container.
-    size_t n_cells{}; ///< Number of cells in the container. @warning Be careful
-                    ///< when decrementing this value.
     uint64_t id{};    ///< Unique identifier for the container.
-    // std::span<double const> concentrations; ///< Span of concentrations
-                                            ///< associated with the container.
+
     LocalConcentrationView concentrations;
+
+    alignas(ExecInfo::cache_line_size) int64_t n_cells{}; ///< Number of cells in the container. @warning Be careful
+                    ///< when decrementing this value.
+
     /**
      * @brief Serializes the `ContainerState` data members.
      *
@@ -45,6 +45,9 @@ namespace MC
       ar(volume_liq, volume_gas, n_cells, id);
     }
   };
+
+  static_assert(sizeof(ContainerState)<=2*ExecInfo::cache_line_size,"Container State size" );
+
 } // namespace MC
 
 #endif //__MC_CONTAINER_STATE_HPP__

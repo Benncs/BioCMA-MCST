@@ -96,10 +96,10 @@ namespace MC
     return *this;
   }
 
-  std::vector<size_t> ReactorDomain::getRepartition() const
+  std::vector<uint64_t> ReactorDomain::getRepartition() const
   {
     // Repartition is used for postprocessing outside kernel so we can use STL
-    std::vector<size_t> dist(shared_containers.extent(0));
+    std::vector<uint64_t> dist(shared_containers.extent(0));
 
     // shared_containers is located in a sharespace so deep copy is not
     // necessary but in case of migrating shared_container to computeSpace,
@@ -109,7 +109,7 @@ namespace MC
 
     for (size_t i = 0LU; i < dist.size(); ++i)
     {
-      dist[i] = static_cast<size_t>(host_view(i).n_cells);
+      dist[i] = static_cast<uint64_t>(host_view(i).n_cells);
     }
     return dist;
   }

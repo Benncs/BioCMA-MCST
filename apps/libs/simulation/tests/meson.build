@@ -1,4 +1,3 @@
-
 # test_transport = executable(
 #   'test_probabilites',
 #   'test_transport.cpp',
@@ -18,8 +17,15 @@ test_flow_map = executable(
 #   include_directories: [private_simulation_includes],
 # )
 
+test_probes = executable(
+  'test_probes',
+  'test_probes.cpp',
+  dependencies: [simulation_lib_dependency],
+  include_directories: [private_simulation_includes],
+)
 
-
+test('test_probes', test_probes)
 test('test_flowmap', test_flow_map)
+
 # test('test test_probabilites', test_transport)
 # test('test transition matrix', test_transition_matrix)

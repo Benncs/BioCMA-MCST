@@ -3,6 +3,7 @@
 
 #include <common/common.hpp>
 #include <memory>
+#include <core/simulation_parameters.hpp>
 
 // Forward declaration
 namespace Simulation
@@ -28,7 +29,7 @@ namespace Simulation
  */
 std::unique_ptr<Simulation::SimulationUnit>
 init_simulation(const ExecInfo &info,
-                SimulationParameters &params,
+                Core::SimulationParameters &params,
                 std::unique_ptr<Simulation::FlowMapTransitioner> &transitioner);
 
 #endif //__PROCESS_INIT_HPP__

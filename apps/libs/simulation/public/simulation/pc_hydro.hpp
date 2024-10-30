@@ -41,7 +41,7 @@ namespace Simulation
   public:
     // FlowMatrixType flows;
     FlowMatrixType transition_matrix;
-    Eigen::MatrixXd cumulative_probability;
+    Eigen::Matrix<double, -1, -1, Eigen::RowMajor> cumulative_probability;
 
     [[nodiscard]] CmaRead::L2DView<const double> get_view_cum_prob() const;
 

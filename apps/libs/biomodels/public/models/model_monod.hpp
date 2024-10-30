@@ -7,32 +7,31 @@
 #include <mc/particles/particle_model.hpp>
 namespace Models
 {
+
   class Monod
   {
-    double age;
     double mu;
     double l;
     double contrib;
-    private:
+
+  private:
     double _init_only_cell_lenghtening;
+
   public:
-    
-
-
-    KOKKOS_FUNCTION void init(MC::ParticleDataHolder &p,
-                              MC::KPRNG _rng);
+    KOKKOS_FUNCTION void init(MC::ParticleDataHolder &p, MC::KPRNG _rng)noexcept;
 
     KOKKOS_FUNCTION void update(double d_t,
                                 MC::ParticleDataHolder &p,
                                 const LocalConcentrationView &concentration,
-                                MC::KPRNG _rng);
+                                MC::KPRNG _rng)noexcept;
 
-    KOKKOS_FUNCTION Monod division(MC::ParticleDataHolder &p);
+    KOKKOS_FUNCTION Monod division(MC::ParticleDataHolder &p,MC::KPRNG)noexcept;
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
-                                      ContributionView contri);
+                                      ContributionView contri)noexcept;
+    KOKKOS_FUNCTION [[nodiscard]] double mass() const noexcept;
 
-    model_properties_detail_t get_properties();
+    model_properties_detail_t get_properties() noexcept;
   };
 } // namespace Models
 

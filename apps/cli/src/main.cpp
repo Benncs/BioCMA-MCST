@@ -1,33 +1,25 @@
 #include <cli_parser.hpp>
-#include <cma_read/flow_iterator.hpp>
-#include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <common/execinfo.hpp>
-#include <common/simulation_parameters.hpp>
-#include <host_specific.hpp>
-#include <mpi_w/wrap_mpi.hpp>
-#include <post_process.hpp>
+#include <core/case_data.hpp>
+#include <core/simulation_parameters.hpp>
+#include <filesystem>
+#include <iostream>
+#include <memory>
 #include <rt_init.hpp>
 #include <siminit.hpp>
-#include <simulation/simulation.hpp>
-#include <sync.hpp>
-#include <worker_specific.hpp>
+#include <stream_io.hpp>
+
+#ifndef NO_MPI
+#  include <mpi_w/wrap_mpi.hpp>
+#endif
 
 #ifdef USE_PYTHON_MODULE
 #  include <pymodule/import_py.hpp>
-#endif
-
-#include <iostream>
-#include <memory>
-#include <stream_io.hpp>
-
-#ifdef USE_PYTHON_MODULE
 #  define INTERPRETER_INIT auto _interpreter_handle = init_python_interpreter();
 #else
 #  define INTERPRETER_INIT
 #endif
-
-#include <case_data.hpp>
 
 /**
  * @brief Prepares the case data based on execution information and simulation
@@ -45,37 +37,48 @@
  * settings.
  * @return A `CaseData` object containing the prepared data for the simulation.
  */
-static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params);
-
-/**
- * @brief Start simulation
- */
-static void exec(CaseData &&case_data);
+static Core::CaseData prepare(const ExecInfo &exec_info, Core::SimulationParameters params);
 
 /**
  * @brief Wrapper to handle Excception raised in try/catch block
  */
-template <typename ExceptionType>
-static int handle_catch(ExceptionType const &e);
+template <typename ExceptionType> static int handle_catch(ExceptionType const &e) noexcept;
+
+/**
+ * @brief Check if result path exist or not and ask for overriding if yes
+ * @return true if override results_path
+ */
+static bool override_result_path(const Core::SimulationParameters &params, const ExecInfo &exec);
 
 int main(int argc, char **argv)
 {
-
+  // First manually retrieve argument from command line
   auto params_opt = parse_cli(argc, argv);
   if (!params_opt.has_value())
   {
+    // If needed value are not given or invalid argument early return
     showHelp(std::cout);
     return -1;
   }
 
-  const auto params = params_opt.value();
+  auto params = params_opt.value(); // Deref value is safe  TODO: with c++23 support use monadic
+
+  /*Init environnement (MPI+Kokkos)
+    Note that environnement should be the first action in the code to avoid conflict*/
   const ExecInfo exec_info = runtime_init(argc, argv, params);
+
+  // Ask overring results file
+  if (!override_result_path(params, exec_info))
+  {
+    return -1;
+  }
+
+  /*Main loop*/
   try
   {
-
     INTERPRETER_INIT
 
-    REDIRECT_BLOCK({
+    REDIRECT_SCOPE({
       auto case_data = prepare(exec_info, params);
       exec(std::move(case_data));
     })
@@ -93,29 +96,14 @@ int main(int argc, char **argv)
   return 0;
 }
 
-static CaseData prepare(const ExecInfo &exec_info, SimulationParameters params)
+static Core::CaseData prepare(const ExecInfo &exec_info, Core::SimulationParameters params)
 {
-
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
   auto simulation = init_simulation(exec_info, params, transitioner);
   return {std::move(simulation), params, std::move(transitioner), exec_info};
 }
 
-static void exec(CaseData &&case_data)
-{
-  const auto f_run = (case_data.exec_info.current_rank == 0) ? &host_process
-                                                             : &workers_process;
-
-  auto *const sim = case_data.simulation.release();
-
-  f_run(case_data.exec_info,
-        std::move(*sim),
-        case_data.params,
-        std::move(case_data.transitioner));
-}
-
-template <typename ExceptionType>
-static int handle_catch(ExceptionType const &e)
+template <typename ExceptionType> static int handle_catch(ExceptionType const &e) noexcept
 {
 #ifdef DEBUG
   std::cerr << e.what() << '\n';
@@ -125,3 +113,24 @@ static int handle_catch(ExceptionType const &e)
   return -1;
 #endif
 }
+
+bool override_result_path(const Core::SimulationParameters &params, const ExecInfo &exec)
+{
+  bool flag = true;
+  if (exec.current_rank == 0)
+  {
+    if (std::filesystem::exists(params.results_file_name) && !params.user_params.force_override)
+    {
+      std::cout << "Override results ? (y/n)" << std::endl;
+      std::string res;
+      std::cin >> res;
+      flag = res == "y";
+    }
+  }
+#ifndef NO_MPI
+  MPI_W::barrier();
+  MPI_W::broadcast(flag, 0);
+#endif
+  return flag;
+}
+

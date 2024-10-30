@@ -1,23 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cases>
-<control name="n14">
+   <control name="n14">
       <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
-      <final_time>3600</final_time>
-      <numper_particle>1000</numper_particle>
+      <final_time>10</final_time>
+      <numper_particle>100000</numper_particle>
       <delta_time>0</delta_time>
-      <results_file_name>monod_14_long_4</results_file_name>
-      <number_exported_result>10</number_exported_result>
-      <model_name>model_monod</model_name>
-   </control>
-   
-   <control name="0d">
-      <cma_case_path>./cma_data/0d/</cma_case_path>
-      <final_time>10000</final_time>
-      <numper_particle>10</numper_particle>
-      <delta_time>0.1</delta_time>
-      <results_file_name>model_uptake</results_file_name>
-      <number_exported_result>20</number_exported_result>
-      <model_name>model_uptake</model_name> 
+      <results_file_name>debug_compress</results_file_name>
+      <number_exported_result>500</number_exported_result>
+      <model_name>model_uptake</model_name>
+      <initialiser_path>./cma_data/n14_init.h5</initialiser_path>
    </control>
 
-   </cases>
+   <control name="0d">
+      <cma_case_path>./cma_data/0d/</cma_case_path>
+      <final_time>250000</final_time>
+      <numper_particle>10000</numper_particle>
+      <delta_time>0.5</delta_time>
+      <results_file_name>uptake_a22</results_file_name>
+      <number_exported_result>200</number_exported_result>
+      <model_name>model_uptake</model_name>
+      <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
+   </control>
+
+   <control name="0d_4s">
+      <cma_case_path>./cma_data/0d_gas/</cma_case_path>
+      <final_time>180000</final_time>
+      <numper_particle>10000</numper_particle>
+      <delta_time>0.5</delta_time>
+      <results_file_name>uptake_a</results_file_name>
+      <number_exported_result>200</number_exported_result>
+      <model_name>model_uptake_acetate</model_name>
+      <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
+   </control>
+
+   <control name="test">
+      <cma_case_path>./cma_data/0d/</cma_case_path>
+      <final_time>1</final_time>
+      <!-- <final_time>500</final_time> -->
+      <!-- 10000000 -->
+      <numper_particle>10000000</numper_particle> 
+      <delta_time>0.02</delta_time>
+      <results_file_name>debug</results_file_name>
+      <number_exported_result>10</number_exported_result>
+      <model_name>model_monod</model_name>
+      <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
+   </control>
+
+   <control name="test14">
+      <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path>
+      <final_time>7000</final_time>
+      <numper_particle>1000000</numper_particle> 
+      <delta_time>0.005</delta_time>
+      <results_file_name>rtd_rushton</results_file_name>
+      <number_exported_result>250</number_exported_result>
+      <model_name>default</model_name>
+      <initialiser_path>./cma_data/n14_init.h5</initialiser_path>
+   </control>
+
+   <control name="test_pfr">
+      <cma_case_path >/mnt/c/Users/casale/Documents/code/python/JumbioApp/jumbio/out/1d/</cma_case_path>
+      <final_time>20</final_time>
+      <numper_particle>600000</numper_particle>
+      <delta_time>0</delta_time>
+      <results_file_name>rtd_pfr</results_file_name>
+      <number_exported_result>500</number_exported_result>
+      <model_name>default</model_name>
+      <initialiser_path>./cma_data/n50_init.h5</initialiser_path>
+   </control>
+
+   <control name="test_pfr500">
+      <cma_case_path >/mnt/c/Users/casale/Documents/code/python/JumbioApp/jumbio/out/1d/</cma_case_path>
+      <final_time>20</final_time>
+      <numper_particle>6000</numper_particle>
+      <delta_time>0</delta_time>
+      <results_file_name>rtd_pfr_500</results_file_name>
+      <number_exported_result>600</number_exported_result>
+      <model_name>default</model_name>
+      <initialiser_path>./cma_data/n14_init.h5</initialiser_path>
+   </control>
+
+   <control name="sanofi">
+      <cma_case_path >/home/benjamin/Documents/thesis/cfd-cma/sanofi/</cma_case_path>
+      <final_time>50000</final_time>
+      <numper_particle>100000</numper_particle>
+      <delta_time>0.01</delta_time>
+      <results_file_name>sanofi_rtd_noreaction</results_file_name>
+      <number_exported_result>500</number_exported_result>
+      <model_name>default</model_name>
+      <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>
+   </control>
+
+   <control name="debug">
+	   <cma_case_path>./cma_data/0d/</cma_case_path>
+      <final_time>95</final_time>
+      <numper_particle>100000</numper_particle>
+      <delta_time>0.1</delta_time>
+      <results_file_name>debug_t</results_file_name>
+      <number_exported_result>100</number_exported_result>
+      <model_name>model_monod</model_name>
+      <initialiser_path></initialiser_path>
+   </control>
+
+   <control name="bench">
+	   <cma_case_path>./cma_data/0d/</cma_case_path>
+      <!-- <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path> -->
+      <final_time>50000</final_time>
+      <numper_particle>5000</numper_particle>
+      <delta_time>0.5</delta_time>
+      <results_file_name>bench</results_file_name>
+      <number_exported_result>10</number_exported_result>
+      <model_name>model_uptake_acetate</model_name>
+      <initialiser_path></initialiser_path>
+   </control>
+
+   <control name="merge">
+	   <cma_case_path>/mnt/c/Users/casale/Documents/code/jumbio/jumbio_case/out/merged/</cma_case_path>
+      <final_time>9</final_time>
+      <numper_particle>10000</numper_particle>
+      <delta_time>0.001</delta_time>
+      <results_file_name>test_merge</results_file_name>
+      <number_exported_result>100</number_exported_result>
+      <model_name>model_monod</model_name>
+      <initialiser_path></initialiser_path>
+   </control>
+
+</cases>

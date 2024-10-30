@@ -5,16 +5,14 @@ mc_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ').std
 
 public_mc = include_directories('public')
 
-models_list_def = include_directories('../biomodels/public')
+public_include_dir = [public_mc, public_common,models_list_def,auto_generate_include]
 
-public_include_dir = [public_mc, public_common,models_list_def,'../']
-
-mc_lib = library(
+mc_lib = static_library(
    f'@project_name@_mc',
    mc_sources,
-   include_directories: [public_include_dir, 'includes','../'],
+   include_directories: [public_include_dir, 'includes'],
    dependencies: [cma_dep,kokkos],
-   pic: true,
+   # pic: true,
    install: true,
    install_rpath: global_install_dir,
    link_args: [flto_flag]

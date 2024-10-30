@@ -9,7 +9,7 @@ setup = ['-Dcpp_std=gnu++20','-Dinstall_post_processing=true']
 
 [project]
 name = 'biomc_post_processing'
-version = '0.0.1'
+version = '0.2.0'
 description = 'Utils for post-processing Monte-Carlo simulation data'
 readme = 'README.md'
 requires-python = '>=3.10'
@@ -27,7 +27,9 @@ dependencies = [
   'numpy==1.26.4',
   'vtk==9.3.0',
   'matplotlib==3.8.4',
-  'cmtool>=1.0.0'
+  'cmtool>=1.0.0',
+  'h5py>=3.11.0',
+  'SciencePlots>=2.1.1'
 ]
 
 keywords = [

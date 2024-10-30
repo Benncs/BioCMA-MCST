@@ -35,3 +35,6 @@ __old
 
 ./Documentation/html
 ./Documentation/latex
+
+
+tmp*

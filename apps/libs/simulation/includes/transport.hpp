@@ -2,7 +2,6 @@
 #define __TRANSPORT_HPP__
 
 #include <cma_read/light_2d_view.hpp>
-#include <common/thread_safe_container.hpp>
 #include <mc/domain.hpp>
 #include <Kokkos_Core.hpp>
 #include <cma_read/flowmap.hpp>

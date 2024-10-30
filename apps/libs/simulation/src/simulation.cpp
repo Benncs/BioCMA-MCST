@@ -1,5 +1,8 @@
+#include "simulation/feed_descriptor.hpp"
+#include "simulation/scalar_initializer.hpp"
 #include "simulation/simulation_exception.hpp"
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Printf.hpp>
 #include <cma_read/light_2d_view.hpp>
 #include <common/kokkos_vector.hpp>
 #include <cstddef>
@@ -12,9 +15,10 @@
 #include <mc/prng/prng.hpp>
 #include <mc/unit.hpp>
 #include <memory>
+#include <optional>
 #include <scalar_simulation.hpp>
+#include <simulation/alias.hpp>
 #include <simulation/simulation.hpp>
-#include <stdexcept>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
 #include <transport.hpp>
 
@@ -30,19 +34,18 @@ namespace Simulation
 {
 
   SimulationUnit::SimulationUnit(SimulationUnit &&other) noexcept
-      : mc_unit(std::move(other.mc_unit)),
-        is_two_phase_flow(other.is_two_phase_flow),
-        flow_liquid(other.flow_liquid), flow_gas(other.flow_gas)
+      : mc_unit(std::move(other.mc_unit)), flow_liquid(other.flow_liquid),
+        flow_gas(other.flow_gas), is_two_phase_flow(other.is_two_phase_flow)
   {
   }
 
-  SimulationUnit::SimulationUnit(
-                                 std::unique_ptr<MC::MonteCarloUnit> &&_unit,
-                                 ScalarInitializer scalar_init)
-      : mc_unit(std::move(_unit)), is_two_phase_flow(scalar_init.gas_flow),
+  SimulationUnit::SimulationUnit(std::unique_ptr<MC::MonteCarloUnit> &&_unit,
+                                 const ScalarInitializer &scalar_init,std::optional<Feed::SimulationFeed> _feed)
+      : mc_unit(std::move(_unit)), flow_liquid(nullptr),
 
-        flow_liquid(nullptr), flow_gas(nullptr)
+        flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow)
   {
+
     this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(
         makeScalarSimulation(mc_unit->domain.getNumberCompartments(),
                              scalar_init.n_species,
@@ -57,14 +60,25 @@ namespace Simulation
                       scalar_init.volumesgas)) // No contribs for gas
             : nullptr;
 
-    post_init_concentration(scalar_init.liquid_f_init, scalar_init.gaz_f_init);
+    post_init_concentration(scalar_init);
     post_init_compartments();
-    const std::size_t n_exit_flow = 1;
+
+
+    if(_feed.has_value())
+    {
+        this->feed = std::move(*_feed);
+    }
+    else
+    {
+        this->feed = Feed::SimulationFeed{std::nullopt, std::nullopt};
+    }
+ 
+    const size_t n_flows = 1;
     index_leaving_flow =
-        Kokkos::View<size_t *, ComputeSpace>("index_leaving_flow", n_exit_flow);
+        Kokkos::View<size_t *, ComputeSpace>("index_leaving_flow", n_flows);
 
     leaving_flow =
-        Kokkos::View<double *, ComputeSpace>("leaving_flow", n_exit_flow);
+        Kokkos::View<double *, ComputeSpace>("leaving_flow", n_flows);
   }
 
   void SimulationUnit::setVolumes(std::span<const double> volumesgas,
@@ -88,8 +102,7 @@ namespace Simulation
     this->mc_unit->domain.setVolumes(vg, vl);
   }
 
-  SimulationUnit::NeighborsViewCompute
-  SimulationUnit::get_kernel_neighbors() const
+  NeighborsViewCompute SimulationUnit::get_kernel_neighbors() const
   {
     const auto view_neighbors = this->mc_unit->domain.getNeighbors();
 
@@ -98,66 +111,115 @@ namespace Simulation
                                       view_neighbors.getNCol(),
                                       1);
 
-    const auto host_view = Kokkos::View<const size_t **, Kokkos::LayoutStride>(
+    
+    // const Kokkos::LayoutLeft layout(view_neighbors.getNRow(),
+    //                                   view_neighbors.getNCol());
+
+    const auto host_view = NeighborsView<HostSpace>(
         view_neighbors.data().data(), layout);
 
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_view);
   }
 
-  void SimulationUnit::post_init_concentration(init_scalar_f_t liquid,
-                                               init_scalar_f_t gas)
+  void SimulationUnit::post_init_concentration_file(
+      const ScalarInitializer &scalar_init)
   {
-    CmaRead::L2DView<double> cliq = this->liquid_scalar->getConcentrationView();
-    CmaRead::L2DView<double> *cgas = nullptr;
+    if (!scalar_init.liquid_buffer.has_value())
+    {
+      throw SimulationException(ErrorCodes::BadInitialiser);
+    }
+    if (!this->liquid_scalar->deep_copy_concentration(
+            *scalar_init.liquid_buffer))
+    {
+      throw SimulationException(ErrorCodes::MismatchSize);
+    }
     if (is_two_phase_flow)
     {
-      *cgas = this->gas_scalar->getConcentrationView();
+      if (!scalar_init.gas_buffer.has_value())
+      {
+        throw SimulationException(ErrorCodes::BadInitialiser);
+      }
+      if (!this->gas_scalar->deep_copy_concentration(*scalar_init.gas_buffer))
+      {
+        throw SimulationException(ErrorCodes::MismatchSize);
+      }
+    }
+  }
+
+  void SimulationUnit::post_init_concentration_functor(
+      const ScalarInitializer &scalar_init)
+  {
+    CmaRead::L2DView<double> cliq = this->liquid_scalar->getConcentrationView();
+    CmaRead::L2DView<double> c;
+    if (is_two_phase_flow)
+    {
+      assert(this->gas_scalar != nullptr);
+      c = this->gas_scalar->getConcentrationView();
+      assert(c.size() != 0);
     }
 
     for (size_t i = 0; i < cliq.getNCol(); ++i)
     {
-      liquid(i, cliq);
+      scalar_init.liquid_f_init.value()(i, cliq);
       if (is_two_phase_flow)
       {
-        gas(i, *cgas);
+        scalar_init.gas_f_init.value()(i, c);
       }
     }
+  }
 
-    if ((this->liquid_scalar->concentration.array() < 0).any())
+  void
+  SimulationUnit::post_init_concentration(const ScalarInitializer &scalar_init)
+  {
+
+    if (scalar_init.type == ScalarInitialiserType::Uniform ||
+        scalar_init.type == ScalarInitialiserType::Local)
+
+    {
+      post_init_concentration_functor(scalar_init);
+    }
+    else
+    {
+      post_init_concentration_file(scalar_init);
+    }
+
+    if ((this->liquid_scalar->getConcentrationArray() >= 0.).all())
+    {
+      this->liquid_scalar->set_mass();
+    }
+    else
     {
       throw SimulationException(ErrorCodes::BadConcentrationInitLiq);
     }
 
     if (is_two_phase_flow)
     {
-      if ((this->gas_scalar->concentration.array() < 0).any())
+      if ((this->gas_scalar->getConcentrationArray() >= 0.).all())
+      {
+        this->gas_scalar->set_mass();
+      }
+      else
       {
         throw SimulationException(ErrorCodes::BadConcentrationInitGas);
       }
-    }
-
-    this->liquid_scalar->total_mass =
-        this->liquid_scalar->concentration * this->liquid_scalar->getVolume();
-    if (is_two_phase_flow)
-    {
-      this->gas_scalar->total_mass =
-          this->gas_scalar->concentration * this->gas_scalar->getVolume();
     }
   }
 
   void SimulationUnit::post_init_compartments()
   {
-    auto _compute_concentration = liquid_scalar->compute_concentration;
+    auto _compute_concentration = liquid_scalar->get_device_concentration();
     auto _containers = mc_unit->domain.data();
 
     Kokkos::parallel_for(
         "post_init_compartments",
         mc_unit->domain.getNumberCompartments(),
         KOKKOS_LAMBDA(const int i) {
+          auto s = Kokkos::subview(_compute_concentration, i, Kokkos::ALL);
           _containers(i).concentrations =
-              Kokkos::subview(_compute_concentration, i, Kokkos::ALL);
+              Kokkos::subview(_compute_concentration, Kokkos::ALL, i);
         });
     Kokkos::fence();
+
     // int i = 0;
     // size_t n_species = this->liquid_scalar->n_species();
     // std::for_each(mc_unit->domain.begin(),
@@ -171,7 +233,7 @@ namespace Simulation
     //               });
   }
 
-  SimulationUnit::DiagonalViewCompute SimulationUnit::get_kernel_diagonal()
+  DiagonalViewCompute SimulationUnit::get_kernel_diagonal()
   {
     DiagonalViewCompute diag(this->flow_liquid->diag_transition.data(),
                              this->flow_liquid->diag_transition.size());
@@ -179,32 +241,29 @@ namespace Simulation
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(), diag);
   }
 
-  SimulationUnit::CumulativeProbabilityViewCompute
-  SimulationUnit::get_kernel_cumulative_proba()
+  CumulativeProbabilityViewCompute SimulationUnit::get_kernel_cumulative_proba()
   {
     auto &matrix = flow_liquid->cumulative_probability;
 
-    CumulativeProbabilityViewCompute rd(
+    CumulativeProbabilityView<HostSpace> rd(
         matrix.data(), matrix.rows(), matrix.cols());
 
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(), rd);
   }
 
-  SimulationUnit::ContributionViewCompute
-  SimulationUnit::get_kernel_contribution()
+  kernelContribution SimulationUnit::get_kernel_contribution()
   {
-    return Kokkos::create_mirror_view_and_copy(ComputeSpace(),
-                                               liquid_scalar->k_contribs);
+    return this->liquid_scalar->get_kernel_contribution();
   }
 
-  void SimulationUnit::set_kernel_contribs_to_host(ContributionViewCompute c)
+  void SimulationUnit::set_kernel_contribs_to_host(kernelContribution c)
   {
-    Kokkos::deep_copy(liquid_scalar->k_contribs, c);
+    this->liquid_scalar->set_kernel_contribs_to_host(std::move(c));
   }
 
   void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation *ptr) const
   {
-    delete ptr;
+    delete ptr; // NOLINT
   }
 
 } // namespace Simulation

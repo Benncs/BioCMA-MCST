@@ -10,7 +10,9 @@ namespace Simulation
   enum class ErrorCodes
   {
     BadConcentrationInitLiq,
-    BadConcentrationInitGas
+    BadConcentrationInitGas,
+    BadInitialiser,
+     MismatchSize,
   };
 
   class SimulationException : public std::exception

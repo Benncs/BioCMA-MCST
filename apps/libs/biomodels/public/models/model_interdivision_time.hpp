@@ -23,10 +23,12 @@ namespace Models
                                 const LocalConcentrationView &concentration,
                                 MC::KPRNG _rng);
 
-    KOKKOS_FUNCTION InterdivisionTime division(MC::ParticleDataHolder &p);
+    KOKKOS_FUNCTION InterdivisionTime division(MC::ParticleDataHolder &p,MC::KPRNG);
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
                                       ContributionView contri);
+
+                                      KOKKOS_INLINE_FUNCTION double mass()const{return 1.;}
 
     model_properties_detail_t get_properties();
   };

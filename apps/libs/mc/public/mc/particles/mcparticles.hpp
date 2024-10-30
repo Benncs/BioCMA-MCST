@@ -1,6 +1,8 @@
 #ifndef __MC_PARTICLESHPP__
 #define __MC_PARTICLESHPP__
 
+#include "common/execinfo.hpp"
+#include "common/has_serialize.hpp"
 #include <mc/particles/data_holder.hpp>
 #include <mc/particles/particle_model.hpp>
 #include <mc/prng/prng.hpp>
@@ -9,7 +11,8 @@
 namespace MC
 {
 
-  template <ParticleModel _Model> class alignas(ExecInfo::cache_line_size) BaseParticle
+  template <ParticleModel _Model>
+  class alignas(ExecInfo::cache_line_size) BaseParticle
   {
   public:
     using Model = _Model;
@@ -34,20 +37,33 @@ namespace MC
            const LocalConcentrationView &concentration,
            KPRNG globalrng)
     {
+      properties.hydraulic_time += d_t;
+      properties.interdivision_time += d_t;
       data.update(d_t, properties, concentration, globalrng);
     }
 
-    KOKKOS_INLINE_FUNCTION BaseParticle<_Model> division()
+    KOKKOS_INLINE_FUNCTION BaseParticle<_Model> division(KPRNG globalrng)
     {
-      properties.status = CellStatus::IDLE;
-      auto p = data.division(properties);
-    
-      return BaseParticle(properties, std::move(p));
+      this->properties.status = CellStatus::IDLE;
+      this->properties.interdivision_time = 0;
+      auto p = data.division(properties,globalrng);
+      auto prop_child = this->properties;
+      prop_child.hydraulic_time = 0;
+      return BaseParticle(std::move(prop_child), std::move(p));
     }
 
     KOKKOS_INLINE_FUNCTION void contribution(ContributionView contrib)
     {
       data.contribution(properties, contrib);
+    }
+
+    template <class Archive> void serde(Archive &ar)
+    {
+      properties.serde(ar);
+      if constexpr (has_serialize<_Model, Archive>())
+      {
+        data.serde(ar);
+      }
     }
 
     ParticleDataHolder properties;

@@ -62,7 +62,7 @@ namespace Models
   }
 
   KOKKOS_FUNCTION InterdivisionTime
-  InterdivisionTime::division(MC::ParticleDataHolder &p)
+  InterdivisionTime::division(MC::ParticleDataHolder &p,MC::KPRNG)
   {
     age = 0;
     const double original_lenght = l;
@@ -79,8 +79,12 @@ namespace Models
   {
     // contribution(0, p.current_container) -= contrib * p.weight;
 
-    Kokkos::atomic_add_fetch(&contribution(0, p.current_container),
-                             -contrib * p.weight);
+    auto access_contribs = contribution.access();
+
+    // Kokkos::atomic_add(&contribution(0, p.current_container),
+    //                          -contrib * p.weight);
+
+    access_contribs(0,p.current_container)+= (-contrib*p.weight);
   }
 
   model_properties_detail_t InterdivisionTime::get_properties()

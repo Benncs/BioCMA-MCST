@@ -11,7 +11,8 @@ namespace MPI_W
   {
     STOP,
     RUN,
-    NOP
+    NOP,
+    DUMP
   };
 
   
