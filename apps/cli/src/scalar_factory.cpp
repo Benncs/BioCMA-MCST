@@ -37,10 +37,10 @@ namespace ScalarFactory
     ret.volumesgas = gas_volume;
     ret.volumesliq = liquid_volume;
 
-    if (ret.gas_flow != f_init_gas_flow)
-    {
-      throw std::invalid_argument("Gas provided but no functor, or inverse");
-    }
+    // if (ret.gas_flow != f_init_gas_flow)
+    // {
+    //   throw std::invalid_argument("Gas provided but no functor, or inverse");
+    // }
 
     if (!sanitize(ret))
     {
