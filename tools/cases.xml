@@ -13,19 +13,19 @@
 
    <control name="0d">
       <cma_case_path>./cma_data/0d/</cma_case_path>
-      <final_time>180000</final_time>
-      <numper_particle>1000</numper_particle>
+      <final_time>250000</final_time>
+      <numper_particle>10000</numper_particle>
       <delta_time>0.5</delta_time>
-      <results_file_name>uptake_a</results_file_name>
+      <results_file_name>uptake_a22</results_file_name>
       <number_exported_result>200</number_exported_result>
-      <model_name>model_uptake_acetate</model_name>
+      <model_name>model_uptake</model_name>
       <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
    </control>
 
    <control name="0d_4s">
-      <cma_case_path>./cma_data/0d/</cma_case_path>
-      <final_time>10000</final_time>
-      <numper_particle>1000</numper_particle>
+      <cma_case_path>./cma_data/0d_gas/</cma_case_path>
+      <final_time>180000</final_time>
+      <numper_particle>10000</numper_particle>
       <delta_time>0.5</delta_time>
       <results_file_name>uptake_a</results_file_name>
       <number_exported_result>200</number_exported_result>

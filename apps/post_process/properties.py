@@ -43,6 +43,30 @@ def _mk_pdf(data, name, dest: str):
     except:
         pass
 
+def merge_hist(a, b):
+
+    edgesa = a[1]
+    edgesb = b[1]
+    da = edgesa[1]-edgesa[0]
+    db = edgesb[1]-edgesb[0]
+    dint = np.min([da, db])
+
+    min = np.min(np.hstack([edgesa, edgesb]))
+    max = np.max(np.hstack([edgesa, edgesb]))
+    edgesc = np.arange(min, max, dint)
+
+    def interpolate_hist(edgesint, edges, hist):
+        cumhist = np.hstack([0, np.cumsum(hist)])
+        cumhistint = np.interp(edgesint, edges, cumhist)
+        histint = np.diff(cumhistint)
+        return histint
+
+    histaint = interpolate_hist(edgesc, edgesa, a[0])
+    histbint = interpolate_hist(edgesc, edgesb, b[0])
+
+    c = histaint + histbint
+    return c, edgesc
+
 
 def _mk_histogram(
     partials: List[PartialResult], key: str, index: int, name: str, dest: str
@@ -50,25 +74,54 @@ def _mk_histogram(
     num_bins = 100
 
     # data = partials[0].extra_bioparam[index][key]
-    
-    # counts, bin_edges = np.histogram(data, bins=num_bins, density=False)
-
-    counts = np.zeros((num_bins,))
-    bin_edges = np.zeros((num_bins + 1,))
-
-    # data = []
-    # for i in partials[0:-1]:
+    # counts = np.zeros((num_bins))
+    # bin_edges = np.zeros((num_bins+1))
+    # # counts, bin_edges = np.histogram(data, bins=num_bins, density=False)
+    # for i in partials[0:1]:
     #     init = i.extra_bioparam[index]
-    #     data.append(init[key])
-    # fused_data = np.concatenate(data)
+    #     c, e = np.histogram(init[key], num_bins)
+    #     counts += c
+    #     bin_edges += e
 
-    for i in partials[0:1]:
+    all_data = []
+    for i in partials:
         init = i.extra_bioparam[index]
-        c, e = np.histogram(init[key], num_bins)
-        counts += c
-        bin_edges += e
-    # counts, bin_edges = np.histogram(fused_data, num_bins)
-    counts_normalized = counts / counts.max()
+        all_data.extend(init[key])  
+
+    all_data = np.array(all_data)
+
+    data_min = all_data.min()
+    data_max = all_data.max()
+
+    merged_counts = np.zeros(num_bins)
+
+    for i in partials:
+        init = i.extra_bioparam[index]
+        c, _ = np.histogram(init[key], bins=num_bins, range=(data_min, data_max))
+        merged_counts += c  # Add counts to the merged counts
+
+    counts_normalized = merged_counts / merged_counts.max() if merged_counts.max() > 0 else merged_counts
+
+    bin_edges = np.linspace(data_min, data_max, num_bins + 1)
+
+    # counts = None
+    # bin_edges = None #np.zeros((num_bins + 1,))
+    # cc = []
+    # ee = []
+    # for i in partials[0:-1]:  
+    #     init = i.extra_bioparam[index]  
+    #     data = init[key] 
+
+    #     # Compute histogram
+    #     c, e = np.histogram(data, bins=num_bins)
+    #     cc.append(c)
+    #     ee.append(e)
+        
+    # counts, bin_edges = merge_hist(cc, ee)
+    # # Normalize counts for plotting
+    # counts_normalized = counts / counts.max() if counts.max() > 0 else counts
+   
+    # Plotting the histogram
     mkdir(f"{dest}/histogram")
     plt.figure()
     plt.bar(
@@ -117,7 +170,11 @@ def property_distribution(
         #     "varred: ",
         #     variance_sample,
         # )
-        _mk_histogram(partials, key, index, f"{prefix}_{key}", dest)
+        _key = key
+        if(key=="lenght"):
+            _key = "length"
+
+        _mk_histogram(partials, key, index, f"{prefix}_{_key}", dest)
 
         # TODO Need to merge into value
         # if vtk_cma_mesh_path is not None:
@@ -190,6 +247,8 @@ def plot_average(results: Results, dest: str):
             )
             plt.xlabel(f"Time [{get_time()}]")
             plt.ylabel("Mean Value")
+            if(key=="lenght"):
+                key = "length"
             plt.title(f"Mean Value of {key} Over Time")
             plt.legend()
             plt.savefig(f"{dest}/{key}{FIGURE_TYPE}")
@@ -212,8 +271,8 @@ def process_particle_data(results: Results, dest_root: str = "./results/"):
             "init",
             dest,
         )
-    except:
-        pass
+    except Exception as e:
+        print(e)
     
     try:
         property_distribution(
@@ -222,8 +281,8 @@ def process_particle_data(results: Results, dest_root: str = "./results/"):
             "final",
             dest,
         )
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 
 

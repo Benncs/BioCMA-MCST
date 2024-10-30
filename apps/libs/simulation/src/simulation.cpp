@@ -251,12 +251,12 @@ namespace Simulation
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(), rd);
   }
 
-  cv SimulationUnit::get_kernel_contribution()
+  kernelContribution SimulationUnit::get_kernel_contribution()
   {
     return this->liquid_scalar->get_kernel_contribution();
   }
 
-  void SimulationUnit::set_kernel_contribs_to_host(cv c)
+  void SimulationUnit::set_kernel_contribs_to_host(kernelContribution c)
   {
     this->liquid_scalar->set_kernel_contribs_to_host(std::move(c));
   }

@@ -64,12 +64,12 @@ namespace Simulation
     [[nodiscard]] size_t n_row() const;
     [[nodiscard]] size_t n_col() const;
 
-    [[nodiscard]] cv get_kernel_contribution() const;
+    [[nodiscard]] kernelContribution get_kernel_contribution() const;
 
     // Setters
 
     void set_mass();
-    void set_kernel_contribs_to_host(cv c) const;
+    void set_kernel_contribs_to_host(kernelContribution c) const;
 
     void set_feed(uint64_t i_r, uint64_t i_c, double val);
     void set_sink(uint64_t i_compartment, double val);
@@ -126,7 +126,7 @@ namespace Simulation
     return n_r;
   }
 
-  inline cv
+  inline kernelContribution
   ScalarSimulation::get_kernel_contribution() const
   {
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(),
@@ -134,7 +134,7 @@ namespace Simulation
   }
 
   inline void
-  ScalarSimulation::set_kernel_contribs_to_host(cv c) const
+  ScalarSimulation::set_kernel_contribs_to_host(kernelContribution c) const
   {
     Kokkos::deep_copy(host_view_biomass_contribution, c);
   }

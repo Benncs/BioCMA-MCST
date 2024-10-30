@@ -5,20 +5,20 @@ from biomc import make_initial_concentration
 
 
 def init_0d_1s():
-    liquid_0d = np.zeros((1,1))
+    liquid_0d = np.zeros((1,2))
     liquid_0d[0,0]=0.
     make_initial_concentration("./cma_data/0d_init.h5",liquid_0d)
 
 def init_0d_4s():
     liquid_0d = np.zeros((1,4))
     gas_0d = np.zeros((1,4))
-    liquid_0d[0,0]=5.
+    liquid_0d[0,0]=0.01
     liquid_0d[0,1]=8e-3
 
     gas_0d[0,0]=0.
     gas_0d[0,1]=300e-3
 
-    make_initial_concentration("./cma_data/0d_4s_init.h5",liquid_0d)
+    make_initial_concentration("./cma_data/0d_4s_init.h5",liquid_0d,gas_0d)
 
 def init_n14_1s():
     liquid_n14 = np.zeros((500,1))

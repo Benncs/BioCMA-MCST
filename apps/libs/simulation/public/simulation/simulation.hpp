@@ -22,7 +22,6 @@
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation_kernel.hpp>
 
-
 #include <Kokkos_ScatterView.hpp>
 
 // TODO Clean
@@ -61,8 +60,7 @@ namespace Simulation
     [[nodiscard]] std::optional<std::span<double>> getCgasData() const;
     [[nodiscard]] std::span<double> getContributionData() const;
 
-    void setVolumes(std::span<const double> volumesgas,
-                    std::span<const double> volumesliq) const;
+    void setVolumes(std::span<const double> volumesgas, std::span<const double> volumesliq) const;
 
     void step(double d_t, const CmaRead::ReactorState &state) const;
 
@@ -82,25 +80,14 @@ namespace Simulation
 
     void reset();
 
-    [[nodiscard]] bool two_phase_flow() const
-    {
-      return is_two_phase_flow;
-    }
+    [[nodiscard]] bool two_phase_flow() const;
 
-    // FIXME
-    Probes probes;
-
-    void set_probes(Probes &&_probes)
-    {
-      probes = std::move(_probes);
-    }
-
-    [[nodiscard]] auto counter() const
-    {
-      return _internal_counter;
-    }
+    Probes &get_probes();
+    void set_probes(Probes &&_probes);
+    [[nodiscard]] auto counter() const;
 
   private:
+    Probes probes;
     Simulation::Feed::SimulationFeed feed;
 
     bool const_number_simulation = true;
@@ -115,9 +102,9 @@ namespace Simulation
 
     CumulativeProbabilityViewCompute get_kernel_cumulative_proba();
 
-    cv get_kernel_contribution();
+    kernelContribution get_kernel_contribution();
 
-    void set_kernel_contribs_to_host(cv c);
+    void set_kernel_contribs_to_host(kernelContribution c);
 
     [[nodiscard]] NeighborsViewCompute get_kernel_neighbors() const;
 
@@ -127,14 +114,8 @@ namespace Simulation
     void post_init_concentration_functor(const ScalarInitializer &scalar_init);
     void post_init_concentration_file(const ScalarInitializer &scalar_init);
 
-    template <class ListType,
-              class ResultViewType,
-              class CompartmentListType,
-              typename ContribType>
-    inline void post_kernel_process(ListType &list,
-                                    ResultViewType &rview,
-                                    CompartmentListType &local_compartments,
-                                    ContribType &contribs);
+    template <class ListType, class ResultViewType, class CompartmentListType, typename ContribType>
+    inline void post_kernel_process(ListType &list, ResultViewType &rview, CompartmentListType &local_compartments, ContribType &contribs);
 
     struct pimpl_deleter
     {
@@ -151,6 +132,26 @@ namespace Simulation
     gas_scalar.reset();
     flow_liquid = nullptr;
     flow_gas = nullptr;
+  }
+
+  inline Probes &SimulationUnit::get_probes()
+  {
+    return probes;
+  }
+
+  inline void SimulationUnit::set_probes(Probes &&_probes)
+  {
+    probes = std::move(_probes);
+  }
+
+  inline auto SimulationUnit::counter() const
+  {
+    return _internal_counter;
+  }
+
+  inline bool SimulationUnit::two_phase_flow() const
+  {
+    return is_two_phase_flow;
   }
 
   inline void SimulationUnit::setLiquidFlow(PreCalculatedHydroState *_flows_l)
@@ -188,8 +189,7 @@ namespace Simulation
     ContributionView contribs_scatter(contribs);
 
     const_number_simulation = (n_particle > trigger_const_particle_number);
-    Kokkos::View<size_t, Kokkos::SharedSpace> internal_counter_dead(
-        "internal_counter");
+    Kokkos::View<size_t, Kokkos::SharedSpace> internal_counter_dead("internal_counter");
 
     Kokkos::deep_copy(internal_counter_dead, _internal_counter);
     auto k = KernelInline::Kernel(d_t,
@@ -206,8 +206,7 @@ namespace Simulation
                                   local_leaving_flow,
                                   local_index_leaving_flow,
                                   probes);
-    Kokkos::parallel_for(
-        "mc_cycle_process", Kokkos::RangePolicy<>(0, n_particle), k);
+    Kokkos::parallel_for("mc_cycle_process", Kokkos::RangePolicy<>(0, n_particle), k);
     Kokkos::fence("fence_mc_cycle_process");
 
     // Kokkos::parallel_for(
@@ -228,32 +227,18 @@ namespace Simulation
     post_kernel_process(list, rview, local_compartments, contribs);
   }
 
-  template <class ListType,
-            class ResultViewType,
-            class CompartmentListType,
-            typename ContribType>
+  template <class ListType, class ResultViewType, class CompartmentListType, typename ContribType>
   inline void
-  SimulationUnit::post_kernel_process(ListType &list,
-                                      ResultViewType &rview,
-                                      CompartmentListType &local_compartments,
-                                      ContribType &contribs)
+  SimulationUnit::post_kernel_process(ListType &list, ResultViewType &rview, CompartmentListType &local_compartments, ContribType &contribs)
   {
     Kokkos::parallel_for(
-        "update_compartment_number",
-        rview().extra_process.size(),
-        KOKKOS_LAMBDA(const int i) {
-          Kokkos::atomic_increment(
-              &local_compartments(rview()
-                                      .extra_process._owned_data(i)
-                                      .properties.current_container)
-                   .n_cells);
+        "update_compartment_number", rview().extra_process.size(), KOKKOS_LAMBDA(const int i) {
+          Kokkos::atomic_increment(&local_compartments(rview().extra_process._owned_data(i).properties.current_container).n_cells);
         });
 
     static constexpr uint64_t minimum_dead_particle_removal = 100;
-    const auto threshold = std::max(
-        minimum_dead_particle_removal,
-        static_cast<uint64_t>(static_cast<double>(list.size()) *
-                              AutoGenerated::dead_particle_ratio_threshold));
+    const auto threshold = std::max(minimum_dead_particle_removal,
+                                    static_cast<uint64_t>(static_cast<double>(list.size()) * AutoGenerated::dead_particle_ratio_threshold));
 
     if (_internal_counter > threshold)
     {
@@ -270,15 +255,11 @@ namespace Simulation
 
     list.insert(rview().extra_process);
     const auto n_new_alloc = rview().waiting_allocation_particle;
-    const double new_weight =
-        list._owned_data(0).properties.weight; // Weight is random, try to
-                                               // find other initialisation
+    const double new_weight = list._owned_data(0).properties.weight; // Weight is random, try to
+                                                                     // find other initialisation
     list._spawn_alloc(n_new_alloc, new_weight);
 
-    Kokkos::parallel_for(
-        "add_new_alloc", n_new_alloc, KOKKOS_LAMBDA(const int) {
-          Kokkos::atomic_increment(&local_compartments(0).n_cells);
-        });
+    Kokkos::parallel_for("add_new_alloc", n_new_alloc, KOKKOS_LAMBDA(const int) { Kokkos::atomic_increment(&local_compartments(0).n_cells); });
     Kokkos::fence("Fence cycle process ");
 
     set_kernel_contribs_to_host(contribs);

@@ -38,6 +38,8 @@ def check_mixing(
     try:
         for i in range(len(pathres)):
             results = import_results(pathres[i])
+            if(results.main.n_compartment==1):
+                return []
             if results is None:
                 break
             (
@@ -47,6 +49,7 @@ def check_mixing(
                 norm_par_var,
                 t,ret_tuple
             ) = process_norm(results)
+
             step =1
             if(len(t)>20):
                 step=20

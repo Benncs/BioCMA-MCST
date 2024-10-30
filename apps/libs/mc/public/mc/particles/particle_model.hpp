@@ -26,7 +26,7 @@ using LocalConcentrationView =
                                             ///< current container that particle
                                             ///< can access
 
-using cv = Kokkos::View<double **, Kokkos::LayoutLeft, ComputeSpace>;
+using kernelContribution = Kokkos::View<double **, Kokkos::LayoutLeft, ComputeSpace>;
 
 using ContributionView = Kokkos::Experimental::
     ScatterView<double **, Kokkos::LayoutLeft>; ///< Contribution inside the

@@ -132,18 +132,23 @@ def calculate_mass(dest:str,results: Results):
 
 
 def get_spatial_average_concentration(results: Results, dest: str):
-    def phase_functor(concentration_record, full_volume, phase_name: str):
+    def phase_functor(concentration_record, full_volume, phase_name: str,species_name:str):
         c_avg = np.array(average_concentration(concentration_record, full_volume))
         plt.figure()
         plt.plot(results.time, c_avg)
-        plt.title("Average glucose concentration over time")
+        plt.title(f"Average {species_name} concentration over time")
         plt.ylabel("C [g/L]")
         plt.xlabel(f"Time [{get_time()}]")
-        plt.savefig(dest + f"/c_avg_{phase_name}_{FIGURE_TYPE}")
+        plt.savefig(dest + f"/c_avg_{species_name}_{phase_name}_{FIGURE_TYPE}")
 
     concentration_record = results.main.concentrations_liquid[:, :, 0]
     full_volume = results.main.volume_liquid
-    phase_functor(concentration_record, full_volume, "liquid")
+    phase_functor(concentration_record, full_volume, "liquid","glucose")
+
+    for  i in range(1,results.main.concentrations_liquid.shape[2]):
+        concentration_record = results.main.concentrations_liquid[:, :, i]
+        full_volume = results.main.volume_liquid
+        phase_functor(concentration_record, full_volume, "liquid",f"{i}")
 
     # if results.main.concentrations_gas is not None:
     #     concentration_record = results.main.concentrations_gas[:, :, 0]
@@ -193,7 +198,7 @@ def main(name_results, root_res="./results/"):
         last_id = results.main.n_export - 1
         last_vtk_path = get_vtk(last_id)
 
-        get_scalar_rtd(dest[i],0.5e-6,results,False) 
+        # get_scalar_rtd(dest[i],0.5e-6,results,False) 
         # get_scalar_rtd(dest[i],0.035,results)
         # get_scalar_rtd(dest[i],0.031653119013143756,results,True)
         # get_scalar_rtd(dest[i],2.6e-5,results,True) 

@@ -37,7 +37,7 @@ namespace PostProcessing
   void save_probes(Simulation::SimulationUnit &simulation,
                    CORE_DE::PartialExporter &pde)
   {
-    auto &probes = simulation.probes;
+    auto &probes = simulation.get_probes();
 
     if (probes.need_export())
     {
