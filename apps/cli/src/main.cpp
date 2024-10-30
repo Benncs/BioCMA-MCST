@@ -10,6 +10,10 @@
 #include <siminit.hpp>
 #include <stream_io.hpp>
 
+#ifndef NO_MPI
+#  include <mpi_w/wrap_mpi.hpp>
+#endif
+
 #ifdef USE_PYTHON_MODULE
 #  include <pymodule/import_py.hpp>
 #  define INTERPRETER_INIT auto _interpreter_handle = init_python_interpreter();
@@ -33,49 +37,51 @@
  * settings.
  * @return A `CaseData` object containing the prepared data for the simulation.
  */
-static Core::CaseData prepare(const ExecInfo &exec_info,
-                              Core::SimulationParameters params);
+static Core::CaseData prepare(const ExecInfo &exec_info, Core::SimulationParameters params);
 
 /**
  * @brief Wrapper to handle Excception raised in try/catch block
  */
-template <typename ExceptionType>
-static int handle_catch(ExceptionType const &e) noexcept;
+template <typename ExceptionType> static int handle_catch(ExceptionType const &e) noexcept;
 
 /**
  * @brief Check if result path exist or not and ask for overriding if yes
  * @return true if override results_path
  */
-static bool override_result_path(const Core::SimulationParameters &params);
+static bool override_result_path(const Core::SimulationParameters &params, const ExecInfo &exec);
 
 int main(int argc, char **argv)
 {
-
+  // First manually retrieve argument from command line
   auto params_opt = parse_cli(argc, argv);
   if (!params_opt.has_value())
   {
+    // If needed value are not given or invalid argument early return
     showHelp(std::cout);
     return -1;
   }
 
-  auto params = params_opt.value();
+  auto params = params_opt.value(); // Deref value is safe  TODO: with c++23 support use monadic
 
-  if (!override_result_path(params))
+  /*Init environnement (MPI+Kokkos)
+    Note that environnement should be the first action in the code to avoid conflict*/
+  const ExecInfo exec_info = runtime_init(argc, argv, params);
+
+  // Ask overring results file
+  if (!override_result_path(params, exec_info))
   {
     return -1;
   }
 
-  const ExecInfo exec_info = runtime_init(argc, argv, params);
-
+  /*Main loop*/
   try
   {
     INTERPRETER_INIT
 
-    REDIRECT_BLOCK(
-        {
-          auto case_data = prepare(exec_info, params);
-          exec(std::move(case_data));
-        })
+    REDIRECT_SCOPE({
+      auto case_data = prepare(exec_info, params);
+      exec(std::move(case_data));
+    })
   }
   catch (std::exception const &e)
   {
@@ -90,17 +96,14 @@ int main(int argc, char **argv)
   return 0;
 }
 
-static Core::CaseData prepare(const ExecInfo &exec_info,
-                              Core::SimulationParameters params)
+static Core::CaseData prepare(const ExecInfo &exec_info, Core::SimulationParameters params)
 {
-
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
   auto simulation = init_simulation(exec_info, params, transitioner);
   return {std::move(simulation), params, std::move(transitioner), exec_info};
 }
 
-template <typename ExceptionType>
-static int handle_catch(ExceptionType const &e) noexcept
+template <typename ExceptionType> static int handle_catch(ExceptionType const &e) noexcept
 {
 #ifdef DEBUG
   std::cerr << e.what() << '\n';
@@ -111,37 +114,23 @@ static int handle_catch(ExceptionType const &e) noexcept
 #endif
 }
 
-bool override_result_path(const Core::SimulationParameters &params)
+bool override_result_path(const Core::SimulationParameters &params, const ExecInfo &exec)
 {
-  if (std::filesystem::exists(params.results_file_name) &&
-      !params.user_params.force_override)
+  bool flag = true;
+  if (exec.current_rank == 0)
   {
-    std::cout << "Override results ? (y/n)" << std::endl;
-    std::string res;
-    std::cin >> res;
-    return res == "y";
+    if (std::filesystem::exists(params.results_file_name) && !params.user_params.force_override)
+    {
+      std::cout << "Override results ? (y/n)" << std::endl;
+      std::string res;
+      std::cin >> res;
+      flag = res == "y";
+    }
   }
-  return true;
+#ifndef NO_MPI
+  MPI_W::barrier();
+  MPI_W::broadcast(flag, 0);
+#endif
+  return flag;
 }
 
-// bool override_result_path(const Core::SimulationParameters &params)
-// {
-//   // Check if the results file exists and the user has not forced an override
-//   bool flag = false;
-//   if (std::filesystem::exists(params.results_file_name) &&
-//       !params.user_params.force_override)
-//   {
-//     std::cout << "Results file already exists: " << params.results_file_name
-//               << "\nDo you want to override it? (y/n): ";
-
-//     std::string response;
-//     std::cin >> response;
-
-//     if (response == "y" || response == "Y" || response == "yes")
-//     {
-//       flag = true;
-//     }
-//   }
-
-//   return flag;
-// }
