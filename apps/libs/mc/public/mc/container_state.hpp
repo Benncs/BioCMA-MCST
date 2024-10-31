@@ -27,9 +27,9 @@ namespace MC
 
     LocalConcentrationView concentrations;
 
-    // alignas(ExecInfo::cache_line_size) int64_t n_cells{}; ///< Number of cells in the container. @warning Be careful
+    alignas(ExecInfo::cache_line_size) int64_t n_cells{}; ///< Number of cells in the container. @warning Be careful
                     ///< when decrementing this value.
-    int64_t n_cells{}; 
+    
     /**
      * @brief Serializes the `ContainerState` data members.
      *

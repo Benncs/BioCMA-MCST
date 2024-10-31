@@ -206,7 +206,7 @@ namespace Core
   }
 
   OptionalPtr<Simulation::SimulationUnit>
-  GlobalInitialiser::init_simulation(std::unique_ptr<MC::MonteCarloUnit> &&_unit,
+  GlobalInitialiser::init_simulation(std::unique_ptr<MC::MonteCarloUnit> _unit,
                                      const Simulation::ScalarInitializer &scalar_init,
                                      std::optional<Simulation::Feed::SimulationFeed> &&_feed)
   {

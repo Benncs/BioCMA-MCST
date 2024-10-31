@@ -2,6 +2,7 @@
 #define __MC_REACTORDOMAIN_HPP__
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_Macros.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 #include <cassert>
@@ -46,12 +47,12 @@ namespace MC
      * @brief Default constructor
      *
      */
-    ReactorDomain() = default;
+    ReactorDomain();
 
     /**
      * @brief Move constructor
      **/
-    ReactorDomain(ReactorDomain &&other) noexcept;
+    ReactorDomain(ReactorDomain &&other) noexcept=default;
 
     /**
      * @brief Main constructor
@@ -172,9 +173,10 @@ namespace MC
       std::vector<ContainerState> data_vector;
       ar(id, size, data_vector);
 
-      auto tmpdata = Kokkos::View<ContainerState *, Kokkos::SharedSpace>(data_vector.data());
+      auto tmpdata = Kokkos::View<ContainerState *, Kokkos::HostSpace>(data_vector.data(),data_vector.size());
 
-      shared_containers = Kokkos::create_mirror_view_and_copy(Kokkos::SharedSpace(), tmpdata);
+      Kokkos::deep_copy(shared_containers,tmpdata);
+   
     }
 
   private:

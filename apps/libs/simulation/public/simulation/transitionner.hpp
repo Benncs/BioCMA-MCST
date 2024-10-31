@@ -66,7 +66,7 @@ namespace Simulation
   private:
     void discontinuous_transition();
     void linear_interpolation_transition();
-
+    
     bool two_phase_flow;
     std::unique_ptr<CmaRead::FlowIterator> iterator = nullptr;
     size_t n_per_flowmap;

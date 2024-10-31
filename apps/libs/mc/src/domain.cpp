@@ -13,19 +13,18 @@
 
 namespace MC
 {
-  ReactorDomain::ReactorDomain(ReactorDomain &&other) noexcept
-  {
-    if (this != &other)
-    {
-      this->size = other.size;
-      this->id = other.id;
-      this->_total_volume = other._total_volume;
-      this->shared_containers = other.shared_containers;
-    }
-  }
+  // ReactorDomain::ReactorDomain(ReactorDomain &&other) noexcept
+  // {
+  //   if (this != &other)
+  //   {
+  //     this->size = other.size;
+  //     this->id = other.id;
+  //     this->_total_volume = other._total_volume;
+  //     this->shared_containers = other.shared_containers;
+  //   }
+  // }
 
-  void ReactorDomain::setVolumes(std::span<double const> volumes_gas,
-                                 std::span<double const> volumes_liq)
+  void ReactorDomain::setVolumes(std::span<double const> volumes_gas, std::span<double const> volumes_liq)
   {
     // Lot of assert to ensure validy of flowmap during MPI broadcast
 
@@ -43,29 +42,28 @@ namespace MC
       this->_total_volume += volumes_liq[i_c];
     }
   }
-  
-  ReactorDomain::ReactorDomain(
-      std::span<double> volumes,
-      const CmaRead::Neighbors::Neighbors_const_view_t &_neighbors)
-      : size(volumes.size()), neighbors(_neighbors)
+
+  ReactorDomain::ReactorDomain():shared_containers(Kokkos::view_alloc("domain_containers"))
+  {
+
+  }
+
+  ReactorDomain::ReactorDomain(std::span<double> volumes, const CmaRead::Neighbors::Neighbors_const_view_t &_neighbors)
+      : size(volumes.size()), shared_containers(Kokkos::view_alloc("domain_containers")),
+        neighbors(_neighbors)
   {
 
     // Volume data is located on the host, creating a first unmanaged view
-    Kokkos::View<double *, Kokkos::HostSpace> tmp_volume_host(volumes.data(),
-                                                              volumes.size());
+    Kokkos::View<double *, Kokkos::HostSpace> tmp_volume_host(volumes.data(), volumes.size());
 
     // Copy to data into new view that can be accessed within a kernel
-    auto volume_compute =
-        Kokkos::create_mirror_view_and_copy(ComputeSpace(), tmp_volume_host);
+    auto volume_compute = Kokkos::create_mirror_view_and_copy(Kokkos::SharedSpace(), tmp_volume_host);
 
-    // Temporary view for initialisation
-    auto tmp_shared_containers =
-        Kokkos::View<ContainerState *, Kokkos::SharedSpace>("domain_containers",
-                                                            volumes.size());
+    Kokkos::resize(shared_containers,volumes.size());
 
     // Temporary view for initialisation
     Kokkos::View<double, ComputeSpace> _tmp_tot("domain_tmp_total_volume", 1);
-
+    auto tmp_shared_containers =shared_containers;
     Kokkos::parallel_for(
         "init_domain", volumes.size(), KOKKOS_LAMBDA(const int i) {
           auto &local_container = tmp_shared_containers(i);
@@ -78,8 +76,6 @@ namespace MC
           _tmp_tot() += local_container.volume_liq;
         });
     Kokkos::fence();
-    // Atomic increment reference to initalise member view
-    this->shared_containers = tmp_shared_containers;
 
     this->_total_volume = _tmp_tot(); // copy computed volume
   }
@@ -105,8 +101,7 @@ namespace MC
     // shared_containers is located in a sharespace so deep copy is not
     // necessary but in case of migrating shared_container to computeSpace,
     // nothing to change here
-    auto host_view = Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(),
-                                                         shared_containers);
+    auto host_view = Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), shared_containers);
 
     for (size_t i = 0LU; i < dist.size(); ++i)
     {
@@ -115,9 +110,7 @@ namespace MC
     return dist;
   }
 
-  ReactorDomain ReactorDomain::reduce(std::span<const size_t> data,
-                                      size_t original_size,
-                                      size_t n_rank)
+  ReactorDomain ReactorDomain::reduce(std::span<const size_t> data, size_t original_size, size_t n_rank)
   {
     // OK because of sharedspace
     ReactorDomain reduced;
@@ -132,8 +125,7 @@ namespace MC
     {
       for (size_t i_c = 0; i_c < original_size; ++i_c)
       {
-        reduced.shared_containers(i_c).n_cells +=
-            data[i_c + i_rank * original_size];
+        reduced.shared_containers(i_c).n_cells += data[i_c + i_rank * original_size];
       }
     }
 

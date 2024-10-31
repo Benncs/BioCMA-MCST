@@ -49,7 +49,6 @@ namespace MC
       ar(init_weight, events,domain,container);
 
       // std::visit([&ar](auto &container) { ar(container); }, container);
-      ar(container);
     }
   };
 

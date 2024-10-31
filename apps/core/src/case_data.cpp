@@ -67,11 +67,9 @@ namespace Core
 
     const auto filename = exporter_filename(case_data.exec_info, case_data.params);
 
-    std::cout << " prima  " << case_data.simulation->mc_unit->domain[0].n_cells << std::endl;
-    std::cout << " prima  " << case_data.simulation->mc_unit->init_weight << std::endl;
+
     CORE_DE::PartialExporter partial_exporter(ExecInfo(), filename);
-    std::cout << " poi  " << case_data.simulation->mc_unit->domain[0].n_cells << std::endl;
-    std::cout << " poi  " << case_data.simulation->mc_unit->init_weight << std::endl;
+
     init_partial_exporter(partial_exporter, case_data);
 
     auto *const sim = case_data.simulation.get();
@@ -98,7 +96,7 @@ namespace Core
     case_data.transitioner = std::move(*transition);
 
     bool ok_init = SerDe::load_simulation(
-        gi, case_data, "/mnt/c/Users/casale/Documents/code/cpp/kokkos_biomc/results/debug_serde/debug_serde_serde_0");
+        gi, case_data, "/home/benjamin/Documents/code/cpp/BioCMA-MCST/results/debug_serde/debug_serde_serde_0");
 
     if (!gi.check_init_terminate() || !ok_init)
     {
@@ -107,7 +105,7 @@ namespace Core
 
     case_data.params = params;
     // TODO: Check integreity between transitionner and read value (transitionner and simulation tpf + n_species)
-    std::cout << " load:   " << case_data.simulation->mc_unit->domain[0].n_cells << std::endl;
+
     return case_data;
   }
 

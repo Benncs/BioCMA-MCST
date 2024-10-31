@@ -85,7 +85,7 @@ namespace Core
      * @return An optional unique pointer to the initialized simulation unit.
      */
     OptionalPtr<Simulation::SimulationUnit>
-    init_simulation(std::unique_ptr<MC::MonteCarloUnit> &&_unit,
+    init_simulation(std::unique_ptr<MC::MonteCarloUnit> _unit,
                     const Simulation::ScalarInitializer &scalar_init,
                     std::optional<Simulation::Feed::SimulationFeed>&& _feed = std::nullopt);
 
