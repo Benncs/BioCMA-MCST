@@ -126,6 +126,8 @@ namespace Core::ScalarFactory
                                                std::span<double> gas_volume,
                                                std::span<double> liquid_volume,
                                                ScalarVariant arg_liq);
+
+  bool sanitize(const Simulation::ScalarInitializer &res);
 } // namespace Core::ScalarFactory
 
 #endif

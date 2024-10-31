@@ -52,7 +52,7 @@ template <typename ExceptionType> static int handle_catch(ExceptionType const &e
  */
 static bool override_result_path(const Core::SimulationParameters &params, const ExecInfo &exec);
 
-constexpr bool serde = false;
+constexpr bool serde = true;
 
 int main(int argc, char **argv)
 {

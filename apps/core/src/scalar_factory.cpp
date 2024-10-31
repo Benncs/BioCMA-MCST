@@ -1,10 +1,11 @@
 #include "highfive/H5DataSet.hpp"
 #include <algorithm>
+#include <core/scalar_factory.hpp>
 #include <filesystem>
 #include <optional>
-#include <core/scalar_factory.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <stdexcept>
+
 
 #include <iostream>
 #include <utility>
@@ -17,7 +18,7 @@
 #  include <highfive/H5PropertyList.hpp>
 #endif
 
-static bool sanitize(const Simulation::ScalarInitializer &res);
+
 
 namespace Core::ScalarFactory
 {
@@ -60,8 +61,7 @@ namespace Core::ScalarFactory
 
     auto wrap_functor = [n_species](auto &&c)
     {
-      return [n_species, local_concentrations = c](
-                 size_t i, CmaRead::L2DView<double> &view)
+      return [n_species, local_concentrations = c](size_t i, CmaRead::L2DView<double> &view)
       {
         for (size_t i_species = 0; i_species < n_species; ++i_species)
         {
@@ -93,9 +93,7 @@ namespace Core::ScalarFactory
 
     const auto wrap_functor = [n_species](auto &&i, auto &&c)
     {
-      return [n_species,
-              concentrations = std::forward<decltype(c)>(c),
-              _indices = std::forward<decltype(i)>(i)](
+      return [n_species, concentrations = std::forward<decltype(c)>(c), _indices = std::forward<decltype(i)>(i)](
                  size_t i, CmaRead::L2DView<double> &view)
       {
         if (std::ranges::find(_indices, i) != _indices.end())
@@ -127,8 +125,7 @@ namespace Core::ScalarFactory
     res.type = Simulation::ScalarInitialiserType::File;
     if (!std::filesystem::is_regular_file(arg.path))
     {
-      throw std::invalid_argument(
-          "Unable to open provided concentration initaliser file");
+      throw std::invalid_argument("Unable to open provided concentration initaliser file");
     }
 
     HighFive::File file(arg.path.data(), HighFive::File::ReadOnly);
@@ -137,10 +134,10 @@ namespace Core::ScalarFactory
 
     HighFive::DataSet gas_dataset;
     bool gas = false;
-    if(file.exist("initial_gas"))
+    if (file.exist("initial_gas"))
     {
       gas_dataset = file.getDataSet("initial_gas");
-      gas=true;
+      gas = true;
     }
 
     auto set_buffer = [&arg, &res](auto &dataset)
@@ -189,17 +186,14 @@ namespace Core::ScalarFactory
     throw std::invalid_argument("Not implemented yet");
   }
 
-} // namespace ScalarFactory
-
-bool sanitize(const Simulation::ScalarInitializer &res)
+  bool sanitize(const Simulation::ScalarInitializer &res)
 {
 
   bool flag = false;
 
   auto test_functor = [](auto &&_res)
   {
-    bool _flag =
-        _res.liquid_f_init.has_value() && !_res.liquid_buffer.has_value();
+    bool _flag = _res.liquid_f_init.has_value() && !_res.liquid_buffer.has_value();
 
     if (_res.gas_flow)
     {
@@ -225,8 +219,7 @@ bool sanitize(const Simulation::ScalarInitializer &res)
   case Simulation::ScalarInitialiserType::File:
   {
 
-    flag = res.liquid_buffer.has_value() &&
-           (!res.gas_f_init.has_value() && !res.liquid_f_init.has_value());
+    flag = res.liquid_buffer.has_value() && (!res.gas_f_init.has_value() && !res.liquid_f_init.has_value());
     if (flag)
     {
       flag = res.liquid_buffer->size() != 0;
@@ -240,3 +233,6 @@ bool sanitize(const Simulation::ScalarInitializer &res)
 
   return flag;
 }
+
+} // namespace Core::ScalarFactory
+

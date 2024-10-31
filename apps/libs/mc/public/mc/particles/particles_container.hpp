@@ -87,7 +87,7 @@ namespace MC
 
     template <class Archive> void serialize(Archive &ar)
     {
-      ar(to_process, host_process,extra);
+      ar(to_process,extra);
     }
 
    

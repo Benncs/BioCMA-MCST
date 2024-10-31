@@ -91,12 +91,12 @@
    </control>
 
    <control name="debug">
-	   <!-- <cma_case_path>./cma_data/0d/</cma_case_path> -->
+	   <cma_case_path>./cma_data/0d/</cma_case_path>
        <!-- <cma_case_path>./cma_data/0d_gas/</cma_case_path> -->
-      <cma_case_path >./cma_data/sanofi/</cma_case_path>
+      <!-- <cma_case_path >./cma_data/sanofi/</cma_case_path> -->
         <!-- <cma_case_path recursive="true">/mnt/c/Users/casale/Documents/cfd/flowmap_14/</cma_case_path> -->
       <final_time>100</final_time>
-      <numper_particle>10000</numper_particle>
+      <numper_particle>15</numper_particle>
       <delta_time>0.1</delta_time>
       <results_file_name>debug_serde</results_file_name>
       <number_exported_result>100</number_exported_result>

@@ -14,7 +14,8 @@
 #  include <cereal/types/optional.hpp>
 #  include <cereal/types/string.hpp> //MC::List use vector internally
 #  include <cereal/types/tuple.hpp>
-#  include <cereal/types/vector.hpp> //MC::List use vector internally
+#  include <cereal/types/variant.hpp> //MC::Unit use vector internally
+#  include <cereal/types/vector.hpp>  //MC::List use vector internally
 #  include <fstream>
 #  include <optional>
 #  include <serde.hpp>
@@ -71,7 +72,8 @@ using iArchive_t = cereal::XMLInputArchive;
 
 namespace SerDe
 {
-
+  static std::vector<double> spl = {20e-3};
+  static std::vector<double> spg = {};
   void save_simulation(const Core::CaseData &case_data)
   {
 
@@ -92,14 +94,13 @@ namespace SerDe
 
       ar(dim, std::vector<double>(cliq.begin(), cliq.end()), cgas_a);
 
-      ar(cereal::defer(case_data.simulation->mc_unit));
-      ar.serializeDeferments();
+      ar(case_data.simulation->mc_unit);
     }
 
     write_to_file(buf, serde_name.str());
   }
 
-  bool load_simulation(Core::CaseData& res,std::string_view ser_filename)
+  bool load_simulation(Core::GlobalInitialiser &gi, Core::CaseData &case_data, std::string_view ser_filename)
   {
 
     std::stringstream buffer;
@@ -107,33 +108,43 @@ namespace SerDe
     iArchive_t ar(buffer);
 
     std::string version;
-    ar(version, res.exec_info);
 
-    std::cout << res.exec_info.run_id << std::endl;
+    ExecInfo serde_exec{};
+    ar(version, serde_exec);
+
+    case_data.exec_info.run_id = serde_exec.run_id;
+    std::cout << "SIMULATION: " << case_data.exec_info.run_id << " LOADED" << std::endl;
 
     Simulation::Dimensions dims;
-    std::vector<double> cliq;
-    std::optional<std::vector<double>> cgas;
+    std::vector<double> read_c_liq;
+    std::optional<std::vector<double>> read_c_gas;
 
-    ar(dims, cliq, cgas);
+    ar(dims, read_c_liq, read_c_gas);
+
+    // const auto *state = case_data.transitioner->getState();
 
     Simulation::ScalarInitializer scalar_init;
     scalar_init.n_species = dims.n_species;
     scalar_init.type = Simulation::ScalarInitialiserType::File;
-    scalar_init.liquid_buffer = cliq;
-    scalar_init.gas_buffer = cgas;
+    scalar_init.liquid_buffer = read_c_liq;
+    scalar_init.gas_buffer = read_c_gas;
+    scalar_init.gas_flow = read_c_gas.has_value();
 
-
-
-    if(cgas)
-    {
-      std::cout<<cgas->size()<<"\r\n";
-    }
+    //FIXME
+    scalar_init.volumesliq = spl;
+    scalar_init.volumesgas = spg;
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
-    res.simulation =std::make_unique<Simulation::SimulationUnit>(std::move(mc_unit),scalar_init);
 
+    auto simulation = gi.init_simulation(std::move(mc_unit), scalar_init, gi.init_feed());
+
+    if (!simulation.has_value())
+    {
+      return false;
+    }
+
+    case_data.simulation = std::move(*simulation);
     return true;
   }
 

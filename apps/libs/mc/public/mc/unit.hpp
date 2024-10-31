@@ -46,9 +46,10 @@ namespace MC
 
     template <class Archive> void serialize(Archive &ar)
     {
-      ar(init_weight, events,domain);
+      ar(init_weight, events,domain,container);
 
-      std::visit([&ar](auto &container) { ar(container); }, container);
+      // std::visit([&ar](auto &container) { ar(container); }, container);
+      ar(container);
     }
   };
 
