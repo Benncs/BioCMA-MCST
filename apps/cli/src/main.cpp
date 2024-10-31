@@ -1,3 +1,4 @@
+#include "core/global_initaliser.hpp"
 #include <cli_parser.hpp>
 #include <common/common.hpp>
 #include <common/execinfo.hpp>
@@ -38,7 +39,7 @@
  * settings.
  * @return A `CaseData` object containing the prepared data for the simulation.
  */
-static std::optional<Core::CaseData> prepare(const ExecInfo &exec_info,  Core::SimulationParameters& param);
+static std::optional<Core::CaseData> prepare(const ExecInfo &exec_info, Core::SimulationParameters &param);
 
 /**
  * @brief Wrapper to handle Excception raised in try/catch block
@@ -51,10 +52,7 @@ template <typename ExceptionType> static int handle_catch(ExceptionType const &e
  */
 static bool override_result_path(const Core::SimulationParameters &params, const ExecInfo &exec);
 
-
-
-
-constexpr bool serde = true;
+constexpr bool serde = false;
 
 int main(int argc, char **argv)
 {
@@ -79,7 +77,6 @@ int main(int argc, char **argv)
     return -1;
   }
 
-
   const auto f_get_case_data = (serde) ? Core::load : prepare;
 
   /*Main loop*/
@@ -89,15 +86,15 @@ int main(int argc, char **argv)
 
     REDIRECT_SCOPE({
       auto case_data = f_get_case_data(exec_info, params);
-      if(case_data)
+      if (case_data)
       {
         exec(std::move(*case_data));
       }
-      else {
-        std::cout<<"ERROR"<<std::endl;
+      else
+      {
+        std::cout << "ERROR" << std::endl;
         return -1;
       }
-      
     })
   }
   catch (std::exception const &e)
@@ -113,11 +110,22 @@ int main(int argc, char **argv)
   return 0;
 }
 
-static std::optional<Core::CaseData> prepare(const ExecInfo &exec_info,  Core::SimulationParameters& params)
+static std::optional<Core::CaseData> prepare(const ExecInfo &exec_info, Core::SimulationParameters &params)
 {
-  std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
-  auto simulation = init_simulation(exec_info, params, transitioner);
-  return std::make_optional<Core::CaseData>(std::move(simulation), params, std::move(transitioner), exec_info);
+
+  Core::GlobalInitialiser gi(exec_info, params);
+  auto t = gi.init_transitionner();
+
+
+  auto __simulation = gi.init_simulation();
+  if ((!t.has_value() && !__simulation.has_value()) || !gi.check_init_terminate())
+  {
+    return std::nullopt;
+  }
+
+  register_run(exec_info, params);
+
+  return std::make_optional<Core::CaseData>(std::move(*__simulation), params, std::move(*t), exec_info);
 }
 
 template <typename ExceptionType> static int handle_catch(ExceptionType const &e) noexcept
@@ -150,4 +158,3 @@ bool override_result_path(const Core::SimulationParameters &params, const ExecIn
 #endif
   return flag;
 }
-

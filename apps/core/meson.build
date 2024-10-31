@@ -59,3 +59,5 @@ core_distributed_dependency = declare_dependency(
     dependencies: dep_core_mpi,
     compile_args: [],
 )
+
+subdir('tests')

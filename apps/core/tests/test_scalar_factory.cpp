@@ -1,9 +1,10 @@
 #include <cassert>
 #include <filesystem>
 #include <iostream>
-#include <scalar_factory.hpp>
+#include <core/scalar_factory.hpp>
 #include <stdexcept>
 #include <string_view>
+#include <vector> 
 
 #define WRAP_EXCEP(__f__)                                                      \
   try                                                                          \
@@ -59,9 +60,9 @@ void test_uniform_liq()
 
   bool f_init_gas_flow = false;
 
-  ScalarFactory::Uniform arg = {concentrations, std::nullopt};
+  Core::ScalarFactory::Uniform arg = {concentrations, std::nullopt};
 
-  auto scalar_init = ScalarFactory::scalar_factory(
+  auto scalar_init = Core::ScalarFactory::scalar_factory(
       f_init_gas_flow, gas_volume, liquid_volume, arg);
 
   assert(scalar_init.n_species == n_species);
@@ -83,9 +84,9 @@ void test_uniform_liq_gas()
   GET_CONCENTRATION
   GET_CONCENTRATION_GAS
   bool f_init_gas_flow = true;
-  ScalarFactory::Uniform arg = {concentrations, concentrations_gas};
+  Core::ScalarFactory::Uniform arg = {concentrations, concentrations_gas};
 
-  auto scalar_init = ScalarFactory::scalar_factory(
+  auto scalar_init = Core::ScalarFactory::scalar_factory(
       f_init_gas_flow, gas_volume, liquid_volume, std::move(arg));
 
   assert(scalar_init.n_species == n_species);
@@ -132,7 +133,7 @@ void test_local_gas_liq()
 
   bool f_init_gas_flow = true;
 
-  ScalarFactory::Local arg = {
+  Core::ScalarFactory::Local arg = {
       concentrations, liq_indices, concentrations_gas, gas_indices};
 
   auto scalar_init =
@@ -157,7 +158,7 @@ void test_local_liq()
 
   bool f_init_gas_flow = false;
 
-  ScalarFactory::Local arg = {concentrations, indices};
+  Core::ScalarFactory::Local arg = {concentrations, indices};
 
   auto scalar_init =
       scalar_factory(f_init_gas_flow, gas_volume, liquid_volume, arg);
@@ -192,8 +193,8 @@ void test_read(std::string_view path)
   GET_VOLUME
   GET_CONCENTRATION
 
-  auto args = ScalarFactory::File(500,  path);
-  ScalarFactory::scalar_factory(false, gas_volume, liquid_volume, args);
+  auto args = Core::ScalarFactory::File(500,  path);
+  Core::ScalarFactory::scalar_factory(false, gas_volume, liquid_volume, args);
 }
 
 void test_wrong_size()
@@ -201,7 +202,7 @@ void test_wrong_size()
   GET_CONCENTRATION
   GET_VOLUME
   gas_volume.emplace_back(1); // So that gas and liq don't have the same size
-  ScalarFactory::Uniform arg = {concentrations};
+  Core::ScalarFactory::Uniform arg = {concentrations};
 
   // Should throw exception
   try

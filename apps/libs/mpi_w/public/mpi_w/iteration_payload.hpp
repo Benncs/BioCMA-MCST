@@ -2,7 +2,6 @@
 #define __ITERATION_PAYLOAD_HPP__
 
 #include <cma_read/flow_iterator.hpp>
-#include <memory>
 #include <mpi.h>
 #include <span>
 #include <vector>
@@ -11,7 +10,7 @@
 namespace MPI_W
 {
 
-  void bcst_iterator(std::unique_ptr<CmaRead::FlowIterator>& iterator,size_t rank);
+  // void bcst_iterator(std::unique_ptr<CmaRead::FlowIterator>& iterator,size_t rank);
 
   class IterationPayload
   {

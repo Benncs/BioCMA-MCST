@@ -1,5 +1,5 @@
-#ifndef __SCALAR_FACTORY__
-#define __SCALAR_FACTORY__
+#ifndef __CORE_SCALAR_FACTORY_HPP__
+#define __CORE_SCALAR_FACTORY_HPP__
 
 #include <optional>
 #include <simulation/scalar_initializer.hpp>
@@ -13,7 +13,7 @@
  * The ScalarFactory namespace contains several structures representing different methods of initializing scalar values
  * (liquid and gas concentrations) for simulations.
  */
-namespace ScalarFactory
+namespace Core::ScalarFactory
 {
   /**
    * @struct Uniform
@@ -122,8 +122,10 @@ namespace ScalarFactory
    * @param arg_liq Scalar variant specifying the source of scalar data for liquid concentration.
    * @return A `ScalarInitializer` configured with the provided data.
    */
-  Simulation::ScalarInitializer
-  scalar_factory(bool f_init_gas_flow, std::span<double> gas_volume, std::span<double> liquid_volume, ScalarVariant arg_liq);
-} // namespace ScalarFactory
+  Simulation::ScalarInitializer scalar_factory(bool f_init_gas_flow,
+                                               std::span<double> gas_volume,
+                                               std::span<double> liquid_volume,
+                                               ScalarVariant arg_liq);
+} // namespace Core::ScalarFactory
 
 #endif

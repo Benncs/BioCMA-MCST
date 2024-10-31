@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <optional>
-#include <scalar_factory.hpp>
+#include <core/scalar_factory.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <stdexcept>
 
@@ -19,7 +19,7 @@
 
 static bool sanitize(const Simulation::ScalarInitializer &res);
 
-namespace ScalarFactory
+namespace Core::ScalarFactory
 {
 
   Simulation::ScalarInitializer scalar_factory(bool f_init_gas_flow,

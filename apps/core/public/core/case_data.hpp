@@ -6,7 +6,7 @@
 #include <memory>
 #include <simulation/simulation.hpp>
 #include <simulation/transitionner.hpp>
-
+#include <optional> 
 
 namespace Core
 {
