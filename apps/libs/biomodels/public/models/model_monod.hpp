@@ -31,6 +31,11 @@ namespace Models
                                       ContributionView contri)noexcept;
     KOKKOS_FUNCTION [[nodiscard]] double mass() const noexcept;
 
+    template <class Archive> void serialize(Archive &ar)
+  {
+    ar(mu,l,contrib,_init_only_cell_lenghtening);
+  }
+
     model_properties_detail_t get_properties() noexcept;
   };
 } // namespace Models

@@ -50,7 +50,7 @@ namespace MC
     }
 
     template <class Archive>
-    void serde(Archive &ar)
+    void serialize(Archive &ar)
     {
       ar(current_container,
          current_domain,

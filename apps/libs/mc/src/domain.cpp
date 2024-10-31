@@ -43,6 +43,7 @@ namespace MC
       this->_total_volume += volumes_liq[i_c];
     }
   }
+  
   ReactorDomain::ReactorDomain(
       std::span<double> volumes,
       const CmaRead::Neighbors::Neighbors_const_view_t &_neighbors)

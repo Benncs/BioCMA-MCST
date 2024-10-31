@@ -6,7 +6,7 @@
 #include <memory>
 #include <simulation/simulation.hpp>
 #include <simulation/transitionner.hpp>
-
+#include <optional> 
 
 namespace Core
 {
@@ -61,6 +61,9 @@ namespace Core
    * @brief Start simulation
    */
   void exec(CaseData &&case_data);
+
+
+  std::optional<Core::CaseData> load(const ExecInfo&exec,  SimulationParameters& params);
 
 } // namespace Core
 

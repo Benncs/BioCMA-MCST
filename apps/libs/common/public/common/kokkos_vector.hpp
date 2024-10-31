@@ -15,6 +15,8 @@
 using ComputeSpace = Kokkos::DefaultExecutionSpace::memory_space;
 using HostSpace = Kokkos::HostSpace::memory_space;
 
+#include <iostream>
+
 /**
  * @brief A basic wrapper around Kokkos View to handle non-fixed size containers
  * with an API compatible with `std::vector`.
@@ -41,7 +43,8 @@ template <typename T, typename Space> class KokkosVector
 public:
   /// The layout used for the underlying Kokkos View (LayoutRight by default)
   using Layout = Kokkos::LayoutRight;
-
+  /// The Kokkos View holding the data elements.
+  Kokkos::View<T *, Layout, Space, Kokkos::MemoryTraits<Kokkos::Restrict>> _owned_data{};
   /**
    * @brief Destructor for KokkosVector.
    */
@@ -60,9 +63,7 @@ public:
    * allocated push vector has size 0
    * @param label A string label for the Kokkos View used internally.
    */
-  explicit KokkosVector(size_t capacity,
-                        bool alloc = true,
-                        std::string label = "");
+  explicit KokkosVector(size_t capacity, bool alloc = true, std::string label = "");
 
   /**
    * @brief Clears the vector, setting the used elements count to zero.
@@ -121,9 +122,7 @@ public:
    */
   KOKKOS_INLINE_FUNCTION T &operator[](size_t i)
   {
-    KOKKOS_ASSERT(
-        i <
-        n_used_elements); // Kokkos view is not bound checked when use release
+    KOKKOS_ASSERT(i < n_used_elements); // Kokkos view is not bound checked when use release
     return _owned_data(i);
   }
 
@@ -165,11 +164,9 @@ public:
    * @param src The source vector.
    * @param dest The destination vector.
    */
-  template <typename MS1, typename MS2>
-  static void migrate(KokkosVector<T, MS1> src, KokkosVector<T, MS2> &dest)
+  template <typename MS1, typename MS2> static void migrate(KokkosVector<T, MS1> src, KokkosVector<T, MS2> &dest)
   {
-    dest._owned_data = Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(),
-                                                           src._owned_data);
+    dest._owned_data = Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), src._owned_data);
     dest.n_used_elements = src.n_used_elements;
     dest.n_allocated_element = src.n_allocated_element;
   }
@@ -227,10 +224,7 @@ public:
    */
   void insert(const KokkosVector<T, Space> &rhs);
 
-  /// The Kokkos View holding the data elements.
-  Kokkos::View<T *, Layout, Space,Kokkos::MemoryTraits<Kokkos::Restrict>> _owned_data{};
-
-   /**
+  /**
    * @brief Gets the underlying data.
    *
    * @return A Kokkos View of the data.
@@ -240,9 +234,31 @@ public:
     return _owned_data;
   }
 
+  template <class Archive> void save(Archive &ar) const
+  {
+    auto host_particle = Kokkos::create_mirror_view_and_copy(HostSpace(), this->_owned_data);
+    std::vector<T> data_vector(host_particle.data(), host_particle.data() + n_used_elements);
+    ar(n_allocated_element, n_used_elements, extra_allocation_factor, data_vector);
+  }
+
+  template <class Archive> void load(Archive &ar)
+  {
+    // TODO GET VIEW LABEL
+    // Deserialize data into local variables and a vector
+    ar(n_allocated_element, n_used_elements, extra_allocation_factor);
+
+    std::vector<T> data_vector;
+    ar(data_vector); // Deserialize the data into the vector
+
+    if (n_used_elements > 0)
+    {
+      auto tmpdata = Kokkos::View<T *, Layout, HostSpace, Kokkos::MemoryTraits<Kokkos::Restrict>>(data_vector.data());
+      _owned_data = Kokkos::create_mirror_view_and_copy(Space(), tmpdata);
+      Kokkos::resize(_owned_data, n_allocated_element);
+    }
+  }
 
 protected:
- 
   void set_n_used_elements(uint64_t value)
   {
     KOKKOS_ASSERT(n_used_elements < n_allocated_element);
@@ -250,10 +266,9 @@ protected:
   }
 
 private:
-  uint64_t n_allocated_element = 0; ///< Number of allocated elements.
-  uint64_t n_used_elements = 0;     ///< Number of elements currently in use.
-  double extra_allocation_factor =
-      default_extra_allocation_factor; ///< Factor used for resizing the vector.
+  uint64_t n_allocated_element = 0;                                 ///< Number of allocated elements.
+  uint64_t n_used_elements = 0;                                     ///< Number of elements currently in use.
+  double extra_allocation_factor = default_extra_allocation_factor; ///< Factor used for resizing the vector.
 
   static constexpr double default_extra_allocation_factor = 1.5;
 
@@ -267,11 +282,8 @@ private:
 };
 
 template <typename T, typename Space>
-KokkosVector<T, Space>::KokkosVector(const size_t capacity,
-                                     bool alloc,
-                                     std::string label)
-    : _owned_data(Kokkos::view_alloc(label + "_owned_data",
-                                     Kokkos::WithoutInitializing))
+KokkosVector<T, Space>::KokkosVector(const size_t capacity, bool alloc, std::string label)
+    : _owned_data(Kokkos::view_alloc(label + "_owned_data", Kokkos::WithoutInitializing))
 {
   __allocate__(capacity);
   if (alloc)
@@ -284,8 +296,7 @@ KokkosVector<T, Space>::KokkosVector(const size_t capacity,
   }
 }
 
-template <typename T, typename Space>
-void KokkosVector<T, Space>::clear() noexcept
+template <typename T, typename Space> void KokkosVector<T, Space>::clear() noexcept
 {
   n_used_elements = 0;
 }
@@ -297,23 +308,19 @@ template <typename T, typename Space> void KokkosVector<T, Space>::reset()
   Kokkos::resize(_owned_data, n_allocated_element);
 }
 
-template <typename T, typename Space>
-void KokkosVector<T, Space>::resize(size_t n)
+template <typename T, typename Space> void KokkosVector<T, Space>::resize(size_t n)
 {
   this->n_used_elements = 0;
   this->__allocate__(n);
 }
-template <typename T, typename Space>
-KokkosVector<T, Space>
-KokkosVector<T, Space>::with_capacity(std::size_t capacity)
+template <typename T, typename Space> KokkosVector<T, Space> KokkosVector<T, Space>::with_capacity(std::size_t capacity)
 {
   auto rhs = KokkosVector(capacity);
   rhs.n_used_elements = 0;
   return rhs;
 }
 
-template <typename T, typename Space>
-KOKKOS_FUNCTION bool KokkosVector<T, Space>::emplace(T &&d)
+template <typename T, typename Space> KOKKOS_FUNCTION bool KokkosVector<T, Space>::emplace(T &&d)
 {
   const auto local_used_size = n_used_elements;
   if (local_used_size < n_allocated_element)
@@ -324,21 +331,17 @@ KOKKOS_FUNCTION bool KokkosVector<T, Space>::emplace(T &&d)
   }
   return false;
 }
-template <typename T, typename Space>
-[[nodiscard]] double
-KokkosVector<T, Space>::get_allocation_factor() const noexcept
+template <typename T, typename Space> [[nodiscard]] double KokkosVector<T, Space>::get_allocation_factor() const noexcept
 {
   return extra_allocation_factor;
 }
-template <typename T, typename Space>
-void KokkosVector<T, Space>::set_allocation_factor(double value) noexcept
+template <typename T, typename Space> void KokkosVector<T, Space>::set_allocation_factor(double value) noexcept
 {
   KOKKOS_ASSERT(value >= 1);
   this->extra_allocation_factor = value;
 }
 
-template <typename T, typename Space>
-void KokkosVector<T, Space>::insert(const KokkosVector<T, Space> &rhs)
+template <typename T, typename Space> void KokkosVector<T, Space>::insert(const KokkosVector<T, Space> &rhs)
 {
 
   const auto original_size = n_used_elements;
@@ -347,24 +350,20 @@ void KokkosVector<T, Space>::insert(const KokkosVector<T, Space> &rhs)
 
   auto data = this->data();
   Kokkos::parallel_for(
-      "InsertNew",
-      Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_add_item),
-      KOKKOS_LAMBDA(const size_t i) {
+      "InsertNew", Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_add_item), KOKKOS_LAMBDA(const size_t i) {
         data(original_size + i) = rhs._owned_data(i);
       });
   Kokkos::fence();
 
   n_used_elements += n_add_item;
 }
-template <typename T, typename Space>
-size_t KokkosVector<T, Space>::__allocate__(const std::size_t new_size)
+template <typename T, typename Space> size_t KokkosVector<T, Space>::__allocate__(const std::size_t new_size)
 {
   if (new_size > 0)
   {
     if (new_size >= n_allocated_element)
     {
-      const auto new_allocated_size = static_cast<std::size_t>(
-          std::ceil(static_cast<double>(new_size) * extra_allocation_factor));
+      const auto new_allocated_size = static_cast<std::size_t>(std::ceil(static_cast<double>(new_size) * extra_allocation_factor));
 
       n_allocated_element = new_allocated_size;
       Kokkos::resize(_owned_data, n_allocated_element);

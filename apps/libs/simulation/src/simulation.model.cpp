@@ -10,7 +10,6 @@
 #include <Eigen/Sparse>
 
 #include <hydro/mass_transfer.hpp>
-#include <iterator>
 #include <scalar_simulation.hpp>
 #include <stdexcept>
 
@@ -42,10 +41,15 @@ namespace Simulation
     return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()};
   }
 
+  [[nodiscard]] Dimensions SimulationUnit::getDimensions() const noexcept
+  {
+    return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()} ;
+  }
+
   void SimulationUnit::reduceContribs(std::span<double> data, size_t n_rank) const
   {
 
-    auto [nr, nc] = getDim();
+    auto [nr, nc] = getDimensions();
 
     this->liquid_scalar->biomass_contribution.setZero();
 
