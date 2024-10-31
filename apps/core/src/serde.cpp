@@ -92,7 +92,7 @@ namespace SerDe
       std::optional<std::vector<double>> cgas_a =
           cgas.has_value() ? std::make_optional(std::vector<double>(cgas->begin(), cgas->end())) : std::nullopt;
 
-      ar(dim, std::vector<double>(cliq.begin(), cliq.end()), cgas_a);
+      ar(dim, std::vector<double>(cliq.begin(), cliq.end()), cgas_a, case_data.simulation->get_end_time_mut());
 
       ar(case_data.simulation->mc_unit);
     }
@@ -118,8 +118,8 @@ namespace SerDe
     Simulation::Dimensions dims;
     std::vector<double> read_c_liq;
     std::optional<std::vector<double>> read_c_gas;
-
-    ar(dims, read_c_liq, read_c_gas);
+    double start_time;
+    ar(dims, read_c_liq, read_c_gas, start_time);
 
     // const auto *state = case_data.transitioner->getState();
 
@@ -130,7 +130,7 @@ namespace SerDe
     scalar_init.gas_buffer = read_c_gas;
     scalar_init.gas_flow = read_c_gas.has_value();
 
-    //FIXME
+    // FIXME
     scalar_init.volumesliq = spl;
     scalar_init.volumesgas = spg;
 
@@ -145,6 +145,8 @@ namespace SerDe
     }
 
     case_data.simulation = std::move(*simulation);
+
+    case_data.simulation->get_start_time_mut() = start_time;
     return true;
   }
 

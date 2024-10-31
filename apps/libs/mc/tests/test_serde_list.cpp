@@ -100,6 +100,8 @@ void test_list_serde()
 
   assert(list.size() == slist.size());
   assert(list.capacity() == slist.capacity());
+  assert(list._owned_data[9].data.property1 == slist._owned_data[9].data.property1);
+
 }
 
 void test_container_serde()
@@ -125,11 +127,11 @@ void test_container_serde()
   ar(secontainer);
 
   auto l = container.get_host();
-  auto sl = container.get_host();
+  auto sl = secontainer.get_host();
 
   assert(l.size() == sl.size() && l.size()==p_size);
   assert(l.capacity() == sl.capacity());
-
+  std::cerr<<l._owned_data[9].data.property1<<" "<<sl._owned_data[9].data.property1<<std::endl;
   assert(l._owned_data[9].data.property1 == sl._owned_data[9].data.property1 && l._owned_data[9].data.property1 == 9);
 }
 

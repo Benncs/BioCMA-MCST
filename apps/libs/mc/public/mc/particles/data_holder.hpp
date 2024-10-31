@@ -52,13 +52,20 @@ namespace MC
     template <class Archive>
     void serialize(Archive &ar)
     {
+      
+      int tmp_s = static_cast<int>(status);
+
+
       ar(current_container,
          current_domain,
          random_seed,
          id,
-         status,
+         tmp_s,
          weight,
          hydraulic_time);
+
+      status = static_cast<CellStatus>(tmp_s);
+      
     }
 
     

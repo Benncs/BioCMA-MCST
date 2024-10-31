@@ -34,7 +34,8 @@ namespace Simulation
 {
 
   SimulationUnit::SimulationUnit(SimulationUnit &&other) noexcept
-      : mc_unit(std::move(other.mc_unit)), flow_liquid(other.flow_liquid), flow_gas(other.flow_gas), is_two_phase_flow(other.is_two_phase_flow)
+      : mc_unit(std::move(other.mc_unit)), flow_liquid(other.flow_liquid), flow_gas(other.flow_gas),
+        is_two_phase_flow(other.is_two_phase_flow)
   {
   }
 
@@ -49,14 +50,11 @@ namespace Simulation
     this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(
         makeScalarSimulation(mc_unit->domain.getNumberCompartments(), scalar_init.n_species, scalar_init.volumesliq));
 
-    this->gas_scalar = (is_two_phase_flow)
-                           ? std::unique_ptr<ScalarSimulation, pimpl_deleter>(makeScalarSimulation(mc_unit->domain.getNumberCompartments(),
-                                                                                                   scalar_init.n_species,
-                                                                                                   scalar_init.volumesgas)) // No contribs for gas
-                           : nullptr;
-
-
-    
+    this->gas_scalar = (is_two_phase_flow) ? std::unique_ptr<ScalarSimulation, pimpl_deleter>(
+                                                 makeScalarSimulation(mc_unit->domain.getNumberCompartments(),
+                                                                      scalar_init.n_species,
+                                                                      scalar_init.volumesgas)) // No contribs for gas
+                                           : nullptr;
 
     post_init_concentration(scalar_init);
     post_init_compartments();
@@ -231,6 +229,15 @@ namespace Simulation
   void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation *ptr) const
   {
     delete ptr; // NOLINT
+  }
+
+  [[nodiscard]] double& SimulationUnit::get_start_time_mut() 
+  {
+    return starting_time;
+  }
+  [[nodiscard]] double &SimulationUnit::get_end_time_mut()
+  {
+    return end_time;
   }
 
 } // namespace Simulation

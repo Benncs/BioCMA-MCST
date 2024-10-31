@@ -59,10 +59,11 @@ namespace MC
 
     template <class Archive> void serialize(Archive &ar)
     {
-      properties.serialize(ar);
+      
+      ar(properties);
       if constexpr (has_serialize<_Model, Archive>())
       {
-        data.serialize(ar);
+        ar(data);
       }
     }
 
