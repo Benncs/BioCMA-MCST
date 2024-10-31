@@ -253,8 +253,6 @@ public:
     if (n_used_elements > 0)
     {
       auto tmpdata = Kokkos::View<T *, Layout, HostSpace, Kokkos::MemoryTraits<Kokkos::Restrict>>(data_vector.data());
-      std::cout << data_vector.size() << " " << n_used_elements << " " << n_allocated_element << std::endl;
-
       _owned_data = Kokkos::create_mirror_view_and_copy(Space(), tmpdata);
       Kokkos::resize(_owned_data, n_allocated_element);
     }

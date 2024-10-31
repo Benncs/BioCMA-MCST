@@ -133,7 +133,7 @@ namespace CORE_DE
         event.get<MC::EventType::NewParticle>();
     final_values["events/total_death"] = event.get<MC::EventType::Death>();
     final_values["events/total_exit"] = event.get<MC::EventType::Exit>();
-    const auto [n_row, n_col] = simulation.getDim();
+    const auto [n_row, n_col] = simulation.getDimensions();
 
     write_simple(final_values, "final_result/");
 

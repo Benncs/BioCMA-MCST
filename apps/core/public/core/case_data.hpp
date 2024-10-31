@@ -62,6 +62,9 @@ namespace Core
    */
   void exec(CaseData &&case_data);
 
+
+  std::optional<Core::CaseData> load(const ExecInfo&exec,  SimulationParameters& params);
+
 } // namespace Core
 
 #endif

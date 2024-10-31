@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <rt_init.hpp>
 #include <siminit.hpp>
 #include <stream_io.hpp>
@@ -37,7 +38,7 @@
  * settings.
  * @return A `CaseData` object containing the prepared data for the simulation.
  */
-static Core::CaseData prepare(const ExecInfo &exec_info, Core::SimulationParameters params);
+static std::optional<Core::CaseData> prepare(const ExecInfo &exec_info,  Core::SimulationParameters& param);
 
 /**
  * @brief Wrapper to handle Excception raised in try/catch block
@@ -49,6 +50,11 @@ template <typename ExceptionType> static int handle_catch(ExceptionType const &e
  * @return true if override results_path
  */
 static bool override_result_path(const Core::SimulationParameters &params, const ExecInfo &exec);
+
+
+
+
+constexpr bool serde = true;
 
 int main(int argc, char **argv)
 {
@@ -73,14 +79,25 @@ int main(int argc, char **argv)
     return -1;
   }
 
+
+  const auto f_get_case_data = (serde) ? Core::load : prepare;
+
   /*Main loop*/
   try
   {
     INTERPRETER_INIT
 
     REDIRECT_SCOPE({
-      auto case_data = prepare(exec_info, params);
-      exec(std::move(case_data));
+      auto case_data = f_get_case_data(exec_info, params);
+      if(case_data)
+      {
+        exec(std::move(*case_data));
+      }
+      else {
+        std::cout<<"ERROR"<<std::endl;
+        return -1;
+      }
+      
     })
   }
   catch (std::exception const &e)
@@ -96,11 +113,11 @@ int main(int argc, char **argv)
   return 0;
 }
 
-static Core::CaseData prepare(const ExecInfo &exec_info, Core::SimulationParameters params)
+static std::optional<Core::CaseData> prepare(const ExecInfo &exec_info,  Core::SimulationParameters& params)
 {
   std::unique_ptr<Simulation::FlowMapTransitioner> transitioner = nullptr;
   auto simulation = init_simulation(exec_info, params, transitioner);
-  return {std::move(simulation), params, std::move(transitioner), exec_info};
+  return std::make_optional<Core::CaseData>(std::move(simulation), params, std::move(transitioner), exec_info);
 }
 
 template <typename ExceptionType> static int handle_catch(ExceptionType const &e) noexcept

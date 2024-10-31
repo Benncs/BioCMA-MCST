@@ -196,22 +196,10 @@ namespace Simulation
 
     Kokkos::parallel_for(
         "post_init_compartments", mc_unit->domain.getNumberCompartments(), KOKKOS_LAMBDA(const int i) {
-          auto s = Kokkos::subview(_compute_concentration, i, Kokkos::ALL);
+          // auto s = Kokkos::subview(_compute_concentration, i, Kokkos::ALL);
           _containers(i).concentrations = Kokkos::subview(_compute_concentration, Kokkos::ALL, i);
         });
     Kokkos::fence();
-
-    // int i = 0;
-    // size_t n_species = this->liquid_scalar->n_species();
-    // std::for_each(mc_unit->domain.begin(),
-    //               mc_unit->domain.end(),
-    //               [this, n_species, &i](auto &&cs)
-    //               {
-    //                 cs.concentrations = std::span(
-    //                     this->liquid_scalar->concentration.col(i).data(),
-    //                     n_species);
-    //                 ++i;
-    //               });
   }
 
   DiagonalViewCompute SimulationUnit::get_kernel_diagonal()

@@ -163,7 +163,7 @@ void host_process(const ExecInfo &exec,
 
   std::unique_ptr<CORE_DE::MainExporter> main_exporter = make_main_exporter(exec, params);
 
-  const auto [n_species, n_compartment] = simulation.getDim();
+  const auto [n_species, n_compartment] = simulation.getDimensions();
 
   main_exporter->init_fields(params.user_params.number_exported_result, n_compartment, n_species, simulation.two_phase_flow());
 

@@ -9,6 +9,7 @@
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <common/kokkos_vector.hpp>
+#include <cstddef>
 #include <cstdint>
 #include <mc/events.hpp>
 #include <mc/particles/extra_process.hpp>
@@ -35,6 +36,17 @@ static constexpr size_t trigger_const_particle_number = 1e6;
 namespace Simulation
 {
 
+  struct Dimensions
+  {
+    std::size_t n_species{};
+    std::size_t n_compartment{};
+
+    template <class Archive> void serialize(Archive &archive)
+    {
+      archive(n_species, n_compartment);
+    }
+  };
+
   class PreCalculatedHydroState;
   class ScalarSimulation;
 
@@ -56,6 +68,8 @@ namespace Simulation
 
     [[nodiscard]] std::span<double> getCliqData() const;
     [[nodiscard]] std::tuple<size_t, size_t> getDim() const noexcept;
+
+    [[nodiscard]] Dimensions getDimensions() const noexcept;
 
     [[nodiscard]] std::optional<std::span<double>> getCgasData() const;
     [[nodiscard]] std::span<double> getContributionData() const;
