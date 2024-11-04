@@ -67,7 +67,6 @@ namespace Simulation
 
   void SimulationUnit::update_feed(const double t, const double d_t, const bool update_scalar) noexcept
   {
-
     // Get references to the index_leaving_flow and leaving_flow data members
     auto &_index_leaving_flow = this->index_leaving_flow;
     auto &_leaving_flow = this->leaving_flow;
@@ -126,7 +125,7 @@ namespace Simulation
 
   void SimulationUnit::step(double d_t, const CmaRead::ReactorState &state) const
   {
-
+    
     if (is_two_phase_flow)
     {
       this->liquid_scalar->mass_transfer = gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,

@@ -67,7 +67,6 @@ namespace Core
 
     const auto filename = exporter_filename(case_data.exec_info, case_data.params);
 
-
     CORE_DE::PartialExporter partial_exporter(ExecInfo(), filename);
 
     init_partial_exporter(partial_exporter, case_data);
@@ -86,21 +85,29 @@ namespace Core
     {
       throw std::runtime_error("Serde for MPI Not implemented yet");
     }
+
     GlobalInitialiser gi(exec, params);
     auto transition = gi.init_transitionner();
-
     if (!transition.has_value())
     {
       return std::nullopt;
     }
+
     case_data.transitioner = std::move(*transition);
-
-    bool ok_init = SerDe::load_simulation(
-        gi, case_data, "/home/benjamin/Documents/code/cpp/BioCMA-MCST/results/debug_serde/debug_serde_serde_0");
-
-    if (!gi.check_init_terminate() || !ok_init)
+    try
     {
-      return std::nullopt;
+      const bool ok_init = SerDe::load_simulation(
+          gi, case_data, "/mnt/c/Users/casale/Documents/code/cpp/kokkos_biomc/results/debug_serde4/debug_serde4_serde_0.raw");
+
+      if (!gi.check_init_terminate() || !ok_init)
+      {
+        return std::nullopt;
+      }
+    }
+    catch (std::exception &e)
+    {
+      auto err = "CORE::load::load_simulation:" + std::string(e.what());
+      throw std::runtime_error(err);
     }
 
     case_data.params = params;

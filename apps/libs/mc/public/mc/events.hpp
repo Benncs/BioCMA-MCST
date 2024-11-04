@@ -47,10 +47,10 @@ namespace MC
     // be shared between Host and Device According to SharedHostPinnedSpace
     // documentation, the size of this data can fit into one cache line so
     // transfer is not a botteneck
-    Kokkos::View<size_t[number_event_type], Kokkos::SharedHostPinnedSpace>
+    Kokkos::View<std::size_t[number_event_type], Kokkos::SharedHostPinnedSpace>
         _events; // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
-    static_assert(sizeof(size_t[number_event_type]) <= ExecInfo::cache_line_size, "Size of Eventcontainer::_event fits into cache line");
+    static_assert(sizeof(std::size_t[number_event_type]) <= ExecInfo::cache_line_size, "Size of Eventcontainer::_event fits into cache line");
 
     /**
      * @brief Default container, initalise counter
@@ -64,7 +64,7 @@ namespace MC
     /**
      * @brief Get std const view of _events counter
      */
-    [[nodiscard]] std::span<size_t> get_span() const
+    [[nodiscard]] std::span<std::size_t> get_span() const
     {
       // As we use SharedHostPinnedSpace, we can deal with classic std
       // containers to use host manipulation
@@ -85,7 +85,7 @@ namespace MC
      * @warning This function is thread_safe because we get a copy of the
      * current counter
      */
-    template <EventType event> [[nodiscard]] constexpr size_t get() const
+    template <EventType event> [[nodiscard]] constexpr std::size_t get() const
     {
       return _events(event_index<event>());
     }
@@ -96,7 +96,7 @@ namespace MC
      * @warning This function is NOT thread_safe because we get a raw reference
      * on the current counter
      */
-    template <EventType event> [[nodiscard]] constexpr size_t &get_mut()
+    template <EventType event> [[nodiscard]] constexpr std::size_t &get_mut()
     {
       return _events(event_index<event>());
     }
@@ -119,13 +119,13 @@ namespace MC
      * @param _data obtained via multiple EventContainer merged together
      * @warning _data size has to be a multiple of number_event_type
      */
-    static EventContainer reduce(std::span<size_t> _data);
+    static EventContainer reduce(std::span<std::size_t> _data);
 
     // Either for save and load, as number_event_type is small and data is located in host, we can loop over array
 
     template <class Archive> void save(Archive &ar) const
     {
-      std::array<size_t, number_event_type> array{};
+      std::array<std::size_t, number_event_type> array{};
       for (size_t i = 0; i < number_event_type; ++i)
       {
         array[i] = _events[i];
@@ -136,9 +136,9 @@ namespace MC
 
     template <class Archive> void load(Archive &ar)
     {
-      std::array<size_t, number_event_type> array{};
+      std::array<std::size_t, number_event_type> array{};
       ar(array);
-      for (size_t i = 0; i < number_event_type; ++i)
+      for (std::size_t i = 0; i < number_event_type; ++i)
       {
         _events(i) = array[i];
       }

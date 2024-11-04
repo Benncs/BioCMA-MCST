@@ -7,23 +7,20 @@
 #include <optional>
 #include <string_view>
 
-
 static void sanitise_check_cli(Core::SimulationParameters &params);
 // static void print_green(std::ostream &os, std::string_view message);
 static void print_red(std::ostream &os, std::string_view message);
 static void throw_bad_arg(std::string_view arg);
 
-static void parseArg(Core::UserControlParameters &user_controll,
-                     std::string current_param,
-                     std::string_view current_value);
+static void
+parseArg(Core::UserControlParameters &user_controll, std::string current_param, std::string_view current_value);
 
 static void recur_path(std::string_view rootPath, Core::SimulationParameters &params)
 {
   size_t count = 1;
   std::string dirName = "i_" + std::to_string(count) + "/";
   std::filesystem::path dirPath = std::string(rootPath) + dirName;
-  while (std::filesystem::exists(dirPath) &&
-         std::filesystem::is_directory(dirPath))
+  while (std::filesystem::exists(dirPath) && std::filesystem::is_directory(dirPath))
   {
     ++count;
     params.flow_files.push_back(dirPath.string());
@@ -32,8 +29,7 @@ static void recur_path(std::string_view rootPath, Core::SimulationParameters &pa
   }
 }
 
-static std::optional<Core::UserControlParameters> parse_user_param(int argc,
-                                                             char **argv)
+static std::optional<Core::UserControlParameters> parse_user_param(int argc, char **argv)
 {
   Core::UserControlParameters control = Core::UserControlParameters::m_default();
 
@@ -100,9 +96,8 @@ std::optional<Core::SimulationParameters> parse_cli(int argc, char **argv) noexc
   return params;
 }
 
-static void parseArg(Core::UserControlParameters &user_controll,
-                     std::string current_param,
-                     std::string_view current_value)
+static void
+parseArg(Core::UserControlParameters &user_control, std::string current_param, std::string_view current_value)
 {
   std::string path;
   // TODO need check that begin()+1 is not OOB
@@ -113,7 +108,7 @@ static void parseArg(Core::UserControlParameters &user_controll,
   {
     if (current_param == "er")
     {
-      user_controll.results_file_name = std::string(current_value);
+      user_control.results_file_name = std::string(current_value);
     }
     break;
   }
@@ -121,7 +116,7 @@ static void parseArg(Core::UserControlParameters &user_controll,
   {
     if (current_param == "mn")
     {
-      user_controll.model_name = std::string(current_value);
+      user_control.model_name = std::string(current_value);
     }
     break;
   }
@@ -129,16 +124,15 @@ static void parseArg(Core::UserControlParameters &user_controll,
   {
     if (current_param == "nt")
     {
-      user_controll.n_thread = std::stoi(std::string(current_value));
+      user_control.n_thread = std::stoi(std::string(current_value));
     }
     else if (current_param == "np")
     {
-      user_controll.number_particle = std::stol(std::string(current_value));
+      user_control.number_particle = std::stol(std::string(current_value));
     }
     else if (current_param == "nex")
     {
-      user_controll.number_exported_result =
-          std::stol(std::string(current_value));
+      user_control.number_exported_result = std::stol(std::string(current_value));
     }
     break;
   }
@@ -146,34 +140,44 @@ static void parseArg(Core::UserControlParameters &user_controll,
   {
     if (current_param == "dt")
     {
-      user_controll.delta_time = std::stod(std::string(current_value));
+      user_control.delta_time = std::stod(std::string(current_value));
     }
     else if (current_param == "d")
     {
-      user_controll.final_time = std::stod(std::string(current_value));
+      user_control.final_time = std::stod(std::string(current_value));
     }
     break;
   }
 
   case 'r':
   {
-    user_controll.recursive = true;
+    user_control.recursive = true;
     break;
   }
   case 'f':
   {
     if (current_param == "f")
     {
-      user_controll.cma_case_path = current_value;
+      user_control.cma_case_path = current_value;
     }
     else if (current_param == "force")
     {
-      user_controll.force_override = true;
+      user_control.force_override = true;
     }
     else if (current_param == "fi")
     {
-      user_controll.initialiser_path = current_value;
+      user_control.initialiser_path = current_value;
     }
+    break;
+  }
+  case 's':
+  {
+
+    if (current_param == "serde")
+    {
+      user_control.serde = true;
+    }
+
     break;
   }
 
@@ -210,11 +214,9 @@ void showHelp(std::ostream &os) noexcept
 {
   os << "Usage: ";
   print_red(os, "BIOCMA-MCST");
-  os << "  -np <number_of_particles> [-ff <flow_file_folder_path>] [OPTIONS] "
-     << '\n';
+  os << "  -np <number_of_particles> [-ff <flow_file_folder_path>] [OPTIONS] " << '\n';
   os << "\nMandatory arguments:" << '\n';
-  os << "  -np <number>, --number-particles <number>\tNumber of particles"
-     << '\n';
+  os << "  -np <number>, --number-particles <number>\tNumber of particles" << '\n';
   os << "  -d <number>, --duration <number>\tSimulation duration" << '\n';
   os << "  -ff <flow_file_folder_path>\t\tPath to flow file (Default: "
         "./rawdata)"

@@ -25,6 +25,7 @@ namespace Core
     double biomass_initial_concentration;
     std::string initialiser_path;
     bool force_override;
+    bool serde;
     static UserControlParameters m_default();
   };
 
@@ -52,8 +53,7 @@ namespace Core
     std::string filename;
   };
 
-  inline std::ostream &operator<<(std::ostream &stream,
-                                  const SimulationParameters &obj)
+  inline std::ostream &operator<<(std::ostream &stream, const SimulationParameters &obj)
   {
     stream << obj.user_params.number_particle << "\t" << obj.user_params.final_time << "\t" << obj.d_t << "\t"
            << obj.n_different_maps << "\t" << obj.user_params.n_thread << " ";

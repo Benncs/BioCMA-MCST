@@ -126,6 +126,7 @@ namespace Simulation::KernelInline
   KOKKOS_FUNCTION void Kernel<ListType, ResultViewType>::operator()(
       const std::size_t i_particle) const
   {
+
     auto &particle = list._owned_data(i_particle);
     auto &status = particle.properties.status;
     auto& properties = particle.properties;

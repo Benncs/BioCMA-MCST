@@ -242,10 +242,10 @@ void main_loop(const Core::SimulationParameters &params,
     auto result = local_container.get_extra();
 
     auto view_result = result.get_view();
-
+   
     for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation; ++__loop_counter)
     {
-
+      
       DEBUG_INSTRUCTION
 
       {
@@ -340,6 +340,7 @@ void handle_export(const ExecInfo &exec, /*/Exec is used for MPI **/
                    CORE_DE::PartialExporter &partial_exporter)
 // NOLINTEND
 {
+ 
   PROFILE_SECTION("host:handle_export")
   if (++dump_counter == dump_interval)
   {

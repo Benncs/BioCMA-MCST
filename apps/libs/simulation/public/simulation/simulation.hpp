@@ -191,6 +191,7 @@ namespace Simulation
 
   void SimulationUnit::cycleProcess(auto &&container, auto &&rview, double d_t)
   {
+    
     PROFILE_SECTION("cycleProcess")
     auto &list = container.get_compute();
     const size_t n_particle = list.size();
@@ -229,18 +230,7 @@ namespace Simulation
     Kokkos::parallel_for("mc_cycle_process", Kokkos::RangePolicy<>(0, n_particle), k);
     Kokkos::fence("fence_mc_cycle_process");
 
-    // Kokkos::parallel_for(
-    //     "mc_cycle_process", Kokkos::RangePolicy<>(0, n_particle), KOKKOS_LAMBDA(const std::size_t i_particle) {
-    //       d(i_particle).properties.current_container +=1;
-    //       // d(i_particle).update(d_t,
-    //       //           local_compartments(d(i_particle).properties.current_container)
-    //       //               .concentrations,
-    //       //           list.rng_instance);
-
-    //       // Kokkos::atomic_increment(
-    //       //     &local_compartments(0).n_cells);
-    //     });
-
+ 
     Kokkos::Experimental::contribute(contribs, contribs_scatter);
 
     _internal_counter = internal_counter_dead();

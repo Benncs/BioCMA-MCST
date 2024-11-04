@@ -52,8 +52,6 @@ template <typename ExceptionType> static int handle_catch(ExceptionType const &e
  */
 static bool override_result_path(const Core::SimulationParameters &params, const ExecInfo &exec);
 
-constexpr bool serde = true;
-
 int main(int argc, char **argv)
 {
   // First manually retrieve argument from command line
@@ -77,7 +75,7 @@ int main(int argc, char **argv)
     return -1;
   }
 
-  const auto f_get_case_data = (serde) ? Core::load : prepare;
+  const auto f_get_case_data = (params.user_params.serde) ? Core::load : prepare;
 
   /*Main loop*/
   try
@@ -116,7 +114,6 @@ static std::optional<Core::CaseData> prepare(const ExecInfo &exec_info, Core::Si
   Core::GlobalInitialiser gi(exec_info, params);
   auto t = gi.init_transitionner();
 
-
   auto __simulation = gi.init_simulation();
   if ((!t.has_value() && !__simulation.has_value()) || !gi.check_init_terminate())
   {
@@ -131,7 +128,7 @@ static std::optional<Core::CaseData> prepare(const ExecInfo &exec_info, Core::Si
 template <typename ExceptionType> static int handle_catch(ExceptionType const &e) noexcept
 {
 #ifdef DEBUG
-  std::cerr << e.what() << '\n';
+  std::cerr << "Caught Exception: " << e.what() << '\n';
   return -1;
 #else
   std::cerr << "Internal error" << '\n';

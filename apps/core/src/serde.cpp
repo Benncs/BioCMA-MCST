@@ -2,8 +2,10 @@
 #include "simulation/scalar_initializer.hpp"
 #include "simulation/simulation.hpp"
 #include <cstddef>
+#include <exception>
 #include <ios>
 #include <memory>
+#include <stdexcept>
 #include <vector>
 #ifdef USE_CEAREAL
 #  include "common/execinfo.hpp"
@@ -24,7 +26,7 @@
 static void write_to_file(const std::ostringstream &oss, std::string_view filename)
 {
 
-  std::ofstream file(filename.data());
+  std::ofstream file(filename.data(),std::ios::binary );
   if (!file)
   {
     std::cerr << "Error opening file: " << filename << std::endl;
@@ -43,13 +45,12 @@ static void read_file(std::stringstream &buffer, std::string_view filename)
     buffer << file.rdbuf();
     file.close();
   }
+
 }
 
-#  define PLAINTEXT_ARCHIVE cereal::XMLOutputArchive
-#  define BINARY_ARCHIVE cereal::BinaryArchive
 
-using Archive_t = cereal::XMLOutputArchive;
-using iArchive_t = cereal::XMLInputArchive;
+using Archive_t = cereal::BinaryOutputArchive;
+using iArchive_t = cereal::BinaryInputArchive;
 
 // void read_archive(cereal::XMLInputArchive& ar,std::string_view filename)
 // {
@@ -78,7 +79,7 @@ namespace SerDe
   {
 
     std::stringstream serde_name;
-    serde_name << case_data.params.user_params.results_file_name << "_serde_" << case_data.exec_info.current_rank;
+    serde_name << case_data.params.user_params.results_file_name << "_serde_" << case_data.exec_info.current_rank<<".raw";
 
     std::ostringstream buf(std::ios::binary);
     {
@@ -104,7 +105,10 @@ namespace SerDe
   {
 
     std::stringstream buffer;
+
     read_file(buffer, ser_filename);
+    
+    
     iArchive_t ar(buffer);
 
     std::string version;
@@ -118,7 +122,7 @@ namespace SerDe
     Simulation::Dimensions dims;
     std::vector<double> read_c_liq;
     std::optional<std::vector<double>> read_c_gas;
-    double start_time;
+    double start_time{};
     ar(dims, read_c_liq, read_c_gas, start_time);
 
     // const auto *state = case_data.transitioner->getState();

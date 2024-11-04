@@ -59,14 +59,9 @@ namespace Simulation
     post_init_concentration(scalar_init);
     post_init_compartments();
 
-    if (_feed.has_value())
-    {
-      this->feed = std::move(*_feed);
-    }
-    else
-    {
-      this->feed = Feed::SimulationFeed{std::nullopt, std::nullopt};
-    }
+
+    this->feed = _feed.has_value()?std::move(*_feed):Feed::SimulationFeed{std::nullopt, std::nullopt};
+
 
     const size_t n_flows = 1;
     index_leaving_flow = Kokkos::View<size_t *, ComputeSpace>("index_leaving_flow", n_flows);
