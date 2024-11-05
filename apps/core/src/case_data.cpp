@@ -97,7 +97,7 @@ namespace Core
     try
     {
       const bool ok_init = SerDe::load_simulation(
-          gi, case_data, "/mnt/c/Users/casale/Documents/code/cpp/kokkos_biomc/results/debug_serde4/debug_serde4_serde_0.raw");
+          gi, case_data, "/mnt/c/Users/casale/Documents/code/cpp/kokkos_biomc/results/tmp/tmp_serde_0.raw");
 
       if (!gi.check_init_terminate() || !ok_init)
       {

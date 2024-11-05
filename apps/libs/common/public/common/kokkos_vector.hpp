@@ -250,7 +250,7 @@ public:
     std::vector<T> data_vector;
     ar(data_vector); // Deserialize the data into the vector
 
-    if (n_used_elements > 0)
+    // if (n_used_elements > 0)
     {
       auto tmpdata = Kokkos::View<T *, Layout, HostSpace, Kokkos::MemoryTraits<Kokkos::Restrict>>(data_vector.data(),data_vector.size());
       _owned_data = Kokkos::create_mirror_view_and_copy(Space(), tmpdata);
