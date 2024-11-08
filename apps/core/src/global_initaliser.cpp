@@ -46,10 +46,11 @@ namespace Core
 
   std::optional<Simulation::Feed::SimulationFeed> GlobalInitialiser::init_feed()
   {
-    constexpr double flow = 0.15 / 3600 * 20e-3;
+    // constexpr double flow = 0.15 / 3600 * 20e-3;
+    constexpr double flow =  0.031653119013143756;//10*0.15 / 3600 * 20e-3;
     constexpr double gas_flow = 0.1 / 3600 * 20e-3;
     constexpr double oxygen_c = 300e-3;
-    constexpr double glucose_c = 0;//10.8;
+    constexpr double glucose_c = 10.8;
 
     Simulation::Feed::FeedDescritor fl(flow, {glucose_c}, {0}, {0}, Simulation::Feed::Constant{});
     Simulation::Feed::FeedDescritor fg(gas_flow, {oxygen_c}, {0}, {1}, Simulation::Feed::Constant{});

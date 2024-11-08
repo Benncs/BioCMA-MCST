@@ -9,28 +9,28 @@
 #  include <highfive/H5PropertyList.hpp>
 #  include <highfive/eigen.hpp>
 #  include <highfive/highfive.hpp>
+#  include <iomanip>
+#  include <stdexcept>
+#  include <string_view>
 #  include <type_traits>
-#include <iomanip>
-#include <stdexcept>
-#include <string_view>
-#include <variant>
-#ifdef __linux__
-#  include <pwd.h>
-#  include <unistd.h>
-#endif
+#  include <variant>
 
-#define CHECK_PIMPL                                                            \
-  if (!pimpl)                                                                  \
-  {                                                                            \
-    throw std::runtime_error(__FILE__ ": Unexpected ERROR");                   \
-  }
+#  ifdef __linux__
+#    include <pwd.h>
+#    include <unistd.h>
+#  endif
+
+#  define CHECK_PIMPL                                                                                                  \
+    if (!pimpl)                                                                                                        \
+    {                                                                                                                  \
+      throw std::runtime_error(__FILE__ ": Unexpected ERROR");                                                         \
+    }
 
 static std::string date_time()
 {
   // Non vedo l’ora che arrivi c++23-format
   std::stringstream ss;
-  auto now =
-      std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+  auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
   ss << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
   return ss.str();
 }
@@ -38,16 +38,38 @@ static std::string date_time()
 static std::string get_user_name()
 {
   std::string_view res = "someone";
-#ifdef __linux__
+#  ifdef __linux__
   uid_t uid = geteuid();
   passwd *pw = getpwuid(uid);
   if (pw != nullptr)
   {
     res = pw->pw_name;
   }
-#endif
+#  endif
 
   return std::string(res);
+}
+
+static std::size_t get_chunk_size(std::size_t data_length)
+{
+  // NOLINTBEGIN
+  if (data_length <= 1000)
+  {
+    return 1;
+  }
+  else if (data_length <= 1e4)
+  {
+    return 1024;
+  }
+  else if (data_length <= 1e6)
+  {
+    return 8192;
+  }
+  else
+  {
+    return 65536;
+  }
+  // NOLINTEND
 }
 
 namespace CORE_DE
@@ -57,8 +79,7 @@ namespace CORE_DE
   {
   public:
     explicit impl(std::string_view _filename)
-        : filename(_filename),
-          file(HighFive::File(filename, HighFive::File::Truncate))
+        : filename(_filename), file(HighFive::File(filename, HighFive::File::Truncate))
     {
     }
 
@@ -78,13 +99,11 @@ namespace CORE_DE
   constexpr size_t hdf5_max_compression = 9;
   DataExporter::DataExporter(const ExecInfo &info,
                              std::string_view _filename,
-                 
+
                              std::optional<export_metadata_t> user_description)
       : pimpl(new impl(_filename))
   {
-    export_metadata_t description = user_description.has_value()
-                                        ? *user_description
-                                        : "Interesting results";
+    export_metadata_t description = user_description.has_value() ? *user_description : "Interesting results";
 
     metadata["file_version"] = 4;
     metadata["creation_date"] = date_time();
@@ -93,16 +112,12 @@ namespace CORE_DE
     metadata["run_id"] = info.run_id;
   }
 
-  void DataExporter::do_link(std::string_view filename,            std::string_view link_name,
-                             std::string_view groupname)
+  void DataExporter::do_link(std::string_view filename, std::string_view link_name, std::string_view groupname)
   {
-    pimpl->file.createExternalLink(
-        link_name.data(), filename.data(), groupname.data());
+    pimpl->file.createExternalLink(link_name.data(), filename.data(), groupname.data());
   }
 
-  void
-  DataExporter::write_properties(std::optional<std::string> specific_dataspace,
-                                 const export_metadata_kv &values)
+  void DataExporter::write_properties(std::optional<std::string> specific_dataspace, const export_metadata_kv &values)
   {
     CHECK_PIMPL
 
@@ -151,8 +166,7 @@ namespace CORE_DE
     descriptors.emplace(description.name, description);
   }
 
-  void DataExporter::write_simple(std::string specific_dataspace,
-                                  const simple_export_t &value)
+  void DataExporter::write_simple(std::string specific_dataspace, const simple_export_t &value)
   {
     std::visit(
         [&](const auto &val)
@@ -163,8 +177,7 @@ namespace CORE_DE
         value);
   }
 
-  void DataExporter::write_simple(const export_initial_kv &values,
-                                  std::string_view root)
+  void DataExporter::write_simple(const export_initial_kv &values, std::string_view root)
   {
 
     for (const auto &kv : values)
@@ -176,9 +189,7 @@ namespace CORE_DE
     pimpl->file.flush();
   }
 
-  void DataExporter::append_array(std::string_view name,
-                                  std::span<const double> data,
-                                  uint64_t last_size)
+  void DataExporter::append_array(std::string_view name, std::span<const double> data, uint64_t last_size)
   {
     CHECK_PIMPL
     auto &descriptor = descriptors.at(std::string(name));
@@ -198,15 +209,12 @@ namespace CORE_DE
     pimpl->file.flush();
   }
 
-  void DataExporter::write_matrix(std::string_view name,
-                                  std::span<const double> values,
-                                  bool compress)
+  void DataExporter::write_matrix(std::string_view name, std::span<const double> values, bool compress)
   {
     CHECK_PIMPL
 
     HighFive::DataSetCreateProps ds_props;
-    constexpr std::size_t chunk_particle = 512000;
-    ds_props.add(HighFive::Chunking(std::min(values.size(), chunk_particle)));
+    ds_props.add(HighFive::Chunking(get_chunk_size(values.size())));
     ds_props.add(HighFive::Shuffle());
     const auto data_space = HighFive::DataSpace(values.size());
 
@@ -215,24 +223,19 @@ namespace CORE_DE
       ds_props.add(HighFive::Deflate(hdf5_max_compression));
     }
 
-    auto dataset =
-        pimpl->file.createDataSet<double>(name.data(), data_space, ds_props);
+    auto dataset = pimpl->file.createDataSet<double>(name.data(), data_space, ds_props);
     dataset.write_raw(values.data());
     pimpl->file.flush();
   }
 
-  void DataExporter::write_matrix(std::string_view name,
-                                  std::span<const double> values,
-                                  size_t n_row,
-                                  size_t n_col,
-                                  bool compress)
+  void DataExporter::write_matrix(
+      std::string_view name, std::span<const double> values, size_t n_row, size_t n_col, bool compress)
   {
     CHECK_PIMPL
-    auto data = Eigen::Map<Eigen::MatrixXd>(const_cast<double *>(values.data()),
-                                            EIGEN_INDEX(n_row),
-                                            EIGEN_INDEX(n_col));
+    auto data =
+        Eigen::Map<Eigen::MatrixXd>(const_cast<double *>(values.data()), EIGEN_INDEX(n_row), EIGEN_INDEX(n_col));
     HighFive::DataSetCreateProps ds_props;
-    ds_props.add(HighFive::Chunking({1, 1}));
+    ds_props.add(HighFive::Chunking({n_row, n_col}));
     ds_props.add(HighFive::Shuffle());
     if (compress)
     {
@@ -282,7 +285,6 @@ namespace CORE_DE
   }
 
   DataExporter::~DataExporter() = default;
-
 
 } // namespace CORE_DE
 

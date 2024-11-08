@@ -39,7 +39,7 @@ namespace PostProcessing
   {
     auto &probes = simulation.get_probes();
 
-    if (probes.need_export())
+    // if (probes.need_export())
     {
       const double *const probe_ptr = probes.raw_get();
       pde.write_probe({probe_ptr, Simulation::Probes::buffer_size});
