@@ -7,6 +7,7 @@ namespace MPI_W
   int critical_error() noexcept;
   void barrier() noexcept;
   void finalize() noexcept;
+  bool is_initialized() noexcept;
   enum class SIGNALS : char
   {
     STOP,
@@ -15,7 +16,7 @@ namespace MPI_W
     DUMP
   };
 
-  
+
 
 
 } // namespace MPI_W

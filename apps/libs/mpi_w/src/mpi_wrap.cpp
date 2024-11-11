@@ -8,6 +8,15 @@
 
 namespace MPI_W
 {
+    bool is_initialized() noexcept
+    {
+        int initialized{};
+
+        MPI_Initialized(&initialized);
+
+        return initialized != 0;
+    }
+
 
   void finalize() noexcept
   {
