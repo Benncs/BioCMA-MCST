@@ -13,28 +13,31 @@
 class Handle
 {
 public:
-  static std::optional<std::unique_ptr<Handle>> init(uint32_t n_rank, uint32_t current_rank, uint64_t id,uint32_t thread_per_process);
+  Handle(const Handle&) = delete;
+  Handle(Handle&&) = default;
+  Handle& operator=(const Handle&) = delete;
+  Handle& operator=(Handle&&) = default;
+
+  static std::optional<std::unique_ptr<Handle>>
+  init(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_process);
   static std::optional<std::unique_ptr<Handle>> load_mock(uint32_t n_rank, uint32_t current_rank);
   Handle() = default;
   ~Handle();
   void register_parameters();
   void apply(bool to_load);
 
-  void register_parameters(Core::UserControlParameters &&params);
+  void register_parameters(Core::UserControlParameters&& params);
   bool regisiter_initial_condition();                          // TODO
-  bool register_feed(Simulation::Feed::SimulationFeed &&feed); // TODO
+  bool register_feed(Simulation::Feed::SimulationFeed&& feed); // TODO
   bool register_result_path(std::string_view path);
   bool register_cma_path(std::string_view path);
-  [[nodiscard]] int get_id() const
-  {
-    return id;
-  }
+  [[nodiscard]] int get_id() const;
 
   bool exec();
 
 private:
   int id{};
-  Handle(uint32_t n_rank, uint32_t current_rank, uint64_t id,uint32_t thread_per_proces);
+  Handle(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_proces);
   Core::CaseData _data;
   Core::UserControlParameters params;
   bool loaded = false;

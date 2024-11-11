@@ -1,5 +1,4 @@
 BasedOnStyle: llvm 
-BreakBeforeBraces: Allman
 BraceWrapping:
   AfterFunction: true
 AllowShortFunctionsOnASingleLine: None
@@ -7,11 +6,9 @@ BinPackArguments: false
 BinPackParameters: false
 NamespaceIndentation: All
 IndentPPDirectives: AfterHash
-
-ColumnLimit: 120  # Disables column limit to prevent unwanted line wrapping.
+ColumnLimit: 100  # Disables column limit to prevent unwanted line wrapping.
 CommentPragmas: true  # Properly formats comments with pragmas.
 SpaceBeforeParens: ControlStatements  # Space before parentheses for control statements.
 UseTab: Never  # Use spaces for indentation instead of tabs.
-
-
-
+PointerAlignment: Left
+BreakBeforeBraces: Allman
