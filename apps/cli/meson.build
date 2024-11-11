@@ -18,7 +18,7 @@ lib_app = static_library(
   name,
   lib_sources,
   include_directories: ['./includes'],
-  dependencies: [core_distributed_dependency],
+  dependencies: [lib_api_distributed_dep],
   cpp_args: [],
   install_rpath: project_name,
 )
@@ -27,7 +27,7 @@ lib_app_shared = static_library(
   f'@name@_shared',
   lib_sources,
   include_directories: ['./includes'],
-  dependencies: [core_shared_dependency],
+  dependencies: [lib_api_shared_dep],
   # cpp_args: ['-DNO_MPI'],
   install_rpath: project_name,
 )
@@ -35,14 +35,14 @@ lib_app_shared = static_library(
 app_test_dependency = declare_dependency(
   include_directories: ['./includes'],
   link_with: lib_app,
-  dependencies: core_distributed_dependency,
+  dependencies: lib_api_distributed_dep,
   compile_args: [],
 )
 
 app_shared_dependency = declare_dependency(
   include_directories: ['./includes'],
   link_with: lib_app_shared,
-  dependencies: core_shared_dependency,
+  dependencies: lib_api_shared_dep,
   compile_args: [],
 )
 

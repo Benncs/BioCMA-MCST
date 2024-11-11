@@ -22,11 +22,11 @@ namespace CORE_DE
                                    const std::vector<size_t> &distribution)
   {
     export_initial_kv initial_values;
-    initial_values["number_particles"] = params.user_params.number_particle;
+    initial_values["number_particles"] = params.number_particle;
     initial_values["initial_weight"] = weight;
-    initial_values["initial_biomass_concentration"] = params.user_params.biomass_initial_concentration;
+    initial_values["initial_biomass_concentration"] = params.biomass_initial_concentration;
     initial_values["number_compartment"] = params.n_compartments;
-    initial_values["final_time"] = params.user_params.final_time;
+    initial_values["final_time"] = params.final_time;
     initial_values["particle_distribution"] =
         std::vector<size_t>(distribution.begin(), distribution.end());
     initial_values["delta_time"] = params.d_t;

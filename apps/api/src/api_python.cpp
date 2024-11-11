@@ -7,8 +7,8 @@ namespace py = pybind11;
 PYBIND11_MODULE(handle_module, m) {
     // Wrapping the Handle structure
     py::class_<Handle>(m, "Handle");
-    m.def("init_handle_raw", [](uint32_t n_rank,uint32_t i_rank){
-        auto opt = Handle::init(n_rank, i_rank);
+    m.def("init_handle", [](uint32_t n_rank,uint32_t i_rank,uint64_t id){
+        auto opt = Handle::init(n_rank, i_rank,id,1);
         if(opt.has_value())
         {
             return std::move(opt.value());
@@ -17,7 +17,7 @@ PYBIND11_MODULE(handle_module, m) {
     });
 
     m.def("load", [](uint32_t n_rank,uint32_t i_rank){
-        auto opt = Handle::load(n_rank, i_rank);
+        auto opt = Handle::load_mock(n_rank, i_rank);
         if(opt.has_value())
         {
             return std::move(opt.value());

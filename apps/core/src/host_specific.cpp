@@ -138,13 +138,13 @@ std::unique_ptr<CORE_DE::MainExporter> make_main_exporter(const ExecInfo &exec,
                                                           const Core::SimulationParameters &params)
 {
   std::unique_ptr<CORE_DE::MainExporter> main_exporter =
-      std::make_unique<CORE_DE::MainExporter>(exec, params.results_file_name);
+      std::make_unique<CORE_DE::MainExporter>(exec, params.results_file_name+std::string(".h5"));
 
   for (std::size_t i_rank = 0; i_rank < exec.n_rank; ++i_rank)
   {
     std::string group = "files/" + std::to_string(i_rank);
 
-    auto filename = params.user_params.results_file_name + "_partial_" + std::to_string(i_rank) + ".h5";
+    auto filename = params.results_file_name + "_partial_" + std::to_string(i_rank) + ".h5";
 
     main_exporter->do_link(filename, group, "/");
   }
@@ -164,7 +164,7 @@ void host_process(const ExecInfo &exec,
   const auto [n_species, n_compartment] = simulation.getDimensions();
 
   main_exporter->init_fields(
-      params.user_params.number_exported_result, n_compartment, n_species, simulation.two_phase_flow());
+      params.number_exported_result, n_compartment, n_species, simulation.two_phase_flow());
 
   main_exporter->write_initial(simulation.mc_unit->init_weight, params, simulation.mc_unit->domain.getRepartition());
 
@@ -209,9 +209,9 @@ void main_loop(const Core::SimulationParameters &params,
   const size_t n_iter_simulation = transitioner->get_n_timestep();
 
   const size_t dump_number =
-      std::min(n_iter_simulation, static_cast<size_t>(params.user_params.number_exported_result)) - 1;
+      std::min(n_iter_simulation, static_cast<size_t>(params.number_exported_result)) - 1;
   // FIXME when number_exported_result==0 and number_exported_result==1
-  const size_t dump_interval = (params.user_params.number_exported_result != 0)
+  const size_t dump_interval = (params.number_exported_result != 0)
                                    ? (n_iter_simulation) / (dump_number) + 1
                                    : n_iter_simulation + 1;
 

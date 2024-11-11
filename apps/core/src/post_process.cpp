@@ -98,11 +98,11 @@ namespace PostProcessing
     mde->write_final(simulation, distribution);
     // exporter->write_final_results(simulation, distribution);
 
-    if (tot != (new_p - removed + params.user_params.number_particle))
+    if (tot != (new_p - removed + params.number_particle))
     {
       std::cerr << ("Results are not coherent (Bad particle balance): ");
       std::cerr << tot << "=" << new_p << "-" << removed << "+"
-                << params.user_params.number_particle << std::endl;
+                << params.number_particle << std::endl;
     }
   }
 

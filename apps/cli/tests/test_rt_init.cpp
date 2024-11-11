@@ -1,4 +1,5 @@
 #include "common/execinfo.hpp"
+#include "core/simulation_parameters.hpp"
 #include <cassert>
 #include <iostream>
 #include <omp.h>
@@ -7,9 +8,9 @@
 static ExecInfo c_test_set_openmp_threads(int rank, int size, int n_threads)
 {
   ExecInfo info;
-  Core::SimulationParameters params;
-  params.user_params.n_thread = n_threads;
-  set_n_thread_current_rank(rank, size, info, params.user_params);
+  Core::UserControlParameters params;
+  params.n_thread = n_threads;
+  set_n_thread_current_rank(rank, size, info, params);
   std::cerr << "Number of threads: " << info.thread_per_process << '\n';
   return info;
 }

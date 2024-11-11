@@ -36,7 +36,7 @@ namespace Core
      * @param _info Execution information containing context for the simulation.
      * @param _params Simulation parameters that configure the simulation behavior.
      */
-    GlobalInitialiser(const ExecInfo &_info, SimulationParameters &_params);
+    GlobalInitialiser(const ExecInfo &_info, UserControlParameters _user_params);
 
     /**
      * @brief Initializes a flow iterator.
@@ -87,7 +87,7 @@ namespace Core
     OptionalPtr<Simulation::SimulationUnit>
     init_simulation(std::unique_ptr<MC::MonteCarloUnit> _unit,
                     const Simulation::ScalarInitializer &scalar_init,
-                    std::optional<Simulation::Feed::SimulationFeed>&& _feed = std::nullopt);
+                    std::optional<Simulation::Feed::SimulationFeed> &&_feed = std::nullopt);
 
     /**
      * @brief Initializes a scalar component of the simulation.
@@ -116,6 +116,8 @@ namespace Core
      * @return A boolean indicating whether initialization can be terminated.
      */
     [[nodiscard]] bool check_init_terminate() const;
+
+    [[nodiscard]] SimulationParameters get_parameters() const;
 
   private:
     /**
@@ -197,7 +199,9 @@ namespace Core
     void mpi_broadcast(); ///< Method for handling MPI broadcast communication.
 
     ExecInfo info;
-    SimulationParameters &params;
+    SimulationParameters params;
+
+    UserControlParameters user_params;
 
     /////INNER STRUCT
     std::vector<double> liquid_volume;
@@ -205,7 +209,7 @@ namespace Core
     CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors;
     double t_per_flowmap{};
     std::vector<size_t> worker_neighbor_data;
-    bool f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
+    bool f_init_gas_flow;
     /////
 
     bool is_host; ///< Flag indicating if this instance is the host.

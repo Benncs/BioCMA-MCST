@@ -11,7 +11,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <string_view>
 #include <worker_specific.hpp>
 
 #ifdef USE_CEAREAL
@@ -38,7 +37,7 @@ namespace Core
   std::string exporter_filename(const ExecInfo &exec, const SimulationParameters &params)
   {
     std::stringstream filename;
-    filename << params.user_params.results_file_name << "_partial_" << exec.current_rank << ".h5";
+    filename << params.results_file_name << "_partial_" << exec.current_rank << ".h5";
     return filename.str();
   }
 
@@ -47,7 +46,7 @@ namespace Core
 
     const auto [_, n_compartment] = case_data.simulation->getDimensions();
 
-    partial_exporter.init_fields(case_data.params.user_params.number_exported_result, n_compartment);
+    partial_exporter.init_fields(case_data.params.number_exported_result, n_compartment);
 
     auto probes = Simulation::Probes(0, 1, {"exit_time"});
     case_data.simulation->set_probes(std::move(probes));
@@ -77,7 +76,7 @@ namespace Core
     do_serde(case_data);
   }
 
-  std::optional<Core::CaseData> load(const ExecInfo &exec, SimulationParameters &params)
+  std::optional<Core::CaseData> load(const ExecInfo &exec, const UserControlParameters &&params)
   {
     CaseData case_data;
     case_data.exec_info = exec;
@@ -96,8 +95,7 @@ namespace Core
     case_data.transitioner = std::move(*transition);
     try
     {
-      const bool ok_init = SerDe::load_simulation(
-          gi, case_data, "/mnt/c/Users/casale/Documents/code/cpp/kokkos_biomc/results/tmp/tmp_serde_0.raw");
+      const bool ok_init = SerDe::load_simulation(gi, case_data, *params.serde_file);
 
       if (!gi.check_init_terminate() || !ok_init)
       {
@@ -110,7 +108,7 @@ namespace Core
       throw std::runtime_error(err);
     }
 
-    case_data.params = params;
+    case_data.params = gi.get_parameters();
     // TODO: Check integreity between transitionner and read value (transitionner and simulation tpf + n_species)
 
     return case_data;

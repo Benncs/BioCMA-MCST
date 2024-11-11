@@ -36,6 +36,8 @@ lib_api_distributed_dep = declare_dependency(
   dependencies: [core_distributed_dependency],
 )
 
+# C API
+
 lib_api_c = library(
   f'@name@_c',
   files(f'@src_dir@/api_raw.cpp'),
@@ -57,6 +59,7 @@ lib_api_c_dep = declare_dependency(
   include_directories: include_directories('./includes', 'public'),
 )
 
+# Python 
 py = import('python').find_installation(pure: false)
 pybind11_dep = dependency('pybind11', required: true)
 pydep = py.dependency(embed: true)

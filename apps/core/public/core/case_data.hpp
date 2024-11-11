@@ -4,9 +4,11 @@
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
 #include <memory>
+#include <optional>
 #include <simulation/simulation.hpp>
 #include <simulation/transitionner.hpp>
-#include <optional> 
+
+
 
 namespace Core
 {
@@ -62,8 +64,7 @@ namespace Core
    */
   void exec(CaseData &&case_data);
 
-
-  std::optional<Core::CaseData> load(const ExecInfo&exec,  SimulationParameters& params);
+  std::optional<Core::CaseData> load(const ExecInfo &exec, const UserControlParameters &&params);
 
 } // namespace Core
 

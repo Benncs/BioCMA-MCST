@@ -21,7 +21,7 @@
  * parameters are invalid.
  * @exception noexcept This function does not throw exceptions.
  */
-std::optional<Core::SimulationParameters> parse_cli(int argc, char **argv) noexcept;
+std::optional<Core::UserControlParameters> parse_cli(int argc, char **argv) noexcept;
 
 /**
  * @brief Print Help message to specified buffer

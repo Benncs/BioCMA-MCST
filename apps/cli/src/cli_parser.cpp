@@ -7,7 +7,7 @@
 #include <optional>
 #include <string_view>
 
-static void sanitise_check_cli(Core::SimulationParameters &params);
+static void sanitise_check_cli(const Core::UserControlParameters &params);
 // static void print_green(std::ostream &os, std::string_view message);
 static void print_red(std::ostream &os, std::string_view message);
 static void throw_bad_arg(std::string_view arg);
@@ -15,19 +15,6 @@ static void throw_bad_arg(std::string_view arg);
 static void
 parseArg(Core::UserControlParameters &user_controll, std::string current_param, std::string_view current_value);
 
-static void recur_path(std::string_view rootPath, Core::SimulationParameters &params)
-{
-  size_t count = 1;
-  std::string dirName = "i_" + std::to_string(count) + "/";
-  std::filesystem::path dirPath = std::string(rootPath) + dirName;
-  while (std::filesystem::exists(dirPath) && std::filesystem::is_directory(dirPath))
-  {
-    ++count;
-    params.flow_files.push_back(dirPath.string());
-    dirName = "i_" + std::to_string(count) + "/";
-    dirPath = std::string(rootPath) + dirName;
-  }
-}
 
 static std::optional<Core::UserControlParameters> parse_user_param(int argc, char **argv)
 {
@@ -52,7 +39,7 @@ static std::optional<Core::UserControlParameters> parse_user_param(int argc, cha
       }
       else
       {
-        throw_bad_arg("");
+        throw_bad_arg("ALLO");
       }
       iarg += 2;
     }
@@ -70,30 +57,17 @@ static std::optional<Core::UserControlParameters> parse_user_param(int argc, cha
   }
 }
 
-std::optional<Core::SimulationParameters> parse_cli(int argc, char **argv) noexcept
+std::optional<Core::UserControlParameters> parse_cli(int argc, char **argv) noexcept
 {
-  Core::SimulationParameters params = Core::SimulationParameters::m_default();
   auto opt_control = parse_user_param(argc, argv);
   if (!opt_control.has_value())
   {
     return std::nullopt;
   }
   auto control = *opt_control;
-  params.flow_files.clear();
-  if (control.recursive)
-  {
-    recur_path(control.cma_case_path, params);
-  }
-  else
-  {
+  sanitise_check_cli(control);
 
-    params.flow_files.emplace_back(control.cma_case_path);
-  }
-
-  params.user_params = std::move(control);
-  sanitise_check_cli(params);
-
-  return params;
+  return control;
 }
 
 static void
@@ -176,35 +150,33 @@ parseArg(Core::UserControlParameters &user_control, std::string current_param, s
     if (current_param == "serde")
     {
       user_control.serde = true;
+      user_control.serde_file = std::string(current_value);
     }
-
     break;
   }
 
   default:
+  {
     throw_bad_arg(current_param);
     break;
   }
+  }
 }
 
-static void sanitise_check_cli(Core::SimulationParameters &params)
+static void sanitise_check_cli(const Core::UserControlParameters &params)
 {
-  if (params.flow_files.empty())
-  {
-    throw std::invalid_argument("Missing files path");
-  }
 
-  if (params.user_params.delta_time < 0)
+  if (params.delta_time < 0)
   {
     throw std::invalid_argument("Wrongtime step (d_t<0)");
   }
 
-  if (params.user_params.number_particle == 0)
+  if (params.number_particle == 0)
   {
     throw std::invalid_argument("Missing number of particles");
   }
 
-  if (params.user_params.final_time <= 0)
+  if (params.final_time <= 0)
   {
     throw std::invalid_argument("Final time must be positive");
   }
@@ -214,23 +186,23 @@ void showHelp(std::ostream &os) noexcept
 {
   os << "Usage: ";
   print_red(os, "BIOCMA-MCST");
-  os << "  -np <number_of_particles> [-ff <flow_file_folder_path>] [OPTIONS] " << '\n';
-  os << "\nMandatory arguments:" << '\n';
-  os << "  -np <number>, --number-particles <number>\tNumber of particles" << '\n';
-  os << "  -d <number>, --duration <number>\tSimulation duration" << '\n';
-  os << "  -ff <flow_file_folder_path>\t\tPath to flow file (Default: "
-        "./rawdata)"
-     << '\n';
+  // os << "  -np <number_of_particles> [-ff <flow_file_folder_path>] [OPTIONS] " << '\n';
+  // os << "\nMandatory arguments:" << '\n';
+  // os << "  -np <number>, --number-particles <number>\tNumber of particles" << '\n';
+  // os << "  -d <number>, --duration <number>\tSimulation duration" << '\n';
+  // os << "  -ff <flow_file_folder_path>\t\tPath to flow file (Default: "
+  //       "./rawdata)"
+  //    << '\n';
 
-  os << "\nOptional arguments:" << '\n';
-  os << "  -h, --help\t\tDisplay this help message" << '\n';
-  os << "  -v, --verbose\t\tVerbose mode" << '\n';
-  os << "  -nt <number>, --number-threads <number>\tNumber of threads per "
-        "process"
-     << '\n';
+  // os << "\nOptional arguments:" << '\n';
+  // os << "  -h, --help\t\tDisplay this help message" << '\n';
+  // os << "  -v, --verbose\t\tVerbose mode" << '\n';
+  // os << "  -nt <number>, --number-threads <number>\tNumber of threads per "
+  //       "process"
+  //    << '\n';
 
-  os << "Available model:\r\n";
-  os << "WIP\r\n";
+  // os << "Available model:\r\n";
+  // os << "WIP\r\n";
   // for (const auto& i : get_available_models())
   // {
   //   os << i << "\r\n";
@@ -253,6 +225,6 @@ static void print_red(std::ostream &os, std::string_view message)
 static void throw_bad_arg(std::string_view arg)
 {
   std::string msg = "Unknown argument: ";
-  msg += arg;
+  msg += std::string(arg);
   throw std::invalid_argument(msg);
 }
