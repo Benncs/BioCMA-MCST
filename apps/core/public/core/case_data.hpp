@@ -1,6 +1,7 @@
 #ifndef __CASE_DATA__HPP__
 #define __CASE_DATA__HPP__
 
+#include "simulation/feed_descriptor.hpp"
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
 #include <memory>
@@ -64,7 +65,7 @@ namespace Core
    */
   void exec(CaseData &&case_data);
 
-  std::optional<Core::CaseData> load(const ExecInfo &exec, const UserControlParameters &&params);
+  std::optional<Core::CaseData> load(const ExecInfo &exec, const UserControlParameters &&params,std::optional<Simulation::Feed::SimulationFeed> feed=std::nullopt);
 
 } // namespace Core
 

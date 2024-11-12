@@ -8,6 +8,7 @@
 #include <array>
 #include <common/execinfo.hpp>
 #include <memory>
+#include <optional>
 #include <simulation/simulation.hpp>
 #include <simulation/transitionner.hpp>
 
@@ -86,8 +87,7 @@ namespace Core
      */
     OptionalPtr<Simulation::SimulationUnit>
     init_simulation(std::unique_ptr<MC::MonteCarloUnit> _unit,
-                    const Simulation::ScalarInitializer &scalar_init,
-                    std::optional<Simulation::Feed::SimulationFeed> &&_feed = std::nullopt);
+                    const Simulation::ScalarInitializer &scalar_init);
 
     /**
      * @brief Initializes a scalar component of the simulation.
@@ -101,7 +101,7 @@ namespace Core
      *
      * @return An optional simulation feed.
      */
-    std::optional<Simulation::Feed::SimulationFeed> init_feed();
+    void init_feed(std::optional<Simulation::Feed::SimulationFeed> feed=std::nullopt);
 
     /**
      * @brief Initializes a Monte Carlo unit.
@@ -210,6 +210,7 @@ namespace Core
     double t_per_flowmap{};
     std::vector<size_t> worker_neighbor_data;
     bool f_init_gas_flow;
+    std::optional<Simulation::Feed::SimulationFeed> feed;
     /////
 
     bool is_host; ///< Flag indicating if this instance is the host.

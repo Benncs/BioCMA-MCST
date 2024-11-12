@@ -61,6 +61,11 @@ namespace Simulation::Feed
     feed_value_t target;
   };
 
+  struct FeedFactory
+  {
+      static FeedDescritor constant(double _f, feed_value_t &&_target, feed_position_t &&_position, feed_species_t _species);
+  };
+
   struct SimulationFeed
   {
     std::optional<std::vector<FeedDescritor>> liquid;

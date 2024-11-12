@@ -9,27 +9,7 @@
 #include <vector>
 namespace Core
 {
-  struct UserSimulationParam
-  {
-    double final_time;
-    double delta_time;
-    bool force_override;
-    int32_t n_thread;
-    uint32_t number_exported_result;
-    bool recursive;
-    std::string results_file_name;
-    std::string cma_case_path;
-    std::optional<std::string> serde_file;
-  };
-
-  struct InitUserParam
-  {
-    double biomass_initial_concentration;
-    uint64_t number_particle;
-    std::string initialiser_path;
-    std::string model_name;
-  };
-
+ 
   /**
    * @struct UserControlParameters
    * @brief A structure to hold user-defined control parameters for simulation settings.

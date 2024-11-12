@@ -142,8 +142,8 @@ namespace SerDe
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
-
-    auto simulation = gi.init_simulation(std::move(mc_unit), scalar_init, gi.init_feed());
+    
+    auto simulation = gi.init_simulation(std::move(mc_unit), scalar_init);
 
     if (!simulation.has_value())
     {
