@@ -38,7 +38,7 @@ namespace Simulation
         is_two_phase_flow(other.is_two_phase_flow)
   {
   }
-
+  
   SimulationUnit::SimulationUnit(std::unique_ptr<MC::MonteCarloUnit> &&_unit,
                                  const ScalarInitializer &scalar_init,
                                  std::optional<Feed::SimulationFeed> _feed)
@@ -46,7 +46,7 @@ namespace Simulation
 
         flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow)
   {
-
+    std::cerr<<"DOMAIN"<<mc_unit->domain.getNumberCompartments()<<std::endl;
     this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(
         makeScalarSimulation(mc_unit->domain.getNumberCompartments(), scalar_init.n_species, scalar_init.volumesliq));
 
@@ -55,7 +55,7 @@ namespace Simulation
                                                                       scalar_init.n_species,
                                                                       scalar_init.volumesgas)) // No contribs for gas
                                            : nullptr;
-
+    
     post_init_concentration(scalar_init);
     post_init_compartments();
 
@@ -111,8 +111,10 @@ namespace Simulation
     }
     if (!this->liquid_scalar->deep_copy_concentration(*scalar_init.liquid_buffer))
     {
+     
       throw SimulationException(ErrorCodes::MismatchSize);
     }
+    
     if (is_two_phase_flow)
     {
       if (!scalar_init.gas_buffer.has_value())

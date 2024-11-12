@@ -153,7 +153,7 @@ std::unique_ptr<CORE_DE::MainExporter> make_main_exporter(const ExecInfo &exec,
 }
 
 void host_process(const ExecInfo &exec,
-                  Simulation::SimulationUnit &&simulation,
+                  Simulation::SimulationUnit &simulation,
                   const Core::SimulationParameters &params,
                   std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner,
                   CORE_DE::PartialExporter &partial_exporter)
@@ -189,7 +189,7 @@ void host_process(const ExecInfo &exec,
   PostProcessing::save_final_particle_state(simulation, partial_exporter);
   last_sync(exec, simulation);
 
-  PostProcessing::final_post_processing(exec, params, std::move(simulation), main_exporter);
+  PostProcessing::final_post_processing(exec, params, simulation, main_exporter);
 }
 
 void main_loop(const Core::SimulationParameters &params,

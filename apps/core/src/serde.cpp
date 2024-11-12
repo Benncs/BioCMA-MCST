@@ -51,8 +51,8 @@ static void read_file(std::stringstream &buffer, std::string_view filename)
   }
 }
 
-using Archive_t = cereal::BinaryOutputArchive;
-using iArchive_t = cereal::BinaryInputArchive;
+using Archive_t = cereal::XMLOutputArchive;
+using iArchive_t = cereal::XMLInputArchive;
 
 // void read_archive(cereal::XMLInputArchive& ar,std::string_view filename)
 // {
@@ -97,7 +97,7 @@ namespace SerDe
           cgas.has_value() ? std::make_optional(std::vector<double>(cgas->begin(), cgas->end())) : std::nullopt;
 
       ar(dim, std::vector<double>(cliq.begin(), cliq.end()), cgas_a, case_data.simulation->get_end_time_mut());
-
+      std::cerr<<"DOMAIN"<<case_data.simulation->mc_unit->domain.getNumberCompartments()<<std::endl;
       ar(case_data.simulation->mc_unit);
     }
 
@@ -126,7 +126,7 @@ namespace SerDe
     std::optional<std::vector<double>> read_c_gas;
     double start_time{};
     ar(dims, read_c_liq, read_c_gas, start_time);
-
+    
     // const auto *state = case_data.transitioner->getState();
 
     Simulation::ScalarInitializer scalar_init;
@@ -142,7 +142,7 @@ namespace SerDe
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
-    
+    std::cerr<<"DOMAIN"<<mc_unit->domain.getNumberCompartments()<<std::endl;
     auto simulation = gi.init_simulation(std::move(mc_unit), scalar_init);
 
     if (!simulation.has_value())

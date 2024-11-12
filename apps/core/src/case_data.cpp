@@ -84,7 +84,7 @@ namespace Core
     init_partial_exporter(partial_exporter, case_data);
 
     auto *const sim = case_data.simulation.get();
-    f_run(case_data.exec_info, std::move(*sim), case_data.params, std::move(case_data.transitioner), partial_exporter);
+    f_run(case_data.exec_info, *sim, case_data.params, std::move(case_data.transitioner), partial_exporter);
 
     do_serde(case_data);
   }
@@ -110,7 +110,7 @@ namespace Core
     try
     {
       const bool ok_init = SerDe::load_simulation(gi, case_data, *params.serde_file);
-
+      
       if (!gi.check_init_terminate() || !ok_init)
       {
         return std::nullopt;

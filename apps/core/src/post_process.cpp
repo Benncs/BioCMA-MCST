@@ -81,7 +81,7 @@ namespace PostProcessing
 
   void final_post_processing(const ExecInfo &exec,
                              const Core::SimulationParameters &params,
-                             Simulation::SimulationUnit &&simulation,
+                             Simulation::SimulationUnit &simulation,
                              std::unique_ptr<CORE_DE::MainExporter> &mde)
   {
     std::cout << "POST PROCESSING" << std::endl;
