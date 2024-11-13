@@ -9,10 +9,43 @@
 #include <optional>
 // namespace Api
 // {
+struct Success {};
+template <typename T> struct Result : protected std::variant<Success, T>
+{
+  explicit constexpr Result() noexcept : std::variant<Success, T>{Success{}}{};  
+  constexpr explicit Result(T const&& t) noexcept : std::variant<Success, T>{t}
+  {
+  }
+  constexpr explicit operator bool() const noexcept
+  {
+    return valid();
+  }
 
+  [[nodiscard]] constexpr bool valid() const noexcept
+  {
+    return std::holds_alternative<Success>(*this);
+  }
+  [[nodiscard]] constexpr bool invalid() const noexcept
+  {
+    return !valid();
+  }
+  [[nodiscard]] constexpr auto get() const noexcept -> T
+  {
+    return (invalid() ? std::get<T>(*this) : T());
+  }
+};
 
-
-
+struct ApiResult : Result<std::string>
+{
+  constexpr explicit ApiResult(std::string_view t) noexcept : Result<std::string>(std::string(t))
+  {
+  }
+  explicit constexpr ApiResult() noexcept = default;
+  constexpr int to_c_ret_code()
+  {
+    return (valid())?0:-1;
+  }
+};
 
 class Handle
 {
@@ -23,27 +56,26 @@ public:
   Handle& operator=(Handle&&) = default;
 
   static std::optional<std::unique_ptr<Handle>>
-  init(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_process);
+  init(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_process) noexcept;
   Handle() = default;
   ~Handle();
 
-  bool regisiter_initial_condition();                          // TODO
-  bool register_feed(Simulation::Feed::SimulationFeed&& feed); // TODO
-
-  void register_parameters();
-  int apply(bool to_load);
-  void register_parameters(Core::UserControlParameters&& params);
+  ApiResult apply(bool to_load)noexcept;
+  ApiResult register_parameters(Core::UserControlParameters&& params)noexcept;
   bool register_result_path(std::string_view path);
-  bool register_cma_path(std::string_view path,bool recursive=false);
+  bool register_cma_path(std::string_view path, bool recursive = false);
   bool register_serde(std::string_view path);
 
   bool register_model_name(std::string_view path);
-  //flow, {glucose_c}, {0}, {0}, Simulation::Feed::Constant{}
-  bool set_feed_constant(double _f, std::span<double> _target, std::span<std::size_t> _position, std::span<std::size_t> _species,bool gas=false);
+  bool set_feed_constant(double _f,
+                         std::span<double> _target,
+                         std::span<std::size_t> _position,
+                         std::span<std::size_t> _species,
+                         bool gas = false);
 
   [[nodiscard]] int get_id() const;
 
-  bool exec();
+  ApiResult exec()noexcept;
 
 private:
   int id{};
@@ -53,7 +85,7 @@ private:
   bool loaded = false;
   bool applied = false;
   bool registered = false;
-  std::optional<Simulation::Feed::SimulationFeed> feed=std::nullopt;
+  std::optional<Simulation::Feed::SimulationFeed> feed = std::nullopt;
 };
 
 // } //namespace Api

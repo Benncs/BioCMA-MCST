@@ -8,7 +8,7 @@ int apply(Handle* handle, int to_load)
 {
   if (handle != nullptr)
   {
-    return handle->apply(to_load != 0);
+    return handle->apply(to_load != 0).to_c_ret_code();
   }
   return 0xff;
 }

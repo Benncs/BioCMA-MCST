@@ -119,10 +119,18 @@ Handle::Handle(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thr
   }
 }
 
-std::optional<std::unique_ptr<Handle>>
-Handle::init(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_proces)
+std::optional<std::unique_ptr<Handle>> Handle::init(uint32_t n_rank,
+                                                    uint32_t current_rank,
+                                                    uint64_t id,
+                                                    uint32_t thread_per_proces) noexcept
 {
-  auto ptr = std::unique_ptr<Handle>(new Handle(n_rank, current_rank, id, thread_per_proces));
+
+  auto ptr = std::unique_ptr<Handle>(new (std::nothrow)
+                                         Handle(n_rank, current_rank, id, thread_per_proces));
+  if (ptr == nullptr)
+  {
+    return std::nullopt;
+  }
   return ptr;
 }
 
@@ -131,7 +139,7 @@ Handle::~Handle()
   std::cout << "destructing from c++" << std::endl;
 }
 
-bool Handle::exec()
+ApiResult Handle::exec()noexcept
 {
   if (loaded || (registered && applied))
   {
@@ -139,47 +147,44 @@ bool Handle::exec()
     {
       std::cout << "Running " << this->_data.exec_info.current_rank << "..." << std::endl;
       Core::exec(std::forward<Core::CaseData>(this->_data));
-      return true;
+      return ApiResult();
     }
     catch (std::exception& e)
     {
-      std::cout << e.what() << std::endl;
-      return false;
+      return ApiResult(e.what());
     }
   }
   else
   {
-    return false;
+    return ApiResult();
   }
 }
 
-int Handle::apply(bool to_load)
+ApiResult Handle::apply(bool to_load) noexcept
 {
   if (!check_required(this->params, to_load))
   {
-    std::cout << "Check params" << std::endl;
-    return -1;
+    return ApiResult("Check params");
   }
   if (loaded)
   {
-    return -2;
+    return ApiResult("Not loaded");
   }
 
   if (to_load)
   {
-    auto opt_case = Core::load(this->_data.exec_info, std::move(this->params),feed);
-    if (opt_case)
+    if (auto opt_case = Core::load(this->_data.exec_info, std::move(this->params), feed))
     {
       this->_data = std::move(*opt_case);
       this->loaded = true;
+      return ApiResult();
     }
-    return 0;
+    return ApiResult("Error loading");
   }
 
   if (!registered)
   {
-    throw std::runtime_error("Register first");
-    return -3;
+    return ApiResult("Register first");
   }
 
   Core::GlobalInitialiser gi(_data.exec_info, params);
@@ -189,40 +194,41 @@ int Handle::apply(bool to_load)
   auto __simulation = gi.init_simulation();
   if ((!t.has_value() && !__simulation.has_value()) || !gi.check_init_terminate())
   {
-    throw std::runtime_error("Error apply");
+    ApiResult("Error apply");
   }
   _data.params = gi.get_parameters();
   _data.simulation = std::move(*__simulation);
   _data.transitioner = std::move(*t);
   applied = true;
-  return 0;
+  return ApiResult();
 }
 
-void Handle::register_parameters()
-{
-  if (loaded)
-  {
-    return;
-  }
-  this->params = Core::UserControlParameters::m_default();
-  this->params.final_time = 10;
-  this->params.initialiser_path = "";
-  this->params.model_name = "None";
-  this->params.delta_time = 0.1;
-  this->params.number_particle = 100;
-  this->params.results_file_name = "test_api_new";
-  this->params.number_exported_result = 50;
-  this->params.cma_case_path = "/home/benjamin/Documents/code/cpp/BioCMA-MCST/cma_data/0d_mono/";
-  this->params.serde = false;
-  // mock_param.flow_files = {mock_param.user_params.cma_case_path};
+// void Handle::register_parameters()
+// {
+//   if (loaded)
+//   {
+//     return;
+//   }
+//   this->params = Core::UserControlParameters::m_default();
+//   this->params.final_time = 10;
+//   this->params.initialiser_path = "";
+//   this->params.model_name = "None";
+//   this->params.delta_time = 0.1;
+//   this->params.number_particle = 100;
+//   this->params.results_file_name = "test_api_new";
+//   this->params.number_exported_result = 50;
+//   this->params.cma_case_path = "/home/benjamin/Documents/code/cpp/BioCMA-MCST/cma_data/0d_mono/";
+//   this->params.serde = false;
+//   // mock_param.flow_files = {mock_param.user_params.cma_case_path};
 
-  registered = true;
-}
+//   registered = true;
+// }
 
-void Handle::register_parameters(Core::UserControlParameters&& _params)
+ApiResult Handle::register_parameters(Core::UserControlParameters&& _params) noexcept
 {
   params = std::move(_params);
   registered = true;
+  return ApiResult();
 }
 
 bool Handle::register_result_path(std::string_view path)

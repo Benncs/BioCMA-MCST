@@ -76,8 +76,7 @@ using iArchive_t = cereal::XMLInputArchive;
 
 namespace SerDe
 {
-  static std::vector<double> spl = {20e-3};
-  static std::vector<double> spg = {};
+
   void save_simulation(const Core::CaseData &case_data)
   {
 
@@ -132,22 +131,7 @@ namespace SerDe
     {
       return false;
     }
-    // const auto *state = case_data.transitioner->getState();
-    // if (state == nullptr)
-    // {
-    //   throw std::runtime_error("Reactor not correclty initialised");
-    // }
-
-    // Simulation::ScalarInitializer scalar_init;
-    // scalar_init.n_species = dims.n_species;
-    // scalar_init.type = Simulation::ScalarInitialiserType::File;
-    // scalar_init.liquid_buffer = read_c_liq;
-    // scalar_init.gas_buffer = read_c_gas;
-    // scalar_init.gas_flow = read_c_gas.has_value();
-
-    // // FIXME
-    // scalar_init.volumesliq = spl;
-    // scalar_init.volumesgas = spg;
+  
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);

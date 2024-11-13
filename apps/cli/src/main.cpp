@@ -52,6 +52,16 @@ template <typename ExceptionType> static int handle_catch(ExceptionType const& e
  */
 static bool override_result_path(const Core::UserControlParameters& params, const ExecInfo& exec);
 
+#define HANDLE_RC(__api_results__)                                                                 \
+  {                                                                                                \
+    auto rc = (__api_results__);                                                                   \
+    if (!rc)                                                                                       \
+    {                                                                                              \
+      std::cout << "ERROR " << #__api_results__ << " " << rc.get() << std::endl;                   \
+      return -1;                                                                                   \
+    }                                                                                              \
+  }
+
 int main(int argc, char** argv)
 {
   // First manually retrieve argument from command line
@@ -80,29 +90,21 @@ int main(int argc, char** argv)
   auto handle = Handle::init(
       exec_info.n_rank, exec_info.current_rank, exec_info.run_id, exec_info.thread_per_process);
 
-  if (handle.has_value())
+  if (!handle)
   {
-    auto& h = *handle;
-
-    try
-    {
-      INTERPRETER_INIT
-      REDIRECT_SCOPE({
-        h->register_parameters(std::move(user_params));
-        h->apply(user_params.serde);
-        h->exec();
-      })
-    }
-    catch (std::exception const& e)
-    {
-      return handle_catch(e);
-    }
-    catch (...)
-    {
-      std::cerr << "Internal error" << std::endl;
-      return -1;
-    }
+    std::cerr << "Error Handle init" << std::endl;
+    return -1;
   }
+
+  auto& h = *handle;
+  const auto serde = user_params.serde;
+  INTERPRETER_INIT
+ 
+  REDIRECT_SCOPE({
+    HANDLE_RC(h->register_parameters(std::move(user_params)));
+    HANDLE_RC(h->apply(serde));
+    HANDLE_RC(h->exec());
+  })
 
   return 0;
 }

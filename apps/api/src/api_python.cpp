@@ -1,11 +1,12 @@
 #include <api/api.hpp>
 #include <api/api_raw.h> // Include the header with your C functions.
 #include <memory>
-#include <pybind11/pybind11.h>
-#include <stdexcept>
 #include <pybind11/numpy.h>
+#include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
+#include <stdexcept>
+#include <tuple>
 
 namespace py = pybind11;
 
@@ -32,9 +33,16 @@ PYBIND11_MODULE(handle_module, m)
       py::arg("thread_per_proces") = 1);
 
   m.def("exec", &exec);
-  m.def("apply", &apply);
+  // m.def("apply", &apply);
 
-  m.def("apply", &apply);
+  m.def("apply",
+        [](std::shared_ptr<Handle>& handle, bool to_load) -> std::tuple<bool, std::string>
+        {
+          auto rc = handle->apply(to_load);
+          bool f = static_cast<bool>(rc);
+          return { f,rc.get()};
+        });
+
   m.def("register_result_path", &register_result_path);
   m.def("register_cma_path", &register_cma_path);
   m.def("register_serde", &register_serde);
@@ -64,7 +72,9 @@ PYBIND11_MODULE(handle_module, m)
 
   m.def("set_feed_constant",
         [](std::shared_ptr<Handle>& handle,
-           double _f, std::vector<double> _target, std::vector<std::size_t> _position, std::vector<std::size_t> _species) {
-            handle->set_feed_constant(_f, _target, _position, _species);
-        });
+           double _f,
+           std::vector<double> _target,
+           std::vector<std::size_t> _position,
+           std::vector<std::size_t> _species)
+        { handle->set_feed_constant(_f, _target, _position, _species); });
 }
