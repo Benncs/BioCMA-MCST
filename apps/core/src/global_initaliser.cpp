@@ -305,6 +305,11 @@ namespace Core
     return scalar_init;
   }
 
+  void GlobalInitialiser::set_initial_number_particle(uint64_t np)noexcept
+  {
+    params.number_particle = np;
+  }
+
   bool GlobalInitialiser::check_init_terminate() const
   {
     int i = 0;

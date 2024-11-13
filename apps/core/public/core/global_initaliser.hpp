@@ -119,6 +119,8 @@ namespace Core
 
     [[nodiscard]] SimulationParameters get_parameters() const;
 
+    void set_initial_number_particle(uint64_t np)noexcept;
+
   private:
     /**
      * @brief Enum to define initialization steps.

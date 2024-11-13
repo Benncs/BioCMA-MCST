@@ -2,6 +2,7 @@
 #include "simulation/scalar_initializer.hpp"
 #include "simulation/simulation.hpp"
 #include <cstddef>
+#include <cstdint>
 #include <exception>
 #include <ios>
 #include <memory>
@@ -95,8 +96,7 @@ namespace SerDe
 
       std::optional<std::vector<double>> cgas_a =
           cgas.has_value() ? std::make_optional(std::vector<double>(cgas->begin(), cgas->end())) : std::nullopt;
-
-      ar(dim, std::vector<double>(cliq.begin(), cliq.end()), cgas_a, case_data.simulation->get_end_time_mut());
+      ar(case_data.params.number_particle,dim, std::vector<double>(cliq.begin(), cliq.end()), cgas_a, case_data.simulation->get_end_time_mut());
       std::cerr<<"DOMAIN"<<case_data.simulation->mc_unit->domain.getNumberCompartments()<<std::endl;
       ar(case_data.simulation->mc_unit);
     }
@@ -120,30 +120,38 @@ namespace SerDe
 
     case_data.exec_info.run_id = serde_exec.run_id;
     std::cout << "SIMULATION: " << case_data.exec_info.run_id << " LOADED" << std::endl;
-
+    uint64_t np=0;
     Simulation::Dimensions dims;
     std::vector<double> read_c_liq;
     std::optional<std::vector<double>> read_c_gas;
     double start_time{};
-    ar(dims, read_c_liq, read_c_gas, start_time);
+    ar(np,dims, read_c_liq, read_c_gas, start_time);
     
+    auto sc = gi.init_scalar();
+    if(!sc.has_value())
+    {
+      return false;
+    }
     // const auto *state = case_data.transitioner->getState();
+    // if (state == nullptr)
+    // {
+    //   throw std::runtime_error("Reactor not correclty initialised");
+    // }
 
-    Simulation::ScalarInitializer scalar_init;
-    scalar_init.n_species = dims.n_species;
-    scalar_init.type = Simulation::ScalarInitialiserType::File;
-    scalar_init.liquid_buffer = read_c_liq;
-    scalar_init.gas_buffer = read_c_gas;
-    scalar_init.gas_flow = read_c_gas.has_value();
+    // Simulation::ScalarInitializer scalar_init;
+    // scalar_init.n_species = dims.n_species;
+    // scalar_init.type = Simulation::ScalarInitialiserType::File;
+    // scalar_init.liquid_buffer = read_c_liq;
+    // scalar_init.gas_buffer = read_c_gas;
+    // scalar_init.gas_flow = read_c_gas.has_value();
 
-    // FIXME
-    scalar_init.volumesliq = spl;
-    scalar_init.volumesgas = spg;
+    // // FIXME
+    // scalar_init.volumesliq = spl;
+    // scalar_init.volumesgas = spg;
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
-    std::cerr<<"DOMAIN"<<mc_unit->domain.getNumberCompartments()<<std::endl;
-    auto simulation = gi.init_simulation(std::move(mc_unit), scalar_init);
+    auto simulation = gi.init_simulation(std::move(mc_unit), *sc);
 
     if (!simulation.has_value())
     {
@@ -153,6 +161,7 @@ namespace SerDe
     case_data.simulation = std::move(*simulation);
 
     case_data.simulation->get_start_time_mut() = start_time;
+    gi.set_initial_number_particle(np);
     return true;
   }
 

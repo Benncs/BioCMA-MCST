@@ -165,18 +165,17 @@ namespace MC
     template <class Archive> void save(Archive &ar) const
     {
       std::vector<ContainerState> data_vector(shared_containers.data(), shared_containers.data() + shared_containers.size());
-      ar(id, size, data_vector);
+      ar(id, size, _total_volume,data_vector);
     }
 
     template <class Archive> void load(Archive &ar)
     {
       std::vector<ContainerState> data_vector;
-      ar(id, size, data_vector);
+      ar(id, size, _total_volume,data_vector);
 
       auto tmpdata = Kokkos::View<ContainerState *, Kokkos::HostSpace>(data_vector.data(),data_vector.size());
-
+      Kokkos::resize(shared_containers,tmpdata.size());
       Kokkos::deep_copy(shared_containers,tmpdata);
-   
     }
 
   private:
