@@ -153,6 +153,8 @@ namespace MC
     */
     static ReactorDomain reduce(std::span<const size_t> data, size_t original_size, size_t n_rank);
 
+
+    void in_place_reduce(std::span<const size_t> data, size_t original_size, size_t n_rank);
     /**
      * @brief Get reference to raw data containers
      */

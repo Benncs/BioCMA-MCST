@@ -93,10 +93,10 @@ namespace Core
   {
     CaseData case_data;
     case_data.exec_info = exec;
-    if (exec.n_rank > 1)
-    {
-      throw std::runtime_error("Serde for MPI Not implemented yet");
-    }
+    // if (exec.n_rank > 1)
+    // {
+    //   throw std::runtime_error("Serde for MPI Not implemented yet");
+    // }
 
     GlobalInitialiser gi(exec, params);
     auto transition = gi.init_transitionner();
@@ -109,7 +109,10 @@ namespace Core
     gi.init_feed(std::move(feed));
     try
     {
-      const bool ok_init = SerDe::load_simulation(gi, case_data, *params.serde_file);
+
+      std::string serde_filename = *params.serde_file+std::to_string(exec.current_rank)+".raw";
+      std::cout<<serde_filename<<std::endl;
+      const bool ok_init = SerDe::load_simulation(gi, case_data, serde_filename);
       
       if (!gi.check_init_terminate() || !ok_init)
       {

@@ -112,6 +112,27 @@ namespace MC
     return dist;
   }
 
+  void
+  ReactorDomain::in_place_reduce(std::span<const size_t> data, size_t original_size, size_t n_rank)
+  {
+    // OK because of sharedspace
+    // Kokkos::resize(reduced.shared_containers, original_size);
+    // Kokkos::View<ContainerState *, Kokkos::SharedSpace> tmp("tmp_reduce",original_size);
+
+    if (data.size() != original_size * n_rank)
+    {
+      throw std::runtime_error("Cannot reduce different reactor type");
+    }
+    auto shared_container = this->shared_containers;
+    for (size_t i_rank = 1; i_rank < n_rank; ++i_rank)
+    {
+      for (size_t i_c = 0; i_c < original_size; ++i_c)
+      {
+        shared_container(i_c).n_cells += data[i_c + i_rank * original_size];
+      }
+    }
+  }
+
   ReactorDomain
   ReactorDomain::reduce(std::span<const size_t> data, size_t original_size, size_t n_rank)
   {

@@ -162,7 +162,6 @@ int set_feed_constant(Handle* handle,
       (_position != nullptr))
   {
     auto span_target = std::span<double>(_target, n_species);
-    std::cout<<span_target[0]<<" "<<span_target.size()<<std::endl;
     auto span_species = std::span<std::size_t>(_species, n_species);
     auto span_pos = std::span<std::size_t>(_position, n_position);
     handle->set_feed_constant(_f, span_target, span_pos, span_species, gas != 0);

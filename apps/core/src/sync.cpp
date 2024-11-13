@@ -111,12 +111,15 @@ void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
       // simulation is finished and programm is going to exit
       local_events = MC::EventContainer::reduce(total_events_data);
 
-      auto reduced_domain = MC::ReactorDomain::reduce(
-          merged_distribution, local_distribution_size, exec.n_rank);
+      // simulation.mc_unit->domain.in_place_reduce(merged_distribution, local_distribution_size, exec.n_rank);
+      
+      // //WARN: reduce doesn't copy 
+      // auto reduced_domain = MC::ReactorDomain::reduce(
+      //     merged_distribution, local_distribution_size, exec.n_rank);
 
-      simulation.mc_unit->domain =
-          std::move(reduced_domain); // Set new domain (uppdate particle
-                                     // location only on container side)
+      // simulation.mc_unit->domain =
+      //     std::move(reduced_domain); // Set new domain (uppdate particle
+      //                                // location only on container side)
 
       // TODO: MERGE PARTICLELIST
     }

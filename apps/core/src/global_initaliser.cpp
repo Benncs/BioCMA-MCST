@@ -256,7 +256,7 @@ namespace Core
 
     validate_step(InitStep::MC);
     validate_step(InitStep::Scalar);
-    std::cerr<<"DOMAIN"<<_unit->domain.getNumberCompartments()<<std::endl;
+ 
     auto simulation = std::make_unique<Simulation::SimulationUnit>(std::move(_unit), scalar_init, std::move(feed));
 
     // FIXME

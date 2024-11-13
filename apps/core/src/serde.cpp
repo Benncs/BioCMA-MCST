@@ -96,10 +96,8 @@ namespace SerDe
       std::optional<std::vector<double>> cgas_a =
           cgas.has_value() ? std::make_optional(std::vector<double>(cgas->begin(), cgas->end())) : std::nullopt;
       ar(case_data.params.number_particle,dim, std::vector<double>(cliq.begin(), cliq.end()), cgas_a, case_data.simulation->get_end_time_mut());
-      std::cerr<<"DOMAIN"<<case_data.simulation->mc_unit->domain.getNumberCompartments()<<std::endl;
       ar(case_data.simulation->mc_unit);
     }
-
     write_to_file(buf, serde_name.str());
   }
 
@@ -109,7 +107,7 @@ namespace SerDe
     std::stringstream buffer;
 
     read_file(buffer, ser_filename);
-
+    
     iArchive_t ar(buffer);
 
     std::string version;

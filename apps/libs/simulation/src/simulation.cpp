@@ -46,7 +46,6 @@ namespace Simulation
 
         flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow)
   {
-    std::cerr<<"DOMAIN"<<mc_unit->domain.getNumberCompartments()<<std::endl;
     this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(
         makeScalarSimulation(mc_unit->domain.getNumberCompartments(), scalar_init.n_species, scalar_init.volumesliq));
 
