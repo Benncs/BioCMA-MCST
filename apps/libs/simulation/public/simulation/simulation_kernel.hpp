@@ -20,7 +20,7 @@ static constexpr bool const_number_simulation = false;
 namespace
 {
 
-  KOKKOS_INLINE_FUNCTION float ln(float x)
+  KOKKOS_INLINE_FUNCTION float _ln(float x)
   {
     unsigned int bx = *reinterpret_cast<unsigned int *>(&x);
     const unsigned int ex = bx >> 23;
@@ -30,6 +30,7 @@ namespace
     x = *reinterpret_cast<float *>(&bx);
     return -1.49278 + (2.11263 + (-0.729104 + 0.10969 * x) * x) * x + 0.6931471806 * t;
   }
+
 
   KOKKOS_INLINE_FUNCTION bool probability_leaving(double random_number,
                                                   double volume,
@@ -43,7 +44,7 @@ namespace
 
     // return (dt * flow / volume) > (-ln(random_number));
 
-    return (dt * flow / volume) > (-Kokkos::log(random_number));
+    return (dt * flow / volume) > (-_ln(random_number));
 
     // const double x = volume/flow;
     // const double ax = dt/(volume/flow);
@@ -116,6 +117,11 @@ namespace Simulation::KernelInline
         double random_number,
         const Kokkos::View<const size_t *, Kokkos::LayoutStride, ComputeSpace>
             &i_neighbor) const;
+/*
+    KOKKOS_INLINE_FUNCTION size_t _find_next_compartment_2(
+        const std::size_t i_compartment,
+        const double random_number,
+        const NeighborsViewCompute& n) const;i*/
   };
 
   /****************
@@ -140,7 +146,7 @@ namespace Simulation::KernelInline
       // cold branch
       return;
     }
-    
+
     handle_move(properties);
     handle_exit(status, properties);
 
@@ -209,18 +215,27 @@ namespace Simulation::KernelInline
         Kokkos::subview(neighbors, i_compartment, Kokkos::ALL);
 
     // Need 2 random numbers, use index 0 and 1 to acess to
-    const auto random = local_rng.template double_uniform<2>();
+    // const auto random = local_rng.template double_uniform<2>();
 
-    if (probability_leaving(random[0],
+    auto generator = local_rng.random_pool.get_state();
+    const double rng1 = generator.drand(0., 1.);
+    local_rng.random_pool.free_state(generator);
+
+    if (probability_leaving(rng1,
                             current_container.volume_liq,
                             diag_transition(i_compartment),
                             d_t))
     {
+        auto generator = local_rng.random_pool.get_state();
+        const double rng2 = generator.drand(0., 1.);
+        local_rng.random_pool.free_state(generator);
       // Find the next compartment based on the random number and
       // cumulative
       // probabilities
+      // const size_t next =
+      //     _find_next_compartment_2(i_compartment, rng2, neighbors);
       const size_t next =
-          __find_next_compartment(i_compartment, random[1], i_neighbor);
+          __find_next_compartment(i_compartment, rng2, i_neighbor);
 
       KOKKOS_ASSERT(Kokkos::atomic_load(&current_container.n_cells) > 0); // ??
       Kokkos::atomic_decrement(&current_container.n_cells);
@@ -294,6 +309,39 @@ namespace Simulation::KernelInline
 
     return next; // Return the index of the chosen next compartment
   }
+
+  //TODO CHECK IF WORTH IT 
+  /*
+  template <typename ListType, typename ResultViewType>
+  KOKKOS_INLINE_FUNCTION size_t
+  Kernel<ListType, ResultViewType>::_find_next_compartment_2(
+      const std::size_t i_compartment,
+      const double random_number,
+      const NeighborsViewCompute
+          &i_neighbor) const
+  {
+    const int max_neighbor = static_cast<int>(i_neighbor.size());
+    size_t next = i_neighbor(i_compartment,0); // Default to the first neighbor
+
+    // Iterate through the neighbors to find the appropriate next compartment
+    for (int k_neighbor = 0; k_neighbor < max_neighbor - 1; ++k_neighbor)
+    {
+      // Get the cumulative probability range for the current neighbor
+      const auto pi = cumulative_probability(i_compartment, k_neighbor);
+      const auto pn = cumulative_probability(i_compartment, k_neighbor + 1);
+
+      // Use of a Condition mask to avoid branching.
+      // As the condition is not complex, ternary op manually guarantee that no
+      // branching/warp divergence occurs
+      next = (random_number <= pn && pi <= random_number)
+                 ? i_neighbor(i_compartment,k_neighbor + 1)
+                 : next;
+    }
+
+    return next; // Return the index of the chosen next compartment
+  }*/
+
+
 
 } // namespace Simulation::KernelInline
 
