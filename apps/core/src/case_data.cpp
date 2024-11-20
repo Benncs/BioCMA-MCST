@@ -54,7 +54,7 @@ namespace Core
     return filename.str();
   }
 
-  void init_partial_exporter(CORE_DE::PartialExporter &partial_exporter, const CaseData &case_data)
+  void init_partial_exporter(Core::PartialExporter &partial_exporter, const CaseData &case_data)
   {
 
     const auto [_, n_compartment] = case_data.simulation->getDimensions();
@@ -79,7 +79,7 @@ namespace Core
 
     const auto filename = exporter_filename(case_data.exec_info, case_data.params);
 
-    CORE_DE::PartialExporter partial_exporter(ExecInfo(), filename);
+    Core::PartialExporter partial_exporter(ExecInfo(), filename);
 
     init_partial_exporter(partial_exporter, case_data);
 

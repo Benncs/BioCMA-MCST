@@ -16,7 +16,7 @@ namespace PostProcessing
 {
   static void append_properties(int counter,
                                 Simulation::SimulationUnit &simulation,
-                                CORE_DE::PartialExporter &pde);
+                                Core::PartialExporter &pde);
 
   static void get_particle_properties_opti(
       Kokkos::View<std::string *, HostSpace> &host_names,
@@ -26,7 +26,7 @@ namespace PostProcessing
       bool clean = true);
 
   // void save_initial(Simulation::SimulationUnit &simulation,
-  //                   CORE_DE::MainExporter &exporter)
+  //                   Core::MainExporter &exporter)
   // {
   //   exporter.update_fields(0, std::span<double> concentration_liquid,
   //   std::span<const double> liquid_volume, std::optional<std::span<const
@@ -35,7 +35,7 @@ namespace PostProcessing
   // }
 
   void save_probes(Simulation::SimulationUnit &simulation,
-                   CORE_DE::PartialExporter &pde)
+                   Core::PartialExporter &pde)
   {
     auto &probes = simulation.get_probes();
 
@@ -48,7 +48,7 @@ namespace PostProcessing
   }
 
   void save_particle_sate(Simulation::SimulationUnit &simulation,
-                          CORE_DE::PartialExporter &pde,
+                          Core::PartialExporter &pde,
                           std::string suffix,
                           bool clean)
   {
@@ -68,13 +68,13 @@ namespace PostProcessing
   }
 
   void save_final_particle_state(Simulation::SimulationUnit &simulation,
-                                 CORE_DE::PartialExporter &pde)
+                                 Core::PartialExporter &pde)
   {
     save_particle_sate(simulation, pde, "final", false);
   }
 
   void save_initial_particle_state(Simulation::SimulationUnit &simulation,
-                                   CORE_DE::PartialExporter &pde)
+                                   Core::PartialExporter &pde)
   {
     save_particle_sate(simulation, pde, "initial", false);
   }
@@ -82,7 +82,7 @@ namespace PostProcessing
   void final_post_processing(const ExecInfo &exec,
                              const Core::SimulationParameters &params,
                              Simulation::SimulationUnit &simulation,
-                             std::unique_ptr<CORE_DE::MainExporter> &mde)
+                             std::unique_ptr<Core::MainExporter> &mde)
   {
     std::cout << "POST PROCESSING" << std::endl;
     auto distribution = simulation.mc_unit->domain.getRepartition();
@@ -93,7 +93,7 @@ namespace PostProcessing
                    simulation.mc_unit->events.get<MC::EventType::Exit>();
     auto new_p = simulation.mc_unit->events.get<MC::EventType::NewParticle>();
 
-    // TODO CORE_DE::MainExporter& mde
+    // TODO Core::MainExporter& mde
 
     mde->write_final(simulation, distribution);
     // exporter->write_final_results(simulation, distribution);
@@ -118,7 +118,7 @@ namespace PostProcessing
 
   void append_properties(int counter,
                          Simulation::SimulationUnit &simulation,
-                         CORE_DE::PartialExporter &partial_exporter)
+                         Core::PartialExporter &partial_exporter)
   {
 
     {
@@ -138,7 +138,7 @@ namespace PostProcessing
   }
 
   void user_triggered_properties_export(Simulation::SimulationUnit &sim,
-                                        CORE_DE::PartialExporter &pde)
+                                        Core::PartialExporter &pde)
   {
     static int counter = 0;
     counter++;

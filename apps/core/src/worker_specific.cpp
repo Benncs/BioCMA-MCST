@@ -14,7 +14,7 @@ void workers_process(const ExecInfo &exec,
                      Simulation::SimulationUnit &simulation,
                      const Core::SimulationParameters &params,
                      std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner,
-                     CORE_DE::PartialExporter &partial_exporter)
+                     Core::PartialExporter &partial_exporter)
 {
   double d_t = params.d_t;
   size_t n_compartments = simulation.mc_unit->domain.getNumberCompartments();

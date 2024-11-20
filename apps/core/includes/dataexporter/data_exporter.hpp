@@ -15,7 +15,7 @@
 
 #include "cmt_common/macro_constructor_assignment.hpp"
 
-namespace CORE_DE
+namespace Core
 {
 
   static inline std::string
@@ -143,5 +143,5 @@ namespace CORE_DE
     std::unique_ptr<impl> pimpl;
   };
 
-} // namespace CORE_DE
+} // namespace Core
 #endif

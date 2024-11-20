@@ -32,6 +32,6 @@ void host_process(
     Simulation::SimulationUnit &simulation,
     const Core::SimulationParameters &params,
     std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner,
-    CORE_DE::PartialExporter &partial_exporter);
+    Core::PartialExporter &partial_exporter);
 
 #endif //__HOST_SPECIFIC_HPP__

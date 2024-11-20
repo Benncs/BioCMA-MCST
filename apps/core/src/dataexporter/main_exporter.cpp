@@ -3,7 +3,7 @@
 #include <dataexporter/main_exporter.hpp>
 #include <optional>
 #include <utility>
-namespace CORE_DE
+namespace Core
 {
   const std::string MainExporter::base_group_name = "records/";
   MainExporter::MainExporter(const ExecInfo &info,
@@ -151,4 +151,4 @@ namespace CORE_DE
     }
   }
 
-} // namespace CORE_DE
+} // namespace Core

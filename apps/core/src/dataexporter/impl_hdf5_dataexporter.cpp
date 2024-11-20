@@ -20,10 +20,10 @@
 #    include <unistd.h>
 #  endif
 
-#  define CHECK_PIMPL                                                                                                  \
-    if (!pimpl)                                                                                                        \
-    {                                                                                                                  \
-      throw std::runtime_error(__FILE__ ": Unexpected ERROR");                                                         \
+#  define CHECK_PIMPL                                                                              \
+    if (!pimpl)                                                                                    \
+    {                                                                                              \
+      throw std::runtime_error(__FILE__ ": Unexpected ERROR");                                     \
     }
 
 static std::string date_time()
@@ -40,7 +40,7 @@ static std::string get_user_name()
   std::string_view res = "someone";
 #  ifdef __linux__
   uid_t uid = geteuid();
-  passwd *pw = getpwuid(uid);
+  passwd* pw = getpwuid(uid);
   if (pw != nullptr)
   {
     res = pw->pw_name;
@@ -72,7 +72,7 @@ static std::size_t get_chunk_size(std::size_t data_length)
   // NOLINTEND
 }
 
-namespace CORE_DE
+namespace Core
 {
 
   class DataExporter::impl
@@ -97,13 +97,14 @@ namespace CORE_DE
   };
 
   constexpr size_t hdf5_max_compression = 9;
-  DataExporter::DataExporter(const ExecInfo &info,
+  DataExporter::DataExporter(const ExecInfo& info,
                              std::string_view _filename,
 
                              std::optional<export_metadata_t> user_description)
       : pimpl(new impl(_filename))
   {
-    export_metadata_t description = user_description.has_value() ? *user_description : "Interesting results";
+    export_metadata_t description =
+        user_description.has_value() ? *user_description : "Interesting results";
 
     metadata["file_version"] = 4;
     metadata["creation_date"] = date_time();
@@ -112,21 +113,24 @@ namespace CORE_DE
     metadata["run_id"] = info.run_id;
   }
 
-  void DataExporter::do_link(std::string_view filename, std::string_view link_name, std::string_view groupname)
+  void DataExporter::do_link(std::string_view filename,
+                             std::string_view link_name,
+                             std::string_view groupname)
   {
     pimpl->file.createExternalLink(link_name.data(), filename.data(), groupname.data());
   }
 
-  void DataExporter::write_properties(std::optional<std::string> specific_dataspace, const export_metadata_kv &values)
+  void DataExporter::write_properties(std::optional<std::string> specific_dataspace,
+                                      const export_metadata_kv& values)
   {
     CHECK_PIMPL
 
-    for (const auto &kv : values)
+    for (const auto& kv : values)
     {
-      const std::string &attributeName = kv.first;
-      const export_metadata_t &value = kv.second;
+      const std::string& attributeName = kv.first;
+      const export_metadata_t& value = kv.second;
       std::visit(
-          [&](const auto &val)
+          [&](const auto& val)
           {
             using T = std::decay_t<decltype(val)>; // Get the actual type T of
                                                    // the variant alternative
@@ -166,10 +170,10 @@ namespace CORE_DE
     descriptors.emplace(description.name, description);
   }
 
-  void DataExporter::write_simple(std::string specific_dataspace, const simple_export_t &value)
+  void DataExporter::write_simple(std::string specific_dataspace, const simple_export_t& value)
   {
     std::visit(
-        [&](const auto &val)
+        [&](const auto& val)
         {
           using T = std::decay_t<decltype(val)>; // Get the actual type T of
           pimpl->file.createDataSet<T>(specific_dataspace, val);
@@ -177,26 +181,29 @@ namespace CORE_DE
         value);
   }
 
-  void DataExporter::write_simple(const export_initial_kv &values, std::string_view root)
+  void DataExporter::write_simple(const export_initial_kv& values, std::string_view root)
   {
 
-    for (const auto &kv : values)
+    for (const auto& kv : values)
     {
       std::string path = root.data() + kv.first;
-      const simple_export_t &value = kv.second;
+      const simple_export_t& value = kv.second;
       write_simple(path, value);
     }
     pimpl->file.flush();
   }
 
-  void DataExporter::append_array(std::string_view name, std::span<const double> data, uint64_t last_size)
+  void DataExporter::append_array(std::string_view name,
+                                  std::span<const double> data,
+                                  uint64_t last_size)
   {
     CHECK_PIMPL
-    auto &descriptor = descriptors.at(std::string(name));
+    auto& descriptor = descriptors.at(std::string(name));
 
     auto dataset = pimpl->file.getDataSet(name.data());
 
     auto dims = descriptor.dims;
+    //Following are explicit copy 
     auto new_size = dims;
     auto select_start = dims;
     auto select_size = dims;
@@ -209,7 +216,8 @@ namespace CORE_DE
     pimpl->file.flush();
   }
 
-  void DataExporter::write_matrix(std::string_view name, std::span<const double> values, bool compress)
+  void
+  DataExporter::write_matrix(std::string_view name, std::span<const double> values, bool compress)
   {
     CHECK_PIMPL
 
@@ -229,12 +237,15 @@ namespace CORE_DE
     pimpl->file.flush();
   }
 
-  void DataExporter::write_matrix(
-      std::string_view name, std::span<const double> values, size_t n_row, size_t n_col, bool compress)
+  void DataExporter::write_matrix(std::string_view name,
+                                  std::span<const double> values,
+                                  size_t n_row,
+                                  size_t n_col,
+                                  bool compress)
   {
     CHECK_PIMPL
-    auto data =
-        Eigen::Map<Eigen::MatrixXd>(const_cast<double *>(values.data()), EIGEN_INDEX(n_row), EIGEN_INDEX(n_col));
+    auto data = Eigen::Map<Eigen::MatrixXd>(
+        const_cast<double*>(values.data()), EIGEN_INDEX(n_row), EIGEN_INDEX(n_col));
     HighFive::DataSetCreateProps ds_props;
     ds_props.add(HighFive::Chunking({n_row, n_col}));
     ds_props.add(HighFive::Shuffle());
@@ -250,7 +261,7 @@ namespace CORE_DE
   void DataExporter::append_matrix(std::string_view name, matrix_variant_t data)
   {
     CHECK_PIMPL
-    auto &descriptor = descriptors.at(std::string(name));
+    auto& descriptor = descriptors.at(std::string(name));
 
     auto dataset = pimpl->file.getDataSet(name.data());
 
@@ -269,7 +280,7 @@ namespace CORE_DE
     dataset.resize(new_size);
 
     std::visit(
-        [&](auto &&arg)
+        [&](auto&& arg)
         {
           using T = std::decay_t<decltype(arg)>;
           if constexpr (std::is_same_v<T, double>)
@@ -287,6 +298,6 @@ namespace CORE_DE
 
   DataExporter::~DataExporter() = default;
 
-} // namespace CORE_DE
+} // namespace Core
 
 #endif

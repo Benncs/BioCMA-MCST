@@ -3,14 +3,12 @@
 #include <dataexporter/partial_exporter.hpp>
 #include <utility>
 
-namespace CORE_DE
+namespace Core
 {
-  PartialExporter::PartialExporter(
-      const ExecInfo &info,
-      std::string_view _filename,
-      std::optional<export_metadata_t> user_description)
-      : DataExporter(info, _filename, std::move(user_description)),
-        probe_counter_n_element(0)
+  PartialExporter::PartialExporter(const ExecInfo& info,
+                                   std::string_view _filename,
+                                   std::optional<export_metadata_t> user_description)
+      : DataExporter(info, _filename, std::move(user_description)), probe_counter_n_element(0)
   {
     write_properties(std::nullopt, metadata);
   }
@@ -43,8 +41,7 @@ namespace CORE_DE
     }
   }
 
-  void PartialExporter::write_number_particle(
-      const std::vector<size_t> &distribution)
+  void PartialExporter::write_number_particle(const std::vector<size_t>& distribution)
   {
     append_matrix("records/number_particle", distribution);
 
@@ -56,27 +53,24 @@ namespace CORE_DE
     probe_counter_n_element += data.size();
   }
 
-  void
-  PartialExporter::write_particle_data(std::span<std::string> names,
-                                       ViewParticleProperties particle_values,
-                                       ViewParticleProperties spatial_values,
-                                       const std::string &ds_name)
+  void PartialExporter::write_particle_data(std::span<std::string> names,
+                                            ViewParticleProperties particle_values,
+                                            ViewParticleProperties spatial_values,
+                                            const std::string& ds_name)
   {
     const size_t n_particles = particle_values.extent(1);
     const auto n_compartments = spatial_values.extent(1);
-    
+
     for (size_t i_name = 0; i_name < names.size(); ++i_name)
     {
-      auto *ptr_particles =
-          Kokkos::subview(particle_values, i_name, Kokkos::ALL).data();
+      auto* ptr_particles = Kokkos::subview(particle_values, i_name, Kokkos::ALL).data();
 
-      auto *ptr_spatial =
-          Kokkos::subview(spatial_values, i_name, Kokkos::ALL).data();
+      auto* ptr_spatial = Kokkos::subview(spatial_values, i_name, Kokkos::ALL).data();
 
-      this->write_matrix(ds_name + names[i_name], {ptr_particles, n_particles},false);
-      this->write_matrix(ds_name + "spatial/" + names[i_name],
-                         {ptr_spatial, n_compartments},false);
+      this->write_matrix(ds_name + names[i_name], {ptr_particles, n_particles}, false);
+      this->write_matrix(
+          ds_name + "spatial/" + names[i_name], {ptr_spatial, n_compartments}, false);
     }
   }
 
-}; // namespace CORE_DE
+}; // namespace Core

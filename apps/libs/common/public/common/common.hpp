@@ -21,11 +21,11 @@
 #  define WARN_EXPERIMENTAL
 
 #endif
+#define EIGEN_INDEX(__VALUE__) static_cast<int>(__VALUE__)
 
 #ifndef NDEBUG
 #  include <iostream>
 #  include <source_location>
-
 class Canary
 {
 public:
@@ -74,6 +74,6 @@ template <NumberType T> inline bool almost_equal(T val, T val2, T tolerance = to
   return std::abs(val - val2) < tolerance;
 }
 
-#define EIGEN_INDEX(__VALUE__) static_cast<int>(__VALUE__)
+
 
 #endif //__COMMON_EXPORT_HPP__

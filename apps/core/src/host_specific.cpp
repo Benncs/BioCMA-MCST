@@ -36,8 +36,8 @@ static void main_loop(const Core::SimulationParameters &params,
                       const ExecInfo &exec,
                       Simulation::SimulationUnit &simulation,
                       std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
-                      std::unique_ptr<CORE_DE::MainExporter> &main_exporter,
-                      CORE_DE::PartialExporter &partial_exporter);
+                      std::unique_ptr<Core::MainExporter> &main_exporter,
+                      Core::PartialExporter &partial_exporter);
 
 static constexpr size_t PROGRESS_BAR_WIDTH = 100;
 
@@ -49,8 +49,8 @@ static void handle_export(const ExecInfo &exec,
                           double current_time,
                           Simulation::SimulationUnit &simulation,
                           auto &current_reactor_state,
-                          std::unique_ptr<CORE_DE::MainExporter> &main_exporter,
-                          CORE_DE::PartialExporter &partial_exporter);
+                          std::unique_ptr<Core::MainExporter> &main_exporter,
+                          Core::PartialExporter &partial_exporter);
 
 inline static void update_progress_bar(size_t total, size_t current_position)
 {
@@ -134,11 +134,11 @@ inline static void update_progress_bar(size_t total, size_t current_position)
 #  define INIT_PAYLOAD
 #endif
 
-std::unique_ptr<CORE_DE::MainExporter> make_main_exporter(const ExecInfo &exec,
+std::unique_ptr<Core::MainExporter> make_main_exporter(const ExecInfo &exec,
                                                           const Core::SimulationParameters &params)
 {
-  std::unique_ptr<CORE_DE::MainExporter> main_exporter =
-      std::make_unique<CORE_DE::MainExporter>(exec, params.results_file_name+std::string(".h5"));
+  std::unique_ptr<Core::MainExporter> main_exporter =
+      std::make_unique<Core::MainExporter>(exec, params.results_file_name+std::string(".h5"));
 
   for (std::size_t i_rank = 0; i_rank < exec.n_rank; ++i_rank)
   {
@@ -156,10 +156,10 @@ void host_process(const ExecInfo &exec,
                   Simulation::SimulationUnit &simulation,
                   const Core::SimulationParameters &params,
                   std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner,
-                  CORE_DE::PartialExporter &partial_exporter)
+                  Core::PartialExporter &partial_exporter)
 {
 
-  std::unique_ptr<CORE_DE::MainExporter> main_exporter = make_main_exporter(exec, params);
+  std::unique_ptr<Core::MainExporter> main_exporter = make_main_exporter(exec, params);
 
   const auto [n_species, n_compartment] = simulation.getDimensions();
 
@@ -196,8 +196,8 @@ void main_loop(const Core::SimulationParameters &params,
                const ExecInfo &exec,
                Simulation::SimulationUnit &simulation,
                std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
-               std::unique_ptr<CORE_DE::MainExporter> &main_exporter,
-               CORE_DE::PartialExporter &partial_exporter)
+               std::unique_ptr<Core::MainExporter> &main_exporter,
+               Core::PartialExporter &partial_exporter)
 {
 
   simulation.update_feed(0, 0);
@@ -337,8 +337,8 @@ void handle_export(const ExecInfo &exec, /*/Exec is used for MPI **/
                    const double current_time,
                    Simulation::SimulationUnit &simulation,
                    auto &current_reactor_state,
-                   std::unique_ptr<CORE_DE::MainExporter> &main_exporter,
-                   CORE_DE::PartialExporter &partial_exporter)
+                   std::unique_ptr<Core::MainExporter> &main_exporter,
+                   Core::PartialExporter &partial_exporter)
 // NOLINTEND
 {
  
