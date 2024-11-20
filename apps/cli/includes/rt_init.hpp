@@ -52,7 +52,7 @@ std::string sappend_date_time(std::string_view string) noexcept;
  *
  * @param argc The number of command-line arguments.
  * @param argv The array of command-line arguments.
- * @param params The `SimulationParameters` object containing configuration
+ * @param params The `UserControlParameters` object containing configuration
  * settings for the simulation.
  * @return An `ExecInfo` object containing details about the initialized runtime
  * environment, including execution context and other relevant metadata.

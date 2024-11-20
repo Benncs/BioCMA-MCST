@@ -42,11 +42,6 @@ static std::optional<Core::CaseData> prepare(const ExecInfo& exec_info,
                                              const Core::UserControlParameters&& param);
 
 /**
- * @brief Wrapper to handle Excception raised in try/catch block
- */
-template <typename ExceptionType> static int handle_catch(ExceptionType const& e) noexcept;
-
-/**
  * @brief Check if result path exist or not and ask for overriding if yes
  * @return true if override results_path
  */
@@ -87,6 +82,7 @@ int main(int argc, char** argv)
     return -1;
   }
 
+
   auto handle = Handle::init(
       exec_info.n_rank, exec_info.current_rank, exec_info.run_id, exec_info.thread_per_process);
 
@@ -99,7 +95,7 @@ int main(int argc, char** argv)
   auto& h = *handle;
   const auto serde = user_params.serde;
   INTERPRETER_INIT
- 
+
   REDIRECT_SCOPE({
     HANDLE_RC(h->register_parameters(std::move(user_params)));
     HANDLE_RC(h->apply(serde));
@@ -107,17 +103,6 @@ int main(int argc, char** argv)
   })
 
   return 0;
-}
-
-template <typename ExceptionType> static int handle_catch(ExceptionType const& e) noexcept
-{
-#ifdef DEBUG
-  std::cerr << "Caught Exception: " << e.what() << '\n';
-  return -1;
-#else
-  std::cerr << "Internal error" << '\n';
-  return -1;
-#endif
 }
 
 bool override_result_path(const Core::UserControlParameters& params, const ExecInfo& exec)
@@ -135,8 +120,8 @@ bool override_result_path(const Core::UserControlParameters& params, const ExecI
     }
   }
 #ifndef NO_MPI
-  MPI_W::barrier();
-  MPI_W::broadcast(flag, 0);
+  WrapMPI::barrier();
+  WrapMPI::broadcast(flag, 0);
 #endif
   return flag;
 }

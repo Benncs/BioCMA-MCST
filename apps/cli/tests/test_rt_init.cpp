@@ -7,7 +7,7 @@
 
 static ExecInfo c_test_set_openmp_threads(int rank, int size, int n_threads)
 {
-  ExecInfo info;
+  ExecInfo info{};
   Core::UserControlParameters params;
   params.n_thread = n_threads;
   set_n_thread_current_rank(rank, size, info, params);

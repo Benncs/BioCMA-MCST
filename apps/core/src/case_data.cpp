@@ -16,13 +16,13 @@
 #include <worker_specific.hpp>
 
 #ifdef NO_MPI
-namespace MPI_W
+namespace WrapMPI
 {
   bool is_initialized() noexcept
   {
     return false;
   }
-} // namespace MPI_W
+} // namespace WrapMPI
 #else
 #  include "mpi_w/message_t.hpp"
 #endif

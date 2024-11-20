@@ -28,21 +28,18 @@ endif
 
 if compiler.has_argument('-Wno-interference-size')
   # Disable cache line detection size 
-
-
   arch_specific_args = [arch_specific_args, '-Wno-interference-size']
 endif
 
 compiler.has_argument('-fopenmp')
 
-## Define main shared variables\
+## Define main shared variables
 
-
+outdir = meson.current_build_dir()
 root = meson.project_source_root()
 project_name = meson.project_name()
 build_type = get_option('buildtype')
 cpp = meson.get_compiler('cpp')
-
 global_install_dir = get_option('prefix') + '/' + get_option('libdir')
 includes_install_dir = ('include/' + project_name)
 
@@ -51,27 +48,6 @@ cpp_args = [arch_specific_args,'-DENABLE_KOKKOS_PROFILING']
 add_project_arguments(cpp_args, language: 'cpp')
 
 ## Get buildtype specific options
-
-
-#TODO FIXME
-
-
-project_custom_options = {
-  'debug': [],
-  'release': [],
-}
-
-target_custom_options = project_custom_options.get(build_type, [])
-# foreach opt: target_custom_options
-
-
-#     add_project_arguments(opt, language: 'cpp')
-
-
-#     message(opt)
-
-
-# endforeach
 
 CMAKE_TYPE='Release'
 if build_type == 'debug' or build_type == 'debugoptimized'
@@ -215,7 +191,5 @@ if f_cmt == false
 endif
 subdir('apps')
 
-# Clangd project configuration
 
-
-run_command('sh', '-c', 'ln -s builddir/compile_commands.json .', check: false)
+run_command('sh', '-c', f'ln -s @outdir@/compile_commands.json .', check: false)

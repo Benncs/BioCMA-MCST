@@ -6,7 +6,7 @@
 #include <mpi.h>
 #include <omp.h>
 
-namespace MPI_W
+namespace WrapMPI
 {
     bool is_initialized() noexcept
     {
@@ -35,4 +35,4 @@ namespace MPI_W
       critical_error();
     }
   }
-} // namespace MPI_W
+} // namespace WrapMPI

@@ -1,7 +1,7 @@
 #ifndef __PMESSAGE_HPP__
 #define __PMESSAGE_HPP__
 
-namespace MPI_W
+namespace WrapMPI
 {
   // static bool is_mpi_init = false;
   int critical_error() noexcept;
@@ -19,6 +19,6 @@ namespace MPI_W
 
 
 
-} // namespace MPI_W
+} // namespace WrapMPI
 
 #endif //__PMESSAGE_HPP__

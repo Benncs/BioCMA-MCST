@@ -1,3 +1,5 @@
+# This sublibrary aims to provide wrap around MPI C API for modern C++
+
 
 src_dir = './src'
 
@@ -29,3 +31,4 @@ install_subdir(
    install_dir: includes_install_dir,
 )
 
+subdir('./tests')

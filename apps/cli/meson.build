@@ -52,7 +52,7 @@ executable(
   f'@src_dir@/main.cpp',
   include_directories: ['./includes'],
   dependencies: [app_test_dependency],
-  cpp_args: [target_custom_options],
+  cpp_args: [],
   install: true,
   install_rpath: global_install_dir,
   link_args: [flto_flag]
@@ -63,7 +63,7 @@ executable(
   f'@src_dir@/main.cpp',
   include_directories: ['./includes'],
   dependencies: [app_shared_dependency],
-  cpp_args: [target_custom_options],
+  cpp_args: [],
   install: true,
   install_rpath: global_install_dir,
   link_args: [flto_flag]
