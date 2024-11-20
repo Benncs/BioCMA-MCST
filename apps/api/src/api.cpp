@@ -134,10 +134,7 @@ std::optional<std::unique_ptr<Handle>> Handle::init(uint32_t n_rank,
   return ptr;
 }
 
-Handle::~Handle()
-{
-  std::cout << "destructing from c++" << std::endl;
-}
+
 
 ApiResult Handle::exec() noexcept
 {
@@ -156,7 +153,7 @@ ApiResult Handle::exec() noexcept
   }
   else
   {
-    return ApiResult();
+    return ApiResult("Error apply first");
   }
 }
 
@@ -255,7 +252,7 @@ bool Handle::register_serde(std::string_view path)
 
 bool Handle::register_model_name(std::string_view path)
 {
-  this->params.model_name = path;
+  this->params.model_name = path; //TODO check model
   return true;
 }
 

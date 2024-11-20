@@ -46,7 +46,7 @@ lib_api_c = library(
   install_rpath: project_name,
 )
 
-library(
+lib_api_c_shared=library(
   f'@name@_c_shared',
   files(f'@src_dir@/api_raw.cpp'),
   include_directories: ['./includes', 'public'],
@@ -56,6 +56,11 @@ library(
 
 lib_api_c_dep = declare_dependency(
   link_with: lib_api_c,
+  include_directories: include_directories('./includes', 'public'),
+)
+
+lib_api_c_shared_dep = declare_dependency(
+  link_with: lib_api_c_shared,
   include_directories: include_directories('./includes', 'public'),
 )
 
@@ -83,3 +88,5 @@ install_subdir(
   'public',
   install_dir: includes_install_dir,
 )
+
+subdir('./tests')

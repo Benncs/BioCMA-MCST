@@ -58,7 +58,7 @@ public:
   static std::optional<std::unique_ptr<Handle>>
   init(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_process) noexcept;
   Handle() = default;
-  ~Handle();
+  ~Handle()=default;
 
   ApiResult apply(bool to_load)noexcept;
   ApiResult register_parameters(Core::UserControlParameters&& params)noexcept;

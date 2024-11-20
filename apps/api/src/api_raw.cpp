@@ -8,7 +8,8 @@ int apply(Handle* handle, int to_load)
 {
   if (handle != nullptr)
   {
-    return handle->apply(to_load != 0).to_c_ret_code();
+    auto rc = handle->apply(to_load != 0);//TODO HANDLE ERROR
+    return rc.to_c_ret_code();
   }
   return 0xff;
 }
@@ -28,8 +29,6 @@ void delete_handle(Handle* handle)
 
   if (handle != nullptr)
   {
-    std::cout << "Delete..." << std::endl;
-
     delete handle;
     handle = nullptr;
   }
@@ -41,7 +40,10 @@ int exec(Handle* handle)
   {
     if (handle->get_id() == ID_VERIF)
     {
-      return handle->exec() ? 0 : -1;
+      auto rc = handle->exec();
+          std::cerr<<rc.get()<<std::endl;
+
+      return rc ? 0 : -1;
     }
     return -2;
   }
