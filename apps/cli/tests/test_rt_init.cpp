@@ -85,6 +85,12 @@ void test_set_openmp_threads_7()
   assert(info.thread_per_process == 4); // Assertion
 }
 
+
+void test_check_results_file_name()
+{
+  
+}
+
 int main()
 {
   // Run the test
@@ -95,5 +101,8 @@ int main()
   test_set_openmp_threads_5();
   test_set_openmp_threads_6();
   test_set_openmp_threads_7();
+
+  append_date_time(std::cout);
+
   return 0;
 }

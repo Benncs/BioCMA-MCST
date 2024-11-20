@@ -125,6 +125,7 @@ std::optional<std::unique_ptr<Handle>> Handle::init(uint32_t n_rank,
                                                     uint32_t thread_per_proces) noexcept
 {
 
+  
   auto ptr = std::unique_ptr<Handle>(new (std::nothrow)
                                          Handle(n_rank, current_rank, id, thread_per_proces));
   if (ptr == nullptr)
@@ -250,10 +251,10 @@ bool Handle::register_serde(std::string_view path)
   return true;
 }
 
-bool Handle::register_model_name(std::string_view path)
-{
-  this->params.model_name = path; //TODO check model
-  return true;
+ApiResult Handle::register_model_name(std::string_view path)
+{  
+  this->params.model_name = path; 
+  return ApiResult();
 }
 
 // } //namespace Api

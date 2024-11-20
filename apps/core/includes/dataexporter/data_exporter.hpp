@@ -14,7 +14,7 @@
 #include <vector>
 
 #include "cmt_common/macro_constructor_assignment.hpp"
-
+#include <span> 
 namespace Core
 {
 

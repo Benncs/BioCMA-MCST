@@ -14,7 +14,7 @@
 #include <string>
 #include <string_view>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
-
+#include <span> 
 namespace Simulation
 {
 

@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <iostream>
 #include <simulation/probe.hpp>
-
+#include <span> 
 static constexpr uint64_t init_n_particle = 200;
 static constexpr uint64_t n_time_flush = 10;
 

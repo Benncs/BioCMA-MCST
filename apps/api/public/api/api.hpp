@@ -37,9 +37,10 @@ template <typename T> struct Result : protected std::variant<Success, T>
 
 struct ApiResult : Result<std::string>
 {
-  constexpr explicit ApiResult(std::string_view t) noexcept : Result<std::string>(std::string(t))
+  explicit ApiResult(std::string_view t) noexcept : Result<std::string>(std::string(t))
   {
   }
+
   explicit constexpr ApiResult() noexcept = default;
   constexpr int to_c_ret_code()
   {
@@ -66,7 +67,7 @@ public:
   bool register_cma_path(std::string_view path, bool recursive = false);
   bool register_serde(std::string_view path);
 
-  bool register_model_name(std::string_view path);
+  ApiResult register_model_name(std::string_view path);
   bool set_feed_constant(double _f,
                          std::span<double> _target,
                          std::span<std::size_t> _position,

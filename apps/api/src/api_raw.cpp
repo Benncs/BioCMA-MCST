@@ -56,7 +56,7 @@ int exec(Handle* handle)
 
 int register_result_path(Handle* handle, const char* c)
 {
-  if (handle != nullptr)
+  if (handle != nullptr&& c!=nullptr)
   {
     return (handle->register_result_path(c)) ? 0 : -1;
   }
@@ -65,7 +65,7 @@ int register_result_path(Handle* handle, const char* c)
 
 int register_cma_path(Handle* handle, const char* c)
 {
-  if (handle != nullptr)
+  if (handle != nullptr&& c!=nullptr)
   {
     return (handle->register_cma_path(c, false)) ? 0 : -1;
   }
@@ -74,7 +74,7 @@ int register_cma_path(Handle* handle, const char* c)
 
 int register_cma_path_recursive(Handle* handle, const char* c)
 {
-  if (handle != nullptr)
+  if (handle != nullptr&& c!=nullptr)
   {
 
     return (handle->register_cma_path(c, true)) ? 0 : -1;
@@ -84,7 +84,7 @@ int register_cma_path_recursive(Handle* handle, const char* c)
 
 int register_serde(Handle* handle, const char* c)
 {
-  if (handle != nullptr)
+  if (handle != nullptr && c!=nullptr)
   {
     return (handle->register_serde(c)) ? 0 : -1;
   }
@@ -93,7 +93,7 @@ int register_serde(Handle* handle, const char* c)
 
 int register_model_name(Handle* handle, const char* c)
 {
-  if (handle != nullptr)
+  if (handle != nullptr && c!=nullptr)
   {
     return (handle->register_model_name(c)) ? 0 : -1;
   }
