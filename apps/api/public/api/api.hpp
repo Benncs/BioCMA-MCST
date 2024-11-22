@@ -56,8 +56,11 @@ public:
   Handle& operator=(const Handle&) = delete;
   Handle& operator=(Handle&&) = default;
 
+  //TODO Enable if def USE_MPI
   static std::optional<std::unique_ptr<Handle>>
   init(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_process) noexcept;
+  static std::optional<std::unique_ptr<Handle>>
+  init( uint64_t id, uint32_t thread_per_process) noexcept;
   Handle() = default;
   ~Handle()=default;
 

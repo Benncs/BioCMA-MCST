@@ -10,6 +10,8 @@ extern "C"
 
   typedef struct Handle Handle; // NOLINT
 
+  Handle* init_handle_shared(uint64_t id, uint32_t thread_per_process);
+  //TODO Enable if  USE_MPI
   Handle* init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thread_per_process);
 
   void delete_handle(Handle* handle);

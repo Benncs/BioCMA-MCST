@@ -119,15 +119,21 @@ Handle::Handle(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thr
   }
 }
 
+std::optional<std::unique_ptr<Handle>> Handle::init(uint64_t id,
+                                                    uint32_t thread_per_process) noexcept
+{
+  return Handle::init(1,0,id,thread_per_process);
+}
+
 std::optional<std::unique_ptr<Handle>> Handle::init(uint32_t n_rank,
                                                     uint32_t current_rank,
                                                     uint64_t id,
-                                                    uint32_t thread_per_proces) noexcept
+                                                    uint32_t thread_per_process) noexcept
 {
 
   
   auto ptr = std::unique_ptr<Handle>(new (std::nothrow)
-                                         Handle(n_rank, current_rank, id, thread_per_proces));
+                                         Handle(n_rank, current_rank, id, thread_per_process));
   if (ptr == nullptr)
   {
     return std::nullopt;
