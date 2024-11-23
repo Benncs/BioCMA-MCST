@@ -9,7 +9,7 @@
 #include <vector>
 namespace Core
 {
- 
+
   /**
    * @struct UserControlParameters
    * @brief A structure to hold user-defined control parameters for simulation settings.
@@ -35,7 +35,7 @@ namespace Core
     std::string results_file_name;         ///< Name of the file where results are saved.
     std::string cma_case_path;             ///< Path to the CMA case file.
     std::optional<std::string> serde_file; ///< Optional file path for serialized data.
-    
+
     /**
      * @brief Provides default settings for the UserControlParameters structure.
      *
@@ -44,6 +44,8 @@ namespace Core
      */
     static UserControlParameters m_default();
   };
+
+  std::ostream& operator<<(std::ostream& stream, const UserControlParameters& params);
 
   struct SimulationParameters
   {
@@ -62,7 +64,7 @@ namespace Core
     double biomass_initial_concentration;
     double final_time;
     static SimulationParameters m_default();
-    static SimulationParameters init(const UserControlParameters &user_params);
+    static SimulationParameters init(const UserControlParameters& user_params);
   };
 
 } // namespace Core

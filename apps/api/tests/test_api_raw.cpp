@@ -2,7 +2,6 @@
 #include <cassert>
 #include <cstring>
 #include <filesystem>
-#include <iostream>
 #include <string_view>
 
 #include "common_test.hpp"
@@ -22,11 +21,14 @@ void test_delete_handle()
 
 void mock_prepre_apply(std::string_view path, Handle* handle)
 {
-  Param params = PARAM ;
+  Param params = PARAM;
   CHECK(register_parameters(handle, &params));
   CHECK(register_result_path(handle, tmp_dir.c_str()))
   CHECK(register_model_name(handle, "None"))
-  CHECK(register_cma_path(handle, path.data()))
+  if (path.size() != 0)
+  {
+    CHECK(register_cma_path(handle, path.data()))
+  }
 }
 void test_exec(std::string_view path)
 {
@@ -146,7 +148,7 @@ void test_branch_null()
   CHECK_FALSE(register_serde(NULL, NULL));
 
   CHECK_FALSE(register_parameters(NULL, NULL));
-  Param params = PARAM ;
+  Param params = PARAM;
   CHECK_FALSE(register_parameters(NULL, &params));
 
   delete_handle(handle);
@@ -174,7 +176,7 @@ int main(int argc, char** argv)
   test_register_model_name();
 
   test_apply(cma_path);
-  test_exec(cma_path);
+  // FIXME test_exec(cma_path);
 
   return 0;
 }

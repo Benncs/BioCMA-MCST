@@ -2,13 +2,14 @@
 #include <api/api.hpp>
 #include <api/api_raw.h>
 #include <optional>
+#include <sstream>
 constexpr int ID_VERIF = 2025;
 
 int apply(Handle* handle, int to_load)
 {
   if (handle != nullptr)
   {
-    auto rc = handle->apply(to_load != 0);//TODO HANDLE ERROR
+    auto rc = handle->apply(to_load != 0); // TODO HANDLE ERROR
     return rc.to_c_ret_code();
   }
   return 0xff;
@@ -25,9 +26,9 @@ Handle* init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thre
 }
 
 Handle* init_handle_shared(uint64_t id, uint32_t thread_per_process)
-  {
-    return init_handle_raw(1,0,id,thread_per_process);
-  }
+{
+  return init_handle_raw(1, 0, id, thread_per_process);
+}
 void delete_handle(Handle* handle)
 {
 
@@ -45,7 +46,7 @@ int exec(Handle* handle)
     if (handle->get_id() == ID_VERIF)
     {
       auto rc = handle->exec();
-          std::cerr<<rc.get()<<std::endl;
+      std::cerr << rc.get() << std::endl;
 
       return rc ? 0 : -1;
     }
@@ -60,7 +61,7 @@ int exec(Handle* handle)
 
 int register_result_path(Handle* handle, const char* c)
 {
-  if (handle != nullptr&& c!=nullptr)
+  if (handle != nullptr && c != nullptr)
   {
     return (handle->register_result_path(c)) ? 0 : -1;
   }
@@ -69,7 +70,7 @@ int register_result_path(Handle* handle, const char* c)
 
 int register_cma_path(Handle* handle, const char* c)
 {
-  if (handle != nullptr&& c!=nullptr)
+  if (handle != nullptr && c != nullptr)
   {
     return (handle->register_cma_path(c, false)) ? 0 : -1;
   }
@@ -78,7 +79,7 @@ int register_cma_path(Handle* handle, const char* c)
 
 int register_cma_path_recursive(Handle* handle, const char* c)
 {
-  if (handle != nullptr&& c!=nullptr)
+  if (handle != nullptr && c != nullptr)
   {
 
     return (handle->register_cma_path(c, true)) ? 0 : -1;
@@ -88,7 +89,7 @@ int register_cma_path_recursive(Handle* handle, const char* c)
 
 int register_serde(Handle* handle, const char* c)
 {
-  if (handle != nullptr && c!=nullptr)
+  if (handle != nullptr && c != nullptr)
   {
     return (handle->register_serde(c)) ? 0 : -1;
   }
@@ -97,7 +98,7 @@ int register_serde(Handle* handle, const char* c)
 
 int register_model_name(Handle* handle, const char* c)
 {
-  if (handle != nullptr && c!=nullptr)
+  if (handle != nullptr && c != nullptr)
   {
     return (handle->register_model_name(c)) ? 0 : -1;
   }
@@ -175,4 +176,25 @@ int set_feed_constant(Handle* handle,
   }
 
   return -1;
+}
+void show_user_param(const wrap_c_param_t* params)
+{
+  if (params != nullptr)
+  {
+    std::cout << convert_c_wrap_to_param(*params);
+  }
+}
+
+void repr_user_param(const wrap_c_param_t* params, char** repr)
+{
+  std::stringstream ss;
+  ss << convert_c_wrap_to_param(*params);
+
+  // Allocate memory for the string
+  std::string str = ss.str();
+  *repr = (char*)malloc((str.size() + 1) * sizeof(char)); // +1 for null terminator
+  if (*repr != NULL)
+  {
+    strcpy(*repr, str.c_str()); // Copy the string to the allocated memory
+  }
 }

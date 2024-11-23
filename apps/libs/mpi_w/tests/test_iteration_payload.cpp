@@ -1,6 +1,6 @@
 #include <cassert>
 #include <mpi_w/iteration_payload.hpp>
-
+#include <iostream>
 int main(int argc, char** argv)
 {
   int rank = 0;

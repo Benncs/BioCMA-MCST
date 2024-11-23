@@ -1,5 +1,6 @@
 #include <core/simulation_parameters.hpp>
 #include <optional>
+#include <ostream>
 namespace Core
 {
 
@@ -16,7 +17,7 @@ namespace Core
     return params;
   }
 
-  SimulationParameters SimulationParameters::init(const UserControlParameters &user_params)
+  SimulationParameters SimulationParameters::init(const UserControlParameters& user_params)
   {
     // todo
     auto params = SimulationParameters::m_default();
@@ -46,4 +47,25 @@ namespace Core
             .cma_case_path = "",
             .serde_file = std::nullopt};
   }
+  std::ostream& operator<<(std::ostream& stream, const UserControlParameters& params)
+  {
+    stream << "UserControlParameters:\n"
+           << "  Biomass Initial Concentration: " << params.biomass_initial_concentration << "\n"
+           << "  Final Time: " << params.final_time << "\n"
+           << "  Delta Time: " << params.delta_time << "\n"
+           << "  Number of Particles: " << params.number_particle << "\n"
+           << "  Number of Threads: " << params.n_thread << "\n"
+           << "  Number of Exported Results: " << params.number_exported_result << "\n"
+           << "  Recursive: " << (params.recursive ? "true" : "false") << "\n"
+           << "  Force Override: " << (params.force_override ? "true" : "false") << "\n"
+           << "  Serde: " << (params.serde ? "true" : "false") << "\n"
+           << "  Initialiser Path: " << params.initialiser_path << "\n"
+           << "  Model Name: " << params.model_name << "\n"
+           << "  Results File Name: " << params.results_file_name << "\n"
+           << "  CMA Case Path: " << params.cma_case_path << "\n"
+           << "  Serde File: "
+           << (params.serde_file.has_value() ? params.serde_file.value() : "nullopt") << "\n";
+    return stream;
+  }
+
 } // namespace Core

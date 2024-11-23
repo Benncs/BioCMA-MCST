@@ -11,7 +11,7 @@ extern "C"
   typedef struct Handle Handle; // NOLINT
 
   Handle* init_handle_shared(uint64_t id, uint32_t thread_per_process);
-  //TODO Enable if  USE_MPI
+  // TODO Enable if  USE_MPI
   Handle* init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thread_per_process);
 
   void delete_handle(Handle* handle);
@@ -42,7 +42,9 @@ extern "C"
     int serde;
   } Param;
   // NOLINTEND
+  void show_user_param(const wrap_c_param_t* params);
 
+  void repr_user_param(const wrap_c_param_t* params, char** repr);
   Param make_params(double biomass_initial_concentration,
                     double final_time,
                     double delta_time,
