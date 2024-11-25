@@ -1,23 +1,31 @@
-import time 
 import cpp_module
+import random
 
 
+def __start():
+    print(f"Module {__name__} Loaded")
 
-a = cpp_module.a
+class Model:
+    def __init__(self,a):
+        self.a =a
 
+def init(p:cpp_module.ParticleDataHolder):
+    p.id = random.randint(0,10000)
+    return Model(p.id)
 
-def init(initmass:float):
-    _data={}
-    _data['mass']=initmass
-    print("initialised")
-
-def update(value):   
-    print(value)
+def update(_data:cpp_module.OpaquePointer,p:cpp_module.ParticleDataHolder,concentrations):   
+    model =_data.get()
+    model.a+=1
+    print(concentrations)
+    print(model.a)
     # time.sleep(0.2)
     # _data['mass']+=1
 
 
 def show():
-    print(a)
+    pass
 
-print("Module Loaded")
+__start()
+
+if __name__=="__main__":
+    Warning("This file canno't be run as main script")

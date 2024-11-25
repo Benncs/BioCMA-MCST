@@ -1,3 +1,5 @@
+#include "mc/particles/data_holder.hpp"
+#include "pymodule/opaque_type.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <pybind11/embed.h>
@@ -6,10 +8,14 @@
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
 #include <pymodule/import_py.hpp>
-
+#include <pymodule/opaque_type.hpp>
 
 PYBIND11_EMBEDDED_MODULE(cpp_module, m) {
     m.attr("a") = 1;
+    declare_opaque(m);
+    pybind11::class_<MC::ParticleDataHolder>(m,"ParticleDataHolder")
+    .def_readwrite("id", &MC::ParticleDataHolder::id);
+
 }
 
 

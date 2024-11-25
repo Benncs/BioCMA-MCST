@@ -1,3 +1,6 @@
+#include "pybind11/attr.h"
+#include "pybind11/buffer_info.h"
+#include "pymodule/opaque_type.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <pybind11/embed.h>
@@ -32,6 +35,9 @@ EXPORT python_interpreter_t init_python_interpreter()
   return {nullptr, &_custom_interpreter_deleter};
 }
 
+#define PYTHON_CST_FWD(__value__) std::cref((__value__))
+#define PYTHON_FWD(__value__) std::ref((__value__))
+
 namespace PythonWrap
 {
 
@@ -44,7 +50,7 @@ namespace PythonWrap
     pybind11::object update_f;
     pybind11::object show_f;
 
-    pybind11::object _data;
+    OpaquePointer _data;
   };
 
   void PimpModel::Impl::initialize_pimpl()
@@ -149,7 +155,8 @@ namespace PythonWrap
   {
     if (pimpl != nullptr)
     {
-      pimpl->init_f(float(rand() / float(RAND_MAX)));
+      auto obj = pimpl->init_f(PYTHON_FWD(p));
+      pimpl->_data.ptr=new py::object(obj);
     }
   }
 
@@ -159,8 +166,17 @@ namespace PythonWrap
                          MC::KPRNG _rng)
   {
     if (pimpl != nullptr)
-    {
-      pimpl->update_f(p.hydraulic_time);
+    { 
+      auto bf = pybind11::buffer_info(
+            const_cast<double*>(concentration.data()),                       
+            sizeof(double),                             
+            pybind11::format_descriptor<const double>::format(),    
+            1,                                          
+            { concentration.size() },                   
+            { sizeof(double) }                          
+        );
+    
+      pimpl->update_f(PYTHON_CST_FWD(pimpl->_data),PYTHON_FWD(p),pybind11::array_t<double>(bf));
       pimpl->show_f();
     }
   }

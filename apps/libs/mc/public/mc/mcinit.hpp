@@ -82,6 +82,7 @@ namespace MC
           KOKKOS_LAMBDA(const int i) {
             auto p = Particle<Model>(weight);
             p.properties.weight = weight;
+            p.properties.id = i;
             const uint64_t location = rng.uniform_u(min_c, max_c);
             p.properties.current_container = location;
             Kokkos::atomic_increment(&compartments(location).n_cells);

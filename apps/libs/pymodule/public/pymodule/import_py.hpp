@@ -1,6 +1,5 @@
 #ifndef __IMPORT_PY_HPP__
 #define __IMPORT_PY_HPP__
-#include <mc/particles/particle_model.hpp>
 #include <memory>
 
 #define EXPORT __attribute__((visibility("default")))

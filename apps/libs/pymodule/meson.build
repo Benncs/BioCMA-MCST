@@ -7,10 +7,6 @@ pydep = py.dependency(embed: true)
 python_module_name = 'pyBioCMAMCST'
 modfile = files(f'@src_dir@/pymodule.cpp', f'@src_dir@/opaque_type.cpp')
 
-# python_sources = files(f'@root@/modules/simple_model.py')
-
-# Install Python sources to 'birem' subdirectory
-# py.install_sources(python_sources, subdir: python_module_name)
 
 install_subdir(
   'public',
@@ -18,28 +14,11 @@ install_subdir(
 )
 public = include_directories('./public')
 
-# dependencies = [
-#   biomodel_dependency,
-#   cma_dep,
-#   mc_dependency,
-#   common_dependecy,
-#   pydep,
-#   pybind11_dep,
-# ]
-
-# py.extension_module(
-#   python_module_name,
-#   modfile,
-#   include_directories: public,
-#   dependencies: [dependencies],
-#   install: true,
-#   subdir: python_module_name,
-# )
 
 wrap_py = library(
   'wrap_py',
   include_directories: public,
-  sources: [f'@src_dir@/import_py.cpp',f'@src_dir@/pymodule.cpp'],
+  sources: [f'@src_dir@/import_py.cpp',f'@src_dir@/pymodule.cpp',f'@src_dir@/opaque_type.cpp'],
   dependencies: [pybind11_dep, pydep, mc_dependency],
 )
 
