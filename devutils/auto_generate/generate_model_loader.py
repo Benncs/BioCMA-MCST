@@ -111,7 +111,7 @@ def generate_header(template_path, output_path):
         file.write(content)
 
 
-def generate_variant(template_path: str, output_path: str, includes, model_files):
+def generate_variant(template_path: str, output_path: str, includes, model_files,add_py_variant):
     try:
         with open(template_path, "r") as template_file:
             template_content = template_file.read()
@@ -121,6 +121,8 @@ def generate_variant(template_path: str, output_path: str, includes, model_files
                 body += f"MC::ParticlesContainer<Models::{to_camel_case(model)}>,"
 
             body = body[:-1]
+            if(add_py_variant):
+                body+=",MC::ParticlesContainer<PythonWrap::PimpModel>"
 
             content = content.replace("@VARIANT_TYPE@", body)
 
@@ -137,7 +139,7 @@ def generate_variant(template_path: str, output_path: str, includes, model_files
 if __name__ == "__main__":
     # Read command-line arguments
     args = sys.argv
-    if len(args) != 8:
+    if len(args) != 9:
         raise Exception("Bad argument")
 
     models_path = args[1]
@@ -149,6 +151,9 @@ if __name__ == "__main__":
 
     variant_template_path = args[6]
     variant_output_path = args[7]
+    
+    add_py_variant = args[8]!=""
+    
 
     files, headers = list_model_files(models_path)
 
@@ -164,4 +169,4 @@ if __name__ == "__main__":
 
     generate_header(header_template_path, header_output_path)
 
-    generate_variant(variant_template_path, variant_output_path, includes, files)
+    generate_variant(variant_template_path, variant_output_path, includes, files,add_py_variant)

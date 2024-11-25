@@ -35,8 +35,11 @@ EXPORT python_interpreter_t init_python_interpreter()
   return {nullptr, &_custom_interpreter_deleter};
 }
 
+//NOLINTBEGIN
 #define PYTHON_CST_FWD(__value__) std::cref((__value__))
 #define PYTHON_FWD(__value__) std::ref((__value__))
+//NOLINTEND
+
 
 namespace PythonWrap
 {
@@ -74,7 +77,7 @@ namespace PythonWrap
 
   PimpModel::PimpModel(const PimpModel& rhs)
   {
-    if (rhs.pimpl)
+    if (rhs.pimpl != nullptr)
     {                                          // Null check
       pimpl = new PimpModel::Impl(*rhs.pimpl); // Deep copy
       pimpl->initialize_pimpl();
@@ -94,7 +97,7 @@ namespace PythonWrap
 
     delete pimpl;
 
-    if (rhs.pimpl)
+    if (rhs.pimpl != nullptr)
     {
       pimpl = new PimpModel::Impl(*rhs.pimpl);
       pimpl->initialize_pimpl();
@@ -109,7 +112,7 @@ namespace PythonWrap
 
   PimpModel::PimpModel(PimpModel&& rhs) noexcept
   {
-    if (rhs.pimpl)
+    if (rhs.pimpl != nullptr)
     {
       pimpl = rhs.pimpl;
       pimpl->initialize_pimpl();
