@@ -14,7 +14,8 @@ PYBIND11_EMBEDDED_MODULE(cpp_module, m) {
     m.attr("a") = 1;
     declare_opaque(m);
     pybind11::class_<MC::ParticleDataHolder>(m,"ParticleDataHolder")
-    .def_readwrite("id", &MC::ParticleDataHolder::id);
+    .def_readwrite("id", &MC::ParticleDataHolder::id)
+    .def_readwrite("weight", &MC::ParticleDataHolder::weight);
 
 }
 

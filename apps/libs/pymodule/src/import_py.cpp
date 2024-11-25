@@ -48,6 +48,7 @@ namespace PythonWrap
     pybind11::module_ current_module;
     pybind11::object init_f;
     pybind11::object update_f;
+    pybind11::object contribution_f;
     pybind11::object show_f;
 
     OpaquePointer _data;
@@ -59,6 +60,7 @@ namespace PythonWrap
     init_f = current_module.attr("init");
     update_f = current_module.attr("update");
     show_f = current_module.attr("show");
+    contribution_f = current_module.attr("contribution");
   }
 
   PimpModel::PimpModel()
@@ -156,7 +158,7 @@ namespace PythonWrap
     if (pimpl != nullptr)
     {
       auto obj = pimpl->init_f(PYTHON_FWD(p));
-      pimpl->_data.ptr=new py::object(obj);
+      pimpl->_data.ptr = new py::object(obj);
     }
   }
 
@@ -166,17 +168,15 @@ namespace PythonWrap
                          MC::KPRNG _rng)
   {
     if (pimpl != nullptr)
-    { 
-      auto bf = pybind11::buffer_info(
-            const_cast<double*>(concentration.data()),                       
-            sizeof(double),                             
-            pybind11::format_descriptor<const double>::format(),    
-            1,                                          
-            { concentration.size() },                   
-            { sizeof(double) }                          
-        );
-    
-      pimpl->update_f(PYTHON_CST_FWD(pimpl->_data),PYTHON_FWD(p),pybind11::array_t<double>(bf));
+    {
+      auto bf = pybind11::buffer_info(const_cast<double*>(concentration.data()),
+                                      sizeof(double),
+                                      pybind11::format_descriptor<const double>::format(),
+                                      1,
+                                      {concentration.size()},
+                                      {sizeof(double)});
+
+      pimpl->update_f(PYTHON_CST_FWD(pimpl->_data), PYTHON_FWD(p), pybind11::array_t<double>(bf));
       pimpl->show_f();
     }
   }
@@ -186,8 +186,29 @@ namespace PythonWrap
     return PimpModel{};
   }
 
-  void PimpModel::contribution(MC::ParticleDataHolder& p, ContributionView contrib) noexcept
+  void PimpModel::contribution(MC::ParticleDataHolder& p, ContributionView contribution) noexcept
   {
+    if (pimpl != nullptr)
+    {
+      auto access_contribs = contribution.subview();
+      auto* data = access_contribs.data();
+      const auto cols = access_contribs.extent(0);
+      const auto rows = access_contribs.extent(1);
+
+      py::object capsule = py::capsule(data);
+      auto result = py::array_t<double_t>(
+          py::buffer_info(
+              data,                                         // Pointer to the data
+              sizeof(double_t),                             // Size of each element
+              py::format_descriptor<double_t>::format(),    // Data type format
+              2,                                            // Number of dimensions
+              {rows, cols},                                 // Shape of the array
+              {sizeof(double_t) * cols, sizeof(double_t)}), // Strides for each dimension
+          capsule);
+
+      pimpl->contribution_f(PYTHON_CST_FWD(p),PYTHON_CST_FWD(pimpl->_data), PYTHON_FWD(result));
+
+    }
   }
 
   model_properties_detail_t PimpModel::get_properties() noexcept
