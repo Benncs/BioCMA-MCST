@@ -1,9 +1,6 @@
-
-
 src_dir = './src'
 
 app_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ').stdout().splitlines()
-
 
 lib_sources = []
 foreach item : app_sources
@@ -32,7 +29,7 @@ lib_app_shared = static_library(
   install_rpath: project_name,
 )
 
-app_test_dependency = declare_dependency(
+app_dependency = declare_dependency(
   include_directories: ['./includes'],
   link_with: lib_app,
   dependencies: lib_api_distributed_dep,
@@ -51,11 +48,11 @@ executable(
   name,
   f'@src_dir@/main.cpp',
   include_directories: ['./includes'],
-  dependencies: [app_test_dependency],
+  dependencies: [app_dependency],
   cpp_args: [],
   install: true,
   install_rpath: global_install_dir,
-  link_args: [flto_flag]
+  link_args: [flto_flag],
 )
 
 executable(
@@ -66,14 +63,14 @@ executable(
   cpp_args: [],
   install: true,
   install_rpath: global_install_dir,
-  link_args: [flto_flag]
+  link_args: [flto_flag],
 )
 
 # Conditional dynamic module build
 if use_dynamic_module
-  dep_dynamic_module = [core_distributed_dependency, simu_dyn_dependency, py_dynamic_module]
+  dep_dynamic_module = [app_dependency, py_dynamic_module]
   name = name + '_dyn'
-  
+
   lib_app_dyn = static_library(
     name,
     lib_sources,
@@ -99,6 +96,4 @@ if use_dynamic_module
   )
 endif
 
-
 subdir('tests')
-

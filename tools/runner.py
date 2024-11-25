@@ -18,7 +18,7 @@ DEFAULT_TYPE = "debug"
 _MPI_ROOT_FLAG = "--allow-run-as-root"
 MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 4 --bind-to core"
 OMP_NUM_THREADS = "1"
-COMPILER_NAME = "gcc"
+COMPILER_NAME = "python"  # "gcc"
 
 
 def get_executable(type: str, mpi: bool = True):
@@ -96,22 +96,22 @@ def main():
     mpi_c = ""
     if cli_args.use_mpi and not cli_args.dry_run:
         mpi_c = MPI_COMMAND + " "
-    
+
     command = (
         mpi_c
         + get_executable(r_type, cli_args.use_mpi)
         + " "
         + run_cli
-        + f"-nt {cli_args.n_threads} " #+ "-force 1 "
+        + f"-nt {cli_args.n_threads} "  + "-force 1 "
     )
     if cli_args.serde is True:
-        command += "-serde "+"./results/allo/allo_serde_0.raw "
+        command += "-serde " + "./results/allo/allo_serde_0.raw "
 
         # if(cli_args.use_mpi):
         #     input("confirm force?")
         #     command+= " -force 1"
     if cli_args.dry_run:
-        arg = " --args "+ command
+        arg = " --args " + command
         print(arg)
         return
     exec(command, cli_args.n_threads, do_kokkos_measure=False)

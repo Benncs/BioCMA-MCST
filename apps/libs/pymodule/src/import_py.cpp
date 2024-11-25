@@ -1,156 +1,186 @@
-#include "pymodule/opaque_type.hpp"
-
-#include "mc/particles/mcparticles.hpp"
+#include <cstdlib>
 #include <iostream>
-#include <memory>
-#include <models/types.hpp>
-#include <omp.h>
-#include <pybind11/eigen.h>
 #include <pybind11/embed.h>
 #include <pybind11/gil.h>
 #include <pybind11/numpy.h>
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
 #include <pymodule/import_py.hpp>
-#include <sstream>
-#include <stdexcept>
+#include <pymodule/model_python.hpp>
 
-namespace py = pybind11;
+static bool interpreter_init = false;
 
-pybind11::scoped_interpreter init_python_interpreter()
+static void _custom_interpreter_deleter(pybind11::scoped_interpreter* interpreter)
 {
-  std::cout << "PYTHON INTERPRETER INITIALISATION" << std::endl;
-  pybind11::scoped_interpreter interpret;
-
-  return interpret;
+  if (interpreter != nullptr)
+  {
+    delete interpreter; // NOLINT
+    interpreter_init = false;
+    interpreter = nullptr;
+    std::cout << "PYTHON INTERPRETER DESTROYED" << std::endl;
+  }
 }
 
-model_properties_t convert_to_variant(const pybind11::handle& obj)
+EXPORT python_interpreter_t init_python_interpreter()
 {
-  if (py::isinstance<py::int_>(obj))
+  if (!interpreter_init)
   {
-    return obj.cast<int>();
+    std::cout << "PYTHON INTERPRETER INITIALIZATION" << std::endl;
+    interpreter_init = true;
+    return {new pybind11::scoped_interpreter(), &_custom_interpreter_deleter};
   }
-  else if (py::isinstance<py::float_>(obj))
+  return {nullptr, &_custom_interpreter_deleter};
+}
+
+namespace PythonWrap
+{
+
+  struct PimpModel::Impl
   {
-    // Check if the float is narrow enough to fit into a float, otherwise use
-    // double
-    double d = obj.cast<double>();
-    if (d == static_cast<float>(d))
+    void initialize_pimpl();
+
+    pybind11::module_ current_module;
+    pybind11::object init_f;
+    pybind11::object update_f;
+    pybind11::object show_f;
+
+    pybind11::object _data;
+  };
+
+  void PimpModel::Impl::initialize_pimpl()
+  {
+    current_module = pybind11::module_::import("modules.modules");
+    init_f = current_module.attr("init");
+    update_f = current_module.attr("update");
+    show_f = current_module.attr("show");
+  }
+
+  PimpModel::PimpModel()
+  {
+    if (interpreter_init)
     {
-      return static_cast<float>(d);
+      pimpl = new PimpModel::Impl(); // NOLINT
+      pimpl->initialize_pimpl();
+    }
+  }
+
+  PimpModel::PimpModel(const PimpModel& rhs)
+  {
+    if (rhs.pimpl)
+    {                                          // Null check
+      pimpl = new PimpModel::Impl(*rhs.pimpl); // Deep copy
+      pimpl->initialize_pimpl();
     }
     else
     {
-      return d;
+      pimpl = nullptr;
     }
   }
-  else if (py::isinstance<py::str>(obj))
+
+  PimpModel& PimpModel::operator=(const PimpModel& rhs)
   {
-    return obj.cast<std::string>();
-  }
-  else
-  {
-    throw std::invalid_argument(
-        "Unsupported type for conversion to numeric_model_properties_t");
-  }
-}
-
-model_properties_detail_t convert_dict_to_map(const py::dict &kwargs)
-{
-  std::unordered_map<std::string, model_properties_t> cpp_map;
-
-  for (auto item : kwargs)
-  {
-    // Assuming the keys are strings
-    std::string key = py::str(item.first);
-    model_properties_t value = convert_to_variant(item.second);
-
-    cpp_map[key] = value;
-  }
-
-  return cpp_map;
-}
-
-void init_module_function(KModel &model,
-                          py::function &&init,
-                          py::function &&update,
-                          py::function &&contrib,
-                          py::function &&division,
-                          py::function &&properties,
-                          py::function &&__debug)
-{
-  model.init_kernel = [init = std::move(init)](MC::Particles &p)
-  {
-    p.data = std::make_shared<OpaquePointer>();
+    if (this == &rhs)
     {
-      init(std::ref(p));
-      return;
+      return *this;
     }
-  };
 
-  model.update_kernel =
-      [update = std::move(update)](double dt, MC::Particles &p, auto &&c)
-  {
-    update(dt, std::ref(p), std::vector(c.begin(), c.end()));
-    return;
-  };
+    delete pimpl;
 
-  model.contribution_kernel = [contrib = std::move(contrib)](auto &&p, auto &&o)
-  {
-    contrib(std::ref(p), std::ref(o));
+    if (rhs.pimpl)
+    {
+      pimpl = new PimpModel::Impl(*rhs.pimpl);
+      pimpl->initialize_pimpl();
+    }
+    else
+    {
+      pimpl = nullptr;
+    }
 
-    return;
-  };
-  model.division_kernel = [division = std::move(division)](auto &&p)
-  {
-    MC::Particles child(p);
-    auto s = child.status;
-    division(std::ref(p), std::ref(child));
-    auto s2 = child.status;
-    // assert(s != s2);
-    return child;
-  };
-
-  model.get_properties =
-      [properties = std::move(properties)](auto &&p)
-  {
-    auto dict = properties(std::cref(p));
-    return convert_dict_to_map(dict);
-  };
-}
-
-KModel get_python_module(const std::string &module_path)
-{
-  KModel model;
-  try
-  {
-    py::module model_setup = py::module_::import(module_path.c_str());
-    py::function init = model_setup.attr("init_kernel");
-    py::function update = model_setup.attr("update_kernel");
-    py::function contrib = model_setup.attr("contribution_kernel");
-    py::function division = model_setup.attr("division_kernel");
-    py::function properties = model_setup.attr("get_properties");
-    py::function __debug = model_setup.attr("__debug");
-
-    init_module_function(model,
-                         std::move(init),
-                         std::move(update),
-                         std::move(contrib),
-                         std::move(division),
-                         std::move(properties),
-                         std::move(__debug));
-    return model;
+    return *this;
   }
-  catch (const std::exception &e)
+
+  PimpModel::PimpModel(PimpModel&& rhs) noexcept
   {
-    std::stringstream msg;
-    msg << "Error loading python module: " << std::endl;
-    msg << e.what() << std::endl;
-    throw std::runtime_error(msg.str());
+    if (rhs.pimpl)
+    {
+      pimpl = rhs.pimpl;
+      pimpl->initialize_pimpl();
+      rhs.pimpl = nullptr;
+    }
+    else
+    {
+      pimpl = nullptr;
+    }
   }
-  catch (...)
+
+  PimpModel& PimpModel::operator=(PimpModel&& rhs) noexcept
   {
-    throw std::runtime_error("Error loading python module");
+    if (this == &rhs)
+    {
+      return *this;
+    }
+
+    delete pimpl;
+
+    if (rhs.pimpl)
+    {
+      pimpl = rhs.pimpl;
+      pimpl->initialize_pimpl();
+      rhs.pimpl = nullptr;
+    }
+    else
+    {
+      pimpl = nullptr;
+    }
+
+    return *this;
   }
-}
+
+  PimpModel::~PimpModel()
+  {
+    delete pimpl;
+  }
+
+  /**
+  Biological model wrap
+  **/
+
+  void PimpModel::init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
+  {
+    if (pimpl != nullptr)
+    {
+      pimpl->init_f(float(rand() / float(RAND_MAX)));
+    }
+  }
+
+  void PimpModel::update(const double d_t,
+                         MC::ParticleDataHolder& p,
+                         const LocalConcentrationView& concentration,
+                         MC::KPRNG _rng)
+  {
+    if (pimpl != nullptr)
+    {
+      pimpl->update_f(p.hydraulic_time);
+      pimpl->show_f();
+    }
+  }
+
+  PimpModel PimpModel::division(MC::ParticleDataHolder& p, MC::KPRNG k) noexcept
+  {
+    return PimpModel{};
+  }
+
+  void PimpModel::contribution(MC::ParticleDataHolder& p, ContributionView contrib) noexcept
+  {
+  }
+
+  model_properties_detail_t PimpModel::get_properties() noexcept
+  {
+    return {{"mass", 1.}};
+  }
+  [[nodiscard]] double PimpModel::mass() const noexcept
+  {
+    return 1.;
+  }
+
+} // namespace PythonWrap

@@ -95,7 +95,7 @@ int main(int argc, char** argv)
   auto& h = *handle;
   const auto serde = user_params.serde;
   INTERPRETER_INIT
-
+ 
   REDIRECT_SCOPE({
     HANDLE_RC(h->register_parameters(std::move(user_params)));
     HANDLE_RC(h->apply(serde));

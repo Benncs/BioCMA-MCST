@@ -95,8 +95,7 @@ concept ParticleModel = HasMass<T>&&requires(T model,
   { model.division(p,rng) } -> std::same_as<T>;
   { model.contribution(p, contrib) } -> std::same_as<void>;
   { model.get_properties() } -> std::same_as<model_properties_detail_t>;
-  { model.get_properties() } -> std::same_as<model_properties_detail_t>;
-   
+
 };
 
 /**

@@ -87,6 +87,7 @@ namespace Core
     f_run(case_data.exec_info, *sim, case_data.params, std::move(case_data.transitioner), partial_exporter);
 
     do_serde(case_data);
+    case_data.simulation->mc_unit.reset();
   }
 
   std::optional<Core::CaseData> load(const ExecInfo &exec, const UserControlParameters &&params,std::optional<Simulation::Feed::SimulationFeed> feed)
