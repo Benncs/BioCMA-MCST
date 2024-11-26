@@ -62,7 +62,11 @@ namespace Simulation
     this->feed =
         _feed.has_value() ? std::move(*_feed) : Feed::SimulationFeed{std::nullopt, std::nullopt};
 
-    const size_t n_flows = 1;
+    size_t n_flows=0;
+    if(this->feed.liquid.has_value())
+    {
+       n_flows = this->feed.liquid->size();
+    }
     index_leaving_flow = Kokkos::View<size_t*, ComputeSpace>("index_leaving_flow", n_flows);
 
     leaving_flow = Kokkos::View<double*, ComputeSpace>("leaving_flow", n_flows);

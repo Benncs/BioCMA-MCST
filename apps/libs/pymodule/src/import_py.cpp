@@ -35,14 +35,27 @@ EXPORT python_interpreter_t init_python_interpreter()
   return {nullptr, &_custom_interpreter_deleter};
 }
 
-//NOLINTBEGIN
+// NOLINTBEGIN
 #define PYTHON_CST_FWD(__value__) std::cref((__value__))
 #define PYTHON_FWD(__value__) std::ref((__value__))
-//NOLINTEND
-
+// NOLINTEND
 
 namespace PythonWrap
 {
+
+  model_properties_detail_t convert_dict_to_map(const py::dict& kwargs)
+  {
+    model_properties_detail_t cpp_map;
+
+    for (auto item : kwargs)
+    {
+
+      std::string key = py::str(item.first);
+      cpp_map[key] = item.second.cast<double>();
+    }
+
+    return cpp_map;
+  }
 
   struct PimpModel::Impl
   {
@@ -52,8 +65,10 @@ namespace PythonWrap
     pybind11::object init_f;
     pybind11::object update_f;
     pybind11::object contribution_f;
+    pybind11::object division_f;
     pybind11::object show_f;
-
+    pybind11::object get_properties_f;
+    pybind11::object mass_f;
     OpaquePointer _data;
   };
 
@@ -64,6 +79,9 @@ namespace PythonWrap
     update_f = current_module.attr("update");
     show_f = current_module.attr("show");
     contribution_f = current_module.attr("contribution");
+    get_properties_f = current_module.attr("get_properties");
+    division_f = current_module.attr("division");
+    mass_f = current_module.attr("mass");
   }
 
   PimpModel::PimpModel()
@@ -78,8 +96,8 @@ namespace PythonWrap
   PimpModel::PimpModel(const PimpModel& rhs)
   {
     if (rhs.pimpl != nullptr)
-    {                                          // Null check
-      pimpl = new PimpModel::Impl(*rhs.pimpl); // Deep copy
+    {
+      pimpl = new PimpModel::Impl(*rhs.pimpl); // Deep copy // NOLINT
       pimpl->initialize_pimpl();
     }
     else
@@ -99,7 +117,7 @@ namespace PythonWrap
 
     if (rhs.pimpl != nullptr)
     {
-      pimpl = new PimpModel::Impl(*rhs.pimpl);
+      pimpl = new PimpModel::Impl(*rhs.pimpl); // NOLINT
       pimpl->initialize_pimpl();
     }
     else
@@ -133,7 +151,7 @@ namespace PythonWrap
 
     delete pimpl;
 
-    if (rhs.pimpl)
+    if (rhs.pimpl != nullptr)
     {
       pimpl = rhs.pimpl;
       pimpl->initialize_pimpl();
@@ -161,7 +179,7 @@ namespace PythonWrap
     if (pimpl != nullptr)
     {
       auto obj = pimpl->init_f(PYTHON_FWD(p));
-      pimpl->_data.ptr = new py::object(obj);
+      pimpl->_data.ptr = new py::object(obj); // NOLINT
     }
   }
 
@@ -174,19 +192,25 @@ namespace PythonWrap
     {
       auto bf = pybind11::buffer_info(const_cast<double*>(concentration.data()),
                                       sizeof(double),
-                                      pybind11::format_descriptor<const double>::format(),
+                                      pybind11::format_descriptor<double>::format(),
                                       1,
                                       {concentration.size()},
                                       {sizeof(double)});
 
-      pimpl->update_f(PYTHON_CST_FWD(pimpl->_data), PYTHON_FWD(p), pybind11::array_t<double>(bf));
-      pimpl->show_f();
+      pimpl->update_f(d_t,PYTHON_CST_FWD(pimpl->_data), PYTHON_FWD(p), pybind11::array_t<double>(bf));
     }
   }
 
   PimpModel PimpModel::division(MC::ParticleDataHolder& p, MC::KPRNG k) noexcept
   {
-    return PimpModel{};
+    PimpModel child_model;
+    if (pimpl != nullptr)
+    {
+      auto obj = pimpl->division_f(PYTHON_CST_FWD(pimpl->_data),PYTHON_FWD(p));
+      child_model.pimpl->_data.ptr = new py::object(obj); // NOLINT
+    }
+
+    return child_model;
   }
 
   void PimpModel::contribution(MC::ParticleDataHolder& p, ContributionView contribution) noexcept
@@ -209,17 +233,26 @@ namespace PythonWrap
               {sizeof(double_t) * cols, sizeof(double_t)}), // Strides for each dimension
           capsule);
 
-      pimpl->contribution_f(PYTHON_CST_FWD(p),PYTHON_CST_FWD(pimpl->_data), PYTHON_FWD(result));
-
+      pimpl->contribution_f(PYTHON_CST_FWD(p), PYTHON_CST_FWD(pimpl->_data), PYTHON_FWD(result));
     }
   }
 
   model_properties_detail_t PimpModel::get_properties() noexcept
   {
-    return {{"mass", 1.}};
+    if (pimpl != nullptr)
+    {
+      return convert_dict_to_map(pimpl->get_properties_f(PYTHON_CST_FWD(pimpl->_data)));
+    }
+    return {{"None", 1.}};
   }
+
   [[nodiscard]] double PimpModel::mass() const noexcept
   {
+    if (pimpl != nullptr)
+    {
+      auto obj= pimpl->mass_f(PYTHON_CST_FWD(pimpl->_data));
+      return obj.cast<double>();
+    }
     return 1.;
   }
 

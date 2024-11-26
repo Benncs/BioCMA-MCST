@@ -22,32 +22,63 @@ def __start():
 
 
 
+mu_max = 0.77 / 3600.
+ks=0.01
+l_0=0.9e-6
+ln2=0.69314718056
+_init_only_cell_lenghtening = l_0/2. / ln2
+
+tau_metabolism=.1/mu_max
 
 class Model:
-    def __init__(self,a):
-        self.a =a
+    def __init__(self):
+        self.l= 0
+        self.mu =0
+        self.cc=0
 
 def init(p:cpp_module.ParticleDataHolder):
-    p.id = random.randint(0,10000)
-    return Model(p.id)
+    model =Model()
+    model.l=random.normalvariate(0.9e-6/2,0.9e-6/5)
+    model.mu = random.normalvariate(mu_max,mu_max/5)
+    return model
 
-def update(_data:cpp_module.OpaquePointer,p:cpp_module.ParticleDataHolder,concentrations):   
+def update(dt:float,_data:cpp_module.OpaquePointer,p:cpp_module.ParticleDataHolder,concentrations):   
     model =_data.get()
-    model.a+=1
-    # print(concentrations)
-    # print(model.a)
-    # time.sleep(0.2)
-    # _data['mass']+=1
+    s = concentrations[0]
+    mu_p = mu_max * s / (ks + s)
+    
+    mu_eff = min(mu_p,model.mu)
+    model =_data.get()
+    model.l += dt * (mu_eff * _init_only_cell_lenghtening)
+    model.mu += dt * (1.0 / tau_metabolism) * (mu_p - model.mu)
+    model.cc = mu_eff *2.*1000. * 3.14 * (0.8e-6) * (0.8e-6) / 4.*model.l
 
-def division(p:cpp_module.ParticleDataHolder):
-    p.id = random.randint(0,10000)
-    return Model(p.id)
+    if(model.l>l_0):
+        p.signal_division()
+
+
+def division(_data,p:cpp_module.ParticleDataHolder):
+    model =_data.get()
+    child = model
+    child.l/=2
+    model.l/=2
+
+    return model
 
 
 def contribution(p,_data:cpp_module.OpaquePointer,contribs):
-    contribs[0,0]+=10./p.weight
-    contribs[:,1]+=2.
-    pass
+    model =_data.get()
+   
+    contribs[0,0]-=model.cc*p.weight
+    return
+
+def get_properties(_data):
+    model =_data.get()
+    return {"l":model.l,"mu":model.mu}
+
+def mass(_data):
+    model =_data.get()
+    return 0.5*1000 * 3.14 * (0.8e-6) * (0.8e-6) / 4.*model.l
 
 
 def show():

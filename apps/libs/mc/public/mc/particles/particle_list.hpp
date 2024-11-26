@@ -172,6 +172,7 @@ namespace MC
     void remove_dead(uint64_t count_dead)
     {
       PROFILE_SECTION("remove_dead")
+      if(count_dead==0){return;}
 
       auto pred = KOKKOS_LAMBDA(const auto &p)
       {

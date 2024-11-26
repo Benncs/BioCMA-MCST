@@ -82,9 +82,11 @@ int main(int argc, char** argv)
     return -1;
   }
 
-
   auto handle = Handle::init(
-      exec_info.n_rank, exec_info.current_rank, exec_info.run_id, exec_info.thread_per_process);
+      exec_info.n_rank, 
+      exec_info.current_rank, 
+      exec_info.run_id, 
+      exec_info.thread_per_process);
 
   if (!handle)
   {
@@ -95,7 +97,7 @@ int main(int argc, char** argv)
   auto& h = *handle;
   const auto serde = user_params.serde;
   INTERPRETER_INIT
- 
+
   REDIRECT_SCOPE({
     HANDLE_RC(h->register_parameters(std::move(user_params)));
     HANDLE_RC(h->apply(serde));

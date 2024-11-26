@@ -4,10 +4,6 @@ py = import('python').find_installation(pure: false)
 pybind11_dep = dependency('pybind11', required: true)
 pydep = py.dependency(embed: true)
 
-python_module_name = 'pyBioCMAMCST'
-modfile = files(f'@src_dir@/pymodule.cpp', f'@src_dir@/opaque_type.cpp')
-
-
 install_subdir(
   'public',
   install_dir: includes_install_dir,
@@ -16,9 +12,9 @@ public = include_directories('./public')
 
 
 wrap_py = library(
-  'wrap_py',
+  'wrap_python',
   include_directories: public,
-  sources: [f'@src_dir@/import_py.cpp',f'@src_dir@/pymodule.cpp',f'@src_dir@/opaque_type.cpp'],
+  sources: [f'@src_dir@/import_py.cpp',f'@src_dir@/pymodule.cpp'],
   dependencies: [pybind11_dep, pydep, mc_dependency],
 )
 
