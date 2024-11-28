@@ -1,6 +1,8 @@
 HeaderFilterRegex: 'apps/*/public/*/*.hpp'
 
 Checks: |
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
   *bugprone*,
   *performance*,
   *openmp*,

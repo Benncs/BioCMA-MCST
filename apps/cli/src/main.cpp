@@ -1,3 +1,4 @@
+#include "udf_includes.hpp"
 #include <api/api.hpp>
 #include <cli_parser.hpp>
 #include <common/common.hpp>
@@ -57,6 +58,10 @@ static bool override_result_path(const Core::UserControlParameters& params, cons
     }                                                                                              \
   }
 
+
+#include "udf_includes.hpp"
+
+
 int main(int argc, char** argv)
 {
   // First manually retrieve argument from command line
@@ -67,6 +72,7 @@ int main(int argc, char** argv)
     showHelp(std::cout);
     return -1;
   }
+  auto  _ = UnsafeUDF::Loader::init_lib("/home/benjamin/Documents/code/cpp/BioCMA-MCST/builddir/debug_python/apps/udf_model/libudf_model.so");
 
   auto user_params = params_opt.value(); // Deref value is safe  TODO: with
                                          // c++23 support use monadic

@@ -1,4 +1,3 @@
-#include "common/common.hpp"
 #include "mc/prng/prng.hpp"
 #include "models/utils.hpp"
 #include <Kokkos_Macros.hpp>

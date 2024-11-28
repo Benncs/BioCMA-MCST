@@ -2,7 +2,6 @@
 #define __MC_DATA_HOLDER_PARTICLE_HPP__
 
 #include <Kokkos_Core.hpp>
-#include <cmt_common/macro_constructor_assignment.hpp>
 #include <common/execinfo.hpp>
 
 namespace MC

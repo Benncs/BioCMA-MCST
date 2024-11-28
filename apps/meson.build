@@ -9,4 +9,7 @@ else
   subdir('core')
   subdir('api')
   subdir('cli')
+  subdir('udf_model')
 endif
+
+

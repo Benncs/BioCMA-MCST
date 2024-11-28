@@ -4,7 +4,6 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/common.hpp>
-#include <common/kokkos_vector.hpp>
 #include <concepts>
 #include <mc/particles/data_holder.hpp>
 #include <mc/prng/prng.hpp>

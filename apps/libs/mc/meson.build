@@ -32,6 +32,13 @@ mc_dependency = declare_dependency(
    compile_args: [arg],
 )
 
+mc_dependency_light = declare_dependency(
+   include_directories: public_include_dir,
+   dependencies:[kokkos],
+   link_with: mc_lib,
+   compile_args: [arg],
+)
+
 subdir('./tests')
 
 install_subdir(
