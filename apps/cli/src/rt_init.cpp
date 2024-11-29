@@ -18,7 +18,7 @@
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
 #endif
-
+#  include <omp.h>
 #ifndef USE_PYTHON_MODULE
 #  include <omp.h>
 
@@ -82,9 +82,9 @@ ExecInfo runtime_init(int argc, char **argv, Core::UserControlParameters &params
   // Eigen::setNbThreads(static_cast<int>(info.thread_per_process));
   // Eigen::setNbThreads(std::min(omp_get_num_procs(), 4));
 
-#ifdef USE_PYTHON_MODULE
-  info.thread_per_process = 1; // Set one thread because of PYthon GIL
-#endif
+// #ifdef USE_PYTHON_MODULE
+//   info.thread_per_process = 1; // Set one thread because of PYthon GIL
+// #endif
       // TODO FIXME : disable OMP feature
   std::cout << "Numberof thread per process " << info.thread_per_process
             << std::endl;
@@ -206,7 +206,6 @@ void set_n_thread_current_rank(const int rank,
   size_t omp_n_thread = (params.n_thread > 0)
                             ? static_cast<size_t>(params.n_thread)
                             : static_cast<size_t>(omp_get_max_threads());
-
   // int num_core_per_node = omp_get_num_procs();
 
   size_t threads_per_process = 1;

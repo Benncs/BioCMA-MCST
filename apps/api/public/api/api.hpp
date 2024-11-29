@@ -4,15 +4,23 @@
 #include "core/simulation_parameters.hpp"
 #include "simulation/feed_descriptor.hpp"
 #include <core/case_data.hpp>
+#include <cstdint>
 #include <cstdlib>
 #include <memory>
 #include <optional>
+#include <span>
+#include <string>
+#include <string_view>
+#include <variant>
 // namespace Api
+//
 // {
-struct Success {};
+struct Success
+{
+};
 template <typename T> struct Result : protected std::variant<Success, T>
 {
-  explicit constexpr Result() noexcept : std::variant<Success, T>{Success{}}{};  
+  explicit constexpr Result() noexcept : std::variant<Success, T>{Success{}} {};
   constexpr explicit Result(T const&& t) noexcept : std::variant<Success, T>{t}
   {
   }
@@ -44,7 +52,7 @@ struct ApiResult : Result<std::string>
   explicit constexpr ApiResult() noexcept = default;
   constexpr int to_c_ret_code()
   {
-    return (valid())?0:-1;
+    return (valid()) ? 0 : -1;
   }
 };
 
@@ -56,16 +64,16 @@ public:
   Handle& operator=(const Handle&) = delete;
   Handle& operator=(Handle&&) = default;
 
-  //TODO Enable if def USE_MPI
+  // TODO Enable if def USE_MPI
   static std::optional<std::unique_ptr<Handle>>
   init(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_process) noexcept;
-  static std::optional<std::unique_ptr<Handle>>
-  init( uint64_t id, uint32_t thread_per_process) noexcept;
+  static std::optional<std::unique_ptr<Handle>> init(uint64_t id,
+                                                     uint32_t thread_per_process) noexcept;
   Handle() = default;
-  ~Handle()=default;
+  ~Handle() = default;
 
-  ApiResult apply(bool to_load)noexcept;
-  ApiResult register_parameters(Core::UserControlParameters&& params)noexcept;
+  ApiResult apply(bool to_load) noexcept;
+  ApiResult register_parameters(Core::UserControlParameters&& params) noexcept;
   bool register_result_path(std::string_view path);
   bool register_cma_path(std::string_view path, bool recursive = false);
   bool register_serde(std::string_view path);
@@ -79,7 +87,7 @@ public:
 
   [[nodiscard]] int get_id() const;
 
-  ApiResult exec()noexcept;
+  ApiResult exec() noexcept;
 
 private:
   int id{};

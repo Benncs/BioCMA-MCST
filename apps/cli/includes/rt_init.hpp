@@ -1,10 +1,13 @@
 #ifndef __RUNTIME_INIT_HPP__
 #define __RUNTIME_INIT_HPP__
 
+#include "common/execinfo.hpp"
 #include <chrono>
-#include <common/common.hpp>
+#include <ctime>
 #include <iomanip>
 #include <core/simulation_parameters.hpp>
+#include <string>
+#include <string_view>
 
 void set_n_thread_current_rank(int rank,
                                int size,

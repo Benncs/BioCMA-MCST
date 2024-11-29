@@ -116,6 +116,7 @@ Handle::Handle(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thr
             .set_disable_warnings(false)
             .set_num_threads(static_cast<int32_t>(_data.exec_info.thread_per_process))
             .set_map_device_id_by("random"));
+            Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
   }
 }
 

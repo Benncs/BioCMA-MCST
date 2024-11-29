@@ -58,9 +58,7 @@ static bool override_result_path(const Core::UserControlParameters& params, cons
     }                                                                                              \
   }
 
-
 #include "udf_includes.hpp"
-
 
 int main(int argc, char** argv)
 {
@@ -72,7 +70,8 @@ int main(int argc, char** argv)
     showHelp(std::cout);
     return -1;
   }
-  auto  _ = UnsafeUDF::Loader::init_lib("/home/benjamin/Documents/code/cpp/BioCMA-MCST/builddir/debug_python/apps/udf_model/libudf_model.so");
+  auto _ = UnsafeUDF::Loader::init_lib("/home/benjamin/Documents/code/cpp/BioCMA-MCST/builddir/"
+                                       "debug_python/apps/udf_model/libudf_model.so");
 
   auto user_params = params_opt.value(); // Deref value is safe  TODO: with
                                          // c++23 support use monadic
@@ -89,10 +88,7 @@ int main(int argc, char** argv)
   }
 
   auto handle = Handle::init(
-      exec_info.n_rank, 
-      exec_info.current_rank, 
-      exec_info.run_id, 
-      exec_info.thread_per_process);
+      exec_info.n_rank, exec_info.current_rank, exec_info.run_id, exec_info.thread_per_process);
 
   if (!handle)
   {

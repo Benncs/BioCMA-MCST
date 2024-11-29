@@ -15,11 +15,11 @@ __current_file_path = os.path.abspath(__file__)
 __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
 DEFAULT_TYPE = "debug"
-_MPI_ROOT_FLAG = "" #"--allow-run-as-root"
+_MPI_ROOT_FLAG = ""  # "--allow-run-as-root"
 MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 4 --bind-to core"
 # MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 8 --use-hwthread-cpus"
 OMP_NUM_THREADS = "1"
-COMPILER_NAME = "python"  # "gcc"
+COMPILER_NAME = "gcc"  # "gcc"
 
 
 def get_executable(type: str, mpi: bool = True):
@@ -103,7 +103,8 @@ def main():
         + get_executable(r_type, cli_args.use_mpi)
         + " "
         + run_cli
-        + f"-nt {cli_args.n_threads} "  + "-force 1 "
+        + f"-nt {cli_args.n_threads} "
+        + "-force 1 "
     )
     if cli_args.serde is True:
         command += "-serde " + "./results/allo/allo_serde_0.raw "
