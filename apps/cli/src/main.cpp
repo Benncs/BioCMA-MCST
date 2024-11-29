@@ -1,7 +1,5 @@
-#include "udf_includes.hpp"
 #include <api/api.hpp>
 #include <cli_parser.hpp>
-#include <common/common.hpp>
 #include <common/execinfo.hpp>
 #include <core/case_data.hpp>
 #include <core/simulation_parameters.hpp>
@@ -11,6 +9,9 @@
 #include <optional>
 #include <rt_init.hpp>
 #include <stream_io.hpp>
+#include <string>
+#include <udf_includes.hpp>
+#include <utility>
 
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
@@ -57,8 +58,6 @@ static bool override_result_path(const Core::UserControlParameters& params, cons
       return -1;                                                                                   \
     }                                                                                              \
   }
-
-#include "udf_includes.hpp"
 
 int main(int argc, char** argv)
 {
