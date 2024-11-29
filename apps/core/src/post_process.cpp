@@ -70,13 +70,13 @@ namespace PostProcessing
   void save_final_particle_state(Simulation::SimulationUnit &simulation,
                                  Core::PartialExporter &pde)
   {
-    // save_particle_sate(simulation, pde, "final", false);
+    save_particle_sate(simulation, pde, "final", false);
   }
 
   void save_initial_particle_state(Simulation::SimulationUnit &simulation,
                                    Core::PartialExporter &pde)
   {
-    // save_particle_sate(simulation, pde, "initial", false);
+    save_particle_sate(simulation, pde, "initial", false);
   }
 
   void final_post_processing(const ExecInfo &exec,
@@ -217,21 +217,27 @@ namespace PostProcessing
 
                 particle_values(i_key, i) = value;
 
+                // Kokkos::atomic_add(&spatial_values(i_key, i_container),
+                //                    value / cast_n_cell);
                 Kokkos::atomic_add(&spatial_values(i_key, i_container),
-                                   value / cast_n_cell);
+                                   value);
                 ++i_key;
               }
 
               particle_values(i_key, i) = particle.properties.hydraulic_time;
               Kokkos::atomic_add(&spatial_values(i_key, i_container),
-                                 particle.properties.hydraulic_time /
-                                     cast_n_cell);
+                                   particle.properties.hydraulic_time);
+              // Kokkos::atomic_add(&spatial_values(i_key, i_container),
+              //                    particle.properties.hydraulic_time /
+              //                        cast_n_cell);
               ++i_key;
               particle_values(i_key, i) =
                   particle.properties.interdivision_time;
-              Kokkos::atomic_add(&spatial_values(i_key, i_container),
-                                 particle.properties.interdivision_time /
-                                     cast_n_cell);
+              // Kokkos::atomic_add(&spatial_values(i_key, i_container),
+              //                    particle.properties.interdivision_time /
+              //                        cast_n_cell);
+                   Kokkos::atomic_add(&spatial_values(i_key, i_container),
+                                 particle.properties.interdivision_time  );
             }
             if (clean)
             {

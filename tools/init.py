@@ -51,7 +51,7 @@ def sanofi_1s():
     gas_sanofi[:,0]=0 #glucose g/l
     gas_sanofi[:,1]=0.21 #o2 g/l
 
-    liquid_sanofi[:,0]=0 #glucose g/l
+    liquid_sanofi[:,0]=5 #glucose g/l
     liquid_sanofi[:,1]=0 #o2 g/l
 
 
