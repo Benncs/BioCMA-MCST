@@ -1,10 +1,6 @@
 #include "common/kokkos_vector.hpp"
 #include "mc/container_state.hpp"
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Core_fwd.hpp>
-#include <Kokkos_DynamicView.hpp>
-#include <Kokkos_Macros.hpp>
-#include <Kokkos_Printf.hpp>
 #include <cassert>
 #include <cma_read/neighbors.hpp>
 #include <cstddef>
@@ -13,21 +9,10 @@
 
 namespace MC
 {
-  // ReactorDomain::ReactorDomain(ReactorDomain &&other) noexcept
-  // {
-  //   if (this != &other)
-  //   {
-  //     this->size = other.size;
-  //     this->id = other.id;
-  //     this->_total_volume = other._total_volume;
-  //     this->shared_containers = other.shared_containers;
-  //   }
-  // }
 
   void ReactorDomain::setVolumes(std::span<double const> volumes_gas,
                                  std::span<double const> volumes_liq)
   {
-    // Lot of assert to ensure validy of flowmap during MPI broadcast
 
     assert(volumes_gas.size() == size);
     assert(volumes_liq.size() == size);
@@ -112,7 +97,7 @@ namespace MC
     return dist;
   }
 
-  void
+  [[deprecated("Not needed anymore")]] void
   ReactorDomain::in_place_reduce(std::span<const size_t> data, size_t original_size, size_t n_rank)
   {
     // OK because of sharedspace
@@ -124,9 +109,9 @@ namespace MC
       throw std::runtime_error("Cannot reduce different reactor type");
     }
     auto shared_container = this->shared_containers;
-    for (size_t i_rank = 1; i_rank < n_rank; ++i_rank)
+    for (std::size_t i_rank = 1; i_rank < n_rank; ++i_rank)
     {
-      for (size_t i_c = 0; i_c < original_size; ++i_c)
+      for (std::size_t i_c = 0; i_c < original_size; ++i_c)
       {
         shared_container(i_c).n_cells += data[i_c + i_rank * original_size];
       }

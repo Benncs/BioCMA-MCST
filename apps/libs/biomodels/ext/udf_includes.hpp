@@ -19,7 +19,7 @@ namespace Models
 namespace MC
 {
   class ParticleDataHolder;
-}
+} //namespace MC
 
 namespace UnsafeUDF
 {

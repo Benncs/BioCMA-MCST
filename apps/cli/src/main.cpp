@@ -49,15 +49,28 @@ static std::optional<Core::CaseData> prepare(const ExecInfo& exec_info,
  */
 static bool override_result_path(const Core::UserControlParameters& params, const ExecInfo& exec);
 
-#define HANDLE_RC(__api_results__)                                                                 \
-  {                                                                                                \
-    auto rc = (__api_results__);                                                                   \
-    if (!rc)                                                                                       \
+#ifndef NO_MPI
+#  define HANDLE_RC(__api_results__)                                                               \
     {                                                                                              \
-      std::cout << "ERROR " << #__api_results__ << " " << rc.get() << std::endl;                   \
-      return -1;                                                                                   \
-    }                                                                                              \
-  }
+      auto rc = (__api_results__);                                                                 \
+      if (!rc)                                                                                     \
+      {                                                                                            \
+        std::cout << "ERROR " << #__api_results__ << " " << rc.get() << std::endl;                 \
+        WrapMPI::critical_error();                                                                   \
+        return -1;                                                                                 \
+      }                                                                                            \
+    }
+#else
+#  define HANDLE_RC(__api_results__)                                                               \
+    {                                                                                              \
+      auto rc = (__api_results__);                                                                 \
+      if (!rc)                                                                                     \
+      {                                                                                            \
+        std::cout << "ERROR " << #__api_results__ << " " << rc.get() << std::endl;                 \
+        return -1;                                                                                 \
+      }                                                                                            \
+    }
+#endif
 
 int main(int argc, char** argv)
 {

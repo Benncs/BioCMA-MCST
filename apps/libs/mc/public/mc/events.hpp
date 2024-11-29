@@ -1,16 +1,11 @@
 #ifndef __MC_EVENTS_HPP__
 #define __MC_EVENTS_HPP__
 
-#include "common/kokkos_vector.hpp"
-#include <Kokkos_Atomic.hpp>
-#include <Kokkos_Core_fwd.hpp>
+#include <Kokkos_Core.hpp>
 #include <Kokkos_DynamicView.hpp>
-#include <Kokkos_Macros.hpp>
 #include <common/execinfo.hpp>
 #include <cstddef>
-#include <impl/Kokkos_HostThreadTeam.hpp>
 #include <span>
-
 namespace MC
 {
   /**
@@ -126,22 +121,32 @@ namespace MC
     template <class Archive> void save(Archive &ar) const
     {
       std::array<std::size_t, number_event_type> array{};
-      for (size_t i = 0; i < number_event_type; ++i)
-      {
-        array[i] = _events[i];
-      }
+
+      auto rd = std::span<std::size_t>(_events.data(),number_event_type);
+
+      std::copy(rd.begin(), rd.end(), array.begin());
+      assert(rd[0]==_events[0] && rd[0]==array[0]);
 
       ar(array);
     }
 
     template <class Archive> void load(Archive &ar)
     {
+
       std::array<std::size_t, number_event_type> array{};
       ar(array);
-      for (std::size_t i = 0; i < number_event_type; ++i)
-      {
-        _events(i) = array[i];
-      }
+
+      auto rd = std::span<std::size_t>(_events.data(),number_event_type);
+
+      std::copy(array.begin(), array.end(), rd.begin());
+      assert(rd[0]==_events[0]);
+      // std::array<std::size_t, number_event_type> array{};
+      // ar(array);
+
+      // for (std::size_t i = 0; i < number_event_type; ++i)
+      // {
+      //   _events(i) = array[i];
+      // }
     }
   };
 

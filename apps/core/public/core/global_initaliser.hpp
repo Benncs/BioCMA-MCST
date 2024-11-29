@@ -1,7 +1,6 @@
 #ifndef __CORE_GLOBAL_INITIALLISER_HPP__
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
-#include "biocma_cst_config.hpp"
 #include "cma_read/flow_iterator.hpp"
 #include "core/simulation_parameters.hpp"
 #include "mc/unit.hpp"
