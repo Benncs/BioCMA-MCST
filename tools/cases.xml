@@ -94,7 +94,7 @@
 	   <!-- <cma_case_path>./cma_data/0d_mono/</cma_case_path> -->
       <cma_case_path >/home/benjamin/Documents/thesis/cfd-cma/sanofi/</cma_case_path>
       <final_time>10</final_time>
-      <numper_particle>10000000</numper_particle>
+      <numper_particle>100000</numper_particle>
       <delta_time>0.1</delta_time>
       <results_file_name>debug</results_file_name>
       <number_exported_result>2</number_exported_result>

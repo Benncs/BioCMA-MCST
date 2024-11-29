@@ -13,14 +13,14 @@ public_include_dir = [public_model]
 loader = library(
    'loader',
    f'ext/udf_includes.cpp',
-   include_directories: [shared_load_include, ext_include,public_include_dir],
-   dependencies: [mc_dependency, common_dependecy],
+   include_directories: [ ext_include,public_include_dir],
+   dependencies: [mc_dependency, common_dependecy,dynlib_dep],
    cpp_args: ['-DDECLARE_EXPORT_UDF'],
 )
 
 udf_loader = declare_dependency(
    link_with: loader,
-   dependencies: [mc_dependency, common_dependecy],
+   dependencies: [mc_dependency, common_dependecy,dynlib_dep],
 )
 
 

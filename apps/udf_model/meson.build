@@ -1,11 +1,11 @@
 
 
-dep = [mc_dependency]
+dep = [mc_dependency,dynlib_dep]
 
 library(
     'udf_model',
    'impl.cpp',
-   include_directories: [include_directories('./'),shared_load_include,public_model,ext_include],
+   include_directories: [include_directories('./'),public_model,ext_include],
    dependencies: dep,
    link_args: [flto_flag],
    pic:true,

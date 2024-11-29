@@ -1,4 +1,3 @@
-#include <Kokkos_Core.hpp>
 #include <cassert>
 #include <mc/events.hpp>
 #include <span>

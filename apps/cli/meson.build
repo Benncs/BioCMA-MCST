@@ -11,7 +11,7 @@ endforeach
 
 name = f'@project_name@_cli_app'
 
-includes = ['./includes',shared_load_include,ext_include]
+includes = ['./includes',ext_include]
 
 
 lib_app = static_library(

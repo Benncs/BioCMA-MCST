@@ -111,7 +111,7 @@ kokkos = declare_dependency(
   compile_args: kokkos_compile_arg,
 )
 
-shared_load_include = include_directories('/home/benjamin/Documents/code/cpp/DynamicLibrary/public')
+dynlib_dep = dependency('dynlib-1.0', required: true)
 
 highfive_found = false
 ceral_found = false
