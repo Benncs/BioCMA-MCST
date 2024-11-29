@@ -39,13 +39,13 @@ Handle init_handle_shared(uint64_t id, uint32_t thread_per_process)
 {
   return init_handle_raw(1, 0, id, thread_per_process);
 }
-void delete_handle(Handle handle)
+void delete_handle(Handle* handle)
 {
 
   if (handle != nullptr)
   {
-    delete handle; // NOLINT
-    handle = nullptr;
+    delete *handle; // NOLINT
+    *handle = nullptr;
   }
 }
 
