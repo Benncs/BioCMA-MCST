@@ -14,7 +14,6 @@
 #include <string>
 #include <utility>
 #include <worker_specific.hpp>
-
 #ifdef NO_MPI
 namespace WrapMPI
 {
@@ -140,5 +139,7 @@ namespace Core
 
     return case_data;
   }
+
+ 
 
 } // namespace Core
