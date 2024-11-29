@@ -1,4 +1,3 @@
-#include <api/api_raw.h>
 #include <api/api.hpp>
 #include <cstddef>
 #include <cstdint>
@@ -13,7 +12,7 @@
 #include <string>
 #include <tuple>
 #include <vector>
-
+#include <api/api_raw.h>
 namespace py = pybind11;
 
 std::string wrap_repr(const wrap_c_param_t& m)
@@ -53,7 +52,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
   // m.def("apply", &apply);
 
   m.def("apply",
-        [](std::shared_ptr<Api::SimulationInstance>& handle, bool to_load) -> std::tuple<bool, std::string>
+        [](std::shared_ptr<Api::SimulationInstance>& handle,
+           bool to_load) -> std::tuple<bool, std::string>
         {
           auto rc = handle->apply(to_load);
           bool f = static_cast<bool>(rc);
