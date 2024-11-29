@@ -44,7 +44,7 @@ namespace
 
     // return (dt * flow / volume) > (-ln(random_number));
 
-    return (dt * flow / volume) > (-_ln(random_number));
+    return (dt * flow / volume) > (-Kokkos::log(random_number));
 
     // const double x = volume/flow;
     // const double ax = dt/(volume/flow);
