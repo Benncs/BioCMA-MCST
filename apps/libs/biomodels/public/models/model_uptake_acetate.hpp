@@ -2,11 +2,7 @@
 #define __BIO_MODEL_UPTAKE_ACETATE_HPP__
 
 #include "mc/prng/prng.hpp"
-#include "models/utils.hpp"
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Core_fwd.hpp>
-#include <Kokkos_Macros.hpp>
-#include <algorithm>
 #include <common/kokkos_vector.hpp>
 #include <mc/particles/particle_model.hpp>
 

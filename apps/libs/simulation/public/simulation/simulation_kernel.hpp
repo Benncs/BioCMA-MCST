@@ -20,16 +20,16 @@ static constexpr bool const_number_simulation = false;
 namespace
 {
 
-  KOKKOS_INLINE_FUNCTION float _ln(float x)
-  {
-    unsigned int bx = *reinterpret_cast<unsigned int *>(&x);
-    const unsigned int ex = bx >> 23;
-    const signed int t = static_cast<signed int>(ex) - static_cast<signed int>(127);
-    unsigned int s = (t < 0) ? (-t) : t;
-    bx = 1065353216 | (bx & 8388607);
-    x = *reinterpret_cast<float *>(&bx);
-    return -1.49278 + (2.11263 + (-0.729104 + 0.10969 * x) * x) * x + 0.6931471806 * t;
-  }
+  // KOKKOS_INLINE_FUNCTION float _ln(float x)
+  // {
+  //   unsigned int bx = *reinterpret_cast<unsigned int *>(&x);
+  //   const unsigned int ex = bx >> 23;
+  //   const signed int t = static_cast<signed int>(ex) - static_cast<signed int>(127);
+  //   unsigned int s = (t < 0) ? (-t) : t;
+  //   bx = 1065353216 | (bx & 8388607);
+  //   x = *reinterpret_cast<float *>(&bx);
+  //   return -1.49278 + (2.11263 + (-0.729104 + 0.10969 * x) * x) * x + 0.6931471806 * t;
+  // }
 
 
   KOKKOS_INLINE_FUNCTION bool probability_leaving(double random_number,
@@ -133,7 +133,7 @@ namespace Simulation::KernelInline
       const std::size_t i_particle) const
   {
 
-    auto &particle = list._owned_data(i_particle);
+    auto &particle = list._owned_data[i_particle];
     auto &status = particle.properties.status;
     auto& properties = particle.properties;
 
@@ -181,7 +181,7 @@ namespace Simulation::KernelInline
       const auto new_particle = particle.division(list.rng_instance);
       if constexpr (!const_number_simulation)
       {
-        auto *np = rview().extra_process.spawn();
+        auto *const np = rview().extra_process.spawn();
         if (np != nullptr)
         {
           *np = new_particle;

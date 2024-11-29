@@ -70,13 +70,13 @@ namespace PostProcessing
   void save_final_particle_state(Simulation::SimulationUnit &simulation,
                                  Core::PartialExporter &pde)
   {
-    save_particle_sate(simulation, pde, "final", false);
+    // save_particle_sate(simulation, pde, "final", false);
   }
 
   void save_initial_particle_state(Simulation::SimulationUnit &simulation,
                                    Core::PartialExporter &pde)
   {
-    save_particle_sate(simulation, pde, "initial", false);
+    // save_particle_sate(simulation, pde, "initial", false);
   }
 
   void final_post_processing(const ExecInfo &exec,

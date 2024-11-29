@@ -15,8 +15,6 @@
 using ComputeSpace = Kokkos::DefaultExecutionSpace::memory_space;
 using HostSpace = Kokkos::HostSpace::memory_space;
 
-#include <iostream>
-
 /**
  * @brief A basic wrapper around Kokkos View to handle non-fixed size containers
  * with an API compatible with `std::vector`.

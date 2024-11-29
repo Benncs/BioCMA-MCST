@@ -1,6 +1,5 @@
 #include "mc/prng/prng.hpp"
 #include "models/utils.hpp"
-#include <Kokkos_Macros.hpp>
 #include <models/model_uptake_implicit.hpp>
 
 static constexpr double tauPTS = 25.0;
