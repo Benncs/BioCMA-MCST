@@ -6,24 +6,58 @@
 #ifdef __cplusplus
 extern "C"
 {
+
+  // Forward declaration
   namespace Api
   {
     class SimulationInstance;
-  }
+  } // namespace Api
 #endif
 
-  #ifdef __cplusplus
+#ifdef __cplusplus
   typedef struct Api::SimulationInstance* Handle; // NOLINT
-  #else 
-  typedef struct Opaque* Handle; // NOLINT
-  #endif 
+#else
+typedef struct Opaque*
+    Handle; // NOLINT //In C we only need ptr type so Opaque doesn´t need to exist
+#endif
 
-
+  /**
+   * @brief Initialize a simulation instance handle for shared memory.
+   *
+   * This function creates a simulation instance with a configuration, suitable
+   * for single-node or single-process execution.
+   *
+   * @param id A unique identifier for the simulation instance.
+   * @param thread_per_process The number of threads allocated per process.
+   * @return A `Handle` to the simulation instance, or `NULL` if initialization failed.
+   */
   Handle init_handle_shared(uint64_t id, uint32_t thread_per_process);
-  // TODO Enable if  USE_MPI
+
+  // TODO: Enable when USE_MPI is defined
+  /**
+   * @brief Initialize a raw simulation instance handle with MPI support.
+   *
+   * This function creates a simulation instance that is aware of MPI configurations,
+   * suitable for distributed simulations.
+   *
+   * @param n_rank The total number of ranks in the MPI group.
+   * @param current_rank The rank ID for this instance.
+   * @param id A unique identifier for the simulation instance.
+   * @param thread_per_process The number of threads allocated per process.
+   * @return A `Handle` to the simulation instance, or `NULL` if initialization failed.
+   */
   Handle init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thread_per_process);
 
-  void delete_handle(Handle handle);
+  /**
+   * @brief Delete a simulation instance handle.
+   *
+   * This function frees the resources associated with the simulation instance.
+   * After calling this function, the `Handle` is no longer valid.
+   *
+   * @param handle The handle to the simulation instance to delete.
+   */
+  void delete_handle(Handle* handle);
+
   int exec(Handle handle);
   int register_initial_condition(Handle* handle);
   int apply(Handle handle, int to_load);
