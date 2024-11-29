@@ -86,7 +86,7 @@ int main(int argc, char** argv)
     return -1;
   }
 
-  auto handle = Handle::init(
+  auto handle = Api::SimulationInstance::init(
       exec_info.n_rank, exec_info.current_rank, exec_info.run_id, exec_info.thread_per_process);
 
   if (!handle)

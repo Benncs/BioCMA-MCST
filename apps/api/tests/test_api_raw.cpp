@@ -10,20 +10,21 @@
 
 void test_init()
 {
-  Handle* handle = INIT assert(handle != nullptr);
+  Handle handle = INIT assert(handle != nullptr);
   delete_handle(handle);
 }
 
 void test_delete_handle()
 {
-  Handle* handle = INIT delete_handle(handle);
+  Handle handle = INIT delete_handle(handle);
 }
 
-void mock_prepre_apply(std::string_view path, Handle* handle)
+void mock_prepre_apply(std::string_view path, Handle handle)
 {
   Param params = PARAM;
+  auto rdir = std::string(tmp_dir)+"/";
   CHECK(register_parameters(handle, &params));
-  CHECK(register_result_path(handle, tmp_dir.c_str()))
+  CHECK(register_result_path(handle, rdir.c_str()))
   CHECK(register_model_name(handle, "None"))
   if (path.size() != 0)
   {
@@ -32,7 +33,7 @@ void mock_prepre_apply(std::string_view path, Handle* handle)
 }
 void test_exec(std::string_view path)
 {
-  Handle* handle = INIT mock_prepre_apply(path, handle);
+  Handle handle = INIT mock_prepre_apply(path, handle);
   CHECK(apply(handle, 0));
   int result = exec(handle);
   assert(result == 0);
@@ -41,20 +42,20 @@ void test_exec(std::string_view path)
 
 void test_apply(std::string_view path)
 {
-  Handle* handle = INIT mock_prepre_apply(path, handle);
+  Handle handle = INIT mock_prepre_apply(path, handle);
   CHECK(apply(handle, 0));
   delete_handle(handle);
 }
 
 void test_apply_err()
 {
-  Handle* handle = INIT assert(apply(handle, 0) != 0); // THIS SHOULD RETURN ERROR
+  Handle handle = INIT assert(apply(handle, 0) != 0); // THIS SHOULD RETURN ERROR
   delete_handle(handle);
 }
 
 void test_exec_err()
 {
-  Handle* handle = INIT assert(exec(handle) != 0); // THIS SHOULD RETURN ERROR
+  Handle handle = INIT assert(exec(handle) != 0); // THIS SHOULD RETURN ERROR
   delete_handle(handle);
 }
 
@@ -62,7 +63,7 @@ void test_exec_err()
 
 void test_register_result_path()
 {
-  Handle* handle = INIT int result = register_result_path(handle, "path");
+  Handle handle = INIT int result = register_result_path(handle, "path");
   register_cma_path(handle, "path");
   assert(result == 0);
   delete_handle(handle);
@@ -83,28 +84,28 @@ void test_make_params()
 
 void test_register_parameters()
 {
-  Handle* handle = INIT Param params = PARAM int result = register_parameters(handle, &params);
+  Handle handle = INIT Param params = PARAM int result = register_parameters(handle, &params);
   assert(result == 0);
   delete_handle(handle);
 }
 
 void test_register_cma_path_recursive()
 {
-  Handle* handle = INIT int result = register_cma_path_recursive(handle, "path");
+  Handle handle = INIT int result = register_cma_path_recursive(handle, "path");
   assert(result == 0);
   delete_handle(handle);
 }
 
 void test_register_cma_path()
 {
-  Handle* handle = INIT int result = register_cma_path(handle, "path");
+  Handle handle = INIT int result = register_cma_path(handle, "path");
   assert(result == 0);
   delete_handle(handle);
 }
 
 void test_register_serde()
 {
-  Handle* handle = INIT;
+  Handle handle = INIT;
   int result = register_serde(handle, "serde");
   assert(result == 0);
   delete_handle(handle);
@@ -112,7 +113,7 @@ void test_register_serde()
 
 void test_register_model_name()
 {
-  Handle* handle = INIT;
+  Handle handle = INIT;
   int result = register_model_name(handle, "model");
   assert(result == 0);
   delete_handle(handle);
@@ -124,7 +125,7 @@ void test_branch_null()
   CHECK_FALSE(apply(NULL, 0));
 
   CHECK_FALSE(exec(NULL));
-  Handle* handle = INIT;
+  Handle handle = INIT;
 
   // Manual fuzziing Alternatively check ptr validity, has to return error
   CHECK_FALSE(register_model_name(NULL, "valid"));
@@ -177,6 +178,6 @@ int main(int argc, char** argv)
 
   test_apply(cma_path);
   // FIXME test_exec(cma_path);
-
+  test_exec(cma_path);
   return 0;
 }

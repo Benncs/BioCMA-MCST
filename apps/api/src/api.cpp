@@ -1,3 +1,4 @@
+#include "api/results.hpp"
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
 #include <biocma_cst_config.hpp>
@@ -31,8 +32,8 @@ namespace WrapMPI
 #  include "mpi_w/message_t.hpp"
 #endif
 
-// namespace Api
-// {
+namespace Api
+{
 
 static bool check_required(const Core::UserControlParameters& params, bool to_load)
 {
@@ -56,7 +57,7 @@ static bool check_required(const Core::UserControlParameters& params, bool to_lo
   return flag;
 }
 
-[[nodiscard]] int Handle::get_id() const
+[[nodiscard]] int SimulationInstance::get_id() const
 {
   return id;
 }
@@ -66,11 +67,11 @@ template <typename T> std::vector<T> span_to_vec(std::span<T> rhs)
   return std::vector<T>(rhs.begin(), rhs.end());
 }
 
-bool Handle::set_feed_constant(double _f,
-                               std::span<double> _target,
-                               std::span<std::size_t> _position,
-                               std::span<std::size_t> _species,
-                               bool gas)
+bool SimulationInstance::set_feed_constant(double _f,
+                                           std::span<double> _target,
+                                           std::span<std::size_t> _position,
+                                           std::span<std::size_t> _species,
+                                           bool gas)
 {
   auto target = span_to_vec(_target);
   auto position = span_to_vec(_position);
@@ -97,7 +98,10 @@ bool Handle::set_feed_constant(double _f,
   return true;
 }
 
-Handle::Handle(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_process)
+SimulationInstance::SimulationInstance(uint32_t n_rank,
+                                       uint32_t current_rank,
+                                       uint64_t id,
+                                       uint32_t thread_per_process)
     : id(ID_VERIF)
 {
   _data.exec_info = {.n_rank = n_rank,
@@ -125,20 +129,18 @@ Handle::Handle(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thr
   }
 }
 
-std::optional<std::unique_ptr<Handle>> Handle::init(uint64_t id,
-                                                    uint32_t thread_per_process) noexcept
+std::optional<std::unique_ptr<SimulationInstance>>
+SimulationInstance::init(uint64_t id, uint32_t thread_per_process) noexcept
 {
-  return Handle::init(1, 0, id, thread_per_process);
+  return SimulationInstance::init(1, 0, id, thread_per_process);
 }
 
-std::optional<std::unique_ptr<Handle>> Handle::init(uint32_t n_rank,
-                                                    uint32_t current_rank,
-                                                    uint64_t id,
-                                                    uint32_t thread_per_process) noexcept
+std::optional<std::unique_ptr<SimulationInstance>> SimulationInstance::init(
+    uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_process) noexcept
 {
 
-  auto ptr = std::unique_ptr<Handle>(new (std::nothrow)
-                                         Handle(n_rank, current_rank, id, thread_per_process));
+  auto ptr = std::unique_ptr<SimulationInstance>(
+      new (std::nothrow) SimulationInstance(n_rank, current_rank, id, thread_per_process));
   if (ptr == nullptr)
   {
     return std::nullopt;
@@ -146,7 +148,7 @@ std::optional<std::unique_ptr<Handle>> Handle::init(uint32_t n_rank,
   return ptr;
 }
 
-ApiResult Handle::exec() noexcept
+ApiResult SimulationInstance::exec() noexcept
 {
   if (loaded || (registered && applied))
   {
@@ -167,7 +169,7 @@ ApiResult Handle::exec() noexcept
   }
 }
 
-ApiResult Handle::apply(bool to_load) noexcept
+ApiResult SimulationInstance::apply(bool to_load) noexcept
 {
   if (!check_required(this->params, to_load))
   {
@@ -210,21 +212,21 @@ ApiResult Handle::apply(bool to_load) noexcept
   return ApiResult();
 }
 
-ApiResult Handle::register_parameters(Core::UserControlParameters&& _params) noexcept
+ApiResult SimulationInstance::register_parameters(Core::UserControlParameters&& _params) noexcept
 {
   params = std::move(_params);
   registered = true;
   return ApiResult();
 }
 
-bool Handle::register_result_path(std::string_view path)
+bool SimulationInstance::register_result_path(std::string_view path)
 {
   // TODO Check path
   this->params.results_file_name = path;
   return true; // TODO
 }
 
-bool Handle::register_cma_path(std::string_view path, bool recursive)
+bool SimulationInstance::register_cma_path(std::string_view path, bool recursive)
 {
   // TODO Check path
   this->params.recursive = recursive;
@@ -232,17 +234,17 @@ bool Handle::register_cma_path(std::string_view path, bool recursive)
   return true; // TODO
 }
 
-bool Handle::register_serde(std::string_view path)
+bool SimulationInstance::register_serde(std::string_view path)
 {
   this->params.serde_file = path;
   this->params.serde = true;
   return true;
 }
 
-ApiResult Handle::register_model_name(std::string_view path)
+ApiResult SimulationInstance::register_model_name(std::string_view path)
 {
   this->params.model_name = path;
   return ApiResult();
 }
 
-// } //namespace Api
+} //namespace Api

@@ -6,25 +6,34 @@
 #ifdef __cplusplus
 extern "C"
 {
+  namespace Api
+  {
+    class SimulationInstance;
+  }
 #endif
 
-  typedef struct Handle Handle; // NOLINT
+  #ifdef __cplusplus
+  typedef struct Api::SimulationInstance* Handle; // NOLINT
+  #else 
+  typedef struct Opaque* Handle; // NOLINT
+  #endif 
 
-  Handle* init_handle_shared(uint64_t id, uint32_t thread_per_process);
+
+  Handle init_handle_shared(uint64_t id, uint32_t thread_per_process);
   // TODO Enable if  USE_MPI
-  Handle* init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thread_per_process);
+  Handle init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thread_per_process);
 
-  void delete_handle(Handle* handle);
-  int exec(Handle* handle);
+  void delete_handle(Handle handle);
+  int exec(Handle handle);
   int register_initial_condition(Handle* handle);
-  int apply(Handle* handle, int to_load);
+  int apply(Handle handle, int to_load);
 
   /* REGISTER */
-  int register_result_path(Handle* handle, const char* c);
-  int register_cma_path_recursive(Handle* handle, const char* c);
-  int register_cma_path(Handle* handle, const char* c);
-  int register_serde(Handle* handle, const char* c);
-  int register_model_name(Handle* handle, const char* c);
+  int register_result_path(Handle handle, const char* c);
+  int register_cma_path_recursive(Handle handle, const char* c);
+  int register_cma_path(Handle handle, const char* c);
+  int register_serde(Handle handle, const char* c);
+  int register_model_name(Handle handle, const char* c);
 
   /*Parameters*/
   // NOLINTBEGIN
@@ -42,19 +51,19 @@ extern "C"
     int serde;
   } Param;
   // NOLINTEND
-  void show_user_param(const wrap_c_param_t* params);
+  void show_user_param(const Param* params);
 
-  void repr_user_param(const wrap_c_param_t* params, char** repr);
+  void repr_user_param(const Param* params, char** repr);
   Param make_params(double biomass_initial_concentration,
                     double final_time,
                     double delta_time,
                     uint64_t number_particle,
                     uint32_t number_exported_result);
 
-  int register_parameters(Handle* handle, Param* params);
+  int register_parameters(Handle handle, Param* params);
 
   /*Feed*/
-  int set_feed_constant(Handle*,
+  int set_feed_constant(Handle,
                         double _f,
                         size_t n_species,
                         double* _target,

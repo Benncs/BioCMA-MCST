@@ -1,5 +1,5 @@
+#include <api/api_raw.h>
 #include <api/api.hpp>
-#include <api/api_raw.h> 
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
@@ -30,17 +30,17 @@ std::string wrap_repr(const wrap_c_param_t& m)
 PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 {
   // Wrapping the Handle structure
-  py::class_<Handle, std::shared_ptr<Handle>>(m, "Handle");
+  py::class_<Api::SimulationInstance, std::shared_ptr<Api::SimulationInstance>>(m, "Handle");
 
   m.def(
       "init_handle",
       [](uint32_t n_rank, uint32_t i_rank, uint64_t id, uint32_t thread_per_proces)
       {
-        auto opt = Handle::init(n_rank, i_rank, id, thread_per_proces);
+        auto opt = Api::SimulationInstance::init(n_rank, i_rank, id, thread_per_proces);
         if (opt.has_value())
         {
           auto* ptr = opt.value().release();
-          return std::shared_ptr<Handle>(ptr);
+          return std::shared_ptr<Api::SimulationInstance>(ptr);
         }
         throw std::runtime_error("Simulation handle initialisation failed");
       },
@@ -53,7 +53,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
   // m.def("apply", &apply);
 
   m.def("apply",
-        [](std::shared_ptr<Handle>& handle, bool to_load) -> std::tuple<bool, std::string>
+        [](std::shared_ptr<Api::SimulationInstance>& handle, bool to_load) -> std::tuple<bool, std::string>
         {
           auto rc = handle->apply(to_load);
           bool f = static_cast<bool>(rc);
@@ -125,7 +125,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
   // Feed
 
   m.def("set_feed_constant",
-        [](std::shared_ptr<Handle>& handle,
+        [](std::shared_ptr<Api::SimulationInstance>& handle,
            double _f,
            std::vector<double> _target,
            std::vector<std::size_t> _position,
