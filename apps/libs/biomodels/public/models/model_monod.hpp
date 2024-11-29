@@ -1,7 +1,6 @@
 #ifndef __BIO_MODEL_MONOD__
 #define __BIO_MODEL_MONOD__
 
-#include "common/kokkos_vector.hpp"
 #include "mc/prng/prng.hpp"
 #include <Kokkos_Core.hpp>
 #include <mc/particles/particle_model.hpp>

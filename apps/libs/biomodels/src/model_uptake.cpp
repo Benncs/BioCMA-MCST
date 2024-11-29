@@ -1,6 +1,5 @@
 #include "mc/prng/prng.hpp"
 #include "models/utils.hpp"
-#include <Kokkos_Macros.hpp>
 #include <models/model_uptake.hpp>
 
 static constexpr double YXS = 2.;

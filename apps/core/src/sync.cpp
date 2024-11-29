@@ -3,7 +3,7 @@
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
 #include <sync.hpp>
-
+#include <simulation/simulation.hpp>
 
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>

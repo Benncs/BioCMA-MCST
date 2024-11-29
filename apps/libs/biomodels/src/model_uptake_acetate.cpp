@@ -1,4 +1,5 @@
 #include <models/model_uptake_acetate.hpp>
+#include <models/utils.hpp>
 
 namespace
 {

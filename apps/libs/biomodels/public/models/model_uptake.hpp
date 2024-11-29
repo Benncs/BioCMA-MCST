@@ -2,8 +2,6 @@
 #define __BIO_model_test_HPP__
 
 #include "mc/prng/prng.hpp"
-#include <Kokkos_Core.hpp>
-#include <common/kokkos_vector.hpp>
 #include <mc/particles/particle_model.hpp>
 
 namespace Models
