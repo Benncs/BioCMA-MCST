@@ -28,6 +28,14 @@
 #  include <mpi_w/wrap_mpi.hpp>
 #endif
 
+
+#ifndef NDEBUG
+#define VERBOSE_ERROR std::cerr<<"Error: "<<__LINE__<<std::endl;
+#else
+#define VERBOSE_ERROR 
+#endif 
+
+
 static const Core::ScalarFactory::ScalarVariant DefaultIntialiser = Core::ScalarFactory::Uniform({1.});
 
 static const Core::ScalarFactory::ScalarVariant DefaultIntialiserTPF =
@@ -245,15 +253,18 @@ namespace Core
   {
     if (!check_steps(InitStep::FlowIterator, InitStep::Transitioner, InitStep::InitState,InitStep::Feed))
     {
+      VERBOSE_ERROR
       return std::nullopt;
     }
 
     if (_unit == nullptr)
     {
+      VERBOSE_ERROR
       return std::nullopt;
     }
     if (!Core::ScalarFactory::sanitize(scalar_init))
     {
+      VERBOSE_ERROR
       return std::nullopt;
     }
 

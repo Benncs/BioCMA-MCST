@@ -175,6 +175,10 @@ namespace Api
     {
       return ApiResult("Check params");
     }
+    if (loaded)
+    {
+      return ApiResult("Not loaded");
+    }
     if (auto opt_case = Core::load(this->_data.exec_info, std::move(this->params), feed))
     {
       this->_data = std::move(*opt_case);

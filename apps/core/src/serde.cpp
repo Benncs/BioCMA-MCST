@@ -105,18 +105,16 @@ namespace SerDe
   {
 
     std::stringstream buffer;
-
     read_file(buffer, ser_filename);
-    
+  
     iArchive_t ar(buffer);
 
     std::string version;
-
     ExecInfo serde_exec{};
     ar(version, serde_exec);
 
     case_data.exec_info.run_id = serde_exec.run_id;
-    std::cout << "SIMULATION: " << case_data.exec_info.run_id << " LOADED" << std::endl;
+    
     uint64_t np=0;
     Simulation::Dimensions dims;
     std::vector<double> read_c_liq;
@@ -127,16 +125,18 @@ namespace SerDe
     auto sc = gi.init_scalar();
     if(!sc.has_value())
     {
+      std::cout << "Scalar loaded failed" << std::endl;
       return false;
     }
   
-
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
+    assert(mc_unit!=nullptr);
     auto simulation = gi.init_simulation(std::move(mc_unit), *sc);
 
     if (!simulation.has_value())
     {
+      std::cout << "SIMULATION loaded failed" << std::endl;
       return false;
     }
 
@@ -144,6 +144,7 @@ namespace SerDe
 
     case_data.simulation->get_start_time_mut() = start_time;
     gi.set_initial_number_particle(np);
+    std::cout << "SIMULATION: " << case_data.exec_info.run_id << " LOADED" << std::endl;
     return true;
   }
 

@@ -89,6 +89,5 @@ void workers_process(const ExecInfo &exec,
     }
   };
   std::visit(loop_functor, simulation.mc_unit->container);
-  simulation.mc_unit.reset();
 }
 #endif // NO_MPI

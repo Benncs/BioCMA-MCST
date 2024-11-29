@@ -1,8 +1,7 @@
-#include "common/kokkos_vector.hpp"
 #include <Kokkos_Core.hpp>
 #include <cassert>
 #include <mc/events.hpp>
-#include <stdexcept>
+#include <span>
 
 namespace MC
 {
