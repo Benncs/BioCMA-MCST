@@ -5,7 +5,6 @@
 #include <Kokkos_Atomic.hpp>
 #include <Kokkos_DynamicView.hpp>
 #include <cassert>
-#include <common/common_types.hpp>
 #include <common/execinfo.hpp>
 #include <common/kokkos_vector.hpp>
 #include <cstdint>

@@ -1,10 +1,9 @@
 #include <api/api_raw.h>
 #include <cassert>
 #include <cstring>
-#include <filesystem>
 #include <string_view>
-
 #include "common_test.hpp"
+
 #define INIT init_handle_raw(n_rank, i_rank, id, nt);
 #define PARAM make_params(cx, ft, dt, np, nex);
 

@@ -220,9 +220,9 @@ namespace Api
     if(to_load){
       return apply_load();
     }
-    else {
-      return apply();
-    }
+    
+    return apply();
+    
   }
 
   ApiResult SimulationInstance::register_parameters(Core::UserControlParameters&& _params) noexcept
