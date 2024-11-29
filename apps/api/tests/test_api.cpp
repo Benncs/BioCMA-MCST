@@ -2,7 +2,7 @@
 #include <api/api.hpp>
 #include <optional>
 
-#define INIT Handle::init(n_rank, i_rank, id, nt);
+#define INIT Api::SimulationInstance::init(n_rank, i_rank, id, nt);
 
 Core::UserControlParameters gparams(std::string_view path)
 {

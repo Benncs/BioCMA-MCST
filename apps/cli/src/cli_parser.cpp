@@ -1,32 +1,36 @@
-#include "rt_init.hpp"
 #include <cli_parser.hpp>
 #include <core/simulation_parameters.hpp>
+#include <cstdlib>
 #include <exception>
-#include <filesystem>
 #include <iostream>
 #include <optional>
+#include <stdexcept>
+#include <string>
 #include <string_view>
 
-static void sanitise_check_cli(const Core::UserControlParameters &params);
+static void sanitise_check_cli(const Core::UserControlParameters& params);
 // static void print_green(std::ostream &os, std::string_view message);
-static void print_red(std::ostream &os, std::string_view message);
+static void print_red(std::ostream& os, std::string_view message);
 static void throw_bad_arg(std::string_view arg);
 
-static void
-parseArg(Core::UserControlParameters &user_controll, std::string current_param, std::string_view current_value);
+static void parseArg(Core::UserControlParameters& user_controll,
+                     std::string_view current_param,
+                     std::string_view current_value);
 
-
-static std::optional<Core::UserControlParameters> parse_user_param(int argc, char **argv)
+static std::optional<Core::UserControlParameters> parse_user_param(int argc, char** argv)
 {
   Core::UserControlParameters control = Core::UserControlParameters::m_default();
-
+  if (argc <= 1)
+  {
+    return std::nullopt;
+  }
   try
   {
     int iarg = 1;
     while (iarg < argc - 1)
     {
-      auto current_param = std::string(argv[iarg]);
-      auto current_value = std::string_view(argv[iarg + 1]);
+      std::string_view current_param = argv[iarg];     // NOLINT
+      std::string_view current_value = argv[iarg + 1]; // NOLINT
       if (current_param.data() != nullptr && current_param[0] != '\0')
       {
         if (current_param == "h")
@@ -45,19 +49,19 @@ static std::optional<Core::UserControlParameters> parse_user_param(int argc, cha
     }
     return control;
   }
-  catch (std::invalid_argument &e)
+  catch (std::invalid_argument& e)
   {
     std::cerr << e.what() << '\n';
     return std::nullopt;
   }
-  catch (std::exception const &e)
+  catch (std::exception const& e)
   {
     std::cerr << e.what() << '\n';
     return std::nullopt;
   }
 }
 
-std::optional<Core::UserControlParameters> parse_cli(int argc, char **argv) noexcept
+std::optional<Core::UserControlParameters> parse_cli(int argc, char** argv) noexcept
 {
   auto opt_control = parse_user_param(argc, argv);
   if (!opt_control.has_value())
@@ -70,12 +74,18 @@ std::optional<Core::UserControlParameters> parse_cli(int argc, char **argv) noex
   return control;
 }
 
-static void
-parseArg(Core::UserControlParameters &user_control, std::string current_param, std::string_view current_value)
+static void parseArg(Core::UserControlParameters& user_control,
+                     std::string_view _current_param,
+                     std::string_view current_value)
 {
   std::string path;
-  // TODO need check that begin()+1 is not OOB
-  current_param = std::string(current_param.begin() + 1, current_param.end());
+  // check that begin()+1 is not OOB
+  if (_current_param.size() == 1)
+  {
+    return;
+  }
+
+  auto current_param = std::string(_current_param.begin() + 1, _current_param.end());
   switch (current_param[0])
   {
   case 'e':
@@ -163,7 +173,7 @@ parseArg(Core::UserControlParameters &user_control, std::string current_param, s
   }
 }
 
-static void sanitise_check_cli(const Core::UserControlParameters &params)
+static void sanitise_check_cli(const Core::UserControlParameters& params)
 {
 
   if (params.delta_time < 0)
@@ -182,7 +192,7 @@ static void sanitise_check_cli(const Core::UserControlParameters &params)
   }
 }
 
-void showHelp(std::ostream &os) noexcept
+void showHelp(std::ostream& os) noexcept
 {
   os << "Usage: ";
   print_red(os, "BIOCMA-MCST");
@@ -217,7 +227,7 @@ void showHelp(std::ostream &os) noexcept
 //   os << "\033[1;32m" << message << "\033[0m";
 // }
 
-static void print_red(std::ostream &os, std::string_view message)
+static void print_red(std::ostream& os, std::string_view message)
 {
   os << "\033[1;31m" << message << "\033[0m"; // ANSI escape code for red color
 }

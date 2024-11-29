@@ -1,23 +1,33 @@
-#include "core/simulation_parameters.hpp"
-#include <api/api.hpp>
 #include <api/api_raw.h>
+#include <core/simulation_parameters.hpp>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
 #include <optional>
+#include <ostream>
+#include <span>
 #include <sstream>
+#include <string>
+#include <utility>
+#include <api/api.hpp>
 constexpr int ID_VERIF = 2025;
 
-int apply(Handle* handle, int to_load)
+
+int apply(Handle handle, int to_load)
 {
   if (handle != nullptr)
   {
     auto rc = handle->apply(to_load != 0); // TODO HANDLE ERROR
     return rc.to_c_ret_code();
   }
-  return 0xff;
+  return -1;
 }
 
-Handle* init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thread_per_process)
+Handle init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thread_per_process)
 {
-  auto opt_handle = Handle::init(n_rank, current_rank, id, thread_per_process);
+  auto opt_handle = Api::SimulationInstance::init(n_rank, current_rank, id, thread_per_process);
   if (opt_handle.has_value())
   {
     return opt_handle->release();
@@ -25,28 +35,28 @@ Handle* init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thre
   return nullptr;
 }
 
-Handle* init_handle_shared(uint64_t id, uint32_t thread_per_process)
+Handle init_handle_shared(uint64_t id, uint32_t thread_per_process)
 {
   return init_handle_raw(1, 0, id, thread_per_process);
 }
-void delete_handle(Handle* handle)
+void delete_handle(Handle handle)
 {
 
   if (handle != nullptr)
   {
-    delete handle;
+    delete handle; // NOLINT
     handle = nullptr;
   }
 }
 
-int exec(Handle* handle)
+int exec(Handle handle)
 {
   if (handle != nullptr)
   {
     if (handle->get_id() == ID_VERIF)
     {
       auto rc = handle->exec();
-      std::cerr << rc.get() << std::endl;
+      std::cerr << "EXEC: "<<rc.get() << std::endl;
 
       return rc ? 0 : -1;
     }
@@ -59,7 +69,7 @@ int exec(Handle* handle)
     REGISTER
 */
 
-int register_result_path(Handle* handle, const char* c)
+int register_result_path(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
@@ -68,7 +78,7 @@ int register_result_path(Handle* handle, const char* c)
   return -1;
 }
 
-int register_cma_path(Handle* handle, const char* c)
+int register_cma_path(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
@@ -77,7 +87,7 @@ int register_cma_path(Handle* handle, const char* c)
   return -1;
 }
 
-int register_cma_path_recursive(Handle* handle, const char* c)
+int register_cma_path_recursive(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
@@ -87,7 +97,7 @@ int register_cma_path_recursive(Handle* handle, const char* c)
   return -1;
 }
 
-int register_serde(Handle* handle, const char* c)
+int register_serde(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
@@ -96,7 +106,7 @@ int register_serde(Handle* handle, const char* c)
   return -1;
 }
 
-int register_model_name(Handle* handle, const char* c)
+int register_model_name(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
@@ -144,7 +154,7 @@ Param make_params(double biomass_initial_concentration,
           0};
 }
 
-int register_parameters(Handle* handle, Param* raw_params)
+int register_parameters(Handle handle, Param* raw_params)
 {
 
   if (handle != nullptr && raw_params != nullptr)
@@ -156,7 +166,7 @@ int register_parameters(Handle* handle, Param* raw_params)
   return -1;
 }
 
-int set_feed_constant(Handle* handle,
+int set_feed_constant(Handle handle,
                       double _f,
                       size_t n_species,
                       double* _target,
@@ -192,8 +202,10 @@ void repr_user_param(const wrap_c_param_t* params, char** repr)
 
   // Allocate memory for the string
   std::string str = ss.str();
-  *repr = (char*)malloc((str.size() + 1) * sizeof(char)); // +1 for null terminator
-  if (*repr != NULL)
+  // clang-format off
+  *repr = static_cast<char*>(malloc((str.size() + 1) * sizeof(char))); // NOLINT +1 for null terminator
+  // clang-format on
+  if (*repr != nullptr)
   {
     strcpy(*repr, str.c_str()); // Copy the string to the allocated memory
   }

@@ -12,7 +12,7 @@ void* operator new(std::size_t size, const std::nothrow_t& nothrow_value) noexce
 
 void test_init_throw()
 {
-  auto handle = Handle::init(n_rank, i_rank, id, nt);
+  auto handle = Api::SimulationInstance::init(n_rank, i_rank, id, nt);
     
   assert(!handle.has_value());
 }

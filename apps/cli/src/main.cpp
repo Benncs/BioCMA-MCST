@@ -1,7 +1,5 @@
-#include "udf_includes.hpp"
 #include <api/api.hpp>
 #include <cli_parser.hpp>
-#include <common/common.hpp>
 #include <common/execinfo.hpp>
 #include <core/case_data.hpp>
 #include <core/simulation_parameters.hpp>
@@ -11,6 +9,9 @@
 #include <optional>
 #include <rt_init.hpp>
 #include <stream_io.hpp>
+#include <string>
+#include <udf_includes.hpp>
+#include <utility>
 
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
@@ -58,10 +59,6 @@ static bool override_result_path(const Core::UserControlParameters& params, cons
     }                                                                                              \
   }
 
-
-#include "udf_includes.hpp"
-
-
 int main(int argc, char** argv)
 {
   // First manually retrieve argument from command line
@@ -72,7 +69,8 @@ int main(int argc, char** argv)
     showHelp(std::cout);
     return -1;
   }
-  auto  _ = UnsafeUDF::Loader::init_lib("/home/benjamin/Documents/code/cpp/BioCMA-MCST/builddir/debug_python/apps/udf_model/libudf_model.so");
+  auto _ = UnsafeUDF::Loader::init_lib("/home/benjamin/Documents/code/cpp/BioCMA-MCST/builddir/"
+                                       "debug_python/apps/udf_model/libudf_model.so");
 
   auto user_params = params_opt.value(); // Deref value is safe  TODO: with
                                          // c++23 support use monadic
@@ -88,11 +86,8 @@ int main(int argc, char** argv)
     return -1;
   }
 
-  auto handle = Handle::init(
-      exec_info.n_rank, 
-      exec_info.current_rank, 
-      exec_info.run_id, 
-      exec_info.thread_per_process);
+  auto handle = Api::SimulationInstance::init(
+      exec_info.n_rank, exec_info.current_rank, exec_info.run_id, exec_info.thread_per_process);
 
   if (!handle)
   {
