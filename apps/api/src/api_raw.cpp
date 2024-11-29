@@ -1,8 +1,17 @@
-#include "core/simulation_parameters.hpp"
 #include <api/api.hpp>
 #include <api/api_raw.h>
+#include <core/simulation_parameters.hpp>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
 #include <optional>
+#include <ostream>
+#include <span>
 #include <sstream>
+#include <string>
+#include <utility>
 constexpr int ID_VERIF = 2025;
 
 int apply(Handle* handle, int to_load)
@@ -12,7 +21,7 @@ int apply(Handle* handle, int to_load)
     auto rc = handle->apply(to_load != 0); // TODO HANDLE ERROR
     return rc.to_c_ret_code();
   }
-  return 0xff;
+  return -1;
 }
 
 Handle* init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thread_per_process)
@@ -34,7 +43,7 @@ void delete_handle(Handle* handle)
 
   if (handle != nullptr)
   {
-    delete handle;
+    delete handle; // NOLINT
     handle = nullptr;
   }
 }
@@ -192,8 +201,10 @@ void repr_user_param(const wrap_c_param_t* params, char** repr)
 
   // Allocate memory for the string
   std::string str = ss.str();
-  *repr = (char*)malloc((str.size() + 1) * sizeof(char)); // +1 for null terminator
-  if (*repr != NULL)
+  // clang-format off
+  *repr = static_cast<char*>(malloc((str.size() + 1) * sizeof(char))); // NOLINT +1 for null terminator
+  // clang-format on
+  if (*repr != nullptr)
   {
     strcpy(*repr, str.c_str()); // Copy the string to the allocated memory
   }

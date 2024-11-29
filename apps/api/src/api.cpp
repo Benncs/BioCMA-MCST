@@ -1,17 +1,22 @@
-#include "biocma_cst_config.hpp"
-#include "common/execinfo.hpp"
-#include "core/case_data.hpp"
-#include "core/global_initaliser.hpp"
-#include "core/simulation_parameters.hpp"
-#include "simulation/feed_descriptor.hpp"
-
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
+#include <biocma_cst_config.hpp>
+#include <common/execinfo.hpp>
+#include <core/case_data.hpp>
+#include <core/global_initaliser.hpp>
+#include <core/simulation_parameters.hpp>
+#include <cstddef>
+#include <cstdint>
+#include <exception>
 #include <iostream>
 #include <memory>
+#include <new>
 #include <optional>
+#include <simulation/feed_descriptor.hpp>
+#include <span>
 #include <stdexcept>
 #include <utility>
+#include <vector>
 constexpr int ID_VERIF = 2025;
 
 #ifdef NO_MPI
@@ -35,7 +40,7 @@ static bool check_required(const Core::UserControlParameters& params, bool to_lo
 
   flag = flag && params.final_time > 0;
   flag = flag && params.delta_time >= 0;
-  flag = flag && params.cma_case_path != "";
+  flag = flag && !params.cma_case_path.empty();
   flag = flag && ((params.serde && params.serde_file.has_value()) ||
                   (!params.serde && !params.serde_file.has_value()));
 
@@ -116,14 +121,14 @@ Handle::Handle(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thr
             .set_disable_warnings(false)
             .set_num_threads(static_cast<int32_t>(_data.exec_info.thread_per_process))
             .set_map_device_id_by("random"));
-            Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
+    Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
   }
 }
 
 std::optional<std::unique_ptr<Handle>> Handle::init(uint64_t id,
                                                     uint32_t thread_per_process) noexcept
 {
-  return Handle::init(1,0,id,thread_per_process);
+  return Handle::init(1, 0, id, thread_per_process);
 }
 
 std::optional<std::unique_ptr<Handle>> Handle::init(uint32_t n_rank,
@@ -132,7 +137,6 @@ std::optional<std::unique_ptr<Handle>> Handle::init(uint32_t n_rank,
                                                     uint32_t thread_per_process) noexcept
 {
 
-  
   auto ptr = std::unique_ptr<Handle>(new (std::nothrow)
                                          Handle(n_rank, current_rank, id, thread_per_process));
   if (ptr == nullptr)
@@ -141,8 +145,6 @@ std::optional<std::unique_ptr<Handle>> Handle::init(uint32_t n_rank,
   }
   return ptr;
 }
-
-
 
 ApiResult Handle::exec() noexcept
 {
@@ -208,27 +210,6 @@ ApiResult Handle::apply(bool to_load) noexcept
   return ApiResult();
 }
 
-// void Handle::register_parameters()
-// {
-//   if (loaded)
-//   {
-//     return;
-//   }
-//   this->params = Core::UserControlParameters::m_default();
-//   this->params.final_time = 10;
-//   this->params.initialiser_path = "";
-//   this->params.model_name = "None";
-//   this->params.delta_time = 0.1;
-//   this->params.number_particle = 100;
-//   this->params.results_file_name = "test_api_new";
-//   this->params.number_exported_result = 50;
-//   this->params.cma_case_path = "/home/benjamin/Documents/code/cpp/BioCMA-MCST/cma_data/0d_mono/";
-//   this->params.serde = false;
-//   // mock_param.flow_files = {mock_param.user_params.cma_case_path};
-
-//   registered = true;
-// }
-
 ApiResult Handle::register_parameters(Core::UserControlParameters&& _params) noexcept
 {
   params = std::move(_params);
@@ -259,8 +240,8 @@ bool Handle::register_serde(std::string_view path)
 }
 
 ApiResult Handle::register_model_name(std::string_view path)
-{  
-  this->params.model_name = path; 
+{
+  this->params.model_name = path;
   return ApiResult();
 }
 
