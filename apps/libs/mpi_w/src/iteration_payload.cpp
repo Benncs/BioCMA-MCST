@@ -3,7 +3,6 @@
 #include <mpi.h>
 #include <mpi_w/impl_op.hpp>
 #include <mpi_w/iteration_payload.hpp>
-#include <mpi_w/message_t.hpp>
 
 namespace WrapMPI
 {

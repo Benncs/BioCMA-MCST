@@ -13,10 +13,10 @@ namespace Models
   };
 } // namespace Models
 
-__attribute__((constructor)) static void foo()
-{
-  std::cout << "IMPL LOADED" << std::endl;
-}
+// __attribute__((constructor)) static void foo()
+// {
+//   std::cout << "IMPL LOADED" << std::endl;
+// }
 
 void _init_udf(Models::UserImpl& pimpl, MC::ParticleDataHolder&)
 {

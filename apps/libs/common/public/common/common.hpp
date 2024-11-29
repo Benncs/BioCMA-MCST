@@ -3,7 +3,6 @@
 
 #include <biocma_cst_config.hpp>
 #include <common/alg.hpp>
-#include <common/common_types.hpp>
 #include <common/execinfo.hpp>
 #include <string_view>
 
@@ -55,7 +54,6 @@ private:
 #  define MkCanary(x)
 #endif
 
-void test_common();
 
 double constexpr tolerance_equality_float = 1e-15;
 template <typename T>
