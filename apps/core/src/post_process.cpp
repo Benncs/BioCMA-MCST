@@ -67,16 +67,19 @@ namespace PostProcessing
                             ds_name);
   }
 
+  //FIXME
   void save_final_particle_state(Simulation::SimulationUnit &simulation,
                                  Core::PartialExporter &pde)
   {
-    save_particle_sate(simulation, pde, "final", false);
+    // save_particle_sate(simulation, pde, "final", false);
+    user_triggered_properties_export(simulation,pde);
   }
 
   void save_initial_particle_state(Simulation::SimulationUnit &simulation,
                                    Core::PartialExporter &pde)
   {
-    save_particle_sate(simulation, pde, "initial", false);
+    user_triggered_properties_export(simulation,pde);
+    // save_particle_sate(simulation, pde, "initial", false);
   }
 
   void final_post_processing(const ExecInfo &exec,
@@ -141,9 +144,9 @@ namespace PostProcessing
                                         Core::PartialExporter &pde)
   {
     static int counter = 0;
-    counter++;
     std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
     PostProcessing::append_properties(counter, sim, pde);
+    counter++;
   }
 
   void get_particle_properties_opti(
@@ -209,8 +212,8 @@ namespace PostProcessing
             {
               auto prop = particle.data.get_properties();
               const size_t i_container = particle.properties.current_container;
-              const auto cast_n_cell =
-                  static_cast<double>(compartments[i_container].n_cells);
+              // const auto cast_n_cell =
+              //     static_cast<double>(compartments[i_container].n_cells);
               size_t i_key = 0;
               for (const auto &[key, value] : prop)
               {
