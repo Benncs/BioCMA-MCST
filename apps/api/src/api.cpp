@@ -67,17 +67,26 @@ namespace Api
     return std::vector<T>(rhs.begin(), rhs.end());
   }
 
-  bool SimulationInstance::set_feed_constant(double _f,
-                                             std::span<double> _target,
+  bool SimulationInstance::set_feed_constant_from_rvalue(double _f,
+                                                         std::vector<double>&& _target,
+                                                         std::vector<std::size_t>&& _position,
+                                                         std::vector<std::size_t>&& _species,
+                                                         bool gas)
+  {
+    return set_feed_constant(_f, _target, _position, _species, gas);
+  }
+
+  bool SimulationInstance::set_feed_constant(double _flow,
+                                             std::span<double> _concentratio,
                                              std::span<std::size_t> _position,
                                              std::span<std::size_t> _species,
                                              bool gas)
   {
-    auto target = span_to_vec(_target);
+    auto target = span_to_vec(_concentratio);
     auto position = span_to_vec(_position);
     auto species = span_to_vec(_species);
     auto fd = Simulation::Feed::FeedFactory::constant(
-        _f, std::move(target), std::move(position), std::move(species));
+        _flow, std::move(target), std::move(position), std::move(species));
 
     if (!feed.has_value())
     {
@@ -221,12 +230,12 @@ namespace Api
 
   ApiResult SimulationInstance::apply(bool to_load) noexcept
   {
-    if(to_load){
+    if (to_load)
+    {
       return apply_load();
     }
-    
+
     return apply();
-    
   }
 
   ApiResult SimulationInstance::register_parameters(Core::UserControlParameters&& _params) noexcept
