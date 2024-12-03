@@ -4,3 +4,5 @@ revision = head
 depth = 1
 method = meson
 
+[provide]
+cma_read = cma_read_shared_lib_dependency

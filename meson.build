@@ -156,7 +156,7 @@ if cmt.found()
   cma_dep = dependency(cma_read_name, required: true)
 
 else
-  cma_reader = subproject(
+  subproject(
     'cmtool',
     required: true,
     default_options: [
@@ -167,7 +167,7 @@ else
     ],
   ) # We only need native cmtool library in order to read flowmap so, no python neither executable
 
-  cma_dep = cma_reader.get_variable('cma_read_shared_lib_dependency') # Get shared lib
+  cma_dep = dependency('cma_read', required: true, version: '>=1.1') # Get shared lib
 
 endif
 
