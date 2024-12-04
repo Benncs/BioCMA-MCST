@@ -114,7 +114,7 @@ int main(int argc, char** argv)
 
   REDIRECT_SCOPE({
     HANDLE_RC(h->register_parameters(std::move(user_params)));
-   // h->set_feed_constant_from_rvalue(0.50 / 3600., {5}, {0}, {0}, false);
+    h->set_feed_constant_from_rvalue(0.50 / 3600., {5}, {0}, {0}, false);
     HANDLE_RC(h->apply(serde));
     HANDLE_RC(h->exec());
   })

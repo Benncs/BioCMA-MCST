@@ -41,7 +41,7 @@ namespace Simulation
     std::size_t n_species{};
     std::size_t n_compartment{};
 
-    template <class Archive> void serialize(Archive &archive)
+    template <class Archive> void serialize(Archive& archive)
     {
       archive(n_species, n_compartment);
     }
@@ -53,16 +53,16 @@ namespace Simulation
   class SimulationUnit
   {
   public:
-    SimulationUnit(std::unique_ptr<MC::MonteCarloUnit> &&_unit,
-                   const ScalarInitializer &scalar_init,
+    SimulationUnit(std::unique_ptr<MC::MonteCarloUnit>&& _unit,
+                   const ScalarInitializer& scalar_init,
                    std::optional<Feed::SimulationFeed> _feed = std::nullopt);
 
     ~SimulationUnit() = default;
 
-    SimulationUnit(SimulationUnit &&other) noexcept;
-    SimulationUnit(const SimulationUnit &other) = delete;
-    SimulationUnit &operator=(SimulationUnit &&rhs) = delete;
-    SimulationUnit &operator=(const SimulationUnit &rhs) = delete;
+    SimulationUnit(SimulationUnit&& other) noexcept;
+    SimulationUnit(const SimulationUnit& other) = delete;
+    SimulationUnit& operator=(SimulationUnit&& rhs) = delete;
+    SimulationUnit& operator=(const SimulationUnit& rhs) = delete;
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
 
@@ -76,13 +76,13 @@ namespace Simulation
 
     void setVolumes(std::span<const double> volumesgas, std::span<const double> volumesliq) const;
 
-    void step(double d_t, const CmaRead::ReactorState &state) const;
+    void step(double d_t, const CmaRead::ReactorState& state) const;
 
-    void cycleProcess(auto &&container, auto &&rview, double d_t);
+    void cycleProcess(auto&& container, auto&& rview, double d_t);
 
-    void setLiquidFlow(PreCalculatedHydroState *_flows_l);
+    void setLiquidFlow(PreCalculatedHydroState* _flows_l);
 
-    void setGasFlow(PreCalculatedHydroState *_flows_g);
+    void setGasFlow(PreCalculatedHydroState* _flows_g);
 
     void reduceContribs(std::span<double> data, size_t n_rank) const;
 
@@ -96,12 +96,12 @@ namespace Simulation
 
     [[nodiscard]] bool two_phase_flow() const;
 
-    Probes &get_probes();
-    void set_probes(Probes &&_probes);
+    Probes& get_probes();
+    void set_probes(Probes&& _probes);
     [[nodiscard]] auto counter() const;
 
-    [[nodiscard]] double& get_start_time_mut() ;
-    [[nodiscard]] double &get_end_time_mut();
+    [[nodiscard]] double& get_start_time_mut();
+    [[nodiscard]] double& get_end_time_mut();
 
   private:
     Probes probes;
@@ -110,8 +110,8 @@ namespace Simulation
     uint64_t _internal_counter = 0;
     LeavingFlowIndexType index_leaving_flow;
     LeavingFlowType leaving_flow;
-    PreCalculatedHydroState *flow_liquid; // TODO OPTI
-    PreCalculatedHydroState *flow_gas;    // TODO OPTI
+    PreCalculatedHydroState* flow_liquid; // TODO OPTI
+    PreCalculatedHydroState* flow_gas;    // TODO OPTI
     bool is_two_phase_flow;
     double starting_time = 0.; // Not used within calculation, only for export purposes
     double end_time{};         // Not used within calculation, only for export purposes
@@ -126,20 +126,20 @@ namespace Simulation
     [[nodiscard]] NeighborsViewCompute get_kernel_neighbors() const;
 
     void post_init_compartments();
-    void post_init_concentration(const ScalarInitializer &scalar_init);
+    void post_init_concentration(const ScalarInitializer& scalar_init);
 
-    void post_init_concentration_functor(const ScalarInitializer &scalar_init);
-    void post_init_concentration_file(const ScalarInitializer &scalar_init);
+    void post_init_concentration_functor(const ScalarInitializer& scalar_init);
+    void post_init_concentration_file(const ScalarInitializer& scalar_init);
 
     template <class ListType, class ResultViewType, class CompartmentListType, typename ContribType>
-    inline void post_kernel_process(ListType &list,
-                                    ResultViewType &rview,
-                                    CompartmentListType &local_compartments,
-                                    ContribType &contribs);
+    inline void post_kernel_process(ListType& list,
+                                    ResultViewType& rview,
+                                    CompartmentListType& local_compartments,
+                                    ContribType& contribs);
 
     struct pimpl_deleter
     {
-      void operator()(ScalarSimulation *) const;
+      void operator()(ScalarSimulation*) const;
     };
     using pimp_ptr_t = std::unique_ptr<ScalarSimulation, pimpl_deleter>;
     pimp_ptr_t liquid_scalar;
@@ -154,12 +154,12 @@ namespace Simulation
     flow_gas = nullptr;
   }
 
-  inline Probes &SimulationUnit::get_probes()
+  inline Probes& SimulationUnit::get_probes()
   {
     return probes;
   }
 
-  inline void SimulationUnit::set_probes(Probes &&_probes)
+  inline void SimulationUnit::set_probes(Probes&& _probes)
   {
     probes = std::move(_probes);
   }
@@ -174,12 +174,12 @@ namespace Simulation
     return is_two_phase_flow;
   }
 
-  inline void SimulationUnit::setLiquidFlow(PreCalculatedHydroState *_flows_l)
+  inline void SimulationUnit::setLiquidFlow(PreCalculatedHydroState* _flows_l)
   {
     flow_liquid = _flows_l;
   }
 
-  inline void SimulationUnit::setGasFlow(PreCalculatedHydroState *_flows_g)
+  inline void SimulationUnit::setGasFlow(PreCalculatedHydroState* _flows_g)
   {
     flow_gas = _flows_g;
   }
@@ -189,21 +189,21 @@ namespace Simulation
     mc_unit.reset();
   }
 
-  void SimulationUnit::cycleProcess(auto &&container, auto &&rview, double d_t)
+  void SimulationUnit::cycleProcess(auto&& container, auto&& rview, double d_t)
   {
-    
+
     PROFILE_SECTION("cycleProcess")
-    auto &list = container.get_compute();
+    auto& list = container.get_compute();
     const size_t n_particle = list.size();
 
     const auto diag_transition = get_kernel_diagonal();
-    const auto &local_leaving_flow = leaving_flow;
-    const auto &local_index_leaving_flow = index_leaving_flow;
+    const auto& local_leaving_flow = leaving_flow;
+    const auto& local_index_leaving_flow = index_leaving_flow;
     const auto neighbors = get_kernel_neighbors();
     const auto cumulative_probability = get_kernel_cumulative_proba();
 
-    auto &local_compartments = mc_unit->domain.data();
-    auto &local_rng = mc_unit->rng;
+    auto& local_compartments = mc_unit->domain.data();
+    auto& local_rng = mc_unit->rng;
     auto events = mc_unit->events;
     auto contribs = get_kernel_contribution();
 
@@ -230,7 +230,6 @@ namespace Simulation
     Kokkos::parallel_for("mc_cycle_process", Kokkos::RangePolicy<>(0, n_particle), k);
     Kokkos::fence("fence_mc_cycle_process");
 
- 
     Kokkos::Experimental::contribute(contribs, contribs_scatter);
 
     _internal_counter = internal_counter_dead();
@@ -238,23 +237,28 @@ namespace Simulation
   }
 
   template <class ListType, class ResultViewType, class CompartmentListType, typename ContribType>
-  inline void SimulationUnit::post_kernel_process(ListType &list,
-                                                  ResultViewType &rview,
-                                                  CompartmentListType &local_compartments,
-                                                  ContribType &contribs)
+  inline void SimulationUnit::post_kernel_process(ListType& list,
+                                                  ResultViewType& rview,
+                                                  CompartmentListType& local_compartments,
+                                                  ContribType& contribs)
   {
     Kokkos::parallel_for(
         "update_compartment_number", rview().extra_process.size(), KOKKOS_LAMBDA(const int i) {
           Kokkos::atomic_increment(
-              &local_compartments(rview().extra_process._owned_data(i).properties.current_container).n_cells);
+              &local_compartments(rview().extra_process._owned_data(i).properties.current_container)
+                   .n_cells);
         });
 
     static constexpr uint64_t minimum_dead_particle_removal = 100;
-    const auto threshold = std::max(
-        minimum_dead_particle_removal,
-        static_cast<uint64_t>(static_cast<double>(list.size()) * AutoGenerated::dead_particle_ratio_threshold));
+    const auto threshold =
+        std::max(minimum_dead_particle_removal,
+                 static_cast<uint64_t>(static_cast<double>(list.size()) *
+                                       AutoGenerated::dead_particle_ratio_threshold));
 
-    if (_internal_counter > threshold)
+    //Use commented line to remove dead when there is no particle. 
+    //This lead to stop exporting state for next time steps.  
+    // if (_internal_counter > threshold || _internal_counter==list.size())
+    if (_internal_counter > threshold )
     {
 #ifndef NDEBUG
       const auto old_size = list.size();

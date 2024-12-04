@@ -203,7 +203,7 @@ namespace Core
     auto dataset = pimpl->file.getDataSet(name.data());
 
     auto dims = descriptor.dims;
-    //Following are explicit copy 
+    // Following are explicit copy
     auto new_size = dims;
     auto select_start = dims;
     auto select_size = dims;
@@ -222,9 +222,12 @@ namespace Core
     CHECK_PIMPL
 
     HighFive::DataSetCreateProps ds_props;
-    // ds_props.add(HighFive::Chunking(get_chunk_size(values.size())));
-    ds_props.add(HighFive::Chunking(1));
-    ds_props.add(HighFive::Shuffle());
+    if (values.size() > 1)
+    {
+      ds_props.add(HighFive::Chunking(get_chunk_size(values.size())));
+      // ds_props.add(HighFive::Chunking(1)); // FIXME
+      ds_props.add(HighFive::Shuffle());
+    }
     const auto data_space = HighFive::DataSpace(values.size());
 
     if (compress)
