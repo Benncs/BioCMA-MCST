@@ -18,8 +18,8 @@
 #  define WARN_EXPERIMENTAL _Pragma("message( __FILE__ \" contains experimental Kokkos feature\")") // NOLINT
 #else
 #  define WARN_EXPERIMENTAL
-
 #endif
+
 #define EIGEN_INDEX(__VALUE__) static_cast<int>(__VALUE__)
 
 #ifndef NDEBUG

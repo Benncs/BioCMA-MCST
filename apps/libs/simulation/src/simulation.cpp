@@ -246,4 +246,9 @@ namespace Simulation
     return end_time;
   }
 
+  const Simulation::Feed::SimulationFeed& SimulationUnit::get_feed()const
+  {
+    return this->feed;
+  }
+
 } // namespace Simulation

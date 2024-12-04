@@ -26,7 +26,7 @@ namespace PythonWrap
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder& p, ContributionView contrib) noexcept;
 
     model_properties_detail_t get_properties() noexcept;
-    KOKKOS_FUNCTION [[nodiscard]] double mass() const noexcept;
+    [[nodiscard]] KOKKOS_FUNCTION double mass() const noexcept;
 
   private:
     struct Impl;
