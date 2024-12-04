@@ -22,7 +22,7 @@ def make_initial_concentration(dest:str,liq_concentration:np.ndarray,gas_concent
 
 def init_0d_1s():
     liquid_0d = np.zeros((1,2))
-    liquid_0d[0,0]=10.
+    liquid_0d[0,0]=0
     make_initial_concentration("./cma_data/0d_init.h5",liquid_0d)
 
 def init_0d_4s():
