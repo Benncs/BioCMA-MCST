@@ -1,10 +1,13 @@
 #ifndef __CORE_SCALAR_FACTORY_HPP__
 #define __CORE_SCALAR_FACTORY_HPP__
 
+#include <cstddef>
 #include <optional>
 #include <simulation/scalar_initializer.hpp>
 #include <span>
+#include <string_view>
 #include <variant>
+#include <vector>
 
 /**
  * @namespace ScalarFactory
