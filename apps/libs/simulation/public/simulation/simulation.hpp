@@ -84,7 +84,7 @@ namespace Simulation
 
     void setGasFlow(PreCalculatedHydroState* _flows_g);
 
-    void reduceContribs(std::span<double> data, size_t n_rank) const;
+    void reduceContribs(std::span<const double> data, size_t n_rank) const;
 
     void clearContribution() const noexcept;
 

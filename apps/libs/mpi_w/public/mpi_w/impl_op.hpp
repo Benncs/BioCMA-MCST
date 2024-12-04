@@ -258,6 +258,10 @@ namespace WrapMPI
   template <POD_t T>
   std::vector<T> gather(std::span<T> local_data, size_t n_rank, size_t root = 0);
 
+
+  template <POD_t T>
+  std::vector<T> gather(std::span<const T> local_data, size_t n_rank, size_t root = 0);
+
   /**
    * @brief Gathers and reduces data to a single value.
    *
@@ -441,6 +445,12 @@ namespace WrapMPI
   template <POD_t T> std::vector<T> gather(std::span<T> local_data, size_t n_rank, size_t root)
   {
     return _gather_unsafe(local_data.data(), local_data.size(), n_rank, root);
+  }
+  //FIXME
+  template <POD_t T>
+  std::vector<T> gather(std::span<const T> local_data, size_t n_rank, size_t root)
+  {
+    return _gather_unsafe(const_cast<T*>(local_data.data()), local_data.size(), n_rank, root);
   }
 
   template <NumberType T> T gather_reduce(T data, size_t root)

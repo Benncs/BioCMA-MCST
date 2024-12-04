@@ -1,29 +1,27 @@
-#include "highfive/H5DataSet.hpp"
+
 #include <algorithm>
 #include <core/scalar_factory.hpp>
 #include <filesystem>
 #include <optional>
 #include <simulation/scalar_initializer.hpp>
 #include <stdexcept>
-
-
-#include <iostream>
 #include <utility>
-
+#include <span> 
+#include <variant> 
+#include <cma_read/light_2d_view.hpp>
 #ifdef USE_HIGHFIVE
 #  include <Eigen/Dense>
+#  include <highfive/H5DataSet.hpp>
 #  include <highfive/H5DataSpace.hpp>
 #  include <highfive/H5Easy.hpp>
 #  include <highfive/H5File.hpp>
 #  include <highfive/H5PropertyList.hpp>
 #endif
 
-
-
 namespace Core::ScalarFactory
 {
 
-  Simulation::ScalarInitializer scalar_factory(bool f_init_gas_flow,
+  Simulation::ScalarInitializer scalar_factory(bool  /*f_init_gas_flow*/,
                                                std::span<double> gas_volume,
                                                std::span<double> liquid_volume,
                                                ScalarVariant arg_liq)
@@ -38,10 +36,11 @@ namespace Core::ScalarFactory
     ret.volumesgas = gas_volume;
     ret.volumesliq = liquid_volume;
 
-    // if (ret.gas_flow != f_init_gas_flow)
-    // {
-    //   throw std::invalid_argument("Gas provided but no functor, or inverse");
-    // }
+    // FIXME
+    //  if (ret.gas_flow != f_init_gas_flow)
+    //  {
+    //    throw std::invalid_argument("Gas provided but no functor, or inverse");
+    //  }
 
     if (!sanitize(ret))
     {
@@ -59,9 +58,9 @@ namespace Core::ScalarFactory
     res.n_species = n_species;
     res.gas_flow = false;
 
-    auto wrap_functor = [n_species](auto &&c)
+    auto wrap_functor = [n_species](auto&& c)
     {
-      return [n_species, local_concentrations = c](size_t i, CmaRead::L2DView<double> &view)
+      return [n_species, local_concentrations = c](size_t i, CmaRead::L2DView<double>& view)
       {
         for (size_t i_species = 0; i_species < n_species; ++i_species)
         {
@@ -91,10 +90,11 @@ namespace Core::ScalarFactory
     res.n_species = n_species;
     res.gas_flow = false;
 
-    const auto wrap_functor = [n_species](auto &&i, auto &&c)
+    const auto wrap_functor = [n_species](auto&& i, auto&& c)
     {
-      return [n_species, concentrations = std::forward<decltype(c)>(c), _indices = std::forward<decltype(i)>(i)](
-                 size_t i, CmaRead::L2DView<double> &view)
+      return [n_species,
+              concentrations = std::forward<decltype(c)>(c),
+              _indices = std::forward<decltype(i)>(i)](size_t i, CmaRead::L2DView<double>& view)
       {
         if (std::ranges::find(_indices, i) != _indices.end())
         {
@@ -117,18 +117,18 @@ namespace Core::ScalarFactory
     return res;
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(File arg)
+  Simulation::ScalarInitializer Visitor::operator()(File filepath)
   {
 
 #ifdef USE_HIGHFIVE
     auto res = Simulation::ScalarInitializer();
     res.type = Simulation::ScalarInitialiserType::File;
-    if (!std::filesystem::is_regular_file(arg.path))
+    if (!std::filesystem::is_regular_file(filepath.path))
     {
       throw std::invalid_argument("Unable to open provided concentration initaliser file");
     }
 
-    HighFive::File file(arg.path.data(), HighFive::File::ReadOnly);
+    HighFive::File file(filepath.path.data(), HighFive::File::ReadOnly);
 
     auto liquid_dataset = file.getDataSet("initial_liquid");
 
@@ -140,16 +140,16 @@ namespace Core::ScalarFactory
       gas = true;
     }
 
-    auto set_buffer = [&arg, &res](auto &dataset)
+    auto set_buffer = [&filepath, &res](auto& dataset)
     {
       auto dims = dataset.getDimensions();
 
       auto n_elements = dims[0] * dims[1];
-      if (n_elements >= arg.n_compartment)
+      if (n_elements >= filepath.n_compartment)
       {
         auto nd_array = std::vector<double>(n_elements);
         dataset.template read_raw<double>(nd_array.data());
-        res.n_species = n_elements / arg.n_compartment;
+        res.n_species = n_elements / filepath.n_compartment;
         return nd_array;
       }
 
@@ -181,58 +181,59 @@ namespace Core::ScalarFactory
 #endif
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(CustomScript path)
+  Simulation::ScalarInitializer Visitor::operator()(CustomScript /*path*/)
   {
     throw std::invalid_argument("Not implemented yet");
   }
 
-  bool sanitize(const Simulation::ScalarInitializer &res)
-{
-
-  bool flag = false;
-
-  auto test_functor = [](auto &&_res)
+  bool sanitize(const Simulation::ScalarInitializer& res)
   {
-    bool _flag = _res.liquid_f_init.has_value() && !_res.liquid_buffer.has_value();
 
-    if (_res.gas_flow)
+    bool flag = false;
+
+    auto test_functor = [](auto&& _res)
     {
-      _flag = _flag && _res.gas_f_init.has_value();
-    }
-    return _flag;
-  };
+      bool _flag = _res.liquid_f_init.has_value() && !_res.liquid_buffer.has_value();
 
-  switch (res.type)
-  {
-  case Simulation::ScalarInitialiserType::Uniform:
-  {
-    flag = test_functor(res);
-    break;
-  }
+      if (_res.gas_flow)
+      {
+        _flag = _flag && _res.gas_f_init.has_value();
+      }
+      return _flag;
+    };
 
-  case Simulation::ScalarInitialiserType::Local:
-  {
-    flag = test_functor(res);
-
-    break;
-  }
-  case Simulation::ScalarInitialiserType::File:
-  {
-
-    flag = res.liquid_buffer.has_value() && (!res.gas_f_init.has_value() && !res.liquid_f_init.has_value());
-    if (flag)
+    switch (res.type)
     {
-      flag = res.liquid_buffer->size() != 0;
-    }
-    break;
-  }
-  case Simulation::ScalarInitialiserType::CustomScript:
-    flag = false;
-    break;
-  }
 
-  return flag;
-}
+    case Simulation::ScalarInitialiserType::Uniform: // NOLINT
+    {
+      flag = test_functor(res);
+      break;
+    }
+
+    case Simulation::ScalarInitialiserType::Local:
+    {
+      flag = test_functor(res);
+
+      break;
+    }
+    case Simulation::ScalarInitialiserType::File:
+    {
+
+      flag = res.liquid_buffer.has_value() &&
+             (!res.gas_f_init.has_value() && !res.liquid_f_init.has_value());
+      if (flag)
+      {
+        flag = res.liquid_buffer->size() != 0;
+      }
+      break;
+    }
+    case Simulation::ScalarInitialiserType::CustomScript:
+      flag = false;
+      break;
+    }
+
+    return flag;
+  }
 
 } // namespace Core::ScalarFactory
-
