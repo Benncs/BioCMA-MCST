@@ -35,12 +35,13 @@ void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation)
     // afterwards, we rank 0 retrieves the local particle contribution in other
     // ranks
 
-    WrapMPI::barrier();
+    
 
     // Just use pointer to data wraped into span
     //  TODO: As we just gather we could use const data
     auto local_contribution = simulation.getContributionData();
-
+    
+    WrapMPI::barrier();
     std::vector<double> total_contrib_data =
         WrapMPI::gather<double>(local_contribution, exec.n_rank);
 
@@ -59,11 +60,11 @@ void sync_prepare_next(Simulation::SimulationUnit &simulation)
   {
     // In multiple rank context, we also need to broadcast the updated liquid
     // concentration computed by the host during the current step
-    WrapMPI::barrier();
-
+    
     auto data =
         simulation.getCliqData(); // Get concentration ptr wrapped into span
 
+    WrapMPI::barrier();
     // We can use span here because we broadcast without changing size
     WrapMPI::broadcast_span(data, 0);
   }

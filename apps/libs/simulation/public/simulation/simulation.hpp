@@ -72,7 +72,7 @@ namespace Simulation
     [[nodiscard]] Dimensions getDimensions() const noexcept;
 
     [[nodiscard]] std::optional<std::span<double>> getCgasData() const;
-    [[nodiscard]] std::span<double> getContributionData() const;
+    [[nodiscard]] std::span<const double> getContributionData() const;
 
     void setVolumes(std::span<const double> volumesgas, std::span<const double> volumesliq) const;
 

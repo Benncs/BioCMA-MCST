@@ -16,7 +16,7 @@
 namespace Simulation
 {
 
-  std::span<double> SimulationUnit::getContributionData() const
+  std::span<const double> SimulationUnit::getContributionData() const
   {
 
     return liquid_scalar->getContributionData();
@@ -49,7 +49,7 @@ namespace Simulation
   void SimulationUnit::reduceContribs(std::span<double> data, size_t n_rank) const
   {
 
-    auto [nr, nc] = getDimensions();
+    const auto [nr, nc] = getDimensions();
 
     this->liquid_scalar->biomass_contribution.setZero();
 
