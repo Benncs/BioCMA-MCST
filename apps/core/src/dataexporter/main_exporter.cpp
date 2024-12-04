@@ -3,6 +3,10 @@
 #include <dataexporter/main_exporter.hpp>
 #include <optional>
 #include <utility>
+#include <string> 
+#include <common/execinfo.hpp>
+#include <string_view>
+
 namespace Core
 {
   const std::string MainExporter::base_group_name = "records/";

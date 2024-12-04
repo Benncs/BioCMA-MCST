@@ -1,11 +1,11 @@
 #ifndef __CORE_DATA_EXPORTER_HPP__
 #define __CORE_DATA_EXPORTER_HPP__
 
-#include <Kokkos_Core.hpp>
 #include <common/execinfo.hpp>
 #include <common/kokkos_vector.hpp>
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <optional>
 #include <string>
 #include <string_view>

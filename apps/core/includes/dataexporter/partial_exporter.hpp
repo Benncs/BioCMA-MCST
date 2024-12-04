@@ -1,8 +1,15 @@
 #ifndef __CORE_PARTIAL_EXPORTER_HPP__
 #define __CORE_PARTIAL_EXPORTER_HPP__
 
+#include <common/execinfo.hpp>
+#include <cstdint>
+#include <cstddef>
 #include <dataexporter/data_exporter.hpp>
+#include <optional>
 #include <span>
+#include <string_view>
+#include <string>
+#include <vector>
 
 namespace Core
 {
