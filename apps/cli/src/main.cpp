@@ -49,6 +49,8 @@ static std::optional<Core::CaseData> prepare(const ExecInfo& exec_info,
  */
 static bool override_result_path(const Core::UserControlParameters& params, const ExecInfo& exec);
 
+
+
 #ifndef NO_MPI
 #  define HANDLE_RC(__api_results__)                                                               \
     {                                                                                              \
@@ -114,7 +116,7 @@ int main(int argc, char** argv)
 
   REDIRECT_SCOPE({
     HANDLE_RC(h->register_parameters(std::move(user_params)));
-    h->set_feed_constant_from_rvalue(0.50 / 3600., {5}, {0}, {0}, false);
+    h->set_feed_constant_from_rvalue(20*0.031653119013143756, {5}, {250}, {0}, false);
     HANDLE_RC(h->apply(serde));
     HANDLE_RC(h->exec());
   })

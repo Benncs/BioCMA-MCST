@@ -1,6 +1,7 @@
 #ifndef __ITERATION_PAYLOAD_HPP__
 #define __ITERATION_PAYLOAD_HPP__
 
+#include "cma_read/reactorstate.hpp"
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/neighbors.hpp>
 #include <mpi.h>
@@ -77,6 +78,7 @@ namespace WrapMPI
     /// View neighbors values to be sent for the current iteration.
     CmaRead::Neighbors::Neighbors_const_view_t neighbors;
 
+    void fill(const CmaRead::ReactorState* current_reactor_state);
     /**
      * @brief Sends this payload to a specified MPI rank.
      *

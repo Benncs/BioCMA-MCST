@@ -25,7 +25,7 @@ namespace Models
     KOKKOS_FUNCTION Monod division(MC::ParticleDataHolder &p, MC::KPRNG) noexcept;
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p, ContributionView contri) noexcept;
-    KOKKOS_FUNCTION [[nodiscard]] double mass() const noexcept;
+    [[nodiscard]] KOKKOS_FUNCTION  double mass() const noexcept;
 
     template <class Archive> void serialize(Archive &ar)
     {

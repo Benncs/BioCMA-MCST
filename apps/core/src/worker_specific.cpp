@@ -10,11 +10,11 @@
 #  include <sync.hpp>
 #  include <worker_specific.hpp>
 
-void workers_process(const ExecInfo &exec,
-                     Simulation::SimulationUnit &simulation,
-                     const Core::SimulationParameters &params,
-                     std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner,
-                     Core::PartialExporter &partial_exporter)
+void workers_process(const ExecInfo& exec,
+                     Simulation::SimulationUnit& simulation,
+                     const Core::SimulationParameters& params,
+                     std::unique_ptr<Simulation::FlowMapTransitioner>&& transitioner,
+                     Core::PartialExporter& partial_exporter)
 {
   double d_t = params.d_t;
   size_t n_compartments = simulation.mc_unit->domain.getNumberCompartments();
@@ -22,7 +22,7 @@ void workers_process(const ExecInfo &exec,
 
   WrapMPI::IterationPayload payload(n_compartments * n_compartments, n_compartments);
 
-  const auto loop_functor = [&](auto &&container)
+  const auto loop_functor = [&](auto&& container)
   {
     auto result = container.get_extra();
     auto view_result = result.get_view();
@@ -41,7 +41,7 @@ void workers_process(const ExecInfo &exec,
         }
 
         last_sync(exec, simulation);
-        auto &list = container.get_compute();
+        auto& list = container.get_compute();
         list.remove_dead(simulation.counter());
         PostProcessing::save_final_particle_state(simulation, partial_exporter);
         stop = true;
@@ -81,11 +81,9 @@ void workers_process(const ExecInfo &exec,
       simulation.update_feed(current_time, d_t);
       current_time += d_t;
 
-
       sync_step(exec, simulation);
 
       sync_prepare_next(simulation);
-  
     }
   };
   std::visit(loop_functor, simulation.mc_unit->container);

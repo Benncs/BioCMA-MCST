@@ -90,6 +90,8 @@ namespace Simulation
 
     void update_feed(double t, double d_t, bool update_scalar = true) noexcept;
 
+    [[nodiscard]] const Simulation::Feed::SimulationFeed& get_feed()const;
+
     void clear_mc();
 
     void reset();

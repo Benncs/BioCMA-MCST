@@ -26,7 +26,7 @@ namespace Models
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
                                       ContributionView contri);
 
-    KOKKOS_FUNCTION [[nodiscard]] double mass() const noexcept;
+    [[nodiscard]]  KOKKOS_FUNCTION  double mass() const noexcept;
 
     model_properties_detail_t get_properties();
   };
