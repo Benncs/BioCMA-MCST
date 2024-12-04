@@ -1,15 +1,24 @@
 #ifndef __CORE_GLOBAL_INITIALLISER_HPP__
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
-#include "cma_read/flow_iterator.hpp"
 #include "core/simulation_parameters.hpp"
-#include "mc/unit.hpp"
 #include <array>
+#include <cma_read/flow_iterator.hpp>
+#include <cma_read/neighbors.hpp>
+#include <cmt_common/cma_case.hpp>
 #include <common/execinfo.hpp>
+#include <cstddef>
+#include <cstdint>
+#include <initializer_list>
+#include <mc/unit.hpp>
 #include <memory>
 #include <optional>
+#include <simulation/feed_descriptor.hpp>
+#include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/transitionner.hpp>
+#include <string>
+#include <vector>
 
 namespace Core
 {
@@ -36,7 +45,7 @@ namespace Core
      * @param _info Execution information containing context for the simulation.
      * @param _params Simulation parameters that configure the simulation behavior.
      */
-    GlobalInitialiser(const ExecInfo &_info, UserControlParameters _user_params);
+    GlobalInitialiser(const ExecInfo& _info, UserControlParameters _user_params);
 
     /**
      * @brief Initializes a flow iterator.
@@ -51,7 +60,7 @@ namespace Core
      * @param flow_handle A unique pointer to the flow iterator used for state initialization.
      * @return An optional boolean indicating success or failure of the initialization.
      */
-    std::optional<bool> init_state(std::unique_ptr<CmaRead::FlowIterator> &flow_handle);
+    std::optional<bool> init_state(std::unique_ptr<CmaRead::FlowIterator>& flow_handle);
 
     /**
      * @brief Initializes a transitioner with the provided flow iterator.
@@ -60,7 +69,7 @@ namespace Core
      * @return An optional unique pointer to the initialized flow map transitioner.
      */
     OptionalPtr<Simulation::FlowMapTransitioner>
-    init_transitionner(std::unique_ptr<CmaRead::FlowIterator> &&flow_handle);
+    init_transitionner(std::unique_ptr<CmaRead::FlowIterator>&& flow_handle);
 
     /**
      * @brief Initializes a transitioner without parameters.
@@ -86,7 +95,7 @@ namespace Core
      */
     OptionalPtr<Simulation::SimulationUnit>
     init_simulation(std::unique_ptr<MC::MonteCarloUnit> _unit,
-                    const Simulation::ScalarInitializer &scalar_init);
+                    const Simulation::ScalarInitializer& scalar_init);
 
     /**
      * @brief Initializes a scalar component of the simulation.
@@ -100,7 +109,7 @@ namespace Core
      *
      * @return An optional simulation feed.
      */
-    void init_feed(std::optional<Simulation::Feed::SimulationFeed> feed=std::nullopt);
+    void init_feed(std::optional<Simulation::Feed::SimulationFeed> feed = std::nullopt);
 
     /**
      * @brief Initializes a Monte Carlo unit.
@@ -118,7 +127,7 @@ namespace Core
 
     [[nodiscard]] SimulationParameters get_parameters() const;
 
-    void set_initial_number_particle(uint64_t np)noexcept;
+    void set_initial_number_particle(uint64_t np) noexcept;
 
   private:
     /**
@@ -186,12 +195,12 @@ namespace Core
      * @param cma_case_path The path for the CMA case.
      * @return A structure containing exported paths.
      */
-    CmtCommons::cma_exported_paths_t get_path_files(const std::string &cma_case_path);
+    CmtCommons::cma_exported_paths_t get_path_files(const std::string& cma_case_path);
 
     /**
      * @brief Host speciffic state init
      */
-    std::optional<bool> host_init_state(std::unique_ptr<CmaRead::FlowIterator> &flow_handle);
+    std::optional<bool> host_init_state(std::unique_ptr<CmaRead::FlowIterator>& flow_handle);
 
     /**
      * @brief Performs MPI broadcast for synchronization.

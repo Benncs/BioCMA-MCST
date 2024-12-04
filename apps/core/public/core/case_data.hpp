@@ -69,4 +69,4 @@ namespace Core
 
 } // namespace Core
 
-#endif
+#endif //!__CASE_DATA__HPP__
