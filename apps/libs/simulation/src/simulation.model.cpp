@@ -46,16 +46,16 @@ namespace Simulation
     return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()} ;
   }
 
-  void SimulationUnit::reduceContribs(std::span<double> data, size_t n_rank) const
+  void SimulationUnit::reduceContribs(std::span<const double> data, size_t n_rank) const
   {
 
     const auto [nr, nc] = getDimensions();
 
     this->liquid_scalar->biomass_contribution.setZero();
-
+    //FIXME
     for (int i = 0; i < static_cast<int>(n_rank); ++i)
     {
-      this->liquid_scalar->biomass_contribution.noalias() += Eigen::Map<Eigen::MatrixXd>(&data[i * nr * nc], EIGEN_INDEX(nr), EIGEN_INDEX(nc));
+      this->liquid_scalar->biomass_contribution.noalias() += Eigen::Map<Eigen::MatrixXd>(const_cast<double*>(&data[i * nr * nc]), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
     }
   }
 

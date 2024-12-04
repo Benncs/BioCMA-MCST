@@ -1,29 +1,33 @@
-#include "common/kokkos_vector.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <algorithm>
 #include <common/execinfo.hpp>
+#include <common/kokkos_vector.hpp>
 #include <dataexporter/data_exporter.hpp>
 #include <impl/Kokkos_HostThreadTeam.hpp>
 #include <iostream>
-#include <mc/particles/particle_model.hpp>
 #include <mc/unit.hpp>
 #include <memory>
 #include <numeric>
 #include <post_process.hpp>
 #include <simulation/simulation.hpp>
 #include <variant>
+
+namespace
+{
+  void append_properties(int counter,
+                         Simulation::SimulationUnit& simulation,
+                         Core::PartialExporter& partial_exporter);
+
+  void get_particle_properties_opti(Kokkos::View<std::string*, HostSpace>& host_names,
+                                    Kokkos::View<double**, HostSpace>& host_particle_values,
+                                    Kokkos::View<double**, HostSpace>& host_spatial_values,
+                                    std::unique_ptr<MC::MonteCarloUnit>& mc_unit,
+                                    bool clean = true);
+} // namespace
+
 namespace PostProcessing
 {
-  static void append_properties(int counter,
-                                Simulation::SimulationUnit& simulation,
-                                Core::PartialExporter& pde);
-
-  static void get_particle_properties_opti(Kokkos::View<std::string*, HostSpace>& host_names,
-                                           Kokkos::View<double**, HostSpace>& host_particle_values,
-                                           Kokkos::View<double**, HostSpace>& host_spatial_values,
-                                           std::unique_ptr<MC::MonteCarloUnit>& mc_unit,
-                                           bool clean = true);
 
   // void save_initial(Simulation::SimulationUnit &simulation,
   //                   Core::MainExporter &exporter)
@@ -46,22 +50,22 @@ namespace PostProcessing
     }
   }
 
-  void save_particle_sate(Simulation::SimulationUnit& simulation,
-                          Core::PartialExporter& pde,
-                          std::string suffix,
-                          bool clean)
-  {
-    std::cout << "EXPORTING PARTICLE DATA" << std::endl;
+  // void save_particle_sate(Simulation::SimulationUnit& simulation,
+  //                         Core::PartialExporter& pde,
+  //                         std::string suffix,
+  //                         bool clean)
+  // {
+  //   std::cout << "EXPORTING PARTICLE DATA" << std::endl;
 
-    Kokkos::View<std::string*, HostSpace> names;
-    Kokkos::View<double**, HostSpace> particle_values;
-    Kokkos::View<double**, HostSpace> spatial_values;
+  //   Kokkos::View<std::string*, HostSpace> names;
+  //   Kokkos::View<double**, HostSpace> particle_values;
+  //   Kokkos::View<double**, HostSpace> spatial_values;
 
-    get_particle_properties_opti(names, particle_values, spatial_values, simulation.mc_unit, clean);
-    std::string ds_name = "biological_model/" + suffix + "/";
-    pde.write_particle_data(
-        {names.data(), names.extent(0)}, particle_values, spatial_values, ds_name);
-  }
+  //   get_particle_properties_opti(names, particle_values, spatial_values, simulation.mc_unit, clean);
+  //   std::string ds_name = "biological_model/" + suffix + "/";
+  //   pde.write_particle_data(
+  //       {names.data(), names.extent(0)}, particle_values, spatial_values, ds_name);
+  // }
 
   // FIXME
   void save_final_particle_state(Simulation::SimulationUnit& simulation, Core::PartialExporter& pde)
@@ -113,6 +117,18 @@ namespace PostProcessing
     Kokkos::printf("\r\n");
   }
 
+  void user_triggered_properties_export(Simulation::SimulationUnit& sim, Core::PartialExporter& pde)
+  {
+    static int counter = 0;
+    std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
+    ::append_properties(counter, sim, pde);
+    counter++;
+  }
+
+} // namespace PostProcessing
+
+namespace
+{
   void append_properties(int counter,
                          Simulation::SimulationUnit& simulation,
                          Core::PartialExporter& partial_exporter)
@@ -130,14 +146,6 @@ namespace PostProcessing
       partial_exporter.write_particle_data(
           {names.data(), names.extent(0)}, particle_values, spatial_values, ds_name);
     }
-  }
-
-  void user_triggered_properties_export(Simulation::SimulationUnit& sim, Core::PartialExporter& pde)
-  {
-    static int counter = 0;
-    std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
-    PostProcessing::append_properties(counter, sim, pde);
-    counter++;
   }
 
   void get_particle_properties_opti(Kokkos::View<std::string*, HostSpace>& host_names,
@@ -240,5 +248,4 @@ namespace PostProcessing
 
     std::visit(visitor, mc_unit->container);
   }
-
-} // namespace PostProcessing
+} // namespace

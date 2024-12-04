@@ -4,7 +4,7 @@ wrap_cxx="/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr
 
 
 args="$@"
-args=$(echo "$args" | sed 's/-MQ /-MT /g')
+args=$(echo "$args" | sed 's/-MQ /-MT /g') #Cmake and Ninja don´t use the same link semantic
 cmd="$wrap_cxx  $args"
 echo "$cmd" >> wrapper_log.log
 

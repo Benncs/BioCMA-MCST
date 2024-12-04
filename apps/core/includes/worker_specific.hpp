@@ -34,7 +34,7 @@ void workers_process(
     const ExecInfo &exec,
     Simulation::SimulationUnit &simulation,
     const Core::SimulationParameters &params,
-    std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner,Core::PartialExporter&mm);
+    std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner,Core::PartialExporter&partial_exporter);
 
 
 

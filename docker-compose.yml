@@ -26,6 +26,6 @@ services:
       - /bin/sh
       - -c
       - |
-        meson setup builddir --buildtype=release --reconfigure
+        meson setup builddir --buildtype=debug --reconfigure
         ninja -C builddir  test 
 
