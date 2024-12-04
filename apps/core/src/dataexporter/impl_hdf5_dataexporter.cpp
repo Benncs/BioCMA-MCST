@@ -1,8 +1,8 @@
 #ifdef USE_HIGHFIVE
-#  include "common/common.hpp"
-#  include <Eigen/Core>
 #  include <chrono>
+#  include <common/common.hpp>
 #  include <cstddef>
+#  include <ctime>
 #  include <dataexporter/data_exporter.hpp>
 #  include <highfive/H5DataSpace.hpp>
 #  include <highfive/H5File.hpp>
@@ -10,13 +10,15 @@
 #  include <highfive/eigen.hpp>
 #  include <highfive/highfive.hpp>
 #  include <iomanip>
-#  include <stdexcept>
+#  include <sstream>
+#  include <string>
 #  include <string_view>
 #  include <type_traits>
 #  include <variant>
-
+# include <span> 
 #  ifdef __linux__
 #    include <pwd.h>
+#    include <sys/types.h>
 #    include <unistd.h>
 #  endif
 
@@ -25,52 +27,54 @@
     {                                                                                              \
       throw std::runtime_error(__FILE__ ": Unexpected ERROR");                                     \
     }
-
-static std::string date_time()
+namespace
 {
-  // Non vedo l’ora che arrivi c++23-format
-  std::stringstream ss;
-  auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-  ss << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
-  return ss.str();
-}
-
-static std::string get_user_name()
-{
-  std::string_view res = "someone";
-#  ifdef __linux__
-  uid_t uid = geteuid();
-  passwd* pw = getpwuid(uid);
-  if (pw != nullptr)
+  std::string date_time()
   {
-    res = pw->pw_name;
+    // Non vedo l’ora che arrivi c++23-format
+    std::stringstream ss;
+    auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    ss << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
+    return ss.str();
   }
+
+  std::string get_user_name()
+  {
+    std::string_view res = "someone";
+#  ifdef __linux__
+    uid_t uid = geteuid();
+    passwd* pw = getpwuid(uid);
+    if (pw != nullptr)
+    {
+      res = pw->pw_name;
+    }
 #  endif
 
-  return std::string(res);
-}
+    return std::string(res);
+  }
 
-static std::size_t get_chunk_size(std::size_t data_length)
-{
-  // NOLINTBEGIN
-  if (data_length <= 1000)
+  std::size_t get_chunk_size(std::size_t data_length)
   {
-    return 1;
+    // NOLINTBEGIN
+    if (data_length <= 1000)
+    {
+      return 1;
+    }
+    else if (data_length <= 1e4)
+    {
+      return 1024;
+    }
+    else if (data_length <= 1e6)
+    {
+      return 8192;
+    }
+    else
+    {
+      return 65536;
+    }
+    // NOLINTEND
   }
-  else if (data_length <= 1e4)
-  {
-    return 1024;
-  }
-  else if (data_length <= 1e6)
-  {
-    return 8192;
-  }
-  else
-  {
-    return 65536;
-  }
-  // NOLINTEND
-}
+} // namespace
 
 namespace Core
 {
@@ -83,9 +87,12 @@ namespace Core
     {
     }
 
-    ~impl()
-    {
-    }
+    impl(const impl&) = delete;
+    impl(impl&&) = delete;
+    impl& operator=(const impl&) = delete;
+    impl& operator=(impl&&) = delete;
+
+    ~impl() = default;
 
     template <typename T> void write(std::string_view name, T val)
     {
@@ -123,6 +130,9 @@ namespace Core
   void DataExporter::write_properties(std::optional<std::string> specific_dataspace,
                                       const export_metadata_kv& values)
   {
+    // TODO impl specific dataspace as metadata by default.
+    // It's not easy to deal with built-in hdf5 metadata from other lib(python/rust),
+    // use standard dataset called metadata instead is better
     CHECK_PIMPL
 
     for (const auto& kv : values)
@@ -222,10 +232,13 @@ namespace Core
     CHECK_PIMPL
 
     HighFive::DataSetCreateProps ds_props;
+    // Minimum chunk size is 1 and leads to error if size<chunk
+    // With size=0, nothing will be saved it will not change anything to skip property in this case
+    // TODO: if values is 0 early return ?
     if (values.size() > 1)
     {
+      // If error occurs, try to debug with fixed chunk of 1
       ds_props.add(HighFive::Chunking(get_chunk_size(values.size())));
-      // ds_props.add(HighFive::Chunking(1)); // FIXME
       ds_props.add(HighFive::Shuffle());
     }
     const auto data_space = HighFive::DataSpace(values.size());
