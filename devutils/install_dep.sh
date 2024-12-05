@@ -73,8 +73,8 @@ if ! sudo pip3 install meson; then
 fi
 
 echo "Installing omp dev..."
-  if ! sudo apt-get install -y libomp-18-dev; then
-    error "Failed to install HDF5."
+  if ! sudo apt-get install -y libomp-dev; then
+    error "Failed to install omp."
     exit 1
   fi
 
