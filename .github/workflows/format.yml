@@ -22,11 +22,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install Meson
-        run: pip install meson
-      - name: get LLVM clang-tidy/clang-format
+      - name: get dependencies
         run: |
-          sudo sh devutils/docker/clang_config.sh 17
+          sudo sh devutils/install_dep.sh
       - name: Configure project
         run: |
           meson setup builddir/ --buildtype=release 

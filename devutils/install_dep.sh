@@ -72,7 +72,7 @@ echo "Installing omp dev..."
 
 # Run clang configuration script
 echo "Running clang configuration script..."
-if ! sh ./devutils/clang_config.sh $LLVM_VERSION; then
+if ! sh ./devutils/docker/clang_config.sh $LLVM_VERSION; then
   error "Failed to run clang configuration script."
   exit 1
 fi
