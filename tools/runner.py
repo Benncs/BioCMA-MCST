@@ -107,7 +107,7 @@ def main():
         + "-force 1 "
     )
     if cli_args.serde is True:
-        command += "-serde " + "./results/debug/debug_serde_ "
+        command += "-serde " + "./results/debug_4/debug_4_serde_ "
 
         # if(cli_args.use_mpi):
         #     input("confirm force?")

@@ -28,7 +28,7 @@ def init_0d_1s():
 def init_0d_4s():
     liquid_0d = np.zeros((1,4))
     gas_0d = np.zeros((1,4))
-    liquid_0d[0,0]=0.01
+    liquid_0d[0,0]=5
     liquid_0d[0,1]=8e-3
 
     gas_0d[0,0]=0.

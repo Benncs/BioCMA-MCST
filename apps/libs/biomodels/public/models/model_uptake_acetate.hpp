@@ -61,6 +61,11 @@ namespace Models
     [[nodiscard]] KOKKOS_FUNCTION double mass() const noexcept;
 
     model_properties_detail_t get_properties();
+
+    template <class Archive> void serialize(Archive &ar)
+    {
+      ar(lenght, nu, a_pts, a_permease);
+    }
   };
 } // namespace Models
 

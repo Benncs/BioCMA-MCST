@@ -92,15 +92,17 @@
 
    <control name="debug">
 	   <!-- <cma_case_path>./cma_data/0d_mono/</cma_case_path> -->
-      <cma_case_path >/home/benjamin/Documents/thesis/cfd-cma/sanofi/</cma_case_path>
-      <final_time>300000</final_time>
-      <numper_particle>5000</numper_particle>
+      <cma_case_path>/home/benjamin/Documents/thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
+      
+      <!-- <cma_case_path >/home/benjamin/Documents/thesis/cfd-cma/sanofi/</cma_case_path> -->
+      <final_time>500</final_time>
+      <numper_particle>10000</numper_particle>
       <delta_time>0.01</delta_time>
-      <results_file_name>debug</results_file_name>
-      <number_exported_result>0</number_exported_result>
-      <model_name>model_monod</model_name>
-      <!-- <initialiser_path>./cma_data/0d_init.h5</initialiser_path> -->
-      <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>
+      <results_file_name>debug_5</results_file_name>
+      <number_exported_result>50</number_exported_result>
+      <model_name>model_uptake_acetate</model_name>
+      <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
+      <!-- <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path> -->
    </control>
 
    <control name="bench">
