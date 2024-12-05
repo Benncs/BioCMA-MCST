@@ -92,4 +92,11 @@ if ! sudo apt-get install -y clang-$LLVM_VERSION; then
   exit 1
 fi
 
+# Install specific version of clang
+echo "Installing Kokkos..."
+if ! sh ./devutils/docker/kokkos_config; then
+  error "Failed to install Kokkos."
+  exit 1
+fi
+
 echo "All dependencies have been installed successfully."
