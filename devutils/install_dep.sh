@@ -94,7 +94,7 @@ fi
 
 # Install specific version of clang
 echo "Installing Kokkos..."
-if ! sh ./devutils/docker/kokkos_config; then
+if ! sh ./devutils/docker/kokkos_config.sh; then
   error "Failed to install Kokkos."
   exit 1
 fi
