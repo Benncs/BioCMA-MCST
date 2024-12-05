@@ -59,7 +59,7 @@ fi
 
 # Install meson via pip
 echo "Installing meson..."
-if ! pip install meson; then
+if ! pip install meson --break-system-packages; then
   error "Failed to install meson."
   exit 1
 fi
