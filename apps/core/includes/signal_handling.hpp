@@ -46,6 +46,30 @@ namespace Core
       return ret;
     }
 
+    [[nodiscard]] static inline bool is_usr2_raised() noexcept(false)
+    {
+      if (instance == nullptr)
+      {
+        throw std::runtime_error("SignalHandler not initialized before use");
+      }
+
+      const auto ret = instance->f_usr2_raised;
+      instance->f_usr2_raised = false;
+      return ret;
+    }
+
+    [[nodiscard]] static inline bool is_sigint_raised() noexcept(false)
+    {
+      if (instance == nullptr)
+      {
+        throw std::runtime_error("SignalHandler not initialized before use");
+      }
+
+      const auto ret = instance->f_sigint_raised;
+      instance->f_sigint_raised = false;
+      return ret;
+    }
+
   private:
     /**
      * @brief Handles the SIGUSR1 signal.
@@ -66,7 +90,12 @@ namespace Core
      */
     static void handle_SIGUSR2(int signal) noexcept;
 
-    bool f_usr1_raised;             ///< Flag to indicate if the SIGUSR1 signal was triggered.
+
+    static void handle_SIGINT(int signal) noexcept;
+
+    bool f_sigint_raised;
+    bool f_usr1_raised; ///< Flag to indicate if the SIGUSR1 signal was triggered.
+    bool f_usr2_raised;
     static SignalHandler* instance; ///< Singleton instance of the SignalHandler.
   };
 

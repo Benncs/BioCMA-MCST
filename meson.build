@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.1.1',
+  version: '0.2.1',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=gnu++20'],
 )
@@ -65,7 +65,7 @@ no_mpi_flag = '-DNO_MPI'
 no_use_mpi_flag = '-DNO_USE_MPI'
 
 use_dynamic_module = get_option('use_dynamic_module') # Use python module or not
-
+use_cereal = get_option('use_cereal')
 use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  use_dynamic_module is true
 
 ## Checking all needed depencies (execpt Python)
@@ -110,6 +110,9 @@ kokkos = declare_dependency(
 dynlib_dep = dependency('dynlib-1.0', required: true)
 
 highfive_found = false
+
+
+
 ceral_found = false
 cmake = import('cmake', required: false)
 if cmake.found()
@@ -131,7 +134,7 @@ if cmake.found()
     add_project_arguments('-DUSE_HIGHFIVE', language: 'cpp')
     highfive_dependency = highfive_proj.dependency('HighFive')
   endif
-
+  if use_cereal
   cereal_cmake_options = cmake.subproject_options()
   cereal_cmake_options.add_cmake_defines({'SKIP_PERFORMANCE_COMPARISON': true})
   cereal_cmake_options.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
@@ -145,6 +148,7 @@ if cmake.found()
     add_project_arguments('-DUSE_CEAREAL', language: 'cpp')
     cereal_dependency = cereal_proj.dependency('cereal')
   endif
+  endif 
 
 endif
 

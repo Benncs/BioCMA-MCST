@@ -285,11 +285,19 @@ namespace
         {
           PostProcessing::user_triggered_properties_export(simulation, partial_exporter);
         }
+
+        if (Core::SignalHandler::is_sigint_raised())
+        {
+          std::cout<<"user interruption"<<std::endl;
+          break;
+        }
       }
     };
 
     std::visit(loop_functor, simulation.mc_unit->container);
 
+    std::cout<<"visit end"<<std::endl;
+    
     gas_volume = (!simulation.getCgasData().has_value())
                      ? std::nullopt
                      : std::make_optional(current_reactor_state->gasVolume);

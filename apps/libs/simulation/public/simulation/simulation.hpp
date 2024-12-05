@@ -86,6 +86,8 @@ namespace Simulation
 
     void reduceContribs(std::span<const double> data, size_t n_rank) const;
 
+    [[deprecated("perf:not useful")]] void reduceContribs_per_rank(std::span<const double> data) const;
+
     void clearContribution() const noexcept;
 
     void update_feed(double t, double d_t, bool update_scalar = true) noexcept;
