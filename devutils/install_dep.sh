@@ -48,6 +48,14 @@ for arg in "$@"; do
   fi
 done
 
+
+
+echo "Pip upgrade..."
+if ! python3 -m pip install --upgrade pip; then
+  error "Failed to upgrade pip."
+  exit 1
+fi
+
 # Install optional HDF5 if flag is set
 if $INSTALL_HDF5; then
   echo "Installing HDF5..."
@@ -59,7 +67,7 @@ fi
 
 # Install meson via pip
 echo "Installing meson..."
-if ! pip3 install meson --break-system-packages; then
+if ! sudo pip3 install meson; then
   error "Failed to install meson."
   exit 1
 fi
