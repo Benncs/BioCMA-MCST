@@ -288,15 +288,13 @@ namespace
 
         if (Core::SignalHandler::is_sigint_raised())
         {
-          std::cout<<"user interruption"<<std::endl;
+          std::cout<<"User interruption"<<std::endl;
           break;
         }
       }
     };
 
     std::visit(loop_functor, simulation.mc_unit->container);
-
-    std::cout<<"visit end"<<std::endl;
     
     gas_volume = (!simulation.getCgasData().has_value())
                      ? std::nullopt

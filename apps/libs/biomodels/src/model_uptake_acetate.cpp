@@ -102,7 +102,7 @@ namespace Models
 
     // this->lenght = Kokkos::max(
     //     minimal_length, Kokkos::max(generator.normal(l_0/2, l_0 / 3.), 0.));
-    this->lenght = l_0 * 0.9;
+    this->lenght = l_0 * 0.5;
     this->a_permease = Kokkos::max(generator.normal(1e-3, 1e-4), 0.);
 
     this->a_pts = Kokkos::min(1., Kokkos::max(generator.normal(0.8, 0.1), 0.));

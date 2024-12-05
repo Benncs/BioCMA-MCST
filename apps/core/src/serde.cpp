@@ -1,4 +1,6 @@
 
+#include "core/scalar_factory.hpp"
+#include "simulation/scalar_initializer.hpp"
 #ifdef USE_CEAREAL
 #  include "common/execinfo.hpp"
 #  include "mc/unit.hpp"
@@ -128,11 +130,20 @@ namespace SerDe
     ar(np, dims, read_c_liq, read_c_gas, start_time);
 
     auto sc = gi.init_scalar();
+
+
+
     if (!sc.has_value())
     {
       std::cout << "Scalar loaded failed" << std::endl;
       return false;
     }
+
+    //FIXME
+    //Overwrite value set by initialiser 
+    sc->gas_buffer = read_c_gas;
+    sc->liquid_buffer = read_c_liq;
+    sc->type = Simulation::ScalarInitialiserType::File;
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);

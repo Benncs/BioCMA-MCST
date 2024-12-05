@@ -24,24 +24,6 @@
 #  define INTERPRETER_INIT
 #endif
 
-/**
- * @brief Prepares the case data based on execution information and simulation
- * parameters.
- *
- * This function processes the provided execution information and simulation
- * parameters to prepare and return a `CaseData` object. It is designed to be
- * called before the main simulation execution to ensure all necessary data is
- * correctly initialized.
- *
- * @param exec_info The execution information containing details about the
- * current simulation run, such as environment settings and execution context.
- * @param params    The simulation parameters that configure various aspects of
- * the simulation, including time steps, boundary conditions, and other
- * relevant settings.
- * @return A `CaseData` object containing the prepared data for the simulation.
- */
-static std::optional<Core::CaseData> prepare(const ExecInfo& exec_info,
-                                             const Core::UserControlParameters&& param);
 
 /**
  * @brief Check if result path exist or not and ask for overriding if yes
@@ -116,7 +98,9 @@ int main(int argc, char** argv)
 
   REDIRECT_SCOPE({
     HANDLE_RC(h->register_parameters(std::move(user_params)));
-    // h->set_feed_constant_from_rvalue(0.031653119013143756, {5}, {250}, {0}, false);
+
+    // h->set_feed_constant_from_rvalue(20e-3*0.5/3600., {10}, {0}, {0}, false);
+    // h->set_feed_constant_from_rvalue(0.1/3600., {10}, {0}, {1}, true);
     HANDLE_RC(h->apply(serde));
     HANDLE_RC(h->exec());
   })
