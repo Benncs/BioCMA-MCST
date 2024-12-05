@@ -1,15 +1,8 @@
-#include "mc/unit.hpp"
-#include "simulation/scalar_initializer.hpp"
-#include "simulation/simulation.hpp"
-#include <cstddef>
-#include <cstdint>
-#include <exception>
-#include <ios>
-#include <memory>
-#include <stdexcept>
-#include <vector>
+
 #ifdef USE_CEAREAL
 #  include "common/execinfo.hpp"
+#  include "mc/unit.hpp"
+#  include "simulation/simulation.hpp"
 #  include <cereal/archives/binary.hpp>
 #  include <cereal/archives/xml.hpp>
 #  include <cereal/types/array.hpp> //MC::events use vector internally
@@ -19,12 +12,17 @@
 #  include <cereal/types/tuple.hpp>
 #  include <cereal/types/variant.hpp> //MC::Unit use vector internally
 #  include <cereal/types/vector.hpp>  //MC::List use vector internally
+#  include <cstdint>
 #  include <fstream>
+#  include <ios>
+#  include <memory>
 #  include <optional>
 #  include <serde.hpp>
+#  include <stdexcept>
 #  include <string_view>
+#  include <vector>
 
-static void write_to_file(const std::ostringstream &oss, std::string_view filename)
+static void write_to_file(const std::ostringstream& oss, std::string_view filename)
 {
 
   std::ofstream file(filename.data(), std::ios::binary);
@@ -37,7 +35,7 @@ static void write_to_file(const std::ostringstream &oss, std::string_view filena
   file.close();
 }
 
-static void read_file(std::stringstream &buffer, std::string_view filename)
+static void read_file(std::stringstream& buffer, std::string_view filename)
 {
   std::fstream file;
   file.open(filename.data(), std::ios::binary | std::ios::in);
@@ -77,12 +75,12 @@ using iArchive_t = cereal::XMLInputArchive;
 namespace SerDe
 {
 
-  void save_simulation(const Core::CaseData &case_data)
+  void save_simulation(const Core::CaseData& case_data)
   {
 
     std::stringstream serde_name;
-    serde_name << case_data.params.results_file_name << "_serde_" << case_data.exec_info.current_rank
-               << ".raw";
+    serde_name << case_data.params.results_file_name << "_serde_"
+               << case_data.exec_info.current_rank << ".raw";
 
     std::ostringstream buf(std::ios::binary);
     {
@@ -94,19 +92,26 @@ namespace SerDe
       auto cgas = case_data.simulation->getCgasData();
 
       std::optional<std::vector<double>> cgas_a =
-          cgas.has_value() ? std::make_optional(std::vector<double>(cgas->begin(), cgas->end())) : std::nullopt;
-      ar(case_data.params.number_particle,dim, std::vector<double>(cliq.begin(), cliq.end()), cgas_a, case_data.simulation->get_end_time_mut());
+          cgas.has_value() ? std::make_optional(std::vector<double>(cgas->begin(), cgas->end()))
+                           : std::nullopt;
+      ar(case_data.params.number_particle,
+         dim,
+         std::vector<double>(cliq.begin(), cliq.end()),
+         cgas_a,
+         case_data.simulation->get_end_time_mut());
       ar(case_data.simulation->mc_unit);
     }
     write_to_file(buf, serde_name.str());
   }
 
-  bool load_simulation(Core::GlobalInitialiser &gi, Core::CaseData &case_data, std::string_view ser_filename)
+  bool load_simulation(Core::GlobalInitialiser& gi,
+                       Core::CaseData& case_data,
+                       std::string_view ser_filename)
   {
 
     std::stringstream buffer;
     read_file(buffer, ser_filename);
-  
+
     iArchive_t ar(buffer);
 
     std::string version;
@@ -114,24 +119,24 @@ namespace SerDe
     ar(version, serde_exec);
 
     case_data.exec_info.run_id = serde_exec.run_id;
-    
-    uint64_t np=0;
+
+    uint64_t np = 0;
     Simulation::Dimensions dims;
     std::vector<double> read_c_liq;
     std::optional<std::vector<double>> read_c_gas;
     double start_time{};
-    ar(np,dims, read_c_liq, read_c_gas, start_time);
-    
+    ar(np, dims, read_c_liq, read_c_gas, start_time);
+
     auto sc = gi.init_scalar();
-    if(!sc.has_value())
+    if (!sc.has_value())
     {
       std::cout << "Scalar loaded failed" << std::endl;
       return false;
     }
-  
+
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
-    assert(mc_unit!=nullptr);
+    assert(mc_unit != nullptr);
     auto simulation = gi.init_simulation(std::move(mc_unit), *sc);
 
     if (!simulation.has_value())

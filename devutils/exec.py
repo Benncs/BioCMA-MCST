@@ -2,6 +2,7 @@ import subprocess
 import re
 import time
 import os
+import signal
 
 
 def format_rhs(match):
@@ -18,17 +19,26 @@ def format_rhs(match):
 
 
 def wrap_timer(f, do_measure: bool):
-    if do_measure:
-        start_time = time.perf_counter()
-        process = f()
-        return_code = process.wait()
-        end_time = time.perf_counter()
-        elapsed_time = end_time - start_time
-        print(f"Command executed in \033[92m{elapsed_time:.6f}\033[0m seconds")
-        return return_code
-    else:
-        process = f()
-        return process.wait()
+    try:
+
+        old_action = signal.signal(signal.SIGINT, signal.SIG_IGN)
+        if do_measure:
+            start_time = time.perf_counter()
+            process = f()
+            return_code = process.wait()
+            end_time = time.perf_counter()
+            elapsed_time = end_time - start_time
+            print(f"Command executed in \033[92m{elapsed_time:.6f}\033[0m seconds")
+            return return_code
+        else:
+            try:
+                process = f()
+            finally:
+                # Restore original SIGINT handling in the parent
+                signal.signal(signal.SIGINT, old_action)
+            return process.wait()
+    except KeyboardInterrupt:
+        pass
 
 
 def exec(command, n_thread, do_measure: bool = True, do_kokkos_measure=False, **kwargs):
@@ -50,4 +60,3 @@ def exec(command, n_thread, do_measure: bool = True, do_kokkos_measure=False, **
     return wrap_timer(
         lambda: subprocess.Popen(command, shell=True, env=env_var, **kwargs), do_measure
     )
-

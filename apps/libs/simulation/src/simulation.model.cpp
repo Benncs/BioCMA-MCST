@@ -46,9 +46,17 @@ namespace Simulation
     return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()} ;
   }
 
+  [[deprecated("perf:not useful")]] void SimulationUnit::reduceContribs_per_rank(std::span<const double> data) const
+  {
+    PROFILE_SECTION("host:reduceContribs_rank")
+    const auto [nr, nc] = getDimensions();
+    this->liquid_scalar->biomass_contribution.noalias() += Eigen::Map<Eigen::MatrixXd>(const_cast<double*>(data.data()), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
+
+  }
+
   void SimulationUnit::reduceContribs(std::span<const double> data, size_t n_rank) const
   {
-
+    PROFILE_SECTION("host:reduceContribs")
     const auto [nr, nc] = getDimensions();
 
     this->liquid_scalar->biomass_contribution.setZero();
