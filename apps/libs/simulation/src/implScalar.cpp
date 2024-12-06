@@ -8,6 +8,7 @@
 #include <common/common.hpp>
 #include <common/kokkos_vector.hpp>
 #include <scalar_simulation.hpp>
+#include <simulation/alias.hpp>
 
 namespace Simulation
 {

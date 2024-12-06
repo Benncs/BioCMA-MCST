@@ -15,6 +15,10 @@ namespace WrapMPI
   void barrier() {};
   template <typename T> std::vector<T> gather(auto s, auto n, int i = 0) {};
 
+  template <typename T> void gather_span(std::span<T> dest, std::span<const T> local_data, size_t root=0)
+  {
+  };
+
   void broadcast_span(auto data, auto n) {};
 
 } // namespace WrapMPI
@@ -36,15 +40,48 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
 
     const auto local_contribution = simulation.getContributionData();
 
-    std::vector<double> total_contrib_data =
-        WrapMPI::gather<double>(local_contribution, exec.n_rank);
+    static std::vector<double> total_contrib_data;
+    if (total_contrib_data.empty())
+    {
+      total_contrib_data.resize(local_contribution.size() * exec.n_rank,0);
+    }
 
+    WrapMPI::gather_span<double>(total_contrib_data, local_contribution);
+    // // auto total_contrib_data = WrapMPI::gather<double>(local_contribution,exec.n_rank);
     if (exec.current_rank == 0)
     {
       simulation.reduceContribs(total_contrib_data, exec.n_rank);
     }
-    WrapMPI::barrier();
 
+    // constexpr size_t tag = 10;
+    // const auto local_contribution = simulation.getContributionData();
+    // #ifndef NO_MPI
+    // if (exec.current_rank != 0)
+    // {
+      
+    //   WrapMPI::send_v(local_contribution, 0,tag,false);
+    // }
+    // else
+    // {
+    //   MPI_Status status;
+    //   static std::vector<double> receive_data;
+    //   if(receive_data.empty())
+    //   {
+    //     receive_data.resize(local_contribution.size(),0.);
+        
+    //   }
+    //   for(size_t i = 1;i<exec.n_rank;++i)
+    //   {
+    //     auto _ret = WrapMPI::recv_span<double>(receive_data,i,&status,tag);
+    //     simulation.reduceContribs_per_rank(receive_data);
+    //   }
+
+    // }
+
+    // #endif 
+
+
+    WrapMPI::barrier();
   }
 }
 

@@ -10,13 +10,13 @@ namespace Models
   {
   public:
 
-    User(const User&)=default;;
+    User(const User&)=default;
 
     User& operator=(const User&)=default;
-    User(User&&) noexcept=default;;
-    User& operator=(User&&) noexcept=default;;
+    User(User&&) noexcept=default;
+    User& operator=(User&&) noexcept=default;
     User();
-    ~User()=default;;
+    ~User()=default;
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder& p, MC::KPRNG _rng);
     KOKKOS_FUNCTION void update(double d_t,
                                 MC::ParticleDataHolder& p,

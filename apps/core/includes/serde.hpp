@@ -100,6 +100,7 @@ std::optional<Core::CaseData> impl_load(const ExecInfo& exec,
                                         const Core::UserControlParameters&& params,
                                         std::optional<Simulation::Feed::SimulationFeed> feed)
 {
+  return std::nullopt;
 }
 
 #endif 

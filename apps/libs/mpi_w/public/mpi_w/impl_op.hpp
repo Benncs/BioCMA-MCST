@@ -21,8 +21,9 @@ namespace WrapMPI
 {
 
   template <typename T>
-  concept POD_t = std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T> &&
-                std::is_trivially_destructible_v<T> && std::is_trivially_default_constructible_v<T>;
+  concept POD_t =
+      std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T> &&
+      std::is_trivially_destructible_v<T> && std::is_trivially_default_constructible_v<T>;
 
   // SENDING
 
@@ -222,8 +223,7 @@ namespace WrapMPI
    * @param sign A `SIGNALS` enumeration indicating the signal to trigger the task.
    * @param args Variadic arguments to pass to the host.
    */
-  template <POD_t... Args>
-  void host_dispatch(const ExecInfo& info, SIGNALS sign, Args&&... args);
+  template <POD_t... Args> void host_dispatch(const ExecInfo& info, SIGNALS sign, Args&&... args);
 
   /**
    * @brief Gathers raw data from all processes in an unsafe manner.
@@ -241,7 +241,10 @@ namespace WrapMPI
    * @note Use this function with caution as it performs no validation on the input.
    */
   template <POD_t T>
-  std::vector<T> _gather_unsafe(T* src_data, size_t size, size_t n_rank, size_t root = 0) noexcept;
+  std::vector<T> _gather_unsafe(T* src_data, size_t size, size_t n_rank, size_t root = 0);
+
+  template <POD_t T>
+  int _gather_unsafe_to_buffer(T* dest, T* src_data, size_t size, size_t root = 0) noexcept;
 
   /**
    * @brief Gathers data from all processes.
@@ -255,9 +258,9 @@ namespace WrapMPI
    * @param root The identifier of the root process that gathers the data (default is 0).
    * @return A vector containing the gathered data on the root process.
    */
-  template <POD_t T>
-  std::vector<T> gather(std::span<T> local_data, size_t n_rank, size_t root = 0);
+  template <POD_t T> std::vector<T> gather(std::span<T> local_data, size_t n_rank, size_t root = 0);
 
+  template <POD_t T> void gather_span(std::span<T> dest, std::span<const T> local_data, size_t root = 0);
 
   template <POD_t T>
   std::vector<T> gather(std::span<const T> local_data, size_t n_rank, size_t root = 0);
@@ -290,8 +293,6 @@ namespace WrapMPI
    */
   template <POD_t T>
   std::vector<T> gather_v(const std::vector<T>& local_data, size_t n_rank, size_t root = 0);
-
-
 
   //**
   // IMPL
@@ -425,16 +426,20 @@ namespace WrapMPI
   }
 
   template <POD_t T>
-  std::vector<T> _gather_unsafe(T* src_data, size_t size, size_t n_rank, size_t root) noexcept
+  std::vector<T> _gather_unsafe(T* src_data, size_t size, size_t n_rank, size_t root)
   {
     int src_size = static_cast<int>(size);
     std::vector<T> total_data(src_size * n_rank);
     T* dest_data = total_data.data();
-    auto mpi_type = get_type<T>();
+    // auto mpi_type = get_type<T>();
 
-    int gather_result = MPI_Gather(
-        src_data, src_size, mpi_type, dest_data, src_size, mpi_type, root, MPI_COMM_WORLD);
-    if (gather_result != MPI_SUCCESS)
+    // int gather_result = MPI_Gather(
+    //     src_data, src_size, mpi_type, dest_data, src_size, mpi_type, root, MPI_COMM_WORLD);
+    // if (gather_result != MPI_SUCCESS)
+    // {
+    //   throw std::runtime_error("MPI_Gather failed");
+    // }
+    if (_gather_unsafe_to_buffer(dest_data, src_data, size, root) != MPI_SUCCESS)
     {
       throw std::runtime_error("MPI_Gather failed");
     }
@@ -442,11 +447,31 @@ namespace WrapMPI
     return total_data;
   }
 
+  template <POD_t T>
+  int _gather_unsafe_to_buffer(T* const dest, T* src_data, size_t size, size_t root) noexcept
+  {
+    int src_size = static_cast<int>(size);
+    auto mpi_type = get_type<T>();
+
+    return MPI_Gather(src_data, src_size, mpi_type, dest, src_size, mpi_type, root, MPI_COMM_WORLD);
+  }
+
+  template <POD_t T> void gather_span(std::span<T> dest, std::span<const T> local_data, size_t root)
+  {
+    T* dest_data = dest.data();
+#ifndef NDEBUG
+    int size{};
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    assert(dest.size() == local_data.size() * size);
+#endif
+    _gather_unsafe_to_buffer(dest_data, const_cast<T*>(local_data.data()), local_data.size(), root);
+  }
+
   template <POD_t T> std::vector<T> gather(std::span<T> local_data, size_t n_rank, size_t root)
   {
     return _gather_unsafe(local_data.data(), local_data.size(), n_rank, root);
   }
-  //FIXME
+  // FIXME
   template <POD_t T>
   std::vector<T> gather(std::span<const T> local_data, size_t n_rank, size_t root)
   {
@@ -538,6 +563,6 @@ namespace WrapMPI
     return buf;
   }
 
-} // namespace MPI_W
+} // namespace WrapMPI
 
 #endif //__IMPL_MPI_OP_HPP__
