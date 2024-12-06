@@ -4,14 +4,15 @@
 #include "cma_read/light_2d_view.hpp"
 #include "common/common.hpp"
 #include "common/kokkos_vector.hpp"
-#include "simulation/alias.hpp"
+#include <mc/particles/particle_model.hpp>
 #include <cstdint>
 #include <simulation/pc_hydro.hpp>
 #include <span>
-
+#include <simulation/alias.hpp>
 // TODO REMOVE
 #include <Kokkos_Core.hpp>
-#include <iostream>
+#include <cstddef>
+#include <vector> 
 
 namespace Simulation
 {
@@ -57,10 +58,10 @@ namespace Simulation
 
     CmaRead::L2DView<double> getConcentrationView();
 
-    [[nodiscard]] size_t n_species() const;
+    [[nodiscard]] std::size_t n_species() const;
 
-    [[nodiscard]] size_t n_row() const;
-    [[nodiscard]] size_t n_col() const;
+    [[nodiscard]] std::size_t n_row() const;
+    [[nodiscard]] std::size_t n_col() const;
 
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
 
@@ -69,8 +70,8 @@ namespace Simulation
     void set_mass();
     void set_kernel_contribs_to_host(kernelContribution c) const;
 
-    void set_feed(uint64_t i_r, uint64_t i_c, double val);
-    void set_sink(uint64_t i_compartment, double val);
+    void set_feed(std::uint64_t i_r, std::uint64_t i_c, double val);
+    void set_sink(std::uint64_t i_compartment, double val);
 
     void setVolumes(std::span<const double> volumes, std::span<const double> inv_volumes);
 

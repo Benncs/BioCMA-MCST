@@ -1,12 +1,10 @@
 #ifndef __SIMULATION_ALIAS_HPP__
 #define __SIMULATION_ALIAS_HPP__
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Core_fwd.hpp>
 #include <common/kokkos_vector.hpp>
-#include <mc/container_state.hpp>
 #include <mc/events.hpp>
-#include <mc/prng/prng.hpp>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
+#include <cstddef>
 namespace Simulation
 {
 
@@ -30,7 +28,7 @@ namespace Simulation
 
   template <typename Space>
   using NeighborsView =
-      Kokkos::View<const size_t **,
+      Kokkos::View<const std::size_t **,
                    Kokkos::LayoutStride,
                    Space,
                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
@@ -38,7 +36,7 @@ namespace Simulation
   using NeighborsViewCompute = NeighborsView<ComputeSpace>;
 
   using LeavingFlowIndexType =
-      Kokkos::View<size_t *, Kokkos::SharedHostPinnedSpace>;
+      Kokkos::View<std::size_t *, Kokkos::SharedHostPinnedSpace>;
   using LeavingFlowType = Kokkos::View<double *, Kokkos::SharedHostPinnedSpace>;
 
 } // namespace Simulation

@@ -1,11 +1,13 @@
 #ifndef __SIMULATION_FEED_DESCRIPTOR_HPP__
 #define __SIMULATION_FEED_DESCRIPTOR_HPP__
 
+#include <cstddef>
+#include <cstdint>
 #include <optional>
 #include <variant>
 #include <vector>
 
-enum class FeedType
+enum class FeedType:std::uint8_t
 {
   Constant,
   Step,

@@ -1,18 +1,18 @@
 
-#include "core/scalar_factory.hpp"
-#include "simulation/scalar_initializer.hpp"
+
 #ifdef USE_CEAREAL
 #  include "common/execinfo.hpp"
 #  include "mc/unit.hpp"
+#  include "simulation/scalar_initializer.hpp"
 #  include "simulation/simulation.hpp"
 #  include <cereal/archives/binary.hpp>
 #  include <cereal/archives/xml.hpp>
-#  include <cereal/types/array.hpp> //MC::events use vector internally
+#  include <cereal/types/array.hpp> //MC::events use array internally
 #  include <cereal/types/memory.hpp>
 #  include <cereal/types/optional.hpp>
 #  include <cereal/types/string.hpp> //MC::List use vector internally
 #  include <cereal/types/tuple.hpp>
-#  include <cereal/types/variant.hpp> //MC::Unit use vector internally
+#  include <cereal/types/variant.hpp> //MC::Unit use variant internally
 #  include <cereal/types/vector.hpp>  //MC::List use vector internally
 #  include <cstdint>
 #  include <fstream>
@@ -23,7 +23,6 @@
 #  include <stdexcept>
 #  include <string_view>
 #  include <vector>
-
 static void write_to_file(const std::ostringstream& oss, std::string_view filename)
 {
 
@@ -131,16 +130,14 @@ namespace SerDe
 
     auto sc = gi.init_scalar();
 
-
-
     if (!sc.has_value())
     {
       std::cout << "Scalar loaded failed" << std::endl;
       return false;
     }
 
-    //FIXME
-    //Overwrite value set by initialiser 
+    // FIXME
+    // Overwrite value set by initialiser
     sc->gas_buffer = read_c_gas;
     sc->liquid_buffer = read_c_liq;
     sc->type = Simulation::ScalarInitialiserType::File;

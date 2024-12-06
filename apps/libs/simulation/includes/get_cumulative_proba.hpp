@@ -2,7 +2,10 @@
 #define __GET_CUMULATIVE_PROBABILITY_HPP__
 
 #include <simulation/pc_hydro.hpp>
-
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
+#include <cma_read/neighbors.hpp>
 namespace Simulation
 {
   using CumulativeProbaType= Eigen::Matrix<double, -1, -1, Eigen::RowMajor>;

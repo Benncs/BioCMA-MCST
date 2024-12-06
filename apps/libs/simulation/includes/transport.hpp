@@ -2,13 +2,13 @@
 #define __TRANSPORT_HPP__
 
 #include <cma_read/light_2d_view.hpp>
-#include <mc/domain.hpp>
+
 #include <Kokkos_Core.hpp>
 #include <cma_read/flowmap.hpp>
-#include <mc/particles/particles_container.hpp>
-#include <mc/unit.hpp>
+#include <cstddef>
 #include <simulation/pc_hydro.hpp>
-
+#include <span>
+#include <vector>
 namespace Simulation
 {
 
@@ -29,18 +29,14 @@ namespace Simulation
    *
    * @return The index of the next compartment for the particle.
    */
-  size_t
-  find_next_compartment(int i_compartment,
-                        double random_number,
-                        std::span<const size_t> i_neighbor,
-                        CmaRead::L2DView<const double> cumulative_probability);
+  std::size_t find_next_compartment(int i_compartment,
+                                    double random_number,
+                                    std::span<const std::size_t> i_neighbor,
+                                    CmaRead::L2DView<const double> cumulative_probability);
 
-  FlowMatrixType
-  get_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t &flows);
+  FlowMatrixType get_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t& flows);
 
-  std::vector<double> get_diag_transition(const FlowMatrixType &m_transition);
-
-  
+  std::vector<double> get_diag_transition(const FlowMatrixType& m_transition);
 
 } // namespace Simulation
 
