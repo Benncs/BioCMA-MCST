@@ -107,7 +107,7 @@ namespace
       for (size_t __macro_j = 1; __macro_j < exec.n_rank; ++__macro_j)                             \
       {                                                                                            \
         auto _ = WrapMPI::send(WrapMPI::SIGNALS::RUN, __macro_j);                                  \
-        auto _ = mpi_payload.send(__macro_j);                                                      \
+        _ = mpi_payload.send(__macro_j);                                                      \
       }                                                                                            \
     }
 #  define SEND_MPI_SIG_STOP                                                                        \

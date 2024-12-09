@@ -66,9 +66,10 @@ int main(int argc, char** argv)
     showHelp(std::cout);
     return -1;
   }
+  /*
   auto _ = UnsafeUDF::Loader::init_lib("/home/benjamin/Documents/code/cpp/BioCMA-MCST/builddir/"
                                        "debug_python/apps/udf_model/libudf_model.so");
-
+  */
   auto user_params = params_opt.value(); // Deref value is safe  TODO: with
                                          // c++23 support use monadic
 

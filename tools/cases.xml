@@ -94,7 +94,8 @@
 	   <!-- <cma_case_path>./cma_data/0d_mono/</cma_case_path> -->
       <!-- <cma_case_path>/home/benjamin/Documents/thesis/cfd-cma/cma_data/0d_gas/</cma_case_path> -->
       
-      <cma_case_path >/home/benjamin/Documents/thesis/cfd-cma/sanofi/</cma_case_path>
+    <cma_case_path recursive='true' >./cma_data/flowmap_14/</cma_case_path>
+    <!--<cma_case_path >/home/benjamin/Documents/thesis/cfd-cma/sanofi/</cma_case_path>-->
       <final_time>300</final_time>
       <numper_particle>50000</numper_particle>
       <delta_time>0.001</delta_time>
@@ -103,7 +104,7 @@
       <model_name>NN</model_name>
       <!-- <model_name>model_uptake_acetate</model_name> -->
       <!-- <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path> -->
-      <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>
+      <initialiser_path>./cma_data/n14_init.h5</initialiser_path>
    </control>
 
    <control name="bench">
