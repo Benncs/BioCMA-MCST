@@ -47,11 +47,40 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     }
 
     WrapMPI::gather_span<double>(total_contrib_data, local_contribution);
-
+    // // auto total_contrib_data = WrapMPI::gather<double>(local_contribution,exec.n_rank);
     if (exec.current_rank == 0)
     {
       simulation.reduceContribs(total_contrib_data, exec.n_rank);
     }
+
+    // constexpr size_t tag = 10;
+    // const auto local_contribution = simulation.getContributionData();
+    // #ifndef NO_MPI
+    // if (exec.current_rank != 0)
+    // {
+      
+    //   WrapMPI::send_v(local_contribution, 0,tag,false);
+    // }
+    // else
+    // {
+    //   MPI_Status status;
+    //   static std::vector<double> receive_data;
+    //   if(receive_data.empty())
+    //   {
+    //     receive_data.resize(local_contribution.size(),0.);
+        
+    //   }
+    //   for(size_t i = 1;i<exec.n_rank;++i)
+    //   {
+    //     auto _ret = WrapMPI::recv_span<double>(receive_data,i,&status,tag);
+    //     simulation.reduceContribs_per_rank(receive_data);
+    //   }
+
+    // }
+
+    // #endif 
+
+
     WrapMPI::barrier();
   }
 }
