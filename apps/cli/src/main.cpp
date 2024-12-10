@@ -24,14 +24,11 @@
 #  define INTERPRETER_INIT
 #endif
 
-
 /**
  * @brief Check if result path exist or not and ask for overriding if yes
  * @return true if override results_path
  */
 static bool override_result_path(const Core::UserControlParameters& params, const ExecInfo& exec);
-
-
 
 #ifndef NO_MPI
 #  define HANDLE_RC(__api_results__)                                                               \
@@ -66,10 +63,10 @@ int main(int argc, char** argv)
     showHelp(std::cout);
     return -1;
   }
-  /*
-  auto _ = UnsafeUDF::Loader::init_lib("/home/benjamin/Documents/code/cpp/BioCMA-MCST/builddir/"
-                                       "debug_python/apps/udf_model/libudf_model.so");
-  */
+
+  // auto _ = UnsafeUDF::Loader::init_lib("/home/benjamin/Documents/code/cpp/BioCMA-MCST/builddir/"
+  //                                      "release_gcc/apps/udf_model/libudf_model.so");
+
   auto user_params = params_opt.value(); // Deref value is safe  TODO: with
                                          // c++23 support use monadic
 
@@ -99,9 +96,12 @@ int main(int argc, char** argv)
 
   REDIRECT_SCOPE({
     HANDLE_RC(h->register_parameters(std::move(user_params)));
+    // 1:20e-3*0.5/3600., {3}
+    // 2:20e-3*0.9/3600., {10}
 
+    h->set_feed_constant_from_rvalue(20e-3 * 0.1 / 3600., {10.}, {0}, {0}, false);
     // h->set_feed_constant_from_rvalue(20e-3*0.5/3600., {10}, {0}, {0}, false);
-    // h->set_feed_constant_from_rvalue(0.1/3600., {10}, {0}, {1}, true);
+    h->set_feed_constant_from_rvalue(0.01 / 3600., {0.3}, {0}, {1}, true);
     HANDLE_RC(h->apply(serde));
     HANDLE_RC(h->exec());
   })

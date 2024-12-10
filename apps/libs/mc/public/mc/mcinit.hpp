@@ -18,7 +18,7 @@ namespace MC
 
   constexpr bool uniform_init = false;
   // constexpr double initial_mass_cell = 3.14 * (0.8e-6) * (0.8e-6) / 4. * 0.9e-6 / 2. * 1000;
-  constexpr double initial_mass_cell = 3.14 * (0.8e-6) * (0.8e-6) / 4. * 0.9e-6 / 2. * 1000;
+  constexpr double initial_mass_cell = 3.14 * (0.8e-6) * (0.8e-6) / 4. * (4e-6 *0.9) * 1000;
   namespace
   {
 

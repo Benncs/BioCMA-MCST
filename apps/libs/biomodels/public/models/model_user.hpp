@@ -6,7 +6,7 @@
 namespace Models
 {
   struct UserImpl;
-  class User
+  struct User
   {
   public:
 
@@ -23,7 +23,7 @@ namespace Models
                                 const LocalConcentrationView& concentration,
                                 MC::KPRNG _rng);
     KOKKOS_FUNCTION User division(MC::ParticleDataHolder& p, MC::KPRNG k) noexcept;
-    KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder& p, ContributionView contrib) noexcept;
+    KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder& p, const ContributionView& contrib) noexcept;
 
     model_properties_detail_t get_properties() noexcept;
     [[nodiscard]] KOKKOS_FUNCTION double mass() const noexcept;

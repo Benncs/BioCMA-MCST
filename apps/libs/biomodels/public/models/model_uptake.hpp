@@ -24,7 +24,7 @@ namespace Models
     KOKKOS_FUNCTION Uptake division(MC::ParticleDataHolder &p,MC::KPRNG);
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
-                                      ContributionView contri);
+                                      const ContributionView& contri);
 
     [[nodiscard]]  KOKKOS_FUNCTION  double mass() const noexcept;
 

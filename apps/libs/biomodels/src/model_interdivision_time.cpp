@@ -74,7 +74,7 @@ namespace Models
 
   KOKKOS_FUNCTION void
   InterdivisionTime::contribution(MC::ParticleDataHolder &p,
-                                  ContributionView contribution)
+                                  const ContributionView& contribution)
   {
     // contribution(0, p.current_container) -= contrib * p.weight;
 

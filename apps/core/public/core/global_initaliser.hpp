@@ -1,6 +1,7 @@
 #ifndef __CORE_GLOBAL_INITIALLISER_HPP__
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
+#include "core/scalar_factory.hpp"
 #include "core/simulation_parameters.hpp"
 #include <array>
 #include <cma_read/flow_iterator.hpp>
@@ -83,7 +84,8 @@ namespace Core
      *
      * @return An optional unique pointer to the initialized simulation unit.
      */
-    OptionalPtr<Simulation::SimulationUnit> init_simulation();
+    OptionalPtr<Simulation::SimulationUnit> init_simulation(std::optional<Core::ScalarFactory::ScalarVariant> variant=std::nullopt);
+
 
     /**
      * @brief Initializes a simulation unit with specified parameters.
@@ -103,6 +105,8 @@ namespace Core
      * @return An optional scalar initializer.
      */
     std::optional<Simulation::ScalarInitializer> init_scalar();
+
+    std::optional<Simulation::ScalarInitializer> init_scalar(Core::ScalarFactory::ScalarVariant&& variant);
 
     /**
      * @brief Initializes a simulation feed.

@@ -10,7 +10,7 @@ extern "C"
   // Forward declaration
   namespace Api
   {
-    class SimulationInstance;
+    struct SimulationInstance;
   } // namespace Api
 #endif
 
@@ -69,6 +69,7 @@ typedef struct Opaque*
   int register_serde(Handle handle, const char* c);
   int register_model_name(Handle handle, const char* c);
 
+  int register_initializer_path(Handle handle, const char* c);
   /*Parameters*/
   // NOLINTBEGIN
 

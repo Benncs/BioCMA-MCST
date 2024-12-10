@@ -16,10 +16,10 @@ __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
 DEFAULT_TYPE = "debug"
 _MPI_ROOT_FLAG = ""  # "--allow-run-as-root"
-MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 20 --bind-to core"
+MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 4 --bind-to core"
 # MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 8 --use-hwthread-cpus"
 OMP_NUM_THREADS = "1"
-COMPILER_NAME = "gcc"  # "gcc"
+COMPILER_NAME = "clang"  # "gcc"
 
 
 def get_executable(type: str, mpi: bool = True):
@@ -107,7 +107,7 @@ def main():
         + "-force 1 "
     )
     if cli_args.serde is True:
-        command += "-serde " + "./results/debug_4/debug_4_serde_ "
+        command += "-serde " + "./results/cstr/cstr_serde_ "
 
         # if(cli_args.use_mpi):
         #     input("confirm force?")
@@ -116,7 +116,7 @@ def main():
         arg = " --args " + command
         print(arg)
         return
-    exec(command, cli_args.n_threads, do_kokkos_measure=True)
+    exec(command, cli_args.n_threads, do_kokkos_measure=False)
 
 
 if __name__ == "__main__":

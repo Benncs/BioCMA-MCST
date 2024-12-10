@@ -1,6 +1,7 @@
 #ifndef __BIOMC_API_HPP__
 #define __BIOMC_API_HPP__
 
+#include "core/scalar_factory.hpp"
 #include <core/case_data.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstdint>
@@ -29,8 +30,10 @@ namespace Api
    *
    * The class is non-copyable but movable to ensure unique ownership and efficient resource
    * management.
+   * Note: Define this struct as struct and not class to be coherent with the C opaque type defined
+   * as typedef struct This change absolutely nothing to the code behaviour it's just a name
    */
-  class SimulationInstance
+  struct SimulationInstance
   {
   public:
     /**
@@ -122,6 +125,8 @@ namespace Api
      */
     bool register_result_path(std::string_view path);
 
+    ApiResult register_initial_condition(Core::ScalarFactory::ScalarVariant&& type);
+    ApiResult register_initialiser_file_path(std::string_view path);
     /**
      * @brief Register a path for CMA data.
      *
@@ -163,13 +168,11 @@ namespace Api
                            std::span<std::size_t> _species,
                            bool gas = false);
 
-
-
     bool set_feed_constant_from_rvalue(double _f,
-                           std::vector<double>&& _target,
-                           std::vector<std::size_t>&& _position,
-                           std::vector<std::size_t>&& _species,
-                           bool gas = false);
+                                       std::vector<double>&& _target,
+                                       std::vector<std::size_t>&& _position,
+                                       std::vector<std::size_t>&& _species,
+                                       bool gas = false);
 
     /**
      * @brief Retrieve the simulation instance's unique identifier.
@@ -201,6 +204,7 @@ namespace Api
                        uint64_t id,
                        uint32_t thread_per_process);
 
+    std::optional<Core::ScalarFactory::ScalarVariant> scalar_initializer_variant = std::nullopt;
     Core::CaseData _data;               ///< Case data for the simulation.
     Core::UserControlParameters params; ///< User-defined control parameters.
     bool loaded = false;                ///< Flag indicating if the instance is loaded.

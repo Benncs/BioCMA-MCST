@@ -56,11 +56,11 @@ namespace Models
 
     KOKKOS_FUNCTION UptakeAcetate division(MC::ParticleDataHolder &p, MC::KPRNG _rng);
 
-    KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p, ContributionView contribution);
+    KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p, const ContributionView& contribution);
 
     [[nodiscard]] KOKKOS_FUNCTION double mass() const noexcept;
 
-    model_properties_detail_t get_properties();
+    KOKKOS_FUNCTION model_properties_detail_t get_properties();
 
     template <class Archive> void serialize(Archive &ar)
     {

@@ -34,7 +34,7 @@ public:
     return {};
   }
 
-  void contribution(MC::ParticleDataHolder &p, ContributionView contrib)
+  void contribution(MC::ParticleDataHolder &p, const ContributionView& contrib)
   {
   }
 
@@ -73,7 +73,7 @@ public:
     return {};
   }
 
-  void contribution(MC::ParticleDataHolder &p, ContributionView contrib)
+  void contribution(MC::ParticleDataHolder &p, const ContributionView& contrib)
   {
   }
 

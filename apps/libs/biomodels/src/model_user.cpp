@@ -46,7 +46,7 @@ namespace Models
     return {};
   }
   KOKKOS_FUNCTION void User::contribution(MC::ParticleDataHolder& p,
-                                          ContributionView contrib) noexcept
+                                          const ContributionView& contrib) noexcept
   {
     CHECK_PIMP;
     return UnsafeUDF::Loader::contribution_udf(*pimpl, p, contrib);

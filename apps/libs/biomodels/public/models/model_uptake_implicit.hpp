@@ -4,7 +4,7 @@
 #include "mc/prng/prng.hpp"
 #include <Kokkos_Core.hpp>
 #include <mc/particles/particle_model.hpp>
-
+#include <mc/particles/data_holder.hpp>
 namespace Models
 {
   struct UptakeImplicit
@@ -26,7 +26,7 @@ namespace Models
     KOKKOS_FUNCTION UptakeImplicit division(MC::ParticleDataHolder &p,MC::KPRNG);
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
-                                      ContributionView contri);
+                                      const ContributionView& contri);
 
     [[nodiscard]]  KOKKOS_FUNCTION  double mass() const noexcept;
 

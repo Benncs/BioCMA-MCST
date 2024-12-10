@@ -83,8 +83,6 @@ namespace Simulation
 
     void performStep(double d_t, const FlowMatrixType &m_transition, const Eigen::MatrixXd &transfer_gas_liquid);
 
-   
-
   private:
     Eigen::MatrixXd total_mass;
 

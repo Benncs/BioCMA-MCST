@@ -1,6 +1,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <dataexporter/main_exporter.hpp>
+#include <numeric>
 #include <optional>
 #include <utility>
 #include <string> 

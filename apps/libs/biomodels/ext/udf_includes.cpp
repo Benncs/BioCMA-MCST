@@ -15,7 +15,7 @@ namespace UnsafeUDF
 
   void (*Loader::contribution_udf)(Models::UserImpl&,
                                    MC::ParticleDataHolder& p,
-                                   ContributionView& contrib) = nullptr;
+                                   const ContributionView& contrib) = nullptr;
 
   Models::UserImpl* (*Loader::division_udf)(Models::UserImpl&, MC::ParticleDataHolder& p, MC::KPRNG) = nullptr;
 

@@ -65,7 +65,7 @@ namespace Models
   }
 
   KOKKOS_FUNCTION void Monod::contribution(MC::ParticleDataHolder &p,
-                                           ContributionView contribution) noexcept
+                                           const ContributionView& contribution) noexcept
   {
     // contribution(0, p.current_container) -= contrib * p.weight;
     auto access_contribs = contribution.access();

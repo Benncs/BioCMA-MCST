@@ -2,6 +2,7 @@
 #include "common/common.hpp"
 #include "dataexporter/data_exporter.hpp"
 #include <dataexporter/partial_exporter.hpp>
+#include <optional>
 #include <utility>
 
 namespace Core
@@ -23,7 +24,7 @@ namespace Core
         .max_dims = {n_expected_export, n_compartments},
         .chunk_dims = std::vector<unsigned long long>({1, n_compartments}),
         .compression = true,
-        .is_integer = false};
+        .is_integer = true};
 
     this->prepare_matrix(particle_repartition);
 
@@ -65,9 +66,9 @@ namespace Core
 
     for (size_t i_name = 0; i_name < names.size(); ++i_name)
     {
-      auto* ptr_particles = Kokkos::subview(particle_values, i_name, Kokkos::ALL).data();
+      const auto* ptr_particles = Kokkos::subview(particle_values, i_name, Kokkos::ALL).data();
 
-      auto* ptr_spatial = Kokkos::subview(spatial_values, i_name, Kokkos::ALL).data();
+      const auto* ptr_spatial = Kokkos::subview(spatial_values, i_name, Kokkos::ALL).data();
 
       this->write_matrix(ds_name + names[i_name], {ptr_particles, n_particles}, false);
       this->write_matrix(
