@@ -1,10 +1,15 @@
-#include <common/kokkos_vector.hpp>
 #include <Kokkos_Atomic.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
+#include <common/kokkos_vector.hpp>
+#include <cstddef>
 #include <cstdint>
 #include <optional>
 #include <simulation/probe.hpp>
+
+
+/* Old Implementation
+
 
 #define __condition(__MACRO__)                                                 \
   if (this->n_p == 0 || this->n_t == 0)                                        \
@@ -18,7 +23,8 @@ namespace Simulation
 {
 
   Probes::Probes(size_t initial_n_particle, size_t n_t_flush)
-      : n_p(initial_n_particle), n_t(n_t_flush), n_s(0), labels("labels", n_s),buffer("buffer"),internal_counter("i_c")
+      : n_p(initial_n_particle), n_t(n_t_flush), n_s(0), labels("labels",
+n_s),buffer("buffer"),internal_counter("i_c")
   {
     this->probes =
         Kokkos::View<double ***, ComputeSpace>("probes", n_p, n_t, n_s);
@@ -28,7 +34,8 @@ namespace Simulation
                  size_t n_t_flush,
                  std::span<std::string> _labels)
       : n_p(initial_n_particle), n_t(n_t_flush), n_s(_labels.size()),
-        probes("probes", n_p, n_t, n_s), labels("labels", n_s),buffer("buffer"),internal_counter("i_c")
+        probes("probes", n_p, n_t, n_s), labels("labels",
+n_s),buffer("buffer"),internal_counter("i_c")
   {
 
     for (size_t i = 0; i < n_s; ++i)
@@ -68,7 +75,8 @@ namespace Simulation
                  size_t n_t_flush,
                  std::initializer_list<std::string> _labels)
       : n_p(initial_n_particle), n_t(n_t_flush), n_s(_labels.size()),
-        probes("probes", n_p, n_t, n_s), labels("labels", n_s), buffer("buffer"),internal_counter("i_c")
+        probes("probes", n_p, n_t, n_s), labels("labels", n_s),
+buffer("buffer"),internal_counter("i_c")
   {
 
     size_t i = 0;
@@ -132,3 +140,5 @@ namespace Simulation
     return {this->labels.data(), n_s};
   }
 } // namespace Simulation
+
+*/

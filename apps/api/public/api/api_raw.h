@@ -10,7 +10,7 @@ extern "C"
   // Forward declaration
   namespace Api
   {
-    class SimulationInstance;
+    struct SimulationInstance;
   } // namespace Api
 #endif
 

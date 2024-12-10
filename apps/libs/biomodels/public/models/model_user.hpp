@@ -6,7 +6,7 @@
 namespace Models
 {
   struct UserImpl;
-  class User
+  struct User
   {
   public:
 

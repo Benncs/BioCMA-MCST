@@ -10,11 +10,13 @@
 
 struct ExecInfo
 {
+  uint64_t run_id;
   uint32_t n_rank;
   uint32_t current_rank;
   uint32_t thread_per_process;
   bool verbose;
-  uint64_t run_id;
+  //Compiler typically adds 3 bytes padding
+ 
 #if defined(__cpp_lib_hardware_interference_size)
   // default cacheline size from runtime
   static constexpr size_t cache_line_size = std::hardware_destructive_interference_size;

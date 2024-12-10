@@ -13,11 +13,9 @@
 namespace WrapMPI
 {
   void barrier() {};
-  template <typename T> std::vector<T> gather(auto s, auto n, int i = 0) {};
+  template <typename T> std::vector<T> gather(auto, auto, int = 0) {};
 
-  template <typename T> void gather_span(std::span<T> dest, std::span<const T> local_data, size_t root=0)
-  {
-  };
+  template <typename T> void gather_span(std::span<T>, std::span<const T>, size_t = 0){};
 
   void broadcast_span(auto data, auto n) {};
 
@@ -43,7 +41,7 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     static std::vector<double> total_contrib_data;
     if (total_contrib_data.empty())
     {
-      total_contrib_data.resize(local_contribution.size() * exec.n_rank,0);
+      total_contrib_data.resize(local_contribution.size() * exec.n_rank, 0);
     }
 
     WrapMPI::gather_span<double>(total_contrib_data, local_contribution);
@@ -58,7 +56,7 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     // #ifndef NO_MPI
     // if (exec.current_rank != 0)
     // {
-      
+
     //   WrapMPI::send_v(local_contribution, 0,tag,false);
     // }
     // else
@@ -68,7 +66,7 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     //   if(receive_data.empty())
     //   {
     //     receive_data.resize(local_contribution.size(),0.);
-        
+
     //   }
     //   for(size_t i = 1;i<exec.n_rank;++i)
     //   {
@@ -78,8 +76,7 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
 
     // }
 
-    // #endif 
-
+    // #endif
 
     WrapMPI::barrier();
   }

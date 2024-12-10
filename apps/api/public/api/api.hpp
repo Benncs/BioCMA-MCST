@@ -29,8 +29,10 @@ namespace Api
    *
    * The class is non-copyable but movable to ensure unique ownership and efficient resource
    * management.
+   * Note: Define this struct as struct and not class to be coherent with the C opaque type defined as typedef struct
+   * This change absolutely nothing to the code behaviour it's just a name 
    */
-  class SimulationInstance
+  struct SimulationInstance
   {
   public:
     /**

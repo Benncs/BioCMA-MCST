@@ -29,43 +29,17 @@ namespace
 namespace PostProcessing
 {
 
-  // void save_initial(Simulation::SimulationUnit &simulation,
-  //                   Core::MainExporter &exporter)
-  // {
-  //   exporter.update_fields(0, std::span<double> concentration_liquid,
-  //   std::span<const double> liquid_volume, std::optional<std::span<const
-  //   double>> concentration_gas, std::optional<std::span<const double>>
-  //   volume_gas)
-  // }
-
   void save_probes(Simulation::SimulationUnit& simulation, Core::PartialExporter& pde)
   {
     auto& probes = simulation.get_probes();
 
+    //TODO: Find out if comment is necessary or not 
     // if (probes.need_export())
     {
-      const double* const probe_ptr = probes.raw_get();
-      pde.write_probe({probe_ptr, Simulation::Probes::buffer_size});
+      pde.write_probe(probes.get());
       probes.clear();
     }
   }
-
-  // void save_particle_sate(Simulation::SimulationUnit& simulation,
-  //                         Core::PartialExporter& pde,
-  //                         std::string suffix,
-  //                         bool clean)
-  // {
-  //   std::cout << "EXPORTING PARTICLE DATA" << std::endl;
-
-  //   Kokkos::View<std::string*, HostSpace> names;
-  //   Kokkos::View<double**, HostSpace> particle_values;
-  //   Kokkos::View<double**, HostSpace> spatial_values;
-
-  //   get_particle_properties_opti(names, particle_values, spatial_values, simulation.mc_unit, clean);
-  //   std::string ds_name = "biological_model/" + suffix + "/";
-  //   pde.write_particle_data(
-  //       {names.data(), names.extent(0)}, particle_values, spatial_values, ds_name);
-  // }
 
   // FIXME
   void save_final_particle_state(Simulation::SimulationUnit& simulation, Core::PartialExporter& pde)

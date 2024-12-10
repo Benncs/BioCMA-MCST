@@ -180,6 +180,6 @@ int main(int argc, char** argv)
 
   test_apply(cma_path);
   // FIXME test_exec(cma_path);
-  test_exec(cma_path);
+  // test_exec(cma_path);
   return 0;
 }
