@@ -33,8 +33,13 @@ endif
 
 compiler.has_argument('-fopenmp')
 
-## Define main shared variables
+if(compiler.get_id()=='clang')
+message('using clang')
+add_global_arguments(['-stdlib=libc++'], language: 'cpp')
+add_global_link_arguments(['-stdlib=libc++', '-lc++','-lc++abi'], language: 'cpp')
+endif 
 
+## Define main shared variables
 outdir = meson.current_build_dir()
 root = meson.project_source_root()
 project_name = meson.project_name()
@@ -43,9 +48,17 @@ cpp = meson.get_compiler('cpp')
 global_install_dir = get_option('prefix') + '/' + get_option('libdir')
 includes_install_dir = ('include/' + project_name)
 
-cpp_args = [arch_specific_args, '-DENABLE_KOKKOS_PROFILING']
+
+use_kokkos_tools=true
+
+# cpp_args = [arch_specific_args,'-stdlib=libc++']
+cpp_args = [arch_specific_args]
+if(use_kokkos_tools)
+cpp_args=[cpp_args,'-DENABLE_KOKKOS_PROFILING']
+endif
 
 add_project_arguments(cpp_args, language: 'cpp')
+
 
 ## Get buildtype specific options
 
@@ -83,28 +96,29 @@ blas = dependency('blas', required: false) # Eigen can work without BLAS
 
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
-__cmake_kokkos_dep__ = dependency(
-  'Kokkos',
-  method: 'cmake',
-  required: true,
-  components: ['kokkos'],
-  modules: ['Kokkos::kokkos'],
-)
 
-kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE']
 
-if use_cuda
-  kokkos_compile_arg = [
-    kokkos_compile_arg,
-    '-extended-lambda',
-    '-Wext-lambda-captures-this',
-    '-arch=native',
-  ]
-endif
+cmake = import('cmake', required: true)
+kokkos_option = cmake.subproject_options()
+kokkos_option.add_cmake_defines({'CMAKE_CXX_STANDARD': '20'})
+kokkos_option.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
+kokkos_option.add_cmake_defines({'Kokkos_ENABLE_OPENMP':'ON'})
+kokkos_option.add_cmake_defines({'Kokkos_ENABLE_HWLOC':'ON'})
+kokkos_option.add_cmake_defines({'CMAKE_POSITION_INDEPENDENT_CODE':'ON'})
+
+sub_kokkos=cmake.subproject(
+    'kokkos',
+    required: true,
+    options:kokkos_option
+  ) 
 
 kokkos = declare_dependency(
-  dependencies: [__cmake_kokkos_dep__, omp, hwloc, thread_dep],
-  compile_args: kokkos_compile_arg,
+  dependencies: [sub_kokkos.dependency('kokkos'),
+  sub_kokkos.dependency('kokkoscore'), 
+  sub_kokkos.dependency('kokkossimd'),
+  sub_kokkos.dependency('kokkoscontainers'),
+  sub_kokkos.dependency('kokkosalgorithms')
+  ,omp, hwloc, thread_dep]
 )
 
 dynlib_dep = dependency('dynlib-1.0', required: true)
@@ -114,7 +128,6 @@ highfive_found = false
 
 
 ceral_found = false
-cmake = import('cmake', required: false)
 if cmake.found()
   highfive_cmake_options = cmake.subproject_options()
   highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_COMPILER': 'clang++-18'})

@@ -20,8 +20,7 @@ common_lib = static_library(
 )
 
 common_dependecy = declare_dependency(
-   sources: common_sources,
-   dependencies:[kokkos],
+   dependencies:[],
    include_directories: public_includes,
    link_with: common_lib,
    link_args: [flto_flag]

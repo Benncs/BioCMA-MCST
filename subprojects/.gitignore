@@ -1,3 +1,5 @@
 highfive/
 cereal/
 dynlib/
+kokkos-*
+packagecache

@@ -1,0 +1,7 @@
+[wrap-file]
+directory = kokkos-4.4.00
+
+source_url = https://github.com/kokkos/kokkos/releases/download/4.4.00/kokkos-4.4.00.tar.gz
+source_filename = kokkos-4.4.00.tar.gz
+source_hash =0b46372f38c48aa088411ac1b7c173a5c90f0fdb69ab40271827688fc134f58b
+method = cmake
