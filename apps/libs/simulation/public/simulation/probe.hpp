@@ -46,8 +46,6 @@ namespace Simulation
 
   template <std::size_t buffer_size> bool Probes<buffer_size>::set(double val) const
   {
-    // const uint64_t off = 1;
-    // auto i = Kokkos::atomic_fetch_add(&internal_counter(), off);
     const auto i = Kokkos::atomic_fetch_inc(&internal_counter());
     if (i < buffer_size)
     {

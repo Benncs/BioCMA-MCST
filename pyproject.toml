@@ -9,7 +9,7 @@ setup = ['-Dinstall_post_processing=true']
 
 [project]
 name = 'biomc_post_processing'
-version = '0.2.2'
+version = '0.3.0'
 description = 'Utils for post-processing Monte-Carlo simulation data'
 readme = 'README.md'
 requires-python = '>=3.10'

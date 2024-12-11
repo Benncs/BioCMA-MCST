@@ -51,7 +51,7 @@ Eigen::MatrixXd gas_liquid_mass_transfer(Eigen::ArrayXXd &res_kla,
     // // //LAZY
 
   #define kl_array (0.3 * (energy_dissipation_array * kinematic_viscosity).pow(0.25) * std::pow(schmidtnumber, -0.5))
-
+ 
   // Calculate gas fraction
   #define gas_fraction_array (gas_array / (liq_array + gas_array))
 

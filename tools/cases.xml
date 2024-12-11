@@ -12,23 +12,34 @@
    </control>
 
    <control name="0d">
-      <cma_case_path>./cma_data/0d/</cma_case_path>
+      <cma_case_path>./cma_data/0d_mono/</cma_case_path>
       <final_time>250000</final_time>
       <numper_particle>10000</numper_particle>
-      <delta_time>0.5</delta_time>
-      <results_file_name>uptake_a22</results_file_name>
-      <number_exported_result>200</number_exported_result>
+      <delta_time>0.2</delta_time>
+      <results_file_name>monod_1</results_file_name>
+      <number_exported_result>50</number_exported_result>
       <model_name>model_uptake</model_name>
       <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
    </control>
 
+   <!-- <control name="0d_4s">
+      <cma_case_path>/home/benjamin/Documents/thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
+      <final_time>120000</final_time>
+      <numper_particle>25000</numper_particle>
+      <delta_time>0.5</delta_time>
+      <results_file_name>uptake_6</results_file_name>
+      <number_exported_result>100</number_exported_result>
+      <model_name>model_uptake_acetate</model_name>
+      <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
+   </control> -->
+
    <control name="0d_4s">
-      <cma_case_path>./cma_data/0d_gas/</cma_case_path>
-      <final_time>180000</final_time>
+      <cma_case_path>/home/benjamin/Documents/thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
+      <final_time>20000</final_time>
       <numper_particle>10000</numper_particle>
       <delta_time>0.5</delta_time>
-      <results_file_name>uptake_a</results_file_name>
-      <number_exported_result>200</number_exported_result>
+      <results_file_name>uptake_29</results_file_name>
+      <number_exported_result>100</number_exported_result>
       <model_name>model_uptake_acetate</model_name>
       <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
    </control>
@@ -91,19 +102,19 @@
    </control>
 
    <control name="debug">
-		   <!--	    <cma_case_path>./cma_data/0d/</cma_case_path> -->
+		   	    <cma_case_path>./cma_data/0d_mono/</cma_case_path>
       <!-- <cma_case_path>/home/benjamin/Documents/thesis/cfd-cma/cma_data/0d_gas/</cma_case_path> -->
       
-      <cma_case_path recursive='true' >./cma_data/flowmap_14/</cma_case_path> 
+      <!-- <cma_case_path recursive='true' >./cma_data/flowmap_14/</cma_case_path>  -->
     <!--<cma_case_path >/home/benjamin/Documents/thesis/cfd-cma/sanofi/</cma_case_path>-->
-      <final_time>300</final_time>
-      <numper_particle>500000</numper_particle>
+      <final_time>30</final_time>
+      <numper_particle>50000</numper_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>bench</results_file_name>
       <number_exported_result>10</number_exported_result>
-      <model_name>odel_monod</model_name>
+      <model_name>model_user</model_name>
       <!-- <model_name>model_uptake_acetate</model_name> -->
-      <!-- <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path> -->
+      <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
     <!-- <initialiser_path>./cma_data/n14_init.h5</initialiser_path> -->
    </control>
 
