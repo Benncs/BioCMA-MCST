@@ -146,9 +146,9 @@ namespace Models
     const double phi_mode_e = min_var(y1_e * nu_residual, phi_a_in_mol, y2_e * phi_o2_residual);
 
     rates.glucose = -phi_s_in;
-    rates.oxygen = -current_mass*MolarMass::dioxygen *
+    rates.oxygen = -current_mass*MolarMass::dioxygen *(
                    (Yields::Y_EG * Yields::Y_OG / (Yields::Y_EG + Yields::Yo_EG) * phi_mode_b +
-                    Yields::Y_EA * Yields::Y_OA / (Yields::Y_EA + Yields::Yo_EA) * phi_mode_e + phi_mode_d);
+                    Yields::Y_EA * Yields::Y_OA / (Yields::Y_EA + Yields::Yo_EA) * phi_mode_e + phi_mode_d));
 
     rates.acetate = current_mass*
                     (Yields::Y_AG * Yields::Y_EG / (Yields::Y_EG + Yields::Yf_EG) * phi_mode_c + Yields::Y_AG * phi_mode_d - phi_mode_e) *
@@ -220,7 +220,6 @@ namespace Models
   KOKKOS_FUNCTION void UptakeAcetate::contribution(MC::ParticleDataHolder &p, ContributionView contribution)
   {
     auto access_contribs = contribution.access();
-
     access_contribs(_INDICES(GLUCOSE), p.current_container) += rates.glucose * p.weight;
     access_contribs(_INDICES(Ac), p.current_container) += rates.acetate * p.weight;
     access_contribs(_INDICES(O2), p.current_container) += rates.oxygen * p.weight;
