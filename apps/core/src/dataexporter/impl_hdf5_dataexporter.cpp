@@ -157,15 +157,15 @@ namespace Core
 
     HighFive::DataSpace dataspace(description.dims, description.max_dims);
     HighFive::DataSetCreateProps props;
-    props.add(HighFive::Shuffle());
+    
     if (description.chunk_dims.has_value())
     {
+      props.add(HighFive::Shuffle());
       props.add(HighFive::Chunking(*description.chunk_dims));
     }
 
     if (description.compression)
     {
-
       props.add(HighFive::Deflate(hdf5_max_compression));
     }
 
@@ -238,7 +238,7 @@ namespace Core
     if (values.size() > 1)
     {
       // If error occurs, try to debug with fixed chunk of 1
-      ds_props.add(HighFive::Chunking(get_chunk_size(values.size())));
+      ds_props.add(HighFive::Chunking(std::min(get_chunk_size(values.size()),values.size())));
       ds_props.add(HighFive::Shuffle());
     }
     const auto data_space = HighFive::DataSpace(values.size());

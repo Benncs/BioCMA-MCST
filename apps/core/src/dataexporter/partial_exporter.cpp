@@ -2,6 +2,7 @@
 #include "common/common.hpp"
 #include "dataexporter/data_exporter.hpp"
 #include <dataexporter/partial_exporter.hpp>
+#include <optional>
 #include <utility>
 
 namespace Core
@@ -23,7 +24,7 @@ namespace Core
         .max_dims = {n_expected_export, n_compartments},
         .chunk_dims = std::vector<unsigned long long>({1, n_compartments}),
         .compression = true,
-        .is_integer = false};
+        .is_integer = true};
 
     this->prepare_matrix(particle_repartition);
 
