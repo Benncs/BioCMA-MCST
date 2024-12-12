@@ -65,7 +65,7 @@ namespace
   constexpr double nu_max = f_num_max();
 
   constexpr double phi_pts_max = f_phi_pts_max(nu_max);
-  constexpr double phi_o2_max = 15e-6 / 3600 / 1000; // mol0/kgx/s
+  constexpr double phi_o2_max = 15.6 / 3600 ; // mol0/gx/s
   constexpr double phi_a_max = phi_pts_max / 3.;     // mol0/kgx/s
   constexpr double k_pts = 1e-3;
   constexpr double kppermease = 1e-2;
@@ -177,15 +177,14 @@ namespace Models
     const double s = Kokkos::max(0., concentration(_INDICES(GLUCOSE)));
     const double phi_s_pts = phi_pts(a_pts, s);
     const double gamma_PTS_S = phi_s_pts / phi_pts_max;
-    const double micro_mixing = 0.3;
+    // const double micro_mixing = 0.3;
 
     phi_uptakes.glucose = phi_s_pts + phi_permease(n_permease, a_permease, s);
     phi_uptakes.acetate = concentration(_INDICES(Ac)) > 1e-4 ? phi_a_max : 0.;
     // 1 / micro_mixing * concentration(_INDICES(Ac)) / 1000.;
 
-    phi_uptakes.oxygen = concentration(_INDICES(O2)) > 4e-3
-                             ? phi_o2_max*1000
-                             : 0.; // 1 / micro_mixing * concentration(_INDICES(O2)) / 1000.;
+    phi_uptakes.oxygen =  phi_o2_max*concentration(_INDICES(O2))/8.5e-3;
+                             ; // 1 / micro_mixing * concentration(_INDICES(O2)) / 1000.;
     return gamma_PTS_S;
   }
 
@@ -241,12 +240,12 @@ namespace Models
   }
 
   KOKKOS_FUNCTION void UptakeAcetate::contribution(MC::ParticleDataHolder& p,
-                                                   ContributionView contribution)
+                                                   const ContributionView& contribution)
   {
     auto access_contribs = contribution.access();
     access_contribs(_INDICES(GLUCOSE), p.current_container) += rates.glucose * p.weight;
-    // access_contribs(_INDICES(Ac), p.current_container) += rates.acetate * p.weight;
-    // access_contribs(_INDICES(O2), p.current_container) += rates.oxygen * p.weight;
+    access_contribs(_INDICES(Ac), p.current_container) += rates.acetate * p.weight;
+    access_contribs(_INDICES(O2), p.current_container) += rates.oxygen * p.weight;
     access_contribs(_INDICES(CO2), p.current_container) += rates.carbon_dioxide * p.weight;
   }
 
@@ -255,7 +254,7 @@ namespace Models
     return factor * lenght;
   }
 
-  model_properties_detail_t UptakeAcetate::get_properties()
+  KOKKOS_FUNCTION model_properties_detail_t UptakeAcetate::get_properties()
   {
 
     return {{"lenght", lenght},

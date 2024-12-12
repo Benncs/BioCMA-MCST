@@ -26,7 +26,7 @@ namespace Models
     KOKKOS_FUNCTION InterdivisionTime division(MC::ParticleDataHolder &p,MC::KPRNG);
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p,
-                                      ContributionView contri);
+                                      const ContributionView& contri);
 
                                       KOKKOS_INLINE_FUNCTION double mass()const{return 1.;}
 

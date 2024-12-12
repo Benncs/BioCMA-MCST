@@ -87,7 +87,7 @@ concept ParticleModel = HasMass<T>&&requires(T model,
                                  MC::ParticleDataHolder &p,
                                  double d_t,
                                  const LocalConcentrationView &concentration,
-                                 ContributionView contrib,
+                                 const ContributionView &contrib,
                                  MC::KPRNG rng) {
   { model.init(p, rng) } -> std::same_as<void>;
   { model.update(d_t, p, concentration, rng) } -> std::same_as<void>;
@@ -124,7 +124,7 @@ public:
   }
 
   KOKKOS_INLINE_FUNCTION void contribution(MC::ParticleDataHolder &p,
-                                           ContributionView contrib)noexcept
+                                           const ContributionView& contrib)noexcept
   {
   }
 

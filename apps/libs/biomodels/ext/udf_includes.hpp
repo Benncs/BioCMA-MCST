@@ -39,7 +39,7 @@ namespace UnsafeUDF
 
     static void (*contribution_udf)(Models::UserImpl&,
                                     MC::ParticleDataHolder& p,
-                                    ContributionView& contrib);
+                                    const ContributionView& contrib);
 
     static Models::UserImpl* (*division_udf)(Models::UserImpl&,
                                              MC::ParticleDataHolder& p,

@@ -135,7 +135,7 @@ namespace Models
   }
 
   KOKKOS_FUNCTION void Uptake::contribution(MC::ParticleDataHolder &p,
-                                            ContributionView contribution)
+                                            const ContributionView& contribution)
   {
 
     auto access_contribs = contribution.access();
