@@ -46,8 +46,8 @@ namespace
     static constexpr double Ad = 5.;
   };
 
-  constexpr double l_1 = 2.8e-6;
-  constexpr double l_0 = 0.9e-6;
+  constexpr double l_1 = 5e-6;
+  constexpr double l_0 = 4e-6;
   constexpr double d_m = 0.8e-6;
   constexpr double factor = 1000. * 3.14 * d_m * d_m / 4.;
   static_assert(l_0 < l_1, "Length");
@@ -72,10 +72,10 @@ namespace
   constexpr double phi_permease_specific = phi_pts_max / 40.;
 
   constexpr double psi_o_meta = 20e-3 / 3600 * 32e-3; // 20mmmol O2 /h;
-  constexpr double tau_metabolism = 2 * 3600;
+  constexpr double tau_metabolism =  3600;
 
   constexpr double NPermease_max = 200;
-  constexpr double NPermease_init = 0.;
+  constexpr double NPermease_init = 1.;
 
   KOKKOS_INLINE_FUNCTION double phi_pts(double a_pts, double S)
   {
@@ -104,13 +104,14 @@ namespace Models
 
     // this->lenght = Kokkos::max(
     //     minimal_length, Kokkos::max(generator.normal(l_0/2, l_0 / 3.), 0.));
-    this->lenght = l_0 * 0.5;
+    this->lenght = l_0 * 0.9;
+
     this->a_permease = Kokkos::max(generator.normal(1e-3, 1e-4), 0.);
 
     this->a_pts = Kokkos::min(1., Kokkos::max(generator.normal(0.8, 0.1), 0.));
     this->n_permease = Kokkos::max(generator.normal(NPermease_init / 2., NPermease_init / 5.), 0.);
 
-    this->nu = Kokkos::max(generator.normal(nu_max / 5., nu_max / 5. / 5.), 0.) / lenght;
+    this->nu = Kokkos::max(generator.normal(nu_max / 2., nu_max / 2. / 5.), 0.) / lenght;
     _rng.random_pool.free_state(generator);
   }
 
@@ -134,6 +135,7 @@ namespace Models
     const double phi_a_in_mol = phi_a_in / (current_mass * MolarMass::acetate);
     const double phi_o2_in_mol = phi_o2_in;
     const double r1_max = nu / MolarMass::X / Yields::x_s / MolarMass::glucose; // molS/s
+
 
     const double phi_mode_b = min_var(y1_b * r1_max, phi_s_in_mol, y2_b * phi_o2_in_mol); // molS/s
 
@@ -178,12 +180,11 @@ namespace Models
     const double micro_mixing = 0.3;
 
     phi_uptakes.glucose = phi_s_pts + phi_permease(n_permease, a_permease, s);
-    phi_uptakes.acetate = min_var(
-        phi_pts_max / 3.,
-        1 / micro_mixing *
-            concentration(_INDICES(Ac))); // 1 / micro_mixing * concentration(_INDICES(Ac)) / 1000.;
+    phi_uptakes.acetate = concentration(_INDICES(Ac)) > 1e-4 ? phi_a_max : 0.;
+    // 1 / micro_mixing * concentration(_INDICES(Ac)) / 1000.;
+
     phi_uptakes.oxygen = concentration(_INDICES(O2)) > 4e-3
-                             ? 15.6 / 1000.
+                             ? phi_o2_max*1000
                              : 0.; // 1 / micro_mixing * concentration(_INDICES(O2)) / 1000.;
     return gamma_PTS_S;
   }
@@ -195,7 +196,6 @@ namespace Models
   {
     const double s = Kokkos::max(0., concentration(0));
     const double gamma_PTS_S = uptake(concentration);
-
     const double nu_p = phi_uptakes.glucose / mass() / (Yields::nu_s_x);
 
     metabolism();
@@ -245,8 +245,8 @@ namespace Models
   {
     auto access_contribs = contribution.access();
     access_contribs(_INDICES(GLUCOSE), p.current_container) += rates.glucose * p.weight;
-    access_contribs(_INDICES(Ac), p.current_container) += rates.acetate * p.weight;
-    access_contribs(_INDICES(O2), p.current_container) += rates.oxygen * p.weight;
+    // access_contribs(_INDICES(Ac), p.current_container) += rates.acetate * p.weight;
+    // access_contribs(_INDICES(O2), p.current_container) += rates.oxygen * p.weight;
     access_contribs(_INDICES(CO2), p.current_container) += rates.carbon_dioxide * p.weight;
   }
 
@@ -260,7 +260,8 @@ namespace Models
 
     return {{"lenght", lenght},
             {"a_pts", a_pts},
-            {"mu_eff", nu},
+            {"nu_eff", nu},
+            {"nu_meta", rates.nu},
             {"a_permease", a_permease},
             {"n_permease", n_permease},
             {"mass", mass()}};
