@@ -96,7 +96,7 @@ blas = dependency('blas', required: false) # Eigen can work without BLAS
 
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
-
+if not get_option('install_post_processing')
 
 cmake = import('cmake', required: true)
 kokkos_option = cmake.subproject_options()
@@ -164,7 +164,7 @@ if cmake.found()
   endif 
 
 endif
-
+endif 
 cmt = dependency('cmtool', required: false, version: '>=1.1', method: 'pkg-config')
 
 if cmt.found()

@@ -24,7 +24,7 @@ maintainers = [
 ]
 
 dependencies = [
-  'numpy==1.26.4',
+  'numpy>=2.2.0',
   'vtk==9.3.0',
   'matplotlib==3.8.4',
   'cmtool>=1.0.0',

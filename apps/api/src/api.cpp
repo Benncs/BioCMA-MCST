@@ -218,7 +218,7 @@ namespace Api
     auto t = gi.init_transitionner();
     gi.init_feed(feed);
 
-    auto __simulation = gi.init_simulation();
+    auto __simulation = gi.init_simulation(this->scalar_initializer_variant);
     if ((!t.has_value() && !__simulation.has_value()) || !gi.check_init_terminate())
     {
       ApiResult("Error apply");
@@ -254,12 +254,26 @@ namespace Api
     return true; // TODO
   }
 
+  ApiResult SimulationInstance::register_initialiser_file_path(std::string_view path)
+  {
+
+    this->params.initialiser_path = path;
+    return ApiResult(); // TODO
+  }
+
   bool SimulationInstance::register_cma_path(std::string_view path, bool recursive)
   {
     // TODO Check path
     this->params.recursive = recursive;
     this->params.cma_case_path = path;
     return true; // TODO
+  }
+
+  ApiResult
+  SimulationInstance::register_initial_condition(Core::ScalarFactory::ScalarVariant&& type)
+  {
+    scalar_initializer_variant = std::move(type);
+    return ApiResult();
   }
 
   bool SimulationInstance::register_serde(std::string_view path)

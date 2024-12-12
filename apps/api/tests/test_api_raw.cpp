@@ -1,8 +1,8 @@
+#include "common_test.hpp"
 #include <api/api_raw.h>
 #include <cassert>
 #include <cstring>
 #include <string_view>
-#include "common_test.hpp"
 
 #define INIT init_handle_raw(n_rank, i_rank, id, nt);
 #define PARAM make_params(cx, ft, dt, np, nex);
@@ -71,6 +71,13 @@ void test_register_result_path()
   delete_handle(&handle);
 }
 
+void test_register_initializer_path()
+{
+  Handle handle = INIT;
+  int result = register_initializer_path(handle, "path");
+  assert(result == 0);
+  delete_handle(&handle);
+}
 void test_make_params()
 {
   Param params = PARAM assert(params.biomass_initial_concentration == cx);
@@ -138,6 +145,10 @@ void test_branch_null()
   CHECK_FALSE(register_cma_path(handle, NULL));
   CHECK_FALSE(register_cma_path(NULL, NULL));
 
+  CHECK_FALSE(register_initializer_path(NULL, "valid"));
+  CHECK_FALSE(register_initializer_path(handle, NULL));
+  CHECK_FALSE(register_initializer_path(NULL, NULL));
+
   CHECK_FALSE(register_result_path(NULL, "valid"));
   CHECK_FALSE(register_result_path(handle, NULL));
   CHECK_FALSE(register_result_path(NULL, NULL));
@@ -173,6 +184,7 @@ int main(int argc, char** argv)
   test_make_params();
   test_register_parameters();
   test_register_result_path();
+  test_register_initializer_path();
   test_register_cma_path_recursive();
   test_register_cma_path();
   test_register_serde();

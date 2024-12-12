@@ -1,3 +1,4 @@
+#include "Kokkos_Bitset.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <algorithm>
@@ -171,16 +172,18 @@ namespace
       Kokkos::View<double**, ComputeSpace> particle_values(
           "host_property_values", property_names.size(), n_p);
 
-      Kokkos::View<double**> _spatial_values(
+      Kokkos::View<double**,ComputeSpace> spatial_values(
           "host_spatial_values", property_names.size(), n_compartment);
+      Kokkos::deep_copy(spatial_values,0.);
 
-      Kokkos::Experimental::ScatterView<double**> scatter_spatial_values(_spatial_values);
+      Kokkos::Experimental::ScatterView<double**> scatter_spatial_values(spatial_values);
+
       Kokkos::parallel_for(
           "get_particle_properties", n_p, KOKKOS_LAMBDA(const int i) {
             auto& particle = compute_particles_data._owned_data(i);
             if (particle.properties.status == MC::CellStatus::IDLE)
             {
-              auto spatial_values = scatter_spatial_values.access();
+              auto local_spatial_values = scatter_spatial_values.access();
               auto prop = particle.data.get_properties();
               const size_t i_container = particle.properties.current_container;
               // const auto cast_n_cell =
@@ -193,12 +196,12 @@ namespace
 
                 // Kokkos::atomic_add(&spatial_values(i_key, i_container),
                 //                    value / cast_n_cell);
-                spatial_values(i_key, i_container) += value;
+                local_spatial_values(i_key, i_container) += value;
                 ++i_key;
               }
 
               particle_values(i_key, i) = particle.properties.hydraulic_time;
-              spatial_values(i_key, i_container) += particle.properties.hydraulic_time;
+              local_spatial_values(i_key, i_container) += particle.properties.hydraulic_time;
               // Kokkos::atomic_add(&spatial_values(i_key, i_container),
               //                    particle.properties.hydraulic_time /
               //                        cast_n_cell);
@@ -207,7 +210,7 @@ namespace
               // Kokkos::atomic_add(&spatial_values(i_key, i_container),
               //                    particle.properties.interdivision_time /
               //                        cast_n_cell);
-              spatial_values(i_key, i_container) += particle.properties.interdivision_time;
+              local_spatial_values(i_key, i_container) += particle.properties.interdivision_time;
             }
             if (clean)
             {
@@ -215,9 +218,9 @@ namespace
             }
           });
       Kokkos::fence();
-      Kokkos::Experimental::contribute(_spatial_values, scatter_spatial_values);
+      Kokkos::Experimental::contribute(spatial_values, scatter_spatial_values);
       host_particle_values = Kokkos::create_mirror_view_and_copy(HostSpace(), particle_values);
-      host_spatial_values = Kokkos::create_mirror_view_and_copy(HostSpace(), _spatial_values);
+      host_spatial_values = Kokkos::create_mirror_view_and_copy(HostSpace(), spatial_values);
     };
 
     std::visit(visitor, mc_unit->container);

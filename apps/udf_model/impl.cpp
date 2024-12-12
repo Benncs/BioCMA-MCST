@@ -33,7 +33,7 @@ void _update_udf(Models::UserImpl& pimpl, double d_t, MC::ParticleDataHolder& p,
 }
 
 void _contributions_udf(Models::UserImpl& pimpl, MC::ParticleDataHolder& p,
-                                          ContributionView& contribution)
+                                          const ContributionView& contribution)
 {
   auto access_contribs = contribution.access();
   

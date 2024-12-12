@@ -66,9 +66,9 @@ namespace Core
 
     for (size_t i_name = 0; i_name < names.size(); ++i_name)
     {
-      auto* ptr_particles = Kokkos::subview(particle_values, i_name, Kokkos::ALL).data();
+      const auto* ptr_particles = Kokkos::subview(particle_values, i_name, Kokkos::ALL).data();
 
-      auto* ptr_spatial = Kokkos::subview(spatial_values, i_name, Kokkos::ALL).data();
+      const auto* ptr_spatial = Kokkos::subview(spatial_values, i_name, Kokkos::ALL).data();
 
       this->write_matrix(ds_name + names[i_name], {ptr_particles, n_particles}, false);
       this->write_matrix(

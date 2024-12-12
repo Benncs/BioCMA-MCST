@@ -126,13 +126,15 @@ namespace Core
     return std::nullopt;
   }
 
-  OptionalPtr<Simulation::SimulationUnit> GlobalInitialiser::init_simulation()
+  OptionalPtr<Simulation::SimulationUnit>
+  GlobalInitialiser::init_simulation(std::optional<Core::ScalarFactory::ScalarVariant> variant)
   {
     if (!check_steps(InitStep::Feed))
     {
       return std::nullopt;
     }
-    auto scalar = init_scalar();
+
+    auto scalar = variant.has_value() ? init_scalar(std::move(*variant)) : init_scalar();
     auto mc = init_monte_carlo();
 
     if (scalar.has_value() && mc.has_value())
@@ -289,6 +291,12 @@ namespace Core
     return simulation;
   }
 
+  std::optional<Simulation::ScalarInitializer>
+  GlobalInitialiser::init_scalar(Core::ScalarFactory::ScalarVariant&& variant)
+  {
+    return std::nullopt;
+  }
+
   std::optional<Simulation::ScalarInitializer> GlobalInitialiser::init_scalar()
   {
     if (!check_steps(InitStep::FlowIterator, InitStep::InitState))
@@ -404,7 +412,7 @@ namespace Core
     // Define the duration of each flowmap and compute steps per flowmap
     params.t_per_flow_map = t_per_flowmap;
 
-    //TODO fix float/integer division 
+    // TODO fix float/integer division
     const auto n_per_flowmap =
         (t_per_flowmap == 0 || params.n_different_maps == 1)
             ? 1

@@ -213,7 +213,7 @@ namespace PythonWrap
     return child_model;
   }
 
-  void PimpModel::contribution(MC::ParticleDataHolder& p, ContributionView contribution) noexcept
+  void PimpModel::contribution(MC::ParticleDataHolder& p, const ContributionView& contribution) noexcept
   {
     if (pimpl != nullptr)
     {

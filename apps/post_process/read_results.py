@@ -141,14 +141,14 @@ class PartialResult(RawResults):
                 d[key] = np.array(node[key])
             user_export.append(d)
 
-        get_dict("initial")
+        # get_dict("initial")
 
-        for i_ds in range(1, len(b_node) - 1):
+        for i_ds in range( len(b_node)):
             get_dict(f"{i_ds}")
-        try:
-            get_dict("final")
-        except Exception as _:
-            user_export.append(user_export[-1])  # FIXME
+        # try:
+        #     get_dict("final")
+        # except Exception as _:
+        #     user_export.append(user_export[-1])  # FIXME
 
         self.extra_bioparam = user_export
 
