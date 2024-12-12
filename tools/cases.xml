@@ -35,11 +35,11 @@
 
    <control name="0d_4s">
       <cma_case_path>/home/benjamin/Documents/thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
-      <final_time>20000</final_time>
-      <numper_particle>10000</numper_particle>
-      <delta_time>0.5</delta_time>
-      <results_file_name>uptake_29</results_file_name>
-      <number_exported_result>100</number_exported_result>
+      <final_time>3600</final_time>
+      <numper_particle>1000</numper_particle>
+      <delta_time>0.1</delta_time>
+      <results_file_name>batch</results_file_name>
+      <number_exported_result>50</number_exported_result>
       <model_name>model_uptake_acetate</model_name>
       <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
    </control>
