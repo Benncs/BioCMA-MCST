@@ -1,7 +1,4 @@
-#include <Kokkos_Atomic.hpp>
-#include <Kokkos_Macros.hpp>
-#include <Kokkos_Printf.hpp>
-#include <common/common.hpp>
+
 #include <mc/particles/data_holder.hpp>
 #include <mc/particles/particle_model.hpp>
 #include <models/model_monod.hpp>
@@ -35,7 +32,6 @@ namespace Models
     this->mu = Kokkos::max(generator.normal(mu_max/2. , mu_max / 4), 0.);
     _rng.random_pool.free_state(generator);
     static_assert(l_1 > l_0, "Monod: Bad Model Parameter ");
-    constexpr double ___init_only_cell_lenghtening = 4e-7 / ln2;
     _init_only_cell_lenghtening =l_0/2. / ln2;
 
     // p.weight = p.weight/mass();
@@ -55,8 +51,8 @@ namespace Models
     l += d_t * (mu_eff * _init_only_cell_lenghtening);
     mu += d_t * (1.0 / tau_metabolism) * (mu_p - mu);
 
-    // Models::update_division_status(
-    //     p.status, d_t, GammaDivision::threshold_linear(l, l_0, l_1), _rng);
+    Models::update_division_status(
+        p.status, d_t, GammaDivision::threshold_linear(l, l_0, l_1), _rng);
   }
 
   KOKKOS_FUNCTION Monod Monod::division(MC::ParticleDataHolder &p,MC::KPRNG) noexcept
@@ -69,7 +65,7 @@ namespace Models
   }
 
   KOKKOS_FUNCTION void Monod::contribution(MC::ParticleDataHolder &p,
-                                           ContributionView contribution) noexcept
+                                           const ContributionView& contribution) noexcept
   {
     // contribution(0, p.current_container) -= contrib * p.weight;
     auto access_contribs = contribution.access();

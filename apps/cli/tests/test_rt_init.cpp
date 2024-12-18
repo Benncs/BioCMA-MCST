@@ -1,4 +1,5 @@
 #include "common/execinfo.hpp"
+#include "core/simulation_parameters.hpp"
 #include <cassert>
 #include <iostream>
 #include <omp.h>
@@ -6,10 +7,10 @@
 
 static ExecInfo c_test_set_openmp_threads(int rank, int size, int n_threads)
 {
-  ExecInfo info;
-  Core::SimulationParameters params;
-  params.user_params.n_thread = n_threads;
-  set_n_thread_current_rank(rank, size, info, params.user_params);
+  ExecInfo info{};
+  Core::UserControlParameters params;
+  params.n_thread = n_threads;
+  set_n_thread_current_rank(rank, size, info, params);
   std::cerr << "Number of threads: " << info.thread_per_process << '\n';
   return info;
 }
@@ -84,6 +85,12 @@ void test_set_openmp_threads_7()
   assert(info.thread_per_process == 4); // Assertion
 }
 
+
+void test_check_results_file_name()
+{
+  
+}
+
 int main()
 {
   // Run the test
@@ -94,5 +101,8 @@ int main()
   test_set_openmp_threads_5();
   test_set_openmp_threads_6();
   test_set_openmp_threads_7();
+
+  append_date_time(std::cout);
+
   return 0;
 }

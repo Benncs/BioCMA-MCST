@@ -1,9 +1,14 @@
 #include <cstddef>
 #include <cstdint>
 #include <dataexporter/main_exporter.hpp>
+#include <numeric>
 #include <optional>
 #include <utility>
-namespace CORE_DE
+#include <string> 
+#include <common/execinfo.hpp>
+#include <string_view>
+
+namespace Core
 {
   const std::string MainExporter::base_group_name = "records/";
   MainExporter::MainExporter(const ExecInfo &info,
@@ -22,11 +27,11 @@ namespace CORE_DE
                                    const std::vector<size_t> &distribution)
   {
     export_initial_kv initial_values;
-    initial_values["number_particles"] = params.user_params.number_particle;
+    initial_values["number_particles"] = params.number_particle;
     initial_values["initial_weight"] = weight;
-    initial_values["initial_biomass_concentration"] = params.user_params.biomass_initial_concentration;
+    initial_values["initial_biomass_concentration"] = params.biomass_initial_concentration;
     initial_values["number_compartment"] = params.n_compartments;
-    initial_values["final_time"] = params.user_params.final_time;
+    initial_values["final_time"] = params.final_time;
     initial_values["particle_distribution"] =
         std::vector<size_t>(distribution.begin(), distribution.end());
     initial_values["delta_time"] = params.d_t;
@@ -133,7 +138,7 @@ namespace CORE_DE
         event.get<MC::EventType::NewParticle>();
     final_values["events/total_death"] = event.get<MC::EventType::Death>();
     final_values["events/total_exit"] = event.get<MC::EventType::Exit>();
-    const auto [n_row, n_col] = simulation.getDim();
+    const auto [n_row, n_col] = simulation.getDimensions();
 
     write_simple(final_values, "final_result/");
 
@@ -151,4 +156,4 @@ namespace CORE_DE
     }
   }
 
-} // namespace CORE_DE
+} // namespace Core

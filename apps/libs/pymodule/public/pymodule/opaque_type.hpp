@@ -8,38 +8,33 @@
 namespace py = pybind11;
 struct OpaquePointer
 {
-  void *ptr{};
-  OpaquePointer() = default;
-  OpaquePointer(const OpaquePointer &) = delete;
-  OpaquePointer(OpaquePointer &&rhs) noexcept : ptr(rhs.ptr)
-  {
+  void* ptr{nullptr}; // Ensure ptr is initialized to nullptr by default
 
+  OpaquePointer() = default; // Default constructor
+
+  OpaquePointer(const OpaquePointer& rhs) noexcept = default; // Default copy constructor
+
+  OpaquePointer& operator=(const OpaquePointer& rhs) = default;
+
+  OpaquePointer(OpaquePointer&& rhs) noexcept : ptr(rhs.ptr)
+  { // Move constructor
     rhs.ptr = nullptr;
-  };
+  }
 
-  OpaquePointer &operator=(OpaquePointer &&rhs)
- noexcept   {
-    if (&rhs != this)
-    {
+  OpaquePointer& operator=(OpaquePointer&& rhs) noexcept
+  { // Move assignment operator
+    if (this != &rhs)
+    { // Prevent self-assignment
       ptr = rhs.ptr;
       rhs.ptr = nullptr;
     }
     return *this;
-  };
-  OpaquePointer &operator=(const OpaquePointer &&) = delete;
-
-  ~OpaquePointer()
-  {
-    if (ptr != nullptr)
-    {
-      auto *obj = static_cast<py::object *>(ptr);
-      delete obj;
-    }
   }
+
+  // Add a destructor to handle cleanup if necessary
+  ~OpaquePointer() = default;
 };
 
-void declare_opaque(py::module &m);
-
-
+void declare_opaque(py::module& m);
 
 #endif //__PY_OPAQUE_HPP__

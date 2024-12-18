@@ -1,156 +1,259 @@
+#include "pybind11/attr.h"
+#include "pybind11/buffer_info.h"
 #include "pymodule/opaque_type.hpp"
-
-#include "mc/particles/mcparticles.hpp"
+#include <cstdlib>
 #include <iostream>
-#include <memory>
-#include <models/types.hpp>
-#include <omp.h>
-#include <pybind11/eigen.h>
 #include <pybind11/embed.h>
 #include <pybind11/gil.h>
 #include <pybind11/numpy.h>
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
 #include <pymodule/import_py.hpp>
-#include <sstream>
-#include <stdexcept>
+#include <pymodule/model_python.hpp>
 
-namespace py = pybind11;
+static bool interpreter_init = false;
 
-pybind11::scoped_interpreter init_python_interpreter()
+static void _custom_interpreter_deleter(pybind11::scoped_interpreter* interpreter)
 {
-  std::cout << "PYTHON INTERPRETER INITIALISATION" << std::endl;
-  pybind11::scoped_interpreter interpret;
-
-  return interpret;
+  if (interpreter != nullptr)
+  {
+    delete interpreter; // NOLINT
+    interpreter_init = false;
+    interpreter = nullptr;
+    std::cout << "PYTHON INTERPRETER DESTROYED" << std::endl;
+  }
 }
 
-model_properties_t convert_to_variant(const pybind11::handle& obj)
+EXPORT python_interpreter_t init_python_interpreter()
 {
-  if (py::isinstance<py::int_>(obj))
+  if (!interpreter_init)
   {
-    return obj.cast<int>();
+    std::cout << "PYTHON INTERPRETER INITIALIZATION" << std::endl;
+    interpreter_init = true;
+    return {new pybind11::scoped_interpreter(), &_custom_interpreter_deleter};
   }
-  else if (py::isinstance<py::float_>(obj))
+  return {nullptr, &_custom_interpreter_deleter};
+}
+
+// NOLINTBEGIN
+#define PYTHON_CST_FWD(__value__) std::cref((__value__))
+#define PYTHON_FWD(__value__) std::ref((__value__))
+// NOLINTEND
+
+namespace PythonWrap
+{
+
+  model_properties_detail_t convert_dict_to_map(const py::dict& kwargs)
   {
-    // Check if the float is narrow enough to fit into a float, otherwise use
-    // double
-    double d = obj.cast<double>();
-    if (d == static_cast<float>(d))
+    model_properties_detail_t cpp_map;
+
+    for (auto item : kwargs)
     {
-      return static_cast<float>(d);
+
+      std::string key = py::str(item.first);
+      cpp_map[key] = item.second.cast<double>();
+    }
+
+    return cpp_map;
+  }
+
+  struct PimpModel::Impl
+  {
+    void initialize_pimpl();
+
+    pybind11::module_ current_module;
+    pybind11::object init_f;
+    pybind11::object update_f;
+    pybind11::object contribution_f;
+    pybind11::object division_f;
+    pybind11::object show_f;
+    pybind11::object get_properties_f;
+    pybind11::object mass_f;
+    OpaquePointer _data;
+  };
+
+  void PimpModel::Impl::initialize_pimpl()
+  {
+    current_module = pybind11::module_::import("modules.modules");
+    init_f = current_module.attr("init");
+    update_f = current_module.attr("update");
+    show_f = current_module.attr("show");
+    contribution_f = current_module.attr("contribution");
+    get_properties_f = current_module.attr("get_properties");
+    division_f = current_module.attr("division");
+    mass_f = current_module.attr("mass");
+  }
+
+  PimpModel::PimpModel()
+  {
+    if (interpreter_init)
+    {
+      pimpl = new PimpModel::Impl(); // NOLINT
+      pimpl->initialize_pimpl();
+    }
+  }
+
+  PimpModel::PimpModel(const PimpModel& rhs)
+  {
+    if (rhs.pimpl != nullptr)
+    {
+      pimpl = new PimpModel::Impl(*rhs.pimpl); // Deep copy // NOLINT
+      pimpl->initialize_pimpl();
     }
     else
     {
-      return d;
+      pimpl = nullptr;
     }
   }
-  else if (py::isinstance<py::str>(obj))
+
+  PimpModel& PimpModel::operator=(const PimpModel& rhs)
   {
-    return obj.cast<std::string>();
-  }
-  else
-  {
-    throw std::invalid_argument(
-        "Unsupported type for conversion to numeric_model_properties_t");
-  }
-}
-
-model_properties_detail_t convert_dict_to_map(const py::dict &kwargs)
-{
-  std::unordered_map<std::string, model_properties_t> cpp_map;
-
-  for (auto item : kwargs)
-  {
-    // Assuming the keys are strings
-    std::string key = py::str(item.first);
-    model_properties_t value = convert_to_variant(item.second);
-
-    cpp_map[key] = value;
-  }
-
-  return cpp_map;
-}
-
-void init_module_function(KModel &model,
-                          py::function &&init,
-                          py::function &&update,
-                          py::function &&contrib,
-                          py::function &&division,
-                          py::function &&properties,
-                          py::function &&__debug)
-{
-  model.init_kernel = [init = std::move(init)](MC::Particles &p)
-  {
-    p.data = std::make_shared<OpaquePointer>();
+    if (this == &rhs)
     {
-      init(std::ref(p));
-      return;
+      return *this;
     }
-  };
 
-  model.update_kernel =
-      [update = std::move(update)](double dt, MC::Particles &p, auto &&c)
-  {
-    update(dt, std::ref(p), std::vector(c.begin(), c.end()));
-    return;
-  };
+    delete pimpl;
 
-  model.contribution_kernel = [contrib = std::move(contrib)](auto &&p, auto &&o)
-  {
-    contrib(std::ref(p), std::ref(o));
+    if (rhs.pimpl != nullptr)
+    {
+      pimpl = new PimpModel::Impl(*rhs.pimpl); // NOLINT
+      pimpl->initialize_pimpl();
+    }
+    else
+    {
+      pimpl = nullptr;
+    }
 
-    return;
-  };
-  model.division_kernel = [division = std::move(division)](auto &&p)
-  {
-    MC::Particles child(p);
-    auto s = child.status;
-    division(std::ref(p), std::ref(child));
-    auto s2 = child.status;
-    // assert(s != s2);
-    return child;
-  };
-
-  model.get_properties =
-      [properties = std::move(properties)](auto &&p)
-  {
-    auto dict = properties(std::cref(p));
-    return convert_dict_to_map(dict);
-  };
-}
-
-KModel get_python_module(const std::string &module_path)
-{
-  KModel model;
-  try
-  {
-    py::module model_setup = py::module_::import(module_path.c_str());
-    py::function init = model_setup.attr("init_kernel");
-    py::function update = model_setup.attr("update_kernel");
-    py::function contrib = model_setup.attr("contribution_kernel");
-    py::function division = model_setup.attr("division_kernel");
-    py::function properties = model_setup.attr("get_properties");
-    py::function __debug = model_setup.attr("__debug");
-
-    init_module_function(model,
-                         std::move(init),
-                         std::move(update),
-                         std::move(contrib),
-                         std::move(division),
-                         std::move(properties),
-                         std::move(__debug));
-    return model;
+    return *this;
   }
-  catch (const std::exception &e)
+
+  PimpModel::PimpModel(PimpModel&& rhs) noexcept
   {
-    std::stringstream msg;
-    msg << "Error loading python module: " << std::endl;
-    msg << e.what() << std::endl;
-    throw std::runtime_error(msg.str());
+    if (rhs.pimpl != nullptr)
+    {
+      pimpl = rhs.pimpl;
+      pimpl->initialize_pimpl();
+      rhs.pimpl = nullptr;
+    }
+    else
+    {
+      pimpl = nullptr;
+    }
   }
-  catch (...)
+
+  PimpModel& PimpModel::operator=(PimpModel&& rhs) noexcept
   {
-    throw std::runtime_error("Error loading python module");
+    if (this == &rhs)
+    {
+      return *this;
+    }
+
+    delete pimpl;
+
+    if (rhs.pimpl != nullptr)
+    {
+      pimpl = rhs.pimpl;
+      pimpl->initialize_pimpl();
+      rhs.pimpl = nullptr;
+    }
+    else
+    {
+      pimpl = nullptr;
+    }
+
+    return *this;
   }
-}
+
+  PimpModel::~PimpModel()
+  {
+    delete pimpl;
+  }
+
+  /**
+  Biological model wrap
+  **/
+
+  void PimpModel::init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
+  {
+    if (pimpl != nullptr)
+    {
+      auto obj = pimpl->init_f(PYTHON_FWD(p));
+      pimpl->_data.ptr = new py::object(obj); // NOLINT
+    }
+  }
+
+  void PimpModel::update(const double d_t,
+                         MC::ParticleDataHolder& p,
+                         const LocalConcentrationView& concentration,
+                         MC::KPRNG _rng)
+  {
+    if (pimpl != nullptr)
+    {
+      auto bf = pybind11::buffer_info(const_cast<double*>(concentration.data()),
+                                      sizeof(double),
+                                      pybind11::format_descriptor<double>::format(),
+                                      1,
+                                      {concentration.size()},
+                                      {sizeof(double)});
+
+      pimpl->update_f(d_t,PYTHON_CST_FWD(pimpl->_data), PYTHON_FWD(p), pybind11::array_t<double>(bf));
+    }
+  }
+
+  PimpModel PimpModel::division(MC::ParticleDataHolder& p, MC::KPRNG k) noexcept
+  {
+    PimpModel child_model;
+    if (pimpl != nullptr)
+    {
+      auto obj = pimpl->division_f(PYTHON_CST_FWD(pimpl->_data),PYTHON_FWD(p));
+      child_model.pimpl->_data.ptr = new py::object(obj); // NOLINT
+    }
+
+    return child_model;
+  }
+
+  void PimpModel::contribution(MC::ParticleDataHolder& p, const ContributionView& contribution) noexcept
+  {
+    if (pimpl != nullptr)
+    {
+      auto access_contribs = contribution.subview();
+      auto* data = access_contribs.data();
+      const auto cols = access_contribs.extent(0);
+      const auto rows = access_contribs.extent(1);
+
+      py::object capsule = py::capsule(data);
+      auto result = py::array_t<double_t>(
+          py::buffer_info(
+              data,                                         // Pointer to the data
+              sizeof(double_t),                             // Size of each element
+              py::format_descriptor<double_t>::format(),    // Data type format
+              2,                                            // Number of dimensions
+              {rows, cols},                                 // Shape of the array
+              {sizeof(double_t) * cols, sizeof(double_t)}), // Strides for each dimension
+          capsule);
+
+      pimpl->contribution_f(PYTHON_CST_FWD(p), PYTHON_CST_FWD(pimpl->_data), PYTHON_FWD(result));
+    }
+  }
+
+  model_properties_detail_t PimpModel::get_properties() noexcept
+  {
+    if (pimpl != nullptr)
+    {
+      return convert_dict_to_map(pimpl->get_properties_f(PYTHON_CST_FWD(pimpl->_data)));
+    }
+    return {{"None", 1.}};
+  }
+
+  [[nodiscard]] double PimpModel::mass() const noexcept
+  {
+    if (pimpl != nullptr)
+    {
+      auto obj= pimpl->mass_f(PYTHON_CST_FWD(pimpl->_data));
+      return obj.cast<double>();
+    }
+    return 1.;
+  }
+
+} // namespace PythonWrap

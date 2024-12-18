@@ -10,14 +10,13 @@
 #include <Eigen/Sparse>
 
 #include <hydro/mass_transfer.hpp>
-#include <iterator>
 #include <scalar_simulation.hpp>
 #include <stdexcept>
 
 namespace Simulation
 {
 
-  std::span<double> SimulationUnit::getContributionData() const
+  std::span<const double> SimulationUnit::getContributionData() const
   {
 
     return liquid_scalar->getContributionData();
@@ -42,16 +41,30 @@ namespace Simulation
     return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()};
   }
 
-  void SimulationUnit::reduceContribs(std::span<double> data, size_t n_rank) const
+  [[nodiscard]] Dimensions SimulationUnit::getDimensions() const noexcept
   {
+    return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()} ;
+  }
 
-    auto [nr, nc] = getDim();
+  [[deprecated("perf:not useful")]] void SimulationUnit::reduceContribs_per_rank(std::span<const double> data) const
+  {
+    
+    PROFILE_SECTION("host:reduceContribs_rank")
+    const auto [nr, nc] = getDimensions();
+    this->liquid_scalar->biomass_contribution.noalias() += Eigen::Map<Eigen::MatrixXd>(const_cast<double*>(data.data()), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
+
+  }
+
+  void SimulationUnit::reduceContribs(std::span<const double> data, size_t n_rank) const
+  {
+    PROFILE_SECTION("host:reduceContribs")
+    const auto [nr, nc] = getDimensions();
 
     this->liquid_scalar->biomass_contribution.setZero();
-
+    //FIXME
     for (int i = 0; i < static_cast<int>(n_rank); ++i)
     {
-      this->liquid_scalar->biomass_contribution.noalias() += Eigen::Map<Eigen::MatrixXd>(&data[i * nr * nc], EIGEN_INDEX(nr), EIGEN_INDEX(nc));
+      this->liquid_scalar->biomass_contribution.noalias() += Eigen::Map<Eigen::MatrixXd>(const_cast<double*>(&data[i * nr * nc]), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
     }
   }
 
@@ -63,7 +76,6 @@ namespace Simulation
 
   void SimulationUnit::update_feed(const double t, const double d_t, const bool update_scalar) noexcept
   {
-
     // Get references to the index_leaving_flow and leaving_flow data members
     auto &_index_leaving_flow = this->index_leaving_flow;
     auto &_leaving_flow = this->leaving_flow;
@@ -122,7 +134,7 @@ namespace Simulation
 
   void SimulationUnit::step(double d_t, const CmaRead::ReactorState &state) const
   {
-
+    
     if (is_two_phase_flow)
     {
       this->liquid_scalar->mass_transfer = gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,

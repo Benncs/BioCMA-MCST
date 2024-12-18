@@ -52,17 +52,18 @@ namespace MC
       return BaseParticle(std::move(prop_child), std::move(p));
     }
 
-    KOKKOS_INLINE_FUNCTION void contribution(ContributionView contrib)
+    KOKKOS_INLINE_FUNCTION void contribution(const ContributionView& contrib)
     {
       data.contribution(properties, contrib);
     }
 
-    template <class Archive> void serde(Archive &ar)
+    template <class Archive> void serialize(Archive &ar)
     {
-      properties.serde(ar);
+      
+      ar(properties);
       if constexpr (has_serialize<_Model, Archive>())
       {
-        data.serde(ar);
+        ar(data);
       }
     }
 

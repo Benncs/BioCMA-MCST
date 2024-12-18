@@ -35,6 +35,11 @@ model_loader = meson.current_source_dir()+'/model_loader.cxx'
 model_loader_header = meson.current_source_dir()+'/model_loader.hxx'
 variant_model = meson.current_source_dir()+'/variant_model.hxx'
 
+arg_includ_py=''
+if use_dynamic_module
+arg_includ_py='1'
+endif
+
 # custom target to generate model_loader.cpp and model_list.hpp
 generated_model_selection = custom_target(
     'generated_model_selection.[ch]',
@@ -54,5 +59,6 @@ generated_model_selection = custom_target(
         '@OUTPUT1@',
         variant_model,
         '@OUTPUT2@',
+        arg_includ_py
     ],
 )

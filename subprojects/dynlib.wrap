@@ -1,0 +1,8 @@
+[wrap-git]
+url = https://github.com/Benncs/DynamicLibrary.git
+revision = head
+depth = 1
+method = meson
+
+[provide]
+dynlib-1.0 = dynlib_dep

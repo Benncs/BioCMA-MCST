@@ -2,11 +2,7 @@
 #define __BIO_MODEL_UPTAKE_ACETATE_HPP__
 
 #include "mc/prng/prng.hpp"
-#include "models/utils.hpp"
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Core_fwd.hpp>
-#include <Kokkos_Macros.hpp>
-#include <algorithm>
 #include <common/kokkos_vector.hpp>
 #include <mc/particles/particle_model.hpp>
 
@@ -60,11 +56,16 @@ namespace Models
 
     KOKKOS_FUNCTION UptakeAcetate division(MC::ParticleDataHolder &p, MC::KPRNG _rng);
 
-    KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p, ContributionView contribution);
+    KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder &p, const ContributionView& contribution);
 
     [[nodiscard]] KOKKOS_FUNCTION double mass() const noexcept;
 
-    model_properties_detail_t get_properties();
+    KOKKOS_FUNCTION model_properties_detail_t get_properties();
+
+    template <class Archive> void serialize(Archive &ar)
+    {
+      ar(lenght, nu, a_pts, a_permease);
+    }
   };
 } // namespace Models
 

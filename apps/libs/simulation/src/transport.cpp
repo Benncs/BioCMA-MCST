@@ -4,7 +4,9 @@
 #include <get_cumulative_proba.hpp>
 #include <simulation/pc_hydro.hpp>
 #include <transport.hpp>
-
+#include <mc/domain.hpp>
+#include <mc/particles/particles_container.hpp>
+#include <mc/unit.hpp>
 namespace Simulation
 {
 

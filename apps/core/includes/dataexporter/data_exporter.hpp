@@ -1,11 +1,11 @@
 #ifndef __CORE_DATA_EXPORTER_HPP__
 #define __CORE_DATA_EXPORTER_HPP__
 
-#include <Kokkos_Core.hpp>
 #include <common/execinfo.hpp>
 #include <common/kokkos_vector.hpp>
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -14,8 +14,8 @@
 #include <vector>
 
 #include "cmt_common/macro_constructor_assignment.hpp"
-
-namespace CORE_DE
+#include <span> 
+namespace Core
 {
 
   static inline std::string
@@ -143,5 +143,5 @@ namespace CORE_DE
     std::unique_ptr<impl> pimpl;
   };
 
-} // namespace CORE_DE
+} // namespace Core
 #endif

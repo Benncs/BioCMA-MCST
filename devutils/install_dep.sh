@@ -48,6 +48,14 @@ for arg in "$@"; do
   fi
 done
 
+
+
+echo "Pip upgrade..."
+if ! python3 -m pip install --upgrade pip; then
+  error "Failed to upgrade pip."
+  exit 1
+fi
+
 # Install optional HDF5 if flag is set
 if $INSTALL_HDF5; then
   echo "Installing HDF5..."
@@ -59,20 +67,20 @@ fi
 
 # Install meson via pip
 echo "Installing meson..."
-if ! pip install meson; then
+if ! sudo pip3 install meson; then
   error "Failed to install meson."
   exit 1
 fi
 
 echo "Installing omp dev..."
-  if ! sudo apt-get install -y libomp-18-dev; then
-    error "Failed to install HDF5."
+  if ! sudo apt-get install -y libomp-dev; then
+    error "Failed to install omp."
     exit 1
   fi
 
 # Run clang configuration script
 echo "Running clang configuration script..."
-if ! sh ./devutils/clang_config.sh $LLVM_VERSION; then
+if ! sh ./devutils/docker/clang_config.sh $LLVM_VERSION; then
   error "Failed to run clang configuration script."
   exit 1
 fi
@@ -81,6 +89,13 @@ fi
 echo "Installing clang-$LLVM_VERSION..."
 if ! sudo apt-get install -y clang-$LLVM_VERSION; then
   error "Failed to install clang-$LLVM_VERSION."
+  exit 1
+fi
+
+# Install specific version of clang
+echo "Installing Kokkos..."
+if ! sh ./devutils/docker/kokkos_config.sh; then
+  error "Failed to install Kokkos."
   exit 1
 fi
 

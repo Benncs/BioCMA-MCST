@@ -5,10 +5,10 @@
 #include <mpi.h>
 #include <type_traits>
 
-namespace MPI_W
+namespace WrapMPI
 {
 
-  template <typename T> constexpr MPI_Datatype get_type()
+  template <typename T> constexpr MPI_Datatype get_type() noexcept
   {
     MPI_Datatype datatype{};
 
@@ -16,7 +16,6 @@ namespace MPI_W
 
     if constexpr (std::is_same_v<_type, size_t>)
     {
-
       datatype = MPI_UNSIGNED_LONG;
     }
     else if constexpr (std::is_same_v<_type, double>)
@@ -32,7 +31,7 @@ namespace MPI_W
       datatype = MPI_CXX_BOOL;
     }
     else if constexpr (std::is_same_v<_type, char> ||
-                       std::is_same_v<_type, MPI_W::SIGNALS>)
+                       std::is_same_v<_type, WrapMPI::SIGNALS>)
     {
       datatype = MPI_BYTE;
     }
@@ -47,6 +46,6 @@ namespace MPI_W
 
     return datatype;
   }
-} // namespace MPI_W
+} // namespace WrapMPI
 
 #endif //__MPI_TYPES_HPP__

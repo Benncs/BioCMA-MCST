@@ -3,13 +3,15 @@
 
 #include <cma_read/light_2d_view.hpp>
 #include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <optional>
 #include <span>
+#include <vector> 
 
 namespace Simulation
 {
-  enum class ScalarInitialiserType
+  enum class ScalarInitialiserType:std::uint8_t
   {
     Uniform,     // Need vec{uniform concentration}
     Local,       // Need vec{index compartment }+ vec{concentration}

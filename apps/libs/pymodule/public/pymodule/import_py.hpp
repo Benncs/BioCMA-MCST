@@ -1,11 +1,18 @@
-#ifndef __PY_MODULES_HPP__
-#define __PY_MODULES_HPP__
+#ifndef __IMPORT_PY_HPP__
+#define __IMPORT_PY_HPP__
+#include <memory>
 
-#include <models/types.hpp>
-#include <pybind11/embed.h>
-#include <string>
+#define EXPORT __attribute__((visibility("default")))
 
-KModel get_python_module(const std::string &module_path);
-pybind11::scoped_interpreter init_python_interpreter();
+namespace pybind11
+{
+  class scoped_interpreter;
+} // namespace pybind11
 
-#endif //__PY_MODULES_HPP__
+
+using python_interpreter_t =
+    std::unique_ptr<pybind11::scoped_interpreter, void (*)(pybind11::scoped_interpreter*)>;
+
+python_interpreter_t init_python_interpreter();
+
+#endif

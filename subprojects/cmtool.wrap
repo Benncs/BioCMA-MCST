@@ -1,0 +1,8 @@
+[wrap-git]
+url = https://gitlab.com/codes_tim/compartment-modelling-tool.git
+revision = head
+depth = 1
+method = meson
+
+[provide]
+cma_read = cma_read_shared_lib_dependency

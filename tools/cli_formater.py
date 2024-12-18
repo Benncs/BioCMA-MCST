@@ -62,7 +62,7 @@ def read_xml_values(xml_path, parser, target_name):
 
                 if recursive:
                     cli_args += "-r 1 "
-                cli_args += f"-f { cma_case_path} "
+                cli_args += f"-f {cma_case_path} "
 
                 cli_args += f"-d {final_time} "
                 cli_args += f"-np {numper_particle} "
@@ -78,7 +78,7 @@ def read_xml_values(xml_path, parser, target_name):
                 if initialiser_path != "" and initialiser_path is not None:
                     cli_args += f"-fi {initialiser_path} "
 
-                cli_args += f"-mn {model_name}"
+                cli_args += f"-mn {model_name} "
                 break
         if cli_args == "":
             raise Exception("Case not found")

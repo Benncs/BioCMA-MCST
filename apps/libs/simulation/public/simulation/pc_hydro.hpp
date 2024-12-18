@@ -1,37 +1,29 @@
 #ifndef __SIMUALTION__PC_HYDRO_HPP__
 #define __SIMUALTION__PC_HYDRO_HPP__
 
-#include <cma_read/light_2d_view.hpp>
+#include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#include <cma_read/light_2d_view.hpp>
 #include <cma_read/reactorstate.hpp>
-
+#include <vector>
+#include <span> 
 // using FlowMatrixType = Eigen::MatrixXd;
 
 using FlowMatrixType = Eigen::SparseMatrix<double>;
 
-
-//TODO MOVE ELSEWHERE
+// TODO MOVE ELSEWHERE
 inline CmaRead::L2DView<double> get_eigen_view(Eigen::MatrixXd& matrix)
 {
   return CmaRead::L2DView<double>(
-        std::span<double>(matrix.data(),
-                                matrix.size()),
-        matrix.rows(),
-        matrix.cols(),
-        false);
+      std::span<double>(matrix.data(), matrix.size()), matrix.rows(), matrix.cols(), false);
 }
 
 inline CmaRead::L2DView<const double> get_eigen_view(const Eigen::MatrixXd& matrix)
 {
   return CmaRead::L2DView<const double>(
-        std::span<const double>(matrix.data(),
-                                matrix.size()),
-        matrix.rows(),
-        matrix.cols(),
-        false);
+      std::span<const double>(matrix.data(), matrix.size()), matrix.rows(), matrix.cols(), false);
 }
-
 
 namespace Simulation
 {
@@ -53,14 +45,13 @@ namespace Simulation
     PreCalculatedHydroState() = default;
     ~PreCalculatedHydroState() = default;
 
-    explicit PreCalculatedHydroState(const FlowMatrixType &_tm);
+    explicit PreCalculatedHydroState(const FlowMatrixType& _tm);
 
-    PreCalculatedHydroState &operator=(PreCalculatedHydroState &&rhs) = default;
-    PreCalculatedHydroState &
-    operator=(const PreCalculatedHydroState &rhs) = delete;
+    PreCalculatedHydroState& operator=(PreCalculatedHydroState&& rhs) = default;
+    PreCalculatedHydroState& operator=(const PreCalculatedHydroState& rhs) = delete;
 
-    PreCalculatedHydroState(PreCalculatedHydroState &&other) = default;
-    PreCalculatedHydroState(const PreCalculatedHydroState &other) = delete;
+    PreCalculatedHydroState(PreCalculatedHydroState&& other) = default;
+    PreCalculatedHydroState(const PreCalculatedHydroState& other) = delete;
   };
 
   [[nodiscard]] inline CmaRead::L2DView<const double>

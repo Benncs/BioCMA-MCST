@@ -17,20 +17,20 @@ import sys
 # from wakepy import keep
 # from ..exec import exec
 import datetime 
-BENCH_OMP_THREADS = [1, 6,12]  # List of thread numbers when running scaling
-EXECUTABLE_PATH = "./builddir/release_gcc/apps/cli"  # Path to executable to run
-EXECUTABLE_NAME = "biocma_mcst_cli_app"  # Name of executable to run
+BENCH_OMP_THREADS = [1,2,4]  # List of thread numbers when running scaling
+EXECUTABLE_PATH = "./builddir/debug_gcc/apps/cli"  # Path to executable to run
+EXECUTABLE_NAME = "biocma_mcst_cli_app_shared"  # Name of executable to run
 BENCH_SCRIPT_PATH = (
     "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
 )
 date = datetime.datetime.today().strftime('%Y_%m_%d')
-FILENAME = f"./devutils/benchs/bench_records_3_{date}.csv"  # Record filename
-OUTPUT_PDF = f"./devutils/benchs/results_bench_3_{date}.pdf"  # Output path
-MODEL_NAME = "model_monod"
+FILENAME = f"./devutils/benchs/bench_records3_{date}.csv"  # Record filename
+OUTPUT_PDF = f"./devutils/benchs/results_bench3_{date}.pdf"  # Output path
+MODEL_NAME = "model_user"
 FINAL_TIME = 1  # Reference simulation time
 DELTA_TIME = 1e-3  # Reference delta time fixed
 # CMA_DATA_PATH = "./cma_data/bench/"
-CMA_DATA_PATH = "./cma_data/0d/"
+CMA_DATA_PATH = "./cma_data/0d_mono/"
 RECURSIVE = False
 
 def format_cli(number_particle, final_time):
@@ -55,7 +55,7 @@ def format_cli(number_particle, final_time):
         "-f",
         CMA_DATA_PATH,
         "-er",
-        "bench","-force","1","-mpi","1"
+        "bench","-nex","3","-force","1","-fi","./cma_data/0d_init.h5" #,"-mpi","1"
     ]
 
 
@@ -64,20 +64,19 @@ def execute(n_thread, script_path, command):
     env_var["OMP_NUM_THREADS"] = str(n_thread)
     env_var["OMP_PLACES"] = "threads"
     env_var["OMP_PROC_BIND"] = "spread"
-    # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
-    commands = [
-        "mpiexec",
-        "--allow-run-as-root",
-        "-n",
-        "3",
-        BENCH_SCRIPT_PATH,
-        *command,
-    ]
-
+    #env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
     # commands = [
+    #     "mpiexec",
+    #     "-n",
+    #     "4",
     #     BENCH_SCRIPT_PATH,
     #     *command,
     # ]
+
+    commands = [
+        BENCH_SCRIPT_PATH,
+        *command,"-n",str(n_thread)
+    ]
 
     result = subprocess.run(
         commands,

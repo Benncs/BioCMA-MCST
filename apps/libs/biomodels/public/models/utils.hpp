@@ -9,7 +9,7 @@ namespace Models
   static constexpr double tau_division_proba = 1e-7;
 
   KOKKOS_INLINE_FUNCTION bool
-  check_probability_division(double d_t, double gamma, MC::KPRNG &_rng)
+  check_probability_division(double /*d_t*/, double gamma, MC::KPRNG &_rng)
   {
     // const double proba_div =
     //     (1 - Kokkos::exp(-d_t / tau_division_proba)) * gamma;
@@ -22,7 +22,7 @@ namespace Models
   template <typename F>
   KOKKOS_INLINE_FUNCTION void update_division_status(MC::CellStatus &status,
                                                      double d_t,
-                                                     F &&predicate,
+                                                     F predicate,
                                                      MC::KPRNG &rng)
   {
     status = Models::check_probability_division(d_t, predicate, rng)

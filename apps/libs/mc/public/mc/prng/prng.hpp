@@ -18,7 +18,7 @@
 
 namespace MC
 {
-
+  
   class KPRNG
   {
   public:

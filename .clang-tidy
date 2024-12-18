@@ -1,10 +1,16 @@
 HeaderFilterRegex: 'apps/*/public/*/*.hpp'
 
+
+
 Checks: |
   *bugprone*,
   *performance*,
   *openmp*,
   *mpi*,
+  *modernize*,
+  *readability*,
+  *hicpp*,
+  *clang-analyzer-*,
   clang-analyzer-optin.cplusplus.VirtualCall,
   clang-analyzer-optin.performance.Padding,
   *cppcoreguidelines*,
@@ -17,8 +23,9 @@ Checks: |
   misc-throw-by-value-catch-by-reference,
   misc-uniqueptr-reset-release,
   misc-unused-parameters,
-  *modernize*,
-  *readability*,
+  misc-include-cleaner,
+  misc-use-internal-linkage,
+  misc-use-anonymous-namespace,
   hicpp-use-noexcept,
   -bugprone-exception-escape,
   -bugprone-reserved-identifier,
