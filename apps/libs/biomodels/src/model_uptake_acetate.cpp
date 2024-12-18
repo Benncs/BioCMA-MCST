@@ -1,5 +1,6 @@
 #include <models/model_uptake_acetate.hpp>
 #include <models/utils.hpp>
+#include <numbers>
 
 namespace
 {
@@ -54,7 +55,7 @@ namespace
 
   consteval double f_num_max()
   {
-    return l_0 * 0.69314718056 / 3600.; // 0.69314718056=ln(2)
+    return l_0 * std::numbers::ln2 / 3600.; // 0.69314718056=ln(2)
   }
 
   consteval double f_phi_pts_max(double nu_m)
@@ -65,14 +66,14 @@ namespace
   constexpr double nu_max = f_num_max();
 
   constexpr double phi_pts_max = f_phi_pts_max(nu_max);
-  constexpr double phi_o2_max = 15.6 / 3600 ; // mol0/gx/s
-  constexpr double phi_a_max = phi_pts_max / 3.;     // mol0/kgx/s
+  constexpr double phi_o2_max = 15.6 / 3600;     // mol0/gx/s
+  constexpr double phi_a_max = phi_pts_max / 3.; // mol0/kgx/s
   constexpr double k_pts = 1e-3;
   constexpr double kppermease = 1e-2;
   constexpr double phi_permease_specific = phi_pts_max / 40.;
 
   constexpr double psi_o_meta = 20e-3 / 3600 * 32e-3; // 20mmmol O2 /h;
-  constexpr double tau_metabolism =  3600;
+  constexpr double tau_metabolism = 3600;
 
   constexpr double NPermease_max = 200;
   constexpr double NPermease_init = 1.;
@@ -136,7 +137,6 @@ namespace Models
     const double phi_o2_in_mol = phi_o2_in;
     const double r1_max = nu / MolarMass::X / Yields::x_s / MolarMass::glucose; // molS/s
 
-
     const double phi_mode_b = min_var(y1_b * r1_max, phi_s_in_mol, y2_b * phi_o2_in_mol); // molS/s
 
     const double phi_s_residual = phi_s_in_mol - phi_mode_b; // molS/s
@@ -183,8 +183,8 @@ namespace Models
     phi_uptakes.acetate = concentration(_INDICES(Ac)) > 1e-4 ? phi_a_max : 0.;
     // 1 / micro_mixing * concentration(_INDICES(Ac)) / 1000.;
 
-    phi_uptakes.oxygen =  phi_o2_max*concentration(_INDICES(O2))/8.5e-3;
-                             ; // 1 / micro_mixing * concentration(_INDICES(O2)) / 1000.;
+    phi_uptakes.oxygen = phi_o2_max * concentration(_INDICES(O2)) / 8.5e-3;
+    ; // 1 / micro_mixing * concentration(_INDICES(O2)) / 1000.;
     return gamma_PTS_S;
   }
 

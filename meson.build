@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.3.0',
+  version: '0.3.1',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=gnu++20'],
 )

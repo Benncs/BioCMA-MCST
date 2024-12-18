@@ -242,6 +242,7 @@ namespace Api
 
   ApiResult SimulationInstance::register_parameters(Core::UserControlParameters&& _params) noexcept
   {
+
     params = std::move(_params);
     registered = true;
     return ApiResult();
