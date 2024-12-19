@@ -77,9 +77,9 @@ namespace Models
 
   KOKKOS_FUNCTION void
   Uptake::update(double d_t,
-                                MC::ParticleDataHolder &p,
-                                const LocalConcentrationView &concentration,
-                                MC::KPRNG _rng)
+                 MC::ParticleDataHolder &p,
+                 const LocalConcentrationView &concentration,
+                 MC::KPRNG _rng)
   {
 
     const double s = Kokkos::max(0., concentration(0));

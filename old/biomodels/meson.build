@@ -8,7 +8,7 @@ ext_include = include_directories('./ext')
 
 public_include_dir = [public_model]
 
-if use_cuda
+
 
 loader = library(
    'loader',
@@ -22,9 +22,7 @@ udf_loader = declare_dependency(
    link_with: loader,
    dependencies: [mc_dependency, common_dependecy,dynlib_dep],
 )
-else
-udf_loader = declare_dependency()
-endif 
+
 
 dep = [mc_dependency, common_dependecy, kokkos,udf_loader]
 

@@ -19,7 +19,7 @@ _MPI_ROOT_FLAG = ""  # "--allow-run-as-root"
 MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 4 --bind-to core"
 # MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 8 --use-hwthread-cpus"
 OMP_NUM_THREADS = "1"
-COMPILER_NAME = "clang"  # "gcc"
+COMPILER_NAME = "cuda"  # "gcc"
 
 
 def get_executable(type: str, mpi: bool = True):

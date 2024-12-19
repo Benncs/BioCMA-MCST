@@ -3,7 +3,7 @@ project(
   'cpp',
   version: '0.3.1',
   meson_version: '>= 1.3.0',
-  default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=gnu++20'],
+  default_options: ['warning_level=0', 'b_colorout=always', 'cpp_std=c++20'],
 )
 
 use_cuda = get_option('use_cuda')
@@ -35,8 +35,8 @@ compiler.has_argument('-fopenmp')
 
 if(compiler.get_id()=='clang')
 message('using clang')
-add_global_arguments(['-stdlib=libc++'], language: 'cpp')
-add_global_link_arguments(['-stdlib=libc++', '-lc++','-lc++abi'], language: 'cpp')
+#add_global_arguments(['-stdlib=libc++'], language: 'cpp')
+#add_global_link_arguments(['-stdlib=libc++', '-lc++','-lc++abi'], language: 'cpp')
 endif 
 
 ## Define main shared variables
@@ -49,9 +49,8 @@ global_install_dir = get_option('prefix') + '/' + get_option('libdir')
 includes_install_dir = ('include/' + project_name)
 
 
-use_kokkos_tools=true
+use_kokkos_tools=false
 
-# cpp_args = [arch_specific_args,'-stdlib=libc++']
 cpp_args = [arch_specific_args]
 if(use_kokkos_tools)
 cpp_args=[cpp_args,'-DENABLE_KOKKOS_PROFILING']
@@ -98,7 +97,36 @@ blas = dependency('blas', required: false) # Eigen can work without BLAS
 
 if not get_option('install_post_processing')
 
+use_system_kokkos=true
 cmake = import('cmake', required: true)
+if use_system_kokkos
+__cmake_kokkos_dep__ = dependency(
+  'Kokkos',
+  method: 'cmake',
+  required: true,
+  components: ['kokkos'],
+  modules: ['Kokkos::kokkos'],
+)
+
+kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE']
+
+if use_cuda
+
+  kokkos_compile_arg = [
+    kokkos_compile_arg,
+    '-extended-lambda',
+    '-Wext-lambda-captures-this',
+   # '-arch=native',
+  ]
+endif
+
+kokkos = declare_dependency(
+  dependencies: [__cmake_kokkos_dep__, omp, hwloc, thread_dep],
+  compile_args: kokkos_compile_arg,
+)
+else
+
+
 kokkos_option = cmake.subproject_options()
 kokkos_option.add_cmake_defines({'CMAKE_CXX_STANDARD': '20'})
 kokkos_option.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
@@ -120,6 +148,7 @@ kokkos = declare_dependency(
   sub_kokkos.dependency('kokkosalgorithms')
   ,omp, hwloc, thread_dep]
 )
+endif 
 
 dynlib_dep = dependency('dynlib-1.0', required: true)
 

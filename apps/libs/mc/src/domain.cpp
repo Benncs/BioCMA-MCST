@@ -7,6 +7,35 @@
 #include <mc/domain.hpp>
 #include <stdexcept>
 
+namespace 
+{
+  template<typename ViewType,typename VolumeViewType,typename ResViewType>
+  class FunctorInit
+  {
+    public:
+    FunctorInit(ViewType shared_containers,VolumeViewType _volumes,ResViewType tot):tmp_shared_containers(shared_containers),volumes(_volumes),total(tot)
+    {
+
+    }
+
+    ViewType tmp_shared_containers;
+    VolumeViewType volumes;
+    ResViewType total;
+
+    KOKKOS_FUNCTION void operator()(std::size_t i_particle) const
+    {
+         auto& local_container = tmp_shared_containers(i_particle);
+          // Make a container with initial information about domain
+          local_container = MC::ContainerState();
+          local_container.id = i_particle;
+          local_container.n_cells = 0;
+          local_container.volume_liq = volumes(i_particle);
+          // Don't need gas volume right now, will be set during the simulation
+          total() += local_container.volume_liq;
+    }
+  };
+}
+
 namespace MC
 {
 
@@ -51,20 +80,13 @@ namespace MC
     // Temporary view for initialisation
     Kokkos::View<double, ComputeSpace> _tmp_tot("domain_tmp_total_volume", 1);
     auto tmp_shared_containers = shared_containers;
-    Kokkos::parallel_for(
-        "init_domain", volumes.size(), KOKKOS_LAMBDA(const int i) {
-          auto& local_container = tmp_shared_containers(i);
-          // Make a container with initial information about domain
-          local_container = ContainerState();
-          local_container.id = i;
-          local_container.n_cells = 0;
-          local_container.volume_liq = volume_compute(i);
-          // Don't need gas volume right now, will be set during the simulation
-          _tmp_tot() += local_container.volume_liq;
-        });
-    Kokkos::fence();
 
-    this->_total_volume = _tmp_tot(); // copy computed volume
+    Kokkos::parallel_for(
+        "init_domain", volumes.size(), FunctorInit(shared_containers,volume_compute,_tmp_tot));
+
+    Kokkos::fence();
+    Kokkos::deep_copy(this->_total_volume,_tmp_tot);// copy computed volume
+
   }
 
   ReactorDomain& ReactorDomain::operator=(ReactorDomain&& other) noexcept

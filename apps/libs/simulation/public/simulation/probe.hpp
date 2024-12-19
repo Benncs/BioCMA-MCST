@@ -44,7 +44,7 @@ namespace Simulation
   {
   }
 
-  template <std::size_t buffer_size> bool Probes<buffer_size>::set(double val) const
+   template <std::size_t buffer_size> KOKKOS_INLINE_FUNCTION bool Probes<buffer_size>::set(double val) const
   {
     const auto i = Kokkos::atomic_fetch_inc(&internal_counter());
     if (i < buffer_size)

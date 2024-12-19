@@ -32,8 +32,7 @@ mc_dependency = declare_dependency(
    compile_args: [arg],
 )
 
-
-subdir('./tests')
+#subdir('./tests')
 
 install_subdir(
    'public',

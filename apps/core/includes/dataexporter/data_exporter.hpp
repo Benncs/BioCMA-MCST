@@ -92,7 +92,7 @@ namespace Core
     using simple_export_t = std::variant<size_t,
                                          std::string,
                                          std::vector<size_t>,
-                                         double>; ///< Simple export types
+                                         double,uint32_t>; ///< Simple export types
     using export_initial_kv = std::unordered_map<std::string,
                                                  simple_export_t>; ///< Initial export key-value pairs
 

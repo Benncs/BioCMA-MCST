@@ -67,9 +67,9 @@ namespace Simulation
     {
        n_flows = this->feed.liquid->size();
     }
-    index_leaving_flow = Kokkos::View<size_t*, ComputeSpace>("index_leaving_flow", n_flows);
+    index_leaving_flow = LeavingFlowIndexType("index_leaving_flow", n_flows);
 
-    leaving_flow = Kokkos::View<double*, ComputeSpace>("leaving_flow", n_flows);
+    leaving_flow = LeavingFlowType("leaving_flow", n_flows);
   }
 
   void SimulationUnit::setVolumes(std::span<const double> volumesgas,

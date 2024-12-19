@@ -147,82 +147,82 @@ namespace
       host_names(i) = "age";
     };
 
-    const size_t n_compartment = mc_unit->domain.getNumberCompartments();
-    const auto compartments = mc_unit->domain.data();
-    auto visitor = [clean,
-                    n_compartment,
-                    compartments,
-                    get_names,
-                    &host_names,
-                    &host_particle_values,
-                    &host_spatial_values](auto&& container)
-    {
-      auto& compute_particles_data = container.get_compute();
-      if (compute_particles_data.size() == 0)
-      {
-        return;
-      }
-      auto& host_particles_data = container.get_host();
+    // const size_t n_compartment = mc_unit->domain.getNumberCompartments();
+    // const auto compartments = mc_unit->domain.data();
+    // auto visitor = [clean,
+    //                 n_compartment,
+    //                 compartments,
+    //                 get_names,
+    //                 &host_names,
+    //                 &host_particle_values,
+    //                 &host_spatial_values](auto&& container)
+    // {
+    //   auto& compute_particles_data = container.get_compute();
+    //   if (compute_particles_data.size() == 0)
+    //   {
+    //     return;
+    //   }
+    //   auto& host_particles_data = container.get_host();
 
-      get_names(host_particles_data);
+    //   get_names(host_particles_data);
 
-      auto property_names = Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_names);
+    //   auto property_names = Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_names);
 
-      size_t n_p = compute_particles_data.size();
-      Kokkos::View<double**, ComputeSpace> particle_values(
-          "host_property_values", property_names.size(), n_p);
+    //   size_t n_p = compute_particles_data.size();
+    //   Kokkos::View<double**, ComputeSpace> particle_values(
+    //       "host_property_values", property_names.size(), n_p);
 
-      Kokkos::View<double**,ComputeSpace> spatial_values(
-          "host_spatial_values", property_names.size(), n_compartment);
-      Kokkos::deep_copy(spatial_values,0.);
+    //   Kokkos::View<double**,ComputeSpace> spatial_values(
+    //       "host_spatial_values", property_names.size(), n_compartment);
+    //   Kokkos::deep_copy(spatial_values,0.);
 
-      Kokkos::Experimental::ScatterView<double**> scatter_spatial_values(spatial_values);
+    //   Kokkos::Experimental::ScatterView<double**> scatter_spatial_values(spatial_values);
 
-      Kokkos::parallel_for(
-          "get_particle_properties", n_p, KOKKOS_LAMBDA(const int i) {
-            auto& particle = compute_particles_data._owned_data(i);
-            if (particle.properties.status == MC::CellStatus::IDLE)
-            {
-              auto local_spatial_values = scatter_spatial_values.access();
-              auto prop = particle.data.get_properties();
-              const size_t i_container = particle.properties.current_container;
-              // const auto cast_n_cell =
-              //     static_cast<double>(compartments[i_container].n_cells);
-              size_t i_key = 0;
-              for (const auto& [key, value] : prop)
-              {
+    //   Kokkos::parallel_for(
+    //       "get_particle_properties", n_p, KOKKOS_LAMBDA(const int i) {
+    //         auto& particle = compute_particles_data._owned_data(i);
+    //         if (particle.properties.status == MC::CellStatus::IDLE)
+    //         {
+    //           auto local_spatial_values = scatter_spatial_values.access();
+    //           auto prop = particle.data.get_properties();
+    //           const size_t i_container = particle.properties.current_container;
+    //           // const auto cast_n_cell =
+    //           //     static_cast<double>(compartments[i_container].n_cells);
+    //           size_t i_key = 0;
+    //           for (const auto& [key, value] : prop)
+    //           {
 
-                particle_values(i_key, i) = value;
+    //             particle_values(i_key, i) = value;
 
-                // Kokkos::atomic_add(&spatial_values(i_key, i_container),
-                //                    value / cast_n_cell);
-                local_spatial_values(i_key, i_container) += value;
-                ++i_key;
-              }
+    //             // Kokkos::atomic_add(&spatial_values(i_key, i_container),
+    //             //                    value / cast_n_cell);
+    //             local_spatial_values(i_key, i_container) += value;
+    //             ++i_key;
+    //           }
 
-              particle_values(i_key, i) = particle.properties.hydraulic_time;
-              local_spatial_values(i_key, i_container) += particle.properties.hydraulic_time;
-              // Kokkos::atomic_add(&spatial_values(i_key, i_container),
-              //                    particle.properties.hydraulic_time /
-              //                        cast_n_cell);
-              ++i_key;
-              particle_values(i_key, i) = particle.properties.interdivision_time;
-              // Kokkos::atomic_add(&spatial_values(i_key, i_container),
-              //                    particle.properties.interdivision_time /
-              //                        cast_n_cell);
-              local_spatial_values(i_key, i_container) += particle.properties.interdivision_time;
-            }
-            if (clean)
-            {
-              particle.clearState();
-            }
-          });
-      Kokkos::fence();
-      Kokkos::Experimental::contribute(spatial_values, scatter_spatial_values);
-      host_particle_values = Kokkos::create_mirror_view_and_copy(HostSpace(), particle_values);
-      host_spatial_values = Kokkos::create_mirror_view_and_copy(HostSpace(), spatial_values);
-    };
+    //           particle_values(i_key, i) = particle.properties.hydraulic_time;
+    //           local_spatial_values(i_key, i_container) += particle.properties.hydraulic_time;
+    //           // Kokkos::atomic_add(&spatial_values(i_key, i_container),
+    //           //                    particle.properties.hydraulic_time /
+    //           //                        cast_n_cell);
+    //           ++i_key;
+    //           particle_values(i_key, i) = particle.properties.interdivision_time;
+    //           // Kokkos::atomic_add(&spatial_values(i_key, i_container),
+    //           //                    particle.properties.interdivision_time /
+    //           //                        cast_n_cell);
+    //           local_spatial_values(i_key, i_container) += particle.properties.interdivision_time;
+    //         }
+    //         if (clean)
+    //         {
+    //           particle.clearState();
+    //         }
+    //       });
+    //   Kokkos::fence();
+    //   Kokkos::Experimental::contribute(spatial_values, scatter_spatial_values);
+    //   host_particle_values = Kokkos::create_mirror_view_and_copy(HostSpace(), particle_values);
+    //   host_spatial_values = Kokkos::create_mirror_view_and_copy(HostSpace(), spatial_values);
+    // };
 
-    std::visit(visitor, mc_unit->container);
+    // std::visit(visitor, mc_unit->container);
   }
 } // namespace

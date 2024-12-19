@@ -44,10 +44,10 @@ namespace Models
   } // namespace GammaDivision
 
 
-  KOKKOS_INLINE_FUNCTION bool almost_equal(double val, double val2, double tolerance=1e-8)
-  {
-    return Kokkos::abs(val - val2) < tolerance;
-  }
+  template <NumberType T> KOKKOS_INLINE_FUNCTION bool almost_equal(T val, T val2, T tolerance = tolerance_equality_float)
+{
+  return Kokkos::abs(val - val2) < tolerance;
+}
 
 } // namespace Models
 

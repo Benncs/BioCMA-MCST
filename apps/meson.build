@@ -9,7 +9,9 @@ else
   subdir('core')
   subdir('api')
   subdir('cli')
+  if not use_cuda
   subdir('udf_model')
+  endif 
 endif
 
 

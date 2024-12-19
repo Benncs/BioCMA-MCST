@@ -45,7 +45,7 @@ namespace MC
       ar(volume_liq, volume_gas, id,n_cells);
     }
 
-    
+    KOKKOS_FUNCTION ContainerState()=default;
 
   };
 

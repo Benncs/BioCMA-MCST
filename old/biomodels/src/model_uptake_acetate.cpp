@@ -254,18 +254,15 @@ namespace Models
     return factor * lenght;
   }
 
-  //TODO use Kokks unordered map 
   KOKKOS_FUNCTION model_properties_detail_t UptakeAcetate::get_properties()
   {
-    // model_properties_detail_t var;
-    // var.insert({"lenght", lenght});
-    // return {{"lenght", lenght},
-    //         {"a_pts", a_pts},
-    //         {"nu_eff", nu},
-    //         {"nu_meta", rates.nu},
-    //         {"a_permease", a_permease},
-    //         {"n_permease", n_permease},
-    //         {"mass", mass()}};
-    // return {};
+
+    return {{"lenght", lenght},
+            {"a_pts", a_pts},
+            {"nu_eff", nu},
+            {"nu_meta", rates.nu},
+            {"a_permease", a_permease},
+            {"n_permease", n_permease},
+            {"mass", mass()}};
   }
 } // namespace Models

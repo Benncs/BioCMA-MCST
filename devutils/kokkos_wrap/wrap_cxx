@@ -1,7 +1,8 @@
 #!/bin/bash
 
-wrap_cxx="/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++"
+# wrap_cxx="/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper /usr/bin/c++ /usr/bin/c++"
 
+wrap_cxx="/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper clang++-18 clang++-18"
 
 args="$@"
 args=$(echo "$args" | sed 's/-MQ /-MT /g') #Cmake and Ninja don´t use the same link semantic

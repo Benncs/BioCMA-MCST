@@ -273,7 +273,7 @@ namespace
         sync_step(exec, simulation);
         {
           PROFILE_SECTION("host:sync_update")
-            result.clear(local_container.n_particle());
+          result.clear(local_container.n_particle());
           result.update_view(view_result);
           simulation.update_feed(current_time, d_t);
           simulation.step(d_t, *current_reactor_state);

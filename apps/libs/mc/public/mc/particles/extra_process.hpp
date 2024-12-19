@@ -63,13 +63,24 @@ namespace MC
     /**
      * @brief Get correct view to be pass to kernel
      */
-    auto get_view()
+    ResultsVIew get_view()
     {
       // ResultsVIew results("Results_view");
-      Kokkos::View<Results<MemorySpace, T>, MemorySpace> results(Kokkos::view_alloc("Results_view", Kokkos::WithoutInitializing));
-      new (&results()) Results(*this);
-      update_view(results);
-      return results;
+      // ResultsVIew results(Kokkos::view_alloc("Results_view", Kokkos::WithoutInitializing));
+      // new (&results()) Results(*this);
+      // update_view(results);
+
+      // ResultsVIew results(Kokkos::view_alloc("foo_view", Kokkos::MemoryUnmanaged));
+      // Kokkos::deep_copy(results, *this);
+
+  
+      Kokkos::View<Results<MemorySpace, T> ,Kokkos::HostSpace> x_view(this);                                   
+
+      auto v = Kokkos::create_mirror_view_and_copy(MemorySpace(),x_view);
+
+
+
+      return v;
     }
 
     template <class Archive> void serialize(Archive &ar)

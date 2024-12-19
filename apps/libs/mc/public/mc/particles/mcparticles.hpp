@@ -70,8 +70,8 @@ namespace MC
     ParticleDataHolder properties;
     _Model data{};
 
-  private:
-    BaseParticle(ParticleDataHolder props, _Model &&_model)
+  
+    KOKKOS_INLINE_FUNCTION BaseParticle(ParticleDataHolder props, _Model &&_model)
         : properties(props), data(std::move(_model))
     {
     }
