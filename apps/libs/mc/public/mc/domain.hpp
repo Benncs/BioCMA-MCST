@@ -2,13 +2,13 @@
 #define __MC_REACTORDOMAIN_HPP__
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_Macros.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 #include <cassert>
 #include <cma_read/neighbors.hpp>
 #include <cmt_common/macro_constructor_assignment.hpp>
 #include <common/common.hpp>
-#include <common/common_types.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <mc/container_state.hpp>
@@ -46,18 +46,18 @@ namespace MC
      * @brief Default constructor
      *
      */
-    ReactorDomain() = default;
+    ReactorDomain();
 
     /**
      * @brief Move constructor
      **/
-    ReactorDomain(ReactorDomain &&other) noexcept;
+    ReactorDomain(ReactorDomain&& other) noexcept = default;
 
     /**
      * @brief Main constructor
      */
     ReactorDomain(std::span<double> volumes,
-                  const CmaRead::Neighbors::Neighbors_const_view_t &_neighbors);
+                  const CmaRead::Neighbors::Neighbors_const_view_t& _neighbors);
     /**
      * @brief Default destructor
      *
@@ -68,19 +68,17 @@ namespace MC
      * @brief Move assignment operator
      *
      */
-    ReactorDomain &operator=(ReactorDomain &&other) noexcept;
+    ReactorDomain& operator=(ReactorDomain&& other) noexcept;
 
     /**
     @brief Set volume of liquid and gas of each compartment
     */
-    void setVolumes(std::span<double const> volumes_gas,
-                    std::span<double const> volumes_liq);
+    void setVolumes(std::span<double const> volumes_gas, std::span<double const> volumes_liq);
 
     /**
      * @brief Update neigbors of compartments
      */
-    void
-    setLiquidNeighbors(const CmaRead::Neighbors::Neighbors_const_view_t &data);
+    void setLiquidNeighbors(const CmaRead::Neighbors::Neighbors_const_view_t& data);
 
     // GETTERS
     /**
@@ -89,14 +87,14 @@ namespace MC
      * Provides non-const access to the compartment at the given index. This
      * allows modification of the compartment's state.
      */
-    auto &operator[](size_t i_c);
+    auto& operator[](size_t i_c);
     /**
      * @brief Accesses the compartment at the specified index.
      *
      * Provides const access to the compartment at the given index. This
      * allows modification of the compartment's state.
      */
-    auto &operator[](size_t i_c) const;
+    auto& operator[](size_t i_c) const;
 
     /**
      * @brief Returns an iterator to the beginning of the compartments (const
@@ -143,8 +141,7 @@ namespace MC
     /**
      * @brief Return a const reference to neighbors
      */
-    [[nodiscard]] const CmaRead::Neighbors::Neighbors_const_view_t &
-    getNeighbors() const;
+    [[nodiscard]] const CmaRead::Neighbors::Neighbors_const_view_t& getNeighbors() const;
 
     /**
      * @brief Returns the number of particle per compartment
@@ -154,17 +151,36 @@ namespace MC
     /**
     @brief Return a unique domain from data obtained with MPI gather
     */
-    static ReactorDomain
-    reduce(std::span<const size_t> data, size_t original_size, size_t n_rank);
+    static ReactorDomain reduce(std::span<const size_t> data, size_t original_size, size_t n_rank);
 
+    [[deprecated("Not needed anymore")]] void
+    in_place_reduce(std::span<const size_t> data, size_t original_size, size_t n_rank);
     /**
      * @brief Get reference to raw data containers
      */
-    auto &data()
+    auto& data()
     {
       return shared_containers;
     }
     // std::span<ContainerState> data();
+
+    template <class Archive> void save(Archive& ar) const
+    {
+      std::vector<ContainerState> data_vector(shared_containers.data(),
+                                              shared_containers.data() + shared_containers.size());
+      ar(id, size, _total_volume, data_vector);
+    }
+
+    template <class Archive> void load(Archive& ar)
+    {
+      std::vector<ContainerState> data_vector;
+      ar(id, size, _total_volume, data_vector);
+
+      auto tmpdata =
+          Kokkos::View<ContainerState*, Kokkos::HostSpace>(data_vector.data(), data_vector.size());
+      Kokkos::resize(shared_containers, tmpdata.size());
+      Kokkos::deep_copy(shared_containers, tmpdata);
+    }
 
   private:
     double _total_volume = 0.; ///< Domain total volume
@@ -176,23 +192,21 @@ namespace MC
      * outside, containers are located into sharedSpace to limit explicit deep
      * copy.
      */
-    Kokkos::View<ContainerState *, Kokkos::SharedSpace>
+    Kokkos::View<ContainerState*, Kokkos::SharedSpace>
         shared_containers; // TODO: check with GPU if sharedspace is enough, if
                            // not use PinnedToHost, if not use explicit copy
 
-    CmaRead::Neighbors::Neighbors_const_view_t
-        neighbors; ///< Containers neighbors
+    CmaRead::Neighbors::Neighbors_const_view_t neighbors; ///< Containers neighbors
   };
 
-  inline const CmaRead::Neighbors::Neighbors_const_view_t &
-  ReactorDomain::getNeighbors() const
+  inline const CmaRead::Neighbors::Neighbors_const_view_t& ReactorDomain::getNeighbors() const
   {
 
     return neighbors;
   }
 
-  inline void ReactorDomain::setLiquidNeighbors(
-      const CmaRead::Neighbors::Neighbors_const_view_t &data)
+  inline void
+  ReactorDomain::setLiquidNeighbors(const CmaRead::Neighbors::Neighbors_const_view_t& data)
   {
 
     neighbors = data.to_const();
@@ -208,13 +222,13 @@ namespace MC
     return this->_total_volume;
   }
 
-  inline auto &ReactorDomain::operator[](size_t i_c)
+  inline auto& ReactorDomain::operator[](size_t i_c)
   {
     // Kokkos view is not bound checked when use release
     KOKKOS_ASSERT(i_c < size);
     return this->shared_containers(i_c);
   }
-  inline auto &ReactorDomain::operator[](size_t i_c) const
+  inline auto& ReactorDomain::operator[](size_t i_c) const
   {
     KOKKOS_ASSERT(i_c < size);
     return this->shared_containers(i_c);

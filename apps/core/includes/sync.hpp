@@ -2,7 +2,12 @@
 #define __SYNC_NODES_HPP__
 
 #include <common/execinfo.hpp>
-#include <simulation/simulation.hpp>
+
+
+namespace Simulation
+{
+    class SimulationUnit;
+}
 
 /**
  * @brief Synchronization after particle processing.

@@ -1,9 +1,85 @@
+#include <Kokkos_Core.hpp>
+#include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <simulation/probe.hpp>
+
+void test_probes_set()
+{
+  auto probe = Simulation::Probes<2>(); // Buffer size 2
+  assert(probe.set(1) == true);
+  assert(probe.need_export() == false);
+  assert(probe.set(2) == true);
+  assert(probe.need_export() == true);
+  assert(probe.set(3) == false);
+}
+
+void test_probes_get()
+{
+  constexpr std::size_t size_buff = 10;
+  auto probe = Simulation::Probes<size_buff>(); // Buffer size 2
+  for (auto i = 0LU; i < size_buff; ++i)
+  {
+    assert(probe.set(static_cast<double>(i)) == true);
+  }
+  assert(probe.set(55) == false);
+  assert(probe.need_export() == true);
+  auto rd = probe.get();
+  assert(rd.size() == size_buff);
+
+  for (auto i = 0LU; i < size_buff; ++i)
+  {
+    assert(rd[i] == static_cast<double>(i));
+  }
+}
+void test_probes_clear()
+{
+  constexpr std::size_t size_buff = 20;
+
+  constexpr double val_index_2 = 2. * 2.;
+
+  auto probe = Simulation::Probes<size_buff>(); // Buffer size 2
+  for (auto i = 0LU; i < size_buff; ++i)
+  {
+    assert(probe.set(2. * static_cast<double>(i)) == true); // NOLINT
+  }
+  assert(probe.need_export() == true);
+  auto rd = probe.get();
+  assert(rd.size() == size_buff);
+  assert(rd[2] == val_index_2);
+  probe.clear();
+  assert(rd.size() == size_buff);
+  assert(rd[2] != val_index_2);
+
+  // Even if rd is deep copy of probe,svalue is reset to 0 but change doesn´t change
+  assert(probe.need_export() == false);
+  for (auto i = 0LU; i < size_buff; ++i)
+  {
+    assert(probe.set(2. * static_cast<double>(i)) == true); // NOLINT
+  }
+  assert(probe.need_export() == true);
+  rd = probe.get();
+  assert(rd[2] == val_index_2);
+}
+
+int main()
+{
+
+  Kokkos::initialize();
+  test_probes_set();
+  test_probes_get();
+  test_probes_clear();
+  Kokkos::finalize();
+}
+
+/*OLD IMPLEMENTATION TEST
+
 #include <Kokkos_Assert.hpp>
 #include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <simulation/probe.hpp>
-
+#include <span>
 static constexpr uint64_t init_n_particle = 200;
 static constexpr uint64_t n_time_flush = 10;
 
@@ -131,3 +207,5 @@ int main()
   test_ptr();
   Kokkos::finalize();
 }
+
+*/

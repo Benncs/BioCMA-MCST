@@ -28,7 +28,7 @@ namespace Simulation
     case ErrorCodes::BadInitialiser:
       return "Bad initialiser";
     case ErrorCodes::MismatchSize:
-      return "Mismatch Size";
+      return "post_init_concentration: Mismatch Size";
     }
 #if defined(_MSC_VER) && !defined(__clang__) // MSVC
     __assume(false);

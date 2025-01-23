@@ -3,7 +3,7 @@
 #  include <dataexporter/data_exporter.hpp>
 #  include <iostream>
 
-namespace CORE_DE
+namespace Core
 {
   class DataExporter::impl
   {
@@ -65,5 +65,5 @@ namespace CORE_DE
                                   const simple_export_t &values)
   {
   }
-} // namespace CORE_DE
+} // namespace Core
 #endif

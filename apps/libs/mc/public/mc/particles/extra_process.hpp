@@ -14,17 +14,14 @@ namespace MC
   template <typename MemorySpace, ParticleModel T> struct Results
   {
 
-    using ResultsVIew =
-        Kokkos::View<Results<MemorySpace, T>,
-                     MemorySpace>; ///< Alias only for readibility
+    using ResultsVIew = Kokkos::View<Results<MemorySpace, T>,
+                                     MemorySpace>; ///< Alias only for readibility
 
-    MC::ParticleList<MemorySpace, T>
-        extra_process; ///< Fixed size buffer with particles spawnt during the
-                       ///< current cycle that will be process at the end of the
-                       ///< kernel
-    int waiting_allocation_particle =
-        0; ///< Counter to know how many particle to allocate at the end at the
-           ///< kernel if extra_process buffer is full.
+    MC::ParticleList<MemorySpace, T> extra_process; ///< Fixed size buffer with particles spawnt during the
+                                                    ///< current cycle that will be process at the end of the
+                                                    ///< kernel
+    int waiting_allocation_particle = 0;            ///< Counter to know how many particle to allocate at the end at the
+                                                    ///< kernel if extra_process buffer is full.
 
     /**
      * @brief Main constructor
@@ -33,9 +30,7 @@ namespace MC
      * @warning According to implementation, buffer itself can allocate more
      * than capacity
      */
-    explicit Results(size_t capacity)
-        : extra_process(
-              MC::ParticleList<MemorySpace, T>::with_capacity(capacity))
+    explicit Results(size_t capacity) : extra_process(MC::ParticleList<MemorySpace, T>::with_capacity(capacity))
     {
     }
 
@@ -71,13 +66,16 @@ namespace MC
     auto get_view()
     {
       // ResultsVIew results("Results_view");
-      Kokkos::View<Results<MemorySpace, T>, MemorySpace> results(
-          Kokkos::view_alloc("Results_view", Kokkos::WithoutInitializing));
+      Kokkos::View<Results<MemorySpace, T>, MemorySpace> results(Kokkos::view_alloc("Results_view", Kokkos::WithoutInitializing));
       new (&results()) Results(*this);
       update_view(results);
       return results;
     }
 
+    template <class Archive> void serialize(Archive &ar)
+    {
+      ar(extra_process, waiting_allocation_particle);
+    }
     // void from_view(Kokkos::View<Results<MemorySpace, T>, MemorySpace> _r_v)
     // {
     //   extra_process = _r_v().extra_proces;

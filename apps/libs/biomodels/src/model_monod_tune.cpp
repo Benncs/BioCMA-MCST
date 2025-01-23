@@ -1,8 +1,4 @@
 #include "models/utils.hpp"
-#include <Kokkos_Atomic.hpp>
-#include <Kokkos_Macros.hpp>
-#include <Kokkos_Printf.hpp>
-#include <common/common.hpp>
 #include <mc/particles/data_holder.hpp>
 #include <mc/particles/particle_model.hpp>
 #include <models/model_monod_tune.hpp>
@@ -75,7 +71,7 @@ namespace Models
   }
 
   KOKKOS_FUNCTION void MonodTune::contribution(MC::ParticleDataHolder &p,
-                                               ContributionView contribution)
+                                               const ContributionView& contribution)
   {
     // contribution(0, p.current_container) -= contrib * p.weight;
 

@@ -21,18 +21,18 @@ namespace PostProcessing
 
   void final_post_processing(const ExecInfo &exec,
                     const Core::SimulationParameters &params,
-                    Simulation::SimulationUnit &&simulation,std::unique_ptr<CORE_DE::MainExporter>& mde);
+                    Simulation::SimulationUnit &simulation,std::unique_ptr<Core::MainExporter>& mde);
 
   void show_sumup_state(const Simulation::SimulationUnit &simulation) noexcept;
 
-  void save_initial_particle_state(Simulation::SimulationUnit &simulation,CORE_DE::PartialExporter& pde);
+  void save_initial_particle_state(Simulation::SimulationUnit &simulation,Core::PartialExporter& pde);
 
-  void save_final_particle_state(Simulation::SimulationUnit &simulation,CORE_DE::PartialExporter& pde);
+  void save_final_particle_state(Simulation::SimulationUnit &simulation,Core::PartialExporter& pde);
 
-  void save_probes(Simulation::SimulationUnit &simulation,CORE_DE::PartialExporter& pde);
+  void save_probes(Simulation::SimulationUnit &simulation,Core::PartialExporter& pde);
 
   void user_triggered_properties_export(
-      Simulation::SimulationUnit &sim,CORE_DE::PartialExporter& pde);
+      Simulation::SimulationUnit &sim,Core::PartialExporter& pde);
 
   // get_particle_properties(unit,
 

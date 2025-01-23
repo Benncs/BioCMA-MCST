@@ -1,7 +1,5 @@
-#include "common/common.hpp"
 #include "mc/prng/prng.hpp"
 #include "models/utils.hpp"
-#include <Kokkos_Macros.hpp>
 #include <models/model_uptake_implicit.hpp>
 
 static constexpr double tauPTS = 25.0;
@@ -113,7 +111,7 @@ namespace Models
   }
 
   KOKKOS_FUNCTION void UptakeImplicit::contribution(MC::ParticleDataHolder &p,
-                                                    ContributionView contribution)
+                                                    const ContributionView& contribution)
   {
 
     auto access_contribs = contribution.access();

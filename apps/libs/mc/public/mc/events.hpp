@@ -1,16 +1,11 @@
 #ifndef __MC_EVENTS_HPP__
 #define __MC_EVENTS_HPP__
 
-#include "common/kokkos_vector.hpp"
-#include <Kokkos_Atomic.hpp>
-#include <Kokkos_Core_fwd.hpp>
+#include <Kokkos_Core.hpp>
 #include <Kokkos_DynamicView.hpp>
-#include <Kokkos_Macros.hpp>
 #include <common/execinfo.hpp>
 #include <cstddef>
-#include <impl/Kokkos_HostThreadTeam.hpp>
 #include <span>
-
 namespace MC
 {
   /**
@@ -32,8 +27,7 @@ namespace MC
    * @brief inline getter, converts event to its value in order to be use as
    * array index
    */
-  template <EventType event>
-  KOKKOS_INLINE_FUNCTION consteval size_t event_index()
+  template <EventType event> KOKKOS_INLINE_FUNCTION consteval size_t event_index()
   {
     return static_cast<size_t>(event);
   }
@@ -43,35 +37,32 @@ namespace MC
    */
   struct alignas(ExecInfo::cache_line_size) EventContainer
   {
-   
 
     // Use SharedHostPinnedSpace as this struct is meant to be small enough to
     // be shared between Host and Device According to SharedHostPinnedSpace
     // documentation, the size of this data can fit into one cache line so
     // transfer is not a botteneck
-    Kokkos::View<size_t[number_event_type], Kokkos::SharedHostPinnedSpace>
+    Kokkos::View<std::size_t[number_event_type], Kokkos::SharedHostPinnedSpace> // NOLINT
         _events; // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
-    static_assert(sizeof(size_t[number_event_type]) <=
-                      ExecInfo::cache_line_size,
+    // NOLINTBEGIN
+    static_assert(sizeof(std::size_t[number_event_type]) <= ExecInfo::cache_line_size,
                   "Size of Eventcontainer::_event fits into cache line");
-
-    
-
+    // NOLINTEND
     /**
      * @brief Default container, initalise counter
      */
     EventContainer()
     {
-      _events = Kokkos::View<size_t[number_event_type],
-                             Kokkos::SharedHostPinnedSpace>(
-          "events"); // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+      // NOLINTBEGIN
+      _events = Kokkos::View<size_t[number_event_type], Kokkos::SharedHostPinnedSpace>("events");
+      // NOLINTEND
       Kokkos::deep_copy(_events, 0); // Ensure all event to 0 occurence
     }
     /**
      * @brief Get std const view of _events counter
      */
-    [[nodiscard]] std::span<size_t> get_span() const
+    [[nodiscard]] std::span<std::size_t> get_span() const
     {
       // As we use SharedHostPinnedSpace, we can deal with classic std
       // containers to use host manipulation
@@ -92,7 +83,7 @@ namespace MC
      * @warning This function is thread_safe because we get a copy of the
      * current counter
      */
-    template <EventType event> [[nodiscard]] constexpr size_t get() const
+    template <EventType event> [[nodiscard]] constexpr std::size_t get() const
     {
       return _events(event_index<event>());
     }
@@ -103,9 +94,9 @@ namespace MC
      * @warning This function is NOT thread_safe because we get a raw reference
      * on the current counter
      */
-    template <EventType event> [[nodiscard]] constexpr size_t &get_mut()
+    template <EventType event> [[nodiscard]] constexpr std::size_t& get_mut()
     {
-      return _events(event_index<event>());
+      return _events[event_index<event>()];
     }
 
     /**
@@ -115,10 +106,9 @@ namespace MC
      * @tparam Event to get
      *
      */
-    template <EventType event>
-    KOKKOS_INLINE_FUNCTION constexpr void incr() const
+    template <EventType event> KOKKOS_FORCEINLINE_FUNCTION constexpr void incr() const
     {
-      Kokkos::atomic_increment(&_events(event_index<event>()));
+      Kokkos::atomic_increment(&_events[event_index<event>()]);
     }
 
     /**
@@ -127,7 +117,31 @@ namespace MC
      * @param _data obtained via multiple EventContainer merged together
      * @warning _data size has to be a multiple of number_event_type
      */
-    static EventContainer reduce(std::span<size_t> _data);
+    static EventContainer reduce(std::span<std::size_t> _data);
+
+    template <class Archive> void save(Archive& ar) const
+    {
+      std::array<std::size_t, number_event_type> array{};
+
+      auto rd = std::span<std::size_t>(_events.data(), number_event_type);
+
+      std::copy(rd.begin(), rd.end(), array.begin());
+      assert(rd[0] == _events[0] && rd[0] == array[0]);
+
+      ar(array);
+    }
+
+    template <class Archive> void load(Archive& ar)
+    {
+
+      std::array<std::size_t, number_event_type> array{};
+      ar(array);
+
+      auto rd = std::span<std::size_t>(_events.data(), number_event_type);
+
+      std::copy(array.begin(), array.end(), rd.begin());
+      assert(rd[0] == _events[0]);
+    }
   };
 
   static_assert(sizeof(EventContainer) <= 2 * ExecInfo::cache_line_size,

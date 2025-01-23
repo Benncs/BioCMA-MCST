@@ -1,10 +1,13 @@
 #ifndef __RUNTIME_INIT_HPP__
 #define __RUNTIME_INIT_HPP__
 
+#include "common/execinfo.hpp"
 #include <chrono>
-#include <common/common.hpp>
+#include <ctime>
 #include <iomanip>
 #include <core/simulation_parameters.hpp>
+#include <string>
+#include <string_view>
 
 void set_n_thread_current_rank(int rank,
                                int size,
@@ -52,16 +55,16 @@ std::string sappend_date_time(std::string_view string) noexcept;
  *
  * @param argc The number of command-line arguments.
  * @param argv The array of command-line arguments.
- * @param params The `SimulationParameters` object containing configuration
+ * @param params The `UserControlParameters` object containing configuration
  * settings for the simulation.
  * @return An `ExecInfo` object containing details about the initialized runtime
  * environment, including execution context and other relevant metadata.
  */
 ExecInfo
-runtime_init(int argc, char **argv, Core::SimulationParameters &params) noexcept;
+runtime_init(int argc, char **argv, Core::UserControlParameters &params) noexcept;
 
 /**
  * @brief Print run metadata to log file before running */
-void register_run(const ExecInfo &exec, Core::SimulationParameters &params) noexcept;
+void register_run(const ExecInfo &exec, const Core::UserControlParameters &params) noexcept;
 
 #endif //__RUNTIME_INIT_HPP__

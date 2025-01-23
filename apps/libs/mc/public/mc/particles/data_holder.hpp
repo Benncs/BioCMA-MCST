@@ -2,7 +2,6 @@
 #define __MC_DATA_HOLDER_PARTICLE_HPP__
 
 #include <Kokkos_Core.hpp>
-#include <cmt_common/macro_constructor_assignment.hpp>
 #include <common/execinfo.hpp>
 
 namespace MC
@@ -29,8 +28,7 @@ namespace MC
     /**
      * @brief Default constructor (Can be called inside Kernel)
      */
-    KOKKOS_INLINE_FUNCTION explicit ParticleDataHolder(double _weight)
-        : weight(_weight)
+    KOKKOS_INLINE_FUNCTION explicit ParticleDataHolder(double _weight) : weight(_weight)
     {
     }
 
@@ -49,21 +47,18 @@ namespace MC
       interdivision_time = default_interdivision_time;
     }
 
-    template <class Archive>
-    void serde(Archive &ar)
+    template <class Archive> void serialize(Archive &ar)
     {
-      ar(current_container,
-         current_domain,
-         random_seed,
-         id,
-         status,
-         weight,
-         hydraulic_time);
+
+      int tmp_s = static_cast<int>(status);
+
+      ar(current_container, current_domain, random_seed, id, tmp_s, weight, hydraulic_time, interdivision_time);
+
+      status = static_cast<CellStatus>(tmp_s);
     }
 
-    
     // current_domain is always 0 because current simulation only handles 1 domain
-    size_t current_domain = default_domain;       ///< In which domain particles live
+    size_t current_domain = default_domain; ///< In which domain particles live
     size_t random_seed = 0;
     uint32_t id = 0;
 
@@ -72,7 +67,7 @@ namespace MC
     double weight = default_weight; ///< Monte-Carlo weight
 
     size_t current_container = default_container; ///< Current position in the domain
-    CellStatus status = default_status; ///< Particle state
+    CellStatus status = default_status;           ///< Particle state
 
   private:
     // Default values

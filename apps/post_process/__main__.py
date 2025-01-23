@@ -38,6 +38,14 @@ def mk_parser():
     )
 
     parser.add_argument(
+        "-m",
+        dest="do_merge",
+        action="store_true",
+        help="Use given files  together",
+        required=False
+    )
+
+    parser.add_argument(
         "--root_res",
         type=str,
         default="./results/",
@@ -171,6 +179,14 @@ def time_average_reaction_data(results):
 
 
 
+def inner(results:Results,dest_i:str):
+
+    calculate_mass(dest_i,results)
+    plot_grow_in_number(results.time, results.total_repartion, dest_i)
+    get_spatial_average_concentration(results, dest_i)
+
+    process_particle_data(results, dest_i)
+
 
 
 def main(name_results, root_res="./results/"):
@@ -186,7 +202,7 @@ def main(name_results, root_res="./results/"):
     ret_tuple = check_mixing(name_results, pathres, dest)
     n_res = len(name_results)
     
-    
+ 
 
     for i, current_path_res in enumerate(pathres):
         results: Results = import_results(current_path_res)
@@ -203,13 +219,16 @@ def main(name_results, root_res="./results/"):
         # get_scalar_rtd(dest[i],0.031653119013143756,results,True)
         # get_scalar_rtd(dest[i],2.6e-5,results,True) 
 
-        calculate_mass(dest[i],results)
-        plot_grow_in_number(results.time, results.total_repartion, dest[i])
-        get_spatial_average_concentration(results, dest[i])
+        inner(results,dest[i])
 
-        
 
-        process_particle_data(results, dest[i])
+def main_merge(name_results,root_res="./results/"):
+    partials = [import_results(p) for p in assemble(root_res, name_results)]
+    results = Results.merge(*partials)
+    dest = f"./results/{name_results[0]}_merged/postprocessing"
+    if not os.path.exists(dest):
+        os.makedirs(dest)
+    inner(results,dest)
 
 
 if __name__ == "__main__":
@@ -218,4 +237,5 @@ if __name__ == "__main__":
 
     name_results = args.name_results
     root_res = args.root_res
-    main(name_results, root_res)
+    f_main = main_merge if args.do_merge else main 
+    f_main(name_results, root_res)

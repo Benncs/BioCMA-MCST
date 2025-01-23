@@ -1,9 +1,9 @@
-# LSP AND IDE 
-.vscode/ 
+# LSP AND IDE
+.vscode/
 .cache/
-compile_commands.json 
+compile_commands.json
 .clangd
-
+.env
 # Env
 .bmc_info
 results/
@@ -18,20 +18,20 @@ callgrind.*
 *.mem*
 
 
-# Builds 
+# Builds
 builddir/
 build/
 
-# Python    
+# Python
 __pycache__
 *.old
 suprojects/highfive
 llvm.sh
-*.out 
+*.out
 .ruff_cache
 __old
 
-# Documentation 
+# Documentation
 
 ./Documentation/html
 ./Documentation/latex

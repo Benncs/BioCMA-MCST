@@ -1,19 +1,35 @@
 
 import numpy as np
-from biomc import make_initial_concentration
+# from biomc import make_initial_concentration
+
+import h5py 
+import numpy as np
+from typing import Optional
+
+
+def make_initial_concentration(dest:str,liq_concentration:np.ndarray,gas_concentration:Optional[np.ndarray]=None)->None:
+    data_liq = np.asfortranarray(liq_concentration)
+    data_gas = np.zeros(())
+    if gas_concentration is not None:
+        data_gas = np.asfortranarray(gas_concentration)
+
+    with h5py.File(dest, "w") as file: 
+        file.create_dataset("initial_liquid", data=data_liq)
+        if(gas_concentration is not None):
+            file.create_dataset("initial_gas", data=data_gas)
 
 
 
 def init_0d_1s():
     liquid_0d = np.zeros((1,2))
-    liquid_0d[0,0]=0.
+    liquid_0d[0,0]=0
     make_initial_concentration("./cma_data/0d_init.h5",liquid_0d)
 
 def init_0d_4s():
     liquid_0d = np.zeros((1,4))
     gas_0d = np.zeros((1,4))
-    liquid_0d[0,0]=0.01
-    liquid_0d[0,1]=8e-3
+    liquid_0d[0,0]=5
+    liquid_0d[0,1]=2e-3
 
     gas_0d[0,0]=0.
     gas_0d[0,1]=300e-3
@@ -35,7 +51,7 @@ def sanofi_1s():
     gas_sanofi[:,0]=0 #glucose g/l
     gas_sanofi[:,1]=0.21 #o2 g/l
 
-    liquid_sanofi[:,0]=0 #glucose g/l
+    liquid_sanofi[:,0]=5 #glucose g/l
     liquid_sanofi[:,1]=0 #o2 g/l
 
 

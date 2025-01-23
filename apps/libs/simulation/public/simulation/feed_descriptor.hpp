@@ -1,19 +1,19 @@
 #ifndef __SIMULATION_FEED_DESCRIPTOR_HPP__
 #define __SIMULATION_FEED_DESCRIPTOR_HPP__
 
+#include <cstddef>
+#include <cstdint>
 #include <optional>
 #include <variant>
 #include <vector>
 
-enum class FeedType
+enum class FeedType:std::uint8_t
 {
   Constant,
   Step,
   Pulse,
   Custom
 };
-
-
 
 namespace Simulation::Feed
 {
@@ -42,40 +42,37 @@ namespace Simulation::Feed
 
   using FeedTypeVariant = std::variant<Constant, Step, Pulse, Custom>;
 
-
   FeedType get_type(const FeedTypeVariant &v);
-  
+
   class FeedDescritor
   {
   public:
     FeedDescritor() = default;
-    FeedDescritor(double _f,
-                  feed_value_t &&_target,
-                  feed_position_t &&_position,
-                  feed_species_t _species,
-                  FeedTypeVariant _props);
+    FeedDescritor(double _f, feed_value_t &&_target, feed_position_t &&_position, feed_species_t _species, FeedTypeVariant _props);
 
-    double flow_value;
+    double flow_value{};
     feed_value_t value;
     feed_position_t position;
     feed_species_t species;
     FeedTypeVariant props;
-    size_t n_v;
-    void update(double t, double d_t)noexcept;
+    size_t n_v{};
+    void update(double t, double d_t) noexcept;
 
   private:
-    FeedType type;
+    FeedType type{};
     feed_value_t target;
+  };
+
+  struct FeedFactory
+  {
+      static FeedDescritor constant(double _f, feed_value_t &&_target, feed_position_t &&_position, feed_species_t _species);
   };
 
   struct SimulationFeed
   {
-
     std::optional<std::vector<FeedDescritor>> liquid;
     std::optional<std::vector<FeedDescritor>> gas;
   };
-
-  
 
   // struct Visitor
   // {

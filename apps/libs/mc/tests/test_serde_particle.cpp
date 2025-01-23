@@ -1,97 +1,4 @@
-#include "mc/particles/data_holder.hpp"
-#include "mc/particles/particle_model.hpp"
-#include <cassert>
-#include <mc/particles/mcparticles.hpp>
-
-#include <cereal/archives/binary.hpp>
-#include <sstream>
-
-// NOLINTBEGIN
-class NonSerdeModel
-{
-public:
-  int property1 = 0;
-
-  void init(MC::ParticleDataHolder &p, MC::KPRNG _rng)
-  {
-    p.status = MC::CellStatus::IDLE;
-  }
-
-  void update(double d_t,
-              MC::ParticleDataHolder &p,
-              const LocalConcentrationView &concentration,
-              MC::KPRNG _rng)
-  {
-  }
-
-  NonSerdeModel division(MC::ParticleDataHolder & /*p*/,MC::KPRNG)
-  {
-    return {};
-  }
-
-  void contribution(MC::ParticleDataHolder &p, ContributionView contrib)
-  {
-  }
-
-  inline model_properties_detail_t get_properties()
-  {
-    return {};
-  }
-  double mass()const{return 0;}
-};
-
-class SerdeModel
-{
-public:
-  int property1 = 0;
-
-  void init(MC::ParticleDataHolder &p, MC::KPRNG _rng)
-  {
-    p.status = MC::CellStatus::IDLE;
-  }
-
-  template <class Archive> void serde(Archive &ar)
-  {
-    ar(property1);
-  }
-
-  void update(double d_t,
-              MC::ParticleDataHolder &p,
-              const LocalConcentrationView &concentration,
-              MC::KPRNG _rng)
-  {
-  }
-
-  SerdeModel division(MC::ParticleDataHolder & /*p*/,MC::KPRNG)
-  {
-    return {};
-  }
-
-  void contribution(MC::ParticleDataHolder &p, ContributionView contrib)
-  {
-  }
-
-  inline model_properties_detail_t get_properties()
-  {
-    return {};
-  }
-   double mass()const{return 0;}
-};
-// NOLINTEND
-template <typename T> std::ostringstream wrap_ser(T &t)
-{
-  std::ostringstream buff(std::ios::binary);
-  cereal::BinaryOutputArchive ar(buff);
-  t.serde(ar);
-  return buff;
-}
-
-template <typename T, class StreamType> void wrap_de(T &t, StreamType &buff)
-{
-  std::istringstream iss(buff.str(), std::ios::binary);
-  cereal::BinaryInputArchive ar(iss);
-  t.serde(ar);
-}
+#include "serdes_class.hpp"
 
 void test_data_holder()
 {
@@ -127,7 +34,7 @@ void test_particle_with_non_model()
   wrap_de(loaded_part, buff);
 
   assert(part.properties.id == loaded_part.properties.id);
-  assert(loaded_part.data.property1 == 0); // It should not have changed
+  assert(loaded_part.data.property1 == -1); // It should not have changed
 }
 
 void test_particle_with_model()
@@ -144,8 +51,7 @@ void test_particle_with_model()
   wrap_de(loaded_part, buff);
 
   assert(part.properties.id == loaded_part.properties.id);
-  assert(loaded_part.data.property1 ==
-         part.data.property1); // We serialized and desearilzed  model
+  assert(loaded_part.data.property1 == part.data.property1); // We serialized and desearilzed  model
 }
 
 int main()
