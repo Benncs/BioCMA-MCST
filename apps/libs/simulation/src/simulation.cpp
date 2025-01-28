@@ -35,7 +35,8 @@ namespace Simulation
 
   SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept
       : mc_unit(std::move(other.mc_unit)), flow_liquid(other.flow_liquid), flow_gas(other.flow_gas),
-        is_two_phase_flow(other.is_two_phase_flow)
+        is_two_phase_flow(other.is_two_phase_flow), internal_counter_dead(std::move(other.internal_counter_dead)),
+        waiting_allocation_particle(std::move(other.waiting_allocation_particle))
   {
   }
 
@@ -44,7 +45,8 @@ namespace Simulation
                                  std::optional<Feed::SimulationFeed> _feed)
       : mc_unit(std::move(_unit)), flow_liquid(nullptr),
 
-        flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow)
+        flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow),internal_counter_dead("internal_counter_dead"),
+        waiting_allocation_particle("waiting_allocation_particle")
   {
     this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(makeScalarSimulation(
         mc_unit->domain.getNumberCompartments(), scalar_init.n_species, scalar_init.volumesliq));
@@ -62,14 +64,14 @@ namespace Simulation
     this->feed =
         _feed.has_value() ? std::move(*_feed) : Feed::SimulationFeed{std::nullopt, std::nullopt};
 
-    size_t n_flows=0;
-    if(this->feed.liquid.has_value())
+    size_t n_flows = 0;
+    if (this->feed.liquid.has_value())
     {
-       n_flows = this->feed.liquid->size();
+      n_flows = this->feed.liquid->size();
     }
-    index_leaving_flow = Kokkos::View<size_t*, ComputeSpace>("index_leaving_flow", n_flows);
+    index_leaving_flow = LeavingFlowIndexType("index_leaving_flow", n_flows);
 
-    leaving_flow = Kokkos::View<double*, ComputeSpace>("leaving_flow", n_flows);
+    leaving_flow = LeavingFlowType("leaving_flow", n_flows);
   }
 
   void SimulationUnit::setVolumes(std::span<const double> volumesgas,
@@ -197,7 +199,8 @@ namespace Simulation
 
     Kokkos::parallel_for(
         "post_init_compartments",
-        mc_unit->domain.getNumberCompartments(),
+        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0,
+                                                           mc_unit->domain.getNumberCompartments()),
         KOKKOS_LAMBDA(const int i) {
           // auto s = Kokkos::subview(_compute_concentration, i, Kokkos::ALL);
           _containers(i).concentrations = Kokkos::subview(_compute_concentration, Kokkos::ALL, i);
@@ -207,10 +210,8 @@ namespace Simulation
 
   DiagonalViewCompute SimulationUnit::get_kernel_diagonal()
   {
-    DiagonalViewCompute diag(this->flow_liquid->diag_transition.data(),
-                             this->flow_liquid->diag_transition.size());
 
-    return Kokkos::create_mirror_view_and_copy(ComputeSpace(), diag);
+    return flow_liquid->get_kernel_diagonal();
   }
 
   CumulativeProbabilityViewCompute SimulationUnit::get_kernel_cumulative_proba()
@@ -246,7 +247,7 @@ namespace Simulation
     return end_time;
   }
 
-  const Simulation::Feed::SimulationFeed& SimulationUnit::get_feed()const
+  const Simulation::Feed::SimulationFeed& SimulationUnit::get_feed() const
   {
     return this->feed;
   }

@@ -41,20 +41,21 @@
       <results_file_name>cstr_2</results_file_name>
       <number_exported_result>50</number_exported_result>
       <model_name>model_uptake_acetate</model_name>
-      <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
+      <initialiser_path>./cma_data/sanofi.h5</initialiser_path>
    </control>
 
    <control name="test">
-      <cma_case_path>./cma_data/0d/</cma_case_path>
+      <cma_case_path>./cma_data/0d_gas/</cma_case_path>
+      <!-- <cma_case_path recursive="true">/home_pers/casale/Documents/code/biomc/cma_data/bench/</cma_case_path> -->
+      <!-- <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path> -->
       <final_time>1</final_time>
-      <!-- <final_time>500</final_time> -->
-      <!-- 10000000 -->
-      <numper_particle>10000000</numper_particle>
-      <delta_time>0.02</delta_time>
-      <results_file_name>debug</results_file_name>
-      <number_exported_result>10</number_exported_result>
+      <numper_particle>1000</numper_particle>
+      <delta_time>0.1</delta_time>
+      <results_file_name>test_gpu</results_file_name>
+      <number_exported_result>50</number_exported_result>
       <model_name>model_monod</model_name>
-      <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
+      <!-- <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path> -->
+       <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
    </control>
 
    <control name="test14">
@@ -102,7 +103,7 @@
    </control>
 
    <control name="debug">
-		   	    <cma_case_path>./cma_data/0d_mono/</cma_case_path>
+    <cma_case_path>./../../cfd-cma/cma_data/0d/</cma_case_path>
       <!-- <cma_case_path>/home/benjamin/Documents/thesis/cfd-cma/cma_data/0d_gas/</cma_case_path> -->
       
       <!-- <cma_case_path recursive='true' >./cma_data/flowmap_14/</cma_case_path>  -->
@@ -112,9 +113,8 @@
       <delta_time>0.01</delta_time>
       <results_file_name>bench</results_file_name>
       <number_exported_result>10</number_exported_result>
-      <model_name>model_user</model_name>
+      <model_name>model_monod</model_name>
       <!-- <model_name>model_uptake_acetate</model_name> -->
-      <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
     <!-- <initialiser_path>./cma_data/n14_init.h5</initialiser_path> -->
    </control>
 

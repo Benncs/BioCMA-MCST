@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "cmt_common/macro_constructor_assignment.hpp"
+#include "traits/Kokkos_IterationPatternTrait.hpp"
 #include <span> 
 namespace Core
 {
@@ -88,11 +89,11 @@ namespace Core
     using export_metadata_t = std::variant<uint64_t, int, std::string>; ///< Metadata types for export
     using export_metadata_kv = std::unordered_map<std::string,
                                                   export_metadata_t>;  ///< Key-value pairs for metadata
-    using ViewParticleProperties = Kokkos::View<double **, HostSpace>; ///< View for particle properties
+    using ViewParticleProperties = Kokkos::View<double **,Kokkos::LayoutRight, HostSpace>; ///< View for particle properties
     using simple_export_t = std::variant<size_t,
                                          std::string,
                                          std::vector<size_t>,
-                                         double>; ///< Simple export types
+                                         double,uint32_t>; ///< Simple export types
     using export_initial_kv = std::unordered_map<std::string,
                                                  simple_export_t>; ///< Initial export key-value pairs
 

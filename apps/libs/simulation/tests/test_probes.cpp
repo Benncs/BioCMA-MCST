@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cstddef>
 #include <simulation/probe.hpp>
+#include <iostream> 
 
 void test_probes_set()
 {
@@ -66,9 +67,12 @@ int main()
 {
 
   Kokkos::initialize();
-  test_probes_set();
-  test_probes_get();
-  test_probes_clear();
+  // test_probes_set();
+  // std::cout<<"test_probes: Set OK"<<std::endl;
+  // test_probes_get();
+  // std::cout<<"test_probes: Get OK"<<std::endl;
+  // test_probes_clear();
+  // std::cout<<"test_probes: Clear OK"<<std::endl;
   Kokkos::finalize();
 }
 

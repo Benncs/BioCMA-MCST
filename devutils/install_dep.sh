@@ -35,7 +35,7 @@ fi
 
 # Install necessary packages
 echo "Installing necessary packages..."
-if ! sudo apt-get install -y python3-dev python3 python3-pip wget software-properties-common gnupg libomp-dev libopenmpi-dev libtbb-dev libeigen3-dev pkg-config ninja-build; then
+if ! sudo apt-get install -y libstdc++-12-dev cmake python3-dev python3 python3-pip wget software-properties-common gnupg libomp-dev libopenmpi-dev libtbb-dev libeigen3-dev pkg-config ninja-build; then
   error "Failed to install necessary packages."
   exit 1
 fi
@@ -93,10 +93,10 @@ if ! sudo apt-get install -y clang-$LLVM_VERSION; then
 fi
 
 # Install specific version of clang
-echo "Installing Kokkos..."
-if ! sh ./devutils/docker/kokkos_config.sh; then
-  error "Failed to install Kokkos."
-  exit 1
-fi
+#echo "Installing Kokkos..."
+#if ! sh ./devutils/docker/kokkos_config.sh; then
+#  error "Failed to install Kokkos."
+#  exit 1
+#fi
 
 echo "All dependencies have been installed successfully."

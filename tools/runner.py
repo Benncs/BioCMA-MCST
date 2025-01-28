@@ -16,15 +16,16 @@ __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
 DEFAULT_TYPE = "debug"
 _MPI_ROOT_FLAG = ""  # "--allow-run-as-root"
-MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 4 --bind-to core"
+MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 6 --bind-to core"
 # MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 8 --use-hwthread-cpus"
 OMP_NUM_THREADS = "1"
-COMPILER_NAME = "clang"  # "gcc"
+COMPILER_NAME = "cuda"  # "gcc"
 
 
 def get_executable(type: str, mpi: bool = True):
     appname = "biocma_mcst_cli_app" if mpi else "biocma_mcst_cli_app_shared"
-    return f"{ROOT}/builddir/{type}_{COMPILER_NAME}/apps/cli/{appname}"
+   # return f"{ROOT}/builddir/{type}_{COMPILER_NAME}/apps/cli/{appname}"
+    return f"{ROOT}/builddir/laptop/apps/cli/{appname}"
 
 
 def mk_parser():

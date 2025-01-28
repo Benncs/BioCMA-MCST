@@ -1,6 +1,7 @@
 #ifndef __PARTICLES_CONTAINER_HPP__
 #define __PARTICLES_CONTAINER_HPP__
 
+#include "Kokkos_ScatterView.hpp"
 #include <cstddef>
 #include <mc/particles/extra_process.hpp>
 #include <mc/particles/particle_list.hpp>
@@ -11,10 +12,12 @@ namespace MC
   /**
    * @brief Main owning object for Monte-Carlo particles.
    *
-   * This class is responsible for managing and owning containers related to particles, providing access to them for processing
-   * in a Monte-Carlo simulation. It uses a templated model to define the behavior and properties of the particles.
+   * This class is responsible for managing and owning containers related to particles, providing
+   * access to them for processing in a Monte-Carlo simulation. It uses a templated model to define
+   * the behavior and properties of the particles.
    *
-   * @tparam Model The particle model type used for defining the behavior and properties of the particles.
+   * @tparam Model The particle model type used for defining the behavior and properties of the
+   * particles.
    */
   template <ParticleModel Model> class ParticlesContainer
   {
@@ -27,7 +30,11 @@ namespace MC
     /**
      * @brief Default copy and move constructors and assignment operators.
      */
-    DEFAULT_COPY_MOVE_AC(ParticlesContainer)
+    ParticlesContainer() = default;
+    ParticlesContainer(const ParticlesContainer&) = default;
+    ParticlesContainer(ParticlesContainer&&) = default;
+    ParticlesContainer& operator=(const ParticlesContainer&) = default;
+    ParticlesContainer& operator=(ParticlesContainer&&) = default;
 
     /**
      * @brief Default destructor.
@@ -39,7 +46,7 @@ namespace MC
      *
      * @return Reference to the particle list in the compute space.
      */
-    auto &get_compute() noexcept
+    auto& get_compute() noexcept
     {
       return to_process;
     }
@@ -49,7 +56,8 @@ namespace MC
      *
      * @param capacity The number of particles the container can initially hold.
      */
-    explicit ParticlesContainer(size_t capacity) noexcept : to_process(capacity), host_process(), extra(capacity * 2)
+    explicit ParticlesContainer(size_t capacity) noexcept
+        : to_process(capacity), host_process(), extra(capacity * 2), extra_list(capacity * 2, false)
     {
       // Initialization code can be placed here, if needed.
     }
@@ -65,11 +73,11 @@ namespace MC
     }
 
     /**
-     * @brief Migrates particles from compute space to host space and returns a reference to the host container.
-     * A deep copy of main container is performed before returning.
+     * @brief Migrates particles from compute space to host space and returns a reference to the
+     * host container. A deep copy of main container is performed before returning.
      * @return Reference to the particle list in the host space.
      */
-    auto &get_host()
+    auto& get_host()
     {
       ParticleList<ComputeSpace, Model>::migrate(to_process, host_process);
       return host_process;
@@ -80,22 +88,23 @@ namespace MC
      *
      * @return Reference to the results list in the compute space.
      */
-    auto &get_extra() noexcept
+    auto& get_extra() noexcept
     {
       return extra;
     }
 
-    template <class Archive> void serialize(Archive &ar)
+    template <class Archive> void serialize(Archive& ar)
     {
-      ar(to_process,extra);
+      ar(to_process, extra);
+      extra_list = ParticleList<ComputeSpace, Model>::with_capacity(to_process.size() * 2);
     }
 
-   
+    MC::ParticleList<ComputeSpace, Model> extra_list;
 
   private:
     ParticleList<ComputeSpace, Model> to_process; ///< Container for particles in the compute space.
     ParticleList<HostSpace, Model> host_process;  ///< Container for particles in the host space.
-    Results<ComputeSpace, Model> extra;           ///< Container for additional results in the compute space.
+    Results<ComputeSpace, Model> extra; ///< Container for additional results in the compute space.
   };
 
 } // namespace MC

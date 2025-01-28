@@ -12,10 +12,10 @@ lib_name = f'@project_name@_simulation'
 
 public_simulation_includes = include_directories('public')
 
-install_subdir(
-   'public',
-   install_dir: includes_install_dir,
-)
+# install_subdir(
+#    'public',
+#    install_dir: includes_install_dir,
+# )
 
 
 
@@ -45,7 +45,7 @@ simulation_lib = static_library(
    ],
    dependencies: [simulation_public_dependencies, private_dependencies],
    # pic: true,
-   install: true,
+   # install: true,
    install_rpath: global_install_dir,
    link_args: [flto_flag],
    cpp_args:[]

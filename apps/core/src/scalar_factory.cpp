@@ -219,12 +219,13 @@ namespace Core::ScalarFactory
     }
     case Simulation::ScalarInitialiserType::File:
     {
-
+      //File doesn't need functor but buffer
+      //First check initialiser has buffer and functor and not set 
       flag = res.liquid_buffer.has_value() &&
              (!res.gas_f_init.has_value() && !res.liquid_f_init.has_value());
       if (flag)
       {
-        flag = res.liquid_buffer->size() != 0;
+        flag = res.liquid_buffer->size() != 0; //If buffer check that is not empty
       }
       break;
     }

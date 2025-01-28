@@ -1,3 +1,4 @@
+#include <stdexcept>
 #ifdef USE_HIGHFIVE
 #  include <chrono>
 #  include <common/common.hpp>
@@ -157,11 +158,16 @@ namespace Core
 
     HighFive::DataSpace dataspace(description.dims, description.max_dims);
     HighFive::DataSetCreateProps props;
-    
+
     if (description.chunk_dims.has_value())
     {
+      auto chunk_dims = description.chunk_dims.value();
+      if(chunk_dims.size() != chunk_dims.size())
+      {
+        throw std::invalid_argument("prepare_matrix(HDF5): container and chunkdimensions and  don´t match");
+      }
       props.add(HighFive::Shuffle());
-      props.add(HighFive::Chunking(*description.chunk_dims));
+      props.add(HighFive::Chunking(chunk_dims));
     }
 
     if (description.compression)

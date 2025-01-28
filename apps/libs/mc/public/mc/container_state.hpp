@@ -1,9 +1,9 @@
 #ifndef __MC_CONTAINER_STATE_HPP__
 #define __MC_CONTAINER_STATE_HPP__
 
+#include <Kokkos_Core.hpp>
 #include <common/execinfo.hpp>
 #include <cstdint>
-#include <Kokkos_Core.hpp>
 #include <mc/particles/particle_model.hpp>
 
 namespace MC
@@ -20,16 +20,17 @@ namespace MC
    */
   struct ContainerState
   {
-    
+
     double volume_liq{}; ///< Volume of liquid in the container.
     double volume_gas{}; ///< Volume of gas in the container.
-    uint64_t id{};    ///< Unique identifier for the container.
+    uint64_t id{};       ///< Unique identifier for the container.
 
     LocalConcentrationView concentrations;
 
-    alignas(ExecInfo::cache_line_size) int64_t n_cells{}; ///< Number of cells in the container. @warning Be careful
-                    ///< when decrementing this value.
-    
+    alignas(ExecInfo::cache_line_size)
+        int64_t n_cells{}; ///< Number of cells in the container. @warning Be careful
+                           ///< when decrementing this value.
+
     /**
      * @brief Serializes the `ContainerState` data members.
      *
@@ -40,16 +41,15 @@ namespace MC
      * @tparam Archive The type of the archive used for serialization.
      * @param ar Reference to the archive object.
      */
-    template <class Archive> void serialize(Archive &ar)
+    template <class Archive> void serialize(Archive& ar)
     {
-      ar(volume_liq, volume_gas, id,n_cells);
+      ar(volume_liq, volume_gas, id, n_cells);
     }
 
-    
-
+    ContainerState() = default;
   };
 
-  static_assert(sizeof(ContainerState)<=2*ExecInfo::cache_line_size,"Container State size" );
+  static_assert(sizeof(ContainerState) <= 2 * ExecInfo::cache_line_size, "Container State size");
 
 } // namespace MC
 

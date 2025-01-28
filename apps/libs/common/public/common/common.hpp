@@ -6,7 +6,6 @@
 #include <common/execinfo.hpp>
 #include <string_view>
 
-
 #ifdef ENABLE_KOKKOS_PROFILING
 #  include <Kokkos_Profiling_ScopedRegion.hpp>
 #  define PROFILE_SECTION(__label_section__) Kokkos::Profiling::ScopedRegion region(__label_section__);
@@ -15,7 +14,7 @@
 #endif
 
 #ifndef NDEBUG
-#  define WARN_EXPERIMENTAL _Pragma("message( __FILE__ \" contains experimental Kokkos feature\")") // NOLINT
+#  define WARN_EXPERIMENTAL //_Pragma("message( __FILE__ \" contains experimental Kokkos feature\")") // NOLINT
 #else
 #  define WARN_EXPERIMENTAL
 #endif

@@ -135,7 +135,7 @@ namespace Api
           Kokkos::InitializationSettings()
               .set_disable_warnings(false)
               .set_num_threads(static_cast<int32_t>(_data.exec_info.thread_per_process))
-              .set_map_device_id_by("random"));
+              .set_map_device_id_by("mpi_rank"));
       Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
     }
   }
@@ -201,6 +201,7 @@ namespace Api
 
   ApiResult SimulationInstance::apply() noexcept
   {
+   
     if (!check_required(this->params, false))
     {
       return ApiResult("Check params");
@@ -216,8 +217,8 @@ namespace Api
 
     Core::GlobalInitialiser gi(_data.exec_info, params);
     auto t = gi.init_transitionner();
-    gi.init_feed(feed);
-
+    gi.init_feed(feed); 
+     
     auto __simulation = gi.init_simulation(this->scalar_initializer_variant);
     if ((!t.has_value() && !__simulation.has_value()) || !gi.check_init_terminate())
     {
@@ -227,6 +228,7 @@ namespace Api
     _data.simulation = std::move(*__simulation);
     _data.transitioner = std::move(*t);
     applied = true;
+   
     return ApiResult();
   }
 

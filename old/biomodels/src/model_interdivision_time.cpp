@@ -39,7 +39,7 @@ namespace Models
                             MC::KPRNG /*_rng*/)
   {
     const double s = concentration(0);
-    if (almost_equal(s, 0.))
+    if (Models::almost_equal(s, 0.)) //TODO Make Kokkos almost equal 
     {
       return;
     }

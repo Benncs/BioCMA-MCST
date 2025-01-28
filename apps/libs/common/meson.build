@@ -13,23 +13,23 @@ common_lib = static_library(
    f'@project_name@_common',
    common_sources,
    include_directories: incdirs,
-   pic: true,
+   # pic: true,
    dependencies: [kokkos],
       # install: true,
    install_rpath: global_install_dir,
 )
 
 common_dependecy = declare_dependency(
-   dependencies:[],
+   dependencies:[kokkos],
    include_directories: public_includes,
    link_with: common_lib,
    link_args: [flto_flag]
 )
 
-install_subdir(
-   'public',
-   install_dir: includes_install_dir,
-)
+# install_subdir(
+#    'public',
+#    install_dir: includes_install_dir,
+# )
 
 
 subdir('tests')

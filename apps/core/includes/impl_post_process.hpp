@@ -25,15 +25,14 @@ namespace PostProcessing
 
   void show_sumup_state(const Simulation::SimulationUnit &simulation) noexcept;
 
-  void save_initial_particle_state(Simulation::SimulationUnit &simulation,Core::PartialExporter& pde);
+  void save_particle_state(Simulation::SimulationUnit &simulation,Core::PartialExporter& pde);
 
-  void save_final_particle_state(Simulation::SimulationUnit &simulation,Core::PartialExporter& pde);
+  void save_probes(Simulation::SimulationUnit &simulation,Core::PartialExporter& pde,bool force=false);
 
-  void save_probes(Simulation::SimulationUnit &simulation,Core::PartialExporter& pde);
 
-  void user_triggered_properties_export(
-      Simulation::SimulationUnit &sim,Core::PartialExporter& pde);
 
+
+  void reset_counter();
   // get_particle_properties(unit,
 
   //                         aggregated_values,

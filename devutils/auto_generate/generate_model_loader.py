@@ -1,13 +1,14 @@
 import os
 import sys
-from typing import Tuple,List
+from typing import Tuple, List
 
-def to_camel_case(snake_str:str)->str:
+
+def to_camel_case(snake_str: str) -> str:
     components = snake_str.split("_")
     return "".join(x.capitalize() for x in components[1:])
 
 
-def list_model_files(directory:str)->Tuple[List[str],List[str]]:
+def list_model_files(directory: str) -> Tuple[List[str], List[str]]:
     """
     Lists model source files and headers in the given directory.
     """
@@ -34,14 +35,14 @@ def list_model_files(directory:str)->Tuple[List[str],List[str]]:
         return [], []
 
 
-def generate_includes(model_headers:List[str])->str:
+def generate_includes(model_headers: List[str]) -> str:
     """
     Generates include directives for the model headers.
     """
     return "\n".join([f"#include <models/{header}>" for header in model_headers])
 
 
-def generate_loader_body(model_files:List[str])->str:
+def generate_loader_body(model_files: List[str]) -> str:
     """
     Generates the body of the load_model_ function.
     """
@@ -52,7 +53,7 @@ def generate_loader_body(model_files:List[str])->str:
     case {i}:
     {{
         return MC::init<Models::{to_camel_case(model_name)}>(
-            info, number_particle, liq_volume, liquid_neighbors, x0);
+            info, number_particle, liq_volume, liquid_neighbors, x0,total_mass);
     }}
     """
     # Add the default else statement to handle unknown models
@@ -63,20 +64,28 @@ def generate_loader_body(model_files:List[str])->str:
     return function_body
 
 
-def generate_list_body(model_files:List[str])->str:
+def generate_list_body(model_files: List[str]) -> str:
     function_body = ""
     for model_name in model_files:
         function_body += f'list.emplace_back("{model_name}");\r\n'
     return function_body
 
+
 def generate_selection_body(model_files: List[str]) -> str:
     body = ""
 
-    map_elements = ", ".join([f'{{ "{name}", {index} }}' for index, name in enumerate(model_files)])
+    map_elements = ", ".join(
+        [f'{{ "{name}", {index} }}' for index, name in enumerate(model_files)]
+    )
 
-    body += "static std::unordered_map<std::string_view, int> map{ {\"default\", -1},"+f"{map_elements}"+"};"
+    body += (
+        'static std::unordered_map<std::string_view, int> map{ {"default", -1},'
+        + f"{map_elements}"
+        + "};"
+    )
 
     return body
+
 
 def generate_cpp_file(template_path, output_path, includes, body, map_selection):
     """
@@ -90,7 +99,7 @@ def generate_cpp_file(template_path, output_path, includes, body, map_selection)
         content = template_content.replace("@INCLUDES@", includes)
         content = content.replace("@SWITCH_BODY@", body)
         # content = content.replace("@AM_BODY@", list_body)
-        content = content.replace("@MODEL_INDEX_MAP@",map_selection)
+        content = content.replace("@MODEL_INDEX_MAP@", map_selection)
 
         # Write the modified content to the output file
         with open(output_path, "w") as output_file:
@@ -111,7 +120,9 @@ def generate_header(template_path, output_path):
         file.write(content)
 
 
-def generate_variant(template_path: str, output_path: str, includes, model_files,add_py_variant):
+def generate_variant(
+    template_path: str, output_path: str, includes, model_files, add_py_variant
+):
     try:
         with open(template_path, "r") as template_file:
             template_content = template_file.read()
@@ -121,12 +132,10 @@ def generate_variant(template_path: str, output_path: str, includes, model_files
                 body += f"MC::ParticlesContainer<Models::{to_camel_case(model)}>,"
 
             body = body[:-1]
-            if(add_py_variant):
-                body+=",MC::ParticlesContainer<PythonWrap::PimpModel>"
+            if add_py_variant:
+                body += ",MC::ParticlesContainer<PythonWrap::PimpModel>"
 
             content = content.replace("@VARIANT_TYPE@", body)
-
-            
 
             with open(output_path, "w") as output_file:
                 output_file.write(content)
@@ -151,9 +160,8 @@ if __name__ == "__main__":
 
     variant_template_path = args[6]
     variant_output_path = args[7]
-    
-    add_py_variant = args[8]!=""
-    
+
+    add_py_variant = args[8] != ""
 
     files, headers = list_model_files(models_path)
 
@@ -169,4 +177,6 @@ if __name__ == "__main__":
 
     generate_header(header_template_path, header_output_path)
 
-    generate_variant(variant_template_path, variant_output_path, includes, files,add_py_variant)
+    generate_variant(
+        variant_template_path, variant_output_path, includes, files, add_py_variant
+    )

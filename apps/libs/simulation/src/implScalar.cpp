@@ -76,6 +76,8 @@ namespace Simulation
   {
     PROFILE_SECTION("performStep")
 
+    // std::cout<<biomass_contribution<<std::endl;
+
     total_mass += d_t * (alloc_concentrations * m_transition - alloc_concentrations * sink +
                          biomass_contribution + feed + transfer_gas_liquid);
 
