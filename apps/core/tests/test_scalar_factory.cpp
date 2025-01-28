@@ -17,6 +17,7 @@
     std::cout << e.what() << std::endl;                                                            \
     assert(false);                                                                                 \
   }
+  
 
 static constexpr size_t n_compartment = 10;
 static constexpr size_t n_species = 3;

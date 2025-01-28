@@ -36,5 +36,5 @@ __old
 ./Documentation/html
 ./Documentation/latex
 
-
+wrapper_log.log
 tmp*

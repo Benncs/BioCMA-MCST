@@ -9,13 +9,13 @@ public_mpi_wrap = include_directories('public')
 
 dep = [mpi,common_dependecy,cma_dep]
 
-mpi_wrap_lib = library(
+mpi_wrap_lib = static_library(
    f'@project_name@_mpi_wrap',
    mpi_wrap_sources,
    include_directories: [public_mpi_wrap],
    dependencies: dep,
-   pic: true,
-   install: true,
+   # pic: true,
+   # install: true,
    install_rpath: global_install_dir,
 )
 
@@ -25,9 +25,9 @@ mpi_wrap_dependency = declare_dependency(
    link_with: mpi_wrap_lib,
 )
 
-install_subdir(
-   'public',
-   install_dir: includes_install_dir,
-)
+# install_subdir(
+#    'public',
+#    install_dir: includes_install_dir,
+# )
 
 subdir('./tests')

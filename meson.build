@@ -1,9 +1,9 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.3.1',
+  version: '0.4.0',
   meson_version: '>= 1.3.0',
-  default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=gnu++20'],
+  default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
 
 use_cuda = get_option('use_cuda')
@@ -33,11 +33,11 @@ endif
 
 compiler.has_argument('-fopenmp')
 
-if(compiler.get_id()=='clang')
-message('using clang')
-add_global_arguments(['-stdlib=libc++'], language: 'cpp')
-add_global_link_arguments(['-stdlib=libc++', '-lc++','-lc++abi'], language: 'cpp')
-endif 
+if (compiler.get_id() == 'clang')
+  message('using clang')
+  #add_global_arguments(['-stdlib=libc++'], language: 'cpp')
+  #add_global_link_arguments(['-stdlib=libc++', '-lc++','-lc++abi'], language: 'cpp')
+endif
 
 ## Define main shared variables
 outdir = meson.current_build_dir()
@@ -48,17 +48,14 @@ cpp = meson.get_compiler('cpp')
 global_install_dir = get_option('prefix') + '/' + get_option('libdir')
 includes_install_dir = ('include/' + project_name)
 
+use_kokkos_tools = true
 
-use_kokkos_tools=true
-
-# cpp_args = [arch_specific_args,'-stdlib=libc++']
 cpp_args = [arch_specific_args]
-if(use_kokkos_tools)
-cpp_args=[cpp_args,'-DENABLE_KOKKOS_PROFILING']
+if (use_kokkos_tools)
+  cpp_args = [cpp_args, '-DENABLE_KOKKOS_PROFILING']
 endif
 
 add_project_arguments(cpp_args, language: 'cpp')
-
 
 ## Get buildtype specific options
 
@@ -75,8 +72,6 @@ else
 endif
 
 no_mpi_flag = '-DNO_MPI'
-no_use_mpi_flag = '-DNO_USE_MPI'
-
 use_dynamic_module = get_option('use_dynamic_module') # Use python module or not
 use_cereal = get_option('use_cereal')
 use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  use_dynamic_module is true
@@ -93,44 +88,72 @@ blas = dependency('blas', required: false) # Eigen can work without BLAS
 # if blas.found()
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 # endif
-
+# add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
-if not get_option('install_post_processing')
+use_system_kokkos = get_option('use_system_kokkos')
 
 cmake = import('cmake', required: true)
-kokkos_option = cmake.subproject_options()
-kokkos_option.add_cmake_defines({'CMAKE_CXX_STANDARD': '20'})
-kokkos_option.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
-kokkos_option.add_cmake_defines({'Kokkos_ENABLE_OPENMP':'ON'})
-kokkos_option.add_cmake_defines({'Kokkos_ENABLE_HWLOC':'ON'})
-kokkos_option.add_cmake_defines({'CMAKE_POSITION_INDEPENDENT_CODE':'ON'})
-
-sub_kokkos=cmake.subproject(
-    'kokkos',
+if use_system_kokkos
+  __cmake_kokkos_dep__ = dependency(
+    'Kokkos',
+    method: 'cmake',
     required: true,
-    options:kokkos_option
-  ) 
+    components: ['kokkos'],
+    modules: ['Kokkos::kokkos'],
+  )
 
-kokkos = declare_dependency(
-  dependencies: [sub_kokkos.dependency('kokkos'),
-  sub_kokkos.dependency('kokkoscore'), 
-  sub_kokkos.dependency('kokkossimd'),
-  sub_kokkos.dependency('kokkoscontainers'),
-  sub_kokkos.dependency('kokkosalgorithms')
-  ,omp, hwloc, thread_dep]
-)
+  kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE']
+
+  if use_cuda
+
+    kokkos_compile_arg = [
+      kokkos_compile_arg,
+      '-extended-lambda',
+      '-Wext-lambda-captures-this',
+      # '-arch=native',
+    ]
+  endif
+
+  kokkos = declare_dependency(
+    dependencies: [__cmake_kokkos_dep__, omp, hwloc, thread_dep],
+    compile_args: kokkos_compile_arg,
+  )
+else
+
+  kokkos_option = cmake.subproject_options()
+  kokkos_option.add_cmake_defines({'CMAKE_CXX_STANDARD': '20'})
+  kokkos_option.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
+  kokkos_option.add_cmake_defines({'Kokkos_ENABLE_OPENMP': 'ON'})
+  kokkos_option.add_cmake_defines({'Kokkos_ENABLE_HWLOC': 'ON'})
+  kokkos_option.add_cmake_defines({'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'})
+  # kokkos_option.set_install(false)
+  sub_kokkos = cmake.subproject('kokkos', required: true, options: kokkos_option)
+
+  kokkos = declare_dependency(
+    dependencies: [
+      sub_kokkos.dependency('kokkos'),
+      sub_kokkos.dependency('kokkoscore'),
+      sub_kokkos.dependency('kokkossimd'),
+      sub_kokkos.dependency('kokkoscontainers'),
+      sub_kokkos.dependency('kokkosalgorithms'),
+      omp,
+      hwloc,
+      thread_dep,
+    ],
+  )
+endif
 
 dynlib_dep = dependency('dynlib-1.0', required: true)
 
 highfive_found = false
 
-
-
 ceral_found = false
 if cmake.found()
+  hdf5_compiler='g++'
+
   highfive_cmake_options = cmake.subproject_options()
-  highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_COMPILER': 'clang++-18'})
+  highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_COMPILER': hdf5_compiler})
   highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_STANDARD': '20'})
 
   highfive_cmake_options.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
@@ -142,29 +165,35 @@ if cmake.found()
   highfive_cmake_options.add_cmake_defines({'HDF5_PREFER_PARALLEL': false})
   highfive_cmake_options.add_cmake_defines({'HDF5_IS_PARALLEL': false})
   highfive_proj = cmake.subproject('highfive', options: highfive_cmake_options, required: false)
+
   if highfive_proj.found()
-    highfive_found = true
-    add_project_arguments('-DUSE_HIGHFIVE', language: 'cpp')
-    highfive_dependency = highfive_proj.dependency('HighFive')
+    hdf5 = dependency('hdf5', language: 'cpp', required: false)
+    if hdf5.found()
+      highfive_found = true
+      add_project_arguments('-DUSE_HIGHFIVE', language: 'cpp')
+      highfive_dependency = [highfive_proj.dependency('HighFive'),hdf5,highfive_proj.dependency('HighFiveInclude')]
+
+      
+    endif
   endif
   if use_cereal
-  cereal_cmake_options = cmake.subproject_options()
-  cereal_cmake_options.add_cmake_defines({'SKIP_PERFORMANCE_COMPARISON': true})
-  cereal_cmake_options.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
-  cereal_cmake_options.add_cmake_defines({'BUILD_DOC': false})
-  cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})
-  cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})
-  cereal_cmake_options.add_cmake_defines({'BUILD_TESTS': false})
-  cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
-  if cereal_proj.found()
-    ceral_found = true
-    add_project_arguments('-DUSE_CEAREAL', language: 'cpp')
-    cereal_dependency = cereal_proj.dependency('cereal')
+    cereal_cmake_options = cmake.subproject_options()
+    cereal_cmake_options.add_cmake_defines({'SKIP_PERFORMANCE_COMPARISON': true})
+    cereal_cmake_options.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
+    cereal_cmake_options.add_cmake_defines({'BUILD_DOC': false})
+    cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})
+    cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})
+    cereal_cmake_options.add_cmake_defines({'BUILD_TESTS': false})
+    cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
+    if cereal_proj.found() and not use_cuda 
+      ceral_found = true
+      add_project_arguments('-DUSE_CEAREAL', language: 'cpp')
+      cereal_dependency = cereal_proj.dependency('cereal')
+    endif
   endif
-  endif 
 
 endif
-endif 
+
 cmt = dependency('cmtool', required: false, version: '>=1.1', method: 'pkg-config')
 
 if cmt.found()
@@ -191,3 +220,7 @@ endif
 subdir('apps')
 
 run_command('sh', '-c', f'ln -s @outdir@/compile_commands.json .', check: false)
+
+if get_option('compile_tools')
+subdir('tools')
+endif 

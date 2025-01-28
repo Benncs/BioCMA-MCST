@@ -51,8 +51,8 @@ static void read_file(std::stringstream& buffer, std::string_view filename)
   }
 }
 
-using Archive_t = cereal::BinaryOutputArchive;
-using iArchive_t = cereal::BinaryInputArchive;
+using Archive_t = cereal::XMLOutputArchive;
+using iArchive_t = cereal::XMLInputArchive;
 
 // void read_archive(cereal::XMLInputArchive& ar,std::string_view filename)
 // {
@@ -138,6 +138,8 @@ namespace SerDe
 
     // FIXME
     // Overwrite value set by initialiser
+    sc->liquid_f_init = std::nullopt;
+    sc->gas_f_init = std::nullopt;
     sc->gas_buffer = read_c_gas;
     sc->liquid_buffer = read_c_liq;
     sc->type = Simulation::ScalarInitialiserType::File;

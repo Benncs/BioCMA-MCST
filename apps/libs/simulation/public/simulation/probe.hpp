@@ -5,6 +5,14 @@
 #include <biocma_cst_config.hpp>
 #include <cstddef>
 #include <cstdint>
+// #include <type_traits>
+
+// template <typename ViewType, typename ExecutionSpace>
+// KOKKOS_INLINE_FUNCTION bool is_view_accessible(const ViewType& view)
+// {
+//   return Kokkos::SpaceAccessibility<typename ExecutionSpace::memory_space,
+//                                     typename ViewType::memory_space>::accessible;
+// }
 
 namespace Simulation
 {
@@ -13,7 +21,7 @@ namespace Simulation
   public:
     void clear();
 
-    [[nodiscard]] bool set(double val) const;
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION bool set(double val) const;
 
     [[nodiscard]] bool need_export() const noexcept;
 
@@ -21,7 +29,7 @@ namespace Simulation
 
     [[nodiscard]] std::span<const double> get() const;
 
-    constexpr Probes();
+    Probes();
 
   private:
     // NOLINTBEGIN
@@ -39,17 +47,33 @@ namespace Simulation
 namespace Simulation
 {
   template <std::size_t buffer_size>
-  constexpr Probes<buffer_size>::Probes()
+  Probes<buffer_size>::Probes()
       : buffer("buffer"), internal_counter("i_c"), host_buffer("host_buffer")
   {
+    clear();
   }
 
-  template <std::size_t buffer_size> bool Probes<buffer_size>::set(double val) const
+  template <std::size_t buffer_size>
+  KOKKOS_INLINE_FUNCTION bool Probes<buffer_size>::set(double val) const
   {
     const auto i = Kokkos::atomic_fetch_inc(&internal_counter());
+
+    //Innaccessible from host space if use CUDA because of direct assignment 
     if (i < buffer_size)
     {
-      this->buffer(i) = val;
+      // this->buffer(i) = val;
+      // if constexpr (is_view_accessible<decltype(buffer), Kokkos::DefaultExecutionSpace>())
+      {
+        this->buffer(i) = val;
+      }
+      // else
+      // {
+      //   // Kokkos::deep_copy(buffer(i), val);
+      //   Kokkos::View<double, Kokkos::DefaultHostExecutionSpace> single_val("SingleValue");
+      //   single_val() = val;
+
+      //   Kokkos::deep_copy(buffer(i), single_val);
+      // }
       return true;
     }
     return false;
@@ -61,8 +85,8 @@ namespace Simulation
   }
   template <std::size_t buffer_size> void Probes<buffer_size>::clear()
   {
-    Kokkos::deep_copy(buffer, 0);
-    Kokkos::deep_copy(host_buffer, 0);
+    Kokkos::deep_copy(buffer, 0.);
+    // Kokkos::deep_copy(host_buffer, 0);
     Kokkos::deep_copy(internal_counter, 0);
   }
 
@@ -70,7 +94,7 @@ namespace Simulation
   [[nodiscard]] std::span<const double> Probes<buffer_size>::get() const
   {
     Kokkos::deep_copy(host_buffer, buffer);
-    return {host_buffer.data(), buffer_size};
+    return {host_buffer.data(), std::min(buffer_size, internal_counter())};
   }
 } // namespace Simulation
 

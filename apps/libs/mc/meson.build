@@ -19,7 +19,8 @@ mc_lib = static_library(
    include_directories: [public_include_dir, 'includes'],
    dependencies: [cma_dep,kokkos],
    # pic: true,
-   install: true,
+   # install: true,
+   install: false,
    install_rpath: global_install_dir,
    link_args: [flto_flag],
     cpp_args: [arg],
@@ -32,11 +33,10 @@ mc_dependency = declare_dependency(
    compile_args: [arg],
 )
 
-
 subdir('./tests')
 
-install_subdir(
-   'public',
-   install_dir: includes_install_dir,
-)
+# install_subdir(
+#    'public',
+#    install_dir: includes_install_dir,
+# )
 

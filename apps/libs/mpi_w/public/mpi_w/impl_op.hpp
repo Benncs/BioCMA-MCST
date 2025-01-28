@@ -8,6 +8,7 @@
 #include <common/execinfo.hpp>
 #include <cstddef>
 #include <limits>
+#include <math.h>
 #include <mpi.h>
 #include <optional>
 #include <span>
@@ -260,7 +261,8 @@ namespace WrapMPI
    */
   template <POD_t T> std::vector<T> gather(std::span<T> local_data, size_t n_rank, size_t root = 0);
 
-  template <POD_t T> void gather_span(std::span<T> dest, std::span<const T> local_data, size_t root = 0);
+  template <POD_t T>
+  void gather_span(std::span<T> dest, std::span<const T> local_data, size_t root = 0);
 
   template <POD_t T>
   std::vector<T> gather(std::span<const T> local_data, size_t n_rank, size_t root = 0);
@@ -269,7 +271,7 @@ namespace WrapMPI
    * @brief Gathers and reduces data to a single value.
    *
    * This function collects data of type `T` from all processes, performs a reduction operation
-   * (e.g., sum), and returns the result to the root process.
+   * (sum), and returns the result to the root process.
    *
    * @tparam T A type satisfying the `NumberType` concept.
    * @param data The local data to be reduced and gathered.
@@ -278,6 +280,13 @@ namespace WrapMPI
    * @return The reduced value on the root process.
    */
   template <NumberType T> T gather_reduce(T data, size_t root = 0);
+
+  template <NumberType T> T all_reduce(T data)
+  {
+    T global_sum{}; // global sum across all ran
+    MPI_Allreduce(&data, &global_sum, 1, get_type<T>(), MPI_SUM, MPI_COMM_WORLD);
+    return global_sum;
+  }
 
   /**
    * @brief Gathers a vector of data from all processes.

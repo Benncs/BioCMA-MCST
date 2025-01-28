@@ -7,12 +7,13 @@
 #include <pybind11/detail/common.h>
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include <pybind11/pytypes.h>
 #include <stdexcept>
 #include <string>
 #include <tuple>
-#include <vector>
 #include <api/api_raw.h>
+
 namespace py = pybind11;
 
 std::string wrap_repr(const wrap_c_param_t& m)
@@ -65,6 +66,9 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
   m.def("register_serde", &register_serde);
   m.def("register_parameters", &register_parameters);
   m.def("register_model_name", &register_model_name);
+
+  m.def("register_initialiser_file_path",&register_initializer_path);
+
   m.def("make_params",
         &make_params,
         py::arg("biomass_initial_concentration"),
@@ -124,11 +128,19 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 
   // Feed
 
-  m.def("set_feed_constant",
+  m.def("set_liquid_feed_constant",
         [](std::shared_ptr<Api::SimulationInstance>& handle,
            double _f,
            std::vector<double> _target,
            std::vector<std::size_t> _position,
            std::vector<std::size_t> _species)
         { handle->set_feed_constant(_f, _target, _position, _species); });
+
+   m.def("set_gas_feed_constant",
+        [](std::shared_ptr<Api::SimulationInstance>& handle,
+           double _f,
+           std::vector<double> _target,
+           std::vector<std::size_t> _position,
+           std::vector<std::size_t> _species)
+        { handle->set_feed_constant(_f, _target, _position, _species,true); });
 }

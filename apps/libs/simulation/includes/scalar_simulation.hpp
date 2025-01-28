@@ -14,6 +14,9 @@
 #include <cstddef>
 #include <vector> 
 
+template<typename ExecSpace>
+using KokkosScalarMatrix = Kokkos::View<double **, Kokkos::LayoutLeft, ExecSpace>;
+
 namespace Simulation
 {
   struct EigenData
@@ -86,8 +89,9 @@ namespace Simulation
   private:
     Eigen::MatrixXd total_mass;
 
-    Kokkos::View<double **, Kokkos::LayoutLeft, HostSpace> host_concentration;
-    Kokkos::View<double **, Kokkos::LayoutLeft, ComputeSpace> compute_concentration;
+    KokkosScalarMatrix<HostSpace> host_concentration;
+
+    KokkosScalarMatrix<ComputeSpace> compute_concentration;
 
     Eigen::DiagonalMatrix<double, -1> volumes_inverse;
     Eigen::DiagonalMatrix<double, -1> m_volumes;
@@ -103,7 +107,7 @@ namespace Simulation
     size_t n_c;
     CmaRead::L2DView<double> view;
 
-    Kokkos::View<double **, Kokkos::LayoutLeft, HostSpace> host_view_biomass_contribution;
+    KokkosScalarMatrix<HostSpace> host_view_biomass_contribution;
   };
 
   inline size_t ScalarSimulation::n_col() const

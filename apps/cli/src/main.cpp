@@ -10,7 +10,13 @@
 #include <rt_init.hpp>
 #include <stream_io.hpp>
 #include <string>
+#ifdef DECLARE_EXPORT_UDF
 #include <udf_includes.hpp>
+#define DECLARE_LOADER(__path__) auto _ = UnsafeUDF::Loader::init_lib(__path__);
+#else 
+
+#define DECLARE_LOADER(__path__) (void);
+#endif 
 #include <utility>
 
 #ifndef NO_MPI
@@ -32,25 +38,25 @@ static bool override_result_path(const Core::UserControlParameters& params, cons
 
 #ifndef NO_MPI
 #  define HANDLE_RC(__api_results__)                                                               \
-    {                                                                                              \
-      auto rc = (__api_results__);                                                                 \
-      if (!rc)                                                                                     \
-      {                                                                                            \
-        std::cout << "ERROR " << #__api_results__ << " " << rc.get() << std::endl;                 \
-        WrapMPI::critical_error();                                                                 \
-        return -1;                                                                                 \
-      }                                                                                            \
-    }
+{                                                                                              \
+  auto rc = (__api_results__);                                                                 \
+  if (!rc)                                                                                     \
+  {                                                                                            \
+    std::cout << "ERROR " << #__api_results__ << " " << rc.get() << std::endl;                 \
+    WrapMPI::critical_error();                                                                 \
+    return -1;                                                                                 \
+  }                                                                                            \
+}
 #else
 #  define HANDLE_RC(__api_results__)                                                               \
-    {                                                                                              \
-      auto rc = (__api_results__);                                                                 \
-      if (!rc)                                                                                     \
-      {                                                                                            \
-        std::cout << "ERROR " << #__api_results__ << " " << rc.get() << std::endl;                 \
-        return -1;                                                                                 \
-      }                                                                                            \
-    }
+{                                                                                              \
+  auto rc = (__api_results__);                                                                 \
+  if (!rc)                                                                                     \
+  {                                                                                            \
+    std::cout << "ERROR " << #__api_results__ << " " << rc.get() << std::endl;                 \
+    return -1;                                                                                 \
+  }                                                                                            \
+}
 #endif
 
 int main(int argc, char** argv)
@@ -64,8 +70,7 @@ int main(int argc, char** argv)
     return -1;
   }
 
-  // auto _ = UnsafeUDF::Loader::init_lib("/home/benjamin/Documents/code/cpp/BioCMA-MCST/builddir/"
-  //                                      "release_gcc/apps/udf_model/libudf_model.so");
+  //DECLARE_LOADER("/home/benjamin/Documents/code/cpp/BioCMA-MCST/builddir/release_gcc/apps/udf_model/libudf_model.so");
 
   auto user_params = params_opt.value(); // Deref value is safe  TODO: with
                                          // c++23 support use monadic
@@ -94,17 +99,16 @@ int main(int argc, char** argv)
   const auto serde = user_params.serde;
   INTERPRETER_INIT
 
-  REDIRECT_SCOPE({
-    HANDLE_RC(h->register_parameters(std::move(user_params)));
-    // 1:20e-3*0.5/3600., {3}
-    // 2:20e-3*0.9/3600., {10}
-
-    h->set_feed_constant_from_rvalue(20e-3 * 0.1 / 3600., {10.}, {0}, {0}, false);
-    // h->set_feed_constant_from_rvalue(20e-3*0.5/3600., {10}, {0}, {0}, false);
-    h->set_feed_constant_from_rvalue(0.01 / 3600., {0.3}, {0}, {1}, true);
-    HANDLE_RC(h->apply(serde));
-    HANDLE_RC(h->exec());
-  })
+    REDIRECT_SCOPE({
+        HANDLE_RC(h->register_parameters(std::move(user_params)));
+        // 1:20e-3*0.5/3600., {3}
+        // 2:20e-3*0.9/3600., {10}
+        // h->set_feed_constant_from_rvalue(20e-3 * 0.5 / 3600., {0.}, {0}, {0}, false);
+        // // h->set_feed_constant_from_rvalue(20e-3*0.5/3600., {10}, {0}, {0}, false);
+        // h->set_feed_constant_from_rvalue(0.01 / 3600., {0.3}, {0}, {1}, true);
+        HANDLE_RC(h->apply(serde));
+        HANDLE_RC(h->exec());
+        })
 
   return 0;
 }

@@ -1,4 +1,6 @@
 option('use_dynamic_module', type: 'boolean', value: false)
 option('use_cuda', type: 'boolean', value: false)
-option('install_post_processing',type: 'boolean',value:false)
+option('use_system_kokkos', type: 'boolean', value: false)
+option('python_install',type: 'boolean',value:false)
 option('use_cereal',type: 'boolean',value:true)
+option('compile_tools',type: 'boolean',value:false)

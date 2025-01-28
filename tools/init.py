@@ -42,17 +42,28 @@ def init_n14_1s():
     liquid_n14[0,0]=5.
     make_initial_concentration("./cma_data/n14_init.h5",liquid_n14)
 
-
-def sanofi_1s():
-    liquid_sanofi = np.zeros((432,2))
-    gas_sanofi = np.zeros((432,2))
-
+def init_n14_4s():
+    liquid_sanofi = np.zeros((500,4))
+    gas_sanofi = np.zeros((500,4))
 
     gas_sanofi[:,0]=0 #glucose g/l
     gas_sanofi[:,1]=0.21 #o2 g/l
 
     liquid_sanofi[:,0]=5 #glucose g/l
     liquid_sanofi[:,1]=0 #o2 g/l
+
+    make_initial_concentration("./cma_data/n14_4s_init.h5",liquid_sanofi,gas_sanofi)
+
+def sanofi_1s():
+    liquid_sanofi = np.zeros((432,4))
+    gas_sanofi = np.zeros((432,4))
+
+
+    gas_sanofi[:,0]=0 #glucose g/l
+    gas_sanofi[:,1]=0.21 #o2 g/l
+
+    liquid_sanofi[:,0]=5 #glucose g/l
+    liquid_sanofi[:,1]=1e-3 #o2 g/l
 
 
     make_initial_concentration("./cma_data/sanofi_init.h5",liquid_sanofi,gas_sanofi)
@@ -70,3 +81,4 @@ if __name__=="__main__":
     init_0d_1s()
     init_n14_1s()
     sanofi_1s()
+    init_n14_4s()

@@ -10,7 +10,7 @@ namespace Core
   };
   void DataExporter::do_link(std::string_view filename,
                              std::string_view link_name,
-                             std::string_view groupname, )
+                             std::string_view groupname )
   {
   }
 

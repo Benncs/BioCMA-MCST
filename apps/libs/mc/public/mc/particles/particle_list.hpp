@@ -40,7 +40,7 @@ void remove_if(uint64_t i_max_used, uint64_t remove_count, ViewType view, UnaryP
   Kokkos::parallel_scan(
       "remove_if_scan",
       Kokkos::RangePolicy<Space>(space, 0, i_max_used),
-      KOKKOS_LAMBDA(const auto &i, auto &update, const bool is_final) {
+      KOKKOS_LAMBDA(const int &i, uint64_t &update, const bool is_final) {
         const auto &val = view[i];
         if (!pred(val))
         {
@@ -56,7 +56,7 @@ void remove_if(uint64_t i_max_used, uint64_t remove_count, ViewType view, UnaryP
   Kokkos::fence("scan:remove_if");
   KOKKOS_ASSERT(scan_count == (i_max_used - remove_count));
   Kokkos::parallel_for(
-      "remove_if_parfor", Kokkos::RangePolicy<Space>(space, 0, i_max_used), KOKKOS_LAMBDA(const auto i) { view[i] = std::move(tmp_view[i]); });
+      "remove_if_parfor", Kokkos::RangePolicy<Space>(space, 0, i_max_used), KOKKOS_LAMBDA(const int i) { view[i] = std::move(tmp_view[i]); });
   Kokkos::fence("parfor:remove_if");
   // view = tmp_view;
 }
@@ -95,7 +95,7 @@ namespace MC
         throw std::runtime_error(err);
       }
     }
-
+    
     /**
      * @brief Creates a ParticleList with the specified capacity, without
      * allocating memory immediately.
@@ -120,7 +120,7 @@ namespace MC
      * @return A pointer to the newly spawned particle, or nullptr if the
      * particle couldn't be created.
      */
-    KOKKOS_FUNCTION Particle<Model> *spawn()
+    KOKKOS_FUNCTION Particle<Model> *spawn()const
     {
       if (this->emplace(std::move(Particle<Model>())))
       {
@@ -174,10 +174,11 @@ namespace MC
       PROFILE_SECTION("remove_dead")
       if(count_dead==0){return;}
 
-      auto pred = KOKKOS_LAMBDA(const auto &p)
+      auto pred = KOKKOS_LAMBDA(const MC::Particle<Model> &p)
       {
         return p.properties.status == MC::CellStatus::DEAD || p.properties.status == MC::CellStatus::OUT;
       };
+
       uint64_t new_used_item = this->size() - count_dead;
       remove_if<Kokkos::DefaultExecutionSpace>(this->size(), count_dead, this->_owned_data, pred);
 

@@ -3,7 +3,7 @@
 
 #include <mc/particles/mcparticles.hpp>
 #include <mc/particles/particle_list.hpp>
-
+#include <iostream> 
 namespace MC
 {
 
@@ -63,13 +63,12 @@ namespace MC
     /**
      * @brief Get correct view to be pass to kernel
      */
-    auto get_view()
+    ResultsVIew get_view()
     {
-      // ResultsVIew results("Results_view");
-      Kokkos::View<Results<MemorySpace, T>, MemorySpace> results(Kokkos::view_alloc("Results_view", Kokkos::WithoutInitializing));
-      new (&results()) Results(*this);
+      Kokkos::View<Results<MemorySpace, T>, MemorySpace> results("Results_view");
       update_view(results);
       return results;
+      std::cout<<"View ok"<<std::endl;
     }
 
     template <class Archive> void serialize(Archive &ar)

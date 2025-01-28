@@ -2,3 +2,7 @@
 url = https://github.com/BlueBrain/HighFive.git
 revision = head
 depth = 1
+method=cmake
+
+[provide]
+highfive-1.0 = HighFive_dep hdf5_dep

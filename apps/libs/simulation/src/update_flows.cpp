@@ -30,7 +30,7 @@ namespace Simulation
         
     matflow.transition_matrix = _mat_transition_liq;
 
-    matflow.diag_transition = get_diag_transition(matflow.transition_matrix);
+    matflow.set_diag_transition(get_diag_transition(matflow.transition_matrix));
   }
 
   static std::vector<double>

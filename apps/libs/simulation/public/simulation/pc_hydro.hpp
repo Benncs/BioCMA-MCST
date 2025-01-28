@@ -1,6 +1,8 @@
 #ifndef __SIMUALTION__PC_HYDRO_HPP__
 #define __SIMUALTION__PC_HYDRO_HPP__
 
+#include "common/kokkos_vector.hpp"
+#include "simulation/alias.hpp"
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
@@ -40,10 +42,13 @@ namespace Simulation
     [[nodiscard]] std::span<const double> get_diag_transition() const;
 
     std::vector<double> inverse_volume;
-    std::vector<double> diag_transition;
+
+    DiagonalViewCompute get_kernel_diagonal();
 
     PreCalculatedHydroState() = default;
     ~PreCalculatedHydroState() = default;
+
+    void set_diag_transition(std::vector<double>&& diag);
 
     explicit PreCalculatedHydroState(const FlowMatrixType& _tm);
 
@@ -52,6 +57,8 @@ namespace Simulation
 
     PreCalculatedHydroState(PreCalculatedHydroState&& other) = default;
     PreCalculatedHydroState(const PreCalculatedHydroState& other) = delete;
+    private:
+    DiagonalView<ComputeSpace> view_compute;
   };
 
   [[nodiscard]] inline CmaRead::L2DView<const double>
@@ -60,9 +67,9 @@ namespace Simulation
     return get_eigen_view(cumulative_probability);
   }
 
-  [[nodiscard]] inline std::span<const double> PreCalculatedHydroState::get_diag_transition() const
+  inline DiagonalViewCompute PreCalculatedHydroState::get_kernel_diagonal()
   {
-    return diag_transition;
+    return view_compute;
   }
 
   struct TransitionState

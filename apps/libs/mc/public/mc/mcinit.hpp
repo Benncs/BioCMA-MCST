@@ -1,6 +1,7 @@
 #ifndef __MC_INIT_HPP__
 #define __MC_INIT_HPP__
 
+#include "Kokkos_Macros.hpp"
 #include <Kokkos_DynamicView.hpp>
 #include <cassert>
 #include <common/execinfo.hpp>
@@ -13,12 +14,32 @@
 #include <mc/unit.hpp>
 #include <memory>
 
+
+namespace{
+  template<typename ListType>
+  struct PostInitFunctor
+  {
+
+    PostInitFunctor(ListType _list,double _new_weigth):list(_list),new_weigth(_new_weigth)
+    {
+
+    }
+
+    KOKKOS_INLINE_FUNCTION void operator()(std::size_t i_particle) const
+    { 
+       list._owned_data(i_particle).properties.weight = new_weigth;
+    } 
+    ListType list;
+    double new_weigth;
+
+  };
+}
+
 namespace MC
 {
 
   constexpr bool uniform_init = false;
-  // constexpr double initial_mass_cell = 3.14 * (0.8e-6) * (0.8e-6) / 4. * 0.9e-6 / 2. * 1000;
-  constexpr double initial_mass_cell = 3.14 * (0.8e-6) * (0.8e-6) / 4. * (4e-6 *0.9) * 1000;
+
   namespace
   {
 
@@ -42,8 +63,9 @@ namespace MC
     /**
      */
     template <ParticleModel Model>
-    void
-    impl_init(std::unique_ptr<MonteCarloUnit>& unit, double weight, size_t particle_per_process)
+    void impl_init(std::unique_ptr<MonteCarloUnit>& unit,
+                   size_t particle_per_process,
+                   double& total_mass)
     {
 
       auto container = ParticlesContainer<Model>(particle_per_process);
@@ -70,20 +92,47 @@ namespace MC
         max_c = 1;
       }
 
-      Kokkos::parallel_for(
-          "mc_init",
+      // double reactor_total_mass = x0 * unit->domain.getTotalVolume();
+
+      // Kokkos::View<double,ComputeSpace> view_reactor_total_mass("view_reactor_total_mass");
+      // Kokkos::deep_copy(view_reactor_total_mass,reactor_total_mass);
+
+      /*
+       * The mass of each cell in the reactor can be calculated after the model initialization.
+       * To ensure that each cell has a unique weight based on the total mass, the following formula
+       * is used: weight = XV / m_tot Where: XV  - represents a certain property or value related to
+       * the cell (e.g., volume, particle count, etc.). m_tot - the total mass of the cell or
+       * reactor, which needs to be determined first.
+       *
+       * In order to compute the weight correctly, the initialization process needs to be split into
+       * two phases:
+       * 1. The first phase is to calculate the total mass of the cell (m_tot).
+       * 2. The second phase is to apply the newly calculated weight to the cell using the formula
+       * above.
+       *
+       * This split ensures that the mass is determined before the weight, as the weight is
+       * dependent on the total mass.
+       */
+
+      Kokkos::parallel_reduce(
+          "mc_init_first",
           Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, particle_per_process),
-          KOKKOS_LAMBDA(const int i) {
-            auto p = Particle<Model>(weight);
-            p.properties.weight = weight;
+          KOKKOS_LAMBDA(const int i, double& local_mass) {
+            auto p = Particle<Model>(1.);
             p.properties.id = i;
             const uint64_t location = rng.uniform_u(min_c, max_c);
             p.properties.current_container = location;
             Kokkos::atomic_increment(&compartments(location).n_cells);
             p.init(particle_rng);
+            const double mass_i = p.data.mass();
+            // Add the mass of the particle to the local mass variable
+            local_mass += mass_i;
+            // p.properties.weight = view_reactor_total_mass()/mass_i;
+            // Store the particle in the list
             list.set(i, std::move(p));
-          });
-
+          },
+          total_mass // This is the result that will accumulate after the reduction
+      );
       Kokkos::fence();
 
       unit->container = container;
@@ -110,14 +159,15 @@ namespace MC
                                        size_t n_particles,
                                        std::span<double> volumes,
                                        CmaRead::Neighbors::Neighbors_const_view_t neighbors,
-                                       double x0)
+                                       double x0,
+                                       double& total_mass)
   {
     auto unit = std::make_unique<MonteCarloUnit>();
 
     unit->domain = ReactorDomain(volumes, neighbors);
 
-    //Note: use size_t because number of particle represent actually an array size. 
-    std::size_t particle_per_process = n_particles / info.n_rank; 
+    // Note: use size_t because number of particle represent actually an array size.
+    std::size_t particle_per_process = n_particles / info.n_rank;
 
     const std::size_t remainder = n_particles % info.n_rank;
     if (remainder != 0 && info.current_rank == info.n_rank - 1)
@@ -125,13 +175,38 @@ namespace MC
       particle_per_process += remainder;
     }
     constexpr double scale_factor = 1.;
-    const double weight = get_initial_weight(
-        scale_factor, x0, unit->domain.getTotalVolume(), initial_mass_cell, n_particles);
+    // const double weight = get_initial_weight(
+    //     scale_factor, x0, unit->domain.getTotalVolume(), initial_mass_cell, n_particles);
 
-    KOKKOS_ASSERT(weight > 0);
-    unit->init_weight = weight;
-    impl_init<Model>(unit, weight, particle_per_process);
+    impl_init<Model>(unit, particle_per_process, total_mass);
+
     return unit;
+  }
+
+  inline void post_init_weight(std::unique_ptr<MonteCarloUnit>& unit, double x0, double total_mass)
+  {
+
+    const double new_weight = (x0 * unit->domain.getTotalVolume()) / (total_mass);
+    KOKKOS_ASSERT(new_weight > 0);
+    auto functor = [total_mass, new_weight](auto& container)
+    {
+      auto& list = container.get_compute();
+
+      Kokkos::View<double, ComputeSpace> view_new_weight("view_new_weight");
+      Kokkos::deep_copy(view_new_weight, new_weight);
+      Kokkos::parallel_for(
+          "mc_init_apply",
+          Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, list.size()),
+          // KOKKOS_LAMBDA(const int i) {
+          //   list._owned_data(i).properties.weight = view_new_weight();
+          // }
+          PostInitFunctor(list,new_weight)
+          );
+          
+    };
+
+    unit->init_weight = new_weight;
+    std::visit(functor, unit->container);
   }
 
 } // namespace MC
