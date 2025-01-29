@@ -137,7 +137,7 @@ namespace Simulation
 
     kernelContribution get_kernel_contribution();
 
-    void set_kernel_contribs_to_host(kernelContribution c);
+    void set_kernel_contribs_to_host();
 
     [[nodiscard]] NeighborsViewCompute get_kernel_neighbors() const;
 
@@ -147,7 +147,7 @@ namespace Simulation
 
     void post_init_concentration_file(const ScalarInitializer& scalar_init);
 
-     Kokkos::View<size_t, Kokkos::SharedSpace> internal_counter_dead;
+    Kokkos::View<size_t, Kokkos::SharedSpace> internal_counter_dead;
     Kokkos::View<size_t, Kokkos::SharedSpace> waiting_allocation_particle;
 
     struct pimpl_deleter
@@ -224,9 +224,8 @@ namespace Simulation
 
     ContributionView contribs_scatter(contribs);
 
-    //const_number_simulation = (n_particle > trigger_const_particle_number); Not used currently  
+    // const_number_simulation = (n_particle > trigger_const_particle_number); Not used currently
 
-    
     // Kokkos::View<size_t, Kokkos::SharedSpace> internal_counter_dead("internal_counter_dead");
     // Kokkos::View<size_t, Kokkos::SharedSpace> waiting_allocation_particle(
     //     "waiting_allocation_particle");
@@ -234,8 +233,6 @@ namespace Simulation
     Kokkos::deep_copy(internal_counter_dead, _internal_counter);
     Kokkos::deep_copy(waiting_allocation_particle, 0);
 
-  
-    
     Kokkos::parallel_for("mc_cycle_process",
                          Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particle),
                          KernelInline::Kernel(d_t,
@@ -313,7 +310,7 @@ namespace Simulation
       Kokkos::fence("Fence cycle process ");
     }
 
-    set_kernel_contribs_to_host(contribs);
+    set_kernel_contribs_to_host();
   }
 
 } // namespace Simulation

@@ -3,7 +3,6 @@
 
 #include <cma_read/flow_iterator.hpp>
 #include <cmt_common/macro_constructor_assignment.hpp>
-
 #include <cma_read/reactorstate.hpp>
 #include <cstddef>
 #include <memory>

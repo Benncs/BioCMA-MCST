@@ -4,7 +4,6 @@
 #include <common/kokkos_vector.hpp>
 #include <cstddef>
 #include <mc/events.hpp>
-#include <traits/Kokkos_IterationPatternTrait.hpp>
 namespace Simulation
 {
 

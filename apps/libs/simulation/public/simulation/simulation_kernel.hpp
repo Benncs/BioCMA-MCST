@@ -1,9 +1,6 @@
 #ifndef __SIMULATION_MC_KERNEL_HPP
 #define __SIMULATION_MC_KERNEL_HPP
 
-#include "Kokkos_Printf.hpp"
-#include "mc/particles/data_holder.hpp"
-#include "simulation/probe.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
 #include <biocma_cst_config.hpp>
@@ -11,11 +8,14 @@
 #include <common/kokkos_vector.hpp>
 #include <mc/container_state.hpp>
 #include <mc/events.hpp>
+#include <mc/particles/data_holder.hpp>
 #include <mc/particles/mcparticles.hpp>
 #include <mc/prng/prng.hpp>
+#include <simulation/probe.hpp>
+#include <simulation/alias.hpp>
 static constexpr bool const_number_simulation = false;
 
-#include <simulation/alias.hpp>
+
 
 namespace
 {
@@ -74,8 +74,8 @@ namespace Simulation::KernelInline
            GeneratorPool pool)
         : d_t(d_t), list(_list), extra(std::move(_extra)),
           internal_counter_dead(std::move(_internal_counter_dead)),
-          local_compartments(std::move(_local_compartments)), neighbors(std::move(_neighbors)),rng_pool(pool),
-          diag_transition(std::move(_diag_transition)),
+          local_compartments(std::move(_local_compartments)), neighbors(std::move(_neighbors)),
+          rng_pool(pool), diag_transition(std::move(_diag_transition)),
           cumulative_probability(std::move(_cumulative_probability)), events(std::move(_events)),
           biomass_contribution(std::move(_biomass_contribution)),
           local_leaving_flow(std::move(_local_leaving_flow)),
@@ -277,6 +277,23 @@ namespace Simulation::KernelInline
     }
   };
 
+    /**
+   * @brief Finds the next compartment for a particle based on a random number
+   * and cumulative probabilities.
+   *
+   * This function determines the next compartment for a particle by comparing a
+   * random number against the cumulative probabilities of the neighboring
+   * compartments. It returns the index of the chosen next compartment based on
+   * the transition probabilities.
+   *
+   * @param i_compartment Index of the current compartment.
+   * @param random_number Random number used to decide the next compartment.
+   * @param i_neighbor Span of indices representing neighboring compartments.
+   * @param cumulative_probability 2D view of cumulative probabilities for the
+   * compartments.
+   *
+   * @return The index of the next compartment for the particle.
+   */
   template <typename ListType>
   KOKKOS_INLINE_FUNCTION size_t Kernel<ListType>::__find_next_compartment(
       const std::size_t i_compartment,

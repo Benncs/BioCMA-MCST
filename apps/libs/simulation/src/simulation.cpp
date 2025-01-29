@@ -228,9 +228,9 @@ namespace Simulation
     return this->liquid_scalar->get_kernel_contribution();
   }
 
-  void SimulationUnit::set_kernel_contribs_to_host(kernelContribution c)
+  void SimulationUnit::set_kernel_contribs_to_host()
   {
-    this->liquid_scalar->set_kernel_contribs_to_host(std::move(c));
+    this->liquid_scalar->set_kernel_contribs_to_host();
   }
 
   void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation* ptr) const

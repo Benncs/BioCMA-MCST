@@ -88,6 +88,7 @@ blas = dependency('blas', required: false) # Eigen can work without BLAS
 # if blas.found()
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 # endif
+# 
 # add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
