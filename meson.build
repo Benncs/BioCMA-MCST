@@ -89,7 +89,7 @@ blas = dependency('blas', required: false) # Eigen can work without BLAS
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 # endif
 # 
-add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
+# add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
 use_system_kokkos = get_option('use_system_kokkos')

@@ -22,7 +22,7 @@ namespace Simulation
     return this->liquid_scalar->getConcentrationData();
   }
 
-  [[nodiscard]] std::optional<std::span<double>> SimulationUnit::getCgasData() const
+  [[nodiscard]] std::optional<std::span<const double>> SimulationUnit::getCgasData() const
   {
     if (!gas_scalar)
     {
@@ -31,10 +31,6 @@ namespace Simulation
     return this->gas_scalar->getConcentrationData();
   }
 
-  [[nodiscard]] std::tuple<size_t, size_t> SimulationUnit::getDim() const noexcept
-  {
-    return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()};
-  }
 
   [[nodiscard]] Dimensions SimulationUnit::getDimensions() const noexcept
   {
@@ -46,10 +42,6 @@ namespace Simulation
   {
 
     PROFILE_SECTION("host:reduceContribs_rank")
-    // const auto [nr, nc] = getDimensions();
-    // this->liquid_scalar->biomass_contribution.noalias() += Eigen::Map<Eigen::MatrixXd>(
-    //     const_cast<double*>(data.data()), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
-
     this->liquid_scalar->reduce_contribs(data);
   }
 
@@ -137,13 +129,6 @@ namespace Simulation
 
     if (is_two_phase_flow)
     {
-      // this->liquid_scalar->mass_transfer =
-      //     gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,
-      //                              liquid_scalar->getVolume(),
-      //                              liquid_scalar->getConcentrationArray(),
-      //                              gas_scalar->getConcentrationArray(),
-      //                              state);
-
       const auto& mtr = this->liquid_scalar->set_mass_transfer(
           gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,
                                    liquid_scalar->getVolume(),

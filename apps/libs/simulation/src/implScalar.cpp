@@ -8,6 +8,7 @@
 #include <common/kokkos_vector.hpp>
 #include <scalar_simulation.hpp>
 #include <simulation/alias.hpp>
+#include <stdexcept>
 
 EigenKokkos::EigenKokkos(std::size_t n_row, std::size_t n_col)
 {
@@ -31,18 +32,15 @@ void EigenKokkos::update_compute_to_host() const
 namespace Simulation
 {
 
-  // ScalarSimulation::ScalarSimulation(ScalarSimulation&& other) noexcept
-  //     : total_mass(std::move(other.total_mass)), m_volumes(other.m_volumes),
-  //       alloc_concentrations(std::move(other.alloc_concentrations)), n_r(other.n_r),
-  //       n_c(other.n_c)
-  // {
-  // }
-
   ScalarSimulation::ScalarSimulation(size_t n_compartments,
                                      size_t n_species,
                                      std::span<double> volumes)
-      : n_r(n_species), n_c(n_compartments), concentrations(n_r, n_c), b_contribs(n_r, n_c)
+      : n_r(n_species), n_c(n_compartments), concentrations(n_r, n_c), sources(n_r, n_c)
   {
+    if (volumes.size() != n_compartments)
+    {
+      throw std::invalid_argument("Volumes size mismatch");
+    }
 
     const int n_row = EIGEN_INDEX(n_r);
     const int n_col = EIGEN_INDEX(n_c);
@@ -57,10 +55,10 @@ namespace Simulation
     this->total_mass = MatrixType(n_row, n_col);
     this->total_mass.setZero();
 
-    this->feed = SparseMatrixType(n_row, n_col);
-    this->feed.setZero();
+    // this->feed = SparseMatrixType(n_row, n_col);
+    // this->feed.setZero();
 
-    this->sink = DiagonalType( n_col);
+    this->sink = DiagonalType(n_col);
     this->sink.setZero();
 
     this->vec_kla = Eigen::ArrayXXd(n_row, n_col);
@@ -82,10 +80,25 @@ namespace Simulation
     return concentrations.compute;
   }
 
+   CmaRead::L2DView<double> ScalarSimulation::getConcentrationView()
+  {
+    return view;
+  }
+
+  std::size_t ScalarSimulation::n_col() const
+  {
+    return n_c;
+  }
+
+  std::size_t ScalarSimulation::n_row() const
+  {
+    return n_r;
+  }
+
   void ScalarSimulation::reduce_contribs(std::span<const double> data)
   {
     assert(data.size() == (n_c * n_r));
-    b_contribs.eigen_data.noalias() += Eigen::Map<Eigen::MatrixXd>(
+    sources.eigen_data.noalias() += Eigen::Map<Eigen::MatrixXd>(
         const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
   }
 
@@ -96,7 +109,7 @@ namespace Simulation
     PROFILE_SECTION("performStep")
     auto& c = concentrations.eigen_data;
 
-    total_mass += d_t * (c * m_transition - c*sink + b_contribs.eigen_data + feed + transfer_gas_liquid);
+    total_mass += d_t * (c * m_transition - c * sink + sources.eigen_data + transfer_gas_liquid);
 
     // total_mass = (total_mass.array()<0.).select(0,total_mass);
     c = total_mass * volumes_inverse;

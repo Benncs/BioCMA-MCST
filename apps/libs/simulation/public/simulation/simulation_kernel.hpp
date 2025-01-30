@@ -169,15 +169,11 @@ namespace Simulation::KernelInline
       }
     }
 
-    KOKKOS_INLINE_FUNCTION size_t __find_next_compartment(
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION size_t __find_next_compartment(
         std::size_t i_compartment,
         double random_number,
         const Kokkos::View<const size_t*, Kokkos::LayoutStride, ComputeSpace>& i_neighbor) const;
-    /*
-        KOKKOS_INLINE_FUNCTION size_t _find_next_compartment_2(
-            const std::size_t i_compartment,
-            const double random_number,
-            const NeighborsViewCompute& n) const;i*/
+
   };
 
   /****************
@@ -232,7 +228,7 @@ namespace Simulation::KernelInline
 
     // Need 2 random numbers, use index 0 and 1 to acess to
     auto generator = rng_pool.get_state();
-    const double rng1 = generator.drand(0., 1.);
+    const float rng1 = generator.frand(0., 1.);
     rng_pool.free_state(generator);
 
     if (probability_leaving(
@@ -255,6 +251,8 @@ namespace Simulation::KernelInline
       properties.current_container = next;
       events.template incr<MC::EventType::Move>();
     }
+
+    
   };
 
   /**

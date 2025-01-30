@@ -1,7 +1,7 @@
 #ifndef __GET_CUMULATIVE_PROBABILITY_HPP__
 #define __GET_CUMULATIVE_PROBABILITY_HPP__
 
-#include <simulation/pc_hydro.hpp>
+#include <pc_hydro.hpp>
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>

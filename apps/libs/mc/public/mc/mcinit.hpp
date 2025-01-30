@@ -1,8 +1,6 @@
 #ifndef __MC_INIT_HPP__
 #define __MC_INIT_HPP__
 
-#include "Kokkos_Macros.hpp"
-#include <Kokkos_DynamicView.hpp>
 #include <cassert>
 #include <common/execinfo.hpp>
 #include <common/kokkos_vector.hpp>
@@ -13,27 +11,26 @@
 #include <mc/prng/prng.hpp>
 #include <mc/unit.hpp>
 #include <memory>
+#include <utility>
 
-
-namespace{
-  template<typename ListType>
-  struct PostInitFunctor
+namespace
+{
+  template <typename ListType> struct PostInitFunctor
   {
 
-    PostInitFunctor(ListType _list,double _new_weigth):list(_list),new_weigth(_new_weigth)
+    PostInitFunctor(ListType _list, double _new_weigth)
+        : list(std::move(_list)), new_weigth(_new_weigth)
     {
-
     }
 
     KOKKOS_INLINE_FUNCTION void operator()(std::size_t i_particle) const
-    { 
-       list._owned_data(i_particle).properties.weight = new_weigth;
-    } 
+    {
+      list._owned_data(i_particle).properties.weight = new_weigth;
+    }
     ListType list;
     double new_weigth;
-
   };
-}
+} // namespace
 
 namespace MC
 {
@@ -194,15 +191,9 @@ namespace MC
 
       Kokkos::View<double, ComputeSpace> view_new_weight("view_new_weight");
       Kokkos::deep_copy(view_new_weight, new_weight);
-      Kokkos::parallel_for(
-          "mc_init_apply",
-          Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, list.size()),
-          // KOKKOS_LAMBDA(const int i) {
-          //   list._owned_data(i).properties.weight = view_new_weight();
-          // }
-          PostInitFunctor(list,new_weight)
-          );
-          
+      Kokkos::parallel_for("mc_init_apply",
+                           Kokkos::RangePolicy<ComputeSpace>(0, list.size()),
+                           PostInitFunctor(list, new_weight));
     };
 
     unit->init_weight = new_weight;

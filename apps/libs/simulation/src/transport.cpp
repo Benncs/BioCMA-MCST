@@ -2,7 +2,7 @@
 #include <Kokkos_Core.hpp>
 #include <cmt_common/zip.hpp>
 #include <get_cumulative_proba.hpp>
-#include <simulation/pc_hydro.hpp>
+#include <pc_hydro.hpp>
 #include <transport.hpp>
 #include <mc/domain.hpp>
 #include <mc/particles/particles_container.hpp>

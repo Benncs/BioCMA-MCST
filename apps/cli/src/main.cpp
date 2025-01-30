@@ -103,7 +103,7 @@ int main(int argc, char** argv)
         HANDLE_RC(h->register_parameters(std::move(user_params)));
         // 1:20e-3*0.5/3600., {3}
         // 2:20e-3*0.9/3600., {10}
-        h->set_feed_constant_from_rvalue(20e-3 * 0.1 / 3600., {0.}, {0}, {0}, false);
+        h->set_feed_constant_from_rvalue(20e-3 * 0.5 / 3600., {0.}, {0}, {0}, false);
         // // h->set_feed_constant_from_rvalue(20e-3*0.5/3600., {10}, {0}, {0}, false);
         // h->set_feed_constant_from_rvalue(0.01 / 3600., {0.3}, {0}, {1}, true);
         HANDLE_RC(h->apply(serde));

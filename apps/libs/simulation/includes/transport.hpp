@@ -6,13 +6,11 @@
 #include <Kokkos_Core.hpp>
 #include <cma_read/flowmap.hpp>
 #include <cstddef>
-#include <simulation/pc_hydro.hpp>
+#include <pc_hydro.hpp>
 #include <span>
 #include <vector>
 namespace Simulation
 {
-
-
 
   FlowMatrixType get_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t& flows);
 

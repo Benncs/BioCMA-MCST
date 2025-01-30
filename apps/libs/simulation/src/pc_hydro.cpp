@@ -1,6 +1,6 @@
 #include "Kokkos_Core.hpp"
 #include "common/kokkos_vector.hpp"
-#include <simulation/pc_hydro.hpp>
+#include <pc_hydro.hpp>
 #include <transport.hpp>
 
 namespace Simulation

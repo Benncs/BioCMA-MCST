@@ -35,7 +35,7 @@ template <typename ExecSpace> ListType<ExecSpace> init(RngPool pool)
         auto& p = particles(i_particle, 0);
         p.data.a_permease = 0.5;
         p.data.a_pts = 0.5;
-        p.data.lenght = 1e-6;
+        p.data.length = 1e-6;
         p.data.n_permease = 100;
         p.data.nu = 2.776227e-10;
 
@@ -51,7 +51,7 @@ template <typename ExecSpace> ListType<ExecSpace> init(RngPool pool)
           auto& p = particles(i_particle, i_fuzz);
           p.data.a_permease = permease_dist;
           p.data.a_pts = pts_dist;
-          p.data.lenght = length_dist;
+          p.data.length = length_dist;
           p.data.n_permease = n_permease_dist; //This one changes all
           p.data.nu = nu;
         }
