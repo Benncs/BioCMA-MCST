@@ -16,7 +16,7 @@
 #include <type_traits>
 static constexpr bool const_number_simulation = false;
 
-static constexpr bool _use_kokkos_log = false;
+static constexpr bool _use_kokkos_log = true;
 
 namespace
 {

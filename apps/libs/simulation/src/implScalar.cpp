@@ -54,19 +54,19 @@ namespace Simulation
     volumes_inverse = Eigen::DiagonalMatrix<double, -1>(n_col);
     volumes_inverse.setIdentity();
 
-    this->total_mass = Eigen::MatrixXd(n_row, n_col);
+    this->total_mass = MatrixType(n_row, n_col);
     this->total_mass.setZero();
 
-    this->feed = Eigen::SparseMatrix<double>(n_row, n_col);
+    this->feed = SparseMatrixType(n_row, n_col);
     this->feed.setZero();
 
-    this->sink = Eigen::DiagonalMatrix<double, -1>(n_col);
+    this->sink = DiagonalType( n_col);
     this->sink.setZero();
 
     this->vec_kla = Eigen::ArrayXXd(n_row, n_col);
     this->vec_kla.setZero();
 
-    this->mass_transfer = Eigen::MatrixXd(n_row, n_col);
+    this->mass_transfer = MatrixType(n_row, n_col);
     this->mass_transfer.setZero();
 
     // todo remove
@@ -80,7 +80,6 @@ namespace Simulation
   [[nodiscard]] KokkosScalarMatrix<ComputeSpace> ScalarSimulation::get_device_concentration() const
   {
     return concentrations.compute;
-    // return compute_concentration;
   }
 
   void ScalarSimulation::reduce_contribs(std::span<const double> data)
@@ -96,13 +95,10 @@ namespace Simulation
   {
     PROFILE_SECTION("performStep")
     auto& c = concentrations.eigen_data;
-    total_mass +=
-        d_t * (c * m_transition - c * sink + b_contribs.eigen_data + feed + transfer_gas_liquid);
+
+    total_mass += d_t * (c * m_transition - c*sink + b_contribs.eigen_data + feed + transfer_gas_liquid);
 
     // total_mass = (total_mass.array()<0.).select(0,total_mass);
-    // total_mass += d_t * (alloc_concentrations * m_transition -
-    //                      alloc_concentrations * sink + feed);
-
     c = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
