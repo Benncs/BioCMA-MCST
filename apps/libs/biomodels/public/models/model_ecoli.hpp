@@ -286,9 +286,9 @@ namespace Models
       this->n_permease = original_n_permease / 2;
 
       auto child = *this;
-      const bool mask = a_pts > a_permease;
-      const double max_perm = mask ? a_pts : 1;
-      const double max_pts = mask ? 1 : a_permease;
+      // const bool mask = a_pts > a_permease;
+      // const double max_perm = mask ? a_pts : 1;
+      // const double max_pts = mask ? 1 : a_permease;
 
       {
         // auto generator = _rng.random_pool.get_state();

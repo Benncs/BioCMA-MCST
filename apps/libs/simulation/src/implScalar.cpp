@@ -107,11 +107,9 @@ namespace Simulation
                                      const Eigen::MatrixXd& transfer_gas_liquid)
   {
     PROFILE_SECTION("performStep")
-    auto& c = concentrations.eigen_data;
+    #define c concentrations.eigen_data
 
-    total_mass += d_t * (c * m_transition - c * sink + sources.eigen_data + transfer_gas_liquid);
-
-    // total_mass = (total_mass.array()<0.).select(0,total_mass);
+    total_mass = total_mass+d_t * (c * m_transition - c * sink + sources.eigen_data + transfer_gas_liquid);
     c = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace

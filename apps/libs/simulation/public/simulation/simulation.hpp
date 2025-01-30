@@ -107,7 +107,7 @@ namespace Simulation
     void clear_mc();
 
     void reset();
-
+    void post_init_compartments();
   private:
     // Attributes
     Kokkos::View<std::size_t, Kokkos::SharedSpace> internal_counter_dead;
@@ -133,7 +133,7 @@ namespace Simulation
     void post_init_concentration(const ScalarInitializer& scalar_init);
     void post_init_concentration_functor(const ScalarInitializer& scalar_init);
     void post_init_concentration_file(const ScalarInitializer& scalar_init);
-    void post_init_compartments();
+    
 
     struct pimpl_deleter
     {

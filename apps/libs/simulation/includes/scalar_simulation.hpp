@@ -77,10 +77,11 @@ namespace Simulation
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
     [[nodiscard]] const MatrixType& get_mass_transfer() const;
     [[nodiscard]] std::span<double> getConcentrationData();
-     Eigen::ArrayXXd vec_kla; // TODO : Clean this
+    Eigen::ArrayXXd vec_kla; // TODO : Clean this
 
     [[nodiscard]] std::size_t n_row() const;
     [[nodiscard]] std::size_t n_col() const;
+
 
     // Setters
 
@@ -92,6 +93,8 @@ namespace Simulation
     void setVolumes(std::span<const double> volumes, std::span<const double> inv_volumes);
     MatrixType& set_mass_transfer(MatrixType&& mtr);
 
+
+ 
 
   private:
     std::size_t n_r;

@@ -31,7 +31,6 @@ namespace Simulation
     return this->gas_scalar->getConcentrationData();
   }
 
-
   [[nodiscard]] Dimensions SimulationUnit::getDimensions() const noexcept
   {
     return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()};
@@ -129,14 +128,17 @@ namespace Simulation
 
     if (is_two_phase_flow)
     {
-      const auto& mtr = this->liquid_scalar->set_mass_transfer(
-          gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,
-                                   liquid_scalar->getVolume(),
-                                   liquid_scalar->getConcentrationArray(),
-                                   gas_scalar->getConcentrationArray(),
-                                   state));
+      // const auto& mtr = this->liquid_scalar->set_mass_transfer(
+      //     gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,
+      //                              liquid_scalar->getVolume(),
+      //                              liquid_scalar->getConcentrationArray(),
+      //                              gas_scalar->getConcentrationArray(),
+      //                              state));
 
-      this->gas_scalar->performStep(d_t, flow_gas->get_transition(), -1 * mtr);
+      gas_liquid_mass_transfer(liquid_scalar.get(), gas_scalar.get(), state);
+
+      this->gas_scalar->performStep(
+          d_t, flow_gas->get_transition(), -1 * this->liquid_scalar->get_mass_transfer());
     }
 
     this->liquid_scalar->performStep(
