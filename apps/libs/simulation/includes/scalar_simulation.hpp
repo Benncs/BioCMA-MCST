@@ -1,18 +1,28 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
-#include "cma_read/light_2d_view.hpp"
-#include "common/common.hpp"
-#include "common/kokkos_vector.hpp"
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
+#include <Kokkos_Core.hpp>
+#include <cma_read/light_2d_view.hpp>
+#include <common/common.hpp>
+#include <common/kokkos_vector.hpp>
+#include <cstddef>
 #include <cstdint>
 #include <mc/particles/particle_model.hpp>
 #include <simulation/alias.hpp>
 #include <simulation/pc_hydro.hpp>
 #include <span>
-// TODO REMOVE
-#include <Kokkos_Core.hpp>
-#include <cstddef>
 #include <vector>
+
+constexpr auto DataLayoutEigen = Eigen::ColMajor;
+constexpr auto CompileMatrixSizeEigen = -1;
+using MatrixType =
+    Eigen::Matrix<double, CompileMatrixSizeEigen, CompileMatrixSizeEigen, DataLayoutEigen>;
+using SparseMatrixType = Eigen::SparseMatrix<double, DataLayoutEigen>;
+using DiagonalType = Eigen::DiagonalMatrix<double, CompileMatrixSizeEigen>;
+
 
 template <typename ExecSpace>
 using KokkosScalarMatrix = Kokkos::View<double**, Kokkos::LayoutLeft, ExecSpace>;
@@ -21,7 +31,7 @@ struct EigenKokkos
 {
   KokkosScalarMatrix<HostSpace> host;
   KokkosScalarMatrix<ComputeSpace> compute;
-  Eigen::MatrixXd eigen_data;
+  MatrixType eigen_data;
 
   EigenKokkos(std::size_t n_row, std::size_t n_col);
   [[nodiscard]] std::span<const double> get_span() const
@@ -33,49 +43,36 @@ struct EigenKokkos
     return {eigen_data.data(), static_cast<size_t>(eigen_data.size())};
   }
 
-  void update_host_to_compute()const;
+  void update_host_to_compute() const;
 
-  void update_compute_to_host()const;
+  void update_compute_to_host() const;
 };
 
 namespace Simulation
 {
-  struct EigenData
-  {
-    Eigen::MatrixXd concentration;
-    Eigen::MatrixXd total_mass;
-    Eigen::MatrixXd biomass_contribution;
-    Eigen::MatrixXd feed;
-  };
 
   class ScalarSimulation
   {
   public:
-    // ScalarSimulation(ScalarSimulation &&other) noexcept;
-    ScalarSimulation(const ScalarSimulation& other) noexcept = delete;
     ScalarSimulation(size_t n_compartments, size_t n_species, std::span<double> volume);
+
+    ScalarSimulation(ScalarSimulation&& other) noexcept = delete;
+    ScalarSimulation(const ScalarSimulation& other) noexcept = delete;
     ScalarSimulation operator=(const ScalarSimulation& other) = delete;
     ScalarSimulation operator=(ScalarSimulation&& other) = delete;
-
     ~ScalarSimulation() = default;
 
     bool deep_copy_concentration(const std::vector<double>& data);
 
-    // Getters
+    [[nodiscard]] KokkosScalarMatrix<ComputeSpace> get_device_concentration() const;
 
-    [[nodiscard]] auto get_device_concentration() const
-    {
-      return concentrations.compute;
-      // return compute_concentration;
-    }
-
-    auto& get_contribs(){return b_contribs.eigen_data;}
+    void reduce_contribs(std::span<const double> data);
 
     [[nodiscard]] std::span<double const> getVolumeData() const;
 
-    [[nodiscard]] std::span<double> getContributionData();
+    [[nodiscard]] std::span<double> getContributionData() const;
 
-    Eigen::DiagonalMatrix<double, -1>& getVolume();
+    DiagonalType& getVolume();
 
     std::span<double> getConcentrationData();
 
@@ -102,45 +99,34 @@ namespace Simulation
 
     Eigen::ArrayXXd vec_kla; // TODO : Clean this
 
-    // Eigen::MatrixXd biomass_contribution;
     void performStep(double d_t,
                      const FlowMatrixType& m_transition,
-                     const Eigen::MatrixXd& transfer_gas_liquid);
+                     const MatrixType& transfer_gas_liquid);
 
-    Eigen::MatrixXd& set_mass_transfer(Eigen::MatrixXd&& mtr);
+    MatrixType& set_mass_transfer(MatrixType&& mtr);
 
-    void set_zero_contribs(){
+    void set_zero_contribs()
+    {
+      b_contribs.eigen_data.setZero();
       Kokkos::deep_copy(b_contribs.compute, 0);
     }
 
-    [[nodiscard]] const Eigen::MatrixXd& get_mass_transfer() const
+    [[nodiscard]] const MatrixType& get_mass_transfer() const
     {
       return mass_transfer;
     };
 
   private:
-    Eigen::MatrixXd total_mass;
-    Eigen::MatrixXd mass_transfer;
+    std::size_t n_r;
+    std::size_t n_c;
+    MatrixType total_mass;
+    MatrixType mass_transfer;
+    DiagonalType volumes_inverse;
+    DiagonalType m_volumes;
+    DiagonalType sink;
+    SparseMatrixType feed;
 
-    // KokkosScalarMatrix<HostSpace> host_concentration;
-    // KokkosScalarMatrix<ComputeSpace> compute_concentration;
-    // Eigen::MatrixXd alloc_concentrations;
-
-    Eigen::DiagonalMatrix<double, -1> volumes_inverse;
-    Eigen::DiagonalMatrix<double, -1> m_volumes;
-
-    Eigen::SparseMatrix<double> feed;
-
-    // Eigen::SparseMatrix<double> sink;
-
-    Eigen::DiagonalMatrix<double, -1> sink;
-
-    size_t n_r;
-    size_t n_c;
     CmaRead::L2DView<double> view;
-
-    // KokkosScalarMatrix<HostSpace> host_view_biomass_contribution;
-    // KokkosScalarMatrix<ComputeSpace> kernel_view_biomass_contribution;
     EigenKokkos concentrations;
     EigenKokkos b_contribs;
   };
@@ -162,19 +148,16 @@ namespace Simulation
 
   inline kernelContribution ScalarSimulation::get_kernel_contribution() const
   {
-    return b_contribs.compute; 
+    return b_contribs.compute;
   }
 
   inline void ScalarSimulation::set_kernel_contribs_to_host() const
   {
 
     b_contribs.update_compute_to_host();
-    
 
     // Kokkos::deep_copy(host_view_biomass_contribution, kernel_view_biomass_contribution);
     // Kokkos::deep_copy(kernel_view_biomass_contribution, 0);
-    
-    
   }
 
   inline void ScalarSimulation::set_feed(uint64_t i_r, uint64_t i_c, double val)
@@ -209,12 +192,11 @@ namespace Simulation
     //         static_cast<size_t>(this->alloc_concentrations.size())};
   }
 
-  inline std::span<double> ScalarSimulation::getContributionData()
+  inline std::span<double> ScalarSimulation::getContributionData() const
   {
     // return {this->biomass_contribution.data(),
     //         static_cast<size_t>(this->biomass_contribution.size())};
-    return {this->b_contribs.host.data(),
-            static_cast<size_t>(this->b_contribs.host.size())};
+    return {this->b_contribs.host.data(), static_cast<size_t>(this->b_contribs.host.size())};
   }
 
   inline std::span<double const> ScalarSimulation::getVolumeData() const
@@ -237,7 +219,7 @@ namespace Simulation
   inline ScalarSimulation*
   makeScalarSimulation(size_t n_compartments, size_t n_species, std::span<double> volumes)
   {
-    return new ScalarSimulation(n_compartments, n_species, volumes);
+    return new ScalarSimulation(n_compartments, n_species, volumes); // NOLINT
   }
 
 } // namespace Simulation

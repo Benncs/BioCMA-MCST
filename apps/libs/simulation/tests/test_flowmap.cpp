@@ -66,34 +66,46 @@
 
 #include <Eigen/Core>
 
-void test_get_eigen_view()
-{
-    Eigen::MatrixXd m = Eigen::MatrixXd::Random(200,12);
+// void test_get_eigen_view()
+// {
+//     Eigen::MatrixXd m = Eigen::MatrixXd::Random(200,12);
 
-    const auto view = get_eigen_view(m);
+//     const auto view = get_eigen_view(m);
 
-    const CmaRead::L2DView<const double> view_const = get_eigen_view(std::cref(m));
+//     const CmaRead::L2DView<const double> view_const = get_eigen_view(std::cref(m));
 
-    for(int i =0;i<200;++i)
-    {
-        for(int j =0;j<12;++j)
-        {
-            assert(m(i,j)==view(i,j)&& "get_eigen_view");
-            assert(m(i,j)==view_const(i,j)&& "get_eigen_view_const");
-        }
-    }
-
-
-}
+//     for(int i =0;i<200;++i)
+//     {
+//         for(int j =0;j<12;++j)
+//         {
+//             assert(m(i,j)==view(i,j)&& "get_eigen_view");
+//             assert(m(i,j)==view_const(i,j)&& "get_eigen_view_const");
+//         }
+//     }
 
 
+// }
 
+
+
+// TODO MOVE ELSEWHERE
+// inline CmaRead::L2DView<double> get_eigen_view(Eigen::MatrixXd& matrix)
+// {
+//   return CmaRead::L2DView<double>(
+//       std::span<double>(matrix.data(), matrix.size()), matrix.rows(), matrix.cols(), false);
+// }
+
+// inline CmaRead::L2DView<const double> get_eigen_view(const Eigen::MatrixXd& matrix)
+// {
+//   return CmaRead::L2DView<const double>(
+//       std::span<const double>(matrix.data(), matrix.size()), matrix.rows(), matrix.cols(), false);
+// }
 
 int main()
 {
 //   test_valid_input();
 //   test_invalid_input();
-test_get_eigen_view();
+// test_get_eigen_view();
   return 0;
 }
 

@@ -1,8 +1,8 @@
+#include <iostream>
 #include <simulation/feed_descriptor.hpp>
 #include <stdexcept>
 #include <utility>
 #include <variant>
-#include <iostream>
 
 #define CHECK_TYPE_VARIANT(__variant_arg__, __ref__type)                                           \
   std::is_same_v<std::decay_t<decltype(__variant_arg__)>, __ref__type>
@@ -51,14 +51,12 @@ namespace Simulation::Feed
         n_v(_target.size()), type(get_type(props)), target(std::move(_target))
   {
 
-   
-
     value = target;
 
-     // TODO check
+    // TODO check
     if (value.size() != position.size())
     {
-      std::cout<<value.size()<<" "<<position.size()<<std::endl;
+      std::cout << value.size() << " " << position.size() << std::endl;
       throw std::invalid_argument("Bas feed size");
     }
   }

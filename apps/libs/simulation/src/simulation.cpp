@@ -21,6 +21,7 @@
 #include <simulation/simulation.hpp>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
 #include <transport.hpp>
+#include <utility>
 
 #ifndef USE_PYTHON_MODULE
 #  include <omp.h>
@@ -28,14 +29,15 @@
 #  define omp_get_thread_num() 0 // 1 thread
 #endif
 
-#include <utility>
+
 
 namespace Simulation
 {
 
   SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept
       : mc_unit(std::move(other.mc_unit)), flow_liquid(other.flow_liquid), flow_gas(other.flow_gas),
-        is_two_phase_flow(other.is_two_phase_flow), internal_counter_dead(std::move(other.internal_counter_dead)),
+        is_two_phase_flow(other.is_two_phase_flow),
+        internal_counter_dead(std::move(other.internal_counter_dead)),
         waiting_allocation_particle(std::move(other.waiting_allocation_particle))
   {
   }
@@ -43,9 +45,8 @@ namespace Simulation
   SimulationUnit::SimulationUnit(std::unique_ptr<MC::MonteCarloUnit>&& _unit,
                                  const ScalarInitializer& scalar_init,
                                  std::optional<Feed::SimulationFeed> _feed)
-      : mc_unit(std::move(_unit)), flow_liquid(nullptr),
-
-        flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow),internal_counter_dead("internal_counter_dead"),
+      : mc_unit(std::move(_unit)), flow_liquid(nullptr), flow_gas(nullptr),
+        is_two_phase_flow(scalar_init.gas_flow), internal_counter_dead("internal_counter_dead"),
         waiting_allocation_particle("waiting_allocation_particle")
   {
     this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(makeScalarSimulation(
@@ -64,11 +65,8 @@ namespace Simulation
     this->feed =
         _feed.has_value() ? std::move(*_feed) : Feed::SimulationFeed{std::nullopt, std::nullopt};
 
-    size_t n_flows = 0;
-    if (this->feed.liquid.has_value())
-    {
-      n_flows = this->feed.liquid->size();
-    }
+    const std::size_t n_flows = (this->feed.liquid.has_value()) ? this->feed.liquid->size() : 0;
+
     index_leaving_flow = LeavingFlowIndexType("index_leaving_flow", n_flows);
 
     leaving_flow = LeavingFlowType("leaving_flow", n_flows);
@@ -101,9 +99,6 @@ namespace Simulation
 
     const Kokkos::LayoutStride layout(
         view_neighbors.getNRow(), view_neighbors.getNCol(), view_neighbors.getNCol(), 1);
-
-    // const Kokkos::LayoutLeft layout(view_neighbors.getNRow(),
-    //                                   view_neighbors.getNCol());
 
     const auto host_view = NeighborsView<HostSpace>(view_neighbors.data().data(), layout);
 

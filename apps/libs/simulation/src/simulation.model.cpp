@@ -1,22 +1,19 @@
-#include "common/common.hpp"
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <cma_read/reactorstate.hpp>
+#include <common/common.hpp>
 #include <hydro/mass_transfer.hpp>
-#include <iterator>
 #include <mc/domain.hpp>
 #include <optional>
 #include <scalar_simulation.hpp>
 #include <simulation/simulation.hpp>
-#include <stdexcept>
 
 namespace Simulation
 {
 
   std::span<const double> SimulationUnit::getContributionData() const
   {
-
     return liquid_scalar->getContributionData();
   }
 
@@ -49,41 +46,29 @@ namespace Simulation
   {
 
     PROFILE_SECTION("host:reduceContribs_rank")
-    const auto [nr, nc] = getDimensions();
+    // const auto [nr, nc] = getDimensions();
     // this->liquid_scalar->biomass_contribution.noalias() += Eigen::Map<Eigen::MatrixXd>(
     //     const_cast<double*>(data.data()), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
 
-     this->liquid_scalar->get_contribs().noalias() += Eigen::Map<Eigen::MatrixXd>(
-        const_cast<double*>(data.data()), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
+    this->liquid_scalar->reduce_contribs(data);
   }
 
   void SimulationUnit::reduceContribs(std::span<const double> data, size_t n_rank) const
   {
     PROFILE_SECTION("host:reduceContribs")
     const auto [nr, nc] = getDimensions();
-
-    // this->liquid_scalar->biomass_contribution.setZero();
-    // // FIXME
-    // for (int i = 0; i < static_cast<int>(n_rank); ++i)
-    // {
-    //   this->liquid_scalar->biomass_contribution.noalias() += Eigen::Map<Eigen::MatrixXd>(
-    //       const_cast<double*>(&data[i * nr * nc]), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
-    // }
-     this->liquid_scalar->get_contribs().setZero();
-    // FIXME
+    this->liquid_scalar->set_zero_contribs();
     for (int i = 0; i < static_cast<int>(n_rank); ++i)
     {
-      this->liquid_scalar->get_contribs().noalias() += Eigen::Map<Eigen::MatrixXd>(
-          const_cast<double*>(&data[i * nr * nc]), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
+      this->liquid_scalar->reduce_contribs({&data[i * nr * nc], nr * nc});
     }
   }
 
   void SimulationUnit::clearContribution() const noexcept
   {
     this->liquid_scalar->vec_kla.setZero();
-    //Dont forget to clear kernel contribution
+    // Dont forget to clear kernel contribution
     this->liquid_scalar->set_zero_contribs();
-    // this->liquid_scalar->get_contribs().setZero();
   }
 
   void
@@ -166,10 +151,10 @@ namespace Simulation
                                    gas_scalar->getConcentrationArray(),
                                    state));
 
-      this->gas_scalar->performStep(d_t, flow_gas->transition_matrix, -1 * mtr);
+      this->gas_scalar->performStep(d_t, flow_gas->get_transition(), -1 * mtr);
     }
 
     this->liquid_scalar->performStep(
-        d_t, flow_liquid->transition_matrix, this->liquid_scalar->get_mass_transfer());
+        d_t, flow_liquid->get_transition(), this->liquid_scalar->get_mass_transfer());
   }
 } // namespace Simulation

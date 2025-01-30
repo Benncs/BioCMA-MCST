@@ -1,4 +1,5 @@
 #include "api/results.hpp"
+#include "common/common.hpp"
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
 #include <biocma_cst_config.hpp>
@@ -149,7 +150,7 @@ namespace Api
   std::optional<std::unique_ptr<SimulationInstance>> SimulationInstance::init(
       uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_process) noexcept
   {
-
+    PROFILE_SECTION("Initialisation")
     auto ptr = std::unique_ptr<SimulationInstance>(
         new (std::nothrow) SimulationInstance(n_rank, current_rank, id, thread_per_process));
     if (ptr == nullptr)

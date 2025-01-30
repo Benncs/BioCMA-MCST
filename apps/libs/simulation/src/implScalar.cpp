@@ -57,9 +57,6 @@ namespace Simulation
     this->total_mass = Eigen::MatrixXd(n_row, n_col);
     this->total_mass.setZero();
 
-    // this->alloc_concentrations = Eigen::MatrixXd(n_row, n_col);
-    // this->alloc_concentrations.setZero();
-
     this->feed = Eigen::SparseMatrix<double>(n_row, n_col);
     this->feed.setZero();
 
@@ -72,27 +69,25 @@ namespace Simulation
     this->mass_transfer = Eigen::MatrixXd(n_row, n_col);
     this->mass_transfer.setZero();
 
-    // biomass_contribution = Eigen::MatrixXd(n_row, n_col);
-    // biomass_contribution.setZero();
-
     // todo remove
     view = CmaRead::L2DView<double>({this->concentrations.eigen_data.data(),
                                      static_cast<size_t>(this->concentrations.eigen_data.size())},
                                     this->concentrations.eigen_data.rows(),
                                     this->concentrations.eigen_data.cols(),
                                     false);
+  }
 
-    // host_view_biomass_contribution = Kokkos::View<double**, Kokkos::LayoutLeft, HostSpace>(
-    //     biomass_contribution.data(), biomass_contribution.rows(), biomass_contribution.cols());
+  [[nodiscard]] KokkosScalarMatrix<ComputeSpace> ScalarSimulation::get_device_concentration() const
+  {
+    return concentrations.compute;
+    // return compute_concentration;
+  }
 
-    // kernel_view_biomass_contribution =
-    //     Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_view_biomass_contribution);
-
-    // host_concentration = Kokkos::View<double**, Kokkos::LayoutLeft, HostSpace>(
-    //     alloc_concentrations.data(), alloc_concentrations.rows(), alloc_concentrations.cols());
-
-    // compute_concentration = Kokkos::create_mirror_view_and_copy(ComputeSpace(),
-    // host_concentration);
+  void ScalarSimulation::reduce_contribs(std::span<const double> data)
+  {
+    assert(data.size() == (n_c * n_r));
+    b_contribs.eigen_data.noalias() += Eigen::Map<Eigen::MatrixXd>(
+        const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
   }
 
   void ScalarSimulation::performStep(double d_t,
@@ -111,7 +106,6 @@ namespace Simulation
     c = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
-    // Kokkos::deep_copy(compute_concentration, host_concentration);
     concentrations.update_host_to_compute();
   }
 
@@ -129,7 +123,6 @@ namespace Simulation
     }
 
     Eigen::Map<const Eigen::MatrixXd> temp_map(data.data(), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
-    // this->alloc_concentrations = temp_map; // Performs deep copy
     this->concentrations.eigen_data = temp_map; // Performs deep copy
     return true;
   }

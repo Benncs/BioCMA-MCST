@@ -226,15 +226,11 @@ namespace Simulation
 
     // const_number_simulation = (n_particle > trigger_const_particle_number); Not used currently
 
-    // Kokkos::View<size_t, Kokkos::SharedSpace> internal_counter_dead("internal_counter_dead");
-    // Kokkos::View<size_t, Kokkos::SharedSpace> waiting_allocation_particle(
-    //     "waiting_allocation_particle");
-
     Kokkos::deep_copy(internal_counter_dead, _internal_counter);
     Kokkos::deep_copy(waiting_allocation_particle, 0);
 
     Kokkos::parallel_for("mc_cycle_process",
-                         Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particle),
+                         Kokkos::RangePolicy<ComputeSpace>(0, n_particle),
                          KernelInline::Kernel(d_t,
                                               list,
                                               extra_list,
@@ -291,7 +287,6 @@ namespace Simulation
 #ifndef NDEBUG
       KOKKOS_ASSERT(list.size() == old_size - _internal_counter);
 #endif
-
       _internal_counter = 0;
     }
 

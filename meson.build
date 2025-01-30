@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.4.0',
+  version: '0.5.0',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
@@ -89,7 +89,7 @@ blas = dependency('blas', required: false) # Eigen can work without BLAS
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 # endif
 # 
-# add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
+add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
 use_system_kokkos = get_option('use_system_kokkos')

@@ -11,40 +11,38 @@
 #include <mc/particles/data_holder.hpp>
 #include <mc/particles/mcparticles.hpp>
 #include <mc/prng/prng.hpp>
-#include <simulation/probe.hpp>
 #include <simulation/alias.hpp>
+#include <simulation/probe.hpp>
+#include <type_traits>
 static constexpr bool const_number_simulation = false;
 
-
+static constexpr bool _use_kokkos_log = false;
 
 namespace
 {
 
-  // KOKKOS_INLINE_FUNCTION float _ln(float x)
-  // {
-  //   unsigned int bx = *reinterpret_cast<unsigned int *>(&x);
-  //   const unsigned int ex = bx >> 23;
-  //   const signed int t = static_cast<signed int>(ex) - static_cast<signed int>(127);
-  //   unsigned int s = (t < 0) ? (-t) : t;
-  //   bx = 1065353216 | (bx & 8388607);
-  //   x = *reinterpret_cast<float *>(&bx);
-  //   return -1.49278 + (2.11263 + (-0.729104 + 0.10969 * x) * x) * x + 0.6931471806 * t;
-  // }
+  template <bool use_kokkos_log>
+  KOKKOS_INLINE_FUNCTION typename std::enable_if<!use_kokkos_log, float>::type _ln(float x)
+  {
+    unsigned int bx = *reinterpret_cast<unsigned int*>(&x);
+    const unsigned int ex = bx >> 23;
+    const signed int t = static_cast<signed int>(ex) - static_cast<signed int>(127);
+    unsigned int s = (t < 0) ? (-t) : t;
+    bx = 1065353216 | (bx & 8388607);
+    x = *reinterpret_cast<float*>(&bx);
+    return -1.49278 + (2.11263 + (-0.729104 + 0.10969 * x) * x) * x + 0.6931471806 * t;
+  }
+
+  template <bool use_kokkos_log>
+  KOKKOS_INLINE_FUNCTION typename std::enable_if<use_kokkos_log, float>::type _ln(float x)
+  {
+    return Kokkos::log(x);
+  }
 
   KOKKOS_INLINE_FUNCTION bool
-  probability_leaving(double random_number, double volume, double flow, double dt)
+  probability_leaving(float random_number, double volume, double flow, double dt)
   {
-    // Use of Kokkos log to be sure that log is well defined
-    // return (dt * flow / volume) > (-Kokkos::log(1 - random_number));
-
-    // We can use 1-random_number if we have enough particle
-
-    // return (dt * flow / volume) > (-ln(random_number));
-    return (dt * flow / volume) > (-Kokkos::log(random_number));
-
-    // const double x = volume/flow;
-    // const double ax = dt/(volume/flow);
-    // return random_number<ax*(1-ax/2.);
+    return (dt * flow / volume) > (-_ln<_use_kokkos_log>(random_number));
   }
 } // namespace
 
@@ -120,18 +118,6 @@ namespace Simulation::KernelInline
             Kokkos::printf("SPAWNING OVERFLOW\r\n");
             Kokkos::atomic_increment(&waiting_allocation_particle()); // TODO clean this
           }
-
-          // auto* const np = extra.spawn();
-
-          // if (np != nullptr)
-          // {
-          //   *np = std::move(new_particle);
-          // }
-          // else [[unlikely]] // TODO Test attribute
-          // {
-          //   Kokkos::printf("SPAWNING OVERFLOW\r\n");
-          //   Kokkos::atomic_increment(&waiting_allocation_particle()); // TODO
-          // }
         }
         else
         {
@@ -153,7 +139,7 @@ namespace Simulation::KernelInline
         // const double random_number = //local_rng.double_uniform();
 
         auto generator = rng_pool.get_state();
-        const double random_number = generator.drand(0., 1.);
+        const float random_number = generator.frand(0., 1.);
         rng_pool.free_state(generator);
 
         const auto& index = local_index_leaving_flow(i);
@@ -245,12 +231,6 @@ namespace Simulation::KernelInline
     const auto i_neighbor = Kokkos::subview(neighbors, i_compartment, Kokkos::ALL);
 
     // Need 2 random numbers, use index 0 and 1 to acess to
-    // const auto random = local_rng.template double_uniform<2>();
-
-    // auto generator = local_rng.random_pool.get_state();
-    // const double rng1 = generator.drand(0., 1.);
-    // local_rng.random_pool.free_state(generator);
-
     auto generator = rng_pool.get_state();
     const double rng1 = generator.drand(0., 1.);
     rng_pool.free_state(generator);
@@ -277,7 +257,7 @@ namespace Simulation::KernelInline
     }
   };
 
-    /**
+  /**
    * @brief Finds the next compartment for a particle based on a random number
    * and cumulative probabilities.
    *
