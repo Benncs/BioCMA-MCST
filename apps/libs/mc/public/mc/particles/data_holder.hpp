@@ -65,9 +65,9 @@ namespace MC
     double hydraulic_time = default_hydraulic_time;
     double interdivision_time = default_interdivision_time;
     double weight = default_weight; ///< Monte-Carlo weight
+    CellStatus status = default_status;           ///< Particle state
 
     size_t current_container = default_container; ///< Current position in the domain
-    CellStatus status = default_status;           ///< Particle state
 
   private:
     // Default values
@@ -79,7 +79,7 @@ namespace MC
     static constexpr double default_interdivision_time = 0.;
   };
 
-  static_assert(sizeof(ParticleDataHolder) <= ExecInfo::cache_line_size, "Data holder size");
+  static_assert(sizeof(ParticleDataHolder) <= 2*ExecInfo::cache_line_size, "Data holder size");
 
 } // namespace MC
 

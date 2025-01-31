@@ -21,6 +21,8 @@
 #include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation_kernel.hpp>
+// #include <simulation/kernel_update.hpp>
+// #include <simulation/kernel_move.hpp>
 
 // TODO Clean
 static constexpr size_t trigger_const_particle_number = 1e6;
@@ -108,6 +110,7 @@ namespace Simulation
 
     void reset();
     void post_init_compartments();
+
   private:
     // Attributes
     Kokkos::View<std::size_t, Kokkos::SharedSpace> internal_counter_dead;
@@ -133,7 +136,6 @@ namespace Simulation
     void post_init_concentration(const ScalarInitializer& scalar_init);
     void post_init_concentration_functor(const ScalarInitializer& scalar_init);
     void post_init_concentration_file(const ScalarInitializer& scalar_init);
-    
 
     struct pimpl_deleter
     {
@@ -182,6 +184,32 @@ namespace Simulation
     ContributionView contribs_scatter(contribs);
     Kokkos::deep_copy(waiting_allocation_particle, 0);
 
+    // Kokkos::parallel_for("mc_cycle_process_move",
+    //                      Kokkos::RangePolicy<ComputeSpace>(0, n_particle),
+    //                      KernelInline::KernelMove(d_t,
+    //                                               list,
+    //                                               local_compartments,
+    //                                               local_rng.random_pool,
+    //                                               events,
+    //                                               neighbors,
+    //                                               cumulative_probability,
+    //                                               diag_transition,
+    //                                               internal_counter_dead,
+    //                                               probes,
+    //                                               local_leaving_flow,
+    //                                               local_index_leaving_flow));
+    // // Kokkos::fence("fence_mc_cycle_process_move");
+    // Kokkos::parallel_for("mc_cycle_process",
+    //                      Kokkos::RangePolicy<ComputeSpace>(0, n_particle),
+    //                      KernelInline::Kernel(d_t,
+    //                                           list,
+    //                                           extra_list,
+    //                                           local_compartments,              
+    //                                           events,
+    //                                           contribs_scatter,
+    //                                           waiting_allocation_particle,
+    //                                           local_rng.random_pool));
+
     Kokkos::parallel_for("mc_cycle_process",
                          Kokkos::RangePolicy<ComputeSpace>(0, n_particle),
                          KernelInline::Kernel(d_t,
@@ -199,12 +227,12 @@ namespace Simulation
                                               probes,
                                               waiting_allocation_particle,
                                               local_rng.random_pool));
+
     Kokkos::fence("fence_mc_cycle_process");
 
     Kokkos::Experimental::contribute(contribs, contribs_scatter);
     const std::size_t _waiting_allocation_particle = waiting_allocation_particle();
-    post_kernel_process(
-        list, extra_list, local_compartments, _waiting_allocation_particle);
+    post_kernel_process(list, extra_list, local_compartments, _waiting_allocation_particle);
   }
 
   template <class ListType, class CompartmentListType>

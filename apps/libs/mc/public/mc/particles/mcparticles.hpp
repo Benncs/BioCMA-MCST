@@ -75,8 +75,8 @@ namespace MC
       }
     }
 
-    ParticleDataHolder properties;
-    _Model data{};
+    alignas(ExecInfo::cache_line_size)  ParticleDataHolder properties;
+    alignas(ExecInfo::cache_line_size)  _Model data{};
 
     KOKKOS_INLINE_FUNCTION BaseParticle(ParticleDataHolder&& props, _Model&& _model)
         : properties(props), data(std::move(_model))
