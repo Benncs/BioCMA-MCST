@@ -59,6 +59,10 @@ namespace Simulation
   {
     this->liquid_scalar->vec_kla.setZero();
     // Dont forget to clear kernel contribution
+    if(is_two_phase_flow)
+    {
+      this->gas_scalar->set_zero_contribs();
+    }
     this->liquid_scalar->set_zero_contribs();
   }
 
@@ -84,7 +88,7 @@ namespace Simulation
       for (auto&& current_feed : descritor)
       {
         current_feed.update(t, d_t);    // Update the current_feed
-        flow = current_feed.flow_value; // Get the flow_value of the current_feed
+        flow += current_feed.flow_value; // Get the flow_value of the current_feed
 
         if (update_scalar)
         {

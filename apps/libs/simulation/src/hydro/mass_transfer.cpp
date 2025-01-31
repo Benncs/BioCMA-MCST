@@ -55,87 +55,87 @@ void gas_liquid_mass_transfer(Simulation::ScalarSimulation* liquid_scalar,
   liquid_scalar->set_mass_transfer((transfer_g_liq.matrix() * liquid_scalar->getVolume()));
 }
 
-// Eigen::MatrixXd gas_liquid_mass_transfer(Eigen::ArrayXXd& res_kla,
-//                                          const Eigen::MatrixXd& Vliq,
-//                                          const Eigen::ArrayXXd& liq_scalar_as_array,
-//                                          const Eigen::ArrayXXd& gas_scalar_as_array,
-//                                          const CmaRead::ReactorState& state)
-// {
+Eigen::MatrixXd gas_liquid_mass_transfer(Eigen::ArrayXXd& res_kla,
+                                         const Eigen::MatrixXd& Vliq,
+                                         const Eigen::ArrayXXd& liq_scalar_as_array,
+                                         const Eigen::ArrayXXd& gas_scalar_as_array,
+                                         const CmaRead::ReactorState& state)
+{
 
-//   // Eigen::ArrayXXd transfer_g_liq = Eigen::ArrayXXd::Zero(gas_scalar_as_array.rows(),
-//   // gas_scalar_as_array.cols());
+  // Eigen::ArrayXXd transfer_g_liq = Eigen::ArrayXXd::Zero(gas_scalar_as_array.rows(),
+  // gas_scalar_as_array.cols());
 
-//   // // Calculate the mass transfer for the second column (index 1)
-//   // transfer_g_liq.row(1) = 120./3600. * (0.032 * gas_scalar_as_array.row(1) -
-//   // liq_scalar_as_array.row(1));
+  // // Calculate the mass transfer for the second column (index 1)
+  // transfer_g_liq.row(1) = 120./3600. * (0.032 * gas_scalar_as_array.row(1) -
+  // liq_scalar_as_array.row(1));
 
-//   // // Return the result of the transfer matrix multiplied by Vliq
-//   // return (transfer_g_liq.matrix() * Vliq).eval();
+  // // Return the result of the transfer matrix multiplied by Vliq
+  // return (transfer_g_liq.matrix() * Vliq).eval();
 
-//   const double kinematic_viscosity = c_kinematic_viscosity(temperature);
+  const double kinematic_viscosity = c_kinematic_viscosity(temperature);
 
-//   const double schmidtnumber = kinematic_viscosity / oxygen_diffusion_constant;
+  const double schmidtnumber = kinematic_viscosity / oxygen_diffusion_constant;
 
-//   constexpr double db = 1e-3;
+  constexpr double db = 1e-3;
 
-//   const auto energy_dissipation_array = Eigen::Map<Eigen::ArrayXd>(
-//       const_cast<double*>(state.energy_dissipation.data()), state.energy_dissipation.size());
+  const auto energy_dissipation_array = Eigen::Map<Eigen::ArrayXd>(
+      const_cast<double*>(state.energy_dissipation.data()), state.energy_dissipation.size());
 
-//   const auto gas_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.gasVolume.data()),
-//                                                     state.gasVolume.size());
+  const auto gas_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.gasVolume.data()),
+                                                    state.gasVolume.size());
 
-//   const auto liq_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.liquidVolume.data()),
-//                                                     state.liquidVolume.size());
+  const auto liq_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.liquidVolume.data()),
+                                                    state.liquidVolume.size());
 
-//   // // //LAZY
+  // // //LAZY
 
-// #define kl_array                                                                                   \
-//   (0.3 * (energy_dissipation_array * kinematic_viscosity).pow(0.25) * std::pow(schmidtnumber, -0.5))
+#define kl_array                                                                                   \
+  (0.3 * (energy_dissipation_array * kinematic_viscosity).pow(0.25) * std::pow(schmidtnumber, -0.5))
 
-// // Calculate gas fraction
-// #define gas_fraction_array (gas_array / (liq_array + gas_array))
+// Calculate gas fraction
+#define gas_fraction_array (gas_array / (liq_array + gas_array))
 
-// // Calculate interfacial area
-// #define interfacial_area (6 * gas_fraction_array / db)
+// Calculate interfacial area
+#define interfacial_area (6 * gas_fraction_array / db)
 
-// #define res_kla_array (kl_array * interfacial_area).transpose()
+#define res_kla_array (kl_array * interfacial_area).transpose()
 
-//   // Store results in res_kla
-//   res_kla.row(1) = res_kla_array.transpose();
+  // Store results in res_kla
+  res_kla.row(1) = res_kla_array.transpose();
 
-//   // for (int i_c = 0; i_c < static_cast<int>(state.n_compartments); ++i_c)
-//   // {
+  // for (int i_c = 0; i_c < static_cast<int>(state.n_compartments); ++i_c)
+  // {
 
-//   //   double eps_turb{};
-//   //   // TODO FIXME: just to use flowmap without turbulence
-//   //   try
-//   //   {
-//   //     eps_turb = state.energy_dissipation.at(i_c);
-//   //   }
-//   //   catch (const std::out_of_range &e)
-//   //   {
-//   //     eps_turb = 0.5;
-//   //   }
-//   //   const double kl = 0.3 * std::pow(eps_turb * kinematic_viscosity, 0.25) *
-//   //                     std::pow(schmidtnumber, -0.5);
+  //   double eps_turb{};
+  //   // TODO FIXME: just to use flowmap without turbulence
+  //   try
+  //   {
+  //     eps_turb = state.energy_dissipation.at(i_c);
+  //   }
+  //   catch (const std::out_of_range &e)
+  //   {
+  //     eps_turb = 0.5;
+  //   }
+  //   const double kl = 0.3 * std::pow(eps_turb * kinematic_viscosity, 0.25) *
+  //                     std::pow(schmidtnumber, -0.5);
 
-//   //   const double gas_fraction =
-//   //       state.gasVolume[i_c] / (state.liquidVolume[i_c] +
-//   //       state.gasVolume[i_c]);
+  //   const double gas_fraction =
+  //       state.gasVolume[i_c] / (state.liquidVolume[i_c] +
+  //       state.gasVolume[i_c]);
 
-//   //   const double a = 6 * gas_fraction / db;
+  //   const double a = 6 * gas_fraction / db;
 
-//   //   const double kla = kl * a;
+  //   const double kla = kl * a;
 
-//   //   res_kla.coeffRef(1, i_c) = kla;
-//   // }
+  //   res_kla.coeffRef(1, i_c) = kla;
+  // }
 
-// // LAZY EVALUATION
-// #define c_star (3.181e-2 * gas_scalar_as_array)
-// #define transfer_g_liq ((res_kla) * (c_star - liq_scalar_as_array))
+// LAZY EVALUATION
+#define c_star (3.181e-2 * gas_scalar_as_array)
+#define transfer_g_liq ((res_kla) * (c_star - liq_scalar_as_array))
 
-//   return (transfer_g_liq.matrix() * Vliq).eval();
-// }
+  return (transfer_g_liq.matrix() * Vliq).eval();
+}
 
 // Code from
 // https://www.engineeringtoolbox.com/water-dynamic-kinematic-viscosity-d_596.html

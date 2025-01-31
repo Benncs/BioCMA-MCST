@@ -52,6 +52,12 @@ namespace MassTransfer
 
 
 
+Eigen::MatrixXd gas_liquid_mass_transfer(Eigen::ArrayXXd &res_kla,
+                                         const Eigen::MatrixXd &Vliq,
+                                         const Eigen::ArrayXXd &liq_scalar_as_array,
+                                         const Eigen::ArrayXXd &gas_scalar_as_array,
+                                         const CmaRead::ReactorState &state);
+
 void gas_liquid_mass_transfer(Simulation::ScalarSimulation* liquid_scalar,
                                              Simulation::ScalarSimulation* gas_scalar,
                                              const CmaRead::ReactorState& state);

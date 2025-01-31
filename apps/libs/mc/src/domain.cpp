@@ -1,4 +1,6 @@
+#include "Kokkos_Atomic.hpp"
 #include "common/kokkos_vector.hpp"
+#include "decl/Kokkos_Declare_OPENMP.hpp"
 #include "mc/container_state.hpp"
 #include <Kokkos_Core.hpp>
 #include <cassert>
@@ -7,15 +9,14 @@
 #include <mc/domain.hpp>
 #include <stdexcept>
 
-namespace 
+namespace
 {
-  template<typename ViewType,typename VolumeViewType,typename ResViewType>
-  class FunctorInit
+  template <typename ViewType, typename VolumeViewType, typename ResViewType> class FunctorInit
   {
-    public:
-    FunctorInit(ViewType shared_containers,VolumeViewType _volumes,ResViewType tot):tmp_shared_containers(shared_containers),volumes(_volumes),total(tot)
+  public:
+    FunctorInit(ViewType shared_containers, VolumeViewType _volumes, ResViewType tot)
+        : tmp_shared_containers(shared_containers), volumes(_volumes), total(tot)
     {
-
     }
 
     ViewType tmp_shared_containers;
@@ -24,17 +25,17 @@ namespace
 
     KOKKOS_FUNCTION void operator()(std::size_t i_particle) const
     {
-         auto& local_container = tmp_shared_containers(i_particle);
-          // Make a container with initial information about domain
-          local_container = MC::ContainerState();
-          local_container.id = i_particle;
-          local_container.n_cells = 0;
-          local_container.volume_liq = volumes(i_particle);
-          // Don't need gas volume right now, will be set during the simulation
-          total() += local_container.volume_liq;
+      auto& local_container = tmp_shared_containers(i_particle);
+      // Make a container with initial information about domain
+      local_container = MC::ContainerState();
+      local_container.id = i_particle;
+      local_container.n_cells = 0;
+      local_container.volume_liq = volumes(i_particle);
+      // Don't need gas volume right now, will be set during the simulation
+      Kokkos::atomic_add(&total(),local_container.volume_liq);
     }
   };
-}
+} // namespace
 
 namespace MC
 {
@@ -54,6 +55,7 @@ namespace MC
       assert(volumes_gas[i_c] >= 0);
       shared_containers[i_c].volume_liq = volumes_liq[i_c];
       shared_containers[i_c].volume_gas = volumes_gas[i_c];
+      ;
       this->_total_volume += volumes_liq[i_c];
     }
   }
@@ -81,12 +83,12 @@ namespace MC
     Kokkos::View<double, ComputeSpace> _tmp_tot("domain_tmp_total_volume", 1);
     auto tmp_shared_containers = shared_containers;
 
-    Kokkos::parallel_for(
-        "init_domain", volumes.size(), FunctorInit(shared_containers,volume_compute,_tmp_tot));
+    Kokkos::parallel_for("init_domain",
+                         Kokkos::RangePolicy<ComputeSpace>(0, volumes.size()),
+                         FunctorInit(shared_containers, volume_compute, _tmp_tot));
 
     Kokkos::fence();
-    Kokkos::deep_copy(this->_total_volume,_tmp_tot);// copy computed volume
-
+    Kokkos::deep_copy(this->_total_volume, _tmp_tot); // copy computed volume
   }
 
   ReactorDomain& ReactorDomain::operator=(ReactorDomain&& other) noexcept
