@@ -11,6 +11,6 @@ endif
 
 # test('test_serde_particle',test_serde_particle)
 
-
-test_list = executable('test_list', 'test_list.cpp',dependencies:[mc_dependency])
+dl_dep = compiler.find_library('dl', required : false)
+test_list = executable('test_list', 'test_list.cpp',dependencies:[mc_dependency,dl_dep])
 test('test_list',test_list)

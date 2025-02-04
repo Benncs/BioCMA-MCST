@@ -37,9 +37,7 @@ namespace MC
     }
 
     KOKKOS_INLINE_FUNCTION void
-    update(double d_t,
-           const LocalConcentrationView& concentration,
-           MC::KPRNG globalrng)
+    update(double d_t, const LocalConcentrationView& concentration, MC::KPRNG globalrng)
     {
       properties.status = MC::CellStatus::IDLE;
       properties.hydraulic_time += d_t;
@@ -53,11 +51,7 @@ namespace MC
       this->properties.interdivision_time = 0;
       auto prop_child = this->properties;
       prop_child.hydraulic_time = 0;
-      auto p = data.division(prop_child, globalrng);
-
-   
-
-      return BaseParticle(std::move(prop_child), std::move(p));
+      return BaseParticle(std::move(prop_child), std::move(data.division(prop_child, globalrng)));
     }
 
     KOKKOS_INLINE_FUNCTION void contribution(const ContributionView& contrib)
@@ -74,9 +68,6 @@ namespace MC
         ar(data);
       }
     }
-
-    alignas(ExecInfo::cache_line_size)  ParticleDataHolder properties;
-    alignas(ExecInfo::cache_line_size)  _Model data{};
 
     KOKKOS_INLINE_FUNCTION BaseParticle(ParticleDataHolder&& props, _Model&& _model)
         : properties(props), data(std::move(_model))
@@ -105,6 +96,8 @@ namespace MC
         }
       }
     }
+    alignas(ExecInfo::cache_line_size) ParticleDataHolder properties;
+    alignas(ExecInfo::cache_line_size) _Model data{};
   };
 
   template <ParticleModel Model> using Particle = BaseParticle<Model>;

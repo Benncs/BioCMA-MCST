@@ -50,7 +50,7 @@ namespace Simulation
 
     return inverse_diagonal;
   }
-  
+
   FlowMapTransitioner::~FlowMapTransitioner()
   {
     delete interpolated_state;
@@ -212,9 +212,9 @@ namespace Simulation
   }
 
   // MPI worker
-  void FlowMapTransitioner::update_flow(Simulation::SimulationUnit& unit,
+  void FlowMapTransitioner::update_flow(
                                         std::span<double> flows,
-                                        size_t n_compartment)
+                                        size_t n_compartment,const CmaRead::Neighbors::Neighbors_const_view_t& neighbors)
   {
     current_index = getFlowIndex();
 
@@ -227,7 +227,8 @@ namespace Simulation
     if (repetition_count < n_flowmap && this->current_flowmap_count == 0)
     {
       const auto mat_f_liq_view = CmaRead::FlowMap::FlowMap_const_view_t(flows, n_compartment);
-      calculate_liquid_state(mat_f_liq_view, unit, current_liq_hydro_state);
+    
+      calculate_liquid_state( mat_f_liq_view, neighbors,current_liq_hydro_state);
     }
   }
 
@@ -255,13 +256,13 @@ namespace Simulation
   // ok dont modify
   void FlowMapTransitioner::calculate_liquid_state(
       const CmaRead::FlowMap::FlowMap_const_view_t& mat_f_liq_view,
-      const Simulation::SimulationUnit& unit,
+      const CmaRead::Neighbors::Neighbors_const_view_t& neighbors,
       PreCalculatedHydroState* liq_hydro_state)
   {
     PROFILE_SECTION("host:calculate_liquid_state")
     compute_MatFlow(mat_f_liq_view, *liq_hydro_state);
     liq_hydro_state->cumulative_probability = get_cumulative_probabilities(
-        unit.mc_unit->domain.getNeighbors(), liq_hydro_state->get_transition());
+        neighbors, liq_hydro_state->get_transition());
   }
   // ok dont modify
   void FlowMapTransitioner::calculate_full_state(const CmaRead::ReactorState& reactor_state,
@@ -269,7 +270,8 @@ namespace Simulation
                                                  PreCalculatedHydroState* liq_hydro_state,
                                                  PreCalculatedHydroState* gas_hydro_state)
   {
-    calculate_liquid_state(reactor_state.liquid_flow.getViewFlows(), unit, liq_hydro_state);
+    calculate_liquid_state(
+         reactor_state.liquid_flow.getViewFlows(), reactor_state.liquid_flow.getViewNeighors(),liq_hydro_state);
 
     liq_hydro_state->inverse_volume = compute_inverse_diagonal(reactor_state.liquidVolume);
 

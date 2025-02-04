@@ -1,6 +1,8 @@
 #ifndef __MC_REACTORDOMAIN_HPP__
 #define __MC_REACTORDOMAIN_HPP__
 
+#include "common/kokkos_vector.hpp"
+#include "traits/Kokkos_IterationPatternTrait.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_Macros.hpp>
@@ -15,6 +17,10 @@
 #include <span>
 
 WARN_EXPERIMENTAL
+
+template <typename Space>
+using NeighborsView = Kokkos::
+    View<std::size_t**, Kokkos::LayoutRight, Space, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
 namespace MC
 {
@@ -141,7 +147,7 @@ namespace MC
     /**
      * @brief Return a const reference to neighbors
      */
-    [[nodiscard]] const CmaRead::Neighbors::Neighbors_const_view_t& getNeighbors() const;
+    [[nodiscard]] NeighborsView<ComputeSpace> getNeighbors() const;
 
     /**
      * @brief Returns the number of particle per compartment
@@ -196,20 +202,12 @@ namespace MC
         shared_containers; // TODO: check with GPU if sharedspace is enough, if
                            // not use PinnedToHost, if not use explicit copy
 
-    CmaRead::Neighbors::Neighbors_const_view_t neighbors; ///< Containers neighbors
+    NeighborsView<ComputeSpace> k_neighbor;
   };
 
-  inline const CmaRead::Neighbors::Neighbors_const_view_t& ReactorDomain::getNeighbors() const
+  inline NeighborsView<ComputeSpace> ReactorDomain::getNeighbors() const
   {
-
-    return neighbors;
-  }
-
-  inline void
-  ReactorDomain::setLiquidNeighbors(const CmaRead::Neighbors::Neighbors_const_view_t& data)
-  {
-
-    neighbors = data.to_const();
+    return k_neighbor;
   }
 
   inline size_t ReactorDomain::getNumberCompartments() const noexcept

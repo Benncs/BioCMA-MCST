@@ -129,7 +129,7 @@ namespace Simulation
     DiagonalView<ComputeSpace> get_kernel_diagonal();
     CumulativeProbabilityViewCompute get_kernel_cumulative_proba();
     kernelContribution get_kernel_contribution();
-    [[nodiscard]] NeighborsViewCompute get_kernel_neighbors() const;
+    [[nodiscard]] NeighborsView<ComputeSpace> get_kernel_neighbors() const;
     void set_kernel_contribs_to_host();
 
     void post_init_concentration(const ScalarInitializer& scalar_init);
@@ -184,7 +184,7 @@ namespace Simulation
 
     this->move_info.cumulative_probability = get_kernel_cumulative_proba();
     this->move_info.diag_transition=get_kernel_diagonal();
-    this->move_info.neighbors = get_kernel_neighbors();
+    this->move_info.neighbors = mc_unit->domain.getNeighbors();
 
     Kokkos::parallel_for("mc_cycle_process",
                          Kokkos::RangePolicy<ComputeSpace>(0, n_particle),

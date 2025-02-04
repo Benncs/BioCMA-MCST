@@ -1,13 +1,13 @@
-#include "Kokkos_Atomic.hpp"
-#include "common/kokkos_vector.hpp"
-#include "decl/Kokkos_Declare_OPENMP.hpp"
-#include "mc/container_state.hpp"
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Core_fwd.hpp>
 #include <cassert>
 #include <cma_read/neighbors.hpp>
+#include <common/kokkos_vector.hpp>
 #include <cstddef>
+#include <mc/container_state.hpp>
 #include <mc/domain.hpp>
 #include <stdexcept>
+#include <utility>
 
 namespace
 {
@@ -15,7 +15,8 @@ namespace
   {
   public:
     FunctorInit(ViewType shared_containers, VolumeViewType _volumes, ResViewType tot)
-        : tmp_shared_containers(shared_containers), volumes(_volumes), total(tot)
+        : tmp_shared_containers(std::move(shared_containers)), volumes(std::move(_volumes)),
+          total(std::move(tot))
     {
     }
 
@@ -32,7 +33,7 @@ namespace
       local_container.n_cells = 0;
       local_container.volume_liq = volumes(i_particle);
       // Don't need gas volume right now, will be set during the simulation
-      Kokkos::atomic_add(&total(),local_container.volume_liq);
+      Kokkos::atomic_add(&total(), local_container.volume_liq);
     }
   };
 } // namespace
@@ -60,16 +61,20 @@ namespace MC
     }
   }
 
-  ReactorDomain::ReactorDomain() : shared_containers(Kokkos::view_alloc("domain_containers"))
+  ReactorDomain::ReactorDomain()
+      : shared_containers(Kokkos::view_alloc("domain_containers")),
+        k_neighbor(Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"))
   {
   }
 
   ReactorDomain::ReactorDomain(std::span<double> volumes,
                                const CmaRead::Neighbors::Neighbors_const_view_t& _neighbors)
       : size(volumes.size()), shared_containers(Kokkos::view_alloc("domain_containers")),
-        neighbors(_neighbors)
-  {
+        k_neighbor(Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"))
 
+  // ,neighbors(_neighbors)
+  {
+    setLiquidNeighbors(_neighbors);
     // Volume data is located on the host, creating a first unmanaged view
     Kokkos::View<double*, Kokkos::HostSpace> tmp_volume_host(volumes.data(), volumes.size());
 
@@ -91,13 +96,27 @@ namespace MC
     Kokkos::deep_copy(this->_total_volume, _tmp_tot); // copy computed volume
   }
 
+  void ReactorDomain::setLiquidNeighbors(const CmaRead::Neighbors::Neighbors_const_view_t& data)
+  {
+
+    
+    //FIXME remove const_cast
+    const auto host_view = NeighborsView<ComputeSpace>(
+        const_cast<size_t*>(data.data().data()), data.getNRow(), data.getNCol());
+
+;
+    Kokkos::resize(k_neighbor, data.getNRow(), data.getNCol());
+    Kokkos::deep_copy(k_neighbor,host_view);
+
+  }
+
   ReactorDomain& ReactorDomain::operator=(ReactorDomain&& other) noexcept
   {
     if (this != &other)
     {
       this->id = other.id;
       this->size = other.size;
-      this->neighbors = other.neighbors;
+      // this->neighbors = other.neighbors;
       this->_total_volume = other._total_volume;
       this->shared_containers = other.shared_containers;
     }

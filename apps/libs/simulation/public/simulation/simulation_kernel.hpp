@@ -16,7 +16,7 @@
 #include <simulation/probability_leaving.hpp>
 #include <simulation/probe.hpp>
 #include <utility>
-
+#include <mc/domain.hpp>
 static constexpr bool const_number_simulation = false;
 
 namespace Simulation::KernelInline
@@ -24,7 +24,7 @@ namespace Simulation::KernelInline
 
   struct MoveInfo
   {
-    NeighborsViewCompute neighbors;
+    NeighborsView<ComputeSpace> neighbors;
     DiagonalViewCompute diag_transition;
     CumulativeProbabilityViewCompute cumulative_probability;
     LeavingFlowType leaving_flow;
@@ -38,7 +38,6 @@ namespace Simulation::KernelInline
   public:
     KOKKOS_FUNCTION void operator()(std::size_t i_particle) const;
     Kernel(double _d_t,
-
            ListType _list,
            ListType _extra,
            Kokkos::View<size_t, Kokkos::SharedSpace> _internal_counter_dead,

@@ -23,13 +23,13 @@ namespace Simulation
 
   using CumulativeProbabilityViewCompute = CumulativeProbabilityView<ComputeSpace>;
 
-  template <typename Space>
-  using NeighborsView = Kokkos::View<const std::size_t**,
-                                     Kokkos::LayoutStride,
-                                     Space,
-                                     Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+  // template <typename Space>
+  // using NeighborsView = Kokkos::View<const std::size_t**,
+  //                                    Kokkos::LayoutStride,
+  //                                    Space,
+  //                                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
-  using NeighborsViewCompute = NeighborsView<ComputeSpace>;
+  // using NeighborsViewCompute = NeighborsView<ComputeSpace>;
 
   using LeavingFlowIndexType = Kokkos::View<std::size_t*, Kokkos::SharedHostPinnedSpace>;
   using LeavingFlowType = Kokkos::View<double*, Kokkos::SharedHostPinnedSpace>;

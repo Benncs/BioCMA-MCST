@@ -1,6 +1,7 @@
 
 #include "common/kokkos_vector.hpp"
 #include "embed.hpp"
+#include "mc/prng/prng.hpp"
 #include <Kokkos_Core.hpp>
 #include <core/post_process.hpp>
 #include <iostream>
@@ -83,7 +84,7 @@ template <typename ExecSpace> void fuzz(ListType<ExecSpace> particles, RngPool p
         pool.free_state(gen);
       });
   Kokkos::fence();
-
+  MC:MC::KPRNG rng;
   for (std::size_t i_fuzz = 0; i_fuzz < n_fuzz_concentrations; ++i_fuzz)
   {
     auto subview = Kokkos::subview(environment, i_fuzz, 0, Kokkos::ALL);
@@ -94,7 +95,7 @@ template <typename ExecSpace> void fuzz(ListType<ExecSpace> particles, RngPool p
         Kokkos::RangePolicy<ExecSpace>(0, n_fuzzing_particle),
         KOKKOS_LAMBDA(const int i_particle) {
           auto& p = particles(i_particle, i_fuzz);
-          p.update(d_t, subview, pool);
+          p.update(d_t, subview, rng);
           phi_subview(0, i_particle) = p.data.rates.glucose;
         });
     Kokkos::fence();

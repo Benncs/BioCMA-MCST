@@ -1,4 +1,3 @@
-#include "simulation/simulation_kernel.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
 #include <cma_read/light_2d_view.hpp>
@@ -23,7 +22,6 @@
 #include <traits/Kokkos_IterationPatternTrait.hpp>
 #include <transport.hpp>
 #include <utility>
-
 #ifndef USE_PYTHON_MODULE
 #  include <omp.h>
 #else
@@ -47,7 +45,7 @@ namespace Simulation
                                  std::optional<Feed::SimulationFeed> _feed)
       : mc_unit(std::move(_unit)), internal_counter_dead("internal_counter_dead"),
         waiting_allocation_particle("waiting_allocation_particle"), flow_liquid(nullptr),
-        flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow),move_info()
+        flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow), move_info()
   {
     this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(makeScalarSimulation(
         mc_unit->domain.getNumberCompartments(), scalar_init.n_species, scalar_init.volumesliq));
@@ -92,16 +90,11 @@ namespace Simulation
     this->mc_unit->domain.setVolumes(vg, vl);
   }
 
-  NeighborsViewCompute SimulationUnit::get_kernel_neighbors() const
+  NeighborsView<ComputeSpace> SimulationUnit::get_kernel_neighbors() const
   {
-    const auto view_neighbors = this->mc_unit->domain.getNeighbors();
+  
 
-    const Kokkos::LayoutStride layout(
-        view_neighbors.getNRow(), view_neighbors.getNCol(), view_neighbors.getNCol(), 1);
-
-    const auto host_view = NeighborsView<HostSpace>(view_neighbors.data().data(), layout);
-
-    return Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_view);
+    // return this->mc_unit->domain.k_neighbor;
   }
 
   void SimulationUnit::post_init_concentration_file(const ScalarInitializer& scalar_init)
