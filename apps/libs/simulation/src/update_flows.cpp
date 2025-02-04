@@ -5,7 +5,6 @@
 #include <cma_read/flowmap.hpp>
 #include <cmath>
 #include <ctime>
-#include <get_cumulative_proba.hpp>
 #include <pc_hydro.hpp>
 #include <simulation/transitionner.hpp>
 #include <stdexcept>
@@ -96,8 +95,10 @@ namespace Simulation
     interpolated.cumulative_probability =
         (1 - t) * current.cumulative_probability + t * next.cumulative_probability;
 
-    interpolated.transition_matrix =
-        (1.0 - t) * current.transition_matrix + t * next.transition_matrix;
+    
+
+    interpolated.set_transition_matrix((1.0 - t) * current.transition_matrix + t * next.transition_matrix);
+
   }
 
   void FlowMapTransitioner::linear_interpolation_transition()
@@ -261,8 +262,9 @@ namespace Simulation
   {
     PROFILE_SECTION("host:calculate_liquid_state")
     compute_MatFlow(mat_f_liq_view, *liq_hydro_state);
-    liq_hydro_state->cumulative_probability = get_cumulative_probabilities(
-        neighbors, liq_hydro_state->get_transition());
+
+    liq_hydro_state->set_cumulative_probability(neighbors);
+
   }
   // ok dont modify
   void FlowMapTransitioner::calculate_full_state(const CmaRead::ReactorState& reactor_state,

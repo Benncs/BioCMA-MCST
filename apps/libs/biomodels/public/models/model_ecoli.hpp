@@ -239,7 +239,7 @@ namespace Models
       const double s = Kokkos::max(0., concentration(_INDICES(GLUCOSE)));
       const double phi_s_pts = phi_pts(a_pts, s);
       const double gamma_PTS_S = phi_s_pts / phi_pts_max;
-      const double micro_mixing = 0.3;
+      // const double micro_mixing = 0.3;
 
       phi_uptakes.glucose = phi_s_pts + phi_permease(n_permease, a_permease, s);
       phi_uptakes.acetate = phi_a_max * concentration(_INDICES(Ac)) / 1;

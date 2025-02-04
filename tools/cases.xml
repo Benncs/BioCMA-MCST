@@ -50,10 +50,10 @@
 
    <control name="bench">
 	   <!-- <cma_case_path>./cma_data/0d_mono/</cma_case_path> -->
-      <!-- <cma_case_path>../../cfd-cma/cma_data/0d_gas/</cma_case_path> -->
+      <cma_case_path>../../cfd-cma/cma_data/0d_gas/</cma_case_path>
       <!-- <cma_case_path recursive="true">/home_pers/casale/Documents/code/biomc/cma_data/flowmap_14/</cma_case_path> -->
-      <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path>
-      <final_time>0.1</final_time>
+      <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
+      <final_time>10</final_time>
       <numper_particle>2000000</numper_particle>
       <delta_time>0.1</delta_time>
       <results_file_name>bench</results_file_name>

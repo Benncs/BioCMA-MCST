@@ -72,7 +72,6 @@ namespace MC
       : size(volumes.size()), shared_containers(Kokkos::view_alloc("domain_containers")),
         k_neighbor(Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"))
 
-  // ,neighbors(_neighbors)
   {
     setLiquidNeighbors(_neighbors);
     // Volume data is located on the host, creating a first unmanaged view

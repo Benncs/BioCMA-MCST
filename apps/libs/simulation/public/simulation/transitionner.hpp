@@ -3,7 +3,6 @@
 
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/reactorstate.hpp>
-#include <cmt_common/macro_constructor_assignment.hpp>
 #include <cstddef>
 #include <memory>
 
@@ -34,15 +33,19 @@ namespace Simulation
                         std::unique_ptr<CmaRead::FlowIterator>&& iterator = nullptr,
                         bool is_two_phase_flow = false);
 
-    DELETE_COPY_MOVE_AC(FlowMapTransitioner)
+    FlowMapTransitioner(const FlowMapTransitioner&) = delete;
+    FlowMapTransitioner(FlowMapTransitioner&&) = delete;
+    FlowMapTransitioner& operator=(const FlowMapTransitioner&) = delete;
+    FlowMapTransitioner& operator=(FlowMapTransitioner&&) = delete;
 
     ~FlowMapTransitioner();
 
     void update_flow(Simulation::SimulationUnit& unit);
     void advance(Simulation::SimulationUnit& unit);
 
-    void
-    update_flow(std::span<double> flows, size_t n_compartment,const CmaRead::Neighbors::Neighbors_const_view_t& neighbors);
+    void update_flow(std::span<double> flows,
+                     size_t n_compartment,
+                     const CmaRead::Neighbors::Neighbors_const_view_t& neighbors);
 
     [[nodiscard]] size_t get_n_timestep() const;
 
@@ -58,24 +61,12 @@ namespace Simulation
     CmaRead::ReactorState& get_unchecked_mut(size_t index);
     [[nodiscard]] const CmaRead::ReactorState& get_unchecked(size_t index) const;
 
-    const CmaRead::ReactorState* getState()
-    {
-      return current_state;
-    }
+    [[nodiscard]] const CmaRead::ReactorState* getState() const;
 
   private:
     void discontinuous_transition();
     void linear_interpolation_transition();
 
-    bool two_phase_flow;
-    std::unique_ptr<CmaRead::FlowIterator> iterator = nullptr;
-    size_t n_per_flowmap;
-    size_t n_flowmap;
-    size_t n_timestep;
-    CmaRead::ReactorState interpolated_reactor_state;
-
-    size_t current_flowmap_count;
-    size_t repetition_count;
     void calculate_full_state(const CmaRead::ReactorState& reactor_state,
                               const Simulation::SimulationUnit& unit,
                               PreCalculatedHydroState* liq_hydro_state,
@@ -91,6 +82,16 @@ namespace Simulation
 
     void update_flow_discontinous(Simulation::SimulationUnit& unit);
 
+    bool two_phase_flow;
+    std::unique_ptr<CmaRead::FlowIterator> iterator = nullptr;
+    size_t n_per_flowmap;
+    size_t n_flowmap;
+    size_t n_timestep;
+    CmaRead::ReactorState interpolated_reactor_state;
+
+    size_t current_flowmap_count;
+    size_t repetition_count;
+
     std::vector<PreCalculatedHydroState> liquid_pc;
     std::vector<PreCalculatedHydroState> gas_pc;
 
@@ -99,9 +100,13 @@ namespace Simulation
     TransitionState* interpolated_state;
 
     const CmaRead::ReactorState* current_state = nullptr;
-
     size_t current_index;
   };
+
+  inline const CmaRead::ReactorState* FlowMapTransitioner::getState() const
+  {
+    return current_state;
+  }
 
   inline CmaRead::ReactorState& FlowMapTransitioner::get_unchecked_mut(size_t index)
   {

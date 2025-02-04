@@ -1,6 +1,7 @@
 #ifndef __GET_CUMULATIVE_PROBABILITY_HPP__
 #define __GET_CUMULATIVE_PROBABILITY_HPP__
 
+#include "common/kokkos_vector.hpp"
 #include <pc_hydro.hpp>
 #include <Eigen/Core>
 #include <Eigen/Dense>
@@ -27,6 +28,9 @@ namespace Simulation
   CumulativeProbaType get_cumulative_probabilities(
       CmaRead::Neighbors::Neighbors_const_view_t neighbors,
       const FlowMatrixType &m_transition);
+
+
+
 
 } // namespace Simulation
 #endif //__GET_CUMULATIVE_PROBABILITY_HPP__

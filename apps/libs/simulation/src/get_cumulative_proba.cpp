@@ -56,4 +56,5 @@ namespace Simulation
     }
     return cumsum_proba; // Return the computed cumulative probability matrix
   }
+
 } // namespace Simulation
