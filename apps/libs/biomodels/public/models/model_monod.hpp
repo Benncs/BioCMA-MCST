@@ -48,22 +48,20 @@ namespace Models
       constexpr double local_l = minimal_length;
       auto generator = _rng.random_pool.get_state();
 
-      // this->l = 4e-6 *0.9;//l_0 / 2.;
       this->l = Kokkos::max(local_l, Kokkos::max(generator.normal(l_0 * 2., l_0 * 2. / 5.), 0.));
-
       this->mu = Kokkos::max(generator.normal(mu_max / 2., mu_max / 4), 0.);
       _rng.random_pool.free_state(generator);
       static_assert(l_1 > l_0, "Monod: Bad Model Parameter ");
       _init_only_cell_lenghtening = l_0 / 2. / ln2;
 
-      // p.weight = p.weight/mass();
+
       this->contrib = 0.;
     }
 
     KOKKOS_FUNCTION void update(double d_t,
                                 MC::ParticleDataHolder& p,
                                 const LocalConcentrationView& concentration,
-                                Kokkos::Random_XorShift64_Pool<> _rng) noexcept
+                                MC::KPRNG _rng) noexcept
     {
       using namespace implMonod;
       const double s = Kokkos::max(0., concentration(0));
@@ -73,7 +71,7 @@ namespace Models
       l += d_t * (mu_eff * _init_only_cell_lenghtening);
       mu += d_t * (1.0 / tau_metabolism) * (mu_p - mu);
       const auto gamma = GammaDivision::threshold_linear(l, l_0, l_1);
-      Models::update_division_status(p.status, d_t, gamma, _rng);
+      Models::update_division_status(p.status, d_t, gamma, _rng.random_pool);
     }
 
     KOKKOS_FUNCTION Monod division(MC::ParticleDataHolder& p, MC::KPRNG) noexcept
@@ -106,11 +104,6 @@ namespace Models
       using namespace implMonod;
       ar(mu, l, contrib, _init_only_cell_lenghtening);
     }
-
-    // model_properties_detail_t get_properties() noexcept
-    // {
-    //   return {{"mu", mu}, {"length", l}, {"mass", mass()}};
-    // }
 
     static std::vector<std::string> names()
     {

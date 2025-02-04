@@ -39,7 +39,7 @@ namespace MC
     KOKKOS_INLINE_FUNCTION void
     update(double d_t,
            const LocalConcentrationView& concentration,
-           Kokkos::Random_XorShift64_Pool<Kokkos::DefaultExecutionSpace> globalrng)
+           MC::KPRNG globalrng)
     {
       properties.status = MC::CellStatus::IDLE;
       properties.hydraulic_time += d_t;

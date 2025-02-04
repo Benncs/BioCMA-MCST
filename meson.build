@@ -186,7 +186,8 @@ if cmake.found()
     cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})
     cereal_cmake_options.add_cmake_defines({'BUILD_TESTS': false})
     cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
-    if cereal_proj.found() and not use_cuda 
+    if cereal_proj.found() 
+    #and not use_cuda 
       ceral_found = true
       add_project_arguments('-DUSE_CEAREAL', language: 'cpp')
       cereal_dependency = cereal_proj.dependency('cereal')

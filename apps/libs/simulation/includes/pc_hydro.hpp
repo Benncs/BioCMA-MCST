@@ -20,7 +20,7 @@ namespace Simulation
   class PreCalculatedHydroState
   {
   public:
-    PreCalculatedHydroState() = default;
+    PreCalculatedHydroState();
     ~PreCalculatedHydroState() = default;
     explicit PreCalculatedHydroState(const FlowMatrixType& _tm);
     PreCalculatedHydroState& operator=(PreCalculatedHydroState&& rhs) = default;

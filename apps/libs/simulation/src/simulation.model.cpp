@@ -71,8 +71,8 @@ namespace Simulation
   {
     PROFILE_SECTION("host:update_feed")
     // Get references to the index_leaving_flow and leaving_flow data members
-    auto& _index_leaving_flow = this->index_leaving_flow;
-    auto& _leaving_flow = this->leaving_flow;
+    auto& _index_leaving_flow = this->move_info.index_leaving_flow;
+    auto& _leaving_flow = this->move_info.leaving_flow;
 
     // Get the index of the exit compartment
     // TODO exit is not necessarly at the index n-1, it should be given by user

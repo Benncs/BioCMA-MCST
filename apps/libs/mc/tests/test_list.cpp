@@ -4,6 +4,7 @@
 #include "decl/Kokkos_Declare_OPENMP.hpp"
 #include "mc/mcinit.hpp"
 #include "mc/particles/particle_list.hpp"
+#include "mc/prng/prng.hpp"
 #include "models/model_monod.hpp"
 #include <Kokkos_Assert.hpp>
 #include <mc/unit.hpp>
@@ -32,7 +33,7 @@ template <typename ListType, typename ExtraType> struct TestKernel
   ListType list;
   ExtraType extra;
   LocalConcentrationView concentration;
-  Kokkos::Random_XorShift64_Pool<> rng;
+  MC::KPRNG rng;
 };
 
 int main()
@@ -52,7 +53,7 @@ int main()
     auto device = Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_concentration);
     LocalConcentrationView concentration = Kokkos::subview(device, Kokkos::ALL, 0);
     auto unit = MC::init<current_model>(init, n_particle, volumes, neighb, x0, total_mass);
-    auto rng = unit->rng.random_pool;
+    auto rng = unit->rng;
     auto& container = std::get<MC::ParticlesContainer<current_model>>(unit->container);
     auto list = container.get_compute();
 

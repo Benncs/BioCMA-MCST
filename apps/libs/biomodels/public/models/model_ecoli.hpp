@@ -253,7 +253,7 @@ namespace Models
     KOKKOS_FUNCTION void update(double d_t,
                                 MC::ParticleDataHolder& p,
                                 const LocalConcentrationView& concentration,
-                                Kokkos::Random_XorShift64_Pool<> _rng)
+                                MC::KPRNG _rng)
     {
       using namespace implEcoli;
       const double s = Kokkos::max(0., concentration(0));
@@ -274,7 +274,7 @@ namespace Models
                           (MONOD_RATIO(NPermease_max, k_pts, s) - n_permease);
 
       Models::update_division_status(
-          p.status, d_t, GammaDivision::threshold_linear(length, l_0, l_1), _rng);
+          p.status, d_t, GammaDivision::threshold_linear(length, l_0, l_1), _rng.random_pool);
     }
 
     KOKKOS_FUNCTION Ecoli division(MC::ParticleDataHolder& p, MC::KPRNG _rng)
@@ -338,7 +338,7 @@ namespace Models
 
     static std::vector<std::string> names()
     {
-      return {"mass", "length", "nu_eff", "nu","a_permease","a_pts"};
+      return {"mass", "length", "nu_eff", "nu", "a_permease", "a_pts"};
     }
 
     KOKKOS_INLINE_FUNCTION static consteval std::size_t get_number()
@@ -352,8 +352,8 @@ namespace Models
       full(1) = this->length;
       full(2) = this->rates.nu;
       full(3) = this->nu;
-      full(4)=this->a_permease;
-      full(5)=this->a_pts;
+      full(4) = this->a_permease;
+      full(5) = this->a_pts;
     }
   };
 

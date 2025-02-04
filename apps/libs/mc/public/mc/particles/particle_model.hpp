@@ -33,20 +33,11 @@ using ContributionView =
     Kokkos::Experimental::ScatterView<double**, Kokkos::LayoutLeft>; ///< Contribution inside the
                                                                      ///< particle's current
                                                                      ///< container
+template <typename MemorySpace>
+using ParticlePropertyViewType = Kokkos::View<double**, Kokkos::LayoutRight, MemorySpace>;
 
-using model_properties_t = std::variant<double,
-                                        std::string>; ///< Type of properties that model can export
-
-using model_properties_detail_t = std::unordered_map<std::string,
-                                                     double>; ///< Type of properties data that
-                                                              ///< model can export
-
-template<typename MemorySpace>
-using ParticlePropertyViewType = Kokkos::View<double**,Kokkos::LayoutRight, MemorySpace>;
-
-using SubViewtype = Kokkos::Subview<ParticlePropertyViewType<ComputeSpace>, decltype(Kokkos::ALL), std::size_t>;
-
-
+using SubViewtype =
+    Kokkos::Subview<ParticlePropertyViewType<ComputeSpace>, decltype(Kokkos::ALL), std::size_t>;
 
 template <typename T>
 concept HasMass = requires(const T obj) {
@@ -114,10 +105,10 @@ concept ParticleModel = HasExportProperties<T> && HasMass<T> &&
                                  const ContributionView& contrib,
                                  MC::KPRNG rng) {
                           { model.init(p, rng) } -> std::same_as<void>;
-                          // { model.update(d_t, p, concentration, rng) } -> std::same_as<void>;
+                          { model.update(d_t, p, concentration, rng) } -> std::same_as<void>;
                           { model.division(p, rng) } -> std::same_as<T>;
                           { model.contribution(p, contrib) } -> std::same_as<void>;
-                          // { model.get_properties() } -> std::same_as<model_properties_detail_t>;
+
                           { model.mass() } -> std::same_as<double>;
                         };
 
@@ -131,31 +122,34 @@ class DefaultModel
 public:
   KOKKOS_INLINE_FUNCTION void init(MC::ParticleDataHolder& p, MC::KPRNG _rng) noexcept
   {
+    (void)_rng;
     p.status = MC::CellStatus::IDLE;
   }
 
-  KOKKOS_INLINE_FUNCTION void
-  update(const double d_t,
-         MC::ParticleDataHolder& p,
-         const LocalConcentrationView& concentration,
-         Kokkos::Random_XorShift64_Pool<Kokkos::DefaultExecutionSpace> _rng)
+  KOKKOS_INLINE_FUNCTION void update(const double d_t,
+                                     MC::ParticleDataHolder& p,
+                                     const LocalConcentrationView& concentration,
+                                     MC::KPRNG _rng)
   {
+
+    (void)d_t;
+    (void)p;
+    (void)concentration;
+    (void)_rng;
   }
 
-  KOKKOS_INLINE_FUNCTION DefaultModel division(MC::ParticleDataHolder& /*p*/,
-                                               MC::KPRNG /*k*/) noexcept
+  KOKKOS_INLINE_FUNCTION DefaultModel division(MC::ParticleDataHolder& p, MC::KPRNG k) noexcept
   {
+    (void)p;
+    (void)k;
     return {};
   }
 
   KOKKOS_INLINE_FUNCTION void contribution(MC::ParticleDataHolder& p,
                                            const ContributionView& contrib) noexcept
   {
-  }
-
-  inline model_properties_detail_t get_properties() noexcept
-  {
-    return {};
+    (void)p;
+    (void)contrib;
   }
 
   // TODO: make this optinnal -> separation HasExportProperties and ParticleModel

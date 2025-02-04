@@ -1,3 +1,4 @@
+#include "simulation/simulation_kernel.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
 #include <cma_read/light_2d_view.hpp>
@@ -46,7 +47,7 @@ namespace Simulation
                                  std::optional<Feed::SimulationFeed> _feed)
       : mc_unit(std::move(_unit)), internal_counter_dead("internal_counter_dead"),
         waiting_allocation_particle("waiting_allocation_particle"), flow_liquid(nullptr),
-        flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow)
+        flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow),move_info()
   {
     this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(makeScalarSimulation(
         mc_unit->domain.getNumberCompartments(), scalar_init.n_species, scalar_init.volumesliq));
@@ -66,9 +67,8 @@ namespace Simulation
 
     const std::size_t n_flows = (this->feed.liquid.has_value()) ? this->feed.liquid->size() : 0;
 
-    index_leaving_flow = LeavingFlowIndexType("index_leaving_flow", n_flows);
-
-    leaving_flow = LeavingFlowType("leaving_flow", n_flows);
+    move_info.index_leaving_flow = LeavingFlowIndexType("index_leaving_flow", n_flows);
+    move_info.leaving_flow = LeavingFlowType("leaving_flow", n_flows);
   }
 
   void SimulationUnit::setVolumes(std::span<const double> volumesgas,
