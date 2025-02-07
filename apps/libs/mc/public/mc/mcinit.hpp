@@ -182,10 +182,10 @@ namespace MC
 
   inline void post_init_weight(std::unique_ptr<MonteCarloUnit>& unit, double x0, double total_mass)
   {
-
+    
     const double new_weight = (x0 * unit->domain.getTotalVolume()) / (total_mass);
     KOKKOS_ASSERT(new_weight > 0);
-    auto functor = [total_mass, new_weight](auto& container)
+    auto functor = [new_weight](auto& container)
     {
       auto& list = container.get_compute();
 

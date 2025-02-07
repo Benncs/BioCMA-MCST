@@ -29,7 +29,7 @@ def init_0d_4s():
     liquid_0d = np.zeros((1,4))
     gas_0d = np.zeros((1,4))
     liquid_0d[0,0]=5
-    liquid_0d[0,1]=0.
+    liquid_0d[0,1]=9e-3
 
     gas_0d[0,0]=0.
     gas_0d[0,1]=300e-3
@@ -63,7 +63,7 @@ def sanofi_1s():
     gas_sanofi[:,1]=0.21 #o2 g/l
 
     liquid_sanofi[:,0]=5 #glucose g/l
-    liquid_sanofi[:,1]=1e-3 #o2 g/l
+    liquid_sanofi[:,1]=7e-3 #o2 g/l
 
 
     make_initial_concentration("./cma_data/sanofi_init.h5",liquid_sanofi,gas_sanofi)

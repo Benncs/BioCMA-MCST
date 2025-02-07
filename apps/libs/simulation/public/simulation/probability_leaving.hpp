@@ -4,7 +4,7 @@
 #include <Kokkos_Core.hpp>
 #include <type_traits>
 
-static constexpr bool _use_kokkos_log = false; //FIXME
+static constexpr bool _use_kokkos_log = true; //FIXME
 
 namespace Simulation::KernelInline
 {

@@ -28,16 +28,17 @@ static Eigen::ArrayXXd get_gas_fraction(const CmaRead::ReactorState& state)
 }
 
 void gas_liquid_mass_transfer(Simulation::ScalarSimulation* liquid_scalar,
-                                  Simulation::ScalarSimulation* gas_scalar,
-                                  const CmaRead::ReactorState& state)
+                              Simulation::ScalarSimulation* gas_scalar,
+                              const CmaRead::ReactorState& state)
 {
   const double kinematic_viscosity = c_kinematic_viscosity(temperature);
 
   const double schmidtnumber = kinematic_viscosity / oxygen_diffusion_constant;
 
   constexpr double db = 1e-3;
-  const auto energy_dissipation_array = Eigen::Map<Eigen::ArrayXd>(
-      const_cast<double*>(state.energy_dissipation.data()), state.energy_dissipation.size());
+  const auto energy_dissipation_array =
+       Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.energy_dissipation.data()),
+                                      state.energy_dissipation.size());
 
 #define kl_array                                                                                   \
   (0.3 * (energy_dissipation_array * kinematic_viscosity).pow(0.25) * std::pow(schmidtnumber, -0.5))

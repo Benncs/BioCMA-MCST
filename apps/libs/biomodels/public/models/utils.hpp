@@ -4,6 +4,10 @@
 #include <Kokkos_Core.hpp>
 #include <mc/prng/prng.hpp>
 #include <Kokkos_Random.hpp>
+
+
+
+
 namespace Models
 {
   static constexpr double tau_division_proba = 1e-7;

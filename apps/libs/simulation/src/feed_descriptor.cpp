@@ -57,7 +57,7 @@ namespace Simulation::Feed
     if (value.size() != position.size())
     {
       std::cout << value.size() << " " << position.size() << std::endl;
-      throw std::invalid_argument("Bas feed size");
+      throw std::invalid_argument("Bad feed size");
     }
   }
 

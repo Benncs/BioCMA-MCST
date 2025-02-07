@@ -11,20 +11,18 @@
 
 namespace
 {
-  template <typename ViewType, typename VolumeViewType, typename ResViewType> class FunctorInit
+  template <typename ViewType, typename VolumeViewType> class FunctorInit
   {
   public:
-    FunctorInit(ViewType shared_containers, VolumeViewType _volumes, ResViewType tot)
-        : tmp_shared_containers(std::move(shared_containers)), volumes(std::move(_volumes)),
-          total(std::move(tot))
+    FunctorInit(ViewType shared_containers, VolumeViewType _volumes)
+        : tmp_shared_containers(std::move(shared_containers)), volumes(std::move(_volumes))
     {
     }
 
     ViewType tmp_shared_containers;
     VolumeViewType volumes;
-    ResViewType total;
 
-    KOKKOS_FUNCTION void operator()(std::size_t i_particle) const
+    KOKKOS_FUNCTION void operator()(std::size_t i_particle,double& total_volume) const
     {
       auto& local_container = tmp_shared_containers(i_particle);
       // Make a container with initial information about domain
@@ -33,7 +31,7 @@ namespace
       local_container.n_cells = 0;
       local_container.volume_liq = volumes(i_particle);
       // Don't need gas volume right now, will be set during the simulation
-      Kokkos::atomic_add(&total(), local_container.volume_liq);
+      total_volume+=local_container.volume_liq;
     }
   };
 } // namespace
@@ -84,15 +82,14 @@ namespace MC
     Kokkos::resize(shared_containers, volumes.size());
 
     // Temporary view for initialisation
-    Kokkos::View<double, ComputeSpace> _tmp_tot("domain_tmp_total_volume", 1);
     auto tmp_shared_containers = shared_containers;
-
-    Kokkos::parallel_for("init_domain",
+    double local_total_volume=0;
+    Kokkos::parallel_reduce("init_domain",
                          Kokkos::RangePolicy<ComputeSpace>(0, volumes.size()),
-                         FunctorInit(shared_containers, volume_compute, _tmp_tot));
+                         FunctorInit(shared_containers, volume_compute),Kokkos::Sum<double>(local_total_volume));
 
     Kokkos::fence();
-    Kokkos::deep_copy(this->_total_volume, _tmp_tot); // copy computed volume
+    this->_total_volume = local_total_volume;
   }
 
   void ReactorDomain::setLiquidNeighbors(const CmaRead::Neighbors::Neighbors_const_view_t& data)

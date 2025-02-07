@@ -40,6 +40,12 @@ if use_dynamic_module
 arg_includ_py='1'
 endif
 
+arg_udf='1'
+if use_cuda
+arg_udf='0'
+endif
+
+
 # custom target to generate model_loader.cpp and model_list.hpp
 generated_model_selection = custom_target(
     'generated_model_selection.[ch]',
@@ -59,6 +65,6 @@ generated_model_selection = custom_target(
         '@OUTPUT1@',
         variant_model,
         '@OUTPUT2@',
-        arg_includ_py
+        arg_includ_py,arg_udf
     ],
 )

@@ -21,6 +21,7 @@
 #include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation_kernel.hpp>
+#include <type_traits>
 
 // TODO Clean
 static constexpr size_t trigger_const_particle_number = 1e6;
@@ -165,7 +166,8 @@ namespace Simulation
   {
 
     PROFILE_SECTION("cycleProcess")
-    auto list = container.get_compute();
+
+    auto& list = container.get_compute();
     auto& extra_list = container.extra_list;
 
     const size_t n_particle = list.size();
@@ -180,22 +182,13 @@ namespace Simulation
 
     this->move_info.cumulative_probability = get_kernel_cumulative_proba();
     this->move_info.diag_transition = get_kernel_diagonal();
+
     this->move_info.neighbors = mc_unit->domain.getNeighbors();
     int dead_total = 0;
 
-    auto k = KernelInline::Kernel<decltype(list)>(d_t,
-                                  list,
-                                  extra_list,
-                                  local_compartments,
-                                  this->move_info,
-                                  events,
-                                  contribs_scatter,
-                                  probes,
-                                  waiting_allocation_particle,
-                                  local_rng.random_pool);
-
     Kokkos::TeamPolicy<ComputeSpace> policy;
-    int recommended_team_size = policy.team_size_recommended(k, Kokkos::ParallelReduceTag());
+    int recommended_team_size =
+        policy.team_size_recommended(KernelInline::TagDetector(), Kokkos::ParallelReduceTag());
 
     int league_size = (list.size() + recommended_team_size - 1) / recommended_team_size;
 
@@ -204,9 +197,17 @@ namespace Simulation
     auto team_policy = Kokkos::TeamPolicy<ComputeSpace>(league_size, recommended_team_size);
 
     Kokkos::parallel_reduce("mc_cycle_process",
-                            // Kokkos::RangePolicy<ComputeSpace>(0, n_particle),
                             team_policy,
-                            k,
+                            KernelInline::Kernel(d_t,
+                                                 list,
+                                                 extra_list,
+                                                 local_compartments,
+                                                 this->move_info,
+                                                 events,
+                                                 contribs_scatter,
+                                                 probes,
+                                                 waiting_allocation_particle,
+                                                 local_rng),
                             Kokkos::Sum<int>(dead_total));
 
     Kokkos::fence("fence_mc_cycle_process");
@@ -247,7 +248,7 @@ namespace Simulation
 #endif
       list.remove_dead(internal_counter_dead);
 #ifndef NDEBUG
-      KOKKOS_ASSERT(list.size() == old_size - internal_counter_dead());
+      KOKKOS_ASSERT(list.size() == old_size - internal_counter_dead);
 #endif
       internal_counter_dead = 0;
     }

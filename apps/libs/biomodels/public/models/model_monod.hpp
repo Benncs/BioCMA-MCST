@@ -23,18 +23,19 @@ namespace implMonod
   constexpr double mu_max = 0.77 / 3600.;
   constexpr double ln2 = 0.69314718056;
   constexpr double tau_metabolism = (1. / mu_max);
+  constexpr double factor = 1000 * 3.14 * (0.8e-6) * (0.8e-6) / 4;
 } // namespace implMonod
 
-static constexpr double factor = 1000 * 3.14 * (0.8e-6) * (0.8e-6) / 4.;
-#define MASS() (factor * l)
+
+
 namespace Models
 {
 
   class Monod
   {
-    double mu;
-    double l;
-    double contrib;
+    double mu=0.;
+    double l=0.;
+    double contrib=0.;
 
   private:
     double _init_only_cell_lenghtening;
@@ -55,7 +56,6 @@ namespace Models
       _init_only_cell_lenghtening = l_0 / 2. / ln2;
 
 
-      this->contrib = 0.;
     }
 
     KOKKOS_FUNCTION void update(double d_t,
@@ -67,7 +67,7 @@ namespace Models
       const double s = Kokkos::max(0., concentration(0));
       const double mu_p = mu_max * s / (Ks + s);
       const double mu_eff = Kokkos::min(mu, mu_p);
-      contrib = mu_eff * y_s_x * MASS();
+      contrib = mu_eff * y_s_x * factor * l;
       l += d_t * (mu_eff * _init_only_cell_lenghtening);
       mu += d_t * (1.0 / tau_metabolism) * (mu_p - mu);
       const auto gamma = GammaDivision::threshold_linear(l, l_0, l_1);
@@ -96,7 +96,7 @@ namespace Models
     
     [[nodiscard]] KOKKOS_FUNCTION double mass() const noexcept
     {
-      return MASS();
+      return implMonod::factor * l;
     }
 
     template <class Archive> void serialize(Archive& ar)
@@ -120,7 +120,7 @@ namespace Models
     {
       full(0) = mu;
       full(1) = l;
-      full(2) = MASS();
+      full(2) = implMonod::factor * l;
     }
   };
 } // namespace Models

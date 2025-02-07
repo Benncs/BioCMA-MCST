@@ -25,6 +25,7 @@ namespace MC
     KOKKOS_INLINE_FUNCTION explicit BaseParticle(double _weight = 0) noexcept
         : properties(_weight){};
 
+
     KOKKOS_INLINE_FUNCTION void clearState(MC::CellStatus _status = CellStatus::IDLE) noexcept
     {
       properties.reset();
@@ -81,7 +82,7 @@ namespace MC
     {
       KOKKOS_ASSERT(subview.extent(0) == (2 + Model::get_number()));
 
-      constexpr std::size_t size = Model::get_number();
+      const std::size_t size = Model::get_number();
 
       subview(size) = properties.hydraulic_time;
       subview(size + 1) = properties.interdivision_time;

@@ -7,20 +7,23 @@
 namespace Simulation
 {
   PreCalculatedHydroState::PreCalculatedHydroState(const FlowMatrixType& _tm)
-      : transition_matrix(_tm), diagonal_compute("diagonal_compute")
+      : transition_matrix(_tm), diagonal_compute("diagonal_compute",0)
   {
+    Kokkos::deep_copy(diagonal_compute, 0.);
   }
 
-  PreCalculatedHydroState::PreCalculatedHydroState() : diagonal_compute("diagonal_compute")
+  PreCalculatedHydroState::PreCalculatedHydroState() : diagonal_compute("diagonal_compute",0)
   {
+    Kokkos::deep_copy(diagonal_compute, 0.);
   }
 
   void PreCalculatedHydroState::set_diag_transition(std::vector<double>&& diag)
   {
+
+  
     DiagonalView<HostSpace> view_host(diag.data(), diag.size());
     Kokkos::resize(diagonal_compute, diag.size()); // FIXME
     Kokkos::deep_copy(diagonal_compute, view_host);
-    // diagonal_compute = Kokkos::create_mirror_view_and_copy(ComputeSpace(), view_host);
   }
 
   [[nodiscard]] const FlowMatrixType& PreCalculatedHydroState::get_transition() const

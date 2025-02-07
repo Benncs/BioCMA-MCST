@@ -47,6 +47,8 @@ namespace implEcoli
                                      (Yields::Y_XG * Yields::Yo_EG);
   };
 
+
+
   // All in seconds
   struct Tau
   {

@@ -47,10 +47,16 @@ concept HasMass = requires(const T obj) {
                                     // convertible to double
 };
 
+// template <typename T>
+// concept HasNumberExportProperties = requires {
+//   { T::get_number() } -> std::same_as<std::size_t>;
+//   { std::bool_constant<(T::get_number(), true)>() } -> std::same_as<std::true_type>;
+// };
+
 template <typename T>
 concept HasNumberExportProperties = requires {
   { T::get_number() } -> std::same_as<std::size_t>;
-  { std::bool_constant<(T::get_number(), true)>() } -> std::same_as<std::true_type>;
+  // { std::bool_constant<(T::get_number(), true)>() } -> std::same_as<std::true_type>;
 };
 
 template <typename T>

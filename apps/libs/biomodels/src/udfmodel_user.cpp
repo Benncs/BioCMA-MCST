@@ -1,6 +1,7 @@
+// #ifdef DECLARE_EXPORT_UDF
 #include "udf_includes.hpp"
 #include <mc/particles/particle_model.hpp>
-#include <models/model_user.hpp>
+#include <models/udfmodel_user.hpp>
 
 #define CHECK_PIMP                                                                                 \
   if (this->pimpl == nullptr)                                                                      \
@@ -18,7 +19,7 @@ namespace Models
   KOKKOS_FUNCTION void User::init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
   {
     CHECK_PIMP;
-    return UnsafeUDF::Loader::init_udf(*pimpl, p);
+    return UnsafeUDF::Loader::init_udf(*pimpl, p,_rng);
   }
 
   KOKKOS_FUNCTION void User::update(double d_t,
@@ -52,14 +53,27 @@ namespace Models
     return UnsafeUDF::Loader::contribution_udf(*pimpl, p, contrib);
   }
 
-  model_properties_detail_t User::get_properties() noexcept
-  {
-    return {};
-  }
-
   KOKKOS_FUNCTION [[nodiscard]] double User::mass() const noexcept
   {
-    return 0.;
+    return UnsafeUDF::Loader::mass(*pimpl);
+  }
+
+  KOKKOS_FUNCTION void User::fill_properties(SubViewtype full) const
+  {
+
+    UnsafeUDF::Loader::fill_properties(*pimpl, full);
+  }
+
+  KOKKOS_FUNCTION std::size_t User::get_number()
+  {
+    return UnsafeUDF::Loader::get_number();
+  }
+
+  std::vector<std::string> User::names()
+  {
+    return UnsafeUDF::Loader::names();
   }
 
 } // namespace Models
+
+// #endif
