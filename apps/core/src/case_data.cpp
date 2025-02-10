@@ -26,7 +26,6 @@ namespace Core
 
   void init_partial_exporter(Core::PartialExporter& partial_exporter, const CaseData& case_data)
   {
-
     const auto [_, n_compartment] = case_data.simulation->getDimensions();
 
     partial_exporter.init_fields(case_data.params.number_exported_result, n_compartment);

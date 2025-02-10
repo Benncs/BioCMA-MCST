@@ -6,24 +6,16 @@
 #include <mc/particles/particle_model.hpp>
 #define MONOD_RATIO(__c1__, __x1__, __k1__) ((__c1__) * (__x1__) / ((__x1__) + (__k1__)))
 
-#define DECLARE_UPTAKE_PROPERTIES(__type__)                                                        \
+
+namespace Models::Uptake
+{
+  #define DECLARE_UPTAKE_PROPERTIES(__type__)                                                        \
   __type__ a_pts;                                                                                  \
   __type__ a_permease;                                                                             \
   __type__ n_permease;
 
-namespace Models::Uptake
-{
-
   template <typename T>
   concept FloatingPointType = std::is_floating_point_v<std::remove_reference_t<T>>;
-
-  //   template <typename T, typename F>
-  //   concept UptakeModel = FloatingPointType<F> && requires(T& obj) {
-  //     { obj.a_pts } -> std::same_as<std::add_lvalue_reference_t<std::remove_reference_t<F>>>;
-  //     { obj.n_permease } ->
-  //     std::same_as<std::add_lvalue_reference_t<std::remove_reference_t<F>>>; { obj.a_permease }
-  //     -> std::same_as<std::add_lvalue_reference_t<std::remove_reference_t<F>>>;
-  //   };
 
   template <typename T, typename F>
   concept UptakeModel = FloatingPointType<F> && requires(T& obj) {

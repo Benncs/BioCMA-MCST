@@ -1,7 +1,7 @@
 import biomc_pp
 import matplotlib.pyplot as plt 
 import numpy as np 
-pp = biomc_pp.PostProcess('test_sanofi',"/home-local/casale/Documents/thesis/code/BioCMA-MCST/results/")
+pp = biomc_pp.PostProcess('test_ox',"/home-local/casale/Documents/thesis/code/BioCMA-MCST/results/")
 
 
 

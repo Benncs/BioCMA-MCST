@@ -42,7 +42,7 @@ endif
 
 arg_udf='1'
 if use_cuda
-arg_udf='0'
+arg_udf=''
 endif
 
 

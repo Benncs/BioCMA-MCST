@@ -1,9 +1,10 @@
+#include "simulation/mass_transfer.hpp"
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
-#include <hydro/mass_transfer.hpp>
+#include <hydro/impl_mass_transfer.hpp>
 #include <mc/domain.hpp>
 #include <optional>
 #include <scalar_simulation.hpp>
@@ -139,7 +140,7 @@ namespace Simulation
       //                              gas_scalar->getConcentrationArray(),
       //                              state));
 
-      gas_liquid_mass_transfer(liquid_scalar.get(), gas_scalar.get(), state);
+      gas_liquid_mass_transfer(MassTransfer::MTRType::Flowmap,liquid_scalar.get(), gas_scalar.get(), state);
 
       this->gas_scalar->performStep(
           d_t, flow_gas->get_transition(), -1 * this->liquid_scalar->get_mass_transfer());

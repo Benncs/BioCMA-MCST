@@ -16,14 +16,7 @@ namespace implEcoli
 
 #define _INDICES(__name__) static_cast<std::size_t>(Indices::__name__)
 
-  struct MolarMass
-  {
-    static constexpr double glucose = 180e-3;
-    static constexpr double dioxygen = 32e-3;
-    static constexpr double acetate = 59e-3;
-    static constexpr double co2 = 44e-3;
-    static constexpr double X = 113.1e-3;
-  };
+ 
   struct Yields
   {
 
@@ -42,7 +35,7 @@ namespace implEcoli
     static constexpr double Yo_EA = 4.67;      // mol_E/mol_A
     static constexpr double x_s = 1.15;        // 2.;
 
-    static constexpr double nu_s_x = MolarMass::glucose / MolarMass::X *
+    static constexpr double nu_s_x = Models::MolarMass::glucose / Models::MolarMass::X *
                                      (Yields::Y_EG + Yields::Yo_EG) /
                                      (Yields::Y_XG * Yields::Yo_EG);
   };
