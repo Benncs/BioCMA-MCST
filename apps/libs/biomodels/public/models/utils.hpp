@@ -3,6 +3,7 @@
 #include "mc/particles/data_holder.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
+#include <concepts>
 #include <mc/prng/prng.hpp>
 
 namespace Models
@@ -26,13 +27,12 @@ namespace Models
   {
     // const double proba_div =
     //     (1 - Kokkos::exp(-d_t / tau_division_proba)) * gamma;
-    double proba_div = gamma;
-    // const double x = _rng.double_uniform();
+ 
     auto generator = random_pool.get_state();
     const double x = generator.drand(0., 1.);
     random_pool.free_state(generator);
 
-    return x < proba_div;
+    return x < gamma;
   }
 
   KOKKOS_INLINE_FUNCTION void
@@ -51,6 +51,17 @@ namespace Models
     threshold_linear(double lenght, double threshold, double upper_bound)
     {
       return (lenght <= threshold) ? 0 : (lenght - threshold) / (upper_bound - threshold);
+    }
+
+    KOKKOS_INLINE_FUNCTION constexpr float logistic(float x, float xmax, float alpha)
+    {
+      // auto blna = alpha * std::log(xmax);
+      // return 1 / (1 + std::exp(-alpha * std::log(x) + blna));
+
+      // return x<xmax?1. / (1 + std::exp(alpha * std::log((x-xmax)/xmax ))):1.;
+
+      const auto z = x<xmax? std::pow(x/(xmax-x),alpha):1.;
+      return z/(1.+z);
     }
 
   } // namespace GammaDivision

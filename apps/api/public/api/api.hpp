@@ -166,13 +166,13 @@ namespace Api
                            std::span<double> _target,
                            std::span<std::size_t> _position,
                            std::span<std::size_t> _species,
-                           bool gas = false);
+                           bool gas = false,bool fed_batch=false);
 
     bool set_feed_constant_from_rvalue(double _f,
                                        std::vector<double>&& _target,
                                        std::vector<std::size_t>&& _position,
                                        std::vector<std::size_t>&& _species,
-                                       bool gas = false);
+                                       bool gas = false,bool fed_batch=false);
 
     /**
      * @brief Retrieve the simulation instance's unique identifier.

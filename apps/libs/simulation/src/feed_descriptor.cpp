@@ -46,9 +46,9 @@ namespace Simulation::Feed
                                feed_value_t&& _target,
                                feed_position_t&& _position,
                                feed_species_t _species,
-                               FeedTypeVariant _props)
+                               FeedTypeVariant _props,bool _set_exit)
       : flow_value(_f), position(std::move(_position)), species(std::move(_species)), props(_props),
-        n_v(_target.size()), type(get_type(props)), target(std::move(_target))
+        n_v(_target.size()), type(get_type(props)), target(std::move(_target)),set_exit(_set_exit)
   {
 
     value = target;
@@ -64,9 +64,9 @@ namespace Simulation::Feed
   FeedDescritor FeedFactory::constant(double _f,
                                       feed_value_t&& _target,
                                       feed_position_t&& _position,
-                                      feed_species_t _species)
+                                      feed_species_t _species,bool set_exit)
   {
-    return {_f, std::move(_target), std::move(_position), std::move(_species), Constant{}};
+    return {_f, std::move(_target), std::move(_position), std::move(_species), Constant{},set_exit};
   }
 
 } // namespace Simulation::Feed

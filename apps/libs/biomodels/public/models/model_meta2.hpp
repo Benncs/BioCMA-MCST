@@ -2,14 +2,15 @@
 #define __MODELS_SIMPLE_ECOLI_HPP__
 
 #include "Kokkos_Assert.hpp"
+#include "Kokkos_Printf.hpp"
 #include <mc/particles/particle_model.hpp>
 #include <models/uptake.hpp>
 #include <models/utils.hpp>
 
 namespace implEcoli2
 {
-  constexpr float l_max = 3e-6;
-  constexpr float l_c = 2e-6;
+  constexpr float l_max = 5e-6;
+  constexpr float l_c = 3e-6;
   constexpr float tau_1 = 1000.;
   constexpr float tau_2 = 1000.;
 
@@ -19,8 +20,8 @@ namespace implEcoli2
   constexpr float a_12 = 1 / 180.;
   constexpr float a_22 = 1 / 32.;
   constexpr float d_m = 0.6e-6;
-  constexpr float minimal_length = 1.4e-6;
-
+  constexpr float minimal_length = 0.9e-6;
+  // static_assert(minimal_length>d_m*4, "Diameter too large");
   constexpr float factor = 1000. * 3.14 * d_m * d_m / 4.;
   constexpr float y_sx = 1. / 2.217737e+00; // y1b
 
@@ -57,6 +58,8 @@ namespace implEcoli2
 
   constexpr float MolarMassG = 180;
   constexpr float MolarMassO2 = 32;
+
+  constexpr float alpha_divison = 5.2;
 } // namespace implEcoli2
 
 namespace Models
@@ -94,11 +97,9 @@ namespace Models
   
       contrib = {0., 0.0, 0.};
       auto g = _rng.random_pool.get_state();
-      a_pts = g.frand(0.3, 1);
-      a_permease = g.frand(0, 1);
-      n_permease = g.frand(1, n);
-      length =
-          l_c; //(float)Kokkos::max((double)minimal_length, g.normal(1e-6, 0.7e-6));
+  
+      Uptake::distribute_init<float>(*this,g);
+      length =(float)Kokkos::max((double)minimal_length, g.normal(minimal_length, 0.7e-6));
       l_cp = Kokkos::min(Kokkos::max(minimal_length,
                                             g.normal(l_c, l_c / 7.)),
                          l_max);
@@ -110,7 +111,7 @@ namespace Models
                                 const LocalConcentrationView& concentrations,
                                 MC::KPRNG _rng)
     {
-
+      // constexpr double l_max = implEcoli2::l_max
       const auto s = static_cast<float>(concentrations(0));
       using namespace implEcoli2;
       const auto phi_s = Models::Uptake::uptake(
@@ -126,10 +127,11 @@ namespace Models
       KOKKOS_ASSERT(phi_s_residual_1_star>=0.F);
       const float nu_2_star = y_sxf * phi_s_residual_1_star;   // gX/s
 
-      
+            
       nu_eff_1 = Kokkos::min(nu_1_star, nu1); // gX/s
       const float s_1 = (1 / y_sx * nu_eff_1);
       const float phi_s_residual_1 = Kokkos::max(phi_s - s_1, 0.F);
+      
       nu_eff_2 = Kokkos::min( y_sxf * phi_s_residual_1, nu2); // gX/s
       KOKKOS_ASSERT(nu_eff_1>=0.F);
       KOKKOS_ASSERT(nu_eff_2>=0.F);
@@ -137,6 +139,16 @@ namespace Models
       const float s_overflow = phi_s - s_growth;
    
       p.status = (length > l_cp) ? MC::CellStatus::CYTOKINESIS : MC::CellStatus::IDLE;
+
+      // double gamma = 1/(1+Kokkos::exp(-4*(length-l_max/2.)));
+      // Kokkos::printf("%lf\r\n", phi_s_residual_1_star);
+
+      // update_division_status(p.status,
+      // d_t,
+      // gamma,
+      // _rng.random_pool);
+
+
       contrib.phi_s = -phi_s;
       contrib.phi_o =
           -1 * ((1. / y_sx / MolarMassG * y_os * MolarMassO2 * nu_eff_1) + 0. * nu_eff_2);
@@ -166,6 +178,8 @@ namespace Models
           Kokkos::min(Kokkos::max(minimal_length,
                                   g.normal(l_c, l_c / 7.)),
                       l_max);
+
+      Uptake::distribute_division<float>(*this, child_pimpl,g);
       _rng.random_pool.free_state(g);
       return child_pimpl;
     }

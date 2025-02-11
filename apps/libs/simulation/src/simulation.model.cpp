@@ -60,7 +60,7 @@ namespace Simulation
   {
     this->liquid_scalar->vec_kla.setZero();
     // Dont forget to clear kernel contribution
-    if(is_two_phase_flow)
+    if (is_two_phase_flow)
     {
       this->gas_scalar->set_zero_contribs();
     }
@@ -84,13 +84,13 @@ namespace Simulation
                         const pimp_ptr_t& scalar, auto&& descritor, bool mc_f = false)
     {
       double flow = 0.; // Initialize the flow variable
-
+      bool set_exit = false;
       // Iterate through each current_feed in the descriptor
       for (auto&& current_feed : descritor)
       {
-        current_feed.update(t, d_t);    // Update the current_feed
+        current_feed.update(t, d_t);     // Update the current_feed
         flow += current_feed.flow_value; // Get the flow_value of the current_feed
-
+        set_exit = current_feed.set_exit;
         if (update_scalar)
         {
           // Iterate through the species, positions, and values of the
@@ -103,17 +103,20 @@ namespace Simulation
         }
       }
 
-      if (update_scalar)
+      if (set_exit)
       {
-        // Set the sink for the exit compartment
-        scalar->set_sink(i_exit, flow);
-      }
+        if (update_scalar)
+        {
+          // Set the sink for the exit compartment
+          scalar->set_sink(i_exit, flow);
+        }
 
-      // Update Flow for mc particle
-      if (mc_f)
-      {
-        _index_leaving_flow(0) = i_exit;
-        _leaving_flow(0) = flow;
+        // Update Flow for mc particle
+        if (mc_f)
+        {
+          _index_leaving_flow(0) = i_exit;
+          _leaving_flow(0) = flow;
+        }
       }
     };
 
@@ -133,14 +136,9 @@ namespace Simulation
 
     if (is_two_phase_flow)
     {
-      // const auto& mtr = this->liquid_scalar->set_mass_transfer(
-      //     gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,
-      //                              liquid_scalar->getVolume(),
-      //                              liquid_scalar->getConcentrationArray(),
-      //                              gas_scalar->getConcentrationArray(),
-      //                              state));
 
-      gas_liquid_mass_transfer(MassTransfer::MTRType::Flowmap,liquid_scalar.get(), gas_scalar.get(), state);
+      gas_liquid_mass_transfer(
+          MassTransfer::MTRType::Flowmap, liquid_scalar.get(), gas_scalar.get(), state);
 
       this->gas_scalar->performStep(
           d_t, flow_gas->get_transition(), -1 * this->liquid_scalar->get_mass_transfer());

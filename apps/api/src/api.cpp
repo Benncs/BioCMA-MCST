@@ -72,22 +72,23 @@ namespace Api
                                                          std::vector<double>&& _target,
                                                          std::vector<std::size_t>&& _position,
                                                          std::vector<std::size_t>&& _species,
-                                                         bool gas)
+                                                         bool gas,bool fed_batch)
   {
-    return set_feed_constant(_f, _target, _position, _species, gas);
+    return set_feed_constant(_f, _target, _position, _species, gas,fed_batch);
   }
 
   bool SimulationInstance::set_feed_constant(double _flow,
                                              std::span<double> _concentratio,
                                              std::span<std::size_t> _position,
                                              std::span<std::size_t> _species,
-                                             bool gas)
+                                             bool gas,bool fed_batch)
   {
     auto target = span_to_vec(_concentratio);
     auto position = span_to_vec(_position);
     auto species = span_to_vec(_species);
     auto fd = Simulation::Feed::FeedFactory::constant(
-        _flow, std::move(target), std::move(position), std::move(species));
+        _flow, std::move(target), std::move(position), std::move(species),!fed_batch);
+        //negates fed_batch because constant accepts set_exit flag. fed_batch = !set_exit 
 
     if (!feed.has_value())
     {

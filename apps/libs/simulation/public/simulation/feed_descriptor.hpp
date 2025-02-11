@@ -48,14 +48,16 @@ namespace Simulation::Feed
   {
   public:
     FeedDescritor() = default;
-    FeedDescritor(double _f, feed_value_t &&_target, feed_position_t &&_position, feed_species_t _species, FeedTypeVariant _props);
+    FeedDescritor(double _f, feed_value_t &&_target, feed_position_t &&_position, feed_species_t _species, FeedTypeVariant _props,bool set_exit);
 
     double flow_value{};
     feed_value_t value;
     feed_position_t position;
     feed_species_t species;
     FeedTypeVariant props;
+    bool set_exit=true;
     size_t n_v{};
+    
     void update(double t, double d_t) noexcept;
 
   private:
@@ -65,7 +67,7 @@ namespace Simulation::Feed
 
   struct FeedFactory
   {
-      static FeedDescritor constant(double _f, feed_value_t &&_target, feed_position_t &&_position, feed_species_t _species);
+      static FeedDescritor constant(double _f, feed_value_t &&_target, feed_position_t &&_position, feed_species_t _species,bool set_exit=true);
   };
 
   struct SimulationFeed
