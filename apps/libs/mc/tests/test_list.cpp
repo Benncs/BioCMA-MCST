@@ -57,7 +57,7 @@ int main()
     auto& container = std::get<MC::ParticlesContainer<current_model>>(unit->container);
     auto list = container.get_compute();
 
-    MC::ParticleList<ComputeSpace, current_model> extra = container.extra_list;
+    MC::ParticleList<ComputeSpace, current_model> extra = container.process_buffer;
 
     Kokkos::printf("init %d\r\n", extra.size());
 
