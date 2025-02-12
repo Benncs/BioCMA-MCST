@@ -58,7 +58,7 @@ namespace Simulation
 
   void SimulationUnit::clearContribution() const noexcept
   {
-    this->liquid_scalar->vec_kla.setZero();
+    // this->liquid_scalar->vec_kla.setZero();
     // Dont forget to clear kernel contribution
     if (is_two_phase_flow)
     {
@@ -72,16 +72,17 @@ namespace Simulation
   {
     PROFILE_SECTION("host:update_feed")
     // Get references to the index_leaving_flow and leaving_flow data members
-    auto& _index_leaving_flow = this->move_info.index_leaving_flow;
-    auto& _leaving_flow = this->move_info.leaving_flow;
+    const auto& _index_leaving_flow = this->move_info.index_leaving_flow;
+    const auto& _leaving_flow = this->move_info.leaving_flow;
 
     // Get the index of the exit compartment
     // TODO exit is not necessarly at the index n-1, it should be given by user
     const uint64_t i_exit = mc_unit->domain.getNumberCompartments() - 1;
 
     // Define the set_feed lambda function
-    auto set_feed = [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow, update_scalar](
-                        const pimp_ptr_t& scalar, auto&& descritor, bool mc_f = false)
+    auto set_feed =
+        [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow, update_scalar](
+            const std::shared_ptr<ScalarSimulation>& scalar, auto&& descritor, bool mc_f = false)
     {
       double flow = 0.; // Initialize the flow variable
       bool set_exit = false;
@@ -136,15 +137,15 @@ namespace Simulation
 
     if (is_two_phase_flow)
     {
-
-      gas_liquid_mass_transfer(
-          MassTransfer::MTRType::Flowmap, liquid_scalar.get(), gas_scalar.get(), state);
-
-      this->gas_scalar->performStep(
-          d_t, flow_gas->get_transition(), -1 * this->liquid_scalar->get_mass_transfer());
+      mt_model.gas_liquid_mass_transfer(state);
+      const MatrixType& mtr = mt_model.proxy()->mtr;
+      this->gas_scalar->performStep(d_t, flow_gas->get_transition(), -1 * mtr);
+      this->liquid_scalar->performStep(d_t, flow_liquid->get_transition(), mtr);
     }
-
-    this->liquid_scalar->performStep(
-        d_t, flow_liquid->get_transition(), this->liquid_scalar->get_mass_transfer());
+    else
+    {
+      this->liquid_scalar->performStep(d_t, flow_liquid->get_transition());
+    }
+    
   }
 } // namespace Simulation

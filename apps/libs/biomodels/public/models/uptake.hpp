@@ -37,7 +37,7 @@ namespace Models::Uptake
   constexpr double kppermease = 1e-2;
   
   template <FloatingPointType F>
-  constexpr F _k_pts(){return static_cast<F>(k_pts);}
+  KOKKOS_INLINE_FUNCTION constexpr F _k_pts(){return static_cast<F>(k_pts);}
 
   template <FloatingPointType F>
   KOKKOS_INLINE_FUNCTION F phi_pts(const F phi_pts_max, const F a_pts, const F S)

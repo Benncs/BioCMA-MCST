@@ -67,7 +67,9 @@ namespace Simulation
                      const FlowMatrixType& m_transition,
                      const MatrixType& transfer_gas_liquid);
 
-    //Getters
+    void performStep(double d_t, const FlowMatrixType& m_transition);
+
+    // Getters
     [[nodiscard]] KokkosScalarMatrix<ComputeSpace> get_device_concentration() const;
     [[nodiscard]] std::span<double const> getVolumeData() const;
     [[nodiscard]] std::span<double> getContributionData() const;
@@ -77,11 +79,10 @@ namespace Simulation
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
     [[nodiscard]] const MatrixType& get_mass_transfer() const;
     [[nodiscard]] std::span<double> getConcentrationData();
-    Eigen::ArrayXXd vec_kla; // TODO : Clean this
+    
 
     [[nodiscard]] std::size_t n_row() const;
     [[nodiscard]] std::size_t n_col() const;
-
 
     // Setters
 
@@ -91,16 +92,12 @@ namespace Simulation
     void set_sink(std::uint64_t i_compartment, double val);
     void set_zero_contribs();
     void setVolumes(std::span<const double> volumes, std::span<const double> inv_volumes);
-    MatrixType& set_mass_transfer(MatrixType&& mtr);
-
-
- 
 
   private:
     std::size_t n_r;
     std::size_t n_c;
     MatrixType total_mass;
-    MatrixType mass_transfer;
+    
     DiagonalType volumes_inverse;
     DiagonalType m_volumes;
     DiagonalType sink;
@@ -108,6 +105,8 @@ namespace Simulation
     CmaRead::L2DView<double> view;
     EigenKokkos concentrations;
     EigenKokkos sources;
+
+    
   };
 
   inline Eigen::ArrayXXd ScalarSimulation::getConcentrationArray() const
@@ -127,10 +126,7 @@ namespace Simulation
     Kokkos::deep_copy(sources.compute, 0);
   }
 
-  [[nodiscard]] inline const MatrixType& ScalarSimulation::get_mass_transfer() const
-  {
-    return mass_transfer;
-  };
+
 
   inline void ScalarSimulation::set_kernel_contribs_to_host() const
   {

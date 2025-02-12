@@ -24,8 +24,7 @@ void workers_process(const ExecInfo& exec,
 
   const auto loop_functor = [&](auto&& container)
   {
-    // auto result = container.get_extra();
-    // auto view_result = result.get_view();
+
     bool stop = false;
     WrapMPI::SIGNALS signal{};
     double current_time = 0;

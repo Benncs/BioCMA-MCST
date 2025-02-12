@@ -55,17 +55,10 @@ namespace Simulation
     this->total_mass = MatrixType(n_row, n_col);
     this->total_mass.setZero();
 
-    // this->feed = SparseMatrixType(n_row, n_col);
-    // this->feed.setZero();
-
     this->sink = DiagonalType(n_col);
     this->sink.setZero();
 
-    this->vec_kla = Eigen::ArrayXXd(n_row, n_col);
-    this->vec_kla.setZero();
 
-    this->mass_transfer = MatrixType(n_row, n_col);
-    this->mass_transfer.setZero();
 
     // todo remove
     view = CmaRead::L2DView<double>({this->concentrations.eigen_data.data(),
@@ -80,7 +73,7 @@ namespace Simulation
     return concentrations.compute;
   }
 
-   CmaRead::L2DView<double> ScalarSimulation::getConcentrationView()
+  CmaRead::L2DView<double> ScalarSimulation::getConcentrationView()
   {
     return view;
   }
@@ -102,25 +95,36 @@ namespace Simulation
         const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
   }
 
-  void ScalarSimulation::performStep(double d_t,
-                                     const FlowMatrixType& m_transition,
-                                     const Eigen::MatrixXd& transfer_gas_liquid)
+  //TODO OPTI
+  void ScalarSimulation::performStep(double d_t, const FlowMatrixType& m_transition)
   {
     PROFILE_SECTION("performStep")
-    #define c concentrations.eigen_data
+#define c concentrations.eigen_data
 
-    total_mass = total_mass+d_t * (c * m_transition - c * sink + sources.eigen_data + transfer_gas_liquid);
+    total_mass = total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data);
     c = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
     concentrations.update_host_to_compute();
   }
 
-  Eigen::MatrixXd& ScalarSimulation::set_mass_transfer(Eigen::MatrixXd&& mtr)
+  void ScalarSimulation::performStep(double d_t,
+                                     const FlowMatrixType& m_transition,
+                                     const Eigen::MatrixXd& transfer_gas_liquid)
   {
-    this->mass_transfer = std::move(mtr);
-    return this->mass_transfer;
+    PROFILE_SECTION("performStep_gl")
+#define c concentrations.eigen_data
+
+    total_mass =
+        total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data + transfer_gas_liquid);
+    c = total_mass * volumes_inverse;
+
+    // Make accessible new computed concentration to ComputeSpace
+    concentrations.update_host_to_compute();
   }
+
+
+
 
   bool ScalarSimulation::deep_copy_concentration(const std::vector<double>& data)
   {

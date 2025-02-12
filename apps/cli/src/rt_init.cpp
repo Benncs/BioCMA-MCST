@@ -96,7 +96,7 @@ ExecInfo runtime_init(int argc, char** argv, Core::UserControlParameters& params
     std::atexit(WrapMPI::finalize);
 #endif
   }
-  std::atexit(Kokkos::finalize);
+  // std::atexit(Kokkos::finalize);
 
   const auto id_seed = static_cast<size_t>(time(nullptr) * info.n_rank * info.thread_per_process);
 

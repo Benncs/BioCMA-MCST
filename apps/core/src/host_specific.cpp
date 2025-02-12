@@ -233,10 +233,6 @@ namespace
     {
       Core::SignalHandler sig;
 
-      // auto result = local_container.get_extra();
-
-      // auto view_result = result.get_view();
-
       for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation; ++__loop_counter)
       {
 

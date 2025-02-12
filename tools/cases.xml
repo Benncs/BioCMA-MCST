@@ -53,12 +53,12 @@
       <cma_case_path>../../cfd-cma/cma_data/0d_gas/</cma_case_path>
       <!-- <cma_case_path recursive="true">/home_pers/casale/Documents/code/biomc/cma_data/flowmap_14/</cma_case_path> -->
       <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
-      <final_time>100</final_time>
-      <numper_particle>20000</numper_particle>
-      <delta_time>0.1</delta_time>
+      <final_time>1</final_time>
+      <numper_particle>5000000</numper_particle>
+      <delta_time>0.01</delta_time>
       <results_file_name>bench</results_file_name>
       <number_exported_result>10</number_exported_result>
-      <model_name>udfmodel_user</model_name>
+      <model_name>model_meta2</model_name>
       <initialiser_path></initialiser_path>
    </control>
 

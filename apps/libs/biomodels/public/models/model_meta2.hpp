@@ -176,7 +176,7 @@ namespace Models
       auto g = _rng.random_pool.get_state();
       child_pimpl.l_cp =
           Kokkos::min(Kokkos::max(minimal_length,
-                                  g.normal(l_c, l_c / 7.)),
+                                  g.normal(l_c, l_c / 6.)),
                       l_max);
 
       Uptake::distribute_division<float>(*this, child_pimpl,g);

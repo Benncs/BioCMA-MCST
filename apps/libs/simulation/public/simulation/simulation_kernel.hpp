@@ -74,7 +74,7 @@ namespace Simulation::KernelInline
            Kokkos::View<size_t, Kokkos::SharedSpace> _waiting_allocation_particle,
            MC::KPRNG pool)
         : d_t(_d_t), list(_list), extra(std::move(_extra)),
-          local_compartments(std::move(_local_compartments)), move_info(std::move(_move_info)), rng_pool(std::move(pool)),
+          local_compartments(std::move(_local_compartments)), move_info(_move_info), rng_pool(std::move(pool)),
           events(std::move(_events)), biomass_contribution(std::move(_biomass_contribution)),
           probe_at_t(std::move(prob)),
           waiting_allocation_particle(std::move(_waiting_allocation_particle))

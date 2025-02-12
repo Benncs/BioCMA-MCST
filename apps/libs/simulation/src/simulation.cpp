@@ -1,3 +1,5 @@
+#include "simulation/mass_transfer.hpp"
+#include "simulation/simulation_kernel.hpp"
 #include <Kokkos_Core.hpp>
 #include <cma_read/light_2d_view.hpp>
 #include <common/kokkos_vector.hpp>
@@ -22,17 +24,16 @@
 #include <transport.hpp>
 #include <utility>
 
-
 namespace Simulation
 {
 
-  SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept
-      : mc_unit(std::move(other.mc_unit)), internal_counter_dead(other.internal_counter_dead),
-        waiting_allocation_particle(std::move(other.waiting_allocation_particle)),
-        flow_liquid(other.flow_liquid), flow_gas(other.flow_gas),
-        is_two_phase_flow(other.is_two_phase_flow)
-  {
-  }
+  SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept=default;
+  //     : mc_unit(std::move(other.mc_unit)), internal_counter_dead(other.internal_counter_dead),
+  //       waiting_allocation_particle(std::move(other.waiting_allocation_particle)),
+  //       flow_liquid(other.flow_liquid), flow_gas(other.flow_gas),
+  //       is_two_phase_flow(other.is_two_phase_flow)
+  // {
+  // }
 
   SimulationUnit::SimulationUnit(std::unique_ptr<MC::MonteCarloUnit>&& _unit,
                                  const ScalarInitializer& scalar_init,
@@ -41,11 +42,12 @@ namespace Simulation
         waiting_allocation_particle("waiting_allocation_particle"), flow_liquid(nullptr),
         flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow), move_info()
   {
-    this->liquid_scalar = std::unique_ptr<ScalarSimulation, pimpl_deleter>(makeScalarSimulation(
+   
+    this->liquid_scalar = std::shared_ptr<ScalarSimulation>(makeScalarSimulation(
         mc_unit->domain.getNumberCompartments(), scalar_init.n_species, scalar_init.volumesliq));
 
     this->gas_scalar = (is_two_phase_flow)
-                           ? std::unique_ptr<ScalarSimulation, pimpl_deleter>(makeScalarSimulation(
+                           ? std::shared_ptr<ScalarSimulation>(makeScalarSimulation(
                                  mc_unit->domain.getNumberCompartments(),
                                  scalar_init.n_species,
                                  scalar_init.volumesgas)) // No contribs for gas
@@ -61,6 +63,13 @@ namespace Simulation
 
     move_info.index_leaving_flow = LeavingFlowIndexType("index_leaving_flow", n_flows);
     move_info.leaving_flow = LeavingFlowType("leaving_flow", n_flows);
+
+    if(is_two_phase_flow)
+    {
+      this->mt_model = MassTransfer::MassTransferModel(MassTransfer::MTRType::Flowmap,liquid_scalar,gas_scalar);
+    }
+
+
   }
 
   void SimulationUnit::setVolumes(std::span<const double> volumesgas,
@@ -122,6 +131,7 @@ namespace Simulation
     gas_scalar.reset();
     flow_liquid = nullptr;
     flow_gas = nullptr;
+    move_info = KernelInline::MoveInfo<ComputeSpace>();
   }
 
   std::size_t SimulationUnit::counter() const
@@ -212,6 +222,8 @@ namespace Simulation
     Kokkos::fence();
   }
 
+  SimulationUnit::~SimulationUnit()=default;
+
   DiagonalView<ComputeSpace> SimulationUnit::get_kernel_diagonal()
   {
 
@@ -237,10 +249,10 @@ namespace Simulation
     this->liquid_scalar->set_kernel_contribs_to_host();
   }
 
-  void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation* ptr) const
-  {
-    delete ptr; // NOLINT
-  }
+  // void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation* ptr) const
+  // {
+  //   delete ptr; // NOLINT
+  // }
 
   [[nodiscard]] double& SimulationUnit::get_start_time_mut()
   {
