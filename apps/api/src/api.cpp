@@ -33,10 +33,9 @@ namespace WrapMPI
 #  include "mpi_w/message_t.hpp"
 #endif
 
-namespace Api
+namespace
 {
-
-  static bool check_required(const Core::UserControlParameters& params, bool to_load)
+  bool check_required(const Core::UserControlParameters& params, bool to_load)
   {
     bool flag = true;
 
@@ -57,6 +56,10 @@ namespace Api
 
     return flag;
   }
+} // namespace
+
+namespace Api
+{
 
   [[nodiscard]] int SimulationInstance::get_id() const
   {
@@ -72,23 +75,25 @@ namespace Api
                                                          std::vector<double>&& _target,
                                                          std::vector<std::size_t>&& _position,
                                                          std::vector<std::size_t>&& _species,
-                                                         bool gas,bool fed_batch)
+                                                         bool gas,
+                                                         bool fed_batch)
   {
-    return set_feed_constant(_f, _target, _position, _species, gas,fed_batch);
+    return set_feed_constant(_f, _target, _position, _species, gas, fed_batch);
   }
 
   bool SimulationInstance::set_feed_constant(double _flow,
                                              std::span<double> _concentratio,
                                              std::span<std::size_t> _position,
                                              std::span<std::size_t> _species,
-                                             bool gas,bool fed_batch)
+                                             bool gas,
+                                             bool fed_batch)
   {
     auto target = span_to_vec(_concentratio);
     auto position = span_to_vec(_position);
     auto species = span_to_vec(_species);
     auto fd = Simulation::Feed::FeedFactory::constant(
-        _flow, std::move(target), std::move(position), std::move(species),!fed_batch);
-        //negates fed_batch because constant accepts set_exit flag. fed_batch = !set_exit 
+        _flow, std::move(target), std::move(position), std::move(species), !fed_batch);
+    // negates fed_batch because constant accepts set_exit flag. fed_batch = !set_exit
 
     if (!feed.has_value())
     {
@@ -139,6 +144,15 @@ namespace Api
               .set_num_threads(static_cast<int32_t>(_data.exec_info.thread_per_process))
               .set_map_device_id_by("mpi_rank"));
       Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
+    }
+  }
+
+  SimulationInstance::~SimulationInstance()
+  {
+    _data = Core::CaseData(); //Explicity delete everything before 
+    if (!Kokkos::is_finalized())
+    {
+      Kokkos::finalize();
     }
   }
 
@@ -203,7 +217,7 @@ namespace Api
 
   ApiResult SimulationInstance::apply() noexcept
   {
-   
+
     if (!check_required(this->params, false))
     {
       return ApiResult("Check params");
@@ -219,8 +233,8 @@ namespace Api
 
     Core::GlobalInitialiser gi(_data.exec_info, params);
     auto t = gi.init_transitionner();
-    gi.init_feed(feed); 
-     
+    gi.init_feed(feed);
+
     auto __simulation = gi.init_simulation(this->scalar_initializer_variant);
     if ((!t.has_value() && !__simulation.has_value()) || !gi.check_init_terminate())
     {
@@ -230,7 +244,7 @@ namespace Api
     _data.simulation = std::move(*__simulation);
     _data.transitioner = std::move(*t);
     applied = true;
-   
+
     return ApiResult();
   }
 

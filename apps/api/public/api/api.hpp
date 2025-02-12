@@ -2,6 +2,7 @@
 #define __BIOMC_API_HPP__
 
 #include "core/scalar_factory.hpp"
+#include <api/results.hpp>
 #include <core/case_data.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstdint>
@@ -12,7 +13,6 @@
 #include <span>
 #include <string_view>
 
-#include <api/results.hpp>
 /**
  * @namespace Api
  * This namespace contains classes and functions related to the simulation API.
@@ -85,7 +85,7 @@ namespace Api
     /**
      * @brief Default destructor.
      */
-    ~SimulationInstance() = default;
+    ~SimulationInstance();
 
     /**
      * @brief Apply the simulation configuration and prepare for execution.
@@ -166,13 +166,15 @@ namespace Api
                            std::span<double> _target,
                            std::span<std::size_t> _position,
                            std::span<std::size_t> _species,
-                           bool gas = false,bool fed_batch=false);
+                           bool gas = false,
+                           bool fed_batch = false);
 
     bool set_feed_constant_from_rvalue(double _f,
                                        std::vector<double>&& _target,
                                        std::vector<std::size_t>&& _position,
                                        std::vector<std::size_t>&& _species,
-                                       bool gas = false,bool fed_batch=false);
+                                       bool gas = false,
+                                       bool fed_batch = false);
 
     /**
      * @brief Retrieve the simulation instance's unique identifier.

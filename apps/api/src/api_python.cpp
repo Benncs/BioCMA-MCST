@@ -134,7 +134,13 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
            std::vector<double> _target,
            std::vector<std::size_t> _position,
            std::vector<std::size_t> _species,bool fed_batch)
-        { handle->set_feed_constant(_f, _target, _position, _species,false,fed_batch); });
+        { handle->set_feed_constant(_f, _target, _position, _species,false,fed_batch); },
+        py::arg("handle"),
+        py::arg("flow"),
+        py::arg("concentration value"),
+        py::arg("position"),
+        py::arg("species"),
+        py::arg("fed_batch")=false);
 
    m.def("set_gas_feed_constant",
         [](std::shared_ptr<Api::SimulationInstance>& handle,
