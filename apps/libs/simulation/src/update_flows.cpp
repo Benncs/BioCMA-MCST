@@ -15,8 +15,16 @@ double linter(double a, double b, double t)
   return (1 - t) * a + t * b;
 }
 
+
+
 namespace Simulation
 {
+  struct TransitionState
+  {
+    CmaRead::ReactorState state;
+    CmaUtils::PreCalculatedHydroState liquid_pc;
+    CmaUtils::PreCalculatedHydroState gas_pc;
+  };
 
   static void compute_MatFlow(const CmaRead::FlowMap::FlowMap_const_view_t& flows_view,
                               CmaUtils::PreCalculatedHydroState& matflow)
@@ -65,7 +73,7 @@ namespace Simulation
         n_per_flowmap(_n_per_flowmap), n_flowmap(_n_flowmap), n_timestep(number_time_step),
         current_flowmap_count(0), repetition_count(0), current_index(0)
   {
-    this->interpolated_state = new CmaUtils::TransitionState;
+    this->interpolated_state = new TransitionState;
 
     // transtion_state.resize(n_flowmap);
     this->liquid_pc.resize(n_flowmap);
@@ -244,8 +252,7 @@ namespace Simulation
       {
         unit.setGasFlow(current_gas_hydro_state);
       }
-
-      unit.setVolumes(current_state->gasVolume, current_state->liquidVolume);
+      unit.setVolumes();
     }
     if (++this->current_flowmap_count == this->n_per_flowmap)
     {
@@ -277,10 +284,13 @@ namespace Simulation
 
     liq_hydro_state->inverse_volume = compute_inverse_diagonal(reactor_state.liquidVolume);
 
+       liq_hydro_state->volume = reactor_state.liquidVolume; //Not original code 
+
     if (two_phase_flow)
     {
       compute_MatFlow(reactor_state.gas_flow.getViewFlows(), *gas_hydro_state);
       gas_hydro_state->inverse_volume = compute_inverse_diagonal(reactor_state.gasVolume);
+        gas_hydro_state->volume = reactor_state.gasVolume; //Not original code 
     }
   }
 

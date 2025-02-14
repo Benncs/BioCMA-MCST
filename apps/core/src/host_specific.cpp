@@ -1,4 +1,5 @@
 
+#include "cma_utils/transitionner.hpp"
 #include <algorithm> //for std::min
 #include <biocma_cst_config.hpp>
 #include <cma_read/reactorstate.hpp>
@@ -185,7 +186,7 @@ namespace
   void main_loop(const Core::SimulationParameters& params,
                  const ExecInfo& exec,
                  Simulation::SimulationUnit& simulation,
-                 std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
+                 std::unique_ptr<CmaUtils::FlowMapTransitionner> transitioner,
                  std::unique_ptr<Core::MainExporter>& main_exporter,
                  Core::PartialExporter& partial_exporter)
   {
@@ -213,22 +214,24 @@ namespace
 
     INIT_PAYLOAD
 
-    const auto* current_reactor_state = &transitioner->get_unchecked(0);
+    {
+      const auto& current_reactor_state = transitioner->get_current_reactor_state();
 
-    transitioner->update_flow(simulation);
+      transitioner->update_flow(simulation);
 
-    // FIX CMTOOL
-    const auto gas_concentration = simulation.getCgasData();
-    auto gas_volume = (!gas_concentration.has_value())
-                          ? std::nullopt
-                          : std::make_optional(current_reactor_state->gasVolume);
+      // FIX CMTOOL
+      const auto gas_concentration = simulation.getCgasData();
+      auto gas_volume = (!gas_concentration.has_value())
+                            ? std::nullopt
+                            : std::make_optional(current_reactor_state.gasVolume);
 
-    main_exporter->update_fields(current_time,
-                                 simulation.getCliqData(),
-                                 current_reactor_state->liquidVolume,
-                                 gas_concentration,
-                                 gas_volume,
-                                 simulation.getMTRData());
+      main_exporter->update_fields(current_time,
+                                   simulation.getCliqData(),
+                                   current_reactor_state.liquidVolume,
+                                   gas_concentration,
+                                   gas_volume,
+                                   simulation.getMTRData());
+    }
 
     auto loop_functor = [&](auto&& local_container)
     {
@@ -244,7 +247,7 @@ namespace
           transitioner->update_flow(simulation);
         }
 
-        current_reactor_state = transitioner->getState();
+        const auto& current_reactor_state = transitioner->get_current_reactor_state();
 
         FILL_PAYLOAD;
 
@@ -272,7 +275,7 @@ namespace
         {
           PROFILE_SECTION("host:sync_update")
           simulation.update_feed(current_time, d_t);
-          simulation.step(d_t, *current_reactor_state);
+          simulation.step(d_t, current_reactor_state);
           current_time += d_t;
         }
         sync_prepare_next(simulation);
@@ -291,14 +294,14 @@ namespace
     };
 
     std::visit(loop_functor, simulation.mc_unit->container);
-
+    const auto& last_current_reactor_state = transitioner->get_current_reactor_state();
     gas_volume = (!simulation.getCgasData().has_value())
                      ? std::nullopt
-                     : std::make_optional(current_reactor_state->gasVolume);
+                     : std::make_optional(last_current_reactor_state.gasVolume);
 
     main_exporter->update_fields(current_time,
                                  simulation.getCliqData(),
-                                 current_reactor_state->liquidVolume,
+                                 last_current_reactor_state.liquidVolume,
                                  simulation.getCgasData(),
                                  gas_volume,
                                  simulation.getMTRData());

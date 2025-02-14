@@ -54,7 +54,7 @@ namespace MC
       assert(volumes_gas[i_c] >= 0);
       shared_containers[i_c].volume_liq = volumes_liq[i_c];
       shared_containers[i_c].volume_gas = volumes_gas[i_c];
-      ;
+      
       this->_total_volume += volumes_liq[i_c];
     }
   }

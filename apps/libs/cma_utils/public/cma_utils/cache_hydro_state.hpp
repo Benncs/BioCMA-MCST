@@ -37,6 +37,7 @@ namespace CmaUtils
 
     Eigen::Matrix<double, -1, -1, Eigen::RowMajor> cumulative_probability;
     std::vector<double> inverse_volume;
+    std::vector<double> volume;
 
     void set_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t& flows_view);
     void set_transition_matrix(FlowMatrixType&& matrix);
@@ -56,12 +57,7 @@ namespace CmaUtils
     return diagonal_compute;
   }
 
-  struct TransitionState
-  {
-    CmaRead::ReactorState state;
-    PreCalculatedHydroState liquid_pc;
-    PreCalculatedHydroState gas_pc;
-  };
+  
 
 } // namespace CmaUtils
 

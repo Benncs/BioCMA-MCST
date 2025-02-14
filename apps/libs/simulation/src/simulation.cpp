@@ -68,24 +68,32 @@ namespace Simulation
           MassTransfer::MTRType::Flowmap, liquid_scalar, gas_scalar);
     }
   }
+   void SimulationUnit::update(CmaUtils::PreCalculatedHydroState* _flows_l,CmaUtils::PreCalculatedHydroState* _flows_g)
+   {
+      setLiquidFlow(_flows_l);
+      if(_flows_g!=nullptr)
+      {
+        setGasFlow(_flows_g);
+      }
+      setVolumes();
+   }
 
-  void SimulationUnit::setVolumes(std::span<const double> volumesgas,
-                                  std::span<const double> volumesliq) const
+  void SimulationUnit::setVolumes() const
   {
-
+    std::span<double const> vl = liquid_scalar->getVolumeData();
     std::span<double const> vg;
-    this->liquid_scalar->setVolumes(volumesliq, flow_liquid->inverse_volume);
+    this->liquid_scalar->setVolumes(flow_liquid->volume, flow_liquid->inverse_volume);
     if (gas_scalar)
     {
-      this->gas_scalar->setVolumes(volumesgas, flow_gas->inverse_volume);
+      this->gas_scalar->setVolumes(flow_gas->volume, flow_gas->inverse_volume);
       vg = gas_scalar->getVolumeData();
     }
     else
     {
-      vg = volumesgas;
+      vg = std::vector<double>(vl.size(),0);
     }
 
-    std::span<double const> vl = liquid_scalar->getVolumeData();
+    
 
     this->mc_unit->domain.setVolumes(vg, vl);
   }

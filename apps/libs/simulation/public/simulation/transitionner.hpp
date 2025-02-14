@@ -9,13 +9,14 @@
 namespace CmaUtils
 {
   class PreCalculatedHydroState;
-  struct TransitionState;
+  
 } // namespace CmaUtils
 
 // Foward declaration
 namespace Simulation
 {
   class SimulationUnit;
+  struct TransitionState;
 
 } // namespace Simulation
 
@@ -102,7 +103,7 @@ namespace Simulation
 
     CmaUtils::PreCalculatedHydroState* current_liq_hydro_state = nullptr;
     CmaUtils::PreCalculatedHydroState* current_gas_hydro_state = nullptr;
-    CmaUtils::TransitionState* interpolated_state;
+    TransitionState* interpolated_state;
 
     const CmaRead::ReactorState* current_state = nullptr;
     size_t current_index;
