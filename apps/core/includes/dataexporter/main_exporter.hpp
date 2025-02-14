@@ -1,17 +1,17 @@
 #ifndef __CORE_MAIN_EXPORTER_HPP__
 #define __CORE_MAIN_EXPORTER_HPP__
 
-#include <common/execinfo.hpp>
 #include "simulation/simulation.hpp"
+#include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <dataexporter/data_exporter.hpp>
 #include <optional>
-#include <span> 
+#include <span>
+#include <string>
 #include <string_view>
 #include <vector>
-#include <string>
 namespace Core
 {
   /**
@@ -87,7 +87,8 @@ namespace Core
                        std::span<double> concentration_liquid,
                        std::span<const double> liquid_volume,
                        std::optional<std::span<const double>> concentration_gas,
-                       std::optional<std::span<const double>> volume_gas);
+                       std::optional<std::span<const double>> volume_gas,
+                       std::optional<std::span<const double>> mtr);
 
   private:
     static const std::string

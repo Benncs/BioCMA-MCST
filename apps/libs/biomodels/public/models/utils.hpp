@@ -21,10 +21,11 @@ namespace Models
   static constexpr double tau_division_proba = 1e-7;
 
   KOKKOS_INLINE_FUNCTION bool check_probability_division(
-      double /*d_t*/,
+      double d_t,
       double gamma,
       Kokkos::Random_XorShift64_Pool<Kokkos::DefaultExecutionSpace> random_pool)
   {
+    (void)d_t;
     // const double proba_div =
     //     (1 - Kokkos::exp(-d_t / tau_division_proba)) * gamma;
  

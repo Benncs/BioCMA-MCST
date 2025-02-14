@@ -37,6 +37,11 @@ namespace Simulation
     return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()};
   }
 
+  [[nodiscard]] std::optional<std::span<const double>> SimulationUnit::getMTRData() const
+  {
+    return this->mt_model.mtr_data();
+  }
+
   [[deprecated("perf:not useful")]] void
   SimulationUnit::reduceContribs_per_rank(std::span<const double> data) const
   {
@@ -139,13 +144,16 @@ namespace Simulation
     {
       mt_model.gas_liquid_mass_transfer(state);
       const MatrixType& mtr = mt_model.proxy()->mtr;
-      this->gas_scalar->performStep(d_t, flow_gas->get_transition(), -1 * mtr);
-      this->liquid_scalar->performStep(d_t, flow_liquid->get_transition(), mtr);
+      
+      this->gas_scalar->performStepGL(
+          d_t, flow_gas->get_transition(), mtr, MassTransfer::MTRSign::GasToLiquid);
+
+      this->liquid_scalar->performStepGL(
+          d_t, flow_liquid->get_transition(), mtr, MassTransfer::MTRSign::LiquidToGas);
     }
     else
     {
       this->liquid_scalar->performStep(d_t, flow_liquid->get_transition());
     }
-    
   }
 } // namespace Simulation

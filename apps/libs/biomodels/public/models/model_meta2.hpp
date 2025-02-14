@@ -94,15 +94,13 @@ namespace Models
 
       nu1 = implEcoli2::nu_max * implEcoli2::factor / 4;
       nu2 = 0; // pimpl.nu1/5.;
-  
+
       contrib = {0., 0.0, 0.};
       auto g = _rng.random_pool.get_state();
-  
-      Uptake::distribute_init<float>(*this,g);
-      length =(float)Kokkos::max((double)minimal_length, g.normal(minimal_length, 0.7e-6));
-      l_cp = Kokkos::min(Kokkos::max(minimal_length,
-                                            g.normal(l_c, l_c / 7.)),
-                         l_max);
+
+      Uptake::distribute_init<float>(*this, g);
+      length = (float)Kokkos::max((double)minimal_length, g.normal(minimal_length, 0.7e-6));
+      l_cp = Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 7.)), l_max);
       _rng.random_pool.free_state(g);
     }
 
@@ -117,37 +115,34 @@ namespace Models
       const auto phi_s = Models::Uptake::uptake(
           static_cast<float>(d_t), *this, s, phi_s_max, phi_perm_max, NPermease_max);
 
-      const auto o = Kokkos::max(static_cast<float>(concentrations(1)),0.F);
+      const auto o = Kokkos::max(static_cast<float>(concentrations(1)), 0.F);
       const float phi_o2 = (phi_o2_max)*o / (o + k_o); // gO2/s
       const float nu_1_star =
           y_sx * MolarMassG * Kokkos::min(phi_s / MolarMassG, phi_o2 / MolarMassO2 / y_os); // gX/s
 
-      const float s_1_star = (1 / y_sx /MolarMassG* nu_1_star);
+      const float s_1_star = (1 / y_sx * nu_1_star);
       const float phi_s_residual_1_star = Kokkos::max(phi_s - s_1_star, 0.F);
-      KOKKOS_ASSERT(phi_s_residual_1_star>=0.F);
-      const float nu_2_star = y_sxf * phi_s_residual_1_star;   // gX/s
+      KOKKOS_ASSERT(phi_s_residual_1_star >= 0.F);
+      const float nu_2_star = y_sxf * phi_s_residual_1_star; // gX/s
 
-            
       nu_eff_1 = Kokkos::min(nu_1_star, nu1); // gX/s
       const float s_1 = (1 / y_sx * nu_eff_1);
       const float phi_s_residual_1 = Kokkos::max(phi_s - s_1, 0.F);
-      
-      nu_eff_2 = Kokkos::min( y_sxf * phi_s_residual_1, nu2); // gX/s
-      KOKKOS_ASSERT(nu_eff_1>=0.F);
-      KOKKOS_ASSERT(nu_eff_2>=0.F);
+
+      nu_eff_2 = Kokkos::min(y_sxf * phi_s_residual_1, nu2); // gX/s
+      KOKKOS_ASSERT(nu_eff_1 >= 0.F);
+      KOKKOS_ASSERT(nu_eff_2 >= 0.F);
+
       const float s_growth = s_1 + (1 / y_sxf * nu_eff_2);
       const float s_overflow = phi_s - s_growth;
-   
+
       p.status = (length > l_cp) ? MC::CellStatus::CYTOKINESIS : MC::CellStatus::IDLE;
 
-      // double gamma = 1/(1+Kokkos::exp(-4*(length-l_max/2.)));
-      // Kokkos::printf("%lf\r\n", phi_s_residual_1_star);
+      // const double gamma = 1. / (1. + Kokkos::exp(-20.3 * (length - l_max)*1e6));
 
-      // update_division_status(p.status,
-      // d_t,
-      // gamma,
-      // _rng.random_pool);
+      // Kokkos::printf("%f %f\r\n",gamma,length);
 
+      // update_division_status(p.status, d_t, gamma, _rng.random_pool);
 
       contrib.phi_s = -phi_s;
       contrib.phi_o =
@@ -162,7 +157,7 @@ namespace Models
 
     KOKKOS_FUNCTION Meta2 division(MC::ParticleDataHolder& p, MC::KPRNG _rng)
     {
-            constexpr auto n = implEcoli2::NPermease_max;
+      constexpr auto n = implEcoli2::NPermease_max;
       constexpr auto l_c = implEcoli2::l_c;
       constexpr double minimal_length = implEcoli2::minimal_length;
       constexpr double l_max = implEcoli2::l_max;
@@ -174,12 +169,9 @@ namespace Models
       length = l;
       child_pimpl.length = l;
       auto g = _rng.random_pool.get_state();
-      child_pimpl.l_cp =
-          Kokkos::min(Kokkos::max(minimal_length,
-                                  g.normal(l_c, l_c / 6.)),
-                      l_max);
+      child_pimpl.l_cp = Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 6.)), l_max);
 
-      Uptake::distribute_division<float>(*this, child_pimpl,g);
+      Uptake::distribute_division<float>(*this, child_pimpl, g);
       _rng.random_pool.free_state(g);
       return child_pimpl;
     }
@@ -207,7 +199,7 @@ namespace Models
 
     static std::vector<std::string> names()
     {
-      return {"mass", "length", "nu1", "nu2", "nu_eff_1","nu_eff_2","a_pts", "a_permease"};
+      return {"mass", "length", "nu1", "nu2", "nu_eff_1", "nu_eff_2", "a_pts", "a_permease"};
     }
 
     KOKKOS_INLINE_FUNCTION static std::size_t get_number()

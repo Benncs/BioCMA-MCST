@@ -68,6 +68,8 @@ namespace Simulation
 
     [[nodiscard]] std::span<double> getCliqData() const;
     [[nodiscard]] std::optional<std::span<const double>> getCgasData() const;
+
+    [[nodiscard]] std::optional<std::span<const double>> getMTRData() const;
     [[nodiscard]] Dimensions getDimensions() const noexcept;
     [[nodiscard]] std::span<const double> getContributionData() const;
     [[nodiscard]] const Simulation::Feed::SimulationFeed& get_feed() const;
@@ -233,7 +235,8 @@ namespace Simulation
     Kokkos::parallel_for(
         "update_compartment_number", process_buffer.size(), KOKKOS_LAMBDA(const int i) {
           Kokkos::atomic_increment(
-              &local_compartments(process_buffer._owned_data(i).properties.current_container).n_cells);
+              &local_compartments(process_buffer._owned_data(i).properties.current_container)
+                   .n_cells);
         });
 
     static constexpr uint64_t minimum_dead_particle_removal = 100;

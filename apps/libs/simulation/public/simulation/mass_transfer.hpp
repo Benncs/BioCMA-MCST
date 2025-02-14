@@ -17,6 +17,14 @@ namespace Simulation::MassTransfer
     FixedKla,
   };
 
+  enum class MTRSign:int
+  {
+    GasToLiquid=-1,
+    LiquidToGas=1,
+  };
+
+  static_assert(static_cast<float>(MTRSign::GasToLiquid)==-1., "Sign mtr");
+
   struct MassTransferProxy;
 
   class MassTransferModel
@@ -28,38 +36,24 @@ namespace Simulation::MassTransfer
 
     void gas_liquid_mass_transfer(const CmaRead::ReactorState& state) const;
 
-    [[nodiscard]] MassTransferProxy* proxy() const;
+    [[nodiscard]] const std::shared_ptr<MassTransferProxy>& proxy() const;
 
-    MassTransferModel(MassTransferModel&& rhs) noexcept
-        : type(rhs.type), _proxy(rhs._proxy), liquid_scalar(std::move(rhs.liquid_scalar)),
-          gas_scalar(std::move(rhs.gas_scalar))
-    {
-      rhs._proxy = nullptr; 
-    }
 
-    MassTransferModel& operator=(MassTransferModel&& rhs) noexcept
-    {
-      if (this != &rhs)
-      { 
-        type = rhs.type;
-        _proxy = rhs._proxy;
-        liquid_scalar = std::move(rhs.liquid_scalar);
-        gas_scalar = std::move(rhs.gas_scalar);
+    [[nodiscard]] std::optional<std::span<const double>> mtr_data()const;
 
-        rhs._proxy = nullptr; 
-      }
-      return *this;
-    }
+    MassTransferModel(MassTransferModel&& rhs) noexcept;
 
-    // MassTransferModel(const MassTransferModel& rhs) = default;
-    // MassTransferModel& operator=(const MassTransferModel& rhs) = default;
+    MassTransferModel& operator=(MassTransferModel&& rhs) noexcept;
+    
+
+  
     ~MassTransferModel();
 
     MassTransferModel();
 
   private:
     MassTransfer::MTRType type;
-    MassTransferProxy* _proxy;
+    std::shared_ptr<MassTransferProxy> _proxy;
     std::shared_ptr<Simulation::ScalarSimulation> liquid_scalar;
     std::shared_ptr<Simulation::ScalarSimulation> gas_scalar;
   };

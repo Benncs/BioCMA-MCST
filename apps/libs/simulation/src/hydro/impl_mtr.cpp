@@ -75,7 +75,7 @@ namespace Simulation::MassTransfer
       const double schmidtnumber = kinematic_viscosity / oxygen_diffusion_constant;
 
       constexpr double db = 5e-3;
-      const auto energy_dissipation_array = Eigen::Map<Eigen::ArrayXd>(
+      const Eigen::Map<Eigen::ArrayXd> energy_dissipation_array = Eigen::Map<Eigen::ArrayXd>(
           const_cast<double*>(state.energy_dissipation.data()), state.energy_dissipation.size());
 
 #define kl_array                                                                                   \
@@ -86,6 +86,8 @@ namespace Simulation::MassTransfer
 #define res_kla_array (kl_array * interfacial_area).transpose()
 
       mtr.kla.row(1) = res_kla_array.transpose();
+
+      // std::cout<<mtr.kla<<std::endl<<"\r\n";
 
       
 #define c_star (3.181e-2 * gas_scalar->getConcentrationArray())

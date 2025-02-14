@@ -1,6 +1,7 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
+#include <simulation/mass_transfer.hpp>
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
@@ -63,11 +64,14 @@ namespace Simulation
     bool deep_copy_concentration(const std::vector<double>& data);
     void reduce_contribs(std::span<const double> data);
 
-    void performStep(double d_t,
+    void performStepGL(double d_t,
                      const FlowMatrixType& m_transition,
-                     const MatrixType& transfer_gas_liquid);
+                     const MatrixType& mtr,MassTransfer::MTRSign sign);
 
-    void performStep(double d_t, const FlowMatrixType& m_transition);
+    void performStep(double d_t,
+                     const FlowMatrixType& m_transition);
+
+    // void performStep(double d_t, const FlowMatrixType& m_transition);
 
     // Getters
     [[nodiscard]] KokkosScalarMatrix<ComputeSpace> get_device_concentration() const;

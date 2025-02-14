@@ -21,6 +21,8 @@ namespace Simulation::MassTransfer
   {
     MatrixType mtr;
     Eigen::ArrayXXd kla;
+
+
   };
   
   namespace Impl

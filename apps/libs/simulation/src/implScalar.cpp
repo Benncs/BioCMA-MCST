@@ -58,8 +58,6 @@ namespace Simulation
     this->sink = DiagonalType(n_col);
     this->sink.setZero();
 
-
-
     // todo remove
     view = CmaRead::L2DView<double>({this->concentrations.eigen_data.data(),
                                      static_cast<size_t>(this->concentrations.eigen_data.size())},
@@ -95,10 +93,25 @@ namespace Simulation
         const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
   }
 
-  //TODO OPTI
+  void ScalarSimulation::performStepGL(double d_t,
+                                       const FlowMatrixType& m_transition,
+                                       const MatrixType& mtr,
+                                       MassTransfer::MTRSign sign)
+  {
+    PROFILE_SECTION("performStep_gl")
+#define c concentrations.eigen_data
+
+    total_mass = total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data +
+                                     static_cast<float>(sign) * mtr);
+    c = total_mass * volumes_inverse;
+
+    // Make accessible new computed concentration to ComputeSpace
+    concentrations.update_host_to_compute();
+  }
+
   void ScalarSimulation::performStep(double d_t, const FlowMatrixType& m_transition)
   {
-    PROFILE_SECTION("performStep")
+    PROFILE_SECTION("performStep_gl")
 #define c concentrations.eigen_data
 
     total_mass = total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data);
@@ -107,24 +120,6 @@ namespace Simulation
     // Make accessible new computed concentration to ComputeSpace
     concentrations.update_host_to_compute();
   }
-
-  void ScalarSimulation::performStep(double d_t,
-                                     const FlowMatrixType& m_transition,
-                                     const Eigen::MatrixXd& transfer_gas_liquid)
-  {
-    PROFILE_SECTION("performStep_gl")
-#define c concentrations.eigen_data
-
-    total_mass =
-        total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data + transfer_gas_liquid);
-    c = total_mass * volumes_inverse;
-
-    // Make accessible new computed concentration to ComputeSpace
-    concentrations.update_host_to_compute();
-  }
-
-
-
 
   bool ScalarSimulation::deep_copy_concentration(const std::vector<double>& data)
   {

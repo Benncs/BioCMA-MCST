@@ -22,6 +22,10 @@ if compiler.has_argument('-flto')
   flto_flag = '-flto'
 endif
 
+if compiler.has_argument('-dlto')
+  flto_flag = '-dlto'
+endif
+
 if compiler.has_argument('-mtune=native')
   arch_specific_args = [arch_specific_args, '-mtune=native']
 endif
