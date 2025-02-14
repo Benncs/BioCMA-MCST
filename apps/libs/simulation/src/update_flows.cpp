@@ -5,10 +5,10 @@
 #include <cma_read/flowmap.hpp>
 #include <cmath>
 #include <ctime>
-#include <pc_hydro.hpp>
+#include <cma_utils/cache_hydro_state.hpp>
 #include <simulation/transitionner.hpp>
 #include <stdexcept>
-#include <transport.hpp>
+#include <cma_utils/transport.hpp>
 
 double linter(double a, double b, double t)
 {
@@ -19,7 +19,7 @@ namespace Simulation
 {
 
   static void compute_MatFlow(const CmaRead::FlowMap::FlowMap_const_view_t& flows_view,
-                              Simulation::PreCalculatedHydroState& matflow)
+                              CmaUtils::PreCalculatedHydroState& matflow)
   {
     PROFILE_SECTION("host:compute_MatFlow")
     matflow.set_transition_matrix(flows_view); // FIX THIS
@@ -65,7 +65,7 @@ namespace Simulation
         n_per_flowmap(_n_per_flowmap), n_flowmap(_n_flowmap), n_timestep(number_time_step),
         current_flowmap_count(0), repetition_count(0), current_index(0)
   {
-    this->interpolated_state = new TransitionState;
+    this->interpolated_state = new CmaUtils::TransitionState;
 
     // transtion_state.resize(n_flowmap);
     this->liquid_pc.resize(n_flowmap);
@@ -87,9 +87,9 @@ namespace Simulation
     }
   }
 
-  void linter_eigen(const PreCalculatedHydroState& current,
-                    const PreCalculatedHydroState& next,
-                    PreCalculatedHydroState& interpolated,
+  void linter_eigen(const CmaUtils::PreCalculatedHydroState& current,
+                    const CmaUtils::PreCalculatedHydroState& next,
+                    CmaUtils::PreCalculatedHydroState& interpolated,
                     double t)
   {
     interpolated.cumulative_probability =
@@ -258,7 +258,7 @@ namespace Simulation
   void FlowMapTransitioner::calculate_liquid_state(
       const CmaRead::FlowMap::FlowMap_const_view_t& mat_f_liq_view,
       const CmaRead::Neighbors::Neighbors_const_view_t& neighbors,
-      PreCalculatedHydroState* liq_hydro_state)
+      CmaUtils::PreCalculatedHydroState* liq_hydro_state)
   {
     PROFILE_SECTION("host:calculate_liquid_state")
     compute_MatFlow(mat_f_liq_view, *liq_hydro_state);
@@ -269,8 +269,8 @@ namespace Simulation
   // ok dont modify
   void FlowMapTransitioner::calculate_full_state(const CmaRead::ReactorState& reactor_state,
                                                  const Simulation::SimulationUnit& unit,
-                                                 PreCalculatedHydroState* liq_hydro_state,
-                                                 PreCalculatedHydroState* gas_hydro_state)
+                                                 CmaUtils::PreCalculatedHydroState* liq_hydro_state,
+                                                 CmaUtils::PreCalculatedHydroState* gas_hydro_state)
   {
     calculate_liquid_state(
          reactor_state.liquid_flow.getViewFlows(), reactor_state.liquid_flow.getViewNeighors(),liq_hydro_state);

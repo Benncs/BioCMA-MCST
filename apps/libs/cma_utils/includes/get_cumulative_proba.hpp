@@ -1,13 +1,10 @@
 #ifndef __GET_CUMULATIVE_PROBABILITY_HPP__
 #define __GET_CUMULATIVE_PROBABILITY_HPP__
 
-#include "common/kokkos_vector.hpp"
-#include <pc_hydro.hpp>
+#include <cma_utils/cache_hydro_state.hpp>
 #include <Eigen/Core>
-#include <Eigen/Dense>
-#include <Eigen/Sparse>
 #include <cma_read/neighbors.hpp>
-namespace Simulation
+namespace CmaUtils
 {
   using CumulativeProbaType= Eigen::Matrix<double, -1, -1, Eigen::RowMajor>;
   /**

@@ -1,10 +1,10 @@
-#include "Kokkos_Core.hpp"
-#include "common/kokkos_vector.hpp"
-#include "get_cumulative_proba.hpp"
-#include <pc_hydro.hpp>
-#include <transport.hpp>
+#include <cma_utils/cache_hydro_state.hpp>
+#include <Kokkos_Core.hpp>
+#include <common/kokkos_vector.hpp>
+#include <get_cumulative_proba.hpp>
+#include <cma_utils/transport.hpp>
 
-namespace Simulation
+namespace CmaUtils
 {
   PreCalculatedHydroState::PreCalculatedHydroState(const FlowMatrixType& _tm)
       : transition_matrix(_tm), diagonal_compute("diagonal_compute",0)
@@ -35,8 +35,8 @@ namespace Simulation
       const CmaRead::FlowMap::FlowMap_const_view_t& flows_view)
   {
 
-    transition_matrix = Simulation::get_transition_matrix(flows_view);
-    set_diag_transition(Simulation::get_diag_transition(transition_matrix));
+    transition_matrix = CmaUtils::get_transition_matrix(flows_view);
+    set_diag_transition(CmaUtils::get_diag_transition(transition_matrix));
   }
 
   void PreCalculatedHydroState::set_transition_matrix(FlowMatrixType&& matrix)
@@ -51,4 +51,4 @@ namespace Simulation
 
   }
 
-}; // namespace Simulation
+}; // namespace CmaUtils

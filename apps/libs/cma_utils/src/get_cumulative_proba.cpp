@@ -1,8 +1,10 @@
-#include "common/common.hpp"
+#include <common/common.hpp>
 #include <get_cumulative_proba.hpp>
-#include <iostream>
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
 
-namespace Simulation
+namespace CmaUtils
 {
   CumulativeProbaType get_cumulative_probabilities(
       CmaRead::Neighbors::Neighbors_const_view_t neighbors,

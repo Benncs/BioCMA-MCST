@@ -2,14 +2,15 @@
 #include <cassert>
 #include <hydro/impl_mass_transfer.hpp>
 #include <scalar_simulation.hpp>
-#include <utility>
-
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
 namespace
 {
 
   constexpr double c_kinematic_viscosity(double temp);
 
-  Eigen::ArrayXXd get_gas_fraction(const CmaRead::ReactorState& state)
+  inline auto get_gas_fraction(const CmaRead::ReactorState& state)
   {
     const auto gas_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.gasVolume.data()),
                                                       state.gasVolume.size());
@@ -18,6 +19,20 @@ namespace
         const_cast<double*>(state.liquidVolume.data()), state.liquidVolume.size());
 
     return (gas_array / (liq_array + gas_array));
+  }
+
+  inline auto get_interfacial_area(const double db, const CmaRead::ReactorState& state)
+  {
+    return 6. * get_gas_fraction(state) / db;
+  }
+
+  template <typename G, typename K>
+  inline auto kl_correlation(const double schmidtnumber,
+                                        const G& kinematic_viscosity,
+                                        const K& energy_dissipation_array)
+  {
+    return 0.3 * (energy_dissipation_array * kinematic_viscosity).pow(0.25) *
+           std::pow(schmidtnumber, -0.5);
   }
 
   // Code from
@@ -66,34 +81,27 @@ namespace Simulation::MassTransfer
     constexpr double temperature = 20.;
 
     void flowmap_gas_liquid_mass_transfer(MassTransferProxy& mtr,
-                                          const std::shared_ptr<ScalarSimulation>& liquid_scalar,
-                                          const std::shared_ptr<ScalarSimulation>& gas_scalar,
+                                          const Eigen::ArrayXXd& liquid_concentration,
+                                          const Eigen::ArrayXXd& gas_concentration,
+                                          const Eigen::MatrixXd& liquid_volume,
                                           const CmaRead::ReactorState& state)
     {
+
       const double kinematic_viscosity = c_kinematic_viscosity(temperature);
 
       const double schmidtnumber = kinematic_viscosity / oxygen_diffusion_constant;
 
-      constexpr double db = 5e-3;
       const Eigen::Map<Eigen::ArrayXd> energy_dissipation_array = Eigen::Map<Eigen::ArrayXd>(
           const_cast<double*>(state.energy_dissipation.data()), state.energy_dissipation.size());
 
-#define kl_array                                                                                   \
-  (0.3 * (energy_dissipation_array * kinematic_viscosity).pow(0.25) * std::pow(schmidtnumber, -0.5))
+      mtr.kla.row(1) =
+          kl_correlation(schmidtnumber, kinematic_viscosity, energy_dissipation_array.transpose()) *
+          get_interfacial_area(mtr.db, state);
 
-#define interfacial_area (6 * get_gas_fraction(state) / db)
-
-#define res_kla_array (kl_array * interfacial_area).transpose()
-
-      mtr.kla.row(1) = res_kla_array.transpose();
-
-      // std::cout<<mtr.kla<<std::endl<<"\r\n";
-
-      
-#define c_star (3.181e-2 * gas_scalar->getConcentrationArray())
+      const Eigen::ArrayXd c_star = (mtr.Henry * gas_concentration);
 
       mtr.mtr = Simulation::MassTransfer::impl_mtr(
-          mtr.kla, liquid_scalar->getConcentrationArray(), c_star, liquid_scalar->getVolume());
+          mtr.kla, liquid_concentration, c_star, liquid_volume);
     }
 
   } // namespace Impl

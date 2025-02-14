@@ -19,10 +19,10 @@
 namespace Core
 {
 
-  static inline std::string get_filename(std::string_view filename, std::size_t current_rank)
-  {
-    return std::string(filename) + "_partial_" + std::to_string(current_rank) + ".h5";
-  }
+  // static inline std::string get_filename(std::string_view filename, std::size_t current_rank)
+  // {
+  //   return std::string(filename) + "_partial_" + std::to_string(current_rank) + ".h5";
+  // }
 
   /**
    * @class DataExporter

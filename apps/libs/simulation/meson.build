@@ -43,7 +43,7 @@ simulation_lib = static_library(
       public_simulation_includes,
       private_simulation_includes,
    ],
-   dependencies: [simulation_public_dependencies, private_dependencies],
+   dependencies: [simulation_public_dependencies, private_dependencies,cma_utils_dependency],
    # pic: true,
    # install: true,
    install_rpath: global_install_dir,

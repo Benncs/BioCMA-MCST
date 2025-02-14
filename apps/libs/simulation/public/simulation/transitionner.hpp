@@ -6,12 +6,17 @@
 #include <cstddef>
 #include <memory>
 
+namespace CmaUtils
+{
+  class PreCalculatedHydroState;
+  struct TransitionState;
+} // namespace CmaUtils
+
 // Foward declaration
 namespace Simulation
 {
   class SimulationUnit;
-  class PreCalculatedHydroState;
-  struct TransitionState;
+
 } // namespace Simulation
 
 namespace Simulation
@@ -69,12 +74,12 @@ namespace Simulation
 
     void calculate_full_state(const CmaRead::ReactorState& reactor_state,
                               const Simulation::SimulationUnit& unit,
-                              PreCalculatedHydroState* liq_hydro_state,
-                              PreCalculatedHydroState* gas_hydro_state);
+                              CmaUtils::PreCalculatedHydroState* liq_hydro_state,
+                              CmaUtils::PreCalculatedHydroState* gas_hydro_state);
 
     void calculate_liquid_state(const CmaRead::FlowMap::FlowMap_const_view_t& mat_f_liq_view,
                                 const CmaRead::Neighbors::Neighbors_const_view_t& neighbors,
-                                PreCalculatedHydroState* liq_hydro_state);
+                                CmaUtils::PreCalculatedHydroState* liq_hydro_state);
 
     void (FlowMapTransitioner::*f_update)(Simulation::SimulationUnit& unit);
 
@@ -92,12 +97,12 @@ namespace Simulation
     size_t current_flowmap_count;
     size_t repetition_count;
 
-    std::vector<PreCalculatedHydroState> liquid_pc;
-    std::vector<PreCalculatedHydroState> gas_pc;
+    std::vector<CmaUtils::PreCalculatedHydroState> liquid_pc;
+    std::vector<CmaUtils::PreCalculatedHydroState> gas_pc;
 
-    PreCalculatedHydroState* current_liq_hydro_state = nullptr;
-    PreCalculatedHydroState* current_gas_hydro_state = nullptr;
-    TransitionState* interpolated_state;
+    CmaUtils::PreCalculatedHydroState* current_liq_hydro_state = nullptr;
+    CmaUtils::PreCalculatedHydroState* current_gas_hydro_state = nullptr;
+    CmaUtils::TransitionState* interpolated_state;
 
     const CmaRead::ReactorState* current_state = nullptr;
     size_t current_index;

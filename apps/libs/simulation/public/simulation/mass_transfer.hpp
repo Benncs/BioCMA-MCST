@@ -17,13 +17,13 @@ namespace Simulation::MassTransfer
     FixedKla,
   };
 
-  enum class MTRSign:int
+  enum class MTRSign : int
   {
-    GasToLiquid=-1,
-    LiquidToGas=1,
+    GasToLiquid = -1,
+    LiquidToGas = 1,
   };
 
-  static_assert(static_cast<float>(MTRSign::GasToLiquid)==-1., "Sign mtr");
+  static_assert(static_cast<float>(MTRSign::GasToLiquid) == -1., "Sign mtr");
 
   struct MassTransferProxy;
 
@@ -38,15 +38,14 @@ namespace Simulation::MassTransfer
 
     [[nodiscard]] const std::shared_ptr<MassTransferProxy>& proxy() const;
 
-
-    [[nodiscard]] std::optional<std::span<const double>> mtr_data()const;
+    [[nodiscard]] std::optional<std::span<const double>> mtr_data() const;
 
     MassTransferModel(MassTransferModel&& rhs) noexcept;
-
     MassTransferModel& operator=(MassTransferModel&& rhs) noexcept;
-    
 
-  
+    MassTransferModel(const MassTransferModel& rhs) = delete;
+    MassTransferModel& operator=(const MassTransferModel& rhs) = delete;
+
     ~MassTransferModel();
 
     MassTransferModel();

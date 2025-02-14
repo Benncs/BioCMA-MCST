@@ -35,12 +35,12 @@
 
    <control name="sanofi">
       <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path>
-      <final_time>1800</final_time>
+      <final_time>50</final_time>
       <!-- <final_time>36</final_time> -->
-      <numper_particle>50000</numper_particle>
+      <numper_particle>500000</numper_particle>
       <delta_time>0</delta_time>
       <results_file_name>test_sanofi</results_file_name>
-      <number_exported_result>50</number_exported_result>
+      <number_exported_result>10</number_exported_result>
       <model_name>model_meta2</model_name>
       <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>
    </control>

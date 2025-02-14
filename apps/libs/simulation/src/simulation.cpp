@@ -21,13 +21,13 @@
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
-#include <transport.hpp>
+#include <cma_utils/transport.hpp>
 #include <utility>
 
 namespace Simulation
 {
 
-  SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept=default;
+  SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept = default;
   //     : mc_unit(std::move(other.mc_unit)), internal_counter_dead(other.internal_counter_dead),
   //       waiting_allocation_particle(std::move(other.waiting_allocation_particle)),
   //       flow_liquid(other.flow_liquid), flow_gas(other.flow_gas),
@@ -39,40 +39,35 @@ namespace Simulation
                                  const ScalarInitializer& scalar_init,
                                  std::optional<Feed::SimulationFeed> _feed)
       : mc_unit(std::move(_unit)), internal_counter_dead(0),
-        waiting_allocation_particle("waiting_allocation_particle"), flow_liquid(nullptr),
-        flow_gas(nullptr), is_two_phase_flow(scalar_init.gas_flow), move_info()
+        waiting_allocation_particle("waiting_allocation_particle"),
+        feed(_feed.value_or(Feed::SimulationFeed{std::nullopt, std::nullopt})),
+        is_two_phase_flow(scalar_init.gas_flow), move_info()
   {
-   
-    this->liquid_scalar = std::shared_ptr<ScalarSimulation>(makeScalarSimulation(
-        mc_unit->domain.getNumberCompartments(), scalar_init.n_species, scalar_init.volumesliq));
 
-    this->gas_scalar = (is_two_phase_flow)
-                           ? std::shared_ptr<ScalarSimulation>(makeScalarSimulation(
-                                 mc_unit->domain.getNumberCompartments(),
-                                 scalar_init.n_species,
-                                 scalar_init.volumesgas)) // No contribs for gas
-                           : nullptr;
+    this->liquid_scalar = std::make_shared<ScalarSimulation>(
+        mc_unit->domain.getNumberCompartments(), scalar_init.n_species, scalar_init.volumesliq);
+
+    this->gas_scalar =
+        (is_two_phase_flow)
+            ? std::make_shared<ScalarSimulation>(mc_unit->domain.getNumberCompartments(),
+                                                 scalar_init.n_species,
+                                                 scalar_init.volumesgas) // No contribs for gas
+            : nullptr;
 
     post_init_concentration(scalar_init);
     post_init_compartments();
-
-    this->feed =
-        _feed.has_value() ? std::move(*_feed) : Feed::SimulationFeed{std::nullopt, std::nullopt};
 
     const std::size_t n_flows = (this->feed.liquid.has_value()) ? this->feed.liquid->size() : 0;
 
     move_info.index_leaving_flow = LeavingFlowIndexType("index_leaving_flow", n_flows);
     move_info.leaving_flow = LeavingFlowType("leaving_flow", n_flows);
 
-    if(is_two_phase_flow)
+    if (is_two_phase_flow)
     {
-      this->mt_model = MassTransfer::MassTransferModel(MassTransfer::MTRType::Flowmap,liquid_scalar,gas_scalar);
+      this->mt_model = MassTransfer::MassTransferModel(
+          MassTransfer::MTRType::Flowmap, liquid_scalar, gas_scalar);
     }
-
-
   }
-
-
 
   void SimulationUnit::setVolumes(std::span<const double> volumesgas,
                                   std::span<const double> volumesliq) const
@@ -153,12 +148,26 @@ namespace Simulation
 
   void SimulationUnit::post_init_concentration_functor(const ScalarInitializer& scalar_init)
   {
-    CmaRead::L2DView<double> cliq = this->liquid_scalar->getConcentrationView();
+    // CmaRead::L2DView<double> cliq = this->liquid_scalar->getConcentrationView();
+
+    auto cliqdata = this->liquid_scalar->getConcentrationData();
+
+    auto get_view = [this](auto&& cdata)
+    {
+      return CmaRead::L2DView<double>({cdata.data(),
+                                     static_cast<size_t>(cdata.size())},
+                                    this->liquid_scalar->n_row(),
+                                    this->liquid_scalar->n_col(),
+                                    false);
+    };
+
+    auto cliq = get_view(cliqdata);
+
     CmaRead::L2DView<double> c;
     if (is_two_phase_flow)
     {
       assert(this->gas_scalar != nullptr);
-      c = this->gas_scalar->getConcentrationView();
+      c = get_view(this->gas_scalar->getConcentrationData());
       assert(c.size() != 0);
     }
 
@@ -224,7 +233,7 @@ namespace Simulation
     Kokkos::fence();
   }
 
-  SimulationUnit::~SimulationUnit()=default;
+  SimulationUnit::~SimulationUnit() = default;
 
   DiagonalView<ComputeSpace> SimulationUnit::get_kernel_diagonal()
   {

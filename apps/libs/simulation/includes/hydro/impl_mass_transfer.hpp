@@ -1,13 +1,10 @@
 #ifndef __IMPL_HYDRO_MASS_TRANSFER_HPP__
 #define __IMPL_HYDRO_MASS_TRANSFER_HPP__
 
-#include "scalar_simulation.hpp"
 #include <Eigen/Core>
 #include <Eigen/Dense>
-#include <Eigen/Sparse>
 #include <cma_read/reactorstate.hpp>
 #include <mc/domain.hpp>
-#include <memory>
 #include <simulation/mass_transfer.hpp>
 
 namespace Simulation
@@ -19,19 +16,24 @@ namespace Simulation::MassTransfer
 {
   struct MassTransferProxy
   {
-    MatrixType mtr;
+    Eigen::MatrixXd mtr;
     Eigen::ArrayXXd kla;
-
-
+    Eigen::ArrayXd Henry;
+    double db;
   };
+
+  
   
   namespace Impl
   {
 
     void flowmap_gas_liquid_mass_transfer(MassTransferProxy& mtr,
-                                          const std::shared_ptr<ScalarSimulation>& liquid_scalar,
-                                          const std::shared_ptr<ScalarSimulation>& gas_scalar,
+                                          const Eigen::ArrayXXd& liquid_concentration,
+                                          const Eigen::ArrayXXd& gas_concentration,
+                                          const Eigen::MatrixXd& liquid_volume,
                                           const CmaRead::ReactorState& state);
+
+   
   }; // namespace Impl
 
   struct KlFonctor

@@ -1,8 +1,6 @@
 #ifndef __MODELS_SIMPLE_ECOLI_HPP__
 #define __MODELS_SIMPLE_ECOLI_HPP__
 
-#include "Kokkos_Assert.hpp"
-#include "Kokkos_Printf.hpp"
 #include <mc/particles/particle_model.hpp>
 #include <models/uptake.hpp>
 #include <models/utils.hpp>
@@ -86,8 +84,7 @@ namespace Models
 
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
     {
-
-      constexpr auto n = implEcoli2::NPermease_max;
+      (void)p;
       constexpr auto l_c = implEcoli2::l_c;
       constexpr double minimal_length = implEcoli2::minimal_length;
       constexpr double l_max = implEcoli2::l_max;
@@ -97,10 +94,9 @@ namespace Models
 
       contrib = {0., 0.0, 0.};
       auto g = _rng.random_pool.get_state();
-
       Uptake::distribute_init<float>(*this, g);
-      length = (float)Kokkos::max((double)minimal_length, g.normal(minimal_length, 0.7e-6));
-      l_cp = Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 7.)), l_max);
+      length = static_cast<float>(Kokkos::max(minimal_length, g.normal(minimal_length, 0.7e-6)));
+      l_cp = static_cast<float>(Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 7.)), l_max));
       _rng.random_pool.free_state(g);
     }
 
@@ -157,7 +153,7 @@ namespace Models
 
     KOKKOS_FUNCTION Meta2 division(MC::ParticleDataHolder& p, MC::KPRNG _rng)
     {
-      constexpr auto n = implEcoli2::NPermease_max;
+      (void)p;
       constexpr auto l_c = implEcoli2::l_c;
       constexpr double minimal_length = implEcoli2::minimal_length;
       constexpr double l_max = implEcoli2::l_max;
@@ -169,7 +165,7 @@ namespace Models
       length = l;
       child_pimpl.length = l;
       auto g = _rng.random_pool.get_state();
-      child_pimpl.l_cp = Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 6.)), l_max);
+      child_pimpl.l_cp = static_cast<float>(Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 6.)), l_max));
 
       Uptake::distribute_division<float>(*this, child_pimpl, g);
       _rng.random_pool.free_state(g);

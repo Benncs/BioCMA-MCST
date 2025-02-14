@@ -1,3 +1,6 @@
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
 #include <cassert>
 #include <hydro/impl_mass_transfer.hpp>
 #include <memory>
@@ -6,7 +9,6 @@
 #include <simulation/mass_transfer.hpp>
 #include <stdexcept>
 #include <utility>
-
 namespace Simulation::MassTransfer
 {
 
@@ -24,8 +26,11 @@ namespace Simulation::MassTransfer
     _proxy = std::make_shared<MassTransferProxy>();
     _proxy->mtr = MatrixType(nrow, ncol);
     _proxy->kla = Eigen::ArrayXXd(nrow, ncol);
-
+    _proxy->Henry = Eigen::ArrayXXd(liquid_scalar->n_row(), 1);
+    _proxy->Henry.setZero();
+    _proxy->Henry(1) = 3.181e-2;
     _proxy->kla.setZero();
+    _proxy->db = 5e-3;
   }
 
   void MassTransferModel::gas_liquid_mass_transfer(const CmaRead::ReactorState& state) const
@@ -45,7 +50,11 @@ namespace Simulation::MassTransfer
     };
     case Simulation::MassTransfer::MTRType::Flowmap:
     {
-      Impl::flowmap_gas_liquid_mass_transfer(*_proxy, liquid_scalar, gas_scalar, state);
+      Impl::flowmap_gas_liquid_mass_transfer(*_proxy,
+                                             liquid_scalar->getConcentrationArray(),
+                                             gas_scalar->getConcentrationArray(),
+                                             liquid_scalar->getVolume(),
+                                             state);
       break;
     }
     default:
@@ -76,28 +85,10 @@ namespace Simulation::MassTransfer
     return _proxy;
   }
 
-  MassTransferModel::~MassTransferModel()
-  {
-  }
+  MassTransferModel::~MassTransferModel() = default;
 
-  MassTransferModel::MassTransferModel(MassTransferModel&& rhs) noexcept
-      : type(rhs.type), _proxy(std::move(rhs._proxy)), liquid_scalar(std::move(rhs.liquid_scalar)),
-        gas_scalar(std::move(rhs.gas_scalar))
-  {
-  }
+  MassTransferModel::MassTransferModel(MassTransferModel&& rhs) noexcept = default;
 
-  MassTransferModel& MassTransferModel::operator=(MassTransferModel&& rhs) noexcept
-  {
-    if (this != &rhs)
-    {
-      type = rhs.type;
-      _proxy = std::move(rhs._proxy);
-      liquid_scalar = std::move(rhs.liquid_scalar);
-      gas_scalar = std::move(rhs.gas_scalar);
-
-      // rhs._proxy = nullptr;
-    }
-    return *this;
-  }
+  MassTransferModel& MassTransferModel::operator=(MassTransferModel&& rhs) noexcept = default;
 
 }; // namespace Simulation::MassTransfer

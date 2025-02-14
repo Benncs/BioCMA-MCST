@@ -6,46 +6,16 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <Kokkos_Core.hpp>
-#include <cma_read/light_2d_view.hpp>
 #include <common/common.hpp>
 #include <common/kokkos_vector.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <mc/particles/particle_model.hpp>
-#include <pc_hydro.hpp>
+#include <cma_utils/cache_hydro_state.hpp>
 #include <simulation/alias.hpp>
 #include <span>
 #include <vector>
-
-constexpr auto DataLayoutEigen = Eigen::ColMajor;
-constexpr auto CompileMatrixSizeEigen = -1;
-using MatrixType =
-    Eigen::Matrix<double, CompileMatrixSizeEigen, CompileMatrixSizeEigen, DataLayoutEigen>;
-using SparseMatrixType = Eigen::SparseMatrix<double, DataLayoutEigen>;
-using DiagonalType = Eigen::DiagonalMatrix<double, CompileMatrixSizeEigen>;
-
-template <typename ExecSpace>
-using KokkosScalarMatrix = Kokkos::View<double**, Kokkos::LayoutLeft, ExecSpace>;
-
-struct EigenKokkos
-{
-  KokkosScalarMatrix<HostSpace> host;
-  KokkosScalarMatrix<ComputeSpace> compute;
-  MatrixType eigen_data;
-
-  EigenKokkos(std::size_t n_row, std::size_t n_col);
-  [[nodiscard]] std::span<const double> get_span() const
-  {
-    return {eigen_data.data(), static_cast<size_t>(eigen_data.size())};
-  }
-  std::span<double> get_span()
-  {
-    return {eigen_data.data(), static_cast<size_t>(eigen_data.size())};
-  }
-
-  void update_host_to_compute() const;
-  void update_compute_to_host() const;
-};
+#include <eigen_kokkos.hpp>
 
 namespace Simulation
 {
@@ -78,8 +48,7 @@ namespace Simulation
     [[nodiscard]] std::span<double const> getVolumeData() const;
     [[nodiscard]] std::span<double> getContributionData() const;
     [[nodiscard]] const DiagonalType& getVolume() const;
-    [[nodiscard]] Eigen::ArrayXXd getConcentrationArray() const;
-    [[deprecated("remove depenency to cmaread")]] CmaRead::L2DView<double> getConcentrationView();
+    [[nodiscard]] auto getConcentrationArray() const;
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
     [[nodiscard]] const MatrixType& get_mass_transfer() const;
     [[nodiscard]] std::span<double> getConcentrationData();
@@ -113,7 +82,7 @@ namespace Simulation
     
   };
 
-  inline Eigen::ArrayXXd ScalarSimulation::getConcentrationArray() const
+  inline auto ScalarSimulation::getConcentrationArray() const
   {
     // return alloc_concentrations.array();
     return concentrations.eigen_data.array();

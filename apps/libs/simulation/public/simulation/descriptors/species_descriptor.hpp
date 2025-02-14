@@ -10,9 +10,18 @@ namespace Simulation
   {
     std::string name; 
     std::optional<double> molar_weight; 
+    std::optional<double> henry;
   };
 
   using SpecieTable = std::vector<Specie>;
+
+  struct EnvironementProperties
+  {
+    std::vector<Specie> species;
+    double bubble_diameter;
+  };
+
+  
 
 } // namespace Simulation
 

@@ -1,18 +1,25 @@
-#ifndef __SIMUALTION__PC_HYDRO_HPP__
-#define __SIMUALTION__PC_HYDRO_HPP__
+#ifndef __CACHE_HYDRO_STATE__
+#define __CACHE_HYDRO_STATE__
 
-#include "common/kokkos_vector.hpp"
-#include "simulation/alias.hpp"
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <cma_read/light_2d_view.hpp>
 #include <cma_read/reactorstate.hpp>
+#include <common/kokkos_vector.hpp>
 #include <vector>
+
+template <typename ExecSpace>
+using DiagonalView = Kokkos::
+    View<double*, Kokkos::LayoutLeft, ExecSpace, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+
+template <typename Space>
+using CumulativeProbabilityView =
+    Kokkos::View<double**, Kokkos::LayoutRight, Space, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
 using FlowMatrixType = Eigen::SparseMatrix<double>;
 
-namespace Simulation
+namespace CmaUtils
 {
 
   class PreCalculatedHydroState
@@ -36,11 +43,9 @@ namespace Simulation
     void set_cumulative_probability(const CmaRead::Neighbors::Neighbors_const_view_t& neighbors);
     void set_diag_transition(std::vector<double>&& diag);
 
-
     [[nodiscard]] const FlowMatrixType& get_transition() const;
     DiagonalView<ComputeSpace> get_kernel_diagonal();
 
-    
   private:
     DiagonalView<ComputeSpace> diagonal_compute;
     CumulativeProbabilityView<ComputeSpace> compute_cumulative_probability;
@@ -58,6 +63,6 @@ namespace Simulation
     PreCalculatedHydroState gas_pc;
   };
 
-} // namespace Simulation
+} // namespace CmaUtils
 
-#endif //__SIMUALTION__PC_HYDRO_HPP__
+#endif //__CACHE_HYDRO_STATE__

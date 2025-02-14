@@ -1,9 +1,7 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-
 #include <Kokkos_Core.hpp>
-#include <Kokkos_DynamicView.hpp>
 #include <common/common.hpp>
 #include <common/kokkos_vector.hpp>
 #include <scalar_simulation.hpp>
@@ -57,23 +55,11 @@ namespace Simulation
 
     this->sink = DiagonalType(n_col);
     this->sink.setZero();
-
-    // todo remove
-    view = CmaRead::L2DView<double>({this->concentrations.eigen_data.data(),
-                                     static_cast<size_t>(this->concentrations.eigen_data.size())},
-                                    this->concentrations.eigen_data.rows(),
-                                    this->concentrations.eigen_data.cols(),
-                                    false);
   }
 
   [[nodiscard]] KokkosScalarMatrix<ComputeSpace> ScalarSimulation::get_device_concentration() const
   {
     return concentrations.compute;
-  }
-
-  CmaRead::L2DView<double> ScalarSimulation::getConcentrationView()
-  {
-    return view;
   }
 
   std::size_t ScalarSimulation::n_col() const
