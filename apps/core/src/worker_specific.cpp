@@ -6,14 +6,14 @@
 #  include <mpi_w/wrap_mpi.hpp>
 #  include <impl_post_process.hpp>
 #  include <simulation/simulation.hpp>
-#  include <simulation/transitionner.hpp>
+#  include <cma_utils/transitionner.hpp>
 #  include <sync.hpp>
 #  include <worker_specific.hpp>
 
 void workers_process(const ExecInfo& exec,
                      Simulation::SimulationUnit& simulation,
                      const Core::SimulationParameters& params,
-                     std::unique_ptr<Simulation::FlowMapTransitioner>&& transitioner,
+                     std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,
                      Core::PartialExporter& partial_exporter)
 {
   double d_t = params.d_t;

@@ -3,12 +3,12 @@
 namespace CmaUtils
 {
 
-  CmaUtils::PreCalculatedHydroState& DiscontinuousFMT::current_liq_hydro_state()noexcept
+  CmaUtils::PreCalculatedHydroState& DiscontinuousFMT::current_liq_hydro_state() noexcept
   {
     return liquid_pc[getFlowIndex()];
   }
 
-  CmaUtils::PreCalculatedHydroState& DiscontinuousFMT::current_gas_hydro_state()noexcept
+  CmaUtils::PreCalculatedHydroState& DiscontinuousFMT::current_gas_hydro_state() noexcept
   {
     return gas_pc[getFlowIndex()];
   }
@@ -36,8 +36,6 @@ namespace CmaUtils
     {
       calculate_full_state(current_state, current_liq_hydro_state(), current_gas_hydro_state());
     }
-
-    // unit.mc_unit->domain.setLiquidNeighbors(current_state.liquid_flow.getViewNeighors);
   }
 
 } // namespace CmaUtils

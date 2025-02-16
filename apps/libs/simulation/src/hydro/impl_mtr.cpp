@@ -1,10 +1,11 @@
 #include "simulation/mass_transfer.hpp"
-#include <cassert>
-#include <hydro/impl_mass_transfer.hpp>
-#include <scalar_simulation.hpp>
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#include <cassert>
+#include <hydro/impl_mass_transfer.hpp>
+#include <scalar_simulation.hpp>
+
 namespace
 {
 
@@ -28,8 +29,8 @@ namespace
 
   template <typename G, typename K>
   inline auto kl_correlation(const double schmidtnumber,
-                                        const G& kinematic_viscosity,
-                                        const K& energy_dissipation_array)
+                             const G& kinematic_viscosity,
+                             const K& energy_dissipation_array)
   {
     return 0.3 * (energy_dissipation_array * kinematic_viscosity).pow(0.25) *
            std::pow(schmidtnumber, -0.5);
@@ -94,14 +95,18 @@ namespace Simulation::MassTransfer
       const Eigen::Map<Eigen::ArrayXd> energy_dissipation_array = Eigen::Map<Eigen::ArrayXd>(
           const_cast<double*>(state.energy_dissipation.data()), state.energy_dissipation.size());
 
+      assert(gas_concentration.stride() == liquid_concentration.stride());
+      assert(energy_dissipation_array.rows() == liquid_concentration.cols());
+
       mtr.kla.row(1) =
-          kl_correlation(schmidtnumber, kinematic_viscosity, energy_dissipation_array.transpose()) *
-          get_interfacial_area(mtr.db, state);
+          (kl_correlation(schmidtnumber, kinematic_viscosity, energy_dissipation_array) *
+           get_interfacial_area(mtr.db, state))
+              .transpose();
 
-      const Eigen::ArrayXd c_star = (mtr.Henry * gas_concentration);
-
-      mtr.mtr = Simulation::MassTransfer::impl_mtr(
-          mtr.kla, liquid_concentration, c_star, liquid_volume);
+  
+      // impl_mtr(mtr.kla,liquid_concentration,0.7* gas_concentration,liquid_volume);
+      
+      mtr.mtr = (mtr.kla*(gas_concentration.colwise()*mtr.Henry-liquid_concentration)).matrix()*liquid_volume;
     }
 
   } // namespace Impl

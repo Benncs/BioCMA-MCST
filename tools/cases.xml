@@ -13,7 +13,7 @@
 
    <control name="0d">
       <cma_case_path>/home_pers/casale/Documents/code/BioCMA-MCST/cma_data/0d/</cma_case_path>
-      <final_time>250000</final_time>
+      <final_time>250</final_time>
       <numper_particle>10000</numper_particle>
       <delta_time>0.2</delta_time>
       <results_file_name>monod_1</results_file_name>
@@ -23,9 +23,9 @@
    </control>
 
    <control name="0d_4s">
-      <cma_case_path>../../cfd-cma/cma_data/0d_gas/</cma_case_path>
-      <final_time>15000</final_time>
-      <numper_particle>50000</numper_particle>
+      <cma_case_path>../../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
+      <final_time>1500</final_time>
+      <numper_particle>5000</numper_particle>
       <delta_time>0.5</delta_time>
       <results_file_name>test_ferm</results_file_name>
       <number_exported_result>100</number_exported_result>
@@ -34,14 +34,14 @@
    </control>
 
    <control name="sanofi">
-      <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path>
-      <final_time>5</final_time>
+      <cma_case_path >../../../thesis/cfd-cma/sanofi/</cma_case_path>
+      <final_time>10</final_time>
       <!-- <final_time>36</final_time> -->
       <numper_particle>50000</numper_particle>
-      <delta_time>0</delta_time>
+      <delta_time>0.01</delta_time>
       <results_file_name>test_sanofi</results_file_name>
       <number_exported_result>10</number_exported_result>
-      <model_name>model_meta2</model_name>
+      <model_name>model_eta2</model_name>
       <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>
    </control>
 

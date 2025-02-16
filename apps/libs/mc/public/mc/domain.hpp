@@ -8,7 +8,6 @@
 #include <Kokkos_Macros.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 #include <cassert>
-#include <cma_read/neighbors.hpp>
 #include <cmt_common/macro_constructor_assignment.hpp>
 #include <common/common.hpp>
 #include <cstddef>
@@ -46,7 +45,9 @@ namespace MC
   class ReactorDomain
   {
   public:
-    SET_NON_COPYABLE(ReactorDomain)
+    
+    ReactorDomain(const ReactorDomain&) = delete;
+ReactorDomain& operator=(const ReactorDomain&) = delete;
 
     /**
      * @brief Default constructor
@@ -63,7 +64,7 @@ namespace MC
      * @brief Main constructor
      */
     ReactorDomain(std::span<double> volumes,
-                  const CmaRead::Neighbors::Neighbors_const_view_t& _neighbors);
+                  const NeighborsView<HostSpace>& _neighbors);
     /**
      * @brief Default destructor
      *
@@ -86,7 +87,7 @@ namespace MC
     /**
      * @brief Update neigbors of compartments
      */
-    void setLiquidNeighbors(const CmaRead::Neighbors::Neighbors_const_view_t& data);
+    void setLiquidNeighbors(const NeighborsView<HostSpace>& data);
 
     // GETTERS
     /**

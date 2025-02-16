@@ -1,3 +1,5 @@
+#include "cma_utils/iteration_state.hpp"
+#include <algorithm>
 #include <cma_utils/transitionner.hpp>
 #include <common/common.hpp>
 
@@ -16,18 +18,18 @@ namespace
 
     std::vector<double> inverse_diagonal(volumes.size());
 
-    std::transform(volumes.begin(),
-                   volumes.end(),
-                   inverse_diagonal.begin(),
-                   [](double volume)
-                   {
-                     if (volume == 0)
-                     {
-                       throw std::invalid_argument(
-                           "Setvolume: Null value of volume, matrix is not invertible");
-                     }
-                     return 1.0 / volume;
-                   });
+    std::ranges::transform(volumes,
+
+                           inverse_diagonal.begin(),
+                           [](double volume)
+                           {
+                             if (volume == 0)
+                             {
+                               throw std::invalid_argument(
+                                   "Setvolume: Null value of volume, matrix is not invertible");
+                             }
+                             return 1.0 / volume;
+                           });
 
     return inverse_diagonal;
   }
@@ -40,11 +42,18 @@ namespace
     compute_MatFlow(mat_f_liq_view, liq_hydro_state);
     liq_hydro_state.set_cumulative_probability(neighbors);
   }
+
 } // namespace
 
 namespace CmaUtils
 {
-
+  NeighborsView<ComputeSpace> FlowMapTransitionner::get_neighbors_view(
+      const CmaRead::Neighbors::Neighbors_const_view_t& liquid_neighbors)
+  {
+    return NeighborsView<ComputeSpace>(const_cast<size_t*>(liquid_neighbors.data().data()),
+                                       liquid_neighbors.getNRow(),
+                                       liquid_neighbors.getNCol());
+  }
   FlowMapTransitionner::FlowMapTransitionner(size_t _n_flowmap,
                                              size_t _n_per_flowmap,
                                              size_t number_time_step,
@@ -85,7 +94,7 @@ namespace CmaUtils
     calculate_liquid_state(reactor_state.liquid_flow.getViewFlows(),
                            reactor_state.liquid_flow.getViewNeighors(),
                            liq_hydro_state);
-
+    // liq_hydro_state.neighbors =
     liq_hydro_state.inverse_volume = compute_inverse_diagonal(reactor_state.liquidVolume);
     liq_hydro_state.volume = reactor_state.liquidVolume;
 
@@ -97,7 +106,7 @@ namespace CmaUtils
     }
   }
 
-  void FlowMapTransitionner::advance()
+  IterationState FlowMapTransitionner::advance()
   {
     // unit.setLiquidFlow(current_liq_hydro_state());
     // if (iterator)
@@ -109,12 +118,25 @@ namespace CmaUtils
     //   const auto& current_state = get_current_reactor_state();
     //   unit.setVolumes(current_state.gasVolume, current_state.liquidVolume);
     // }
+    auto liquid_neighbors = get_current_reactor_state().liquid_flow.getViewNeighors();
+    const auto host_view =
+        NeighborsView<ComputeSpace>(const_cast<size_t*>(liquid_neighbors.data().data()),
+                                    liquid_neighbors.getNRow(),
+                                    liquid_neighbors.getNCol());
 
+    //Do not update before getting state/neighbors                             
     if (++this->current_flowmap_count == this->n_per_flowmap)
     {
       this->repetition_count++;
       this->current_flowmap_count = 0;
     }
+    
+
+    
+
+    return {.liq = &current_liq_hydro_state(),
+            .gas = &current_gas_hydro_state(),
+            .neighbors = host_view};
   }
 
   [[nodiscard]] std::size_t FlowMapTransitionner::get_n_timestep() const noexcept

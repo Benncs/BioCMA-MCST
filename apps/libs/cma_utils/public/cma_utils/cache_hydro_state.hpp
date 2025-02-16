@@ -46,10 +46,12 @@ namespace CmaUtils
 
     [[nodiscard]] const FlowMatrixType& get_transition() const;
     DiagonalView<ComputeSpace> get_kernel_diagonal();
+     
 
   private:
     DiagonalView<ComputeSpace> diagonal_compute;
     CumulativeProbabilityView<ComputeSpace> compute_cumulative_probability;
+   
   };
 
   inline DiagonalView<ComputeSpace> PreCalculatedHydroState::get_kernel_diagonal()

@@ -1,6 +1,7 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
+#include "Kokkos_Assert.hpp"
 #include <simulation/mass_transfer.hpp>
 #include <Eigen/Core>
 #include <Eigen/Dense>
@@ -139,7 +140,7 @@ namespace Simulation
   inline void ScalarSimulation::setVolumes(std::span<const double> volumes,
                                            std::span<const double> inv_volumes)
   {
-
+    KOKKOS_ASSERT(volumes.size()==inv_volumes.size() && volumes.size()==n_col()&&"scalar:setvolume")
     // SIGFAULT ?
     this->m_volumes.diagonal() =
         Eigen::Map<const Eigen::VectorXd>(volumes.data(), static_cast<int>(volumes.size()));

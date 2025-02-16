@@ -3,6 +3,7 @@
 
 #include "cma_read/reactorstate.hpp"
 #include "cma_utils/cache_hydro_state.hpp"
+#include "cma_utils/iteration_state.hpp"
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/neighbors.hpp>
 #include <cstddef>
@@ -18,7 +19,10 @@ namespace CmaUtils
   class FlowMapTransitionner
   {
   public:
-    FlowMapTransitionner();
+    static NeighborsView<ComputeSpace>
+    get_neighbors_view(const CmaRead::Neighbors::Neighbors_const_view_t& liquid_neighbors);
+
+    FlowMapTransitionner()=default;
 
     FlowMapTransitionner(std::size_t _n_flowmap,
                          std::size_t _n_per_flowmap,
@@ -29,7 +33,7 @@ namespace CmaUtils
     virtual ~FlowMapTransitionner() = default;
 
     virtual void update_flow() = 0;
-    void advance();
+    IterationState advance();
 
     void update_flow_worker(std::span<double> flows,
                             std::span<double> volumeLiq,
@@ -49,7 +53,6 @@ namespace CmaUtils
   protected:
     virtual CmaUtils::PreCalculatedHydroState& current_liq_hydro_state() = 0;
     virtual CmaUtils::PreCalculatedHydroState& current_gas_hydro_state() = 0;
-    
 
     void calculate_full_state(const CmaRead::ReactorState& reactor_state,
                               CmaUtils::PreCalculatedHydroState& liq_hydro_state,
@@ -74,8 +77,6 @@ namespace CmaUtils
     std::unique_ptr<CmaRead::FlowIterator> iterator;
   };
 
-
-
   [[nodiscard]] inline size_t FlowMapTransitionner::getFlowIndex() const noexcept
   {
     return this->repetition_count % this->n_flowmap;
@@ -86,7 +87,7 @@ namespace CmaUtils
     return iterator->size();
   }
 
-  [[nodiscard]] bool FlowMapTransitionner::is_two_phase_flow() const noexcept
+  [[nodiscard]] inline bool FlowMapTransitionner::is_two_phase_flow() const noexcept
   {
     return two_phase_flow;
   }

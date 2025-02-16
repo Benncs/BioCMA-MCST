@@ -35,7 +35,7 @@ namespace
   void main_loop(const Core::SimulationParameters& params,
                  const ExecInfo& exec,
                  Simulation::SimulationUnit& simulation,
-                 std::unique_ptr<Simulation::FlowMapTransitioner> transitioner,
+                 std::unique_ptr<CmaUtils::FlowMapTransitionner> transitioner,
                  std::unique_ptr<Core::MainExporter>& main_exporter,
                  Core::PartialExporter& partial_exporter);
 
@@ -141,7 +141,7 @@ namespace
 void host_process(const ExecInfo& exec,
                   Simulation::SimulationUnit& simulation,
                   const Core::SimulationParameters& params,
-                  std::unique_ptr<Simulation::FlowMapTransitioner>&& transitioner,
+                  std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,
                   Core::PartialExporter& partial_exporter)
 {
 
@@ -217,7 +217,7 @@ namespace
     {
       const auto& current_reactor_state = transitioner->get_current_reactor_state();
 
-      transitioner->update_flow(simulation);
+      transitioner->update_flow();
 
       // FIX CMTOOL
       const auto gas_concentration = simulation.getCgasData();
@@ -244,7 +244,7 @@ namespace
 
         {
           PROFILE_SECTION("host:update_flow")
-          transitioner->update_flow(simulation);
+          transitioner->update_flow();
         }
 
         const auto& current_reactor_state = transitioner->get_current_reactor_state();
@@ -255,7 +255,7 @@ namespace
 
         {
           PROFILE_SECTION("host:update_flow::advance")
-          transitioner->advance(simulation);
+          simulation.update(transitioner->advance());
         }
 
         simulation.cycleProcess(local_container, d_t);
@@ -295,7 +295,7 @@ namespace
 
     std::visit(loop_functor, simulation.mc_unit->container);
     const auto& last_current_reactor_state = transitioner->get_current_reactor_state();
-    gas_volume = (!simulation.getCgasData().has_value())
+    auto gas_volume = (!simulation.getCgasData().has_value())
                      ? std::nullopt
                      : std::make_optional(last_current_reactor_state.gasVolume);
 
@@ -334,13 +334,13 @@ namespace
     {
       SEND_MPI_SIG_DUMP
       auto vg = (simulation.getCgasData().has_value())
-                    ? std::make_optional(current_reactor_state->gasVolume)
+                    ? std::make_optional(current_reactor_state.gasVolume)
                     : std::nullopt;
 
       update_progress_bar(n_iter_simulation, __loop_counter);
       main_exporter->update_fields(current_time,
                                    simulation.getCliqData(),
-                                   current_reactor_state->liquidVolume,
+                                   current_reactor_state.liquidVolume,
                                    simulation.getCgasData(),
                                    vg,
                                    simulation.getMTRData());

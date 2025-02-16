@@ -5,10 +5,14 @@
 
 namespace CmaUtils
 {
+  template <typename Space>
+  using NeighborsView = Kokkos::
+      View<std::size_t**, Kokkos::LayoutRight, Space, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
   struct IterationState
   {
     CmaUtils::PreCalculatedHydroState* liq;
     CmaUtils::PreCalculatedHydroState* gas;
+    NeighborsView<HostSpace> neighbors;
   };
 } // namespace CmaUtils
 

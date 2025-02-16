@@ -137,23 +137,23 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::step(double d_t, const CmaRead::ReactorState& state) const
+  void SimulationUnit::step(double d_t, const CmaRead::ReactorState& _state) const
   {
 
     if (is_two_phase_flow)
     {
-      mt_model.gas_liquid_mass_transfer(state);
+      mt_model.gas_liquid_mass_transfer(_state);
       const MatrixType& mtr = mt_model.proxy()->mtr;
       
       this->gas_scalar->performStepGL(
-          d_t, flow_gas->get_transition(), mtr, MassTransfer::MTRSign::GasToLiquid);
+          d_t, state.gas->get_transition(), mtr, MassTransfer::MTRSign::GasToLiquid);
 
       this->liquid_scalar->performStepGL(
-          d_t, flow_liquid->get_transition(), mtr, MassTransfer::MTRSign::LiquidToGas);
+          d_t, state.liq->get_transition(), mtr, MassTransfer::MTRSign::LiquidToGas);
     }
     else
     {
-      this->liquid_scalar->performStep(d_t, flow_liquid->get_transition());
+      this->liquid_scalar->performStep(d_t, state.liq->get_transition());
     }
   }
 } // namespace Simulation

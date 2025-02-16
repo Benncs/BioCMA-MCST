@@ -1,6 +1,7 @@
 #ifndef __MC_INIT_HPP__
 #define __MC_INIT_HPP__
 
+#include "mc/domain.hpp"
 #include <cassert>
 #include <common/execinfo.hpp>
 #include <common/kokkos_vector.hpp>
@@ -155,7 +156,7 @@ namespace MC
   std::unique_ptr<MonteCarloUnit> init(const ExecInfo& info,
                                        size_t n_particles,
                                        std::span<double> volumes,
-                                       CmaRead::Neighbors::Neighbors_const_view_t neighbors,
+                                       const NeighborsView<HostSpace>& neighbors,
                                        double x0,
                                        double& total_mass)
   {

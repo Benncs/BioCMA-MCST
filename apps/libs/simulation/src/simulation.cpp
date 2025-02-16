@@ -1,3 +1,4 @@
+#include "cma_utils/iteration_state.hpp"
 #include "simulation/mass_transfer.hpp"
 #include "simulation/simulation_kernel.hpp"
 #include <Kokkos_Core.hpp>
@@ -68,24 +69,22 @@ namespace Simulation
           MassTransfer::MTRType::Flowmap, liquid_scalar, gas_scalar);
     }
   }
-   void SimulationUnit::update(CmaUtils::PreCalculatedHydroState* _flows_l,CmaUtils::PreCalculatedHydroState* _flows_g)
+   void SimulationUnit::update(CmaUtils::IterationState&& newstate)
    {
-      setLiquidFlow(_flows_l);
-      if(_flows_g!=nullptr)
-      {
-        setGasFlow(_flows_g);
-      }
+      state = newstate;
+      
       setVolumes();
+      mc_unit->domain.setLiquidNeighbors(state.neighbors);
    }
 
   void SimulationUnit::setVolumes() const
   {
     std::span<double const> vl = liquid_scalar->getVolumeData();
     std::span<double const> vg;
-    this->liquid_scalar->setVolumes(flow_liquid->volume, flow_liquid->inverse_volume);
+    this->liquid_scalar->setVolumes(state.liq->volume, state.liq->inverse_volume);
     if (gas_scalar)
     {
-      this->gas_scalar->setVolumes(flow_gas->volume, flow_gas->inverse_volume);
+      this->gas_scalar->setVolumes(state.gas->volume, state.gas->inverse_volume);
       vg = gas_scalar->getVolumeData();
     }
     else
@@ -134,8 +133,6 @@ namespace Simulation
   {
     liquid_scalar.reset();
     gas_scalar.reset();
-    flow_liquid = nullptr;
-    flow_gas = nullptr;
     move_info = KernelInline::MoveInfo<ComputeSpace>();
   }
 
@@ -246,12 +243,12 @@ namespace Simulation
   DiagonalView<ComputeSpace> SimulationUnit::get_kernel_diagonal()
   {
 
-    return flow_liquid->get_kernel_diagonal();
+    return state.liq->get_kernel_diagonal();
   }
 
   CumulativeProbabilityView<ComputeSpace> SimulationUnit::get_kernel_cumulative_proba()
   {
-    auto& matrix = flow_liquid->cumulative_probability;
+    auto& matrix = state.liq->cumulative_probability;
 
     CumulativeProbabilityView<HostSpace> rd(matrix.data(), matrix.rows(), matrix.cols());
 

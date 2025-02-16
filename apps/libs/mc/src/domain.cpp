@@ -66,7 +66,7 @@ namespace MC
   }
 
   ReactorDomain::ReactorDomain(std::span<double> volumes,
-                               const CmaRead::Neighbors::Neighbors_const_view_t& _neighbors)
+                               const NeighborsView<HostSpace>& _neighbors)
       : size(volumes.size()), shared_containers(Kokkos::view_alloc("domain_containers")),
         k_neighbor(Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"))
 
@@ -92,17 +92,11 @@ namespace MC
     this->_total_volume = local_total_volume;
   }
 
-  void ReactorDomain::setLiquidNeighbors(const CmaRead::Neighbors::Neighbors_const_view_t& data)
+  void ReactorDomain::setLiquidNeighbors(const NeighborsView<HostSpace>& data)
   {
 
-    
-    //FIXME remove const_cast
-    const auto host_view = NeighborsView<ComputeSpace>(
-        const_cast<size_t*>(data.data().data()), data.getNRow(), data.getNCol());
-
-;
-    Kokkos::resize(k_neighbor, data.getNRow(), data.getNCol());
-    Kokkos::deep_copy(k_neighbor,host_view);
+    Kokkos::resize(k_neighbor, data.extent(0), data.extent(1));
+    Kokkos::deep_copy(k_neighbor,data);
 
   }
 
