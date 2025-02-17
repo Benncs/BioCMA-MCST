@@ -78,7 +78,7 @@ namespace WrapMPI
     /// View neighbors values to be sent for the current iteration.
     CmaRead::Neighbors::Neighbors_const_view_t neighbors;
 
-    void fill(const CmaRead::ReactorState* current_reactor_state);
+    void fill(const CmaRead::ReactorState& current_reactor_state);
     /**
      * @brief Sends this payload to a specified MPI rank.
      *

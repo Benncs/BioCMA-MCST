@@ -68,11 +68,8 @@ void workers_process(const ExecInfo& exec,
 
       payload.recv(0, &status);
 
-      simulation.mc_unit->domain.setLiquidNeighbors(payload.neighbors);
-      transitioner->update_flow( payload.liquid_flows, n_compartments,payload.neighbors); //This is not the correct transitionner
-      transitioner->advance(simulation);
-
-      simulation.setVolumes();
+     
+      simulation.update(transitioner->advance_worker(payload.liquid_flows, payload.liquid_volumes,payload.gas_volumes,payload.neighbors));
 
       simulation.cycleProcess(container, d_t);
 

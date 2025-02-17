@@ -3,6 +3,7 @@
 #include "simulation/simulation_kernel.hpp"
 #include <Kokkos_Core.hpp>
 #include <cma_read/light_2d_view.hpp>
+#include <cma_utils/transport.hpp>
 #include <common/kokkos_vector.hpp>
 #include <cstddef>
 #include <cstdio>
@@ -22,7 +23,6 @@
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
-#include <cma_utils/transport.hpp>
 #include <utility>
 
 namespace Simulation
@@ -69,30 +69,33 @@ namespace Simulation
           MassTransfer::MTRType::Flowmap, liquid_scalar, gas_scalar);
     }
   }
-   void SimulationUnit::update(CmaUtils::IterationState&& newstate)
-   {
-      state = newstate;
-      
-      setVolumes();
-      mc_unit->domain.setLiquidNeighbors(state.neighbors);
-   }
+  void SimulationUnit::update(CmaUtils::IterationState&& newstate)
+  {
+    state = newstate;
+
+    setVolumes();
+    mc_unit->domain.setLiquidNeighbors(state.neighbors);
+  }
 
   void SimulationUnit::setVolumes() const
   {
-    std::span<double const> vl = liquid_scalar->getVolumeData();
-    std::span<double const> vg;
-    this->liquid_scalar->setVolumes(state.liq->volume, state.liq->inverse_volume);
+
+    std::span<double const> vl = state.liq->volume;
+    std::span<double const> vg = state.gas->volume;
+    if (liquid_scalar)
+    {
+      std::span<double const> vl = liquid_scalar->getVolumeData();
+      this->liquid_scalar->setVolumes(vl, state.liq->inverse_volume);
+    }
+
     if (gas_scalar)
     {
-      this->gas_scalar->setVolumes(state.gas->volume, state.gas->inverse_volume);
-      vg = gas_scalar->getVolumeData();
+      this->gas_scalar->setVolumes(vg, state.gas->inverse_volume);
     }
     else
     {
-      vg = std::vector<double>(vl.size(),0);
+      vg = std::vector<double>(vl.size(), 0);
     }
-
-    
 
     this->mc_unit->domain.setVolumes(vg, vl);
   }
@@ -159,11 +162,10 @@ namespace Simulation
 
     auto get_view = [this](auto&& cdata)
     {
-      return CmaRead::L2DView<double>({cdata.data(),
-                                     static_cast<size_t>(cdata.size())},
-                                    this->liquid_scalar->n_row(),
-                                    this->liquid_scalar->n_col(),
-                                    false);
+      return CmaRead::L2DView<double>({cdata.data(), static_cast<size_t>(cdata.size())},
+                                      this->liquid_scalar->n_row(),
+                                      this->liquid_scalar->n_col(),
+                                      false);
     };
 
     auto cliq = get_view(cliqdata);
@@ -240,7 +242,7 @@ namespace Simulation
 
   SimulationUnit::~SimulationUnit() = default;
 
-  DiagonalView<ComputeSpace> SimulationUnit::get_kernel_diagonal()
+  DiagonalView<ComputeSpace> SimulationUnit::get_kernel_diagonal() const
   {
 
     return state.liq->get_kernel_diagonal();
@@ -255,7 +257,7 @@ namespace Simulation
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(), rd);
   }
 
-  kernelContribution SimulationUnit::get_kernel_contribution()
+  kernelContribution SimulationUnit::get_kernel_contribution() const
   {
     return this->liquid_scalar->get_kernel_contribution();
   }

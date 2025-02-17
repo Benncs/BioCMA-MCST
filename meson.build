@@ -108,7 +108,7 @@ if use_system_kokkos
     modules: ['Kokkos::kokkos'],
   )
 
-  kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE']
+  kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE','-Wno-unknown-pragmas']
 
   if use_cuda
 

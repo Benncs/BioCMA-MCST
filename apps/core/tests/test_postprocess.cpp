@@ -13,7 +13,7 @@ auto init()
   std::vector<double> volumes = {20e-3};
   const double x0 = 1;
   double total_mass = 0;
-  CmaRead::Neighbors::Neighbors_const_view_t neighb;
+  NeighborsView<HostSpace> neighb;
   {
     using current_model = DefaultModel;
     Kokkos::View<double**, Kokkos::LayoutRight, HostSpace> host_concentration(

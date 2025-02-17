@@ -31,10 +31,10 @@ namespace CmaUtils
 
   void DiscontinuousFMT::update_flow()
   {
-    const auto& current_state = get_current_reactor_state();
     if (need_liquid_state())
     {
-      calculate_full_state(current_state, current_liq_hydro_state(), current_gas_hydro_state());
+      calculate_full_state(
+          get_current_reactor_state(), current_liq_hydro_state(), current_gas_hydro_state());
     }
   }
 

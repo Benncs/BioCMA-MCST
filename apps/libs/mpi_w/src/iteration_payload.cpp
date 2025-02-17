@@ -46,12 +46,12 @@ namespace WrapMPI
     return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS && rc3 == MPI_SUCCESS;
   }
 
-  void HostIterationPayload::fill(const CmaRead::ReactorState* const current_reactor_state)
+  void HostIterationPayload::fill(const CmaRead::ReactorState&  current_reactor_state)
   {
-    liquid_flows = current_reactor_state->liquid_flow.getViewFlows().data();
-    liquid_volumes = current_reactor_state->liquidVolume;
-    gas_volumes = current_reactor_state->gasVolume;
-    neighbors = current_reactor_state->liquid_flow.getViewNeighors().to_const();
+    liquid_flows = current_reactor_state.liquid_flow.getViewFlows().data();
+    liquid_volumes = current_reactor_state.liquidVolume;
+    gas_volumes = current_reactor_state.gasVolume;
+    neighbors = current_reactor_state.liquid_flow.getViewNeighors().to_const();
   }
 
 } // namespace WrapMPI

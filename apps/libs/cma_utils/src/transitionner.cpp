@@ -1,4 +1,5 @@
 #include "cma_utils/iteration_state.hpp"
+#include "common/kokkos_vector.hpp"
 #include <algorithm>
 #include <cma_utils/transitionner.hpp>
 #include <common/common.hpp>
@@ -47,12 +48,12 @@ namespace
 
 namespace CmaUtils
 {
-  NeighborsView<ComputeSpace> FlowMapTransitionner::get_neighbors_view(
+  NeighborsView<HostSpace> FlowMapTransitionner::get_neighbors_view(
       const CmaRead::Neighbors::Neighbors_const_view_t& liquid_neighbors)
   {
-    return NeighborsView<ComputeSpace>(const_cast<size_t*>(liquid_neighbors.data().data()),
-                                       liquid_neighbors.getNRow(),
-                                       liquid_neighbors.getNCol());
+    return NeighborsView<HostSpace>(const_cast<size_t*>(liquid_neighbors.data().data()),
+                                    liquid_neighbors.getNRow(),
+                                    liquid_neighbors.getNCol());
   }
   FlowMapTransitionner::FlowMapTransitionner(size_t _n_flowmap,
                                              size_t _n_per_flowmap,
@@ -74,15 +75,20 @@ namespace CmaUtils
       const CmaRead::Neighbors::Neighbors_const_view_t& neighbors)
   {
 
-    auto& cls = current_liq_hydro_state();
-
     if (need_liquid_state())
     {
+      auto& cls = current_liq_hydro_state();
       const auto mat_f_liq_view = CmaRead::FlowMap::FlowMap_const_view_t(flows, volumeLiq.size());
-
       calculate_liquid_state(mat_f_liq_view, neighbors, cls);
       cls.inverse_volume = compute_inverse_diagonal(volumeLiq);
-      cls.volume = std::vector<double>(volumeGas.begin(), volumeGas.end());
+      cls.volume = std::vector<double>(volumeLiq.begin(), volumeLiq.end());
+      if (is_two_phase_flow())
+      {
+        auto& cgs = current_liq_hydro_state();
+        cgs.inverse_volume = compute_inverse_diagonal(volumeGas);
+        cgs.volume = std::vector<double>(volumeGas.begin(), volumeGas.end());
+        ;
+      }
     }
   }
 
@@ -108,40 +114,47 @@ namespace CmaUtils
 
   IterationState FlowMapTransitionner::advance()
   {
-    // unit.setLiquidFlow(current_liq_hydro_state());
-    // if (iterator)
-    // {
-    //   if (two_phase_flow)
-    //   {
-    //     unit.setGasFlow(current_gas_hydro_state());
-    //   }
-    //   const auto& current_state = get_current_reactor_state();
-    //   unit.setVolumes(current_state.gasVolume, current_state.liquidVolume);
-    // }
+    update_flow();
     auto liquid_neighbors = get_current_reactor_state().liquid_flow.getViewNeighors();
-    const auto host_view =
-        NeighborsView<ComputeSpace>(const_cast<size_t*>(liquid_neighbors.data().data()),
-                                    liquid_neighbors.getNRow(),
-                                    liquid_neighbors.getNCol());
+    auto host_view = NeighborsView<HostSpace>(const_cast<size_t*>(liquid_neighbors.data().data()),
+                                              liquid_neighbors.getNRow(),
+                                              liquid_neighbors.getNCol());
 
-    //Do not update before getting state/neighbors                             
+    return common_advance(host_view);
+  }
+
+  IterationState
+  FlowMapTransitionner::advance_worker(std::span<double> flows,
+                                       std::span<double> volumeLiq,
+                                       std::span<double> volumeGas,
+                                       const CmaRead::Neighbors::Neighbors_const_view_t& neighbors)
+  {
+    auto host_view = NeighborsView<HostSpace>(
+        const_cast<size_t*>(neighbors.data().data()), neighbors.getNRow(), neighbors.getNCol());
+    update_flow_worker(flows, volumeLiq, volumeGas, neighbors);
+    return common_advance(host_view);
+  }
+
+  IterationState FlowMapTransitionner::common_advance(NeighborsView<HostSpace> host_view)
+  {
+    auto* const liq = &current_liq_hydro_state();
+    auto* const gas = &current_gas_hydro_state();
+    update_counters();
+
+    return {.liq = liq, .gas = gas, .neighbors = host_view};
+  }
+
+  void FlowMapTransitionner::update_counters()
+  {
     if (++this->current_flowmap_count == this->n_per_flowmap)
     {
       this->repetition_count++;
       this->current_flowmap_count = 0;
     }
-    
-
-    
-
-    return {.liq = &current_liq_hydro_state(),
-            .gas = &current_gas_hydro_state(),
-            .neighbors = host_view};
   }
 
   [[nodiscard]] std::size_t FlowMapTransitionner::get_n_timestep() const noexcept
   {
     return n_timestep;
   }
-
 } // namespace CmaUtils

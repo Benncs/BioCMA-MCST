@@ -217,7 +217,9 @@ namespace
     {
       const auto& current_reactor_state = transitioner->get_current_reactor_state();
 
-      transitioner->update_flow();
+      // transitioner->update_flow();
+      
+
 
       // FIX CMTOOL
       const auto gas_concentration = simulation.getCgasData();
@@ -242,10 +244,7 @@ namespace
 
         DEBUG_INSTRUCTION
 
-        {
-          PROFILE_SECTION("host:update_flow")
-          transitioner->update_flow();
-        }
+     
 
         const auto& current_reactor_state = transitioner->get_current_reactor_state();
 

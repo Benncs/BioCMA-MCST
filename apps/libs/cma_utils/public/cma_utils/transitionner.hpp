@@ -19,10 +19,10 @@ namespace CmaUtils
   class FlowMapTransitionner
   {
   public:
-    static NeighborsView<ComputeSpace>
+    static NeighborsView<HostSpace>
     get_neighbors_view(const CmaRead::Neighbors::Neighbors_const_view_t& liquid_neighbors);
 
-    FlowMapTransitionner()=default;
+    FlowMapTransitionner() = default;
 
     FlowMapTransitionner(std::size_t _n_flowmap,
                          std::size_t _n_per_flowmap,
@@ -32,14 +32,12 @@ namespace CmaUtils
 
     virtual ~FlowMapTransitionner() = default;
 
-    virtual void update_flow() = 0;
     IterationState advance();
 
-    void update_flow_worker(std::span<double> flows,
-                            std::span<double> volumeLiq,
-                            std::span<double> volumeGas,
-
-                            const CmaRead::Neighbors::Neighbors_const_view_t& neighbors);
+    IterationState advance_worker(std::span<double> flows,
+                                  std::span<double> volumeLiq,
+                                  std::span<double> volumeGas,
+                                  const CmaRead::Neighbors::Neighbors_const_view_t& neighbors);
 
     [[nodiscard]] bool need_liquid_state() const noexcept;
 
@@ -51,6 +49,12 @@ namespace CmaUtils
     get_current_reactor_state() const noexcept = 0;
 
   protected:
+    IterationState common_advance(NeighborsView<HostSpace> host_view);
+    virtual void update_flow() = 0;
+    void update_flow_worker(std::span<double> flows,
+                            std::span<double> volumeLiq,
+                            std::span<double> volumeGas,
+                            const CmaRead::Neighbors::Neighbors_const_view_t& neighbors);
     virtual CmaUtils::PreCalculatedHydroState& current_liq_hydro_state() = 0;
     virtual CmaUtils::PreCalculatedHydroState& current_gas_hydro_state() = 0;
 
@@ -68,6 +72,7 @@ namespace CmaUtils
     std::vector<CmaUtils::PreCalculatedHydroState> gas_pc;
 
   private:
+    void update_counters();
     bool two_phase_flow;
     std::size_t n_per_flowmap;
     std::size_t n_flowmap;

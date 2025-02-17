@@ -134,9 +134,9 @@ namespace Simulation
     double end_time{};         // Not used within calculation, only for export purposes
 
     // Bounce methods to pimpl
-    DiagonalView<ComputeSpace> get_kernel_diagonal();
+    [[nodiscard]] DiagonalView<ComputeSpace> get_kernel_diagonal()const;
     CumulativeProbabilityView<ComputeSpace> get_kernel_cumulative_proba();
-    kernelContribution get_kernel_contribution();
+    [[nodiscard]] kernelContribution get_kernel_contribution()const;
 
     void set_kernel_contribs_to_host();
 
