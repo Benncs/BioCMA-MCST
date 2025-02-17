@@ -4,8 +4,6 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#include <cma_read/light_2d_view.hpp>
-#include <cma_read/reactorstate.hpp>
 #include <common/kokkos_vector.hpp>
 #include <vector>
 
@@ -21,10 +19,13 @@ using FlowMatrixType = Eigen::SparseMatrix<double>;
 
 namespace CmaUtils
 {
+  class ProxyPreCalculatedHydroState;
 
   class PreCalculatedHydroState
   {
   public:
+    friend class ProxyCalculatedHydroState;
+
     PreCalculatedHydroState();
     ~PreCalculatedHydroState() = default;
     explicit PreCalculatedHydroState(const FlowMatrixType& _tm);
@@ -34,32 +35,27 @@ namespace CmaUtils
     PreCalculatedHydroState(const PreCalculatedHydroState& other) = delete;
 
     FlowMatrixType transition_matrix;
-
     Eigen::Matrix<double, -1, -1, Eigen::RowMajor> cumulative_probability;
     std::vector<double> inverse_volume;
     std::vector<double> volume;
-
-    void set_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t& flows_view);
-    void set_transition_matrix(FlowMatrixType&& matrix);
-    void set_cumulative_probability(const CmaRead::Neighbors::Neighbors_const_view_t& neighbors);
-    void set_diag_transition(std::vector<double>&& diag);
-
-    [[nodiscard]] const FlowMatrixType& get_transition() const;
-    DiagonalView<ComputeSpace> get_kernel_diagonal();
-     
-
-  private:
     DiagonalView<ComputeSpace> diagonal_compute;
     CumulativeProbabilityView<ComputeSpace> compute_cumulative_probability;
-   
+
+
+    [[nodiscard]] const FlowMatrixType& get_transition() const;
+    [[nodiscard]] DiagonalView<ComputeSpace> get_kernel_diagonal() const;
+  
+
+  private:
+    
   };
 
-  inline DiagonalView<ComputeSpace> PreCalculatedHydroState::get_kernel_diagonal()
+  inline DiagonalView<ComputeSpace> PreCalculatedHydroState::get_kernel_diagonal() const
   {
     return diagonal_compute;
   }
 
-  
+
 
 } // namespace CmaUtils
 

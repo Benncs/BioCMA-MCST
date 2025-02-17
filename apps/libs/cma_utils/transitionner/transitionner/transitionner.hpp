@@ -8,6 +8,11 @@
 #include <cma_read/neighbors.hpp>
 #include <cstddef>
 #include <memory>
+
+#include <transitionner/proxy_cache.hpp>
+
+
+
 namespace CmaUtils
 {
   enum class FlowmapTransitionMethod : char
@@ -15,14 +20,18 @@ namespace CmaUtils
     Discontinuous,
     InterpolationFO,
   };
-
+  class ProxyPreCalculatedHydroState;
   class FlowMapTransitionner
   {
   public:
-    static NeighborsView<HostSpace>
-    get_neighbors_view(const CmaRead::Neighbors::Neighbors_const_view_t& liquid_neighbors);
+  
 
     FlowMapTransitionner() = default;
+    FlowMapTransitionner& operator=(FlowMapTransitionner&&) = default;
+    FlowMapTransitionner(FlowMapTransitionner&&) = default;
+
+    FlowMapTransitionner& operator=(const FlowMapTransitionner&) = delete;
+    FlowMapTransitionner(const FlowMapTransitionner&) = delete;
 
     FlowMapTransitionner(std::size_t _n_flowmap,
                          std::size_t _n_per_flowmap,
@@ -48,19 +57,22 @@ namespace CmaUtils
     [[nodiscard]] virtual const CmaRead::ReactorState&
     get_current_reactor_state() const noexcept = 0;
 
+      static NeighborsView<HostSpace>
+    get_neighbors_view(const CmaRead::Neighbors::Neighbors_const_view_t& liquid_neighbors);
+
   protected:
-    IterationState common_advance(NeighborsView<HostSpace> host_view);
+    IterationState common_advance(NeighborsView<HostSpace> host_view,std::unordered_map<std::string, std::span<const double>>&& info);
     virtual void update_flow() = 0;
     void update_flow_worker(std::span<double> flows,
                             std::span<double> volumeLiq,
                             std::span<double> volumeGas,
                             const CmaRead::Neighbors::Neighbors_const_view_t& neighbors);
-    virtual CmaUtils::PreCalculatedHydroState& current_liq_hydro_state() = 0;
-    virtual CmaUtils::PreCalculatedHydroState& current_gas_hydro_state() = 0;
+    virtual CmaUtils::ProxyPreCalculatedHydroState& current_liq_hydro_state() = 0;
+    virtual CmaUtils::ProxyPreCalculatedHydroState& current_gas_hydro_state() = 0;
 
     void calculate_full_state(const CmaRead::ReactorState& reactor_state,
-                              CmaUtils::PreCalculatedHydroState& liq_hydro_state,
-                              CmaUtils::PreCalculatedHydroState& gas_hydro_state) const;
+                              CmaUtils::ProxyPreCalculatedHydroState& liq_hydro_state,
+                              CmaUtils::ProxyPreCalculatedHydroState& gas_hydro_state) const;
 
     [[nodiscard]] size_t getFlowIndex() const noexcept;
 
@@ -68,17 +80,17 @@ namespace CmaUtils
 
     [[nodiscard]] const CmaRead::ReactorState& get_unchecked(size_t index) const noexcept;
 
-    std::vector<CmaUtils::PreCalculatedHydroState> liquid_pc;
-    std::vector<CmaUtils::PreCalculatedHydroState> gas_pc;
+    std::vector<CmaUtils::ProxyPreCalculatedHydroState> liquid_pc;
+    std::vector<CmaUtils::ProxyPreCalculatedHydroState> gas_pc;
 
   private:
     void update_counters();
-    bool two_phase_flow;
-    std::size_t n_per_flowmap;
-    std::size_t n_flowmap;
-    std::size_t n_timestep;
-    std::size_t repetition_count;
-    std::size_t current_flowmap_count;
+    bool two_phase_flow{};
+    std::size_t n_per_flowmap{};
+    std::size_t n_flowmap{};
+    std::size_t n_timestep{};
+    std::size_t repetition_count{};
+    std::size_t current_flowmap_count{};
     std::unique_ptr<CmaRead::FlowIterator> iterator;
   };
 

@@ -1,7 +1,6 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <cassert>
-#include <cma_read/neighbors.hpp>
 #include <common/kokkos_vector.hpp>
 #include <cstddef>
 #include <mc/container_state.hpp>

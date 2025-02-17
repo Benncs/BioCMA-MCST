@@ -45,6 +45,7 @@ namespace Simulation
     // void performStep(double d_t, const FlowMatrixType& m_transition);
 
     // Getters
+    [[nodiscard]] MatrixType& get_concentration();
     [[nodiscard]] KokkosScalarMatrix<ComputeSpace> get_device_concentration() const;
     [[nodiscard]] std::span<double const> getVolumeData() const;
     [[nodiscard]] std::span<double> getContributionData() const;
@@ -75,8 +76,6 @@ namespace Simulation
     DiagonalType volumes_inverse;
     DiagonalType m_volumes;
     DiagonalType sink;
-
-    CmaRead::L2DView<double> view;
     EigenKokkos concentrations;
     EigenKokkos sources;
 

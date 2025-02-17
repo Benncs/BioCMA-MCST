@@ -1,13 +1,11 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
-#include "cma_utils/iteration_state.hpp"
-#include "simulation/mass_transfer.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <biocma_cst_config.hpp>
 #include <cassert>
-#include <cma_read/reactorstate.hpp>
+#include <cma_utils/iteration_state.hpp>
 #include <common/common.hpp>
 #include <common/kokkos_vector.hpp>
 #include <cstddef>
@@ -20,10 +18,10 @@
 #include <optional>
 #include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/mass_transfer.hpp>
 #include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation_kernel.hpp>
-#include <type_traits>
 
 // TODO Clean
 static constexpr size_t trigger_const_particle_number = 1e6;
@@ -84,7 +82,7 @@ namespace Simulation
     // Simulation methods
     void cycleProcess(auto&& container, double d_t);
 
-    void step(double d_t, const CmaRead::ReactorState& state) const;
+    void step(double d_t) const;
 
     void reduceContribs(std::span<const double> data, size_t n_rank) const;
 
@@ -104,6 +102,11 @@ namespace Simulation
     [[nodiscard]] double& get_end_time_mut();
 
     void update(CmaUtils::IterationState&& new_state);
+
+    const CmaUtils::IterationState& get_state() const
+    {
+      return state;
+    }
 
     template <class ListType, class CompartmentListType>
     inline void post_kernel_process(ListType& list,
@@ -134,9 +137,9 @@ namespace Simulation
     double end_time{};         // Not used within calculation, only for export purposes
 
     // Bounce methods to pimpl
-    [[nodiscard]] DiagonalView<ComputeSpace> get_kernel_diagonal()const;
+    [[nodiscard]] DiagonalView<ComputeSpace> get_kernel_diagonal() const;
     CumulativeProbabilityView<ComputeSpace> get_kernel_cumulative_proba();
-    [[nodiscard]] kernelContribution get_kernel_contribution()const;
+    [[nodiscard]] kernelContribution get_kernel_contribution() const;
 
     void set_kernel_contribs_to_host();
 

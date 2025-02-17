@@ -15,6 +15,11 @@
 #include <utility>
 constexpr int ID_VERIF = 2025;
 
+void finalize()
+{
+  Api::finalise();
+}
+
 int apply(Handle handle, int to_load)
 {
   if (handle != nullptr)

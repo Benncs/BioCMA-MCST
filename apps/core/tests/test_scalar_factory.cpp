@@ -17,7 +17,6 @@
     std::cout << e.what() << std::endl;                                                            \
     assert(false);                                                                                 \
   }
-  
 
 static constexpr size_t n_compartment = 10;
 static constexpr size_t n_species = 3;
@@ -37,9 +36,12 @@ static std::vector<double> get_raw_concentration_data()
 void mock_init(CmaRead::L2DView<double> c, auto functor)
 {
   assert(functor.has_value());
-  for (size_t i = 0; i < c.getNCol(); ++i)
+  for (size_t i = 0; i < c.getNRow(); ++i)
   {
-    (*functor)(i, c);
+    for (size_t j = 0; j < c.getNCol(); ++j)
+    {
+      c(i, j) = (*functor)(i, j);
+    }
   }
 }
 

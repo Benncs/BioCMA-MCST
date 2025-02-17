@@ -1,12 +1,12 @@
 #ifndef __GET_CUMULATIVE_PROBABILITY_HPP__
 #define __GET_CUMULATIVE_PROBABILITY_HPP__
 
-#include <cma_utils/cache_hydro_state.hpp>
 #include <Eigen/Core>
 #include <cma_read/neighbors.hpp>
+#include <cma_utils/cache_hydro_state.hpp>
 namespace CmaUtils
 {
-  using CumulativeProbaType= Eigen::Matrix<double, -1, -1, Eigen::RowMajor>;
+  using CumulativeProbaType = Eigen::Matrix<double, -1, -1, Eigen::RowMajor>;
   /**
    * @brief Computes the cumulative probability matrix from the transition
    * matrix and neighbor information.
@@ -22,12 +22,9 @@ namespace CmaUtils
    *
    * @return An Eigen::MatrixXd representing the cumulative probability matrix.
    */
-  CumulativeProbaType get_cumulative_probabilities(
-      CmaRead::Neighbors::Neighbors_const_view_t neighbors,
-      const FlowMatrixType &m_transition);
+  CumulativeProbaType
+  get_cumulative_probabilities(CmaRead::Neighbors::Neighbors_const_view_t neighbors,
+                               const FlowMatrixType& m_transition);
 
-
-
-
-} // namespace Simulation
+} // namespace CmaUtils
 #endif //__GET_CUMULATIVE_PROBABILITY_HPP__

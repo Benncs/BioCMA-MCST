@@ -2,7 +2,6 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <hydro/impl_mass_transfer.hpp>
 #include <mc/domain.hpp>
@@ -137,12 +136,12 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::step(double d_t, const CmaRead::ReactorState& _state) const
+  void SimulationUnit::step(double d_t) const
   {
 
     if (is_two_phase_flow)
     {
-      mt_model.gas_liquid_mass_transfer(_state);
+      mt_model.gas_liquid_mass_transfer(state);
       const MatrixType& mtr = mt_model.proxy()->mtr;
       
       this->gas_scalar->performStepGL(

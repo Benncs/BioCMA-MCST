@@ -1,13 +1,14 @@
-#include "cma_utils/iteration_state.hpp"
-#include "common/kokkos_vector.hpp"
+#include <cma_utils/iteration_state.hpp>
+#include <common/kokkos_vector.hpp>
 #include <algorithm>
-#include <cma_utils/transitionner.hpp>
+#include <transitionner/transitionner.hpp>
 #include <common/common.hpp>
-
+#include <utility>
+#include <transitionner/proxy_cache.hpp>
 namespace
 {
   void compute_MatFlow(const CmaRead::FlowMap::FlowMap_const_view_t& flows_view,
-                       CmaUtils::PreCalculatedHydroState& matflow)
+                       CmaUtils::ProxyPreCalculatedHydroState& matflow)
   {
     PROFILE_SECTION("host:compute_MatFlow")
     matflow.set_transition_matrix(flows_view); // FIX THIS
@@ -37,7 +38,7 @@ namespace
 
   void calculate_liquid_state(const CmaRead::FlowMap::FlowMap_const_view_t& mat_f_liq_view,
                               const CmaRead::Neighbors::Neighbors_const_view_t& neighbors,
-                              CmaUtils::PreCalculatedHydroState& liq_hydro_state)
+                              CmaUtils::ProxyPreCalculatedHydroState& liq_hydro_state)
   {
     PROFILE_SECTION("host:calculate_liquid_state")
     compute_MatFlow(mat_f_liq_view, liq_hydro_state);
@@ -80,13 +81,13 @@ namespace CmaUtils
       auto& cls = current_liq_hydro_state();
       const auto mat_f_liq_view = CmaRead::FlowMap::FlowMap_const_view_t(flows, volumeLiq.size());
       calculate_liquid_state(mat_f_liq_view, neighbors, cls);
-      cls.inverse_volume = compute_inverse_diagonal(volumeLiq);
-      cls.volume = std::vector<double>(volumeLiq.begin(), volumeLiq.end());
+      cls.state.inverse_volume = compute_inverse_diagonal(volumeLiq);
+      cls.state.volume = std::vector<double>(volumeLiq.begin(), volumeLiq.end());
       if (is_two_phase_flow())
       {
         auto& cgs = current_liq_hydro_state();
-        cgs.inverse_volume = compute_inverse_diagonal(volumeGas);
-        cgs.volume = std::vector<double>(volumeGas.begin(), volumeGas.end());
+        cgs.state.inverse_volume = compute_inverse_diagonal(volumeGas);
+        cgs.state.volume = std::vector<double>(volumeGas.begin(), volumeGas.end());
         ;
       }
     }
@@ -94,21 +95,21 @@ namespace CmaUtils
 
   void FlowMapTransitionner::calculate_full_state(
       const CmaRead::ReactorState& reactor_state,
-      CmaUtils::PreCalculatedHydroState& liq_hydro_state,
-      CmaUtils::PreCalculatedHydroState& gas_hydro_state) const
+      CmaUtils::ProxyPreCalculatedHydroState& liq_hydro_state,
+      CmaUtils::ProxyPreCalculatedHydroState& gas_hydro_state) const
   {
     calculate_liquid_state(reactor_state.liquid_flow.getViewFlows(),
                            reactor_state.liquid_flow.getViewNeighors(),
                            liq_hydro_state);
     // liq_hydro_state.neighbors =
-    liq_hydro_state.inverse_volume = compute_inverse_diagonal(reactor_state.liquidVolume);
-    liq_hydro_state.volume = reactor_state.liquidVolume;
+    liq_hydro_state.state.inverse_volume = compute_inverse_diagonal(reactor_state.liquidVolume);
+    liq_hydro_state.state.volume = reactor_state.liquidVolume;
 
     if (is_two_phase_flow())
     {
       compute_MatFlow(reactor_state.gas_flow.getViewFlows(), gas_hydro_state);
-      gas_hydro_state.inverse_volume = compute_inverse_diagonal(reactor_state.gasVolume);
-      gas_hydro_state.volume = reactor_state.gasVolume;
+      gas_hydro_state.state.inverse_volume = compute_inverse_diagonal(reactor_state.gasVolume);
+      gas_hydro_state.state.volume = reactor_state.gasVolume;
     }
   }
 
@@ -120,7 +121,7 @@ namespace CmaUtils
                                               liquid_neighbors.getNRow(),
                                               liquid_neighbors.getNCol());
 
-    return common_advance(host_view);
+    return common_advance(host_view,{{"energy_dissipation",get_current_reactor_state().energy_dissipation}});
   }
 
   IterationState
@@ -132,16 +133,20 @@ namespace CmaUtils
     auto host_view = NeighborsView<HostSpace>(
         const_cast<size_t*>(neighbors.data().data()), neighbors.getNRow(), neighbors.getNCol());
     update_flow_worker(flows, volumeLiq, volumeGas, neighbors);
-    return common_advance(host_view);
+    
+    return common_advance(host_view,{});
   }
 
-  IterationState FlowMapTransitionner::common_advance(NeighborsView<HostSpace> host_view)
+  IterationState FlowMapTransitionner::common_advance(NeighborsView<HostSpace> host_view,std::unordered_map<std::string, std::span<const double>>&& info)
   {
-    auto* const liq = &current_liq_hydro_state();
-    auto* const gas = &current_gas_hydro_state();
+    auto* const liq = &current_liq_hydro_state().state;
+    auto* const gas = &current_gas_hydro_state().state;
     update_counters();
+    auto& eps = get_current_reactor_state().energy_dissipation;
 
-    return {.liq = liq, .gas = gas, .neighbors = host_view};
+    
+
+    return {.liq = liq, .gas = gas, .neighbors = std::move(host_view),.infos=info};
   }
 
   void FlowMapTransitionner::update_counters()

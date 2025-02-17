@@ -19,6 +19,9 @@
  */
 namespace Api
 {
+
+  void finalise();
+
   /**
    * @class SimulationInstance
    * @brief Represents an instance of a simulation with customizable parameters and behaviors.

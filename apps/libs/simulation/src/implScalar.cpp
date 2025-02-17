@@ -38,6 +38,11 @@ namespace Simulation
     this->sink.setZero();
   }
 
+  [[nodiscard]] MatrixType& ScalarSimulation::get_concentration()
+  {
+    return concentrations.eigen_data;
+  }
+
   [[nodiscard]] KokkosScalarMatrix<ComputeSpace> ScalarSimulation::get_device_concentration() const
   {
     return concentrations.compute;

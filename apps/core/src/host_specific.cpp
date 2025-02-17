@@ -1,5 +1,5 @@
 
-#include "cma_utils/transitionner.hpp"
+#include <transitionner/transitionner.hpp>
 #include <algorithm> //for std::min
 #include <biocma_cst_config.hpp>
 #include <cma_read/reactorstate.hpp>
@@ -19,7 +19,7 @@
 #include <ostream>
 #include <signal_handling.hpp>
 #include <simulation/simulation.hpp>
-#include <simulation/transitionner.hpp>
+
 #include <string>
 #include <sync.hpp>
 #include <utility>
@@ -48,7 +48,6 @@ namespace
                      size_t __loop_counter,
                      double current_time,
                      Simulation::SimulationUnit& simulation,
-                     auto& current_reactor_state,
                      std::unique_ptr<Core::MainExporter>& main_exporter,
                      Core::PartialExporter& partial_exporter);
 
@@ -216,11 +215,7 @@ namespace
 
     {
       const auto& current_reactor_state = transitioner->get_current_reactor_state();
-
-      // transitioner->update_flow();
       
-
-
       // FIX CMTOOL
       const auto gas_concentration = simulation.getCgasData();
       auto gas_volume = (!gas_concentration.has_value())
@@ -244,8 +239,6 @@ namespace
 
         DEBUG_INSTRUCTION
 
-     
-
         const auto& current_reactor_state = transitioner->get_current_reactor_state();
 
         FILL_PAYLOAD;
@@ -266,7 +259,6 @@ namespace
                       __loop_counter,
                       current_time,
                       simulation,
-                      current_reactor_state,
                       main_exporter,
                       partial_exporter);
 
@@ -274,7 +266,7 @@ namespace
         {
           PROFILE_SECTION("host:sync_update")
           simulation.update_feed(current_time, d_t);
-          simulation.step(d_t, current_reactor_state);
+          simulation.step(d_t);
           current_time += d_t;
         }
         sync_prepare_next(simulation);
@@ -322,24 +314,23 @@ namespace
                      const size_t __loop_counter,
                      const double current_time,
                      Simulation::SimulationUnit& simulation,
-                     auto& current_reactor_state,
                      std::unique_ptr<Core::MainExporter>& main_exporter,
                      Core::PartialExporter& partial_exporter)
   // NOLINTEND
   {
-
+    const auto& state = simulation.get_state();
     PROFILE_SECTION("host:handle_export")
     if (++dump_counter == dump_interval)
     {
       SEND_MPI_SIG_DUMP
       auto vg = (simulation.getCgasData().has_value())
-                    ? std::make_optional(current_reactor_state.gasVolume)
+                    ? std::make_optional(state.gas->volume)
                     : std::nullopt;
 
       update_progress_bar(n_iter_simulation, __loop_counter);
       main_exporter->update_fields(current_time,
                                    simulation.getCliqData(),
-                                   current_reactor_state.liquidVolume,
+                                   state.liq->volume,
                                    simulation.getCgasData(),
                                    vg,
                                    simulation.getMTRData());

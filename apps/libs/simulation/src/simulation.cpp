@@ -1,9 +1,8 @@
-#include "cma_utils/iteration_state.hpp"
+#include "eigen_kokkos.hpp"
 #include "simulation/mass_transfer.hpp"
 #include "simulation/simulation_kernel.hpp"
 #include <Kokkos_Core.hpp>
-#include <cma_read/light_2d_view.hpp>
-#include <cma_utils/transport.hpp>
+#include <cma_utils/iteration_state.hpp>
 #include <common/kokkos_vector.hpp>
 #include <cstddef>
 #include <cstdio>
@@ -158,34 +157,51 @@ namespace Simulation
   {
     // CmaRead::L2DView<double> cliq = this->liquid_scalar->getConcentrationView();
 
-    auto cliqdata = this->liquid_scalar->getConcentrationData();
+    // auto cliqdata = this->liquid_scalar->getConcentrationData();
 
-    auto get_view = [this](auto&& cdata)
-    {
-      return CmaRead::L2DView<double>({cdata.data(), static_cast<size_t>(cdata.size())},
-                                      this->liquid_scalar->n_row(),
-                                      this->liquid_scalar->n_col(),
-                                      false);
-    };
+    // auto get_view = [this](auto&& cdata)
+    // {
+    //   return CmaRead::L2DView<double>({cdata.data(), static_cast<size_t>(cdata.size())},
+    //                                   this->liquid_scalar->n_row(),
+    //                                   this->liquid_scalar->n_col(),
+    //                                   false);
+    // };
 
-    auto cliq = get_view(cliqdata);
+    // auto cliq = get_view(cliqdata);
 
-    CmaRead::L2DView<double> c;
+    // CmaRead::L2DView<double> c;
+    MatrixType & cliq = this->liquid_scalar->get_concentration();
+    MatrixType * cgas=nullptr;
     if (is_two_phase_flow)
     {
       assert(this->gas_scalar != nullptr);
-      c = get_view(this->gas_scalar->getConcentrationData());
-      assert(c.size() != 0);
+      cgas = &this->gas_scalar->get_concentration();
+      assert(cgas->size() != 0);
     }
+    
+    const auto& fv = scalar_init.liquid_f_init.value();
 
-    for (size_t i = 0; i < cliq.getNCol(); ++i)
+    for (size_t i_row = 0; i_row < cliq.rows(); ++i_row)
     {
-      scalar_init.liquid_f_init.value()(i, cliq);
-      if (is_two_phase_flow)
+      for (size_t i_col = 0; i_col < cliq.cols(); ++i_col)
       {
-        scalar_init.gas_f_init.value()(i, c);
+        cliq(i_row, i_col) = fv(i_row, i_col);
+        if (is_two_phase_flow)
+        {
+          (*cgas)(i_row, i_col) = scalar_init.gas_f_init.value()(i_row, i_col);
+        }
       }
     }
+
+    // for (size_t i = 0; i < cliq.getNCol(); ++i)
+    // {
+    //   cliq(i,)
+    //   scalar_init.liquid_f_init.value()(i, cliq);
+    //   if (is_two_phase_flow)
+    //   {
+    //     scalar_init.gas_f_init.value()(i, c);
+    //   }
+    // }
   }
 
   void SimulationUnit::post_init_concentration(const ScalarInitializer& scalar_init)

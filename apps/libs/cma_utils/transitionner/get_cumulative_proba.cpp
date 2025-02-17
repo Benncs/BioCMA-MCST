@@ -1,5 +1,5 @@
 #include <common/common.hpp>
-#include <get_cumulative_proba.hpp>
+#include <transitionner/get_cumulative_proba.hpp>
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>

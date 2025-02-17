@@ -1,3 +1,4 @@
+#include "cma_utils/iteration_state.hpp"
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
@@ -33,7 +34,7 @@ namespace Simulation::MassTransfer
     _proxy->db = 5e-3;
   }
 
-  void MassTransferModel::gas_liquid_mass_transfer(const CmaRead::ReactorState& state) const
+  void MassTransferModel::gas_liquid_mass_transfer(const CmaUtils::IterationState& state) const
   {
     PROFILE_SECTION("gas_liquid_mass_transfer")
     if (gas_scalar == nullptr || _proxy == nullptr)

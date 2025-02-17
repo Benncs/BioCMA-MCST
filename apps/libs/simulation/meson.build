@@ -26,7 +26,7 @@ project_dependencies = [biomodel_dependency, mc_dependency, common_dependecy]
 # Private dependencies needed to compile .so 
 private_dependencies = [eigen_dep,blas]
 
-external_dependcies = [cma_dep, blas,kokkos]
+external_dependcies = [blas,kokkos]
 
 simulation_public_dependencies = [
    project_dependencies,

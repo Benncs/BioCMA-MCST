@@ -1,9 +1,9 @@
 #ifndef __IMPL_HYDRO_MASS_TRANSFER_HPP__
 #define __IMPL_HYDRO_MASS_TRANSFER_HPP__
 
+#include "cma_utils/iteration_state.hpp"
 #include <Eigen/Core>
 #include <Eigen/Dense>
-#include <cma_read/reactorstate.hpp>
 #include <mc/domain.hpp>
 #include <simulation/mass_transfer.hpp>
 
@@ -31,7 +31,7 @@ namespace Simulation::MassTransfer
                                           const Eigen::ArrayXXd& liquid_concentration,
                                           const Eigen::ArrayXXd& gas_concentration,
                                           const Eigen::MatrixXd& liquid_volume,
-                                          const CmaRead::ReactorState& state);
+                                          const CmaUtils::IterationState& state);
 
    
   }; // namespace Impl

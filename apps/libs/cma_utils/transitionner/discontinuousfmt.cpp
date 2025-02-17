@@ -1,14 +1,16 @@
-#include <cma_utils/discontinuous_fmt.hpp>
-#include <cma_utils/transitionner.hpp>
+#include <transitionner/proxy_cache.hpp>
+#include <discontinuous_fmt.hpp>
+#include <linter_fmt.hpp>
+#include <transitionner/transitionner.hpp>
 namespace CmaUtils
 {
 
-  CmaUtils::PreCalculatedHydroState& DiscontinuousFMT::current_liq_hydro_state() noexcept
+  CmaUtils::ProxyPreCalculatedHydroState& DiscontinuousFMT::current_liq_hydro_state() noexcept
   {
     return liquid_pc[getFlowIndex()];
   }
 
-  CmaUtils::PreCalculatedHydroState& DiscontinuousFMT::current_gas_hydro_state() noexcept
+  CmaUtils::ProxyPreCalculatedHydroState& DiscontinuousFMT::current_gas_hydro_state() noexcept
   {
     return gas_pc[getFlowIndex()];
   }
@@ -36,6 +38,15 @@ namespace CmaUtils
       calculate_full_state(
           get_current_reactor_state(), current_liq_hydro_state(), current_gas_hydro_state());
     }
+  }
+
+  CmaUtils::ProxyPreCalculatedHydroState& LinterFMT::current_liq_hydro_state() noexcept
+  {
+    throw std::runtime_error("LinterFMT not implemented yet");
+  }
+  CmaUtils::ProxyPreCalculatedHydroState& LinterFMT::current_gas_hydro_state() noexcept
+  {
+    throw std::runtime_error("LinterFMT not implemented yet");
   }
 
 } // namespace CmaUtils

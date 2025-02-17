@@ -1,7 +1,7 @@
 #ifndef __CMA_UTILS_TRANSITIONNER_FACTORY_HPP__
 #define __CMA_UTILS_TRANSITIONNER_FACTORY_HPP__
 
-#include <cma_utils/transitionner.hpp>
+#include <transitionner/transitionner.hpp>
 #include <memory>
 
 namespace CmaUtils

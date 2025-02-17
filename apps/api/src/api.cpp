@@ -61,6 +61,14 @@ namespace
 namespace Api
 {
 
+  void finalise()
+  {
+    if (!Kokkos::is_finalized())
+    {
+      Kokkos::finalize();
+    }
+  }
+
   [[nodiscard]] int SimulationInstance::get_id() const
   {
     return id;
@@ -136,7 +144,8 @@ namespace Api
       }
     }
 
-    if (!Kokkos::is_initialized())
+    // initialize can be only set once even if finalized was called
+    if (!(Kokkos::is_initialized() || Kokkos::is_finalized()))
     {
       Kokkos::initialize(
           Kokkos::InitializationSettings()
@@ -149,11 +158,7 @@ namespace Api
 
   SimulationInstance::~SimulationInstance()
   {
-    _data = Core::CaseData(); //Explicity delete everything before 
-    if (!Kokkos::is_finalized())
-    {
-      Kokkos::finalize();
-    }
+    _data = Core::CaseData(); // Explicity delete everything before
   }
 
   std::optional<std::unique_ptr<SimulationInstance>>

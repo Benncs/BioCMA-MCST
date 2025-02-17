@@ -2,8 +2,7 @@
 #include <cassert>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/neighbors.hpp>
-#include <cma_utils/transitioner_factory.hpp>
-#include <cma_utils/transitionner.hpp>
+#include <transitionner/transitioner_factory.hpp>
 #include <cmt_common/cma_case.hpp>
 #include <core/global_initaliser.hpp>
 #include <core/scalar_factory.hpp>

@@ -17,6 +17,8 @@
 #include <string>
 #include <string_view>
 #include <Eigen/Core>
+#include <api/api.hpp>
+
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
 #endif
@@ -96,7 +98,7 @@ ExecInfo runtime_init(int argc, char** argv, Core::UserControlParameters& params
     std::atexit(WrapMPI::finalize);
 #endif
   }
-  // std::atexit(Kokkos::finalize);
+  std::atexit(Api::finalise);
 
   const auto id_seed = static_cast<size_t>(time(nullptr) * info.n_rank * info.thread_per_process);
 

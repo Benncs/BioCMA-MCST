@@ -1,7 +1,7 @@
 #ifndef __CORE_GLOBAL_INITIALLISER_HPP__
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
-#include "cma_utils/transitionner.hpp"
+#include "transitionner/transitionner.hpp"
 #include <core/scalar_factory.hpp>
 #include <core/simulation_parameters.hpp>
 #include <array>

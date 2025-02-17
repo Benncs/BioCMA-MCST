@@ -35,7 +35,7 @@
 
    <control name="sanofi">
       <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path>
-      <final_time>10</final_time>
+      <final_time>100</final_time>
       <!-- <final_time>36</final_time> -->
       <numper_particle>50000</numper_particle>
       <delta_time>0.01</delta_time>

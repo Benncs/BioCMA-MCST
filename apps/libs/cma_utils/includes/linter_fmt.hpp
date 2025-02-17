@@ -1,12 +1,12 @@
 #ifndef __CMA_UTILS_LINTER_FMT_HPP__
 #define __CMA_UTILS_LINTER_FMT_HPP__
 
-#include <cma_utils/transitionner.hpp>
+#include <transitionner/transitionner.hpp>
 #include <stdexcept>
 
 namespace CmaUtils
 {
-  class LinterFMT : public FlowMapTransitionner
+  class LinterFMT final : public FlowMapTransitionner
   {
   public:
     LinterFMT(std::size_t _n_flowmap,
@@ -17,24 +17,18 @@ namespace CmaUtils
     {
       throw std::runtime_error("LinterFMT not implemented yet");
     }
-    void update_flow() override
+    void update_flow() final
     {
       throw std::runtime_error("LinterFMT not implemented yet");
     }
 
   protected:
-    [[nodiscard]] const CmaRead::ReactorState& get_current_reactor_state() const noexcept override
+    [[nodiscard]] const CmaRead::ReactorState& get_current_reactor_state() const noexcept final
     {
       throw std::runtime_error("LinterFMT not implemented yet");
     }
-    CmaUtils::PreCalculatedHydroState& current_liq_hydro_state() override
-    {
-      throw std::runtime_error("LinterFMT not implemented yet");
-    }
-    CmaUtils::PreCalculatedHydroState& current_gas_hydro_state() override
-    {
-      throw std::runtime_error("LinterFMT not implemented yet");
-    }
+    CmaUtils::ProxyPreCalculatedHydroState& current_liq_hydro_state() noexcept final;
+    CmaUtils::ProxyPreCalculatedHydroState& current_gas_hydro_state() noexcept final;
   };
 } // namespace CmaUtils
 

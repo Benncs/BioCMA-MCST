@@ -11,18 +11,18 @@ namespace
 
   constexpr double c_kinematic_viscosity(double temp);
 
-  inline auto get_gas_fraction(const CmaRead::ReactorState& state)
+  inline auto get_gas_fraction(const CmaUtils::IterationState& state)
   {
-    const auto gas_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.gasVolume.data()),
-                                                      state.gasVolume.size());
+    const auto gas_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.gas->volume.data()),
+                                                      state.gas->volume.size());
 
-    const auto liq_array = Eigen::Map<Eigen::ArrayXd>(
-        const_cast<double*>(state.liquidVolume.data()), state.liquidVolume.size());
+    const auto liq_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.liq->volume.data()),
+                                                      state.liq->volume.size());
 
     return (gas_array / (liq_array + gas_array));
   }
 
-  inline auto get_interfacial_area(const double db, const CmaRead::ReactorState& state)
+  inline auto get_interfacial_area(const double db, const CmaUtils::IterationState& state)
   {
     return 6. * get_gas_fraction(state) / db;
   }
@@ -85,15 +85,15 @@ namespace Simulation::MassTransfer
                                           const Eigen::ArrayXXd& liquid_concentration,
                                           const Eigen::ArrayXXd& gas_concentration,
                                           const Eigen::MatrixXd& liquid_volume,
-                                          const CmaRead::ReactorState& state)
+                                          const CmaUtils::IterationState& state)
     {
 
       const double kinematic_viscosity = c_kinematic_viscosity(temperature);
 
       const double schmidtnumber = kinematic_viscosity / oxygen_diffusion_constant;
-
-      const Eigen::Map<Eigen::ArrayXd> energy_dissipation_array = Eigen::Map<Eigen::ArrayXd>(
-          const_cast<double*>(state.energy_dissipation.data()), state.energy_dissipation.size());
+      auto eps = state.infos.at("energy_dissipation");
+      const Eigen::Map<Eigen::ArrayXd> energy_dissipation_array =
+          Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(eps.data()), eps.size());
 
       assert(gas_concentration.stride() == liquid_concentration.stride());
       assert(energy_dissipation_array.rows() == liquid_concentration.cols());
@@ -103,10 +103,11 @@ namespace Simulation::MassTransfer
            get_interfacial_area(mtr.db, state))
               .transpose();
 
-  
       // impl_mtr(mtr.kla,liquid_concentration,0.7* gas_concentration,liquid_volume);
-      
-      mtr.mtr = (mtr.kla*(gas_concentration.colwise()*mtr.Henry-liquid_concentration)).matrix()*liquid_volume;
+
+      mtr.mtr =
+          (mtr.kla * (gas_concentration.colwise() * mtr.Henry - liquid_concentration)).matrix() *
+          liquid_volume;
     }
 
   } // namespace Impl

@@ -1,6 +1,6 @@
-#include "cma_utils/linter_fmt.hpp"
-#include <cma_utils/discontinuous_fmt.hpp>
-#include <cma_utils/transitioner_factory.hpp>
+#include "linter_fmt.hpp"
+#include <discontinuous_fmt.hpp>
+#include <transitionner/transitioner_factory.hpp>
 #include <iostream>
 #include <memory>
 #include <stdexcept>

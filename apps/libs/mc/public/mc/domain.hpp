@@ -1,14 +1,10 @@
 #ifndef __MC_REACTORDOMAIN_HPP__
 #define __MC_REACTORDOMAIN_HPP__
 
-#include "common/kokkos_vector.hpp"
-#include "traits/Kokkos_IterationPatternTrait.hpp"
+#include <common/kokkos_vector.hpp>
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Core_fwd.hpp>
-#include <Kokkos_Macros.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 #include <cassert>
-#include <cmt_common/macro_constructor_assignment.hpp>
 #include <common/common.hpp>
 #include <cstddef>
 #include <cstdint>
