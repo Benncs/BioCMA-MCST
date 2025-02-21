@@ -96,7 +96,8 @@ namespace Models
       auto g = _rng.random_pool.get_state();
       Uptake::distribute_init<float>(*this, g);
       length = static_cast<float>(Kokkos::max(minimal_length, g.normal(minimal_length, 0.7e-6)));
-      l_cp = static_cast<float>(Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 7.)), l_max));
+      l_cp = static_cast<float>(
+          Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 7.)), l_max));
       _rng.random_pool.free_state(g);
     }
 
@@ -105,9 +106,9 @@ namespace Models
                                 const LocalConcentrationView& concentrations,
                                 MC::KPRNG _rng)
     {
-      // constexpr double l_max = implEcoli2::l_max
-      const auto s = static_cast<float>(concentrations(0));
       using namespace implEcoli2;
+      const auto s = static_cast<float>(concentrations(0));
+
       const auto phi_s = Models::Uptake::uptake(
           static_cast<float>(d_t), *this, s, phi_s_max, phi_perm_max, NPermease_max);
 
@@ -126,26 +127,21 @@ namespace Models
       const float phi_s_residual_1 = Kokkos::max(phi_s - s_1, 0.F);
 
       nu_eff_2 = Kokkos::min(y_sxf * phi_s_residual_1, nu2); // gX/s
-      KOKKOS_ASSERT(nu_eff_1 >= 0.F);
-      KOKKOS_ASSERT(nu_eff_2 >= 0.F);
 
       const float s_growth = s_1 + (1 / y_sxf * nu_eff_2);
       const float s_overflow = phi_s - s_growth;
 
+      KOKKOS_ASSERT(nu_eff_1 >= 0.F);
+      KOKKOS_ASSERT(nu_eff_2 >= 0.F);
+
       p.status = (length > l_cp) ? MC::CellStatus::CYTOKINESIS : MC::CellStatus::IDLE;
-
-      // const double gamma = 1. / (1. + Kokkos::exp(-20.3 * (length - l_max)*1e6));
-
-      // Kokkos::printf("%f %f\r\n",gamma,length);
-
-      // update_division_status(p.status, d_t, gamma, _rng.random_pool);
 
       contrib.phi_s = -phi_s;
       contrib.phi_o =
           -1 * ((1. / y_sx / MolarMassG * y_os * MolarMassO2 * nu_eff_1) + 0. * nu_eff_2);
-      contrib.phi_a = s_overflow > 0. ? y_sa * (s_overflow) : 0;
+      contrib.phi_a = nu_eff_2 / y_sxf * y_sa + (s_overflow > 0. ? y_sa * (s_overflow) : 0);
+      // contrib.phi_a = (s_overflow > 0. ? y_sa * (s_overflow) : 0);
 
-      //   MSTEP(nu1, (nu_1_star - nu1) / tau_1);
       nu1 = nu1 + static_cast<float>(d_t) * ((nu_1_star - nu1) / tau_1);
       nu2 = nu2 + static_cast<float>(d_t) * ((nu_2_star - nu2) / tau_2);
       length = length + static_cast<float>(d_t) * ((nu_eff_1 + nu_eff_2) / factor);
@@ -165,7 +161,8 @@ namespace Models
       length = l;
       child_pimpl.length = l;
       auto g = _rng.random_pool.get_state();
-      child_pimpl.l_cp = static_cast<float>(Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 6.)), l_max));
+      child_pimpl.l_cp = static_cast<float>(
+          Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 6.)), l_max));
 
       Uptake::distribute_division<float>(*this, child_pimpl, g);
       _rng.random_pool.free_state(g);
