@@ -183,21 +183,25 @@ namespace MC
 
   inline void post_init_weight(std::unique_ptr<MonteCarloUnit>& unit, double x0, double total_mass)
   {
-    
-    const double new_weight = (x0 * unit->domain.getTotalVolume()) / (total_mass);
-    KOKKOS_ASSERT(new_weight > 0);
-    auto functor = [new_weight](auto& container)
+
+    // const double new_weight = (x0 * unit->domain.getTotalVolume()) / (total_mass);
+    auto functor = [total_mass, x0, &unit](auto& container)
     {
       auto& list = container.get_compute();
+      const std::size_t n_p = list.size();
+      // const double new_weight = static_cast<double>(n_p)*(x0 * unit->domain.getTotalVolume()) / (total_mass);
+      const double new_weight = (x0 * unit->domain.getTotalVolume()) / (total_mass);
+      KOKKOS_ASSERT(new_weight > 0);
 
       Kokkos::View<double, ComputeSpace> view_new_weight("view_new_weight");
       Kokkos::deep_copy(view_new_weight, new_weight);
       Kokkos::parallel_for("mc_init_apply",
-                           Kokkos::RangePolicy<ComputeSpace>(0, list.size()),
+                           Kokkos::RangePolicy<ComputeSpace>(0, n_p),
                            PostInitFunctor(list, new_weight));
+                           unit->init_weight = new_weight;
     };
 
-    unit->init_weight = new_weight;
+    
     std::visit(functor, unit->container);
   }
 

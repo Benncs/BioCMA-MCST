@@ -24,7 +24,7 @@
 
    <control name="0d_4s">
       <cma_case_path>../../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
-      <final_time>1500</final_time>
+      <final_time>3500</final_time>
       <numper_particle>5000</numper_particle>
       <delta_time>0.5</delta_time>
       <results_file_name>test_ferm</results_file_name>
@@ -60,14 +60,14 @@
    </control>
 
    <control name="merge">
-	   <cma_case_path>/mnt/c/Users/casale/Documents/code/jumbio/jumbio_case/out/merged/</cma_case_path>
-      <final_time>9</final_time>
-      <numper_particle>10000</numper_particle>
-      <delta_time>0.001</delta_time>
+      <cma_case_path>/home-local/casale/Documents/code/compose/jumbio_api/out/example_1/</cma_case_path>
+      <final_time>5000</final_time>
+      <numper_particle>100000</numper_particle>
+      <delta_time>0.01</delta_time>
       <results_file_name>test_merge</results_file_name>
       <number_exported_result>100</number_exported_result>
-      <model_name>model_monod</model_name>
-      <initialiser_path></initialiser_path>
+      <model_name>model_meta2</model_name>
+      <initialiser_path>./cma_data/merge.h5</initialiser_path>
    </control>
 
 </cases>

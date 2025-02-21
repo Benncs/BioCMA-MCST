@@ -279,6 +279,7 @@ namespace Simulation::KernelInline
     if (mask_next)
     {
       const size_t next = __find_next_compartment(i_compartment, rng2, i_neighbor);
+      
       KOKKOS_ASSERT(Kokkos::atomic_load(&current_container.n_cells) > 0);
       Kokkos::atomic_sub(&current_container.n_cells, 1);
       Kokkos::atomic_add(&local_compartments(next).n_cells, 1);

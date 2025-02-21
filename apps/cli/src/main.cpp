@@ -103,23 +103,23 @@ int main(int argc, char** argv)
     HANDLE_RC(h->register_parameters(std::move(user_params)));
     // 1:20e-3*0.5/3600., {3}
     // 2:20e-3*0.9/3600., {10}
-    // h->set_feed_constant_from_rvalue(20e-3 * 0.5 / 3600., {0.}, {0}, {0}, false);
+    h->set_feed_constant_from_rvalue(20e-3 * 0.5 / 3600., {300e-3}, {0}, {1}, true);
 
     // Sanofi
     //  h->set_feed_constant_from_rvalue(0.031653119013143756, {0.}, {0}, {0});
     // h->set_feed_constant_from_rvalue(0.001 / 3600., {0.3}, {0}, {1}, true);
     // h->set_feed_constant_from_rvalue(20e-3*0.4/3600., {10}, {0}, {0}, false);
-    h->set_feed_constant_from_rvalue(100*0.01 / 3600., {0.3}, {0}, {1}, true);
+    // h->set_feed_constant_from_rvalue(100*0.01 / 3600., {0.3}, {0}, {1}, true);
 
-    std::vector<double> c(100);
-    std::vector<std::size_t> p(100);
-    std::vector<std::size_t> ss(100);
-    for (int i = 0; i < 100; ++i)
-    {
-      p[i] = i;
-      c[i] = 0.3;
-      ss[i] = i;
-    }
+    // std::vector<double> c(100);
+    // std::vector<std::size_t> p(100);
+    // std::vector<std::size_t> ss(100);
+    // for (int i = 0; i < 100; ++i)
+    // {
+    //   p[i] = i;
+    //   c[i] = 0.3;
+    //   ss[i] = i;
+    // }
 
     // h->set_feed_constant(0.031653119013143756, c, p, ss, true);
 
