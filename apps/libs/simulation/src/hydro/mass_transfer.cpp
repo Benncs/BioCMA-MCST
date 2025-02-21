@@ -47,6 +47,10 @@ namespace Simulation::MassTransfer
     {
     case Simulation::MassTransfer::MTRType::FixedKla:
     {
+      Impl::fixed_kla_gas_liquid_mass_transfer(*_proxy,liquid_scalar->getConcentrationArray(),
+                                               gas_scalar->getConcentrationArray(),
+                                               liquid_scalar->getVolume(),
+                                               state);
       break;
     };
     case Simulation::MassTransfer::MTRType::Flowmap:

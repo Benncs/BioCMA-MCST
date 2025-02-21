@@ -28,12 +28,6 @@ namespace Simulation
 {
 
   SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept = default;
-  //     : mc_unit(std::move(other.mc_unit)), internal_counter_dead(other.internal_counter_dead),
-  //       waiting_allocation_particle(std::move(other.waiting_allocation_particle)),
-  //       flow_liquid(other.flow_liquid), flow_gas(other.flow_gas),
-  //       is_two_phase_flow(other.is_two_phase_flow)
-  // {
-  // }
 
   SimulationUnit::SimulationUnit(std::unique_ptr<MC::MonteCarloUnit>&& _unit,
                                  const ScalarInitializer& scalar_init,
@@ -64,8 +58,11 @@ namespace Simulation
 
     if (is_two_phase_flow)
     {
-      this->mt_model = MassTransfer::MassTransferModel(
-          MassTransfer::MTRType::Flowmap, liquid_scalar, gas_scalar);
+      const auto type = MassTransfer::MTRType::Flowmap;
+
+      this->mt_model = MassTransfer::MassTransferModel(type, liquid_scalar, gas_scalar);
+      //      this->mt_model = MassTransfer::MassTransferModel(
+      //    MassTransfer::MTRType::FixedKla, liquid_scalar, gas_scalar);
     }
   }
   void SimulationUnit::update(CmaUtils::IterationState&& newstate)
@@ -170,15 +167,15 @@ namespace Simulation
     // auto cliq = get_view(cliqdata);
 
     // CmaRead::L2DView<double> c;
-    MatrixType & cliq = this->liquid_scalar->get_concentration();
-    MatrixType * cgas=nullptr;
+    MatrixType& cliq = this->liquid_scalar->get_concentration();
+    MatrixType* cgas = nullptr;
     if (is_two_phase_flow)
     {
       assert(this->gas_scalar != nullptr);
       cgas = &this->gas_scalar->get_concentration();
       assert(cgas->size() != 0);
     }
-    
+
     const auto& fv = scalar_init.liquid_f_init.value();
 
     for (size_t i_row = 0; i_row < cliq.rows(); ++i_row)
