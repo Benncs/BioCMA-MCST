@@ -63,7 +63,7 @@ namespace Api
 
   void finalise()
   {
-    if (!Kokkos::is_finalized())
+    if (!Kokkos::is_finalized() && Kokkos::is_initialized())
     {
       Kokkos::finalize();
     }

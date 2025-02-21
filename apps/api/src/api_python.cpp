@@ -1,4 +1,5 @@
 #include <api/api.hpp>
+#include <api/api_raw.h>
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
@@ -7,12 +8,11 @@
 #include <pybind11/detail/common.h>
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
 #include <pybind11/pytypes.h>
+#include <pybind11/stl.h>
 #include <stdexcept>
 #include <string>
 #include <tuple>
-#include <api/api_raw.h>
 
 namespace py = pybind11;
 
@@ -66,8 +66,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
   m.def("register_serde", &register_serde);
   m.def("register_parameters", &register_parameters);
   m.def("register_model_name", &register_model_name);
-
-  m.def("register_initialiser_file_path",&register_initializer_path);
+  m.def("finalize", &finalize);
+  m.def("register_initialiser_file_path", &register_initializer_path);
 
   m.def("make_params",
         &make_params,
@@ -128,25 +128,33 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 
   // Feed
 
-  m.def("set_liquid_feed_constant",
-        [](std::shared_ptr<Api::SimulationInstance>& handle,
-           double _f,
-           std::vector<double> _target,
-           std::vector<std::size_t> _position,
-           std::vector<std::size_t> _species,bool fed_batch)
-        { handle->set_feed_constant(_f, _target, _position, _species,false,fed_batch); },
-        py::arg("handle"),
-        py::arg("flow"),
-        py::arg("concentration value"),
-        py::arg("position"),
-        py::arg("species"),
-        py::arg("fed_batch")=false);
+  m.def(
+      "set_liquid_feed_constant",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         double _f,
+         std::vector<double> _target,
+         std::vector<std::size_t> _position,
+         std::vector<std::size_t> _species,
+         bool fed_batch)
+      { handle->set_feed_constant(_f, _target, _position, _species, false, fed_batch); },
+      py::arg("handle"),
+      py::arg("flow"),
+      py::arg("concentration value"),
+      py::arg("position"),
+      py::arg("species"),
+      py::arg("fed_batch") = false);
 
-   m.def("set_gas_feed_constant",
-        [](std::shared_ptr<Api::SimulationInstance>& handle,
-           double _f,
-           std::vector<double> _target,
-           std::vector<std::size_t> _position,
-           std::vector<std::size_t> _species)
-        { handle->set_feed_constant(_f, _target, _position, _species,true); });
+  m.def(
+      "set_gas_feed_constant",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         double _f,
+         std::vector<double> _target,
+         std::vector<std::size_t> _position,
+         std::vector<std::size_t> _species)
+      { handle->set_feed_constant(_f, _target, _position, _species, true); },
+      py::arg("handle"),
+      py::arg("flow"),
+      py::arg("concentration value"),
+      py::arg("position"),
+      py::arg("species"));
 }
