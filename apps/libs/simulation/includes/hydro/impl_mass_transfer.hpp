@@ -22,8 +22,6 @@ namespace Simulation::MassTransfer
     double db;
   };
 
-  
-  
   namespace Impl
   {
 
@@ -33,7 +31,12 @@ namespace Simulation::MassTransfer
                                           const Eigen::MatrixXd& liquid_volume,
                                           const CmaUtils::IterationState& state);
 
-   
+    void fixed_kla_gas_liquid_mass_transfer(MassTransferProxy& mtr,
+                                            const Eigen::ArrayXXd& liquid_concentration,
+                                            const Eigen::ArrayXXd& gas_concentration,
+                                            const Eigen::MatrixXd& liquid_volume,
+                                            const CmaUtils::IterationState& state);
+
   }; // namespace Impl
 
   struct KlFonctor
