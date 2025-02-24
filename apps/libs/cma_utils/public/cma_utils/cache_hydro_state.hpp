@@ -17,45 +17,88 @@ using CumulativeProbabilityView =
 
 using FlowMatrixType = Eigen::SparseMatrix<double>;
 
+/** @brief Namespace to handle algorithms and structures related to reading compartment mesh */
 namespace CmaUtils
 {
   class ProxyPreCalculatedHydroState;
 
+  /**
+   * @brief Structure to store hydrodynamic properties from a compartment mesh.
+   *
+   * This class is populated during the reading and processing of a Compartment-Mesh case
+   * and is later accessed during transient simulations. The primary advantage is that it
+   * allows reusing precomputed states, eliminating the need to recalculate them from the mesh.
+   * Access and modification are performed via the ProxyCalculatedHydroState class, which
+   * ensures controlled interaction with the private members of this class.
+   */
   class PreCalculatedHydroState
   {
   public:
     friend class ProxyCalculatedHydroState;
 
+    /**
+     * @brief Default constructor.
+     */
     PreCalculatedHydroState();
+
+    /**
+     * @brief Default destructor.
+     */
     ~PreCalculatedHydroState() = default;
+
+    /**
+     * @brief Constructor initializing with a given flow matrix.
+     * @param _tm Reference to a FlowMatrixType object.
+     */
     explicit PreCalculatedHydroState(const FlowMatrixType& _tm);
+
+    /**
+     * @brief Default move constructor.
+     */
     PreCalculatedHydroState& operator=(PreCalculatedHydroState&& rhs) = default;
+    /**
+     * @brief Deleted copy constructor.
+     */
     PreCalculatedHydroState& operator=(const PreCalculatedHydroState& rhs) = delete;
+    /**
+     * @brief Default move assigment.
+     */
     PreCalculatedHydroState(PreCalculatedHydroState&& other) = default;
+    /**
+     * @brief Deleted copy assigment.
+     */
     PreCalculatedHydroState(const PreCalculatedHydroState& other) = delete;
-
-    FlowMatrixType transition_matrix;
-    Eigen::Matrix<double, -1, -1, Eigen::RowMajor> cumulative_probability;
-    std::vector<double> inverse_volume;
-    std::vector<double> volume;
-    DiagonalView<ComputeSpace> diagonal_compute;
-    CumulativeProbabilityView<ComputeSpace> compute_cumulative_probability;
-
-
+    /**
+     * @brief Get the transition matrix.
+     * @return Constant reference to FlowMatrixType.
+     */
     [[nodiscard]] const FlowMatrixType& get_transition() const;
+
+    /**
+     * @brief Get the kernel diagonal view.
+     * @return DiagonalView object for kernel computation.
+     */
     [[nodiscard]] DiagonalView<ComputeSpace> get_kernel_diagonal() const;
-  
+
+    FlowMatrixType transition_matrix; ///< Matrix representing flow transitions.
+
+    Eigen::Matrix<double, -1, -1, Eigen::RowMajor>
+        cumulative_probability; ///< Cumulative probability matrix.
+
+    std::vector<double> inverse_volume;          ///< Inverse of compartment volumes.
+    std::vector<double> volume;                  ///< Volumes of compartments.
+    DiagonalView<ComputeSpace> diagonal_compute; ///< Diagonal view for compute operations.
+
+    CumulativeProbabilityView<ComputeSpace>
+        compute_cumulative_probability; ///< View for cumulative probability computation.
 
   private:
-    
   };
 
   inline DiagonalView<ComputeSpace> PreCalculatedHydroState::get_kernel_diagonal() const
   {
     return diagonal_compute;
   }
-
-
 
 } // namespace CmaUtils
 

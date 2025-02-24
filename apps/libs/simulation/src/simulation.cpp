@@ -1,6 +1,3 @@
-#include "eigen_kokkos.hpp"
-#include "simulation/mass_transfer.hpp"
-#include "simulation/simulation_kernel.hpp"
 #include <Kokkos_Core.hpp>
 #include <cma_utils/iteration_state.hpp>
 #include <common/kokkos_vector.hpp>
@@ -8,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <eigen_kokkos.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
 #include <mc/particles/mcparticles.hpp>
@@ -18,9 +16,11 @@
 #include <scalar_simulation.hpp>
 #include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/mass_transfer.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
+#include <simulation/simulation_kernel.hpp>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
 #include <utility>
 
@@ -152,21 +152,7 @@ namespace Simulation
 
   void SimulationUnit::post_init_concentration_functor(const ScalarInitializer& scalar_init)
   {
-    // CmaRead::L2DView<double> cliq = this->liquid_scalar->getConcentrationView();
 
-    // auto cliqdata = this->liquid_scalar->getConcentrationData();
-
-    // auto get_view = [this](auto&& cdata)
-    // {
-    //   return CmaRead::L2DView<double>({cdata.data(), static_cast<size_t>(cdata.size())},
-    //                                   this->liquid_scalar->n_row(),
-    //                                   this->liquid_scalar->n_col(),
-    //                                   false);
-    // };
-
-    // auto cliq = get_view(cliqdata);
-
-    // CmaRead::L2DView<double> c;
     MatrixType& cliq = this->liquid_scalar->get_concentration();
     MatrixType* cgas = nullptr;
     if (is_two_phase_flow)
@@ -189,16 +175,6 @@ namespace Simulation
         }
       }
     }
-
-    // for (size_t i = 0; i < cliq.getNCol(); ++i)
-    // {
-    //   cliq(i,)
-    //   scalar_init.liquid_f_init.value()(i, cliq);
-    //   if (is_two_phase_flow)
-    //   {
-    //     scalar_init.gas_f_init.value()(i, c);
-    //   }
-    // }
   }
 
   void SimulationUnit::post_init_concentration(const ScalarInitializer& scalar_init)

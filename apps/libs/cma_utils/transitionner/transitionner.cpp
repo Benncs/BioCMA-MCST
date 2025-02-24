@@ -76,7 +76,7 @@ namespace CmaUtils
       const CmaRead::Neighbors::Neighbors_const_view_t& neighbors)
   {
 
-    if (need_liquid_state())
+    if (need_liquid_state_calculation())
     {
       auto& cls = current_liq_hydro_state();
       const auto mat_f_liq_view = CmaRead::FlowMap::FlowMap_const_view_t(flows, volumeLiq.size());
@@ -151,8 +151,12 @@ namespace CmaUtils
 
   void FlowMapTransitionner::update_counters()
   {
+    //The current index is increment
     if (++this->current_flowmap_count == this->n_per_flowmap)
     {
+      //if it exceeds the number of iteration per flowmap
+      //We reset it to 0 and increment repetition_count, this allow to switch to the next element in buffer 
+      //During the first loop we have repetition_count<n_flowmap but after looping we have repetition_count>n_flowmap 
       this->repetition_count++;
       this->current_flowmap_count = 0;
     }

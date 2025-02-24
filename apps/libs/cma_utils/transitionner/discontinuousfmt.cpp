@@ -1,17 +1,19 @@
-#include <transitionner/proxy_cache.hpp>
 #include <discontinuous_fmt.hpp>
 #include <linter_fmt.hpp>
+#include <transitionner/proxy_cache.hpp>
 #include <transitionner/transitionner.hpp>
 namespace CmaUtils
 {
 
   CmaUtils::ProxyPreCalculatedHydroState& DiscontinuousFMT::current_liq_hydro_state() noexcept
   {
+    // With discontinuous we dont need to do anything just select the right index
     return liquid_pc[getFlowIndex()];
   }
 
   CmaUtils::ProxyPreCalculatedHydroState& DiscontinuousFMT::current_gas_hydro_state() noexcept
   {
+    // With discontinuous we dont need to do anything just select the right index
     return gas_pc[getFlowIndex()];
   }
 
@@ -33,8 +35,10 @@ namespace CmaUtils
 
   void DiscontinuousFMT::update_flow()
   {
-    if (need_liquid_state())
+
+    if (need_liquid_state_calculation())
     {
+      // need_liquid_state_calculation ensures that this branch will be taken only "n_flowmap" times
       calculate_full_state(
           get_current_reactor_state(), current_liq_hydro_state(), current_gas_hydro_state());
     }

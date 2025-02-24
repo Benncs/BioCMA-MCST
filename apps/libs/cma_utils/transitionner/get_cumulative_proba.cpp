@@ -2,7 +2,7 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <common/common.hpp>
-#include <transitionner/get_cumulative_proba.hpp>
+#include <transitionner/transport.hpp>
 
 namespace CmaUtils
 {
