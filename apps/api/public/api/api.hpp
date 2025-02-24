@@ -14,7 +14,7 @@
 #include <string_view>
 
 /**
- * @namespace Api
+ * @brief Api
  * This namespace contains classes and functions related to the simulation API.
  */
 namespace Api

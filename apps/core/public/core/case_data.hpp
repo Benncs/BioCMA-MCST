@@ -10,7 +10,9 @@
 #include <transitionner/transitionner.hpp>
 
 
-
+/**
+  @brief Core component to perform simulation 
+ */
 namespace Core
 {
 

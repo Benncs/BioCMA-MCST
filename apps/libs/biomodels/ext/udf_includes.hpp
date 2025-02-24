@@ -21,35 +21,46 @@ namespace MC
   class ParticleDataHolder;
 } // namespace MC
 
+/**
+  @brief Unsafe namespace to handle UDF (User-defined function) via dynamic library loading
+ */
 namespace UnsafeUDF
 {
+  /**
+  @brief Static class to access to low-level configuration to load dynamic library
+   */
   struct Loader
   {
-    static void (*make_udf)(Models::User&);
-    static void (*init_udf)(Models::UserImpl&, MC::ParticleDataHolder&,MC::KPRNG);
+    static void (*make_udf)(Models::User&); //< make function ptr
+    static void (*init_udf)(Models::UserImpl&,
+                            MC::ParticleDataHolder&,
+                            MC::KPRNG); //< init function ptr
     static void (*update_udf)(Models::UserImpl&,
                               double d_t,
                               MC::ParticleDataHolder& p,
-                              const LocalConcentrationView& concentration);
-    static void (*delete_udf)(Models::UserImpl**);
+                              const LocalConcentrationView& concentration); //< update function ptr
+    static void (*delete_udf)(Models::UserImpl**);                          //< delete function ptr
 
     static void (*contribution_udf)(Models::UserImpl&,
                                     MC::ParticleDataHolder& p,
-                                    const ContributionView& contrib);
+                                    const ContributionView& contrib); //< contribution function ptr
 
     static Models::UserImpl* (*division_udf)(Models::UserImpl&,
                                              MC::ParticleDataHolder& p,
-                                             MC::KPRNG);
+                                             MC::KPRNG); //< division function ptr
 
-    static double (*mass)(Models::UserImpl&);
+    static double (*mass)(Models::UserImpl&); //< mass function ptr
 
-    static void (*fill_properties)(Models::UserImpl&, SubViewtype);
+    static void (*fill_properties)(Models::UserImpl&, SubViewtype); //< fill_properties function ptr
 
-    static std::vector<std::string> (*names)();
+    static std::vector<std::string> (*names)(); //< names function ptr
 
-    static std::size_t(*get_number)();
+    static std::size_t (*get_number)(); //< get_number function ptr
 
 #ifdef DECLARE_EXPORT_UDF
+    /**
+      @brief Load UDF from .so path
+     */
     [[nodiscard]] static std::shared_ptr<DynamicLibrary> init_lib(std::string_view path);
 #endif
   };
@@ -58,19 +69,23 @@ namespace UnsafeUDF
 
 #ifdef DECLARE_EXPORT_UDF
 
-using init_udf_ptr = decltype(UnsafeUDF::Loader::init_udf);
-using make_udf_ptr = decltype(UnsafeUDF::Loader::make_udf);
-using delete_udf_ptr = decltype(UnsafeUDF::Loader::delete_udf);
-using update_udf_ptr = decltype(UnsafeUDF::Loader::update_udf);
-using contribution_udf_ptr = decltype(UnsafeUDF::Loader::contribution_udf);
-using division_udf_ptr = decltype(UnsafeUDF::Loader::division_udf);
+using init_udf_ptr = decltype(UnsafeUDF::Loader::init_udf);     //< init function ptr type
+using make_udf_ptr = decltype(UnsafeUDF::Loader::make_udf);     //< make function ptr type
+using delete_udf_ptr = decltype(UnsafeUDF::Loader::delete_udf); //< delete function ptr type
+using update_udf_ptr = decltype(UnsafeUDF::Loader::update_udf); //< update function ptr type
+using contribution_udf_ptr =
+    decltype(UnsafeUDF::Loader::contribution_udf); //< contribution function ptr type
+using division_udf_ptr = decltype(UnsafeUDF::Loader::division_udf); //< division function ptr type
 using mass_udf_ptr = decltype(UnsafeUDF::Loader::mass);
-using fill_prop_udf_ptr = decltype(UnsafeUDF::Loader::fill_properties);
-using names_udf_ptr = decltype(UnsafeUDF::Loader::names);
-using get_number_udf_ptr = decltype(UnsafeUDF::Loader::get_number);
-
+using fill_prop_udf_ptr =
+    decltype(UnsafeUDF::Loader::fill_properties);         //< fill_properties function ptr type
+using names_udf_ptr = decltype(UnsafeUDF::Loader::names); //< names function ptr type
+using get_number_udf_ptr = decltype(UnsafeUDF::Loader::get_number); //< get_number function ptr type
 
 // clang-format off
+/**
+  @brief Module declaration
+*/ 
 DEFINE_MODULE(
               MODULE_ITEM(init_udf) 
               MODULE_ITEM(make_udf) 

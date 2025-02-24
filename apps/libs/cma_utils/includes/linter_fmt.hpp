@@ -1,11 +1,17 @@
 #ifndef __CMA_UTILS_LINTER_FMT_HPP__
 #define __CMA_UTILS_LINTER_FMT_HPP__
 
-#include <transitionner/transitionner.hpp>
 #include <stdexcept>
+#include <transitionner/transitionner.hpp>
 
 namespace CmaUtils
 {
+  /**
+ @brief Derived class to handle Linear interpolation transition between flowmaps
+
+ Linear interpolation means that we pass don't pass from flowmap i to flormap i+1 but we use
+ intermediate flowmap created with linear interpolation
+  */
   class LinterFMT final : public FlowMapTransitionner
   {
   public:

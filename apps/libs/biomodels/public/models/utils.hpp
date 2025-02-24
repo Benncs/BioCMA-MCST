@@ -1,11 +1,14 @@
 #ifndef __BIO__UTILS_HPP__
 #define __BIO__UTILS_HPP__
-#include "mc/particles/data_holder.hpp"
+
+#include <mc/particles/data_holder.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
-#include <concepts>
 #include <mc/prng/prng.hpp>
 
+/**
+  @brief Models definition
+ */
 namespace Models
 {
 

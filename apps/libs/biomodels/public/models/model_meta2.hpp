@@ -5,7 +5,10 @@
 #include <models/uptake.hpp>
 #include <models/utils.hpp>
 
-namespace implEcoli2
+/**
+  @brief Contant and definition specific to model Meta  
+ */
+namespace implMeta
 {
   constexpr float l_max = 5e-6;
   constexpr float l_c = 3e-6;
@@ -58,11 +61,14 @@ namespace implEcoli2
   constexpr float MolarMassO2 = 32;
 
   constexpr float alpha_divison = 5.2;
-} // namespace implEcoli2
+} // namespace implMeta
 
 namespace Models
 {
 
+  /**
+  @brief Two growth rate metabolic model  
+   */
   struct Meta2
   {
     struct contribs
@@ -85,11 +91,11 @@ namespace Models
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
     {
       (void)p;
-      constexpr auto l_c = implEcoli2::l_c;
-      constexpr double minimal_length = implEcoli2::minimal_length;
-      constexpr double l_max = implEcoli2::l_max;
+      constexpr auto l_c = implMeta::l_c;
+      constexpr double minimal_length = implMeta::minimal_length;
+      constexpr double l_max = implMeta::l_max;
 
-      nu1 = implEcoli2::nu_max * implEcoli2::factor / 4;
+      nu1 = implMeta::nu_max * implMeta::factor / 4;
       nu2 = 0; // pimpl.nu1/5.;
 
       contrib = {0., 0.0, 0.};
@@ -106,7 +112,7 @@ namespace Models
                                 const LocalConcentrationView& concentrations,
                                 MC::KPRNG _rng)
     {
-      using namespace implEcoli2;
+      using namespace implMeta;
       const auto s = static_cast<float>(concentrations(0));
 
       const auto phi_s = Models::Uptake::uptake(
@@ -150,9 +156,9 @@ namespace Models
     KOKKOS_FUNCTION Meta2 division(MC::ParticleDataHolder& p, MC::KPRNG _rng)
     {
       (void)p;
-      constexpr auto l_c = implEcoli2::l_c;
-      constexpr double minimal_length = implEcoli2::minimal_length;
-      constexpr double l_max = implEcoli2::l_max;
+      constexpr auto l_c = implMeta::l_c;
+      constexpr double minimal_length = implMeta::minimal_length;
+      constexpr double l_max = implMeta::l_max;
 
       const float l = length / 2.F;
 
@@ -182,7 +188,7 @@ namespace Models
     [[nodiscard]] KOKKOS_FUNCTION double mass() const noexcept
     {
 
-      return implEcoli2::factor * length;
+      return implMeta::factor * length;
     }
 
     template <class Archive> void serialize(Archive& ar)
