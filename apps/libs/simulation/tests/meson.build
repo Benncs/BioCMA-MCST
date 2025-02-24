@@ -24,12 +24,12 @@ test_probes = executable(
   include_directories: [private_simulation_includes],
 )
 
-test_log = executable(
-  'test_log',
-  'test_log.cpp',
-  dependencies: [simulation_lib_dependency],
-  include_directories: [],
-)
+# test_log = executable(
+#   'test_log',
+#   'test_log.cpp',
+#   dependencies: [simulation_lib_dependency],
+#   include_directories: [],
+# )
 # test('test_log', test_log)
 
 test('test_probes', test_probes)

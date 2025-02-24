@@ -2,7 +2,6 @@
 #include <cassert>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/neighbors.hpp>
-#include <transitionner/transitioner_factory.hpp>
 #include <cmt_common/cma_case.hpp>
 #include <core/global_initaliser.hpp>
 #include <core/scalar_factory.hpp>
@@ -21,6 +20,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <transitionner/transitioner_factory.hpp>
 #include <utility>
 #include <vector>
 #include <wrap_init_model_selector.hpp>
@@ -307,7 +307,16 @@ namespace Core
   std::optional<Simulation::ScalarInitializer>
   GlobalInitialiser::init_scalar(Core::ScalarFactory::ScalarVariant&& variant)
   {
-    return std::nullopt;
+
+    
+    auto scalar_init =
+        Core::ScalarFactory::scalar_factory(f_init_gas_flow, gas_volume, liquid_volume, variant);
+    if (info.current_rank != 0) // FIXME
+    {
+      scalar_init.gas_flow = false;
+    }
+    validate_step(InitStep::Scalar);
+    return scalar_init;
   }
 
   std::optional<Simulation::ScalarInitializer> GlobalInitialiser::init_scalar()

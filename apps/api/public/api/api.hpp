@@ -179,6 +179,8 @@ namespace Api
                                        bool gas = false,
                                        bool fed_batch = false);
 
+    ApiResult register_scalar_initiazer(Core::ScalarFactory::ScalarVariant&& var);
+
     /**
      * @brief Retrieve the simulation instance's unique identifier.
      *

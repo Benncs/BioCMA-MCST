@@ -15,7 +15,8 @@ namespace Simulation
     Uniform,     // Need vec{uniform concentration}
     Local,       // Need vec{index compartment }+ vec{concentration}
     File,        // Need filepath
-    CustomScript // Need script path
+    CustomScript ,// Need script path
+    FullCase ,// Need script path
   };
 
   // using init_scalar_f_t =

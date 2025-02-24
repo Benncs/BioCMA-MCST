@@ -85,6 +85,25 @@ namespace Core::ScalarFactory
     return res;
   }
 
+  // Simulation::ScalarInitializer Visitor::operator()(CustomFunctor func)
+  // {
+  //   auto res = Simulation::ScalarInitializer();
+  //   res.type = Simulation::ScalarInitialiserType::CustomFunctor;
+  //   res.n_species = func.n_species;
+
+  //   res.gas_flow = false;
+
+  //   res.liquid_f_init = func.liquid;
+
+  //   if (func.gas.has_value())
+  //   {
+  //     res.gas_f_init = *func.gas;
+  //     res.gas_flow = true;
+  //   }
+
+  //   return res;
+  // }
+
   Simulation::ScalarInitializer Visitor::operator()(Local args)
   {
     auto res = Simulation::ScalarInitializer();
@@ -113,16 +132,11 @@ namespace Core::ScalarFactory
 
     const auto wrap_functor = [](auto&& i, auto&& c)
     {
-      return [
-              concentrations = std::forward<decltype(c)>(c),
+      return [concentrations = std::forward<decltype(c)>(c),
               _indices = std::forward<decltype(i)>(i)](std::size_t i_row, std::size_t i_col)
       {
         if (std::ranges::find(_indices, i_col) != _indices.end())
         {
-          //   for (size_t i_species = 0; i_species < n_species; ++i_species)
-          //   {
-          //     view(i_species, i) = concentrations[i_species];
-          //   }
           return concentrations[i_row];
         }
         else
@@ -139,6 +153,26 @@ namespace Core::ScalarFactory
       res.gas_f_init = wrap_functor(*args.gas_indices, *args.gas_concentration);
       res.gas_flow = true;
     }
+
+    return res;
+  }
+
+  Simulation::ScalarInitializer Visitor::operator()(FullCase data)
+  {
+    auto res = Simulation::ScalarInitializer();
+    res.type = Simulation::ScalarInitialiserType::FullCase;
+    res.gas_flow = data.raw_gas.has_value();
+    res.n_species = data.n_species;
+    if (res.gas_flow)
+    {
+      if (data.raw_gas->size() != data.raw_liquid.size())
+      {
+        throw std::invalid_argument("Liquid and Gas data should have the same size");
+      }
+      res.gas_buffer = std::move(*data.raw_gas);
+    }
+
+    res.liquid_buffer = std::move(data.raw_liquid);
 
     return res;
   }
@@ -227,7 +261,6 @@ namespace Core::ScalarFactory
       }
       return _flag;
     };
-
     switch (res.type)
     {
 
@@ -240,7 +273,6 @@ namespace Core::ScalarFactory
     case Simulation::ScalarInitialiserType::Local:
     {
       flag = test_functor(res);
-
       break;
     }
     case Simulation::ScalarInitialiserType::File:
@@ -256,8 +288,15 @@ namespace Core::ScalarFactory
       break;
     }
     case Simulation::ScalarInitialiserType::CustomScript:
+    {
       flag = false;
       break;
+    }
+    case Simulation::ScalarInitialiserType::FullCase:
+    {
+      flag = true; // TODO
+      break;
+    }
     }
 
     return flag;

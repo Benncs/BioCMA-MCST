@@ -253,6 +253,12 @@ namespace Api
     return ApiResult();
   }
 
+  ApiResult SimulationInstance::register_scalar_initiazer(Core::ScalarFactory::ScalarVariant&& var)
+  {
+    this->scalar_initializer_variant = std::move(var);
+    return ApiResult();
+  }
+
   ApiResult SimulationInstance::apply(bool to_load) noexcept
   {
     if (to_load)

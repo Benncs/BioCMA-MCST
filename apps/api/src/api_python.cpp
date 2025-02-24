@@ -1,3 +1,4 @@
+#include "core/scalar_factory.hpp"
 #include <api/api.hpp>
 #include <api/api_raw.h>
 #include <cstddef>
@@ -157,4 +158,32 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("concentration value"),
       py::arg("position"),
       py::arg("species"));
+
+  m.def(
+      "set_initialiser_from_data",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         std::size_t n_species,
+         const py::array_t<double_t>&& py_liquid,
+         std::optional<py::array_t<double_t>>&& py_gas)
+
+      {
+        auto buf = py_liquid.request();
+        std::span<double> data(static_cast<double*>(buf.ptr), buf.size);
+        std::vector<double> liq(data.begin(), data.end());
+
+        std::optional<std::vector<double>> gas = std::nullopt;
+        if (py_gas.has_value())
+        {
+          auto buf = py_gas->request();
+          std::span<double> data(static_cast<double*>(buf.ptr), buf.size);
+          gas = std::vector<double>(data.begin(), data.end());
+        }
+
+        handle->register_scalar_initiazer(
+            Core::ScalarFactory::FullCase(n_species, std::move(liq), std::move(gas)));
+      },
+      py::arg("handle"),
+      py::arg("n_species"),
+      py::arg("liquid value"),
+      py::arg("gas")=std::nullopt);
 }
