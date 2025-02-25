@@ -68,7 +68,7 @@ namespace Simulation
   void ScalarSimulation::performStepGL(double d_t,
                                        const FlowMatrixType& m_transition,
                                        const MatrixType& mtr,
-                                       MassTransfer::MTRSign sign)
+                                       MassTransfer::Sign sign)
   {
     PROFILE_SECTION("performStep_gl")
 #define c concentrations.eigen_data

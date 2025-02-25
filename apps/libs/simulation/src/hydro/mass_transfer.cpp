@@ -1,4 +1,4 @@
-#include "cma_utils/iteration_state.hpp"
+#include "common/common.hpp"
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
@@ -10,10 +10,68 @@
 #include <simulation/mass_transfer.hpp>
 #include <stdexcept>
 #include <utility>
+
+namespace
+{
+  struct FunctorKla
+  {
+    const std::shared_ptr<Simulation::MassTransfer::MassTransferProxy>& proxy;
+    std::size_t nrow;
+
+    void operator()(Simulation::MassTransfer::Type::FixedKla& kla) const
+    {
+      if (kla.value.size() != nrow)
+      {
+        throw std::invalid_argument("Given kla dimension doesn’t match with CM dimensions");
+      }
+      for (std::size_t i = 0; i < nrow; ++i)
+      {
+        proxy->kla.row(EIGEN_INDEX(i)).setConstant(kla.value[i]);
+      }
+    }
+
+    void operator()(Simulation::MassTransfer::Type::Flowmap&) const
+    {
+      proxy->kla.setZero();
+    }
+  };
+
+  struct MtrVisitor
+  {
+    const std::shared_ptr<Simulation::MassTransfer::MassTransferProxy>& proxy;
+    const std::shared_ptr<Simulation::ScalarSimulation>& liquid_scalar;
+    const std::shared_ptr<Simulation::ScalarSimulation>& gas_scalar;
+    const CmaUtils::IterationState& state;
+
+    void operator()(const Simulation::MassTransfer::Type::FixedKla& _) const
+    {
+      (void)_;
+      Simulation::MassTransfer::Impl::fixed_kla_gas_liquid_mass_transfer(
+          *proxy,
+          liquid_scalar->getConcentrationArray(),
+          gas_scalar->getConcentrationArray(),
+          liquid_scalar->getVolume(),
+          state);
+    }
+
+    void operator()(const Simulation::MassTransfer::Type::Flowmap& _) const
+    {
+      (void)_;
+      Simulation::MassTransfer::Impl::flowmap_gas_liquid_mass_transfer(
+          *proxy,
+          liquid_scalar->getConcentrationArray(),
+          gas_scalar->getConcentrationArray(),
+          liquid_scalar->getVolume(),
+          state);
+    }
+  };
+
+} // namespace
+
 namespace Simulation::MassTransfer
 {
 
-  MassTransferModel::MassTransferModel(MTRType _type,
+  MassTransferModel::MassTransferModel(MassTransfer::Type::MtrTypeVariant _type,
                                        std::shared_ptr<Simulation::ScalarSimulation> _liquid_scalar,
                                        std::shared_ptr<Simulation::ScalarSimulation> _gas_scalar)
       : type(_type), liquid_scalar(std::move(_liquid_scalar)), gas_scalar(std::move(_gas_scalar))
@@ -30,7 +88,9 @@ namespace Simulation::MassTransfer
     _proxy->Henry = Eigen::ArrayXXd(liquid_scalar->n_row(), 1);
     _proxy->Henry.setZero();
     _proxy->Henry(1) = 3.181e-2;
-    _proxy->kla.setZero();
+
+    std::visit(FunctorKla{_proxy, nrow}, _type);
+
     _proxy->db = 5e-3;
   }
 
@@ -42,32 +102,33 @@ namespace Simulation::MassTransfer
       throw std::invalid_argument(
           "gas_liquid_mass_transfer should not be called if gas not intialized");
     }
-
-    switch (type)
-    {
-    case Simulation::MassTransfer::MTRType::FixedKla:
-    {
-      Impl::fixed_kla_gas_liquid_mass_transfer(*_proxy,liquid_scalar->getConcentrationArray(),
-                                               gas_scalar->getConcentrationArray(),
-                                               liquid_scalar->getVolume(),
-                                               state);
-      break;
-    };
-    case Simulation::MassTransfer::MTRType::Flowmap:
-    {
-      Impl::flowmap_gas_liquid_mass_transfer(*_proxy,
-                                             liquid_scalar->getConcentrationArray(),
-                                             gas_scalar->getConcentrationArray(),
-                                             liquid_scalar->getVolume(),
-                                             state);
-      break;
-    }
-    default:
-    {
-      assert(0 && "gas_liquid_mass_transfer switch");
-      __builtin_unreachable(); // TODO use c++23 cross plateform unreachable
-    };
-    }
+    std::visit(MtrVisitor{_proxy, liquid_scalar, gas_scalar, state}, type);
+    // switch (type)
+    // {
+    // case Simulation::MassTransfer::MTRType::FixedKla:
+    // {
+    //   Impl::fixed_kla_gas_liquid_mass_transfer(*_proxy,
+    //                                            liquid_scalar->getConcentrationArray(),
+    //                                            gas_scalar->getConcentrationArray(),
+    //                                            liquid_scalar->getVolume(),
+    //                                            state);
+    //   break;
+    // };
+    // case Simulation::MassTransfer::MTRType::Flowmap:
+    // {
+    //   Impl::flowmap_gas_liquid_mass_transfer(*_proxy,
+    //                                          liquid_scalar->getConcentrationArray(),
+    //                                          gas_scalar->getConcentrationArray(),
+    //                                          liquid_scalar->getVolume(),
+    //                                          state);
+    //   break;
+    // }
+    // default:
+    // {
+    //   assert(0 && "gas_liquid_mass_transfer switch");
+    //   __builtin_unreachable(); // TODO use c++23 cross plateform unreachable
+    // };
+    // }
   }
 
   std::optional<std::span<const double>> MassTransferModel::mtr_data() const
@@ -81,7 +142,7 @@ namespace Simulation::MassTransfer
   }
 
   MassTransferModel::MassTransferModel()
-      : type(MTRType::Flowmap), _proxy(nullptr), liquid_scalar(nullptr), gas_scalar(nullptr)
+      : type(Type::Flowmap{}), _proxy(nullptr), liquid_scalar(nullptr), gas_scalar(nullptr)
   {
   }
 

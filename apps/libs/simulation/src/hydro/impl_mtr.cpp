@@ -1,10 +1,10 @@
-#include "simulation/mass_transfer.hpp"
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <cassert>
 #include <hydro/impl_mass_transfer.hpp>
 #include <scalar_simulation.hpp>
+#include <simulation/mass_transfer.hpp>
 
 namespace
 {
@@ -91,22 +91,19 @@ namespace Simulation::MassTransfer
       const double kinematic_viscosity = c_kinematic_viscosity(temperature);
 
       const double schmidtnumber = kinematic_viscosity / oxygen_diffusion_constant;
-      auto eps = state.infos.at("energy_dissipation");
+      const auto eps = state.infos.at("energy_dissipation");
       const Eigen::Map<Eigen::ArrayXd> energy_dissipation_array =
-          Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(eps.data()), eps.size());
+          Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(eps.data()), EIGEN_INDEX(eps.size()));
+
 
       assert(gas_concentration.stride() == liquid_concentration.stride());
       assert(energy_dissipation_array.rows() == liquid_concentration.cols());
 
       mtr.kla.row(1) =
-          (kl_correlation(schmidtnumber, kinematic_viscosity,  energy_dissipation_array) *
+          (kl_correlation(schmidtnumber, kinematic_viscosity, energy_dissipation_array) *
            get_interfacial_area(mtr.db, state))
               .transpose();
-      // impl_mtr(mtr.kla,liquid_concentration,0.7* gas_concentration,liquid_volume);
 
-      // mtr.mtr =
-      //     (mtr.kla * (gas_concentration.colwise() * mtr.Henry - liquid_concentration)).matrix() *
-      //     liquid_volume;
       mtr.mtr = impl_mtr(
           mtr.kla, liquid_concentration, gas_concentration.colwise() * mtr.Henry, liquid_volume);
     }
@@ -117,9 +114,8 @@ namespace Simulation::MassTransfer
                                             const Eigen::MatrixXd& liquid_volume,
                                             const CmaUtils::IterationState& state)
     {
-      mtr.kla.row(1).setConstant(800. / 3600.);
-      
-      mtr.mtr  = impl_mtr(
+      (void)state;
+      mtr.mtr = impl_mtr(
           mtr.kla, liquid_concentration, gas_concentration.colwise() * mtr.Henry, liquid_volume);
     }
 

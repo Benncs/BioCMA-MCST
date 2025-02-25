@@ -1,8 +1,10 @@
 #ifndef __SIMULATION_HYDRO_MASS_TRANSFER_HPP__
 #define __SIMULATION_HYDRO_MASS_TRANSFER_HPP__
 
-#include "cma_utils/iteration_state.hpp"
+#include <cma_utils/iteration_state.hpp>
 #include <memory>
+#include <variant>
+#include <vector>
 
 namespace Simulation
 {
@@ -11,26 +13,40 @@ namespace Simulation
 
 namespace Simulation::MassTransfer
 {
-  enum class MTRType
-  {
-    Flowmap,
-    FixedKla,
-  };
 
-  enum class MTRSign : int
+  namespace Type
+  {
+    enum class Names
+    {
+      Flowmap,
+      FixedKla,
+    };
+
+    struct Flowmap
+    {
+    };
+    struct FixedKla
+    {
+      std::vector<double> value;
+    };
+
+    using MtrTypeVariant = std::variant<Flowmap, FixedKla>;
+  } // namespace Type
+
+  enum class Sign : int
   {
     GasToLiquid = -1,
     LiquidToGas = 1,
   };
 
-  static_assert(static_cast<float>(MTRSign::GasToLiquid) == -1., "Sign mtr");
+  static_assert(static_cast<float>(Sign::GasToLiquid) == -1., "Sign mtr");
 
   struct MassTransferProxy;
 
   class MassTransferModel
   {
   public:
-    explicit MassTransferModel(MassTransfer::MTRType _type,
+    explicit MassTransferModel(MassTransfer::Type::MtrTypeVariant _type,
                                std::shared_ptr<Simulation::ScalarSimulation> _liquid_scalar,
                                std::shared_ptr<Simulation::ScalarSimulation> _gas_scalar);
 
@@ -51,7 +67,7 @@ namespace Simulation::MassTransfer
     MassTransferModel();
 
   private:
-    MassTransfer::MTRType type;
+    MassTransfer::Type::MtrTypeVariant type;
     std::shared_ptr<MassTransferProxy> _proxy;
     std::shared_ptr<Simulation::ScalarSimulation> liquid_scalar;
     std::shared_ptr<Simulation::ScalarSimulation> gas_scalar;

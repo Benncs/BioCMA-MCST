@@ -49,7 +49,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("i_rank"),
       py::arg("id"),
       py::arg("thread_per_proces") = 1);
-
+  m.def("finalize", &finalize);
   m.def("exec", &exec);
   // m.def("apply", &apply);
 
@@ -67,7 +67,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
   m.def("register_serde", &register_serde);
   m.def("register_parameters", &register_parameters);
   m.def("register_model_name", &register_model_name);
-  m.def("finalize", &finalize);
+  
   m.def("register_initialiser_file_path", &register_initializer_path);
 
   m.def("make_params",
@@ -187,3 +187,34 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("liquid value"),
       py::arg("gas")=std::nullopt);
 }
+
+/**
+ * @example simple_simulation.py
+ *
+ * This example demonstrates how to perfom a simple simulation using the python API 
+ *
+ * @code
+ *   import handle_module>
+ *   
+ *   outfolder = "./out/"
+ *   simulation_name = "my_simulation_name"
+ *   cma_path = "/path/to/the/cma/" #don´t forget last / 
+ *   def run(params): 
+ *       handle = handle_module.init_simulation(outfolder,simulation_name,cma_path,params)
+ *       # cma with 500 compartment, simulation with 4 species liquid only 
+ *       liquid_concentration_0 = np.zeros((500,4))  
+ *       handle_module.set_initial_concentrations(handle,liquid_concentration_0)
+ *       handle_module.register_model_name(handle, "model_name")
+ *        # Apply the simulation settings
+ *     rc = handle_module.apply(handle, False)
+ *
+ *     # Check if the simulation settings were applied successfully
+ *     if not rc[0]:
+ *         print(rc[1])
+ *         return -1
+ *
+ *     # Execute the simulation
+ *     rc = handle_module.exec(handle);
+ *   
+ * @endcode
+ */

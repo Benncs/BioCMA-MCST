@@ -146,7 +146,6 @@ namespace Models
       contrib.phi_o =
           -1 * ((1. / y_sx / MolarMassG * y_os * MolarMassO2 * nu_eff_1) + 0. * nu_eff_2);
       contrib.phi_a = nu_eff_2 / y_sxf * y_sa + (s_overflow > 0. ? y_sa * (s_overflow) : 0);
-      // contrib.phi_a = (s_overflow > 0. ? y_sa * (s_overflow) : 0);
 
       nu1 = nu1 + static_cast<float>(d_t) * ((nu_1_star - nu1) / tau_1);
       nu2 = nu2 + static_cast<float>(d_t) * ((nu_2_star - nu2) / tau_2);

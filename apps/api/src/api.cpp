@@ -90,13 +90,13 @@ namespace Api
   }
 
   bool SimulationInstance::set_feed_constant(double _flow,
-                                             std::span<double> _concentratio,
+                                             std::span<double> _concentration,
                                              std::span<std::size_t> _position,
                                              std::span<std::size_t> _species,
                                              bool gas,
                                              bool fed_batch)
   {
-    auto target = span_to_vec(_concentratio);
+    auto target = span_to_vec(_concentration);
     auto position = span_to_vec(_position);
     auto species = span_to_vec(_species);
     auto fd = Simulation::Feed::FeedFactory::constant(
@@ -108,15 +108,17 @@ namespace Api
       feed = Simulation::Feed::SimulationFeed{std::nullopt, std::nullopt};
     }
 
-    auto& fv = (gas) ? feed->gas : feed->liquid;
+    auto& current_descriptor = (gas) ? this->feed->gas : this->feed->liquid;
 
-    if (!fv.has_value())
+    //If not already created, new vector 
+    if (!current_descriptor.has_value())
     {
-      fv = {fd};
+      current_descriptor = {fd};
     }
     else
     {
-      fv->emplace_back(fd);
+      //Else push 
+      current_descriptor->emplace_back(fd);
     };
 
     return true;
@@ -211,7 +213,7 @@ namespace Api
     {
       return ApiResult("Not loaded");
     }
-    if (auto opt_case = Core::load(this->_data.exec_info, std::move(this->params), feed))
+    if (auto opt_case = Core::load(this->_data.exec_info, std::move(this->params), this->feed))
     {
       this->_data = std::move(*opt_case);
       this->loaded = true;
@@ -236,16 +238,16 @@ namespace Api
       return ApiResult("Register first");
     }
 
-    Core::GlobalInitialiser gi(_data.exec_info, params);
-    auto t = gi.init_transitionner();
-    gi.init_feed(feed);
+    Core::GlobalInitialiser global_initializer(_data.exec_info, params);
+    auto t = global_initializer.init_transitionner();
+    global_initializer.init_feed(feed);
 
-    auto __simulation = gi.init_simulation(this->scalar_initializer_variant);
-    if ((!t.has_value() && !__simulation.has_value()) || !gi.check_init_terminate())
+    auto __simulation = global_initializer.init_simulation(this->scalar_initializer_variant);
+    if ((!t.has_value() && !__simulation.has_value()) || !global_initializer.check_init_terminate())
     {
       ApiResult("Error apply");
     }
-    _data.params = gi.get_parameters();
+    _data.params = global_initializer.get_parameters();
     _data.simulation = std::move(*__simulation);
     _data.transitioner = std::move(*t);
     applied = true;

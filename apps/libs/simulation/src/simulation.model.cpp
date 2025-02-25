@@ -145,10 +145,10 @@ namespace Simulation
       const MatrixType& mtr = mt_model.proxy()->mtr;
       
       this->gas_scalar->performStepGL(
-          d_t, state.gas->get_transition(), mtr, MassTransfer::MTRSign::GasToLiquid);
+          d_t, state.gas->get_transition(), mtr, MassTransfer::Sign::GasToLiquid);
 
       this->liquid_scalar->performStepGL(
-          d_t, state.liq->get_transition(), mtr, MassTransfer::MTRSign::LiquidToGas);
+          d_t, state.liq->get_transition(), mtr, MassTransfer::Sign::LiquidToGas);
     }
     else
     {

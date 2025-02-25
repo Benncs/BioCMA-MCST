@@ -37,7 +37,7 @@ namespace Simulation
 
     void performStepGL(double d_t,
                      const FlowMatrixType& m_transition,
-                     const MatrixType& mtr,MassTransfer::MTRSign sign);
+                     const MatrixType& mtr,MassTransfer::Sign sign);
 
     void performStep(double d_t,
                      const FlowMatrixType& m_transition);

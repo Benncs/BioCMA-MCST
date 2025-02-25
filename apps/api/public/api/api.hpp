@@ -158,15 +158,15 @@ namespace Api
     /**
      * @brief Configure feed constants for the simulation.
      *
-     * @param _f A constant feed value.
-     * @param _target A span of target values.
+     * @param _flow A constant flow value.
+     * @param concentrations A span of concentrations values.
      * @param _position A span of position indices.
      * @param _species A span of species indices.
      * @param gas Flag indicating whether the feed is gas-phase.
      * @return True if the feed was successfully configured; false otherwise.
      */
-    bool set_feed_constant(double _f,
-                           std::span<double> _target,
+    bool set_feed_constant(double _flow,
+                           std::span<double> _concentration,
                            std::span<std::size_t> _position,
                            std::span<std::size_t> _species,
                            bool gas = false,

@@ -58,7 +58,7 @@ namespace Simulation
 
     if (is_two_phase_flow)
     {
-      const auto type = MassTransfer::MTRType::Flowmap;
+      const auto type = MassTransfer::Type::Flowmap{};
 
       this->mt_model = MassTransfer::MassTransferModel(type, liquid_scalar, gas_scalar);
       //      this->mt_model = MassTransfer::MassTransferModel(
