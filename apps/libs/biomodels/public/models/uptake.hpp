@@ -5,6 +5,8 @@
 #include "mc/prng/prng.hpp"
 #include <Kokkos_Core.hpp>
 #include <mc/particles/particle_model.hpp>
+#include <type_traits>
+
 #define MONOD_RATIO(__c1__, __x1__, __k1__) ((__c1__) * (__x1__) / ((__x1__) + (__k1__)))
 
 namespace Models::Uptake

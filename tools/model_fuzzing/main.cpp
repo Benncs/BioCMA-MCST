@@ -1,18 +1,19 @@
 
 #include "common/kokkos_vector.hpp"
 #include "embed.hpp"
+#include "mc/particles/data_holder.hpp"
 #include "mc/prng/prng.hpp"
+#include "models/uptake.hpp"
 #include <Kokkos_Core.hpp>
 #include <core/post_process.hpp>
-#include <iostream>
 #include <mc/container_state.hpp>
 #include <mc/particles/mcparticles.hpp>
 #include <mc/particles/particle_model.hpp>
-#include <models/model_ecoli.hpp>
+#include <models/model_meta2.hpp>
 #include <pybind11/embed.h>
 #include <span>
 
-using FuzzingModel = Models::Ecoli;
+using FuzzingModel = Models::Meta2;
 using FuzzingParticle = MC::Particle<FuzzingModel>;
 
 template <typename ExecSpace>
@@ -21,40 +22,53 @@ using RngPool = Kokkos::Random_XorShift64_Pool<>;
 
 static constexpr std::size_t n_fuzzing_particle = 10e4;
 static constexpr size_t run_rng_seed = 1440;
-static constexpr std::size_t n_fuzz_concentrations = 4;
+static constexpr std::size_t n_fuzz_concentrations = 1;
+
+template <typename F, Models::Uptake::UptakeModel<F> Model> void fuzz_uptake_init(Model& data)
+{
+  data.a_permease = 0.5;
+  data.a_pts = 0.5;
+  data.n_permease = 100;
+}
+
+template <typename GenType, typename F, Models::Uptake::UptakeModel<F> Model>
+void fuzz_uptake_init2(GenType gen, Model& data)
+{
+  const double permease_dist = gen.drand(0., 1.); // Range for permease-related properties
+  const double pts_dist = gen.drand(0., 1.);      // Range for permease-related properties
+  const double n_permease_dist = gen.drand(0, 200); // Range for n_permease
+  data.a_permease = permease_dist;
+  data.a_pts = pts_dist;
+  data.n_permease = n_permease_dist; // This one changes all
+}
 
 template <typename ExecSpace> ListType<ExecSpace> init(RngPool pool)
 {
   ListType<ExecSpace> particles("particle", n_fuzzing_particle, n_fuzz_concentrations);
-
+  MC::KPRNG globalrng;
   Kokkos::parallel_for(
       "Generate",
       Kokkos::RangePolicy<ExecSpace>(0, n_fuzzing_particle),
       KOKKOS_LAMBDA(const int i_particle) {
         auto gen = pool.get_state();
 
-        auto& p = particles(i_particle, 0);
-        p.data.a_permease = 0.5;
-        p.data.a_pts = 0.5;
-        p.data.length = 1e-6;
-        p.data.n_permease = 100;
-        p.data.nu = 2.776227e-10;
+        {
+          auto& p = particles(i_particle, 0);
+          fuzz_uptake_init<float>(p.data);
+          const double length_dist = gen.drand(1e-9, 5e-6); // Range for le
+          p.data.length = length_dist;
+          p.data.nu1 = gen.drand(0., 0.3) / (3600 * 1e3 * 1e12);
+        }
 
         for (size_t i_fuzz = 1; i_fuzz < n_fuzz_concentrations; ++i_fuzz)
         {
-
-          const double permease_dist = gen.drand(0., 1.);   // Range for permease-related properties
-          const double pts_dist = gen.drand(0., 1.);        // Range for permease-related properties
-          const double length_dist = gen.drand(1e-9, 5e-6); // Range for le
-          const double n_permease_dist = gen.drand(0, 200); // Range for n_permease
-          const double nu = gen.drand(0, 5.776227e-10);     // Range for n_permease
-
-          auto& p = particles(i_particle, i_fuzz);
-          p.data.a_permease = permease_dist;
-          p.data.a_pts = pts_dist;
-          p.data.length = length_dist;
-          p.data.n_permease = n_permease_dist; //This one changes all
-          p.data.nu = nu;
+          // auto& p2 = particles(i_particle, i_fuzz);
+          // fuzz_uptake_init2<decltype(gen), float>(gen, p2.data);
+          // const double length_dist = gen.drand(1e-9, 5e-6); // Range for le
+          // p2.data.length = length_dist;
+          // p2.data.nu1 = gen.drand(0., 0.3) / (3600 * 1e3 * 1e12);
+          auto& p2 = particles(i_particle, i_fuzz);
+          p2.init(globalrng);
         }
         pool.free_state(gen);
       });
@@ -84,7 +98,8 @@ template <typename ExecSpace> void fuzz(ListType<ExecSpace> particles, RngPool p
         pool.free_state(gen);
       });
   Kokkos::fence();
-  MC:MC::KPRNG rng;
+
+  MC::KPRNG rng;
   for (std::size_t i_fuzz = 0; i_fuzz < n_fuzz_concentrations; ++i_fuzz)
   {
     auto subview = Kokkos::subview(environment, i_fuzz, 0, Kokkos::ALL);
@@ -96,7 +111,10 @@ template <typename ExecSpace> void fuzz(ListType<ExecSpace> particles, RngPool p
         KOKKOS_LAMBDA(const int i_particle) {
           auto& p = particles(i_particle, i_fuzz);
           p.update(d_t, subview, rng);
-          phi_subview(0, i_particle) = p.data.rates.glucose;
+          auto child = p.division(rng);
+          phi_subview(0, i_particle) = p.data.nu1* (3600 * 1e3 * 1e12);
+          phi_subview(1, i_particle) = child.data.nu1* (3600 * 1e3 * 1e12);
+          
         });
     Kokkos::fence();
 

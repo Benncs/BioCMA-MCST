@@ -6,7 +6,7 @@
 #include <models/utils.hpp>
 
 /**
-  @brief Contant and definition specific to model Meta  
+  @brief Contant and definition specific to model Meta
  */
 namespace implMeta
 {
@@ -67,10 +67,11 @@ namespace Models
 {
 
   /**
-  @brief Two growth rate metabolic model  
+  @brief Two growth rate metabolic model
    */
   struct Meta2
   {
+    
     struct contribs
     {
       float phi_s;
@@ -101,7 +102,7 @@ namespace Models
       contrib = {0., 0.0, 0.};
       auto g = _rng.random_pool.get_state();
       Uptake::distribute_init<float>(*this, g);
-      length = static_cast<float>(Kokkos::max(minimal_length, g.normal(minimal_length, 0.7e-6)));
+      length = static_cast<float>(Kokkos::max(0., g.normal(2*minimal_length, 2*minimal_length/5)));
       l_cp = static_cast<float>(
           Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 7.)), l_max));
       _rng.random_pool.free_state(g);
@@ -161,17 +162,20 @@ namespace Models
 
       const float l = length / 2.F;
 
-      auto child_pimpl = Models::Meta2(*this); // NOLINT
+      auto child = Models::Meta2(*this); // NOLINT
 
       length = l;
-      child_pimpl.length = l;
+      child.length = l;
       auto g = _rng.random_pool.get_state();
-      child_pimpl.l_cp = static_cast<float>(
+      child.l_cp = static_cast<float>(
           Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 6.)), l_max));
 
-      Uptake::distribute_division<float>(*this, child_pimpl, g);
+      child.nu1 = Kokkos::max(g.normal(this->nu1, this->nu1 / 3.), 0.);
+      child.nu2 = Kokkos::max(g.normal(this->nu2, this->nu2 / 3.), 0.);
+
+      Uptake::distribute_division<float>(*this, child, g);
       _rng.random_pool.free_state(g);
-      return child_pimpl;
+      return child;
     }
 
     KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder& p,
