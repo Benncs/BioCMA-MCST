@@ -1,10 +1,10 @@
 #ifndef __BIOMODEL_UPTAKE__
 #define __BIOMODEL_UPTAKE__
 
-#include "Kokkos_Macros.hpp"
-#include "mc/prng/prng.hpp"
 #include <Kokkos_Core.hpp>
+#include <common/traits.hpp>
 #include <mc/particles/particle_model.hpp>
+#include <mc/prng/prng_extension.hpp>
 #include <type_traits>
 
 #define MONOD_RATIO(__c1__, __x1__, __k1__) ((__c1__) * (__x1__) / ((__x1__) + (__k1__)))
@@ -15,9 +15,6 @@ namespace Models::Uptake
   __type__ a_pts;                                                                                  \
   __type__ a_permease;                                                                             \
   __type__ n_permease;
-
-  template <typename T>
-  concept FloatingPointType = std::is_floating_point_v<std::remove_reference_t<T>>;
 
   template <typename T, typename F>
   concept UptakeModel = FloatingPointType<F> && requires(T& obj) {
@@ -34,12 +31,14 @@ namespace Models::Uptake
     static constexpr double Au = 40.;
     static constexpr double Ad = 5.;
   };
-  
+
   constexpr double k_pts = 1e-3;
   constexpr double kppermease = 1e-2;
-  
-  template <FloatingPointType F>
-  KOKKOS_INLINE_FUNCTION constexpr F _k_pts(){return static_cast<F>(k_pts);}
+
+  template <FloatingPointType F> KOKKOS_INLINE_FUNCTION constexpr F _k_pts()
+  {
+    return static_cast<F>(k_pts);
+  }
 
   template <FloatingPointType F>
   KOKKOS_INLINE_FUNCTION F phi_pts(const F phi_pts_max, const F a_pts, const F S)
@@ -85,13 +84,21 @@ namespace Models::Uptake
   KOKKOS_INLINE_FUNCTION void
   distribute_division(Model& model, Model& child, KokkosRNGPoolType& generator)
   {
+    static constexpr F half = F(0.5);
+    // child.a_pts = Kokkos::min(1., Kokkos::max(generator.normal(model.a_pts, model.a_pts / 2.),
+    // 0.));
 
-    child.a_pts = Kokkos::min(1., Kokkos::max(generator.normal(model.a_pts, model.a_pts / 2.), 0.));
+    // child.a_permease =
+    //     Kokkos::min(1., Kokkos::max(generator.normal(model.a_permease, model.a_permease / 2.),
+    //     0.));
 
-    child.a_permease = Kokkos::min(
-        1., Kokkos::max(generator.normal(model.a_permease, model.a_permease / 2.), 0.));
+    child.a_pts = MC::Distributions::TruncatedNormal<F>::draw_from(
+        generator, model.a_pts, model.a_pts * half, F(0.), F(1.));
 
-    model.n_permease = model.n_permease / 2;
+    child.a_permease = MC::Distributions::TruncatedNormal<F>::draw_from(
+        generator, model.a_pts, model.a_permease * half, F(0.), F(1.));
+
+    model.n_permease = model.n_permease * half;
     child.n_permease = model.n_permease;
   }
 
@@ -99,9 +106,21 @@ namespace Models::Uptake
   KOKKOS_INLINE_FUNCTION void
   distribute_init(Model& newp, KokkosRNGPoolType& generator, F NPermease_init = 1)
   {
-    newp.a_permease = Kokkos::max(generator.normal(1e-3, 1e-4), 0.);
-    newp.a_pts = Kokkos::min(1., Kokkos::max(generator.normal(0.8, 0.1), 0.));
-    newp.n_permease = Kokkos::max(generator.normal(NPermease_init / 2., NPermease_init / 5.), 0.);
+    static constexpr F half = F(0.5);
+    // newp.a_permease = Kokkos::max(generator.normal(1e-3, 1e-4), 0.);
+    // newp.a_pts = Kokkos::min(1., Kokkos::max(generator.normal(0.8, 0.1), 0.));
+    // newp.n_permease = Kokkos::max(generator.normal(NPermease_init / 2., NPermease_init / 5.),
+    // 0.);
+
+    newp.a_permease =
+        MC::Distributions::TruncatedNormal<F>::draw_from(generator, F(1e-3), F(1e-4), F(0.), F(1.));
+    newp.a_pts =
+        MC::Distributions::TruncatedNormal<F>::draw_from(generator, F(0.8), F(0.1), F(0.), F(1.));
+    newp.n_permease = MC::Distributions::TruncatedNormal<F>::draw_from(generator,
+                                                                       F(NPermease_init) * half,
+                                                                       F(NPermease_init) / F(5.),
+                                                                       F(0.),
+                                                                       F(NPermease_init) * F(10.));
   }
 
 } // namespace Models::Uptake

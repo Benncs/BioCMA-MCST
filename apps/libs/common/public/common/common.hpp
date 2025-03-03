@@ -5,16 +5,19 @@
 #include <common/alg.hpp>
 #include <common/execinfo.hpp>
 #include <string_view>
+#include <common/traits.hpp>
 
 #ifdef ENABLE_KOKKOS_PROFILING
 #  include <Kokkos_Profiling_ScopedRegion.hpp>
-#  define PROFILE_SECTION(__label_section__) Kokkos::Profiling::ScopedRegion region(__label_section__);
+#  define PROFILE_SECTION(__label_section__)                                                       \
+    Kokkos::Profiling::ScopedRegion region(__label_section__);
 #else
 #  define PROFILE_SECTION(__label_section__) ;
 #endif
 
 #ifndef NDEBUG
-#  define WARN_EXPERIMENTAL //_Pragma("message( __FILE__ \" contains experimental Kokkos feature\")") // NOLINT
+#  define WARN_EXPERIMENTAL //_Pragma("message( __FILE__ \" contains experimental Kokkos
+                            //feature\")") // NOLINT
 #else
 #  define WARN_EXPERIMENTAL
 #endif
@@ -28,15 +31,15 @@ class Canary
 {
 public:
   Canary() = delete;
-  Canary(const Canary &) = delete;
-  Canary(Canary &&) = delete;
-  Canary &operator=(const Canary &) = delete;
-  Canary &operator=(Canary &&) = delete;
+  Canary(const Canary&) = delete;
+  Canary(Canary&&) = delete;
+  Canary& operator=(const Canary&) = delete;
+  Canary& operator=(Canary&&) = delete;
 
   explicit Canary(std::string_view lbl, std::source_location location) : _lbl(lbl)
   {
     // std::cout << "\033[1;31m" << location.function_name() << "\033[0m " << lbl << std::endl;
-    std::cout << location.function_name()<<": " << lbl << std::endl;
+    std::cout << location.function_name() << ": " << lbl << std::endl;
   }
 
   ~Canary()
@@ -52,24 +55,6 @@ private:
 #  define WARN_EXPERIMENTAL
 #  define MkCanary(x)
 #endif
-
-
-double constexpr tolerance_equality_float = 1e-15;
-template <typename T>
-concept IntegerType = requires(T n) {
-  requires std::is_integral_v<T>;
-  requires !std::is_same_v<bool, T>;
-  requires std::is_arithmetic_v<decltype(n + 1)>;
-  requires !std::is_pointer_v<T>;
-};
-
-template <typename T>
-concept NumberType = requires(T n) { requires IntegerType<T> || std::is_floating_point_v<T>; };
-
-template <NumberType T> inline bool almost_equal(T val, T val2, T tolerance = tolerance_equality_float)
-{
-  return std::abs(val - val2) < tolerance;
-}
 
 
 

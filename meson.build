@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.5.3',
+  version: '0.5.4',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
@@ -16,15 +16,17 @@ if compiler.has_argument('-fno-math-errno')
   arch_specific_args = [arch_specific_args, '-fno-math-errno']
 endif
 
-flto_flag = ''
+flto_flag = []
 
 if compiler.has_argument('-flto')
-  flto_flag = '-flto'
+  flto_flag = [flto_flag,'-flto']
 endif
 
 if compiler.has_argument('-dlto')
-  flto_flag = '-dlto'
+  flto_flag = [flto_flag,'-dlto']
 endif
+
+
 
 if compiler.has_argument('-mtune=native')
   arch_specific_args = [arch_specific_args, '-mtune=native']
@@ -80,7 +82,7 @@ use_dynamic_module = get_option('use_dynamic_module') # Use python module or not
 use_cereal = get_option('use_cereal')
 use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  use_dynamic_module is true
 
-## Checking all needed depencies (execpt Python)
+## Checking all needed depencies (except Python)
 
 mpi = dependency('mpi', language: 'cpp', required: true)
 thread_dep = dependency('threads', required: true)

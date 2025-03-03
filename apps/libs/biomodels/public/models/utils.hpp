@@ -1,6 +1,8 @@
 #ifndef __BIO__UTILS_HPP__
 #define __BIO__UTILS_HPP__
 
+#include "Kokkos_MathematicalConstants.hpp"
+#include "common/traits.hpp"
 #include <mc/particles/data_holder.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
@@ -20,6 +22,13 @@ namespace Models
     constexpr double co2 = 44e-3;
     constexpr double X = 113.1e-3;
   }; // namespace MolarMass
+
+
+  template<FloatingPointType F>
+  KOKKOS_INLINE_FUNCTION consteval F c_linear_density(F rho,F d)
+  {
+    return rho * F(Kokkos::numbers::pi) * d * d / F(4.);
+  }
 
   static constexpr double tau_division_proba = 1e-7;
 
