@@ -6,7 +6,7 @@
 namespace UnsafeUDF
 {
   void (*Loader::make_udf)(Models::User&) = nullptr;
-  void (*Loader::init_udf)(Models::UserImpl&, MC::ParticleDataHolder&,MC::KPRNG ) = nullptr;
+  void (*Loader::init_udf)(Models::UserImpl&, MC::ParticleDataHolder&, MC::KPRNG) = nullptr;
   void (*Loader::delete_udf)(Models::UserImpl**) = nullptr;
   void (*Loader::update_udf)(Models::UserImpl&,
                              double d_t,
@@ -19,7 +19,7 @@ namespace UnsafeUDF
 
   double (*Loader::mass)(Models::UserImpl&) = nullptr;
 
-  void (*Loader::fill_properties)(Models::UserImpl&,SubViewtype) = nullptr;
+  void (*Loader::fill_properties)(Models::UserImpl&, SubViewtype) = nullptr;
 
   Models::UserImpl* (*Loader::division_udf)(Models::UserImpl&,
                                             MC::ParticleDataHolder& p,
@@ -27,7 +27,7 @@ namespace UnsafeUDF
 
   std::vector<std::string> (*Loader::names)() = nullptr;
 
-  std::size_t(*Loader::get_number)() = nullptr;
+  std::size_t (*Loader::get_number)() = nullptr;
 
   [[nodiscard]] std::shared_ptr<DynamicLibrary> Loader::init_lib(std::string_view path)
   {

@@ -9,6 +9,7 @@
 #include <Kokkos_Core.hpp>
 #include <mc/particles/particle_model.hpp>
 #include <mc/prng/prng.hpp>
+
 namespace Models
 {
   struct User;
