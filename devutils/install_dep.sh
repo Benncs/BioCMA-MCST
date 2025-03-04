@@ -50,18 +50,16 @@ done
 
 
 
-echo "Pip upgrade..."
-if ! python3 -m pip install --upgrade pip; then
-  error "Failed to upgrade pip."
-  exit 1
-fi
+# echo "Pip upgrade..."
+# if ! python3 -m pip install --upgrade pip; then
+#   error "Failed to upgrade pip."
+# fi
 
 # Install optional HDF5 if flag is set
 if $INSTALL_HDF5; then
   echo "Installing HDF5..."
   if ! sudo apt-get install -y libhdf5-dev; then
     error "Failed to install HDF5."
-    exit 1
   fi
 fi
 
@@ -75,7 +73,6 @@ fi
 echo "Installing omp dev..."
   if ! sudo apt-get install -y libomp-dev; then
     error "Failed to install omp."
-    exit 1
   fi
 
 # Run clang configuration script
