@@ -1,9 +1,9 @@
 #ifndef __MC_PARTICLESHPP__
 #define __MC_PARTICLESHPP__
 
+#include <Kokkos_Core.hpp>
 #include <common/execinfo.hpp>
 #include <common/has_serialize.hpp>
-#include <Kokkos_Core.hpp>
 #include <mc/particles/data_holder.hpp>
 #include <mc/particles/particle_model.hpp>
 #include <mc/prng/prng.hpp>
@@ -117,13 +117,13 @@ namespace MC
     {
     }
 
-        /**
+    /**
      * @brief Exports properties of the particle into arrays.
-     * 
-     * This method allows a particle to write its properties into the provided arrays 
+     *
+     * This method allows a particle to write its properties into the provided arrays
      * to exportmodel-specific properties.
      * Records in both the local subview and the spatial ScatterView.
-     * 
+     *
      * @param subview Local subview where the particle's properties are stored.
      * @param spatial ScatterView for accumulating particle contributions across space.
      */
@@ -150,8 +150,9 @@ namespace MC
       }
     }
 
-    //Alignas ensure no falsesharing we accessing to properties only or data only 
-    alignas(ExecInfo::cache_line_size) ParticleDataHolder properties; //< Particle's common properties
+    // Alignas ensure no falsesharing we accessing to properties only or data only
+    alignas(ExecInfo::cache_line_size)
+        ParticleDataHolder properties;                //< Particle's common properties
     alignas(ExecInfo::cache_line_size) _Model data{}; //< Particle's model
   };
 
