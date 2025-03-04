@@ -1,5 +1,6 @@
 highfive/
 cereal/
 dynlib/
+cmtool/
 kokkos-*
 packagecache

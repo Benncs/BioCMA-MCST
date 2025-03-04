@@ -1,142 +1,114 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
-#include "cma_read/light_2d_view.hpp"
-#include "common/common.hpp"
-#include "common/kokkos_vector.hpp"
-#include <mc/particles/particle_model.hpp>
-#include <cstdint>
-#include <simulation/pc_hydro.hpp>
-#include <span>
-#include <simulation/alias.hpp>
-// TODO REMOVE
+#include "Kokkos_Assert.hpp"
+#include <simulation/mass_transfer.hpp>
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
 #include <Kokkos_Core.hpp>
+#include <common/common.hpp>
+#include <common/kokkos_vector.hpp>
 #include <cstddef>
-#include <vector> 
-
-template<typename ExecSpace>
-using KokkosScalarMatrix = Kokkos::View<double **, Kokkos::LayoutLeft, ExecSpace>;
+#include <cstdint>
+#include <mc/particles/particle_model.hpp>
+#include <cma_utils/cache_hydro_state.hpp>
+#include <simulation/alias.hpp>
+#include <span>
+#include <vector>
+#include <eigen_kokkos.hpp>
 
 namespace Simulation
 {
-  struct EigenData
-  {
-    Eigen::MatrixXd concentration;
-    Eigen::MatrixXd total_mass;
-
-    Eigen::MatrixXd biomass_contribution;
-
-    Eigen::MatrixXd feed;
-  };
 
   class ScalarSimulation
   {
   public:
-    ScalarSimulation(ScalarSimulation &&other) noexcept;
-    ScalarSimulation(const ScalarSimulation &other) noexcept = delete;
     ScalarSimulation(size_t n_compartments, size_t n_species, std::span<double> volume);
-    ScalarSimulation operator=(const ScalarSimulation &other) = delete;
-    ScalarSimulation operator=(ScalarSimulation &&other) = delete;
 
+    ScalarSimulation(ScalarSimulation&& other) noexcept = delete;
+    ScalarSimulation(const ScalarSimulation& other) noexcept = delete;
+    ScalarSimulation operator=(const ScalarSimulation& other) = delete;
+    ScalarSimulation operator=(ScalarSimulation&& other) = delete;
     ~ScalarSimulation() = default;
 
-    bool deep_copy_concentration(const std::vector<double> &data);
+    bool deep_copy_concentration(const std::vector<double>& data);
+    void reduce_contribs(std::span<const double> data);
+
+    void performStepGL(double d_t,
+                     const FlowMatrixType& m_transition,
+                     const MatrixType& mtr,MassTransfer::Sign sign);
+
+    void performStep(double d_t,
+                     const FlowMatrixType& m_transition);
+
+    // void performStep(double d_t, const FlowMatrixType& m_transition);
 
     // Getters
-
-    [[nodiscard]] auto get_device_concentration() const
-    {
-      return compute_concentration;
-    }
-
+    [[nodiscard]] MatrixType& get_concentration();
+    [[nodiscard]] KokkosScalarMatrix<ComputeSpace> get_device_concentration() const;
     [[nodiscard]] std::span<double const> getVolumeData() const;
-
-    [[nodiscard]] std::span<double> getContributionData();
-
-    Eigen::DiagonalMatrix<double, -1> &getVolume();
-
-    std::span<double> getConcentrationData();
-
-    [[nodiscard]] Eigen::ArrayXXd getConcentrationArray() const;
-
-    CmaRead::L2DView<double> getConcentrationView();
-
-    [[nodiscard]] std::size_t n_species() const;
+    [[nodiscard]] std::span<double> getContributionData() const;
+    [[nodiscard]] const DiagonalType& getVolume() const;
+    [[nodiscard]] auto getConcentrationArray() const;
+    [[nodiscard]] kernelContribution get_kernel_contribution() const;
+    [[nodiscard]] const MatrixType& get_mass_transfer() const;
+    [[nodiscard]] std::span<double> getConcentrationData();
+    
 
     [[nodiscard]] std::size_t n_row() const;
     [[nodiscard]] std::size_t n_col() const;
 
-    [[nodiscard]] kernelContribution get_kernel_contribution() const;
-
     // Setters
 
     void set_mass();
-    void set_kernel_contribs_to_host(kernelContribution c) const;
-
+    void set_kernel_contribs_to_host() const;
     void set_feed(std::uint64_t i_r, std::uint64_t i_c, double val);
     void set_sink(std::uint64_t i_compartment, double val);
-
+    void set_zero_contribs();
     void setVolumes(std::span<const double> volumes, std::span<const double> inv_volumes);
 
-    Eigen::ArrayXXd vec_kla; // TODO : Clean this
-
-    Eigen::MatrixXd biomass_contribution;
-
-    Eigen::MatrixXd mass_transfer;
-
-    void performStep(double d_t, const FlowMatrixType &m_transition, const Eigen::MatrixXd &transfer_gas_liquid);
-
   private:
-    Eigen::MatrixXd total_mass;
+    std::size_t n_r;
+    std::size_t n_c;
+    MatrixType total_mass;
+    
+    DiagonalType volumes_inverse;
+    DiagonalType m_volumes;
+    DiagonalType sink;
+    EigenKokkos concentrations;
+    EigenKokkos sources;
 
-    KokkosScalarMatrix<HostSpace> host_concentration;
-
-    KokkosScalarMatrix<ComputeSpace> compute_concentration;
-
-    Eigen::DiagonalMatrix<double, -1> volumes_inverse;
-    Eigen::DiagonalMatrix<double, -1> m_volumes;
-
-    Eigen::SparseMatrix<double> feed;
-
-    // Eigen::SparseMatrix<double> sink;
-
-    Eigen::DiagonalMatrix<double, -1> sink;
-
-    Eigen::MatrixXd alloc_concentrations;
-    size_t n_r;
-    size_t n_c;
-    CmaRead::L2DView<double> view;
-
-    KokkosScalarMatrix<HostSpace> host_view_biomass_contribution;
+    
   };
 
-  inline size_t ScalarSimulation::n_col() const
+  inline auto ScalarSimulation::getConcentrationArray() const
   {
-    return n_c;
-  }
-
-  inline Eigen::ArrayXXd ScalarSimulation::getConcentrationArray() const
-  {
-    return alloc_concentrations.array();
-  }
-  inline size_t ScalarSimulation::n_row() const
-  {
-    return n_r;
+    // return alloc_concentrations.array();
+    return concentrations.eigen_data.array();
   }
 
   inline kernelContribution ScalarSimulation::get_kernel_contribution() const
   {
-    return Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_view_biomass_contribution);
+    return sources.compute;
   }
 
-  inline void ScalarSimulation::set_kernel_contribs_to_host(kernelContribution c) const
+  inline void ScalarSimulation::set_zero_contribs()
   {
-    Kokkos::deep_copy(host_view_biomass_contribution, c);
+    sources.eigen_data.setZero();
+    Kokkos::deep_copy(sources.compute, 0);
+  }
+
+
+
+  inline void ScalarSimulation::set_kernel_contribs_to_host() const
+  {
+    sources.update_compute_to_host();
   }
 
   inline void ScalarSimulation::set_feed(uint64_t i_r, uint64_t i_c, double val)
   {
-    this->feed.coeffRef(EIGEN_INDEX(i_r), EIGEN_INDEX(i_c)) = val;
+    this->sources.eigen_data.coeffRef(EIGEN_INDEX(i_r), EIGEN_INDEX(i_c)) += val;
   }
 
   inline void ScalarSimulation::set_sink(uint64_t i_compartment, double val)
@@ -144,30 +116,19 @@ namespace Simulation
     this->sink.diagonal().coeffRef(EIGEN_INDEX(i_compartment)) = val;
   }
 
-  inline CmaRead::L2DView<double> ScalarSimulation::getConcentrationView()
-  {
-    return view;
-  }
-
-  inline Eigen::DiagonalMatrix<double, -1> &ScalarSimulation::getVolume()
+  inline const DiagonalType& ScalarSimulation::getVolume() const
   {
     return m_volumes;
   }
 
-  inline size_t ScalarSimulation::n_species() const
-  {
-    return this->n_r;
-  }
-
   inline std::span<double> ScalarSimulation::getConcentrationData()
   {
-
-    return {this->alloc_concentrations.data(), static_cast<size_t>(this->alloc_concentrations.size())};
+    return this->concentrations.get_span();
   }
 
-  inline std::span<double> ScalarSimulation::getContributionData()
+  inline std::span<double> ScalarSimulation::getContributionData() const
   {
-    return {this->biomass_contribution.data(), static_cast<size_t>(this->biomass_contribution.size())};
+    return {this->sources.host.data(), static_cast<size_t>(this->sources.host.size())};
   }
 
   inline std::span<double const> ScalarSimulation::getVolumeData() const
@@ -175,18 +136,22 @@ namespace Simulation
     return {m_volumes.diagonal().data(), static_cast<size_t>(m_volumes.rows())};
   }
 
-  inline void ScalarSimulation::setVolumes(std::span<const double> volumes, std::span<const double> inv_volumes)
+  inline void ScalarSimulation::setVolumes(std::span<const double> volumes,
+                                           std::span<const double> inv_volumes)
   {
-
+    KOKKOS_ASSERT(volumes.size()==inv_volumes.size() && volumes.size()==n_col()&&"scalar:setvolume")
     // SIGFAULT ?
-    this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(volumes.data(), static_cast<int>(volumes.size()));
+    this->m_volumes.diagonal() =
+        Eigen::Map<const Eigen::VectorXd>(volumes.data(), static_cast<int>(volumes.size()));
 
-    this->volumes_inverse.diagonal() = Eigen::Map<const Eigen::VectorXd>(inv_volumes.data(), static_cast<int>(inv_volumes.size()));
+    this->volumes_inverse.diagonal() =
+        Eigen::Map<const Eigen::VectorXd>(inv_volumes.data(), static_cast<int>(inv_volumes.size()));
   }
 
-  inline ScalarSimulation *makeScalarSimulation(size_t n_compartments, size_t n_species, std::span<double> volumes)
+  inline ScalarSimulation*
+  makeScalarSimulation(size_t n_compartments, size_t n_species, std::span<double> volumes)
   {
-    return new ScalarSimulation(n_compartments, n_species, volumes);
+    return new ScalarSimulation(n_compartments, n_species, volumes); // NOLINT
   }
 
 } // namespace Simulation

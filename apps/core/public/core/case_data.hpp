@@ -7,10 +7,12 @@
 #include <memory>
 #include <optional>
 #include <simulation/simulation.hpp>
-#include <simulation/transitionner.hpp>
+#include <transitionner/transitionner.hpp>
 
 
-
+/**
+  @brief Core component to perform simulation 
+ */
 namespace Core
 {
 
@@ -48,7 +50,7 @@ namespace Core
      * the simulation, ensuring consistency and accuracy in the simulation's
      * progression.
      */
-    std::unique_ptr<Simulation::FlowMapTransitioner> transitioner;
+    std::unique_ptr<CmaUtils::FlowMapTransitionner> transitioner;
 
     /**
      * @brief Information about the execution environment.

@@ -8,7 +8,7 @@ def to_camel_case(snake_str: str) -> str:
     return "".join(x.capitalize() for x in components[1:])
 
 
-def list_model_files(directory: str) -> Tuple[List[str], List[str]]:
+def list_model_files(directory: str,arg_udf) -> Tuple[List[str], List[str]]:
     """
     Lists model source files and headers in the given directory.
     """
@@ -22,8 +22,13 @@ def list_model_files(directory: str) -> Tuple[List[str], List[str]]:
             for file in src_files
             if file.startswith("model_") and file.endswith(".cpp")
         ]
+        
 
-        model_headers = [header for header in header_files if header.endswith(".hpp")]
+        model_headers = [header for header in header_files if header.endswith(".hpp") and header.startswith("model_")]
+        
+        if arg_udf:
+            model_files.append("udfmodel_user")
+            model_headers.append("udfmodel_user.hpp")
 
         return model_files, model_headers
 
@@ -134,7 +139,8 @@ def generate_variant(
             body = body[:-1]
             if add_py_variant:
                 body += ",MC::ParticlesContainer<PythonWrap::PimpModel>"
-
+            
+     
             content = content.replace("@VARIANT_TYPE@", body)
 
             with open(output_path, "w") as output_file:
@@ -148,7 +154,7 @@ def generate_variant(
 if __name__ == "__main__":
     # Read command-line arguments
     args = sys.argv
-    if len(args) != 9:
+    if len(args) != 10:
         raise Exception("Bad argument")
 
     models_path = args[1]
@@ -162,8 +168,9 @@ if __name__ == "__main__":
     variant_output_path = args[7]
 
     add_py_variant = args[8] != ""
+    add_udf_variant = args[9] != ""
 
-    files, headers = list_model_files(models_path)
+    files, headers = list_model_files(models_path,add_udf_variant)
 
     includes = generate_includes(headers)
     loader_body = generate_loader_body(files)

@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.4.0',
+  version: '0.5.4',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
@@ -16,11 +16,17 @@ if compiler.has_argument('-fno-math-errno')
   arch_specific_args = [arch_specific_args, '-fno-math-errno']
 endif
 
-flto_flag = ''
+flto_flag = []
 
 if compiler.has_argument('-flto')
-  flto_flag = '-flto'
+  flto_flag = [flto_flag,'-flto']
 endif
+
+if compiler.has_argument('-dlto')
+  flto_flag = [flto_flag,'-dlto']
+endif
+
+
 
 if compiler.has_argument('-mtune=native')
   arch_specific_args = [arch_specific_args, '-mtune=native']
@@ -76,7 +82,7 @@ use_dynamic_module = get_option('use_dynamic_module') # Use python module or not
 use_cereal = get_option('use_cereal')
 use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  use_dynamic_module is true
 
-## Checking all needed depencies (execpt Python)
+## Checking all needed depencies (except Python)
 
 mpi = dependency('mpi', language: 'cpp', required: true)
 thread_dep = dependency('threads', required: true)
@@ -88,6 +94,7 @@ blas = dependency('blas', required: false) # Eigen can work without BLAS
 # if blas.found()
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 # endif
+# 
 # add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
@@ -103,7 +110,7 @@ if use_system_kokkos
     modules: ['Kokkos::kokkos'],
   )
 
-  kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE']
+  kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE','-Wno-unknown-pragmas']
 
   if use_cuda
 
@@ -185,7 +192,8 @@ if cmake.found()
     cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})
     cereal_cmake_options.add_cmake_defines({'BUILD_TESTS': false})
     cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
-    if cereal_proj.found() and not use_cuda 
+    if cereal_proj.found() 
+    #and not use_cuda 
       ceral_found = true
       add_project_arguments('-DUSE_CEAREAL', language: 'cpp')
       cereal_dependency = cereal_proj.dependency('cereal')

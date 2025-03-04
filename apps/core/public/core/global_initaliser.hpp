@@ -1,8 +1,9 @@
 #ifndef __CORE_GLOBAL_INITIALLISER_HPP__
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
-#include "core/scalar_factory.hpp"
-#include "core/simulation_parameters.hpp"
+#include "transitionner/transitionner.hpp"
+#include <core/scalar_factory.hpp>
+#include <core/simulation_parameters.hpp>
 #include <array>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/neighbors.hpp>
@@ -17,7 +18,6 @@
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation.hpp>
-#include <simulation/transitionner.hpp>
 #include <string>
 #include <vector>
 
@@ -69,7 +69,7 @@ namespace Core
      * @param flow_handle A unique pointer to the flow iterator.
      * @return An optional unique pointer to the initialized flow map transitioner.
      */
-    OptionalPtr<Simulation::FlowMapTransitioner>
+    OptionalPtr<CmaUtils::FlowMapTransitionner>
     init_transitionner(std::unique_ptr<CmaRead::FlowIterator>&& flow_handle);
 
     /**
@@ -77,7 +77,7 @@ namespace Core
      *
      * @return An optional unique pointer to the initialized flow map transitioner.
      */
-    OptionalPtr<Simulation::FlowMapTransitioner> init_transitionner();
+    OptionalPtr<CmaUtils::FlowMapTransitionner> init_transitionner();
 
     /**
      * @brief Initializes a simulation unit.

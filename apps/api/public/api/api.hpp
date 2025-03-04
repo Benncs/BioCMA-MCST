@@ -2,6 +2,7 @@
 #define __BIOMC_API_HPP__
 
 #include "core/scalar_factory.hpp"
+#include <api/results.hpp>
 #include <core/case_data.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstdint>
@@ -12,13 +13,15 @@
 #include <span>
 #include <string_view>
 
-#include <api/results.hpp>
 /**
- * @namespace Api
+ * @brief Api
  * This namespace contains classes and functions related to the simulation API.
  */
 namespace Api
 {
+
+  void finalise();
+
   /**
    * @class SimulationInstance
    * @brief Represents an instance of a simulation with customizable parameters and behaviors.
@@ -85,7 +88,7 @@ namespace Api
     /**
      * @brief Default destructor.
      */
-    ~SimulationInstance() = default;
+    ~SimulationInstance();
 
     /**
      * @brief Apply the simulation configuration and prepare for execution.
@@ -155,24 +158,28 @@ namespace Api
     /**
      * @brief Configure feed constants for the simulation.
      *
-     * @param _f A constant feed value.
-     * @param _target A span of target values.
+     * @param _flow A constant flow value.
+     * @param concentrations A span of concentrations values.
      * @param _position A span of position indices.
      * @param _species A span of species indices.
      * @param gas Flag indicating whether the feed is gas-phase.
      * @return True if the feed was successfully configured; false otherwise.
      */
-    bool set_feed_constant(double _f,
-                           std::span<double> _target,
+    bool set_feed_constant(double _flow,
+                           std::span<double> _concentration,
                            std::span<std::size_t> _position,
                            std::span<std::size_t> _species,
-                           bool gas = false);
+                           bool gas = false,
+                           bool fed_batch = false);
 
     bool set_feed_constant_from_rvalue(double _f,
                                        std::vector<double>&& _target,
                                        std::vector<std::size_t>&& _position,
                                        std::vector<std::size_t>&& _species,
-                                       bool gas = false);
+                                       bool gas = false,
+                                       bool fed_batch = false);
+
+    ApiResult register_scalar_initiazer(Core::ScalarFactory::ScalarVariant&& var);
 
     /**
      * @brief Retrieve the simulation instance's unique identifier.

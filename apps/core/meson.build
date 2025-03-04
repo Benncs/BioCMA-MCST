@@ -5,12 +5,12 @@ core_source = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ').st
 dep_core = [
     kokkos,
     biomodel_dependency,
-    cma_dep,
     mc_dependency,
     common_dependecy,
     model_selection_dep,
     simulation_lib_dependency,
-    eigen_dep,blas
+    eigen_dep,blas,
+    transitionner_dependency
 ]
 
 if highfive_found

@@ -1,121 +1,160 @@
+#include "common/common.hpp"
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
 #include <cassert>
-#include <hydro/mass_transfer.hpp>
+#include <hydro/impl_mass_transfer.hpp>
+#include <memory>
+#include <optional>
+#include <scalar_simulation.hpp>
+#include <simulation/mass_transfer.hpp>
 #include <stdexcept>
+#include <utility>
 
-static constexpr double c_kinematic_viscosity(double temp);
-static constexpr double oxygen_diffusion_constant = 1e-9;
-static constexpr double temperature = 20.;
-
-namespace MassTransfer
+namespace
 {
-  Eigen::MatrixXd mass_transfer_rate(Eigen::ArrayXXd &res_kla,
-                                     const Eigen::MatrixXd &Vliq,
-                                     const Eigen::ArrayXXd &liq_scalar_as_array,
-                                     const Eigen::ArrayXXd &gas_scalar_as_array,
-                                     const CmaRead::ReactorState &state)
+  struct FunctorKla
   {
-  }
-}; // namespace MassTransfer
+    const std::shared_ptr<Simulation::MassTransfer::MassTransferProxy>& proxy;
+    std::size_t nrow;
 
-Eigen::MatrixXd gas_liquid_mass_transfer(Eigen::ArrayXXd &res_kla,
-                                         const Eigen::MatrixXd &Vliq,
-                                         const Eigen::ArrayXXd &liq_scalar_as_array,
-                                         const Eigen::ArrayXXd &gas_scalar_as_array,
-                                         const CmaRead::ReactorState &state)
+    void operator()(Simulation::MassTransfer::Type::FixedKla& kla) const
+    {
+      if (kla.value.size() != nrow)
+      {
+        throw std::invalid_argument("Given kla dimension doesn’t match with CM dimensions");
+      }
+      for (std::size_t i = 0; i < nrow; ++i)
+      {
+        proxy->kla.row(EIGEN_INDEX(i)).setConstant(kla.value[i]);
+      }
+    }
+
+    void operator()(Simulation::MassTransfer::Type::Flowmap&) const
+    {
+      proxy->kla.setZero();
+    }
+  };
+
+  struct MtrVisitor
+  {
+    const std::shared_ptr<Simulation::MassTransfer::MassTransferProxy>& proxy;
+    const std::shared_ptr<Simulation::ScalarSimulation>& liquid_scalar;
+    const std::shared_ptr<Simulation::ScalarSimulation>& gas_scalar;
+    const CmaUtils::IterationState& state;
+
+    void operator()(const Simulation::MassTransfer::Type::FixedKla& _) const
+    {
+      (void)_;
+      Simulation::MassTransfer::Impl::fixed_kla_gas_liquid_mass_transfer(
+          *proxy,
+          liquid_scalar->getConcentrationArray(),
+          gas_scalar->getConcentrationArray(),
+          liquid_scalar->getVolume(),
+          state);
+    }
+
+    void operator()(const Simulation::MassTransfer::Type::Flowmap& _) const
+    {
+      (void)_;
+      Simulation::MassTransfer::Impl::flowmap_gas_liquid_mass_transfer(
+          *proxy,
+          liquid_scalar->getConcentrationArray(),
+          gas_scalar->getConcentrationArray(),
+          liquid_scalar->getVolume(),
+          state);
+    }
+  };
+
+} // namespace
+
+namespace Simulation::MassTransfer
 {
 
-    // Eigen::ArrayXXd transfer_g_liq = Eigen::ArrayXXd::Zero(gas_scalar_as_array.rows(), gas_scalar_as_array.cols());
+  MassTransferModel::MassTransferModel(MassTransfer::Type::MtrTypeVariant _type,
+                                       std::shared_ptr<Simulation::ScalarSimulation> _liquid_scalar,
+                                       std::shared_ptr<Simulation::ScalarSimulation> _gas_scalar)
+      : type(_type), liquid_scalar(std::move(_liquid_scalar)), gas_scalar(std::move(_gas_scalar))
+  {
 
-    // // Calculate the mass transfer for the second column (index 1)
-    // transfer_g_liq.row(1) = 120./3600. * (0.032 * gas_scalar_as_array.row(1) - liq_scalar_as_array.row(1));
+    const auto nrow = liquid_scalar->n_row();
+    const auto ncol = liquid_scalar->n_col();
 
+    // _proxy = // NOLINT
+    //     new MassTransferProxy{MatrixType(nrow, ncol), Eigen::ArrayXXd(nrow, ncol)};
+    _proxy = std::make_shared<MassTransferProxy>();
+    _proxy->mtr = MatrixType(nrow, ncol);
+    _proxy->kla = Eigen::ArrayXXd(nrow, ncol);
+    _proxy->Henry = Eigen::ArrayXXd(liquid_scalar->n_row(), 1);
+    _proxy->Henry.setZero();
+    _proxy->Henry(1) = 3.181e-2;
 
+    std::visit(FunctorKla{_proxy, nrow}, _type);
 
+    _proxy->db = 5e-3;
+  }
 
-    // // Return the result of the transfer matrix multiplied by Vliq
-    // return (transfer_g_liq.matrix() * Vliq).eval();
-
-    const double kinematic_viscosity = c_kinematic_viscosity(temperature);
-
-    const double schmidtnumber = kinematic_viscosity / oxygen_diffusion_constant;
-
-    constexpr double db = 1e-3;
-
-    const auto energy_dissipation_array =
-        Eigen::Map<Eigen::ArrayXd>(const_cast<double *>(state.energy_dissipation.data()), state.energy_dissipation.size());
-
-    const auto gas_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double *>(state.gasVolume.data()), state.gasVolume.size());
-
-    const auto liq_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double *>(state.liquidVolume.data()), state.liquidVolume.size());
-
-    // // //LAZY
-
-  #define kl_array (0.3 * (energy_dissipation_array * kinematic_viscosity).pow(0.25) * std::pow(schmidtnumber, -0.5))
- 
-  // Calculate gas fraction
-  #define gas_fraction_array (gas_array / (liq_array + gas_array))
-
-  // Calculate interfacial area
-  #define interfacial_area (6 * gas_fraction_array / db)
-
-  #define res_kla_array (kl_array * interfacial_area).transpose()
-
-    // Store results in res_kla
-    res_kla.row(1) = res_kla_array.transpose();
-
-    // for (int i_c = 0; i_c < static_cast<int>(state.n_compartments); ++i_c)
+  void MassTransferModel::gas_liquid_mass_transfer(const CmaUtils::IterationState& state) const
+  {
+    PROFILE_SECTION("gas_liquid_mass_transfer")
+    if (gas_scalar == nullptr || _proxy == nullptr)
+    {
+      throw std::invalid_argument(
+          "gas_liquid_mass_transfer should not be called if gas not intialized");
+    }
+    std::visit(MtrVisitor{_proxy, liquid_scalar, gas_scalar, state}, type);
+    // switch (type)
     // {
-
-    //   double eps_turb{};
-    //   // TODO FIXME: just to use flowmap without turbulence
-    //   try
-    //   {
-    //     eps_turb = state.energy_dissipation.at(i_c);
-    //   }
-    //   catch (const std::out_of_range &e)
-    //   {
-    //     eps_turb = 0.5;
-    //   }
-    //   const double kl = 0.3 * std::pow(eps_turb * kinematic_viscosity, 0.25) *
-    //                     std::pow(schmidtnumber, -0.5);
-
-    //   const double gas_fraction =
-    //       state.gasVolume[i_c] / (state.liquidVolume[i_c] +
-    //       state.gasVolume[i_c]);
-
-    //   const double a = 6 * gas_fraction / db;
-
-    //   const double kla = kl * a;
-
-    //   res_kla.coeffRef(1, i_c) = kla;
+    // case Simulation::MassTransfer::MTRType::FixedKla:
+    // {
+    //   Impl::fixed_kla_gas_liquid_mass_transfer(*_proxy,
+    //                                            liquid_scalar->getConcentrationArray(),
+    //                                            gas_scalar->getConcentrationArray(),
+    //                                            liquid_scalar->getVolume(),
+    //                                            state);
+    //   break;
+    // };
+    // case Simulation::MassTransfer::MTRType::Flowmap:
+    // {
+    //   Impl::flowmap_gas_liquid_mass_transfer(*_proxy,
+    //                                          liquid_scalar->getConcentrationArray(),
+    //                                          gas_scalar->getConcentrationArray(),
+    //                                          liquid_scalar->getVolume(),
+    //                                          state);
+    //   break;
     // }
-
-  // LAZY EVALUATION
-  #define c_star (3.181e-2* gas_scalar_as_array )
-  #define transfer_g_liq ((res_kla) * (c_star - liq_scalar_as_array))
-
-    return (transfer_g_liq.matrix() * Vliq).eval();
-}
-
-// Code from
-// https://www.engineeringtoolbox.com/water-dynamic-kinematic-viscosity-d_596.html
-constexpr double c_kinematic_viscosity(double temp)
-{
-
-  assert(temp > 0 && temp < 370);
-
-  if (temp < 85)
-  {
-    return std::round((0.00000000000282244333 * std::pow(temp, 6) - 0.00000000126441088087 * std::pow(temp, 5) +
-                       0.00000023336659710795 * std::pow(temp, 4) - 0.0000234079044336466 * std::pow(temp, 3) +
-                       0.00144686943485654 * std::pow(temp, 2) - 0.0607310297913931 * temp + 1.79194000343777) *
-                      0.000001 * 10000000000) /
-           10000000000;
+    // default:
+    // {
+    //   assert(0 && "gas_liquid_mass_transfer switch");
+    //   __builtin_unreachable(); // TODO use c++23 cross plateform unreachable
+    // };
+    // }
   }
 
-  return std::round((0.00000000000000178038 * std::pow(temp, 6) - 0.00000000000277495333 * std::pow(temp, 5) +
-                     0.00000000181964246491 * std::pow(temp, 4) - 0.00000064995487357883 * std::pow(temp, 3) +
-                     0.000136367622445752 * std::pow(temp, 2) - 0.0166081298727911 * temp + 1.08486933174497) *
-                    0.000001 * 10000000000) /
-         10000000000;
-}
+  std::optional<std::span<const double>> MassTransferModel::mtr_data() const
+  {
+    if (_proxy != nullptr)
+    {
+      return std::make_optional<std::span<const double>>(
+          {_proxy->mtr.data(), static_cast<size_t>(_proxy->mtr.size())});
+    }
+    return std::nullopt;
+  }
+
+  MassTransferModel::MassTransferModel()
+      : type(Type::Flowmap{}), _proxy(nullptr), liquid_scalar(nullptr), gas_scalar(nullptr)
+  {
+  }
+
+  [[nodiscard]] const std::shared_ptr<MassTransferProxy>& MassTransferModel::proxy() const
+  {
+    return _proxy;
+  }
+
+  MassTransferModel::~MassTransferModel() = default;
+
+  MassTransferModel::MassTransferModel(MassTransferModel&& rhs) noexcept = default;
+
+  MassTransferModel& MassTransferModel::operator=(MassTransferModel&& rhs) noexcept = default;
+
+}; // namespace Simulation::MassTransfer

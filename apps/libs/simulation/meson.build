@@ -26,7 +26,7 @@ project_dependencies = [biomodel_dependency, mc_dependency, common_dependecy]
 # Private dependencies needed to compile .so 
 private_dependencies = [eigen_dep,blas]
 
-external_dependcies = [cma_dep, blas,kokkos]
+external_dependcies = [blas,kokkos]
 
 simulation_public_dependencies = [
    project_dependencies,
@@ -43,7 +43,7 @@ simulation_lib = static_library(
       public_simulation_includes,
       private_simulation_includes,
    ],
-   dependencies: [simulation_public_dependencies, private_dependencies],
+   dependencies: [simulation_public_dependencies, private_dependencies,cma_utils_dependency],
    # pic: true,
    # install: true,
    install_rpath: global_install_dir,

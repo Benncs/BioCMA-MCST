@@ -10,8 +10,8 @@
 #include <cstdint>
 #include <utility>
 
-using ComputeSpace = Kokkos::DefaultExecutionSpace::memory_space;
-using HostSpace = Kokkos::HostSpace::memory_space;
+using ComputeSpace = Kokkos::DefaultExecutionSpace;
+using HostSpace = Kokkos::HostSpace;
 
 /**
  * @brief A basic wrapper around Kokkos View to handle non-fixed size containers

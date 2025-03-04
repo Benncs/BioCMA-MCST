@@ -35,7 +35,7 @@ fi
 
 # Install necessary packages
 echo "Installing necessary packages..."
-if ! sudo apt-get install -y libstdc++-12-dev cmake python3-dev python3 python3-pip wget software-properties-common gnupg libomp-dev libopenmpi-dev libtbb-dev libeigen3-dev pkg-config ninja-build; then
+if ! sudo apt-get install -y libstdc++-12-dev cmake python3-dev python3-pybind11 python3 python3-pip wget software-properties-common gnupg libomp-dev libopenmpi-dev libtbb-dev libeigen3-dev pkg-config ninja-build; then
   error "Failed to install necessary packages."
   exit 1
 fi
@@ -50,18 +50,16 @@ done
 
 
 
-echo "Pip upgrade..."
-if ! python3 -m pip install --upgrade pip; then
-  error "Failed to upgrade pip."
-  exit 1
-fi
+# echo "Pip upgrade..."
+# if ! python3 -m pip install --upgrade pip; then
+#   error "Failed to upgrade pip."
+# fi
 
 # Install optional HDF5 if flag is set
 if $INSTALL_HDF5; then
   echo "Installing HDF5..."
   if ! sudo apt-get install -y libhdf5-dev; then
     error "Failed to install HDF5."
-    exit 1
   fi
 fi
 
@@ -71,12 +69,6 @@ if ! sudo pip3 install meson; then
   error "Failed to install meson."
   exit 1
 fi
-
-echo "Installing omp dev..."
-  if ! sudo apt-get install -y libomp-dev; then
-    error "Failed to install omp."
-    exit 1
-  fi
 
 # Run clang configuration script
 echo "Running clang configuration script..."

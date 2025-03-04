@@ -86,6 +86,16 @@ namespace Core
       {
         this->prepare_matrix(descriptor);
       }
+
+      std::vector<unsigned long long> chunk = {1, n_compartments, n_species};
+      this->prepare_matrix({
+          base_group_name + "mtr",
+          {1, n_compartments, n_species},
+          {n_expected_export, n_compartments, n_species},
+          chunk,
+          true,
+          false});
+
     }
 
     this->prepare_matrix({base_group_name + "time",
@@ -101,7 +111,7 @@ namespace Core
       std::span<double> concentration_liquid,
       std::span<const double> liquid_volume,
       std::optional<std::span<const double>> concentration_gas,
-      std::optional<std::span<const double>> volume_gas)
+      std::optional<std::span<const double>> volume_gas,std::optional<std::span<const double>> mtr)
   {
     if(export_counter>=n_expected_export)
     {
@@ -119,6 +129,12 @@ namespace Core
     {
       append_matrix(base_group_name + "volume_gas", *volume_gas);
     }
+    if(mtr.has_value())
+    {
+       append_matrix(base_group_name + "mtr", *mtr);
+    } 
+
+
     export_counter++;
   }
 

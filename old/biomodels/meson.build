@@ -21,6 +21,7 @@ loader = library(
 udf_loader = declare_dependency(
    link_with: loader,
    dependencies: [mc_dependency, common_dependecy,dynlib_dep],
+   compile_args['-DDECLARE_EXPORT_UDF']
 )
 
 

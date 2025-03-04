@@ -7,5 +7,5 @@ subdir('core')
 subdir('api')
 subdir('cli')
 if not use_cuda and not get_option('python_install')
-  # subdir('udf_model')
+  subdir('udf_model')
 endif

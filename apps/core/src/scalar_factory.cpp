@@ -1,14 +1,14 @@
 
 #include <algorithm>
+#include <cma_read/light_2d_view.hpp>
 #include <core/scalar_factory.hpp>
 #include <filesystem>
 #include <optional>
 #include <simulation/scalar_initializer.hpp>
+#include <span>
 #include <stdexcept>
 #include <utility>
-#include <span> 
-#include <variant> 
-#include <cma_read/light_2d_view.hpp>
+#include <variant>
 #ifdef USE_HIGHFIVE
 #  include <Eigen/Dense>
 #  include <highfive/H5DataSet.hpp>
@@ -21,7 +21,7 @@
 namespace Core::ScalarFactory
 {
 
-  Simulation::ScalarInitializer scalar_factory(bool  /*f_init_gas_flow*/,
+  Simulation::ScalarInitializer scalar_factory(bool /*f_init_gas_flow*/,
                                                std::span<double> gas_volume,
                                                std::span<double> liquid_volume,
                                                ScalarVariant arg_liq)
@@ -58,14 +58,19 @@ namespace Core::ScalarFactory
     res.n_species = n_species;
     res.gas_flow = false;
 
-    auto wrap_functor = [n_species](auto&& c)
+    auto wrap_functor = [](auto&& c)
     {
-      return [n_species, local_concentrations = c](size_t i, CmaRead::L2DView<double>& view)
+      // return [n_species, local_concentrations = c](size_t i, CmaRead::L2DView<double>& view)
+      // {
+      //   for (size_t i_species = 0; i_species < n_species; ++i_species)
+      //   {
+      //     view(i_species, i) = local_concentrations[i_species];
+      //   };
+      // };
+      return [local_concentrations = c](size_t i_row, size_t i_col)
       {
-        for (size_t i_species = 0; i_species < n_species; ++i_species)
-        {
-          view(i_species, i) = local_concentrations[i_species];
-        };
+        (void)i_row;
+        return local_concentrations[i_row];
       };
     };
 
@@ -80,6 +85,25 @@ namespace Core::ScalarFactory
     return res;
   }
 
+  // Simulation::ScalarInitializer Visitor::operator()(CustomFunctor func)
+  // {
+  //   auto res = Simulation::ScalarInitializer();
+  //   res.type = Simulation::ScalarInitialiserType::CustomFunctor;
+  //   res.n_species = func.n_species;
+
+  //   res.gas_flow = false;
+
+  //   res.liquid_f_init = func.liquid;
+
+  //   if (func.gas.has_value())
+  //   {
+  //     res.gas_f_init = *func.gas;
+  //     res.gas_flow = true;
+  //   }
+
+  //   return res;
+  // }
+
   Simulation::ScalarInitializer Visitor::operator()(Local args)
   {
     auto res = Simulation::ScalarInitializer();
@@ -90,18 +114,34 @@ namespace Core::ScalarFactory
     res.n_species = n_species;
     res.gas_flow = false;
 
-    const auto wrap_functor = [n_species](auto&& i, auto&& c)
+    // const auto wrap_functor = [n_species](auto&& i, auto&& c)
+    // {
+    //   return [n_species,
+    //           concentrations = std::forward<decltype(c)>(c),
+    //           _indices = std::forward<decltype(i)>(i)](size_t i, CmaRead::L2DView<double>& view)
+    //   {
+    //     if (std::ranges::find(_indices, i) != _indices.end())
+    //     {
+    //       for (size_t i_species = 0; i_species < n_species; ++i_species)
+    //       {
+    //         view(i_species, i) = concentrations[i_species];
+    //       }
+    //     }
+    //   };
+    // };
+
+    const auto wrap_functor = [](auto&& i, auto&& c)
     {
-      return [n_species,
-              concentrations = std::forward<decltype(c)>(c),
-              _indices = std::forward<decltype(i)>(i)](size_t i, CmaRead::L2DView<double>& view)
+      return [concentrations = std::forward<decltype(c)>(c),
+              _indices = std::forward<decltype(i)>(i)](std::size_t i_row, std::size_t i_col)
       {
-        if (std::ranges::find(_indices, i) != _indices.end())
+        if (std::ranges::find(_indices, i_col) != _indices.end())
         {
-          for (size_t i_species = 0; i_species < n_species; ++i_species)
-          {
-            view(i_species, i) = concentrations[i_species];
-          }
+          return concentrations[i_row];
+        }
+        else
+        {
+          return 0.;
         }
       };
     };
@@ -113,6 +153,26 @@ namespace Core::ScalarFactory
       res.gas_f_init = wrap_functor(*args.gas_indices, *args.gas_concentration);
       res.gas_flow = true;
     }
+
+    return res;
+  }
+
+  Simulation::ScalarInitializer Visitor::operator()(FullCase data)
+  {
+    auto res = Simulation::ScalarInitializer();
+    res.type = Simulation::ScalarInitialiserType::FullCase;
+    res.gas_flow = data.raw_gas.has_value();
+    res.n_species = data.n_species;
+    if (res.gas_flow)
+    {
+      if (data.raw_gas->size() != data.raw_liquid.size())
+      {
+        throw std::invalid_argument("Liquid and Gas data should have the same size");
+      }
+      res.gas_buffer = std::move(*data.raw_gas);
+    }
+
+    res.liquid_buffer = std::move(data.raw_liquid);
 
     return res;
   }
@@ -201,7 +261,6 @@ namespace Core::ScalarFactory
       }
       return _flag;
     };
-
     switch (res.type)
     {
 
@@ -214,24 +273,30 @@ namespace Core::ScalarFactory
     case Simulation::ScalarInitialiserType::Local:
     {
       flag = test_functor(res);
-
       break;
     }
     case Simulation::ScalarInitialiserType::File:
     {
-      //File doesn't need functor but buffer
-      //First check initialiser has buffer and functor and not set 
+      // File doesn't need functor but buffer
+      // First check initialiser has buffer and functor and not set
       flag = res.liquid_buffer.has_value() &&
              (!res.gas_f_init.has_value() && !res.liquid_f_init.has_value());
       if (flag)
       {
-        flag = res.liquid_buffer->size() != 0; //If buffer check that is not empty
+        flag = res.liquid_buffer->size() != 0; // If buffer check that is not empty
       }
       break;
     }
     case Simulation::ScalarInitialiserType::CustomScript:
+    {
       flag = false;
       break;
+    }
+    case Simulation::ScalarInitialiserType::FullCase:
+    {
+      flag = true; // TODO
+      break;
+    }
     }
 
     return flag;

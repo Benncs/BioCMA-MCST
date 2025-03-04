@@ -6,6 +6,7 @@ endif
 
 subdir('common')
 subdir('mpi_w')
+subdir('cma_utils')
 subdir('mc')
 subdir('biomodels')
 

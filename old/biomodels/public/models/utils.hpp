@@ -1,6 +1,6 @@
 #ifndef __BIO__UTILS_HPP__
 #define __BIO__UTILS_HPP__
-#include "mc/particles/data_holder.hpp"
+#include <mc/particles/data_holder.hpp>
 #include <Kokkos_Core.hpp>
 #include <mc/prng/prng.hpp>
 
@@ -14,7 +14,7 @@ namespace Models
     // const double proba_div =
     //     (1 - Kokkos::exp(-d_t / tau_division_proba)) * gamma;
     double proba_div = gamma;
-    const double x = _rng.double_uniform();
+    const auto x = _rng.uniform();
 
     return x < proba_div;
   }

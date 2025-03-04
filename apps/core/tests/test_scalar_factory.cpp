@@ -2,6 +2,7 @@
 #include <core/scalar_factory.hpp>
 #include <filesystem>
 #include <iostream>
+#include <optional>
 #include <stdexcept>
 #include <string_view>
 #include <vector>
@@ -17,7 +18,6 @@
     std::cout << e.what() << std::endl;                                                            \
     assert(false);                                                                                 \
   }
-  
 
 static constexpr size_t n_compartment = 10;
 static constexpr size_t n_species = 3;
@@ -37,9 +37,12 @@ static std::vector<double> get_raw_concentration_data()
 void mock_init(CmaRead::L2DView<double> c, auto functor)
 {
   assert(functor.has_value());
-  for (size_t i = 0; i < c.getNCol(); ++i)
+  for (size_t i = 0; i < c.getNRow(); ++i)
   {
-    (*functor)(i, c);
+    for (size_t j = 0; j < c.getNCol(); ++j)
+    {
+      c(i, j) = (*functor)(i, j);
+    }
   }
 }
 
@@ -211,6 +214,21 @@ void test_wrong_size()
   assert(false);
 }
 
+
+void test_full_case()
+{
+     std ::vector<double> concentrations = {1., 5., 6.};
+  GET_VOLUME
+    Core::ScalarFactory::FullCase arg = {n_species,concentrations,std::nullopt};
+
+  // Should throw exception
+ 
+  auto scalar_init = scalar_factory(false, gas_volume, liquid_volume, arg);
+  
+  assert(scalar_init.n_species==n_species);
+  assert(scalar_init.liquid_buffer==concentrations);
+}
+
 int main(int argc, char** argv)
 {
 
@@ -228,6 +246,7 @@ int main(int argc, char** argv)
   WRAP_EXCEP(test_uniform_liq_gas());
   WRAP_EXCEP(test_local_liq());
   WRAP_EXCEP(test_local_gas_liq());
+  WRAP_EXCEP(test_full_case());
 
   return 0;
 }

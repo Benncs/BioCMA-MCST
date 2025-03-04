@@ -15,6 +15,11 @@
 #include <utility>
 constexpr int ID_VERIF = 2025;
 
+void finalize()
+{
+  Api::finalise();
+}
+
 int apply(Handle handle, int to_load)
 {
   if (handle != nullptr)
@@ -39,6 +44,8 @@ Handle init_handle_shared(uint64_t id, uint32_t thread_per_process)
 {
   return init_handle_raw(1, 0, id, thread_per_process);
 }
+
+
 void delete_handle(Handle* handle)
 {
 
@@ -183,7 +190,8 @@ int set_feed_constant(Handle handle,
                       size_t* _species,
                       size_t n_position,
                       size_t* _position,
-                      int gas)
+                      int gas,
+                      int fed_batch)
 {
   if ((handle != nullptr) && (_target != nullptr) && (_species != nullptr) &&
       (_position != nullptr))
@@ -191,7 +199,7 @@ int set_feed_constant(Handle handle,
     auto span_target = std::span<double>(_target, n_species);
     auto span_species = std::span<std::size_t>(_species, n_species);
     auto span_pos = std::span<std::size_t>(_position, n_position);
-    handle->set_feed_constant(_f, span_target, span_pos, span_species, gas != 0);
+    handle->set_feed_constant(_f, span_target, span_pos, span_species, gas != 0, fed_batch != 0);
     return 0;
   }
 

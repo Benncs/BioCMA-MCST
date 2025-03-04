@@ -44,7 +44,7 @@ namespace PostProcessing
       properties.vnames = Model::names();
       properties.vnames.emplace_back("hydraulic_time");
       properties.vnames.emplace_back("age");
-      constexpr std::size_t n_properties = Model::get_number() + 2; //+2 for hydraulic time and age
+      const std::size_t n_properties = Model::get_number() + 2; //+2 for hydraulic time and age
       // TODO: Find out if we cna use compile time size or not
       // For the moment double** is used for simplicyt with particle model but algortihm remains
       // exactly the same if we know the size of view.

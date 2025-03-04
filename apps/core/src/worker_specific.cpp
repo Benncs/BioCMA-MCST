@@ -6,14 +6,14 @@
 #  include <mpi_w/wrap_mpi.hpp>
 #  include <impl_post_process.hpp>
 #  include <simulation/simulation.hpp>
-#  include <simulation/transitionner.hpp>
+#  include <transitionner/transitionner.hpp>
 #  include <sync.hpp>
 #  include <worker_specific.hpp>
 
 void workers_process(const ExecInfo& exec,
                      Simulation::SimulationUnit& simulation,
                      const Core::SimulationParameters& params,
-                     std::unique_ptr<Simulation::FlowMapTransitioner>&& transitioner,
+                     std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,
                      Core::PartialExporter& partial_exporter)
 {
   double d_t = params.d_t;
@@ -24,8 +24,7 @@ void workers_process(const ExecInfo& exec,
 
   const auto loop_functor = [&](auto&& container)
   {
-    // auto result = container.get_extra();
-    // auto view_result = result.get_view();
+
     bool stop = false;
     WrapMPI::SIGNALS signal{};
     double current_time = 0;
@@ -69,11 +68,8 @@ void workers_process(const ExecInfo& exec,
 
       payload.recv(0, &status);
 
-      simulation.mc_unit->domain.setLiquidNeighbors(payload.neighbors);
-      transitioner->update_flow(simulation, payload.liquid_flows, n_compartments);
-      transitioner->advance(simulation);
-
-      simulation.setVolumes(payload.gas_volumes, payload.liquid_volumes);
+     
+      simulation.update(transitioner->advance_worker(payload.liquid_flows, payload.liquid_volumes,payload.gas_volumes,payload.neighbors));
 
       simulation.cycleProcess(container, d_t);
 

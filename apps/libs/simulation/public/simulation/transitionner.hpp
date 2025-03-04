@@ -1,142 +1,155 @@
-#ifndef __CLI_FLOWMAP_TRANSITIONNER_HPP__
-#define __CLI_FLOWMAP_TRANSITIONNER_HPP__
+// #ifndef __CLI_FLOWMAP_TRANSITIONNER_HPP__
+// #define __CLI_FLOWMAP_TRANSITIONNER_HPP__
 
-#include <cma_read/flow_iterator.hpp>
-#include <cmt_common/macro_constructor_assignment.hpp>
+// #include <cma_read/flow_iterator.hpp>
+// #include <cma_read/reactorstate.hpp>
+// #include <cstddef>
+// #include <memory>
 
-#include <cma_read/reactorstate.hpp>
-#include <cstddef>
-#include <memory>
+// namespace CmaUtils
+// {
+//   class PreCalculatedHydroState;
+  
+// } // namespace CmaUtils
 
-// Foward declaration
-namespace Simulation
-{
-  class SimulationUnit;
-  class PreCalculatedHydroState;
-  struct TransitionState;
-} // namespace Simulation
+// // Foward declaration
+// namespace Simulation
+// {
+//   class SimulationUnit;
+//   struct TransitionState;
 
-namespace Simulation
-{
+// } // namespace Simulation
 
-  class FlowMapTransitioner
-  {
-  public:
-    enum FlowmapTransitionMethod
-    {
-      Discontinuous,
-      InterpolationFO,
-    };
+// namespace Simulation
+// {
 
-    FlowMapTransitioner(size_t n_flowmap,
-                        size_t _n_per_flowmap,
-                        FlowmapTransitionMethod method,
-                        size_t number_time_step,
-                        std::unique_ptr<CmaRead::FlowIterator> &&iterator = nullptr,
-                        bool is_two_phase_flow = false);
+//   class FlowMapTransitioner
+//   {
+//   public:
+//     enum FlowmapTransitionMethod
+//     {
+//       Discontinuous,
+//       InterpolationFO,
+//     };
 
-    DELETE_COPY_MOVE_AC(FlowMapTransitioner)
+//     FlowMapTransitioner(size_t n_flowmap,
+//                         size_t _n_per_flowmap,
+//                         FlowmapTransitionMethod method,
+//                         size_t number_time_step,
+//                         std::unique_ptr<CmaRead::FlowIterator>&& iterator = nullptr,
+//                         bool is_two_phase_flow = false);
 
-    ~FlowMapTransitioner();
+//     FlowMapTransitioner(const FlowMapTransitioner&) = delete;
+//     FlowMapTransitioner(FlowMapTransitioner&&) = delete;
+//     FlowMapTransitioner& operator=(const FlowMapTransitioner&) = delete;
+//     FlowMapTransitioner& operator=(FlowMapTransitioner&&) = delete;
 
-    void update_flow(Simulation::SimulationUnit &unit);
-    void advance(Simulation::SimulationUnit &unit);
+//     ~FlowMapTransitioner();
 
-    void update_flow(Simulation::SimulationUnit &unit, std::span<double> flows, size_t n_compartment);
+//     void update_flow(Simulation::SimulationUnit& unit);
+//     void advance(Simulation::SimulationUnit& unit);
 
-    [[nodiscard]] size_t get_n_timestep() const;
+//     void update_flow(std::span<double> flows,
+//                      size_t n_compartment,
+//                      const CmaRead::Neighbors::Neighbors_const_view_t& neighbors);
 
-    [[nodiscard]] size_t getFlowIndex() const;
+//     [[nodiscard]] size_t get_n_timestep() const;
 
-    // TODO REMOVE THOSE
-    [[nodiscard]] size_t size() const;
+//     [[nodiscard]] size_t getFlowIndex() const;
 
-    CmaRead::ReactorState &get_current_unchecked_mut();
+//     // TODO REMOVE THOSE
+//     [[nodiscard]] size_t size() const;
 
-    [[nodiscard]] const CmaRead::ReactorState &get_current_unchecked() const;
+//     CmaRead::ReactorState& get_current_unchecked_mut();
 
-    CmaRead::ReactorState &get_unchecked_mut(size_t index);
-    [[nodiscard]] const CmaRead::ReactorState &get_unchecked(size_t index) const;
+//     [[nodiscard]] const CmaRead::ReactorState& get_current_unchecked() const;
 
-    const CmaRead::ReactorState *getState()
-    {
-      return current_state;
-    }
+//     CmaRead::ReactorState& get_unchecked_mut(size_t index);
+//     [[nodiscard]] const CmaRead::ReactorState& get_unchecked(size_t index) const;
 
-  private:
-    void discontinuous_transition();
-    void linear_interpolation_transition();
-    
-    bool two_phase_flow;
-    std::unique_ptr<CmaRead::FlowIterator> iterator = nullptr;
-    size_t n_per_flowmap;
-    size_t n_flowmap;
-    size_t n_timestep;
-    CmaRead::ReactorState interpolated_reactor_state;
+//     [[nodiscard]] const CmaRead::ReactorState* getState() const;
 
-    size_t current_flowmap_count;
-    size_t repetition_count;
-    void calculate_full_state(const CmaRead::ReactorState &reactor_state,
-                              const Simulation::SimulationUnit &unit,
-                              PreCalculatedHydroState *liq_hydro_state,
-                              PreCalculatedHydroState *gas_hydro_state);
+//   private:
+//     void discontinuous_transition();
+//     void linear_interpolation_transition();
 
-    void calculate_liquid_state(const CmaRead::FlowMap::FlowMap_const_view_t &mat_f_liq_view,
-                                const Simulation::SimulationUnit &unit,
-                                PreCalculatedHydroState *liq_hydro_state);
+//     void calculate_full_state(const CmaRead::ReactorState& reactor_state,
+//                               const Simulation::SimulationUnit& unit,
+//                               CmaUtils::PreCalculatedHydroState* liq_hydro_state,
+//                               CmaUtils::PreCalculatedHydroState* gas_hydro_state);
 
-    void (FlowMapTransitioner::*f_update)(Simulation::SimulationUnit &unit);
+//     void calculate_liquid_state(const CmaRead::FlowMap::FlowMap_const_view_t& mat_f_liq_view,
+//                                 const CmaRead::Neighbors::Neighbors_const_view_t& neighbors,
+//                                 CmaUtils::PreCalculatedHydroState* liq_hydro_state);
 
-    void update_flow_interpolation(Simulation::SimulationUnit &unit);
+//     void (FlowMapTransitioner::*f_update)(Simulation::SimulationUnit& unit);
 
-    void update_flow_discontinous(Simulation::SimulationUnit &unit);
+//     void update_flow_interpolation(Simulation::SimulationUnit& unit);
 
-    std::vector<PreCalculatedHydroState> liquid_pc;
-    std::vector<PreCalculatedHydroState> gas_pc;
+//     void update_flow_discontinous(Simulation::SimulationUnit& unit);
 
-    PreCalculatedHydroState *current_liq_hydro_state = nullptr;
-    PreCalculatedHydroState *current_gas_hydro_state = nullptr;
-    TransitionState *interpolated_state;
+//     bool two_phase_flow;
+//     std::unique_ptr<CmaRead::FlowIterator> iterator = nullptr;
+//     size_t n_per_flowmap;
+//     size_t n_flowmap;
+//     size_t n_timestep;
+//     CmaRead::ReactorState interpolated_reactor_state;
 
-    const CmaRead::ReactorState *current_state = nullptr;
+//     size_t current_flowmap_count;
+//     size_t repetition_count;
 
-    size_t current_index;
-  };
+//     std::vector<CmaUtils::PreCalculatedHydroState> liquid_pc;
+//     std::vector<CmaUtils::PreCalculatedHydroState> gas_pc;
 
-  inline CmaRead::ReactorState &FlowMapTransitioner::get_unchecked_mut(size_t index)
-  {
-    return iterator->get_unchcked_mut(index);
-  }
-  [[nodiscard]] inline const CmaRead::ReactorState &FlowMapTransitioner::get_unchecked(size_t index) const
-  {
-    return iterator->get_unchecked(index);
-  };
+//     CmaUtils::PreCalculatedHydroState* current_liq_hydro_state = nullptr;
+//     CmaUtils::PreCalculatedHydroState* current_gas_hydro_state = nullptr;
+//     TransitionState* interpolated_state;
 
-  [[nodiscard]] inline const CmaRead::ReactorState &FlowMapTransitioner::get_current_unchecked() const
-  {
-    return iterator->get_unchecked(getFlowIndex());
-  };
+//     const CmaRead::ReactorState* current_state = nullptr;
+//     size_t current_index;
+//   };
 
-  inline CmaRead::ReactorState &FlowMapTransitioner::get_current_unchecked_mut()
-  {
-    return iterator->get_unchcked_mut(getFlowIndex());
-  }
+//   inline const CmaRead::ReactorState* FlowMapTransitioner::getState() const
+//   {
+//     return current_state;
+//   }
 
-  [[nodiscard]] inline size_t FlowMapTransitioner::get_n_timestep() const
-  {
-    return this->n_timestep;
-  };
+//   inline CmaRead::ReactorState& FlowMapTransitioner::get_unchecked_mut(size_t index)
+//   {
+//     return iterator->get_unchcked_mut(index);
+//   }
+//   [[nodiscard]] inline const CmaRead::ReactorState&
+//   FlowMapTransitioner::get_unchecked(size_t index) const
+//   {
+//     return iterator->get_unchecked(index);
+//   };
 
-  [[nodiscard]] inline size_t FlowMapTransitioner::getFlowIndex() const
-  {
-    return this->repetition_count % this->n_flowmap;
-  }
+//   [[nodiscard]] inline const CmaRead::ReactorState&
+//   FlowMapTransitioner::get_current_unchecked() const
+//   {
+//     return iterator->get_unchecked(getFlowIndex());
+//   };
 
-  [[nodiscard]] inline size_t FlowMapTransitioner::size() const
-  {
-    return iterator->size();
-  }
+//   inline CmaRead::ReactorState& FlowMapTransitioner::get_current_unchecked_mut()
+//   {
+//     return iterator->get_unchcked_mut(getFlowIndex());
+//   }
 
-} // namespace Simulation
+//   [[nodiscard]] inline size_t FlowMapTransitioner::get_n_timestep() const
+//   {
+//     return this->n_timestep;
+//   };
 
-#endif //__CLI_FLOWMAP_TRANSITIONNER_HPP__
+//   [[nodiscard]] inline size_t FlowMapTransitioner::getFlowIndex() const
+//   {
+//     return this->repetition_count % this->n_flowmap;
+//   }
+
+//   [[nodiscard]] inline size_t FlowMapTransitioner::size() const
+//   {
+//     return iterator->size();
+//   }
+
+// } // namespace Simulation
+
+// #endif //__CLI_FLOWMAP_TRANSITIONNER_HPP__

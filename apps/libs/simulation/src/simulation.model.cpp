@@ -1,24 +1,19 @@
-#include "common/common.hpp"
-#include <cma_read/reactorstate.hpp>
-#include <iterator>
-#include <mc/domain.hpp>
-#include <optional>
-#include <simulation/simulation.hpp>
-
+#include "simulation/mass_transfer.hpp"
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-
-#include <hydro/mass_transfer.hpp>
+#include <common/common.hpp>
+#include <hydro/impl_mass_transfer.hpp>
+#include <mc/domain.hpp>
+#include <optional>
 #include <scalar_simulation.hpp>
-#include <stdexcept>
+#include <simulation/simulation.hpp>
 
 namespace Simulation
 {
 
   std::span<const double> SimulationUnit::getContributionData() const
   {
-
     return liquid_scalar->getContributionData();
   }
 
@@ -27,7 +22,7 @@ namespace Simulation
     return this->liquid_scalar->getConcentrationData();
   }
 
-  [[nodiscard]] std::optional<std::span<double>> SimulationUnit::getCgasData() const
+  [[nodiscard]] std::optional<std::span<const double>> SimulationUnit::getCgasData() const
   {
     if (!gas_scalar)
     {
@@ -36,14 +31,14 @@ namespace Simulation
     return this->gas_scalar->getConcentrationData();
   }
 
-  [[nodiscard]] std::tuple<size_t, size_t> SimulationUnit::getDim() const noexcept
+  [[nodiscard]] Dimensions SimulationUnit::getDimensions() const noexcept
   {
     return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()};
   }
 
-  [[nodiscard]] Dimensions SimulationUnit::getDimensions() const noexcept
+  [[nodiscard]] std::optional<std::span<const double>> SimulationUnit::getMTRData() const
   {
-    return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()};
+    return this->mt_model.mtr_data();
   }
 
   [[deprecated("perf:not useful")]] void
@@ -51,54 +46,56 @@ namespace Simulation
   {
 
     PROFILE_SECTION("host:reduceContribs_rank")
-    const auto [nr, nc] = getDimensions();
-    this->liquid_scalar->biomass_contribution.noalias() += Eigen::Map<Eigen::MatrixXd>(
-        const_cast<double*>(data.data()), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
+    this->liquid_scalar->reduce_contribs(data);
   }
 
   void SimulationUnit::reduceContribs(std::span<const double> data, size_t n_rank) const
   {
     PROFILE_SECTION("host:reduceContribs")
     const auto [nr, nc] = getDimensions();
-
-    this->liquid_scalar->biomass_contribution.setZero();
-    // FIXME
+    this->liquid_scalar->set_zero_contribs();
     for (int i = 0; i < static_cast<int>(n_rank); ++i)
     {
-      this->liquid_scalar->biomass_contribution.noalias() += Eigen::Map<Eigen::MatrixXd>(
-          const_cast<double*>(&data[i * nr * nc]), EIGEN_INDEX(nr), EIGEN_INDEX(nc));
+      this->liquid_scalar->reduce_contribs({&data[i * nr * nc], nr * nc});
     }
   }
 
   void SimulationUnit::clearContribution() const noexcept
   {
-    this->liquid_scalar->vec_kla.setZero();
-    this->liquid_scalar->biomass_contribution.setZero();
+    // this->liquid_scalar->vec_kla.setZero();
+    // Dont forget to clear kernel contribution
+    if (is_two_phase_flow)
+    {
+      this->gas_scalar->set_zero_contribs();
+    }
+    this->liquid_scalar->set_zero_contribs();
   }
 
   void
   SimulationUnit::update_feed(const double t, const double d_t, const bool update_scalar) noexcept
   {
+    PROFILE_SECTION("host:update_feed")
     // Get references to the index_leaving_flow and leaving_flow data members
-    auto& _index_leaving_flow = this->index_leaving_flow;
-    auto& _leaving_flow = this->leaving_flow;
+    const auto& _index_leaving_flow = this->move_info.index_leaving_flow;
+    const auto& _leaving_flow = this->move_info.leaving_flow;
 
     // Get the index of the exit compartment
     // TODO exit is not necessarly at the index n-1, it should be given by user
     const uint64_t i_exit = mc_unit->domain.getNumberCompartments() - 1;
 
     // Define the set_feed lambda function
-    auto set_feed = [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow, update_scalar](
-                        const pimp_ptr_t& scalar, auto&& descritor, bool mc_f = false)
+    auto set_feed =
+        [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow, update_scalar](
+            const std::shared_ptr<ScalarSimulation>& scalar, auto&& descritor, bool mc_f = false)
     {
       double flow = 0.; // Initialize the flow variable
-
+      bool set_exit = false;
       // Iterate through each current_feed in the descriptor
       for (auto&& current_feed : descritor)
       {
-        current_feed.update(t, d_t);    // Update the current_feed
-        flow = current_feed.flow_value; // Get the flow_value of the current_feed
-
+        current_feed.update(t, d_t);     // Update the current_feed
+        flow += current_feed.flow_value; // Get the flow_value of the current_feed
+        set_exit = current_feed.set_exit;
         if (update_scalar)
         {
           // Iterate through the species, positions, and values of the
@@ -111,17 +108,20 @@ namespace Simulation
         }
       }
 
-      if (update_scalar)
+      if (set_exit)
       {
-        // Set the sink for the exit compartment
-        scalar->set_sink(i_exit, flow);
-      }
+        if (update_scalar)
+        {
+          // Set the sink for the exit compartment
+          scalar->set_sink(i_exit, flow);
+        }
 
-      // Update Flow for mc particle
-      if (mc_f)
-      {
-        _index_leaving_flow(0) = i_exit;
-        _leaving_flow(0) = flow;
+        // Update Flow for mc particle
+        if (mc_f)
+        {
+          _index_leaving_flow(0) = i_exit;
+          _leaving_flow(0) = flow;
+        }
       }
     };
 
@@ -136,23 +136,23 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::step(double d_t, const CmaRead::ReactorState& state) const
+  void SimulationUnit::step(double d_t) const
   {
 
     if (is_two_phase_flow)
     {
-      this->liquid_scalar->mass_transfer =
-          gas_liquid_mass_transfer(this->liquid_scalar->vec_kla,
-                                   liquid_scalar->getVolume(),
-                                   liquid_scalar->getConcentrationArray(),
-                                   gas_scalar->getConcentrationArray(),
-                                   state);
+      mt_model.gas_liquid_mass_transfer(state);
+      const MatrixType& mtr = mt_model.proxy()->mtr;
+      
+      this->gas_scalar->performStepGL(
+          d_t, state.gas->get_transition(), mtr, MassTransfer::Sign::GasToLiquid);
 
-      this->gas_scalar->performStep(
-          d_t, flow_gas->transition_matrix, -1 * this->liquid_scalar->mass_transfer);
+      this->liquid_scalar->performStepGL(
+          d_t, state.liq->get_transition(), mtr, MassTransfer::Sign::LiquidToGas);
     }
-
-    this->liquid_scalar->performStep(
-        d_t, flow_liquid->transition_matrix, this->liquid_scalar->mass_transfer);
+    else
+    {
+      this->liquid_scalar->performStep(d_t, state.liq->get_transition());
+    }
   }
 } // namespace Simulation

@@ -50,7 +50,7 @@ def exec(command, n_thread, do_measure: bool = True, do_kokkos_measure=False, **
     if do_kokkos_measure:
         # env_var["KOKKOS_TOOLS_LIBS"] = "/usr/local/lib64/libkp_memory_events.so"
         # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib64/libkp_kernel_timer.so"
-        env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
+        env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so" #libkp_memory_usage
 
     result = command.replace("-", "\n-")
     pattern = re.compile(r"(-\w+\s)(\S+)")

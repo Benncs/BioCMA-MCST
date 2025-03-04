@@ -1,5 +1,14 @@
 #!/bin/bash
 
-export LD_LIBRARY_PATH=$(pwd)/builddir/laptop/subprojects/cmtool/cmtool/common:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=$(pwd)/builddir/laptop/subprojects/cmtool/cmtool/common:$(pwd)/builddir/laptop/subprojects/cmtool/cmtool/cma_read:$LD_LIBRARY_PATH
-sudo ldconfig 
+
+dir=gpu
+
+# export LD_LIBRARY_PATH=$(pwd)/builddir/$dir/subprojects/cmtool/cmtool/common:$LD_LIBRARY_PATH
+# export LD_LIBRARY_PATH=$(pwd)/builddir/$dir/subprojects/cmtool/cmtool/common:$(pwd)/builddir/$dir/subprojects/cmtool/cmtool/cma_read:$LD_LIBRARY_PATH
+# sudo ldconfig 
+
+
+# eval LD_LIBRARY_PATH=$(pwd)/builddir/$dir/subprojects/cmtool/cmtool/common:$LD_LIBRARY_PATH
+# eval LD_LIBRARY_PATH=$(pwd)/builddir/$dir/subprojects/cmtool/cmtool/cma_read:$LD_LIBRARY_PATH
+
+echo export LD_LIBRARY_PATH=$(pwd)/builddir/$dir/subprojects/cmtool/cmtool/common:$(pwd)/builddir/$dir/subprojects/cmtool/cmtool/cma_read:$LD_LIBRARY_PATH

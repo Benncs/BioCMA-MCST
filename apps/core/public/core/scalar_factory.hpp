@@ -11,10 +11,11 @@
 
 /**
  * @namespace ScalarFactory
- * @brief Provides structures and functions to initialize scalar data for simulations, supporting multiple data sources.
+ * @brief Provides structures and functions to initialize scalar data for simulations, supporting
+ * multiple data sources.
  *
- * The ScalarFactory namespace contains several structures representing different methods of initializing scalar values
- * (liquid and gas concentrations) for simulations.
+ * The ScalarFactory namespace contains several structures representing different methods of
+ * initializing scalar values (liquid and gas concentrations) for simulations.
  */
 namespace Core::ScalarFactory
 {
@@ -52,12 +53,14 @@ namespace Core::ScalarFactory
     std::vector<size_t> liquid_indices;
 
     /**
-     * @brief Optional vector of gas phase concentrations, applied to specific compartments if provided.
+     * @brief Optional vector of gas phase concentrations, applied to specific compartments if
+     * provided.
      */
     std::optional<std::vector<double>> gas_concentration = std::nullopt;
 
     /**
-     * @brief Optional vector of indices corresponding to compartments with specified gas concentrations.
+     * @brief Optional vector of indices corresponding to compartments with specified gas
+     * concentrations.
      */
     std::optional<std::vector<size_t>> gas_indices = std::nullopt;
   };
@@ -92,10 +95,39 @@ namespace Core::ScalarFactory
   };
 
   /**
+   * @struct FullCase
+   * @brief Represents scalar data everywhere
+   */
+  struct FullCase
+  {
+    /**
+     * @brief Liquid concentration (size n*m)
+     */
+    std::size_t n_species;
+    std::vector<double> raw_liquid;
+    std::optional<std::vector<double>> raw_gas;
+  };
+
+  // /**
+  //  * @struct CustomFunctor
+  //  * @brief Represents scalar data initialized through a custom functor.
+  //  */
+  // struct CustomFunctor
+  // {
+  //   /**
+  //    * @brief Path to the custom script used for initializing scalar data.
+  //    */
+  //   size_t n_compartment;
+  //   size_t n_species;
+  //   Simulation::init_scalar_f_t liquid;
+  //   std::optional<Simulation::init_scalar_f_t> gas;
+  // };
+
+  /**
    * @typedef ScalarVariant
    * @brief A variant type representing different scalar data sources.
    */
-  using ScalarVariant = std::variant<Uniform, Local, File, CustomScript>;
+  using ScalarVariant = std::variant<Uniform, Local, File, CustomScript,FullCase>;
 
   /**
    * @struct Visitor
@@ -111,13 +143,16 @@ namespace Core::ScalarFactory
     Simulation::ScalarInitializer operator()(File filepath);
 
     Simulation::ScalarInitializer operator()(CustomScript path);
+    Simulation::ScalarInitializer operator()(FullCase data);
+    // Simulation::ScalarInitializer operator()(CustomFunctor func);
   };
 
   /**
    * @brief Factory function to initialize scalar data based on the specified input source.
    *
-   * The `scalar_factory` function uses a provided variant type to initialize scalar data for both liquid
-   * and optionally gas phases. This function accommodates a variety of data sources for flexibility in setup.
+   * The `scalar_factory` function uses a provided variant type to initialize scalar data for both
+   * liquid and optionally gas phases. This function accommodates a variety of data sources for
+   * flexibility in setup.
    *
    * @param f_init_gas_flow Boolean flag indicating whether gas flow initialization is required.
    * @param gas_volume Span of gas volume data for each compartment.
@@ -130,7 +165,7 @@ namespace Core::ScalarFactory
                                                std::span<double> liquid_volume,
                                                ScalarVariant arg_liq);
 
-  bool sanitize(const Simulation::ScalarInitializer &res);
+  bool sanitize(const Simulation::ScalarInitializer& res);
 } // namespace Core::ScalarFactory
 
 #endif

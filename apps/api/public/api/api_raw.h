@@ -58,6 +58,8 @@ typedef struct Opaque*
    */
   void delete_handle(Handle* handle);
 
+  void finalize();
+
   int exec(Handle handle);
   int register_initial_condition(Handle* handle);
   int apply(Handle handle, int to_load);
@@ -105,7 +107,7 @@ typedef struct Opaque*
                         size_t* _species,
                         size_t n_position,
                         size_t* _position,
-                        int gas);
+                        int gas,int fed_batch);
   // /bool set_feed_constant(double _f, std::span<double> _target, std::span<std::size_t> _position,
   // std::span<std::size_t> _species,bool gas=false);
 

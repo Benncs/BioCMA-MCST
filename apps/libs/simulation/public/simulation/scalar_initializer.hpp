@@ -1,7 +1,6 @@
 #ifndef __SIMULATION_SCALAR_INITIALIZER_HPP__
 #define __SIMULATION_SCALAR_INITIALIZER_HPP__
 
-#include <cma_read/light_2d_view.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
@@ -16,11 +15,16 @@ namespace Simulation
     Uniform,     // Need vec{uniform concentration}
     Local,       // Need vec{index compartment }+ vec{concentration}
     File,        // Need filepath
-    CustomScript // Need script path
+    CustomScript ,// Need script path
+    FullCase ,// Need script path
   };
 
+  // using init_scalar_f_t =
+  //     std::function<void(size_t, CmaRead::L2DView<double> &)>;
+
   using init_scalar_f_t =
-      std::function<void(size_t, CmaRead::L2DView<double> &)>;
+      std::function<double(std::size_t, std::size_t)>;
+
 
   struct ScalarInitializer
   {

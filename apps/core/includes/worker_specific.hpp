@@ -13,8 +13,12 @@
 namespace Simulation
 {
   class SimulationUnit;
-  class FlowMapTransitioner;
 } // namespace Simulation
+
+namespace CmaUtils
+{
+  class FlowMapTransitionner;
+}
 
 /**
  * @brief Main program executed on rank >0.
@@ -34,7 +38,7 @@ void workers_process(
     const ExecInfo &exec,
     Simulation::SimulationUnit &simulation,
     const Core::SimulationParameters &params,
-    std::unique_ptr<Simulation::FlowMapTransitioner> &&transitioner,Core::PartialExporter&partial_exporter);
+    std::unique_ptr<CmaUtils::FlowMapTransitionner> &&transitioner,Core::PartialExporter&partial_exporter);
 
 
 

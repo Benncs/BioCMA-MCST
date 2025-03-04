@@ -1,4 +1,5 @@
 #include "api/results.hpp"
+#include "common/common.hpp"
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
 #include <biocma_cst_config.hpp>
@@ -32,10 +33,9 @@ namespace WrapMPI
 #  include "mpi_w/message_t.hpp"
 #endif
 
-namespace Api
+namespace
 {
-
-  static bool check_required(const Core::UserControlParameters& params, bool to_load)
+  bool check_required(const Core::UserControlParameters& params, bool to_load)
   {
     bool flag = true;
 
@@ -56,6 +56,18 @@ namespace Api
 
     return flag;
   }
+} // namespace
+
+namespace Api
+{
+
+  void finalise()
+  {
+    if (!Kokkos::is_finalized() && Kokkos::is_initialized())
+    {
+      Kokkos::finalize();
+    }
+  }
 
   [[nodiscard]] int SimulationInstance::get_id() const
   {
@@ -71,37 +83,42 @@ namespace Api
                                                          std::vector<double>&& _target,
                                                          std::vector<std::size_t>&& _position,
                                                          std::vector<std::size_t>&& _species,
-                                                         bool gas)
+                                                         bool gas,
+                                                         bool fed_batch)
   {
-    return set_feed_constant(_f, _target, _position, _species, gas);
+    return set_feed_constant(_f, _target, _position, _species, gas, fed_batch);
   }
 
   bool SimulationInstance::set_feed_constant(double _flow,
-                                             std::span<double> _concentratio,
+                                             std::span<double> _concentration,
                                              std::span<std::size_t> _position,
                                              std::span<std::size_t> _species,
-                                             bool gas)
+                                             bool gas,
+                                             bool fed_batch)
   {
-    auto target = span_to_vec(_concentratio);
+    auto target = span_to_vec(_concentration);
     auto position = span_to_vec(_position);
     auto species = span_to_vec(_species);
     auto fd = Simulation::Feed::FeedFactory::constant(
-        _flow, std::move(target), std::move(position), std::move(species));
+        _flow, std::move(target), std::move(position), std::move(species), !fed_batch);
+    // negates fed_batch because constant accepts set_exit flag. fed_batch = !set_exit
 
     if (!feed.has_value())
     {
       feed = Simulation::Feed::SimulationFeed{std::nullopt, std::nullopt};
     }
 
-    auto& fv = (gas) ? feed->gas : feed->liquid;
+    auto& current_descriptor = (gas) ? this->feed->gas : this->feed->liquid;
 
-    if (!fv.has_value())
+    //If not already created, new vector 
+    if (!current_descriptor.has_value())
     {
-      fv = {fd};
+      current_descriptor = {fd};
     }
     else
     {
-      fv->emplace_back(fd);
+      //Else push 
+      current_descriptor->emplace_back(fd);
     };
 
     return true;
@@ -129,15 +146,21 @@ namespace Api
       }
     }
 
-    if (!Kokkos::is_initialized())
+    // initialize can be only set once even if finalized was called
+    if (!(Kokkos::is_initialized() || Kokkos::is_finalized()))
     {
       Kokkos::initialize(
           Kokkos::InitializationSettings()
               .set_disable_warnings(false)
               .set_num_threads(static_cast<int32_t>(_data.exec_info.thread_per_process))
               .set_map_device_id_by("mpi_rank"));
-      Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
+      Kokkos::print_configuration(std::cout);
     }
+  }
+
+  SimulationInstance::~SimulationInstance()
+  {
+    _data = Core::CaseData(); // Explicity delete everything before
   }
 
   std::optional<std::unique_ptr<SimulationInstance>>
@@ -149,7 +172,7 @@ namespace Api
   std::optional<std::unique_ptr<SimulationInstance>> SimulationInstance::init(
       uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_process) noexcept
   {
-
+    PROFILE_SECTION("Initialisation")
     auto ptr = std::unique_ptr<SimulationInstance>(
         new (std::nothrow) SimulationInstance(n_rank, current_rank, id, thread_per_process));
     if (ptr == nullptr)
@@ -190,7 +213,7 @@ namespace Api
     {
       return ApiResult("Not loaded");
     }
-    if (auto opt_case = Core::load(this->_data.exec_info, std::move(this->params), feed))
+    if (auto opt_case = Core::load(this->_data.exec_info, std::move(this->params), this->feed))
     {
       this->_data = std::move(*opt_case);
       this->loaded = true;
@@ -201,7 +224,7 @@ namespace Api
 
   ApiResult SimulationInstance::apply() noexcept
   {
-   
+
     if (!check_required(this->params, false))
     {
       return ApiResult("Check params");
@@ -215,20 +238,26 @@ namespace Api
       return ApiResult("Register first");
     }
 
-    Core::GlobalInitialiser gi(_data.exec_info, params);
-    auto t = gi.init_transitionner();
-    gi.init_feed(feed); 
-     
-    auto __simulation = gi.init_simulation(this->scalar_initializer_variant);
-    if ((!t.has_value() && !__simulation.has_value()) || !gi.check_init_terminate())
+    Core::GlobalInitialiser global_initializer(_data.exec_info, params);
+    auto t = global_initializer.init_transitionner();
+    global_initializer.init_feed(feed);
+
+    auto __simulation = global_initializer.init_simulation(this->scalar_initializer_variant);
+    if ((!t.has_value() && !__simulation.has_value()) || !global_initializer.check_init_terminate())
     {
       ApiResult("Error apply");
     }
-    _data.params = gi.get_parameters();
+    _data.params = global_initializer.get_parameters();
     _data.simulation = std::move(*__simulation);
     _data.transitioner = std::move(*t);
     applied = true;
-   
+
+    return ApiResult();
+  }
+
+  ApiResult SimulationInstance::register_scalar_initiazer(Core::ScalarFactory::ScalarVariant&& var)
+  {
+    this->scalar_initializer_variant = std::move(var);
     return ApiResult();
   }
 

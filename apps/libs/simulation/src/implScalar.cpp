@@ -1,28 +1,25 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-
 #include <Kokkos_Core.hpp>
-#include <Kokkos_DynamicView.hpp>
 #include <common/common.hpp>
 #include <common/kokkos_vector.hpp>
 #include <scalar_simulation.hpp>
 #include <simulation/alias.hpp>
+#include <stdexcept>
 
 namespace Simulation
 {
 
-  ScalarSimulation::ScalarSimulation(ScalarSimulation&& other) noexcept
-      : total_mass(std::move(other.total_mass)), m_volumes(other.m_volumes),
-        alloc_concentrations(std::move(other.alloc_concentrations)), n_r(other.n_r), n_c(other.n_c)
-  {
-  }
-
   ScalarSimulation::ScalarSimulation(size_t n_compartments,
                                      size_t n_species,
                                      std::span<double> volumes)
-      : n_r(n_species), n_c(n_compartments)
+      : n_r(n_species), n_c(n_compartments), concentrations(n_r, n_c), sources(n_r, n_c)
   {
+    if (volumes.size() != n_compartments)
+    {
+      throw std::invalid_argument("Volumes size mismatch");
+    }
 
     const int n_row = EIGEN_INDEX(n_r);
     const int n_col = EIGEN_INDEX(n_c);
@@ -34,61 +31,66 @@ namespace Simulation
     volumes_inverse = Eigen::DiagonalMatrix<double, -1>(n_col);
     volumes_inverse.setIdentity();
 
-    this->total_mass = Eigen::MatrixXd(n_row, n_col);
+    this->total_mass = MatrixType(n_row, n_col);
     this->total_mass.setZero();
 
-    this->alloc_concentrations = Eigen::MatrixXd(n_row, n_col);
-    this->alloc_concentrations.setZero();
-
-    this->feed = Eigen::SparseMatrix<double>(n_row, n_col);
-    this->feed.setZero();
-
-    this->sink = Eigen::DiagonalMatrix<double, -1>(n_col);
+    this->sink = DiagonalType(n_col);
     this->sink.setZero();
-
-    this->vec_kla = Eigen::ArrayXXd(n_row, n_col);
-    this->vec_kla.setZero();
-
-    this->mass_transfer = Eigen::MatrixXd(n_row, n_col);
-    this->mass_transfer.setZero();
-
-    biomass_contribution = Eigen::MatrixXd(n_row, n_col);
-    biomass_contribution.setZero();
-
-    view = CmaRead::L2DView<double>(
-        {this->alloc_concentrations.data(), static_cast<size_t>(this->alloc_concentrations.size())},
-        alloc_concentrations.rows(),
-        alloc_concentrations.cols(),
-        false);
-
-    host_view_biomass_contribution = Kokkos::View<double**, Kokkos::LayoutLeft, HostSpace>(
-        biomass_contribution.data(), biomass_contribution.rows(), biomass_contribution.cols());
-
-    host_concentration = Kokkos::View<double**, Kokkos::LayoutLeft, HostSpace>(
-        alloc_concentrations.data(), alloc_concentrations.rows(), alloc_concentrations.cols());
-
-    compute_concentration = Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_concentration);
   }
 
-  void ScalarSimulation::performStep(double d_t,
-                                     const FlowMatrixType& m_transition,
-                                     const Eigen::MatrixXd& transfer_gas_liquid)
+  [[nodiscard]] MatrixType& ScalarSimulation::get_concentration()
   {
-    PROFILE_SECTION("performStep")
+    return concentrations.eigen_data;
+  }
 
-    // std::cout<<biomass_contribution<<std::endl;
+  [[nodiscard]] KokkosScalarMatrix<ComputeSpace> ScalarSimulation::get_device_concentration() const
+  {
+    return concentrations.compute;
+  }
 
-    total_mass += d_t * (alloc_concentrations * m_transition - alloc_concentrations * sink +
-                         biomass_contribution + feed + transfer_gas_liquid);
+  std::size_t ScalarSimulation::n_col() const
+  {
+    return n_c;
+  }
 
-    // total_mass = (total_mass.array()<0.).select(0,total_mass);
-    // total_mass += d_t * (alloc_concentrations * m_transition -
-    //                      alloc_concentrations * sink + feed);
+  std::size_t ScalarSimulation::n_row() const
+  {
+    return n_r;
+  }
 
-    alloc_concentrations = total_mass * volumes_inverse;
+  void ScalarSimulation::reduce_contribs(std::span<const double> data)
+  {
+    assert(data.size() == (n_c * n_r));
+    sources.eigen_data.noalias() += Eigen::Map<Eigen::MatrixXd>(
+        const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
+  }
+
+  void ScalarSimulation::performStepGL(double d_t,
+                                       const FlowMatrixType& m_transition,
+                                       const MatrixType& mtr,
+                                       MassTransfer::Sign sign)
+  {
+    PROFILE_SECTION("performStep_gl")
+#define c concentrations.eigen_data
+
+    total_mass = total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data +
+                                     static_cast<float>(sign) * mtr);
+    c = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
-    Kokkos::deep_copy(compute_concentration, host_concentration);
+    concentrations.update_host_to_compute();
+  }
+
+  void ScalarSimulation::performStep(double d_t, const FlowMatrixType& m_transition)
+  {
+    PROFILE_SECTION("performStep_gl")
+#define c concentrations.eigen_data
+
+    total_mass = total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data);
+    c = total_mass * volumes_inverse;
+
+    // Make accessible new computed concentration to ComputeSpace
+    concentrations.update_host_to_compute();
   }
 
   bool ScalarSimulation::deep_copy_concentration(const std::vector<double>& data)
@@ -99,13 +101,12 @@ namespace Simulation
     }
 
     Eigen::Map<const Eigen::MatrixXd> temp_map(data.data(), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
-    this->alloc_concentrations = temp_map; // Performs deep copy
-
+    this->concentrations.eigen_data = temp_map; // Performs deep copy
     return true;
   }
 
   void ScalarSimulation::set_mass()
   {
-    total_mass = alloc_concentrations * m_volumes;
+    total_mass = this->concentrations.eigen_data * m_volumes;
   }
 } // namespace Simulation

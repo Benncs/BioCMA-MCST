@@ -1,4 +1,6 @@
+#include "core/scalar_factory.hpp"
 #include <api/api.hpp>
+#include <api/api_raw.h>
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
@@ -7,12 +9,11 @@
 #include <pybind11/detail/common.h>
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
 #include <pybind11/pytypes.h>
+#include <pybind11/stl.h>
 #include <stdexcept>
 #include <string>
 #include <tuple>
-#include <api/api_raw.h>
 
 namespace py = pybind11;
 
@@ -48,7 +49,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("i_rank"),
       py::arg("id"),
       py::arg("thread_per_proces") = 1);
-
+  m.def("finalize", &finalize);
   m.def("exec", &exec);
   // m.def("apply", &apply);
 
@@ -66,8 +67,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
   m.def("register_serde", &register_serde);
   m.def("register_parameters", &register_parameters);
   m.def("register_model_name", &register_model_name);
-
-  m.def("register_initialiser_file_path",&register_initializer_path);
+  
+  m.def("register_initialiser_file_path", &register_initializer_path);
 
   m.def("make_params",
         &make_params,
@@ -128,19 +129,92 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 
   // Feed
 
-  m.def("set_liquid_feed_constant",
-        [](std::shared_ptr<Api::SimulationInstance>& handle,
-           double _f,
-           std::vector<double> _target,
-           std::vector<std::size_t> _position,
-           std::vector<std::size_t> _species)
-        { handle->set_feed_constant(_f, _target, _position, _species); });
+  m.def(
+      "set_liquid_feed_constant",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         double _f,
+         std::vector<double> _target,
+         std::vector<std::size_t> _position,
+         std::vector<std::size_t> _species,
+         bool fed_batch)
+      { handle->set_feed_constant(_f, _target, _position, _species, false, fed_batch); },
+      py::arg("handle"),
+      py::arg("flow"),
+      py::arg("concentration value"),
+      py::arg("position"),
+      py::arg("species"),
+      py::arg("fed_batch") = false);
 
-   m.def("set_gas_feed_constant",
-        [](std::shared_ptr<Api::SimulationInstance>& handle,
-           double _f,
-           std::vector<double> _target,
-           std::vector<std::size_t> _position,
-           std::vector<std::size_t> _species)
-        { handle->set_feed_constant(_f, _target, _position, _species,true); });
+  m.def(
+      "set_gas_feed_constant",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         double _f,
+         std::vector<double> _target,
+         std::vector<std::size_t> _position,
+         std::vector<std::size_t> _species)
+      { handle->set_feed_constant(_f, _target, _position, _species, true); },
+      py::arg("handle"),
+      py::arg("flow"),
+      py::arg("concentration value"),
+      py::arg("position"),
+      py::arg("species"));
+
+  m.def(
+      "set_initialiser_from_data",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         std::size_t n_species,
+         const py::array_t<double_t>&& py_liquid,
+         std::optional<py::array_t<double_t>>&& py_gas)
+
+      {
+        auto buf = py_liquid.request();
+        std::span<double> data(static_cast<double*>(buf.ptr), buf.size);
+        std::vector<double> liq(data.begin(), data.end());
+
+        std::optional<std::vector<double>> gas = std::nullopt;
+        if (py_gas.has_value())
+        {
+          auto buf = py_gas->request();
+          std::span<double> data(static_cast<double*>(buf.ptr), buf.size);
+          gas = std::vector<double>(data.begin(), data.end());
+        }
+
+        handle->register_scalar_initiazer(
+            Core::ScalarFactory::FullCase(n_species, std::move(liq), std::move(gas)));
+      },
+      py::arg("handle"),
+      py::arg("n_species"),
+      py::arg("liquid value"),
+      py::arg("gas")=std::nullopt);
 }
+
+/**
+ * @example simple_simulation.py
+ *
+ * This example demonstrates how to perfom a simple simulation using the python API 
+ *
+ * @code
+ *   import handle_module>
+ *   
+ *   outfolder = "./out/"
+ *   simulation_name = "my_simulation_name"
+ *   cma_path = "/path/to/the/cma/" #don´t forget last / 
+ *   def run(params): 
+ *       handle = handle_module.init_simulation(outfolder,simulation_name,cma_path,params)
+ *       # cma with 500 compartment, simulation with 4 species liquid only 
+ *       liquid_concentration_0 = np.zeros((500,4))  
+ *       handle_module.set_initial_concentrations(handle,liquid_concentration_0)
+ *       handle_module.register_model_name(handle, "model_name")
+ *        # Apply the simulation settings
+ *     rc = handle_module.apply(handle, False)
+ *
+ *     # Check if the simulation settings were applied successfully
+ *     if not rc[0]:
+ *         print(rc[1])
+ *         return -1
+ *
+ *     # Execute the simulation
+ *     rc = handle_module.exec(handle);
+ *   
+ * @endcode
+ */

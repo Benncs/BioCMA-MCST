@@ -22,6 +22,7 @@ namespace MC
   template <ParticleModel Model> class ParticlesContainer
   {
   public:
+    static constexpr std::size_t buffer_ratio = 1; //Buffer size = list.size()*buffer_ratio
     /**
      * @brief Alias for the model used by the container.
      */
@@ -57,7 +58,7 @@ namespace MC
      * @param capacity The number of particles the container can initially hold.
      */
     explicit ParticlesContainer(size_t capacity) noexcept
-        : to_process(capacity), host_process(), extra(capacity * 2), extra_list(capacity * 2, false)
+        : to_process(capacity), host_process(), process_buffer(capacity * buffer_ratio, false)
     {
       // Initialization code can be placed here, if needed.
     }
@@ -88,23 +89,24 @@ namespace MC
      *
      * @return Reference to the results list in the compute space.
      */
-    auto& get_extra() noexcept
-    {
-      return extra;
-    }
+    // auto& get_extra() noexcept
+    // {
+    //   return extra;
+    // }
 
     template <class Archive> void serialize(Archive& ar)
     {
-      ar(to_process, extra);
-      extra_list = ParticleList<ComputeSpace, Model>::with_capacity(to_process.size() * 2);
+      ar(to_process); //
+      process_buffer = ParticleList<ComputeSpace, Model>::with_capacity(to_process.size() * buffer_ratio);
     }
 
-    MC::ParticleList<ComputeSpace, Model> extra_list;
+    MC::ParticleList<ComputeSpace, Model> process_buffer;
 
   private:
     ParticleList<ComputeSpace, Model> to_process; ///< Container for particles in the compute space.
     ParticleList<HostSpace, Model> host_process;  ///< Container for particles in the host space.
-    Results<ComputeSpace, Model> extra; ///< Container for additional results in the compute space.
+    // Results<ComputeSpace, Model> extra; ///< Container for additional results in the compute
+    // space.
   };
 
 } // namespace MC

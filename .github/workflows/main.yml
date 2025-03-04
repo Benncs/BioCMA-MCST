@@ -1,5 +1,14 @@
 name: build_test
+on:
+  push:
+    branches:
+      - main  
+  pull_request:
+    branches:
+      - main  
 
+permissions:
+  contents: read  
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -24,8 +33,8 @@ jobs:
         run: |
           mkdir builddir
           meson setup builddir/ --buildtype=release 
-      # - name: Build project
-      #   run: ninja -k 1 -C builddir
+      - name: Build project
+        run: ninja -k 1 -C builddir
       # - name: Run unit tests
       #   run: |
       #     meson test -C builddir

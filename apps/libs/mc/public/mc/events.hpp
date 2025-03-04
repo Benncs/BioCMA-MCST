@@ -1,6 +1,8 @@
 #ifndef __MC_EVENTS_HPP__
 #define __MC_EVENTS_HPP__
 
+#include "Kokkos_Atomic.hpp"
+#include "Kokkos_Core_fwd.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DynamicView.hpp>
 #include <common/execinfo.hpp>
@@ -42,7 +44,7 @@ namespace MC
     // be shared between Host and Device According to SharedHostPinnedSpace
     // documentation, the size of this data can fit into one cache line so
     // transfer is not a botteneck
-    Kokkos::View<std::size_t[number_event_type], Kokkos::SharedHostPinnedSpace> // NOLINT
+    Kokkos::View<std::size_t[number_event_type], Kokkos::SharedSpace> // NOLINT
         _events; // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
     // NOLINTBEGIN
@@ -52,11 +54,9 @@ namespace MC
     /**
      * @brief Default container, initalise counter
      */
-    EventContainer()
+    EventContainer():_events("events")
     {
-      // NOLINTBEGIN
-      _events = Kokkos::View<size_t[number_event_type], Kokkos::SharedHostPinnedSpace>("events");
-      // NOLINTEND
+  
       Kokkos::deep_copy(_events, 0); // Ensure all event to 0 occurence
     }
     /**
@@ -108,7 +108,12 @@ namespace MC
      */
     template <EventType event> KOKKOS_FORCEINLINE_FUNCTION constexpr void incr() const
     {
-      Kokkos::atomic_increment(&_events[event_index<event>()]);
+      Kokkos::atomic_add(&_events[event_index<event>()], 1);
+    }
+
+    template <EventType event> KOKKOS_FORCEINLINE_FUNCTION constexpr void add(size_t val) const
+    {
+      Kokkos::atomic_add(&_events[event_index<event>()], val);
     }
 
     /**

@@ -16,14 +16,7 @@ namespace implEcoli
 
 #define _INDICES(__name__) static_cast<std::size_t>(Indices::__name__)
 
-  struct MolarMass
-  {
-    static constexpr double glucose = 180e-3;
-    static constexpr double dioxygen = 32e-3;
-    static constexpr double acetate = 59e-3;
-    static constexpr double co2 = 44e-3;
-    static constexpr double X = 113.1e-3;
-  };
+ 
   struct Yields
   {
 
@@ -42,10 +35,12 @@ namespace implEcoli
     static constexpr double Yo_EA = 4.67;      // mol_E/mol_A
     static constexpr double x_s = 1.15;        // 2.;
 
-    static constexpr double nu_s_x = MolarMass::glucose / MolarMass::X *
+    static constexpr double nu_s_x = Models::MolarMass::glucose / Models::MolarMass::X *
                                      (Yields::Y_EG + Yields::Yo_EG) /
                                      (Yields::Y_XG * Yields::Yo_EG);
   };
+
+
 
   // All in seconds
   struct Tau
@@ -135,7 +130,7 @@ namespace Models
       CO2 = 3
     };
 
-    double lenght;
+    double length;
     double nu;
     double a_pts;
     double a_permease;
@@ -145,11 +140,13 @@ namespace Models
 
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
     {
+      
+
       using namespace implEcoli;
       constexpr double local_l = minimal_length;
       auto generator = _rng.random_pool.get_state();
 
-      this->lenght =
+      this->length =
           Kokkos::max(local_l, Kokkos::max(generator.normal(l_0 / 1.5, l_0 / 1.5 / 5.), 0.));
       this->a_permease = Kokkos::max(generator.normal(1e-3, 1e-4), 0.);
       this->a_pts = Kokkos::min(1., Kokkos::max(generator.normal(0.8, 0.1), 0.));
@@ -157,7 +154,7 @@ namespace Models
           Kokkos::max(generator.normal(NPermease_init / 2., NPermease_init / 5.), 0.);
 
       this->nu =
-          nu_max; // Kokkos::max(generator.normal(nu_max / 2., nu_max / 2. / 5.), 0.) / lenght;
+          nu_max; // Kokkos::max(generator.normal(nu_max / 2., nu_max / 2. / 5.), 0.) / length;
       _rng.random_pool.free_state(generator);
     }
 
@@ -239,7 +236,7 @@ namespace Models
       const double s = Kokkos::max(0., concentration(_INDICES(GLUCOSE)));
       const double phi_s_pts = phi_pts(a_pts, s);
       const double gamma_PTS_S = phi_s_pts / phi_pts_max;
-      const double micro_mixing = 0.3;
+      // const double micro_mixing = 0.3;
 
       phi_uptakes.glucose = phi_s_pts + phi_permease(n_permease, a_permease, s);
       phi_uptakes.acetate = phi_a_max * concentration(_INDICES(Ac)) / 1;
@@ -253,7 +250,7 @@ namespace Models
     KOKKOS_FUNCTION void update(double d_t,
                                 MC::ParticleDataHolder& p,
                                 const LocalConcentrationView& concentration,
-                                Kokkos::Random_XorShift64_Pool<> _rng)
+                                MC::KPRNG _rng)
     {
       using namespace implEcoli;
       const double s = Kokkos::max(0., concentration(0));
@@ -261,7 +258,7 @@ namespace Models
       const double nu_p = phi_uptakes.glucose / mass() / (Yields::nu_s_x);
 
       metabolism();
-      this->lenght += d_t * lenght * rates.nu;
+      this->length += d_t * length * rates.nu;
       this->nu += d_t * (1.0 / tau_metabolism) * (nu_p - this->nu);
       this->a_pts += d_t * 1.0 / Tau::pts * (MONOD_RATIO(1., s, k_pts) - this->a_pts);
       this->a_permease +=
@@ -274,21 +271,21 @@ namespace Models
                           (MONOD_RATIO(NPermease_max, k_pts, s) - n_permease);
 
       Models::update_division_status(
-          p.status, d_t, GammaDivision::threshold_linear(lenght, l_0, l_1), _rng);
+          p.status, d_t, GammaDivision::threshold_linear(length, l_0, l_1), _rng.random_pool);
     }
 
     KOKKOS_FUNCTION Ecoli division(MC::ParticleDataHolder& p, MC::KPRNG _rng)
     {
       using namespace implEcoli;
-      const double original_lenght = this->lenght;
+      const double original_length = this->length;
       const double original_n_permease = this->n_permease;
-      this->lenght = original_lenght / 2.;
+      this->length = original_length / 2.;
       this->n_permease = original_n_permease / 2;
 
       auto child = *this;
-      const bool mask = a_pts > a_permease;
-      const double max_perm = mask ? a_pts : 1;
-      const double max_pts = mask ? 1 : a_permease;
+      // const bool mask = a_pts > a_permease;
+      // const double max_perm = mask ? a_pts : 1;
+      // const double max_pts = mask ? 1 : a_permease;
 
       {
         // auto generator = _rng.random_pool.get_state();
@@ -328,27 +325,32 @@ namespace Models
     [[nodiscard]] KOKKOS_FUNCTION double mass() const noexcept
     {
       using namespace implEcoli;
-      return implEcoli::factor * lenght;
+      return implEcoli::factor * length;
     }
 
     template <class Archive> void serialize(Archive& ar)
     {
-      ar(lenght, nu, a_pts, a_permease);
+      ar(length, nu, a_pts, a_permease);
     }
 
     static std::vector<std::string> names()
     {
-      return {"mass"};
+      return {"mass", "length", "nu_eff", "nu", "a_permease", "a_pts"};
     }
 
     KOKKOS_INLINE_FUNCTION static consteval std::size_t get_number()
     {
-      return 1;
+      return 6;
     }
 
     KOKKOS_INLINE_FUNCTION void fill_properties(SubViewtype full) const
     {
       full(0) = mass();
+      full(1) = this->length;
+      full(2) = this->rates.nu;
+      full(3) = this->nu;
+      full(4) = this->a_permease;
+      full(5) = this->a_pts;
     }
   };
 
