@@ -2,6 +2,7 @@
 #define __MODELS_SIMPLE_ECOLI_HPP__
 
 #include <mc/particles/particle_model.hpp>
+#include <mc/prng/prng_extension.hpp>
 #include <models/uptake.hpp>
 #include <models/utils.hpp>
 
@@ -10,57 +11,68 @@
  */
 namespace implMeta
 {
-  constexpr float l_max = 5e-6;
-  constexpr float l_c = 3e-6;
-  constexpr float tau_1 = 1000.;
-  constexpr float tau_2 = 1000.;
+  constexpr float m_to_micron = 1e6;
+  constexpr float micron_to_m = 1e-6;
+  constexpr float g_to_pico = 1e12;
+  constexpr float kg_to_pico = g_to_pico * 1e3; // pg->g 1e12 g->kg 1e3
+  constexpr float pico_to_kg = 1. / kg_to_pico; // pg->g 1e12 g->kg 1e3
 
-  constexpr float a_11 = 1 / 180.;
-  constexpr float a_21 = 1 / 32.;
+  constexpr float l_max_m = 5e-6;   // m
+  constexpr float l_c_m = 3e-6;     // m
+  constexpr float d_m = 0.6e-6;     // m
+  constexpr float l_min_m = 0.9e-6; // m
+  constexpr float MolarMassG = Models::MolarMass::GramPerMole::glucose<float>;
+  constexpr float MolarMassO2 = Models::MolarMass::GramPerMole::dioxygen<float>;      // g/mol
+  constexpr float dl_max_ms = 8 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
+  constexpr float tau_1 = 1000.;         // s
+  constexpr float tau_2 = 1000.;         // s
+  constexpr float cell_density = 1000.;  // kg/m3
+  constexpr float linear_density_kg_m =
+      Models::c_linear_density(cell_density, d_m); // kg/m We stay in meter
+  constexpr float NPermease_max = 200;             // Number of permeases
+  // Yields
+  constexpr float y_sx_1 = 1. / 2.217737e+00; // Mode 1 S to X yield (mass)
+  constexpr float y_sx_2 = y_sx_1 / 3.;       // Mode 2 S to X yield (mass)
+  constexpr float y_sa = 0.8;                 // S to A yield (mass)
+  constexpr float y_os_molar = 3;             // 3 mol o2 per mol for glucose
+  constexpr float k_o = 0.0001;               // g/L: Anane et. al 2017 (Biochem. Eng. J) (g/g)
 
-  constexpr float a_12 = 1 / 180.;
-  constexpr float a_22 = 1 / 32.;
-  constexpr float d_m = 0.6e-6;
-  constexpr float minimal_length = 0.9e-6;
-  // static_assert(minimal_length>d_m*4, "Diameter too large");
-  constexpr float factor = 1000. * 3.14 * d_m * d_m / 4.;
-  constexpr float y_sx = 1. / 2.217737e+00; // y1b
-
-  float consteval get_phi_s_max(float nu)
+  // Uptake
+  float consteval get_phi_s_max(float density, float dl)
   {
-    return (nu * factor) * y_sx; // kgS/s
+    // dl and density must be same unit, dl*density -> mass and y is mass yield
+    return (dl * density) * y_sx_1;
   }
 
-  constexpr float mt = factor * minimal_length;
+  constexpr float phi_s_max = get_phi_s_max(linear_density_kg_m, dl_max_ms); // kgS/s
+  constexpr float phi_perm_max = phi_s_max / 40.;                            // kgS/s
+  constexpr float phi_o2_max = 10 * phi_s_max / MolarMassG *
+                               y_os_molar * MolarMassO2;                   // kgS/s
+  constexpr float nu_max_kg_s = dl_max_ms * implMeta::linear_density_kg_m; // kg/s
 
-  constexpr float mu_max = 0.8 / 3600.;
+  // Conversions
+  constexpr float l_max_um = l_max_m * m_to_micron;
+  constexpr float l_c_um = l_c_m * m_to_micron;
+  constexpr float d_m_um = d_m * m_to_micron;
+  constexpr float l_min_um = l_min_m * m_to_micron;
+  constexpr float linear_density_kg_um = linear_density_kg_m * micron_to_m; // kg/m
+  constexpr float dl_max_um_s = dl_max_ms * m_to_micron;                    // um/s
+  constexpr float nu_max_pg_s = nu_max_kg_s * kg_to_pico;
+  constexpr float phi_s_max_pg = phi_s_max * kg_to_pico;       // pgS/s
+  constexpr float phi_perm_max_pg = phi_perm_max * kg_to_pico; // pgS/s
+  constexpr float phi_o2_max_pg = phi_o2_max * kg_to_pico;     // pgS/s
 
-  constexpr float nu_max2 = mu_max * mt;
+  constexpr auto length_dist =
+      MC::Distributions::TruncatedNormal<float>(l_min_um, l_min_um / 5., 0.5 * l_min_um, l_max_um);
 
-  constexpr float nu_max = 8 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
+  constexpr auto length_c_dist =
+      MC::Distributions::TruncatedNormal<float>(l_c_um, l_c_um / 7., l_min_um, l_max_um);
 
-  constexpr float mu_max_ = nu_max * factor / mt * 3600;
+  constexpr auto mu_nu_dist = nu_max_pg_s * 0.1;
+  constexpr float nu_dist_factor = 1e4; // Scale factor
+  constexpr auto nu_1_initial_dist = MC::Distributions::TruncatedNormal<float>(
+      mu_nu_dist, mu_nu_dist / 7., 0., static_cast<double>(nu_max_pg_s));
 
-  constexpr float phi_s_max = get_phi_s_max(nu_max); // 5*mt/7200;
-  constexpr float phi_perm_max = phi_s_max / 40.;    // 5*mt/7200;
-  constexpr float phi_o2_max = 10 * phi_s_max / 180 * 3 * 32;
-  constexpr float NPermease_max = 200;
-
-  constexpr float y_sxf = y_sx / 3.; // y1
-  // constexpr float y_os = 4.432918e-01;
-  constexpr float y_sa = 0.8;
-
-  constexpr float y_os = 3; // 3 mol o2 per mol for glucose
-
-  constexpr float k_pts = 1e-3;
-  constexpr float k_o = 0.0001; // g/L: Anane et. al 2017 (Biochem. Eng. J)
-
-  constexpr float mmx = 113.1;
-
-  constexpr float MolarMassG = 180;
-  constexpr float MolarMassO2 = 32;
-
-  constexpr float alpha_divison = 5.2;
 } // namespace implMeta
 
 namespace Models
@@ -71,7 +83,7 @@ namespace Models
    */
   struct Meta2
   {
-    
+
     struct contribs
     {
       float phi_s;
@@ -92,19 +104,18 @@ namespace Models
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
     {
       (void)p;
-      constexpr auto l_c = implMeta::l_c;
-      constexpr double minimal_length = implMeta::minimal_length;
-      constexpr double l_max = implMeta::l_max;
 
-      nu1 = implMeta::nu_max * implMeta::factor / 4;
-      nu2 = 0; // pimpl.nu1/5.;
+      constexpr auto length_dist = implMeta::length_dist;
+      constexpr auto length_c_dist = implMeta::length_c_dist;
+      constexpr auto nu_dist = implMeta::nu_1_initial_dist;
+      nu2 = 0;
 
       contrib = {0., 0.0, 0.};
       auto g = _rng.random_pool.get_state();
+      nu1 = nu_dist.draw(g);
       Uptake::distribute_init<float>(*this, g);
-      length = static_cast<float>(Kokkos::max(0., g.normal(2*minimal_length, 2*minimal_length/5)));
-      l_cp = static_cast<float>(
-          Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 7.)), l_max));
+      length = length_dist.draw(g);
+      l_cp = length_c_dist.draw(g);
       _rng.random_pool.free_state(g);
     }
 
@@ -113,29 +124,34 @@ namespace Models
                                 const LocalConcentrationView& concentrations,
                                 MC::KPRNG _rng)
     {
+      (void)_rng;
       using namespace implMeta;
       const auto s = static_cast<float>(concentrations(0));
 
       const auto phi_s = Models::Uptake::uptake(
-          static_cast<float>(d_t), *this, s, phi_s_max, phi_perm_max, NPermease_max);
+          static_cast<float>(d_t), *this, s, phi_s_max_pg, phi_perm_max_pg, NPermease_max);
 
       const auto o = Kokkos::max(static_cast<float>(concentrations(1)), 0.F);
-      const float phi_o2 = (phi_o2_max)*o / (o + k_o); // gO2/s
-      const float nu_1_star =
-          y_sx * MolarMassG * Kokkos::min(phi_s / MolarMassG, phi_o2 / MolarMassO2 / y_os); // gX/s
 
-      const float s_1_star = (1 / y_sx * nu_1_star);
+      const float phi_o2 = (phi_o2_max_pg)*o / (o + k_o); // gO2/s
+
+      const float nu_1_star = y_sx_1 * MolarMassG*
+                              Kokkos::min(phi_s / MolarMassG,
+                                          phi_o2 / MolarMassO2 / y_os_molar); // gX/s
+
+      const float s_1_star = (1 / y_sx_1 * nu_1_star);
+
       const float phi_s_residual_1_star = Kokkos::max(phi_s - s_1_star, 0.F);
       KOKKOS_ASSERT(phi_s_residual_1_star >= 0.F);
-      const float nu_2_star = y_sxf * phi_s_residual_1_star; // gX/s
 
-      nu_eff_1 = Kokkos::min(nu_1_star, nu1); // gX/s
-      const float s_1 = (1 / y_sx * nu_eff_1);
+      const float nu_2_star = y_sx_2 * phi_s_residual_1_star; // gX/s
+      nu_eff_1 = Kokkos::min(nu_1_star, nu1);                 // gX/s
+      const float s_1 = (1 / y_sx_1 * nu_eff_1);
       const float phi_s_residual_1 = Kokkos::max(phi_s - s_1, 0.F);
+      nu_eff_2 = Kokkos::min(y_sx_2 * phi_s_residual_1, nu2); // gX/s
 
-      nu_eff_2 = Kokkos::min(y_sxf * phi_s_residual_1, nu2); // gX/s
+      const float s_growth = s_1 + (1 / y_sx_2 * nu_eff_2);
 
-      const float s_growth = s_1 + (1 / y_sxf * nu_eff_2);
       const float s_overflow = phi_s - s_growth;
 
       KOKKOS_ASSERT(nu_eff_1 >= 0.F);
@@ -144,34 +160,46 @@ namespace Models
       p.status = (length > l_cp) ? MC::CellStatus::CYTOKINESIS : MC::CellStatus::IDLE;
 
       contrib.phi_s = -phi_s;
-      contrib.phi_o =
-          -1 * ((1. / y_sx / MolarMassG * y_os * MolarMassO2 * nu_eff_1) + 0. * nu_eff_2);
-      contrib.phi_a = nu_eff_2 / y_sxf * y_sa + (s_overflow > 0. ? y_sa * (s_overflow) : 0);
+      contrib.phi_o = -1 * ((1. / y_sx_1 / MolarMassG *
+                             y_os_molar * MolarMassO2 * nu_eff_1) +
+                            0. * nu_eff_2);
+      contrib.phi_a = nu_eff_2 / y_sx_2 * y_sa + (s_overflow > 0. ? y_sa * (s_overflow) : 0);
 
       nu1 = nu1 + static_cast<float>(d_t) * ((nu_1_star - nu1) / tau_1);
       nu2 = nu2 + static_cast<float>(d_t) * ((nu_2_star - nu2) / tau_2);
-      length = length + static_cast<float>(d_t) * ((nu_eff_1 + nu_eff_2) / factor);
+      length = length + static_cast<float>(d_t) *
+                            ((nu_eff_1 + nu_eff_2) / (linear_density_kg_um * kg_to_pico));
     }
 
     KOKKOS_FUNCTION Meta2 division(MC::ParticleDataHolder& p, MC::KPRNG _rng)
     {
       (void)p;
-      constexpr auto l_c = implMeta::l_c;
-      constexpr double minimal_length = implMeta::minimal_length;
-      constexpr double l_max = implMeta::l_max;
 
-      const float l = length / 2.F;
+      const float l = 0.5F * length;
 
-      auto child = Models::Meta2(*this); // NOLINT
+      constexpr auto nu_dist_factor = implMeta::nu_dist_factor;
+
+      constexpr auto length_c_dist = implMeta::length_c_dist;
+      auto child = Models::Meta2(*this);
 
       length = l;
       child.length = l;
       auto g = _rng.random_pool.get_state();
-      child.l_cp = static_cast<float>(
-          Kokkos::min(Kokkos::max(minimal_length, g.normal(l_c, l_c / 6.)), l_max));
 
-      child.nu1 = Kokkos::max(g.normal(this->nu1, this->nu1 / 3.), 0.);
-      child.nu2 = Kokkos::max(g.normal(this->nu2, this->nu2 / 3.), 0.);
+      // child.l_cp = length_c_dist.draw(g);
+
+      // child.nu1 = static_cast<float>(MC::Distributions::ScaledTruncatedNormal<double>::draw_from(
+      //     g, nu_dist_factor, this->nu1, this->nu1 / 3., 0., 1.));
+
+      const float sigma_nu2 = (almost_equal(nu2, 0., 1e-13)) ? 0.01F : this->nu2 / 3.;
+
+      // child.nu2 =
+      // static_cast<float>(
+      // MC::Distributions::ScaledTruncatedNormal<double>::draw_from(
+      //     g, nu_dist_factor, this->nu2, sigma_nu2, 0., 1.F));
+
+      KOKKOS_ASSERT(child.nu1 >= 0.F);
+      KOKKOS_ASSERT(child.nu2 >= 0.F);
 
       Uptake::distribute_division<float>(*this, child, g);
       _rng.random_pool.free_state(g);
@@ -183,15 +211,17 @@ namespace Models
     {
       auto access_contribs = contribution.access();
 
-      access_contribs(0, p.current_container) += p.weight * contrib.phi_s;
-      access_contribs(1, p.current_container) += p.weight * contrib.phi_o;
-      access_contribs(2, p.current_container) += p.weight * contrib.phi_a;
+      access_contribs(0, p.current_container) += p.weight * contrib.phi_s * implMeta::pico_to_kg;
+      access_contribs(1, p.current_container) += p.weight * contrib.phi_o * implMeta::pico_to_kg;
+      ;
+      access_contribs(2, p.current_container) += p.weight * contrib.phi_a * implMeta::pico_to_kg;
+      ;
     }
 
     [[nodiscard]] KOKKOS_FUNCTION double mass() const noexcept
     {
-
-      return implMeta::factor * length;
+      // Return the mass in kg
+      return implMeta::linear_density_kg_um * length;
     }
 
     template <class Archive> void serialize(Archive& ar)
@@ -212,7 +242,7 @@ namespace Models
     KOKKOS_INLINE_FUNCTION void fill_properties(SubViewtype full) const
     {
       full(0) = mass();
-      full(1) = length * 1e6;
+      full(1) = length;
       full(2) = nu1;
       full(3) = nu2;
       full(4) = nu_eff_1;

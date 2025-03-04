@@ -1,8 +1,11 @@
 #include "Kokkos_Assert.hpp"
 #include "Kokkos_Core_fwd.hpp"
 #include "Kokkos_Macros.hpp"
+#include "Kokkos_MathematicalFunctions.hpp"
 #include "Kokkos_Random.hpp"
+#include "biocma_cst_config.hpp"
 #include "decl/Kokkos_Declare_OPENMP.hpp"
+#include "mc/prng/prng.hpp"
 #include <Kokkos_Core.hpp>
 #include <cassert>
 #include <iostream>
@@ -27,7 +30,7 @@ template <typename T> void basic_test()
   Kokkos::View<T*> skew_results("skew_results", N);
   MC::Distributions::LogNormal<T> log(mu, sigma);
   MC::Distributions::SkewNormal<T> skewnormal{xi, omega, alpha};
-  Kokkos::Random_XorShift64_Pool<> rand_pool(test_seed);
+  MC::KPRNG::pool_type rand_pool(test_seed);
   Kokkos::parallel_for(
       "TestKernel", N, KOKKOS_LAMBDA(const int i) {
         auto rand_gen = rand_pool.get_state();
@@ -60,22 +63,23 @@ void check_moment(double empirical, double theoretical, double tol, const char* 
   }
 }
 
-template <int N, typename Device, MC::Distributions::ProbabilityLaw<double, Device> F>
-void moment_test(F dist, std::string name)
+template <int N, typename T, typename Device, MC::Distributions::ProbabilityLaw<T, Device> F>
+void moment_test(F dist, std::string name, T tol = tolerance, int seed = test_seed)
 {
 
-  Kokkos::View<double[N]> results("results");
-  Kokkos::Random_XorShift64_Pool<> rand_pool(test_seed);
+  Kokkos::View<T[N]> results("results");
+  MC::KPRNG::pool_type rand_pool(seed);
 
-  double sum = 0;
-  double sum_sq = 0;
-  double sum_skew = 0;
+  T sum = 0;
+  T sum_sq = 0;
+  T sum_skew = 0;
   Kokkos::parallel_reduce(
       name,
       N,
-      KOKKOS_LAMBDA(const int i, double& _s, double& _sq, double& _sk) {
+      KOKKOS_LAMBDA(const int i, T& _s, T& _sq, T& _sk) {
         auto rand_gen = rand_pool.get_state();
         const auto val = dist.draw(rand_gen);
+        KOKKOS_ASSERT(!Kokkos::isnan(val) && !Kokkos::isinf(val));
         results(i) = val;
         _s += val;
         _sq += (val * val);
@@ -87,13 +91,13 @@ void moment_test(F dist, std::string name)
       sum_skew);
   Kokkos::fence();
 
-  double mean = sum / static_cast<double>(N);
-  double var = sum_sq / static_cast<double>(N) - mean * mean;
-  double skew = (sum_skew / N - 3 * mean * var - mean * mean * mean) / std::pow(var, 1.5);
+  T mean = sum / static_cast<T>(N);
+  T var = sum_sq / static_cast<T>(N) - mean * mean;
+  T skew = (sum_skew / N - 3 * mean * var - mean * mean * mean) / std::pow(var, 1.5);
 
-  check_moment(mean, dist.mean(), tolerance, "Mean");
-  check_moment(var, dist.var(), tolerance, "Variance");
-  check_moment(skew, dist.skewness(), tolerance, "Skewness");
+  check_moment(mean, dist.mean(), tol, "Mean");
+  check_moment(var, dist.var(), tol, "Variance");
+  check_moment(skew, dist.skewness(), tol, "Skewness");
 }
 
 void test_norminv()
@@ -143,19 +147,17 @@ void test_norminv()
   assert(std::abs(mean) < 0.1);
   assert(std::abs(variance - 1.0) < 0.1);
 
-  
   // Kokkos::parallel_for(
   //     "test norminv", Kokkos::RangePolicy(1,N-1), KOKKOS_LAMBDA(const int i) {
   //       Kokkos::printf("%lf\r\n",results2(i));
   //       KOKKOS_ASSERT(results2(i-1)<=results2(i));
   //     });
-
 }
 
 template <int N> void test_truncated()
 {
   MC::Distributions::TruncatedNormal<double> dist(2, 2. / 3., 0., 4.);
-  Kokkos::Random_XorShift64_Pool<> rand_pool(test_seed);
+  MC::KPRNG::pool_type rand_pool(test_seed);
   Kokkos::parallel_for(
       "test_truncated", N, KOKKOS_LAMBDA(const int _) {
         auto gen = rand_pool.get_state();
@@ -177,29 +179,58 @@ int main()
 
   constexpr int N = 40'000'000;
   std::cerr << "Normal" << std::endl;
-  moment_test<N, Device>(MC::Distributions::Normal<double>{0, 1}, "Normal");
+  moment_test<N, double, Device>(MC::Distributions::Normal<double>{0, 1}, "Normal");
 
   std::cerr << "Normal2" << std::endl;
 
-  moment_test<N, Device>(MC::Distributions::Normal<double>{mu, sigma}, "Normal2");
+  moment_test<N, double, Device>(MC::Distributions::Normal<double>{mu, sigma}, "Normal2");
 
   MC::Distributions::LogNormal<double> log(mu, sigma);
   std::cerr << "Log-Normal" << std::endl;
-  moment_test<N, Device>(log, "Log-Normal");
+  moment_test<N, double, Device>(log, "Log-Normal");
   std::cerr << "Skew-Normal" << std::endl;
   double xi = 0;
   double omega = 1.;
   double alpha = 0;
-  moment_test<N, Device>(MC::Distributions::SkewNormal<double>{xi, omega, alpha}, "Skew-Normal");
+  moment_test<N, double, Device>(MC::Distributions::SkewNormal<double>{xi, omega, alpha},
+                                 "Skew-Normal");
 
   std::cerr << "Truncated-Normal" << std::endl;
 
-  moment_test<N, Device>(MC::Distributions::TruncatedNormal<double>{1., 0.33, 0., 5.},
-                         "Truncated-Normal");
+  moment_test<N, double, Device>(MC::Distributions::TruncatedNormal<double>{1., 0.33, 0., 5.},
+                                 "Truncated-Normal");
 
   std::cerr << "Truncated-Normal2" << std::endl;
-  moment_test<N, Device>(MC::Distributions::TruncatedNormal<double>(-5., 1.4, -10., 1.),
-                         "Truncated-Normal2");
+  moment_test<N, double, Device>(MC::Distributions::TruncatedNormal<double>(-5., 1.4, -10., 1.),
+                                 "Truncated-Normal2");
+
+
+  std::cerr << "Truncated-Normal3" << std::endl;
+  for (int i = 0; i < 5; ++i)
+  {
+    double factor = 10000.;
+    double mu_t = 4e-5 * factor;
+    double maxsample = 9e-5 * factor;
+    moment_test<N, double, Device>(
+        MC::Distributions::TruncatedNormal<double>(mu_t, 0.01, 0., maxsample),
+        "Truncated-Normal3",
+        0.3,
+        i * test_seed);
+  }
+
+
+  std::cerr << "Scaled double Truncated-Normal3" << std::endl;
+
+  constexpr float l_min_um = 0.9;
+  constexpr float l_max_um = 5;
+  constexpr auto length_c_dist =
+      MC::Distributions::TruncatedNormal<double>(l_min_um, l_min_um / 5., 0.5*l_min_um, l_max_um);
+ 
+  for (int i = 0; i < 5; ++i)
+  {
+    moment_test<N, double, Device>(length_c_dist, "double Truncated-Normal3",0.2,AutoGenerated::debug_MC_RAND_DEFAULT_SEED);
+  }
+
   test_truncated<N>();
   std::cerr << "Skew-Normal2" << std::endl;
 

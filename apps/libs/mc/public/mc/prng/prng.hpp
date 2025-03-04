@@ -23,6 +23,7 @@ namespace MC
   {
   public:
     using SharedKPRNG = Kokkos::View<KPRNG, ComputeSpace>;
+    using pool_type = Kokkos::Random_XorShift1024_Pool<Kokkos::DefaultExecutionSpace>;
     explicit KPRNG(size_t _seed = 0);
 
     [[nodiscard]] KOKKOS_INLINE_FUNCTION double double_uniform() const
@@ -55,7 +56,7 @@ namespace MC
     template <size_t n_r>
     KOKKOS_INLINE_FUNCTION std::array<double, n_r> double_uniform() const
     {
-      return generate_uniform_impl<Kokkos::Random_XorShift64_Pool<>, n_r>(
+      return generate_uniform_impl<pool_type, n_r>(
           random_pool, std::make_index_sequence<n_r>{});
     }
 
@@ -69,7 +70,7 @@ namespace MC
       return x;
     }
 
-    Kokkos::Random_XorShift64_Pool<Kokkos::DefaultExecutionSpace> random_pool;
+    pool_type random_pool;
 
   private:
     template <typename random_pool_t, size_t n_r, size_t... I>

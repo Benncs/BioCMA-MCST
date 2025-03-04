@@ -140,6 +140,8 @@ namespace Models
 
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
     {
+      
+
       using namespace implEcoli;
       constexpr double local_l = minimal_length;
       auto generator = _rng.random_pool.get_state();

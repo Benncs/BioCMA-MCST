@@ -16,11 +16,11 @@ namespace MC
 #else
       const size_t seed = std::random_device{}();
 #endif
-      random_pool = Kokkos::Random_XorShift64_Pool<>(seed);
+      random_pool = pool_type(seed);
     }
     else
     {
-      random_pool = Kokkos::Random_XorShift64_Pool<>(_seed);
+      random_pool = pool_type(_seed);
     }
   };
 
