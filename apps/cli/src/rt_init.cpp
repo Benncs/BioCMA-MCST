@@ -78,7 +78,7 @@ ExecInfo runtime_init(int argc, char** argv, Core::UserControlParameters& params
         
       std::cout << "USING MPI" << std::endl;
     }
-    Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
+    Kokkos::print_configuration(std::cout);
     
   }
 

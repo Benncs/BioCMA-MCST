@@ -154,7 +154,7 @@ namespace Api
               .set_disable_warnings(false)
               .set_num_threads(static_cast<int32_t>(_data.exec_info.thread_per_process))
               .set_map_device_id_by("mpi_rank"));
-      Kokkos::DefaultExecutionSpace().print_configuration(std::cout);
+      Kokkos::print_configuration(std::cout);
     }
   }
 
