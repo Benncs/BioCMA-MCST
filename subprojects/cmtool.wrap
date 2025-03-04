@@ -1,6 +1,6 @@
 [wrap-git]
 url = https://gitlab.com/codes_tim/compartment-modelling-tool.git
-revision = 1.16
+revision = HEAD
 depth = 1
 method = meson
 

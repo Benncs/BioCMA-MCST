@@ -70,11 +70,6 @@ if ! sudo pip3 install meson; then
   exit 1
 fi
 
-echo "Installing omp dev..."
-  if ! sudo apt-get install -y libomp-dev; then
-    error "Failed to install omp."
-  fi
-
 # Run clang configuration script
 echo "Running clang configuration script..."
 if ! sh ./devutils/docker/clang_config.sh $LLVM_VERSION; then

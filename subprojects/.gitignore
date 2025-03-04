@@ -3,3 +3,4 @@ cereal/
 dynlib/
 kokkos-*
 packagecache
+cmtool/
