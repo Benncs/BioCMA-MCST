@@ -35,7 +35,7 @@ fi
 
 # Install necessary packages
 echo "Installing necessary packages..."
-if ! sudo apt-get install -y libstdc++-12-dev cmake python3-dev python3 python3-pip wget software-properties-common gnupg libomp-dev libopenmpi-dev libtbb-dev libeigen3-dev pybind11 pkg-config ninja-build; then
+if ! sudo apt-get install -y libstdc++-12-dev cmake python3-dev python3-pybind11 python3 python3-pip wget software-properties-common gnupg libomp-dev libopenmpi-dev libtbb-dev libeigen3-dev pkg-config ninja-build; then
   error "Failed to install necessary packages."
   exit 1
 fi
