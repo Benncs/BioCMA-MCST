@@ -1,5 +1,14 @@
 name: build_test
+on:
+  push:
+    branches:
+      - main  
+  pull_request:
+    branches:
+      - main  
 
+permissions:
+  contents: read  
 jobs:
   Build:
     runs-on: ubuntu-latest
