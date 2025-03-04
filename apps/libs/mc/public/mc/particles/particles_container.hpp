@@ -22,7 +22,7 @@ namespace MC
   template <ParticleModel Model> class ParticlesContainer
   {
   public:
-    static constexpr std::size_t buffer_ratio = 1; //Buffer size = list.size()*buffer_ratio
+    static constexpr std::size_t buffer_ratio = 1; // Buffer size = list.size()*buffer_ratio
     /**
      * @brief Alias for the model used by the container.
      */
@@ -80,7 +80,7 @@ namespace MC
      */
     auto& get_host()
     {
-      ParticleList<ComputeSpace, Model>::migrate(to_process, host_process);
+      migrate(to_process, host_process);
       return host_process;
     }
 
@@ -94,10 +94,16 @@ namespace MC
     //   return extra;
     // }
 
-    template <class Archive> void serialize(Archive& ar)
+    template <class Archive> void save(Archive& ar) const
     {
       ar(to_process); //
-      process_buffer = ParticleList<ComputeSpace, Model>::with_capacity(to_process.size() * buffer_ratio);
+    }
+
+    template <class Archive> void load(Archive& ar)
+    {
+      ar(to_process); //
+      process_buffer =
+          ParticleList<ComputeSpace, Model>::with_capacity(to_process.size() * buffer_ratio);
     }
 
     MC::ParticleList<ComputeSpace, Model> process_buffer;
