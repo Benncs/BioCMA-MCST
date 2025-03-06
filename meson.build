@@ -91,6 +91,7 @@ omp = dependency('openmp')
 hwloc = dependency('hwloc')
 eigen_dep = dependency('eigen3', required: true)
 blas = dependency('blas', required: false) # Eigen can work without BLAS
+dl_dep = compiler.find_library('dl', required : true)
 
 # if blas.found()
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
@@ -124,7 +125,7 @@ if use_system_kokkos
   endif
 
   kokkos = declare_dependency(
-    dependencies: [__cmake_kokkos_dep__, omp, hwloc, thread_dep],
+    dependencies: [__cmake_kokkos_dep__, omp, hwloc, thread_dep,dl_dep],
     compile_args: kokkos_compile_arg,
   )
 else
@@ -147,7 +148,7 @@ else
       sub_kokkos.dependency('kokkosalgorithms'),
       omp,
       hwloc,
-      thread_dep,
+      thread_dep,dl_dep
     ],
   )
 endif
