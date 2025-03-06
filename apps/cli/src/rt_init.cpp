@@ -64,10 +64,12 @@ ExecInfo runtime_init(int argc, char** argv, Core::UserControlParameters& params
   }
 
   set_n_thread_current_rank(rank, size, info, params);
-  Kokkos::initialize(Kokkos::InitializationSettings() 
-                         .set_disable_warnings(false)
-                         .set_num_threads(static_cast<int32_t>(info.thread_per_process))
-                         .set_map_device_id_by("random"));
+  // Kokkos::initialize(Kokkos::InitializationSettings() 
+  //                        .set_disable_warnings(false)
+  //                        .set_num_threads(static_cast<int32_t>(info.thread_per_process))
+  //                        .set_map_device_id_by("random"));
+
+   Kokkos::initialize(argc, argv);
 #ifndef NO_MPI
   WrapMPI::barrier();
 #endif
@@ -223,7 +225,7 @@ void set_n_thread_current_rank(const int rank,
 
   assert(info.thread_per_process > 0);
 
-  omp_set_num_threads(static_cast<int>(info.thread_per_process));
+  // omp_set_num_threads(static_cast<int>(info.thread_per_process));
 }
 
 void check_results_file_name(Core::UserControlParameters& params)
