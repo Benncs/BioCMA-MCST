@@ -12,15 +12,15 @@ UniformLoadBalancer::UniformLoadBalancer(uint32_t s) : ILoadBalancer(s) {};
 HostImportantLoadBalancer::HostImportantLoadBalancer(uint32_t s, double _alpha)
     : ILoadBalancer(s), alpha(_alpha)
 {
-  if (size() == 0)
+  if (size() == 1)
   {
     alpha = 1.; // Overwrite user value to ensure correct calculation
   }
   else
   {
-    if (size() - 1 <= alpha || alpha <= 0)
+    if (alpha <= 0)
     {
-      std::invalid_argument("Alpha has to respect inequality: size-1>alpha>0 ");
+      std::invalid_argument("Alpha should be strictly positive");
     }
   }
 }
