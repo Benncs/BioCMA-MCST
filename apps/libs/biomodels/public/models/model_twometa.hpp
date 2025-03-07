@@ -81,7 +81,7 @@ namespace Models
 
   Model used in v0.5 to assess multiple growth related metabolic rates
    */
-  struct TwoMeta
+  struct Twometa
   {
 
     struct contribs
@@ -169,7 +169,7 @@ namespace Models
                             ((nu_eff_1 + nu_eff_2) / (linear_density_kg_um * kg_to_pico));
     }
 
-    KOKKOS_FUNCTION TwoMeta division(MC::ParticleDataHolder& p, MC::KPRNG _rng)
+    KOKKOS_FUNCTION Twometa division(MC::ParticleDataHolder& p, MC::KPRNG _rng)
     {
       (void)p;
 
@@ -178,7 +178,7 @@ namespace Models
       constexpr auto nu_dist_factor = implMeta::nu_dist_factor;
 
       constexpr auto length_c_dist = implMeta::length_c_dist;
-      auto child = Models::TwoMeta(*this);
+      auto child = Models::Twometa(*this);
 
       length = l;
       child.length = l;
