@@ -62,7 +62,7 @@ namespace MC
      */
     template <ParticleModel Model>
     void impl_init(std::unique_ptr<MonteCarloUnit>& unit,
-                   size_t particle_per_process,
+                   uint64_t particle_per_process,
                    double& total_mass)
     {
 
@@ -153,29 +153,28 @@ namespace MC
    */
   template <ParticleModel Model>
   std::unique_ptr<MonteCarloUnit> init(const ExecInfo& info,
-                                       size_t n_particles,
+                                       uint64_t n_particles,
                                        std::span<double> volumes,
                                        const NeighborsView<HostSpace>& neighbors,
-                                       double x0,
                                        double& total_mass)
   {
     auto unit = std::make_unique<MonteCarloUnit>();
 
     unit->domain = ReactorDomain(volumes, neighbors);
 
-    // Note: use size_t because number of particle represent actually an array size.
-    std::size_t particle_per_process = n_particles / info.n_rank;
+    // // Note: use size_t because number of particle represent actually an array size.
+    // std::size_t particle_per_process = n_particles / info.n_rank;
 
-    const std::size_t remainder = n_particles % info.n_rank;
-    if (remainder != 0 && info.current_rank == info.n_rank - 1)
-    {
-      particle_per_process += remainder;
-    }
-    constexpr double scale_factor = 1.;
+    // const std::size_t remainder = n_particles % info.n_rank;
+    // if (remainder != 0 && info.current_rank == info.n_rank - 1)
+    // {
+    //   particle_per_process += remainder;
+    // }
+    // constexpr double scale_factor = 1.;
     // const double weight = get_initial_weight(
     //     scale_factor, x0, unit->domain.getTotalVolume(), initial_mass_cell, n_particles);
 
-    impl_init<Model>(unit, particle_per_process, total_mass);
+    impl_init<Model>(unit, n_particles, total_mass);
 
     return unit;
   }

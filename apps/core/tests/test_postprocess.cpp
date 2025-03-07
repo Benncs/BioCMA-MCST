@@ -21,7 +21,7 @@ auto init()
     host_concentration(0, 0) = 50.;
     auto device = Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_concentration);
     LocalConcentrationView concentration = Kokkos::subview(device, Kokkos::ALL, 0);
-    return MC::init<current_model>(init, n_particle, volumes, neighb, x0, total_mass);
+    return MC::init<current_model>(init, n_particle, volumes, neighb, total_mass);
   }
 }
 
