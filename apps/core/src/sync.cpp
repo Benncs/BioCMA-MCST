@@ -117,9 +117,9 @@ void last_sync(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     std::vector<size_t> total_events_data =
         WrapMPI::gather<size_t>(local_events.get_span(), exec.n_rank);
 
-    auto local_distribution = simulation.mc_unit->domain.getRepartition();
+    // auto local_distribution = simulation.mc_unit->getRepartition();
 
-    const std::size_t local_distribution_size = local_distribution.size();
+    // const std::size_t local_distribution_size = local_distribution.size();
 
     // Functor to get the total number of particle in all containers
     // const auto visitor_sync = [&exec](auto &&container) {
@@ -132,7 +132,7 @@ void last_sync(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
 
     // Distribution can be easily merged because all ranks have the same number
     // of compartment so 'local_distribution_size' is the same for all ranks
-    const auto merged_distribution = WrapMPI::gather<size_t>(local_distribution, exec.n_rank, 0);
+    // const auto merged_distribution = WrapMPI::gather<size_t>(local_distribution, exec.n_rank, 0);
 
     if (exec.current_rank == 0)
     {

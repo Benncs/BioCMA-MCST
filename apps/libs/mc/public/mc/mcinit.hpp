@@ -68,7 +68,8 @@ namespace MC
 
       auto container = ParticlesContainer<Model>(particle_per_process);
 
-      auto& compartments = unit->domain.data();
+      // auto& compartments = unit->domain.data();
+      // auto n_cells = unit->domain.n_cells();
       auto& list = container.get_compute();
 
       auto rng = unit->rng;
@@ -116,7 +117,9 @@ namespace MC
             p.properties.id = i;
             const uint64_t location = rng.uniform_u(min_c, max_c);
             p.properties.current_container = location;
-            Kokkos::atomic_increment(&compartments(location).n_cells);
+
+            // Kokkos::atomic_increment(&n_cells(location));
+            // Kokkos::atomic_increment(&compartments(location).n_cells);
             p.init(particle_rng);
             const double mass_i = p.data.mass();
             // Add the mass of the particle to the local mass variable
@@ -185,7 +188,8 @@ namespace MC
     {
       auto& list = container.get_compute();
       const std::size_t n_p = list.size();
-      // const double new_weight = static_cast<double>(n_p)*(x0 * unit->domain.getTotalVolume()) / (total_mass);
+      // const double new_weight = static_cast<double>(n_p)*(x0 * unit->domain.getTotalVolume()) /
+      // (total_mass);
       const double new_weight = (x0 * unit->domain.getTotalVolume()) / (total_mass);
       KOKKOS_ASSERT(new_weight > 0);
 
@@ -194,10 +198,9 @@ namespace MC
       Kokkos::parallel_for("mc_init_apply",
                            Kokkos::RangePolicy<ComputeSpace>(0, n_p),
                            PostInitFunctor(list, new_weight));
-                           unit->init_weight = new_weight;
+      unit->init_weight = new_weight;
     };
 
-    
     std::visit(functor, unit->container);
   }
 

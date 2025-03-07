@@ -52,6 +52,11 @@ namespace MC
       return to_process;
     }
 
+    const auto& get_compute() const noexcept
+    {
+      return to_process;
+    }
+
     /**
      * @brief Constructs a ParticlesContainer with a specified capacity.
      *
