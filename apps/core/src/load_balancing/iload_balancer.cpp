@@ -5,16 +5,16 @@ ILoadBalancer::ILoadBalancer(uint32_t s) : _size(s) {};
 
 uint64_t ILoadBalancer::get_alloc(uint64_t n, uint32_t rank) const noexcept
 {
-  return static_cast<uint64_t>(static_cast<double>(n) * getRatio(rank));
+  return static_cast<uint64_t>(static_cast<double>(n) * getRatio(n,rank));
 }
 
-bool ILoadBalancer::check()const
+bool ILoadBalancer::check(uint64_t n)const
 {
   constexpr double tolerance = 1e-12;
   double cs = 0.;
   for (decltype(_size) i = 0; i < _size; ++i)
   {
-    cs += getRatio(i);
+    cs += getRatio(n,i);
   }
   return (std::abs(cs - 1.) < tolerance);
 }

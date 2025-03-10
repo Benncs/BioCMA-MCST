@@ -90,7 +90,7 @@ ExecInfo runtime_init(int argc, char** argv, Core::UserControlParameters& params
 
 
 
-  Eigen::setNbThreads(6);
+  // Eigen::setNbThreads(6);
   // Eigen::setNbThreads(std::min(omp_get_num_procs(), 4));
 
   #ifdef USE_PYTHON_MODULE

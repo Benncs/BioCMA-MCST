@@ -73,8 +73,8 @@
      <control name="bench2">
       <cma_case_path recursive="true">/home_pers/casale/Documents/thesis/cfd/bench/</cma_case_path>
       <final_time>1</final_time>
-      <numper_particle>3000</numper_particle>
-      <delta_time>0.1</delta_time>
+      <numper_particle>9000000</numper_particle>
+      <delta_time>0.001</delta_time>
       <results_file_name>bench2</results_file_name>
       <number_exported_result>0</number_exported_result>
       <model_name>model_monod</model_name>
@@ -84,7 +84,7 @@
     <control name="bench0d">
       <cma_case_path>../../cfd-cma/cma_data/0d_gas/</cma_case_path>
       <final_time>1</final_time>
-      <numper_particle>4000</numper_particle>
+      <numper_particle>5000000</numper_particle>
       <delta_time>0.001</delta_time>
       <results_file_name>bench0d</results_file_name>
       <number_exported_result>0</number_exported_result>

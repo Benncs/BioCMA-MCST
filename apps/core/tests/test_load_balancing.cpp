@@ -8,12 +8,13 @@ void test(ILoadBalancer* lb,uint64_t n,uint32_t n_rank)
     uint64_t cumsum =0;
     for(uint32_t i=0;i<n_rank;++i)
     {
+        
         auto ib = lb->balance(i, n);
         cumsum+=ib;
         std::cerr<<ib<<std::endl;
     }
     std::cerr<<cumsum<<" "<<n<<std::endl;
-    assert(lb->check());
+    assert(lb->check(n));
     assert(cumsum==n);
 }
 
@@ -26,12 +27,15 @@ int main()
     CustomLoadBalancer custom(n_rank,{0.2,0.15,0.1,0.1,0.2,0.1,0.05,0.05,0.025,0.025});
     HostImportantLoadBalancer host1(n_rank,0.5);
     HostImportantLoadBalancer host2(n_rank,3.1);
-
+    BoundLoadBalancer bound(n_rank,50);
+    BoundLoadBalancer bound2(3,4e6);
 
     test(&uniform, n_particle , n_rank);
     test(&custom, n_particle , n_rank);
     test(&host1, n_particle , n_rank);
     test(&host2, n_particle , n_rank);
+    test(&bound, n_particle , n_rank);
+     test(&bound2, 5e6 , 3);
 
     
 }
