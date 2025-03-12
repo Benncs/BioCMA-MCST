@@ -116,7 +116,6 @@ namespace MC
   {
     // Repartition is used for postprocessing outside kernel so we can use STL
     std::vector<uint64_t> dist(shared_containers.extent(0));
-
     // shared_containers is located in a sharespace so deep copy is not
     // necessary but in case of migrating shared_container to computeSpace,
     // nothing to change here
@@ -135,7 +134,6 @@ namespace MC
     // OK because of sharedspace
     // Kokkos::resize(reduced.shared_containers, original_size);
     // Kokkos::View<ContainerState *, Kokkos::SharedSpace> tmp("tmp_reduce",original_size);
-
     if (data.size() != original_size * n_rank)
     {
       throw std::runtime_error("Cannot reduce different reactor type");
