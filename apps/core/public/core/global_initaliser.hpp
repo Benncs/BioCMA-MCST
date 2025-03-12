@@ -21,6 +21,9 @@
 #include <string>
 #include <vector>
 
+
+class ILoadBalancer;
+
 namespace Core
 {
 
@@ -212,12 +215,15 @@ namespace Core
      */
     void mpi_broadcast(); ///< Method for handling MPI broadcast communication.
 
+
+
     ExecInfo info;
     SimulationParameters params;
 
     UserControlParameters user_params;
 
     /////INNER STRUCT
+    uint64_t particle_per_process;
     std::vector<double> liquid_volume;
     std::vector<double> gas_volume;
     CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors;

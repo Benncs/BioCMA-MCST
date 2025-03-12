@@ -1,6 +1,7 @@
 #ifndef __MODELS_SIMPLE_ECOLI_HPP__
 #define __MODELS_SIMPLE_ECOLI_HPP__
 
+#include "common/execinfo.hpp"
 #include <mc/particles/particle_model.hpp>
 #include <mc/prng/prng_extension.hpp>
 #include <models/uptake.hpp>
@@ -22,7 +23,7 @@ namespace implMeta
   constexpr float d_m = 0.6e-6;     // m
   constexpr float l_min_m = 0.9e-6; // m
   constexpr float MolarMassG = Models::MolarMass::GramPerMole::glucose<float>;
-  constexpr float MolarMassO2 = Models::MolarMass::GramPerMole::dioxygen<float>;      // g/mol
+  constexpr float MolarMassO2 = Models::MolarMass::GramPerMole::dioxygen<float>; // g/mol
   constexpr float dl_max_ms = 8 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
   constexpr float tau_1 = 1000.;         // s
   constexpr float tau_2 = 1000.;         // s
@@ -44,11 +45,10 @@ namespace implMeta
     return (dl * density) * y_sx_1;
   }
 
-  constexpr float phi_s_max = get_phi_s_max(linear_density_kg_m, dl_max_ms); // kgS/s
-  constexpr float phi_perm_max = phi_s_max / 40.;                            // kgS/s
-  constexpr float phi_o2_max = 10 * phi_s_max / MolarMassG *
-                               y_os_molar * MolarMassO2;                   // kgS/s
-  constexpr float nu_max_kg_s = dl_max_ms * implMeta::linear_density_kg_m; // kg/s
+  constexpr float phi_s_max = get_phi_s_max(linear_density_kg_m, dl_max_ms);           // kgS/s
+  constexpr float phi_perm_max = phi_s_max / 40.;                                      // kgS/s
+  constexpr float phi_o2_max = 10 * phi_s_max / MolarMassG * y_os_molar * MolarMassO2; // kgS/s
+  constexpr float nu_max_kg_s = dl_max_ms * implMeta::linear_density_kg_m;             // kg/s
 
   // Conversions
   constexpr float l_max_um = l_max_m * m_to_micron;
@@ -61,7 +61,6 @@ namespace implMeta
   constexpr float phi_s_max_pg = phi_s_max * kg_to_pico;       // pgS/s
   constexpr float phi_perm_max_pg = phi_perm_max * kg_to_pico; // pgS/s
   constexpr float phi_o2_max_pg = phi_o2_max * kg_to_pico;     // pgS/s
-
   constexpr auto length_dist =
       MC::Distributions::TruncatedNormal<float>(l_min_um, l_min_um / 5., 0.5 * l_min_um, l_max_um);
 
@@ -80,8 +79,10 @@ namespace Models
 
   /**
   @brief Two growth rate metabolic model
+
+  Model used in v0.5 to assess multiple growth related metabolic rates
    */
-  struct Meta2
+  struct Twometa
   {
 
     struct contribs
@@ -96,9 +97,8 @@ namespace Models
     float nu1;
     float nu2;
     float l_cp;
-    float mu;
-    float nu_eff_1;
-    float nu_eff_2;
+    float nu_eff_1; // This is not itself a model property but stored to be exported
+    float nu_eff_2; // This is not itself a model property but stored to be exported
     contribs contrib;
 
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
@@ -135,7 +135,7 @@ namespace Models
 
       const float phi_o2 = (phi_o2_max_pg)*o / (o + k_o); // gO2/s
 
-      const float nu_1_star = y_sx_1 * MolarMassG*
+      const float nu_1_star = y_sx_1 * MolarMassG *
                               Kokkos::min(phi_s / MolarMassG,
                                           phi_o2 / MolarMassO2 / y_os_molar); // gX/s
 
@@ -160,9 +160,8 @@ namespace Models
       p.status = (length > l_cp) ? MC::CellStatus::CYTOKINESIS : MC::CellStatus::IDLE;
 
       contrib.phi_s = -phi_s;
-      contrib.phi_o = -1 * ((1. / y_sx_1 / MolarMassG *
-                             y_os_molar * MolarMassO2 * nu_eff_1) +
-                            0. * nu_eff_2);
+      contrib.phi_o =
+          -1 * ((1. / y_sx_1 / MolarMassG * y_os_molar * MolarMassO2 * nu_eff_1) + 0. * nu_eff_2);
       contrib.phi_a = nu_eff_2 / y_sx_2 * y_sa + (s_overflow > 0. ? y_sa * (s_overflow) : 0);
 
       nu1 = nu1 + static_cast<float>(d_t) * ((nu_1_star - nu1) / tau_1);
@@ -171,7 +170,7 @@ namespace Models
                             ((nu_eff_1 + nu_eff_2) / (linear_density_kg_um * kg_to_pico));
     }
 
-    KOKKOS_FUNCTION Meta2 division(MC::ParticleDataHolder& p, MC::KPRNG _rng)
+    KOKKOS_FUNCTION Twometa division(MC::ParticleDataHolder& p, MC::KPRNG _rng)
     {
       (void)p;
 
@@ -180,23 +179,21 @@ namespace Models
       constexpr auto nu_dist_factor = implMeta::nu_dist_factor;
 
       constexpr auto length_c_dist = implMeta::length_c_dist;
-      auto child = Models::Meta2(*this);
+      auto child = Models::Twometa(*this);
 
       length = l;
       child.length = l;
       auto g = _rng.random_pool.get_state();
 
-      // child.l_cp = length_c_dist.draw(g);
+      child.l_cp = length_c_dist.draw(g);
 
-      // child.nu1 = static_cast<float>(MC::Distributions::ScaledTruncatedNormal<double>::draw_from(
-      //     g, nu_dist_factor, this->nu1, this->nu1 / 3., 0., 1.));
+      child.nu1 = static_cast<float>(MC::Distributions::ScaledTruncatedNormal<double>::draw_from(
+          g, nu_dist_factor, this->nu1, this->nu1 / 3., 0., 1.));
 
-      const float sigma_nu2 = (almost_equal(nu2, 0., 1e-13)) ? 0.01F : this->nu2 / 3.;
+      const float sigma_nu2 = this->nu2 / 3.;
 
-      // child.nu2 =
-      // static_cast<float>(
-      // MC::Distributions::ScaledTruncatedNormal<double>::draw_from(
-      //     g, nu_dist_factor, this->nu2, sigma_nu2, 0., 1.F));
+      child.nu2 = static_cast<float>(MC::Distributions::ScaledTruncatedNormal<double>::draw_from(
+          g, nu_dist_factor, this->nu2, sigma_nu2, 0., 1.F));
 
       KOKKOS_ASSERT(child.nu1 >= 0.F);
       KOKKOS_ASSERT(child.nu2 >= 0.F);
@@ -213,9 +210,7 @@ namespace Models
 
       access_contribs(0, p.current_container) += p.weight * contrib.phi_s * implMeta::pico_to_kg;
       access_contribs(1, p.current_container) += p.weight * contrib.phi_o * implMeta::pico_to_kg;
-      ;
       access_contribs(2, p.current_container) += p.weight * contrib.phi_a * implMeta::pico_to_kg;
-      ;
     }
 
     [[nodiscard]] KOKKOS_FUNCTION double mass() const noexcept

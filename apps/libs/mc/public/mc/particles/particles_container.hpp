@@ -24,6 +24,7 @@ namespace MC
   {
   public:
     static constexpr double buffer_ratio = 0.4; // Buffer size = ceil(list.size()*buffer_ratio)
+    static constexpr std::size_t buffer_ratio = 1; // Buffer size = list.size()*buffer_ratio
     /**
      * @brief Alias for the model used by the container.
      */
@@ -56,15 +57,36 @@ namespace MC
      */
     [[nodiscard]] KOKKOS_INLINE_FUNCTION std::size_t n_particles() const
     {
-      return n_used_elements;
-    };
+      return to_process.size();
+    }
 
-    [[nodiscard]] KOKKOS_INLINE_FUNCTION bool handle_division(std::size_t idx1) const;
+    /**
+     * @brief Migrates particles from compute space to host space and returns a reference to the
+     * host container. A deep copy of main container is performed before returning.
+     * @return Reference to the particle list in the host space.
+     */
+    auto& get_host()
+    {
+      ParticleList<ComputeSpace, Model>::migrate(to_process, host_process);
+      return host_process;
+    }
 
-    void merge_buffer();
+    /**
+     * @brief Returns a reference to the extra results container.
+     *
+     * @return Reference to the results list in the compute space.
+     */
+    // auto& get_extra() noexcept
+    // {
+    //   return extra;
+    // }
 
+    template <class Archive> void save(Archive& ar) const
+    {
+      ar(to_process); //
+    }
 
-    template <class Archive> void serialize(Archive& ar)
+    template <class Archive> void load(Archive& ar)
     {
       // ar(to_process); //
       // process_buffer =

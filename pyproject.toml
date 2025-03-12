@@ -24,7 +24,7 @@ maintainers = [
 ]
 
 dependencies = [
-  'mpi4py'
+  'mpi4py',
   'numpy>=2.2.0',
 # 'vtk==9.3.0',
 #  'matplotlib==3.8.4',

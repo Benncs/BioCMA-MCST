@@ -238,6 +238,9 @@ namespace Api
       return ApiResult("Register first");
     }
 
+
+    
+
     Core::GlobalInitialiser global_initializer(_data.exec_info, params);
     auto t = global_initializer.init_transitionner();
     global_initializer.init_feed(feed);
