@@ -85,12 +85,12 @@ namespace
 
     KOKKOS_INLINE_FUNCTION void operator()(const int i, double& local_mass) const
     {
-      auto particle_rng = list.rng_instance;
+      // auto particle_rng = list.rng_instance;
       auto p = MC::Particle<CurrentModel>(1.);
       p.properties.id = i;
       const uint64_t location = rng.uniform_u(min_c, max_c);
       p.properties.current_container = location;
-      p.init(particle_rng);
+      p.init(rng);
       const double mass_i = p.data.mass();
       local_mass += mass_i;
       list.set(i, std::move(p));

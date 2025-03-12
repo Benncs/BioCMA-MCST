@@ -1,6 +1,7 @@
 #ifndef __MODELS_SIMPLE_ECOLI_HPP__
 #define __MODELS_SIMPLE_ECOLI_HPP__
 
+#include "common/execinfo.hpp"
 #include <mc/particles/particle_model.hpp>
 #include <mc/prng/prng_extension.hpp>
 #include <models/uptake.hpp>
@@ -96,8 +97,8 @@ namespace Models
     float nu1;
     float nu2;
     float l_cp;
-    float nu_eff_1; //This is not itself a model property but stored to be exported 
-    float nu_eff_2; //This is not itself a model property but stored to be exported 
+    float nu_eff_1; // This is not itself a model property but stored to be exported
+    float nu_eff_2; // This is not itself a model property but stored to be exported
     contribs contrib;
 
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
@@ -209,9 +210,7 @@ namespace Models
 
       access_contribs(0, p.current_container) += p.weight * contrib.phi_s * implMeta::pico_to_kg;
       access_contribs(1, p.current_container) += p.weight * contrib.phi_o * implMeta::pico_to_kg;
-      ;
       access_contribs(2, p.current_container) += p.weight * contrib.phi_a * implMeta::pico_to_kg;
-      ;
     }
 
     [[nodiscard]] KOKKOS_FUNCTION double mass() const noexcept

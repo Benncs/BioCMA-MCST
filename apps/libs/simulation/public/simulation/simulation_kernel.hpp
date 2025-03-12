@@ -227,6 +227,7 @@ namespace Simulation::KernelInline
                                                move_info.diag_transition(i_compartment),
                                                d_t);
 
+    // properties.current_container = (mask_next)?__find_next_compartment(i_compartment, rng2):i_compartment;
     if (mask_next)
     {
       properties.current_container = __find_next_compartment(i_compartment, rng2);

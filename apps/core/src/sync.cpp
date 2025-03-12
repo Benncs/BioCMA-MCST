@@ -8,6 +8,7 @@
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
 #else
+using MPI_Request = int;
 // MOCK
 // NOLINTBEGIN
 namespace WrapMPI
@@ -18,7 +19,17 @@ namespace WrapMPI
   template <typename T> void gather_span(std::span<T>, std::span<const T>, size_t = 0){};
 
   void broadcast_span(auto data, auto n) {};
+  template <typename T>
+  int send_v(std::span<const T> data, size_t dest, size_t tag, bool send_size) noexcept {};
 
+  namespace Async
+  {
+
+    template <typename T>
+    int recv_span(MPI_Request& request, std::span<T> buf, size_t src, size_t tag) noexcept;
+    void wait(MPI_Request& request);
+
+  } // namespace Async
 } // namespace WrapMPI
 // NOLINTEND
 #endif
@@ -35,50 +46,93 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     // With multiple rank, we ensure that all finished kernel processing
     // then, rank 0 retrieves the local particle contribution in other
     // ranks
+    // Reduce impl too long
+    // #ifndef NO_MPI
+    // if (exec.current_rank != 0)
+    // {
+    //   const auto local_contribution = simulation.getContributionData();
+    //       std::vector<double> dummy_buffer(local_contribution.size(), 0.0); // Dummy buffer for
+    //       non-root ranks
+    //   MPI_Reduce(local_contribution.data(),
+    //              dummy_buffer.data(),
+    //              local_contribution.size(),
+    //              MPI_DOUBLE,
+    //              MPI_SUM,
+    //              0,
+    //              MPI_COMM_WORLD);
+    // }
+    // else
+    // {
+    //   auto host_contribution = simulation.getContributionData_mut();
+    //   MPI_Reduce(MPI_IN_PLACE,host_contribution.data(),
+    //              host_contribution.size(),
+    //              MPI_DOUBLE,
+    //              MPI_SUM,
+    //              0,
+    //              MPI_COMM_WORLD);
+    // }
+    // #endif
+
+    // Old impl (GPU/CPU same node 432comps): - sync_step(REGION)   15.972034 1001
+    // 0.015956 66.261864 36.022619 (6CPU ): - sync_step(REGION)   0.081290 1001 0.000081 0.918069
+    // 0.712938
 
     const auto local_contribution = simulation.getContributionData();
-
     static std::vector<double> total_contrib_data;
     if (total_contrib_data.empty())
     {
       total_contrib_data.resize(local_contribution.size() * exec.n_rank, 0);
     }
-
-    WrapMPI::gather_span<double>(total_contrib_data, local_contribution);
-    // // auto total_contrib_data = WrapMPI::gather<double>(local_contribution,exec.n_rank);
+    {
+      PROFILE_SECTION("host:sync_step gathering")
+      WrapMPI::gather_span<double>(total_contrib_data, local_contribution);
+    }
+    
     if (exec.current_rank == 0)
     {
       simulation.reduceContribs(total_contrib_data, exec.n_rank);
     }
 
-    // constexpr size_t tag = 10;
-    // const auto local_contribution = simulation.getContributionData();
-    // #ifndef NO_MPI
+    // Newimpl (GPU/CPU same node 432comps): - sync_step (REGION)   0.010833 1001 0.000011 0.079145
+    // 0.025588
+    //  (6CPU ): - sync_step (REGION)   0.109201 1001 0.000109 1.120788 0.845310
+    
+
     // if (exec.current_rank != 0)
     // {
-
-    //   WrapMPI::send_v(local_contribution, 0,tag,false);
+    //   const auto local_contribution = simulation.getContributionData();
+    //   PROFILE_SECTION("worker:sync_step")
+    //   WrapMPI::send_v(local_contribution, 0, 0, false);
     // }
     // else
     // {
-    //   MPI_Status status;
-    //   static std::vector<double> receive_data;
-    //   if(receive_data.empty())
+    //   const auto local_contribution = simulation.getContributionData();
+    //   static std::vector<MPI_Request> requests(exec.n_rank - 1);
+    //   static std::vector<double> total_contrib_data;
+    //   auto buffer_size = local_contribution.size();
+    //   if (total_contrib_data.empty())
     //   {
-    //     receive_data.resize(local_contribution.size(),0.);
-
+    //     total_contrib_data.resize(buffer_size * (exec.n_rank), 0);
     //   }
-    //   for(size_t i = 1;i<exec.n_rank;++i)
+    //   simulation.reduceContribs_per_rank(local_contribution);
     //   {
-    //     auto _ret = WrapMPI::recv_span<double>(receive_data,i,&status,tag);
-    //     simulation.reduceContribs_per_rank(receive_data);
-    //   }
+    //     PROFILE_SECTION("host:sync_step communication")
+    //     for (int i = 1; i < exec.n_rank; ++i)
+    //     {
+    //       WrapMPI::Async::recv_span(
+    //           requests[i - 1],
+    //           std::span<double>(total_contrib_data.data() + i * buffer_size, buffer_size),
+    //           i,
+    //           0);
+    //     }
 
+    //     for (int i = 0; i < exec.n_rank - 1; ++i)
+    //     {
+    //       WrapMPI::Async::wait(requests[i]);
+    //     }
+    //   }
+    //   simulation.reduceContribs(total_contrib_data, exec.n_rank);
     // }
-
-    // #endif
-
-    WrapMPI::barrier();
   }
 }
 
@@ -117,39 +171,11 @@ void last_sync(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     std::vector<size_t> total_events_data =
         WrapMPI::gather<size_t>(local_events.get_span(), exec.n_rank);
 
-    // auto local_distribution = simulation.mc_unit->getRepartition();
-
-    // const std::size_t local_distribution_size = local_distribution.size();
-
-    // Functor to get the total number of particle in all containers
-    // const auto visitor_sync = [&exec](auto &&container) {
-    //   return WrapMPI::gather_reduce<size_t>(container.process_size(),
-    //                                       exec.n_rank);
-    // };
-    // auto total_particle_number = WrapMPI::gather_reduce<size_t>(
-    //     std::visit(visitor_sync, simulation.mc_unit->container),
-    //     exec.n_rank);
-
-    // Distribution can be easily merged because all ranks have the same number
-    // of compartment so 'local_distribution_size' is the same for all ranks
-    // const auto merged_distribution = WrapMPI::gather<size_t>(local_distribution, exec.n_rank, 0);
-
     if (exec.current_rank == 0)
     {
       // We could update 'local_events' for all ranks but it's useless as
       // simulation is finished and programm is going to exit
       local_events = MC::EventContainer::reduce(total_events_data);
-
-      // simulation.mc_unit->domain.in_place_reduce(merged_distribution, local_distribution_size,
-      // exec.n_rank);
-
-      // //WARN: reduce doesn't copy
-      // auto reduced_domain = MC::ReactorDomain::reduce(
-      //     merged_distribution, local_distribution_size, exec.n_rank);
-
-      // simulation.mc_unit->domain =
-      //     std::move(reduced_domain); // Set new domain (uppdate particle
-      //                                // location only on container side)
 
       // TODO: MERGE PARTICLELIST
     }
