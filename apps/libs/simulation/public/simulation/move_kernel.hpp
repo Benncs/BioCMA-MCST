@@ -62,7 +62,7 @@ namespace Simulation::KernelInline
                 MC::ParticleStatus _status,
                 std::size_t n_p,
                 MoveInfo<ComputeSpace> m,
-                MC::pool_type _random_pool)
+                MC::KPRNG::pool_type _random_pool)
         : d_t(_d_t), positions(std::move(p)), n_particles(n_p), move(std::move(m)),
           random_pool(_random_pool), status(std::move(_status)) {};
 
@@ -134,7 +134,7 @@ namespace Simulation::KernelInline
     MC::ParticlePositions positions;
     std::size_t n_particles;
     MoveInfo<ComputeSpace> move;
-    MC::pool_type random_pool;
+    MC::KPRNG::pool_type random_pool;
     MC::ParticleStatus status;
   };
 } // namespace Simulation::KernelInline

@@ -1,3 +1,4 @@
+#include "mc/traits.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/execinfo.hpp>
@@ -11,6 +12,7 @@
 #include <memory>
 #include <numeric>
 
+#include <optional>
 #include <simulation/simulation.hpp>
 #include <variant>
 
@@ -51,7 +53,7 @@ namespace PostProcessing
                              std::unique_ptr<Core::MainExporter>& mde)
   {
     std::cout << "POST PROCESSING" << std::endl;
-    
+
     auto removed = simulation.mc_unit->events.get<MC::EventType::Death>() +
                    simulation.mc_unit->events.get<MC::EventType::Exit>();
     auto new_p = simulation.mc_unit->events.get<MC::EventType::NewParticle>();
@@ -89,7 +91,7 @@ namespace PostProcessing
 namespace
 {
 
-  PostProcessing::BonceBuffer
+  std::optional<PostProcessing::BonceBuffer>
   get_particle_properties_device(const std::unique_ptr<MC::MonteCarloUnit>& mc_unit);
 
   void append_properties(int counter,
@@ -97,35 +99,29 @@ namespace
                          Core::PartialExporter& partial_exporter)
   {
 
+    auto dump = get_particle_properties_device(simulation.mc_unit);
+    if (dump.has_value())
     {
-    //   auto dump = get_particle_properties_device(simulation.mc_unit);
-
-    //   std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
-    //   partial_exporter.write_particle_data(
-    //       dump.vnames, dump.particle_values, dump.spatial_values, ds_name);
+      std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
+      partial_exporter.write_particle_data(
+          dump->vnames, dump->particle_values, dump->spatial_values, ds_name);
     }
   }
 
-  PostProcessing::BonceBuffer
+  std::optional<PostProcessing::BonceBuffer>
   get_particle_properties_device(const std::unique_ptr<MC::MonteCarloUnit>& mc_unit)
   {
 
     // BonceBuffer properties;
     const size_t n_compartment = mc_unit->domain.getNumberCompartments();
 
-   
-    // return std::visit(
-    //     [n_compartment](auto& container)
-    //     {
-    //       auto list = container.get_compute();
-    //       const std::size_t n_p = list.size(); // USE list size not Kokkos View size. ParticleList
-    //                                            // allocates more particles than needed
-
-    //       return PostProcessing::get_properties(n_p, list._owned_data, n_compartment);
-    //     },
-    //     mc_unit->container);
-
-    
+    return std::visit(
+        [n_compartment](auto& container)
+        {
+          using CurrentModel = typename std::remove_reference<decltype(container)>::type::UsedModel;
+          return PostProcessing::get_properties<CurrentModel>(container, n_compartment);
+        },
+        mc_unit->container);
   }
 
 } // namespace

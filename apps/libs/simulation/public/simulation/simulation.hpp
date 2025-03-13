@@ -187,13 +187,13 @@ namespace Simulation
     int _waiting_allocation_particle = 0;
 
     auto f = Simulation::KernelInline::CycleFunctor<CurrentModel>(
-        d_t, container, local_rng.random_pool, getkernel_concentration());
+        d_t, container, local_rng.random_pool, getkernel_concentration(),contribs_scatter);
 
 
     if (!set_policy)
     {
       _policy = MC::get_policty(f, n_particle,true);
-      //   set_policy = true;
+        set_policy = true;
     }
 
     // if (mc_unit->domain.getNumberCompartments() != 1)

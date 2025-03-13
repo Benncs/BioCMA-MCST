@@ -24,10 +24,11 @@ namespace Simulation::KernelInline
 
     KOKKOS_INLINE_FUNCTION CycleFunctor(M::FloatType dt,
                                         MC::ParticlesContainer<M> _particles,
-                                        const MC::pool_type& _random_pool,
-                                        MC::KernelConcentrationType _concentrations)
+                                        MC::KPRNG::pool_type _random_pool,
+                                        MC::KernelConcentrationType&& _concentrations,
+                                        MC::ContributionView _contribs_scatter)
         : d_t(dt), particles(_particles), random_pool(_random_pool),
-          concentrations(std::move(_concentrations))
+          concentrations(std::move(_concentrations)), contribs_scatter(std::move(_contribs_scatter))
     {
     }
 
@@ -55,12 +56,15 @@ namespace Simulation::KernelInline
           assert(false && "Division Overflow Not implemented");
         }
       };
+
+      particles.get_contributions(idx,contribs_scatter);
     }
 
     M::FloatType d_t;
     MC::ParticlesContainer<M> particles;
-    MC::pool_type random_pool;
+    MC::KPRNG::pool_type random_pool;
     MC::KernelConcentrationType concentrations;
+    MC::ContributionView contribs_scatter;
   };
 
 } // namespace Simulation::KernelInline

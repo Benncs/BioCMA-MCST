@@ -59,18 +59,18 @@ namespace
    *
    * @tparam ListType The type of the particle list.
    */
-  template <typename ListType> struct PostInitFunctor
+  struct PostInitFunctor
   {
-    ListType list;     ///< List of particles.
-    double new_weigth; ///< The new weight assigned to each particle.
+    MC::ParticleWeigths weights; ///< List of particles.
+    double new_weigth;        ///< The new weight assigned to each particle.
 
     /**
      * @brief Constructor for PostInitFunctor.
      * @param _list The particle list.
      * @param _new_weigth The new weight to be assigned to each particle.
      */
-    PostInitFunctor(ListType _list, double _new_weigth)
-        : list(std::move(_list)), new_weigth(_new_weigth)
+    PostInitFunctor(MC::ParticleWeigths _weights, double _new_weigth)
+        : weights(std::move(_weights)), new_weigth(_new_weigth)
     {
     }
 
@@ -80,7 +80,7 @@ namespace
      */
     KOKKOS_INLINE_FUNCTION void operator()(std::size_t i_particle) const
     {
-      list._owned_data(i_particle).properties.weight = new_weigth;
+      // list._owned_data(i_particle).properties.weight = new_weigth;
     }
   };
 
@@ -101,13 +101,12 @@ namespace
       // p.properties.id = i;
       // const uint64_t location = rng.uniform_u(min_c, max_c);
       particles.position(i) = rng.uniform_u(min_c, max_c);
-      Model::init(i, particles.model);
+      Model::init(rng.random_pool,i, particles.model);
       // p.properties.current_container = location;
       // p.init(rng);
-      // const double mass_i = p.data.mass();
-      // local_mass += mass_i;
+      const double mass_i = Model::mass(i,particles.model);
+      local_mass += mass_i;
       // list.set(i, std::move(p));
-      local_mass += 0;
     }
 
     MC::ParticlesContainer<Model> particles;
@@ -142,7 +141,7 @@ namespace MC
           // auto& list = _container.get_compute();
           Kokkos::parallel_for("get_repartition",
                                _container.n_particles(),
-                               NcellFunctor(_container.position, _container.status,sn_cells));
+                               NcellFunctor(_container.position, _container.status, sn_cells));
         },
         container);
     Kokkos::Experimental::contribute(n_cells, sn_cells);
@@ -155,23 +154,32 @@ namespace MC
 
   void post_init_weight(std::unique_ptr<MonteCarloUnit>& unit, double x0, double total_mass)
   {
+    auto functor = [total_mass, x0, &unit](auto& container)
+    {
+      // TODO
 
-    // auto functor = [total_mass, x0, &unit](auto& container)
-    // {
-    //   // TODO
+      // const std::size_t n_p = container.n_particles();
+      const double new_weight = (x0 * unit->domain.getTotalVolume()) / (total_mass);
+      KOKKOS_ASSERT(new_weight > 0);
+      using CurrentModel = typename std::remove_reference<decltype(container)>::type::UsedModel;
+      if constexpr (ConstWeightModelType<CurrentModel>)
+      {
+        Kokkos::deep_copy(container.weights, new_weight);
+      }
+      else
+      {
+        static_assert(!ConstWeightModelType<CurrentModel>, "Multiple weights Not implemented yet");
+        // Kokkos::parallel_for("mc_init_apply",
+        //                    Kokkos::RangePolicy<ComputeSpace>(0, n_p),
+        //                    PostInitFunctor(container.weights, new_weight));
+      }
+      // Kokkos::View<double, ComputeSpace> view_new_weight("view_new_weight");
+      // Kokkos::deep_copy(view_new_weight, new_weight);
+      
+      unit->init_weight = new_weight;
+    };
 
-    //   // const std::size_t n_p = container.n_particles();
-    //   // const double new_weight = (x0 * unit->domain.getTotalVolume()) / (total_mass);
-    //   // KOKKOS_ASSERT(new_weight > 0);
-    //   // Kokkos::View<double, ComputeSpace> view_new_weight("view_new_weight");
-    //   // Kokkos::deep_copy(view_new_weight, new_weight);
-    //   // Kokkos::parallel_for("mc_init_apply",
-    //   //                      Kokkos::RangePolicy<ComputeSpace>(0, n_p),
-    //   //                      PostInitFunctor(container, new_weight));
-    //   // unit->init_weight = new_weight;
-    // };
-
-    // std::visit(functor, unit->container);
+    std::visit(functor, unit->container);
   }
 
   void impl_init(double& total_mass,

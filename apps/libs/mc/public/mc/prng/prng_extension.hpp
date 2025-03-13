@@ -249,7 +249,7 @@ namespace MC::Distributions
   // if we draw from xf = [a * factor, b * factor] and then scale back using x = xf / factor.
   template <FloatingPointType F> struct TruncatedNormal
   {
-
+    
     F mu;    // Mean
     F sigma; // Standard deviation
     F lower; // Standard deviation
@@ -279,8 +279,8 @@ namespace MC::Distributions
       // for extrem value Min bounded if |mu-bound| <<1 z -> 0 which is also not wanted for error
       // function
 
-      F zl = Kokkos::clamp(lower - mu / sigma, F(1e-3), F(1e3));
-      F zu = Kokkos::clamp(upper - mu / sigma, F(1e-3), F(1e3));
+      F zl = Kokkos::clamp(lower - mu / sigma, F(-5e3), F(0));  //upper-mu is by defintion <0
+      F zu = Kokkos::clamp(upper - mu / sigma, F(0), F(5e3)); //upper-mu is by defintion >0
 
       F pl = 0.5 * Kokkos::erfc(-zl / Kokkos::numbers::sqrt2);
       KOKKOS_ASSERT(Kokkos::isfinite(pl)&&"Truncated normal draw leads is Nan of Inf with given parameters");

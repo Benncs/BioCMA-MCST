@@ -1,14 +1,65 @@
 #ifndef __PARTICLES_CONTAINER_HPP__
 #define __PARTICLES_CONTAINER_HPP__
 
-#include "Kokkos_Core.hpp"
-#include "Kokkos_Printf.hpp"
-#include <Kokkos_Atomic.hpp>
-#include <Kokkos_NestedSort.hpp>
-#include <Kokkos_Sort.hpp>
-#include <Kokkos_Swap.hpp>
+
+#include <Kokkos_Core.hpp>
 #include <mc/traits.hpp>
 #include <stdexcept>
+
+namespace
+{
+  template <ModelType M> struct FillGapFunctor
+  {
+
+    FillGapFunctor(MC::ParticleStatus _status,
+                   M::SelfParticle _model,
+                   MC::ParticlePositions _position,
+                   std::size_t _to_remove,
+                   std::size_t _last_used_index)
+        : status(std::move(_status)), model(std::move(_model)), position(std::move(_position)),
+          offset("offset"), to_remove(_to_remove), last_used_index(_last_used_index)
+    {
+
+      Kokkos::deep_copy(offset, 0);
+    }
+
+    KOKKOS_INLINE_FUNCTION void operator()(const int i, std::size_t& update, const bool final)const 
+    {
+      const bool is_dead = (status(i) != MC::Status::Idle);
+
+      std::size_t scan_index = update;
+      update += is_dead ? 1 : 0;
+
+      if (final && is_dead && scan_index < to_remove)
+      {
+
+        const auto i_to_remove = i;
+        // Kokkos::printf("Removing index %d\r\n", i_to_remove);
+
+        auto idx_to_move = last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
+        while (status(idx_to_move) != MC::Status::Idle || idx_to_move == i_to_remove)
+        {
+          idx_to_move = last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
+        }
+
+        status(i_to_remove) = MC::Status::Idle;
+        Kokkos::atomic_exchange(&position(i_to_remove), position(idx_to_move));
+
+        for (std::size_t i_properties = 0; i_properties < M::n_var; ++i_properties)
+        {
+          model(i_to_remove, i_properties) = model(idx_to_move, i_properties);
+        }
+      }
+    }
+
+    MC::ParticleStatus status;
+    M::SelfParticle model;
+    MC::ParticlePositions position;
+    Kokkos::View<std::size_t, ComputeSpace> offset;
+    std::size_t to_remove;
+    std::size_t last_used_index;
+  };
+}; // namespace
 
 namespace MC
 {
@@ -38,7 +89,7 @@ namespace MC
     Model::SelfParticle model;
     MC::ParticlePositions position;
     MC::ParticleStatus status;
-
+    ParticleWeigths weights;
     /**
      * @brief Default copy and move constructors and assignment operators.
      */
@@ -62,6 +113,8 @@ namespace MC
       return n_used_elements;
     };
 
+    void get_contributions(std::size_t idx, const ContributionView& contributions) const;
+
     [[nodiscard]] KOKKOS_INLINE_FUNCTION bool handle_division(std::size_t idx1) const;
 
     void clean_dead(std::size_t to_remove);
@@ -70,34 +123,38 @@ namespace MC
 
     template <class Archive> void save(Archive& ar) const
     {
+      (void)ar;
       // ar(to_process); //
       // process_buffer =
       //     ParticleList<ComputeSpace, Model>::with_capacity(to_process.size() * buffer_ratio);
     }
 
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION double get_weight(std::size_t idx) const;
+
   private:
     Model::SelfParticle buffer_model;
     ParticlePositions buffer_position;
     Kokkos::View<uint64_t, Kokkos::SharedSpace> buffer_index;
-    void __allocate__(std::size_t new_size);
-    void __allocate_buffer__();
-
-    void __shrink__(std::size_t new_size, bool force);
-
-    static constexpr double default_allocation_factor = 2;
     double allocation_factor;
     std::size_t n_allocated_elements;
     uint64_t n_used_elements;
+
+    static constexpr double default_allocation_factor = 2;
+    void __allocate__(std::size_t new_size);
+    void __allocate_buffer__();
+    void __shrink__(std::size_t new_size, bool force);
   };
 
   template <ModelType Model>
   KOKKOS_INLINE_FUNCTION bool ParticlesContainer<Model>::handle_division(std::size_t idx1) const
   {
+    PROFILE_SECTION("ParticlesContainer::handle_division")
     if (Kokkos::atomic_load(&buffer_index()) < buffer_model.extent(0))
     {
       const auto idx2 = Kokkos::atomic_fetch_add(&buffer_index(), 1);
       Model::division(idx1, idx2, model, buffer_model);
       buffer_position(idx2) = position(idx1);
+
       return true;
     }
     return false;
@@ -105,8 +162,13 @@ namespace MC
 
   template <ModelType Model> void ParticlesContainer<Model>::merge_buffer()
   {
+    PROFILE_SECTION("ParticlesContainer::merge_buffer")
     const auto original_size = n_used_elements;
     const auto n_add_item = buffer_index();
+    if (n_add_item == 0)
+    {
+      return;
+    }
     __allocate__(original_size + n_add_item);
     // Merge position EZ
     Kokkos::parallel_for(
@@ -133,7 +195,7 @@ namespace MC
   template <ModelType Model>
   void ParticlesContainer<Model>::__allocate__(const std::size_t new_size)
   {
-
+    PROFILE_SECTION("ParticlesContainer::__allocate__")
     if (new_size > 0)
     {
       if (new_size >= n_allocated_elements)
@@ -144,12 +206,21 @@ namespace MC
         Kokkos::resize(position, n_allocated_elements);
         Kokkos::resize(model, n_allocated_elements);
         Kokkos::resize(status, n_allocated_elements);
+        if constexpr (ConstWeightModelType<Model>)
+        {
+          Kokkos::resize(weights, n_allocated_elements);
+        }
+        else
+        {
+          Kokkos::resize(weights, 1);
+        }
       }
     }
   }
   template <ModelType Model>
   void ParticlesContainer<Model>::__shrink__(std::size_t new_size, bool force)
   {
+    PROFILE_SECTION("ParticlesContainer::__shrink__")
     if (new_size > 0 && (new_size > n_used_elements || force))
     {
       const auto new_allocated_size =
@@ -158,11 +229,20 @@ namespace MC
       Kokkos::resize(position, n_allocated_elements);
       Kokkos::resize(model, n_allocated_elements);
       Kokkos::resize(status, n_allocated_elements);
+      if constexpr (ConstWeightModelType<Model>)
+      {
+        Kokkos::resize(weights, n_allocated_elements);
+      }
+      else
+      {
+        Kokkos::resize(weights, 1);
+      }
     }
   }
 
   template <ModelType Model> void ParticlesContainer<Model>::__allocate_buffer__()
   {
+    PROFILE_SECTION("ParticlesContainer::__allocate_buffer__")
     auto buffer_size = buffer_position.extent(0);
     if (static_cast<double>(buffer_size) / static_cast<double>(n_allocated_elements) < buffer_ratio)
     {
@@ -177,6 +257,7 @@ namespace MC
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer(std::size_t n_particle)
       : model("particle_model", 0), position("particle_position", 0), // Dont allocate now
+        weights("particle_weigth", 0),                                // Dont allocate now
         buffer_model("buffer_particle_model", 0),
         buffer_position("buffer_particle_position", 0), // Dont allocate now
         buffer_index("buffer_index"), allocation_factor(default_allocation_factor),
@@ -189,7 +270,7 @@ namespace MC
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer()
-      : model("particle_model"), position("particle_position"),
+      : model("particle_model"), position("particle_position"), weights("particle_weigth"),
         buffer_model("buffer_particle_model", 0),
         buffer_position("buffer_particle_position", 0), // Dont allocate now
         buffer_index("buffer_index"), allocation_factor(default_allocation_factor),
@@ -200,7 +281,7 @@ namespace MC
 
   template <ModelType M> void ParticlesContainer<M>::clean_dead(std::size_t to_remove)
   {
-    PROFILE_SECTION("remove_dead")
+    PROFILE_SECTION("ParticlesContainer::remove_dead")
     if (to_remove == 0)
     {
       return;
@@ -209,6 +290,7 @@ namespace MC
     if (to_remove == n_used_elements)
     {
       __shrink__(0, true); // TODO check this function if size=0
+      n_used_elements = 0;
     }
     else if (to_remove > n_used_elements)
     {
@@ -219,49 +301,48 @@ namespace MC
     {
 
       const auto new_used_item = n_used_elements - to_remove;
-      // using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
-      // using TeamMem = TeamPolicy::member_type;
+      // Kokkos::printf("Sorting \r\n");
+      // std::cout << "n_used_elements " << n_used_elements << std::endl;
+      // std::cout << "To remove " << to_remove << std::endl;
 
-      Kokkos::parallel_for(
-          n_used_elements,
-          KOKKOS_CLASS_LAMBDA(const int i) { Kokkos::printf("%lf\r\n", model(i,0)); });
-      Kokkos::printf("Sorting \r\n");
-      std::cout << "n_used_elements " << n_used_elements << std::endl;
-      std::cout << "To remove " << to_remove << std::endl;
-
-      Kokkos::View<std::size_t*, ComputeSpace> indices("dead_indices", to_remove);
-      Kokkos::View<std::size_t, ComputeSpace> dead("dead_counter");
-      Kokkos::deep_copy(dead,0);
-      Kokkos::parallel_for(
-          "find indices", n_used_elements, KOKKOS_CLASS_LAMBDA(const int i) {
-            if (status(i) != Status::Idle)
-            {
-              indices(Kokkos::atomic_fetch_add(&dead(), 1)) = i;
-            }
-          });
       const auto last_used_index = n_used_elements - 1;
-      Kokkos::View<std::size_t, ComputeSpace> offset("offset");
-      Kokkos::deep_copy(offset,0);
-      Kokkos::parallel_for(
-          "fill_gap", to_remove, KOKKOS_CLASS_LAMBDA(const int i) {
-            const auto i_to_remove = indices(i);
-            auto idx_to_move = last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
-            while (status(idx_to_move) != Status::Idle || idx_to_move==i_to_remove)
-            {
-              idx_to_move = last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
-            }
-            Kokkos::printf("i_to_remove %ld\r\n", i_to_remove);
-            status(i_to_remove) = Idle;
-            Kokkos::atomic_exchange(&position(i_to_remove), position(idx_to_move));
-            for (std::size_t i_properties = 0; i_properties < M::n_var; ++i_properties)
-            {
-              model(i_to_remove, i_properties) = model(idx_to_move, i_properties);
-            }
-          });
+      Kokkos::parallel_scan("find_and_fill_gap",
+                            Kokkos::RangePolicy<ComputeSpace>(0, n_used_elements),
+                            FillGapFunctor<M>(status, model, position, to_remove, last_used_index));
 
-      Kokkos::parallel_for(
-          new_used_item, KOKKOS_CLASS_LAMBDA(const int i) { Kokkos::printf("%lf\r\n", model(i,0)); });
+      // Kokkos::View<std::size_t, ComputeSpace> offset("offset");
+      // Kokkos::deep_copy(offset, 0);
+      // Kokkos::parallel_scan(
+      //     "find_and_fill_gap",
+      //     Kokkos::RangePolicy<ComputeSpace>(0, n_used_elements),
+      //     KOKKOS_CLASS_LAMBDA(const int i, std::size_t& update, const bool final) {
+      //       const bool is_dead = (status(i) != Status::Idle);
 
+      //       std::size_t scan_index = update;
+      //       update += is_dead ? 1 : 0;
+
+      //       if (final && is_dead && scan_index < to_remove)
+      //       {
+
+      //         const auto i_to_remove = i;
+      //         // Kokkos::printf("Removing index %d\r\n", i_to_remove);
+
+      //         auto idx_to_move = last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
+      //         while (status(idx_to_move) != Status::Idle || idx_to_move == i_to_remove)
+      //         {
+      //           idx_to_move = last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
+      //         }
+
+      //         status(i_to_remove) = Status::Idle;
+      //         Kokkos::atomic_exchange(&position(i_to_remove), position(idx_to_move));
+
+      //         for (std::size_t i_properties = 0; i_properties < M::n_var; ++i_properties)
+      //         {
+      //           model(i_to_remove, i_properties) = model(idx_to_move, i_properties);
+      //         }
+      //       }
+      //     });
+      Kokkos::fence();
       KOKKOS_ASSERT(this->position.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->model.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->status.extent(0) == n_allocated_elements);
@@ -269,78 +350,34 @@ namespace MC
 
       if (static_cast<double>(n_used_elements) / static_cast<double>(n_allocated_elements) <= 0.1)
       {
-        std::cout << "SHRINK" << std::endl;
+        // std::cout << "SHRINK" << std::endl;
         __shrink__(n_used_elements * 2, false);
       }
     };
   }
 
-  //       PROFILE_SECTION("remove_dead")
-  //       if(count_dead==0){return;}
+  template <ModelType M>
+  void ParticlesContainer<M>::get_contributions(std::size_t idx,
+                                                const ContributionView& contributions) const
+  {
+    static_assert(ConstWeightModelType<M>, "ModelType: Const apply_weight()");
+    const double weight = get_weight(idx);
+    M::contribution(idx, position(idx), weight, model, contributions);
+  }
 
-  //       auto pred = KOKKOS_LAMBDA(const MC::Particle<Model> &p)
-  //       {
-  //         return p.properties.status == MC::CellStatus::DEAD || p.properties.status ==
-  //         MC::CellStatus::OUT;
-  //       };
-
-  //       uint64_t new_used_item = this->size() - count_dead;
-  //       remove_if<Kokkos::DefaultExecutionSpace>(this->size(), count_dead, this->_owned_data,
-  //       pred);
-
-  //       // auto res = Kokkos::Experimental::remove_if(
-  //       //     "dead_removing", Kokkos::DefaultExecutionSpace(), beg, end, pred);
-
-  //       // const auto stepsA = Kokkos::Experimental::distance(
-  //       //     Kokkos::Experimental::begin(this->_owned_data), res);
-
-  //       KOKKOS_ASSERT(this->data().extent(0) == this->capacity());
-  //       this->set_n_used_elements(new_used_item);
-  //       KOKKOS_ASSERT(this->size() <= this->capacity());
-
-  // template <typename Space, typename ViewType, class UnaryPredicateType>
-  // void remove_if(uint64_t i_max_used, uint64_t remove_count, ViewType view, UnaryPredicateType
-  // pred)
-  // {
-
-  //   const size_t view_size = view.size();
-  //   if (remove_count >= view_size)
-  //   {
-  //     return;
-  //   }
-
-  //   Space space;
-
-  //   // Initialisation, make tmp view as keeping storage
-  //   ViewType tmp_view(Kokkos::view_alloc(Kokkos::WithoutInitializing, space, "remove_tmp_view"),
-  //                     view_size);
-
-  //   uint64_t scan_count = 0;
-  //   Kokkos::parallel_scan(
-  //       "remove_if_scan",
-  //       Kokkos::RangePolicy<Space>(space, 0, i_max_used),
-  //       KOKKOS_LAMBDA(const int& i, uint64_t& update, const bool is_final) {
-  //         const auto& val = view[i];
-  //         if (!pred(val))
-  //         {
-  //           if (is_final)
-  //           {
-  //             tmp_view[update] = std::move(val);
-  //           }
-  //           update++;
-  //         }
-  //       },
-  //       scan_count);
-
-  //   Kokkos::fence("scan:remove_if");
-  //   KOKKOS_ASSERT(scan_count == (i_max_used - remove_count));
-  //   Kokkos::parallel_for(
-  //       "remove_if_parfor",
-  //       Kokkos::RangePolicy<Space>(space, 0, i_max_used),
-  //       KOKKOS_LAMBDA(const int i) { view[i] = std::move(tmp_view[i]); });
-  //   Kokkos::fence("parfor:remove_if");
-  //   // view = tmp_view;
-  // }
+  template <ModelType M>
+  [[nodiscard]] KOKKOS_INLINE_FUNCTION double
+  ParticlesContainer<M>::get_weight(std::size_t idx) const
+  {
+    if constexpr (ConstWeightModelType<M>)
+    {
+      return weights(0);
+    }
+    else
+    {
+      return weights(idx);
+    }
+  }
 
 } // namespace MC
 
