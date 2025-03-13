@@ -28,7 +28,8 @@ namespace Models
     {
       (void)c;
       arr(idx, particle_var::mass) += d_t * 1;
-      return (idx % 3 == 0) ? MC::Status::Division : MC::Status::Idle;
+      // return (idx % 3 == 0) ? MC::Status::Division : MC::Status::Idle;
+      return MC::Status::Idle;
     }
 
     KOKKOS_INLINE_FUNCTION static void division(std::size_t idx,

@@ -1,5 +1,7 @@
 #include "mc/prng/prng.hpp"
+#include "mc/traits.hpp"
 #include <Kokkos_Core.hpp>
+#include <Kokkos_ScatterView.hpp>
 #include <common/kokkos_vector.hpp>
 #include <cstdint>
 #include <cstring>
@@ -18,18 +20,20 @@ namespace
    * @tparam ListType The type of the particle list.
    * @tparam ScatterType The type of the scatter view for atomic updates.
    */
-  template <typename ListType, typename ScatterType> struct NcellFunctor
+  template <typename ScatterType> struct NcellFunctor
   {
-    ScatterType n_cells; ///< Scatter view for counting particles in containers.
-    ListType list;       ///< List of particles.
+    ScatterType n_cells;             ///< Scatter view for counting particles in containers.
+    MC::ParticlePositions positions; ///< List of particles.
+    MC::ParticleStatus status;       ///< List of particles.
 
     /**
      * @brief Constructor for NcellFunctor.
      * @param _list The particle list.
      * @param _n_cells The scatter view for counting.
      */
-    KOKKOS_FUNCTION NcellFunctor(ListType _list, ScatterType _n_cells)
-        : n_cells(std::move(_n_cells)), list(std::move(_list))
+    KOKKOS_FUNCTION
+    NcellFunctor(MC::ParticlePositions _list, MC::ParticleStatus _status, ScatterType _n_cells)
+        : n_cells(std::move(_n_cells)), positions(std::move(_list)), status(std::move(_status))
     {
     }
 
@@ -40,7 +44,11 @@ namespace
     KOKKOS_FUNCTION void operator()(const int i_particle) const
     {
       auto access_ = n_cells.access();
-      access_(list._owned_data(i_particle).properties.current_container) += 1;
+      // access_(list._owned_data(i_particle).properties.current_container) += 1;
+      if (status(i_particle) == MC::Status::Idle)
+      {
+        access_(positions(i_particle)) += 1;
+      }
     }
   };
 
@@ -76,27 +84,33 @@ namespace
     }
   };
 
-  template <typename ListType, typename CurrentModel> struct InitFunctor
+  template <ModelType Model> struct InitFunctor
   {
-    explicit InitFunctor(ListType _list, uint64_t min, uint64_t max,MC::KPRNG kprng)
-        : list(std::move(_list)), rng(std::move(kprng)),min_c(min), max_c(max) {
+    explicit InitFunctor(MC::ParticlesContainer<Model> _list,
+                         uint64_t min,
+                         uint64_t max,
+                         MC::KPRNG kprng)
+        : particles(std::move(_list)), rng(std::move(kprng)), min_c(min), max_c(max) {
 
           };
 
     KOKKOS_INLINE_FUNCTION void operator()(const int i, double& local_mass) const
     {
-      // auto particle_rng = list.rng_instance;
-      auto p = MC::Particle<CurrentModel>(1.);
-      p.properties.id = i;
-      const uint64_t location = rng.uniform_u(min_c, max_c);
-      p.properties.current_container = location;
-      p.init(rng);
-      const double mass_i = p.data.mass();
-      local_mass += mass_i;
-      list.set(i, std::move(p));
+      // // auto particle_rng = list.rng_instance;
+      // auto p = MC::Particle<CurrentModel>(1.);
+      // p.properties.id = i;
+      // const uint64_t location = rng.uniform_u(min_c, max_c);
+      particles.position(i) = rng.uniform_u(min_c, max_c);
+      Model::init(i, particles.model);
+      // p.properties.current_container = location;
+      // p.init(rng);
+      // const double mass_i = p.data.mass();
+      // local_mass += mass_i;
+      // list.set(i, std::move(p));
+      local_mass += 0;
     }
 
-    ListType list;
+    MC::ParticlesContainer<Model> particles;
     MC::KPRNG rng;
     uint64_t min_c;
     uint64_t max_c;
@@ -108,7 +122,7 @@ namespace MC
 {
   [[nodiscard]] uint64_t MonteCarloUnit::n_particle() const
   {
-    return std::visit([](auto&& c) -> std::size_t { return c.n_particle(); }, container);
+    return std::visit([](auto&& c) -> std::size_t { return c.n_particles(); }, container);
   }
 
   [[nodiscard]] std::vector<uint64_t> MonteCarloUnit::getRepartition() const
@@ -125,8 +139,10 @@ namespace MC
     std::visit(
         [&sn_cells](auto&& _container)
         {
-          auto& list = _container.get_compute();
-          Kokkos::parallel_for("get_repartition", list.size(), NcellFunctor(list, sn_cells));
+          // auto& list = _container.get_compute();
+          Kokkos::parallel_for("get_repartition",
+                               _container.n_particles(),
+                               NcellFunctor(_container.position, _container.status,sn_cells));
         },
         container);
     Kokkos::Experimental::contribute(n_cells, sn_cells);
@@ -140,37 +156,35 @@ namespace MC
   void post_init_weight(std::unique_ptr<MonteCarloUnit>& unit, double x0, double total_mass)
   {
 
-    auto functor = [total_mass, x0, &unit](auto& container)
-    {
-      auto& list = container.get_compute();
-      const std::size_t n_p = list.size();
-      const double new_weight = (x0 * unit->domain.getTotalVolume()) / (total_mass);
-      KOKKOS_ASSERT(new_weight > 0);
-      Kokkos::View<double, ComputeSpace> view_new_weight("view_new_weight");
-      Kokkos::deep_copy(view_new_weight, new_weight);
-      Kokkos::parallel_for("mc_init_apply",
-                           Kokkos::RangePolicy<ComputeSpace>(0, n_p),
-                           PostInitFunctor(list, new_weight));
-      unit->init_weight = new_weight;
-    };
+    // auto functor = [total_mass, x0, &unit](auto& container)
+    // {
+    //   // TODO
 
-    std::visit(functor, unit->container);
+    //   // const std::size_t n_p = container.n_particles();
+    //   // const double new_weight = (x0 * unit->domain.getTotalVolume()) / (total_mass);
+    //   // KOKKOS_ASSERT(new_weight > 0);
+    //   // Kokkos::View<double, ComputeSpace> view_new_weight("view_new_weight");
+    //   // Kokkos::deep_copy(view_new_weight, new_weight);
+    //   // Kokkos::parallel_for("mc_init_apply",
+    //   //                      Kokkos::RangePolicy<ComputeSpace>(0, n_p),
+    //   //                      PostInitFunctor(container, new_weight));
+    //   // unit->init_weight = new_weight;
+    // };
+
+    // std::visit(functor, unit->container);
   }
 
   void impl_init(double& total_mass,
                  uint64_t n_particles,
                  MonteCarloUnit& unit,
-                 AutoGenerated::ContainerVariant&& container)
+                 ContainerVariant&& container)
   {
     constexpr bool uniform_init = true;
-    auto visitor = [&](auto&& c)
+    auto visitor = [&](auto&& container)
     {
-      auto& list = c.get_compute();
-
       auto rng = unit.rng;
-      auto particle_rng = list.rng_instance;
 
-      list.set_allocation_factor(AutoGenerated::default_particle_container_allocation_factor);
+      // list.set_allocation_factor(AutoGenerated::default_particle_container_allocation_factor);
       const auto n_compartments = unit.domain.getNumberCompartments();
 
       uint64_t min_c = 0;
@@ -184,13 +198,13 @@ namespace MC
 
       /*
        * The mass of each cell in the reactor can be calculated after the model initialization.
-       * To ensure that each cell has a unique weight based on the total mass, the following formula
-       * is used: weight = XV / m_tot Where: XV  - represents a certain property or value related to
-       * the cell (e.g., volume, particle count, etc.). m_tot - the total mass of the cell or
-       * reactor, which needs to be determined first.
+       * To ensure that each cell has a unique weight based on the total mass, the following
+       * formula is used: weight = XV / m_tot Where: XV  - represents a certain property or value
+       * related to the cell (e.g., volume, particle count, etc.). m_tot - the total mass of the
+       * cell or reactor, which needs to be determined first.
        *
-       * In order to compute the weight correctly, the initialization process needs to be split into
-       * two phases:
+       * In order to compute the weight correctly, the initialization process needs to be split
+       * into two phases:
        * 1. The first phase is to calculate the total mass of the cell (m_tot).
        * 2. The second phase is to apply the newly calculated weight to the cell using the formula
        * above.
@@ -198,28 +212,12 @@ namespace MC
        * This split ensures that the mass is determined before the weight, as the weight is
        * dependent on the total mass.
        */
-      using CurrentModel = typename std::remove_reference<decltype(c)>::type::UsedModel;
-      using ListType = typename std::remove_reference<decltype(list)>::type;
-      // Kokkos::parallel_reduce(
-      //     "mc_init_first",
-      //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particles),
-      //     KOKKOS_LAMBDA(const int i, double& local_mass) {
-      //       auto p = Particle<CurrentModel>(1.);
-      //       p.properties.id = i;
-      //       const uint64_t location = rng.uniform_u(min_c, max_c);
-      //       p.properties.current_container = location;
-      //       p.init(particle_rng);
-      //       const double mass_i = p.data.mass();
-      //       local_mass += mass_i;
-      //       list.set(i, std::move(p));
-      //     },
-      //     total_mass);
+      using CurrentModel = typename std::remove_reference<decltype(container)>::type::UsedModel;
 
-       Kokkos::parallel_reduce(
-          "mc_init_first",
-          Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particles),
-          InitFunctor<ListType, CurrentModel>(list,min_c,max_c,rng),
-          total_mass);
+      Kokkos::parallel_reduce("mc_init_first",
+                              Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particles),
+                              InitFunctor<CurrentModel>(container, min_c, max_c, rng),
+                              total_mass);
       Kokkos::fence();
     };
 

@@ -1,6 +1,5 @@
 #include <Kokkos_Core.hpp>
 #include <cma_utils/iteration_state.hpp>
-#include <common/kokkos_vector.hpp>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
@@ -8,7 +7,6 @@
 #include <eigen_kokkos.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
-#include <mc/particles/mcparticles.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/unit.hpp>
 #include <memory>
@@ -170,9 +168,9 @@ namespace Simulation
 
     const auto& fv = scalar_init.liquid_f_init.value();
 
-    for (size_t i_row = 0; i_row < cliq.rows(); ++i_row)
+    for (decltype(cliq.rows()) i_row = 0; i_row < cliq.rows(); ++i_row)
     {
-      for (size_t i_col = 0; i_col < cliq.cols(); ++i_col)
+      for (decltype(cliq.cols()) i_col = 0; i_col < cliq.cols(); ++i_col)
       {
         cliq(i_row, i_col) = fv(i_row, i_col);
         if (is_two_phase_flow)

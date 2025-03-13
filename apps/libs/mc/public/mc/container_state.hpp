@@ -6,6 +6,13 @@
 #include <cstdint>
 #include <mc/particles/particle_model.hpp>
 
+using LocalConcentrationView = Kokkos::Subview<Kokkos::View<const double**>,
+                                               int,
+                                               decltype(Kokkos::ALL)>; ///< Concentration inside the
+                                                                       ///< current container that
+                                                                       ///< particle can access //TODO REMOVE 
+
+
 namespace MC
 {
   /**

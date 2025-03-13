@@ -181,8 +181,6 @@ if cmake.found()
       highfive_found = true
       add_project_arguments('-DUSE_HIGHFIVE', language: 'cpp')
       highfive_dependency = [highfive_proj.dependency('HighFive'),hdf5,highfive_proj.dependency('HighFiveInclude')]
-
-      
     endif
   endif
   if use_cereal

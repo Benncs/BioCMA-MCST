@@ -98,11 +98,11 @@ namespace
   {
 
     {
-      auto dump = get_particle_properties_device(simulation.mc_unit);
+    //   auto dump = get_particle_properties_device(simulation.mc_unit);
 
-      std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
-      partial_exporter.write_particle_data(
-          dump.vnames, dump.particle_values, dump.spatial_values, ds_name);
+    //   std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
+    //   partial_exporter.write_particle_data(
+    //       dump.vnames, dump.particle_values, dump.spatial_values, ds_name);
     }
   }
 
@@ -113,55 +113,19 @@ namespace
     // BonceBuffer properties;
     const size_t n_compartment = mc_unit->domain.getNumberCompartments();
 
-    // auto visitor = [&properties, n_compartment](auto& container) mutable
-    // {
-    //   auto list = container.get_compute();
-    //   const std::size_t n_p = list.size(); // USE list size not Kokkos View size. ParticleList
-    //                                        // allocates more particles than needed
+   
+    // return std::visit(
+    //     [n_compartment](auto& container)
+    //     {
+    //       auto list = container.get_compute();
+    //       const std::size_t n_p = list.size(); // USE list size not Kokkos View size. ParticleList
+    //                                            // allocates more particles than needed
 
-    //   auto view = list._owned_data;
-    //   using ListType = decltype(view);
-    //   using ViewParticleType = ListType::value_type;
-    //   using Model = ViewParticleType::Model;
-    //   properties.vnames = Model::names();
-    //   properties.vnames.emplace_back("hydraulic_time");
-    //   properties.vnames.emplace_back("age");
-    //   constexpr std::size_t n_properties = Model::get_number() + 2; //+2 for hydraulic time and
-    //   age
-    //   // TODO: Find out if we cna use compile time size or not
-    //   // For the moment double** is used for simplicyt with particle model but algortihm remains
-    //   // exactly the same if we know the size of view.
-    //   // Kokkos::View<double* [n_properties], ComputeSpace> particle_values(
-    //   //     "device_property_values", names.size(), n_p);
+    //       return PostProcessing::get_properties(n_p, list._owned_data, n_compartment);
+    //     },
+    //     mc_unit->container);
 
-    //   ParticlePropertyViewType<ComputeSpace> particle_values("property_values", n_properties,
-    //   n_p); ParticlePropertyViewType<ComputeSpace> spatial_values(
-    //       "property_spatial", n_properties, n_compartment);
-
-    //   inner<ListType, Kokkos::DefaultExecutionSpace>(n_p, view, particle_values, spatial_values);
-
-    //   properties.particle_values =
-    //       Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), particle_values);
-    //   properties.spatial_values =
-    //       Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), spatial_values);
-    // };
-
-    // auto properties=std::visit(func, mc_unit->container);
-
-    return std::visit(
-        [n_compartment](auto& container)
-        {
-          auto list = container.get_compute();
-          const std::size_t n_p = list.size(); // USE list size not Kokkos View size. ParticleList
-                                               // allocates more particles than needed
-
-          return PostProcessing::get_properties(n_p, list._owned_data, n_compartment);
-        },
-        mc_unit->container);
-
-    // return std::visit([n_compartment](auto& container)
-    //                   { PostProcessing::get_properties(container.get_compute(), n_compartment) },
-    //                   mc_unit->container);
+    
   }
 
 } // namespace

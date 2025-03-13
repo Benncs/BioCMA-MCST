@@ -161,10 +161,9 @@ void host_process(const ExecInfo& exec,
 
   auto clean_list = [&simulation](auto&& container)
   {
-    auto& list = container.get_compute();
     if (simulation.counter() != 0)
     {
-      list.remove_dead(simulation.counter());
+      container.clean_dead(simulation.counter());
     }
   };
 

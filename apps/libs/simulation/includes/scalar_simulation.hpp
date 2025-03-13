@@ -17,6 +17,7 @@
 #include <span>
 #include <vector>
 #include <eigen_kokkos.hpp>
+#include <mc/traits.hpp>
 
 namespace Simulation
 {

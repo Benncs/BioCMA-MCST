@@ -25,7 +25,7 @@ COMPILER_NAME = "cuda"  # "gcc"
 def get_executable(type: str, mpi: bool = True):
     appname = "biocma_mcst_cli_app" if mpi else "biocma_mcst_cli_app_shared"
    # return f"{ROOT}/builddir/{type}_{COMPILER_NAME}/apps/cli/{appname}"
-    return f"{ROOT}/builddir/host/apps/cli/{appname}"
+    return f"{ROOT}/builddir/apps/cli/{appname}"
 
 
 def mk_parser():
@@ -114,7 +114,7 @@ def main():
         #     input("confirm force?")
         #     command+= " -force 1"
     if cli_args.dry_run:
-        arg = " --args " + command
+        arg = command
         print(arg)
         return
     exec(command, cli_args.n_threads, do_kokkos_measure=True)
