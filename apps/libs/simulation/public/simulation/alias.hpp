@@ -1,7 +1,7 @@
 #ifndef __SIMULATION_ALIAS_HPP__
 #define __SIMULATION_ALIAS_HPP__
 #include <Kokkos_Core.hpp>
-#include <common/kokkos_vector.hpp>
+
 #include <cstddef>
 namespace Simulation
 {

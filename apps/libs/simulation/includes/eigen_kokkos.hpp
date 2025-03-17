@@ -6,7 +6,7 @@
 #include <Eigen/Sparse>
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
-#include <common/kokkos_vector.hpp>
+
 
 constexpr auto DataLayoutEigen = Eigen::ColMajor;
 constexpr auto CompileMatrixSizeEigen = -1;

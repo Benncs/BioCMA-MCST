@@ -3,7 +3,7 @@
 
 #include "mc/prng/prng.hpp"
 #include <Kokkos_Core.hpp>
-#include <common/kokkos_vector.hpp>
+
 #include <mc/particles/particle_model.hpp>
 
 #include <models/utils.hpp>

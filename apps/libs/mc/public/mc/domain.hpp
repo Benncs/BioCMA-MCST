@@ -5,7 +5,7 @@
 #include <Kokkos_StdAlgorithms.hpp>
 #include <cassert>
 #include <common/common.hpp>
-#include <common/kokkos_vector.hpp>
+
 #include <cstddef>
 #include <cstdint>
 #include <mc/container_state.hpp>

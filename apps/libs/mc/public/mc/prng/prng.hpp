@@ -2,7 +2,7 @@
 #define __MC_PRNG_HPP__
 
 #include <Kokkos_Random.hpp>
-#include <common/kokkos_vector.hpp>
+#include <common/common.hpp>
 #include <common/traits.hpp>
 #include <cstdint>
 

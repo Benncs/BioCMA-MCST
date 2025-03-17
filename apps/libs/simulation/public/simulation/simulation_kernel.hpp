@@ -2,7 +2,7 @@
 #define __SIMULATION_MC_KERNEL_HPP
 #include "Kokkos_Assert.hpp"
 #include "Kokkos_Printf.hpp"
-#include "mc/particles/particles_container.hpp"
+#include <mc/particles_container.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
 #include <biocma_cst_config.hpp>

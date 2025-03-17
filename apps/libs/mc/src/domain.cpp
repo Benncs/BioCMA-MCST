@@ -1,7 +1,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <cassert>
-#include <common/kokkos_vector.hpp>
+
 #include <cstddef>
 #include <mc/container_state.hpp>
 #include <mc/domain.hpp>

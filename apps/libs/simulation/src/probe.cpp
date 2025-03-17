@@ -1,7 +1,7 @@
 // #include <Kokkos_Atomic.hpp>
 // #include <Kokkos_Core.hpp>
 // #include <Kokkos_StdAlgorithms.hpp>
-// #include <common/kokkos_vector.hpp>
+// 
 // #include <cstddef>
 // #include <cstdint>
 // #include <optional>

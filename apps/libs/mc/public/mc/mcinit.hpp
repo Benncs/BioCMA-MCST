@@ -6,7 +6,7 @@
 #include <common/execinfo.hpp>
 #include <cstdint>
 #include <mc/domain.hpp>
-#include <mc/particles/particles_container.hpp>
+#include <mc/particles_container.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/unit.hpp>
 #include <memory>

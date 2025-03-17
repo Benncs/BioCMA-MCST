@@ -3,7 +3,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/execinfo.hpp>
-#include <common/kokkos_vector.hpp>
+
 #include <core/post_process.hpp>
 #include <dataexporter/data_exporter.hpp>
 #include <impl/Kokkos_HostThreadTeam.hpp>

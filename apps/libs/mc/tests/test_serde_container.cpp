@@ -1,5 +1,5 @@
 #include "Kokkos_Macros.hpp"
-#include "mc/particles/particles_container.hpp"
+#include <mc/particles_container.hpp>
 #include "serdes_class.hpp"
 #include <Kokkos_Core.hpp>
 #include <cereal/archives/binary.hpp>

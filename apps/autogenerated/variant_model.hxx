@@ -1,8 +1,7 @@
 #ifndef __AUTOGENRATED_VARIANT_MODEL_HPP__
 #define __AUTOGENRATED_VARIANT_MODEL_HPP__
 
-#include <mc/particles/particle_model.hpp>
-#include <mc/particles/particles_container.hpp>
+#include <mc/particles_container.hpp>
 #include <variant>
 
 #ifdef USE_PYTHON_MODULE

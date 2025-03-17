@@ -4,7 +4,6 @@
 #include <Kokkos_Core.hpp>
 #include <common/execinfo.hpp>
 #include <cstdint>
-#include <mc/particles/particle_model.hpp>
 
 using LocalConcentrationView = Kokkos::Subview<Kokkos::View<const double**>,
                                                int,

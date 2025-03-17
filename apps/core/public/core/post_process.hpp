@@ -1,11 +1,9 @@
 #ifndef __CORE_POST_PROCESS_PUBLIC_HPP__
 #define __CORE_POST_PROCESS_PUBLIC_HPP__
-#include "mc/particles/particles_container.hpp"
 #include "mc/traits.hpp"
 #include <Kokkos_Core.hpp>
-#include <common/kokkos_vector.hpp>
 #include <cstdint>
-#include <mc/particles/particle_model.hpp>
+#include <mc/particles_container.hpp>
 
 template <typename MemorySpace>
 using ParticlePropertyViewType = Kokkos::View<double**, Kokkos::LayoutRight, MemorySpace>;
@@ -39,8 +37,8 @@ namespace PostProcessing
 
           for (std::size_t i = 0; i < Model::n_var; ++i)
           {
-            access(i,position(i_particle)) += model(i_particle, i);
-            particle_values( i,i_particle) = model(i_particle, i);
+            access(i, position(i_particle)) += model(i_particle, i);
+            particle_values(i, i_particle) = model(i_particle, i);
           }
         });
     Kokkos::fence();
@@ -51,19 +49,19 @@ namespace PostProcessing
   std::optional<PostProcessing::BonceBuffer>
   get_properties(const MC::ParticlesContainer<M>& container, const std::size_t n_compartment)
   {
-    if constexpr (HasExportProperties<M::n_var,M>)
+    if constexpr (HasExportProperties<M::n_var, M>)
     {
-      
+
       BonceBuffer properties;
       const std::size_t n_p =
           container.n_particles(); // USE list size not Kokkos View size. ParticleList
                                    // allocates more particles than needed
       auto ar = M::names();
-      properties.vnames = std::vector<std::string>(ar.begin(),ar.end());
+      properties.vnames = std::vector<std::string>(ar.begin(), ar.end());
       ParticlePropertyViewType<ComputeSpace> spatial_values(
           "property_spatial", M::n_var, n_compartment);
       ParticlePropertyViewType<ComputeSpace> particle_values("property_values", M::n_var, n_p);
-  
+
       inner<M, Kokkos::DefaultExecutionSpace>(
           n_p, container.position, container.model, particle_values, spatial_values);
 

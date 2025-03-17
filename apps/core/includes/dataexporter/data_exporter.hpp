@@ -2,7 +2,7 @@
 #define __CORE_DATA_EXPORTER_HPP__
 
 #include <common/execinfo.hpp>
-#include <common/kokkos_vector.hpp>
+
 #include <cstddef>
 #include <cstdint>
 #include <memory>

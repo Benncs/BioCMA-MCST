@@ -4,7 +4,7 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#include <common/kokkos_vector.hpp>
+#include <common/common.hpp>
 #include <vector>
 
 template <typename ExecSpace>

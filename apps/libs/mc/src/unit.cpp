@@ -2,7 +2,7 @@
 #include "mc/traits.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
-#include <common/kokkos_vector.hpp>
+
 #include <cstdint>
 #include <cstring>
 #include <mc/unit.hpp>

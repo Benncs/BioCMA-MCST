@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <cma_utils/iteration_state.hpp>
 #include <common/common.hpp>
-#include <common/kokkos_vector.hpp>
+
 #include <transitionner/proxy_cache.hpp>
 #include <transitionner/transitionner.hpp>
 #include <utility>

@@ -1,7 +1,6 @@
 #ifndef __SIMULATION_MOVE_KERNEL_HPP__
 #define __SIMULATION_MOVE_KERNEL_HPP__
 
-#include "mc/particles/data_holder.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
 #include <biocma_cst_config.hpp>
