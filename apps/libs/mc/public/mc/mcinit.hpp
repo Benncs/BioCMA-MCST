@@ -1,10 +1,11 @@
 #ifndef __MC_INIT_HPP__
 #define __MC_INIT_HPP__
 
-#include "mc/domain.hpp"
+#include "mc/traits.hpp"
 #include <cassert>
 #include <common/execinfo.hpp>
 #include <cstdint>
+#include <mc/domain.hpp>
 #include <mc/particles/particles_container.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/unit.hpp>
@@ -38,6 +39,10 @@ namespace MC
                                        const NeighborsView<HostSpace>& neighbors,
                                        double& total_mass)
   {
+    if constexpr (ConstWeightModelType<Model>)
+    {
+      Kokkos::printf("Const Weights\r\n");
+    }
     auto unit = std::make_unique<MonteCarloUnit>();
     unit->domain = ReactorDomain(volumes, neighbors);
     auto container = ParticlesContainer<Model>(n_particles);

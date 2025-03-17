@@ -8,6 +8,7 @@
 #include <mc/prng/prng.hpp>
 // #include <variant_model.hpp>
 #include <models/models.hpp>
+#include <models/two_meta.hpp>
 #include <variant>
 
 struct TagDetector
@@ -22,8 +23,9 @@ struct TagDetector
   {
   }
 };
-using ContainerVariant =
-    std::variant<MC::ParticlesContainer<Models::SimpleModel>, MC::ParticlesContainer<DefaultModel>>;
+using ContainerVariant = std::variant<MC::ParticlesContainer<Models::SimpleModel>,
+                                      MC::ParticlesContainer<DefaultModel>,
+                                      MC::ParticlesContainer<Models::TwoMetaModel>>;
 
 /**
  * @namespace MC

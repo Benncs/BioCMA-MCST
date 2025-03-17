@@ -1,14 +1,14 @@
 #ifndef __MODELS_TRAITS_HPP__
 #define __MODELS_TRAITS_HPP__
 
-#include <common/traits.hpp>
-#include <mc/prng/prng.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_Random.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/common.hpp>
+#include <common/traits.hpp>
 #include <concepts>
 #include <cstdint>
+#include <mc/prng/prng.hpp>
 #include <type_traits>
 
 #define CHECK_MODEL(name)                                                                          \
@@ -17,9 +17,30 @@
 
 #define MODEL_CONSTANT static constexpr
 
+// #define INDEX_FROM_ENUM(e) static_cast<std::size_t>((e))
+
+// #define GET_PROPERTY_FROM(__index__,__array_name__,enum_name)
+// (__array_name__)((__index__),INDEX_FROM_ENUM((enum_name)))
+
+// #define GET_PROPERTY(enum_name) GET_PROPERTY_FROM(idx,arr,INDEX_FROM_ENUM((enum_name)))
+
+// Utility to get the index from an enum
+#define INDEX_FROM_ENUM(e) static_cast<std::size_t>((e))
+
+// Bounds checking macro using static_extent
+#define CHECK_BOUND(__index__, __array_name__)                                                     \
+  static_assert(INDEX_FROM_ENUM(__index__) < __array_name__.static_extent(1),                      \
+                "Index out of model bound");
+
+// Main macro that uses bounds checking and array access
+#define GET_PROPERTY_FROM(__index__, __array_name__, enum_name)                                    \
+  __array_name__(__index__, INDEX_FROM_ENUM(enum_name))
+
+#define GET_PROPERTY(enum_name) GET_PROPERTY_FROM(idx, arr, enum_name)
+
 namespace MC
 {
-  enum Status : int
+  enum class Status : int
   {
     Idle = 0,
     Division,
@@ -49,10 +70,10 @@ namespace MC
                                                ComputeSpace,
                                                Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
   using LocalConcentration = Kokkos::Subview<KernelConcentrationType, int, decltype(Kokkos::ALL)>;
-  
-  //NOLINTBEGIN(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-  template <uint64_t Nd, FloatingPointType F> using ParticlesModel = Kokkos::View<F* [Nd]>; 
-  //NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+
+  // NOLINTBEGIN(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+  template <uint64_t Nd, FloatingPointType F> using ParticlesModel = Kokkos::View<F* [Nd]>;
+  // NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
 }; // namespace MC
 
@@ -72,10 +93,21 @@ concept HasNumberExportProperties = requires {
   // { std::bool_constant<(T::get_number(), true)>() } -> std::same_as<std::true_type>;
 };
 
-template <typename T>
+template <std::size_t n, typename T>
 concept HasExportProperties = requires(const T obj) {
-  { T::names() } -> std::convertible_to<std::vector<std::string>>;
+  { T::names() } -> std::convertible_to<std::array<std::string_view, n>>;
 };
+
+template <std::size_t N1, std::size_t N2>
+constexpr std::array<std::string_view, N1 + N2>
+concat_arrays(const std::array<std::string_view, N1>& arr1,
+              const std::array<std::string_view, N2>& arr2)
+{
+  std::array<std::string_view, N1 + N2> result;
+  std::copy(arr1.begin(), arr1.end(), result.begin());
+  std::copy(arr2.begin(), arr2.end(), result.begin() + N1);
+  return result;
+}
 
 template <typename T>
 concept ModelType = requires(T model,
@@ -95,11 +127,11 @@ concept ModelType = requires(T model,
 
   { T::mass(idx, arr) } -> std::same_as<double>;
 
-  { T::update(d_t, idx, arr, c) } -> std::convertible_to<MC::Status>;
+  { T::update(random_pool, d_t, idx, arr, c) } -> std::convertible_to<MC::Status>;
 
   { T::contribution(idx, position, weight, arr, contributions) } -> std::same_as<void>;
 
-  { T::division(idx, idx2, arr, buffer_arr) } -> std::same_as<void>;
+  { T::division(random_pool, idx, idx2, arr, buffer_arr) } -> std::same_as<void>;
 
   typename T::FloatType;
   typename T::SelfParticle;
@@ -148,19 +180,23 @@ struct DefaultModel
     return 1.;
   }
 
-  KOKKOS_INLINE_FUNCTION static MC::Status update([[maybe_unused]] FloatType d_t,
-                                                  [[maybe_unused]] std::size_t idx,
-                                                  [[maybe_unused]] const SelfParticle& arr,
-                                                  [[maybe_unused]] const MC::LocalConcentration& c)
+  KOKKOS_INLINE_FUNCTION static MC::Status
+  update([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+         [[maybe_unused]] FloatType d_t,
+         [[maybe_unused]] std::size_t idx,
+         [[maybe_unused]] const SelfParticle& arr,
+         [[maybe_unused]] const MC::LocalConcentration& c)
   {
 
     return MC::Status::Idle;
   }
 
-  KOKKOS_INLINE_FUNCTION static void division([[maybe_unused]] std::size_t idx,
-                                              [[maybe_unused]] std::size_t idx2,
-                                              [[maybe_unused]] const SelfParticle& arr,
-                                              [[maybe_unused]] const SelfParticle& buffer_arr)
+  KOKKOS_INLINE_FUNCTION static void
+  division([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+           [[maybe_unused]] std::size_t idx,
+           [[maybe_unused]] std::size_t idx2,
+           [[maybe_unused]] const SelfParticle& arr,
+           [[maybe_unused]] const SelfParticle& buffer_arr)
   {
   }
 

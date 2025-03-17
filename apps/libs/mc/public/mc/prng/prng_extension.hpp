@@ -1,6 +1,7 @@
 #ifndef __PRNG_EXTENSION_HPP__
 #define __PRNG_EXTENSION_HPP__
 
+#include "Kokkos_Macros.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_MathematicalConstants.hpp>
 #include <Kokkos_Random.hpp>
@@ -255,7 +256,7 @@ namespace MC::Distributions
     F lower; // Standard deviation
     F upper; // Standard deviation
 
-    constexpr TruncatedNormal(F m, F s, F l, F u) : mu(m), sigma(s), lower(l), upper(u)
+    KOKKOS_INLINE_FUNCTION constexpr TruncatedNormal(F m, F s, F l, F u) : mu(m), sigma(s), lower(l), upper(u)
     {
       X_ASSERT(mu > lower);
       X_ASSERT(mu < upper);

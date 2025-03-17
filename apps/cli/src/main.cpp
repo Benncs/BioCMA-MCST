@@ -108,7 +108,7 @@ int main(int argc, char** argv)
     // Sanofi
     //  h->set_feed_constant_from_rvalue(0.031653119013143756, {0.}, {0}, {0});
     // h->set_feed_constant_from_rvalue(0.001 / 3600., {0.3}, {0}, {1}, true);
-    h->set_feed_constant_from_rvalue(20e-3*0.9/3600., {10}, {0}, {0}, false);
+    // h->set_feed_constant_from_rvalue(20e-3*0.9/3600., {10}, {0}, {0}, false);
     // h->set_feed_constant_from_rvalue(100*0.01 / 3600., {0.3}, {0}, {1}, true);
 
     // std::vector<double> c(100);

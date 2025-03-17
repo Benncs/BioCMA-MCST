@@ -1,5 +1,7 @@
 #ifndef __SIMULATION_MC_KERNEL_HPP
 #define __SIMULATION_MC_KERNEL_HPP
+#include "Kokkos_Assert.hpp"
+#include "Kokkos_Printf.hpp"
 #include "mc/particles/particles_container.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
@@ -33,31 +35,33 @@ namespace Simulation::KernelInline
     }
 
     KOKKOS_INLINE_FUNCTION void operator()(const TeamMember& team_handle,
-                                           int& waiting_allocation_particle,
-                                           int& dead_total) const
+                                           std::size_t& waiting_allocation_particle,
+                                           [[maybe_unused]] std::size_t& dead_total) const
     {
-      (void)dead_total; // Counter not used currently because there is no cell mortality
+       (void)dead_total; // Counter not used currently because there is no cell mortality
       GET_INDEX(particles.n_particles());
       if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
       {
+        Kokkos::printf("Skip %ld", idx);
         return;
       }
 
-      if (M::update(d_t,
+      if (M::update(random_pool,
+                    d_t,
                     idx,
                     particles.model,
                     Kokkos::subview(concentrations, particles.position(idx), Kokkos::ALL)) ==
           MC::Status::Division)
       {
-        if (!particles.handle_division(idx))
+        if (!particles.handle_division(random_pool, idx))
         {
           waiting_allocation_particle += 1;
           Kokkos::printf("Division Overflow\r\n");
-          assert(false && "Division Overflow Not implemented");
+          // KOKKOS_ASSERT(false && "Division Overflow Not implemented");
         }
       };
 
-      particles.get_contributions(idx,contribs_scatter);
+      particles.get_contributions(idx, contribs_scatter);
     }
 
     M::FloatType d_t;

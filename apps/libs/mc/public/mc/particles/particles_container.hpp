@@ -1,7 +1,6 @@
 #ifndef __PARTICLES_CONTAINER_HPP__
 #define __PARTICLES_CONTAINER_HPP__
 
-
 #include <Kokkos_Core.hpp>
 #include <mc/traits.hpp>
 #include <stdexcept>
@@ -23,7 +22,7 @@ namespace
       Kokkos::deep_copy(offset, 0);
     }
 
-    KOKKOS_INLINE_FUNCTION void operator()(const int i, std::size_t& update, const bool final)const 
+    KOKKOS_INLINE_FUNCTION void operator()(const int i, std::size_t& update, const bool final) const
     {
       const bool is_dead = (status(i) != MC::Status::Idle);
 
@@ -37,7 +36,8 @@ namespace
         // Kokkos::printf("Removing index %d\r\n", i_to_remove);
 
         auto idx_to_move = last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
-        while (status(idx_to_move) != MC::Status::Idle || idx_to_move == i_to_remove)
+        while (status(idx_to_move) != MC::Status::Idle ||
+               idx_to_move == static_cast<std::size_t>(i_to_remove))
         {
           idx_to_move = last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
         }
@@ -76,7 +76,7 @@ namespace MC
   template <ModelType Model> class ParticlesContainer
   {
   public:
-    static constexpr double buffer_ratio = 0.4; // Buffer size = ceil(list.size()*buffer_ratio)
+    static constexpr double buffer_ratio = 0.6; // Buffer size = ceil(list.size()*buffer_ratio)
     /**
      * @brief Alias for the model used by the container.
      */
@@ -115,7 +115,8 @@ namespace MC
 
     void get_contributions(std::size_t idx, const ContributionView& contributions) const;
 
-    [[nodiscard]] KOKKOS_INLINE_FUNCTION bool handle_division(std::size_t idx1) const;
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
+    handle_division(const MC::KPRNG::pool_type& random_pool, std::size_t idx1) const;
 
     void clean_dead(std::size_t to_remove);
 
@@ -146,17 +147,19 @@ namespace MC
   };
 
   template <ModelType Model>
-  KOKKOS_INLINE_FUNCTION bool ParticlesContainer<Model>::handle_division(std::size_t idx1) const
+  KOKKOS_INLINE_FUNCTION bool
+  ParticlesContainer<Model>::handle_division(const MC::KPRNG::pool_type& random_pool,
+                                             std::size_t idx1) const
   {
-    PROFILE_SECTION("ParticlesContainer::handle_division")
     if (Kokkos::atomic_load(&buffer_index()) < buffer_model.extent(0))
     {
       const auto idx2 = Kokkos::atomic_fetch_add(&buffer_index(), 1);
-      Model::division(idx1, idx2, model, buffer_model);
+      Model::division(random_pool, idx1, idx2, model, buffer_model);
       buffer_position(idx2) = position(idx1);
 
       return true;
     }
+    Kokkos::printf("%ld %ld\r\n", Kokkos::atomic_load(&buffer_index()), buffer_model.extent(0));
     return false;
   }
 
@@ -171,16 +174,29 @@ namespace MC
     }
     __allocate__(original_size + n_add_item);
     // Merge position EZ
+    // TODO ADD non const Weight and status
+    // Kokkos::parallel_for(
+    //     "InsertNewPosition",
+    //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_add_item),
+    //     KOKKOS_CLASS_LAMBDA(const size_t i) { position(original_size + i) = buffer_position(i);
+    //     });
+    // Kokkos::fence();
+    // // Merge model less EZ
+    // Kokkos::parallel_for(
+    //     "InsertNewModel",
+    //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_add_item),
+    //     KOKKOS_CLASS_LAMBDA(const size_t i) {
+    //       for (std::size_t j = 0; j < Model::n_var; ++j)
+    //       {
+    //         model(original_size + i, j) = buffer_model(i, j);
+    //       }
+    //     });
+
     Kokkos::parallel_for(
         "InsertNewPosition",
         Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_add_item),
-        KOKKOS_CLASS_LAMBDA(const size_t i) { position(original_size + i) = buffer_position(i); });
-    Kokkos::fence();
-    // Merge model less EZ
-    Kokkos::parallel_for(
-        "InsertNewModel",
-        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_add_item),
         KOKKOS_CLASS_LAMBDA(const size_t i) {
+          position(original_size + i) = buffer_position(i);
           for (std::size_t j = 0; j < Model::n_var; ++j)
           {
             model(original_size + i, j) = buffer_model(i, j);
@@ -208,6 +224,7 @@ namespace MC
         Kokkos::resize(status, n_allocated_elements);
         if constexpr (ConstWeightModelType<Model>)
         {
+
           Kokkos::resize(weights, n_allocated_elements);
         }
         else
@@ -231,11 +248,11 @@ namespace MC
       Kokkos::resize(status, n_allocated_elements);
       if constexpr (ConstWeightModelType<Model>)
       {
-        Kokkos::resize(weights, n_allocated_elements);
+        Kokkos::resize(weights, 1);
       }
       else
       {
-        Kokkos::resize(weights, 1);
+        Kokkos::resize(weights, n_allocated_elements);
       }
     }
   }
@@ -256,25 +273,29 @@ namespace MC
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer(std::size_t n_particle)
-      : model("particle_model", 0), position("particle_position", 0), // Dont allocate now
-        weights("particle_weigth", 0),                                // Dont allocate now
+      : model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_model"), 0),
+        position(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_position"), 0),
+        weights(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_weigth"), 0),
+        status(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_status"), 0),
         buffer_model("buffer_particle_model", 0),
         buffer_position("buffer_particle_position", 0), // Dont allocate now
         buffer_index("buffer_index"), allocation_factor(default_allocation_factor),
         n_allocated_elements(0), n_used_elements(n_particle)
   {
     __allocate__(n_particle);
-
     __allocate_buffer__();
   }
 
-  template <ModelType M>
-  ParticlesContainer<M>::ParticlesContainer()
-      : model("particle_model"), position("particle_position"), weights("particle_weigth"),
-        buffer_model("buffer_particle_model", 0),
-        buffer_position("buffer_particle_position", 0), // Dont allocate now
-        buffer_index("buffer_index"), allocation_factor(default_allocation_factor),
-        n_allocated_elements(0), n_used_elements(0)
+  template <ModelType M> ParticlesContainer<M>::ParticlesContainer()
+  // : model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_model"), 0),
+  //   position(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_position"), 0),
+  //   weights(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_weigth"), 0),
+  //   status(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_status"), 0),
+  //   buffer_model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "buffer_particle_model"), 0),
+  //   buffer_position(Kokkos::view_alloc(Kokkos::WithoutInitializing, "buffer_particle_position"),
+  //                   0), // Dont allocate now
+  //   buffer_index("buffer_index"), allocation_factor(default_allocation_factor),
+  //   n_allocated_elements(0), n_used_elements(0)
 
   {
   }
@@ -357,8 +378,9 @@ namespace MC
   }
 
   template <ModelType M>
-  void ParticlesContainer<M>::get_contributions(std::size_t idx,
-                                                const ContributionView& contributions) const
+  KOKKOS_INLINE_FUNCTION void
+  ParticlesContainer<M>::get_contributions(std::size_t idx,
+                                           const ContributionView& contributions) const
   {
     static_assert(ConstWeightModelType<M>, "ModelType: Const apply_weight()");
     const double weight = get_weight(idx);

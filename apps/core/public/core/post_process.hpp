@@ -21,7 +21,7 @@ namespace PostProcessing
     std::vector<std::string> vnames;
   };
 
-  template <HasExportProperties Model, typename ExecutionSpace>
+  template <ModelType Model, typename ExecutionSpace>
   void inner(std::size_t n_p,
              const MC::ParticlePositions& position,
              const typename Model::SelfParticle& model,
@@ -50,14 +50,14 @@ namespace PostProcessing
   std::optional<PostProcessing::BonceBuffer>
   get_properties(const MC::ParticlesContainer<M>& container, const std::size_t n_compartment)
   {
-    if constexpr (HasExportProperties<M>)
+    if constexpr (HasExportProperties<M::n_var,M>)
     {
       BonceBuffer properties;
       const std::size_t n_p =
           container.n_particles(); // USE list size not Kokkos View size. ParticleList
                                    // allocates more particles than needed
-
-      properties.vnames = M::names();
+      auto ar = M::names();
+      properties.vnames = std::vector<std::string>(ar.begin(),ar.end());
       ParticlePropertyViewType<ComputeSpace> spatial_values(
           "property_spatial", M::n_var, n_compartment);
       ParticlePropertyViewType<ComputeSpace> particle_values("property_values", M::n_var, n_p);

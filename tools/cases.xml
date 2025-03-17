@@ -51,13 +51,15 @@
          <!-- <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path> -->
       <!-- <cma_case_path recursive="true">/home_pers/casale/Documents/code/biomc/cma_data/flowmap_14/</cma_case_path> -->
       <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
-      <final_time>1000</final_time>
-      <numper_particle>100000</numper_particle>
+      <final_time>800</final_time>
+      <numper_particle>10000</numper_particle>
       <delta_time>0.1</delta_time>
       <results_file_name>bench</results_file_name>
       <number_exported_result>10</number_exported_result>
-      <model_name>model_monod</model_name>
-      <initialiser_path></initialiser_path>
+      <model_name>model_twometa</model_name>
+      <!-- <initialiser_path></initialiser_path> -->
+
+       <initialiser_path>/home-local/casale/Documents/thesis/code/BioCMA-MCST/cma_data/0d_4s_init.h5</initialiser_path>
    </control>
 
    <control name="merge">
