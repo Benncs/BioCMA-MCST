@@ -51,11 +51,11 @@
          <!-- <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path> -->
       <!-- <cma_case_path recursive="true">/home_pers/casale/Documents/code/biomc/cma_data/flowmap_14/</cma_case_path> -->
       <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
-      <final_time>800</final_time>
-      <numper_particle>10000</numper_particle>
-      <delta_time>0.1</delta_time>
+      <final_time>1000</final_time>
+      <numper_particle>1000000</numper_particle>
+      <delta_time>1</delta_time>
       <results_file_name>bench</results_file_name>
-      <number_exported_result>10</number_exported_result>
+      <number_exported_result>0</number_exported_result>
       <model_name>model_twometa</model_name>
       <!-- <initialiser_path></initialiser_path> -->
 
@@ -88,12 +88,12 @@
      <control name="bench_sanofi">
       <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path>
       <final_time>1</final_time>
-      <numper_particle>8000000</numper_particle>
-      <delta_time>0.001</delta_time>
+      <numper_particle>8000</numper_particle>
+      <delta_time>0.1</delta_time>
       <results_file_name>bench2</results_file_name>
       <number_exported_result>0</number_exported_result>
       <!-- <model_name>model_twometa</model_name> -->
-        <model_name>None</model_name>
+        <model_name>model_twometa</model_name>
       <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>
    </control>
 

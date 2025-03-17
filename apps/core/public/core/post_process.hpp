@@ -30,6 +30,7 @@ namespace PostProcessing
   {
     Kokkos::Experimental::ScatterView<double**, Kokkos::LayoutRight, ComputeSpace>
         scatter_spatial_values(spatial_values);
+
     Kokkos::parallel_for(
         "kernel_spatial_get_properties",
         Kokkos::RangePolicy<ExecutionSpace>(0, n_p),
@@ -38,7 +39,7 @@ namespace PostProcessing
 
           for (std::size_t i = 0; i < Model::n_var; ++i)
           {
-            access(position(i_particle), i) += model(i_particle, i);
+            access(i,position(i_particle)) += model(i_particle, i);
             particle_values( i,i_particle) = model(i_particle, i);
           }
         });
@@ -52,6 +53,7 @@ namespace PostProcessing
   {
     if constexpr (HasExportProperties<M::n_var,M>)
     {
+      
       BonceBuffer properties;
       const std::size_t n_p =
           container.n_particles(); // USE list size not Kokkos View size. ParticleList
@@ -61,7 +63,7 @@ namespace PostProcessing
       ParticlePropertyViewType<ComputeSpace> spatial_values(
           "property_spatial", M::n_var, n_compartment);
       ParticlePropertyViewType<ComputeSpace> particle_values("property_values", M::n_var, n_p);
-
+  
       inner<M, Kokkos::DefaultExecutionSpace>(
           n_p, container.position, container.model, particle_values, spatial_values);
 

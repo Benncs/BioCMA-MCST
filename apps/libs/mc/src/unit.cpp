@@ -220,14 +220,14 @@ namespace MC
        * dependent on the total mass.
        */
       using CurrentModel = typename std::remove_reference<decltype(container)>::type::UsedModel;
-
+            
       Kokkos::parallel_reduce("mc_init_first",
                               Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particles),
                               InitFunctor<CurrentModel>(container, min_c, max_c, rng),
                               total_mass);
       Kokkos::fence();
     };
-
+         
     std::visit(visitor, container);
     unit.container = std::move(container);
   }

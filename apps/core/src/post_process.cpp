@@ -114,7 +114,7 @@ namespace
 
     // BonceBuffer properties;
     const size_t n_compartment = mc_unit->domain.getNumberCompartments();
-
+    
     return std::visit(
         [n_compartment](auto& container)
         {

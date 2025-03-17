@@ -167,7 +167,7 @@ namespace Simulation
 
   void SimulationUnit::cycleProcess(auto&& container, double d_t)
   {
-
+    PROFILE_SECTION("cycleProcess")
     using CurrentModel = typename std::remove_reference<decltype(container)>::type::UsedModel;
     const size_t n_particle = container.n_particles();
 
@@ -199,7 +199,7 @@ namespace Simulation
                                                                   move_info,
                                                                   local_rng.random_pool),
                             out_total);
-
+    Kokkos::fence("fence_mc_cycle_process");
     Kokkos::parallel_reduce("cycle_model", _policy, f, _waiting_allocation_particle, dead_total);
     Kokkos::fence("fence_mc_cycle_process");
 

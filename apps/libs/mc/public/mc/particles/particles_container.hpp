@@ -83,7 +83,7 @@ namespace MC
     using UsedModel = Model;
 
     explicit ParticlesContainer(std::size_t n_particle);
-    ParticlesContainer();
+    ParticlesContainer();//=default;
     void init();
 
     Model::SelfParticle model;
@@ -282,8 +282,11 @@ namespace MC
         buffer_index("buffer_index"), allocation_factor(default_allocation_factor),
         n_allocated_elements(0), n_used_elements(n_particle)
   {
+   
     __allocate__(n_particle);
+
     __allocate_buffer__();
+    
   }
 
   template <ModelType M> ParticlesContainer<M>::ParticlesContainer()
@@ -298,6 +301,7 @@ namespace MC
   //   n_allocated_elements(0), n_used_elements(0)
 
   {
+
   }
 
   template <ModelType M> void ParticlesContainer<M>::clean_dead(std::size_t to_remove)
