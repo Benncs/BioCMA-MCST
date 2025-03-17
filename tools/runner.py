@@ -25,7 +25,7 @@ COMPILER_NAME = "cuda"  # "gcc"
 def get_executable(type: str, mpi: bool = True):
     appname = "biocma_mcst_cli_app" if mpi else "biocma_mcst_cli_app_shared"
    # return f"{ROOT}/builddir/{type}_{COMPILER_NAME}/apps/cli/{appname}"
-    return f"{ROOT}/builddir/apps/cli/{appname}"
+    return f"{ROOT}/builddir/gpu/apps/cli/{appname}"
 
 
 def mk_parser():
@@ -108,7 +108,7 @@ def main():
         + "-force 1 "
     )
     if cli_args.serde is True:
-        command += "-serde " + "./results/sanofi_poster_2/sanofi_poster_2_serde_ "
+        command += "-serde " + "./results/bench/bench_serde_ "
 
         # if(cli_args.use_mpi):
         #     input("confirm force?")
