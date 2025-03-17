@@ -83,7 +83,7 @@ namespace MC
     using UsedModel = Model;
 
     explicit ParticlesContainer(std::size_t n_particle);
-    ParticlesContainer();//=default;
+    ParticlesContainer(); //=default;
     void init();
 
     Model::SelfParticle model;
@@ -282,26 +282,26 @@ namespace MC
         buffer_index("buffer_index"), allocation_factor(default_allocation_factor),
         n_allocated_elements(0), n_used_elements(n_particle)
   {
-   
+
     __allocate__(n_particle);
 
     __allocate_buffer__();
-    
   }
 
-  template <ModelType M> ParticlesContainer<M>::ParticlesContainer()
-  // : model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_model"), 0),
-  //   position(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_position"), 0),
-  //   weights(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_weigth"), 0),
-  //   status(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_status"), 0),
-  //   buffer_model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "buffer_particle_model"), 0),
-  //   buffer_position(Kokkos::view_alloc(Kokkos::WithoutInitializing, "buffer_particle_position"),
-  //                   0), // Dont allocate now
-  //   buffer_index("buffer_index"), allocation_factor(default_allocation_factor),
-  //   n_allocated_elements(0), n_used_elements(0)
+  template <ModelType M>
+  ParticlesContainer<M>::ParticlesContainer()
+  //FIXME 
+      : // : model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_model"), 0),
+        //   position(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_position"), 0),
+        //   weights(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_weigth"), 0),
+        //   status(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_status"), 0),
+        //   buffer_model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "buffer_particle_model"),
+        //   0), buffer_position(Kokkos::view_alloc(Kokkos::WithoutInitializing,
+        //   "buffer_particle_position"),
+        //                   0), // Dont allocate now
+        allocation_factor(default_allocation_factor), n_allocated_elements(0), n_used_elements(0)
 
   {
-
   }
 
   template <ModelType M> void ParticlesContainer<M>::clean_dead(std::size_t to_remove)

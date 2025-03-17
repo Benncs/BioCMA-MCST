@@ -186,7 +186,7 @@ namespace Simulation
     std::size_t _waiting_allocation_particle = 0;
 
     auto f = Simulation::KernelInline::CycleFunctor<CurrentModel>(
-        d_t, container, local_rng.random_pool, getkernel_concentration(), contribs_scatter);
+        d_t, container, local_rng.random_pool, getkernel_concentration(), contribs_scatter,events);
 
     _policy = MC::get_policty(f, n_particle, true);
 
@@ -197,7 +197,7 @@ namespace Simulation
                                                                   container.status,
                                                                   n_particle,
                                                                   move_info,
-                                                                  local_rng.random_pool),
+                                                                  local_rng.random_pool,events),
                             out_total);
     Kokkos::fence("fence_mc_cycle_process");
     Kokkos::parallel_reduce("cycle_model", _policy, f, _waiting_allocation_particle, dead_total);

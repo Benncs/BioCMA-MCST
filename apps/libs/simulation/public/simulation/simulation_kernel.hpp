@@ -28,9 +28,11 @@ namespace Simulation::KernelInline
                                         MC::ParticlesContainer<M> _particles,
                                         MC::KPRNG::pool_type _random_pool,
                                         MC::KernelConcentrationType&& _concentrations,
-                                        MC::ContributionView _contribs_scatter)
+                                        MC::ContributionView _contribs_scatter,
+                                        MC::EventContainer _event)
         : d_t(dt), particles(_particles), random_pool(_random_pool),
-          concentrations(std::move(_concentrations)), contribs_scatter(std::move(_contribs_scatter))
+          concentrations(std::move(_concentrations)),
+          contribs_scatter(std::move(_contribs_scatter)), events(std::move(_event))
     {
     }
 
@@ -38,7 +40,7 @@ namespace Simulation::KernelInline
                                            std::size_t& waiting_allocation_particle,
                                            [[maybe_unused]] std::size_t& dead_total) const
     {
-       (void)dead_total; // Counter not used currently because there is no cell mortality
+      (void)dead_total; // Counter not used currently because there is no cell mortality
       GET_INDEX(particles.n_particles());
       if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
       {
@@ -57,8 +59,11 @@ namespace Simulation::KernelInline
         {
           waiting_allocation_particle += 1;
           Kokkos::printf("Division Overflow\r\n");
+          events.wrap_incr<MC::EventType::Overflow>();
+
           // KOKKOS_ASSERT(false && "Division Overflow Not implemented");
         }
+        events.wrap_incr<MC::EventType::NewParticle>();
       };
 
       particles.get_contributions(idx, contribs_scatter);
@@ -69,6 +74,7 @@ namespace Simulation::KernelInline
     MC::KPRNG::pool_type random_pool;
     MC::KernelConcentrationType concentrations;
     MC::ContributionView contribs_scatter;
+    MC::EventContainer events;
   };
 
 } // namespace Simulation::KernelInline
