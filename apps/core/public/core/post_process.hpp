@@ -30,7 +30,7 @@ namespace PostProcessing
         scatter_spatial_values(spatial_values);
 
     Kokkos::parallel_for(
-        "kernel_spatial_get_properties",
+        "kernel_get_properties",
         Kokkos::RangePolicy<ExecutionSpace>(0, n_p),
         KOKKOS_LAMBDA(const int i_particle) {
           auto access = scatter_spatial_values.access();
