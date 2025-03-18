@@ -20,10 +20,10 @@ namespace
 namespace Models
 {
 
-  struct TwoMetaModel
+  struct TwoMeta
   {
     using uniform_weight = std::true_type; // Using type alias
-    using Self = TwoMetaModel;
+    using Self = TwoMeta;
     using FloatType = float;
 
     enum class particle_var : int
@@ -117,10 +117,10 @@ namespace Models
     }
   };
 
-  CHECK_MODEL(TwoMetaModel)
+  CHECK_MODEL(TwoMeta)
 
   KOKKOS_INLINE_FUNCTION void
-  TwoMetaModel::init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  TwoMeta::init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
                      std::size_t idx,
                      const SelfParticle& arr)
   {
@@ -140,7 +140,7 @@ namespace Models
   }
 
   KOKKOS_INLINE_FUNCTION MC::Status
-  TwoMetaModel::update(const MC::KPRNG::pool_type& random_pool,
+  TwoMeta::update(const MC::KPRNG::pool_type& random_pool,
                        FloatType d_t,
                        std::size_t idx,
                        const SelfParticle& arr,
@@ -210,7 +210,7 @@ namespace Models
                : MC::Status::Idle;
   }
 
-  KOKKOS_INLINE_FUNCTION void TwoMetaModel::division(const MC::KPRNG::pool_type& random_pool,
+  KOKKOS_INLINE_FUNCTION void TwoMeta::division(const MC::KPRNG::pool_type& random_pool,
                                                      std::size_t idx,
                                                      std::size_t idx2,
                                                      const SelfParticle& arr,
@@ -237,7 +237,7 @@ namespace Models
     Uptake<Self>::division(random_pool, idx, idx2, arr, child_buffer_arr);
   }
 
-  KOKKOS_INLINE_FUNCTION void TwoMetaModel::contribution([[maybe_unused]] std::size_t idx,
+  KOKKOS_INLINE_FUNCTION void TwoMeta::contribution([[maybe_unused]] std::size_t idx,
                                                          std::size_t position,
                                                          double weight,
                                                          [[maybe_unused]] const SelfParticle& arr,
