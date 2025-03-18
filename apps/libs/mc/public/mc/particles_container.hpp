@@ -45,7 +45,7 @@ namespace
 
         status(i_to_remove) = MC::Status::Idle;
         Kokkos::atomic_exchange(&position(i_to_remove), position(idx_to_move));
-
+        //TODO Use hierachical parallism here, thread range is likely to work  
         for (std::size_t i_properties = 0; i_properties < M::n_var; ++i_properties)
         {
           model(i_to_remove, i_properties) = model(idx_to_move, i_properties);
@@ -113,7 +113,7 @@ namespace MC
       return n_used_elements;
     };
 
-    void get_contributions(std::size_t idx, const ContributionView& contributions) const;
+    KOKKOS_INLINE_FUNCTION void get_contributions(std::size_t idx, const ContributionView& contributions) const;
 
     [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
     handle_division(const MC::KPRNG::pool_type& random_pool, std::size_t idx1) const;
@@ -302,7 +302,6 @@ namespace MC
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer()
-      // FIXME
       : model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_model"), 0),
         position(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_position"), 0),
         weights(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_weigth"), 0),
@@ -325,7 +324,7 @@ namespace MC
 
     if (to_remove == n_used_elements)
     {
-      __shrink__(0, true); // TODO check this function if size=0
+      __shrink__(0, true); 
       n_used_elements = 0;
     }
     else if (to_remove > n_used_elements)

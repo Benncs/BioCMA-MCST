@@ -18,7 +18,7 @@
 
 namespace Simulation::KernelInline
 {
-
+  
   template <ModelType M> struct CycleFunctor
   {
     using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
@@ -52,7 +52,7 @@ namespace Simulation::KernelInline
                     d_t,
                     idx,
                     particles.model,
-                    Kokkos::subview(concentrations, particles.position(idx), Kokkos::ALL)) ==
+                    Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx))) ==
           MC::Status::Division)
       {
         if (!particles.handle_division(random_pool, idx))

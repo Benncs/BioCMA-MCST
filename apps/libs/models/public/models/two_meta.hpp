@@ -1,6 +1,7 @@
 #ifndef __TWOMETA_MODEL_HPP__
 #define __TWOMETA_MODEL_HPP__
 
+#include "Kokkos_Printf.hpp"
 #include "common/traits.hpp"
 #include "models/utils.hpp"
 #include <mc/prng/prng_extension.hpp>
@@ -10,11 +11,11 @@
 
 namespace
 {
-  template <FloatingPointType F> static F consteval get_phi_s_max(F density, F dl)
-  {
-    // dl and density must be same unit, dl*density -> mass and y is mass yield
-    return (dl * density) * 0.5;
-  }
+  // template <FloatingPointType F> static F consteval get_phi_s_max(F density, F dl)
+  // {
+  //   // dl and density must be same unit, dl*density -> mass and y is mass yield
+  //   return (dl * density) * 0.5;
+  // }
 } // namespace
 
 namespace Models
@@ -59,7 +60,7 @@ namespace Models
     MODEL_CONSTANT FloatType y_sa = 0.8;                 // S to A yield (mass)
     MODEL_CONSTANT FloatType y_os_molar = 3;             // 3 mol o2 per mol for glucose
     MODEL_CONSTANT FloatType k_o = 0.0001; // g/L: Anane et. al 2017 (Biochem. Eng. J) (g/g)
-    MODEL_CONSTANT FloatType dl_max_ms = 8 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
+    MODEL_CONSTANT FloatType dl_max_ms = 8*2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
     MODEL_CONSTANT FloatType tau_1 = 1000.;         // s
     MODEL_CONSTANT FloatType tau_2 = 1000.;         // s
 
@@ -67,8 +68,8 @@ namespace Models
     MODEL_CONSTANT FloatType phi_perm_max = phi_s_max / 40.; // kgS/
     MODEL_CONSTANT FloatType phi_o2_max =
         10 * phi_s_max / MolarMassG * y_os_molar * MolarMassO2; // kgS/s
+    MODEL_CONSTANT float nu_max_kg_s = dl_max_ms * lin_density;  
 
-    MODEL_CONSTANT FloatType nu_max_kg_s = dl_max_ms * lin_density;
 
     KOKKOS_INLINE_FUNCTION static void
     init(const MC::KPRNG::pool_type& random_pool, std::size_t idx, const SelfParticle& arr);
@@ -121,40 +122,39 @@ namespace Models
 
   KOKKOS_INLINE_FUNCTION void
   TwoMeta::init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-                     std::size_t idx,
-                     const SelfParticle& arr)
+                std::size_t idx,
+                const SelfParticle& arr)
   {
 
     constexpr auto length_dist = MC::Distributions::TruncatedNormal<FloatType>(
-        l_min_m, l_min_m / 5., 0.5 * l_min_m, l_max_m);
+        l_c_m/2, l_c_m / 5., l_min_m, l_max_m);
 
     constexpr auto length_c_dist =
         MC::Distributions::TruncatedNormal<FloatType>(l_c_m, l_c_m / 7., l_min_m, l_max_m);
+    constexpr auto mu_nu_dist = nu_max_kg_s * 0.1;
+    constexpr auto nu_1_initial_dist = MC::Distributions::TruncatedNormal<float>(
+        mu_nu_dist, mu_nu_dist / 7., 0., static_cast<double>(nu_max_kg_s));
 
     auto gen = random_pool.get_state();
     GET_PROPERTY(Self::particle_var::length) = length_dist.draw(gen);
     GET_PROPERTY(Self::particle_var::l_cp) = length_c_dist.draw(gen);
+    GET_PROPERTY(particle_var::nu1)=nu_1_initial_dist.draw(gen);
     random_pool.free_state(gen);
     GET_PROPERTY(particle_var::contrib_phi_s) = 0;
     Uptake<Self>::init(random_pool, idx, arr);
   }
 
-  KOKKOS_INLINE_FUNCTION MC::Status
-  TwoMeta::update(const MC::KPRNG::pool_type& random_pool,
-                       FloatType d_t,
-                       std::size_t idx,
-                       const SelfParticle& arr,
-                       const MC::LocalConcentration& concentrations)
+  KOKKOS_INLINE_FUNCTION MC::Status TwoMeta::update(const MC::KPRNG::pool_type& random_pool,
+                                                    FloatType d_t,
+                                                    std::size_t idx,
+                                                    const SelfParticle& arr,
+                                                    const MC::LocalConcentration& concentrations)
   {
     (void)random_pool;
     const auto phi_s =
         Uptake<Self>::uptake_step(phi_s_max, phi_perm_max, d_t, idx, arr, concentrations);
 
-    GET_PROPERTY(Self::particle_var::age) += d_t;
-    GET_PROPERTY(Self::particle_var::contrib_phi_s) = phi_s;
-
-    const auto s = static_cast<float>(concentrations(0));
-    const auto o = 9e-3; // Kokkos::max(static_cast<float>(concentrations(1)), 0.F);
+    const auto o = Kokkos::max(static_cast<float>(concentrations(1)), 0.F);
 
     const float phi_o2 = (phi_o2_max)*o / (o + k_o); // gO2/s
 
@@ -168,8 +168,10 @@ namespace Models
     KOKKOS_ASSERT(phi_s_residual_1_star >= 0.F);
 
     const float nu_2_star = y_sx_2 * phi_s_residual_1_star; // gX/s
+
     GET_PROPERTY(Self::particle_var::nu_eff_1) =
         Kokkos::min(nu_1_star, GET_PROPERTY(Self::particle_var::nu1)); // gX/s
+
     const float s_1 = (1 / y_sx_1 * GET_PROPERTY(Self::particle_var::nu_eff_1));
     const float phi_s_residual_1 = Kokkos::max(phi_s - s_1, 0.F);
     GET_PROPERTY(Self::particle_var::nu_eff_2) =
@@ -182,28 +184,30 @@ namespace Models
     KOKKOS_ASSERT(GET_PROPERTY(Self::particle_var::nu_eff_1) >= 0.F);
     KOKKOS_ASSERT(GET_PROPERTY(Self::particle_var::nu_eff_2) >= 0.F);
 
+    // CONTRIBS
     GET_PROPERTY(Self::particle_var::contrib_phi_s) = -phi_s;
     GET_PROPERTY(Self::particle_var::contrib_phi_o2) =
         -1 * ((1. / y_sx_1 / MolarMassG * y_os_molar * MolarMassO2 *
                GET_PROPERTY(Self::particle_var::nu_eff_1)) +
               0. * GET_PROPERTY(Self::particle_var::nu_eff_2));
+
     GET_PROPERTY(Self::particle_var::contrib_phi_ac) =
         GET_PROPERTY(Self::particle_var::nu_eff_2) / y_sx_2 * y_sa +
         (s_overflow > 0. ? y_sa * (s_overflow) : 0);
 
-    GET_PROPERTY(Self::particle_var::nu1) =
-        GET_PROPERTY(Self::particle_var::nu1) +
+    // ODE
+    GET_PROPERTY(Self::particle_var::nu1) +=
         static_cast<float>(d_t) * ((nu_1_star - GET_PROPERTY(Self::particle_var::nu1)) / tau_1);
 
-    GET_PROPERTY(Self::particle_var::nu2) =
-        GET_PROPERTY(Self::particle_var::nu2) +
+    GET_PROPERTY(Self::particle_var::nu2) +=
         static_cast<float>(d_t) * ((nu_2_star - GET_PROPERTY(Self::particle_var::nu2)) / tau_2);
 
-    GET_PROPERTY(Self::particle_var::length) =
-        GET_PROPERTY(Self::particle_var::length) +
-        static_cast<float>(d_t) * ((GET_PROPERTY(Self::particle_var::nu_eff_1) +
-                                    GET_PROPERTY(Self::particle_var::nu_eff_2)) /
-                                   (lin_density));
+    const auto sum_nu =
+        (GET_PROPERTY(Self::particle_var::nu_eff_1) + GET_PROPERTY(Self::particle_var::nu_eff_2));
+
+    GET_PROPERTY(Self::particle_var::length) += static_cast<float>(d_t) * (sum_nu / lin_density);
+
+    GET_PROPERTY(Self::particle_var::age) += d_t;
 
     return (GET_PROPERTY(Self::particle_var::length) > GET_PROPERTY(Self::particle_var::l_cp))
                ? MC::Status::Division
@@ -211,10 +215,10 @@ namespace Models
   }
 
   KOKKOS_INLINE_FUNCTION void TwoMeta::division(const MC::KPRNG::pool_type& random_pool,
-                                                     std::size_t idx,
-                                                     std::size_t idx2,
-                                                     const SelfParticle& arr,
-                                                     const SelfParticle& child_buffer_arr)
+                                                std::size_t idx,
+                                                std::size_t idx2,
+                                                const SelfParticle& arr,
+                                                const SelfParticle& child_buffer_arr)
   {
 
     const FloatType new_current_length =
@@ -238,13 +242,15 @@ namespace Models
   }
 
   KOKKOS_INLINE_FUNCTION void TwoMeta::contribution([[maybe_unused]] std::size_t idx,
-                                                         std::size_t position,
-                                                         double weight,
-                                                         [[maybe_unused]] const SelfParticle& arr,
-                                                         const MC::ContributionView& contributions)
+                                                    std::size_t position,
+                                                    double weight,
+                                                    [[maybe_unused]] const SelfParticle& arr,
+                                                    const MC::ContributionView& contributions)
   {
     auto access = contributions.access();
-    access(position, 0) += weight * GET_PROPERTY(Self::particle_var::contrib_phi_s); // NOLINT
+    access(0, position) += weight * GET_PROPERTY(Self::particle_var::contrib_phi_s);  // NOLINT
+    access(1, position) += weight * GET_PROPERTY(Self::particle_var::contrib_phi_o2); // NOLINT
+    access(2, position) += weight * GET_PROPERTY(Self::particle_var::contrib_phi_ac); // NOLINT
   }
 
 } // namespace Models

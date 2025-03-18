@@ -17,6 +17,10 @@
 
 namespace Simulation::KernelInline
 {
+  constexpr bool enable_leave =true;
+  constexpr bool disable_leave =false;
+  constexpr bool disable_move =false;
+  constexpr bool enable_move =true;
 
   template <typename ExecSpace> struct MoveInfo
   {

@@ -33,7 +33,8 @@ namespace Models
     using FloatType = M::FloatType;
     using SelfParticle = MC::ParticlesModel<M::n_var, Self::FloatType>;
 
-    MODEL_CONSTANT FloatType NPermease_init = 1e-3;
+    MODEL_CONSTANT FloatType NPermease_init = 1;
+    MODEL_CONSTANT FloatType NPermease_max = 200;
     MODEL_CONSTANT FloatType k_pts = 1e-3;
     MODEL_CONSTANT FloatType kppermease = 1e-2;
 
@@ -134,7 +135,7 @@ namespace Models
           d_t *
           (MONOD_RATIO(n_perm_frequence_new, k_pts, s) +
            MONOD_RATIO(n_perm_frequence_rm, s, k_pts)) *
-          (MONOD_RATIO(NPermease_init, k_pts, s) - GET_PROPERTY(Uptakeparticle_var::n_permease));
+          (MONOD_RATIO(NPermease_max, k_pts, s) - GET_PROPERTY(Uptakeparticle_var::n_permease));
 
       return phi_s;
     }

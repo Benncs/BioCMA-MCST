@@ -149,7 +149,7 @@ namespace Simulation
 
     // Bounce methods to pimpl
     [[nodiscard]] DiagonalView<ComputeSpace> get_kernel_diagonal() const;
-    CumulativeProbabilityView<ComputeSpace> get_kernel_cumulative_proba()const ;
+    CumulativeProbabilityView<ComputeSpace> get_kernel_cumulative_proba() const;
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
 
     void set_kernel_contribs_to_host();
@@ -190,9 +190,6 @@ namespace Simulation
     this->move_info.diag_transition = get_kernel_diagonal();
     this->move_info.neighbors = mc_unit->domain.getNeighbors();
 
-
-    
-
     std::size_t out_total = 0;
     std::size_t dead_total = 0;
     std::size_t _waiting_allocation_particle = 0;
@@ -202,22 +199,22 @@ namespace Simulation
 
     _policy = MC::get_policty(f, n_particle, true);
 
-    bool enable_move = move_info.liquid_volume.size()!=0;
-    bool enable_leave = move_info.leaving_flow.size()!=0;
+    bool enable_move = move_info.liquid_volume.size() > 1;
+    bool enable_leave = move_info.leaving_flow.size() != 0;
 
     switch (static_cast<int>(enable_leave) * 2 + static_cast<int>(enable_move))
     {
     case 0:
-      LAUNCH_KERNEL_MOVE(false, false);
+      // No need to move/leave
       break;
     case 1:
-      LAUNCH_KERNEL_MOVE(false, true);
+      LAUNCH_KERNEL_MOVE(KernelInline::disable_leave, KernelInline::enable_move);
       break;
     case 2:
-      LAUNCH_KERNEL_MOVE(true, false);
+      LAUNCH_KERNEL_MOVE(KernelInline::enable_leave, KernelInline::disable_move);
       break;
     case 3:
-      LAUNCH_KERNEL_MOVE(true, true);
+      LAUNCH_KERNEL_MOVE(KernelInline::enable_leave, KernelInline::enable_move);
       break;
     }
 
