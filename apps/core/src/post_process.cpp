@@ -42,7 +42,6 @@ namespace PostProcessing
   static int counter = 0; // TODO Remove static and reset to 0 when new simulation. If handle is
                           // reused for two simulation as itś static counter is not reset
 
-  // FIXME
   void save_particle_state(Simulation::SimulationUnit& simulation, Core::PartialExporter& pde)
   {
     ::append_properties(counter, simulation, pde);
