@@ -33,23 +33,6 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
   // Wrapping the Handle structure
   py::class_<Api::SimulationInstance, std::shared_ptr<Api::SimulationInstance>>(m, "Handle");
 
-  // m.def(
-  //     "init_handle",
-  //     [](uint32_t n_rank, uint32_t i_rank, uint64_t id, uint32_t thread_per_proces)
-  //     {
-  //       auto opt = Api::SimulationInstance::init(n_rank, i_rank, id, thread_per_proces);
-  //       if (opt.has_value())
-  //       {
-  //         auto* ptr = opt.value().release();
-  //         return std::shared_ptr<Api::SimulationInstance>(ptr);
-  //       }
-  //       throw std::runtime_error("Simulation handle initialisation failed");
-  //     },
-  //     py::arg("n_rank"),
-  //     py::arg("i_rank"),
-  //     py::arg("id"),
-  //     py::arg("thread_per_proces") = 1);
-
   m.def(
       "init_handle",
       [](const std::vector<std::string>& args)
