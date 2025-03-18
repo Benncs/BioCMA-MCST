@@ -100,10 +100,10 @@
     <control name="bench0d">
       <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
       <final_time>1</final_time>
-      <numper_particle>10000000</numper_particle>
+      <numper_particle>10000</numper_particle>
       <delta_time>0.001</delta_time>
       <results_file_name>bench0d</results_file_name>
-      <number_exported_result>0</number_exported_result>
+      <number_exported_result>10</number_exported_result>
       <model_name>twometa</model_name>
       <initialiser_path></initialiser_path>
    </control>

@@ -294,9 +294,6 @@ namespace Core
       return std::nullopt;
     }
 
-    std::cout << scalar_init.volumesliq.size() << std::endl;
-    std::cout << scalar_init.n_species << std::endl;
-
     validate_step(InitStep::MC);
     validate_step(InitStep::Scalar);
 
