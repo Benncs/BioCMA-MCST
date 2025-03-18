@@ -59,7 +59,7 @@ int main()
   assert(container.n_particles()==container2.n_particles());
 
    Kokkos::parallel_for(np,KOKKOS_LAMBDA(const int i){
-    for(int j=0;j<SerdeModel::n_var;++j)
+    for(std::size_t j=0;j<SerdeModel::n_var;++j)
     {
       KOKKOS_ASSERT(container.model(i,j)==container2.model(i,j));
     }

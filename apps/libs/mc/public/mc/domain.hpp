@@ -75,7 +75,7 @@ namespace MC
     /**
     @brief Set volume of liquid and gas of each compartment
     */
-    void setVolumes(std::span<double const> volumes_gas, std::span<double const> volumes_liq);
+    void setVolumes(std::span<double const> volumes_liq);
 
     /**
      * @brief Update neigbors of compartments

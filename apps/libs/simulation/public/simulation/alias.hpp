@@ -18,7 +18,7 @@ namespace Simulation
 
   template <typename Space>
   using CumulativeProbabilityView = Kokkos::
-      View<double**, Kokkos::LayoutRight, Space, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+      View<const double**, Kokkos::LayoutRight, Space, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
   
 

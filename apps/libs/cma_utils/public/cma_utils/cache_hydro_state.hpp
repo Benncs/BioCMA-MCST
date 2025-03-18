@@ -89,8 +89,8 @@ namespace CmaUtils
     std::vector<double> volume;                  ///< Volumes of compartments.
     DiagonalView<ComputeSpace> diagonal_compute; ///< Diagonal view for compute operations.
 
-    CumulativeProbabilityView<ComputeSpace>
-        compute_cumulative_probability; ///< View for cumulative probability computation.
+    // CumulativeProbabilityView<ComputeSpace>
+    //     compute_cumulative_probability; ///< View for cumulative probability computation.
 
   private:
   };

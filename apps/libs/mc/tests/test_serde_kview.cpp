@@ -39,7 +39,7 @@ void test_2d()
   Kokkos::View<float**> view("view", n, n_p);
   Kokkos::parallel_for(
       "initialize", n, KOKKOS_LAMBDA(const int i) {
-        for (int j = 0; j < n_p; ++j)
+        for (std::size_t j = 0; j < n_p; ++j)
         {
           view(i, j) = float(i) * float(j);
         }
@@ -58,7 +58,7 @@ void test_2d()
   assert(new_view.extent(1) == n_p && "col");
   Kokkos::parallel_for(
       "verify", n, KOKKOS_LAMBDA(const int i) {
-        for (int j = 0; j < n_p; ++j)
+        for (std::size_t j = 0; j < n_p; ++j)
         {
           KOKKOS_ASSERT(Kokkos::abs(new_view(i, j) - float(i) * float(j)) < 1e-6);
         }

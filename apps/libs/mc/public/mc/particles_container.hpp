@@ -124,21 +124,20 @@ namespace MC
 
     template <class Archive> void save(Archive& ar) const
     {
-      ar(n_allocated_elements,n_used_elements,allocation_factor);
-      serialize_view(ar,weights);
-      serialize_view(ar,position);
-      serialize_view(ar,status);
-      serialize_view(ar,model);
-      
+      ar(n_allocated_elements, n_used_elements, allocation_factor);
+      serialize_view(ar, weights);
+      serialize_view(ar, position);
+      serialize_view(ar, status);
+      serialize_view(ar, model);
     }
 
     template <class Archive> void load(Archive& ar)
     {
-      ar(n_allocated_elements,n_used_elements,allocation_factor);
-      deserialize_view(ar,weights);
-      deserialize_view(ar,position);
-      deserialize_view(ar,status);
-      deserialize_view(ar,model);
+      ar(n_allocated_elements, n_used_elements, allocation_factor);
+      deserialize_view(ar, weights);
+      deserialize_view(ar, position);
+      deserialize_view(ar, status);
+      deserialize_view(ar, model);
       __allocate_buffer__();
     }
 
@@ -275,7 +274,9 @@ namespace MC
     auto buffer_size = buffer_position.extent(0);
     if (static_cast<double>(buffer_size) / static_cast<double>(n_allocated_elements) < buffer_ratio)
     {
-      buffer_size = std::ceil(static_cast<double>(n_allocated_elements) * buffer_ratio);
+      buffer_size = static_cast<std::size_t>(
+          std::ceil(static_cast<double>(n_allocated_elements) * buffer_ratio));
+
       // Realloc because not needed to keep buffer as it has been copied
       Kokkos::realloc(buffer_position, buffer_size);
       Kokkos::realloc(buffer_model, buffer_size);
@@ -294,23 +295,22 @@ namespace MC
         buffer_index("buffer_index"), allocation_factor(default_allocation_factor),
         n_allocated_elements(0), n_used_elements(n_particle)
   {
-
+    
     __allocate__(n_particle);
-
     __allocate_buffer__();
   }
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer()
-  //FIXME 
+      // FIXME
       : model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_model"), 0),
         position(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_position"), 0),
         weights(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_weigth"), 0),
         status(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_status"), 0),
-        buffer_model("buffer_particle_model", 0),
-        buffer_position("buffer_particle_position", 0), // Dont allocate now
-        buffer_index("buffer_index"),
-        allocation_factor(default_allocation_factor), n_allocated_elements(0), n_used_elements(0)
+        buffer_model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "buffer_particle_model"), 0),
+        buffer_position( Kokkos::view_alloc(Kokkos::WithoutInitializing, "buffer_particle_model")),
+        buffer_index("buffer_index"), allocation_factor(default_allocation_factor),
+        n_allocated_elements(0), n_used_elements(0)
 
   {
   }

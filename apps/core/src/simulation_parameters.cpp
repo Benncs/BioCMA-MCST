@@ -20,6 +20,7 @@ namespace Core
   SimulationParameters SimulationParameters::init(const UserControlParameters& user_params)
   {
     // todo
+    
     auto params = SimulationParameters::m_default();
     params.number_exported_result = user_params.number_exported_result;
     params.number_particle = user_params.number_particle;

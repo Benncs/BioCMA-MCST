@@ -14,21 +14,19 @@
 namespace MC
 {
 
-  void ReactorDomain::setVolumes(std::span<double const> volumes_gas,
+  void ReactorDomain::setVolumes(
                                  std::span<double const> volumes_liq)
   {
 
-    assert(volumes_gas.size() == size);
     assert(volumes_liq.size() == size);
 
     this->_total_volume = std::reduce(volumes_liq.begin(), volumes_liq.end(), 0.);
 
     this->_total_volume = 0;
-    for (size_t i_c = 0; i_c < volumes_gas.size(); ++i_c)
+    for (auto&& i_c : volumes_liq)
     {
-      assert(volumes_liq[i_c] >= 0);
-      assert(volumes_gas[i_c] >= 0);
-      this->_total_volume += volumes_liq[i_c];
+      assert(i_c >= 0);
+      this->_total_volume += i_c;
     }
   }
 
@@ -43,6 +41,7 @@ namespace MC
         k_neighbor(Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"))
 
   {
+   
 
     setLiquidNeighbors(_neighbors);
   }

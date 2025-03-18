@@ -64,8 +64,8 @@
 
    <control name="merge">
       <cma_case_path>/home-local/casale/Documents/code/compose/jumbio_api/out/example_1/</cma_case_path>
-      <final_time>5000</final_time>
-      <numper_particle>100000</numper_particle>
+      <final_time>1000</final_time>
+      <numper_particle>12000</numper_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>test_merge</results_file_name>
       <number_exported_result>100</number_exported_result>
@@ -75,36 +75,36 @@
 
      <control name="bench2">
       <cma_case_path recursive="true">/home_pers/casale/Documents/thesis/cfd/bench/</cma_case_path>
-      <final_time>1</final_time>
-      <numper_particle>600000</numper_particle>
-      <delta_time>0.001</delta_time>
+      <final_time>10</final_time>
+      <numper_particle>120000</numper_particle>
+      <delta_time>0</delta_time>
       <results_file_name>bench2</results_file_name>
-      <number_exported_result>0</number_exported_result>
-      <model_name>model_monod</model_name>
-      <initialiser_path></initialiser_path>
+      <number_exported_result>10</number_exported_result>
+      <model_name>simple</model_name>
+      <initialiser_path>./cma_data/n14_init.h5</initialiser_path>
    </control>
 
 
      <control name="bench_sanofi">
       <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path>
-      <final_time>1000</final_time>
+      <final_time>100</final_time>
       <numper_particle>12000</numper_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>bench2</results_file_name>
       <number_exported_result>50</number_exported_result>
       <!-- <model_name>model_twometa</model_name> -->
-        <model_name>model_twometa</model_name>
+        <model_name>twometa</model_name>
       <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>
    </control>
 
     <control name="bench0d">
-      <cma_case_path>../../cfd-cma/cma_data/0d_gas/</cma_case_path>
+      <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
       <final_time>1</final_time>
-      <numper_particle>600000</numper_particle>
+      <numper_particle>10000000</numper_particle>
       <delta_time>0.001</delta_time>
       <results_file_name>bench0d</results_file_name>
       <number_exported_result>0</number_exported_result>
-      <model_name>model_twometa</model_name>
+      <model_name>twometa</model_name>
       <initialiser_path></initialiser_path>
    </control>
 

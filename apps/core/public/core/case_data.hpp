@@ -69,6 +69,7 @@ namespace Core
 
   std::optional<Core::CaseData> load(const ExecInfo &exec, const UserControlParameters &&params,std::optional<Simulation::Feed::SimulationFeed> feed=std::nullopt);
 
+  
 } // namespace Core
 
 #endif //!__CASE_DATA__HPP__
