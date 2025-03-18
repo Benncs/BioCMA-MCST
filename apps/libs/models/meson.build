@@ -29,18 +29,17 @@ udf_loader = declare_dependency()
 
 dep = [mc_dependency, common_dependecy, kokkos,udf_loader]
 
-model_lib = static_library(
-   f'@project_name@_bmodels',
-   model_sources,
-   include_directories: [public_include_dir],
-   dependencies: dep,
-   link_args: [flto_flag],
-   # pic:true
-)
+# model_lib = static_library(
+#    f'@project_name@_bmodels',
+#    model_sources,
+#    include_directories: [public_include_dir],
+#    dependencies: dep,
+#    link_args: [flto_flag],
+#    # pic:true
+# )
 
 biomodel_dependency = declare_dependency(
    include_directories: [public_include_dir],
-   link_with: model_lib,
    dependencies: dep,
 )
 

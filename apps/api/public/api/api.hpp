@@ -1,6 +1,7 @@
 #ifndef __BIOMC_API_HPP__
 #define __BIOMC_API_HPP__
 
+#include "common/execinfo.hpp"
 #include "core/scalar_factory.hpp"
 #include <api/results.hpp>
 #include <core/case_data.hpp>
@@ -19,6 +20,28 @@
  */
 namespace Api
 {
+
+  /**
+   * @brief Initializes the runtime environment based on command-line arguments
+   * and simulation parameters.
+   *
+   * This function sets up the necessary runtime environment for the simulation
+   * by:
+   * - Initializing MPI (Message Passing Interface) if applicable.
+   * - Setting up Kokkos for parallel programming.
+   * - Configuring functions to be executed upon program exit.
+   * - Handling signals to ensure proper shutdown and resource cleanup.
+   *
+   * The function uses the provided command-line arguments and simulation
+   * parameters to configure the runtime environment accordingly.
+   *
+   * @param argc The number of command-line arguments.
+   * @param argv The array of command-line arguments.
+   * settings for the simulation.
+   * @return An `ExecInfo` object containing details about the initialized runtime
+   * environment, including execution context and other relevant metadata.
+   */
+  ExecInfo runtime_init(int argc, char** argv, std::optional<std::size_t> force_run_id=std::nullopt);
 
   void finalise();
 
@@ -67,7 +90,7 @@ namespace Api
      * @return An optional containing a unique pointer to the instance if successful,
      *         or std::nullopt if initialization failed.
      */
-    static std::optional<std::unique_ptr<SimulationInstance>>
+    [[deprecated]] static std::optional<std::unique_ptr<SimulationInstance>>
     init(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_process) noexcept;
 
     /**
@@ -78,8 +101,10 @@ namespace Api
      * @return An optional containing a unique pointer to the instance if successful,
      *         or std::nullopt if initialization failed.
      */
-    static std::optional<std::unique_ptr<SimulationInstance>>
+    [[deprecated]] static std::optional<std::unique_ptr<SimulationInstance>>
     init(uint64_t id, uint32_t thread_per_process) noexcept;
+
+    static std::optional<std::unique_ptr<SimulationInstance>> init(int argc, char** argv,std::optional<std::size_t> run_id=std::nullopt) noexcept;
 
     /**
      * @brief Default constructor.
@@ -188,6 +213,8 @@ namespace Api
      */
     [[nodiscard]] int get_id() const;
 
+    [[nodiscard]] const ExecInfo& get_exec_info()const{return _data.exec_info;}
+
     /**
      * @brief Execute the simulation.
      *
@@ -206,10 +233,12 @@ namespace Api
      * @param id A unique identifier for the simulation instance.
      * @param thread_per_process Number of threads allocated per process.
      */
-    SimulationInstance(uint32_t n_rank,
+    [[deprecated]]SimulationInstance(uint32_t n_rank,
                        uint32_t current_rank,
                        uint64_t id,
                        uint32_t thread_per_process);
+
+    SimulationInstance(int argc,char** argv,std::optional<std::size_t> run_id);                  
 
     std::optional<Core::ScalarFactory::ScalarVariant> scalar_initializer_variant = std::nullopt;
     Core::CaseData _data;               ///< Case data for the simulation.

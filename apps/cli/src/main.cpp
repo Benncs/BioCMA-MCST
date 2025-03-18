@@ -10,6 +10,8 @@
 #include <rt_init.hpp>
 #include <stream_io.hpp>
 #include <string>
+#include <utility>
+
 #ifdef DECLARE_EXPORT_UDF
 #  include <udf_includes.hpp>
 #  define DECLARE_LOADER(__path__) auto _ = UnsafeUDF::Loader::init_lib(__path__)
@@ -17,7 +19,6 @@
 
 #  define DECLARE_LOADER(__path__) (void)__path__;
 #endif
-#include <utility>
 
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
@@ -61,34 +62,8 @@ static bool override_result_path(const Core::UserControlParameters& params, cons
 
 int main(int argc, char** argv)
 {
-  // First manually retrieve argument from command line
-  auto params_opt = parse_cli(argc, argv);
-  if (!params_opt.has_value())
-  {
-    // If needed value are not given or invalid argument early return
-    showHelp(std::cout);
-    return -1;
-  }
 
-  // DECLARE_LOADER("/home-local/casale/Documents/thesis/code/BioCMA-MCST/builddir/test/apps/"
-  //                "udf_model/libudf_model.so");
-
-  auto user_params = params_opt.value(); // Deref value is safe  TODO: with
-                                         // c++23 support use monadic
-
-  /*Init environnement (MPI+Kokkos)
-    Note that environnement should be the first action in the code to avoid
-    conflict*/
-  const ExecInfo exec_info = runtime_init(argc, argv, user_params);
-
-  // Ask overring results file
-  if (!override_result_path(user_params, exec_info))
-  {
-    return -1;
-  }
-
-  auto handle = Api::SimulationInstance::init(
-      exec_info.n_rank, exec_info.current_rank, exec_info.run_id, exec_info.thread_per_process);
+  auto handle = Api::SimulationInstance::init(argc, argv);
 
   if (!handle)
   {
@@ -96,7 +71,25 @@ int main(int argc, char** argv)
     return -1;
   }
 
+  auto params_opt = parse_cli(argc, argv); // retrieve argument from command line
+  if (!params_opt.has_value())
+  {
+    // If needed value are not given or invalid argument early return
+    showHelp(std::cout);
+    return -1;
+  }
+
+  auto user_params = params_opt.value(); // Deref value is safe  TODO: with
+                                         // c++23 support use monadic
+  // DECLARE_LOADER("/home-local/casale/Documents/thesis/code/BioCMA-MCST/builddir/test/apps/"
+  //                "udf_model/libudf_model.so");
+
   auto& h = *handle;
+  if (!override_result_path(user_params, h->get_exec_info()))
+  {
+    return -1;
+  }
+
   const auto serde = user_params.serde;
   INTERPRETER_INIT
   REDIRECT_SCOPE({
