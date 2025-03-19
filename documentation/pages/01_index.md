@@ -1,6 +1,4 @@
-\mainpage
-
-# BioCMA-MCST: A Biological Simulation Tool Using Monte Carlo and Compartment Modeling Approaches
+# BioCMA-MCST: A Biological Simulation Tool Using Monte Carlo and Compartment Modeling Approaches {#mainpage}
 
 [TOC]
 
@@ -22,6 +20,9 @@ Additionally, the Monte Carlo method, while computationally intensive, captures 
 
 
 \subpage gettingstarted
+
+
+\subpage simparam
 
 
 

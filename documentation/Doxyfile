@@ -9,7 +9,6 @@ CITE_BIB_FILES		   = ./documentation/pages/references.bib
 
 
 MARKDOWN_SUPPORT       = YES
-EXTENSION_MAPPING      = 
 USE_MDFILE_AS_MAINPAGE = ./documentation/01_index.md
 
 #Equations
@@ -19,11 +18,12 @@ MATHJAX_FORMAT         = HTML-CSS
 MATHJAX_RELPATH        = https://cdn.jsdelivr.net/npm/mathjax@2
 INTERACTIVE_SVG        = YES
 
+
 # Source code extraction
 EXTRACT_ALL            = YES
 EXTRACT_PRIVATE        = YES
 EXTRACT_STATIC         = YES
-
+SHOW_FILES             = NO
 
 # Generate LaTeX too (optional)
 GENERATE_LATEX         = NO
@@ -38,8 +38,6 @@ CALLER_GRAPH           = YES
 
 # Pretty output
 GENERATE_TREEVIEW      = YES
-
-
 DISABLE_INDEX          = NO
 FULL_SIDEBAR           = NO
 HTML_EXTRA_STYLESHEET  = documentation/pages/style.css

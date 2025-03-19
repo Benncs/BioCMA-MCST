@@ -3,7 +3,7 @@
    <control name="n14">
       <cma_case_path recursive="true">/home_pers/casale/Documents/thesis/cfd/bench/</cma_case_path>
       <final_time>10</final_time>
-      <numper_particle>50000</numper_particle>
+      <number_particle>50000</number_particle>
       <delta_time>0</delta_time>
       <results_file_name>debug</results_file_name>
       <number_exported_result>100</number_exported_result>
@@ -14,7 +14,7 @@
    <control name="0d">
       <cma_case_path>/home_pers/casale/Documents/code/BioCMA-MCST/cma_data/0d/</cma_case_path>
       <final_time>250</final_time>
-      <numper_particle>10000</numper_particle>
+      <number_particle>10000</number_particle>
       <delta_time>0.2</delta_time>
       <results_file_name>monod_1</results_file_name>
       <number_exported_result>50</number_exported_result>
@@ -25,7 +25,7 @@
    <control name="0d_4s">
       <cma_case_path>../../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
       <final_time>3500</final_time>
-      <numper_particle>5000</numper_particle>
+      <number_particle>5000</number_particle>
       <delta_time>0.5</delta_time>
       <results_file_name>test_ferm</results_file_name>
       <number_exported_result>100</number_exported_result>
@@ -37,7 +37,7 @@
       <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path>
       <final_time>100</final_time>
       <!-- <final_time>36</final_time> -->
-      <numper_particle>50000</numper_particle>
+      <number_particle>50000</number_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>test_sanofi</results_file_name>
       <number_exported_result>10</number_exported_result>
@@ -52,7 +52,7 @@
       <!-- <cma_case_path recursive="true">/home_pers/casale/Documents/code/biomc/cma_data/flowmap_14/</cma_case_path> -->
       <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
       <final_time>1000</final_time>
-      <numper_particle>12000</numper_particle>
+      <number_particle>12000</number_particle>
       <delta_time>1</delta_time>
       <results_file_name>bench</results_file_name>
       <number_exported_result>0</number_exported_result>
@@ -65,7 +65,7 @@
    <control name="merge">
       <cma_case_path>/home-local/casale/Documents/code/compose/jumbio_api/out/example_1/</cma_case_path>
       <final_time>1000</final_time>
-      <numper_particle>12000</numper_particle>
+      <number_particle>12000</number_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>test_merge</results_file_name>
       <number_exported_result>100</number_exported_result>
@@ -76,7 +76,7 @@
      <control name="bench2">
       <cma_case_path recursive="true">/home_pers/casale/Documents/thesis/cfd/bench/</cma_case_path>
       <final_time>10</final_time>
-      <numper_particle>120000</numper_particle>
+      <number_particle>120000</number_particle>
       <delta_time>0</delta_time>
       <results_file_name>bench2</results_file_name>
       <number_exported_result>10</number_exported_result>
@@ -88,7 +88,7 @@
      <control name="bench_sanofi">
       <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path>
       <final_time>100</final_time>
-      <numper_particle>12000</numper_particle>
+      <number_particle>12000</number_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>bench2</results_file_name>
       <number_exported_result>50</number_exported_result>
@@ -100,7 +100,7 @@
     <control name="bench0d">
       <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
       <final_time>1</final_time>
-      <numper_particle>10000</numper_particle>
+      <number_particle>10000</number_particle>
       <delta_time>0.001</delta_time>
       <results_file_name>bench0d</results_file_name>
       <number_exported_result>10</number_exported_result>
