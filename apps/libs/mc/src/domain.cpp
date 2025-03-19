@@ -1,9 +1,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <cassert>
-
 #include <cstddef>
-#include <mc/container_state.hpp>
 #include <mc/domain.hpp>
 #include <numeric>
 #include <stdexcept>

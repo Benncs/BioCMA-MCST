@@ -24,7 +24,7 @@ namespace Simulation::KernelInline
 
   template <typename ExecSpace> struct MoveInfo
   {
-    NeighborsView<ExecSpace> neighbors;
+    ConstNeighborsView<ExecSpace> neighbors;
     DiagonalView<ExecSpace> diag_transition;
     CumulativeProbabilityView<ExecSpace> cumulative_probability;
     LeavingFlowType leaving_flow;
@@ -32,7 +32,7 @@ namespace Simulation::KernelInline
     Kokkos::View<double*, ExecSpace> liquid_volume;
 
     MoveInfo()
-        : neighbors("neighbors", 0, 0), diag_transition("diag_transition", 0),
+        : diag_transition("diag_transition", 0),
           leaving_flow("leaving_flow", 0),
           index_leaving_flow("index_leaving_flow", 0), liquid_volume("liquid_volume")
     {
@@ -40,7 +40,7 @@ namespace Simulation::KernelInline
   };
 
   KOKKOS_INLINE_FUNCTION std::size_t
-  __find_next_compartment(const NeighborsView<ComputeSpace>& neighbors,
+  __find_next_compartment(const ConstNeighborsView<ComputeSpace>& neighbors,
                           const CumulativeProbabilityView<ComputeSpace>& cumulative_probability,
                           const std::size_t i_compartment,
                           const double random_number)

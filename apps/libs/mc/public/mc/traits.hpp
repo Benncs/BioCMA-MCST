@@ -17,13 +17,6 @@
 
 #define MODEL_CONSTANT static constexpr
 
-// #define INDEX_FROM_ENUM(e) static_cast<std::size_t>((e))
-
-// #define GET_PROPERTY_FROM(__index__,__array_name__,enum_name)
-// (__array_name__)((__index__),INDEX_FROM_ENUM((enum_name)))
-
-// #define GET_PROPERTY(enum_name) GET_PROPERTY_FROM(idx,arr,INDEX_FROM_ENUM((enum_name)))
-
 // Utility to get the index from an enum
 #define INDEX_FROM_ENUM(e) static_cast<std::size_t>((e))
 
@@ -75,7 +68,14 @@ namespace MC
   template <uint64_t Nd, FloatingPointType F> using ParticlesModel = Kokkos::View<F* [Nd]>;
   // NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
+
 }; // namespace MC
+
+template <typename Space>
+using ConstNeighborsView = Kokkos::View<const std::size_t**,
+                                        Kokkos::LayoutRight,
+                                        Space,
+                                        Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
 // FIXME
 using kernelContribution = Kokkos::View<double**, Kokkos::LayoutLeft, MC::ComputeSpace>;

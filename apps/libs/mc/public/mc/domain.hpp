@@ -2,23 +2,18 @@
 #define __MC_REACTORDOMAIN_HPP__
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_StdAlgorithms.hpp>
 #include <cassert>
 #include <common/common.hpp>
-
 #include <cstddef>
 #include <cstdint>
-#include <mc/container_state.hpp>
+#include <mc/traits.hpp>
 #include <span>
-
-WARN_EXPERIMENTAL
-
-template <typename Space>
-using NeighborsView = Kokkos::
-    View<std::size_t**, Kokkos::LayoutRight, Space, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
 namespace MC
 {
+  template <typename Space>
+  using NeighborsView = Kokkos::
+      View<std::size_t**, Kokkos::LayoutRight, Space, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
   /**
    * @brief Represents the spatial domain where Monte Carlo particles can exist.
@@ -95,7 +90,7 @@ namespace MC
     /**
      * @brief Return a const reference to neighbors
      */
-    [[nodiscard]] NeighborsView<ComputeSpace> getNeighbors() const;
+    [[nodiscard]] ConstNeighborsView<ComputeSpace> getNeighbors() const;
 
     /**
     @brief Return a unique domain from data obtained with MPI gather
@@ -124,7 +119,7 @@ namespace MC
     NeighborsView<ComputeSpace> k_neighbor;
   };
 
-  inline NeighborsView<ComputeSpace> ReactorDomain::getNeighbors() const
+  inline ConstNeighborsView<ComputeSpace> ReactorDomain::getNeighbors() const
   {
     return k_neighbor;
   }
