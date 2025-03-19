@@ -140,7 +140,7 @@ namespace Simulation::KernelInline
         auto generator = random_pool.get_state();
         const float random_number = generator.frand(0., 1.);
         random_pool.free_state(generator);
-
+        
         const auto& index = move.index_leaving_flow(i);
         const auto& flow = move.leaving_flow(i);
         if (position != index)

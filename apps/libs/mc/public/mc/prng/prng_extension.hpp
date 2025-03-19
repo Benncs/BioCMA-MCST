@@ -8,6 +8,9 @@
 #include <cmath>
 #include <common/traits.hpp>
 
+/**
+  @brief Kokkos compatible method to draw from specific probability distribution
+ */
 namespace MC::Distributions
 {
   /**
@@ -246,17 +249,25 @@ namespace MC::Distributions
     }
   };
 
-  // To sample from [a, b] where |a - b| << 1, methods perform better
-  // if we draw from xf = [a * factor, b * factor] and then scale back using x = xf / factor.
+
+  /**
+  @brief Represents a TruncatedNormal (Gaussian) probability distribution.
+
+  The normal distribution is parameterized by a mean, a standard deviation and lower and upper
+  bound. It supports random sampling, computing statistical properties.
+
+  @tparam F Floating-point type (must satisfy `FloatingPointType`).
+*/
   template <FloatingPointType F> struct TruncatedNormal
   {
-    
+
     F mu;    // Mean
     F sigma; // Standard deviation
     F lower; // Standard deviation
     F upper; // Standard deviation
 
-    KOKKOS_INLINE_FUNCTION constexpr TruncatedNormal(F m, F s, F l, F u) : mu(m), sigma(s), lower(l), upper(u)
+    KOKKOS_INLINE_FUNCTION constexpr TruncatedNormal(F m, F s, F l, F u)
+        : mu(m), sigma(s), lower(l), upper(u)
     {
       X_ASSERT(mu > lower);
       X_ASSERT(mu < upper);
@@ -280,16 +291,19 @@ namespace MC::Distributions
       // for extrem value Min bounded if |mu-bound| <<1 z -> 0 which is also not wanted for error
       // function
 
-      F zl = Kokkos::clamp((lower - mu) / sigma, F(-5e3), F(0));  //upper-mu is by defintion <0
-      F zu = Kokkos::clamp((upper - mu) / sigma, F(0), F(5e3)); //upper-mu is by defintion >0
+      F zl = Kokkos::clamp((lower - mu) / sigma, F(-5e3), F(0)); // upper-mu is by defintion <0
+      F zu = Kokkos::clamp((upper - mu) / sigma, F(0), F(5e3));  // upper-mu is by defintion >0
 
       F pl = 0.5 * Kokkos::erfc(-zl / Kokkos::numbers::sqrt2);
-      KOKKOS_ASSERT(Kokkos::isfinite(pl)&&"Truncated normal draw leads is Nan of Inf with given parameters");
+      KOKKOS_ASSERT(Kokkos::isfinite(pl) &&
+                    "Truncated normal draw leads is Nan of Inf with given parameters");
       F pu = 0.5 * Kokkos::erfc(-zu / Kokkos::numbers::sqrt2);
-      KOKKOS_ASSERT(Kokkos::isfinite(pu)&&"Truncated normal draw leads is Nan of Inf with given parameters");
+      KOKKOS_ASSERT(Kokkos::isfinite(pu) &&
+                    "Truncated normal draw leads is Nan of Inf with given parameters");
       F p = rand * (pu - pl) + pl;
       F x = norminv(p, mu, sigma);
-      KOKKOS_ASSERT(Kokkos::isfinite(x)&&"Truncated normal draw leads is Nan of Inf with given parameters");
+      KOKKOS_ASSERT(Kokkos::isfinite(x) &&
+                    "Truncated normal draw leads is Nan of Inf with given parameters");
       return x;
 
       // NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
@@ -319,7 +333,18 @@ namespace MC::Distributions
       return 0.;
     }
   };
+  
 
+   /**
+  @brief Represents a Scaled TruncatedNormal (Gaussian) probability distribution.
+
+  The normal distribution is parameterized by a mean, a standard deviation a scale factor and lower and upper
+  bound. It supports random sampling, computing statistical properties.
+  To sample from [a, b] where |a - b| << 1, methods perform better
+  if we draw from xf = [a * factor, b * factor] and then scale back using x = xf / factor.
+
+  @tparam F Floating-point type (must satisfy `FloatingPointType`).
+*/
   template <FloatingPointType F> struct ScaledTruncatedNormal
   {
 
@@ -364,6 +389,13 @@ namespace MC::Distributions
     }
   };
 
+   /**
+  @brief Represents a LogNormal (Gaussian) probability distribution.
+
+  The normal distribution is parameterized by a mean, a standard deviation.
+
+  @tparam F Floating-point type (must satisfy `FloatingPointType`).
+*/
   template <FloatingPointType F> struct LogNormal
   {
     F mu;    // Mean
@@ -391,6 +423,13 @@ namespace MC::Distributions
     }
   };
 
+     /**
+  @brief Represents a SkewNormal (Gaussian) probability distribution.
+
+  The normal distribution is parameterized by a mean, a standard deviation and a skew factor.
+
+  @tparam F Floating-point type (must satisfy `FloatingPointType`).
+*/
   template <FloatingPointType F> struct SkewNormal
   {
     F xi;    // Mean

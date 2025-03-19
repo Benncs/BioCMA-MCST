@@ -12,6 +12,8 @@ For discrete particles, transport is also based on flow fields but incorporates 
 
 This documentation focuses on the namespace \ref CmaUtils "CmaUtils" and the functor \ref Simulation::KernelInline::MoveFunctor "MoveFunctor".
 
+
+
 ## CmaUtils
 
 The **CmaUtils** library serves as the interface between **CMtool** and **Kokkos**. While **CMtool** provides lightweight data accessors, it is not optimized for parallel simulation. Many operations require reading flow data efficiently in a parallel context—this is where **CmaUtils** bridges the gap.
@@ -24,6 +26,7 @@ Two main operations have to be performed to CMtool Rawdata in order to used them
 - Construct a transition matrix based on in/out flow in each compartment 
 - Get the cumulative probabilty destination per compartment 
 
+This operations has been already studied in \cite morchain_dynamic_2024 
 #### Transition Matrix 
 
 One can reformulate the mass balance over a scalar field y governed by compartmental flow velocities into matrix form.
@@ -66,4 +69,49 @@ The transtionner supports flexible behaviors, such as:
 -   Implementing caching mechanisms for improved performance.
 -   Interpolation between flowmaps.
 This flexibility ensures efficient and accurate simulation of field evolution over time.
+
+## Move kernel
+
+
+This operations has been already studied in \cite morchain_dynamic_2024 and implementation is \ref Simulation::KernelInline::MoveInfo "here".
+
+This kernel performs the following steps: 
+- Compute the probability of leaving the current compartment based on the liquid volume, diagonal transition rate, and time step.
+- If the particle moves, draw a random number to select the next compartment using the cumulative transition probabilities.
+- Find the neighbor using cumulative probability using a random number.
+- Move the particle to the selected compartment; otherwise, it stays in the current one.
+
+The probability of leaving the current compartment follows a discrete Poisson law, where the parameter is the compartment's mean residence time.
+\f[
+    p_{out} = 1 − \exp(-\frac{\Delta t}{\tau})
+\f]
+Inverse sampling is used to draw from the discrete Poisson law, allowing a no-branching algorithm. 
+The probability of leaving the compartment is \ref Simulation::KernelInline::probability_leaving "implemented" using the regular logarithmic function. 
+For small simulation time steps compared to the mean residence time, approximations may also be applied.
+
+The leaving condition is given by:
+\f[
+\left\{
+\begin{array}{l}
+u \sim \mathcal{U}(0, 1) \\
+\Delta t \cdot F > -\ln(u) \cdot V
+\end{array}
+\right.
+\f]
+
+where:
+
+- \f$u\f$ is a uniform random number in \f$(0, 1)\f$,
+- \f$\Delta t\f$ is the simulation time step,
+- \f$F\f$ is the leaving flow rate,
+- \f$V\f$ is the liquid volume of the compartment.
+
+This Poisson law formalism, based on the cumulative distribution function (CDF) of the leaving probability, is useful because it doesn't depend on the spatial structure or the number of neighboring compartments. It works the same whether a compartment has one neighbor or many. Leaving the reactor is, therefore, treated like moving to any other compartment.
+
+### Leaving reactor  
+At each time step, a particle can exit the system through a leaving flow.
+The total flow out of a compartment is defined as:\f$F=F_{circulation}+F_{out}\f$. 
+Where \f$F=F_{circulation}\f$ comes from transition matrix and flowmap and \f$F=F_{out}\f$ 
+
+The probability of leaving the reactor is computed using the same inverse sampling method from the exponential (Poisson) law, replacing the internal flow with the specific flow leaving the reactor.
 

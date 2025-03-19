@@ -13,8 +13,8 @@
 namespace CmaUtils
 {
   /**
-   * @brief Proxy class for PreCalculatedHydroState structure, which is used to fill this struct
-   * with data from an external library.
+   * @brief Proxy class for PreCalculatedHydroState  used to fill this struct with data
+   * from an external library.
    */
   class ProxyPreCalculatedHydroState
   {

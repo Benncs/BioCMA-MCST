@@ -1,3 +1,5 @@
+\mainpage
+
 # BioCMA-MCST: A Biological Simulation Tool Using Monte Carlo and Compartment Modeling Approaches
 
 [TOC]
@@ -17,6 +19,11 @@ To address these challenges, most models and tools for biological simulation emp
 The aim of BioCMA-MCST is to maintain the accuracy of Computational Fluid Dynamics (CFD) while incorporating detailed biological models. By using Compartment Modeling, users can simulate CFD once and then reuse the results in subsequent simulations, significantly reducing the computational burden [more information](https://compartment-modelling-tool-codes-tim-1414a41277458b7f47f5759968.gitlab.io/).
 
 Additionally, the Monte Carlo method, while computationally intensive, captures the high diversity in biological populations and reactions, resulting in a more sensitive and realistic model compared to those that rely on averaged biological data. This combination of approaches enables BioCMA-MCST to provide detailed and accurate simulations, offering valuable insights into complex biological processes in industrial settings.
+
+
+\subpage gettingstarted
+
+
 
 \subpage Documentation
 

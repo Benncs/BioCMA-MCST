@@ -5,6 +5,8 @@ OUTPUT_DIRECTORY       = ./documentation/output
 INPUT                  = ./apps ./documentation/pages
 FILE_PATTERNS          = *.cpp *.hpp *.md *.tex 
 RECURSIVE              = YES
+CITE_BIB_FILES		   = ./documentation/pages/references.bib
+
 
 MARKDOWN_SUPPORT       = YES
 EXTENSION_MAPPING      = 
@@ -15,8 +17,7 @@ USE_MATHJAX            = YES
 MATHJAX_VERSION        = MathJax_2
 MATHJAX_FORMAT         = HTML-CSS
 MATHJAX_RELPATH        = https://cdn.jsdelivr.net/npm/mathjax@2
-
-
+INTERACTIVE_SVG        = YES
 
 # Source code extraction
 EXTRACT_ALL            = YES
@@ -39,8 +40,7 @@ CALLER_GRAPH           = YES
 GENERATE_TREEVIEW      = YES
 
 
-GENERATE_TREEVIEW      = YES 
-DISABLE_INDEX          = YES
+DISABLE_INDEX          = NO
 FULL_SIDEBAR           = NO
 HTML_EXTRA_STYLESHEET  = documentation/pages/style.css
 HTML_COLORSTYLE        = LIGHT # required with Doxygen >= 1.9.5
