@@ -1,0 +1,7 @@
+<map id="PostProcessing::get_properties" name="PostProcessing::get_properties">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,26,145,65"/>
+<area shape="rect" id="Node000002" href="$namespacePostProcessing.html#ae12ff1585768d64069adb36d895d8905" title=" " alt="" coords="197,5,346,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,33,181,28,182,33,145,38"/>
+<area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f" title="Gets the number of particles in the container." alt="" coords="193,54,351,93"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="145,53,177,58,176,63,144,58"/>
+</map>

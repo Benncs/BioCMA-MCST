@@ -1,0 +1,11 @@
+<map id="WrapMPI::_gather_unsafe_to_buffer" name="WrapMPI::_gather_unsafe_to_buffer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="405,48,576,86"/>
+<area shape="rect" id="Node000002" href="$namespaceWrapMPI.html#af35b85e638478a00672758818ade9e38" title="Gathers raw data from all processes in an unsafe manner." alt="" coords="186,29,357,54"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="390,58,357,54,358,49,390,53"/>
+<area shape="rect" id="Node000005" href="$namespaceWrapMPI.html#af7356272883f4a6063a5f393042201dd" title=" " alt="" coords="195,79,348,103"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="390,81,349,85,348,80,390,75"/>
+<area shape="rect" id="Node000003" href="$namespaceWrapMPI.html#a5cd65b924b505503f88fae43fb8270ee" title="Gathers data from all processes." alt="" coords="12,5,131,30"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="170,32,130,27,131,22,170,27"/>
+<area shape="rect" id="Node000004" href="$namespaceWrapMPI.html#a6c82ee24a6d0fe8ee85a173f65f39907" title="Gathers a vector of data from all processes." alt="" coords="5,55,138,79"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="171,57,138,61,138,56,170,52"/>
+</map>

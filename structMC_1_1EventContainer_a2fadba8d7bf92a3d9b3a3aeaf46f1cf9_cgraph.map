@@ -1,0 +1,5 @@
+<map id="MC::EventContainer::get" name="MC::EventContainer::get">
+<area shape="rect" id="Node000001" title="Getter to specific event counter." alt="" coords="5,5,171,30"/>
+<area shape="rect" id="Node000002" href="$namespaceMC.html#ae91609aafa31939cedd6775cc5adafc4" title="inline getter, converts event to its value in order to be use as array index" alt="" coords="219,5,338,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,15,203,15,203,20,171,20"/>
+</map>

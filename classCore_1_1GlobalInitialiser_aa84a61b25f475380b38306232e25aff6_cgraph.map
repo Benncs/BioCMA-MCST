@@ -1,0 +1,11 @@
+<map id="Core::GlobalInitialiser::init_scalar" name="Core::GlobalInitialiser::init_scalar">
+<area shape="rect" id="Node000001" title="Initializes a scalar component of the simulation." alt="" coords="5,68,152,107"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#a5134f9db1f59d9124d5fdec88e3e99f3" title="Checks the validity of specified initialization steps." alt="" coords="200,5,346,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,65,195,47,197,52,141,70"/>
+<area shape="rect" id="Node000003" href="$namespaceCore_1_1ScalarFactory.html#a8fb497033464776a1cda71cce1840cd8" title="Factory function to initialize scalar data based on the specified input source." alt="" coords="203,68,342,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,85,188,85,188,90,152,90"/>
+<area shape="rect" id="Node000005" href="$classCore_1_1GlobalInitialiser.html#a3844076c910ed26f60f42bada71cc09e" title="Validates the specified initialization step and any additional steps." alt="" coords="200,131,346,169"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="141,105,197,123,195,128,140,110"/>
+<area shape="rect" id="Node000004" href="$namespaceCore_1_1ScalarFactory.html#a3cd3bf6bf73298a38df48b444e3f0a23" title=" " alt="" coords="394,68,533,107"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="343,85,378,85,378,90,343,90"/>
+</map>

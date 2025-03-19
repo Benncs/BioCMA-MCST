@@ -1,0 +1,9 @@
+<map id="MC::ReactorDomain::getNumberCompartments" name="MC::ReactorDomain::getNumberCompartments">
+<area shape="rect" id="Node000001" title="Return the number of compartment in the domain." alt="" coords="309,33,481,72"/>
+<area shape="rect" id="Node000002" href="$structMC_1_1MonteCarloUnit.html#a2e431bdcb96f1fa71525aca30d0457ba" title=" " alt="" coords="121,5,261,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="293,41,261,37,261,32,294,36"/>
+<area shape="rect" id="Node000003" href="$namespaceMC.html#add6610d86a95c5798b5bbc69920cf657" title=" " alt="" coords="142,68,240,93"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="294,69,241,77,240,71,294,64"/>
+<area shape="rect" id="Node000004" href="$namespaceMC.html#a146b478d04e1def9f6d1a2bd08a0854b" title="Helper function to initialize a MonteCarloUnit." alt="" coords="5,68,73,93"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="126,83,73,83,73,78,126,78"/>
+</map>

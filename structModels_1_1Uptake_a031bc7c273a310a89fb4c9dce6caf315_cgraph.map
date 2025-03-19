@@ -1,0 +1,9 @@
+<map id="Models::Uptake::init" name="Models::Uptake::init">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,12,143,37"/>
+<area shape="rect" id="Node000002" href="$structMC_1_1Distributions_1_1TruncatedNormal.html#af6cfcdb1f39978352e55fc5c5f729462" title=" " alt="" coords="191,5,380,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,22,175,22,175,27,143,27"/>
+<area shape="rect" id="Node000003" href="$namespaceMC_1_1Distributions.html#a3c07f6cf61b1c67ea9b2b3e0d6c42cc7" title="Computes the inverse CDF (probit function) of a normal distribution." alt="" coords="428,5,559,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="380,22,412,22,412,27,380,27"/>
+<area shape="rect" id="Node000004" href="$namespaceMC_1_1Distributions.html#a351272c0fa13e73d23c7b1caf92e858f" title="Computes an approximation of the inverse error function." alt="" coords="607,5,739,44"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="560,22,592,22,592,27,560,27"/>
+</map>

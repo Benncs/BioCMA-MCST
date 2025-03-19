@@ -1,0 +1,5 @@
+<map id="Core::load" name="Core::load">
+<area shape="rect" id="Node000001" title=" " alt="" coords="213,12,294,37"/>
+<area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#ad2abfa76ac4128d44b7c0c895f78b77b" title="Load ad apply the simulation configuration and prepare for execution based on file." alt="" coords="5,5,165,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,27,165,27,165,22,197,22"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Core::runtime_init" name="Core::runtime_init">
+<area shape="rect" id="Node000001" title="Initializes the runtime environment based on command&#45;line arguments and simulation parameters." alt="" coords="213,12,337,37"/>
+<area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#aaba14d53cd780130378421e0bf990663" title="simulation instance constructor" alt="" coords="5,5,165,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,27,165,27,165,22,197,22"/>
+</map>

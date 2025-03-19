@@ -1,0 +1,9 @@
+<map id="CmaUtils::FlowMapTransitionner::need_liquid_state_calculation" name="CmaUtils::FlowMapTransitionner::need_liquid_state_calculation">
+<area shape="rect" id="Node000001" title="Check if liquid state has to calculated or can be use via caching." alt="" coords="524,37,735,76"/>
+<area shape="rect" id="Node000002" href="$classCmaUtils_1_1DiscontinuousFMT.html#a5b9b0e3ef2d5812a9e605f1dbb9214d6" title="Calculate the current state based on the selected method, may be caching or direct calculation." alt="" coords="273,5,468,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="508,44,468,39,468,34,509,39"/>
+<area shape="rect" id="Node000003" href="$classCmaUtils_1_1FlowMapTransitionner.html#ab55d6efef4c6d0c9e5d42e86f9ff8ae1" title="ONLY for MPI_WORKER Calculate the current state based on the selected method, may be caching or direc..." alt="" coords="265,68,476,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="509,74,477,77,476,72,508,68"/>
+<area shape="rect" id="Node000004" href="$classCmaUtils_1_1FlowMapTransitionner.html#ae189e6d1156fa712175a8673e332c480" title="Advances the simulation by one timestep from a MPI Wroker." alt="" coords="5,68,217,107"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="249,90,217,90,217,85,249,85"/>
+</map>

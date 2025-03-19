@@ -1,0 +1,13 @@
+<map id="CmaUtils::FlowMapTransitionner::getFlowIndex" name="CmaUtils::FlowMapTransitionner::getFlowIndex">
+<area shape="rect" id="Node000001" title="Return the index of the current ProxyPreCalculatedHydroState." alt="" coords="490,68,701,107"/>
+<area shape="rect" id="Node000002" href="$classCmaUtils_1_1DiscontinuousFMT.html#a6c8dd6ddccce5fc099aa3a24ff3120b4" title="Get current gas state read from CmaRead." alt="" coords="248,5,442,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="500,66,425,47,426,42,501,61"/>
+<area shape="rect" id="Node000004" href="$classCmaUtils_1_1DiscontinuousFMT.html#a6e942b1caf7ddc68b29c8d24b185b594" title="Get current liquid state read from CmaRead." alt="" coords="248,68,442,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="474,90,442,90,442,85,474,85"/>
+<area shape="rect" id="Node000005" href="$classCmaUtils_1_1DiscontinuousFMT.html#afb3fcc676bcb57682b6fc6e4658e7ae0" title="Provides a const reference to the current reactor state." alt="" coords="248,131,442,169"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="501,114,426,133,425,127,500,108"/>
+<area shape="rect" id="Node000003" href="$classCmaUtils_1_1DiscontinuousFMT.html#a5b9b0e3ef2d5812a9e605f1dbb9214d6" title="Calculate the current state based on the selected method, may be caching or direct calculation." alt="" coords="5,68,200,107"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="254,51,181,70,179,65,252,46"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="232,90,200,90,200,85,232,85"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="252,129,179,110,181,105,254,124"/>
+</map>

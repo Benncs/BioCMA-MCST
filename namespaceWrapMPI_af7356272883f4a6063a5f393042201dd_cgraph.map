@@ -1,0 +1,7 @@
+<map id="WrapMPI::gather_span" name="WrapMPI::gather_span">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,12,159,37"/>
+<area shape="rect" id="Node000002" href="$namespaceWrapMPI.html#abbfbd4027c90508fdf9fb2e8ec46958a" title=" " alt="" coords="207,5,378,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,22,191,22,191,27,159,27"/>
+<area shape="rect" id="Node000003" href="$namespaceWrapMPI.html#adab3300a86b8c0227268b23134b57a24" title=" " alt="" coords="426,12,558,37"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="378,22,411,22,411,27,378,27"/>
+</map>

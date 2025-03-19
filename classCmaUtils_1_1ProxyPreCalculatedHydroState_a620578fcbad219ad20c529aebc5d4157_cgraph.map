@@ -1,0 +1,9 @@
+<map id="CmaUtils::ProxyPreCalculatedHydroState::set_transition_matrix" name="CmaUtils::ProxyPreCalculatedHydroState::set_transition_matrix">
+<area shape="rect" id="Node000001" title="Set the transition matrix using a constant flow map view." alt="" coords="5,68,221,107"/>
+<area shape="rect" id="Node000002" href="$namespaceCmaUtils.html#a62072fff78d8de117e133499f87a2a0c" title="Return the diagonal of the transition matrix (outflows)." alt="" coords="304,5,437,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,65,288,42,289,47,196,70"/>
+<area shape="rect" id="Node000003" href="$namespaceCmaUtils.html#a66366f852348c9e73718973e83e243f5" title="Calculate the transition matrix representing phase flow." alt="" coords="289,68,452,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,85,274,85,274,90,221,90"/>
+<area shape="rect" id="Node000004" href="$classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a1dad8236e1e52305c76772504e502fd1" title="Set the diagonal elements of the transition matrix." alt="" coords="269,131,472,169"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="196,105,274,124,272,129,195,110"/>
+</map>

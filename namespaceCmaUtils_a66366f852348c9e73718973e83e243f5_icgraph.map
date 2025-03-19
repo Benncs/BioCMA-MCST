@@ -1,0 +1,5 @@
+<map id="CmaUtils::get_transition_matrix" name="CmaUtils::get_transition_matrix">
+<area shape="rect" id="Node000001" title="Calculate the transition matrix representing phase flow." alt="" coords="269,5,431,44"/>
+<area shape="rect" id="Node000002" href="$classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a620578fcbad219ad20c529aebc5d4157" title="Set the transition matrix using a constant flow map view." alt="" coords="5,5,221,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="253,27,221,27,221,22,253,22"/>
+</map>

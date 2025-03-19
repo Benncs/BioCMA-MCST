@@ -1,0 +1,16 @@
+<map id="Core::PartialExporter::init_fields" name="Core::PartialExporter::init_fields">
+<area shape="rect" id="Node000001" title="Initializes the fields required for exporting data." alt="" coords="720,61,865,100"/>
+<area shape="rect" id="Node000002" href="$namespaceCore.html#afbce0beea293a7ccfdfc34a85b5e5e77" title=" " alt="" coords="554,61,672,100"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="704,83,672,83,672,78,704,78"/>
+<area shape="rect" id="Node000003" href="$namespaceCore.html#acd849e9c1dbf0aef00c45cfdcb0194b3" title="Start simulation." alt="" coords="422,68,506,93"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="539,83,507,83,507,78,539,78"/>
+<area shape="rect" id="Node000004" href="$structApi_1_1SimulationInstance.html#a3f04372728be84263fb69f5773ca5bd5" title="Execute the simulation." alt="" coords="214,5,373,44"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="409,65,354,47,355,42,411,60"/>
+<area shape="rect" id="Node000005" href="$namespaceCore.html#a23e6f3d22fc51ef9decabb2c220b27c4" title=" " alt="" coords="213,68,374,93"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="407,92,375,92,374,87,407,87"/>
+<area shape="rect" id="Node000006" href="$namespaceCore.html#a8a3e4aa1d1921da2e211c43d5368acf1" title=" " alt="" coords="253,118,334,142"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="408,100,335,121,333,116,406,94"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="390,69,422,70,422,75,390,74"/>
+<area shape="rect" id="Node000007" href="$structApi_1_1SimulationInstance.html#ad2abfa76ac4128d44b7c0c895f78b77b" title="Load ad apply the simulation configuration and prepare for execution based on file." alt="" coords="5,111,165,149"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="237,133,165,133,165,127,237,127"/>
+</map>

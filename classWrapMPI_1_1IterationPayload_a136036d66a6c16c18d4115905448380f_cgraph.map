@@ -1,0 +1,12 @@
+<map id="WrapMPI::IterationPayload::recv" name="WrapMPI::IterationPayload::recv">
+<area shape="rect" id="Node000001" title="Receives data for this payload from a specified source." alt="" coords="5,24,182,62"/>
+<area shape="rect" id="Node000002" href="$namespaceWrapMPI.html#a74f34d02c61dba38e414425bdf71d74c" title="Receives data into a span buffer." alt="" coords="230,5,372,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,30,214,26,214,31,183,35"/>
+<area shape="rect" id="Node000004" href="$namespaceWrapMPI.html#adfe55cebcaa7d941006e23c69a5a3bcf" title="Receives a vector of data items from a source." alt="" coords="240,55,362,79"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="183,51,225,56,224,61,182,56"/>
+<area shape="rect" id="Node000003" href="$namespaceWrapMPI.html#adab3300a86b8c0227268b23134b57a24" title=" " alt="" coords="420,5,552,30"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="372,15,404,15,404,20,372,20"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="349,51,422,32,423,37,351,57"/>
+<area shape="rect" id="Node000005" href="$namespaceWrapMPI.html#ac43482d706c8ce2d9022c54784820197" title="Receives a single data item from a source." alt="" coords="432,55,540,79"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="362,64,417,64,417,70,362,70"/>
+</map>

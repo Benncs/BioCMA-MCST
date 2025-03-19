@@ -1,0 +1,11 @@
+<map id="Core::runtime_init" name="Core::runtime_init">
+<area shape="rect" id="Node000001" title="Initializes the runtime environment based on command&#45;line arguments and simulation parameters." alt="" coords="5,55,130,79"/>
+<area shape="rect" id="Node000002" href="$namespaceWrapMPI.html#a1a08bbe69602ac2f4f38e1a0d45275cb" title=" " alt="" coords="195,5,313,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,51,189,32,191,37,118,57"/>
+<area shape="rect" id="Node000004" href="$namespaceWrapMPI.html#aadc3308a0cd9aa92fb555a4eb2f26c97" title=" " alt="" coords="193,55,315,79"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="130,64,177,64,177,70,130,70"/>
+<area shape="rect" id="Node000005" href="$namespaceWrapMPI.html#a35940eb9d8521af86ea7383b1eaa6925" title=" " alt="" coords="178,104,330,129"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="118,77,191,97,189,102,116,83"/>
+<area shape="rect" id="Node000003" href="$namespaceWrapMPI.html#aa924ad0d911109a9e6e3a20bebc3b316" title=" " alt="" coords="378,5,531,30"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="314,15,362,15,362,20,314,20"/>
+</map>

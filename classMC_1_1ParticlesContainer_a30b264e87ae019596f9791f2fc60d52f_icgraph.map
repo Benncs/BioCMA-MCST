@@ -1,0 +1,7 @@
+<map id="MC::ParticlesContainer::n_particles" name="MC::ParticlesContainer::n_particles">
+<area shape="rect" id="Node000001" title="Gets the number of particles in the container." alt="" coords="223,37,381,76"/>
+<area shape="rect" id="Node000002" href="$namespacePostProcessing.html#abdeec32d0ce1418085fd40ad58aa6c1e" title=" " alt="" coords="20,5,160,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,45,160,38,161,33,207,40"/>
+<area shape="rect" id="Node000003" href="$structSimulation_1_1KernelInline_1_1CycleFunctor.html#a64bc7bcb272a1b91b1ab3f21acdea6c8" title=" " alt="" coords="5,68,175,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="208,73,176,78,175,72,207,68"/>
+</map>

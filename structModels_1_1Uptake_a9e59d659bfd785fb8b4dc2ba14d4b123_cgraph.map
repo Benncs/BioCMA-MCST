@@ -1,0 +1,7 @@
+<map id="Models::Uptake::uptake" name="Models::Uptake::uptake">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,40,164,65"/>
+<area shape="rect" id="Node000002" href="$structModels_1_1Uptake.html#a3627cf1414527a8edd7082dd51d24fba" title=" " alt="" coords="224,5,362,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,39,209,33,209,39,165,45"/>
+<area shape="rect" id="Node000003" href="$structModels_1_1Uptake.html#ad5bef0e6800ba6e9b3ba55a675f270a8" title=" " alt="" coords="212,68,374,93"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="165,61,197,65,196,70,164,66"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="WrapMPI::broadcast" name="WrapMPI::broadcast">
+<area shape="rect" id="Node000001" title="Broadcasts a single data item to all processes." alt="" coords="796,33,935,58"/>
+<area shape="rect" id="Node000002" href="$namespaceWrapMPI.html#a166c6e5ac2d338a1d6f554532dd43b80" title=" " alt="" coords="605,5,744,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="780,36,744,31,745,25,781,31"/>
+<area shape="rect" id="Node000003" href="$classCore_1_1GlobalInitialiser.html#aa042e8d396a5287c49fb6a8b81eba209" title="Performs MPI broadcast for synchronization." alt="" coords="601,54,748,93"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="780,61,748,66,748,60,780,56"/>
+<area shape="rect" id="Node000004" href="$classCore_1_1GlobalInitialiser.html#a212a55abe2b9cb558932ba82e4cf6dbf" title="Initializes the simulation state." alt="" coords="407,54,553,93"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="586,76,553,76,553,71,586,71"/>
+<area shape="rect" id="Node000005" href="$classCore_1_1GlobalInitialiser.html#a4fa32007b34a9e448be11ebd7d5e695f" title="Initializes a transitioner with the provided flow iterator." alt="" coords="213,54,359,93"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="391,76,359,76,359,71,391,71"/>
+<area shape="rect" id="Node000006" href="$structApi_1_1SimulationInstance.html#ae9bdd54076170f50eadcb7966d64c19d" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,54,165,93"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="197,76,165,76,165,71,197,71"/>
+</map>

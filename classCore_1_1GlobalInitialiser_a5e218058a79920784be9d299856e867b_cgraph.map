@@ -1,0 +1,27 @@
+<map id="Core::GlobalInitialiser::init_simulation" name="Core::GlobalInitialiser::init_simulation">
+<area shape="rect" id="Node000001" title="Initializes a simulation unit." alt="" coords="5,229,152,268"/>
+<area shape="poly" id="edge14_Node000001_Node000001" title=" " alt="" coords="42,230,40,220,45,211,58,205,79,203,100,205,113,212,110,216,99,210,78,208,60,210,49,215,45,221,47,228"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#a5134f9db1f59d9124d5fdec88e3e99f3" title="Checks the validity of specified initialization steps." alt="" coords="426,292,573,331"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,266,200,277,310,293,411,303,411,308,309,298,199,282,150,271"/>
+<area shape="rect" id="Node000003" href="$classCore_1_1GlobalInitialiser.html#a9b38d15538796d9cc115211890a6c081" title="Initializes a Monte Carlo unit." alt="" coords="200,139,346,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="121,226,215,182,217,187,123,231"/>
+<area shape="rect" id="Node000009" href="$classCore_1_1GlobalInitialiser.html#aa84a61b25f475380b38306232e25aff6" title="Initializes a scalar component of the simulation." alt="" coords="200,229,346,268"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="152,246,185,246,185,251,152,251"/>
+<area shape="poly" id="edge5_Node000003_Node000002" title=" " alt="" coords="303,176,348,215,362,233,371,249,380,263,396,277,413,287,411,292,392,281,376,266,366,251,358,236,344,219,300,180"/>
+<area shape="rect" id="Node000004" href="$namespaceWrapMPI.html#a8237adbb04708d9bf4bae9e904d04f5f" title=" " alt="" coords="429,118,570,142"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="346,146,413,138,414,143,347,152"/>
+<area shape="rect" id="Node000006" href="$classCmaUtils_1_1FlowMapTransitionner.html#a5ca5151ebfbb3b5dd309309c54652af8" title="Converts the provided neighbors&#39; data into a Kokkos view." alt="" coords="394,5,605,44"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="291,136,335,95,393,54,405,48,408,53,395,59,338,99,294,140"/>
+<area shape="rect" id="Node000007" href="$namespaceMC.html#ac9b6a65d70e4c5007f4bc908509924a0" title=" " alt="" coords="428,68,571,93"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="314,136,393,103,422,95,424,100,395,109,316,141"/>
+<area shape="rect" id="Node000008" href="$classCore_1_1GlobalInitialiser.html#a3844076c910ed26f60f42bada71cc09e" title="Validates the specified initialization step and any additional steps." alt="" coords="426,167,573,205"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="347,164,412,172,411,178,346,170"/>
+<area shape="rect" id="Node000005" href="$namespaceWrapMPI.html#adab3300a86b8c0227268b23134b57a24" title=" " alt="" coords="657,118,789,142"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="571,127,642,127,642,133,571,133"/>
+<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="346,266,413,285,412,290,344,271"/>
+<area shape="poly" id="edge13_Node000009_Node000008" title=" " alt="" coords="344,226,412,207,413,213,346,231"/>
+<area shape="rect" id="Node000010" href="$namespaceCore_1_1ScalarFactory.html#a8fb497033464776a1cda71cce1840cd8" title="Factory function to initialize scalar data based on the specified input source." alt="" coords="430,229,569,268"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="346,246,414,246,414,251,346,251"/>
+<area shape="rect" id="Node000011" href="$namespaceCore_1_1ScalarFactory.html#a3cd3bf6bf73298a38df48b444e3f0a23" title=" " alt="" coords="653,229,793,268"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="570,246,637,246,637,251,570,251"/>
+</map>

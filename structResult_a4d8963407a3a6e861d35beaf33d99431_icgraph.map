@@ -1,0 +1,9 @@
+<map id="Result::valid" name="Result::valid">
+<area shape="rect" id="Node000001" title=" " alt="" coords="327,31,419,55"/>
+<area shape="rect" id="Node000002" href="$structResult.html#a2fe84d778f14a2d3c774268b92b39208" title=" " alt="" coords="157,5,260,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="312,36,259,28,260,23,312,31"/>
+<area shape="rect" id="Node000004" href="$structResult.html#a57838349dddd5e33f9c6c1cd79751493" title=" " alt="" coords="138,55,279,79"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="312,55,280,59,279,54,311,49"/>
+<area shape="rect" id="Node000003" href="$structResult.html#adc619466a52eb48f755f41a3e88fe50a" title=" " alt="" coords="5,5,90,30"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="141,20,90,20,90,15,141,15"/>
+</map>

@@ -1,0 +1,58 @@
+<map id="Api::SimulationInstance::apply" name="Api::SimulationInstance::apply">
+<area shape="rect" id="Node000001" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,194,165,232"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#af0e3ff388be6a2cb08edf9f69dd200b0" title="Checks if all initialization steps have been validated." alt="" coords="213,44,362,83"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,191,148,143,179,116,211,92,217,88,220,93,214,96,182,120,152,147,105,195"/>
+<area shape="rect" id="Node000003" href="$classCore_1_1GlobalInitialiser.html#ae6d2f54a18d82dda373f9cd7ec923eac" title=" " alt="" coords="214,107,360,146"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="130,191,212,154,223,150,225,154,214,159,132,195"/>
+<area shape="rect" id="Node000004" href="$classCore_1_1GlobalInitialiser.html#a4e94ae98b2a69de5162045c205c23fd2" title="Initializes a simulation feed." alt="" coords="424,422,570,460"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="112,230,158,267,214,305,310,361,411,408,424,413,422,418,409,413,308,366,211,310,155,271,109,235"/>
+<area shape="rect" id="Node000006" href="$classCore_1_1GlobalInitialiser.html#a5e218058a79920784be9d299856e867b" title="Initializes a simulation unit." alt="" coords="214,194,360,232"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="165,210,198,210,198,216,165,216"/>
+<area shape="rect" id="Node000016" href="$classCore_1_1GlobalInitialiser.html#a4fa32007b34a9e448be11ebd7d5e695f" title="Initializes a transitioner with the provided flow iterator." alt="" coords="214,256,360,295"/>
+<area shape="poly" id="edge20_Node000001_Node000016" title=" " alt="" coords="150,230,209,249,207,254,149,235"/>
+<area shape="rect" id="Node000005" href="$classCore_1_1GlobalInitialiser.html#a3844076c910ed26f60f42bada71cc09e" title="Validates the specified initialization step and any additional steps." alt="" coords="664,280,810,319"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="565,419,582,408,597,389,605,370,612,349,630,330,648,318,651,322,633,334,617,352,610,372,602,392,585,412,568,423"/>
+<area shape="poly" id="edge19_Node000006_Node000006" title=" " alt="" coords="250,194,247,184,253,175,266,169,287,167,310,169,323,176,320,181,308,174,287,172,268,174,256,179,252,185,255,193"/>
+<area shape="rect" id="Node000007" href="$classCore_1_1GlobalInitialiser.html#a5134f9db1f59d9124d5fdec88e3e99f3" title="Checks the validity of specified initialization steps." alt="" coords="664,142,810,180"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="311,191,355,161,381,147,409,137,471,126,534,124,595,129,649,137,648,142,594,134,534,129,471,131,411,142,383,152,357,166,314,195"/>
+<area shape="rect" id="Node000008" href="$classCore_1_1GlobalInitialiser.html#a9b38d15538796d9cc115211890a6c081" title="Initializes a Monte Carlo unit." alt="" coords="424,31,570,70"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="317,191,360,155,374,137,383,120,392,104,408,87,425,75,428,79,412,91,396,107,387,123,379,140,364,159,321,195"/>
+<area shape="rect" id="Node000013" href="$classCore_1_1GlobalInitialiser.html#aa84a61b25f475380b38306232e25aff6" title="Initializes a scalar component of the simulation." alt="" coords="424,196,570,235"/>
+<area shape="poly" id="edge14_Node000006_Node000013" title=" " alt="" coords="361,211,408,212,408,217,361,216"/>
+<area shape="poly" id="edge13_Node000008_Node000005" title=" " alt="" coords="513,69,633,252,662,271,659,275,629,256,509,72"/>
+<area shape="poly" id="edge10_Node000008_Node000007" title=" " alt="" coords="549,68,585,87,609,107,633,127,651,135,648,140,630,131,605,111,582,91,547,72"/>
+<area shape="rect" id="Node000009" href="$namespaceWrapMPI.html#a8237adbb04708d9bf4bae9e904d04f5f" title=" " alt="" coords="891,67,1032,92"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="565,28,625,15,695,5,770,4,843,14,891,33,932,56,929,61,889,37,842,19,769,9,695,11,626,20,566,33"/>
+<area shape="rect" id="Node000011" href="$classCmaUtils_1_1FlowMapTransitionner.html#a5ca5151ebfbb3b5dd309309c54652af8" title="Converts the provided neighbors&#39; data into a Kokkos view." alt="" coords="631,30,843,68"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="570,47,616,47,616,52,570,52"/>
+<area shape="rect" id="Node000012" href="$namespaceMC.html#ac9b6a65d70e4c5007f4bc908509924a0" title=" " alt="" coords="665,93,809,117"/>
+<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="571,64,665,86,664,91,569,69"/>
+<area shape="rect" id="Node000010" href="$namespaceWrapMPI.html#adab3300a86b8c0227268b23134b57a24" title=" " alt="" coords="1090,279,1223,304"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="976,90,1135,266,1131,269,972,94"/>
+<area shape="poly" id="edge18_Node000013_Node000005" title=" " alt="" coords="555,233,666,272,664,277,553,238"/>
+<area shape="poly" id="edge15_Node000013_Node000007" title=" " alt="" coords="569,196,648,178,649,183,571,202"/>
+<area shape="rect" id="Node000014" href="$namespaceCore_1_1ScalarFactory.html#a8fb497033464776a1cda71cce1840cd8" title="Factory function to initialize scalar data based on the specified input source." alt="" coords="667,204,807,243"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="570,215,652,218,652,223,570,221"/>
+<area shape="rect" id="Node000015" href="$namespaceCore_1_1ScalarFactory.html#a3cd3bf6bf73298a38df48b444e3f0a23" title=" " alt="" coords="892,204,1031,243"/>
+<area shape="poly" id="edge17_Node000014_Node000015" title=" " alt="" coords="807,221,876,221,876,226,807,226"/>
+<area shape="poly" id="edge33_Node000016_Node000005" title=" " alt="" coords="361,287,410,293,535,299,648,299,648,305,535,304,410,298,361,292"/>
+<area shape="poly" id="edge21_Node000016_Node000007" title=" " alt="" coords="341,253,360,241,374,226,382,210,392,195,409,181,468,158,531,147,592,144,648,146,648,151,592,149,531,152,469,164,411,186,396,198,387,213,379,229,364,246,344,258"/>
+<area shape="rect" id="Node000017" href="$namespaceCmaUtils.html#ae4418f76313b27b818a039af962096d4" title="Transition factory according to the given method." alt="" coords="410,259,583,284"/>
+<area shape="poly" id="edge22_Node000016_Node000017" title=" " alt="" coords="361,271,394,271,394,276,361,277"/>
+<area shape="rect" id="Node000018" href="$classCore_1_1GlobalInitialiser.html#a212a55abe2b9cb558932ba82e4cf6dbf" title="Initializes the simulation state." alt="" coords="424,359,570,398"/>
+<area shape="poly" id="edge23_Node000016_Node000018" title=" " alt="" coords="326,293,411,337,437,350,435,354,409,342,324,298"/>
+<area shape="poly" id="edge32_Node000018_Node000005" title=" " alt="" coords="552,356,630,329,654,321,656,326,632,334,554,361"/>
+<area shape="poly" id="edge24_Node000018_Node000007" title=" " alt="" coords="521,357,552,328,581,294,595,266,601,240,609,215,630,190,648,177,651,182,633,194,614,217,606,241,600,267,586,297,555,332,525,360"/>
+<area shape="rect" id="Node000019" href="$classCore_1_1GlobalInitialiser.html#ad6c43546eb4230a024ef3a43c470a9c5" title="Host speciffic state init." alt="" coords="664,406,810,444"/>
+<area shape="poly" id="edge25_Node000018_Node000019" title=" " alt="" coords="570,390,649,405,648,410,569,395"/>
+<area shape="rect" id="Node000020" href="$classCore_1_1GlobalInitialiser.html#aa042e8d396a5287c49fb6a8b81eba209" title="Performs MPI broadcast for synchronization." alt="" coords="664,343,810,382"/>
+<area shape="poly" id="edge26_Node000018_Node000020" title=" " alt="" coords="570,371,648,365,648,371,570,376"/>
+<area shape="rect" id="Node000021" href="$namespaceWrapMPI.html#a1a08bbe69602ac2f4f38e1a0d45275cb" title=" " alt="" coords="902,338,1020,363"/>
+<area shape="poly" id="edge27_Node000020_Node000021" title=" " alt="" coords="810,356,886,352,887,357,810,361"/>
+<area shape="rect" id="Node000022" href="$namespaceWrapMPI.html#aa924ad0d911109a9e6e3a20bebc3b316" title=" " alt="" coords="1080,338,1233,363"/>
+<area shape="poly" id="edge31_Node000020_Node000022" title=" " alt="" coords="810,368,915,375,1032,372,1086,363,1086,369,1032,377,915,380,810,373"/>
+<area shape="rect" id="Node000023" href="$namespaceWrapMPI.html#a372df5351a2085df252cc9f4cceae7de" title="Broadcasts a single data item to all processes." alt="" coords="892,283,1031,308"/>
+<area shape="poly" id="edge29_Node000020_Node000023" title=" " alt="" coords="806,340,842,329,903,310,905,315,843,334,807,345"/>
+<area shape="poly" id="edge28_Node000021_Node000022" title=" " alt="" coords="1021,348,1064,348,1064,353,1021,353"/>
+<area shape="poly" id="edge30_Node000023_Node000010" title=" " alt="" coords="1031,291,1075,291,1075,296,1031,297"/>
+</map>

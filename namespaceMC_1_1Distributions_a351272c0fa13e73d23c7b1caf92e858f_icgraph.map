@@ -1,0 +1,23 @@
+<map id="MC::Distributions::erfinv" name="MC::Distributions::erfinv">
+<area shape="rect" id="Node000001" title="Computes an approximation of the inverse error function." alt="" coords="858,124,989,163"/>
+<area shape="rect" id="Node000002" href="$namespaceMC_1_1Distributions.html#a3c07f6cf61b1c67ea9b2b3e0d6c42cc7" title="Computes the inverse CDF (probit function) of a normal distribution." alt="" coords="678,124,810,163"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="842,146,810,146,810,141,842,141"/>
+<area shape="rect" id="Node000003" href="$structMC_1_1Distributions_1_1TruncatedNormal.html#af6cfcdb1f39978352e55fc5c5f729462" title=" " alt="" coords="441,124,630,163"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="663,146,631,146,631,141,663,141"/>
+<area shape="rect" id="Node000004" href="$structModels_1_1Uptake.html#a81f6d63498b3036a75880ed7a5c48d6a" title=" " alt="" coords="229,40,393,65"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="482,119,392,79,359,68,361,63,394,74,484,114"/>
+<area shape="rect" id="Node000007" href="$structMC_1_1Distributions_1_1TruncatedNormal.html#a5c5cc899d8c3986ea0ae4b4789fbc533" title=" " alt="" coords="233,89,389,128"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="425,129,389,123,390,118,426,124"/>
+<area shape="rect" id="Node000008" href="$structMC_1_1Distributions_1_1ScaledTruncatedNormal.html#ac66c440e3d39d95509ab84a43455029b" title=" " alt="" coords="231,152,391,204"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="426,163,392,168,391,163,425,158"/>
+<area shape="rect" id="Node000009" href="$structModels_1_1Uptake.html#a031bc7c273a310a89fb4c9dce6caf315" title=" " alt="" coords="242,228,380,253"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="488,173,394,219,362,230,361,225,392,214,486,168"/>
+<area shape="rect" id="Node000005" href="$structModels_1_1SimpleModel.html#a0c6a28fd790efe9193d1a3973f7239d7" title=" " alt="" coords="20,5,166,44"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="213,43,166,37,167,31,214,37"/>
+<area shape="rect" id="Node000006" href="$structModels_1_1TwoMeta.html#afcf107b4e7c86508762048d28608a5b9" title=" " alt="" coords="5,68,181,93"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="214,68,182,72,181,67,213,63"/>
+<area shape="rect" id="Node000010" href="$structModels_1_1SimpleModel.html#a50c1e5de1921c8323b707df3c31834e5" title=" " alt="" coords="20,193,166,232"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="227,233,166,225,167,219,227,227"/>
+<area shape="rect" id="Node000011" href="$structModels_1_1TwoMeta.html#a77088e8a2d0675d4f08e638f0018a0a9" title=" " alt="" coords="19,256,167,281"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="228,254,168,262,167,256,227,249"/>
+</map>

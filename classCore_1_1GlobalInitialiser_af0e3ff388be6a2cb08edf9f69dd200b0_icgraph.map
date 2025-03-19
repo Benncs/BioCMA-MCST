@@ -1,0 +1,5 @@
+<map id="Core::GlobalInitialiser::check_init_terminate" name="Core::GlobalInitialiser::check_init_terminate">
+<area shape="rect" id="Node000001" title="Checks if all initialization steps have been validated." alt="" coords="213,5,362,44"/>
+<area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#ae9bdd54076170f50eadcb7966d64c19d" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,5,165,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,27,165,27,165,22,197,22"/>
+</map>

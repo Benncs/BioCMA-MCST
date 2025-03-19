@@ -1,0 +1,10 @@
+<map id="MC::post_init_weight" name="MC::post_init_weight">
+<area shape="rect" id="Node000001" title=" " alt="" coords="601,36,745,61"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#a9b38d15538796d9cc115211890a6c081" title="Initializes a Monte Carlo unit." alt="" coords="407,29,553,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="586,51,554,51,554,46,586,46"/>
+<area shape="rect" id="Node000003" href="$classCore_1_1GlobalInitialiser.html#a5e218058a79920784be9d299856e867b" title="Initializes a simulation unit." alt="" coords="213,29,359,68"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="391,51,359,51,359,46,391,46"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="318,16,306,10,286,8,267,10,256,15,252,21,255,28,249,30,247,20,253,11,266,5,286,3,307,5,320,12"/>
+<area shape="rect" id="Node000004" href="$structApi_1_1SimulationInstance.html#ae9bdd54076170f50eadcb7966d64c19d" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,29,165,68"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="197,51,165,51,165,46,197,46"/>
+</map>

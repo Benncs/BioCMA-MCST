@@ -1,0 +1,28 @@
+var structModels_1_1Uptake =
+[
+    [ "FloatType", "structModels_1_1Uptake.html#ab59a394c03b40b7b0674d1e1be0ecc0f", null ],
+    [ "Self", "structModels_1_1Uptake.html#aa13f4469db0e2e67d233304289374950", null ],
+    [ "SelfParticle", "structModels_1_1Uptake.html#a7ee9e7e3a339a8098de6ea548824bc22", null ],
+    [ "uniform_weight", "structModels_1_1Uptake.html#ade859488b23446412ceeddbc90162946", null ],
+    [ "_k_pts", "structModels_1_1Uptake.html#a5cdc6dccae2cdcc9a6e4c14609059e39", null ],
+    [ "contribution", "structModels_1_1Uptake.html#a2c1e4759223575913ed655234ed66bb7", null ],
+    [ "division", "structModels_1_1Uptake.html#a81f6d63498b3036a75880ed7a5c48d6a", null ],
+    [ "init", "structModels_1_1Uptake.html#a031bc7c273a310a89fb4c9dce6caf315", null ],
+    [ "mass", "structModels_1_1Uptake.html#a5eec604cdea8ae4939f45f1803677df2", null ],
+    [ "names", "structModels_1_1Uptake.html#adc00ff6cd86f497a4045258ea30c7df3", null ],
+    [ "phi_permease", "structModels_1_1Uptake.html#a3627cf1414527a8edd7082dd51d24fba", null ],
+    [ "phi_pts", "structModels_1_1Uptake.html#ad5bef0e6800ba6e9b3ba55a675f270a8", null ],
+    [ "uptake", "structModels_1_1Uptake.html#a9e59d659bfd785fb8b4dc2ba14d4b123", null ],
+    [ "uptake_step", "structModels_1_1Uptake.html#a511b5a27e41b542b8f2d4f0b409c133e", null ],
+    [ "k_pts", "structModels_1_1Uptake.html#ac38f76684b88fd1fd4f61a9bbc656bbb", null ],
+    [ "kppermease", "structModels_1_1Uptake.html#a078eb09c7ce068d2c4dab2337a675cca", null ],
+    [ "n_var", "structModels_1_1Uptake.html#aa07643d12e66755941c002c1131ed71b", null ],
+    [ "name", "structModels_1_1Uptake.html#aa30ec62b4ddb58dd962cc586530e4cbd", null ],
+    [ "NPermease_init", "structModels_1_1Uptake.html#a177ab319290f34c2ee73876a3fbd6a73", null ],
+    [ "NPermease_max", "structModels_1_1Uptake.html#a06dbe821c6ecbb4bfbe7ee2497551df6", null ],
+    [ "tau_Ad", "structModels_1_1Uptake.html#abb49bd5e24f585b663edc766c07d1350", null ],
+    [ "tau_Au", "structModels_1_1Uptake.html#a02cd2dd29481e1fda96e460ab241296b", null ],
+    [ "tau_new_permease", "structModels_1_1Uptake.html#a8aa417d2c9bf3c4ed9b16949287011d0", null ],
+    [ "tau_pts", "structModels_1_1Uptake.html#ad9234fd866460518cfc9d19c73d5694a", null ],
+    [ "tau_rm_perm", "structModels_1_1Uptake.html#a90c4a714dcd56c27361faf2972efd147", null ]
+];

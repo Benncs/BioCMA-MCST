@@ -1,0 +1,15 @@
+<map id="Core::GlobalInitialiser::init_monte_carlo" name="Core::GlobalInitialiser::init_monte_carlo">
+<area shape="rect" id="Node000001" title="Initializes a Monte Carlo unit." alt="" coords="5,117,152,156"/>
+<area shape="rect" id="Node000002" href="$namespaceWrapMPI.html#a8237adbb04708d9bf4bae9e904d04f5f" title=" " alt="" coords="235,5,376,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,115,141,76,169,56,199,39,219,31,221,36,201,44,172,61,145,80,101,119"/>
+<area shape="rect" id="Node000004" href="$classCore_1_1GlobalInitialiser.html#a5134f9db1f59d9124d5fdec88e3e99f3" title="Checks the validity of specified initialization steps." alt="" coords="232,54,378,93"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="150,114,218,95,219,100,151,119"/>
+<area shape="rect" id="Node000005" href="$classCmaUtils_1_1FlowMapTransitionner.html#a5ca5151ebfbb3b5dd309309c54652af8" title="Converts the provided neighbors&#39; data into a Kokkos view." alt="" coords="200,117,411,156"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="152,134,184,134,184,139,152,139"/>
+<area shape="rect" id="Node000006" href="$namespaceMC.html#ac9b6a65d70e4c5007f4bc908509924a0" title=" " alt="" coords="234,180,377,205"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="153,152,200,164,236,173,235,178,199,170,151,158"/>
+<area shape="rect" id="Node000007" href="$classCore_1_1GlobalInitialiser.html#a3844076c910ed26f60f42bada71cc09e" title="Validates the specified initialization step and any additional steps." alt="" coords="232,229,378,268"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="106,154,149,184,201,214,218,221,216,226,198,219,146,189,103,158"/>
+<area shape="rect" id="Node000003" href="$namespaceWrapMPI.html#adab3300a86b8c0227268b23134b57a24" title=" " alt="" coords="459,5,591,30"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="377,15,444,15,444,20,377,20"/>
+</map>

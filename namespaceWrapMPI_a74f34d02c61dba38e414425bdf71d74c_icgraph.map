@@ -1,0 +1,5 @@
+<map id="WrapMPI::recv_span" name="WrapMPI::recv_span">
+<area shape="rect" id="Node000001" title="Receives data into a span buffer." alt="" coords="230,12,372,37"/>
+<area shape="rect" id="Node000002" href="$classWrapMPI_1_1IterationPayload.html#a136036d66a6c16c18d4115905448380f" title="Receives data for this payload from a specified source." alt="" coords="5,5,182,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,27,182,27,182,22,214,22"/>
+</map>

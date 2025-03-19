@@ -1,0 +1,26 @@
+<map id="Core::exporter_filename" name="Core::exporter_filename">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,170,167,194"/>
+<area shape="rect" id="Node000002" href="$namespaceCore.html#acd849e9c1dbf0aef00c45cfdcb0194b3" title="Start simulation." alt="" coords="215,170,299,194"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,188,199,188,199,193,167,194"/>
+<area shape="poly" id="edge2_Node000002_Node000001" title=" " alt="" coords="214,177,182,176,182,170,214,171"/>
+<area shape="rect" id="Node000003" href="$namespaceCore.html#afbce0beea293a7ccfdfc34a85b5e5e77" title=" " alt="" coords="362,100,480,139"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="291,167,354,142,356,147,293,172"/>
+<area shape="rect" id="Node000009" href="$namespacePostProcessing.html#a0e06c75e06cf43e767d5e3e8afab62f2" title=" " alt="" coords="347,193,495,232"/>
+<area shape="poly" id="edge9_Node000002_Node000009" title=" " alt="" coords="300,187,332,193,331,199,299,192"/>
+<area shape="rect" id="Node000004" href="$classCore_1_1PartialExporter.html#a05cba8c28abaecce99f586d551a75f80" title="Initializes the fields required for exporting data." alt="" coords="558,5,704,44"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="456,97,542,53,555,48,557,53,544,58,458,102"/>
+<area shape="rect" id="Node000006" href="$namespacePostProcessing.html#a9ff9231cbdf2a3c4e539c4638aba2445" title=" " alt="" coords="557,68,705,107"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="480,108,541,98,542,104,481,113"/>
+<area shape="rect" id="Node000007" href="$classCore_1_1PartialExporter.html#a450fb0c92efa4ee81b4083fc01f5e665" title="Writes the number of particles in each compartment." alt="" coords="552,131,710,169"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="481,125,537,134,537,139,480,131"/>
+<area shape="rect" id="Node000005" href="$classCore_1_1DataExporter.html#a9c60512b8e80f25d5f1f6cac29b27d07" title=" " alt="" coords="767,5,901,44"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="704,22,752,22,752,27,704,27"/>
+<area shape="rect" id="Node000008" href="$classCore_1_1DataExporter.html#a0af9b5e13d16339af1918f8e845193f9" title=" " alt="" coords="767,131,901,169"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="710,147,751,147,751,153,710,153"/>
+<area shape="rect" id="Node000010" href="$classSimulation_1_1SimulationUnit.html#a0d675ed463b0caaeea75be8bd87d72cc" title=" " alt="" coords="543,193,719,232"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="496,210,528,210,528,215,496,215"/>
+<area shape="rect" id="Node000011" href="$classCore_1_1PartialExporter.html#a9927dbf1350349f090606134043e190c" title="Writes probe data to the export." alt="" coords="558,256,704,295"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="489,230,550,248,549,254,487,235"/>
+<area shape="rect" id="Node000012" href="$classCore_1_1DataExporter.html#a0b0b79f3932c4eb905704a852248c857" title=" " alt="" coords="767,256,901,295"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="704,273,752,273,752,278,704,278"/>
+</map>

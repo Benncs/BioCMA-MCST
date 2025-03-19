@@ -1,0 +1,7 @@
+<map id="MC::Distributions::TruncatedNormal::var" name="MC::Distributions::TruncatedNormal::var">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,151,76"/>
+<area shape="rect" id="Node000002" href="$namespaceMC_1_1Distributions.html#ad926df45d288940d27ecbc7d10dfda4c" title="Computes the standard normal cumulative distribution function (CDF)." alt="" coords="199,5,330,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,42,183,36,184,41,151,47"/>
+<area shape="rect" id="Node000003" href="$namespaceMC_1_1Distributions.html#a4f029bcbd226a11b903c0b6c0a0402ee" title="Computes the standard normal probability density function (PDF)." alt="" coords="199,68,330,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="151,66,184,71,183,77,150,71"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Core::GlobalInitialiser::init_state" name="Core::GlobalInitialiser::init_state">
+<area shape="rect" id="Node000001" title="Initializes the simulation state." alt="" coords="407,5,553,44"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#a4fa32007b34a9e448be11ebd7d5e695f" title="Initializes a transitioner with the provided flow iterator." alt="" coords="213,5,359,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="391,27,359,27,359,22,391,22"/>
+<area shape="rect" id="Node000003" href="$structApi_1_1SimulationInstance.html#ae9bdd54076170f50eadcb7966d64c19d" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,5,165,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="197,27,165,27,165,22,197,22"/>
+</map>

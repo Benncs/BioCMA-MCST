@@ -1,0 +1,12 @@
+<map id="Core::exporter_filename" name="Core::exporter_filename">
+<area shape="rect" id="Node000001" title=" " alt="" coords="552,40,714,65"/>
+<area shape="rect" id="Node000002" href="$namespaceCore.html#acd849e9c1dbf0aef00c45cfdcb0194b3" title="Start simulation." alt="" coords="420,40,504,65"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="537,64,505,63,505,58,537,59"/>
+<area shape="poly" id="edge3_Node000002_Node000001" title=" " alt="" coords="520,41,552,41,552,46,520,47"/>
+<area shape="rect" id="Node000003" href="$structApi_1_1SimulationInstance.html#a3f04372728be84263fb69f5773ca5bd5" title="Execute the simulation." alt="" coords="213,5,372,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="404,46,372,40,373,35,405,41"/>
+<area shape="rect" id="Node000004" href="$namespaceCore.html#a8a3e4aa1d1921da2e211c43d5368acf1" title=" " alt="" coords="252,68,333,93"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="405,65,334,77,333,71,404,59"/>
+<area shape="rect" id="Node000005" href="$structApi_1_1SimulationInstance.html#ad2abfa76ac4128d44b7c0c895f78b77b" title="Load ad apply the simulation configuration and prepare for execution based on file." alt="" coords="5,61,165,100"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="236,83,165,83,165,78,236,78"/>
+</map>

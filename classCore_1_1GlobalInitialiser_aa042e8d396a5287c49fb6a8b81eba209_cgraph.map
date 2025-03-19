@@ -1,0 +1,12 @@
+<map id="Core::GlobalInitialiser::mpi_broadcast" name="Core::GlobalInitialiser::mpi_broadcast">
+<area shape="rect" id="Node000001" title="Performs MPI broadcast for synchronization." alt="" coords="5,48,152,86"/>
+<area shape="rect" id="Node000002" href="$namespaceWrapMPI.html#a1a08bbe69602ac2f4f38e1a0d45275cb" title=" " alt="" coords="210,5,328,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,45,203,32,204,37,153,51"/>
+<area shape="rect" id="Node000003" href="$namespaceWrapMPI.html#aa924ad0d911109a9e6e3a20bebc3b316" title=" " alt="" coords="387,31,540,55"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="152,60,372,46,372,51,152,65"/>
+<area shape="rect" id="Node000004" href="$namespaceWrapMPI.html#a372df5351a2085df252cc9f4cceae7de" title="Broadcasts a single data item to all processes." alt="" coords="200,104,339,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="153,83,204,97,203,102,151,89"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="329,23,372,28,371,34,328,28"/>
+<area shape="rect" id="Node000005" href="$namespaceWrapMPI.html#adab3300a86b8c0227268b23134b57a24" title=" " alt="" coords="398,104,530,129"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="339,114,382,114,382,119,339,119"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="Core::GlobalInitialiser" name="Core::GlobalInitialiser">
+<area shape="rect" id="Node000001" title="A class responsible for initializing various components of a simulation framework." alt="" coords="122,92,268,117"/>
+<area shape="rect" id="Node000002" href="$structExecInfo.html" title=" " alt="" coords="5,5,78,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,35,175,89,173,94,74,40"/>
+<area shape="rect" id="Node000003" href="$structCore_1_1SimulationParameters.html" title=" " alt="" coords="102,5,288,30"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,45,198,92,192,92,192,45"/>
+<area shape="rect" id="Node000004" href="$structCore_1_1UserControlParameters.html" title="A structure to hold user&#45;defined control parameters for simulation settings." alt="" coords="312,5,507,30"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="367,38,226,94,224,89,365,33"/>
+</map>

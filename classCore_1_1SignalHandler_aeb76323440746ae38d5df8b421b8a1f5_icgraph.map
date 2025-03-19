@@ -1,0 +1,5 @@
+<map id="Core::SignalHandler::handle_SIGUSR1" name="Core::SignalHandler::handle_SIGUSR1">
+<area shape="rect" id="Node000001" title="Handles the SIGUSR1 signal." alt="" coords="192,5,330,44"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1SignalHandler.html#a1f78204fef0e70461d3477db7cbd9b74" title="Constructor for SignalHandler." alt="" coords="5,5,144,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,27,144,27,144,22,176,22"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="WrapMPI::recv_v" name="WrapMPI::recv_v">
+<area shape="rect" id="Node000001" title="Receives a vector of data items from a source." alt="" coords="5,31,127,55"/>
+<area shape="rect" id="Node000002" href="$namespaceWrapMPI.html#adab3300a86b8c0227268b23134b57a24" title=" " alt="" coords="175,5,307,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,32,159,27,160,32,127,37"/>
+<area shape="rect" id="Node000003" href="$namespaceWrapMPI.html#ac43482d706c8ce2d9022c54784820197" title="Receives a single data item from a source." alt="" coords="187,55,294,79"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="127,49,172,55,171,60,127,54"/>
+</map>

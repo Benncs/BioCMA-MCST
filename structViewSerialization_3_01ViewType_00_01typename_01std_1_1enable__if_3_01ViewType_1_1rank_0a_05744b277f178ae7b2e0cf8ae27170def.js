@@ -1,0 +1,5 @@
+var structViewSerialization_3_01ViewType_00_01typename_01std_1_1enable__if_3_01ViewType_1_1rank_0a_05744b277f178ae7b2e0cf8ae27170def =
+[
+    [ "deserialize", "structViewSerialization_3_01ViewType_00_01typename_01std_1_1enable__if_3_01ViewType_1_1rank_0a_05744b277f178ae7b2e0cf8ae27170def.html#ae94579fef035fa5a8057d982ca5469f5", null ],
+    [ "serialize", "structViewSerialization_3_01ViewType_00_01typename_01std_1_1enable__if_3_01ViewType_1_1rank_0a_05744b277f178ae7b2e0cf8ae27170def.html#a29d3b19c0d52ea2dc3779e8d26df006c", null ]
+];

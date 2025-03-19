@@ -1,0 +1,7 @@
+<map id="Core::DataExporter" name="Core::DataExporter">
+<area shape="rect" id="Node000001" title="A class responsible for exporting various types of data such as matrices, arrays, and metadata in a s..." alt="" coords="87,5,222,30"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1MainExporter.html" title="Exporter for host&#45;only data related to general&#45;purpose simulation data (e.g., concentration,..." alt="" coords="5,78,141,103"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,42,88,80,84,76,128,38"/>
+<area shape="rect" id="Node000003" href="$classCore_1_1PartialExporter.html" title="Exporter for each MPI worker (including host) that exports data relative to particle state." alt="" coords="164,78,310,103"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,38,225,76,222,80,178,43"/>
+</map>

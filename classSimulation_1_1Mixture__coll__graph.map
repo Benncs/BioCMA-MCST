@@ -1,0 +1,5 @@
+<map id="Simulation::Mixture" name="Simulation::Mixture">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,92,139,117"/>
+<area shape="rect" id="Node000002" href="$structSimulation_1_1Phase.html" title=" " alt="" coords="8,5,136,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,45,75,92,69,92,69,45"/>
+</map>

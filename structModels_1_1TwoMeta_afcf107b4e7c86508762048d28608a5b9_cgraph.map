@@ -1,0 +1,11 @@
+<map id="Models::TwoMeta::division" name="Models::TwoMeta::division">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,12,181,37"/>
+<area shape="rect" id="Node000002" href="$structModels_1_1Uptake.html#a81f6d63498b3036a75880ed7a5c48d6a" title=" " alt="" coords="229,12,393,37"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,22,213,22,213,27,181,27"/>
+<area shape="rect" id="Node000003" href="$structMC_1_1Distributions_1_1TruncatedNormal.html#af6cfcdb1f39978352e55fc5c5f729462" title=" " alt="" coords="441,5,630,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="394,22,425,22,425,27,394,27"/>
+<area shape="rect" id="Node000004" href="$namespaceMC_1_1Distributions.html#a3c07f6cf61b1c67ea9b2b3e0d6c42cc7" title="Computes the inverse CDF (probit function) of a normal distribution." alt="" coords="678,5,810,44"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="631,22,663,22,663,27,631,27"/>
+<area shape="rect" id="Node000005" href="$namespaceMC_1_1Distributions.html#a351272c0fa13e73d23c7b1caf92e858f" title="Computes an approximation of the inverse error function." alt="" coords="858,5,989,44"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="810,22,842,22,842,27,810,27"/>
+</map>

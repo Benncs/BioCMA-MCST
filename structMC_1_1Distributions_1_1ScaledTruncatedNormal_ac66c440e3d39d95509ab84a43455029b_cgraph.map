@@ -1,0 +1,9 @@
+<map id="MC::Distributions::ScaledTruncatedNormal::draw_from" name="MC::Distributions::ScaledTruncatedNormal::draw_from">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,166,58"/>
+<area shape="rect" id="Node000002" href="$structMC_1_1Distributions_1_1TruncatedNormal.html#af6cfcdb1f39978352e55fc5c5f729462" title=" " alt="" coords="214,12,403,51"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,29,198,29,198,34,166,34"/>
+<area shape="rect" id="Node000003" href="$namespaceMC_1_1Distributions.html#a3c07f6cf61b1c67ea9b2b3e0d6c42cc7" title="Computes the inverse CDF (probit function) of a normal distribution." alt="" coords="451,12,582,51"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="403,29,435,29,435,34,403,34"/>
+<area shape="rect" id="Node000004" href="$namespaceMC_1_1Distributions.html#a351272c0fa13e73d23c7b1caf92e858f" title="Computes an approximation of the inverse error function." alt="" coords="630,12,762,51"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="583,29,615,29,615,34,583,34"/>
+</map>

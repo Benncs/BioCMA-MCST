@@ -1,0 +1,5 @@
+<map id="MC::Distributions::norminv" name="MC::Distributions::norminv">
+<area shape="rect" id="Node000001" title="Computes the inverse CDF (probit function) of a normal distribution." alt="" coords="5,5,137,44"/>
+<area shape="rect" id="Node000002" href="$namespaceMC_1_1Distributions.html#a351272c0fa13e73d23c7b1caf92e858f" title="Computes an approximation of the inverse error function." alt="" coords="185,5,316,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,22,169,22,169,27,137,27"/>
+</map>
