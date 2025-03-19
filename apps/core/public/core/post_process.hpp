@@ -45,6 +45,9 @@ namespace PostProcessing
           particle_values(Model::n_var, i_particle) = mass;
 
         });
+
+ 
+
     Kokkos::fence();
     Kokkos::Experimental::contribute(spatial_values, scatter_spatial_values);
   }
@@ -64,8 +67,8 @@ namespace PostProcessing
       properties.vnames = std::vector<std::string>(ar.begin(), ar.end());
       properties.vnames.emplace_back("mass");
       ParticlePropertyViewType<ComputeSpace> spatial_values(
-          "property_spatial", M::n_var+1, n_compartment);
-      ParticlePropertyViewType<ComputeSpace> particle_values("property_values", M::n_var+1, n_p);
+          "property_spatial", M::n_var + 1, n_compartment);
+      ParticlePropertyViewType<ComputeSpace> particle_values("property_values", M::n_var + 1, n_p);
 
       inner<M, Kokkos::DefaultExecutionSpace>(
           n_p, container.position, container.model, particle_values, spatial_values);

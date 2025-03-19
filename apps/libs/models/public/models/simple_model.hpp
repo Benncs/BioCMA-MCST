@@ -103,7 +103,7 @@ namespace Models
     Uptake<SimpleModel>::init(random_pool, idx, arr);
   }
 
-  KOKKOS_INLINE_FUNCTION MC::Status SimpleModel::update(const MC::KPRNG::pool_type& random_pool,
+  KOKKOS_INLINE_FUNCTION MC::Status SimpleModel::update([[maybe_unused]]const MC::KPRNG::pool_type& random_pool,
                                                         FloatType d_t,
                                                         std::size_t idx,
                                                         const SelfParticle& arr,

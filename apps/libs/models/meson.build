@@ -45,9 +45,9 @@ biomodel_dependency = declare_dependency(
 
 
 
-# install_subdir(
-#    'public',
-#    install_dir: includes_install_dir,
-# )
+install_subdir(
+   'public',
+   install_dir: includes_install_dir,
+)
 
-# subdir('tests')
+subdir('tests')

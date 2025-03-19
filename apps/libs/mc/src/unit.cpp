@@ -80,6 +80,7 @@ namespace
      */
     KOKKOS_INLINE_FUNCTION void operator()(std::size_t i_particle) const
     {
+      (void)i_particle;
       // list._owned_data(i_particle).properties.weight = new_weigth;
     }
   };

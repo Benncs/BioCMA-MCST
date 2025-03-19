@@ -45,7 +45,7 @@ namespace
 
         status(i_to_remove) = MC::Status::Idle;
         Kokkos::atomic_exchange(&position(i_to_remove), position(idx_to_move));
-        //TODO Use hierachical parallism here, thread range is likely to work  
+        // TODO Use hierachical parallism here, thread range is likely to work
         for (std::size_t i_properties = 0; i_properties < M::n_var; ++i_properties)
         {
           model(i_to_remove, i_properties) = model(idx_to_move, i_properties);
@@ -113,7 +113,8 @@ namespace MC
       return n_used_elements;
     };
 
-    KOKKOS_INLINE_FUNCTION void get_contributions(std::size_t idx, const ContributionView& contributions) const;
+    KOKKOS_INLINE_FUNCTION void get_contributions(std::size_t idx,
+                                                  const ContributionView& contributions) const;
 
     [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
     handle_division(const MC::KPRNG::pool_type& random_pool, std::size_t idx1) const;
@@ -288,14 +289,14 @@ namespace MC
   ParticlesContainer<M>::ParticlesContainer(std::size_t n_particle)
       : model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_model"), 0),
         position(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_position"), 0),
-        weights(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_weigth"), 0),
         status(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_status"), 0),
+        weights(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_weigth"), 0),
         buffer_model("buffer_particle_model", 0),
         buffer_position("buffer_particle_position", 0), // Dont allocate now
         buffer_index("buffer_index"), allocation_factor(default_allocation_factor),
         n_allocated_elements(0), n_used_elements(n_particle)
   {
-    
+
     __allocate__(n_particle);
     __allocate_buffer__();
   }
@@ -304,10 +305,11 @@ namespace MC
   ParticlesContainer<M>::ParticlesContainer()
       : model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_model"), 0),
         position(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_position"), 0),
-        weights(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_weigth"), 0),
         status(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_status"), 0),
+        weights(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_weigth"), 0),
+
         buffer_model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "buffer_particle_model"), 0),
-        buffer_position( Kokkos::view_alloc(Kokkos::WithoutInitializing, "buffer_particle_model")),
+        buffer_position(Kokkos::view_alloc(Kokkos::WithoutInitializing, "buffer_particle_model")),
         buffer_index("buffer_index"), allocation_factor(default_allocation_factor),
         n_allocated_elements(0), n_used_elements(0)
 
@@ -324,7 +326,7 @@ namespace MC
 
     if (to_remove == n_used_elements)
     {
-      __shrink__(0, true); 
+      __shrink__(0, true);
       n_used_elements = 0;
     }
     else if (to_remove > n_used_elements)

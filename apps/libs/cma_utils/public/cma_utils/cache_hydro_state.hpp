@@ -17,7 +17,12 @@ using CumulativeProbabilityView =
 
 using FlowMatrixType = Eigen::SparseMatrix<double>;
 
-/** @brief Namespace to handle algorithms and structures related to reading compartment mesh */
+/** 
+  @brief Namespace to handle algorithms and structures related to reading compartment mesh
+  @see Simulation::KernelInline::MoveFunctor
+  
+  @note See documentation page for full explanation  
+*/
 namespace CmaUtils
 {
   class ProxyPreCalculatedHydroState;
