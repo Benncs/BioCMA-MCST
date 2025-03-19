@@ -106,7 +106,11 @@ namespace Core
 #endif
     }
 
-    Kokkos::initialize(argc, argv);
+    if (!Kokkos::is_finalized() && !Kokkos::is_initialized())
+    {
+      Kokkos::initialize(argc, argv);
+    }
+
 #ifndef NO_MPI
     WrapMPI::barrier();
 #endif
@@ -128,7 +132,7 @@ namespace Core
 
     info.current_rank = static_cast<size_t>(rank);
     info.n_rank = static_cast<size_t>(size);
-    
+
     const auto id_seed =
         (force_run_id.has_value())
             ? *force_run_id

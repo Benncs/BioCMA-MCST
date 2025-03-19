@@ -49,7 +49,7 @@ meson setup builddir $flags$
 Be sure to be in root project 
 
 ~~~~~~~~~~~~~bash
-$(pwd)/devutils/kokkos_wrap/wrap_cxx meson setup builddir $optionalflags$ -Duse_cuda=true -Duse_system_kokkos=true  
+CXX=$(pwd)/devutils/kokkos_wrap/wrap_cxx meson setup builddir $optionalflags$ -Duse_cuda=true -Duse_system_kokkos=true  
 ~~~~~~~~~~~~~
 
 This command is mandatory to detect the correct compiler, this configuration needs kokkos to be installed system wide for specific GPU. 
