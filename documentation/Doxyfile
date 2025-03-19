@@ -1,26 +1,31 @@
-# Doxygen runs relative to docs/ folder
 PROJECT_NAME           = "BioCMAMC-ST"
 BRIEF 				   = Biological system simulation tool based on Compartment Approach and Monte-Carlo 
 OUTPUT_DIRECTORY       = ./documentation/output
 
-# INPUT paths relative to this Doxyfile
 INPUT                  = ./apps ./documentation/pages
-
 FILE_PATTERNS          = *.cpp *.hpp *.md *.tex 
 RECURSIVE              = YES
 
-# Markdown support
 MARKDOWN_SUPPORT       = YES
 EXTENSION_MAPPING      = 
 USE_MDFILE_AS_MAINPAGE = ./documentation/01_index.md
 
+#Equations
+USE_MATHJAX            = YES
+MATHJAX_VERSION        = MathJax_2
+MATHJAX_FORMAT         = HTML-CSS
+MATHJAX_RELPATH        = https://cdn.jsdelivr.net/npm/mathjax@2
+
+
+
 # Source code extraction
 EXTRACT_ALL            = YES
-EXTRACT_PRIVATE        = NO
+EXTRACT_PRIVATE        = YES
 EXTRACT_STATIC         = YES
 
+
 # Generate LaTeX too (optional)
-GENERATE_LATEX         = YES
+GENERATE_LATEX         = NO
 LATEX_OUTPUT           = ./latex
 SEARCHENGINE           = NO
 
@@ -34,8 +39,8 @@ CALLER_GRAPH           = YES
 GENERATE_TREEVIEW      = YES
 
 
-GENERATE_TREEVIEW      = YES # required!
-DISABLE_INDEX          = NO
+GENERATE_TREEVIEW      = YES 
+DISABLE_INDEX          = YES
 FULL_SIDEBAR           = NO
 HTML_EXTRA_STYLESHEET  = documentation/pages/style.css
 HTML_COLORSTYLE        = LIGHT # required with Doxygen >= 1.9.5
