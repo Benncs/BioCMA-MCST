@@ -17,11 +17,6 @@ namespace Simulation
     return liquid_scalar->getContributionData();
   }
 
-  std::span<double> SimulationUnit::getContributionData_mut()
-  {
-    return liquid_scalar->getContributionData();
-  }
-
   std::span<double> SimulationUnit::getCliqData() const
   {
     return this->liquid_scalar->getConcentrationData();
@@ -148,7 +143,7 @@ namespace Simulation
     {
       mt_model.gas_liquid_mass_transfer(state);
       const MatrixType& mtr = mt_model.proxy()->mtr;
-
+      
       this->gas_scalar->performStepGL(
           d_t, state.gas->get_transition(), mtr, MassTransfer::Sign::GasToLiquid);
 

@@ -68,7 +68,7 @@ namespace MC::Distributions
 */
   template <FloatingPointType F> KOKKOS_INLINE_FUNCTION F erfinv(F x)
   {
-
+    
     // Use the Winitzki’s method to calculate get an approached expression of erf(x) and inverse it
 
     constexpr F a = 0.147;
@@ -177,8 +177,8 @@ namespace MC::Distributions
 */
   template <FloatingPointType F> struct Normal
   {
-    F mu;    ///< Mean
-    F sigma; ///< Standard deviation
+    F mu;    ///< Mean 
+    F sigma; ///< Standard deviation 
 
     /**
       @brief Draws a random sample from the distribution.
@@ -274,22 +274,18 @@ namespace MC::Distributions
     {
       // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
       const F rand = static_cast<F>(gen.drand());
-
-      // Max bounded because if sigma <<1 z -> Inf not wanted because erf/erfc/erfinv are not stable
-      // for extrem value Min bounded if |mu-bound| <<1 z -> 0 which is also not wanted for error
-      // function
-
-      F zl = Kokkos::clamp(lower - mu / sigma, F(1e-3), F(1e3));
-      F zu = Kokkos::clamp(upper - mu / sigma, F(1e-3), F(1e3));
-
+      F zl = (lower - mu) / sigma;
+      F zu = (upper - mu) / sigma;
       F pl = 0.5 * Kokkos::erfc(-zl / Kokkos::numbers::sqrt2);
-      KOKKOS_ASSERT(Kokkos::isfinite(pl)&&"Truncated normal draw leads is Nan of Inf with given parameters");
+      KOKKOS_ASSERT(Kokkos::isfinite(pl));
       F pu = 0.5 * Kokkos::erfc(-zu / Kokkos::numbers::sqrt2);
-      KOKKOS_ASSERT(Kokkos::isfinite(pu)&&"Truncated normal draw leads is Nan of Inf with given parameters");
+      KOKKOS_ASSERT(Kokkos::isfinite(pu));
       F p = rand * (pu - pl) + pl;
       F x = norminv(p, mu, sigma);
-      KOKKOS_ASSERT(Kokkos::isfinite(x)&&"Truncated normal draw leads is Nan of Inf with given parameters");
+      KOKKOS_ASSERT(Kokkos::isfinite(x));
       return x;
+
+
 
       // NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
     }

@@ -51,16 +51,15 @@ namespace PostProcessing
                              std::unique_ptr<Core::MainExporter>& mde)
   {
     std::cout << "POST PROCESSING" << std::endl;
-    
+    auto distribution = simulation.mc_unit->domain.getRepartition();
+
+    auto tot = std::accumulate(distribution.begin(), distribution.end(), static_cast<size_t>(0));
     auto removed = simulation.mc_unit->events.get<MC::EventType::Death>() +
                    simulation.mc_unit->events.get<MC::EventType::Exit>();
     auto new_p = simulation.mc_unit->events.get<MC::EventType::NewParticle>();
 
-    mde->write_final(simulation, simulation.mc_unit->n_particle());
+    mde->write_final(simulation, distribution);
 
-    auto distribution = simulation.mc_unit->getRepartition();
-
-    auto tot = std::accumulate(distribution.begin(), distribution.end(), static_cast<size_t>(0));
     if (tot != (new_p - removed + params.number_particle))
     {
       std::cerr << ("Results are not coherent (Bad particle balance): ");
@@ -72,9 +71,9 @@ namespace PostProcessing
   void show_sumup_state(const Simulation::SimulationUnit& simulation) noexcept
   {
     // Assuming domain data is in sharedSpace
-    for (auto&& c : simulation.mc_unit->getRepartition())
+    for (auto&& c : simulation.mc_unit->domain)
     {
-      Kokkos::printf("%d ", c);
+      Kokkos::printf("%d ", c.n_cells);
     }
     Kokkos::printf("\r\n");
   }

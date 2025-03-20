@@ -20,11 +20,16 @@ namespace MC
    */
   struct ContainerState
   {
+
+    double volume_liq{}; ///< Volume of liquid in the container.
+    double volume_gas{}; ///< Volume of gas in the container.
     uint64_t id{};       ///< Unique identifier for the container.
+
     LocalConcentrationView concentrations;
-    // alignas(ExecInfo::cache_line_size)
-    //     int64_t n_cells{}; ///< Number of cells in the container. @warning Be careful
-    //                        ///< when decrementing this value.
+
+    alignas(ExecInfo::cache_line_size)
+        int64_t n_cells{}; ///< Number of cells in the container. @warning Be careful
+                           ///< when decrementing this value.
 
     /**
      * @brief Serializes the `ContainerState` data members.
@@ -38,7 +43,7 @@ namespace MC
      */
     template <class Archive> void serialize(Archive& ar)
     {
-      ar(id);
+      ar(volume_liq, volume_gas, id, n_cells);
     }
 
     ContainerState() = default;
