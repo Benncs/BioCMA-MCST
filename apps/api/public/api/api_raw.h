@@ -33,7 +33,6 @@ typedef struct Opaque*
   //  */
   // Handle init_handle_shared(uint64_t id, uint32_t thread_per_process);
 
-  // // TODO: Enable when USE_MPI is defined
   // /**
   //  * @brief Initialize a raw simulation instance handle with MPI support.
   //  *

@@ -10,26 +10,35 @@
 #else
 using MPI_Request = int;
 // MOCK
+// TODO CLEAN FWD DECLARATION
 // NOLINTBEGIN
 namespace WrapMPI
 {
   void barrier() {};
-  template <typename T> std::vector<T> gather(auto, auto, int = 0) {};
-
-  template <typename T> void gather_span(std::span<T>, std::span<const T>, size_t = 0){};
-
-  void broadcast_span(auto data, auto n) {};
   template <typename T>
-  int send_v(std::span<const T> data, size_t dest, size_t tag, bool send_size) noexcept {};
+  [[maybe_unused]] std::vector<T>
+  gather([[maybe_unused]] auto, [[maybe_unused]] auto, [[maybe_unused]] int = 0) {};
 
-  namespace Async
-  {
+  template <typename T>
+  [[maybe_unused]] void gather_span([[maybe_unused]] std::span<T>,
+                                    [[maybe_unused]] std::span<const T>,
+                                    [[maybe_unused]] size_t = 0){};
 
-    template <typename T>
-    int recv_span(MPI_Request& request, std::span<T> buf, size_t src, size_t tag) noexcept;
-    void wait(MPI_Request& request);
+  void broadcast_span([[maybe_unused]] auto data, [[maybe_unused]] auto n) {};
+  template <typename T>
+  [[maybe_unused]] int send_v([[maybe_unused]] std::span<const T> data,
+                              [[maybe_unused]] size_t dest,
+                              [[maybe_unused]] size_t tag,
+                              [[maybe_unused]] bool send_size) noexcept {};
 
-  } // namespace Async
+  // namespace Async
+  // {
+
+  //   template <typename T>
+  //   [[maybe_unused]] int recv_span(MPI_Request& request, std::span<T> buf, size_t src, size_t tag) noexcept;
+  //   void wait(MPI_Request& request);
+
+  // } // namespace Async
 } // namespace WrapMPI
 // NOLINTEND
 #endif

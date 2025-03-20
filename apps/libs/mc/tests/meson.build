@@ -11,9 +11,8 @@ endif
 
 
 
-dl_dep = compiler.find_library('dl', required : false)
-test_list = executable('test_list', 'test_list.cpp',dependencies:[mc_dependency,dl_dep])
-test('test_list',test_list)
+test_container = executable('test_container', 'test_container.cpp',dependencies:[mc_dependency])
+test('test_container',test_container)
 
 arg = []
 if ci_execution

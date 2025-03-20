@@ -84,8 +84,9 @@ namespace Simulation::KernelInline
                std::size_t& dead_count) const
     {
       GET_INDEX(n_particles);
-      if (status(idx) != MC::Status::Idle)
+        if (status(idx) != MC::Status::Idle) [[unlikely]]
       {
+        // Kokkos::printf("Skip %ld", idx);
         return;
       }
 

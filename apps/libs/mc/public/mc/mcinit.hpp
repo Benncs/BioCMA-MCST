@@ -1,17 +1,18 @@
 #ifndef __MC_INIT_HPP__
 #define __MC_INIT_HPP__
 
-#include "mc/traits.hpp"
 #include <cassert>
 #include <common/execinfo.hpp>
 #include <cstdint>
 #include <mc/domain.hpp>
 #include <mc/particles_container.hpp>
-#include <mc/prng/prng.hpp>
+#include <mc/traits.hpp>
 #include <mc/unit.hpp>
 #include <memory>
 #include <stdexcept>
 #include <utility>
+#include <span> 
+#include <biocma_cst_config.hpp>
 
 namespace MC
 {
@@ -47,14 +48,15 @@ namespace MC
     auto unit = std::make_unique<MonteCarloUnit>();
     unit->domain = ReactorDomain(volumes, neighbors);
     auto container = ParticlesContainer<Model>(n_particles);
-    try{
+    try
+    {
       impl_init(total_mass, n_particles, *unit, std::move(container));
     }
-    catch(const std::runtime_error& e)
+    catch (const std::runtime_error& e)
     {
       return nullptr;
     }
-    
+
     return unit;
   }
 

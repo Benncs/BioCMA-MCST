@@ -317,10 +317,11 @@ namespace
                      Core::PartialExporter& partial_exporter)
   // NOLINTEND
   {
-    const auto& state = simulation.get_state();
+    
     PROFILE_SECTION("host:handle_export")
     if (++dump_counter == dump_interval)
     {
+      const auto& state = simulation.get_state();
       SEND_MPI_SIG_DUMP
       auto vg = (simulation.getCgasData().has_value()) ? std::make_optional(state.gas->volume)
                                                        : std::nullopt;

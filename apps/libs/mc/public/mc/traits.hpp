@@ -93,10 +93,7 @@ concept HasNumberExportProperties = requires {
   // { std::bool_constant<(T::get_number(), true)>() } -> std::same_as<std::true_type>;
 };
 
-template <std::size_t n, typename T>
-concept HasExportProperties = requires(const T obj) {
-  { T::names() } -> std::convertible_to<std::array<std::string_view, n>>;
-};
+
 
 template <std::size_t N1, std::size_t N2>
 constexpr std::array<std::string_view, N1 + N2>
@@ -139,6 +136,33 @@ concept ModelType = requires(T model,
 
   requires FloatingPointType<typename T::FloatType>;
 };
+
+
+template <std::size_t n,typename T>
+concept _HasExportProperties = requires(const T obj) {
+  { T::names() } -> std::convertible_to<std::array<std::string_view, n>>;
+};
+
+
+
+template <typename T>
+concept HasExportPropertiesFull = ModelType<T>&&requires(const T obj) {
+  { T::names() } -> std::convertible_to<std::array<std::string_view, T::n_var>>;
+};
+
+//TODO Implement this concept for models and for PostProcess::get_properties
+template <typename T>
+concept HasExportPropertiesPartial = ModelType<T>&&requires(const T obj) {
+  { T::names() } -> std::convertible_to<std::vector<std::string_view>>;
+  { T::get_number() } -> std::convertible_to<std::size_t>; //May be a vector of indices to select
+};
+
+
+template <typename T>
+concept HasExportProperties = HasExportPropertiesFull<T> || HasExportPropertiesPartial<T>;
+
+
+
 
 // Helper to detect if `uniform_weight` exists as a type alias (using `using` keyword)
 template <typename T, typename = void> struct has_uniform_weight : std::false_type

@@ -69,7 +69,7 @@ namespace Core::ScalarFactory
       // };
       return [local_concentrations = c](size_t i_row, size_t i_col)
       {
-        (void)i_row;
+        (void)i_col;
         return local_concentrations[i_row];
       };
     };

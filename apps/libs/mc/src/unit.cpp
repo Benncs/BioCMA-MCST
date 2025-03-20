@@ -1,10 +1,9 @@
-#include "mc/prng/prng.hpp"
-#include "mc/traits.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
-
 #include <cstdint>
 #include <cstring>
+#include <mc/prng/prng.hpp>
+#include <mc/traits.hpp>
 #include <mc/unit.hpp>
 #include <type_traits>
 #include <utility>
@@ -62,7 +61,7 @@ namespace
   struct PostInitFunctor
   {
     MC::ParticleWeigths weights; ///< List of particles.
-    double new_weigth;        ///< The new weight assigned to each particle.
+    double new_weigth;           ///< The new weight assigned to each particle.
 
     /**
      * @brief Constructor for PostInitFunctor.
@@ -102,10 +101,10 @@ namespace
       // p.properties.id = i;
       // const uint64_t location = rng.uniform_u(min_c, max_c);
       particles.position(i) = rng.uniform_u(min_c, max_c);
-      Model::init(rng.random_pool,i, particles.model);
+      Model::init(rng.random_pool, i, particles.model);
       // p.properties.current_container = location;
       // p.init(rng);
-      const double mass_i = Model::mass(i,particles.model);
+      const double mass_i = Model::mass(i, particles.model);
       local_mass += mass_i;
       // list.set(i, std::move(p));
     }
@@ -147,7 +146,6 @@ namespace MC
     Kokkos::Experimental::contribute(n_cells, sn_cells);
     auto host = Kokkos::create_mirror_view_and_copy(HostSpace(), n_cells);
 
-  
     std::vector<uint64_t> dist(n_cells.extent(0));
     std::memcpy(dist.data(), host.data(), host.size() * sizeof(uint64_t));
 
@@ -177,7 +175,7 @@ namespace MC
       }
       // Kokkos::View<double, ComputeSpace> view_new_weight("view_new_weight");
       // Kokkos::deep_copy(view_new_weight, new_weight);
-      
+
       unit->init_weight = new_weight;
     };
 
@@ -222,14 +220,14 @@ namespace MC
        * dependent on the total mass.
        */
       using CurrentModel = typename std::remove_reference<decltype(container)>::type::UsedModel;
-            
+
       Kokkos::parallel_reduce("mc_init_first",
                               Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particles),
                               InitFunctor<CurrentModel>(container, min_c, max_c, rng),
                               total_mass);
       Kokkos::fence();
     };
-         
+
     std::visit(visitor, container);
     unit.container = std::move(container);
   }

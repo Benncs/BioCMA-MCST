@@ -1,8 +1,10 @@
 #ifndef __PARTICLES_CONTAINER_HPP__
 #define __PARTICLES_CONTAINER_HPP__
 
-#include "common/has_serialize.hpp"
 #include <Kokkos_Core.hpp>
+#include <common/has_serialize.hpp>
+#include <cstdint>
+#include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
 #include <stdexcept>
 
@@ -60,6 +62,52 @@ namespace
     std::size_t to_remove;
     std::size_t last_used_index;
   };
+
+  template <ModelType M> struct InsertFunctor
+  {
+    InsertFunctor(std::size_t _original_size,
+                  M::SelfParticle _model,
+                  MC::ParticlePositions _position,
+                  M::SelfParticle _buffer_model,
+                  MC::ParticlePositions _buffer_position)
+        : original_size(_original_size), model(std::move(_model)), position(std::move(_position)),
+          buffer_model(std::move(_buffer_model)), buffer_position(std::move(_buffer_position))
+    {
+    }
+
+    KOKKOS_INLINE_FUNCTION void operator()(const int i) const
+    {
+      position(original_size + i) = buffer_position(i);
+      for (std::size_t j = 0; j < M::n_var; ++j)
+      {
+        model(original_size + i, j) = buffer_model(i, j);
+      }
+    }
+
+    // TODO try this functor
+    // TODO find a way to organise data to not copy non needed  data (like contribs). Split model in
+    // two arrays?
+
+    //   KOKKOS_INLINE_FUNCTION
+    // void operator()(const Kokkos::TeamPolicy<>::member_type& team) const {
+    //   const int i = team.league_rank();  // Each team gets one index 'i'
+
+    //   position(original_size + i) = buffer_position(i);
+
+    //   Kokkos::parallel_for(
+    //     Kokkos::TeamThreadRange(team, M::n_var),
+    //     [&](const std::size_t j) {
+    //       model(original_size + i, j) = buffer_model(i, j);
+    //     });
+    // }
+
+    std::size_t original_size;
+    M::SelfParticle model;
+    MC::ParticlePositions position;
+    M::SelfParticle buffer_model;
+    MC::ParticlePositions buffer_position;
+  };
+
 }; // namespace
 
 namespace MC
@@ -144,6 +192,10 @@ namespace MC
 
     [[nodiscard]] KOKKOS_INLINE_FUNCTION double get_weight(std::size_t idx) const;
 
+    [[nodiscard]] double get_allocation_factor()const{return allocation_factor;}
+
+    [[nodiscard]] std::size_t capacity()const{return n_allocated_elements;}
+
   private:
     Model::SelfParticle buffer_model;
     ParticlePositions buffer_position;
@@ -205,15 +257,20 @@ namespace MC
     //     });
 
     Kokkos::parallel_for(
-        "InsertNewPosition",
-        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_add_item),
-        KOKKOS_CLASS_LAMBDA(const size_t i) {
-          position(original_size + i) = buffer_position(i);
-          for (std::size_t j = 0; j < Model::n_var; ++j)
-          {
-            model(original_size + i, j) = buffer_model(i, j);
-          }
-        });
+        "InsertMerge",
+        Kokkos::RangePolicy<>(0, n_add_item),
+        InsertFunctor<Model>(original_size, model, position, buffer_model, buffer_position));
+
+    // Kokkos::parallel_for(
+    //     "InsertNewPosition",
+    //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_add_item),
+    //     KOKKOS_CLASS_LAMBDA(const size_t i) {
+    //       position(original_size + i) = buffer_position(i);
+    //       for (std::size_t j = 0; j < Model::n_var; ++j)
+    //       {
+    //         model(original_size + i, j) = buffer_model(i, j);
+    //       }
+    //     });
 
     buffer_index() = 0;
     n_used_elements += n_add_item;

@@ -1,3 +1,4 @@
+#include "Kokkos_Core.hpp"
 #include <biocma_cst_config.hpp>
 #include <common/execinfo.hpp>
 #include <core/case_data.hpp>
@@ -49,6 +50,8 @@ namespace Core
 
   void exec(CaseData&& case_data)
   {
+    //TODO Find orphan profile_section : Kokkos::Profiling::popRegion() called outside  of an actve region. Previous regions: 
+    
 #ifdef NO_MPI
     const auto f_run = host_process;
 #else
@@ -132,6 +135,8 @@ namespace Core
 
     info.current_rank = static_cast<size_t>(rank);
     info.n_rank = static_cast<size_t>(size);
+
+    info.thread_per_process = Kokkos::num_threads();
 
     const auto id_seed =
         (force_run_id.has_value())

@@ -1,8 +1,7 @@
 #ifndef __GENERATED_MODEL_WRAP__HPP__
 #define __GENERATED_MODEL_WRAP__HPP__
 
-#include "common/kokkos_vector.hpp"
-#include "mc/domain.hpp"
+#include <mc/domain.hpp>
 #include <common/execinfo.hpp>
 #include <mc/unit.hpp>
 #include <memory>

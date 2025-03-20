@@ -56,7 +56,7 @@ namespace PostProcessing
   std::optional<PostProcessing::BonceBuffer>
   get_properties(const MC::ParticlesContainer<M>& container, const std::size_t n_compartment)
   {
-    if constexpr (HasExportProperties<M::n_var, M>)
+    if constexpr (HasExportProperties<M>)
     {
 
       BonceBuffer properties;

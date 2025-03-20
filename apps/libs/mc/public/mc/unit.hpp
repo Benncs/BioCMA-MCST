@@ -1,14 +1,14 @@
 #ifndef __MC_UNIT_HPP__
 #define __MC_UNIT_HPP__
 
-#include <mc/traits.hpp>
+#include "variant_model.hpp"
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
 #include <mc/particles_container.hpp>
 #include <mc/prng/prng.hpp>
+#include <mc/traits.hpp>
 #include <models/two_meta.hpp>
 #include <variant>
-#include "variant_model.hpp"
 
 struct TagDetector
 {
@@ -18,9 +18,7 @@ struct TagDetector
     (void)team_handle;
     (void)dead_count;
   }
-  TagDetector()
-  {
-  }
+  TagDetector() = default;
 };
 
 /**
@@ -39,7 +37,8 @@ namespace MC
   Kokkos::TeamPolicy<ComputeSpace>
   get_policty(FunctorType& f, std::size_t range, bool reduce = false)
   {
-
+    (void)f;
+    (void)reduce;
     Kokkos::TeamPolicy<ComputeSpace> _policy;
     // int recommended_team_size = (reduce)
     //                                 ? _policy.team_size_recommended(f,
@@ -55,8 +54,6 @@ namespace MC
     //   std::cout << "Policy(" << league_size << "," << recommended_team_size << ")" << std::endl;
     return _policy;
   }
-
- 
 
   /**
    * @brief General-purpose Monte Carlo unit to carry out simulations.
@@ -96,7 +93,7 @@ namespace MC
     template <class Archive> void serialize(Archive& ar)
     {
       ar(init_weight, events, domain, container);
-      std::visit([&ar](auto &container) { ar(container); }, container);
+      std::visit([&ar](auto& container) { ar(container); }, container);
     }
   };
 

@@ -47,7 +47,7 @@ namespace PostProcessing
     ::append_properties(counter, simulation, pde);
     counter++;
   }
-  void final_post_processing(const ExecInfo& exec,
+  void final_post_processing([[maybe_unused]] const ExecInfo& exec,
                              const Core::SimulationParameters& params,
                              Simulation::SimulationUnit& simulation,
                              std::unique_ptr<Core::MainExporter>& mde)
@@ -99,13 +99,13 @@ namespace
                          Simulation::SimulationUnit& simulation,
                          Core::PartialExporter& partial_exporter)
   {
-
+    bool compress_data = false;
     auto dump = get_particle_properties_device(simulation.mc_unit);
     if (dump.has_value())
     {
       std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
       partial_exporter.write_particle_data(
-          dump->vnames, dump->particle_values, dump->spatial_values, ds_name);
+          dump->vnames, dump->particle_values, dump->spatial_values, ds_name, compress_data);
     }
   }
 

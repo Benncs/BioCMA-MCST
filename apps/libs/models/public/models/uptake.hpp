@@ -212,6 +212,8 @@ namespace Models
 
     KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx, const SelfParticle& arr)
     {
+      (void)idx;
+      (void)arr;
       return 0.;
     }
 

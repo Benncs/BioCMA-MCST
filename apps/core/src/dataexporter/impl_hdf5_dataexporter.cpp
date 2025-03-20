@@ -114,7 +114,7 @@ namespace Core
     export_metadata_t description =
         user_description.has_value() ? *user_description : "Interesting results";
 
-    metadata["file_version"] = 4;
+    metadata["file_version"] = 5; //NOLINT
     metadata["creation_date"] = date_time();
     metadata["author"] = get_user_name();
     metadata["description"] = description;
@@ -128,7 +128,7 @@ namespace Core
     pimpl->file.createExternalLink(link_name.data(), filename.data(), groupname.data());
   }
 
-  void DataExporter::write_properties(std::optional<std::string> specific_dataspace,
+  void DataExporter::write_properties([[maybe_unused]] std::optional<std::string> specific_dataspace,
                                       const export_metadata_kv& values)
   {
     // TODO impl specific dataspace as metadata by default.
