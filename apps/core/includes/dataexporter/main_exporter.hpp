@@ -49,8 +49,7 @@ namespace Core
      * @param distribution Initial distribution of particles or entities across compartments.
      */
     void write_initial(double weight,
-                       const Core::SimulationParameters& params,
-                       const std::vector<size_t>& distribution);
+                       const Core::SimulationParameters& params);
 
     /**
      * @brief Writes final simulation data to the output.
@@ -58,8 +57,7 @@ namespace Core
      * @param simulation Reference to the simulation unit containing final state information.
      * @param distribution Final distribution of particles or entities across compartments.
      */
-    void write_final(Simulation::SimulationUnit& simulation,
-                     std::span<const std::size_t> distribution);
+    void write_final(Simulation::SimulationUnit& simulation,std::size_t number_particles);
 
     /**
      * @brief Initializes fields required for simulation export.

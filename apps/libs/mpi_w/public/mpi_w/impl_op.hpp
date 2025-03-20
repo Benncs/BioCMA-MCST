@@ -21,10 +21,7 @@
 namespace WrapMPI
 {
 
-  template <typename T>
-  concept POD_t =
-      std::is_standard_layout_v<T> && std::is_trivially_copyable_v<T> &&
-      std::is_trivially_destructible_v<T> && std::is_trivially_default_constructible_v<T>;
+
 
   // SENDING
 

@@ -9,7 +9,7 @@
 #include <string>
 #include <string_view>
 
-void set_n_thread_current_rank(int rank,
+[[deprecated]]void set_n_thread_current_rank(int rank,
                                int size,
                                ExecInfo &info,
                                const Core::UserControlParameters &params) noexcept;

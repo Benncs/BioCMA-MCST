@@ -58,7 +58,7 @@ def generate_loader_body(model_files: List[str]) -> str:
     case {i}:
     {{
         return MC::init<Models::{to_camel_case(model_name)}>(
-            info, number_particle, liq_volume, liquid_neighbors, x0,total_mass);
+             number_particle, liq_volume, liquid_neighbors,total_mass);
     }}
     """
     # Add the default else statement to handle unknown models

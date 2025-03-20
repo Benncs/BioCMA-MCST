@@ -16,7 +16,6 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
-
 #include <Kokkos_StdAlgorithms.hpp>
 
 WARN_EXPERIMENTAL

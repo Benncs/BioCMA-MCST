@@ -104,7 +104,7 @@ void fast_uniform_batch()
   MC::KPRNG rng;
   for (size_t i = 0; i < n_sample; ++i)
   {
-    samples[i] = rng.double_uniform();
+    samples[i] = rng.uniform<double>();
     theoretical[i] = static_cast<double>(i) / n_sample;
     std_sample[i] = dist(seed);
   }
@@ -131,7 +131,7 @@ void long_uniform_batch()
 
   for (size_t i = 0; i < n_sample; ++i)
   {
-    samples[i] = rng.double_uniform();
+    samples[i] = rng.uniform<double>();
     theoretical[i] = static_cast<double>(i) / n_sample;
     std_sample[i] = dist(seed);
   }
