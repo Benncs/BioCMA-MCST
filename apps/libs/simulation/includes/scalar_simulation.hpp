@@ -1,22 +1,20 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
-#include "Kokkos_Assert.hpp"
-#include <simulation/mass_transfer.hpp>
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <Kokkos_Core.hpp>
+#include <cma_utils/cache_hydro_state.hpp>
 #include <common/common.hpp>
-#include <common/kokkos_vector.hpp>
 #include <cstddef>
 #include <cstdint>
-#include <mc/particles/particle_model.hpp>
-#include <cma_utils/cache_hydro_state.hpp>
+#include <eigen_kokkos.hpp>
+#include <mc/traits.hpp>
 #include <simulation/alias.hpp>
+#include <simulation/mass_transfer.hpp>
 #include <span>
 #include <vector>
-#include <eigen_kokkos.hpp>
 
 namespace Simulation
 {
@@ -36,11 +34,11 @@ namespace Simulation
     void reduce_contribs(std::span<const double> data);
 
     void performStepGL(double d_t,
-                     const FlowMatrixType& m_transition,
-                     const MatrixType& mtr,MassTransfer::Sign sign);
+                       const FlowMatrixType& m_transition,
+                       const MatrixType& mtr,
+                       MassTransfer::Sign sign);
 
-    void performStep(double d_t,
-                     const FlowMatrixType& m_transition);
+    void performStep(double d_t, const FlowMatrixType& m_transition);
 
     // void performStep(double d_t, const FlowMatrixType& m_transition);
 
@@ -54,7 +52,6 @@ namespace Simulation
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
     [[nodiscard]] const MatrixType& get_mass_transfer() const;
     [[nodiscard]] std::span<double> getConcentrationData();
-    
 
     [[nodiscard]] std::size_t n_row() const;
     [[nodiscard]] std::size_t n_col() const;
@@ -72,14 +69,12 @@ namespace Simulation
     std::size_t n_r;
     std::size_t n_c;
     MatrixType total_mass;
-    
+
     DiagonalType volumes_inverse;
     DiagonalType m_volumes;
     DiagonalType sink;
     EigenKokkos concentrations;
     EigenKokkos sources;
-
-    
   };
 
   inline auto ScalarSimulation::getConcentrationArray() const
@@ -98,8 +93,6 @@ namespace Simulation
     sources.eigen_data.setZero();
     Kokkos::deep_copy(sources.compute, 0);
   }
-
-
 
   inline void ScalarSimulation::set_kernel_contribs_to_host() const
   {
@@ -139,7 +132,8 @@ namespace Simulation
   inline void ScalarSimulation::setVolumes(std::span<const double> volumes,
                                            std::span<const double> inv_volumes)
   {
-    KOKKOS_ASSERT(volumes.size()==inv_volumes.size() && volumes.size()==n_col()&&"scalar:setvolume")
+    KOKKOS_ASSERT(volumes.size() == inv_volumes.size() && volumes.size() == n_col() &&
+                  "scalar:setvolume")
     // SIGFAULT ?
     this->m_volumes.diagonal() =
         Eigen::Map<const Eigen::VectorXd>(volumes.data(), static_cast<int>(volumes.size()));

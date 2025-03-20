@@ -1,6 +1,5 @@
 #include <Kokkos_Core.hpp>
 #include <cma_utils/iteration_state.hpp>
-#include <common/kokkos_vector.hpp>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
@@ -8,7 +7,6 @@
 #include <eigen_kokkos.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
-#include <mc/particles/mcparticles.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/unit.hpp>
 #include <memory>
@@ -33,9 +31,8 @@ namespace Simulation
                                  const ScalarInitializer& scalar_init,
                                  std::optional<Feed::SimulationFeed> _feed)
       : mc_unit(std::move(_unit)), internal_counter_dead(0),
-        waiting_allocation_particle("waiting_allocation_particle"),
         feed(_feed.value_or(Feed::SimulationFeed{std::nullopt, std::nullopt})),
-        is_two_phase_flow(scalar_init.gas_flow), move_info()
+        is_two_phase_flow(scalar_init.gas_flow)
   {
 
     this->liquid_scalar = std::make_shared<ScalarSimulation>(
@@ -53,8 +50,10 @@ namespace Simulation
 
     const std::size_t n_flows = (this->feed.liquid.has_value()) ? this->feed.liquid->size() : 0;
 
-    move_info.index_leaving_flow = LeavingFlowIndexType("index_leaving_flow", n_flows);
-    move_info.leaving_flow = LeavingFlowType("leaving_flow", n_flows);
+    Kokkos::resize(move_info.index_leaving_flow, n_flows);
+    Kokkos::resize(move_info.leaving_flow, n_flows);
+    Kokkos::resize(move_info.liquid_volume, mc_unit->domain.getNumberCompartments());
+    Kokkos::resize(move_info.diag_transition, mc_unit->domain.getNumberCompartments());
 
     if (is_two_phase_flow)
     {
@@ -93,7 +92,11 @@ namespace Simulation
       vg = std::vector<double>(vl.size(), 0);
     }
 
-    this->mc_unit->domain.setVolumes(vg, vl);
+    Kokkos::View<double*, HostSpace> hostli(state.liq->volume.data(), vl.size());
+
+    Kokkos::deep_copy(this->move_info.liquid_volume, hostli);
+
+    this->mc_unit->domain.setVolumes(vl);
   }
 
   void SimulationUnit::post_init_concentration_file(const ScalarInitializer& scalar_init)
@@ -164,9 +167,9 @@ namespace Simulation
 
     const auto& fv = scalar_init.liquid_f_init.value();
 
-    for (size_t i_row = 0; i_row < cliq.rows(); ++i_row)
+    for (decltype(cliq.rows()) i_row = 0; i_row < cliq.rows(); ++i_row)
     {
-      for (size_t i_col = 0; i_col < cliq.cols(); ++i_col)
+      for (decltype(cliq.cols()) i_col = 0; i_col < cliq.cols(); ++i_col)
       {
         cliq(i_row, i_col) = fv(i_row, i_col);
         if (is_two_phase_flow)
@@ -215,18 +218,19 @@ namespace Simulation
 
   void SimulationUnit::post_init_compartments()
   {
-    auto _compute_concentration = liquid_scalar->get_device_concentration();
-    auto _containers = mc_unit->domain.data();
+    // auto _compute_concentration = liquid_scalar->get_device_concentration();
+    // // auto _containers = mc_unit->domain.data();
 
-    Kokkos::parallel_for(
-        "post_init_compartments",
-        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0,
-                                                           mc_unit->domain.getNumberCompartments()),
-        KOKKOS_LAMBDA(const int i) {
-          // auto s = Kokkos::subview(_compute_concentration, i, Kokkos::ALL);
-          _containers(i).concentrations = Kokkos::subview(_compute_concentration, Kokkos::ALL, i);
-        });
-    Kokkos::fence();
+    // Kokkos::parallel_for(
+    //     "post_init_compartments",
+    //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0,
+    //                                                        mc_unit->domain.getNumberCompartments()),
+    //     KOKKOS_LAMBDA(const int i) {
+    //       // auto s = Kokkos::subview(_compute_concentration, i, Kokkos::ALL);
+    //       _containers(i).concentrations = Kokkos::subview(_compute_concentration, Kokkos::ALL,
+    //       i);
+    //     });
+    // Kokkos::fence();
   }
 
   SimulationUnit::~SimulationUnit() = default;
@@ -237,11 +241,12 @@ namespace Simulation
     return state.liq->get_kernel_diagonal();
   }
 
-  CumulativeProbabilityView<ComputeSpace> SimulationUnit::get_kernel_cumulative_proba()
+  CumulativeProbabilityView<ComputeSpace> SimulationUnit::get_kernel_cumulative_proba() const
   {
     auto& matrix = state.liq->cumulative_probability;
-
-    CumulativeProbabilityView<HostSpace> rd(matrix.data(), matrix.rows(), matrix.cols());
+    using layout_type = CumulativeProbabilityView<HostSpace>::array_layout;
+    CumulativeProbabilityView<HostSpace> rd(matrix.data(),
+                                            layout_type(matrix.rows(), matrix.cols()));
 
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(), rd);
   }
@@ -254,6 +259,15 @@ namespace Simulation
   void SimulationUnit::set_kernel_contribs_to_host()
   {
     this->liquid_scalar->set_kernel_contribs_to_host();
+  }
+
+  [[nodiscard]] Kokkos::View<const double**,
+                             Kokkos::LayoutLeft,
+                             ComputeSpace,
+                             Kokkos::MemoryTraits<Kokkos::RandomAccess>>
+  SimulationUnit::getkernel_concentration() const
+  {
+    return this->liquid_scalar->get_device_concentration();
   }
 
   // void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation* ptr) const

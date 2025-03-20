@@ -4,7 +4,7 @@
 #include "Kokkos_Macros.hpp"
 #include "decl/Kokkos_Declare_OPENMP.hpp"
 #include <cassert>
-#include <common/kokkos_vector.hpp>
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -101,7 +101,7 @@ void test_migration()
   src.emplace(2.2);
 
   // Migrate data from src to dest
-  KokkosVector<double, Kokkos::HostSpace>::migrate(src, dest);
+  migrate(src, dest);
 
   // FIXME
   // assert(dest.size() == src.size());

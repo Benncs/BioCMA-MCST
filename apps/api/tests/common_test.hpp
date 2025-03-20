@@ -18,14 +18,14 @@ constexpr double dt = 0.;
 constexpr size_t np = 40;
 constexpr size_t nex = 0;
 
-void test_init();
-void test_exec(std::string_view path);
-void test_exec_err();
+void test_init(int argc, char** argv);
+void test_exec(int argc, char** argv,std::string_view path);
+void test_exec_err(int argc, char** argv);
 
-void test_apply(std::string_view path);
-void test_apply_err();
-void test_register_result_path();
-void test_register_parameters();
+void test_apply(int argc, char** argv,std::string_view path);
+void test_apply_err(int argc, char** argv);
+void test_register_result_path(int argc, char** argv);
+void test_register_parameters(int argc, char** argv);
 
 inline std::string get_cma_path(int argc, char** argv)
 {

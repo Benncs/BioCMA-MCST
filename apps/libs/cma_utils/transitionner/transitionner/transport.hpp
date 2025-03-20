@@ -2,11 +2,11 @@
 #define __GET_CUMULATIVE_PROBABILITY_HPP__
 
 #include <Eigen/Core>
-#include <cma_read/neighbors.hpp>
-#include <cma_utils/cache_hydro_state.hpp>
 #include <Kokkos_Core.hpp>
 #include <cma_read/flowmap.hpp>
 #include <cma_read/light_2d_view.hpp>
+#include <cma_read/neighbors.hpp>
+#include <cma_utils/cache_hydro_state.hpp>
 #include <vector>
 
 namespace CmaUtils
@@ -19,7 +19,8 @@ namespace CmaUtils
    * This function calculates the cumulative probability matrix for each zone
    * (or compartment) based on the transition probabilities and the neighboring
    * information. The cumulative probability matrix is used for determining the
-   * likelihood of moving to different compartments.
+   * likelihood of moving to different compartments. This is by construction non-strictly increasing
+   * over rows
    *
    * @param neighbors A view of the neighbors for each compartment.
    * @param m_transition The transition matrix that provides the probabilities

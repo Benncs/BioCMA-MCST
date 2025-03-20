@@ -62,6 +62,7 @@ void test()
 
 int main()
 {
+  
   Kokkos::initialize();
   test();
   Kokkos::finalize();

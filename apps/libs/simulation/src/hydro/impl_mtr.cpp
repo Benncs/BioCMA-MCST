@@ -96,16 +96,20 @@ namespace Simulation::MassTransfer
           Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(eps.data()), EIGEN_INDEX(eps.size()));
 
 
-      assert(gas_concentration.stride() == liquid_concentration.stride());
-      assert(energy_dissipation_array.rows() == liquid_concentration.cols());
+      assert(gas_concentration.stride() == liquid_concentration.stride()&&"gas liquid size mtr check");
+      assert(energy_dissipation_array.rows() == liquid_concentration.cols()&&"energy liquid size mtr check");
+      assert( mtr.Henry.rows() == gas_concentration.rows()&&"henry gas size mtr check");
+      assert( mtr.kla.rows() == gas_concentration.rows()&&"kla gas size mtr check");
+
 
       mtr.kla.row(1) =
           (kl_correlation(schmidtnumber, kinematic_viscosity, energy_dissipation_array) *
            get_interfacial_area(mtr.db, state))
               .transpose();
 
-      mtr.mtr = impl_mtr(
-          mtr.kla, liquid_concentration, gas_concentration.colwise() * mtr.Henry, liquid_volume);
+      //FIXME impl_mtr with template doesn´t work with Eigen type deduction  
+      mtr.mtr = (mtr.kla * (gas_concentration.colwise() * mtr.Henry - liquid_concentration)).matrix() * liquid_volume;
+  
     }
 
     void fixed_kla_gas_liquid_mass_transfer(MassTransferProxy& mtr,
@@ -114,6 +118,7 @@ namespace Simulation::MassTransfer
                                             const Eigen::MatrixXd& liquid_volume,
                                             const CmaUtils::IterationState& state)
     {
+     
       (void)state;
       mtr.mtr = impl_mtr(
           mtr.kla, liquid_concentration, gas_concentration.colwise() * mtr.Henry, liquid_volume);

@@ -16,7 +16,7 @@ __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
 DEFAULT_TYPE = "debug"
 _MPI_ROOT_FLAG = ""  # "--allow-run-as-root"
-MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 2 --bind-to core"
+MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} --mca orte_base_help_aggregate 1 -np 6 --report-bindings --bind-to core --map-by slot:PE=1"
 # MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 8 --use-hwthread-cpus"
 OMP_NUM_THREADS = "1"
 COMPILER_NAME = "cuda"  # "gcc"
@@ -108,13 +108,13 @@ def main():
         + "-force 1 "
     )
     if cli_args.serde is True:
-        command += "-serde " + "./results/sanofi_poster_2/sanofi_poster_2_serde_ "
+        command += "-serde " + "./results/bench/bench_serde_ "
 
         # if(cli_args.use_mpi):
         #     input("confirm force?")
         #     command+= " -force 1"
     if cli_args.dry_run:
-        arg = " --args " + command
+        arg = command
         print(arg)
         return
     exec(command, cli_args.n_threads, do_kokkos_measure=True)

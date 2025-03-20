@@ -1,8 +1,8 @@
 #include <cma_read/neighbors.hpp>
 #include <cstddef>
 #include <mpi.h>
-#include <mpi_w/impl_op.hpp>
 #include <mpi_w/iteration_payload.hpp>
+#include <mpi_w/wrap_mpi.hpp>
 
 namespace WrapMPI
 {
@@ -14,15 +14,42 @@ namespace WrapMPI
     this->gas_volumes.resize(volumes);
   }
 
-  bool HostIterationPayload::send(const size_t rank) const noexcept
+  [[nodiscard]] bool HostIterationPayload::sendAll(std::size_t n_rank) noexcept
   {
-    int rc1 = WrapMPI::send_v<double>(liquid_flows, rank, 0, false);
+    PROFILE_SECTION("host:All")
+    bool flag = false;
+    if(n_rank==1){return true;}
+    // MPI_Request req_flag;
+    // for (size_t __macro_j = 1; __macro_j < n_rank; ++__macro_j)
+    // {
+    //   auto _ = WrapMPI::send(WrapMPI::SIGNALS::RUN, __macro_j,tag);
+    // }
+    // MPI_Wait(&req_flag, MPI_STATUS_IGNORE); // Wait for each send to finish
 
-    int rc2 = WrapMPI::send_v<double>(liquid_volumes, rank, 1, false);
+    for (size_t __macro_j = 1; __macro_j < n_rank; ++__macro_j)
+    {
+      auto _ = WrapMPI::send(WrapMPI::SIGNALS::RUN, __macro_j);
+      flag = this->send(__macro_j);
+    }
 
-    int rc3 = WrapMPI::send_v<double>(gas_volumes, rank, 2, false);
+    for (auto& req : requests)
+    {
+      MPI_Wait(&req, MPI_STATUS_IGNORE); // Wait for each send to finish
+    }
 
-    int rc4 = WrapMPI::send_v(neighbors.data(), rank, 3, true);
+    return flag;
+  }
+
+  bool HostIterationPayload::send(const size_t rank) noexcept
+  {
+    PROFILE_SECTION("host:to_node")
+    int rc1 = WrapMPI::Async::send_v<double>(requests[0], liquid_flows, rank, 0, false);
+
+    int rc2 = WrapMPI::Async::send_v<double>(requests[1], liquid_volumes, rank, 1, false);
+
+    int rc3 = WrapMPI::Async::send_v<double>(requests[2], gas_volumes, rank, 2, false);
+
+    int rc4 = WrapMPI::Async::send_v(requests[3], neighbors.data(), rank, 3, true);
 
     return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS && rc3 == MPI_SUCCESS && rc4 == MPI_SUCCESS;
   }
@@ -46,7 +73,7 @@ namespace WrapMPI
     return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS && rc3 == MPI_SUCCESS;
   }
 
-  void HostIterationPayload::fill(const CmaRead::ReactorState&  current_reactor_state)
+  void HostIterationPayload::fill(const CmaRead::ReactorState& current_reactor_state)
   {
     liquid_flows = current_reactor_state.liquid_flow.getViewFlows().data();
     liquid_volumes = current_reactor_state.liquidVolume;

@@ -1,10 +1,10 @@
-#include <cma_utils/iteration_state.hpp>
-#include <common/kokkos_vector.hpp>
 #include <algorithm>
-#include <transitionner/transitionner.hpp>
+#include <cma_utils/iteration_state.hpp>
 #include <common/common.hpp>
-#include <utility>
+
 #include <transitionner/proxy_cache.hpp>
+#include <transitionner/transitionner.hpp>
+#include <utility>
 namespace
 {
   void compute_MatFlow(const CmaRead::FlowMap::FlowMap_const_view_t& flows_view,
@@ -121,7 +121,8 @@ namespace CmaUtils
                                               liquid_neighbors.getNRow(),
                                               liquid_neighbors.getNCol());
 
-    return common_advance(host_view,{{"energy_dissipation",get_current_reactor_state().energy_dissipation}});
+    return common_advance(host_view,
+                          {{"energy_dissipation", get_current_reactor_state().energy_dissipation}});
   }
 
   IterationState
@@ -133,30 +134,30 @@ namespace CmaUtils
     auto host_view = NeighborsView<HostSpace>(
         const_cast<size_t*>(neighbors.data().data()), neighbors.getNRow(), neighbors.getNCol());
     update_flow_worker(flows, volumeLiq, volumeGas, neighbors);
-    
-    return common_advance(host_view,{});
+
+    return common_advance(host_view, {});
   }
 
-  IterationState FlowMapTransitionner::common_advance(NeighborsView<HostSpace> host_view,std::unordered_map<std::string, std::span<const double>>&& info)
+  IterationState FlowMapTransitionner::common_advance(
+      NeighborsView<HostSpace> host_view,
+      std::unordered_map<std::string, std::span<const double>>&& info)
   {
     auto* const liq = &current_liq_hydro_state().state;
     auto* const gas = &current_gas_hydro_state().state;
     update_counters();
-    auto& eps = get_current_reactor_state().energy_dissipation;
 
-    
-
-    return {.liq = liq, .gas = gas, .neighbors = std::move(host_view),.infos=info};
+    return {.liq = liq, .gas = gas, .neighbors = std::move(host_view), .infos = info};
   }
 
   void FlowMapTransitionner::update_counters()
   {
-    //The current index is increment
+    // The current index is increment
     if (++this->current_flowmap_count == this->n_per_flowmap)
     {
-      //if it exceeds the number of iteration per flowmap
-      //We reset it to 0 and increment repetition_count, this allow to switch to the next element in buffer 
-      //During the first loop we have repetition_count<n_flowmap but after looping we have repetition_count>n_flowmap 
+      // if it exceeds the number of iteration per flowmap
+      // We reset it to 0 and increment repetition_count, this allow to switch to the next element
+      // in buffer During the first loop we have repetition_count<n_flowmap but after looping we
+      // have repetition_count>n_flowmap
       this->repetition_count++;
       this->current_flowmap_count = 0;
     }

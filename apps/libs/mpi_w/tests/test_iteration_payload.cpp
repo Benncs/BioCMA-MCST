@@ -1,8 +1,15 @@
 #include <cassert>
 #include <mpi_w/iteration_payload.hpp>
 #include <iostream>
+
+
+
+
+
+
 int main(int argc, char** argv)
 {
+  
   int rank = 0;
   int size = 0;
   MPI_Init(&argc, &argv);
@@ -24,8 +31,12 @@ int main(int argc, char** argv)
     if (rank == 0)
     { // Sender
 
-      WrapMPI::HostIterationPayload host_payload(flows, volumes, gases, n_view);
-      auto _ = host_payload.send(1);
+      WrapMPI::HostIterationPayload host_payload;
+      host_payload.liquid_flows= flows;
+      host_payload.liquid_volumes=volumes;
+      host_payload.gas_volumes=gases;
+      host_payload.neighbors = n_view;
+      auto _ = host_payload.sendAll(size);
     }
     else if (rank == 1)
     {

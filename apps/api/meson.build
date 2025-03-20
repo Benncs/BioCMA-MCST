@@ -19,7 +19,7 @@ lib_api_distributed = static_library(
   f'@name@',
   api_source,
   include_directories: ['./includes', 'public'],
-  dependencies: [core_distributed_dependency_static],
+  dependencies: [core_distributed_dependency_static,mpi_wrap_dependency],
   # cpp_args: ['-DNO_MPI'],
   install_rpath: project_name,
 )

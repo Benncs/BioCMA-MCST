@@ -79,6 +79,9 @@ namespace WrapMPI
     CmaRead::Neighbors::Neighbors_const_view_t neighbors;
 
     void fill(const CmaRead::ReactorState& current_reactor_state);
+
+    [[nodiscard]] bool sendAll(std::size_t n_rank)  noexcept;
+    private:
     /**
      * @brief Sends this payload to a specified MPI rank.
      *
@@ -90,7 +93,10 @@ namespace WrapMPI
      * @note This method uses MPI to perform the send operation and assumes the MPI environment is
      * initialized.
      */
-    [[nodiscard]] bool send(size_t rank) const noexcept;
+    [[nodiscard]] bool send(size_t rank)  noexcept;
+    
+    static constexpr std::size_t n_vector_send = 4; 
+    std::array<MPI_Request,n_vector_send> requests;
   };
 
 } // namespace WrapMPI
