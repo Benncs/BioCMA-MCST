@@ -1,7 +1,9 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <cassert>
+#include <common/kokkos_vector.hpp>
 #include <cstddef>
+#include <mc/container_state.hpp>
 #include <mc/domain.hpp>
 #include <numeric>
 #include <stdexcept>
@@ -12,19 +14,21 @@
 namespace MC
 {
 
-  void ReactorDomain::setVolumes(
+  void ReactorDomain::setVolumes(std::span<double const> volumes_gas,
                                  std::span<double const> volumes_liq)
   {
 
+    assert(volumes_gas.size() == size);
     assert(volumes_liq.size() == size);
 
     this->_total_volume = std::reduce(volumes_liq.begin(), volumes_liq.end(), 0.);
 
     this->_total_volume = 0;
-    for (auto&& i_c : volumes_liq)
+    for (size_t i_c = 0; i_c < volumes_gas.size(); ++i_c)
     {
-      assert(i_c >= 0);
-      this->_total_volume += i_c;
+      assert(volumes_liq[i_c] >= 0);
+      assert(volumes_gas[i_c] >= 0);
+      this->_total_volume += volumes_liq[i_c];
     }
   }
 
@@ -39,7 +43,6 @@ namespace MC
         k_neighbor(Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"))
 
   {
-   
 
     setLiquidNeighbors(_neighbors);
   }
@@ -68,6 +71,7 @@ namespace MC
     // OK because of sharedspace
     // Kokkos::resize(reduced.shared_containers, original_size);
     // Kokkos::View<ContainerState *, Kokkos::SharedSpace> tmp("tmp_reduce",original_size);
+
     if (data.size() != original_size * n_rank)
     {
       throw std::runtime_error("Cannot reduce different reactor type");

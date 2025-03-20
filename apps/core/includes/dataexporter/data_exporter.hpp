@@ -2,18 +2,20 @@
 #define __CORE_DATA_EXPORTER_HPP__
 
 #include <common/execinfo.hpp>
-#include <core/simulation_parameters.hpp>
+#include <common/kokkos_vector.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <optional>
-#include <span>
 #include <string>
 #include <string_view>
 #include <unordered_map>
 #include <variant>
 #include <vector>
-#include <common/common.hpp>
+
+#include "cmt_common/macro_constructor_assignment.hpp"
+#include "traits/Kokkos_IterationPatternTrait.hpp"
+#include <span>
 namespace Core
 {
 
@@ -21,7 +23,7 @@ namespace Core
   // {
   //   return std::string(filename) + "_partial_" + std::to_string(current_rank) + ".h5";
   // }
-  bool check_results_file_name(Core::UserControlParameters& params);
+
   /**
    * @class DataExporter
    * @brief A class responsible for exporting various types of data such as
@@ -41,10 +43,7 @@ namespace Core
   class DataExporter
   {
   public:
-    DataExporter(const DataExporter&) = delete;
-    DataExporter(DataExporter&&) = delete;
-    DataExporter& operator=(const DataExporter&) = delete;
-    DataExporter& operator=(DataExporter&&) = delete;
+    DELETE_COPY_MOVE_AC(DataExporter)
     DataExporter() = default;
     /**
      * @brief Creates a link to a specified file.

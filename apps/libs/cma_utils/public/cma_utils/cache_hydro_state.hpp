@@ -4,7 +4,7 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#include <common/common.hpp>
+#include <common/kokkos_vector.hpp>
 #include <vector>
 
 template <typename ExecSpace>
@@ -17,12 +17,7 @@ using CumulativeProbabilityView =
 
 using FlowMatrixType = Eigen::SparseMatrix<double>;
 
-/** 
-  @brief Namespace to handle algorithms and structures related to reading compartment mesh
-  @see Simulation::KernelInline::MoveFunctor
-  
-  @note See documentation page for full explanation  
-*/
+/** @brief Namespace to handle algorithms and structures related to reading compartment mesh */
 namespace CmaUtils
 {
   class ProxyPreCalculatedHydroState;
@@ -94,8 +89,8 @@ namespace CmaUtils
     std::vector<double> volume;                  ///< Volumes of compartments.
     DiagonalView<ComputeSpace> diagonal_compute; ///< Diagonal view for compute operations.
 
-    // CumulativeProbabilityView<ComputeSpace>
-    //     compute_cumulative_probability; ///< View for cumulative probability computation.
+    CumulativeProbabilityView<ComputeSpace>
+        compute_cumulative_probability; ///< View for cumulative probability computation.
 
   private:
   };

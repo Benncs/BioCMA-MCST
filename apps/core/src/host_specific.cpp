@@ -159,15 +159,16 @@ void host_process(const ExecInfo& exec,
 
   SEND_MPI_SIG_STOP;
 
-  // auto clean_list = [&simulation](auto& container)
-  // {
-  //   if (simulation.counter() != 0)
-  //   {
-  //     container.clean_dead(simulation.counter());
-  //   }
-  // };
+  auto clean_list = [&simulation](auto&& container)
+  {
+    auto& list = container.get_compute();
+    if (simulation.counter() != 0)
+    {
+      list.remove_dead(simulation.counter());
+    }
+  };
 
-  // std::visit(clean_list, simulation.mc_unit->container);
+  std::visit(clean_list, simulation.mc_unit->container);
   PostProcessing::save_particle_state(simulation, partial_exporter);
   last_sync(exec, simulation);
   PostProcessing::final_post_processing(exec, params, simulation, main_exporter);
@@ -276,11 +277,6 @@ namespace
           break;
         }
       }
-
-      if (simulation.counter() != 0)
-      {
-        local_container.clean_dead(simulation.counter());
-      }
     };
 
     std::visit(loop_functor, simulation.mc_unit->container);
@@ -317,11 +313,10 @@ namespace
                      Core::PartialExporter& partial_exporter)
   // NOLINTEND
   {
-    
+    const auto& state = simulation.get_state();
     PROFILE_SECTION("host:handle_export")
     if (++dump_counter == dump_interval)
     {
-      const auto& state = simulation.get_state();
       SEND_MPI_SIG_DUMP
       auto vg = (simulation.getCgasData().has_value()) ? std::make_optional(state.gas->volume)
                                                        : std::nullopt;

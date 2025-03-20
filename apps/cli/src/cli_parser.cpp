@@ -9,6 +9,7 @@
 #include <string_view>
 
 static void sanitise_check_cli(const Core::UserControlParameters& params);
+// static void print_green(std::ostream &os, std::string_view message);
 static void print_red(std::ostream& os, std::string_view message);
 static void throw_bad_arg(std::string_view arg);
 

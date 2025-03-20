@@ -44,7 +44,6 @@ namespace CmaUtils
           */
           count_neighbor++; // Increment the neighbor count
           continue;
-          
         }
 
         const double out_flow = m_transition.coeff(k_compartment, k_compartment);

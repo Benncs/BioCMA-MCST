@@ -50,12 +50,11 @@ namespace Core
      * @param particle_values Particle properties such as mass, age ...
      * @param spatial_values Particle properties such as mass, age ... in space
      * @param ds_name Dataset name associated with this data.
-     * @param compress_data Compress particle or not (can be time consuming)
      */
     void write_particle_data(std::span<std::string> names,
                              ViewParticleProperties particle_values,
                              ViewParticleProperties spatial_values,
-                             const std::string& ds_name,bool compress_data);
+                             const std::string& ds_name);
 
     /**
      * @brief Writes the number of particles in each compartment.

@@ -2,7 +2,6 @@
 #include <Kokkos_Core.hpp>
 #include <cma_utils/cache_hydro_state.hpp>
 #include <cmt_common/zip.hpp>
-#include <cstddef>
 #include <transitionner/transport.hpp>
 namespace CmaUtils
 {
@@ -31,7 +30,7 @@ namespace CmaUtils
 
     typedef Eigen::Triplet<double> T;
     std::vector<T> tripletList;
-    tripletList.reserve(static_cast<long long>(n_compartments * n_compartments)); // Reserve space for all elements
+    tripletList.reserve(n_compartments * n_compartments); // Reserve space for all elements
 
     // Temporary vector to keep track of the row sums for diagonal elements
     std::vector<double> rowSums(n_compartments, 0.0);

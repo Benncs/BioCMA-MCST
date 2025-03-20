@@ -5,14 +5,46 @@ from typing import Tuple, List
 
 def to_camel_case(snake_str: str) -> str:
     components = snake_str.split("_")
-    return "".join(x.capitalize() for x in components)
+    return "".join(x.capitalize() for x in components[1:])
 
 
-def generate_includes(model_list: List[str]) -> str:
+def list_model_files(directory: str,arg_udf) -> Tuple[List[str], List[str]]:
+    """
+    Lists model source files and headers in the given directory.
+    """
+    try:
+        src_files = os.listdir(os.path.join(directory, "src"))
+
+        header_files = os.listdir(os.path.join(directory, "public/models"))
+
+        model_files = [
+            file[:-4]
+            for file in src_files
+            if file.startswith("model_") and file.endswith(".cpp")
+        ]
+        
+
+        model_headers = [header for header in header_files if header.endswith(".hpp") and header.startswith("model_")]
+        
+        if arg_udf:
+            model_files.append("udfmodel_user")
+            model_headers.append("udfmodel_user.hpp")
+
+        return model_files, model_headers
+
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+        return [], []
+    except PermissionError as e:
+        print(f"Error: {e}")
+        return [], []
+
+
+def generate_includes(model_headers: List[str]) -> str:
     """
     Generates include directives for the model headers.
     """
-    return "\n".join([f"#include <models/{header}.hpp>" for header in model_list])
+    return "\n".join([f"#include <models/{header}>" for header in model_headers])
 
 
 def generate_loader_body(model_files: List[str]) -> str:
@@ -122,40 +154,36 @@ def generate_variant(
 if __name__ == "__main__":
     # Read command-line arguments
     args = sys.argv
-    if len(args) < 11:
-        print(args)
+    if len(args) != 10:
         raise Exception("Bad argument")
 
+    models_path = args[1]
+    source_template_path = args[2]
+    source_output_path = args[3]
 
+    header_template_path = args[4]
+    header_output_path = args[5]
 
-    models_folder_root = args[1]
-
-    template_model_loader_path = args[2]
-    template_model_loader_header = args[3]
-    template_variant_model = args[4]
-    source_output_path = args[5]
-    header_output_path = args[6]
+    variant_template_path = args[6]
     variant_output_path = args[7]
+
     add_py_variant = args[8] != ""
     add_udf_variant = args[9] != ""
 
-    model_list_name = args[10:]
+    files, headers = list_model_files(models_path,add_udf_variant)
 
+    includes = generate_includes(headers)
+    loader_body = generate_loader_body(files)
+    # list_body = generate_list_body(files)
+    map_selection = generate_selection_body(files)
 
-    # files, headers = list_model_files(models_folder_root,add_udf_variant)
-
-    includes = generate_includes(model_list_name)
-    loader_body = generate_loader_body(model_list_name)
-    # # list_body = generate_list_body(files)
-    map_selection = generate_selection_body(model_list_name)
-
-    # # Generate the C++ file
+    # Generate the C++ file
     generate_cpp_file(
-        template_model_loader_path, source_output_path, includes, loader_body, map_selection
+        source_template_path, source_output_path, includes, loader_body, map_selection
     )
 
-    generate_header(template_model_loader_header, header_output_path)
+    generate_header(header_template_path, header_output_path)
 
     generate_variant(
-        template_variant_model, variant_output_path, includes, model_list_name, add_py_variant
+        variant_template_path, variant_output_path, includes, files, add_py_variant
     )

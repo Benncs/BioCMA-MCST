@@ -1,3 +1,4 @@
+#include "common_test.hpp"
 #include <api/api.hpp>
 #include <new>
 
@@ -8,8 +9,16 @@ void* operator new(std::size_t size, const std::nothrow_t& nothrow_value) noexce
 {
   return nullptr;
 }
-int main(int argc, char** argv)
+
+void test_init_throw()
 {
-  auto handle = Api::SimulationInstance::init(argc,argv);
+  auto handle = Api::SimulationInstance::init(n_rank, i_rank, id, nt);
+    
   assert(!handle.has_value());
+}
+
+int main()
+{
+
+  test_init_throw();
 }

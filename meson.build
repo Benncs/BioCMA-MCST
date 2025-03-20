@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.7.1',
+  version: '0.5.4',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
@@ -181,6 +181,8 @@ if cmake.found()
       highfive_found = true
       add_project_arguments('-DUSE_HIGHFIVE', language: 'cpp')
       highfive_dependency = [highfive_proj.dependency('HighFive'),hdf5,highfive_proj.dependency('HighFiveInclude')]
+
+      
     endif
   endif
   if use_cereal
@@ -192,7 +194,8 @@ if cmake.found()
     cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})
     cereal_cmake_options.add_cmake_defines({'BUILD_TESTS': false})
     cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
-    if cereal_proj.found() and not use_cuda 
+    if cereal_proj.found() 
+    #and not use_cuda 
       ceral_found = true
       add_project_arguments('-DUSE_CEAREAL', language: 'cpp')
       cereal_dependency = cereal_proj.dependency('cereal')

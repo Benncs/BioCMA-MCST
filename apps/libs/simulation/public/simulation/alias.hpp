@@ -1,7 +1,7 @@
 #ifndef __SIMULATION_ALIAS_HPP__
 #define __SIMULATION_ALIAS_HPP__
 #include <Kokkos_Core.hpp>
-
+#include <common/kokkos_vector.hpp>
 #include <cstddef>
 namespace Simulation
 {
@@ -18,7 +18,7 @@ namespace Simulation
 
   template <typename Space>
   using CumulativeProbabilityView = Kokkos::
-      View<const double**, Kokkos::LayoutRight, Space, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+      View<double**, Kokkos::LayoutRight, Space, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
   
 

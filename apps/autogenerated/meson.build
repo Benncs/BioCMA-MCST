@@ -19,8 +19,7 @@ conf_data = configuration_data(
         'debug_MC_RAND_DEFAULT_SEED': '2024',
         '_dead_particle_ratio_threshold':'0.01',
         'result_dir_path':'"./results/"',
-        'cma_data_folder_path':'"cma_data"',
-        'enable_event_counter':'false'
+        'cma_data_folder_path':'"cma_data"'
     },
 )
 
@@ -32,9 +31,9 @@ configure_file(
 
 prog_python = find_program('python3')
 
-template_model_loader = meson.current_source_dir()+'/model_loader.cxx'
-template_model_loader_header = meson.current_source_dir()+'/model_loader.hxx'
-template_variant_model = meson.current_source_dir()+'/variant_model.hxx'
+model_loader = meson.current_source_dir()+'/model_loader.cxx'
+model_loader_header = meson.current_source_dir()+'/model_loader.hxx'
+variant_model = meson.current_source_dir()+'/variant_model.hxx'
 
 arg_includ_py=''
 if use_dynamic_module
@@ -47,32 +46,7 @@ arg_udf=''
 endif
 
 
-# custom target to generate template_model_loader.cpp and model_list.hpp
-# generated_model_selection = custom_target(
-#     'generated_model_selection.[ch]',
-#     output: [
-#         'wrap_init_model_selector.cpp',
-#         'wrap_init_model_selector.hpp',
-#         'variant_model.hpp',
-#     ],
-#     input: f'@root@/devutils/auto_generate/generate_model_loader.py',
-#     command: [
-#         prog_python,
-#         '@INPUT@',
-#         f'@root@/apps/libs/biomodels',
-#         template_model_loader,
-#         '@OUTPUT0@',
-#         template_model_loader_header,
-#         '@OUTPUT1@',
-#         variant_model,
-#         '@OUTPUT2@',
-#         arg_includ_py,arg_udf
-#     ],
-# )
-
-model_list_name = ['two_meta','simple_model']
-model_folder_root = f'@root@/apps/libs/models'
-
+# custom target to generate model_loader.cpp and model_list.hpp
 generated_model_selection = custom_target(
     'generated_model_selection.[ch]',
     output: [
@@ -84,15 +58,13 @@ generated_model_selection = custom_target(
     command: [
         prog_python,
         '@INPUT@',
-        model_folder_root,
-        template_model_loader,
-        template_model_loader_header,
-        template_variant_model,
+        f'@root@/apps/libs/biomodels',
+        model_loader,
         '@OUTPUT0@',
+        model_loader_header,
         '@OUTPUT1@',
+        variant_model,
         '@OUTPUT2@',
-        arg_includ_py,
-        arg_udf,
-        model_list_name,
+        arg_includ_py,arg_udf
     ],
 )

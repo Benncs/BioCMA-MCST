@@ -10,6 +10,7 @@
 #include <vector>
 
 /**
+ * @namespace ScalarFactory
  * @brief Provides structures and functions to initialize scalar data for simulations, supporting
  * multiple data sources.
  *

@@ -105,7 +105,7 @@ namespace Simulation
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_Macros.hpp>
-
+#include <common/kokkos_vector.hpp>
 #include <cstdint>
 #include <decl/Kokkos_Declare_OPENMP.hpp>
 #include <initializer_list>

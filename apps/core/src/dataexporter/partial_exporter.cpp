@@ -66,7 +66,7 @@ namespace Core
   void PartialExporter::write_particle_data(std::span<std::string> names,
                                             ViewParticleProperties particle_values,
                                             ViewParticleProperties spatial_values,
-                                            const std::string& ds_name,bool compress_data)
+                                            const std::string& ds_name)
   {
     PROFILE_SECTION("write_particle_data")
     const size_t n_particles = particle_values.extent(1);
@@ -78,7 +78,7 @@ namespace Core
 
       const auto* ptr_spatial = Kokkos::subview(spatial_values, i_name, Kokkos::ALL).data();
 
-      this->write_matrix(ds_name + names[i_name], {ptr_particles, n_particles}, compress_data);
+      this->write_matrix(ds_name + names[i_name], {ptr_particles, n_particles}, false);
       this->write_matrix(
           ds_name + "spatial/" + names[i_name], {ptr_spatial, n_compartments}, false);
     }

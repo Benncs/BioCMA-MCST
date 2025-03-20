@@ -2,12 +2,12 @@
 #ifndef NO_MPI
 #  include "biocma_cst_config.hpp"
 #  include <csignal>
-#  include <impl_post_process.hpp>
 #  include <mpi_w/iteration_payload.hpp>
 #  include <mpi_w/wrap_mpi.hpp>
+#  include <impl_post_process.hpp>
 #  include <simulation/simulation.hpp>
-#  include <sync.hpp>
 #  include <transitionner/transitionner.hpp>
+#  include <sync.hpp>
 #  include <worker_specific.hpp>
 
 void workers_process(const ExecInfo& exec,
@@ -24,6 +24,7 @@ void workers_process(const ExecInfo& exec,
 
   const auto loop_functor = [&](auto&& container)
   {
+
     bool stop = false;
     WrapMPI::SIGNALS signal{};
     double current_time = 0;
@@ -39,11 +40,8 @@ void workers_process(const ExecInfo& exec,
         }
 
         last_sync(exec, simulation);
-       
-        if (simulation.counter() != 0)
-        {
-          container.clean_dead(simulation.counter());
-        }
+        auto& list = container.get_compute();
+        list.remove_dead(simulation.counter());
         PostProcessing::save_particle_state(simulation, partial_exporter);
         PostProcessing::reset_counter();
         stop = true;
@@ -70,11 +68,13 @@ void workers_process(const ExecInfo& exec,
 
       payload.recv(0, &status);
 
-      simulation.update(transitioner->advance_worker(
-          payload.liquid_flows, payload.liquid_volumes, payload.gas_volumes, payload.neighbors));
+     
+      simulation.update(transitioner->advance_worker(payload.liquid_flows, payload.liquid_volumes,payload.gas_volumes,payload.neighbors));
 
       simulation.cycleProcess(container, d_t);
 
+      // result.clear(container.n_particle());
+      // result.update_view(view_result);
       simulation.update_feed(current_time, d_t);
       current_time += d_t;
 
