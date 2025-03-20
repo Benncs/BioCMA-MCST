@@ -56,8 +56,11 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("argv"));
 
   m.def("finalize", &finalize);
-  m.def("exec", &exec);
-  // m.def("apply", &apply);
+    m.def("exec", [](std::shared_ptr<Api::SimulationInstance>& handle){
+    pybind11::gil_scoped_release release;
+    handle->exec();
+    pybind11::gil_scoped_acquire acquire;
+  });
 
   m.def("apply",
         [](std::shared_ptr<Api::SimulationInstance>& handle,
