@@ -23,19 +23,14 @@ namespace Models::Uptake
     { obj.a_permease } -> std::same_as<std::add_lvalue_reference_t<F>>;
   };
 
-  namespace Tau
+  struct Tau
   {
     static constexpr double new_permease = 40.;
     static constexpr double tau_rm_perm = 200.;
     static constexpr double pts = 20.;
     static constexpr double Au = 40.;
     static constexpr double Ad = 5.;
-
-    template <FloatingPointType F> consteval F freq(F tau)
-    {
-      return F(1) / tau;
-    }
-  }; // namespace Tau
+  };
 
   constexpr double k_pts = 1e-3;
   constexpr double kppermease = 1e-2;
@@ -60,21 +55,15 @@ namespace Models::Uptake
   template <FloatingPointType F, UptakeModel<F> Model>
   KOKKOS_INLINE_FUNCTION void step(F d_t, F gamma_PTS_S, F s, Model& model, F NPermease_max)
   {
-    constexpr F apts_frequency = Tau::freq(Tau::pts);
-    constexpr F aperm_frequency_au = Tau::freq(Tau::Au);
-    constexpr F aperm_frequency_ad = Tau::freq(Tau::Ad);
-    constexpr F n_perm_frequence_new = Tau::freq(Tau::new_permease);
-    constexpr F n_perm_frequence_rm = Tau::freq(Tau::tau_rm_perm);
-
-    model.a_pts += d_t * apts_frequency * (MONOD_RATIO(F(1), s, k_pts) - model.a_pts);
+    model.a_pts += d_t * 1.0 / Tau::pts * (MONOD_RATIO(1., s, k_pts) - model.a_pts);
     model.a_permease +=
-        d_t * ((aperm_frequency_au * gamma_PTS_S + aperm_frequency_ad * (F(1) - gamma_PTS_S)) *
-               (F(1) - gamma_PTS_S - model.a_permease));
+        d_t * (((1.0 / Tau::Au) * gamma_PTS_S + (1.0 / Tau::Ad) * (1.0 - gamma_PTS_S)) *
+               (1.0 - gamma_PTS_S - model.a_permease));
 
-    model.n_permease +=
-        d_t *
-        (MONOD_RATIO(n_perm_frequence_new, k_pts, s) + MONOD_RATIO(n_perm_frequence_rm, s, k_pts)) *
-        (MONOD_RATIO(NPermease_max, k_pts, s) - model.n_permease);
+    model.n_permease += d_t *
+                        (MONOD_RATIO(1. / Tau::new_permease, k_pts, s) +
+                         MONOD_RATIO(1. / Tau::tau_rm_perm, s, k_pts)) *
+                        (MONOD_RATIO(NPermease_max, k_pts, s) - model.n_permease);
   }
 
   template <FloatingPointType F, UptakeModel<F> Model>
@@ -96,6 +85,12 @@ namespace Models::Uptake
   distribute_division(Model& model, Model& child, KokkosRNGPoolType& generator)
   {
     static constexpr F half = F(0.5);
+    // child.a_pts = Kokkos::min(1., Kokkos::max(generator.normal(model.a_pts, model.a_pts / 2.),
+    // 0.));
+
+    // child.a_permease =
+    //     Kokkos::min(1., Kokkos::max(generator.normal(model.a_permease, model.a_permease / 2.),
+    //     0.));
 
     child.a_pts = MC::Distributions::TruncatedNormal<F>::draw_from(
         generator, model.a_pts, model.a_pts * half, F(0.), F(1.));
@@ -112,6 +107,10 @@ namespace Models::Uptake
   distribute_init(Model& newp, KokkosRNGPoolType& generator, F NPermease_init = 1)
   {
     static constexpr F half = F(0.5);
+    // newp.a_permease = Kokkos::max(generator.normal(1e-3, 1e-4), 0.);
+    // newp.a_pts = Kokkos::min(1., Kokkos::max(generator.normal(0.8, 0.1), 0.));
+    // newp.n_permease = Kokkos::max(generator.normal(NPermease_init / 2., NPermease_init / 5.),
+    // 0.);
 
     newp.a_permease =
         MC::Distributions::TruncatedNormal<F>::draw_from(generator, F(1e-3), F(1e-4), F(0.), F(1.));

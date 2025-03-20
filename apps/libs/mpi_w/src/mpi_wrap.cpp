@@ -1,19 +1,19 @@
 #include <cstdlib>
-#include <mpi.h>
 #include <mpi_w/message_t.hpp>
+#include <mpi.h>
 #include <omp.h>
-#include <mpi_w/impl_async.hpp>
 
 namespace WrapMPI
 {
-  bool is_initialized() noexcept
-  {
-    int initialized{};
+    bool is_initialized() noexcept
+    {
+        int initialized{};
 
-    MPI_Initialized(&initialized);
+        MPI_Initialized(&initialized);
 
-    return initialized != 0;
-  }
+        return initialized != 0;
+    }
+
 
   void finalize() noexcept
   {
@@ -32,9 +32,4 @@ namespace WrapMPI
       critical_error();
     }
   }
-
-  namespace Async
-  {
-  
-  } // namespace Async
 } // namespace WrapMPI

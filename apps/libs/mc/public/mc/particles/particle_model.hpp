@@ -1,7 +1,10 @@
 #ifndef __MC_PARTICLE_MODEL_HPP__
 #define __MC_PARTICLE_MODEL_HPP__
 
-#include <common/kokkos_vector.hpp>
+#include "Kokkos_Macros.hpp"
+#include "common/kokkos_vector.hpp"
+#include "decl/Kokkos_Declare_OPENMP.hpp"
+#include "traits/Kokkos_IterationPatternTrait.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/common.hpp>
@@ -9,6 +12,7 @@
 #include <mc/particles/data_holder.hpp>
 #include <mc/prng/prng.hpp>
 #include <type_traits>
+#include <variant>
 
 WARN_EXPERIMENTAL
 

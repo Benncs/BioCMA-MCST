@@ -48,10 +48,6 @@ namespace MC
     MonteCarloUnit() = default;
     ~MonteCarloUnit() = default;
 
-    [[nodiscard]] uint64_t n_particle()const;
-
-    [[nodiscard]] std::vector<uint64_t> getRepartition() const;
-
     template <class Archive> void serialize(Archive& ar)
     {
       ar(init_weight, events, domain, container);

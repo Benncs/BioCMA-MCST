@@ -23,7 +23,8 @@ namespace Core
   };
 
   void MainExporter::write_initial(const double weight,
-                                   const Core::SimulationParameters &params)
+                                   const Core::SimulationParameters &params,
+                                   const std::vector<size_t> &distribution)
   {
     export_initial_kv initial_values;
     initial_values["number_particles"] = params.number_particle;
@@ -31,8 +32,8 @@ namespace Core
     initial_values["initial_biomass_concentration"] = params.biomass_initial_concentration;
     initial_values["number_compartment"] = params.n_compartments;
     initial_values["final_time"] = params.final_time;
-    // initial_values["particle_distribution"] =
-    //     std::vector<size_t>(distribution.begin(), distribution.end());
+    initial_values["particle_distribution"] =
+        std::vector<size_t>(distribution.begin(), distribution.end());
     initial_values["delta_time"] = params.d_t;
     initial_values["n_map"] = params.n_different_maps;
     initial_values["t_per_flow_map"] = params.t_per_flow_map;
@@ -137,15 +138,17 @@ namespace Core
     export_counter++;
   }
 
-  void MainExporter::write_final(Simulation::SimulationUnit &simulation,std::size_t number_particles)
+  void MainExporter::write_final(Simulation::SimulationUnit &simulation,
+                                 std::span<const std::size_t> distribution)
   {
- ;
+    const std::size_t number_particles = std::accumulate(
+        distribution.begin(), distribution.end(), static_cast<size_t>(0));
     const auto &event = simulation.mc_unit->events;
 
     export_initial_kv final_values;
     final_values["number_particles"] = number_particles;
-    // final_values["distribution"] = std::vector<std::size_t>(
-    //     distribution.begin(), distribution.end()); // TODO Remove ?
+    final_values["distribution"] = std::vector<std::size_t>(
+        distribution.begin(), distribution.end()); // TODO Remove ?
     final_values["events/move"] = event.get<MC::EventType::Move>();
     final_values["events/total_division"] =
         event.get<MC::EventType::NewParticle>();

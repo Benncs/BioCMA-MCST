@@ -50,7 +50,7 @@ public:
    * @brief Default copy and move constructors and assignment operators.
    */
 
-  KokkosVector();
+  KokkosVector() = default;
   KokkosVector(const KokkosVector&) = default;
   KokkosVector(KokkosVector&&) = default;
   KokkosVector& operator=(const KokkosVector&) = default;
@@ -165,8 +165,16 @@ public:
    * @param src The source vector.
    * @param dest The destination vector.
    */
-  template <typename MS1, typename MS2, typename U>
-  friend void migrate(KokkosVector<U, MS1>, KokkosVector<U, MS2>&);
+  template <typename MS1, typename MS2>
+  static void migrate(KokkosVector<T, MS1> src, KokkosVector<T, MS2>& dest)
+  {
+    dest._owned_data = Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), src._owned_data);
+    //TODO 
+    // auto local_n_used_elements = src.n_used_elements;
+    // auto dest_used = Kokkos::create_mirror_view_and_copy(Kokkos::SharedSpace(),local_n_used_elements);
+    // dest.n_used_elements = dest_used;
+    // dest.n_allocated_element = src.n_allocated_element;
+  }
 
   /**
    * @brief Gets the number of elements currently in use.
@@ -242,9 +250,8 @@ public:
   {
     // TODO GET VIEW LABEL
     // Deserialize data into local variables and a vector
-    uint64_t r_used_element{};
-    ar(n_allocated_element, r_used_element, extra_allocation_factor);
-    n_used_elements() = r_used_element;
+    ar(n_allocated_element, n_used_elements(), extra_allocation_factor);
+
     std::vector<T> data_vector;
     ar(data_vector); // Deserialize the data into the vector
 
@@ -284,13 +291,6 @@ private:
    */
   size_t __allocate__(std::size_t new_size);
 };
-
-template <typename T, typename Space>
-KokkosVector<T, Space>::KokkosVector()
-    : _owned_data(Kokkos::view_alloc("_owned_data", Kokkos::WithoutInitializing)),
-      n_used_elements("n_used_elements")
-{
-}
 
 template <typename T, typename Space>
 KokkosVector<T, Space>::KokkosVector(const size_t capacity, bool alloc, std::string label)
@@ -338,7 +338,7 @@ KokkosVector<T, Space> KokkosVector<T, Space>::with_capacity(std::size_t capacit
 // KOKKOS_FUNCTION bool KokkosVector<T, Space>::emplace(T&& d) const
 // {
 //   const auto local_used_size = n_used_elements();
-
+  
 //   if (local_used_size < n_allocated_element)
 //   {
 //     Kokkos::atomic_increment(&n_used_elements());
@@ -348,10 +348,11 @@ KokkosVector<T, Space> KokkosVector<T, Space>::with_capacity(std::size_t capacit
 //   return false;
 // }
 
+
 template <typename T, typename Space>
 KOKKOS_FUNCTION bool KokkosVector<T, Space>::emplace(T&& d) const
 {
-
+  
   if (Kokkos::atomic_load(&n_used_elements()) < n_allocated_element)
   {
     _owned_data(Kokkos::atomic_fetch_inc(&n_used_elements())) = std::forward<T>(d);
@@ -359,6 +360,9 @@ KOKKOS_FUNCTION bool KokkosVector<T, Space>::emplace(T&& d) const
   }
   return false;
 }
+
+
+
 
 template <typename T, typename Space>
 [[nodiscard]] double KokkosVector<T, Space>::get_allocation_factor() const noexcept
@@ -381,7 +385,7 @@ void KokkosVector<T, Space>::insert(const KokkosVector<T, Space>& rhs)
   __allocate__(original_size + rhs.size());
 
   auto data = this->data();
-
+  
   Kokkos::parallel_for(
       "InsertNew",
       Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_add_item),
@@ -390,6 +394,7 @@ void KokkosVector<T, Space>::insert(const KokkosVector<T, Space>& rhs)
 
   n_used_elements() += n_add_item;
 }
+
 
 template <typename T, typename Space>
 size_t KokkosVector<T, Space>::__allocate__(const std::size_t new_size)
@@ -406,21 +411,6 @@ size_t KokkosVector<T, Space>::__allocate__(const std::size_t new_size)
     }
   }
   return new_size;
-}
-
-template <typename MS1, typename MS2, typename U>
-void migrate(KokkosVector<U, MS1> src, KokkosVector<U, MS2>& dest)
-{
-  dest._owned_data = Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), src._owned_data);
-  dest.n_used_elements() = src.size();
-  dest.extra_allocation_factor = src.capacity();
-  dest.n_allocated_element = src.get_allocation_factor();
-  // TODO
-  //  auto local_n_used_elements = src.n_used_elements;
-  //  auto dest_used =
-  //  Kokkos::create_mirror_view_and_copy(Kokkos::SharedSpace(),local_n_used_elements);
-  //  dest.n_used_elements = dest_used;
-  //  dest.n_allocated_element = src.n_allocated_element;
 }
 
 #endif

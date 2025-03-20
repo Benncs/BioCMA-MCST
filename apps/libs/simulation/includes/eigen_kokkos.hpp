@@ -15,13 +15,13 @@ using MatrixType =
 using SparseMatrixType = Eigen::SparseMatrix<double, DataLayoutEigen>;
 using DiagonalType = Eigen::DiagonalMatrix<double, CompileMatrixSizeEigen>;
 
-template <typename ExecSpace,typename ...Memorytrait>
-using KokkosScalarMatrix = Kokkos::View<double**, Kokkos::LayoutLeft, ExecSpace,Memorytrait...>;
+template <typename ExecSpace>
+using KokkosScalarMatrix = Kokkos::View<double**, Kokkos::LayoutLeft, ExecSpace>;
 
 struct EigenKokkos
 {
   KokkosScalarMatrix<HostSpace> host;
-  KokkosScalarMatrix<ComputeSpace,Kokkos::MemoryTraits<Kokkos::RandomAccess>> compute;
+  KokkosScalarMatrix<ComputeSpace> compute;
   MatrixType eigen_data;
 
   EigenKokkos(std::size_t n_row, std::size_t n_col);

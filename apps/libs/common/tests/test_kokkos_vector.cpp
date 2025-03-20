@@ -101,7 +101,7 @@ void test_migration()
   src.emplace(2.2);
 
   // Migrate data from src to dest
-  migrate(src, dest);
+  KokkosVector<double, Kokkos::HostSpace>::migrate(src, dest);
 
   // FIXME
   // assert(dest.size() == src.size());
