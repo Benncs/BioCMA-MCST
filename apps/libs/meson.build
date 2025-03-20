@@ -1,4 +1,6 @@
-models_list_def = include_directories('./biomodels/public')
+# models_list_def = include_directories('./biomodels/public')
+
+models_list_def = include_directories('./models/public')
 
 if use_dynamic_module
 py_wrap_inc = include_directories('./pymodule/public')
@@ -8,8 +10,8 @@ subdir('common')
 subdir('mpi_w')
 subdir('cma_utils')
 subdir('mc')
-subdir('biomodels')
-
+# subdir('biomodels')
+subdir('models')
 if use_dynamic_module
   subdir('pymodule')
 endif

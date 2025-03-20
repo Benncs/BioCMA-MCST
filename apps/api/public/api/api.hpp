@@ -1,6 +1,7 @@
 #ifndef __BIOMC_API_HPP__
 #define __BIOMC_API_HPP__
 
+#include "common/execinfo.hpp"
 #include "core/scalar_factory.hpp"
 #include <api/results.hpp>
 #include <core/case_data.hpp>
@@ -56,35 +57,22 @@ namespace Api
      */
     SimulationInstance& operator=(SimulationInstance&&) = default;
 
-    // TODO Enable if def USE_MPI
     /**
-     * @brief Initialize a simulation instance with MPI support.
+     * @brief Initialize a simulation instance
      *
-     * @param n_rank The total number of ranks in the MPI group.
-     * @param current_rank The rank ID for this instance.
-     * @param id A unique identifier for the simulation instance.
-     * @param thread_per_process Number of threads allocated per process.
+     * @param argc Number of runtime argument.
+     * @param argv Tuntime arguments.
+     * @param id A unique identifier for the simulation instance (optional).
      * @return An optional containing a unique pointer to the instance if successful,
      *         or std::nullopt if initialization failed.
      */
     static std::optional<std::unique_ptr<SimulationInstance>>
-    init(uint32_t n_rank, uint32_t current_rank, uint64_t id, uint32_t thread_per_process) noexcept;
-
-    /**
-     * @brief Initialize a simulation instance without MPI support.
-     *
-     * @param id A unique identifier for the simulation instance.
-     * @param thread_per_process Number of threads allocated per process.
-     * @return An optional containing a unique pointer to the instance if successful,
-     *         or std::nullopt if initialization failed.
-     */
-    static std::optional<std::unique_ptr<SimulationInstance>>
-    init(uint64_t id, uint32_t thread_per_process) noexcept;
+    init(int argc, char** argv, std::optional<std::size_t> run_id = std::nullopt) noexcept;
 
     /**
      * @brief Default constructor.
      */
-    SimulationInstance() = default;
+    SimulationInstance() = delete;
     /**
      * @brief Default destructor.
      */
@@ -188,6 +176,11 @@ namespace Api
      */
     [[nodiscard]] int get_id() const;
 
+    [[nodiscard]] const ExecInfo& get_exec_info() const
+    {
+      return _data.exec_info;
+    }
+
     /**
      * @brief Execute the simulation.
      *
@@ -199,17 +192,14 @@ namespace Api
     int id{}; ///< The unique identifier to connect with c api.
 
     /**
-     * @brief Private constructor for internal initialization.
+     * @brief simulation instance constructor
      *
-     * @param n_rank The total number of ranks in the MPI group.
-     * @param current_rank The rank ID for this instance.
-     * @param id A unique identifier for the simulation instance.
-     * @param thread_per_process Number of threads allocated per process.
+     * @param argc Number of runtime argument.
+     * @param argv Tuntime arguments.
+     * @param id A unique identifier for the simulation instance (optional).
+
      */
-    SimulationInstance(uint32_t n_rank,
-                       uint32_t current_rank,
-                       uint64_t id,
-                       uint32_t thread_per_process);
+    SimulationInstance(int argc, char** argv, std::optional<std::size_t> run_id);
 
     std::optional<Core::ScalarFactory::ScalarVariant> scalar_initializer_variant = std::nullopt;
     Core::CaseData _data;               ///< Case data for the simulation.

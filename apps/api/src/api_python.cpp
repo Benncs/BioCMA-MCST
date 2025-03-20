@@ -35,9 +35,17 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 
   m.def(
       "init_handle",
-      [](uint32_t n_rank, uint32_t i_rank, uint64_t id, uint32_t thread_per_proces)
+      [](const std::vector<std::string>& args)
       {
-        auto opt = Api::SimulationInstance::init(n_rank, i_rank, id, thread_per_proces);
+        std::vector<const char*> c_args;
+        c_args.reserve(args.size());
+        for (const auto& arg : args)
+        {
+          c_args.push_back(arg.c_str());
+        }
+
+        auto opt = Api::SimulationInstance::init(static_cast<int>(c_args.size()),
+                                                 const_cast<char**>(c_args.data()));
         if (opt.has_value())
         {
           auto* ptr = opt.value().release();
@@ -45,10 +53,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
         }
         throw std::runtime_error("Simulation handle initialisation failed");
       },
-      py::arg("n_rank"),
-      py::arg("i_rank"),
-      py::arg("id"),
-      py::arg("thread_per_proces") = 1);
+      py::arg("argv"));
+
   m.def("finalize", &finalize);
   m.def("exec", &exec);
   // m.def("apply", &apply);
@@ -62,12 +68,19 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
           return {f, rc.get()};
         });
 
+  m.def("i_rank",
+        [](std::shared_ptr<Api::SimulationInstance>& handle)
+        { return handle->get_exec_info().current_rank; });
+  m.def("n_rank",
+        [](std::shared_ptr<Api::SimulationInstance>& handle)
+        { return handle->get_exec_info().n_rank; });
+
   m.def("register_result_path", &register_result_path);
   m.def("register_cma_path", &register_cma_path);
   m.def("register_serde", &register_serde);
   m.def("register_parameters", &register_parameters);
   m.def("register_model_name", &register_model_name);
-  
+
   m.def("register_initialiser_file_path", &register_initializer_path);
 
   m.def("make_params",
@@ -185,24 +198,24 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("handle"),
       py::arg("n_species"),
       py::arg("liquid value"),
-      py::arg("gas")=std::nullopt);
+      py::arg("gas") = std::nullopt);
 }
 
 /**
  * @example simple_simulation.py
  *
- * This example demonstrates how to perfom a simple simulation using the python API 
+ * This example demonstrates how to perfom a simple simulation using the python API
  *
  * @code
  *   import handle_module>
- *   
+ *
  *   outfolder = "./out/"
  *   simulation_name = "my_simulation_name"
- *   cma_path = "/path/to/the/cma/" #don´t forget last / 
- *   def run(params): 
+ *   cma_path = "/path/to/the/cma/" #don´t forget last /
+ *   def run(params):
  *       handle = handle_module.init_simulation(outfolder,simulation_name,cma_path,params)
- *       # cma with 500 compartment, simulation with 4 species liquid only 
- *       liquid_concentration_0 = np.zeros((500,4))  
+ *       # cma with 500 compartment, simulation with 4 species liquid only
+ *       liquid_concentration_0 = np.zeros((500,4))
  *       handle_module.set_initial_concentrations(handle,liquid_concentration_0)
  *       handle_module.register_model_name(handle, "model_name")
  *        # Apply the simulation settings
@@ -215,6 +228,6 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
  *
  *     # Execute the simulation
  *     rc = handle_module.exec(handle);
- *   
+ *
  * @endcode
  */

@@ -4,16 +4,16 @@
 #include <cstring>
 #include <string_view>
 
-#define INIT init_handle_raw(n_rank, i_rank, id, nt);
+#define INIT init_handle_raw(argc,argv);
 #define PARAM make_params(cx, ft, dt, np, nex);
 
-void test_init()
+void test_init(int argc, char** argv)
 {
   Handle handle = INIT assert(handle != nullptr);
   delete_handle(&handle);
 }
 
-void test_delete_handle()
+void test_delete_handle(int argc, char** argv)
 {
   Handle handle = INIT;
   assert(handle != nullptr);
@@ -33,7 +33,7 @@ void mock_prepre_apply(std::string_view path, Handle handle)
     CHECK(register_cma_path(handle, path.data()))
   }
 }
-void test_exec(std::string_view path)
+void test_exec(int argc, char** argv,std::string_view path)
 {
   Handle handle = INIT mock_prepre_apply(path, handle);
   CHECK(apply(handle, 0));
@@ -42,20 +42,20 @@ void test_exec(std::string_view path)
   delete_handle(&handle);
 }
 
-void test_apply(std::string_view path)
+void test_apply(int argc, char** argv,std::string_view path)
 {
   Handle handle = INIT mock_prepre_apply(path, handle);
   CHECK(apply(handle, 0));
   delete_handle(&handle);
 }
 
-void test_apply_err()
+void test_apply_err(int argc, char** argv)
 {
   Handle handle = INIT assert(apply(handle, 0) != 0); // THIS SHOULD RETURN ERROR
   delete_handle(&handle);
 }
 
-void test_exec_err()
+void test_exec_err(int argc, char** argv)
 {
   Handle handle = INIT assert(exec(handle) != 0); // THIS SHOULD RETURN ERROR
   delete_handle(&handle);
@@ -63,7 +63,7 @@ void test_exec_err()
 
 // TODO TEST APPLY/EXEC WITH LOAD
 
-void test_register_result_path()
+void test_register_result_path(int argc, char** argv)
 {
   Handle handle = INIT int result = register_result_path(handle, "path");
   register_cma_path(handle, "path");
@@ -71,14 +71,14 @@ void test_register_result_path()
   delete_handle(&handle);
 }
 
-void test_register_initializer_path()
+void test_register_initializer_path(int argc, char** argv)
 {
   Handle handle = INIT;
   int result = register_initializer_path(handle, "path");
   assert(result == 0);
   delete_handle(&handle);
 }
-void test_make_params()
+void test_make_params(int argc, char** argv)
 {
   Param params = PARAM assert(params.biomass_initial_concentration == cx);
   assert(params.final_time == ft);
@@ -91,28 +91,28 @@ void test_make_params()
   assert(params.serde == 0);          // Default value
 }
 
-void test_register_parameters()
+void test_register_parameters(int argc, char** argv)
 {
   Handle handle = INIT Param params = PARAM int result = register_parameters(handle, &params);
   assert(result == 0);
   delete_handle(&handle);
 }
 
-void test_register_cma_path_recursive()
+void test_register_cma_path_recursive(int argc, char** argv)
 {
   Handle handle = INIT int result = register_cma_path_recursive(handle, "path");
   assert(result == 0);
   delete_handle(&handle);
 }
 
-void test_register_cma_path()
+void test_register_cma_path(int argc, char** argv)
 {
   Handle handle = INIT int result = register_cma_path(handle, "path");
   assert(result == 0);
   delete_handle(&handle);
 }
 
-void test_register_serde()
+void test_register_serde(int argc, char** argv)
 {
   Handle handle = INIT;
   int result = register_serde(handle, "serde");
@@ -120,7 +120,7 @@ void test_register_serde()
   delete_handle(&handle);
 }
 
-void test_register_model_name()
+void test_register_model_name(int argc, char** argv)
 {
   Handle handle = INIT;
   int result = register_model_name(handle, "model");
@@ -128,7 +128,7 @@ void test_register_model_name()
   delete_handle(&handle);
 }
 
-void test_branch_null()
+void test_branch_null(int argc, char** argv)
 {
   // We use NULL to mimic C behavior
   CHECK_FALSE(apply(NULL, 0));
@@ -173,24 +173,24 @@ int main(int argc, char** argv)
 
   std::string cma_path = get_cma_path(argc, argv);
 
-  test_init();
-  test_delete_handle();
+  test_init(argc,argv);
+  test_delete_handle(argc,argv);
 
-  test_exec_err();
-  test_apply_err();
+  test_exec_err(argc,argv);
+  test_apply_err(argc,argv);
 
-  test_branch_null();
+  test_branch_null(argc,argv);
 
-  test_make_params();
-  test_register_parameters();
-  test_register_result_path();
-  test_register_initializer_path();
-  test_register_cma_path_recursive();
-  test_register_cma_path();
-  test_register_serde();
-  test_register_model_name();
+  test_make_params(argc,argv);
+  test_register_parameters(argc,argv);
+  test_register_result_path(argc,argv);
+  test_register_initializer_path(argc,argv);
+  test_register_cma_path_recursive(argc,argv);
+  test_register_cma_path(argc,argv);
+  test_register_serde(argc,argv);
+  test_register_model_name(argc,argv);
 
-  test_apply(cma_path);
+  test_apply(argc,argv,cma_path);
   // // FIXME test_exec(cma_path);
   // test_exec(cma_path);
   return 0;

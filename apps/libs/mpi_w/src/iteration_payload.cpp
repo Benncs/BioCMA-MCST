@@ -18,6 +18,7 @@ namespace WrapMPI
   {
     PROFILE_SECTION("host:All")
     bool flag = false;
+    if(n_rank==1){return true;}
     // MPI_Request req_flag;
     // for (size_t __macro_j = 1; __macro_j < n_rank; ++__macro_j)
     // {

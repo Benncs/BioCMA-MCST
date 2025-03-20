@@ -7,14 +7,14 @@
 #include <cma_read/light_2d_view.hpp>
 #include <cma_read/reactorstate.hpp>
 #include <cma_utils/cache_hydro_state.hpp>
-#include <common/kokkos_vector.hpp>
+
 #include <vector>
 
 namespace CmaUtils
 {
   /**
-   * @brief Proxy class for PreCalculatedHydroState structure, which is used to fill this struct
-   * with data from an external library.
+   * @brief Proxy class for PreCalculatedHydroState  used to fill this struct with data
+   * from an external library.
    */
   class ProxyPreCalculatedHydroState
   {

@@ -14,35 +14,39 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 import sys
+
 # from wakepy import keep
 # from ..exec import exec
-import datetime 
-BENCH_OMP_THREADS = [1,2,4]  # List of thread numbers when running scaling
-EXECUTABLE_PATH = "./builddir/debug_gcc/apps/cli"  # Path to executable to run
+import datetime
+
+BENCH_OMP_THREADS = [1, 2,4, 6]  # List of thread numbers when running scaling
+EXECUTABLE_PATH = "./builddir/host/apps/cli"  # Path to executable to run
 EXECUTABLE_NAME = "biocma_mcst_cli_app_shared"  # Name of executable to run
 BENCH_SCRIPT_PATH = (
     "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
 )
-date = datetime.datetime.today().strftime('%Y_%m_%d')
-FILENAME = f"./devutils/benchs/bench_records3_{date}.csv"  # Record filename
-OUTPUT_PDF = f"./devutils/benchs/results_bench3_{date}.pdf"  # Output path
-MODEL_NAME = "model_user"
+date = datetime.datetime.today().strftime("%Y_%m_%d")
+FILENAME = f"./devutils/benchs/bench_records_3d2_{date}.csv"  # Record filename
+OUTPUT_PDF = f"./devutils/benchs/results_bench_3d2_{date}.pdf"  # Output path
+MODEL_NAME = "twometa"
 FINAL_TIME = 1  # Reference simulation time
 DELTA_TIME = 1e-3  # Reference delta time fixed
 # CMA_DATA_PATH = "./cma_data/bench/"
-CMA_DATA_PATH = "./cma_data/0d_mono/"
+# CMA_DATA_PATH = "../../thesis/cfd-cma/cma_data/0d_gas/"
+CMA_DATA_PATH = "/home_pers/casale/Documents/thesis/cfd/sanofi/"
 RECURSIVE = False
 
-def format_cli(number_particle, final_time):
 
-    rec  = [""]
+def format_cli(number_particle, final_time):
+    rec = [""]
     if RECURSIVE:
-        rec = [    "-r",
-        "1",]
+        rec = [
+            "-r",
+            "1",
+        ]
 
     return [
         f"{EXECUTABLE_PATH}/{EXECUTABLE_NAME}",
-        
         "-mn",
         MODEL_NAME,
         "-np",
@@ -55,7 +59,12 @@ def format_cli(number_particle, final_time):
         "-f",
         CMA_DATA_PATH,
         "-er",
-        "bench","-nex","3","-force","1","-fi","./cma_data/0d_init.h5" #,"-mpi","1"
+        "bench",
+        "-nex",
+        "0",
+        "-force",
+        "1",
+        # ,"-fi","./cma_data/0d_init.h5" #,"-mpi","1"
     ]
 
 
@@ -64,7 +73,7 @@ def execute(n_thread, script_path, command):
     env_var["OMP_NUM_THREADS"] = str(n_thread)
     env_var["OMP_PLACES"] = "threads"
     env_var["OMP_PROC_BIND"] = "spread"
-    #env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
+    # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
     # commands = [
     #     "mpiexec",
     #     "-n",
@@ -73,10 +82,7 @@ def execute(n_thread, script_path, command):
     #     *command,
     # ]
 
-    commands = [
-        BENCH_SCRIPT_PATH,
-        *command,"-n",str(n_thread)
-    ]
+    commands = [BENCH_SCRIPT_PATH, *command, "-n", str(n_thread)]
 
     result = subprocess.run(
         commands,
@@ -157,18 +163,15 @@ def plot_thread_vs_time(threads, particles, iterations, records):
 def plot_scaling(threads, particles, iterations, records):
     unique_particles = np.unique(particles)
     unique_iterations = np.unique(iterations)
-    figs = []
+    figs = [plt.figure()]
 
     # Plot strong scaling efficiency (speedup) vs. number of threads for each particle and iteration combination
     for particle in unique_particles:
-        
         for iteration in unique_iterations:
-            f = plt.figure()
-            plt.title(
-                f"Speedup=f(num_thread) for n_particle={particle}, iteration={iteration}"
-            )
+            # f = plt.figure()
+
             mask = (particles == particle) & (iterations == iteration)
-            condition = True #np.count_nonzero(mask) >= 3
+            condition = True  # np.count_nonzero(mask) >= 3
             if condition:
                 # Extract the relevant data
                 selected_threads = threads[mask]
@@ -185,7 +188,7 @@ def plot_scaling(threads, particles, iterations, records):
                 ]  # There should be exactly one such entry
 
                 # Compute speedup
-                speedup = single_thread_time / selected_times
+                speedup = single_thread_time / selected_times / selected_threads
 
                 # Sort by the number of threads for a proper plot
                 sorted_indices = np.argsort(selected_threads)
@@ -193,11 +196,32 @@ def plot_scaling(threads, particles, iterations, records):
                 sorted_speedup = speedup[sorted_indices]
 
                 # Plot the speedup
-                plt.plot(sorted_threads, sorted_speedup, "-o")
-                plt.xlabel("Number of Threads")
-                plt.ylabel("Speedup (T(1)/T(n))")
-                plt.grid(True)
-                figs.append(f)
+                plt.title(f"Efficiency (T(1)/T(n)/n) for {iteration} iterations", fontsize=16)
+
+                # Plot with improved styling
+                plt.plot(
+                    sorted_threads,
+                    sorted_speedup,
+                    "-x",  # Line with 'x' markers
+                    label=f"{particle:.0e}",
+                    markersize=8,  # Increase marker size for better visibility
+                    linewidth=2  # Thicker line for visibility
+                )
+
+                # Add labels with larger fonts for better readability
+                plt.xlabel("Number of Threads", fontsize=14)
+                plt.ylabel("Efficiency", fontsize=14)
+
+                # Customize the legend
+                plt.legend(title="n particle")
+
+                # Improve grid appearance
+                plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+
+                # Increase the font size of ticks for better readability
+                plt.xticks(fontsize=12)
+                plt.yticks(fontsize=12)
+                # figs.append(f)
 
     return figs
 
@@ -241,18 +265,17 @@ def plot_csv():
 
     pre_mask = particles >= 150000
     with PdfPages(OUTPUT_PDF) as pdf:
-        add_to_pdf(
-            pdf,
-            plot_thread_vs_time(
-                threads[pre_mask],
-                particles[pre_mask],
-                iterations[pre_mask],
-                records[pre_mask],
-            ),
-        )
+        # add_to_pdf(
+        #     pdf,
+        #     plot_thread_vs_time(
+        #         threads[pre_mask],
+        #         particles[pre_mask],
+        #         iterations[pre_mask],
+        #         records[pre_mask],
+        #     ),
+        # )
         add_to_pdf(pdf, plot_scaling(threads, particles, iterations, records))
         #   add_to_pdf(pdf,plot_particle_vs_time(threads,particles,iterations,records))
-        
 
 
 def do_scale(particles=1000000):

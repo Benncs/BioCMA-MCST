@@ -1,18 +1,18 @@
 #ifndef __MC_INIT_HPP__
 #define __MC_INIT_HPP__
 
-#include "mc/domain.hpp"
 #include <cassert>
 #include <common/execinfo.hpp>
-#include <common/kokkos_vector.hpp>
 #include <cstdint>
-#include <mc/particles/extra_process.hpp>
-#include <mc/particles/mcparticles.hpp>
-#include <mc/particles/particles_container.hpp>
-#include <mc/prng/prng.hpp>
+#include <mc/domain.hpp>
+#include <mc/particles_container.hpp>
+#include <mc/traits.hpp>
 #include <mc/unit.hpp>
 #include <memory>
+#include <stdexcept>
 #include <utility>
+#include <span> 
+#include <biocma_cst_config.hpp>
 
 namespace MC
 {
@@ -35,17 +35,28 @@ namespace MC
    *
    * @return A unique pointer to the initialized MonteCarloUnit.
    */
-  template <ParticleModel Model>
-  std::unique_ptr<MonteCarloUnit> init(
-                                       uint64_t n_particles,
+  template <ModelType Model>
+  std::unique_ptr<MonteCarloUnit> init(uint64_t n_particles,
                                        std::span<double> volumes,
                                        const NeighborsView<HostSpace>& neighbors,
                                        double& total_mass)
   {
+    if constexpr (ConstWeightModelType<Model>)
+    {
+      Kokkos::printf("Const Weights\r\n");
+    }
     auto unit = std::make_unique<MonteCarloUnit>();
     unit->domain = ReactorDomain(volumes, neighbors);
     auto container = ParticlesContainer<Model>(n_particles);
-    impl_init(total_mass, n_particles, *unit, std::move(container));
+    try
+    {
+      impl_init(total_mass, n_particles, *unit, std::move(container));
+    }
+    catch (const std::runtime_error& e)
+    {
+      return nullptr;
+    }
+
     return unit;
   }
 

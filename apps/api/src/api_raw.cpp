@@ -30,21 +30,30 @@ int apply(Handle handle, int to_load)
   return -1;
 }
 
-Handle init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thread_per_process)
+// Handle init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thread_per_process)
+// {
+//   auto opt_handle = Api::SimulationInstance::init(n_rank, current_rank, id, thread_per_process);
+//   if (opt_handle.has_value())
+//   {
+//     return opt_handle->release();
+//   }
+//   return nullptr;
+// }
+
+// Handle init_handle_shared(uint64_t id, uint32_t thread_per_process)
+// {
+//   return init_handle_raw(1, 0, id, thread_per_process);
+// }
+
+Handle init_handle_raw(int argc, char** argv)
 {
-  auto opt_handle = Api::SimulationInstance::init(n_rank, current_rank, id, thread_per_process);
+  auto opt_handle = Api::SimulationInstance::init(argc, argv);
   if (opt_handle.has_value())
   {
     return opt_handle->release();
   }
   return nullptr;
 }
-
-Handle init_handle_shared(uint64_t id, uint32_t thread_per_process)
-{
-  return init_handle_raw(1, 0, id, thread_per_process);
-}
-
 
 void delete_handle(Handle* handle)
 {
