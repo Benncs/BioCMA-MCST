@@ -313,24 +313,26 @@ $(function(){initNavTree('uptake_8hpp_source.html',''); initResizable(true); });
 <div class="foldopen" id="foldopen00213" data-start="{" data-end="}">
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno"><a class="line" href="structModels_1_1Uptake.html#a5eec604cdea8ae4939f45f1803677df2">  213</a></span>    KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code hl_function" href="structModels_1_1Uptake.html#a5eec604cdea8ae4939f45f1803677df2">mass</a>(std::size_t idx, <span class="keyword">const</span> <a class="code hl_typedef" href="structModels_1_1Uptake.html#a7ee9e7e3a339a8098de6ea548824bc22">SelfParticle</a>&amp; arr)</div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    {</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>      <span class="keywordflow">return</span> 0.;</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    }</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>      (void)idx;</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>      (void)arr;</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>      <span class="keywordflow">return</span> 0.;</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    }</div>
 </div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
-<div class="foldopen" id="foldopen00218" data-start="{" data-end="}">
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno"><a class="line" href="structModels_1_1Uptake.html#adc00ff6cd86f497a4045258ea30c7df3">  218</a></span>    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="keyword">static</span> std::array&lt;std::string_view, n_var&gt; <a class="code hl_function" href="structModels_1_1Uptake.html#adc00ff6cd86f497a4045258ea30c7df3">names</a>()</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    {</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>      <span class="keyword">constexpr</span> std::array&lt;std::string_view, n_var&gt; _names = {<span class="stringliteral">&quot;a_pts&quot;</span>, <span class="stringliteral">&quot;a_permease&quot;</span>, <span class="stringliteral">&quot;n_permease&quot;</span>};</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>      <span class="keyword">static_assert</span>(_names.size() == <a class="code hl_variable" href="structModels_1_1Uptake.html#aa07643d12e66755941c002c1131ed71b">n_var</a>);</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>      <span class="keywordflow">return</span> _names;</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    }</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
+<div class="foldopen" id="foldopen00220" data-start="{" data-end="}">
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno"><a class="line" href="structModels_1_1Uptake.html#adc00ff6cd86f497a4045258ea30c7df3">  220</a></span>    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="keyword">static</span> std::array&lt;std::string_view, n_var&gt; <a class="code hl_function" href="structModels_1_1Uptake.html#adc00ff6cd86f497a4045258ea30c7df3">names</a>()</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    {</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>      <span class="keyword">constexpr</span> std::array&lt;std::string_view, n_var&gt; _names = {<span class="stringliteral">&quot;a_pts&quot;</span>, <span class="stringliteral">&quot;a_permease&quot;</span>, <span class="stringliteral">&quot;n_permease&quot;</span>};</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>      <span class="keyword">static_assert</span>(_names.size() == <a class="code hl_variable" href="structModels_1_1Uptake.html#aa07643d12e66755941c002c1131ed71b">n_var</a>);</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>      <span class="keywordflow">return</span> _names;</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    }</div>
 </div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>  };</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>  };</div>
 </div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>  <span class="comment">// CHECK_MODEL(Uptake&lt;DefaultModel&gt;)</span></div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>} <span class="comment">// namespace Models</span></div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span> </div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>  <span class="comment">// CHECK_MODEL(Uptake&lt;DefaultModel&gt;)</span></div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>} <span class="comment">// namespace Models</span></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassMC_1_1KPRNG_html_ab838a46e423f7dbdfb9f9809afaeefd5"><div class="ttname"><a href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a></div><div class="ttdeci">Kokkos::Random_XorShift1024_Pool&lt; Kokkos::DefaultExecutionSpace &gt; pool_type</div><div class="ttdef"><b>Definition</b> prng.hpp:17</div></div>
 <div class="ttc" id="anamespaceMC_html_a014ee946d2a4f3e125803a71eefae77d"><div class="ttname"><a href="namespaceMC.html#a014ee946d2a4f3e125803a71eefae77d">MC::LocalConcentration</a></div><div class="ttdeci">Kokkos::Subview&lt; KernelConcentrationType, int, decltype(Kokkos::ALL)&gt; LocalConcentration</div><div class="ttdef"><b>Definition</b> traits.hpp:65</div></div>
 <div class="ttc" id="anamespaceMC_html_a467b254d9cdce8dba61de2d4ab8858e6"><div class="ttname"><a href="namespaceMC.html#a467b254d9cdce8dba61de2d4ab8858e6">MC::ContributionView</a></div><div class="ttdeci">Kokkos::Experimental::ScatterView&lt; double **, Kokkos::LayoutLeft &gt; ContributionView</div><div class="ttdef"><b>Definition</b> traits.hpp:56</div></div>
@@ -366,7 +368,7 @@ $(function(){initNavTree('uptake_8hpp_source.html',''); initResizable(true); });
 <div class="ttc" id="astructModels_1_1Uptake_html_ac38f76684b88fd1fd4f61a9bbc656bbb"><div class="ttname"><a href="structModels_1_1Uptake.html#ac38f76684b88fd1fd4f61a9bbc656bbb">Models::Uptake::k_pts</a></div><div class="ttdeci">MODEL_CONSTANT FloatType k_pts</div><div class="ttdef"><b>Definition</b> uptake.hpp:38</div></div>
 <div class="ttc" id="astructModels_1_1Uptake_html_ad5bef0e6800ba6e9b3ba55a675f270a8"><div class="ttname"><a href="structModels_1_1Uptake.html#ad5bef0e6800ba6e9b3ba55a675f270a8">Models::Uptake::phi_pts</a></div><div class="ttdeci">static KOKKOS_INLINE_FUNCTION constexpr FloatType phi_pts(const FloatType phi_pts_max, const FloatType a_pts, const FloatType S)</div><div class="ttdef"><b>Definition</b> uptake.hpp:53</div></div>
 <div class="ttc" id="astructModels_1_1Uptake_html_ad9234fd866460518cfc9d19c73d5694a"><div class="ttname"><a href="structModels_1_1Uptake.html#ad9234fd866460518cfc9d19c73d5694a">Models::Uptake::tau_pts</a></div><div class="ttdeci">MODEL_CONSTANT double tau_pts</div><div class="ttdef"><b>Definition</b> uptake.hpp:43</div></div>
-<div class="ttc" id="astructModels_1_1Uptake_html_adc00ff6cd86f497a4045258ea30c7df3"><div class="ttname"><a href="structModels_1_1Uptake.html#adc00ff6cd86f497a4045258ea30c7df3">Models::Uptake::names</a></div><div class="ttdeci">static constexpr std::array&lt; std::string_view, n_var &gt; names()</div><div class="ttdef"><b>Definition</b> uptake.hpp:218</div></div>
+<div class="ttc" id="astructModels_1_1Uptake_html_adc00ff6cd86f497a4045258ea30c7df3"><div class="ttname"><a href="structModels_1_1Uptake.html#adc00ff6cd86f497a4045258ea30c7df3">Models::Uptake::names</a></div><div class="ttdeci">static constexpr std::array&lt; std::string_view, n_var &gt; names()</div><div class="ttdef"><b>Definition</b> uptake.hpp:220</div></div>
 <div class="ttc" id="astructModels_1_1Uptake_html_ade859488b23446412ceeddbc90162946"><div class="ttname"><a href="structModels_1_1Uptake.html#ade859488b23446412ceeddbc90162946">Models::Uptake::uniform_weight</a></div><div class="ttdeci">std::true_type uniform_weight</div><div class="ttdef"><b>Definition</b> uptake.hpp:31</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

@@ -139,7 +139,7 @@ CPU only</h3>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md5"></a>
 Cuda</h3>
 <p>Be sure to be in root project</p>
-<div class="fragment"><div class="line">$(pwd)/devutils/kokkos_wrap/wrap_cxx meson setup builddir $optionalflags$ -Duse_cuda=true -Duse_system_kokkos=true  </div>
+<div class="fragment"><div class="line">CXX=$(pwd)/devutils/kokkos_wrap/wrap_cxx meson setup builddir $optionalflags$ -Duse_cuda=true -Duse_system_kokkos=true  </div>
 </div><!-- fragment --><p>This command is mandatory to detect the correct compiler, this configuration needs kokkos to be installed system wide for specific GPU.</p>
 <p><b>wrap_cxx</b> script is another wrap around wrapper provided by kokkos to be compatible with Meson. It basically gives the correct compiler to script.</p>
 <h3><a class="anchor" id="autotoc_md6"></a>

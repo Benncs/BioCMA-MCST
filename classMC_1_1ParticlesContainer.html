@@ -127,6 +127,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acca450f3c529a6e6962d76f8f39011e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e95993fb1287c04427780d6372be565" id="r_a8e95993fb1287c04427780d6372be565"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e95993fb1287c04427780d6372be565">merge_buffer</a> ()</td></tr>
 <tr class="separator:a8e95993fb1287c04427780d6372be565"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c693e0db50b6d4dd5186bc391a0f0c3" id="r_a7c693e0db50b6d4dd5186bc391a0f0c3"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c693e0db50b6d4dd5186bc391a0f0c3">get_buffer_index</a> () const</td></tr>
+<tr class="separator:a7c693e0db50b6d4dd5186bc391a0f0c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf9c8e5f7b98db37614050c602e02d58" id="r_aaf9c8e5f7b98db37614050c602e02d58"><td class="memTemplParams" colspan="2">template&lt;class Archive &gt; </td></tr>
 <tr class="memitem:aaf9c8e5f7b98db37614050c602e02d58"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#aaf9c8e5f7b98db37614050c602e02d58">save</a> (Archive &amp;ar) const</td></tr>
 <tr class="separator:aaf9c8e5f7b98db37614050c602e02d58"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,6 +137,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adae9af7cbb629530927d504f5fe75c90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2d3ed66b206a8c7fbad9acb23b5b878" id="r_aa2d3ed66b206a8c7fbad9acb23b5b878"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2d3ed66b206a8c7fbad9acb23b5b878">get_weight</a> (std::size_t idx) const</td></tr>
 <tr class="separator:aa2d3ed66b206a8c7fbad9acb23b5b878"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49422ec69c8a1c859f0c2f779ee17c01" id="r_a49422ec69c8a1c859f0c2f779ee17c01"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49422ec69c8a1c859f0c2f779ee17c01">get_allocation_factor</a> () const</td></tr>
+<tr class="separator:a49422ec69c8a1c859f0c2f779ee17c01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa77d660ef437015c9d50b608956a862a" id="r_aa77d660ef437015c9d50b608956a862a"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa77d660ef437015c9d50b608956a862a">capacity</a> () const</td></tr>
+<tr class="separator:aa77d660ef437015c9d50b608956a862a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -443,6 +449,33 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
 
 </div>
 </div>
+<a id="aa77d660ef437015c9d50b608956a862a" name="aa77d660ef437015c9d50b608956a862a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa77d660ef437015c9d50b608956a862a">&#9670;&#160;</a></span>capacity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::capacity </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="acca450f3c529a6e6962d76f8f39011e8" name="acca450f3c529a6e6962d76f8f39011e8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acca450f3c529a6e6962d76f8f39011e8">&#9670;&#160;</a></span>clean_dead()</h2>
 
@@ -458,6 +491,60 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a49422ec69c8a1c859f0c2f779ee17c01" name="a49422ec69c8a1c859f0c2f779ee17c01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49422ec69c8a1c859f0c2f779ee17c01">&#9670;&#160;</a></span>get_allocation_factor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::get_allocation_factor </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7c693e0db50b6d4dd5186bc391a0f0c3" name="a7c693e0db50b6d4dd5186bc391a0f0c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c693e0db50b6d4dd5186bc391a0f0c3">&#9670;&#160;</a></span>get_buffer_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::get_buffer_index </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">nodiscard</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

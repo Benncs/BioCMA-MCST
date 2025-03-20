@@ -79,6 +79,7 @@ $(function(){initNavTree('classMC_1_1KPRNG.html',''); initResizable(true); });
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classMC_1_1KPRNG-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">MC::KPRNG Class Reference</div></div>
 </div><!--header-->
@@ -116,6 +117,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad1c9b5acec76cbf1d01783be1e41e664"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a067a194948465c4a636c41ebe13d313d" id="r_a067a194948465c4a636c41ebe13d313d"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a067a194948465c4a636c41ebe13d313d">uniform_u</a> (uint64_t a, uint64_t b) const</td></tr>
 <tr class="separator:a067a194948465c4a636c41ebe13d313d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70bc13040a7ecb8e23f9c30d57db1acb" id="r_a70bc13040a7ecb8e23f9c30d57db1acb"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a70bc13040a7ecb8e23f9c30d57db1acb">get_seed</a> () const</td></tr>
+<tr class="separator:a70bc13040a7ecb8e23f9c30d57db1acb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -127,6 +130,11 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a704dfab53ca0915c944e9e9ae1854a04" id="r_a704dfab53ca0915c944e9e9ae1854a04"><td class="memTemplParams" colspan="2">template&lt;typename random_pool_t , size_t n_r, size_t... I&gt; </td></tr>
 <tr class="memitem:a704dfab53ca0915c944e9e9ae1854a04"><td class="memTemplItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION std::array&lt; double, n_r &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a704dfab53ca0915c944e9e9ae1854a04">generate_uniform_impl</a> (random_pool_t pool, std::index_sequence&lt; I... &gt;) const</td></tr>
 <tr class="separator:a704dfab53ca0915c944e9e9ae1854a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:afa1cb38dd2c56c82f2e720784ff7c922" id="r_afa1cb38dd2c56c82f2e720784ff7c922"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa1cb38dd2c56c82f2e720784ff7c922">seed</a> {}</td></tr>
+<tr class="separator:afa1cb38dd2c56c82f2e720784ff7c922"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Utilities and wrap around kokkos random generator. </p>
@@ -326,6 +334,31 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a70bc13040a7ecb8e23f9c30d57db1acb" name="a70bc13040a7ecb8e23f9c30d57db1acb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70bc13040a7ecb8e23f9c30d57db1acb">&#9670;&#160;</a></span>get_seed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto MC::KPRNG::get_seed </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a3c6b73ae8161b91229f9929f15a1b2fe" name="a3c6b73ae8161b91229f9929f15a1b2fe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3c6b73ae8161b91229f9929f15a1b2fe">&#9670;&#160;</a></span>uniform() <span class="overload">[1/2]</span></h2>
 
@@ -424,6 +457,28 @@ template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType
           <td class="memname"><a class="el" href="#ab838a46e423f7dbdfb9f9809afaeefd5">pool_type</a> MC::KPRNG::random_pool</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afa1cb38dd2c56c82f2e720784ff7c922" name="afa1cb38dd2c56c82f2e720784ff7c922"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa1cb38dd2c56c82f2e720784ff7c922">&#9670;&#160;</a></span>seed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t MC::KPRNG::seed {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

@@ -105,9 +105,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a05cba8c28abaecce99f586d551a75f80" id="r_a05cba8c28abaecce99f586d551a75f80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05cba8c28abaecce99f586d551a75f80">init_fields</a> (uint64_t n_iter, uint64_t n_compartments)</td></tr>
 <tr class="memdesc:a05cba8c28abaecce99f586d551a75f80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the fields required for exporting data.  <br /></td></tr>
 <tr class="separator:a05cba8c28abaecce99f586d551a75f80"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2d9be83527215ab2b2d19cd5efecf55" id="r_ae2d9be83527215ab2b2d19cd5efecf55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2d9be83527215ab2b2d19cd5efecf55">write_particle_data</a> (std::span&lt; std::string &gt; names, <a class="el" href="classCore_1_1DataExporter.html#a55319e6575fc867bf2b3b828de3ed37e">ViewParticleProperties</a> particle_values, <a class="el" href="classCore_1_1DataExporter.html#a55319e6575fc867bf2b3b828de3ed37e">ViewParticleProperties</a> spatial_values, const std::string &amp;ds_name)</td></tr>
-<tr class="memdesc:ae2d9be83527215ab2b2d19cd5efecf55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes particle data to the output.  <br /></td></tr>
-<tr class="separator:ae2d9be83527215ab2b2d19cd5efecf55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a733fbd04921878e92cde8975e45f9b84" id="r_a733fbd04921878e92cde8975e45f9b84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a733fbd04921878e92cde8975e45f9b84">write_particle_data</a> (std::span&lt; std::string &gt; names, <a class="el" href="classCore_1_1DataExporter.html#a55319e6575fc867bf2b3b828de3ed37e">ViewParticleProperties</a> particle_values, <a class="el" href="classCore_1_1DataExporter.html#a55319e6575fc867bf2b3b828de3ed37e">ViewParticleProperties</a> spatial_values, const std::string &amp;ds_name, bool compress_data)</td></tr>
+<tr class="memdesc:a733fbd04921878e92cde8975e45f9b84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes particle data to the output.  <br /></td></tr>
+<tr class="separator:a733fbd04921878e92cde8975e45f9b84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a450fb0c92efa4ee81b4083fc01f5e665" id="r_a450fb0c92efa4ee81b4083fc01f5e665"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a450fb0c92efa4ee81b4083fc01f5e665">write_number_particle</a> (const std::vector&lt; size_t &gt; &amp;distribution)</td></tr>
 <tr class="memdesc:a450fb0c92efa4ee81b4083fc01f5e665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the number of particles in each compartment.  <br /></td></tr>
 <tr class="separator:a450fb0c92efa4ee81b4083fc01f5e665"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -301,8 +301,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="ae2d9be83527215ab2b2d19cd5efecf55" name="ae2d9be83527215ab2b2d19cd5efecf55"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae2d9be83527215ab2b2d19cd5efecf55">&#9670;&#160;</a></span>write_particle_data()</h2>
+<a id="a733fbd04921878e92cde8975e45f9b84" name="a733fbd04921878e92cde8975e45f9b84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a733fbd04921878e92cde8975e45f9b84">&#9670;&#160;</a></span>write_particle_data()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -325,7 +325,12 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ds_name</em></span>&#160;)</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>ds_name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>compress_data</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -337,13 +342,14 @@ Here is the caller graph for this function:</div>
     <tr><td class="paramname">particle_values</td><td>Particle properties such as mass, age ... </td></tr>
     <tr><td class="paramname">spatial_values</td><td>Particle properties such as mass, age ... in space </td></tr>
     <tr><td class="paramname">ds_name</td><td>Dataset name associated with this data. </td></tr>
+    <tr><td class="paramname">compress_data</td><td>Compress particle or not (can be time consuming) </td></tr>
   </table>
   </dd>
 </dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classCore_1_1PartialExporter_ae2d9be83527215ab2b2d19cd5efecf55_cgraph.svg" width="339" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classCore_1_1PartialExporter_a733fbd04921878e92cde8975e45f9b84_cgraph.svg" width="339" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
