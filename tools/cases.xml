@@ -93,18 +93,18 @@
       <results_file_name>bench2</results_file_name>
       <number_exported_result>50</number_exported_result>
       <!-- <model_name>model_twometa</model_name> -->
-        <model_name>twometa</model_name>
+        <model_name>two_meta</model_name>
       <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>
    </control>
 
     <control name="bench0d">
       <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
-      <final_time>1</final_time>
-      <number_particle>10000</number_particle>
-      <delta_time>0.001</delta_time>
+      <final_time>5000</final_time>
+      <number_particle>1000000</number_particle>
+      <delta_time>0.1</delta_time>
       <results_file_name>bench0d</results_file_name>
-      <number_exported_result>10</number_exported_result>
-      <model_name>twometa</model_name>
+      <number_exported_result>100</number_exported_result>
+      <model_name>two_meta</model_name>
       <initialiser_path></initialiser_path>
    </control>
 

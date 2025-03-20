@@ -60,7 +60,7 @@ namespace Models
     MODEL_CONSTANT FloatType y_sa = 0.8;                 // S to A yield (mass)
     MODEL_CONSTANT FloatType y_os_molar = 3;             // 3 mol o2 per mol for glucose
     MODEL_CONSTANT FloatType k_o = 0.0001; // g/L: Anane et. al 2017 (Biochem. Eng. J) (g/g)
-    MODEL_CONSTANT FloatType dl_max_ms = 8*2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
+    MODEL_CONSTANT FloatType dl_max_ms = 8 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
     MODEL_CONSTANT FloatType tau_1 = 1000.;         // s
     MODEL_CONSTANT FloatType tau_2 = 1000.;         // s
 
@@ -68,8 +68,7 @@ namespace Models
     MODEL_CONSTANT FloatType phi_perm_max = phi_s_max / 40.; // kgS/
     MODEL_CONSTANT FloatType phi_o2_max =
         10 * phi_s_max / MolarMassG * y_os_molar * MolarMassO2; // kgS/s
-    MODEL_CONSTANT float nu_max_kg_s = dl_max_ms * lin_density;  
-
+    MODEL_CONSTANT float nu_max_kg_s = dl_max_ms * lin_density;
 
     KOKKOS_INLINE_FUNCTION static void
     init(const MC::KPRNG::pool_type& random_pool, std::size_t idx, const SelfParticle& arr);
@@ -97,24 +96,39 @@ namespace Models
       return GET_PROPERTY(Self::particle_var::length) * lin_density;
     }
 
-    inline constexpr static std::array<std::string_view, n_var> names()
-    {
-      constexpr std::size_t ln_var = n_var - Uptake<Self>::n_var;
-      constexpr auto _names = concat_arrays<Uptake<Self>::n_var, ln_var>(Uptake<Self>::names(),
-                                                                         {
-                                                                             "age",
-                                                                             "length",
-                                                                             "nu1",
-                                                                             "nu2",
-                                                                             "l_cp",
-                                                                             "nu_eff_1",
-                                                                             "nu_eff_2",
-                                                                             "contrib_phi_s",
-                                                                             "contrib_phi_o2",
-                                                                             "contrib_phi_ac",
-                                                                         });
+    // inline constexpr static std::array<std::string_view, n_var> names()
+    // {
+    //   constexpr std::size_t ln_var = n_var - Uptake<Self>::n_var;
+    //   constexpr auto _names = concat_arrays<Uptake<Self>::n_var, ln_var>(Uptake<Self>::names(),
+    //                                                                      {
+    //                                                                          "age",
+    //                                                                          "length",
+    //                                                                          "nu1",
+    //                                                                          "nu2",
+    //                                                                          "l_cp",
+    //                                                                          "nu_eff_1",
+    //                                                                          "nu_eff_2",
+    //                                                                          "contrib_phi_s",
+    //                                                                          "contrib_phi_o2",
+    //                                                                          "contrib_phi_ac",
+    //                                                                      });
 
-      return _names;
+    //   return _names;
+    // }
+
+    inline constexpr static std::vector<std::string_view> names()
+    {
+      return {"age", "length", "nu1", "nu2", "nu_eff_1", "nu_eff_2"};
+    }
+
+    inline constexpr static std::vector<std::size_t> get_number()
+    {
+      return {INDEX_FROM_ENUM(particle_var::age),
+              INDEX_FROM_ENUM(particle_var::length),
+              INDEX_FROM_ENUM(particle_var::nu1),
+              INDEX_FROM_ENUM(particle_var::nu2),
+              INDEX_FROM_ENUM(particle_var::nu_eff_1),
+              INDEX_FROM_ENUM(particle_var::nu_eff_2)};
     }
   };
 
@@ -126,8 +140,8 @@ namespace Models
                 const SelfParticle& arr)
   {
 
-    constexpr auto length_dist = MC::Distributions::TruncatedNormal<FloatType>(
-        l_c_m/2, l_c_m / 5., l_min_m, l_max_m);
+    constexpr auto length_dist =
+        MC::Distributions::TruncatedNormal<FloatType>(l_c_m / 2, l_c_m / 5., l_min_m, l_max_m);
 
     constexpr auto length_c_dist =
         MC::Distributions::TruncatedNormal<FloatType>(l_c_m, l_c_m / 7., l_min_m, l_max_m);
@@ -138,7 +152,7 @@ namespace Models
     auto gen = random_pool.get_state();
     GET_PROPERTY(Self::particle_var::length) = length_dist.draw(gen);
     GET_PROPERTY(Self::particle_var::l_cp) = length_c_dist.draw(gen);
-    GET_PROPERTY(particle_var::nu1)=nu_1_initial_dist.draw(gen);
+    GET_PROPERTY(particle_var::nu1) = nu_1_initial_dist.draw(gen);
     random_pool.free_state(gen);
     GET_PROPERTY(particle_var::contrib_phi_s) = 0;
     Uptake<Self>::init(random_pool, idx, arr);

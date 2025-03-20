@@ -57,7 +57,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 
   m.def("finalize", &finalize);
     m.def("exec", [](std::shared_ptr<Api::SimulationInstance>& handle){
-    pybind11::gil_scoped_release release;
+    pybind11::gil_scoped_release release; //TODO check if really usefull ?
     handle->exec();
     pybind11::gil_scoped_acquire acquire;
   });

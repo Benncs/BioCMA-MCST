@@ -197,7 +197,7 @@ namespace Simulation
     auto f = Simulation::KernelInline::CycleFunctor<CurrentModel>(
         d_t, container, local_rng.random_pool, getkernel_concentration(), contribs_scatter, events);
 
-    _policy = MC::get_policty(f, n_particle, true);
+    _policy = MC::get_policy(f, n_particle, true);
 
     bool enable_move = move_info.liquid_volume.size() > 1;
     bool enable_leave = move_info.leaving_flow.size() != 0;
