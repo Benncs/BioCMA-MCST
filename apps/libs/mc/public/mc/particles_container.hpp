@@ -171,6 +171,11 @@ namespace MC
 
     void merge_buffer();
 
+    [[maybe_unused]] [[nodiscard]] auto get_buffer_index() const
+    {
+      return buffer_index();
+    }
+
     template <class Archive> void save(Archive& ar) const
     {
       ar(n_allocated_elements, n_used_elements, allocation_factor);
@@ -192,9 +197,15 @@ namespace MC
 
     [[nodiscard]] KOKKOS_INLINE_FUNCTION double get_weight(std::size_t idx) const;
 
-    [[nodiscard]] double get_allocation_factor()const{return allocation_factor;}
+    [[nodiscard]] double get_allocation_factor() const
+    {
+      return allocation_factor;
+    }
 
-    [[nodiscard]] std::size_t capacity()const{return n_allocated_elements;}
+    [[nodiscard]] std::size_t capacity() const
+    {
+      return n_allocated_elements;
+    }
 
   private:
     Model::SelfParticle buffer_model;
@@ -293,12 +304,11 @@ namespace MC
         Kokkos::resize(status, n_allocated_elements);
         if constexpr (ConstWeightModelType<Model>)
         {
-
-          Kokkos::resize(weights, n_allocated_elements);
+          Kokkos::resize(weights, 1);
         }
         else
         {
-          Kokkos::resize(weights, 1);
+          Kokkos::resize(weights, n_allocated_elements);
         }
       }
     }
@@ -441,7 +451,6 @@ namespace MC
       KOKKOS_ASSERT(this->model.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->status.extent(0) == n_allocated_elements);
       n_used_elements = new_used_item;
-
       if (static_cast<double>(n_used_elements) / static_cast<double>(n_allocated_elements) <= 0.1)
       {
         // std::cout << "SHRINK" << std::endl;
