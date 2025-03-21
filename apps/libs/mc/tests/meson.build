@@ -1,11 +1,3 @@
-
-
-
-# test_rng = executable('test_rng', 'test_rng.cpp',dependencies:[mc_dependency])
-# test('test_rng',test_rng)
-
-
-
 test_container = executable('test_container', 'test_container.cpp',dependencies:[mc_dependency])
 test('test_container',test_container)
 
@@ -26,5 +18,6 @@ test('test_rng_2',test_rng_2)
 
 if not ci_execution
 t2 = executable('test_rng_long', 'test_rng_long.cpp',dependencies:[mc_dependency])
+test('test_rng_long',t2)
 endif 
 

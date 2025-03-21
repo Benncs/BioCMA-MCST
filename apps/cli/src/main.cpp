@@ -71,54 +71,73 @@ int main(int argc, char** argv)
     return -1;
   }
 
-  auto params_opt = parse_cli(argc, argv); // retrieve argument from command line
-  if (!params_opt.has_value())
-  {
-    // If needed value are not given or invalid argument early return
-    showHelp(std::cout);
-    return -1;
-  }
+  return parse_cli(argc, argv)
+      .match(
+          [&](auto&& user_params)
+          {
+            DECLARE_LOADER("/home-local/casale/Documents/code/poc/builddir/host/apps/udf_model/"
+                           "libudf_model.so");
 
-  auto user_params = params_opt.value(); // Deref value is safe  TODO: with
-                                         // c++23 support use monadic
+            auto& h = *handle;
+            if (!override_result_path(user_params, h->get_exec_info()))
+            {
+              return -1;
+            }
 
-  DECLARE_LOADER("/home-local/casale/Documents/code/poc/builddir/host/apps/udf_model/libudf_model.so");
+            const auto serde = user_params.serde;
+            INTERPRETER_INIT
+            REDIRECT_SCOPE({
+              HANDLE_RC(h->register_parameters(std::forward<decltype(user_params)>(user_params)));
 
-  auto& h = *handle;
-  if (!override_result_path(user_params, h->get_exec_info()))
-  {
-    return -1;
-  }
+              HANDLE_RC(h->apply(serde));
+              HANDLE_RC(h->exec());
+            })
+            return 0;
+          },
+          [](auto&& val)
+          {
+            std::cout << "Err: " << val << std::endl;
+            showHelp(std::cout);
+            return 1;
+          });
 
-  const auto serde = user_params.serde;
-  INTERPRETER_INIT
-  REDIRECT_SCOPE({
-    HANDLE_RC(h->register_parameters(std::move(user_params)));
-    // 1:20e-3*0.5/3600., {3}
-    // 2:20e-3*0.9/3600., {10}
-    // h->set_feed_constant_from_rvalue(20e-3 * 0.5 / 3600., {300e-3}, {0}, {1}, true);
+  // DECLARE_LOADER("/home-local/casale/Documents/code/poc/builddir/host/apps/udf_model/libudf_model.so");
 
-    // Sanofi
-    //  h->set_feed_constant_from_rvalue(0.031653119013143756, {0.}, {0}, {0});
-    // h->set_feed_constant_from_rvalue(0.001 / 3600., {0.3}, {0}, {1}, true);
-    // h->set_feed_constant_from_rvalue(20e-3*0.9/3600., {10}, {0}, {0}, false);
-    // h->set_feed_constant_from_rvalue(100*0.01 / 3600., {0.3}, {0}, {1}, true);
+  // auto& h = *handle;
+  // if (!override_result_path(user_params, h->get_exec_info()))
+  // {
+  //   return -1;
+  // }
 
-    // std::vector<double> c(100);
-    // std::vector<std::size_t> p(100);
-    // std::vector<std::size_t> ss(100);
-    // for (int i = 0; i < 100; ++i)
-    // {
-    //   p[i] = i;
-    //   c[i] = 0.3;
-    //   ss[i] = i;
-    // }
+  // const auto serde = user_params.serde;
+  // INTERPRETER_INIT
+  // REDIRECT_SCOPE({
+  //   HANDLE_RC(h->register_parameters(std::move(user_params)));
+  //   // 1:20e-3*0.5/3600., {3}
+  //   // 2:20e-3*0.9/3600., {10}
+  //   // h->set_feed_constant_from_rvalue(20e-3 * 0.5 / 3600., {300e-3}, {0}, {1}, true);
 
-    // h->set_feed_constant(0.031653119013143756, c, p, ss, true);
+  //   // Sanofi
+  //   //  h->set_feed_constant_from_rvalue(0.031653119013143756, {0.}, {0}, {0});
+  //   // h->set_feed_constant_from_rvalue(0.001 / 3600., {0.3}, {0}, {1}, true);
+  //   // h->set_feed_constant_from_rvalue(20e-3*0.9/3600., {10}, {0}, {0}, false);
+  //   // h->set_feed_constant_from_rvalue(100*0.01 / 3600., {0.3}, {0}, {1}, true);
 
-    HANDLE_RC(h->apply(serde));
-    HANDLE_RC(h->exec());
-  })
+  //   // std::vector<double> c(100);
+  //   // std::vector<std::size_t> p(100);
+  //   // std::vector<std::size_t> ss(100);
+  //   // for (int i = 0; i < 100; ++i)
+  //   // {
+  //   //   p[i] = i;
+  //   //   c[i] = 0.3;
+  //   //   ss[i] = i;
+  //   // }
+
+  //   // h->set_feed_constant(0.031653119013143756, c, p, ss, true);
+
+  //   HANDLE_RC(h->apply(serde));
+  //   HANDLE_RC(h->exec());
+  // })
 
   return 0;
 }
