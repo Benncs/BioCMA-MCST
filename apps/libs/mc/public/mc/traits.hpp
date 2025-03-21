@@ -97,6 +97,9 @@ concat_arrays(const std::array<std::string_view, N1>& arr1,
   return result;
 }
 
+/**
+  @brief Concept to define a correct Model
+ */
 template <typename T>
 concept ModelType = requires(T model,
                              T::FloatType d_t,
@@ -127,6 +130,9 @@ concept ModelType = requires(T model,
 
   requires FloatingPointType<typename T::FloatType>;
 };
+
+
+
 
 template <std::size_t n, typename T>
 concept _HasExportProperties = requires(const T obj) {
@@ -244,7 +250,8 @@ CHECK_MODEL(DefaultModel)
 
 //     int recommended_team_size =
 //         _policy.team_size_recommended(TagDetector(), Kokkos::ParallelForTag());
-//     int league_size = (static_cast<int>(range) + recommended_team_size - 1) / recommended_team_size;
+//     int league_size = (static_cast<int>(range) + recommended_team_size - 1) /
+//     recommended_team_size;
 
 //     _policy = Kokkos::TeamPolicy<ComputeSpace>(league_size, recommended_team_size);
 
@@ -260,7 +267,8 @@ CHECK_MODEL(DefaultModel)
 //     // int recommended_team_size = (reduce)
 //     //                                 ? _policy.team_size_recommended(f,
 //     //                                 Kokkos::ParallelReduceTag()) :
-//     //                                 _policy.team_size_recommended(f, Kokkos::ParallelForTag());
+//     //                                 _policy.team_size_recommended(f,
+//     Kokkos::ParallelForTag());
 
 //     // int league_size = (static_cast<int>(range) + recommended_team_size - 1) /
 //     // recommended_team_size;
@@ -271,7 +279,8 @@ CHECK_MODEL(DefaultModel)
 
 //     int recommended_team_size =
 //         _policy.team_size_recommended(TagDetector(), Kokkos::ParallelForTag());
-//     int league_size = (static_cast<int>(range) + recommended_team_size - 1) / recommended_team_size;
+//     int league_size = (static_cast<int>(range) + recommended_team_size - 1) /
+//     recommended_team_size;
 
 //     _policy = Kokkos::TeamPolicy<ComputeSpace>(league_size, recommended_team_size);
 
