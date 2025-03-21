@@ -1,77 +1,54 @@
 // #ifdef DECLARE_EXPORT_UDF
-#include "udf_includes.hpp"
-#include <mc/particles/particle_model.hpp>
-#include <models/udfmodel_user.hpp>
-
-#define CHECK_PIMP                                                                                 \
-  if (this->pimpl == nullptr)                                                                      \
-  {                                                                                                \
-    return;                                                                                        \
-  }
+// #include "udf_includes.hpp"
+#include "ext/udf_includes.hpp"
+#include <mc/alias.hpp>
+#include <models/udf_model.hpp>
 
 namespace Models
 {
-  User::User()
+
+  KOKKOS_FUNCTION void UdfModel::init(const MC::KPRNG::pool_type& random_pool,
+                                  std::size_t idx,
+                                  const UdfModel::SelfParticle& arr)
   {
-    UnsafeUDF::Loader::make_udf(*this);
+    UnsafeUDF::Loader::init_udf(random_pool,idx,arr);
   }
 
-  KOKKOS_FUNCTION void User::init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
+  KOKKOS_FUNCTION double UdfModel::mass(std::size_t idx, const UdfModel::SelfParticle& arr)
   {
-    CHECK_PIMP;
-    return UnsafeUDF::Loader::init_udf(*pimpl, p,_rng);
+    return UnsafeUDF::Loader::mass(idx,arr);
   }
 
-  KOKKOS_FUNCTION void User::update(double d_t,
-                                    MC::ParticleDataHolder& p,
-                                    const LocalConcentrationView& concentration,
-                                    MC::KPRNG _rng)
+  KOKKOS_FUNCTION MC::Status UdfModel::update(const MC::KPRNG::pool_type& random_pool,
+                                          FloatType d_t,
+                                          std::size_t idx,
+                                          const SelfParticle& arr,
+                                          const MC::LocalConcentration& c)
   {
-    CHECK_PIMP;
-    return UnsafeUDF::Loader::update_udf(*pimpl, d_t, p, concentration);
-  }
-  KOKKOS_FUNCTION User User::division(MC::ParticleDataHolder& p, MC::KPRNG k) noexcept
-  {
-    if (this->pimpl == nullptr)
-    {
-      return {};
-    }
-    auto* const new_pimpl = UnsafeUDF::Loader::division_udf(*pimpl, p, k);
-    if (new_pimpl != nullptr)
-    {
-      auto child = User(*this);
-      child.pimpl = new_pimpl;
-      return child;
-    }
-
-    return {};
-  }
-  KOKKOS_FUNCTION void User::contribution(MC::ParticleDataHolder& p,
-                                          const ContributionView& contrib) noexcept
-  {
-    CHECK_PIMP;
-    return UnsafeUDF::Loader::contribution_udf(*pimpl, p, contrib);
+    return UnsafeUDF::Loader::update_udf(random_pool,d_t,idx,arr,c);
   }
 
-  KOKKOS_FUNCTION [[nodiscard]] double User::mass() const noexcept
+  KOKKOS_FUNCTION void UdfModel::division(const MC::KPRNG::pool_type& random_pool,
+                                      std::size_t idx,
+                                      std::size_t idx2,
+                                      const SelfParticle& arr,
+                                      const SelfParticle& buffer_arr)
   {
-    return UnsafeUDF::Loader::mass(*pimpl);
+    UnsafeUDF::Loader::division_udf(random_pool,idx,idx2,arr,buffer_arr);
   }
 
-  KOKKOS_FUNCTION void User::fill_properties(SubViewtype full) const
+  KOKKOS_FUNCTION void UdfModel::contribution(std::size_t idx,
+                                          std::size_t position,
+                                          double weight,
+                                          const SelfParticle& arr,
+                                          const MC::ContributionView& contributions)
   {
-
-    UnsafeUDF::Loader::fill_properties(*pimpl, full);
+    UnsafeUDF::Loader::contribution_udf(idx,position,weight,arr,contributions);
   }
 
-  KOKKOS_FUNCTION std::size_t User::get_number()
+  void UdfModel::set_nvar()
   {
-    return UnsafeUDF::Loader::get_number();
-  }
-
-  std::vector<std::string> User::names()
-  {
-    return UnsafeUDF::Loader::names();
+    UdfModel::n_var = UnsafeUDF::Loader::set_nvar_udf();
   }
 
 } // namespace Models

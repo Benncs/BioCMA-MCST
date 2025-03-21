@@ -95,7 +95,7 @@ namespace
     KOKKOS_INLINE_FUNCTION
     void operator()(const TeamMember& team) const
     {
-      static constexpr auto range = M::n_var;
+      auto range = M::n_var;
       const int i = team.league_rank();
 
       position(original_size + i) = buffer_position(i);
@@ -292,7 +292,7 @@ namespace MC
             static_cast<std::size_t>(std::ceil(static_cast<double>(new_size) * allocation_factor));
         n_allocated_elements = new_allocated_size;
         Kokkos::resize(position, n_allocated_elements);
-        Kokkos::resize(model, n_allocated_elements);
+        Kokkos::resize(model, n_allocated_elements,Model::n_var);//use 2nd dim resize if dynamic 
         Kokkos::resize(status, n_allocated_elements);
         if constexpr (ConstWeightModelType<Model>)
         {
@@ -305,6 +305,7 @@ namespace MC
       }
     }
   }
+  
   template <ModelType Model>
   void ParticlesContainer<Model>::__shrink__(std::size_t new_size, bool force)
   {
@@ -315,7 +316,7 @@ namespace MC
           static_cast<std::size_t>(std::ceil(static_cast<double>(new_size) * allocation_factor));
       n_allocated_elements = new_allocated_size;
       Kokkos::resize(position, n_allocated_elements);
-      Kokkos::resize(model, n_allocated_elements);
+      Kokkos::resize(model, n_allocated_elements,Model::n_var); //use 2nd dim resize if dynamic 
       Kokkos::resize(status, n_allocated_elements);
       if constexpr (ConstWeightModelType<Model>)
       {
@@ -339,7 +340,7 @@ namespace MC
 
       // Realloc because not needed to keep buffer as it has been copied
       Kokkos::realloc(buffer_position, buffer_size);
-      Kokkos::realloc(buffer_model, buffer_size);
+      Kokkos::realloc(buffer_model, buffer_size,Model::n_var); //use 2nd dim resize if dynamic 
       buffer_index() = 0;
     }
   }

@@ -81,8 +81,8 @@ int main(int argc, char** argv)
 
   auto user_params = params_opt.value(); // Deref value is safe  TODO: with
                                          // c++23 support use monadic
-  // DECLARE_LOADER("/home-local/casale/Documents/thesis/code/BioCMA-MCST/builddir/test/apps/"
-  //                "udf_model/libudf_model.so");
+
+  DECLARE_LOADER("/home-local/casale/Documents/code/poc/builddir/host/apps/udf_model/libudf_model.so");
 
   auto& h = *handle;
   if (!override_result_path(user_params, h->get_exec_info()))

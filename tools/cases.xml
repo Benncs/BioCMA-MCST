@@ -104,7 +104,18 @@
       <delta_time>0.1</delta_time>
       <results_file_name>bench0d</results_file_name>
       <number_exported_result>100</number_exported_result>
-      <model_name>two_meta</model_name>
+      <model_name>none</model_name>
+      <initialiser_path></initialiser_path>
+   </control>
+
+   <control name="udf">
+      <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
+      <final_time>100</final_time>
+      <number_particle>100000</number_particle>
+      <delta_time>0.1</delta_time>
+      <results_file_name>udf</results_file_name>
+      <number_exported_result>100</number_exported_result>
+      <model_name>udf_model</model_name>
       <initialiser_path></initialiser_path>
    </control>
 
