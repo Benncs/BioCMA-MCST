@@ -61,6 +61,16 @@ double mass(std::size_t idx, const Models::UdfModel::SelfParticle& arr)
   return GET_PROPERTY(particle_var::mass);
 }
 
+std::vector<std::string_view> _names()
+{
+  return {};
+};
+
+std::vector<std::size_t> _get_number()
+{
+  return {};
+};
+
 // clang-format off
 EXPORT_MODULE(
     module, &_init_udf, 
@@ -68,5 +78,7 @@ EXPORT_MODULE(
     &_contribution_udf, 
     &_division_udf, 
     &mass, 
+    &_names,
+    &_get_number,
     &_set_nvar);
 //clang-format on

@@ -45,10 +45,16 @@ namespace Models
                  [[maybe_unused]] const SelfParticle& arr,
                  [[maybe_unused]] const MC::ContributionView& contributions);
 
+    
+    static std::vector<std::string_view> names();
+
+    static std::vector<std::size_t> get_number();
+
     static void set_nvar();
   };
   inline std::size_t UdfModel::n_var =0;//Need to be overwritte
   static_assert(ModelType<UdfModel>, "Check Pimpl");
+  static_assert(HasExportProperties<UdfModel>, "Check Pimpl");
 } // namespace Models
 
 #endif

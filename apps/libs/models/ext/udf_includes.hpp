@@ -28,10 +28,10 @@ namespace UnsafeUDF
                             const Models::UdfModel::SelfParticle& arr); //< init function ptr
 
     static MC::Status (*update_udf)(const MC::KPRNG::pool_type& random_pool,
-                              float d_t,
-                              std::size_t idx,
-                              const Models::UdfModel::SelfParticle& arr,
-                              const MC::LocalConcentration& c); //< update function ptr
+                                    float d_t,
+                                    std::size_t idx,
+                                    const Models::UdfModel::SelfParticle& arr,
+                                    const MC::LocalConcentration& c); //< update function ptr
 
     static void (*contribution_udf)(
         std::size_t idx,
@@ -49,6 +49,10 @@ namespace UnsafeUDF
 
     static double (*mass)(std::size_t idx,
                           const MC::DynParticlesModel<float>& arr); //< mass function ptr
+
+    static std::vector<std::string_view> (*names)();
+
+    static std::vector<std::size_t> (*get_number)();
 
     // static std::vector<std::string> (*names)(); //< names function ptr
 
@@ -72,6 +76,9 @@ using division_udf_ptr = decltype(UnsafeUDF::Loader::division_udf); //< division
 using mass_udf_ptr = decltype(UnsafeUDF::Loader::mass);
 using set_nvar_udf_ptr = decltype(UnsafeUDF::Loader::set_nvar_udf); //< division function ptr type
 
+using names_udf_ptr = decltype(UnsafeUDF::Loader::names);
+using get_number_udf_ptr = decltype(UnsafeUDF::Loader::get_number); //< division function ptr type
+
 // clang-format off
 /**
   @brief Module declaration
@@ -82,6 +89,8 @@ DEFINE_MODULE(
               MODULE_ITEM(contribution_udf) 
               MODULE_ITEM(division_udf)
               MODULE_ITEM(mass_udf)   
+              MODULE_ITEM(names_udf)
+              MODULE_ITEM(get_number_udf)
               MODULE_ITEM(set_nvar_udf)     
               )
 // clang-format on
