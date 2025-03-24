@@ -19,20 +19,24 @@ import sys
 # from ..exec import exec
 import datetime
 
-BENCH_OMP_THREADS = [1, 2,4, 6]  # List of thread numbers when running scaling
-EXECUTABLE_PATH = "./builddir/host/apps/cli"  # Path to executable to run
+BENCH_OMP_THREADS = [1, 2,8,16, 20]  # List of thread numbers when running scaling
+EXECUTABLE_PATH = "./builddir/gpe/apps/cli"  # Path to executable to run
 EXECUTABLE_NAME = "biocma_mcst_cli_app_shared"  # Name of executable to run
 BENCH_SCRIPT_PATH = (
     "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
 )
 date = datetime.datetime.today().strftime("%Y_%m_%d")
-FILENAME = f"./devutils/benchs/bench_records_3d2_{date}.csv"  # Record filename
-OUTPUT_PDF = f"./devutils/benchs/results_bench_3d2_{date}.pdf"  # Output path
-MODEL_NAME = "twometa"
-FINAL_TIME = 1  # Reference simulation time
-DELTA_TIME = 1e-3  # Reference delta time fixed
+# FILENAME = f"./devutils/benchs/bench_records_3d_{date}.csv"  # Record filename
+# OUTPUT_PDF = f"./devutils/benchs/results_bench_3d_{date}.pdf"  # Output path
+
+FILENAME = f"./devutils/benchs/bench_records_3d_2025_03_21.csv"  # Record filename
+OUTPUT_PDF = f"./devutils/benchs/results_bench_3d_2025_03_21.pdf"  # Output path
+
+MODEL_NAME = "two_meta"
+FINAL_TIME = 10  # Reference simulation time
+DELTA_TIME = 1e-2  # Reference delta time fixed
 # CMA_DATA_PATH = "./cma_data/bench/"
-# CMA_DATA_PATH = "../../thesis/cfd-cma/cma_data/0d_gas/"
+# CMA_DATA_PATH = "./cma_data/0d_gas/"
 CMA_DATA_PATH = "/home_pers/casale/Documents/thesis/cfd/sanofi/"
 RECURSIVE = False
 
@@ -64,7 +68,8 @@ def format_cli(number_particle, final_time):
         "0",
         "-force",
         "1",
-        # ,"-fi","./cma_data/0d_init.h5" #,"-mpi","1"
+        "-fi","./cma_data/sanofi_init.h5" 
+        # #,"-mpi","1"
     ]
 
 
@@ -163,7 +168,19 @@ def plot_thread_vs_time(threads, particles, iterations, records):
 def plot_scaling(threads, particles, iterations, records):
     unique_particles = np.unique(particles)
     unique_iterations = np.unique(iterations)
-    figs = [plt.figure()]
+    font_properties = {'family': 'serif', 'size': 14}
+    fig, (ax_scale, ax_eff) = plt.subplots(1, 2, figsize=(14, 6)) 
+    figs = [fig]
+    from cycler import cycler
+    colors = plt.cm.cool(np.linspace(0, 1, 5))  
+    line_widths = [1, 1,1,1,1]  
+
+    custom_cycler = (cycler(color=colors) +
+                    cycler(lw=line_widths))
+
+    ax_scale.set_prop_cycle(custom_cycler)
+    ax_eff.set_prop_cycle(custom_cycler)
+
 
     # Plot strong scaling efficiency (speedup) vs. number of threads for each particle and iteration combination
     for particle in unique_particles:
@@ -188,41 +205,56 @@ def plot_scaling(threads, particles, iterations, records):
                 ]  # There should be exactly one such entry
 
                 # Compute speedup
-                speedup = single_thread_time / selected_times / selected_threads
+                speedup = single_thread_time / selected_times 
 
                 # Sort by the number of threads for a proper plot
                 sorted_indices = np.argsort(selected_threads)
                 sorted_threads = selected_threads[sorted_indices]
                 sorted_speedup = speedup[sorted_indices]
 
-                # Plot the speedup
-                plt.title(f"Efficiency (T(1)/T(n)/n) for {iteration} iterations", fontsize=16)
-
-                # Plot with improved styling
-                plt.plot(
+  
+                ax_scale.plot(
                     sorted_threads,
                     sorted_speedup,
-                    "-x",  # Line with 'x' markers
+                    "-x",  
                     label=f"{particle:.0e}",
-                    markersize=8,  # Increase marker size for better visibility
-                    linewidth=2  # Thicker line for visibility
+                    markersize=8,  
+                    linewidth=2  
                 )
 
-                # Add labels with larger fonts for better readability
-                plt.xlabel("Number of Threads", fontsize=14)
-                plt.ylabel("Efficiency", fontsize=14)
+                ax_eff.plot(
+                    sorted_threads,
+                    sorted_speedup/selected_threads,
+                    "-x",  
+                    label=f"{particle:.0e}",
+                    markersize=8,  
+                    linewidth=2 
+                )
 
-                # Customize the legend
-                plt.legend(title="n particle")
+         
 
-                # Improve grid appearance
-                plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+          
+    ax_scale.set_title(f"Speedup for {iteration} iterations", fontsize=16, fontdict=font_properties)
+    ax_eff.set_title(f"Efficiency for {iteration} iterations", fontsize=16, fontdict=font_properties)
+    ax_scale.set_xlabel("Number of Threads", fontsize=14, fontdict=font_properties)
+    ax_eff.set_xlabel("Number of Threads", fontsize=14, fontdict=font_properties)
+    ax_eff.set_ylabel("Efficiency", fontsize=14, fontdict=font_properties)
+    ax_scale.set_ylabel("Speedup", fontsize=14, fontdict=font_properties)
+ 
 
-                # Increase the font size of ticks for better readability
-                plt.xticks(fontsize=12)
-                plt.yticks(fontsize=12)
-                # figs.append(f)
-
+    ax_scale.grid(True, which='both', linestyle='--', linewidth=0.5)
+    ax_eff.grid(True, which='both', linestyle='--', linewidth=0.5)
+ 
+    x = np.linspace(0,np.max(threads))
+    ax_scale.plot(
+                    x,
+                    x,
+                    label="ideal",
+                    color='k',
+                    linewidth=2  
+                )
+    ax_scale.legend(title='n particle',bbox_to_anchor=(1.05, 0), loc='lower left', borderaxespad=0.)
+    fig.tight_layout()
     return figs
 
 
