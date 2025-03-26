@@ -72,14 +72,18 @@ namespace Models
       return GET_PROPERTY(SimpleModel::particle_var::length) * lin_density;
     }
 
-    inline constexpr static std::array<std::string_view, n_var> names()
-    {
-      constexpr std::size_t ln_var = n_var - Uptake<SimpleModel>::n_var;
-      constexpr auto _names = concat_arrays<Uptake<SimpleModel>::n_var, ln_var>(
-          Uptake<SimpleModel>::names(), {"length", "age", "phi_s", "t_div"});
+    // inline constexpr static std::array<std::string_view, n_var> names()
+    // {
+    //   constexpr std::size_t ln_var = n_var - Uptake<SimpleModel>::n_var;
+    //   constexpr auto _names = concat_arrays<Uptake<SimpleModel>::n_var, ln_var>(
+    //       Uptake<SimpleModel>::names(), {"length", "age", "phi_s", "t_div"});
 
-      return _names;
-    }
+    //   return _names;
+    // }
+
+
+    
+    
   };
 
   CHECK_MODEL(SimpleModel)

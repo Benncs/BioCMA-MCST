@@ -185,6 +185,7 @@ namespace Simulation
     auto contribs = get_kernel_contribution();
 
     MC::ContributionView contribs_scatter(contribs);
+    
 
     this->move_info.cumulative_probability = get_kernel_cumulative_proba();
     this->move_info.diag_transition = get_kernel_diagonal();
@@ -197,7 +198,7 @@ namespace Simulation
     auto f = Simulation::KernelInline::CycleFunctor<CurrentModel>(
         d_t, container, local_rng.random_pool, getkernel_concentration(), contribs_scatter, events);
 
-    _policy = MC::get_policty(f, n_particle, true);
+    _policy = MC::get_policy(f, n_particle, true);
 
     bool enable_move = move_info.liquid_volume.size() > 1;
     bool enable_leave = move_info.leaving_flow.size() != 0;

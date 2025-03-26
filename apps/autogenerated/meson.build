@@ -71,6 +71,11 @@ endif
 # )
 
 model_list_name = ['two_meta','simple_model']
+
+if not use_cuda
+model_list_name = [model_list_name,'udf_model']
+endif
+
 model_folder_root = f'@root@/apps/libs/models'
 
 generated_model_selection = custom_target(

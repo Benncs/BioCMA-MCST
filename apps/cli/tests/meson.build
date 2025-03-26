@@ -6,3 +6,11 @@
 #   t3 = executable('test_test_pymodule', 'test_pymodule.cpp',dependencies:[app_test_dependency_dyn])
 #   test('test test_pymodule',t3)
 # endif
+
+test_cli = executable(
+    'test_cli',
+    'test_cli.cpp',
+    dependencies: [app_dependency],
+)
+
+test('test_cli',test_cli)

@@ -39,14 +39,17 @@ namespace
   bool check_required(const Core::UserControlParameters& params, bool to_load)
   {
     bool flag = true;
-
+     std::cout<<flag<<std::endl;
     flag = flag && params.final_time > 0;
+    std::cout<<flag<<std::endl;
     flag = flag && params.delta_time >= 0;
+     std::cout<<flag<<std::endl;
     flag = flag && !params.cma_case_path.empty();
+     std::cout<<flag<<std::endl;
     flag = flag && ((params.serde && params.serde_file.has_value()) ||
                     (!params.serde && !params.serde_file.has_value()));
-
-    if (!to_load)
+     std::cout<<flag<<std::endl;
+    if (!to_load) 
     {
       flag = flag && params.biomass_initial_concentration !=
                          0; // Biomass could be 0 at start but OK to say that X>0

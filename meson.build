@@ -27,6 +27,9 @@ if compiler.has_argument('-dlto')
   flto_flag = [flto_flag,'-dlto']
 endif
 
+if compiler.has_argument('-march=native')
+  arch_specific_args = [arch_specific_args, '-march=native']
+endif
 
 
 if compiler.has_argument('-mtune=native')
@@ -135,6 +138,7 @@ else
   kokkos_option.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
   kokkos_option.add_cmake_defines({'Kokkos_ENABLE_OPENMP': 'ON'})
   kokkos_option.add_cmake_defines({'Kokkos_ENABLE_HWLOC': 'ON'})
+  kokkos_option.add_cmake_defines({'Kokkos_ARCH_NATIVE': 'ON'})
   kokkos_option.add_cmake_defines({'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'})
   # kokkos_option.set_install(false)
   sub_kokkos = cmake.subproject('kokkos', required: true, options: kokkos_option)

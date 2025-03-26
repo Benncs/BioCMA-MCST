@@ -1,12 +1,15 @@
 #ifndef __PARTICLES_CONTAINER_HPP__
 #define __PARTICLES_CONTAINER_HPP__
 
+#include "Kokkos_Core_fwd.hpp"
+#include "common/common.hpp"
 #include <Kokkos_Core.hpp>
 #include <common/has_serialize.hpp>
 #include <cstdint>
 #include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
 #include <stdexcept>
+#include <type_traits>
 
 namespace
 {
@@ -62,7 +65,8 @@ namespace
     std::size_t to_remove;
     std::size_t last_used_index;
   };
-
+  using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
+  using TeamMember = TeamPolicy::member_type;
   template <ModelType M> struct InsertFunctor
   {
     InsertFunctor(std::size_t _original_size,
@@ -75,31 +79,29 @@ namespace
     {
     }
 
-    KOKKOS_INLINE_FUNCTION void operator()(const int i) const
-    {
-      position(original_size + i) = buffer_position(i);
-      for (std::size_t j = 0; j < M::n_var; ++j)
-      {
-        model(original_size + i, j) = buffer_model(i, j);
-      }
-    }
+    // KOKKOS_INLINE_FUNCTION void operator()(const int i) const
+    // {
+    //   position(original_size + i) = buffer_position(i);
+    //   for (std::size_t j = 0; j < M::n_var; ++j)
+    //   {
+    //     model(original_size + i, j) = buffer_model(i, j);
+    //   }
+    // }
 
     // TODO try this functor
     // TODO find a way to organise data to not copy non needed  data (like contribs). Split model in
     // two arrays?
 
-    //   KOKKOS_INLINE_FUNCTION
-    // void operator()(const Kokkos::TeamPolicy<>::member_type& team) const {
-    //   const int i = team.league_rank();  // Each team gets one index 'i'
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const TeamMember& team) const
+    {
+      auto range = M::n_var;
+      const int i = team.league_rank();
 
-    //   position(original_size + i) = buffer_position(i);
-
-    //   Kokkos::parallel_for(
-    //     Kokkos::TeamThreadRange(team, M::n_var),
-    //     [&](const std::size_t j) {
-    //       model(original_size + i, j) = buffer_model(i, j);
-    //     });
-    // }
+      position(original_size + i) = buffer_position(i);
+      Kokkos::parallel_for(Kokkos::TeamVectorRange(team, range),
+                           [&](const int& j) { model(original_size + i, j) = buffer_model(i, j); });
+    }
 
     std::size_t original_size;
     M::SelfParticle model;
@@ -249,39 +251,29 @@ namespace MC
     }
     __allocate__(original_size + n_add_item);
     // Merge position EZ
-    // TODO ADD non const Weight and status
+
     // Kokkos::parallel_for(
-    //     "InsertNewPosition",
-    //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_add_item),
-    //     KOKKOS_CLASS_LAMBDA(const size_t i) { position(original_size + i) = buffer_position(i);
-    //     });
-    // Kokkos::fence();
-    // // Merge model less EZ
-    // Kokkos::parallel_for(
-    //     "InsertNewModel",
-    //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_add_item),
-    //     KOKKOS_CLASS_LAMBDA(const size_t i) {
-    //       for (std::size_t j = 0; j < Model::n_var; ++j)
-    //       {
-    //         model(original_size + i, j) = buffer_model(i, j);
-    //       }
-    //     });
+    //     "InsertMerge",
+    //     Kokkos::RangePolicy<>(0, n_add_item),
+    //     InsertFunctor<Model>(original_size, model, position, buffer_model, buffer_position));
+
+    auto get_policy_insert = [=]()
+    {
+      if constexpr (std::is_same_v<Kokkos::DefaultHostExecutionSpace, Kokkos::DefaultExecutionSpace>)
+      {
+        return TeamPolicy(n_add_item/Kokkos::num_threads(), Kokkos::AUTO, Model::n_var);
+      }
+      else
+      {
+        return TeamPolicy(n_add_item, Kokkos::AUTO, Model::n_var);
+      }
+    };
+
 
     Kokkos::parallel_for(
         "InsertMerge",
-        Kokkos::RangePolicy<>(0, n_add_item),
+        TeamPolicy(n_add_item, Kokkos::AUTO, Model::n_var),
         InsertFunctor<Model>(original_size, model, position, buffer_model, buffer_position));
-
-    // Kokkos::parallel_for(
-    //     "InsertNewPosition",
-    //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_add_item),
-    //     KOKKOS_CLASS_LAMBDA(const size_t i) {
-    //       position(original_size + i) = buffer_position(i);
-    //       for (std::size_t j = 0; j < Model::n_var; ++j)
-    //       {
-    //         model(original_size + i, j) = buffer_model(i, j);
-    //       }
-    //     });
 
     buffer_index() = 0;
     n_used_elements += n_add_item;
@@ -300,7 +292,7 @@ namespace MC
             static_cast<std::size_t>(std::ceil(static_cast<double>(new_size) * allocation_factor));
         n_allocated_elements = new_allocated_size;
         Kokkos::resize(position, n_allocated_elements);
-        Kokkos::resize(model, n_allocated_elements);
+        Kokkos::resize(model, n_allocated_elements,Model::n_var);//use 2nd dim resize if dynamic 
         Kokkos::resize(status, n_allocated_elements);
         if constexpr (ConstWeightModelType<Model>)
         {
@@ -313,6 +305,7 @@ namespace MC
       }
     }
   }
+  
   template <ModelType Model>
   void ParticlesContainer<Model>::__shrink__(std::size_t new_size, bool force)
   {
@@ -323,7 +316,7 @@ namespace MC
           static_cast<std::size_t>(std::ceil(static_cast<double>(new_size) * allocation_factor));
       n_allocated_elements = new_allocated_size;
       Kokkos::resize(position, n_allocated_elements);
-      Kokkos::resize(model, n_allocated_elements);
+      Kokkos::resize(model, n_allocated_elements,Model::n_var); //use 2nd dim resize if dynamic 
       Kokkos::resize(status, n_allocated_elements);
       if constexpr (ConstWeightModelType<Model>)
       {
@@ -347,7 +340,7 @@ namespace MC
 
       // Realloc because not needed to keep buffer as it has been copied
       Kokkos::realloc(buffer_position, buffer_size);
-      Kokkos::realloc(buffer_model, buffer_size);
+      Kokkos::realloc(buffer_model, buffer_size,Model::n_var); //use 2nd dim resize if dynamic 
       buffer_index() = 0;
     }
   }

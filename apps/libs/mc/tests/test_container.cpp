@@ -40,7 +40,7 @@ template <ModelType M> void team_member_test()
   std::size_t cumsum = 0;
   Kokkos::parallel_reduce(
       "spawn",
-      MC::get_policty(foo, size),
+      MC::get_policy(foo, size),
       KOKKOS_LAMBDA(const TeamMember& team_handle, std::size_t& cs) {
         GET_INDEX(size);
         cs += 1;

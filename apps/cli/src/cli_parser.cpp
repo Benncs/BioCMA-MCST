@@ -2,26 +2,30 @@
 #include <core/simulation_parameters.hpp>
 #include <cstdlib>
 #include <exception>
+#include <functional>
 #include <iostream>
 #include <optional>
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 
-static void sanitise_check_cli(const Core::UserControlParameters& params);
+static CliResults<Core::UserControlParameters>
+sanitise_check_cli(Core::UserControlParameters&& params);
 static void print_red(std::ostream& os, std::string_view message);
 static void throw_bad_arg(std::string_view arg);
 
-static void parseArg(Core::UserControlParameters& user_controll,
-                     std::string_view current_param,
-                     std::string_view current_value);
+static CliResults<Core::UserControlParameters> parseArg(Core::UserControlParameters& user_controll,
+                                                        std::string_view current_param,
+                                                        std::string_view current_value);
 
-static std::optional<Core::UserControlParameters> parse_user_param(int argc, char** argv)
+static CliResults<Core::UserControlParameters> parse_user_param(int argc, char** argv)
 {
+  using return_type = CliResults<Core::UserControlParameters>;
   Core::UserControlParameters control = Core::UserControlParameters::m_default();
   if (argc <= 1)
   {
-    return std::nullopt;
+    return return_type("Need at leats one argument");
   }
   try
   {
@@ -37,158 +41,223 @@ static std::optional<Core::UserControlParameters> parse_user_param(int argc, cha
           showHelp(std::cout);
           exit(0);
         }
+        auto opt = parseArg(control, current_param, current_value);
+        if(opt)
+        {
+          control = opt.gets();
+        }
+        else {
+          return opt;
+        }
 
-        parseArg(control, current_param, current_value);
       }
       else
       {
-        throw_bad_arg("ALLO");
+        return return_type("ALLO");
       }
       iarg += 2;
     }
-    return control;
+    return return_type(std::move(control));
   }
   catch (std::invalid_argument& e)
   {
     std::cerr << e.what() << '\n';
-    return std::nullopt;
+    return return_type(e.what());
   }
   catch (std::exception const& e)
   {
     std::cerr << e.what() << '\n';
-    return std::nullopt;
+    return return_type(e.what());
   }
 }
 
-std::optional<Core::UserControlParameters> parse_cli(int argc, char** argv) noexcept
+CliResults<Core::UserControlParameters> parse_cli(int argc, char** argv) noexcept
 {
   auto opt_control = parse_user_param(argc, argv);
-  if (!opt_control.has_value())
+  if (!opt_control)
   {
-    return std::nullopt;
+    return CliResults<Core::UserControlParameters>(opt_control.get());
   }
-  auto control = *opt_control;
-  sanitise_check_cli(control);
-
-  return control;
+  return sanitise_check_cli(opt_control.gets());
 }
 
-static void parseArg(Core::UserControlParameters& user_control,
-                     std::string_view _current_param,
-                     std::string_view current_value)
+static CliResults<Core::UserControlParameters> parseArg(Core::UserControlParameters& user_control,
+                                                        std::string_view _current_param,
+                                                        std::string_view current_value)
 {
-  std::string path;
-  // check that begin()+1 is not OOB
-  if (_current_param.size() == 1)
+  std::string_view current_param = _current_param.substr(1);
+
+  // Create a map to associate options with corresponding actions (lambdas)
+  static const std::unordered_map<std::string_view, std::function<void(std::string_view)>>
+      param_handlers = {
+          {"er",
+           [&user_control](std::string_view value)
+           { user_control.results_file_name = std::string(value); }},
+          {"mn",
+           [&user_control](std::string_view value)
+           { user_control.model_name = std::string(value); }},
+          {"nt",
+           [&user_control](std::string_view value)
+           { user_control.n_thread = std::stoi(std::string(value)); }},
+          {"np",
+           [&user_control](std::string_view value)
+           { user_control.number_particle = std::stol(std::string(value)); }},
+          {"nex",
+           [&user_control](std::string_view value)
+           { user_control.number_exported_result = std::stol(std::string(value)); }},
+          {"dt",
+           [&user_control](std::string_view value)
+           { user_control.delta_time = std::stod(std::string(value)); }},
+          {"d",
+           [&user_control](std::string_view value)
+           { user_control.final_time = std::stod(std::string(value)); }},
+          {"r", [&user_control](std::string_view) { user_control.recursive = true; }},
+          {"f",
+           [&user_control](std::string_view value)
+           { user_control.cma_case_path = std::string(value); }},
+          {"force", [&user_control](std::string_view) { user_control.force_override = true; }},
+          {"fi",
+           [&user_control](std::string_view value)
+           { user_control.initialiser_path = std::string(value); }},
+          {"serde",
+           [&user_control](std::string_view value)
+           {
+             user_control.serde = true;
+             user_control.serde_file = std::string(value);
+           }}};
+
+  auto it = param_handlers.find(current_param);
+  if (it != param_handlers.end())
   {
-    return;
+    it->second(current_value);
+  }
+  else
+  {
+    return CliResults<Core::UserControlParameters>(std::string(current_param));
   }
 
-  auto current_param = std::string(_current_param.begin() + 1, _current_param.end());
-  switch (current_param[0])
-  {
-  case 'e':
-  {
-    if (current_param == "er")
-    {
-      user_control.results_file_name = std::string(current_value);
-    }
-    break;
-  }
-  case 'm':
-  {
-    if (current_param == "mn")
-    {
-      user_control.model_name = std::string(current_value);
-    }
-    break;
-  }
-  case 'n':
-  {
-    if (current_param == "nt")
-    {
-      user_control.n_thread = std::stoi(std::string(current_value));
-    }
-    else if (current_param == "np")
-    {
-      user_control.number_particle = std::stol(std::string(current_value));
-    }
-    else if (current_param == "nex")
-    {
-      user_control.number_exported_result = std::stol(std::string(current_value));
-    }
-    break;
-  }
-  case 'd':
-  {
-    if (current_param == "dt")
-    {
-      user_control.delta_time = std::stod(std::string(current_value));
-    }
-    else if (current_param == "d")
-    {
-      user_control.final_time = std::stod(std::string(current_value));
-    }
-    break;
-  }
-
-  case 'r':
-  {
-    user_control.recursive = true;
-    break;
-  }
-  case 'f':
-  {
-    if (current_param == "f")
-    {
-      user_control.cma_case_path = current_value;
-    }
-    else if (current_param == "force")
-    {
-      user_control.force_override = true;
-    }
-    else if (current_param == "fi")
-    {
-      user_control.initialiser_path = current_value;
-    }
-    break;
-  }
-  case 's':
-  {
-
-    if (current_param == "serde")
-    {
-      user_control.serde = true;
-      user_control.serde_file = std::string(current_value);
-    }
-    break;
-  }
-
-  default:
-  {
-    throw_bad_arg(current_param);
-    break;
-  }
-  }
+  return CliResults<Core::UserControlParameters>(std::move(user_control));
 }
 
-static void sanitise_check_cli(const Core::UserControlParameters& params)
+// static void parseArg(Core::UserControlParameters& user_control,
+//                      std::string_view _current_param,
+//                      std::string_view current_value)
+// {
+//   std::string path;
+//   // check that begin()+1 is not OOB
+//   if (_current_param.size() == 1)
+//   {
+//     return;
+//   }
+
+//   auto current_param = std::string(_current_param.begin() + 1, _current_param.end());
+//   switch (current_param[0])
+//   {
+//   case 'e':
+//   {
+//     if (current_param == "er")
+//     {
+//       user_control.results_file_name = std::string(current_value);
+//     }
+//     break;
+//   }
+//   case 'm':
+//   {
+//     if (current_param == "mn")
+//     {
+//       user_control.model_name = std::string(current_value);
+//     }
+//     break;
+//   }
+//   case 'n':
+//   {
+//     if (current_param == "nt")
+//     {
+//       user_control.n_thread = std::stoi(std::string(current_value));
+//     }
+//     else if (current_param == "np")
+//     {
+//       user_control.number_particle = std::stol(std::string(current_value));
+//     }
+//     else if (current_param == "nex")
+//     {
+//       user_control.number_exported_result = std::stol(std::string(current_value));
+//     }
+//     break;
+//   }
+//   case 'd':
+//   {
+//     if (current_param == "dt")
+//     {
+//       user_control.delta_time = std::stod(std::string(current_value));
+//     }
+//     else if (current_param == "d")
+//     {
+//       user_control.final_time = std::stod(std::string(current_value));
+//     }
+//     break;
+//   }
+
+//   case 'r':
+//   {
+//     user_control.recursive = true;
+//     break;
+//   }
+//   case 'f':
+//   {
+//     if (current_param == "f")
+//     {
+//       user_control.cma_case_path = current_value;
+//     }
+//     else if (current_param == "force")
+//     {
+//       user_control.force_override = true;
+//     }
+//     else if (current_param == "fi")
+//     {
+//       user_control.initialiser_path = current_value;
+//     }
+//     break;
+//   }
+//   case 's':
+//   {
+
+//     if (current_param == "serde")
+//     {
+//       user_control.serde = true;
+//       user_control.serde_file = std::string(current_value);
+//     }
+//     break;
+//   }
+
+//   default:
+//   {
+//     throw_bad_arg(current_param);
+//     break;
+//   }
+//   }
+// }
+
+static CliResults<Core::UserControlParameters>
+sanitise_check_cli(Core::UserControlParameters&& params)
 {
 
   if (params.delta_time < 0)
   {
-    throw std::invalid_argument("Wrongtime step (d_t<0)");
+    return CliResults<Core::UserControlParameters>("Wrongtime step (d_t<0)");
   }
 
   if (params.number_particle == 0)
   {
-    throw std::invalid_argument("Missing number of particles");
+    return CliResults<Core::UserControlParameters>("Missing number of particles");
   }
 
   if (params.final_time <= 0)
   {
-    throw std::invalid_argument("Final time must be positive");
+    return CliResults<Core::UserControlParameters>("Final time must be positive");
   }
+
+  return CliResults<Core::UserControlParameters>(std::move(params));
 }
 
 void showHelp(std::ostream& os) noexcept

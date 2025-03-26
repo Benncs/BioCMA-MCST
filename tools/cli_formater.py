@@ -42,7 +42,7 @@ def read_xml_values(xml_path, parser, target_name):
                 cma_case_path = control.findtext("cma_case_path")
                 recursive = control.find("cma_case_path").get("recursive")
                 final_time = float(control.findtext("final_time"))
-                numper_particle = int(control.findtext("numper_particle"))
+                number_particle = int(control.findtext("number_particle"))
                 delta_time_element = control.find("delta_time")
                 delta_time = (
                     float(delta_time_element.text)
@@ -65,7 +65,7 @@ def read_xml_values(xml_path, parser, target_name):
                 cli_args += f"-f {cma_case_path} "
 
                 cli_args += f"-d {final_time} "
-                cli_args += f"-np {numper_particle} "
+                cli_args += f"-np {number_particle} "
                 if delta_time > 0:
                     cli_args += f"-dt {delta_time} "
 
