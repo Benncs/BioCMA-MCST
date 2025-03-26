@@ -81,12 +81,12 @@ $(function(){initNavTree('conceptHasExportPropertiesPartial.html',''); initResiz
 <p><code>#include &lt;<a class="el" href="mc_2public_2mc_2traits_8hpp_source.html">traits.hpp</a>&gt;</code></p>
 <h2 class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptHasExportPropertiesPartial.html">HasExportPropertiesPartial</a> =  <a class="code hl_concept" href="conceptModelType.html">ModelType&lt;T&gt;</a>&amp;&amp;<span class="keyword">requires</span>(<span class="keyword">const</span> T obj) {</div>
+<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptHasExportPropertiesPartial.html">HasExportPropertiesPartial</a> =  <a class="code hl_concept" href="conceptModelType.html">ModelType&lt;T&gt;</a> &amp;&amp; <span class="keyword">requires</span>(<span class="keyword">const</span> T obj) {</div>
 <div class="line">  { T::names() } -&gt; std::convertible_to&lt;std::vector&lt;std::string_view&gt;&gt;;</div>
-<div class="line">  { T::get_number() } -&gt; std::convertible_to&lt;std::size_t&gt;; </div>
+<div class="line">  { T::get_number() } -&gt; std::convertible_to&lt;std::vector&lt;std::size_t&gt;&gt;;</div>
 <div class="line">}</div>
-<div class="ttc" id="aconceptHasExportPropertiesPartial_html"><div class="ttname"><a href="conceptHasExportPropertiesPartial.html">HasExportPropertiesPartial</a></div><div class="ttdef"><b>Definition</b> traits.hpp:155</div></div>
-<div class="ttc" id="aconceptModelType_html"><div class="ttname"><a href="conceptModelType.html">ModelType</a></div><div class="ttdef"><b>Definition</b> traits.hpp:110</div></div>
+<div class="ttc" id="aconceptHasExportPropertiesPartial_html"><div class="ttname"><a href="conceptHasExportPropertiesPartial.html">HasExportPropertiesPartial</a></div><div class="ttdef"><b>Definition</b> traits.hpp:95</div></div>
+<div class="ttc" id="aconceptModelType_html"><div class="ttname"><a href="conceptModelType.html">ModelType</a></div><div class="ttdef"><b>Definition</b> traits.hpp:81</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

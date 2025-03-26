@@ -12,5 +12,7 @@ var index =
         [ "Fast run", "gettingstarted.html#autotoc_md7", null ]
       ] ]
     ] ],
-    [ "Simulation Configuration", "simparam.html", null ]
+    [ "Simulation Configuration", "simparam.html", null ],
+    [ "Simulation Examples", "sim_examples.html", null ],
+    [ "Benchmarks", "benches.html", null ]
 ];

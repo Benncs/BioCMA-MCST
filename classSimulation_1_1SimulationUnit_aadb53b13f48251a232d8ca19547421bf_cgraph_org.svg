@@ -78,9 +78,9 @@
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="namespaceMC.html#a1364a4ba60d8fa8f050864199abb3369" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="283.62,-112.75 198.62,-112.75 198.62,-94.25 283.62,-94.25 283.62,-112.75"/>
-<text text-anchor="middle" x="241.12" y="-99.25" font-family="Helvetica,sans-Serif" font-size="10.00">MC::get_policty</text>
+<g id="a_Node000006"><a xlink:href="namespaceMC.html#aeb6c61ac56feb0416848df97cb95a720" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="282.12,-112.75 200.12,-112.75 200.12,-94.25 282.12,-94.25 282.12,-112.75"/>
+<text text-anchor="middle" x="241.12" y="-99.25" font-family="Helvetica,sans-Serif" font-size="10.00">MC::get_policy</text>
 </a>
 </g>
 </g>
@@ -88,8 +88,8 @@
 <g id="edge5_Node000001_Node000006" class="edge">
 <title>Node1&#45;&gt;Node6</title>
 <g id="a_edge5_Node000001_Node000006"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M131.8,-116.62C150.09,-114.41 169.75,-112.02 187.23,-109.91"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="187.36,-113.42 196.87,-108.74 186.52,-106.47 187.36,-113.42"/>
+<path fill="none" stroke="#63b8ff" d="M131.8,-116.62C150.48,-114.36 170.59,-111.92 188.36,-109.77"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="188.64,-113.26 198.15,-108.58 187.8,-106.31 188.64,-113.26"/>
 </a>
 </g>
 </g>

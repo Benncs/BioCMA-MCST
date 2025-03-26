@@ -1,7 +1,0 @@
-<map id="EigenKokkos::update_host_to_compute" name="EigenKokkos::update_host_to_compute">
-<area shape="rect" id="Node000001" title=" " alt="" coords="242,37,386,76"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1ScalarSimulation.html#ac17e1fb2da810c4a21e94ce0caf09e17" title=" " alt="" coords="5,5,194,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,46,194,41,195,36,227,41"/>
-<area shape="rect" id="Node000003" href="$classSimulation_1_1ScalarSimulation.html#accd578eb371bceadce12a9f5aaa1adf4" title=" " alt="" coords="5,68,194,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,72,195,76,194,71,226,67"/>
-</map>

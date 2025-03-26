@@ -15,7 +15,6 @@ var structModels_1_1SimpleModel =
     [ "division", "structModels_1_1SimpleModel.html#a0c6a28fd790efe9193d1a3973f7239d7", null ],
     [ "init", "structModels_1_1SimpleModel.html#a50c1e5de1921c8323b707df3c31834e5", null ],
     [ "mass", "structModels_1_1SimpleModel.html#a3275b23fdc1fd4309c896e24a1d3a45e", null ],
-    [ "names", "structModels_1_1SimpleModel.html#a904e65b013521552962e0cd120f0e88e", null ],
     [ "update", "structModels_1_1SimpleModel.html#af7aeaedcc2c7fa2ecc72e1de31067c15", null ],
     [ "d_m", "structModels_1_1SimpleModel.html#a85a67b1098b4a3a1fd56791dff7d0737", null ],
     [ "frequency_division", "structModels_1_1SimpleModel.html#a1ed4b66aa5212b759b0f1c105366ea91", null ],

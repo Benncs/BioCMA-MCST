@@ -1,5 +1,5 @@
-<map id="Result&lt; T &gt;" name="Result&lt; T &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="48,78,139,103"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,182,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,46,96,78,91,78,91,46"/>
+<map id="Result&lt; S, T &gt;" name="Result&lt; S, T &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="19,78,126,103"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,140,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,46,75,78,70,78,70,46"/>
 </map>

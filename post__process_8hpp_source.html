@@ -79,112 +79,170 @@ $(function(){initNavTree('post__process_8hpp_source.html',''); initResizable(tru
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef __CORE_POST_PROCESS_PUBLIC_HPP__</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define __CORE_POST_PROCESS_PUBLIC_HPP__</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;mc/traits.hpp&quot;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;Kokkos_Core.hpp&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;mc/particles_container.hpp&gt;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> MemorySpace&gt;</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">using </span>ParticlePropertyViewType = Kokkos::View&lt;double**, Kokkos::LayoutRight, MemorySpace&gt;;</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">using </span>SubViewtype =</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    Kokkos::Subview&lt;ParticlePropertyViewType&lt;ComputeSpace&gt;, <span class="keyword">decltype</span>(Kokkos::ALL), std::size_t&gt;;</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacePostProcessing.html">PostProcessing</a></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>{</div>
-<div class="foldopen" id="foldopen00015" data-start="{" data-end="};">
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="structPostProcessing_1_1BonceBuffer.html">   15</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structPostProcessing_1_1BonceBuffer.html">BonceBuffer</a></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structPostProcessing_1_1BonceBuffer.html#a558740b16d4ffe015d473ebc6442bf08">   17</a></span>    ParticlePropertyViewType&lt;HostSpace&gt; <a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a558740b16d4ffe015d473ebc6442bf08">particle_values</a>;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="structPostProcessing_1_1BonceBuffer.html#a1b1a95897201f07c3ef33ad6ed2b0470">   18</a></span>    ParticlePropertyViewType&lt;HostSpace&gt; <a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a1b1a95897201f07c3ef33ad6ed2b0470">spatial_values</a>;</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="structPostProcessing_1_1BonceBuffer.html#a3acd2d2fa52440e8d8fd58b51a79c561">   19</a></span>    std::vector&lt;std::string&gt; <a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a3acd2d2fa52440e8d8fd58b51a79c561">vnames</a>;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  };</div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;Kokkos_Core_fwd.hpp&quot;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;common/common.hpp&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;mc/traits.hpp&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;Kokkos_Core.hpp&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;mc/particles_container.hpp&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> MemorySpace&gt;</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">using </span>ParticlePropertyViewType = Kokkos::View&lt;double**, Kokkos::LayoutRight, MemorySpace&gt;;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">using </span>SubViewtype =</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    Kokkos::Subview&lt;ParticlePropertyViewType&lt;ComputeSpace&gt;, <span class="keyword">decltype</span>(Kokkos::ALL), std::size_t&gt;;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacePostProcessing.html">PostProcessing</a></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>{</div>
+<div class="foldopen" id="foldopen00017" data-start="{" data-end="};">
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structPostProcessing_1_1BonceBuffer.html">   17</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structPostProcessing_1_1BonceBuffer.html">BonceBuffer</a></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="structPostProcessing_1_1BonceBuffer.html#a558740b16d4ffe015d473ebc6442bf08">   19</a></span>    ParticlePropertyViewType&lt;HostSpace&gt; <a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a558740b16d4ffe015d473ebc6442bf08">particle_values</a>;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="structPostProcessing_1_1BonceBuffer.html#a1b1a95897201f07c3ef33ad6ed2b0470">   20</a></span>    ParticlePropertyViewType&lt;HostSpace&gt; <a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a1b1a95897201f07c3ef33ad6ed2b0470">spatial_values</a>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="structPostProcessing_1_1BonceBuffer.html#a3acd2d2fa52440e8d8fd58b51a79c561">   21</a></span>    std::vector&lt;std::string&gt; <a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a3acd2d2fa52440e8d8fd58b51a79c561">vnames</a>;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  };</div>
 </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  <span class="keyword">template</span> &lt;ModelType Model, <span class="keyword">typename</span> ExecutionSpace&gt;</div>
-<div class="foldopen" id="foldopen00023" data-start="{" data-end="}">
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="namespacePostProcessing.html#ae12ff1585768d64069adb36d895d8905">   23</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="namespacePostProcessing.html#ae12ff1585768d64069adb36d895d8905">inner</a>(std::size_t n_p,</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>             <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a>&amp; position,</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>             <span class="keyword">const</span> <span class="keyword">typename</span> Model::SelfParticle&amp; model,</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>             ParticlePropertyViewType&lt;ComputeSpace&gt;&amp; particle_values,</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>             ParticlePropertyViewType&lt;ComputeSpace&gt;&amp; spatial_values)</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  {</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    Kokkos::Experimental::ScatterView&lt;double**, Kokkos::LayoutRight, ComputeSpace&gt;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        scatter_spatial_values(spatial_values);</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    Kokkos::parallel_for(</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="stringliteral">&quot;kernel_get_properties&quot;</span>,</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        Kokkos::RangePolicy&lt;ExecutionSpace&gt;(0, n_p),</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keywordtype">int</span> i_particle) {</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>          <span class="keyword">auto</span> access = scatter_spatial_values.access();</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>          <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; Model::n_var; ++i)</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>          {</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            access(i, position(i_particle)) += model(i_particle, i);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            particle_values(i, i_particle) = model(i_particle, i);</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>          }</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>          <span class="keyword">auto</span> mass = Model::mass(i_particle,model  );</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>          access(Model::n_var, position(i_particle)) += mass;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>          particle_values(Model::n_var, i_particle) = mass;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        });</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    Kokkos::fence();</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    Kokkos::Experimental::contribute(spatial_values, scatter_spatial_values);</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  }</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>  <span class="keyword">template</span> &lt;HasExportPropertiesFull Model, <span class="keyword">typename</span> ExecutionSpace&gt;</div>
+<div class="foldopen" id="foldopen00025" data-start="{" data-end="}">
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="namespacePostProcessing.html#ae12ff1585768d64069adb36d895d8905">   25</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="namespacePostProcessing.html#ae12ff1585768d64069adb36d895d8905">inner</a>(std::size_t n_p,</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>             <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a>&amp; position,</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>             <span class="keyword">const</span> <span class="keyword">typename</span> Model::SelfParticle&amp; model,</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>             ParticlePropertyViewType&lt;ComputeSpace&gt;&amp; particle_values,</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>             ParticlePropertyViewType&lt;ComputeSpace&gt;&amp; spatial_values)</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>  {</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    Kokkos::Experimental::ScatterView&lt;double**, Kokkos::LayoutRight, ComputeSpace&gt;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        scatter_spatial_values(spatial_values);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    Kokkos::parallel_for(</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="stringliteral">&quot;kernel_get_properties&quot;</span>,</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        Kokkos::RangePolicy&lt;ExecutionSpace&gt;(0, n_p),</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keywordtype">int</span> i_particle) {</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>          <span class="keyword">auto</span> access = scatter_spatial_values.access();</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>          <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; Model::n_var; ++i)</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>          {</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            access(i, position(i_particle)) += model(i_particle, i);</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            particle_values(i, i_particle) = model(i_particle, i);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>          }</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>          <span class="keyword">auto</span> mass = Model::mass(i_particle, model);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>          access(Model::n_var, position(i_particle)) += mass;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>          particle_values(Model::n_var, i_particle) = mass;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        });</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    Kokkos::fence();</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    Kokkos::Experimental::contribute(spatial_values, scatter_spatial_values);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  }</div>
 </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  <span class="keyword">template</span> &lt;ModelType M&gt;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  std::optional&lt;PostProcessing::BonceBuffer&gt;</div>
-<div class="foldopen" id="foldopen00057" data-start="{" data-end="}">
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="namespacePostProcessing.html#abdeec32d0ce1418085fd40ad58aa6c1e">   57</a></span>  <a class="code hl_function" href="namespacePostProcessing.html#abdeec32d0ce1418085fd40ad58aa6c1e">get_properties</a>(<span class="keyword">const</span> <a class="code hl_class" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer&lt;M&gt;</a>&amp; container, <span class="keyword">const</span> std::size_t n_compartment)</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  {</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_concept" href="conceptHasExportProperties.html">HasExportProperties&lt;M&gt;</a>)</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    {</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>      <a class="code hl_struct" href="structPostProcessing_1_1BonceBuffer.html">BonceBuffer</a> properties;</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>      <span class="keyword">const</span> std::size_t n_p =</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>          container.<a class="code hl_function" href="classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f">n_particles</a>(); <span class="comment">// USE list size not Kokkos View size. ParticleList</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                                   <span class="comment">// allocates more particles than needed</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>      <span class="keyword">auto</span> ar = M::names();</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>      properties.<a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a3acd2d2fa52440e8d8fd58b51a79c561">vnames</a> = std::vector&lt;std::string&gt;(ar.begin(), ar.end());</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>      properties.<a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a3acd2d2fa52440e8d8fd58b51a79c561">vnames</a>.emplace_back(<span class="stringliteral">&quot;mass&quot;</span>);</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>      ParticlePropertyViewType&lt;ComputeSpace&gt; spatial_values(</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>          <span class="stringliteral">&quot;property_spatial&quot;</span>, M::n_var + 1, n_compartment);</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>      ParticlePropertyViewType&lt;ComputeSpace&gt; particle_values(<span class="stringliteral">&quot;property_values&quot;</span>, M::n_var + 1, n_p);</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>      <a class="code hl_function" href="namespacePostProcessing.html#ae12ff1585768d64069adb36d895d8905">inner&lt;M, Kokkos::DefaultExecutionSpace&gt;</a>(</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>          n_p, container.<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#aab2bc872e28015fbbd9dd5ce78468e73">position</a>, container.<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297">model</a>, particle_values, spatial_values);</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>      properties.<a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a558740b16d4ffe015d473ebc6442bf08">particle_values</a> =</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>          Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), particle_values);</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>      properties.<a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a1b1a95897201f07c3ef33ad6ed2b0470">spatial_values</a> =</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>          Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), spatial_values);</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>      <span class="keywordflow">return</span> properties;</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    }</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    {</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>      <span class="keywordflow">return</span> std::nullopt;</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    }</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  }</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  <span class="keyword">template</span> &lt;HasExportPropertiesPartial Model, <span class="keyword">typename</span> ExecutionSpace&gt;</div>
+<div class="foldopen" id="foldopen00054" data-start="{" data-end="}">
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="namespacePostProcessing.html#a39e37336c0f6de5f577e50cf119160a8">   54</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="namespacePostProcessing.html#a39e37336c0f6de5f577e50cf119160a8">inner_partial</a>(std::size_t n_p,</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                     <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a>&amp; position,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                     <span class="keyword">const</span> <span class="keyword">typename</span> Model::SelfParticle&amp; model,</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                     ParticlePropertyViewType&lt;ComputeSpace&gt;&amp; particle_values,</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>                     ParticlePropertyViewType&lt;ComputeSpace&gt;&amp; spatial_values)</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  {</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    Kokkos::Experimental::ScatterView&lt;double**, Kokkos::LayoutRight, ComputeSpace&gt;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        scatter_spatial_values(spatial_values);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">auto</span> indices = Model::get_number();</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keyword">static</span> Kokkos::View&lt;size_t*,HostSpace&gt; host_index(<span class="stringliteral">&quot;host_index&quot;</span>,indices.size());</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordflow">for</span>(<span class="keyword">auto</span> i =0;i&lt; indices.size();++i)</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    {</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>      host_index(i)=indices[i];</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    }</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keyword">const</span> Kokkos::View&lt;const size_t*,ComputeSpace&gt;  kindices = Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_index);</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>   </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    Kokkos::parallel_for(</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <span class="stringliteral">&quot;kernel_get_properties&quot;</span>,</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        Kokkos::RangePolicy&lt;ExecutionSpace&gt;(0, n_p),</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keywordtype">int</span> i_particle) {</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>          <span class="keyword">auto</span> access = scatter_spatial_values.access();</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>       </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>          <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; kindices.extent(0); ++i)</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>          {</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>            <span class="keyword">auto</span> index_export = kindices(i);</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>            access(i, position(i_particle)) += model(i_particle, index_export);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>            particle_values(i, i_particle) = model(i_particle, index_export);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>          }</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>          <span class="keyword">auto</span> mass = Model::mass(i_particle, model);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>          access(kindices.extent(0), position(i_particle)) += mass;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>          particle_values(kindices.extent(0), i_particle) = mass;</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        });</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    Kokkos::fence();</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    Kokkos::Experimental::contribute(spatial_values, scatter_spatial_values);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  }</div>
 </div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>} <span class="comment">// namespace PostProcessing</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclassMC_1_1ParticlesContainer_html"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a></div><div class="ttdoc">Main owning object for Monte-Carlo particles.</div><div class="ttdef"><b>Definition</b> particles_container.hpp:126</div></div>
-<div class="ttc" id="aclassMC_1_1ParticlesContainer_html_a2b64b07b72efe145ffc2c9ef491b2297"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297">MC::ParticlesContainer::model</a></div><div class="ttdeci">Model::SelfParticle model</div><div class="ttdef"><b>Definition</b> particles_container.hpp:137</div></div>
-<div class="ttc" id="aclassMC_1_1ParticlesContainer_html_a30b264e87ae019596f9791f2fc60d52f"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f">MC::ParticlesContainer::n_particles</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION std::size_t n_particles() const</div><div class="ttdoc">Gets the number of particles in the container.</div><div class="ttdef"><b>Definition</b> particles_container.hpp:159</div></div>
-<div class="ttc" id="aclassMC_1_1ParticlesContainer_html_aab2bc872e28015fbbd9dd5ce78468e73"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html#aab2bc872e28015fbbd9dd5ce78468e73">MC::ParticlesContainer::position</a></div><div class="ttdeci">MC::ParticlePositions position</div><div class="ttdef"><b>Definition</b> particles_container.hpp:138</div></div>
-<div class="ttc" id="aconceptHasExportProperties_html"><div class="ttname"><a href="conceptHasExportProperties.html">HasExportProperties</a></div><div class="ttdef"><b>Definition</b> traits.hpp:162</div></div>
-<div class="ttc" id="anamespaceMC_html_a404d6db92035cbc2c86cbda6d98b6d8d"><div class="ttname"><a href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a></div><div class="ttdeci">Kokkos::View&lt; uint64_t *, ComputeSpace &gt; ParticlePositions</div><div class="ttdef"><b>Definition</b> traits.hpp:45</div></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  <span class="keyword">template</span> &lt;ModelType M&gt;</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  std::optional&lt;PostProcessing::BonceBuffer&gt;</div>
+<div class="foldopen" id="foldopen00095" data-start="{" data-end="}">
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="namespacePostProcessing.html#abdeec32d0ce1418085fd40ad58aa6c1e">   95</a></span>  <a class="code hl_function" href="namespacePostProcessing.html#abdeec32d0ce1418085fd40ad58aa6c1e">get_properties</a>(<span class="keyword">const</span> <a class="code hl_class" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer&lt;M&gt;</a>&amp; container, <span class="keyword">const</span> std::size_t n_compartment)</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  {</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_concept" href="conceptHasExportProperties.html">HasExportProperties&lt;M&gt;</a>)</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    {</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>      <a class="code hl_struct" href="structPostProcessing_1_1BonceBuffer.html">BonceBuffer</a> properties;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>      <span class="keyword">const</span> std::size_t n_p =</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>          container.<a class="code hl_function" href="classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f">n_particles</a>(); <span class="comment">// USE list size not Kokkos View size. ParticleList</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>                                   <span class="comment">// allocates more particles than needed</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>      <span class="keyword">auto</span> ar = M::names();</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>      properties.<a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a3acd2d2fa52440e8d8fd58b51a79c561">vnames</a> = std::vector&lt;std::string&gt;(ar.begin(), ar.end());</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>      properties.<a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a3acd2d2fa52440e8d8fd58b51a79c561">vnames</a>.emplace_back(<span class="stringliteral">&quot;mass&quot;</span>);</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>      <span class="keywordtype">size_t</span> n_var = M::n_var + 1;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>      <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_concept" href="conceptHasExportPropertiesPartial.html">HasExportPropertiesPartial&lt;M&gt;</a>)</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>      {</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        n_var = ar.size() + 1;</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>      }</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>      ParticlePropertyViewType&lt;ComputeSpace&gt; spatial_values(</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>          <span class="stringliteral">&quot;property_spatial&quot;</span>, n_var, n_compartment);</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>      ParticlePropertyViewType&lt;ComputeSpace&gt; particle_values(<span class="stringliteral">&quot;property_values&quot;</span>, n_var, n_p);</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>      <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_concept" href="conceptHasExportPropertiesPartial.html">HasExportPropertiesPartial&lt;M&gt;</a>)</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>      {</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        </div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        <a class="code hl_function" href="namespacePostProcessing.html#a39e37336c0f6de5f577e50cf119160a8">inner_partial&lt;M, Kokkos::DefaultExecutionSpace&gt;</a>(</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>            n_p, container.<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#aab2bc872e28015fbbd9dd5ce78468e73">position</a>, container.<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297">model</a>, particle_values, spatial_values);</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>      }</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>      <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>      {</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <a class="code hl_function" href="namespacePostProcessing.html#ae12ff1585768d64069adb36d895d8905">inner&lt;M, Kokkos::DefaultExecutionSpace&gt;</a>(</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>            n_p, container.<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#aab2bc872e28015fbbd9dd5ce78468e73">position</a>, container.<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297">model</a>, particle_values, spatial_values);</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>      }</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>      properties.<a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a558740b16d4ffe015d473ebc6442bf08">particle_values</a> =</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>          Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), particle_values);</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>      properties.<a class="code hl_variable" href="structPostProcessing_1_1BonceBuffer.html#a1b1a95897201f07c3ef33ad6ed2b0470">spatial_values</a> =</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>          Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), spatial_values);</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>      <span class="keywordflow">return</span> properties;</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    }</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    {</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>      <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    }</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>  }</div>
+</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>} <span class="comment">// namespace PostProcessing</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclassMC_1_1ParticlesContainer_html"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a></div><div class="ttdoc">Main owning object for Monte-Carlo particles.</div><div class="ttdef"><b>Definition</b> particles_container.hpp:128</div></div>
+<div class="ttc" id="aclassMC_1_1ParticlesContainer_html_a2b64b07b72efe145ffc2c9ef491b2297"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297">MC::ParticlesContainer::model</a></div><div class="ttdeci">Model::SelfParticle model</div><div class="ttdef"><b>Definition</b> particles_container.hpp:139</div></div>
+<div class="ttc" id="aclassMC_1_1ParticlesContainer_html_a30b264e87ae019596f9791f2fc60d52f"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f">MC::ParticlesContainer::n_particles</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION std::size_t n_particles() const</div><div class="ttdoc">Gets the number of particles in the container.</div><div class="ttdef"><b>Definition</b> particles_container.hpp:161</div></div>
+<div class="ttc" id="aclassMC_1_1ParticlesContainer_html_aab2bc872e28015fbbd9dd5ce78468e73"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html#aab2bc872e28015fbbd9dd5ce78468e73">MC::ParticlesContainer::position</a></div><div class="ttdeci">MC::ParticlePositions position</div><div class="ttdef"><b>Definition</b> particles_container.hpp:140</div></div>
+<div class="ttc" id="aconceptHasExportPropertiesPartial_html"><div class="ttname"><a href="conceptHasExportPropertiesPartial.html">HasExportPropertiesPartial</a></div><div class="ttdef"><b>Definition</b> traits.hpp:95</div></div>
+<div class="ttc" id="aconceptHasExportProperties_html"><div class="ttname"><a href="conceptHasExportProperties.html">HasExportProperties</a></div><div class="ttdef"><b>Definition</b> traits.hpp:101</div></div>
+<div class="ttc" id="anamespaceMC_html_a404d6db92035cbc2c86cbda6d98b6d8d"><div class="ttname"><a href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a></div><div class="ttdeci">Kokkos::View&lt; uint64_t *, ComputeSpace &gt; ParticlePositions</div><div class="ttdef"><b>Definition</b> alias.hpp:19</div></div>
 <div class="ttc" id="anamespacePostProcessing_html"><div class="ttname"><a href="namespacePostProcessing.html">PostProcessing</a></div><div class="ttdef"><b>Definition</b> impl_post_process.hpp:17</div></div>
-<div class="ttc" id="anamespacePostProcessing_html_abdeec32d0ce1418085fd40ad58aa6c1e"><div class="ttname"><a href="namespacePostProcessing.html#abdeec32d0ce1418085fd40ad58aa6c1e">PostProcessing::get_properties</a></div><div class="ttdeci">std::optional&lt; PostProcessing::BonceBuffer &gt; get_properties(const MC::ParticlesContainer&lt; M &gt; &amp;container, const std::size_t n_compartment)</div><div class="ttdef"><b>Definition</b> post_process.hpp:57</div></div>
-<div class="ttc" id="anamespacePostProcessing_html_ae12ff1585768d64069adb36d895d8905"><div class="ttname"><a href="namespacePostProcessing.html#ae12ff1585768d64069adb36d895d8905">PostProcessing::inner</a></div><div class="ttdeci">void inner(std::size_t n_p, const MC::ParticlePositions &amp;position, const typename Model::SelfParticle &amp;model, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;particle_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;spatial_values)</div><div class="ttdef"><b>Definition</b> post_process.hpp:23</div></div>
-<div class="ttc" id="astructPostProcessing_1_1BonceBuffer_html"><div class="ttname"><a href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a></div><div class="ttdef"><b>Definition</b> post_process.hpp:16</div></div>
-<div class="ttc" id="astructPostProcessing_1_1BonceBuffer_html_a1b1a95897201f07c3ef33ad6ed2b0470"><div class="ttname"><a href="structPostProcessing_1_1BonceBuffer.html#a1b1a95897201f07c3ef33ad6ed2b0470">PostProcessing::BonceBuffer::spatial_values</a></div><div class="ttdeci">ParticlePropertyViewType&lt; HostSpace &gt; spatial_values</div><div class="ttdef"><b>Definition</b> post_process.hpp:18</div></div>
-<div class="ttc" id="astructPostProcessing_1_1BonceBuffer_html_a3acd2d2fa52440e8d8fd58b51a79c561"><div class="ttname"><a href="structPostProcessing_1_1BonceBuffer.html#a3acd2d2fa52440e8d8fd58b51a79c561">PostProcessing::BonceBuffer::vnames</a></div><div class="ttdeci">std::vector&lt; std::string &gt; vnames</div><div class="ttdef"><b>Definition</b> post_process.hpp:19</div></div>
-<div class="ttc" id="astructPostProcessing_1_1BonceBuffer_html_a558740b16d4ffe015d473ebc6442bf08"><div class="ttname"><a href="structPostProcessing_1_1BonceBuffer.html#a558740b16d4ffe015d473ebc6442bf08">PostProcessing::BonceBuffer::particle_values</a></div><div class="ttdeci">ParticlePropertyViewType&lt; HostSpace &gt; particle_values</div><div class="ttdef"><b>Definition</b> post_process.hpp:17</div></div>
+<div class="ttc" id="anamespacePostProcessing_html_a39e37336c0f6de5f577e50cf119160a8"><div class="ttname"><a href="namespacePostProcessing.html#a39e37336c0f6de5f577e50cf119160a8">PostProcessing::inner_partial</a></div><div class="ttdeci">void inner_partial(std::size_t n_p, const MC::ParticlePositions &amp;position, const typename Model::SelfParticle &amp;model, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;particle_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;spatial_values)</div><div class="ttdef"><b>Definition</b> post_process.hpp:54</div></div>
+<div class="ttc" id="anamespacePostProcessing_html_abdeec32d0ce1418085fd40ad58aa6c1e"><div class="ttname"><a href="namespacePostProcessing.html#abdeec32d0ce1418085fd40ad58aa6c1e">PostProcessing::get_properties</a></div><div class="ttdeci">std::optional&lt; PostProcessing::BonceBuffer &gt; get_properties(const MC::ParticlesContainer&lt; M &gt; &amp;container, const std::size_t n_compartment)</div><div class="ttdef"><b>Definition</b> post_process.hpp:95</div></div>
+<div class="ttc" id="anamespacePostProcessing_html_ae12ff1585768d64069adb36d895d8905"><div class="ttname"><a href="namespacePostProcessing.html#ae12ff1585768d64069adb36d895d8905">PostProcessing::inner</a></div><div class="ttdeci">void inner(std::size_t n_p, const MC::ParticlePositions &amp;position, const typename Model::SelfParticle &amp;model, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;particle_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;spatial_values)</div><div class="ttdef"><b>Definition</b> post_process.hpp:25</div></div>
+<div class="ttc" id="astructPostProcessing_1_1BonceBuffer_html"><div class="ttname"><a href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a></div><div class="ttdef"><b>Definition</b> post_process.hpp:18</div></div>
+<div class="ttc" id="astructPostProcessing_1_1BonceBuffer_html_a1b1a95897201f07c3ef33ad6ed2b0470"><div class="ttname"><a href="structPostProcessing_1_1BonceBuffer.html#a1b1a95897201f07c3ef33ad6ed2b0470">PostProcessing::BonceBuffer::spatial_values</a></div><div class="ttdeci">ParticlePropertyViewType&lt; HostSpace &gt; spatial_values</div><div class="ttdef"><b>Definition</b> post_process.hpp:20</div></div>
+<div class="ttc" id="astructPostProcessing_1_1BonceBuffer_html_a3acd2d2fa52440e8d8fd58b51a79c561"><div class="ttname"><a href="structPostProcessing_1_1BonceBuffer.html#a3acd2d2fa52440e8d8fd58b51a79c561">PostProcessing::BonceBuffer::vnames</a></div><div class="ttdeci">std::vector&lt; std::string &gt; vnames</div><div class="ttdef"><b>Definition</b> post_process.hpp:21</div></div>
+<div class="ttc" id="astructPostProcessing_1_1BonceBuffer_html_a558740b16d4ffe015d473ebc6442bf08"><div class="ttname"><a href="structPostProcessing_1_1BonceBuffer.html#a558740b16d4ffe015d473ebc6442bf08">PostProcessing::BonceBuffer::particle_values</a></div><div class="ttdeci">ParticlePropertyViewType&lt; HostSpace &gt; particle_values</div><div class="ttdef"><b>Definition</b> post_process.hpp:19</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

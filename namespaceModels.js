@@ -7,6 +7,7 @@ var namespaceModels =
     [ "MolarMass", "namespaceModels_1_1MolarMass.html", "namespaceModels_1_1MolarMass" ],
     [ "SimpleModel", "structModels_1_1SimpleModel.html", "structModels_1_1SimpleModel" ],
     [ "TwoMeta", "structModels_1_1TwoMeta.html", "structModels_1_1TwoMeta" ],
+    [ "UdfModel", "structModels_1_1UdfModel.html", "structModels_1_1UdfModel" ],
     [ "Uptake", "structModels_1_1Uptake.html", "structModels_1_1Uptake" ],
     [ "Uptakeparticle_var", "namespaceModels.html#a52297e9d81641214786aa09fe85fe13a", [
       [ "a_pts", "namespaceModels.html#a52297e9d81641214786aa09fe85fe13aaaade42051e6186c62884436a8e1890cd", null ],

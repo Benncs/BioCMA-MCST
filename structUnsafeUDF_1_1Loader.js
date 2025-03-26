@@ -1,11 +1,11 @@
 var structUnsafeUDF_1_1Loader =
 [
-    [ "contribution_udf", "structUnsafeUDF_1_1Loader.html#a2e776f87ca0c817c24eceb04da829a3b", null ],
-    [ "delete_udf", "structUnsafeUDF_1_1Loader.html#ac032afc61defa2394f9e7d6780391bc7", null ],
-    [ "division_udf", "structUnsafeUDF_1_1Loader.html#a9d4d623a8b9a5fbf5a3e6e861b32d3d9", null ],
-    [ "init_udf", "structUnsafeUDF_1_1Loader.html#afc4c0d7ff129a8e83875ce0ca99123ea", null ],
-    [ "make_udf", "structUnsafeUDF_1_1Loader.html#af83171afe7e0c14c9128dfd182564dab", null ],
-    [ "mass", "structUnsafeUDF_1_1Loader.html#ae43e67edeabb6d7498b18040b3a5344d", null ],
-    [ "names", "structUnsafeUDF_1_1Loader.html#aeba42a5a764b2e355ecb8fb9c1b40ece", null ],
-    [ "update_udf", "structUnsafeUDF_1_1Loader.html#aa7f7e03f4034cc111c9a9abe11d49f0b", null ]
+    [ "contribution_udf", "structUnsafeUDF_1_1Loader.html#aab132ac915d3223ef9eb76f0c2914b1d", null ],
+    [ "division_udf", "structUnsafeUDF_1_1Loader.html#aac8512069552b273714ef63d0ca71f59", null ],
+    [ "get_number", "structUnsafeUDF_1_1Loader.html#a62edbb78ae554bf55d80cb18befabc01", null ],
+    [ "init_udf", "structUnsafeUDF_1_1Loader.html#a694ed7fccf432e6551d69bc9cce5e365", null ],
+    [ "mass", "structUnsafeUDF_1_1Loader.html#a8ce5a8e59e5631fdebde4986bba46b92", null ],
+    [ "names", "structUnsafeUDF_1_1Loader.html#a33346e97f3ff2b195d18416d2dd7b33c", null ],
+    [ "set_nvar_udf", "structUnsafeUDF_1_1Loader.html#a54d09de77e3ffa2e39f4334d0fc58b18", null ],
+    [ "update_udf", "structUnsafeUDF_1_1Loader.html#a9b9104ce0adc02327c29dcd9b24fa80c", null ]
 ];

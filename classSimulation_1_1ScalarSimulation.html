@@ -86,7 +86,7 @@ $(function(){initNavTree('classSimulation_1_1ScalarSimulation.html',''); initRes
 <div class="dynheader">
 Collaboration diagram for Simulation::ScalarSimulation:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1ScalarSimulation__coll__graph.svg" width="199" height="136"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1ScalarSimulation__coll__graph.svg" width="456" height="136"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -107,14 +107,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a90436e426f916e5b2540941b0dce8cc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa78bf7ac21d619b85feca2faba599965" id="r_aa78bf7ac21d619b85feca2faba599965"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa78bf7ac21d619b85feca2faba599965">reduce_contribs</a> (std::span&lt; const double &gt; data)</td></tr>
 <tr class="separator:aa78bf7ac21d619b85feca2faba599965"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accd578eb371bceadce12a9f5aaa1adf4" id="r_accd578eb371bceadce12a9f5aaa1adf4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#accd578eb371bceadce12a9f5aaa1adf4">performStepGL</a> (double d_t, const FlowMatrixType &amp;m_transition, const MatrixType &amp;mtr, <a class="el" href="namespaceSimulation_1_1MassTransfer.html#ae8feef3b084e54617612bce610be7c0b">MassTransfer::Sign</a> sign)</td></tr>
-<tr class="separator:accd578eb371bceadce12a9f5aaa1adf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16b998d2b5b2e0b1c0583804d298ff6b" id="r_a16b998d2b5b2e0b1c0583804d298ff6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16b998d2b5b2e0b1c0583804d298ff6b">performStepGL</a> (double d_t, const FlowMatrixType &amp;m_transition, const ColMajorMatrixtype &amp;mtr, <a class="el" href="namespaceSimulation_1_1MassTransfer.html#ae8feef3b084e54617612bce610be7c0b">MassTransfer::Sign</a> sign)</td></tr>
+<tr class="separator:a16b998d2b5b2e0b1c0583804d298ff6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac17e1fb2da810c4a21e94ce0caf09e17" id="r_ac17e1fb2da810c4a21e94ce0caf09e17"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac17e1fb2da810c4a21e94ce0caf09e17">performStep</a> (double d_t, const FlowMatrixType &amp;m_transition)</td></tr>
 <tr class="separator:ac17e1fb2da810c4a21e94ce0caf09e17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a274eb8058639674da2e2f961fa890fa9" id="r_a274eb8058639674da2e2f961fa890fa9"><td class="memItemLeft" align="right" valign="top">MatrixType &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a274eb8058639674da2e2f961fa890fa9">get_concentration</a> ()</td></tr>
-<tr class="separator:a274eb8058639674da2e2f961fa890fa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4d84a1c1ab6038e59e91de498a2b54e" id="r_af4d84a1c1ab6038e59e91de498a2b54e"><td class="memItemLeft" align="right" valign="top">KokkosScalarMatrix&lt; ComputeSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4d84a1c1ab6038e59e91de498a2b54e">get_device_concentration</a> () const</td></tr>
-<tr class="separator:af4d84a1c1ab6038e59e91de498a2b54e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7970d54aec7c4ef0cd2fe43679e1368c" id="r_a7970d54aec7c4ef0cd2fe43679e1368c"><td class="memItemLeft" align="right" valign="top">ColMajorMatrixtype &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7970d54aec7c4ef0cd2fe43679e1368c">get_concentration</a> ()</td></tr>
+<tr class="separator:a7970d54aec7c4ef0cd2fe43679e1368c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40a0d4fbe4d444bde00afb2f55194412" id="r_a40a0d4fbe4d444bde00afb2f55194412"><td class="memItemLeft" align="right" valign="top">ColMajorKokkosScalarMatrix&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40a0d4fbe4d444bde00afb2f55194412">get_device_concentration</a> () const</td></tr>
+<tr class="separator:a40a0d4fbe4d444bde00afb2f55194412"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8498ea2f568b016f61015c66aa6209c7" id="r_a8498ea2f568b016f61015c66aa6209c7"><td class="memItemLeft" align="right" valign="top">std::span&lt; double const &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8498ea2f568b016f61015c66aa6209c7">getVolumeData</a> () const</td></tr>
 <tr class="separator:a8498ea2f568b016f61015c66aa6209c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae63deb940c3ff0f2c01089fa399225c2" id="r_ae63deb940c3ff0f2c01089fa399225c2"><td class="memItemLeft" align="right" valign="top">std::span&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae63deb940c3ff0f2c01089fa399225c2">getContributionData</a> () const</td></tr>
@@ -125,8 +125,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae2625817dffc02083227be2b82dfe534"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbf90360d259eea04a5672e3070cea8f" id="r_acbf90360d259eea04a5672e3070cea8f"><td class="memItemLeft" align="right" valign="top">kernelContribution&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acbf90360d259eea04a5672e3070cea8f">get_kernel_contribution</a> () const</td></tr>
 <tr class="separator:acbf90360d259eea04a5672e3070cea8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98a1afc5e48818a241ae70634e75d19c" id="r_a98a1afc5e48818a241ae70634e75d19c"><td class="memItemLeft" align="right" valign="top">const MatrixType &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98a1afc5e48818a241ae70634e75d19c">get_mass_transfer</a> () const</td></tr>
-<tr class="separator:a98a1afc5e48818a241ae70634e75d19c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2d4a16bf6d1215934f82d22a2c5a45d" id="r_af2d4a16bf6d1215934f82d22a2c5a45d"><td class="memItemLeft" align="right" valign="top">const ColMajorMatrixtype &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2d4a16bf6d1215934f82d22a2c5a45d">get_mass_transfer</a> () const</td></tr>
+<tr class="separator:af2d4a16bf6d1215934f82d22a2c5a45d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcf9b11b8de7215be6b83ed6a2aceaf0" id="r_afcf9b11b8de7215be6b83ed6a2aceaf0"><td class="memItemLeft" align="right" valign="top">std::span&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcf9b11b8de7215be6b83ed6a2aceaf0">getConcentrationData</a> ()</td></tr>
 <tr class="separator:afcf9b11b8de7215be6b83ed6a2aceaf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59abe629b12f83f5ee99971a9098950e" id="r_a59abe629b12f83f5ee99971a9098950e"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59abe629b12f83f5ee99971a9098950e">n_row</a> () const</td></tr>
@@ -152,18 +152,18 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a8dbb8f959cc2cc7908d86a0ace0ae718"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa3ac3185393ec60e84ea8b305c7ebc8" id="r_afa3ac3185393ec60e84ea8b305c7ebc8"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa3ac3185393ec60e84ea8b305c7ebc8">n_c</a></td></tr>
 <tr class="separator:afa3ac3185393ec60e84ea8b305c7ebc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39553ddc30ddb6a6f7dca1a3a93268d0" id="r_a39553ddc30ddb6a6f7dca1a3a93268d0"><td class="memItemLeft" align="right" valign="top">MatrixType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39553ddc30ddb6a6f7dca1a3a93268d0">total_mass</a></td></tr>
-<tr class="separator:a39553ddc30ddb6a6f7dca1a3a93268d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5d95693f044f3c4a689edacc8149417" id="r_af5d95693f044f3c4a689edacc8149417"><td class="memItemLeft" align="right" valign="top">ColMajorMatrixtype&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5d95693f044f3c4a689edacc8149417">total_mass</a></td></tr>
+<tr class="separator:af5d95693f044f3c4a689edacc8149417"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a898e819cf4c3e06cd089ca05c1add8df" id="r_a898e819cf4c3e06cd089ca05c1add8df"><td class="memItemLeft" align="right" valign="top">DiagonalType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a898e819cf4c3e06cd089ca05c1add8df">volumes_inverse</a></td></tr>
 <tr class="separator:a898e819cf4c3e06cd089ca05c1add8df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcfe575dd87fccc56a014f84fe15fe1a" id="r_afcfe575dd87fccc56a014f84fe15fe1a"><td class="memItemLeft" align="right" valign="top">DiagonalType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcfe575dd87fccc56a014f84fe15fe1a">m_volumes</a></td></tr>
 <tr class="separator:afcfe575dd87fccc56a014f84fe15fe1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe8d8df5f68be02f54478cff3abeb9f2" id="r_afe8d8df5f68be02f54478cff3abeb9f2"><td class="memItemLeft" align="right" valign="top">DiagonalType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe8d8df5f68be02f54478cff3abeb9f2">sink</a></td></tr>
 <tr class="separator:afe8d8df5f68be02f54478cff3abeb9f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6267083c7f53a6e540a0ae48bd28686d" id="r_a6267083c7f53a6e540a0ae48bd28686d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structEigenKokkos.html">EigenKokkos</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6267083c7f53a6e540a0ae48bd28686d">concentrations</a></td></tr>
+<tr class="memitem:a6267083c7f53a6e540a0ae48bd28686d" id="r_a6267083c7f53a6e540a0ae48bd28686d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structEigenKokkosBase.html">EigenKokkos</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6267083c7f53a6e540a0ae48bd28686d">concentrations</a></td></tr>
 <tr class="separator:a6267083c7f53a6e540a0ae48bd28686d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a768057c083863264bb6863dc7b3ecc0e" id="r_a768057c083863264bb6863dc7b3ecc0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structEigenKokkos.html">EigenKokkos</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a768057c083863264bb6863dc7b3ecc0e">sources</a></td></tr>
-<tr class="separator:a768057c083863264bb6863dc7b3ecc0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6238ab9156df2ba46b066b0f77020827" id="r_a6238ab9156df2ba46b066b0f77020827"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structEigenKokkosBase.html">RowMajorEigenKokkos</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6238ab9156df2ba46b066b0f77020827">sources</a></td></tr>
+<tr class="separator:a6238ab9156df2ba46b066b0f77020827"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa72818956090d90be703c0ba0ed932ee" name="aa72818956090d90be703c0ba0ed932ee"></a>
@@ -290,8 +290,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a274eb8058639674da2e2f961fa890fa9" name="a274eb8058639674da2e2f961fa890fa9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a274eb8058639674da2e2f961fa890fa9">&#9670;&#160;</a></span>get_concentration()</h2>
+<a id="a7970d54aec7c4ef0cd2fe43679e1368c" name="a7970d54aec7c4ef0cd2fe43679e1368c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7970d54aec7c4ef0cd2fe43679e1368c">&#9670;&#160;</a></span>get_concentration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -300,7 +300,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">MatrixType &amp; Simulation::ScalarSimulation::get_concentration </td>
+          <td class="memname">ColMajorMatrixtype &amp; Simulation::ScalarSimulation::get_concentration </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -315,8 +315,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="af4d84a1c1ab6038e59e91de498a2b54e" name="af4d84a1c1ab6038e59e91de498a2b54e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af4d84a1c1ab6038e59e91de498a2b54e">&#9670;&#160;</a></span>get_device_concentration()</h2>
+<a id="a40a0d4fbe4d444bde00afb2f55194412" name="a40a0d4fbe4d444bde00afb2f55194412"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40a0d4fbe4d444bde00afb2f55194412">&#9670;&#160;</a></span>get_device_concentration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -325,7 +325,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">KokkosScalarMatrix&lt; ComputeSpace &gt; Simulation::ScalarSimulation::get_device_concentration </td>
+          <td class="memname">ColMajorKokkosScalarMatrix Simulation::ScalarSimulation::get_device_concentration </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -365,8 +365,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a98a1afc5e48818a241ae70634e75d19c" name="a98a1afc5e48818a241ae70634e75d19c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98a1afc5e48818a241ae70634e75d19c">&#9670;&#160;</a></span>get_mass_transfer()</h2>
+<a id="af2d4a16bf6d1215934f82d22a2c5a45d" name="af2d4a16bf6d1215934f82d22a2c5a45d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2d4a16bf6d1215934f82d22a2c5a45d">&#9670;&#160;</a></span>get_mass_transfer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -375,7 +375,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const MatrixType &amp; Simulation::ScalarSimulation::get_mass_transfer </td>
+          <td class="memname">const ColMajorMatrixtype &amp; Simulation::ScalarSimulation::get_mass_transfer </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -440,7 +440,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1ScalarSimulation_afcf9b11b8de7215be6b83ed6a2aceaf0_cgraph.svg" width="406" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1ScalarSimulation_afcf9b11b8de7215be6b83ed6a2aceaf0_cgraph.svg" width="436" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -651,13 +651,13 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1ScalarSimulation_ac17e1fb2da810c4a21e94ce0caf09e17_cgraph.svg" width="392" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1ScalarSimulation_ac17e1fb2da810c4a21e94ce0caf09e17_cgraph.svg" width="422" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="accd578eb371bceadce12a9f5aaa1adf4" name="accd578eb371bceadce12a9f5aaa1adf4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#accd578eb371bceadce12a9f5aaa1adf4">&#9670;&#160;</a></span>performStepGL()</h2>
+<a id="a16b998d2b5b2e0b1c0583804d298ff6b" name="a16b998d2b5b2e0b1c0583804d298ff6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16b998d2b5b2e0b1c0583804d298ff6b">&#9670;&#160;</a></span>performStepGL()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -675,7 +675,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const MatrixType &amp;</td>          <td class="paramname"><span class="paramname"><em>mtr</em></span>, </td>
+          <td class="paramtype">const ColMajorMatrixtype &amp;</td>          <td class="paramname"><span class="paramname"><em>mtr</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -687,7 +687,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1ScalarSimulation_accd578eb371bceadce12a9f5aaa1adf4_cgraph.svg" width="392" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1ScalarSimulation_a16b998d2b5b2e0b1c0583804d298ff6b_cgraph.svg" width="422" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -768,7 +768,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1ScalarSimulation_afb6dadda99cfce2c2172ad5fabc42682_cgraph.svg" width="395" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1ScalarSimulation_afb6dadda99cfce2c2172ad5fabc42682_cgraph.svg" width="424" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -889,7 +889,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structEigenKokkos.html">EigenKokkos</a> Simulation::ScalarSimulation::concentrations</td>
+          <td class="memname"><a class="el" href="structEigenKokkosBase.html">EigenKokkos</a> Simulation::ScalarSimulation::concentrations</td>
         </tr>
       </table>
   </td>
@@ -989,8 +989,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a768057c083863264bb6863dc7b3ecc0e" name="a768057c083863264bb6863dc7b3ecc0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a768057c083863264bb6863dc7b3ecc0e">&#9670;&#160;</a></span>sources</h2>
+<a id="a6238ab9156df2ba46b066b0f77020827" name="a6238ab9156df2ba46b066b0f77020827"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6238ab9156df2ba46b066b0f77020827">&#9670;&#160;</a></span>sources</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -999,7 +999,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structEigenKokkos.html">EigenKokkos</a> Simulation::ScalarSimulation::sources</td>
+          <td class="memname"><a class="el" href="structEigenKokkosBase.html">RowMajorEigenKokkos</a> Simulation::ScalarSimulation::sources</td>
         </tr>
       </table>
   </td>
@@ -1011,8 +1011,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a39553ddc30ddb6a6f7dca1a3a93268d0" name="a39553ddc30ddb6a6f7dca1a3a93268d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39553ddc30ddb6a6f7dca1a3a93268d0">&#9670;&#160;</a></span>total_mass</h2>
+<a id="af5d95693f044f3c4a689edacc8149417" name="af5d95693f044f3c4a689edacc8149417"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5d95693f044f3c4a689edacc8149417">&#9670;&#160;</a></span>total_mass</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1021,7 +1021,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">MatrixType Simulation::ScalarSimulation::total_mass</td>
+          <td class="memname">ColMajorMatrixtype Simulation::ScalarSimulation::total_mass</td>
         </tr>
       </table>
   </td>

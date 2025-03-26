@@ -1,5 +1,7 @@
 <map id="Simulation::ScalarSimulation" name="Simulation::ScalarSimulation">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,106,194,131"/>
-<area shape="rect" id="Node000002" href="$structEigenKokkos.html" title=" " alt="" coords="51,5,148,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,46,102,105,97,105,97,46"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="134,106,322,131"/>
+<area shape="rect" id="Node000002" href="$structEigenKokkosBase.html" title=" " alt="" coords="5,5,216,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,51,215,103,211,108,144,56"/>
+<area shape="rect" id="Node000003" href="$structEigenKokkosBase.html" title=" " alt="" coords="240,5,450,44"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="312,56,276,84,245,108,242,103,273,80,309,52"/>
 </map>

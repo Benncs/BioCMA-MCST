@@ -40,6 +40,11 @@ var NAVTREE =
         ] ]
       ] ]
     ] ],
+    [ "md_documentation_2pages_204__models", "md_documentation_2pages_204__models.html", [
+      [ "Model declaration", "md_documentation_2pages_204__models.html#autotoc_md18", [
+        [ "Required Model Subkernels", "md_documentation_2pages_204__models.html#autotoc_md19", null ]
+      ] ]
+    ] ],
     [ "Todo List", "todo.html", null ],
     [ "Bibliography", "citelist.html", null ],
     [ "Namespaces", "namespaces.html", [
@@ -77,11 +82,11 @@ var NAVTREEINDEX =
 "classCore_1_1GlobalInitialiser.html#a751126aaf6e8da709d3b9c98f0a796fb",
 "classMC_1_1ReactorDomain.html#a767b95c07cbc48f98c5841f94b564f20",
 "classSimulation_1_1SimulationUnit.html#a448192ce085c5d0d5e71875a888e99b8",
-"namespaceCmaUtils.html#a62072fff78d8de117e133499f87a2a0c",
-"structApi_1_1SimulationInstance.html#ae4f96d5c15493b6f950517afbe53caa2",
-"structMC_1_1Distributions_1_1SkewNormal.html#a1e5735bef55e02c63db888d8813a6e62",
-"structModels_1_1Uptake.html#a5eec604cdea8ae4939f45f1803677df2",
-"structSimulation_1_1Phase.html"
+"namespaceApi.html#a43523f23b4fed2f495f0d6ca4e5aee32",
+"structApi_1_1SimulationInstance.html#ad54f1c021ad6af49979c42edf10b207b",
+"structMC_1_1Distributions_1_1Normal.html#a2da39bb909a2148961ed998662a707dd",
+"structModels_1_1TwoMeta.html#ac9d1651c326f2a928fba425661fdf128af477ea4460e57d89276aa2626e0c3ec3",
+"structSimulation_1_1KernelInline_1_1MoveFunctor.html#a6499b95b23e49943edde7565bc9e4b22"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
