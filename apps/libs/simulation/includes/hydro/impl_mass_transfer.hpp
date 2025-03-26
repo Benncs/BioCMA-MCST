@@ -2,6 +2,7 @@
 #define __IMPL_HYDRO_MASS_TRANSFER_HPP__
 
 #include "cma_utils/iteration_state.hpp"
+#include "eigen_kokkos.hpp"
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <mc/domain.hpp>
@@ -16,7 +17,7 @@ namespace Simulation::MassTransfer
 {
   struct MassTransferProxy
   {
-    Eigen::MatrixXd mtr;
+    ColMajorMatrixtype mtr;
     Eigen::ArrayXXd kla;
     Eigen::ArrayXd Henry;
     double db;

@@ -172,8 +172,8 @@ def plot_scaling(threads, particles, iterations, records):
     fig, (ax_scale, ax_eff) = plt.subplots(1, 2, figsize=(14, 6)) 
     figs = [fig]
     from cycler import cycler
-    colors = plt.cm.cool(np.linspace(0, 1, 5))  
-    line_widths = [1, 1,1,1,1]  
+    colors = plt.cm.tab20b(np.linspace(0, 1, 10))  
+    line_widths = [1]*10  
 
     custom_cycler = (cycler(color=colors) +
                     cycler(lw=line_widths))

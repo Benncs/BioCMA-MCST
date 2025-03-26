@@ -1,3 +1,4 @@
+
 #include <api/api.hpp>
 #include <cli_parser.hpp>
 #include <common/execinfo.hpp>
@@ -10,11 +11,23 @@
 #include <rt_init.hpp>
 #include <stream_io.hpp>
 #include <string>
+#include <string_view>
 #include <utility>
 
 #ifdef DECLARE_EXPORT_UDF
 #  include <udf_includes.hpp>
-#  define DECLARE_LOADER(__path__) auto _ = UnsafeUDF::Loader::init_lib(__path__)
+std::shared_ptr<DynamicLibrary> wrap_non_scoped_udf(std::string_view path, bool load)
+{
+  if (load)
+  {
+    return UnsafeUDF::Loader::init_lib(path);
+  }
+  else
+  {
+    return nullptr;
+  }
+}
+#  define DECLARE_LOADER(__path__) auto _ = wrap_non_scoped_udf(__path__, false);
 #else
 
 #  define DECLARE_LOADER(__path__) (void)__path__;
@@ -30,12 +43,6 @@
 #else
 #  define INTERPRETER_INIT
 #endif
-
-/**
- * @brief Check if result path exist or not and ask for overriding if yes
- * @return true if override results_path
- */
-static bool override_result_path(const Core::UserControlParameters& params, const ExecInfo& exec);
 
 #ifndef NO_MPI
 #  define HANDLE_RC(__api_results__)                                                               \
@@ -60,6 +67,14 @@ static bool override_result_path(const Core::UserControlParameters& params, cons
     }
 #endif
 
+/**
+ * @brief Check if result path exist or not and ask for overriding if yes
+ * @return true if override results_path
+ */
+static bool override_result_path(const Core::UserControlParameters& params, const ExecInfo& exec);
+static int parse_callback_ok(Core::UserControlParameters&& user_params,
+                             std::optional<std::unique_ptr<Api::SimulationInstance>>& handle);
+
 int main(int argc, char** argv)
 {
 
@@ -74,71 +89,35 @@ int main(int argc, char** argv)
   return parse_cli(argc, argv)
       .match(
           [&](auto&& user_params)
-          {
-            DECLARE_LOADER("/home-local/casale/Documents/code/poc/builddir/host/apps/udf_model/"
-                           "libudf_model.so");
-
-            auto& h = *handle;
-            if (!override_result_path(user_params, h->get_exec_info()))
-            {
-              return -1;
-            }
-
-            const auto serde = user_params.serde;
-            INTERPRETER_INIT
-            REDIRECT_SCOPE({
-              HANDLE_RC(h->register_parameters(std::forward<decltype(user_params)>(user_params)));
-
-              HANDLE_RC(h->apply(serde));
-              HANDLE_RC(h->exec());
-            })
-            return 0;
-          },
+          { return parse_callback_ok(std::forward<decltype(user_params)>(user_params), handle); },
           [](auto&& val)
           {
             std::cout << "Err: " << val << std::endl;
             showHelp(std::cout);
             return 1;
           });
+}
 
-  // DECLARE_LOADER("/home-local/casale/Documents/code/poc/builddir/host/apps/udf_model/libudf_model.so");
+int parse_callback_ok(Core::UserControlParameters&& user_params,
+                      std::optional<std::unique_ptr<Api::SimulationInstance>>& handle)
+{
+  DECLARE_LOADER("/home-local/casale/Documents/code/poc/builddir/host/apps/udf_model/"
+                 "libudf_model.so");
 
-  // auto& h = *handle;
-  // if (!override_result_path(user_params, h->get_exec_info()))
-  // {
-  //   return -1;
-  // }
+  auto& h = *handle;
+  if (!override_result_path(user_params, h->get_exec_info()))
+  {
+    return -1;
+  }
 
-  // const auto serde = user_params.serde;
-  // INTERPRETER_INIT
-  // REDIRECT_SCOPE({
-  //   HANDLE_RC(h->register_parameters(std::move(user_params)));
-  //   // 1:20e-3*0.5/3600., {3}
-  //   // 2:20e-3*0.9/3600., {10}
-  //   // h->set_feed_constant_from_rvalue(20e-3 * 0.5 / 3600., {300e-3}, {0}, {1}, true);
+  const auto serde = user_params.serde;
+  INTERPRETER_INIT
+  REDIRECT_SCOPE({
+    HANDLE_RC(h->register_parameters(std::forward<decltype(user_params)>(user_params)));
 
-  //   // Sanofi
-  //   //  h->set_feed_constant_from_rvalue(0.031653119013143756, {0.}, {0}, {0});
-  //   // h->set_feed_constant_from_rvalue(0.001 / 3600., {0.3}, {0}, {1}, true);
-  //   // h->set_feed_constant_from_rvalue(20e-3*0.9/3600., {10}, {0}, {0}, false);
-  //   // h->set_feed_constant_from_rvalue(100*0.01 / 3600., {0.3}, {0}, {1}, true);
-
-  //   // std::vector<double> c(100);
-  //   // std::vector<std::size_t> p(100);
-  //   // std::vector<std::size_t> ss(100);
-  //   // for (int i = 0; i < 100; ++i)
-  //   // {
-  //   //   p[i] = i;
-  //   //   c[i] = 0.3;
-  //   //   ss[i] = i;
-  //   // }
-
-  //   // h->set_feed_constant(0.031653119013143756, c, p, ss, true);
-
-  //   HANDLE_RC(h->apply(serde));
-  //   HANDLE_RC(h->exec());
-  // })
-
+    HANDLE_RC(h->apply(serde));
+    HANDLE_RC(h->exec());
+  })
   return 0;
 }
 
@@ -162,3 +141,11 @@ bool override_result_path(const Core::UserControlParameters& params, const ExecI
 #endif
   return flag;
 }
+
+//   // h->set_feed_constant_from_rvalue(20e-3 * 0.5 / 3600., {300e-3}, {0}, {1}, true);
+
+//   // Sanofi
+//   //  h->set_feed_constant_from_rvalue(0.031653119013143756, {0.}, {0}, {0});
+//   // h->set_feed_constant_from_rvalue(0.001 / 3600., {0.3}, {0}, {1}, true);
+//   // h->set_feed_constant_from_rvalue(20e-3*0.9/3600., {10}, {0}, {0}, false);
+//   // h->set_feed_constant_from_rvalue(100*0.01 / 3600., {0.3}, {0}, {1}, true);

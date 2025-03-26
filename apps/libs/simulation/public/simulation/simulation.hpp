@@ -185,6 +185,7 @@ namespace Simulation
     auto contribs = get_kernel_contribution();
 
     MC::ContributionView contribs_scatter(contribs);
+    
 
     this->move_info.cumulative_probability = get_kernel_cumulative_proba();
     this->move_info.diag_transition = get_kernel_diagonal();

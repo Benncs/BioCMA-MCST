@@ -156,8 +156,9 @@ namespace Simulation
   void SimulationUnit::post_init_concentration_functor(const ScalarInitializer& scalar_init)
   {
 
-    MatrixType& cliq = this->liquid_scalar->get_concentration();
-    MatrixType* cgas = nullptr;
+    auto& cliq = this->liquid_scalar->get_concentration();
+    decltype(&cliq) cgas = nullptr; //FIXME
+
     if (is_two_phase_flow)
     {
       assert(this->gas_scalar != nullptr);

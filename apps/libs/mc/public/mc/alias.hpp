@@ -28,9 +28,11 @@ namespace MC
 
   // Kernel alias
   using ContributionView =
-      Kokkos::Experimental::ScatterView<double**, Kokkos::LayoutLeft>; ///< Contribution inside the
+      Kokkos::Experimental::ScatterView<double**, Kokkos::LayoutRight>; ///< Contribution inside the
                                                                        ///< particle's current
                                                                        ///< container
+  // using access_type = decltype(std::declval<ContributionView>().access());
+
 
   using KernelConcentrationType = Kokkos::View<const double**,
                                                Kokkos::LayoutLeft,
@@ -47,6 +49,6 @@ using ConstNeighborsView = Kokkos::View<const std::size_t**,
                                         Kokkos::LayoutRight,
                                         Space,
                                         Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
-using kernelContribution = Kokkos::View<double**, Kokkos::LayoutLeft, MC::ComputeSpace>;
+using kernelContribution = Kokkos::View<double**, Kokkos::LayoutRight, MC::ComputeSpace>;
 
 #endif 
