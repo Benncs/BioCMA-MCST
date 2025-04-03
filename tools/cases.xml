@@ -23,13 +23,13 @@
    </control>
 
    <control name="0d_4s">
-      <cma_case_path>../../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
+      <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
       <final_time>3500</final_time>
-      <number_particle>5000</number_particle>
+      <number_particle>50000</number_particle>
       <delta_time>0.5</delta_time>
-      <results_file_name>test_ferm</results_file_name>
-      <number_exported_result>100</number_exported_result>
-      <model_name>model_meta2</model_name>
+      <results_file_name>meta_chem_0d</results_file_name>
+      <number_exported_result>500</number_exported_result>
+      <model_name>two_meta</model_name>
       <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
    </control>
 
@@ -110,14 +110,35 @@
 
    <control name="udf">
       <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
-      <final_time>10</final_time>
-      <number_particle>100000</number_particle>
-      <delta_time>0.1</delta_time>
+      <final_time>3000</final_time>
+      <number_particle>50000</number_particle>
+      <delta_time>0.01</delta_time>
       <results_file_name>udf</results_file_name>
-      <number_exported_result>100</number_exported_result>
+      <number_exported_result>10</number_exported_result>
       <model_name>udf_model</model_name>
-      <!-- <initialiser_path></initialiser_path> -->
-      
+       <!-- <initialiser_path>./cma_data/0d_init.h5</initialiser_path> -->
+   </control>
+
+   <control name="prepbatch">
+      <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
+      <final_time>7200</final_time>
+      <number_particle>50000</number_particle>
+      <delta_time>0.05</delta_time>
+      <results_file_name>prepbatch</results_file_name>
+      <number_exported_result>10</number_exported_result>
+      <model_name>two_meta</model_name>
+      <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
+   </control>
+
+   <control name="loadbatch">
+      <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
+      <final_time>7200</final_time>
+      <number_particle>50000</number_particle>
+      <delta_time>0.5</delta_time>
+      <results_file_name>loadbatch</results_file_name>
+      <number_exported_result>100</number_exported_result>
+      <model_name>two_meta</model_name>
+      <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
    </control>
 
 </cases>

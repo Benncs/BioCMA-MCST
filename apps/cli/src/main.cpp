@@ -1,4 +1,5 @@
 
+#include "simulation/feed_descriptor.hpp"
 #include <api/api.hpp>
 #include <cli_parser.hpp>
 #include <common/execinfo.hpp>
@@ -27,7 +28,7 @@ std::shared_ptr<DynamicLibrary> wrap_non_scoped_udf(std::string_view path, bool 
     return nullptr;
   }
 }
-#  define DECLARE_LOADER(__path__) auto _ = wrap_non_scoped_udf(__path__, false);
+#  define DECLARE_LOADER(__path__) auto _ = wrap_non_scoped_udf(__path__, true);
 #else
 
 #  define DECLARE_LOADER(__path__) (void)__path__;
@@ -110,11 +111,18 @@ int parse_callback_ok(Core::UserControlParameters&& user_params,
     return -1;
   }
 
+  // auto sine_feed = Simulation::Feed::FeedFactory::pulse(20e-3 * 5 / 3600.,{5}, {0}, 
+  // {0},0,0,2./3600.,true);
+
   const auto serde = user_params.serde;
   INTERPRETER_INIT
   REDIRECT_SCOPE({
     HANDLE_RC(h->register_parameters(std::forward<decltype(user_params)>(user_params)));
-
+    h->set_feed_constant_from_rvalue(20e-3 * 0.5 / 3600., {300e-3}, {0}, {1}, true);
+    // h->set_feed(sine_feed);
+    // h->set_feed_constant_from_rvalue(0.031653119013143756, {0.}, {0}, {0},false);
+    // h->set_feed_constant_from_rvalue(20e-3 * 0.8 / 3600., {5}, {0}, {0}, false);
+    //   h->set_feed_constant_from_rvalue(20e-3 * 0.8 / 3600., {8e-3}, {0}, {1}, false);
     HANDLE_RC(h->apply(serde));
     HANDLE_RC(h->exec());
   })

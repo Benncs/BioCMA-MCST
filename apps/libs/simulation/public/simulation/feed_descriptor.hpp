@@ -43,6 +43,7 @@ namespace Simulation::Feed
     double t_init;
     double t_end;
     double frequency;
+     double stored_value;
   };
 
   struct Custom
@@ -93,6 +94,15 @@ namespace Simulation::Feed
                                          double t_init,
                                          double t_end,
                                          bool set_exit = true);
+
+    static FeedDescritor pulse(double _f,
+                               feed_value_t&& _target,
+                               feed_position_t&& _position,
+                               feed_species_t _species,
+                               double t_init,
+                               double t_end,
+                               double frequency,
+                               bool set_exit = true);
   };
 
   struct SimulationFeed

@@ -296,14 +296,14 @@ namespace MC::Distributions
 
       F pl = 0.5 * Kokkos::erfc(-zl / Kokkos::numbers::sqrt2);
       KOKKOS_ASSERT(Kokkos::isfinite(pl) &&
-                    "Truncated normal draw leads is Nan of Inf with given parameters");
+                    "Truncated normal draw leads to Nan of Inf with given parameters");
       F pu = 0.5 * Kokkos::erfc(-zu / Kokkos::numbers::sqrt2);
       KOKKOS_ASSERT(Kokkos::isfinite(pu) &&
-                    "Truncated normal draw leads is Nan of Inf with given parameters");
+                    "Truncated normal draw leads to Nan of Inf with given parameters");
       F p = rand * (pu - pl) + pl;
       F x = norminv(p, mu, sigma);
       KOKKOS_ASSERT(Kokkos::isfinite(x) &&
-                    "Truncated normal draw leads is Nan of Inf with given parameters");
+                    "Truncated normal draw leads to Nan of Inf with given parameters");
       return x;
 
       // NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
