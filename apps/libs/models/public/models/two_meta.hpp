@@ -72,10 +72,14 @@ namespace Models
     MODEL_CONSTANT float nu_max_kg_s = dl_max_ms * lin_density;
 
     // MODEL_CONSTANT auto length_c_dist =
-    //     MC::Distributions::TruncatedNormal<FloatType>(l_c_m, l_c_m / 7., l_min_m, l_max_m); use in out_str_l2
+    //     MC::Distributions::TruncatedNormal<FloatType>(l_c_m, l_c_m / 7., l_min_m, l_max_m); use
+    //     in out_str_l2
 
-        MODEL_CONSTANT auto length_c_dist =
-        MC::Distributions::TruncatedNormal<FloatType>(l_c_m, l_c_m / 2., l_min_m, l_max_m);
+    MODEL_CONSTANT auto length_c_dist = MC::Distributions::TruncatedNormal<FloatType>(
+        l_c_m, l_c_m / 2., l_min_m, l_max_m); // use in out_str_l3
+
+    // MODEL_CONSTANT auto length_c_dist =
+    // MC::Distributions::TruncatedNormal<FloatType>(1.5*l_c_m, l_c_m / 7., 3*l_min_m, l_max_m);
 
     KOKKOS_INLINE_FUNCTION static void
     init(const MC::KPRNG::pool_type& random_pool, std::size_t idx, const SelfParticle& arr);
@@ -149,8 +153,7 @@ namespace Models
     constexpr auto local_lc = length_c_dist;
     constexpr auto length_dist =
         MC::Distributions::TruncatedNormal<FloatType>(l_c_m / 2, l_c_m / 5., l_min_m, l_max_m);
-    
-    
+
     constexpr auto mu_nu_dist = nu_max_kg_s * 0.1;
     constexpr auto nu_1_initial_dist = MC::Distributions::TruncatedNormal<float>(
         mu_nu_dist, mu_nu_dist / 7., 0., static_cast<double>(nu_max_kg_s));
@@ -250,9 +253,21 @@ namespace Models
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::length) = new_current_length;
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::age) = 0;
 
-
+    auto nu_1_o = GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_1);
+    auto nu_2_o = GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_2);
     auto gen = random_pool.get_state();
     GET_PROPERTY(Self::particle_var::l_cp) = local_lc.draw(gen);
+    if (nu_1_o != 0)
+    {
+      GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu1) =
+          MC::Distributions::TruncatedNormal<FloatType>::draw_from(gen, nu_1_o, nu_1_o / 2., 0, 1.);
+    }
+    if (nu_2_o != 0)
+    {
+      GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu2) =
+          MC::Distributions::TruncatedNormal<FloatType>::draw_from(gen, nu_2_o, nu_2_o / 2., 0, 1.);
+    }
+
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::l_cp) = local_lc.draw(gen);
     random_pool.free_state(gen);
 
@@ -271,7 +286,7 @@ namespace Models
     access(2, position) += weight * GET_PROPERTY(Self::particle_var::contrib_phi_ac); // NOLINT
   }
 
-  static_assert(HasExportProperties<TwoMeta>,"ee" );
+  static_assert(HasExportProperties<TwoMeta>, "ee");
 
 } // namespace Models
 
