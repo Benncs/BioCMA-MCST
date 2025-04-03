@@ -120,6 +120,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:a2193e5e54bfdf96357f01505831e1072"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a193bca8fb4700ce9ddd472c1929e5ac1" id="r_a193bca8fb4700ce9ddd472c1929e5ac1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a193bca8fb4700ce9ddd472c1929e5ac1">ParticleWeigths</a> = Kokkos::View&lt;double*, ComputeSpace&gt;</td></tr>
 <tr class="separator:a193bca8fb4700ce9ddd472c1929e5ac1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b36081df52989e572295db36fcb57fe" id="r_a2b36081df52989e572295db36fcb57fe"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b36081df52989e572295db36fcb57fe">ParticleAges</a> = Kokkos::View&lt;double*[2], Kokkos::LayoutLeft,ComputeSpace&gt;</td></tr>
+<tr class="separator:a2b36081df52989e572295db36fcb57fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc5d7547f4d75b0ed71d943cbbb836c5" id="r_abc5d7547f4d75b0ed71d943cbbb836c5"><td class="memTemplParams" colspan="2">template&lt;typename MemorySpace &gt; </td></tr>
 <tr class="memitem:abc5d7547f4d75b0ed71d943cbbb836c5"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#abc5d7547f4d75b0ed71d943cbbb836c5">ParticlePropertyViewType</a> = Kokkos::View&lt;double**, Kokkos::LayoutRight, MemorySpace&gt;</td></tr>
 <tr class="separator:abc5d7547f4d75b0ed71d943cbbb836c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,13 +152,13 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="separator:abb6088b7a69c0054394437eb3ac65f7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4abe28e303ac1f2bcdc889c01e9064b8" id="r_a4abe28e303ac1f2bcdc889c01e9064b8"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8">EventType</a> : char { <br />
-&#160;&#160;<a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8aff388cf92ac4efa80c5aac6d4c7852ae">ChangeWeight</a> = 0
-, <a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8ad647742db7fc3579a1034ec4919e4752">NewParticle</a>
+&#160;&#160;<a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8ad647742db7fc3579a1034ec4919e4752">NewParticle</a> =0
 , <a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8a6097f89e3092d4ccd249c9d479785c1f">Death</a>
 , <a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8a6bc362dbf494c61ea117fe3c71ca48a5">Move</a>
+, <a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8afef46e5063ce3dc78b8ae64fa474241d">Exit</a>
 , <br />
-&#160;&#160;<a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8afef46e5063ce3dc78b8ae64fa474241d">Exit</a>
-, <a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8a129e8109f319870e328cc7a1d5b5cae3">Overflow</a>
+&#160;&#160;<a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8a129e8109f319870e328cc7a1d5b5cae3">Overflow</a>
+, <a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8aff388cf92ac4efa80c5aac6d4c7852ae">ChangeWeight</a>
 , <a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb">__COUNT__</a>
 <br />
  }</td></tr>
@@ -273,6 +275,20 @@ template&lt;typename Space &gt; </div>
 </div><!-- fragment -->
 </div>
 </div>
+<a id="a2b36081df52989e572295db36fcb57fe" name="a2b36081df52989e572295db36fcb57fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b36081df52989e572295db36fcb57fe">&#9670;&#160;</a></span>ParticleAges</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a2b36081df52989e572295db36fcb57fe">MC::ParticleAges</a> = Kokkos::View&lt;double*[2], Kokkos::LayoutLeft,ComputeSpace&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a404d6db92035cbc2c86cbda6d98b6d8d" name="a404d6db92035cbc2c86cbda6d98b6d8d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a404d6db92035cbc2c86cbda6d98b6d8d">&#9670;&#160;</a></span>ParticlePositions</h2>
 
@@ -386,9 +402,7 @@ template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">Floa
 
 <p>Enumeration that represents events that can occurs during a Monte-Carlo cycle. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4abe28e303ac1f2bcdc889c01e9064b8aff388cf92ac4efa80c5aac6d4c7852ae" name="a4abe28e303ac1f2bcdc889c01e9064b8aff388cf92ac4efa80c5aac6d4c7852ae"></a>ChangeWeight&#160;</td><td class="fielddoc"><p>Update in weight. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4abe28e303ac1f2bcdc889c01e9064b8ad647742db7fc3579a1034ec4919e4752" name="a4abe28e303ac1f2bcdc889c01e9064b8ad647742db7fc3579a1034ec4919e4752"></a>NewParticle&#160;</td><td class="fielddoc"><p>Spawn new particle. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4abe28e303ac1f2bcdc889c01e9064b8ad647742db7fc3579a1034ec4919e4752" name="a4abe28e303ac1f2bcdc889c01e9064b8ad647742db7fc3579a1034ec4919e4752"></a>NewParticle&#160;</td><td class="fielddoc"><p>Spawn new particle. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a4abe28e303ac1f2bcdc889c01e9064b8a6097f89e3092d4ccd249c9d479785c1f" name="a4abe28e303ac1f2bcdc889c01e9064b8a6097f89e3092d4ccd249c9d479785c1f"></a>Death&#160;</td><td class="fielddoc"><p>Remove particle from list. </p>
 </td></tr>
@@ -397,6 +411,8 @@ template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">Floa
 <tr><td class="fieldname"><a id="a4abe28e303ac1f2bcdc889c01e9064b8afef46e5063ce3dc78b8ae64fa474241d" name="a4abe28e303ac1f2bcdc889c01e9064b8afef46e5063ce3dc78b8ae64fa474241d"></a>Exit&#160;</td><td class="fielddoc"><p>Remove particle from list due to move in domain. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a4abe28e303ac1f2bcdc889c01e9064b8a129e8109f319870e328cc7a1d5b5cae3" name="a4abe28e303ac1f2bcdc889c01e9064b8a129e8109f319870e328cc7a1d5b5cae3"></a>Overflow&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4abe28e303ac1f2bcdc889c01e9064b8aff388cf92ac4efa80c5aac6d4c7852ae" name="a4abe28e303ac1f2bcdc889c01e9064b8aff388cf92ac4efa80c5aac6d4c7852ae"></a>ChangeWeight&#160;</td><td class="fielddoc"><p>Update in weight. </p>
+</td></tr>
 <tr><td class="fieldname"><a id="a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb" name="a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb"></a>__COUNT__&#160;</td><td class="fielddoc"></td></tr>
 </table>
 

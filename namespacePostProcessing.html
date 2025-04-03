@@ -101,15 +101,15 @@ Functions</h2></td></tr>
 <tr class="separator:a0e06c75e06cf43e767d5e3e8afab62f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78ad4623d83b436cdd0ae9c8e1e5c7ac" id="r_a78ad4623d83b436cdd0ae9c8e1e5c7ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78ad4623d83b436cdd0ae9c8e1e5c7ac">reset_counter</a> ()</td></tr>
 <tr class="separator:a78ad4623d83b436cdd0ae9c8e1e5c7ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae12ff1585768d64069adb36d895d8905" id="r_ae12ff1585768d64069adb36d895d8905"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptHasExportPropertiesFull.html">HasExportPropertiesFull</a> Model, typename ExecutionSpace &gt; </td></tr>
-<tr class="memitem:ae12ff1585768d64069adb36d895d8905"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#ae12ff1585768d64069adb36d895d8905">inner</a> (std::size_t n_p, const <a class="el" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a> &amp;position, const typename Model::SelfParticle &amp;model, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;particle_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;spatial_values)</td></tr>
-<tr class="separator:ae12ff1585768d64069adb36d895d8905"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39e37336c0f6de5f577e50cf119160a8" id="r_a39e37336c0f6de5f577e50cf119160a8"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptHasExportPropertiesPartial.html">HasExportPropertiesPartial</a> Model, typename ExecutionSpace &gt; </td></tr>
-<tr class="memitem:a39e37336c0f6de5f577e50cf119160a8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a39e37336c0f6de5f577e50cf119160a8">inner_partial</a> (std::size_t n_p, const <a class="el" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a> &amp;position, const typename Model::SelfParticle &amp;model, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;particle_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;spatial_values)</td></tr>
-<tr class="separator:a39e37336c0f6de5f577e50cf119160a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdeec32d0ce1418085fd40ad58aa6c1e" id="r_abdeec32d0ce1418085fd40ad58aa6c1e"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </td></tr>
-<tr class="memitem:abdeec32d0ce1418085fd40ad58aa6c1e"><td class="memTemplItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#abdeec32d0ce1418085fd40ad58aa6c1e">get_properties</a> (const <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;container, const std::size_t n_compartment)</td></tr>
-<tr class="separator:abdeec32d0ce1418085fd40ad58aa6c1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b24c0cbc25e014d92006a5ebdcfeb22" id="r_a7b24c0cbc25e014d92006a5ebdcfeb22"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptHasExportPropertiesFull.html">HasExportPropertiesFull</a> Model, typename ExecutionSpace &gt; </td></tr>
+<tr class="memitem:a7b24c0cbc25e014d92006a5ebdcfeb22"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a7b24c0cbc25e014d92006a5ebdcfeb22">inner</a> (std::size_t n_p, const <a class="el" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a> &amp;position, const typename Model::SelfParticle &amp;model, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;particle_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;spatial_values, const <a class="el" href="namespaceMC.html#a2193e5e54bfdf96357f01505831e1072">MC::ParticleStatus</a> &amp;status)</td></tr>
+<tr class="separator:a7b24c0cbc25e014d92006a5ebdcfeb22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7f761591bedad44bd0af2a85bd0aad6" id="r_ae7f761591bedad44bd0af2a85bd0aad6"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptHasExportPropertiesPartial.html">HasExportPropertiesPartial</a> Model, typename ExecutionSpace &gt; </td></tr>
+<tr class="memitem:ae7f761591bedad44bd0af2a85bd0aad6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#ae7f761591bedad44bd0af2a85bd0aad6">inner_partial</a> (const std::size_t n_p, const <a class="el" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a> &amp;position, const typename Model::SelfParticle &amp;model, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;particle_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;spatial_values, const <a class="el" href="namespaceMC.html#a2193e5e54bfdf96357f01505831e1072">MC::ParticleStatus</a> &amp;status)</td></tr>
+<tr class="separator:ae7f761591bedad44bd0af2a85bd0aad6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a942419cfbff3ce0870cf761062263ddf" id="r_a942419cfbff3ce0870cf761062263ddf"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </td></tr>
+<tr class="memitem:a942419cfbff3ce0870cf761062263ddf"><td class="memTemplItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a942419cfbff3ce0870cf761062263ddf">get_properties</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;container, const std::size_t n_compartment)</td></tr>
+<tr class="separator:a942419cfbff3ce0870cf761062263ddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -148,8 +148,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="abdeec32d0ce1418085fd40ad58aa6c1e" name="abdeec32d0ce1418085fd40ad58aa6c1e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abdeec32d0ce1418085fd40ad58aa6c1e">&#9670;&#160;</a></span>get_properties()</h2>
+<a id="a942419cfbff3ce0870cf761062263ddf" name="a942419cfbff3ce0870cf761062263ddf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a942419cfbff3ce0870cf761062263ddf">&#9670;&#160;</a></span>get_properties()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -159,7 +159,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
         <tr>
           <td class="memname">std::optional&lt; <a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &gt; PostProcessing::get_properties </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>container</em></span>, </td>
+          <td class="paramtype"><a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>container</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -171,13 +171,13 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespacePostProcessing_abdeec32d0ce1418085fd40ad58aa6c1e_cgraph.svg" width="356" height="162"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="namespacePostProcessing_a942419cfbff3ce0870cf761062263ddf_cgraph.svg" width="356" height="224"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="ae12ff1585768d64069adb36d895d8905" name="ae12ff1585768d64069adb36d895d8905"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae12ff1585768d64069adb36d895d8905">&#9670;&#160;</a></span>inner()</h2>
+<a id="a7b24c0cbc25e014d92006a5ebdcfeb22" name="a7b24c0cbc25e014d92006a5ebdcfeb22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b24c0cbc25e014d92006a5ebdcfeb22">&#9670;&#160;</a></span>inner()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -207,20 +207,25 @@ template&lt;<a class="el" href="conceptHasExportPropertiesFull.html">HasExportPr
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>spatial_values</em></span>&#160;)</td>
+          <td class="paramtype">ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>spatial_values</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceMC.html#a2193e5e54bfdf96357f01505831e1072">MC::ParticleStatus</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>status</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespacePostProcessing_ae12ff1585768d64069adb36d895d8905_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="namespacePostProcessing_a7b24c0cbc25e014d92006a5ebdcfeb22_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="a39e37336c0f6de5f577e50cf119160a8" name="a39e37336c0f6de5f577e50cf119160a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39e37336c0f6de5f577e50cf119160a8">&#9670;&#160;</a></span>inner_partial()</h2>
+<a id="ae7f761591bedad44bd0af2a85bd0aad6" name="ae7f761591bedad44bd0af2a85bd0aad6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7f761591bedad44bd0af2a85bd0aad6">&#9670;&#160;</a></span>inner_partial()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -230,7 +235,7 @@ template&lt;<a class="el" href="conceptHasExportPropertiesPartial.html">HasExpor
         <tr>
           <td class="memname">void PostProcessing::inner_partial </td>
           <td>(</td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_p</em></span>, </td>
+          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_p</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -250,14 +255,19 @@ template&lt;<a class="el" href="conceptHasExportPropertiesPartial.html">HasExpor
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>spatial_values</em></span>&#160;)</td>
+          <td class="paramtype">ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>spatial_values</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceMC.html#a2193e5e54bfdf96357f01505831e1072">MC::ParticleStatus</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>status</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="namespacePostProcessing_a39e37336c0f6de5f577e50cf119160a8_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="namespacePostProcessing_ae7f761591bedad44bd0af2a85bd0aad6_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

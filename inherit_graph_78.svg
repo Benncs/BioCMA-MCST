@@ -11,7 +11,7 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classSimulation_1_1Probes.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="classSimulation_1_1Probes.html" target="_top" xlink:title="Class to store time event as bulk storage">
 <polygon fill="white" stroke="#666666" points="98.5,-29 0,-29 0,0 98.5,0 98.5,-29"/>
 <text text-anchor="start" x="8" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::Probes</text>
 <text text-anchor="middle" x="49.25" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; buffer_size &gt;</text>

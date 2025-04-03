@@ -266,14 +266,14 @@ $(function(){initNavTree('prng__extension_8hpp_source.html',''); initResizable(t
 <div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
 <div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>      F pl = 0.5 * Kokkos::erfc(-zl / Kokkos::numbers::sqrt2);</div>
 <div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>      KOKKOS_ASSERT(Kokkos::isfinite(pl) &amp;&amp;</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>                    <span class="stringliteral">&quot;Truncated normal draw leads is Nan of Inf with given parameters&quot;</span>);</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>                    <span class="stringliteral">&quot;Truncated normal draw leads to Nan of Inf with given parameters&quot;</span>);</div>
 <div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>      F pu = 0.5 * Kokkos::erfc(-zu / Kokkos::numbers::sqrt2);</div>
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>      KOKKOS_ASSERT(Kokkos::isfinite(pu) &amp;&amp;</div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>                    <span class="stringliteral">&quot;Truncated normal draw leads is Nan of Inf with given parameters&quot;</span>);</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>                    <span class="stringliteral">&quot;Truncated normal draw leads to Nan of Inf with given parameters&quot;</span>);</div>
 <div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>      F p = rand * (pu - pl) + pl;</div>
 <div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>      F x = <a class="code hl_function" href="namespaceMC_1_1Distributions.html#a3c07f6cf61b1c67ea9b2b3e0d6c42cc7">norminv</a>(p, <a class="code hl_variable" href="structMC_1_1Distributions_1_1TruncatedNormal.html#adabc71aaba01f9d9d9bc3cf1d9bd479c">mu</a>, <a class="code hl_variable" href="structMC_1_1Distributions_1_1TruncatedNormal.html#acd70a07194dab26421daf94b3dfbeecd">sigma</a>);</div>
 <div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>      KOKKOS_ASSERT(Kokkos::isfinite(x) &amp;&amp;</div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>                    <span class="stringliteral">&quot;Truncated normal draw leads is Nan of Inf with given parameters&quot;</span>);</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>                    <span class="stringliteral">&quot;Truncated normal draw leads to Nan of Inf with given parameters&quot;</span>);</div>
 <div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>      <span class="keywordflow">return</span> x;</div>
 <div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
 <div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>      <span class="comment">// NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)</span></div>

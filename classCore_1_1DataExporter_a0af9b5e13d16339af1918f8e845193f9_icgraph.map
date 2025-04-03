@@ -1,6 +1,6 @@
 <map id="Core::DataExporter::append_matrix" name="Core::DataExporter::append_matrix">
 <area shape="rect" id="Node000001" title=" " alt="" coords="925,37,1059,76"/>
-<area shape="rect" id="Node000002" href="$classCore_1_1MainExporter.html#a254d405eb56c60864f2d1614b93927e5" title="Updates fields with the current simulation state." alt="" coords="731,5,866,44"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1MainExporter.html#a0e04f097a83ddbab96df6f98cc4d15b6" title="Updates fields with the current simulation state." alt="" coords="731,5,866,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="909,46,866,38,867,33,910,40"/>
 <area shape="rect" id="Node000003" href="$classCore_1_1PartialExporter.html#a450fb0c92efa4ee81b4083fc01f5e665" title="Writes the number of particles in each compartment." alt="" coords="720,68,877,107"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="910,72,877,78,877,72,909,67"/>

@@ -79,6 +79,7 @@ $(function(){initNavTree('classSimulation_1_1SimulationUnit.html',''); initResiz
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classSimulation_1_1SimulationUnit-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Simulation::SimulationUnit Class Reference</div></div>
 </div><!--header-->
@@ -88,7 +89,7 @@ $(function(){initNavTree('classSimulation_1_1SimulationUnit.html',''); initResiz
 <div class="dynheader">
 Collaboration diagram for Simulation::SimulationUnit:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1SimulationUnit__coll__graph.svg" width="100%" height="515"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1SimulationUnit__coll__graph.svg" width="100%" height="458"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -105,8 +106,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa8a28ba8699f0b719db0558d4eca98cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a255b9ef06424a104581e8aab290e8281" id="r_a255b9ef06424a104581e8aab290e8281"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classSimulation_1_1SimulationUnit.html">SimulationUnit</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a255b9ef06424a104581e8aab290e8281">operator=</a> (const <a class="el" href="classSimulation_1_1SimulationUnit.html">SimulationUnit</a> &amp;rhs)=delete</td></tr>
 <tr class="separator:a255b9ef06424a104581e8aab290e8281"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec187751497e8d91a87a03abbbb3598a" id="r_aec187751497e8d91a87a03abbbb3598a"><td class="memItemLeft" align="right" valign="top">Kokkos::View&lt; const double **, Kokkos::LayoutLeft, ComputeSpace, Kokkos::MemoryTraits&lt; Kokkos::RandomAccess &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec187751497e8d91a87a03abbbb3598a">getkernel_concentration</a> () const</td></tr>
-<tr class="separator:aec187751497e8d91a87a03abbbb3598a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4295618336e99606be4e87b31feb848a" id="r_a4295618336e99606be4e87b31feb848a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#aec96faf8efe0d2222c4c2f19e3fee1cd">MC::KernelConcentrationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4295618336e99606be4e87b31feb848a">getkernel_concentration</a> () const</td></tr>
+<tr class="separator:a4295618336e99606be4e87b31feb848a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d0ee29e0a425f79fa8cbc620d2abb99" id="r_a3d0ee29e0a425f79fa8cbc620d2abb99"><td class="memItemLeft" align="right" valign="top">std::span&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d0ee29e0a425f79fa8cbc620d2abb99">getCliqData</a> () const</td></tr>
 <tr class="separator:a3d0ee29e0a425f79fa8cbc620d2abb99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abee4f5b8a764dc6655ee5a91fcab7080" id="r_abee4f5b8a764dc6655ee5a91fcab7080"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::span&lt; const double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abee4f5b8a764dc6655ee5a91fcab7080">getCgasData</a> () const</td></tr>
@@ -186,14 +187,14 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a505fbf5573509d5d1d5674c436fe61f1" id="r_a505fbf5573509d5d1d5674c436fe61f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#af34adaabc60487412f7551db1dc83226">MapProbes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a505fbf5573509d5d1d5674c436fe61f1">probes</a></td></tr>
+<tr class="separator:a505fbf5573509d5d1d5674c436fe61f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acee18bc13bbdffe29290a3e91a100b87" id="r_acee18bc13bbdffe29290a3e91a100b87"><td class="memItemLeft" align="right" valign="top">Kokkos::TeamPolicy&lt; ComputeSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acee18bc13bbdffe29290a3e91a100b87">_policy</a></td></tr>
 <tr class="separator:acee18bc13bbdffe29290a3e91a100b87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afaf59854247eb5f0e54ba2affec9bb26" id="r_afaf59854247eb5f0e54ba2affec9bb26"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afaf59854247eb5f0e54ba2affec9bb26">set_policy</a> = false</td></tr>
 <tr class="separator:afaf59854247eb5f0e54ba2affec9bb26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0b6cfbf2d3284d2613b73ce81b60754" id="r_ab0b6cfbf2d3284d2613b73ce81b60754"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0b6cfbf2d3284d2613b73ce81b60754">internal_counter_dead</a></td></tr>
 <tr class="separator:ab0b6cfbf2d3284d2613b73ce81b60754"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4d4c3637ffb804306b5e1cbf53f0062" id="r_ae4d4c3637ffb804306b5e1cbf53f0062"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#a7e205e1192f8faf89b55c1d6525413f8">ProbeAutogeneratedBuffer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4d4c3637ffb804306b5e1cbf53f0062">probes</a></td></tr>
-<tr class="separator:ae4d4c3637ffb804306b5e1cbf53f0062"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a7c5c496164e443222bc54de1edab70" id="r_a2a7c5c496164e443222bc54de1edab70"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a7c5c496164e443222bc54de1edab70">feed</a></td></tr>
 <tr class="separator:a2a7c5c496164e443222bc54de1edab70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab3ff3f2caf2c3c94ebbe25786bea678" id="r_aab3ff3f2caf2c3c94ebbe25786bea678"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structCmaUtils_1_1IterationState.html">CmaUtils::IterationState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab3ff3f2caf2c3c94ebbe25786bea678">state</a></td></tr>
@@ -214,6 +215,11 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a1e473c7c7f7e31551bdb26188e56830d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a687da24a9467b5a6c8a8e522ac140786" id="r_a687da24a9467b5a6c8a8e522ac140786"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSimulation_1_1KernelInline_1_1MoveInfo.html">KernelInline::MoveInfo</a>&lt; ComputeSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a687da24a9467b5a6c8a8e522ac140786">move_info</a></td></tr>
 <tr class="separator:a687da24a9467b5a6c8a8e522ac140786"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a8ae22ac06600fa39d52292ee2a27c323" id="r_a8ae22ac06600fa39d52292ee2a27c323"><td class="memItemLeft" align="right" valign="top">static constexpr uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ae22ac06600fa39d52292ee2a27c323">minimum_dead_particle_removal</a></td></tr>
+<tr class="separator:a8ae22ac06600fa39d52292ee2a27c323"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a366f1f10c6148e01e79d3f10735ea0ea" name="a366f1f10c6148e01e79d3f10735ea0ea"></a>
@@ -773,8 +779,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="aec187751497e8d91a87a03abbbb3598a" name="aec187751497e8d91a87a03abbbb3598a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec187751497e8d91a87a03abbbb3598a">&#9670;&#160;</a></span>getkernel_concentration()</h2>
+<a id="a4295618336e99606be4e87b31feb848a" name="a4295618336e99606be4e87b31feb848a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4295618336e99606be4e87b31feb848a">&#9670;&#160;</a></span>getkernel_concentration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -783,7 +789,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Kokkos::View&lt; const double **, Kokkos::LayoutLeft, ComputeSpace, Kokkos::MemoryTraits&lt; Kokkos::RandomAccess &gt; &gt; Simulation::SimulationUnit::getkernel_concentration </td>
+          <td class="memname"><a class="el" href="namespaceMC.html#aec96faf8efe0d2222c4c2f19e3fee1cd">MC::KernelConcentrationType</a> Simulation::SimulationUnit::getkernel_concentration </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -798,7 +804,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1SimulationUnit_aec187751497e8d91a87a03abbbb3598a_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classSimulation_1_1SimulationUnit_a4295618336e99606be4e87b31feb848a_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -1481,6 +1487,30 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a id="a8ae22ac06600fa39d52292ee2a27c323" name="a8ae22ac06600fa39d52292ee2a27c323"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ae22ac06600fa39d52292ee2a27c323">&#9670;&#160;</a></span>minimum_dead_particle_removal</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t Simulation::SimulationUnit::minimum_dead_particle_removal</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">        100</div>
+</div><!-- fragment -->
+</div>
+</div>
 <a id="a687da24a9467b5a6c8a8e522ac140786" name="a687da24a9467b5a6c8a8e522ac140786"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a687da24a9467b5a6c8a8e522ac140786">&#9670;&#160;</a></span>move_info</h2>
 
@@ -1525,8 +1555,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="ae4d4c3637ffb804306b5e1cbf53f0062" name="ae4d4c3637ffb804306b5e1cbf53f0062"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4d4c3637ffb804306b5e1cbf53f0062">&#9670;&#160;</a></span>probes</h2>
+<a id="a505fbf5573509d5d1d5674c436fe61f1" name="a505fbf5573509d5d1d5674c436fe61f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a505fbf5573509d5d1d5674c436fe61f1">&#9670;&#160;</a></span>probes</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1535,7 +1565,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceSimulation.html#a7e205e1192f8faf89b55c1d6525413f8">ProbeAutogeneratedBuffer</a> Simulation::SimulationUnit::probes</td>
+          <td class="memname"><a class="el" href="namespaceSimulation.html#af34adaabc60487412f7551db1dc83226">MapProbes</a> Simulation::SimulationUnit::probes</td>
         </tr>
       </table>
   </td>

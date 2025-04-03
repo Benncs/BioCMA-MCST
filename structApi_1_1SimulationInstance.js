@@ -22,6 +22,7 @@ var structApi_1_1SimulationInstance =
     [ "register_result_path", "structApi_1_1SimulationInstance.html#a19af55accb633781f80c6100a3508284", null ],
     [ "register_scalar_initiazer", "structApi_1_1SimulationInstance.html#afb6d2f04368f71955e4773dd5452f2e2", null ],
     [ "register_serde", "structApi_1_1SimulationInstance.html#a44482022a20986f2f68163a5a3baf49f", null ],
+    [ "set_feed", "structApi_1_1SimulationInstance.html#a87d0cfa936aeddd3b7a65f1e02d8dc59", null ],
     [ "set_feed_constant", "structApi_1_1SimulationInstance.html#aa760a361f0899468e5e7d24b55734eb0", null ],
     [ "set_feed_constant_from_rvalue", "structApi_1_1SimulationInstance.html#a1a8fec396e8646910f54a882b19e5b31", null ],
     [ "_data", "structApi_1_1SimulationInstance.html#a9602da52be8e78442654d6309f9d313a", null ],

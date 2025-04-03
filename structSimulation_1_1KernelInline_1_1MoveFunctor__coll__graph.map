@@ -1,7 +1,9 @@
 <map id="Simulation::KernelInline::MoveFunctor&lt; enable_leave, enable_move &gt;" name="Simulation::KernelInline::MoveFunctor&lt; enable_leave, enable_move &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="102,106,297,159"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="293,54,488,107"/>
 <area shape="rect" id="Node000002" href="$structSimulation_1_1KernelInline_1_1MoveInfo.html" title=" " alt="" coords="5,5,202,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,54,178,104,174,107,129,57"/>
-<area shape="rect" id="Node000003" href="$structMC_1_1EventContainer.html" title="Use to count events that occurs during Monte&#45;Carlo processing cycles." alt="" coords="226,12,365,37"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="277,50,225,108,221,104,273,47"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,44,293,59,292,64,217,49"/>
+<area shape="rect" id="Node000003" href="$structMC_1_1EventContainer.html" title="Use to count events that occurs during Monte&#45;Carlo processing cycles." alt="" coords="34,68,173,93"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,78,292,78,292,83,189,83"/>
+<area shape="rect" id="Node000004" href="$classSimulation_1_1Probes.html" title=" " alt="" coords="23,117,184,170"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="198,120,291,99,293,105,199,125"/>
 </map>
