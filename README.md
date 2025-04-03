@@ -36,6 +36,16 @@ The repository is organized as follows:
 
 - **CASALE Benjamin**
 
+## Citation
+If you use this software or its results in a scientific publication, please cite the following:
+
+@misc{biocmamcst,
+   author = {Benjamin Casale},
+   year = {2025},
+   url = {https://github.com/Benncs/BioCMA-MCST},
+   title = {Biological system simulation tool based on Compartment Approach and Monte-Carlo Method}
+}
+
 ### LICENSE 
 
 This tool is under [Apache License, Version 2.0](./LICENSE) *(Apache-2.0)*

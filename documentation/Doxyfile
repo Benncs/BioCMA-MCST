@@ -1,5 +1,5 @@
 PROJECT_NAME           = "BioCMAMC-ST"
-BRIEF 				   = Biological system simulation tool based on Compartment Approach and Monte-Carlo 
+BRIEF 				   = Biological system simulation tool based on Compartment Approach and Monte-Carlo Method
 OUTPUT_DIRECTORY       = ./documentation/output
 
 INPUT                  = ./apps ./documentation/pages 

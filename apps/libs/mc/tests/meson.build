@@ -2,7 +2,7 @@ test_container = executable('test_container', 'test_container.cpp',dependencies:
 test('test_container',test_container)
 
 
-if ceral_found  
+if ceral_found  and not use_cuda
 test_serde_kview = executable('test_serde_kview', 'test_serde_kview.cpp',dependencies:[mc_dependency,cereal_dependency])
 test_serde_container = executable('test_serde_container', 'test_serde_container.cpp',dependencies:[mc_dependency,cereal_dependency])
 test('test_serde_kview',test_serde_kview)
