@@ -19,6 +19,7 @@ namespace MC
   using ParticlePositions = Kokkos::View<uint64_t*, ComputeSpace>;
   using ParticleStatus = Kokkos::View<Status*, ComputeSpace>;
   using ParticleWeigths = Kokkos::View<double*, ComputeSpace>;
+  using ParticleAges = Kokkos::View<double*[2], Kokkos::LayoutLeft,ComputeSpace>;
 
   template <typename MemorySpace>
   using ParticlePropertyViewType = Kokkos::View<double**, Kokkos::LayoutRight, MemorySpace>;
