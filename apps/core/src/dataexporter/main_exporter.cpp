@@ -102,6 +102,13 @@ namespace Core
                           std::vector<unsigned long long>({1}),
                           true,
                           false});
+
+    this->prepare_matrix({base_group_name + "tallies",
+                          {1,MC::number_event_type},
+                          {n_expected_export,MC::number_event_type},
+                          std::vector<unsigned long long>({1,MC::number_event_type}),
+                          true,
+                          true});
   }
 
   void MainExporter::update_fields(double t,
@@ -109,7 +116,7 @@ namespace Core
                                    std::span<const double> liquid_volume,
                                    std::optional<std::span<const double>> concentration_gas,
                                    std::optional<std::span<const double>> volume_gas,
-                                   std::optional<std::span<const double>> mtr)
+                                   std::optional<std::span<const double>> mtr,std::optional<std::span<std::size_t>> events)
   {
     if (export_counter >= n_expected_export)
     {
@@ -129,6 +136,10 @@ namespace Core
     if (mtr.has_value())
     {
       append_matrix(base_group_name + "mtr", *mtr);
+    }
+    if (events.has_value())
+    {
+      append_matrix(base_group_name + "tallies", *events);
     }
 
     export_counter++;

@@ -1,6 +1,7 @@
 #ifndef __CORE_MAIN_EXPORTER_HPP__
 #define __CORE_MAIN_EXPORTER_HPP__
 
+#include "mc/events.hpp"
 #include "simulation/simulation.hpp"
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
@@ -86,7 +87,7 @@ namespace Core
                        std::span<const double> liquid_volume,
                        std::optional<std::span<const double>> concentration_gas,
                        std::optional<std::span<const double>> volume_gas,
-                       std::optional<std::span<const double>> mtr);
+                       std::optional<std::span<const double>> mtr,std::optional<std::span<std::size_t>> events);
 
   private:
     static const std::string
