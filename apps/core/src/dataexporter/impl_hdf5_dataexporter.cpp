@@ -114,7 +114,7 @@ namespace Core
     export_metadata_t description =
         user_description.has_value() ? *user_description : "Interesting results";
 
-    metadata["file_version"] = 5; //NOLINT
+    metadata["file_version"] = 6; //NOLINT
     metadata["creation_date"] = date_time();
     metadata["author"] = get_user_name();
     metadata["description"] = description;

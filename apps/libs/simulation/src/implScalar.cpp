@@ -97,6 +97,8 @@ namespace Simulation
   {
     if (data.size() != n_c * n_r)
     {
+      std::cout<<data.size()<<std::endl;
+      std::cout<<n_c * n_r<<std::endl;
       return false;
     }
 
