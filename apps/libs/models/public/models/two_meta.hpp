@@ -127,12 +127,12 @@ namespace Models
     //   return _names;
     // }
 
-    inline constexpr static std::vector<std::string_view> names()
+    inline static std::vector<std::string_view> names()
     {
       return {"age", "length", "nu1", "nu2", "nu_eff_1", "nu_eff_2"};
     }
 
-    inline constexpr static std::vector<std::size_t> get_number()
+    inline static std::vector<std::size_t> get_number()
     {
       return {INDEX_FROM_ENUM(particle_var::age),
               INDEX_FROM_ENUM(particle_var::length),
