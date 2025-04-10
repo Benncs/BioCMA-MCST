@@ -56,11 +56,13 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("argv"));
 
   m.def("finalize", &finalize);
-    m.def("exec", [](std::shared_ptr<Api::SimulationInstance>& handle){
-    pybind11::gil_scoped_release release; //TODO check if really usefull ?
-    handle->exec();
-    pybind11::gil_scoped_acquire acquire;
-  });
+  m.def("exec",
+        [](std::shared_ptr<Api::SimulationInstance>& handle)
+        {
+          pybind11::gil_scoped_release release; // TODO check if really usefull ?
+          handle->exec();
+          pybind11::gil_scoped_acquire acquire;
+        });
 
   m.def("apply",
         [](std::shared_ptr<Api::SimulationInstance>& handle,
@@ -105,6 +107,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       .def_readwrite("biomass_initial_concentration",
                      &wrap_c_param_t::biomass_initial_concentration)
       .def_readwrite("number_particle", &wrap_c_param_t::number_particle)
+      .def_readwrite("save_serde", &wrap_c_param_t::save_serde)
       .def("__repr__", &wrap_repr)
       // TODO Write unittest
       .def(py::pickle(
@@ -117,10 +120,11 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
                                   p.number_exported_result,
                                   p.recursive,
                                   p.biomass_initial_concentration,
-                                  p.number_particle);
+                                  p.number_particle,
+                                  p.save_serde);
           },
           [](const py::tuple& t) { // __setstate__
-            constexpr std::size_t n_attributes = 8;
+            constexpr std::size_t n_attributes = 9;
             if (t.size() != n_attributes)
             {
               throw std::runtime_error("Invalid state!");
@@ -139,6 +143,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
             p.recursive = static_cast<int>(t[5].cast<bool>());
             p.biomass_initial_concentration = t[6].cast<double>();
             p.number_particle = t[7].cast<int>();
+            p.number_particle = t[8].cast<int>();
             // NOLINTEND
             return p;
           }));

@@ -3,8 +3,8 @@
 set -e # Exit immediately if a command exits with a non-zero status
 
 current_pwd=$(pwd)
-kokkos_version=4.4.00
-folder_name="kokkos-4.4.00"
+kokkos_version=4.6.00
+folder_name="kokkos-4.6.00"
 tar_name="${folder_name}.tar.gz"
 tar_url="https://github.com/kokkos/kokkos/releases/download/$kokkos_version/kokkos-$kokkos_version.tar.gz"
 
@@ -52,16 +52,14 @@ cd kokkos_build || {
   exit 1
 }
 
-
 #-DKokkos_ARCH_TURING75=ON
 flag_cmake="-DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DCUDA_ROOT=/usr/local/cuda-12.6/ -DCMAKE_CXX_STANDARD=20 -B . -S .. -DCMAKE_BUILD_TYPE=Release"
-
 
 #flag_cmake="${flag_cmake} -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON"
 flag_cmake="${flag_cmake} -DCMAKE_CXX_COMPILER=clang++-18"
 
 # if [[ "$back_end_omp" == "1" ]]; then
-  flag_cmake="${flag_cmake} -DKokkos_ENABLE_OPENMP=ON"
+flag_cmake="${flag_cmake} -DKokkos_ENABLE_OPENMP=ON"
 # fi
 
 #if [[ "$back_end_cuda" == "1" ]]; then

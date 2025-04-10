@@ -12,6 +12,7 @@ namespace Core
     params.verbose = false;
     params.n_compartments = 0;
     params.t_per_flow_map = 0;
+    params.save_final_serde=false;
     // params.user_params = UserControlParameters::m_default();
 
     return params;
@@ -27,6 +28,7 @@ namespace Core
     params.biomass_initial_concentration = user_params.biomass_initial_concentration;
     params.final_time = user_params.final_time;
     params.results_file_name = user_params.results_file_name;
+    params.save_final_serde =user_params.save_serde;
     return params;
   }
 
@@ -41,12 +43,14 @@ namespace Core
             .number_exported_result = 0,
             .recursive = false,
             .force_override = false,
-            .serde = false,
+            .load_serde = false,
+            .save_serde=false,
             .initialiser_path = "",
-            .model_name = "model_light",
+            .model_name = "None",
             .results_file_name = "",
             .cma_case_path = "",
-            .serde_file = std::nullopt};
+            .serde_file = std::nullopt,
+            };
   }
   std::ostream& operator<<(std::ostream& stream, const UserControlParameters& params)
   {
@@ -59,7 +63,7 @@ namespace Core
            << "  Number of Exported Results: " << params.number_exported_result << "\n"
            << "  Recursive: " << (params.recursive ? "true" : "false") << "\n"
            << "  Force Override: " << (params.force_override ? "true" : "false") << "\n"
-           << "  Serde: " << (params.serde ? "true" : "false") << "\n"
+           << "  Serde: " << (params.load_serde ? "true" : "false") << "\n"
            << "  Initialiser Path: " << params.initialiser_path << "\n"
            << "  Model Name: " << params.model_name << "\n"
            << "  Results File Name: " << params.results_file_name << "\n"

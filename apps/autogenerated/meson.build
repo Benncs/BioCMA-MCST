@@ -70,7 +70,7 @@ endif
 #     ],
 # )
 
-model_list_name = ['two_meta','simple_model']
+model_list_name = ['two_meta','simple_model','two_meta_div']
 
 if not use_cuda
 model_list_name = [model_list_name,'udf_model']

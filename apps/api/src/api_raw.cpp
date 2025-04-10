@@ -144,7 +144,7 @@ int register_initializer_path(Handle handle, const char* c)
 Core::UserControlParameters convert_c_wrap_to_param(const wrap_c_param_t& params)
 {
   bool recursive = params.recursive != 0;
-  bool serde = params.serde != 0;
+  bool serde = params.load_serde != 0;
   bool force_override = params.force_override != 0;
 
   return {.biomass_initial_concentration = params.biomass_initial_concentration,
@@ -155,7 +155,7 @@ Core::UserControlParameters convert_c_wrap_to_param(const wrap_c_param_t& params
           .number_exported_result = params.number_exported_result,
           .recursive = force_override,
           .force_override = recursive,
-          .serde = serde,
+          .load_serde = serde,
           .initialiser_path = "",
           .model_name = "",
           .results_file_name = "",
@@ -175,6 +175,7 @@ Param make_params(double biomass_initial_concentration,
           number_particle,
           1,
           number_exported_result,
+          0,
           0,
           0,
           0};

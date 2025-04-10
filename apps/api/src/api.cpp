@@ -42,8 +42,8 @@ namespace
     flag = flag && params.final_time > 0;
     flag = flag && params.delta_time >= 0;
     flag = flag && !params.cma_case_path.empty();
-    flag = flag && ((params.serde && params.serde_file.has_value()) ||
-                    (!params.serde && !params.serde_file.has_value()));
+    flag = flag && ((params.load_serde && params.serde_file.has_value()) ||
+                    (!params.load_serde && !params.serde_file.has_value()));
     if (!to_load)
     {
       flag = flag && params.biomass_initial_concentration !=
@@ -287,7 +287,7 @@ namespace Api
   bool SimulationInstance::register_serde(std::string_view path)
   {
     this->params.serde_file = path;
-    this->params.serde = true;
+    this->params.load_serde = true;
     return true;
   }
 

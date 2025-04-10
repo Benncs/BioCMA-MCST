@@ -114,7 +114,7 @@ int parse_callback_ok(Core::UserControlParameters&& user_params,
   // auto sine_feed = Simulation::Feed::FeedFactory::pulse(20e-3 * 5 / 3600.,{5}, {0}, 
   // {0},0,0,2./3600.,true);
 
-  const auto serde = user_params.serde;
+  const auto load_serde = user_params.load_serde;
   INTERPRETER_INIT
   REDIRECT_SCOPE({
     HANDLE_RC(h->register_parameters(std::forward<decltype(user_params)>(user_params)));
@@ -123,7 +123,7 @@ int parse_callback_ok(Core::UserControlParameters&& user_params,
     // h->set_feed_constant_from_rvalue(0.031653119013143756, {0.}, {0}, {0},false);
     // h->set_feed_constant_from_rvalue(20e-3 * 0.8 / 3600., {5}, {0}, {0}, false);
     //   h->set_feed_constant_from_rvalue(20e-3 * 0.8 / 3600., {8e-3}, {0}, {1}, false);
-    HANDLE_RC(h->apply(serde));
+    HANDLE_RC(h->apply(load_serde));
     HANDLE_RC(h->exec());
   })
   return 0;

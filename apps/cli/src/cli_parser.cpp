@@ -122,7 +122,7 @@ static CliResults<Core::UserControlParameters> parseArg(Core::UserControlParamet
           {"serde",
            [&user_control](std::string_view value)
            {
-             user_control.serde = true;
+             user_control.load_serde = true;
              user_control.serde_file = std::string(value);
            }}};
 

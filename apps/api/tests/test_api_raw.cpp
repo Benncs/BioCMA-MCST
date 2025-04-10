@@ -88,7 +88,7 @@ void test_make_params(int argc, char** argv)
   assert(params.number_exported_result == nex);
   assert(params.recursive == 0);      // Default value
   assert(params.force_override == 0); // Default value
-  assert(params.serde == 0);          // Default value
+  assert(params.load_serde == 0);          // Default value
 }
 
 void test_register_parameters(int argc, char** argv)
