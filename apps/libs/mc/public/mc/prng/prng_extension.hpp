@@ -2,6 +2,7 @@
 #define __PRNG_EXTENSION_HPP__
 
 #include "Kokkos_Macros.hpp"
+#include "mc/alias.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_MathematicalConstants.hpp>
 #include <Kokkos_Random.hpp>
@@ -463,6 +464,8 @@ namespace MC::Distributions
              Kokkos::pow(1 - 2 * delta * delta / M_PI, 1.5);
     }
   };
+
+  static_assert(ProbabilityLaw<SkewNormal<float>, float, ComputeSpace>);
 
 } // namespace MC::Distributions
 

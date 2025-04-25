@@ -8,6 +8,7 @@ np.set_printoptions(precision=1, suppress=True)
 ds = "meta_batch_0d"
 
 
+
 def fix_zero_rows(P):
     N = P.shape[0]
     for i in range(N):

@@ -71,7 +71,7 @@ namespace PostProcessing
 
     static Kokkos::View<size_t*, HostSpace> host_index("host_index", indices.size());
 
-    for (auto i = 0; i < indices.size(); ++i)
+    for (std::size_t i = 0; i < indices.size(); ++i)
     {
       host_index(i) = indices[i];
     }

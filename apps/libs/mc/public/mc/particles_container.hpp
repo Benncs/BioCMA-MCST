@@ -42,8 +42,6 @@ namespace
       {
 
         const auto i_to_remove = i;
-        // Kokkos::printf("Removing index %d\r\n", i_to_remove);
-
         auto idx_to_move = last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
         while (status(idx_to_move) != MC::Status::Idle ||
                idx_to_move == static_cast<std::size_t>(i_to_remove))

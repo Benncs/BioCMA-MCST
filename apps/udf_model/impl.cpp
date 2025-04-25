@@ -37,8 +37,8 @@ void _init_udf(const MC::KPRNG::pool_type& random_pool,
                const Models::UdfModel::SelfParticle& arr)
 {
   constexpr auto local_lc = 3e-6;
-  // constexpr auto length_dist = MC::Distributions::TruncatedNormal<Models::UdfModel::FloatType>(
-  //     local_lc , l_c_m / 20., l_min_m, l_max_m);
+  constexpr auto length_dist_c = MC::Distributions::TruncatedNormal<Models::UdfModel::FloatType>(
+      local_lc , l_c_m / 20., l_min_m, l_max_m);
 
   constexpr auto length_dist =
       MC::Distributions::Normal<Models::UdfModel::FloatType>(local_lc, 0.1e-6);
@@ -46,7 +46,7 @@ void _init_udf(const MC::KPRNG::pool_type& random_pool,
   auto gen = random_pool.get_state();
   GET_PROPERTY(particle_var::length) = 2.5e-6; // Kokkos::max(FloatType(0), length_dist.draw(gen));
   random_pool.free_state(gen);
-  GET_PROPERTY(particle_var::l_cp) = local_lc;
+  GET_PROPERTY(particle_var::l_cp) = length_dist_c.draw(gen);
   GET_PROPERTY(particle_var::contrib_phi_s) = 0;
 };
 
@@ -64,7 +64,7 @@ MC::Status _update_udf([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
 
   auto dl = (phi_s > 1e-6) ? 1e-9 : 0;
 
-  GET_PROPERTY(particle_var::contrib_phi_s) = -2. * nu;
+  GET_PROPERTY(particle_var::contrib_phi_s) = -2. * nu*1e-5;
 
   GET_PROPERTY(particle_var::length) += static_cast<float>(d_t) * dl;
   GET_PROPERTY(particle_var::age) += d_t;

@@ -51,15 +51,14 @@
          <!-- <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path> -->
       <!-- <cma_case_path recursive="true">/home_pers/casale/Documents/code/biomc/cma_data/flowmap_14/</cma_case_path> -->
       <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
-      <final_time>1000</final_time>
-      <number_particle>12000</number_particle>
+      <final_time>10</final_time>
+      <number_particle>10000000</number_particle>
       <delta_time>1</delta_time>
-      <results_file_name>bench</results_file_name>
+      <results_file_name>debug</results_file_name>
       <number_exported_result>0</number_exported_result>
-      <model_name>model_twometa</model_name>
+      <model_name>two_meta_div</model_name>
       <!-- <initialiser_path></initialiser_path> -->
-
-       <initialiser_path>/home-local/casale/Documents/thesis/code/BioCMA-MCST/cma_data/0d_4s_init.h5</initialiser_path>
+      <initialiser_path>/home-local/casale/Documents/thesis/code/BioCMA-MCST/cma_data/0d_4s_init.h5</initialiser_path>
    </control>
 
    <control name="merge">
@@ -110,13 +109,13 @@
 
    <control name="udf">
       <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
-      <final_time>3000</final_time>
-      <number_particle>50000</number_particle>
-      <delta_time>0.01</delta_time>
-      <results_file_name>udf</results_file_name>
-      <number_exported_result>10</number_exported_result>
+      <final_time>25000</final_time>
+      <number_particle>500</number_particle>
+      <delta_time>0.5</delta_time>
+      <results_file_name>udf_lcdist</results_file_name>
+      <number_exported_result>50</number_exported_result>
       <model_name>udf_model</model_name>
-       <!-- <initialiser_path>./cma_data/0d_init.h5</initialiser_path> -->
+      <!-- <initialiser_path>./cma_data/0d_init.h5</initialiser_path> -->
    </control>
 
    <control name="prepbatch">

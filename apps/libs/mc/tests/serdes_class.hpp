@@ -69,20 +69,6 @@ struct SerdeModel
 };
 static_assert(ModelType<SerdeModel>, "Check non serde model");
 
-// // NOLINTEND
-// template <typename T> std::ostringstream wrap_ser(T& t)
-// {
-//   std::ostringstream buff(std::ios::binary);
-//   cereal::BinaryOutputArchive ar(buff);
-//   t.serialize(ar);
-//   return buff;
-// }
 
-// template <typename T, class StreamType> void wrap_de(T& t, StreamType& buff)
-// {
-//   std::istringstream iss(buff.str(), std::ios::binary);
-//   cereal::BinaryInputArchive ar(iss);
-//   t.serialize(ar);
-// }
 
 #endif
