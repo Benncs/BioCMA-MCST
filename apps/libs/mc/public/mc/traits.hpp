@@ -13,8 +13,7 @@
 #include <mc/prng/prng.hpp>
 #include <type_traits>
 
-
-
+/** @brief Utility for compile time array concatenation  */
 template <std::size_t N1, std::size_t N2>
 constexpr std::array<std::string_view, N1 + N2>
 concat_arrays(const std::array<std::string_view, N1>& arr1,
@@ -38,65 +37,89 @@ namespace MC
 
 /**
   @brief Concept to define a correct Model
+
+  Minimum model definition should validate this contract, the behaviour behind each function can
+  vary but the order and signature should be the same
  */
-template <typename T,typename ViewType>
+template <typename T, typename ViewType>
 concept CommonModelType = requires(T model,
-                                T::FloatType d_t,
-                                std::size_t idx,
-                                std::size_t idx2,
-                                double weight,
-                                const T::SelfParticle& arr,
-                                const T::SelfParticle& buffer_arr,
-                                const MC::LocalConcentration& c,
-                                std::size_t position,
-                                const MC::ContributionView& contributions,
-                                const MC::KPRNG::pool_type& random_pool) {
-  { T::n_var } -> std::convertible_to<std::size_t>;
-  typename T::FloatType;
-  typename T::SelfParticle;
-  typename T::Self;
+                                   T::FloatType d_t,
+                                   std::size_t idx,
+                                   std::size_t idx2,
+                                   double weight,
+                                   const T::SelfParticle& arr,
+                                   const T::SelfParticle& buffer_arr,
+                                   const MC::LocalConcentration& c,
+                                   std::size_t position,
+                                   const MC::ContributionView& contributions,
+                                   const MC::KPRNG::pool_type& random_pool) {
+  {
+    T::n_var
+  } -> std::convertible_to<std::size_t>; ///< A model should declare the number of internal variable
+  typename T::FloatType;    ///< Type used internally by model to declare internal floating point
+                            ///< values
+                            
+  typename T::SelfParticle; ///< Equivalent to MC::ParticlesModel<Self::n_var, Self::FloatType>
+  typename T::Self;         ///< Model typename
+
+  {
+    T::init(random_pool, idx, arr)
+  } -> std::same_as<void>; ///< Main init function applied to each MC particle at the begin of the
+                           ///< simulation
+
+  { T::mass(idx, arr) } -> std::same_as<double>; ///< Return the individual mass of particle
+
+  {
+    T::update(random_pool, d_t, idx, arr, c)
+  } -> std::convertible_to<MC::Status>; ///< Update state of MC particle
+
+  {
+    T::contribution(idx, position, weight, arr, contributions)
+  } -> std::same_as<void>; ///< Get the individual contribution for the MC particle
+
+  {
+    T::division(random_pool, idx, idx2, arr, buffer_arr)
+  } -> std::same_as<void>; ///< Perform the internal property redistribution after division
+
   requires FloatingPointType<typename T::FloatType>;
-  { T::n_var } -> std::convertible_to<std::size_t>;
-
-  { T::init(random_pool, idx, arr) } -> std::same_as<void>;
-
-  { T::mass(idx, arr) } -> std::same_as<double>;
-
-  { T::update(random_pool, d_t, idx, arr, c) } -> std::convertible_to<MC::Status>;
-
-  { T::contribution(idx, position, weight, arr, contributions) } -> std::same_as<void>;
-
-  { T::division(random_pool, idx, idx2, arr, buffer_arr) } -> std::same_as<void>;
 };
 
-
+/** @brief  SFNIAE way to declare a model with number of internal properties known at compile time
+ */
 template <typename T>
-concept DynModelType = CommonModelType<T,MC::DynParticlesModel<typename T::FloatType>>;
+concept FixedModelType = CommonModelType<T, MC::ParticlesModel<T::n_var, typename T::FloatType>>;
 
+/** @brief  SFNIAE wau to declare a model with number of internal properties not known at compile
+time Alows to properly define User Defined Model but should be avoid in other cases
+ */
 template <typename T>
-concept FixedModelType = CommonModelType<T,MC::ParticlesModel<T::n_var, typename T::FloatType>>;
+concept DynModelType = CommonModelType<T, MC::DynParticlesModel<typename T::FloatType>>;
 
-
+/** @brief  Model type
+ */
 template <typename T>
-concept ModelType = DynModelType<T> ||  FixedModelType<T>;
+concept ModelType = DynModelType<T> || FixedModelType<T>;
 
-
+/** @brief SFNIAE way to check whether model allow internal value saving or not  */
 template <std::size_t n, typename T>
 concept _HasExportProperties = requires(const T obj) {
   { T::names() } -> std::convertible_to<std::array<std::string_view, n>>;
 };
 
+/** @brief SFNIAE way to check whether model allow all value saving*/
 template <typename T>
 concept HasExportPropertiesFull = FixedModelType<T> && requires(const T obj) {
   { T::names() } -> std::convertible_to<std::array<std::string_view, T::n_var>>;
 };
 
+/** @brief SFNIAE way to check whether model allow partial value saving */
 template <typename T>
 concept HasExportPropertiesPartial = ModelType<T> && requires(const T obj) {
   { T::names() } -> std::convertible_to<std::vector<std::string_view>>;
   { T::get_number() } -> std::convertible_to<std::vector<std::size_t>>;
 };
 
+/** @brief Model that can export properties */
 template <typename T>
 concept HasExportProperties = HasExportPropertiesFull<T> || HasExportPropertiesPartial<T>;
 
@@ -110,185 +133,14 @@ struct has_uniform_weight<T, std::void_t<typename T::uniform_weight>> : std::tru
 {
 };
 
-// Concept to check if a model type has `uniform_weight`
+/** @brief Concept to check if a model type has `uniform_weight`*/
 template <typename T>
 concept ConstWeightModelType = ModelType<T> && has_uniform_weight<T>::value;
 
-struct DefaultModel
-{
-  enum class particle_var : int
-  {
-    mass = 0,
-  };
-  static constexpr std::size_t n_var = 1;
-  static constexpr std::string_view name = "simple";
-  using uniform_weight = std::true_type; // Using type alias
-  using Self = DefaultModel;
-  using FloatType = float;
-  using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
-  static constexpr bool uniform_weigth = false;
-
-  KOKKOS_INLINE_FUNCTION static void init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-                                          [[maybe_unused]] std::size_t idx,
-                                          [[maybe_unused]] const SelfParticle& arr)
-  {
-  }
-
-  KOKKOS_INLINE_FUNCTION static double mass([[maybe_unused]] std::size_t idx,
-                                            [[maybe_unused]] const SelfParticle& arr)
-  {
-    return 1.;
-  }
-
-  KOKKOS_INLINE_FUNCTION static MC::Status
-  update([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-         [[maybe_unused]] FloatType d_t,
-         [[maybe_unused]] std::size_t idx,
-         [[maybe_unused]] const SelfParticle& arr,
-         [[maybe_unused]] const MC::LocalConcentration& c)
-  {
-
-    return MC::Status::Idle;
-  }
-
-  KOKKOS_INLINE_FUNCTION static void
-  division([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-           [[maybe_unused]] std::size_t idx,
-           [[maybe_unused]] std::size_t idx2,
-           [[maybe_unused]] const SelfParticle& arr,
-           [[maybe_unused]] const SelfParticle& buffer_arr)
-  {
-  }
-
-  KOKKOS_INLINE_FUNCTION static void
-  contribution([[maybe_unused]] std::size_t idx,
-               [[maybe_unused]] std::size_t position,
-               [[maybe_unused]] double weight,
-               [[maybe_unused]] const SelfParticle& arr,
-               [[maybe_unused]] const MC::ContributionView& contributions)
-  {
-  }
-};
-
-CHECK_MODEL(DefaultModel)
+/** @brief Concept to check if a model type has `uniform_weight`*/
+template <typename T>
+concept PreInitModel = ModelType<T> && requires(T model){T::preinit();};
 
 
-struct DynamicDefaultModel
-{
-  enum class particle_var : int
-  {
-    mass = 0,
-  };
-  static constexpr std::size_t n_var = 1;
-  static constexpr std::string_view name = "simple";
-  using uniform_weight = std::true_type; // Using type alias
-  using Self = DynamicDefaultModel;
-  using FloatType = float;
-  using SelfParticle = MC::DynParticlesModel<FloatType>;
-  static constexpr bool uniform_weigth = false;
-
-  KOKKOS_INLINE_FUNCTION static void init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-                                          [[maybe_unused]] std::size_t idx,
-                                          [[maybe_unused]] const SelfParticle& arr)
-  {
-  }
-
-  KOKKOS_INLINE_FUNCTION static double mass([[maybe_unused]] std::size_t idx,
-                                            [[maybe_unused]] const SelfParticle& arr)
-  {
-    return 1.;
-  }
-
-  KOKKOS_INLINE_FUNCTION static MC::Status
-  update([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-         [[maybe_unused]] FloatType d_t,
-         [[maybe_unused]] std::size_t idx,
-         [[maybe_unused]] const SelfParticle& arr,
-         [[maybe_unused]] const MC::LocalConcentration& c)
-  {
-
-    return MC::Status::Idle;
-  }
-
-  KOKKOS_INLINE_FUNCTION static void
-  division([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-           [[maybe_unused]] std::size_t idx,
-           [[maybe_unused]] std::size_t idx2,
-           [[maybe_unused]] const SelfParticle& arr,
-           [[maybe_unused]] const SelfParticle& buffer_arr)
-  {
-  }
-
-  KOKKOS_INLINE_FUNCTION static void
-  contribution([[maybe_unused]] std::size_t idx,
-               [[maybe_unused]] std::size_t position,
-               [[maybe_unused]] double weight,
-               [[maybe_unused]] const SelfParticle& arr,
-               [[maybe_unused]] const MC::ContributionView& contributions)
-  {
-  }
-};
-
-CHECK_MODEL(DynamicDefaultModel)
-
-// namespace MC
-// {
-//   // TODO MOVE
-
-//   struct TagDetector
-//   {
-//     KOKKOS_FUNCTION void
-//     operator()(const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle,
-//                int& dead_count) const
-//     {
-//       (void)team_handle;
-//       (void)dead_count;
-//     }
-//     TagDetector() = default;
-//   };
-//   Kokkos::TeamPolicy<ComputeSpace> inline get_policy_auto(std::size_t range)
-//   {
-
-//     Kokkos::TeamPolicy<ComputeSpace> _policy;
-
-//     int recommended_team_size =
-//         _policy.team_size_recommended(TagDetector(), Kokkos::ParallelForTag());
-//     int league_size = (static_cast<int>(range) + recommended_team_size - 1) /
-//     recommended_team_size;
-
-//     _policy = Kokkos::TeamPolicy<ComputeSpace>(league_size, recommended_team_size);
-
-//     return _policy;
-//   }
-
-//   template <typename FunctorType>
-//   Kokkos::TeamPolicy<ComputeSpace>
-//   get_policy(FunctorType& f, std::size_t range, bool reduce = false)
-//   {
-
-//     // Kokkos::TeamPolicy<ComputeSpace> _policy;
-//     // int recommended_team_size = (reduce)
-//     //                                 ? _policy.team_size_recommended(f,
-//     //                                 Kokkos::ParallelReduceTag()) :
-//     //                                 _policy.team_size_recommended(f,
-//     Kokkos::ParallelForTag());
-
-//     // int league_size = (static_cast<int>(range) + recommended_team_size - 1) /
-//     // recommended_team_size;
-
-//     // return {league_size, recommended_team_size};
-
-//     Kokkos::TeamPolicy<ComputeSpace> _policy;
-
-//     int recommended_team_size =
-//         _policy.team_size_recommended(TagDetector(), Kokkos::ParallelForTag());
-//     int league_size = (static_cast<int>(range) + recommended_team_size - 1) /
-//     recommended_team_size;
-
-//     _policy = Kokkos::TeamPolicy<ComputeSpace>(league_size, recommended_team_size);
-
-//     return _policy;
-//   }
-// } // namespace MC
 
 #endif
