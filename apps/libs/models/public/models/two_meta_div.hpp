@@ -10,6 +10,9 @@
 #include <models/uptake.hpp>
 #include <string_view>
 
+
+
+
 namespace
 {
   // template <FloatingPointType F> static F consteval get_phi_s_max(F density, F dl)
@@ -124,7 +127,15 @@ namespace Models
               INDEX_FROM_ENUM(particle_var::nu_eff_1),
               INDEX_FROM_ENUM(particle_var::nu_eff_2)};
     }
+
+    KOKKOS_INLINE_FUNCTION static void preinit()
+    {
+      Kokkos::printf("Two Meta Divsion Pre init\r\n");
+      // Self::lenght_init = MC::Distributions::Normal<FloatType>(2e-6, l_c_m / 5.);
+    }
   };
+
+
 
   CHECK_MODEL(TwoMetaDiv)
 
@@ -134,15 +145,13 @@ namespace Models
                    const SelfParticle& arr)
   {
     constexpr auto local_lc = length_c_dist;
-    constexpr auto length_dist =
-        MC::Distributions::TruncatedNormal<FloatType>(l_c_m / 2, l_c_m / 5., l_min_m, l_max_m);
 
     constexpr auto mu_nu_dist = nu_max_kg_s * 0.1;
     constexpr auto nu_1_initial_dist = MC::Distributions::TruncatedNormal<float>(
         mu_nu_dist, mu_nu_dist / 7., 0., static_cast<double>(nu_max_kg_s));
-
+    auto lenght_init = MC::Distributions::Normal<FloatType>(2e-6, l_c_m / 5.);
     auto gen = random_pool.get_state();
-    GET_PROPERTY(Self::particle_var::length) = length_dist.draw(gen);
+    GET_PROPERTY(Self::particle_var::length) = Kokkos::max(0.F, lenght_init.draw(gen));
     GET_PROPERTY(Self::particle_var::l_cp) = local_lc.draw(gen);
     GET_PROPERTY(particle_var::nu1) = nu_1_initial_dist.draw(gen);
     random_pool.free_state(gen);

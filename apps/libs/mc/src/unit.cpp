@@ -96,17 +96,10 @@ namespace
 
     KOKKOS_INLINE_FUNCTION void operator()(const int i, double& local_mass) const
     {
-      // // auto particle_rng = list.rng_instance;
-      // auto p = MC::Particle<CurrentModel>(1.);
-      // p.properties.id = i;
-      // const uint64_t location = rng.uniform_u(min_c, max_c);
       particles.position(i) = rng.uniform_u(min_c, max_c);
       Model::init(rng.random_pool, i, particles.model);
-      // p.properties.current_container = location;
-      // p.init(rng);
       const double mass_i = Model::mass(i, particles.model);
       local_mass += mass_i;
-      // list.set(i, std::move(p));
     }
 
     MC::ParticlesContainer<Model> particles;
@@ -220,6 +213,11 @@ namespace MC
        * dependent on the total mass.
        */
       using CurrentModel = typename std::remove_reference<decltype(container)>::type::UsedModel;
+
+      if constexpr(PreInitModel<CurrentModel>)
+      {
+        CurrentModel::preinit();
+      }
 
       Kokkos::parallel_reduce("mc_init_first",
                               Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particles),
