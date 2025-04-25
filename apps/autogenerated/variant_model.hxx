@@ -2,6 +2,7 @@
 #define __AUTOGENRATED_VARIANT_MODEL_HPP__
 
 #include <mc/particles_container.hpp>
+#include <mc/m_default.hpp>
 #include <variant>
 
 #ifdef USE_PYTHON_MODULE

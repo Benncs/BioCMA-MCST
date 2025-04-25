@@ -57,6 +57,9 @@ build_type = get_option('buildtype')
 cpp = meson.get_compiler('cpp')
 global_install_dir = get_option('prefix') + '/' + get_option('libdir')
 includes_install_dir = ('include/' + project_name)
+build_test=get_option('build_test')
+
+
 
 use_kokkos_tools = true
 
@@ -140,7 +143,7 @@ else
   kokkos_option.add_cmake_defines({'Kokkos_ENABLE_HWLOC': 'ON'})
   kokkos_option.add_cmake_defines({'Kokkos_ARCH_NATIVE': 'ON'})
   kokkos_option.add_cmake_defines({'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'})
-  # kokkos_option.set_install(false)
+  kokkos_option.set_install(false)
   sub_kokkos = cmake.subproject('kokkos', required: true, options: kokkos_option)
 
   kokkos = declare_dependency(
@@ -177,6 +180,7 @@ if cmake.found()
   ## MAYBE USE ?? IDK
   highfive_cmake_options.add_cmake_defines({'HDF5_PREFER_PARALLEL': false})
   highfive_cmake_options.add_cmake_defines({'HDF5_IS_PARALLEL': false})
+  highfive_cmake_options.set_install(false)
   highfive_proj = cmake.subproject('highfive', options: highfive_cmake_options, required: false)
 
   if highfive_proj.found()
@@ -195,6 +199,7 @@ if cmake.found()
     cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})
     cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})
     cereal_cmake_options.add_cmake_defines({'BUILD_TESTS': false})
+    cereal_cmake_options.set_install(false)
     cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
     if cereal_proj.found() #and not use_cuda 
       ceral_found = true
@@ -211,7 +216,6 @@ if cmt.found()
   message('System cmtool')
   cma_read_name = cmt.get_variable('cma_read', default_value: 'none')
   cma_dep = dependency(cma_read_name, required: true)
-
 else
   subproject(
     'cmtool',
@@ -221,10 +225,9 @@ else
       'b_colorout=always',
       'b_coverage=false',
       'build_all=false',
-    ],
+    ]
   ) # We only need native cmtool library in order to read flowmap so, no python neither executable
-
-  cma_dep = dependency('cma_read', required: true, version: '>=1.1') # Get shared lib
+  cma_dep = dependency('cma_read', required: true, version: '>=1.1',static:true) # Get shared lib
 
 endif
 

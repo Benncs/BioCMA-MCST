@@ -30,4 +30,6 @@ mpi_wrap_dependency = declare_dependency(
 #    install_dir: includes_install_dir,
 # )
 
-subdir('./tests')
+if build_test
+subdir('tests')
+endif

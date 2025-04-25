@@ -1,6 +1,8 @@
 src_dir = './src'
 
-model_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name model_*.cpp ').stdout().splitlines()
+# model_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name model_*.cpp ').stdout().splitlines()
+
+model_sources = [f'@src_dir@/two_meta_div.cpp']
 
 public_model = include_directories('public')
 
@@ -56,10 +58,6 @@ biomodel_dependency = declare_dependency(
 endif 
 
 
-
-install_subdir(
-   'public',
-   install_dir: includes_install_dir,
-)
-
+if build_test
 subdir('tests')
+endif

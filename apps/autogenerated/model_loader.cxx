@@ -2,6 +2,7 @@
 #include <mc/mcinit.hpp>
 #include <string_view>
 #include <unordered_map> // IWYU pragma: keep
+#include <mc/m_default.hpp>
 
 /* ---------------------------------------------------------
  *                  BIOCMA_MC ST

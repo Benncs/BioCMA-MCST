@@ -83,16 +83,12 @@ py.extension_module(
   install: true,
   dependencies: [lib_api_distributed_dep, lib_api_c_dep_static, pydep, pybind11_dep],
   subdir: python_module_name,
-
 )
 
-# python_sources = files(f'@root@/modules/simple_model.py')
 python_sources = files(f'./python/__init__.py')
 py.install_sources(python_sources, subdir: python_module_name)
 
-# install_subdir(
-#   'public',
-#   install_dir: includes_install_dir,
-# )
 
-subdir('./tests')
+if build_test
+subdir('tests')
+endif
