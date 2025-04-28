@@ -54,11 +54,11 @@ jobs:
           tags: ${{ matrix.image.tag }}
           outputs: type=docker,dest=${{ matrix.image.output }}
 
-      # - name: Save Docker image as artifact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: ${{ matrix.image.name }}
-      #     path: ${{ matrix.image.output }}
+      - name: Save Docker image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.image.name }}
+          path: ${{ matrix.image.output }}
 
   build-docker-dependent-image:
     runs-on: ubuntu-latest

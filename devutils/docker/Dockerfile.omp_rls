@@ -31,7 +31,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 
-RUN pip install --no-cache-dir meson lxml --break-system-packages
+RUN pip install --no-cache-dir lxml --break-system-packages
 COPY --from=build /app/builddir/apps/cli/biocma_mcst_cli_app_shared /usr/bin/biocma_mcst_cli_app_shared
 COPY --from=build /app/builddir/apps/cli/biocma_mcst_cli_app /usr/bin/biocma_mcst_cli_app
 COPY ./tools/runner.py /usr/bin/runner.py
