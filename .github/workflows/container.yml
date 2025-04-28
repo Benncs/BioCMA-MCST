@@ -81,18 +81,30 @@ jobs:
       - name: Download Docker base image artifact
         uses: actions/download-artifact@v4
         with:
-          pattern: "!*.dockerbuild"
+          name: biocma_omp_base
+          path: /tmp
 
       - name: Load Docker base image
         run: docker load --input /tmp/biocma_omp_base.tar
 
-      - name: Build Docker dependent image
-        uses: docker/build-push-action@v4
+      # - name: Build Docker dependent image
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: .
+      #     file: ./devutils/docker/Dockerfile.omp_rls
+      #     tags: biocma_omp_rls:latest
+      #     outputs: type=docker,dest=/tmp/biocma_omp_rls.tar
+      - name: Build Docker image
+        run: docker build -t biocma_omp -f /devutils/docker/Dockerfile.omp_rls .
+
+      - name: Save Docker image
+        run: docker save biocma_omp -o /tmp/biocma_omp.tar
+
+      - name: Save Docker image as artifact
+        uses: actions/upload-artifact@v4
         with:
-          context: .
-          file: ./devutils/docker/Dockerfile.omp_rls
-          tags: biocma_omp_rls:latest
-          outputs: type=docker,dest=/tmp/biocma_omp_rls.tar
+          name: biocma_omp
+          path: /tmp/biocma_omp.tar
 
 
 
