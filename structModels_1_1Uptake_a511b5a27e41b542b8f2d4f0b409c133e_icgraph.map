@@ -1,7 +1,9 @@
 <map id="Models::Uptake::uptake_step" name="Models::Uptake::uptake_step">
-<area shape="rect" id="Node000001" title=" " alt="" coords="224,40,414,65"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="224,68,414,93"/>
 <area shape="rect" id="Node000002" href="$structModels_1_1SimpleModel.html#af7aeaedcc2c7fa2ecc72e1de31067c15" title=" " alt="" coords="17,5,164,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,42,164,36,165,31,209,36"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="250,67,163,45,165,40,251,61"/>
 <area shape="rect" id="Node000003" href="$structModels_1_1TwoMeta.html#ada93cefb060e3e11a33d6860c1097e90" title=" " alt="" coords="5,68,176,93"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="208,69,176,73,176,68,208,64"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="208,83,176,83,176,78,208,78"/>
+<area shape="rect" id="Node000004" href="$structModels_1_1TwoMetaDiv.html#a33078ae1db5734a5ae31db7fe640fcce" title=" " alt="" coords="19,117,162,156"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="251,100,163,122,162,116,250,95"/>
 </map>

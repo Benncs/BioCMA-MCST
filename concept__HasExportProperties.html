@@ -78,14 +78,21 @@ $(function(){initNavTree('concept__HasExportProperties.html',''); initResizable(
 </div><!--header-->
 <div class="contents">
 
+<p>SFNIAE way to check whether model allow internal value saving or not <br  />
+  
+<a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="mc_2public_2mc_2traits_8hpp_source.html">traits.hpp</a>&gt;</code></p>
 <h2 class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;std::<span class="keywordtype">size_t</span> n, <span class="keyword">typename</span> T&gt;</div>
 <div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="concept__HasExportProperties.html">_HasExportProperties</a> =  <span class="keyword">requires</span>(<span class="keyword">const</span> T obj) {</div>
 <div class="line">  { T::names() } -&gt; std::convertible_to&lt;std::array&lt;std::string_view, n&gt;&gt;;</div>
 <div class="line">}</div>
-<div class="ttc" id="aconcept__HasExportProperties_html"><div class="ttname"><a href="concept__HasExportProperties.html">_HasExportProperties</a></div><div class="ttdef"><b>Definition</b> traits.hpp:85</div></div>
-</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aconcept__HasExportProperties_html"><div class="ttname"><a href="concept__HasExportProperties.html">_HasExportProperties</a></div><div class="ttdoc">SFNIAE way to check whether model allow internal value saving or not</div><div class="ttdef"><b>Definition</b> traits.hpp:105</div></div>
+</div><!-- fragment --><a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>SFNIAE way to check whether model allow internal value saving or not <br  />
+ </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

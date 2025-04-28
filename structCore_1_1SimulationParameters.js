@@ -14,6 +14,7 @@ var structCore_1_1SimulationParameters =
     [ "number_exported_result", "structCore_1_1SimulationParameters.html#a2aed82be70a9f9560b2f9e95693f3e13", null ],
     [ "number_particle", "structCore_1_1SimulationParameters.html#af3019bea6a3108d33a63a9c806113c4f", null ],
     [ "results_file_name", "structCore_1_1SimulationParameters.html#a800b07b4ed1487a2cf08ac7b7d83dcfe", null ],
+    [ "save_final_serde", "structCore_1_1SimulationParameters.html#a99d226ca33273a07b776dae2bcf5e63d", null ],
     [ "t_per_flow_map", "structCore_1_1SimulationParameters.html#af7d917d58bef46be17ea84ec4cf0bff0", null ],
     [ "verbose", "structCore_1_1SimulationParameters.html#a549b82a6fde3a6ff6d488f1401d01e8d", null ]
 ];

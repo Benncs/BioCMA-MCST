@@ -103,6 +103,7 @@ var hierarchy =
     ] ],
     [ "MC::Distributions::TruncatedNormal< F >", "structMC_1_1Distributions_1_1TruncatedNormal.html", null ],
     [ "Models::TwoMeta", "structModels_1_1TwoMeta.html", null ],
+    [ "Models::TwoMetaDiv", "structModels_1_1TwoMetaDiv.html", null ],
     [ "Models::UdfModel", "structModels_1_1UdfModel.html", null ],
     [ "Core::ScalarFactory::Uniform", "structCore_1_1ScalarFactory_1_1Uniform.html", null ],
     [ "Models::Uptake< M >", "structModels_1_1Uptake.html", null ],

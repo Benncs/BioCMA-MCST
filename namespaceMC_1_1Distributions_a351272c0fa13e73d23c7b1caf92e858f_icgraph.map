@@ -1,24 +1,29 @@
 <map id="MC::Distributions::erfinv" name="MC::Distributions::erfinv">
-<area shape="rect" id="Node000001" title="Computes an approximation of the inverse error function." alt="" coords="858,104,989,142"/>
-<area shape="rect" id="Node000002" href="$namespaceMC_1_1Distributions.html#a3c07f6cf61b1c67ea9b2b3e0d6c42cc7" title="Computes the inverse CDF (probit function) of a normal distribution." alt="" coords="678,104,810,142"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="842,126,810,126,810,120,842,120"/>
-<area shape="rect" id="Node000003" href="$structMC_1_1Distributions_1_1TruncatedNormal.html#af6cfcdb1f39978352e55fc5c5f729462" title=" " alt="" coords="441,104,630,142"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="663,126,631,126,631,120,663,120"/>
+<area shape="rect" id="Node000001" title="Computes an approximation of the inverse error function." alt="" coords="858,133,989,172"/>
+<area shape="rect" id="Node000002" href="$namespaceMC_1_1Distributions.html#a3c07f6cf61b1c67ea9b2b3e0d6c42cc7" title="Computes the inverse CDF (probit function) of a normal distribution." alt="" coords="678,133,810,172"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="842,155,810,155,810,150,842,150"/>
+<area shape="rect" id="Node000003" href="$structMC_1_1Distributions_1_1TruncatedNormal.html#af6cfcdb1f39978352e55fc5c5f729462" title=" " alt="" coords="441,133,630,172"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="663,155,631,155,631,150,663,150"/>
 <area shape="rect" id="Node000004" href="$structModels_1_1TwoMeta.html#afcf107b4e7c86508762048d28608a5b9" title=" " alt="" coords="5,5,181,30"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="494,97,447,69,392,46,339,32,284,24,181,18,181,13,284,19,340,27,394,40,449,64,497,93"/>
-<area shape="rect" id="Node000005" href="$structModels_1_1Uptake.html#a81f6d63498b3036a75880ed7a5c48d6a" title=" " alt="" coords="229,55,393,79"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="440,102,363,83,364,77,441,97"/>
-<area shape="rect" id="Node000007" href="$structMC_1_1Distributions_1_1TruncatedNormal.html#a5c5cc899d8c3986ea0ae4b4789fbc533" title=" " alt="" coords="233,104,389,142"/>
-<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="425,126,389,126,389,120,425,120"/>
-<area shape="rect" id="Node000008" href="$structMC_1_1Distributions_1_1ScaledTruncatedNormal.html#ac66c440e3d39d95509ab84a43455029b" title=" " alt="" coords="231,166,391,219"/>
-<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="457,150,392,170,390,165,456,145"/>
-<area shape="rect" id="Node000009" href="$structModels_1_1Uptake.html#a031bc7c273a310a89fb4c9dce6caf315" title=" " alt="" coords="242,243,380,267"/>
-<area shape="poly" id="edge9_Node000003_Node000009" title=" " alt="" coords="504,155,454,195,394,233,367,245,365,240,392,229,451,191,501,151"/>
-<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="237,53,150,33,151,28,239,48"/>
-<area shape="rect" id="Node000006" href="$structModels_1_1SimpleModel.html#a0c6a28fd790efe9193d1a3973f7239d7" title=" " alt="" coords="20,54,166,93"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="213,73,167,74,167,69,213,67"/>
-<area shape="rect" id="Node000010" href="$structModels_1_1SimpleModel.html#a50c1e5de1921c8323b707df3c31834e5" title=" " alt="" coords="20,208,166,246"/>
-<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="227,247,166,239,167,234,227,242"/>
-<area shape="rect" id="Node000011" href="$structModels_1_1TwoMeta.html#a77088e8a2d0675d4f08e638f0018a0a9" title=" " alt="" coords="19,271,167,295"/>
-<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="228,268,168,276,167,271,227,263"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="501,124,452,85,423,67,392,52,339,36,284,26,181,18,181,13,285,20,340,31,394,47,426,62,455,81,505,120"/>
+<area shape="rect" id="Node000005" href="$structModels_1_1TwoMetaDiv.html#a067be4bba4ba59abc0f3da680e6be052" title=" " alt="" coords="21,117,165,156"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="426,151,165,142,165,136,426,146"/>
+<area shape="rect" id="Node000006" href="$structModels_1_1Uptake.html#a81f6d63498b3036a75880ed7a5c48d6a" title=" " alt="" coords="229,61,393,86"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="463,130,348,89,350,84,465,125"/>
+<area shape="rect" id="Node000008" href="$structMC_1_1Distributions_1_1TruncatedNormal.html#a5c5cc899d8c3986ea0ae4b4789fbc533" title=" " alt="" coords="233,161,389,200"/>
+<area shape="poly" id="edge9_Node000003_Node000008" title=" " alt="" coords="426,169,390,173,389,168,426,163"/>
+<area shape="rect" id="Node000009" href="$structMC_1_1Distributions_1_1ScaledTruncatedNormal.html#ac66c440e3d39d95509ab84a43455029b" title=" " alt="" coords="231,223,391,276"/>
+<area shape="poly" id="edge10_Node000003_Node000009" title=" " alt="" coords="476,181,375,225,373,220,474,176"/>
+<area shape="rect" id="Node000010" href="$structModels_1_1Uptake.html#a031bc7c273a310a89fb4c9dce6caf315" title=" " alt="" coords="242,300,380,325"/>
+<area shape="poly" id="edge11_Node000003_Node000010" title=" " alt="" coords="511,186,461,239,429,267,394,291,370,302,367,297,392,286,426,263,457,235,508,182"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="244,59,143,33,145,28,245,54"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="251,93,163,119,162,114,250,88"/>
+<area shape="rect" id="Node000007" href="$structModels_1_1SimpleModel.html#a0c6a28fd790efe9193d1a3973f7239d7" title=" " alt="" coords="20,54,166,93"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="213,76,167,76,167,71,213,71"/>
+<area shape="rect" id="Node000011" href="$structModels_1_1SimpleModel.html#a50c1e5de1921c8323b707df3c31834e5" title=" " alt="" coords="20,237,166,276"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="244,298,166,278,167,273,245,293"/>
+<area shape="rect" id="Node000012" href="$structModels_1_1TwoMeta.html#a77088e8a2d0675d4f08e638f0018a0a9" title=" " alt="" coords="19,300,167,325"/>
+<area shape="poly" id="edge13_Node000010_Node000012" title=" " alt="" coords="227,315,168,315,168,310,227,310"/>
+<area shape="rect" id="Node000013" href="$structModels_1_1TwoMetaDiv.html#a3326318642a739201c0a1362710362bb" title=" " alt="" coords="21,349,165,388"/>
+<area shape="poly" id="edge14_Node000010_Node000013" title=" " alt="" coords="246,332,166,352,164,347,244,327"/>
 </map>

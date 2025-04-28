@@ -19,5 +19,6 @@ var concepts =
     [ "HasExportPropertiesPartial", "conceptHasExportPropertiesPartial.html", null ],
     [ "IntegerType", "conceptIntegerType.html", null ],
     [ "ModelType", "conceptModelType.html", null ],
-    [ "NumberType", "conceptNumberType.html", null ]
+    [ "NumberType", "conceptNumberType.html", null ],
+    [ "PreInitModel", "conceptPreInitModel.html", null ]
 ];

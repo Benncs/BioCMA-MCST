@@ -50,6 +50,7 @@ var annotated_dup =
     [ "Models", "namespaceModels.html", [
       [ "SimpleModel", "structModels_1_1SimpleModel.html", "structModels_1_1SimpleModel" ],
       [ "TwoMeta", "structModels_1_1TwoMeta.html", "structModels_1_1TwoMeta" ],
+      [ "TwoMetaDiv", "structModels_1_1TwoMetaDiv.html", "structModels_1_1TwoMetaDiv" ],
       [ "UdfModel", "structModels_1_1UdfModel.html", "structModels_1_1UdfModel" ],
       [ "Uptake", "structModels_1_1Uptake.html", "structModels_1_1Uptake" ]
     ] ],

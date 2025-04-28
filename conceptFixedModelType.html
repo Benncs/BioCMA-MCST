@@ -78,13 +78,18 @@ $(function(){initNavTree('conceptFixedModelType.html',''); initResizable(true); 
 </div><!--header-->
 <div class="contents">
 
+<p>SFNIAE way to declare a model with number of internal properties known at compile time.  
+<a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="mc_2public_2mc_2traits_8hpp_source.html">traits.hpp</a>&gt;</code></p>
 <h2 class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptFixedModelType.html">FixedModelType</a> =  <a class="code hl_concept" href="conceptCommonModelType.html">CommonModelType&lt;T,MC::ParticlesModel&lt;T::n_var, typename T::FloatType&gt;</a>&gt;</div>
-<div class="ttc" id="aconceptCommonModelType_html"><div class="ttname"><a href="conceptCommonModelType.html">CommonModelType</a></div><div class="ttdoc">Concept to define a correct Model.</div><div class="ttdef"><b>Definition</b> traits.hpp:43</div></div>
-<div class="ttc" id="aconceptFixedModelType_html"><div class="ttname"><a href="conceptFixedModelType.html">FixedModelType</a></div><div class="ttdef"><b>Definition</b> traits.hpp:77</div></div>
-</div><!-- fragment --></div><!-- contents -->
+<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptFixedModelType.html">FixedModelType</a> =  <a class="code hl_concept" href="conceptCommonModelType.html">CommonModelType&lt;T, MC::ParticlesModel&lt;T::n_var, typename T::FloatType&gt;</a>&gt;</div>
+<div class="ttc" id="aconceptCommonModelType_html"><div class="ttname"><a href="conceptCommonModelType.html">CommonModelType</a></div><div class="ttdoc">Concept to define a correct Model.</div><div class="ttdef"><b>Definition</b> traits.hpp:45</div></div>
+<div class="ttc" id="aconceptFixedModelType_html"><div class="ttname"><a href="conceptFixedModelType.html">FixedModelType</a></div><div class="ttdoc">SFNIAE way to declare a model with number of internal properties known at compile time.</div><div class="ttdef"><b>Definition</b> traits.hpp:90</div></div>
+</div><!-- fragment --><a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>SFNIAE way to declare a model with number of internal properties known at compile time. </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -78,15 +78,20 @@ $(function(){initNavTree('conceptHasExportPropertiesFull.html',''); initResizabl
 </div><!--header-->
 <div class="contents">
 
+<p>SFNIAE way to check whether model allow all value saving.  
+<a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="mc_2public_2mc_2traits_8hpp_source.html">traits.hpp</a>&gt;</code></p>
 <h2 class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptHasExportPropertiesFull.html">HasExportPropertiesFull</a> =  <a class="code hl_concept" href="conceptFixedModelType.html">FixedModelType&lt;T&gt;</a> &amp;&amp; <span class="keyword">requires</span>(<span class="keyword">const</span> T obj) {</div>
 <div class="line">  { T::names() } -&gt; std::convertible_to&lt;std::array&lt;std::string_view, T::n_var&gt;&gt;;</div>
 <div class="line">}</div>
-<div class="ttc" id="aconceptFixedModelType_html"><div class="ttname"><a href="conceptFixedModelType.html">FixedModelType</a></div><div class="ttdef"><b>Definition</b> traits.hpp:77</div></div>
-<div class="ttc" id="aconceptHasExportPropertiesFull_html"><div class="ttname"><a href="conceptHasExportPropertiesFull.html">HasExportPropertiesFull</a></div><div class="ttdef"><b>Definition</b> traits.hpp:90</div></div>
-</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aconceptFixedModelType_html"><div class="ttname"><a href="conceptFixedModelType.html">FixedModelType</a></div><div class="ttdoc">SFNIAE way to declare a model with number of internal properties known at compile time.</div><div class="ttdef"><b>Definition</b> traits.hpp:90</div></div>
+<div class="ttc" id="aconceptHasExportPropertiesFull_html"><div class="ttname"><a href="conceptHasExportPropertiesFull.html">HasExportPropertiesFull</a></div><div class="ttdoc">SFNIAE way to check whether model allow all value saving.</div><div class="ttdef"><b>Definition</b> traits.hpp:111</div></div>
+</div><!-- fragment --><a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>SFNIAE way to check whether model allow all value saving. </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
