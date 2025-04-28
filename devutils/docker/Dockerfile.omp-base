@@ -38,3 +38,15 @@ RUN sh ./clang_config.sh $LLVM_VERSION
 RUN bash ./kokkos_config.sh $KOKKOS_VERSION --omp --clang $LLVM_VERSION
 
 RUN apt-get install -y clang-$LLVM_VERSION
+
+
+##!/bin/bash
+
+
+#cd devutils/docker
+
+#docker build -t biocma_omp_base -f Dockerfile.omp-base .
+#docker build -t biocma_cuda_base -f Dockerfile.cuda_base .
+#cd ../../
+# docker build -t biocma_omp-f Dockerfile.omp_rls .
+
