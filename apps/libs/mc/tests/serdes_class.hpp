@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <mc/traits.hpp>
+#include <optional>
 
 // NOLINTBEGIN
 struct SerdeModel
@@ -10,6 +11,7 @@ struct SerdeModel
   using uniform_weight = std::true_type; // Using type alias
   using Self = SerdeModel;
   using FloatType = float;
+  using Config = std::nullopt_t;
 
   enum class particle_var : int
   {

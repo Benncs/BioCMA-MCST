@@ -32,6 +32,7 @@ namespace Models
     using Self = Uptake;
     using FloatType = M::FloatType;
     using SelfParticle = MC::ParticlesModel<M::n_var, Self::FloatType>;
+    using Config = std::nullopt_t;
 
     MODEL_CONSTANT FloatType NPermease_init = 1;
     MODEL_CONSTANT FloatType NPermease_max = 200;

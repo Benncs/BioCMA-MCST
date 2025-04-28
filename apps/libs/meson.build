@@ -13,7 +13,8 @@ subdir('mc')
 # subdir('biomodels')
 subdir('models')
 if use_dynamic_module
-  subdir('pymodule')
+  # subdir('pymodule') 
+  #  NOT USED 
 endif
 
 subdir('simulation')

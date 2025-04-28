@@ -1,8 +1,5 @@
 import numpy as np
-# from biomc import make_initial_concentration
-
 import h5py
-import numpy as np
 from typing import Optional
 
 

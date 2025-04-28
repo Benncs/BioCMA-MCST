@@ -52,8 +52,7 @@ executable(
   f'@src_dir@/main.cpp',
   include_directories: includes,
   dependencies: [app_dependency,udf_loader],
-  
-  install: false,
+  install: true,
   install_rpath: global_install_dir,
   link_args: [flto_flag],
 )
@@ -64,7 +63,7 @@ executable(
   include_directories: includes,
   dependencies: [app_shared_dependency,udf_loader],
 
-  install: false,
+  install: true,
   install_rpath: global_install_dir,
   link_args: [flto_flag],
 )
@@ -95,7 +94,7 @@ if use_dynamic_module
     include_directories: includes,
     dependencies: [app_test_dependency_dyn,udf_loader],
     cpp_args: [use_python_define],
-    install: false,
+    install: true,
   )
 endif
 

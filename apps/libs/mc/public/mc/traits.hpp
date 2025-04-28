@@ -12,6 +12,8 @@
 #include <mc/macros.hpp>
 #include <mc/prng/prng.hpp>
 #include <type_traits>
+#include <optional> 
+
 
 /** @brief Utility for compile time array concatenation  */
 template <std::size_t N1, std::size_t N2>
@@ -35,6 +37,23 @@ namespace MC
 
 }; // namespace MC
 
+template <typename T>
+concept ConfigurableInit = requires(T model,
+                                     const MC::KPRNG::pool_type& random_pool,
+                                     std::size_t idx,
+                                     const typename T::SelfParticle& arr,
+                                     const T::Config& config) {
+  { model.init(random_pool, idx, arr, config) } -> std::same_as<void>;
+};
+
+template <typename T>
+concept NonConfigurableInit = requires(T model,
+                                        const MC::KPRNG::pool_type& random_pool,
+                                        std::size_t idx,
+                                        const typename T::SelfParticle& arr) {
+  { model.init(random_pool, idx, arr) } -> std::same_as<void>;
+};
+
 /**
   @brief Concept to define a correct Model
 
@@ -52,20 +71,28 @@ concept CommonModelType = requires(T model,
                                    const MC::LocalConcentration& c,
                                    std::size_t position,
                                    const MC::ContributionView& contributions,
-                                   const MC::KPRNG::pool_type& random_pool) {
+                                   const MC::KPRNG::pool_type& random_pool,
+                                   const T::Config& config) {
   {
     T::n_var
   } -> std::convertible_to<std::size_t>; ///< A model should declare the number of internal variable
-  typename T::FloatType;    ///< Type used internally by model to declare internal floating point
-                            ///< values
-                            
+  typename T::FloatType; ///< Type used internally by model to declare internal floating point
+                         ///< values
   typename T::SelfParticle; ///< Equivalent to MC::ParticlesModel<Self::n_var, Self::FloatType>
   typename T::Self;         ///< Model typename
+  typename T::Config;       ///< Model typename
 
-  {
-    T::init(random_pool, idx, arr)
-  } -> std::same_as<void>; ///< Main init function applied to each MC particle at the begin of the
-                           ///< simulation
+  // Check if the model is configurable
+  // requires(std::is_same_v<typename T::Config, std::nullopt_t> ? NonConfigurableInit<T>
+  //                                                             : ConfigurableInit<T>);
+
+  requires ConfigurableInit<T> || (std::is_same_v<typename T::Config, std::nullopt_t> && NonConfigurableInit<T>);
+
+
+  // {
+  //   T::init(random_pool, idx, arr, config)
+  // } -> std::same_as<void>; ///< Main init function applied to each MC particle at the begin of the
+  //                          ///< simulation
 
   { T::mass(idx, arr) } -> std::same_as<double>; ///< Return the individual mass of particle
 
@@ -84,6 +111,8 @@ concept CommonModelType = requires(T model,
   requires FloatingPointType<typename T::FloatType>;
 };
 
+
+
 /** @brief  SFNIAE way to declare a model with number of internal properties known at compile time
  */
 template <typename T>
@@ -99,6 +128,12 @@ concept DynModelType = CommonModelType<T, MC::DynParticlesModel<typename T::Floa
  */
 template <typename T>
 concept ModelType = DynModelType<T> || FixedModelType<T>;
+
+template <typename T>
+concept NonConfigurableModel = ModelType<T> && NonConfigurableInit<T>;
+
+template <typename T>
+concept ConfigurableModel = ModelType<T> && ConfigurableInit<T>;
 
 /** @brief SFNIAE way to check whether model allow internal value saving or not  */
 template <std::size_t n, typename T>
@@ -139,8 +174,6 @@ concept ConstWeightModelType = ModelType<T> && has_uniform_weight<T>::value;
 
 /** @brief Concept to check if a model type has `uniform_weight`*/
 template <typename T>
-concept PreInitModel = ModelType<T> && requires(T model){T::preinit();};
-
-
+concept PreInitModel = ModelType<T> && requires(T model) { T::preinit(); };
 
 #endif

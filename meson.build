@@ -68,7 +68,7 @@ if (use_kokkos_tools)
   cpp_args = [cpp_args, '-DENABLE_KOKKOS_PROFILING']
 endif
 
-add_project_arguments(cpp_args, language: 'cpp')
+
 
 ## Get buildtype specific options
 
@@ -121,13 +121,12 @@ if use_system_kokkos
   kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE','-Wno-unknown-pragmas']
 
   if use_cuda
-
     kokkos_compile_arg = [
       kokkos_compile_arg,
       '-extended-lambda',
       '-Wext-lambda-captures-this',
-      # '-arch=native',
     ]
+
   endif
 
   kokkos = declare_dependency(
@@ -156,7 +155,7 @@ else
       omp,
       hwloc,
       thread_dep,dl_dep
-    ],
+    ]
   )
 endif
 
@@ -203,6 +202,9 @@ if cmake.found()
     cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
     if cereal_proj.found() #and not use_cuda 
       ceral_found = true
+      if compiler.has_argument('-Wno-missing-template-arg-list-after-template-kw')
+        cpp_args=[cpp_args,'-Wno-missing-template-arg-list-after-template-kw'] #FIXME needed with clang++-19
+      endif 
       add_project_arguments('-DUSE_CEAREAL', language: 'cpp')
       cereal_dependency = cereal_proj.dependency('cereal')
     endif
@@ -230,11 +232,12 @@ else
   cma_dep = dependency('cma_read', required: true, version: '>=1.1',static:true) # Get shared lib
 
 endif
-
+add_project_arguments(cpp_args, language: 'cpp')
 subdir('apps')
 
 run_command('sh', '-c', f'ln -s @outdir@/compile_commands.json .', check: false)
 
-if get_option('compile_tools')
+
 subdir('tools')
-endif 
+
+

@@ -25,11 +25,6 @@ mpi_wrap_dependency = declare_dependency(
    link_with: mpi_wrap_lib,
 )
 
-# install_subdir(
-#    'public',
-#    install_dir: includes_install_dir,
-# )
-
 if build_test
 subdir('tests')
 endif

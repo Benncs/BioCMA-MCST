@@ -9,8 +9,8 @@ current_file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(current_file_path)
 
 
-def create_xml_parser():
-    XSD_PATH = current_directory + "/../devutils/datamodel/input_scheme.xsd"
+def create_xml_parser(xsd):
+    XSD_PATH = xsd 
     # Load XSD schema
     with open(XSD_PATH, "r") as xsd_file:
         xsd_content = xsd_file.read()
@@ -90,13 +90,18 @@ def read_xml_values(xml_path, parser, target_name):
         print(f"Invalid XML: {str(e)}")
 
 
-def format_cli(args, file="cases.xml"):
+def format_cli(args, file="cases.xml",global_install:bool=False):
     if (len(args)) == 2:
         name = args[1]
-        xml_file_path = current_directory + "/" + file
 
+          
+        xml_file_path = current_directory + "/" + file
         # Create XML parser with schema validation
-        parser = create_xml_parser()
+        xsd_path = current_directory + "/../devutils/datamodel/input_scheme.xsd"
+        if global_install:
+            xsd_path = "/opt/biomc/datamodel/input_scheme.xsd"
+            xml_file_path = "/opt/biomc/cases.xml"
+        parser = create_xml_parser(xsd_path)
 
         # Read XML and extract values
         return read_xml_values(xml_file_path, parser, name)

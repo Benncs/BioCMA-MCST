@@ -22,10 +22,13 @@ OMP_NUM_THREADS = "1"
 COMPILER_NAME = "cuda"  # "gcc"
 
 
-def get_executable(type: str, mpi: bool = True):
+def get_executable(type: str, global_install:bool = False,mpi: bool = True):
     appname = "biocma_mcst_cli_app" if mpi else "biocma_mcst_cli_app_shared"
     # return f"{ROOT}/builddir/{type}_{COMPILER_NAME}/apps/cli/{appname}"
-    return f"{ROOT}/builddir/host/apps/cli/{appname}"
+    if global_install:
+        return f"/usr/bin/{appname}"
+    else:
+        return f"{ROOT}/builddir/apps/cli/{appname}"
 
 
 def mk_parser():
@@ -85,6 +88,14 @@ def mk_parser():
         required=False,
     )
 
+    parser.add_argument(
+        "-gi",
+        dest="global_install",
+        action="store_true",
+        help="global_install",
+        required=False,
+    )
+
     return parser
 
 
@@ -94,19 +105,22 @@ def main():
     if cli_args.release_flag:
         r_type = "release"
 
-    run_cli, res_file = format_cli(["_", cli_args.casename])
+    
+    run_cli, res_file = format_cli(["_", cli_args.casename],global_install=cli_args.global_install)
+
     mpi_c = ""
     if cli_args.use_mpi and not cli_args.dry_run:
         mpi_c = MPI_COMMAND + " "
-
+        
     command = (
         mpi_c
-        + get_executable(r_type, cli_args.use_mpi)
+        + get_executable(r_type,cli_args.global_install, cli_args.use_mpi)
         + " "
         + run_cli
         + f"-nt {cli_args.n_threads} "
         + "-force 1 "
     )
+
     if cli_args.serde is True:
         command += "-serde " + "./results/prepbatch/prepbatch_serde_ "
 
@@ -117,6 +131,7 @@ def main():
         arg = command
         print(arg)
         return
+    
     exec(command, cli_args.n_threads, do_kokkos_measure=False)
 
 

@@ -1,0 +1,41 @@
+FROM biocma_cuda_base AS build
+
+WORKDIR /app
+
+COPY ./apps /app/apps
+COPY ./subprojects/dynlib.wrap /app/subprojects/dynlib.wrap
+COPY ./subprojects/cereal.wrap /app/subprojects/cereal.wrap
+COPY ./subprojects/highfive.wrap /app/subprojects/highfive.wrap
+COPY ./subprojects/cmtool.wrap /app/subprojects/cmtool.wrap
+COPY ./subprojects/cmtool /app/subprojects/cmtool
+COPY ./meson.build /app/meson.build
+COPY ./meson_options.txt /app/meson_options.txt
+COPY ./devutils/auto_generate /app/devutils/auto_generate
+COPY ./devutils/kokkos_wrap/wrap_cxx /app/wrap_cxx
+COPY ./tools /app/tools
+ENV CXX=/app/wrap_cxx
+RUN meson setup builddir --buildtype=release -Dbuild_test=false -Duse_system_kokkos=true -Duse_cuda=true -Dbuild_c_api=false -Dbuild_python_api=false
+RUN ninja -C builddir 
+
+
+FROM nvidia/cuda:12.6.0-runtime-ubuntu24.04  AS rls 
+
+RUN apt-get update && \
+    apt-get install -y \
+    python3 \
+    python3-pip \
+    libomp5 \
+    openmpi-bin \
+    libhdf5-103-1t64 \
+    libhdf5-openmpi-103-1t64 && \
+    rm -rf /var/lib/apt/lists/*
+
+
+RUN pip install --no-cache-dir meson lxml --break-system-packages
+COPY --from=build /app/builddir/apps/cli/biocma_mcst_cli_app_shared /usr/bin/biocma_mcst_cli_app_shared
+COPY --from=build /app/builddir/apps/cli/biocma_mcst_cli_app /usr/bin/biocma_mcst_cli_app
+COPY ./tools/runner.py /usr/bin/runner.py
+COPY ./devutils/datamodel /opt/biomc/datamodel
+COPY ./tools/cli_formater.py /usr/bin/cli_formater.py
+COPY ./devutils/exec.py /usr/bin/exec.py
+ENTRYPOINT ["/usr/bin/runner.py"]

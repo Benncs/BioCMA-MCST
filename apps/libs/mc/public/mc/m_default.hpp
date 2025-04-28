@@ -2,6 +2,7 @@
 #define __DEFAULT_MODEL_IMPLEMENTATION_HPP__
 
 #include <mc/traits.hpp>
+#include <optional>
 
 
 /***
@@ -21,6 +22,7 @@ struct DefaultModel
   using Self = DefaultModel;
   using FloatType = float;
   using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
+  using Config = std::nullopt_t;
   static constexpr bool uniform_weigth = false;
 
   KOKKOS_INLINE_FUNCTION static void init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
@@ -79,11 +81,12 @@ struct DynamicDefaultModel
   using Self = DynamicDefaultModel;
   using FloatType = float;
   using SelfParticle = MC::DynParticlesModel<FloatType>;
+  using Config = float;
   static constexpr bool uniform_weigth = false;
 
   KOKKOS_INLINE_FUNCTION static void init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
                                           [[maybe_unused]] std::size_t idx,
-                                          [[maybe_unused]] const SelfParticle& arr)
+                                          [[maybe_unused]] const SelfParticle& arr,[[maybe_unused]] const Config& config)
   {
   }
 

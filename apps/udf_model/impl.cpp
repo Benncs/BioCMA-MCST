@@ -9,8 +9,9 @@ using namespace Models;
 
 void __attribute__((constructor)) on_load()
 {
-  printf("UDF loaded\n"); // NOLINT
+  printf("UDF loaded\r\n"); // NOLINT
 }
+
 using FloatType = Models::UdfModel::FloatType;
 MODEL_CONSTANT FloatType l_max_m = 5e-6;   // m
 MODEL_CONSTANT FloatType l_c_m = 3e-6;     // m

@@ -15,6 +15,7 @@ namespace Models
     using Self = UdfModel;
     using FloatType = float;
     using SelfParticle = MC::DynParticlesModel<FloatType>;
+    using Config = std::nullopt_t;
 
     KOKKOS_FUNCTION static void
     init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
@@ -54,6 +55,7 @@ namespace Models
   };
   inline std::size_t UdfModel::n_var =0;//Need to be overwritte
   static_assert(ModelType<UdfModel>, "Check Pimpl");
+   static_assert(NonConfigurableModel<UdfModel>, "Check Pimpl");
   static_assert(HasExportProperties<UdfModel>, "Check Pimpl");
 } // namespace Models
 

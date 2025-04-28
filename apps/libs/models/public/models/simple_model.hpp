@@ -6,6 +6,7 @@
 #include <mc/prng/prng_extension.hpp>
 #include <mc/traits.hpp>
 #include <models/uptake.hpp>
+#include <optional>
 #include <string_view>
 
 namespace Models
@@ -20,6 +21,7 @@ namespace Models
     using uniform_weight = std::true_type; // Using type alias
     using Self = SimpleModel;
     using FloatType = float;
+    using Config = std::nullopt_t;
 
     enum class particle_var : int
     {

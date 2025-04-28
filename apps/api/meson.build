@@ -36,7 +36,15 @@ lib_api_distributed_dep = declare_dependency(
   dependencies: [core_distributed_dependency_static],
 )
 
+build_python = get_option('build_python_api')
+build_c_api = get_option('build_c_api')
+if build_python
+build_c_api = true # python API depends on C API 
+endif 
+
 # C API
+
+if build_c_api
 
 lib_api_c = both_libraries(
   f'@name@_c',
@@ -70,6 +78,11 @@ lib_api_c_shared_dep = declare_dependency(
 )
 
 # Python 
+# Depends on C API 
+
+if build_python
+
+
 py = import('python').find_installation(pure: false)
 pybind11_dep = dependency('pybind11', required: true)
 pydep = py.dependency(embed: true)
@@ -87,7 +100,9 @@ py.extension_module(
 
 python_sources = files(f'./python/__init__.py')
 py.install_sources(python_sources, subdir: python_module_name)
+endif 
 
+endif 
 
 if build_test
 subdir('tests')
