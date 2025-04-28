@@ -95,7 +95,7 @@ jobs:
       #     tags: biocma_omp_rls:latest
       #     outputs: type=docker,dest=/tmp/biocma_omp_rls.tar
       - name: Build Docker image
-        run: docker build -t biocma_omp -f /devutils/docker/Dockerfile.omp_rls .
+        run: docker build -t biocma_omp -f ./devutils/docker/Dockerfile.omp_rls .
 
       - name: Save Docker image
         run: docker save biocma_omp -o /tmp/biocma_omp.tar
