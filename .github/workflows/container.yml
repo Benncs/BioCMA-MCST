@@ -74,6 +74,7 @@ jobs:
         run: |
           git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
           git submodule update --init --recursive
+          git clone https://gitlab.com/codes_tim/compartment-modelling-tool.git subprojects/cmtool
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
