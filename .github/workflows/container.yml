@@ -78,7 +78,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Dow#!/bin/bash
+      - name: Download Docker base image artifact
+        uses: actions/download-artifact@v4
+        with:
+          pattern: "!*.dockerbuild"
+
+      - name: Load Docker base image
+        run: docker load --input /tmp/biocma_omp_base.tar
+
+      - name: Build Docker dependent image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./devutils/docker/Dockerfile.omp_rls
+          tags: biocma_omp_rls:latest
+          outputs: type=docker,dest=/tmp/biocma_omp_rls.tar
 
 
 
