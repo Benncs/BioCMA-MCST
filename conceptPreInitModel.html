@@ -84,9 +84,9 @@ $(function(){initNavTree('conceptPreInitModel.html',''); initResizable(true); })
 <p><code>#include &lt;<a class="el" href="mc_2public_2mc_2traits_8hpp_source.html">traits.hpp</a>&gt;</code></p>
 <h2 class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptPreInitModel.html">PreInitModel</a> =  <a class="code hl_concept" href="conceptModelType.html">ModelType&lt;T&gt;</a> &amp;&amp; <span class="keyword">requires</span>(T model){T::preinit();}</div>
-<div class="ttc" id="aconceptModelType_html"><div class="ttname"><a href="conceptModelType.html">ModelType</a></div><div class="ttdoc">Model type.</div><div class="ttdef"><b>Definition</b> traits.hpp:101</div></div>
-<div class="ttc" id="aconceptPreInitModel_html"><div class="ttname"><a href="conceptPreInitModel.html">PreInitModel</a></div><div class="ttdoc">Concept to check if a model type has uniform_weight</div><div class="ttdef"><b>Definition</b> traits.hpp:142</div></div>
+<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptPreInitModel.html">PreInitModel</a> =  <a class="code hl_concept" href="conceptModelType.html">ModelType&lt;T&gt;</a> &amp;&amp; <span class="keyword">requires</span>(T model) { T::preinit(); }</div>
+<div class="ttc" id="aconceptModelType_html"><div class="ttname"><a href="conceptModelType.html">ModelType</a></div><div class="ttdoc">Model type.</div><div class="ttdef"><b>Definition</b> traits.hpp:130</div></div>
+<div class="ttc" id="aconceptPreInitModel_html"><div class="ttname"><a href="conceptPreInitModel.html">PreInitModel</a></div><div class="ttdoc">Concept to check if a model type has uniform_weight</div><div class="ttdef"><b>Definition</b> traits.hpp:177</div></div>
 </div><!-- fragment --><a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Concept to check if a model type has <code>uniform_weight</code> </p>
 </div></div><!-- contents -->

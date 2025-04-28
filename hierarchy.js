@@ -98,6 +98,7 @@ var hierarchy =
     [ "Simulation::Feed::Step", "structSimulation_1_1Feed_1_1Step.html", null ],
     [ "Success", "structSuccess.html", null ],
     [ "TagDetector", "structTagDetector.html", null ],
+    [ "Models::TwoMetaDiv::TMDConfig", "structModels_1_1TwoMetaDiv_1_1TMDConfig.html", null ],
     [ "std::true_type", null, [
       [ "has_uniform_weight< T, std::void_t< typename T::uniform_weight > >", "structhas__uniform__weight_3_01T_00_01std_1_1void__t_3_01typename_01T_1_1uniform__weight_01_4_01_4.html", null ]
     ] ],

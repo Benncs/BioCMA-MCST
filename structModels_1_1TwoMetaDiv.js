@@ -1,5 +1,7 @@
 var structModels_1_1TwoMetaDiv =
 [
+    [ "TMDConfig", "structModels_1_1TwoMetaDiv_1_1TMDConfig.html", "structModels_1_1TwoMetaDiv_1_1TMDConfig" ],
+    [ "Config", "structModels_1_1TwoMetaDiv.html#a4c3dcdfcbab5c6dc7689d0f9cfc44924", null ],
     [ "FloatType", "structModels_1_1TwoMetaDiv.html#a8925610f0a1a181a36ca5e9146fdc106", null ],
     [ "Self", "structModels_1_1TwoMetaDiv.html#a649ceaced70bcc15993786f2209b6b75", null ],
     [ "SelfParticle", "structModels_1_1TwoMetaDiv.html#a3c7abd525c9d2f525e27eaeca8f9127d", null ],
@@ -20,7 +22,7 @@ var structModels_1_1TwoMetaDiv =
     [ "contribution", "structModels_1_1TwoMetaDiv.html#a5da90430d6de0e030e148c15668f09be", null ],
     [ "division", "structModels_1_1TwoMetaDiv.html#a067be4bba4ba59abc0f3da680e6be052", null ],
     [ "get_number", "structModels_1_1TwoMetaDiv.html#a4e4bd08d1cc807ac59ba1eb490c1cdf9", null ],
-    [ "init", "structModels_1_1TwoMetaDiv.html#a3326318642a739201c0a1362710362bb", null ],
+    [ "init", "structModels_1_1TwoMetaDiv.html#aef2ce0e5a12a18c6a1d076f0414a4263", null ],
     [ "mass", "structModels_1_1TwoMetaDiv.html#ae1c05016bce50cd44482487e832ef6f2", null ],
     [ "names", "structModels_1_1TwoMetaDiv.html#a0946d3e5ca61171ec3ecbc64cc126c48", null ],
     [ "preinit", "structModels_1_1TwoMetaDiv.html#ac8979e9ffb589b64deecdd6091843e97", null ],

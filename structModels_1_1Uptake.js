@@ -1,5 +1,6 @@
 var structModels_1_1Uptake =
 [
+    [ "Config", "structModels_1_1Uptake.html#a85e52e029d561599d448997a6d3433b3", null ],
     [ "FloatType", "structModels_1_1Uptake.html#ab59a394c03b40b7b0674d1e1be0ecc0f", null ],
     [ "Self", "structModels_1_1Uptake.html#aa13f4469db0e2e67d233304289374950", null ],
     [ "SelfParticle", "structModels_1_1Uptake.html#a7ee9e7e3a339a8098de6ea548824bc22", null ],
