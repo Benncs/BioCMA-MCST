@@ -25,12 +25,6 @@ jobs:
             dockerfile: ./devutils/docker/Dockerfile.omp-base
             tag: biocma_omp_base:latest
             output: /tmp/biocma_omp_base.tar
-
-          # - name: biocma_cuda_base
-          #   context: ./devutils/docker
-          #   dockerfile: ./devutils/docker/Dockerfile.cuda-base
-          #   tag: biocma_cuda_base:latest
-          #   output: /tmp/biocma_cuda_base.tar
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -88,13 +82,6 @@ jobs:
       - name: Load Docker base image
         run: docker load --input /tmp/biocma_omp_base.tar
 
-      # - name: Build Docker dependent image
-      #   uses: docker/build-push-action@v4
-      #   with:
-      #     context: .
-      #     file: ./devutils/docker/Dockerfile.omp_rls
-      #     tags: biocma_omp_rls:latest
-      #     outputs: type=docker,dest=/tmp/biocma_omp_rls.tar
       - name: Build Docker image
         run: docker build -t biocma_omp -f ./devutils/docker/Dockerfile.omp_rls .
 

@@ -38,4 +38,4 @@ COPY ./tools/runner.py /usr/bin/runner.py
 COPY ./devutils/datamodel /opt/biomc/datamodel
 COPY ./tools/cli_formater.py /usr/bin/cli_formater.py
 COPY ./devutils/exec.py /usr/bin/exec.py
-# ENTRYPOINT ["/usr/bin/runner.py"]
+ENTRYPOINT ["/usr/bin/runner.py"]
