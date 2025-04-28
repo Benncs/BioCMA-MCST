@@ -15,90 +15,22 @@ permissions:
   packages: write
 
 jobs:
-  # build-docker-base-images:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       image:
-  #         - name: biocma_omp_base
-  #           context: ./devutils/docker
-  #           dockerfile: ./devutils/docker/Dockerfile.omp-base
-  #           tag: biocma_omp_base:latest
-  #           output: /tmp/biocma_omp_base.tar
-
-  #         # - name: biocma_cuda_base
-  #         #   context: ./devutils/docker
-  #         #   dockerfile: ./devutils/docker/Dockerfile.cuda-base
-  #         #   tag: biocma_cuda_base:latest
-  #         #   output: /tmp/biocma_cuda_base.tar
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #       with:
-  #         token: '${{ secrets.PAT_TOKEN }}'
-  #         submodules: recursive
-
-  #     - name: Clone GitLab submodule
-  #       run: |
-  #         git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
-  #         git submodule update --init --recursive
-
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v2
-
-  #     - name: Build Docker image (${{ matrix.image.name }})
-  #       uses: docker/build-push-action@v4
-  #       with:
-  #         context: ${{ matrix.image.context }}
-  #         file: ${{ matrix.image.dockerfile }}
-  #         tags: ${{ matrix.image.tag }}
-  #         outputs: type=docker,dest=${{ matrix.image.output }}
-
-  #     - name: Save Docker image as artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: ${{ matrix.image.name }}
-  #         path: ${{ matrix.image.output }}
-
-  # build-docker-dependent-image:
-  #   runs-on: ubuntu-latest
-  #   needs: build-docker-base-images
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #       with:
-  #         token: '${{ secrets.PAT_TOKEN }}'
-  #         submodules: recursive
-
-  #     - name: Clone GitLab submodule
-  #       run: |
-  #         git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
-  #         git submodule update --init --recursive
-
-  #     - name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v2
-
-  #     - name: Download Docker base image artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: biocma_omp_base
-  #         path: /tmp
-
-  #     - name: Load Docker base image
-  #       run: docker load --input /tmp/biocma_omp_base.tar
-
-  #     - name: Build Docker dependent image
-  #       uses: docker/build-push-action@v4
-  #       with:
-  #         context: .
-  #         file: ./devutils/docker/Dockerfile.omp_rls
-  #         tags: biocma_omp_rls:latest
-  #         outputs: type=docker,dest=/tmp/biocma_omp_rls.tar
-
-
   build-docker-base-images:
     runs-on: ubuntu-latest
-   
+    strategy:
+      matrix:
+        image:
+          - name: biocma_omp_base
+            context: ./devutils/docker
+            dockerfile: ./devutils/docker/Dockerfile.omp-base
+            tag: biocma_omp_base:latest
+            output: /tmp/biocma_omp_base.tar
+
+          # - name: biocma_cuda_base
+          #   context: ./devutils/docker
+          #   dockerfile: ./devutils/docker/Dockerfile.cuda-base
+          #   tag: biocma_cuda_base:latest
+          #   output: /tmp/biocma_cuda_base.tar
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -114,39 +46,40 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker image biocma_omp_base
+      - name: Build Docker image (${{ matrix.image.name }})
         uses: docker/build-push-action@v4
         with:
-          context: ./devutils/docker
-          file: ./devutils/docker/Dockerfile.omp-base
-          tags: biocma_omp_base:latest
-          outputs: type=docker,dest=/tmp/biocma_omp_base.tar
+          context: ${{ matrix.image.context }}
+          file: ${{ matrix.image.dockerfile }}
+          tags: ${{ matrix.image.tag }}
+          outputs: type=docker,dest=${{ matrix.image.output }}
 
-      - name: Load Docker base image
-        run: docker load --input /tmp/biocma_omp_base.tar
-
-      - name: Build Docker image biocma_omp_rls
-        uses: docker/build-push-action@v4
-        with:
-          context: ./devutils/docker
-          file: ./devutils/docker/Dockerfile.omp_rls
-          tags: biocma_omp_rls:latest
-          outputs: type=docker,dest=/tmp/biocma_omp_rls.tar
-
-      - name: Save Docker image biocma_omp_base as artifact
+      - name: Save Docker image as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: biocma_omp_base
-          path: /tmp/biocma_omp_base.tar
+          name: ${{ matrix.image.name }}
+          path: ${{ matrix.image.output }}
 
-      - name: Save Docker image biocma_omp_rls as artifact
-        uses: actions/upload-artifact@v4
+  build-docker-dependent-image:
+    runs-on: ubuntu-latest
+    needs: build-docker-base-images
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          name: biocma_omp_rls
-          path: /tmp/biocma_omp_rls.tar
+          token: '${{ secrets.PAT_TOKEN }}'
+          submodules: recursive
 
-      # - name: Save Docker dependent image as artifact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: biocma_omp_rls
-      #     path: /tmp/biocma_omp_rls.tar
+      - name: Clone GitLab submodule
+        run: |
+          git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
+          git submodule update --init --recursive
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Dow#!/bin/bash
+
+
+
+
