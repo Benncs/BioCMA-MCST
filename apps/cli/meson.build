@@ -71,31 +71,31 @@ executable(
 # Conditional dynamic module build
 if use_dynamic_module
   # dep_dynamic_module = [app_dependency, py_dynamic_module]
-  name = name + '_dyn'
+  # name = name + '_dyn'
 
-  lib_app_dyn = static_library(
-    name,
-    lib_sources,
-    include_directories: includes,
-    dependencies: dep_dynamic_module,
-    cpp_args: [use_python_define],
-  )
+  # lib_app_dyn = static_library(
+  #   name,
+  #   lib_sources,
+  #   include_directories: includes,
+  #   dependencies: dep_dynamic_module,
+  #   cpp_args: [use_python_define],
+  # )
 
-  app_test_dependency_dyn = declare_dependency(
-    include_directories: includes,
-    link_with: lib_app_dyn,
-    dependencies: dep_dynamic_module,
-    compile_args: [use_python_define],
-  )
+  # app_test_dependency_dyn = declare_dependency(
+  #   include_directories: includes,
+  #   link_with: lib_app_dyn,
+  #   dependencies: dep_dynamic_module,
+  #   compile_args: [use_python_define],
+  # )
 
-  executable(
-    name,
-    f'@src_dir@/main.cpp',
-    include_directories: includes,
-    dependencies: [app_test_dependency_dyn,udf_loader],
-    cpp_args: [use_python_define],
-    install: true,
-  )
+  # executable(
+  #   name,
+  #   f'@src_dir@/main.cpp',
+  #   include_directories: includes,
+  #   dependencies: [app_test_dependency_dyn,udf_loader],
+  #   cpp_args: [use_python_define],
+  #   install: true,
+  # )
 endif
 
 if build_test

@@ -48,31 +48,7 @@ if use_cuda
 arg_udf=''
 endif
 
-
-# custom target to generate template_model_loader.cpp and model_list.hpp
-# generated_model_selection = custom_target(
-#     'generated_model_selection.[ch]',
-#     output: [
-#         'wrap_init_model_selector.cpp',
-#         'wrap_init_model_selector.hpp',
-#         'variant_model.hpp',
-#     ],
-#     input: f'@root@/devutils/auto_generate/generate_model_loader.py',
-#     command: [
-#         prog_python,
-#         '@INPUT@',
-#         f'@root@/apps/libs/biomodels',
-#         template_model_loader,
-#         '@OUTPUT0@',
-#         template_model_loader_header,
-#         '@OUTPUT1@',
-#         variant_model,
-#         '@OUTPUT2@',
-#         arg_includ_py,arg_udf
-#     ],
-# )
-
-model_list_name = ['two_meta','simple_model','two_meta_div','tracer_model']
+model_list_name = ['two_meta','simple_model','two_meta_div']
 
 if not use_cuda
 model_list_name = [model_list_name,'udf_model']

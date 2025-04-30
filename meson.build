@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.8.0',
+  version: '0.8.5',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
@@ -115,7 +115,7 @@ if use_system_kokkos
     method: 'cmake',
     required: true,
     components: ['kokkos'],
-    modules: ['Kokkos::kokkos'],
+    modules: ['Kokkos::kokkos']
   )
 
   kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE','-Wno-unknown-pragmas']
