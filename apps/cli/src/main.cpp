@@ -75,11 +75,11 @@ std::shared_ptr<DynamicLibrary> wrap_non_scoped_udf(std::string_view path, bool 
 static bool override_result_path(const Core::UserControlParameters& params, const ExecInfo& exec);
 static int parse_callback_ok(Core::UserControlParameters&& user_params,
                              std::optional<std::unique_ptr<Api::SimulationInstance>>& handle);
-
+static void log_start_up();
 int main(int argc, char** argv)
 {
 
-  std::cout<<_BIOMC_BUILD_MODE<<std::endl;
+  log_start_up();
 
   auto handle = Api::SimulationInstance::init(argc, argv);
 
@@ -122,7 +122,7 @@ int parse_callback_ok(Core::UserControlParameters&& user_params,
     HANDLE_RC(h->register_parameters(std::forward<decltype(user_params)>(user_params)));
 
 
-    h->set_feed_constant_from_rvalue(20e-3 * 0.5 / 3600., {300e-3}, {0}, {1}, true);
+    // h->set_feed_constant_from_rvalue(20e-3 * 0.5 / 3600., {300e-3}, {0}, {1}, true);
 
 
     // h->set_feed(sine_feed);
@@ -163,3 +163,11 @@ bool override_result_path(const Core::UserControlParameters& params, const ExecI
 //   // h->set_feed_constant_from_rvalue(0.001 / 3600., {0.3}, {0}, {1}, true);
 //   // h->set_feed_constant_from_rvalue(20e-3*0.9/3600., {10}, {0}, {0}, false);
 //   // h->set_feed_constant_from_rvalue(100*0.01 / 3600., {0.3}, {0}, {1}, true);
+static void log_start_up()
+{
+  std::cout<<"--------"<<std::endl;
+  std::cout<<"Bio-CMA-MC Simulation tool\r\n";
+  std::cout<<"\tV"<<_BIOMC_VERSION_MAJOR<<"."<<_BIOMC_VERSION_MINOR<<"."<<_BIOMC_VERSION_DEV<<"\r\n";
+  std::cout<<"\tMode "<<_BIOMC_BUILD_MODE<<"\r\n";
+  std::cout<<"--------"<<std::endl;
+}
