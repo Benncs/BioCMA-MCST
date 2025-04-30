@@ -24,6 +24,8 @@ conf_data = configuration_data(
     },
 )
 
+conf_data.set_quoted(  '_BIOMC_BUILD_MODE', build_type)
+
 configure_file(
     input: 'biocma_cst_config.hpp.in',
     output: 'biocma_cst_config.hpp',
@@ -70,7 +72,7 @@ endif
 #     ],
 # )
 
-model_list_name = ['two_meta','simple_model','two_meta_div']
+model_list_name = ['two_meta','simple_model','two_meta_div','tracer_model']
 
 if not use_cuda
 model_list_name = [model_list_name,'udf_model']

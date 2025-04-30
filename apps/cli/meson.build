@@ -70,7 +70,7 @@ executable(
 
 # Conditional dynamic module build
 if use_dynamic_module
-  dep_dynamic_module = [app_dependency, py_dynamic_module]
+  # dep_dynamic_module = [app_dependency, py_dynamic_module]
   name = name + '_dyn'
 
   lib_app_dyn = static_library(

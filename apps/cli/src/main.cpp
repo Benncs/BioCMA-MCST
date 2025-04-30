@@ -79,6 +79,8 @@ static int parse_callback_ok(Core::UserControlParameters&& user_params,
 int main(int argc, char** argv)
 {
 
+  std::cout<<_BIOMC_BUILD_MODE<<std::endl;
+
   auto handle = Api::SimulationInstance::init(argc, argv);
 
   if (!handle)
@@ -118,9 +120,13 @@ int parse_callback_ok(Core::UserControlParameters&& user_params,
   INTERPRETER_INIT
   REDIRECT_SCOPE({
     HANDLE_RC(h->register_parameters(std::forward<decltype(user_params)>(user_params)));
+
+
     h->set_feed_constant_from_rvalue(20e-3 * 0.5 / 3600., {300e-3}, {0}, {1}, true);
+
+
     // h->set_feed(sine_feed);
-    // h->set_feed_constant_from_rvalue(0.031653119013143756, {0.}, {0}, {0},false);
+    // h->set_feed_constant_from_rvalue(0.5/3600*20e-3, {0.}, {0}, {0},false);
     // h->set_feed_constant_from_rvalue(20e-3 * 0.8 / 3600., {5}, {0}, {0}, false);
     //   h->set_feed_constant_from_rvalue(20e-3 * 0.8 / 3600., {8e-3}, {0}, {1}, false);
     HANDLE_RC(h->apply(load_serde));
