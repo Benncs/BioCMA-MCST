@@ -117,7 +117,7 @@ namespace Simulation::Feed
     if (value.size() != position.size())
     {
       std::cout << value.size() << " " << position.size() << std::endl;
-      throw std::invalid_argument("Bad feed size");
+      throw std::invalid_argument("Feed descriptor: Number of position should be the same as value");
     }
   }
 

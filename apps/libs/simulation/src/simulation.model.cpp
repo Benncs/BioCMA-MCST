@@ -59,6 +59,7 @@ namespace Simulation
     PROFILE_SECTION("host:reduceContribs")
     const auto [nr, nc] = getDimensions();
     this->liquid_scalar->set_zero_contribs();
+
     for (int i = 0; i < static_cast<int>(n_rank); ++i)
     {
       this->liquid_scalar->reduce_contribs({&data[i * nr * nc], nr * nc});

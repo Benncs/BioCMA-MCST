@@ -266,6 +266,7 @@ namespace Core
                                   bool compress)
   {
     CHECK_PIMPL
+    //Caution to Eigen layout 
     auto data = Eigen::Map<Eigen::MatrixXd>(
         const_cast<double*>(values.data()), EIGEN_INDEX(n_row), EIGEN_INDEX(n_col));
     HighFive::DataSetCreateProps ds_props;

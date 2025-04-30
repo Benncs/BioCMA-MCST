@@ -59,10 +59,11 @@ namespace Simulation
     if (is_two_phase_flow)
     {
       const auto type = MassTransfer::Type::Flowmap{};
+      // const auto type = MassTransfer::Type::FixedKla{{0,0.5,0,0}};
 
       this->mt_model = MassTransfer::MassTransferModel(type, liquid_scalar, gas_scalar);
-      //      this->mt_model = MassTransfer::MassTransferModel(
-      //    MassTransfer::MTRType::FixedKla, liquid_scalar, gas_scalar);
+
+      
     }
   }
   void SimulationUnit::update(CmaUtils::IterationState&& newstate)

@@ -108,39 +108,32 @@ namespace Models
       return GET_PROPERTY(Self::particle_var::length) * lin_density;
     }
 
-    // inline constexpr static std::array<std::string_view, n_var> names()
-    // {
-    //   constexpr std::size_t ln_var = n_var - Uptake<Self>::n_var;
-    //   constexpr auto _names = concat_arrays<Uptake<Self>::n_var, ln_var>(Uptake<Self>::names(),
-    //                                                                      {
-    //                                                                          "age",
-    //                                                                          "length",
-    //                                                                          "nu1",
-    //                                                                          "nu2",
-    //                                                                          "l_cp",
-    //                                                                          "nu_eff_1",
-    //                                                                          "nu_eff_2",
-    //                                                                          "contrib_phi_s",
-    //                                                                          "contrib_phi_o2",
-    //                                                                          "contrib_phi_ac",
-    //                                                                      });
-
-    //   return _names;
-    // }
-
-    inline static std::vector<std::string_view> names()
+    static std::vector<std::string_view> names()
     {
-      return {"age", "length", "nu1", "nu2", "nu_eff_1", "nu_eff_2"};
+      return {"age",
+              "length",
+              "nu1",
+              "nu2",
+              "nu_eff_1",
+              "nu_eff_2",
+              "a_perm",
+              "a_pts",
+              "phi_o2",
+              "phi_g"};
     }
 
-    inline static std::vector<std::size_t> get_number()
+    static std::vector<std::size_t> get_number()
     {
       return {INDEX_FROM_ENUM(particle_var::age),
               INDEX_FROM_ENUM(particle_var::length),
               INDEX_FROM_ENUM(particle_var::nu1),
               INDEX_FROM_ENUM(particle_var::nu2),
               INDEX_FROM_ENUM(particle_var::nu_eff_1),
-              INDEX_FROM_ENUM(particle_var::nu_eff_2)};
+              INDEX_FROM_ENUM(particle_var::nu_eff_2),
+              INDEX_FROM_ENUM(Uptakeparticle_var::a_permease),
+              INDEX_FROM_ENUM(Uptakeparticle_var::a_pts),
+              INDEX_FROM_ENUM(particle_var::contrib_phi_o2),
+              INDEX_FROM_ENUM(particle_var::contrib_phi_s)};
     }
   };
 

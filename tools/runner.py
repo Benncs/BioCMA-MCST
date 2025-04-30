@@ -16,7 +16,7 @@ __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
 DEFAULT_TYPE = "debug"
 _MPI_ROOT_FLAG = ""  # "--allow-run-as-root"
-MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} --mca orte_base_help_aggregate 1 -np 6 --report-bindings --bind-to core --map-by slot:PE=1"
+MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} --mca orte_base_help_aggregate 1 -np 1 --report-bindings --bind-to core --map-by slot:PE=6"
 # MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 8 --use-hwthread-cpus"
 OMP_NUM_THREADS = "1"
 COMPILER_NAME = "cuda"  # "gcc"
@@ -28,7 +28,7 @@ def get_executable(type: str, global_install:bool = False,mpi: bool = True):
     if global_install:
         return f"/usr/bin/{appname}"
     else:
-        return f"{ROOT}/builddir/apps/cli/{appname}"
+        return f"{ROOT}/builddir/gpu/apps/cli/{appname}"
 
 
 def mk_parser():

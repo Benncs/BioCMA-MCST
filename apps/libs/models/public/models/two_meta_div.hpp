@@ -25,6 +25,21 @@ namespace Models
 
   struct TwoMetaDiv
   {
+    struct Yields
+    {
+
+      static constexpr double Y_EG = 12.05;      // mol_E/mol_G
+      static constexpr double Y_XG = 1.15;       // mol_X/mol_G
+      static constexpr double m = 250;           // µmol_G/g_X.h
+      static constexpr double Y_OG = 6.;         // mol_O/mol_G
+      static constexpr double Yo_EG = 20.;       // mol_E/mol_G
+      static constexpr double Yf_EG = 3.;        // mol_E/mol_G
+      static constexpr double Y_AG = 1.5;        // mol_A/mol_G (modified for CO2 production)
+      static constexpr double Y_EA = 12.05 / 3.; // mol_E/mol_A
+      static constexpr double Y_XA = 0.4;        // mol_X/mol_A
+      static constexpr double Y_OA = 2.;         // mol_O/mol_A
+      static constexpr double Yo_EA = 4.67;      // mol_E/mol_A
+    };
 
     using uniform_weight = std::true_type; // Using type alias
     using Self = TwoMetaDiv;
@@ -47,9 +62,8 @@ namespace Models
     };
 
     static constexpr std::size_t n_var = INDEX_FROM_ENUM(particle_var::COUNT);
-    static constexpr std::string_view name = "simple";
+    static constexpr std::string_view name = "two_meta_div";
     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
-
     MODEL_CONSTANT FloatType l_max_m = 5e-6;   // m
     MODEL_CONSTANT FloatType l_c_m = 3e-6;     // m
     MODEL_CONSTANT FloatType d_m = 0.6e-6;     // m
@@ -57,16 +71,18 @@ namespace Models
     MODEL_CONSTANT FloatType lin_density = c_linear_density(static_cast<FloatType>(1000), d_m);
     MODEL_CONSTANT FloatType MolarMassG = Models::MolarMass::GramPerMole::glucose<float>;
     MODEL_CONSTANT FloatType MolarMassO2 = Models::MolarMass::GramPerMole::dioxygen<float>; // g/mol
-
-    MODEL_CONSTANT FloatType y_sx_1 = 1. / 2.217737e+00; // Mode 1 S to X yield (mass)
-    MODEL_CONSTANT FloatType y_sx_2 = y_sx_1 / 3.;       // Mode 2 S to X yield (mass)
-    MODEL_CONSTANT FloatType y_sa = 0.8;                 // S to A yield (mass)
-    MODEL_CONSTANT FloatType y_os_molar = 3;             // 3 mol o2 per mol for glucose
-    MODEL_CONSTANT FloatType k_o = 0.0001; // g/L: Anane et. al 2017 (Biochem. Eng. J) (g/g)
+    MODEL_CONSTANT FloatType y_sx_1 = Models::MolarMass::X / Models::MolarMass::glucose *
+                                      (Yields::Y_XG * Yields::Yo_EG) /
+                                      (Yields::Y_EG + Yields::Yo_EG); // Mode 1 S to X yield (mass)
+    MODEL_CONSTANT FloatType y_sx_2 =
+        Yields::Y_XG * Yields::Yf_EG / (Yields::Y_EG + Yields::Yf_EG); // Mode 2 S to X yield (mass)
+    MODEL_CONSTANT FloatType y_sa = Yields::Y_AG * Models::MolarMass::GramPerMole::acetate<float> /
+                                    MolarMassG; // S to A yield (mass)
+    MODEL_CONSTANT FloatType y_os_molar = 6;    // 6 mol o2 per mol for glucose
+    MODEL_CONSTANT FloatType k_o = 0.0001;      // g/L: Anane et. al 2017 (Biochem. Eng. J) (g/g)
     MODEL_CONSTANT FloatType dl_max_ms = 8 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
     MODEL_CONSTANT FloatType tau_1 = 1000.;         // s
     MODEL_CONSTANT FloatType tau_2 = 1000.;         // s
-
     MODEL_CONSTANT FloatType phi_s_max = (dl_max_ms * lin_density) * y_sx_1;
     MODEL_CONSTANT FloatType phi_perm_max = phi_s_max / 40.; // kgS/
     MODEL_CONSTANT FloatType phi_o2_max =
@@ -75,14 +91,13 @@ namespace Models
 
     struct TMDConfig
     {
-      // MC::Distributions::TruncatedNormal<TwoMetaDiv::FloatType> lc;
       FloatType mu = l_c_m;         // Mean
-      FloatType sigma = l_c_m / 7.; // Standard deviation
+      FloatType sigma = l_c_m / 2.; // Standard deviation
       FloatType lower = l_min_m;    // Standard deviation
       FloatType upper = l_max_m;    // Standard deviation
     };
-    using Config = TMDConfig;
 
+    using Config = TMDConfig;
     MODEL_CONSTANT auto length_c_dist =
         MC::Distributions::TruncatedNormal<FloatType>(l_c_m, l_c_m / 7., l_min_m, l_max_m);
     // div1,div2
@@ -124,19 +139,21 @@ namespace Models
       return GET_PROPERTY(Self::particle_var::length) * lin_density;
     }
 
-    inline static std::vector<std::string_view> names()
+    static std::vector<std::string_view> names()
     {
-      return {"age", "length", "nu1", "nu2", "nu_eff_1", "nu_eff_2"};
+      return {"age", "length", "nu1", "nu2", "nu_eff_1", "nu_eff_2", "a_perm", "a_pts"};
     }
 
-    inline static std::vector<std::size_t> get_number()
+    static std::vector<std::size_t> get_number()
     {
       return {INDEX_FROM_ENUM(particle_var::age),
               INDEX_FROM_ENUM(particle_var::length),
               INDEX_FROM_ENUM(particle_var::nu1),
               INDEX_FROM_ENUM(particle_var::nu2),
               INDEX_FROM_ENUM(particle_var::nu_eff_1),
-              INDEX_FROM_ENUM(particle_var::nu_eff_2)};
+              INDEX_FROM_ENUM(particle_var::nu_eff_2),
+              INDEX_FROM_ENUM(Uptakeparticle_var::a_permease),
+              INDEX_FROM_ENUM(Uptakeparticle_var::a_pts)};
     }
 
     KOKKOS_INLINE_FUNCTION static void preinit()
@@ -154,15 +171,16 @@ namespace Models
                    const SelfParticle& arr,
                    const Config& config)
   {
-    auto lc = MC::Distributions::TruncatedNormal<FloatType>(
-        config.mu, config.sigma, config.lower, config.upper);
+    auto lc = l_c_m; // MC::Distributions::TruncatedNormal<FloatType>(
+    //     config.mu, config.sigma, config.lower, config.upper);
+
     constexpr auto mu_nu_dist = nu_max_kg_s * 0.1;
     constexpr auto nu_1_initial_dist = MC::Distributions::TruncatedNormal<float>(
         mu_nu_dist, mu_nu_dist / 7., 0., static_cast<double>(nu_max_kg_s));
     auto lenght_init = MC::Distributions::Normal<FloatType>(2e-6, l_c_m / 5.);
     auto gen = random_pool.get_state();
     GET_PROPERTY(Self::particle_var::length) = Kokkos::max(0.F, lenght_init.draw(gen));
-    GET_PROPERTY(Self::particle_var::l_cp) = lc.draw(gen);
+    GET_PROPERTY(Self::particle_var::l_cp) = lc;//lc.draw(gen);
     GET_PROPERTY(particle_var::nu1) = nu_1_initial_dist.draw(gen);
     random_pool.free_state(gen);
     GET_PROPERTY(particle_var::contrib_phi_s) = 0;
@@ -175,7 +193,10 @@ namespace Models
                                                        const SelfParticle& arr,
                                                        const MC::LocalConcentration& concentrations)
   {
+
+
     (void)random_pool;
+
     const auto phi_s =
         Uptake<Self>::uptake_step(phi_s_max, phi_perm_max, d_t, idx, arr, concentrations);
 
@@ -211,6 +232,7 @@ namespace Models
 
     // CONTRIBS
     GET_PROPERTY(Self::particle_var::contrib_phi_s) = -phi_s;
+
     GET_PROPERTY(Self::particle_var::contrib_phi_o2) =
         -1 * ((1. / y_sx_1 / MolarMassG * y_os_molar * MolarMassO2 *
                GET_PROPERTY(Self::particle_var::nu_eff_1)) +
@@ -218,7 +240,7 @@ namespace Models
 
     GET_PROPERTY(Self::particle_var::contrib_phi_ac) =
         GET_PROPERTY(Self::particle_var::nu_eff_2) / y_sx_2 * y_sa +
-        (s_overflow > 0. ? y_sa * (s_overflow) : 0);
+        ((s_overflow > 0.) ? y_sa * (s_overflow) : 0);
 
     // ODE
     GET_PROPERTY(Self::particle_var::nu1) +=
@@ -258,7 +280,7 @@ namespace Models
     auto nu_1_o = GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_1);
     auto nu_2_o = GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_2);
     auto gen = random_pool.get_state();
-    GET_PROPERTY(Self::particle_var::l_cp) = local_lc.draw(gen);
+    
     if (nu_1_o != 0)
     {
       GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu1) =
@@ -269,8 +291,8 @@ namespace Models
       GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu2) =
           MC::Distributions::TruncatedNormal<FloatType>::draw_from(gen, nu_2_o, nu_2_o / 2., 0, 1.);
     }
-
-    GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::l_cp) = local_lc.draw(gen);
+    GET_PROPERTY(Self::particle_var::l_cp) = l_c_m;//local_lc.draw(gen);
+    GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::l_cp) = l_c_m;//local_lc.draw(gen);
     random_pool.free_state(gen);
 
     Uptake<Self>::division(random_pool, idx, idx2, arr, child_buffer_arr);
