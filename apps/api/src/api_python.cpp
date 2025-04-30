@@ -127,7 +127,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
             constexpr std::size_t n_attributes = 9;
             if (t.size() != n_attributes)
             {
-              throw std::runtime_error("Invalid state!");
+              throw std::runtime_error("Pickle param invalid state, different number of attributes");
             }
 
             /* Create a new C++ instance */
