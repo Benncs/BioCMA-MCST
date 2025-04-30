@@ -86,8 +86,8 @@ var NAVTREEINDEX =
 "structApi_1_1SimulationInstance.html#a44482022a20986f2f68163a5a3baf49f",
 "structExecInfo.html#a31b8d8deddf0bd3a73cd01a18767cd7d",
 "structModels_1_1TwoMeta.html#aae48a7a781ab5199b2ae6ab4fe0ebf54",
-"structOpaquePointer.html#aca8558d4a2b7aab20b1b68eb4d96a269",
-"structSimulation_1_1Specie.html"
+"structModels_1_1Uptake.html#aa07643d12e66755941c002c1131ed71b",
+"structSimulation_1_1Phase.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

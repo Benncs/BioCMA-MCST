@@ -1,6 +1,7 @@
 var structModels_1_1TwoMetaDiv =
 [
     [ "TMDConfig", "structModels_1_1TwoMetaDiv_1_1TMDConfig.html", "structModels_1_1TwoMetaDiv_1_1TMDConfig" ],
+    [ "Yields", "structModels_1_1TwoMetaDiv_1_1Yields.html", "structModels_1_1TwoMetaDiv_1_1Yields" ],
     [ "Config", "structModels_1_1TwoMetaDiv.html#a4c3dcdfcbab5c6dc7689d0f9cfc44924", null ],
     [ "FloatType", "structModels_1_1TwoMetaDiv.html#a8925610f0a1a181a36ca5e9146fdc106", null ],
     [ "Self", "structModels_1_1TwoMetaDiv.html#a649ceaced70bcc15993786f2209b6b75", null ],
