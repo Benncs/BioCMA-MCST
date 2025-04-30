@@ -23,7 +23,6 @@ namespace Simulation
 
     const int n_row = EIGEN_INDEX(n_r);
     const int n_col = EIGEN_INDEX(n_c);
-
     m_volumes = Eigen::DiagonalMatrix<double, -1>(n_col);
     this->m_volumes.diagonal() =
         Eigen::Map<const Eigen::VectorXd>(volumes.data(), static_cast<int>(volumes.size()));
@@ -61,7 +60,8 @@ namespace Simulation
   void ScalarSimulation::reduce_contribs(std::span<const double> data)
   {
     assert(data.size() == (n_c * n_r));
-    sources.eigen_data.noalias() += Eigen::Map<Eigen::MatrixXd>(
+    using eigen_type = decltype(sources)::EigenMatrix; 
+    sources.eigen_data.noalias() += Eigen::Map<eigen_type>(
         const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
   }
 
@@ -83,7 +83,7 @@ namespace Simulation
 
   void ScalarSimulation::performStep(double d_t, const FlowMatrixType& m_transition)
   {
-    PROFILE_SECTION("performStep_gl")
+    PROFILE_SECTION("performStep_l")
 #define c concentrations.eigen_data
 
     total_mass = total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data);
@@ -99,8 +99,8 @@ namespace Simulation
     {
       return false;
     }
-
-    Eigen::Map<const Eigen::MatrixXd> temp_map(data.data(), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
+    using eigen_type = decltype(this->concentrations)::EigenMatrix;
+    Eigen::Map<const eigen_type> temp_map(data.data(), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
     this->concentrations.eigen_data = temp_map; // Performs deep copy
     return true;
   }
