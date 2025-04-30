@@ -14,6 +14,10 @@
 
 namespace
 {
+
+  using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
+  using TeamMember = TeamPolicy::member_type;
+
   template <ModelType M> struct FillGapFunctor
   {
 
@@ -69,8 +73,7 @@ namespace
     std::size_t to_remove;
     std::size_t last_used_index;
   };
-  using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
-  using TeamMember = TeamPolicy::member_type;
+
   template <ModelType M> struct InsertFunctor
   {
     InsertFunctor(std::size_t _original_size,
@@ -266,11 +269,6 @@ namespace MC
     __allocate__(original_size + n_add_item);
     // Merge position EZ
 
-    // Kokkos::parallel_for(
-    //     "InsertMerge",
-    //     Kokkos::RangePolicy<>(0, n_add_item),
-    //     InsertFunctor<Model>(original_size, model, position, buffer_model, buffer_position));
-
     auto get_policy_insert = [=]()
     {
       if constexpr (std::is_same_v<Kokkos::DefaultHostExecutionSpace,
@@ -292,8 +290,10 @@ namespace MC
     buffer_index() = 0;
     n_used_elements += n_add_item;
     __allocate_buffer__();
-  }
 
+  } 
+
+  //TODO Merge reduce duplicate __allocate__ and __shrink__
   template <ModelType Model>
   void ParticlesContainer<Model>::__allocate__(const std::size_t new_size)
   {

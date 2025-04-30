@@ -26,7 +26,8 @@
 // TODO Clean
 static constexpr size_t trigger_const_particle_number = 1e6;
 #define KERNEL_MOVE_ARGS_LIST                                                                      \
-  d_t, container.position, container.status, n_particle, move_info, local_rng.random_pool, events,probes[ProbeType::LeavingTime]
+  d_t, container.position, container.status, n_particle, move_info, local_rng.random_pool, events, \
+      probes[ProbeType::LeavingTime],container.ages
 
 #define LAUNCH_KERNEL_MOVE(b_move, b_leave)                                                        \
   Kokkos::parallel_reduce(                                                                         \
@@ -178,6 +179,10 @@ namespace Simulation
     PROFILE_SECTION("cycleProcess")
     using CurrentModel = typename std::remove_reference<decltype(container)>::type::UsedModel;
     const size_t n_particle = container.n_particles();
+    if(n_particle==0)
+    {
+      return;
+    }
 
     auto local_rng = mc_unit->rng;
     auto events = mc_unit->events;
@@ -192,11 +197,9 @@ namespace Simulation
     std::size_t out_total = 0;
     std::size_t dead_total = 0;
     std::size_t _waiting_allocation_particle = 0;
-
-    auto f = Simulation::KernelInline::CycleFunctor<CurrentModel>(
+    auto reaction_functor = Simulation::KernelInline::CycleFunctor<CurrentModel>(
         d_t, container, local_rng.random_pool, getkernel_concentration(), contribs_scatter, events);
-
-    _policy = MC::get_policy(f, n_particle, true);
+    _policy = MC::get_policy(reaction_functor, n_particle, true);
 
     bool enable_move = move_info.liquid_volume.size() > 1;
     bool enable_leave = move_info.leaving_flow.size() != 0;
@@ -218,12 +221,17 @@ namespace Simulation
     }
 
     Kokkos::fence("fence_mc_cycle_process_move");
-    Kokkos::parallel_reduce("cycle_model", _policy, f, _waiting_allocation_particle, dead_total);
-    Kokkos::fence("fence_mc_cycle_process_model");
+    bool f_reaction = true; //FIXME 
+    if (f_reaction)
+    {
 
-    container.counter += out_total;
-    container.counter += dead_total;
-    Kokkos::Experimental::contribute(contribs, contribs_scatter);
+      Kokkos::parallel_reduce(
+          "cycle_model", _policy, reaction_functor, _waiting_allocation_particle, dead_total);
+      Kokkos::fence("fence_mc_cycle_process_model");
+      container.counter += out_total;
+      container.counter += dead_total;
+      Kokkos::Experimental::contribute(contribs, contribs_scatter);
+    }
 
     const auto threshold =
         std::max(minimum_dead_particle_removal,
