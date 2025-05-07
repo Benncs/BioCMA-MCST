@@ -81,7 +81,23 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
         { return handle->get_exec_info().n_rank; });
 
   m.def("register_result_path", &register_result_path);
-  m.def("register_cma_path", &register_cma_path);
+
+
+  m.def("register_cma_path",
+        [](std::shared_ptr<Api::SimulationInstance>& handle,
+           const std::string& cma_path,
+           bool recursive)
+        {
+          if (recursive)
+          {
+            return register_cma_path_recursive(handle.get(), cma_path.data());
+          }
+          else
+          {
+            return register_cma_path(handle.get(), cma_path.data());
+          }
+        },py::arg("handle"),py::arg("cma_path"),py::arg("recursive")=false);
+
   m.def("register_serde", &register_serde);
   m.def("register_parameters", &register_parameters);
   m.def("register_model_name", &register_model_name);
@@ -127,7 +143,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
             constexpr std::size_t n_attributes = 9;
             if (t.size() != n_attributes)
             {
-              throw std::runtime_error("Pickle param invalid state, different number of attributes");
+              throw std::runtime_error(
+                  "Pickle param invalid state, different number of attributes");
             }
 
             /* Create a new C++ instance */

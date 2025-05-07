@@ -94,7 +94,6 @@ int register_cma_path_recursive(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
-
     return (handle->register_cma_path(c, true)) ? 0 : -1;
   }
   return -1;
