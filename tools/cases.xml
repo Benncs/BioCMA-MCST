@@ -35,19 +35,29 @@
 
    <control name="sanofi">
       <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path>
-      <final_time>100</final_time>
+      <final_time>1000</final_time>
       <!-- <final_time>36</final_time> -->
-      <number_particle>50000</number_particle>
-      <delta_time>0.01</delta_time>
-      <results_file_name>test_sanofi</results_file_name>
+      <number_particle>1</number_particle>
+      <delta_time>0</delta_time>
+      <results_file_name>mixing</results_file_name>
       <number_exported_result>10</number_exported_result>
-      <model_name>model_eta2</model_name>
+      <model_name>None</model_name>
       <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>
    </control>
 
+   <control name="debug_docker">
+	   <cma_case_path>/opt/biomc/cma_data/0d_gas/</cma_case_path>
+      <final_time>150</final_time>
+      <number_particle>1000</number_particle>
+      <delta_time>0.1</delta_time>
+      <results_file_name>debug_docker</results_file_name>
+      <number_exported_result>20</number_exported_result>
+      <model_name>two_meta_div</model_name>
+   </control>
+
    <control name="debug">
-	   <!-- <cma_case_path>./cma_data/0d_mono/</cma_case_path> -->
-      <cma_case_path>/app/cma_data/0d_gas/</cma_case_path>
+	   <cma_case_path>./cma_data/0d_gas/</cma_case_path>
+      <!-- <cma_case_path>/app/cma_data/0d_gas/</cma_case_path> -->
          <!-- <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path> -->
       <!-- <cma_case_path recursive="true">/home_pers/casale/Documents/code/biomc/cma_data/flowmap_14/</cma_case_path> -->
       <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
@@ -99,9 +109,9 @@
       <!-- <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path>
        -->
       <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
-      <final_time>9600</final_time>
+      <final_time>15000</final_time>
       <number_particle>100000</number_particle>
-      <delta_time>0.1</delta_time>
+      <delta_time>0.01</delta_time>
       <results_file_name>rtd_sanofi</results_file_name>
       <number_exported_result>100</number_exported_result>
       <model_name>niente</model_name>
@@ -122,12 +132,12 @@
    <control name="udf">
       <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
       <final_time>25000</final_time>
-      <number_particle>500</number_particle>
+      <number_particle>50000</number_particle>
       <delta_time>0.5</delta_time>
-      <results_file_name>udf_lcdist</results_file_name>
+      <results_file_name>udf_lc_dist</results_file_name>
       <number_exported_result>50</number_exported_result>
       <model_name>udf_model</model_name>
-      <!-- <initialiser_path>./cma_data/0d_init.h5</initialiser_path> -->
+      <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
    </control>
 
    <control name="prepbatch">

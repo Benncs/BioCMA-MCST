@@ -43,7 +43,7 @@ namespace
   const Core::ScalarFactory::ScalarVariant DefaultIntialiser = Core::ScalarFactory::Uniform({1.});
 
   const Core::ScalarFactory::ScalarVariant DefaultIntialiserTPF = Core::ScalarFactory::Local(
-      {5., 0.}, {0}, std::vector<double>({0, 0.}), std::vector<size_t>({0}));
+      {0., 0.}, {0}, std::vector<double>({0, 0.}), std::vector<size_t>({0}));
 
   void recur_path(std::string_view rootPath, Core::SimulationParameters& params);
 

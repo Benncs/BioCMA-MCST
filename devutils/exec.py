@@ -46,7 +46,6 @@ def exec(command, n_thread, do_measure: bool = True, do_kokkos_measure=False, **
     env_var["OMP_PLACES"] = "threads"
     env_var["OMP_PROC_BIND"] = "spread"
     env_var["OMP_NUM_THREADS"] = n_thread
-
     if do_kokkos_measure:
         # env_var["KOKKOS_TOOLS_LIBS"] = "/usr/local/lib64/libkp_memory_events.so"
         # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib64/libkp_kernel_timer.so"

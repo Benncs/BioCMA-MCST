@@ -2,6 +2,7 @@
 #define __SIMULATION_MOVE_KERNEL_HPP__
 
 #include "Kokkos_Assert.hpp"
+#include "Kokkos_Printf.hpp"
 #include "mc/alias.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
@@ -162,7 +163,9 @@ namespace Simulation::KernelInline
           {
             // Ignore ret value, if probe is full we´re gonna miss events which is not really
             // important
-            auto _ = probes.set(ages(idx,0));
+            if (!probes.set(ages(idx,0))){
+              Kokkos::printf("PROBES OVERFLOW\r\n");
+            };
             ages(idx,0)=0;
             
           }

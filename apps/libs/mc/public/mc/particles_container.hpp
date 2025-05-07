@@ -174,8 +174,7 @@ namespace MC
     };
 
     // TODO Add logic off internal_dead_counter header
-
-    std::size_t counter = 0;
+    std::size_t counter = 0; //FIXME !!
 
     KOKKOS_INLINE_FUNCTION void get_contributions(std::size_t idx,
                                                   const ContributionView& contributions) const;

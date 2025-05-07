@@ -28,7 +28,7 @@ def get_executable(type: str, global_install:bool = False,mpi: bool = True):
     if global_install:
         return f"/usr/bin/{appname}"
     else:
-        return f"{ROOT}/builddir/gpu/apps/cli/{appname}"
+        return f"{ROOT}/builddir/host/apps/cli/{appname}"
 
 
 def mk_parser():
