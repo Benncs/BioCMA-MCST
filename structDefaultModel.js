@@ -1,6 +1,5 @@
 var structDefaultModel =
 [
-    [ "Config", "structDefaultModel.html#ad813594c4c826e562ef3cd02a617e1c4", null ],
     [ "FloatType", "structDefaultModel.html#a1a4f501ce356216bcf48e2a3e0ac4d4a", null ],
     [ "Self", "structDefaultModel.html#a5dc249b0a48315687d93955c707a75c1", null ],
     [ "SelfParticle", "structDefaultModel.html#aabe828b7f5c62566cab630af8d7d318b", null ],

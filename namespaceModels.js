@@ -20,7 +20,6 @@ var namespaceModels =
     [ "c_linear_density", "namespaceModels.html#ae070357c43b64436202145d812e1e05c", null ],
     [ "check_probability_division", "namespaceModels.html#a4232bad81819956cdafafb24d9b6bc06", null ],
     [ "freq", "namespaceModels.html#aff3e4340a32804ffc9a3fba674928842", null ],
-    [ "get_model_configuration", "namespaceModels.html#a889aab227c3847d27577aa8ff5f0e107", null ],
     [ "get_phi_s_max", "namespaceModels.html#aef295592d46c0edd243afefbe4cd18ca", null ],
     [ "min_var", "namespaceModels.html#a762c1e1dcf75381362aabbef1c4f79a7", null ],
     [ "min_var", "namespaceModels.html#aeb5cecf73dd99777ef0554d1b129252e", null ],

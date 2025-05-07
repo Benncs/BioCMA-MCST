@@ -1,6 +1,5 @@
 var structSerdeModel =
 [
-    [ "Config", "structSerdeModel.html#a9633f5fca8cfc7071d9fc085a38d58f7", null ],
     [ "FloatType", "structSerdeModel.html#ab88ad507b9ba41f16877ea9cf95f03d3", null ],
     [ "Self", "structSerdeModel.html#aadfdf263ce095bf438571ae880b3c73c", null ],
     [ "SelfParticle", "structSerdeModel.html#add2cc33cdcc61366d2f6881a285b86fd", null ],

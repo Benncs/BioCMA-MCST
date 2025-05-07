@@ -1,6 +1,5 @@
 var structModels_1_1UdfModel =
 [
-    [ "Config", "structModels_1_1UdfModel.html#a5f2896ec37c5d34af98a55f2e7378e3b", null ],
     [ "FloatType", "structModels_1_1UdfModel.html#ab5d0fac0d0633397a821bfa1d726f3f5", null ],
     [ "Self", "structModels_1_1UdfModel.html#ab8ddc2c5aa91655d56a81ffb0e2ae7dc", null ],
     [ "SelfParticle", "structModels_1_1UdfModel.html#a93d517c9794559c7c0a473e7207ecc05", null ],
