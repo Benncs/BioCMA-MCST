@@ -83,7 +83,7 @@ $(function(){initNavTree('structDynamicDefaultModel.html',''); initResizable(tru
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="mc_2public_2mc_2traits_8hpp_source.html">traits.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="m__default_8hpp_source.html">m_default.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -98,11 +98,13 @@ Public Types</h2></td></tr>
 <tr class="separator:aa2d9a9f425170654189dd0f2463a368b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0c30471aed8077445bef26d40f0d745" id="r_ac0c30471aed8077445bef26d40f0d745"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a> = <a class="el" href="namespaceMC.html#ac6dce614edaf4c841140ad371ee80f24">MC::DynParticlesModel</a>&lt;<a class="el" href="#aa2d9a9f425170654189dd0f2463a368b">FloatType</a>&gt;</td></tr>
 <tr class="separator:ac0c30471aed8077445bef26d40f0d745"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa1198dceed930117847bd33dfa4cf27" id="r_afa1198dceed930117847bd33dfa4cf27"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa1198dceed930117847bd33dfa4cf27">Config</a> = float</td></tr>
+<tr class="separator:afa1198dceed930117847bd33dfa4cf27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a1ba75cd2fa6c60abf60673af13474d19" id="r_a1ba75cd2fa6c60abf60673af13474d19"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ba75cd2fa6c60abf60673af13474d19">init</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx, const <a class="el" href="#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a> &amp;arr)</td></tr>
-<tr class="separator:a1ba75cd2fa6c60abf60673af13474d19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11d439dc35b571b7a3ad5eb782b7e896" id="r_a11d439dc35b571b7a3ad5eb782b7e896"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11d439dc35b571b7a3ad5eb782b7e896">init</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx, const <a class="el" href="#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a> &amp;arr, const <a class="el" href="#afa1198dceed930117847bd33dfa4cf27">Config</a> &amp;config)</td></tr>
+<tr class="separator:a11d439dc35b571b7a3ad5eb782b7e896"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a968fff01adc149e4fea157d122539da7" id="r_a968fff01adc149e4fea157d122539da7"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a968fff01adc149e4fea157d122539da7">mass</a> (std::size_t idx, const <a class="el" href="#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a> &amp;arr)</td></tr>
 <tr class="separator:a968fff01adc149e4fea157d122539da7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9065d8c5419d2bb9d57ed680e3f84d3e" id="r_a9065d8c5419d2bb9d57ed680e3f84d3e"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7c">MC::Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9065d8c5419d2bb9d57ed680e3f84d3e">update</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, <a class="el" href="#aa2d9a9f425170654189dd0f2463a368b">FloatType</a> d_t, std::size_t idx, const <a class="el" href="#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a> &amp;arr, const <a class="el" href="namespaceMC.html#a014ee946d2a4f3e125803a71eefae77d">MC::LocalConcentration</a> &amp;c)</td></tr>
@@ -122,6 +124,20 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a00565710eef4ffca354492f9a557c6db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="afa1198dceed930117847bd33dfa4cf27" name="afa1198dceed930117847bd33dfa4cf27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa1198dceed930117847bd33dfa4cf27">&#9670;&#160;</a></span>Config</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#afa1198dceed930117847bd33dfa4cf27">DynamicDefaultModel::Config</a> = float</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa2d9a9f425170654189dd0f2463a368b" name="aa2d9a9f425170654189dd0f2463a368b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa2d9a9f425170654189dd0f2463a368b">&#9670;&#160;</a></span>FloatType</h2>
 
@@ -293,8 +309,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a1ba75cd2fa6c60abf60673af13474d19" name="a1ba75cd2fa6c60abf60673af13474d19"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ba75cd2fa6c60abf60673af13474d19">&#9670;&#160;</a></span>init()</h2>
+<a id="a11d439dc35b571b7a3ad5eb782b7e896" name="a11d439dc35b571b7a3ad5eb782b7e896"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11d439dc35b571b7a3ad5eb782b7e896">&#9670;&#160;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -315,7 +331,12 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>arr</em></span>&#160;)</td>
+          <td class="paramtype">const <a class="el" href="#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>arr</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="#afa1198dceed930117847bd33dfa4cf27">Config</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>config</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -468,7 +489,7 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>apps/libs/mc/public/mc/<a class="el" href="mc_2public_2mc_2traits_8hpp_source.html">traits.hpp</a></li>
+<li>apps/libs/mc/public/mc/<a class="el" href="m__default_8hpp_source.html">m_default.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

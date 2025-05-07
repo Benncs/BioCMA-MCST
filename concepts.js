@@ -10,6 +10,8 @@ var concepts =
     ] ],
     [ "_HasExportProperties", "concept__HasExportProperties.html", null ],
     [ "CommonModelType", "conceptCommonModelType.html", null ],
+    [ "ConfigurableInit", "conceptConfigurableInit.html", null ],
+    [ "ConfigurableModel", "conceptConfigurableModel.html", null ],
     [ "ConstWeightModelType", "conceptConstWeightModelType.html", null ],
     [ "DynModelType", "conceptDynModelType.html", null ],
     [ "FixedModelType", "conceptFixedModelType.html", null ],
@@ -19,5 +21,8 @@ var concepts =
     [ "HasExportPropertiesPartial", "conceptHasExportPropertiesPartial.html", null ],
     [ "IntegerType", "conceptIntegerType.html", null ],
     [ "ModelType", "conceptModelType.html", null ],
-    [ "NumberType", "conceptNumberType.html", null ]
+    [ "NonConfigurableInit", "conceptNonConfigurableInit.html", null ],
+    [ "NonConfigurableModel", "conceptNonConfigurableModel.html", null ],
+    [ "NumberType", "conceptNumberType.html", null ],
+    [ "PreInitModel", "conceptPreInitModel.html", null ]
 ];

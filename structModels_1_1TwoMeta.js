@@ -1,5 +1,6 @@
 var structModels_1_1TwoMeta =
 [
+    [ "Config", "structModels_1_1TwoMeta.html#aae48a7a781ab5199b2ae6ab4fe0ebf54", null ],
     [ "FloatType", "structModels_1_1TwoMeta.html#a80c201c60ea74d4f0e466ade96e4efd4", null ],
     [ "Self", "structModels_1_1TwoMeta.html#aebc2014693ef2bdda31510ccf5afaa14", null ],
     [ "SelfParticle", "structModels_1_1TwoMeta.html#ae18d291f810d2e2b26f3685c2343095d", null ],

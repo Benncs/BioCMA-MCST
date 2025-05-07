@@ -1,5 +1,6 @@
 var structModels_1_1SimpleModel =
 [
+    [ "Config", "structModels_1_1SimpleModel.html#abb3c536db6dd743447c617711aeec8c3", null ],
     [ "FloatType", "structModels_1_1SimpleModel.html#ad15d55900af7e9698acca28a16044233", null ],
     [ "Self", "structModels_1_1SimpleModel.html#a5ce062e5d435db70ecbbc36a6c8dd5f1", null ],
     [ "SelfParticle", "structModels_1_1SimpleModel.html#aac7b372913395974ec13320e1fc63096", null ],

@@ -111,6 +111,8 @@ Public Types</h2></td></tr>
 <tr class="separator:aebc2014693ef2bdda31510ccf5afaa14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80c201c60ea74d4f0e466ade96e4efd4" id="r_a80c201c60ea74d4f0e466ade96e4efd4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80c201c60ea74d4f0e466ade96e4efd4">FloatType</a> = float</td></tr>
 <tr class="separator:a80c201c60ea74d4f0e466ade96e4efd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae48a7a781ab5199b2ae6ab4fe0ebf54" id="r_aae48a7a781ab5199b2ae6ab4fe0ebf54"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae48a7a781ab5199b2ae6ab4fe0ebf54">Config</a> = std::nullopt_t</td></tr>
+<tr class="separator:aae48a7a781ab5199b2ae6ab4fe0ebf54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae18d291f810d2e2b26f3685c2343095d" id="r_ae18d291f810d2e2b26f3685c2343095d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae18d291f810d2e2b26f3685c2343095d">SelfParticle</a> = <a class="el" href="namespaceMC.html#ab8c67c8127bdb4bc0a1a8ad1e3cfe067">MC::ParticlesModel</a>&lt;<a class="el" href="#a22b8105fa86028a5ce2521dc682e7788">Self::n_var</a>, <a class="el" href="#a80c201c60ea74d4f0e466ade96e4efd4">Self::FloatType</a>&gt;</td></tr>
 <tr class="separator:ae18d291f810d2e2b26f3685c2343095d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -182,6 +184,20 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a32673f6847484d4b8666375a386bc904"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="aae48a7a781ab5199b2ae6ab4fe0ebf54" name="aae48a7a781ab5199b2ae6ab4fe0ebf54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae48a7a781ab5199b2ae6ab4fe0ebf54">&#9670;&#160;</a></span>Config</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#aae48a7a781ab5199b2ae6ab4fe0ebf54">Models::TwoMeta::Config</a> = std::nullopt_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a80c201c60ea74d4f0e466ade96e4efd4" name="a80c201c60ea74d4f0e466ade96e4efd4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a80c201c60ea74d4f0e466ade96e4efd4">&#9670;&#160;</a></span>FloatType</h2>
 
@@ -633,10 +649,10 @@ Here is the call graph for this function:</div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= <a class="code hl_struct" href="structMC_1_1Distributions_1_1TruncatedNormal.html">MC::Distributions::TruncatedNormal&lt;FloatType&gt;</a>(</div>
 <div class="line">        <a class="code hl_variable" href="#a03f14da33bba963d6a7d442fb4043e71">l_c_m</a>, <a class="code hl_variable" href="#a03f14da33bba963d6a7d442fb4043e71">l_c_m</a> / 2., <a class="code hl_variable" href="#a9a447bac00865ec9f795bb93276630cb">l_min_m</a>, <a class="code hl_variable" href="#a41bd775403bf95d818e115efbd30962a">l_max_m</a>)</div>
-<div class="ttc" id="astructMC_1_1Distributions_1_1TruncatedNormal_html"><div class="ttname"><a href="structMC_1_1Distributions_1_1TruncatedNormal.html">MC::Distributions::TruncatedNormal</a></div><div class="ttdoc">Represents a TruncatedNormal (Gaussian) probability distribution.</div><div class="ttdef"><b>Definition</b> prng_extension.hpp:262</div></div>
-<div class="ttc" id="astructModels_1_1TwoMeta_html_a03f14da33bba963d6a7d442fb4043e71"><div class="ttname"><a href="#a03f14da33bba963d6a7d442fb4043e71">Models::TwoMeta::l_c_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_c_m</div><div class="ttdef"><b>Definition</b> two_meta.hpp:52</div></div>
-<div class="ttc" id="astructModels_1_1TwoMeta_html_a41bd775403bf95d818e115efbd30962a"><div class="ttname"><a href="#a41bd775403bf95d818e115efbd30962a">Models::TwoMeta::l_max_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_max_m</div><div class="ttdef"><b>Definition</b> two_meta.hpp:51</div></div>
-<div class="ttc" id="astructModels_1_1TwoMeta_html_a9a447bac00865ec9f795bb93276630cb"><div class="ttname"><a href="#a9a447bac00865ec9f795bb93276630cb">Models::TwoMeta::l_min_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_min_m</div><div class="ttdef"><b>Definition</b> two_meta.hpp:54</div></div>
+<div class="ttc" id="astructMC_1_1Distributions_1_1TruncatedNormal_html"><div class="ttname"><a href="structMC_1_1Distributions_1_1TruncatedNormal.html">MC::Distributions::TruncatedNormal</a></div><div class="ttdoc">Represents a TruncatedNormal (Gaussian) probability distribution.</div><div class="ttdef"><b>Definition</b> prng_extension.hpp:263</div></div>
+<div class="ttc" id="astructModels_1_1TwoMeta_html_a03f14da33bba963d6a7d442fb4043e71"><div class="ttname"><a href="#a03f14da33bba963d6a7d442fb4043e71">Models::TwoMeta::l_c_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_c_m</div><div class="ttdef"><b>Definition</b> two_meta.hpp:53</div></div>
+<div class="ttc" id="astructModels_1_1TwoMeta_html_a41bd775403bf95d818e115efbd30962a"><div class="ttname"><a href="#a41bd775403bf95d818e115efbd30962a">Models::TwoMeta::l_max_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_max_m</div><div class="ttdef"><b>Definition</b> two_meta.hpp:52</div></div>
+<div class="ttc" id="astructModels_1_1TwoMeta_html_a9a447bac00865ec9f795bb93276630cb"><div class="ttname"><a href="#a9a447bac00865ec9f795bb93276630cb">Models::TwoMeta::l_min_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_min_m</div><div class="ttdef"><b>Definition</b> two_meta.hpp:55</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -753,10 +769,10 @@ Here is the call graph for this function:</div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">        10 * <a class="code hl_variable" href="#aca53c07d6363b5ff25b3bcd0bcd34e53">phi_s_max</a> / <a class="code hl_variable" href="#a1a5fcc1f3fcb2a8ede40c24c63232ff1">MolarMassG</a> * <a class="code hl_variable" href="#aec26a1f0029dd1d83ab9a81612548990">y_os_molar</a> * <a class="code hl_variable" href="#a8a85907bbf0fad3594ba11e66b9395c1">MolarMassO2</a></div>
-<div class="ttc" id="astructModels_1_1TwoMeta_html_a1a5fcc1f3fcb2a8ede40c24c63232ff1"><div class="ttname"><a href="#a1a5fcc1f3fcb2a8ede40c24c63232ff1">Models::TwoMeta::MolarMassG</a></div><div class="ttdeci">MODEL_CONSTANT FloatType MolarMassG</div><div class="ttdef"><b>Definition</b> two_meta.hpp:56</div></div>
-<div class="ttc" id="astructModels_1_1TwoMeta_html_a8a85907bbf0fad3594ba11e66b9395c1"><div class="ttname"><a href="#a8a85907bbf0fad3594ba11e66b9395c1">Models::TwoMeta::MolarMassO2</a></div><div class="ttdeci">MODEL_CONSTANT FloatType MolarMassO2</div><div class="ttdef"><b>Definition</b> two_meta.hpp:57</div></div>
-<div class="ttc" id="astructModels_1_1TwoMeta_html_aca53c07d6363b5ff25b3bcd0bcd34e53"><div class="ttname"><a href="#aca53c07d6363b5ff25b3bcd0bcd34e53">Models::TwoMeta::phi_s_max</a></div><div class="ttdeci">MODEL_CONSTANT FloatType phi_s_max</div><div class="ttdef"><b>Definition</b> two_meta.hpp:68</div></div>
-<div class="ttc" id="astructModels_1_1TwoMeta_html_aec26a1f0029dd1d83ab9a81612548990"><div class="ttname"><a href="#aec26a1f0029dd1d83ab9a81612548990">Models::TwoMeta::y_os_molar</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_os_molar</div><div class="ttdef"><b>Definition</b> two_meta.hpp:62</div></div>
+<div class="ttc" id="astructModels_1_1TwoMeta_html_a1a5fcc1f3fcb2a8ede40c24c63232ff1"><div class="ttname"><a href="#a1a5fcc1f3fcb2a8ede40c24c63232ff1">Models::TwoMeta::MolarMassG</a></div><div class="ttdeci">MODEL_CONSTANT FloatType MolarMassG</div><div class="ttdef"><b>Definition</b> two_meta.hpp:57</div></div>
+<div class="ttc" id="astructModels_1_1TwoMeta_html_a8a85907bbf0fad3594ba11e66b9395c1"><div class="ttname"><a href="#a8a85907bbf0fad3594ba11e66b9395c1">Models::TwoMeta::MolarMassO2</a></div><div class="ttdeci">MODEL_CONSTANT FloatType MolarMassO2</div><div class="ttdef"><b>Definition</b> two_meta.hpp:58</div></div>
+<div class="ttc" id="astructModels_1_1TwoMeta_html_aca53c07d6363b5ff25b3bcd0bcd34e53"><div class="ttname"><a href="#aca53c07d6363b5ff25b3bcd0bcd34e53">Models::TwoMeta::phi_s_max</a></div><div class="ttdeci">MODEL_CONSTANT FloatType phi_s_max</div><div class="ttdef"><b>Definition</b> two_meta.hpp:69</div></div>
+<div class="ttc" id="astructModels_1_1TwoMeta_html_aec26a1f0029dd1d83ab9a81612548990"><div class="ttname"><a href="#aec26a1f0029dd1d83ab9a81612548990">Models::TwoMeta::y_os_molar</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_os_molar</div><div class="ttdef"><b>Definition</b> two_meta.hpp:63</div></div>
 </div><!-- fragment -->
 </div>
 </div>

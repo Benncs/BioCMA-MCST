@@ -75,6 +75,7 @@ $(function(){initNavTree('structModels_1_1TwoMetaDiv.html',''); initResizable(tr
 <div id="doc-content">
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
@@ -86,6 +87,13 @@ $(function(){initNavTree('structModels_1_1TwoMetaDiv.html',''); initResizable(tr
 
 <p><code>#include &lt;<a class="el" href="two__meta__div_8hpp_source.html">two_meta_div.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structModels_1_1TwoMetaDiv_1_1TMDConfig.html">TMDConfig</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structModels_1_1TwoMetaDiv_1_1Yields.html">Yields</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:ad00b6c7bc48606c59356b7bee29e0d5f" id="r_ad00b6c7bc48606c59356b7bee29e0d5f"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad00b6c7bc48606c59356b7bee29e0d5f">particle_var</a> : int { <br />
@@ -113,11 +121,13 @@ Public Types</h2></td></tr>
 <tr class="separator:a8925610f0a1a181a36ca5e9146fdc106"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c7abd525c9d2f525e27eaeca8f9127d" id="r_a3c7abd525c9d2f525e27eaeca8f9127d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c7abd525c9d2f525e27eaeca8f9127d">SelfParticle</a> = <a class="el" href="namespaceMC.html#ab8c67c8127bdb4bc0a1a8ad1e3cfe067">MC::ParticlesModel</a>&lt;<a class="el" href="#a98750c7a2167dcb2340d511feda16b68">Self::n_var</a>, <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">Self::FloatType</a>&gt;</td></tr>
 <tr class="separator:a3c7abd525c9d2f525e27eaeca8f9127d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c3dcdfcbab5c6dc7689d0f9cfc44924" id="r_a4c3dcdfcbab5c6dc7689d0f9cfc44924"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c3dcdfcbab5c6dc7689d0f9cfc44924">Config</a> = <a class="el" href="structModels_1_1TwoMetaDiv_1_1TMDConfig.html">TMDConfig</a></td></tr>
+<tr class="separator:a4c3dcdfcbab5c6dc7689d0f9cfc44924"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a3326318642a739201c0a1362710362bb" id="r_a3326318642a739201c0a1362710362bb"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3326318642a739201c0a1362710362bb">init</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx, const <a class="el" href="#a3c7abd525c9d2f525e27eaeca8f9127d">SelfParticle</a> &amp;arr)</td></tr>
-<tr class="separator:a3326318642a739201c0a1362710362bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef2ce0e5a12a18c6a1d076f0414a4263" id="r_aef2ce0e5a12a18c6a1d076f0414a4263"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef2ce0e5a12a18c6a1d076f0414a4263">init</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx, const <a class="el" href="#a3c7abd525c9d2f525e27eaeca8f9127d">SelfParticle</a> &amp;arr, const <a class="el" href="#a4c3dcdfcbab5c6dc7689d0f9cfc44924">Config</a> &amp;config)</td></tr>
+<tr class="separator:aef2ce0e5a12a18c6a1d076f0414a4263"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33078ae1db5734a5ae31db7fe640fcce" id="r_a33078ae1db5734a5ae31db7fe640fcce"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7c">MC::Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a33078ae1db5734a5ae31db7fe640fcce">update</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a> d_t, std::size_t idx, const <a class="el" href="#a3c7abd525c9d2f525e27eaeca8f9127d">SelfParticle</a> &amp;arr, const <a class="el" href="namespaceMC.html#a014ee946d2a4f3e125803a71eefae77d">MC::LocalConcentration</a> &amp;c)</td></tr>
 <tr class="separator:a33078ae1db5734a5ae31db7fe640fcce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a067be4bba4ba59abc0f3da680e6be052" id="r_a067be4bba4ba59abc0f3da680e6be052"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a067be4bba4ba59abc0f3da680e6be052">division</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx, std::size_t idx2, const <a class="el" href="#a3c7abd525c9d2f525e27eaeca8f9127d">SelfParticle</a> &amp;arr, const <a class="el" href="#a3c7abd525c9d2f525e27eaeca8f9127d">SelfParticle</a> &amp;buffer_arr)</td></tr>
@@ -130,6 +140,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a0946d3e5ca61171ec3ecbc64cc126c48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e4bd08d1cc807ac59ba1eb490c1cdf9" id="r_a4e4bd08d1cc807ac59ba1eb490c1cdf9"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e4bd08d1cc807ac59ba1eb490c1cdf9">get_number</a> ()</td></tr>
 <tr class="separator:a4e4bd08d1cc807ac59ba1eb490c1cdf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8979e9ffb589b64deecdd6091843e97" id="r_ac8979e9ffb589b64deecdd6091843e97"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8979e9ffb589b64deecdd6091843e97">preinit</a> ()</td></tr>
+<tr class="separator:ac8979e9ffb589b64deecdd6091843e97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -147,13 +159,13 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a50b7816e8788a69557e324091bc58f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8891def71ccd08b96a92b803108e1e2" id="r_ae8891def71ccd08b96a92b803108e1e2"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8891def71ccd08b96a92b803108e1e2">MolarMassO2</a> = <a class="el" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#adbef58e62e260dafd32d1505a5452ede">Models::MolarMass::GramPerMole::dioxygen</a>&lt;float&gt;</td></tr>
 <tr class="separator:ae8891def71ccd08b96a92b803108e1e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2aabca821babfbccb9d8f3cb0ee9b72e" id="r_a2aabca821babfbccb9d8f3cb0ee9b72e"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2aabca821babfbccb9d8f3cb0ee9b72e">y_sx_1</a> = 1. / 2.217737e+00</td></tr>
+<tr class="memitem:a2aabca821babfbccb9d8f3cb0ee9b72e" id="r_a2aabca821babfbccb9d8f3cb0ee9b72e"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2aabca821babfbccb9d8f3cb0ee9b72e">y_sx_1</a></td></tr>
 <tr class="separator:a2aabca821babfbccb9d8f3cb0ee9b72e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4079d6626cba4d887aad9298fb44d91f" id="r_a4079d6626cba4d887aad9298fb44d91f"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4079d6626cba4d887aad9298fb44d91f">y_sx_2</a> = <a class="el" href="#a2aabca821babfbccb9d8f3cb0ee9b72e">y_sx_1</a> / 3.</td></tr>
+<tr class="memitem:a4079d6626cba4d887aad9298fb44d91f" id="r_a4079d6626cba4d887aad9298fb44d91f"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4079d6626cba4d887aad9298fb44d91f">y_sx_2</a></td></tr>
 <tr class="separator:a4079d6626cba4d887aad9298fb44d91f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a4785c26f2cb5770bdf3dcb599f1fd2" id="r_a0a4785c26f2cb5770bdf3dcb599f1fd2"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a4785c26f2cb5770bdf3dcb599f1fd2">y_sa</a> = 0.8</td></tr>
+<tr class="memitem:a0a4785c26f2cb5770bdf3dcb599f1fd2" id="r_a0a4785c26f2cb5770bdf3dcb599f1fd2"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a4785c26f2cb5770bdf3dcb599f1fd2">y_sa</a></td></tr>
 <tr class="separator:a0a4785c26f2cb5770bdf3dcb599f1fd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab656a0fbdbc627895f3fccf3fe4497b9" id="r_ab656a0fbdbc627895f3fccf3fe4497b9"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab656a0fbdbc627895f3fccf3fe4497b9">y_os_molar</a> = 3</td></tr>
+<tr class="memitem:ab656a0fbdbc627895f3fccf3fe4497b9" id="r_ab656a0fbdbc627895f3fccf3fe4497b9"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab656a0fbdbc627895f3fccf3fe4497b9">y_os_molar</a> = 6</td></tr>
 <tr class="separator:ab656a0fbdbc627895f3fccf3fe4497b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a295f907f29422a6b74d4471890e5d55a" id="r_a295f907f29422a6b74d4471890e5d55a"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a295f907f29422a6b74d4471890e5d55a">k_o</a> = 0.0001</td></tr>
 <tr class="separator:a295f907f29422a6b74d4471890e5d55a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -178,10 +190,24 @@ Public Attributes</h2></td></tr>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a98750c7a2167dcb2340d511feda16b68" id="r_a98750c7a2167dcb2340d511feda16b68"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98750c7a2167dcb2340d511feda16b68">n_var</a> = INDEX_FROM_ENUM(<a class="el" href="#ad00b6c7bc48606c59356b7bee29e0d5fa4905ac9d6a22bdfc1ae096094ce6248d">particle_var::COUNT</a>)</td></tr>
 <tr class="separator:a98750c7a2167dcb2340d511feda16b68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab5d58f5473bdc659bc3207f7da472af" id="r_aab5d58f5473bdc659bc3207f7da472af"><td class="memItemLeft" align="right" valign="top">static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab5d58f5473bdc659bc3207f7da472af">name</a> = &quot;simple&quot;</td></tr>
+<tr class="memitem:aab5d58f5473bdc659bc3207f7da472af" id="r_aab5d58f5473bdc659bc3207f7da472af"><td class="memItemLeft" align="right" valign="top">static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab5d58f5473bdc659bc3207f7da472af">name</a> = &quot;two_meta_div&quot;</td></tr>
 <tr class="separator:aab5d58f5473bdc659bc3207f7da472af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a4c3dcdfcbab5c6dc7689d0f9cfc44924" name="a4c3dcdfcbab5c6dc7689d0f9cfc44924"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c3dcdfcbab5c6dc7689d0f9cfc44924">&#9670;&#160;</a></span>Config</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a4c3dcdfcbab5c6dc7689d0f9cfc44924">Models::TwoMetaDiv::Config</a> = <a class="el" href="structModels_1_1TwoMetaDiv_1_1TMDConfig.html">TMDConfig</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a8925610f0a1a181a36ca5e9146fdc106" name="a8925610f0a1a181a36ca5e9146fdc106"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8925610f0a1a181a36ca5e9146fdc106">&#9670;&#160;</a></span>FloatType</h2>
 
@@ -393,8 +419,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a3326318642a739201c0a1362710362bb" name="a3326318642a739201c0a1362710362bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3326318642a739201c0a1362710362bb">&#9670;&#160;</a></span>init()</h2>
+<a id="aef2ce0e5a12a18c6a1d076f0414a4263" name="aef2ce0e5a12a18c6a1d076f0414a4263"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef2ce0e5a12a18c6a1d076f0414a4263">&#9670;&#160;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -415,7 +441,12 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="#a3c7abd525c9d2f525e27eaeca8f9127d">SelfParticle</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>arr</em></span>&#160;)</td>
+          <td class="paramtype">const <a class="el" href="#a3c7abd525c9d2f525e27eaeca8f9127d">SelfParticle</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>arr</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="#a4c3dcdfcbab5c6dc7689d0f9cfc44924">Config</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>config</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -427,7 +458,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="structModels_1_1TwoMetaDiv_a3326318642a739201c0a1362710362bb_cgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="structModels_1_1TwoMetaDiv_aef2ce0e5a12a18c6a1d076f0414a4263_cgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -472,6 +503,31 @@ Here is the call graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">static std::vector&lt; std::string_view &gt; Models::TwoMetaDiv::names </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac8979e9ffb589b64deecdd6091843e97" name="ac8979e9ffb589b64deecdd6091843e97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8979e9ffb589b64deecdd6091843e97">&#9670;&#160;</a></span>preinit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static KOKKOS_INLINE_FUNCTION void Models::TwoMetaDiv::preinit </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -633,10 +689,10 @@ Here is the call graph for this function:</div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">        <a class="code hl_struct" href="structMC_1_1Distributions_1_1TruncatedNormal.html">MC::Distributions::TruncatedNormal&lt;FloatType&gt;</a>(<a class="code hl_variable" href="#a9cabb56198893cf7e2d906d385132c38">l_c_m</a>, <a class="code hl_variable" href="#a9cabb56198893cf7e2d906d385132c38">l_c_m</a> / 7., <a class="code hl_variable" href="#a182ff63ec2d3b88c74ca8c47c03c1e50">l_min_m</a>, <a class="code hl_variable" href="#ae987e60f75c8d4b1755d68c02e3e11aa">l_max_m</a>)</div>
-<div class="ttc" id="astructMC_1_1Distributions_1_1TruncatedNormal_html"><div class="ttname"><a href="structMC_1_1Distributions_1_1TruncatedNormal.html">MC::Distributions::TruncatedNormal</a></div><div class="ttdoc">Represents a TruncatedNormal (Gaussian) probability distribution.</div><div class="ttdef"><b>Definition</b> prng_extension.hpp:262</div></div>
-<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_a182ff63ec2d3b88c74ca8c47c03c1e50"><div class="ttname"><a href="#a182ff63ec2d3b88c74ca8c47c03c1e50">Models::TwoMetaDiv::l_min_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_min_m</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:54</div></div>
-<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_a9cabb56198893cf7e2d906d385132c38"><div class="ttname"><a href="#a9cabb56198893cf7e2d906d385132c38">Models::TwoMetaDiv::l_c_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_c_m</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:52</div></div>
-<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_ae987e60f75c8d4b1755d68c02e3e11aa"><div class="ttname"><a href="#ae987e60f75c8d4b1755d68c02e3e11aa">Models::TwoMetaDiv::l_max_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_max_m</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:51</div></div>
+<div class="ttc" id="astructMC_1_1Distributions_1_1TruncatedNormal_html"><div class="ttname"><a href="structMC_1_1Distributions_1_1TruncatedNormal.html">MC::Distributions::TruncatedNormal</a></div><div class="ttdoc">Represents a TruncatedNormal (Gaussian) probability distribution.</div><div class="ttdef"><b>Definition</b> prng_extension.hpp:263</div></div>
+<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_a182ff63ec2d3b88c74ca8c47c03c1e50"><div class="ttname"><a href="#a182ff63ec2d3b88c74ca8c47c03c1e50">Models::TwoMetaDiv::l_min_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_min_m</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:70</div></div>
+<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_a9cabb56198893cf7e2d906d385132c38"><div class="ttname"><a href="#a9cabb56198893cf7e2d906d385132c38">Models::TwoMetaDiv::l_c_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_c_m</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:68</div></div>
+<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_ae987e60f75c8d4b1755d68c02e3e11aa"><div class="ttname"><a href="#ae987e60f75c8d4b1755d68c02e3e11aa">Models::TwoMetaDiv::l_max_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_max_m</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:67</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -714,7 +770,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string_view Models::TwoMetaDiv::name = &quot;simple&quot;</td>
+          <td class="memname">std::string_view Models::TwoMetaDiv::name = &quot;two_meta_div&quot;</td>
         </tr>
       </table>
   </td>
@@ -753,10 +809,10 @@ Here is the call graph for this function:</div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">        10 * <a class="code hl_variable" href="#a8622009aa318875aad79b0a671d85f54">phi_s_max</a> / <a class="code hl_variable" href="#a50b7816e8788a69557e324091bc58f4a">MolarMassG</a> * <a class="code hl_variable" href="#ab656a0fbdbc627895f3fccf3fe4497b9">y_os_molar</a> * <a class="code hl_variable" href="#ae8891def71ccd08b96a92b803108e1e2">MolarMassO2</a></div>
-<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_a50b7816e8788a69557e324091bc58f4a"><div class="ttname"><a href="#a50b7816e8788a69557e324091bc58f4a">Models::TwoMetaDiv::MolarMassG</a></div><div class="ttdeci">MODEL_CONSTANT FloatType MolarMassG</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:56</div></div>
-<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_a8622009aa318875aad79b0a671d85f54"><div class="ttname"><a href="#a8622009aa318875aad79b0a671d85f54">Models::TwoMetaDiv::phi_s_max</a></div><div class="ttdeci">MODEL_CONSTANT FloatType phi_s_max</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:68</div></div>
-<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_ab656a0fbdbc627895f3fccf3fe4497b9"><div class="ttname"><a href="#ab656a0fbdbc627895f3fccf3fe4497b9">Models::TwoMetaDiv::y_os_molar</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_os_molar</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:62</div></div>
-<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_ae8891def71ccd08b96a92b803108e1e2"><div class="ttname"><a href="#ae8891def71ccd08b96a92b803108e1e2">Models::TwoMetaDiv::MolarMassO2</a></div><div class="ttdeci">MODEL_CONSTANT FloatType MolarMassO2</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:57</div></div>
+<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_a50b7816e8788a69557e324091bc58f4a"><div class="ttname"><a href="#a50b7816e8788a69557e324091bc58f4a">Models::TwoMetaDiv::MolarMassG</a></div><div class="ttdeci">MODEL_CONSTANT FloatType MolarMassG</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:72</div></div>
+<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_a8622009aa318875aad79b0a671d85f54"><div class="ttname"><a href="#a8622009aa318875aad79b0a671d85f54">Models::TwoMetaDiv::phi_s_max</a></div><div class="ttdeci">MODEL_CONSTANT FloatType phi_s_max</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:86</div></div>
+<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_ab656a0fbdbc627895f3fccf3fe4497b9"><div class="ttname"><a href="#ab656a0fbdbc627895f3fccf3fe4497b9">Models::TwoMetaDiv::y_os_molar</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_os_molar</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:81</div></div>
+<div class="ttc" id="astructModels_1_1TwoMetaDiv_html_ae8891def71ccd08b96a92b803108e1e2"><div class="ttname"><a href="#ae8891def71ccd08b96a92b803108e1e2">Models::TwoMetaDiv::MolarMassO2</a></div><div class="ttdeci">MODEL_CONSTANT FloatType MolarMassO2</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:73</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -823,7 +879,7 @@ Here is the call graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a> Models::TwoMetaDiv::y_os_molar = 3</td>
+          <td class="memname">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a> Models::TwoMetaDiv::y_os_molar = 6</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -837,11 +893,15 @@ Here is the call graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a> Models::TwoMetaDiv::y_sa = 0.8</td>
+          <td class="memname">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a> Models::TwoMetaDiv::y_sa</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">= <a class="code hl_variable" href="structModels_1_1TwoMetaDiv_1_1Yields.html#addd75369e4a97f3e8498420f105c9040">Yields::Y_AG</a> * <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#a747108ab3b505449ffc4f50a61d78e33">Models::MolarMass::GramPerMole::acetate&lt;float&gt;</a> /</div>
+<div class="line">                                    <a class="code hl_variable" href="#a50b7816e8788a69557e324091bc58f4a">MolarMassG</a></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_1_1GramPerMole_html_a747108ab3b505449ffc4f50a61d78e33"><div class="ttname"><a href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#a747108ab3b505449ffc4f50a61d78e33">Models::MolarMass::GramPerMole::acetate</a></div><div class="ttdeci">constexpr T acetate</div><div class="ttdef"><b>Definition</b> utils.hpp:23</div></div>
+<div class="ttc" id="astructModels_1_1TwoMetaDiv_1_1Yields_html_addd75369e4a97f3e8498420f105c9040"><div class="ttname"><a href="structModels_1_1TwoMetaDiv_1_1Yields.html#addd75369e4a97f3e8498420f105c9040">Models::TwoMetaDiv::Yields::Y_AG</a></div><div class="ttdeci">static constexpr double Y_AG</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:37</div></div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="a2aabca821babfbccb9d8f3cb0ee9b72e" name="a2aabca821babfbccb9d8f3cb0ee9b72e"></a>
@@ -851,11 +911,19 @@ Here is the call graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a> Models::TwoMetaDiv::y_sx_1 = 1. / 2.217737e+00</td>
+          <td class="memname">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a> Models::TwoMetaDiv::y_sx_1</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">= <a class="code hl_variable" href="namespaceModels_1_1MolarMass.html#a3a2a51f986be9b402be67bab93a97d81">Models::MolarMass::X</a> / <a class="code hl_variable" href="namespaceModels_1_1MolarMass.html#a94adeb9df6dde398be39fa66b3b28f6e">Models::MolarMass::glucose</a> *</div>
+<div class="line">                                      (<a class="code hl_variable" href="structModels_1_1TwoMetaDiv_1_1Yields.html#ae2b67aaf26c701d056e51f7c3ea6fdbf">Yields::Y_XG</a> * <a class="code hl_variable" href="structModels_1_1TwoMetaDiv_1_1Yields.html#a8914c0e38ef84302b5c833552d1f109a">Yields::Yo_EG</a>) /</div>
+<div class="line">                                      (<a class="code hl_variable" href="structModels_1_1TwoMetaDiv_1_1Yields.html#a2cd3a25e5105382ab7d0738e5bf8bfbb">Yields::Y_EG</a> + <a class="code hl_variable" href="structModels_1_1TwoMetaDiv_1_1Yields.html#a8914c0e38ef84302b5c833552d1f109a">Yields::Yo_EG</a>)</div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_html_a3a2a51f986be9b402be67bab93a97d81"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html#a3a2a51f986be9b402be67bab93a97d81">Models::MolarMass::X</a></div><div class="ttdeci">constexpr double X</div><div class="ttdef"><b>Definition</b> utils.hpp:36</div></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_html_a94adeb9df6dde398be39fa66b3b28f6e"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html#a94adeb9df6dde398be39fa66b3b28f6e">Models::MolarMass::glucose</a></div><div class="ttdeci">constexpr double glucose</div><div class="ttdef"><b>Definition</b> utils.hpp:29</div></div>
+<div class="ttc" id="astructModels_1_1TwoMetaDiv_1_1Yields_html_a2cd3a25e5105382ab7d0738e5bf8bfbb"><div class="ttname"><a href="structModels_1_1TwoMetaDiv_1_1Yields.html#a2cd3a25e5105382ab7d0738e5bf8bfbb">Models::TwoMetaDiv::Yields::Y_EG</a></div><div class="ttdeci">static constexpr double Y_EG</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:31</div></div>
+<div class="ttc" id="astructModels_1_1TwoMetaDiv_1_1Yields_html_a8914c0e38ef84302b5c833552d1f109a"><div class="ttname"><a href="structModels_1_1TwoMetaDiv_1_1Yields.html#a8914c0e38ef84302b5c833552d1f109a">Models::TwoMetaDiv::Yields::Yo_EG</a></div><div class="ttdeci">static constexpr double Yo_EG</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:35</div></div>
+<div class="ttc" id="astructModels_1_1TwoMetaDiv_1_1Yields_html_ae2b67aaf26c701d056e51f7c3ea6fdbf"><div class="ttname"><a href="structModels_1_1TwoMetaDiv_1_1Yields.html#ae2b67aaf26c701d056e51f7c3ea6fdbf">Models::TwoMetaDiv::Yields::Y_XG</a></div><div class="ttdeci">static constexpr double Y_XG</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:32</div></div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="a4079d6626cba4d887aad9298fb44d91f" name="a4079d6626cba4d887aad9298fb44d91f"></a>
@@ -865,11 +933,14 @@ Here is the call graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a> Models::TwoMetaDiv::y_sx_2 = <a class="el" href="#a2aabca821babfbccb9d8f3cb0ee9b72e">y_sx_1</a> / 3.</td>
+          <td class="memname">MODEL_CONSTANT <a class="el" href="#a8925610f0a1a181a36ca5e9146fdc106">FloatType</a> Models::TwoMetaDiv::y_sx_2</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">        <a class="code hl_variable" href="structModels_1_1TwoMetaDiv_1_1Yields.html#ae2b67aaf26c701d056e51f7c3ea6fdbf">Yields::Y_XG</a> * <a class="code hl_variable" href="structModels_1_1TwoMetaDiv_1_1Yields.html#a9a6a258487b0c42804057fad05ddbf38">Yields::Yf_EG</a> / (<a class="code hl_variable" href="structModels_1_1TwoMetaDiv_1_1Yields.html#a2cd3a25e5105382ab7d0738e5bf8bfbb">Yields::Y_EG</a> + <a class="code hl_variable" href="structModels_1_1TwoMetaDiv_1_1Yields.html#a9a6a258487b0c42804057fad05ddbf38">Yields::Yf_EG</a>)</div>
+<div class="ttc" id="astructModels_1_1TwoMetaDiv_1_1Yields_html_a9a6a258487b0c42804057fad05ddbf38"><div class="ttname"><a href="structModels_1_1TwoMetaDiv_1_1Yields.html#a9a6a258487b0c42804057fad05ddbf38">Models::TwoMetaDiv::Yields::Yf_EG</a></div><div class="ttdeci">static constexpr double Yf_EG</div><div class="ttdef"><b>Definition</b> two_meta_div.hpp:36</div></div>
+</div><!-- fragment -->
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
