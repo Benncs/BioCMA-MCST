@@ -28,7 +28,7 @@ set -e # Exit immediately if a command exits with a non-zero status
 current_pwd=$(pwd)
 back_end_omp=0
 back_end_cuda=0
-clang_version=18
+clang_version=-1
 kokkos_version="4.6.00"  
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -81,11 +81,14 @@ cd kokkos_build || {
   exit 1
 }
 
-#-DKokkos_ARCH_TURING75=ON
 flag_cmake="-DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DCMAKE_CXX_STANDARD=20 -B . -S .. -DCMAKE_BUILD_TYPE=Release"
 
+if [[ "$clang_version" != "-1" ]]; then
+    flag_cmake="${flag_cmake} -DCMAKE_CXX_COMPILER=clang++-$clang_version"
+fi
+
 #flag_cmake="${flag_cmake} -DKokkos_ENABLE_CUDA_RELOCATABLE_DEVICE_CODE=ON"
-flag_cmake="${flag_cmake} -DCMAKE_CXX_COMPILER=clang++-$clang_version"
+# flag_cmake="${flag_cmake} -DCMAKE_CXX_COMPILER=clang++-$clang_version"
 
 if [[ "$back_end_omp" == "1" ]]; then
     flag_cmake="${flag_cmake} -DKokkos_ENABLE_OPENMP=ON"

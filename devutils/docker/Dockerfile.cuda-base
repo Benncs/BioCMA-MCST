@@ -35,5 +35,5 @@ COPY clang_config.sh /app
 COPY kokkos_config.sh /app
 # Install LLVM clang-tidy/clang-format
 RUN sh ./clang_config.sh $LLVM_VERSION
-RUN bash ./kokkos_config.sh $KOKKOS_VERSION --omp --cuda --clang $LLVM_VERSION 
+RUN bash ./kokkos_config.sh $KOKKOS_VERSION --omp --cuda 
 RUN rm /app/clang_config.sh  /app/kokkos_config.sh 

@@ -38,4 +38,9 @@ COPY ./tools/runner.py /usr/bin/runner.py
 COPY ./devutils/datamodel /opt/biomc/datamodel
 COPY ./tools/cli_formater.py /usr/bin/cli_formater.py
 COPY ./devutils/exec.py /usr/bin/exec.py
+RUN mkdir -p /results/
+RUN rm -rf /app
 ENTRYPOINT ["/usr/bin/runner.py"]
+
+
+#docker run -v ./tools/cases.xml:/opt/biomc/cases.xml -v ./cma_data/:/opt/biomc/cma_data/ -v ./results:/usr/bin/results --runtime=nvidia  biocma_cuda debug_docker -gi
