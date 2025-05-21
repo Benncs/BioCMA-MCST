@@ -54,6 +54,7 @@ executable(
   dependencies: [app_dependency,udf_loader],
   install: true,
   install_rpath: global_install_dir,
+  install_dir: global_install_dir,
   link_args: [flto_flag],
 )
 
@@ -65,6 +66,7 @@ executable(
 
   install: true,
   install_rpath: global_install_dir,
+  install_dir: global_install_dir,
   link_args: [flto_flag],
 )
 

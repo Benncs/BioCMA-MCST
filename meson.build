@@ -55,8 +55,15 @@ root = meson.project_source_root()
 project_name = meson.project_name()
 build_type = get_option('buildtype')
 cpp = meson.get_compiler('cpp')
+python_install = get_option('python_install')
+if python_install
 global_install_dir = get_option('prefix') + '/' + get_option('libdir')
-includes_install_dir = ('include/' + project_name)
+else
+global_install_dir = '/opt/biomc'
+endif 
+
+# global_install_dir = get_option('prefix') + '/' + get_option('libdir')
+# includes_install_dir = ('include/' + project_name)
 build_test=get_option('build_test')
 
 
@@ -239,5 +246,6 @@ run_command('sh', '-c', f'ln -s @outdir@/compile_commands.json .', check: false)
 
 
 subdir('tools')
-
-
+if not python_install
+meson.add_install_script('devutils/install_script.sh',result_dir)
+endif 
