@@ -4,7 +4,7 @@
 
 % Load standard article class with options
 \LoadClass[11pt, a4paper]{article}
-\newcommand{\myversion}{0.3.x}
+\newcommand{\myversion}{0.9.x}
 
 
 % Load necessary packages

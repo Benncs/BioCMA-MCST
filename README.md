@@ -1,7 +1,7 @@
 <div align="left">
 
   [![License: Apache-2.0](https://img.shields.io/badge/License-Apache-blue.svg)](LICENSE)
-  [![Version: 0.2.2](https://img.shields.io/badge/Version-0.0.7-red.svg)](LICENSE)
+  [![Version: 0.9](https://img.shields.io/badge/Version-0.0.7-red.svg)](LICENSE)
 </div>
 
 
