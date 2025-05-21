@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:bookworm-slim 
 
 ARG LLVM_VERSION=19
 ARG KOKKOS_VERSION=4.6.00
@@ -25,6 +25,7 @@ RUN apt-get update && \
     python3-pybind11 && \
     rm -rf /var/lib/apt/lists/*
 
+
 # Install Meson
 RUN pip install --no-cache-dir meson lxml --break-system-packages
 
@@ -41,10 +42,7 @@ RUN apt-get install -y clang-$LLVM_VERSION
 
 
 ##!/bin/bash
-
-
 #cd devutils/docker
-
 #docker build -t biocma_omp_base -f Dockerfile.omp-base .
 #docker build -t biocma_cuda_base -f Dockerfile.cuda_base .
 #cd ../../
