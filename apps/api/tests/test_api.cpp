@@ -15,7 +15,7 @@ Core::UserControlParameters gparams(std::string_view path)
           .number_exported_result = nex,
           .recursive = false,
           .force_override = true,
-          .serde = serde,
+          .load_serde = serde,
           .initialiser_path = "",
           .model_name = "None",
           .results_file_name = tmp_dir,

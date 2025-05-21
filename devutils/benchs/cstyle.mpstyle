@@ -1,0 +1,43 @@
+#  IEEE plots
+
+
+axes.prop_cycle : (cycler('color', ['k', 'r', 'b', 'g']) + cycler('ls', ['-', '--', ':', '-.']))
+
+# Set default figure size
+figure.figsize : 3.3, 2.5
+figure.dpi : 600
+
+# Font sizes
+font.family : serif
+mathtext.fontset : dejavuserif
+font.size : 8
+axes.formatter.use_mathtext : True
+font.serif : cmr10, Computer Modern Serif, DejaVu Serif
+
+lines.linewidth :1
+lines.markersize : 4
+legend.frameon : False
+
+legend.loc:upper right
+
+# Set x axis
+xtick.direction : in
+xtick.major.size : 3
+xtick.major.width : 0.5
+xtick.minor.size : 1.5
+xtick.minor.width : 0.5
+xtick.minor.visible : True
+xtick.top : True
+
+# Set y axis
+ytick.direction : in
+ytick.major.size : 3
+ytick.major.width : 0.5
+ytick.minor.size : 1.5
+ytick.minor.width : 0.5
+ytick.minor.visible : True
+ytick.right : True
+
+
+savefig.bbox : tight
+savefig.pad_inches : 0.05

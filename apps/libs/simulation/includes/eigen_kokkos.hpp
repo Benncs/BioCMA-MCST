@@ -7,36 +7,130 @@
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 
+// constexpr auto EigenLayoutRight = Eigen::RowMajor;
 
-constexpr auto DataLayoutEigen = Eigen::ColMajor;
+// constexpr auto DataLayoutEigen = Eigen::ColMajor;
+// constexpr auto CompileMatrixSizeEigen = -1;
+// using MatrixType =
+//     Eigen::Matrix<double, CompileMatrixSizeEigen, CompileMatrixSizeEigen, DataLayoutEigen>;
+
+// using SparseMatrixType = Eigen::SparseMatrix<double, DataLayoutEigen>;
+// using DiagonalType = Eigen::DiagonalMatrix<double, CompileMatrixSizeEigen>;
+
+// template <typename ExecSpace,typename ...Memorytrait>
+// using KokkosScalarMatrix = Kokkos::View<double**, Kokkos::LayoutLeft, ExecSpace,Memorytrait...>;
+
+// struct RowMajorEigenKokkos
+// {
+
+// };
+
+// struct EigenKokkos
+// {
+//   KokkosScalarMatrix<HostSpace> host;
+//   KokkosScalarMatrix<ComputeSpace,Kokkos::MemoryTraits<Kokkos::RandomAccess>> compute;
+//   MatrixType eigen_data;
+
+//   EigenKokkos(std::size_t n_row, std::size_t n_col);
+//   [[nodiscard]] std::span<const double> get_span() const
+//   {
+//     return {eigen_data.data(), static_cast<size_t>(eigen_data.size())};
+//   }
+//   std::span<double> get_span()
+//   {
+//     return {eigen_data.data(), static_cast<size_t>(eigen_data.size())};
+//   }
+
+//   void update_host_to_compute() const;
+//   void update_compute_to_host() const;
+// };
+
+#include <span>
+
+// Layout definitions
+constexpr auto EigenLayoutRight = Eigen::RowMajor;
+constexpr auto EigenLayoutLeft = Eigen::ColMajor;
 constexpr auto CompileMatrixSizeEigen = -1;
-using MatrixType =
-    Eigen::Matrix<double, CompileMatrixSizeEigen, CompileMatrixSizeEigen, DataLayoutEigen>;
-using SparseMatrixType = Eigen::SparseMatrix<double, DataLayoutEigen>;
+
+// Templated Eigen Matrix Type
+template <int Layout>
+using MatrixType = Eigen::Matrix<double, CompileMatrixSizeEigen, CompileMatrixSizeEigen, Layout>;
+
+using ColMajorMatrixtype = MatrixType<EigenLayoutLeft>;
+
+template <int Layout> using SparseMatrixType = Eigen::SparseMatrix<double, Layout>;
+
 using DiagonalType = Eigen::DiagonalMatrix<double, CompileMatrixSizeEigen>;
 
-template <typename ExecSpace,typename ...Memorytrait>
-using KokkosScalarMatrix = Kokkos::View<double**, Kokkos::LayoutLeft, ExecSpace,Memorytrait...>;
+// template <typename ExecSpace, typename... MemoryTraits>
+// using KokkosScalarMatrix = Kokkos::View<double**, Kokkos::LayoutLeft, ExecSpace,
+// MemoryTraits...>;
 
-struct EigenKokkos
+template <int EigenLayout> struct KokkosLayoutMapper;
+
+template <> struct KokkosLayoutMapper<Eigen::ColMajor>
 {
-  KokkosScalarMatrix<HostSpace> host;
-  KokkosScalarMatrix<ComputeSpace,Kokkos::MemoryTraits<Kokkos::RandomAccess>> compute;
-  MatrixType eigen_data;
+  using type = Kokkos::LayoutLeft;
+};
 
-  EigenKokkos(std::size_t n_row, std::size_t n_col);
+template <> struct KokkosLayoutMapper<Eigen::RowMajor>
+{
+  using type = Kokkos::LayoutRight;
+};
+
+template <typename ExecSpace, int EigenLayout, typename... MemoryTrait>
+using KokkosScalarMatrix = Kokkos::
+    View<double**, typename KokkosLayoutMapper<EigenLayout>::type, ExecSpace, MemoryTrait...>;
+
+
+using RowMajorKokkosScalarMatrix = KokkosScalarMatrix<ComputeSpace, Eigen::RowMajor>;
+using ColMajorKokkosScalarMatrix = KokkosScalarMatrix<ComputeSpace, Eigen::ColMajor>;
+
+template <int EigenLayout> struct EigenKokkosBase
+{
+  using EigenMatrix = MatrixType<EigenLayout>;
+  using HostView = KokkosScalarMatrix<HostSpace, EigenLayout>;
+  using ComputeView = KokkosScalarMatrix<ComputeSpace,
+                                         EigenLayout,
+                                         Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+
+  HostView host;
+  ComputeView compute;
+  EigenMatrix eigen_data;
+
+  EigenKokkosBase(std::size_t n_row, std::size_t n_col)
+      : eigen_data(MatrixType<EigenLayout>(n_row, n_col))
+  {
+    eigen_data.setZero();
+    host = HostView(eigen_data.data(), n_row, n_col);
+    compute = Kokkos::create_mirror_view_and_copy(ComputeSpace(), host);
+  }
+
   [[nodiscard]] std::span<const double> get_span() const
   {
     return {eigen_data.data(), static_cast<size_t>(eigen_data.size())};
   }
+
   std::span<double> get_span()
   {
     return {eigen_data.data(), static_cast<size_t>(eigen_data.size())};
   }
 
-  void update_host_to_compute() const;
-  void update_compute_to_host() const;
+  void update_host_to_compute() const
+  {
+    Kokkos::deep_copy(compute, host);
+  }
+
+  void update_compute_to_host() const
+  {
+    Kokkos::deep_copy(host, compute);
+  }
 };
 
+// ColMajor version (default)
+using EigenKokkos = EigenKokkosBase<EigenLayoutLeft>;
 
-#endif 
+// RowMajor version
+using RowMajorEigenKokkos = EigenKokkosBase<EigenLayoutRight>;
+
+#endif

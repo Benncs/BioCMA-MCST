@@ -15,12 +15,12 @@ namespace MC
    */
   enum class EventType : char
   {
-    ChangeWeight = 0, ///< Update in weight
-    NewParticle,      ///< Spawn new particle
+    NewParticle=0,      ///< Spawn new particle
     Death,            ///< Remove particle from list
     Move,             ///< Move in domain
     Exit,             ///< Remove particle from list due to move in domain
     Overflow,
+    ChangeWeight , ///< Update in weight
     __COUNT__
   };
 

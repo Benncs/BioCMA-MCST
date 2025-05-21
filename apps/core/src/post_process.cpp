@@ -3,7 +3,6 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/execinfo.hpp>
-
 #include <core/post_process.hpp>
 #include <dataexporter/data_exporter.hpp>
 #include <impl/Kokkos_HostThreadTeam.hpp>
@@ -12,7 +11,6 @@
 #include <mc/unit.hpp>
 #include <memory>
 #include <numeric>
-
 #include <optional>
 #include <simulation/simulation.hpp>
 #include <variant>

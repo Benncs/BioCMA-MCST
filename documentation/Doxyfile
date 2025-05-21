@@ -1,12 +1,12 @@
 PROJECT_NAME           = "BioCMAMC-ST"
-BRIEF 				   = Biological system simulation tool based on Compartment Approach and Monte-Carlo 
+BRIEF 				   = Biological system simulation tool based on Compartment Approach and Monte-Carlo Method
 OUTPUT_DIRECTORY       = ./documentation/output
 
-INPUT                  = ./apps ./documentation/pages
+INPUT                  = ./apps ./documentation/pages 
 FILE_PATTERNS          = *.cpp *.hpp *.md *.tex 
 RECURSIVE              = YES
 CITE_BIB_FILES		   = ./documentation/pages/references.bib
-
+TOC_INCLUDE_HEADINGS   = YES
 
 MARKDOWN_SUPPORT       = YES
 USE_MDFILE_AS_MAINPAGE = ./documentation/01_index.md
@@ -17,6 +17,7 @@ MATHJAX_VERSION        = MathJax_2
 MATHJAX_FORMAT         = HTML-CSS
 MATHJAX_RELPATH        = https://cdn.jsdelivr.net/npm/mathjax@2
 INTERACTIVE_SVG        = YES
+EXAMPLE_PATH		   = documentation/examples
 
 
 # Source code extraction

@@ -23,24 +23,15 @@
 # -----------------------------------------------------------------------------
 
 
-KOKKOS_COMPILER=clang++-18
-CXX_COMPILER=clang++-18
-LOG=1
-
-
-
-wrap_cxx="/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper ${KOKKOS_COMPILER} ${CXX_COMPILER}"
-
+KOKKOS_COMPILER=g++
+LOG=0
+wrap_cxx="/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper ${KOKKOS_COMPILER} ${KOKKOS_COMPILER}"
 args="$@"
 args=$(echo "$args" | sed 's/-MQ /-MT /g') #Cmake and Ninja don´t use the same link semantic
 cmd="$wrap_cxx  $args"
 
-
-
 if [ "$LOG" -eq 1 ]; then
     echo "$cmd" >> wrapper_log.log
 fi
-
-
 
 eval "$cmd"

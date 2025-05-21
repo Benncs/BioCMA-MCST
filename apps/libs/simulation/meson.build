@@ -72,8 +72,7 @@ if use_dynamic_module
       ],
       dependencies: [simulation_dyn_public_dep, private_dependencies],
       cpp_args: [use_python_define],
-      # pic: true,
-      install: true,
+      install: false,
        install_rpath: global_install_dir
    )
 
@@ -89,4 +88,6 @@ endif
 
 
 
+if build_test
 subdir('tests')
+endif

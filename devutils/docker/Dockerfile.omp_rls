@@ -1,0 +1,44 @@
+FROM biocma_omp_base AS build
+
+WORKDIR /app
+ENV CXX=clang++-19
+ENV APP_INSTALL_DIR=/opt/biomc
+# Copy files and directories into the Docker image
+COPY ./apps /app/apps
+COPY ./subprojects/dynlib.wrap /app/subprojects/dynlib.wrap
+COPY ./subprojects/cereal.wrap /app/subprojects/cereal.wrap
+COPY ./subprojects/highfive.wrap /app/subprojects/highfive.wrap
+COPY ./subprojects/cmtool.wrap /app/subprojects/cmtool.wrap
+COPY ./subprojects/cmtool /app/subprojects/cmtool
+COPY ./meson.build /app/meson.build
+COPY ./meson_options.txt /app/meson_options.txt
+COPY ./devutils/auto_generate /app/devutils/auto_generate
+COPY ./devutils/install_script.sh /app/devutils/install_script.sh 
+COPY ./tools /app/tools
+COPY ./devutils/datamodel /app/devutils/datamodel
+COPY ./devutils/exec.py /app/devutils/exec.py
+
+RUN meson setup builddir --buildtype=release -Dbuild_test=false -Duse_system_kokkos=true -Duse_cuda=false -Dbuild_c_api=false -Dbuild_python_api=false -Dresult_dir_path=$APP_INSTALL_DIR/results/
+RUN ninja -C builddir install
+
+
+FROM debian:bookworm-slim AS rls 
+ENV APP_INSTALL_DIR=/opt/biomc
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    libomp5 \
+    openmpi-bin \
+    libhdf5-103 \
+    libhdf5-openmpi-103 && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir lxml --break-system-packages && \
+    rm -rf /var/lib/apt/lists/*
+
+    
+COPY --from=build $APP_INSTALL_DIR $APP_INSTALL_DIR
+RUN ln -sf $APP_INSTALL_DIR/runner.py /usr/bin/biomc_runner
+WORKDIR /
+RUN rm -rf /app
+# ENTRYPOINT ["/usr/bin/runner.py"]

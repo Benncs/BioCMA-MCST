@@ -24,7 +24,8 @@ namespace
 
   inline auto get_interfacial_area(const double db, const CmaUtils::IterationState& state)
   {
-    return 6. * get_gas_fraction(state) / db;
+    const auto alpha_g = get_gas_fraction(state);
+    return 6. * alpha_g / (db*(1-alpha_g));
   }
 
   template <typename G, typename K>
@@ -100,6 +101,7 @@ namespace Simulation::MassTransfer
       assert(energy_dissipation_array.rows() == liquid_concentration.cols()&&"energy liquid size mtr check");
       assert( mtr.Henry.rows() == gas_concentration.rows()&&"henry gas size mtr check");
       assert( mtr.kla.rows() == gas_concentration.rows()&&"kla gas size mtr check");
+      assert( mtr.kla.cols() == gas_concentration.cols()&&"kla gas size mtr check");
 
 
       mtr.kla.row(1) =
@@ -118,10 +120,10 @@ namespace Simulation::MassTransfer
                                             const Eigen::MatrixXd& liquid_volume,
                                             const CmaUtils::IterationState& state)
     {
-     
       (void)state;
-      mtr.mtr = impl_mtr(
-          mtr.kla, liquid_concentration, gas_concentration.colwise() * mtr.Henry, liquid_volume);
+      // mtr.mtr = impl_mtr(
+      //     mtr.kla, liquid_concentration, gas_concentration.colwise() * mtr.Henry, liquid_volume);
+      mtr.mtr = (mtr.kla * (gas_concentration.colwise() * mtr.Henry - liquid_concentration)).matrix() * liquid_volume;
     }
 
   } // namespace Impl

@@ -1,12 +1,12 @@
 #ifndef __COMMON_EXPORT_HPP__
 #define __COMMON_EXPORT_HPP__
 
+#include "Kokkos_Macros.hpp"
 #include <biocma_cst_config.hpp>
 #include <common/alg.hpp>
 #include <common/execinfo.hpp>
-#include <string_view>
 #include <common/traits.hpp>
-
+#include <string_view>
 
 using ComputeSpace = Kokkos::DefaultExecutionSpace;
 using HostSpace = Kokkos::HostSpace;
@@ -17,13 +17,6 @@ using HostSpace = Kokkos::HostSpace;
     Kokkos::Profiling::ScopedRegion region(__label_section__);
 #else
 #  define PROFILE_SECTION(__label_section__) ;
-#endif
-
-#ifndef NDEBUG
-#  define WARN_EXPERIMENTAL //_Pragma("message( __FILE__ \" contains experimental Kokkos
-                            //feature\")") // NOLINT
-#else
-#  define WARN_EXPERIMENTAL
 #endif
 
 #define EIGEN_INDEX(__VALUE__) static_cast<int>(__VALUE__)
@@ -56,10 +49,29 @@ private:
 };
 #  define MkCanary(x) Canary(x, std::source_location());
 #else
-#  define WARN_EXPERIMENTAL
 #  define MkCanary(x)
 #endif
 
+inline Kokkos::TeamPolicy<ComputeSpace> get_policy_auto(std::size_t range)
+{
 
+  Kokkos::TeamPolicy<ComputeSpace> _policy;
+
+  int recommended_team_size = _policy.team_size_recommended(
+      KOKKOS_LAMBDA(const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle) {
+        std::size_t idx =
+            team_handle.league_rank() * team_handle.team_size() + team_handle.team_rank();
+        if (idx >= range)
+        {
+          return;
+        }
+      },
+      Kokkos::ParallelForTag());
+  int league_size = (static_cast<int>(range) + recommended_team_size - 1) / recommended_team_size;
+
+  _policy = Kokkos::TeamPolicy<ComputeSpace>(league_size, recommended_team_size);
+
+  return _policy;
+}
 
 #endif //__COMMON_EXPORT_HPP__

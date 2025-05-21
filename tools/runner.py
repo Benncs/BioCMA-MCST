@@ -2,31 +2,44 @@
 
 import argparse
 import os
-from cli_formater import format_cli
 import sys
+def detect_execution_mode():
+    release_app = "/opt/biomc/biocma_mcst_cli_app"
+    if os.path.exists(release_app):
+        return True
+    return False
 
-dev_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "devutils"))
-sys.path.append(dev_path)
+INSTALL_RELEASE =detect_execution_mode()
+
+if INSTALL_RELEASE:
+    gi = os.path.abspath(os.path.join("/opt/biomc"))
+    sys.path.append(gi) #TODO IMPROVE IMPORT
+else:
+    dev_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "devutils"))
+    sys.path.append(dev_path)
+
 
 from exec import exec  # noqa: E402
-
+from cli_formater import format_cli # noqa: E402
 
 __current_file_path = os.path.abspath(__file__)
 __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
-DEFAULT_TYPE = "debug"
 _MPI_ROOT_FLAG = ""  # "--allow-run-as-root"
-MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} --mca orte_base_help_aggregate 1 -np 6 --report-bindings --bind-to core --map-by slot:PE=1"
+MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} --mca orte_base_help_aggregate 1 -np 1 --report-bindings --bind-to core --map-by slot:PE=6"
 # MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 8 --use-hwthread-cpus"
 OMP_NUM_THREADS = "1"
 COMPILER_NAME = "cuda"  # "gcc"
 
 
-def get_executable(type: str, mpi: bool = True):
+def get_executable(instal: str, mpi: bool = True):
+    """Retourne le chemin de l'exécutable en fonction du type (debug/release)"""
     appname = "biocma_mcst_cli_app" if mpi else "biocma_mcst_cli_app_shared"
-   # return f"{ROOT}/builddir/{type}_{COMPILER_NAME}/apps/cli/{appname}"
-    return f"{ROOT}/builddir/gpu/apps/cli/{appname}"
 
+    if instal:
+        return f"/opt/biomc/{appname}"
+    else:
+        return f"{ROOT}/builddir/host/apps/cli/{appname}"
 
 def mk_parser():
     parser = argparse.ArgumentParser(description="Runner")
@@ -84,31 +97,31 @@ def mk_parser():
         help="dry_run",
         required=False,
     )
-
     return parser
 
 
 def main():
     cli_args = mk_parser().parse_args()
-    r_type = DEFAULT_TYPE
-    if cli_args.release_flag:
-        r_type = "release"
 
-    run_cli, res_file = format_cli(["_", cli_args.casename])
+
+
+    run_cli, res_file = format_cli(["_", cli_args.casename],global_install=INSTALL_RELEASE)
+
     mpi_c = ""
     if cli_args.use_mpi and not cli_args.dry_run:
         mpi_c = MPI_COMMAND + " "
 
     command = (
         mpi_c
-        + get_executable(r_type, cli_args.use_mpi)
+        + get_executable(INSTALL_RELEASE, cli_args.use_mpi)
         + " "
         + run_cli
         + f"-nt {cli_args.n_threads} "
         + "-force 1 "
     )
+
     if cli_args.serde is True:
-        command += "-serde " + "./results/bench/bench_serde_ "
+        command += "-serde " + "./results/prepbatch/prepbatch_serde_ "
 
         # if(cli_args.use_mpi):
         #     input("confirm force?")
@@ -117,7 +130,8 @@ def main():
         arg = command
         print(arg)
         return
-    exec(command, cli_args.n_threads, do_kokkos_measure=True)
+
+    exec(command, cli_args.n_threads, do_kokkos_measure=False)
 
 
 if __name__ == "__main__":

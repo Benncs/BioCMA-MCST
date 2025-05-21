@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 #include <simulation/feed_descriptor.hpp>
 #include <stdexcept>
@@ -79,7 +80,17 @@ namespace Simulation::Feed
     }
     case FeedType::Pulse:
     {
+      
+
+      auto& inner = std::get<Pulse>(this->props);
+      const auto periode = 1/inner.frequency;
+      this->value[0]=(std::fmod(t, periode) < (periode / 2)) ? 1 : 0;
+     
+    
+      // flow_value = inner.stored_value*(1 + std::cos(std::numbers::pi * inner.frequency * t));
+
       __builtin_unreachable();
+
       break;
     }
     case FeedType::Custom:
@@ -106,7 +117,7 @@ namespace Simulation::Feed
     if (value.size() != position.size())
     {
       std::cout << value.size() << " " << position.size() << std::endl;
-      throw std::invalid_argument("Bad feed size");
+      throw std::invalid_argument("Feed descriptor: Number of position should be the same as value");
     }
   }
 
@@ -133,6 +144,23 @@ namespace Simulation::Feed
             std::move(_position),
             std::move(_species),
             DelayedConstant{t_init, t_end, _f},
+            set_exit};
+  }
+
+  FeedDescritor FeedFactory::pulse(double _f,
+                      feed_value_t&& _target,
+                      feed_position_t&& _position,
+                      feed_species_t _species,
+                      double t_init,
+                      double t_end,
+                      double frequency,
+                      bool set_exit)
+  {
+    return {_f,
+            std::move(_target),
+            std::move(_position),
+            std::move(_species),
+            Pulse{t_init, t_end, frequency,_f},
             set_exit};
   }
 

@@ -2,6 +2,7 @@
 #define __PRNG_EXTENSION_HPP__
 
 #include "Kokkos_Macros.hpp"
+#include "mc/alias.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_MathematicalConstants.hpp>
 #include <Kokkos_Random.hpp>
@@ -266,6 +267,7 @@ namespace MC::Distributions
     F lower; // Standard deviation
     F upper; // Standard deviation
 
+
     KOKKOS_INLINE_FUNCTION constexpr TruncatedNormal(F m, F s, F l, F u)
         : mu(m), sigma(s), lower(l), upper(u)
     {
@@ -296,14 +298,14 @@ namespace MC::Distributions
 
       F pl = 0.5 * Kokkos::erfc(-zl / Kokkos::numbers::sqrt2);
       KOKKOS_ASSERT(Kokkos::isfinite(pl) &&
-                    "Truncated normal draw leads is Nan of Inf with given parameters");
+                    "Truncated normal draw leads to Nan of Inf with given parameters");
       F pu = 0.5 * Kokkos::erfc(-zu / Kokkos::numbers::sqrt2);
       KOKKOS_ASSERT(Kokkos::isfinite(pu) &&
-                    "Truncated normal draw leads is Nan of Inf with given parameters");
+                    "Truncated normal draw leads to Nan of Inf with given parameters");
       F p = rand * (pu - pl) + pl;
       F x = norminv(p, mu, sigma);
       KOKKOS_ASSERT(Kokkos::isfinite(x) &&
-                    "Truncated normal draw leads is Nan of Inf with given parameters");
+                    "Truncated normal draw leads to Nan of Inf with given parameters");
       return x;
 
       // NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
@@ -463,6 +465,8 @@ namespace MC::Distributions
              Kokkos::pow(1 - 2 * delta * delta / M_PI, 1.5);
     }
   };
+
+  static_assert(ProbabilityLaw<SkewNormal<float>, float, ComputeSpace>);
 
 } // namespace MC::Distributions
 

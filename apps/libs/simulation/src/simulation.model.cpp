@@ -59,6 +59,7 @@ namespace Simulation
     PROFILE_SECTION("host:reduceContribs")
     const auto [nr, nc] = getDimensions();
     this->liquid_scalar->set_zero_contribs();
+
     for (int i = 0; i < static_cast<int>(n_rank); ++i)
     {
       this->liquid_scalar->reduce_contribs({&data[i * nr * nc], nr * nc});
@@ -86,12 +87,13 @@ namespace Simulation
 
     // Get the index of the exit compartment
     // TODO exit is not necessarly at the index n-1, it should be given by user
-    const uint64_t i_exit = mc_unit->domain.getNumberCompartments() - 1;
+    const uint64_t i_exit = 0; // mc_unit->domain.getNumberCompartments() - 1;
 
     // Define the set_feed lambda function
     auto set_feed =
         [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow, update_scalar](
             const std::shared_ptr<ScalarSimulation>& scalar, auto&& descritor, bool mc_f = false)
+
     {
       double flow = 0.; // Initialize the flow variable
       bool set_exit = false;
@@ -147,7 +149,7 @@ namespace Simulation
     if (is_two_phase_flow)
     {
       mt_model.gas_liquid_mass_transfer(state);
-      const MatrixType& mtr = mt_model.proxy()->mtr;
+      const auto& mtr = mt_model.proxy()->mtr;
 
       this->gas_scalar->performStepGL(
           d_t, state.gas->get_transition(), mtr, MassTransfer::Sign::GasToLiquid);

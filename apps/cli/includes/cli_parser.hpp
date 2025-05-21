@@ -1,9 +1,29 @@
 #ifndef __CLI_PARSER_HPP__
 #define __CLI_PARSER_HPP__
 
+#include <common/results.hpp>
 #include <core/simulation_parameters.hpp>
 #include <iostream>
-#include <optional>
+#include <utility>
+
+//TODO WIP 
+template <typename S>
+struct CliResults : Result<S, std::string> {
+    explicit CliResults(std::string_view t) noexcept : Result<S, std::string>(std::string(t)) {}
+
+    explicit CliResults(S&& value) noexcept : Result<S, std::string>(std::move(value)) {}
+
+    explicit constexpr CliResults() noexcept = default;
+
+    explicit operator CliResults<S>() && {
+        return CliResults<S>(std::move(*this));  
+    }
+
+    explicit operator CliResults<S>() const& {
+        return CliResults<S>(this->get());
+    }
+};
+
 
 /**
  * @brief Parses command-line arguments to extract simulation parameters.
@@ -21,11 +41,11 @@
  * parameters are invalid.
  * @exception noexcept This function does not throw exceptions.
  */
-std::optional<Core::UserControlParameters> parse_cli(int argc, char **argv) noexcept;
+CliResults<Core::UserControlParameters> parse_cli(int argc, char** argv) noexcept;
 
 /**
  * @brief Print Help message to specified buffer
  */
-void showHelp(std::ostream &os) noexcept;
+void showHelp(std::ostream& os) noexcept;
 
 #endif //__CLI_PARSER_HPP__

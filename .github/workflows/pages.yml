@@ -1,3 +1,5 @@
+name: publish-doc
+
 on: [push, pull_request]
 permissions:
   contents: write

@@ -39,13 +39,11 @@ namespace
   bool check_required(const Core::UserControlParameters& params, bool to_load)
   {
     bool flag = true;
-
     flag = flag && params.final_time > 0;
     flag = flag && params.delta_time >= 0;
     flag = flag && !params.cma_case_path.empty();
-    flag = flag && ((params.serde && params.serde_file.has_value()) ||
-                    (!params.serde && !params.serde_file.has_value()));
-
+    flag = flag && ((params.load_serde && params.serde_file.has_value()) ||
+                    (!params.load_serde && !params.serde_file.has_value()));
     if (!to_load)
     {
       flag = flag && params.biomass_initial_concentration !=
@@ -91,6 +89,28 @@ namespace Api
     return set_feed_constant(_f, _target, _position, _species, gas, fed_batch);
   }
 
+  bool SimulationInstance::set_feed(Simulation::Feed::FeedDescritor feed_variant, bool gas)
+  {
+    if (!feed.has_value())
+    {
+      feed = Simulation::Feed::SimulationFeed{std::nullopt, std::nullopt};
+    }
+
+    auto& current_descriptor = (gas) ? this->feed->gas : this->feed->liquid;
+
+    // If not already created, new vector
+    if (!current_descriptor.has_value())
+    {
+      current_descriptor = {std::move(feed_variant)};
+    }
+    else
+    {
+      // Else push
+      current_descriptor->emplace_back(std::move(feed_variant));
+    };
+    return true; //TODO FIX ERROR
+  }
+
   bool SimulationInstance::set_feed_constant(double _flow,
                                              std::span<double> _concentration,
                                              std::span<std::size_t> _position,
@@ -105,25 +125,9 @@ namespace Api
         _flow, std::move(target), std::move(position), std::move(species), !fed_batch);
     // negates fed_batch because constant accepts set_exit flag. fed_batch = !set_exit
 
-    if (!feed.has_value())
-    {
-      feed = Simulation::Feed::SimulationFeed{std::nullopt, std::nullopt};
-    }
+    
 
-    auto& current_descriptor = (gas) ? this->feed->gas : this->feed->liquid;
-
-    // If not already created, new vector
-    if (!current_descriptor.has_value())
-    {
-      current_descriptor = {fd};
-    }
-    else
-    {
-      // Else push
-      current_descriptor->emplace_back(fd);
-    };
-
-    return true;
+    return set_feed(fd,gas);
   }
 
   SimulationInstance::SimulationInstance(int argc, char** argv, std::optional<std::size_t> run_id)
@@ -138,8 +142,6 @@ namespace Api
     _data = Core::CaseData(); // Explicity delete everything before
   }
 
- 
-
   std::optional<std::unique_ptr<SimulationInstance>>
   SimulationInstance::init(int argc, char** argv, std::optional<std::size_t> run_id) noexcept
   {
@@ -152,8 +154,6 @@ namespace Api
     }
     return ptr;
   }
-
-
 
   ApiResult SimulationInstance::exec() noexcept
   {
@@ -213,6 +213,7 @@ namespace Api
 
     Core::GlobalInitialiser global_initializer(_data.exec_info, params);
     auto t = global_initializer.init_transitionner();
+
     global_initializer.init_feed(feed);
 
     auto __simulation = global_initializer.init_simulation(this->scalar_initializer_variant);
@@ -286,7 +287,7 @@ namespace Api
   bool SimulationInstance::register_serde(std::string_view path)
   {
     this->params.serde_file = path;
-    this->params.serde = true;
+    this->params.load_serde = true;
     return true;
   }
 
@@ -295,7 +296,5 @@ namespace Api
     this->params.model_name = path;
     return ApiResult();
   }
-
-  
 
 } // namespace Api

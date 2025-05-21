@@ -86,7 +86,8 @@ typedef struct Opaque*
     uint32_t number_exported_result;      ///< Number of results to be exported.
     int recursive;                        ///< Flag to enable recursive processing.
     int force_override;                   ///< Flag to allow overwriting of existing results.
-    int serde;
+    int load_serde;
+    int save_serde;
   } Param;
   // NOLINTEND
   void show_user_param(const Param* params);

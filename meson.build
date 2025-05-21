@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.7.1',
+  version: '0.8.5',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
@@ -27,6 +27,9 @@ if compiler.has_argument('-dlto')
   flto_flag = [flto_flag,'-dlto']
 endif
 
+if compiler.has_argument('-march=native')
+  arch_specific_args = [arch_specific_args, '-march=native']
+endif
 
 
 if compiler.has_argument('-mtune=native')
@@ -52,8 +55,18 @@ root = meson.project_source_root()
 project_name = meson.project_name()
 build_type = get_option('buildtype')
 cpp = meson.get_compiler('cpp')
+python_install = get_option('python_install')
+if python_install
 global_install_dir = get_option('prefix') + '/' + get_option('libdir')
-includes_install_dir = ('include/' + project_name)
+else
+global_install_dir = '/opt/biomc'
+endif 
+
+# global_install_dir = get_option('prefix') + '/' + get_option('libdir')
+# includes_install_dir = ('include/' + project_name)
+build_test=get_option('build_test')
+
+
 
 use_kokkos_tools = true
 
@@ -62,7 +75,7 @@ if (use_kokkos_tools)
   cpp_args = [cpp_args, '-DENABLE_KOKKOS_PROFILING']
 endif
 
-add_project_arguments(cpp_args, language: 'cpp')
+
 
 ## Get buildtype specific options
 
@@ -109,19 +122,18 @@ if use_system_kokkos
     method: 'cmake',
     required: true,
     components: ['kokkos'],
-    modules: ['Kokkos::kokkos'],
+    modules: ['Kokkos::kokkos']
   )
 
   kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE','-Wno-unknown-pragmas']
 
   if use_cuda
-
     kokkos_compile_arg = [
       kokkos_compile_arg,
       '-extended-lambda',
       '-Wext-lambda-captures-this',
-      # '-arch=native',
     ]
+
   endif
 
   kokkos = declare_dependency(
@@ -135,8 +147,9 @@ else
   kokkos_option.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
   kokkos_option.add_cmake_defines({'Kokkos_ENABLE_OPENMP': 'ON'})
   kokkos_option.add_cmake_defines({'Kokkos_ENABLE_HWLOC': 'ON'})
+  kokkos_option.add_cmake_defines({'Kokkos_ARCH_NATIVE': 'ON'})
   kokkos_option.add_cmake_defines({'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'})
-  # kokkos_option.set_install(false)
+  kokkos_option.set_install(false)
   sub_kokkos = cmake.subproject('kokkos', required: true, options: kokkos_option)
 
   kokkos = declare_dependency(
@@ -149,7 +162,7 @@ else
       omp,
       hwloc,
       thread_dep,dl_dep
-    ],
+    ]
   )
 endif
 
@@ -173,6 +186,7 @@ if cmake.found()
   ## MAYBE USE ?? IDK
   highfive_cmake_options.add_cmake_defines({'HDF5_PREFER_PARALLEL': false})
   highfive_cmake_options.add_cmake_defines({'HDF5_IS_PARALLEL': false})
+  highfive_cmake_options.set_install(false)
   highfive_proj = cmake.subproject('highfive', options: highfive_cmake_options, required: false)
 
   if highfive_proj.found()
@@ -191,9 +205,13 @@ if cmake.found()
     cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})
     cereal_cmake_options.add_cmake_defines({'BUILD_SANDBOX': false})
     cereal_cmake_options.add_cmake_defines({'BUILD_TESTS': false})
+    cereal_cmake_options.set_install(false)
     cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
-    if cereal_proj.found() and not use_cuda 
+    if cereal_proj.found() #and not use_cuda 
       ceral_found = true
+      if compiler.has_argument('-Wno-missing-template-arg-list-after-template-kw')
+        cpp_args=[cpp_args,'-Wno-missing-template-arg-list-after-template-kw'] #FIXME needed with clang++-19
+      endif 
       add_project_arguments('-DUSE_CEAREAL', language: 'cpp')
       cereal_dependency = cereal_proj.dependency('cereal')
     endif
@@ -207,7 +225,6 @@ if cmt.found()
   message('System cmtool')
   cma_read_name = cmt.get_variable('cma_read', default_value: 'none')
   cma_dep = dependency(cma_read_name, required: true)
-
 else
   subproject(
     'cmtool',
@@ -217,17 +234,18 @@ else
       'b_colorout=always',
       'b_coverage=false',
       'build_all=false',
-    ],
+    ]
   ) # We only need native cmtool library in order to read flowmap so, no python neither executable
-
-  cma_dep = dependency('cma_read', required: true, version: '>=1.1') # Get shared lib
+  cma_dep = dependency('cma_read', required: true, version: '>=1.1',static:true) # Get shared lib
 
 endif
-
+add_project_arguments(cpp_args, language: 'cpp')
 subdir('apps')
 
 run_command('sh', '-c', f'ln -s @outdir@/compile_commands.json .', check: false)
 
-if get_option('compile_tools')
+
 subdir('tools')
+if not python_install
+meson.add_install_script('devutils/install_script.sh',result_dir)
 endif 

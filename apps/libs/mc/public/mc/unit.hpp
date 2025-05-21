@@ -1,7 +1,7 @@
 #ifndef __MC_UNIT_HPP__
 #define __MC_UNIT_HPP__
 
-#include "variant_model.hpp"
+#include <variant_model.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
 #include <mc/particles_container.hpp>
@@ -35,7 +35,7 @@ namespace MC
 
   template <typename FunctorType>
   Kokkos::TeamPolicy<ComputeSpace>
-  get_policty(FunctorType& f, std::size_t range, bool reduce = false)
+  get_policy(FunctorType& f, std::size_t range, bool reduce = false)
   {
     (void)f;
     (void)reduce;

@@ -1,4 +1,3 @@
-#include "core/scalar_factory.hpp"
 #include <api/api.hpp>
 #include <api/api_raw.h>
 #include <core/simulation_parameters.hpp>
@@ -13,7 +12,10 @@
 #include <sstream>
 #include <string>
 #include <utility>
+
 constexpr int ID_VERIF = 2025;
+[[maybe_unused]] constexpr int f_true = 1;
+[[maybe_unused]] constexpr int f_false = 0;
 
 void finalize()
 {
@@ -29,21 +31,6 @@ int apply(Handle handle, int to_load)
   }
   return -1;
 }
-
-// Handle init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thread_per_process)
-// {
-//   auto opt_handle = Api::SimulationInstance::init(n_rank, current_rank, id, thread_per_process);
-//   if (opt_handle.has_value())
-//   {
-//     return opt_handle->release();
-//   }
-//   return nullptr;
-// }
-
-// Handle init_handle_shared(uint64_t id, uint32_t thread_per_process)
-// {
-//   return init_handle_raw(1, 0, id, thread_per_process);
-// }
 
 Handle init_handle_raw(int argc, char** argv)
 {
@@ -107,7 +94,6 @@ int register_cma_path_recursive(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
-
     return (handle->register_cma_path(c, true)) ? 0 : -1;
   }
   return -1;
@@ -144,23 +130,27 @@ int register_initializer_path(Handle handle, const char* c)
 Core::UserControlParameters convert_c_wrap_to_param(const wrap_c_param_t& params)
 {
   bool recursive = params.recursive != 0;
-  bool serde = params.serde != 0;
   bool force_override = params.force_override != 0;
-
-  return {.biomass_initial_concentration = params.biomass_initial_concentration,
-          .final_time = params.final_time,
-          .delta_time = params.delta_time,
-          .number_particle = params.number_particle,
-          .n_thread = params.n_thread,
-          .number_exported_result = params.number_exported_result,
-          .recursive = force_override,
-          .force_override = recursive,
-          .serde = serde,
-          .initialiser_path = "",
-          .model_name = "",
-          .results_file_name = "",
-          .cma_case_path = "",
-          .serde_file = std::nullopt};
+  bool load_serde = (params.load_serde != 0);
+  bool save_serde = (params.save_serde != 0);
+  std::cout<<params.save_serde<<std::endl;
+  return Core::UserControlParameters{
+      .biomass_initial_concentration = params.biomass_initial_concentration,
+      .final_time = params.final_time,
+      .delta_time = params.delta_time,
+      .number_particle = params.number_particle,
+      .n_thread = params.n_thread,
+      .number_exported_result = params.number_exported_result,
+      .recursive = force_override,
+      .force_override = recursive,
+      .load_serde = load_serde,
+      .save_serde = save_serde,
+      .initialiser_path = "",
+      .model_name = "",
+      .results_file_name = "",
+      .cma_case_path = "",
+      .serde_file = std::nullopt,
+  };
 }
 
 Param make_params(double biomass_initial_concentration,
@@ -169,15 +159,17 @@ Param make_params(double biomass_initial_concentration,
                   uint64_t number_particle,
                   uint32_t number_exported_result)
 {
+
   return {biomass_initial_concentration,
           final_time,
           delta_time,
           number_particle,
           1,
           number_exported_result,
-          0,
-          0,
-          0};
+          f_false,
+          f_false,
+          f_false,
+          f_false};
 }
 
 int register_parameters(Handle handle, Param* raw_params)

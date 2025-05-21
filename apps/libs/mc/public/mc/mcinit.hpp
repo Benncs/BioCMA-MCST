@@ -41,10 +41,12 @@ namespace MC
                                        const NeighborsView<HostSpace>& neighbors,
                                        double& total_mass)
   {
+    // Kokkos::printf("Using model: %s\r\n",Model::); //TODO Add model's name to trait (optional)
     if constexpr (ConstWeightModelType<Model>)
     {
       Kokkos::printf("Const Weights\r\n");
     }
+
     auto unit = std::make_unique<MonteCarloUnit>();
     unit->domain = ReactorDomain(volumes, neighbors);
     auto container = ParticlesContainer<Model>(n_particles);

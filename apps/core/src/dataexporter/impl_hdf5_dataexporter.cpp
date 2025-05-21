@@ -16,7 +16,7 @@
 #  include <string_view>
 #  include <type_traits>
 #  include <variant>
-# include <span> 
+# include <span>
 #  ifdef __linux__
 #    include <pwd.h>
 #    include <sys/types.h>
@@ -114,7 +114,7 @@ namespace Core
     export_metadata_t description =
         user_description.has_value() ? *user_description : "Interesting results";
 
-    metadata["file_version"] = 5; //NOLINT
+    metadata["file_version"] = 6; //NOLINT
     metadata["creation_date"] = date_time();
     metadata["author"] = get_user_name();
     metadata["description"] = description;
@@ -162,12 +162,20 @@ namespace Core
     if (description.chunk_dims.has_value())
     {
       auto chunk_dims = description.chunk_dims.value();
+      std::vector<hsize_t> _chunk_dims; //FIXME
+      for(auto&& i : chunk_dims)
+      {
+          _chunk_dims.push_back(i);
+      }
+
+      //FIXME
       if(chunk_dims.size() != chunk_dims.size())
       {
         throw std::invalid_argument("prepare_matrix(HDF5): container and chunkdimensions and  don´t match");
       }
+
       props.add(HighFive::Shuffle());
-      props.add(HighFive::Chunking(chunk_dims));
+      props.add(HighFive::Chunking(_chunk_dims));
     }
 
     if (description.compression)
@@ -266,6 +274,7 @@ namespace Core
                                   bool compress)
   {
     CHECK_PIMPL
+    //Caution to Eigen layout
     auto data = Eigen::Map<Eigen::MatrixXd>(
         const_cast<double*>(values.data()), EIGEN_INDEX(n_row), EIGEN_INDEX(n_col));
     HighFive::DataSetCreateProps ds_props;

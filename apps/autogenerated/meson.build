@@ -18,11 +18,13 @@ conf_data = configuration_data(
         'MC_MAX_PARTICLE_BUFFER': '100e6',
         'debug_MC_RAND_DEFAULT_SEED': '2024',
         '_dead_particle_ratio_threshold':'0.01',
-        'result_dir_path':'"./results/"',
         'cma_data_folder_path':'"cma_data"',
         'enable_event_counter':'false'
     },
 )
+result_dir = get_option('result_dir_path')
+conf_data.set_quoted(  'result_dir_path', result_dir)
+conf_data.set_quoted(  '_BIOMC_BUILD_MODE', build_type)
 
 configure_file(
     input: 'biocma_cst_config.hpp.in',
@@ -46,31 +48,12 @@ if use_cuda
 arg_udf=''
 endif
 
+model_list_name = ['two_meta','simple_model','two_meta_div']
 
-# custom target to generate template_model_loader.cpp and model_list.hpp
-# generated_model_selection = custom_target(
-#     'generated_model_selection.[ch]',
-#     output: [
-#         'wrap_init_model_selector.cpp',
-#         'wrap_init_model_selector.hpp',
-#         'variant_model.hpp',
-#     ],
-#     input: f'@root@/devutils/auto_generate/generate_model_loader.py',
-#     command: [
-#         prog_python,
-#         '@INPUT@',
-#         f'@root@/apps/libs/biomodels',
-#         template_model_loader,
-#         '@OUTPUT0@',
-#         template_model_loader_header,
-#         '@OUTPUT1@',
-#         variant_model,
-#         '@OUTPUT2@',
-#         arg_includ_py,arg_udf
-#     ],
-# )
+if not use_cuda
+model_list_name = [model_list_name,'udf_model']
+endif
 
-model_list_name = ['two_meta','simple_model']
 model_folder_root = f'@root@/apps/libs/models'
 
 generated_model_selection = custom_target(

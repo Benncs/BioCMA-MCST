@@ -56,8 +56,13 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("argv"));
 
   m.def("finalize", &finalize);
-  m.def("exec", &exec);
-  // m.def("apply", &apply);
+  m.def("exec",
+        [](std::shared_ptr<Api::SimulationInstance>& handle)
+        {
+          pybind11::gil_scoped_release release; // TODO check if really usefull ?
+          handle->exec();
+          pybind11::gil_scoped_acquire acquire;
+        });
 
   m.def("apply",
         [](std::shared_ptr<Api::SimulationInstance>& handle,
@@ -76,7 +81,26 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
         { return handle->get_exec_info().n_rank; });
 
   m.def("register_result_path", &register_result_path);
-  m.def("register_cma_path", &register_cma_path);
+
+  m.def(
+      "register_cma_path",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         const std::string& cma_path,
+         bool recursive)
+      {
+        if (recursive)
+        {
+          return register_cma_path_recursive(handle.get(), cma_path.data());
+        }
+        else
+        {
+          return register_cma_path(handle.get(), cma_path.data());
+        }
+      },
+      py::arg("handle"),
+      py::arg("cma_path"),
+      py::arg("recursive") = false);
+
   m.def("register_serde", &register_serde);
   m.def("register_parameters", &register_parameters);
   m.def("register_model_name", &register_model_name);
@@ -102,6 +126,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       .def_readwrite("biomass_initial_concentration",
                      &wrap_c_param_t::biomass_initial_concentration)
       .def_readwrite("number_particle", &wrap_c_param_t::number_particle)
+      .def_readwrite("save_serde", &wrap_c_param_t::save_serde)
       .def("__repr__", &wrap_repr)
       // TODO Write unittest
       .def(py::pickle(
@@ -114,13 +139,15 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
                                   p.number_exported_result,
                                   p.recursive,
                                   p.biomass_initial_concentration,
-                                  p.number_particle);
+                                  p.number_particle,
+                                  p.save_serde);
           },
           [](const py::tuple& t) { // __setstate__
-            constexpr std::size_t n_attributes = 8;
+            constexpr std::size_t n_attributes = 9;
             if (t.size() != n_attributes)
             {
-              throw std::runtime_error("Invalid state!");
+              throw std::runtime_error(
+                  "Pickle param invalid state, different number of attributes");
             }
 
             /* Create a new C++ instance */
@@ -136,6 +163,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
             p.recursive = static_cast<int>(t[5].cast<bool>());
             p.biomass_initial_concentration = t[6].cast<double>();
             p.number_particle = t[7].cast<int>();
+            p.number_particle = t[8].cast<int>();
             // NOLINTEND
             return p;
           }));
@@ -165,7 +193,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
          std::vector<double> _target,
          std::vector<std::size_t> _position,
          std::vector<std::size_t> _species)
-      { handle->set_feed_constant(_f, _target, _position, _species, true); },
+      // Ensure gas feed has fed_batch flag to false, gas has to have exit
+      { handle->set_feed_constant(_f, _target, _position, _species, true, false); },
       py::arg("handle"),
       py::arg("flow"),
       py::arg("concentration value"),

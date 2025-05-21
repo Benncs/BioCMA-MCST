@@ -143,6 +143,8 @@ namespace Api
      */
     ApiResult register_model_name(std::string_view path);
 
+    bool set_feed(Simulation::Feed::FeedDescritor feed_variant,bool gas=false);
+
     /**
      * @brief Configure feed constants for the simulation.
      *

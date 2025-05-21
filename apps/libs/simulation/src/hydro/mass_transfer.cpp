@@ -83,7 +83,7 @@ namespace Simulation::MassTransfer
     // _proxy = // NOLINT
     //     new MassTransferProxy{MatrixType(nrow, ncol), Eigen::ArrayXXd(nrow, ncol)};
     _proxy = std::make_shared<MassTransferProxy>();
-    _proxy->mtr = MatrixType(nrow, ncol);
+    _proxy->mtr = ColMajorMatrixtype(nrow, ncol);
     _proxy->kla = Eigen::ArrayXXd(nrow, ncol);
     _proxy->Henry = Eigen::ArrayXXd(liquid_scalar->n_row(), 1);
     _proxy->Henry.setZero();

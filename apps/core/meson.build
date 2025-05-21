@@ -66,4 +66,6 @@ core_distributed_dependency_static = declare_dependency(
     compile_args: [],
 )
 
+if build_test
 subdir('tests')
+endif

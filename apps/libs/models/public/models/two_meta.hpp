@@ -3,6 +3,7 @@
 
 #include "Kokkos_Printf.hpp"
 #include "common/traits.hpp"
+#include "mc/macros.hpp"
 #include "models/utils.hpp"
 #include <mc/prng/prng_extension.hpp>
 #include <mc/traits.hpp>
@@ -26,6 +27,7 @@ namespace Models
     using uniform_weight = std::true_type; // Using type alias
     using Self = TwoMeta;
     using FloatType = float;
+    using Config = std::nullopt_t;
 
     enum class particle_var : int
     {
@@ -60,7 +62,7 @@ namespace Models
     MODEL_CONSTANT FloatType y_sa = 0.8;                 // S to A yield (mass)
     MODEL_CONSTANT FloatType y_os_molar = 3;             // 3 mol o2 per mol for glucose
     MODEL_CONSTANT FloatType k_o = 0.0001; // g/L: Anane et. al 2017 (Biochem. Eng. J) (g/g)
-    MODEL_CONSTANT FloatType dl_max_ms = 8*2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
+    MODEL_CONSTANT FloatType dl_max_ms = 8 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
     MODEL_CONSTANT FloatType tau_1 = 1000.;         // s
     MODEL_CONSTANT FloatType tau_2 = 1000.;         // s
 
@@ -68,8 +70,17 @@ namespace Models
     MODEL_CONSTANT FloatType phi_perm_max = phi_s_max / 40.; // kgS/
     MODEL_CONSTANT FloatType phi_o2_max =
         10 * phi_s_max / MolarMassG * y_os_molar * MolarMassO2; // kgS/s
-    MODEL_CONSTANT float nu_max_kg_s = dl_max_ms * lin_density;  
+    MODEL_CONSTANT float nu_max_kg_s = dl_max_ms * lin_density;
 
+    // MODEL_CONSTANT auto length_c_dist =
+    //     MC::Distributions::TruncatedNormal<FloatType>(l_c_m, l_c_m / 7., l_min_m, l_max_m); use
+    //     in out_str_l2
+
+    MODEL_CONSTANT auto length_c_dist = MC::Distributions::TruncatedNormal<FloatType>(
+        l_c_m, l_c_m / 2., l_min_m, l_max_m); // use in out_str_l3
+
+    // MODEL_CONSTANT auto length_c_dist =
+    // MC::Distributions::TruncatedNormal<FloatType>(1.5*l_c_m, l_c_m / 7., 3*l_min_m, l_max_m);
 
     KOKKOS_INLINE_FUNCTION static void
     init(const MC::KPRNG::pool_type& random_pool, std::size_t idx, const SelfParticle& arr);
@@ -97,24 +108,32 @@ namespace Models
       return GET_PROPERTY(Self::particle_var::length) * lin_density;
     }
 
-    inline constexpr static std::array<std::string_view, n_var> names()
+    static std::vector<std::string_view> names()
     {
-      constexpr std::size_t ln_var = n_var - Uptake<Self>::n_var;
-      constexpr auto _names = concat_arrays<Uptake<Self>::n_var, ln_var>(Uptake<Self>::names(),
-                                                                         {
-                                                                             "age",
-                                                                             "length",
-                                                                             "nu1",
-                                                                             "nu2",
-                                                                             "l_cp",
-                                                                             "nu_eff_1",
-                                                                             "nu_eff_2",
-                                                                             "contrib_phi_s",
-                                                                             "contrib_phi_o2",
-                                                                             "contrib_phi_ac",
-                                                                         });
+      return {"age",
+              "length",
+              "nu1",
+              "nu2",
+              "nu_eff_1",
+              "nu_eff_2",
+              "a_perm",
+              "a_pts",
+              "phi_o2",
+              "phi_g"};
+    }
 
-      return _names;
+    static std::vector<std::size_t> get_number()
+    {
+      return {INDEX_FROM_ENUM(particle_var::age),
+              INDEX_FROM_ENUM(particle_var::length),
+              INDEX_FROM_ENUM(particle_var::nu1),
+              INDEX_FROM_ENUM(particle_var::nu2),
+              INDEX_FROM_ENUM(particle_var::nu_eff_1),
+              INDEX_FROM_ENUM(particle_var::nu_eff_2),
+              INDEX_FROM_ENUM(Uptakeparticle_var::a_permease),
+              INDEX_FROM_ENUM(Uptakeparticle_var::a_pts),
+              INDEX_FROM_ENUM(particle_var::contrib_phi_o2),
+              INDEX_FROM_ENUM(particle_var::contrib_phi_s)};
     }
   };
 
@@ -125,20 +144,18 @@ namespace Models
                 std::size_t idx,
                 const SelfParticle& arr)
   {
+    constexpr auto local_lc = length_c_dist;
+    constexpr auto length_dist =
+        MC::Distributions::TruncatedNormal<FloatType>(l_c_m / 2, l_c_m / 5., l_min_m, l_max_m);
 
-    constexpr auto length_dist = MC::Distributions::TruncatedNormal<FloatType>(
-        l_c_m/2, l_c_m / 5., l_min_m, l_max_m);
-
-    constexpr auto length_c_dist =
-        MC::Distributions::TruncatedNormal<FloatType>(l_c_m, l_c_m / 7., l_min_m, l_max_m);
     constexpr auto mu_nu_dist = nu_max_kg_s * 0.1;
     constexpr auto nu_1_initial_dist = MC::Distributions::TruncatedNormal<float>(
         mu_nu_dist, mu_nu_dist / 7., 0., static_cast<double>(nu_max_kg_s));
 
     auto gen = random_pool.get_state();
     GET_PROPERTY(Self::particle_var::length) = length_dist.draw(gen);
-    GET_PROPERTY(Self::particle_var::l_cp) = length_c_dist.draw(gen);
-    GET_PROPERTY(particle_var::nu1)=nu_1_initial_dist.draw(gen);
+    GET_PROPERTY(Self::particle_var::l_cp) = local_lc.draw(gen);
+    GET_PROPERTY(particle_var::nu1) = nu_1_initial_dist.draw(gen);
     random_pool.free_state(gen);
     GET_PROPERTY(particle_var::contrib_phi_s) = 0;
     Uptake<Self>::init(random_pool, idx, arr);
@@ -220,7 +237,7 @@ namespace Models
                                                 const SelfParticle& arr,
                                                 const SelfParticle& child_buffer_arr)
   {
-
+    constexpr auto local_lc = length_c_dist;
     const FloatType new_current_length =
         GET_PROPERTY(particle_var::length) / static_cast<FloatType>(2.);
 
@@ -230,12 +247,22 @@ namespace Models
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::length) = new_current_length;
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::age) = 0;
 
-    constexpr auto length_c_dist =
-        MC::Distributions::TruncatedNormal<FloatType>(l_c_m, l_c_m / 7., l_min_m, l_max_m);
-
+    auto nu_1_o = GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_1);
+    auto nu_2_o = GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_2);
     auto gen = random_pool.get_state();
-    GET_PROPERTY(Self::particle_var::l_cp) = length_c_dist.draw(gen);
-    GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::l_cp) = length_c_dist.draw(gen);
+    GET_PROPERTY(Self::particle_var::l_cp) = local_lc.draw(gen);
+    if (nu_1_o != 0)
+    {
+      GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu1) =
+          MC::Distributions::TruncatedNormal<FloatType>::draw_from(gen, nu_1_o, nu_1_o / 2., 0, 1.);
+    }
+    if (nu_2_o != 0)
+    {
+      GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu2) =
+          MC::Distributions::TruncatedNormal<FloatType>::draw_from(gen, nu_2_o, nu_2_o / 2., 0, 1.);
+    }
+
+    GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::l_cp) = local_lc.draw(gen);
     random_pool.free_state(gen);
 
     Uptake<Self>::division(random_pool, idx, idx2, arr, child_buffer_arr);
@@ -252,6 +279,8 @@ namespace Models
     access(1, position) += weight * GET_PROPERTY(Self::particle_var::contrib_phi_o2); // NOLINT
     access(2, position) += weight * GET_PROPERTY(Self::particle_var::contrib_phi_ac); // NOLINT
   }
+
+  static_assert(HasExportProperties<TwoMeta>, "ee");
 
 } // namespace Models
 
