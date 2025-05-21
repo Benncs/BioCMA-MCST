@@ -153,7 +153,6 @@ namespace Simulation::KernelInline
         {
           return;
         }
-
         if (probability_leaving(random_number, move.liquid_volume(position), flow, d_t))
         {
           dead_count += 1;

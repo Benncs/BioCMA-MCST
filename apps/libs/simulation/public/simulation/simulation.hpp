@@ -221,7 +221,7 @@ namespace Simulation
     }
 
     Kokkos::fence("fence_mc_cycle_process_move");
-    bool f_reaction = true; //FIXME 
+    bool f_reaction = true; //FIXME
     if (f_reaction)
     {
 

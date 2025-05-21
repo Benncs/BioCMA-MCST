@@ -82,21 +82,24 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 
   m.def("register_result_path", &register_result_path);
 
-
-  m.def("register_cma_path",
-        [](std::shared_ptr<Api::SimulationInstance>& handle,
-           const std::string& cma_path,
-           bool recursive)
+  m.def(
+      "register_cma_path",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         const std::string& cma_path,
+         bool recursive)
+      {
+        if (recursive)
         {
-          if (recursive)
-          {
-            return register_cma_path_recursive(handle.get(), cma_path.data());
-          }
-          else
-          {
-            return register_cma_path(handle.get(), cma_path.data());
-          }
-        },py::arg("handle"),py::arg("cma_path"),py::arg("recursive")=false);
+          return register_cma_path_recursive(handle.get(), cma_path.data());
+        }
+        else
+        {
+          return register_cma_path(handle.get(), cma_path.data());
+        }
+      },
+      py::arg("handle"),
+      py::arg("cma_path"),
+      py::arg("recursive") = false);
 
   m.def("register_serde", &register_serde);
   m.def("register_parameters", &register_parameters);
@@ -190,7 +193,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
          std::vector<double> _target,
          std::vector<std::size_t> _position,
          std::vector<std::size_t> _species)
-      { handle->set_feed_constant(_f, _target, _position, _species, true); },
+      // Ensure gas feed has fed_batch flag to false, gas has to have exit
+      { handle->set_feed_constant(_f, _target, _position, _species, true, false); },
       py::arg("handle"),
       py::arg("flow"),
       py::arg("concentration value"),

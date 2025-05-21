@@ -87,12 +87,13 @@ namespace Simulation
 
     // Get the index of the exit compartment
     // TODO exit is not necessarly at the index n-1, it should be given by user
-    const uint64_t i_exit = mc_unit->domain.getNumberCompartments() - 1;
+    const uint64_t i_exit = 0; // mc_unit->domain.getNumberCompartments() - 1;
 
     // Define the set_feed lambda function
     auto set_feed =
         [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow, update_scalar](
             const std::shared_ptr<ScalarSimulation>& scalar, auto&& descritor, bool mc_f = false)
+
     {
       double flow = 0.; // Initialize the flow variable
       bool set_exit = false;
