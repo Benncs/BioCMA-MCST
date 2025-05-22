@@ -1,3 +1,4 @@
+#include "api/results.hpp"
 #include <api/api.hpp>
 #include <api/api_raw.h>
 #include <core/simulation_parameters.hpp>
@@ -133,7 +134,7 @@ Core::UserControlParameters convert_c_wrap_to_param(const wrap_c_param_t& params
   bool force_override = params.force_override != 0;
   bool load_serde = (params.load_serde != 0);
   bool save_serde = (params.save_serde != 0);
-  std::cout<<params.save_serde<<std::endl;
+  std::cout << params.save_serde << std::endl;
   return Core::UserControlParameters{
       .biomass_initial_concentration = params.biomass_initial_concentration,
       .final_time = params.final_time,
@@ -184,28 +185,55 @@ int register_parameters(Handle handle, Param* raw_params)
   return -1;
 }
 
-int set_feed_constant(Handle handle,
-                      double _f,
-                      size_t n_species,
-                      double* _target,
-                      size_t* _species,
-                      size_t n_position,
-                      size_t* _position,
-                      int gas,
-                      int fed_batch)
-{
-  if ((handle != nullptr) && (_target != nullptr) && (_species != nullptr) &&
-      (_position != nullptr))
-  {
-    auto span_target = std::span<double>(_target, n_species);
-    auto span_species = std::span<std::size_t>(_species, n_species);
-    auto span_pos = std::span<std::size_t>(_position, n_position);
-    handle->set_feed_constant(_f, span_target, span_pos, span_species, gas != 0, fed_batch != 0);
-    return 0;
-  }
+// int set_feed_constant(Handle handle,
+//                       double _f,
+//                       size_t n_species,
+//                       double* _target,
+//                       size_t* _species,
+//                       size_t n_position,
+//                       size_t* _position,
+//                       int gas,
+//                       int fed_batch)
+// {
+//   if ((handle != nullptr) && (_target != nullptr) && (_species != nullptr) &&
+//       (_position != nullptr))
+//   {
+//     auto span_target = std::span<double>(_target, n_species);
+//     auto span_species = std::span<std::size_t>(_species, n_species);
+//     auto span_pos = std::span<std::size_t>(_position, n_position);
+//     handle->set_feed_constant(_f, span_target, span_pos, span_species, gas != 0, fed_batch != 0);
+//     return 0;
+//   }
 
+//   return -1;
+// }
+
+int set_feed_constant(Handle handle,
+                        double flow,
+                        double concentraiton,
+                        size_t species,
+                        size_t position,
+                        int output_position,
+                        int gas,
+                        int fed_batch)
+{
+  if (handle != nullptr)
+  {
+    ApiResult res;
+    if (output_position < 0)
+    {
+      res = handle->set_feed_constant(flow, concentraiton, species,position, gas != 0, fed_batch != 0);
+    }
+    else
+    {
+      res = handle->set_feed_constant_different_output(
+          flow, concentraiton, species, position,output_position, gas != 0);
+    }
+    return res ? 0 : -1;
+  }
   return -1;
 }
+
 void show_user_param(const wrap_c_param_t* params)
 {
   if (params != nullptr)

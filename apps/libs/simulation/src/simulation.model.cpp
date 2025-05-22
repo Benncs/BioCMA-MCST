@@ -85,63 +85,102 @@ namespace Simulation
     const auto& _index_leaving_flow = this->move_info.index_leaving_flow;
     const auto& _leaving_flow = this->move_info.leaving_flow;
 
-    // Get the index of the exit compartment
-    // TODO exit is not necessarly at the index n-1, it should be given by user
-    const uint64_t i_exit = 0; // mc_unit->domain.getNumberCompartments() - 1;
-
-    // Define the set_feed lambda function
-    auto set_feed =
-        [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow, update_scalar](
-            const std::shared_ptr<ScalarSimulation>& scalar, auto&& descritor, bool mc_f = false)
-
+    auto functor = [update_scalar](auto& scl, const Feed::FeedDescriptor& fd) -> void
     {
-      double flow = 0.; // Initialize the flow variable
-      bool set_exit = false;
-      // Iterate through each current_feed in the descriptor
-      for (auto&& current_feed : descritor)
+      if (update_scalar)
       {
-        current_feed.update(t, d_t);     // Update the current_feed
-        flow += current_feed.flow_value; // Get the flow_value of the current_feed
-        set_exit = current_feed.set_exit;
-        if (update_scalar)
+        scl.set_feed(fd.species_index, fd.input_position, fd.flow * fd.concentration);
+        if (fd.output_position)
         {
-          // Iterate through the species, positions, and values of the
-          // current_feed
-          for (std::size_t i_f = 0; i_f < current_feed.n_v; ++i_f)
-          {
-            const std::size_t i_species = current_feed.species[i_f];
-            scalar->set_feed(i_species, current_feed.position[i_f], flow * current_feed.value[i_f]);
-          }
-        }
-      }
-
-      if (set_exit)
-      {
-        if (update_scalar)
-        {
-          // Set the sink for the exit compartment
-          scalar->set_sink(i_exit, flow);
-        }
-
-        // Update Flow for mc particle
-        if (mc_f)
-        {
-          _index_leaving_flow(0) = i_exit;
-          _leaving_flow(0) = flow;
+          scl.set_sink(*fd.output_position, fd.flow);
         }
       }
     };
 
-    if (feed.liquid.has_value())
+    for (auto& feed : feed.liquid_feeds())
     {
-      set_feed(this->liquid_scalar, *feed.liquid, true);
+      feed.update(t, d_t);
+      functor(*this->liquid_scalar, feed);
+      // TODO: improve
+      if (feed.output_position)
+      {
+        _index_leaving_flow(0) = 0;
+        _leaving_flow(0) = feed.flow;
+      }
     }
 
-    if (is_two_phase_flow && feed.gas.has_value())
+    if (is_two_phase_flow)
     {
-      set_feed(this->gas_scalar, *feed.gas);
+      for (auto& feed : feed.gas_feeds())
+      {
+        feed.update(t, d_t);
+        functor(*this->gas_scalar, feed);
+      }
     }
   }
+
+  // void
+  // SimulationUnit::update_feed(const double t, const double d_t, const bool update_scalar)
+  // noexcept
+  // {
+  //   PROFILE_SECTION("host:update_feed")
+  //   // Get references to the index_leaving_flow and leaving_flow data members
+  //   const auto& _index_leaving_flow = this->move_info.index_leaving_flow;
+  //   const auto& _leaving_flow = this->move_info.leaving_flow;
+
+  //   // Get the index of the exit compartment
+  //   // TODO exit is not necessarly at the index n-1, it should be given by user
+  //   const uint64_t i_exit = 0; // mc_unit->domain.getNumberCompartments() - 1;
+
+  //   // Define the set_feed lambda function
+  //   auto set_feed =
+  //       [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow, update_scalar](
+  //           const std::shared_ptr<ScalarSimulation>& scalar, auto&& descritor, bool mc_f = false)
+
+  //   {
+  //     double flow = 0.; // Initialize the flow variable
+  //     bool set_exit = false;
+  //     // Iterate through each current_feed in the descriptor
+  //     for (auto&& current_feed : descritor)
+  //     {
+  //       current_feed.update(t, d_t);     // Update the current_feed
+  //       flow += current_feed.flow_value; // Get the flow_value of the current_feed
+  //       set_exit = current_feed.set_exit;
+  //       if (update_scalar)
+  //       {
+  //         // Iterate through the species, positions, and values of the
+  //         // current_feed
+  //         for (std::size_t i_f = 0; i_f < current_feed.n_v; ++i_f)
+  //         {
+  //           const std::size_t i_species = current_feed.species[i_f];
+  //           scalar->set_feed(i_species, current_feed.position[i_f], flow *
+  //           current_feed.value[i_f]); if (set_exit)
+  //           {
+  //             scalar->set_sink(current_feed.ouput_position[i_f], flow);
+  //           }
+  //         }
+  //       }
+
+  //       //TODO use ouput position
+  //       if (set_exit && mc_f)
+  //       {
+  //         _index_leaving_flow(0) = 0;
+  //         _leaving_flow(0) = flow;
+  //       }
+  //     }
+
+  //   };
+
+  //   if (feed.liquid.has_value())
+  //   {
+  //     set_feed(this->liquid_scalar, *feed.liquid, true);
+  //   }
+
+  //   if (is_two_phase_flow && feed.gas.has_value())
+  //   {
+  //     set_feed(this->gas_scalar, *feed.gas);
+  //   }
+  // }
 
   void SimulationUnit::step(double d_t) const
   {

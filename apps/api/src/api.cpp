@@ -79,56 +79,90 @@ namespace Api
     return std::vector<T>(rhs.begin(), rhs.end());
   }
 
-  bool SimulationInstance::set_feed_constant_from_rvalue(double _f,
-                                                         std::vector<double>&& _target,
-                                                         std::vector<std::size_t>&& _position,
-                                                         std::vector<std::size_t>&& _species,
-                                                         bool gas,
-                                                         bool fed_batch)
-  {
-    return set_feed_constant(_f, _target, _position, _species, gas, fed_batch);
-  }
-
-  bool SimulationInstance::set_feed(Simulation::Feed::FeedDescritor feed_variant, bool gas)
+  ApiResult SimulationInstance::set_feed(Simulation::Feed::FeedDescriptor feed_variant, Phase phase)
   {
     if (!feed.has_value())
     {
       feed = Simulation::Feed::SimulationFeed{std::nullopt, std::nullopt};
     }
 
-    auto& current_descriptor = (gas) ? this->feed->gas : this->feed->liquid;
+    this->feed->add_feed(move_allow_trivial(feed_variant), phase);
 
-    // If not already created, new vector
-    if (!current_descriptor.has_value())
-    {
-      current_descriptor = {std::move(feed_variant)};
-    }
-    else
-    {
-      // Else push
-      current_descriptor->emplace_back(std::move(feed_variant));
-    };
-    return true; //TODO FIX ERROR
+    return ApiResult(); // TODO FIX ERROR
   }
 
-  bool SimulationInstance::set_feed_constant(double _flow,
-                                             std::span<double> _concentration,
-                                             std::span<std::size_t> _position,
-                                             std::span<std::size_t> _species,
-                                             bool gas,
-                                             bool fed_batch)
+  ApiResult SimulationInstance::set_feed_constant(double _flow,
+                                                  double _concentration,
+                                                  std::size_t _species,
+                                                  std::size_t _position,
+
+                                                  bool gas,
+                                                  bool fed_batch)
   {
-    auto target = span_to_vec(_concentration);
-    auto position = span_to_vec(_position);
-    auto species = span_to_vec(_species);
-    auto fd = Simulation::Feed::FeedFactory::constant(
-        _flow, std::move(target), std::move(position), std::move(species), !fed_batch);
-    // negates fed_batch because constant accepts set_exit flag. fed_batch = !set_exit
-
-    
-
-    return set_feed(fd,gas);
+    auto phase = gas ? Phase::Gas : Phase::Liquid;
+    auto constant_feed = Simulation::Feed::FeedFactory::constant(
+        _flow, _concentration, _species, _position, std::nullopt, !fed_batch);
+    // Negates fed_batch because expect set_output wich is !fed_batch
+    return set_feed(constant_feed, phase);
   }
+
+  ApiResult SimulationInstance::set_feed_constant_different_output(double _flow,
+                                                                   double _concentration,
+                                                                   std::size_t _species,
+                                                                   std::size_t input_position,
+                                                                   std::size_t output_position,
+
+                                                                   bool gas)
+  {
+    auto phase = gas ? Phase::Gas : Phase::Liquid;
+    auto constant_feed = Simulation::Feed::FeedFactory::constant(
+        _flow, _concentration, _species, input_position, output_position, true);
+    return set_feed(constant_feed, phase);
+  }
+
+  // bool SimulationInstance::set_feed_constant_from_rvalue(double _f,
+  //                                                        std::vector<double>&& _target,
+  //                                                        std::vector<std::size_t>&& _position,
+  //                                                        std::vector<std::size_t>&& _species,
+  //                                                        bool gas,
+  //                                                        bool fed_batch)
+  // {
+  //   return set_feed_constant(_f, _target, _position, _species, gas, fed_batch);
+  // }
+
+  // bool SimulationInstance::set_feed_constant(double _flow,
+  //                                            std::span<double> _concentration,
+  //                                            std::span<std::size_t> _position,
+  //                                            std::span<std::size_t> _species,
+  //                                            bool gas,
+  //                                            bool fed_batch)
+  // {
+  //   return set_feed_constant_from_position(
+  //       _flow, _concentration, _position, _species, std::nullopt, gas, fed_batch);
+  // }
+
+  // bool SimulationInstance::set_feed_constant_from_position(
+  //     double _flow,
+  //     std::span<double> _concentration,
+  //     std::span<std::size_t> _position,
+  //     std::span<std::size_t> _species,
+  //     std::optional<std::vector<std::size_t>> _output_position,
+  //     bool gas,
+  //     bool fed_batch)
+  // {
+  //   auto target = span_to_vec(_concentration);
+  //   auto position = span_to_vec(_position);
+  //   auto species = span_to_vec(_species);
+  //   auto fd = Simulation::Feed::FeedFactory::constant(_flow,
+  //                                                     std::move(target),
+  //                                                     std::move(position),
+  //                                                     std::move(species),
+  //                                                     std::move(_output_position),
+  //                                                     !fed_batch);
+  //   // negates fed_batch because constant accepts set_exit flag. fed_batch = !set_exit
+
+  //   return set_feed(fd, gas);
+  // }
 
   SimulationInstance::SimulationInstance(int argc, char** argv, std::optional<std::size_t> run_id)
       : id(ID_VERIF)
@@ -295,6 +329,11 @@ namespace Api
   {
     this->params.model_name = path;
     return ApiResult();
+  }
+
+  [[nodiscard]] const ExecInfo& SimulationInstance::get_exec_info() const
+  {
+    return _data.exec_info;
   }
 
 } // namespace Api

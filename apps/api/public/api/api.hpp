@@ -1,12 +1,11 @@
 #ifndef __BIOMC_API_HPP__
 #define __BIOMC_API_HPP__
 
-#include "common/execinfo.hpp"
 #include "core/scalar_factory.hpp"
 #include <api/results.hpp>
+#include <common/execinfo.hpp>
 #include <core/case_data.hpp>
 #include <core/simulation_parameters.hpp>
-#include <cstdint>
 #include <cstdlib>
 #include <memory>
 #include <optional>
@@ -143,31 +142,54 @@ namespace Api
      */
     ApiResult register_model_name(std::string_view path);
 
-    bool set_feed(Simulation::Feed::FeedDescritor feed_variant,bool gas=false);
+    ApiResult set_feed(Simulation::Feed::FeedDescriptor feed_variant, Phase phase = Phase::Liquid);
 
-    /**
-     * @brief Configure feed constants for the simulation.
-     *
-     * @param _flow A constant flow value.
-     * @param concentrations A span of concentrations values.
-     * @param _position A span of position indices.
-     * @param _species A span of species indices.
-     * @param gas Flag indicating whether the feed is gas-phase.
-     * @return True if the feed was successfully configured; false otherwise.
-     */
-    bool set_feed_constant(double _flow,
-                           std::span<double> _concentration,
-                           std::span<std::size_t> _position,
-                           std::span<std::size_t> _species,
-                           bool gas = false,
-                           bool fed_batch = false);
+    ApiResult set_feed_constant(double _flow,
+                                double _concentration,
+                                std::size_t _species,
+                                std::size_t _position,
 
-    bool set_feed_constant_from_rvalue(double _f,
-                                       std::vector<double>&& _target,
-                                       std::vector<std::size_t>&& _position,
-                                       std::vector<std::size_t>&& _species,
-                                       bool gas = false,
-                                       bool fed_batch = false);
+                                bool gas = false,
+                                bool fed_batch = false);
+
+    ApiResult set_feed_constant_different_output(double _flow,
+                                                 double _concentration,
+                                                 std::size_t _species,
+                                                 std::size_t input_position,
+                                                 std::size_t output_position,
+                                                 bool gas = false);
+
+    // /**
+    //  * @brief Configure feed constants for the simulation.
+    //  *
+    //  * @param _flow A constant flow value.
+    //  * @param concentrations A span of concentrations values.
+    //  * @param _position A span of position indices.
+    //  * @param _species A span of species indices.
+    //  * @param gas Flag indicating whether the feed is gas-phase.
+    //  * @return True if the feed was successfully configured; false otherwise.
+    //  */
+    // [[deprecated]]bool set_feed_constant(double _flow,
+    //                        std::span<double> _concentration,
+    //                        std::span<std::size_t> _position,
+    //                        std::span<std::size_t> _species,
+    //                        bool gas = false,
+    //                        bool fed_batch = false);
+
+    // [[deprecated]]bool set_feed_constant_from_position(double _flow,
+    //                                      std::span<double> _concentration,
+    //                                      std::span<std::size_t> _position,
+    //                                      std::span<std::size_t> _species,
+    //                                      std::optional<std::vector<std::size_t>>
+    //                                      _output_position, bool gas = false, bool fed_batch =
+    //                                      false);
+
+    // [[deprecated]]bool set_feed_constant_from_rvalue(double _f,
+    //                                    std::vector<double>&& _target,
+    //                                    std::vector<std::size_t>&& _position,
+    //                                    std::vector<std::size_t>&& _species,
+    //                                    bool gas = false,
+    //                                    bool fed_batch = false);
 
     ApiResult register_scalar_initiazer(Core::ScalarFactory::ScalarVariant&& var);
 
@@ -178,10 +200,7 @@ namespace Api
      */
     [[nodiscard]] int get_id() const;
 
-    [[nodiscard]] const ExecInfo& get_exec_info() const
-    {
-      return _data.exec_info;
-    }
+    [[nodiscard]] const ExecInfo& get_exec_info() const;
 
     /**
      * @brief Execute the simulation.

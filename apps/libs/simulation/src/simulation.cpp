@@ -49,7 +49,7 @@ namespace Simulation
     post_init_concentration(scalar_init);
     post_init_compartments();
 
-    const std::size_t n_flows = (this->feed.liquid.has_value()) ? this->feed.liquid->size() : 0;
+    const std::size_t n_flows = this->feed.n_liquid_flow();
 
     Kokkos::resize(move_info.index_leaving_flow, n_flows);
     Kokkos::resize(move_info.leaving_flow, n_flows);
@@ -60,7 +60,7 @@ namespace Simulation
     {
       // const auto type = MassTransfer::Type::Flowmap{};
       std::vector<double> kla(scalar_init.n_species) ;
-      kla[1]=0.5;
+      kla[1]=0.2; //700 h-1
       const auto type = MassTransfer::Type::FixedKla{kla};
 
       this->mt_model = MassTransfer::MassTransferModel(type, liquid_scalar, gas_scalar);

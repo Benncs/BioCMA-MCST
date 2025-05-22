@@ -1,13 +1,13 @@
 #ifndef __SIMULATION_MOVE_KERNEL_HPP__
 #define __SIMULATION_MOVE_KERNEL_HPP__
 
-#include "Kokkos_Assert.hpp"
-#include "Kokkos_Printf.hpp"
-#include "mc/alias.hpp"
+#include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Printf.hpp>
 #include <Kokkos_Random.hpp>
 #include <biocma_cst_config.hpp>
 #include <cassert>
+#include <mc/alias.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
 #include <mc/prng/prng.hpp>
@@ -15,7 +15,6 @@
 #include <simulation/alias.hpp>
 #include <simulation/probability_leaving.hpp>
 #include <simulation/probe.hpp>
-#include <type_traits>
 #include <utility>
 
 namespace Simulation::KernelInline
@@ -80,7 +79,7 @@ namespace Simulation::KernelInline
                 MC::ParticleAges _ages)
         : d_t(_d_t), positions(std::move(p)), n_particles(n_p), move(std::move(m)),
           random_pool(_random_pool), status(std::move(_status)), events(std::move(_events)),
-          probes(std::move(_probes)) ,ages(std::move(_ages)) {};
+          probes(std::move(_probes)), ages(std::move(_ages)) {};
 
     KOKKOS_INLINE_FUNCTION void
     operator()(const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle,
@@ -92,18 +91,15 @@ namespace Simulation::KernelInline
         // Kokkos::printf("Skip %ld", idx);
         return;
       }
-      ages(idx,0)+=d_t;
-
+      ages(idx, 0) += d_t;
       if constexpr (enable_move)
       {
         handle_move(idx);
       }
-
       if constexpr (enable_leave)
       {
         handle_exit(idx, dead_count);
       }
-      
     }
 
     KOKKOS_FUNCTION void handle_move(const std::size_t idx) const
@@ -162,11 +158,11 @@ namespace Simulation::KernelInline
           {
             // Ignore ret value, if probe is full we´re gonna miss events which is not really
             // important
-            if (!probes.set(ages(idx,0))){
+            if (!probes.set(ages(idx, 0)))
+            {
               Kokkos::printf("PROBES OVERFLOW\r\n");
             };
-            ages(idx,0)=0;
-            
+            ages(idx, 0) = 0;
           }
         }
       }

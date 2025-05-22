@@ -103,32 +103,7 @@ namespace Simulation::MassTransfer
           "gas_liquid_mass_transfer should not be called if gas not intialized");
     }
     std::visit(MtrVisitor{_proxy, liquid_scalar, gas_scalar, state}, type);
-    // switch (type)
-    // {
-    // case Simulation::MassTransfer::MTRType::FixedKla:
-    // {
-    //   Impl::fixed_kla_gas_liquid_mass_transfer(*_proxy,
-    //                                            liquid_scalar->getConcentrationArray(),
-    //                                            gas_scalar->getConcentrationArray(),
-    //                                            liquid_scalar->getVolume(),
-    //                                            state);
-    //   break;
-    // };
-    // case Simulation::MassTransfer::MTRType::Flowmap:
-    // {
-    //   Impl::flowmap_gas_liquid_mass_transfer(*_proxy,
-    //                                          liquid_scalar->getConcentrationArray(),
-    //                                          gas_scalar->getConcentrationArray(),
-    //                                          liquid_scalar->getVolume(),
-    //                                          state);
-    //   break;
-    // }
-    // default:
-    // {
-    //   assert(0 && "gas_liquid_mass_transfer switch");
-    //   __builtin_unreachable(); // TODO use c++23 cross plateform unreachable
-    // };
-    // }
+   
   }
 
   std::optional<std::span<const double>> MassTransferModel::mtr_data() const

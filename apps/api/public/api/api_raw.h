@@ -102,15 +102,25 @@ typedef struct Opaque*
   int register_parameters(Handle handle, Param* params);
 
   /*Feed*/
-  int set_feed_constant(Handle,
-                        double _f,
-                        size_t n_species,
-                        double* _target,
-                        size_t* _species,
-                        size_t n_position,
-                        size_t* _position,
+  // int set_feed_constant(Handle,
+  //                       double _f,
+  //                       size_t n_species,
+  //                       double* _target,
+  //                       size_t* _species,
+  //                       size_t n_position,
+  //                       size_t* _position,
+  //                       int gas,
+  //                       int fed_batch);
+
+   int set_feed_constant(Handle,
+                        double flow,
+                        double concentraiton,
+                        size_t species,
+                        size_t position,
+                        int output_position,
                         int gas,
                         int fed_batch);
+
   // /bool set_feed_constant(double _f, std::span<double> _target, std::span<std::size_t> _position,
   // std::span<std::size_t> _species,bool gas=false);
 

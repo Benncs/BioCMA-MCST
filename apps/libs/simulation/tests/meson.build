@@ -7,6 +7,14 @@ test_probes = executable(
   include_directories: [private_simulation_includes],
 )
 
+
+test_feed= executable(
+  'test_feed',
+  'test_feed.cpp',
+  dependencies: [simulation_lib_dependency],
+  include_directories: [private_simulation_includes],
+)
+
 # test_log = executable(
 #   'test_log',
 #   'test_log.cpp',
@@ -16,3 +24,4 @@ test_probes = executable(
 # test('test_log', test_log)
 
 test('test_probes', test_probes)
+test('test_feed', test_feed)

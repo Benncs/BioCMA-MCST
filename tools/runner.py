@@ -26,10 +26,10 @@ __current_file_path = os.path.abspath(__file__)
 __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
 _MPI_ROOT_FLAG = ""  # "--allow-run-as-root"
-MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} --mca orte_base_help_aggregate 1 -np 1 --report-bindings --bind-to core --map-by slot:PE=6"
+MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} --mca orte_base_help_aggregate 1 -np 2 --report-bindings --bind-to core --map-by slot:PE=3"
 # MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 8 --use-hwthread-cpus"
 OMP_NUM_THREADS = "1"
-COMPILER_NAME = "cuda"  # "gcc"
+
 
 
 def get_executable(instal: str, mpi: bool = True):
@@ -39,15 +39,13 @@ def get_executable(instal: str, mpi: bool = True):
     if instal:
         return f"/opt/biomc/{appname}"
     else:
-        return f"{ROOT}/builddir/host/apps/cli/{appname}"
+        return f"{ROOT}/builddir/host_debug/apps/cli/{appname}"
 
 def mk_parser():
     parser = argparse.ArgumentParser(description="Runner")
 
-    # Positional argument for casename
     parser.add_argument(dest="casename", type=str, help="The name of the case")
 
-    # Optional flag -r
     parser.add_argument(
         "-r",
         dest="release_flag",
@@ -64,7 +62,6 @@ def mk_parser():
         help="Do post process after",
     )
 
-    # Optional number argument
     parser.add_argument(
         "-n",
         dest="n_threads",
@@ -74,7 +71,6 @@ def mk_parser():
         help="Optional number of thread",
     )
 
-    # Optional flag -mpi
     parser.add_argument(
         "-mpi",
         dest="use_mpi",
