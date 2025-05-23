@@ -59,7 +59,7 @@ typedef struct Opaque*
    */
   void delete_handle(Handle* handle);
 
-  void finalize();
+  // void finalize(); //Do not use it 
 
   int exec(Handle handle);
   int register_initial_condition(Handle* handle);

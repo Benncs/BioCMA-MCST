@@ -18,10 +18,10 @@ constexpr int ID_VERIF = 2025;
 [[maybe_unused]] constexpr int f_true = 1;
 [[maybe_unused]] constexpr int f_false = 0;
 
-void finalize()
-{
-  Api::finalise();
-}
+// void finalize()
+// {
+//   Api::finalise();
+// }
 
 int apply(Handle handle, int to_load)
 {

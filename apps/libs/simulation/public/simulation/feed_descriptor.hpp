@@ -75,7 +75,6 @@ namespace Simulation::Feed
     std::size_t input_position{};
     std::optional<std::size_t> output_position;
     FeedTypeVariant extra;
-
     void update(double t, double d_t) noexcept;
   };
 
