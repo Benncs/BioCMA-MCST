@@ -194,12 +194,11 @@ namespace
 
     const size_t n_iter_simulation = transitioner->get_n_timestep();
 
-
     const size_t dump_number =
         std::min(n_iter_simulation, static_cast<size_t>(params.number_exported_result)) - 1;
-    
+
     // FIXME when number_exported_result==0 and number_exported_result==1
-    const size_t dump_interval = (params.number_exported_result != 0 && dump_number!=0)
+    const size_t dump_interval = (params.number_exported_result != 0 && dump_number != 0)
                                      ? (n_iter_simulation) / (dump_number) + 1
                                      : n_iter_simulation + 1;
 

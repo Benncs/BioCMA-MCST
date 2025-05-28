@@ -3,10 +3,9 @@
 
 #include <common/execinfo.hpp>
 
-
 namespace Simulation
 {
-    class SimulationUnit;
+  class SimulationUnit;
 }
 
 /**
@@ -21,7 +20,7 @@ namespace Simulation
  * @param simulation The `Simulation::SimulationUnit` object representing the
  * simulation to be synchronized.
  */
-void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation);
+void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation);
 
 /**
  * @brief Synchronizes and resets simulation state for the next time step.
@@ -35,7 +34,7 @@ void sync_step(const ExecInfo &exec, Simulation::SimulationUnit &simulation);
  * @param simulation The `Simulation::SimulationUnit` object representing the
  * simulation being synchronized.
  */
-void sync_prepare_next(Simulation::SimulationUnit &simulation);
+void sync_prepare_next(Simulation::SimulationUnit& simulation);
 
 /**
  * @brief Final synchronization before exporting results.
@@ -48,6 +47,6 @@ void sync_prepare_next(Simulation::SimulationUnit &simulation);
  * @param simulation The `Simulation::SimulationUnit` object representing the
  * simulation being synchronized.
  */
-void last_sync(const ExecInfo &exec, Simulation::SimulationUnit &simulation);
+void last_sync(const ExecInfo& exec, Simulation::SimulationUnit& simulation);
 
 #endif //__SYNC_NODES_HPP__

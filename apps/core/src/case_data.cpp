@@ -1,4 +1,4 @@
-#include "Kokkos_Core.hpp"
+#include <Kokkos_Core.hpp>
 #include <biocma_cst_config.hpp>
 #include <common/execinfo.hpp>
 #include <core/case_data.hpp>
@@ -98,7 +98,7 @@ namespace Core
       if (!WrapMPI::is_initialized())
       {
         // MPI_Init(&argc, &argv);
-        MPI_Init(NULL,NULL); //FIXME with python API
+        MPI_Init(NULL, NULL); // FIXME with python API
       }
       MPI_Comm_rank(MPI_COMM_WORLD, &rank);
       MPI_Comm_size(MPI_COMM_WORLD, &size);

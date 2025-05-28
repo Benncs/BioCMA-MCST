@@ -90,7 +90,6 @@ namespace Core
      */
     static void handle_SIGUSR2(int signal) noexcept;
 
-
     static void handle_SIGINT(int signal) noexcept;
 
     bool f_sigint_raised;

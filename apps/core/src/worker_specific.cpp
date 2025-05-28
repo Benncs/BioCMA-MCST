@@ -39,7 +39,7 @@ void workers_process(const ExecInfo& exec,
         }
 
         last_sync(exec, simulation);
-       
+
         if (simulation.counter() != 0)
         {
           container.clean_dead(simulation.counter());

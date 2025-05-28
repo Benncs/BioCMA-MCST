@@ -1,10 +1,6 @@
 
 
 #ifdef USE_CEAREAL
-#  include <common/execinfo.hpp>
-#  include <mc/unit.hpp>
-#  include <simulation/scalar_initializer.hpp>
-#  include <simulation/simulation.hpp>
 #  include <cereal/archives/binary.hpp>
 #  include <cereal/archives/xml.hpp>
 #  include <cereal/types/array.hpp> //MC::events use array internally
@@ -14,12 +10,16 @@
 #  include <cereal/types/tuple.hpp>
 #  include <cereal/types/variant.hpp> //MC::Unit use variant internally
 #  include <cereal/types/vector.hpp>  //MC::List use vector internally
+#  include <common/execinfo.hpp>
 #  include <cstdint>
 #  include <fstream>
 #  include <ios>
+#  include <mc/unit.hpp>
 #  include <memory>
 #  include <optional>
 #  include <serde.hpp>
+#  include <simulation/scalar_initializer.hpp>
+#  include <simulation/simulation.hpp>
 #  include <stdexcept>
 #  include <string_view>
 #  include <vector>
@@ -151,22 +151,20 @@ namespace SerDe
     // auto mc = gi.init_mtr_model(sc);
 
     std::vector<double> kla(sc->n_species);
-    if(kla.size()>1)
+    if (kla.size() > 1)
     {
-       kla[1] = 0.2; // 700 h-1
+      kla[1] = 0.2; // 700 h-1
     }
 
-
-    #warning message("MTR model is not loaded")
-    auto simulation = gi.init_simulation(std::move(mc_unit), *sc); 
+#  warning message("MTR model is not loaded")
+    auto simulation = gi.init_simulation(std::move(mc_unit), *sc);
 
     if (!simulation.has_value())
     {
       std::cout << "SIMULATION loaded failed" << std::endl;
       return false;
     }
-    
-    
+
     case_data.simulation = std::move(*simulation);
 
     case_data.simulation->set_mtr_model(Simulation::MassTransfer::Type::FixedKla{kla});

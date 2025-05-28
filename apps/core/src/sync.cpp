@@ -35,8 +35,8 @@ namespace WrapMPI
   // {
 
   //   template <typename T>
-  //   [[maybe_unused]] int recv_span(MPI_Request& request, std::span<T> buf, size_t src, size_t tag) noexcept;
-  //   void wait(MPI_Request& request);
+  //   [[maybe_unused]] int recv_span(MPI_Request& request, std::span<T> buf, size_t src, size_t
+  //   tag) noexcept; void wait(MPI_Request& request);
 
   // } // namespace Async
 } // namespace WrapMPI
@@ -95,7 +95,6 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
       WrapMPI::gather_span<double>(total_contrib_data, local_contribution);
     }
 
-   
     if (exec.current_rank == 0)
     {
       simulation.reduceContribs(total_contrib_data, exec.n_rank);
