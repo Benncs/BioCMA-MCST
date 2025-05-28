@@ -25,7 +25,7 @@ namespace
   inline auto get_interfacial_area(const double db, const CmaUtils::IterationState& state)
   {
     const auto alpha_g = get_gas_fraction(state);
-    return 6. * alpha_g / (db*(1-alpha_g));
+    return 6. * alpha_g / (db * (1 - alpha_g));
   }
 
   template <typename G, typename K>
@@ -96,22 +96,23 @@ namespace Simulation::MassTransfer
       const Eigen::Map<Eigen::ArrayXd> energy_dissipation_array =
           Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(eps.data()), EIGEN_INDEX(eps.size()));
 
-
-      assert(gas_concentration.stride() == liquid_concentration.stride()&&"gas liquid size mtr check");
-      assert(energy_dissipation_array.rows() == liquid_concentration.cols()&&"energy liquid size mtr check");
-      assert( mtr.Henry.rows() == gas_concentration.rows()&&"henry gas size mtr check");
-      assert( mtr.kla.rows() == gas_concentration.rows()&&"kla gas size mtr check");
-      assert( mtr.kla.cols() == gas_concentration.cols()&&"kla gas size mtr check");
-
+      assert(gas_concentration.stride() == liquid_concentration.stride() &&
+             "gas liquid size mtr check");
+      assert(energy_dissipation_array.rows() == liquid_concentration.cols() &&
+             "energy liquid size mtr check");
+      assert(mtr.Henry.rows() == gas_concentration.rows() && "henry gas size mtr check");
+      assert(mtr.kla.rows() == gas_concentration.rows() && "kla gas size mtr check");
+      assert(mtr.kla.cols() == gas_concentration.cols() && "kla gas size mtr check");
 
       mtr.kla.row(1) =
           (kl_correlation(schmidtnumber, kinematic_viscosity, energy_dissipation_array) *
            get_interfacial_area(mtr.db, state))
               .transpose();
 
-      //FIXME impl_mtr with template doesn´t work with Eigen type deduction  
-      mtr.mtr = (mtr.kla * (gas_concentration.colwise() * mtr.Henry - liquid_concentration)).matrix() * liquid_volume;
-  
+      // FIXME impl_mtr with template doesn´t work with Eigen type deduction
+      mtr.mtr =
+          (mtr.kla * (gas_concentration.colwise() * mtr.Henry - liquid_concentration)).matrix() *
+          liquid_volume;
     }
 
     void fixed_kla_gas_liquid_mass_transfer(MassTransferProxy& mtr,
@@ -123,7 +124,18 @@ namespace Simulation::MassTransfer
       (void)state;
       // mtr.mtr = impl_mtr(
       //     mtr.kla, liquid_concentration, gas_concentration.colwise() * mtr.Henry, liquid_volume);
-      mtr.mtr = (mtr.kla * (gas_concentration.colwise() * mtr.Henry - liquid_concentration)).matrix() * liquid_volume;
+      mtr.mtr =
+          (mtr.kla * (gas_concentration.colwise() * mtr.Henry - liquid_concentration)).matrix() *
+          liquid_volume;
+    }
+
+    void flowmap_kla_gas_liquid_mass_transfer(MassTransferProxy& mtr,
+                                              const Eigen::ArrayXXd& liquid_concentration,
+                                              const Eigen::ArrayXXd& gas_concentration,
+                                              const Eigen::MatrixXd& liquid_volume,
+                                              const CmaUtils::IterationState& state)
+    {
+      const auto kla = state.infos.at("kla");
     }
 
   } // namespace Impl
