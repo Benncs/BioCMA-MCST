@@ -39,7 +39,7 @@ void _init_udf(const MC::KPRNG::pool_type& random_pool,
 {
   constexpr auto local_lc = 3e-6;
   constexpr auto length_dist_c = MC::Distributions::TruncatedNormal<Models::UdfModel::FloatType>(
-      local_lc , l_c_m / 20., l_min_m, l_max_m);
+      local_lc, l_c_m / 20., l_min_m, l_max_m);
 
   constexpr auto length_dist =
       MC::Distributions::Normal<Models::UdfModel::FloatType>(local_lc, 0.1e-6);
@@ -65,7 +65,7 @@ MC::Status _update_udf([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
 
   auto dl = (phi_s > 1e-6) ? 1e-9 : 0;
 
-  GET_PROPERTY(particle_var::contrib_phi_s) = -2. * nu*1e-5;
+  GET_PROPERTY(particle_var::contrib_phi_s) = -2. * nu * 1e-5;
 
   GET_PROPERTY(particle_var::length) += static_cast<float>(d_t) * dl;
   GET_PROPERTY(particle_var::age) += d_t;
@@ -94,7 +94,7 @@ void _division_udf([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
 {
   constexpr auto local_lc = 3e-6;
   constexpr auto length_dist_c = MC::Distributions::TruncatedNormal<Models::UdfModel::FloatType>(
-      local_lc , l_c_m / 20., l_min_m, l_max_m);
+      local_lc, l_c_m / 20., l_min_m, l_max_m);
   auto gen = random_pool.get_state();
 
   const FloatType new_current_length =
@@ -103,9 +103,9 @@ void _division_udf([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
   GET_PROPERTY(particle_var::age) = 0;
   GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::length) = new_current_length;
   GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::age) = 0;
-  GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_cp) = length_dist_c.draw(gen);//local_lc;
-  GET_PROPERTY(particle_var::l_cp) = length_dist_c.draw(gen);//local_lc;
-      random_pool.free_state(gen);
+  GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_cp) = length_dist_c.draw(gen); // local_lc;
+  GET_PROPERTY(particle_var::l_cp) = length_dist_c.draw(gen);                        // local_lc;
+  random_pool.free_state(gen);
 }
 
 double mass(std::size_t idx, const Models::UdfModel::SelfParticle& arr)
@@ -115,12 +115,14 @@ double mass(std::size_t idx, const Models::UdfModel::SelfParticle& arr)
 
 std::vector<std::string_view> _names()
 {
-  return {"age", "length","lc"};
+  return {"age", "length", "lc"};
 };
 
 std::vector<std::size_t> _get_number()
 {
-  return {INDEX_FROM_ENUM(particle_var::age), INDEX_FROM_ENUM(particle_var::length),INDEX_FROM_ENUM(particle_var::l_cp)};
+  return {INDEX_FROM_ENUM(particle_var::age),
+          INDEX_FROM_ENUM(particle_var::length),
+          INDEX_FROM_ENUM(particle_var::l_cp)};
 };
 
 // clang-format off

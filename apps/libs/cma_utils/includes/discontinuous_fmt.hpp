@@ -7,10 +7,10 @@ namespace CmaUtils
 {
   /**
   @brief Derived class to handle Discontinuous transition between flowmaps
-  
-    Discontinuous means that we pass from flowmap i to flormap i+1 without any calculation 
+
+    Discontinuous means that we pass from flowmap i to flormap i+1 without any calculation
    */
-  class DiscontinuousFMT final: public FlowMapTransitionner
+  class DiscontinuousFMT final : public FlowMapTransitionner
   {
   public:
     DiscontinuousFMT(std::size_t _n_flowmap,

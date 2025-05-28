@@ -5,7 +5,6 @@ namespace CmaUtils
 {
   void ProxyPreCalculatedHydroState::set_diag_transition(std::vector<double>&& diag)
   {
-    
 
     DiagonalView<HostSpace> view_host(diag.data(), diag.size());
     Kokkos::resize(state.diagonal_compute, diag.size()); // FIXME

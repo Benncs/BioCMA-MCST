@@ -1,9 +1,9 @@
-#include "linter_fmt.hpp"
+#include <linter_fmt.hpp>
 #include <discontinuous_fmt.hpp>
-#include <transitionner/transitioner_factory.hpp>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <transitionner/transitioner_factory.hpp>
 
 namespace CmaUtils
 {

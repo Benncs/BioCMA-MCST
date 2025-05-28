@@ -1,8 +1,6 @@
 #include <Kokkos_Core.hpp>
 #include <cma_utils/cache_hydro_state.hpp>
 
-
-
 namespace CmaUtils
 {
 

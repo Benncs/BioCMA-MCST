@@ -39,7 +39,8 @@
 
 //   // Set the 'flows' member of 'f' to the sparse view
 //   // f.flows = sparse;
-//   f.transition_matrix = Simulation::get_transition_matrix(FlowMap::FlowMap_const_view_t(flattened_data,data.size()));
+//   f.transition_matrix =
+//   Simulation::get_transition_matrix(FlowMap::FlowMap_const_view_t(flattened_data,data.size()));
 
 //   // Calculate the cumulative probability matrix
 //   auto cp = Simulation::get_CP(view, f.transition_matrix);
@@ -90,7 +91,7 @@
 //   assert(neighbors.size() == n_c);
 // }
 
-// static std::vector<std::vector<size_t>> get_neighbors() //TODO FIXIT 
+// static std::vector<std::vector<size_t>> get_neighbors() //TODO FIXIT
 // {
 //   return {{1, 4, 8},
 //           {2, 5, 9},
