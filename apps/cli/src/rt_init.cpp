@@ -1,6 +1,12 @@
-
-
+#ifndef NDEBUG
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
 #include <Eigen/Core>
+#ifndef NDEBUG
+#  pragma GCC diagnostic pop
+#endif
+
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
 #include <biocma_cst_config.hpp>
@@ -8,12 +14,10 @@
 #include <chrono>
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
-#include <cstdint>
 #include <cstdlib>
 #include <ctime>
 #include <filesystem>
 #include <fstream>
-#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <rt_init.hpp>

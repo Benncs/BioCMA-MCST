@@ -1,4 +1,11 @@
+#ifndef NDEBUG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif 
 #include <Eigen/Dense>
+#ifndef NDEBUG
+#pragma GCC diagnostic pop
+#endif 
 #include <Kokkos_Core.hpp>
 #include <cma_utils/cache_hydro_state.hpp>
 #include <cmt_common/zip.hpp>
