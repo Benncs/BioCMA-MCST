@@ -224,6 +224,21 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("species"),
       py::arg("position"));
 
+       m.def(
+      "set_liquid_feed_constant_fed_batch",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         double flow,
+         double concentration,
+         std::size_t _species,
+         std::size_t _position) {
+        return set_feed_constant(handle.get(), flow, concentration, _species, _position, -1, 0, 1);
+      },
+      py::arg("handle"),
+      py::arg("flow"),
+      py::arg("concentration_value"),
+      py::arg("species"),
+      py::arg("position"));
+
   m.def(
       "set_liquid_feed_constant_with_output",
       [](std::shared_ptr<Api::SimulationInstance>& handle,
