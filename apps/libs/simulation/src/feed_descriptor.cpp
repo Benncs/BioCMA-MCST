@@ -6,8 +6,6 @@
 #define CHECK_TYPE_VARIANT(__variant_arg__, __ref__type)                                           \
   std::is_same_v<std::decay_t<decltype(__variant_arg__)>, __ref__type>
 
-
-
 namespace Simulation::Feed
 {
   FeedType get_type(const FeedTypeVariant& v)
@@ -45,7 +43,6 @@ namespace Simulation::Feed
 #pragma message("Update feed not implemented")
     (void)t;
     (void)d_t;
- 
   }
 
   // FeedDescritor::FeedDescritor(double _f,
@@ -133,7 +130,6 @@ namespace Simulation::Feed
     }
 
     return {flow, concentration, species_index, input_position, _ouput_position, Constant{}};
-
   }
 
   // FeedDescriptor delayedconstant(double _f,
@@ -176,17 +172,18 @@ namespace Simulation::Feed
     {
       vec = std::vector<FeedDescriptor>();
     }
-    vec->emplace_back(move_allow_trivial(fd)); //Use move_allow_trivial in case FeedDescriptor become non trivial 
+    vec->emplace_back(
+        move_allow_trivial(fd)); // Use move_allow_trivial in case FeedDescriptor become non trivial
   }
 
   void SimulationFeed::add_liquid(FeedDescriptor&& fd)
   {
-    add_feed(move_allow_trivial(fd), Phase::Liquid); 
+    add_feed(move_allow_trivial(fd), Phase::Liquid);
   }
 
   void SimulationFeed::add_gas(FeedDescriptor&& fd)
   {
-    add_feed(move_allow_trivial(fd), Phase::Gas); 
+    add_feed(move_allow_trivial(fd), Phase::Gas);
   }
 
   std::size_t SimulationFeed::n_liquid_flow() const

@@ -1,4 +1,3 @@
-#include "simulation/probe.hpp"
 #include <Kokkos_Core.hpp>
 #include <cma_utils/iteration_state.hpp>
 #include <cstddef>
@@ -16,6 +15,7 @@
 #include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
+#include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
@@ -55,8 +55,6 @@ namespace Simulation
     Kokkos::resize(move_info.leaving_flow, n_flows);
     Kokkos::resize(move_info.liquid_volume, mc_unit->domain.getNumberCompartments());
     Kokkos::resize(move_info.diag_transition, mc_unit->domain.getNumberCompartments());
-
-
   }
 
   void SimulationUnit::set_mtr_model(MassTransfer::Type::MtrTypeVariant&& variant)

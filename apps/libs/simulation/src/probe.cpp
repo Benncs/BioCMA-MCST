@@ -1,12 +1,11 @@
 // #include <Kokkos_Atomic.hpp>
 // #include <Kokkos_Core.hpp>
 // #include <Kokkos_StdAlgorithms.hpp>
-// 
+//
 // #include <cstddef>
 // #include <cstdint>
 // #include <optional>
 // #include <simulation/probe.hpp>
-
 
 /* Old Implementation
 

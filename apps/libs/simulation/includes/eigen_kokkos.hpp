@@ -82,7 +82,6 @@ template <typename ExecSpace, int EigenLayout, typename... MemoryTrait>
 using KokkosScalarMatrix = Kokkos::
     View<double**, typename KokkosLayoutMapper<EigenLayout>::type, ExecSpace, MemoryTrait...>;
 
-
 using RowMajorKokkosScalarMatrix = KokkosScalarMatrix<ComputeSpace, Eigen::RowMajor>;
 using ColMajorKokkosScalarMatrix = KokkosScalarMatrix<ComputeSpace, Eigen::ColMajor>;
 
@@ -90,9 +89,8 @@ template <int EigenLayout> struct EigenKokkosBase
 {
   using EigenMatrix = MatrixType<EigenLayout>;
   using HostView = KokkosScalarMatrix<HostSpace, EigenLayout>;
-  using ComputeView = KokkosScalarMatrix<ComputeSpace,
-                                         EigenLayout,
-                                         Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+  using ComputeView =
+      KokkosScalarMatrix<ComputeSpace, EigenLayout, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
   HostView host;
   ComputeView compute;

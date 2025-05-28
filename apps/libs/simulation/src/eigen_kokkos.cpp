@@ -18,4 +18,3 @@
 // {
 //   Kokkos::deep_copy(host, compute);
 // }
-

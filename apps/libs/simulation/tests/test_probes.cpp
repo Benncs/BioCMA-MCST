@@ -2,8 +2,8 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <iostream>
 #include <simulation/probe.hpp>
-#include <iostream> 
 
 void test_probes_set()
 {
