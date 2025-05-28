@@ -132,18 +132,12 @@ void in_kernel_emplace()
   {
     vec.emplace({5, i});
   };
-    Kokkos::parallel_for(
-        "test_in_kernel_emplace", vec.capacity(), lambda);
-
-
+  Kokkos::parallel_for("test_in_kernel_emplace", vec.capacity(), lambda);
 
   auto l = Kokkos::create_mirror_view_and_copy(HostSpace(), vec._owned_data);
 
-  
- 
   std::cout << l.size() << std::endl;
   KOKKOS_ASSERT(l.size() >= 10); // Allocation factor 1.5
-
 }
 
 int main()
