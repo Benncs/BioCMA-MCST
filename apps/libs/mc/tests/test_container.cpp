@@ -1,10 +1,10 @@
-#include "Kokkos_Assert.hpp"
-#include "Kokkos_Core.hpp"
-#include "Kokkos_Core_fwd.hpp"
-#include "Kokkos_Macros.hpp"
-#include "biocma_cst_config.hpp"
-#include "mc/traits.hpp"
+#include <Kokkos_Assert.hpp>
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Core_fwd.hpp>
+#include <Kokkos_Macros.hpp>
+#include <biocma_cst_config.hpp>
 #include <mc/particles_container.hpp>
+#include <mc/traits.hpp>
 #include <mc/unit.hpp>
 
 template <ModelType M> void basic_test()
@@ -109,10 +109,9 @@ template <ModelType M> void clean_test()
         rng.free_state(gen);
       });
   Kokkos::fence();
-    KOKKOS_ASSERT(container.n_particles() == size);
+  KOKKOS_ASSERT(container.n_particles() == size);
   container.clean_dead(to_remove);
-  KOKKOS_ASSERT(container.n_particles() == size-to_remove);
-
+  KOKKOS_ASSERT(container.n_particles() == size - to_remove);
 }
 
 template <ModelType M> void clean_test_and_shrink()
@@ -129,10 +128,9 @@ template <ModelType M> void clean_test_and_shrink()
         rng.free_state(gen);
       });
   Kokkos::fence();
-    KOKKOS_ASSERT(container.n_particles() == size);
+  KOKKOS_ASSERT(container.n_particles() == size);
   container.clean_dead(to_remove);
-  KOKKOS_ASSERT(container.n_particles() == size-to_remove);
-
+  KOKKOS_ASSERT(container.n_particles() == size - to_remove);
 }
 
 int main()

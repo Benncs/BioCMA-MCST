@@ -1,7 +1,7 @@
 #include <cassert>
+#include <cstddef>
 #include <mc/events.hpp>
 #include <span>
-#include <cstddef> 
 namespace MC
 {
   EventContainer EventContainer::reduce(std::span<std::size_t> _data)
@@ -15,6 +15,5 @@ namespace MC
     }
     return results;
   }
-
 
 } // namespace MC

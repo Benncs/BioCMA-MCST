@@ -7,13 +7,10 @@
 #include <stdexcept>
 #include <utility>
 
-
-
 namespace MC
 {
 
-  void ReactorDomain::setVolumes(
-                                 std::span<double const> volumes_liq)
+  void ReactorDomain::setVolumes(std::span<double const> volumes_liq)
   {
 
     assert(volumes_liq.size() == size);
@@ -28,8 +25,8 @@ namespace MC
     }
   }
 
-  ReactorDomain::ReactorDomain():
-        k_neighbor(Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"))
+  ReactorDomain::ReactorDomain()
+      : k_neighbor(Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"))
   {
   }
 
@@ -39,7 +36,6 @@ namespace MC
         k_neighbor(Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"))
 
   {
-   
 
     setLiquidNeighbors(_neighbors);
   }

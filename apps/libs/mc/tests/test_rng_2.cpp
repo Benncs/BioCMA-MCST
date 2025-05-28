@@ -20,7 +20,6 @@ constexpr int test_seed = 1407;
 constexpr double mu = 0.0;
 constexpr double sigma = 1.0;
 
-
 template <typename T> void basic_test()
 {
   T xi = 0;
