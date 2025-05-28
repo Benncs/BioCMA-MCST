@@ -100,6 +100,7 @@ namespace Api
                                                   bool fed_batch)
   {
     auto phase = gas ? Phase::Gas : Phase::Liquid;
+
     auto constant_feed = Simulation::Feed::FeedFactory::constant(
         _flow, _concentration, _species, _position, std::nullopt, !fed_batch);
     // Negates fed_batch because expect set_output wich is !fed_batch
@@ -220,11 +221,19 @@ namespace Api
     {
       return ApiResult("Not loaded");
     }
-    if (auto opt_case = Core::load(this->_data.exec_info, std::move(this->params), this->feed))
+    try
     {
-      this->_data = std::move(*opt_case);
-      this->loaded = true;
-      return ApiResult();
+
+      if (auto opt_case = Core::load(this->_data.exec_info, std::move(this->params), this->feed))
+      {
+        this->_data = std::move(*opt_case);
+        this->loaded = true;
+        return ApiResult();
+      }
+    }
+    catch (std::exception& e)
+    {
+      return ApiResult(e.what());
     }
     return ApiResult("Error loading");
   }
@@ -248,13 +257,31 @@ namespace Api
     Core::GlobalInitialiser global_initializer(_data.exec_info, params);
     auto t = global_initializer.init_transitionner();
 
-    global_initializer.init_feed(feed);
+    if (!global_initializer.init_feed(feed))
+    {
+      return ApiResult("Error with feed");
+    }
 
     auto __simulation = global_initializer.init_simulation(this->scalar_initializer_variant);
     if ((!t.has_value() && !__simulation.has_value()) || !global_initializer.check_init_terminate())
     {
       ApiResult("Error apply");
     }
+
+    // FIXME
+    std::vector<double> kla((*__simulation)->getDimensions().n_species);
+    if (kla.size() > 1)
+    {
+      kla[1] = 0.2; // 700 h-1
+    }
+
+    mtr_type = Simulation::MassTransfer::Type::FixedKla{kla};
+
+    if (mtr_type)
+    {
+      (*__simulation)->set_mtr_model(std::move(*mtr_type));
+    }
+
     _data.params = global_initializer.get_parameters();
     _data.simulation = std::move(*__simulation);
     _data.transitioner = std::move(*t);

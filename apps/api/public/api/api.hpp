@@ -1,7 +1,8 @@
 #ifndef __BIOMC_API_HPP__
 #define __BIOMC_API_HPP__
 
-#include "core/scalar_factory.hpp"
+#include <core/scalar_factory.hpp>
+#include <simulation/mass_transfer.hpp>
 #include <api/results.hpp>
 #include <common/execinfo.hpp>
 #include <core/case_data.hpp>
@@ -230,6 +231,7 @@ namespace Api
     bool registered = false;            ///< Flag indicating if resources are registered.
     std::optional<Simulation::Feed::SimulationFeed> feed =
         std::nullopt; ///< Optional feed configuration.
+    std::optional<Simulation::MassTransfer::Type::MtrTypeVariant> mtr_type = std::nullopt;
   };
 
 } // namespace Api

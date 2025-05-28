@@ -1,14 +1,15 @@
 #ifndef __CORE_GLOBAL_INITIALLISER_HPP__
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
-#include "transitionner/transitionner.hpp"
-#include <core/scalar_factory.hpp>
-#include <core/simulation_parameters.hpp>
+#include <simulation/mass_transfer.hpp>
+#include <transitionner/transitionner.hpp>
 #include <array>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/neighbors.hpp>
 #include <cmt_common/cma_case.hpp>
 #include <common/execinfo.hpp>
+#include <core/scalar_factory.hpp>
+#include <core/simulation_parameters.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <initializer_list>
@@ -20,7 +21,6 @@
 #include <simulation/simulation.hpp>
 #include <string>
 #include <vector>
-
 
 class ILoadBalancer;
 
@@ -87,8 +87,8 @@ namespace Core
      *
      * @return An optional unique pointer to the initialized simulation unit.
      */
-    OptionalPtr<Simulation::SimulationUnit> init_simulation(std::optional<Core::ScalarFactory::ScalarVariant> variant=std::nullopt);
-
+    OptionalPtr<Simulation::SimulationUnit>
+    init_simulation( std::optional<Core::ScalarFactory::ScalarVariant> variant);
 
     /**
      * @brief Initializes a simulation unit with specified parameters.
@@ -109,14 +109,18 @@ namespace Core
      */
     std::optional<Simulation::ScalarInitializer> init_scalar();
 
-    std::optional<Simulation::ScalarInitializer> init_scalar(Core::ScalarFactory::ScalarVariant&& variant);
+    std::optional<Simulation::ScalarInitializer>
+    init_scalar(Core::ScalarFactory::ScalarVariant&& variant);
+
+    std::optional<bool>
+    init_mtr_model(Simulation::SimulationUnit& unit,Simulation::MassTransfer::Type::MtrTypeVariant&& variant);
 
     /**
      * @brief Initializes a simulation feed.
      *
      * @return An optional simulation feed.
      */
-    void init_feed(std::optional<Simulation::Feed::SimulationFeed> feed = std::nullopt);
+    bool init_feed(std::optional<Simulation::Feed::SimulationFeed> feed = std::nullopt);
 
     /**
      * @brief Initializes a Monte Carlo unit.
@@ -214,8 +218,6 @@ namespace Core
      * @note: this function compiles and doesn't throw error even if no_mpi is not defined
      */
     void mpi_broadcast(); ///< Method for handling MPI broadcast communication.
-
-
 
     ExecInfo info;
     SimulationParameters params;

@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.9.0',
+  version: '0.9.1',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
@@ -45,8 +45,8 @@ compiler.has_argument('-fopenmp')
 
 if (compiler.get_id() == 'clang')
   message('using clang')
-  #add_global_arguments(['-stdlib=libc++'], language: 'cpp')
-  #add_global_link_arguments(['-stdlib=libc++', '-lc++','-lc++abi'], language: 'cpp')
+  add_global_arguments(['-stdlib=libc++'], language: 'cpp')
+  add_global_link_arguments(['-stdlib=libc++', '-lc++','-lc++abi'], language: 'cpp')
 endif
 
 ## Define main shared variables
@@ -68,7 +68,7 @@ build_test=get_option('build_test')
 
 
 
-use_kokkos_tools = true
+use_kokkos_tools = false
 
 cpp_args = [arch_specific_args]
 if (use_kokkos_tools)
@@ -172,12 +172,9 @@ highfive_found = false
 
 ceral_found = false
 if cmake.found()
-  hdf5_compiler='g++'
 
   highfive_cmake_options = cmake.subproject_options()
-  highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_COMPILER': hdf5_compiler})
   highfive_cmake_options.add_cmake_defines({'CMAKE_CXX_STANDARD': '20'})
-
   highfive_cmake_options.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_USE_BOOST': false})
   highfive_cmake_options.add_cmake_defines({'HIGHFIVE_EXAMPLES': false})
@@ -224,7 +221,7 @@ cmt = dependency('cmtool', required: false, version: '>=1.1', method: 'pkg-confi
 if cmt.found()
   message('System cmtool')
   cma_read_name = cmt.get_variable('cma_read', default_value: 'none')
-  cma_dep = dependency(cma_read_name, required: true)
+  cma_dep = dependency(cma_read_name, required: true, version: '>=1.2')
 else
   subproject(
     'cmtool',
@@ -236,7 +233,7 @@ else
       'build_all=false',
     ]
   ) # We only need native cmtool library in order to read flowmap so, no python neither executable
-  cma_dep = dependency('cma_read', required: true, version: '>=1.1',static:true) # Get shared lib
+  cma_dep = dependency('cma_read', required: true, version: '>=1.2',static:true) # Get shared lib
 
 endif
 add_project_arguments(cpp_args, language: 'cpp')

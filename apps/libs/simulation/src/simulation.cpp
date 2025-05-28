@@ -56,18 +56,18 @@ namespace Simulation
     Kokkos::resize(move_info.liquid_volume, mc_unit->domain.getNumberCompartments());
     Kokkos::resize(move_info.diag_transition, mc_unit->domain.getNumberCompartments());
 
+
+  }
+
+  void SimulationUnit::set_mtr_model(MassTransfer::Type::MtrTypeVariant&& variant)
+  {
     if (is_two_phase_flow)
     {
-      // const auto type = MassTransfer::Type::Flowmap{};
-      std::vector<double> kla(scalar_init.n_species) ;
-      kla[1]=0.2; //700 h-1
-      const auto type = MassTransfer::Type::FixedKla{kla};
-
-      this->mt_model = MassTransfer::MassTransferModel(type, liquid_scalar, gas_scalar);
-
-
+      this->mt_model =
+          Simulation::MassTransfer::MassTransferModel(variant, liquid_scalar, gas_scalar);
     }
   }
+
   void SimulationUnit::update(CmaUtils::IterationState&& newstate)
   {
     state = newstate;

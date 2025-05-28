@@ -1,10 +1,10 @@
 
 
 #ifdef USE_CEAREAL
-#  include "common/execinfo.hpp"
-#  include "mc/unit.hpp"
-#  include "simulation/scalar_initializer.hpp"
-#  include "simulation/simulation.hpp"
+#  include <common/execinfo.hpp>
+#  include <mc/unit.hpp>
+#  include <simulation/scalar_initializer.hpp>
+#  include <simulation/simulation.hpp>
 #  include <cereal/archives/binary.hpp>
 #  include <cereal/archives/xml.hpp>
 #  include <cereal/types/array.hpp> //MC::events use array internally
@@ -143,23 +143,33 @@ namespace SerDe
     sc->gas_buffer = read_c_gas;
     sc->liquid_buffer = read_c_liq;
     sc->n_species = dims.n_species;
-    
-
- 
     sc->type = Simulation::ScalarInitialiserType::File;
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
     assert(mc_unit != nullptr);
-    auto simulation = gi.init_simulation(std::move(mc_unit), *sc);
+    // auto mc = gi.init_mtr_model(sc);
+
+    std::vector<double> kla(sc->n_species);
+    if(kla.size()>1)
+    {
+       kla[1] = 0.2; // 700 h-1
+    }
+
+
+    #warning message("MTR model is not loaded")
+    auto simulation = gi.init_simulation(std::move(mc_unit), *sc); 
 
     if (!simulation.has_value())
     {
       std::cout << "SIMULATION loaded failed" << std::endl;
       return false;
     }
-
+    
+    
     case_data.simulation = std::move(*simulation);
+
+    case_data.simulation->set_mtr_model(Simulation::MassTransfer::Type::FixedKla{kla});
 
     case_data.simulation->get_start_time_mut() = start_time;
     gi.set_initial_number_particle(np);
