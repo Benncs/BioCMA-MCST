@@ -123,10 +123,14 @@ int parse_callback_ok(Core::UserControlParameters&& user_params,
   REDIRECT_SCOPE({
     HANDLE_RC(h->register_parameters(std::forward<decltype(user_params)>(user_params)));
 
-    const auto fd = Simulation::Feed::FeedFactory::constant(
-        20e-3 * 0.6 / 3600, 300e-3, 0, 0, std::nullopt, true);
+    // const auto fd = Simulation::Feed::FeedFactory::constant(
+    //     2.33333333333333E-05, 300e-3, 1, 1,10, true);
 
-    h->set_feed(fd, Phase::Liquid);
+    // const auto fd_liq = Simulation::Feed::FeedFactory::constant(
+    //     10e-3*0.1/3600, 5, 0, 0,0, false);
+
+    // h->set_feed(fd, Phase::Gas);
+    // h->set_feed(fd_liq, Phase::Liquid);
 
     HANDLE_RC(h->apply(load_serde));
     HANDLE_RC(h->exec());
