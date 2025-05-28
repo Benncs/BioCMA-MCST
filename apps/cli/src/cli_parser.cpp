@@ -42,14 +42,14 @@ static CliResults<Core::UserControlParameters> parse_user_param(int argc, char**
           exit(0);
         }
         auto opt = parseArg(control, current_param, current_value);
-        if(opt)
+        if (opt)
         {
           control = opt.gets();
         }
-        else {
+        else
+        {
           return opt;
         }
-
       }
       else
       {

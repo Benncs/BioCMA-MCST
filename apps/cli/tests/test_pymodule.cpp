@@ -9,7 +9,7 @@ void test_get_python_module()
     KModel model = get_python_module(module_path);
     assert(true);
   }
-  catch (const std::runtime_error &e)
+  catch (const std::runtime_error& e)
   {
     assert(false);
   }

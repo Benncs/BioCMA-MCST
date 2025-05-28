@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 // Status flag
-static bool is_stdout_redirect = false; //NOLINT //TODO FIND a way to remove global 
+static bool is_stdout_redirect = false; // NOLINT //TODO FIND a way to remove global
 
 void restore_stdout(int original_stdout_fd, std::streambuf*& original_buffer)
 {

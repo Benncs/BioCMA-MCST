@@ -1,4 +1,6 @@
+#include <Eigen/Core>
 #include <Kokkos_Core.hpp>
+#include <api/api.hpp>
 #include <biocma_cst_config.hpp>
 #include <cassert>
 #include <chrono>
@@ -16,8 +18,6 @@
 #include <sstream>
 #include <string>
 #include <string_view>
-#include <Eigen/Core>
-#include <api/api.hpp>
 
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
@@ -113,5 +113,3 @@ void register_run(const ExecInfo& exec, const Core::UserControlParameters& /*par
     std::cerr << "Error: Unable to open file for writing\n";
   }
 }
-
-
