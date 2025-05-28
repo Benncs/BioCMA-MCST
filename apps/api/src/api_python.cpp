@@ -1,16 +1,17 @@
-#include <api/api.hpp>
 #include <api/api_raw.h>
-#include <core/scalar_factory.hpp>
-#include <cstddef>
-#include <cstdint>
-#include <cstdlib>
-#include <memory>
 #include <pybind11/cast.h>
 #include <pybind11/detail/common.h>
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
+
+#include <api/api.hpp>
+#include <core/scalar_factory.hpp>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -49,7 +50,7 @@ namespace PythonBindings
     throw std::runtime_error("Simulation handle initialisation failed");
   }
 
-  auto exec(std::shared_ptr<Api::SimulationInstance>& handle) 
+  auto exec(std::shared_ptr<Api::SimulationInstance>& handle)
   {
     pybind11::gil_scoped_release release; // TODO check if really usefull ?
     handle->exec();
@@ -111,16 +112,16 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 
   m.def("init_handle", PythonBindings::init_handle, py::arg("argv"));
 
-  // m.def("finalize", &finalize); //Do not use it 
-  
+  // m.def("finalize", &finalize); //Do not use it
+
   // m.def("exec", &PythonBindings::exec);
 
-    m.def("exec",
+  m.def("exec",
         [](std::shared_ptr<Api::SimulationInstance>& handle)
         {
           pybind11::gil_scoped_release release; // TODO check if really usefull ? //NOLINT
           handle->exec();
-          pybind11::gil_scoped_acquire acquire; //NOLINT
+          pybind11::gil_scoped_acquire acquire; // NOLINT
         });
 
   m.def("apply", &PythonBindings::apply);
@@ -185,8 +186,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
             constexpr std::size_t n_attributes = 9;
             if (t.size() != n_attributes)
             {
-              throw std::runtime_error(
-                  "Pickle param invalid state, different number of attributes");
+              throw std::runtime_error("Pickle param invalid state, "
+                                       "different number of attributes");
             }
 
             /* Create a new C++ instance */
@@ -224,7 +225,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("species"),
       py::arg("position"));
 
-       m.def(
+  m.def(
       "set_liquid_feed_constant_fed_batch",
       [](std::shared_ptr<Api::SimulationInstance>& handle,
          double flow,
@@ -314,7 +315,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 /**
  * @example simple_simulation.py
  *
- * This example demonstrates how to perfom a simple simulation using the python API
+ * This example demonstrates how to perfom a simple simulation using the python
+ * API
  *
  * @code
  *   import handle_module>
@@ -323,8 +325,9 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
  *   simulation_name = "my_simulation_name"
  *   cma_path = "/path/to/the/cma/" #don´t forget last /
  *   def run(params):
- *       handle = handle_module.init_simulation(outfolder,simulation_name,cma_path,params)
- *       # cma with 500 compartment, simulation with 4 species liquid only
+ *       handle =
+ * handle_module.init_simulation(outfolder,simulation_name,cma_path,params) #
+ * cma with 500 compartment, simulation with 4 species liquid only
  *       liquid_concentration_0 = np.zeros((500,4))
  *       handle_module.set_initial_concentrations(handle,liquid_concentration_0)
  *       handle_module.register_model_name(handle, "model_name")

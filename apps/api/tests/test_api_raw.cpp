@@ -1,10 +1,12 @@
-#include "common_test.hpp"
 #include <api/api_raw.h>
+
 #include <cassert>
 #include <cstring>
 #include <string_view>
 
-#define INIT init_handle_raw(argc,argv);
+#include "common_test.hpp"
+
+#define INIT init_handle_raw(argc, argv);
 #define PARAM make_params(cx, ft, dt, np, nex);
 
 void test_init(int argc, char** argv)
@@ -33,7 +35,7 @@ void mock_prepre_apply(std::string_view path, Handle handle)
     CHECK(register_cma_path(handle, path.data()))
   }
 }
-void test_exec(int argc, char** argv,std::string_view path)
+void test_exec(int argc, char** argv, std::string_view path)
 {
   Handle handle = INIT mock_prepre_apply(path, handle);
   CHECK(apply(handle, 0));
@@ -42,7 +44,7 @@ void test_exec(int argc, char** argv,std::string_view path)
   delete_handle(&handle);
 }
 
-void test_apply(int argc, char** argv,std::string_view path)
+void test_apply(int argc, char** argv, std::string_view path)
 {
   Handle handle = INIT mock_prepre_apply(path, handle);
   CHECK(apply(handle, 0));
@@ -88,7 +90,7 @@ void test_make_params(int argc, char** argv)
   assert(params.number_exported_result == nex);
   assert(params.recursive == 0);      // Default value
   assert(params.force_override == 0); // Default value
-  assert(params.load_serde == 0);          // Default value
+  assert(params.load_serde == 0);     // Default value
 }
 
 void test_register_parameters(int argc, char** argv)
@@ -170,27 +172,26 @@ void test_branch_null(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
-
   std::string cma_path = get_cma_path(argc, argv);
 
-  test_init(argc,argv);
-  test_delete_handle(argc,argv);
+  test_init(argc, argv);
+  test_delete_handle(argc, argv);
 
-  test_exec_err(argc,argv);
-  test_apply_err(argc,argv);
+  test_exec_err(argc, argv);
+  test_apply_err(argc, argv);
 
-  test_branch_null(argc,argv);
+  test_branch_null(argc, argv);
 
-  test_make_params(argc,argv);
-  test_register_parameters(argc,argv);
-  test_register_result_path(argc,argv);
-  test_register_initializer_path(argc,argv);
-  test_register_cma_path_recursive(argc,argv);
-  test_register_cma_path(argc,argv);
-  test_register_serde(argc,argv);
-  test_register_model_name(argc,argv);
+  test_make_params(argc, argv);
+  test_register_parameters(argc, argv);
+  test_register_result_path(argc, argv);
+  test_register_initializer_path(argc, argv);
+  test_register_cma_path_recursive(argc, argv);
+  test_register_cma_path(argc, argv);
+  test_register_serde(argc, argv);
+  test_register_model_name(argc, argv);
 
-  test_apply(argc,argv,cma_path);
+  test_apply(argc, argv, cma_path);
   // // FIXME test_exec(cma_path);
   // test_exec(cma_path);
   return 0;

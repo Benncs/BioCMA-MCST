@@ -1,8 +1,9 @@
-#include "common_test.hpp"
 #include <api/api.hpp>
 #include <optional>
 
-#define INIT Api::SimulationInstance::init(argc,argv);
+#include "common_test.hpp"
+
+#define INIT Api::SimulationInstance::init(argc, argv);
 
 Core::UserControlParameters gparams(std::string_view path)
 {
@@ -36,7 +37,7 @@ void test_apply_from_param_serde(std::string_view path)
   // TODO
 }
 
-void test_exec_from_param(int argc,char **argv,std::string_view path)
+void test_exec_from_param(int argc, char** argv, std::string_view path)
 {
   auto handle = *INIT;
   assert(handle->register_parameters(gparams(path)));
@@ -44,14 +45,14 @@ void test_exec_from_param(int argc,char **argv,std::string_view path)
   assert(handle->exec());
 }
 
-void test_apply_from_param(int argc,char **argv,std::string_view path)
+void test_apply_from_param(int argc, char** argv, std::string_view path)
 {
   auto handle = *INIT;
   assert(handle->register_parameters(gparams(path)));
   assert(handle->apply(false));
 }
 
-void test_register_parameters(int argc,char **argv,std::string_view path)
+void test_register_parameters(int argc, char** argv, std::string_view path)
 {
   auto handle = *INIT;
   assert(handle->register_parameters(gparams(path)));
@@ -63,9 +64,9 @@ int main(int argc, char** argv)
   test_init(argc, argv);
   test_apply_err(argc, argv);
   test_exec_err(argc, argv);
-  test_register_parameters(argc, argv,cma_path);
+  test_register_parameters(argc, argv, cma_path);
 
-  test_apply_from_param(argc, argv,cma_path);
+  test_apply_from_param(argc, argv, cma_path);
   test_apply(cma_path);
   test_apply_from_param_serde(cma_path);
 

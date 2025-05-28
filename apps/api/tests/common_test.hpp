@@ -19,17 +19,16 @@ constexpr size_t np = 40;
 constexpr size_t nex = 0;
 
 void test_init(int argc, char** argv);
-void test_exec(int argc, char** argv,std::string_view path);
+void test_exec(int argc, char** argv, std::string_view path);
 void test_exec_err(int argc, char** argv);
 
-void test_apply(int argc, char** argv,std::string_view path);
+void test_apply(int argc, char** argv, std::string_view path);
 void test_apply_err(int argc, char** argv);
 void test_register_result_path(int argc, char** argv);
 void test_register_parameters(int argc, char** argv);
 
 inline std::string get_cma_path(int argc, char** argv)
 {
-
   if (argc != 2)
   {
     assert(false && "Need cma path");

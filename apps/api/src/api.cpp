@@ -1,8 +1,8 @@
-#include "api/results.hpp"
-#include "common/common.hpp"
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
+#include <api/results.hpp>
 #include <biocma_cst_config.hpp>
+#include <common/common.hpp>
 #include <common/execinfo.hpp>
 #include <core/case_data.hpp>
 #include <core/global_initaliser.hpp>
@@ -122,13 +122,16 @@ namespace Api
   }
 
   // bool SimulationInstance::set_feed_constant_from_rvalue(double _f,
-  //                                                        std::vector<double>&& _target,
-  //                                                        std::vector<std::size_t>&& _position,
-  //                                                        std::vector<std::size_t>&& _species,
-  //                                                        bool gas,
+  //                                                        std::vector<double>&&
+  //                                                        _target,
+  //                                                        std::vector<std::size_t>&&
+  //                                                        _position,
+  //                                                        std::vector<std::size_t>&&
+  //                                                        _species, bool gas,
   //                                                        bool fed_batch)
   // {
-  //   return set_feed_constant(_f, _target, _position, _species, gas, fed_batch);
+  //   return set_feed_constant(_f, _target, _position, _species, gas,
+  //   fed_batch);
   // }
 
   // bool SimulationInstance::set_feed_constant(double _flow,
@@ -139,7 +142,8 @@ namespace Api
   //                                            bool fed_batch)
   // {
   //   return set_feed_constant_from_position(
-  //       _flow, _concentration, _position, _species, std::nullopt, gas, fed_batch);
+  //       _flow, _concentration, _position, _species, std::nullopt, gas,
+  //       fed_batch);
   // }
 
   // bool SimulationInstance::set_feed_constant_from_position(
@@ -160,7 +164,8 @@ namespace Api
   //                                                     std::move(species),
   //                                                     std::move(_output_position),
   //                                                     !fed_batch);
-  //   // negates fed_batch because constant accepts set_exit flag. fed_batch = !set_exit
+  //   // negates fed_batch because constant accepts set_exit flag. fed_batch =
+  //   !set_exit
 
   //   return set_feed(fd, gas);
   // }
@@ -223,7 +228,6 @@ namespace Api
     }
     try
     {
-
       if (auto opt_case = Core::load(this->_data.exec_info, std::move(this->params), this->feed))
       {
         this->_data = std::move(*opt_case);
@@ -240,7 +244,6 @@ namespace Api
 
   ApiResult SimulationInstance::apply() noexcept
   {
-
     if (!check_required(this->params, false))
     {
       return ApiResult("Check params");
@@ -308,7 +311,6 @@ namespace Api
 
   ApiResult SimulationInstance::register_parameters(Core::UserControlParameters&& _params) noexcept
   {
-
     params = std::move(_params);
     registered = true;
     return ApiResult();
@@ -316,7 +318,6 @@ namespace Api
 
   bool SimulationInstance::register_result_path(std::string_view path)
   {
-
     // TODO Check path
     this->params.results_file_name = path;
 
@@ -325,7 +326,6 @@ namespace Api
 
   ApiResult SimulationInstance::register_initialiser_file_path(std::string_view path)
   {
-
     this->params.initialiser_path = path;
     return ApiResult(); // TODO
   }

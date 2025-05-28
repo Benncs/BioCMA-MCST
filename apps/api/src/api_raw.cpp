@@ -1,6 +1,6 @@
-#include "api/results.hpp"
 #include <api/api.hpp>
 #include <api/api_raw.h>
+#include <api/results.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
 #include <cstdint>
@@ -45,7 +45,6 @@ Handle init_handle_raw(int argc, char** argv)
 
 void delete_handle(Handle* handle)
 {
-
   if (handle != nullptr)
   {
     delete *handle; // NOLINT
@@ -120,7 +119,6 @@ int register_model_name(Handle handle, const char* c)
 
 int register_initializer_path(Handle handle, const char* c)
 {
-
   if (handle != nullptr && c != nullptr)
   {
     return (handle->register_initialiser_file_path(c)) ? 0 : -1;
@@ -160,7 +158,6 @@ Param make_params(double biomass_initial_concentration,
                   uint64_t number_particle,
                   uint32_t number_exported_result)
 {
-
   return {biomass_initial_concentration,
           final_time,
           delta_time,
@@ -175,7 +172,6 @@ Param make_params(double biomass_initial_concentration,
 
 int register_parameters(Handle handle, Param* raw_params)
 {
-
   if (handle != nullptr && raw_params != nullptr)
   {
     auto params = convert_c_wrap_to_param(*raw_params);
@@ -195,39 +191,41 @@ int register_parameters(Handle handle, Param* raw_params)
 //                       int gas,
 //                       int fed_batch)
 // {
-//   if ((handle != nullptr) && (_target != nullptr) && (_species != nullptr) &&
+//   if ((handle != nullptr) && (_target != nullptr) && (_species != nullptr)
+//   &&
 //       (_position != nullptr))
 //   {
 //     auto span_target = std::span<double>(_target, n_species);
 //     auto span_species = std::span<std::size_t>(_species, n_species);
 //     auto span_pos = std::span<std::size_t>(_position, n_position);
-//     handle->set_feed_constant(_f, span_target, span_pos, span_species, gas != 0, fed_batch != 0);
-//     return 0;
+//     handle->set_feed_constant(_f, span_target, span_pos, span_species, gas
+//     != 0, fed_batch != 0); return 0;
 //   }
 
 //   return -1;
 // }
 
 int set_feed_constant(Handle handle,
-                        double flow,
-                        double concentraiton,
-                        size_t species,
-                        size_t position,
-                        int output_position,
-                        int gas,
-                        int fed_batch)
+                      double flow,
+                      double concentraiton,
+                      size_t species,
+                      size_t position,
+                      int output_position,
+                      int gas,
+                      int fed_batch)
 {
   if (handle != nullptr)
   {
     ApiResult res;
     if (output_position < 0)
     {
-      res = handle->set_feed_constant(flow, concentraiton, species,position, gas != 0, fed_batch != 0);
+      res = handle->set_feed_constant(
+          flow, concentraiton, species, position, gas != 0, fed_batch != 0);
     }
     else
     {
       res = handle->set_feed_constant_different_output(
-          flow, concentraiton, species, position,output_position, gas != 0);
+          flow, concentraiton, species, position, output_position, gas != 0);
     }
     return res ? 0 : -1;
   }
