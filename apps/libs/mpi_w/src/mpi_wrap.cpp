@@ -1,8 +1,8 @@
 #include <cstdlib>
 #include <mpi.h>
+#include <mpi_w/impl_async.hpp>
 #include <mpi_w/message_t.hpp>
 #include <omp.h>
-#include <mpi_w/impl_async.hpp>
 
 namespace WrapMPI
 {
@@ -35,6 +35,6 @@ namespace WrapMPI
 
   namespace Async
   {
-  
+
   } // namespace Async
 } // namespace WrapMPI
