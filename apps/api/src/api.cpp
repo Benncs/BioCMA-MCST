@@ -257,8 +257,15 @@ namespace Api
       return ApiResult("Register first");
     }
 
+    //TODO Refractor with and_then when supported 
     Core::GlobalInitialiser global_initializer(_data.exec_info, params);
-    auto t = global_initializer.init_transitionner();
+
+    auto transitionner = global_initializer.init_transitionner();
+
+    if (!transitionner)
+    {
+      ApiResult("Error when apply: transitionner");
+    }
 
     if (!global_initializer.init_feed(feed))
     {
@@ -266,9 +273,15 @@ namespace Api
     }
 
     auto __simulation = global_initializer.init_simulation(this->scalar_initializer_variant);
-    if ((!t.has_value() && !__simulation.has_value()) || !global_initializer.check_init_terminate())
+
+    if (!global_initializer.check_init_terminate())
     {
-      ApiResult("Error apply");
+      return ApiResult("Error apply: missing one initialization step");
+    }
+
+    if (!__simulation.has_value())
+    {
+      return ApiResult("Error apply: simulation ");
     }
 
     // FIXME
@@ -287,7 +300,7 @@ namespace Api
 
     _data.params = global_initializer.get_parameters();
     _data.simulation = std::move(*__simulation);
-    _data.transitioner = std::move(*t);
+    _data.transitioner = std::move(*transitionner);
     applied = true;
 
     return ApiResult();

@@ -22,7 +22,7 @@ namespace Core
 
   SimulationParameters SimulationParameters::init(const UserControlParameters& user_params)
   {
-    // todo
+    // TODO
 
     auto params = SimulationParameters::m_default();
     params.number_exported_result = user_params.number_exported_result;
@@ -56,6 +56,7 @@ namespace Core
         .serde_file = std::nullopt,
     };
   }
+
   std::ostream& operator<<(std::ostream& stream, const UserControlParameters& params)
   {
     stream << "UserControlParameters:\n"

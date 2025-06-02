@@ -5,11 +5,9 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
-
 #include <api/api.hpp>
 #include <core/scalar_factory.hpp>
 #include <cstddef>
-#include <cstdint>
 #include <cstdlib>
 #include <memory>
 #include <stdexcept>
@@ -22,9 +20,7 @@ std::string wrap_repr(const wrap_c_param_t& m)
 {
   char* repr = nullptr;
   repr_user_param(&m, &repr); // This function perform dynamic allocation
-
   std::string result(repr); // Create a std::string from the char*
-
   free(repr);    // NOLINT free the allocated memory
   return result; // Return the string representation
 }
@@ -39,7 +35,6 @@ namespace PythonBindings
     {
       c_args.push_back(arg.c_str());
     }
-
     auto opt = Api::SimulationInstance::init(static_cast<int>(c_args.size()),
                                              const_cast<char**>(c_args.data()));
     if (opt.has_value())
@@ -70,14 +65,9 @@ namespace PythonBindings
                          const std::string& cma_path,
                          bool recursive)
   {
-    if (recursive)
-    {
-      return register_cma_path_recursive(handle.get(), cma_path.data());
-    }
-    else
-    {
-      return ::register_cma_path(handle.get(), cma_path.data());
-    }
+
+    return (recursive) ? register_cma_path_recursive(handle.get(), cma_path.data())
+                       : ::register_cma_path(handle.get(), cma_path.data());
   }
 
   auto set_initialiser_from_data(std::shared_ptr<Api::SimulationInstance>& handle,
@@ -103,59 +93,10 @@ namespace PythonBindings
 
     return 0;
   }
-} // namespace PythonBindings
 
-PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
+  auto declare_parameter(auto& m)
 {
-  // Wrapping the Handle structure
-  py::class_<Api::SimulationInstance, std::shared_ptr<Api::SimulationInstance>>(m, "Handle");
-
-  m.def("init_handle", PythonBindings::init_handle, py::arg("argv"));
-
-  // m.def("finalize", &finalize); //Do not use it
-
-  // m.def("exec", &PythonBindings::exec);
-
-  m.def("exec",
-        [](std::shared_ptr<Api::SimulationInstance>& handle)
-        {
-          pybind11::gil_scoped_release release; // TODO check if really usefull ? //NOLINT
-          handle->exec();
-          pybind11::gil_scoped_acquire acquire; // NOLINT
-        });
-
-  m.def("apply", &PythonBindings::apply);
-
-  m.def("i_rank",
-        [](std::shared_ptr<Api::SimulationInstance>& handle)
-        { return handle->get_exec_info().current_rank; });
-  m.def("n_rank",
-        [](std::shared_ptr<Api::SimulationInstance>& handle)
-        { return handle->get_exec_info().n_rank; });
-
-  m.def("register_result_path", &register_result_path);
-
-  m.def("register_cma_path",
-        &PythonBindings::register_cma_path,
-        py::arg("handle"),
-        py::arg("cma_path"),
-        py::arg("recursive") = false);
-
-  m.def("register_serde", &register_serde);
-  m.def("register_parameters", &register_parameters);
-  m.def("register_model_name", &register_model_name);
-
-  m.def("register_initialiser_file_path", &register_initializer_path);
-
-  m.def("make_params",
-        &make_params,
-        py::arg("biomass_initial_concentration"),
-        py::arg("final_time"),
-        py::arg("delta_time"),
-        py::arg("number_particle"),
-        py::arg("number_exported_result"));
-
-  py::class_<wrap_c_param_t>(m, "UserSimulationParam")
+  return py::class_<wrap_c_param_t>(m, "UserSimulationParam")
       .def(py::init<>())
       .def_readwrite("final_time", &wrap_c_param_t::final_time)
       .def_readwrite("delta_time", &wrap_c_param_t::delta_time)
@@ -207,6 +148,62 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
             // NOLINTEND
             return p;
           }));
+}
+} // namespace PythonBindings
+
+
+
+PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
+{
+  // Wrapping the Handle structure
+  py::class_<Api::SimulationInstance, std::shared_ptr<Api::SimulationInstance>>(m, "Handle");
+
+  m.def("init_handle", PythonBindings::init_handle, py::arg("argv"));
+
+  // m.def("finalize", &finalize); //Do not use it
+
+  // m.def("exec", &PythonBindings::exec);
+
+  m.def("exec",
+        [](std::shared_ptr<Api::SimulationInstance>& handle)
+        {
+          pybind11::gil_scoped_release release; // TODO check if really usefull ? //NOLINT
+          handle->exec();
+          pybind11::gil_scoped_acquire acquire; // NOLINT
+        });
+
+  m.def("apply", &PythonBindings::apply);
+
+  m.def("i_rank",
+        [](std::shared_ptr<Api::SimulationInstance>& handle)
+        { return handle->get_exec_info().current_rank; });
+  m.def("n_rank",
+        [](std::shared_ptr<Api::SimulationInstance>& handle)
+        { return handle->get_exec_info().n_rank; });
+
+  m.def("register_result_path", &register_result_path);
+
+  m.def("register_cma_path",
+        &PythonBindings::register_cma_path,
+        py::arg("handle"),
+        py::arg("cma_path"),
+        py::arg("recursive") = false);
+
+  m.def("register_serde", &register_serde);
+  m.def("register_parameters", &register_parameters);
+  m.def("register_model_name", &register_model_name);
+
+  m.def("register_initialiser_file_path", &register_initializer_path);
+
+  m.def("make_params",
+        &make_params,
+        py::arg("biomass_initial_concentration"),
+        py::arg("final_time"),
+        py::arg("delta_time"),
+        py::arg("number_particle"),
+        py::arg("number_exported_result"));
+
+  PythonBindings::declare_parameter(m);
 
   // Feed
 
@@ -254,7 +251,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
                                  concentration,
                                  _species,
                                  input_position,
-                                 int(output_position),
+                                 static_cast<int>(output_position),
                                  0,
                                  0);
       },
@@ -272,7 +269,12 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
          double concentration,
          std::size_t species,
          std::size_t position)
-      { return set_feed_constant(handle.get(), flow, concentration, position, species, -1, 1, 0); },
+      {
+        constexpr int output_position = -1;
+        constexpr int gas = 1;
+        return set_feed_constant(
+            handle.get(), flow, concentration, species, position, output_position, gas, 0);
+      },
       py::arg("handle"),
       py::arg("flow"),
       py::arg("concentration_value"),
@@ -293,7 +295,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
                                  concentration,
                                  _species,
                                  input_position,
-                                 int(output_position),
+                                 static_cast<int>(output_position),
                                  1,
                                  0);
       },

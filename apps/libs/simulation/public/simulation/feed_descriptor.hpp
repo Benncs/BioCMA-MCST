@@ -23,17 +23,13 @@ enum class FeedType : std::uint8_t
   Custom
 };
 
-template<typename T>
-constexpr decltype(auto) move_allow_trivial(T&& t) noexcept
+template <typename T> constexpr decltype(auto) move_allow_trivial(T&& t) noexcept
 {
-    return std::move(t); // NOLINT
+  return std::move(t); // NOLINT
 }
 
 namespace Simulation::Feed
 {
-  using feed_value_t = std::vector<double>;
-  using feed_position_t = std::vector<std::size_t>;
-  using feed_species_t = std::vector<std::size_t>;
 
   struct Constant
   {
@@ -81,11 +77,11 @@ namespace Simulation::Feed
   struct FeedFactory
   {
     static FeedDescriptor constant(double flow,
-                                  double concentration,
-                                  std::size_t species_index,
-                                  std::size_t input_position,
-                                  std::optional<std::size_t > _ouput_position = std::nullopt,
-                                  bool set_output = true);
+                                   double concentration,
+                                   std::size_t species_index,
+                                   std::size_t input_position,
+                                   std::optional<std::size_t> _ouput_position = std::nullopt,
+                                   bool set_output = true);
 
     // static FeedDescriptor delayedconstant(double _f,
     //                                      feed_value_t&& _target,
@@ -117,8 +113,8 @@ namespace Simulation::Feed
 
     void add_feed(FeedDescriptor&& fd, Phase phase);
 
-    std::size_t n_liquid_flow()const;
-    std::size_t n_gas_flow()const;
+    [[nodiscard]] std::size_t n_liquid_flow() const;
+    [[nodiscard]] std::size_t n_gas_flow() const;
 
     auto liquid_feeds()
     {

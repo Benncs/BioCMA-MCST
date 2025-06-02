@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.9.1',
+  version: '0.9.2',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
@@ -216,7 +216,7 @@ if cmake.found()
 
 endif
 
-cmt = dependency('cmtool', required: false, version: '>=1.1', method: 'pkg-config')
+cmt = dependency('cmt1ool', required: false, version: '>=1.2', method: 'pkg-config')
 
 if cmt.found()
   message('System cmtool')

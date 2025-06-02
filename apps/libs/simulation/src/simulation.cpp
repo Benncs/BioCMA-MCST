@@ -61,14 +61,14 @@ namespace Simulation
   {
     if (is_two_phase_flow)
     {
-      this->mt_model =
-          Simulation::MassTransfer::MassTransferModel(variant, liquid_scalar, gas_scalar);
+      this->mt_model = Simulation::MassTransfer::MassTransferModel(
+          std::move(variant), liquid_scalar, gas_scalar);
     }
   }
 
   void SimulationUnit::update(CmaUtils::IterationState&& newstate)
   {
-    state = newstate;
+    state = std::move(newstate);
 
     setVolumes();
     mc_unit->domain.setLiquidNeighbors(state.neighbors);
