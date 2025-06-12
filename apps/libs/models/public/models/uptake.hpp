@@ -1,6 +1,7 @@
 #ifndef __MODELS_UPTAKES_HPP__
 #define __MODELS_UPTAKES_HPP__
 
+#include "common/traits.hpp"
 #include "mc/prng/prng_extension.hpp"
 #include <cstddef>
 #include <mc/traits.hpp>
@@ -23,6 +24,8 @@ namespace Models
     return F(1) / tau;
   }
 
+  
+
   template <ModelType M> struct Uptake
   {
 
@@ -38,13 +41,13 @@ namespace Models
     MODEL_CONSTANT FloatType NPermease_max = 200;
     MODEL_CONSTANT FloatType k_pts = 1e-3;
     MODEL_CONSTANT FloatType kppermease = 1e-2;
-
     MODEL_CONSTANT double tau_new_permease = 40.;
     MODEL_CONSTANT double tau_rm_perm = 200.;
     MODEL_CONSTANT double tau_pts = 20.;
     MODEL_CONSTANT double tau_Au = 40.;
     MODEL_CONSTANT double tau_Ad = 5.;
 
+  
     static KOKKOS_INLINE_FUNCTION constexpr FloatType _k_pts()
     {
       return static_cast<FloatType>(k_pts);

@@ -48,7 +48,7 @@ if use_cuda
 arg_udf=''
 endif
 
-model_list_name = ['two_meta','simple_model','two_meta_div']
+model_list_name = ['two_meta','simple_model','two_meta_nb']
 
 if not use_cuda
 model_list_name = [model_list_name,'udf_model']

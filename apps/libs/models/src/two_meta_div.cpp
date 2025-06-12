@@ -1,8 +1,6 @@
-#include <models/two_meta_div.hpp>
+#include <models/two_meta_nb.hpp>
 
-// GLOBAL void Models::TwoMetaDiv::preinit()
+// namespace Models
 // {
-//   Kokkos::printf("Two Meta Divsion Pre init\r\n");
-//   Self::lenght_init =
-//       MC::Distributions::Normal<FloatType>(2e-6, l_c_m / 5.);
+//     UptakeCst<TwoMetaNb::FloatType> TwoMetaNb::init_uptake_cst = UptakeCst<TwoMetaNb::FloatType>();
 // }
