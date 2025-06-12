@@ -152,6 +152,7 @@ else
   kokkos_option.set_install(false)
   sub_kokkos = cmake.subproject('kokkos', required: true, options: kokkos_option)
 
+
   kokkos = declare_dependency(
     dependencies: [
       sub_kokkos.dependency('kokkos'),
