@@ -4,6 +4,7 @@
 #include "Kokkos_Printf.hpp"
 #include "common/traits.hpp"
 #include "mc/macros.hpp"
+#include "models/uptake_dyn.hpp"
 #include "models/utils.hpp"
 #include <mc/prng/prng_extension.hpp>
 #include <mc/traits.hpp>
@@ -158,7 +159,7 @@ namespace Models
     GET_PROPERTY(particle_var::nu1) = nu_1_initial_dist.draw(gen);
     random_pool.free_state(gen);
     GET_PROPERTY(particle_var::contrib_phi_s) = 0;
-    Uptake<Self>::init(random_pool, idx, arr);
+    Uptake<UptakeDefault<typename Self::FloatType>,Self>::init(random_pool, idx, arr);
   }
 
   KOKKOS_INLINE_FUNCTION MC::Status TwoMeta::update(const MC::KPRNG::pool_type& random_pool,
@@ -169,7 +170,7 @@ namespace Models
   {
     (void)random_pool;
     const auto phi_s =
-        Uptake<Self>::uptake_step(phi_s_max, phi_perm_max, d_t, idx, arr, concentrations);
+        Uptake<UptakeDefault<typename Self::FloatType>,Self>::uptake_step(phi_s_max, d_t, idx, arr, concentrations);
 
     const auto o = Kokkos::max(static_cast<float>(concentrations(1)), 0.F);
 
@@ -265,7 +266,7 @@ namespace Models
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::l_cp) = local_lc.draw(gen);
     random_pool.free_state(gen);
 
-    Uptake<Self>::division(random_pool, idx, idx2, arr, child_buffer_arr);
+    Uptake<UptakeDefault<typename Self::FloatType>,Self>::division(random_pool, idx, idx2, arr, child_buffer_arr);
   }
 
   KOKKOS_INLINE_FUNCTION void TwoMeta::contribution([[maybe_unused]] std::size_t idx,

@@ -2,6 +2,7 @@
 #define __SIMPLE_MODEL_HPP__
 
 #include "common/traits.hpp"
+#include "models/uptake_dyn.hpp"
 #include "models/utils.hpp"
 #include <mc/prng/prng_extension.hpp>
 #include <mc/traits.hpp>
@@ -106,7 +107,7 @@ namespace Models
     arr(idx, static_cast<int>(particle_var::age)) = 0;
     arr(idx, static_cast<int>(particle_var::phi_s)) = 0;
 
-    Uptake<SimpleModel>::init(random_pool, idx, arr);
+    Uptake<UptakeDefault<typename Self::FloatType>,SimpleModel>::init(random_pool, idx, arr);
   }
 
   KOKKOS_INLINE_FUNCTION MC::Status SimpleModel::update([[maybe_unused]]const MC::KPRNG::pool_type& random_pool,
@@ -116,7 +117,7 @@ namespace Models
                                                         const MC::LocalConcentration& c)
   {
 
-    const auto phi_s = Uptake<SimpleModel>::uptake_step(phi_s_max, phi_perm_max, d_t, idx, arr, c);
+    const auto phi_s = Uptake<UptakeDefault<typename Self::FloatType>,SimpleModel>::uptake_step(phi_s_max, d_t, idx, arr, c);
 
     GET_PROPERTY(SimpleModel::particle_var::age) += d_t;
     GET_PROPERTY(SimpleModel::particle_var::phi_s) = phi_s;
@@ -154,7 +155,7 @@ namespace Models
     GET_PROPERTY(SimpleModel::particle_var::t_div) = division_time_d.draw(gen);
     random_pool.free_state(gen);
 
-    Uptake<SimpleModel>::division(random_pool, idx, idx2, arr, buffer_arr);
+    Uptake<UptakeDefault<typename Self::FloatType>,SimpleModel>::division(random_pool, idx, idx2, arr, buffer_arr);
   }
 
   KOKKOS_INLINE_FUNCTION void SimpleModel::contribution([[maybe_unused]] std::size_t idx,

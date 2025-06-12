@@ -39,3 +39,5 @@ __old
 wrapper_log.log
 tmp*
 old/
+flake.nix
+flake.lock

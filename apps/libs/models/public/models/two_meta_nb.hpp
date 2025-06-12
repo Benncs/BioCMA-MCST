@@ -76,18 +76,14 @@ namespace Models
 
     MODEL_CONSTANT FloatType NPermease_init = 1;
     MODEL_CONSTANT FloatType NPermease_max = 200;
-    MODEL_CONSTANT FloatType k_pts = 1e-2;
-    MODEL_CONSTANT FloatType kppermease = 1e-3;
+    MODEL_CONSTANT FloatType k = 1e-3;
+    MODEL_CONSTANT FloatType delta = 10;
+    MODEL_CONSTANT FloatType beta = 5;
     MODEL_CONSTANT FloatType tau_new_permease = 40.;
     MODEL_CONSTANT FloatType tau_rm_perm = 200.;
     MODEL_CONSTANT FloatType tau_pts = 6*20.;
     MODEL_CONSTANT FloatType tau_Au = 40.;
     MODEL_CONSTANT FloatType tau_Ad = 5.;
-    MODEL_CONSTANT FloatType beta = 5;
-
-    MODEL_CONSTANT FloatType phi_perm_max =
-        phi_pts_max * beta / NPermease_max; // phi_pts_max / 40.; // kgS/
-    static_assert(phi_perm_max * NPermease_max == phi_pts_max * beta, "Ratio permease TS");
 
     MODEL_CONSTANT auto length_c_dist = MC::Distributions::TruncatedNormal<FloatType>(
         l_c_m, l_c_m / 2., l_min_m, l_max_m); // use in out_str_l3
@@ -183,7 +179,7 @@ namespace Models
     random_pool.free_state(gen);
     GET_PROPERTY(particle_var::contrib_phi_s) = 0;
 
-    UptakeDyn<Self>::init(random_pool, idx, arr);
+    Uptake<Self>::init(random_pool, idx, arr);
   }
 
   KOKKOS_INLINE_FUNCTION MC::Status TwoMetaNb::update(const MC::KPRNG::pool_type& random_pool,
@@ -193,8 +189,7 @@ namespace Models
                                                       const MC::LocalConcentration& concentrations)
   {
     (void)random_pool;
-    const auto phi_s = UptakeDyn<Self>::uptake_step(phi_pts_max,
-                                                    phi_perm_max,
+    const auto phi_s = Uptake<Self>::uptake_step(phi_pts_max,
                                                     d_t,
                                                     idx,
                                                     arr,
@@ -295,7 +290,7 @@ namespace Models
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::l_cp) = local_lc.draw(gen);
     random_pool.free_state(gen);
 
-    UptakeDyn<Self>::division(random_pool, idx, idx2, arr, child_buffer_arr);
+    Uptake<Self>::division(random_pool, idx, idx2, arr, child_buffer_arr);
   }
 
   KOKKOS_INLINE_FUNCTION void TwoMetaNb::contribution([[maybe_unused]] std::size_t idx,
