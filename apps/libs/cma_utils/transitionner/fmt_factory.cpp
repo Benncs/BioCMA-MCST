@@ -5,6 +5,10 @@
 #include <stdexcept>
 #include <transitionner/transitioner_factory.hpp>
 
+
+#define BLUE "\033[34m"
+#define RESET "\033[0m"
+
 namespace CmaUtils
 {
   std::unique_ptr<FlowMapTransitionner>
@@ -19,13 +23,13 @@ namespace CmaUtils
     {
     case (CmaUtils::FlowmapTransitionMethod::Discontinuous):
     {
-      std::cout << "Using Discontinous transition\r\n";
+      std::cout << BLUE "[FlowMapTransitionner]: " RESET "Using Discontinous transition\r\n";
       return std::make_unique<DiscontinuousFMT>(
           n_flowmap, n_per_flowmap, number_time_step, std::move(iterator), is_two_phase_flow);
     }
     case (CmaUtils::FlowmapTransitionMethod::InterpolationFO):
     {
-      std::cout << "Using linear interpolation transition\r\n";
+      std::cout << BLUE "[FlowMapTransitionner]: " RESET "Using linear interpolation transition\r\n";
       return std::make_unique<LinterFMT>(
           n_flowmap, n_per_flowmap, number_time_step, std::move(iterator), is_two_phase_flow);
     }

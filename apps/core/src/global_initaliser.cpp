@@ -40,6 +40,11 @@
 #  define VERBOSE_ERROR
 #endif
 
+#define BLUE "\033[34m"
+#define RED "\033[31m"
+
+#define RESET "\033[0m"
+
 namespace
 {
   const Core::ScalarFactory::ScalarVariant DefaultIntialiser = Core::ScalarFactory::Uniform({1.});
@@ -307,14 +312,16 @@ namespace Core
       {
         throw std::runtime_error("Flow map are not loaded");
       }
-      std::cout << "Flowmap loaded: " << flow_handle->size() << std::endl;
+      std::cout << BLUE "[Initializer]: " RESET "Flowmap loaded: " << flow_handle->size()
+                << std::endl;
 
       state = &flow_handle->get_unchecked(0);
       if (state == nullptr)
       {
         throw std::runtime_error("Reactor not correclty initialised");
       }
-      std::cout << "Flowmap loaded with " << state->n_compartments << " compartments" << std::endl;
+      std::cout << BLUE "[Initializer]: " RESET "Flowmap loaded with " << state->n_compartments
+                << " compartments" << std::endl;
     }
     catch (const std::exception& e)
     {
@@ -444,7 +451,7 @@ namespace Core
     Core::ScalarFactory::ScalarVariant arg;
     if (user_params.initialiser_path.empty())
     {
-      std::cerr << "WARNING: using Default Initialiser" << std::endl;
+      std::cerr << RED "[Initializer]: " RESET  "WARNING: using Default Initialiser" << std::endl;
       arg = params.is_two_phase_flow ? DefaultIntialiserTPF : DefaultIntialiser;
     }
     else
