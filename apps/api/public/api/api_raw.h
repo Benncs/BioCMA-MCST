@@ -1,6 +1,7 @@
 #ifndef __BIOMC_API_RAW_H__
 #define __BIOMC_API_RAW_H__
 
+#include <cstdint>
 #include <stddef.h> //NOLINT
 #include <stdint.h> //NOLINT
 #ifdef __cplusplus
@@ -20,33 +21,15 @@ extern "C"
 typedef struct Opaque*
     Handle; // NOLINT //In C we only need ptr type so Opaque doesn´t need to exist
 #endif
-
   // /**
-  //  * @brief Initialize a simulation instance handle for shared memory.
+  //  * @brief Initialize a simulation instance handle
   //  *
-  //  * This function creates a simulation instance with a configuration, suitable
-  //  * for single-node or single-process execution.
+  //  * This function creates a simulation instance with a configuration
   //  *
-  //  * @param id A unique identifier for the simulation instance.
-  //  * @param thread_per_process The number of threads allocated per process.
+  //  * @param argc.
+  //  * @param argv.
   //  * @return A `Handle` to the simulation instance, or `NULL` if initialization failed.
   //  */
-  // Handle init_handle_shared(uint64_t id, uint32_t thread_per_process);
-
-  // /**
-  //  * @brief Initialize a raw simulation instance handle with MPI support.
-  //  *
-  //  * This function creates a simulation instance that is aware of MPI configurations,
-  //  * suitable for distributed simulations.
-  //  *
-  //  * @param n_rank The total number of ranks in the MPI group.
-  //  * @param current_rank The rank ID for this instance.
-  //  * @param id A unique identifier for the simulation instance.
-  //  * @param thread_per_process The number of threads allocated per process.
-  //  * @return A `Handle` to the simulation instance, or `NULL` if initialization failed.
-  //  */
-  // Handle init_handle_raw(int n_rank, int current_rank, uint64_t id, uint32_t thread_per_process);
-
   Handle init_handle_raw(int argc, char** argv);
 
   /**
@@ -59,7 +42,7 @@ typedef struct Opaque*
    */
   void delete_handle(Handle* handle);
 
-  // void finalize(); //Do not use it 
+  // void finalize(); //Do not use it
 
   int exec(Handle handle);
   int register_initial_condition(Handle* handle);
@@ -75,7 +58,6 @@ typedef struct Opaque*
   int register_initializer_path(Handle handle, const char* c);
   /*Parameters*/
   // NOLINTBEGIN
-
   typedef struct wrap_c_param_t
   {
     double biomass_initial_concentration; ///< Initial concentration of biomass.
@@ -90,6 +72,9 @@ typedef struct Opaque*
     int save_serde;
   } Param;
   // NOLINTEND
+
+  int set_scalar_buffer(Handle handle, uint64_t rows, uint64_t cols, double* liquid, double* gas_ptr);
+
   void show_user_param(const Param* params);
 
   void repr_user_param(const Param* params, char** repr);
@@ -98,6 +83,14 @@ typedef struct Opaque*
                     double delta_time,
                     uint64_t number_particle,
                     uint32_t number_exported_result);
+
+  Param* make_params_ptr(double biomass_initial_concentration,
+                         double final_time,
+                         double delta_time,
+                         uint64_t number_particle,
+                         uint32_t number_exported_result);
+
+  void delete_params(Param** params);
 
   int register_parameters(Handle handle, Param* params);
 
@@ -112,7 +105,7 @@ typedef struct Opaque*
   //                       int gas,
   //                       int fed_batch);
 
-   int set_feed_constant(Handle,
+  int set_feed_constant(Handle,
                         double flow,
                         double concentraiton,
                         size_t species,

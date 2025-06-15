@@ -132,7 +132,6 @@ Core::UserControlParameters convert_c_wrap_to_param(const wrap_c_param_t& params
   bool force_override = params.force_override != 0;
   bool load_serde = (params.load_serde != 0);
   bool save_serde = (params.save_serde != 0);
-  std::cout << params.save_serde << std::endl;
   return Core::UserControlParameters{
       .biomass_initial_concentration = params.biomass_initial_concentration,
       .final_time = params.final_time,
@@ -168,6 +167,80 @@ Param make_params(double biomass_initial_concentration,
           f_false,
           f_false,
           f_false};
+}
+
+Param* make_params_ptr(double biomass_initial_concentration,
+                       double final_time,
+                       double delta_time,
+                       uint64_t number_particle,
+                       uint32_t number_exported_result)
+{
+  return new Param{biomass_initial_concentration,
+                   final_time,
+                   delta_time,
+                   number_particle,
+                   1,
+                   number_exported_result,
+                   f_false,
+                   f_false,
+                   f_false,
+                   f_false};
+}
+
+int set_scalar_buffer(Handle handle, uint64_t rows, uint64_t cols, double* liquid, double* gas_ptr)
+{
+  if (handle == nullptr || liquid == nullptr)
+  {
+    return -1;
+  }
+
+  if (rows == 0 || cols == 0)
+  {
+    return -1;
+  }
+
+  // uint64_t buffer_size=0;
+  // if (__builtin_umull_overflow(rows, cols, &buffer_size)) {
+  //     return -1;
+  // }
+  const auto buffer_size = rows * cols;
+
+  try
+  {
+    std::span<double> liquid_span(liquid, buffer_size);
+    std::vector<double> liq(liquid_span.begin(), liquid_span.end());
+
+    std::optional<std::vector<double>> gas = std::nullopt;
+    if (gas_ptr != nullptr)
+    {
+      std::span<double> gas_span(gas_ptr, buffer_size);
+      gas = std::vector<double>(gas_span.begin(), gas_span.end());
+    }
+
+    bool success = handle
+                       ->register_scalar_initiazer(
+                           Core::ScalarFactory::FullCase(rows, std::move(liq), std::move(gas)))
+                       .valid();
+
+    return success ? 0 : -1;
+  }
+  catch (const std::bad_alloc& e)
+  {
+    return -1;
+  }
+  catch (const std::exception& e)
+  {
+    return -1;
+  }
+}
+
+void delete_params(Param** params)
+{
+  if (params != nullptr)
+  {
+    delete *params; // NOLINT
+    *params = nullptr;
+  }
 }
 
 int register_parameters(Handle handle, Param* raw_params)
