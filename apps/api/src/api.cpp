@@ -201,7 +201,7 @@ namespace Api
     {
       try
       {
-        std::cout << "Running " << this->_data.exec_info.current_rank << "..." << std::endl;
+        std::cout << "\033[34m[Simulation]: ""\033[0m""Running " << this->_data.exec_info.current_rank << "..." << std::endl;
         Core::exec(std::forward<Core::CaseData>(this->_data));
         return ApiResult();
       }

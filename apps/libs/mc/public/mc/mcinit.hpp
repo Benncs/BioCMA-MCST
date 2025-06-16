@@ -45,7 +45,9 @@ namespace MC
     // Kokkos::printf("Using model: %s\r\n",Model::); //TODO Add model's name to trait (optional)
     if constexpr (ConstWeightModelType<Model>)
     {
-      Kokkos::printf("Const Weights\r\n");
+      // Kokkos::printf("Const Weights\r\n");
+      std::cout<<  "\033[34m[Model]: " "Const Weights" "\033[0m" <<std::endl;
+
     }
 
     auto unit = std::make_unique<MonteCarloUnit>();

@@ -217,7 +217,7 @@ if cmake.found()
 
 endif
 
-cmt = dependency('cmt1ool', required: false, version: '>=1.2', method: 'pkg-config')
+cmt = dependency('cmtool', required: false, version: '>=1.2', method: 'pkg-config')
 
 if cmt.found()
   message('System cmtool')
