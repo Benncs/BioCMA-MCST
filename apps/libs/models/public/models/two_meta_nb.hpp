@@ -74,16 +74,14 @@ namespace Models
         10 * phi_pts_max / MolarMassG * y_os_molar * MolarMassO2; // kgS/s
     MODEL_CONSTANT float nu_max_kg_s = dl_max_ms * lin_density;
 
-    MODEL_CONSTANT FloatType NPermease_init = 1;
-    MODEL_CONSTANT FloatType NPermease_max = 200;
-    MODEL_CONSTANT FloatType k = 1e-3;
-    MODEL_CONSTANT FloatType delta = 10;
-    MODEL_CONSTANT FloatType beta = 5;
+    MODEL_CONSTANT FloatType k = 1e-2;
+    MODEL_CONSTANT FloatType delta = 1;
+    MODEL_CONSTANT FloatType beta = 10;
     MODEL_CONSTANT FloatType tau_new_permease = 40.;
     MODEL_CONSTANT FloatType tau_rm_perm = 200.;
-    MODEL_CONSTANT FloatType tau_pts = 6*20.;
+    MODEL_CONSTANT FloatType tau_pts = 20.;
     MODEL_CONSTANT FloatType tau_Au = 40.;
-    MODEL_CONSTANT FloatType tau_Ad = 5.;
+    MODEL_CONSTANT FloatType tau_Ad = 5;//5.;
 
     MODEL_CONSTANT auto length_c_dist = MC::Distributions::TruncatedNormal<FloatType>(
         l_c_m, l_c_m / 2., l_min_m, l_max_m); // use in out_str_l3

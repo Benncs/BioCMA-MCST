@@ -34,9 +34,9 @@ namespace Models
 
   template <typename T>
   concept UptakeModel = requires(T model) {
-    { T::NPermease_init } -> std::convertible_to<typename T::FloatType>;
+    // { T::NPermease_init } -> std::convertible_to<typename T::FloatType>;
 
-    { T::NPermease_max } -> std::convertible_to<typename T::FloatType>;
+    // { T::NPermease_max } -> std::convertible_to<typename T::FloatType>;
 
     { T::k } -> std::convertible_to<typename T::FloatType>;
 
@@ -77,9 +77,9 @@ namespace Models
     }
 
     static KOKKOS_INLINE_FUNCTION constexpr FloatType
-    phi_permease(FloatType phi_pts_max, FloatType n_permease, FloatType a_permease, FloatType S)
+    phi_permease(FloatType phi_pts_max, FloatType a_permease_2, FloatType a_permease, FloatType S)
     {
-      return a_permease * n_permease / U::NPermease_max * phi_pts_max * U::beta * f_G(S / U::delta);
+      return a_permease * a_permease_2 * phi_pts_max * U::beta * f_G(S / U::delta);
     }
 
     KOKKOS_INLINE_FUNCTION static void
@@ -99,11 +99,15 @@ namespace Models
 
       GET_PROPERTY(Uptakeparticle_var::n_permease) =
           MC::Distributions::TruncatedNormal<FloatType>::draw_from(
-              gen,
-              FloatType(U::NPermease_init) * half,
-              FloatType(U::NPermease_init) / FloatType(5.),
-              FloatType(0.),
-              FloatType(U::NPermease_init) * FloatType(10.));
+              gen, FloatType(0.8), FloatType(0.1), FloatType(0.), FloatType(1.));
+
+      // GET_PROPERTY(Uptakeparticle_var::n_permease) =
+      //     MC::Distributions::TruncatedNormal<FloatType>::draw_from(
+      //         gen,
+      //         FloatType(U::NPermease_init) * half,
+      //         FloatType(U::NPermease_init) / FloatType(5.),
+      //         FloatType(0.),
+      //         FloatType(U::NPermease_init) * FloatType(10.));
       // NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
       random_pool.free_state(gen);
     }
@@ -123,7 +127,7 @@ namespace Models
         *r_phi_pts = phi_s_pts;
       }
       const auto phi_s_perm = phi_permease(phi_pts_max,
-                                           GET_PROPERTY(Uptakeparticle_var::a_permease),
+                                           GET_PROPERTY(Uptakeparticle_var::n_permease),
                                            GET_PROPERTY(Uptakeparticle_var::a_permease),
                                            s);
       if (r_phi_perm != nullptr)
@@ -178,11 +182,11 @@ namespace Models
           ((aperm_frequency_au * gamma_PTS_S + aperm_frequency_ad * (FloatType(1) - gamma_PTS_S)) *
            (FloatType(1) - G - GET_PROPERTY(Uptakeparticle_var::a_permease)));
 
-  
+
       GET_PROPERTY(Uptakeparticle_var::n_permease) +=
-          d_t * U::NPermease_max *
+          d_t * 
           (n_perm_frequence_rm * G + n_perm_frequence_new * (FloatType(1) - G)) *
-          (FloatType(1) - gamma_PTS_S - GET_PROPERTY(Uptakeparticle_var::n_permease) / U::NPermease_max);
+          (FloatType(1) - gamma_PTS_S - GET_PROPERTY(Uptakeparticle_var::n_permease) );
 
       return phi_s;
     }
