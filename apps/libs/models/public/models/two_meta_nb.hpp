@@ -149,7 +149,7 @@ namespace Models
 
     static KOKKOS_INLINE_FUNCTION void preinit()
     {
-      Kokkos::printf("PRENINT\r\n");
+      Kokkos::printf("[Model]: PRENINT\r\n");
     }
   };
 

@@ -73,12 +73,17 @@ namespace PostProcessing
   void show_sumup_state(const Simulation::SimulationUnit& simulation) noexcept
   {
     // Assuming domain data is in sharedSpace
+    std::ios::sync_with_stdio(false);
     for (auto&& c : simulation.mc_unit->getRepartition())
     {
-      Kokkos::printf("%d ", c);
+      // Kokkos::printf("%d ", c);
+      std::cout<<c<<" ";
     }
-    Kokkos::printf("\r\n");
+    // Kokkos::printf("\r\n");
+    std::cout<<"\r\n";
+    std::ios::sync_with_stdio(true);
   }
+
 
   void reset_counter()
   {

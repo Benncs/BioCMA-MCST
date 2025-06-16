@@ -179,6 +179,8 @@ namespace Api
 
   SimulationInstance::~SimulationInstance()
   {
+
+
     _data = Core::CaseData(); // Explicity delete everything before
   }
 
@@ -201,7 +203,10 @@ namespace Api
     {
       try
       {
-        std::cout << "\033[34m[Simulation]: ""\033[0m""Running " << this->_data.exec_info.current_rank << "..." << std::endl;
+        std::cout << "\033[34m[Simulation]: "
+                     "\033[0m"
+                     "Running "
+                  << this->_data.exec_info.current_rank << "..." << std::endl;
         Core::exec(std::forward<Core::CaseData>(this->_data));
         return ApiResult();
       }
@@ -257,7 +262,7 @@ namespace Api
       return ApiResult("Register first");
     }
 
-    //TODO Refractor with and_then when supported 
+    // TODO Refractor with and_then when supported
     Core::GlobalInitialiser global_initializer(_data.exec_info, params);
 
     auto transitionner = global_initializer.init_transitionner();

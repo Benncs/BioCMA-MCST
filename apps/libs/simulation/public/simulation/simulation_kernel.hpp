@@ -58,7 +58,7 @@ namespace Simulation::KernelInline
         if (!particles.handle_division(random_pool, idx))
         {
           waiting_allocation_particle += 1;
-          Kokkos::printf("Division Overflow\r\n");
+          Kokkos::printf("[KERNEL] Division Overflow\r\n");
           events.wrap_incr<MC::EventType::Overflow>();
 
           // KOKKOS_ASSERT(false && "Division Overflow Not implemented");

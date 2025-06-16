@@ -5,11 +5,12 @@
 #include <cstdlib>
 #include <mc/traits.hpp>
 #include <udf_includes.hpp>
+#include <cstdio> 
 using namespace Models;
 
 void __attribute__((constructor)) on_load()
 {
-  printf("UDF loaded\r\n"); // NOLINT
+  std::printf("[UDF]: loaded\r\n"); // NOLINT
 }
 
 using FloatType = Models::UdfModel::FloatType;

@@ -160,7 +160,7 @@ namespace Simulation::KernelInline
             // important
             if (!probes.set(ages(idx, 0)))
             {
-              Kokkos::printf("PROBES OVERFLOW\r\n");
+              Kokkos::printf("[Kernel]: PROBES OVERFLOW\r\n");
             };
             ages(idx, 0) = 0;
           }
