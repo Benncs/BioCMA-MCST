@@ -1,6 +1,7 @@
 #ifndef __BIOMC_API_HPP__
 #define __BIOMC_API_HPP__
 
+#include "common/logger.hpp"
 #include <core/scalar_factory.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <api/results.hpp>
@@ -13,6 +14,7 @@
 #include <simulation/feed_descriptor.hpp>
 #include <span>
 #include <string_view>
+#include <utility>
 
 /**
  * @brief Api
@@ -210,6 +212,11 @@ namespace Api
      */
     ApiResult exec() noexcept;
 
+    void set_logger(std::shared_ptr<IO::Logger> _logger){
+      
+      logger=std::move(_logger);
+      }
+
   private:
     int id{}; ///< The unique identifier to connect with c api.
 
@@ -222,6 +229,8 @@ namespace Api
 
      */
     SimulationInstance(int argc, char** argv, std::optional<std::size_t> run_id);
+
+    std::shared_ptr<IO::Logger> logger;
 
     std::optional<Core::ScalarFactory::ScalarVariant> scalar_initializer_variant = std::nullopt;
     Core::CaseData _data;               ///< Case data for the simulation.

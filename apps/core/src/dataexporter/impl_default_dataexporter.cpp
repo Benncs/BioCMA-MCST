@@ -1,7 +1,6 @@
 // DEFAULT
 #ifndef USE_HIGHFIVE
 #  include <dataexporter/data_exporter.hpp>
-#  include <iostream>
 
 namespace Core
 {
@@ -18,7 +17,10 @@ namespace Core
                              std::string_view _filename,
                              std::optional<export_metadata_t> user_description)
   {
-    std::cerr << "NOT DATAEXPORTER IMPLEMENTATION" << std::endl;
+    if(logger)
+    {
+      logger->error("NOT DATAEXPORTER IMPLEMENTATION")
+    }
   }
   DataExporter::~DataExporter() = default;
 

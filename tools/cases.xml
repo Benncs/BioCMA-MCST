@@ -62,7 +62,7 @@
       <cma_case_path recursive="true">/home_pers/casale/Documents/code/biomc/cma_data/flowmap_14/</cma_case_path>
       <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
       <final_time>10</final_time>
-      <number_particle>100</number_particle>
+      <number_particle>100000</number_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>debug</results_file_name>
       <number_exported_result>20</number_exported_result>

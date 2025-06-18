@@ -5,17 +5,20 @@
 #include <core/case_data.hpp>
 #include <core/simulation_parameters.hpp>
 #include <filesystem>
-#include <iostream>
+#include <ios>
 #include <memory>
 #include <optional>
 #include <rt_init.hpp>
 #include <simulation/feed_descriptor.hpp>
 // #include <stream_io.hpp>
-#include <common/logger.hpp>
+#include <common/console.hpp>
+#include <sstream>
 #include <string>
 #include <string_view>
 #include <utility>
 #include <wrap_init_model_selector.hpp>
+#include <iostream> 
+
 
 #ifdef DECLARE_EXPORT_UDF
 #  include <udf_includes.hpp>
@@ -56,7 +59,7 @@ std::shared_ptr<DynamicLibrary> wrap_non_scoped_udf(std::string_view path, bool 
       auto rc = (__api_results__);                                                                 \
       if (!rc)                                                                                     \
       {                                                                                            \
-        std::cout << "ERROR " << #__api_results__ << " " << rc.get() << std::endl;                 \
+        logger->error(IO::format(#__api_results__, " ", rc.get()));                                \
         WrapMPI::critical_error();                                                                 \
         return -1;                                                                                 \
       }                                                                                            \
@@ -67,7 +70,7 @@ std::shared_ptr<DynamicLibrary> wrap_non_scoped_udf(std::string_view path, bool 
       auto rc = (__api_results__);                                                                 \
       if (!rc)                                                                                     \
       {                                                                                            \
-        std::cout << "ERROR " << #__api_results__ << " " << rc.get() << std::endl;                 \
+        logger->error(IO::format(#__api_results__, " ", rc.get()));                                \
         return -1;                                                                                 \
       }                                                                                            \
     }
@@ -77,48 +80,49 @@ std::shared_ptr<DynamicLibrary> wrap_non_scoped_udf(std::string_view path, bool 
  * @brief Check if result path exist or not and ask for overriding if yes
  * @return true if override results_path
  */
-static bool override_result_path(const Core::UserControlParameters& params, const ExecInfo& exec);
-static int parse_callback_ok(Core::UserControlParameters&& user_params,
+static bool override_result_path(const std::shared_ptr<IO::Logger>& logger,const Core::UserControlParameters& params, const ExecInfo& exec);
+static int parse_callback_ok(std::shared_ptr<IO::Logger>&& logger,
+                             Core::UserControlParameters&& user_params,
                              std::optional<std::unique_ptr<Api::SimulationInstance>>& handle);
-static void log_start_up();
+static std::string log_start_up();
 int main(int argc, char** argv)
 {
-  auto logger = std::make_shared<IO::RedirectGuard>();
-  std::ios::sync_with_stdio(false);
+  auto logger = std::make_shared<IO::Console>();
+  logger->toggle_print();
+  logger->toggle_alert();
+  logger->toggle_error();
+
   int rc = -1;
-
-
   {
-    log_start_up();
+    logger->raw_log(log_start_up());
 
     auto handle = Api::SimulationInstance::init(argc, argv);
 
     if (!handle)
     {
-      std::cerr << "Error Handle init" << std::endl;
+      logger->error("Error Handle init");
       return -1;
     }
-   
-    rc = parse_cli(argc, argv)
+
+    rc = parse_cli(logger,argc, argv)
              .match(
                  [&](auto&& user_params) {
-                   return parse_callback_ok(std::forward<decltype(user_params)>(user_params),
-                                            handle);
+                   return parse_callback_ok(
+                       logger, std::forward<decltype(user_params)>(user_params), handle);
                  },
-                 [](auto&& val)
+                 [&logger](auto&& val)
                  {
-                   std::cout << "Err: " << val << std::endl;
-                   showHelp(std::cout);
+                   logger->error(val);
+                   logger->raw_log(get_help_message());
                    return 1;
                  });
   }
 
-  
-
   return rc;
 }
 
-int parse_callback_ok(Core::UserControlParameters&& user_params,
+int parse_callback_ok(std::shared_ptr<IO::Logger>&& logger,
+                      Core::UserControlParameters&& user_params,
                       std::optional<std::unique_ptr<Api::SimulationInstance>>& handle)
 {
   DECLARE_LOADER("/home-local/casale/Documents/code/poc/builddir/host/apps/udf_model/"
@@ -126,10 +130,14 @@ int parse_callback_ok(Core::UserControlParameters&& user_params,
                  AutoGenerated::request_udf(user_params.model_name));
 
   auto& h = *handle;
-  if (!override_result_path(user_params, h->get_exec_info()))
+  
+
+  if (!override_result_path(logger,user_params, h->get_exec_info()))
   {
     return -1;
   }
+  
+  h->set_logger(std::cref(logger));
 
   const auto load_serde = user_params.load_serde;
   INTERPRETER_INIT
@@ -168,7 +176,7 @@ int parse_callback_ok(Core::UserControlParameters&& user_params,
   return 0;
 }
 
-bool override_result_path(const Core::UserControlParameters& params, const ExecInfo& exec)
+bool override_result_path(const std::shared_ptr<IO::Logger>& logger,const Core::UserControlParameters& params, const ExecInfo& exec)
 {
   bool flag = true;
   if (exec.current_rank == 0)
@@ -176,10 +184,12 @@ bool override_result_path(const Core::UserControlParameters& params, const ExecI
     if (std::filesystem::exists(params.results_file_name + std::string(".h5")) &&
         !params.force_override)
     {
-      std::cout << "Override results ? (y/n)" << std::endl;
+      std::ios_base::sync_with_stdio(true); //FIXME
+      logger->print("", "Override results ? (y/n)");
       std::string res;
       std::cin >> res;
       flag = res == "y";
+       std::ios_base::sync_with_stdio(false);
     }
   }
 #ifndef NO_MPI
@@ -189,12 +199,14 @@ bool override_result_path(const Core::UserControlParameters& params, const ExecI
   return flag;
 }
 
-static void log_start_up()
+static std::string log_start_up()
 {
-  std::cout << "--------" << std::endl;
-  std::cout << "Bio-CMA-MC Simulation tool\r\n";
-  std::cout << "\tV" << _BIOMC_VERSION_MAJOR << "." << _BIOMC_VERSION_MINOR << "."
-            << _BIOMC_VERSION_DEV << "\r\n";
-  std::cout << "\tMode " << _BIOMC_BUILD_MODE << "\r\n";
-  std::cout << "--------" << std::endl;
+  std::stringstream os;
+  os << "--------" << std::endl;
+  os << "Bio-CMA-MC Simulation tool\r\n";
+  os << "\tV" << _BIOMC_VERSION_MAJOR << "." << _BIOMC_VERSION_MINOR << "." << _BIOMC_VERSION_DEV
+     << "\r\n";
+  os << "\tMode " << _BIOMC_BUILD_MODE << "\r\n";
+  os << "--------" << std::endl;
+  return os.str();
 }

@@ -1,10 +1,10 @@
 #ifndef __COMMON_LOGGER_HPP__
 #define __COMMON_LOGGER_HPP__
 
-#include <memory>
-#include <optional>
-#include <sstream>
-#include <streambuf>
+
+#include <source_location>
+#include <string_view>
+#include <string> 
 
 namespace IO
 {
@@ -14,63 +14,60 @@ namespace IO
     constexpr auto blue = "\033[34m";
     constexpr auto red = "\033[31m";
     constexpr auto reset = "\033[0m";
-
+    constexpr auto green = "\033[32m";
   } // namespace AnsiCode
 
-  enum RedirectionType
+  namespace Unicode
   {
-    Buffer,
-    File
-  };
+    constexpr auto red_circle = "\U0001F534";
+  } // namespace Unicode
 
-  class RedirectGuard;
 
-  class RedirectHandle
-  {
-  public:
-    RedirectHandle(std::shared_ptr<RedirectGuard> owner,
-                   std::shared_ptr<bool> active_flag,
-                   bool owns,
-                   RedirectionType _type);
 
-    ~RedirectHandle();
-
-    RedirectHandle(const RedirectHandle&) = delete;
-    RedirectHandle& operator=(const RedirectHandle&) = delete;
-
-    RedirectHandle(RedirectHandle&&) = default;
-    RedirectHandle& operator=(RedirectHandle&&) = default;
-
-  private:
-    std::shared_ptr<RedirectGuard> owner_ptr;
-    std::shared_ptr<bool> active_flag;
-    bool owns_guard = false;
-    RedirectionType type;
-  };
-
-  class RedirectGuard : public std::enable_shared_from_this<RedirectGuard>
+  class Logger
   {
   public:
-    RedirectGuard();
+    Logger() = default;
 
-    [[nodiscard("Handle must be held")]] RedirectHandle redirect();
+    Logger(const Logger&) = default;
+    Logger(Logger&&) = default;
 
-    [[nodiscard("Handle must be held")]] RedirectHandle redirect_to_file();
+    Logger& operator=(const Logger&) = default;
+    Logger& operator=(Logger&&) = default;
 
-    void restore();
+    virtual ~Logger() = default;
 
-    std::optional<std::string> getCapturedOutput() const;
+    virtual void debug(std::string_view message) = 0;
 
-  private:
-    friend class RedirectHandle;
+    virtual void print(std::string_view prefix, std::string_view message) = 0;
 
-    bool has_been_redirected = false;
-    std::streambuf* coutbuf = nullptr;
-    std::stringstream buffer;
-    int original_stdout_fd = -1;
+    virtual void alert(std::string_view prefix,std::string_view message) = 0;
 
-    std::shared_ptr<bool> active_flag;
+    virtual void error(std::string_view message,std::source_location location =std::source_location::current()) = 0;
+
+    virtual void raw_log(std::string_view message) =0;
+
+    virtual void toggle_debug() = 0;
+
+    virtual void toggle_print() = 0;
+
+    virtual void toggle_alert() = 0;
+
+    virtual void toggle_error() = 0;
+
+    virtual void toggle_all() = 0;
   };
+
+  template <typename... MsgType> std::string format(MsgType&&... msgs)
+  {
+    std::string result;
+    (result += ... += std::forward<MsgType>(msgs));
+    return result;
+  }
+
+  
+
+  
 
 } // namespace IO
 

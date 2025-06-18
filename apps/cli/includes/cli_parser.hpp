@@ -3,8 +3,9 @@
 
 #include <common/results.hpp>
 #include <core/simulation_parameters.hpp>
-#include <iostream>
 #include <utility>
+#include <common/logger.hpp>
+#include <memory>
 
 // TODO WIP
 template <typename S> struct CliResults : Result<S, std::string>
@@ -46,11 +47,11 @@ template <typename S> struct CliResults : Result<S, std::string>
  * parameters are invalid.
  * @exception noexcept This function does not throw exceptions.
  */
-CliResults<Core::UserControlParameters> parse_cli(int argc, char** argv) noexcept;
+CliResults<Core::UserControlParameters> parse_cli(const std::shared_ptr<IO::Logger>& logger,int argc, char** argv) noexcept;
 
 /**
  * @brief Print Help message to specified buffer
  */
-void showHelp(std::ostream& os) noexcept;
+std::string get_help_message() noexcept;
 
 #endif //__CLI_PARSER_HPP__

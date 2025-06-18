@@ -219,6 +219,11 @@ namespace Simulation
     }
   }
 
+  void SimulationUnit::set_logger(std::shared_ptr<IO::Logger> _logger)
+  {
+    logger = std::move(_logger);
+  }
+
   void SimulationUnit::post_init_compartments()
   {
     // auto _compute_concentration = liquid_scalar->get_device_concentration();

@@ -1,6 +1,7 @@
 #ifndef __CMA_UTILS_TRANSITIONNER_FACTORY_HPP__
 #define __CMA_UTILS_TRANSITIONNER_FACTORY_HPP__
 
+#include "common/logger.hpp"
 #include <memory>
 #include <transitionner/transitionner.hpp>
 
@@ -21,7 +22,7 @@ namespace CmaUtils
    * @return Unique pointer to FlowMapTransitionner.
    */
   std::unique_ptr<FlowMapTransitionner>
-  get_transitioner(FlowmapTransitionMethod method,
+  get_transitioner(const std::shared_ptr<IO::Logger>& logger,FlowmapTransitionMethod method,
                    std::size_t n_flowmap,
                    std::size_t n_per_flowmap,
                    std::size_t number_time_step,

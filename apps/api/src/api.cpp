@@ -1,3 +1,4 @@
+#include "common/logger.hpp"
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
 #include <api/results.hpp>
@@ -10,13 +11,13 @@
 #include <cstddef>
 #include <cstdint>
 #include <exception>
-#include <iostream>
 #include <memory>
 #include <new>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
 #include <span>
 #include <stdexcept>
+#include <string>
 #include <utility>
 #include <vector>
 constexpr int ID_VERIF = 2025;
@@ -203,11 +204,12 @@ namespace Api
     {
       try
       {
-        std::cout << "\033[34m[Simulation]: "
-                     "\033[0m"
-                     "Running "
-                  << this->_data.exec_info.current_rank << "..." << std::endl;
-        Core::exec(std::forward<Core::CaseData>(this->_data));
+        if(logger)
+        {
+          logger->print("Simulation", IO::format("Running ",std::to_string(this->_data.exec_info.current_rank) ,"..."));
+        }
+
+        Core::exec(logger,std::forward<Core::CaseData>(this->_data));
         return ApiResult();
       }
       catch (std::exception& e)
@@ -265,6 +267,11 @@ namespace Api
     // TODO Refractor with and_then when supported
     Core::GlobalInitialiser global_initializer(_data.exec_info, params);
 
+    if(logger)
+    {
+      global_initializer.set_logger(logger);
+    }
+
     auto transitionner = global_initializer.init_transitionner();
 
     if (!transitionner)
@@ -287,6 +294,11 @@ namespace Api
     if (!__simulation.has_value())
     {
       return ApiResult("Error apply: simulation ");
+    }
+
+     if(logger)
+    {
+      (*__simulation)->set_logger(logger);
     }
 
     // FIXME

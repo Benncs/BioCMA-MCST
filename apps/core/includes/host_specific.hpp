@@ -3,6 +3,7 @@
 
 // #include <common/common.hpp>
 
+#include <common/logger.hpp>
 #include <core/simulation_parameters.hpp>
 #include <dataexporter/partial_exporter.hpp>
 #include <memory>
@@ -32,7 +33,9 @@ namespace CmaUtils
  * @param transitioner A unique pointer to the `Simulation::FlowMapTransitioner`
  * for handling flow map transitions.
  */
-void host_process(const ExecInfo& exec,
+void host_process(std::shared_ptr<IO::Logger> logger, /*logger is passed by value because it can be
+                                                         set into maindataexporter*/
+                  const ExecInfo& exec,
                   Simulation::SimulationUnit& simulation,
                   const Core::SimulationParameters& params,
                   std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,

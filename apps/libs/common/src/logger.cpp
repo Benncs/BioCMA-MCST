@@ -1,11 +1,35 @@
-#include "biocma_cst_config.hpp"
+#include <biocma_cst_config.hpp>
 #include <common/logger.hpp>
 #include <cstdio>
 #include <iostream>
 #include <optional>
 #include <stdexcept>
+#include <memory>
+#include <optional>
+#include <ostream>
+#include <source_location>
+#include <sstream>
+#include <streambuf>
+#include <common/console.hpp>
+
+#include <unistd.h> //dup2
 
 constexpr bool f_redirect = true;
+
+namespace
+{
+  // NOLINTBEGIN(hicpp-signed-bitwise)
+  enum Flags
+  {
+    None = 0,
+    Debug = 1 << 0,
+    Print = 1 << 1,
+    Alert = 1 << 2,
+    Error = 1 << 3,
+    All = Debug | Print | Alert | Error
+  };
+  // NOLINTEND(hicpp-signed-bitwise)
+} // namespace
 
 namespace IO
 {
@@ -122,6 +146,81 @@ namespace IO
     {
       owner_ptr->restore();
     }
+  }
+
+  Console::Console() : flags(Flags::None), output(std::cout),err_output(std::cerr)
+  {
+      std::ios::sync_with_stdio(false);
+      std::locale::global(std::locale("en_US.utf8"));
+  }
+
+  void Console::debug([[maybe_unused]] std::string_view message)
+  {
+#ifndef NDEBUG
+    if ((flags & Flags::Debug) != 0U)
+    {
+      output << "[DEBUG]: " << message << "\r\n";
+    }
+#endif
+  }
+
+  void Console::print(std::string_view prefix, std::string_view message)
+  {
+    if ((flags & Flags::Print) != 0U)
+    {
+      output <<AnsiCode::blue<<"["<<prefix<<"]: "<<AnsiCode::reset << message << "\r\n";
+    }
+  }
+
+  void Console::alert(std::string_view prefix, std::string_view message)
+  {
+    if ((flags & Flags::Alert) != 0U)
+    {
+      output << AnsiCode::red<<"[Warning: "<<prefix<<"]" << ": "<<AnsiCode::reset  << message << "\r\n";
+    }
+  }
+
+  void Console::error(std::string_view message,std::source_location location )
+  {
+    if ((flags & Flags::Error) != 0U)
+    {
+      err_output << AnsiCode::red<<"[Error] From: "<<location.function_name() <<AnsiCode::reset  <<": "<< message << "\r\n";
+    }
+  }
+
+   void Console::raw_log(std::string_view message )
+  {
+    if ((flags & Flags::Error) != 0U)
+    {
+      err_output << message;
+    }
+  }
+
+  void Console::toggle_debug()
+  {
+
+    flags ^= Flags::Debug;
+  }
+
+  void Console::toggle_all()
+  {
+    flags ^= Flags::All;
+  }
+
+
+  void Console::toggle_print()
+  {
+    flags ^= Flags::Print;
+  }
+
+  void Console::toggle_alert()
+  {
+    flags ^= Flags::Alert;
+  }
+
+  void Console::toggle_error()
+  {
+    flags ^= Flags::Error;
   }
 
 } // namespace IO

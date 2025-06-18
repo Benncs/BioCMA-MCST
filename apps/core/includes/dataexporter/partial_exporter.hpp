@@ -21,7 +21,7 @@ namespace Core
    * writing particle data, managing particle number distributions, and writing probe data.
    * It derives privately from `DataExporter` to encapsulate its backend.
    */
-  class PartialExporter : private DataExporter
+  class PartialExporter : public DataExporter
   {
   public:
     /**

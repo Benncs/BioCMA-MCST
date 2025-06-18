@@ -7,6 +7,12 @@
 #include <core/simulation_parameters.hpp>
 #include <memory>
 
+
+namespace IO
+{
+  class Logger;
+}
+
 namespace Simulation
 {
   class SimulationUnit;
@@ -18,12 +24,12 @@ namespace PostProcessing
                     const Core::SimulationParameters& params,
                     Simulation::SimulationUnit& simulation);
 
-  void final_post_processing(const ExecInfo& exec,
+  void final_post_processing(const std::shared_ptr<IO::Logger>& logger,const ExecInfo& exec,
                              const Core::SimulationParameters& params,
                              Simulation::SimulationUnit& simulation,
                              std::unique_ptr<Core::MainExporter>& mde);
 
-  void show_sumup_state(const Simulation::SimulationUnit& simulation) noexcept;
+  void show_sumup_state(const std::shared_ptr<IO::Logger>& logger,const Simulation::SimulationUnit& simulation) noexcept;
 
   void save_particle_state(Simulation::SimulationUnit& simulation, Core::PartialExporter& pde);
 

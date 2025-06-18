@@ -1,4 +1,3 @@
-#include <iostream>
 #include <load_balancing/impl_lb.hpp>
 #include <stdexcept>
 #include <utility>

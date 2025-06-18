@@ -1,4 +1,5 @@
 
+#include "common/logger.hpp"
 #include <algorithm> //for std::min
 #include <biocma_cst_config.hpp>
 #include <cma_read/reactorstate.hpp>
@@ -19,19 +20,22 @@
 #include <signal_handling.hpp>
 #include <simulation/simulation.hpp>
 #include <transitionner/transitionner.hpp>
-
+#include <iostream> 
 #include <string>
 #include <sync.hpp>
 #include <type_traits>
 #include <utility>
 #include <variant>
+
+
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
 #endif
 
 namespace IO
 {
-  constexpr size_t PROGRESS_BAR_WIDTH = 100;
+  constexpr size_t PROGRESS_BAR_WIDTH = 100; //Number of 
+  constexpr char PROGRESS_BAR_SYMBOL = '*';
 
 
   class ProgressBar
@@ -42,31 +46,32 @@ namespace IO
       buffer = std::string(PROGRESS_BAR_WIDTH, ' ');
     }
 
-    inline void show(size_t total, size_t current_position)
+    inline void show(std::ostream& out_stream,size_t total, size_t current_position)
     {
 
       std::ios::sync_with_stdio(false);
       size_t progress = (current_position * PROGRESS_BAR_WIDTH) / total;
 
-      std::fill_n(buffer.begin(), progress, '*');
-      std::cout << "Progress: [" << buffer << "] " << std::fixed << std::setprecision(2)
+      std::fill_n(buffer.begin(), progress, PROGRESS_BAR_SYMBOL);
+      out_stream << "Progress: [" << buffer << "] " << std::fixed << std::setprecision(2)
                 << (static_cast<float>(current_position) * 100.0 / static_cast<float>(total))
                 << "%\r" << std::flush << std::setprecision(default_precision);
     }
 
-    inline void show_percentage(size_t total, size_t current_position)
+    inline void show_percentage(std::ostream& out_stream,size_t total, size_t current_position)const
     {
       std::ios::sync_with_stdio(false);
-      std::cout << "Progress: ["  << std::fixed << std::setprecision(2)
+      out_stream << "Progress: ["  << std::fixed << std::setprecision(2)
                 << (static_cast<float>(current_position) * 100.0 / static_cast<float>(total))
                 << "%" << "]\r"<< std::flush << std::setprecision(default_precision);
     }
 
   private:
     std::string buffer;
+    
     const int default_precision = std::cout.precision(); // NOLINT Conversion long to int
   };
-
+  
   static ProgressBar progressbar= ProgressBar();
 } // namespace IO
 
@@ -74,14 +79,12 @@ namespace
 {
 
   // constexpr size_t n_particle_trigger_parralel = 1e6;
-  void main_loop(const Core::SimulationParameters& params,
+  void main_loop(const std::shared_ptr<IO::Logger>& logger,const Core::SimulationParameters& params,
                  const ExecInfo& exec,
                  Simulation::SimulationUnit& simulation,
                  std::unique_ptr<CmaUtils::FlowMapTransitionner> transitioner,
                  std::unique_ptr<Core::MainExporter>& main_exporter,
                  Core::PartialExporter& partial_exporter);
-
-  constexpr size_t PROGRESS_BAR_WIDTH = 100;
 
   void handle_export(const ExecInfo& exec,
                      size_t& dump_counter,
@@ -158,7 +161,7 @@ namespace
 #  define DEBUG_INSTRUCTION
 #endif
 
-void host_process(const ExecInfo& exec,
+void host_process(std::shared_ptr<IO::Logger> logger,const ExecInfo& exec,
                   Simulation::SimulationUnit& simulation,
                   const Core::SimulationParameters& params,
                   std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,
@@ -167,6 +170,8 @@ void host_process(const ExecInfo& exec,
 
   std::unique_ptr<Core::MainExporter> main_exporter = make_main_exporter(exec, params);
 
+  main_exporter->set_logger(logger);
+
   const auto [n_species, n_compartment] = simulation.getDimensions();
 
   main_exporter->init_fields(
@@ -174,11 +179,11 @@ void host_process(const ExecInfo& exec,
 
   main_exporter->write_initial(simulation.mc_unit->init_weight, params);
 
-  PostProcessing::show_sumup_state(simulation);
+  PostProcessing::show_sumup_state(logger,simulation);
 
-  main_loop(params, exec, simulation, std::move(transitioner), main_exporter, partial_exporter);
+  main_loop(logger,params, exec, simulation, std::move(transitioner), main_exporter, partial_exporter);
 
-  PostProcessing::show_sumup_state(simulation);
+  PostProcessing::show_sumup_state(logger,simulation);
 
   SEND_MPI_SIG_STOP;
 
@@ -193,7 +198,7 @@ void host_process(const ExecInfo& exec,
   // std::visit(clean_list, simulation.mc_unit->container);
   PostProcessing::save_particle_state(simulation, partial_exporter);
   last_sync(exec, simulation);
-  PostProcessing::final_post_processing(exec, params, simulation, main_exporter);
+  PostProcessing::final_post_processing(logger,exec, params, simulation, main_exporter);
 
   PostProcessing::reset_counter();
 }
@@ -201,7 +206,7 @@ void host_process(const ExecInfo& exec,
 namespace
 {
 
-  void main_loop(const Core::SimulationParameters& params,
+  void main_loop(const std::shared_ptr<IO::Logger>& logger,const Core::SimulationParameters& params,
                  const ExecInfo& exec,
                  Simulation::SimulationUnit& simulation,
                  std::unique_ptr<CmaUtils::FlowMapTransitionner> transitioner,
@@ -308,7 +313,10 @@ namespace
 
         if (Core::SignalHandler::is_sigint_raised())
         {
-          std::cout << "User interruption" << std::endl;
+          if(logger)
+          {
+            logger->print("[Host]", "User interruption");
+          }
           break;
         }
       }
@@ -384,7 +392,9 @@ namespace
                                                        : std::nullopt;
       if constexpr (AutoGenerated::FlagCompileTime::verbose)
       {
-        IO::progressbar.show_percentage(n_iter_simulation, __loop_counter);
+        // IO::progressbar.show_percentage(std::cout,n_iter_simulation, __loop_counter);
+        IO::progressbar.show(std::cout,n_iter_simulation, __loop_counter);
+
       }
 
       // update_progress_bar(n_iter_simulation, __loop_counter);

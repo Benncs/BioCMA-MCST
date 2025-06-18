@@ -118,6 +118,7 @@ namespace Core
                                    std::optional<std::span<const double>> volume_gas,
                                    std::optional<std::span<const double>> mtr,std::optional<std::span<std::size_t>> events)
   {
+  
     if (export_counter >= n_expected_export)
     {
       return;

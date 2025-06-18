@@ -10,7 +10,7 @@
 #  include <transitionner/transitionner.hpp>
 #  include <worker_specific.hpp>
 
-void workers_process(const ExecInfo& exec,
+void workers_process(std::shared_ptr<IO::Logger> logger,const ExecInfo& exec,
                      Simulation::SimulationUnit& simulation,
                      const Core::SimulationParameters& params,
                      std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,

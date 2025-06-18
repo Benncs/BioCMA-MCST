@@ -1,10 +1,13 @@
+#include "common/logger.hpp"
 #include <cli_parser.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstdlib>
 #include <exception>
 #include <functional>
 #include <iostream>
+#include <memory>
 #include <optional>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -19,7 +22,7 @@ static CliResults<Core::UserControlParameters> parseArg(Core::UserControlParamet
                                                         std::string_view current_param,
                                                         std::string_view current_value);
 
-static CliResults<Core::UserControlParameters> parse_user_param(int argc, char** argv)
+static CliResults<Core::UserControlParameters> parse_user_param(const std::shared_ptr<IO::Logger>& logger,int argc, char** argv)
 {
   using return_type = CliResults<Core::UserControlParameters>;
   Core::UserControlParameters control = Core::UserControlParameters::m_default();
@@ -38,7 +41,10 @@ static CliResults<Core::UserControlParameters> parse_user_param(int argc, char**
       {
         if (current_param == "h")
         {
-          showHelp(std::cout);
+          if(logger)
+          {
+            logger->raw_log(get_help_message());
+          }
           exit(0);
         }
         auto opt = parseArg(control, current_param, current_value);
@@ -71,9 +77,9 @@ static CliResults<Core::UserControlParameters> parse_user_param(int argc, char**
   }
 }
 
-CliResults<Core::UserControlParameters> parse_cli(int argc, char** argv) noexcept
+CliResults<Core::UserControlParameters> parse_cli(const std::shared_ptr<IO::Logger>& logger,int argc, char** argv) noexcept
 {
-  auto opt_control = parse_user_param(argc, argv);
+  auto opt_control = parse_user_param(logger,argc, argv);
   if (!opt_control)
   {
     return CliResults<Core::UserControlParameters>(opt_control.get());
@@ -260,8 +266,9 @@ sanitise_check_cli(Core::UserControlParameters&& params)
   return CliResults<Core::UserControlParameters>(std::move(params));
 }
 
-void showHelp(std::ostream& os) noexcept
+std::string get_help_message() noexcept
 {
+  std::stringstream os;
   os << "Usage: ";
   print_red(os, "BIOCMA-MCST");
   // os << "  -np <number_of_particles> [-ff <flow_file_folder_path>] [OPTIONS] " << '\n';
@@ -288,6 +295,8 @@ void showHelp(std::ostream& os) noexcept
 
   os << "\nExample:" << '\n';
   os << "  BIOCMA-MCST -np 100 -ff /path/to/flow_file_folder/ [-v]" << '\n';
+
+  return os.str();
 }
 
 // static void print_green(std::ostream &os, std::string_view message)

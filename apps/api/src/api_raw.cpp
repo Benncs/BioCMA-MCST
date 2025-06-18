@@ -1,3 +1,5 @@
+#include "common/console.hpp"
+#include "common/logger.hpp"
 #include <api/api.hpp>
 #include <api/api_raw.h>
 #include <api/results.hpp>
@@ -7,6 +9,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <memory>
 #include <optional>
 #include <ostream>
 #include <span>
@@ -37,7 +40,10 @@ Handle init_handle_raw(int argc, char** argv)
 {
   auto opt_handle = Api::SimulationInstance::init(argc, argv);
   if (opt_handle.has_value())
-  {
+  { 
+    auto logger = std::make_shared<IO::Console>();
+    logger->toggle_all();
+    (*opt_handle)->set_logger(logger);
     return opt_handle->release();
   }
   return nullptr;

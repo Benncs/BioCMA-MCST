@@ -1,6 +1,7 @@
 #ifndef __CORE_GLOBAL_INITIALLISER_HPP__
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
+#include "common/logger.hpp"
 #include <simulation/mass_transfer.hpp>
 #include <transitionner/transitionner.hpp>
 #include <array>
@@ -50,6 +51,8 @@ namespace Core
      * @param _params Simulation parameters that configure the simulation behavior.
      */
     GlobalInitialiser(const ExecInfo& _info, UserControlParameters _user_params);
+
+    void set_logger(std::shared_ptr<IO::Logger> _logger);
 
     /**
      * @brief Initializes a flow iterator.
@@ -233,6 +236,8 @@ namespace Core
     std::vector<size_t> worker_neighbor_data;
     bool f_init_gas_flow;
     std::optional<Simulation::Feed::SimulationFeed> feed;
+    std::shared_ptr<IO::Logger> logger;
+
     /////
 
     bool is_host; ///< Flag indicating if this instance is the host.

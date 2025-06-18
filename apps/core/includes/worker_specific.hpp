@@ -7,7 +7,7 @@
 #    include <core/simulation_parameters.hpp>
 #    include <dataexporter/partial_exporter.hpp>
 #    include <memory>
-
+#include <common/logger.hpp>
 // Foward declaration
 namespace Simulation
 {
@@ -33,7 +33,7 @@ namespace CmaUtils
  * @param transitioner A unique pointer to the `Simulation::FlowMapTransitioner`
  * for handling flow map transitions.
  */
-void workers_process(const ExecInfo& exec,
+void workers_process(std::shared_ptr<IO::Logger> logger,const ExecInfo& exec,
                      Simulation::SimulationUnit& simulation,
                      const Core::SimulationParameters& params,
                      std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,

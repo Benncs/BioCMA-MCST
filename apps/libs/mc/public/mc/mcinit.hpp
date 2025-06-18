@@ -1,6 +1,7 @@
 #ifndef __MC_INIT_HPP__
 #define __MC_INIT_HPP__
 
+#include "common/logger.hpp"
 #include <cassert>
 #include <common/execinfo.hpp>
 #include <cstdint>
@@ -36,17 +37,18 @@ namespace MC
    * @return A unique pointer to the initialized MonteCarloUnit.
    */
   template <ModelType Model>
-  std::unique_ptr<MonteCarloUnit> init(uint64_t n_particles,
+  std::unique_ptr<MonteCarloUnit> init(const std::shared_ptr<IO::Logger>& _logger,uint64_t n_particles,
                                        std::span<double> volumes,
                                        const NeighborsView<HostSpace>& neighbors,
                                        bool uniform_mc_init,
                                        double& total_mass)
   {
-    // Kokkos::printf("Using model: %s\r\n",Model::); //TODO Add model's name to trait (optional)
     if constexpr (ConstWeightModelType<Model>)
     {
-      // Kokkos::printf("Const Weights\r\n");
-      std::cout<<  "\033[34m[Model]: " "Const Weights" "\033[0m" <<std::endl;
+      if(_logger)
+      {
+        _logger->print("Model", "Const Weights");//TODO Add model's name to trait (optional)
+      }
 
     }
 
