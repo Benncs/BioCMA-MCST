@@ -59,7 +59,7 @@ int exec(Handle handle)
     if (handle->get_id() == ID_VERIF)
     {
       auto rc = handle->exec();
-      std::cerr << "EXEC: " << rc.get() << std::endl;
+     
 
       return rc ? 0 : -1;
     }
@@ -311,6 +311,23 @@ void show_user_param(const wrap_c_param_t* params)
   {
     std::cout << convert_c_wrap_to_param(*params);
   }
+}
+
+int n_rank(Handle handle)
+{
+  if (handle == nullptr)
+  {
+    return 0;
+  }
+  return static_cast<int>(handle->get_exec_info().n_rank);
+}
+int i_rank(Handle handle)
+{
+  if (handle == nullptr)
+  {
+    return 0;
+  }
+  return static_cast<int>(handle->get_exec_info().current_rank);
 }
 
 void repr_user_param(const wrap_c_param_t* params, char** repr)

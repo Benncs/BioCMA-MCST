@@ -94,6 +94,9 @@ typedef struct Opaque*
 
   int register_parameters(Handle handle, Param* params);
 
+  int n_rank(Handle handle);
+  int i_rank(Handle handle);
+
   /*Feed*/
   // int set_feed_constant(Handle,
   //                       double _f,
