@@ -18,6 +18,7 @@ if [ -z "$MESON_SOURCE_ROOT" ]; then
 fi
 
 # Copy additional files
+cp $MESON_SOURCE_ROOT/tools/cases.xml "$INSTALL_DIR/cases.xml"
 cp $MESON_SOURCE_ROOT/tools/runner.py "$INSTALL_DIR/runner.py"
 cp $MESON_SOURCE_ROOT/tools/cli_formater.py "$INSTALL_DIR/cli_formater.py"
 cp $MESON_SOURCE_ROOT/devutils/exec.py "$INSTALL_DIR/exec.py"
