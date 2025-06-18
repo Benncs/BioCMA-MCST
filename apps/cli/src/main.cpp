@@ -10,7 +10,8 @@
 #include <optional>
 #include <rt_init.hpp>
 #include <simulation/feed_descriptor.hpp>
-#include <stream_io.hpp>
+// #include <stream_io.hpp>
+#include <common/logger.hpp>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -82,27 +83,39 @@ static int parse_callback_ok(Core::UserControlParameters&& user_params,
 static void log_start_up();
 int main(int argc, char** argv)
 {
+  auto logger = std::make_shared<IO::RedirectGuard>();
+  std::ios::sync_with_stdio(false);
+  int rc = -1;
 
-  log_start_up();
 
-  auto handle = Api::SimulationInstance::init(argc, argv);
-
-  if (!handle)
   {
-    std::cerr << "Error Handle init" << std::endl;
-    return -1;
+    log_start_up();
+
+    auto handle = Api::SimulationInstance::init(argc, argv);
+
+    if (!handle)
+    {
+      std::cerr << "Error Handle init" << std::endl;
+      return -1;
+    }
+   
+    rc = parse_cli(argc, argv)
+             .match(
+                 [&](auto&& user_params) {
+                   return parse_callback_ok(std::forward<decltype(user_params)>(user_params),
+                                            handle);
+                 },
+                 [](auto&& val)
+                 {
+                   std::cout << "Err: " << val << std::endl;
+                   showHelp(std::cout);
+                   return 1;
+                 });
   }
 
-  return parse_cli(argc, argv)
-      .match(
-          [&](auto&& user_params)
-          { return parse_callback_ok(std::forward<decltype(user_params)>(user_params), handle); },
-          [](auto&& val)
-          {
-            std::cout << "Err: " << val << std::endl;
-            showHelp(std::cout);
-            return 1;
-          });
+  
+
+  return rc;
 }
 
 int parse_callback_ok(Core::UserControlParameters&& user_params,
@@ -120,7 +133,8 @@ int parse_callback_ok(Core::UserControlParameters&& user_params,
 
   const auto load_serde = user_params.load_serde;
   INTERPRETER_INIT
-  REDIRECT_SCOPE({
+
+  {
     HANDLE_RC(h->register_parameters(std::forward<decltype(user_params)>(user_params)));
 
     // const auto fd = Simulation::Feed::FeedFactory::constant(
@@ -134,7 +148,23 @@ int parse_callback_ok(Core::UserControlParameters&& user_params,
 
     HANDLE_RC(h->apply(load_serde));
     HANDLE_RC(h->exec());
-  })
+  }
+
+  // REDIRECT_SCOPE({
+  //   // HANDLE_RC(h->register_parameters(std::forward<decltype(user_params)>(user_params)));
+
+  //   // // const auto fd = Simulation::Feed::FeedFactory::constant(
+  //   // //     2.33333333333333E-05, 300e-3, 1, 1,10, true);
+
+  //   // // const auto fd_liq = Simulation::Feed::FeedFactory::constant(
+  //   // //     10e-3*0.1/3600, 5, 0, 0,0, false);
+
+  //   // // h->set_feed(fd, Phase::Gas);
+  //   // // h->set_feed(fd_liq, Phase::Liquid);
+
+  //   // HANDLE_RC(h->apply(load_serde));
+  //   // HANDLE_RC(h->exec());
+  // })
   return 0;
 }
 
