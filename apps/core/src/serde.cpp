@@ -51,8 +51,10 @@ static void read_file(std::stringstream& buffer, std::string_view filename)
   }
 }
 
-using Archive_t = cereal::XMLOutputArchive;
-using iArchive_t = cereal::XMLInputArchive;
+// using Archive_t = cereal::XMLOutputArchive;
+// using iArchive_t = cereal::XMLInputArchive;
+using Archive_t = cereal::BinaryOutputArchive;
+using iArchive_t = cereal::BinaryInputArchive;
 
 // void read_archive(cereal::XMLInputArchive& ar,std::string_view filename)
 // {
