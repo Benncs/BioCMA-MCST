@@ -7,8 +7,8 @@
 #define CHECK_FALSE(__stmt__) assert((__stmt__) != 0);
 static const auto tmp_dir = std::filesystem::temp_directory_path();
 
-constexpr size_t n_rank = 1;
-constexpr size_t i_rank = 0;
+// constexpr size_t n_rank = 1;
+// constexpr size_t i_rank = 0;
 constexpr size_t id = 123;
 constexpr size_t nt = 4;
 

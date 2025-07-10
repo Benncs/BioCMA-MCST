@@ -17,7 +17,7 @@ int main()
                           "3.14",
                           "-r"};
     int argc = 9;
-    auto result = parse_cli(argc, const_cast<char**>(argv));
+    auto result = parse_cli(nullptr,argc, const_cast<char**>(argv));
 
     //     assert(result.has_value()); // Should return a valid UserControlParameters object
     //     const auto& control = result.value();

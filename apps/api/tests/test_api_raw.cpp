@@ -7,7 +7,7 @@
 #include "common_test.hpp"
 
 #define INIT init_handle_raw(argc, argv);
-#define PARAM make_params(cx, ft, dt, np, nex);
+#define PARAM make_params(cx, ft, dt, np, nex,0);
 
 void test_init(int argc, char** argv)
 {
