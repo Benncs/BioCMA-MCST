@@ -2,16 +2,16 @@
 #define __BIOMC_API_HPP__
 
 #include "common/logger.hpp"
-#include <core/scalar_factory.hpp>
-#include <simulation/mass_transfer.hpp>
 #include <api/results.hpp>
 #include <common/execinfo.hpp>
 #include <core/case_data.hpp>
+#include <core/scalar_factory.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstdlib>
 #include <memory>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/mass_transfer.hpp>
 #include <span>
 #include <string_view>
 #include <utility>
@@ -151,7 +151,6 @@ namespace Api
                                 double _concentration,
                                 std::size_t _species,
                                 std::size_t _position,
-
                                 bool gas = false,
                                 bool fed_batch = false);
 
@@ -212,10 +211,16 @@ namespace Api
      */
     ApiResult exec() noexcept;
 
-    void set_logger(std::shared_ptr<IO::Logger> _logger){
-      
-      logger=std::move(_logger);
-      }
+    void set_logger(std::shared_ptr<IO::Logger> _logger)
+    {
+
+      logger = std::move(_logger);
+    }
+
+    [[nodiscard]] auto& get_logger() const
+    {
+      return logger;
+    }
 
   private:
     int id{}; ///< The unique identifier to connect with c api.

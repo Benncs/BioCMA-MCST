@@ -231,7 +231,7 @@ namespace Api
     }
     if (loaded)
     {
-      return ApiResult("Not loaded");
+      return ApiResult("Already loaded");
     }
     try
     {
@@ -257,7 +257,7 @@ namespace Api
     }
     if (loaded)
     {
-      return ApiResult("Not loaded");
+      return ApiResult("Already loaded");
     }
     if (!registered)
     {
