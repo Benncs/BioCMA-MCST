@@ -201,7 +201,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
         py::arg("final_time"),
         py::arg("delta_time"),
         py::arg("number_particle"),
-        py::arg("number_exported_result"));
+        py::arg("number_exported_result"),py::arg("save_serde"));
 
   PythonBindings::declare_parameter(m);
 

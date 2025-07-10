@@ -73,7 +73,8 @@ typedef struct Opaque*
   } Param;
   // NOLINTEND
 
-  int set_scalar_buffer(Handle handle, uint64_t rows, uint64_t cols, double* liquid, double* gas_ptr);
+  int set_scalar_buffer(
+      Handle handle, uint64_t rows, uint64_t cols, double* liquid, double* gas_ptr);
 
   void show_user_param(const Param* params);
 
@@ -82,13 +83,15 @@ typedef struct Opaque*
                     double final_time,
                     double delta_time,
                     uint64_t number_particle,
-                    uint32_t number_exported_result);
+                    uint32_t number_exported_result,
+                    int save);
 
   Param* make_params_ptr(double biomass_initial_concentration,
                          double final_time,
                          double delta_time,
                          uint64_t number_particle,
-                         uint32_t number_exported_result);
+                         uint32_t number_exported_result,
+                         int save);
 
   void delete_params(Param** params);
 

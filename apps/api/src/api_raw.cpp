@@ -30,7 +30,11 @@ int apply(Handle handle, int to_load)
 {
   if (handle != nullptr)
   {
-    auto rc = handle->apply(to_load != 0); // TODO HANDLE ERROR
+    auto rc = handle->apply(to_load != 0);        // TODO HANDLE ERROR
+    if (!rc)
+    {
+      handle->get_logger()->error(IO::format(" ", rc.get()));
+    }
     return rc.to_c_ret_code();
   }
   return -1;
@@ -40,7 +44,7 @@ Handle init_handle_raw(int argc, char** argv)
 {
   auto opt_handle = Api::SimulationInstance::init(argc, argv);
   if (opt_handle.has_value())
-  { 
+  {
     auto logger = std::make_shared<IO::Console>();
     logger->toggle_all();
     (*opt_handle)->set_logger(logger);
@@ -65,7 +69,6 @@ int exec(Handle handle)
     if (handle->get_id() == ID_VERIF)
     {
       auto rc = handle->exec();
-     
 
       return rc ? 0 : -1;
     }
@@ -161,7 +164,8 @@ Param make_params(double biomass_initial_concentration,
                   double final_time,
                   double delta_time,
                   uint64_t number_particle,
-                  uint32_t number_exported_result)
+                  uint32_t number_exported_result,
+                  int save)
 {
   return {biomass_initial_concentration,
           final_time,
@@ -172,14 +176,15 @@ Param make_params(double biomass_initial_concentration,
           f_false,
           f_false,
           f_false,
-          f_false};
+          save};
 }
 
 Param* make_params_ptr(double biomass_initial_concentration,
                        double final_time,
                        double delta_time,
                        uint64_t number_particle,
-                       uint32_t number_exported_result)
+                       uint32_t number_exported_result,
+                       int save)
 {
   return new Param{biomass_initial_concentration,
                    final_time,
@@ -190,7 +195,7 @@ Param* make_params_ptr(double biomass_initial_concentration,
                    f_false,
                    f_false,
                    f_false,
-                   f_false};
+                   save};
 }
 
 int set_scalar_buffer(Handle handle, uint64_t rows, uint64_t cols, double* liquid, double* gas_ptr)
