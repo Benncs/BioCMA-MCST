@@ -27,16 +27,7 @@
 
 // TODO Clean
 static constexpr size_t trigger_const_particle_number = 1e6;
-#define KERNEL_MOVE_ARGS_LIST                                                                      \
-  d_t, container.position, container.status, n_particle, move_info, local_rng.random_pool, events, \
-      probes[ProbeType::LeavingTime], container.ages
-
-#define LAUNCH_KERNEL_MOVE(b_move, b_leave)                                                        \
-  Kokkos::parallel_reduce(                                                                         \
-      "cycle_move",                                                                                \
-      _policy,                                                                                     \
-      Simulation::KernelInline::MoveFunctor<b_move, b_leave>(KERNEL_MOVE_ARGS_LIST),               \
-      out_total);
+static constexpr bool f_reaction = true; // FIXME
 
 namespace CmaUtils
 {
@@ -64,7 +55,7 @@ namespace Simulation
 
   class ScalarSimulation;
 
- class SimulationUnit
+  class SimulationUnit
   {
   public:
     SimulationUnit(std::unique_ptr<MC::MonteCarloUnit>&& _unit,
@@ -144,8 +135,7 @@ namespace Simulation
 
     // Bounce methods to pimpl
     [[nodiscard]] DiagonalView<ComputeSpace> get_kernel_diagonal() const;
-    [[nodiscard]] CumulativeProbabilityView<ComputeSpace>
-    get_kernel_cumulative_proba() const;
+    [[nodiscard]] CumulativeProbabilityView<ComputeSpace> get_kernel_cumulative_proba() const;
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
 
     void set_kernel_contribs_to_host();
@@ -164,15 +154,21 @@ namespace Simulation
 
     template <ModelType Model>
     void post_cycle(MC::ParticlesContainer<Model>& container,
-                    std::size_t waiting_allocation_particle,
-                    std::size_t n_particle);
+                    std::size_t n_particle,
+                    KernelInline::Functors::move_reducer_view_type& out_total,
+                    KernelInline::Functors::cycle_reducer_view_type& reducer_type);
 
-    template <ModelType Model>
-    void pre_cycle(MC::ParticlesContainer<Model>& container, double d_t, auto& functors);
+    template <ModelType Model> void pre_cycle(MC::ParticlesContainer<Model>& container, double d_t);
   };
 
+  template <ModelType Model>
+  void SimulationUnit::pre_cycle(MC::ParticlesContainer<Model>& container, double d_t)
+  {
 
-
+    this->move_info.cumulative_probability = get_kernel_cumulative_proba();
+    this->move_info.diag_transition = get_kernel_diagonal();
+    this->move_info.neighbors = mc_unit->domain.getNeighbors();
+  }
 
   void SimulationUnit::cycleProcess(auto&& container, double d_t)
   {
@@ -185,59 +181,72 @@ namespace Simulation
       return;
     }
 
+    pre_cycle(container, d_t);
+
     auto local_rng = mc_unit->rng;
     auto events = mc_unit->events;
     auto contribs = get_kernel_contribution();
 
     MC::ContributionView contribs_scatter(contribs);
+    auto out_total = Kokkos::View<std::size_t, ComputeSpace>("out_total");
 
-    this->move_info.cumulative_probability = get_kernel_cumulative_proba();
-    this->move_info.diag_transition = get_kernel_diagonal();
-    this->move_info.neighbors = mc_unit->domain.getNeighbors();
-
-    std::size_t out_total = 0;
-    std::size_t dead_total = 0;
-    std::size_t _waiting_allocation_particle = 0;
     auto reaction_functor = Simulation::KernelInline::CycleFunctor<CurrentModel>(
         d_t, container, local_rng.random_pool, getkernel_concentration(), contribs_scatter, events);
+
+    auto reducer = KernelInline::CycleReducer<ComputeSpace>::result_view_type("reducer");
+
     auto _policy = MC::get_policy(reaction_functor, n_particle, true);
 
     bool enable_move = move_info.liquid_volume.size() > 1;
     bool enable_leave = move_info.leaving_flow.size() != 0;
 
-    switch (static_cast<int>(enable_leave) * 2 + static_cast<int>(enable_move))
-    {
-    case 0:
-      // No need to move/leave
-      break;
-    case 1:
-      LAUNCH_KERNEL_MOVE(KernelInline::disable_leave, KernelInline::enable_move);
-      break;
-    case 2:
-      LAUNCH_KERNEL_MOVE(KernelInline::enable_leave, KernelInline::disable_move);
-      break;
-    case 3:
-      LAUNCH_KERNEL_MOVE(KernelInline::enable_leave, KernelInline::enable_move);
-      break;
-    }
+    Kokkos ::parallel_reduce(
+        "cycle_move",
+        _policy,
+        Simulation ::KernelInline ::MoveFunctor(d_t,
+                                                container.position,
+                                                container.status,
+                                                n_particle,
+                                                move_info,
+                                                local_rng.random_pool,
+                                                events,
+                                                probes[ProbeType ::LeavingTime],
+                                                container.ages,
+                                                enable_move,
+                                                enable_leave),
+        out_total);
 
-    Kokkos::fence("fence_mc_cycle_process_move");
-    bool f_reaction = true; // FIXME
     if (f_reaction)
     {
 
-      Kokkos::parallel_reduce(
-          "cycle_model", _policy, reaction_functor, _waiting_allocation_particle, dead_total);
-      Kokkos::fence("fence_mc_cycle_process_model");
-      container.counter += out_total;
-      container.counter += dead_total;
-      Kokkos::Experimental::contribute(contribs, contribs_scatter);
+      Kokkos::parallel_reduce("cycle_model",
+                              _policy,
+                              reaction_functor,
+                              KernelInline::CycleReducer<ComputeSpace>(reducer));
     }
+
+    Kokkos::Experimental::contribute(contribs, contribs_scatter);
+
+    post_cycle(container, n_particle, out_total, reducer);
+  }
+
+  template <ModelType Model>
+  void SimulationUnit::post_cycle(MC::ParticlesContainer<Model>& container,
+                                  std::size_t n_particle,
+                                  KernelInline::Functors::move_reducer_view_type& out_total,
+                                  KernelInline::Functors::cycle_reducer_view_type& reducer_type)
+  {
 
     const auto threshold =
         std::max(minimum_dead_particle_removal,
                  static_cast<uint64_t>(static_cast<double>(n_particle) *
                                        AutoGenerated::dead_particle_ratio_threshold));
+
+    Kokkos::fence();
+    auto host_red = Kokkos::create_mirror_view_and_copy(HostSpace(), reducer_type)();
+    auto host_out_counter = Kokkos::create_mirror_view_and_copy(HostSpace(), out_total)();
+    container.counter += host_out_counter;
+    container.counter += host_red.dead_total;
 
     // TODO: May change threshold as container is now cleaned before exporting,
     if (container.counter > threshold)
@@ -249,7 +258,7 @@ namespace Simulation
 
     container.merge_buffer();
 
-    if (_waiting_allocation_particle != 0)
+    if (host_red.waiting_allocation_particle != 0)
     {
       if (logger)
       {

@@ -71,7 +71,6 @@ namespace Core
     {
       PostProcessing::save_probes(*sim, partial_exporter, true);
     }
-    logger->debug(IO::format(case_data.params.save_final_serde));
     if (case_data.params.save_final_serde)
     {
       // Load/Save works fine but be careful with big data (can crash due to overflow) mainly on GPU

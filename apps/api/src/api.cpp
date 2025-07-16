@@ -181,7 +181,6 @@ namespace Api
   SimulationInstance::~SimulationInstance()
   {
 
-
     _data = Core::CaseData(); // Explicity delete everything before
   }
 
@@ -204,12 +203,14 @@ namespace Api
     {
       try
       {
-        if(logger)
+        if (logger)
         {
-          logger->print("Simulation", IO::format("Running ",std::to_string(this->_data.exec_info.current_rank) ,"..."));
+          logger->print(
+              "Simulation",
+              IO::format("Running ", std::to_string(this->_data.exec_info.current_rank), "..."));
         }
 
-        Core::exec(logger,std::forward<Core::CaseData>(this->_data));
+        Core::exec(logger, std::forward<Core::CaseData>(this->_data));
         return ApiResult();
       }
       catch (std::exception& e)
@@ -267,7 +268,7 @@ namespace Api
     // TODO Refractor with and_then when supported
     Core::GlobalInitialiser global_initializer(_data.exec_info, params);
 
-    if(logger)
+    if (logger)
     {
       global_initializer.set_logger(logger);
     }
@@ -296,7 +297,7 @@ namespace Api
       return ApiResult("Error apply: simulation ");
     }
 
-     if(logger)
+    if (logger)
     {
       (*__simulation)->setLogger(logger);
     }
