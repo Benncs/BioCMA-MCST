@@ -1,15 +1,16 @@
+#include <api/api.hpp>
 #include <api/api_raw.h>
+#include <common/console.hpp>
+#include <core/scalar_factory.hpp>
+#include <cstddef>
+#include <cstdlib>
+#include <memory>
 #include <pybind11/cast.h>
 #include <pybind11/detail/common.h>
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
-#include <api/api.hpp>
-#include <core/scalar_factory.hpp>
-#include <cstddef>
-#include <cstdlib>
-#include <memory>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -20,9 +21,9 @@ std::string wrap_repr(const wrap_c_param_t& m)
 {
   char* repr = nullptr;
   repr_user_param(&m, &repr); // This function perform dynamic allocation
-  std::string result(repr); // Create a std::string from the char*
-  free(repr);    // NOLINT free the allocated memory
-  return result; // Return the string representation
+  std::string result(repr);   // Create a std::string from the char*
+  free(repr);                 // NOLINT free the allocated memory
+  return result;              // Return the string representation
 }
 
 namespace PythonBindings
@@ -39,7 +40,10 @@ namespace PythonBindings
                                              const_cast<char**>(c_args.data()));
     if (opt.has_value())
     {
+      auto logger = std::make_shared<IO::Console>();
+      logger->toggle_all();
       auto* ptr = opt.value().release();
+      ptr->set_logger(logger);
       return std::shared_ptr<Api::SimulationInstance>(ptr);
     }
     throw std::runtime_error("Simulation handle initialisation failed");
@@ -53,8 +57,8 @@ namespace PythonBindings
     return 0;
   }
 
-  auto apply(std::shared_ptr<Api::SimulationInstance>& handle,
-             bool to_load) -> std::tuple<bool, std::string>
+  auto apply(std::shared_ptr<Api::SimulationInstance>& handle, bool to_load)
+      -> std::tuple<bool, std::string>
   {
     auto rc = handle->apply(to_load);
     bool f = static_cast<bool>(rc);
@@ -95,8 +99,8 @@ namespace PythonBindings
   }
 
   auto declare_parameter(auto& m)
-{
-  return py::class_<wrap_c_param_t>(m, "UserSimulationParam")
+  {
+    return py::class_<wrap_c_param_t>(m, "UserSimulationParam")
       .def(py::init<>())
       .def_readwrite("final_time", &wrap_c_param_t::final_time)
       .def_readwrite("delta_time", &wrap_c_param_t::delta_time)
@@ -148,10 +152,8 @@ namespace PythonBindings
             // NOLINTEND
             return p;
           }));
-}
+  }
 } // namespace PythonBindings
-
-
 
 PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 {
@@ -201,7 +203,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
         py::arg("final_time"),
         py::arg("delta_time"),
         py::arg("number_particle"),
-        py::arg("number_exported_result"),py::arg("save_serde"));
+        py::arg("number_exported_result"),
+        py::arg("save_serde"));
 
   PythonBindings::declare_parameter(m);
 
@@ -213,7 +216,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
          double flow,
          double concentration,
          std::size_t _species,
-         std::size_t _position) {
+         std::size_t _position)
+      {
         return set_feed_constant(handle.get(), flow, concentration, _species, _position, -1, 0, 0);
       },
       py::arg("handle"),
@@ -228,7 +232,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
          double flow,
          double concentration,
          std::size_t _species,
-         std::size_t _position) {
+         std::size_t _position)
+      {
         return set_feed_constant(handle.get(), flow, concentration, _species, _position, -1, 0, 1);
       },
       py::arg("handle"),

@@ -236,7 +236,6 @@ namespace Simulation
                                   KernelInline::Functors::move_reducer_view_type& out_total,
                                   KernelInline::Functors::cycle_reducer_view_type& reducer_type)
   {
-
     const auto threshold =
         std::max(minimum_dead_particle_removal,
                  static_cast<uint64_t>(static_cast<double>(n_particle) *
