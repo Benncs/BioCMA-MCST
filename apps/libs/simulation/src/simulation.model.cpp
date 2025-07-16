@@ -19,39 +19,7 @@
 namespace Simulation
 {
 
-  std::span<const double> SimulationUnit::getContributionData() const
-  {
-    return liquid_scalar->getContributionData();
-  }
 
-  std::span<double> SimulationUnit::getContributionData_mut()
-  {
-    return liquid_scalar->getContributionData();
-  }
-
-  std::span<double> SimulationUnit::getCliqData() const
-  {
-    return this->liquid_scalar->getConcentrationData();
-  }
-
-  [[nodiscard]] std::optional<std::span<const double>> SimulationUnit::getCgasData() const
-  {
-    if (!gas_scalar)
-    {
-      return std::nullopt;
-    }
-    return this->gas_scalar->getConcentrationData();
-  }
-
-  [[nodiscard]] Dimensions SimulationUnit::getDimensions() const noexcept
-  {
-    return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()};
-  }
-
-  [[nodiscard]] std::optional<std::span<const double>> SimulationUnit::getMTRData() const
-  {
-    return this->mt_model.mtr_data();
-  }
 
   [[deprecated("perf:not useful")]] void
   SimulationUnit::reduceContribs_per_rank(std::span<const double> data) const
