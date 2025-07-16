@@ -37,14 +37,16 @@ namespace Simulation
   {
 
     this->liquid_scalar = std::make_shared<ScalarSimulation>(
-        mc_unit->domain.getNumberCompartments(), scalar_init.n_species, scalar_init.volumesliq);
+        mc_unit->domain.getNumberCompartments(),
+        scalar_init.n_species,
+        scalar_init.volumesliq);
 
-    this->gas_scalar =
-        (is_two_phase_flow)
-            ? std::make_shared<ScalarSimulation>(mc_unit->domain.getNumberCompartments(),
-                                                 scalar_init.n_species,
-                                                 scalar_init.volumesgas) // No contribs for gas
-            : nullptr;
+    this->gas_scalar = (is_two_phase_flow)
+                           ? std::make_shared<ScalarSimulation>(
+                                 mc_unit->domain.getNumberCompartments(),
+                                 scalar_init.n_species,
+                                 scalar_init.volumesgas) // No contribs for gas
+                           : nullptr;
 
     post_init_concentration(scalar_init);
     post_init_compartments();
@@ -53,11 +55,13 @@ namespace Simulation
 
     Kokkos::resize(move_info.index_leaving_flow, n_flows);
     Kokkos::resize(move_info.leaving_flow, n_flows);
-    Kokkos::resize(move_info.liquid_volume, mc_unit->domain.getNumberCompartments());
-    Kokkos::resize(move_info.diag_transition, mc_unit->domain.getNumberCompartments());
+    Kokkos::resize(move_info.liquid_volume,
+                   mc_unit->domain.getNumberCompartments());
+    Kokkos::resize(move_info.diag_transition,
+                   mc_unit->domain.getNumberCompartments());
+
+           contribs_scatter=         MC::ContributionView (get_kernel_contribution());
   }
-
-
 
   void SimulationUnit::update(CmaUtils::IterationState&& newstate)
   {
@@ -65,6 +69,12 @@ namespace Simulation
 
     setVolumes();
     mc_unit->domain.setLiquidNeighbors(state.neighbors);
+  }
+
+  void SimulationUnit::scatter_contribute()
+  {
+    auto contribs = get_kernel_contribution();
+    Kokkos::Experimental::contribute(contribs, contribs_scatter);
   }
 
   void SimulationUnit::setVolumes() const
@@ -87,14 +97,16 @@ namespace Simulation
       vg = std::vector<double>(vl.size(), 0);
     }
 
-    Kokkos::View<double*, HostSpace> hostli(state.liq->volume.data(), vl.size());
+    Kokkos::View<double*, HostSpace> hostli(state.liq->volume.data(),
+                                            vl.size());
 
     Kokkos::deep_copy(this->move_info.liquid_volume, hostli);
 
     this->mc_unit->domain.setVolumes(vl);
   }
 
-  void SimulationUnit::post_init_concentration_file(const ScalarInitializer& scalar_init)
+  void SimulationUnit::post_init_concentration_file(
+      const ScalarInitializer& scalar_init)
   {
 
     if (!scalar_init.liquid_buffer.has_value())
@@ -102,7 +114,8 @@ namespace Simulation
       throw SimulationException(ErrorCodes::BadInitialiser);
     }
 
-    if (!this->liquid_scalar->deep_copy_concentration(*scalar_init.liquid_buffer))
+    if (!this->liquid_scalar->deep_copy_concentration(
+            *scalar_init.liquid_buffer))
     {
 
       throw SimulationException(ErrorCodes::MismatchSize);
@@ -133,12 +146,8 @@ namespace Simulation
     move_info = KernelInline::MoveInfo<ComputeSpace>();
   }
 
- 
-
- 
-
- 
-  void SimulationUnit::post_init_concentration_functor(const ScalarInitializer& scalar_init)
+  void SimulationUnit::post_init_concentration_functor(
+      const ScalarInitializer& scalar_init)
   {
 
     auto& cliq = this->liquid_scalar->get_concentration();
@@ -166,7 +175,8 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::post_init_concentration(const ScalarInitializer& scalar_init)
+  void
+  SimulationUnit::post_init_concentration(const ScalarInitializer& scalar_init)
   {
 
     if (scalar_init.type == ScalarInitialiserType::Uniform ||
@@ -202,7 +212,6 @@ namespace Simulation
     }
   }
 
- 
   void SimulationUnit::post_init_compartments()
   {
     // auto _compute_concentration = liquid_scalar->get_device_concentration();
@@ -213,19 +222,13 @@ namespace Simulation
     //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0,
     //                                                        mc_unit->domain.getNumberCompartments()),
     //     KOKKOS_LAMBDA(const int i) {
-    //       // auto s = Kokkos::subview(_compute_concentration, i, Kokkos::ALL);
-    //       _containers(i).concentrations = Kokkos::subview(_compute_concentration, Kokkos::ALL,
-    //       i);
+    //       // auto s = Kokkos::subview(_compute_concentration, i,
+    //       Kokkos::ALL); _containers(i).concentrations =
+    //       Kokkos::subview(_compute_concentration, Kokkos::ALL, i);
     //     });
     // Kokkos::fence();
   }
 
   SimulationUnit::~SimulationUnit() = default;
-
-
- 
-
- 
-
 
 } // namespace Simulation
