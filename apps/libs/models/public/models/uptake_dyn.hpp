@@ -86,7 +86,7 @@ namespace Models
     init(const MC::KPRNG::pool_type& random_pool, std::size_t idx, const SelfParticle& arr)
     {
 
-      static constexpr FloatType half = FloatType(0.5);
+      // static constexpr FloatType half = FloatType(0.5);
       auto gen = random_pool.get_state();
       // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
       GET_PROPERTY(Uptakeparticle_var::a_pts) =

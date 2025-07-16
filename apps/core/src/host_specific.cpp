@@ -321,10 +321,9 @@ namespace
         }
       }
 
-      if (simulation.counter() != 0)
-      {
-        local_container.clean_dead(simulation.counter());
-      }
+      
+        local_container.clean_dead(simulation.dead_counter());
+      
     };
 
     std::visit(loop_functor, simulation.mc_unit->container);
@@ -386,7 +385,7 @@ namespace
       {
         event_span = simulation.mc_unit->events.get_span();
       }
-      const auto& state = simulation.get_state();
+      const auto& state = simulation.getState();
       SEND_MPI_SIG_DUMP
       auto vg = (simulation.getCgasData().has_value()) ? std::make_optional(state.gas->volume)
                                                        : std::nullopt;

@@ -40,10 +40,9 @@ void workers_process(std::shared_ptr<IO::Logger> logger,const ExecInfo& exec,
 
         last_sync(exec, simulation);
 
-        if (simulation.counter() != 0)
-        {
-          container.clean_dead(simulation.counter());
-        }
+      
+        container.clean_dead(simulation.dead_counter());
+        
         PostProcessing::save_particle_state(simulation, partial_exporter);
         PostProcessing::reset_counter();
         stop = true;

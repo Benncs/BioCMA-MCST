@@ -137,11 +137,7 @@ namespace Simulation
 
  
 
-  bool SimulationUnit::two_phase_flow() const
-  {
-    return is_two_phase_flow;
-  }
-
+ 
   void SimulationUnit::post_init_concentration_functor(const ScalarInitializer& scalar_init)
   {
 
@@ -227,15 +223,7 @@ namespace Simulation
   SimulationUnit::~SimulationUnit() = default;
 
 
-  CumulativeProbabilityView<ComputeSpace> SimulationUnit::get_kernel_cumulative_proba() const
-  {
-    auto& matrix = state.liq->cumulative_probability;
-    using layout_type = CumulativeProbabilityView<HostSpace>::array_layout;
-    CumulativeProbabilityView<HostSpace> rd(matrix.data(),
-                                            layout_type(matrix.rows(), matrix.cols()));
-
-    return Kokkos::create_mirror_view_and_copy(ComputeSpace(), rd);
-  }
+ 
 
  
 

@@ -268,18 +268,18 @@ namespace MC
     __allocate__(original_size + n_add_item);
     // Merge position EZ
 
-    auto get_policy_insert = [=]()
-    {
-      if constexpr (std::is_same_v<Kokkos::DefaultHostExecutionSpace,
-                                   Kokkos::DefaultExecutionSpace>)
-      {
-        return TeamPolicy(n_add_item / Kokkos::num_threads(), Kokkos::AUTO, Model::n_var);
-      }
-      else
-      {
-        return TeamPolicy(n_add_item, Kokkos::AUTO, Model::n_var);
-      }
-    };
+    // auto get_policy_insert = [=]()
+    // {
+    //   if constexpr (std::is_same_v<Kokkos::DefaultHostExecutionSpace,
+    //                                Kokkos::DefaultExecutionSpace>)
+    //   {
+    //     return TeamPolicy(n_add_item / Kokkos::num_threads(), Kokkos::AUTO, Model::n_var);
+    //   }
+    //   else
+    //   {
+    //     return TeamPolicy(n_add_item, Kokkos::AUTO, Model::n_var);
+    //   }
+    // };
 
     Kokkos::parallel_for(
         "InsertMerge",

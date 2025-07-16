@@ -169,7 +169,7 @@ namespace SerDe
 
     case_data.simulation = std::move(*simulation);
 
-    case_data.simulation->set_mtr_model(Simulation::MassTransfer::Type::FixedKla{kla});
+    case_data.simulation->setMtrModel(Simulation::MassTransfer::Type::FixedKla{kla});
 
     case_data.simulation->get_start_time_mut() = start_time;
     gi.set_initial_number_particle(np);

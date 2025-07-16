@@ -298,7 +298,7 @@ namespace Api
 
      if(logger)
     {
-      (*__simulation)->set_logger(logger);
+      (*__simulation)->setLogger(logger);
     }
 
     // FIXME
@@ -312,7 +312,7 @@ namespace Api
 
     if (mtr_type)
     {
-      (*__simulation)->set_mtr_model(std::move(*mtr_type));
+      (*__simulation)->setMtrModel(std::move(*mtr_type));
     }
 
     _data.params = global_initializer.get_parameters();

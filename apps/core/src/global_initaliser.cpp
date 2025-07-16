@@ -52,8 +52,8 @@ namespace
   {
 
     // return BoundLoadBalancer(s,4e6).balance(r, n);
-    return HostImportantLoadBalancer(s, 2).balance(r, n);
-    // return UniformLoadBalancer(s).balance(r, n);
+    // return HostImportantLoadBalancer(s, 2).balance(r, n);
+    return UniformLoadBalancer(s).balance(r, n);
   }
 
   // TODO Move elsewhere
@@ -328,12 +328,6 @@ namespace Core
         throw std::runtime_error("Flow map are not loaded");
       }
 
-      if (logger)
-      {
-        logger->print("Initializer",
-                      IO::format("Flowmap loaded: ", std::to_string(flow_handle->size())));
-      }
-
       state = &flow_handle->get_unchecked(0);
       if (state == nullptr)
       {
@@ -342,10 +336,16 @@ namespace Core
 
       if (logger)
       {
+        // Note final "s"
+        const auto str = (flow_handle->size() > 1) ? std::string(" flowmaps loaded with ")
+                                                   : std::string(" flowmap loaded with ");
+        const auto compartment_str = (state->n_compartments > 1) ? std::string(" compartments")
+                                                                 : std::string(" compartment");
         logger->print("Initializer",
-                      IO::format("Flowmap loaded with  ",
+                      IO::format(std::to_string(flow_handle->size()),
+                                 str,
                                  std::to_string(state->n_compartments),
-                                 " compartments"));
+                                 compartment_str));
       }
     }
     catch (const std::exception& e)
@@ -441,7 +441,7 @@ namespace Core
       VERBOSE_ERROR
       return std::nullopt;
     }
-    unit.set_mtr_model(std::move(variant));
+    unit.setMtrModel(std::move(variant));
 
     // TODO
     return true;
