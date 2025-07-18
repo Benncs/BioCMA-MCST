@@ -1,6 +1,7 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
+#include "Kokkos_Printf.hpp"
 #include "mc/domain.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
@@ -8,6 +9,7 @@
 #include <cassert>
 #include <cma_utils/iteration_state.hpp>
 #include <common/common.hpp>
+#include <common/logger.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <mc/events.hpp>
@@ -22,8 +24,6 @@
 #include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation_kernel.hpp>
-
-#include <common/logger.hpp>
 
 // TODO Clean
 static constexpr size_t trigger_const_particle_number = 1e6;
@@ -95,7 +95,7 @@ namespace Simulation
 
     // Simulation methods
 
-    void cycleProcess(auto&& container, double d_t);
+    void cycleProcess(auto&& container, double d_t, auto& _functors);
 
     void step(double d_t) const;
     void reduceContribs(std::span<const double> data, size_t n_rank) const;
@@ -110,6 +110,10 @@ namespace Simulation
     void clear_mc();
     void reset();
     void post_init_compartments();
+
+    template <typename Space, ModelType Model>
+    KernelInline::Functors<Space, Model>
+    init_functors(MC::ParticlesContainer<Model> container);
 
   private:
     void setVolumes() const;
@@ -134,13 +138,14 @@ namespace Simulation
         0.;            // Not used within calculation, only for export purposes
     double end_time{}; // Not used within calculation, only for export purposes
 
+    void scatter_contribute();
+    void set_kernel_contribs_to_host();
     // Bounce methods to pimpl
     [[nodiscard]] DiagonalView<ComputeSpace> get_kernel_diagonal() const;
     [[nodiscard]] CumulativeProbabilityView<ComputeSpace>
     get_kernel_cumulative_proba() const;
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
 
-    void set_kernel_contribs_to_host();
     void post_init_concentration(const ScalarInitializer& scalar_init);
     void post_init_concentration_functor(const ScalarInitializer& scalar_init);
     void post_init_concentration_file(const ScalarInitializer& scalar_init);
@@ -150,8 +155,6 @@ namespace Simulation
     MassTransfer::MassTransferModel
         mt_model; // TODO add default null value (no model)
     KernelInline::MoveInfo<ComputeSpace> move_info;
-
-    void scatter_contribute();
 
     std::shared_ptr<IO::Logger> logger;
 
@@ -164,20 +167,71 @@ namespace Simulation
             reducer_type);
 
     template <ModelType Model>
-    void pre_cycle(MC::ParticlesContainer<Model>& container, double d_t);
+    void pre_cycle(MC::ParticlesContainer<Model>& container,
+                   double d_t,
+                   auto& functors);
   };
 
   template <ModelType Model>
   void SimulationUnit::pre_cycle(MC::ParticlesContainer<Model>& container,
-                                 double d_t)
+                                 double d_t,
+                                 auto& functors)
   {
     this->contribs_scatter.reset();
     this->move_info.cumulative_probability = get_kernel_cumulative_proba();
     this->move_info.diag_transition = get_kernel_diagonal();
     this->move_info.neighbors = mc_unit->domain.getNeighbors();
+
+    //TODO map through flowmap and find max flow, then true if max>0
+    bool enable_move = move_info.liquid_volume.size() > 1;
+    bool enable_leave = move_info.leaving_flow.size() != 0;
+
+    // FIXME: cycle_kernel: need to update container because we change:
+    // n_used_element counter which is size_t outside of kernel. As functor owns
+    // a copy of container this counter is not update between iterations.
+    // 1. Use n_used_element as a reference counter type
+    // 2. Manually update counter in update function (dirty way)
+
+    functors.cycle_kernel.update(d_t, container);
+    functors.move_kernel.update(d_t,
+                                container.n_particles(),
+                                this->move_info,
+                                container.position,
+                                container.status,
+                                container.ages,
+                                enable_move,
+                                enable_leave);
   }
 
-  void SimulationUnit::cycleProcess(auto&& container, double d_t)
+  template <typename Space, ModelType Model>
+  KernelInline::Functors<Space, Model>
+  SimulationUnit::init_functors(MC::ParticlesContainer<Model> container)
+  {
+    using FunctorType = KernelInline::Functors<ComputeSpace, Model>;
+
+    auto local_rng = mc_unit->rng;
+    auto events = mc_unit->events;
+    auto reaction_functor =
+        typename FunctorType::cycle_kernel_type(container,
+                                                local_rng.random_pool,
+                                                getkernel_concentration(),
+                                                contribs_scatter,
+                                                events);
+    auto move_functor =
+        Simulation ::KernelInline ::MoveFunctor(container.position,
+                                                container.status,
+                                                move_info,
+                                                local_rng.random_pool,
+                                                events,
+                                                probes[ProbeType ::LeavingTime],
+                                                container.ages);
+
+    return KernelInline::Functors<Space, Model>(std::move(reaction_functor),
+                                                std::move(move_functor));
+  }
+
+  void
+  SimulationUnit::cycleProcess(auto&& container, double d_t, auto& functors)
   {
 
     PROFILE_SECTION("cycleProcess")
@@ -189,53 +243,29 @@ namespace Simulation
       return;
     }
 
-    pre_cycle(container, d_t);
-    using FunctorType = KernelInline::Functors<ComputeSpace, CurrentModel>;
-    FunctorType functors;
+    pre_cycle(container, d_t, functors);
+    //    using FunctorType = KernelInline::Functors<ComputeSpace,
+    //    CurrentModel>;
 
-    auto local_rng = mc_unit->rng;
-    auto events = mc_unit->events;
-
-    auto reaction_functor =
-        typename FunctorType::cycle_kernel_type(d_t,
-                                                container,
-                                                local_rng.random_pool,
-                                                getkernel_concentration(),
-                                                contribs_scatter,
-                                                events);
-
-    auto _policy = MC::get_policy(reaction_functor, n_particle, true);
-
-    bool enable_move =
-        false; //move_info.liquid_volume.size() > 1; //TODO map through flowmap and find max flow, then true if max>0
+    //TODO map through flowmap and find max flow, then true if max>0
+    bool enable_move = move_info.liquid_volume.size() > 1;
     bool enable_leave = move_info.leaving_flow.size() != 0;
 
     if (enable_leave || enable_move)
     {
-      Kokkos ::parallel_reduce("cycle_move",
-                               _policy,
-                               Simulation ::KernelInline ::MoveFunctor(
-                                   d_t,
-                                   container.position,
-                                   container.status,
-                                   n_particle,
-                                   move_info,
-                                   local_rng.random_pool,
-                                   events,
-                                   probes[ProbeType ::LeavingTime],
-                                   container.ages,
-                                   enable_move,
-                                   enable_leave),
-                               functors.move_reducer);
+      auto _policy = MC::get_policy(functors.move_kernel, n_particle, true);
+      Kokkos ::parallel_reduce(
+          "cycle_move", _policy, functors.move_kernel, functors.move_reducer);
     }
 
     if (f_reaction)
     {
 
+      auto _policy = MC::get_policy(functors.cycle_kernel, n_particle, true);
       Kokkos::parallel_reduce(
           "cycle_model",
           _policy,
-          reaction_functor,
+          functors.cycle_kernel,
           KernelInline::CycleReducer<ComputeSpace>(functors.cycle_reducer));
     }
 
@@ -261,6 +291,7 @@ namespace Simulation
     this->scatter_contribute();
     auto host_red =
         Kokkos::create_mirror_view_and_copy(HostSpace(), reducer_type)();
+
     auto host_out_counter =
         Kokkos::create_mirror_view_and_copy(HostSpace(), out_total)();
     container.counter += host_out_counter;

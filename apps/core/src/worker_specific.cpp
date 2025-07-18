@@ -24,6 +24,7 @@ void workers_process(std::shared_ptr<IO::Logger> logger,const ExecInfo& exec,
 
   const auto loop_functor = [&](auto&& container)
   {
+    auto functors = simulation.init_functors<ComputeSpace>(container);
     bool stop = false;
     WrapMPI::SIGNALS signal{};
     double current_time = 0;
@@ -72,7 +73,7 @@ void workers_process(std::shared_ptr<IO::Logger> logger,const ExecInfo& exec,
       simulation.update(transitioner->advance_worker(
           payload.liquid_flows, payload.liquid_volumes, payload.gas_volumes, payload.neighbors));
 
-      simulation.cycleProcess(container, d_t);
+      simulation.cycleProcess(container, d_t,functors);
 
       simulation.update_feed(current_time, d_t);
       current_time += d_t;

@@ -2,6 +2,7 @@
 #define __SIMULATION_MC_KERNEL_HPP
 #include "Kokkos_Assert.hpp"
 #include "Kokkos_Printf.hpp"
+#include "simulation/move_kernel.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
 #include <biocma_cst_config.hpp>
@@ -95,18 +96,38 @@ namespace Simulation::KernelInline
     using TeamMember = TeamPolicy::member_type;
     using value_type = CycleReduceType;
 
+    // KOKKOS_INLINE_FUNCTION
+    // CycleFunctor(M::FloatType dt,
+    // MC::ParticlesContainer<M> _particles,
+    // MC::KPRNG::pool_type _random_pool,
+    // MC::KernelConcentrationType&& _concentrations,
+    // MC::ContributionView _contribs_scatter,
+    // MC::EventContainer _event)
+    //: d_t(dt), particles(_particles), random_pool(_random_pool),
+    // concentrations(std::move(_concentrations)),
+    // contribs_scatter(std::move(_contribs_scatter)),
+    // events(std::move(_event))
+    //{
+    //}
+    //
+
     KOKKOS_INLINE_FUNCTION
-    CycleFunctor(M::FloatType dt,
-                 MC::ParticlesContainer<M> _particles,
+    CycleFunctor(MC::ParticlesContainer<M> _particles,
                  MC::KPRNG::pool_type _random_pool,
                  MC::KernelConcentrationType&& _concentrations,
                  MC::ContributionView _contribs_scatter,
                  MC::EventContainer _event)
-        : d_t(dt), particles(_particles), random_pool(_random_pool),
+        : d_t(0.), particles(_particles), random_pool(_random_pool),
           concentrations(std::move(_concentrations)),
           contribs_scatter(std::move(_contribs_scatter)),
           events(std::move(_event))
     {
+    }
+
+    void update(double _d_t, MC::ParticlesContainer<M> _particles)
+    {
+      this->d_t = _d_t;
+      this->particles = _particles;
     }
 
     KOKKOS_INLINE_FUNCTION void operator()(const TeamMember& team_handle,
@@ -135,12 +156,9 @@ namespace Simulation::KernelInline
           reduce_val.waiting_allocation_particle += 1;
           Kokkos::printf("[KERNEL] Division Overflow\r\n");
           events.wrap_incr<MC::EventType::Overflow>();
-
-          // KOKKOS_ASSERT(false && "Division Overflow Not implemented");
         }
         events.wrap_incr<MC::EventType::NewParticle>();
       };
-
       particles.get_contributions(idx, contribs_scatter);
     }
 
@@ -160,12 +178,18 @@ namespace Simulation::KernelInline
     using move_reducer_view_type = Kokkos::View<std::size_t, Space>;
 
     typedef CycleFunctor<Model> cycle_kernel_type;
+    typedef MoveFunctor move_kernel_type;
     // using cycle_kernel_type = CycleFunctor<Model>;
 
     cycle_reducer_view_type cycle_reducer;
     move_reducer_view_type move_reducer;
 
-    Functors() : cycle_reducer("cycle_reducer"), move_reducer("move_reducer")
+    cycle_kernel_type cycle_kernel;
+    move_kernel_type move_kernel;
+
+    explicit Functors(cycle_kernel_type&& ck, move_kernel_type&& mk)
+        : cycle_reducer("cycle_reducer"), move_reducer("move_reducer"),
+          cycle_kernel(std::move(ck)), move_kernel(std::move(mk))
     {
     }
   };

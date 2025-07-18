@@ -227,7 +227,7 @@ namespace Models
     // CONTRIBS
     GET_PROPERTY(Self::particle_var::contrib_phi_s) = -phi_s;
     GET_PROPERTY(Self::particle_var::contrib_phi_o2) =
-        -1 * ((1. / y_sx_1 / MolarMassG * y_os_molar * MolarMassO2 *
+        -1. * ((1. / y_sx_1 / MolarMassG * y_os_molar * MolarMassO2 *
                GET_PROPERTY(Self::particle_var::nu_eff_1)) +
               0. * GET_PROPERTY(Self::particle_var::nu_eff_2));
 

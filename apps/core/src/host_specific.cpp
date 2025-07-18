@@ -1,5 +1,6 @@
 
 #include "common/logger.hpp"
+#include "simulation/simulation_kernel.hpp"
 #include <algorithm> //for std::min
 #include <biocma_cst_config.hpp>
 #include <cma_read/reactorstate.hpp>
@@ -271,6 +272,8 @@ namespace
     {
       Core::SignalHandler sig;
 
+      auto functors = simulation.init_functors<ComputeSpace>(local_container);
+
       for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation; ++__loop_counter)
       {
 
@@ -304,7 +307,7 @@ namespace
         }
         sync_prepare_next(simulation);
 
-        simulation.cycleProcess(local_container, d_t);
+        simulation.cycleProcess(local_container, d_t,functors);
 
         if (Core::SignalHandler::is_usr1_raised())
         {

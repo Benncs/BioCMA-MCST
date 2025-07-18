@@ -299,11 +299,11 @@ namespace MC
     PROFILE_SECTION("ParticlesContainer::__allocate__")
     if (new_size > 0)
     {
-      if (new_size >= n_allocated_elements)
+      if (new_size >= this->n_allocated_elements)
       {
         const auto new_allocated_size =
             static_cast<std::size_t>(std::ceil(static_cast<double>(new_size) * allocation_factor));
-        n_allocated_elements = new_allocated_size;
+        this->n_allocated_elements = new_allocated_size;
         Kokkos::resize(position, n_allocated_elements);
         Kokkos::resize(model, n_allocated_elements, Model::n_var); // use 2nd dim resize if dynamic
         Kokkos::resize(status, n_allocated_elements);
