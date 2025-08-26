@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.9.4',
+  version: '0.9.5',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
@@ -60,7 +60,7 @@ if python_install
 global_install_dir = get_option('prefix') + '/' + get_option('libdir')
 else
 global_install_dir = '/opt/biomc'
-endif 
+endif
 
 # global_install_dir = get_option('prefix') + '/' + get_option('libdir')
 # includes_install_dir = ('include/' + project_name)
@@ -109,7 +109,7 @@ dl_dep = compiler.find_library('dl', required : true)
 # if blas.found()
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 # endif
-# 
+#
 # add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
@@ -205,11 +205,11 @@ if cmake.found()
     cereal_cmake_options.add_cmake_defines({'BUILD_TESTS': false})
     cereal_cmake_options.set_install(false)
     cereal_proj = cmake.subproject('cereal', options: cereal_cmake_options, required: false)
-    if cereal_proj.found() #and not use_cuda 
+    if cereal_proj.found() #and not use_cuda
       ceral_found = true
       if compiler.has_argument('-Wno-missing-template-arg-list-after-template-kw')
         cpp_args=[cpp_args,'-Wno-missing-template-arg-list-after-template-kw'] #FIXME needed with clang++-19
-      endif 
+      endif
       add_project_arguments('-DUSE_CEAREAL', language: 'cpp')
       cereal_dependency = cereal_proj.dependency('cereal')
     endif
@@ -254,4 +254,4 @@ run_command('sh', '-c', f'ln -s @outdir@/compile_commands.json .', check: false)
 subdir('tools')
 if not python_install
 meson.add_install_script('devutils/install_script.sh',result_dir)
-endif 
+endif

@@ -23,6 +23,22 @@
 #include <traits/Kokkos_IterationPatternTrait.hpp>
 #include <utility>
 
+
+namespace {
+    template<typename T>
+    std::vector<T> layout_right_to_left(std::span<const T> input, size_t rows, size_t cols) {
+        std::vector<T> output(input.size());
+
+        for (size_t i = 0; i < rows; ++i) {
+            for (size_t j = 0; j < cols; ++j) {
+                output[j * rows + i] = input[i * cols + j];
+            }
+        }
+
+        return output;
+    }
+}
+
 namespace Simulation
 {
 
@@ -113,9 +129,11 @@ namespace Simulation
     {
       throw SimulationException(ErrorCodes::BadInitialiser);
     }
+    const std::size_t cols = scalar_init.liquid_buffer->size()/scalar_init.n_species;
+    const auto layout_left_buffer = layout_right_to_left<double>(*scalar_init.liquid_buffer, scalar_init.n_species, cols);
 
     if (!this->liquid_scalar->deep_copy_concentration(
-            *scalar_init.liquid_buffer))
+            layout_left_buffer))
     {
 
       throw SimulationException(ErrorCodes::MismatchSize);
@@ -127,7 +145,8 @@ namespace Simulation
       {
         throw SimulationException(ErrorCodes::BadInitialiser);
       }
-      if (!this->gas_scalar->deep_copy_concentration(*scalar_init.gas_buffer))
+      const auto layout_left_buffer = layout_right_to_left<double>(*scalar_init.gas_buffer, scalar_init.n_species, cols);
+      if (!this->gas_scalar->deep_copy_concentration(layout_left_buffer))
       {
         throw SimulationException(ErrorCodes::MismatchSize);
       }

@@ -4,6 +4,7 @@
 compile_commands.json
 .clangd
 .env
+.zed/
 # Env
 .bmc_info
 results/
