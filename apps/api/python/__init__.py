@@ -4,13 +4,14 @@ import time
 import numpy as np
 from typing import Optional
 import sys
+
 __all__ = []
 __doc__ = handle_module.__doc__
 if hasattr(handle_module, "__all__"):
     __all__ = handle_module.__all__
 
 
-def pyinit_handle(sim_id:int):
+def pyinit_handle(sim_id: int):
     """
     Initialize the BioMC handle.
 
@@ -26,7 +27,7 @@ def pyinit_handle(sim_id:int):
     handle = handle_module.init_handle(sys.argv)
     n_rank = handle_module.n_rank(handle)
     i_rank = handle_module.i_rank(handle)
-    return handle,i_rank,n_rank
+    return handle, i_rank, n_rank
 
 
 def init_simulation(
@@ -68,7 +69,7 @@ def set_initial_concentrations(
         if liquid.shape != gas.shape:
             raise RuntimeError("Concentrations should be the same")
 
-    handle_module.set_initialiser_from_data(handle, liquid.shape[1], liquid, gas)
+    handle_module.set_initialiser_from_data(handle, liquid.shape[0], liquid, gas)
 
 
-__all__.extend(["pyinit_handle", "init_simulation","set_initial_concentrations"])
+__all__.extend(["pyinit_handle", "init_simulation", "set_initial_concentrations"])

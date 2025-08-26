@@ -1,13 +1,13 @@
 #ifndef NDEBUG
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#endif 
+#endif
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #ifndef NDEBUG
 #pragma GCC diagnostic pop
-#endif 
+#endif
 
 #include <common/common.hpp>
 #include <cassert>
@@ -38,7 +38,7 @@ namespace
       }
 
       // proxy->kla(1,0)=0;
-      
+
     }
 
     void operator()(Simulation::MassTransfer::Type::FlowmapTurbulence&) const
@@ -127,7 +127,7 @@ namespace Simulation::MassTransfer
           "gas_liquid_mass_transfer should not be called if gas not intialized");
     }
     std::visit(MtrVisitor{_proxy, liquid_scalar, gas_scalar, state}, type);
-   
+
   }
 
   std::optional<std::span<const double>> MassTransferModel::mtr_data() const
