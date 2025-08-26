@@ -21,7 +21,7 @@
 #include <signal_handling.hpp>
 #include <simulation/simulation.hpp>
 #include <transitionner/transitionner.hpp>
-#include <iostream> 
+#include <iostream>
 #include <string>
 #include <sync.hpp>
 #include <type_traits>
@@ -35,7 +35,7 @@
 
 namespace IO
 {
-  constexpr size_t PROGRESS_BAR_WIDTH = 100; //Number of 
+  constexpr size_t PROGRESS_BAR_WIDTH = 100; //Number of
   constexpr char PROGRESS_BAR_SYMBOL = '*';
 
 
@@ -69,10 +69,10 @@ namespace IO
 
   private:
     std::string buffer;
-    
+
     const int default_precision = std::cout.precision(); // NOLINT Conversion long to int
   };
-  
+
   static ProgressBar progressbar= ProgressBar();
 } // namespace IO
 
@@ -324,9 +324,9 @@ namespace
         }
       }
 
-      
+
         local_container.clean_dead(simulation.dead_counter());
-      
+
     };
 
     std::visit(loop_functor, simulation.mc_unit->container);

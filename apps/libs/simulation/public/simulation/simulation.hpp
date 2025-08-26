@@ -193,6 +193,8 @@ namespace Simulation
     // 2. Manually update counter in update function (dirty way)
 
     functors.cycle_kernel.update(d_t, container);
+
+    // TODO: Why need to update all views (where did we lost the refcount ? )
     functors.move_kernel.update(d_t,
                                 container.n_particles(),
                                 this->move_info,
@@ -207,16 +209,14 @@ namespace Simulation
   KernelInline::Functors<Space, Model>
   SimulationUnit::init_functors(MC::ParticlesContainer<Model> container)
   {
-    using FunctorType = KernelInline::Functors<ComputeSpace, Model>;
-
     auto local_rng = mc_unit->rng;
     auto events = mc_unit->events;
     auto reaction_functor =
-        typename FunctorType::cycle_kernel_type(container,
-                                                local_rng.random_pool,
-                                                getkernel_concentration(),
-                                                contribs_scatter,
-                                                events);
+        Simulation::KernelInline::CycleFunctor<Model>(container,
+                                                      local_rng.random_pool,
+                                                      getkernel_concentration(),
+                                                      contribs_scatter,
+                                                      events);
     auto move_functor =
         Simulation ::KernelInline ::MoveFunctor(container.position,
                                                 container.status,
@@ -244,8 +244,6 @@ namespace Simulation
     }
 
     pre_cycle(container, d_t, functors);
-    //    using FunctorType = KernelInline::Functors<ComputeSpace,
-    //    CurrentModel>;
 
     //TODO map through flowmap and find max flow, then true if max>0
     bool enable_move = move_info.liquid_volume.size() > 1;
@@ -260,7 +258,6 @@ namespace Simulation
 
     if (f_reaction)
     {
-
       auto _policy = MC::get_policy(functors.cycle_kernel, n_particle, true);
       Kokkos::parallel_reduce(
           "cycle_model",
