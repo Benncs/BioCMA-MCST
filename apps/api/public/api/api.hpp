@@ -22,22 +22,24 @@
  */
 namespace Api
 {
+  std::array<int, 3> get_version();
 
   void finalise();
 
   /**
    * @class SimulationInstance
-   * @brief Represents an instance of a simulation with customizable parameters and behaviors.
+   * @brief Represents an instance of a simulation with customizable parameters
+   * and behaviors.
    *
-   * The SimulationInstance class is designed to encapsulate the configuration, execution,
-   * and management of a simulation process. It supports initialization for single-threaded
-   * or multi-threaded (optionally MPI-enabled) scenarios, parameter registration,
-   * and execution control.
+   * The SimulationInstance class is designed to encapsulate the configuration,
+   * execution, and management of a simulation process. It supports
+   * initialization for single-threaded or multi-threaded (optionally
+   * MPI-enabled) scenarios, parameter registration, and execution control.
    *
-   * The class is non-copyable but movable to ensure unique ownership and efficient resource
-   * management.
-   * Note: Define this struct as struct and not class to be coherent with the C opaque type defined
-   * as typedef struct This change absolutely nothing to the code behaviour it's just a name
+   * The class is non-copyable but movable to ensure unique ownership and
+   * efficient resource management. Note: Define this struct as struct and not
+   * class to be coherent with the C opaque type defined as typedef struct This
+   * change absolutely nothing to the code behaviour it's just a name
    */
   struct SimulationInstance
   {
@@ -55,7 +57,8 @@ namespace Api
      */
     SimulationInstance& operator=(const SimulationInstance&) = delete;
     /**
-     * @brief Defaulted move assignment operator for efficient resource transfer.
+     * @brief Defaulted move assignment operator for efficient resource
+     * transfer.
      */
     SimulationInstance& operator=(SimulationInstance&&) = default;
 
@@ -65,11 +68,13 @@ namespace Api
      * @param argc Number of runtime argument.
      * @param argv Tuntime arguments.
      * @param id A unique identifier for the simulation instance (optional).
-     * @return An optional containing a unique pointer to the instance if successful,
-     *         or std::nullopt if initialization failed.
+     * @return An optional containing a unique pointer to the instance if
+     * successful, or std::nullopt if initialization failed.
      */
     static std::optional<std::unique_ptr<SimulationInstance>>
-    init(int argc, char** argv, std::optional<std::size_t> run_id = std::nullopt) noexcept;
+    init(int argc,
+         char** argv,
+         std::optional<std::size_t> run_id = std::nullopt) noexcept;
 
     /**
      * @brief Default constructor.
@@ -83,7 +88,8 @@ namespace Api
     /**
      * @brief Apply the simulation configuration and prepare for execution.
      *
-     * @param to_load Flag indicating whether the configuration should be loaded.
+     * @param to_load Flag indicating whether the configuration should be
+     * loaded.
      * @return An ApiResult indicating the success or failure of the operation.
      */
     ApiResult apply(bool to_load) noexcept;
@@ -96,7 +102,8 @@ namespace Api
     ApiResult apply() noexcept;
 
     /**
-     * @brief Load ad apply the simulation configuration and prepare for execution based on file.
+     * @brief Load ad apply the simulation configuration and prepare for
+     * execution based on file.
      *
      * @return An ApiResult indicating the success or failure of the operation.
      */
@@ -108,7 +115,8 @@ namespace Api
      * @param params A rvalue reference to a UserControlParameters object.
      * @return An ApiResult indicating the success or failure of the operation.
      */
-    ApiResult register_parameters(Core::UserControlParameters&& params) noexcept;
+    ApiResult
+    register_parameters(Core::UserControlParameters&& params) noexcept;
 
     /**
      * @brief Register a result output path.
@@ -118,7 +126,8 @@ namespace Api
      */
     bool register_result_path(std::string_view path);
 
-    ApiResult register_initial_condition(Core::ScalarFactory::ScalarVariant&& type);
+    ApiResult
+    register_initial_condition(Core::ScalarFactory::ScalarVariant&& type);
     ApiResult register_initialiser_file_path(std::string_view path);
     /**
      * @brief Register a path for CMA data.
@@ -145,7 +154,8 @@ namespace Api
      */
     ApiResult register_model_name(std::string_view path);
 
-    ApiResult set_feed(Simulation::Feed::FeedDescriptor feed_variant, Phase phase = Phase::Liquid);
+    ApiResult set_feed(Simulation::Feed::FeedDescriptor feed_variant,
+                       Phase phase = Phase::Liquid);
 
     ApiResult set_feed_constant(double _flow,
                                 double _concentration,
@@ -183,8 +193,8 @@ namespace Api
     //                                      std::span<std::size_t> _position,
     //                                      std::span<std::size_t> _species,
     //                                      std::optional<std::vector<std::size_t>>
-    //                                      _output_position, bool gas = false, bool fed_batch =
-    //                                      false);
+    //                                      _output_position, bool gas = false,
+    //                                      bool fed_batch = false);
 
     // [[deprecated]]bool set_feed_constant_from_rvalue(double _f,
     //                                    std::vector<double>&& _target,
@@ -193,7 +203,8 @@ namespace Api
     //                                    bool gas = false,
     //                                    bool fed_batch = false);
 
-    ApiResult register_scalar_initiazer(Core::ScalarFactory::ScalarVariant&& var);
+    ApiResult
+    register_scalar_initiazer(Core::ScalarFactory::ScalarVariant&& var);
 
     /**
      * @brief Retrieve the simulation instance's unique identifier.
@@ -233,19 +244,23 @@ namespace Api
      * @param id A unique identifier for the simulation instance (optional).
 
      */
-    SimulationInstance(int argc, char** argv, std::optional<std::size_t> run_id);
+    SimulationInstance(int argc,
+                       char** argv,
+                       std::optional<std::size_t> run_id);
 
     std::shared_ptr<IO::Logger> logger;
 
-    std::optional<Core::ScalarFactory::ScalarVariant> scalar_initializer_variant = std::nullopt;
+    std::optional<Core::ScalarFactory::ScalarVariant>
+        scalar_initializer_variant = std::nullopt;
     Core::CaseData _data;               ///< Case data for the simulation.
     Core::UserControlParameters params; ///< User-defined control parameters.
-    bool loaded = false;                ///< Flag indicating if the instance is loaded.
-    bool applied = false;               ///< Flag indicating if the configuration is applied.
-    bool registered = false;            ///< Flag indicating if resources are registered.
+    bool loaded = false;  ///< Flag indicating if the instance is loaded.
+    bool applied = false; ///< Flag indicating if the configuration is applied.
+    bool registered = false; ///< Flag indicating if resources are registered.
     std::optional<Simulation::Feed::SimulationFeed> feed =
         std::nullopt; ///< Optional feed configuration.
-    std::optional<Simulation::MassTransfer::Type::MtrTypeVariant> mtr_type = std::nullopt;
+    std::optional<Simulation::MassTransfer::Type::MtrTypeVariant> mtr_type =
+        std::nullopt;
   };
 
 } // namespace Api

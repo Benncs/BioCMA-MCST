@@ -70,14 +70,16 @@ namespace PythonBindings
                          bool recursive)
   {
 
-    return (recursive) ? register_cma_path_recursive(handle.get(), cma_path.data())
-                       : ::register_cma_path(handle.get(), cma_path.data());
+    return (recursive)
+               ? register_cma_path_recursive(handle.get(), cma_path.data())
+               : ::register_cma_path(handle.get(), cma_path.data());
   }
 
-  auto set_initialiser_from_data(std::shared_ptr<Api::SimulationInstance>& handle,
-                                 std::size_t n_species,
-                                 const py::array_t<double_t>&& py_liquid,
-                                 std::optional<py::array_t<double_t>>&& py_gas)
+  auto
+  set_initialiser_from_data(std::shared_ptr<Api::SimulationInstance>& handle,
+                            std::size_t n_species,
+                            const py::array_t<double_t>&& py_liquid,
+                            std::optional<py::array_t<double_t>>&& py_gas)
 
   {
     auto buf = py_liquid.request();
@@ -92,8 +94,8 @@ namespace PythonBindings
       gas = std::vector<double>(data.begin(), data.end());
     }
 
-    handle->register_scalar_initiazer(
-        Core::ScalarFactory::FullCase(n_species, std::move(liq), std::move(gas)));
+    handle->register_scalar_initiazer(Core::ScalarFactory::FullCase(
+        n_species, std::move(liq), std::move(gas)));
 
     return 0;
   }
@@ -158,7 +160,10 @@ namespace PythonBindings
 PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 {
   // Wrapping the Handle structure
-  py::class_<Api::SimulationInstance, std::shared_ptr<Api::SimulationInstance>>(m, "Handle");
+  py::class_<Api::SimulationInstance, std::shared_ptr<Api::SimulationInstance>>(
+      m, "Handle");
+
+  m.def("get_version", Api::get_version);
 
   m.def("init_handle", PythonBindings::init_handle, py::arg("argv"));
 
@@ -169,7 +174,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
   m.def("exec",
         [](std::shared_ptr<Api::SimulationInstance>& handle)
         {
-          pybind11::gil_scoped_release release; // TODO check if really usefull ? //NOLINT
+          pybind11::gil_scoped_release
+              release; // TODO check if really usefull ? //NOLINT
           handle->exec();
           pybind11::gil_scoped_acquire acquire; // NOLINT
         });
@@ -218,7 +224,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
          std::size_t _species,
          std::size_t _position)
       {
-        return set_feed_constant(handle.get(), flow, concentration, _species, _position, -1, 0, 0);
+        return set_feed_constant(
+            handle.get(), flow, concentration, _species, _position, -1, 0, 0);
       },
       py::arg("handle"),
       py::arg("flow"),
@@ -234,7 +241,8 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
          std::size_t _species,
          std::size_t _position)
       {
-        return set_feed_constant(handle.get(), flow, concentration, _species, _position, -1, 0, 1);
+        return set_feed_constant(
+            handle.get(), flow, concentration, _species, _position, -1, 0, 1);
       },
       py::arg("handle"),
       py::arg("flow"),
@@ -277,8 +285,14 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       {
         constexpr int output_position = -1;
         constexpr int gas = 1;
-        return set_feed_constant(
-            handle.get(), flow, concentration, species, position, output_position, gas, 0);
+        return set_feed_constant(handle.get(),
+                                 flow,
+                                 concentration,
+                                 species,
+                                 position,
+                                 output_position,
+                                 gas,
+                                 0);
       },
       py::arg("handle"),
       py::arg("flow"),

@@ -47,8 +47,9 @@ namespace
                     (!params.load_serde && !params.serde_file.has_value()));
     if (!to_load)
     {
-      flag = flag && params.biomass_initial_concentration !=
-                         0; // Biomass could be 0 at start but OK to say that X>0
+      flag =
+          flag && params.biomass_initial_concentration !=
+                      0; // Biomass could be 0 at start but OK to say that X>0
       flag = flag && params.number_particle > 0;
       // flag = flag && params.initialiser_path != "";
       // flag = flag && params.model_name != "";
@@ -61,6 +62,11 @@ namespace
 
 namespace Api
 {
+
+  std::array<int, 3> get_version()
+  {
+    return {_BIOMC_VERSION_MAJOR, _BIOMC_VERSION_MINOR, _BIOMC_VERSION_DEV};
+  }
 
   void finalise()
   {
@@ -80,7 +86,9 @@ namespace Api
     return std::vector<T>(rhs.begin(), rhs.end());
   }
 
-  ApiResult SimulationInstance::set_feed(Simulation::Feed::FeedDescriptor feed_variant, Phase phase)
+  ApiResult
+  SimulationInstance::set_feed(Simulation::Feed::FeedDescriptor feed_variant,
+                               Phase phase)
   {
     if (!feed.has_value())
     {
@@ -108,13 +116,14 @@ namespace Api
     return set_feed(constant_feed, phase);
   }
 
-  ApiResult SimulationInstance::set_feed_constant_different_output(double _flow,
-                                                                   double _concentration,
-                                                                   std::size_t _species,
-                                                                   std::size_t input_position,
-                                                                   std::size_t output_position,
+  ApiResult SimulationInstance::set_feed_constant_different_output(
+      double _flow,
+      double _concentration,
+      std::size_t _species,
+      std::size_t input_position,
+      std::size_t output_position,
 
-                                                                   bool gas)
+      bool gas)
   {
     auto phase = gas ? Phase::Gas : Phase::Liquid;
     auto constant_feed = Simulation::Feed::FeedFactory::constant(
@@ -136,8 +145,10 @@ namespace Api
   // }
 
   // bool SimulationInstance::set_feed_constant(double _flow,
-  //                                            std::span<double> _concentration,
-  //                                            std::span<std::size_t> _position,
+  //                                            std::span<double>
+  //                                            _concentration,
+  //                                            std::span<std::size_t>
+  //                                            _position,
   //                                            std::span<std::size_t> _species,
   //                                            bool gas,
   //                                            bool fed_batch)
@@ -171,7 +182,9 @@ namespace Api
   //   return set_feed(fd, gas);
   // }
 
-  SimulationInstance::SimulationInstance(int argc, char** argv, std::optional<std::size_t> run_id)
+  SimulationInstance::SimulationInstance(int argc,
+                                         char** argv,
+                                         std::optional<std::size_t> run_id)
       : id(ID_VERIF)
   {
     _data.exec_info = Core::runtime_init(argc, argv, run_id);
@@ -184,12 +197,12 @@ namespace Api
     _data = Core::CaseData(); // Explicity delete everything before
   }
 
-  std::optional<std::unique_ptr<SimulationInstance>>
-  SimulationInstance::init(int argc, char** argv, std::optional<std::size_t> run_id) noexcept
+  std::optional<std::unique_ptr<SimulationInstance>> SimulationInstance::init(
+      int argc, char** argv, std::optional<std::size_t> run_id) noexcept
   {
     PROFILE_SECTION("Initialisation")
-    auto ptr = std::unique_ptr<SimulationInstance>(new (std::nothrow)
-                                                       SimulationInstance(argc, argv, run_id));
+    auto ptr = std::unique_ptr<SimulationInstance>(
+        new (std::nothrow) SimulationInstance(argc, argv, run_id));
     if (ptr == nullptr)
     {
       return std::nullopt;
@@ -207,7 +220,9 @@ namespace Api
         {
           logger->print(
               "Simulation",
-              IO::format("Running ", std::to_string(this->_data.exec_info.current_rank), "..."));
+              IO::format("Running ",
+                         std::to_string(this->_data.exec_info.current_rank),
+                         "..."));
         }
 
         Core::exec(logger, std::forward<Core::CaseData>(this->_data));
@@ -236,7 +251,8 @@ namespace Api
     }
     try
     {
-      if (auto opt_case = Core::load(this->_data.exec_info, std::move(this->params), this->feed))
+      if (auto opt_case = Core::load(
+              this->_data.exec_info, std::move(this->params), this->feed))
       {
         this->_data = std::move(*opt_case);
         this->loaded = true;
@@ -285,7 +301,8 @@ namespace Api
       return ApiResult("Error with feed");
     }
 
-    auto __simulation = global_initializer.init_simulation(this->scalar_initializer_variant);
+    auto __simulation =
+        global_initializer.init_simulation(this->scalar_initializer_variant);
 
     if (!global_initializer.check_init_terminate())
     {
@@ -324,7 +341,8 @@ namespace Api
     return ApiResult();
   }
 
-  ApiResult SimulationInstance::register_scalar_initiazer(Core::ScalarFactory::ScalarVariant&& var)
+  ApiResult SimulationInstance::register_scalar_initiazer(
+      Core::ScalarFactory::ScalarVariant&& var)
   {
     this->scalar_initializer_variant = std::move(var);
     return ApiResult();
@@ -340,7 +358,8 @@ namespace Api
     return apply();
   }
 
-  ApiResult SimulationInstance::register_parameters(Core::UserControlParameters&& _params) noexcept
+  ApiResult SimulationInstance::register_parameters(
+      Core::UserControlParameters&& _params) noexcept
   {
     params = std::move(_params);
     registered = true;
@@ -355,13 +374,15 @@ namespace Api
     return true; // TODO
   }
 
-  ApiResult SimulationInstance::register_initialiser_file_path(std::string_view path)
+  ApiResult
+  SimulationInstance::register_initialiser_file_path(std::string_view path)
   {
     this->params.initialiser_path = path;
     return ApiResult(); // TODO
   }
 
-  bool SimulationInstance::register_cma_path(std::string_view path, bool recursive)
+  bool SimulationInstance::register_cma_path(std::string_view path,
+                                             bool recursive)
   {
     // TODO Check path
     this->params.recursive = recursive;
@@ -369,8 +390,8 @@ namespace Api
     return true; // TODO
   }
 
-  ApiResult
-  SimulationInstance::register_initial_condition(Core::ScalarFactory::ScalarVariant&& type)
+  ApiResult SimulationInstance::register_initial_condition(
+      Core::ScalarFactory::ScalarVariant&& type)
   {
     scalar_initializer_variant = std::move(type);
     return ApiResult();
