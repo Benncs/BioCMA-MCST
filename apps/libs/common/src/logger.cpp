@@ -1,16 +1,15 @@
 #include <biocma_cst_config.hpp>
+#include <common/console.hpp>
 #include <common/logger.hpp>
 #include <cstdio>
 #include <iostream>
-#include <optional>
-#include <stdexcept>
 #include <memory>
 #include <optional>
 #include <ostream>
 #include <source_location>
 #include <sstream>
+#include <stdexcept>
 #include <streambuf>
-#include <common/console.hpp>
 
 #include <unistd.h> //dup2
 
@@ -38,8 +37,8 @@ namespace IO
                                  std::shared_ptr<bool> active_flag,
                                  bool owns,
                                  RedirectionType _type)
-      : owner_ptr(std::move(owner)), active_flag(std::move(active_flag)), owns_guard(owns),
-        type(_type)
+      : owner_ptr(std::move(owner)), active_flag(std::move(active_flag)),
+        owns_guard(owns), type(_type)
   {
   }
 
@@ -148,10 +147,21 @@ namespace IO
     }
   }
 
-  Console::Console() : flags(Flags::None), output(std::cout),err_output(std::cerr)
+  Console::Console()
+      : flags(Flags::None), output(std::cout), err_output(std::cerr)
   {
-      std::ios::sync_with_stdio(false);
+    std::ios::sync_with_stdio(false);
+    try
+    {
       std::locale::global(std::locale("en_US.utf8"));
+    }
+    catch (const std::runtime_error& e)
+    {
+      std::locale::global(std::locale::classic());
+      toggle_alert();
+      this->alert("I/O Console", format("Failed to set local: ", e.what()));
+      toggle_alert();
+    }
   }
 
   void Console::debug([[maybe_unused]] std::string_view message)
@@ -168,7 +178,8 @@ namespace IO
   {
     if ((flags & Flags::Print) != 0U)
     {
-      output <<AnsiCode::blue<<"["<<prefix<<"]: "<<AnsiCode::reset << message << "\r\n";
+      output << AnsiCode::blue << "[" << prefix << "]: " << AnsiCode::reset
+             << message << "\r\n";
     }
   }
 
@@ -176,19 +187,22 @@ namespace IO
   {
     if ((flags & Flags::Alert) != 0U)
     {
-      output << AnsiCode::red<<"[Warning: "<<prefix<<"]" << ": "<<AnsiCode::reset  << message << "\r\n";
+      output << AnsiCode::red << "[Warning: " << prefix << "]" << ": "
+             << AnsiCode::reset << message << "\r\n";
     }
   }
 
-  void Console::error(std::string_view message,std::source_location location )
+  void Console::error(std::string_view message, std::source_location location)
   {
     if ((flags & Flags::Error) != 0U)
     {
-      err_output << AnsiCode::red<<"[Error] From: "<<location.function_name() <<AnsiCode::reset  <<": "<< message << "\r\n";
+      err_output << AnsiCode::red
+                 << "[Error] From: " << location.function_name()
+                 << AnsiCode::reset << ": " << message << "\r\n";
     }
   }
 
-   void Console::raw_log(std::string_view message )
+  void Console::raw_log(std::string_view message)
   {
     if ((flags & Flags::Error) != 0U)
     {
@@ -206,7 +220,6 @@ namespace IO
   {
     flags ^= Flags::All;
   }
-
 
   void Console::toggle_print()
   {
