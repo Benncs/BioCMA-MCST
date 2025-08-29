@@ -10,8 +10,8 @@
 enum Uptakeparticle_var : int
 {
   a_pts = 0,
-  a_permease,
-  n_permease,
+  a_permease_1,
+  a_permease_2,
   COUNT
 };
 
@@ -57,7 +57,8 @@ namespace Models
 
   template <UptakeModel U, ModelType M = U> struct Uptake
   {
-    static constexpr std::size_t n_var = static_cast<std::size_t>(Uptakeparticle_var::COUNT);
+    static constexpr std::size_t n_var =
+        static_cast<std::size_t>(Uptakeparticle_var::COUNT);
     static constexpr std::string_view name = "uptake";
     using uniform_weight = std::true_type;
     using Self = Uptake;
@@ -65,25 +66,32 @@ namespace Models
     using SelfParticle = MC::ParticlesModel<M::n_var, Self::FloatType>;
     using Config = std::nullopt_t;
 
-    static KOKKOS_INLINE_FUNCTION constexpr FloatType f_G(const FloatType x) noexcept
+    static KOKKOS_INLINE_FUNCTION constexpr FloatType
+    f_G(const FloatType x) noexcept
     {
       return f_saturation(x, U::k);
     }
 
-    static KOKKOS_INLINE_FUNCTION constexpr FloatType
-    phi_pts(const FloatType phi_pts_max, const FloatType a_pts, const FloatType S)
+    static KOKKOS_INLINE_FUNCTION constexpr FloatType phi_pts(
+        const FloatType phi_pts_max, const FloatType a_pts, const FloatType S)
     {
       return a_pts * phi_pts_max * f_G(S);
     }
 
     static KOKKOS_INLINE_FUNCTION constexpr FloatType
-    phi_permease(FloatType phi_pts_max, FloatType a_permease_2, FloatType a_permease, FloatType S)
+    phi_permease(FloatType phi_pts_max,
+                 FloatType a_permease_2,
+                 FloatType a_permease,
+                 FloatType S)
     {
-      return a_permease * a_permease_2 * phi_pts_max * U::beta * f_G(S / U::delta);
+      return a_permease * a_permease_2 * phi_pts_max * U::beta *
+             f_G(S / U::delta);
     }
 
     KOKKOS_INLINE_FUNCTION static void
-    init(const MC::KPRNG::pool_type& random_pool, std::size_t idx, const SelfParticle& arr)
+    init(const MC::KPRNG::pool_type& random_pool,
+         std::size_t idx,
+         const SelfParticle& arr)
     {
 
       // static constexpr FloatType half = FloatType(0.5);
@@ -91,45 +99,53 @@ namespace Models
       // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
       GET_PROPERTY(Uptakeparticle_var::a_pts) =
           MC::Distributions::TruncatedNormal<FloatType>::draw_from(
-              gen, FloatType(1e-3), FloatType(1e-4), FloatType(0.), FloatType(1.));
+              gen,
+              FloatType(1e-3),
+              FloatType(1e-4),
+              FloatType(0.),
+              FloatType(1.));
 
-      GET_PROPERTY(Uptakeparticle_var::a_permease) =
+      GET_PROPERTY(Uptakeparticle_var::a_permease_1) =
           MC::Distributions::TruncatedNormal<FloatType>::draw_from(
-              gen, FloatType(0.8), FloatType(0.1), FloatType(0.), FloatType(1.));
+              gen,
+              FloatType(0.8),
+              FloatType(0.1),
+              FloatType(0.),
+              FloatType(1.));
 
-      GET_PROPERTY(Uptakeparticle_var::n_permease) =
+      GET_PROPERTY(Uptakeparticle_var::a_permease_2) =
           MC::Distributions::TruncatedNormal<FloatType>::draw_from(
-              gen, FloatType(0.8), FloatType(0.1), FloatType(0.), FloatType(1.));
+              gen,
+              FloatType(0.8),
+              FloatType(0.1),
+              FloatType(0.),
+              FloatType(1.));
 
-      // GET_PROPERTY(Uptakeparticle_var::n_permease) =
-      //     MC::Distributions::TruncatedNormal<FloatType>::draw_from(
-      //         gen,
-      //         FloatType(U::NPermease_init) * half,
-      //         FloatType(U::NPermease_init) / FloatType(5.),
-      //         FloatType(0.),
-      //         FloatType(U::NPermease_init) * FloatType(10.));
       // NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
       random_pool.free_state(gen);
     }
 
-    KOKKOS_INLINE_FUNCTION static FloatType uptake(FloatType phi_pts_max,
-                                                   std::size_t idx,
-                                                   const SelfParticle& arr,
-                                                   const MC::LocalConcentration& c,
-                                                   FloatType* r_phi_pts = nullptr,
-                                                   FloatType* r_phi_perm = nullptr)
+    KOKKOS_INLINE_FUNCTION static FloatType
+    uptake(FloatType phi_pts_max,
+           std::size_t idx,
+           const SelfParticle& arr,
+           const MC::LocalConcentration& c,
+           FloatType* r_phi_pts = nullptr,
+           FloatType* r_phi_perm = nullptr)
     {
       const auto s = c(0);
 
-      const FloatType phi_s_pts = phi_pts(phi_pts_max, GET_PROPERTY(Uptakeparticle_var::a_pts), s);
+      const FloatType phi_s_pts =
+          phi_pts(phi_pts_max, GET_PROPERTY(Uptakeparticle_var::a_pts), s);
       if (r_phi_pts != nullptr)
       {
         *r_phi_pts = phi_s_pts;
       }
-      const auto phi_s_perm = phi_permease(phi_pts_max,
-                                           GET_PROPERTY(Uptakeparticle_var::n_permease),
-                                           GET_PROPERTY(Uptakeparticle_var::a_permease),
-                                           s);
+      const auto phi_s_perm =
+          phi_permease(phi_pts_max,
+                       GET_PROPERTY(Uptakeparticle_var::a_permease_2),
+                       GET_PROPERTY(Uptakeparticle_var::a_permease_1),
+                       s);
       if (r_phi_perm != nullptr)
       {
         *r_phi_perm = phi_s_perm;
@@ -138,64 +154,60 @@ namespace Models
       return phi_s_pts + phi_s_perm;
     }
 
-    KOKKOS_INLINE_FUNCTION static FloatType uptake_step(FloatType phi_pts_max,
-                                                        FloatType d_t,
-                                                        std::size_t idx,
-                                                        const SelfParticle& arr,
-                                                        const MC::LocalConcentration& c,
-                                                        FloatType* r_phi_pts = nullptr,
-                                                        FloatType* r_phi_perm = nullptr)
+    KOKKOS_INLINE_FUNCTION static FloatType
+    uptake_step(FloatType phi_pts_max,
+                FloatType d_t,
+                std::size_t idx,
+                const SelfParticle& arr,
+                const MC::LocalConcentration& c,
+                FloatType* r_phi_pts = nullptr,
+                FloatType* r_phi_perm = nullptr)
     {
       constexpr FloatType apts_frequency = 1. / U::tau_pts;
       constexpr FloatType aperm_frequency_au = 1. / U::tau_Au;
       constexpr FloatType aperm_frequency_ad = 1. / U::tau_Ad;
       constexpr FloatType n_perm_frequence_new = 1. / U::tau_new_permease;
       constexpr FloatType n_perm_frequence_rm = 1. / U::tau_rm_perm;
+      constexpr FloatType one = FloatType(1);
+
+      auto& a_pts = GET_PROPERTY(Uptakeparticle_var::a_pts);
+      auto& a_p1 = GET_PROPERTY(Uptakeparticle_var::a_permease_1);
+      auto& a_p2 = GET_PROPERTY(Uptakeparticle_var::a_permease_2);
 
       const auto s = c(0);
-      const FloatType phi_s_pts = phi_pts(phi_pts_max, GET_PROPERTY(Uptakeparticle_var::a_pts), s);
-
       const auto G = f_G(s);
-
-      const FloatType gamma_PTS_S = GET_PROPERTY(Uptakeparticle_var::a_pts) * G;
-
-      if (r_phi_pts != nullptr)
-      {
-        *r_phi_pts = phi_s_pts;
-      }
-      const auto phi_perm = phi_permease(phi_pts_max,
-                                         GET_PROPERTY(Uptakeparticle_var::n_permease),
-                                         GET_PROPERTY(Uptakeparticle_var::a_permease),
-                                         s);
+      const auto a_pts_g = a_pts * G;
+      const auto phi_s_pts = phi_pts(phi_pts_max, a_pts, s);
+      const auto phi_perm = phi_permease(phi_pts_max, a_p2, a_p1, s);
+      const FloatType phi_s = phi_s_pts + phi_perm;
       if (r_phi_perm != nullptr)
       {
         *r_phi_perm = phi_perm;
       }
+      if (r_phi_pts != nullptr)
+      {
+        *r_phi_pts = phi_s_pts;
+      }
 
-      const FloatType phi_s = phi_s_pts + phi_perm;
+      a_pts += d_t * apts_frequency * (G - a_pts);
 
-      GET_PROPERTY(Uptakeparticle_var::a_pts) +=
-          d_t * apts_frequency * (G - GET_PROPERTY(Uptakeparticle_var::a_pts));
+      a_p1 += d_t * ((aperm_frequency_au * a_pts_g +
+                      aperm_frequency_ad * (one - a_pts_g)) *
+                     (one - G - a_p1));
 
-      GET_PROPERTY(Uptakeparticle_var::a_permease) +=
-          d_t *
-          ((aperm_frequency_au * gamma_PTS_S + aperm_frequency_ad * (FloatType(1) - gamma_PTS_S)) *
-           (FloatType(1) - G - GET_PROPERTY(Uptakeparticle_var::a_permease)));
-
-
-      GET_PROPERTY(Uptakeparticle_var::n_permease) +=
-          d_t * 
-          (n_perm_frequence_rm * G + n_perm_frequence_new * (FloatType(1) - G)) *
-          (FloatType(1) - gamma_PTS_S - GET_PROPERTY(Uptakeparticle_var::n_permease) );
+      a_p2 +=
+          d_t * ((n_perm_frequence_rm * G + n_perm_frequence_new * (one - G)) *
+                 (one - a_pts_g - a_p2));
 
       return phi_s;
     }
 
-    KOKKOS_INLINE_FUNCTION static void division(const MC::KPRNG::pool_type& random_pool,
-                                                std::size_t idx,
-                                                std::size_t idx2,
-                                                const SelfParticle& arr,
-                                                const SelfParticle& buffer_arr)
+    KOKKOS_INLINE_FUNCTION static void
+    division(const MC::KPRNG::pool_type& random_pool,
+             std::size_t idx,
+             std::size_t idx2,
+             const SelfParticle& arr,
+             const SelfParticle& buffer_arr)
     {
       static constexpr FloatType half = FloatType(0.5);
       auto generator = random_pool.get_state();
@@ -207,17 +219,19 @@ namespace Models
               FloatType(0.),
               FloatType(1.));
 
-      GET_PROPERTY_FROM(idx2, buffer_arr, Uptakeparticle_var::a_permease) =
+      GET_PROPERTY_FROM(idx2, buffer_arr, Uptakeparticle_var::a_permease_1) =
           MC::Distributions::TruncatedNormal<FloatType>::draw_from(
               generator,
               GET_PROPERTY(Uptakeparticle_var::a_pts),
-              GET_PROPERTY(Uptakeparticle_var::a_permease) * half,
+              GET_PROPERTY(Uptakeparticle_var::a_permease_1) * half,
               FloatType(0.),
               FloatType(1.));
 
-      const auto new_n_permease = GET_PROPERTY(Uptakeparticle_var::n_permease) * half;
-      GET_PROPERTY(Uptakeparticle_var::n_permease) = new_n_permease;
-      GET_PROPERTY_FROM(idx2, buffer_arr, Uptakeparticle_var::n_permease) = new_n_permease;
+      const auto new_n_permease =
+          GET_PROPERTY(Uptakeparticle_var::a_permease_2) * half;
+      GET_PROPERTY(Uptakeparticle_var::a_permease_2) = new_n_permease;
+      GET_PROPERTY_FROM(idx2, buffer_arr, Uptakeparticle_var::a_permease_2) =
+          new_n_permease;
       random_pool.free_state(generator);
     }
 
@@ -230,7 +244,8 @@ namespace Models
     {
     }
 
-    KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx, const SelfParticle& arr)
+    KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx,
+                                              const SelfParticle& arr)
     {
       (void)idx;
       (void)arr;
@@ -239,7 +254,8 @@ namespace Models
 
     inline constexpr static std::array<std::string_view, n_var> names()
     {
-      constexpr std::array<std::string_view, n_var> _names = {"a_pts", "a_permease", "n_permease"};
+      constexpr std::array<std::string_view, n_var> _names = {
+          "a_pts", "a_permease_1", "a_permease_2"};
       static_assert(_names.size() == n_var);
       return _names;
     }

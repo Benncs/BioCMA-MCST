@@ -123,9 +123,9 @@ namespace Models
               "nu2",
               "nu_eff_1",
               "nu_eff_2",
-              "a_perm",
-              "a_pts",
-              "n_permease",
+              "a_p1",
+              "a_p2",
+              "a_p3",
               "phi_o2",
               "phi_g",
               "phi_pts"};
@@ -139,9 +139,10 @@ namespace Models
               INDEX_FROM_ENUM(particle_var::nu2),
               INDEX_FROM_ENUM(particle_var::nu_eff_1),
               INDEX_FROM_ENUM(particle_var::nu_eff_2),
-              INDEX_FROM_ENUM(Uptakeparticle_var::a_permease),
-              INDEX_FROM_ENUM(Uptakeparticle_var::a_pts),
-              INDEX_FROM_ENUM(Uptakeparticle_var::n_permease),
+                  INDEX_FROM_ENUM(Uptakeparticle_var::a_pts),
+              INDEX_FROM_ENUM(Uptakeparticle_var::a_permease_1),
+
+              INDEX_FROM_ENUM(Uptakeparticle_var::a_permease_2),
               INDEX_FROM_ENUM(particle_var::contrib_phi_o2),
               INDEX_FROM_ENUM(particle_var::contrib_phi_s),
               INDEX_FROM_ENUM(particle_var::phi_pts)};

@@ -131,7 +131,7 @@ namespace Models
               INDEX_FROM_ENUM(particle_var::nu2),
               INDEX_FROM_ENUM(particle_var::nu_eff_1),
               INDEX_FROM_ENUM(particle_var::nu_eff_2),
-              INDEX_FROM_ENUM(Uptakeparticle_var::a_permease),
+              INDEX_FROM_ENUM(Uptakeparticle_var::a_permease_1),
               INDEX_FROM_ENUM(Uptakeparticle_var::a_pts),
               INDEX_FROM_ENUM(particle_var::contrib_phi_o2),
               INDEX_FROM_ENUM(particle_var::contrib_phi_s)};
