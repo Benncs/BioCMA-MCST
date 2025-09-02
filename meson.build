@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.9.5',
+  version: '0.9.52',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
@@ -45,8 +45,8 @@ compiler.has_argument('-fopenmp')
 
 if (compiler.get_id() == 'clang')
   message('using clang')
-  add_global_arguments(['-stdlib=libc++'], language: 'cpp')
-  add_global_link_arguments(['-stdlib=libc++', '-lc++','-lc++abi'], language: 'cpp')
+#  add_global_arguments(['-stdlib=libc++'], language: 'cpp')
+#  add_global_link_arguments(['-stdlib=libc++', '-lc++','-lc++abi'], language: 'cpp')
 endif
 
 ## Define main shared variables

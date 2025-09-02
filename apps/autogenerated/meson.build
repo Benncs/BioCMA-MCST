@@ -12,14 +12,14 @@ conf_data = configuration_data(
         '__f__redirect__': 'false',
         '__f_verbose__': 'true',
         'dump_particle_state': 'true',
-        'use_probe': 'true',
+        'use_probe': 'false',
         'const_number_simulation': 'false',
         'default_particle_container_allocation_factor': '2.5',
         'MC_MAX_PARTICLE_BUFFER': '100e6',
         'debug_MC_RAND_DEFAULT_SEED': '2024',
         '_dead_particle_ratio_threshold':'0.01',
         'cma_data_folder_path':'"cma_data"',
-        'enable_event_counter':'false'
+        'enable_event_counter':'true'
     },
 )
 result_dir = get_option('result_dir_path')

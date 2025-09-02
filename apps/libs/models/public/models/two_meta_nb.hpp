@@ -9,16 +9,6 @@
 #include <models/utils.hpp>
 #include <string_view>
 
-namespace
-{
-  // template <FloatingPointType F> static F consteval get_phi_s_max(F density,
-  // F dl)
-  // {
-  //   // dl and density must be same unit, dl*density -> mass and y is mass
-  //   yield return (dl * density) * 0.5;
-  // }
-} // namespace
-
 namespace Models
 {
 
@@ -47,12 +37,12 @@ namespace Models
     };
 
     static constexpr std::size_t n_var = INDEX_FROM_ENUM(particle_var::COUNT);
-    static constexpr std::string_view name = "simple";
+    static constexpr std::string_view name = "two_mode_nb";
     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
 
     MODEL_CONSTANT FloatType l_max_m = 5e-6;   // m
     MODEL_CONSTANT FloatType l_c_m = 3e-6;     // m
-    MODEL_CONSTANT FloatType d_m = 0.6e-6;     // m
+    MODEL_CONSTANT FloatType d_m = 0.3e-6;     // m
     MODEL_CONSTANT FloatType l_min_m = 0.9e-6; // m
     MODEL_CONSTANT FloatType lin_density =
         c_linear_density(static_cast<FloatType>(1000), d_m);
@@ -69,7 +59,8 @@ namespace Models
     MODEL_CONSTANT FloatType k_o =
         0.0001; // g/L: Anane et. al 2017 (Biochem. Eng. J) (g/g)
     MODEL_CONSTANT FloatType dl_max_ms =
-        8 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
+        10 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
+
     MODEL_CONSTANT FloatType tau_1 = 1000.; // s
     MODEL_CONSTANT FloatType tau_2 = 1000.; // s
 
@@ -82,8 +73,8 @@ namespace Models
     MODEL_CONSTANT FloatType nu_max_kg_s = dl_max_ms * lin_density;
 
     MODEL_CONSTANT FloatType k = 1e-2;
-    MODEL_CONSTANT FloatType delta = 1;
-    MODEL_CONSTANT FloatType beta = 10;
+    MODEL_CONSTANT FloatType k_perm = 1e-3;
+    MODEL_CONSTANT FloatType beta = 7;
     MODEL_CONSTANT FloatType tau_new_permease = 40.;
     MODEL_CONSTANT FloatType tau_rm_perm = 200.;
     MODEL_CONSTANT FloatType tau_pts = 20.;
@@ -94,9 +85,14 @@ namespace Models
         MC::Distributions::TruncatedNormal<FloatType>(
             l_c_m, l_c_m / 2., l_min_m, l_max_m); // use in out_str_l3
 
-    // MODEL_CONSTANT auto length_c_dist =
-    // MC::Distributions::TruncatedNormal<FloatType>(1.5*l_c_m, l_c_m / 7.,
-    // 3*l_min_m, l_max_m);
+    MODEL_CONSTANT FloatType adder_mean = 1.5e-6; // m
+
+    MODEL_CONSTANT auto adder_dist =
+        MC::Distributions::TruncatedNormal<FloatType>(
+            adder_mean,
+            adder_mean / 2.,
+            adder_mean / 20.,
+            adder_mean * 10); // use in out_str_l3
 
     KOKKOS_INLINE_FUNCTION static void
     init(const MC::KPRNG::pool_type& random_pool,
@@ -177,7 +173,7 @@ namespace Models
   {
 
     // auto& v = init_uptake_cst;
-    constexpr auto local_lc = length_c_dist;
+    constexpr auto local_ac = adder_dist;
     constexpr auto length_dist = MC::Distributions::TruncatedNormal<FloatType>(
         l_c_m / 2, l_c_m / 5., l_min_m, l_max_m);
 
@@ -187,8 +183,10 @@ namespace Models
             mu_nu_dist, mu_nu_dist / 7., 0., static_cast<double>(nu_max_kg_s));
 
     auto gen = random_pool.get_state();
-    GET_PROPERTY(Self::particle_var::length) = length_dist.draw(gen);
-    GET_PROPERTY(Self::particle_var::l_cp) = local_lc.draw(gen);
+    auto l = length_dist.draw(gen);
+
+    GET_PROPERTY(Self::particle_var::length) = l;
+    GET_PROPERTY(Self::particle_var::l_cp) = l + local_ac.draw(gen);
     GET_PROPERTY(particle_var::nu1) = nu_1_initial_dist.draw(gen);
     random_pool.free_state(gen);
     GET_PROPERTY(particle_var::contrib_phi_s) = 0;
@@ -197,7 +195,7 @@ namespace Models
   }
 
   KOKKOS_INLINE_FUNCTION MC::Status
-  TwoMetaNb::update([[maybe_unused]]const MC::KPRNG::pool_type& random_pool,
+  TwoMetaNb::update([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
                     FloatType d_t,
                     std::size_t idx,
                     const SelfParticle& arr,
@@ -282,7 +280,7 @@ namespace Models
                       const SelfParticle& child_buffer_arr)
   {
     constexpr FloatType half = 0.5;
-    constexpr auto local_lc = length_c_dist;
+    constexpr auto local_ac = adder_dist;
     const FloatType new_current_length =
         GET_PROPERTY(particle_var::length) / static_cast<FloatType>(2.);
 
@@ -296,7 +294,8 @@ namespace Models
     auto nu_1_o = GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_1);
     auto nu_2_o = GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_2);
     auto gen = random_pool.get_state();
-    GET_PROPERTY(Self::particle_var::l_cp) = local_lc.draw(gen);
+    GET_PROPERTY(Self::particle_var::l_cp) =
+        new_current_length + local_ac.draw(gen);
 
     if (nu_1_o != 0)
     {
@@ -312,7 +311,7 @@ namespace Models
     }
 
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::l_cp) =
-        local_lc.draw(gen);
+        new_current_length + local_ac.draw(gen);
     random_pool.free_state(gen);
 
     Uptake<Self>::division(random_pool, idx, idx2, arr, child_buffer_arr);

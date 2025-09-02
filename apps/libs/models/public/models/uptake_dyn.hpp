@@ -1,6 +1,7 @@
 #ifndef __MODELS_UPTAKES_DYN_HPP__
 #define __MODELS_UPTAKES_DYN_HPP__
 
+#include "Kokkos_Assert.hpp"
 #include <common/traits.hpp>
 #include <cstddef>
 #include <mc/prng/prng_extension.hpp>
@@ -39,6 +40,7 @@ namespace Models
     // { T::NPermease_max } -> std::convertible_to<typename T::FloatType>;
 
     { T::k } -> std::convertible_to<typename T::FloatType>;
+    { T::k_perm } -> std::convertible_to<typename T::FloatType>;
 
     { T::tau_new_permease } -> std::convertible_to<typename T::FloatType>;
 
@@ -52,7 +54,7 @@ namespace Models
 
     { T::beta } -> std::convertible_to<typename T::FloatType>;
 
-    { T::delta } -> std::convertible_to<typename T::FloatType>;
+    //    { T::delta } -> std::convertible_to<typename T::FloatType>;
   };
 
   template <UptakeModel U, ModelType M = U> struct Uptake
@@ -84,8 +86,11 @@ namespace Models
                  FloatType a_permease,
                  FloatType S)
     {
+      constexpr FloatType k_perm = U::k / 10;
+      constexpr FloatType sigma = k_perm / 10.;
+      const FloatType innerexp = (S - k_perm) / sigma;
       return a_permease * a_permease_2 * phi_pts_max * U::beta *
-             f_G(S / U::delta);
+             Kokkos::exp(-innerexp * innerexp);
     }
 
     KOKKOS_INLINE_FUNCTION static void
@@ -175,6 +180,7 @@ namespace Models
       auto& a_p2 = GET_PROPERTY(Uptakeparticle_var::a_permease_2);
 
       const auto s = c(0);
+      KOKKOS_ASSERT(s >= 0.F);
       const auto G = f_G(s);
       const auto a_pts_g = a_pts * G;
       const auto phi_s_pts = phi_pts(phi_pts_max, a_pts, s);
