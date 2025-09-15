@@ -37,7 +37,7 @@ namespace Simulation::KernelInline
         : diag_transition("diag_transition", 0),
           leaving_flow("leaving_flow", 0),
           index_leaving_flow("index_leaving_flow", 0),
-          liquid_volume("liquid_volume")
+          liquid_volume("liquid_volume", 0)
     {
     }
   };
@@ -99,11 +99,9 @@ namespace Simulation::KernelInline
       this->enable_move = b_move;
       this->move = std::move(move_i);
 
-
       this->positions = std::move(_positions);
       this->status = std::move(_status);
       this->ages = std::move(_ages);
-
     }
 
     MoveFunctor(double _d_t,
