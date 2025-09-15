@@ -40,85 +40,58 @@ namespace Models
     static constexpr std::string_view name = "two_mode_nb";
     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
 
-    MODEL_CONSTANT FloatType l_max_m = 5e-6;   // m
-    MODEL_CONSTANT FloatType l_c_m = 3e-6;     // m
-    MODEL_CONSTANT FloatType d_m = 0.3e-6;     // m
-    MODEL_CONSTANT FloatType l_min_m = 0.9e-6; // m
-    MODEL_CONSTANT FloatType lin_density =
-        c_linear_density(static_cast<FloatType>(1000), d_m);
+    // Constants BEGIN
     MODEL_CONSTANT FloatType MolarMassG =
         Models::MolarMass::GramPerMole::glucose<FloatType>;
     MODEL_CONSTANT FloatType MolarMassO2 =
         Models::MolarMass::GramPerMole::dioxygen<FloatType>; // g/mol
+
+    MODEL_CONSTANT FloatType l_max_m = 5e-6;   // m
+    MODEL_CONSTANT FloatType l_c_m = 3e-6;     // m
+    MODEL_CONSTANT FloatType d_m = 0.3e-6;     // m
+    MODEL_CONSTANT FloatType l_min_m = 0.9e-6; // m
+
+    MODEL_CONSTANT FloatType dl_max_ms =
+        10 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
+
+    MODEL_CONSTANT FloatType lin_density =
+        c_linear_density(static_cast<FloatType>(1000), d_m);
 
     MODEL_CONSTANT FloatType y_sx_1 =
         1. / 2.217737e+00;                         // Mode 1 S to X yield (mass)
     MODEL_CONSTANT FloatType y_sx_2 = y_sx_1 / 3.; // Mode 2 S to X yield (mass)
     MODEL_CONSTANT FloatType y_sa = 0.8;           // S to A yield (mass)
     MODEL_CONSTANT FloatType y_os_molar = 3; // 3 mol o2 per mol for glucose
-    MODEL_CONSTANT FloatType k_o =
-        0.0001; // g/L: Anane et. al 2017 (Biochem. Eng. J) (g/g)
-    MODEL_CONSTANT FloatType dl_max_ms =
-        10 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
 
     MODEL_CONSTANT FloatType tau_1 = 1000.; // s
     MODEL_CONSTANT FloatType tau_2 = 1000.; // s
 
-    MODEL_CONSTANT FloatType phi_pts_max = (dl_max_ms * lin_density) * y_sx_1;
-
-    // phi_pts_max
-
+    MODEL_CONSTANT FloatType phi_max = (dl_max_ms * lin_density) * y_sx_1;
     MODEL_CONSTANT FloatType phi_o2_max =
-        10 * phi_pts_max / MolarMassG * y_os_molar * MolarMassO2; // kgS/s
+        10 * phi_max / MolarMassG * y_os_molar * MolarMassO2; // kgS/s
     MODEL_CONSTANT FloatType nu_max_kg_s = dl_max_ms * lin_density;
 
+    MODEL_CONSTANT FloatType k_o =
+        0.0001; // g/L: Anane et. al 2017 (Biochem. Eng. J) (g/g)
     MODEL_CONSTANT FloatType k = 1e-2;
     MODEL_CONSTANT FloatType k_perm = 1e-3;
     MODEL_CONSTANT FloatType beta = 7;
-    MODEL_CONSTANT FloatType tau_new_permease = 40.;
-    MODEL_CONSTANT FloatType tau_rm_perm = 200.;
-    MODEL_CONSTANT FloatType tau_pts = 20.;
-    MODEL_CONSTANT FloatType tau_Au = 40.;
-    MODEL_CONSTANT FloatType tau_Ad = 5; // 5.;
+    MODEL_CONSTANT FloatType tau_ap_1 = 300;
+    MODEL_CONSTANT FloatType tau_ap_2 = 200;
+    MODEL_CONSTANT FloatType tau_ap_3 = 1000;
 
     MODEL_CONSTANT auto length_c_dist =
         MC::Distributions::TruncatedNormal<FloatType>(
             l_c_m, l_c_m / 2., l_min_m, l_max_m); // use in out_str_l3
 
     MODEL_CONSTANT FloatType adder_mean = 1.5e-6; // m
-
     MODEL_CONSTANT auto adder_dist =
         MC::Distributions::TruncatedNormal<FloatType>(
             adder_mean,
             adder_mean / 2.,
             adder_mean / 20.,
             adder_mean * 10); // use in out_str_l3
-
-    KOKKOS_INLINE_FUNCTION static void
-    init(const MC::KPRNG::pool_type& random_pool,
-         std::size_t idx,
-         const SelfParticle& arr);
-
-    KOKKOS_INLINE_FUNCTION static MC::Status
-    update(const MC::KPRNG::pool_type& random_pool,
-           FloatType d_t,
-           std::size_t idx,
-           const SelfParticle& arr,
-           const MC::LocalConcentration& c);
-
-    KOKKOS_INLINE_FUNCTION static void
-    division(const MC::KPRNG::pool_type& random_pool,
-             std::size_t idx,
-             std::size_t idx2,
-             const SelfParticle& arr,
-             const SelfParticle& buffer_arr);
-
-    KOKKOS_INLINE_FUNCTION static void
-    contribution(std::size_t idx,
-                 std::size_t position,
-                 double weight,
-                 const SelfParticle& arr,
-                 const MC::ContributionView& contributions);
+    // Constants END
 
     KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx,
                                               const SelfParticle& arr)
@@ -150,9 +123,9 @@ namespace Models
               INDEX_FROM_ENUM(particle_var::nu2),
               INDEX_FROM_ENUM(particle_var::nu_eff_1),
               INDEX_FROM_ENUM(particle_var::nu_eff_2),
-              INDEX_FROM_ENUM(Uptakeparticle_var::a_pts),
-              INDEX_FROM_ENUM(Uptakeparticle_var::a_permease_1),
-              INDEX_FROM_ENUM(Uptakeparticle_var::a_permease_2),
+              INDEX_FROM_ENUM(Uptakeparticle_var::ap_1),
+              INDEX_FROM_ENUM(Uptakeparticle_var::ap_2),
+              INDEX_FROM_ENUM(Uptakeparticle_var::ap_3),
               INDEX_FROM_ENUM(particle_var::contrib_phi_o2),
               INDEX_FROM_ENUM(particle_var::contrib_phi_s),
               INDEX_FROM_ENUM(particle_var::phi_pts)};
@@ -160,8 +133,36 @@ namespace Models
 
     static KOKKOS_INLINE_FUNCTION void preinit()
     {
-      Kokkos::printf("[Model]: PRENINT\r\n");
+      Kokkos::printf("[Model]: PRENINIT:BEGIN\r\n");
+      //      Kokkos::printf("[Model]: phi_max:%.12f\r\n", phi_pts_max * 1e12);
+      //      Kokkos::printf("[Model]: PRENINIT:END\r\n");
     }
+
+    KOKKOS_INLINE_FUNCTION static void
+    init(const MC::KPRNG::pool_type& random_pool,
+         std::size_t idx,
+         const SelfParticle& arr);
+
+    KOKKOS_INLINE_FUNCTION static MC::Status
+    update(const MC::KPRNG::pool_type& random_pool,
+           FloatType d_t,
+           std::size_t idx,
+           const SelfParticle& arr,
+           const MC::LocalConcentration& c);
+
+    KOKKOS_INLINE_FUNCTION static void
+    division(const MC::KPRNG::pool_type& random_pool,
+             std::size_t idx,
+             std::size_t idx2,
+             const SelfParticle& arr,
+             const SelfParticle& buffer_arr);
+
+    KOKKOS_INLINE_FUNCTION static void
+    contribution(std::size_t idx,
+                 std::size_t position,
+                 double weight,
+                 const SelfParticle& arr,
+                 const MC::ContributionView& contributions);
   };
 
   CHECK_MODEL(TwoMetaNb)
@@ -174,6 +175,7 @@ namespace Models
 
     // auto& v = init_uptake_cst;
     constexpr auto local_ac = adder_dist;
+
     constexpr auto length_dist = MC::Distributions::TruncatedNormal<FloatType>(
         l_c_m / 2, l_c_m / 5., l_min_m, l_max_m);
 
@@ -202,7 +204,7 @@ namespace Models
                     const MC::LocalConcentration& concentrations)
   {
     const auto phi_s =
-        Uptake<Self>::uptake_step(phi_pts_max,
+        Uptake<Self>::uptake_step(phi_max,
                                   d_t,
                                   idx,
                                   arr,
@@ -289,11 +291,16 @@ namespace Models
 
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::length) =
         new_current_length;
+
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::age) = 0;
 
-    auto nu_1_o = GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_1);
-    auto nu_2_o = GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_2);
+    const auto nu_1_o =
+        GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_1);
+    const auto nu_2_o =
+        GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_2);
+
     auto gen = random_pool.get_state();
+
     GET_PROPERTY(Self::particle_var::l_cp) =
         new_current_length + local_ac.draw(gen);
 
@@ -303,6 +310,7 @@ namespace Models
           MC::Distributions::TruncatedNormal<FloatType>::draw_from(
               gen, nu_1_o, nu_1_o * half, 0.F, 1.F);
     }
+
     if (nu_2_o != 0)
     {
       GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu2) =

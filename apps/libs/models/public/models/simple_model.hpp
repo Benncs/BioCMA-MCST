@@ -150,16 +150,6 @@ namespace Models
                         const SelfParticle& arr,
                         const SelfParticle& buffer_arr)
   {
-    // for(size_t i=0;i<n_var;++i)
-    // {
-    //   buffer_arr(idx,i)=arr(idx,i); //basic copy
-    // }
-    MODEL_CONSTANT auto division_time_d =
-        MC::Distributions::TruncatedNormal<FloatType>(
-            500.,
-            500. / 2.,
-            10,
-            1200); //-Kokkos::log(random_number) / frequency_division;
 
     const FloatType new_current_length =
         arr(idx, static_cast<int>(particle_var::length)) /
@@ -171,11 +161,11 @@ namespace Models
     arr(idx, static_cast<int>(particle_var::age)) = 0;
     buffer_arr(idx2, static_cast<int>(particle_var::age)) = 0;
 
-    auto gen = random_pool.get_state();
-    GET_PROPERTY_FROM(idx2, buffer_arr, SimpleModel::particle_var::t_div) =
-        division_time_d.draw(gen);
-    GET_PROPERTY(SimpleModel::particle_var::t_div) = division_time_d.draw(gen);
-    random_pool.free_state(gen);
+    // auto gen = random_pool.get_state();
+    //  GET_PROPERTY_FROM(idx2, buffer_arr, SimpleModel::particle_var::t_div) =
+    //  division_time_d.draw(gen);
+    //  GET_PROPERTY(SimpleModel::particle_var::t_div) =
+    //  division_time_d.draw(gen); random_pool.free_state(gen);
 
     Uptake<UptakeDefault<typename Self::FloatType>, SimpleModel>::division(
         random_pool, idx, idx2, arr, buffer_arr);
