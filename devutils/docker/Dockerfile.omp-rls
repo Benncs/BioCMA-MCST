@@ -1,7 +1,7 @@
 FROM biocma_omp_base AS build
 
 WORKDIR /app
-ENV CXX=clang++-19
+ENV CXX=clang++-20
 ENV APP_INSTALL_DIR=/opt/biomc
 # Copy files and directories into the Docker image
 COPY ./apps /app/apps
@@ -18,11 +18,19 @@ COPY ./tools /app/tools
 COPY ./devutils/datamodel /app/devutils/datamodel
 COPY ./devutils/exec.py /app/devutils/exec.py
 
-RUN meson setup builddir --buildtype=release -Dbuild_test=false -Duse_system_kokkos=true -Duse_cuda=false -Dbuild_c_api=false -Dbuild_python_api=false -Dresult_dir_path=$APP_INSTALL_DIR/results/
+RUN meson setup builddir\
+ --buildtype=release    \
+ -Dbuild_test=false     \
+ -Duse_system_kokkos=true\
+ -Duse_cuda=false        \
+ -Dbuild_c_api=false     \
+ -Dbuild_python_api=false\
+ -Dresult_dir_path=$APP_INSTALL_DIR/results/
+
 RUN ninja -C builddir install
 
 
-FROM debian:bookworm-slim AS rls 
+FROM debian:trixie-slim AS rls 
 ENV APP_INSTALL_DIR=/opt/biomc
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -30,8 +38,9 @@ RUN apt-get update && \
     python3-pip \
     libomp5 \
     openmpi-bin \
-    libhdf5-103 \
-    libhdf5-openmpi-103 && \
+    libhdf5-310 \
+    libhdf5-cpp-310\
+    libhdf5-mpi-dev && \
     rm -rf /var/lib/apt/lists/* && \
     pip install --no-cache-dir lxml --break-system-packages && \
     rm -rf /var/lib/apt/lists/*

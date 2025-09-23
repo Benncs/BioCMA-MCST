@@ -19,7 +19,7 @@ namespace Core
   {
     if(logger)
     {
-      logger->error("NOT DATAEXPORTER IMPLEMENTATION")
+      logger->error("NOT DATAEXPORTER IMPLEMENTATION");
     }
   }
   DataExporter::~DataExporter() = default;

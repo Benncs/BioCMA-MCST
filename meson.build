@@ -45,8 +45,8 @@ compiler.has_argument('-fopenmp')
 
 if (compiler.get_id() == 'clang')
   message('using clang')
-  add_global_arguments(['-stdlib=libc++'], language: 'cpp')
-  add_global_link_arguments(['-stdlib=libc++', '-lc++','-lc++abi'], language: 'cpp')
+#  add_global_arguments(['-stdlib=libc++'], language: 'cpp')
+#  add_global_link_arguments(['-stdlib=libc++', '-lc++','-lc++abi'], language: 'cpp')
 endif
 
 ## Define main shared variables

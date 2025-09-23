@@ -7,7 +7,6 @@
 #include <mc/particles_container.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
-#include <models/two_meta.hpp>
 #include <variant>
 
 struct TagDetector
