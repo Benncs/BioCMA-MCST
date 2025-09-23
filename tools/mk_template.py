@@ -41,9 +41,9 @@ def get_root_sim():
         print("ee")
         return os.environ["BIOMC_SIMFOLDER"]
     else:
-        #        homedir=os.path.expanduser('~')
-        #        return f"{homedir}/biomc_simulation"
-        return "/tmp/biomc_simulation"
+                homedir=os.path.expanduser('~')
+                return f"{homedir}/biomc_simulation"
+#        return "/tmp/biomc_simulation"
 
 
 def mk_template(data):

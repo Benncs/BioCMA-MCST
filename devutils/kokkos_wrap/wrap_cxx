@@ -1,29 +1,28 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # -----------------------------------------------------------------------------
 # Author: CASALE Benjamin
 # Date: 16/04/2024
 # Description: A wrapper script for integrating Kokkos with Meson build system
 #
-# This script acts as an intermediary to make Kokkos scripts compatible with the Meson build system, 
-# as the Kokkos project is not directly designed to work with Meson. Instead of using the provided 
-# Kokkos scripts directly, this wrapper simplifies the process by replacing the `CXX` environment 
+# This script acts as an intermediary to make Kokkos scripts compatible with the Meson build system,
+# as the Kokkos project is not directly designed to work with Meson. Instead of using the provided
+# Kokkos scripts directly, this wrapper simplifies the process by replacing the `CXX` environment
 # variable with this script.
 #
-# The script ensures that the correct compiler is invoked and transforms certain configurations 
+# The script ensures that the correct compiler is invoked and transforms certain configurations
 # as required to enable smoother integration between Kokkos and Meson.
 #
 # Usage example:
 # Set the `CXX` environment variable to this script's path, and then configure the build:
-# 
+#
 #   CXX=$(pwd)/devutils/kokkos_wrap/wrap_cxx meson setup builddir
 #
-# This approach streamlines the setup process and avoids manual adjustments when combining Kokkos 
+# This approach streamlines the setup process and avoids manual adjustments when combining Kokkos
 # with Meson.
 # -----------------------------------------------------------------------------
 
-
-KOKKOS_COMPILER=g++
+KOKKOS_COMPILER=clang++-18
 LOG=0
 wrap_cxx="/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper ${KOKKOS_COMPILER} ${KOKKOS_COMPILER}"
 args="$@"
@@ -31,7 +30,7 @@ args=$(echo "$args" | sed 's/-MQ /-MT /g') #Cmake and Ninja don´t use the same 
 cmd="$wrap_cxx  $args"
 
 if [ "$LOG" -eq 1 ]; then
-    echo "$cmd" >> wrapper_log.log
+  echo "$cmd" >>wrapper_log.log
 fi
 
 eval "$cmd"
