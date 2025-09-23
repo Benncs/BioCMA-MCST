@@ -20,7 +20,8 @@
 
 #ifdef DECLARE_EXPORT_UDF
 #  include <udf_includes.hpp>
-std::shared_ptr<DynamicLibrary> wrap_non_scoped_udf(std::string_view path, bool load)
+std::shared_ptr<DynamicLibrary> wrap_non_scoped_udf(std::string_view path,
+                                                    bool load)
 {
   if (load)
   {
@@ -29,12 +30,12 @@ std::shared_ptr<DynamicLibrary> wrap_non_scoped_udf(std::string_view path, bool 
 
   return nullptr;
 }
-#  define DECLARE_LOADER(__path__, __load_flag__)                                                  \
+#  define DECLARE_LOADER(__path__, __load_flag__)                              \
     auto _ = wrap_non_scoped_udf(__path__, __load_flag__);
 #else
 
-#  define DECLARE_LOADER(__path__, __junk__)                                                       \
-    (void)__path__;                                                                                \
+#  define DECLARE_LOADER(__path__, __junk__)                                   \
+    (void)__path__;                                                            \
     (void)__junk__
 #endif
 
@@ -50,25 +51,25 @@ std::shared_ptr<DynamicLibrary> wrap_non_scoped_udf(std::string_view path, bool 
 #endif
 
 #ifndef NO_MPI
-#  define HANDLE_RC(__api_results__)                                                               \
-    {                                                                                              \
-      auto rc = (__api_results__);                                                                 \
-      if (!rc)                                                                                     \
-      {                                                                                            \
-        logger->error(IO::format(#__api_results__, " ", rc.get()));                                \
-        WrapMPI::critical_error();                                                                 \
-        return -1;                                                                                 \
-      }                                                                                            \
+#  define HANDLE_RC(__api_results__)                                           \
+    {                                                                          \
+      auto rc = (__api_results__);                                             \
+      if (!rc)                                                                 \
+      {                                                                        \
+        logger->error(IO::format(#__api_results__, " ", rc.get()));            \
+        WrapMPI::critical_error();                                             \
+        return -1;                                                             \
+      }                                                                        \
     }
 #else
-#  define HANDLE_RC(__api_results__)                                                               \
-    {                                                                                              \
-      auto rc = (__api_results__);                                                                 \
-      if (!rc)                                                                                     \
-      {                                                                                            \
-        logger->error(IO::format(#__api_results__, " ", rc.get()));                                \
-        return -1;                                                                                 \
-      }                                                                                            \
+#  define HANDLE_RC(__api_results__)                                           \
+    {                                                                          \
+      auto rc = (__api_results__);                                             \
+      if (!rc)                                                                 \
+      {                                                                        \
+        logger->error(IO::format(#__api_results__, " ", rc.get()));            \
+        return -1;                                                             \
+      }                                                                        \
     }
 #endif
 
@@ -79,9 +80,10 @@ std::shared_ptr<DynamicLibrary> wrap_non_scoped_udf(std::string_view path, bool 
 static bool override_result_path(const std::shared_ptr<IO::Logger>& logger,
                                  const Core::UserControlParameters& params,
                                  const ExecInfo& exec);
-static int parse_callback_ok(std::shared_ptr<IO::Logger>&& logger,
-                             Core::UserControlParameters&& user_params,
-                             std::optional<std::unique_ptr<Api::SimulationInstance>>& handle);
+static int parse_callback_ok(
+    std::shared_ptr<IO::Logger>&& logger,
+    Core::UserControlParameters&& user_params,
+    std::optional<std::unique_ptr<Api::SimulationInstance>>& handle);
 static std::string log_start_up();
 int main(int argc, char** argv)
 {
@@ -104,9 +106,12 @@ int main(int argc, char** argv)
 
     rc = parse_cli(logger, argc, argv)
              .match(
-                 [&](auto&& user_params) {
+                 [&](auto&& user_params)
+                 {
                    return parse_callback_ok(
-                       logger, std::forward<decltype(user_params)>(user_params), handle);
+                       logger,
+                       std::forward<decltype(user_params)>(user_params),
+                       handle);
                  },
                  [&logger](auto&& val)
                  {
@@ -119,13 +124,15 @@ int main(int argc, char** argv)
   return rc;
 }
 
-int parse_callback_ok(std::shared_ptr<IO::Logger>&& logger,
-                      Core::UserControlParameters&& user_params,
-                      std::optional<std::unique_ptr<Api::SimulationInstance>>& handle)
+int parse_callback_ok(
+    std::shared_ptr<IO::Logger>&& logger,
+    Core::UserControlParameters&& user_params,
+    std::optional<std::unique_ptr<Api::SimulationInstance>>& handle)
 {
-  DECLARE_LOADER("/home-local/casale/Documents/code/poc/builddir/host/apps/udf_model/"
-                 "libudf_model.so",
-                 AutoGenerated::request_udf(user_params.model_name));
+  DECLARE_LOADER(
+      "/home-local/casale/Documents/code/poc/builddir/host/apps/udf_model/"
+      "libudf_model.so",
+      AutoGenerated::request_udf(user_params.model_name));
 
   auto& h = *handle;
 
@@ -140,36 +147,11 @@ int parse_callback_ok(std::shared_ptr<IO::Logger>&& logger,
   INTERPRETER_INIT
 
   {
-    HANDLE_RC(h->register_parameters(std::forward<decltype(user_params)>(user_params)));
-
-    // const auto fd = Simulation::Feed::FeedFactory::constant(
-    //     2.33333333333333E-05, 300e-3, 1, 1,10, true);
-
-    // const auto fd_liq = Simulation::Feed::FeedFactory::constant(
-    //     10e-3*0.1/3600, 5, 0, 0,0, false);
-
-    // h->set_feed(fd, Phase::Gas);
-    // h->set_feed(fd_liq, Phase::Liquid);
-
+    HANDLE_RC(h->register_parameters(
+        std::forward<decltype(user_params)>(user_params)));
     HANDLE_RC(h->apply(load_serde));
     HANDLE_RC(h->exec());
   }
-
-  // REDIRECT_SCOPE({
-  //   // HANDLE_RC(h->register_parameters(std::forward<decltype(user_params)>(user_params)));
-
-  //   // // const auto fd = Simulation::Feed::FeedFactory::constant(
-  //   // //     2.33333333333333E-05, 300e-3, 1, 1,10, true);
-
-  //   // // const auto fd_liq = Simulation::Feed::FeedFactory::constant(
-  //   // //     10e-3*0.1/3600, 5, 0, 0,0, false);
-
-  //   // // h->set_feed(fd, Phase::Gas);
-  //   // // h->set_feed(fd_liq, Phase::Liquid);
-
-  //   // HANDLE_RC(h->apply(load_serde));
-  //   // HANDLE_RC(h->exec());
-  // })
   return 0;
 }
 
@@ -180,7 +162,8 @@ bool override_result_path(const std::shared_ptr<IO::Logger>& logger,
   bool flag = true;
   if (exec.current_rank == 0)
   {
-    if (std::filesystem::exists(params.results_file_name + std::string(".h5")) &&
+    if (std::filesystem::exists(params.results_file_name +
+                                std::string(".h5")) &&
         !params.force_override)
     {
       std::ios_base::sync_with_stdio(true); // FIXME
@@ -203,8 +186,8 @@ static std::string log_start_up()
   std::stringstream os;
   os << "--------" << std::endl;
   os << "Bio-CMA-MC Simulation tool\r\n";
-  os << "\tV" << _BIOMC_VERSION_MAJOR << "." << _BIOMC_VERSION_MINOR << "." << _BIOMC_VERSION_DEV
-     << "\r\n";
+  os << "\tV" << _BIOMC_VERSION_MAJOR << "." << _BIOMC_VERSION_MINOR << "."
+     << _BIOMC_VERSION_DEV << "\r\n";
   os << "\tMode " << _BIOMC_BUILD_MODE << "\r\n";
   os << "--------" << std::endl;
   return os.str();

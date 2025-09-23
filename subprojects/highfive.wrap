@@ -1,8 +1,8 @@
-[wrap-git]
-url = https://github.com/BlueBrain/HighFive.git
-revision = head
-depth = 1
+[wrap-file]
+directory = highfive-3.1.1
+source_url = https://github.com/highfive-devs/highfive/archive/refs/tags/v3.1.1.tar.gz
+source_filename = highfive-3.1.1.tar.gz
+source_hash=622034f34badda41255d7793e1c5a3046954dcf0875b0bca076e7c77088a8890
 method=cmake
-
 [provide]
 highfive-1.0 = HighFive_dep hdf5_dep

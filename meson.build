@@ -65,6 +65,7 @@ endif
 # includes_install_dir = ('include/' + project_name)
 build_test = get_option('build_test')
 
+build_udf = get_option('build_udf')
 use_kokkos_tools = false
 
 cpp_args = [arch_specific_args]

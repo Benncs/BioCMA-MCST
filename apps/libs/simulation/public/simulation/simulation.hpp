@@ -1,8 +1,6 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
-#include "Kokkos_Printf.hpp"
-#include "mc/domain.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <biocma_cst_config.hpp>
@@ -12,6 +10,7 @@
 #include <common/logger.hpp>
 #include <cstddef>
 #include <cstdint>
+#include <mc/domain.hpp>
 #include <mc/events.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/unit.hpp>
