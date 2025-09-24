@@ -37,7 +37,7 @@ namespace Simulation::KernelInline
         : diag_transition("diag_transition", 0),
           leaving_flow("leaving_flow", 0),
           index_leaving_flow("index_leaving_flow", 0),
-          liquid_volume("liquid_volume", 0)
+          liquid_volume("liquid_volume")
     {
     }
   };
@@ -103,7 +103,6 @@ namespace Simulation::KernelInline
       this->status = std::move(_status);
       this->ages = std::move(_ages);
     }
-
     MoveFunctor(double _d_t,
                 MC::ParticlePositions p,
                 MC::ParticleStatus _status,
@@ -125,12 +124,13 @@ namespace Simulation::KernelInline
     operator()(const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle,
                std::size_t& dead_count) const
     {
+
       GET_INDEX(n_particles);
       if (status(idx) != MC::Status::Idle) [[unlikely]]
       {
-        // Kokkos::printf("Skip %ld", idx);
         return;
       }
+
       ages(idx, 0) += d_t;
       if (enable_move)
       {
@@ -140,6 +140,11 @@ namespace Simulation::KernelInline
       {
         handle_exit(idx, dead_count);
       }
+    }
+
+    [[nodiscard]] bool need_launch() const
+    {
+      return enable_leave || enable_move;
     }
 
     KOKKOS_FUNCTION void handle_move(const std::size_t idx) const

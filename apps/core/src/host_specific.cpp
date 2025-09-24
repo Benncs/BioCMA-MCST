@@ -1,6 +1,5 @@
 
 #include "common/logger.hpp"
-#include "simulation/simulation_kernel.hpp"
 #include <algorithm> //for std::min
 #include <biocma_cst_config.hpp>
 #include <cma_read/reactorstate.hpp>
