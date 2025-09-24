@@ -79,7 +79,7 @@ jobs:
         run: docker load --input /tmp/biocma_omp_base.tar
 
       - name: Build Docker image
-        run: docker build -t biocma_omp -f ./devutils/docker/Dockerfile.omp_rls .
+        run: docker build -t biocma_omp -f ./devutils/docker/Dockerfile.omp-rls .
 
       - name: Save Docker image
         run: docker save biocma_omp -o /tmp/biocma_omp.tar
