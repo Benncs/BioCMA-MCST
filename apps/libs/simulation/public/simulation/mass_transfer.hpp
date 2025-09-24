@@ -18,19 +18,26 @@ namespace Simulation::MassTransfer
   {
     enum class Names
     {
-      Flowmap,
+      FlowmapTurb,
       FixedKla,
+      FlowmapKla
     };
 
-    struct Flowmap
+    struct FlowmapTurbulence
     {
     };
+
+    struct FlowmapKla
+    {
+    };
+    
     struct FixedKla
     {
       std::vector<double> value;
     };
 
-    using MtrTypeVariant = std::variant<Flowmap, FixedKla>;
+
+    using MtrTypeVariant = std::variant<FlowmapTurbulence, FixedKla,FlowmapKla>;
   } // namespace Type
 
   enum class Sign : int

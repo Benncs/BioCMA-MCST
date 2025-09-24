@@ -85,10 +85,9 @@
 //   assert(info.thread_per_process == 4); // Assertion
 // }
 
-
 // void test_check_results_file_name()
 // {
-  
+
 // }
 
 // int main()

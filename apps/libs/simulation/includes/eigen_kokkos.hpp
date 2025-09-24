@@ -1,9 +1,16 @@
 #ifndef __SIMULATION_EIGEN_KOKKOS_HPP__
 #define __SIMULATION_EIGEN_KOKKOS_HPP__
 
+#ifndef NDEBUG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif 
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#ifndef NDEBUG
+#pragma GCC diagnostic pop
+#endif 
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 
@@ -82,7 +89,6 @@ template <typename ExecSpace, int EigenLayout, typename... MemoryTrait>
 using KokkosScalarMatrix = Kokkos::
     View<double**, typename KokkosLayoutMapper<EigenLayout>::type, ExecSpace, MemoryTrait...>;
 
-
 using RowMajorKokkosScalarMatrix = KokkosScalarMatrix<ComputeSpace, Eigen::RowMajor>;
 using ColMajorKokkosScalarMatrix = KokkosScalarMatrix<ComputeSpace, Eigen::ColMajor>;
 
@@ -90,9 +96,8 @@ template <int EigenLayout> struct EigenKokkosBase
 {
   using EigenMatrix = MatrixType<EigenLayout>;
   using HostView = KokkosScalarMatrix<HostSpace, EigenLayout>;
-  using ComputeView = KokkosScalarMatrix<ComputeSpace,
-                                         EigenLayout,
-                                         Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+  using ComputeView =
+      KokkosScalarMatrix<ComputeSpace, EigenLayout, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
   HostView host;
   ComputeView compute;

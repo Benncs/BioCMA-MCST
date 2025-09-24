@@ -1,6 +1,8 @@
 #ifndef __CASE_DATA__HPP__
 #define __CASE_DATA__HPP__
 
+#include "common/logger.hpp"
+#include <simulation/mass_transfer.hpp>
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
 #include <memory>
@@ -64,7 +66,7 @@ namespace Core
   /**
    * @brief Start simulation
    */
-  void exec(CaseData&& case_data);
+  void exec(std::shared_ptr<IO::Logger> logger,CaseData&& case_data);
 
   std::optional<Core::CaseData>
   load(const ExecInfo& exec,

@@ -1,25 +1,26 @@
-#include "dataexporter/data_exporter.hpp"
-#include "load_balancing/iload_balancer.hpp"
-#include "load_balancing/impl_lb.hpp"
 #include <biocma_cst_config.hpp>
 #include <cassert>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/neighbors.hpp>
 #include <cmt_common/cma_case.hpp>
+#include <common/logger.hpp>
 #include <core/global_initaliser.hpp>
 #include <core/scalar_factory.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
 #include <cstdio>
+#include <dataexporter/data_exporter.hpp>
 #include <exception>
 #include <filesystem>
-#include <iostream>
+#include <load_balancing/iload_balancer.hpp>
+#include <load_balancing/impl_lb.hpp>
 #include <mc/mcinit.hpp>
 #include <memory>
 #include <optional>
+#include <simulation/feed_descriptor.hpp>
+#include <simulation/mass_transfer.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/transitionner.hpp>
-#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -51,7 +52,69 @@ namespace
   {
 
     // return BoundLoadBalancer(s,4e6).balance(r, n);
+    // return HostImportantLoadBalancer(s, 2).balance(r, n);
     return UniformLoadBalancer(s).balance(r, n);
+  }
+
+  // TODO Move elsewhere
+  double get_time_step(double user_deta_time,
+                       const std::unique_ptr<CmaRead::FlowIterator>& iterator)
+  {
+
+    // internal hydrodynamic time scales. To account for this, the simulation's
+    // explicit time step is calculated to approximate a CFL condition, with the
+    // formula: time_step = min(residence_time) / 100. This approach ensures
+    // that the fluid movement between two steps is accurately represented
+    // without losing flow information.
+    double delta_time = user_deta_time;
+
+    auto min_liquid_residen_time = [](const auto& state) -> double
+    {
+      constexpr double init_residence_time = std::numeric_limits<double>::max();
+      double min_residence_time = init_residence_time;
+
+      for (size_t i = 0; i < state.n_compartments; ++i)
+      {
+        const auto view_flows = state.liquid_flow.getViewFlows();
+        double sum_flows = 0.;
+        for (size_t j = 0; j < state.n_compartments; ++j)
+        {
+          sum_flows += view_flows(i, j);
+        }
+        if (sum_flows != 0)
+        {
+          double residence_time = state.liquidVolume[i] / sum_flows;
+          if (residence_time < min_residence_time && residence_time != 0.)
+          {
+            min_residence_time = residence_time;
+          }
+        }
+      }
+
+      if (min_residence_time <= 0 || min_residence_time == init_residence_time)
+      {
+        throw std::invalid_argument("Flow map not valid");
+      }
+
+      return min_residence_time;
+    };
+
+    if (delta_time <= 0)
+    {
+      auto minElement = std::min_element(
+          iterator->begin(),
+          iterator->end(),
+          [&min_liquid_residen_time](const auto& state1, const auto& state2)
+          { return min_liquid_residen_time(state1) < min_liquid_residen_time(state2); });
+
+      if (minElement != iterator->end())
+      {
+
+        delta_time = min_liquid_residen_time(*minElement) / 100.;
+      }
+    }
+
+    return delta_time;
   }
 
 } // namespace
@@ -69,6 +132,11 @@ namespace Core
     f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow; // NOLINT
   }
 
+  void GlobalInitialiser::set_logger(std::shared_ptr<IO::Logger> _logger)
+  {
+    this->logger = std::move(_logger);
+  }
+
   template <typename T> using OptionalPtr = GlobalInitialiser::OptionalPtr<T>;
 
   CmtCommons::cma_exported_paths_t
@@ -80,10 +148,37 @@ namespace Core
     return cma_case.paths;
   }
 
-  void GlobalInitialiser::init_feed(std::optional<Simulation::Feed::SimulationFeed> feed)
+  bool GlobalInitialiser::init_feed(std::optional<Simulation::Feed::SimulationFeed> _feed)
   {
+    if (!check_steps(InitStep::InitState))
+    {
+      return false;
+    }
+    if (_feed) // TODO Improve error handling
+    {
+      auto index_max_compartments = liquid_volume.size() - 1;
+      for (auto&& i : _feed->liquid_feeds())
+      {
+        // input_position: unsigned long so >0 no need to test this
+
+        if (i.output_position > index_max_compartments)
+        {
+          return false;
+        }
+      }
+      for (auto&& i : _feed->gas_feeds())
+      {
+        // input_position: unsigned long so >0 no need to test this
+
+        if (i.output_position > index_max_compartments)
+        {
+          return false;
+        }
+      }
+    }
     validate_step(InitStep::Feed);
-    this->feed = std::move(feed);
+    this->feed = std::move(_feed);
+    return true;
   }
 
   std::optional<bool>
@@ -100,24 +195,19 @@ namespace Core
         return std::nullopt;
       }
     }
-
     mpi_broadcast();
-
     liquid_neighbors.set_row_major();
     validate_step(InitStep::InitState);
-
     return true;
   }
 
   OptionalPtr<CmaUtils::FlowMapTransitionner> GlobalInitialiser::init_transitionner()
   {
-
     auto handle = init_flow_iterator();
     if (handle.has_value())
     {
       return init_transitionner(std::move(*handle));
     }
-
     return std::nullopt;
   }
 
@@ -128,12 +218,11 @@ namespace Core
     {
       return std::nullopt;
     }
-
     auto scalar = variant.has_value() ? init_scalar(std::move(*variant)) : init_scalar();
     auto mc = init_monte_carlo();
-
-    if (scalar.has_value() && mc.has_value())
+    if (scalar.has_value() and mc.has_value())
     {
+
       return init_simulation(std::move(*mc), *scalar);
     }
     return std::nullopt;
@@ -147,6 +236,15 @@ namespace Core
     }
 
     const auto i_model = AutoGenerated::get_model_index_from_name(user_params.model_name);
+
+    if (i_model == -2)
+    {
+      if (logger)
+      {
+        logger->alert("Initializer", "Model not found, using DefaultModel instead");
+      }
+    }
+
     double total_mass = 0.;
 
     std::shared_ptr<ILoadBalancer> lb;
@@ -154,16 +252,23 @@ namespace Core
     const uint64_t particle_per_process =
         balance(info.n_rank, info.current_rank, user_params.number_particle);
 
+    if (particle_per_process == 0)
+    {
+      throw std::runtime_error("ERROR particle_per_process after balancing is 0");
+    }
+
     if (particle_per_process > AutoGenerated::MC_MAX_PARTICLE_BUFFER)
     {
       return std::nullopt;
     }
 
     auto mc_unit = AutoGenerated::wrap_init_model_selector(
+        logger,
         i_model,
         particle_per_process,
         liquid_volume,
         CmaUtils::FlowMapTransitionner::get_neighbors_view(liquid_neighbors),
+        params.uniform_mc_init,
         total_mass);
 
     if (mc_unit == nullptr)
@@ -222,20 +327,30 @@ namespace Core
       {
         throw std::runtime_error("Flow map are not loaded");
       }
-      std::cout << "Flowmap loaded: " << flow_handle->size() << std::endl;
 
       state = &flow_handle->get_unchecked(0);
       if (state == nullptr)
       {
         throw std::runtime_error("Reactor not correclty initialised");
       }
-      std::cout << "Flowmap loaded with " << state->n_compartments << " compartments" << std::endl;
+
+      if (logger)
+      {
+        // Note final "s"
+        const auto str = (flow_handle->size() > 1) ? std::string(" flowmaps loaded with ")
+                                                   : std::string(" flowmap loaded with ");
+        const auto compartment_str = (state->n_compartments > 1) ? std::string(" compartments")
+                                                                 : std::string(" compartment");
+        logger->print("Initializer",
+                      IO::format(std::to_string(flow_handle->size()),
+                                 str,
+                                 std::to_string(state->n_compartments),
+                                 compartment_str));
+      }
     }
     catch (const std::exception& e)
     {
-      std::stringstream err;
-      err << "Error while reading files\t:" << e.what();
-      throw std::runtime_error(err.str());
+      throw std::runtime_error(IO::format("Error while reading files\t: ", e.what()));
     }
     if (flow_handle == nullptr)
     {
@@ -257,10 +372,12 @@ namespace Core
     // Calculate the total number of time steps
     f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
     const auto n_t = static_cast<size_t>(user_params.final_time / params.d_t) + 1;
+
     // Transitioner handles flowmap transition between time step, flowmaps are
     // only located in host but transitioner handles cache and receiving for
     // workers
-    auto transitioner = CmaUtils::get_transitioner(CmaUtils::FlowmapTransitionMethod::Discontinuous,
+    auto transitioner = CmaUtils::get_transitioner(logger,
+                                                   CmaUtils::FlowmapTransitionMethod::Discontinuous,
                                                    params.n_different_maps,
                                                    params.n_per_flowmap,
                                                    n_t,
@@ -297,6 +414,10 @@ namespace Core
     validate_step(InitStep::MC);
     validate_step(InitStep::Scalar);
 
+    // std::vector<double> kla(scalar_init.n_species);
+    // kla[1] = 0.2; // 700 h-1
+    // const auto type = Simulation::MassTransfer::Type::FixedKla{kla};
+
     auto simulation = std::make_unique<Simulation::SimulationUnit>(
         std::move(_unit), scalar_init, std::move(feed));
 
@@ -309,6 +430,21 @@ namespace Core
     validate_step(InitStep::SimulationUnit);
 
     return simulation;
+  }
+
+  std::optional<bool>
+  GlobalInitialiser::init_mtr_model(Simulation::SimulationUnit& unit,
+                                    Simulation::MassTransfer::Type::MtrTypeVariant&& variant)
+  {
+    if (!check_steps(InitStep::SimulationUnit))
+    {
+      VERBOSE_ERROR
+      return std::nullopt;
+    }
+    unit.setMtrModel(std::move(variant));
+
+    // TODO
+    return true;
   }
 
   std::optional<Simulation::ScalarInitializer>
@@ -339,7 +475,11 @@ namespace Core
     Core::ScalarFactory::ScalarVariant arg;
     if (user_params.initialiser_path.empty())
     {
-      std::cerr << "WARNING: using Default Initialiser" << std::endl;
+      if (logger)
+      {
+        logger->alert("Intializer", "Using Default scalar initialiser");
+      }
+
       arg = params.is_two_phase_flow ? DefaultIntialiserTPF : DefaultIntialiser;
     }
     else
@@ -368,11 +508,16 @@ namespace Core
   bool GlobalInitialiser::check_init_terminate() const
   {
     int i = 0;
+
     for (auto&& step : validated_steps)
     {
       if (!step)
       {
-        std::cerr << "Initialisation step " << i << " not completed!" << std::endl;
+        if (logger)
+        {
+          logger->error(IO::format("Initialisation step ", std::to_string(i), " not completed!"));
+        }
+
         return false;
       }
       ++i;
@@ -422,15 +567,7 @@ namespace Core
 
     if (liquid_volume.size() > 1)
     {
-      // When multiple compartments are present, it implies the existence of
-      // internal hydrodynamic time scales. To account for this, the simulation's
-      // explicit time step is calculated to approximate a CFL condition, with the
-      // formula: time_step = min(residence_time) / 100. This approach ensures
-      // that the fluid movement between two steps is accurately represented
-      // without losing flow information.
-
-      params.d_t = (user_params.delta_time == 0.) ? flow_handle->MinLiquidResidenceTime() / 100.
-                                                  : user_params.delta_time;
+      params.d_t = get_time_step(user_params.delta_time, flow_handle);
     }
     else
     {

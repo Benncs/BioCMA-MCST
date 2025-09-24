@@ -214,19 +214,18 @@ void test_wrong_size()
   assert(false);
 }
 
-
 void test_full_case()
 {
-     std ::vector<double> concentrations = {1., 5., 6.};
+  std ::vector<double> concentrations = {1., 5., 6.};
   GET_VOLUME
-    Core::ScalarFactory::FullCase arg = {n_species,concentrations,std::nullopt};
+  Core::ScalarFactory::FullCase arg = {n_species, concentrations, std::nullopt};
 
   // Should throw exception
- 
+
   auto scalar_init = scalar_factory(false, gas_volume, liquid_volume, arg);
-  
-  assert(scalar_init.n_species==n_species);
-  assert(scalar_init.liquid_buffer==concentrations);
+
+  assert(scalar_init.n_species == n_species);
+  assert(scalar_init.liquid_buffer == concentrations);
 }
 
 int main(int argc, char** argv)

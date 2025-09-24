@@ -10,7 +10,15 @@
 #include <utility>
 #include <variant>
 #ifdef USE_HIGHFIVE
+
+#ifndef NDEBUG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif 
 #  include <Eigen/Dense>
+#ifndef NDEBUG
+#pragma GCC diagnostic pop
+#endif 
 #  include <highfive/H5DataSet.hpp>
 #  include <highfive/H5DataSpace.hpp>
 #  include <highfive/H5Easy.hpp>

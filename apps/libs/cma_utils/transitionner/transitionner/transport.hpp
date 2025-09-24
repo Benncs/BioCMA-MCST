@@ -1,7 +1,14 @@
 #ifndef __GET_CUMULATIVE_PROBABILITY_HPP__
 #define __GET_CUMULATIVE_PROBABILITY_HPP__
 
+#ifndef NDEBUG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif 
 #include <Eigen/Core>
+#ifndef NDEBUG
+#pragma GCC diagnostic pop
+#endif 
 #include <Kokkos_Core.hpp>
 #include <cma_read/flowmap.hpp>
 #include <cma_read/light_2d_view.hpp>

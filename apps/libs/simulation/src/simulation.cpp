@@ -1,4 +1,3 @@
-#include "simulation/probe.hpp"
 #include <Kokkos_Core.hpp>
 #include <cma_utils/iteration_state.hpp>
 #include <cstddef>
@@ -16,12 +15,29 @@
 #include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
+#include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
 #include <simulation/simulation_kernel.hpp>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
 #include <utility>
+
+
+namespace {
+    template<typename T>
+    std::vector<T> layout_right_to_left(std::span<const T> input, size_t rows, size_t cols) {
+        std::vector<T> output(input.size());
+
+        for (size_t i = 0; i < rows; ++i) {
+            for (size_t j = 0; j < cols; ++j) {
+                output[j * rows + i] = input[i * cols + j];
+            }
+        }
+
+        return output;
+    }
+}
 
 namespace Simulation
 {
@@ -37,43 +53,44 @@ namespace Simulation
   {
 
     this->liquid_scalar = std::make_shared<ScalarSimulation>(
-        mc_unit->domain.getNumberCompartments(), scalar_init.n_species, scalar_init.volumesliq);
+        mc_unit->domain.getNumberCompartments(),
+        scalar_init.n_species,
+        scalar_init.volumesliq);
 
-    this->gas_scalar =
-        (is_two_phase_flow)
-            ? std::make_shared<ScalarSimulation>(mc_unit->domain.getNumberCompartments(),
-                                                 scalar_init.n_species,
-                                                 scalar_init.volumesgas) // No contribs for gas
-            : nullptr;
+    this->gas_scalar = (is_two_phase_flow)
+                           ? std::make_shared<ScalarSimulation>(
+                                 mc_unit->domain.getNumberCompartments(),
+                                 scalar_init.n_species,
+                                 scalar_init.volumesgas) // No contribs for gas
+                           : nullptr;
 
     post_init_concentration(scalar_init);
     post_init_compartments();
 
-    const std::size_t n_flows = (this->feed.liquid.has_value()) ? this->feed.liquid->size() : 0;
+    const std::size_t n_flows = this->feed.n_liquid_flow();
 
     Kokkos::resize(move_info.index_leaving_flow, n_flows);
     Kokkos::resize(move_info.leaving_flow, n_flows);
-    Kokkos::resize(move_info.liquid_volume, mc_unit->domain.getNumberCompartments());
-    Kokkos::resize(move_info.diag_transition, mc_unit->domain.getNumberCompartments());
+    Kokkos::resize(move_info.liquid_volume,
+                   mc_unit->domain.getNumberCompartments());
+    Kokkos::resize(move_info.diag_transition,
+                   mc_unit->domain.getNumberCompartments());
 
-    if (is_two_phase_flow)
-    {
-      // const auto type = MassTransfer::Type::Flowmap{};
-      std::vector<double> kla(scalar_init.n_species) ;
-      kla[1]=0.5;
-      const auto type = MassTransfer::Type::FixedKla{kla};
-
-      this->mt_model = MassTransfer::MassTransferModel(type, liquid_scalar, gas_scalar);
-
-
-    }
+           contribs_scatter=         MC::ContributionView (get_kernel_contribution());
   }
+
   void SimulationUnit::update(CmaUtils::IterationState&& newstate)
   {
-    state = newstate;
+    state = std::move(newstate);
 
     setVolumes();
     mc_unit->domain.setLiquidNeighbors(state.neighbors);
+  }
+
+  void SimulationUnit::scatter_contribute()
+  {
+    auto contribs = get_kernel_contribution();
+    Kokkos::Experimental::contribute(contribs, contribs_scatter);
   }
 
   void SimulationUnit::setVolumes() const
@@ -96,22 +113,27 @@ namespace Simulation
       vg = std::vector<double>(vl.size(), 0);
     }
 
-    Kokkos::View<double*, HostSpace> hostli(state.liq->volume.data(), vl.size());
+    Kokkos::View<double*, HostSpace> hostli(state.liq->volume.data(),
+                                            vl.size());
 
     Kokkos::deep_copy(this->move_info.liquid_volume, hostli);
 
     this->mc_unit->domain.setVolumes(vl);
   }
 
-  void SimulationUnit::post_init_concentration_file(const ScalarInitializer& scalar_init)
+  void SimulationUnit::post_init_concentration_file(
+      const ScalarInitializer& scalar_init)
   {
 
     if (!scalar_init.liquid_buffer.has_value())
     {
       throw SimulationException(ErrorCodes::BadInitialiser);
     }
+    const std::size_t cols = scalar_init.liquid_buffer->size()/scalar_init.n_species;
+    const auto layout_left_buffer = layout_right_to_left<double>(*scalar_init.liquid_buffer, scalar_init.n_species, cols);
 
-    if (!this->liquid_scalar->deep_copy_concentration(*scalar_init.liquid_buffer))
+    if (!this->liquid_scalar->deep_copy_concentration(
+            layout_left_buffer))
     {
 
       throw SimulationException(ErrorCodes::MismatchSize);
@@ -123,7 +145,8 @@ namespace Simulation
       {
         throw SimulationException(ErrorCodes::BadInitialiser);
       }
-      if (!this->gas_scalar->deep_copy_concentration(*scalar_init.gas_buffer))
+      const auto layout_left_buffer = layout_right_to_left<double>(*scalar_init.gas_buffer, scalar_init.n_species, cols);
+      if (!this->gas_scalar->deep_copy_concentration(layout_left_buffer))
       {
         throw SimulationException(ErrorCodes::MismatchSize);
       }
@@ -142,22 +165,8 @@ namespace Simulation
     move_info = KernelInline::MoveInfo<ComputeSpace>();
   }
 
-  std::size_t SimulationUnit::counter() const
-  {
-    return internal_counter_dead;
-  }
-
-  void SimulationUnit::set_probes(ProbeAutogeneratedBuffer&& _probes)
-  {
-    probes[ProbeType::LeavingTime] = std::move(_probes);
-  }
-
-  bool SimulationUnit::two_phase_flow() const
-  {
-    return is_two_phase_flow;
-  }
-
-  void SimulationUnit::post_init_concentration_functor(const ScalarInitializer& scalar_init)
+  void SimulationUnit::post_init_concentration_functor(
+      const ScalarInitializer& scalar_init)
   {
 
     auto& cliq = this->liquid_scalar->get_concentration();
@@ -185,7 +194,8 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::post_init_concentration(const ScalarInitializer& scalar_init)
+  void
+  SimulationUnit::post_init_concentration(const ScalarInitializer& scalar_init)
   {
 
     if (scalar_init.type == ScalarInitialiserType::Uniform ||
@@ -231,63 +241,13 @@ namespace Simulation
     //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0,
     //                                                        mc_unit->domain.getNumberCompartments()),
     //     KOKKOS_LAMBDA(const int i) {
-    //       // auto s = Kokkos::subview(_compute_concentration, i, Kokkos::ALL);
-    //       _containers(i).concentrations = Kokkos::subview(_compute_concentration, Kokkos::ALL,
-    //       i);
+    //       // auto s = Kokkos::subview(_compute_concentration, i,
+    //       Kokkos::ALL); _containers(i).concentrations =
+    //       Kokkos::subview(_compute_concentration, Kokkos::ALL, i);
     //     });
     // Kokkos::fence();
   }
 
   SimulationUnit::~SimulationUnit() = default;
-
-  DiagonalView<ComputeSpace> SimulationUnit::get_kernel_diagonal() const
-  {
-
-    return state.liq->get_kernel_diagonal();
-  }
-
-  CumulativeProbabilityView<ComputeSpace> SimulationUnit::get_kernel_cumulative_proba() const
-  {
-    auto& matrix = state.liq->cumulative_probability;
-    using layout_type = CumulativeProbabilityView<HostSpace>::array_layout;
-    CumulativeProbabilityView<HostSpace> rd(matrix.data(),
-                                            layout_type(matrix.rows(), matrix.cols()));
-
-    return Kokkos::create_mirror_view_and_copy(ComputeSpace(), rd);
-  }
-
-  kernelContribution SimulationUnit::get_kernel_contribution() const
-  {
-    return this->liquid_scalar->get_kernel_contribution();
-  }
-
-  void SimulationUnit::set_kernel_contribs_to_host()
-  {
-    this->liquid_scalar->set_kernel_contribs_to_host();
-  }
-
-  [[nodiscard]] MC::KernelConcentrationType SimulationUnit::getkernel_concentration() const
-  {
-    return this->liquid_scalar->get_device_concentration();
-  }
-
-  // void SimulationUnit::pimpl_deleter::operator()(ScalarSimulation* ptr) const
-  // {
-  //   delete ptr; // NOLINT
-  // }
-
-  [[nodiscard]] double& SimulationUnit::get_start_time_mut()
-  {
-    return starting_time;
-  }
-  [[nodiscard]] double& SimulationUnit::get_end_time_mut()
-  {
-    return end_time;
-  }
-
-  const Simulation::Feed::SimulationFeed& SimulationUnit::get_feed() const
-  {
-    return this->feed;
-  }
 
 } // namespace Simulation

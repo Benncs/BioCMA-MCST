@@ -8,6 +8,11 @@
 #include <memory>
 
 
+namespace IO
+{
+  class Logger;
+}
+
 namespace Simulation
 {
   class SimulationUnit;
@@ -15,22 +20,22 @@ namespace Simulation
 
 namespace PostProcessing
 {
-  void save_results(const ExecInfo &exec,
-                    const Core::SimulationParameters &params,
-                    Simulation::SimulationUnit &simulation);
+  void save_results(const ExecInfo& exec,
+                    const Core::SimulationParameters& params,
+                    Simulation::SimulationUnit& simulation);
 
-  void final_post_processing(const ExecInfo &exec,
-                    const Core::SimulationParameters &params,
-                    Simulation::SimulationUnit &simulation,std::unique_ptr<Core::MainExporter>& mde);
+  void final_post_processing(const std::shared_ptr<IO::Logger>& logger,const ExecInfo& exec,
+                             const Core::SimulationParameters& params,
+                             Simulation::SimulationUnit& simulation,
+                             std::unique_ptr<Core::MainExporter>& mde);
 
-  void show_sumup_state(const Simulation::SimulationUnit &simulation) noexcept;
+  void show_sumup_state(const std::shared_ptr<IO::Logger>& logger,const Simulation::SimulationUnit& simulation) noexcept;
 
-  void save_particle_state(Simulation::SimulationUnit &simulation,Core::PartialExporter& pde);
+  void save_particle_state(Simulation::SimulationUnit& simulation, Core::PartialExporter& pde);
 
-  void save_probes(Simulation::SimulationUnit &simulation,Core::PartialExporter& pde,bool force=false);
-
-
-
+  void save_probes(Simulation::SimulationUnit& simulation,
+                   Core::PartialExporter& pde,
+                   bool force = false);
 
   void reset_counter();
   // get_particle_properties(unit,

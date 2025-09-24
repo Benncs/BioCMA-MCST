@@ -10,7 +10,7 @@
 #  include <transitionner/transitionner.hpp>
 #  include <worker_specific.hpp>
 
-void workers_process(const ExecInfo& exec,
+void workers_process(std::shared_ptr<IO::Logger> logger,const ExecInfo& exec,
                      Simulation::SimulationUnit& simulation,
                      const Core::SimulationParameters& params,
                      std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,
@@ -24,6 +24,7 @@ void workers_process(const ExecInfo& exec,
 
   const auto loop_functor = [&](auto&& container)
   {
+    auto functors = simulation.init_functors<ComputeSpace>(container);
     bool stop = false;
     WrapMPI::SIGNALS signal{};
     double current_time = 0;
@@ -39,11 +40,10 @@ void workers_process(const ExecInfo& exec,
         }
 
         last_sync(exec, simulation);
-       
-        if (simulation.counter() != 0)
-        {
-          container.clean_dead(simulation.counter());
-        }
+
+      
+        container.clean_dead(simulation.dead_counter());
+        
         PostProcessing::save_particle_state(simulation, partial_exporter);
         PostProcessing::reset_counter();
         stop = true;
@@ -73,7 +73,7 @@ void workers_process(const ExecInfo& exec,
       simulation.update(transitioner->advance_worker(
           payload.liquid_flows, payload.liquid_volumes, payload.gas_volumes, payload.neighbors));
 
-      simulation.cycleProcess(container, d_t);
+      simulation.cycleProcess(container, d_t,functors);
 
       simulation.update_feed(current_time, d_t);
       current_time += d_t;

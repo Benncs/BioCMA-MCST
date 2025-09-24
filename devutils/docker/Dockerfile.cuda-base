@@ -1,8 +1,8 @@
 # FROM nvcr.io/nvidia/nvhpc:24.5-devel-cuda_multi-ubuntu24.04
 FROM nvidia/cuda:12.6.0-devel-ubuntu24.04 AS cuda_base
-
+#FROM nvidia/cuda:13.0.1-devel-ubuntu24.04 AS cuda_base
 ARG LLVM_VERSION=18
-ARG KOKKOS_VERSION=4.6.00
+ARG KOKKOS_VERSION=4.7.01
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
@@ -35,5 +35,5 @@ COPY clang_config.sh /app
 COPY kokkos_config.sh /app
 # Install LLVM clang-tidy/clang-format
 RUN sh ./clang_config.sh $LLVM_VERSION
-RUN bash ./kokkos_config.sh $KOKKOS_VERSION --omp --cuda 
-RUN rm /app/clang_config.sh  /app/kokkos_config.sh 
+RUN bash ./kokkos_config.sh $KOKKOS_VERSION --omp --cuda
+RUN rm /app/clang_config.sh  /app/kokkos_config.sh

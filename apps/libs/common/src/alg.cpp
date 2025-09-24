@@ -3,19 +3,14 @@
 
 #include <functional>
 
-double naive_newton(const std::function<double(double)> &f,
-                    double x_init,
-                    bool *success,
-                    double tolerance)
+double
+naive_newton(const std::function<double(double)>& f, double x_init, bool* success, double tolerance)
 {
   constexpr int max_iterations = 50;
   constexpr double newton_dx = 1e-8;
 
   auto d = [&](double eps_guess) -> double
-  {
-    return (f(eps_guess + newton_dx) - f(eps_guess - newton_dx)) /
-           (2 * newton_dx);
-  };
+  { return (f(eps_guess + newton_dx) - f(eps_guess - newton_dx)) / (2 * newton_dx); };
 
   for (int iter = 0; iter < max_iterations; ++iter)
   {

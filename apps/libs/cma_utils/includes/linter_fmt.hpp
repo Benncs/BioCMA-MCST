@@ -21,11 +21,11 @@ namespace CmaUtils
               std::unique_ptr<CmaRead::FlowIterator>&& _iterator,
               bool is_two_phase_flow)
     {
-      (void) _n_flowmap;
+      (void)_n_flowmap;
       (void)_n_per_flowmap;
-      (void) number_time_step;
-      (void) _iterator;
-      (void) is_two_phase_flow;
+      (void)number_time_step;
+      (void)_iterator;
+      (void)is_two_phase_flow;
       throw std::runtime_error("LinterFMT not implemented yet");
     }
     void update_flow() final

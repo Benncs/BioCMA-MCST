@@ -1,7 +1,7 @@
 #ifndef __ITERATION_PAYLOAD_HPP__
 #define __ITERATION_PAYLOAD_HPP__
 
-#include "cma_read/reactorstate.hpp"
+#include <cma_read/reactorstate.hpp>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/neighbors.hpp>
 #include <mpi.h>

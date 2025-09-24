@@ -4,11 +4,10 @@ on:
   push:
     branches:
       - main
-      - dev/0.8*
   pull_request:
     branches:
       - main
-      - dev/0.8-docker
+      - dev/*
 
 permissions:
   contents: read
@@ -28,14 +27,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          token: '${{ secrets.PAT_TOKEN }}'
-          submodules: recursive
-
+        #with:
+          #token: '${{ secrets.PAT_TOKEN }}'
+#
       - name: Clone GitLab submodule
         run: |
           git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
-          git submodule update --init --recursive
+          #git submodule update --init --recursive
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -60,14 +58,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          token: '${{ secrets.PAT_TOKEN }}'
-          submodules: recursive
-
+        #with:
+          #token: '${{ secrets.PAT_TOKEN }}'
+#
       - name: Clone GitLab submodule
         run: |
           git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
-          git submodule update --init --recursive
           git clone https://gitlab.com/codes_tim/compartment-modelling-tool.git subprojects/cmtool
 
       - name: Set up Docker Buildx
@@ -83,7 +79,7 @@ jobs:
         run: docker load --input /tmp/biocma_omp_base.tar
 
       - name: Build Docker image
-        run: docker build -t biocma_omp -f ./devutils/docker/Dockerfile.omp_rls .
+        run: docker build -t biocma_omp -f ./devutils/docker/Dockerfile.omp-rls .
 
       - name: Save Docker image
         run: docker save biocma_omp -o /tmp/biocma_omp.tar

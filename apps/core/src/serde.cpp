@@ -1,10 +1,6 @@
 
 
 #ifdef USE_CEAREAL
-#  include "common/execinfo.hpp"
-#  include "mc/unit.hpp"
-#  include "simulation/scalar_initializer.hpp"
-#  include "simulation/simulation.hpp"
 #  include <cereal/archives/binary.hpp>
 #  include <cereal/archives/xml.hpp>
 #  include <cereal/types/array.hpp> //MC::events use array internally
@@ -14,12 +10,16 @@
 #  include <cereal/types/tuple.hpp>
 #  include <cereal/types/variant.hpp> //MC::Unit use variant internally
 #  include <cereal/types/vector.hpp>  //MC::List use vector internally
+#  include <common/execinfo.hpp>
 #  include <cstdint>
 #  include <fstream>
 #  include <ios>
+#  include <mc/unit.hpp>
 #  include <memory>
 #  include <optional>
 #  include <serde.hpp>
+#  include <simulation/scalar_initializer.hpp>
+#  include <simulation/simulation.hpp>
 #  include <stdexcept>
 #  include <string_view>
 #  include <vector>
@@ -51,8 +51,10 @@ static void read_file(std::stringstream& buffer, std::string_view filename)
   }
 }
 
-using Archive_t = cereal::XMLOutputArchive;
-using iArchive_t = cereal::XMLInputArchive;
+// using Archive_t = cereal::XMLOutputArchive;
+// using iArchive_t = cereal::XMLInputArchive;
+using Archive_t = cereal::BinaryOutputArchive;
+using iArchive_t = cereal::BinaryInputArchive;
 
 // void read_archive(cereal::XMLInputArchive& ar,std::string_view filename)
 // {
@@ -143,14 +145,20 @@ namespace SerDe
     sc->gas_buffer = read_c_gas;
     sc->liquid_buffer = read_c_liq;
     sc->n_species = dims.n_species;
-    
-
- 
     sc->type = Simulation::ScalarInitialiserType::File;
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
     assert(mc_unit != nullptr);
+    // auto mc = gi.init_mtr_model(sc);
+
+    std::vector<double> kla(sc->n_species);
+    if (kla.size() > 1)
+    {
+      kla[1] = 0.2; // 700 h-1
+    }
+
+#  warning message("MTR model is not loaded")
     auto simulation = gi.init_simulation(std::move(mc_unit), *sc);
 
     if (!simulation.has_value())
@@ -160,6 +168,8 @@ namespace SerDe
     }
 
     case_data.simulation = std::move(*simulation);
+
+    case_data.simulation->setMtrModel(Simulation::MassTransfer::Type::FixedKla{kla});
 
     case_data.simulation->get_start_time_mut() = start_time;
     gi.set_initial_number_particle(np);

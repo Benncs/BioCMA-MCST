@@ -1,9 +1,15 @@
+#ifndef NDEBUG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif 
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#ifndef NDEBUG
+#pragma GCC diagnostic pop
+#endif 
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
-
 #include <scalar_simulation.hpp>
 #include <simulation/alias.hpp>
 #include <stdexcept>
@@ -60,7 +66,7 @@ namespace Simulation
   void ScalarSimulation::reduce_contribs(std::span<const double> data)
   {
     assert(data.size() == (n_c * n_r));
-    using eigen_type = decltype(sources)::EigenMatrix; 
+    using eigen_type = decltype(sources)::EigenMatrix;
     sources.eigen_data.noalias() += Eigen::Map<eigen_type>(
         const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
   }

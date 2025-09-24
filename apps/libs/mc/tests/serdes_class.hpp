@@ -71,6 +71,4 @@ struct SerdeModel
 };
 static_assert(ModelType<SerdeModel>, "Check non serde model");
 
-
-
 #endif

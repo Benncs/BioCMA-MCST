@@ -8,7 +8,6 @@
 #include <string>
 #include <vector>
 
-
 namespace Core
 {
 
@@ -31,8 +30,9 @@ namespace Core
     uint32_t number_exported_result;       ///< Number of results to be exported.
     bool recursive;                        ///< Flag to enable recursive processing.
     bool force_override;                   ///< Flag to allow overwriting of existing results.
-    bool load_serde;                            ///< Flag to enable serialization/deserialization.
-    bool save_serde;                            ///< Flag to enable serialization/deserialization.
+    bool load_serde;                       ///< Flag to enable serialization/deserialization.
+    bool save_serde;                       ///< Flag to enable serialization/deserialization.
+    bool uniform_mc_init;                  ///< Flag to enable serialization/deserialization.
     std::string initialiser_path;          ///< Path to the initialiser configuration file.
     std::string model_name;                ///< Name of the simulation model.
     std::string results_file_name;         ///< Name of the file where results are saved.
@@ -67,6 +67,7 @@ namespace Core
     double biomass_initial_concentration;
     double final_time;
     bool save_final_serde;
+    bool uniform_mc_init;
     static SimulationParameters m_default();
     static SimulationParameters init(const UserControlParameters& user_params);
   };

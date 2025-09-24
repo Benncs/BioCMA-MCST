@@ -1,10 +1,17 @@
 #ifndef __IMPL_HYDRO_MASS_TRANSFER_HPP__
 #define __IMPL_HYDRO_MASS_TRANSFER_HPP__
 
-#include "cma_utils/iteration_state.hpp"
-#include "eigen_kokkos.hpp"
+#ifndef NDEBUG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif 
 #include <Eigen/Core>
 #include <Eigen/Dense>
+#ifndef NDEBUG
+#pragma GCC diagnostic pop
+#endif 
+#include <cma_utils/iteration_state.hpp>
+#include <eigen_kokkos.hpp>
 #include <mc/domain.hpp>
 #include <simulation/mass_transfer.hpp>
 
@@ -37,6 +44,12 @@ namespace Simulation::MassTransfer
                                             const Eigen::ArrayXXd& gas_concentration,
                                             const Eigen::MatrixXd& liquid_volume,
                                             const CmaUtils::IterationState& state);
+                                            
+    void flowmap_kla_gas_liquid_mass_transfer(MassTransferProxy& mtr,
+                                            const Eigen::ArrayXXd& liquid_concentration,
+                                            const Eigen::ArrayXXd& gas_concentration,
+                                            const Eigen::MatrixXd& liquid_volume,
+                                            const CmaUtils::IterationState& state);                                       
 
   }; // namespace Impl
 

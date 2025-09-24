@@ -1,7 +1,7 @@
-# Use to generate source/header file before compilation 
+# Use to generate source/header file before compilation
 
 version = meson.project_version().split('.')
-assert(version.length()==3)
+assert(version.length() == 3)
 
 conf_data = configuration_data(
     {
@@ -12,43 +12,43 @@ conf_data = configuration_data(
         '__f__redirect__': 'false',
         '__f_verbose__': 'true',
         'dump_particle_state': 'true',
-        'use_probe': 'true',
+        'use_probe': 'false',
         'const_number_simulation': 'false',
         'default_particle_container_allocation_factor': '2.5',
         'MC_MAX_PARTICLE_BUFFER': '100e6',
         'debug_MC_RAND_DEFAULT_SEED': '2024',
         '_dead_particle_ratio_threshold':'0.01',
         'cma_data_folder_path':'"cma_data"',
-        'enable_event_counter':'false'
+        'enable_event_counter':'true'
     },
 )
 result_dir = get_option('result_dir_path')
-conf_data.set_quoted(  'result_dir_path', result_dir)
-conf_data.set_quoted(  '_BIOMC_BUILD_MODE', build_type)
+conf_data.set_quoted('result_dir_path', result_dir)
+conf_data.set_quoted('_BIOMC_BUILD_MODE', build_type)
 
 configure_file(
-    input: 'biocma_cst_config.hpp.in',
-    output: 'biocma_cst_config.hpp',
-    configuration: conf_data,
+  input: 'biocma_cst_config.hpp.in',
+  output: 'biocma_cst_config.hpp',
+  configuration: conf_data,
 )
 
 prog_python = find_program('python3')
 
-template_model_loader = meson.current_source_dir()+'/model_loader.cxx'
-template_model_loader_header = meson.current_source_dir()+'/model_loader.hxx'
-template_variant_model = meson.current_source_dir()+'/variant_model.hxx'
+template_model_loader = meson.current_source_dir() + '/model_loader.cxx'
+template_model_loader_header = meson.current_source_dir() + '/model_loader.hxx'
+template_variant_model = meson.current_source_dir() + '/variant_model.hxx'
 
-arg_includ_py=''
+arg_includ_py = ''
 if use_dynamic_module
-arg_includ_py='1'
+  arg_includ_py = '1'
 endif
 
-arg_udf='1'
+arg_udf = '1'
 if use_cuda
-arg_udf=''
+  arg_udf = ''
 endif
 
-model_list_name = ['two_meta','simple_model','two_meta_div']
+model_list_name = ['two_meta','simple_model','two_meta_nb','fixed_length']
 
 if not use_cuda
 model_list_name = [model_list_name,'udf_model']

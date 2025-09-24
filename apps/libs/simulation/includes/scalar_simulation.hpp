@@ -1,9 +1,16 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
+#ifndef NDEBUG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif 
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#ifndef NDEBUG
+#pragma GCC diagnostic pop
+#endif 
 #include <Kokkos_Core.hpp>
 #include <cma_utils/cache_hydro_state.hpp>
 #include <common/common.hpp>
@@ -92,6 +99,7 @@ namespace Simulation
   {
     sources.eigen_data.setZero();
     Kokkos::deep_copy(sources.compute, 0);
+    this->sink.setZero();
   }
 
   inline void ScalarSimulation::set_kernel_contribs_to_host() const
@@ -106,7 +114,7 @@ namespace Simulation
 
   inline void ScalarSimulation::set_sink(uint64_t i_compartment, double val)
   {
-    this->sink.diagonal().coeffRef(EIGEN_INDEX(i_compartment)) = val;
+    this->sink.diagonal().coeffRef(EIGEN_INDEX(i_compartment)) += val;
   }
 
   inline const DiagonalType& ScalarSimulation::getVolume() const

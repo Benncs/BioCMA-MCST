@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cma_utils/iteration_state.hpp>
+#include <cmt_common/cma_case.hpp>
 #include <common/common.hpp>
 
 #include <transitionner/proxy_cache.hpp>
@@ -62,9 +63,9 @@ namespace CmaUtils
                                              std::unique_ptr<CmaRead::FlowIterator>&& _iterator,
                                              bool is_two_phase_flow)
       : two_phase_flow((is_two_phase_flow)), n_per_flowmap(_n_per_flowmap), n_flowmap(_n_flowmap),
-        n_timestep(number_time_step), repetition_count(0), current_flowmap_count(0),
-        iterator(std::move(_iterator))
+        n_timestep(number_time_step), iterator(std::move(_iterator))
   {
+
     this->liquid_pc.resize(n_flowmap);
     this->gas_pc.resize(n_flowmap);
   }
@@ -111,6 +112,10 @@ namespace CmaUtils
       gas_hydro_state.state.inverse_volume = compute_inverse_diagonal(reactor_state.gasVolume);
       gas_hydro_state.state.volume = reactor_state.gasVolume;
     }
+
+    // TODO Read scalar field  into IterationState::info
+    //  auto test = iterator->query(this->current_flowmap_count,
+    //  CmtCommons::CMAExportType::GasFlow); std::cout<<"test "<<test.has_value()<<std::endl;
   }
 
   IterationState FlowMapTransitionner::advance()

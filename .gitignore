@@ -4,6 +4,7 @@
 compile_commands.json
 .clangd
 .env
+.zed/
 # Env
 .bmc_info
 results/
@@ -39,3 +40,5 @@ __old
 wrapper_log.log
 tmp*
 old/
+flake.nix
+flake.lock

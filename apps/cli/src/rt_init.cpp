@@ -1,23 +1,29 @@
+#ifndef NDEBUG
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
+#include <Eigen/Core>
+#ifndef NDEBUG
+#  pragma GCC diagnostic pop
+#endif
+
 #include <Kokkos_Core.hpp>
+#include <api/api.hpp>
 #include <biocma_cst_config.hpp>
 #include <cassert>
 #include <chrono>
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
-#include <cstdint>
 #include <cstdlib>
 #include <ctime>
 #include <filesystem>
 #include <fstream>
-#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <rt_init.hpp>
 #include <sstream>
 #include <string>
 #include <string_view>
-#include <Eigen/Core>
-#include <api/api.hpp>
 
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
@@ -113,5 +119,3 @@ void register_run(const ExecInfo& exec, const Core::UserControlParameters& /*par
     std::cerr << "Error: Unable to open file for writing\n";
   }
 }
-
-

@@ -1,0 +1,52 @@
+FROM biocma_cuda_base AS build
+
+WORKDIR /app
+ENV APP_INSTALL_DIR=/opt/biomc
+ENV CXX=/app/wrap_cxx
+COPY ./apps /app/apps
+COPY ./subprojects/dynlib.wrap /app/subprojects/dynlib.wrap
+COPY ./subprojects/cereal.wrap /app/subprojects/cereal.wrap
+COPY ./subprojects/highfive.wrap /app/subprojects/highfive.wrap
+COPY ./subprojects/cmtool.wrap /app/subprojects/cmtool.wrap
+COPY ./subprojects/eigen.wrap /app/subprojects/eigen.wrap
+COPY ./subprojects/cmtool /app/subprojects/cmtool
+COPY ./meson.build /app/meson.build
+COPY ./meson_options.txt /app/meson_options.txt
+COPY ./devutils/auto_generate /app/devutils/auto_generate
+COPY ./devutils/install_script.sh /app/devutils/install_script.sh
+COPY ./tools /app/tools
+COPY ./devutils/datamodel /app/devutils/datamodel
+COPY ./devutils/exec.py /app/devutils/exec.py
+COPY devutils/kokkos_wrap/wrap_cxx /app/wrap_cxx
+
+RUN meson setup builddir \
+--buildtype=release \
+-Dbuild_test=false \
+-Duse_system_kokkos=true \
+-Duse_cuda=true \
+-Dbuild_c_api=false \
+-Dbuild_python_api=false \
+-Dresult_dir_path=$APP_INSTALL_DIR/results/
+
+
+RUN ninja -C builddir && sh /app/devutils/install_script.sh $APP_INSTALL_DIR/results/
+
+FROM nvidia/cuda:12.6.0-runtime-ubuntu24.04  AS rls
+ENV APP_INSTALL_DIR=/opt/biomc
+RUN apt-get update && \
+    apt-get install -y \
+    python3 \
+    python3-pip \
+    libomp5 \
+    openmpi-bin \
+    libhdf5-103-1t64 \
+    libhdf5-openmpi-103-1t64 && \
+    rm -rf /var/lib/apt/lists/* && pip install --no-cache-dir meson lxml --break-system-packages
+
+COPY --from=build $APP_INSTALL_DIR $APP_INSTALL_DIR
+COPY --from=build /app/builddir/apps/cli/biocma_mcst_cli_app_shared $APP_INSTALL_DIR/biocma_mcst_cli_app_shared
+COPY --from=build /app/builddir/apps/cli/biocma_mcst_cli_app $APP_INSTALL_DIR/biocma_mcst_cli_app
+RUN ln -sf $APP_INSTALL_DIR/runner.py /usr/bin/biomc_runner
+WORKDIR /
+RUN rm -rf /app
+ENTRYPOINT ["biomc_runner"]

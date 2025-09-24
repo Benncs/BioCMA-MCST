@@ -1,7 +1,6 @@
 #include <signal_handling.hpp>
 
 #include <csignal>
-#include <iostream>
 namespace Core
 {
 
@@ -13,7 +12,7 @@ namespace Core
 
     std::signal(SIGUSR1, &SignalHandler::handle_SIGUSR1);
     std::signal(SIGUSR2, &SignalHandler::handle_SIGUSR2); // Delete usr2 for not implemented signal
-    std::signal(SIGINT, &SignalHandler::handle_SIGINT); // Delete usr2 for not implemented signal
+    std::signal(SIGINT, &SignalHandler::handle_SIGINT);   // Delete usr2 for not implemented signal
 
     instance->f_usr1_raised = false;
     instance->f_usr2_raised = false;

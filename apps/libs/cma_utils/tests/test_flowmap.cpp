@@ -83,10 +83,7 @@
 // //         }
 // //     }
 
-
 // // }
-
-
 
 // // TODO MOVE ELSEWHERE
 // // inline CmaRead::L2DView<double> get_eigen_view(Eigen::MatrixXd& matrix)
@@ -98,14 +95,14 @@
 // // inline CmaRead::L2DView<const double> get_eigen_view(const Eigen::MatrixXd& matrix)
 // // {
 // //   return CmaRead::L2DView<const double>(
-// //       std::span<const double>(matrix.data(), matrix.size()), matrix.rows(), matrix.cols(), false);
+// //       std::span<const double>(matrix.data(), matrix.size()), matrix.rows(), matrix.cols(),
+// false);
 // // }
 
 int main()
 {
-//   test_valid_input();
-//   test_invalid_input();
-// test_get_eigen_view();
+  //   test_valid_input();
+  //   test_invalid_input();
+  // test_get_eigen_view();
   return 0;
 }
-

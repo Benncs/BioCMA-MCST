@@ -1,9 +1,16 @@
 #ifndef __CMA_UTILS_PROXY_CACHE_HPP__
 #define __CMA_UTILS_PROXY_CACHE_HPP__
 
+#ifndef NDEBUG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif 
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#ifndef NDEBUG
+#pragma GCC diagnostic pop
+#endif 
 #include <cma_read/light_2d_view.hpp>
 #include <cma_read/reactorstate.hpp>
 #include <cma_utils/cache_hydro_state.hpp>

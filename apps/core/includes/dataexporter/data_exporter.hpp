@@ -1,6 +1,7 @@
 #ifndef __CORE_DATA_EXPORTER_HPP__
 #define __CORE_DATA_EXPORTER_HPP__
 
+#include "common/logger.hpp"
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
@@ -60,7 +61,17 @@ namespace Core
      */
     void do_link(std::string_view filename, std::string_view link_name, std::string_view groupname);
 
+    void set_logger(std::shared_ptr<IO::Logger> _logger)
+    {
+      logger=std::move(_logger);
+    }
+
   protected:
+
+    std::shared_ptr<IO::Logger> logger;
+
+
+
     /**
      * @struct MultiMatrixDescription
      * @brief Describes the properties of a multi-dimensional matrix for export

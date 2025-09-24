@@ -1,7 +1,15 @@
-#include "common/common.hpp"
+#ifndef NDEBUG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#endif
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#ifndef NDEBUG
+#pragma GCC diagnostic pop
+#endif
+
+#include <common/common.hpp>
 #include <cassert>
 #include <hydro/impl_mass_transfer.hpp>
 #include <memory>
@@ -28,9 +36,16 @@ namespace
       {
         proxy->kla.row(EIGEN_INDEX(i)).setConstant(kla.value[i]);
       }
+
+      // proxy->kla(1,0)=0;
+
     }
 
-    void operator()(Simulation::MassTransfer::Type::Flowmap&) const
+    void operator()(Simulation::MassTransfer::Type::FlowmapTurbulence&) const
+    {
+      proxy->kla.setZero();
+    }
+    void operator()(Simulation::MassTransfer::Type::FlowmapKla&) const
     {
       proxy->kla.setZero();
     }
@@ -54,7 +69,7 @@ namespace
           state);
     }
 
-    void operator()(const Simulation::MassTransfer::Type::Flowmap& _) const
+    void operator()(const Simulation::MassTransfer::Type::FlowmapTurbulence& _) const
     {
       (void)_;
       Simulation::MassTransfer::Impl::flowmap_gas_liquid_mass_transfer(
@@ -63,6 +78,17 @@ namespace
           gas_scalar->getConcentrationArray(),
           liquid_scalar->getVolume(),
           state);
+    }
+
+    void operator()(const Simulation::MassTransfer::Type::FlowmapKla& _) const
+    {
+      (void)_;
+      // Simulation::MassTransfer::Impl::flowmap_gas_liquid_mass_transfer(
+      //     *proxy,
+      //     liquid_scalar->getConcentrationArray(),
+      //     gas_scalar->getConcentrationArray(),
+      //     liquid_scalar->getVolume(),
+      //     state);
     }
   };
 
@@ -80,8 +106,6 @@ namespace Simulation::MassTransfer
     const auto nrow = liquid_scalar->n_row();
     const auto ncol = liquid_scalar->n_col();
 
-    // _proxy = // NOLINT
-    //     new MassTransferProxy{MatrixType(nrow, ncol), Eigen::ArrayXXd(nrow, ncol)};
     _proxy = std::make_shared<MassTransferProxy>();
     _proxy->mtr = ColMajorMatrixtype(nrow, ncol);
     _proxy->kla = Eigen::ArrayXXd(nrow, ncol);
@@ -91,7 +115,7 @@ namespace Simulation::MassTransfer
 
     std::visit(FunctorKla{_proxy, nrow}, _type);
 
-    _proxy->db = 5e-3;
+    _proxy->db = 5e-3; //FIXME
   }
 
   void MassTransferModel::gas_liquid_mass_transfer(const CmaUtils::IterationState& state) const
@@ -103,32 +127,7 @@ namespace Simulation::MassTransfer
           "gas_liquid_mass_transfer should not be called if gas not intialized");
     }
     std::visit(MtrVisitor{_proxy, liquid_scalar, gas_scalar, state}, type);
-    // switch (type)
-    // {
-    // case Simulation::MassTransfer::MTRType::FixedKla:
-    // {
-    //   Impl::fixed_kla_gas_liquid_mass_transfer(*_proxy,
-    //                                            liquid_scalar->getConcentrationArray(),
-    //                                            gas_scalar->getConcentrationArray(),
-    //                                            liquid_scalar->getVolume(),
-    //                                            state);
-    //   break;
-    // };
-    // case Simulation::MassTransfer::MTRType::Flowmap:
-    // {
-    //   Impl::flowmap_gas_liquid_mass_transfer(*_proxy,
-    //                                          liquid_scalar->getConcentrationArray(),
-    //                                          gas_scalar->getConcentrationArray(),
-    //                                          liquid_scalar->getVolume(),
-    //                                          state);
-    //   break;
-    // }
-    // default:
-    // {
-    //   assert(0 && "gas_liquid_mass_transfer switch");
-    //   __builtin_unreachable(); // TODO use c++23 cross plateform unreachable
-    // };
-    // }
+
   }
 
   std::optional<std::span<const double>> MassTransferModel::mtr_data() const
@@ -142,7 +141,7 @@ namespace Simulation::MassTransfer
   }
 
   MassTransferModel::MassTransferModel()
-      : type(Type::Flowmap{}), _proxy(nullptr), liquid_scalar(nullptr), gas_scalar(nullptr)
+      : type(Type::FlowmapTurbulence{}), _proxy(nullptr), liquid_scalar(nullptr), gas_scalar(nullptr)
   {
   }
 

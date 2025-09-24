@@ -1,14 +1,13 @@
 #ifndef NO_MPI
 
+#  ifndef __WORKER_SPECIFIC_HPP__
+#    define __WORKER_SPECIFIC_HPP__
 
-#ifndef __WORKER_SPECIFIC_HPP__
-#define __WORKER_SPECIFIC_HPP__
-
-#include <dataexporter/partial_exporter.hpp>
-#include <common/common.hpp>
-#include <core/simulation_parameters.hpp>
-#include <memory>
-
+#    include <common/common.hpp>
+#    include <core/simulation_parameters.hpp>
+#    include <dataexporter/partial_exporter.hpp>
+#    include <memory>
+#include <common/logger.hpp>
 // Foward declaration
 namespace Simulation
 {
@@ -24,7 +23,7 @@ namespace CmaUtils
  * @brief Main program executed on rank >0.
  *
  * This function is the main processing routine that is executed exclusively on
- * rank >0 : the workers 
+ * rank >0 : the workers
  * @param exec The `ExecInfo` object containing details about the execution
  * environment.
  * @param simulation The `Simulation::SimulationUnit` object representing the
@@ -34,14 +33,12 @@ namespace CmaUtils
  * @param transitioner A unique pointer to the `Simulation::FlowMapTransitioner`
  * for handling flow map transitions.
  */
-void workers_process(
-    const ExecInfo &exec,
-    Simulation::SimulationUnit &simulation,
-    const Core::SimulationParameters &params,
-    std::unique_ptr<CmaUtils::FlowMapTransitionner> &&transitioner,Core::PartialExporter&partial_exporter);
+void workers_process(std::shared_ptr<IO::Logger> logger,const ExecInfo& exec,
+                     Simulation::SimulationUnit& simulation,
+                     const Core::SimulationParameters& params,
+                     std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,
+                     Core::PartialExporter& partial_exporter);
 
+#  endif //__WORKER_SPECIFIC_HPP__
 
-
-#endif //__WORKER_SPECIFIC_HPP__
-
-#endif //NO_MPI
+#endif // NO_MPI

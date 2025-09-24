@@ -19,14 +19,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: '${{ secrets.PAT_TOKEN }}'
-      - name: Clone GitLab submodule
+      - name: Add token GitLab 
         run: >
           git config --global credential.helper '!f() { echo "username=${{
           secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; };
           f'
-
-          git submodule update --init --recursive
-      - name: get dependencies
         run: |
           sudo sh devutils/install_dep.sh
       - name: Configure project
