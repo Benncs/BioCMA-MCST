@@ -10,9 +10,8 @@ error() {
 
 # Function to check if a command exists
 command_exists() {
-  command -v "$1" &> /dev/null
+  command -v "$1" &>/dev/null
 }
-
 
 # Check if apt-get is installed
 if ! command_exists apt-get; then
@@ -35,7 +34,9 @@ fi
 
 # Install necessary packages
 echo "Installing necessary packages..."
-if ! sudo apt-get install -y libstdc++-12-dev cmake python3-dev python3-pybind11 python3 python3-pip wget software-properties-common gnupg libomp-dev libopenmpi-dev libtbb-dev libeigen3-dev pkg-config ninja-build; then
+if ! sudo apt-get install -y \
+  libstdc++-12-dev cmake python3-dev python3-pybind11 \
+  python3 python3-pip wget software-properties-common gnupg libomp-dev libopenmpi-dev libtbb-dev pkg-config ninja-build; then
   error "Failed to install necessary packages."
   exit 1
 fi
@@ -47,8 +48,6 @@ for arg in "$@"; do
     break
   fi
 done
-
-
 
 # echo "Pip upgrade..."
 # if ! python3 -m pip install --upgrade pip; then
