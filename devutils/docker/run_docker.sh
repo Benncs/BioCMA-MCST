@@ -1,4 +1,7 @@
 
+ # image_name=biocma_omp
+ image_name=biocma_cuda
+
  cfd_path=../../thesis/cfd-cma/cma_data/
  initaliser_path=./cma_data
  case_path=./tools/cases.xml
@@ -7,4 +10,5 @@
  -v $cfd_path:/opt/biomc/ccma_data:Z\
  -v $case_path:/opt/biomc/cases.xml:Z \
  -v $res_path:/opt/biomc/results:Z\
- biocma_omp docker -n 6
+ --runtime=nvidia\
+ $image_name docker -n 6
