@@ -4,10 +4,13 @@ name = f'@project_name@_api'
 
 api_source = files(f'@src_dir@/api.cpp')
 
+includes = include_directories('./includes', 'public')
+
+
 lib_api_shared = static_library(
   f'@name@_shared',
   api_source,
-  include_directories: ['./includes', 'public'],
+  include_directories: includes,
   dependencies: [core_shared_dependency],
   # cpp_args: ['-DNO_MPI'],
   install_rpath: project_name,
@@ -16,7 +19,7 @@ lib_api_shared = static_library(
 lib_api_distributed = static_library(
   f'@name@',
   api_source,
-  include_directories: ['./includes', 'public'],
+  include_directories: includes,
   dependencies: [core_distributed_dependency_static, mpi_wrap_dependency],
   # cpp_args: ['-DNO_MPI'],
   install_rpath: project_name,
@@ -24,13 +27,13 @@ lib_api_distributed = static_library(
 
 lib_api_shared_dep = declare_dependency(
   link_with: lib_api_shared,
-  include_directories: include_directories('./includes', 'public'),
+  include_directories: includes,
   dependencies: [core_shared_dependency, kokkos],
 )
 
 lib_api_distributed_dep = declare_dependency(
   link_with: lib_api_distributed,
-  include_directories: include_directories('./includes', 'public'),
+  include_directories: includes,
   dependencies: [core_distributed_dependency_static],
 )
 
@@ -47,7 +50,7 @@ if build_c_api
   lib_api_c = both_libraries(
     f'@name@_c',
     files(f'@src_dir@/api_raw.cpp'),
-    include_directories: ['./includes', 'public'],
+    include_directories: includes,
     dependencies: [lib_api_distributed_dep],
     install_rpath: project_name,
   )
@@ -55,24 +58,24 @@ if build_c_api
   lib_api_c_shared = library(
     f'@name@_c_shared',
     files(f'@src_dir@/api_raw.cpp'),
-    include_directories: ['./includes', 'public'],
+    include_directories: includes,
     dependencies: [lib_api_shared_dep],
     install_rpath: project_name,
   )
 
   lib_api_c_dep = declare_dependency(
     link_with: lib_api_c,
-    include_directories: include_directories('./includes', 'public'),
+    include_directories: includes,
   )
 
   lib_api_c_dep_static = declare_dependency(
     link_with: lib_api_c.get_static_lib(),
-    include_directories: include_directories('./includes', 'public'),
+    include_directories: includes,
   )
 
   lib_api_c_shared_dep = declare_dependency(
     link_with: lib_api_c_shared,
-    include_directories: include_directories('./includes', 'public'),
+    include_directories: includes,
   )
 
   # Python
@@ -89,7 +92,7 @@ if build_c_api
     py.extension_module(
       python_module_name,
       modfile,
-      include_directories: ['./includes', 'public'],
+      include_directories: includes,
       install: true,
       dependencies: [lib_api_distributed_dep, lib_api_c_dep_static, pydep, pybind11_dep],
       subdir: python_module_name,

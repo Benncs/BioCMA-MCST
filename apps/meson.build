@@ -6,8 +6,8 @@ subdir('libs')
 subdir('core')
 subdir('api')
 if not python_install
-subdir('cli')
-if not use_cuda and build_udf
-  subdir('udf_model')
-endif
+  subdir('cli')
+  if not use_cuda and build_udf
+    subdir('udf_model')
+  endif
 endif 
