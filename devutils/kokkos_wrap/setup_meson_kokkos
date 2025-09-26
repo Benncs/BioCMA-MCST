@@ -1,5 +1,0 @@
-#!/bin/bash 
-# CXX=$(pwd)/devutils/kokkos_wrap/wrap_cxx meson setup builddir/cuda --buildtype=release -Dcpp_std=gnu++20
-
-
-CXX=$(pwd)/devutils/kokkos_wrap/wrap_cxx meson setup builddir -Duse_cuda=true -Duse_system_kokkos=true

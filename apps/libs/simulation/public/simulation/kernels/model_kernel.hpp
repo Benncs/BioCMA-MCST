@@ -1,8 +1,9 @@
 #ifndef __SIMULATION_MC_KERNEL_HPP
 #define __SIMULATION_MC_KERNEL_HPP
-#include "Kokkos_Assert.hpp"
-#include "Kokkos_Printf.hpp"
-#include "simulation/move_kernel.hpp"
+
+
+#include <Kokkos_Assert.hpp>
+#include <Kokkos_Printf.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
 #include <biocma_cst_config.hpp>
@@ -19,6 +20,13 @@
 
 namespace Simulation::KernelInline
 {
+  struct TagFirstPass
+  {
+  };
+  struct TagSecondPass
+  {
+  };
+
   struct CycleReduceType
   {
     std::size_t waiting_allocation_particle;
@@ -31,7 +39,6 @@ namespace Simulation::KernelInline
     // Required for Concept
     using reducer = CycleReducer;
     using value_type = CycleReduceType;
-
     using result_view_type = Kokkos::View<value_type, Space>;
 
     KOKKOS_INLINE_FUNCTION
@@ -89,27 +96,11 @@ namespace Simulation::KernelInline
     result_view_type value;
     bool references_scalar_v;
   };
-
   template <ModelType M> struct CycleFunctor
   {
     using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
     using TeamMember = TeamPolicy::member_type;
     using value_type = CycleReduceType;
-
-    // KOKKOS_INLINE_FUNCTION
-    // CycleFunctor(M::FloatType dt,
-    // MC::ParticlesContainer<M> _particles,
-    // MC::KPRNG::pool_type _random_pool,
-    // MC::KernelConcentrationType&& _concentrations,
-    // MC::ContributionView _contribs_scatter,
-    // MC::EventContainer _event)
-    //: d_t(dt), particles(_particles), random_pool(_random_pool),
-    // concentrations(std::move(_concentrations)),
-    // contribs_scatter(std::move(_contribs_scatter)),
-    // events(std::move(_event))
-    //{
-    //}
-    //
 
     KOKKOS_INLINE_FUNCTION
     CycleFunctor(MC::ParticlesContainer<M> _particles,
@@ -130,9 +121,28 @@ namespace Simulation::KernelInline
       this->particles = _particles;
     }
 
-    KOKKOS_INLINE_FUNCTION void operator()(const TeamMember& team_handle,
+    KOKKOS_INLINE_FUNCTION void operator()(const TagFirstPass _tag,
+                                           const TeamMember& team_handle) const
+    {
+      (void)_tag;
+      GET_INDEX(particles.n_particles());
+      if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
+      {
+        // Kokkos::printf("Skip %ld", idx);
+        return;
+      }
+
+      auto local_c =
+          Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx));
+
+      particles.get_contributions(d_t, idx, local_c, contribs_scatter);
+    }
+
+    KOKKOS_INLINE_FUNCTION void operator()(const TagSecondPass _tag,
+                                           const TeamMember& team_handle,
                                            value_type& reduce_val) const
     {
+      (void)_tag;
       (void)reduce_val.dead_total; // Counter not used currently because there
                                    // is no cell mortality
       GET_INDEX(particles.n_particles());
@@ -142,13 +152,11 @@ namespace Simulation::KernelInline
         return;
       }
 
-      if (M::update(random_pool,
-                    d_t,
-                    idx,
-                    particles.model,
-                    Kokkos::subview(concentrations,
-                                    Kokkos::ALL,
-                                    particles.position(idx))) ==
+      auto local_c =
+          Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx));
+
+      if (M::update(
+              random_pool, d_t, idx, particles.model, local_c) ==
           MC::Status::Division)
       {
         if (!particles.handle_division(random_pool, idx))
@@ -159,7 +167,6 @@ namespace Simulation::KernelInline
         }
         events.wrap_incr<MC::EventType::NewParticle>();
       };
-      particles.get_contributions(idx, contribs_scatter);
     }
 
     M::FloatType d_t;
@@ -167,31 +174,8 @@ namespace Simulation::KernelInline
     MC::KPRNG::pool_type random_pool;
     MC::KernelConcentrationType concentrations;
     MC::ContributionView contribs_scatter;
+    MC::KernelConcentrationType limitation_factor;
     MC::EventContainer events;
-  };
-
-  template <typename Space, ModelType Model> struct Functors
-  {
-    using FModel = Model;
-    using cycle_reducer_view_type =
-        KernelInline::CycleReducer<Space>::result_view_type;
-    using move_reducer_view_type = Kokkos::View<std::size_t, Space>;
-
-    typedef CycleFunctor<Model> cycle_kernel_type;
-    typedef MoveFunctor move_kernel_type;
-    // using cycle_kernel_type = CycleFunctor<Model>;
-
-    cycle_reducer_view_type cycle_reducer;
-    move_reducer_view_type move_reducer;
-
-    cycle_kernel_type cycle_kernel;
-    move_kernel_type move_kernel;
-
-    explicit Functors(cycle_kernel_type&& ck, move_kernel_type&& mk)
-        : cycle_reducer("cycle_reducer"), move_reducer("move_reducer"),
-          cycle_kernel(std::move(ck)), move_kernel(std::move(mk))
-    {
-    }
   };
 
 } // namespace Simulation::KernelInline

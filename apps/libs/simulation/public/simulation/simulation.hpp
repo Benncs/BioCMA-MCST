@@ -19,10 +19,10 @@
 #include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
-#include <simulation/move_kernel.hpp>
 #include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
-#include <simulation/simulation_kernel.hpp>
+#include <simulation/kernels/kernels.hpp>
+
 
 // TODO Clean
 static constexpr size_t trigger_const_particle_number = 1e6;
@@ -234,6 +234,7 @@ namespace Simulation
   {
 
     PROFILE_SECTION("cycleProcess")
+    using cycle_functor_type = decltype(functors.cycle_kernel);
     using CurrentModel =
         typename std::remove_reference<decltype(container)>::type::UsedModel;
     const size_t n_particle = container.n_particles();
@@ -248,16 +249,19 @@ namespace Simulation
     bool enable_move = move_info.liquid_volume.size() > 1;
     bool enable_leave = move_info.leaving_flow.size() != 0;
 
-    if (enable_leave || enable_move)
+    if (functors.move_kernel.need_launch())
     {
-      auto _policy = MC::get_policy(functors.move_kernel, n_particle, true);
-      Kokkos ::parallel_reduce(
-          "cycle_move", _policy, functors.move_kernel, functors.move_reducer);
+      const auto _policy = MC::get_policy(functors.move_kernel, n_particle, true);
+      Kokkos ::parallel_reduce("cycle_move", _policy, functors.move_kernel,
+                               functors.move_reducer);
     }
 
     if (f_reaction)
     {
-      auto _policy = MC::get_policy(functors.cycle_kernel, n_particle, true);
+      const auto _policy =
+          MC::get_policy<cycle_functor_type, KernelInline::TagSecondPass>(
+              functors.cycle_kernel, n_particle, true);
+
       Kokkos::parallel_reduce(
           "cycle_model",
           _policy,
