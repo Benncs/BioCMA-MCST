@@ -3,7 +3,7 @@
 
 src_dir = './src'
 
-mpi_wrap_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ').stdout().splitlines()
+mpi_wrap_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ',check:true).stdout().splitlines()
 
 public_mpi_wrap = include_directories('public')
 

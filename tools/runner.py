@@ -18,9 +18,7 @@ if INSTALL_RELEASE:
     gi = os.path.abspath(os.path.join("/opt/biomc"))
     sys.path.append(gi)  # TODO IMPROVE IMPORT
 else:
-    dev_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "devutils")
-    )
+    dev_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
     sys.path.append(dev_path)
 
 

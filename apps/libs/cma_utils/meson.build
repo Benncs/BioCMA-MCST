@@ -1,7 +1,7 @@
 cma_utils_src = run_command(
    'sh',
    '-c',
-   f'find ./src -type f -name *.cpp',
+   f'find ./src -type f -name *.cpp',check:true
 ).stdout().splitlines()
 
 
@@ -9,7 +9,7 @@ cma_utils_src = run_command(
 src_without_cmtool_dep  = run_command(
    'sh',
    '-c',
-   f'find ./transitionner -type f -name *.cpp',
+   f'find ./transitionner -type f -name *.cpp',check:true
 ).stdout().splitlines()
 
 

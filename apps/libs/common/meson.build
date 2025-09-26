@@ -1,7 +1,7 @@
 
 src_dir = './src'
 
-common_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ').stdout().splitlines()
+common_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ',check:true).stdout().splitlines()
 
 public_common = include_directories('public')
 

@@ -164,8 +164,9 @@ else
   )
 endif
 
-dynlib_dep = dependency('dynlib-1.0', required: true)
-
+if build_udf
+  dynlib_dep = dependency('dynlib-1.0', required: true)
+endif 
 highfive_found = false
 
 ceral_found = false
@@ -248,7 +249,7 @@ endif
 add_project_arguments(cpp_args, language: 'cpp')
 subdir('apps')
 
-run_command('sh', '-c', f'ln -s @outdir@/compile_commands.json .', check: false)
+_r = run_command('sh', '-c', f'ln -s @outdir@/compile_commands.json .', check: false)
 
 subdir('tools')
 if not python_install
