@@ -1,6 +1,5 @@
 src_dir = './src'
 
-# model_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name model_*.cpp ').stdout().splitlines()
 
 model_sources = [f'@src_dir@/two_meta_div.cpp']
 
@@ -10,7 +9,7 @@ public_model = include_directories('public')
 ext_include = include_directories('ext')
 public_include_dir = [public_model]
 
-if not use_cuda
+if not use_cuda and build_udf
 model_sources = [model_sources,f'@src_dir@/udfmodel_user.cpp']
 loader = static_library(
    'loader',
@@ -44,7 +43,7 @@ endif
 
 dep = [mc_dependency, common_dependecy, kokkos,udf_loader]
 
-if not use_cuda
+if not use_cuda and build_udf
 biomodel_dependency = declare_dependency(
    link_with: model_lib,
    include_directories: [public_include_dir],

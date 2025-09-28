@@ -1,12 +1,21 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.9.52',
+  version: '0.9.53',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
-ci_execution = get_option('ci_execution')
 
+
+
+build_type = get_option('buildtype')
+python_install = get_option('python_install')
+ci_execution = get_option('ci_execution')
+use_dynamic_module = get_option('use_dynamic_module') # Use python module or not
+use_cereal = get_option('use_cereal')
+use_system_kokkos = get_option('use_system_kokkos')
+build_test = get_option('build_test')
+build_udf = get_option('build_udf')
 use_cuda = get_option('use_cuda')
 
 arch_specific_args = []
@@ -42,44 +51,34 @@ endif
 
 compiler.has_argument('-fopenmp')
 
-if (compiler.get_id() == 'clang')
-  message('using clang')
-  # add_global_arguments(['-stdlib=libc++'], language: 'cpp')
-  # add_global_link_arguments(['-stdlib=libc++', '-lc++', '-lc++abi'], language: 'cpp')
-endif
+#if (compiler.get_id() == 'clang')
+  #message('using clang')
+  ## add_global_arguments(['-stdlib=libc++'], language: 'cpp')
+  ## add_global_link_arguments(['-stdlib=libc++', '-lc++', '-lc++abi'], language: 'cpp')
+#endif
 
 ## Define main shared variables
 outdir = meson.current_build_dir()
 root = meson.project_source_root()
 project_name = meson.project_name()
-build_type = get_option('buildtype')
 cpp = meson.get_compiler('cpp')
-python_install = get_option('python_install')
 if python_install
   global_install_dir = get_option('prefix') + '/' + get_option('libdir')
 else
   global_install_dir = '/opt/biomc'
 endif
 
-# global_install_dir = get_option('prefix') + '/' + get_option('libdir')
-# includes_install_dir = ('include/' + project_name)
-build_test = get_option('build_test')
-
-build_udf = get_option('build_udf')
-use_kokkos_tools = false
-
-cpp_args = [arch_specific_args]
-if (use_kokkos_tools)
-  cpp_args = [cpp_args, '-DENABLE_KOKKOS_PROFILING']
-endif
+use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  use_dynamic_module is true
 
 ## Get buildtype specific options
 
+use_kokkos_tools = true 
 CMAKE_TYPE = 'Release'
 if build_type == 'debug' or build_type == 'debugoptimized'
   # NOTHING
   CMAKE_TYPE = 'Debug'
   add_global_arguments('-DDEBUG', language: 'cpp')
+  use_kokkos_tools =true
 else
   add_global_arguments('-DNDEBUG', language: 'cpp')
   if compiler.has_argument('-ffast-math')
@@ -87,18 +86,20 @@ else
   endif
 endif
 
-no_mpi_flag = '-DNO_MPI'
-use_dynamic_module = get_option('use_dynamic_module') # Use python module or not
-use_cereal = get_option('use_cereal')
-use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  use_dynamic_module is true
+cpp_args = [arch_specific_args]
+if (use_kokkos_tools)
+  message('Kokkos tool enable')
+  cpp_args = [cpp_args, '-DENABLE_KOKKOS_PROFILING']
+endif
 
-## Checking all needed depencies (except Python)
+
+
+no_mpi_flag = '-DNO_MPI'
 
 mpi = dependency('mpi', language: 'cpp', required: true)
 thread_dep = dependency('threads', required: true)
 omp = dependency('openmp')
 hwloc = dependency('hwloc')
-
 blas = dependency('blas', required: false) # Eigen can work without BLAS
 dl_dep = compiler.find_library('dl', required: true)
 eigen_dep = subproject('eigen', required: true).get_variable('eigen_dep')
@@ -110,7 +111,6 @@ eigen_dep = subproject('eigen', required: true).get_variable('eigen_dep')
 # add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
-use_system_kokkos = get_option('use_system_kokkos')
 
 cmake = import('cmake', required: true)
 if use_system_kokkos
@@ -164,8 +164,9 @@ else
   )
 endif
 
-dynlib_dep = dependency('dynlib-1.0', required: true)
-
+if build_udf
+  dynlib_dep = dependency('dynlib-1.0', required: true)
+endif 
 highfive_found = false
 
 ceral_found = false
@@ -222,7 +223,7 @@ endif
 use_system_cmtool = false
 use_subprojects_cmtool = false
 if use_system_cmtool
-  cmt = dependency('ctool', required: false, version: '>=1.2', method: 'pkg-config')
+  cmt = dependency('cmtool', required: false, version: '>=1.2', method: 'pkg-config')
   if cmt.found()
     message('System cmtool')
     cma_read_name = cmt.get_variable('cma_read', default_value: 'none')
@@ -248,7 +249,7 @@ endif
 add_project_arguments(cpp_args, language: 'cpp')
 subdir('apps')
 
-run_command('sh', '-c', f'ln -s @outdir@/compile_commands.json .', check: false)
+_r = run_command('sh', '-c', f'ln -s @outdir@/compile_commands.json .', check: false)
 
 subdir('tools')
 if not python_install

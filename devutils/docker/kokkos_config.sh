@@ -29,7 +29,7 @@ current_pwd=$(pwd)
 back_end_omp=0
 back_end_cuda=0
 clang_version=-1
-kokkos_version="4.7.00"
+kokkos_version="4.7.01"
 while [[ "$#" -gt 0 ]]; do
   case $1 in
   --omp) back_end_omp=1 ;;
@@ -90,6 +90,7 @@ fi
 
 if [[ "$back_end_omp" == "1" ]]; then
   flag_cmake="${flag_cmake} -DKokkos_ENABLE_OPENMP=ON"
+  flag_cmake="${flag_cmake} -DKokkos_ARCH_NATIVE=ON"
 fi
 
 if [[ "$back_end_cuda" == "1" ]]; then

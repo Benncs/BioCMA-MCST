@@ -69,8 +69,8 @@
       <delta_time>0.01</delta_time>
       <results_file_name>debug</results_file_name>
       <number_exported_result>20</number_exported_result>
-      <model_name>None</model_name>
-       <initialiser_path />
+      <model_name>two_meta</model_name>
+       <!-- <initialiser_path /> -->
       <!-- <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path> -->
    </control>
 

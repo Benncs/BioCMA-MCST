@@ -116,6 +116,11 @@ namespace Simulation
     return liquid_scalar->getContributionData();
   }
 
+  std::span<double> SimulationUnit::getContributionData_mut()
+  {
+      return this->liquid_scalar->getContributionData_mut();
+  }
+
   std::span<double> SimulationUnit::getCliqData() const
   {
     return this->liquid_scalar->getConcentrationData();

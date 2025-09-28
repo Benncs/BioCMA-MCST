@@ -32,26 +32,19 @@ struct TagDetector
 namespace MC
 {
 
-  template <typename FunctorType>
-  Kokkos::TeamPolicy<ComputeSpace>
-  get_policy(FunctorType& f, std::size_t range, bool reduce = false)
-  {
+  template <typename FunctorType, typename Tag = void>
+  Kokkos::TeamPolicy<ComputeSpace, Tag>
+  get_policy(FunctorType &f, std::size_t range, bool reduce = false) {
     (void)f;
     (void)reduce;
-    Kokkos::TeamPolicy<ComputeSpace> _policy;
-    // int recommended_team_size = (reduce)
-    //                                 ? _policy.team_size_recommended(f,
-    //                                 Kokkos::ParallelReduceTag()) :
-    //                                 _policy.team_size_recommended(f, Kokkos::ParallelForTag());
-
+    Kokkos::TeamPolicy<> _policy;
     int recommended_team_size =
         _policy.team_size_recommended(TagDetector(), Kokkos::ParallelReduceTag());
-    int league_size = (static_cast<int>(range) + recommended_team_size - 1) / recommended_team_size;
+    int league_size = (static_cast<int>(range) + recommended_team_size - 1) /
+                      recommended_team_size;
 
-    _policy = Kokkos::TeamPolicy<ComputeSpace>(league_size, recommended_team_size);
-
-    //   std::cout << "Policy(" << league_size << "," << recommended_team_size << ")" << std::endl;
-    return _policy;
+    return Kokkos::TeamPolicy<ComputeSpace, Tag>(league_size,
+                                                 recommended_team_size);
   }
 
   /**

@@ -43,14 +43,14 @@ if use_dynamic_module
   arg_includ_py = '1'
 endif
 
-arg_udf = '1'
-if use_cuda
-  arg_udf = ''
+arg_udf = ''
+if not use_cuda  and build_udf
+  arg_udf = '1'
 endif
 
 model_list_name = ['two_meta','simple_model','two_meta_nb','fixed_length']
 
-if not use_cuda
+if not use_cuda and build_udf
 model_list_name = [model_list_name,'udf_model']
 endif
 
@@ -63,7 +63,7 @@ generated_model_selection = custom_target(
         'wrap_init_model_selector.hpp',
         'variant_model.hpp',
     ],
-    input: f'@root@/devutils/auto_generate/generate_model_loader.py',
+    input: f'@root@/devutils/generate_model_loader.py',
     command: [
         prog_python,
         '@INPUT@',

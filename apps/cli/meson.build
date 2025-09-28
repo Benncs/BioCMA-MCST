@@ -1,7 +1,6 @@
 src_dir = './src'
 
-app_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ').stdout().splitlines()
-
+app_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ',check:true).stdout().splitlines()
 lib_sources = []
 foreach item : app_sources
   if item not in [f'@src_dir@/main.cpp', f'@src_dir@/import_py.cpp']

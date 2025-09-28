@@ -18,11 +18,10 @@
 #include <optional>
 #include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/kernels/kernels.hpp>
 #include <simulation/mass_transfer.hpp>
-#include <simulation/move_kernel.hpp>
 #include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
-#include <simulation/simulation_kernel.hpp>
 
 // TODO Clean
 static constexpr size_t trigger_const_particle_number = 1e6;
@@ -91,6 +90,7 @@ namespace Simulation
     [[nodiscard]] bool two_phase_flow() const;
     [[nodiscard]] std::optional<std::span<const double>> getMTRData() const;
     [[nodiscard]] std::size_t dead_counter() const;
+         std::span<double> getContributionData_mut() ;
 
     // Simulation methods
 
@@ -98,6 +98,7 @@ namespace Simulation
 
     void step(double d_t) const;
     void reduceContribs(std::span<const double> data, size_t n_rank) const;
+
     [[deprecated("perf:not useful")]] void
     reduceContribs_per_rank(std::span<const double> data) const;
     void clearContribution() const noexcept;
@@ -234,6 +235,7 @@ namespace Simulation
   {
 
     PROFILE_SECTION("cycleProcess")
+    using cycle_functor_type = decltype(functors.cycle_kernel);
     using CurrentModel =
         typename std::remove_reference<decltype(container)>::type::UsedModel;
     const size_t n_particle = container.n_particles();
@@ -244,20 +246,19 @@ namespace Simulation
 
     pre_cycle(container, d_t, functors);
 
-    //TODO map through flowmap and find max flow, then true if max>0
-    bool enable_move = move_info.liquid_volume.size() > 1;
-    bool enable_leave = move_info.leaving_flow.size() != 0;
-
-    if (enable_leave || enable_move)
+    if (functors.move_kernel.need_launch())
     {
-      auto _policy = MC::get_policy(functors.move_kernel, n_particle, true);
-      Kokkos ::parallel_reduce(
-          "cycle_move", _policy, functors.move_kernel, functors.move_reducer);
+      const auto _policy = MC::get_policy(functors.move_kernel, n_particle, true);
+      Kokkos ::parallel_reduce("cycle_move", _policy, functors.move_kernel,
+                               functors.move_reducer);
     }
 
     if (f_reaction)
     {
-      auto _policy = MC::get_policy(functors.cycle_kernel, n_particle, true);
+      const auto _policy =
+          MC::get_policy<cycle_functor_type, KernelInline::TagSecondPass>(
+              functors.cycle_kernel, n_particle, true);
+
       Kokkos::parallel_reduce(
           "cycle_model",
           _policy,

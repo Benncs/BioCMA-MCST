@@ -19,8 +19,6 @@
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
-#include <simulation/simulation_kernel.hpp>
-#include <traits/Kokkos_IterationPatternTrait.hpp>
 #include <utility>
 
 
