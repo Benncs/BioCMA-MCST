@@ -72,7 +72,7 @@ use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  
 
 ## Get buildtype specific options
 
-use_kokkos_tools = false
+use_kokkos_tools = true 
 CMAKE_TYPE = 'Release'
 if build_type == 'debug' or build_type == 'debugoptimized'
   # NOTHING
