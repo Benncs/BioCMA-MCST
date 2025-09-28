@@ -18,11 +18,10 @@
 #include <optional>
 #include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/kernels/kernels.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
-#include <simulation/kernels/kernels.hpp>
-
 
 // TODO Clean
 static constexpr size_t trigger_const_particle_number = 1e6;
@@ -91,6 +90,7 @@ namespace Simulation
     [[nodiscard]] bool two_phase_flow() const;
     [[nodiscard]] std::optional<std::span<const double>> getMTRData() const;
     [[nodiscard]] std::size_t dead_counter() const;
+         std::span<double> getContributionData_mut() ;
 
     // Simulation methods
 
@@ -98,6 +98,7 @@ namespace Simulation
 
     void step(double d_t) const;
     void reduceContribs(std::span<const double> data, size_t n_rank) const;
+
     [[deprecated("perf:not useful")]] void
     reduceContribs_per_rank(std::span<const double> data) const;
     void clearContribution() const noexcept;
@@ -244,10 +245,6 @@ namespace Simulation
     }
 
     pre_cycle(container, d_t, functors);
-
-    //TODO map through flowmap and find max flow, then true if max>0
-    bool enable_move = move_info.liquid_volume.size() > 1;
-    bool enable_leave = move_info.leaving_flow.size() != 0;
 
     if (functors.move_kernel.need_launch())
     {

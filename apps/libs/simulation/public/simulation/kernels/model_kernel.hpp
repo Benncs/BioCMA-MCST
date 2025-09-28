@@ -1,10 +1,9 @@
 #ifndef __SIMULATION_MC_KERNEL_HPP
 #define __SIMULATION_MC_KERNEL_HPP
 
-
 #include <Kokkos_Assert.hpp>
-#include <Kokkos_Printf.hpp>
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Printf.hpp>
 #include <Kokkos_Random.hpp>
 #include <biocma_cst_config.hpp>
 #include <cassert>
@@ -155,8 +154,7 @@ namespace Simulation::KernelInline
       auto local_c =
           Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx));
 
-      if (M::update(
-              random_pool, d_t, idx, particles.model, local_c) ==
+      if (M::update(random_pool, d_t, idx, particles.model, local_c) ==
           MC::Status::Division)
       {
         if (!particles.handle_division(random_pool, idx))
@@ -167,6 +165,8 @@ namespace Simulation::KernelInline
         }
         events.wrap_incr<MC::EventType::NewParticle>();
       };
+
+      particles.get_contributions(idx, contribs_scatter);
     }
 
     M::FloatType d_t;
