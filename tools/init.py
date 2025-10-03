@@ -20,39 +20,39 @@ def make_initial_concentration(
 
 
 def init_0d_1s():
-    liquid_0d = np.zeros((1, 2))
+    liquid_0d = np.zeros((2, 1))
     liquid_0d[0, 0] = 0.5
     make_initial_concentration("./cma_data/0d_init.h5", liquid_0d)
 
 
 def init_0d_4s():
-    liquid_0d = np.zeros((1, 4))
-    gas_0d = np.zeros((1, 4))
+    liquid_0d = np.zeros((4, 1))
+    gas_0d = np.zeros((4, 1))
     liquid_0d[0, 0] = 2
-    liquid_0d[0, 1] = 9e-3
+    liquid_0d[1, 0] = 9e-3
 
     gas_0d[0, 0] = 0.0
-    gas_0d[0, 1] = 300e-3
+    gas_0d[1, 0] = 300e-3
 
     make_initial_concentration("./cma_data/0d_4s_init.h5", liquid_0d, gas_0d)
 
 
 def init_n14_1s():
-    liquid_n14 = np.zeros((500, 1))
-    liquid_n14[:, 0] = 0.0
+    liquid_n14 = np.zeros((1, 500))
+    liquid_n14[0, :] = 0.0
     liquid_n14[0, 0] = 5.0
     make_initial_concentration("./cma_data/n14_init.h5", liquid_n14)
 
 
 def init_n14_4s():
-    liquid_sanofi = np.zeros((500, 4))
-    gas_sanofi = np.zeros((500, 4))
+    liquid_sanofi = np.zeros((4, 500))
+    gas_sanofi = np.zeros((4, 500))
 
-    gas_sanofi[:, 0] = 0  # glucose g/l
-    gas_sanofi[:, 1] = 0.21  # o2 g/l
+    gas_sanofi[0, :] = 0  # glucose g/l
+    gas_sanofi[1, :] = 0.21  # o2 g/l
 
-    liquid_sanofi[:, 0] = 1  # glucose g/l
-    liquid_sanofi[:, 1] = 0  # o2 g/l
+    liquid_sanofi[0, :] = 1  # glucose g/l
+    liquid_sanofi[1, :] = 0  # o2 g/l
 
     make_initial_concentration(
         "./cma_data/n14_4s_1g_init.h5", liquid_sanofi, gas_sanofi
@@ -60,45 +60,23 @@ def init_n14_4s():
 
 
 def sanofi_1s():
-    liquid_sanofi = np.zeros((432, 4))
-    gas_sanofi = np.zeros((432, 4))
+    liquid_sanofi = np.zeros((4, 432))
+    gas_sanofi = np.zeros((4, 432))
 
-    gas_sanofi[:, 0] = 0  # glucose g/l
-    gas_sanofi[:, 1] = 0.21  # o2 g/l
+    gas_sanofi[0, :] = 0  # glucose g/l
+    gas_sanofi[1, :] = 0.21  # o2 g/l
 
     # liquid_sanofi[:, 0] = 5  # glucose g/l
-    liquid_sanofi[:, 0] = 0  # glucose g/l
+    liquid_sanofi[0:] = 5  # glucose g/l
     liquid_sanofi[0, 0] = 5  # glucose g/l
-    liquid_sanofi[:, 1] = 3e-3  # o2 g/l
+    liquid_sanofi[1, :] = 3e-3  # o2 g/l
 
     make_initial_concentration("./cma_data/sanofi_init.h5", liquid_sanofi, gas_sanofi)
 
 
-def merge_4s():
-    liquid_sanofi = np.zeros((101, 4))
-    gas_sanofi = np.zeros((101, 4))
-
-    gas_sanofi[:, 0] = 0  # glucose g/l
-    gas_sanofi[:, 1] = 0.21  # o2 g/l
-
-    liquid_sanofi[:, 0] = 0  # glucose g/l
-    liquid_sanofi[0, 0] = 5  # glucose g/l
-    liquid_sanofi[:, 1] = 0e-3  # o2 g/l
-
-    make_initial_concentration("./cma_data/merge.h5", liquid_sanofi, gas_sanofi)
-
-
 if __name__ == "__main__":
-    # liquid_0d = np.zeros((1,2))
-    # liquid_n50 = np.zeros((50,1))
-
-    # liquid_n50[:,0]=0.
-
-    # make_initial_concentration("./cma_data/n50_init.h5",liquid_n50)
-
     init_0d_4s()
     init_0d_1s()
     init_n14_1s()
     sanofi_1s()
     init_n14_4s()
-    merge_4s()
