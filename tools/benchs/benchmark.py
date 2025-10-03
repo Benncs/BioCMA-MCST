@@ -2,146 +2,194 @@
 Script to perform bench scaling and profiling of an external running program.
 
 Author: CASALE Benjamin
-Date: 04/26/2024
-Version: 1.0
+Date: 10/02/2025
+Version: 2.0
 """
 
+from typing import Dict
 import os
-import csv
 import subprocess
-import re
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 import sys
-
-# from wakepy import keep
-# from ..exec import exec
-import datetime
-
-BENCH_OMP_THREADS = [1, 2,8,16, 20]  # List of thread numbers when running scaling
-EXECUTABLE_PATH = "./builddir/gpe/apps/cli"  # Path to executable to run
-EXECUTABLE_NAME = "biocma_mcst_cli_app_shared"  # Name of executable to run
-BENCH_SCRIPT_PATH = (
-    "./devutils/benchs/bench.sh"  # Intermediate script used to perform bench
-)
-date = datetime.datetime.today().strftime("%Y_%m_%d")
-# FILENAME = f"./devutils/benchs/bench_records_3d_{date}.csv"  # Record filename
-# OUTPUT_PDF = f"./devutils/benchs/results_bench_3d_{date}.pdf"  # Output path
-
-FILENAME = f"./devutils/benchs/bench_records_3d_2025_03_21.csv"  # Record filename
-OUTPUT_PDF = f"./devutils/benchs/results_bench_3d_2025_03_21.pdf"  # Output path
-
-MODEL_NAME = "two_meta"
-FINAL_TIME = 10  # Reference simulation time
-DELTA_TIME = 1e-2  # Reference delta time fixed
-# CMA_DATA_PATH = "./cma_data/bench/"
-# CMA_DATA_PATH = "./cma_data/0d_gas/"
-CMA_DATA_PATH = "/home_pers/casale/Documents/thesis/cfd/sanofi/"
-RECURSIVE = False
+import glob
+import shutil
+import json
+from matplotlib.backends.backend_pdf import PdfPages
+from cycler import cycler
 
 
-def format_cli(number_particle, final_time):
-    rec = [""]
-    if RECURSIVE:
+def add_to_pdf(_pdf, figs):
+    for fig in figs:
+        _pdf.savefig(fig)
+        plt.close(fig)
+
+
+def default_config():
+    bench_config = {
+        "OMP_THREADS": [1, 6],
+        "path": os.environ.get("BIOMC_ROOT"),
+        "executable_name": "biocma_mcst_cli_app",
+        "name": "host",
+        "folder": "./bench_2",
+    }
+
+    case_config = {
+        "model_name": "two_meta",
+        "tf": 10,
+        "dt": 1e-2,
+        "cma_path": "/home_pers/casale/Documents/thesis/cfd/sanofi/",
+        "cma_init": "./cma_data/sanofi_init.h5",
+        "recursive": False,
+    }
+
+    return {"bench_config": bench_config, "case_config": case_config}
+
+
+def read_config(path: str) -> Dict:
+    with open(path, "r") as fd:
+        data = json.load(fd)
+    return data
+
+
+def annotate_json(filename, bench_config, n_p, n_threads):
+    dest = f"bench_{bench_config['name']}_{n_p}_{n_threads}.json"
+    dest = f"{bench_config['folder']}/{dest}"
+    shutil.move(filename, dest)
+    with open(dest, "r") as file:
+        data = json.load(file)
+    data["n_p"] = str(n_p)
+    data["n_threads"] = str(n_threads)
+    with open(dest, "w") as file:
+        json.dump(data, file, indent=2)
+
+
+def format_cli(bench_config, case_config, number_particle):
+    rec = []
+    if case_config["recursive"]:
         rec = [
             "-r",
             "1",
         ]
 
-    return [
-        f"{EXECUTABLE_PATH}/{EXECUTABLE_NAME}",
+    cmd = [
+        f"{bench_config['path']}/{bench_config['executable_name']}",
         "-mn",
-        MODEL_NAME,
+        case_config["model_name"],
         "-np",
         f"{number_particle}",
         "-d",
-        f"{final_time}",
+        f"{case_config['tf']}",
         "-dt",
-        f"{DELTA_TIME}",
+        f"{case_config['dt']}",
         *rec,
         "-f",
-        CMA_DATA_PATH,
-        "-er",
-        "bench",
+        case_config["cma_path"],
+         "-er",
+        bench_config["name"],
         "-nex",
         "0",
         "-force",
         "1",
-        "-fi","./cma_data/sanofi_init.h5" 
-        # #,"-mpi","1"
     ]
 
+    if case_config["cma_init"] is not None:
+        cmd.append("-fi")
+        cmd.append(case_config["cma_init"])
 
-def execute(n_thread, script_path, command):
+    return cmd
+
+
+def read_dict(bench_config):
+    data = []
+    pattern = f"{bench_config['folder']}/bench_{bench_config['name']}_*.json"
+    matches = glob.glob(pattern)
+    main_dict = {}
+    for i, filename in enumerate(matches):
+        with open(filename, "r") as fd:
+            data = json.load(fd)
+            main_dict[i] = data
+    return main_dict
+
+
+def execute(bench_config, n_thread, n_p, command):
     env_var = os.environ.copy()
     env_var["OMP_NUM_THREADS"] = str(n_thread)
     env_var["OMP_PLACES"] = "threads"
     env_var["OMP_PROC_BIND"] = "spread"
-    # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so"
-    # commands = [
-    #     "mpiexec",
-    #     "-n",
-    #     "4",
-    #     BENCH_SCRIPT_PATH,
-    #     *command,
-    # ]
-
-    commands = [BENCH_SCRIPT_PATH, *command, "-n", str(n_thread)]
-
-    result = subprocess.run(
+    env_var["KOKKOS_TOOLS_LIBS"] = "/home_pers/casale/Documents/code/kokkos-tools/build/lib/libkp_kernel_timer.so"
+    env_var["KOKKOS_TOOLS_TIMER_JSON"] = "1"
+    commands = command
+    os.makedirs(bench_config["folder"], exist_ok=True)
+    result = subprocess.Popen(
         commands,
-        shell=False,
+        env=env_var,
+        stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        universal_newlines=True,
-        env=env_var,
     )
+    result.wait()
     if result.returncode != 0:
-        raise Exception("error", result.stderr)
-    time_resutlt = result.stderr
-
-    match = re.search(r"Time elapsed: (\d+\.\d+) seconds", time_resutlt)
-    if match:
-        time_elapsed = float(match.group(1))
-        return time_elapsed
-    else:
-        print("Time elapsed not found in the output.")
+        print(result.stderr)
+        raise Exception("error")
+    filename = f"{os.uname().nodename}-{result.pid}.json"
+    annotate_json(filename, bench_config, n_p, n_thread)
 
 
-def scalling(np, tf):
+def scaling(case_config, bench_config, n_p):
     records = []
-    commanDELTA_TIMEo_run = format_cli(np, tf)
-    print("Running: ", *commanDELTA_TIMEo_run, " ....")
-
-    for n_thread in BENCH_OMP_THREADS:
+    command_to_run = format_cli(bench_config, case_config, n_p)
+    print("Running: ", *command_to_run, " ....")
+    for n_thread in bench_config["OMP_THREADS"]:
         print("OMP_NUM_THREADS=", n_thread)
-        run_time = execute(n_thread, BENCH_SCRIPT_PATH, commanDELTA_TIMEo_run)
+        run_time = execute(bench_config, n_thread, n_p, command_to_run)
         records.append(run_time)
-
     return records
 
 
-def dump_to_csv(records, particles, n_iteration):
-    # Create a CSV file with a header row
-    is_empty = not os.path.exists(FILENAME) or os.path.getsize(FILENAME) == 0
-    with open(FILENAME, mode="a") as file:
-        writer = csv.writer(file)
-        if is_empty:
-            writer.writerow(["Thread", "particles", "iteration", "Record"])
-        # Write each record to the CSV file
-        for i, record in enumerate(records):
-            writer.writerow([BENCH_OMP_THREADS[i], particles, n_iteration, record])
+def process_results(config):
+    # Read data from the file
+    bench_config = config["bench_config"]
+    data = read_dict(bench_config)
+
+    def find_in_data(name, key, region=False):
+        subd = "kernel-perf-info"
+        if region:
+            subd = "region-perf-info"
+        return np.array(
+            [
+                next(
+                    (
+                        d[key]
+                        for d in data[i]["kokkos-kernel-data"][subd]
+                        if d["kernel-name"] == name
+                    ),
+                    0,
+                )
+                for i in data
+            ]
+        )
+
+    res = {}
+    # Extract data for plotting
+    res["total_app_time"] = np.array(
+        [int(data[r]["kokkos-kernel-data"]["total-app-time"]) for r in data]
+    )
+    res["threads"] = np.array([int(data[r]["n_threads"]) for r in data])
+    res["particles"] = np.array([int(data[r]["n_p"]) for r in data])
+    res["target_kernel"] = "cycleProcess"
+    res["call_count"] = find_in_data("cycleProcess", "call-count", True)
+    # target_kernel = "cycle_model"
+    #    time_model = find_in_data(target_kernel, "total-time", False)
+    #  target_kernel = "cycle_move"
+    #   time_move = find_in_data(target_kernel, "total-time", False)
+    res["total_time"] = find_in_data(
+        "cycleProcess", "total-time", True
+    )  # time_model + time_move
+    return res
 
 
-def read_csv_to_dict():
-    # Read the CSV file into a dictionary
-    data = []
-    with open(FILENAME, mode="r") as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            data.append(row)
-    return data
+## FIGURE
 
 
 def plot_thread_vs_time(threads, particles, iterations, records):
@@ -165,39 +213,37 @@ def plot_thread_vs_time(threads, particles, iterations, records):
     return figs
 
 
-def plot_scaling(threads, particles, iterations, records):
+def plot_scaling(total_time, threads, particles, iterations, records):
     unique_particles = np.unique(particles)
     unique_iterations = np.unique(iterations)
-    font_properties = {'family': 'serif', 'size': 14}
-    fig, (ax_scale, ax_eff) = plt.subplots(1, 2, figsize=(14, 6)) 
-    figs = [fig]
-    from cycler import cycler
-    colors = plt.cm.tab20b(np.linspace(0, 1, 10))  
-    line_widths = [1]*10  
-
-    custom_cycler = (cycler(color=colors) +
-                    cycler(lw=line_widths))
+    font_properties = {"family": "serif", "size": 14}
+    fig, (ax_scale, ax_eff) = plt.subplots(1, 2, figsize=(14, 6))
+    fig2, ax_percent = plt.subplots(1, 1, figsize=(14, 6))
+    figs = [fig, fig2]
+    colors = plt.cm.tab20b(np.linspace(0, 1, 10))
+    line_widths = [1] * 10
+    custom_cycler = cycler(color=colors) + cycler(lw=line_widths)
 
     ax_scale.set_prop_cycle(custom_cycler)
     ax_eff.set_prop_cycle(custom_cycler)
-
 
     # Plot strong scaling efficiency (speedup) vs. number of threads for each particle and iteration combination
     for particle in unique_particles:
         for iteration in unique_iterations:
             # f = plt.figure()
-
             mask = (particles == particle) & (iterations == iteration)
             condition = True  # np.count_nonzero(mask) >= 3
             if condition:
                 # Extract the relevant data
                 selected_threads = threads[mask]
                 selected_times = records[mask]
+                selected_total_times = total_time[mask]
 
                 # Find the time for single-thread execution (assuming we have this data point)
                 single_thread_time = selected_times[selected_threads == 1]
 
                 if single_thread_time.size == 0:
+                    raise Exception("There's no single-thread-data")
                     continue  # Skip if there's no single-thread data
 
                 single_thread_time = single_thread_time[
@@ -205,152 +251,157 @@ def plot_scaling(threads, particles, iterations, records):
                 ]  # There should be exactly one such entry
 
                 # Compute speedup
-                speedup = single_thread_time / selected_times 
-
+                speedup = single_thread_time / selected_times
                 # Sort by the number of threads for a proper plot
                 sorted_indices = np.argsort(selected_threads)
                 sorted_threads = selected_threads[sorted_indices]
                 sorted_speedup = speedup[sorted_indices]
 
-  
+                percent = selected_times / selected_total_times
                 ax_scale.plot(
                     sorted_threads,
                     sorted_speedup,
-                    "-x",  
+                    "-x",
                     label=f"{particle:.0e}",
-                    markersize=8,  
-                    linewidth=2  
+                    markersize=8,
+                    linewidth=2,
                 )
-
                 ax_eff.plot(
                     sorted_threads,
-                    sorted_speedup/selected_threads,
-                    "-x",  
+                    sorted_speedup / sorted_threads,
+                    "-x",
                     label=f"{particle:.0e}",
-                    markersize=8,  
-                    linewidth=2 
+                    markersize=8,
+                    linewidth=2,
                 )
 
-         
+                ax_percent.plot(
+                    sorted_threads,
+                    percent[sorted_indices],
+                    "-x",
+                    label=f"{particle:.0e}",
+                    markersize=8,
+                    linewidth=2,
+                )
 
-          
-    ax_scale.set_title(f"Speedup for {iteration} iterations", fontsize=16, fontdict=font_properties)
-    ax_eff.set_title(f"Efficiency for {iteration} iterations", fontsize=16, fontdict=font_properties)
+    ax_scale.set_title(
+        f"Speedup for {iteration} iterations", fontsize=16, fontdict=font_properties
+    )
+    ax_eff.set_title(
+        f"Efficiency for {iteration} iterations", fontsize=16, fontdict=font_properties
+    )
     ax_scale.set_xlabel("Number of Threads", fontsize=14, fontdict=font_properties)
     ax_eff.set_xlabel("Number of Threads", fontsize=14, fontdict=font_properties)
     ax_eff.set_ylabel("Efficiency", fontsize=14, fontdict=font_properties)
     ax_scale.set_ylabel("Speedup", fontsize=14, fontdict=font_properties)
- 
 
-    ax_scale.grid(True, which='both', linestyle='--', linewidth=0.5)
-    ax_eff.grid(True, which='both', linestyle='--', linewidth=0.5)
- 
-    x = np.linspace(0,np.max(threads))
-    ax_scale.plot(
-                    x,
-                    x,
-                    label="ideal",
-                    color='k',
-                    linewidth=2  
-                )
-    ax_scale.legend(title='n particle',bbox_to_anchor=(1.05, 0), loc='lower left', borderaxespad=0.)
+    ax_scale.grid(True, which="both", linestyle="--", linewidth=0.5)
+    ax_eff.grid(True, which="both", linestyle="--", linewidth=0.5)
+
+    x = np.linspace(0, np.max(threads))
+    ax_scale.plot(x, x, label="ideal", color="k", linewidth=2)
+    ax_scale.legend(
+        title="n particle",
+        bbox_to_anchor=(1.05, 0),
+        loc="lower left",
+        borderaxespad=0.0,
+    )
+
+    ax_percent.set_title(
+        f"Percent in kernels for {iteration} iterations",
+        fontsize=16,
+        fontdict=font_properties,
+    )
+
+    ax_percent.set_xlabel("Number of Threads", fontsize=14, fontdict=font_properties)
+
+    ax_percent.legend(
+        title="n particle",
+        borderaxespad=0.0,
+    )
+
     fig.tight_layout()
     return figs
 
 
-def plot_particle_vs_time(threads, particles, iterations, records):
-    unique_threads = np.unique(threads)
-    unique_iterations = np.unique(iterations)
-    figs = []
-    for thread in unique_threads:
-        for iteration in unique_iterations:
-            f = plt.figure()
-            mask = thread == threads
-            if np.count_nonzero(mask) > 3:
-                plt.title(
-                    f"Time=f(particles) for n_threads={thread}, n_iteration={iteration}"
-                )
-                plt.plot(particles[mask], records[mask], "-o")
-                plt.xlabel("Number of Particles")
-                plt.ylabel("Time (s)")
-                plt.grid(True)
-                figs.append(f)
-
-    return figs
+def plot_results(config, processed_results):
+    bench_config = config["bench_config"]
+    total_app_time = processed_results["total_app_time"]
+    threads = processed_results["threads"]
+    particles = processed_results["particles"]
+    call_count = processed_results["call_count"]
+    total_time = processed_results["total_time"]
+    with PdfPages(f"{bench_config['folder']}/{bench_config['name']}.pdf") as pdf:
+        add_to_pdf(
+            pdf,
+            plot_scaling(total_app_time, threads, particles, call_count, total_time),
+        )
 
 
-def add_to_pdf(_pdf, figs):
-    for fig in figs:
-        _pdf.savefig(fig)
-        plt.close(fig)
+## MAIN
 
 
-def plot_csv():
-    # Read data from the CSV file
-    data = read_csv_to_dict()
+def _fom(args):
+    cases = [read_config(args[i]) for i in range(1, len(args))]
 
-    # Extract data for plotting
-    threads = np.array([int(row["Thread"]) for row in data])
-    particles = np.array([float(row["particles"]) for row in data])
-    iterations = np.array([float(row["iteration"]) for row in data])
-    records = np.array([float(row["Record"]) for row in data])
+    print(cases)
 
-    pre_mask = particles >= 150000
-    with PdfPages(OUTPUT_PDF) as pdf:
-        # add_to_pdf(
-        #     pdf,
-        #     plot_thread_vs_time(
-        #         threads[pre_mask],
-        #         particles[pre_mask],
-        #         iterations[pre_mask],
-        #         records[pre_mask],
-        #     ),
-        # )
-        add_to_pdf(pdf, plot_scaling(threads, particles, iterations, records))
-        #   add_to_pdf(pdf,plot_particle_vs_time(threads,particles,iterations,records))
+    return 0
 
 
-def do_scale(particles=1000000):
-    records = scalling(particles, FINAL_TIME)
-    n_iteration = FINAL_TIME / DELTA_TIME
-    dump_to_csv(records, particles, n_iteration)
+def _plot(args):
+    if len(args) != 2:
+        raise Exception("bad arguments: case ")
+    bench_config = read_config(args[1])
+    res = process_results(bench_config)
+    plot_results(bench_config, res)
+    return 0
 
 
-def main(args):
-    if args[0] == "plot":
-        plot_csv()
-    elif args[0] == "scale":
-        if len(args) != 4:
-            print(
-                "Error: Invalid number of arguments for scale. Usage: python script.py scale [particle_n1] [particle_n2] [n_scale]"
-            )
-            return
+def _gen(args):
+    with open("bench.json", "w") as fd:
+        json.dump(default_config(), fd, indent=2)
+    return 0
 
-        particle_n1 = float(args[1])
-        particle_n2 = float(args[2])
-        n_scale = int(args[3])
-        try:
-            raise Exception("")
-            # with keep.running():
-            #     n_particles = np.linspace(particle_n1, particle_n2, num=n_scale, dtype=np.int32)
-            #     for number in n_particles:
-            #         do_scale(number)
-        except:
-            n_particles = np.linspace(
-                particle_n1, particle_n2, num=n_scale, dtype=np.int32
-            )
-            for number in n_particles:
-                do_scale(number)
-    else:
-        print("Error: Invalid argument. Usage: python script.py [plot | scale]")
+
+def _add(args):
+    if len(args) != 5:
+        raise Exception("bad arguments: expected case path np nt ")
+    case = args[1]
+    path = args[2]
+    bc = process_results(read_config(case))
+    annotate_json(bc, path, int(args[3]), int(args[4]))
+    return 0
+
+
+def _do_scale(args):
+    if len(args) != 5:
+        print(
+            "Error: Invalid number of arguments for scale. Usage: python script.py scale [particle_n1] [particle_n2] [n_scale] [case]"
+        )
+        return
+
+    particle_n1 = float(args[1])
+    particle_n2 = float(args[2])
+    n_scale = int(args[3])
+    config_path = args[4]
+    config = read_config(config_path)
+    n_particles = np.linspace(particle_n1, particle_n2, num=n_scale, dtype=np.int32)
+    for number in n_particles:
+        scaling(
+            config["case_config"],
+            config["bench_config"],
+            number,
+        )
 
 
 if __name__ == "__main__":
-    if len(sys.argv) not in [2, 5]:
-        print(
-            "Error: Invalid number of arguments. Usage: python script.py [plot | scale]"
-        )
-        sys.exit(1)
-
+    _cb = {"plot": _plot, "gen": _gen, "add": _add, "fom": _fom, "scale": _do_scale}
     args = sys.argv[1:]
-    main(args)
+
+    if args[0] in _cb:
+        _cb[args[0]](args)
+        sys.exit(0)
+    else:
+        print("Error: Invalid argument. Usage: python script.py [plot | scale]")
+        sys.exit(1)
