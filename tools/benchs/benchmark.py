@@ -85,7 +85,7 @@ def format_cli(bench_config, case_config, number_particle):
         *rec,
         "-f",
         case_config["cma_path"],
-         "-er",
+        "-er",
         bench_config["name"],
         "-nex",
         "0",
@@ -117,7 +117,9 @@ def execute(bench_config, n_thread, n_p, command):
     env_var["OMP_NUM_THREADS"] = str(n_thread)
     env_var["OMP_PLACES"] = "threads"
     env_var["OMP_PROC_BIND"] = "spread"
-    env_var["KOKKOS_TOOLS_LIBS"] = "/home_pers/casale/Documents/code/kokkos-tools/build/lib/libkp_kernel_timer.so"
+    env_var["KOKKOS_TOOLS_LIBS"] = (
+        "/home_pers/casale/Documents/code/kokkos-tools/build/lib/libkp_kernel_timer.so"
+    )
     env_var["KOKKOS_TOOLS_TIMER_JSON"] = "1"
     commands = command
     os.makedirs(bench_config["folder"], exist_ok=True)
@@ -147,28 +149,29 @@ def scaling(case_config, bench_config, n_p):
     return records
 
 
+def find_in_data(data, name, key, region=False):
+    subd = "kernel-perf-info"
+    if region:
+        subd = "region-perf-info"
+    return np.array(
+        [
+            next(
+                (
+                    d[key]
+                    for d in data[i]["kokkos-kernel-data"][subd]
+                    if d["kernel-name"] == name
+                ),
+                0,
+            )
+            for i in data
+        ]
+    )
+
+
 def process_results(config):
     # Read data from the file
     bench_config = config["bench_config"]
     data = read_dict(bench_config)
-
-    def find_in_data(name, key, region=False):
-        subd = "kernel-perf-info"
-        if region:
-            subd = "region-perf-info"
-        return np.array(
-            [
-                next(
-                    (
-                        d[key]
-                        for d in data[i]["kokkos-kernel-data"][subd]
-                        if d["kernel-name"] == name
-                    ),
-                    0,
-                )
-                for i in data
-            ]
-        )
 
     res = {}
     # Extract data for plotting
@@ -178,39 +181,18 @@ def process_results(config):
     res["threads"] = np.array([int(data[r]["n_threads"]) for r in data])
     res["particles"] = np.array([int(data[r]["n_p"]) for r in data])
     res["target_kernel"] = "cycleProcess"
-    res["call_count"] = find_in_data("cycleProcess", "call-count", True)
+    res["call_count"] = find_in_data(data, "cycleProcess", "call-count", True)
     # target_kernel = "cycle_model"
     #    time_model = find_in_data(target_kernel, "total-time", False)
     #  target_kernel = "cycle_move"
     #   time_move = find_in_data(target_kernel, "total-time", False)
     res["total_time"] = find_in_data(
-        "cycleProcess", "total-time", True
+        data, "cycleProcess", "total-time", True
     )  # time_model + time_move
     return res
 
 
 ## FIGURE
-
-
-def plot_thread_vs_time(threads, particles, iterations, records):
-    unique_particles = np.unique(particles)
-    unique_iterations = np.unique(iterations)
-    figs = []
-    # Plot time vs. number of threads for each particle
-    for particle in unique_particles:
-        for iteration in unique_iterations:
-            f = plt.figure()
-            plt.title(
-                f"Time=f(num_thread) for n_particle={particle}, iteration={iteration}"
-            )
-            mask = (particles == particle) & (iterations == iteration)
-            if np.count_nonzero(mask) > 3:
-                plt.plot(threads[mask], records[mask], "-o")
-                plt.xlabel("Number of Threads")
-                plt.ylabel("Time (s)")
-                plt.grid(True)
-                figs.append(f)
-    return figs
 
 
 def plot_scaling(total_time, threads, particles, iterations, records):
@@ -343,8 +325,31 @@ def plot_results(config, processed_results):
 
 def _fom(args):
     cases = [read_config(args[i]) for i in range(1, len(args))]
+    names = []
+    all_np = []
+    all_kt = []
 
-    print(cases)
+    for i, case in enumerate(cases):
+        bc = case["bench_config"]
+        data = read_dict(bc)
+        names.append([bc["name"]] * len(data))
+        res = np.array([int(data[r]["n_p"]) for r in data])
+        all_np.append(res)
+        kt = find_in_data(data, "cycleProcess", "total-time", True)
+        all_kt.append(kt)
+
+    all_np = np.concatenate(all_np)
+    names = np.concatenate(names)
+    all_kt = np.concatenate(all_kt)
+
+    mask_name = True  # (names == "gpe_3d") | (names == "gpu_3d")
+    mask_np = (all_np == 1e6) | (all_np == 1e6)
+    mask = mask_np & mask_name
+
+    plt.figure()
+    plt.bar(names[mask], all_kt[mask])
+
+    plt.show()
 
     return 0
 
