@@ -28,6 +28,7 @@ namespace Models
     enum class particle_var : int
     {
       length = 0,
+      l_max,
       phi_s,
       COUNT
     };
@@ -98,8 +99,15 @@ namespace Models
                     std::size_t idx,
                     const SelfParticle& arr)
   {
+
+    constexpr auto l_initial_dist = MC::Distributions::TruncatedNormal<float>(
+        l_min_m, l_min_m / 7., 0., static_cast<double>(1));
+
     auto gen = random_pool.get_state();
-    auto linit = gen.drand(l_min_m * .8, l_max_m);
+    auto linit = l_initial_dist.draw(
+        gen); // l_min_m; // gen.drand(l_min_m * .8, l_max_m);
+    GET_PROPERTY(particle_var::l_max) =
+        l_max_m; // gen.drand(l_max_m * 0.8, l_max_m * 1.2);
     random_pool.free_state(gen);
     GET_PROPERTY(particle_var::length) = linit;
     GET_PROPERTY(particle_var::phi_s) = 0.;
@@ -119,7 +127,8 @@ namespace Models
     GET_PROPERTY(FixedLength::particle_var::phi_s) = phi_s * 2.;
     GET_PROPERTY(FixedLength::particle_var::length) += d_t * ldot;
 
-    return (GET_PROPERTY(Self::particle_var::length) >= l_max_m)
+    return (GET_PROPERTY(Self::particle_var::length) >=
+            GET_PROPERTY(particle_var::l_max))
                ? MC::Status::Division
                : MC::Status::Idle;
   }
@@ -136,6 +145,10 @@ namespace Models
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::length) =
         new_current_length;
     GET_PROPERTY(particle_var::length) = new_current_length;
+    auto gen = random_pool.get_state();
+    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) =
+        gen.drand(l_max_m * 0.8, l_max_m * 1.2);
+    random_pool.free_state(gen);
   }
 
   KOKKOS_INLINE_FUNCTION void
