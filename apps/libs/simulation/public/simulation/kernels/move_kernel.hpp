@@ -37,7 +37,7 @@ namespace Simulation::KernelInline
         : diag_transition("diag_transition", 0),
           leaving_flow("leaving_flow", 0),
           index_leaving_flow("index_leaving_flow", 0),
-          liquid_volume("liquid_volume")
+          liquid_volume("liquid_volume", 0)
     {
     }
   };
