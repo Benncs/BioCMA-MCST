@@ -107,7 +107,7 @@
       <number_particle>10000</number_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>bench_sanofi</results_file_name>
-      <number_exported_result></number_exported_result>
+      <number_exported_result>0</number_exported_result>
       <model_name>two_meta_nb</model_name>
         <!-- <model_name>niente</model_name> -->
       <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>

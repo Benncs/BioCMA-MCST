@@ -19,6 +19,16 @@ from matplotlib.backends.backend_pdf import PdfPages
 from cycler import cycler
 
 
+def format_with_k_notation(num):
+    print(num)
+    if num >= 1000_000:
+        return f"{num / 1_000_000:.1f}M"
+    elif num >= 1_000:  # For thousands
+        return f"{num / 1_000:.1f}K"
+    else:
+        return str(num)
+
+
 def add_to_pdf(_pdf, figs):
     for fig in figs:
         _pdf.savefig(fig)
@@ -28,6 +38,7 @@ def add_to_pdf(_pdf, figs):
 def default_config():
     bench_config = {
         "OMP_THREADS": [1, 6],
+        "mpi": None,
         "path": os.environ.get("BIOMC_ROOT"),
         "executable_name": "biocma_mcst_cli_app",
         "name": "host",
@@ -64,16 +75,16 @@ def annotate_json(filename, bench_config, n_p, n_threads):
         json.dump(data, file, indent=2)
 
 
-def format_cli(bench_config, case_config, number_particle):
+def format_cli(bench_config, case_config, number_particle, nt=None):
     rec = []
+
     if case_config["recursive"]:
         rec = [
             "-r",
             "1",
         ]
 
-    cmd = [
-        f"{bench_config['path']}/{bench_config['executable_name']}",
+    common_cmd = [
         "-mn",
         case_config["model_name"],
         "-np",
@@ -86,7 +97,7 @@ def format_cli(bench_config, case_config, number_particle):
         "-f",
         case_config["cma_path"],
         "-er",
-        bench_config["name"],
+        f"./tmp_result/{bench_config['name']}",
         "-nex",
         "0",
         "-force",
@@ -94,9 +105,24 @@ def format_cli(bench_config, case_config, number_particle):
     ]
 
     if case_config["cma_init"] is not None:
-        cmd.append("-fi")
-        cmd.append(case_config["cma_init"])
+        common_cmd.append("-fi")
+        common_cmd.append(case_config["cma_init"])
 
+    if bench_config.get("mpi",None) is None:
+        cmd = [f"{bench_config['path']}/{bench_config['executable_name']}", *common_cmd]
+    else:
+        n_node = bench_config["mpi"]
+        cmd = [
+            "mpiexec",
+            "-np",
+            str(n_node),
+            "--bind-to",
+            "core",
+            "--map-by",
+            f"slot:PE={nt} ",
+            f"{bench_config['path']}/{bench_config['executable_name']}",
+            *common_cmd,
+        ]
     return cmd
 
 
@@ -135,6 +161,14 @@ def execute(bench_config, n_thread, n_p, command):
         print(result.stderr)
         raise Exception("error")
     filename = f"{os.uname().nodename}-{result.pid}.json"
+
+    n_err = 0
+    while n_err != 10:
+        if os.path.exists(filename):
+            break
+        n_err += 1
+        filename = f"{os.uname().nodename}-{result.pid + n_err}.json"
+
     annotate_json(filename, bench_config, n_p, n_thread)
 
 
@@ -143,6 +177,7 @@ def scaling(case_config, bench_config, n_p):
     command_to_run = format_cli(bench_config, case_config, n_p)
     print("Running: ", *command_to_run, " ....")
     for n_thread in bench_config["OMP_THREADS"]:
+        command_to_run = format_cli(bench_config, case_config, n_p, n_thread)
         print("OMP_NUM_THREADS=", n_thread)
         run_time = execute(bench_config, n_thread, n_p, command_to_run)
         records.append(run_time)
@@ -323,11 +358,53 @@ def plot_results(config, processed_results):
 ## MAIN
 
 
+def _fom2(args):
+    case = read_config(args[1])
+    bc = case["bench_config"]
+    data = read_dict(bc)
+    keys = list(data.keys())
+
+    def plot_fom():
+        figs = []
+        for i in range(0, len(keys), len(keys) // 4):
+            datai = data[keys[i]]
+            region_perf_info = datai.get("kokkos-kernel-data", {}).get(
+                "region-perf-info", []
+            )
+            kernel_names = [entry["kernel-name"] for entry in region_perf_info]
+            total_times = [entry["total-time"] for entry in region_perf_info]
+            print(kernel_names)
+            sorted_kernels = sorted(
+                zip(kernel_names, total_times), key=lambda x: x[1], reverse=True
+            )
+
+            sorted_kernel_names, sorted_total_times = zip(*sorted_kernels)
+
+            figs.append(plt.figure(figsize=(10, 6)))
+            plt.barh(sorted_kernel_names, sorted_total_times, color="skyblue")
+            plt.xlabel("Total Time (s)")
+
+            plt.title(
+                f"Most Time Consuming Kernels for {format_with_k_notation(int(datai['n_p']))} particle"
+            )
+            plt.gca().invert_yaxis()
+        return figs
+
+    with PdfPages(f"{bc['folder']}/{bc['name']}_fom.pdf") as pdf:
+        add_to_pdf(
+            pdf,
+            plot_fom(),
+        )
+
+
 def _fom(args):
     cases = [read_config(args[i]) for i in range(1, len(args))]
     names = []
     all_np = []
     all_kt = []
+    all_time = []
+    all_nt = []
+    all_mpi = []
 
     for i, case in enumerate(cases):
         bc = case["bench_config"]
@@ -336,18 +413,46 @@ def _fom(args):
         res = np.array([int(data[r]["n_p"]) for r in data])
         all_np.append(res)
         kt = find_in_data(data, "cycleProcess", "total-time", True)
+        all_time.append(
+            np.array([data[i]["kokkos-kernel-data"]["total-app-time"] for i in data])
+        )
         all_kt.append(kt)
 
+        all_nt.append(
+            np.array( [int(data[i]["n_threads"]) for i in data])
+        )
+    
+        all_mpi.append(
+            np.array( [bc.get('mpi',0) for i in data])
+        )
+        
     all_np = np.concatenate(all_np)
+    all_time = np.concatenate(all_time)
     names = np.concatenate(names)
     all_kt = np.concatenate(all_kt)
+    all_nt = np.concatenate(all_nt)
+    maxnt = np.max(all_nt)
+    all_mpi = np.concatenate(all_mpi)
 
+    maxnp = 100e6 #np.max(all_np)
     mask_name = True  # (names == "gpe_3d") | (names == "gpu_3d")
-    mask_np = (all_np == 1e6) | (all_np == 1e6)
-    mask = mask_np & mask_name
+    mask_np = (all_np == maxnp) | (all_np == maxnp)
+    mask_mpi = (all_nt == 1) & (all_mpi == 20)
+    mask_thread = (all_nt == maxnt) | mask_mpi
+    mask = mask_np & mask_name & mask_thread 
+    
 
-    plt.figure()
-    plt.bar(names[mask], all_kt[mask])
+    fig, ax = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+    ax[0].bar(names[mask], all_kt[mask], color='skyblue')
+    ax[0].set_title("Kernel Time (100M Particles)", fontsize=14)
+    ax[0].set_ylabel("Time [s]", fontsize=12)
+    ax[0].grid(True, which='both', linestyle='--', alpha=0.7)
+    ax[1].bar(names[mask], all_time[mask], color='#FF6347')
+    ax[1].set_title("Wall Time (100M Particles)", fontsize=14)
+    ax[1].set_ylabel("Time [s]", fontsize=12)
+    ax[1].set_xlabel("Names", fontsize=12)
+    ax[1].grid(True, which='both', linestyle='--', alpha=0.7)
+    plt.tight_layout()
 
     plt.show()
 
@@ -380,6 +485,7 @@ def _add(args):
 
 
 def _do_scale(args):
+    os.makedirs("tmp_result", exist_ok=True)
     if len(args) != 5:
         print(
             "Error: Invalid number of arguments for scale. Usage: python script.py scale [particle_n1] [particle_n2] [n_scale] [case]"
@@ -401,7 +507,14 @@ def _do_scale(args):
 
 
 if __name__ == "__main__":
-    _cb = {"plot": _plot, "gen": _gen, "add": _add, "fom": _fom, "scale": _do_scale}
+    _cb = {
+        "plot": _plot,
+        "gen": _gen,
+        "add": _add,
+        "fom": _fom,
+        "scale": _do_scale,
+        "fom_k": _fom2,
+    }
     args = sys.argv[1:]
 
     if args[0] in _cb:
