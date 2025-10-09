@@ -64,29 +64,17 @@
       <!-- <cma_case_path>/app/cma_data/0d_gas/</cma_case_path> -->
       <!-- <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path> -->
       <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
-      <final_time>10</final_time>
-      <number_particle>100000</number_particle>
-      <delta_time>0.01</delta_time>
+      <final_time>100</final_time>
+      <number_particle>1000000</number_particle>
+      <delta_time>0.1</delta_time>
       <results_file_name>debug</results_file_name>
-      <number_exported_result>20</number_exported_result>
-      <model_name>None</model_name>
-       <initialiser_path />
-      <!-- <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path> -->
+      <number_exported_result>0</number_exported_result>
+      <model_name>simple_model</model_name>
+       <!-- <initialiser_path /> -->
+      <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
    </control>
 
-   <control name="merge">
-      <cma_case_path
-        >/home-local/casale/Documents/code/compose/api2/out/neubauer_1995/</cma_case_path>
-      <final_time>1</final_time>
-      <number_particle>5</number_particle>
-      <delta_time>0</delta_time>
-      <results_file_name>neubaeur</results_file_name>
-      <number_exported_result>100</number_exported_result>
-      <model_name>two_meta_nb</model_name>
-      <!-- Add do not forget to add 4 species -->
-   </control>
-
-     <control name="bench2">
+     <control name="bench_n14">
       <cma_case_path
             recursive="true"
         >/home_pers/casale/Documents/thesis/cfd/bench/</cma_case_path>
@@ -103,12 +91,12 @@
      <control name="bench_sanofi">
       <cma_case_path
         >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path>
-      <final_time>800</final_time>
+      <final_time>10</final_time>
       <number_particle>10000</number_particle>
-      <delta_time>0</delta_time>
-      <results_file_name>debug</results_file_name>
-      <number_exported_result>10</number_exported_result>
-      <model_name>two_meta</model_name>
+      <delta_time>0.01</delta_time>
+      <results_file_name>bench_sanofi</results_file_name>
+      <number_exported_result>0</number_exported_result>
+      <model_name>two_meta_nb</model_name>
         <!-- <model_name>niente</model_name> -->
       <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>
    </control>
@@ -147,29 +135,6 @@
       <model_name>udf_model</model_name>
       <initialiser_path>./cma_data/0d_init.h5</initialiser_path>
    </control>
-
-   <control name="prepbatch">
-      <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
-      <final_time>7200</final_time>
-      <number_particle>50000</number_particle>
-      <delta_time>0.05</delta_time>
-      <results_file_name>prepbatch</results_file_name>
-      <number_exported_result>10</number_exported_result>
-      <model_name>two_meta</model_name>
-      <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
-   </control>
-
-   <control name="loadbatch">
-      <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>
-      <final_time>7200</final_time>
-      <number_particle>50000</number_particle>
-      <delta_time>0.5</delta_time>
-      <results_file_name>loadbatch</results_file_name>
-      <number_exported_result>100</number_exported_result>
-      <model_name>two_meta</model_name>
-      <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
-   </control>
-
 
    <control name="example0d">
       <cma_case_path>../../thesis/cfd-cma/cma_data/0d_gas/</cma_case_path>

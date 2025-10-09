@@ -4,13 +4,13 @@
 #ifndef NDEBUG
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#endif 
+#endif
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #ifndef NDEBUG
 #pragma GCC diagnostic pop
-#endif 
+#endif
 #include <Kokkos_Core.hpp>
 #include <cma_utils/cache_hydro_state.hpp>
 #include <common/common.hpp>
@@ -54,6 +54,8 @@ namespace Simulation
     [[nodiscard]] ColMajorKokkosScalarMatrix get_device_concentration() const;
     [[nodiscard]] std::span<double const> getVolumeData() const;
     [[nodiscard]] std::span<double> getContributionData() const;
+
+    [[nodiscard]] std::span<double> getContributionData_mut();
     [[nodiscard]] const DiagonalType& getVolume() const;
     [[nodiscard]] auto getConcentrationArray() const;
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
@@ -128,6 +130,11 @@ namespace Simulation
   }
 
   inline std::span<double> ScalarSimulation::getContributionData() const
+  {
+    return {this->sources.host.data(), static_cast<size_t>(this->sources.host.size())};
+  }
+
+  inline std::span<double> ScalarSimulation::getContributionData_mut()
   {
     return {this->sources.host.data(), static_cast<size_t>(this->sources.host.size())};
   }

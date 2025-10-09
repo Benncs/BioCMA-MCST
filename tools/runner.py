@@ -3,33 +3,35 @@
 import argparse
 import os
 import sys
+
+
 def detect_execution_mode():
     release_app = "/opt/biomc/biocma_mcst_cli_app"
     if os.path.exists(release_app):
         return True
     return False
 
-INSTALL_RELEASE =detect_execution_mode()
+
+INSTALL_RELEASE = detect_execution_mode()
 
 if INSTALL_RELEASE:
     gi = os.path.abspath(os.path.join("/opt/biomc"))
-    sys.path.append(gi) #TODO IMPROVE IMPORT
+    sys.path.append(gi)  # TODO IMPROVE IMPORT
 else:
-    dev_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "devutils"))
+    dev_path = os.path.abspath(os.path.join(os.path.dirname(__file__)))
     sys.path.append(dev_path)
 
 
 from exec import exec  # noqa: E402
-from cli_formater import format_cli # noqa: E402
+from cli_formater import format_cli  # noqa: E402
 
 __current_file_path = os.path.abspath(__file__)
 __current_directory = os.path.dirname(__current_file_path)
 ROOT = __current_directory + "/.."
 _MPI_ROOT_FLAG = ""  # "--allow-run-as-root"
-MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} --mca orte_base_help_aggregate 1 -np 2 --report-bindings --bind-to core --map-by slot:PE=3"
+MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} --mca orte_base_help_aggregate 1 -np 6  --report-bindings --bind-to core --map-by slot:PE=1"
 # MPI_COMMAND = f"mpiexec {_MPI_ROOT_FLAG} -np 8 --use-hwthread-cpus"
 OMP_NUM_THREADS = "1"
-
 
 
 def get_executable(instal: str, mpi: bool = True):
@@ -40,6 +42,7 @@ def get_executable(instal: str, mpi: bool = True):
         return f"/opt/biomc/{appname}"
     else:
         return f"{ROOT}/builddir/host/apps/cli/{appname}"
+
 
 def mk_parser():
     parser = argparse.ArgumentParser(description="Runner")
@@ -99,9 +102,9 @@ def mk_parser():
 def main():
     cli_args = mk_parser().parse_args()
 
-
-
-    run_cli, res_file = format_cli(["_", cli_args.casename],global_install=INSTALL_RELEASE)
+    run_cli, res_file = format_cli(
+        ["_", cli_args.casename], global_install=INSTALL_RELEASE
+    )
 
     mpi_c = ""
     if cli_args.use_mpi and not cli_args.dry_run:
@@ -127,7 +130,7 @@ def main():
         print(arg)
         return
 
-    exec(command, cli_args.n_threads, do_kokkos_measure=False)
+    exec(command, cli_args.n_threads, do_kokkos_measure=True)
 
 
 if __name__ == "__main__":

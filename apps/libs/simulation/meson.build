@@ -5,7 +5,7 @@ simulation_src_dir = './src'
 simulation_sources = run_command(
    'sh',
    '-c',
-   f'find @simulation_src_dir@ -type f -name *.cpp',
+   f'find @simulation_src_dir@ -type f -name *.cpp',check:true
 ).stdout().splitlines()
 
 lib_name = f'@project_name@_simulation'

@@ -1,13 +1,13 @@
 #ifndef NDEBUG
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#endif 
+#endif
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #ifndef NDEBUG
 #pragma GCC diagnostic pop
-#endif 
+#endif
 #include <simulation/mass_transfer.hpp>
 #include <common/common.hpp>
 #include <hydro/impl_mass_transfer.hpp>

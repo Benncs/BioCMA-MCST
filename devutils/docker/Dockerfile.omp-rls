@@ -14,11 +14,11 @@ COPY ./subprojects/eigen.wrap /app/subprojects/eigen.wrap
 COPY ./subprojects/cmtool /app/subprojects/cmtool
 COPY ./meson.build /app/meson.build
 COPY ./meson_options.txt /app/meson_options.txt
-COPY ./devutils/auto_generate /app/devutils/auto_generate
+COPY ./devutils/generate_model_loader.py /app/devutils/generate_model_loader.py
 COPY ./devutils/install_script.sh /app/devutils/install_script.sh
 COPY ./tools /app/tools
 COPY ./devutils/datamodel /app/devutils/datamodel
-COPY ./devutils/exec.py /app/devutils/exec.py
+COPY ./tools/exec.py /app/tools/exec.py
 
 RUN meson setup builddir\
  --buildtype=release    \

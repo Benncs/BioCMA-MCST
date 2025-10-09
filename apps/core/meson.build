@@ -1,6 +1,6 @@
 src_dir = './src'
 
-core_source = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ').stdout().splitlines()
+core_source = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ',check:true).stdout().splitlines()
 
 dep_core = [
     kokkos,

@@ -9,7 +9,7 @@ compile_commands.json
 .bmc_info
 results/
 cma_data/
-
+*.h5
 #Benchs
 *.folded
 *.data*
