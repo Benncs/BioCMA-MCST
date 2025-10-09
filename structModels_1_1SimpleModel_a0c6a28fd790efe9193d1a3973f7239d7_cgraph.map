@@ -1,11 +1,4 @@
 <map id="Models::SimpleModel::division" name="Models::SimpleModel::division">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,152,44"/>
-<area shape="rect" id="Node000002" href="$structModels_1_1Uptake.html#a81f6d63498b3036a75880ed7a5c48d6a" title=" " alt="" coords="200,12,364,37"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,22,184,22,184,27,152,27"/>
-<area shape="rect" id="Node000003" href="$structMC_1_1Distributions_1_1TruncatedNormal.html#af6cfcdb1f39978352e55fc5c5f729462" title=" " alt="" coords="412,5,601,44"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="365,22,396,22,396,27,365,27"/>
-<area shape="rect" id="Node000004" href="$namespaceMC_1_1Distributions.html#a3c07f6cf61b1c67ea9b2b3e0d6c42cc7" title="Computes the inverse CDF (probit function) of a normal distribution." alt="" coords="649,5,781,44"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="602,22,634,22,634,27,602,27"/>
-<area shape="rect" id="Node000005" href="$namespaceMC_1_1Distributions.html#a351272c0fa13e73d23c7b1caf92e858f" title="Computes an approximation of the inverse error function." alt="" coords="829,5,960,44"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="781,22,813,22,813,27,781,27"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,29,152,68"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="50,30,48,20,53,11,63,5,79,3,95,5,105,12,102,16,93,10,78,8,65,10,57,14,54,21,56,29"/>
 </map>

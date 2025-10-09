@@ -12,6 +12,7 @@ var classSimulation_1_1ScalarSimulation =
     [ "getConcentrationArray", "classSimulation_1_1ScalarSimulation.html#ae2625817dffc02083227be2b82dfe534", null ],
     [ "getConcentrationData", "classSimulation_1_1ScalarSimulation.html#afcf9b11b8de7215be6b83ed6a2aceaf0", null ],
     [ "getContributionData", "classSimulation_1_1ScalarSimulation.html#ae63deb940c3ff0f2c01089fa399225c2", null ],
+    [ "getContributionData_mut", "classSimulation_1_1ScalarSimulation.html#a5080ee4d5ac93889c2ebf53b9e270580", null ],
     [ "getVolume", "classSimulation_1_1ScalarSimulation.html#a7f914d5d6f893f873cac2697cc41682b", null ],
     [ "getVolumeData", "classSimulation_1_1ScalarSimulation.html#a8498ea2f568b016f61015c66aa6209c7", null ],
     [ "n_col", "classSimulation_1_1ScalarSimulation.html#a61b60090dad6432c6f3ed2c3e67c9273", null ],

@@ -1,0 +1,7 @@
+<map id="MC::ReactorDomain::reduce" name="MC::ReactorDomain::reduce">
+<area shape="rect" id="Node000001" title="Return a unique domain from data obtained with MPI gather." alt="" coords="202,37,350,76"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ReactorDomain.html#a50c7900b6adfbb3d988f3497ecbcfae2" title="Main constructor." alt="" coords="5,5,154,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,45,154,39,155,34,187,39"/>
+<area shape="rect" id="Node000003" href="$classMC_1_1ReactorDomain.html#a5f2e3ee22ab6fbc5d87134440a8865fe" title="Default destructor." alt="" coords="5,68,154,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="187,73,155,78,154,73,186,68"/>
+</map>

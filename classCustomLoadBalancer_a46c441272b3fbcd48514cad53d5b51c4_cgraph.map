@@ -1,5 +1,7 @@
 <map id="CustomLoadBalancer::CustomLoadBalancer" name="CustomLoadBalancer::CustomLoadBalancer">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,160,44"/>
-<area shape="rect" id="Node000002" href="$classILoadBalancer.html#a0ea1f8c452c4cc8ef53c981769fe7947" title=" " alt="" coords="208,12,343,37"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,22,193,22,193,27,160,27"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,24,160,62"/>
+<area shape="rect" id="Node000002" href="$classILoadBalancer.html#ad87b5d27f4c6fff4b1b8fb654b478b0c" title=" " alt="" coords="208,5,403,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,32,192,28,192,33,161,37"/>
+<area shape="rect" id="Node000003" href="$classILoadBalancer.html#a0ea1f8c452c4cc8ef53c981769fe7947" title=" " alt="" coords="238,55,373,79"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,49,222,55,222,61,160,54"/>
 </map>

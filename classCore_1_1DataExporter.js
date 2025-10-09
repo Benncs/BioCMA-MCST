@@ -19,6 +19,7 @@ var classCore_1_1DataExporter =
     [ "operator=", "classCore_1_1DataExporter.html#afa2762f3923d101b037451effdd73c97", null ],
     [ "operator=", "classCore_1_1DataExporter.html#ab1ebc3cb19a86b7ef00e731e4b6d5322", null ],
     [ "prepare_matrix", "classCore_1_1DataExporter.html#a9c60512b8e80f25d5f1f6cac29b27d07", null ],
+    [ "set_logger", "classCore_1_1DataExporter.html#ad3b98151595b0962c089a7afcdb2a642", null ],
     [ "write_matrix", "classCore_1_1DataExporter.html#a6078190744bea0d5319dedc207ab68b2", null ],
     [ "write_matrix", "classCore_1_1DataExporter.html#ae96d1f9c963c6a477dfae7ef00053da5", null ],
     [ "write_properties", "classCore_1_1DataExporter.html#a7c1ccdd8fd75dacdf621d0a42757a555", null ],
@@ -26,6 +27,7 @@ var classCore_1_1DataExporter =
     [ "write_simple", "classCore_1_1DataExporter.html#af340f4cf2e82a66d036f21f3c797fb86", null ],
     [ "descriptors", "classCore_1_1DataExporter.html#a33ee48bdb5b87aeeeb8208c4f15de01b", null ],
     [ "export_counter", "classCore_1_1DataExporter.html#a664e70090726aed7a359e2c0dde74460", null ],
+    [ "logger", "classCore_1_1DataExporter.html#a371c949f4ceb63ad0391b65083bf7ab1", null ],
     [ "metadata", "classCore_1_1DataExporter.html#abc84638b733bf89818b0ca2adb4e6c19", null ],
     [ "pimpl", "classCore_1_1DataExporter.html#ac971ba24f23d0ad43a077ce7a521624a", null ]
 ];

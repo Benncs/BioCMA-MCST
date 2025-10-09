@@ -1,7 +1,13 @@
 <map id="ILoadBalancer::size" name="ILoadBalancer::size">
-<area shape="rect" id="Node000001" title=" " alt="" coords="246,44,381,69"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="246,138,381,162"/>
 <area shape="rect" id="Node000002" href="$classCustomLoadBalancer.html#a46c441272b3fbcd48514cad53d5b51c4" title=" " alt="" coords="24,5,179,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,47,179,39,180,34,231,42"/>
-<area shape="rect" id="Node000003" href="$classHostImportantLoadBalancer.html#a968eb70ea9c0f8e2d0ac9257333b23ee" title=" " alt="" coords="5,68,198,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,71,199,76,198,71,230,66"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="287,128,247,92,196,58,173,47,176,42,199,53,250,88,291,125"/>
+<area shape="rect" id="Node000003" href="$classBoundLoadBalancer.html#a98fceab7666ed5c0d6c0687e4c76e150" title=" " alt="" coords="29,68,174,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="253,135,168,110,170,105,255,130"/>
+<area shape="rect" id="Node000004" href="$classHostImportantLoadBalancer.html#a1e17060ec1afd7d914ee01f23b80fb7f" title=" " alt="" coords="9,131,194,169"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="230,153,194,153,194,147,230,147"/>
+<area shape="rect" id="Node000005" href="$classUniformLoadBalancer.html#a51f2aad072402a9de2cd8ad64ca4c04c" title=" " alt="" coords="28,193,175,232"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="255,170,170,195,168,190,253,165"/>
+<area shape="rect" id="Node000006" href="$classHostImportantLoadBalancer.html#a968eb70ea9c0f8e2d0ac9257333b23ee" title=" " alt="" coords="5,256,198,295"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="290,175,250,211,199,246,173,258,170,253,196,241,246,207,287,171"/>
 </map>

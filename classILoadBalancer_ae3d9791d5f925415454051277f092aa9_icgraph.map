@@ -1,5 +1,9 @@
 <map id="ILoadBalancer::getRatio" name="ILoadBalancer::getRatio">
-<area shape="rect" id="Node000001" title=" " alt="" coords="201,5,361,30"/>
-<area shape="rect" id="Node000002" href="$classILoadBalancer.html#a27fb1f345c6d7b6e428b2bd012429dc2" title=" " alt="" coords="5,5,153,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="185,20,153,20,153,15,185,15"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="406,33,566,58"/>
+<area shape="rect" id="Node000002" href="$classILoadBalancer.html#a27fb1f345c6d7b6e428b2bd012429dc2" title=" " alt="" coords="211,5,358,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="390,35,358,31,359,25,391,30"/>
+<area shape="rect" id="Node000003" href="$classILoadBalancer.html#aa10d0dcff513a3ce26f47ce671401d5b" title=" " alt="" coords="219,54,350,93"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="391,62,350,67,350,62,390,56"/>
+<area shape="rect" id="Node000004" href="$classILoadBalancer.html#a11305fecea49664648595dd5d61027b3" title=" " alt="" coords="5,61,163,86"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="204,76,163,76,163,71,204,71"/>
 </map>

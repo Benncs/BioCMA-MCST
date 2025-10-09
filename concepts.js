@@ -5,6 +5,12 @@ var concepts =
         [ "ProbabilityLaw", "conceptMC_1_1Distributions_1_1ProbabilityLaw.html", null ]
       ] ]
     ] ],
+    [ "Models", "namespaceModels.html", [
+      [ "DivisionModel", "namespaceModels_1_1DivisionModel.html", [
+        [ "DivisionModelModule", "conceptModels_1_1DivisionModel_1_1DivisionModelModule.html", null ]
+      ] ],
+      [ "UptakeModel", "conceptModels_1_1UptakeModel.html", null ]
+    ] ],
     [ "WrapMPI", "namespaceWrapMPI.html", [
       [ "POD_t", "conceptWrapMPI_1_1POD__t.html", null ]
     ] ],

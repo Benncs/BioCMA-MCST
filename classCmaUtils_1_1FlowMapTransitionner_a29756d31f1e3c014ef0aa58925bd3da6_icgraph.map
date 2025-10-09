@@ -1,5 +1,6 @@
 <map id="CmaUtils::FlowMapTransitionner::update_flow" name="CmaUtils::FlowMapTransitionner::update_flow">
-<area shape="rect" id="Node000001" title="Calculate the current state based on the selected method, may be caching or direct calculation." alt="" coords="265,5,476,44"/>
-<area shape="rect" id="Node000002" href="$classCmaUtils_1_1FlowMapTransitionner.html#aa66bfc8d6b4f0890630a5a20b4664956" title="Advances the simulation by one timestep." alt="" coords="5,5,217,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="249,27,217,27,217,22,249,22"/>
+<area shape="rect" id="Node000001" title="Calculate the current state based on the selected method, may be caching or direct calculation." alt="" coords="265,29,476,68"/>
+<area shape="poly" id="edge2_Node000001_Node000001" title=" " alt="" coords="413,16,398,10,370,8,345,10,330,15,324,21,328,28,323,30,319,20,327,10,344,5,370,3,399,5,415,11"/>
+<area shape="rect" id="Node000002" href="$classCmaUtils_1_1FlowMapTransitionner.html#aa66bfc8d6b4f0890630a5a20b4664956" title="Advances the simulation by one timestep." alt="" coords="5,29,217,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="249,51,217,51,217,46,249,46"/>
 </map>

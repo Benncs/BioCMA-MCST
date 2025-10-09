@@ -1,0 +1,8 @@
+<map id="PythonBindings::init_handle" name="PythonBindings::init_handle">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,29,143,68"/>
+<area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#abdcc3b78881f75bd8fa06815ea08bd08" title="Initialize a simulation instance." alt="" coords="191,29,350,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,46,175,46,175,51,143,51"/>
+<area shape="rect" id="Node000003" href="$structApi_1_1SimulationInstance.html#a7a849ee5dd1d0d13a198aecee702944c" title="Deleted copy constructor to prevent copying." alt="" coords="398,29,557,68"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="350,46,383,46,383,51,350,51"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="439,30,436,20,442,11,456,5,478,3,501,5,514,12,512,16,499,10,478,8,458,10,446,15,442,21,444,28"/>
+</map>

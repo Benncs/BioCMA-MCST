@@ -1,9 +1,0 @@
-<map id="Models::Uptake::division" name="Models::Uptake::division">
-<area shape="rect" id="Node000001" title=" " alt="" coords="229,68,393,93"/>
-<area shape="rect" id="Node000002" href="$structModels_1_1SimpleModel.html#a0c6a28fd790efe9193d1a3973f7239d7" title=" " alt="" coords="20,5,166,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="244,66,166,46,167,41,245,61"/>
-<area shape="rect" id="Node000003" href="$structModels_1_1TwoMeta.html#afcf107b4e7c86508762048d28608a5b9" title=" " alt="" coords="5,68,181,93"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="213,83,181,83,181,78,213,78"/>
-<area shape="rect" id="Node000004" href="$structModels_1_1TwoMetaDiv.html#a067be4bba4ba59abc0f3da680e6be052" title=" " alt="" coords="21,117,165,156"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="246,100,166,121,164,116,244,95"/>
-</map>

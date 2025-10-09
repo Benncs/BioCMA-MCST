@@ -1,0 +1,6 @@
+<map id="Api::SimulationInstance::SimulationInstance" name="Api::SimulationInstance::SimulationInstance">
+<area shape="rect" id="Node000001" title="Defaulted move constructor for efficient resource transfer." alt="" coords="5,29,165,68"/>
+<area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#a7a849ee5dd1d0d13a198aecee702944c" title="Deleted copy constructor to prevent copying." alt="" coords="213,29,372,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,46,197,46,197,51,165,51"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="254,30,251,20,257,11,271,5,292,3,315,5,329,12,326,16,314,10,292,8,272,10,260,15,256,21,259,28"/>
+</map>

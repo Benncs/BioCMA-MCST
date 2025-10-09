@@ -1,0 +1,9 @@
+<map id="Simulation::ScalarSimulation::operator=" name="Simulation::ScalarSimulation::operator=">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,194,76"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1ScalarSimulation.html#aa72818956090d90be703c0ba0ed932ee" title=" " alt="" coords="242,37,430,76"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,54,226,54,226,59,194,59"/>
+<area shape="rect" id="Node000003" href="$classSimulation_1_1ScalarSimulation.html#a61b60090dad6432c6f3ed2c3e67c9273" title=" " alt="" coords="478,5,666,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="430,41,462,37,463,42,431,47"/>
+<area shape="rect" id="Node000004" href="$classSimulation_1_1ScalarSimulation.html#a59abe629b12f83f5ee99971a9098950e" title=" " alt="" coords="478,68,666,107"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="431,66,463,70,462,76,430,72"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Models::Uptake::phi_pts" name="Models::Uptake::phi_pts">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,168,30"/>
+<area shape="rect" id="Node000002" href="$structModels_1_1Uptake.html#a4678e2ba17d3206a046a14ed2460a6b2" title=" " alt="" coords="216,5,357,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,15,200,15,200,20,168,20"/>
+<area shape="rect" id="Node000003" href="$namespaceModels.html#a98711ac2ebacdd7d1adea1524f8fc43b" title=" " alt="" coords="405,5,544,30"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="357,15,389,15,389,20,357,20"/>
+</map>

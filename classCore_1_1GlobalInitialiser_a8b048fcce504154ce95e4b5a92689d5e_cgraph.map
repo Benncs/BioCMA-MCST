@@ -1,0 +1,7 @@
+<map id="Core::GlobalInitialiser::init_mtr_model" name="Core::GlobalInitialiser::init_mtr_model">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,152,76"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#a5134f9db1f59d9124d5fdec88e3e99f3" title="Checks the validity of specified initialization steps." alt="" coords="214,5,360,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,43,198,36,199,41,152,48"/>
+<area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#a94cfe4657d93316bd4609e1ddd2d64cc" title=" " alt="" coords="200,68,375,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,65,185,70,184,75,152,70"/>
+</map>

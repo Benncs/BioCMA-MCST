@@ -1,0 +1,17 @@
+<map id="Models::TwoMetaNb::update" name="Models::TwoMetaNb::update">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,154,44"/>
+<area shape="rect" id="Node000002" href="$structModels_1_1Uptake.html#aa49ff7f6c6612f124457541d05e080ae" title=" " alt="" coords="202,12,392,37"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,22,186,22,186,27,154,27"/>
+<area shape="rect" id="Node000003" href="$structModels_1_1Uptake.html#a4678e2ba17d3206a046a14ed2460a6b2" title=" " alt="" coords="857,30,998,54"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="392,18,585,15,697,16,809,22,841,25,841,31,808,27,697,22,585,20,392,23"/>
+<area shape="rect" id="Node000005" href="$structModels_1_1Uptake.html#a4f234fec9f9f9ab26e607310ab95291f" title=" " alt="" coords="440,36,598,61"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="393,32,425,36,424,41,392,38"/>
+<area shape="rect" id="Node000004" href="$namespaceModels.html#a98711ac2ebacdd7d1adea1524f8fc43b" title=" " alt="" coords="1046,58,1185,82"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="999,50,1031,55,1030,60,998,55"/>
+<area shape="rect" id="Node000006" href="$structModels_1_1Uptake.html#a86c86b134ce5505227968ede9c60c8db" title=" " alt="" coords="859,79,996,117"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="582,59,647,70,844,90,843,95,646,75,581,64"/>
+<area shape="rect" id="Node000007" href="$structModels_1_1Uptake.html#a3a55e9132d39efd1185cf726946b4fb0" title=" " alt="" coords="646,36,809,61"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="599,46,631,46,631,51,599,51"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="996,85,1030,80,1031,85,997,90"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="809,43,841,42,841,48,809,49"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="MC::ReactorDomain::ReactorDomain" name="MC::ReactorDomain::ReactorDomain">
+<area shape="rect" id="Node000001" title="Move constructor." alt="" coords="5,29,154,68"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ReactorDomain.html#ad520ec34d2ffda4f7e62959ed4676aea" title=" " alt="" coords="202,29,350,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,46,186,46,186,51,154,51"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="239,30,236,20,242,11,256,5,276,3,298,5,310,12,308,16,296,10,276,8,257,10,246,15,242,21,244,28"/>
+</map>

@@ -1,6 +1,7 @@
 var classCore_1_1SignalHandler =
 [
     [ "SignalHandler", "classCore_1_1SignalHandler.html#a1f78204fef0e70461d3477db7cbd9b74", null ],
+    [ "~SignalHandler", "classCore_1_1SignalHandler.html#a683bf07acfbfef1abc9c23f2196ea6b6", null ],
     [ "handle_SIGINT", "classCore_1_1SignalHandler.html#a3a233dad29fa8d15701c4a5faf4d5bdc", null ],
     [ "handle_SIGUSR1", "classCore_1_1SignalHandler.html#aeb76323440746ae38d5df8b421b8a1f5", null ],
     [ "handle_SIGUSR2", "classCore_1_1SignalHandler.html#acebfb4be790c494a3fd30b728ecfc4b0", null ],

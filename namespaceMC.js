@@ -6,6 +6,7 @@ var namespaceMC =
     [ "MonteCarloUnit", "structMC_1_1MonteCarloUnit.html", "structMC_1_1MonteCarloUnit" ],
     [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html", "classMC_1_1ParticlesContainer" ],
     [ "ReactorDomain", "classMC_1_1ReactorDomain.html", "classMC_1_1ReactorDomain" ],
+    [ "ComputeSpace", "namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f", null ],
     [ "ContributionView", "namespaceMC.html#ab52c4201047a412a68a2f53444dacb78", null ],
     [ "DynParticlesModel", "namespaceMC.html#ac6dce614edaf4c841140ad371ee80f24", null ],
     [ "KernelConcentrationType", "namespaceMC.html#aec96faf8efe0d2222c4c2f19e3fee1cd", null ],
@@ -34,9 +35,9 @@ var namespaceMC =
       [ "Dead", "namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7ca183b62c7f067711f9c5a54913c054617", null ]
     ] ],
     [ "event_index", "namespaceMC.html#ae91609aafa31939cedd6775cc5adafc4", null ],
-    [ "get_policy", "namespaceMC.html#aeb6c61ac56feb0416848df97cb95a720", null ],
-    [ "impl_init", "namespaceMC.html#add6610d86a95c5798b5bbc69920cf657", null ],
-    [ "init", "namespaceMC.html#a146b478d04e1def9f6d1a2bd08a0854b", null ],
+    [ "get_policy", "namespaceMC.html#a3f29b6dc7dd9c6f1f2da8461f189e233", null ],
+    [ "impl_init", "namespaceMC.html#aabb3d28b6ac38413f8d34f525d26942f", null ],
+    [ "init", "namespaceMC.html#a8c67a0954fafbfba6825f3077e3d0df8", null ],
     [ "post_init_weight", "namespaceMC.html#ac9b6a65d70e4c5007f4bc908509924a0", null ],
     [ "number_event_type", "namespaceMC.html#a2bac73e9eee491093b7ac10969645bfa", null ]
 ];

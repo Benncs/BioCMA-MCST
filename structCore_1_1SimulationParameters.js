@@ -16,5 +16,6 @@ var structCore_1_1SimulationParameters =
     [ "results_file_name", "structCore_1_1SimulationParameters.html#a800b07b4ed1487a2cf08ac7b7d83dcfe", null ],
     [ "save_final_serde", "structCore_1_1SimulationParameters.html#a99d226ca33273a07b776dae2bcf5e63d", null ],
     [ "t_per_flow_map", "structCore_1_1SimulationParameters.html#af7d917d58bef46be17ea84ec4cf0bff0", null ],
+    [ "uniform_mc_init", "structCore_1_1SimulationParameters.html#aa2bc5d8cdf722682a17beb6f6f0909a1", null ],
     [ "verbose", "structCore_1_1SimulationParameters.html#a549b82a6fde3a6ff6d488f1401d01e8d", null ]
 ];

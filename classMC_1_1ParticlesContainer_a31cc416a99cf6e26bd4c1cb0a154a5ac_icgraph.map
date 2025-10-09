@@ -1,0 +1,11 @@
+<map id="MC::ParticlesContainer::ParticlesContainer" name="MC::ParticlesContainer::ParticlesContainer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="212,100,370,139"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#ad499de971fbe1a2cf3e1adbe2bb151d6" title=" " alt="" coords="5,5,164,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,95,163,58,137,47,139,42,165,53,240,90"/>
+<area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a5d93b87f5a6e18c449e0ed62333e9d6e" title=" " alt="" coords="5,68,164,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="196,107,164,102,165,97,197,102"/>
+<area shape="rect" id="Node000004" href="$classMC_1_1ParticlesContainer.html#adacba063d362632ca0899bae750b628a" title="Default copy and move constructors and assignment operators." alt="" coords="5,131,164,169"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="197,136,165,141,164,136,196,131"/>
+<area shape="rect" id="Node000005" href="$classMC_1_1ParticlesContainer.html#ae0cd8cf83c2728db495167ec2f10d80a" title=" " alt="" coords="5,193,164,232"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="238,148,165,183,136,195,134,190,163,178,236,144"/>
+</map>

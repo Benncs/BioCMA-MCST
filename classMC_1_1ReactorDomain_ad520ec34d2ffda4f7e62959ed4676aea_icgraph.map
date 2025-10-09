@@ -1,0 +1,17 @@
+<map id="MC::ReactorDomain::ReactorDomain" name="MC::ReactorDomain::ReactorDomain">
+<area shape="rect" id="Node000001" title=" " alt="" coords="398,131,546,169"/>
+<area shape="poly" id="edge3_Node000001_Node000001" title=" " alt="" coords="504,118,492,112,472,109,453,111,442,116,438,122,441,130,435,131,433,121,439,112,452,106,472,104,494,106,507,113"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ReactorDomain.html#a5b9c87cd27af77aec95a03b5b31ce8f8" title=" " alt="" coords="202,5,350,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="436,123,396,90,349,58,328,47,331,42,351,53,399,85,440,118"/>
+<area shape="rect" id="Node000003" href="$classMC_1_1ReactorDomain.html#a767b95c07cbc48f98c5841f94b564f20" title="Move assignment operator." alt="" coords="202,68,350,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="395,128,338,110,340,105,396,123"/>
+<area shape="rect" id="Node000004" href="$classMC_1_1ReactorDomain.html#afc896a99412f0663a598cd22752d0fac" title="Move constructor." alt="" coords="202,131,350,169"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="383,153,350,153,350,147,383,147"/>
+<area shape="rect" id="Node000005" href="$classMC_1_1ReactorDomain.html#a6c2cb1a737b21df58c90e0a0c91ebc0f" title="Return a unique domain from data obtained with MPI gather." alt="" coords="202,193,350,232"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="396,177,340,195,338,190,395,172"/>
+<area shape="rect" id="Node000007" href="$classMC_1_1ReactorDomain.html#a5f2e3ee22ab6fbc5d87134440a8865fe" title="Default destructor." alt="" coords="5,251,154,289"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="443,182,402,217,351,246,301,261,250,270,154,276,154,271,249,265,300,256,349,241,399,212,440,178"/>
+<area shape="rect" id="Node000006" href="$classMC_1_1ReactorDomain.html#a50c7900b6adfbb3d988f3497ecbcfae2" title="Main constructor." alt="" coords="5,188,154,227"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="186,213,154,212,154,207,186,208"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="193,239,149,253,147,248,192,234"/>
+</map>

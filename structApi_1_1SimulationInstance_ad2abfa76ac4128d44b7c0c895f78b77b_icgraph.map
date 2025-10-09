@@ -1,0 +1,8 @@
+<map id="Api::SimulationInstance::apply_load" name="Api::SimulationInstance::apply_load">
+<area shape="rect" id="Node000001" title="Load ad apply the simulation configuration and prepare for execution based on file." alt="" coords="213,61,372,100"/>
+<area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#a3398ddd22faa3ceb16b454c51faeced0" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,29,165,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,69,165,64,165,58,198,63"/>
+<area shape="rect" id="Node000003" href="$structApi_1_1SimulationInstance.html#afee07db8a6b57fe7982900ecaa943cc0" title="Default constructor." alt="" coords="5,92,165,131"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="198,97,165,102,165,97,197,92"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="119,16,107,10,85,8,65,10,53,15,49,21,51,28,46,30,44,20,50,11,64,5,85,3,108,5,121,12"/>
+</map>

@@ -1,20 +1,22 @@
 <map id="Core::load" name="Core::load">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,87,104"/>
-<area shape="rect" id="Node000002" href="$namespaceCore.html#acd849e9c1dbf0aef00c45cfdcb0194b3" title="Start simulation." alt="" coords="135,79,219,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,89,119,89,119,94,87,94"/>
-<area shape="rect" id="Node000003" href="$namespaceCore.html#a23e6f3d22fc51ef9decabb2c220b27c4" title=" " alt="" coords="267,51,428,76"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="219,90,298,77,299,82,220,95"/>
-<area shape="rect" id="Node000004" href="$namespaceCore.html#afbce0beea293a7ccfdfc34a85b5e5e77" title=" " alt="" coords="289,100,406,139"/>
-<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="220,96,274,105,273,110,219,101"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,138,87,162"/>
+<area shape="rect" id="Node000002" href="$namespaceCore.html#ab6528e76111960864b7e4741327b3049" title="Start simulation." alt="" coords="135,138,219,162"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,147,119,147,119,153,87,153"/>
+<area shape="rect" id="Node000003" href="$namespaceCore.html#a23e6f3d22fc51ef9decabb2c220b27c4" title=" " alt="" coords="267,82,428,106"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="219,143,266,127,318,110,319,115,268,133,220,148"/>
+<area shape="rect" id="Node000004" href="$namespaceCore.html#afbce0beea293a7ccfdfc34a85b5e5e77" title=" " alt="" coords="289,131,406,169"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="219,147,273,147,273,153,219,153"/>
 <area shape="rect" id="Node000010" href="$namespacePostProcessing.html#a0e06c75e06cf43e767d5e3e8afab62f2" title=" " alt="" coords="274,193,422,232"/>
-<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="198,102,308,182,305,186,195,106"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="267,70,227,78,226,72,266,65"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="214,160,280,185,278,190,212,165"/>
+<area shape="rect" id="Node000014" href="$classCore_1_1DataExporter.html#ad3b98151595b0962c089a7afcdb2a642" title=" " alt="" coords="280,256,415,295"/>
+<area shape="poly" id="edge14_Node000002_Node000014" title=" " alt="" coords="189,161,222,200,269,241,276,246,274,251,265,245,218,203,185,164"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="267,109,205,132,203,128,265,104"/>
 <area shape="rect" id="Node000005" href="$classCore_1_1PartialExporter.html#a05cba8c28abaecce99f586d551a75f80" title="Initializes the fields required for exporting data." alt="" coords="491,5,637,44"/>
-<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="401,97,427,85,451,69,475,53,486,48,488,53,478,58,454,73,430,90,404,102"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="406,129,427,116,441,101,450,85,459,69,475,53,480,49,483,54,478,57,463,72,455,88,446,104,430,120,408,133"/>
 <area shape="rect" id="Node000007" href="$namespacePostProcessing.html#a9ff9231cbdf2a3c4e539c4638aba2445" title=" " alt="" coords="490,68,638,107"/>
-<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="406,108,474,98,475,103,407,113"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="406,130,479,109,481,114,408,136"/>
 <area shape="rect" id="Node000008" href="$classCore_1_1PartialExporter.html#a450fb0c92efa4ee81b4083fc01f5e665" title="Writes the number of particles in each compartment." alt="" coords="485,131,643,169"/>
-<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="407,125,470,134,470,139,406,130"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="407,147,469,147,469,153,407,153"/>
 <area shape="rect" id="Node000006" href="$classCore_1_1DataExporter.html#a9c60512b8e80f25d5f1f6cac29b27d07" title=" " alt="" coords="700,5,834,44"/>
 <area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="637,22,685,22,685,27,637,27"/>
 <area shape="rect" id="Node000009" href="$classCore_1_1DataExporter.html#a0af9b5e13d16339af1918f8e845193f9" title=" " alt="" coords="700,131,834,169"/>

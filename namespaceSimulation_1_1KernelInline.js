@@ -1,8 +1,13 @@
 var namespaceSimulation_1_1KernelInline =
 [
     [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html", "structSimulation_1_1KernelInline_1_1CycleFunctor" ],
+    [ "CycleReducer", "classSimulation_1_1KernelInline_1_1CycleReducer.html", "classSimulation_1_1KernelInline_1_1CycleReducer" ],
+    [ "CycleReduceType", "structSimulation_1_1KernelInline_1_1CycleReduceType.html", "structSimulation_1_1KernelInline_1_1CycleReduceType" ],
+    [ "Functors", "structSimulation_1_1KernelInline_1_1Functors.html", "structSimulation_1_1KernelInline_1_1Functors" ],
     [ "MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", "structSimulation_1_1KernelInline_1_1MoveFunctor" ],
     [ "MoveInfo", "structSimulation_1_1KernelInline_1_1MoveInfo.html", "structSimulation_1_1KernelInline_1_1MoveInfo" ],
+    [ "TagFirstPass", "structSimulation_1_1KernelInline_1_1TagFirstPass.html", null ],
+    [ "TagSecondPass", "structSimulation_1_1KernelInline_1_1TagSecondPass.html", null ],
     [ "__find_next_compartment", "namespaceSimulation_1_1KernelInline.html#a68ac7aac1215936a97dee2435fb8fa28", null ],
     [ "_ln", "namespaceSimulation_1_1KernelInline.html#a51d881a6b6159d9839b53d9b6f607b65", null ],
     [ "_ln", "namespaceSimulation_1_1KernelInline.html#adad0345d9377ee65d288bdc7c8b9432a", null ],

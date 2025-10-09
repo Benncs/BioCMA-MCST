@@ -1,0 +1,10 @@
+<map id="Simulation::Feed::FeedFactory::constant" name="Simulation::Feed::FeedFactory::constant">
+<area shape="rect" id="Node000001" title=" " alt="" coords="450,40,651,79"/>
+<area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#a5a689a100cbbf66d7a6d9171a8718cff" title=" " alt="" coords="228,5,387,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="434,45,387,39,388,33,435,40"/>
+<area shape="rect" id="Node000004" href="$structApi_1_1SimulationInstance.html#aec331d2ab718c45a574566727e463996" title=" " alt="" coords="213,68,402,120"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="435,79,403,83,402,78,434,73"/>
+<area shape="rect" id="Node000003" href="$structApi_1_1SimulationInstance.html#afee07db8a6b57fe7982900ecaa943cc0" title="Default constructor." alt="" coords="5,40,165,79"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="213,42,166,50,165,44,212,37"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="197,79,165,74,166,69,198,74"/>
+</map>

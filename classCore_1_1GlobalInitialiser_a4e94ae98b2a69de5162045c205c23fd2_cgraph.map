@@ -1,5 +1,0 @@
-<map id="Core::GlobalInitialiser::init_feed" name="Core::GlobalInitialiser::init_feed">
-<area shape="rect" id="Node000001" title="Initializes a simulation feed." alt="" coords="5,5,152,44"/>
-<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#a3844076c910ed26f60f42bada71cc09e" title="Validates the specified initialization step and any additional steps." alt="" coords="200,5,346,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,22,185,22,185,27,152,27"/>
-</map>

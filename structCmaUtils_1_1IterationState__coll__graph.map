@@ -1,5 +1,5 @@
 <map id="CmaUtils::IterationState" name="CmaUtils::IterationState">
-<area shape="rect" id="Node000001" title="Structure to store information about the reactor state during simulation." alt="" coords="24,120,186,145"/>
+<area shape="rect" id="Node000001" title="Structure to store information about the reactor state during simulation." alt="" coords="24,133,186,158"/>
 <area shape="rect" id="Node000002" href="$classCmaUtils_1_1PreCalculatedHydroState.html" title="Structure to store hydrodynamic properties from a compartment mesh." alt="" coords="5,5,205,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,60,108,119,102,119,102,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,60,108,133,102,133,102,60"/>
 </map>

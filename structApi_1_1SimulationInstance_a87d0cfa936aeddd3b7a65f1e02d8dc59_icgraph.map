@@ -1,7 +1,0 @@
-<map id="Api::SimulationInstance::set_feed" name="Api::SimulationInstance::set_feed">
-<area shape="rect" id="Node000001" title=" " alt="" coords="430,12,589,51"/>
-<area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#aa760a361f0899468e5e7d24b55734eb0" title="Configure feed constants for the simulation." alt="" coords="223,12,382,51"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="415,34,382,34,382,29,415,29"/>
-<area shape="rect" id="Node000003" href="$structApi_1_1SimulationInstance.html#a1a8fec396e8646910f54a882b19e5b31" title=" " alt="" coords="5,5,175,58"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="207,34,175,34,175,29,207,29"/>
-</map>

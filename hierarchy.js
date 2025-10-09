@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "Models::DivisionModel::Adder< M >", "structModels_1_1DivisionModel_1_1Adder.html", null ],
     [ "PostProcessing::BonceBuffer", "structPostProcessing_1_1BonceBuffer.html", null ],
     [ "Canary", "classCanary.html", null ],
     [ "Core::CaseData", "structCore_1_1CaseData.html", null ],
@@ -10,6 +11,8 @@ var hierarchy =
     [ "CustomFunctor", "structCustomFunctor.html", null ],
     [ "Core::ScalarFactory::CustomScript", "structCore_1_1ScalarFactory_1_1CustomScript.html", null ],
     [ "Simulation::KernelInline::CycleFunctor< M >", "structSimulation_1_1KernelInline_1_1CycleFunctor.html", null ],
+    [ "Simulation::KernelInline::CycleReducer< Space >", "classSimulation_1_1KernelInline_1_1CycleReducer.html", null ],
+    [ "Simulation::KernelInline::CycleReduceType", "structSimulation_1_1KernelInline_1_1CycleReduceType.html", null ],
     [ "Core::DataExporter", "classCore_1_1DataExporter.html", [
       [ "Core::MainExporter", "classCore_1_1MainExporter.html", null ],
       [ "Core::PartialExporter", "classCore_1_1PartialExporter.html", null ]
@@ -19,8 +22,9 @@ var hierarchy =
     [ "Simulation::Dimensions", "structSimulation_1_1Dimensions.html", null ],
     [ "DynamicDefaultModel", "structDynamicDefaultModel.html", null ],
     [ "EigenKokkosBase< EigenLayout >", "structEigenKokkosBase.html", null ],
-    [ "EigenKokkosBase< EigenLayoutLeft >", "structEigenKokkosBase.html", null ],
-    [ "EigenKokkosBase< EigenLayoutRight >", "structEigenKokkosBase.html", null ],
+    [ "std::enable_shared_from_this", null, [
+      [ "IO::RedirectGuard", "classIO_1_1RedirectGuard.html", null ]
+    ] ],
     [ "Simulation::EnvironementProperties", "structSimulation_1_1EnvironementProperties.html", null ],
     [ "Simulation::MassTransfer::EquilibriumFunctor", "structSimulation_1_1MassTransfer_1_1EquilibriumFunctor.html", null ],
     [ "MC::EventContainer", "structMC_1_1EventContainer.html", null ],
@@ -29,19 +33,23 @@ var hierarchy =
     ] ],
     [ "ExecInfo", "structExecInfo.html", null ],
     [ "std::false_type", null, [
+      [ "has_uniform_weight< T, std::void_t< typename T::uniform_weight > >", "structhas__uniform__weight_3_01T_00_01std_1_1void__t_3_01typename_01T_1_1uniform__weight_01_4_01_4.html", null ],
       [ "has_uniform_weight< T, typename >", "structhas__uniform__weight.html", null ]
     ] ],
-    [ "Simulation::Feed::FeedDescritor", "classSimulation_1_1Feed_1_1FeedDescritor.html", null ],
+    [ "Simulation::Feed::FeedDescriptor", "structSimulation_1_1Feed_1_1FeedDescriptor.html", null ],
     [ "Simulation::Feed::FeedFactory", "structSimulation_1_1Feed_1_1FeedFactory.html", null ],
     [ "Core::ScalarFactory::File", "structCore_1_1ScalarFactory_1_1File.html", null ],
     [ "Simulation::MassTransfer::Type::FixedKla", "structSimulation_1_1MassTransfer_1_1Type_1_1FixedKla.html", null ],
-    [ "Simulation::MassTransfer::Type::Flowmap", "structSimulation_1_1MassTransfer_1_1Type_1_1Flowmap.html", null ],
+    [ "Models::FixedLength", "structModels_1_1FixedLength.html", null ],
+    [ "Simulation::MassTransfer::Type::FlowmapKla", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapKla.html", null ],
     [ "CmaUtils::FlowMapTransitionner", "classCmaUtils_1_1FlowMapTransitionner.html", [
       [ "CmaUtils::DiscontinuousFMT", "classCmaUtils_1_1DiscontinuousFMT.html", null ],
       [ "CmaUtils::LinterFMT", "classCmaUtils_1_1LinterFMT.html", null ]
     ] ],
+    [ "Simulation::MassTransfer::Type::FlowmapTurbulence", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapTurbulence.html", null ],
     [ "foo", "structfoo.html", null ],
     [ "Core::ScalarFactory::FullCase", "structCore_1_1ScalarFactory_1_1FullCase.html", null ],
+    [ "Simulation::KernelInline::Functors< Space, Model >", "structSimulation_1_1KernelInline_1_1Functors.html", null ],
     [ "Core::GlobalInitialiser", "classCore_1_1GlobalInitialiser.html", null ],
     [ "WrapMPI::HostIterationPayload", "classWrapMPI_1_1HostIterationPayload.html", null ],
     [ "ILoadBalancer", "classILoadBalancer.html", [
@@ -62,34 +70,36 @@ var hierarchy =
     [ "MC::KPRNG", "classMC_1_1KPRNG.html", null ],
     [ "UnsafeUDF::Loader", "structUnsafeUDF_1_1Loader.html", null ],
     [ "Core::ScalarFactory::Local", "structCore_1_1ScalarFactory_1_1Local.html", null ],
+    [ "IO::Logger", "classIO_1_1Logger.html", [
+      [ "IO::Console", "classIO_1_1Console.html", null ]
+    ] ],
     [ "MC::Distributions::LogNormal< F >", "structMC_1_1Distributions_1_1LogNormal.html", null ],
     [ "Simulation::MassTransfer::MassTransferModel", "classSimulation_1_1MassTransfer_1_1MassTransferModel.html", null ],
     [ "Simulation::MassTransfer::MassTransferProxy", "structSimulation_1_1MassTransfer_1_1MassTransferProxy.html", null ],
     [ "Simulation::Mixture", "classSimulation_1_1Mixture.html", null ],
     [ "MC::MonteCarloUnit", "structMC_1_1MonteCarloUnit.html", null ],
-    [ "Simulation::KernelInline::MoveFunctor< enable_leave, enable_move >", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", null ],
+    [ "Simulation::KernelInline::MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", null ],
     [ "Simulation::KernelInline::MoveInfo< ExecSpace >", "structSimulation_1_1KernelInline_1_1MoveInfo.html", null ],
-    [ "Simulation::KernelInline::MoveInfo< ComputeSpace >", "structSimulation_1_1KernelInline_1_1MoveInfo.html", null ],
     [ "Core::DataExporter::MultiMatrixDescription", "structCore_1_1DataExporter_1_1MultiMatrixDescription.html", null ],
     [ "MC::Distributions::Normal< F >", "structMC_1_1Distributions_1_1Normal.html", null ],
     [ "OpaquePointer", "structOpaquePointer.html", null ],
     [ "MC::ParticlesContainer< Model >", "classMC_1_1ParticlesContainer.html", null ],
-    [ "MC::ParticlesContainer< M >", "classMC_1_1ParticlesContainer.html", null ],
     [ "Simulation::Phase", "structSimulation_1_1Phase.html", null ],
     [ "PythonWrap::PimpModel", "classPythonWrap_1_1PimpModel.html", null ],
     [ "CmaUtils::PreCalculatedHydroState", "classCmaUtils_1_1PreCalculatedHydroState.html", null ],
     [ "Simulation::Probes< buffer_size >", "classSimulation_1_1Probes.html", null ],
-    [ "Simulation::Probes< AutoGenerated::probe_buffer_size >", "classSimulation_1_1Probes.html", null ],
+    [ "IO::ProgressBar", "classIO_1_1ProgressBar.html", null ],
     [ "CmaUtils::ProxyPreCalculatedHydroState", "classCmaUtils_1_1ProxyPreCalculatedHydroState.html", null ],
     [ "Simulation::Feed::Pulse", "structSimulation_1_1Feed_1_1Pulse.html", null ],
     [ "MC::ReactorDomain", "classMC_1_1ReactorDomain.html", null ],
+    [ "IO::RedirectHandle", "classIO_1_1RedirectHandle.html", null ],
     [ "Simulation::ScalarInitializer", "structSimulation_1_1ScalarInitializer.html", null ],
     [ "Simulation::ScalarSimulation", "classSimulation_1_1ScalarSimulation.html", null ],
     [ "MC::Distributions::ScaledTruncatedNormal< F >", "structMC_1_1Distributions_1_1ScaledTruncatedNormal.html", null ],
     [ "SerdeModel", "structSerdeModel.html", null ],
     [ "Core::SignalHandler", "classCore_1_1SignalHandler.html", null ],
     [ "Models::SimpleModel", "structModels_1_1SimpleModel.html", null ],
-    [ "Simulation::Feed::SimulationFeed", "structSimulation_1_1Feed_1_1SimulationFeed.html", null ],
+    [ "Simulation::Feed::SimulationFeed", "classSimulation_1_1Feed_1_1SimulationFeed.html", null ],
     [ "Api::SimulationInstance", "structApi_1_1SimulationInstance.html", null ],
     [ "Core::SimulationParameters", "structCore_1_1SimulationParameters.html", null ],
     [ "Simulation::SimulationUnit", "classSimulation_1_1SimulationUnit.html", null ],
@@ -98,16 +108,18 @@ var hierarchy =
     [ "Simulation::Feed::Step", "structSimulation_1_1Feed_1_1Step.html", null ],
     [ "Success", "structSuccess.html", null ],
     [ "TagDetector", "structTagDetector.html", null ],
-    [ "Models::TwoMetaDiv::TMDConfig", "structModels_1_1TwoMetaDiv_1_1TMDConfig.html", null ],
+    [ "Simulation::KernelInline::TagFirstPass", "structSimulation_1_1KernelInline_1_1TagFirstPass.html", null ],
+    [ "Simulation::KernelInline::TagSecondPass", "structSimulation_1_1KernelInline_1_1TagSecondPass.html", null ],
     [ "std::true_type", null, [
       [ "has_uniform_weight< T, std::void_t< typename T::uniform_weight > >", "structhas__uniform__weight_3_01T_00_01std_1_1void__t_3_01typename_01T_1_1uniform__weight_01_4_01_4.html", null ]
     ] ],
     [ "MC::Distributions::TruncatedNormal< F >", "structMC_1_1Distributions_1_1TruncatedNormal.html", null ],
     [ "Models::TwoMeta", "structModels_1_1TwoMeta.html", null ],
-    [ "Models::TwoMetaDiv", "structModels_1_1TwoMetaDiv.html", null ],
+    [ "Models::TwoMetaNb", "structModels_1_1TwoMetaNb.html", null ],
     [ "Models::UdfModel", "structModels_1_1UdfModel.html", null ],
     [ "Core::ScalarFactory::Uniform", "structCore_1_1ScalarFactory_1_1Uniform.html", null ],
-    [ "Models::Uptake< M >", "structModels_1_1Uptake.html", null ],
+    [ "Models::Uptake< U, M >", "structModels_1_1Uptake.html", null ],
+    [ "Models::UptakeDefault< F >", "structModels_1_1UptakeDefault.html", null ],
     [ "Core::UserControlParameters", "structCore_1_1UserControlParameters.html", null ],
     [ "std::variant", null, [
       [ "Result< Success, std::string >", "structResult.html", [
@@ -121,6 +133,5 @@ var hierarchy =
     [ "ViewSerialization< ViewType, Enable >", "structViewSerialization.html", null ],
     [ "ViewSerialization< ViewType, typename std::enable_if< ViewType::rank==1 &&AutoGenerated::FlagCompileTime::use_cereal_serde >::type >", "structViewSerialization_3_01ViewType_00_01typename_01std_1_1enable__if_3_01ViewType_1_1rank_0a_05744b277f178ae7b2e0cf8ae27170def.html", null ],
     [ "ViewSerialization< ViewType, typename std::enable_if< ViewType::rank==2 &&AutoGenerated::FlagCompileTime::use_cereal_serde >::type >", "structViewSerialization_3_01ViewType_00_01typename_01std_1_1enable__if_3_01ViewType_1_1rank_0a_0ccf96dab9cae5a5168c9aa7b976df51e.html", null ],
-    [ "Core::ScalarFactory::Visitor", "structCore_1_1ScalarFactory_1_1Visitor.html", null ],
-    [ "Models::TwoMetaDiv::Yields", "structModels_1_1TwoMetaDiv_1_1Yields.html", null ]
+    [ "Core::ScalarFactory::Visitor", "structCore_1_1ScalarFactory_1_1Visitor.html", null ]
 ];

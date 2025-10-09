@@ -1,0 +1,14 @@
+<map id="IO::Console::toggle_alert" name="IO::Console::toggle_alert">
+<area shape="rect" id="Node000001" title=" " alt="" coords="403,122,537,161"/>
+<area shape="rect" id="Node000002" href="$classIO_1_1Console.html#ad8e8490ed0b1b321bb75e9702c32fb8a" title=" " alt="" coords="208,104,355,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="387,133,355,129,356,124,388,128"/>
+<area shape="rect" id="Node000005" href="$classIO_1_1Console.html#aac82dc12f9d262c7f44b22fe6f2dd49b" title=" " alt="" coords="5,153,160,178"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="388,149,160,164,160,158,387,144"/>
+<area shape="rect" id="Node000003" href="$classIO_1_1Console.html#afa53ede48496d2ff21c31a463d4c8e9e" title=" " alt="" coords="9,5,156,30"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="248,97,206,71,159,45,127,33,129,28,161,41,209,66,251,93"/>
+<area shape="rect" id="Node000004" href="$classIO_1_1Console.html#af5e8a2459163188ad1da3430b88001b6" title=" " alt="" coords="9,55,156,79"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="213,102,135,83,136,77,214,97"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="214,136,136,155,135,150,213,130"/>
+<area shape="rect" id="Node000006" href="$classIO_1_1Console.html#a2ae23124d355bfe39da66c91d3417caf" title=" " alt="" coords="5,104,160,129"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="192,119,160,119,160,114,192,114"/>
+</map>

@@ -1,5 +1,8 @@
 <map id="Core::PartialExporter::PartialExporter" name="Core::PartialExporter::PartialExporter">
-<area shape="rect" id="Node000001" title="Constructs a PartialExporter instance." alt="" coords="5,5,151,44"/>
-<area shape="rect" id="Node000002" href="$classCore_1_1DataExporter.html#a7c1ccdd8fd75dacdf621d0a42757a555" title=" " alt="" coords="199,5,333,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,22,183,22,183,27,151,27"/>
+<area shape="rect" id="Node000001" title="Constructs a PartialExporter instance." alt="" coords="5,61,151,100"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1DataExporter.html#aa39b5e7514dd7c25024bb31c72e2e8e7" title=" " alt="" coords="199,29,333,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,66,183,60,184,65,151,71"/>
+<area shape="rect" id="Node000003" href="$classCore_1_1DataExporter.html#a7c1ccdd8fd75dacdf621d0a42757a555" title=" " alt="" coords="199,92,333,131"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="151,90,184,95,183,101,150,95"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="231,30,228,20,234,11,246,5,266,3,287,5,299,12,296,16,285,10,266,8,248,10,237,15,233,21,236,28"/>
 </map>

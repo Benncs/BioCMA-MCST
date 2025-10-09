@@ -1,0 +1,18 @@
+<map id="Core::exec" name="Core::exec">
+<area shape="rect" id="Node000001" title="Start simulation." alt="" coords="629,59,714,84"/>
+<area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#a3f04372728be84263fb69f5773ca5bd5" title="Execute the simulation." alt="" coords="213,5,372,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="614,57,581,50,472,36,372,30,372,24,473,31,582,45,615,52"/>
+<area shape="rect" id="Node000004" href="$namespaceCore.html#a23e6f3d22fc51ef9decabb2c220b27c4" title=" " alt="" coords="420,59,581,84"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="614,83,582,83,582,78,614,77"/>
+<area shape="rect" id="Node000005" href="$namespaceCore.html#a8a3e4aa1d1921da2e211c43d5368acf1" title=" " alt="" coords="460,108,541,133"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="615,90,542,112,541,107,614,85"/>
+<area shape="rect" id="Node000003" href="$structApi_1_1SimulationInstance.html#afee07db8a6b57fe7982900ecaa943cc0" title="Default constructor." alt="" coords="5,7,165,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="197,28,165,28,165,23,197,23"/>
+<area shape="poly" id="edge4_Node000004_Node000001" title=" " alt="" coords="597,60,629,61,629,66,597,65"/>
+<area shape="rect" id="Node000006" href="$structApi_1_1SimulationInstance.html#ad2abfa76ac4128d44b7c0c895f78b77b" title="Load ad apply the simulation configuration and prepare for execution based on file." alt="" coords="213,96,372,135"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="444,122,372,120,372,115,444,117"/>
+<area shape="poly" id="edge9_Node000006_Node000003" title=" " alt="" coords="232,92,164,62,133,48,135,44,166,57,234,87"/>
+<area shape="rect" id="Node000007" href="$structApi_1_1SimulationInstance.html#a3398ddd22faa3ceb16b454c51faeced0" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,96,165,135"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="197,118,165,118,165,113,197,113"/>
+<area shape="poly" id="edge8_Node000007_Node000007" title=" " alt="" coords="119,83,107,77,85,75,65,77,53,81,49,87,51,95,46,96,44,86,50,77,64,71,85,69,108,72,121,78"/>
+</map>

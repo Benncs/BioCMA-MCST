@@ -3,6 +3,7 @@ var namespaceSimulation_1_1MassTransfer =
     [ "Impl", "namespaceSimulation_1_1MassTransfer_1_1Impl.html", [
       [ "fixed_kla_gas_liquid_mass_transfer", "namespaceSimulation_1_1MassTransfer_1_1Impl.html#aec719edbf6e8660d789bce8a97eb2b87", null ],
       [ "flowmap_gas_liquid_mass_transfer", "namespaceSimulation_1_1MassTransfer_1_1Impl.html#a5c6ad0a32a2c20a9488a1d1e8bee0ec3", null ],
+      [ "flowmap_kla_gas_liquid_mass_transfer", "namespaceSimulation_1_1MassTransfer_1_1Impl.html#a3525d99d4442214875b83318a3fa86fc", null ],
       [ "oxygen_diffusion_constant", "namespaceSimulation_1_1MassTransfer_1_1Impl.html#a56817d463871ae1ec2ff8fe48f283a13", null ],
       [ "temperature", "namespaceSimulation_1_1MassTransfer_1_1Impl.html#a843c16a20f1e8e3c729bdb687f3f1455", null ]
     ] ],

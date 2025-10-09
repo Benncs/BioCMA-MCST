@@ -8,7 +8,7 @@
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="589,76,553,70,554,65,590,71"/>
 <area shape="rect" id="Node000007" href="$classCore_1_1GlobalInitialiser.html#a6c679d3dc5f4ee98dfd9ed4c35092f1c" title=" " alt="" coords="407,99,553,137"/>
 <area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="590,103,554,109,553,104,589,98"/>
-<area shape="rect" id="Node000005" href="$classCore_1_1GlobalInitialiser.html#a5e218058a79920784be9d299856e867b" title="Initializes a simulation unit." alt="" coords="213,36,359,75"/>
+<area shape="rect" id="Node000005" href="$classCore_1_1GlobalInitialiser.html#a00d0e7a7d549bf06886dfc3ba9de3e3d" title="Initializes a simulation unit." alt="" coords="213,36,359,75"/>
 <area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="391,58,359,58,359,53,391,53"/>
 <area shape="poly" id="edge6_Node000005_Node000005" title=" " alt="" coords="318,23,306,17,286,15,267,17,256,21,252,27,255,35,249,36,247,27,253,17,266,11,286,9,307,12,320,18"/>
 <area shape="rect" id="Node000006" href="$structApi_1_1SimulationInstance.html#ae9bdd54076170f50eadcb7966d64c19d" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,36,165,75"/>

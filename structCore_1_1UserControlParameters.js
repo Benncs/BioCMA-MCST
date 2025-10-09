@@ -15,5 +15,6 @@ var structCore_1_1UserControlParameters =
     [ "recursive", "structCore_1_1UserControlParameters.html#a8732aef43985a58d033f3f2e999e33a2", null ],
     [ "results_file_name", "structCore_1_1UserControlParameters.html#a2d9086ac2e81d32ba50e28fac3c52cec", null ],
     [ "save_serde", "structCore_1_1UserControlParameters.html#ab6ff203a009543cf8348d81873c029d9", null ],
-    [ "serde_file", "structCore_1_1UserControlParameters.html#ae20c20b26d78473b3b329d172b6e2394", null ]
+    [ "serde_file", "structCore_1_1UserControlParameters.html#ae20c20b26d78473b3b329d172b6e2394", null ],
+    [ "uniform_mc_init", "structCore_1_1UserControlParameters.html#aaf7f19a570183539f2c37a84764c0354", null ]
 ];

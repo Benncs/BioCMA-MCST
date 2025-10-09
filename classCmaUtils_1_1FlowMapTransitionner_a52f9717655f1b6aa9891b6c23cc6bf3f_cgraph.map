@@ -1,9 +1,21 @@
 <map id="CmaUtils::FlowMapTransitionner::common_advance" name="CmaUtils::FlowMapTransitionner::common_advance">
-<area shape="rect" id="Node000001" title="Operation required by all methods in order to perform advance function ." alt="" coords="5,68,217,107"/>
-<area shape="rect" id="Node000002" href="$classCmaUtils_1_1FlowMapTransitionner.html#a3dc7a76f36a1a0ada35bb8d1ca8f512c" title="Get current gas state read from CmaRead." alt="" coords="265,5,476,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,65,272,46,273,51,195,70"/>
-<area shape="rect" id="Node000003" href="$classCmaUtils_1_1FlowMapTransitionner.html#a33ea0931034223c04f4c1074ad1ee5aa" title="Get current liquid state read from CmaRead." alt="" coords="265,68,476,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,85,249,85,249,90,217,90"/>
-<area shape="rect" id="Node000004" href="$classCmaUtils_1_1FlowMapTransitionner.html#adc33f9f202442f07fede2ffe1bb0ee6d" title="Update flow and iteration counters." alt="" coords="265,131,476,169"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="195,105,273,124,272,129,193,110"/>
+<area shape="rect" id="Node000001" title="Operation required by all methods in order to perform advance function ." alt="" coords="5,185,217,224"/>
+<area shape="rect" id="Node000002" href="$classCmaUtils_1_1FlowMapTransitionner.html#a3dc7a76f36a1a0ada35bb8d1ca8f512c" title="Get current gas state read from CmaRead." alt="" coords="265,99,476,137"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,182,264,146,283,140,285,145,266,151,165,187"/>
+<area shape="rect" id="Node000008" href="$classCmaUtils_1_1FlowMapTransitionner.html#a33ea0931034223c04f4c1074ad1ee5aa" title="Get current liquid state read from CmaRead." alt="" coords="265,185,476,224"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="217,202,249,202,249,207,217,207"/>
+<area shape="rect" id="Node000009" href="$classCmaUtils_1_1FlowMapTransitionner.html#adc33f9f202442f07fede2ffe1bb0ee6d" title="Update flow and iteration counters." alt="" coords="265,248,476,287"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="195,222,273,241,272,246,193,227"/>
+<area shape="poly" id="edge4_Node000002_Node000002" title=" " alt="" coords="323,99,319,89,327,80,344,74,370,72,399,74,415,81,413,86,398,80,370,77,345,79,330,84,324,90,328,97"/>
+<area shape="rect" id="Node000003" href="$classCmaUtils_1_1FlowMapTransitionner.html#ae24d277adf0085d83cd09644149f31b6" title="Calculate the whole state (liquid+gas+neighbor) for the current time step." alt="" coords="524,5,735,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="416,96,523,53,541,47,543,52,525,58,418,101"/>
+<area shape="rect" id="Node000005" href="$classCmaUtils_1_1FlowMapTransitionner.html#adef8e20a97054d14eba0521ca20829f6" title="Direct read state from iterator." alt="" coords="524,68,735,107"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="476,103,508,99,509,104,477,108"/>
+<area shape="rect" id="Node000006" href="$classCmaUtils_1_1FlowMapTransitionner.html#a95f2c1ce2a5c0dcccb0e0be0341fa466" title="Return the index of the current ProxyPreCalculatedHydroState." alt="" coords="524,131,735,169"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="477,128,509,132,508,138,476,134"/>
+<area shape="rect" id="Node000007" href="$classCmaUtils_1_1FlowMapTransitionner.html#acac9006d49f9cee106f3b6769ed29ba2" title="Get the number of load flowmap." alt="" coords="524,193,735,232"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="450,135,477,146,502,162,525,178,541,185,538,190,523,183,499,167,475,151,448,140"/>
+<area shape="rect" id="Node000004" href="$classCmaUtils_1_1FlowMapTransitionner.html#abb98a83b7db34307ef4e59ed7e33a71a" title="Checks whether a gas flowmap is provided." alt="" coords="783,5,995,44"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="736,22,768,22,768,27,736,27"/>
+<area shape="poly" id="edge9_Node000008_Node000008" title=" " alt="" coords="323,186,319,176,327,166,344,161,370,159,399,161,415,167,413,172,398,166,370,164,345,166,330,171,324,177,328,184"/>
 </map>

@@ -1,0 +1,12 @@
+<map id="Models::Uptake::uptake" name="Models::Uptake::uptake">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,42,164,66"/>
+<area shape="rect" id="Node000002" href="$structModels_1_1Uptake.html#a86c86b134ce5505227968ede9c60c8db" title=" " alt="" coords="424,5,561,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,46,408,28,408,33,164,51"/>
+<area shape="rect" id="Node000004" href="$structModels_1_1Uptake.html#a3a55e9132d39efd1185cf726946b4fb0" title=" " alt="" coords="212,66,374,90"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="164,60,197,64,196,70,164,66"/>
+<area shape="rect" id="Node000003" href="$namespaceModels.html#a98711ac2ebacdd7d1adea1524f8fc43b" title=" " alt="" coords="611,40,751,65"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="562,32,597,37,596,43,561,37"/>
+<area shape="rect" id="Node000005" href="$structModels_1_1Uptake.html#a4678e2ba17d3206a046a14ed2460a6b2" title=" " alt="" coords="422,68,563,93"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="374,76,406,77,406,82,374,82"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="563,68,595,63,596,68,564,73"/>
+</map>

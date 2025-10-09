@@ -1,0 +1,19 @@
+<map id="ILoadBalancer::ILoadBalancer" name="ILoadBalancer::ILoadBalancer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="249,219,444,244"/>
+<area shape="rect" id="Node000002" href="$classBoundLoadBalancer.html#ae5fb97683fc4a1537402d1d3823fa65a" title=" " alt="" coords="30,5,176,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="328,207,277,133,241,92,199,58,175,45,177,40,202,53,245,89,282,130,333,204"/>
+<area shape="rect" id="Node000003" href="$classCustomLoadBalancer.html#a46c441272b3fbcd48514cad53d5b51c4" title=" " alt="" coords="26,68,180,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="319,210,267,165,199,120,175,110,178,105,202,116,270,161,323,206"/>
+<area shape="rect" id="Node000004" href="$classHostImportantLoadBalancer.html#a968eb70ea9c0f8e2d0ac9257333b23ee" title=" " alt="" coords="7,131,199,169"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="292,216,200,185,164,172,165,167,202,179,294,211"/>
+<area shape="rect" id="Node000005" href="$classILoadBalancer.html#a785a63a32bac78b2ed293e3165e24640" title=" " alt="" coords="5,194,201,218"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="233,222,201,219,201,214,233,217"/>
+<area shape="rect" id="Node000006" href="$classILoadBalancer.html#a3c702bc154d71fece146e1857d27bf30" title=" " alt="" coords="5,243,201,268"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="233,245,201,248,201,243,233,240"/>
+<area shape="rect" id="Node000007" href="$classILoadBalancer.html#a6c98abba439da620a0957093d84df382" title=" " alt="" coords="19,292,187,317"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="295,252,201,282,157,294,155,289,200,277,293,247"/>
+<area shape="rect" id="Node000008" href="$classILoadBalancer.html#ab44f9a74d7cc9270aab6b5c0a4ad4e05" title=" " alt="" coords="19,342,187,366"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="319,256,267,294,202,331,167,344,165,339,200,326,264,290,316,252"/>
+<area shape="rect" id="Node000009" href="$classUniformLoadBalancer.html#a1fed7b51f21c968e7b5120be870516ca" title=" " alt="" coords="26,391,180,429"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="329,258,276,319,241,352,202,380,178,392,176,388,199,376,238,348,272,315,325,254"/>
+</map>

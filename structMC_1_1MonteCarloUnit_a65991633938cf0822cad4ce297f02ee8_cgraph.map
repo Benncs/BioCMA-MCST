@@ -1,0 +1,11 @@
+<map id="MC::MonteCarloUnit::~MonteCarloUnit" name="MC::MonteCarloUnit::~MonteCarloUnit">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,63,146,101"/>
+<area shape="rect" id="Node000002" href="$structMC_1_1MonteCarloUnit.html#a2e431bdcb96f1fa71525aca30d0457ba" title=" " alt="" coords="194,5,334,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,60,183,46,184,52,142,65"/>
+<area shape="rect" id="Node000003" href="$structMC_1_1MonteCarloUnit.html#a9a63012c0c3a5d812abdfd77555a7f46" title=" " alt="" coords="382,35,522,73"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="146,74,366,58,367,63,147,79"/>
+<area shape="rect" id="Node000004" href="$structMC_1_1MonteCarloUnit.html#a0e4f63686697a931b06447ce22b435c6" title="Prevent copying of the MonteCarloUnit." alt="" coords="194,144,334,183"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="123,99,204,135,202,140,121,104"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="335,33,367,38,366,43,334,38"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="228,144,226,135,232,125,244,119,264,117,285,120,297,126,295,131,283,125,264,123,246,125,235,129,231,135,234,143"/>
+</map>

@@ -1,9 +1,9 @@
 <map id="MC::MonteCarloUnit" name="MC::MonteCarloUnit">
-<area shape="rect" id="Node000001" title="General&#45;purpose Monte Carlo unit to carry out simulations." alt="" coords="169,92,309,117"/>
+<area shape="rect" id="Node000001" title="General&#45;purpose Monte Carlo unit to carry out simulations." alt="" coords="169,100,309,125"/>
 <area shape="rect" id="Node000002" href="$structMC_1_1EventContainer.html" title="Use to count events that occurs during Monte&#45;Carlo processing cycles." alt="" coords="5,5,145,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,35,218,89,215,94,110,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,36,220,97,217,102,108,40"/>
 <area shape="rect" id="Node000003" href="$classMC_1_1ReactorDomain.html" title="Represents the spatial domain where Monte Carlo particles can exist." alt="" coords="169,5,309,30"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,45,242,92,236,92,236,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,46,242,100,236,100,236,46"/>
 <area shape="rect" id="Node000004" href="$classMC_1_1KPRNG.html" title="Utilities and wrap around kokkos random generator." alt="" coords="333,5,430,30"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="351,40,260,94,257,89,348,36"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="353,41,296,78,259,102,256,97,294,74,350,37"/>
 </map>

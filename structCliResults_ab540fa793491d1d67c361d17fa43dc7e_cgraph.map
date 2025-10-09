@@ -1,5 +1,9 @@
 <map id="CliResults::operator CliResults&lt; S &gt;" name="CliResults::operator CliResults&lt; S &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,142,44"/>
-<area shape="rect" id="Node000002" href="$structCliResults.html#a17cc4717b346ddce900fe5d49c2f5b8b" title=" " alt="" coords="190,12,339,37"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,22,174,22,174,27,142,27"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,24,142,62"/>
+<area shape="rect" id="Node000002" href="$structCliResults.html#a17cc4717b346ddce900fe5d49c2f5b8b" title=" " alt="" coords="190,5,339,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,31,174,27,174,32,143,37"/>
+<area shape="rect" id="Node000003" href="$structCliResults.html#a09c1101614941851f6442bbc10f9ec76" title=" " alt="" coords="190,55,339,79"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="143,49,174,53,174,58,142,54"/>
+<area shape="rect" id="Node000004" href="$structResult.html#af83cd1ef963ba1bd0a72133067675a11" title=" " alt="" coords="387,48,532,86"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="340,64,372,64,372,70,340,70"/>
 </map>

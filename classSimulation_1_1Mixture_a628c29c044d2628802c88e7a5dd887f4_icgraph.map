@@ -1,0 +1,7 @@
+<map id="Simulation::Mixture::Mixture" name="Simulation::Mixture::Mixture">
+<area shape="rect" id="Node000001" title=" " alt="" coords="187,37,320,76"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1Mixture.html#a81eeb4316962e0725783f5cb6bf02dac" title="New momophasic mixture." alt="" coords="5,5,139,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,45,138,39,139,34,172,40"/>
+<area shape="rect" id="Node000003" href="$classSimulation_1_1Mixture.html#aa4502698f192c8d6bd89b872eab1dd55" title="New two phase flow mixture." alt="" coords="5,68,139,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="172,73,139,79,138,73,171,68"/>
+</map>

@@ -15,5 +15,5 @@ var namespaceCmaUtils =
     [ "get_cumulative_probabilities", "namespaceCmaUtils.html#ac0295574e384d9028eb114a0fffa784b", null ],
     [ "get_diag_transition", "namespaceCmaUtils.html#a62072fff78d8de117e133499f87a2a0c", null ],
     [ "get_transition_matrix", "namespaceCmaUtils.html#a66366f852348c9e73718973e83e243f5", null ],
-    [ "get_transitioner", "namespaceCmaUtils.html#ae4418f76313b27b818a039af962096d4", null ]
+    [ "get_transitioner", "namespaceCmaUtils.html#a4db0dd1b3866bccb91f532fd68959905", null ]
 ];

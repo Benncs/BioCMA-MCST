@@ -1,7 +1,7 @@
 <map id="Core::CaseData" name="Core::CaseData">
-<area shape="rect" id="Node000001" title="Holds the data required to execute a simulation case." alt="" coords="117,92,232,117"/>
+<area shape="rect" id="Node000001" title="Holds the data required to execute a simulation case." alt="" coords="117,100,232,125"/>
 <area shape="rect" id="Node000002" href="$structCore_1_1SimulationParameters.html" title=" " alt="" coords="5,5,192,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,40,166,90,162,94,117,43"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,40,167,98,163,101,116,44"/>
 <area shape="rect" id="Node000003" href="$structExecInfo.html" title=" " alt="" coords="216,5,288,30"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="233,43,187,94,183,90,229,40"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="234,44,186,101,182,98,230,40"/>
 </map>
