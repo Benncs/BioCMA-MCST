@@ -127,7 +127,6 @@ namespace Simulation::KernelInline
       GET_INDEX(particles.n_particles());
       if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
       {
-        // Kokkos::printf("Skip %ld", idx);
         return;
       }
 
@@ -147,7 +146,6 @@ namespace Simulation::KernelInline
       GET_INDEX(particles.n_particles());
       if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
       {
-        // Kokkos::printf("Skip %ld", idx);
         return;
       }
 

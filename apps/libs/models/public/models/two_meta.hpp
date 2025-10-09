@@ -74,7 +74,8 @@ namespace Models
     MODEL_CONSTANT FloatType tau_1 = 1000.; // s
     MODEL_CONSTANT FloatType tau_2 = 1000.; // s
 
-    MODEL_CONSTANT FloatType phi_s_max = (dl_max_ms * lin_density) * y_sx_1;
+    MODEL_CONSTANT FloatType phi_s_max =
+        (dl_max_ms * lin_density) * y_sx_1; // TODO should be /y
     MODEL_CONSTANT FloatType phi_perm_max = phi_s_max / 40.; // kgS/
     MODEL_CONSTANT FloatType phi_o2_max =
         10 * phi_s_max / MolarMassG * y_os_molar * MolarMassO2; // kgS/s
