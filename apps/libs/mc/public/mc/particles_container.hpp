@@ -10,7 +10,6 @@
 #include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
 #include <stdexcept>
-#include <type_traits>
 
 namespace
 {
@@ -113,10 +112,10 @@ namespace
       const int i = team.league_rank();
 
       position(original_size + i) = buffer_position(i);
-      Kokkos::parallel_for(
-          Kokkos::TeamVectorRange(team, range),
-          [&](const int& j)
-          { model(original_size + i, j) = buffer_model(i, j); });
+      Kokkos::parallel_for(Kokkos::TeamVectorRange(team, range),
+                           [&](const int& j) {
+                             model(original_size + i, j) = buffer_model(i, j);
+                           });
     }
 
     std::size_t original_size;
@@ -178,13 +177,9 @@ namespace MC
      *
      * @return The number of particles currently in the to_process container.
      */
-    [[nodiscard]] KOKKOS_INLINE_FUNCTION std::size_t n_particles() const
-    {
-      return n_used_elements;
-    };
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION std::size_t n_particles() const;
 
     // TODO Add logic off internal_dead_counter header
-    std::size_t counter = 0; // FIXME !!
 
     KOKKOS_INLINE_FUNCTION void
     get_contributions(std::size_t idx,
@@ -194,63 +189,122 @@ namespace MC
     handle_division(const MC::KPRNG::pool_type& random_pool,
                     std::size_t idx1) const;
 
-    void clean_dead(std::size_t to_remove);
+    void force_remove_dead();
 
     void merge_buffer();
 
-    [[maybe_unused]] [[nodiscard]] auto get_buffer_index() const
-    {
-      return buffer_index();
-    }
+    [[maybe_unused]] [[nodiscard]] auto get_buffer_index() const;
 
-    template <class Archive> void save(Archive& ar) const
-    {
-      ar(n_allocated_elements, n_used_elements, allocation_factor);
-      serialize_view(ar, weights);
-      serialize_view(ar, position);
-      serialize_view(ar, status);
-      serialize_view(ar, model);
-      serialize_view(ar, ages);
-    }
+    template <class Archive> void save(Archive& ar) const;
 
-    template <class Archive> void load(Archive& ar)
-    {
-      ar(n_allocated_elements, n_used_elements, allocation_factor);
-      deserialize_view(ar, weights);
-      deserialize_view(ar, position);
-      deserialize_view(ar, status);
-      deserialize_view(ar, model);
-      deserialize_view(ar, ages);
-
-      __allocate_buffer__();
-    }
+    template <class Archive> void load(Archive& ar);
 
     [[nodiscard]] KOKKOS_INLINE_FUNCTION double
     get_weight(std::size_t idx) const;
 
-    [[nodiscard]] double get_allocation_factor() const
-    {
-      return allocation_factor;
-    }
+    [[nodiscard]] double get_allocation_factor() const;
 
-    [[nodiscard]] std::size_t capacity() const
-    {
-      return n_allocated_elements;
-    }
+    [[nodiscard]] std::size_t capacity() const;
+
+    [[nodiscard]] std::size_t get_inactive() const;
+
+    std::size_t update_and_clean_dead(std::size_t out,
+                                      std::size_t dead,
+                                      std::size_t threshold);
+
+    void clean_dead(std::size_t to_remove);
 
   private:
+    static constexpr double default_allocation_factor = 2;
     Model::SelfParticle buffer_model;
     ParticlePositions buffer_position;
     Kokkos::View<uint64_t, Kokkos::SharedSpace> buffer_index;
     double allocation_factor;
     std::size_t n_allocated_elements;
     uint64_t n_used_elements;
-
-    static constexpr double default_allocation_factor = 2;
-    void __allocate__(std::size_t new_size);
+    std::size_t inactive_counter = 0;
     void __allocate_buffer__();
-    void __shrink__(std::size_t new_size, bool force);
+    void _resize(std::size_t new_size, bool force = false);
   };
+
+  template <ModelType Model>
+  [[nodiscard]] KOKKOS_INLINE_FUNCTION std::size_t
+  ParticlesContainer<Model>::n_particles() const
+  {
+    return n_used_elements;
+  };
+
+  template <ModelType Model>
+  [[nodiscard]] std::size_t ParticlesContainer<Model>::get_inactive() const
+  {
+    return inactive_counter;
+  }
+
+  template <ModelType Model> void ParticlesContainer<Model>::force_remove_dead()
+  {
+    this->clean_dead(this->inactive_counter);
+    this->inactive_counter = 0;
+  }
+
+  template <ModelType Model>
+  [[maybe_unused]] [[nodiscard]] auto
+  ParticlesContainer<Model>::get_buffer_index() const
+  {
+    return buffer_index();
+  }
+
+  template <ModelType Model>
+  [[nodiscard]] double ParticlesContainer<Model>::get_allocation_factor() const
+  {
+    return allocation_factor;
+  }
+  template <ModelType Model>
+  [[nodiscard]] std::size_t ParticlesContainer<Model>::capacity() const
+  {
+    return n_allocated_elements;
+  }
+
+  template <ModelType Model>
+  template <class Archive>
+  void ParticlesContainer<Model>::load(Archive& ar)
+  {
+    ar(n_allocated_elements, n_used_elements, allocation_factor);
+    deserialize_view(ar, weights);
+    deserialize_view(ar, position);
+    deserialize_view(ar, status);
+    deserialize_view(ar, model);
+    deserialize_view(ar, ages);
+    __allocate_buffer__();
+  }
+
+  template <ModelType Model>
+  template <class Archive>
+  void ParticlesContainer<Model>::save(Archive& ar) const
+  {
+    ar(n_allocated_elements, n_used_elements, allocation_factor);
+    serialize_view(ar, weights);
+    serialize_view(ar, position);
+    serialize_view(ar, status);
+    serialize_view(ar, model);
+    serialize_view(ar, ages);
+  }
+
+  template <ModelType Model>
+  std::size_t
+  ParticlesContainer<Model>::update_and_clean_dead(const std::size_t out,
+                                                   const std::size_t dead,
+                                                   const std::size_t threshold)
+  {
+    inactive_counter += out;
+    inactive_counter += dead;
+    // TODO: May change threshold as container is now cleaned before exporting,
+    if (inactive_counter > threshold)
+    {
+      this->clean_dead(inactive_counter);
+      inactive_counter = 0;
+    }
+    return inactive_counter;
+  }
 
   template <ModelType Model>
   KOKKOS_INLINE_FUNCTION bool ParticlesContainer<Model>::handle_division(
@@ -279,22 +333,8 @@ namespace MC
     {
       return;
     }
-    __allocate__(original_size + n_add_item);
+    _resize(original_size + n_add_item);
     // Merge position EZ
-
-    // auto get_policy_insert = [=]()
-    // {
-    //   if constexpr (std::is_same_v<Kokkos::DefaultHostExecutionSpace,
-    //                                Kokkos::DefaultExecutionSpace>)
-    //   {
-    //     return TeamPolicy(n_add_item / Kokkos::num_threads(), Kokkos::AUTO,
-    //     Model::n_var);
-    //   }
-    //   else
-    //   {
-    //     return TeamPolicy(n_add_item, Kokkos::AUTO, Model::n_var);
-    //   }
-    // };
 
     Kokkos::parallel_for(
         "InsertMerge",
@@ -307,58 +347,41 @@ namespace MC
     __allocate_buffer__();
   }
 
-  // TODO Merge reduce duplicate __allocate__ and __shrink__
   template <ModelType Model>
-  void ParticlesContainer<Model>::__allocate__(const std::size_t new_size)
+  void ParticlesContainer<Model>::_resize(std::size_t new_size, bool force)
   {
-    PROFILE_SECTION("ParticlesContainer::__allocate__")
+    PROFILE_SECTION("ParticlesContainer::_resize")
+
+    // Ensure new_size is greater than zero
     if (new_size > 0)
     {
-      if (new_size >= this->n_allocated_elements)
+      // Determine if resizing is necessary based on the condition
+      if (new_size > n_allocated_elements || force)
       {
+        // Calculate the new allocated size
         const auto new_allocated_size = static_cast<std::size_t>(
             std::ceil(static_cast<double>(new_size) * allocation_factor));
-        this->n_allocated_elements = new_allocated_size;
+
+        // Update the allocated size
+        n_allocated_elements = new_allocated_size;
+
+        // Perform the resizing on all relevant data containers
         Kokkos::resize(position, n_allocated_elements);
         Kokkos::resize(model,
                        n_allocated_elements,
                        Model::n_var); // use 2nd dim resize if dynamic
         Kokkos::resize(status, n_allocated_elements);
         Kokkos::resize(ages, n_allocated_elements);
+
+        // Handle resizing for weights based on model type
         if constexpr (ConstWeightModelType<Model>)
         {
-          Kokkos::resize(weights, 1);
+          Kokkos::resize(weights, 1); // Fixed size for ConstWeightModelType
         }
         else
         {
           Kokkos::resize(weights, n_allocated_elements);
         }
-      }
-    }
-  }
-
-  template <ModelType Model>
-  void ParticlesContainer<Model>::__shrink__(std::size_t new_size, bool force)
-  {
-    PROFILE_SECTION("ParticlesContainer::__shrink__")
-    if (new_size > 0 && (new_size > n_used_elements || force))
-    {
-      const auto new_allocated_size = static_cast<std::size_t>(
-          std::ceil(static_cast<double>(new_size) * allocation_factor));
-      n_allocated_elements = new_allocated_size;
-      Kokkos::resize(position, n_allocated_elements);
-      Kokkos::resize(model,
-                     n_allocated_elements,
-                     Model::n_var); // use 2nd dim resize if dynamic
-      Kokkos::resize(status, n_allocated_elements);
-      Kokkos::resize(ages, n_allocated_elements);
-      if constexpr (ConstWeightModelType<Model>)
-      {
-        Kokkos::resize(weights, 1);
-      }
-      else
-      {
-        Kokkos::resize(weights, n_allocated_elements);
       }
     }
   }
@@ -400,13 +423,13 @@ namespace MC
         ages(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_age"),
              0),
         buffer_model("buffer_particle_model", 0),
-        buffer_position("buffer_particle_position", 0), // Dont allocate now
+        buffer_position("buffer_particle_position", 0),
         buffer_index("buffer_index"),
         allocation_factor(default_allocation_factor), n_allocated_elements(0),
         n_used_elements(n_particle)
   {
 
-    __allocate__(n_particle);
+    _resize(n_particle);
     __allocate_buffer__();
   }
 
@@ -449,7 +472,7 @@ namespace MC
 
     if (to_remove == n_used_elements)
     {
-      __shrink__(0, true);
+      _resize(0, true);
       n_used_elements = 0;
     }
     else if (to_remove > n_used_elements)
@@ -479,7 +502,7 @@ namespace MC
           0.1)
       {
         // std::cout << "SHRINK" << std::endl;
-        __shrink__(n_used_elements * 2, false);
+        _resize(n_used_elements * 2, false);
       }
     };
   }

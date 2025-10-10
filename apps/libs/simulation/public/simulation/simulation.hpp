@@ -90,7 +90,7 @@ namespace Simulation
     [[nodiscard]] bool two_phase_flow() const;
     [[nodiscard]] std::optional<std::span<const double>> getMTRData() const;
     [[nodiscard]] std::size_t dead_counter() const;
-         std::span<double> getContributionData_mut() ;
+    std::span<double> getContributionData_mut();
 
     // Simulation methods
 
@@ -248,9 +248,10 @@ namespace Simulation
 
     if (functors.move_kernel.need_launch())
     {
-      const auto _policy = MC::get_policy(functors.move_kernel, n_particle, true);
-      Kokkos ::parallel_reduce("cycle_move", _policy, functors.move_kernel,
-                               functors.move_reducer);
+      const auto _policy =
+          MC::get_policy(functors.move_kernel, n_particle, true);
+      Kokkos ::parallel_reduce(
+          "cycle_move", _policy, functors.move_kernel, functors.move_reducer);
     }
 
     if (f_reaction)
@@ -291,16 +292,21 @@ namespace Simulation
 
     auto host_out_counter =
         Kokkos::create_mirror_view_and_copy(HostSpace(), out_total)();
-    container.counter += host_out_counter;
-    container.counter += host_red.dead_total;
 
-    // TODO: May change threshold as container is now cleaned before exporting,
-    if (container.counter > threshold)
-    {
-      container.clean_dead(container.counter);
-      container.counter = 0;
-    }
-    internal_counter_dead = container.counter;
+    // container.counter += host_out_counter;
+    // container.counter += host_red.dead_total;
+    // // TODO: May change threshold as container is now cleaned before
+    // exporting, if (container.counter > threshold)
+    // {
+    //   container.clean_dead(container.counter);
+    //   container.counter = 0;
+    // }
+    // internal_counter_dead = container.counter;
+    //
+    //
+
+    internal_counter_dead = container.update_and_clean_dead(
+        host_out_counter, host_red.dead_total, threshold);
 
     container.merge_buffer();
 
