@@ -130,7 +130,7 @@ def main():
         print(arg)
         return
 
-    exec(command, cli_args.n_threads, do_kokkos_measure=True)
+    exec(command, cli_args.n_threads, do_kokkos_measure=False)
 
 
 if __name__ == "__main__":

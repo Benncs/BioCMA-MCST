@@ -9,7 +9,7 @@ setup = ['-Duse_cuda=false', '-Duse_system_kokkos=true', '-Dpython_install=true'
 
 [project]
 name = 'biomc'
-version = '0.9.53'
+version = '0.9.6'
 description = 'Monte-Carlo simulation'
 readme = 'README.md'
 requires-python = '>=3.10'

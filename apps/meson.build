@@ -8,7 +8,6 @@ subdir('api')
 if not python_install
   subdir('cli')
   if not use_cuda and build_udf
-    add_project_arguments('-DUSE_UDF', language: 'cpp')
     subdir('udf_model')
   endif
 endif 
