@@ -133,7 +133,8 @@ namespace Simulation::KernelInline
       auto local_c =
           Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx));
 
-      particles.get_contributions(d_t, idx, local_c, contribs_scatter);
+      particles.template get_contributions<M, ComputeSpace>(
+          d_t, idx, local_c, contribs_scatter);
     }
 
     KOKKOS_INLINE_FUNCTION void operator()(const TagSecondPass _tag,
@@ -164,7 +165,7 @@ namespace Simulation::KernelInline
         events.wrap_incr<MC::EventType::NewParticle>();
       };
 
-      particles.get_contributions(idx, contribs_scatter);
+      particles.template get_contributions<ComputeSpace>(idx, contribs_scatter);
     }
 
     M::FloatType d_t;

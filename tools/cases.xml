@@ -65,9 +65,9 @@
       <!-- <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path> -->
       <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
       <final_time>7200</final_time>
-      <number_particle>100000</number_particle>
+      <number_particle>1000</number_particle>
       <delta_time>0.01</delta_time>
-      <results_file_name>debug</results_file_name>
+      <results_file_name>debug2</results_file_name>
       <number_exported_result>50</number_exported_result>
       <model_name>udf_model</model_name>
        <!-- <initialiser_path /> -->

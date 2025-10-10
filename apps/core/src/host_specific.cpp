@@ -186,15 +186,6 @@ void host_process(
 
   SEND_MPI_SIG_STOP;
 
-  // auto clean_list = [&simulation](auto& container)
-  // {
-  //   if (simulation.counter() != 0)
-  //   {
-  //     container.clean_dead(simulation.counter());
-  //   }
-  // };
-
-  // std::visit(clean_list, simulation.mc_unit->container);
   PostProcessing::save_particle_state(simulation, partial_exporter);
   last_sync(exec, simulation);
   PostProcessing::final_post_processing(

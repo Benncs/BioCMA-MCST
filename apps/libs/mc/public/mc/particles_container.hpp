@@ -181,7 +181,20 @@ namespace MC
 
     // TODO Add logic off internal_dead_counter header
 
-    KOKKOS_INLINE_FUNCTION void
+    // template <typename ExecutionSpace>
+    // KOKKOS_INLINE_FUNCTION void
+    // get_contributions(std::size_t idx,
+    //                   const ContributionView& contributions) const;
+
+    template <typename ExecutionSpace>
+    KOKKOS_INLINE_FUNCTION typename std::enable_if<
+        std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
+    get_contributions(std::size_t idx,
+                      const ContributionView& contributions) const;
+
+    template <typename ExecutionSpace>
+    typename std::enable_if<
+        !std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
     get_contributions(std::size_t idx,
                       const ContributionView& contributions) const;
 
@@ -507,8 +520,32 @@ namespace MC
     };
   }
 
+  // template <ModelType M>
+  // KOKKOS_INLINE_FUNCTION void ParticlesContainer<M>::get_contributions(
+  //     std::size_t idx, const ContributionView& contributions) const
+  // {
+  //   static_assert(ConstWeightModelType<M>, "ModelType: Const
+  //   apply_weight()"); const double weight = get_weight(idx);
+  //   M::contribution(idx, position(idx), weight, model, contributions);
+  // }
+
   template <ModelType M>
-  KOKKOS_INLINE_FUNCTION void ParticlesContainer<M>::get_contributions(
+  template <typename ExecutionSpace>
+  KOKKOS_INLINE_FUNCTION typename std::enable_if<
+      std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
+  ParticlesContainer<M>::get_contributions(
+      std::size_t idx, const ContributionView& contributions) const
+  {
+    static_assert(ConstWeightModelType<M>, "ModelType: Const apply_weight()");
+    const double weight = get_weight(idx);
+    M::contribution(idx, position(idx), weight, model, contributions);
+  }
+
+  template <ModelType M>
+  template <typename ExecutionSpace>
+  KOKKOS_INLINE_FUNCTION typename std::enable_if<
+      !std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
+  ParticlesContainer<M>::get_contributions(
       std::size_t idx, const ContributionView& contributions) const
   {
     static_assert(ConstWeightModelType<M>, "ModelType: Const apply_weight()");

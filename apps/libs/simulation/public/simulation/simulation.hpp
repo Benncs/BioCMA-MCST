@@ -287,23 +287,12 @@ namespace Simulation
     Kokkos::fence();
 
     this->scatter_contribute();
-    auto host_red =
+
+    const auto host_red =
         Kokkos::create_mirror_view_and_copy(HostSpace(), reducer_type)();
 
-    auto host_out_counter =
+    const auto host_out_counter =
         Kokkos::create_mirror_view_and_copy(HostSpace(), out_total)();
-
-    // container.counter += host_out_counter;
-    // container.counter += host_red.dead_total;
-    // // TODO: May change threshold as container is now cleaned before
-    // exporting, if (container.counter > threshold)
-    // {
-    //   container.clean_dead(container.counter);
-    //   container.counter = 0;
-    // }
-    // internal_counter_dead = container.counter;
-    //
-    //
 
     internal_counter_dead = container.update_and_clean_dead(
         host_out_counter, host_red.dead_total, threshold);
