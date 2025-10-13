@@ -1,7 +1,6 @@
 #ifndef __PARTICLES_CONTAINER_HPP__
 #define __PARTICLES_CONTAINER_HPP__
 
-#include "Kokkos_Core_fwd.hpp"
 #include "common/common.hpp"
 #include "mc/alias.hpp"
 #include <Kokkos_Core.hpp>
@@ -151,7 +150,7 @@ namespace MC
      */
     using UsedModel = Model;
 
-    explicit ParticlesContainer(std::size_t n_particle);
+    explicit ParticlesContainer(std::size_t n_particle, bool virtual_position);
     ParticlesContainer(); //=default;
 
     Model::SelfParticle model;
@@ -186,17 +185,21 @@ namespace MC
     // get_contributions(std::size_t idx,
     //                   const ContributionView& contributions) const;
 
-    template <typename ExecutionSpace>
-    KOKKOS_INLINE_FUNCTION typename std::enable_if<
-        std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
-    get_contributions(std::size_t idx,
-                      const ContributionView& contributions) const;
+    // template <typename ExecutionSpace, typename TeamHandle>
+    // KOKKOS_INLINE_FUNCTION typename std::enable_if<
+    //     std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
+    // get_contributions(const MC::KPRNG::pool_type& random_pool,
+    //                   std::size_t idx,
+    //                   const ContributionView& contributions,
+    //                   const TeamMember& handle) const;
 
-    template <typename ExecutionSpace>
-    typename std::enable_if<
-        !std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
-    get_contributions(std::size_t idx,
-                      const ContributionView& contributions) const;
+    // template <typename ExecutionSpace, typename TeamHandle>
+    // typename std::enable_if<
+    //     !std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
+    // get_contributions(const MC::KPRNG::pool_type& random_pool,
+    //                   std::size_t idx,
+    //                   const ContributionView& contributions,
+    //                   const TeamMember& handle) const;
 
     [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
     handle_division(const MC::KPRNG::pool_type& random_pool,
@@ -238,6 +241,7 @@ namespace MC
     std::size_t inactive_counter = 0;
     void __allocate_buffer__();
     void _resize(std::size_t new_size, bool force = false);
+    bool flag_virtual_position = false;
   };
 
   template <ModelType Model>
@@ -421,7 +425,8 @@ namespace MC
   }
 
   template <ModelType M>
-  ParticlesContainer<M>::ParticlesContainer(std::size_t n_particle)
+  ParticlesContainer<M>::ParticlesContainer(std::size_t n_particle,
+                                            bool virtual_position)
       : model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_model"),
               0),
         position(Kokkos::view_alloc(Kokkos::WithoutInitializing,
@@ -439,7 +444,7 @@ namespace MC
         buffer_position("buffer_particle_position", 0),
         buffer_index("buffer_index"),
         allocation_factor(default_allocation_factor), n_allocated_elements(0),
-        n_used_elements(n_particle)
+        n_used_elements(n_particle), flag_virtual_position(virtual_position)
   {
 
     _resize(n_particle);
@@ -529,29 +534,74 @@ namespace MC
   //   M::contribution(idx, position(idx), weight, model, contributions);
   // }
 
-  template <ModelType M>
-  template <typename ExecutionSpace>
-  KOKKOS_INLINE_FUNCTION typename std::enable_if<
-      std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
-  ParticlesContainer<M>::get_contributions(
-      std::size_t idx, const ContributionView& contributions) const
-  {
-    static_assert(ConstWeightModelType<M>, "ModelType: Const apply_weight()");
-    const double weight = get_weight(idx);
-    M::contribution(idx, position(idx), weight, model, contributions);
-  }
+  // template <ModelType M>
+  // template <typename TeamHandle>
+  // KOKKOS_INLINE_FUNCTION typename std::enable_if<
+  //     std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
+  // ParticlesContainer<M>::get_contributions(
+  //     const MC::KPRNG::pool_type& random_pool,
+  //     std::size_t idx,
+  //     const ContributionView& contributions,
+  //     const TeamMember& handle) const
+  // {
 
-  template <ModelType M>
-  template <typename ExecutionSpace>
-  KOKKOS_INLINE_FUNCTION typename std::enable_if<
-      !std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
-  ParticlesContainer<M>::get_contributions(
-      std::size_t idx, const ContributionView& contributions) const
-  {
-    static_assert(ConstWeightModelType<M>, "ModelType: Const apply_weight()");
-    const double weight = get_weight(idx);
-    M::contribution(idx, position(idx), weight, model, contributions);
-  }
+  //   (void)handle;
+  //   static_assert(ConstWeightModelType<M>, "ModelType: Constapply_weight()");
+  //   const double weight = get_weight(idx);
+  //   M::contribution(idx, position(idx), weight, model, contributions);
+
+  //   // constexpr int n_virtual_position = 500;
+  //   // static_assert(ConstWeightModelType<M>, "ModelType:
+  //   Constapply_weight()");
+  //   // const double weight = get_weight(idx);
+  //   // auto s = random_pool.get_state();
+  //   // const auto pos = s.urand(0, n_virtual_position - 1);
+  //   // random_pool.free_state(s);
+  //   // if (flag_virtual_position)
+  //   // {
+  //   //   Kokkos::View<double*,
+  //   //                typename ExecutionSpace::scratch_memory_space,
+  //   //                Kokkos::MemoryTraits<Kokkos::Unmanaged>>
+  //   //       a(handle.team_scratch(0), n_virtual_position);
+
+  //   //   const auto mock_contrib = -1 * weight * model(idx, 2);
+  //   //   Kokkos::atomic_add(&a(pos), mock_contrib);
+  //   //   handle.team_barrier();
+  //   //   double sum = 0.;
+  //   //   parallel_reduce(
+  //   //       TeamThreadRange(handle, n_virtual_position),
+  //   //       KOKKOS_LAMBDA(int i, double& lsum) {
+  //   //         Kokkos::single(PerThread(handle), [=]() { lsum += a(i); });
+  //   //       },
+  //   //       sum);
+
+  //   //   Kokkos::single(Kokkos::PerThread(handle),
+  //   //                  [=]()
+  //   //                  {
+  //   //                    auto access = contributions.access();
+  //   //                    access(0, 0) += sum;
+  //   //                  });
+  //   // }
+  //   // else
+  //   // {
+  //   // }
+  // }
+
+  // template <ModelType M>
+  // template <typename ExecutionSpace, typename TeamHandle>
+  // KOKKOS_INLINE_FUNCTION typename std::enable_if<
+  //     !std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
+  // ParticlesContainer<M>::get_contributions(
+  //     const MC::KPRNG::pool_type& random_pool,
+  //     std::size_t idx,
+  //     const ContributionView& contributions,
+  //     const TeamMember& handle) const
+  // {
+  //   (void)handle;
+  //   static_assert(ConstWeightModelType<M>, "ModelType: Const
+  //   apply_weight()"); const double weight = get_weight(idx);
+  //   M::contribution(idx, position(idx), weight, model, contributions);
+  // }
 
   template <ModelType M>
   [[nodiscard]] KOKKOS_INLINE_FUNCTION double

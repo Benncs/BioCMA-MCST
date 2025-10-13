@@ -18,6 +18,9 @@ use_cuda = get_option('use_cuda')
 if not use_cuda and build_udf
     add_project_arguments('-DUSE_UDF', language: 'cpp')
  endif
+add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
+add_global_arguments('-DEIGEN_DONT_VECTORIZE=1',language: 'cpp')
+
 
 arch_specific_args = []
 
@@ -106,8 +109,8 @@ eigen_dep = subproject('eigen', required: true).get_variable('eigen_dep')
 # if blas.found()
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 # endif
-#
-# add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
+
+
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
 cmake = import('cmake', required: true)
@@ -127,6 +130,7 @@ if use_system_kokkos
       kokkos_compile_arg,
       '-extended-lambda',
       '-Wext-lambda-captures-this',
+      '--expt-relaxed-constexpr'
     ]
 
   endif

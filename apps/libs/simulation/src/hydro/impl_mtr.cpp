@@ -1,6 +1,7 @@
 #ifndef NDEBUG
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
 #endif 
 #include <Eigen/Core>
 #include <Eigen/Dense>

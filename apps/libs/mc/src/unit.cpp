@@ -274,6 +274,11 @@ namespace MC
         max_c = 1;
       }
 
+      // if (max_c == 1 && uniform_init)
+      // {
+      //   max_c = 500;
+      // }
+
       /*
        * The mass of each cell in the reactor can be calculated after the model
        * initialization. To ensure that each cell has a unique weight based on

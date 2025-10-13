@@ -147,8 +147,9 @@ namespace Models
     const FloatType g = s / (k + s);
     FloatType phi_s = phi_s_max * g;
     const auto ldot = l_dot_max * g;
-    GET_PROPERTY(Self::particle_var::phi_s) = phi_s;
     GET_PROPERTY(Self::particle_var::length) += d_t * ldot;
+    GET_PROPERTY(Self::particle_var::phi_s) = -phi_s;
+
     return (GET_PROPERTY(Self::particle_var::length) >=
             GET_PROPERTY(particle_var::l_max))
                ? MC::Status::Division
@@ -164,12 +165,12 @@ namespace Models
   {
     const FloatType new_current_length =
         GET_PROPERTY(particle_var::length) / 2.F;
+
+    GET_PROPERTY(particle_var::length) = new_current_length;
+    GET_PROPERTY(particle_var::l_max) = l_max_m;
+
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::length) =
         new_current_length;
-    GET_PROPERTY(particle_var::length) = new_current_length;
-
-    // Deterministic
-    GET_PROPERTY(particle_var::l_max) = l_max_m;
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = l_max_m;
 
     // Stochastic 2
