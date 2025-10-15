@@ -181,6 +181,7 @@ namespace
 
 namespace MC
 {
+
   [[nodiscard]] uint64_t MonteCarloUnit::n_particle() const
   {
     return std::visit([](auto&& c) -> std::size_t

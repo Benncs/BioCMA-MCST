@@ -180,10 +180,9 @@ namespace MC
 
     // TODO Add logic off internal_dead_counter header
 
-    // template <typename ExecutionSpace>
-    // KOKKOS_INLINE_FUNCTION void
-    // get_contributions(std::size_t idx,
-    //                   const ContributionView& contributions) const;
+    KOKKOS_INLINE_FUNCTION void
+    get_contributions(std::size_t idx,
+                      const ContributionView& contributions) const;
 
     // template <typename ExecutionSpace, typename TeamHandle>
     // KOKKOS_INLINE_FUNCTION typename std::enable_if<
@@ -242,7 +241,32 @@ namespace MC
     void __allocate_buffer__();
     void _resize(std::size_t new_size, bool force = false);
     bool flag_virtual_position = false;
+
+    int begin;
+    int end;
   };
+
+  template <ModelType Model>
+  KOKKOS_INLINE_FUNCTION void ParticlesContainer<Model>::get_contributions(
+      std::size_t idx, const ContributionView& contributions) const
+  {
+    static_assert(ConstWeightModelType<Model>,
+                  "ModelType: Constapply_weight()");
+
+    const double weight = get_weight(idx);
+    const auto pos = position(idx);
+    auto access = contributions.access();
+
+    for (int i = begin; i < end; ++i)
+    {
+      const int rel = i - begin;
+      // const re
+      const double c = weight * model(idx, i);
+      // Kokkos::printf("%d %d %lf\r\n", rel, i, c);
+      access(pos, rel) += c;
+    }
+    // access(pos, 0) += (weight * model(idx, 2)); works
+  }
 
   template <ModelType Model>
   [[nodiscard]] KOKKOS_INLINE_FUNCTION std::size_t
@@ -449,6 +473,9 @@ namespace MC
 
     _resize(n_particle);
     __allocate_buffer__();
+    auto bounds = M::get_bounds();
+    begin = bounds.begin;
+    end = bounds.end;
   }
 
   template <ModelType M>
@@ -477,6 +504,10 @@ namespace MC
         n_used_elements(0)
 
   {
+
+    auto bounds = M::get_bounds();
+    begin = bounds.begin;
+    end = bounds.end;
   }
 
   template <ModelType M>

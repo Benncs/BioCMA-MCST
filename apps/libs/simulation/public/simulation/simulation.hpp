@@ -1,7 +1,7 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
-
+#include "simulation/kernels/model_kernel.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <biocma_cst_config.hpp>
@@ -216,7 +216,7 @@ namespace Simulation
         Simulation::KernelInline::CycleFunctor<Model>(container,
                                                       local_rng.random_pool,
                                                       getkernel_concentration(),
-                                                      get_kernel_contribution(),
+                                                      contribs_scatter,
                                                       events);
     auto move_functor =
         Simulation ::KernelInline ::MoveFunctor(container.position,
@@ -263,30 +263,18 @@ namespace Simulation
       const auto _policy =
           MC::get_policy<cycle_functor_type, KernelInline::TagSecondPass>(
               functors.cycle_kernel, n_particle, is_reduce);
+      const auto scatter_policy =
+          MC::get_policy<cycle_functor_type, KernelInline::TagFirstPass>(
+              functors.cycle_kernel, n_particle, false);
 
       Kokkos::parallel_reduce(
           "cycle_model",
           _policy,
           functors.cycle_kernel,
           KernelInline::CycleReducer<ComputeSpace>(functors.cycle_reducer));
-
-      const auto policy_contribs =
-          MC::get_policy<cycle_functor_type, KernelInline::TagFirstPass>(
-              functors.cycle_kernel, n_particle, is_reduce);
-      const int n_virtual_position = 500;
-      auto tmp_block =
-          Kokkos::View<double**, ComputeSpace>("block", n_virtual_position, 2);
-      auto block_global = MC::ContributionView(tmp_block);
-      functors.cycle_kernel.sblock(block_global);
+      Kokkos::fence(); // TODO needed ?
       Kokkos::parallel_for(
-          "cycle_model_second_pass", policy_contribs, functors.cycle_kernel);
-      // auto global = get_kernel_contribution();
-      Kokkos::Experimental::contribute(tmp_block, block_global);
-
-      Kokkos::parallel_for("cycle_model_third_pass",
-                           Kokkos::RangePolicy<>(0, tmp_block.extent(0)),
-                           KernelInline::CycleFunctorFinalReduce<CurrentModel>(
-                               tmp_block, contribs_scatter));
+          "cycle_scatter", scatter_policy, functors.cycle_kernel);
     }
 
     post_cycle<ComputeSpace, CurrentModel>(

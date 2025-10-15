@@ -1,9 +1,9 @@
 #ifndef __DEFAULT_MODEL_IMPLEMENTATION_HPP__
 #define __DEFAULT_MODEL_IMPLEMENTATION_HPP__
 
+#include "mc/alias.hpp"
 #include <mc/traits.hpp>
 #include <optional>
-
 
 /***
 DEFAULT MODEL IMPLEMENTATION
@@ -16,7 +16,7 @@ struct DefaultModel
     mass = 0,
   };
   static constexpr std::size_t n_var = 1;
-  
+
   static constexpr std::string_view name = "simple";
   using uniform_weight = std::true_type; // Using type alias
   using Self = DefaultModel;
@@ -25,14 +25,16 @@ struct DefaultModel
   using Config = std::nullopt_t;
   static constexpr bool uniform_weigth = false;
 
-  KOKKOS_INLINE_FUNCTION static void init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-                                          [[maybe_unused]] std::size_t idx,
-                                          [[maybe_unused]] const SelfParticle& arr)
+  KOKKOS_INLINE_FUNCTION static void
+  init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+       [[maybe_unused]] std::size_t idx,
+       [[maybe_unused]] const SelfParticle& arr)
   {
   }
 
-  KOKKOS_INLINE_FUNCTION static double mass([[maybe_unused]] std::size_t idx,
-                                            [[maybe_unused]] const SelfParticle& arr)
+  KOKKOS_INLINE_FUNCTION static double
+  mass([[maybe_unused]] std::size_t idx,
+       [[maybe_unused]] const SelfParticle& arr)
   {
     return 1.;
   }
@@ -65,6 +67,10 @@ struct DefaultModel
                [[maybe_unused]] const MC::ContributionView& contributions)
   {
   }
+  MC::ContribIndexBounds static get_bounds()
+  {
+    return {0, 0};
+  }
 };
 
 CHECK_MODEL(DefaultModel)
@@ -84,14 +90,17 @@ struct DynamicDefaultModel
   using Config = float;
   static constexpr bool uniform_weigth = false;
 
-  KOKKOS_INLINE_FUNCTION static void init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-                                          [[maybe_unused]] std::size_t idx,
-                                          [[maybe_unused]] const SelfParticle& arr,[[maybe_unused]] const Config& config)
+  KOKKOS_INLINE_FUNCTION static void
+  init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+       [[maybe_unused]] std::size_t idx,
+       [[maybe_unused]] const SelfParticle& arr,
+       [[maybe_unused]] const Config& config)
   {
   }
 
-  KOKKOS_INLINE_FUNCTION static double mass([[maybe_unused]] std::size_t idx,
-                                            [[maybe_unused]] const SelfParticle& arr)
+  KOKKOS_INLINE_FUNCTION static double
+  mass([[maybe_unused]] std::size_t idx,
+       [[maybe_unused]] const SelfParticle& arr)
   {
     return 1.;
   }
@@ -105,6 +114,11 @@ struct DynamicDefaultModel
   {
 
     return MC::Status::Idle;
+  }
+
+  MC::ContribIndexBounds static get_bounds()
+  {
+    return {0, 0};
   }
 
   KOKKOS_INLINE_FUNCTION static void
@@ -128,6 +142,4 @@ struct DynamicDefaultModel
 
 CHECK_MODEL(DynamicDefaultModel)
 
-
-
-#endif 
+#endif

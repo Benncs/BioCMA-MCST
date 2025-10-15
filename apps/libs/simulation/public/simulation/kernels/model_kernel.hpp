@@ -1,7 +1,6 @@
 #ifndef __SIMULATION_MC_KERNEL_HPP
 #define __SIMULATION_MC_KERNEL_HPP
 
-
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
@@ -106,12 +105,12 @@ namespace Simulation::KernelInline
     CycleFunctor(MC::ParticlesContainer<M> _particles,
                  MC::KPRNG::pool_type _random_pool,
                  MC::KernelConcentrationType&& _concentrations,
-                 kernelContribution _contribs_scatter,
+                 MC::ContributionView _contribs_scatter,
                  MC::EventContainer _event)
         : d_t(0.), particles(_particles), random_pool(_random_pool),
           concentrations(std::move(_concentrations)),
-          // contribs_scatter(std::move(_contribs_scatter)),
-          contribs(_contribs_scatter), events(std::move(_event))
+          contribs_scatter(std::move(_contribs_scatter)),
+          events(std::move(_event))
     {
     }
 
@@ -131,40 +130,12 @@ namespace Simulation::KernelInline
                     const TeamMember& team_handle) const
     {
       (void)_tag;
-      const int idx_start = team_handle.league_rank() * team_handle.team_size();
-      const int n_virtual_position = 500;
-      auto access = block.access();
-      Kokkos::parallel_for(
-          Kokkos::TeamThreadRange(team_handle, team_handle.team_size()),
-          [&](const int i)
-          {
-            const std::size_t idx = i + idx_start;
-            if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
-            {
-              return;
-            }
-            auto s = random_pool.get_state();
-            const uint32_t virtual_position = s.urand(0, n_virtual_position);
-            random_pool.free_state(s);
-            const double weight = particles.get_weight(idx);
-            const int idx_start_consumed = 2; // TODO
-            const int idx_n_consumed = 1;     // TODO
-            // for (int j = 0; j < idx_n_consumed; ++j)
-            // {
-            //   auto mock_contrib =
-            //       -1.0 * weight * particles.model(idx, idx_start_consumed +
-            //       j);
-            //   access(virtual_position, j) += mock_contrib;
-            // }
-            Kokkos::parallel_for(
-                Kokkos::ThreadVectorRange(team_handle, idx_n_consumed),
-                [&](const int j)
-                {
-                  const double mock_contrib =
-                      weight * particles.model(idx, idx_start_consumed + j);
-                  access(virtual_position, j) += mock_contrib;
-                });
-          });
+      GET_INDEX(particles.n_particles());
+      if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
+      {
+        return;
+      }
+      particles.get_contributions(idx, contribs_scatter);
     }
 
     KOKKOS_INLINE_FUNCTION void operator()(const TagSecondPass _tag,
@@ -203,30 +174,11 @@ namespace Simulation::KernelInline
     MC::ParticlesContainer<M> particles;
     MC::KPRNG::pool_type random_pool;
     MC::KernelConcentrationType concentrations;
-    // MC::ContributionView contribs_scatter;
-    kernelContribution contribs;
+    MC::ContributionView contribs_scatter;
+    // kernelContribution contribs;
     MC::KernelConcentrationType limitation_factor;
     MC::EventContainer events;
     MC::ContributionView block;
-  };
-
-  template <ModelType M> struct CycleFunctorFinalReduce
-  {
-  public:
-    CycleFunctorFinalReduce(Kokkos::View<double**, ComputeSpace> _tmp_block,
-                            MC::ContributionView _contribs)
-        : tmp_block(_tmp_block), contribs(_contribs)
-    {
-    }
-
-    KOKKOS_INLINE_FUNCTION void operator()(const int i)
-    {
-      auto access = contribs.access();
-      access(0, 0) += tmp_block(i, 0);
-    }
-
-    Kokkos::View<double**, ComputeSpace> tmp_block;
-    MC::ContributionView contribs;
   };
 
 } // namespace Simulation::KernelInline
