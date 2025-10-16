@@ -53,7 +53,7 @@ namespace Models
     MC::ContribIndexBounds static get_bounds()
     {
       int begin = INDEX_FROM_ENUM(Self::particle_var::phi_s);
-      return {begin, begin + 1};
+      return {.begin=begin, .end=begin + 1};
     }
 
     inline static void init(const MC::KPRNG::pool_type& random_pool,

@@ -49,7 +49,7 @@ if not use_cuda and build_udf
 endif
 
 # model_list_name = ['two_meta','simple_model','two_meta_nb','fixed_length']
-model_list_name = ['fixed_length']
+model_list_name = ['fixed_length','two_meta_nb']
 if not use_cuda and build_udf
   model_list_name = [model_list_name, 'udf_model']
 endif

@@ -111,10 +111,10 @@ namespace
       const int i = team.league_rank();
 
       position(original_size + i) = buffer_position(i);
-      Kokkos::parallel_for(Kokkos::TeamVectorRange(team, range),
-                           [&](const int& j) {
-                             model(original_size + i, j) = buffer_model(i, j);
-                           });
+      Kokkos::parallel_for(
+          Kokkos::TeamVectorRange(team, range),
+          [&](const int& j)
+          { model(original_size + i, j) = buffer_model(i, j); });
     }
 
     std::size_t original_size;
@@ -150,7 +150,8 @@ namespace MC
      */
     using UsedModel = Model;
 
-    explicit ParticlesContainer(std::size_t n_particle, bool virtual_position);
+    explicit ParticlesContainer(std::size_t n_particle,
+                                bool virtual_position = false);
     ParticlesContainer(); //=default;
 
     Model::SelfParticle model;
