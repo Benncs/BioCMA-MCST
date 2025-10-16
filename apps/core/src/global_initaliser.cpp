@@ -20,7 +20,6 @@
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/simulation.hpp>
-#include <simulation/transitionner.hpp>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -52,8 +51,6 @@ namespace
 
   void recur_path(std::string_view rootPath,
                   Core::SimulationParameters& params);
-
- 
 
   // TODO Move elsewhere
   double get_time_step(double user_deta_time,
