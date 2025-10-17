@@ -53,7 +53,7 @@ namespace Models
     MC::ContribIndexBounds static get_bounds()
     {
       int begin = INDEX_FROM_ENUM(Self::particle_var::phi_s);
-      return {.begin=begin, .end=begin + 1};
+      return {.begin = begin, .end = begin + 1};
     }
 
     inline static void init(const MC::KPRNG::pool_type& random_pool,
@@ -121,18 +121,32 @@ namespace Models
     // MC::Distributions::TruncatedNormal<float>(
     //    l_min_m, l_min_m / 2., 0., static_cast<double>(1));
 
+    // Normal1
     constexpr auto l_initial_dist =
         MC::Distributions::TruncatedNormal<float>(l_max_m * 0.75,
                                                   l_max_m / 10.,
                                                   l_max_m / 2.,
                                                   static_cast<double>(l_max_m));
 
+    // constexpr FloatType lambda =
+    //     0.69314718056 / l_max_m;
+    //
+    //     // lambda=-h/a WARN!!! use abs(lambda)
+    //  for exp(-lambda x) sampling
+    //     constexpr auto l_initial_dist =
+
     auto gen = random_pool.get_state();
-    auto linit = l_initial_dist.draw(
-        gen); // l_min_m; // gen.drand(l_min_m * .8, l_max_m);
+    // loatType lm = l_max_m;
+    // FloatType lh = l_max_m / 2.;
+
+    FloatType linit = l_initial_dist.draw(gen);
+    // linit = Kokkos::min(linit + lh, lm);
+
+    //   auto linit = l_initial_dist.draw(
+    //       gen); // l_min_m; // gen.drand(l_min_m * .8, l_max_m);
+    //
     random_pool.free_state(gen);
     GET_PROPERTY(particle_var::length) = linit;
-
     // Stochastic 1
     //    auto gen = random_pool.get_state();
     //    GET_PROPERTY(particle_var::l_max) = gen.drand(l_max_m * 0.9, l_max_m

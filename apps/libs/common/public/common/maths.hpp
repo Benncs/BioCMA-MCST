@@ -10,6 +10,7 @@ namespace CommonMaths
   KOKKOS_INLINE_FUNCTION float _ln(float x)
     requires(!use_kokkos_log)
   {
+    // NOLINTBEGIN
     unsigned int bx = *reinterpret_cast<unsigned int*>(&x);
     const unsigned int ex = bx >> 23;
     const signed int t =
@@ -19,6 +20,7 @@ namespace CommonMaths
     x = *reinterpret_cast<float*>(&bx);
     return -1.49278 + (2.11263 + (-0.729104 + 0.10969 * x) * x) * x +
            0.6931471806 * t;
+    // NOLINTEND
   }
   template <bool use_kokkos_log>
   KOKKOS_INLINE_FUNCTION float _ln(float x)
