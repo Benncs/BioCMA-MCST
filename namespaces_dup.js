@@ -3,6 +3,10 @@ var namespaces_dup =
     [ "Api", "namespaceApi.html", "namespaceApi" ],
     [ "CmaUtils", "namespaceCmaUtils.html", "namespaceCmaUtils" ],
     [ "Common", "namespaceCommon.html", "namespaceCommon" ],
+    [ "CommonMaths", "namespaceCommonMaths.html", [
+      [ "_ln", "namespaceCommonMaths.html#ad4e27e17383f20d970bcd89fd00e36f0", null ],
+      [ "_ln", "namespaceCommonMaths.html#a4c17801ee3f7b5fefd5a2f209df270d3", null ]
+    ] ],
     [ "Core", "namespaceCore.html", "namespaceCore" ],
     [ "IO", "namespaceIO.html", "namespaceIO" ],
     [ "MC", "namespaceMC.html", "namespaceMC" ],

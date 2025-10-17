@@ -77,46 +77,47 @@ $(function(){initNavTree('proxy__cache_8hpp_source.html','',''); });
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#ifndef NDEBUG</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma GCC diagnostic push</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wunused-but-set-variable&quot;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#endif </span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Eigen/Core&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;Eigen/Dense&gt;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;Eigen/Sparse&gt;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#ifndef NDEBUG</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#pragma GCC diagnostic pop</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#endif </span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;cma_read/light_2d_view.hpp&gt;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;cma_read/reactorstate.hpp&gt;</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;cma_utils/cache_hydro_state.hpp&gt;</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceCmaUtils.html">CmaUtils</a></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>{</div>
-<div class="foldopen" id="foldopen00026" data-start="{" data-end="};">
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html">   26</a></span>  <span class="keyword">class </span><a class="code hl_class" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html">ProxyPreCalculatedHydroState</a></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>  {</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a620578fcbad219ad20c529aebc5d4157">set_transition_matrix</a>(<span class="keyword">const</span> CmaRead::FlowMap::FlowMap_const_view_t&amp; flows_view);</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a620578fcbad219ad20c529aebc5d4157">set_transition_matrix</a>(FlowMatrixType&amp;&amp; matrix);</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a125ac43c19bfc4b00e122904d661d3aa">set_cumulative_probability</a>(<span class="keyword">const</span> CmaRead::Neighbors::Neighbors_const_view_t&amp; neighbors);</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a1dad8236e1e52305c76772504e502fd1">set_diag_transition</a>(std::vector&lt;double&gt;&amp;&amp; diag);</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <a class="code hl_class" href="classCmaUtils_1_1PreCalculatedHydroState.html">PreCalculatedHydroState</a></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a6aaf4603b566081f190d5274ccc744f4">   54</a></span>        <a class="code hl_variable" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a6aaf4603b566081f190d5274ccc744f4">state</a>; </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  };</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wnan-infinity-disabled&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#endif </span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;Eigen/Core&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;Eigen/Dense&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;Eigen/Sparse&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#ifndef NDEBUG</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#pragma GCC diagnostic pop</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#endif </span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;cma_read/light_2d_view.hpp&gt;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;cma_read/reactorstate.hpp&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;cma_utils/cache_hydro_state.hpp&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceCmaUtils.html">CmaUtils</a></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>{</div>
+<div class="foldopen" id="foldopen00027" data-start="{" data-end="};">
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html">   27</a></span>  <span class="keyword">class </span><a class="code hl_class" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html">ProxyPreCalculatedHydroState</a></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  {</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a620578fcbad219ad20c529aebc5d4157">set_transition_matrix</a>(<span class="keyword">const</span> CmaRead::FlowMap::FlowMap_const_view_t&amp; flows_view);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a620578fcbad219ad20c529aebc5d4157">set_transition_matrix</a>(FlowMatrixType&amp;&amp; matrix);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a125ac43c19bfc4b00e122904d661d3aa">set_cumulative_probability</a>(<span class="keyword">const</span> CmaRead::Neighbors::Neighbors_const_view_t&amp; neighbors);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a1dad8236e1e52305c76772504e502fd1">set_diag_transition</a>(std::vector&lt;double&gt;&amp;&amp; diag);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <a class="code hl_class" href="classCmaUtils_1_1PreCalculatedHydroState.html">PreCalculatedHydroState</a></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a6aaf4603b566081f190d5274ccc744f4">   55</a></span>        <a class="code hl_variable" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a6aaf4603b566081f190d5274ccc744f4">state</a>; </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  };</div>
 </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>} <span class="comment">// namespace CmaUtils</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclassCmaUtils_1_1PreCalculatedHydroState_html"><div class="ttname"><a href="classCmaUtils_1_1PreCalculatedHydroState.html">CmaUtils::PreCalculatedHydroState</a></div><div class="ttdoc">Structure to store hydrodynamic properties from a compartment mesh.</div><div class="ttdef"><b>Definition</b> cache_hydro_state.hpp:48</div></div>
-<div class="ttc" id="aclassCmaUtils_1_1ProxyPreCalculatedHydroState_html"><div class="ttname"><a href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html">CmaUtils::ProxyPreCalculatedHydroState</a></div><div class="ttdoc">Proxy class for PreCalculatedHydroState used to fill this struct with data from an external library.</div><div class="ttdef"><b>Definition</b> proxy_cache.hpp:27</div></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>} <span class="comment">// namespace CmaUtils</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclassCmaUtils_1_1PreCalculatedHydroState_html"><div class="ttname"><a href="classCmaUtils_1_1PreCalculatedHydroState.html">CmaUtils::PreCalculatedHydroState</a></div><div class="ttdoc">Structure to store hydrodynamic properties from a compartment mesh.</div><div class="ttdef"><b>Definition</b> cache_hydro_state.hpp:49</div></div>
+<div class="ttc" id="aclassCmaUtils_1_1ProxyPreCalculatedHydroState_html"><div class="ttname"><a href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html">CmaUtils::ProxyPreCalculatedHydroState</a></div><div class="ttdoc">Proxy class for PreCalculatedHydroState used to fill this struct with data from an external library.</div><div class="ttdef"><b>Definition</b> proxy_cache.hpp:28</div></div>
 <div class="ttc" id="aclassCmaUtils_1_1ProxyPreCalculatedHydroState_html_a125ac43c19bfc4b00e122904d661d3aa"><div class="ttname"><a href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a125ac43c19bfc4b00e122904d661d3aa">CmaUtils::ProxyPreCalculatedHydroState::set_cumulative_probability</a></div><div class="ttdeci">void set_cumulative_probability(const CmaRead::Neighbors::Neighbors_const_view_t &amp;neighbors)</div><div class="ttdoc">Set the cumulative probability using a constant neighbors view.</div><div class="ttdef"><b>Definition</b> proxy_cache.cpp:27</div></div>
 <div class="ttc" id="aclassCmaUtils_1_1ProxyPreCalculatedHydroState_html_a1dad8236e1e52305c76772504e502fd1"><div class="ttname"><a href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a1dad8236e1e52305c76772504e502fd1">CmaUtils::ProxyPreCalculatedHydroState::set_diag_transition</a></div><div class="ttdeci">void set_diag_transition(std::vector&lt; double &gt; &amp;&amp;diag)</div><div class="ttdoc">Set the diagonal elements of the transition matrix.</div><div class="ttdef"><b>Definition</b> proxy_cache.cpp:6</div></div>
 <div class="ttc" id="aclassCmaUtils_1_1ProxyPreCalculatedHydroState_html_a620578fcbad219ad20c529aebc5d4157"><div class="ttname"><a href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a620578fcbad219ad20c529aebc5d4157">CmaUtils::ProxyPreCalculatedHydroState::set_transition_matrix</a></div><div class="ttdeci">void set_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t &amp;flows_view)</div><div class="ttdoc">Set the transition matrix using a constant flow map view.</div><div class="ttdef"><b>Definition</b> proxy_cache.cpp:14</div></div>
-<div class="ttc" id="aclassCmaUtils_1_1ProxyPreCalculatedHydroState_html_a6aaf4603b566081f190d5274ccc744f4"><div class="ttname"><a href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a6aaf4603b566081f190d5274ccc744f4">CmaUtils::ProxyPreCalculatedHydroState::state</a></div><div class="ttdeci">PreCalculatedHydroState state</div><div class="ttdoc">Instance of PreCalculatedHydroState containing the filled data.</div><div class="ttdef"><b>Definition</b> proxy_cache.hpp:54</div></div>
+<div class="ttc" id="aclassCmaUtils_1_1ProxyPreCalculatedHydroState_html_a6aaf4603b566081f190d5274ccc744f4"><div class="ttname"><a href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html#a6aaf4603b566081f190d5274ccc744f4">CmaUtils::ProxyPreCalculatedHydroState::state</a></div><div class="ttdeci">PreCalculatedHydroState state</div><div class="ttdoc">Instance of PreCalculatedHydroState containing the filled data.</div><div class="ttdef"><b>Definition</b> proxy_cache.hpp:55</div></div>
 <div class="ttc" id="anamespaceCmaUtils_html"><div class="ttname"><a href="namespaceCmaUtils.html">CmaUtils</a></div><div class="ttdoc">Namespace to handle algorithms and structures related to reading compartment mesh.</div><div class="ttdef"><b>Definition</b> host_specific.hpp:18</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

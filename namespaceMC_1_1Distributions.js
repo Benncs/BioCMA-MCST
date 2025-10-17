@@ -1,5 +1,6 @@
 var namespaceMC_1_1Distributions =
 [
+    [ "Exponential", "structMC_1_1Distributions_1_1Exponential.html", "structMC_1_1Distributions_1_1Exponential" ],
     [ "LogNormal", "structMC_1_1Distributions_1_1LogNormal.html", "structMC_1_1Distributions_1_1LogNormal" ],
     [ "Normal", "structMC_1_1Distributions_1_1Normal.html", "structMC_1_1Distributions_1_1Normal" ],
     [ "ScaledTruncatedNormal", "structMC_1_1Distributions_1_1ScaledTruncatedNormal.html", "structMC_1_1Distributions_1_1ScaledTruncatedNormal" ],

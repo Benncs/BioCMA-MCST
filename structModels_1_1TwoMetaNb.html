@@ -85,11 +85,11 @@ Public Types</h2></td></tr>
 &#160;&#160;<a class="el" href="#aacbc344113be86953aa75039adb42ac1ae0e4c71ef2aaff0f4d1177e225934c9c">l_cp</a>
 , <a class="el" href="#aacbc344113be86953aa75039adb42ac1ad318f3237c26c7ff343cbe980871815c">nu_eff_1</a>
 , <a class="el" href="#aacbc344113be86953aa75039adb42ac1aec0f8261b2e5ed4489f8ebd59aaedca7">nu_eff_2</a>
-, <a class="el" href="#aacbc344113be86953aa75039adb42ac1af477ea4460e57d89276aa2626e0c3ec3">contrib_phi_s</a>
-, <br />
-&#160;&#160;<a class="el" href="#aacbc344113be86953aa75039adb42ac1a4296f5b5b012152da6d18ac8f9df498b">contrib_phi_o2</a>
-, <a class="el" href="#aacbc344113be86953aa75039adb42ac1ad847ada0496a128c2592238f1673d5f4">contrib_phi_ac</a>
 , <a class="el" href="#aacbc344113be86953aa75039adb42ac1a6dcb01722c6663b1f659b128522916f6">phi_pts</a>
+, <br />
+&#160;&#160;<a class="el" href="#aacbc344113be86953aa75039adb42ac1af477ea4460e57d89276aa2626e0c3ec3">contrib_phi_s</a>
+, <a class="el" href="#aacbc344113be86953aa75039adb42ac1a4296f5b5b012152da6d18ac8f9df498b">contrib_phi_o2</a>
+, <a class="el" href="#aacbc344113be86953aa75039adb42ac1ad847ada0496a128c2592238f1673d5f4">contrib_phi_ac</a>
 , <a class="el" href="#aacbc344113be86953aa75039adb42ac1a4905ac9d6a22bdfc1ae096094ce6248d">COUNT</a>
 <br />
  }</td></tr>
@@ -101,14 +101,15 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:af629901d7d22dd38d55cf4038ab98ee1" id="r_af629901d7d22dd38d55cf4038ab98ee1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structMC_1_1ContribIndexBounds.html">MC::ContribIndexBounds</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af629901d7d22dd38d55cf4038ab98ee1">get_bounds</a> ()</td></tr>
 <tr class="memitem:a38b720d6fdf8d64f11a8da42332bf023" id="r_a38b720d6fdf8d64f11a8da42332bf023"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38b720d6fdf8d64f11a8da42332bf023">mass</a> (std::size_t idx, const <a class="el" href="#a3f96dd5ece70b7fa889a1609936aadbf">SelfParticle</a> &amp;arr)</td></tr>
 <tr class="memitem:a3eaa18a2f536b2f0245f2a2ed818d487" id="r_a3eaa18a2f536b2f0245f2a2ed818d487"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::string_view &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3eaa18a2f536b2f0245f2a2ed818d487">names</a> ()</td></tr>
 <tr class="memitem:a22862f87017ba8059a76aba709c65c35" id="r_a22862f87017ba8059a76aba709c65c35"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22862f87017ba8059a76aba709c65c35">get_number</a> ()</td></tr>
 <tr class="memitem:a67d5e33a903c086000f9ca2cf1ce75d9" id="r_a67d5e33a903c086000f9ca2cf1ce75d9"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67d5e33a903c086000f9ca2cf1ce75d9">preinit</a> ()</td></tr>
 <tr class="memitem:afd8730470d275a0dc5757f7ca5c894d4" id="r_afd8730470d275a0dc5757f7ca5c894d4"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd8730470d275a0dc5757f7ca5c894d4">init</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx, const <a class="el" href="#a3f96dd5ece70b7fa889a1609936aadbf">SelfParticle</a> &amp;arr)</td></tr>
-<tr class="memitem:af87eb2560275107bff615f9a54bfeeda" id="r_af87eb2560275107bff615f9a54bfeeda"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7c">MC::Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af87eb2560275107bff615f9a54bfeeda">update</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, <a class="el" href="#aba078a5913edb7051a5d5afc91223ec1">FloatType</a> d_t, std::size_t idx, const <a class="el" href="#a3f96dd5ece70b7fa889a1609936aadbf">SelfParticle</a> &amp;arr, const <a class="el" href="namespaceMC.html#a014ee946d2a4f3e125803a71eefae77d">MC::LocalConcentration</a> &amp;c)</td></tr>
+<tr class="memitem:af87eb2560275107bff615f9a54bfeeda" id="r_af87eb2560275107bff615f9a54bfeeda"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7c">MC::Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af87eb2560275107bff615f9a54bfeeda">update</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, <a class="el" href="#aba078a5913edb7051a5d5afc91223ec1">FloatType</a> d_t, std::size_t idx, const <a class="el" href="#a3f96dd5ece70b7fa889a1609936aadbf">SelfParticle</a> &amp;arr, const <a class="el" href="namespaceMC.html#aad69f7f73ef6a017ee86ca89451a6271">MC::LocalConcentration</a> &amp;c)</td></tr>
 <tr class="memitem:a329f6d4a53ae6e8315a49c35ebd6bdc4" id="r_a329f6d4a53ae6e8315a49c35ebd6bdc4"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a329f6d4a53ae6e8315a49c35ebd6bdc4">division</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx, std::size_t idx2, const <a class="el" href="#a3f96dd5ece70b7fa889a1609936aadbf">SelfParticle</a> &amp;arr, const <a class="el" href="#a3f96dd5ece70b7fa889a1609936aadbf">SelfParticle</a> &amp;buffer_arr)</td></tr>
-<tr class="memitem:a166ce035f1e4ed57fef4353a5d177a95" id="r_a166ce035f1e4ed57fef4353a5d177a95"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a166ce035f1e4ed57fef4353a5d177a95">contribution</a> (std::size_t idx, std::size_t position, double weight, const <a class="el" href="#a3f96dd5ece70b7fa889a1609936aadbf">SelfParticle</a> &amp;arr, const <a class="el" href="namespaceMC.html#ab52c4201047a412a68a2f53444dacb78">MC::ContributionView</a> &amp;contributions)</td></tr>
+<tr class="memitem:addc912d4e52d6faaa7aaf57fae17e696" id="r_addc912d4e52d6faaa7aaf57fae17e696"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addc912d4e52d6faaa7aaf57fae17e696">contribution</a> (std::size_t idx, std::size_t position, double weight, const <a class="el" href="#a3f96dd5ece70b7fa889a1609936aadbf">SelfParticle</a> &amp;arr, const <a class="el" href="namespaceMC.html#a4861d217ba26986f3f68935d00c6a709">MC::ContributionView</a> &amp;contributions)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -244,18 +245,18 @@ Static Public Attributes</h2></td></tr>
 <tr><td class="fieldname"><a id="aacbc344113be86953aa75039adb42ac1ae0e4c71ef2aaff0f4d1177e225934c9c" name="aacbc344113be86953aa75039adb42ac1ae0e4c71ef2aaff0f4d1177e225934c9c"></a>l_cp&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="aacbc344113be86953aa75039adb42ac1ad318f3237c26c7ff343cbe980871815c" name="aacbc344113be86953aa75039adb42ac1ad318f3237c26c7ff343cbe980871815c"></a>nu_eff_1&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="aacbc344113be86953aa75039adb42ac1aec0f8261b2e5ed4489f8ebd59aaedca7" name="aacbc344113be86953aa75039adb42ac1aec0f8261b2e5ed4489f8ebd59aaedca7"></a>nu_eff_2&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aacbc344113be86953aa75039adb42ac1a6dcb01722c6663b1f659b128522916f6" name="aacbc344113be86953aa75039adb42ac1a6dcb01722c6663b1f659b128522916f6"></a>phi_pts&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="aacbc344113be86953aa75039adb42ac1af477ea4460e57d89276aa2626e0c3ec3" name="aacbc344113be86953aa75039adb42ac1af477ea4460e57d89276aa2626e0c3ec3"></a>contrib_phi_s&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="aacbc344113be86953aa75039adb42ac1a4296f5b5b012152da6d18ac8f9df498b" name="aacbc344113be86953aa75039adb42ac1a4296f5b5b012152da6d18ac8f9df498b"></a>contrib_phi_o2&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="aacbc344113be86953aa75039adb42ac1ad847ada0496a128c2592238f1673d5f4" name="aacbc344113be86953aa75039adb42ac1ad847ada0496a128c2592238f1673d5f4"></a>contrib_phi_ac&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="aacbc344113be86953aa75039adb42ac1a6dcb01722c6663b1f659b128522916f6" name="aacbc344113be86953aa75039adb42ac1a6dcb01722c6663b1f659b128522916f6"></a>phi_pts&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="aacbc344113be86953aa75039adb42ac1a4905ac9d6a22bdfc1ae096094ce6248d" name="aacbc344113be86953aa75039adb42ac1a4905ac9d6a22bdfc1ae096094ce6248d"></a>COUNT&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a166ce035f1e4ed57fef4353a5d177a95" name="a166ce035f1e4ed57fef4353a5d177a95"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a166ce035f1e4ed57fef4353a5d177a95">&#9670;&#160;</a></span>contribution()</h2>
+<a id="addc912d4e52d6faaa7aaf57fae17e696" name="addc912d4e52d6faaa7aaf57fae17e696"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addc912d4e52d6faaa7aaf57fae17e696">&#9670;&#160;</a></span>contribution()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -286,7 +287,7 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceMC.html#ab52c4201047a412a68a2f53444dacb78">MC::ContributionView</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>contributions</em></span>&#160;)</td>
+          <td class="paramtype">const <a class="el" href="namespaceMC.html#a4861d217ba26986f3f68935d00c6a709">MC::ContributionView</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>contributions</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -344,6 +345,31 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structModels_1_1TwoMetaNb_a329f6d4a53ae6e8315a49c35ebd6bdc4_cgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
+
+</div>
+</div>
+<a id="af629901d7d22dd38d55cf4038ab98ee1" name="af629901d7d22dd38d55cf4038ab98ee1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af629901d7d22dd38d55cf4038ab98ee1">&#9670;&#160;</a></span>get_bounds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structMC_1_1ContribIndexBounds.html">MC::ContribIndexBounds</a> Models::TwoMetaNb::get_bounds </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -522,7 +548,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceMC.html#a014ee946d2a4f3e125803a71eefae77d">MC::LocalConcentration</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>c</em></span>&#160;)</td>
+          <td class="paramtype">const <a class="el" href="namespaceMC.html#aad69f7f73ef6a017ee86ca89451a6271">MC::LocalConcentration</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>c</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -557,7 +583,7 @@ Here is the call graph for this function:</div>
 <div class="line">            <a class="code hl_variable" href="#aa8b32fac401219d468f43399c5a88698">adder_mean</a> / 2.,</div>
 <div class="line">            <a class="code hl_variable" href="#aa8b32fac401219d468f43399c5a88698">adder_mean</a> / 20.,</div>
 <div class="line">            <a class="code hl_variable" href="#aa8b32fac401219d468f43399c5a88698">adder_mean</a> * 10)</div>
-<div class="ttc" id="astructMC_1_1Distributions_1_1TruncatedNormal_html"><div class="ttname"><a href="structMC_1_1Distributions_1_1TruncatedNormal.html">MC::Distributions::TruncatedNormal</a></div><div class="ttdoc">Represents a TruncatedNormal (Gaussian) probability distribution.</div><div class="ttdef"><b>Definition</b> prng_extension.hpp:263</div></div>
+<div class="ttc" id="astructMC_1_1Distributions_1_1TruncatedNormal_html"><div class="ttname"><a href="structMC_1_1Distributions_1_1TruncatedNormal.html">MC::Distributions::TruncatedNormal</a></div><div class="ttdoc">Represents a TruncatedNormal (Gaussian) probability distribution.</div><div class="ttdef"><b>Definition</b> prng_extension.hpp:277</div></div>
 <div class="ttc" id="astructModels_1_1TwoMetaNb_html_aa8b32fac401219d468f43399c5a88698"><div class="ttname"><a href="#aa8b32fac401219d468f43399c5a88698">Models::TwoMetaNb::adder_mean</a></div><div class="ttdeci">MODEL_CONSTANT FloatType adder_mean</div><div class="ttdef"><b>Definition</b> two_meta_nb.hpp:87</div></div>
 </div><!-- fragment -->
 </div>

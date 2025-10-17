@@ -10,6 +10,7 @@ var structDefaultModel =
     ] ],
     [ "contribution", "structDefaultModel.html#a2453a483d8e5b552db78cee53c4e1a53", null ],
     [ "division", "structDefaultModel.html#aec7ac923869363e0b4614d4dc3b0a5b7", null ],
+    [ "get_bounds", "structDefaultModel.html#a3efef32df43d577edf410629fe42df74", null ],
     [ "init", "structDefaultModel.html#a06fabbdf53a9d88026c535d2e11dcf1a", null ],
     [ "mass", "structDefaultModel.html#a73daf991fe2854519c1f3f48ab09fd73", null ],
     [ "update", "structDefaultModel.html#a3131119ab9892e186e75608304208f17", null ],

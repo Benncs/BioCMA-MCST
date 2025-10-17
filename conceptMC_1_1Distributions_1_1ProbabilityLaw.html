@@ -79,14 +79,15 @@ $(function(){initNavTree('conceptMC_1_1Distributions_1_1ProbabilityLaw.html','',
 <h2 id="header-conceptdef" class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> F, <span class="keyword">class</span> DeviceType&gt;</div>
 <div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptMC_1_1Distributions_1_1ProbabilityLaw.html">MC::Distributions::ProbabilityLaw</a> = </div>
-<div class="line">      <a class="code hl_concept" href="conceptFloatingPointType.html">FloatingPointType&lt;F&gt;</a> &amp;&amp; <span class="keyword">requires</span>(<span class="keyword">const</span> T&amp; obj, Kokkos::Random_XorShift1024&lt;DeviceType&gt;&amp; gen) {</div>
+<div class="line">      <a class="code hl_concept" href="conceptFloatingPointType.html">FloatingPointType&lt;F&gt;</a> &amp;&amp;</div>
+<div class="line">      <span class="keyword">requires</span>(<span class="keyword">const</span> T&amp; obj, Kokkos::Random_XorShift1024&lt;DeviceType&gt;&amp; gen) {</div>
 <div class="line">        { obj.draw(gen) } -&gt; std::same_as&lt;F&gt;;</div>
 <div class="line">        { obj.mean() } -&gt; std::same_as&lt;F&gt;;</div>
 <div class="line">        { obj.var() } -&gt; std::same_as&lt;F&gt;;</div>
 <div class="line">        { obj.skewness() } -&gt; std::same_as&lt;F&gt;;</div>
 <div class="line">      }</div>
 <div class="ttc" id="aconceptFloatingPointType_html"><div class="ttname"><a href="conceptFloatingPointType.html">FloatingPointType</a></div><div class="ttdef"><b>Definition</b> traits.hpp:20</div></div>
-<div class="ttc" id="aconceptMC_1_1Distributions_1_1ProbabilityLaw_html"><div class="ttname"><a href="conceptMC_1_1Distributions_1_1ProbabilityLaw.html">MC::Distributions::ProbabilityLaw</a></div><div class="ttdoc">Concept for probability distribution laws.</div><div class="ttdef"><b>Definition</b> prng_extension.hpp:48</div></div>
+<div class="ttc" id="aconceptMC_1_1Distributions_1_1ProbabilityLaw_html"><div class="ttname"><a href="conceptMC_1_1Distributions_1_1ProbabilityLaw.html">MC::Distributions::ProbabilityLaw</a></div><div class="ttdoc">Concept for probability distribution laws.</div><div class="ttdef"><b>Definition</b> prng_extension.hpp:50</div></div>
 </div><!-- fragment --><a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Concept for probability distribution laws. </p>
 <p>The <span class="tt">ProbabilityLaw</span> concept defines the requirements for a type <span class="tt">T</span> to model a probability distribution with floating-point computations. It ensures that the type provides methods for drawing random samples and computing common statistical measures such as mean, variance, and skewness.</p>
@@ -111,7 +112,7 @@ $(function(){initNavTree('conceptMC_1_1Distributions_1_1ProbabilityLaw.html','',
 <div class="line">    <span class="keywordtype">double</span> mean()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mu; }</div>
 <div class="line">    <span class="keywordtype">double</span> var()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> sigma * sigma; }</div>
 <div class="line">    <span class="keywordtype">double</span> skewness()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0.0; }</div>
-<div class="line">    <span class="keywordtype">double</span> draw(Kokkos::Random_XorShift1024&lt;DeviceType&gt;&amp; gen) {<span class="keywordflow">return</span> 0.;    }</div>
+<div class="line">    <span class="keywordtype">double</span> draw(Kokkos::Random_XorShift1024&lt;DeviceType&gt;&amp; gen) {<span class="keywordflow">return</span> 0.; }</div>
 <div class="line">  };</div>
 <div class="line">  <span class="keyword">static_assert</span>(ProbabilityLaw&lt;NormalDistribution, double, DeviceType&gt;);</div>
 </div><!-- fragment --> </div></div><!-- contents -->

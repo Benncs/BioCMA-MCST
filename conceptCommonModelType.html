@@ -85,9 +85,9 @@ $(function(){initNavTree('conceptCommonModelType.html','',''); });
 <div class="line">                                   <span class="keywordtype">double</span> weight,</div>
 <div class="line">                                   <span class="keyword">const</span> T::SelfParticle&amp; arr,</div>
 <div class="line">                                   <span class="keyword">const</span> T::SelfParticle&amp; buffer_arr,</div>
-<div class="line">                                   <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a014ee946d2a4f3e125803a71eefae77d">MC::LocalConcentration</a>&amp; c,</div>
+<div class="line">                                   <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#aad69f7f73ef6a017ee86ca89451a6271">MC::LocalConcentration</a>&amp; c,</div>
 <div class="line">                                   std::size_t position,</div>
-<div class="line">                                   <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#ab52c4201047a412a68a2f53444dacb78">MC::ContributionView</a>&amp; contributions,</div>
+<div class="line">                                   <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a4861d217ba26986f3f68935d00c6a709">MC::ContributionView</a>&amp; contributions,</div>
 <div class="line">                                   <span class="keyword">const</span> <a class="code hl_typedef" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a>&amp; random_pool,</div>
 <div class="line">                                   <span class="keyword">const</span> T::Config&amp; config) {</div>
 <div class="line">  {</div>
@@ -101,24 +101,33 @@ $(function(){initNavTree('conceptCommonModelType.html','',''); });
 <div class="line">  </div>
 <div class="line">  </div>
 <div class="line">  </div>
+<div class="line">  </div>
+<div class="line">  </div>
 <div class="line"> </div>
-<div class="line">  <span class="keyword">requires</span> <a class="code hl_concept" href="conceptConfigurableInit.html">ConfigurableInit&lt;T&gt;</a> || (std::is_same_v&lt;typename T::Config, std::nullopt_t&gt; &amp;&amp; <a class="code hl_concept" href="conceptNonConfigurableInit.html">NonConfigurableInit&lt;T&gt;</a>);</div>
-<div class="line"> </div>
+<div class="line">  <span class="keyword">requires</span> <a class="code hl_concept" href="conceptConfigurableInit.html">ConfigurableInit&lt;T&gt;</a> ||</div>
+<div class="line">               (std::is_same_v&lt;typename T::Config, std::nullopt_t&gt; &amp;&amp;</div>
+<div class="line">                <a class="code hl_concept" href="conceptNonConfigurableInit.html">NonConfigurableInit&lt;T&gt;</a>);</div>
 <div class="line"> </div>
 <div class="line">  </div>
 <div class="line">  </div>
 <div class="line">  </div>
 <div class="line">  </div>
+<div class="line">  </div>
 <div class="line"> </div>
-<div class="line">  { T::mass(idx, arr) } -&gt; std::same_as&lt;double&gt;; </div>
+<div class="line">  {</div>
+<div class="line">    T::mass(idx, arr)</div>
+<div class="line">  } -&gt; std::same_as&lt;double&gt;; </div>
 <div class="line"> </div>
 <div class="line">  {</div>
 <div class="line">    T::update(random_pool, d_t, idx, arr, c)</div>
 <div class="line">  } -&gt; std::convertible_to&lt;MC::Status&gt;; </div>
 <div class="line"> </div>
-<div class="line">  {</div>
-<div class="line">    T::contribution(idx, position, weight, arr, contributions)</div>
-<div class="line">  } -&gt; std::same_as&lt;void&gt;; </div>
+<div class="line">  </div>
+<div class="line">  </div>
+<div class="line">  </div>
+<div class="line">  </div>
+<div class="line"> </div>
+<div class="line">  { T::get_bounds() } -&gt; std::same_as&lt;MC::ContribIndexBounds&gt;;</div>
 <div class="line"> </div>
 <div class="line">  {</div>
 <div class="line">    T::division(random_pool, idx, idx2, arr, buffer_arr)</div>
@@ -131,8 +140,8 @@ $(function(){initNavTree('conceptCommonModelType.html','',''); });
 <div class="ttc" id="aconceptConfigurableInit_html"><div class="ttname"><a href="conceptConfigurableInit.html">ConfigurableInit</a></div><div class="ttdef"><b>Definition</b> traits.hpp:41</div></div>
 <div class="ttc" id="aconceptFloatingPointType_html"><div class="ttname"><a href="conceptFloatingPointType.html">FloatingPointType</a></div><div class="ttdef"><b>Definition</b> traits.hpp:20</div></div>
 <div class="ttc" id="aconceptNonConfigurableInit_html"><div class="ttname"><a href="conceptNonConfigurableInit.html">NonConfigurableInit</a></div><div class="ttdef"><b>Definition</b> traits.hpp:50</div></div>
-<div class="ttc" id="anamespaceMC_html_a014ee946d2a4f3e125803a71eefae77d"><div class="ttname"><a href="namespaceMC.html#a014ee946d2a4f3e125803a71eefae77d">MC::LocalConcentration</a></div><div class="ttdeci">Kokkos::Subview&lt; KernelConcentrationType, int, decltype(Kokkos::ALL)&gt; LocalConcentration</div><div class="ttdef"><b>Definition</b> alias.hpp:42</div></div>
-<div class="ttc" id="anamespaceMC_html_ab52c4201047a412a68a2f53444dacb78"><div class="ttname"><a href="namespaceMC.html#ab52c4201047a412a68a2f53444dacb78">MC::ContributionView</a></div><div class="ttdeci">Kokkos::Experimental::ScatterView&lt; double **, Kokkos::LayoutRight &gt; ContributionView</div><div class="ttdef"><b>Definition</b> alias.hpp:31</div></div>
+<div class="ttc" id="anamespaceMC_html_a4861d217ba26986f3f68935d00c6a709"><div class="ttname"><a href="namespaceMC.html#a4861d217ba26986f3f68935d00c6a709">MC::ContributionView</a></div><div class="ttdeci">Kokkos::Experimental:: ScatterView&lt; double **, Kokkos::LayoutRight &gt; ContributionView</div><div class="ttdef"><b>Definition</b> alias.hpp:47</div></div>
+<div class="ttc" id="anamespaceMC_html_aad69f7f73ef6a017ee86ca89451a6271"><div class="ttname"><a href="namespaceMC.html#aad69f7f73ef6a017ee86ca89451a6271">MC::LocalConcentration</a></div><div class="ttdeci">Kokkos::Subview&lt; KernelConcentrationType, int, decltype(Kokkos::ALL)&gt; LocalConcentration</div><div class="ttdef"><b>Definition</b> alias.hpp:58</div></div>
 </div><!-- fragment --><a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Concept to define a correct Model. </p>
 <p>Minimum model definition should validate this contract, the behaviour behind each function can vary but the order and signature should be the same </p>

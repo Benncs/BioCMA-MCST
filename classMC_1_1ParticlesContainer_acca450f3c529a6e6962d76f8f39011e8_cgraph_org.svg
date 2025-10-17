@@ -21,10 +21,10 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="classMC_1_1ParticlesContainer.html#a758b2d11447e82410e4ffe272b509cc2" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="classMC_1_1ParticlesContainer.html#a4fc94ae525191a5d034dce4866986c1e" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="273.5,-29 154.75,-29 154.75,0 273.5,0 273.5,-29"/>
 <text xml:space="preserve" text-anchor="start" x="162.75" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
-<text xml:space="preserve" text-anchor="middle" x="214.12" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::__shrink__</text>
+<text xml:space="preserve" text-anchor="middle" x="214.12" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::_resize</text>
 </a>
 </g>
 </g>

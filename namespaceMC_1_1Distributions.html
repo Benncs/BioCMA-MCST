@@ -77,6 +77,8 @@ $(function(){initNavTree('namespaceMC_1_1Distributions.html','',''); });
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:Exponential" id="r_Exponential"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMC_1_1Distributions_1_1Exponential.html">Exponential</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a <a class="el" href="structMC_1_1Distributions_1_1Exponential.html" title="Represents a Exponential probability distribution.">Exponential</a> probability distribution.  <a href="structMC_1_1Distributions_1_1Exponential.html#details">More...</a><br /></td></tr>
 <tr class="memitem:LogNormal" id="r_LogNormal"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMC_1_1Distributions_1_1LogNormal.html">LogNormal</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a <a class="el" href="structMC_1_1Distributions_1_1LogNormal.html" title="Represents a LogNormal (Gaussian) probability distribution.">LogNormal</a> (Gaussian) probability distribution.  <a href="structMC_1_1Distributions_1_1LogNormal.html#details">More...</a><br /></td></tr>
 <tr class="memitem:Normal" id="r_Normal"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMC_1_1Distributions_1_1Normal.html">Normal</a></td></tr>
@@ -195,7 +197,8 @@ template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The corresponding value <span class="tt">x</span> such that <span class="tt">P(X ≤ x) = p</span> for X ~ N(mean, stddev).</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The corresponding value <span class="tt">x</span> such that <span class="tt">P(X ≤ x) = p</span> for X ~ N(mean,
+stddev).</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>This implementation uses the inverse error function <span class="tt">erfinv(x)</span> for accuracy and efficiency. Extreme values may be clamped for stability.</dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd><span class="tt">p</span> must be strictly in (0,1), otherwise the result is undefined. </dd></dl>
 <div class="dynheader">
@@ -229,8 +232,9 @@ template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType
 </div><div class="memdoc">
 
 <p>Computes the standard normal cumulative distribution function (CDF). </p>
-<p>The standard normal CDF is given by:   </p><p class="formulaDsp">
-\[    \Phi(x) = \frac{1}{2} \left( 1 + \operatorname{erf} \left( \frac{x}{\sqrt{2}} \right) \right)
+<p>The standard normal CDF is given by:    </p><p class="formulaDsp">
+\[    \Phi(x) = \frac{1}{2} \left( 1 + \operatorname{erf} \left(
+\frac{x}{\sqrt{2}} \right) \right)
 \]
 </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>

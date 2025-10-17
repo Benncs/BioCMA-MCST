@@ -11,9 +11,9 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structMC_1_1MonteCarloUnit.html" target="_top" xlink:title="General&#45;purpose Monte Carlo unit to carry out simulations.">
-<polygon fill="white" stroke="#666666" points="105.25,-18.5 0,-18.5 0,0 105.25,0 105.25,-18.5"/>
-<text xml:space="preserve" text-anchor="middle" x="52.62" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::MonteCarloUnit</text>
+<g id="a_Node000000"><a xlink:href="structMC_1_1EventContainer.html" target="_top" xlink:title="Use to count events that occurs during Monte&#45;Carlo processing cycles.">
+<polygon fill="white" stroke="#666666" points="104.5,-18.5 0,-18.5 0,0 104.5,0 104.5,-18.5"/>
+<text xml:space="preserve" text-anchor="middle" x="52.25" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::EventContainer</text>
 </a>
 </g>
 </g>

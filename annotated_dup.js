@@ -42,12 +42,14 @@ var annotated_dup =
     ] ],
     [ "MC", "namespaceMC.html", [
       [ "Distributions", "namespaceMC_1_1Distributions.html", [
+        [ "Exponential", "structMC_1_1Distributions_1_1Exponential.html", "structMC_1_1Distributions_1_1Exponential" ],
         [ "LogNormal", "structMC_1_1Distributions_1_1LogNormal.html", "structMC_1_1Distributions_1_1LogNormal" ],
         [ "Normal", "structMC_1_1Distributions_1_1Normal.html", "structMC_1_1Distributions_1_1Normal" ],
         [ "ScaledTruncatedNormal", "structMC_1_1Distributions_1_1ScaledTruncatedNormal.html", "structMC_1_1Distributions_1_1ScaledTruncatedNormal" ],
         [ "SkewNormal", "structMC_1_1Distributions_1_1SkewNormal.html", "structMC_1_1Distributions_1_1SkewNormal" ],
         [ "TruncatedNormal", "structMC_1_1Distributions_1_1TruncatedNormal.html", "structMC_1_1Distributions_1_1TruncatedNormal" ]
       ] ],
+      [ "ContribIndexBounds", "structMC_1_1ContribIndexBounds.html", "structMC_1_1ContribIndexBounds" ],
       [ "EventContainer", "structMC_1_1EventContainer.html", "structMC_1_1EventContainer" ],
       [ "KPRNG", "classMC_1_1KPRNG.html", "classMC_1_1KPRNG" ],
       [ "MonteCarloUnit", "structMC_1_1MonteCarloUnit.html", "structMC_1_1MonteCarloUnit" ],

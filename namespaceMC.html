@@ -82,6 +82,7 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:ContribIndexBounds" id="r_ContribIndexBounds"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMC_1_1ContribIndexBounds.html">ContribIndexBounds</a></td></tr>
 <tr class="memitem:EventContainer" id="r_EventContainer"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMC_1_1EventContainer.html">EventContainer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use to count events that occurs during Monte-Carlo processing cycles.  <a href="structMC_1_1EventContainer.html#details">More...</a><br /></td></tr>
 <tr class="memitem:KPRNG" id="r_KPRNG"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMC_1_1KPRNG.html">KPRNG</a></td></tr>
@@ -99,13 +100,13 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a404d6db92035cbc2c86cbda6d98b6d8d" id="r_a404d6db92035cbc2c86cbda6d98b6d8d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a404d6db92035cbc2c86cbda6d98b6d8d">ParticlePositions</a> = Kokkos::View&lt;uint64_t*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
 <tr class="memitem:a2193e5e54bfdf96357f01505831e1072" id="r_a2193e5e54bfdf96357f01505831e1072"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2193e5e54bfdf96357f01505831e1072">ParticleStatus</a> = Kokkos::View&lt;<a class="el" href="#abb6088b7a69c0054394437eb3ac65f7c">Status</a>*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
 <tr class="memitem:a193bca8fb4700ce9ddd472c1929e5ac1" id="r_a193bca8fb4700ce9ddd472c1929e5ac1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a193bca8fb4700ce9ddd472c1929e5ac1">ParticleWeigths</a> = Kokkos::View&lt;double*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
-<tr class="memitem:a2b36081df52989e572295db36fcb57fe" id="r_a2b36081df52989e572295db36fcb57fe"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b36081df52989e572295db36fcb57fe">ParticleAges</a> = Kokkos::View&lt;double*[2], Kokkos::LayoutLeft,<a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
-<tr class="memitem:abc5d7547f4d75b0ed71d943cbbb836c5" id="r_abc5d7547f4d75b0ed71d943cbbb836c5"><td class="memTemplParams" colspan="2">template&lt;typename MemorySpace&gt; </td></tr>
-<tr class="memitem:abc5d7547f4d75b0ed71d943cbbb836c5 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc5d7547f4d75b0ed71d943cbbb836c5">ParticlePropertyViewType</a> = Kokkos::View&lt;double**, Kokkos::LayoutRight, MemorySpace&gt;</td></tr>
-<tr class="memitem:acf394b86ecc3c0091d196f20b6e3771d" id="r_acf394b86ecc3c0091d196f20b6e3771d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf394b86ecc3c0091d196f20b6e3771d">PropertySubViewtype</a></td></tr>
-<tr class="memitem:ab52c4201047a412a68a2f53444dacb78" id="r_ab52c4201047a412a68a2f53444dacb78"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab52c4201047a412a68a2f53444dacb78">ContributionView</a></td></tr>
-<tr class="memitem:aec96faf8efe0d2222c4c2f19e3fee1cd" id="r_aec96faf8efe0d2222c4c2f19e3fee1cd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec96faf8efe0d2222c4c2f19e3fee1cd">KernelConcentrationType</a></td></tr>
-<tr class="memitem:a014ee946d2a4f3e125803a71eefae77d" id="r_a014ee946d2a4f3e125803a71eefae77d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a014ee946d2a4f3e125803a71eefae77d">LocalConcentration</a> = Kokkos::Subview&lt;<a class="el" href="#aec96faf8efe0d2222c4c2f19e3fee1cd">KernelConcentrationType</a>, int, decltype(Kokkos::ALL)&gt;</td></tr>
+<tr class="memitem:af836e787c735c75a05f0f573b19abcde" id="r_af836e787c735c75a05f0f573b19abcde"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af836e787c735c75a05f0f573b19abcde">ParticleAges</a></td></tr>
+<tr class="memitem:ae0175d06e1394c74d896ba2986c18353" id="r_ae0175d06e1394c74d896ba2986c18353"><td class="memTemplParams" colspan="2">template&lt;typename MemorySpace&gt; </td></tr>
+<tr class="memitem:ae0175d06e1394c74d896ba2986c18353 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0175d06e1394c74d896ba2986c18353">ParticlePropertyViewType</a></td></tr>
+<tr class="memitem:a20fc03265c23b32637770a775864c720" id="r_a20fc03265c23b32637770a775864c720"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20fc03265c23b32637770a775864c720">PropertySubViewtype</a></td></tr>
+<tr class="memitem:a4861d217ba26986f3f68935d00c6a709" id="r_a4861d217ba26986f3f68935d00c6a709"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4861d217ba26986f3f68935d00c6a709">ContributionView</a></td></tr>
+<tr class="memitem:ac4db0c9d5b74f4c59a2ffcc7374cba1c" id="r_ac4db0c9d5b74f4c59a2ffcc7374cba1c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">KernelConcentrationType</a></td></tr>
+<tr class="memitem:aad69f7f73ef6a017ee86ca89451a6271" id="r_aad69f7f73ef6a017ee86ca89451a6271"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad69f7f73ef6a017ee86ca89451a6271">LocalConcentration</a></td></tr>
 <tr class="memitem:aaf5acbbd38fb2860519d4494697b386b" id="r_aaf5acbbd38fb2860519d4494697b386b"><td class="memTemplParams" colspan="2">template&lt;typename Space&gt; </td></tr>
 <tr class="memitem:aaf5acbbd38fb2860519d4494697b386b template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf5acbbd38fb2860519d4494697b386b">NeighborsView</a></td></tr>
 <tr class="memitem:ab8c67c8127bdb4bc0a1a8ad1e3cfe067" id="r_ab8c67c8127bdb4bc0a1a8ad1e3cfe067"><td class="memTemplParams" colspan="2">template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> F&gt; </td></tr>
@@ -168,19 +169,19 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="ab52c4201047a412a68a2f53444dacb78" name="ab52c4201047a412a68a2f53444dacb78"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab52c4201047a412a68a2f53444dacb78">&#9670;&#160;</a></span>ContributionView</h2>
+<a id="a4861d217ba26986f3f68935d00c6a709" name="a4861d217ba26986f3f68935d00c6a709"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4861d217ba26986f3f68935d00c6a709">&#9670;&#160;</a></span>ContributionView</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#ab52c4201047a412a68a2f53444dacb78">MC::ContributionView</a></td>
+          <td class="memname">using <a class="el" href="#a4861d217ba26986f3f68935d00c6a709">MC::ContributionView</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> </div>
-<div class="line">      Kokkos::Experimental::ScatterView&lt;double**, Kokkos::LayoutRight&gt;</div>
+<b>Initial value:</b><div class="fragment"><div class="line"> Kokkos::Experimental::</div>
+<div class="line">      ScatterView&lt;double**, Kokkos::LayoutRight&gt;</div>
 </div><!-- fragment --><p>Contribution inside the particle's current container </p>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="example_model_8cxx-example.html#_a4">example_model.cxx</a>.</dd>
 </dl>
@@ -203,37 +204,41 @@ template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType
 
 </div>
 </div>
-<a id="aec96faf8efe0d2222c4c2f19e3fee1cd" name="aec96faf8efe0d2222c4c2f19e3fee1cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec96faf8efe0d2222c4c2f19e3fee1cd">&#9670;&#160;</a></span>KernelConcentrationType</h2>
+<a id="ac4db0c9d5b74f4c59a2ffcc7374cba1c" name="ac4db0c9d5b74f4c59a2ffcc7374cba1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">&#9670;&#160;</a></span>KernelConcentrationType</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#aec96faf8efe0d2222c4c2f19e3fee1cd">MC::KernelConcentrationType</a></td>
+          <td class="memname">using <a class="el" href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">MC::KernelConcentrationType</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> Kokkos::View&lt;<span class="keyword">const</span> <span class="keywordtype">double</span>**,</div>
-<div class="line">                                               Kokkos::LayoutLeft,</div>
-<div class="line">                                               <a class="code hl_typedef" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>,</div>
-<div class="line">                                               Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;</div>
-<div class="ttc" id="anamespaceMC_html_aac73f6850f68fa6ced0d771f20a4af0f"><div class="ttname"><a href="#aac73f6850f68fa6ced0d771f20a4af0f">MC::ComputeSpace</a></div><div class="ttdeci">Kokkos::DefaultExecutionSpace ComputeSpace</div><div class="ttdef"><b>Definition</b> alias.hpp:18</div></div>
+<b>Initial value:</b><div class="fragment"><div class="line"> </div>
+<div class="line">      Kokkos::View&lt;<span class="keyword">const</span> <span class="keywordtype">double</span>**,</div>
+<div class="line">                   Kokkos::LayoutLeft,</div>
+<div class="line">                   <a class="code hl_typedef" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>,</div>
+<div class="line">                   Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;</div>
+<div class="ttc" id="anamespaceMC_html_aac73f6850f68fa6ced0d771f20a4af0f"><div class="ttname"><a href="#aac73f6850f68fa6ced0d771f20a4af0f">MC::ComputeSpace</a></div><div class="ttdeci">Kokkos::DefaultExecutionSpace ComputeSpace</div><div class="ttdef"><b>Definition</b> alias.hpp:23</div></div>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="a014ee946d2a4f3e125803a71eefae77d" name="a014ee946d2a4f3e125803a71eefae77d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a014ee946d2a4f3e125803a71eefae77d">&#9670;&#160;</a></span>LocalConcentration</h2>
+<a id="aad69f7f73ef6a017ee86ca89451a6271" name="aad69f7f73ef6a017ee86ca89451a6271"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad69f7f73ef6a017ee86ca89451a6271">&#9670;&#160;</a></span>LocalConcentration</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#a014ee946d2a4f3e125803a71eefae77d">MC::LocalConcentration</a> = Kokkos::Subview&lt;<a class="el" href="#aec96faf8efe0d2222c4c2f19e3fee1cd">KernelConcentrationType</a>, int, decltype(Kokkos::ALL)&gt;</td>
+          <td class="memname">using <a class="el" href="#aad69f7f73ef6a017ee86ca89451a6271">MC::LocalConcentration</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="example_model_8cxx-example.html#_a3">example_model.cxx</a>.</dd>
+<b>Initial value:</b><div class="fragment"><div class="line"> </div>
+<div class="line">      Kokkos::Subview&lt;<a class="code hl_typedef" href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">KernelConcentrationType</a>, int, <span class="keyword">decltype</span>(Kokkos::ALL)&gt;</div>
+<div class="ttc" id="anamespaceMC_html_ac4db0c9d5b74f4c59a2ffcc7374cba1c"><div class="ttname"><a href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">MC::KernelConcentrationType</a></div><div class="ttdeci">Kokkos::View&lt; const double **, Kokkos::LayoutLeft, ComputeSpace, Kokkos::MemoryTraits&lt; Kokkos::RandomAccess &gt; &gt; KernelConcentrationType</div><div class="ttdef"><b>Definition</b> alias.hpp:53</div></div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="example_model_8cxx-example.html#_a3">example_model.cxx</a>.</dd>
 </dl>
 
 </div>
@@ -256,18 +261,20 @@ template&lt;typename Space&gt; </div>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="a2b36081df52989e572295db36fcb57fe" name="a2b36081df52989e572295db36fcb57fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b36081df52989e572295db36fcb57fe">&#9670;&#160;</a></span>ParticleAges</h2>
+<a id="af836e787c735c75a05f0f573b19abcde" name="af836e787c735c75a05f0f573b19abcde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af836e787c735c75a05f0f573b19abcde">&#9670;&#160;</a></span>ParticleAges</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#a2b36081df52989e572295db36fcb57fe">MC::ParticleAges</a> = Kokkos::View&lt;double*[2], Kokkos::LayoutLeft,<a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td>
+          <td class="memname">using <a class="el" href="#af836e787c735c75a05f0f573b19abcde">MC::ParticleAges</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line"> </div>
+<div class="line">      Kokkos::View&lt;double* [2], Kokkos::LayoutLeft, ComputeSpace&gt;</div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="a404d6db92035cbc2c86cbda6d98b6d8d" name="a404d6db92035cbc2c86cbda6d98b6d8d"></a>
@@ -284,8 +291,8 @@ template&lt;typename Space&gt; </div>
 
 </div>
 </div>
-<a id="abc5d7547f4d75b0ed71d943cbbb836c5" name="abc5d7547f4d75b0ed71d943cbbb836c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc5d7547f4d75b0ed71d943cbbb836c5">&#9670;&#160;</a></span>ParticlePropertyViewType</h2>
+<a id="ae0175d06e1394c74d896ba2986c18353" name="ae0175d06e1394c74d896ba2986c18353"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0175d06e1394c74d896ba2986c18353">&#9670;&#160;</a></span>ParticlePropertyViewType</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -293,11 +300,13 @@ template&lt;typename Space&gt; </div>
 template&lt;typename MemorySpace&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#abc5d7547f4d75b0ed71d943cbbb836c5">MC::ParticlePropertyViewType</a> = Kokkos::View&lt;double**, Kokkos::LayoutRight, MemorySpace&gt;</td>
+          <td class="memname">using <a class="el" href="#ae0175d06e1394c74d896ba2986c18353">MC::ParticlePropertyViewType</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line"> </div>
+<div class="line">      Kokkos::View&lt;double**, Kokkos::LayoutRight, MemorySpace&gt;</div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="ab8c67c8127bdb4bc0a1a8ad1e3cfe067" name="ab8c67c8127bdb4bc0a1a8ad1e3cfe067"></a>
@@ -346,19 +355,21 @@ template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">Floa
 
 </div>
 </div>
-<a id="acf394b86ecc3c0091d196f20b6e3771d" name="acf394b86ecc3c0091d196f20b6e3771d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf394b86ecc3c0091d196f20b6e3771d">&#9670;&#160;</a></span>PropertySubViewtype</h2>
+<a id="a20fc03265c23b32637770a775864c720" name="a20fc03265c23b32637770a775864c720"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20fc03265c23b32637770a775864c720">&#9670;&#160;</a></span>PropertySubViewtype</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#acf394b86ecc3c0091d196f20b6e3771d">MC::PropertySubViewtype</a></td>
+          <td class="memname">using <a class="el" href="#a20fc03265c23b32637770a775864c720">MC::PropertySubViewtype</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> </div>
-<div class="line">      Kokkos::Subview&lt;ParticlePropertyViewType&lt;ComputeSpace&gt;, <span class="keyword">decltype</span>(Kokkos::ALL), std::size_t&gt;</div>
+<div class="line">      Kokkos::Subview&lt;ParticlePropertyViewType&lt;ComputeSpace&gt;,</div>
+<div class="line">                      <span class="keyword">decltype</span>(Kokkos::ALL),</div>
+<div class="line">                      std::size_t&gt;</div>
 </div><!-- fragment -->
 </div>
 </div>

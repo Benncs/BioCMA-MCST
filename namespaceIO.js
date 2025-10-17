@@ -20,6 +20,5 @@ var namespaceIO =
     ] ],
     [ "format", "namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383", null ],
     [ "PROGRESS_BAR_SYMBOL", "namespaceIO.html#a075d2e094da9387b2caaee5b8f84085c", null ],
-    [ "PROGRESS_BAR_WIDTH", "namespaceIO.html#a7abfa25f825da6a5507e7642fde4f9ab", null ],
-    [ "progressbar", "namespaceIO.html#ae73800ef30319f320b074008b0022f88", null ]
+    [ "PROGRESS_BAR_WIDTH", "namespaceIO.html#a7abfa25f825da6a5507e7642fde4f9ab", null ]
 ];

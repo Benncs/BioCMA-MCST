@@ -86,10 +86,6 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a68ac7aac1215936a97dee2435fb8fa28" id="r_a68ac7aac1215936a97dee2435fb8fa28"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68ac7aac1215936a97dee2435fb8fa28">__find_next_compartment</a> (const ConstNeighborsView&lt; ComputeSpace &gt; &amp;neighbors, const <a class="el" href="namespaceSimulation.html#aece6cb625e9b11e5a3d119cd284c46a4">CumulativeProbabilityView</a>&lt; ComputeSpace &gt; &amp;cumulative_probability, const std::size_t i_compartment, const double random_number)</td></tr>
-<tr class="memitem:a51d881a6b6159d9839b53d9b6f607b65" id="r_a51d881a6b6159d9839b53d9b6f607b65"><td class="memTemplParams" colspan="2">template&lt;bool use_kokkos_log&gt; </td></tr>
-<tr class="memitem:a51d881a6b6159d9839b53d9b6f607b65 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION std::enable_if&lt;!use_kokkos_log, float &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a51d881a6b6159d9839b53d9b6f607b65">_ln</a> (float x)</td></tr>
-<tr class="memitem:adad0345d9377ee65d288bdc7c8b9432a" id="r_adad0345d9377ee65d288bdc7c8b9432a"><td class="memTemplParams" colspan="2">template&lt;bool use_kokkos_log&gt; </td></tr>
-<tr class="memitem:adad0345d9377ee65d288bdc7c8b9432a template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION std::enable_if&lt; use_kokkos_log, float &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adad0345d9377ee65d288bdc7c8b9432a">_ln</a> (float x)</td></tr>
 <tr class="memitem:a7a29d7da817caed279a1f87044177942" id="r_a7a29d7da817caed279a1f87044177942"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a29d7da817caed279a1f87044177942">probability_leaving</a> (float random_number, double volume, double flow, double dt)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
@@ -98,6 +94,7 @@ Variables</h2></td></tr>
 <tr class="memitem:a431c56faa51e10df7402c915d43931cf" id="r_a431c56faa51e10df7402c915d43931cf"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a431c56faa51e10df7402c915d43931cf">disable_leave</a> = false</td></tr>
 <tr class="memitem:afb71f7052dd74678b2dc9a75d827ee25" id="r_afb71f7052dd74678b2dc9a75d827ee25"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb71f7052dd74678b2dc9a75d827ee25">disable_move</a> = false</td></tr>
 <tr class="memitem:a29b2c8436e7a920f0ae3f8d222f8a336" id="r_a29b2c8436e7a920f0ae3f8d222f8a336"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29b2c8436e7a920f0ae3f8d222f8a336">enable_move</a> = true</td></tr>
+<tr class="memitem:a44b083c689a8840645847ffbbfb0b53d" id="r_a44b083c689a8840645847ffbbfb0b53d"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a44b083c689a8840645847ffbbfb0b53d">_use_kokkos_log</a> = true</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a68ac7aac1215936a97dee2435fb8fa28" name="a68ac7aac1215936a97dee2435fb8fa28"></a>
@@ -136,49 +133,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a51d881a6b6159d9839b53d9b6f607b65" name="a51d881a6b6159d9839b53d9b6f607b65"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a51d881a6b6159d9839b53d9b6f607b65">&#9670;&#160;</a></span>_ln() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;bool use_kokkos_log&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION std::enable_if&lt;!use_kokkos_log, float &gt;::type Simulation::KernelInline::_ln </td>
-          <td>(</td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>x</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_a51d881a6b6159d9839b53d9b6f607b65_icgraph.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="adad0345d9377ee65d288bdc7c8b9432a" name="adad0345d9377ee65d288bdc7c8b9432a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adad0345d9377ee65d288bdc7c8b9432a">&#9670;&#160;</a></span>_ln() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;bool use_kokkos_log&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION std::enable_if&lt; use_kokkos_log, float &gt;::type Simulation::KernelInline::_ln </td>
-          <td>(</td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>x</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a7a29d7da817caed279a1f87044177942" name="a7a29d7da817caed279a1f87044177942"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7a29d7da817caed279a1f87044177942">&#9670;&#160;</a></span>probability_leaving()</h2>
 
@@ -210,7 +164,7 @@ template&lt;bool use_kokkos_log&gt; </div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_a7a29d7da817caed279a1f87044177942_cgraph.svg" width="399" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_a7a29d7da817caed279a1f87044177942_cgraph.svg" width="352" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -221,6 +175,28 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
+<a id="a44b083c689a8840645847ffbbfb0b53d" name="a44b083c689a8840645847ffbbfb0b53d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44b083c689a8840645847ffbbfb0b53d">&#9670;&#160;</a></span>_use_kokkos_log</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Simulation::KernelInline::_use_kokkos_log = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a431c56faa51e10df7402c915d43931cf" name="a431c56faa51e10df7402c915d43931cf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a431c56faa51e10df7402c915d43931cf">&#9670;&#160;</a></span>disable_leave</h2>
 
