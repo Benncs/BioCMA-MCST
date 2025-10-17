@@ -1,12 +1,10 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.9.53',
+  version: '0.9.6',
   meson_version: '>= 1.3.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
 )
-
-
 
 build_type = get_option('buildtype')
 python_install = get_option('python_install')
@@ -17,6 +15,12 @@ use_system_kokkos = get_option('use_system_kokkos')
 build_test = get_option('build_test')
 build_udf = get_option('build_udf')
 use_cuda = get_option('use_cuda')
+if not use_cuda and build_udf
+    add_project_arguments('-DUSE_UDF', language: 'cpp')
+ endif
+add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
+add_global_arguments('-DEIGEN_DONT_VECTORIZE=1',language: 'cpp')
+
 
 arch_specific_args = []
 
@@ -52,9 +56,9 @@ endif
 compiler.has_argument('-fopenmp')
 
 #if (compiler.get_id() == 'clang')
-  #message('using clang')
-  ## add_global_arguments(['-stdlib=libc++'], language: 'cpp')
-  ## add_global_link_arguments(['-stdlib=libc++', '-lc++', '-lc++abi'], language: 'cpp')
+#message('using clang')
+## add_global_arguments(['-stdlib=libc++'], language: 'cpp')
+## add_global_link_arguments(['-stdlib=libc++', '-lc++', '-lc++abi'], language: 'cpp')
 #endif
 
 ## Define main shared variables
@@ -72,13 +76,13 @@ use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  
 
 ## Get buildtype specific options
 
-use_kokkos_tools = true 
+use_kokkos_tools = true
 CMAKE_TYPE = 'Release'
 if build_type == 'debug' or build_type == 'debugoptimized'
   # NOTHING
   CMAKE_TYPE = 'Debug'
   add_global_arguments('-DDEBUG', language: 'cpp')
-  use_kokkos_tools =true
+  use_kokkos_tools = true
 else
   add_global_arguments('-DNDEBUG', language: 'cpp')
   if compiler.has_argument('-ffast-math')
@@ -91,8 +95,6 @@ if (use_kokkos_tools)
   message('Kokkos tool enable')
   cpp_args = [cpp_args, '-DENABLE_KOKKOS_PROFILING']
 endif
-
-
 
 no_mpi_flag = '-DNO_MPI'
 
@@ -107,10 +109,9 @@ eigen_dep = subproject('eigen', required: true).get_variable('eigen_dep')
 # if blas.found()
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 # endif
-#
-# add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
-#add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
+
+#add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
 cmake = import('cmake', required: true)
 if use_system_kokkos
@@ -129,6 +130,7 @@ if use_system_kokkos
       kokkos_compile_arg,
       '-extended-lambda',
       '-Wext-lambda-captures-this',
+      '--expt-relaxed-constexpr'
     ]
 
   endif
@@ -166,7 +168,7 @@ endif
 
 if build_udf
   dynlib_dep = dependency('dynlib-1.0', required: true)
-endif 
+endif
 highfive_found = false
 
 ceral_found = false

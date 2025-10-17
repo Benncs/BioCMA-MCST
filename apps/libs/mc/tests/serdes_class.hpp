@@ -1,6 +1,7 @@
 #ifndef __UTILS_SERDES_HPP__
 #define __UTILS_SERDES_HPP__
 
+#include "mc/alias.hpp"
 #include <cassert>
 #include <mc/traits.hpp>
 #include <optional>
@@ -27,15 +28,17 @@ struct SerdeModel
 
   MODEL_CONSTANT FloatType a_i = 5e-6; // m
 
-  KOKKOS_INLINE_FUNCTION static void init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-                                          std::size_t idx,
-                                          const SelfParticle& arr)
+  KOKKOS_INLINE_FUNCTION static void
+  init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+       std::size_t idx,
+       const SelfParticle& arr)
   {
     GET_PROPERTY(SerdeModel::particle_var::a) = a_i;
   }
 
-  KOKKOS_INLINE_FUNCTION static double mass([[maybe_unused]] std::size_t idx,
-                                            [[maybe_unused]] const SelfParticle& arr)
+  KOKKOS_INLINE_FUNCTION static double
+  mass([[maybe_unused]] std::size_t idx,
+       [[maybe_unused]] const SelfParticle& arr)
   {
     return 1.;
   }
@@ -60,13 +63,9 @@ struct SerdeModel
   {
   }
 
-  KOKKOS_INLINE_FUNCTION static void
-  contribution([[maybe_unused]] std::size_t idx,
-               [[maybe_unused]] std::size_t position,
-               [[maybe_unused]] double weight,
-               [[maybe_unused]] const SelfParticle& arr,
-               [[maybe_unused]] const MC::ContributionView& contributions)
+  static MC::ContribIndexBounds get_bounds()
   {
+    return {0, 0};
   }
 };
 static_assert(ModelType<SerdeModel>, "Check non serde model");

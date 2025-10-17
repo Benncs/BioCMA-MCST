@@ -29,10 +29,10 @@ namespace Models
       nu_eff_1, // This is not itself a model property but stored to be exported
       nu_eff_2, // This is not itself a model property but stored to be exported
       // TODO FIND BETTER WAY TO STORE/GET CONTRIBUTIONS
+      phi_pts,
       contrib_phi_s,
       contrib_phi_o2,
       contrib_phi_ac,
-      phi_pts,
       COUNT
     };
 
@@ -93,6 +93,10 @@ namespace Models
             adder_mean * 10); // use in out_str_l3
     // Constants END
 
+
+    static MC::ContribIndexBounds get_bounds();
+
+    
     KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx,
                                               const SelfParticle& arr)
     {
@@ -325,21 +329,28 @@ namespace Models
     Uptake<Self>::division(random_pool, idx, idx2, arr, child_buffer_arr);
   }
 
-  KOKKOS_INLINE_FUNCTION void
-  TwoMetaNb::contribution([[maybe_unused]] std::size_t idx,
-                          std::size_t position,
-                          double weight,
-                          [[maybe_unused]] const SelfParticle& arr,
-                          const MC::ContributionView& contributions)
-  {
-    auto access = contributions.access();
-    access(0, position) +=
-        weight * GET_PROPERTY(Self::particle_var::contrib_phi_s); // NOLINT
-    access(1, position) +=
-        weight * GET_PROPERTY(Self::particle_var::contrib_phi_o2); // NOLINT
-    access(2, position) +=
-        weight * GET_PROPERTY(Self::particle_var::contrib_phi_ac); // NOLINT
-  }
+    inline MC::ContribIndexBounds TwoMetaNb::get_bounds()
+    {
+      const int begin = INDEX_FROM_ENUM(Self::particle_var::contrib_phi_s);
+      const int end= INDEX_FROM_ENUM(Self::particle_var::contrib_phi_ac);
+      assert(begin<end);
+      return {.begin=begin, .end=end};
+    }
+  // KOKKOS_INLINE_FUNCTION void
+  // TwoMetaNb::contribution([[maybe_unused]] std::size_t idx,
+  //                         std::size_t position,
+  //                         double weight,
+  //                         [[maybe_unused]] const SelfParticle& arr,
+  //                         const MC::ContributionView& contributions)
+  // {
+  //   auto access = contributions.access();
+  //   access(0, position) +=
+  //       weight * GET_PROPERTY(Self::particle_var::contrib_phi_s); // NOLINT
+  //   access(1, position) +=
+  //       weight * GET_PROPERTY(Self::particle_var::contrib_phi_o2); // NOLINT
+  //   access(2, position) +=
+  //       weight * GET_PROPERTY(Self::particle_var::contrib_phi_ac); // NOLINT
+  // }
 
   static_assert(HasExportProperties<TwoMetaNb>, "ee");
 

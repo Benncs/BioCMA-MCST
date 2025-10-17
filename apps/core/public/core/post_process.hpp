@@ -10,10 +10,12 @@
 #include <mc/particles_container.hpp>
 
 template <typename MemorySpace>
-using ParticlePropertyViewType = Kokkos::View<double**, Kokkos::LayoutRight, MemorySpace>;
+using ParticlePropertyViewType =
+    Kokkos::View<double**, Kokkos::LayoutRight, MemorySpace>;
 
-using SubViewtype =
-    Kokkos::Subview<ParticlePropertyViewType<ComputeSpace>, decltype(Kokkos::ALL), std::size_t>;
+using SubViewtype = Kokkos::Subview<ParticlePropertyViewType<ComputeSpace>,
+                                    decltype(Kokkos::ALL),
+                                    std::size_t>;
 namespace PostProcessing
 {
   struct BonceBuffer
@@ -31,8 +33,9 @@ namespace PostProcessing
              ParticlePropertyViewType<ComputeSpace>& spatial_values,
              const MC::ParticleStatus& status)
   {
-    Kokkos::Experimental::ScatterView<double**, Kokkos::LayoutRight, ComputeSpace>
-        scatter_spatial_values(spatial_values);
+    Kokkos::Experimental::
+        ScatterView<double**, Kokkos::LayoutRight, ComputeSpace>
+            scatter_spatial_values(spatial_values);
 
     Kokkos::parallel_for(
         "kernel_get_properties",
@@ -65,11 +68,13 @@ namespace PostProcessing
                      ParticlePropertyViewType<ComputeSpace>& spatial_values,
                      const MC::ParticleStatus& status)
   {
-    Kokkos::Experimental::ScatterView<double**, Kokkos::LayoutRight, ComputeSpace>
-        scatter_spatial_values(spatial_values);
+    Kokkos::Experimental::
+        ScatterView<double**, Kokkos::LayoutRight, ComputeSpace>
+            scatter_spatial_values(spatial_values);
     static const auto indices = Model::get_number();
 
-    static Kokkos::View<size_t*, HostSpace> host_index("host_index", indices.size());
+    static Kokkos::View<size_t*, HostSpace> host_index("host_index",
+                                                       indices.size());
 
     for (std::size_t i = 0; i < indices.size(); ++i)
     {
@@ -82,19 +87,18 @@ namespace PostProcessing
         "kernel_get_properties",
         Kokkos::RangePolicy<ExecutionSpace>(0, n_p),
         KOKKOS_LAMBDA(const int i_particle) {
-
-          if(status(i_particle)!=MC::Status::Idle)
+          if (status(i_particle) != MC::Status::Idle)
           {
             return;
           }
-       
+
           auto access = scatter_spatial_values.access();
 
           for (size_t k_var = 0; k_var < kindices.extent(0); ++k_var)
           {
             const auto index_export = kindices(k_var);
             const auto current = model(i_particle, index_export);
-          
+
             access(k_var, position(i_particle)) += current;
             particle_values(k_var, i_particle) = current;
           }
@@ -108,16 +112,17 @@ namespace PostProcessing
 
   template <ModelType M>
   std::optional<PostProcessing::BonceBuffer>
-  get_properties(MC::ParticlesContainer<M>& container, const std::size_t n_compartment)
+  get_properties(MC::ParticlesContainer<M>& container,
+                 const std::size_t n_compartment)
   {
     if constexpr (HasExportProperties<M>)
     {
-      container.clean_dead(container.counter);
-      container.counter = 0;
+      container.force_remove_dead();
       BonceBuffer properties;
       const std::size_t n_p =
-          container.n_particles(); // USE list size not Kokkos View size. ParticleList
-                                   // allocates more particles than needed
+          container.n_particles(); // USE list size not Kokkos View size.
+                                   // ParticleList allocates more particles than
+                                   // needed
       auto ar = M::names();
       properties.vnames = std::vector<std::string>(ar.begin(), ar.end());
       properties.vnames.emplace_back("mass");
@@ -129,7 +134,8 @@ namespace PostProcessing
       }
       ParticlePropertyViewType<ComputeSpace> spatial_values(
           "property_spatial", n_var, n_compartment);
-      ParticlePropertyViewType<ComputeSpace> particle_values("property_values", n_var, n_p);
+      ParticlePropertyViewType<ComputeSpace> particle_values(
+          "property_values", n_var, n_p);
 
       if constexpr (HasExportPropertiesPartial<M>)
       {
@@ -150,10 +156,10 @@ namespace PostProcessing
                                                 container.status);
       }
 
-      properties.particle_values =
-          Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), particle_values);
-      properties.spatial_values =
-          Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), spatial_values);
+      properties.particle_values = Kokkos::create_mirror_view_and_copy(
+          Kokkos::HostSpace(), particle_values);
+      properties.spatial_values = Kokkos::create_mirror_view_and_copy(
+          Kokkos::HostSpace(), spatial_values);
       return properties;
     }
     else
