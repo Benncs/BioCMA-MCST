@@ -16,11 +16,13 @@ build_test = get_option('build_test')
 build_udf = get_option('build_udf')
 use_cuda = get_option('use_cuda')
 if not use_cuda and build_udf
-    add_project_arguments('-DUSE_UDF', language: 'cpp')
- endif
-add_global_arguments('-DEIGEN_NO_CUDA=1',language: 'cpp',)
-add_global_arguments('-DEIGEN_DONT_VECTORIZE=1',language: 'cpp')
-
+  add_project_arguments('-DUSE_UDF', language: 'cpp')
+endif
+add_global_arguments(
+  '-DEIGEN_NO_CUDA=1',
+  language: 'cpp',
+)
+add_global_arguments('-DEIGEN_DONT_VECTORIZE=1', language: 'cpp')
 
 arch_specific_args = []
 
@@ -110,7 +112,6 @@ eigen_dep = subproject('eigen', required: true).get_variable('eigen_dep')
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 # endif
 
-
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
 cmake = import('cmake', required: true)
@@ -130,7 +131,7 @@ if use_system_kokkos
       kokkos_compile_arg,
       '-extended-lambda',
       '-Wext-lambda-captures-this',
-      '--expt-relaxed-constexpr'
+      '--expt-relaxed-constexpr',
     ]
 
   endif
@@ -165,6 +166,8 @@ else
     ],
   )
 endif
+
+kokkos_sampling = dependency('kokkos_sampling-1.0', required: true)
 
 if build_udf
   dynlib_dep = dependency('dynlib-1.0', required: true)

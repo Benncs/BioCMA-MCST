@@ -1,3 +1,4 @@
+#include "common/common.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <cstdint>
@@ -93,8 +94,10 @@ namespace
   template <typename Model, typename = void> struct InitFunctor;
 
   template <typename Model>
-  struct InitFunctor<Model, std::enable_if_t<NonConfigurableModel<Model>>>
+    requires(NonConfigurableModel<Model>)
+  struct InitFunctor<Model>
   {
+
     explicit InitFunctor(MC::ParticlesContainer<Model> _list,
                          uint64_t min,
                          uint64_t max,
@@ -120,7 +123,8 @@ namespace
   };
 
   template <typename Model>
-  struct InitFunctor<Model, std::enable_if_t<ConfigurableModel<Model>>>
+    requires(ConfigurableModel<Model>)
+  struct InitFunctor<Model>
   {
     explicit InitFunctor(MC::ParticlesContainer<Model> _list,
                          uint64_t min,
@@ -167,7 +171,8 @@ namespace
     }
     else
     {
-      typename Model::Config config = Models::get_model_configuration<Model>();
+      typename Model::Config config =
+          Models::get_model_configuration<Model>(n_particles);
       Kokkos::parallel_reduce(
           "mc_init_first",
           Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particles),

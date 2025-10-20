@@ -5,6 +5,7 @@
 #include "Kokkos_Clamp.hpp"
 #include "Kokkos_Core_fwd.hpp"
 #include "Kokkos_Macros.hpp"
+#include "common/common.hpp"
 #include "common/traits.hpp"
 #include "mc/macros.hpp"
 #include "models/utils.hpp"
@@ -29,12 +30,12 @@ namespace Models
     using Self = FixedLength;
     using FloatType = float;
 
-    struct Params
-    {
-      MC::Distributions::Exponential<FloatType> dist;
-    };
+    // struct Params
+    // {
+    //   MC::Distributions::Exponential<FloatType> dist;
+    // };
 
-    using Config = Kokkos::View<Params, Kokkos::DefaultExecutionSpace>;
+    using Config = Kokkos::View<FloatType*, ComputeSpace>;
 
     enum class particle_var : int
     {
@@ -143,12 +144,15 @@ namespace Models
 
     auto gen = random_pool.get_state();
 
-    constexpr auto lm = l_max_m;
-
-    FloatType linit = lm / 2. + config().dist.draw(gen);
-
-    linit = Kokkos::min(linit, lm);
-    linit = Kokkos::max(linit, FloatType(lm / 2.));
+    // FloatType linit = 0.;
+    // do
+    // {
+    //   linit = lm / 2. + config().dist.draw(gen);
+    // } while (linit > lm);
+    //
+    //
+    auto linit = config(idx); // linit = Kokkos::min(linit, lm);
+    // linit = Kokkos::max(linit, FloatType(lm / 2.));
 
     //   auto linit = l_initial_dist.draw(
     //       gen); // l_min_m; // gen.drand(l_min_m * .8, l_max_m);

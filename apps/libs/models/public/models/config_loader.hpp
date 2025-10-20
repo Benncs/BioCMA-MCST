@@ -4,52 +4,46 @@
 #include "Kokkos_Core.hpp"
 #include "common/common.hpp"
 #include "mc/prng/prng_extension.hpp"
+#include <kokkos-sampling/metropolis.hpp>
 #include <mc/traits.hpp>
 #include <models/fixed_length.hpp>
-
-namespace
-{
-
-}
+#include <stdexcept>
 
 namespace Models
 {
 
-  template <ConfigurableModel Model> Model::Config get_model_configuration()
+  template <ConfigurableModel Model>
+  Model::Config get_model_configuration(std::size_t n)
   {
     return {}; // TODO
   }
 
-  template <> inline FixedLength::Config get_model_configuration<FixedLength>()
+  template <>
+  inline FixedLength::Config get_model_configuration<FixedLength>(std::size_t n)
   {
-    using param_type = FixedLength::Params;
+    using float_t = FixedLength::FloatType;
 
-    float l_max = 2e-6;
-    float l_men = 1e-6;
-    float lvar = 2e-6 / 10.;
-    char* ptr = std::getenv("LMAX");
-
-    if (ptr != nullptr)
+    float_t lambda = 0;
+    char* lambda_env = std::getenv("VLAMBDA");
+    if (lambda_env != nullptr)
     {
-      l_men = std::stof(ptr);
-      std::cout << "Use env " << l_max << std::endl;
+      lambda = static_cast<float_t>(std::stod(lambda_env));
     }
 
-    ptr = std::getenv("LVAR");
-    if (ptr != nullptr)
+    auto target = KOKKOS_LAMBDA(const FixedLength::FloatType x)
     {
-      lvar = std::stof(ptr);
-      std::cout << "Use env " << lvar << std::endl;
+      return lambda * Kokkos::exp(-lambda * x);
+    };
+    Kokkos::View<float_t*, ComputeSpace> samples("samples", n);
+
+    auto rc = metropolis(target, samples, float_t(1e-6), float_t(2e-6));
+
+    if (rc != 0)
+    {
+      throw std::runtime_error("FixedLength init: Error when sampling");
     }
 
-    auto l_initial_dist = MC::Distributions::Exponential<float>(l_men);
-
-    auto host = Kokkos::View<param_type, HostSpace>("params");
-    const auto params = param_type{l_initial_dist};
-    host() = params;
-    auto device = Kokkos::create_mirror_view_and_copy(
-        ComputeSpace(), host, "params_device");
-    return device;
+    return samples;
   }
 
 }; // namespace Models

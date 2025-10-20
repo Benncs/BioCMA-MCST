@@ -1,0 +1,8 @@
+[wrap-git]
+url = https://github.com/Benncs/mh_sampling
+revision = head
+depth = 1
+method = meson
+
+[provide]
+kokkos_sampling-1.0 = kokkos_sampling_dep
