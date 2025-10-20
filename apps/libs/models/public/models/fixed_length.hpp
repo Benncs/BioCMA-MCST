@@ -2,6 +2,9 @@
 #ifndef __FIXED_LENGTH_MODEL_HPP__
 #define __FIXED_LENGTH_MODEL_HPP__
 
+#include "Kokkos_Clamp.hpp"
+#include "Kokkos_Core_fwd.hpp"
+#include "Kokkos_Macros.hpp"
 #include "common/traits.hpp"
 #include "mc/macros.hpp"
 #include "models/utils.hpp"
@@ -25,7 +28,13 @@ namespace Models
     using uniform_weight = std::true_type; // Using type alias
     using Self = FixedLength;
     using FloatType = float;
-    using Config = std::nullopt_t;
+
+    struct Params
+    {
+      MC::Distributions::Exponential<FloatType> dist;
+    };
+
+    using Config = Kokkos::View<Params, Kokkos::DefaultExecutionSpace>;
 
     enum class particle_var : int
     {
@@ -56,9 +65,11 @@ namespace Models
       return {.begin = begin, .end = begin + 1};
     }
 
-    inline static void init(const MC::KPRNG::pool_type& random_pool,
-                            std::size_t idx,
-                            const SelfParticle& arr);
+    KOKKOS_INLINE_FUNCTION static void
+    init(const MC::KPRNG::pool_type& random_pool,
+         std::size_t idx,
+         const SelfParticle& arr,
+         const Config& params);
 
     KOKKOS_INLINE_FUNCTION static MC::Status
     update(const MC::KPRNG::pool_type& random_pool,
@@ -106,7 +117,8 @@ namespace Models
   KOKKOS_INLINE_FUNCTION void
   FixedLength::init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
                     std::size_t idx,
-                    const SelfParticle& arr)
+                    const SelfParticle& arr,
+                    const Config& config)
   {
 
     // normal1
@@ -122,12 +134,6 @@ namespace Models
     //    l_min_m, l_min_m / 2., 0., static_cast<double>(1));
 
     // Normal1
-    constexpr auto l_initial_dist =
-        MC::Distributions::TruncatedNormal<float>(l_max_m * 0.75,
-                                                  l_max_m / 10.,
-                                                  l_max_m / 2.,
-                                                  static_cast<double>(l_max_m));
-
     // constexpr FloatType lambda =
     //     0.69314718056 / l_max_m;
     //
@@ -136,11 +142,13 @@ namespace Models
     //     constexpr auto l_initial_dist =
 
     auto gen = random_pool.get_state();
-    // loatType lm = l_max_m;
-    // FloatType lh = l_max_m / 2.;
 
-    FloatType linit = l_initial_dist.draw(gen);
-    // linit = Kokkos::min(linit + lh, lm);
+    constexpr auto lm = l_max_m;
+
+    FloatType linit = lm / 2. + config().dist.draw(gen);
+
+    linit = Kokkos::min(linit, lm);
+    linit = Kokkos::max(linit, FloatType(lm / 2.));
 
     //   auto linit = l_initial_dist.draw(
     //       gen); // l_min_m; // gen.drand(l_min_m * .8, l_max_m);
@@ -156,7 +164,6 @@ namespace Models
     // auto gen = random_pool.get_state();
     // GET_PROPERTY(particle_var::l_max) = gen.drand(l_max_m * 0.8, l_max_m
     // * 1.2); random_pool.free_state(gen);
-
     GET_PROPERTY(particle_var::l_max) = l_max_m;
 
     //   GET_PROPERTY(particle_var::length) = l_max_m / 2.;

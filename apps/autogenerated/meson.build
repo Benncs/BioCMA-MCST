@@ -25,15 +25,12 @@ conf_data = configuration_data(
 result_dir = get_option('result_dir_path')
 conf_data.set_quoted('result_dir_path', result_dir)
 conf_data.set_quoted('_BIOMC_BUILD_MODE', build_type)
-
 configure_file(
   input: 'biocma_cst_config.hpp.in',
   output: 'biocma_cst_config.hpp',
   configuration: conf_data,
 )
-
 prog_python = find_program('python3')
-
 template_model_loader = meson.current_source_dir() + '/model_loader.cxx'
 template_model_loader_header = meson.current_source_dir() + '/model_loader.hxx'
 template_variant_model = meson.current_source_dir() + '/variant_model.hxx'

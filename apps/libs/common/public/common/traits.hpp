@@ -4,16 +4,16 @@
 #include <type_traits>
 
 #if defined __GNUC__
-# define LIKELY(EXPR)  __builtin_expect(!!(EXPR), 1)
+#  define LIKELY(EXPR) __builtin_expect(!!(EXPR), 1)
 #else
-# define LIKELY(EXPR)  (!!(EXPR))
+#  define LIKELY(EXPR) (!!(EXPR))
 #endif
- 
+
 #if defined NDEBUG
-# define X_ASSERT(CHECK) void(0)
+#  define X_ASSERT(CHECK) void(0)
 #else
-# define X_ASSERT(CHECK) \
-    ( LIKELY(CHECK) ?  void(0) : []{assert(!#CHECK);}() )
+#  define X_ASSERT(CHECK)                                                      \
+    (LIKELY(CHECK) ? void(0) : [] { assert(!(#CHECK)); }())
 #endif
 
 template <typename T>
@@ -43,7 +43,9 @@ inline bool almost_equal(T val, T val2, T tolerance = tolerance_equality_float)
 
 // Overload for references
 template <NumberType T>
-inline bool almost_equal(const T& val, const T& val2, T tolerance = tolerance_equality_float)
+inline bool almost_equal(const T& val,
+                         const T& val2,
+                         T tolerance = tolerance_equality_float)
 {
   using CommonT = std::common_type_t<T, T>;
   return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2)) <
@@ -52,7 +54,9 @@ inline bool almost_equal(const T& val, const T& val2, T tolerance = tolerance_eq
 
 // Overload for pointers
 template <NumberType T>
-inline bool almost_equal(const T* val, const T* val2, T tolerance = tolerance_equality_float)
+inline bool almost_equal(const T* val,
+                         const T* val2,
+                         T tolerance = tolerance_equality_float)
 {
   if (!val || !val2)
   {
@@ -65,7 +69,8 @@ inline bool almost_equal(const T* val, const T* val2, T tolerance = tolerance_eq
 
 // Overload for rvalue references
 template <NumberType T>
-inline bool almost_equal(T&& val, T&& val2, T tolerance = tolerance_equality_float)
+inline bool
+almost_equal(T&& val, T&& val2, T tolerance = tolerance_equality_float)
 {
   using CommonT = std::common_type_t<T, T>;
   return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2)) <

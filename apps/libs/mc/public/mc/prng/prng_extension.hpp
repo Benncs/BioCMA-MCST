@@ -281,6 +281,8 @@ namespace MC::Distributions
     F lower; // Standard deviation
     F upper; // Standard deviation
 
+    TruncatedNormal() = default;
+
     KOKKOS_INLINE_FUNCTION constexpr TruncatedNormal(F m, F s, F l, F u)
         : mu(m), sigma(s), lower(l), upper(u)
     {
