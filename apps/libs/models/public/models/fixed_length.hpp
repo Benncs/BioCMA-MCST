@@ -35,7 +35,7 @@ namespace Models
     //   MC::Distributions::Exponential<FloatType> dist;
     // };
 
-    using Config = Kokkos::View<FloatType*, ComputeSpace>;
+    using Config = Kokkos::View<const FloatType*, ComputeSpace>;
 
     enum class particle_var : int
     {
@@ -65,6 +65,8 @@ namespace Models
       int begin = INDEX_FROM_ENUM(Self::particle_var::phi_s);
       return {.begin = begin, .end = begin + 1};
     }
+
+    static Self::Config get_config(std::size_t n);
 
     KOKKOS_INLINE_FUNCTION static void
     init(const MC::KPRNG::pool_type& random_pool,

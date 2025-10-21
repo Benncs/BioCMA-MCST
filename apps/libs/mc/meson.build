@@ -12,11 +12,12 @@ if use_dynamic_module
   arg = [use_python_define]
 endif
 
+dep=[kokkos, kokkos_sampling]
 mc_lib = static_library(
   f'@project_name@_mc',
   mc_sources,
   include_directories: [public_include_dir, 'includes'],
-  dependencies: [kokkos, kokkos_sampling],
+  dependencies: [dep],
   # pic: true,
   # install: true,
   install: false,
@@ -27,7 +28,7 @@ mc_lib = static_library(
 
 mc_dependency = declare_dependency(
   include_directories: public_include_dir,
-  dependencies: [kokkos],
+  dependencies: [dep],
   link_with: mc_lib,
   compile_args: [arg],
 )

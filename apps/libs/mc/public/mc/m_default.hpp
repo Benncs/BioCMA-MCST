@@ -90,6 +90,12 @@ struct DynamicDefaultModel
   using Config = float;
   static constexpr bool uniform_weigth = false;
 
+  static Config get_config(const std::size_t size)
+  {
+    (void)size;
+    return 1.;
+  };
+
   KOKKOS_INLINE_FUNCTION static void
   init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
        [[maybe_unused]] std::size_t idx,

@@ -39,11 +39,14 @@ namespace MC
 
 template <typename T>
 concept ConfigurableInit = requires(T model,
+                                    const std::size_t size,
                                     const MC::KPRNG::pool_type& random_pool,
                                     std::size_t idx,
                                     const typename T::SelfParticle& arr,
                                     const T::Config& config) {
   { model.init(random_pool, idx, arr, config) } -> std::same_as<void>;
+
+  { model.get_config(size) } -> std::same_as<typename T::Config>;
 };
 
 template <typename T>

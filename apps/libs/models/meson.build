@@ -1,5 +1,5 @@
 src_dir = './src'
-model_sources = [f'@src_dir@/two_meta_div.cpp',f'@src_dir@/config_loader.cpp']
+model_sources = [f'@src_dir@/two_meta_div.cpp']
 public_model = include_directories('public')
 # ext_include = include_directories('./ext')
 ext_include = include_directories('ext')
@@ -33,10 +33,14 @@ else
   udf_loader = declare_dependency()
 endif 
 
+source_config = [f'@src_dir@/config_loader.cpp']
+
 dep = [mc_dependency, common_dependecy, kokkos,udf_loader]
+# TODO make it .so if possible (linkage not working with nvcc currently)
+config_lib = static_library('config_loader',source_config,include_directories:[public_include_dir],dependencies:dep)
 if not use_cuda and build_udf
   biomodel_dependency = declare_dependency(
-    link_with: model_lib,
+    link_with: [model_lib,config_lib],
     include_directories: [public_include_dir],
     dependencies: dep,
   )
@@ -44,6 +48,7 @@ else
   biomodel_dependency = declare_dependency(
     include_directories: [public_include_dir],
     dependencies: dep,
+    link_with:config_lib,
   )
 endif 
 

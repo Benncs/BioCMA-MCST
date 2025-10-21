@@ -10,7 +10,6 @@ subdir('common')
 subdir('mpi_w')
 subdir('cma_utils')
 subdir('mc')
-# subdir('biomodels')
 subdir('models')
 if use_dynamic_module
   # subdir('pymodule')
