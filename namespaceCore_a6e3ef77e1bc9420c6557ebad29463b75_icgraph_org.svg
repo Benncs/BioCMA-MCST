@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="classCore_1_1GlobalInitialiser.html#a7694d9869fc9df36ef7012d893e98e9d" target="_top" xlink:title="Constructs a GlobalInitialiser instance.">
+<g id="a_Node000002"><a xlink:href="classCore_1_1GlobalInitialiser.html#a6366cce5d23ddbb0f475288da17b9c9d" target="_top" xlink:title="Constructs a GlobalInitialiser instance.">
 <polygon fill="white" stroke="#666666" points="109.75,-29 0,-29 0,0 109.75,0 109.75,-29"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
 <text xml:space="preserve" text-anchor="middle" x="54.88" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::GlobalInitialiser</text>

@@ -1,9 +1,11 @@
 <map id="Core::GlobalInitialiser::GlobalInitialiser" name="Core::GlobalInitialiser::GlobalInitialiser">
-<area shape="rect" id="Node000001" title="Constructs a GlobalInitialiser instance." alt="" coords="5,37,152,76"/>
+<area shape="rect" id="Node000001" title="Constructs a GlobalInitialiser instance." alt="" coords="5,68,152,107"/>
 <area shape="rect" id="Node000002" href="$namespaceCore.html#a6e3ef77e1bc9420c6557ebad29463b75" title=" " alt="" coords="224,5,362,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,43,208,35,209,40,152,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,65,209,46,211,51,148,70"/>
 <area shape="rect" id="Node000003" href="$structCore_1_1SimulationParameters.html#aa4af6c014480bad09adc3054a11e7173" title=" " alt="" coords="200,68,386,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,64,185,69,184,74,152,70"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,85,184,85,184,90,152,90"/>
+<area shape="rect" id="Node000005" href="$classCore_1_1GlobalInitialiser.html#a75225c576e7e17ef5361c9078a31797e" title=" " alt="" coords="220,131,366,169"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="148,105,211,123,209,128,146,110"/>
 <area shape="rect" id="Node000004" href="$structCore_1_1SimulationParameters.html#a16fac412f57df6243d2e7b1dc14d6e01" title=" " alt="" coords="434,68,620,107"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="386,85,418,85,418,90,386,90"/>
 </map>

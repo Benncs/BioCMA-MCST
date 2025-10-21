@@ -1,5 +1,6 @@
 var structMC_1_1Distributions_1_1TruncatedNormal =
 [
+    [ "TruncatedNormal", "structMC_1_1Distributions_1_1TruncatedNormal.html#ae1f0c1d7e40bc3c180acc34240bdae93", null ],
     [ "TruncatedNormal", "structMC_1_1Distributions_1_1TruncatedNormal.html#a6b34bc6e3ff216e96c9fda25ead473c0", null ],
     [ "draw", "structMC_1_1Distributions_1_1TruncatedNormal.html#a5c5cc899d8c3986ea0ae4b4789fbc533", null ],
     [ "draw_from", "structMC_1_1Distributions_1_1TruncatedNormal.html#af6cfcdb1f39978352e55fc5c5f729462", null ],

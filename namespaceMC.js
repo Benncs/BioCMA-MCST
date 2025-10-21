@@ -22,9 +22,9 @@ var namespaceMC =
     [ "PropertySubViewtype", "namespaceMC.html#a20fc03265c23b32637770a775864c720", null ],
     [ "EventType", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8", [
       [ "NewParticle", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8ad647742db7fc3579a1034ec4919e4752", null ],
-      [ "Death", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8a6097f89e3092d4ccd249c9d479785c1f", null ],
-      [ "Move", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8a6bc362dbf494c61ea117fe3c71ca48a5", null ],
       [ "Exit", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8afef46e5063ce3dc78b8ae64fa474241d", null ],
+      [ "Move", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8a6bc362dbf494c61ea117fe3c71ca48a5", null ],
+      [ "Death", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8a6097f89e3092d4ccd249c9d479785c1f", null ],
       [ "Overflow", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8a129e8109f319870e328cc7a1d5b5cae3", null ],
       [ "ChangeWeight", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8aff388cf92ac4efa80c5aac6d4c7852ae", null ],
       [ "__COUNT__", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb", null ]

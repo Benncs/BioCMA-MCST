@@ -84,13 +84,14 @@ Public Types</h2></td></tr>
 <tr class="memitem:ac59adcb7e9e454757bc61cb1246786b9" id="r_ac59adcb7e9e454757bc61cb1246786b9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac59adcb7e9e454757bc61cb1246786b9">uniform_weight</a> = std::true_type</td></tr>
 <tr class="memitem:a1b5eda221ac912eb5b9e1046f50857cb" id="r_a1b5eda221ac912eb5b9e1046f50857cb"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b5eda221ac912eb5b9e1046f50857cb">Self</a> = <a class="el" href="structModels_1_1FixedLength.html">FixedLength</a></td></tr>
 <tr class="memitem:ab10005608c96d8a014bc4f73653a81c4" id="r_ab10005608c96d8a014bc4f73653a81c4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab10005608c96d8a014bc4f73653a81c4">FloatType</a> = float</td></tr>
-<tr class="memitem:ac8b527f9bfbd00ac6b2d9bbd903a48e9" id="r_ac8b527f9bfbd00ac6b2d9bbd903a48e9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8b527f9bfbd00ac6b2d9bbd903a48e9">Config</a> = std::nullopt_t</td></tr>
+<tr class="memitem:af98ee38e88201bed889f8bdf5c53d922" id="r_af98ee38e88201bed889f8bdf5c53d922"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af98ee38e88201bed889f8bdf5c53d922">Config</a> = Kokkos::View&lt;const <a class="el" href="#ab10005608c96d8a014bc4f73653a81c4">FloatType</a>*, ComputeSpace&gt;</td></tr>
 <tr class="memitem:a0279d1d6c1862c6dafcc4390cd8aa3f7" id="r_a0279d1d6c1862c6dafcc4390cd8aa3f7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> = <a class="el" href="namespaceMC.html#ab8c67c8127bdb4bc0a1a8ad1e3cfe067">MC::ParticlesModel</a>&lt;<a class="el" href="#aee1107ee75abb2b5d929e468462dcc2a">Self::n_var</a>, <a class="el" href="#ab10005608c96d8a014bc4f73653a81c4">Self::FloatType</a>&gt;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aa9ad5b8958fad66791be3a8ce3835f87" id="r_aa9ad5b8958fad66791be3a8ce3835f87"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structMC_1_1ContribIndexBounds.html">MC::ContribIndexBounds</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9ad5b8958fad66791be3a8ce3835f87">get_bounds</a> ()</td></tr>
-<tr class="memitem:ab5ee7615b5ba3d831c4cee348950b2b0" id="r_ab5ee7615b5ba3d831c4cee348950b2b0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5ee7615b5ba3d831c4cee348950b2b0">init</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx, const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;arr)</td></tr>
+<tr class="memitem:ad2fbacbf94c199f2b375481a6b8f1dab" id="r_ad2fbacbf94c199f2b375481a6b8f1dab"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="#af98ee38e88201bed889f8bdf5c53d922">Self::Config</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2fbacbf94c199f2b375481a6b8f1dab">get_config</a> (std::size_t n)</td></tr>
+<tr class="memitem:a9677d5083af7df5a15e1689b97fd7a98" id="r_a9677d5083af7df5a15e1689b97fd7a98"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9677d5083af7df5a15e1689b97fd7a98">init</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx, const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;arr, const <a class="el" href="#af98ee38e88201bed889f8bdf5c53d922">Config</a> &amp;params)</td></tr>
 <tr class="memitem:a712bbca45efd85ea38cec631d0a416cb" id="r_a712bbca45efd85ea38cec631d0a416cb"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7c">MC::Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a712bbca45efd85ea38cec631d0a416cb">update</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, <a class="el" href="#ab10005608c96d8a014bc4f73653a81c4">FloatType</a> d_t, std::size_t idx, const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;arr, const <a class="el" href="namespaceMC.html#aad69f7f73ef6a017ee86ca89451a6271">MC::LocalConcentration</a> &amp;c)</td></tr>
 <tr class="memitem:aa727b73c1c6b3a482b9eb3ec29842c04" id="r_aa727b73c1c6b3a482b9eb3ec29842c04"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa727b73c1c6b3a482b9eb3ec29842c04">division</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx, std::size_t idx2, const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;arr, const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;buffer_arr)</td></tr>
 <tr class="memitem:a2744bdbfbb7361d39b230a62c33f7e09" id="r_a2744bdbfbb7361d39b230a62c33f7e09"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2744bdbfbb7361d39b230a62c33f7e09">contribution</a> (std::size_t idx, std::size_t position, double weight, const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;arr, const <a class="el" href="namespaceMC.html#a4861d217ba26986f3f68935d00c6a709">MC::ContributionView</a> &amp;contributions)</td></tr>
@@ -114,14 +115,14 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:a1cb3604d28d69cd95f2082a6fe1f602b" id="r_a1cb3604d28d69cd95f2082a6fe1f602b"><td class="memItemLeft" align="right" valign="top">static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1cb3604d28d69cd95f2082a6fe1f602b">name</a> = &quot;fixed-length&quot;</td></tr>
 </table>
 <a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
-<a id="ac8b527f9bfbd00ac6b2d9bbd903a48e9" name="ac8b527f9bfbd00ac6b2d9bbd903a48e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8b527f9bfbd00ac6b2d9bbd903a48e9">&#9670;&#160;</a></span>Config</h2>
+<a id="af98ee38e88201bed889f8bdf5c53d922" name="af98ee38e88201bed889f8bdf5c53d922"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af98ee38e88201bed889f8bdf5c53d922">&#9670;&#160;</a></span>Config</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#ac8b527f9bfbd00ac6b2d9bbd903a48e9">Models::FixedLength::Config</a> = std::nullopt_t</td>
+          <td class="memname">using <a class="el" href="#af98ee38e88201bed889f8bdf5c53d922">Models::FixedLength::Config</a> = Kokkos::View&lt;const <a class="el" href="#ab10005608c96d8a014bc4f73653a81c4">FloatType</a>*, ComputeSpace&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -327,6 +328,31 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ad2fbacbf94c199f2b375481a6b8f1dab" name="ad2fbacbf94c199f2b375481a6b8f1dab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2fbacbf94c199f2b375481a6b8f1dab">&#9670;&#160;</a></span>get_config()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#af98ee38e88201bed889f8bdf5c53d922">FixedLength::Config</a> Models::FixedLength::get_config </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a510a7132bbef294b660877f2f4b7b4ff" name="a510a7132bbef294b660877f2f4b7b4ff"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a510a7132bbef294b660877f2f4b7b4ff">&#9670;&#160;</a></span>get_number()</h2>
 
@@ -352,8 +378,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab5ee7615b5ba3d831c4cee348950b2b0" name="ab5ee7615b5ba3d831c4cee348950b2b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab5ee7615b5ba3d831c4cee348950b2b0">&#9670;&#160;</a></span>init()</h2>
+<a id="a9677d5083af7df5a15e1689b97fd7a98" name="a9677d5083af7df5a15e1689b97fd7a98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9677d5083af7df5a15e1689b97fd7a98">&#9670;&#160;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -374,12 +400,17 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>arr</em></span>&#160;)</td>
+          <td class="paramtype">const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>arr</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="#af98ee38e88201bed889f8bdf5c53d922">Config</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>params</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -481,6 +512,11 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structModels_1_1FixedLength_a712bbca45efd85ea38cec631d0a416cb_cgraph.svg" width="331" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -568,9 +604,9 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">        <a class="code hl_function" href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">c_linear_density</a>(<span class="keyword">static_cast&lt;</span><a class="code hl_typedef" href="#ab10005608c96d8a014bc4f73653a81c4">FloatType</a><span class="keyword">&gt;</span>(1000), <a class="code hl_variable" href="#a78e6f7dba8a0a9cd7d385c2b99a77404">d_m</a>)</div>
-<div class="ttc" id="anamespaceModels_html_ae070357c43b64436202145d812e1e05c"><div class="ttname"><a href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">Models::c_linear_density</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION consteval F c_linear_density(F rho, F d)</div><div class="ttdef"><b>Definition</b> utils.hpp:40</div></div>
-<div class="ttc" id="astructModels_1_1FixedLength_html_a78e6f7dba8a0a9cd7d385c2b99a77404"><div class="ttname"><a href="#a78e6f7dba8a0a9cd7d385c2b99a77404">Models::FixedLength::d_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType d_m</div><div class="ttdef"><b>Definition</b> fixed_length.hpp:46</div></div>
-<div class="ttc" id="astructModels_1_1FixedLength_html_ab10005608c96d8a014bc4f73653a81c4"><div class="ttname"><a href="#ab10005608c96d8a014bc4f73653a81c4">Models::FixedLength::FloatType</a></div><div class="ttdeci">float FloatType</div><div class="ttdef"><b>Definition</b> fixed_length.hpp:27</div></div>
+<div class="ttc" id="anamespaceModels_html_ae070357c43b64436202145d812e1e05c"><div class="ttname"><a href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">Models::c_linear_density</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION consteval F c_linear_density(F rho, F d)</div><div class="ttdef"><b>Definition</b> utils.hpp:47</div></div>
+<div class="ttc" id="astructModels_1_1FixedLength_html_a78e6f7dba8a0a9cd7d385c2b99a77404"><div class="ttname"><a href="#a78e6f7dba8a0a9cd7d385c2b99a77404">Models::FixedLength::d_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType d_m</div><div class="ttdef"><b>Definition</b> fixed_length.hpp:50</div></div>
+<div class="ttc" id="astructModels_1_1FixedLength_html_ab10005608c96d8a014bc4f73653a81c4"><div class="ttname"><a href="#ab10005608c96d8a014bc4f73653a81c4">Models::FixedLength::FloatType</a></div><div class="ttdeci">float FloatType</div><div class="ttdef"><b>Definition</b> fixed_length.hpp:30</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -631,14 +667,15 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">        <a class="code hl_function" href="namespaceModels.html#aacffe777a75c70b9bdd3df39cb29cf44">_get_phi_s_max&lt;FloatType&gt;</a>(<a class="code hl_variable" href="#a872e4c2850d3996443ca0cac92af97c2">lin_density</a>, <a class="code hl_variable" href="#a637a630f4f54d4f26147b064b317e0d5">l_dot_max</a>)</div>
-<div class="ttc" id="anamespaceModels_html_aacffe777a75c70b9bdd3df39cb29cf44"><div class="ttname"><a href="namespaceModels.html#aacffe777a75c70b9bdd3df39cb29cf44">Models::_get_phi_s_max</a></div><div class="ttdeci">static F consteval _get_phi_s_max(F density, F dl, F glucose_to_biomass_yield=0.5)</div><div class="ttdef"><b>Definition</b> fixed_length.hpp:16</div></div>
-<div class="ttc" id="astructModels_1_1FixedLength_html_a637a630f4f54d4f26147b064b317e0d5"><div class="ttname"><a href="#a637a630f4f54d4f26147b064b317e0d5">Models::FixedLength::l_dot_max</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_dot_max</div><div class="ttdef"><b>Definition</b> fixed_length.hpp:42</div></div>
-<div class="ttc" id="astructModels_1_1FixedLength_html_a872e4c2850d3996443ca0cac92af97c2"><div class="ttname"><a href="#a872e4c2850d3996443ca0cac92af97c2">Models::FixedLength::lin_density</a></div><div class="ttdeci">MODEL_CONSTANT FloatType lin_density</div><div class="ttdef"><b>Definition</b> fixed_length.hpp:47</div></div>
+<div class="ttc" id="anamespaceModels_html_aacffe777a75c70b9bdd3df39cb29cf44"><div class="ttname"><a href="namespaceModels.html#aacffe777a75c70b9bdd3df39cb29cf44">Models::_get_phi_s_max</a></div><div class="ttdeci">static F consteval _get_phi_s_max(F density, F dl, F glucose_to_biomass_yield=0.5)</div><div class="ttdef"><b>Definition</b> fixed_length.hpp:19</div></div>
+<div class="ttc" id="astructModels_1_1FixedLength_html_a637a630f4f54d4f26147b064b317e0d5"><div class="ttname"><a href="#a637a630f4f54d4f26147b064b317e0d5">Models::FixedLength::l_dot_max</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_dot_max</div><div class="ttdef"><b>Definition</b> fixed_length.hpp:46</div></div>
+<div class="ttc" id="astructModels_1_1FixedLength_html_a872e4c2850d3996443ca0cac92af97c2"><div class="ttname"><a href="#a872e4c2850d3996443ca0cac92af97c2">Models::FixedLength::lin_density</a></div><div class="ttdeci">MODEL_CONSTANT FloatType lin_density</div><div class="ttdef"><b>Definition</b> fixed_length.hpp:51</div></div>
 </div><!-- fragment -->
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+<hr/>The documentation for this struct was generated from the following files:<ul>
 <li>apps/libs/models/public/models/<a class="el" href="fixed__length_8hpp_source.html">fixed_length.hpp</a></li>
+<li>apps/libs/models/src/<b>config_loader.cpp</b></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

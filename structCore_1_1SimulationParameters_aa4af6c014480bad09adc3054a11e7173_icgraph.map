@@ -1,5 +1,5 @@
 <map id="Core::SimulationParameters::init" name="Core::SimulationParameters::init">
 <area shape="rect" id="Node000001" title=" " alt="" coords="200,5,386,44"/>
-<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#a7694d9869fc9df36ef7012d893e98e9d" title="Constructs a GlobalInitialiser instance." alt="" coords="5,5,152,44"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#a6366cce5d23ddbb0f475288da17b9c9d" title="Constructs a GlobalInitialiser instance." alt="" coords="5,5,152,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,27,152,27,152,22,184,22"/>
 </map>

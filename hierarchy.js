@@ -1,6 +1,5 @@
 var hierarchy =
 [
-    [ "Models::DivisionModel::Adder< M >", "structModels_1_1DivisionModel_1_1Adder.html", null ],
     [ "PostProcessing::BonceBuffer", "structPostProcessing_1_1BonceBuffer.html", null ],
     [ "Canary", "classCanary.html", null ],
     [ "Core::CaseData", "structCore_1_1CaseData.html", null ],

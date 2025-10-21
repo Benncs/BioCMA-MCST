@@ -57,9 +57,6 @@ var annotated_dup =
       [ "ReactorDomain", "classMC_1_1ReactorDomain.html", "classMC_1_1ReactorDomain" ]
     ] ],
     [ "Models", "namespaceModels.html", [
-      [ "DivisionModel", "namespaceModels_1_1DivisionModel.html", [
-        [ "Adder", "structModels_1_1DivisionModel_1_1Adder.html", "structModels_1_1DivisionModel_1_1Adder" ]
-      ] ],
       [ "FixedLength", "structModels_1_1FixedLength.html", "structModels_1_1FixedLength" ],
       [ "SimpleModel", "structModels_1_1SimpleModel.html", "structModels_1_1SimpleModel" ],
       [ "TwoMeta", "structModels_1_1TwoMeta.html", "structModels_1_1TwoMeta" ],

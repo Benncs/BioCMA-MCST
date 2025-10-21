@@ -74,143 +74,156 @@ $(function(){initNavTree('utils_8hpp_source.html','',''); });
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef __BIO__UTILS_HPP__</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define __BIO__UTILS_HPP__</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;Kokkos_MathematicalConstants.hpp&quot;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;common/traits.hpp&quot;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;Kokkos_Core.hpp&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;Kokkos_Macros.hpp&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;Kokkos_Core.hpp&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;Kokkos_MathematicalConstants.hpp&gt;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Kokkos_Random.hpp&gt;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;mc/prng/prng.hpp&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceModels.html">Models</a></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>{</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="foldopen" id="foldopen00016" data-start="{" data-end="}">
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass.html">   16</a></span>  <span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceModels_1_1MolarMass.html">MolarMass</a></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  {</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;common/traits.hpp&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;mc/alias.hpp&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;mc/prng/prng.hpp&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceModels.html">Models</a></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>{</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  <span class="keyword">template</span> &lt;FloatingPo<span class="keywordtype">int</span>Type T&gt;</div>
 <div class="foldopen" id="foldopen00018" data-start="{" data-end="}">
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html">   18</a></span>    <span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html">GramPerMole</a></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#ac6a51604316ae2e935781a16fe04a8ef">   21</a></span>      <span class="keyword">template</span> &lt;FloatingPo<span class="keywordtype">int</span>Type T&gt; <span class="keyword">constexpr</span> T <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#ac6a51604316ae2e935781a16fe04a8ef">glucose</a> = <span class="keyword">static_cast&lt;</span>T<span class="keyword">&gt;</span>(180);</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#adbef58e62e260dafd32d1505a5452ede">   22</a></span>      <span class="keyword">template</span> &lt;FloatingPo<span class="keywordtype">int</span>Type T&gt; <span class="keyword">constexpr</span> T <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#adbef58e62e260dafd32d1505a5452ede">dioxygen</a> = <span class="keyword">static_cast&lt;</span>T<span class="keyword">&gt;</span>(32);</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#a747108ab3b505449ffc4f50a61d78e33">   23</a></span>      <span class="keyword">template</span> &lt;FloatingPo<span class="keywordtype">int</span>Type T&gt; <span class="keyword">constexpr</span> T <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#a747108ab3b505449ffc4f50a61d78e33">acetate</a> = <span class="keyword">static_cast&lt;</span>T<span class="keyword">&gt;</span>(59);</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#afbdd1820a9ba6cc5665b8472b1be496d">   25</a></span>      <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#afbdd1820a9ba6cc5665b8472b1be496d">co2</a> = 44;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>      ;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    }; <span class="comment">// namespace GramPerMole</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="namespaceModels.html#a91f8e773246cdd315aada1f72f97983d">   18</a></span>  KOKKOS_INLINE_FUNCTION <a class="code hl_enumeration" href="namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7c">MC::Status</a> <a class="code hl_function" href="namespaceModels.html#a91f8e773246cdd315aada1f72f97983d">check_div</a>(<span class="keyword">const</span> T l, <span class="keyword">const</span> T lc)</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordflow">return</span> (l &gt;= lc) ? <a class="code hl_enumvalue" href="namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7ca3025cdaab2deb0bb2cd642449e570833">MC::Status::Division</a> : <a class="code hl_enumvalue" href="namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7cae599161956d626eda4cb0a5ffb85271c">MC::Status::Idle</a>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  }</div>
 </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass.html#a94adeb9df6dde398be39fa66b3b28f6e">   29</a></span>    <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels_1_1MolarMass.html#a94adeb9df6dde398be39fa66b3b28f6e">glucose</a> = <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#ac6a51604316ae2e935781a16fe04a8ef">GramPerMole::glucose&lt;double&gt;</a> * 1e-3;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass.html#af2c6da047b8ae605bbec441aa47ea3f8">   30</a></span>    <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels_1_1MolarMass.html#af2c6da047b8ae605bbec441aa47ea3f8">dioxygen</a> = <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#adbef58e62e260dafd32d1505a5452ede">GramPerMole::dioxygen&lt;double&gt;</a> * 1e-3;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    ;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass.html#a0453c5c5f9b86b991bc7eec8aa28debc">   32</a></span>    <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels_1_1MolarMass.html#a0453c5c5f9b86b991bc7eec8aa28debc">acetate</a> = <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#a747108ab3b505449ffc4f50a61d78e33">GramPerMole::acetate&lt;double&gt;</a> * 1e-3;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    ;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass.html#a34f2d77bf91173f55f06eaa731ab394b">   34</a></span>    <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels_1_1MolarMass.html#a34f2d77bf91173f55f06eaa731ab394b">co2</a> = <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#afbdd1820a9ba6cc5665b8472b1be496d">GramPerMole::co2</a> * 1e-3;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    ;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass.html#a3a2a51f986be9b402be67bab93a97d81">   36</a></span>    [[deprecated]] <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels_1_1MolarMass.html#a3a2a51f986be9b402be67bab93a97d81">X</a> = 113.1e-3;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  }; <span class="comment">// namespace MolarMass</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="foldopen" id="foldopen00023" data-start="{" data-end="}">
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass.html">   23</a></span>  <span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceModels_1_1MolarMass.html">MolarMass</a></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>  {</div>
+<div class="foldopen" id="foldopen00025" data-start="{" data-end="}">
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html">   25</a></span>    <span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html">GramPerMole</a></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#ac6a51604316ae2e935781a16fe04a8ef">   28</a></span>      <span class="keyword">template</span> &lt;FloatingPo<span class="keywordtype">int</span>Type T&gt; <span class="keyword">constexpr</span> T <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#ac6a51604316ae2e935781a16fe04a8ef">glucose</a> = <span class="keyword">static_cast&lt;</span>T<span class="keyword">&gt;</span>(180);</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#adbef58e62e260dafd32d1505a5452ede">   29</a></span>      <span class="keyword">template</span> &lt;FloatingPo<span class="keywordtype">int</span>Type T&gt; <span class="keyword">constexpr</span> T <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#adbef58e62e260dafd32d1505a5452ede">dioxygen</a> = <span class="keyword">static_cast&lt;</span>T<span class="keyword">&gt;</span>(32);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#a747108ab3b505449ffc4f50a61d78e33">   30</a></span>      <span class="keyword">template</span> &lt;FloatingPo<span class="keywordtype">int</span>Type T&gt; <span class="keyword">constexpr</span> T <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#a747108ab3b505449ffc4f50a61d78e33">acetate</a> = <span class="keyword">static_cast&lt;</span>T<span class="keyword">&gt;</span>(59);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#afbdd1820a9ba6cc5665b8472b1be496d">   32</a></span>      <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#afbdd1820a9ba6cc5665b8472b1be496d">co2</a> = 44;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>      ;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    }; <span class="comment">// namespace GramPerMole</span></div>
 </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  <span class="keyword">template</span> &lt;FloatingPo<span class="keywordtype">int</span>Type F&gt;</div>
-<div class="foldopen" id="foldopen00040" data-start="{" data-end="}">
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">   40</a></span>  KOKKOS_INLINE_FUNCTION <span class="keyword">consteval</span> F <a class="code hl_function" href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">c_linear_density</a>(F rho, F d)</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  {</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordflow">return</span> rho * F(Kokkos::numbers::pi) * d * d / F(4.);</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  }</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass.html#a94adeb9df6dde398be39fa66b3b28f6e">   36</a></span>    <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels_1_1MolarMass.html#a94adeb9df6dde398be39fa66b3b28f6e">glucose</a> = <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#ac6a51604316ae2e935781a16fe04a8ef">GramPerMole::glucose&lt;double&gt;</a> * 1e-3;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass.html#af2c6da047b8ae605bbec441aa47ea3f8">   37</a></span>    <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels_1_1MolarMass.html#af2c6da047b8ae605bbec441aa47ea3f8">dioxygen</a> = <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#adbef58e62e260dafd32d1505a5452ede">GramPerMole::dioxygen&lt;double&gt;</a> * 1e-3;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    ;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass.html#a0453c5c5f9b86b991bc7eec8aa28debc">   39</a></span>    <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels_1_1MolarMass.html#a0453c5c5f9b86b991bc7eec8aa28debc">acetate</a> = <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#a747108ab3b505449ffc4f50a61d78e33">GramPerMole::acetate&lt;double&gt;</a> * 1e-3;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    ;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass.html#a34f2d77bf91173f55f06eaa731ab394b">   41</a></span>    <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels_1_1MolarMass.html#a34f2d77bf91173f55f06eaa731ab394b">co2</a> = <a class="code hl_variable" href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#afbdd1820a9ba6cc5665b8472b1be496d">GramPerMole::co2</a> * 1e-3;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    ;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="namespaceModels_1_1MolarMass.html#a3a2a51f986be9b402be67bab93a97d81">   43</a></span>    [[deprecated]] <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels_1_1MolarMass.html#a3a2a51f986be9b402be67bab93a97d81">X</a> = 113.1e-3;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  }; <span class="comment">// namespace MolarMass</span></div>
 </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="namespaceModels.html#af990d8f8c467e200680a53e35c3327a6">   45</a></span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels.html#af990d8f8c467e200680a53e35c3327a6">tau_division_proba</a> = 1e-7;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  <span class="keyword">template</span> &lt;FloatingPo<span class="keywordtype">int</span>Type F&gt;</div>
 <div class="foldopen" id="foldopen00047" data-start="{" data-end="}">
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="namespaceModels.html#a4232bad81819956cdafafb24d9b6bc06">   47</a></span>  KOKKOS_INLINE_FUNCTION <span class="keywordtype">bool</span> <a class="code hl_function" href="namespaceModels.html#a4232bad81819956cdafafb24d9b6bc06">check_probability_division</a>(</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>      <span class="keywordtype">double</span> d_t, <span class="keywordtype">double</span> gamma, <a class="code hl_typedef" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> random_pool)</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  {</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    (void)d_t;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="comment">// const double proba_div =</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="comment">//     (1 - Kokkos::exp(-d_t / tau_division_proba)) * gamma;</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">   47</a></span>  KOKKOS_INLINE_FUNCTION <span class="keyword">consteval</span> F <a class="code hl_function" href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">c_linear_density</a>(F rho, F d)</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  {</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordflow">return</span> rho * F(Kokkos::numbers::pi) * d * d / F(4.);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  }</div>
+</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="namespaceModels.html#af990d8f8c467e200680a53e35c3327a6">   52</a></span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceModels.html#af990d8f8c467e200680a53e35c3327a6">tau_division_proba</a> = 1e-7;</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keyword">auto</span> generator = random_pool.get_state();</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> x = generator.drand(0., 1.);</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    random_pool.free_state(generator);</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keywordflow">return</span> x &lt; gamma;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  }</div>
-</div>
+<div class="foldopen" id="foldopen00054" data-start="{" data-end="}">
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="namespaceModels.html#a4232bad81819956cdafafb24d9b6bc06">   54</a></span>  KOKKOS_INLINE_FUNCTION <span class="keywordtype">bool</span> <a class="code hl_function" href="namespaceModels.html#a4232bad81819956cdafafb24d9b6bc06">check_probability_division</a>(</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>      <span class="keywordtype">double</span> d_t, <span class="keywordtype">double</span> gamma, <a class="code hl_typedef" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> random_pool)</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  {</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    (void)d_t;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="comment">// const double proba_div =</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="comment">//     (1 - Kokkos::exp(-d_t / tau_division_proba)) * gamma;</span></div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="foldopen" id="foldopen00061" data-start="{" data-end="}">
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="namespaceModels_1_1GammaDivision.html">   61</a></span>  <span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceModels_1_1GammaDivision.html">GammaDivision</a></div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  {</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    KOKKOS_INLINE_FUNCTION <span class="keywordtype">double</span></div>
-<div class="foldopen" id="foldopen00064" data-start="{" data-end="}">
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="namespaceModels_1_1GammaDivision.html#acee9355f9fe219b04920306ac65c4ac3">   64</a></span>    <a class="code hl_function" href="namespaceModels_1_1GammaDivision.html#acee9355f9fe219b04920306ac65c4ac3">threshold_linear</a>(<span class="keywordtype">double</span> lenght, <span class="keywordtype">double</span> threshold, <span class="keywordtype">double</span> upper_bound)</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    {</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>      <span class="keywordflow">return</span> (lenght &lt;= threshold)</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                 ? 0</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                 : (lenght - threshold) / (upper_bound - threshold);</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    }</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keyword">auto</span> generator = random_pool.get_state();</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keyword">const</span> <span class="keywordtype">double</span> x = generator.drand(0., 1.);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    random_pool.free_state(generator);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keywordflow">return</span> x &lt; gamma;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  }</div>
 </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    KOKKOS_INLINE_FUNCTION <span class="keyword">constexpr</span> <span class="keywordtype">float</span></div>
-<div class="foldopen" id="foldopen00072" data-start="{" data-end="}">
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="namespaceModels_1_1GammaDivision.html#acf88eee4fc351f8a29a44610f36d761d">   72</a></span>    <a class="code hl_function" href="namespaceModels_1_1GammaDivision.html#acf88eee4fc351f8a29a44610f36d761d">logistic</a>(<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> xmax, <span class="keywordtype">float</span> alpha)</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    {</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>      <span class="comment">// auto blna = alpha * std::log(xmax);</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>      <span class="comment">// return 1 / (1 + std::exp(-alpha * std::log(x) + blna));</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>      <span class="comment">// return x&lt;xmax?1. / (1 + std::exp(alpha * std::log((x-xmax)/xmax ))):1.;</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="foldopen" id="foldopen00068" data-start="{" data-end="}">
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="namespaceModels_1_1GammaDivision.html">   68</a></span>  <span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceModels_1_1GammaDivision.html">GammaDivision</a></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  {</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    KOKKOS_INLINE_FUNCTION <span class="keywordtype">double</span></div>
+<div class="foldopen" id="foldopen00071" data-start="{" data-end="}">
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="namespaceModels_1_1GammaDivision.html#acee9355f9fe219b04920306ac65c4ac3">   71</a></span>    <a class="code hl_function" href="namespaceModels_1_1GammaDivision.html#acee9355f9fe219b04920306ac65c4ac3">threshold_linear</a>(<span class="keywordtype">double</span> lenght, <span class="keywordtype">double</span> threshold, <span class="keywordtype">double</span> upper_bound)</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    {</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>      <span class="keywordflow">return</span> (lenght &lt;= threshold)</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                 ? 0</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>                 : (lenght - threshold) / (upper_bound - threshold);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    }</div>
+</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>      <span class="keyword">const</span> <span class="keyword">auto</span> z = x &lt; xmax ? std::pow(x / (xmax - x), alpha) : 1.;</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>      <span class="keywordflow">return</span> z / (1. + z);</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    }</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    KOKKOS_INLINE_FUNCTION <span class="keyword">constexpr</span> <span class="keywordtype">float</span></div>
+<div class="foldopen" id="foldopen00079" data-start="{" data-end="}">
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="namespaceModels_1_1GammaDivision.html#acf88eee4fc351f8a29a44610f36d761d">   79</a></span>    <a class="code hl_function" href="namespaceModels_1_1GammaDivision.html#acf88eee4fc351f8a29a44610f36d761d">logistic</a>(<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> xmax, <span class="keywordtype">float</span> alpha)</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    {</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>      <span class="comment">// auto blna = alpha * std::log(xmax);</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>      <span class="comment">// return 1 / (1 + std::exp(-alpha * std::log(x) + blna));</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>      <span class="comment">// return x&lt;xmax?1. / (1 + std::exp(alpha * std::log((x-xmax)/xmax ))):1.;</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>      <span class="keyword">const</span> <span class="keyword">auto</span> z = x &lt; xmax ? std::pow(x / (xmax - x), alpha) : 1.;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>      <span class="keywordflow">return</span> z / (1. + z);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    }</div>
 </div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  } <span class="comment">// namespace GammaDivision</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>  } <span class="comment">// namespace GammaDivision</span></div>
 </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  KOKKOS_INLINE_FUNCTION <span class="keywordtype">bool</span></div>
-<div class="foldopen" id="foldopen00085" data-start="{" data-end="}">
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="namespaceModels.html#a960cb54a05fd1b8376bd187b46297140">   85</a></span>  <a class="code hl_function" href="namespaceModels.html#a960cb54a05fd1b8376bd187b46297140">almost_equal</a>(<span class="keywordtype">double</span> val, <span class="keywordtype">double</span> val2, <span class="keywordtype">double</span> tolerance = 1e-8)</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  {</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="keywordflow">return</span> Kokkos::abs(val - val2) &lt; tolerance;</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  }</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  KOKKOS_INLINE_FUNCTION <span class="keywordtype">bool</span></div>
+<div class="foldopen" id="foldopen00092" data-start="{" data-end="}">
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="namespaceModels.html#a960cb54a05fd1b8376bd187b46297140">   92</a></span>  <a class="code hl_function" href="namespaceModels.html#a960cb54a05fd1b8376bd187b46297140">almost_equal</a>(<span class="keywordtype">double</span> val, <span class="keywordtype">double</span> val2, <span class="keywordtype">double</span> tolerance = 1e-8)</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  {</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keywordflow">return</span> Kokkos::abs(val - val2) &lt; tolerance;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  }</div>
 </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
-<div class="foldopen" id="foldopen00091" data-start="{" data-end="}">
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="namespaceModels.html#aeb5cecf73dd99777ef0554d1b129252e">   91</a></span>  KOKKOS_INLINE_FUNCTION <span class="keywordtype">double</span> <a class="code hl_function" href="namespaceModels.html#a762c1e1dcf75381362aabbef1c4f79a7">min_var</a>(Args... args)</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  {</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    <span class="keywordflow">return</span> (Kokkos::min)({args...});</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  }</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
+<div class="foldopen" id="foldopen00098" data-start="{" data-end="}">
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="namespaceModels.html#aeb5cecf73dd99777ef0554d1b129252e">   98</a></span>  KOKKOS_INLINE_FUNCTION <span class="keywordtype">double</span> <a class="code hl_function" href="namespaceModels.html#a762c1e1dcf75381362aabbef1c4f79a7">min_var</a>(Args... args)</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  {</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keywordflow">return</span> (Kokkos::min)({args...});</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>  }</div>
 </div>
-<div class="foldopen" id="foldopen00095" data-start="{" data-end="}">
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="namespaceModels.html#a762c1e1dcf75381362aabbef1c4f79a7">   95</a></span>  <span class="keyword">template</span> &lt;&gt; KOKKOS_INLINE_FUNCTION <span class="keywordtype">double</span> <a class="code hl_function" href="namespaceModels.html#a762c1e1dcf75381362aabbef1c4f79a7">min_var</a>()</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  {</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keywordflow">return</span> 0.;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>  }</div>
+<div class="foldopen" id="foldopen00102" data-start="{" data-end="}">
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="namespaceModels.html#a762c1e1dcf75381362aabbef1c4f79a7">  102</a></span>  <span class="keyword">template</span> &lt;&gt; KOKKOS_INLINE_FUNCTION <span class="keywordtype">double</span> <a class="code hl_function" href="namespaceModels.html#a762c1e1dcf75381362aabbef1c4f79a7">min_var</a>()</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  {</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    <span class="keywordflow">return</span> 0.;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  }</div>
 </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>} <span class="comment">// namespace Models</span></div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>} <span class="comment">// namespace Models</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassMC_1_1KPRNG_html_ab838a46e423f7dbdfb9f9809afaeefd5"><div class="ttname"><a href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a></div><div class="ttdeci">Kokkos::Random_XorShift1024_Pool&lt; Kokkos::DefaultExecutionSpace &gt; pool_type</div><div class="ttdef"><b>Definition</b> prng.hpp:17</div></div>
-<div class="ttc" id="anamespaceModels_1_1GammaDivision_html"><div class="ttname"><a href="namespaceModels_1_1GammaDivision.html">Models::GammaDivision</a></div><div class="ttdef"><b>Definition</b> utils.hpp:62</div></div>
-<div class="ttc" id="anamespaceModels_1_1GammaDivision_html_acee9355f9fe219b04920306ac65c4ac3"><div class="ttname"><a href="namespaceModels_1_1GammaDivision.html#acee9355f9fe219b04920306ac65c4ac3">Models::GammaDivision::threshold_linear</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION double threshold_linear(double lenght, double threshold, double upper_bound)</div><div class="ttdef"><b>Definition</b> utils.hpp:64</div></div>
-<div class="ttc" id="anamespaceModels_1_1GammaDivision_html_acf88eee4fc351f8a29a44610f36d761d"><div class="ttname"><a href="namespaceModels_1_1GammaDivision.html#acf88eee4fc351f8a29a44610f36d761d">Models::GammaDivision::logistic</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION constexpr float logistic(float x, float xmax, float alpha)</div><div class="ttdef"><b>Definition</b> utils.hpp:72</div></div>
-<div class="ttc" id="anamespaceModels_1_1MolarMass_1_1GramPerMole_html"><div class="ttname"><a href="namespaceModels_1_1MolarMass_1_1GramPerMole.html">Models::MolarMass::GramPerMole</a></div><div class="ttdef"><b>Definition</b> utils.hpp:19</div></div>
-<div class="ttc" id="anamespaceModels_1_1MolarMass_1_1GramPerMole_html_a747108ab3b505449ffc4f50a61d78e33"><div class="ttname"><a href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#a747108ab3b505449ffc4f50a61d78e33">Models::MolarMass::GramPerMole::acetate</a></div><div class="ttdeci">constexpr T acetate</div><div class="ttdef"><b>Definition</b> utils.hpp:23</div></div>
-<div class="ttc" id="anamespaceModels_1_1MolarMass_1_1GramPerMole_html_ac6a51604316ae2e935781a16fe04a8ef"><div class="ttname"><a href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#ac6a51604316ae2e935781a16fe04a8ef">Models::MolarMass::GramPerMole::glucose</a></div><div class="ttdeci">constexpr T glucose</div><div class="ttdef"><b>Definition</b> utils.hpp:21</div></div>
-<div class="ttc" id="anamespaceModels_1_1MolarMass_1_1GramPerMole_html_adbef58e62e260dafd32d1505a5452ede"><div class="ttname"><a href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#adbef58e62e260dafd32d1505a5452ede">Models::MolarMass::GramPerMole::dioxygen</a></div><div class="ttdeci">constexpr T dioxygen</div><div class="ttdef"><b>Definition</b> utils.hpp:22</div></div>
-<div class="ttc" id="anamespaceModels_1_1MolarMass_1_1GramPerMole_html_afbdd1820a9ba6cc5665b8472b1be496d"><div class="ttname"><a href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#afbdd1820a9ba6cc5665b8472b1be496d">Models::MolarMass::GramPerMole::co2</a></div><div class="ttdeci">constexpr double co2</div><div class="ttdef"><b>Definition</b> utils.hpp:25</div></div>
-<div class="ttc" id="anamespaceModels_1_1MolarMass_html"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html">Models::MolarMass</a></div><div class="ttdef"><b>Definition</b> utils.hpp:17</div></div>
-<div class="ttc" id="anamespaceModels_1_1MolarMass_html_a0453c5c5f9b86b991bc7eec8aa28debc"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html#a0453c5c5f9b86b991bc7eec8aa28debc">Models::MolarMass::acetate</a></div><div class="ttdeci">constexpr double acetate</div><div class="ttdef"><b>Definition</b> utils.hpp:32</div></div>
-<div class="ttc" id="anamespaceModels_1_1MolarMass_html_a34f2d77bf91173f55f06eaa731ab394b"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html#a34f2d77bf91173f55f06eaa731ab394b">Models::MolarMass::co2</a></div><div class="ttdeci">constexpr double co2</div><div class="ttdef"><b>Definition</b> utils.hpp:34</div></div>
-<div class="ttc" id="anamespaceModels_1_1MolarMass_html_a3a2a51f986be9b402be67bab93a97d81"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html#a3a2a51f986be9b402be67bab93a97d81">Models::MolarMass::X</a></div><div class="ttdeci">constexpr double X</div><div class="ttdef"><b>Definition</b> utils.hpp:36</div></div>
-<div class="ttc" id="anamespaceModels_1_1MolarMass_html_a94adeb9df6dde398be39fa66b3b28f6e"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html#a94adeb9df6dde398be39fa66b3b28f6e">Models::MolarMass::glucose</a></div><div class="ttdeci">constexpr double glucose</div><div class="ttdef"><b>Definition</b> utils.hpp:29</div></div>
-<div class="ttc" id="anamespaceModels_1_1MolarMass_html_af2c6da047b8ae605bbec441aa47ea3f8"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html#af2c6da047b8ae605bbec441aa47ea3f8">Models::MolarMass::dioxygen</a></div><div class="ttdeci">constexpr double dioxygen</div><div class="ttdef"><b>Definition</b> utils.hpp:30</div></div>
-<div class="ttc" id="anamespaceModels_html"><div class="ttname"><a href="namespaceModels.html">Models</a></div><div class="ttdoc">Models definition.</div><div class="ttdef"><b>Definition</b> config_loader.hpp:8</div></div>
-<div class="ttc" id="anamespaceModels_html_a4232bad81819956cdafafb24d9b6bc06"><div class="ttname"><a href="namespaceModels.html#a4232bad81819956cdafafb24d9b6bc06">Models::check_probability_division</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION bool check_probability_division(double d_t, double gamma, MC::KPRNG::pool_type random_pool)</div><div class="ttdef"><b>Definition</b> utils.hpp:47</div></div>
-<div class="ttc" id="anamespaceModels_html_a762c1e1dcf75381362aabbef1c4f79a7"><div class="ttname"><a href="namespaceModels.html#a762c1e1dcf75381362aabbef1c4f79a7">Models::min_var</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION double min_var()</div><div class="ttdef"><b>Definition</b> utils.hpp:95</div></div>
-<div class="ttc" id="anamespaceModels_html_a960cb54a05fd1b8376bd187b46297140"><div class="ttname"><a href="namespaceModels.html#a960cb54a05fd1b8376bd187b46297140">Models::almost_equal</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION bool almost_equal(double val, double val2, double tolerance=1e-8)</div><div class="ttdef"><b>Definition</b> utils.hpp:85</div></div>
-<div class="ttc" id="anamespaceModels_html_ae070357c43b64436202145d812e1e05c"><div class="ttname"><a href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">Models::c_linear_density</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION consteval F c_linear_density(F rho, F d)</div><div class="ttdef"><b>Definition</b> utils.hpp:40</div></div>
-<div class="ttc" id="anamespaceModels_html_af990d8f8c467e200680a53e35c3327a6"><div class="ttname"><a href="namespaceModels.html#af990d8f8c467e200680a53e35c3327a6">Models::tau_division_proba</a></div><div class="ttdeci">static constexpr double tau_division_proba</div><div class="ttdef"><b>Definition</b> utils.hpp:45</div></div>
+<div class="ttc" id="anamespaceMC_html_abb6088b7a69c0054394437eb3ac65f7c"><div class="ttname"><a href="namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7c">MC::Status</a></div><div class="ttdeci">Status</div><div class="ttdef"><b>Definition</b> alias.hpp:11</div></div>
+<div class="ttc" id="anamespaceMC_html_abb6088b7a69c0054394437eb3ac65f7ca3025cdaab2deb0bb2cd642449e570833"><div class="ttname"><a href="namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7ca3025cdaab2deb0bb2cd642449e570833">MC::Status::Division</a></div><div class="ttdeci">@ Division</div><div class="ttdef"><b>Definition</b> alias.hpp:13</div></div>
+<div class="ttc" id="anamespaceMC_html_abb6088b7a69c0054394437eb3ac65f7cae599161956d626eda4cb0a5ffb85271c"><div class="ttname"><a href="namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7cae599161956d626eda4cb0a5ffb85271c">MC::Status::Idle</a></div><div class="ttdeci">@ Idle</div><div class="ttdef"><b>Definition</b> alias.hpp:12</div></div>
+<div class="ttc" id="anamespaceModels_1_1GammaDivision_html"><div class="ttname"><a href="namespaceModels_1_1GammaDivision.html">Models::GammaDivision</a></div><div class="ttdef"><b>Definition</b> utils.hpp:69</div></div>
+<div class="ttc" id="anamespaceModels_1_1GammaDivision_html_acee9355f9fe219b04920306ac65c4ac3"><div class="ttname"><a href="namespaceModels_1_1GammaDivision.html#acee9355f9fe219b04920306ac65c4ac3">Models::GammaDivision::threshold_linear</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION double threshold_linear(double lenght, double threshold, double upper_bound)</div><div class="ttdef"><b>Definition</b> utils.hpp:71</div></div>
+<div class="ttc" id="anamespaceModels_1_1GammaDivision_html_acf88eee4fc351f8a29a44610f36d761d"><div class="ttname"><a href="namespaceModels_1_1GammaDivision.html#acf88eee4fc351f8a29a44610f36d761d">Models::GammaDivision::logistic</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION constexpr float logistic(float x, float xmax, float alpha)</div><div class="ttdef"><b>Definition</b> utils.hpp:79</div></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_1_1GramPerMole_html"><div class="ttname"><a href="namespaceModels_1_1MolarMass_1_1GramPerMole.html">Models::MolarMass::GramPerMole</a></div><div class="ttdef"><b>Definition</b> utils.hpp:26</div></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_1_1GramPerMole_html_a747108ab3b505449ffc4f50a61d78e33"><div class="ttname"><a href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#a747108ab3b505449ffc4f50a61d78e33">Models::MolarMass::GramPerMole::acetate</a></div><div class="ttdeci">constexpr T acetate</div><div class="ttdef"><b>Definition</b> utils.hpp:30</div></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_1_1GramPerMole_html_ac6a51604316ae2e935781a16fe04a8ef"><div class="ttname"><a href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#ac6a51604316ae2e935781a16fe04a8ef">Models::MolarMass::GramPerMole::glucose</a></div><div class="ttdeci">constexpr T glucose</div><div class="ttdef"><b>Definition</b> utils.hpp:28</div></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_1_1GramPerMole_html_adbef58e62e260dafd32d1505a5452ede"><div class="ttname"><a href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#adbef58e62e260dafd32d1505a5452ede">Models::MolarMass::GramPerMole::dioxygen</a></div><div class="ttdeci">constexpr T dioxygen</div><div class="ttdef"><b>Definition</b> utils.hpp:29</div></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_1_1GramPerMole_html_afbdd1820a9ba6cc5665b8472b1be496d"><div class="ttname"><a href="namespaceModels_1_1MolarMass_1_1GramPerMole.html#afbdd1820a9ba6cc5665b8472b1be496d">Models::MolarMass::GramPerMole::co2</a></div><div class="ttdeci">constexpr double co2</div><div class="ttdef"><b>Definition</b> utils.hpp:32</div></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_html"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html">Models::MolarMass</a></div><div class="ttdef"><b>Definition</b> utils.hpp:24</div></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_html_a0453c5c5f9b86b991bc7eec8aa28debc"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html#a0453c5c5f9b86b991bc7eec8aa28debc">Models::MolarMass::acetate</a></div><div class="ttdeci">constexpr double acetate</div><div class="ttdef"><b>Definition</b> utils.hpp:39</div></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_html_a34f2d77bf91173f55f06eaa731ab394b"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html#a34f2d77bf91173f55f06eaa731ab394b">Models::MolarMass::co2</a></div><div class="ttdeci">constexpr double co2</div><div class="ttdef"><b>Definition</b> utils.hpp:41</div></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_html_a3a2a51f986be9b402be67bab93a97d81"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html#a3a2a51f986be9b402be67bab93a97d81">Models::MolarMass::X</a></div><div class="ttdeci">constexpr double X</div><div class="ttdef"><b>Definition</b> utils.hpp:43</div></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_html_a94adeb9df6dde398be39fa66b3b28f6e"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html#a94adeb9df6dde398be39fa66b3b28f6e">Models::MolarMass::glucose</a></div><div class="ttdeci">constexpr double glucose</div><div class="ttdef"><b>Definition</b> utils.hpp:36</div></div>
+<div class="ttc" id="anamespaceModels_1_1MolarMass_html_af2c6da047b8ae605bbec441aa47ea3f8"><div class="ttname"><a href="namespaceModels_1_1MolarMass.html#af2c6da047b8ae605bbec441aa47ea3f8">Models::MolarMass::dioxygen</a></div><div class="ttdeci">constexpr double dioxygen</div><div class="ttdef"><b>Definition</b> utils.hpp:37</div></div>
+<div class="ttc" id="anamespaceModels_html"><div class="ttname"><a href="namespaceModels.html">Models</a></div><div class="ttdoc">Models definition.</div><div class="ttdef"><b>Definition</b> config_loader.hpp:9</div></div>
+<div class="ttc" id="anamespaceModels_html_a4232bad81819956cdafafb24d9b6bc06"><div class="ttname"><a href="namespaceModels.html#a4232bad81819956cdafafb24d9b6bc06">Models::check_probability_division</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION bool check_probability_division(double d_t, double gamma, MC::KPRNG::pool_type random_pool)</div><div class="ttdef"><b>Definition</b> utils.hpp:54</div></div>
+<div class="ttc" id="anamespaceModels_html_a762c1e1dcf75381362aabbef1c4f79a7"><div class="ttname"><a href="namespaceModels.html#a762c1e1dcf75381362aabbef1c4f79a7">Models::min_var</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION double min_var()</div><div class="ttdef"><b>Definition</b> utils.hpp:102</div></div>
+<div class="ttc" id="anamespaceModels_html_a91f8e773246cdd315aada1f72f97983d"><div class="ttname"><a href="namespaceModels.html#a91f8e773246cdd315aada1f72f97983d">Models::check_div</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION MC::Status check_div(const T l, const T lc)</div><div class="ttdef"><b>Definition</b> utils.hpp:18</div></div>
+<div class="ttc" id="anamespaceModels_html_a960cb54a05fd1b8376bd187b46297140"><div class="ttname"><a href="namespaceModels.html#a960cb54a05fd1b8376bd187b46297140">Models::almost_equal</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION bool almost_equal(double val, double val2, double tolerance=1e-8)</div><div class="ttdef"><b>Definition</b> utils.hpp:92</div></div>
+<div class="ttc" id="anamespaceModels_html_ae070357c43b64436202145d812e1e05c"><div class="ttname"><a href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">Models::c_linear_density</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION consteval F c_linear_density(F rho, F d)</div><div class="ttdef"><b>Definition</b> utils.hpp:47</div></div>
+<div class="ttc" id="anamespaceModels_html_af990d8f8c467e200680a53e35c3327a6"><div class="ttname"><a href="namespaceModels.html#af990d8f8c467e200680a53e35c3327a6">Models::tau_division_proba</a></div><div class="ttdeci">static constexpr double tau_division_proba</div><div class="ttdef"><b>Definition</b> utils.hpp:52</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

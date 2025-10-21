@@ -11,7 +11,7 @@ var classCore_1_1GlobalInitialiser =
       [ "SimulationUnit", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeae72c61b7a94c54fd6a574c64d5b5d4ca", null ],
       [ "Count", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeae93f994f01c537c4e2f7d8528c3eb5e9", null ]
     ] ],
-    [ "GlobalInitialiser", "classCore_1_1GlobalInitialiser.html#a7694d9869fc9df36ef7012d893e98e9d", null ],
+    [ "GlobalInitialiser", "classCore_1_1GlobalInitialiser.html#a6366cce5d23ddbb0f475288da17b9c9d", null ],
     [ "check_init_terminate", "classCore_1_1GlobalInitialiser.html#af0e3ff388be6a2cb08edf9f69dd200b0", null ],
     [ "check_steps", "classCore_1_1GlobalInitialiser.html#a5134f9db1f59d9124d5fdec88e3e99f3", null ],
     [ "get_parameters", "classCore_1_1GlobalInitialiser.html#ae6d2f54a18d82dda373f9cd7ec923eac", null ],

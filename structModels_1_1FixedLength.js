@@ -1,6 +1,6 @@
 var structModels_1_1FixedLength =
 [
-    [ "Config", "structModels_1_1FixedLength.html#ac8b527f9bfbd00ac6b2d9bbd903a48e9", null ],
+    [ "Config", "structModels_1_1FixedLength.html#af98ee38e88201bed889f8bdf5c53d922", null ],
     [ "FloatType", "structModels_1_1FixedLength.html#ab10005608c96d8a014bc4f73653a81c4", null ],
     [ "Self", "structModels_1_1FixedLength.html#a1b5eda221ac912eb5b9e1046f50857cb", null ],
     [ "SelfParticle", "structModels_1_1FixedLength.html#a0279d1d6c1862c6dafcc4390cd8aa3f7", null ],
@@ -14,8 +14,9 @@ var structModels_1_1FixedLength =
     [ "contribution", "structModels_1_1FixedLength.html#a2744bdbfbb7361d39b230a62c33f7e09", null ],
     [ "division", "structModels_1_1FixedLength.html#aa727b73c1c6b3a482b9eb3ec29842c04", null ],
     [ "get_bounds", "structModels_1_1FixedLength.html#aa9ad5b8958fad66791be3a8ce3835f87", null ],
+    [ "get_config", "structModels_1_1FixedLength.html#ad2fbacbf94c199f2b375481a6b8f1dab", null ],
     [ "get_number", "structModels_1_1FixedLength.html#a510a7132bbef294b660877f2f4b7b4ff", null ],
-    [ "init", "structModels_1_1FixedLength.html#ab5ee7615b5ba3d831c4cee348950b2b0", null ],
+    [ "init", "structModels_1_1FixedLength.html#a9677d5083af7df5a15e1689b97fd7a98", null ],
     [ "mass", "structModels_1_1FixedLength.html#af95f402aa987c6d544670eff217691d7", null ],
     [ "names", "structModels_1_1FixedLength.html#a9b1f19a191f8cbdb23e7598ca2b06b75", null ],
     [ "update", "structModels_1_1FixedLength.html#a712bbca45efd85ea38cec631d0a416cb", null ],

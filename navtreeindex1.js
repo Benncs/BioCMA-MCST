@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"classCore_1_1GlobalInitialiser.html#a6d77d0995004ab9cf3c8116fb82bc5a4":[5,0,4,3,0],
+"classCore_1_1GlobalInitialiser.html#a6d77d0995004ab9cf3c8116fb82bc5a4":[7,0,3,3,0],
 "classCore_1_1GlobalInitialiser.html#a725f6daa4a85b80447cef70134828f17":[5,0,4,3,29],
 "classCore_1_1GlobalInitialiser.html#a725f6daa4a85b80447cef70134828f17":[7,0,3,3,29],
 "classCore_1_1GlobalInitialiser.html#a751126aaf6e8da709d3b9c98f0a796fb":[5,0,4,3,6],
@@ -8,8 +10,6 @@ var NAVTREEINDEX1 =
 "classCore_1_1GlobalInitialiser.html#a75225c576e7e17ef5361c9078a31797e":[7,0,3,3,21],
 "classCore_1_1GlobalInitialiser.html#a75d25e8aff4b562b2fa4d6dec4bb7ff6":[5,0,4,3,36],
 "classCore_1_1GlobalInitialiser.html#a75d25e8aff4b562b2fa4d6dec4bb7ff6":[7,0,3,3,36],
-"classCore_1_1GlobalInitialiser.html#a7694d9869fc9df36ef7012d893e98e9d":[5,0,4,3,2],
-"classCore_1_1GlobalInitialiser.html#a7694d9869fc9df36ef7012d893e98e9d":[7,0,3,3,2],
 "classCore_1_1GlobalInitialiser.html#a8a12b7212682099e787297559d0b0a73":[5,0,4,3,34],
 "classCore_1_1GlobalInitialiser.html#a8a12b7212682099e787297559d0b0a73":[7,0,3,3,34],
 "classCore_1_1GlobalInitialiser.html#a8ad6c39ccb88ecb69fe505ae3ecc2498":[5,0,4,3,28],

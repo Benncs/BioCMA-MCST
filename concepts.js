@@ -6,9 +6,6 @@ var concepts =
       ] ]
     ] ],
     [ "Models", "namespaceModels.html", [
-      [ "DivisionModel", "namespaceModels_1_1DivisionModel.html", [
-        [ "DivisionModelModule", "conceptModels_1_1DivisionModel_1_1DivisionModelModule.html", null ]
-      ] ],
       [ "UptakeModel", "conceptModels_1_1UptakeModel.html", null ]
     ] ],
     [ "WrapMPI", "namespaceWrapMPI.html", [

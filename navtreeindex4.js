@@ -94,10 +94,8 @@ var NAVTREEINDEX4 =
 "conceptMC_1_1Distributions_1_1ProbabilityLaw.html":[5,0,6,0,6],
 "conceptMC_1_1Distributions_1_1ProbabilityLaw.html":[6,0,0,0],
 "conceptModelType.html":[6,15],
-"conceptModels_1_1DivisionModel_1_1DivisionModelModule.html":[5,0,7,0,1],
-"conceptModels_1_1DivisionModel_1_1DivisionModelModule.html":[6,1,0,0],
-"conceptModels_1_1UptakeModel.html":[5,0,7,10],
-"conceptModels_1_1UptakeModel.html":[6,1,1],
+"conceptModels_1_1UptakeModel.html":[5,0,7,9],
+"conceptModels_1_1UptakeModel.html":[6,1,0],
 "conceptNonConfigurableInit.html":[6,16],
 "conceptNonConfigurableModel.html":[6,17],
 "conceptNumberType.html":[6,18],
@@ -249,5 +247,7 @@ var NAVTREEINDEX4 =
 "namespaceIO.html#a7abfa25f825da6a5507e7642fde4f9ab":[5,0,5,10],
 "namespaceIO.html#ab9eac12535dcbd46b28d922fc4cfada7":[5,0,5,7],
 "namespaceIO.html#ab9eac12535dcbd46b28d922fc4cfada7a409c35fd70c7118c4fbef3e7f90f5fc4":[5,0,5,7,1],
-"namespaceIO.html#ab9eac12535dcbd46b28d922fc4cfada7aef3428b560e9f68dfb0b2f685858059c":[5,0,5,7,0]
+"namespaceIO.html#ab9eac12535dcbd46b28d922fc4cfada7aef3428b560e9f68dfb0b2f685858059c":[5,0,5,7,0],
+"namespaceIO_1_1AnsiCode.html":[5,0,5,0],
+"namespaceIO_1_1AnsiCode.html#a0259aeae206d039e496a7e35d5bad370":[5,0,5,0,2]
 };

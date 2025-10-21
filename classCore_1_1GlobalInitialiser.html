@@ -90,9 +90,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7694d9869fc9df36ef7012d893e98e9d" id="r_a7694d9869fc9df36ef7012d893e98e9d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7694d9869fc9df36ef7012d893e98e9d">GlobalInitialiser</a> (const <a class="el" href="structExecInfo.html">ExecInfo</a> &amp;_info, <a class="el" href="structCore_1_1UserControlParameters.html">UserControlParameters</a> _user_params)</td></tr>
-<tr class="memdesc:a7694d9869fc9df36ef7012d893e98e9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classCore_1_1GlobalInitialiser.html" title="A class responsible for initializing various components of a simulation framework.">GlobalInitialiser</a> instance.  <br /></td></tr>
-<tr class="memitem:a75225c576e7e17ef5361c9078a31797e" id="r_a75225c576e7e17ef5361c9078a31797e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75225c576e7e17ef5361c9078a31797e">set_logger</a> (std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; _logger)</td></tr>
+<tr class="memitem:a6366cce5d23ddbb0f475288da17b9c9d" id="r_a6366cce5d23ddbb0f475288da17b9c9d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6366cce5d23ddbb0f475288da17b9c9d">GlobalInitialiser</a> (const <a class="el" href="structExecInfo.html">ExecInfo</a> &amp;_info, <a class="el" href="structCore_1_1UserControlParameters.html">UserControlParameters</a> _user_params, std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt;=nullptr)</td></tr>
+<tr class="memdesc:a6366cce5d23ddbb0f475288da17b9c9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classCore_1_1GlobalInitialiser.html" title="A class responsible for initializing various components of a simulation framework.">GlobalInitialiser</a> instance.  <br /></td></tr>
 <tr class="memitem:a980172ba3bb45d1eaac97d447b87bd4e" id="r_a980172ba3bb45d1eaac97d447b87bd4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; CmaRead::FlowIterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a980172ba3bb45d1eaac97d447b87bd4e">init_flow_iterator</a> ()</td></tr>
 <tr class="memdesc:a980172ba3bb45d1eaac97d447b87bd4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a flow iterator.  <br /></td></tr>
 <tr class="memitem:a212a55abe2b9cb558932ba82e4cf6dbf" id="r_a212a55abe2b9cb558932ba82e4cf6dbf"><td class="memItemLeft" align="right" valign="top">std::optional&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a212a55abe2b9cb558932ba82e4cf6dbf">init_state</a> (std::unique_ptr&lt; CmaRead::FlowIterator &gt; &amp;flow_handle)</td></tr>
@@ -136,6 +135,7 @@ Private Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a75225c576e7e17ef5361c9078a31797e" id="r_a75225c576e7e17ef5361c9078a31797e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75225c576e7e17ef5361c9078a31797e">set_logger</a> (std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; _logger)</td></tr>
 <tr class="memitem:a5134f9db1f59d9124d5fdec88e3e99f3" id="r_a5134f9db1f59d9124d5fdec88e3e99f3"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:a5134f9db1f59d9124d5fdec88e3e99f3 template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5134f9db1f59d9124d5fdec88e3e99f3">check_steps</a> (<a class="el" href="#aed6035b1335dd789d51598a410e4dbae">InitStep</a> step, Args... args) const</td></tr>
 <tr class="memdesc:a5134f9db1f59d9124d5fdec88e3e99f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks the validity of specified initialization steps.  <br /></td></tr>
@@ -236,8 +236,8 @@ template&lt;typename T&gt; </div>
 </div>
 </div>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7694d9869fc9df36ef7012d893e98e9d" name="a7694d9869fc9df36ef7012d893e98e9d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7694d9869fc9df36ef7012d893e98e9d">&#9670;&#160;</a></span>GlobalInitialiser()</h2>
+<a id="a6366cce5d23ddbb0f475288da17b9c9d" name="a6366cce5d23ddbb0f475288da17b9c9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6366cce5d23ddbb0f475288da17b9c9d">&#9670;&#160;</a></span>GlobalInitialiser()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -250,7 +250,12 @@ template&lt;typename T&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structCore_1_1UserControlParameters.html">UserControlParameters</a></td>          <td class="paramname"><span class="paramname"><em>_user_params</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="structCore_1_1UserControlParameters.html">UserControlParameters</a></td>          <td class="paramname"><span class="paramname"><em>_user_params</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>_logger</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -266,7 +271,7 @@ template&lt;typename T&gt; </div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a7694d9869fc9df36ef7012d893e98e9d_cgraph.svg" width="626" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a6366cce5d23ddbb0f475288da17b9c9d_cgraph.svg" width="626" height="175"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -862,6 +867,9 @@ Here is the caller graph for this function:</div>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void Core::GlobalInitialiser::set_logger </td>
@@ -870,11 +878,16 @@ Here is the caller graph for this function:</div>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a75225c576e7e17ef5361c9078a31797e_icgraph.svg" width="364" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a75225c576e7e17ef5361c9078a31797e_icgraph.svg" width="352" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
