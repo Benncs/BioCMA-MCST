@@ -11,7 +11,6 @@
 #include "models/utils.hpp"
 #include <mc/prng/prng_extension.hpp>
 #include <mc/traits.hpp>
-#include <optional>
 #include <string_view>
 
 namespace Models
@@ -26,18 +25,13 @@ namespace Models
   }
   struct FixedLength
   {
-    using uniform_weight = std::true_type; // Using type alias
+    using uniform_weight = std::true_type;
     using Self = FixedLength;
     using FloatType = float;
 
-    // struct Params
-    // {
-    //   MC::Distributions::Exponential<FloatType> dist;
-    // };
-
     using Config = Kokkos::View<const FloatType*, ComputeSpace>;
 
-    enum class particle_var : int
+    enum class particle_var : int // NOLINT
     {
       length = 0,
       l_max,
@@ -191,10 +185,8 @@ namespace Models
     GET_PROPERTY(Self::particle_var::length) += d_t * ldot;
     GET_PROPERTY(Self::particle_var::phi_s) = -phi_s;
 
-    return (GET_PROPERTY(Self::particle_var::length) >=
-            GET_PROPERTY(particle_var::l_max))
-               ? MC::Status::Division
-               : MC::Status::Idle;
+    return check_div(GET_PROPERTY(Self::particle_var::length),
+                     GET_PROPERTY(Self::particle_var::l_max));
   }
 
   KOKKOS_INLINE_FUNCTION void
