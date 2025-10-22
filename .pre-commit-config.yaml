@@ -1,0 +1,8 @@
+repos:
+  - repo: local
+    hooks:
+      - id: clang-format
+        name: Check format
+        entry: find ./apps -iname "*.cpp" -o -iname "*.hpp" | xargs clang-format -i --style="file:.clang-format" --dry-run
+        language: system
+        types: [python]  # Tu peux l’adapter à ton langage si nécessaire
