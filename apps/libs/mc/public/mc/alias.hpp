@@ -1,10 +1,23 @@
 #ifndef __MC__ALIAS_HPP__
 #define __MC__ALIAS_HPP__
 
+#include "Kokkos_Core.hpp"
+#include "decl/Kokkos_Declare_OPENMP.hpp"
 #include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/traits.hpp>
 
+namespace MC
+{
+  using ComputeSpace = Kokkos::DefaultExecutionSpace;
+}
+
+using kernelMT = Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::RandomAccess |
+                                      Kokkos::MemoryTraitsFlags::Atomic |
+                                      Kokkos::MemoryTraitsFlags::Restrict>;
+
+using kernelContribution =
+    Kokkos::View<double**, Kokkos::LayoutRight, MC::ComputeSpace, kernelMT>;
 namespace MC
 {
   enum class Status : int
@@ -20,19 +33,17 @@ namespace MC
     int end;
   };
 
-  using ComputeSpace = Kokkos::DefaultExecutionSpace;
-
   // template <typename Exec>
   // using GContribIndexBounds = Kokkos::View<SContribIndexBounds, Exec>; //
   // NOLINT
 
   // using ContribIndexBounds = GContribIndexBounds<ComputeSpace>; // NOLINT
-
-  using ParticlePositions = Kokkos::View<uint64_t*, ComputeSpace>;
-  using ParticleStatus = Kokkos::View<Status*, ComputeSpace>;
-  using ParticleWeigths = Kokkos::View<double*, ComputeSpace>;
+  using restrict_mt = Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>;
+  using ParticlePositions = Kokkos::View<uint64_t*, ComputeSpace, restrict_mt>;
+  using ParticleStatus = Kokkos::View<Status*, ComputeSpace, restrict_mt>;
+  using ParticleWeigths = Kokkos::View<double*, ComputeSpace, restrict_mt>;
   using ParticleAges =
-      Kokkos::View<double* [2], Kokkos::LayoutLeft, ComputeSpace>;
+      Kokkos::View<double* [2], Kokkos::LayoutLeft, ComputeSpace, restrict_mt>;
 
   template <typename MemorySpace>
   using ParticlePropertyViewType =
@@ -44,10 +55,11 @@ namespace MC
                       std::size_t>;
 
   // Kernel alias
-  using ContributionView = Kokkos::Experimental::
-      ScatterView<double**, Kokkos::LayoutRight>; ///< Contribution inside the
-                                                  ///< particle's current
-                                                  ///< container
+  using ContributionView =
+      decltype(Kokkos::Experimental::create_scatter_view(kernelContribution()));
+  ///< Contribution inside the
+  ///< particle's current
+  ///< container
   // using access_type = decltype(std::declval<ContributionView>().access());
 
   using KernelConcentrationType =
@@ -66,7 +78,5 @@ using ConstNeighborsView =
                  Kokkos::LayoutRight,
                  Space,
                  Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
-using kernelContribution =
-    Kokkos::View<double**, Kokkos::LayoutRight, MC::ComputeSpace>;
 
 #endif

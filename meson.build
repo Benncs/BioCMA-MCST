@@ -80,9 +80,12 @@ use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  
 
 use_kokkos_tools = true
 CMAKE_TYPE = 'Release'
-if build_type == 'debug' or build_type == 'debugoptimized'
+if build_type == 'debug'
   # NOTHING
   CMAKE_TYPE = 'Debug'
+  add_global_arguments('-DDEBUG', language: 'cpp')
+  use_kokkos_tools = true
+elif build_type == 'debugoptimized'
   add_global_arguments('-DDEBUG', language: 'cpp')
   use_kokkos_tools = true
 else
@@ -90,6 +93,7 @@ else
   if compiler.has_argument('-ffast-math')
     arch_specific_args = [arch_specific_args, '-ffast-math']
   endif
+  use_kokkos_tools = true
 endif
 
 cpp_args = [arch_specific_args]
@@ -149,6 +153,8 @@ else
   kokkos_option.add_cmake_defines({'Kokkos_ENABLE_HWLOC': 'ON'})
   kokkos_option.add_cmake_defines({'Kokkos_ARCH_NATIVE': 'ON'})
   kokkos_option.add_cmake_defines({'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'})
+  kokkos_option.add_cmake_defines({'Kokkos_ENABLE_DEPRECATED_CODE_4': 'OFF'})
+  kokkos_option.add_cmake_defines({'Kokkos_ENABLE_IMPL_VIEW_LEGACY': 'OFF'})
   kokkos_option.set_install(false)
   sub_kokkos = cmake.subproject('kokkos', required: true, options: kokkos_option)
 

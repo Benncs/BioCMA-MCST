@@ -111,10 +111,10 @@ namespace
       const int i = team.league_rank();
 
       position(original_size + i) = buffer_position(i);
-      Kokkos::parallel_for(
-          Kokkos::TeamVectorRange(team, range),
-          [&](const int& j)
-          { model(original_size + i, j) = buffer_model(i, j); });
+      Kokkos::parallel_for(Kokkos::TeamVectorRange(team, range),
+                           [&](const int& j) {
+                             model(original_size + i, j) = buffer_model(i, j);
+                           });
     }
 
     std::size_t original_size;
@@ -181,9 +181,27 @@ namespace MC
 
     // TODO Add logic off internal_dead_counter header
 
+    template <typename CviewType>
     KOKKOS_INLINE_FUNCTION void
-    get_contributions(std::size_t idx,
-                      const ContributionView& contributions) const;
+    get_contributions(std::size_t idx, const CviewType& contributions) const
+    {
+      static_assert(ConstWeightModelType<Model>,
+                    "ModelType: Constapply_weight()");
+
+      const double weight = get_weight(idx);
+      const auto pos = position(idx);
+      auto access = contributions.access();
+
+      for (int i = begin; i < end; ++i)
+      {
+        const int rel = i - begin;
+        // const re
+        const double c = weight * model(idx, i);
+        // Kokkos::printf("%d %d %lf\r\n", rel, i, c);
+        access(pos, rel) += c;
+      }
+      // access(pos, 0) += (weight * model(idx, 2)); works
+    }
 
     // template <typename ExecutionSpace, typename TeamHandle>
     // KOKKOS_INLINE_FUNCTION typename std::enable_if<
@@ -247,27 +265,28 @@ namespace MC
     int end;
   };
 
-  template <ModelType Model>
-  KOKKOS_INLINE_FUNCTION void ParticlesContainer<Model>::get_contributions(
-      std::size_t idx, const ContributionView& contributions) const
-  {
-    static_assert(ConstWeightModelType<Model>,
-                  "ModelType: Constapply_weight()");
+  // template <typename CviewType>
+  // template <ModelType Model>
+  // KOKKOS_INLINE_FUNCTION void ParticlesContainer<Model>::get_contributions(
+  //     std::size_t idx, const CviewType& contributions) const
+  // {
+  //   static_assert(ConstWeightModelType<Model>,
+  //                 "ModelType: Constapply_weight()");
 
-    const double weight = get_weight(idx);
-    const auto pos = position(idx);
-    auto access = contributions.access();
+  //   const double weight = get_weight(idx);
+  //   const auto pos = position(idx);
+  //   auto access = contributions.access();
 
-    for (int i = begin; i < end; ++i)
-    {
-      const int rel = i - begin;
-      // const re
-      const double c = weight * model(idx, i);
-      // Kokkos::printf("%d %d %lf\r\n", rel, i, c);
-      access(pos, rel) += c;
-    }
-    // access(pos, 0) += (weight * model(idx, 2)); works
-  }
+  //   for (int i = begin; i < end; ++i)
+  //   {
+  //     const int rel = i - begin;
+  //     // const re
+  //     const double c = weight * model(idx, i);
+  //     // Kokkos::printf("%d %d %lf\r\n", rel, i, c);
+  //     access(pos, rel) += c;
+  //   }
+  //   // access(pos, 0) += (weight * model(idx, 2)); works
+  // }
 
   template <ModelType Model>
   [[nodiscard]] KOKKOS_INLINE_FUNCTION std::size_t
