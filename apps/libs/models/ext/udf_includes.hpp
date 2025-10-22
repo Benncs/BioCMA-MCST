@@ -81,7 +81,7 @@ using update_udf_ptr =
     decltype(UnsafeUDF::Loader::update_udf); //< update function ptr type
 using contribution_udf_ptr =
     decltype(UnsafeUDF::Loader::contribution_udf); //< contribution function ptr
-                                                   //type
+                                                   // type
 using division_udf_ptr =
     decltype(UnsafeUDF::Loader::division_udf); //< division function ptr type
 using mass_udf_ptr = decltype(UnsafeUDF::Loader::mass);

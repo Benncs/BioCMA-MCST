@@ -1,0 +1,1 @@
+find ./apps -iname "*.cpp" -o -iname "*.hpp" | xargs clang-format -i --style="file:.clang-format"

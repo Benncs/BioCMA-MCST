@@ -1,8 +1,9 @@
+fail_fast: false
 repos:
-  - repo: local
+  - repo: https://github.com/pocc/pre-commit-hooks
+    rev: v1.3.5
     hooks:
       - id: clang-format
-        name: Check format
-        entry: find ./apps -iname "*.cpp" -o -iname "*.hpp" | xargs clang-format -i --style="file:.clang-format" --dry-run
-        language: system
-        types: [c++]  
+        args: [--style=file:.clang-format]
+      # - id: clang-tidy
+      #   args: [./apps/*]
