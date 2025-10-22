@@ -35,9 +35,9 @@
 //       Eigen::MatrixXd::Random(5, 5); // Generate random 5x5 matrix
 
 //   // Scale the random numbers to be between 0 and 10
-//   flows_2x2 = (flows_2x2.array() + 1.0) * 5.0; // Scale to be between 0 and 10
-//   flows_n_n = (flows_n_n.array() + 1.0) * 5.0; // Scale to be between 0 and 10
-//   auto check = [](auto &f)
+//   flows_2x2 = (flows_2x2.array() + 1.0) * 5.0; // Scale to be between 0 and
+//   10 flows_n_n = (flows_n_n.array() + 1.0) * 5.0; // Scale to be between 0
+//   and 10 auto check = [](auto &f)
 //   {
 //     std::cout << f << std::endl;
 //     auto transition = Simulation::get_transition_matrix(f);

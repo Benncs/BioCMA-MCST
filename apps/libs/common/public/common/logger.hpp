@@ -1,10 +1,9 @@
 #ifndef __COMMON_LOGGER_HPP__
 #define __COMMON_LOGGER_HPP__
 
-
 #include <source_location>
+#include <string>
 #include <string_view>
-#include <string> 
 
 namespace IO
 {
@@ -21,8 +20,6 @@ namespace IO
   {
     constexpr auto red_circle = "\U0001F534";
   } // namespace Unicode
-
-
 
   class Logger
   {
@@ -41,11 +38,13 @@ namespace IO
 
     virtual void print(std::string_view prefix, std::string_view message) = 0;
 
-    virtual void alert(std::string_view prefix,std::string_view message) = 0;
+    virtual void alert(std::string_view prefix, std::string_view message) = 0;
 
-    virtual void error(std::string_view message,std::source_location location =std::source_location::current()) = 0;
+    virtual void
+    error(std::string_view message,
+          std::source_location location = std::source_location::current()) = 0;
 
-    virtual void raw_log(std::string_view message) =0;
+    virtual void raw_log(std::string_view message) = 0;
 
     virtual void toggle_debug() = 0;
 
@@ -64,10 +63,6 @@ namespace IO
     (result += ... += std::forward<MsgType>(msgs));
     return result;
   }
-
-  
-
-  
 
 } // namespace IO
 

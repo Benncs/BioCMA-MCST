@@ -23,7 +23,8 @@ enum class FeedType : std::uint8_t
   Custom
 };
 
-template <typename T> constexpr decltype(auto) move_allow_trivial(T&& t) noexcept
+template <typename T>
+constexpr decltype(auto) move_allow_trivial(T&& t) noexcept
 {
   return std::move(t); // NOLINT
 }
@@ -59,7 +60,8 @@ namespace Simulation::Feed
   {
   };
 
-  using FeedTypeVariant = std::variant<Constant, Step, Pulse, Custom, DelayedConstant>;
+  using FeedTypeVariant =
+      std::variant<Constant, Step, Pulse, Custom, DelayedConstant>;
 
   FeedType get_type(const FeedTypeVariant& v);
 
@@ -76,12 +78,13 @@ namespace Simulation::Feed
 
   struct FeedFactory
   {
-    static FeedDescriptor constant(double flow,
-                                   double concentration,
-                                   std::size_t species_index,
-                                   std::size_t input_position,
-                                   std::optional<std::size_t> _ouput_position = std::nullopt,
-                                   bool set_output = true);
+    static FeedDescriptor
+    constant(double flow,
+             double concentration,
+             std::size_t species_index,
+             std::size_t input_position,
+             std::optional<std::size_t> _ouput_position = std::nullopt,
+             bool set_output = true);
 
     // static FeedDescriptor delayedconstant(double _f,
     //                                      feed_value_t&& _target,

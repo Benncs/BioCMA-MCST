@@ -23,7 +23,7 @@ namespace WrapMPI
   template <typename T>
   [[maybe_unused]] void gather_span([[maybe_unused]] std::span<T>,
                                     [[maybe_unused]] std::span<const T>,
-                                    [[maybe_unused]] size_t = 0){};
+                                    [[maybe_unused]] size_t = 0) {};
 
   void broadcast_span([[maybe_unused]] auto data, [[maybe_unused]] auto n) {};
   template <typename T>

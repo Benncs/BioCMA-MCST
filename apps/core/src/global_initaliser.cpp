@@ -100,7 +100,8 @@ namespace
       auto minElement = std::min_element(
           iterator->begin(),
           iterator->end(),
-          [&min_liquid_residen_time](const auto& state1, const auto& state2) {
+          [&min_liquid_residen_time](const auto& state1, const auto& state2)
+          {
             return min_liquid_residen_time(state1) <
                    min_liquid_residen_time(state2);
           });

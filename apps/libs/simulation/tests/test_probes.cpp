@@ -52,7 +52,8 @@ void test_probes_clear()
   assert(rd.size() == size_buff);
   assert(rd[2] != val_index_2);
 
-  // Even if rd is deep copy of probe,svalue is reset to 0 but change doesn´t change
+  // Even if rd is deep copy of probe,svalue is reset to 0 but change doesn´t
+  // change
   assert(probe.need_export() == false);
   for (auto i = 0LU; i < size_buff; ++i)
   {

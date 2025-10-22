@@ -2,16 +2,16 @@
 #define __SIMULATION_EIGEN_KOKKOS_HPP__
 
 #ifndef NDEBUG
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
-#endif 
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
+#endif
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #ifndef NDEBUG
-#pragma GCC diagnostic pop
-#endif 
+#  pragma GCC diagnostic pop
+#endif
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 
@@ -20,13 +20,15 @@
 // constexpr auto DataLayoutEigen = Eigen::ColMajor;
 // constexpr auto CompileMatrixSizeEigen = -1;
 // using MatrixType =
-//     Eigen::Matrix<double, CompileMatrixSizeEigen, CompileMatrixSizeEigen, DataLayoutEigen>;
+//     Eigen::Matrix<double, CompileMatrixSizeEigen, CompileMatrixSizeEigen,
+//     DataLayoutEigen>;
 
 // using SparseMatrixType = Eigen::SparseMatrix<double, DataLayoutEigen>;
 // using DiagonalType = Eigen::DiagonalMatrix<double, CompileMatrixSizeEigen>;
 
 // template <typename ExecSpace,typename ...Memorytrait>
-// using KokkosScalarMatrix = Kokkos::View<double**, Kokkos::LayoutLeft, ExecSpace,Memorytrait...>;
+// using KokkosScalarMatrix = Kokkos::View<double**, Kokkos::LayoutLeft,
+// ExecSpace,Memorytrait...>;
 
 // struct RowMajorEigenKokkos
 // {
@@ -36,8 +38,8 @@
 // struct EigenKokkos
 // {
 //   KokkosScalarMatrix<HostSpace> host;
-//   KokkosScalarMatrix<ComputeSpace,Kokkos::MemoryTraits<Kokkos::RandomAccess>> compute;
-//   MatrixType eigen_data;
+//   KokkosScalarMatrix<ComputeSpace,Kokkos::MemoryTraits<Kokkos::RandomAccess>>
+//   compute; MatrixType eigen_data;
 
 //   EigenKokkos(std::size_t n_row, std::size_t n_col);
 //   [[nodiscard]] std::span<const double> get_span() const
@@ -62,17 +64,19 @@ constexpr auto CompileMatrixSizeEigen = -1;
 
 // Templated Eigen Matrix Type
 template <int Layout>
-using MatrixType = Eigen::Matrix<double, CompileMatrixSizeEigen, CompileMatrixSizeEigen, Layout>;
+using MatrixType = Eigen::
+    Matrix<double, CompileMatrixSizeEigen, CompileMatrixSizeEigen, Layout>;
 
 using ColMajorMatrixtype = MatrixType<EigenLayoutLeft>;
 
-template <int Layout> using SparseMatrixType = Eigen::SparseMatrix<double, Layout>;
+template <int Layout>
+using SparseMatrixType = Eigen::SparseMatrix<double, Layout>;
 
 using DiagonalType = Eigen::DiagonalMatrix<double, CompileMatrixSizeEigen>;
 
 // template <typename ExecSpace, typename... MemoryTraits>
-// using KokkosScalarMatrix = Kokkos::View<double**, Kokkos::LayoutLeft, ExecSpace,
-// MemoryTraits...>;
+// using KokkosScalarMatrix = Kokkos::View<double**, Kokkos::LayoutLeft,
+// ExecSpace, MemoryTraits...>;
 
 template <int EigenLayout> struct KokkosLayoutMapper;
 
@@ -87,18 +91,25 @@ template <> struct KokkosLayoutMapper<Eigen::RowMajor>
 };
 
 template <typename ExecSpace, int EigenLayout, typename... MemoryTrait>
-using KokkosScalarMatrix = Kokkos::
-    View<double**, typename KokkosLayoutMapper<EigenLayout>::type, ExecSpace, MemoryTrait...>;
+using KokkosScalarMatrix =
+    Kokkos::View<double**,
+                 typename KokkosLayoutMapper<EigenLayout>::type,
+                 ExecSpace,
+                 MemoryTrait...>;
 
-using RowMajorKokkosScalarMatrix = KokkosScalarMatrix<ComputeSpace, Eigen::RowMajor>;
-using ColMajorKokkosScalarMatrix = KokkosScalarMatrix<ComputeSpace, Eigen::ColMajor>;
+using RowMajorKokkosScalarMatrix =
+    KokkosScalarMatrix<ComputeSpace, Eigen::RowMajor>;
+using ColMajorKokkosScalarMatrix =
+    KokkosScalarMatrix<ComputeSpace, Eigen::ColMajor>;
 
 template <int EigenLayout> struct EigenKokkosBase
 {
   using EigenMatrix = MatrixType<EigenLayout>;
   using HostView = KokkosScalarMatrix<HostSpace, EigenLayout>;
   using ComputeView =
-      KokkosScalarMatrix<ComputeSpace, EigenLayout, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+      KokkosScalarMatrix<ComputeSpace,
+                         EigenLayout,
+                         Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
   HostView host;
   ComputeView compute;

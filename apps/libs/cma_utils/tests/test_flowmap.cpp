@@ -43,7 +43,8 @@
 // //   }
 // // }
 
-// // // Test function to check if FlowmapToMat throws an exception for invalid input
+// // // Test function to check if FlowmapToMat throws an exception for invalid
+// input
 // // void test_invalid_input()
 // // {
 // //   std::vector<double> data = {1.0,
@@ -72,7 +73,8 @@
 
 // //     const auto view = get_eigen_view(m);
 
-// //     const CmaRead::L2DView<const double> view_const = get_eigen_view(std::cref(m));
+// //     const CmaRead::L2DView<const double> view_const =
+// get_eigen_view(std::cref(m));
 
 // //     for(int i =0;i<200;++i)
 // //     {
@@ -89,14 +91,16 @@
 // // inline CmaRead::L2DView<double> get_eigen_view(Eigen::MatrixXd& matrix)
 // // {
 // //   return CmaRead::L2DView<double>(
-// //       std::span<double>(matrix.data(), matrix.size()), matrix.rows(), matrix.cols(), false);
+// //       std::span<double>(matrix.data(), matrix.size()), matrix.rows(),
+// matrix.cols(), false);
 // // }
 
-// // inline CmaRead::L2DView<const double> get_eigen_view(const Eigen::MatrixXd& matrix)
+// // inline CmaRead::L2DView<const double> get_eigen_view(const
+// Eigen::MatrixXd& matrix)
 // // {
 // //   return CmaRead::L2DView<const double>(
-// //       std::span<const double>(matrix.data(), matrix.size()), matrix.rows(), matrix.cols(),
-// false);
+// //       std::span<const double>(matrix.data(), matrix.size()),
+// matrix.rows(), matrix.cols(), false);
 // // }
 
 int main()

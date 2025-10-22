@@ -18,14 +18,17 @@ sanitise_check_cli(Core::UserControlParameters&& params);
 static void print_red(std::ostream& os, std::string_view message);
 static void throw_bad_arg(std::string_view arg);
 
-static CliResults<Core::UserControlParameters> parseArg(Core::UserControlParameters& user_controll,
-                                                        std::string_view current_param,
-                                                        std::string_view current_value);
+static CliResults<Core::UserControlParameters>
+parseArg(Core::UserControlParameters& user_controll,
+         std::string_view current_param,
+         std::string_view current_value);
 
-static CliResults<Core::UserControlParameters> parse_user_param(const std::shared_ptr<IO::Logger>& logger,int argc, char** argv)
+static CliResults<Core::UserControlParameters> parse_user_param(
+    const std::shared_ptr<IO::Logger>& logger, int argc, char** argv)
 {
   using return_type = CliResults<Core::UserControlParameters>;
-  Core::UserControlParameters control = Core::UserControlParameters::m_default();
+  Core::UserControlParameters control =
+      Core::UserControlParameters::m_default();
   if (argc <= 1)
   {
     return return_type("Need at leats one argument");
@@ -41,7 +44,7 @@ static CliResults<Core::UserControlParameters> parse_user_param(const std::share
       {
         if (current_param == "h")
         {
-          if(logger)
+          if (logger)
           {
             logger->raw_log(get_help_message());
           }
@@ -77,9 +80,10 @@ static CliResults<Core::UserControlParameters> parse_user_param(const std::share
   }
 }
 
-CliResults<Core::UserControlParameters> parse_cli(const std::shared_ptr<IO::Logger>& logger,int argc, char** argv) noexcept
+CliResults<Core::UserControlParameters> parse_cli(
+    const std::shared_ptr<IO::Logger>& logger, int argc, char** argv) noexcept
 {
-  auto opt_control = parse_user_param(logger,argc, argv);
+  auto opt_control = parse_user_param(logger, argc, argv);
   if (!opt_control)
   {
     return CliResults<Core::UserControlParameters>(opt_control.get());
@@ -87,14 +91,16 @@ CliResults<Core::UserControlParameters> parse_cli(const std::shared_ptr<IO::Logg
   return sanitise_check_cli(opt_control.gets());
 }
 
-static CliResults<Core::UserControlParameters> parseArg(Core::UserControlParameters& user_control,
-                                                        std::string_view _current_param,
-                                                        std::string_view current_value)
+static CliResults<Core::UserControlParameters>
+parseArg(Core::UserControlParameters& user_control,
+         std::string_view _current_param,
+         std::string_view current_value)
 {
   std::string_view current_param = _current_param.substr(1);
 
   // Create a map to associate options with corresponding actions (lambdas)
-  static const std::unordered_map<std::string_view, std::function<void(std::string_view)>>
+  static const std::unordered_map<std::string_view,
+                                  std::function<void(std::string_view)>>
       param_handlers = {
           {"er",
            [&user_control](std::string_view value)
@@ -110,18 +116,25 @@ static CliResults<Core::UserControlParameters> parseArg(Core::UserControlParamet
            { user_control.number_particle = std::stol(std::string(value)); }},
           {"nex",
            [&user_control](std::string_view value)
-           { user_control.number_exported_result = std::stol(std::string(value)); }},
+           {
+             user_control.number_exported_result =
+                 std::stol(std::string(value));
+           }},
           {"dt",
            [&user_control](std::string_view value)
            { user_control.delta_time = std::stod(std::string(value)); }},
           {"d",
            [&user_control](std::string_view value)
            { user_control.final_time = std::stod(std::string(value)); }},
-          {"r", [&user_control](std::string_view) { user_control.recursive = true; }},
+          {"r",
+           [&user_control](std::string_view)
+           { user_control.recursive = true; }},
           {"f",
            [&user_control](std::string_view value)
            { user_control.cma_case_path = std::string(value); }},
-          {"force", [&user_control](std::string_view) { user_control.force_override = true; }},
+          {"force",
+           [&user_control](std::string_view)
+           { user_control.force_override = true; }},
           {"fi",
            [&user_control](std::string_view value)
            { user_control.initialiser_path = std::string(value); }},
@@ -156,8 +169,8 @@ static CliResults<Core::UserControlParameters> parseArg(Core::UserControlParamet
 //     return;
 //   }
 
-//   auto current_param = std::string(_current_param.begin() + 1, _current_param.end());
-//   switch (current_param[0])
+//   auto current_param = std::string(_current_param.begin() + 1,
+//   _current_param.end()); switch (current_param[0])
 //   {
 //   case 'e':
 //   {
@@ -187,7 +200,8 @@ static CliResults<Core::UserControlParameters> parseArg(Core::UserControlParamet
 //     }
 //     else if (current_param == "nex")
 //     {
-//       user_control.number_exported_result = std::stol(std::string(current_value));
+//       user_control.number_exported_result =
+//       std::stol(std::string(current_value));
 //     }
 //     break;
 //   }
@@ -255,12 +269,14 @@ sanitise_check_cli(Core::UserControlParameters&& params)
 
   if (params.number_particle == 0)
   {
-    return CliResults<Core::UserControlParameters>("Missing number of particles");
+    return CliResults<Core::UserControlParameters>(
+        "Missing number of particles");
   }
 
   if (params.final_time <= 0)
   {
-    return CliResults<Core::UserControlParameters>("Final time must be positive");
+    return CliResults<Core::UserControlParameters>(
+        "Final time must be positive");
   }
 
   return CliResults<Core::UserControlParameters>(std::move(params));
@@ -271,11 +287,11 @@ std::string get_help_message() noexcept
   std::stringstream os;
   os << "Usage: ";
   print_red(os, "BIOCMA-MCST");
-  // os << "  -np <number_of_particles> [-ff <flow_file_folder_path>] [OPTIONS] " << '\n';
-  // os << "\nMandatory arguments:" << '\n';
-  // os << "  -np <number>, --number-particles <number>\tNumber of particles" << '\n';
-  // os << "  -d <number>, --duration <number>\tSimulation duration" << '\n';
-  // os << "  -ff <flow_file_folder_path>\t\tPath to flow file (Default: "
+  // os << "  -np <number_of_particles> [-ff <flow_file_folder_path>] [OPTIONS]
+  // " << '\n'; os << "\nMandatory arguments:" << '\n'; os << "  -np <number>,
+  // --number-particles <number>\tNumber of particles" << '\n'; os << "  -d
+  // <number>, --duration <number>\tSimulation duration" << '\n'; os << "  -ff
+  // <flow_file_folder_path>\t\tPath to flow file (Default: "
   //       "./rawdata)"
   //    << '\n';
 

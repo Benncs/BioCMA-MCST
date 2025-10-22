@@ -17,10 +17,10 @@ int main()
                           "3.14",
                           "-r"};
     int argc = 9;
-    auto result = parse_cli(nullptr,argc, const_cast<char**>(argv));
+    auto result = parse_cli(nullptr, argc, const_cast<char**>(argv));
 
-    //     assert(result.has_value()); // Should return a valid UserControlParameters object
-    //     const auto& control = result.value();
+    //     assert(result.has_value()); // Should return a valid
+    //     UserControlParameters object const auto& control = result.value();
 
     //     // Validate values are correctly set
     //     assert(control.results_file_name == "result.txt");
@@ -36,7 +36,7 @@ int main()
     //     int argc = 1;
     //     auto result = parse_cli(argc, const_cast<char**>(argv));
 
-    //     assert(result == std::nullopt); // Should return std::nullopt because of insufficient
-    //     arguments
+    //     assert(result == std::nullopt); // Should return std::nullopt because
+    //     of insufficient arguments
   }
 }

@@ -5,7 +5,8 @@
 // Usual new operator throw bad_alloc in this case
 // Api use new operator nothrow: that is to say return nullptr instead of
 // throwing excpetion
-void* operator new(std::size_t size, const std::nothrow_t& nothrow_value) noexcept
+void* operator new(std::size_t size,
+                   const std::nothrow_t& nothrow_value) noexcept
 {
   return nullptr;
 }

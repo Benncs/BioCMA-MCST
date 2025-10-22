@@ -28,21 +28,24 @@ namespace UnsafeUDF
                                    const MC::ContributionView& contributions) =
       nullptr; //< contribution function ptr
 
-  void (*Loader::division_udf)(const MC::KPRNG::pool_type& random_pool,
-                               std::size_t idx,
-                               std::size_t idx2,
-                               const Models::UdfModel::SelfParticle& arr,
-                               const Models::UdfModel::SelfParticle& buffer_arr) =
+  void (*Loader::division_udf)(
+      const MC::KPRNG::pool_type& random_pool,
+      std::size_t idx,
+      std::size_t idx2,
+      const Models::UdfModel::SelfParticle& arr,
+      const Models::UdfModel::SelfParticle& buffer_arr) =
       nullptr; //< division function ptr
 
   double (*Loader::mass)(std::size_t idx,
-                         const Models::UdfModel::SelfParticle& arr) = nullptr; //< mass function ptr
+                         const Models::UdfModel::SelfParticle& arr) =
+      nullptr; //< mass function ptr
 
   std::vector<std::string_view> (*Loader::names)() = nullptr;
 
   std::vector<std::size_t> (*Loader::get_number)() = nullptr;
 
-  [[nodiscard]] std::shared_ptr<DynamicLibrary> Loader::init_lib(std::string_view path)
+  [[nodiscard]] std::shared_ptr<DynamicLibrary>
+  Loader::init_lib(std::string_view path)
   {
     auto _handle = DynamicLibrary::getLib(path);
     auto _mod = DynamicLibrary::getModule<Module>(_handle);

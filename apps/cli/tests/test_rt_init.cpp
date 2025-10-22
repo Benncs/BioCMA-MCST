@@ -25,7 +25,8 @@
 //   assert(info.thread_per_process == 2); // Assertion
 // }
 
-// // Test case 2: One node with 16 threads, should have number of threads equal to
+// // Test case 2: One node with 16 threads, should have number of threads equal
+// to
 // // the number of CPU cores
 // void test_set_openmp_threads_2()
 // {
@@ -36,7 +37,8 @@
 //   // assert(info.thread_per_process == n_core); // Assertion
 // }
 
-// // Test case 3: 5 nodes and we are in the last (4), as 16%5 = 1, the last should
+// // Test case 3: 5 nodes and we are in the last (4), as 16%5 = 1, the last
+// should
 // // have int(16/5 + 1) = 4 threads
 // void test_set_openmp_threads_3()
 // {
@@ -46,7 +48,8 @@
 //   assert(info.thread_per_process == 4); // Assertion
 // }
 
-// // Test case 4: Same situation as test 3 but we are not on the last node, so we
+// // Test case 4: Same situation as test 3 but we are not on the last node, so
+// we
 // // have int(16/5) = 3 threads
 // void test_set_openmp_threads_4()
 // {
@@ -56,8 +59,8 @@
 //   assert(info.thread_per_process == 3); // Assertion
 // }
 
-// // Test case 5: Only one node with 4 threads, should have 4 threads per process
-// void test_set_openmp_threads_5()
+// // Test case 5: Only one node with 4 threads, should have 4 threads per
+// process void test_set_openmp_threads_5()
 // {
 //   int rank = 0;
 //   int size = 1;
@@ -65,7 +68,8 @@
 //   assert(info.thread_per_process == 4); // Assertion
 // }
 
-// // Test case 6: 2 nodes and we are in the first (0), so it should have int(8/2)
+// // Test case 6: 2 nodes and we are in the first (0), so it should have
+// int(8/2)
 // // = 4 threads
 // void test_set_openmp_threads_6()
 // {

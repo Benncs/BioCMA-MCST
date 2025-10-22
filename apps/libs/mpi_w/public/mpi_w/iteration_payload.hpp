@@ -1,9 +1,9 @@
 #ifndef __ITERATION_PAYLOAD_HPP__
 #define __ITERATION_PAYLOAD_HPP__
 
-#include <cma_read/reactorstate.hpp>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/neighbors.hpp>
+#include <cma_read/reactorstate.hpp>
 #include <mpi.h>
 #include <span>
 #include <vector>
@@ -36,11 +36,14 @@ namespace WrapMPI
     CmaRead::Neighbors::Neighbors_const_view_t neighbors;
 
     /**
-     * @brief Constructs an IterationPayload with specified sizes for flows and volumes.
+     * @brief Constructs an IterationPayload with specified sizes for flows and
+     * volumes.
      *
      * @param size_flows The number of elements in the liquid flows vector.
-     * @param volumes The number of elements in the liquid and gas volumes vectors.
-     * @note: Size are needed to alloc vector, this allow to use preallocated chunk when transfer
+     * @param volumes The number of elements in the liquid and gas volumes
+     * vectors.
+     * @note: Size are needed to alloc vector, this allow to use preallocated
+     * chunk when transfer
      */
     explicit IterationPayload(size_t size_flows, size_t volumes);
 
@@ -51,11 +54,11 @@ namespace WrapMPI
      * from a given MPI source rank.
      *
      * @param source The MPI rank of the source process sending the data.
-     * @param status Pointer to an MPI_Status object to store information about the receive
-     * operation.
+     * @param status Pointer to an MPI_Status object to store information about
+     * the receive operation.
      *
-     * @note This method uses MPI to perform the receive operation and assumes the MPI environment
-     * is initialized.
+     * @note This method uses MPI to perform the receive operation and assumes
+     * the MPI environment is initialized.
      */
     bool recv(size_t source, MPI_Status* status) noexcept;
   };
@@ -80,8 +83,9 @@ namespace WrapMPI
 
     void fill(const CmaRead::ReactorState& current_reactor_state);
 
-    [[nodiscard]] bool sendAll(std::size_t n_rank)  noexcept;
-    private:
+    [[nodiscard]] bool sendAll(std::size_t n_rank) noexcept;
+
+  private:
     /**
      * @brief Sends this payload to a specified MPI rank.
      *
@@ -90,13 +94,13 @@ namespace WrapMPI
      *
      * @param rank The MPI rank of the destination process.
      *
-     * @note This method uses MPI to perform the send operation and assumes the MPI environment is
-     * initialized.
+     * @note This method uses MPI to perform the send operation and assumes the
+     * MPI environment is initialized.
      */
-    [[nodiscard]] bool send(size_t rank)  noexcept;
-    
-    static constexpr std::size_t n_vector_send = 4; 
-    std::array<MPI_Request,n_vector_send> requests;
+    [[nodiscard]] bool send(size_t rank) noexcept;
+
+    static constexpr std::size_t n_vector_send = 4;
+    std::array<MPI_Request, n_vector_send> requests;
   };
 
 } // namespace WrapMPI

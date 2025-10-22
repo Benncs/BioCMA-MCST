@@ -2,15 +2,15 @@
 #define __IMPL_HYDRO_MASS_TRANSFER_HPP__
 
 #ifndef NDEBUG
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
-#endif 
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
+#endif
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #ifndef NDEBUG
-#pragma GCC diagnostic pop
-#endif 
+#  pragma GCC diagnostic pop
+#endif
 #include <cma_utils/iteration_state.hpp>
 #include <eigen_kokkos.hpp>
 #include <mc/domain.hpp>
@@ -34,23 +34,26 @@ namespace Simulation::MassTransfer
   namespace Impl
   {
 
-    void flowmap_gas_liquid_mass_transfer(MassTransferProxy& mtr,
-                                          const Eigen::ArrayXXd& liquid_concentration,
-                                          const Eigen::ArrayXXd& gas_concentration,
-                                          const Eigen::MatrixXd& liquid_volume,
-                                          const CmaUtils::IterationState& state);
+    void flowmap_gas_liquid_mass_transfer(
+        MassTransferProxy& mtr,
+        const Eigen::ArrayXXd& liquid_concentration,
+        const Eigen::ArrayXXd& gas_concentration,
+        const Eigen::MatrixXd& liquid_volume,
+        const CmaUtils::IterationState& state);
 
-    void fixed_kla_gas_liquid_mass_transfer(MassTransferProxy& mtr,
-                                            const Eigen::ArrayXXd& liquid_concentration,
-                                            const Eigen::ArrayXXd& gas_concentration,
-                                            const Eigen::MatrixXd& liquid_volume,
-                                            const CmaUtils::IterationState& state);
-                                            
-    void flowmap_kla_gas_liquid_mass_transfer(MassTransferProxy& mtr,
-                                            const Eigen::ArrayXXd& liquid_concentration,
-                                            const Eigen::ArrayXXd& gas_concentration,
-                                            const Eigen::MatrixXd& liquid_volume,
-                                            const CmaUtils::IterationState& state);                                       
+    void fixed_kla_gas_liquid_mass_transfer(
+        MassTransferProxy& mtr,
+        const Eigen::ArrayXXd& liquid_concentration,
+        const Eigen::ArrayXXd& gas_concentration,
+        const Eigen::MatrixXd& liquid_volume,
+        const CmaUtils::IterationState& state);
+
+    void flowmap_kla_gas_liquid_mass_transfer(
+        MassTransferProxy& mtr,
+        const Eigen::ArrayXXd& liquid_concentration,
+        const Eigen::ArrayXXd& gas_concentration,
+        const Eigen::MatrixXd& liquid_volume,
+        const CmaUtils::IterationState& state);
 
   }; // namespace Impl
 

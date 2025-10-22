@@ -28,15 +28,16 @@ void calculate_correlation(const std::vector<double>& samples, size_t n_sample)
     sum_y2 += y * y;
   }
 
-  double correlation =
-      (n_sample * sum_xy - sum_x * sum_y) /
-      std::sqrt((n_sample * sum_x2 - sum_x * sum_x) * (n_sample * sum_y2 - sum_y * sum_y));
+  double correlation = (n_sample * sum_xy - sum_x * sum_y) /
+                       std::sqrt((n_sample * sum_x2 - sum_x * sum_x) *
+                                 (n_sample * sum_y2 - sum_y * sum_y));
   std::cout << "Pearson correlation: " << correlation << std::endl;
 }
 
 void mean_variance(const std::vector<double>& samples, size_t n_sample)
 {
-  double mean = std::accumulate(samples.begin(), samples.end(), 0.0) / samples.size();
+  double mean =
+      std::accumulate(samples.begin(), samples.end(), 0.0) / samples.size();
 
   double variance = 0.0;
   for (double sample : samples)
@@ -66,7 +67,9 @@ double ks_statistic(std::vector<double>& sample1, std::vector<double>& sample2)
   return d;
 }
 
-void check(std::vector<double>& theoretical, std::vector<double>& samples, size_t n_sample)
+void check(std::vector<double>& theoretical,
+           std::vector<double>& samples,
+           size_t n_sample)
 {
   calculate_correlation(samples, n_sample);
 
@@ -161,11 +164,14 @@ void bench()
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    auto duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
-    std::cout << "MC:PRNG duration: " << duration.count() << " milliseconds" << std::endl;
+    std::cout << "MC:PRNG duration: " << duration.count() << " milliseconds"
+              << std::endl;
 
-    std::cout << "MC::PRNG duration per sample " << static_cast<double>(duration.count()) / n_sample
+    std::cout << "MC::PRNG duration per sample "
+              << static_cast<double>(duration.count()) / n_sample
               << " milliseconds" << std::endl;
   }
 
@@ -178,11 +184,14 @@ void bench()
       std_sample[i] = dist(seed);
     }
     auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    auto duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
-    std::cout << "STD duration: " << duration.count() << " milliseconds" << std::endl;
+    std::cout << "STD duration: " << duration.count() << " milliseconds"
+              << std::endl;
 
-    std::cout << "STD duration per sample " << static_cast<double>(duration.count()) / n_sample
+    std::cout << "STD duration per sample "
+              << static_cast<double>(duration.count()) / n_sample
               << " milliseconds" << std::endl;
   }
 
@@ -197,10 +206,12 @@ void bench()
 
     double time2 = timer.seconds();
     double duration = time2 - time1;
-    std::cout << "MC:PRNG duration: " << duration << " milliseconds" << std::endl;
+    std::cout << "MC:PRNG duration: " << duration << " milliseconds"
+              << std::endl;
 
-    std::cout << "MC::PRNG duration per sample " << static_cast<double>(duration) / n_sample
-              << " milliseconds" << std::endl;
+    std::cout << "MC::PRNG duration per sample "
+              << static_cast<double>(duration) / n_sample << " milliseconds"
+              << std::endl;
   }
   std::cout << "BENCH PARRALEL STATIC" << std::endl;
   {
@@ -213,10 +224,12 @@ void bench()
 
     double time2 = timer.seconds();
     double duration = time2 - time1;
-    std::cout << "MC:PRNG duration: " << duration << " milliseconds" << std::endl;
+    std::cout << "MC:PRNG duration: " << duration << " milliseconds"
+              << std::endl;
 
-    std::cout << "MC::PRNG duration per sample " << static_cast<double>(duration) / n_sample
-              << " milliseconds" << std::endl;
+    std::cout << "MC::PRNG duration per sample "
+              << static_cast<double>(duration) / n_sample << " milliseconds"
+              << std::endl;
   }
 }
 

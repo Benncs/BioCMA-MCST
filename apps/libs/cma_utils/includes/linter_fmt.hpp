@@ -9,8 +9,8 @@ namespace CmaUtils
   /**
  @brief Derived class to handle Linear interpolation transition between flowmaps
 
- Linear interpolation means that we pass don't pass from flowmap i to flormap i+1 but we use
- intermediate flowmap created with linear interpolation
+ Linear interpolation means that we pass don't pass from flowmap i to flormap
+ i+1 but we use intermediate flowmap created with linear interpolation
   */
   class LinterFMT final : public FlowMapTransitionner
   {
@@ -34,12 +34,15 @@ namespace CmaUtils
     }
 
   protected:
-    [[nodiscard]] const CmaRead::ReactorState& get_current_reactor_state() const noexcept final
+    [[nodiscard]] const CmaRead::ReactorState&
+    get_current_reactor_state() const noexcept final
     {
       throw std::runtime_error("LinterFMT not implemented yet");
     }
-    CmaUtils::ProxyPreCalculatedHydroState& current_liq_hydro_state() noexcept final;
-    CmaUtils::ProxyPreCalculatedHydroState& current_gas_hydro_state() noexcept final;
+    CmaUtils::ProxyPreCalculatedHydroState&
+    current_liq_hydro_state() noexcept final;
+    CmaUtils::ProxyPreCalculatedHydroState&
+    current_gas_hydro_state() noexcept final;
   };
 } // namespace CmaUtils
 

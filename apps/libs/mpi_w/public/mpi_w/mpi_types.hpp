@@ -1,8 +1,8 @@
 #ifndef __MPI_TYPES_HPP__
 #define __MPI_TYPES_HPP__
 
-#include <mpi_w/message_t.hpp>
 #include <mpi.h>
+#include <mpi_w/message_t.hpp>
 #include <type_traits>
 
 namespace WrapMPI
@@ -37,11 +37,7 @@ namespace WrapMPI
     }
     else
     {
-      []<bool flag = false>()
-      {
-        static_assert(flag, "no match");
-      }
-      ();
+      []<bool flag = false>() { static_assert(flag, "no match"); }();
     }
 
     return datatype;

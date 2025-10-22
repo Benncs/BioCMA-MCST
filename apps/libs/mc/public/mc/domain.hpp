@@ -12,8 +12,11 @@
 namespace MC
 {
   template <typename Space>
-  using NeighborsView = Kokkos::
-      View<std::size_t**, Kokkos::LayoutRight, Space, Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+  using NeighborsView =
+      Kokkos::View<std::size_t**,
+                   Kokkos::LayoutRight,
+                   Space,
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
   /**
    * @brief Represents the spatial domain where Monte Carlo particles can exist.
@@ -54,7 +57,8 @@ namespace MC
     /**
      * @brief Main constructor
      */
-    ReactorDomain(std::span<double> volumes, const NeighborsView<HostSpace>& _neighbors);
+    ReactorDomain(std::span<double> volumes,
+                  const NeighborsView<HostSpace>& _neighbors);
     /**
      * @brief Default destructor
      *
@@ -98,8 +102,8 @@ namespace MC
     [[deprecated("Not needed anymore")]] static ReactorDomain
     reduce(std::span<const size_t> data, size_t original_size, size_t n_rank);
 
-    [[deprecated("Not needed anymore")]] void
-    in_place_reduce(std::span<const size_t> data, size_t original_size, size_t n_rank);
+    [[deprecated("Not needed anymore")]] void in_place_reduce(
+        std::span<const size_t> data, size_t original_size, size_t n_rank);
 
     template <class Archive> void save(Archive& ar) const
     {

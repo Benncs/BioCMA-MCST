@@ -7,7 +7,7 @@
 #include "common_test.hpp"
 
 #define INIT init_handle_raw(argc, argv);
-#define PARAM make_params(cx, ft, dt, np, nex,0);
+#define PARAM make_params(cx, ft, dt, np, nex, 0);
 
 void test_init(int argc, char** argv)
 {
@@ -53,7 +53,8 @@ void test_apply(int argc, char** argv, std::string_view path)
 
 void test_apply_err(int argc, char** argv)
 {
-  Handle handle = INIT assert(apply(handle, 0) != 0); // THIS SHOULD RETURN ERROR
+  Handle handle =
+      INIT assert(apply(handle, 0) != 0); // THIS SHOULD RETURN ERROR
   delete_handle(&handle);
 }
 
@@ -95,7 +96,8 @@ void test_make_params(int argc, char** argv)
 
 void test_register_parameters(int argc, char** argv)
 {
-  Handle handle = INIT Param params = PARAM int result = register_parameters(handle, &params);
+  Handle handle = INIT Param params = PARAM int result =
+      register_parameters(handle, &params);
   assert(result == 0);
   delete_handle(&handle);
 }

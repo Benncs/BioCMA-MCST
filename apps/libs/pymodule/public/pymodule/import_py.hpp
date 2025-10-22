@@ -9,9 +9,9 @@ namespace pybind11
   class scoped_interpreter;
 } // namespace pybind11
 
-
 using python_interpreter_t =
-    std::unique_ptr<pybind11::scoped_interpreter, void (*)(pybind11::scoped_interpreter*)>;
+    std::unique_ptr<pybind11::scoped_interpreter,
+                    void (*)(pybind11::scoped_interpreter*)>;
 
 python_interpreter_t init_python_interpreter();
 

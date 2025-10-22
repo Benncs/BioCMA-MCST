@@ -10,11 +10,12 @@
 #include <vector>
 
 /**
- * @brief Provides structures and functions to initialize scalar data for simulations, supporting
- * multiple data sources.
+ * @brief Provides structures and functions to initialize scalar data for
+ * simulations, supporting multiple data sources.
  *
- * The ScalarFactory namespace contains several structures representing different methods of
- * initializing scalar values (liquid and gas concentrations) for simulations.
+ * The ScalarFactory namespace contains several structures representing
+ * different methods of initializing scalar values (liquid and gas
+ * concentrations) for simulations.
  */
 namespace Core::ScalarFactory
 {
@@ -30,7 +31,8 @@ namespace Core::ScalarFactory
     std::vector<double> liquid_concentrations;
 
     /**
-     * @brief Optional vector of gas phase concentrations, applied uniformly if provided.
+     * @brief Optional vector of gas phase concentrations, applied uniformly if
+     * provided.
      */
     std::optional<std::vector<double>> gas_concentration = std::nullopt;
   };
@@ -47,19 +49,20 @@ namespace Core::ScalarFactory
     std::vector<double> liquid_concentrations;
 
     /**
-     * @brief Vector of indices corresponding to compartments with specified liquid concentrations.
+     * @brief Vector of indices corresponding to compartments with specified
+     * liquid concentrations.
      */
     std::vector<size_t> liquid_indices;
 
     /**
-     * @brief Optional vector of gas phase concentrations, applied to specific compartments if
-     * provided.
+     * @brief Optional vector of gas phase concentrations, applied to specific
+     * compartments if provided.
      */
     std::optional<std::vector<double>> gas_concentration = std::nullopt;
 
     /**
-     * @brief Optional vector of indices corresponding to compartments with specified gas
-     * concentrations.
+     * @brief Optional vector of indices corresponding to compartments with
+     * specified gas concentrations.
      */
     std::optional<std::vector<size_t>> gas_indices = std::nullopt;
   };
@@ -126,11 +129,13 @@ namespace Core::ScalarFactory
    * @typedef ScalarVariant
    * @brief A variant type representing different scalar data sources.
    */
-  using ScalarVariant = std::variant<Uniform, Local, File, CustomScript,FullCase>;
+  using ScalarVariant =
+      std::variant<Uniform, Local, File, CustomScript, FullCase>;
 
   /**
    * @struct Visitor
-   * @brief Functor struct to visit each type in ScalarVariant and initialize scalar data.
+   * @brief Functor struct to visit each type in ScalarVariant and initialize
+   * scalar data.
    */
   struct Visitor
   {
@@ -147,16 +152,19 @@ namespace Core::ScalarFactory
   };
 
   /**
-   * @brief Factory function to initialize scalar data based on the specified input source.
+   * @brief Factory function to initialize scalar data based on the specified
+   * input source.
    *
-   * The `scalar_factory` function uses a provided variant type to initialize scalar data for both
-   * liquid and optionally gas phases. This function accommodates a variety of data sources for
-   * flexibility in setup.
+   * The `scalar_factory` function uses a provided variant type to initialize
+   * scalar data for both liquid and optionally gas phases. This function
+   * accommodates a variety of data sources for flexibility in setup.
    *
-   * @param f_init_gas_flow Boolean flag indicating whether gas flow initialization is required.
+   * @param f_init_gas_flow Boolean flag indicating whether gas flow
+   * initialization is required.
    * @param gas_volume Span of gas volume data for each compartment.
    * @param liquid_volume Span of liquid volume data for each compartment.
-   * @param arg_liq Scalar variant specifying the source of scalar data for liquid concentration.
+   * @param arg_liq Scalar variant specifying the source of scalar data for
+   * liquid concentration.
    * @return A `ScalarInitializer` configured with the provided data.
    */
   Simulation::ScalarInitializer scalar_factory(bool f_init_gas_flow,

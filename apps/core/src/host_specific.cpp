@@ -288,7 +288,7 @@ namespace
           PostProcessing::save_particle_state(simulation, partial_exporter);
         }
 
-        if (Core::SignalHandler::is_sigint_raised())[[unlikely]]
+        if (Core::SignalHandler::is_sigint_raised()) [[unlikely]]
         {
           if (logger)
           {

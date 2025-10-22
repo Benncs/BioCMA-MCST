@@ -1,5 +1,5 @@
-#include <Kokkos_ScatterView.hpp>
 #include <Kokkos_Core.hpp>
+#include <Kokkos_ScatterView.hpp>
 #include <cma_utils/iteration_state.hpp>
 #include <cstddef>
 #include <cstdio>

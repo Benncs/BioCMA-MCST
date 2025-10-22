@@ -33,12 +33,13 @@ namespace CmaUtils
  * @param transitioner A unique pointer to the `Simulation::FlowMapTransitioner`
  * for handling flow map transitions.
  */
-void host_process(std::shared_ptr<IO::Logger> logger, /*logger is passed by value because it can be
-                                                         set into maindataexporter*/
-                  const ExecInfo& exec,
-                  Simulation::SimulationUnit& simulation,
-                  const Core::SimulationParameters& params,
-                  std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,
-                  Core::PartialExporter& partial_exporter);
+void host_process(
+    std::shared_ptr<IO::Logger> logger, /*logger is passed by value because it
+                                           can be set into maindataexporter*/
+    const ExecInfo& exec,
+    Simulation::SimulationUnit& simulation,
+    const Core::SimulationParameters& params,
+    std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,
+    Core::PartialExporter& partial_exporter);
 
 #endif //__HOST_SPECIFIC_HPP__

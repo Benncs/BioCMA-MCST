@@ -1,7 +1,7 @@
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
+#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
 #endif
 #include <Eigen/Core>
 #ifndef NDEBUG
@@ -93,7 +93,8 @@ std::string sappend_date_time(std::string_view string) noexcept
 {
   std::stringstream fd;
   fd << string;
-  auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+  auto now =
+      std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
   fd << std::put_time(std::localtime(&now), "%Y-%m-%d-%H:%M:%S");
   return fd.str();
 }
@@ -103,7 +104,8 @@ std::string env_file_path() noexcept
   return ".bmc_info";
 }
 
-void register_run(const ExecInfo& exec, const Core::UserControlParameters& /*params*/) noexcept
+void register_run(const ExecInfo& exec,
+                  const Core::UserControlParameters& /*params*/) noexcept
 {
   // Open the file in append mode
   std::ofstream env(env_file_path(), std::ios_base::app);

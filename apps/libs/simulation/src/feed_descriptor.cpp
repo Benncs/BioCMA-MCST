@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <variant>
 
-#define CHECK_TYPE_VARIANT(__variant_arg__, __ref__type)                                           \
+#define CHECK_TYPE_VARIANT(__variant_arg__, __ref__type)                       \
   std::is_same_v<std::decay_t<decltype(__variant_arg__)>, __ref__type>
 
 namespace Simulation::Feed
@@ -51,8 +51,8 @@ namespace Simulation::Feed
   //                              feed_species_t _species,
   //                              FeedTypeVariant _props,
   //                              bool _set_exit)
-  //     : flow_value(_f), position(std::move(_position)), species(std::move(_species)),
-  //     props(_props),
+  //     : flow_value(_f), position(std::move(_position)),
+  //     species(std::move(_species)), props(_props),
   //       set_exit(_set_exit), n_v(_target.size()), type(get_type(props)),
   //       target(std::move(_target))
   // {
@@ -76,12 +76,12 @@ namespace Simulation::Feed
   // FeedDescritor::FeedDescritor(double _f,
   //                              feed_value_t&& _target,
   //                              feed_position_t&& _position,
-  //                              std::optional<feed_position_t>&& _ouput_position,
-  //                              feed_species_t _species,
+  //                              std::optional<feed_position_t>&&
+  //                              _ouput_position, feed_species_t _species,
   //                              FeedTypeVariant _props,
   //                              bool _set_exit)
-  //     : flow_value(_f), position(std::move(_position)), species(std::move(_species)),
-  //     props(_props),
+  //     : flow_value(_f), position(std::move(_position)),
+  //     species(std::move(_species)), props(_props),
   //       set_exit(_set_exit), n_v(_target.size()), type(get_type(props)),
   //       target(std::move(_target))
   // {
@@ -111,17 +111,19 @@ namespace Simulation::Feed
   //     if (ouput_position.size() != position.size())
   //     {
   //       throw std::invalid_argument(
-  //           "Feed descriptor: Number of position should be the same as ouput_position");
+  //           "Feed descriptor: Number of position should be the same as
+  //           ouput_position");
   //     }
   //   }
   // }
 
-  FeedDescriptor FeedFactory::constant(double flow,
-                                       double concentration,
-                                       std::size_t species_index,
-                                       std::size_t input_position,
-                                       std::optional<std::size_t> _ouput_position,
-                                       bool set_output)
+  FeedDescriptor
+  FeedFactory::constant(double flow,
+                        double concentration,
+                        std::size_t species_index,
+                        std::size_t input_position,
+                        std::optional<std::size_t> _ouput_position,
+                        bool set_output)
   {
 
     if (set_output && (!_ouput_position))
@@ -129,7 +131,12 @@ namespace Simulation::Feed
       _ouput_position = input_position;
     }
 
-    return {flow, concentration, species_index, input_position, _ouput_position, Constant{}};
+    return {flow,
+            concentration,
+            species_index,
+            input_position,
+            _ouput_position,
+            Constant{}};
   }
 
   // FeedDescriptor delayedconstant(double _f,
@@ -173,7 +180,8 @@ namespace Simulation::Feed
       vec = std::vector<FeedDescriptor>();
     }
     vec->emplace_back(
-        move_allow_trivial(fd)); // Use move_allow_trivial in case FeedDescriptor become non trivial
+        move_allow_trivial(fd)); // Use move_allow_trivial in case
+                                 // FeedDescriptor become non trivial
   }
 
   void SimulationFeed::add_liquid(FeedDescriptor&& fd)

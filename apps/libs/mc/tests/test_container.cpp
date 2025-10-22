@@ -13,7 +13,8 @@ template <ModelType M> void basic_test()
   MC::ParticlesContainer<M> container(size);
 
   KOKKOS_ASSERT(container.n_particles() == size)
-  KOKKOS_ASSERT(container.capacity() == size * container.get_allocation_factor());
+  KOKKOS_ASSERT(container.capacity() ==
+                size * container.get_allocation_factor());
   KOKKOS_ASSERT(container.model.extent(0) == container.capacity());
   KOKKOS_ASSERT(container.model.extent(1) == M::n_var);
 

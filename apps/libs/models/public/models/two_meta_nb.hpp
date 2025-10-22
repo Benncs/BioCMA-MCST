@@ -93,10 +93,8 @@ namespace Models
             adder_mean * 10); // use in out_str_l3
     // Constants END
 
-
     static MC::ContribIndexBounds get_bounds();
 
-    
     KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx,
                                               const SelfParticle& arr)
     {
@@ -329,13 +327,13 @@ namespace Models
     Uptake<Self>::division(random_pool, idx, idx2, arr, child_buffer_arr);
   }
 
-    inline MC::ContribIndexBounds TwoMetaNb::get_bounds()
-    {
-      const int begin = INDEX_FROM_ENUM(Self::particle_var::contrib_phi_s);
-      const int end= INDEX_FROM_ENUM(Self::particle_var::contrib_phi_ac);
-      assert(begin<end);
-      return {.begin=begin, .end=end};
-    }
+  inline MC::ContribIndexBounds TwoMetaNb::get_bounds()
+  {
+    const int begin = INDEX_FROM_ENUM(Self::particle_var::contrib_phi_s);
+    const int end = INDEX_FROM_ENUM(Self::particle_var::contrib_phi_ac);
+    assert(begin < end);
+    return {.begin = begin, .end = end};
+  }
   // KOKKOS_INLINE_FUNCTION void
   // TwoMetaNb::contribution([[maybe_unused]] std::size_t idx,
   //                         std::size_t position,

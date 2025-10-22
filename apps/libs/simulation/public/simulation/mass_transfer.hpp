@@ -30,14 +30,14 @@ namespace Simulation::MassTransfer
     struct FlowmapKla
     {
     };
-    
+
     struct FixedKla
     {
       std::vector<double> value;
     };
 
-
-    using MtrTypeVariant = std::variant<FlowmapTurbulence, FixedKla,FlowmapKla>;
+    using MtrTypeVariant =
+        std::variant<FlowmapTurbulence, FixedKla, FlowmapKla>;
   } // namespace Type
 
   enum class Sign : int
@@ -53,9 +53,10 @@ namespace Simulation::MassTransfer
   class MassTransferModel
   {
   public:
-    explicit MassTransferModel(MassTransfer::Type::MtrTypeVariant _type,
-                               std::shared_ptr<Simulation::ScalarSimulation> _liquid_scalar,
-                               std::shared_ptr<Simulation::ScalarSimulation> _gas_scalar);
+    explicit MassTransferModel(
+        MassTransfer::Type::MtrTypeVariant _type,
+        std::shared_ptr<Simulation::ScalarSimulation> _liquid_scalar,
+        std::shared_ptr<Simulation::ScalarSimulation> _gas_scalar);
 
     void gas_liquid_mass_transfer(const CmaUtils::IterationState& state) const;
 

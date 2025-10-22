@@ -11,10 +11,10 @@ namespace PythonWrap
   {
   public:
     PimpModel(const PimpModel&);
- 
+
     PimpModel& operator=(const PimpModel&);
-    PimpModel(PimpModel&&)noexcept;
-    PimpModel& operator=(PimpModel&&) noexcept ;
+    PimpModel(PimpModel&&) noexcept;
+    PimpModel& operator=(PimpModel&&) noexcept;
     PimpModel();
     ~PimpModel();
     KOKKOS_FUNCTION void init(MC::ParticleDataHolder& p, MC::KPRNG _rng);
@@ -22,8 +22,10 @@ namespace PythonWrap
                                 MC::ParticleDataHolder& p,
                                 const LocalConcentrationView& concentration,
                                 MC::KPRNG _rng);
-    KOKKOS_FUNCTION PimpModel division(MC::ParticleDataHolder& p, MC::KPRNG k) noexcept;
-    KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder& p, const ContributionView& contrib) noexcept;
+    KOKKOS_FUNCTION PimpModel division(MC::ParticleDataHolder& p,
+                                       MC::KPRNG k) noexcept;
+    KOKKOS_FUNCTION void contribution(MC::ParticleDataHolder& p,
+                                      const ContributionView& contrib) noexcept;
 
     model_properties_detail_t get_properties() noexcept;
     [[nodiscard]] KOKKOS_FUNCTION double mass() const noexcept;
@@ -35,4 +37,4 @@ namespace PythonWrap
   static_assert(ParticleModel<PimpModel>, "Check Pimpl");
 } // namespace PythonWrap
 
-#endif 
+#endif

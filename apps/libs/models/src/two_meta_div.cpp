@@ -2,5 +2,6 @@
 
 // namespace Models
 // {
-//     UptakeCst<TwoMetaNb::FloatType> TwoMetaNb::init_uptake_cst = UptakeCst<TwoMetaNb::FloatType>();
+//     UptakeCst<TwoMetaNb::FloatType> TwoMetaNb::init_uptake_cst =
+//     UptakeCst<TwoMetaNb::FloatType>();
 // }
