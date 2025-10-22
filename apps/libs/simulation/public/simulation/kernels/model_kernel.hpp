@@ -142,6 +142,7 @@ namespace Simulation::KernelInline
                                            const TeamMember& team_handle,
                                            value_type& reduce_val) const
     {
+
       (void)_tag;
       (void)reduce_val.dead_total; // Counter not used currently because there
                                    // is no cell mortality
@@ -160,8 +161,8 @@ namespace Simulation::KernelInline
         if (!particles.handle_division(random_pool, idx))
         {
           reduce_val.waiting_allocation_particle += 1;
-          Kokkos::printf("[KERNEL] Division Overflow\r\n");
           events.wrap_incr<MC::EventType::Overflow>();
+          Kokkos::printf("[KERNEL] Division Overflow\r\n");
         }
         events.wrap_incr<MC::EventType::NewParticle>();
       };

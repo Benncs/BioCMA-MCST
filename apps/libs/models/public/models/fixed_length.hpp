@@ -119,9 +119,8 @@ namespace Models
   {
 
     // normal1
-    //    constexpr auto l_initial_dist =
-    //    MC::Distributions::TruncatedNormal<float>(
-    //        l_min_m / 2, l_min_m / 5., 0., static_cast<double>(1));
+    constexpr auto l_initial_dist = MC::Distributions::TruncatedNormal<float>(
+        l_max_m * 0.75, l_min_m / 5., l_min_m, l_max_m);
 
     // normal2 lmin/2 lmin/2
     // normal3 l_min*0.7
@@ -139,15 +138,18 @@ namespace Models
     //     constexpr auto l_initial_dist =
 
     auto gen = random_pool.get_state();
-
-    // FloatType linit = 0.;
-    // do
-    // {
-    //   linit = lm / 2. + config().dist.draw(gen);
-    // } while (linit > lm);
+    // auto linit = l_initial_dist.draw(gen);
+    //  FloatType linit = 0.;
+    //  do
+    //  {
+    //    linit = lm / 2. + config().dist.draw(gen);
+    //  } while (linit > lm);
+    //
+    //
     //
     //
     auto linit = config(idx); // linit = Kokkos::min(linit, lm);
+
     // linit = Kokkos::max(linit, FloatType(lm / 2.));
 
     //   auto linit = l_initial_dist.draw(
@@ -184,7 +186,6 @@ namespace Models
     const FloatType ldot = l_dot_max * g;
     GET_PROPERTY(Self::particle_var::length) += d_t * ldot;
     GET_PROPERTY(Self::particle_var::phi_s) = -phi_s;
-
     return check_div(GET_PROPERTY(Self::particle_var::length),
                      GET_PROPERTY(Self::particle_var::l_max));
   }

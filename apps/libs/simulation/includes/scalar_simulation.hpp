@@ -2,15 +2,15 @@
 #define __SCALAR_SIMULATION_HPP__
 
 #ifndef NDEBUG
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
 #endif
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #ifndef NDEBUG
-#pragma GCC diagnostic pop
+#  pragma GCC diagnostic pop
 #endif
 #include <Kokkos_Core.hpp>
 #include <cma_utils/cache_hydro_state.hpp>
@@ -30,7 +30,9 @@ namespace Simulation
   class ScalarSimulation
   {
   public:
-    ScalarSimulation(size_t n_compartments, size_t n_species, std::span<double> volume);
+    ScalarSimulation(size_t n_compartments,
+                     size_t n_species,
+                     std::span<double> volume);
 
     ScalarSimulation(ScalarSimulation&& other) noexcept = delete;
     ScalarSimulation(const ScalarSimulation& other) noexcept = delete;
@@ -47,6 +49,8 @@ namespace Simulation
                        MassTransfer::Sign sign);
 
     void performStep(double d_t, const FlowMatrixType& m_transition);
+
+    void synchro_sources();
 
     // void performStep(double d_t, const FlowMatrixType& m_transition);
 
@@ -73,12 +77,14 @@ namespace Simulation
     void set_feed(std::uint64_t i_r, std::uint64_t i_c, double val);
     void set_sink(std::uint64_t i_compartment, double val);
     void set_zero_contribs();
-    void setVolumes(std::span<const double> volumes, std::span<const double> inv_volumes);
+    void setVolumes(std::span<const double> volumes,
+                    std::span<const double> inv_volumes);
 
   private:
     std::size_t n_r;
     std::size_t n_c;
     ColMajorMatrixtype total_mass;
+    kernelContribution contribs;
 
     DiagonalType volumes_inverse;
     DiagonalType m_volumes;
@@ -95,12 +101,14 @@ namespace Simulation
 
   inline kernelContribution ScalarSimulation::get_kernel_contribution() const
   {
-    return sources.compute;
+    // return sources.compute;
+    return contribs;
   }
 
   inline void ScalarSimulation::set_zero_contribs()
   {
     sources.eigen_data.setZero();
+    Kokkos::deep_copy(contribs, 0);
     Kokkos::deep_copy(sources.compute, 0);
     this->sink.setZero();
   }
@@ -112,7 +120,8 @@ namespace Simulation
 
   inline void ScalarSimulation::set_feed(uint64_t i_r, uint64_t i_c, double val)
   {
-    this->sources.eigen_data.coeffRef(EIGEN_INDEX(i_r), EIGEN_INDEX(i_c)) += val;
+    this->sources.eigen_data.coeffRef(EIGEN_INDEX(i_r), EIGEN_INDEX(i_c)) +=
+        val;
   }
 
   inline void ScalarSimulation::set_sink(uint64_t i_compartment, double val)
@@ -132,12 +141,14 @@ namespace Simulation
 
   inline std::span<double> ScalarSimulation::getContributionData() const
   {
-    return {this->sources.host.data(), static_cast<size_t>(this->sources.host.size())};
+    return {this->sources.host.data(),
+            static_cast<size_t>(this->sources.host.size())};
   }
 
   inline std::span<double> ScalarSimulation::getContributionData_mut()
   {
-    return {this->sources.host.data(), static_cast<size_t>(this->sources.host.size())};
+    return {this->sources.host.data(),
+            static_cast<size_t>(this->sources.host.size())};
   }
 
   inline std::span<double const> ScalarSimulation::getVolumeData() const
@@ -148,18 +159,19 @@ namespace Simulation
   inline void ScalarSimulation::setVolumes(std::span<const double> volumes,
                                            std::span<const double> inv_volumes)
   {
-    KOKKOS_ASSERT(volumes.size() == inv_volumes.size() && volumes.size() == n_col() &&
-                  "scalar:setvolume")
+    KOKKOS_ASSERT(volumes.size() == inv_volumes.size() &&
+                  volumes.size() == n_col() && "scalar:setvolume")
     // SIGFAULT ?
-    this->m_volumes.diagonal() =
-        Eigen::Map<const Eigen::VectorXd>(volumes.data(), static_cast<int>(volumes.size()));
+    this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(
+        volumes.data(), static_cast<int>(volumes.size()));
 
-    this->volumes_inverse.diagonal() =
-        Eigen::Map<const Eigen::VectorXd>(inv_volumes.data(), static_cast<int>(inv_volumes.size()));
+    this->volumes_inverse.diagonal() = Eigen::Map<const Eigen::VectorXd>(
+        inv_volumes.data(), static_cast<int>(inv_volumes.size()));
   }
 
-  inline ScalarSimulation*
-  makeScalarSimulation(size_t n_compartments, size_t n_species, std::span<double> volumes)
+  inline ScalarSimulation* makeScalarSimulation(size_t n_compartments,
+                                                size_t n_species,
+                                                std::span<double> volumes)
   {
     return new ScalarSimulation(n_compartments, n_species, volumes); // NOLINT
   }

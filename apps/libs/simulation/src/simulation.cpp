@@ -1,3 +1,4 @@
+#include <Kokkos_ScatterView.hpp>
 #include <Kokkos_Core.hpp>
 #include <cma_utils/iteration_state.hpp>
 #include <cstddef>
@@ -78,7 +79,8 @@ namespace Simulation
     Kokkos::resize(move_info.diag_transition,
                    mc_unit->domain.getNumberCompartments());
 
-    contribs_scatter = MC::ContributionView(get_kernel_contribution());
+    contribs_scatter =
+        Kokkos::Experimental::create_scatter_view(get_kernel_contribution());
   }
 
   void SimulationUnit::update(CmaUtils::IterationState&& newstate)
@@ -93,6 +95,7 @@ namespace Simulation
   {
     auto contribs = get_kernel_contribution();
     Kokkos::Experimental::contribute(contribs, contribs_scatter);
+    this->liquid_scalar->synchro_sources();
   }
 
   void SimulationUnit::setVolumes() const
