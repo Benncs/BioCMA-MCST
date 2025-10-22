@@ -8,6 +8,6 @@ var namespaceSimulation_1_1Feed =
     [ "Pulse", "structSimulation_1_1Feed_1_1Pulse.html", "structSimulation_1_1Feed_1_1Pulse" ],
     [ "SimulationFeed", "classSimulation_1_1Feed_1_1SimulationFeed.html", "classSimulation_1_1Feed_1_1SimulationFeed" ],
     [ "Step", "structSimulation_1_1Feed_1_1Step.html", "structSimulation_1_1Feed_1_1Step" ],
-    [ "FeedTypeVariant", "namespaceSimulation_1_1Feed.html#a79af6349f51698c17587144746aadb33", null ],
+    [ "FeedTypeVariant", "namespaceSimulation_1_1Feed.html#a9a8a60c8e3d4310ee77f1a69861f4bf2", null ],
     [ "get_type", "namespaceSimulation_1_1Feed.html#ae2b43fd78e41337982a37fcb48f54a62", null ]
 ];

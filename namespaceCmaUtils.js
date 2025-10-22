@@ -7,7 +7,7 @@ var namespaceCmaUtils =
     [ "PreCalculatedHydroState", "classCmaUtils_1_1PreCalculatedHydroState.html", "classCmaUtils_1_1PreCalculatedHydroState" ],
     [ "ProxyPreCalculatedHydroState", "classCmaUtils_1_1ProxyPreCalculatedHydroState.html", "classCmaUtils_1_1ProxyPreCalculatedHydroState" ],
     [ "CumulativeProbaType", "namespaceCmaUtils.html#a86cda1f46ba5e585a9630b6a9bf1d01e", null ],
-    [ "NeighborsView", "namespaceCmaUtils.html#a4bac9b18ea383eb869087160e3b8e26b", null ],
+    [ "NeighborsView", "namespaceCmaUtils.html#a8b9d76d2e60d6841b12cb317f0b32c5a", null ],
     [ "FlowmapTransitionMethod", "namespaceCmaUtils.html#a4635cf3c33d8058b34a590c983639a60", [
       [ "Discontinuous", "namespaceCmaUtils.html#a4635cf3c33d8058b34a590c983639a60aa7c136d0368b3b78677670e35303a307", null ],
       [ "InterpolationFO", "namespaceCmaUtils.html#a4635cf3c33d8058b34a590c983639a60ac34bc141c7bf0386d74277c7dd0f4643", null ]

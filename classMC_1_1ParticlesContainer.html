@@ -95,8 +95,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a23696c7b8b024aa8544b5f4deca12ac3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor.  <br /></td></tr>
 <tr class="memitem:a30b264e87ae019596f9791f2fc60d52f" id="r_a30b264e87ae019596f9791f2fc60d52f"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30b264e87ae019596f9791f2fc60d52f">n_particles</a> () const</td></tr>
 <tr class="memdesc:a30b264e87ae019596f9791f2fc60d52f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of particles in the container.  <br /></td></tr>
-<tr class="memitem:aa76dbda634f94a7c870e8c5431291907" id="r_aa76dbda634f94a7c870e8c5431291907"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa76dbda634f94a7c870e8c5431291907">get_contributions</a> (std::size_t idx, const <a class="el" href="namespaceMC.html#a4861d217ba26986f3f68935d00c6a709">ContributionView</a> &amp;contributions) const</td></tr>
-<tr class="memitem:a5d2f244aefe3e55bcebe1d3d8bf94ca2" id="r_a5d2f244aefe3e55bcebe1d3d8bf94ca2"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d2f244aefe3e55bcebe1d3d8bf94ca2">handle_division</a> (const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx1) const</td></tr>
+<tr class="memitem:ad9651169bb0503f429b02a30a2324295" id="r_ad9651169bb0503f429b02a30a2324295"><td class="memTemplParams" colspan="2">template&lt;typename CviewType&gt; </td></tr>
+<tr class="memitem:ad9651169bb0503f429b02a30a2324295 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad9651169bb0503f429b02a30a2324295">get_contributions</a> (std::size_t idx, const CviewType &amp;contributions) const</td></tr>
+<tr class="memitem:a5d2f244aefe3e55bcebe1d3d8bf94ca2" id="r_a5d2f244aefe3e55bcebe1d3d8bf94ca2"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d2f244aefe3e55bcebe1d3d8bf94ca2">handle_division</a> (const <a class="el" href="classMC_1_1KPRNG.html#a4d34d46754755b2291e25325c5759641">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx1) const</td></tr>
 <tr class="memitem:a25d64f06c6f66817bc15bac225369a63" id="r_a25d64f06c6f66817bc15bac225369a63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25d64f06c6f66817bc15bac225369a63">force_remove_dead</a> ()</td></tr>
 <tr class="memitem:a8e95993fb1287c04427780d6372be565" id="r_a8e95993fb1287c04427780d6372be565"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e95993fb1287c04427780d6372be565">merge_buffer</a> ()</td></tr>
 <tr class="memitem:a7c693e0db50b6d4dd5186bc391a0f0c3" id="r_a7c693e0db50b6d4dd5186bc391a0f0c3"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c693e0db50b6d4dd5186bc391a0f0c3">get_buffer_index</a> () const</td></tr>
@@ -114,10 +115,10 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a2b64b07b72efe145ffc2c9ef491b2297" id="r_a2b64b07b72efe145ffc2c9ef491b2297"><td class="memItemLeft" align="right" valign="top">Model::SelfParticle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b64b07b72efe145ffc2c9ef491b2297">model</a></td></tr>
-<tr class="memitem:aab2bc872e28015fbbd9dd5ce78468e73" id="r_aab2bc872e28015fbbd9dd5ce78468e73"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab2bc872e28015fbbd9dd5ce78468e73">position</a></td></tr>
-<tr class="memitem:afa005cba9cbc87bc27b6bd0eaa066fac" id="r_afa005cba9cbc87bc27b6bd0eaa066fac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a2193e5e54bfdf96357f01505831e1072">MC::ParticleStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa005cba9cbc87bc27b6bd0eaa066fac">status</a></td></tr>
-<tr class="memitem:a393fc40e049e47aa2f7c6365cce02e4f" id="r_a393fc40e049e47aa2f7c6365cce02e4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a193bca8fb4700ce9ddd472c1929e5ac1">ParticleWeigths</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a393fc40e049e47aa2f7c6365cce02e4f">weights</a></td></tr>
-<tr class="memitem:ac69ec6b2784cf095558d8f43f2a4cb0a" id="r_ac69ec6b2784cf095558d8f43f2a4cb0a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#af836e787c735c75a05f0f573b19abcde">ParticleAges</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac69ec6b2784cf095558d8f43f2a4cb0a">ages</a></td></tr>
+<tr class="memitem:aab2bc872e28015fbbd9dd5ce78468e73" id="r_aab2bc872e28015fbbd9dd5ce78468e73"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a9a4b5cf4fee992bcbbaa6e62a3cb2753">MC::ParticlePositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab2bc872e28015fbbd9dd5ce78468e73">position</a></td></tr>
+<tr class="memitem:afa005cba9cbc87bc27b6bd0eaa066fac" id="r_afa005cba9cbc87bc27b6bd0eaa066fac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a48f9a66039a8e943d22c1548b62e2b50">MC::ParticleStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa005cba9cbc87bc27b6bd0eaa066fac">status</a></td></tr>
+<tr class="memitem:a393fc40e049e47aa2f7c6365cce02e4f" id="r_a393fc40e049e47aa2f7c6365cce02e4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a46c5aecdd6e031726c5f6e92c0d5e70e">ParticleWeigths</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a393fc40e049e47aa2f7c6365cce02e4f">weights</a></td></tr>
+<tr class="memitem:ac69ec6b2784cf095558d8f43f2a4cb0a" id="r_ac69ec6b2784cf095558d8f43f2a4cb0a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a30a6a3d926790b762a9ba03a3d270310">ParticleAges</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac69ec6b2784cf095558d8f43f2a4cb0a">ages</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-attribs" class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -131,7 +132,7 @@ Private Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a9d347f73227fb358d6e5be5e98770c1a" id="r_a9d347f73227fb358d6e5be5e98770c1a"><td class="memItemLeft" align="right" valign="top">Model::SelfParticle&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d347f73227fb358d6e5be5e98770c1a">buffer_model</a></td></tr>
-<tr class="memitem:aa90d0178c200214e2ecf3f4e5ef2196d" id="r_aa90d0178c200214e2ecf3f4e5ef2196d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">ParticlePositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa90d0178c200214e2ecf3f4e5ef2196d">buffer_position</a></td></tr>
+<tr class="memitem:aa90d0178c200214e2ecf3f4e5ef2196d" id="r_aa90d0178c200214e2ecf3f4e5ef2196d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a9a4b5cf4fee992bcbbaa6e62a3cb2753">ParticlePositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa90d0178c200214e2ecf3f4e5ef2196d">buffer_position</a></td></tr>
 <tr class="memitem:a4f96ea2b382665e1f5d7d2fcae915424" id="r_a4f96ea2b382665e1f5d7d2fcae915424"><td class="memItemLeft" align="right" valign="top">Kokkos::View&lt; uint64_t, Kokkos::SharedSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4f96ea2b382665e1f5d7d2fcae915424">buffer_index</a></td></tr>
 <tr class="memitem:a33f8c746935392baeabe55849a0532c1" id="r_a33f8c746935392baeabe55849a0532c1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a33f8c746935392baeabe55849a0532c1">allocation_factor</a></td></tr>
 <tr class="memitem:ae3d67d42ba1d139b0ad83d1d9395f3dc" id="r_ae3d67d42ba1d139b0ad83d1d9395f3dc"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3d67d42ba1d139b0ad83d1d9395f3dc">n_allocated_elements</a></td></tr>
@@ -538,13 +539,18 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
 
 </div>
 </div>
-<a id="aa76dbda634f94a7c870e8c5431291907" name="aa76dbda634f94a7c870e8c5431291907"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa76dbda634f94a7c870e8c5431291907">&#9670;&#160;</a></span>get_contributions()</h2>
+<a id="ad9651169bb0503f429b02a30a2324295" name="ad9651169bb0503f429b02a30a2324295"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9651169bb0503f429b02a30a2324295">&#9670;&#160;</a></span>get_contributions()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
+<div class="memtemplate">
+template&lt;typename CviewType&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">KOKKOS_INLINE_FUNCTION void <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::get_contributions </td>
@@ -554,14 +560,19 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceMC.html#a4861d217ba26986f3f68935d00c6a709">ContributionView</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>contributions</em></span>&#160;) const</td>
+          <td class="paramtype">const CviewType &amp;</td>          <td class="paramname"><span class="paramname"><em>contributions</em></span>&#160;) const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_aa76dbda634f94a7c870e8c5431291907_cgraph.svg" width="376" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_ad9651169bb0503f429b02a30a2324295_cgraph.svg" width="376" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -639,7 +650,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
         <tr>
           <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::handle_division </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classMC_1_1KPRNG.html#ab838a46e423f7dbdfb9f9809afaeefd5">MC::KPRNG::pool_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>random_pool</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="classMC_1_1KPRNG.html#a4d34d46754755b2291e25325c5759641">MC::KPRNG::pool_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>random_pool</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -879,7 +890,7 @@ Here is the caller graph for this function:</div>
 template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceMC.html#af836e787c735c75a05f0f573b19abcde">ParticleAges</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::ages</td>
+          <td class="memname"><a class="el" href="namespaceMC.html#a30a6a3d926790b762a9ba03a3d270310">ParticleAges</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::ages</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -994,7 +1005,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">ParticlePositions</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::buffer_position</td>
+          <td class="memname"><a class="el" href="namespaceMC.html#a9a4b5cf4fee992bcbbaa6e62a3cb2753">ParticlePositions</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::buffer_position</td>
         </tr>
       </table>
   </td>
@@ -1202,7 +1213,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
 template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::position</td>
+          <td class="memname"><a class="el" href="namespaceMC.html#a9a4b5cf4fee992bcbbaa6e62a3cb2753">MC::ParticlePositions</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::position</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1218,7 +1229,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
 template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceMC.html#a2193e5e54bfdf96357f01505831e1072">MC::ParticleStatus</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::status</td>
+          <td class="memname"><a class="el" href="namespaceMC.html#a48f9a66039a8e943d22c1548b62e2b50">MC::ParticleStatus</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::status</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1234,7 +1245,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
 template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceMC.html#a193bca8fb4700ce9ddd472c1929e5ac1">ParticleWeigths</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::weights</td>
+          <td class="memname"><a class="el" href="namespaceMC.html#a46c5aecdd6e031726c5f6e92c0d5e70e">ParticleWeigths</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::weights</td>
         </tr>
       </table>
 </div><div class="memdoc">

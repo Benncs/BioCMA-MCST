@@ -104,14 +104,14 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a5ca5151ebfbb3b5dd309309c54652af8" id="r_a5ca5151ebfbb3b5dd309309c54652af8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceCmaUtils.html#a4bac9b18ea383eb869087160e3b8e26b">NeighborsView</a>&lt; HostSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ca5151ebfbb3b5dd309309c54652af8">get_neighbors_view</a> (const CmaRead::Neighbors::Neighbors_const_view_t &amp;liquid_neighbors)</td></tr>
+<tr class="memitem:a5ca5151ebfbb3b5dd309309c54652af8" id="r_a5ca5151ebfbb3b5dd309309c54652af8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceCmaUtils.html#a8b9d76d2e60d6841b12cb317f0b32c5a">NeighborsView</a>&lt; HostSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ca5151ebfbb3b5dd309309c54652af8">get_neighbors_view</a> (const CmaRead::Neighbors::Neighbors_const_view_t &amp;liquid_neighbors)</td></tr>
 <tr class="memdesc:a5ca5151ebfbb3b5dd309309c54652af8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the provided neighbors' data into a Kokkos view.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a2b977307d10c78474830d7776030665c" id="r_a2b977307d10c78474830d7776030665c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b977307d10c78474830d7776030665c">need_liquid_state_calculation</a> () const noexcept</td></tr>
 <tr class="memdesc:a2b977307d10c78474830d7776030665c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if liquid state has to calculated or can be use via caching.  <br /></td></tr>
-<tr class="memitem:a52f9717655f1b6aa9891b6c23cc6bf3f" id="r_a52f9717655f1b6aa9891b6c23cc6bf3f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structCmaUtils_1_1IterationState.html">IterationState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52f9717655f1b6aa9891b6c23cc6bf3f">common_advance</a> (<a class="el" href="namespaceCmaUtils.html#a4bac9b18ea383eb869087160e3b8e26b">NeighborsView</a>&lt; HostSpace &gt; host_view, std::unordered_map&lt; std::string, std::span&lt; const double &gt; &gt; &amp;&amp;info)</td></tr>
+<tr class="memitem:a52f9717655f1b6aa9891b6c23cc6bf3f" id="r_a52f9717655f1b6aa9891b6c23cc6bf3f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structCmaUtils_1_1IterationState.html">IterationState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52f9717655f1b6aa9891b6c23cc6bf3f">common_advance</a> (<a class="el" href="namespaceCmaUtils.html#a8b9d76d2e60d6841b12cb317f0b32c5a">NeighborsView</a>&lt; HostSpace &gt; host_view, std::unordered_map&lt; std::string, std::span&lt; const double &gt; &gt; &amp;&amp;info)</td></tr>
 <tr class="memdesc:a52f9717655f1b6aa9891b6c23cc6bf3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operation required by all methods in order to perform advance function .  <br /></td></tr>
 <tr class="memitem:a29756d31f1e3c014ef0aa58925bd3da6" id="r_a29756d31f1e3c014ef0aa58925bd3da6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29756d31f1e3c014ef0aa58925bd3da6">update_flow</a> ()=0</td></tr>
 <tr class="memdesc:a29756d31f1e3c014ef0aa58925bd3da6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the current state based on the selected method, may be caching or direct calculation.  <br /></td></tr>
@@ -153,7 +153,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:aa5cdf7fbe61a3c8bf51148337c0c350d" id="r_aa5cdf7fbe61a3c8bf51148337c0c350d"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5cdf7fbe61a3c8bf51148337c0c350d">n_timestep</a> {}</td></tr>
 <tr class="memdesc:aa5cdf7fbe61a3c8bf51148337c0c350d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total number of timestep.  <br /></td></tr>
 <tr class="memitem:a346e8d1d8d7748a6198f95cd41768360" id="r_a346e8d1d8d7748a6198f95cd41768360"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a346e8d1d8d7748a6198f95cd41768360">repetition_count</a> {}</td></tr>
-<tr class="memdesc:a346e8d1d8d7748a6198f95cd41768360"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many flowmaps (different or not) have been used.  <br /></td></tr>
 <tr class="memitem:aadd4922e53c260284d40f6af150e54ba" id="r_aadd4922e53c260284d40f6af150e54ba"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aadd4922e53c260284d40f6af150e54ba">current_flowmap_count</a> {}</td></tr>
 <tr class="memitem:a09bacf81ae91b6bbfce2523b099d8843" id="r_a09bacf81ae91b6bbfce2523b099d8843"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; CmaRead::FlowIterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a09bacf81ae91b6bbfce2523b099d8843">iterator</a></td></tr>
 <tr class="memdesc:a09bacf81ae91b6bbfce2523b099d8843"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterator that reads flowmap.  <br /></td></tr>
@@ -448,7 +447,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname"><a class="el" href="structCmaUtils_1_1IterationState.html">IterationState</a> CmaUtils::FlowMapTransitionner::common_advance </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceCmaUtils.html#a4bac9b18ea383eb869087160e3b8e26b">NeighborsView</a>&lt; HostSpace &gt;</td>          <td class="paramname"><span class="paramname"><em>host_view</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespaceCmaUtils.html#a8b9d76d2e60d6841b12cb317f0b32c5a">NeighborsView</a>&lt; HostSpace &gt;</td>          <td class="paramname"><span class="paramname"><em>host_view</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -637,7 +636,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceCmaUtils.html#a4bac9b18ea383eb869087160e3b8e26b">NeighborsView</a>&lt; HostSpace &gt; CmaUtils::FlowMapTransitionner::get_neighbors_view </td>
+          <td class="memname"><a class="el" href="namespaceCmaUtils.html#a8b9d76d2e60d6841b12cb317f0b32c5a">NeighborsView</a>&lt; HostSpace &gt; CmaUtils::FlowMapTransitionner::get_neighbors_view </td>
           <td>(</td>
           <td class="paramtype">const CmaRead::Neighbors::Neighbors_const_view_t &amp;</td>          <td class="paramname"><span class="paramname"><em>liquid_neighbors</em></span></td><td>)</td>
           <td></td>
@@ -1202,8 +1201,7 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>How many flowmaps (different or not) have been used. </p>
+<p>How many flowmaps (different or not) have been used </p>
 
 </div>
 </div>

@@ -91,6 +91,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa78bf7ac21d619b85feca2faba599965" id="r_aa78bf7ac21d619b85feca2faba599965"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa78bf7ac21d619b85feca2faba599965">reduce_contribs</a> (std::span&lt; const double &gt; data)</td></tr>
 <tr class="memitem:a16b998d2b5b2e0b1c0583804d298ff6b" id="r_a16b998d2b5b2e0b1c0583804d298ff6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16b998d2b5b2e0b1c0583804d298ff6b">performStepGL</a> (double d_t, const FlowMatrixType &amp;m_transition, const ColMajorMatrixtype &amp;mtr, <a class="el" href="namespaceSimulation_1_1MassTransfer.html#ae8feef3b084e54617612bce610be7c0b">MassTransfer::Sign</a> sign)</td></tr>
 <tr class="memitem:ac17e1fb2da810c4a21e94ce0caf09e17" id="r_ac17e1fb2da810c4a21e94ce0caf09e17"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac17e1fb2da810c4a21e94ce0caf09e17">performStep</a> (double d_t, const FlowMatrixType &amp;m_transition)</td></tr>
+<tr class="memitem:ae4b543a150df1ccde9002adad7f89e46" id="r_ae4b543a150df1ccde9002adad7f89e46"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4b543a150df1ccde9002adad7f89e46">synchro_sources</a> ()</td></tr>
 <tr class="memitem:a7970d54aec7c4ef0cd2fe43679e1368c" id="r_a7970d54aec7c4ef0cd2fe43679e1368c"><td class="memItemLeft" align="right" valign="top">ColMajorMatrixtype &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7970d54aec7c4ef0cd2fe43679e1368c">get_concentration</a> ()</td></tr>
 <tr class="memitem:a40a0d4fbe4d444bde00afb2f55194412" id="r_a40a0d4fbe4d444bde00afb2f55194412"><td class="memItemLeft" align="right" valign="top">ColMajorKokkosScalarMatrix&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40a0d4fbe4d444bde00afb2f55194412">get_device_concentration</a> () const</td></tr>
 <tr class="memitem:a8498ea2f568b016f61015c66aa6209c7" id="r_a8498ea2f568b016f61015c66aa6209c7"><td class="memItemLeft" align="right" valign="top">std::span&lt; double const &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8498ea2f568b016f61015c66aa6209c7">getVolumeData</a> () const</td></tr>
@@ -115,6 +116,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a8dbb8f959cc2cc7908d86a0ace0ae718" id="r_a8dbb8f959cc2cc7908d86a0ace0ae718"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8dbb8f959cc2cc7908d86a0ace0ae718">n_r</a></td></tr>
 <tr class="memitem:afa3ac3185393ec60e84ea8b305c7ebc8" id="r_afa3ac3185393ec60e84ea8b305c7ebc8"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa3ac3185393ec60e84ea8b305c7ebc8">n_c</a></td></tr>
 <tr class="memitem:af5d95693f044f3c4a689edacc8149417" id="r_af5d95693f044f3c4a689edacc8149417"><td class="memItemLeft" align="right" valign="top">ColMajorMatrixtype&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5d95693f044f3c4a689edacc8149417">total_mass</a></td></tr>
+<tr class="memitem:a7ba3ff343e635e84a6ed36991731510e" id="r_a7ba3ff343e635e84a6ed36991731510e"><td class="memItemLeft" align="right" valign="top">kernelContribution&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ba3ff343e635e84a6ed36991731510e">contribs</a></td></tr>
 <tr class="memitem:a898e819cf4c3e06cd089ca05c1add8df" id="r_a898e819cf4c3e06cd089ca05c1add8df"><td class="memItemLeft" align="right" valign="top">DiagonalType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a898e819cf4c3e06cd089ca05c1add8df">volumes_inverse</a></td></tr>
 <tr class="memitem:afcfe575dd87fccc56a014f84fe15fe1a" id="r_afcfe575dd87fccc56a014f84fe15fe1a"><td class="memItemLeft" align="right" valign="top">DiagonalType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcfe575dd87fccc56a014f84fe15fe1a">m_volumes</a></td></tr>
 <tr class="memitem:afe8d8df5f68be02f54478cff3abeb9f2" id="r_afe8d8df5f68be02f54478cff3abeb9f2"><td class="memItemLeft" align="right" valign="top">DiagonalType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe8d8df5f68be02f54478cff3abeb9f2">sink</a></td></tr>
@@ -864,6 +866,23 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a id="ae4b543a150df1ccde9002adad7f89e46" name="ae4b543a150df1ccde9002adad7f89e46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4b543a150df1ccde9002adad7f89e46">&#9670;&#160;</a></span>synchro_sources()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Simulation::ScalarSimulation::synchro_sources </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
 <a id="a6267083c7f53a6e540a0ae48bd28686d" name="a6267083c7f53a6e540a0ae48bd28686d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6267083c7f53a6e540a0ae48bd28686d">&#9670;&#160;</a></span>concentrations</h2>
@@ -876,6 +895,28 @@ Here is the call graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="structEigenKokkosBase.html">EigenKokkos</a> Simulation::ScalarSimulation::concentrations</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7ba3ff343e635e84a6ed36991731510e" name="a7ba3ff343e635e84a6ed36991731510e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ba3ff343e635e84a6ed36991731510e">&#9670;&#160;</a></span>contribs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">kernelContribution Simulation::ScalarSimulation::contribs</td>
         </tr>
       </table>
   </td>

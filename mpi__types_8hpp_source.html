@@ -74,8 +74,8 @@ $(function(){initNavTree('mpi__types_8hpp_source.html','',''); });
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef __MPI_TYPES_HPP__</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define __MPI_TYPES_HPP__</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;mpi_w/message_t.hpp&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;mpi.h&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;mpi.h&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;mpi_w/message_t.hpp&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;type_traits&gt;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceWrapMPI.html">WrapMPI</a></div>
@@ -111,20 +111,16 @@ $(function(){initNavTree('mpi__types_8hpp_source.html','',''); });
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    }</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keywordflow">else</span></div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    {</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>      []&lt;<span class="keywordtype">bool</span> flag = <span class="keyword">false</span>&gt;()</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>      {</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keyword">static_assert</span>(flag, <span class="stringliteral">&quot;no match&quot;</span>);</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>      }</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>      ();</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    }</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordflow">return</span> datatype;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  }</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>      []&lt;<span class="keywordtype">bool</span> flag = <span class="keyword">false</span>&gt;() { <span class="keyword">static_assert</span>(flag, <span class="stringliteral">&quot;no match&quot;</span>); }();</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    }</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordflow">return</span> datatype;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  }</div>
 </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>} <span class="comment">// namespace WrapMPI</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">#endif </span><span class="comment">//__MPI_TYPES_HPP__</span></div>
-<div class="ttc" id="anamespaceWrapMPI_html"><div class="ttname"><a href="namespaceWrapMPI.html">WrapMPI</a></div><div class="ttdoc">Namespace to correclty wrap MPI C API for modern C++.</div><div class="ttdef"><b>Definition</b> impl_async.hpp:19</div></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>} <span class="comment">// namespace WrapMPI</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="preprocessor">#endif </span><span class="comment">//__MPI_TYPES_HPP__</span></div>
+<div class="ttc" id="anamespaceWrapMPI_html"><div class="ttname"><a href="namespaceWrapMPI.html">WrapMPI</a></div><div class="ttdoc">Namespace to correclty wrap MPI C API for modern C++.</div><div class="ttdef"><b>Definition</b> impl_async.hpp:18</div></div>
 <div class="ttc" id="anamespaceWrapMPI_html_adab3300a86b8c0227268b23134b57a24"><div class="ttname"><a href="namespaceWrapMPI.html#adab3300a86b8c0227268b23134b57a24">WrapMPI::get_type</a></div><div class="ttdeci">constexpr MPI_Datatype get_type() noexcept</div><div class="ttdef"><b>Definition</b> mpi_types.hpp:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

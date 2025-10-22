@@ -86,44 +86,45 @@ $(function(){initNavTree('opaque__type_8hpp_source.html','',''); });
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">   13</a></span>  <a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>() = <span class="keywordflow">default</span>; <span class="comment">// Default constructor</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="structOpaquePointer.html#ad8c8a5c3d71cdeac6a859fd7f61cf0da">   15</a></span>  <a class="code hl_function" href="structOpaquePointer.html#ad8c8a5c3d71cdeac6a859fd7f61cf0da">OpaquePointer</a>(<span class="keyword">const</span> <a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>&amp; rhs) <span class="keyword">noexcept</span> = <span class="keywordflow">default</span>; <span class="comment">// Default copy constructor</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structOpaquePointer.html#afd0afd245ea27d36ad0ee2fd8216fa4f">   17</a></span>  <a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>&amp; <a class="code hl_function" href="structOpaquePointer.html#afd0afd245ea27d36ad0ee2fd8216fa4f">operator=</a>(<span class="keyword">const</span> <a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>&amp; rhs) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="foldopen" id="foldopen00019" data-start="{" data-end="}">
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="structOpaquePointer.html#ae91003d47c4ec49634c6af6558bb581b">   19</a></span>  <a class="code hl_function" href="structOpaquePointer.html#ae91003d47c4ec49634c6af6558bb581b">OpaquePointer</a>(<a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>&amp;&amp; rhs) noexcept : <a class="code hl_variable" href="structOpaquePointer.html#a7d90f52e05398fb8dd818da46aea9e14">ptr</a>(rhs.ptr)</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  { <span class="comment">// Move constructor</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    rhs.ptr = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  }</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="structOpaquePointer.html#ad8c8a5c3d71cdeac6a859fd7f61cf0da">   15</a></span>  <a class="code hl_function" href="structOpaquePointer.html#ad8c8a5c3d71cdeac6a859fd7f61cf0da">OpaquePointer</a>(<span class="keyword">const</span> <a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>&amp; rhs) <span class="keyword">noexcept</span> =</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>      <span class="keywordflow">default</span>; <span class="comment">// Default copy constructor</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="structOpaquePointer.html#afd0afd245ea27d36ad0ee2fd8216fa4f">   18</a></span>  <a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>&amp; <a class="code hl_function" href="structOpaquePointer.html#afd0afd245ea27d36ad0ee2fd8216fa4f">operator=</a>(<span class="keyword">const</span> <a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>&amp; rhs) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="foldopen" id="foldopen00020" data-start="{" data-end="}">
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="structOpaquePointer.html#ae91003d47c4ec49634c6af6558bb581b">   20</a></span>  <a class="code hl_function" href="structOpaquePointer.html#ae91003d47c4ec49634c6af6558bb581b">OpaquePointer</a>(<a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>&amp;&amp; rhs) noexcept : <a class="code hl_variable" href="structOpaquePointer.html#a7d90f52e05398fb8dd818da46aea9e14">ptr</a>(rhs.ptr)</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  { <span class="comment">// Move constructor</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    rhs.ptr = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  }</div>
 </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="foldopen" id="foldopen00024" data-start="{" data-end="}">
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="structOpaquePointer.html#aca8558d4a2b7aab20b1b68eb4d96a269">   24</a></span>  <a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>&amp; <a class="code hl_function" href="structOpaquePointer.html#aca8558d4a2b7aab20b1b68eb4d96a269">operator=</a>(<a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>&amp;&amp; rhs) <span class="keyword">noexcept</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  { <span class="comment">// Move assignment operator</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordflow">if</span> (<span class="keyword">this</span> != &amp;rhs)</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    { <span class="comment">// Prevent self-assignment</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>      <a class="code hl_variable" href="structOpaquePointer.html#a7d90f52e05398fb8dd818da46aea9e14">ptr</a> = rhs.ptr;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>      rhs.ptr = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    }</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  }</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="foldopen" id="foldopen00025" data-start="{" data-end="}">
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="structOpaquePointer.html#aca8558d4a2b7aab20b1b68eb4d96a269">   25</a></span>  <a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>&amp; <a class="code hl_function" href="structOpaquePointer.html#aca8558d4a2b7aab20b1b68eb4d96a269">operator=</a>(<a class="code hl_function" href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer</a>&amp;&amp; rhs) <span class="keyword">noexcept</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>  { <span class="comment">// Move assignment operator</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keywordflow">if</span> (<span class="keyword">this</span> != &amp;rhs)</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    { <span class="comment">// Prevent self-assignment</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>      <a class="code hl_variable" href="structOpaquePointer.html#a7d90f52e05398fb8dd818da46aea9e14">ptr</a> = rhs.ptr;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>      rhs.ptr = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    }</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  }</div>
 </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>  <span class="comment">// Add a destructor to handle cleanup if necessary</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="structOpaquePointer.html#a15258c96871b7e26aabb0977f35bbf0e">   35</a></span>  <a class="code hl_function" href="structOpaquePointer.html#a15258c96871b7e26aabb0977f35bbf0e">~OpaquePointer</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>};</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>  <span class="comment">// Add a destructor to handle cleanup if necessary</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="structOpaquePointer.html#a15258c96871b7e26aabb0977f35bbf0e">   36</a></span>  <a class="code hl_function" href="structOpaquePointer.html#a15258c96871b7e26aabb0977f35bbf0e">~OpaquePointer</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>};</div>
 </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="keywordtype">void</span> declare_opaque(py::module&amp; m);</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#endif </span><span class="comment">//__PY_OPAQUE_HPP__</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keywordtype">void</span> declare_opaque(py::module&amp; m);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#endif </span><span class="comment">//__PY_OPAQUE_HPP__</span></div>
 <div class="ttc" id="anamespacepybind11_html"><div class="ttname"><a href="namespacepybind11.html">pybind11</a></div><div class="ttdef"><b>Definition</b> import_py.hpp:8</div></div>
 <div class="ttc" id="astructOpaquePointer_html_a15258c96871b7e26aabb0977f35bbf0e"><div class="ttname"><a href="structOpaquePointer.html#a15258c96871b7e26aabb0977f35bbf0e">OpaquePointer::~OpaquePointer</a></div><div class="ttdeci">~OpaquePointer()=default</div></div>
 <div class="ttc" id="astructOpaquePointer_html_a7d90f52e05398fb8dd818da46aea9e14"><div class="ttname"><a href="structOpaquePointer.html#a7d90f52e05398fb8dd818da46aea9e14">OpaquePointer::ptr</a></div><div class="ttdeci">void * ptr</div><div class="ttdef"><b>Definition</b> opaque_type.hpp:11</div></div>
 <div class="ttc" id="astructOpaquePointer_html_a8005b607c5c53314d182e09bc3ac5aaa"><div class="ttname"><a href="structOpaquePointer.html#a8005b607c5c53314d182e09bc3ac5aaa">OpaquePointer::OpaquePointer</a></div><div class="ttdeci">OpaquePointer()=default</div></div>
-<div class="ttc" id="astructOpaquePointer_html_aca8558d4a2b7aab20b1b68eb4d96a269"><div class="ttname"><a href="structOpaquePointer.html#aca8558d4a2b7aab20b1b68eb4d96a269">OpaquePointer::operator=</a></div><div class="ttdeci">OpaquePointer &amp; operator=(OpaquePointer &amp;&amp;rhs) noexcept</div><div class="ttdef"><b>Definition</b> opaque_type.hpp:24</div></div>
+<div class="ttc" id="astructOpaquePointer_html_aca8558d4a2b7aab20b1b68eb4d96a269"><div class="ttname"><a href="structOpaquePointer.html#aca8558d4a2b7aab20b1b68eb4d96a269">OpaquePointer::operator=</a></div><div class="ttdeci">OpaquePointer &amp; operator=(OpaquePointer &amp;&amp;rhs) noexcept</div><div class="ttdef"><b>Definition</b> opaque_type.hpp:25</div></div>
 <div class="ttc" id="astructOpaquePointer_html_ad8c8a5c3d71cdeac6a859fd7f61cf0da"><div class="ttname"><a href="structOpaquePointer.html#ad8c8a5c3d71cdeac6a859fd7f61cf0da">OpaquePointer::OpaquePointer</a></div><div class="ttdeci">OpaquePointer(const OpaquePointer &amp;rhs) noexcept=default</div></div>
-<div class="ttc" id="astructOpaquePointer_html_ae91003d47c4ec49634c6af6558bb581b"><div class="ttname"><a href="structOpaquePointer.html#ae91003d47c4ec49634c6af6558bb581b">OpaquePointer::OpaquePointer</a></div><div class="ttdeci">OpaquePointer(OpaquePointer &amp;&amp;rhs) noexcept</div><div class="ttdef"><b>Definition</b> opaque_type.hpp:19</div></div>
+<div class="ttc" id="astructOpaquePointer_html_ae91003d47c4ec49634c6af6558bb581b"><div class="ttname"><a href="structOpaquePointer.html#ae91003d47c4ec49634c6af6558bb581b">OpaquePointer::OpaquePointer</a></div><div class="ttdeci">OpaquePointer(OpaquePointer &amp;&amp;rhs) noexcept</div><div class="ttdef"><b>Definition</b> opaque_type.hpp:20</div></div>
 <div class="ttc" id="astructOpaquePointer_html_afd0afd245ea27d36ad0ee2fd8216fa4f"><div class="ttname"><a href="structOpaquePointer.html#afd0afd245ea27d36ad0ee2fd8216fa4f">OpaquePointer::operator=</a></div><div class="ttdeci">OpaquePointer &amp; operator=(const OpaquePointer &amp;rhs)=default</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

@@ -88,16 +88,16 @@ Classes</h2></td></tr>
 <tr class="memitem:Uniform" id="r_Uniform"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCore_1_1ScalarFactory_1_1Uniform.html">Uniform</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents uniform concentration data for all compartments.  <a href="structCore_1_1ScalarFactory_1_1Uniform.html#details">More...</a><br /></td></tr>
 <tr class="memitem:Visitor" id="r_Visitor"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCore_1_1ScalarFactory_1_1Visitor.html">Visitor</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Functor struct to visit each type in <a class="el" href="#a358a47b1336632ccfeac46da15791fae" title="Path to the custom script used for initializing scalar data.">ScalarVariant</a> and initialize scalar data.  <a href="structCore_1_1ScalarFactory_1_1Visitor.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Functor struct to visit each type in <a class="el" href="#aede963ff58e06bcac32b39866b14148d" title="Path to the custom script used for initializing scalar data.">ScalarVariant</a> and initialize scalar data.  <a href="structCore_1_1ScalarFactory_1_1Visitor.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a358a47b1336632ccfeac46da15791fae" id="r_a358a47b1336632ccfeac46da15791fae"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a358a47b1336632ccfeac46da15791fae">ScalarVariant</a> = std::variant&lt;<a class="el" href="structCore_1_1ScalarFactory_1_1Uniform.html">Uniform</a>, <a class="el" href="structCore_1_1ScalarFactory_1_1Local.html">Local</a>, <a class="el" href="structCore_1_1ScalarFactory_1_1File.html">File</a>, <a class="el" href="structCore_1_1ScalarFactory_1_1CustomScript.html">CustomScript</a>,<a class="el" href="structCore_1_1ScalarFactory_1_1FullCase.html">FullCase</a>&gt;</td></tr>
-<tr class="memdesc:a358a47b1336632ccfeac46da15791fae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Path to the custom script used for initializing scalar data.  <br /></td></tr>
+<tr class="memitem:aede963ff58e06bcac32b39866b14148d" id="r_aede963ff58e06bcac32b39866b14148d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aede963ff58e06bcac32b39866b14148d">ScalarVariant</a></td></tr>
+<tr class="memdesc:aede963ff58e06bcac32b39866b14148d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Path to the custom script used for initializing scalar data.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8fb497033464776a1cda71cce1840cd8" id="r_a8fb497033464776a1cda71cce1840cd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSimulation_1_1ScalarInitializer.html">Simulation::ScalarInitializer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fb497033464776a1cda71cce1840cd8">scalar_factory</a> (bool f_init_gas_flow, std::span&lt; double &gt; gas_volume, std::span&lt; double &gt; liquid_volume, <a class="el" href="#a358a47b1336632ccfeac46da15791fae">ScalarVariant</a> arg_liq)</td></tr>
+<tr class="memitem:a8fb497033464776a1cda71cce1840cd8" id="r_a8fb497033464776a1cda71cce1840cd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSimulation_1_1ScalarInitializer.html">Simulation::ScalarInitializer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fb497033464776a1cda71cce1840cd8">scalar_factory</a> (bool f_init_gas_flow, std::span&lt; double &gt; gas_volume, std::span&lt; double &gt; liquid_volume, <a class="el" href="#aede963ff58e06bcac32b39866b14148d">ScalarVariant</a> arg_liq)</td></tr>
 <tr class="memdesc:a8fb497033464776a1cda71cce1840cd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory function to initialize scalar data based on the specified input source.  <br /></td></tr>
 <tr class="memitem:a3cd3bf6bf73298a38df48b444e3f0a23" id="r_a3cd3bf6bf73298a38df48b444e3f0a23"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3cd3bf6bf73298a38df48b444e3f0a23">sanitize</a> (const <a class="el" href="structSimulation_1_1ScalarInitializer.html">Simulation::ScalarInitializer</a> &amp;res)</td></tr>
 </table>
@@ -105,18 +105,20 @@ Functions</h2></td></tr>
 <div class="textblock"><p>Provides structures and functions to initialize scalar data for simulations, supporting multiple data sources. </p>
 <p>The <a class="el" href="namespaceCore_1_1ScalarFactory.html" title="Provides structures and functions to initialize scalar data for simulations, supporting multiple data...">ScalarFactory</a> namespace contains several structures representing different methods of initializing scalar values (liquid and gas concentrations) for simulations. </p>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
-<a id="a358a47b1336632ccfeac46da15791fae" name="a358a47b1336632ccfeac46da15791fae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a358a47b1336632ccfeac46da15791fae">&#9670;&#160;</a></span>ScalarVariant</h2>
+<a id="aede963ff58e06bcac32b39866b14148d" name="aede963ff58e06bcac32b39866b14148d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aede963ff58e06bcac32b39866b14148d">&#9670;&#160;</a></span>ScalarVariant</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#a358a47b1336632ccfeac46da15791fae">Core::ScalarFactory::ScalarVariant</a> = std::variant&lt;<a class="el" href="structCore_1_1ScalarFactory_1_1Uniform.html">Uniform</a>, <a class="el" href="structCore_1_1ScalarFactory_1_1Local.html">Local</a>, <a class="el" href="structCore_1_1ScalarFactory_1_1File.html">File</a>, <a class="el" href="structCore_1_1ScalarFactory_1_1CustomScript.html">CustomScript</a>,<a class="el" href="structCore_1_1ScalarFactory_1_1FullCase.html">FullCase</a>&gt;</td>
+          <td class="memname">using <a class="el" href="#aede963ff58e06bcac32b39866b14148d">Core::ScalarFactory::ScalarVariant</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line"> </div>
+<div class="line">      std::variant&lt;Uniform, Local, File, CustomScript, FullCase&gt;</div>
+</div><!-- fragment -->
 <p>Path to the custom script used for initializing scalar data. </p>
 <p>A variant type representing different scalar data sources. </p>
 
@@ -169,7 +171,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a358a47b1336632ccfeac46da15791fae">ScalarVariant</a></td>          <td class="paramname"><span class="paramname"><em>arg_liq</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="#aede963ff58e06bcac32b39866b14148d">ScalarVariant</a></td>          <td class="paramname"><span class="paramname"><em>arg_liq</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">

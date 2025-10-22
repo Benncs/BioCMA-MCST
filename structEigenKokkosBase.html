@@ -78,7 +78,7 @@ $(function(){initNavTree('structEigenKokkosBase.html','','structEigenKokkosBase-
 Public Types</h2></td></tr>
 <tr class="memitem:add0e7d4acc40f46660ddc27248f05274" id="r_add0e7d4acc40f46660ddc27248f05274"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add0e7d4acc40f46660ddc27248f05274">EigenMatrix</a> = MatrixType&lt;EigenLayout&gt;</td></tr>
 <tr class="memitem:a7d072a83aff73745519d0663a8b784a2" id="r_a7d072a83aff73745519d0663a8b784a2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d072a83aff73745519d0663a8b784a2">HostView</a> = KokkosScalarMatrix&lt;HostSpace, EigenLayout&gt;</td></tr>
-<tr class="memitem:ab93cc989841e95675a4309f565f7e74a" id="r_ab93cc989841e95675a4309f565f7e74a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab93cc989841e95675a4309f565f7e74a">ComputeView</a></td></tr>
+<tr class="memitem:a0171917c2d85ace98cc00b725e78487a" id="r_a0171917c2d85ace98cc00b725e78487a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0171917c2d85ace98cc00b725e78487a">ComputeView</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -91,12 +91,12 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:afc86f3e1951928d7d39c4205afb773fd" id="r_afc86f3e1951928d7d39c4205afb773fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a7d072a83aff73745519d0663a8b784a2">HostView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc86f3e1951928d7d39c4205afb773fd">host</a></td></tr>
-<tr class="memitem:a02880b2be1ef8ec8f99c4354216c8a78" id="r_a02880b2be1ef8ec8f99c4354216c8a78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ab93cc989841e95675a4309f565f7e74a">ComputeView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02880b2be1ef8ec8f99c4354216c8a78">compute</a></td></tr>
+<tr class="memitem:a02880b2be1ef8ec8f99c4354216c8a78" id="r_a02880b2be1ef8ec8f99c4354216c8a78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0171917c2d85ace98cc00b725e78487a">ComputeView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02880b2be1ef8ec8f99c4354216c8a78">compute</a></td></tr>
 <tr class="memitem:a04dfe1c54be0e40e2ddc8831b3572ac8" id="r_a04dfe1c54be0e40e2ddc8831b3572ac8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#add0e7d4acc40f46660ddc27248f05274">EigenMatrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a04dfe1c54be0e40e2ddc8831b3572ac8">eigen_data</a></td></tr>
 </table>
 <a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
-<a id="ab93cc989841e95675a4309f565f7e74a" name="ab93cc989841e95675a4309f565f7e74a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab93cc989841e95675a4309f565f7e74a">&#9670;&#160;</a></span>ComputeView</h2>
+<a id="a0171917c2d85ace98cc00b725e78487a" name="a0171917c2d85ace98cc00b725e78487a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0171917c2d85ace98cc00b725e78487a">&#9670;&#160;</a></span>ComputeView</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -109,7 +109,9 @@ template&lt;int EigenLayout&gt; </div>
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> </div>
-<div class="line">      KokkosScalarMatrix&lt;ComputeSpace, EigenLayout, Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;</div>
+<div class="line">      KokkosScalarMatrix&lt;ComputeSpace,</div>
+<div class="line">                         EigenLayout,</div>
+<div class="line">                         Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -296,7 +298,7 @@ template&lt;int EigenLayout&gt; </div>
 template&lt;int EigenLayout&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ab93cc989841e95675a4309f565f7e74a">ComputeView</a> <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout &gt;::compute</td>
+          <td class="memname"><a class="el" href="#a0171917c2d85ace98cc00b725e78487a">ComputeView</a> <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout &gt;::compute</td>
         </tr>
       </table>
 </div><div class="memdoc">
