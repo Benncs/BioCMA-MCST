@@ -250,7 +250,7 @@ $(function(){initNavTree('particles__container_8hpp_source.html','',''); });
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        <span class="comment">// const re</span></div>
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>        <span class="keyword">const</span> <span class="keywordtype">double</span> c = weight * <a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297">model</a>(idx, i);</div>
 <div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        <span class="comment">// Kokkos::printf(&quot;%d %d %lf\r\n&quot;, rel, i, c);</span></div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        access(pos, rel) += c;</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        access(rel, pos) += c;</div>
 <div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>      }</div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>      <span class="comment">// access(pos, 0) += (weight * model(idx, 2)); works</span></div>
 <div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    }</div>
