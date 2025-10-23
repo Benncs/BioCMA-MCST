@@ -10,6 +10,7 @@ COPY ./subprojects/highfive.wrap /app/subprojects/highfive.wrap
 COPY ./subprojects/cmtool.wrap /app/subprojects/cmtool.wrap
 COPY ./subprojects/eigen.wrap /app/subprojects/eigen.wrap
 COPY ./subprojects/cmtool /app/subprojects/cmtool
+COPY ./subprojects/cmtool /app/subprojects/kokkos_sampling.wrap
 COPY ./meson.build /app/meson.build
 COPY ./meson_options.txt /app/meson_options.txt
 COPY ./devutils/generate_model_loader.py /app/devutils/generate_model_loader.py
