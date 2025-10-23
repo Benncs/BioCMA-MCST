@@ -195,9 +195,7 @@ namespace MC
       for (int i = begin; i < end; ++i)
       {
         const int rel = i - begin;
-        // const re
         const double c = weight * model(idx, i);
-        // Kokkos::printf("%d %d %lf\r\n", rel, i, c);
         access(rel, pos) += c;
       }
       // access(pos, 0) += (weight * model(idx, 2)); works

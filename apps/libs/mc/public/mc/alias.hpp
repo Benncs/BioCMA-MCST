@@ -17,7 +17,7 @@ using kernelMT = Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::RandomAccess |
                                       Kokkos::MemoryTraitsFlags::Restrict>;
 
 using kernelContribution =
-    Kokkos::View<double**, Kokkos::LayoutRight, MC::ComputeSpace, kernelMT>;
+    Kokkos::View<double**, Kokkos::LayoutLeft, MC::ComputeSpace, kernelMT>;
 namespace MC
 {
   enum class Status : int
