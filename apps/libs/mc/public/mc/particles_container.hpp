@@ -55,6 +55,7 @@ namespace
               last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
         }
 
+        // Merge position EZ
         status(i_to_remove) = MC::Status::Idle;
         Kokkos::atomic_exchange(&position(i_to_remove), position(idx_to_move));
         // TODO Use hierachical parallism here, thread range is likely to work
@@ -82,10 +83,11 @@ namespace
     InsertFunctor(std::size_t _original_size,
                   M::SelfParticle _model,
                   MC::ParticlePositions _position,
+                  MC::ParticleAges _ages,
                   M::SelfParticle _buffer_model,
                   MC::ParticlePositions _buffer_position)
         : original_size(_original_size), model(std::move(_model)),
-          position(std::move(_position)),
+          ages(std::move(_ages)), position(std::move(_position)),
           buffer_model(std::move(_buffer_model)),
           buffer_position(std::move(_buffer_position))
     {
@@ -110,11 +112,17 @@ namespace
       auto range = M::n_var;
       const int i = team.league_rank();
 
-      position(original_size + i) = buffer_position(i);
       Kokkos::parallel_for(
           Kokkos::TeamVectorRange(team, range),
           [&](const int& j)
           { model(original_size + i, j) = buffer_model(i, j); });
+      position(original_size + i) = buffer_position(i);
+
+      // Actually needs buffer to store mother's hydraulic time
+      // But set new hydraulic time to 0 to not create new buffer a save memory
+      // usage
+      ages(original_size + 1, 0) = 0;
+      ages(original_size + 1, 1) = 0;
     }
 
     std::size_t original_size;
@@ -122,6 +130,7 @@ namespace
     MC::ParticlePositions position;
     M::SelfParticle buffer_model;
     MC::ParticlePositions buffer_position;
+    MC::ParticleAges ages;
   };
 
 }; // namespace
@@ -142,23 +151,18 @@ namespace MC
   template <ModelType Model> class ParticlesContainer
   {
   public:
+    using UsedModel = Model;
+
     static constexpr double buffer_ratio =
         1; ///< Buffer size = ceil(list.size()*buffer_ratio), 0.6 is fine for
            ///< high division rate or stiff increase to 1
     /**
      * @brief Alias for the model used by the container.
      */
-    using UsedModel = Model;
 
     explicit ParticlesContainer(std::size_t n_particle,
                                 bool virtual_position = false);
     ParticlesContainer(); //=default;
-
-    Model::SelfParticle model;
-    MC::ParticlePositions position;
-    MC::ParticleStatus status;
-    ParticleWeigths weights;
-    ParticleAges ages;
     /**
      * @brief Default copy and move constructors and assignment operators.
      */
@@ -172,14 +176,13 @@ namespace MC
      */
     ~ParticlesContainer() = default;
 
-    /**
-     * @brief Gets the number of particles in the container.
-     *
-     * @return The number of particles currently in the to_process container.
-     */
-    [[nodiscard]] KOKKOS_INLINE_FUNCTION std::size_t n_particles() const;
-
-    // TODO Add logic off internal_dead_counter header
+    // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes)
+    Model::SelfParticle model;
+    MC::ParticlePositions position;
+    MC::ParticleStatus status;
+    ParticleWeigths weights;
+    ParticleAges ages;
+    // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
 
     template <typename CviewType>
     KOKKOS_INLINE_FUNCTION void
@@ -198,28 +201,16 @@ namespace MC
         const double c = weight * model(idx, i);
         access(rel, pos) += c;
       }
-      // access(pos, 0) += (weight * model(idx, 2)); works
     }
-
-    // template <typename ExecutionSpace, typename TeamHandle>
-    // KOKKOS_INLINE_FUNCTION typename std::enable_if<
-    //     std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
-    // get_contributions(const MC::KPRNG::pool_type& random_pool,
-    //                   std::size_t idx,
-    //                   const ContributionView& contributions,
-    //                   const TeamMember& handle) const;
-
-    // template <typename ExecutionSpace, typename TeamHandle>
-    // typename std::enable_if<
-    //     !std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
-    // get_contributions(const MC::KPRNG::pool_type& random_pool,
-    //                   std::size_t idx,
-    //                   const ContributionView& contributions,
-    //                   const TeamMember& handle) const;
 
     [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
     handle_division(const MC::KPRNG::pool_type& random_pool,
                     std::size_t idx1) const;
+
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION double
+    get_weight(std::size_t idx) const;
+
+    // HOST
 
     void force_remove_dead();
 
@@ -231,9 +222,6 @@ namespace MC
 
     template <class Archive> void load(Archive& ar);
 
-    [[nodiscard]] KOKKOS_INLINE_FUNCTION double
-    get_weight(std::size_t idx) const;
-
     [[nodiscard]] double get_allocation_factor() const;
 
     [[nodiscard]] std::size_t capacity() const;
@@ -243,6 +231,14 @@ namespace MC
     std::size_t update_and_clean_dead(std::size_t out,
                                       std::size_t dead,
                                       std::size_t threshold);
+
+    /**
+     * @brief Gets the number of particles in the container.
+     *
+     * @return The number of particles currently in the to_process
+     * container.
+     */
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION std::size_t n_particles() const;
 
     void clean_dead(std::size_t to_remove);
 
@@ -262,29 +258,6 @@ namespace MC
     int begin;
     int end;
   };
-
-  // template <typename CviewType>
-  // template <ModelType Model>
-  // KOKKOS_INLINE_FUNCTION void ParticlesContainer<Model>::get_contributions(
-  //     std::size_t idx, const CviewType& contributions) const
-  // {
-  //   static_assert(ConstWeightModelType<Model>,
-  //                 "ModelType: Constapply_weight()");
-
-  //   const double weight = get_weight(idx);
-  //   const auto pos = position(idx);
-  //   auto access = contributions.access();
-
-  //   for (int i = begin; i < end; ++i)
-  //   {
-  //     const int rel = i - begin;
-  //     // const re
-  //     const double c = weight * model(idx, i);
-  //     // Kokkos::printf("%d %d %lf\r\n", rel, i, c);
-  //     access(pos, rel) += c;
-  //   }
-  //   // access(pos, 0) += (weight * model(idx, 2)); works
-  // }
 
   template <ModelType Model>
   [[nodiscard]] KOKKOS_INLINE_FUNCTION std::size_t
@@ -374,12 +347,9 @@ namespace MC
       const auto idx2 = Kokkos::atomic_fetch_add(&buffer_index(), 1);
       Model::division(random_pool, idx1, idx2, model, buffer_model);
       buffer_position(idx2) = position(idx1);
-
+      ages(idx1, 1) = 0;
       return true;
     }
-    Kokkos::printf("%ld %ld\r\n",
-                   Kokkos::atomic_load(&buffer_index()),
-                   buffer_model.extent(0));
     return false;
   }
 
@@ -393,13 +363,14 @@ namespace MC
       return;
     }
     _resize(original_size + n_add_item);
-    // Merge position EZ
-
-    Kokkos::parallel_for(
-        "InsertMerge",
-        TeamPolicy(n_add_item, Kokkos::AUTO, Model::n_var),
-        InsertFunctor<Model>(
-            original_size, model, position, buffer_model, buffer_position));
+    Kokkos::parallel_for("InsertMerge",
+                         TeamPolicy(n_add_item, Kokkos::AUTO, Model::n_var),
+                         InsertFunctor<Model>(original_size,
+                                              model,
+                                              position,
+                                              ages,
+                                              buffer_model,
+                                              buffer_position));
 
     buffer_index() = 0;
     n_used_elements += n_add_item;
@@ -573,84 +544,6 @@ namespace MC
       }
     };
   }
-
-  // template <ModelType M>
-  // KOKKOS_INLINE_FUNCTION void ParticlesContainer<M>::get_contributions(
-  //     std::size_t idx, const ContributionView& contributions) const
-  // {
-  //   static_assert(ConstWeightModelType<M>, "ModelType: Const
-  //   apply_weight()"); const double weight = get_weight(idx);
-  //   M::contribution(idx, position(idx), weight, model, contributions);
-  // }
-
-  // template <ModelType M>
-  // template <typename TeamHandle>
-  // KOKKOS_INLINE_FUNCTION typename std::enable_if<
-  //     std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
-  // ParticlesContainer<M>::get_contributions(
-  //     const MC::KPRNG::pool_type& random_pool,
-  //     std::size_t idx,
-  //     const ContributionView& contributions,
-  //     const TeamMember& handle) const
-  // {
-
-  //   (void)handle;
-  //   static_assert(ConstWeightModelType<M>, "ModelType: Constapply_weight()");
-  //   const double weight = get_weight(idx);
-  //   M::contribution(idx, position(idx), weight, model, contributions);
-
-  //   // constexpr int n_virtual_position = 500;
-  //   // static_assert(ConstWeightModelType<M>, "ModelType:
-  //   Constapply_weight()");
-  //   // const double weight = get_weight(idx);
-  //   // auto s = random_pool.get_state();
-  //   // const auto pos = s.urand(0, n_virtual_position - 1);
-  //   // random_pool.free_state(s);
-  //   // if (flag_virtual_position)
-  //   // {
-  //   //   Kokkos::View<double*,
-  //   //                typename ExecutionSpace::scratch_memory_space,
-  //   //                Kokkos::MemoryTraits<Kokkos::Unmanaged>>
-  //   //       a(handle.team_scratch(0), n_virtual_position);
-
-  //   //   const auto mock_contrib = -1 * weight * model(idx, 2);
-  //   //   Kokkos::atomic_add(&a(pos), mock_contrib);
-  //   //   handle.team_barrier();
-  //   //   double sum = 0.;
-  //   //   parallel_reduce(
-  //   //       TeamThreadRange(handle, n_virtual_position),
-  //   //       KOKKOS_LAMBDA(int i, double& lsum) {
-  //   //         Kokkos::single(PerThread(handle), [=]() { lsum += a(i); });
-  //   //       },
-  //   //       sum);
-
-  //   //   Kokkos::single(Kokkos::PerThread(handle),
-  //   //                  [=]()
-  //   //                  {
-  //   //                    auto access = contributions.access();
-  //   //                    access(0, 0) += sum;
-  //   //                  });
-  //   // }
-  //   // else
-  //   // {
-  //   // }
-  // }
-
-  // template <ModelType M>
-  // template <typename ExecutionSpace, typename TeamHandle>
-  // KOKKOS_INLINE_FUNCTION typename std::enable_if<
-  //     !std::is_same<ExecutionSpace, Kokkos::HostSpace>::value>::type
-  // ParticlesContainer<M>::get_contributions(
-  //     const MC::KPRNG::pool_type& random_pool,
-  //     std::size_t idx,
-  //     const ContributionView& contributions,
-  //     const TeamMember& handle) const
-  // {
-  //   (void)handle;
-  //   static_assert(ConstWeightModelType<M>, "ModelType: Const
-  //   apply_weight()"); const double weight = get_weight(idx);
-  //   M::contribution(idx, position(idx), weight, model, contributions);
-  // }
 
   template <ModelType M>
   [[nodiscard]] KOKKOS_INLINE_FUNCTION double

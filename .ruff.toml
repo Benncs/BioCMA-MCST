@@ -1,5 +1,5 @@
 include = ["apps/api/python/*.py","tools/**/*.py","devutils/**/*.py"]
-
+exclude = ['documentation/']
 line-length = 88
 indent-width = 4
 

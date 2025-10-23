@@ -20,7 +20,6 @@ def format_rhs(match):
 
 def wrap_timer(f, do_measure: bool):
     try:
-
         old_action = signal.signal(signal.SIGINT, signal.SIG_IGN)
         if do_measure:
             start_time = time.perf_counter()
@@ -49,7 +48,9 @@ def exec(command, n_thread, do_measure: bool = True, do_kokkos_measure=False, **
     if do_kokkos_measure:
         # env_var["KOKKOS_TOOLS_LIBS"] = "/usr/local/lib64/libkp_memory_events.so"
         # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib64/libkp_kernel_timer.so"
-        env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib/libkp_kernel_timer.so" #libkp_memory_usage
+        env_var["KOKKOS_TOOLS_LIBS"] = (
+            "/usr/local/lib/libkp_kernel_timer.so"  # libkp_memory_usage
+        )
 
     result = command.replace("-", "\n-")
     pattern = re.compile(r"(-\w+\s)(\S+)")

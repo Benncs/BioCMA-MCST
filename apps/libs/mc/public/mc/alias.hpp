@@ -20,30 +20,40 @@ using kernelContribution =
     Kokkos::View<double**, Kokkos::LayoutLeft, MC::ComputeSpace, kernelMT>;
 namespace MC
 {
-  enum class Status : int
+
+  using restrict_mt = Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>;
+  namespace
+  {
+
+    /**
+     * @brief Store particle ages
+     * ages(i,0) -> hydraulic time (set to 0 when leave reactor)
+     * ages(i,1) -> time since division (set to 0 when divide)
+     **/
+    template <typename Exec>
+    using ParticleAgesBase = Kokkos::
+        View<double* [2], Kokkos::LayoutLeft, Exec, restrict_mt>; // NOLINT
+  } // namespace
+
+  enum class Status : char
   {
     Idle = 0,
     Division,
     Exit,
     Dead,
   };
+
   struct ContribIndexBounds
   {
     int begin;
     int end;
   };
 
-  // template <typename Exec>
-  // using GContribIndexBounds = Kokkos::View<SContribIndexBounds, Exec>; //
-  // NOLINT
-
-  // using ContribIndexBounds = GContribIndexBounds<ComputeSpace>; // NOLINT
-  using restrict_mt = Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>;
   using ParticlePositions = Kokkos::View<uint64_t*, ComputeSpace, restrict_mt>;
   using ParticleStatus = Kokkos::View<Status*, ComputeSpace, restrict_mt>;
   using ParticleWeigths = Kokkos::View<double*, ComputeSpace, restrict_mt>;
-  using ParticleAges =
-      Kokkos::View<double* [2], Kokkos::LayoutLeft, ComputeSpace, restrict_mt>;
+
+  using ParticleAges = ParticleAgesBase<ComputeSpace>;
 
   template <typename MemorySpace>
   using ParticlePropertyViewType =

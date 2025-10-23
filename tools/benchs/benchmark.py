@@ -108,7 +108,7 @@ def format_cli(bench_config, case_config, number_particle, nt=None):
         common_cmd.append("-fi")
         common_cmd.append(case_config["cma_init"])
 
-    if bench_config.get("mpi",None) is None:
+    if bench_config.get("mpi", None) is None:
         cmd = [f"{bench_config['path']}/{bench_config['executable_name']}", *common_cmd]
     else:
         n_node = bench_config["mpi"]
@@ -418,14 +418,10 @@ def _fom(args):
         )
         all_kt.append(kt)
 
-        all_nt.append(
-            np.array( [int(data[i]["n_threads"]) for i in data])
-        )
-    
-        all_mpi.append(
-            np.array( [bc.get('mpi',0) for i in data])
-        )
-        
+        all_nt.append(np.array([int(data[i]["n_threads"]) for i in data]))
+
+        all_mpi.append(np.array([bc.get("mpi", 0) for i in data]))
+
     all_np = np.concatenate(all_np)
     all_time = np.concatenate(all_time)
     names = np.concatenate(names)
@@ -434,24 +430,23 @@ def _fom(args):
     maxnt = np.max(all_nt)
     all_mpi = np.concatenate(all_mpi)
 
-    maxnp = 100e6 #np.max(all_np)
+    maxnp = 100e6  # np.max(all_np)
     mask_name = True  # (names == "gpe_3d") | (names == "gpu_3d")
     mask_np = (all_np == maxnp) | (all_np == maxnp)
     mask_mpi = (all_nt == 1) & (all_mpi == 20)
     mask_thread = (all_nt == maxnt) | mask_mpi
-    mask = mask_np & mask_name & mask_thread 
-    
+    mask = mask_np & mask_name & mask_thread
 
     fig, ax = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
-    ax[0].bar(names[mask], all_kt[mask], color='skyblue')
+    ax[0].bar(names[mask], all_kt[mask], color="skyblue")
     ax[0].set_title("Kernel Time (100M Particles)", fontsize=14)
     ax[0].set_ylabel("Time [s]", fontsize=12)
-    ax[0].grid(True, which='both', linestyle='--', alpha=0.7)
-    ax[1].bar(names[mask], all_time[mask], color='#FF6347')
+    ax[0].grid(True, which="both", linestyle="--", alpha=0.7)
+    ax[1].bar(names[mask], all_time[mask], color="#FF6347")
     ax[1].set_title("Wall Time (100M Particles)", fontsize=14)
     ax[1].set_ylabel("Time [s]", fontsize=12)
     ax[1].set_xlabel("Names", fontsize=12)
-    ax[1].grid(True, which='both', linestyle='--', alpha=0.7)
+    ax[1].grid(True, which="both", linestyle="--", alpha=0.7)
     plt.tight_layout()
 
     plt.show()
