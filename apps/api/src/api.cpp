@@ -11,6 +11,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <exception>
+#include <filesystem>
 #include <memory>
 #include <new>
 #include <optional>
@@ -20,6 +21,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+
 constexpr int ID_VERIF = 2025;
 
 #define CHECK_OR_RETURN(cond, msg)                                             \
@@ -123,57 +125,6 @@ namespace Api
         _flow, _concentration, _species, input_position, output_position, true);
     return set_feed(constant_feed, phase);
   }
-
-  // bool SimulationInstance::set_feed_constant_from_rvalue(double _f,
-  //                                                        std::vector<double>&&
-  //                                                        _target,
-  //                                                        std::vector<std::size_t>&&
-  //                                                        _position,
-  //                                                        std::vector<std::size_t>&&
-  //                                                        _species, bool gas,
-  //                                                        bool fed_batch)
-  // {
-  //   return set_feed_constant(_f, _target, _position, _species, gas,
-  //   fed_batch);
-  // }
-
-  // bool SimulationInstance::set_feed_constant(double _flow,
-  //                                            std::span<double>
-  //                                            _concentration,
-  //                                            std::span<std::size_t>
-  //                                            _position,
-  //                                            std::span<std::size_t> _species,
-  //                                            bool gas,
-  //                                            bool fed_batch)
-  // {
-  //   return set_feed_constant_from_position(
-  //       _flow, _concentration, _position, _species, std::nullopt, gas,
-  //       fed_batch);
-  // }
-
-  // bool SimulationInstance::set_feed_constant_from_position(
-  //     double _flow,
-  //     std::span<double> _concentration,
-  //     std::span<std::size_t> _position,
-  //     std::span<std::size_t> _species,
-  //     std::optional<std::vector<std::size_t>> _output_position,
-  //     bool gas,
-  //     bool fed_batch)
-  // {
-  //   auto target = span_to_vec(_concentration);
-  //   auto position = span_to_vec(_position);
-  //   auto species = span_to_vec(_species);
-  //   auto fd = Simulation::Feed::FeedFactory::constant(_flow,
-  //                                                     std::move(target),
-  //                                                     std::move(position),
-  //                                                     std::move(species),
-  //                                                     std::move(_output_position),
-  //                                                     !fed_batch);
-  //   // negates fed_batch because constant accepts set_exit flag. fed_batch =
-  //   !set_exit
-
-  //   return set_feed(fd, gas);
-  // }
 
   SimulationInstance::SimulationInstance(int argc,
                                          char** argv,
@@ -351,10 +302,24 @@ namespace Api
   bool SimulationInstance::register_cma_path(std::string_view path,
                                              bool recursive)
   {
-    // TODO Check path
+
+    std::filesystem::path p(path);
+
+    if (!std::filesystem::exists(p) || !std::filesystem::is_directory(p))
+    {
+      return false;
+    }
+
+    std::string normalized = p.string();
+    if (normalized.back() != std::filesystem::path::preferred_separator)
+    {
+      normalized += std::filesystem::path::preferred_separator;
+    }
+
     this->params.recursive = recursive;
-    this->params.cma_case_path = path;
-    return true; // TODO
+    this->params.cma_case_path = normalized;
+
+    return true;
   }
 
   ApiResult SimulationInstance::register_initial_condition(

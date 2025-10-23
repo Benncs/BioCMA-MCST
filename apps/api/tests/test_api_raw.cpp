@@ -102,16 +102,18 @@ void test_register_parameters(int argc, char** argv)
   delete_handle(&handle);
 }
 
+// need existing directory
 void test_register_cma_path_recursive(int argc, char** argv)
 {
-  Handle handle = INIT int result = register_cma_path_recursive(handle, "path");
+  Handle handle = INIT int result =
+      register_cma_path_recursive(handle, "./tools");
   assert(result == 0);
   delete_handle(&handle);
 }
-
+// need existing directory
 void test_register_cma_path(int argc, char** argv)
 {
-  Handle handle = INIT int result = register_cma_path(handle, "path");
+  Handle handle = INIT int result = register_cma_path(handle, "./tools");
   assert(result == 0);
   delete_handle(&handle);
 }
