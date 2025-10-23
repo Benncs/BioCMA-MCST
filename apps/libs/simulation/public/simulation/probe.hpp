@@ -13,7 +13,8 @@
 // KOKKOS_INLINE_FUNCTION bool is_view_accessible(const ViewType& view)
 // {
 //   return Kokkos::SpaceAccessibility<typename ExecutionSpace::memory_space,
-//                                     typename ViewType::memory_space>::accessible;
+//                                     typename
+//                                     ViewType::memory_space>::accessible;
 // }
 
 namespace Simulation
@@ -25,8 +26,8 @@ namespace Simulation
     DivisionTime
   };
 
-  // TODO: keep thi structure as a bulkstorage for fast compute but consider sorting into bins when
-  // exporting it to avoid unnecessary amount of data
+  // TODO: keep thi structure as a bulkstorage for fast compute but consider
+  // sorting into bins when exporting it to avoid unnecessary amount of data
   //  Unordered map could be adapted
 
   /**  @brief Class to store time event as bulk storage  */
@@ -34,7 +35,8 @@ namespace Simulation
   {
   public:
     template <typename Space>
-    using buffer_type = Kokkos::View<double[buffer_size], Kokkos::LayoutRight, Space>;
+    using buffer_type =
+        Kokkos::View<double[buffer_size], Kokkos::LayoutRight, Space>;
     void clear();
 
     [[nodiscard]] KOKKOS_INLINE_FUNCTION bool set(double val) const;
@@ -71,7 +73,8 @@ namespace Simulation
       active = true;
       buffer = buffer_type<Kokkos::DefaultExecutionSpace>("probe_buffer");
       internal_counter = Kokkos::View<uint64_t, Kokkos::SharedSpace>("i_c");
-      host_buffer = buffer_type<Kokkos::DefaultHostExecutionSpace>("host_buffer");
+      host_buffer =
+          buffer_type<Kokkos::DefaultHostExecutionSpace>("host_buffer");
     }
     clear();
   }
@@ -79,21 +82,22 @@ namespace Simulation
   template <std::size_t buffer_size>
   KOKKOS_INLINE_FUNCTION bool Probes<buffer_size>::set(double val) const
   {
-    const auto i = (active)?Kokkos::atomic_fetch_inc(&internal_counter()):0;
+    const auto i = (active) ? Kokkos::atomic_fetch_inc(&internal_counter()) : 0;
 
     // Innaccessible from host space if use CUDA because of direct assignment
     if ((i < buffer_size) && active)
     {
       // this->buffer(i) = val;
-      // if constexpr (is_view_accessible<decltype(buffer), Kokkos::DefaultExecutionSpace>())
+      // if constexpr (is_view_accessible<decltype(buffer),
+      // Kokkos::DefaultExecutionSpace>())
       {
         this->buffer(i) = val;
       }
       // else
       // {
       //   // Kokkos::deep_copy(buffer(i), val);
-      //   Kokkos::View<double, Kokkos::DefaultHostExecutionSpace> single_val("SingleValue");
-      //   single_val() = val;
+      //   Kokkos::View<double, Kokkos::DefaultHostExecutionSpace>
+      //   single_val("SingleValue"); single_val() = val;
 
       //   Kokkos::deep_copy(buffer(i), single_val);
       // }
@@ -102,7 +106,8 @@ namespace Simulation
     return false;
   }
 
-  template <std::size_t buffer_size> bool Probes<buffer_size>::need_export() const noexcept
+  template <std::size_t buffer_size>
+  bool Probes<buffer_size>::need_export() const noexcept
   {
     return (internal_counter() >= buffer_size) && active;
   }

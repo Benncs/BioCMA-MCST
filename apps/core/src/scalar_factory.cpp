@@ -11,14 +11,15 @@
 #include <variant>
 #ifdef USE_HIGHFIVE
 
-#ifndef NDEBUG
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#endif 
+#  ifndef NDEBUG
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#    pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
+#  endif
 #  include <Eigen/Dense>
-#ifndef NDEBUG
-#pragma GCC diagnostic pop
-#endif 
+#  ifndef NDEBUG
+#    pragma GCC diagnostic pop
+#  endif
 #  include <highfive/H5DataSet.hpp>
 #  include <highfive/H5DataSpace.hpp>
 #  include <highfive/H5Easy.hpp>
@@ -47,7 +48,8 @@ namespace Core::ScalarFactory
     // FIXME
     //  if (ret.gas_flow != f_init_gas_flow)
     //  {
-    //    throw std::invalid_argument("Gas provided but no functor, or inverse");
+    //    throw std::invalid_argument("Gas provided but no functor, or
+    //    inverse");
     //  }
 
     if (!sanitize(ret))
@@ -68,7 +70,8 @@ namespace Core::ScalarFactory
 
     auto wrap_functor = [](auto&& c)
     {
-      // return [n_species, local_concentrations = c](size_t i, CmaRead::L2DView<double>& view)
+      // return [n_species, local_concentrations = c](size_t i,
+      // CmaRead::L2DView<double>& view)
       // {
       //   for (size_t i_species = 0; i_species < n_species; ++i_species)
       //   {
@@ -126,7 +129,8 @@ namespace Core::ScalarFactory
     // {
     //   return [n_species,
     //           concentrations = std::forward<decltype(c)>(c),
-    //           _indices = std::forward<decltype(i)>(i)](size_t i, CmaRead::L2DView<double>& view)
+    //           _indices = std::forward<decltype(i)>(i)](size_t i,
+    //           CmaRead::L2DView<double>& view)
     //   {
     //     if (std::ranges::find(_indices, i) != _indices.end())
     //     {
@@ -141,7 +145,8 @@ namespace Core::ScalarFactory
     const auto wrap_functor = [](auto&& i, auto&& c)
     {
       return [concentrations = std::forward<decltype(c)>(c),
-              _indices = std::forward<decltype(i)>(i)](std::size_t i_row, std::size_t i_col)
+              _indices = std::forward<decltype(i)>(i)](std::size_t i_row,
+                                                       std::size_t i_col)
       {
         if (std::ranges::find(_indices, i_col) != _indices.end())
         {
@@ -175,7 +180,8 @@ namespace Core::ScalarFactory
     {
       if (data.raw_gas->size() != data.raw_liquid.size())
       {
-        throw std::invalid_argument("Liquid and Gas data should have the same size");
+        throw std::invalid_argument(
+            "Liquid and Gas data should have the same size");
       }
       res.gas_buffer = std::move(*data.raw_gas);
     }
@@ -193,7 +199,8 @@ namespace Core::ScalarFactory
     res.type = Simulation::ScalarInitialiserType::File;
     if (!std::filesystem::is_regular_file(filepath.path))
     {
-      throw std::invalid_argument("Unable to open provided concentration initaliser file");
+      throw std::invalid_argument(
+          "Unable to open provided concentration initaliser file");
     }
 
     HighFive::File file(filepath.path.data(), HighFive::File::ReadOnly);
@@ -261,7 +268,8 @@ namespace Core::ScalarFactory
 
     auto test_functor = [](auto&& _res)
     {
-      bool _flag = _res.liquid_f_init.has_value() && !_res.liquid_buffer.has_value();
+      bool _flag =
+          _res.liquid_f_init.has_value() && !_res.liquid_buffer.has_value();
 
       if (_res.gas_flow)
       {
@@ -291,7 +299,8 @@ namespace Core::ScalarFactory
              (!res.gas_f_init.has_value() && !res.liquid_f_init.has_value());
       if (flag)
       {
-        flag = res.liquid_buffer->size() != 0; // If buffer check that is not empty
+        flag =
+            res.liquid_buffer->size() != 0; // If buffer check that is not empty
       }
       break;
     }

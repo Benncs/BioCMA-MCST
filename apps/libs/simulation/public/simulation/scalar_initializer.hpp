@@ -6,25 +6,23 @@
 #include <functional>
 #include <optional>
 #include <span>
-#include <vector> 
+#include <vector>
 
 namespace Simulation
 {
-  enum class ScalarInitialiserType:std::uint8_t
+  enum class ScalarInitialiserType : std::uint8_t
   {
-    Uniform,     // Need vec{uniform concentration}
-    Local,       // Need vec{index compartment }+ vec{concentration}
-    File,        // Need filepath
-    CustomScript ,// Need script path
-    FullCase ,// Need script path
+    Uniform,      // Need vec{uniform concentration}
+    Local,        // Need vec{index compartment }+ vec{concentration}
+    File,         // Need filepath
+    CustomScript, // Need script path
+    FullCase,     // Need script path
   };
 
   // using init_scalar_f_t =
   //     std::function<void(size_t, CmaRead::L2DView<double> &)>;
 
-  using init_scalar_f_t =
-      std::function<double(std::size_t, std::size_t)>;
-
+  using init_scalar_f_t = std::function<double(std::size_t, std::size_t)>;
 
   struct ScalarInitializer
   {

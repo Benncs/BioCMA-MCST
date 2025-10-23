@@ -1,13 +1,14 @@
 #ifndef NDEBUG
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#endif 
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
+#endif
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #ifndef NDEBUG
-#pragma GCC diagnostic pop
-#endif 
+#  pragma GCC diagnostic pop
+#endif
 #include <cassert>
 #include <hydro/impl_mass_transfer.hpp>
 #include <scalar_simulation.hpp>
@@ -20,16 +21,19 @@ namespace
 
   inline auto get_gas_fraction(const CmaUtils::IterationState& state)
   {
-    const auto gas_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.gas->volume.data()),
-                                                      state.gas->volume.size());
+    const auto gas_array = Eigen::Map<Eigen::ArrayXd>(
+        const_cast<double*>(state.gas->volume.data()),
+        state.gas->volume.size());
 
-    const auto liq_array = Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(state.liq->volume.data()),
-                                                      state.liq->volume.size());
+    const auto liq_array = Eigen::Map<Eigen::ArrayXd>(
+        const_cast<double*>(state.liq->volume.data()),
+        state.liq->volume.size());
 
     return (gas_array / (liq_array + gas_array));
   }
 
-  inline auto get_interfacial_area(const double db, const CmaUtils::IterationState& state)
+  inline auto get_interfacial_area(const double db,
+                                   const CmaUtils::IterationState& state)
   {
     const auto alpha_g = get_gas_fraction(state);
     return 6. * alpha_g / (db * (1 - alpha_g));
@@ -57,8 +61,8 @@ namespace
                          0.00000000126441088087 * std::pow(temp, 5) +
                          0.00000023336659710795 * std::pow(temp, 4) -
                          0.0000234079044336466 * std::pow(temp, 3) +
-                         0.00144686943485654 * std::pow(temp, 2) - 0.0607310297913931 * temp +
-                         1.79194000343777) *
+                         0.00144686943485654 * std::pow(temp, 2) -
+                         0.0607310297913931 * temp + 1.79194000343777) *
                         0.000001 * 10000000000) /
              10000000000;
     }
@@ -67,8 +71,8 @@ namespace
                        0.00000000000277495333 * std::pow(temp, 5) +
                        0.00000000181964246491 * std::pow(temp, 4) -
                        0.00000064995487357883 * std::pow(temp, 3) +
-                       0.000136367622445752 * std::pow(temp, 2) - 0.0166081298727911 * temp +
-                       1.08486933174497) *
+                       0.000136367622445752 * std::pow(temp, 2) -
+                       0.0166081298727911 * temp + 1.08486933174497) *
                       0.000001 * 10000000000) /
            10000000000;
   }
@@ -78,8 +82,10 @@ namespace
 namespace Simulation::MassTransfer
 {
   template <typename T, typename G>
-  Eigen::MatrixXd
-  impl_mtr(const T& kla, const Eigen::ArrayXd& Cl, const G& Cs, const Eigen::MatrixXd& Vliq)
+  Eigen::MatrixXd impl_mtr(const T& kla,
+                           const Eigen::ArrayXd& Cl,
+                           const G& Cs,
+                           const Eigen::MatrixXd& Vliq)
   {
     return (kla * (Cs - Cl)).matrix() * Vliq;
   }
@@ -89,58 +95,70 @@ namespace Simulation::MassTransfer
     constexpr double oxygen_diffusion_constant = 1e-9;
     constexpr double temperature = 20.;
 
-    void flowmap_gas_liquid_mass_transfer(MassTransferProxy& mtr,
-                                          const Eigen::ArrayXXd& liquid_concentration,
-                                          const Eigen::ArrayXXd& gas_concentration,
-                                          const Eigen::MatrixXd& liquid_volume,
-                                          const CmaUtils::IterationState& state)
+    void flowmap_gas_liquid_mass_transfer(
+        MassTransferProxy& mtr,
+        const Eigen::ArrayXXd& liquid_concentration,
+        const Eigen::ArrayXXd& gas_concentration,
+        const Eigen::MatrixXd& liquid_volume,
+        const CmaUtils::IterationState& state)
     {
 
       const double kinematic_viscosity = c_kinematic_viscosity(temperature);
 
-      const double schmidtnumber = kinematic_viscosity / oxygen_diffusion_constant;
+      const double schmidtnumber =
+          kinematic_viscosity / oxygen_diffusion_constant;
       const auto eps = state.infos.at("energy_dissipation");
       const Eigen::Map<Eigen::ArrayXd> energy_dissipation_array =
-          Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(eps.data()), EIGEN_INDEX(eps.size()));
+          Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(eps.data()),
+                                     EIGEN_INDEX(eps.size()));
 
       assert(gas_concentration.stride() == liquid_concentration.stride() &&
              "gas liquid size mtr check");
       assert(energy_dissipation_array.rows() == liquid_concentration.cols() &&
              "energy liquid size mtr check");
-      assert(mtr.Henry.rows() == gas_concentration.rows() && "henry gas size mtr check");
-      assert(mtr.kla.rows() == gas_concentration.rows() && "kla gas size mtr check");
-      assert(mtr.kla.cols() == gas_concentration.cols() && "kla gas size mtr check");
+      assert(mtr.Henry.rows() == gas_concentration.rows() &&
+             "henry gas size mtr check");
+      assert(mtr.kla.rows() == gas_concentration.rows() &&
+             "kla gas size mtr check");
+      assert(mtr.kla.cols() == gas_concentration.cols() &&
+             "kla gas size mtr check");
 
       mtr.kla.row(1) =
-          (kl_correlation(schmidtnumber, kinematic_viscosity, energy_dissipation_array) *
+          (kl_correlation(
+               schmidtnumber, kinematic_viscosity, energy_dissipation_array) *
            get_interfacial_area(mtr.db, state))
               .transpose();
 
       // FIXME impl_mtr with template doesn´t work with Eigen type deduction
-      mtr.mtr =
-          (mtr.kla * (gas_concentration.colwise() * mtr.Henry - liquid_concentration)).matrix() *
-          liquid_volume;
+      mtr.mtr = (mtr.kla * (gas_concentration.colwise() * mtr.Henry -
+                            liquid_concentration))
+                    .matrix() *
+                liquid_volume;
     }
 
-    void fixed_kla_gas_liquid_mass_transfer(MassTransferProxy& mtr,
-                                            const Eigen::ArrayXXd& liquid_concentration,
-                                            const Eigen::ArrayXXd& gas_concentration,
-                                            const Eigen::MatrixXd& liquid_volume,
-                                            const CmaUtils::IterationState& state)
+    void fixed_kla_gas_liquid_mass_transfer(
+        MassTransferProxy& mtr,
+        const Eigen::ArrayXXd& liquid_concentration,
+        const Eigen::ArrayXXd& gas_concentration,
+        const Eigen::MatrixXd& liquid_volume,
+        const CmaUtils::IterationState& state)
     {
       (void)state;
       // mtr.mtr = impl_mtr(
-      //     mtr.kla, liquid_concentration, gas_concentration.colwise() * mtr.Henry, liquid_volume);
-      mtr.mtr =
-          (mtr.kla * (gas_concentration.colwise() * mtr.Henry - liquid_concentration)).matrix() *
-          liquid_volume;
+      //     mtr.kla, liquid_concentration, gas_concentration.colwise() *
+      //     mtr.Henry, liquid_volume);
+      mtr.mtr = (mtr.kla * (gas_concentration.colwise() * mtr.Henry -
+                            liquid_concentration))
+                    .matrix() *
+                liquid_volume;
     }
 
-    void flowmap_kla_gas_liquid_mass_transfer(MassTransferProxy& mtr,
-                                              const Eigen::ArrayXXd& liquid_concentration,
-                                              const Eigen::ArrayXXd& gas_concentration,
-                                              const Eigen::MatrixXd& liquid_volume,
-                                              const CmaUtils::IterationState& state)
+    void flowmap_kla_gas_liquid_mass_transfer(
+        MassTransferProxy& mtr,
+        const Eigen::ArrayXXd& liquid_concentration,
+        const Eigen::ArrayXXd& gas_concentration,
+        const Eigen::MatrixXd& liquid_volume,
+        const CmaUtils::IterationState& state)
     {
       const auto kla = state.infos.at("kla");
     }

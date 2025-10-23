@@ -1,4 +1,5 @@
 #include <Kokkos_Core.hpp>
+#include <Kokkos_ScatterView.hpp>
 #include <cma_utils/iteration_state.hpp>
 #include <cstddef>
 #include <cstdio>
@@ -21,21 +22,25 @@
 #include <simulation/simulation_exception.hpp>
 #include <utility>
 
+namespace
+{
+  template <typename T>
+  std::vector<T>
+  layout_right_to_left(std::span<const T> input, size_t rows, size_t cols)
+  {
+    std::vector<T> output(input.size());
 
-namespace {
-    template<typename T>
-    std::vector<T> layout_right_to_left(std::span<const T> input, size_t rows, size_t cols) {
-        std::vector<T> output(input.size());
-
-        for (size_t i = 0; i < rows; ++i) {
-            for (size_t j = 0; j < cols; ++j) {
-                output[j * rows + i] = input[i * cols + j];
-            }
-        }
-
-        return output;
+    for (size_t i = 0; i < rows; ++i)
+    {
+      for (size_t j = 0; j < cols; ++j)
+      {
+        output[j * rows + i] = input[i * cols + j];
+      }
     }
-}
+
+    return output;
+  }
+} // namespace
 
 namespace Simulation
 {
@@ -74,7 +79,8 @@ namespace Simulation
     Kokkos::resize(move_info.diag_transition,
                    mc_unit->domain.getNumberCompartments());
 
-           contribs_scatter=         MC::ContributionView (get_kernel_contribution());
+    contribs_scatter =
+        Kokkos::Experimental::create_scatter_view(get_kernel_contribution());
   }
 
   void SimulationUnit::update(CmaUtils::IterationState&& newstate)
@@ -89,6 +95,7 @@ namespace Simulation
   {
     auto contribs = get_kernel_contribution();
     Kokkos::Experimental::contribute(contribs, contribs_scatter);
+    this->liquid_scalar->synchro_sources();
   }
 
   void SimulationUnit::setVolumes() const
@@ -127,11 +134,12 @@ namespace Simulation
     {
       throw SimulationException(ErrorCodes::BadInitialiser);
     }
-    const std::size_t cols = scalar_init.liquid_buffer->size()/scalar_init.n_species;
-    const auto layout_left_buffer = layout_right_to_left<double>(*scalar_init.liquid_buffer, scalar_init.n_species, cols);
+    const std::size_t cols =
+        scalar_init.liquid_buffer->size() / scalar_init.n_species;
+    const auto layout_left_buffer = layout_right_to_left<double>(
+        *scalar_init.liquid_buffer, scalar_init.n_species, cols);
 
-    if (!this->liquid_scalar->deep_copy_concentration(
-            layout_left_buffer))
+    if (!this->liquid_scalar->deep_copy_concentration(layout_left_buffer))
     {
 
       throw SimulationException(ErrorCodes::MismatchSize);
@@ -143,7 +151,8 @@ namespace Simulation
       {
         throw SimulationException(ErrorCodes::BadInitialiser);
       }
-      const auto layout_left_buffer = layout_right_to_left<double>(*scalar_init.gas_buffer, scalar_init.n_species, cols);
+      const auto layout_left_buffer = layout_right_to_left<double>(
+          *scalar_init.gas_buffer, scalar_init.n_species, cols);
       if (!this->gas_scalar->deep_copy_concentration(layout_left_buffer))
       {
         throw SimulationException(ErrorCodes::MismatchSize);

@@ -18,7 +18,6 @@
 // clang-format off
 @INCLUDES@
 
-//TODO: remove include of model_user.hpp when compiling with cuda 
 
 #ifdef USE_PYTHON_MODULE
 #  include <pymodule/import_py.hpp>

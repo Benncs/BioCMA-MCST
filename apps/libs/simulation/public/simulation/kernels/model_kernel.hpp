@@ -120,8 +120,14 @@ namespace Simulation::KernelInline
       this->particles = _particles;
     }
 
-    KOKKOS_INLINE_FUNCTION void operator()(const TagFirstPass _tag,
-                                           const TeamMember& team_handle) const
+    void sblock(MC::ContributionView _block)
+    {
+      this->block = _block;
+    }
+
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const TagFirstPass _tag,
+                    const TeamMember& team_handle) const
     {
       (void)_tag;
       GET_INDEX(particles.n_particles());
@@ -129,17 +135,14 @@ namespace Simulation::KernelInline
       {
         return;
       }
-
-      auto local_c =
-          Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx));
-
-      particles.get_contributions(d_t, idx, local_c, contribs_scatter);
+      particles.get_contributions(idx, contribs_scatter);
     }
 
     KOKKOS_INLINE_FUNCTION void operator()(const TagSecondPass _tag,
                                            const TeamMember& team_handle,
                                            value_type& reduce_val) const
     {
+
       (void)_tag;
       (void)reduce_val.dead_total; // Counter not used currently because there
                                    // is no cell mortality
@@ -158,13 +161,14 @@ namespace Simulation::KernelInline
         if (!particles.handle_division(random_pool, idx))
         {
           reduce_val.waiting_allocation_particle += 1;
-          Kokkos::printf("[KERNEL] Division Overflow\r\n");
           events.wrap_incr<MC::EventType::Overflow>();
+          Kokkos::printf("[KERNEL] Division Overflow\r\n");
         }
         events.wrap_incr<MC::EventType::NewParticle>();
       };
 
-      particles.get_contributions(idx, contribs_scatter);
+      // particles.template get_contributions<ComputeSpace, TeamMember>(
+      //     random_pool, idx, contribs_scatter, team_handle);
     }
 
     M::FloatType d_t;
@@ -172,8 +176,10 @@ namespace Simulation::KernelInline
     MC::KPRNG::pool_type random_pool;
     MC::KernelConcentrationType concentrations;
     MC::ContributionView contribs_scatter;
+    // kernelContribution contribs;
     MC::KernelConcentrationType limitation_factor;
     MC::EventContainer events;
+    MC::ContributionView block;
   };
 
 } // namespace Simulation::KernelInline

@@ -6,17 +6,22 @@
 
 void check_sigus1()
 {
-  assert(!Core::SignalHandler::is_usr1_raised() && "No signal should be raised initially");
+  assert(!Core::SignalHandler::is_usr1_raised() &&
+         "No signal should be raised initially");
   std::raise(SIGUSR1);
-  assert(Core::SignalHandler::is_usr1_raised() && "Signal should have been raised");
-  assert(!Core::SignalHandler::is_usr1_raised() && "Signal flag should reset after querying");
+  assert(Core::SignalHandler::is_usr1_raised() &&
+         "Signal should have been raised");
+  assert(!Core::SignalHandler::is_usr1_raised() &&
+         "Signal flag should reset after querying");
 }
 
 void check_sigus2()
 {
-  assert(!Core::SignalHandler::is_usr1_raised() && "No signal should be raised initially");
+  assert(!Core::SignalHandler::is_usr1_raised() &&
+         "No signal should be raised initially");
   std::raise(SIGUSR2);
-  assert(!Core::SignalHandler::is_usr1_raised() && "Signal should not have been raised");
+  assert(!Core::SignalHandler::is_usr1_raised() &&
+         "Signal should not have been raised");
 }
 
 int main()

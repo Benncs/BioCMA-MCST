@@ -22,18 +22,11 @@
 #include <vector>
 constexpr int ID_VERIF = 2025;
 
-// #ifdef NO_MPI
-// namespace WrapMPI
-// {
-//   bool is_initialized() noexcept
-//   {
-//     return false;
-//   }
-// } // namespace WrapMPI
-// #else
-// #  include "mpi_w/message_t.hpp"
-// #  include <mpi_w/wrap_mpi.hpp>
-// #endif
+#define CHECK_OR_RETURN(cond, msg)                                             \
+  if ((cond))                                                                  \
+  {                                                                            \
+    return ApiResult(msg);                                                     \
+  }
 
 namespace
 {
@@ -241,14 +234,10 @@ namespace Api
 
   ApiResult SimulationInstance::apply_load() noexcept
   {
-    if (!check_required(this->params, true))
-    {
-      return ApiResult("Check params");
-    }
-    if (loaded)
-    {
-      return ApiResult("Already loaded");
-    }
+    // Checks
+    CHECK_OR_RETURN(!check_required(this->params, true), "Check params");
+    CHECK_OR_RETURN(loaded, "Already loaded");
+
     try
     {
       if (auto opt_case = Core::load(
@@ -268,59 +257,34 @@ namespace Api
 
   ApiResult SimulationInstance::apply() noexcept
   {
-    if (!check_required(this->params, false))
-    {
-      return ApiResult("Check params");
-    }
-    if (loaded)
-    {
-      return ApiResult("Already loaded");
-    }
-    if (!registered)
-    {
-      return ApiResult("Register first");
-    }
+
+    // Checks
+    CHECK_OR_RETURN(!check_required(this->params, true), "Check params");
+    CHECK_OR_RETURN(loaded, "Already loaded");
+    CHECK_OR_RETURN(!registered, "Register first");
 
     // TODO Refractor with and_then when supported
-    Core::GlobalInitialiser global_initializer(_data.exec_info, params);
-
-    if (logger)
-    {
-      global_initializer.set_logger(logger);
-    }
+    Core::GlobalInitialiser global_initializer(_data.exec_info, params, logger);
 
     auto transitionner = global_initializer.init_transitionner();
+    CHECK_OR_RETURN(!transitionner, "Error when apply: transitionner");
 
-    if (!transitionner)
-    {
-      ApiResult("Error when apply: transitionner");
-    }
-
-    if (!global_initializer.init_feed(feed))
-    {
-      return ApiResult("Error with feed");
-    }
+    CHECK_OR_RETURN(!global_initializer.init_feed(feed),
+                    "Error when apply: feed");
 
     auto __simulation =
         global_initializer.init_simulation(this->scalar_initializer_variant);
 
-    if (!global_initializer.check_init_terminate())
-    {
-      return ApiResult("Error apply: missing one initialization step");
-    }
+    CHECK_OR_RETURN(!__simulation.has_value(), "Error when apply: simulation");
 
-    if (!__simulation.has_value())
-    {
-      return ApiResult("Error apply: simulation ");
-    }
+    auto simulation = std::move(*__simulation);
 
     if (logger)
     {
-      (*__simulation)->setLogger(logger);
+      simulation->setLogger(logger);
     }
-
     // FIXME
-    std::vector<double> kla((*__simulation)->getDimensions().n_species);
+    std::vector<double> kla(simulation->getDimensions().n_species);
     if (kla.size() > 1)
     {
       kla[1] = 0.2; // 700 h-1
@@ -330,11 +294,14 @@ namespace Api
 
     if (mtr_type)
     {
-      (*__simulation)->setMtrModel(std::move(*mtr_type));
+      simulation->setMtrModel(std::move(*mtr_type));
     }
 
+    CHECK_OR_RETURN(!global_initializer.check_init_terminate(),
+                    "Error apply: missing one initialization step");
+
     _data.params = global_initializer.get_parameters();
-    _data.simulation = std::move(*__simulation);
+    _data.simulation = std::move(simulation);
     _data.transitioner = std::move(*transitionner);
     applied = true;
 

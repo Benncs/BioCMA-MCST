@@ -4,8 +4,8 @@
 
 void basic_insertion()
 {
-  auto constant_feed =
-      Simulation::Feed::FeedDescriptor{1, 1, 0, 1, 1, Simulation::Feed::Constant{}};
+  auto constant_feed = Simulation::Feed::FeedDescriptor{
+      1, 1, 0, 1, 1, Simulation::Feed::Constant{}};
 
   auto feeds = Simulation::Feed::SimulationFeed();
 

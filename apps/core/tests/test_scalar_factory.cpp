@@ -7,27 +7,28 @@
 #include <string_view>
 #include <vector>
 
-#define WRAP_EXCEP(__f__)                                                                          \
-  try                                                                                              \
-  {                                                                                                \
-    __f__;                                                                                         \
-  }                                                                                                \
-  catch (std::exception & e)                                                                       \
-  {                                                                                                \
-    std::cout << __LINE__ << std::endl;                                                            \
-    std::cout << e.what() << std::endl;                                                            \
-    assert(false);                                                                                 \
+#define WRAP_EXCEP(__f__)                                                      \
+  try                                                                          \
+  {                                                                            \
+    __f__;                                                                     \
+  }                                                                            \
+  catch (std::exception & e)                                                   \
+  {                                                                            \
+    std::cout << __LINE__ << std::endl;                                        \
+    std::cout << e.what() << std::endl;                                        \
+    assert(false);                                                             \
   }
 
 static constexpr size_t n_compartment = 10;
 static constexpr size_t n_species = 3;
-#define GET_VOLUME                                                                                 \
-  static std::vector<double> gas_volume = {0., 0., 0., 0.};                                        \
+#define GET_VOLUME                                                             \
+  static std::vector<double> gas_volume = {0., 0., 0., 0.};                    \
   static std::vector<double> liquid_volume = {1., 1., 1., 1.};
 
 #define GET_CONCENTRATION std::vector<double> concentrations = {1., 5., 6.};
 
-#define GET_CONCENTRATION_GAS std::vector<double> concentrations_gas = {0.1, 0.2, 3.};
+#define GET_CONCENTRATION_GAS                                                  \
+  std::vector<double> concentrations_gas = {0.1, 0.2, 3.};
 
 static std::vector<double> get_raw_concentration_data()
 {
@@ -46,14 +47,14 @@ void mock_init(CmaRead::L2DView<double> c, auto functor)
   }
 }
 
-#define DO_INIT_LIQ                                                                                \
-  auto rd = get_raw_concentration_data();                                                          \
-  auto cliq = CmaRead::L2DView<double>(rd, n_species, n_compartment);                              \
+#define DO_INIT_LIQ                                                            \
+  auto rd = get_raw_concentration_data();                                      \
+  auto cliq = CmaRead::L2DView<double>(rd, n_species, n_compartment);          \
   mock_init(cliq, scalar_init.liquid_f_init);
 
-#define DO_INIT_GAS                                                                                \
-  auto rdg = get_raw_concentration_data();                                                         \
-  auto cgas = CmaRead::L2DView<double>(rdg, n_species, n_compartment);                             \
+#define DO_INIT_GAS                                                            \
+  auto rdg = get_raw_concentration_data();                                     \
+  auto cgas = CmaRead::L2DView<double>(rdg, n_species, n_compartment);         \
   mock_init(cgas, scalar_init.gas_f_init);
 
 void test_uniform_liq()
@@ -65,8 +66,8 @@ void test_uniform_liq()
 
   Core::ScalarFactory::Uniform arg = {concentrations, std::nullopt};
 
-  auto scalar_init =
-      Core::ScalarFactory::scalar_factory(f_init_gas_flow, gas_volume, liquid_volume, arg);
+  auto scalar_init = Core::ScalarFactory::scalar_factory(
+      f_init_gas_flow, gas_volume, liquid_volume, arg);
 
   assert(scalar_init.n_species == n_species);
 
@@ -129,15 +130,18 @@ void test_local_gas_liq()
     }
   };
 
-  GET_VOLUME GET_CONCENTRATION GET_CONCENTRATION_GAS std::vector<size_t> liq_indices = {0, 5, 6};
+  GET_VOLUME GET_CONCENTRATION GET_CONCENTRATION_GAS std::vector<size_t>
+      liq_indices = {0, 5, 6};
 
   std::vector<size_t> gas_indices = {6, 5, 7};
 
   bool f_init_gas_flow = true;
 
-  Core::ScalarFactory::Local arg = {concentrations, liq_indices, concentrations_gas, gas_indices};
+  Core::ScalarFactory::Local arg = {
+      concentrations, liq_indices, concentrations_gas, gas_indices};
 
-  auto scalar_init = scalar_factory(f_init_gas_flow, gas_volume, liquid_volume, arg);
+  auto scalar_init =
+      scalar_factory(f_init_gas_flow, gas_volume, liquid_volume, arg);
 
   DO_INIT_LIQ
   DO_INIT_GAS
@@ -160,14 +164,16 @@ void test_local_liq()
 
   Core::ScalarFactory::Local arg = {concentrations, indices};
 
-  auto scalar_init = scalar_factory(f_init_gas_flow, gas_volume, liquid_volume, arg);
+  auto scalar_init =
+      scalar_factory(f_init_gas_flow, gas_volume, liquid_volume, arg);
 
   DO_INIT_LIQ
 
   for (size_t i_compartment = 0; i_compartment < n_compartment; ++i_compartment)
   {
 
-    if (i_compartment == indices[0] || i_compartment == indices[1] || i_compartment == indices[2])
+    if (i_compartment == indices[0] || i_compartment == indices[1] ||
+        i_compartment == indices[2])
     {
       for (size_t isp = 0; isp < n_species; ++isp)
       {

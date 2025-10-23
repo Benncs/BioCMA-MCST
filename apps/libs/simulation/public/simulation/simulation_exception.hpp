@@ -3,7 +3,7 @@
 
 #include <exception>
 #include <stdexcept>
-#include <string> 
+#include <string>
 namespace Simulation
 {
 
@@ -12,7 +12,7 @@ namespace Simulation
     BadConcentrationInitLiq,
     BadConcentrationInitGas,
     BadInitialiser,
-     MismatchSize,
+    MismatchSize,
   };
 
   class SimulationException : public std::exception
@@ -20,7 +20,7 @@ namespace Simulation
   public:
     explicit SimulationException(ErrorCodes code);
 
-    [[nodiscard]] const char *what() const noexcept override
+    [[nodiscard]] const char* what() const noexcept override
     {
 
       return msg.c_str();

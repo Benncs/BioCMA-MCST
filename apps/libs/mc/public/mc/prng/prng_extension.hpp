@@ -2,6 +2,7 @@
 #define __PRNG_EXTENSION_HPP__
 
 #include "Kokkos_Macros.hpp"
+#include "common/maths.hpp"
 #include "mc/alias.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_MathematicalConstants.hpp>
@@ -20,7 +21,8 @@ namespace MC::Distributions
    The `ProbabilityLaw` concept defines the requirements for a type `T`
    to model a probability distribution with floating-point computations.
    It ensures that the type provides methods for drawing random samples
-   and computing common statistical measures such as mean, variance, and skewness.
+   and computing common statistical measures such as mean, variance, and
+   skewness.
 
    @tparam T The type representing a probability distribution.
    @tparam F The floating-point type used for computations.
@@ -39,14 +41,15 @@ namespace MC::Distributions
        double mean() const { return mu; }
        double var() const { return sigma * sigma; }
        double skewness() const { return 0.0; }
-       double draw(Kokkos::Random_XorShift1024<DeviceType>& gen) {return 0.;    }
+       double draw(Kokkos::Random_XorShift1024<DeviceType>& gen) {return 0.; }
      };
      static_assert(ProbabilityLaw<NormalDistribution, double, DeviceType>);
      @endcode
    */
   template <typename T, typename F, class DeviceType>
   concept ProbabilityLaw =
-      FloatingPointType<F> && requires(const T& obj, Kokkos::Random_XorShift1024<DeviceType>& gen) {
+      FloatingPointType<F> &&
+      requires(const T& obj, Kokkos::Random_XorShift1024<DeviceType>& gen) {
         { obj.draw(gen) } -> std::same_as<F>;
         { obj.mean() } -> std::same_as<F>;
         { obj.var() } -> std::same_as<F>;
@@ -57,8 +60,8 @@ namespace MC::Distributions
   @brief Computes an approximation of the inverse error function.
 
   This function approximates the inverse error function `erfinv(x)`
-  using Winitzki’s method (from A. Soranzo, E. Epure), which provides a simple and computationally
-  efficient formula based on logarithms and square roots.
+  using Winitzki’s method (from A. Soranzo, E. Epure), which provides a simple
+  and computationally efficient formula based on logarithms and square roots.
 
   @tparam F Floating-point type (must satisfy `FloatingPointType`).
   @param x Input value in the range [-1, 1].
@@ -66,15 +69,17 @@ namespace MC::Distributions
 
   @note This implementation is not highly optimized for GPUs.
         For a more accurate and efficient implementation,
-        see: https://people.maths.ox.ac.uk/gilesm/codes/erfinv/gems.pdf. See also bramowitz and
-  Stegun method (Handbook of Mathematical Functions, formula 7.1.26)
+        see: https://people.maths.ox.ac.uk/gilesm/codes/erfinv/gems.pdf. See
+  also bramowitz and Stegun method (Handbook of Mathematical Functions,
+  formula 7.1.26)
 
   @warning This approximation is not valid for extreme values |x| close to 1.
 */
   template <FloatingPointType F> KOKKOS_INLINE_FUNCTION F erfinv(F x)
   {
 
-    // Use the Winitzki’s method to calculate get an approached expression of erf(x) and inverse it
+    // Use the Winitzki’s method to calculate get an approached expression of
+    // erf(x) and inverse it
 
     constexpr F a = 0.147;
     constexpr F inv_a = 1. / a;
@@ -82,11 +87,13 @@ namespace MC::Distributions
     const double ln1mx2 = Kokkos::log((1. - x) * (1. + x));
     const F term1 = tmp + (0.5 * ln1mx2);
     const F term2 = inv_a * ln1mx2;
-    return Kokkos::copysign(Kokkos::sqrt(Kokkos::sqrt(term1 * term1 - term2) - term1), x);
+    return Kokkos::copysign(
+        Kokkos::sqrt(Kokkos::sqrt(term1 * term1 - term2) - term1), x);
   }
 
   // Inverse error function approximation (Using the rational approximation)
-  //  template <FloatingPointType F> KOKKOS_INLINE_FUNCTION constexpr F erf_inv(F x)
+  //  template <FloatingPointType F> KOKKOS_INLINE_FUNCTION constexpr F
+  //  erf_inv(F x)
   // {
   //     constexpr F a[4] = {0.147, 0.147, 0.147, 0.147};
   //     constexpr F b[4] = {-1.0, 0.5, -0.5, 1.0};
@@ -113,19 +120,24 @@ namespace MC::Distributions
   @param p Probability value in the range (0,1).
   @param mean Mean of the normal distribution.
   @param stddev Standard deviation of the normal distribution.
-  @return The corresponding value `x` such that `P(X ≤ x) = p` for X ~ N(mean, stddev).
+  @return The corresponding value `x` such that `P(X ≤ x) = p` for X ~ N(mean,
+  stddev).
 
   @note This implementation uses the inverse error function `erfinv(x)`
-        for accuracy and efficiency. Extreme values may be clamped for stability.
+        for accuracy and efficiency. Extreme values may be clamped for
+  stability.
 
   @warning `p` must be strictly in (0,1), otherwise the result is undefined.
 */
-  template <FloatingPointType F> KOKKOS_INLINE_FUNCTION F norminv(F p, F mean, F stddev)
+  template <FloatingPointType F>
+  KOKKOS_INLINE_FUNCTION F norminv(F p, F mean, F stddev)
   {
     constexpr F erfinv_lb = -5;
     constexpr F erfinv_up = 5;
-    auto clamped_inverse = Kokkos::clamp(erfinv(2 * p - 1), erfinv_lb, erfinv_up);
-    KOKKOS_ASSERT(Kokkos::isfinite(stddev * Kokkos::numbers::sqrt2 * clamped_inverse));
+    auto clamped_inverse =
+        Kokkos::clamp(erfinv(2 * p - 1), erfinv_lb, erfinv_up);
+    KOKKOS_ASSERT(
+        Kokkos::isfinite(stddev * Kokkos::numbers::sqrt2 * clamped_inverse));
     return mean + stddev * Kokkos::numbers::sqrt2 * clamped_inverse;
   }
 
@@ -156,12 +168,14 @@ namespace MC::Distributions
 
   The standard normal CDF is given by:
   \f[
-      \Phi(x) = \frac{1}{2} \left( 1 + \operatorname{erf} \left( \frac{x}{\sqrt{2}} \right) \right)
+      \Phi(x) = \frac{1}{2} \left( 1 + \operatorname{erf} \left(
+  \frac{x}{\sqrt{2}} \right) \right)
   \f]
 
   @tparam F Floating-point type (must satisfy `FloatingPointType`).
   @param x Input value.
-  @return Value of the standard normal CDF at `x`, which is P(X ≤ x) for X ~ N(0,1).
+  @return Value of the standard normal CDF at `x`, which is P(X ≤ x) for X ~
+  N(0,1).
 */
   template <FloatingPointType F> KOKKOS_INLINE_FUNCTION F std_normal_cdf(F x)
   {
@@ -192,7 +206,8 @@ namespace MC::Distributions
       @return A normally distributed random sample.
     */
     template <class DeviceType>
-    KOKKOS_INLINE_FUNCTION F draw(Kokkos::Random_XorShift1024<DeviceType>& gen) const
+    KOKKOS_INLINE_FUNCTION F
+    draw(Kokkos::Random_XorShift1024<DeviceType>& gen) const
     {
       return draw_from(gen, mu, sigma);
     }
@@ -206,9 +221,8 @@ namespace MC::Distributions
       @return A normally distributed random sample.
     */
     template <class DeviceType>
-    static KOKKOS_INLINE_FUNCTION F draw_from(Kokkos::Random_XorShift1024<DeviceType>& gen,
-                                              F mu,
-                                              F sigma)
+    static KOKKOS_INLINE_FUNCTION F
+    draw_from(Kokkos::Random_XorShift1024<DeviceType>& gen, F mu, F sigma)
     {
       return gen.normal(mu, sigma);
     }
@@ -250,12 +264,12 @@ namespace MC::Distributions
     }
   };
 
-
   /**
   @brief Represents a TruncatedNormal (Gaussian) probability distribution.
 
-  The normal distribution is parameterized by a mean, a standard deviation and lower and upper
-  bound. It supports random sampling, computing statistical properties.
+  The normal distribution is parameterized by a mean, a standard deviation and
+  lower and upper bound. It supports random sampling, computing statistical
+  properties.
 
   @tparam F Floating-point type (must satisfy `FloatingPointType`).
 */
@@ -267,6 +281,7 @@ namespace MC::Distributions
     F lower; // Standard deviation
     F upper; // Standard deviation
 
+    TruncatedNormal() = default;
 
     KOKKOS_INLINE_FUNCTION constexpr TruncatedNormal(F m, F s, F l, F u)
         : mu(m), sigma(s), lower(l), upper(u)
@@ -277,35 +292,45 @@ namespace MC::Distributions
     }
 
     template <class DeviceType>
-    KOKKOS_INLINE_FUNCTION F draw(Kokkos::Random_XorShift1024<DeviceType>& gen) const
+    KOKKOS_INLINE_FUNCTION F
+    draw(Kokkos::Random_XorShift1024<DeviceType>& gen) const
     {
       return draw_from(gen, mu, sigma, lower, upper);
     }
 
     template <class DeviceType>
     static KOKKOS_INLINE_FUNCTION F
-    draw_from(Kokkos::Random_XorShift1024<DeviceType>& gen, F mu, F sigma, F lower, F upper)
+    draw_from(Kokkos::Random_XorShift1024<DeviceType>& gen,
+              F mu,
+              F sigma,
+              F lower,
+              F upper)
     {
       // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
       const F rand = static_cast<F>(gen.drand());
 
-      // Max bounded because if sigma <<1 z -> Inf not wanted because erf/erfc/erfinv are not stable
-      // for extrem value Min bounded if |mu-bound| <<1 z -> 0 which is also not wanted for error
-      // function
+      // Max bounded because if sigma <<1 z -> Inf not wanted because
+      // erf/erfc/erfinv are not stable for extrem value Min bounded if
+      // |mu-bound| <<1 z -> 0 which is also not wanted for error function
 
-      F zl = Kokkos::clamp((lower - mu) / sigma, F(-5e3), F(0)); // upper-mu is by defintion <0
-      F zu = Kokkos::clamp((upper - mu) / sigma, F(0), F(5e3));  // upper-mu is by defintion >0
+      F zl = Kokkos::clamp(
+          (lower - mu) / sigma, F(-5e3), F(0)); // upper-mu is by defintion <0
+      F zu = Kokkos::clamp(
+          (upper - mu) / sigma, F(0), F(5e3)); // upper-mu is by defintion >0
 
       F pl = 0.5 * Kokkos::erfc(-zl / Kokkos::numbers::sqrt2);
-      KOKKOS_ASSERT(Kokkos::isfinite(pl) &&
-                    "Truncated normal draw leads to Nan of Inf with given parameters");
+      KOKKOS_ASSERT(
+          Kokkos::isfinite(pl) &&
+          "Truncated normal draw leads to Nan of Inf with given parameters");
       F pu = 0.5 * Kokkos::erfc(-zu / Kokkos::numbers::sqrt2);
-      KOKKOS_ASSERT(Kokkos::isfinite(pu) &&
-                    "Truncated normal draw leads to Nan of Inf with given parameters");
+      KOKKOS_ASSERT(
+          Kokkos::isfinite(pu) &&
+          "Truncated normal draw leads to Nan of Inf with given parameters");
       F p = rand * (pu - pl) + pl;
       F x = norminv(p, mu, sigma);
-      KOKKOS_ASSERT(Kokkos::isfinite(x) &&
-                    "Truncated normal draw leads to Nan of Inf with given parameters");
+      KOKKOS_ASSERT(
+          Kokkos::isfinite(x) &&
+          "Truncated normal draw leads to Nan of Inf with given parameters");
       return x;
 
       // NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
@@ -335,17 +360,17 @@ namespace MC::Distributions
       return 0.;
     }
   };
-  
 
-   /**
-  @brief Represents a Scaled TruncatedNormal (Gaussian) probability distribution.
+  /**
+ @brief Represents a Scaled TruncatedNormal (Gaussian) probability distribution.
 
-  The normal distribution is parameterized by a mean, a standard deviation a scale factor and lower and upper
-  bound. It supports random sampling, computing statistical properties.
-  To sample from [a, b] where |a - b| << 1, methods perform better
-  if we draw from xf = [a * factor, b * factor] and then scale back using x = xf / factor.
+ The normal distribution is parameterized by a mean, a standard deviation a
+ scale factor and lower and upper bound. It supports random sampling, computing
+ statistical properties. To sample from [a, b] where |a - b| << 1, methods
+ perform better if we draw from xf = [a * factor, b * factor] and then scale
+ back using x = xf / factor.
 
-  @tparam F Floating-point type (must satisfy `FloatingPointType`).
+ @tparam F Floating-point type (must satisfy `FloatingPointType`).
 */
   template <FloatingPointType F> struct ScaledTruncatedNormal
   {
@@ -356,21 +381,33 @@ namespace MC::Distributions
 
     constexpr ScaledTruncatedNormal(F factor, F m, F s, F l, F u)
         : scale_factor(factor), inverse_factor(1. / scale_factor),
-          dist(scale_factor * m, s * scale_factor, scale_factor * l, scale_factor * u)
+          dist(scale_factor * m,
+               s * scale_factor,
+               scale_factor * l,
+               scale_factor * u)
     {
     }
 
     template <class DeviceType>
-    static KOKKOS_INLINE_FUNCTION F draw_from(
-        Kokkos::Random_XorShift1024<DeviceType>& gen, F factor, F mu, F sigma, F lower, F upper)
+    static KOKKOS_INLINE_FUNCTION F
+    draw_from(Kokkos::Random_XorShift1024<DeviceType>& gen,
+              F factor,
+              F mu,
+              F sigma,
+              F lower,
+              F upper)
     {
       return 1. / factor *
-             TruncatedNormal<F>::draw_from(
-                 gen, factor * mu, factor * sigma, factor * lower, factor * upper);
+             TruncatedNormal<F>::draw_from(gen,
+                                           factor * mu,
+                                           factor * sigma,
+                                           factor * lower,
+                                           factor * upper);
     }
 
     template <class DeviceType>
-    KOKKOS_INLINE_FUNCTION F draw(Kokkos::Random_XorShift1024<DeviceType>& gen) const
+    KOKKOS_INLINE_FUNCTION F
+    draw(Kokkos::Random_XorShift1024<DeviceType>& gen) const
     {
       return inverse_factor * dist.draw(gen);
     }
@@ -391,12 +428,12 @@ namespace MC::Distributions
     }
   };
 
-   /**
-  @brief Represents a LogNormal (Gaussian) probability distribution.
+  /**
+ @brief Represents a LogNormal (Gaussian) probability distribution.
 
-  The normal distribution is parameterized by a mean, a standard deviation.
+ The normal distribution is parameterized by a mean, a standard deviation.
 
-  @tparam F Floating-point type (must satisfy `FloatingPointType`).
+ @tparam F Floating-point type (must satisfy `FloatingPointType`).
 */
   template <FloatingPointType F> struct LogNormal
   {
@@ -404,7 +441,8 @@ namespace MC::Distributions
     F sigma; // Standard deviation
 
     template <class DeviceType>
-    KOKKOS_INLINE_FUNCTION F draw(Kokkos::Random_XorShift1024<DeviceType>& gen) const
+    KOKKOS_INLINE_FUNCTION F
+    draw(Kokkos::Random_XorShift1024<DeviceType>& gen) const
     {
       return Kokkos::exp(gen.normal(mu, sigma));
     }
@@ -425,12 +463,13 @@ namespace MC::Distributions
     }
   };
 
-     /**
-  @brief Represents a SkewNormal (Gaussian) probability distribution.
+  /**
+ @brief Represents a SkewNormal (Gaussian) probability distribution.
 
-  The normal distribution is parameterized by a mean, a standard deviation and a skew factor.
+ The normal distribution is parameterized by a mean, a standard deviation and a
+ skew factor.
 
-  @tparam F Floating-point type (must satisfy `FloatingPointType`).
+ @tparam F Floating-point type (must satisfy `FloatingPointType`).
 */
   template <FloatingPointType F> struct SkewNormal
   {
@@ -439,7 +478,8 @@ namespace MC::Distributions
     F alpha;
 
     template <class DeviceType>
-    KOKKOS_INLINE_FUNCTION F draw(Kokkos::Random_XorShift1024<DeviceType>& gen) const
+    KOKKOS_INLINE_FUNCTION F
+    draw(Kokkos::Random_XorShift1024<DeviceType>& gen) const
     {
 
       const double Z0 = gen.normal();
@@ -451,7 +491,8 @@ namespace MC::Distributions
     }
     KOKKOS_INLINE_FUNCTION F mean() const
     {
-      return xi + omega * (alpha / (Kokkos::sqrt(1 + alpha * alpha))) * Kokkos::sqrt(2 / M_PI);
+      return xi + omega * (alpha / (Kokkos::sqrt(1 + alpha * alpha))) *
+                      Kokkos::sqrt(2 / M_PI);
     }
     KOKKOS_INLINE_FUNCTION F var() const
     {
@@ -467,6 +508,44 @@ namespace MC::Distributions
   };
 
   static_assert(ProbabilityLaw<SkewNormal<float>, float, ComputeSpace>);
+
+  /**
+  @brief Represents a Exponential probability distribution.
+
+  The exp distribution is only parameterized by lambda .
+
+  @tparam F Floating-point type (must satisfy `FloatingPointType`).
+   */
+  template <FloatingPointType F> struct Exponential
+  {
+    F lambda;
+
+    static constexpr bool use_kokkos_log = true;
+
+    template <class DeviceType>
+    KOKKOS_INLINE_FUNCTION F
+    draw(Kokkos::Random_XorShift1024<DeviceType>& gen) const
+    {
+      const float rnd = gen.frand();
+      return F(-1) * CommonMaths::_ln<use_kokkos_log>(rnd) / lambda;
+    }
+
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION F mean() const
+    {
+      return F(1) / lambda;
+    }
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION F var() const
+    {
+
+      return F(1) / (lambda * lambda);
+    }
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION F skewness() const
+    {
+      return 2;
+    }
+  };
+
+  static_assert(ProbabilityLaw<Exponential<float>, float, ComputeSpace>);
 
 } // namespace MC::Distributions
 

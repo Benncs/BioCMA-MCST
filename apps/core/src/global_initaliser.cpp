@@ -20,7 +20,6 @@
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/simulation.hpp>
-#include <simulation/transitionner.hpp>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -52,8 +51,6 @@ namespace
 
   void recur_path(std::string_view rootPath,
                   Core::SimulationParameters& params);
-
- 
 
   // TODO Move elsewhere
   double get_time_step(double user_deta_time,
@@ -124,10 +121,13 @@ namespace
 namespace Core
 {
   GlobalInitialiser::GlobalInitialiser(const ExecInfo& _info,
-                                       UserControlParameters _user_params)
+                                       UserControlParameters _user_params,
+                                       std::shared_ptr<IO::Logger> _logger)
       : info(_info), user_params(std::move(_user_params)),
         particle_per_process(0), is_host(info.current_rank == 0)
+
   {
+    set_logger(std::move(_logger));
     std::unique_ptr<CmaUtils::FlowMapTransitionner> transitioner = nullptr;
 
     Core::check_results_file_name(user_params);
@@ -138,7 +138,10 @@ namespace Core
 
   void GlobalInitialiser::set_logger(std::shared_ptr<IO::Logger> _logger)
   {
-    this->logger = std::move(_logger);
+    if (_logger != nullptr)
+    {
+      this->logger = std::move(_logger);
+    }
   }
 
   template <typename T> using OptionalPtr = GlobalInitialiser::OptionalPtr<T>;

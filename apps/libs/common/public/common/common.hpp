@@ -11,10 +11,9 @@
 using ComputeSpace = Kokkos::DefaultExecutionSpace;
 using HostSpace = Kokkos::HostSpace;
 
-
 #ifdef ENABLE_KOKKOS_PROFILING
 #  include <Kokkos_Profiling_ScopedRegion.hpp>
-#  define PROFILE_SECTION(__label_section__)                                                       \
+#  define PROFILE_SECTION(__label_section__)                                   \
     Kokkos::Profiling::ScopedRegion region(__label_section__);
 #else
 #  define PROFILE_SECTION(__label_section__) ;
@@ -34,9 +33,11 @@ public:
   Canary& operator=(const Canary&) = delete;
   Canary& operator=(Canary&&) = delete;
 
-  explicit Canary(std::string_view lbl, std::source_location location) : _lbl(lbl)
+  explicit Canary(std::string_view lbl, std::source_location location)
+      : _lbl(lbl)
   {
-    // std::cout << "\033[1;31m" << location.function_name() << "\033[0m " << lbl << std::endl;
+    // std::cout << "\033[1;31m" << location.function_name() << "\033[0m " <<
+    // lbl << std::endl;
     std::cout << location.function_name() << ": " << lbl << std::endl;
   }
 
@@ -59,18 +60,21 @@ inline Kokkos::TeamPolicy<ComputeSpace> get_policy_auto(std::size_t range)
   Kokkos::TeamPolicy<ComputeSpace> _policy;
 
   int recommended_team_size = _policy.team_size_recommended(
-      KOKKOS_LAMBDA(const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle) {
-        std::size_t idx =
-            team_handle.league_rank() * team_handle.team_size() + team_handle.team_rank();
+      KOKKOS_LAMBDA(
+          const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle) {
+        std::size_t idx = team_handle.league_rank() * team_handle.team_size() +
+                          team_handle.team_rank();
         if (idx >= range)
         {
           return;
         }
       },
       Kokkos::ParallelForTag());
-  int league_size = (static_cast<int>(range) + recommended_team_size - 1) / recommended_team_size;
+  int league_size = (static_cast<int>(range) + recommended_team_size - 1) /
+                    recommended_team_size;
 
-  _policy = Kokkos::TeamPolicy<ComputeSpace>(league_size, recommended_team_size);
+  _policy =
+      Kokkos::TeamPolicy<ComputeSpace>(league_size, recommended_team_size);
 
   return _policy;
 }

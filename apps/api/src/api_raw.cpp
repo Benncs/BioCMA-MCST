@@ -30,7 +30,7 @@ int apply(Handle handle, int to_load)
 {
   if (handle != nullptr)
   {
-    auto rc = handle->apply(to_load != 0);        // TODO HANDLE ERROR
+    auto rc = handle->apply(to_load != 0); // TODO HANDLE ERROR
     if (!rc)
     {
       handle->get_logger()->error(IO::format(" ", rc.get()));
@@ -135,7 +135,8 @@ int register_initializer_path(Handle handle, const char* c)
   return -1;
 }
 
-Core::UserControlParameters convert_c_wrap_to_param(const wrap_c_param_t& params)
+Core::UserControlParameters
+convert_c_wrap_to_param(const wrap_c_param_t& params)
 {
   bool recursive = params.recursive != 0;
   bool force_override = params.force_override != 0;
@@ -198,7 +199,11 @@ Param* make_params_ptr(double biomass_initial_concentration,
                    save};
 }
 
-int set_scalar_buffer(Handle handle, uint64_t rows, uint64_t cols, double* liquid, double* gas_ptr)
+int set_scalar_buffer(Handle handle,
+                      uint64_t rows,
+                      uint64_t cols,
+                      double* liquid,
+                      double* gas_ptr)
 {
   if (handle == nullptr || liquid == nullptr)
   {
@@ -228,10 +233,11 @@ int set_scalar_buffer(Handle handle, uint64_t rows, uint64_t cols, double* liqui
       gas = std::vector<double>(gas_span.begin(), gas_span.end());
     }
 
-    bool success = handle
-                       ->register_scalar_initiazer(
-                           Core::ScalarFactory::FullCase(rows, std::move(liq), std::move(gas)))
-                       .valid();
+    bool success =
+        handle
+            ->register_scalar_initiazer(Core::ScalarFactory::FullCase(
+                rows, std::move(liq), std::move(gas)))
+            .valid();
 
     return success ? 0 : -1;
   }

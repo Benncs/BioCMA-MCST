@@ -2,12 +2,12 @@
 #define __CASE_DATA__HPP__
 
 #include "common/logger.hpp"
-#include <simulation/mass_transfer.hpp>
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
 #include <memory>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/mass_transfer.hpp>
 #include <simulation/simulation.hpp>
 #include <transitionner/transitionner.hpp>
 
@@ -66,7 +66,7 @@ namespace Core
   /**
    * @brief Start simulation
    */
-  void exec(std::shared_ptr<IO::Logger> logger,CaseData&& case_data);
+  void exec(std::shared_ptr<IO::Logger> logger, CaseData&& case_data);
 
   std::optional<Core::CaseData>
   load(const ExecInfo& exec,
@@ -90,11 +90,13 @@ namespace Core
    * @param argc The number of command-line arguments.
    * @param argv The array of command-line arguments.
    * settings for the simulation.
-   * @return An `ExecInfo` object containing details about the initialized runtime
-   * environment, including execution context and other relevant metadata.
+   * @return An `ExecInfo` object containing details about the initialized
+   * runtime environment, including execution context and other relevant
+   * metadata.
    */
-  ExecInfo
-  runtime_init(int argc, char** argv, std::optional<std::size_t> force_run_id = std::nullopt);
+  ExecInfo runtime_init(int argc,
+                        char** argv,
+                        std::optional<std::size_t> force_run_id = std::nullopt);
 } // namespace Core
 
 #endif //!__CASE_DATA__HPP__

@@ -1,20 +1,22 @@
 #ifndef __CLI_PARSER_HPP__
 #define __CLI_PARSER_HPP__
 
+#include <common/logger.hpp>
 #include <common/results.hpp>
 #include <core/simulation_parameters.hpp>
-#include <utility>
-#include <common/logger.hpp>
 #include <memory>
+#include <utility>
 
 // TODO WIP
 template <typename S> struct CliResults : Result<S, std::string>
 {
-  explicit CliResults(std::string_view t) noexcept : Result<S, std::string>(std::string(t))
+  explicit CliResults(std::string_view t) noexcept
+      : Result<S, std::string>(std::string(t))
   {
   }
 
-  explicit CliResults(S&& value) noexcept : Result<S, std::string>(std::move(value))
+  explicit CliResults(S&& value) noexcept
+      : Result<S, std::string>(std::move(value))
   {
   }
 
@@ -47,7 +49,8 @@ template <typename S> struct CliResults : Result<S, std::string>
  * parameters are invalid.
  * @exception noexcept This function does not throw exceptions.
  */
-CliResults<Core::UserControlParameters> parse_cli(const std::shared_ptr<IO::Logger>& logger,int argc, char** argv) noexcept;
+CliResults<Core::UserControlParameters> parse_cli(
+    const std::shared_ptr<IO::Logger>& logger, int argc, char** argv) noexcept;
 
 /**
  * @brief Print Help message to specified buffer

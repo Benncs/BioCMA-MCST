@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+title: >-
+  BioCMA-MCST: A Biological Simulation Tool Using Particle
+  Method,Monte Carlo and Compartment Modeling Approaches
+message: 'If you use this software, please cite it as below.'
+type: software
+authors:
+  - given-names: Benjamin
+    family-names: Casale
+    email: casale@insa-toulouse.fr
+repository-code: 'https://github.com/Benncs/BioCMA-MCST'
+url: 'https://benncs.github.io/BioCMA-MCST/'
+keywords:
+  - Simulation
+  - Kokkos
+  - Bioprocess
+  - CFD
+license: Apache-2.0
+version: 0.9.6
+date-released: '2025-10-09'

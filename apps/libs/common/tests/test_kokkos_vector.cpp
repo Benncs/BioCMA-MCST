@@ -117,7 +117,8 @@ void test_resize_and_capacity()
   // Resize the vector
   vec.resize(10);
 
-  assert(vec.capacity() >= 10); // Capacity may be greater due to allocation factor
+  assert(vec.capacity() >=
+         10); // Capacity may be greater due to allocation factor
   assert(vec.size() == 0);
 
   std::cout << "test_resize_and_capacity passed!\n";

@@ -23,7 +23,8 @@ int main()
   const uint32_t n_rank = 10;
   const uint32_t n_particle = 10e6;
   UniformLoadBalancer uniform(n_rank);
-  CustomLoadBalancer custom(n_rank, {0.2, 0.15, 0.1, 0.1, 0.2, 0.1, 0.05, 0.05, 0.025, 0.025});
+  CustomLoadBalancer custom(
+      n_rank, {0.2, 0.15, 0.1, 0.1, 0.2, 0.1, 0.05, 0.05, 0.025, 0.025});
   HostImportantLoadBalancer host1(n_rank, 0.5);
   HostImportantLoadBalancer host2(n_rank, 3.1);
   BoundLoadBalancer bound(n_rank, 50);

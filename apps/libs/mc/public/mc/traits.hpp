@@ -11,9 +11,8 @@
 #include <mc/alias.hpp>
 #include <mc/macros.hpp>
 #include <mc/prng/prng.hpp>
+#include <optional>
 #include <type_traits>
-#include <optional> 
-
 
 /** @brief Utility for compile time array concatenation  */
 template <std::size_t N1, std::size_t N2>
@@ -31,7 +30,8 @@ namespace MC
 {
 
   // NOLINTBEGIN(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-  template <uint64_t Nd, FloatingPointType F> using ParticlesModel = Kokkos::View<F* [Nd]>;
+  template <uint64_t Nd, FloatingPointType F>
+  using ParticlesModel = Kokkos::View<F* [Nd]>;
   template <FloatingPointType F> using DynParticlesModel = Kokkos::View<F**>;
   // NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
@@ -39,26 +39,29 @@ namespace MC
 
 template <typename T>
 concept ConfigurableInit = requires(T model,
-                                     const MC::KPRNG::pool_type& random_pool,
-                                     std::size_t idx,
-                                     const typename T::SelfParticle& arr,
-                                     const T::Config& config) {
+                                    const std::size_t size,
+                                    const MC::KPRNG::pool_type& random_pool,
+                                    std::size_t idx,
+                                    const typename T::SelfParticle& arr,
+                                    const T::Config& config) {
   { model.init(random_pool, idx, arr, config) } -> std::same_as<void>;
+
+  { model.get_config(size) } -> std::same_as<typename T::Config>;
 };
 
 template <typename T>
 concept NonConfigurableInit = requires(T model,
-                                        const MC::KPRNG::pool_type& random_pool,
-                                        std::size_t idx,
-                                        const typename T::SelfParticle& arr) {
+                                       const MC::KPRNG::pool_type& random_pool,
+                                       std::size_t idx,
+                                       const typename T::SelfParticle& arr) {
   { model.init(random_pool, idx, arr) } -> std::same_as<void>;
 };
 
 /**
   @brief Concept to define a correct Model
 
-  Minimum model definition should validate this contract, the behaviour behind each function can
-  vary but the order and signature should be the same
+  Minimum model definition should validate this contract, the behaviour behind
+  each function can vary but the order and signature should be the same
  */
 template <typename T, typename ViewType>
 concept CommonModelType = requires(T model,
@@ -75,54 +78,68 @@ concept CommonModelType = requires(T model,
                                    const T::Config& config) {
   {
     T::n_var
-  } -> std::convertible_to<std::size_t>; ///< A model should declare the number of internal variable
-  typename T::FloatType; ///< Type used internally by model to declare internal floating point
-                         ///< values
-  typename T::SelfParticle; ///< Equivalent to MC::ParticlesModel<Self::n_var, Self::FloatType>
+  } -> std::convertible_to<std::size_t>; ///< A model should declare the number
+                                         ///< of internal variable
+  typename T::FloatType; ///< Type used internally by model to declare internal
+                         ///< floating point values
+  typename T::SelfParticle; ///< Equivalent to MC::ParticlesModel<Self::n_var,
+                            ///< Self::FloatType>
   typename T::Self;         ///< Model typename
   typename T::Config;       ///< Model typename
 
   // Check if the model is configurable
-  // requires(std::is_same_v<typename T::Config, std::nullopt_t> ? NonConfigurableInit<T>
-  //                                                             : ConfigurableInit<T>);
+  // requires(std::is_same_v<typename T::Config, std::nullopt_t> ?
+  // NonConfigurableInit<T>
+  //                                                             :
+  //                                                             ConfigurableInit<T>);
 
-  requires ConfigurableInit<T> || (std::is_same_v<typename T::Config, std::nullopt_t> && NonConfigurableInit<T>);
-
+  requires ConfigurableInit<T> ||
+               (std::is_same_v<typename T::Config, std::nullopt_t> &&
+                NonConfigurableInit<T>);
 
   // {
   //   T::init(random_pool, idx, arr, config)
-  // } -> std::same_as<void>; ///< Main init function applied to each MC particle at the begin of the
+  // } -> std::same_as<void>; ///< Main init function applied to each MC
+  // particle at the begin of the
   //                          ///< simulation
 
-  { T::mass(idx, arr) } -> std::same_as<double>; ///< Return the individual mass of particle
+  {
+    T::mass(idx, arr)
+  } -> std::same_as<double>; ///< Return the individual mass of particle
 
   {
     T::update(random_pool, d_t, idx, arr, c)
   } -> std::convertible_to<MC::Status>; ///< Update state of MC particle
 
-  {
-    T::contribution(idx, position, weight, arr, contributions)
-  } -> std::same_as<void>; ///< Get the individual contribution for the MC particle
+  // {
+  //   T::contribution(idx, position, weight, arr, contributions)
+  // } -> std::same_as<void>; ///< Get the individual contribution for the MC
+  // particle
+
+  { T::get_bounds() } -> std::same_as<MC::ContribIndexBounds>;
 
   {
     T::division(random_pool, idx, idx2, arr, buffer_arr)
-  } -> std::same_as<void>; ///< Perform the internal property redistribution after division
+  } -> std::same_as<void>; ///< Perform the internal property redistribution
+                           ///< after division
 
   requires FloatingPointType<typename T::FloatType>;
 };
 
-
-
-/** @brief  SFNIAE way to declare a model with number of internal properties known at compile time
+/** @brief  SFNIAE way to declare a model with number of internal properties
+ * known at compile time
  */
 template <typename T>
-concept FixedModelType = CommonModelType<T, MC::ParticlesModel<T::n_var, typename T::FloatType>>;
+concept FixedModelType =
+    CommonModelType<T, MC::ParticlesModel<T::n_var, typename T::FloatType>>;
 
-/** @brief  SFNIAE wau to declare a model with number of internal properties not known at compile
-time Alows to properly define User Defined Model but should be avoid in other cases
+/** @brief  SFNIAE wau to declare a model with number of internal properties not
+known at compile time Alows to properly define User Defined Model but should be
+avoid in other cases
  */
 template <typename T>
-concept DynModelType = CommonModelType<T, MC::DynParticlesModel<typename T::FloatType>>;
+concept DynModelType =
+    CommonModelType<T, MC::DynParticlesModel<typename T::FloatType>>;
 
 /** @brief  Model type
  */
@@ -135,7 +152,8 @@ concept NonConfigurableModel = ModelType<T> && NonConfigurableInit<T>;
 template <typename T>
 concept ConfigurableModel = ModelType<T> && ConfigurableInit<T>;
 
-/** @brief SFNIAE way to check whether model allow internal value saving or not  */
+/** @brief SFNIAE way to check whether model allow internal value saving or not
+ */
 template <std::size_t n, typename T>
 concept _HasExportProperties = requires(const T obj) {
   { T::names() } -> std::convertible_to<std::array<std::string_view, n>>;
@@ -156,15 +174,19 @@ concept HasExportPropertiesPartial = ModelType<T> && requires(const T obj) {
 
 /** @brief Model that can export properties */
 template <typename T>
-concept HasExportProperties = HasExportPropertiesFull<T> || HasExportPropertiesPartial<T>;
+concept HasExportProperties =
+    HasExportPropertiesFull<T> || HasExportPropertiesPartial<T>;
 
-// Helper to detect if `uniform_weight` exists as a type alias (using `using` keyword)
-template <typename T, typename = void> struct has_uniform_weight : std::false_type
+// Helper to detect if `uniform_weight` exists as a type alias (using `using`
+// keyword)
+template <typename T, typename = void>
+struct has_uniform_weight : std::false_type
 {
 };
 
 template <typename T>
-struct has_uniform_weight<T, std::void_t<typename T::uniform_weight>> : std::true_type
+struct has_uniform_weight<T, std::void_t<typename T::uniform_weight>>
+    : std::true_type
 {
 };
 

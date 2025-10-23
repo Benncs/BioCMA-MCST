@@ -11,7 +11,7 @@
 
 namespace IO
 {
-    class Console final : public Logger
+  class Console final : public Logger
   {
   public:
     Console();
@@ -24,9 +24,10 @@ namespace IO
 
     void debug(std::string_view message) final;
     void print(std::string_view prefix, std::string_view message) final;
-    void alert(std::string_view prefix,std::string_view message) final;
-    void error(std::string_view message,std::source_location location =std::source_location::current()) final;
-
+    void alert(std::string_view prefix, std::string_view message) final;
+    void error(
+        std::string_view message,
+        std::source_location location = std::source_location::current()) final;
 
     void raw_log(std::string_view message) final;
 
@@ -47,11 +48,9 @@ namespace IO
     std::ostream& err_output;
   };
 
-    //TODO move elsewhere 
+  // TODO move elsewhere
 
-
-
-    enum RedirectionType
+  enum RedirectionType
   {
     Buffer,
     File
@@ -105,6 +104,6 @@ namespace IO
 
     std::shared_ptr<bool> active_flag;
   };
-}
+} // namespace IO
 
-#endif 
+#endif

@@ -1,25 +1,24 @@
 #ifndef NDEBUG
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
 #endif
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #ifndef NDEBUG
-#pragma GCC diagnostic pop
+#  pragma GCC diagnostic pop
 #endif
-#include <simulation/mass_transfer.hpp>
 #include <common/common.hpp>
 #include <hydro/impl_mass_transfer.hpp>
 #include <mc/domain.hpp>
 #include <optional>
 #include <scalar_simulation.hpp>
+#include <simulation/mass_transfer.hpp>
 #include <simulation/simulation.hpp>
 
 namespace Simulation
 {
-
-
 
   [[deprecated("perf:not useful")]] void
   SimulationUnit::reduceContribs_per_rank(std::span<const double> data) const
@@ -29,7 +28,8 @@ namespace Simulation
     this->liquid_scalar->reduce_contribs(data);
   }
 
-  void SimulationUnit::reduceContribs(std::span<const double> data, size_t n_rank) const
+  void SimulationUnit::reduceContribs(std::span<const double> data,
+                                      size_t n_rank) const
   {
     PROFILE_SECTION("host:reduceContribs")
     const auto [nr, nc] = getDimensions();
@@ -52,19 +52,22 @@ namespace Simulation
     this->liquid_scalar->set_zero_contribs();
   }
 
-  void
-  SimulationUnit::update_feed(const double t, const double d_t, const bool update_scalar) noexcept
+  void SimulationUnit::update_feed(const double t,
+                                   const double d_t,
+                                   const bool update_scalar) noexcept
   {
     PROFILE_SECTION("host:update_feed")
     // Get references to the index_leaving_flow and leaving_flow data members
     const auto& _index_leaving_flow = this->move_info.index_leaving_flow;
     const auto& _leaving_flow = this->move_info.leaving_flow;
 
-    auto functor = [update_scalar](auto& scl, const Feed::FeedDescriptor& fd) -> void
+    auto functor = [update_scalar](auto& scl,
+                                   const Feed::FeedDescriptor& fd) -> void
     {
       if (update_scalar)
       {
-        scl.set_feed(fd.species_index, fd.input_position, fd.flow * fd.concentration);
+        scl.set_feed(
+            fd.species_index, fd.input_position, fd.flow * fd.concentration);
         if (fd.output_position)
         {
           scl.set_sink(*fd.output_position, fd.flow);
@@ -95,8 +98,8 @@ namespace Simulation
   }
 
   // void
-  // SimulationUnit::update_feed(const double t, const double d_t, const bool update_scalar)
-  // noexcept
+  // SimulationUnit::update_feed(const double t, const double d_t, const bool
+  // update_scalar) noexcept
   // {
   //   PROFILE_SECTION("host:update_feed")
   //   // Get references to the index_leaving_flow and leaving_flow data members
@@ -104,13 +107,16 @@ namespace Simulation
   //   const auto& _leaving_flow = this->move_info.leaving_flow;
 
   //   // Get the index of the exit compartment
-  //   // TODO exit is not necessarly at the index n-1, it should be given by user
-  //   const uint64_t i_exit = 0; // mc_unit->domain.getNumberCompartments() - 1;
+  //   // TODO exit is not necessarly at the index n-1, it should be given by
+  //   user const uint64_t i_exit = 0; //
+  //   mc_unit->domain.getNumberCompartments() - 1;
 
   //   // Define the set_feed lambda function
   //   auto set_feed =
-  //       [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow, update_scalar](
-  //           const std::shared_ptr<ScalarSimulation>& scalar, auto&& descritor, bool mc_f = false)
+  //       [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow,
+  //       update_scalar](
+  //           const std::shared_ptr<ScalarSimulation>& scalar, auto&&
+  //           descritor, bool mc_f = false)
 
   //   {
   //     double flow = 0.; // Initialize the flow variable
@@ -119,9 +125,8 @@ namespace Simulation
   //     for (auto&& current_feed : descritor)
   //     {
   //       current_feed.update(t, d_t);     // Update the current_feed
-  //       flow += current_feed.flow_value; // Get the flow_value of the current_feed
-  //       set_exit = current_feed.set_exit;
-  //       if (update_scalar)
+  //       flow += current_feed.flow_value; // Get the flow_value of the
+  //       current_feed set_exit = current_feed.set_exit; if (update_scalar)
   //       {
   //         // Iterate through the species, positions, and values of the
   //         // current_feed
@@ -165,11 +170,15 @@ namespace Simulation
       mt_model.gas_liquid_mass_transfer(state);
       const auto& mtr = mt_model.proxy()->mtr;
 
-      this->gas_scalar->performStepGL(
-          d_t, state.gas->get_transition(), mtr, MassTransfer::Sign::GasToLiquid);
+      this->gas_scalar->performStepGL(d_t,
+                                      state.gas->get_transition(),
+                                      mtr,
+                                      MassTransfer::Sign::GasToLiquid);
 
-      this->liquid_scalar->performStepGL(
-          d_t, state.liq->get_transition(), mtr, MassTransfer::Sign::LiquidToGas);
+      this->liquid_scalar->performStepGL(d_t,
+                                         state.liq->get_transition(),
+                                         mtr,
+                                         MassTransfer::Sign::LiquidToGas);
     }
     else
     {

@@ -2,14 +2,14 @@
 #define __SIMULATION_SPECIES_DESCRIPTOR_HPP__
 #include <optional>
 #include <string>
-#include <vector> 
+#include <vector>
 namespace Simulation
 {
 
   struct Specie
   {
-    std::string name; 
-    std::optional<double> molar_weight; 
+    std::string name;
+    std::optional<double> molar_weight;
     std::optional<double> henry;
   };
 
@@ -20,8 +20,6 @@ namespace Simulation
     std::vector<Specie> species;
     double bubble_diameter;
   };
-
-  
 
 } // namespace Simulation
 

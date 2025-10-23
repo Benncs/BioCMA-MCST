@@ -17,7 +17,8 @@ PYBIND11_EMBEDDED_MODULE(cpp_module, m)
       .def_readwrite("id", &MC::ParticleDataHolder::id)
       .def_readwrite("weight", &MC::ParticleDataHolder::weight)
       .def("signal_division",
-           [](MC::ParticleDataHolder& p) { p.status = MC::CellStatus::CYTOKINESIS; });
+           [](MC::ParticleDataHolder& p)
+           { p.status = MC::CellStatus::CYTOKINESIS; });
 }
 
 void declare_opaque(py::module& m)
@@ -52,11 +53,10 @@ void declare_opaque(py::module& m)
               return py::reinterpret_borrow<py::object>(*obj_ptr);
             }
 
-             return py::reinterpret_borrow<py::object>(py::none());
+            return py::reinterpret_borrow<py::object>(py::none());
           },
           pybind11::return_value_policy::reference);
 }
-
 
 // PYBIND11_MODULE(pyBioCMAMCST, m)
 // {
@@ -84,7 +84,8 @@ void declare_opaque(py::module& m)
 
 //       .def("getOpaque",
 //            [](MC::Particles &p)
-//            { return std::any_cast<std::shared_ptr<OpaquePointer>>(p.data); });
+//            { return std::any_cast<std::shared_ptr<OpaquePointer>>(p.data);
+//            });
 
 //   declare_opaque(m);
 // }

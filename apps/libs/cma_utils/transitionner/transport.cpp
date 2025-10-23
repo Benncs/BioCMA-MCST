@@ -1,11 +1,12 @@
 #ifndef NDEBUG
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#endif 
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
+#endif
 #include <Eigen/Dense>
 #ifndef NDEBUG
-#pragma GCC diagnostic pop
-#endif 
+#  pragma GCC diagnostic pop
+#endif
 #include <Kokkos_Core.hpp>
 #include <cma_utils/cache_hydro_state.hpp>
 #include <cmt_common/zip.hpp>
@@ -24,9 +25,11 @@ namespace CmaUtils
     return res;
   }
 
-  FlowMatrixType get_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t& flows)
+  FlowMatrixType
+  get_transition_matrix(const CmaRead::FlowMap::FlowMap_const_view_t& flows)
   {
-    const int n_compartments = static_cast<int>(flows.getNRow()); // It SHOULD be square
+    const int n_compartments =
+        static_cast<int>(flows.getNRow()); // It SHOULD be square
 
     // Uncomment with dense matrix
     //  auto rd = flows.data();
@@ -34,12 +37,13 @@ namespace CmaUtils
     //  std::vector<double>(rd.begin(),rd.end()); FlowMatrixType m_transition =
     //  Eigen::Map<Eigen::MatrixXd>(flow_copy.data(),n_compartments,n_compartments);
 
-    FlowMatrixType m_transition = FlowMatrixType(n_compartments, n_compartments);
+    FlowMatrixType m_transition =
+        FlowMatrixType(n_compartments, n_compartments);
 
     typedef Eigen::Triplet<double> T;
     std::vector<T> tripletList;
-    tripletList.reserve(
-        static_cast<long long>(n_compartments * n_compartments)); // Reserve space for all elements
+    tripletList.reserve(static_cast<long long>(
+        n_compartments * n_compartments)); // Reserve space for all elements
 
     // Temporary vector to keep track of the row sums for diagonal elements
     std::vector<double> rowSums(n_compartments, 0.0);

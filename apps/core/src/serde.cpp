@@ -23,7 +23,8 @@
 #  include <stdexcept>
 #  include <string_view>
 #  include <vector>
-static void write_to_file(const std::ostringstream& oss, std::string_view filename)
+static void write_to_file(const std::ostringstream& oss,
+                          std::string_view filename)
 {
 
   std::ofstream file(filename.data(), std::ios::binary);
@@ -89,13 +90,15 @@ namespace SerDe
     {
 
       Archive_t ar(buf);
-      ar(cereal::make_nvp("version", ExecInfo::get_version()), case_data.exec_info);
+      ar(cereal::make_nvp("version", ExecInfo::get_version()),
+         case_data.exec_info);
       auto dim = case_data.simulation->getDimensions();
       auto cliq = case_data.simulation->getCliqData();
       auto cgas = case_data.simulation->getCgasData();
 
       std::optional<std::vector<double>> cgas_a =
-          cgas.has_value() ? std::make_optional(std::vector<double>(cgas->begin(), cgas->end()))
+          cgas.has_value() ? std::make_optional(std::vector<double>(
+                                 cgas->begin(), cgas->end()))
                            : std::nullopt;
       ar(case_data.params.number_particle,
          dim,
@@ -169,11 +172,13 @@ namespace SerDe
 
     case_data.simulation = std::move(*simulation);
 
-    case_data.simulation->setMtrModel(Simulation::MassTransfer::Type::FixedKla{kla});
+    case_data.simulation->setMtrModel(
+        Simulation::MassTransfer::Type::FixedKla{kla});
 
     case_data.simulation->get_start_time_mut() = start_time;
     gi.set_initial_number_particle(np);
-    std::cout << "SIMULATION: " << case_data.exec_info.run_id << " LOADED" << std::endl;
+    std::cout << "SIMULATION: " << case_data.exec_info.run_id << " LOADED"
+              << std::endl;
     return true;
   }
 

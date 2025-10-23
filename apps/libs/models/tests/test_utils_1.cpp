@@ -1,13 +1,13 @@
 #include <models/utils.hpp>
 
-#define ASSERT_EQUALS(a, b)                                                                        \
-  if ((a) != (b))                                                                                  \
-  {                                                                                                \
-    std::cerr << "Test failed: " << #a << " != " << #b << "\n";                                    \
-  }                                                                                                \
-  else                                                                                             \
-  {                                                                                                \
-    std::cout << "Test passed: " << #a << " == " << #b << "\n";                                    \
+#define ASSERT_EQUALS(a, b)                                                    \
+  if ((a) != (b))                                                              \
+  {                                                                            \
+    std::cerr << "Test failed: " << #a << " != " << #b << "\n";                \
+  }                                                                            \
+  else                                                                         \
+  {                                                                            \
+    std::cout << "Test passed: " << #a << " == " << #b << "\n";                \
   }
 
 int main()

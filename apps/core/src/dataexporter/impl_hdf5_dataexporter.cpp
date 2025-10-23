@@ -11,22 +11,22 @@
 #  include <highfive/eigen.hpp>
 #  include <highfive/highfive.hpp>
 #  include <iomanip>
+#  include <span>
 #  include <sstream>
 #  include <string>
 #  include <string_view>
 #  include <type_traits>
 #  include <variant>
-# include <span>
 #  ifdef __linux__
 #    include <pwd.h>
 #    include <sys/types.h>
 #    include <unistd.h>
 #  endif
 
-#  define CHECK_PIMPL                                                                              \
-    if (!pimpl)                                                                                    \
-    {                                                                                              \
-      throw std::runtime_error(__FILE__ ": Unexpected ERROR");                                     \
+#  define CHECK_PIMPL                                                          \
+    if (!pimpl)                                                                \
+    {                                                                          \
+      throw std::runtime_error(__FILE__ ": Unexpected ERROR");                 \
     }
 namespace
 {
@@ -34,7 +34,8 @@ namespace
   {
     // Non vedo l’ora che arrivi c++23-format
     std::stringstream ss;
-    auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    auto now =
+        std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     ss << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
     return ss.str();
   }
@@ -84,7 +85,8 @@ namespace Core
   {
   public:
     explicit impl(std::string_view _filename)
-        : filename(_filename), file(HighFive::File(filename, HighFive::File::Truncate))
+        : filename(_filename),
+          file(HighFive::File(filename, HighFive::File::Truncate))
     {
     }
 
@@ -111,10 +113,11 @@ namespace Core
                              std::optional<export_metadata_t> user_description)
       : pimpl(new impl(_filename))
   {
-    export_metadata_t description =
-        user_description.has_value() ? *user_description : "Interesting results";
+    export_metadata_t description = user_description.has_value()
+                                        ? *user_description
+                                        : "Interesting results";
 
-    metadata["file_version"] = 6; //NOLINT
+    metadata["file_version"] = 6; // NOLINT
     metadata["creation_date"] = date_time();
     metadata["author"] = get_user_name();
     metadata["description"] = description;
@@ -125,15 +128,17 @@ namespace Core
                              std::string_view link_name,
                              std::string_view groupname)
   {
-    pimpl->file.createExternalLink(link_name.data(), filename.data(), groupname.data());
+    pimpl->file.createExternalLink(
+        link_name.data(), filename.data(), groupname.data());
   }
 
-  void DataExporter::write_properties([[maybe_unused]] std::optional<std::string> specific_dataspace,
-                                      const export_metadata_kv& values)
+  void DataExporter::write_properties(
+      [[maybe_unused]] std::optional<std::string> specific_dataspace,
+      const export_metadata_kv& values)
   {
     // TODO impl specific dataspace as metadata by default.
-    // It's not easy to deal with built-in hdf5 metadata from other lib(python/rust),
-    // use standard dataset called metadata instead is better
+    // It's not easy to deal with built-in hdf5 metadata from other
+    // lib(python/rust), use standard dataset called metadata instead is better
     CHECK_PIMPL
 
     for (const auto& kv : values)
@@ -162,16 +167,17 @@ namespace Core
     if (description.chunk_dims.has_value())
     {
       auto chunk_dims = description.chunk_dims.value();
-      std::vector<hsize_t> _chunk_dims; //FIXME
-      for(auto&& i : chunk_dims)
+      std::vector<hsize_t> _chunk_dims; // FIXME
+      for (auto&& i : chunk_dims)
       {
-          _chunk_dims.push_back(i);
+        _chunk_dims.push_back(i);
       }
 
-      //FIXME
-      if(chunk_dims.size() != chunk_dims.size())
+      // FIXME
+      if (chunk_dims.size() != chunk_dims.size())
       {
-        throw std::invalid_argument("prepare_matrix(HDF5): container and chunkdimensions and  don´t match");
+        throw std::invalid_argument("prepare_matrix(HDF5): container and "
+                                    "chunkdimensions and  don´t match");
       }
 
       props.add(HighFive::Shuffle());
@@ -194,7 +200,8 @@ namespace Core
     descriptors.emplace(description.name, description);
   }
 
-  void DataExporter::write_simple(std::string specific_dataspace, const simple_export_t& value)
+  void DataExporter::write_simple(std::string specific_dataspace,
+                                  const simple_export_t& value)
   {
     std::visit(
         [&](const auto& val)
@@ -205,7 +212,8 @@ namespace Core
         value);
   }
 
-  void DataExporter::write_simple(const export_initial_kv& values, std::string_view root)
+  void DataExporter::write_simple(const export_initial_kv& values,
+                                  std::string_view root)
   {
 
     for (const auto& kv : values)
@@ -240,19 +248,22 @@ namespace Core
     pimpl->file.flush();
   }
 
-  void
-  DataExporter::write_matrix(std::string_view name, std::span<const double> values, bool compress)
+  void DataExporter::write_matrix(std::string_view name,
+                                  std::span<const double> values,
+                                  bool compress)
   {
     CHECK_PIMPL
 
     HighFive::DataSetCreateProps ds_props;
     // Minimum chunk size is 1 and leads to error if size<chunk
-    // With size=0, nothing will be saved it will not change anything to skip property in this case
+    // With size=0, nothing will be saved it will not change anything to skip
+    // property in this case
     // TODO: if values is 0 early return ?
     if (values.size() > 1)
     {
       // If error occurs, try to debug with fixed chunk of 1
-      ds_props.add(HighFive::Chunking(std::min(get_chunk_size(values.size()),values.size())));
+      ds_props.add(HighFive::Chunking(
+          std::min(get_chunk_size(values.size()), values.size())));
       ds_props.add(HighFive::Shuffle());
     }
     const auto data_space = HighFive::DataSpace(values.size());
@@ -262,7 +273,8 @@ namespace Core
       ds_props.add(HighFive::Deflate(hdf5_max_compression));
     }
 
-    auto dataset = pimpl->file.createDataSet<double>(name.data(), data_space, ds_props);
+    auto dataset =
+        pimpl->file.createDataSet<double>(name.data(), data_space, ds_props);
     dataset.write_raw(values.data());
     pimpl->file.flush();
   }
@@ -274,9 +286,10 @@ namespace Core
                                   bool compress)
   {
     CHECK_PIMPL
-    //Caution to Eigen layout
-    auto data = Eigen::Map<Eigen::MatrixXd>(
-        const_cast<double*>(values.data()), EIGEN_INDEX(n_row), EIGEN_INDEX(n_col));
+    // Caution to Eigen layout
+    auto data = Eigen::Map<Eigen::MatrixXd>(const_cast<double*>(values.data()),
+                                            EIGEN_INDEX(n_row),
+                                            EIGEN_INDEX(n_col));
     HighFive::DataSetCreateProps ds_props;
     ds_props.add(HighFive::Chunking({n_row, n_col}));
     ds_props.add(HighFive::Shuffle());

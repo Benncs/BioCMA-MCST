@@ -17,7 +17,8 @@ float random_float(float min, float max)
 
 double log_fast_ankerl(double a)
 {
-  static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__, "Little endian is required!");
+  static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__,
+                "Little endian is required!");
   union
   {
     double d;

@@ -46,7 +46,9 @@ int main()
     MC::ParticlesContainer<SerdeModel> container(np);
     MC::KPRNG::pool_type rng;
     Kokkos::parallel_for(
-        np, KOKKOS_LAMBDA(const int i) { SerdeModel::init(rng, i, container.model); });
+        np, KOKKOS_LAMBDA(const int i) {
+          SerdeModel::init(rng, i, container.model);
+        });
 
     std::ostringstream buff(std::ios::binary);
     cereal::BinaryOutputArchive oarchive(buff);

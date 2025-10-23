@@ -2,24 +2,25 @@
 #define __CORE_PARTIAL_EXPORTER_HPP__
 
 #include <common/execinfo.hpp>
-#include <cstdint>
 #include <cstddef>
+#include <cstdint>
 #include <dataexporter/data_exporter.hpp>
 #include <optional>
 #include <span>
-#include <string_view>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace Core
 {
   /**
-   * @brief Exporter for each MPI worker (including host) that exports data relative to particle
-   * state.
+   * @brief Exporter for each MPI worker (including host) that exports data
+   * relative to particle state.
    *
-   * This class handles exporting particle-related data, including initialization of fields,
-   * writing particle data, managing particle number distributions, and writing probe data.
-   * It derives privately from `DataExporter` to encapsulate its backend.
+   * This class handles exporting particle-related data, including
+   * initialization of fields, writing particle data, managing particle number
+   * distributions, and writing probe data. It derives privately from
+   * `DataExporter` to encapsulate its backend.
    */
   class PartialExporter : public DataExporter
   {
@@ -29,11 +30,13 @@ namespace Core
      *
      * @param info Execution information necessary for export operations.
      * @param _filename The filename for data export.
-     * @param user_description Optional metadata describing the export operation.
+     * @param user_description Optional metadata describing the export
+     * operation.
      */
-    PartialExporter(const ExecInfo& info,
-                    std::string_view _filename,
-                    std::optional<export_metadata_t> user_description = std::nullopt);
+    PartialExporter(
+        const ExecInfo& info,
+        std::string_view _filename,
+        std::optional<export_metadata_t> user_description = std::nullopt);
 
     /**
      * @brief Initializes the fields required for exporting data.
@@ -55,7 +58,8 @@ namespace Core
     void write_particle_data(std::span<std::string> names,
                              ViewParticleProperties particle_values,
                              ViewParticleProperties spatial_values,
-                             const std::string& ds_name,bool compress_data);
+                             const std::string& ds_name,
+                             bool compress_data);
 
     /**
      * @brief Writes the number of particles in each compartment.
@@ -72,7 +76,8 @@ namespace Core
     void write_probe(std::span<const double> data);
 
   private:
-    uint64_t probe_counter_n_element; /**< Counter for the number of probe elements. */
+    uint64_t probe_counter_n_element; /**< Counter for the number of probe
+                                         elements. */
   };
 
 }; // namespace Core

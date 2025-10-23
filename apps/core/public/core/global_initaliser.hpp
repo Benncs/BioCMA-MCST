@@ -2,8 +2,6 @@
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
 #include "common/logger.hpp"
-#include <simulation/mass_transfer.hpp>
-#include <transitionner/transitionner.hpp>
 #include <array>
 #include <cma_read/flow_iterator.hpp>
 #include <cma_read/neighbors.hpp>
@@ -18,9 +16,11 @@
 #include <memory>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/mass_transfer.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation.hpp>
 #include <string>
+#include <transitionner/transitionner.hpp>
 #include <vector>
 
 class ILoadBalancer;
@@ -30,7 +30,8 @@ namespace Core
 
   /**
    * @class GlobalInitialiser
-   * @brief A class responsible for initializing various components of a simulation framework.
+   * @brief A class responsible for initializing various components of a
+   * simulation framework.
    *
    */
   class GlobalInitialiser
@@ -48,11 +49,12 @@ namespace Core
      * @brief Constructs a GlobalInitialiser instance.
      *
      * @param _info Execution information containing context for the simulation.
-     * @param _params Simulation parameters that configure the simulation behavior.
+     * @param _params Simulation parameters that configure the simulation
+     * behavior.
      */
-    GlobalInitialiser(const ExecInfo& _info, UserControlParameters _user_params);
-
-    void set_logger(std::shared_ptr<IO::Logger> _logger);
+    GlobalInitialiser(const ExecInfo& _info,
+                      UserControlParameters _user_params,
+                      std::shared_ptr<IO::Logger> = nullptr);
 
     /**
      * @brief Initializes a flow iterator.
@@ -64,16 +66,20 @@ namespace Core
     /**
      * @brief Initializes the simulation state.
      *
-     * @param flow_handle A unique pointer to the flow iterator used for state initialization.
-     * @return An optional boolean indicating success or failure of the initialization.
+     * @param flow_handle A unique pointer to the flow iterator used for state
+     * initialization.
+     * @return An optional boolean indicating success or failure of the
+     * initialization.
      */
-    std::optional<bool> init_state(std::unique_ptr<CmaRead::FlowIterator>& flow_handle);
+    std::optional<bool>
+    init_state(std::unique_ptr<CmaRead::FlowIterator>& flow_handle);
 
     /**
      * @brief Initializes a transitioner with the provided flow iterator.
      *
      * @param flow_handle A unique pointer to the flow iterator.
-     * @return An optional unique pointer to the initialized flow map transitioner.
+     * @return An optional unique pointer to the initialized flow map
+     * transitioner.
      */
     OptionalPtr<CmaUtils::FlowMapTransitionner>
     init_transitionner(std::unique_ptr<CmaRead::FlowIterator>&& flow_handle);
@@ -81,7 +87,8 @@ namespace Core
     /**
      * @brief Initializes a transitioner without parameters.
      *
-     * @return An optional unique pointer to the initialized flow map transitioner.
+     * @return An optional unique pointer to the initialized flow map
+     * transitioner.
      */
     OptionalPtr<CmaUtils::FlowMapTransitionner> init_transitionner();
 
@@ -91,7 +98,7 @@ namespace Core
      * @return An optional unique pointer to the initialized simulation unit.
      */
     OptionalPtr<Simulation::SimulationUnit>
-    init_simulation( std::optional<Core::ScalarFactory::ScalarVariant> variant);
+    init_simulation(std::optional<Core::ScalarFactory::ScalarVariant> variant);
 
     /**
      * @brief Initializes a simulation unit with specified parameters.
@@ -116,14 +123,16 @@ namespace Core
     init_scalar(Core::ScalarFactory::ScalarVariant&& variant);
 
     std::optional<bool>
-    init_mtr_model(Simulation::SimulationUnit& unit,Simulation::MassTransfer::Type::MtrTypeVariant&& variant);
+    init_mtr_model(Simulation::SimulationUnit& unit,
+                   Simulation::MassTransfer::Type::MtrTypeVariant&& variant);
 
     /**
      * @brief Initializes a simulation feed.
      *
      * @return An optional simulation feed.
      */
-    bool init_feed(std::optional<Simulation::Feed::SimulationFeed> feed = std::nullopt);
+    bool init_feed(
+        std::optional<Simulation::Feed::SimulationFeed> feed = std::nullopt);
 
     /**
      * @brief Initializes a Monte Carlo unit.
@@ -144,6 +153,8 @@ namespace Core
     void set_initial_number_particle(uint64_t np) noexcept;
 
   private:
+    void set_logger(std::shared_ptr<IO::Logger> _logger);
+
     /**
      * @brief Enum to define initialization steps.
      *
@@ -166,7 +177,7 @@ namespace Core
       Feed,             ///< Step for initializing the simulation feed.
       MC,               ///< Step for initializing the Monte Carlo unit.
       SimulationUnit,   ///< Step for initializing the simulation unit.
-      Count             ///< Total number of steps in the initialization sequence.
+      Count ///< Total number of steps in the initialization sequence.
     };
 
     /**
@@ -181,7 +192,8 @@ namespace Core
      * @param args Additional steps to check.
      * @return A boolean indicating whether all specified steps are validated.
      */
-    template <typename... Args> [[nodiscard]] bool check_steps(InitStep step, Args... args) const
+    template <typename... Args>
+    [[nodiscard]] bool check_steps(InitStep step, Args... args) const
     {
       if (!validated_steps[static_cast<size_t>(step)]) // NOLINT
       {
@@ -192,7 +204,8 @@ namespace Core
     }
 
     /**
-     * @brief Validates the specified initialization step and any additional steps.
+     * @brief Validates the specified initialization step and any additional
+     * steps.
      *
      * @param step The current initialization step to validate.
      * @param args Additional steps to validate.
@@ -200,7 +213,8 @@ namespace Core
     template <typename... Args> void validate_step(InitStep step, Args... args)
     {
       validated_steps[static_cast<size_t>(step)] = true; // NOLINT
-      (void)std::initializer_list<int>{(validated_steps[static_cast<size_t>(args)] = true, 0)...};
+      (void)std::initializer_list<int>{
+          (validated_steps[static_cast<size_t>(args)] = true, 0)...};
     }
 
     /**
@@ -209,16 +223,19 @@ namespace Core
      * @param cma_case_path The path for the CMA case.
      * @return A structure containing exported paths.
      */
-    CmtCommons::cma_exported_paths_t get_path_files(const std::string& cma_case_path);
+    CmtCommons::cma_exported_paths_t
+    get_path_files(const std::string& cma_case_path);
 
     /**
      * @brief Host speciffic state init
      */
-    std::optional<bool> host_init_state(std::unique_ptr<CmaRead::FlowIterator>& flow_handle);
+    std::optional<bool>
+    host_init_state(std::unique_ptr<CmaRead::FlowIterator>& flow_handle);
 
     /**
      * @brief Performs MPI broadcast for synchronization.
-     * @note: this function compiles and doesn't throw error even if no_mpi is not defined
+     * @note: this function compiles and doesn't throw error even if no_mpi is
+     * not defined
      */
     void mpi_broadcast(); ///< Method for handling MPI broadcast communication.
 

@@ -47,7 +47,8 @@ template <typename S, typename T> struct Result : protected std::variant<S, T>
     throw std::runtime_error("Deref None");
   }
 
-  // template <typename Func, typename Err> auto match_const(Func&& f, Err&& r) const noexcept
+  // template <typename Func, typename Err> auto match_const(Func&& f, Err&& r)
+  // const noexcept
   // {
   //   if (this->valid())
   //   {

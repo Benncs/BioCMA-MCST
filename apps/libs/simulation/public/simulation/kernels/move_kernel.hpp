@@ -185,10 +185,10 @@ namespace Simulation::KernelInline
     KOKKOS_FUNCTION void handle_exit(std::size_t idx,
                                      std::size_t& dead_count) const
     {
-
+      const auto position = positions(idx);
       for (size_t i = 0LU; i < move.index_leaving_flow.size(); ++i)
       {
-        const auto position = positions(idx);
+
         auto generator = random_pool.get_state();
         const float random_number = generator.frand(0., 1.);
         random_pool.free_state(generator);

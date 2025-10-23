@@ -25,6 +25,7 @@
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
 #endif
 #include <Eigen/Core>
 #include <Eigen/Dense>
@@ -45,7 +46,7 @@ namespace Simulation
   {
     return is_two_phase_flow;
   }
-  
+
   DiagonalView<ComputeSpace> SimulationUnit::get_kernel_diagonal() const
   {
 
@@ -94,8 +95,8 @@ namespace Simulation
   {
     auto& matrix = state.liq->cumulative_probability;
     using layout_type = CumulativeProbabilityView<HostSpace>::array_layout;
-    CumulativeProbabilityView<HostSpace> rd(matrix.data(),
-                                            layout_type(matrix.rows(), matrix.cols()));
+    CumulativeProbabilityView<HostSpace> rd(
+        matrix.data(), layout_type(matrix.rows(), matrix.cols()));
 
     return Kokkos::create_mirror_view_and_copy(ComputeSpace(), rd);
   }
@@ -118,7 +119,7 @@ namespace Simulation
 
   std::span<double> SimulationUnit::getContributionData_mut()
   {
-      return this->liquid_scalar->getContributionData_mut();
+    return this->liquid_scalar->getContributionData_mut();
   }
 
   std::span<double> SimulationUnit::getCliqData() const
@@ -126,7 +127,8 @@ namespace Simulation
     return this->liquid_scalar->getConcentrationData();
   }
 
-  [[nodiscard]] std::optional<std::span<const double>> SimulationUnit::getCgasData() const
+  [[nodiscard]] std::optional<std::span<const double>>
+  SimulationUnit::getCgasData() const
   {
     if (!gas_scalar)
     {
@@ -140,7 +142,8 @@ namespace Simulation
     return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()};
   }
 
-  [[nodiscard]] std::optional<std::span<const double>> SimulationUnit::getMTRData() const
+  [[nodiscard]] std::optional<std::span<const double>>
+  SimulationUnit::getMTRData() const
   {
     return this->mt_model.mtr_data();
   }

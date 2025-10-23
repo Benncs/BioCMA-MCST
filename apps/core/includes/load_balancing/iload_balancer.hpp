@@ -16,12 +16,13 @@ public:
   ILoadBalancer& operator=(ILoadBalancer&&) = delete;
   ILoadBalancer& operator=(const ILoadBalancer&) = delete;
 
-  [[nodiscard]] bool check(uint64_t n=0) const;
+  [[nodiscard]] bool check(uint64_t n = 0) const;
 
   uint64_t balance(uint32_t rank, uint64_t n);
 
 protected:
-  [[nodiscard]] virtual double getRatio(uint64_t n, uint32_t rank) const noexcept =0;
+  [[nodiscard]] virtual double getRatio(uint64_t n,
+                                        uint32_t rank) const noexcept = 0;
 
   [[nodiscard]] inline auto size() const noexcept
   {

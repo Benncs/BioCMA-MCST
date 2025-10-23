@@ -7,7 +7,8 @@
 namespace WrapMPI
 {
 
-  IterationPayload::IterationPayload(const size_t size_flows, const size_t volumes)
+  IterationPayload::IterationPayload(const size_t size_flows,
+                                     const size_t volumes)
   {
     this->liquid_flows.resize(size_flows);
     this->liquid_volumes.resize(volumes);
@@ -46,15 +47,20 @@ namespace WrapMPI
   bool HostIterationPayload::send(const size_t rank) noexcept
   {
     PROFILE_SECTION("host:to_node")
-    int rc1 = WrapMPI::Async::send_v<double>(requests[0], liquid_flows, rank, 0, false);
+    int rc1 = WrapMPI::Async::send_v<double>(
+        requests[0], liquid_flows, rank, 0, false);
 
-    int rc2 = WrapMPI::Async::send_v<double>(requests[1], liquid_volumes, rank, 1, false);
+    int rc2 = WrapMPI::Async::send_v<double>(
+        requests[1], liquid_volumes, rank, 1, false);
 
-    int rc3 = WrapMPI::Async::send_v<double>(requests[2], gas_volumes, rank, 2, false);
+    int rc3 = WrapMPI::Async::send_v<double>(
+        requests[2], gas_volumes, rank, 2, false);
 
-    int rc4 = WrapMPI::Async::send_v(requests[3], neighbors.data(), rank, 3, true);
+    int rc4 =
+        WrapMPI::Async::send_v(requests[3], neighbors.data(), rank, 3, true);
 
-    return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS && rc3 == MPI_SUCCESS && rc4 == MPI_SUCCESS;
+    return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS && rc3 == MPI_SUCCESS &&
+           rc4 == MPI_SUCCESS;
   }
 
   bool IterationPayload::recv(const size_t source, MPI_Status* status) noexcept
@@ -71,12 +77,13 @@ namespace WrapMPI
     }
     raw_neighbors = opt.value();
     auto n_col = raw_neighbors.size() / gas_volumes.size();
-    neighbors =
-        CmaRead::Neighbors::Neighbors_const_view_t(raw_neighbors, gas_volumes.size(), n_col, true);
+    neighbors = CmaRead::Neighbors::Neighbors_const_view_t(
+        raw_neighbors, gas_volumes.size(), n_col, true);
     return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS && rc3 == MPI_SUCCESS;
   }
 
-  void HostIterationPayload::fill(const CmaRead::ReactorState& current_reactor_state)
+  void
+  HostIterationPayload::fill(const CmaRead::ReactorState& current_reactor_state)
   {
     liquid_flows = current_reactor_state.liquid_flow.getViewFlows().data();
     liquid_volumes = current_reactor_state.liquidVolume;

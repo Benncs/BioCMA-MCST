@@ -1,17 +1,24 @@
 #ifndef __BIO__UTILS_HPP__
 #define __BIO__UTILS_HPP__
 
-#include "Kokkos_MathematicalConstants.hpp"
-#include "common/traits.hpp"
+#include "Kokkos_Macros.hpp"
 #include <Kokkos_Core.hpp>
+#include <Kokkos_MathematicalConstants.hpp>
 #include <Kokkos_Random.hpp>
+#include <common/traits.hpp>
+#include <mc/alias.hpp>
 #include <mc/prng/prng.hpp>
-
 /**
   @brief Models definition
  */
 namespace Models
 {
+
+  template <FloatingPointType T>
+  KOKKOS_INLINE_FUNCTION MC::Status check_div(const T l, const T lc)
+  {
+    return (l >= lc) ? MC::Status::Division : MC::Status::Idle;
+  }
 
   namespace MolarMass
   {

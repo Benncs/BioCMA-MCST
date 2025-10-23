@@ -2,10 +2,10 @@
 #include "mc/macros.hpp"
 #include "mc/prng/prng_extension.hpp"
 #include "models/utils.hpp"
+#include <cstdio>
 #include <cstdlib>
 #include <mc/traits.hpp>
 #include <udf_includes.hpp>
-#include <cstdio> 
 using namespace Models;
 
 void __attribute__((constructor)) on_load()
@@ -18,7 +18,8 @@ MODEL_CONSTANT FloatType l_max_m = 5e-6;   // m
 MODEL_CONSTANT FloatType l_c_m = 3e-6;     // m
 MODEL_CONSTANT FloatType d_m = 0.6e-6;     // m
 MODEL_CONSTANT FloatType l_min_m = 0.9e-6; // m
-MODEL_CONSTANT FloatType lin_density = c_linear_density(static_cast<FloatType>(1000), d_m);
+MODEL_CONSTANT FloatType lin_density =
+    c_linear_density(static_cast<FloatType>(1000), d_m);
 
 enum class particle_var : int
 {
@@ -39,24 +40,27 @@ void _init_udf(const MC::KPRNG::pool_type& random_pool,
                const Models::UdfModel::SelfParticle& arr)
 {
   constexpr auto local_lc = 3e-6;
-  constexpr auto length_dist_c = MC::Distributions::TruncatedNormal<Models::UdfModel::FloatType>(
-      local_lc, l_c_m / 20., l_min_m, l_max_m);
+  constexpr auto length_dist_c =
+      MC::Distributions::TruncatedNormal<Models::UdfModel::FloatType>(
+          local_lc, l_c_m / 20., l_min_m, l_max_m);
 
   constexpr auto length_dist =
       MC::Distributions::Normal<Models::UdfModel::FloatType>(local_lc, 0.1e-6);
 
   auto gen = random_pool.get_state();
-  GET_PROPERTY(particle_var::length) = 2.5e-6; // Kokkos::max(FloatType(0), length_dist.draw(gen));
+  GET_PROPERTY(particle_var::length) =
+      2.5e-6; // Kokkos::max(FloatType(0), length_dist.draw(gen));
   random_pool.free_state(gen);
   GET_PROPERTY(particle_var::l_cp) = length_dist_c.draw(gen);
   GET_PROPERTY(particle_var::contrib_phi_s) = 0;
 };
 
-MC::Status _update_udf([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-                       [[maybe_unused]] float d_t,
-                       [[maybe_unused]] std::size_t idx,
-                       [[maybe_unused]] const Models::UdfModel::SelfParticle& arr,
-                       [[maybe_unused]] const MC::LocalConcentration& c)
+MC::Status
+_update_udf([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+            [[maybe_unused]] float d_t,
+            [[maybe_unused]] std::size_t idx,
+            [[maybe_unused]] const Models::UdfModel::SelfParticle& arr,
+            [[maybe_unused]] const MC::LocalConcentration& c)
 {
 
   (void)random_pool;
@@ -77,35 +81,41 @@ MC::Status _update_udf([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
   // return MC::Status::Idle;
 }
 
-void _contribution_udf([[maybe_unused]] std::size_t idx,
-                       [[maybe_unused]] std::size_t position,
-                       [[maybe_unused]] double weight,
-                       [[maybe_unused]] const Models::UdfModel::SelfParticle& arr,
-                       [[maybe_unused]] const MC::ContributionView& contribution)
+void _contribution_udf(
+    [[maybe_unused]] std::size_t idx,
+    [[maybe_unused]] std::size_t position,
+    [[maybe_unused]] double weight,
+    [[maybe_unused]] const Models::UdfModel::SelfParticle& arr,
+    [[maybe_unused]] const MC::ContributionView& contribution)
 {
   auto access = contribution.access();
-  access(0, position) += weight * GET_PROPERTY(::particle_var::contrib_phi_s); // NOLINT
+  access(0, position) +=
+      weight * GET_PROPERTY(::particle_var::contrib_phi_s); // NOLINT
 }
 
-void _division_udf([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-                   [[maybe_unused]] std::size_t idx,
-                   [[maybe_unused]] std::size_t idx2,
-                   [[maybe_unused]] const MC::DynParticlesModel<float>& arr,
-                   [[maybe_unused]] const MC::DynParticlesModel<float>& buffer_arr)
+void _division_udf(
+    [[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+    [[maybe_unused]] std::size_t idx,
+    [[maybe_unused]] std::size_t idx2,
+    [[maybe_unused]] const MC::DynParticlesModel<float>& arr,
+    [[maybe_unused]] const MC::DynParticlesModel<float>& buffer_arr)
 {
   constexpr auto local_lc = 3e-6;
-  constexpr auto length_dist_c = MC::Distributions::TruncatedNormal<Models::UdfModel::FloatType>(
-      local_lc, l_c_m / 20., l_min_m, l_max_m);
+  constexpr auto length_dist_c =
+      MC::Distributions::TruncatedNormal<Models::UdfModel::FloatType>(
+          local_lc, l_c_m / 20., l_min_m, l_max_m);
   auto gen = random_pool.get_state();
 
   const FloatType new_current_length =
       GET_PROPERTY(particle_var::length) / static_cast<FloatType>(2.);
   GET_PROPERTY(particle_var::length) = new_current_length;
   GET_PROPERTY(particle_var::age) = 0;
-  GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::length) = new_current_length;
+  GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::length) =
+      new_current_length;
   GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::age) = 0;
-  GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_cp) = length_dist_c.draw(gen); // local_lc;
-  GET_PROPERTY(particle_var::l_cp) = length_dist_c.draw(gen);                        // local_lc;
+  GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_cp) =
+      length_dist_c.draw(gen);                                // local_lc;
+  GET_PROPERTY(particle_var::l_cp) = length_dist_c.draw(gen); // local_lc;
   random_pool.free_state(gen);
 }
 

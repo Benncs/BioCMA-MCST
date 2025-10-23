@@ -1,13 +1,14 @@
 #ifndef NDEBUG
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#endif 
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
+#endif
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #ifndef NDEBUG
-#pragma GCC diagnostic pop
-#endif 
+#  pragma GCC diagnostic pop
+#endif
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 #include <scalar_simulation.hpp>
@@ -20,7 +21,8 @@ namespace Simulation
   ScalarSimulation::ScalarSimulation(size_t n_compartments,
                                      size_t n_species,
                                      std::span<double> volumes)
-      : n_r(n_species), n_c(n_compartments), concentrations(n_r, n_c), sources(n_r, n_c)
+      : n_r(n_species), n_c(n_compartments), concentrations(n_r, n_c),
+        sources(n_r, n_c)
   {
     if (volumes.size() != n_compartments)
     {
@@ -30,8 +32,10 @@ namespace Simulation
     const int n_row = EIGEN_INDEX(n_r);
     const int n_col = EIGEN_INDEX(n_c);
     m_volumes = Eigen::DiagonalMatrix<double, -1>(n_col);
-    this->m_volumes.diagonal() =
-        Eigen::Map<const Eigen::VectorXd>(volumes.data(), static_cast<int>(volumes.size()));
+    this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(
+        volumes.data(), static_cast<int>(volumes.size()));
+
+    contribs = kernelContribution("contribs", n_r, n_c);
 
     volumes_inverse = Eigen::DiagonalMatrix<double, -1>(n_col);
     volumes_inverse.setIdentity();
@@ -43,12 +47,18 @@ namespace Simulation
     this->sink.setZero();
   }
 
+  void ScalarSimulation::synchro_sources()
+  {
+    Kokkos::deep_copy(sources.compute, contribs);
+  }
+
   [[nodiscard]] ColMajorMatrixtype& ScalarSimulation::get_concentration()
   {
     return concentrations.eigen_data;
   }
 
-  [[nodiscard]] ColMajorKokkosScalarMatrix ScalarSimulation::get_device_concentration() const
+  [[nodiscard]] ColMajorKokkosScalarMatrix
+  ScalarSimulation::get_device_concentration() const
   {
     return concentrations.compute;
   }
@@ -79,34 +89,39 @@ namespace Simulation
     PROFILE_SECTION("performStep_gl")
 #define c concentrations.eigen_data
 
-    total_mass = total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data +
-                                     static_cast<float>(sign) * mtr);
+    total_mass =
+        total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data +
+                            static_cast<float>(sign) * mtr);
     c = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
     concentrations.update_host_to_compute();
   }
 
-  void ScalarSimulation::performStep(double d_t, const FlowMatrixType& m_transition)
+  void ScalarSimulation::performStep(double d_t,
+                                     const FlowMatrixType& m_transition)
   {
     PROFILE_SECTION("performStep_l")
 #define c concentrations.eigen_data
 
-    total_mass = total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data);
+    total_mass =
+        total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data);
     c = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
     concentrations.update_host_to_compute();
   }
 
-  bool ScalarSimulation::deep_copy_concentration(const std::vector<double>& data)
+  bool
+  ScalarSimulation::deep_copy_concentration(const std::vector<double>& data)
   {
     if (data.size() != n_c * n_r)
     {
       return false;
     }
     using eigen_type = decltype(this->concentrations)::EigenMatrix;
-    Eigen::Map<const eigen_type> temp_map(data.data(), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
+    Eigen::Map<const eigen_type> temp_map(
+        data.data(), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
     this->concentrations.eigen_data = temp_map; // Performs deep copy
     return true;
   }

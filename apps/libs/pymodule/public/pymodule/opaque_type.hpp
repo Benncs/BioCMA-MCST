@@ -12,7 +12,8 @@ struct OpaquePointer
 
   OpaquePointer() = default; // Default constructor
 
-  OpaquePointer(const OpaquePointer& rhs) noexcept = default; // Default copy constructor
+  OpaquePointer(const OpaquePointer& rhs) noexcept =
+      default; // Default copy constructor
 
   OpaquePointer& operator=(const OpaquePointer& rhs) = default;
 

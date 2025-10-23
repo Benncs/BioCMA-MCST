@@ -12,43 +12,49 @@
 #include <models/udf_model.hpp>
 
 /**
-  @brief Unsafe namespace to handle UDF (User-defined function) via dynamic library loading
+  @brief Unsafe namespace to handle UDF (User-defined function) via dynamic
+  library loading
  */
 namespace UnsafeUDF
 {
   /**
-  @brief Static class to access to low-level configuration to load dynamic library
+  @brief Static class to access to low-level configuration to load dynamic
+  library
    */
   struct Loader
   {
     static std::size_t (*set_nvar_udf)();
 
-    static void (*init_udf)(const MC::KPRNG::pool_type& random_pool,
-                            std::size_t idx,
-                            const Models::UdfModel::SelfParticle& arr); //< init function ptr
+    static void (*init_udf)(
+        const MC::KPRNG::pool_type& random_pool,
+        std::size_t idx,
+        const Models::UdfModel::SelfParticle& arr); //< init function ptr
 
-    static MC::Status (*update_udf)(const MC::KPRNG::pool_type& random_pool,
-                                    float d_t,
-                                    std::size_t idx,
-                                    const Models::UdfModel::SelfParticle& arr,
-                                    const MC::LocalConcentration& c); //< update function ptr
+    static MC::Status (*update_udf)(
+        const MC::KPRNG::pool_type& random_pool,
+        float d_t,
+        std::size_t idx,
+        const Models::UdfModel::SelfParticle& arr,
+        const MC::LocalConcentration& c); //< update function ptr
 
     static void (*contribution_udf)(
         std::size_t idx,
         std::size_t position,
         double weight,
         const Models::UdfModel::SelfParticle& arr,
-        const MC::ContributionView& contributions); //< contribution function ptr
+        const MC::ContributionView&
+            contributions); //< contribution function ptr
 
-    static void (*division_udf)(
-        const MC::KPRNG::pool_type& random_pool,
+    static void (*division_udf)(const MC::KPRNG::pool_type& random_pool,
+                                std::size_t idx,
+                                std::size_t idx2,
+                                const MC::DynParticlesModel<float>& arr,
+                                const MC::DynParticlesModel<float>&
+                                    buffer_arr); //< division function ptr
+
+    static double (*mass)(
         std::size_t idx,
-        std::size_t idx2,
-        const MC::DynParticlesModel<float>& arr,
-        const MC::DynParticlesModel<float>& buffer_arr); //< division function ptr
-
-    static double (*mass)(std::size_t idx,
-                          const MC::DynParticlesModel<float>& arr); //< mass function ptr
+        const MC::DynParticlesModel<float>& arr); //< mass function ptr
 
     static std::vector<std::string_view> (*names)();
 
@@ -60,7 +66,8 @@ namespace UnsafeUDF
     /**
       @brief Load UDF from .so path
      */
-    [[nodiscard]] static std::shared_ptr<DynamicLibrary> init_lib(std::string_view path);
+    [[nodiscard]] static std::shared_ptr<DynamicLibrary>
+    init_lib(std::string_view path);
 #endif
   };
 
@@ -68,16 +75,22 @@ namespace UnsafeUDF
 
 #ifdef DECLARE_EXPORT_UDF
 
-using init_udf_ptr = decltype(UnsafeUDF::Loader::init_udf);     //< init function ptr type
-using update_udf_ptr = decltype(UnsafeUDF::Loader::update_udf); //< update function ptr type
+using init_udf_ptr =
+    decltype(UnsafeUDF::Loader::init_udf); //< init function ptr type
+using update_udf_ptr =
+    decltype(UnsafeUDF::Loader::update_udf); //< update function ptr type
 using contribution_udf_ptr =
-    decltype(UnsafeUDF::Loader::contribution_udf); //< contribution function ptr type
-using division_udf_ptr = decltype(UnsafeUDF::Loader::division_udf); //< division function ptr type
+    decltype(UnsafeUDF::Loader::contribution_udf); //< contribution function ptr
+                                                   // type
+using division_udf_ptr =
+    decltype(UnsafeUDF::Loader::division_udf); //< division function ptr type
 using mass_udf_ptr = decltype(UnsafeUDF::Loader::mass);
-using set_nvar_udf_ptr = decltype(UnsafeUDF::Loader::set_nvar_udf); //< division function ptr type
+using set_nvar_udf_ptr =
+    decltype(UnsafeUDF::Loader::set_nvar_udf); //< division function ptr type
 
 using names_udf_ptr = decltype(UnsafeUDF::Loader::names);
-using get_number_udf_ptr = decltype(UnsafeUDF::Loader::get_number); //< division function ptr type
+using get_number_udf_ptr =
+    decltype(UnsafeUDF::Loader::get_number); //< division function ptr type
 
 // clang-format off
 /**

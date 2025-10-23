@@ -13,7 +13,8 @@
 
 static bool interpreter_init = false;
 
-static void _custom_interpreter_deleter(pybind11::scoped_interpreter* interpreter)
+static void
+_custom_interpreter_deleter(pybind11::scoped_interpreter* interpreter)
 {
   if (interpreter != nullptr)
   {
@@ -190,14 +191,18 @@ namespace PythonWrap
   {
     if (pimpl != nullptr)
     {
-      auto bf = pybind11::buffer_info(const_cast<double*>(concentration.data()),
-                                      sizeof(double),
-                                      pybind11::format_descriptor<double>::format(),
-                                      1,
-                                      {concentration.size()},
-                                      {sizeof(double)});
+      auto bf =
+          pybind11::buffer_info(const_cast<double*>(concentration.data()),
+                                sizeof(double),
+                                pybind11::format_descriptor<double>::format(),
+                                1,
+                                {concentration.size()},
+                                {sizeof(double)});
 
-      pimpl->update_f(d_t,PYTHON_CST_FWD(pimpl->_data), PYTHON_FWD(p), pybind11::array_t<double>(bf));
+      pimpl->update_f(d_t,
+                      PYTHON_CST_FWD(pimpl->_data),
+                      PYTHON_FWD(p),
+                      pybind11::array_t<double>(bf));
     }
   }
 
@@ -206,14 +211,15 @@ namespace PythonWrap
     PimpModel child_model;
     if (pimpl != nullptr)
     {
-      auto obj = pimpl->division_f(PYTHON_CST_FWD(pimpl->_data),PYTHON_FWD(p));
+      auto obj = pimpl->division_f(PYTHON_CST_FWD(pimpl->_data), PYTHON_FWD(p));
       child_model.pimpl->_data.ptr = new py::object(obj); // NOLINT
     }
 
     return child_model;
   }
 
-  void PimpModel::contribution(MC::ParticleDataHolder& p, const ContributionView& contribution) noexcept
+  void PimpModel::contribution(MC::ParticleDataHolder& p,
+                               const ContributionView& contribution) noexcept
   {
     if (pimpl != nullptr)
     {
@@ -225,15 +231,17 @@ namespace PythonWrap
       py::object capsule = py::capsule(data);
       auto result = py::array_t<double_t>(
           py::buffer_info(
-              data,                                         // Pointer to the data
-              sizeof(double_t),                             // Size of each element
-              py::format_descriptor<double_t>::format(),    // Data type format
-              2,                                            // Number of dimensions
-              {rows, cols},                                 // Shape of the array
-              {sizeof(double_t) * cols, sizeof(double_t)}), // Strides for each dimension
+              data,                                      // Pointer to the data
+              sizeof(double_t),                          // Size of each element
+              py::format_descriptor<double_t>::format(), // Data type format
+              2,                                         // Number of dimensions
+              {rows, cols},                              // Shape of the array
+              {sizeof(double_t) * cols,
+               sizeof(double_t)}), // Strides for each dimension
           capsule);
 
-      pimpl->contribution_f(PYTHON_CST_FWD(p), PYTHON_CST_FWD(pimpl->_data), PYTHON_FWD(result));
+      pimpl->contribution_f(
+          PYTHON_CST_FWD(p), PYTHON_CST_FWD(pimpl->_data), PYTHON_FWD(result));
     }
   }
 
@@ -241,7 +249,8 @@ namespace PythonWrap
   {
     if (pimpl != nullptr)
     {
-      return convert_dict_to_map(pimpl->get_properties_f(PYTHON_CST_FWD(pimpl->_data)));
+      return convert_dict_to_map(
+          pimpl->get_properties_f(PYTHON_CST_FWD(pimpl->_data)));
     }
     return {{"None", 1.}};
   }
@@ -250,7 +259,7 @@ namespace PythonWrap
   {
     if (pimpl != nullptr)
     {
-      auto obj= pimpl->mass_f(PYTHON_CST_FWD(pimpl->_data));
+      auto obj = pimpl->mass_f(PYTHON_CST_FWD(pimpl->_data));
       return obj.cast<double>();
     }
     return 1.;
