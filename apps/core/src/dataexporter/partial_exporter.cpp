@@ -1,6 +1,7 @@
 #include "biocma_cst_config.hpp"
 #include "common/common.hpp"
 #include "dataexporter/data_exporter.hpp"
+#include "models/two_meta_nb.hpp"
 #include <dataexporter/partial_exporter.hpp>
 #include <optional>
 #include <utility>
@@ -69,27 +70,27 @@ namespace Core
     probe_counter_n_element += data.size();
   }
 
-  void
-  PartialExporter::write_particle_data(std::span<std::string> names,
-                                       ViewParticleProperties particle_values,
-                                       ViewParticleProperties spatial_values,
-                                       ViewParticleProperties ages_values,
-                                       const std::string& ds_name,
-                                       bool compress_data)
+  void PartialExporter::write_particle_data(PostProcessing::BonceBuffer&& bonce,
+                                            const std::string& ds_name,
+                                            bool compress_data)
   {
     PROFILE_SECTION("write_particle_data")
+    const auto& [particle_values, spatial_values, ages_values, names] = bonce;
+
     const size_t n_particles = particle_values.extent(1);
-    const size_t n_compartments = spatial_values.extent(1);
+    const size_t n_compartments = bonce.spatial_values.extent(1);
 
-    auto* ptr_ages = Kokkos::subview(ages_values, 0, Kokkos::ALL).data();
-    this->write_matrix(
-        ds_name + "age_hydro/", {ptr_ages, n_particles}, compress_data);
+    if (ages_values.has_value())
+    {
+      auto* ptr_ages = Kokkos::subview(*ages_values, 0, Kokkos::ALL).data();
+      this->write_matrix(
+          ds_name + "age_hydro/", {ptr_ages, n_particles}, compress_data);
+      ptr_ages = Kokkos::subview(*ages_values, 1, Kokkos::ALL).data();
+      this->write_matrix(
+          ds_name + "age_div/", {ptr_ages, n_particles}, compress_data);
+    }
 
-    ptr_ages = Kokkos::subview(ages_values, 1, Kokkos::ALL).data();
-    this->write_matrix(
-        ds_name + "age_div/", {ptr_ages, n_particles}, compress_data);
-
-    for (size_t i_name = 0; i_name < names.size(); ++i_name)
+    for (size_t i_name = 0; i_name < bonce.vnames.size(); ++i_name)
     {
       const auto* ptr_particles =
           Kokkos::subview(particle_values, i_name, Kokkos::ALL).data();

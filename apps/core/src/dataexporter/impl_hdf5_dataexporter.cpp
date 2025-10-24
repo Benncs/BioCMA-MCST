@@ -30,52 +30,10 @@
     }
 namespace
 {
-  std::string date_time()
-  {
-    // Non vedo l’ora che arrivi c++23-format
-    std::stringstream ss;
-    auto now =
-        std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    ss << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
-    return ss.str();
-  }
+  std::string date_time();
+  std::string get_user_name();
+  std::size_t get_chunk_size(std::size_t data_length);
 
-  std::string get_user_name()
-  {
-    std::string_view res = "someone";
-#  ifdef __linux__
-    uid_t uid = geteuid();
-    passwd* pw = getpwuid(uid);
-    if (pw != nullptr)
-    {
-      res = pw->pw_name;
-    }
-#  endif
-
-    return std::string(res);
-  }
-
-  std::size_t get_chunk_size(std::size_t data_length)
-  {
-    // NOLINTBEGIN
-    if (data_length <= 1000)
-    {
-      return 1;
-    }
-    else if (data_length <= 1e4)
-    {
-      return 1024;
-    }
-    else if (data_length <= 1e6)
-    {
-      return 8192;
-    }
-    else
-    {
-      return 65536;
-    }
-    // NOLINTEND
-  }
 } // namespace
 
 namespace Core
@@ -168,6 +126,7 @@ namespace Core
     {
       auto chunk_dims = description.chunk_dims.value();
       std::vector<hsize_t> _chunk_dims; // FIXME
+      _chunk_dims.reserve(chunk_dims.size());
       for (auto&& i : chunk_dims)
       {
         _chunk_dims.push_back(i);
@@ -343,5 +302,55 @@ namespace Core
   DataExporter::~DataExporter() = default;
 
 } // namespace Core
+//
+namespace
+{
+  std::string date_time()
+  {
+    // Non vedo l’ora che arrivi c++23-format
+    std::stringstream ss;
+    auto now =
+        std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    ss << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
+    return ss.str();
+  }
+  std::string get_user_name()
+  {
+    std::string_view res = "someone";
+#  ifdef __linux__
+    uid_t uid = geteuid();
+    passwd* pw = getpwuid(uid);
+    if (pw != nullptr)
+    {
+      res = pw->pw_name;
+    }
+#  endif
+
+    return std::string(res);
+  }
+
+  std::size_t get_chunk_size(std::size_t data_length)
+  {
+    // NOLINTBEGIN
+    if (data_length <= 1000)
+    {
+      return 1;
+    }
+    else if (data_length <= 1e4)
+    {
+      return 1024;
+    }
+    else if (data_length <= 1e6)
+    {
+      return 8192;
+    }
+    else
+    {
+      return 65536;
+    }
+    // NOLINTEND
+  }
+
+} // namespace
 
 #endif

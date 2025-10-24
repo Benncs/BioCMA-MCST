@@ -1,13 +1,11 @@
 #ifndef __CORE_POST_PROCESS_PUBLIC_HPP__
 #define __CORE_POST_PROCESS_PUBLIC_HPP__
-#include "Kokkos_Atomic.hpp"
-#include "Kokkos_Core_fwd.hpp"
-#include "common/common.hpp"
-#include "mc/alias.hpp"
-#include "mc/traits.hpp"
 #include <Kokkos_Core.hpp>
-#include <cstdint>
+#include <Kokkos_Core_fwd.hpp>
+#include <common/common.hpp>
+#include <mc/alias.hpp>
 #include <mc/particles_container.hpp>
+#include <mc/traits.hpp>
 
 template <typename MemorySpace>
 using ParticlePropertyViewType =
@@ -22,16 +20,19 @@ namespace PostProcessing
   {
     ParticlePropertyViewType<HostSpace> particle_values;
     ParticlePropertyViewType<HostSpace> spatial_values;
-    ParticlePropertyViewType<HostSpace> ages;
+    std::optional<ParticlePropertyViewType<HostSpace>> ages;
     std::vector<std::string> vnames;
   };
 
+  // TODO remove duplicated code in inner and inner_partial
   template <HasExportPropertiesFull Model, typename ExecutionSpace>
   void inner(std::size_t n_p,
              const MC::ParticlePositions& position,
              const typename Model::SelfParticle& model,
+             const MC::ParticleAges& ages,
              ParticlePropertyViewType<ComputeSpace>& particle_values,
              ParticlePropertyViewType<ComputeSpace>& spatial_values,
+             ParticlePropertyViewType<ComputeSpace>& ages_value,
              const MC::ParticleStatus& status)
   {
     Kokkos::Experimental::
@@ -56,6 +57,8 @@ namespace PostProcessing
           auto mass = Model::mass(i_particle, model);
           access(Model::n_var, position(i_particle)) += mass;
           particle_values(Model::n_var, i_particle) = mass;
+          ages_value(0, i_particle) = ages(i_particle, 0);
+          ages_value(1, i_particle) = ages(i_particle, 1);
         });
     Kokkos::fence();
     Kokkos::Experimental::contribute(spatial_values, scatter_spatial_values);
@@ -118,7 +121,8 @@ namespace PostProcessing
   template <ModelType M>
   std::optional<PostProcessing::BonceBuffer>
   get_properties(MC::ParticlesContainer<M>& container,
-                 const std::size_t n_compartment)
+                 const std::size_t n_compartment,
+                 const bool with_age)
   {
     if constexpr (HasExportProperties<M>)
     {
@@ -126,8 +130,8 @@ namespace PostProcessing
       BonceBuffer properties;
       const std::size_t n_p =
           container.n_particles(); // USE list size not Kokkos View size.
-                                   // ParticleList allocates more particles than
-                                   // needed
+                                   // bcause container allocates more particles
+                                   // than needed
       auto ar = M::names();
       properties.vnames = std::vector<std::string>(ar.begin(), ar.end());
       properties.vnames.emplace_back("mass");
@@ -137,10 +141,14 @@ namespace PostProcessing
       {
         n_var = ar.size() + 1;
       }
+
       ParticlePropertyViewType<ComputeSpace> spatial_values(
           "property_spatial", n_var, n_compartment);
       ParticlePropertyViewType<ComputeSpace> particle_values(
           "property_values", n_var, n_p);
+
+      // TODO Currently view is allocated and filled even if with_age flag is
+      // turned of, with_age controlls export but not postprocessing
       ParticlePropertyViewType<ComputeSpace> ages_values("ages_values", 2, n_p);
 
       if constexpr (HasExportPropertiesPartial<M>)
@@ -156,11 +164,14 @@ namespace PostProcessing
       }
       else
       {
+
         inner<M, Kokkos::DefaultExecutionSpace>(n_p,
                                                 container.position,
                                                 container.model,
+                                                container.ages,
                                                 particle_values,
                                                 spatial_values,
+                                                ages_values,
                                                 container.status);
       }
 
@@ -168,8 +179,17 @@ namespace PostProcessing
           Kokkos::HostSpace(), particle_values);
       properties.spatial_values = Kokkos::create_mirror_view_and_copy(
           Kokkos::HostSpace(), spatial_values);
-      properties.ages =
-          Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), ages_values);
+
+      if (with_age)
+      {
+
+        properties.ages = Kokkos::create_mirror_view_and_copy(
+            Kokkos::HostSpace(), ages_values);
+      }
+      else
+      {
+        properties.ages = std::nullopt;
+      }
 
       return properties;
     }
