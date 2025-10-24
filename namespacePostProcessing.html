@@ -84,12 +84,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a9ff9231cbdf2a3c4e539c4638aba2445" id="r_a9ff9231cbdf2a3c4e539c4638aba2445"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ff9231cbdf2a3c4e539c4638aba2445">save_particle_state</a> (<a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &amp;simulation, <a class="el" href="classCore_1_1PartialExporter.html">Core::PartialExporter</a> &amp;pde)</td></tr>
 <tr class="memitem:a0e06c75e06cf43e767d5e3e8afab62f2" id="r_a0e06c75e06cf43e767d5e3e8afab62f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e06c75e06cf43e767d5e3e8afab62f2">save_probes</a> (<a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &amp;simulation, <a class="el" href="classCore_1_1PartialExporter.html">Core::PartialExporter</a> &amp;pde, bool force=false)</td></tr>
 <tr class="memitem:a78ad4623d83b436cdd0ae9c8e1e5c7ac" id="r_a78ad4623d83b436cdd0ae9c8e1e5c7ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78ad4623d83b436cdd0ae9c8e1e5c7ac">reset_counter</a> ()</td></tr>
-<tr class="memitem:a7b24c0cbc25e014d92006a5ebdcfeb22" id="r_a7b24c0cbc25e014d92006a5ebdcfeb22"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptHasExportPropertiesFull.html">HasExportPropertiesFull</a> Model, typename ExecutionSpace&gt; </td></tr>
-<tr class="memitem:a7b24c0cbc25e014d92006a5ebdcfeb22 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b24c0cbc25e014d92006a5ebdcfeb22">inner</a> (std::size_t n_p, const <a class="el" href="namespaceMC.html#a9a4b5cf4fee992bcbbaa6e62a3cb2753">MC::ParticlePositions</a> &amp;position, const typename Model::SelfParticle &amp;model, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;particle_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;spatial_values, const <a class="el" href="namespaceMC.html#a48f9a66039a8e943d22c1548b62e2b50">MC::ParticleStatus</a> &amp;status)</td></tr>
-<tr class="memitem:ae7f761591bedad44bd0af2a85bd0aad6" id="r_ae7f761591bedad44bd0af2a85bd0aad6"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptHasExportPropertiesPartial.html">HasExportPropertiesPartial</a> Model, typename ExecutionSpace&gt; </td></tr>
-<tr class="memitem:ae7f761591bedad44bd0af2a85bd0aad6 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae7f761591bedad44bd0af2a85bd0aad6">inner_partial</a> (const std::size_t n_p, const <a class="el" href="namespaceMC.html#a9a4b5cf4fee992bcbbaa6e62a3cb2753">MC::ParticlePositions</a> &amp;position, const typename Model::SelfParticle &amp;model, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;particle_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;spatial_values, const <a class="el" href="namespaceMC.html#a48f9a66039a8e943d22c1548b62e2b50">MC::ParticleStatus</a> &amp;status)</td></tr>
-<tr class="memitem:a942419cfbff3ce0870cf761062263ddf" id="r_a942419cfbff3ce0870cf761062263ddf"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </td></tr>
-<tr class="memitem:a942419cfbff3ce0870cf761062263ddf template"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a942419cfbff3ce0870cf761062263ddf">get_properties</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;container, const std::size_t n_compartment)</td></tr>
+<tr class="memitem:ad1f1599c125a9291115b7437b65fc59a" id="r_ad1f1599c125a9291115b7437b65fc59a"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptHasExportPropertiesFull.html">HasExportPropertiesFull</a> Model, typename ExecutionSpace&gt; </td></tr>
+<tr class="memitem:ad1f1599c125a9291115b7437b65fc59a template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1f1599c125a9291115b7437b65fc59a">inner</a> (std::size_t n_p, const <a class="el" href="namespaceMC.html#a9a4b5cf4fee992bcbbaa6e62a3cb2753">MC::ParticlePositions</a> &amp;position, const typename Model::SelfParticle &amp;model, const <a class="el" href="namespaceMC.html#a71308af240201ce951b6993271bec9d6">MC::ParticleAges</a> &amp;ages, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;particle_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;spatial_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;ages_value, const <a class="el" href="namespaceMC.html#a48f9a66039a8e943d22c1548b62e2b50">MC::ParticleStatus</a> &amp;status)</td></tr>
+<tr class="memitem:a1df285c9edc402d4fe911f1e970f505a" id="r_a1df285c9edc402d4fe911f1e970f505a"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptHasExportPropertiesPartial.html">HasExportPropertiesPartial</a> Model, typename ExecutionSpace&gt; </td></tr>
+<tr class="memitem:a1df285c9edc402d4fe911f1e970f505a template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1df285c9edc402d4fe911f1e970f505a">inner_partial</a> (const std::size_t n_p, const <a class="el" href="namespaceMC.html#a9a4b5cf4fee992bcbbaa6e62a3cb2753">MC::ParticlePositions</a> &amp;position, const typename Model::SelfParticle &amp;model, const <a class="el" href="namespaceMC.html#a71308af240201ce951b6993271bec9d6">MC::ParticleAges</a> &amp;ages, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;particle_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;spatial_values, ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;ages_value, const <a class="el" href="namespaceMC.html#a48f9a66039a8e943d22c1548b62e2b50">MC::ParticleStatus</a> &amp;status)</td></tr>
+<tr class="memitem:a5c1775fa34193199d9c989e5740e2f84" id="r_a5c1775fa34193199d9c989e5740e2f84"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </td></tr>
+<tr class="memitem:a5c1775fa34193199d9c989e5740e2f84 template"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c1775fa34193199d9c989e5740e2f84">get_properties</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;container, const std::size_t n_compartment, const bool with_age)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -137,8 +137,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a942419cfbff3ce0870cf761062263ddf" name="a942419cfbff3ce0870cf761062263ddf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a942419cfbff3ce0870cf761062263ddf">&#9670;&#160;</a></span>get_properties()</h2>
+<a id="a5c1775fa34193199d9c989e5740e2f84" name="a5c1775fa34193199d9c989e5740e2f84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c1775fa34193199d9c989e5740e2f84">&#9670;&#160;</a></span>get_properties()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -153,20 +153,25 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_compartment</em></span>&#160;)</td>
+          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_compartment</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool</td>          <td class="paramname"><span class="paramname"><em>with_age</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_a942419cfbff3ce0870cf761062263ddf_cgraph.svg" width="100%" height="468"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_a5c1775fa34193199d9c989e5740e2f84_cgraph.svg" width="100%" height="468"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
 </div>
-<a id="a7b24c0cbc25e014d92006a5ebdcfeb22" name="a7b24c0cbc25e014d92006a5ebdcfeb22"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b24c0cbc25e014d92006a5ebdcfeb22">&#9670;&#160;</a></span>inner()</h2>
+<a id="ad1f1599c125a9291115b7437b65fc59a" name="ad1f1599c125a9291115b7437b65fc59a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1f1599c125a9291115b7437b65fc59a">&#9670;&#160;</a></span>inner()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -191,12 +196,22 @@ template&lt;<a class="el" href="conceptHasExportPropertiesFull.html">HasExportPr
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceMC.html#a71308af240201ce951b6993271bec9d6">MC::ParticleAges</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ages</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>particle_values</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>spatial_values</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ages_value</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -208,13 +223,13 @@ template&lt;<a class="el" href="conceptHasExportPropertiesFull.html">HasExportPr
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_a7b24c0cbc25e014d92006a5ebdcfeb22_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_ad1f1599c125a9291115b7437b65fc59a_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="ae7f761591bedad44bd0af2a85bd0aad6" name="ae7f761591bedad44bd0af2a85bd0aad6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae7f761591bedad44bd0af2a85bd0aad6">&#9670;&#160;</a></span>inner_partial()</h2>
+<a id="a1df285c9edc402d4fe911f1e970f505a" name="a1df285c9edc402d4fe911f1e970f505a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1df285c9edc402d4fe911f1e970f505a">&#9670;&#160;</a></span>inner_partial()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -239,12 +254,22 @@ template&lt;<a class="el" href="conceptHasExportPropertiesPartial.html">HasExpor
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceMC.html#a71308af240201ce951b6993271bec9d6">MC::ParticleAges</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ages</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>particle_values</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>spatial_values</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ParticlePropertyViewType&lt; ComputeSpace &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ages_value</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -256,7 +281,7 @@ template&lt;<a class="el" href="conceptHasExportPropertiesPartial.html">HasExpor
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_ae7f761591bedad44bd0af2a85bd0aad6_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_a1df285c9edc402d4fe911f1e970f505a_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

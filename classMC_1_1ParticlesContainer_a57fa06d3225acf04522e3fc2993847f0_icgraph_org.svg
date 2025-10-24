@@ -59,7 +59,7 @@
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="classMC_1_1ParticlesContainer.html#a9fa7f315c1a2245124142e8af60d42cc" target="_top" xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="classMC_1_1ParticlesContainer.html#a9fa7f315c1a2245124142e8af60d42cc" target="_top" xlink:title="Alias for the model used by the container.">
 <polygon fill="white" stroke="#666666" points="453.75,-123 335,-123 335,-94 453.75,-94 453.75,-123"/>
 <text xml:space="preserve" text-anchor="start" x="343" y="-109.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
 <text xml:space="preserve" text-anchor="middle" x="394.38" y="-99" font-family="Helvetica,sans-Serif" font-size="10.00">::ParticlesContainer</text>

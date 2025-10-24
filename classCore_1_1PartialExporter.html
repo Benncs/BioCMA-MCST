@@ -93,8 +93,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a229594aed8ebd366f6bcef6fcb2faae9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classCore_1_1PartialExporter.html" title="Exporter for each MPI worker (including host) that exports data relative to particle state.">PartialExporter</a> instance.  <br /></td></tr>
 <tr class="memitem:a05cba8c28abaecce99f586d551a75f80" id="r_a05cba8c28abaecce99f586d551a75f80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05cba8c28abaecce99f586d551a75f80">init_fields</a> (uint64_t n_iter, uint64_t n_compartments)</td></tr>
 <tr class="memdesc:a05cba8c28abaecce99f586d551a75f80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the fields required for exporting data.  <br /></td></tr>
-<tr class="memitem:a733fbd04921878e92cde8975e45f9b84" id="r_a733fbd04921878e92cde8975e45f9b84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a733fbd04921878e92cde8975e45f9b84">write_particle_data</a> (std::span&lt; std::string &gt; names, <a class="el" href="classCore_1_1DataExporter.html#ad9ace09ea4d3f836cd5820539a417c89">ViewParticleProperties</a> particle_values, <a class="el" href="classCore_1_1DataExporter.html#ad9ace09ea4d3f836cd5820539a417c89">ViewParticleProperties</a> spatial_values, const std::string &amp;ds_name, bool compress_data)</td></tr>
-<tr class="memdesc:a733fbd04921878e92cde8975e45f9b84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes particle data to the output.  <br /></td></tr>
+<tr class="memitem:a1720332f2c2678a682c5286d4d024a03" id="r_a1720332f2c2678a682c5286d4d024a03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1720332f2c2678a682c5286d4d024a03">write_particle_data</a> (<a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &amp;&amp;bonce, const std::string &amp;ds_name, bool compress_data)</td></tr>
+<tr class="memdesc:a1720332f2c2678a682c5286d4d024a03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes particle data to the output.  <br /></td></tr>
 <tr class="memitem:a450fb0c92efa4ee81b4083fc01f5e665" id="r_a450fb0c92efa4ee81b4083fc01f5e665"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a450fb0c92efa4ee81b4083fc01f5e665">write_number_particle</a> (const std::vector&lt; size_t &gt; &amp;distribution)</td></tr>
 <tr class="memdesc:a450fb0c92efa4ee81b4083fc01f5e665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the number of particles in each compartment.  <br /></td></tr>
 <tr class="memitem:a9927dbf1350349f090606134043e190c" id="r_a9927dbf1350349f090606134043e190c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9927dbf1350349f090606134043e190c">write_probe</a> (std::span&lt; const double &gt; data)</td></tr>
@@ -264,8 +264,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a733fbd04921878e92cde8975e45f9b84" name="a733fbd04921878e92cde8975e45f9b84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a733fbd04921878e92cde8975e45f9b84">&#9670;&#160;</a></span>write_particle_data()</h2>
+<a id="a1720332f2c2678a682c5286d4d024a03" name="a1720332f2c2678a682c5286d4d024a03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1720332f2c2678a682c5286d4d024a03">&#9670;&#160;</a></span>write_particle_data()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -273,17 +273,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">void Core::PartialExporter::write_particle_data </td>
           <td>(</td>
-          <td class="paramtype">std::span&lt; std::string &gt;</td>          <td class="paramname"><span class="paramname"><em>names</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classCore_1_1DataExporter.html#ad9ace09ea4d3f836cd5820539a417c89">ViewParticleProperties</a></td>          <td class="paramname"><span class="paramname"><em>particle_values</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classCore_1_1DataExporter.html#ad9ace09ea4d3f836cd5820539a417c89">ViewParticleProperties</a></td>          <td class="paramname"><span class="paramname"><em>spatial_values</em></span>, </td>
+          <td class="paramtype"><a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>bonce</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -301,9 +291,6 @@ Here is the caller graph for this function:</div>
 <p>Writes particle data to the output. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">names</td><td>A span of strings representing particle property names. </td></tr>
-    <tr><td class="paramname">particle_values</td><td>Particle properties such as mass, age ... </td></tr>
-    <tr><td class="paramname">spatial_values</td><td>Particle properties such as mass, age ... in space </td></tr>
     <tr><td class="paramname">ds_name</td><td>Dataset name associated with this data. </td></tr>
     <tr><td class="paramname">compress_data</td><td>Compress particle or not (can be time consuming) </td></tr>
   </table>
@@ -312,7 +299,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1PartialExporter_a733fbd04921878e92cde8975e45f9b84_cgraph.svg" width="339" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1PartialExporter_a1720332f2c2678a682c5286d4d024a03_cgraph.svg" width="339" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

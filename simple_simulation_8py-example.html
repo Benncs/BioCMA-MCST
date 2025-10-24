@@ -111,41 +111,43 @@ $(function(){initNavTree('simple_simulation_8py-example.html','',''); });
 <div class="line"><span class="lineno">   15</span> </div>
 <div class="line"><span class="lineno">   16</span><span class="comment"># Import the handle module</span></div>
 <div class="line"><span class="lineno">   17</span><span class="keyword">import</span> handle_module</div>
-<div class="line"><span class="lineno">   18</span><span class="keyword">import</span> numpy <span class="keyword">as</span> np </div>
+<div class="line"><span class="lineno">   18</span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div>
 <div class="line"><span class="lineno">   19</span> </div>
-<div class="line"><span class="lineno">   20</span><span class="comment">#define the constants </span></div>
+<div class="line"><span class="lineno">   20</span><span class="comment"># define the constants</span></div>
 <div class="line"><span class="lineno">   21</span>OUTFOLDER = <span class="stringliteral">&quot;./out/&quot;</span></div>
 <div class="line"><span class="lineno">   22</span>SIMULATION_NAME = <span class="stringliteral">&quot;my_simulation_name&quot;</span></div>
-<div class="line"><span class="lineno">   23</span>CMA_PATH = <span class="stringliteral">&quot;/path/to/the/cma/&quot;</span> <span class="comment">#don´t forget last / </span></div>
+<div class="line"><span class="lineno">   23</span>CMA_PATH = <span class="stringliteral">&quot;/path/to/the/cma/&quot;</span>  <span class="comment"># don´t forget last /</span></div>
 <div class="line"><span class="lineno">   24</span> </div>
-<div class="line"><span class="lineno">   25</span><span class="keyword">def </span>run(params): </div>
-<div class="line"><span class="lineno">   26</span>    handle = handle_module.init_simulation(OUTFOLDER,SIMULATION_NAME,CMA_PATH,params)</div>
-<div class="line"><span class="lineno">   27</span>    <span class="comment"># cma with 500 compartment, simulation with 4 species liquid only </span></div>
-<div class="line"><span class="lineno">   28</span>    liquid_concentration_0 = np.zeros((500,4))  </div>
-<div class="line"><span class="lineno">   29</span>    handle_module.set_initial_concentrations(handle,liquid_concentration_0)</div>
-<div class="line"><span class="lineno">   30</span>    handle_module.register_model_name(handle, <span class="stringliteral">&quot;model_name&quot;</span>)</div>
-<div class="line"><span class="lineno">   31</span>    <span class="comment"># Apply the simulation settings</span></div>
-<div class="line"><span class="lineno">   32</span>    rc = handle_module.apply(handle, <span class="keyword">False</span>)</div>
-<div class="line"><span class="lineno">   33</span> </div>
-<div class="line"><span class="lineno">   34</span>    <span class="comment"># Check if the simulation settings were applied successfully</span></div>
-<div class="line"><span class="lineno">   35</span>    <span class="keywordflow">if</span> <span class="keywordflow">not</span> rc[0]:</div>
-<div class="line"><span class="lineno">   36</span>        print(rc[1])</div>
-<div class="line"><span class="lineno">   37</span>        <span class="keywordflow">return</span> -1</div>
-<div class="line"><span class="lineno">   38</span> </div>
-<div class="line"><span class="lineno">   39</span>    <span class="comment"># Execute the simulation</span></div>
-<div class="line"><span class="lineno">   40</span>    rc = handle_module.exec(handle)</div>
-<div class="line"><span class="lineno">   41</span> </div>
-<div class="line"><span class="lineno">   42</span><span class="keywordflow">if</span> __name__ == <span class="stringliteral">&quot;__main__&quot;</span>:</div>
-<div class="line"><span class="lineno">   43</span>    <span class="comment"># Create the simulation parameters</span></div>
-<div class="line"><span class="lineno">   44</span>    params = handle_module.make_params(</div>
-<div class="line"><span class="lineno">   45</span>        biomass_initial_concentration=0,</div>
-<div class="line"><span class="lineno">   46</span>        final_time=250,</div>
-<div class="line"><span class="lineno">   47</span>        delta_time=0.5,</div>
-<div class="line"><span class="lineno">   48</span>        number_particle=0,</div>
-<div class="line"><span class="lineno">   49</span>        number_exported_result=5,</div>
-<div class="line"><span class="lineno">   50</span>    )</div>
-<div class="line"><span class="lineno">   51</span> </div>
-<div class="line"><span class="lineno">   52</span>    run(params)</div>
+<div class="line"><span class="lineno">   25</span> </div>
+<div class="line"><span class="lineno">   26</span><span class="keyword">def </span>run(params):</div>
+<div class="line"><span class="lineno">   27</span>    handle = handle_module.init_simulation(OUTFOLDER, SIMULATION_NAME, CMA_PATH, params)</div>
+<div class="line"><span class="lineno">   28</span>    <span class="comment"># cma with 500 compartment, simulation with 4 species liquid only</span></div>
+<div class="line"><span class="lineno">   29</span>    liquid_concentration_0 = np.zeros((500, 4))</div>
+<div class="line"><span class="lineno">   30</span>    handle_module.set_initial_concentrations(handle, liquid_concentration_0)</div>
+<div class="line"><span class="lineno">   31</span>    handle_module.register_model_name(handle, <span class="stringliteral">&quot;model_name&quot;</span>)</div>
+<div class="line"><span class="lineno">   32</span>    <span class="comment"># Apply the simulation settings</span></div>
+<div class="line"><span class="lineno">   33</span>    rc = handle_module.apply(handle, <span class="keyword">False</span>)</div>
+<div class="line"><span class="lineno">   34</span> </div>
+<div class="line"><span class="lineno">   35</span>    <span class="comment"># Check if the simulation settings were applied successfully</span></div>
+<div class="line"><span class="lineno">   36</span>    <span class="keywordflow">if</span> <span class="keywordflow">not</span> rc[0]:</div>
+<div class="line"><span class="lineno">   37</span>        print(rc[1])</div>
+<div class="line"><span class="lineno">   38</span>        <span class="keywordflow">return</span> -1</div>
+<div class="line"><span class="lineno">   39</span> </div>
+<div class="line"><span class="lineno">   40</span>    <span class="comment"># Execute the simulation</span></div>
+<div class="line"><span class="lineno">   41</span>    rc = handle_module.exec(handle)</div>
+<div class="line"><span class="lineno">   42</span> </div>
+<div class="line"><span class="lineno">   43</span> </div>
+<div class="line"><span class="lineno">   44</span><span class="keywordflow">if</span> __name__ == <span class="stringliteral">&quot;__main__&quot;</span>:</div>
+<div class="line"><span class="lineno">   45</span>    <span class="comment"># Create the simulation parameters</span></div>
+<div class="line"><span class="lineno">   46</span>    params = handle_module.make_params(</div>
+<div class="line"><span class="lineno">   47</span>        biomass_initial_concentration=0,</div>
+<div class="line"><span class="lineno">   48</span>        final_time=250,</div>
+<div class="line"><span class="lineno">   49</span>        delta_time=0.5,</div>
+<div class="line"><span class="lineno">   50</span>        number_particle=0,</div>
+<div class="line"><span class="lineno">   51</span>        number_exported_result=5,</div>
+<div class="line"><span class="lineno">   52</span>    )</div>
+<div class="line"><span class="lineno">   53</span> </div>
+<div class="line"><span class="lineno">   54</span>    run(params)</div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

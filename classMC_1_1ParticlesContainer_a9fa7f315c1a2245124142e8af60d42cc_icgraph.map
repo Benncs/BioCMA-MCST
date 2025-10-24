@@ -1,5 +1,5 @@
 <map id="MC::ParticlesContainer::ParticlesContainer" name="MC::ParticlesContainer::ParticlesContainer">
-<area shape="rect" id="Node000001" title=" " alt="" coords="212,100,370,139"/>
+<area shape="rect" id="Node000001" title="Alias for the model used by the container." alt="" coords="212,100,370,139"/>
 <area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#ad499de971fbe1a2cf3e1adbe2bb151d6" title=" " alt="" coords="5,5,164,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,95,163,58,137,47,139,42,165,53,240,90"/>
 <area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a5d93b87f5a6e18c449e0ed62333e9d6e" title=" " alt="" coords="5,68,164,107"/>

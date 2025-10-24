@@ -13,7 +13,7 @@ var namespaceMC =
     [ "KernelConcentrationType", "namespaceMC.html#ac4db0c9d5b74f4c59a2ffcc7374cba1c", null ],
     [ "LocalConcentration", "namespaceMC.html#aad69f7f73ef6a017ee86ca89451a6271", null ],
     [ "NeighborsView", "namespaceMC.html#ad31fce592f5fd9b873839781863419d3", null ],
-    [ "ParticleAges", "namespaceMC.html#a30a6a3d926790b762a9ba03a3d270310", null ],
+    [ "ParticleAges", "namespaceMC.html#a71308af240201ce951b6993271bec9d6", null ],
     [ "ParticlePositions", "namespaceMC.html#a9a4b5cf4fee992bcbbaa6e62a3cb2753", null ],
     [ "ParticlePropertyViewType", "namespaceMC.html#ae0175d06e1394c74d896ba2986c18353", null ],
     [ "ParticlesModel", "namespaceMC.html#ab8c67c8127bdb4bc0a1a8ad1e3cfe067", null ],
@@ -30,11 +30,11 @@ var namespaceMC =
       [ "ChangeWeight", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8aff388cf92ac4efa80c5aac6d4c7852ae", null ],
       [ "__COUNT__", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb", null ]
     ] ],
-    [ "Status", "namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7c", [
-      [ "Idle", "namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7cae599161956d626eda4cb0a5ffb85271c", null ],
-      [ "Division", "namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7ca3025cdaab2deb0bb2cd642449e570833", null ],
-      [ "Exit", "namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7cafef46e5063ce3dc78b8ae64fa474241d", null ],
-      [ "Dead", "namespaceMC.html#abb6088b7a69c0054394437eb3ac65f7ca183b62c7f067711f9c5a54913c054617", null ]
+    [ "Status", "namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7b", [
+      [ "Idle", "namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c", null ],
+      [ "Division", "namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7ba3025cdaab2deb0bb2cd642449e570833", null ],
+      [ "Exit", "namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bafef46e5063ce3dc78b8ae64fa474241d", null ],
+      [ "Dead", "namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7ba183b62c7f067711f9c5a54913c054617", null ]
     ] ],
     [ "event_index", "namespaceMC.html#ae91609aafa31939cedd6775cc5adafc4", null ],
     [ "get_policy", "namespaceMC.html#a3f29b6dc7dd9c6f1f2da8461f189e233", null ],

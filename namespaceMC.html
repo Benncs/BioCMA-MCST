@@ -99,9 +99,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:aac73f6850f68fa6ced0d771f20a4af0f" id="r_aac73f6850f68fa6ced0d771f20a4af0f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a> = Kokkos::DefaultExecutionSpace</td></tr>
 <tr class="memitem:a427e7af7e25d874236fc70664ebfd0d6" id="r_a427e7af7e25d874236fc70664ebfd0d6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a427e7af7e25d874236fc70664ebfd0d6">restrict_mt</a> = Kokkos::MemoryTraits&lt;Kokkos::MemoryTraitsFlags::Restrict&gt;</td></tr>
 <tr class="memitem:a9a4b5cf4fee992bcbbaa6e62a3cb2753" id="r_a9a4b5cf4fee992bcbbaa6e62a3cb2753"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a4b5cf4fee992bcbbaa6e62a3cb2753">ParticlePositions</a> = Kokkos::View&lt;uint64_t*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, <a class="el" href="#a427e7af7e25d874236fc70664ebfd0d6">restrict_mt</a>&gt;</td></tr>
-<tr class="memitem:a48f9a66039a8e943d22c1548b62e2b50" id="r_a48f9a66039a8e943d22c1548b62e2b50"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48f9a66039a8e943d22c1548b62e2b50">ParticleStatus</a> = Kokkos::View&lt;<a class="el" href="#abb6088b7a69c0054394437eb3ac65f7c">Status</a>*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, <a class="el" href="#a427e7af7e25d874236fc70664ebfd0d6">restrict_mt</a>&gt;</td></tr>
+<tr class="memitem:a48f9a66039a8e943d22c1548b62e2b50" id="r_a48f9a66039a8e943d22c1548b62e2b50"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48f9a66039a8e943d22c1548b62e2b50">ParticleStatus</a> = Kokkos::View&lt;<a class="el" href="#a69467f7d54b0dcb1a4e176fe425ffb7b">Status</a>*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, <a class="el" href="#a427e7af7e25d874236fc70664ebfd0d6">restrict_mt</a>&gt;</td></tr>
 <tr class="memitem:a46c5aecdd6e031726c5f6e92c0d5e70e" id="r_a46c5aecdd6e031726c5f6e92c0d5e70e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46c5aecdd6e031726c5f6e92c0d5e70e">ParticleWeigths</a> = Kokkos::View&lt;double*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, <a class="el" href="#a427e7af7e25d874236fc70664ebfd0d6">restrict_mt</a>&gt;</td></tr>
-<tr class="memitem:a30a6a3d926790b762a9ba03a3d270310" id="r_a30a6a3d926790b762a9ba03a3d270310"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30a6a3d926790b762a9ba03a3d270310">ParticleAges</a></td></tr>
+<tr class="memitem:a71308af240201ce951b6993271bec9d6" id="r_a71308af240201ce951b6993271bec9d6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71308af240201ce951b6993271bec9d6">ParticleAges</a> = ParticleAgesBase&lt;<a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
 <tr class="memitem:ae0175d06e1394c74d896ba2986c18353" id="r_ae0175d06e1394c74d896ba2986c18353"><td class="memTemplParams" colspan="2">template&lt;typename MemorySpace&gt; </td></tr>
 <tr class="memitem:ae0175d06e1394c74d896ba2986c18353 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0175d06e1394c74d896ba2986c18353">ParticlePropertyViewType</a></td></tr>
 <tr class="memitem:a20fc03265c23b32637770a775864c720" id="r_a20fc03265c23b32637770a775864c720"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20fc03265c23b32637770a775864c720">PropertySubViewtype</a></td></tr>
@@ -117,10 +117,10 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:abb6088b7a69c0054394437eb3ac65f7c" id="r_abb6088b7a69c0054394437eb3ac65f7c"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb6088b7a69c0054394437eb3ac65f7c">Status</a> : int { <a class="el" href="#abb6088b7a69c0054394437eb3ac65f7cae599161956d626eda4cb0a5ffb85271c">Idle</a> = 0
-, <a class="el" href="#abb6088b7a69c0054394437eb3ac65f7ca3025cdaab2deb0bb2cd642449e570833">Division</a>
-, <a class="el" href="#abb6088b7a69c0054394437eb3ac65f7cafef46e5063ce3dc78b8ae64fa474241d">Exit</a>
-, <a class="el" href="#abb6088b7a69c0054394437eb3ac65f7ca183b62c7f067711f9c5a54913c054617">Dead</a>
+<tr class="memitem:a69467f7d54b0dcb1a4e176fe425ffb7b" id="r_a69467f7d54b0dcb1a4e176fe425ffb7b"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69467f7d54b0dcb1a4e176fe425ffb7b">Status</a> : char { <a class="el" href="#a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c">Idle</a> = 0
+, <a class="el" href="#a69467f7d54b0dcb1a4e176fe425ffb7ba3025cdaab2deb0bb2cd642449e570833">Division</a>
+, <a class="el" href="#a69467f7d54b0dcb1a4e176fe425ffb7bafef46e5063ce3dc78b8ae64fa474241d">Exit</a>
+, <a class="el" href="#a69467f7d54b0dcb1a4e176fe425ffb7ba183b62c7f067711f9c5a54913c054617">Dead</a>
  }</td></tr>
 <tr class="memitem:a4abe28e303ac1f2bcdc889c01e9064b8" id="r_a4abe28e303ac1f2bcdc889c01e9064b8"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8">EventType</a> : char { <br />
 &#160;&#160;<a class="el" href="#a4abe28e303ac1f2bcdc889c01e9064b8ad647742db7fc3579a1034ec4919e4752">NewParticle</a> = 0
@@ -238,7 +238,7 @@ template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> </div>
 <div class="line">      Kokkos::Subview&lt;<a class="code hl_typedef" href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">KernelConcentrationType</a>, int, <span class="keyword">decltype</span>(Kokkos::ALL)&gt;</div>
-<div class="ttc" id="anamespaceMC_html_ac4db0c9d5b74f4c59a2ffcc7374cba1c"><div class="ttname"><a href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">MC::KernelConcentrationType</a></div><div class="ttdeci">Kokkos::View&lt; const double **, Kokkos::LayoutLeft, ComputeSpace, Kokkos::MemoryTraits&lt; Kokkos::RandomAccess &gt; &gt; KernelConcentrationType</div><div class="ttdef"><b>Definition</b> alias.hpp:65</div></div>
+<div class="ttc" id="anamespaceMC_html_ac4db0c9d5b74f4c59a2ffcc7374cba1c"><div class="ttname"><a href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">MC::KernelConcentrationType</a></div><div class="ttdeci">Kokkos::View&lt; const double **, Kokkos::LayoutLeft, ComputeSpace, Kokkos::MemoryTraits&lt; Kokkos::RandomAccess &gt; &gt; KernelConcentrationType</div><div class="ttdef"><b>Definition</b> alias.hpp:75</div></div>
 </div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="example_model_8cxx-example.html#_a3">example_model.cxx</a>.</dd>
 </dl>
 
@@ -265,20 +265,18 @@ template&lt;typename Space&gt; </div>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="a30a6a3d926790b762a9ba03a3d270310" name="a30a6a3d926790b762a9ba03a3d270310"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30a6a3d926790b762a9ba03a3d270310">&#9670;&#160;</a></span>ParticleAges</h2>
+<a id="a71308af240201ce951b6993271bec9d6" name="a71308af240201ce951b6993271bec9d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71308af240201ce951b6993271bec9d6">&#9670;&#160;</a></span>ParticleAges</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#a30a6a3d926790b762a9ba03a3d270310">MC::ParticleAges</a></td>
+          <td class="memname">using <a class="el" href="#a71308af240201ce951b6993271bec9d6">MC::ParticleAges</a> = ParticleAgesBase&lt;<a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> </div>
-<div class="line">      Kokkos::View&lt;double* [2], Kokkos::LayoutLeft, ComputeSpace, restrict_mt&gt;</div>
-</div><!-- fragment -->
+
 </div>
 </div>
 <a id="a9a4b5cf4fee992bcbbaa6e62a3cb2753" name="a9a4b5cf4fee992bcbbaa6e62a3cb2753"></a>
@@ -338,7 +336,7 @@ template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">Floa
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#a48f9a66039a8e943d22c1548b62e2b50">MC::ParticleStatus</a> = Kokkos::View&lt;<a class="el" href="#abb6088b7a69c0054394437eb3ac65f7c">Status</a>*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, <a class="el" href="#a427e7af7e25d874236fc70664ebfd0d6">restrict_mt</a>&gt;</td>
+          <td class="memname">using <a class="el" href="#a48f9a66039a8e943d22c1548b62e2b50">MC::ParticleStatus</a> = Kokkos::View&lt;<a class="el" href="#a69467f7d54b0dcb1a4e176fe425ffb7b">Status</a>*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, <a class="el" href="#a427e7af7e25d874236fc70664ebfd0d6">restrict_mt</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -430,8 +428,8 @@ template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">Floa
 
 </div>
 </div>
-<a id="abb6088b7a69c0054394437eb3ac65f7c" name="abb6088b7a69c0054394437eb3ac65f7c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb6088b7a69c0054394437eb3ac65f7c">&#9670;&#160;</a></span>Status</h2>
+<a id="a69467f7d54b0dcb1a4e176fe425ffb7b" name="a69467f7d54b0dcb1a4e176fe425ffb7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69467f7d54b0dcb1a4e176fe425ffb7b">&#9670;&#160;</a></span>Status</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -440,7 +438,7 @@ template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">Floa
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">enum class <a class="el" href="#abb6088b7a69c0054394437eb3ac65f7c">MC::Status</a> : int</td>
+          <td class="memname">enum class <a class="el" href="#a69467f7d54b0dcb1a4e176fe425ffb7b">MC::Status</a> : char</td>
         </tr>
       </table>
   </td>
@@ -450,10 +448,10 @@ template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">Floa
 </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="abb6088b7a69c0054394437eb3ac65f7cae599161956d626eda4cb0a5ffb85271c" name="abb6088b7a69c0054394437eb3ac65f7cae599161956d626eda4cb0a5ffb85271c"></a>Idle&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="abb6088b7a69c0054394437eb3ac65f7ca3025cdaab2deb0bb2cd642449e570833" name="abb6088b7a69c0054394437eb3ac65f7ca3025cdaab2deb0bb2cd642449e570833"></a>Division&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="abb6088b7a69c0054394437eb3ac65f7cafef46e5063ce3dc78b8ae64fa474241d" name="abb6088b7a69c0054394437eb3ac65f7cafef46e5063ce3dc78b8ae64fa474241d"></a>Exit&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="abb6088b7a69c0054394437eb3ac65f7ca183b62c7f067711f9c5a54913c054617" name="abb6088b7a69c0054394437eb3ac65f7ca183b62c7f067711f9c5a54913c054617"></a>Dead&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c" name="a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c"></a>Idle&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a69467f7d54b0dcb1a4e176fe425ffb7ba3025cdaab2deb0bb2cd642449e570833" name="a69467f7d54b0dcb1a4e176fe425ffb7ba3025cdaab2deb0bb2cd642449e570833"></a>Division&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a69467f7d54b0dcb1a4e176fe425ffb7bafef46e5063ce3dc78b8ae64fa474241d" name="a69467f7d54b0dcb1a4e176fe425ffb7bafef46e5063ce3dc78b8ae64fa474241d"></a>Exit&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a69467f7d54b0dcb1a4e176fe425ffb7ba183b62c7f067711f9c5a54913c054617" name="a69467f7d54b0dcb1a4e176fe425ffb7ba183b62c7f067711f9c5a54913c054617"></a>Dead&#160;</td><td class="fielddoc"></td></tr>
 </table>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="example_model_8cxx-example.html#_a2">example_model.cxx</a>.</dd>
 </dl>

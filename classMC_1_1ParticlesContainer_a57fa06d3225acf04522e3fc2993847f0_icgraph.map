@@ -4,7 +4,7 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="657,66,596,47,598,42,658,61"/>
 <area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" title=" " alt="" coords="452,68,610,107"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="643,90,611,90,611,85,643,85"/>
-<area shape="rect" id="Node000006" href="$classMC_1_1ParticlesContainer.html#a9fa7f315c1a2245124142e8af60d42cc" title=" " alt="" coords="452,161,610,200"/>
+<area shape="rect" id="Node000006" href="$classMC_1_1ParticlesContainer.html#a9fa7f315c1a2245124142e8af60d42cc" title="Alias for the model used by the container." alt="" coords="452,161,610,200"/>
 <area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="680,116,577,163,575,158,678,111"/>
 <area shape="rect" id="Node000004" href="$classSimulation_1_1SimulationUnit.html#ac3c769522d65eee17433bb67e4f19dc3" title=" " alt="" coords="229,36,404,75"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="436,76,404,71,405,66,437,71"/>

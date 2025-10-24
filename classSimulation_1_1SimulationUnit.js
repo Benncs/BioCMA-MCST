@@ -34,7 +34,6 @@ var classSimulation_1_1SimulationUnit =
     [ "post_init_concentration_functor", "classSimulation_1_1SimulationUnit.html#acdb3001a8070525afefe3298ed738691", null ],
     [ "pre_cycle", "classSimulation_1_1SimulationUnit.html#ad984b5d95455d6db475d8b6e20077a0c", null ],
     [ "reduceContribs", "classSimulation_1_1SimulationUnit.html#a6f98af5385cda0210db8895f7725ea8f", null ],
-    [ "reduceContribs_per_rank", "classSimulation_1_1SimulationUnit.html#a5561efa166b97b216a3ee7ab0092b233", null ],
     [ "reset", "classSimulation_1_1SimulationUnit.html#aa12b65d19fa7e3eb74152b0252591a4d", null ],
     [ "scatter_contribute", "classSimulation_1_1SimulationUnit.html#ae2077067788b0cb0535c62933724a1cf", null ],
     [ "set_kernel_contribs_to_host", "classSimulation_1_1SimulationUnit.html#ac396f393b4cf318b38364c5067254c80", null ],
