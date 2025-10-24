@@ -107,12 +107,11 @@ namespace Simulation::KernelInline
                  MC::KPRNG::pool_type _random_pool,
                  MC::KernelConcentrationType&& _concentrations,
                  MC::ContributionView _contribs_scatter,
-                 MC::EventContainer _event,
-                 MC::ParticleAges _ages)
+                 MC::EventContainer _event)
         : d_t(0.), particles(_particles), random_pool(_random_pool),
           concentrations(std::move(_concentrations)),
           contribs_scatter(std::move(_contribs_scatter)),
-          events(std::move(_event)), ages(std::move(_ages))
+          events(std::move(_event))
     {
     }
 
@@ -148,7 +147,7 @@ namespace Simulation::KernelInline
       {
         return;
       }
-      ages(idx, 1) += d_t;
+      particles.ages(idx, 1) += d_t;
       auto local_c =
           Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx));
 
@@ -176,7 +175,6 @@ namespace Simulation::KernelInline
     // kernelContribution contribs;
     MC::KernelConcentrationType limitation_factor;
     MC::EventContainer events;
-    MC::ParticleAges ages;
   };
 
 } // namespace Simulation::KernelInline

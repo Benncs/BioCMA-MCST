@@ -96,12 +96,12 @@ namespace Simulation
     // Simulation methods
 
     void cycleProcess(auto&& container, double d_t, auto& _functors);
-
     void step(double d_t) const;
     void reduceContribs(std::span<const double> data, size_t n_rank) const;
 
-    [[deprecated("perf:not useful")]] void
-    reduceContribs_per_rank(std::span<const double> data) const;
+    //[[deprecated("perf:not useful")]] void
+    // reduceContribs_per_rank(std::span<const double> data) const;
+    //
     void clearContribution() const noexcept;
     auto init_functor(double d_t, auto&& container);
     void update_feed(double t, double d_t, bool update_scalar = true) noexcept;
@@ -217,8 +217,7 @@ namespace Simulation
                                                       local_rng.random_pool,
                                                       getkernel_concentration(),
                                                       contribs_scatter,
-                                                      events,
-                                                      container.ages);
+                                                      events);
     auto move_functor =
         Simulation ::KernelInline ::MoveFunctor(container.position,
                                                 container.status,
