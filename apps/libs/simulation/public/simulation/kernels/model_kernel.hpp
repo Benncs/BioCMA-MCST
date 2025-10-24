@@ -1,6 +1,7 @@
 #ifndef __SIMULATION_MC_KERNEL_HPP
 #define __SIMULATION_MC_KERNEL_HPP
 
+#include "mc/alias.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
@@ -106,11 +107,12 @@ namespace Simulation::KernelInline
                  MC::KPRNG::pool_type _random_pool,
                  MC::KernelConcentrationType&& _concentrations,
                  MC::ContributionView _contribs_scatter,
-                 MC::EventContainer _event)
+                 MC::EventContainer _event,
+                 MC::ParticleAges _ages)
         : d_t(0.), particles(_particles), random_pool(_random_pool),
           concentrations(std::move(_concentrations)),
           contribs_scatter(std::move(_contribs_scatter)),
-          events(std::move(_event))
+          events(std::move(_event)), ages(std::move(_ages))
     {
     }
 
@@ -118,11 +120,6 @@ namespace Simulation::KernelInline
     {
       this->d_t = _d_t;
       this->particles = _particles;
-    }
-
-    void sblock(MC::ContributionView _block)
-    {
-      this->block = _block;
     }
 
     KOKKOS_INLINE_FUNCTION
@@ -151,7 +148,7 @@ namespace Simulation::KernelInline
       {
         return;
       }
-
+      ages(idx, 1) += d_t;
       auto local_c =
           Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx));
 
@@ -179,7 +176,7 @@ namespace Simulation::KernelInline
     // kernelContribution contribs;
     MC::KernelConcentrationType limitation_factor;
     MC::EventContainer events;
-    MC::ContributionView block;
+    MC::ParticleAges ages;
   };
 
 } // namespace Simulation::KernelInline

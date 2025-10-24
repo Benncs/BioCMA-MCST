@@ -213,8 +213,8 @@ namespace Simulation::KernelInline
             {
               Kokkos::printf("[Kernel]: PROBES OVERFLOW\r\n");
             };
-            ages(idx, 0) = 0;
           }
+          ages(idx, 0) = 0;
         }
       }
     }

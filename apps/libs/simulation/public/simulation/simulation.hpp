@@ -217,7 +217,8 @@ namespace Simulation
                                                       local_rng.random_pool,
                                                       getkernel_concentration(),
                                                       contribs_scatter,
-                                                      events);
+                                                      events,
+                                                      container.ages);
     auto move_functor =
         Simulation ::KernelInline ::MoveFunctor(container.position,
                                                 container.status,

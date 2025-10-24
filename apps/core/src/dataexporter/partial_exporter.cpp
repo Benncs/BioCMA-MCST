@@ -73,12 +73,21 @@ namespace Core
   PartialExporter::write_particle_data(std::span<std::string> names,
                                        ViewParticleProperties particle_values,
                                        ViewParticleProperties spatial_values,
+                                       ViewParticleProperties ages_values,
                                        const std::string& ds_name,
                                        bool compress_data)
   {
     PROFILE_SECTION("write_particle_data")
     const size_t n_particles = particle_values.extent(1);
-    const auto n_compartments = spatial_values.extent(1);
+    const size_t n_compartments = spatial_values.extent(1);
+
+    auto* ptr_ages = Kokkos::subview(ages_values, 0, Kokkos::ALL).data();
+    this->write_matrix(
+        ds_name + "age_hydro/", {ptr_ages, n_particles}, compress_data);
+
+    ptr_ages = Kokkos::subview(ages_values, 1, Kokkos::ALL).data();
+    this->write_matrix(
+        ds_name + "age_div/", {ptr_ages, n_particles}, compress_data);
 
     for (size_t i_name = 0; i_name < names.size(); ++i_name)
     {

@@ -154,10 +154,10 @@ int parse_callback_ok(
 
   const auto load_serde = user_params.load_serde;
   INTERPRETER_INIT
-
   {
     HANDLE_RC(h->register_parameters(
         std::forward<decltype(user_params)>(user_params)));
+    h->set_feed_constant(0.1 / 3600 * 1e-3, 10, 0, 0);
     HANDLE_RC(h->apply(load_serde));
     HANDLE_RC(h->exec());
   }

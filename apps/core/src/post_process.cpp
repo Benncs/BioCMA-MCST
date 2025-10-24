@@ -132,6 +132,7 @@ namespace
       partial_exporter.write_particle_data(dump->vnames,
                                            dump->particle_values,
                                            dump->spatial_values,
+                                           dump->ages,
                                            ds_name,
                                            compress_data);
     }

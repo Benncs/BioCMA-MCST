@@ -22,6 +22,7 @@ namespace PostProcessing
   {
     ParticlePropertyViewType<HostSpace> particle_values;
     ParticlePropertyViewType<HostSpace> spatial_values;
+    ParticlePropertyViewType<HostSpace> ages;
     std::vector<std::string> vnames;
   };
 
@@ -64,8 +65,10 @@ namespace PostProcessing
   void inner_partial(const std::size_t n_p,
                      const MC::ParticlePositions& position,
                      const typename Model::SelfParticle& model,
+                     const MC::ParticleAges& ages,
                      ParticlePropertyViewType<ComputeSpace>& particle_values,
                      ParticlePropertyViewType<ComputeSpace>& spatial_values,
+                     ParticlePropertyViewType<ComputeSpace>& ages_value,
                      const MC::ParticleStatus& status)
   {
     Kokkos::Experimental::
@@ -75,7 +78,6 @@ namespace PostProcessing
 
     static Kokkos::View<size_t*, HostSpace> host_index("host_index",
                                                        indices.size());
-
     for (std::size_t i = 0; i < indices.size(); ++i)
     {
       host_index(i) = indices[i];
@@ -102,9 +104,12 @@ namespace PostProcessing
             access(k_var, position(i_particle)) += current;
             particle_values(k_var, i_particle) = current;
           }
+
           const auto mass = Model::mass(i_particle, model);
           access(kindices.extent(0), position(i_particle)) += mass;
           particle_values(kindices.extent(0), i_particle) = mass;
+          ages_value(0, i_particle) = ages(i_particle, 0);
+          ages_value(1, i_particle) = ages(i_particle, 1);
         });
     Kokkos::fence();
     Kokkos::Experimental::contribute(spatial_values, scatter_spatial_values);
@@ -136,14 +141,17 @@ namespace PostProcessing
           "property_spatial", n_var, n_compartment);
       ParticlePropertyViewType<ComputeSpace> particle_values(
           "property_values", n_var, n_p);
+      ParticlePropertyViewType<ComputeSpace> ages_values("ages_values", 2, n_p);
 
       if constexpr (HasExportPropertiesPartial<M>)
       {
         inner_partial<M, Kokkos::DefaultExecutionSpace>(n_p,
                                                         container.position,
                                                         container.model,
+                                                        container.ages,
                                                         particle_values,
                                                         spatial_values,
+                                                        ages_values,
                                                         container.status);
       }
       else
@@ -160,6 +168,9 @@ namespace PostProcessing
           Kokkos::HostSpace(), particle_values);
       properties.spatial_values = Kokkos::create_mirror_view_and_copy(
           Kokkos::HostSpace(), spatial_values);
+      properties.ages =
+          Kokkos::create_mirror_view_and_copy(Kokkos::HostSpace(), ages_values);
+
       return properties;
     }
     else

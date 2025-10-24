@@ -57,7 +57,10 @@ namespace
 
         // Merge position EZ
         status(i_to_remove) = MC::Status::Idle;
+
+        // No need atomic: final executed exactly once
         Kokkos::atomic_exchange(&position(i_to_remove), position(idx_to_move));
+
         // TODO Use hierachical parallism here, thread range is likely to work
         for (std::size_t i_properties = 0; i_properties < M::n_var;
              ++i_properties)
@@ -121,8 +124,8 @@ namespace
       // Actually needs buffer to store mother's hydraulic time
       // But set new hydraulic time to 0 to not create new buffer a save memory
       // usage
-      ages(original_size + 1, 0) = 0;
-      ages(original_size + 1, 1) = 0;
+      ages(original_size + i, 0) = 0;
+      ages(original_size + i, 1) = 0;
     }
 
     std::size_t original_size;

@@ -31,8 +31,8 @@ namespace MC
      * ages(i,1) -> time since division (set to 0 when divide)
      **/
     template <typename Exec>
-    using ParticleAgesBase = Kokkos::
-        View<double* [2], Kokkos::LayoutLeft, Exec, restrict_mt>; // NOLINT
+    using ParticleAgesBase =
+        Kokkos::View<double* [2], Kokkos::LayoutLeft, Exec>; // NOLINT
   } // namespace
 
   enum class Status : char

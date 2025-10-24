@@ -58,6 +58,7 @@ namespace Core
     void write_particle_data(std::span<std::string> names,
                              ViewParticleProperties particle_values,
                              ViewParticleProperties spatial_values,
+                             ViewParticleProperties ages_values,
                              const std::string& ds_name,
                              bool compress_data);
 
