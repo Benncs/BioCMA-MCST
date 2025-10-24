@@ -2,6 +2,7 @@
 #define __CORE_PARTIAL_EXPORTER_HPP__
 
 #include <common/execinfo.hpp>
+#include <core/post_process.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <dataexporter/data_exporter.hpp>
@@ -49,18 +50,12 @@ namespace Core
     /**
      * @brief Writes particle data to the output.
      *
-     * @param names A span of strings representing particle property names.
-     * @param particle_values Particle properties such as mass, age ...
-     * @param spatial_values Particle properties such as mass, age ... in space
      * @param ds_name Dataset name associated with this data.
      * @param compress_data Compress particle or not (can be time consuming)
      */
-    void write_particle_data(std::span<std::string> names,
-                             ViewParticleProperties particle_values,
-                             ViewParticleProperties spatial_values,
+    void write_particle_data(PostProcessing::BonceBuffer&& bonce,
                              const std::string& ds_name,
                              bool compress_data);
-
     /**
      * @brief Writes the number of particles in each compartment.
      *

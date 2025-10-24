@@ -1,6 +1,7 @@
 #ifndef __SIMULATION_MC_KERNEL_HPP
 #define __SIMULATION_MC_KERNEL_HPP
 
+#include "mc/alias.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
@@ -120,11 +121,6 @@ namespace Simulation::KernelInline
       this->particles = _particles;
     }
 
-    void sblock(MC::ContributionView _block)
-    {
-      this->block = _block;
-    }
-
     KOKKOS_INLINE_FUNCTION
     void operator()(const TagFirstPass _tag,
                     const TeamMember& team_handle) const
@@ -151,7 +147,7 @@ namespace Simulation::KernelInline
       {
         return;
       }
-
+      particles.ages(idx, 1) += d_t;
       auto local_c =
           Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx));
 
@@ -179,7 +175,6 @@ namespace Simulation::KernelInline
     // kernelContribution contribs;
     MC::KernelConcentrationType limitation_factor;
     MC::EventContainer events;
-    MC::ContributionView block;
   };
 
 } // namespace Simulation::KernelInline

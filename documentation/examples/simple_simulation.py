@@ -15,18 +15,19 @@ Usage:
 
 # Import the handle module
 import handle_module
-import numpy as np 
+import numpy as np
 
-#define the constants 
+# define the constants
 OUTFOLDER = "./out/"
 SIMULATION_NAME = "my_simulation_name"
-CMA_PATH = "/path/to/the/cma/" #don´t forget last / 
+CMA_PATH = "/path/to/the/cma/"  # don´t forget last /
 
-def run(params): 
-    handle = handle_module.init_simulation(OUTFOLDER,SIMULATION_NAME,CMA_PATH,params)
-    # cma with 500 compartment, simulation with 4 species liquid only 
-    liquid_concentration_0 = np.zeros((500,4))  
-    handle_module.set_initial_concentrations(handle,liquid_concentration_0)
+
+def run(params):
+    handle = handle_module.init_simulation(OUTFOLDER, SIMULATION_NAME, CMA_PATH, params)
+    # cma with 500 compartment, simulation with 4 species liquid only
+    liquid_concentration_0 = np.zeros((500, 4))
+    handle_module.set_initial_concentrations(handle, liquid_concentration_0)
     handle_module.register_model_name(handle, "model_name")
     # Apply the simulation settings
     rc = handle_module.apply(handle, False)
@@ -38,6 +39,7 @@ def run(params):
 
     # Execute the simulation
     rc = handle_module.exec(handle)
+
 
 if __name__ == "__main__":
     # Create the simulation parameters

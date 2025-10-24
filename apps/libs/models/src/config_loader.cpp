@@ -12,7 +12,7 @@ namespace Models
 
     using float_t = Self::FloatType;
 
-    float_t lambda = 0;
+    float_t lambda = 2e6;
     char* lambda_env = std::getenv("VLAMBDA");
     if (lambda_env != nullptr)
     {

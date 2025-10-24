@@ -139,7 +139,8 @@ namespace Simulation
 
   [[nodiscard]] Dimensions SimulationUnit::getDimensions() const noexcept
   {
-    return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()};
+    return {.n_species = this->liquid_scalar->n_row(),
+            .n_compartment = this->liquid_scalar->n_col()};
   }
 
   [[nodiscard]] std::optional<std::span<const double>>
