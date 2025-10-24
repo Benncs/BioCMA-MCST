@@ -15,6 +15,7 @@
 #include <scalar_simulation.hpp>
 #include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/kernels/move_kernel.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
@@ -51,7 +52,7 @@ namespace Simulation
                                  const ScalarInitializer& scalar_init,
                                  std::optional<Feed::SimulationFeed> _feed)
       : mc_unit(std::move(_unit)), internal_counter_dead(0),
-        feed(_feed.value_or(Feed::SimulationFeed{std::nullopt, std::nullopt})),
+        feed(_feed.value_or(Feed::SimulationFeed::empty())),
         is_two_phase_flow(scalar_init.gas_flow)
   {
 
@@ -72,21 +73,16 @@ namespace Simulation
 
     const std::size_t n_flows = this->feed.n_liquid_flow();
 
-    Kokkos::resize(move_info.index_leaving_flow, n_flows);
-    Kokkos::resize(move_info.leaving_flow, n_flows);
-    Kokkos::resize(move_info.liquid_volume,
-                   mc_unit->domain.getNumberCompartments());
-    Kokkos::resize(move_info.diag_transition,
-                   mc_unit->domain.getNumberCompartments());
+    move_info = KernelInline::MoveInfo<ComputeSpace>(
+        mc_unit->domain.getNumberCompartments(), n_flows);
 
     contribs_scatter =
         Kokkos::Experimental::create_scatter_view(get_kernel_contribution());
   }
 
-  void SimulationUnit::update(CmaUtils::IterationState&& newstate)
+  void SimulationUnit::update(CmaUtils::IterationState&& new_state)
   {
-    state = std::move(newstate);
-
+    state = std::move(new_state);
     setVolumes();
     mc_unit->domain.setLiquidNeighbors(state.neighbors);
   }

@@ -20,14 +20,14 @@
 namespace Simulation
 {
 
-  [[deprecated("perf:not useful")]] void
-  SimulationUnit::reduceContribs_per_rank(std::span<const double> data) const
-  {
-
-    PROFILE_SECTION("host:reduceContribs_rank")
-    this->liquid_scalar->reduce_contribs(data);
-  }
-
+  //[[deprecated("perf:not useful")]] void
+  // SimulationUnit::reduceContribs_per_rank(std::span<const double> data) const
+  //{
+  //
+  // PROFILE_SECTION("host:reduceContribs_rank")
+  // this->liquid_scalar->reduce_contribs(data);
+  //}
+  //
   void SimulationUnit::reduceContribs(std::span<const double> data,
                                       size_t n_rank) const
   {

@@ -130,10 +130,10 @@ namespace
 
     std::size_t original_size;
     M::SelfParticle model;
+    MC::ParticleAges ages;
     MC::ParticlePositions position;
     M::SelfParticle buffer_model;
     MC::ParticlePositions buffer_position;
-    MC::ParticleAges ages;
   };
 
 }; // namespace
