@@ -121,16 +121,23 @@ namespace Simulation::KernelInline
       this->particles = _particles;
     }
 
+    // KOKKOS_INLINE_FUNCTION
+    // void operator()(const TagFirstPass _tag,
+    //                 const TeamMember& team_handle) const
+    // {
+    //   (void)_tag;
+    //   GET_INDEX(particles.n_particles());
+    //   if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
+    //   {
+    //     return;
+    //   }
+    //   particles.get_contributions(idx, contribs_scatter);
+    // }
+    //
     KOKKOS_INLINE_FUNCTION
-    void operator()(const TagFirstPass _tag,
-                    const TeamMember& team_handle) const
+    void operator()(const TagFirstPass _tag, const std::size_t idx) const
     {
       (void)_tag;
-      GET_INDEX(particles.n_particles());
-      if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
-      {
-        return;
-      }
       particles.get_contributions(idx, contribs_scatter);
     }
 
@@ -162,9 +169,6 @@ namespace Simulation::KernelInline
         }
         events.wrap_incr<MC::EventType::NewParticle>();
       };
-
-      // particles.template get_contributions<ComputeSpace, TeamMember>(
-      //     random_pool, idx, contribs_scatter, team_handle);
     }
 
     M::FloatType d_t;

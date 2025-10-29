@@ -1,7 +1,6 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
-#include "simulation/kernels/model_kernel.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <biocma_cst_config.hpp>
@@ -236,8 +235,6 @@ namespace Simulation
   {
 
     PROFILE_SECTION("cycleProcess")
-
-    using cycle_functor_type = decltype(functors.cycle_kernel);
     using CurrentModel =
         typename std::remove_reference<decltype(container)>::type::UsedModel;
     const size_t n_particle = container.n_particles();
@@ -250,31 +247,12 @@ namespace Simulation
 
     if (functors.move_kernel.need_launch())
     {
-      constexpr bool is_reduce = true;
-      const auto _policy =
-          MC::get_policy(functors.move_kernel, n_particle, is_reduce);
-      Kokkos ::parallel_reduce(
-          "cycle_move", _policy, functors.move_kernel, functors.move_reducer);
+      functors.launch_move(n_particle);
     }
 
     if (f_reaction)
     {
-      constexpr bool is_reduce = true;
-      const auto _policy =
-          MC::get_policy<cycle_functor_type, KernelInline::TagSecondPass>(
-              functors.cycle_kernel, n_particle, is_reduce);
-      const auto scatter_policy =
-          MC::get_policy<cycle_functor_type, KernelInline::TagFirstPass>(
-              functors.cycle_kernel, n_particle, false);
-
-      Kokkos::parallel_reduce(
-          "cycle_model",
-          _policy,
-          functors.cycle_kernel,
-          KernelInline::CycleReducer<ComputeSpace>(functors.cycle_reducer));
-      Kokkos::fence(); // TODO needed ?
-      Kokkos::parallel_for(
-          "cycle_scatter", scatter_policy, functors.cycle_kernel);
+      functors.launch_model(n_particle);
     }
 
     post_cycle<ComputeSpace, CurrentModel>(
