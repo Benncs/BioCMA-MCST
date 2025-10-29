@@ -57,26 +57,19 @@ namespace MC
                                                  recommended_team_size);
   }
 
-  // template <typename Tag = void>
-  // Kokkos::TeamPolicy<ComputeSpace, Tag> get_policy_team(std::size_t
-  // league_size,
-  //                                                       bool reduce = false)
-  // {
-  //   (void)reduce;
-  //   Kokkos::TeamPolicy<> _policy;
+  template <typename Tag = void>
+  Kokkos::TeamPolicy<ComputeSpace, Tag> get_policy_team()
+  {
+    const char* env_team_size = std::getenv("BIOMC_LEAGUE_SIZE");
 
-  //   const char* env_team_size = std::getenv("BIOMC_TEAM_SIZE");
+    auto league_size = 1;
+    if (env_team_size != nullptr)
+    {
+      league_size = std::stoi(env_team_size);
+    }
 
-  //   int recommended_team_size = _policy.team_size_recommended(
-  //       TagDetector(), Kokkos::ParallelReduceTag());
-  //   if (env_team_size != nullptr)
-  //   {
-  //     recommended_team_size = std::stoi(env_team_size);
-  //   }
-
-  //   return Kokkos::TeamPolicy<ComputeSpace, Tag>(league_size,
-  //                                                Kokkos::AUTO);
-  // }
+    return Kokkos::TeamPolicy<ComputeSpace, Tag>(league_size, Kokkos::AUTO);
+  }
 
   /**
    * @brief General-purpose Monte Carlo unit to carry out simulations.

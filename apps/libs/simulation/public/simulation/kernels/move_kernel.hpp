@@ -178,6 +178,31 @@ namespace Simulation::KernelInline
                      [&]() { local_dead_count += team_local; });
     }
 
+    // KOKKOS_INLINE_FUNCTION void
+    // operator()(TagLeave _tag,
+    //            const Kokkos::TeamPolicy<ComputeSpace>::member_type&
+    //            team_handle, std::size_t& local_dead_count) const
+    // {
+    //   (void)_tag;
+    //   const std::size_t league_size = team_handle.league_size();
+    //   const std::size_t league_rank = team_handle.league_rank();
+    //   const std::size_t start_idx = league_rank * (n_particles /
+    //   league_size); std::size_t end_idx = (league_rank + 1) * (n_particles /
+    //   league_size);
+
+    //   if (league_rank == (league_size - 1))
+    //   {
+    //     end_idx = n_particles;
+    //   }
+    //   Kokkos::parallel_for(
+    //       Kokkos::TeamThreadRange(team_handle, start_idx, end_idx),
+    //       [&](int idx)
+    //       {
+    //         ages(idx, 0) += d_t;
+    //         handle_exit(idx, local_dead_count);
+    //       });
+    // }
+
     [[nodiscard]] bool need_launch() const
     {
       return enable_leave || enable_move;

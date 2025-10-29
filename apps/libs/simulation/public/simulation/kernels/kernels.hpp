@@ -1,6 +1,7 @@
 #ifndef __SIMULATION_KERNELS_HPP__
 #define __SIMULATION_KERNELS_HPP__
 
+#include "impl/Kokkos_Profiling.hpp"
 #include <mc/unit.hpp>
 #include <simulation/kernels/model_kernel.hpp>
 #include <simulation/kernels/move_kernel.hpp>
@@ -46,7 +47,10 @@ namespace Simulation::KernelInline
 
         const auto _policy_leave =
             Kokkos::TeamPolicy<ComputeSpace, KernelInline::TagLeave>(
-                32, Kokkos::AUTO);
+                256, Kokkos::AUTO);
+
+        // const auto _policy_leave = MC::get_policy_team<TagLeave>();
+        //
 
         Kokkos ::parallel_reduce(
             "cycle_move_leave", _policy_leave, move_kernel, move_reducer);

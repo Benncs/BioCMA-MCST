@@ -159,7 +159,6 @@ namespace Simulation
 
     template <typename Space, ModelType Model>
     void post_cycle(MC::ParticlesContainer<Model>& container,
-                    std::size_t n_particle,
                     KernelInline::move_reducer_view_type<Space> out_total,
                     KernelInline::cycle_reducer_view_type<Space> reducer_type);
 
@@ -253,13 +252,12 @@ namespace Simulation
     }
 
     post_cycle<ComputeSpace, CurrentModel>(
-        container, n_particle, functors.move_reducer, functors.cycle_reducer);
+        container, functors.move_reducer, functors.cycle_reducer);
   }
 
   template <typename Space, ModelType Model>
   void SimulationUnit::post_cycle(
       MC::ParticlesContainer<Model>& container,
-      std::size_t n_particle,
       KernelInline::move_reducer_view_type<Space> out_total,
       KernelInline::cycle_reducer_view_type<Space> reducer_type)
   {
