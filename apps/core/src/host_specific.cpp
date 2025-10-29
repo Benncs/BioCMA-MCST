@@ -253,7 +253,7 @@ namespace
           }
           break;
         }
-      }
+      } // end for
 
       local_container.clean_dead(simulation.dead_counter());
     };

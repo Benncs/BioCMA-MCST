@@ -6,19 +6,21 @@
 #include <simulation/kernels/move_kernel.hpp>
 namespace Simulation::KernelInline
 {
+  template <typename Space>
+  using cycle_reducer_view_type =
+      KernelInline::CycleReducer<Space>::result_view_type;
+  template <typename Space>
+  using move_reducer_view_type = Kokkos::View<std::size_t, Space>;
 
   template <typename Space, ModelType Model> struct Functors
   {
     using FModel = Model;
 
-    using cycle_reducer_view_type =
-        KernelInline::CycleReducer<Space>::result_view_type;
-    using move_reducer_view_type = Kokkos::View<std::size_t, Space>;
     using cycle_kernel_type = CycleFunctor<Model>;
     using move_kernel_type = MoveFunctor;
 
-    cycle_reducer_view_type cycle_reducer;
-    move_reducer_view_type move_reducer;
+    cycle_reducer_view_type<Space> cycle_reducer;
+    move_reducer_view_type<Space> move_reducer;
     cycle_kernel_type cycle_kernel;
     move_kernel_type move_kernel;
 
