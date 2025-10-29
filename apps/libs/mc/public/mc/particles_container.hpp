@@ -1,145 +1,16 @@
 #ifndef __PARTICLES_CONTAINER_HPP__
 #define __PARTICLES_CONTAINER_HPP__
 
-#include "common/common.hpp"
-#include "mc/alias.hpp"
 #include <Kokkos_Core.hpp>
+#include <common/common.hpp>
 #include <common/has_serialize.hpp>
 #include <cstdint>
+#include <mc/alias.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
-#include <stdexcept>
-
-namespace
-{
-
-  using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
-  using TeamMember = TeamPolicy::member_type;
-
-  template <ModelType M> struct FillGapFunctor
-  {
-
-    FillGapFunctor(MC::ParticleStatus _status,
-                   M::SelfParticle _model,
-                   MC::ParticlePositions _position,
-                   MC::ParticleAges _ages,
-                   std::size_t _to_remove,
-                   std::size_t _last_used_index)
-        : status(std::move(_status)), model(std::move(_model)),
-          position(std::move(_position)), ages(std::move(_ages)),
-          offset("offset"), to_remove(_to_remove),
-          last_used_index(_last_used_index)
-    {
-
-      Kokkos::deep_copy(offset, 0);
-    }
-
-    KOKKOS_INLINE_FUNCTION void
-    operator()(const int i, std::size_t& update, const bool final) const
-    {
-      const bool is_dead = (status(i) != MC::Status::Idle);
-
-      const std::size_t scan_index = update;
-      update += is_dead ? 1 : 0;
-
-      if (final && is_dead && scan_index < to_remove)
-      {
-
-        const auto i_to_remove = i;
-        auto idx_to_move =
-            last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
-        while (status(idx_to_move) != MC::Status::Idle ||
-               idx_to_move == static_cast<std::size_t>(i_to_remove))
-        {
-          idx_to_move =
-              last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
-        }
-
-        // Merge position EZ
-        status(i_to_remove) = MC::Status::Idle;
-
-        // No need atomic: final executed exactly once
-        Kokkos::atomic_exchange(&position(i_to_remove), position(idx_to_move));
-
-        // TODO Use hierachical parallism here, thread range is likely to work
-        for (std::size_t i_properties = 0; i_properties < M::n_var;
-             ++i_properties)
-        {
-          model(i_to_remove, i_properties) = model(idx_to_move, i_properties);
-        }
-        ages(i_to_remove, 0) = ages(idx_to_move, 0);
-        ages(i_to_remove, 1) = ages(idx_to_move, 1);
-      }
-    }
-
-    MC::ParticleStatus status;
-    M::SelfParticle model;
-    MC::ParticlePositions position;
-    MC::ParticleAges ages;
-    Kokkos::View<std::size_t, ComputeSpace> offset;
-    std::size_t to_remove;
-    std::size_t last_used_index;
-  };
-
-  template <ModelType M> struct InsertFunctor
-  {
-    InsertFunctor(std::size_t _original_size,
-                  M::SelfParticle _model,
-                  MC::ParticlePositions _position,
-                  MC::ParticleAges _ages,
-                  M::SelfParticle _buffer_model,
-                  MC::ParticlePositions _buffer_position)
-        : original_size(_original_size), model(std::move(_model)),
-          ages(std::move(_ages)), position(std::move(_position)),
-          buffer_model(std::move(_buffer_model)),
-          buffer_position(std::move(_buffer_position))
-    {
-    }
-
-    // KOKKOS_INLINE_FUNCTION void operator()(const int i) const
-    // {
-    //   position(original_size + i) = buffer_position(i);
-    //   for (std::size_t j = 0; j < M::n_var; ++j)
-    //   {
-    //     model(original_size + i, j) = buffer_model(i, j);
-    //   }
-    // }
-
-    // TODO try this functor
-    // TODO find a way to organise data to not copy non needed  data (like
-    // contribs). Split model in two arrays?
-
-    KOKKOS_INLINE_FUNCTION
-    void operator()(const TeamMember& team) const
-    {
-      auto range = M::n_var;
-      const int i = team.league_rank();
-
-      Kokkos::parallel_for(
-          Kokkos::TeamVectorRange(team, range),
-          [&](const int& j)
-          { model(original_size + i, j) = buffer_model(i, j); });
-      position(original_size + i) = buffer_position(i);
-
-      // Actually needs buffer to store mother's hydraulic time
-      // But set new hydraulic time to 0 to not create new buffer a save memory
-      // usage
-      ages(original_size + i, 0) = 0;
-      ages(original_size + i, 1) = 0;
-    }
-
-    std::size_t original_size;
-    M::SelfParticle model;
-    MC::ParticleAges ages;
-    MC::ParticlePositions position;
-    M::SelfParticle buffer_model;
-    MC::ParticlePositions buffer_position;
-  };
-
-}; // namespace
-
 namespace MC
 {
+
   /**
    * @brief Main owning object for Monte-Carlo particles.
    *
@@ -249,7 +120,7 @@ namespace MC
     double allocation_factor;
     std::size_t n_allocated_elements;
     uint64_t n_used_elements;
-    std::size_t inactive_counter = 0;
+    std::size_t inactive_counter;
     void __allocate_buffer__();
     void _resize(std::size_t new_size, bool force = false);
     uint64_t minimum_dead_particle_removal;
@@ -258,6 +129,142 @@ namespace MC
     int begin;
     int end;
   };
+
+} // namespace MC
+
+/*
+ * IMPLEMENTATION
+ */
+namespace MC
+{
+  namespace
+  {
+
+    using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
+    using TeamMember = TeamPolicy::member_type;
+
+    template <ModelType M> struct FillGapFunctor
+    {
+
+      FillGapFunctor(MC::ParticleStatus _status,
+                     M::SelfParticle _model,
+                     MC::ParticlePositions _position,
+                     MC::ParticleAges _ages,
+                     std::size_t _to_remove,
+                     std::size_t _last_used_index)
+          : status(std::move(_status)), model(std::move(_model)),
+            position(std::move(_position)), ages(std::move(_ages)),
+            offset("offset"), to_remove(_to_remove),
+            last_used_index(_last_used_index)
+      {
+
+        Kokkos::deep_copy(offset, 0);
+      }
+
+      KOKKOS_INLINE_FUNCTION void
+      operator()(const int i, std::size_t& update, const bool final) const
+      {
+        const bool is_dead = (status(i) != MC::Status::Idle);
+
+        const std::size_t scan_index = update;
+        update += is_dead ? 1 : 0;
+
+        if (final && is_dead && scan_index < to_remove)
+        {
+
+          const auto i_to_remove = i;
+          auto idx_to_move =
+              last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
+          while (status(idx_to_move) != MC::Status::Idle ||
+                 idx_to_move == static_cast<std::size_t>(i_to_remove))
+          {
+            idx_to_move =
+                last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
+          }
+
+          // Merge position EZ
+          status(i_to_remove) = MC::Status::Idle;
+
+          // No need atomic: final executed exactly once
+          Kokkos::atomic_exchange(&position(i_to_remove),
+                                  position(idx_to_move));
+
+          // TODO Use hierachical parallism here, thread range is likely to work
+          for (std::size_t i_properties = 0; i_properties < M::n_var;
+               ++i_properties)
+          {
+            model(i_to_remove, i_properties) = model(idx_to_move, i_properties);
+          }
+          ages(i_to_remove, 0) = ages(idx_to_move, 0);
+          ages(i_to_remove, 1) = ages(idx_to_move, 1);
+        }
+      }
+
+      MC::ParticleStatus status;
+      M::SelfParticle model;
+      MC::ParticlePositions position;
+      MC::ParticleAges ages;
+      Kokkos::View<std::size_t, ComputeSpace> offset;
+      std::size_t to_remove;
+      std::size_t last_used_index;
+    };
+
+    template <ModelType M> struct InsertFunctor
+    {
+      InsertFunctor(std::size_t _original_size,
+                    M::SelfParticle _model,
+                    MC::ParticlePositions _position,
+                    MC::ParticleAges _ages,
+                    M::SelfParticle _buffer_model,
+                    MC::ParticlePositions _buffer_position)
+          : original_size(_original_size), model(std::move(_model)),
+            ages(std::move(_ages)), position(std::move(_position)),
+            buffer_model(std::move(_buffer_model)),
+            buffer_position(std::move(_buffer_position))
+      {
+      }
+
+      // KOKKOS_INLINE_FUNCTION void operator()(const int i) const
+      // {
+      //   position(original_size + i) = buffer_position(i);
+      //   for (std::size_t j = 0; j < M::n_var; ++j)
+      //   {
+      //     model(original_size + i, j) = buffer_model(i, j);
+      //   }
+      // }
+
+      // TODO try this functor
+      // TODO find a way to organise data to not copy non needed  data (like
+      // contribs). Split model in two arrays?
+
+      KOKKOS_INLINE_FUNCTION
+      void operator()(const TeamMember& team) const
+      {
+        auto range = M::n_var;
+        const int i = team.league_rank();
+
+        Kokkos::parallel_for(
+            Kokkos::TeamVectorRange(team, range),
+            [&](const int& j)
+            { model(original_size + i, j) = buffer_model(i, j); });
+        position(original_size + i) = buffer_position(i);
+
+        // Actually needs buffer to store mother's hydraulic time
+        // But set new hydraulic time to 0 to not create new buffer a save
+        // memory usage
+        ages(original_size + i, 0) = 0;
+        ages(original_size + i, 1) = 0;
+      }
+
+      std::size_t original_size;
+      M::SelfParticle model;
+      MC::ParticleAges ages;
+      MC::ParticlePositions position;
+      M::SelfParticle buffer_model;
+      MC::ParticlePositions buffer_position;
+    };
+
+  }; // namespace
 
   template <ModelType Model>
   [[nodiscard]] KOKKOS_INLINE_FUNCTION std::size_t
@@ -462,7 +469,8 @@ namespace MC
         buffer_position("buffer_particle_position", 0),
         buffer_index("buffer_index"),
         allocation_factor(default_allocation_factor), n_allocated_elements(0),
-        n_used_elements(n_particle), minimum_dead_particle_removal(0)
+        n_used_elements(n_particle), minimum_dead_particle_removal(0),
+        inactive_counter(0)
   {
 
     if (n_particle != 0)
@@ -539,7 +547,6 @@ namespace MC
       return weights(idx);
     }
   }
-
 } // namespace MC
 
 #endif
