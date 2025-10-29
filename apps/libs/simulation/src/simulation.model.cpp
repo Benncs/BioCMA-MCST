@@ -58,8 +58,8 @@ namespace Simulation
   {
     PROFILE_SECTION("host:update_feed")
     // Get references to the index_leaving_flow and leaving_flow data members
-    const auto& _index_leaving_flow = this->move_info.index_leaving_flow;
-    const auto& _leaving_flow = this->move_info.leaving_flow;
+    // const auto& _index_leaving_flow = this->move_info.index_leaving_flow;
+    // const auto& _leaving_flow = this->move_info.leaving_flow;
 
     auto functor = [update_scalar](auto& scl,
                                    const Feed::FeedDescriptor& fd) -> void
@@ -82,8 +82,10 @@ namespace Simulation
       // TODO: improve
       if (feed.output_position)
       {
-        _index_leaving_flow(0) = 0;
-        _leaving_flow(0) = feed.flow;
+        // _index_leaving_flow(0) = 0;
+        // _leaving_flow(0) = feed.flow;
+        //
+        move_info.set_flow(0, 0, feed.flow);
       }
     }
 
