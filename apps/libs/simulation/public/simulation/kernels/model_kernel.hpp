@@ -138,6 +138,10 @@ namespace Simulation::KernelInline
     void operator()(const TagFirstPass _tag, const std::size_t idx) const
     {
       (void)_tag;
+      if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
+      {
+        return;
+      }
       particles.get_contributions(idx, contribs_scatter);
     }
 
