@@ -39,7 +39,7 @@ namespace
     {
       const bool is_dead = (status(i) != MC::Status::Idle);
 
-      std::size_t scan_index = update;
+      const std::size_t scan_index = update;
       update += is_dead ? 1 : 0;
 
       if (final && is_dead && scan_index < to_remove)
@@ -157,7 +157,7 @@ namespace MC
     using UsedModel = Model;
 
     static constexpr double buffer_ratio =
-        1; ///< Buffer size = ceil(list.size()*buffer_ratio), 0.6 is fine for
+        1; ///< Buffer size = ceil(list.size()*buffer_ratio), 0.6 is fine, for
            ///< high division rate or stiff increase to 1
     /**
      * @brief Alias for the model used by the container.
@@ -189,8 +189,10 @@ namespace MC
 
     template <typename CviewType>
     KOKKOS_INLINE_FUNCTION void
-    get_contributions(std::size_t idx, const CviewType& contributions) const
+    get_contributions(const std::size_t idx,
+                      const CviewType& contributions) const
     {
+
       static_assert(ConstWeightModelType<Model>,
                     "ModelType: Constapply_weight()");
 

@@ -9,11 +9,10 @@ namespace Models
 
   FixedLength::Config FixedLength::get_config(const std::size_t n)
   {
-
     using float_t = Self::FloatType;
-
     float_t lambda = 2e6;
     char* lambda_env = std::getenv("VLAMBDA");
+
     if (lambda_env != nullptr)
     {
       lambda = static_cast<float_t>(std::stod(lambda_env));
@@ -26,8 +25,7 @@ namespace Models
     };
 
     Kokkos::View<float_t*, ComputeSpace> samples("samples", n);
-
-    auto rc =
+    const auto rc =
         Sampling::metropolis(target, samples, Self::l_min_m, Self::l_max_m);
 
     if (rc != 0)
