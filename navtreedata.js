@@ -26,23 +26,23 @@ var NAVTREE =
 [
   [ "BioCMAMC-ST", "index.html", [
     [ "BioCMA-MCST: A Biological Simulation Tool Using Monte Carlo and Compartment Modeling Approaches", "index.html", "index" ],
-    [ "md_documentation_2pages_203__cma", "md_documentation_2pages_203__cma.html", [
-      [ "Compartment Modelling Approach", "md_documentation_2pages_203__cma.html#autotoc_md8", [
-        [ "CmaUtils", "md_documentation_2pages_203__cma.html#autotoc_md9", [
-          [ "Compartment Operations", "md_documentation_2pages_203__cma.html#autotoc_md10", [
-            [ "Transition Matrix", "md_documentation_2pages_203__cma.html#autotoc_md11", null ],
-            [ "Cumulative probability", "md_documentation_2pages_203__cma.html#autotoc_md12", null ]
+    [ "Documentation", "cma.html", [
+      [ "Compartment Modelling Approach", "cma.html#autotoc_md8", [
+        [ "CmaUtils", "cma.html#autotoc_md9", [
+          [ "Compartment Operations", "cma.html#autotoc_md10", [
+            [ "Transition Matrix", "cma.html#autotoc_md11", null ],
+            [ "Cumulative probability", "cma.html#autotoc_md12", null ]
           ] ],
-          [ "FlowMapTransitionner", "md_documentation_2pages_203__cma.html#autotoc_md13", null ]
+          [ "FlowMapTransitionner", "cma.html#autotoc_md13", null ]
         ] ],
-        [ "Move kernel", "md_documentation_2pages_203__cma.html#autotoc_md14", [
-          [ "Leaving reactor", "md_documentation_2pages_203__cma.html#autotoc_md15", null ]
+        [ "Move kernel", "cma.html#autotoc_md14", [
+          [ "Leaving reactor", "cma.html#autotoc_md15", null ]
         ] ]
       ] ]
     ] ],
-    [ "md_documentation_2pages_204__models", "md_documentation_2pages_204__models.html", [
-      [ "Model declaration", "md_documentation_2pages_204__models.html#autotoc_md18", [
-        [ "Required Model Subkernels", "md_documentation_2pages_204__models.html#autotoc_md19", null ]
+    [ "Documentation", "models.html", [
+      [ "Model declaration", "models.html#autotoc_md18", [
+        [ "Required Model Subkernels", "models.html#autotoc_md19", null ]
       ] ]
     ] ],
     [ "List of Kokkkos Kernels", "kernels.html", [
