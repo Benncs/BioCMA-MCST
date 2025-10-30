@@ -80,6 +80,7 @@ namespace Simulation
     void setLogger(std::shared_ptr<IO::Logger>);
 
     // Getters
+
     [[nodiscard]] double& get_start_time_mut();
     [[nodiscard]] double& get_end_time_mut();
     [[nodiscard]] const CmaUtils::IterationState& getState() const;
@@ -96,20 +97,17 @@ namespace Simulation
 
     void cycleProcess(auto&& container, double d_t, auto& _functors);
     void step(double d_t) const;
-    void reduceContribs(std::span<const double> data, size_t n_rank) const;
+    // void reduceContribs(std::span<const double> data, size_t n_rank) const;
 
     //[[deprecated("perf:not useful")]] void
     // reduceContribs_per_rank(std::span<const double> data) const;
     //
     void clearContribution() const noexcept;
-    auto init_functor(double d_t, auto&& container);
     void update_feed(double t, double d_t, bool update_scalar = true) noexcept;
     void update(CmaUtils::IterationState&& new_state);
 
     // Memory management
-    void clear_mc();
     void reset();
-    void post_init_compartments();
 
     template <typename Space, ModelType Model>
     KernelInline::Functors<Space, Model>
@@ -119,6 +117,7 @@ namespace Simulation
     void setVolumes() const;
     void setLiquidFlow(CmaUtils::PreCalculatedHydroState* _flows_l);
     void setGasFlow(CmaUtils::PreCalculatedHydroState* _flows_g);
+    void post_init_compartments();
 
     [[nodiscard]] MC::KernelConcentrationType getkernel_concentration() const;
 
@@ -146,8 +145,6 @@ namespace Simulation
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
 
     void post_init_concentration(const ScalarInitializer& scalar_init);
-    void post_init_concentration_functor(const ScalarInitializer& scalar_init);
-    void post_init_concentration_file(const ScalarInitializer& scalar_init);
 
     std::shared_ptr<ScalarSimulation> liquid_scalar;
     std::shared_ptr<ScalarSimulation> gas_scalar;

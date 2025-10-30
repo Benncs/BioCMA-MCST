@@ -12,6 +12,7 @@
 #include <mc/unit.hpp>
 #include <memory>
 #include <optional>
+#include <scalar_init.hpp>
 #include <scalar_simulation.hpp>
 #include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
@@ -22,26 +23,6 @@
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
 #include <utility>
-
-namespace
-{
-  template <typename T>
-  std::vector<T>
-  layout_right_to_left(std::span<const T> input, size_t rows, size_t cols)
-  {
-    std::vector<T> output(input.size());
-
-    for (size_t i = 0; i < rows; ++i)
-    {
-      for (size_t j = 0; j < cols; ++j)
-      {
-        output[j * rows + i] = input[i * cols + j];
-      }
-    }
-
-    return output;
-  }
-} // namespace
 
 namespace Simulation
 {
@@ -122,79 +103,11 @@ namespace Simulation
     this->mc_unit->domain.setVolumes(vl);
   }
 
-  void SimulationUnit::post_init_concentration_file(
-      const ScalarInitializer& scalar_init)
-  {
-
-    if (!scalar_init.liquid_buffer.has_value())
-    {
-      throw SimulationException(ErrorCodes::BadInitialiser);
-    }
-    const std::size_t cols =
-        scalar_init.liquid_buffer->size() / scalar_init.n_species;
-    const auto layout_left_buffer = layout_right_to_left<double>(
-        *scalar_init.liquid_buffer, scalar_init.n_species, cols);
-
-    if (!this->liquid_scalar->deep_copy_concentration(layout_left_buffer))
-    {
-
-      throw SimulationException(ErrorCodes::MismatchSize);
-    }
-
-    if (is_two_phase_flow)
-    {
-      if (!scalar_init.gas_buffer.has_value())
-      {
-        throw SimulationException(ErrorCodes::BadInitialiser);
-      }
-      const auto layout_left_buffer = layout_right_to_left<double>(
-          *scalar_init.gas_buffer, scalar_init.n_species, cols);
-      if (!this->gas_scalar->deep_copy_concentration(layout_left_buffer))
-      {
-        throw SimulationException(ErrorCodes::MismatchSize);
-      }
-    }
-  }
-
-  void SimulationUnit::clear_mc()
-  {
-    mc_unit.reset();
-  }
-
   void SimulationUnit::reset()
   {
     liquid_scalar.reset();
     gas_scalar.reset();
     move_info = KernelInline::MoveInfo<ComputeSpace>();
-  }
-
-  void SimulationUnit::post_init_concentration_functor(
-      const ScalarInitializer& scalar_init)
-  {
-
-    auto& cliq = this->liquid_scalar->get_concentration();
-    decltype(&cliq) cgas = nullptr; // FIXME
-
-    if (is_two_phase_flow)
-    {
-      assert(this->gas_scalar != nullptr);
-      cgas = &this->gas_scalar->get_concentration();
-      assert(cgas->size() != 0);
-    }
-
-    const auto& fv = scalar_init.liquid_f_init.value();
-
-    for (decltype(cliq.rows()) i_row = 0; i_row < cliq.rows(); ++i_row)
-    {
-      for (decltype(cliq.cols()) i_col = 0; i_col < cliq.cols(); ++i_col)
-      {
-        cliq(i_row, i_col) = fv(i_row, i_col);
-        if (is_two_phase_flow)
-        {
-          (*cgas)(i_row, i_col) = scalar_init.gas_f_init.value()(i_row, i_col);
-        }
-      }
-    }
   }
 
   void
@@ -205,11 +118,14 @@ namespace Simulation
         scalar_init.type == ScalarInitialiserType::Local)
 
     {
-      post_init_concentration_functor(scalar_init);
+
+      impl::post_init_concentration_functor(
+          is_two_phase_flow, scalar_init, liquid_scalar, gas_scalar);
     }
     else
     {
-      post_init_concentration_file(scalar_init);
+      impl::post_init_concentration_file(
+          is_two_phase_flow, scalar_init, liquid_scalar, gas_scalar);
     }
 
     if ((this->liquid_scalar->getConcentrationArray() >= 0.).all())

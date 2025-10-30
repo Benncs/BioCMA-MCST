@@ -5,11 +5,11 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <eigen_kokkos.hpp>
-#include <mc/domain.hpp>
-#include <mc/events.hpp>
-#include <mc/prng/prng.hpp>
-#include <mc/unit.hpp>
+// #include <hydro/impl_mass_transfer.hpp>
+// #include <mc/domain.hpp>
+// #include <mc/events.hpp>
+// #include <mc/prng/prng.hpp>
+// #include <mc/unit.hpp>
 #include <memory>
 #include <optional>
 #include <scalar_simulation.hpp>
@@ -20,20 +20,19 @@
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
-#include <traits/Kokkos_IterationPatternTrait.hpp>
-#include <utility>
+// #include <utility>
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
 #endif
-#include <Eigen/Core>
+// #include <Eigen/Core>
 #include <Eigen/Dense>
-#include <Eigen/Sparse>
+// #include <Eigen/Sparse>
+// #include <eigen_kokkos.hpp>
 #ifndef NDEBUG
 #  pragma GCC diagnostic pop
 #endif
-#include <hydro/impl_mass_transfer.hpp>
 
 namespace Simulation
 {
