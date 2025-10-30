@@ -57,7 +57,7 @@ namespace PostProcessing
                              [[maybe_unused]] const ExecInfo& exec,
                              const Core::SimulationParameters& params,
                              Simulation::SimulationUnit& simulation,
-                             std::unique_ptr<Core::MainExporter>& mde)
+                             const std::shared_ptr<Core::MainExporter>& mde)
   {
     if (logger)
     {

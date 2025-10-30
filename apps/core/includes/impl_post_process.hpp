@@ -27,7 +27,7 @@ namespace PostProcessing
                              const ExecInfo& exec,
                              const Core::SimulationParameters& params,
                              Simulation::SimulationUnit& simulation,
-                             std::unique_ptr<Core::MainExporter>& mde);
+                             const std::shared_ptr<Core::MainExporter>& mde);
 
   void show_sumup_state(const std::shared_ptr<IO::Logger>& logger,
                         const Simulation::SimulationUnit& simulation) noexcept;
