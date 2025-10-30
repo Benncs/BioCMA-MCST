@@ -16,7 +16,7 @@
  */
 
 // clang-format off
-@INCLUDES @
+@INCLUDES@
 
 #ifdef USE_PYTHON_MODULE
 #  include <pymodule/import_py.hpp>
@@ -34,7 +34,7 @@
   {
     switch (i_model)
     {
-    @SWITCH_BODY @
+    @SWITCH_BODY@
 
 #ifdef USE_PYTHON_MODULE
         case -1:
@@ -65,7 +65,7 @@
     }
 #endif
 
-    @MODEL_INDEX_MAP @
+    @MODEL_INDEX_MAP@
 
         auto it = map.find(model_name);
     if (it != map.end())
