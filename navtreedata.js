@@ -45,6 +45,13 @@ var NAVTREE =
         [ "Required Model Subkernels", "md_documentation_2pages_204__models.html#autotoc_md19", null ]
       ] ]
     ] ],
+    [ "List of Kokkkos Kernels", "kernels.html", [
+      [ "List of Kokkos Kernels", "kernels.html#autotoc_md20", [
+        [ "Particle Container Management (MC)", "kernels.html#autotoc_md21", null ],
+        [ "Iteration Cycle Kernels", "kernels.html#autotoc_md23", null ],
+        [ "Data Export Kernels", "kernels.html#autotoc_md25", null ]
+      ] ]
+    ] ],
     [ "Todo List", "todo.html", null ],
     [ "Bibliography", "citelist.html", null ],
     [ "Namespaces", "namespaces.html", [
@@ -83,12 +90,12 @@ var NAVTREEINDEX =
 "classIO_1_1RedirectGuard.html#a1ce0fb5b1a9285e75f1441dd9ea71aab",
 "classSimulation_1_1KernelInline_1_1CycleReducer.html#a2ab0a8958631f8b25f76966f516a3c1a",
 "classSimulation_1_1SimulationUnit.html#aa1fba49aec41255dbf01e2c07067df2a",
-"namespaceIO.html#ab9eac12535dcbd46b28d922fc4cfada7a409c35fd70c7118c4fbef3e7f90f5fc4",
-"structApi_1_1SimulationInstance.html#ab6aa2713cc7da5e3099b18dd7eab9418",
-"structKokkosLayoutMapper.html",
-"structModels_1_1SimpleModel.html#a5ce062e5d435db70ecbbc36a6c8dd5f1",
-"structModels_1_1UdfModel.html#a4c50d722c0682795be12ff6a0a8a7886",
-"structSimulation_1_1KernelInline_1_1Functors.html#a77cd82ba38729c168d911ba6a67fbeb9"
+"namespaceIO.html",
+"structApi_1_1SimulationInstance.html#aa95ff2c5b7a00aa738eff843014b4cfd",
+"structExecInfo.html#a97d024d761006b167e05e37f60797cfa",
+"structModels_1_1SimpleModel.html#a4dac5cdb34821a8a987ccd1c3d3dc646",
+"structModels_1_1UdfModel.html#a3108247300844976bfd89856418ea55e",
+"structSimulation_1_1KernelInline_1_1Functors.html#a4ac051c22ae36d4a439a75db57250911"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

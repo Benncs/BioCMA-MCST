@@ -11,9 +11,9 @@ var structModels_1_1FixedLength =
       [ "phi_s", "structModels_1_1FixedLength.html#a289b27afb1d56f6621f42bb29b219c59a21fd14f94b25a41271352c09d16a3a8e", null ],
       [ "COUNT", "structModels_1_1FixedLength.html#a289b27afb1d56f6621f42bb29b219c59a4905ac9d6a22bdfc1ae096094ce6248d", null ]
     ] ],
-    [ "contribution", "structModels_1_1FixedLength.html#a2744bdbfbb7361d39b230a62c33f7e09", null ],
+    [ "contribution", "structModels_1_1FixedLength.html#aa54b36d8ce8b44daf7e77bba0ed6fd5d", null ],
     [ "division", "structModels_1_1FixedLength.html#aa727b73c1c6b3a482b9eb3ec29842c04", null ],
-    [ "get_bounds", "structModels_1_1FixedLength.html#aa9ad5b8958fad66791be3a8ce3835f87", null ],
+    [ "get_bounds", "structModels_1_1FixedLength.html#a5586c94443df36f75570fadef7f98552", null ],
     [ "get_config", "structModels_1_1FixedLength.html#ad2fbacbf94c199f2b375481a6b8f1dab", null ],
     [ "get_number", "structModels_1_1FixedLength.html#a510a7132bbef294b660877f2f4b7b4ff", null ],
     [ "init", "structModels_1_1FixedLength.html#a9677d5083af7df5a15e1689b97fd7a98", null ],
