@@ -469,8 +469,8 @@ namespace MC
         buffer_position("buffer_particle_position", 0),
         buffer_index("buffer_index"),
         allocation_factor(default_allocation_factor), n_allocated_elements(0),
-        n_used_elements(n_particle), minimum_dead_particle_removal(0),
-        inactive_counter(0)
+        n_used_elements(n_particle), inactive_counter(0),
+        minimum_dead_particle_removal(0)
   {
 
     if (n_particle != 0)

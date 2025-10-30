@@ -1,5 +1,6 @@
 #include <host_export_handler.hpp>
 #include <impl_post_process.hpp>
+#include <iostream>
 
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
