@@ -376,7 +376,7 @@ namespace MC
       return;
     }
     _resize(original_size + n_add_item);
-    Kokkos::parallel_for("InsertMerge",
+    Kokkos::parallel_for("insert_merge",
                          TeamPolicy(n_add_item, Kokkos::AUTO, Model::n_var),
                          InsertFunctor<Model>(original_size,
                                               model,

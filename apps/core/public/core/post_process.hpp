@@ -116,7 +116,7 @@ namespace PostProcessing
               Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_index);
         }
 
-        Kokkos::parallel_for("kernel_get_properties",
+        Kokkos::parallel_for("get_properties",
                              Kokkos::RangePolicy<ExecutionSpace>(0, n_p),
                              *this);
 

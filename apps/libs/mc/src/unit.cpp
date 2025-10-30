@@ -1,6 +1,6 @@
-#include "common/common.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
+#include <common/common.hpp>
 #include <cstdint>
 #include <cstring>
 #include <mc/prng/prng.hpp>
