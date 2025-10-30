@@ -91,40 +91,7 @@ namespace
     }
   };
 
-  template <typename Model, typename = void> struct InitFunctor;
-
-  template <typename Model>
-    requires(NonConfigurableModel<Model>)
-  struct InitFunctor<Model>
-  {
-
-    explicit InitFunctor(MC::ParticlesContainer<Model> _list,
-                         uint64_t min,
-                         uint64_t max,
-                         MC::KPRNG kprng)
-        : particles(std::move(_list)), rng(std::move(kprng)), min_c(min),
-          max_c(max)
-    {
-    }
-
-    KOKKOS_INLINE_FUNCTION
-    void operator()(const int i, double& local_mass) const
-    {
-      particles.position(i) = rng.uniform_u(min_c, max_c);
-      Model::init(rng.random_pool, i, particles.model);
-      const double mass_i = Model::mass(i, particles.model);
-      local_mass += mass_i;
-    }
-
-    MC::ParticlesContainer<Model> particles;
-    MC::KPRNG rng;
-    uint64_t min_c;
-    uint64_t max_c;
-  };
-
-  template <typename Model>
-    requires(ConfigurableModel<Model>)
-  struct InitFunctor<Model>
+  template <ModelType Model> struct InitFunctor
   {
     explicit InitFunctor(MC::ParticlesContainer<Model> _list,
                          uint64_t min,
@@ -132,15 +99,26 @@ namespace
                          MC::KPRNG kprng,
                          Model::Config config)
         : particles(std::move(_list)), rng(std::move(kprng)), min_c(min),
-          max_c(max), config(config)
+          max_c(max), config(std::move(config))
     {
     }
 
     KOKKOS_INLINE_FUNCTION
     void operator()(const int i, double& local_mass) const
+      requires(ConfigurableModel<Model>)
     {
       particles.position(i) = rng.uniform_u(min_c, max_c);
       Model::init(rng.random_pool, i, particles.model, config);
+      const double mass_i = Model::mass(i, particles.model);
+      local_mass += mass_i;
+    }
+
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const int i, double& local_mass) const
+      requires(NonConfigurableModel<Model>)
+    {
+      particles.position(i) = rng.uniform_u(min_c, max_c);
+      Model::init(rng.random_pool, i, particles.model);
       const double mass_i = Model::mass(i, particles.model);
       local_mass += mass_i;
     }
@@ -162,10 +140,11 @@ namespace
   {
     if constexpr (NonConfigurableModel<Model>)
     {
+      NonConfigType dummy = std::nullopt;
       Kokkos::parallel_reduce(
           "mc_init_first",
           Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particles),
-          InitFunctor<Model>(particles, min, max, rng),
+          InitFunctor<Model>(particles, min, max, rng, dummy),
           total_mass);
       Kokkos::fence();
     }
