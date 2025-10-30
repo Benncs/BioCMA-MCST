@@ -2,6 +2,7 @@
 #define __CORE_POST_PROCESS_PUBLIC_HPP__
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
+#include <Kokkos_ScatterView.hpp>
 #include <common/common.hpp>
 #include <mc/alias.hpp>
 #include <mc/particles_container.hpp>
@@ -24,99 +25,120 @@ namespace PostProcessing
     std::vector<std::string> vnames;
   };
 
-  // TODO remove duplicated code in inner and inner_partial
-  template <HasExportPropertiesFull Model, typename ExecutionSpace>
-  void inner(std::size_t n_p,
-             const MC::ParticlePositions& position,
-             const typename Model::SelfParticle& model,
-             const MC::ParticleAges& ages,
-             ParticlePropertyViewType<ComputeSpace>& particle_values,
-             ParticlePropertyViewType<ComputeSpace>& spatial_values,
-             ParticlePropertyViewType<ComputeSpace>& ages_value,
-             const MC::ParticleStatus& status)
+  namespace
   {
-    Kokkos::Experimental::
-        ScatterView<double**, Kokkos::LayoutRight, ComputeSpace>
-            scatter_spatial_values(spatial_values);
-
-    Kokkos::parallel_for(
-        "kernel_get_properties",
-        Kokkos::RangePolicy<ExecutionSpace>(0, n_p),
-        KOKKOS_LAMBDA(const int i_particle) {
-          if (status(i_particle) != MC::Status::Idle)
-          {
-            return;
-          }
-          auto access = scatter_spatial_values.access();
-
-          for (std::size_t i = 0; i < Model::n_var; ++i)
-          {
-            access(i, position(i_particle)) += model(i_particle, i);
-            particle_values(i, i_particle) = model(i_particle, i);
-          }
-          auto mass = Model::mass(i_particle, model);
-          access(Model::n_var, position(i_particle)) += mass;
-          particle_values(Model::n_var, i_particle) = mass;
-          ages_value(0, i_particle) = ages(i_particle, 0);
-          ages_value(1, i_particle) = ages(i_particle, 1);
-        });
-    Kokkos::fence();
-    Kokkos::Experimental::contribute(spatial_values, scatter_spatial_values);
-  }
-
-  template <HasExportPropertiesPartial Model, typename ExecutionSpace>
-  void inner_partial(const std::size_t n_p,
-                     const MC::ParticlePositions& position,
-                     const typename Model::SelfParticle& model,
-                     const MC::ParticleAges& ages,
-                     ParticlePropertyViewType<ComputeSpace>& particle_values,
-                     ParticlePropertyViewType<ComputeSpace>& spatial_values,
-                     ParticlePropertyViewType<ComputeSpace>& ages_value,
-                     const MC::ParticleStatus& status)
-  {
-    Kokkos::Experimental::
-        ScatterView<double**, Kokkos::LayoutRight, ComputeSpace>
-            scatter_spatial_values(spatial_values);
-    static const auto indices = Model::get_number();
-
-    static Kokkos::View<size_t*, HostSpace> host_index("host_index",
-                                                       indices.size());
-    for (std::size_t i = 0; i < indices.size(); ++i)
+    template <typename Model, typename ExecutionSpace>
+    struct GetPropertiesFunctor
     {
-      host_index(i) = indices[i];
-    }
+      using ComputeSpace = typename ExecutionSpace::memory_space;
 
-    const Kokkos::View<const size_t*, ComputeSpace> kindices =
-        Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_index);
-    Kokkos::parallel_for(
-        "kernel_get_properties",
-        Kokkos::RangePolicy<ExecutionSpace>(0, n_p),
-        KOKKOS_LAMBDA(const int i_particle) {
-          if (status(i_particle) != MC::Status::Idle)
+      GetPropertiesFunctor(
+          std::size_t n_p,
+          MC::ParticlePositions position,
+          typename Model::SelfParticle model,
+          MC::ParticleAges ages,
+          ParticlePropertyViewType<ComputeSpace> particle_values,
+          ParticlePropertyViewType<ComputeSpace> spatial_values,
+          ParticlePropertyViewType<ComputeSpace> ages_value,
+          MC::ParticleStatus status)
+          : n_p(n_p), position(std::move(position)), model(std::move(model)),
+            ages(std::move(ages)), particle_values(std::move(particle_values)),
+            spatial_values(std::move(spatial_values)),
+            ages_value(std::move(ages_value)), status(std::move(status))
+      {
+      }
+
+      KOKKOS_INLINE_FUNCTION
+      void operator()(const int i_particle) const
+        requires(HasExportPropertiesFull<Model>)
+      {
+        if (status(i_particle) != MC::Status::Idle)
+        {
+          return;
+        }
+
+        auto access = scatter_spatial_values.access();
+        for (size_t k_var = 0; k_var < Model::n_var; ++k_var)
+        {
+          const auto current = model(i_particle, k_var);
+          access(k_var, position(i_particle)) += current;
+          particle_values(k_var, i_particle) = current;
+        }
+
+        const auto mass = Model::mass(i_particle, model);
+        access(Model::n_var, position(i_particle)) += mass;
+        particle_values(Model::n_var, i_particle) = mass;
+        ages_value(0, i_particle) = ages(i_particle, 0);
+        ages_value(1, i_particle) = ages(i_particle, 1);
+      }
+
+      KOKKOS_INLINE_FUNCTION
+      void operator()(const int i_particle) const
+        requires(HasExportPropertiesPartial<Model>)
+      {
+        if (status(i_particle) != MC::Status::Idle)
+        {
+          return;
+        }
+
+        auto access = scatter_spatial_values.access();
+        for (size_t k_var = 0; k_var < kindices.extent(0); ++k_var)
+        {
+          const auto current = model(i_particle, kindices(k_var));
+          access(k_var, position(i_particle)) += current;
+          particle_values(k_var, i_particle) = current;
+        }
+
+        const auto mass = Model::mass(i_particle, model);
+        access(kindices.extent(0), position(i_particle)) += mass;
+        particle_values(kindices.extent(0), i_particle) = mass;
+        ages_value(0, i_particle) = ages(i_particle, 0);
+        ages_value(1, i_particle) = ages(i_particle, 1);
+      }
+
+      void run()
+      {
+
+        scatter_spatial_values =
+            Kokkos::Experimental::create_scatter_view(spatial_values);
+
+        // Pour PartialExport, on initialise kindices
+        if constexpr (HasExportPropertiesPartial<Model>)
+        {
+          static const auto indices = Model::get_number();
+          Kokkos::View<size_t*, HostSpace> host_index("host_index",
+                                                      indices.size());
+          for (size_t i = 0; i < indices.size(); ++i)
           {
-            return;
+            host_index(i) = indices[i];
           }
+          kindices =
+              Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_index);
+        }
 
-          auto access = scatter_spatial_values.access();
+        Kokkos::parallel_for("kernel_get_properties",
+                             Kokkos::RangePolicy<ExecutionSpace>(0, n_p),
+                             *this);
 
-          for (size_t k_var = 0; k_var < kindices.extent(0); ++k_var)
-          {
-            const auto index_export = kindices(k_var);
-            const auto current = model(i_particle, index_export);
+        Kokkos::fence();
+        Kokkos::Experimental::contribute(spatial_values,
+                                         scatter_spatial_values);
+      }
 
-            access(k_var, position(i_particle)) += current;
-            particle_values(k_var, i_particle) = current;
-          }
-
-          const auto mass = Model::mass(i_particle, model);
-          access(kindices.extent(0), position(i_particle)) += mass;
-          particle_values(kindices.extent(0), i_particle) = mass;
-          ages_value(0, i_particle) = ages(i_particle, 0);
-          ages_value(1, i_particle) = ages(i_particle, 1);
-        });
-    Kokkos::fence();
-    Kokkos::Experimental::contribute(spatial_values, scatter_spatial_values);
-  }
+      std::size_t n_p;
+      MC::ParticlePositions position;
+      typename Model::SelfParticle model;
+      MC::ParticleAges ages;
+      ParticlePropertyViewType<ComputeSpace> particle_values;
+      ParticlePropertyViewType<ComputeSpace> spatial_values;
+      ParticlePropertyViewType<ComputeSpace> ages_value;
+      MC::ParticleStatus status;
+      Kokkos::View<const size_t*, ComputeSpace> kindices;
+      Kokkos::Experimental::
+          ScatterView<double**, Kokkos::LayoutRight, ComputeSpace>
+              scatter_spatial_values;
+    };
+  } // namespace
 
   template <ModelType M>
   std::optional<PostProcessing::BonceBuffer>
@@ -151,29 +173,15 @@ namespace PostProcessing
       // turned of, with_age controlls export but not postprocessing
       ParticlePropertyViewType<ComputeSpace> ages_values("ages_values", 2, n_p);
 
-      if constexpr (HasExportPropertiesPartial<M>)
-      {
-        inner_partial<M, Kokkos::DefaultExecutionSpace>(n_p,
-                                                        container.position,
-                                                        container.model,
-                                                        container.ages,
-                                                        particle_values,
-                                                        spatial_values,
-                                                        ages_values,
-                                                        container.status);
-      }
-      else
-      {
-
-        inner<M, Kokkos::DefaultExecutionSpace>(n_p,
-                                                container.position,
-                                                container.model,
-                                                container.ages,
-                                                particle_values,
-                                                spatial_values,
-                                                ages_values,
-                                                container.status);
-      }
+      GetPropertiesFunctor<M, Kokkos::DefaultExecutionSpace>(n_p,
+                                                             container.position,
+                                                             container.model,
+                                                             container.ages,
+                                                             particle_values,
+                                                             spatial_values,
+                                                             ages_values,
+                                                             container.status)
+          .run();
 
       properties.particle_values = Kokkos::create_mirror_view_and_copy(
           Kokkos::HostSpace(), particle_values);
