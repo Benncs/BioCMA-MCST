@@ -87,9 +87,12 @@ var annotated_dup =
         [ "CycleReducer", "classSimulation_1_1KernelInline_1_1CycleReducer.html", "classSimulation_1_1KernelInline_1_1CycleReducer" ],
         [ "CycleReduceType", "structSimulation_1_1KernelInline_1_1CycleReduceType.html", "structSimulation_1_1KernelInline_1_1CycleReduceType" ],
         [ "Functors", "structSimulation_1_1KernelInline_1_1Functors.html", "structSimulation_1_1KernelInline_1_1Functors" ],
+        [ "LeavingFlow", "structSimulation_1_1KernelInline_1_1LeavingFlow.html", "structSimulation_1_1KernelInline_1_1LeavingFlow" ],
         [ "MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", "structSimulation_1_1KernelInline_1_1MoveFunctor" ],
         [ "MoveInfo", "structSimulation_1_1KernelInline_1_1MoveInfo.html", "structSimulation_1_1KernelInline_1_1MoveInfo" ],
         [ "TagFirstPass", "structSimulation_1_1KernelInline_1_1TagFirstPass.html", null ],
+        [ "TagLeave", "structSimulation_1_1KernelInline_1_1TagLeave.html", null ],
+        [ "TagMove", "structSimulation_1_1KernelInline_1_1TagMove.html", null ],
         [ "TagSecondPass", "structSimulation_1_1KernelInline_1_1TagSecondPass.html", null ]
       ] ],
       [ "MassTransfer", "namespaceSimulation_1_1MassTransfer.html", [
@@ -132,6 +135,7 @@ var annotated_dup =
     [ "DynamicDefaultModel", "structDynamicDefaultModel.html", "structDynamicDefaultModel" ],
     [ "EigenKokkosBase", "structEigenKokkosBase.html", "structEigenKokkosBase" ],
     [ "ExecInfo", "structExecInfo.html", "structExecInfo" ],
+    [ "ExportHandler", "classExportHandler.html", "classExportHandler" ],
     [ "foo", "structfoo.html", "structfoo" ],
     [ "has_uniform_weight", "structhas__uniform__weight.html", null ],
     [ "has_uniform_weight< T, std::void_t< typename T::uniform_weight > >", "structhas__uniform__weight_3_01T_00_01std_1_1void__t_3_01typename_01T_1_1uniform__weight_01_4_01_4.html", null ],

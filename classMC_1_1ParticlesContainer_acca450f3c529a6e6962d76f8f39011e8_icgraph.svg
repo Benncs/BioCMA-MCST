@@ -49,7 +49,7 @@
 <script type="application/ecmascript">
 var viewWidth = 625;
 var viewHeight = 84;
-var sectionId = 'dynsection-7';
+var sectionId = 'dynsection-8';
 </script>
 <script type="application/ecmascript" xlink:href="svg.min.js"/>
 <svg id="graph" class="graph">
@@ -87,7 +87,7 @@ var sectionId = 'dynsection-7';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="classMC_1_1ParticlesContainer.html#a3caab0990a6f03d2c06d3a67858f8c30" target="_top" xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="classMC_1_1ParticlesContainer.html#ae769d9ef9c93fac19c9ba08c6b03ec1a" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="462,-29 335,-29 335,0 462,0 462,-29"/>
 <text xml:space="preserve" text-anchor="start" x="343" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
 <text xml:space="preserve" text-anchor="middle" x="398.5" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::update_and_clean_dead</text>
@@ -125,7 +125,7 @@ var sectionId = 'dynsection-7';
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="classSimulation_1_1SimulationUnit.html#ac3c769522d65eee17433bb67e4f19dc3" target="_top" xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="classSimulation_1_1SimulationUnit.html#a596360d0966f7694e5ebf0652b61b0e2" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="299,-29 167.5,-29 167.5,0 299,0 299,-29"/>
 <text xml:space="preserve" text-anchor="start" x="175.5" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
 <text xml:space="preserve" text-anchor="middle" x="233.25" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::post_cycle</text>

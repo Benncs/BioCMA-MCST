@@ -1,0 +1,5 @@
+<map id="ExportHandler::prepareEventSpan" name="ExportHandler::prepareEventSpan">
+<area shape="rect" id="Node000001" title="Prepares the event span if the event counter is enabled." alt="" coords="222,5,441,30"/>
+<area shape="rect" id="Node000002" href="$classExportHandler.html#a51e7bc3719685192c28df6b57b7a9f37" title="Handles periodic export of simulation data." alt="" coords="5,5,174,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,20,174,20,174,15,206,15"/>
+</map>

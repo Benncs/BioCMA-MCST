@@ -1,7 +1,5 @@
 <map id="Simulation::SimulationUnit::getDimensions" name="Simulation::SimulationUnit::getDimensions">
-<area shape="rect" id="Node000001" title=" " alt="" coords="229,37,404,76"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a6f98af5385cda0210db8895f7725ea8f" title=" " alt="" coords="5,5,181,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,45,181,40,181,35,214,39"/>
-<area shape="rect" id="Node000003" href="$classCore_1_1MainExporter.html#ac2c33b07c7eb59392ad524a9b48b0312" title="Writes final simulation data to the output." alt="" coords="25,68,161,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,73,162,81,161,75,213,68"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="189,5,364,44"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1MainExporter.html#ac2c33b07c7eb59392ad524a9b48b0312" title="Writes final simulation data to the output." alt="" coords="5,5,141,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,27,141,27,141,22,173,22"/>
 </map>

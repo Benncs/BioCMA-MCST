@@ -110,10 +110,10 @@ Typedefs</h2></td></tr>
 <tr class="memitem:aad69f7f73ef6a017ee86ca89451a6271" id="r_aad69f7f73ef6a017ee86ca89451a6271"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad69f7f73ef6a017ee86ca89451a6271">LocalConcentration</a></td></tr>
 <tr class="memitem:ad31fce592f5fd9b873839781863419d3" id="r_ad31fce592f5fd9b873839781863419d3"><td class="memTemplParams" colspan="2">template&lt;typename Space&gt; </td></tr>
 <tr class="memitem:ad31fce592f5fd9b873839781863419d3 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad31fce592f5fd9b873839781863419d3">NeighborsView</a></td></tr>
-<tr class="memitem:ab8c67c8127bdb4bc0a1a8ad1e3cfe067" id="r_ab8c67c8127bdb4bc0a1a8ad1e3cfe067"><td class="memTemplParams" colspan="2">template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> F&gt; </td></tr>
-<tr class="memitem:ab8c67c8127bdb4bc0a1a8ad1e3cfe067 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8c67c8127bdb4bc0a1a8ad1e3cfe067">ParticlesModel</a> = Kokkos::View&lt;F* [Nd]&gt;</td></tr>
-<tr class="memitem:ac6dce614edaf4c841140ad371ee80f24" id="r_ac6dce614edaf4c841140ad371ee80f24"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> F&gt; </td></tr>
-<tr class="memitem:ac6dce614edaf4c841140ad371ee80f24 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6dce614edaf4c841140ad371ee80f24">DynParticlesModel</a> = Kokkos::View&lt;F**&gt;</td></tr>
+<tr class="memitem:ae36f8da8fd9f9f88aa5cff4f307cdc68" id="r_ae36f8da8fd9f9f88aa5cff4f307cdc68"><td class="memTemplParams" colspan="2">template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> F&gt; </td></tr>
+<tr class="memitem:ae36f8da8fd9f9f88aa5cff4f307cdc68 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae36f8da8fd9f9f88aa5cff4f307cdc68">ParticlesModel</a> = Kokkos::View&lt;F* [Nd], Kokkos::LayoutRight&gt;</td></tr>
+<tr class="memitem:ae9182f33a07f97d9cc3851cf47529a04" id="r_ae9182f33a07f97d9cc3851cf47529a04"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> F&gt; </td></tr>
+<tr class="memitem:ae9182f33a07f97d9cc3851cf47529a04 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9182f33a07f97d9cc3851cf47529a04">DynParticlesModel</a> = Kokkos::View&lt;F**, Kokkos::LayoutRight&gt;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -145,8 +145,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a8c67a0954fafbfba6825f3077e3d0df8 template"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MonteCarloUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c67a0954fafbfba6825f3077e3d0df8">init</a> (const std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; &amp;_logger, uint64_t n_particles, std::span&lt; double &gt; volumes, const <a class="el" href="#ad31fce592f5fd9b873839781863419d3">NeighborsView</a>&lt; HostSpace &gt; &amp;neighbors, bool uniform_mc_init, double &amp;total_mass)</td></tr>
 <tr class="memdesc:a8c67a0954fafbfba6825f3077e3d0df8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to initialize a <a class="el" href="structMC_1_1MonteCarloUnit.html" title="General-purpose Monte Carlo unit to carry out simulations.">MonteCarloUnit</a>.  <br /></td></tr>
 <tr class="memitem:ac9b6a65d70e4c5007f4bc908509924a0" id="r_ac9b6a65d70e4c5007f4bc908509924a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9b6a65d70e4c5007f4bc908509924a0">post_init_weight</a> (std::unique_ptr&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MonteCarloUnit</a> &gt; &amp;unit, double x0, double total_mass)</td></tr>
-<tr class="memitem:a3f29b6dc7dd9c6f1f2da8461f189e233" id="r_a3f29b6dc7dd9c6f1f2da8461f189e233"><td class="memTemplParams" colspan="2">template&lt;typename FunctorType, typename Tag = void&gt; </td></tr>
-<tr class="memitem:a3f29b6dc7dd9c6f1f2da8461f189e233 template"><td class="memItemLeft" align="right" valign="top">Kokkos::TeamPolicy&lt; <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, Tag &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f29b6dc7dd9c6f1f2da8461f189e233">get_policy</a> (FunctorType &amp;f, std::size_t range, bool reduce=false)</td></tr>
+<tr class="memitem:a539dfb1d0f4da32f27aae2d443ff6355" id="r_a539dfb1d0f4da32f27aae2d443ff6355"><td class="memTemplParams" colspan="2">template&lt;typename FunctorType, typename Tag = void&gt; </td></tr>
+<tr class="memitem:a539dfb1d0f4da32f27aae2d443ff6355 template"><td class="memItemLeft" align="right" valign="top">Kokkos::TeamPolicy&lt; <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, Tag &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a539dfb1d0f4da32f27aae2d443ff6355">get_policy</a> (const FunctorType &amp;f, std::size_t range, bool reduce=false)</td></tr>
+<tr class="memitem:ad31b72294c4dab44321499cf193c9c0f" id="r_ad31b72294c4dab44321499cf193c9c0f"><td class="memTemplParams" colspan="2">template&lt;typename Tag = void&gt; </td></tr>
+<tr class="memitem:ad31b72294c4dab44321499cf193c9c0f template"><td class="memItemLeft" align="right" valign="top">Kokkos::TeamPolicy&lt; <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, Tag &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad31b72294c4dab44321499cf193c9c0f">get_policy_team</a> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -189,8 +191,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="ac6dce614edaf4c841140ad371ee80f24" name="ac6dce614edaf4c841140ad371ee80f24"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6dce614edaf4c841140ad371ee80f24">&#9670;&#160;</a></span>DynParticlesModel</h2>
+<a id="ae9182f33a07f97d9cc3851cf47529a04" name="ae9182f33a07f97d9cc3851cf47529a04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9182f33a07f97d9cc3851cf47529a04">&#9670;&#160;</a></span>DynParticlesModel</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,7 +200,7 @@ Variables</h2></td></tr>
 template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> F&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#ac6dce614edaf4c841140ad371ee80f24">MC::DynParticlesModel</a> = Kokkos::View&lt;F**&gt;</td>
+          <td class="memname">using <a class="el" href="#ae9182f33a07f97d9cc3851cf47529a04">MC::DynParticlesModel</a> = Kokkos::View&lt;F**, Kokkos::LayoutRight&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -311,8 +313,8 @@ template&lt;typename MemorySpace&gt; </div>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="ab8c67c8127bdb4bc0a1a8ad1e3cfe067" name="ab8c67c8127bdb4bc0a1a8ad1e3cfe067"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab8c67c8127bdb4bc0a1a8ad1e3cfe067">&#9670;&#160;</a></span>ParticlesModel</h2>
+<a id="ae36f8da8fd9f9f88aa5cff4f307cdc68" name="ae36f8da8fd9f9f88aa5cff4f307cdc68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae36f8da8fd9f9f88aa5cff4f307cdc68">&#9670;&#160;</a></span>ParticlesModel</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -320,7 +322,7 @@ template&lt;typename MemorySpace&gt; </div>
 template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> F&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#ab8c67c8127bdb4bc0a1a8ad1e3cfe067">MC::ParticlesModel</a> = Kokkos::View&lt;F* [Nd]&gt;</td>
+          <td class="memname">using <a class="el" href="#ae36f8da8fd9f9f88aa5cff4f307cdc68">MC::ParticlesModel</a> = Kokkos::View&lt;F* [Nd], Kokkos::LayoutRight&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -493,8 +495,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a3f29b6dc7dd9c6f1f2da8461f189e233" name="a3f29b6dc7dd9c6f1f2da8461f189e233"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f29b6dc7dd9c6f1f2da8461f189e233">&#9670;&#160;</a></span>get_policy()</h2>
+<a id="a539dfb1d0f4da32f27aae2d443ff6355" name="a539dfb1d0f4da32f27aae2d443ff6355"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a539dfb1d0f4da32f27aae2d443ff6355">&#9670;&#160;</a></span>get_policy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -504,7 +506,7 @@ template&lt;typename FunctorType, typename Tag = void&gt; </div>
         <tr>
           <td class="memname">Kokkos::TeamPolicy&lt; <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, Tag &gt; MC::get_policy </td>
           <td>(</td>
-          <td class="paramtype">FunctorType &amp;</td>          <td class="paramname"><span class="paramname"><em>f</em></span>, </td>
+          <td class="paramtype">const FunctorType &amp;</td>          <td class="paramname"><span class="paramname"><em>f</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -521,8 +523,27 @@ template&lt;typename FunctorType, typename Tag = void&gt; </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceMC_a3f29b6dc7dd9c6f1f2da8461f189e233_icgraph.svg" width="344" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceMC_a539dfb1d0f4da32f27aae2d443ff6355_icgraph.svg" width="338" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
+
+</div>
+</div>
+<a id="ad31b72294c4dab44321499cf193c9c0f" name="ad31b72294c4dab44321499cf193c9c0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad31b72294c4dab44321499cf193c9c0f">&#9670;&#160;</a></span>get_policy_team()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Tag = void&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Kokkos::TeamPolicy&lt; <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, Tag &gt; MC::get_policy_team </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

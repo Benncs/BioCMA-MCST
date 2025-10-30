@@ -2,10 +2,11 @@ var structSimulation_1_1KernelInline_1_1MoveFunctor =
 [
     [ "MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#a1bb58ba39b2cdd7857c1ce7fdcd093f2", null ],
     [ "MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#a1fd28655ee85dd46360f04e4b07f8c53", null ],
-    [ "handle_exit", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#ad177be661e6be25fa2851249e791447e", null ],
+    [ "handle_exit", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#abfafc032139a43b466331db3cea91e83", null ],
     [ "handle_move", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#a2f5c4626adae4fe3d1c114dcb5f2c08b", null ],
     [ "need_launch", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#a6a622c9d14a761c2a7b35ce48ff36bb8", null ],
-    [ "operator()", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#a71e478375ddd056fe18053814896363a", null ],
+    [ "operator()", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#a5aaf80d98e2418095ed0890e1568f38b", null ],
+    [ "operator()", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#afa5da75e40c38337bf911c63d25c261d", null ],
     [ "update", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#acb65c9e548848293173dd9018abdb90b", null ],
     [ "ages", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#adc5d4a13954d34732902ec33877c25b4", null ],
     [ "d_t", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#a7ee6b1f84138603f92939f5fb97e1708", null ],

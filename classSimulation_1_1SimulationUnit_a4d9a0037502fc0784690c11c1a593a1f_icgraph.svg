@@ -32,10 +32,10 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="classSimulation_1_1SimulationUnit.html#a1e1145d8e7deae618cc0452e690c6f7a" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="classSimulation_1_1SimulationUnit.html#a6ebf53048a2d93f04504352c79660c79" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="299,-146 167.5,-146 167.5,-117 299,-117 299,-146"/>
 <text xml:space="preserve" text-anchor="start" x="175.5" y="-132.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="233.25" y="-122" font-family="Helvetica,sans-Serif" font-size="10.00">::init_functor</text>
+<text xml:space="preserve" text-anchor="middle" x="233.25" y="-122" font-family="Helvetica,sans-Serif" font-size="10.00">::setGasFlow</text>
 </a>
 </g>
 </g>

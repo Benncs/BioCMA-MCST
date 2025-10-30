@@ -72,20 +72,20 @@ $(function(){initNavTree('structSimulation_1_1KernelInline_1_1MoveInfo.html','',
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="move__kernel_8hpp_source.html">move_kernel.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="move__info_8hpp_source.html">move_info.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a20c21d73cba339dded69aabb0fc327c1" id="r_a20c21d73cba339dded69aabb0fc327c1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20c21d73cba339dded69aabb0fc327c1">MoveInfo</a> ()</td></tr>
 <tr class="memitem:a84a79b9648c8b861c414eb40d7f76118" id="r_a84a79b9648c8b861c414eb40d7f76118"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a84a79b9648c8b861c414eb40d7f76118">MoveInfo</a> (const std::size_t n_compartments, const std::size_t n_flows)</td></tr>
+<tr class="memitem:a0f910115522b814d7b07a3bf92867348" id="r_a0f910115522b814d7b07a3bf92867348"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f910115522b814d7b07a3bf92867348">set_flow</a> (const std::size_t i, const std::size_t i_flow, const double flow)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ae3cfeb2039274af79377fcba12b1dba0" id="r_ae3cfeb2039274af79377fcba12b1dba0"><td class="memItemLeft" align="right" valign="top">ConstNeighborsView&lt; ExecSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3cfeb2039274af79377fcba12b1dba0">neighbors</a></td></tr>
 <tr class="memitem:a69c9b0e6d85c691a2ec455738799f9b7" id="r_a69c9b0e6d85c691a2ec455738799f9b7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#a665208bc2eeca86defafa79514116981">DiagonalView</a>&lt; ExecSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69c9b0e6d85c691a2ec455738799f9b7">diag_transition</a></td></tr>
 <tr class="memitem:aaaaf660b0caa979c505df726309171a1" id="r_aaaaf660b0caa979c505df726309171a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#a8d1e1d8236f8e2ff9c680bdbb2685c98">CumulativeProbabilityView</a>&lt; ExecSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaaaf660b0caa979c505df726309171a1">cumulative_probability</a></td></tr>
-<tr class="memitem:a8110a7d44e9dff1b244b11933c199ba0" id="r_a8110a7d44e9dff1b244b11933c199ba0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#ace226eabd36088b491c3ba8a93b7d7b3">LeavingFlowType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8110a7d44e9dff1b244b11933c199ba0">leaving_flow</a></td></tr>
-<tr class="memitem:a8def901acb4094e9f966a5653af403a0" id="r_a8def901acb4094e9f966a5653af403a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#a9ae21a541b288006ad601f3ec8248a1c">LeavingFlowIndexType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8def901acb4094e9f966a5653af403a0">index_leaving_flow</a></td></tr>
+<tr class="memitem:a6900259121d93cc99cd0278f45a9a020" id="r_a6900259121d93cc99cd0278f45a9a020"><td class="memItemLeft" align="right" valign="top">Kokkos::View&lt; <a class="el" href="structSimulation_1_1KernelInline_1_1LeavingFlow.html">LeavingFlow</a> *, Kokkos::SharedHostPinnedSpace, Kokkos::MemoryTraits&lt; Kokkos::MemoryTraitsFlags::Aligned|Kokkos::MemoryTraitsFlags::Restrict &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6900259121d93cc99cd0278f45a9a020">leaving_flow</a></td></tr>
 <tr class="memitem:aec1a1c0fe86b923e6b0d0708280d8828" id="r_aec1a1c0fe86b923e6b0d0708280d8828"><td class="memItemLeft" align="right" valign="top">Kokkos::View&lt; double *, ExecSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec1a1c0fe86b923e6b0d0708280d8828">liquid_volume</a></td></tr>
 </table>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -113,6 +113,16 @@ template&lt;typename ExecSpace&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveInfo_a20c21d73cba339dded69aabb0fc327c1_cgraph.svg" width="168" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveInfo_a20c21d73cba339dded69aabb0fc327c1_icgraph.svg" width="168" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -136,6 +146,43 @@ template&lt;typename ExecSpace&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_flows</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a0f910115522b814d7b07a3bf92867348" name="a0f910115522b814d7b07a3bf92867348"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f910115522b814d7b07a3bf92867348">&#9670;&#160;</a></span>set_flow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ExecSpace&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structSimulation_1_1KernelInline_1_1MoveInfo.html">Simulation::KernelInline::MoveInfo</a>&lt; ExecSpace &gt;::set_flow </td>
+          <td>(</td>
+          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>i</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>i_flow</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double</td>          <td class="paramname"><span class="paramname"><em>flow</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -180,8 +227,8 @@ template&lt;typename ExecSpace&gt; </div>
 
 </div>
 </div>
-<a id="a8def901acb4094e9f966a5653af403a0" name="a8def901acb4094e9f966a5653af403a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8def901acb4094e9f966a5653af403a0">&#9670;&#160;</a></span>index_leaving_flow</h2>
+<a id="a6900259121d93cc99cd0278f45a9a020" name="a6900259121d93cc99cd0278f45a9a020"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6900259121d93cc99cd0278f45a9a020">&#9670;&#160;</a></span>leaving_flow</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -189,23 +236,7 @@ template&lt;typename ExecSpace&gt; </div>
 template&lt;typename ExecSpace&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceSimulation.html#a9ae21a541b288006ad601f3ec8248a1c">LeavingFlowIndexType</a> <a class="el" href="structSimulation_1_1KernelInline_1_1MoveInfo.html">Simulation::KernelInline::MoveInfo</a>&lt; ExecSpace &gt;::index_leaving_flow</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8110a7d44e9dff1b244b11933c199ba0" name="a8110a7d44e9dff1b244b11933c199ba0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8110a7d44e9dff1b244b11933c199ba0">&#9670;&#160;</a></span>leaving_flow</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename ExecSpace&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespaceSimulation.html#ace226eabd36088b491c3ba8a93b7d7b3">LeavingFlowType</a> <a class="el" href="structSimulation_1_1KernelInline_1_1MoveInfo.html">Simulation::KernelInline::MoveInfo</a>&lt; ExecSpace &gt;::leaving_flow</td>
+          <td class="memname">Kokkos::View&lt;<a class="el" href="structSimulation_1_1KernelInline_1_1LeavingFlow.html">LeavingFlow</a>*, Kokkos::SharedHostPinnedSpace, Kokkos::MemoryTraits&lt;Kokkos::MemoryTraitsFlags::Aligned | Kokkos::MemoryTraitsFlags::Restrict&gt; &gt; <a class="el" href="structSimulation_1_1KernelInline_1_1MoveInfo.html">Simulation::KernelInline::MoveInfo</a>&lt; ExecSpace &gt;::leaving_flow</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -245,7 +276,7 @@ template&lt;typename ExecSpace&gt; </div>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>apps/libs/simulation/public/simulation/kernels/<a class="el" href="move__kernel_8hpp_source.html">move_kernel.hpp</a></li>
+<li>apps/libs/simulation/public/simulation/<a class="el" href="move__info_8hpp_source.html">move_info.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

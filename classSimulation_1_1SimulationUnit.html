@@ -105,14 +105,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a401844c1e2eee70c2b043b949d86895d" id="r_a401844c1e2eee70c2b043b949d86895d"><td class="memItemLeft" align="right" valign="top">std::span&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a401844c1e2eee70c2b043b949d86895d">getContributionData_mut</a> ()</td></tr>
 <tr class="memitem:a7b49fd171d4de8aa3949738da6c3810f" id="r_a7b49fd171d4de8aa3949738da6c3810f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b49fd171d4de8aa3949738da6c3810f">cycleProcess</a> (auto &amp;&amp;container, double d_t, auto &amp;_functors)</td></tr>
 <tr class="memitem:af4d179bd1bf0d8da69d83f63fdd72412" id="r_af4d179bd1bf0d8da69d83f63fdd72412"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4d179bd1bf0d8da69d83f63fdd72412">step</a> (double d_t) const</td></tr>
-<tr class="memitem:a6f98af5385cda0210db8895f7725ea8f" id="r_a6f98af5385cda0210db8895f7725ea8f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f98af5385cda0210db8895f7725ea8f">reduceContribs</a> (std::span&lt; const double &gt; data, size_t n_rank) const</td></tr>
 <tr class="memitem:aeb968caf58812bcab01534e72a63d552" id="r_aeb968caf58812bcab01534e72a63d552"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb968caf58812bcab01534e72a63d552">clearContribution</a> () const noexcept</td></tr>
-<tr class="memitem:a1e1145d8e7deae618cc0452e690c6f7a" id="r_a1e1145d8e7deae618cc0452e690c6f7a"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e1145d8e7deae618cc0452e690c6f7a">init_functor</a> (double d_t, auto &amp;&amp;container)</td></tr>
 <tr class="memitem:a6fecb0563822fae0ef26d9f6209d0779" id="r_a6fecb0563822fae0ef26d9f6209d0779"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6fecb0563822fae0ef26d9f6209d0779">update_feed</a> (double t, double d_t, bool update_scalar=true) noexcept</td></tr>
 <tr class="memitem:ad68b5b710ed62a511e10dd6dd1a920f7" id="r_ad68b5b710ed62a511e10dd6dd1a920f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad68b5b710ed62a511e10dd6dd1a920f7">update</a> (<a class="el" href="structCmaUtils_1_1IterationState.html">CmaUtils::IterationState</a> &amp;&amp;new_state)</td></tr>
-<tr class="memitem:a2a1623edb613aafcad4138001ae3ce97" id="r_a2a1623edb613aafcad4138001ae3ce97"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a1623edb613aafcad4138001ae3ce97">clear_mc</a> ()</td></tr>
 <tr class="memitem:aa12b65d19fa7e3eb74152b0252591a4d" id="r_aa12b65d19fa7e3eb74152b0252591a4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa12b65d19fa7e3eb74152b0252591a4d">reset</a> ()</td></tr>
-<tr class="memitem:a4d9a0037502fc0784690c11c1a593a1f" id="r_a4d9a0037502fc0784690c11c1a593a1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d9a0037502fc0784690c11c1a593a1f">post_init_compartments</a> ()</td></tr>
 <tr class="memitem:aa5b0aeaaa6821ce494fe23bd33ae316a" id="r_aa5b0aeaaa6821ce494fe23bd33ae316a"><td class="memTemplParams" colspan="2">template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
 <tr class="memitem:aa5b0aeaaa6821ce494fe23bd33ae316a template"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSimulation_1_1KernelInline_1_1Functors.html">KernelInline::Functors</a>&lt; Space, Model &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5b0aeaaa6821ce494fe23bd33ae316a">init_functors</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt; container)</td></tr>
 </table><table class="memberdecls">
@@ -125,6 +121,7 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:aeb4997de646b6897f7879e1ad0a0b036" id="r_aeb4997de646b6897f7879e1ad0a0b036"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb4997de646b6897f7879e1ad0a0b036">setVolumes</a> () const</td></tr>
 <tr class="memitem:a57ed01bdb3f08608bc945c745f33f3ab" id="r_a57ed01bdb3f08608bc945c745f33f3ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57ed01bdb3f08608bc945c745f33f3ab">setLiquidFlow</a> (<a class="el" href="classCmaUtils_1_1PreCalculatedHydroState.html">CmaUtils::PreCalculatedHydroState</a> *_flows_l)</td></tr>
 <tr class="memitem:a6ebf53048a2d93f04504352c79660c79" id="r_a6ebf53048a2d93f04504352c79660c79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ebf53048a2d93f04504352c79660c79">setGasFlow</a> (<a class="el" href="classCmaUtils_1_1PreCalculatedHydroState.html">CmaUtils::PreCalculatedHydroState</a> *_flows_g)</td></tr>
+<tr class="memitem:a4d9a0037502fc0784690c11c1a593a1f" id="r_a4d9a0037502fc0784690c11c1a593a1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d9a0037502fc0784690c11c1a593a1f">post_init_compartments</a> ()</td></tr>
 <tr class="memitem:a4295618336e99606be4e87b31feb848a" id="r_a4295618336e99606be4e87b31feb848a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#ac4db0c9d5b74f4c59a2ffcc7374cba1c">MC::KernelConcentrationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4295618336e99606be4e87b31feb848a">getkernel_concentration</a> () const</td></tr>
 <tr class="memitem:ae2077067788b0cb0535c62933724a1cf" id="r_ae2077067788b0cb0535c62933724a1cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2077067788b0cb0535c62933724a1cf">scatter_contribute</a> ()</td></tr>
 <tr class="memitem:ac396f393b4cf318b38364c5067254c80" id="r_ac396f393b4cf318b38364c5067254c80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac396f393b4cf318b38364c5067254c80">set_kernel_contribs_to_host</a> ()</td></tr>
@@ -132,10 +129,8 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ac3b83e6fb1638ace3cbfa35833c1affc" id="r_ac3b83e6fb1638ace3cbfa35833c1affc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#a8d1e1d8236f8e2ff9c680bdbb2685c98">CumulativeProbabilityView</a>&lt; ComputeSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3b83e6fb1638ace3cbfa35833c1affc">get_kernel_cumulative_proba</a> () const</td></tr>
 <tr class="memitem:a9ea90cab13d8259f026f57baad1c989f" id="r_a9ea90cab13d8259f026f57baad1c989f"><td class="memItemLeft" align="right" valign="top">kernelContribution&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ea90cab13d8259f026f57baad1c989f">get_kernel_contribution</a> () const</td></tr>
 <tr class="memitem:ad3ffc3108a93d7f403e8f2b81cc24e6d" id="r_ad3ffc3108a93d7f403e8f2b81cc24e6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3ffc3108a93d7f403e8f2b81cc24e6d">post_init_concentration</a> (const <a class="el" href="structSimulation_1_1ScalarInitializer.html">ScalarInitializer</a> &amp;scalar_init)</td></tr>
-<tr class="memitem:acdb3001a8070525afefe3298ed738691" id="r_acdb3001a8070525afefe3298ed738691"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdb3001a8070525afefe3298ed738691">post_init_concentration_functor</a> (const <a class="el" href="structSimulation_1_1ScalarInitializer.html">ScalarInitializer</a> &amp;scalar_init)</td></tr>
-<tr class="memitem:a449800ba9a7ee67fa9b6bae41869a9de" id="r_a449800ba9a7ee67fa9b6bae41869a9de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a449800ba9a7ee67fa9b6bae41869a9de">post_init_concentration_file</a> (const <a class="el" href="structSimulation_1_1ScalarInitializer.html">ScalarInitializer</a> &amp;scalar_init)</td></tr>
-<tr class="memitem:ac3c769522d65eee17433bb67e4f19dc3" id="r_ac3c769522d65eee17433bb67e4f19dc3"><td class="memTemplParams" colspan="2">template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
-<tr class="memitem:ac3c769522d65eee17433bb67e4f19dc3 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3c769522d65eee17433bb67e4f19dc3">post_cycle</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt; &amp;container, std::size_t n_particle, <a class="el" href="structSimulation_1_1KernelInline_1_1Functors.html">KernelInline::Functors</a>&lt; Space, Model &gt;::move_reducer_view_type out_total, <a class="el" href="structSimulation_1_1KernelInline_1_1Functors.html">KernelInline::Functors</a>&lt; Space, Model &gt;::cycle_reducer_view_type reducer_type)</td></tr>
+<tr class="memitem:a596360d0966f7694e5ebf0652b61b0e2" id="r_a596360d0966f7694e5ebf0652b61b0e2"><td class="memTemplParams" colspan="2">template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
+<tr class="memitem:a596360d0966f7694e5ebf0652b61b0e2 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a596360d0966f7694e5ebf0652b61b0e2">post_cycle</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt; &amp;container, <a class="el" href="namespaceSimulation_1_1KernelInline.html#a80366d1de1efc8a4e4c203cdceb3b6d1">KernelInline::move_reducer_view_type</a>&lt; Space &gt; out_total, <a class="el" href="namespaceSimulation_1_1KernelInline.html#a3e6c212b4e4693a01483c60331e9fac1">KernelInline::cycle_reducer_view_type</a>&lt; Space &gt; reducer_type)</td></tr>
 <tr class="memitem:ad984b5d95455d6db475d8b6e20077a0c" id="r_ad984b5d95455d6db475d8b6e20077a0c"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
 <tr class="memitem:ad984b5d95455d6db475d8b6e20077a0c template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad984b5d95455d6db475d8b6e20077a0c">pre_cycle</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt; &amp;container, double d_t, auto &amp;functors)</td></tr>
 </table><table class="memberdecls">
@@ -144,7 +139,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:afcb68150cb8bd8788d31a3d1c54271df" id="r_afcb68150cb8bd8788d31a3d1c54271df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#aa1b418b6e151ebc14d95164d7370e35b">MC::ContributionView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcb68150cb8bd8788d31a3d1c54271df">contribs_scatter</a></td></tr>
 <tr class="memitem:a505fbf5573509d5d1d5674c436fe61f1" id="r_a505fbf5573509d5d1d5674c436fe61f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#af34adaabc60487412f7551db1dc83226">MapProbes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a505fbf5573509d5d1d5674c436fe61f1">probes</a></td></tr>
 <tr class="memitem:ab0b6cfbf2d3284d2613b73ce81b60754" id="r_ab0b6cfbf2d3284d2613b73ce81b60754"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0b6cfbf2d3284d2613b73ce81b60754">internal_counter_dead</a></td></tr>
-<tr class="memitem:a5dd8939bb6bb08b09041e32141a65dc2" id="r_a5dd8939bb6bb08b09041e32141a65dc2"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5dd8939bb6bb08b09041e32141a65dc2">minimum_dead_particle_removal</a></td></tr>
 <tr class="memitem:a2a7c5c496164e443222bc54de1edab70" id="r_a2a7c5c496164e443222bc54de1edab70"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a7c5c496164e443222bc54de1edab70">feed</a></td></tr>
 <tr class="memitem:aab3ff3f2caf2c3c94ebbe25786bea678" id="r_aab3ff3f2caf2c3c94ebbe25786bea678"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structCmaUtils_1_1IterationState.html">CmaUtils::IterationState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab3ff3f2caf2c3c94ebbe25786bea678">state</a></td></tr>
 <tr class="memitem:a448192ce085c5d0d5e71875a888e99b8" id="r_a448192ce085c5d0d5e71875a888e99b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a448192ce085c5d0d5e71875a888e99b8">const_number_simulation</a> = true</td></tr>
@@ -184,7 +178,7 @@ Private Attributes</h2></td></tr>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a366f1f10c6148e01e79d3f10735ea0ea_cgraph.svg" width="646" height="216"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a366f1f10c6148e01e79d3f10735ea0ea_cgraph.svg" width="635" height="206"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -244,7 +238,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aa1fba49aec41255dbf01e2c07067df2a_cgraph.svg" width="100%" height="462"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aa1fba49aec41255dbf01e2c07067df2a_cgraph.svg" width="100%" height="454"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -274,34 +268,12 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a8e019e0aff679d5c93b0b0e8a1f4542e_cgraph.svg" width="100%" height="462"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a8e019e0aff679d5c93b0b0e8a1f4542e_cgraph.svg" width="100%" height="454"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a2a1623edb613aafcad4138001ae3ce97" name="a2a1623edb613aafcad4138001ae3ce97"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2a1623edb613aafcad4138001ae3ce97">&#9670;&#160;</a></span>clear_mc()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Simulation::SimulationUnit::clear_mc </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a2a1623edb613aafcad4138001ae3ce97_icgraph.svg" width="410" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
 <a id="aeb968caf58812bcab01534e72a63d552" name="aeb968caf58812bcab01534e72a63d552"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeb968caf58812bcab01534e72a63d552">&#9670;&#160;</a></span>clearContribution()</h2>
 
@@ -595,7 +567,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_abee4f5b8a764dc6655ee5a91fcab7080_icgraph.svg" width="370" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_abee4f5b8a764dc6655ee5a91fcab7080_icgraph.svg" width="403" height="162"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -625,7 +597,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a3d0ee29e0a425f79fa8cbc620d2abb99_icgraph.svg" width="370" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a3d0ee29e0a425f79fa8cbc620d2abb99_icgraph.svg" width="403" height="162"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -697,7 +669,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a7b82dd15ce4828d8ee59ca0a9410f63d_icgraph.svg" width="410" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a7b82dd15ce4828d8ee59ca0a9410f63d_icgraph.svg" width="370" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -727,7 +699,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a4295618336e99606be4e87b31feb848a_icgraph.svg" width="634" height="160"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a4295618336e99606be4e87b31feb848a_icgraph.svg" width="410" height="136"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -754,6 +726,11 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a95e094f9921c520f4a41e3b9a308b187_icgraph.svg" width="403" height="99"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -779,36 +756,10 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1e1145d8e7deae618cc0452e690c6f7a" name="a1e1145d8e7deae618cc0452e690c6f7a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e1145d8e7deae618cc0452e690c6f7a">&#9670;&#160;</a></span>init_functor()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto Simulation::SimulationUnit::init_functor </td>
-          <td>(</td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>d_t</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">auto &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>container</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a1e1145d8e7deae618cc0452e690c6f7a_cgraph.svg" width="634" height="415"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a1e1145d8e7deae618cc0452e690c6f7a_icgraph.svg" width="187" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_adc096ee7d35524a8107a3390daa55a1a_icgraph.svg" width="403" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -833,11 +784,6 @@ template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aa5b0aeaaa6821ce494fe23bd33ae316a_cgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aa5b0aeaaa6821ce494fe23bd33ae316a_icgraph.svg" width="410" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -867,7 +813,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a255b9ef06424a104581e8aab290e8281_cgraph.svg" width="100%" height="462"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a255b9ef06424a104581e8aab290e8281_cgraph.svg" width="100%" height="454"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -897,13 +843,13 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aa8a28ba8699f0b719db0558d4eca98cf_cgraph.svg" width="100%" height="462"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aa8a28ba8699f0b719db0558d4eca98cf_cgraph.svg" width="100%" height="454"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
 </div>
-<a id="ac3c769522d65eee17433bb67e4f19dc3" name="ac3c769522d65eee17433bb67e4f19dc3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3c769522d65eee17433bb67e4f19dc3">&#9670;&#160;</a></span>post_cycle()</h2>
+<a id="a596360d0966f7694e5ebf0652b61b0e2" name="a596360d0966f7694e5ebf0652b61b0e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a596360d0966f7694e5ebf0652b61b0e2">&#9670;&#160;</a></span>post_cycle()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -921,17 +867,12 @@ template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_particle</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespaceSimulation_1_1KernelInline.html#a80366d1de1efc8a4e4c203cdceb3b6d1">KernelInline::move_reducer_view_type</a>&lt; Space &gt;</td>          <td class="paramname"><span class="paramname"><em>out_total</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structSimulation_1_1KernelInline_1_1Functors.html">KernelInline::Functors</a>&lt; Space, Model &gt;::move_reducer_view_type</td>          <td class="paramname"><span class="paramname"><em>out_total</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structSimulation_1_1KernelInline_1_1Functors.html">KernelInline::Functors</a>&lt; Space, Model &gt;::cycle_reducer_view_type</td>          <td class="paramname"><span class="paramname"><em>reducer_type</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="namespaceSimulation_1_1KernelInline.html#a3e6c212b4e4693a01483c60331e9fac1">KernelInline::cycle_reducer_view_type</a>&lt; Space &gt;</td>          <td class="paramname"><span class="paramname"><em>reducer_type</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -943,12 +884,12 @@ template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ac3c769522d65eee17433bb67e4f19dc3_cgraph.svg" width="100%" height="497"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a596360d0966f7694e5ebf0652b61b0e2_cgraph.svg" width="100%" height="497"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ac3c769522d65eee17433bb67e4f19dc3_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a596360d0966f7694e5ebf0652b61b0e2_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -958,6 +899,9 @@ Here is the caller graph for this function:</div>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void Simulation::SimulationUnit::post_init_compartments </td>
@@ -966,6 +910,11 @@ Here is the caller graph for this function:</div>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -1000,72 +949,12 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad3ffc3108a93d7f403e8f2b81cc24e6d_cgraph.svg" width="422" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad3ffc3108a93d7f403e8f2b81cc24e6d_cgraph.svg" width="412" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad3ffc3108a93d7f403e8f2b81cc24e6d_icgraph.svg" width="634" height="238"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<a id="a449800ba9a7ee67fa9b6bae41869a9de" name="a449800ba9a7ee67fa9b6bae41869a9de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a449800ba9a7ee67fa9b6bae41869a9de">&#9670;&#160;</a></span>post_init_concentration_file()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Simulation::SimulationUnit::post_init_concentration_file </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structSimulation_1_1ScalarInitializer.html">ScalarInitializer</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>scalar_init</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a449800ba9a7ee67fa9b6bae41869a9de_icgraph.svg" width="100%" height="478"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
-
-</div>
-</div>
-<a id="acdb3001a8070525afefe3298ed738691" name="acdb3001a8070525afefe3298ed738691"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acdb3001a8070525afefe3298ed738691">&#9670;&#160;</a></span>post_init_concentration_functor()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Simulation::SimulationUnit::post_init_concentration_functor </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structSimulation_1_1ScalarInitializer.html">ScalarInitializer</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>scalar_init</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_acdb3001a8070525afefe3298ed738691_icgraph.svg" width="100%" height="478"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -1116,32 +1005,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a6f98af5385cda0210db8895f7725ea8f" name="a6f98af5385cda0210db8895f7725ea8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6f98af5385cda0210db8895f7725ea8f">&#9670;&#160;</a></span>reduceContribs()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Simulation::SimulationUnit::reduceContribs </td>
-          <td>(</td>
-          <td class="paramtype">std::span&lt; const double &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>n_rank</em></span>&#160;) const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a6f98af5385cda0210db8895f7725ea8f_cgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
 <a id="aa12b65d19fa7e3eb74152b0252591a4d" name="aa12b65d19fa7e3eb74152b0252591a4d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa12b65d19fa7e3eb74152b0252591a4d">&#9670;&#160;</a></span>reset()</h2>
 
@@ -1156,11 +1019,6 @@ Here is the call graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aa12b65d19fa7e3eb74152b0252591a4d_icgraph.svg" width="410" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
@@ -1254,7 +1112,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a6ebf53048a2d93f04504352c79660c79_cgraph.svg" width="410" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a6ebf53048a2d93f04504352c79660c79_cgraph.svg" width="410" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -1380,7 +1238,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aeb4997de646b6897f7879e1ad0a0b036_icgraph.svg" width="634" height="102"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aeb4997de646b6897f7879e1ad0a0b036_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -1446,11 +1304,6 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad68b5b710ed62a511e10dd6dd1a920f7_cgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad68b5b710ed62a511e10dd6dd1a920f7_icgraph.svg" width="410" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
@@ -1485,11 +1338,6 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a6fecb0563822fae0ef26d9f6209d0779_icgraph.svg" width="410" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
@@ -1702,28 +1550,6 @@ Here is the caller graph for this function:</div>
           <td class="memname">std::unique_ptr&lt;<a class="el" href="structMC_1_1MonteCarloUnit.html">MC::MonteCarloUnit</a>&gt; Simulation::SimulationUnit::mc_unit</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5dd8939bb6bb08b09041e32141a65dc2" name="a5dd8939bb6bb08b09041e32141a65dc2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5dd8939bb6bb08b09041e32141a65dc2">&#9670;&#160;</a></span>minimum_dead_particle_removal</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint64_t Simulation::SimulationUnit::minimum_dead_particle_removal</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>

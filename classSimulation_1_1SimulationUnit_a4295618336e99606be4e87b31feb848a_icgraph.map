@@ -1,11 +1,8 @@
 <map id="Simulation::SimulationUnit::getkernel_concentration" name="Simulation::SimulationUnit::getkernel_concentration">
-<area shape="rect" id="Node000001" title=" " alt="" coords="452,73,627,112"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#aa5b0aeaaa6821ce494fe23bd33ae316a" title=" " alt="" coords="229,29,404,68"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="436,75,404,69,405,63,438,70"/>
-<area shape="rect" id="Node000004" href="$classSimulation_1_1SimulationUnit.html#a6ebf53048a2d93f04504352c79660c79" title=" " alt="" coords="229,116,404,155"/>
-<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="438,115,405,121,404,116,436,110"/>
-<area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#a1e1145d8e7deae618cc0452e690c6f7a" title=" " alt="" coords="5,29,181,68"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="213,51,181,51,181,46,213,46"/>
-<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="130,16,116,10,93,8,71,10,58,15,54,21,57,28,52,30,49,20,55,11,70,5,93,3,118,5,132,11"/>
-<area shape="poly" id="edge5_Node000004_Node000004" title=" " alt="" coords="353,103,340,97,316,95,295,97,282,101,277,107,280,115,275,117,272,106,278,97,293,91,316,89,341,92,355,98"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="229,49,404,88"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#aa5b0aeaaa6821ce494fe23bd33ae316a" title=" " alt="" coords="5,5,181,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,51,181,45,182,39,214,46"/>
+<area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#a6ebf53048a2d93f04504352c79660c79" title=" " alt="" coords="5,92,181,131"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,91,182,97,181,92,213,86"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="130,79,116,73,93,71,71,73,58,77,54,83,57,91,52,93,49,82,55,73,70,67,93,65,118,68,132,74"/>
 </map>

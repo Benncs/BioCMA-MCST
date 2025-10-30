@@ -4,18 +4,20 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="657,66,596,47,598,42,658,61"/>
 <area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" title=" " alt="" coords="452,68,610,107"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="643,90,611,90,611,85,643,85"/>
-<area shape="rect" id="Node000006" href="$classMC_1_1ParticlesContainer.html#a9fa7f315c1a2245124142e8af60d42cc" title="Alias for the model used by the container." alt="" coords="452,161,610,200"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="680,116,577,163,575,158,678,111"/>
-<area shape="rect" id="Node000004" href="$classSimulation_1_1SimulationUnit.html#ac3c769522d65eee17433bb67e4f19dc3" title=" " alt="" coords="229,36,404,75"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="436,76,404,71,405,66,437,71"/>
-<area shape="rect" id="Node000005" href="$classSimulation_1_1SimulationUnit.html#a7b49fd171d4de8aa3949738da6c3810f" title=" " alt="" coords="5,36,181,75"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="213,58,181,58,181,53,213,53"/>
-<area shape="rect" id="Node000007" href="$classMC_1_1ParticlesContainer.html#ad499de971fbe1a2cf3e1adbe2bb151d6" title=" " alt="" coords="237,99,396,137"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="448,159,384,140,386,135,449,154"/>
-<area shape="rect" id="Node000008" href="$classMC_1_1ParticlesContainer.html#a5d93b87f5a6e18c449e0ed62333e9d6e" title=" " alt="" coords="237,161,396,200"/>
-<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="436,183,396,183,396,178,436,178"/>
-<area shape="rect" id="Node000009" href="$classMC_1_1ParticlesContainer.html#adacba063d362632ca0899bae750b628a" title="Default copy and move constructors and assignment operators." alt="" coords="237,224,396,263"/>
-<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="449,207,386,226,384,221,448,202"/>
-<area shape="rect" id="Node000010" href="$classMC_1_1ParticlesContainer.html#ae0cd8cf83c2728db495167ec2f10d80a" title=" " alt="" coords="237,287,396,325"/>
-<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="497,212,455,245,405,276,379,289,377,284,403,272,452,241,494,208"/>
+<area shape="rect" id="Node000006" href="$classMC_1_1ParticlesContainer.html#a31cc416a99cf6e26bd4c1cb0a154a5ac" title="Alias for the model used by the container." alt="" coords="452,177,610,216"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="687,117,571,179,568,174,685,112"/>
+<area shape="rect" id="Node000004" href="$classSimulation_1_1SimulationUnit.html#a596360d0966f7694e5ebf0652b61b0e2" title=" " alt="" coords="229,20,404,59"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="436,69,404,62,405,56,437,64"/>
+<area shape="rect" id="Node000005" href="$classSimulation_1_1SimulationUnit.html#a7b49fd171d4de8aa3949738da6c3810f" title=" " alt="" coords="5,20,181,59"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="213,42,181,42,181,37,213,37"/>
+<area shape="rect" id="Node000007" href="$classMC_1_1ParticlesContainer.html#ad499de971fbe1a2cf3e1adbe2bb151d6" title=" " alt="" coords="237,83,396,121"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="480,172,403,135,376,124,378,119,405,130,482,168"/>
+<area shape="rect" id="Node000008" href="$classMC_1_1ParticlesContainer.html#a5d93b87f5a6e18c449e0ed62333e9d6e" title=" " alt="" coords="237,145,396,184"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="436,185,396,179,396,174,437,180"/>
+<area shape="rect" id="Node000009" href="$classMC_1_1ParticlesContainer.html#a5b4a66b67d3b4942557b22538958480a" title=" " alt="" coords="237,208,396,247"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="437,213,396,219,396,213,436,208"/>
+<area shape="rect" id="Node000010" href="$classMC_1_1ParticlesContainer.html#adacba063d362632ca0899bae750b628a" title="Default copy and move constructors and assignment operators." alt="" coords="237,271,396,309"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="479,226,405,260,375,273,373,268,403,256,477,221"/>
+<area shape="rect" id="Node000011" href="$classMC_1_1ParticlesContainer.html#ae0cd8cf83c2728db495167ec2f10d80a" title=" " alt="" coords="237,333,396,372"/>
+<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="507,230,462,277,405,323,382,335,380,330,403,318,459,273,503,226"/>
 </map>

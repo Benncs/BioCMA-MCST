@@ -1,18 +1,20 @@
 <map id="Simulation::SimulationUnit::get_probes" name="Simulation::SimulationUnit::get_probes">
-<area shape="rect" id="Node000001" title=" " alt="" coords="958,52,1133,91"/>
-<area shape="rect" id="Node000002" href="$namespacePostProcessing.html#a0e06c75e06cf43e767d5e3e8afab62f2" title=" " alt="" coords="762,52,910,91"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="942,74,910,74,910,69,942,69"/>
-<area shape="rect" id="Node000003" href="$namespaceCore.html#ab6528e76111960864b7e4741327b3049" title="Start simulation." alt="" coords="629,59,714,84"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="746,74,714,74,714,69,746,69"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="1042,77,1217,116"/>
+<area shape="rect" id="Node000002" href="$namespacePostProcessing.html#a0e06c75e06cf43e767d5e3e8afab62f2" title=" " alt="" coords="846,77,994,116"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1026,99,994,99,994,94,1026,94"/>
+<area shape="rect" id="Node000003" href="$namespaceCore.html#ab6528e76111960864b7e4741327b3049" title="Start simulation." alt="" coords="671,59,756,84"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="830,88,756,79,756,74,831,83"/>
+<area shape="rect" id="Node000010" href="$classExportHandler.html#a51e7bc3719685192c28df6b57b7a9f37" title="Handles periodic export of simulation data." alt="" coords="629,108,798,133"/>
+<area shape="poly" id="edge12_Node000002_Node000010" title=" " alt="" coords="831,110,798,114,798,108,830,104"/>
 <area shape="rect" id="Node000004" href="$structApi_1_1SimulationInstance.html#a3f04372728be84263fb69f5773ca5bd5" title="Execute the simulation." alt="" coords="213,5,372,44"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="614,57,581,50,472,36,372,30,372,24,473,31,582,45,615,52"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="656,62,581,50,472,39,372,31,373,26,473,33,582,45,657,57"/>
 <area shape="rect" id="Node000006" href="$namespaceCore.html#a23e6f3d22fc51ef9decabb2c220b27c4" title=" " alt="" coords="420,59,581,84"/>
-<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="614,83,582,83,582,78,614,77"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="656,82,582,83,582,77,656,77"/>
 <area shape="rect" id="Node000007" href="$namespaceCore.html#a8a3e4aa1d1921da2e211c43d5368acf1" title=" " alt="" coords="460,108,541,133"/>
-<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="615,90,542,112,541,107,614,85"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="657,87,542,114,541,109,656,82"/>
 <area shape="rect" id="Node000005" href="$structApi_1_1SimulationInstance.html#afee07db8a6b57fe7982900ecaa943cc0" title="Default constructor." alt="" coords="5,7,165,45"/>
 <area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="197,28,165,28,165,23,197,23"/>
-<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="597,60,629,61,629,66,597,65"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="597,60,671,61,671,67,597,65"/>
 <area shape="rect" id="Node000008" href="$structApi_1_1SimulationInstance.html#ad2abfa76ac4128d44b7c0c895f78b77b" title="Load ad apply the simulation configuration and prepare for execution based on file." alt="" coords="213,96,372,135"/>
 <area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="444,122,372,120,372,115,444,117"/>
 <area shape="poly" id="edge11_Node000008_Node000005" title=" " alt="" coords="232,92,164,62,133,48,135,44,166,57,234,87"/>

@@ -1,9 +1,5 @@
 <map id="Simulation::SimulationUnit::setVolumes" name="Simulation::SimulationUnit::setVolumes">
-<area shape="rect" id="Node000001" title=" " alt="" coords="452,29,627,68"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a1e1145d8e7deae618cc0452e690c6f7a" title=" " alt="" coords="5,29,181,68"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="436,48,404,47,229,47,181,48,181,43,229,42,404,42,436,43"/>
-<area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#ad68b5b710ed62a511e10dd6dd1a920f7" title=" " alt="" coords="229,57,404,96"/>
-<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="437,64,405,68,404,63,436,59"/>
-<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="130,16,116,10,93,8,71,10,58,15,54,21,57,28,52,30,49,20,55,11,70,5,93,3,118,5,132,11"/>
-<area shape="poly" id="edge4_Node000003_Node000002" title=" " alt="" coords="213,66,181,62,181,57,214,61"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="229,5,404,44"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#ad68b5b710ed62a511e10dd6dd1a920f7" title=" " alt="" coords="5,5,181,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,27,181,27,181,22,213,22"/>
 </map>

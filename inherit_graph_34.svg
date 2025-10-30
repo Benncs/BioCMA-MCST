@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structKokkosLayoutMapper.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="structKokkosLayoutMapper_3_01Eigen_1_1RowMajor_01_4.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="109,-29 0,-29 0,0 109,0 109,-29"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">KokkosLayoutMapper</text>
-<text xml:space="preserve" text-anchor="middle" x="54.5" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; EigenLayout &gt;</text>
+<text xml:space="preserve" text-anchor="middle" x="54.5" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; Eigen::RowMajor &gt;</text>
 </a>
 </g>
 </g>

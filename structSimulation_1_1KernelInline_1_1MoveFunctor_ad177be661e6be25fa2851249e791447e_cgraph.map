@@ -1,7 +1,0 @@
-<map id="Simulation::KernelInline::MoveFunctor::handle_exit" name="Simulation::KernelInline::MoveFunctor::handle_exit">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,184,44"/>
-<area shape="rect" id="Node000002" href="$namespaceSimulation_1_1KernelInline.html#a7a29d7da817caed279a1f87044177942" title=" " alt="" coords="232,5,389,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,22,216,22,216,27,184,27"/>
-<area shape="rect" id="Node000003" href="$namespaceCommonMaths.html#ad4e27e17383f20d970bcd89fd00e36f0" title=" " alt="" coords="437,12,572,37"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="390,22,421,22,421,27,390,27"/>
-</map>
