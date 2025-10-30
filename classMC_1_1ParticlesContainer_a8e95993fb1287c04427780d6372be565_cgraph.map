@@ -1,5 +1,5 @@
 <map id="MC::ParticlesContainer::merge_buffer" name="MC::ParticlesContainer::merge_buffer">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,164,76"/>
+<area shape="rect" id="Node000001" title="Insert particle buffer into the main container." alt="" coords="5,37,164,76"/>
 <area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#a57fa06d3225acf04522e3fc2993847f0" title=" " alt="" coords="212,5,370,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,42,196,37,197,42,164,47"/>
 <area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a4fc94ae525191a5d034dce4866986c1e" title=" " alt="" coords="212,68,370,107"/>

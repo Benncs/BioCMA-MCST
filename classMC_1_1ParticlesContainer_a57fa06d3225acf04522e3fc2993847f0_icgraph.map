@@ -1,8 +1,8 @@
 <map id="MC::ParticlesContainer::__allocate_buffer__" name="MC::ParticlesContainer::__allocate_buffer__">
 <area shape="rect" id="Node000001" title=" " alt="" coords="658,68,817,107"/>
-<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#adae9af7cbb629530927d504f5fe75c90" title=" " alt="" coords="452,5,610,44"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#adae9af7cbb629530927d504f5fe75c90" title="Load data from ar for deserialization." alt="" coords="452,5,610,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="657,66,596,47,598,42,658,61"/>
-<area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" title=" " alt="" coords="452,68,610,107"/>
+<area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" title="Insert particle buffer into the main container." alt="" coords="452,68,610,107"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="643,90,611,90,611,85,643,85"/>
 <area shape="rect" id="Node000006" href="$classMC_1_1ParticlesContainer.html#a31cc416a99cf6e26bd4c1cb0a154a5ac" title="Alias for the model used by the container." alt="" coords="452,177,610,216"/>
 <area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="687,117,571,179,568,174,685,112"/>

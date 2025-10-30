@@ -6,7 +6,7 @@ var structDynamicDefaultModel =
     [ "SelfParticle", "structDynamicDefaultModel.html#ac0c30471aed8077445bef26d40f0d745", null ],
     [ "uniform_weight", "structDynamicDefaultModel.html#af7d2eca889712f32c5353359a639307a", null ],
     [ "particle_var", "structDynamicDefaultModel.html#aa3ad333fdeeb2e7eee5c54a1ac58a3c9", [
-      [ "mass", "structDynamicDefaultModel.html#aa3ad333fdeeb2e7eee5c54a1ac58a3c9ad90ccffa01275a7a7795fb6d1274e75f", null ]
+      [ "a", "structDynamicDefaultModel.html#aa3ad333fdeeb2e7eee5c54a1ac58a3c9a0cc175b9c0f1b6a831c399e269772661", null ]
     ] ],
     [ "contribution", "structDynamicDefaultModel.html#a3e1e397d5a592af83a835326bf14f365", null ],
     [ "division", "structDynamicDefaultModel.html#a6a4c8db54e733f136045999d312cc36d", null ],

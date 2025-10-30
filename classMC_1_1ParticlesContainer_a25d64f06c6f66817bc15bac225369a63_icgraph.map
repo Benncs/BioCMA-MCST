@@ -1,5 +1,5 @@
 <map id="MC::ParticlesContainer::force_remove_dead" name="MC::ParticlesContainer::force_remove_dead">
-<area shape="rect" id="Node000001" title=" " alt="" coords="193,5,351,44"/>
+<area shape="rect" id="Node000001" title="Clean all the non&#45;idle particle even if number smaller than threshold." alt="" coords="193,5,351,44"/>
 <area shape="rect" id="Node000002" href="$namespacePostProcessing.html#a5c1775fa34193199d9c989e5740e2f84" title=" " alt="" coords="5,5,145,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,27,145,27,145,22,177,22"/>
 </map>

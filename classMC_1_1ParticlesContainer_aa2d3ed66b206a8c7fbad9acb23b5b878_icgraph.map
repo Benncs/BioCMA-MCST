@@ -1,5 +1,5 @@
 <map id="MC::ParticlesContainer::get_weight" name="MC::ParticlesContainer::get_weight">
-<area shape="rect" id="Node000001" title=" " alt="" coords="212,5,370,44"/>
-<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#a7f528da6440de7bfb8c5d33b36040fbd" title=" " alt="" coords="5,5,164,44"/>
+<area shape="rect" id="Node000001" title="Return the particle weight." alt="" coords="212,5,370,44"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#a7f528da6440de7bfb8c5d33b36040fbd" title="Get the contribution if particle at index idx." alt="" coords="5,5,164,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,27,164,27,164,22,196,22"/>
 </map>

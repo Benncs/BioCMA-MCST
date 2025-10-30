@@ -101,7 +101,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a36218d1f9912967dd9a559cbf40c0b55" id="r_a36218d1f9912967dd9a559cbf40c0b55"><td class="memItemLeft" align="right" valign="top">std::span&lt; const double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36218d1f9912967dd9a559cbf40c0b55">getContributionData</a> () const</td></tr>
 <tr class="memitem:a87b7ba2681ea64a4f8fa68dd423a3221" id="r_a87b7ba2681ea64a4f8fa68dd423a3221"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87b7ba2681ea64a4f8fa68dd423a3221">two_phase_flow</a> () const</td></tr>
 <tr class="memitem:a95e094f9921c520f4a41e3b9a308b187" id="r_a95e094f9921c520f4a41e3b9a308b187"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::span&lt; const double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95e094f9921c520f4a41e3b9a308b187">getMTRData</a> () const</td></tr>
-<tr class="memitem:abeb5f3afb03debc895489209c89abd92" id="r_abeb5f3afb03debc895489209c89abd92"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abeb5f3afb03debc895489209c89abd92">dead_counter</a> () const</td></tr>
 <tr class="memitem:a401844c1e2eee70c2b043b949d86895d" id="r_a401844c1e2eee70c2b043b949d86895d"><td class="memItemLeft" align="right" valign="top">std::span&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a401844c1e2eee70c2b043b949d86895d">getContributionData_mut</a> ()</td></tr>
 <tr class="memitem:a7b49fd171d4de8aa3949738da6c3810f" id="r_a7b49fd171d4de8aa3949738da6c3810f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b49fd171d4de8aa3949738da6c3810f">cycleProcess</a> (auto &amp;&amp;container, double d_t, auto &amp;_functors)</td></tr>
 <tr class="memitem:af4d179bd1bf0d8da69d83f63fdd72412" id="r_af4d179bd1bf0d8da69d83f63fdd72412"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4d179bd1bf0d8da69d83f63fdd72412">step</a> (double d_t) const</td></tr>
@@ -138,7 +137,6 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:afcb68150cb8bd8788d31a3d1c54271df" id="r_afcb68150cb8bd8788d31a3d1c54271df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#aa1b418b6e151ebc14d95164d7370e35b">MC::ContributionView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcb68150cb8bd8788d31a3d1c54271df">contribs_scatter</a></td></tr>
 <tr class="memitem:a505fbf5573509d5d1d5674c436fe61f1" id="r_a505fbf5573509d5d1d5674c436fe61f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#af34adaabc60487412f7551db1dc83226">MapProbes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a505fbf5573509d5d1d5674c436fe61f1">probes</a></td></tr>
-<tr class="memitem:ab0b6cfbf2d3284d2613b73ce81b60754" id="r_ab0b6cfbf2d3284d2613b73ce81b60754"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0b6cfbf2d3284d2613b73ce81b60754">internal_counter_dead</a></td></tr>
 <tr class="memitem:a2a7c5c496164e443222bc54de1edab70" id="r_a2a7c5c496164e443222bc54de1edab70"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a7c5c496164e443222bc54de1edab70">feed</a></td></tr>
 <tr class="memitem:aab3ff3f2caf2c3c94ebbe25786bea678" id="r_aab3ff3f2caf2c3c94ebbe25786bea678"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structCmaUtils_1_1IterationState.html">CmaUtils::IterationState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab3ff3f2caf2c3c94ebbe25786bea678">state</a></td></tr>
 <tr class="memitem:a448192ce085c5d0d5e71875a888e99b8" id="r_a448192ce085c5d0d5e71875a888e99b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a448192ce085c5d0d5e71875a888e99b8">const_number_simulation</a> = true</td></tr>
@@ -327,31 +325,6 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a7b49fd171d4de8aa3949738da6c3810f_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
-
-</div>
-</div>
-<a id="abeb5f3afb03debc895489209c89abd92" name="abeb5f3afb03debc895489209c89abd92"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abeb5f3afb03debc895489209c89abd92">&#9670;&#160;</a></span>dead_counter()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t Simulation::SimulationUnit::dead_counter </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -1441,28 +1414,6 @@ Here is the call graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">std::shared_ptr&lt;<a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a>&gt; Simulation::SimulationUnit::gas_scalar</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab0b6cfbf2d3284d2613b73ce81b60754" name="ab0b6cfbf2d3284d2613b73ce81b60754"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0b6cfbf2d3284d2613b73ce81b60754">&#9670;&#160;</a></span>internal_counter_dead</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t Simulation::SimulationUnit::internal_counter_dead</td>
         </tr>
       </table>
   </td>

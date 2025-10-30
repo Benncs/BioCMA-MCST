@@ -47,7 +47,7 @@
   </g>
 </defs>
 <script type="application/ecmascript">
-var viewWidth = 641;
+var viewWidth = 648;
 var viewHeight = 197;
 var sectionId = 'dynsection-19';
 </script>
@@ -68,10 +68,10 @@ var sectionId = 'dynsection-19';
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="298.62,-170 179.88,-170 179.88,-141 298.62,-141 298.62,-170"/>
-<text xml:space="preserve" text-anchor="start" x="187.88" y="-156.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
-<text xml:space="preserve" text-anchor="middle" x="239.25" y="-146" font-family="Helvetica,sans-Serif" font-size="10.00">::merge_buffer</text>
+<g id="a_Node000002"><a xlink:href="classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" target="_top" xlink:title="Insert particle buffer into the main container.">
+<polygon fill="white" stroke="#666666" points="300.5,-170 181.75,-170 181.75,-141 300.5,-141 300.5,-170"/>
+<text xml:space="preserve" text-anchor="start" x="189.75" y="-156.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
+<text xml:space="preserve" text-anchor="middle" x="241.12" y="-146" font-family="Helvetica,sans-Serif" font-size="10.00">::merge_buffer</text>
 </a>
 </g>
 </g>
@@ -79,8 +79,8 @@ var sectionId = 'dynsection-19';
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node1&#45;&gt;Node2</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M95.4,-99.38C115.33,-109.42 142.66,-122.6 167.5,-132.5 171.15,-133.96 174.93,-135.39 178.76,-136.79"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="177.59,-140.09 188.19,-140.11 179.92,-133.49 177.59,-140.09"/>
+<path fill="none" stroke="#63b8ff" d="M95.38,-99.44C115.29,-109.51 142.63,-122.69 167.5,-132.5 171.29,-134 175.22,-135.46 179.2,-136.89"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="177.78,-140.1 188.37,-140.06 180.07,-133.48 177.78,-140.1"/>
 </a>
 </g>
 </g>
@@ -88,9 +88,9 @@ var sectionId = 'dynsection-19';
 <g id="Node000005" class="node">
 <title>Node5</title>
 <g id="a_Node000005"><a xlink:href="classSimulation_1_1SimulationUnit.html#ae2077067788b0cb0535c62933724a1cf" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="305,-123 173.5,-123 173.5,-94 305,-94 305,-123"/>
-<text xml:space="preserve" text-anchor="start" x="181.5" y="-109.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="239.25" y="-99" font-family="Helvetica,sans-Serif" font-size="10.00">::scatter_contribute</text>
+<polygon fill="white" stroke="#666666" points="306.88,-123 175.38,-123 175.38,-94 306.88,-94 306.88,-123"/>
+<text xml:space="preserve" text-anchor="start" x="183.38" y="-109.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
+<text xml:space="preserve" text-anchor="middle" x="241.12" y="-99" font-family="Helvetica,sans-Serif" font-size="10.00">::scatter_contribute</text>
 </a>
 </g>
 </g>
@@ -98,8 +98,8 @@ var sectionId = 'dynsection-19';
 <g id="edge4_Node000001_Node000005" class="edge">
 <title>Node1&#45;&gt;Node5</title>
 <g id="a_edge4_Node000001_Node000005"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M131.59,-93.57C141.44,-94.95 151.69,-96.39 161.77,-97.8"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="161.15,-101.24 171.54,-99.16 162.12,-94.31 161.15,-101.24"/>
+<path fill="none" stroke="#63b8ff" d="M131.8,-93.5C142.17,-94.94 152.99,-96.44 163.6,-97.91"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="163.11,-101.37 173.5,-99.28 164.07,-94.44 163.11,-101.37"/>
 </a>
 </g>
 </g>
@@ -107,9 +107,9 @@ var sectionId = 'dynsection-19';
 <g id="Node000007" class="node">
 <title>Node7</title>
 <g id="a_Node000007"><a xlink:href="classSimulation_1_1SimulationUnit.html#ac396f393b4cf318b38364c5067254c80" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="311,-76 167.5,-76 167.5,-47 311,-47 311,-76"/>
-<text xml:space="preserve" text-anchor="start" x="175.5" y="-62.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="239.25" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00">::set_kernel_contribs_to_host</text>
+<polygon fill="white" stroke="#666666" points="312.88,-76 169.38,-76 169.38,-47 312.88,-47 312.88,-76"/>
+<text xml:space="preserve" text-anchor="start" x="177.38" y="-62.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
+<text xml:space="preserve" text-anchor="middle" x="241.12" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00">::set_kernel_contribs_to_host</text>
 </a>
 </g>
 </g>
@@ -117,18 +117,18 @@ var sectionId = 'dynsection-19';
 <g id="edge6_Node000001_Node000007" class="edge">
 <title>Node1&#45;&gt;Node7</title>
 <g id="a_edge6_Node000001_Node000007"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M131.59,-75.8C139.45,-74.75 147.57,-73.66 155.65,-72.58"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="156.07,-76.05 165.51,-71.25 155.14,-69.12 156.07,-76.05"/>
+<path fill="none" stroke="#63b8ff" d="M131.8,-75.87C140.22,-74.75 148.93,-73.6 157.58,-72.45"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="157.94,-75.93 167.4,-71.15 157.02,-68.99 157.94,-75.93"/>
 </a>
 </g>
 </g>
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:href="classMC_1_1ParticlesContainer.html#ae769d9ef9c93fac19c9ba08c6b03ec1a" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="302.75,-29 175.75,-29 175.75,0 302.75,0 302.75,-29"/>
-<text xml:space="preserve" text-anchor="start" x="183.75" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
-<text xml:space="preserve" text-anchor="middle" x="239.25" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::update_and_clean_dead</text>
+<g id="a_Node000008"><a xlink:href="classMC_1_1ParticlesContainer.html#a0047f4c96b02ae4aeb9ebd8963129687" target="_top" xlink:title="Update the number of non&#45;idle particle and remove if total number exceeds threshold May call : remove...">
+<polygon fill="white" stroke="#666666" points="314.75,-29 167.5,-29 167.5,0 314.75,0 314.75,-29"/>
+<text xml:space="preserve" text-anchor="start" x="175.5" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
+<text xml:space="preserve" text-anchor="middle" x="241.12" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::update_and_remove_inactive</text>
 </a>
 </g>
 </g>
@@ -136,8 +136,8 @@ var sectionId = 'dynsection-19';
 <g id="edge7_Node000001_Node000008" class="edge">
 <title>Node1&#45;&gt;Node8</title>
 <g id="a_edge7_Node000001_Node000008"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M96.31,-69.54C116.17,-59.79 143.08,-47.12 167.5,-37.5 171.16,-36.06 174.94,-34.64 178.78,-33.25"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="179.93,-36.55 188.21,-29.94 177.61,-29.95 179.93,-36.55"/>
+<path fill="none" stroke="#63b8ff" d="M95.85,-69.7C115.74,-59.89 142.86,-47.1 167.5,-37.5 171.3,-36.02 175.23,-34.56 179.22,-33.15"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="180.07,-36.55 188.39,-29.99 177.8,-29.93 180.07,-36.55"/>
 </a>
 </g>
 </g>
@@ -145,9 +145,9 @@ var sectionId = 'dynsection-19';
 <g id="Node000003" class="node">
 <title>Node3</title>
 <g id="a_Node000003"><a xlink:href="classMC_1_1ParticlesContainer.html#a57fa06d3225acf04522e3fc2993847f0" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="472.12,-189 353.38,-189 353.38,-160 472.12,-160 472.12,-189"/>
-<text xml:space="preserve" text-anchor="start" x="361.38" y="-175.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
-<text xml:space="preserve" text-anchor="middle" x="412.75" y="-165" font-family="Helvetica,sans-Serif" font-size="10.00">::__allocate_buffer__</text>
+<polygon fill="white" stroke="#666666" points="477.38,-189 358.62,-189 358.62,-160 477.38,-160 477.38,-189"/>
+<text xml:space="preserve" text-anchor="start" x="366.62" y="-175.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
+<text xml:space="preserve" text-anchor="middle" x="418" y="-165" font-family="Helvetica,sans-Serif" font-size="10.00">::__allocate_buffer__</text>
 </a>
 </g>
 </g>
@@ -155,8 +155,8 @@ var sectionId = 'dynsection-19';
 <g id="edge2_Node000002_Node000003" class="edge">
 <title>Node2&#45;&gt;Node3</title>
 <g id="a_edge2_Node000002_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M298.79,-161.99C312.57,-163.51 327.4,-165.16 341.63,-166.73"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="341.06,-170.19 351.39,-167.81 341.83,-163.23 341.06,-170.19"/>
+<path fill="none" stroke="#63b8ff" d="M300.84,-161.88C315.69,-163.49 331.79,-165.24 347.13,-166.91"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="346.32,-170.34 356.64,-167.94 347.07,-163.38 346.32,-170.34"/>
 </a>
 </g>
 </g>
@@ -164,9 +164,9 @@ var sectionId = 'dynsection-19';
 <g id="Node000004" class="node">
 <title>Node4</title>
 <g id="a_Node000004"><a xlink:href="classMC_1_1ParticlesContainer.html#a4fc94ae525191a5d034dce4866986c1e" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="633.25,-97 514.5,-97 514.5,-68 633.25,-68 633.25,-97"/>
-<text xml:space="preserve" text-anchor="start" x="522.5" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
-<text xml:space="preserve" text-anchor="middle" x="573.88" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">::_resize</text>
+<polygon fill="white" stroke="#666666" points="640,-97 521.25,-97 521.25,-68 640,-68 640,-97"/>
+<text xml:space="preserve" text-anchor="start" x="529.25" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
+<text xml:space="preserve" text-anchor="middle" x="580.62" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">::_resize</text>
 </a>
 </g>
 </g>
@@ -174,8 +174,8 @@ var sectionId = 'dynsection-19';
 <g id="edge3_Node000002_Node000004" class="edge">
 <title>Node2&#45;&gt;Node4</title>
 <g id="a_edge3_Node000002_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M298.95,-147.07C347.45,-139.59 417.92,-127.53 478.5,-112.5 491.8,-109.2 505.96,-105.05 519.16,-100.9"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="520.09,-104.27 528.54,-97.89 517.95,-97.61 520.09,-104.27"/>
+<path fill="none" stroke="#63b8ff" d="M300.54,-147.39C350.08,-139.99 422.82,-127.87 485.25,-112.5 498.55,-109.22 512.72,-105.08 525.92,-100.93"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="526.85,-104.31 535.3,-97.92 524.71,-97.64 526.85,-104.31"/>
 </a>
 </g>
 </g>
@@ -183,9 +183,9 @@ var sectionId = 'dynsection-19';
 <g id="Node000006" class="node">
 <title>Node6</title>
 <g id="a_Node000006"><a xlink:href="classSimulation_1_1SimulationUnit.html#a9ea90cab13d8259f026f57baad1c989f" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="478.5,-103 347,-103 347,-74 478.5,-74 478.5,-103"/>
-<text xml:space="preserve" text-anchor="start" x="355" y="-89.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="412.75" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00">::get_kernel_contribution</text>
+<polygon fill="white" stroke="#666666" points="483.75,-103 352.25,-103 352.25,-74 483.75,-74 483.75,-103"/>
+<text xml:space="preserve" text-anchor="start" x="360.25" y="-89.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
+<text xml:space="preserve" text-anchor="middle" x="418" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00">::get_kernel_contribution</text>
 </a>
 </g>
 </g>
@@ -193,18 +193,18 @@ var sectionId = 'dynsection-19';
 <g id="edge5_Node000005_Node000006" class="edge">
 <title>Node5&#45;&gt;Node6</title>
 <g id="a_edge5_Node000005_Node000006"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M305.09,-100.94C314.94,-99.79 325.19,-98.59 335.27,-97.42"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="335.51,-100.92 345.03,-96.28 334.7,-93.96 335.51,-100.92"/>
+<path fill="none" stroke="#63b8ff" d="M307.24,-101.05C318.05,-99.82 329.35,-98.52 340.41,-97.26"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="340.79,-100.74 350.32,-96.13 339.99,-93.78 340.79,-100.74"/>
 </a>
 </g>
 </g>
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:href="classMC_1_1ParticlesContainer.html#acca450f3c529a6e6962d76f8f39011e8" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="472.12,-52 353.38,-52 353.38,-23 472.12,-23 472.12,-52"/>
-<text xml:space="preserve" text-anchor="start" x="361.38" y="-38.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
-<text xml:space="preserve" text-anchor="middle" x="412.75" y="-28" font-family="Helvetica,sans-Serif" font-size="10.00">::clean_dead</text>
+<g id="a_Node000009"><a xlink:href="classMC_1_1ParticlesContainer.html#a57353f823ed074869300f29deb5c50b2" target="_top" xlink:title="Removes inactive particles from the container.">
+<polygon fill="white" stroke="#666666" points="485.25,-52 350.75,-52 350.75,-23 485.25,-23 485.25,-52"/>
+<text xml:space="preserve" text-anchor="start" x="358.75" y="-38.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
+<text xml:space="preserve" text-anchor="middle" x="418" y="-28" font-family="Helvetica,sans-Serif" font-size="10.00">::remove_inactive_particles</text>
 </a>
 </g>
 </g>
@@ -212,8 +212,8 @@ var sectionId = 'dynsection-19';
 <g id="edge8_Node000008_Node000009" class="edge">
 <title>Node8&#45;&gt;Node9</title>
 <g id="a_edge8_Node000008_Node000009"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M303.14,-22.93C315.78,-24.63 329.14,-26.42 342,-28.15"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="341.27,-31.58 351.64,-29.44 342.2,-24.64 341.27,-31.58"/>
+<path fill="none" stroke="#63b8ff" d="M315.02,-24.09C322.98,-25.13 331.11,-26.2 339.13,-27.26"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="338.5,-30.7 348.87,-28.54 339.41,-23.76 338.5,-30.7"/>
 </a>
 </g>
 </g>
@@ -221,8 +221,8 @@ var sectionId = 'dynsection-19';
 <g id="edge9_Node000009_Node000004" class="edge">
 <title>Node9&#45;&gt;Node4</title>
 <g id="a_edge9_Node000009_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M466.74,-52.48C480.22,-56.3 494.85,-60.44 508.82,-64.39"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="507.82,-67.74 518.39,-67.09 509.72,-61 507.82,-67.74"/>
+<path fill="none" stroke="#63b8ff" d="M472.49,-52.48C486.23,-56.34 501.16,-60.52 515.39,-64.5"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="514.07,-67.77 524.64,-67.1 515.96,-61.03 514.07,-67.77"/>
 </a>
 </g>
 </g>

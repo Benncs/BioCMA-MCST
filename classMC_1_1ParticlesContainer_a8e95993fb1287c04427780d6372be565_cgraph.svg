@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Insert particle buffer into the main container.">
 <polygon fill="#999999" stroke="#666666" points="118.75,-52 0,-52 0,-23 118.75,-23 118.75,-52"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-38.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
 <text xml:space="preserve" text-anchor="middle" x="59.38" y="-28" font-family="Helvetica,sans-Serif" font-size="10.00">::merge_buffer</text>
