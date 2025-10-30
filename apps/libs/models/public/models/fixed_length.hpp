@@ -88,7 +88,7 @@ namespace Models
     KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx,
                                               const SelfParticle& arr)
     {
-      return 1; // GET_PROPERTY(Self::particle_var::length) * lin_density;
+      return GET_PROPERTY(Self::particle_var::length) * lin_density;
     }
 
     static std::vector<std::string_view> names()
