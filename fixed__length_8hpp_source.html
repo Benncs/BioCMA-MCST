@@ -167,7 +167,7 @@ $(function(){initNavTree('fixed__length_8hpp_source.html','',''); });
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="structModels_1_1FixedLength.html#af95f402aa987c6d544670eff217691d7">   88</a></span>    KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code hl_function" href="structModels_1_1FixedLength.html#af95f402aa987c6d544670eff217691d7">mass</a>(std::size_t idx,</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>                                              <span class="keyword">const</span> <a class="code hl_typedef" href="structModels_1_1FixedLength.html#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a>&amp; arr)</div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    {</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>      <span class="keywordflow">return</span> 1; <span class="comment">// GET_PROPERTY(Self::particle_var::length) * lin_density;</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>      <span class="keywordflow">return</span> GET_PROPERTY(<a class="code hl_enumvalue" href="structModels_1_1FixedLength.html#a289b27afb1d56f6621f42bb29b219c59a2fa47f7c65fec19cc163b195725e3844">Self::particle_var::length</a>) * <a class="code hl_variable" href="structModels_1_1FixedLength.html#a872e4c2850d3996443ca0cac92af97c2">lin_density</a>;</div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    }</div>
 </div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
