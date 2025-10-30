@@ -28,18 +28,18 @@ namespace Simulation
   // this->liquid_scalar->reduce_contribs(data);
   //}
   //
-  void SimulationUnit::reduceContribs(std::span<const double> data,
-                                      size_t n_rank) const
-  {
-    PROFILE_SECTION("host:reduceContribs")
-    const auto [nr, nc] = getDimensions();
-    this->liquid_scalar->set_zero_contribs();
+  // void SimulationUnit::reduceContribs(std::span<const double> data,
+  //                                     size_t n_rank) const
+  // {
+  //   PROFILE_SECTION("host:reduceContribs")
+  //   const auto [nr, nc] = getDimensions();
+  //   this->liquid_scalar->set_zero_contribs();
 
-    for (int i = 0; i < static_cast<int>(n_rank); ++i)
-    {
-      this->liquid_scalar->reduce_contribs({&data[i * nr * nc], nr * nc});
-    }
-  }
+  //   for (int i = 0; i < static_cast<int>(n_rank); ++i)
+  //   {
+  //     this->liquid_scalar->reduce_contribs({&data[i * nr * nc], nr * nc});
+  //   }
+  // }
 
   void SimulationUnit::clearContribution() const noexcept
   {
@@ -58,8 +58,6 @@ namespace Simulation
   {
     PROFILE_SECTION("host:update_feed")
     // Get references to the index_leaving_flow and leaving_flow data members
-    // const auto& _index_leaving_flow = this->move_info.index_leaving_flow;
-    // const auto& _leaving_flow = this->move_info.leaving_flow;
 
     auto functor = [update_scalar](auto& scl,
                                    const Feed::FeedDescriptor& fd) -> void

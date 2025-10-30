@@ -155,12 +155,13 @@ namespace Simulation::KernelInline
                std::size_t& local_dead_count) const
     {
       (void)_tag;
-      const std::size_t num_threads = team_handle.league_size();
-      const std::size_t league_rank = team_handle.league_rank();
-      const std::size_t start_idx = league_rank * (n_particles / num_threads);
-      std::size_t end_idx = (league_rank + 1) * (n_particles / num_threads);
+      const std::size_t league_size = team_handle.league_size();
 
-      if (league_rank == (num_threads - 1))
+      const std::size_t league_rank = team_handle.league_rank();
+      const std::size_t start_idx = league_rank * (n_particles / league_size);
+      std::size_t end_idx = (league_rank + 1) * (n_particles / league_size);
+
+      if (league_rank == (league_size - 1))
       {
         end_idx = n_particles;
       }
