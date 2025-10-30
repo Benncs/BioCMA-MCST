@@ -227,7 +227,7 @@ namespace
         }
       } // end for
 
-      local_container.clean_dead(simulation.dead_counter());
+      local_container.force_remove_dead();
     };
 
     std::visit(loop_functor, simulation.mc_unit->container);

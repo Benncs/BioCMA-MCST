@@ -50,7 +50,7 @@ void workers_process(
 
         last_sync(exec, simulation);
 
-        container.clean_dead(simulation.dead_counter());
+        container.force_remove_dead();
 
         if (do_export)
         {

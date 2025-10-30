@@ -32,7 +32,7 @@ namespace Simulation
   SimulationUnit::SimulationUnit(std::unique_ptr<MC::MonteCarloUnit>&& _unit,
                                  const ScalarInitializer& scalar_init,
                                  std::optional<Feed::SimulationFeed> _feed)
-      : mc_unit(std::move(_unit)), internal_counter_dead(0),
+      : mc_unit(std::move(_unit)),
         feed(_feed.value_or(Feed::SimulationFeed::empty())),
         is_two_phase_flow(scalar_init.gas_flow)
   {

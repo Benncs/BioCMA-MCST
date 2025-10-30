@@ -36,10 +36,12 @@
 
 namespace Simulation
 {
-  std::size_t SimulationUnit::dead_counter() const
-  {
-    return internal_counter_dead;
-  }
+  // std::size_t SimulationUnit::dead_counter() const
+  // {
+  //   return std::visit([](const auto& container)
+  //                     { return container.get_inactive(); },
+  //                     mc_unit->container);
+  // }
 
   bool SimulationUnit::two_phase_flow() const
   {

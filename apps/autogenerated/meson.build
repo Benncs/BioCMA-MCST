@@ -20,6 +20,7 @@ conf_data = configuration_data(
     '_dead_particle_ratio_threshold': '0.01',
     'cma_data_folder_path': '"cma_data"',
     'enable_event_counter': 'true',
+    'shrink_ratio':'0.1'
   },
 )
 result_dir = get_option('result_dir_path')

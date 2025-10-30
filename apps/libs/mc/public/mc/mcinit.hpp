@@ -1,10 +1,10 @@
 #ifndef __MC_INIT_HPP__
 #define __MC_INIT_HPP__
 
-#include "common/logger.hpp"
 #include <biocma_cst_config.hpp>
 #include <cassert>
 #include <common/execinfo.hpp>
+#include <common/logger.hpp>
 #include <cstdint>
 #include <mc/domain.hpp>
 #include <mc/particles_container.hpp>

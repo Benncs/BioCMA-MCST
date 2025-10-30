@@ -1,8 +1,6 @@
 \page kernels List of Kokkkos Kernels
 
 
-# List of Kokkos Kernels
-
 ## Particle Container Management (MC)
 The following kernels manage the particle container, including initialization, repartitioning, merging, and defragmentation.
 

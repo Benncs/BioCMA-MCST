@@ -1,10 +1,6 @@
 #ifndef __MC_MACRO_HPP__
 #define __MC_MACRO_HPP__
 
-#include "Kokkos_Core.hpp"
-#include "Kokkos_Macros.hpp"
-#include "common/common.hpp"
-#include "mc/alias.hpp"
 #define CHECK_MODEL(name)                                                      \
   static_assert(ModelType<name>, #name);                                       \
   static_assert(FloatingPointType<name::FloatType>, " floatl" #name);
@@ -32,23 +28,4 @@
   {                                                                            \
     return;                                                                    \
   }
-
-namespace MC
-{
-
-  // inline GContribIndexBounds<HostSpace> mk_bounds(const std::size_t begin,
-  //                                                 const std::size_t end)
-  // {
-  //   assert(begin <= end);
-  //   auto hosts = GContribIndexBounds<HostSpace>("tmp_bounds"); // NOLINT
-  //   hosts() = {begin, end};
-
-  //   // auto bounds = ContribIndexBounds("bounds");
-
-  //   // Kokkos::deep_copy(bounds, hosts);
-
-  //   return hosts;
-  // }
-
-} // namespace MC
 #endif
