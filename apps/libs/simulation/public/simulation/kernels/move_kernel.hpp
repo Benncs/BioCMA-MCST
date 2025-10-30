@@ -166,6 +166,7 @@ namespace Simulation::KernelInline
         end_idx = n_particles;
       }
       std::size_t team_local = 0;
+
       Kokkos::parallel_reduce(
           Kokkos::TeamThreadRange(team_handle, start_idx, end_idx),
           [&](int idx, std::size_t& local)
@@ -174,7 +175,6 @@ namespace Simulation::KernelInline
             handle_exit(idx, local);
           },
           team_local);
-
       Kokkos::single(Kokkos::PerTeam(team_handle),
                      [&]() { local_dead_count += team_local; });
     }
@@ -253,7 +253,6 @@ namespace Simulation::KernelInline
 
       for (std::size_t i = 0LU; i < n_flow; ++i)
       {
-
         auto generator = random_pool.get_state();
         const float random_number = generator.frand(0., 1.);
         random_pool.free_state(generator);

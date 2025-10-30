@@ -6,7 +6,6 @@
 #include <common/execinfo.hpp>
 #include <core/post_process.hpp>
 #include <dataexporter/data_exporter.hpp>
-#include <impl/Kokkos_HostThreadTeam.hpp>
 #include <impl_post_process.hpp>
 #include <mc/unit.hpp>
 #include <memory>
@@ -14,7 +13,6 @@
 #include <optional>
 #include <simulation/simulation.hpp>
 #include <variant>
-
 namespace
 {
   void append_properties(int counter,

@@ -31,8 +31,9 @@ namespace MC
 
   // NOLINTBEGIN(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
   template <uint64_t Nd, FloatingPointType F>
-  using ParticlesModel = Kokkos::View<F* [Nd]>;
-  template <FloatingPointType F> using DynParticlesModel = Kokkos::View<F**>;
+  using ParticlesModel = Kokkos::View<F* [Nd], Kokkos::LayoutRight>;
+  template <FloatingPointType F>
+  using DynParticlesModel = Kokkos::View<F**, Kokkos::LayoutRight>;
   // NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
 }; // namespace MC

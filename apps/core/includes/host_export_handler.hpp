@@ -3,10 +3,11 @@
 
 #include <dataexporter/main_exporter.hpp>
 #include <dataexporter/partial_exporter.hpp>
+#include <optional>
 #include <progress_bar.hpp>
 #include <simulation/simulation.hpp>
+#include <span>
 #include <transitionner/transitionner.hpp>
-
 class ExportHandler
 {
 
