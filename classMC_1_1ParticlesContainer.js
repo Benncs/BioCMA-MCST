@@ -17,6 +17,7 @@ var classMC_1_1ParticlesContainer =
     [ "get_weight", "classMC_1_1ParticlesContainer.html#aa2d3ed66b206a8c7fbad9acb23b5b878", null ],
     [ "handle_division", "classMC_1_1ParticlesContainer.html#a5d2f244aefe3e55bcebe1d3d8bf94ca2", null ],
     [ "load", "classMC_1_1ParticlesContainer.html#adae9af7cbb629530927d504f5fe75c90", null ],
+    [ "load_tuning_constant", "classMC_1_1ParticlesContainer.html#a50dddaeafcf0c527adb2a678cee3172e", null ],
     [ "merge_buffer", "classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565", null ],
     [ "n_particles", "classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f", null ],
     [ "operator=", "classMC_1_1ParticlesContainer.html#ad499de971fbe1a2cf3e1adbe2bb151d6", null ],
@@ -31,7 +32,6 @@ var classMC_1_1ParticlesContainer =
     [ "buffer_model", "classMC_1_1ParticlesContainer.html#a9d347f73227fb358d6e5be5e98770c1a", null ],
     [ "buffer_position", "classMC_1_1ParticlesContainer.html#aa90d0178c200214e2ecf3f4e5ef2196d", null ],
     [ "buffer_ratio", "classMC_1_1ParticlesContainer.html#ae9843abc6b6462765ada320781960b62", null ],
-    [ "default_allocation_factor", "classMC_1_1ParticlesContainer.html#ac1b368322a0a1dc484b92c04bdacb585", null ],
     [ "end", "classMC_1_1ParticlesContainer.html#a3a04fbf688db99e09094770e04ca5b99", null ],
     [ "inactive_counter", "classMC_1_1ParticlesContainer.html#ab287b63249c0feaf15a20d26bfebc647", null ],
     [ "minimum_dead_particle_removal", "classMC_1_1ParticlesContainer.html#ab7767bd85deb3dbd602852d8547f7bd4", null ],
@@ -39,6 +39,7 @@ var classMC_1_1ParticlesContainer =
     [ "n_allocated_elements", "classMC_1_1ParticlesContainer.html#ae3d67d42ba1d139b0ad83d1d9395f3dc", null ],
     [ "n_used_elements", "classMC_1_1ParticlesContainer.html#a7b4ed9c9e9938f71e1fc659dcf3ff66e", null ],
     [ "position", "classMC_1_1ParticlesContainer.html#aab2bc872e28015fbbd9dd5ce78468e73", null ],
+    [ "shink_ratio", "classMC_1_1ParticlesContainer.html#af9ea414084ee8929c35b62f073ebf812", null ],
     [ "status", "classMC_1_1ParticlesContainer.html#afa005cba9cbc87bc27b6bd0eaa066fac", null ],
     [ "weights", "classMC_1_1ParticlesContainer.html#a393fc40e049e47aa2f7c6365cce02e4f", null ]
 ];

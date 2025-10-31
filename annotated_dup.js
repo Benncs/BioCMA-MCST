@@ -84,9 +84,9 @@ var annotated_dup =
       ] ],
       [ "KernelInline", "namespaceSimulation_1_1KernelInline.html", [
         [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html", "structSimulation_1_1KernelInline_1_1CycleFunctor" ],
+        [ "CycleFunctors", "structSimulation_1_1KernelInline_1_1CycleFunctors.html", "structSimulation_1_1KernelInline_1_1CycleFunctors" ],
         [ "CycleReducer", "classSimulation_1_1KernelInline_1_1CycleReducer.html", "classSimulation_1_1KernelInline_1_1CycleReducer" ],
         [ "CycleReduceType", "structSimulation_1_1KernelInline_1_1CycleReduceType.html", "structSimulation_1_1KernelInline_1_1CycleReduceType" ],
-        [ "Functors", "structSimulation_1_1KernelInline_1_1Functors.html", "structSimulation_1_1KernelInline_1_1Functors" ],
         [ "LeavingFlow", "structSimulation_1_1KernelInline_1_1LeavingFlow.html", "structSimulation_1_1KernelInline_1_1LeavingFlow" ],
         [ "MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", "structSimulation_1_1KernelInline_1_1MoveFunctor" ],
         [ "MoveInfo", "structSimulation_1_1KernelInline_1_1MoveInfo.html", "structSimulation_1_1KernelInline_1_1MoveInfo" ],

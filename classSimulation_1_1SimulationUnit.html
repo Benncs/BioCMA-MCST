@@ -108,8 +108,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6fecb0563822fae0ef26d9f6209d0779" id="r_a6fecb0563822fae0ef26d9f6209d0779"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6fecb0563822fae0ef26d9f6209d0779">update_feed</a> (double t, double d_t, bool update_scalar=true) noexcept</td></tr>
 <tr class="memitem:ad68b5b710ed62a511e10dd6dd1a920f7" id="r_ad68b5b710ed62a511e10dd6dd1a920f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad68b5b710ed62a511e10dd6dd1a920f7">update</a> (<a class="el" href="structCmaUtils_1_1IterationState.html">CmaUtils::IterationState</a> &amp;&amp;new_state)</td></tr>
 <tr class="memitem:aa12b65d19fa7e3eb74152b0252591a4d" id="r_aa12b65d19fa7e3eb74152b0252591a4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa12b65d19fa7e3eb74152b0252591a4d">reset</a> ()</td></tr>
-<tr class="memitem:aa5b0aeaaa6821ce494fe23bd33ae316a" id="r_aa5b0aeaaa6821ce494fe23bd33ae316a"><td class="memTemplParams" colspan="2">template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
-<tr class="memitem:aa5b0aeaaa6821ce494fe23bd33ae316a template"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSimulation_1_1KernelInline_1_1Functors.html">KernelInline::Functors</a>&lt; Space, Model &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5b0aeaaa6821ce494fe23bd33ae316a">init_functors</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt; container)</td></tr>
+<tr class="memitem:a50e613289a3b6ca1abea7173e3eac01e" id="r_a50e613289a3b6ca1abea7173e3eac01e"><td class="memTemplParams" colspan="2">template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
+<tr class="memitem:a50e613289a3b6ca1abea7173e3eac01e template"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html">KernelInline::CycleFunctors</a>&lt; Space, Model &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50e613289a3b6ca1abea7173e3eac01e">init_functors</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt; container)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -128,8 +128,8 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ac3b83e6fb1638ace3cbfa35833c1affc" id="r_ac3b83e6fb1638ace3cbfa35833c1affc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#a8d1e1d8236f8e2ff9c680bdbb2685c98">CumulativeProbabilityView</a>&lt; ComputeSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3b83e6fb1638ace3cbfa35833c1affc">get_kernel_cumulative_proba</a> () const</td></tr>
 <tr class="memitem:a9ea90cab13d8259f026f57baad1c989f" id="r_a9ea90cab13d8259f026f57baad1c989f"><td class="memItemLeft" align="right" valign="top">kernelContribution&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ea90cab13d8259f026f57baad1c989f">get_kernel_contribution</a> () const</td></tr>
 <tr class="memitem:ad3ffc3108a93d7f403e8f2b81cc24e6d" id="r_ad3ffc3108a93d7f403e8f2b81cc24e6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3ffc3108a93d7f403e8f2b81cc24e6d">post_init_concentration</a> (const <a class="el" href="structSimulation_1_1ScalarInitializer.html">ScalarInitializer</a> &amp;scalar_init)</td></tr>
-<tr class="memitem:a596360d0966f7694e5ebf0652b61b0e2" id="r_a596360d0966f7694e5ebf0652b61b0e2"><td class="memTemplParams" colspan="2">template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
-<tr class="memitem:a596360d0966f7694e5ebf0652b61b0e2 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a596360d0966f7694e5ebf0652b61b0e2">post_cycle</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt; &amp;container, <a class="el" href="namespaceSimulation_1_1KernelInline.html#a80366d1de1efc8a4e4c203cdceb3b6d1">KernelInline::move_reducer_view_type</a>&lt; Space &gt; out_total, <a class="el" href="namespaceSimulation_1_1KernelInline.html#a3e6c212b4e4693a01483c60331e9fac1">KernelInline::cycle_reducer_view_type</a>&lt; Space &gt; reducer_type)</td></tr>
+<tr class="memitem:a96e8f3fbde370c918a3710b0b910cd42" id="r_a96e8f3fbde370c918a3710b0b910cd42"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
+<tr class="memitem:a96e8f3fbde370c918a3710b0b910cd42 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96e8f3fbde370c918a3710b0b910cd42">post_cycle</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt; &amp;container, auto &amp;cycle_functors)</td></tr>
 <tr class="memitem:ad984b5d95455d6db475d8b6e20077a0c" id="r_ad984b5d95455d6db475d8b6e20077a0c"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
 <tr class="memitem:ad984b5d95455d6db475d8b6e20077a0c template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad984b5d95455d6db475d8b6e20077a0c">pre_cycle</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt; &amp;container, double d_t, auto &amp;functors)</td></tr>
 </table><table class="memberdecls">
@@ -323,7 +323,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a7b49fd171d4de8aa3949738da6c3810f_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a7b49fd171d4de8aa3949738da6c3810f_cgraph.svg" width="100%" height="591"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -737,8 +737,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="aa5b0aeaaa6821ce494fe23bd33ae316a" name="aa5b0aeaaa6821ce494fe23bd33ae316a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5b0aeaaa6821ce494fe23bd33ae316a">&#9670;&#160;</a></span>init_functors()</h2>
+<a id="a50e613289a3b6ca1abea7173e3eac01e" name="a50e613289a3b6ca1abea7173e3eac01e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50e613289a3b6ca1abea7173e3eac01e">&#9670;&#160;</a></span>init_functors()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -746,7 +746,7 @@ Here is the caller graph for this function:</div>
 template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structSimulation_1_1KernelInline_1_1Functors.html">KernelInline::Functors</a>&lt; Space, Model &gt; Simulation::SimulationUnit::init_functors </td>
+          <td class="memname"><a class="el" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html">KernelInline::CycleFunctors</a>&lt; Space, Model &gt; Simulation::SimulationUnit::init_functors </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;</td>          <td class="paramname"><span class="paramname"><em>container</em></span></td><td>)</td>
           <td></td>
@@ -756,7 +756,7 @@ template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aa5b0aeaaa6821ce494fe23bd33ae316a_cgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a50e613289a3b6ca1abea7173e3eac01e_cgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -821,13 +821,13 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a596360d0966f7694e5ebf0652b61b0e2" name="a596360d0966f7694e5ebf0652b61b0e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a596360d0966f7694e5ebf0652b61b0e2">&#9670;&#160;</a></span>post_cycle()</h2>
+<a id="a96e8f3fbde370c918a3710b0b910cd42" name="a96e8f3fbde370c918a3710b0b910cd42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96e8f3fbde370c918a3710b0b910cd42">&#9670;&#160;</a></span>post_cycle()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -840,12 +840,7 @@ template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceSimulation_1_1KernelInline.html#a80366d1de1efc8a4e4c203cdceb3b6d1">KernelInline::move_reducer_view_type</a>&lt; Space &gt;</td>          <td class="paramname"><span class="paramname"><em>out_total</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespaceSimulation_1_1KernelInline.html#a3e6c212b4e4693a01483c60331e9fac1">KernelInline::cycle_reducer_view_type</a>&lt; Space &gt;</td>          <td class="paramname"><span class="paramname"><em>reducer_type</em></span>&#160;)</td>
+          <td class="paramtype">auto &amp;</td>          <td class="paramname"><span class="paramname"><em>cycle_functors</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -857,12 +852,12 @@ template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a596360d0966f7694e5ebf0652b61b0e2_cgraph.svg" width="100%" height="497"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a96e8f3fbde370c918a3710b0b910cd42_cgraph.svg" width="100%" height="497"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a596360d0966f7694e5ebf0652b61b0e2_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a96e8f3fbde370c918a3710b0b910cd42_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -968,7 +963,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad984b5d95455d6db475d8b6e20077a0c_cgraph.svg" width="431" height="175"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad984b5d95455d6db475d8b6e20077a0c_cgraph.svg" width="431" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>

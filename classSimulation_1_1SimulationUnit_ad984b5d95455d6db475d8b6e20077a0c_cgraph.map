@@ -1,9 +1,7 @@
 <map id="Simulation::SimulationUnit::pre_cycle" name="Simulation::SimulationUnit::pre_cycle">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,68,181,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,181,76"/>
 <area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#ac3b83e6fb1638ace3cbfa35833c1affc" title=" " alt="" coords="229,5,425,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,65,237,46,239,51,168,70"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,42,213,38,213,43,181,47"/>
 <area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#a7f871ecc4425caa53838c0a620f3d686" title=" " alt="" coords="239,68,414,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,85,223,85,223,90,181,90"/>
-<area shape="rect" id="Node000004" href="$classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f" title="Gets the number of particles in the container." alt="" coords="248,131,406,169"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="168,105,239,124,237,129,167,110"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,66,224,71,223,76,181,71"/>
 </map>

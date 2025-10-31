@@ -94,7 +94,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a9677d5083af7df5a15e1689b97fd7a98" id="r_a9677d5083af7df5a15e1689b97fd7a98"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9677d5083af7df5a15e1689b97fd7a98">init</a> (const <a class="el" href="classMC_1_1KPRNG.html#a4d34d46754755b2291e25325c5759641">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx, const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;arr, const <a class="el" href="#af98ee38e88201bed889f8bdf5c53d922">Config</a> &amp;params)</td></tr>
 <tr class="memitem:a712bbca45efd85ea38cec631d0a416cb" id="r_a712bbca45efd85ea38cec631d0a416cb"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7b">MC::Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a712bbca45efd85ea38cec631d0a416cb">update</a> (const <a class="el" href="classMC_1_1KPRNG.html#a4d34d46754755b2291e25325c5759641">MC::KPRNG::pool_type</a> &amp;random_pool, <a class="el" href="#ab10005608c96d8a014bc4f73653a81c4">FloatType</a> d_t, std::size_t idx, const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;arr, const <a class="el" href="namespaceMC.html#aad69f7f73ef6a017ee86ca89451a6271">MC::LocalConcentration</a> &amp;c)</td></tr>
 <tr class="memitem:aa727b73c1c6b3a482b9eb3ec29842c04" id="r_aa727b73c1c6b3a482b9eb3ec29842c04"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa727b73c1c6b3a482b9eb3ec29842c04">division</a> (const <a class="el" href="classMC_1_1KPRNG.html#a4d34d46754755b2291e25325c5759641">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx, std::size_t idx2, const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;arr, const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;buffer_arr)</td></tr>
-<tr class="memitem:aa54b36d8ce8b44daf7e77bba0ed6fd5d" id="r_aa54b36d8ce8b44daf7e77bba0ed6fd5d"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa54b36d8ce8b44daf7e77bba0ed6fd5d">contribution</a> (std::size_t idx, std::size_t position, double weight, const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;arr, const <a class="el" href="namespaceMC.html#aa1b418b6e151ebc14d95164d7370e35b">MC::ContributionView</a> &amp;contributions)</td></tr>
 <tr class="memitem:af95f402aa987c6d544670eff217691d7" id="r_af95f402aa987c6d544670eff217691d7"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af95f402aa987c6d544670eff217691d7">mass</a> (std::size_t idx, const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;arr)</td></tr>
 <tr class="memitem:a9b1f19a191f8cbdb23e7598ca2b06b75" id="r_a9b1f19a191f8cbdb23e7598ca2b06b75"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::string_view &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b1f19a191f8cbdb23e7598ca2b06b75">names</a> ()</td></tr>
 <tr class="memitem:a510a7132bbef294b660877f2f4b7b4ff" id="r_a510a7132bbef294b660877f2f4b7b4ff"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a510a7132bbef294b660877f2f4b7b4ff">get_number</a> ()</td></tr>
@@ -215,50 +214,6 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="aa54b36d8ce8b44daf7e77bba0ed6fd5d" name="aa54b36d8ce8b44daf7e77bba0ed6fd5d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa54b36d8ce8b44daf7e77bba0ed6fd5d">&#9670;&#160;</a></span>contribution()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION void Models::FixedLength::contribution </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>idx</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>weight</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="#a0279d1d6c1862c6dafcc4390cd8aa3f7">SelfParticle</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>arr</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceMC.html#aa1b418b6e151ebc14d95164d7370e35b">MC::ContributionView</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>contributions</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aa727b73c1c6b3a482b9eb3ec29842c04" name="aa727b73c1c6b3a482b9eb3ec29842c04"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa727b73c1c6b3a482b9eb3ec29842c04">&#9670;&#160;</a></span>division()</h2>
 

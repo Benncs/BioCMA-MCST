@@ -3,6 +3,7 @@ var structSimulation_1_1KernelInline_1_1CycleFunctor =
     [ "TeamMember", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a51a40082c7b5e2c85653cb98a188894e", null ],
     [ "TeamPolicy", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a9e9ed6bfc86b60cece967345e23f1e13", null ],
     [ "value_type", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a54b7d670ca890df53c1f3557a7d6f0a8", null ],
+    [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a77a382779979e6e32e740c8a70df87c2", null ],
     [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a4c750f8d242d334489ae8ff4093f71ca", null ],
     [ "operator()", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#add5b6c5a0e7d6b32b329c356a3722392", null ],
     [ "operator()", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a8c0c192a8e741909e828e89fb381ae70", null ],

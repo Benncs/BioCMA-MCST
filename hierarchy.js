@@ -11,6 +11,7 @@ var hierarchy =
     [ "CustomFunctor", "structCustomFunctor.html", null ],
     [ "Core::ScalarFactory::CustomScript", "structCore_1_1ScalarFactory_1_1CustomScript.html", null ],
     [ "Simulation::KernelInline::CycleFunctor< M >", "structSimulation_1_1KernelInline_1_1CycleFunctor.html", null ],
+    [ "Simulation::KernelInline::CycleFunctors< Space, Model >", "structSimulation_1_1KernelInline_1_1CycleFunctors.html", null ],
     [ "Simulation::KernelInline::CycleReducer< Space >", "classSimulation_1_1KernelInline_1_1CycleReducer.html", null ],
     [ "Simulation::KernelInline::CycleReduceType", "structSimulation_1_1KernelInline_1_1CycleReduceType.html", null ],
     [ "Core::DataExporter", "classCore_1_1DataExporter.html", [
@@ -51,7 +52,6 @@ var hierarchy =
     [ "Simulation::MassTransfer::Type::FlowmapTurbulence", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapTurbulence.html", null ],
     [ "foo", "structfoo.html", null ],
     [ "Core::ScalarFactory::FullCase", "structCore_1_1ScalarFactory_1_1FullCase.html", null ],
-    [ "Simulation::KernelInline::Functors< Space, Model >", "structSimulation_1_1KernelInline_1_1Functors.html", null ],
     [ "Core::GlobalInitialiser", "classCore_1_1GlobalInitialiser.html", null ],
     [ "WrapMPI::HostIterationPayload", "classWrapMPI_1_1HostIterationPayload.html", null ],
     [ "ILoadBalancer", "classILoadBalancer.html", [

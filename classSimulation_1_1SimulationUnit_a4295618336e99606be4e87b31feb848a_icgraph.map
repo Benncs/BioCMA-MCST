@@ -1,6 +1,6 @@
 <map id="Simulation::SimulationUnit::getkernel_concentration" name="Simulation::SimulationUnit::getkernel_concentration">
 <area shape="rect" id="Node000001" title=" " alt="" coords="229,49,404,88"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#aa5b0aeaaa6821ce494fe23bd33ae316a" title=" " alt="" coords="5,5,181,44"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a50e613289a3b6ca1abea7173e3eac01e" title=" " alt="" coords="5,5,181,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,51,181,45,182,39,214,46"/>
 <area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#a6ebf53048a2d93f04504352c79660c79" title=" " alt="" coords="5,92,181,131"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,91,182,97,181,92,213,86"/>
