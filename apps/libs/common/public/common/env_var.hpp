@@ -1,9 +1,9 @@
 #ifndef __BIOMC_COMMON_ENV_VAR_HPP__
 #define __BIOMC_COMMON_ENV_VAR_HPP__
 #include <cstdlib>
+#include <iostream>
 #include <sstream>
 #include <string_view>
-
 namespace Common
 {
   /**
@@ -21,7 +21,7 @@ namespace Common
       stream >> value;
       if (stream)
       {
-        ret = vdefault;
+        ret = value;
       }
     }
     return ret;
