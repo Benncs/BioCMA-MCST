@@ -156,7 +156,7 @@ namespace Core
                      << "Number of MPI nodes: " << size << '\n';
         }
         std::ios_base::sync_with_stdio(true);
-        std::flush(std::cout);
+        std::flush(out_stream);
       }
     }
 
