@@ -11,7 +11,8 @@ namespace UnsafeUDF
 
   void (*Loader::init_udf)(const MC::KPRNG::pool_type& random_pool,
                            std::size_t idx,
-                           const Models::UdfModel::SelfParticle& arr) =
+                           const Models::UdfModel::SelfParticle& arr,
+                           const Models::UdfModel::Config& config) =
       nullptr; //< init function ptr
 
   MC::Status (*Loader::update_udf)(const MC::KPRNG::pool_type& random_pool,
@@ -21,12 +22,9 @@ namespace UnsafeUDF
                                    const MC::LocalConcentration& c) =
       nullptr; //< update function ptr
 
-  void (*Loader::contribution_udf)(std::size_t idx,
-                                   std::size_t position,
-                                   double weight,
-                                   const Models::UdfModel::SelfParticle& arr,
-                                   const MC::ContributionView& contributions) =
-      nullptr; //< contribution function ptr
+  MC::ContribIndexBounds (*Loader::get_bounds_udf)() = nullptr;
+
+  Models::UdfModel::Config (*Loader::get_config_udf)(std::size_t n) = nullptr;
 
   void (*Loader::division_udf)(
       const MC::KPRNG::pool_type& random_pool,
@@ -54,7 +52,8 @@ namespace UnsafeUDF
     Loader::get_number = _mod._get_number_udf_m;
     Loader::init_udf = _mod._init_udf_m;
     Loader::update_udf = _mod._update_udf_m;
-    Loader::contribution_udf = _mod._contribution_udf_m;
+    Loader::get_config_udf = _mod._get_config_udf_m;
+    Loader::get_bounds_udf = _mod._get_bounds_udf_m;
     Loader::division_udf = _mod._division_udf_m;
     Loader::mass = _mod._mass_udf_m;
     Loader::set_nvar_udf = _mod._set_nvar_udf_m;

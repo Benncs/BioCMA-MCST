@@ -24,7 +24,7 @@ def generate_loader_body(model_files: List[str]) -> str:
         function_body += f"""
     case {i}:
     {{
-        return MC::init<Models::{to_camel_case(model_name)}>(_logger,
+        return ::MC::init<Models::{to_camel_case(model_name)}>(_logger,
              number_particle, liq_volume, liquid_neighbors,uniform_mc_init,total_mass);
     }}
     """
@@ -99,13 +99,13 @@ def generate_variant(
         with open(template_path, "r") as template_file:
             template_content = template_file.read()
             content = template_content.replace("@INCLUDES@", includes)
-            body = "MC::ParticlesContainer<DefaultModel>,"
+            body = "::MC::ParticlesContainer<DefaultModel>,"
             for model in model_files:
-                body += f"MC::ParticlesContainer<Models::{to_camel_case(model)}>,"
+                body += f"::MC::ParticlesContainer<Models::{to_camel_case(model)}>,"
 
             body = body[:-1]
             if add_py_variant:
-                body += ",MC::ParticlesContainer<PythonWrap::PimpModel>"
+                body += ",::MC::ParticlesContainer<PythonWrap::PimpModel>"
 
             content = content.replace("@VARIANT_TYPE@", body)
 

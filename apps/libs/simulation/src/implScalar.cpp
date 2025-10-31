@@ -31,7 +31,9 @@ namespace Simulation
 
     const int n_row = EIGEN_INDEX(n_r);
     const int n_col = EIGEN_INDEX(n_c);
+
     m_volumes = Eigen::DiagonalMatrix<double, -1>(n_col);
+
     this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(
         volumes.data(), static_cast<int>(volumes.size()));
 
@@ -63,12 +65,12 @@ namespace Simulation
     return concentrations.compute;
   }
 
-  std::size_t ScalarSimulation::n_col() const
+  std::size_t ScalarSimulation::n_col() const noexcept
   {
     return n_c;
   }
 
-  std::size_t ScalarSimulation::n_row() const
+  std::size_t ScalarSimulation::n_row() const noexcept
   {
     return n_r;
   }

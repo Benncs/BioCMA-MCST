@@ -6,7 +6,6 @@
 #include <common/execinfo.hpp>
 #include <core/post_process.hpp>
 #include <dataexporter/data_exporter.hpp>
-#include <impl/Kokkos_HostThreadTeam.hpp>
 #include <impl_post_process.hpp>
 #include <mc/unit.hpp>
 #include <memory>
@@ -14,12 +13,12 @@
 #include <optional>
 #include <simulation/simulation.hpp>
 #include <variant>
-
 namespace
 {
   void append_properties(int counter,
                          Simulation::SimulationUnit& simulation,
-                         Core::PartialExporter& partial_exporter);
+                         Core::PartialExporter& partial_exporter,
+                         bool with_age);
 } // namespace
 
 namespace PostProcessing
@@ -47,7 +46,8 @@ namespace PostProcessing
   void save_particle_state(Simulation::SimulationUnit& simulation,
                            Core::PartialExporter& pde)
   {
-    ::append_properties(counter, simulation, pde);
+    const bool with_age = true; // TODO
+    ::append_properties(counter, simulation, pde, with_age);
     counter++;
   }
 
@@ -55,7 +55,7 @@ namespace PostProcessing
                              [[maybe_unused]] const ExecInfo& exec,
                              const Core::SimulationParameters& params,
                              Simulation::SimulationUnit& simulation,
-                             std::unique_ptr<Core::MainExporter>& mde)
+                             const std::shared_ptr<Core::MainExporter>& mde)
   {
     if (logger)
     {
@@ -118,39 +118,37 @@ namespace
 {
 
   std::optional<PostProcessing::BonceBuffer> get_particle_properties_device(
-      const std::unique_ptr<MC::MonteCarloUnit>& mc_unit);
+      const std::unique_ptr<MC::MonteCarloUnit>& mc_unit, bool with_age);
 
-  void append_properties(int counter,
+  void append_properties(const int counter,
                          Simulation::SimulationUnit& simulation,
-                         Core::PartialExporter& partial_exporter)
+                         Core::PartialExporter& partial_exporter,
+                         const bool with_age)
   {
     bool compress_data = false;
-    auto dump = get_particle_properties_device(simulation.mc_unit);
+    auto dump = get_particle_properties_device(simulation.mc_unit, with_age);
     if (dump.has_value())
     {
       std::string ds_name = "biological_model/" + std::to_string(counter) + "/";
-      partial_exporter.write_particle_data(dump->vnames,
-                                           dump->particle_values,
-                                           dump->spatial_values,
-                                           ds_name,
-                                           compress_data);
+      partial_exporter.write_particle_data(
+          std::move(*dump), ds_name, compress_data);
     }
   }
 
   std::optional<PostProcessing::BonceBuffer> get_particle_properties_device(
-      const std::unique_ptr<MC::MonteCarloUnit>& mc_unit)
+      const std::unique_ptr<MC::MonteCarloUnit>& mc_unit, bool with_age)
   {
 
     // BonceBuffer properties;
     const size_t n_compartment = mc_unit->domain.getNumberCompartments();
 
     return std::visit(
-        [n_compartment](auto& container)
+        [n_compartment, with_age](auto& container)
         {
           using CurrentModel = typename std::remove_reference<
               decltype(container)>::type::UsedModel;
-          return PostProcessing::get_properties<CurrentModel>(container,
-                                                              n_compartment);
+          return PostProcessing::get_properties<CurrentModel>(
+              container, n_compartment, with_age);
         },
         mc_unit->container);
   }

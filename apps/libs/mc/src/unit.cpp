@@ -1,6 +1,6 @@
-#include "common/common.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
+#include <common/common.hpp>
 #include <cstdint>
 #include <cstring>
 #include <mc/prng/prng.hpp>
@@ -91,40 +91,7 @@ namespace
     }
   };
 
-  template <typename Model, typename = void> struct InitFunctor;
-
-  template <typename Model>
-    requires(NonConfigurableModel<Model>)
-  struct InitFunctor<Model>
-  {
-
-    explicit InitFunctor(MC::ParticlesContainer<Model> _list,
-                         uint64_t min,
-                         uint64_t max,
-                         MC::KPRNG kprng)
-        : particles(std::move(_list)), rng(std::move(kprng)), min_c(min),
-          max_c(max)
-    {
-    }
-
-    KOKKOS_INLINE_FUNCTION
-    void operator()(const int i, double& local_mass) const
-    {
-      particles.position(i) = rng.uniform_u(min_c, max_c);
-      Model::init(rng.random_pool, i, particles.model);
-      const double mass_i = Model::mass(i, particles.model);
-      local_mass += mass_i;
-    }
-
-    MC::ParticlesContainer<Model> particles;
-    MC::KPRNG rng;
-    uint64_t min_c;
-    uint64_t max_c;
-  };
-
-  template <typename Model>
-    requires(ConfigurableModel<Model>)
-  struct InitFunctor<Model>
+  template <ModelType Model> struct InitFunctor
   {
     explicit InitFunctor(MC::ParticlesContainer<Model> _list,
                          uint64_t min,
@@ -132,15 +99,26 @@ namespace
                          MC::KPRNG kprng,
                          Model::Config config)
         : particles(std::move(_list)), rng(std::move(kprng)), min_c(min),
-          max_c(max), config(config)
+          max_c(max), config(std::move(config))
     {
     }
 
     KOKKOS_INLINE_FUNCTION
     void operator()(const int i, double& local_mass) const
+      requires(ConfigurableModel<Model>)
     {
       particles.position(i) = rng.uniform_u(min_c, max_c);
       Model::init(rng.random_pool, i, particles.model, config);
+      const double mass_i = Model::mass(i, particles.model);
+      local_mass += mass_i;
+    }
+
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const int i, double& local_mass) const
+      requires(NonConfigurableModel<Model>)
+    {
+      particles.position(i) = rng.uniform_u(min_c, max_c);
+      Model::init(rng.random_pool, i, particles.model);
       const double mass_i = Model::mass(i, particles.model);
       local_mass += mass_i;
     }
@@ -153,33 +131,21 @@ namespace
   };
 
   template <typename Model>
-  void initializeModel(const std::size_t n_particles,
-                       MC::ParticlesContainer<Model> particles,
-                       uint64_t min,
-                       uint64_t max,
-                       MC::KPRNG& rng,
-                       double& total_mass)
+  void initialize_model(const std::size_t n_particles,
+                        MC::ParticlesContainer<Model> particles,
+                        uint64_t min,
+                        uint64_t max,
+                        MC::KPRNG& rng,
+                        double& total_mass)
   {
-    if constexpr (NonConfigurableModel<Model>)
-    {
-      Kokkos::parallel_reduce(
-          "mc_init_first",
-          Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particles),
-          InitFunctor<Model>(particles, min, max, rng),
-          total_mass);
-      Kokkos::fence();
-    }
-    else
-    {
-      typename Model::Config config =
-          Models::get_model_configuration<Model>(n_particles);
-      Kokkos::parallel_reduce(
-          "mc_init_first",
-          Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particles),
-          InitFunctor<Model>(particles, min, max, rng, config),
-          total_mass);
-      Kokkos::fence();
-    }
+
+    typename Model::Config config =
+        Models::get_model_configuration<Model>(n_particles);
+    Kokkos::parallel_reduce(
+        "mc_init_first",
+        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particles),
+        InitFunctor<Model>(particles, min, max, rng, config),
+        total_mass);
   }
 
 } // namespace
@@ -310,7 +276,7 @@ namespace MC
         CurrentModel::preinit();
       }
 
-      initializeModel(n_particles, container, min_c, max_c, rng, total_mass);
+      initialize_model(n_particles, container, min_c, max_c, rng, total_mass);
       Kokkos::fence();
     };
 

@@ -1,7 +1,7 @@
 #ifndef __DEFAULT_MODEL_IMPLEMENTATION_HPP__
 #define __DEFAULT_MODEL_IMPLEMENTATION_HPP__
 
-#include "mc/alias.hpp"
+#include <mc/alias.hpp>
 #include <mc/traits.hpp>
 #include <optional>
 
@@ -13,11 +13,10 @@ struct DefaultModel
 {
   enum class particle_var : int
   {
-    mass = 0,
+    a = 0,
   };
   static constexpr std::size_t n_var = 1;
-
-  static constexpr std::string_view name = "simple";
+  static constexpr std::string_view name = "default_dynamic";
   using uniform_weight = std::true_type; // Using type alias
   using Self = DefaultModel;
   using FloatType = float;
@@ -75,14 +74,19 @@ struct DefaultModel
 
 CHECK_MODEL(DefaultModel)
 
+/*
+  Dynamic Model (with size not known at compile time)
+*/
+
 struct DynamicDefaultModel
 {
   enum class particle_var : int
   {
-    mass = 0,
+    a = 0,
   };
+
   static constexpr std::size_t n_var = 1;
-  static constexpr std::string_view name = "simple";
+  static constexpr std::string_view name = "default_dynamic";
   using uniform_weight = std::true_type; // Using type alias
   using Self = DynamicDefaultModel;
   using FloatType = float;

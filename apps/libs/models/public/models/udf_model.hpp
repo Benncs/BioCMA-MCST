@@ -1,7 +1,6 @@
 // #ifdef DECLARE_EXPORT_UDF
 #ifndef __BIO_MODEL_USER_HPP__
 #  define __BIO_MODEL_USER_HPP__
-#  include "Kokkos_Macros.hpp"
 #  include <mc/traits.hpp>
 
 namespace Models
@@ -15,16 +14,21 @@ namespace Models
     using Self = UdfModel;
     using FloatType = float;
     using SelfParticle = MC::DynParticlesModel<FloatType>;
-    using Config = std::nullopt_t;
+    using Config = Kokkos::View<float**>;
 
     KOKKOS_FUNCTION static void
     init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
          [[maybe_unused]] std::size_t idx,
-         [[maybe_unused]] const SelfParticle& arr);
+         [[maybe_unused]] const SelfParticle& arr,
+         const Self::Config& config);
 
     KOKKOS_FUNCTION static double
     mass([[maybe_unused]] std::size_t idx,
          [[maybe_unused]] const SelfParticle& arr);
+
+    static MC::ContribIndexBounds get_bounds();
+
+    static Self::Config get_config(std::size_t n);
 
     KOKKOS_FUNCTION static MC::Status
     update([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
@@ -55,7 +59,7 @@ namespace Models
   };
   inline std::size_t UdfModel::n_var = 0; // Need to be overwritte
   static_assert(ModelType<UdfModel>, "Check Pimpl");
-  static_assert(NonConfigurableModel<UdfModel>, "Check Pimpl");
+  static_assert(ConfigurableModel<UdfModel>, "Check Pimpl");
   static_assert(HasExportProperties<UdfModel>, "Check Pimpl");
 } // namespace Models
 

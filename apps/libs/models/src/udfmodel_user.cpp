@@ -1,6 +1,8 @@
 // #ifdef DECLARE_EXPORT_UDF
 // #include "udf_includes.hpp"
 #include "ext/udf_includes.hpp"
+#include <Kokkos_Core_fwd.hpp>
+#include <fwd/Kokkos_Fwd_OPENMP.hpp>
 #include <mc/alias.hpp>
 #include <models/udf_model.hpp>
 
@@ -9,9 +11,10 @@ namespace Models
 
   KOKKOS_FUNCTION void UdfModel::init(const MC::KPRNG::pool_type& random_pool,
                                       std::size_t idx,
-                                      const UdfModel::SelfParticle& arr)
+                                      const UdfModel::SelfParticle& arr,
+                                      const UdfModel::Config& config)
   {
-    UnsafeUDF::Loader::init_udf(random_pool, idx, arr);
+    UnsafeUDF::Loader::init_udf(random_pool, idx, arr, config);
   }
 
   KOKKOS_FUNCTION double UdfModel::mass(std::size_t idx,
@@ -40,17 +43,6 @@ namespace Models
     UnsafeUDF::Loader::division_udf(random_pool, idx, idx2, arr, buffer_arr);
   }
 
-  KOKKOS_FUNCTION void
-  UdfModel::contribution(std::size_t idx,
-                         std::size_t position,
-                         double weight,
-                         const SelfParticle& arr,
-                         const MC::ContributionView& contributions)
-  {
-    UnsafeUDF::Loader::contribution_udf(
-        idx, position, weight, arr, contributions);
-  }
-
   void UdfModel::set_nvar()
   {
     UdfModel::n_var = UnsafeUDF::Loader::set_nvar_udf();
@@ -59,6 +51,17 @@ namespace Models
   std::vector<std::string_view> UdfModel::names()
   {
     return UnsafeUDF::Loader::names();
+  }
+
+  MC::ContribIndexBounds UdfModel::get_bounds()
+  {
+    return UnsafeUDF::Loader::get_bounds_udf();
+  }
+
+  UdfModel::Config UdfModel::get_config(std::size_t n)
+  {
+
+    return UnsafeUDF::Loader::get_config_udf(n);
   }
 
   std::vector<std::size_t> UdfModel::get_number()

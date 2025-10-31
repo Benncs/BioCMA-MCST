@@ -21,7 +21,6 @@ struct TagDetector
   TagDetector() = default;
 };
 
-#include <iostream>
 /**
  * @namespace MC
  * @brief Namespace that contains classes and structures related to Monte Carlo
@@ -36,7 +35,7 @@ namespace MC
 
   template <typename FunctorType, typename Tag = void>
   Kokkos::TeamPolicy<ComputeSpace, Tag>
-  get_policy(FunctorType& f, std::size_t range, bool reduce = false)
+  get_policy(const FunctorType& f, std::size_t range, bool reduce = false)
   {
     (void)f;
     (void)reduce;
@@ -56,6 +55,20 @@ namespace MC
 
     return Kokkos::TeamPolicy<ComputeSpace, Tag>(league_size,
                                                  recommended_team_size);
+  }
+
+  template <typename Tag = void>
+  Kokkos::TeamPolicy<ComputeSpace, Tag> get_policy_team()
+  {
+    const char* env_team_size = std::getenv("BIOMC_LEAGUE_SIZE");
+
+    auto league_size = 1;
+    if (env_team_size != nullptr)
+    {
+      league_size = std::stoi(env_team_size);
+    }
+
+    return Kokkos::TeamPolicy<ComputeSpace, Tag>(league_size, Kokkos::AUTO);
   }
 
   /**

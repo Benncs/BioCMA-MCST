@@ -31,8 +31,9 @@ namespace MC
 
   // NOLINTBEGIN(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
   template <uint64_t Nd, FloatingPointType F>
-  using ParticlesModel = Kokkos::View<F* [Nd]>;
-  template <FloatingPointType F> using DynParticlesModel = Kokkos::View<F**>;
+  using ParticlesModel = Kokkos::View<F* [Nd], Kokkos::LayoutRight>;
+  template <FloatingPointType F>
+  using DynParticlesModel = Kokkos::View<F**, Kokkos::LayoutRight>;
   // NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
 }; // namespace MC
@@ -56,7 +57,7 @@ concept NonConfigurableInit = requires(T model,
                                        const typename T::SelfParticle& arr) {
   { model.init(random_pool, idx, arr) } -> std::same_as<void>;
 };
-
+using NonConfigType = std::nullopt_t;
 /**
   @brief Concept to define a correct Model
 
@@ -94,7 +95,7 @@ concept CommonModelType = requires(T model,
   //                                                             ConfigurableInit<T>);
 
   requires ConfigurableInit<T> ||
-               (std::is_same_v<typename T::Config, std::nullopt_t> &&
+               (std::is_same_v<typename T::Config, NonConfigType> &&
                 NonConfigurableInit<T>);
 
   // {

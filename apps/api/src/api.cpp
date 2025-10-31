@@ -1,10 +1,10 @@
-#include "common/logger.hpp"
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
 #include <api/results.hpp>
 #include <biocma_cst_config.hpp>
 #include <common/common.hpp>
 #include <common/execinfo.hpp>
+#include <common/logger.hpp>
 #include <core/case_data.hpp>
 #include <core/global_initaliser.hpp>
 #include <core/simulation_parameters.hpp>
@@ -16,12 +16,12 @@
 #include <new>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/simulation.hpp>
 #include <span>
 #include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
-
 constexpr int ID_VERIF = 2025;
 
 #define CHECK_OR_RETURN(cond, msg)                                             \

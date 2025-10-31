@@ -1,6 +1,7 @@
 #ifndef __SIMULATION_MC_KERNEL_HPP
 #define __SIMULATION_MC_KERNEL_HPP
 
+#include "mc/alias.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
@@ -101,13 +102,15 @@ namespace Simulation::KernelInline
     using TeamMember = TeamPolicy::member_type;
     using value_type = CycleReduceType;
 
+    CycleFunctor() = default;
+
     KOKKOS_INLINE_FUNCTION
     CycleFunctor(MC::ParticlesContainer<M> _particles,
                  MC::KPRNG::pool_type _random_pool,
                  MC::KernelConcentrationType&& _concentrations,
                  MC::ContributionView _contribs_scatter,
                  MC::EventContainer _event)
-        : d_t(0.), particles(_particles), random_pool(_random_pool),
+        : d_t(0.), particles(std::move(_particles)), random_pool(_random_pool),
           concentrations(std::move(_concentrations)),
           contribs_scatter(std::move(_contribs_scatter)),
           events(std::move(_event))
@@ -117,20 +120,26 @@ namespace Simulation::KernelInline
     void update(double _d_t, MC::ParticlesContainer<M> _particles)
     {
       this->d_t = _d_t;
-      this->particles = _particles;
+      this->particles = std::move(_particles);
     }
 
-    void sblock(MC::ContributionView _block)
-    {
-      this->block = _block;
-    }
-
+    // KOKKOS_INLINE_FUNCTION
+    // void operator()(const TagFirstPass _tag,
+    //                 const TeamMember& team_handle) const
+    // {
+    //   (void)_tag;
+    //   GET_INDEX(particles.n_particles());
+    //   if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
+    //   {
+    //     return;
+    //   }
+    //   particles.get_contributions(idx, contribs_scatter);
+    // }
+    //
     KOKKOS_INLINE_FUNCTION
-    void operator()(const TagFirstPass _tag,
-                    const TeamMember& team_handle) const
+    void operator()(const TagFirstPass _tag, const std::size_t idx) const
     {
       (void)_tag;
-      GET_INDEX(particles.n_particles());
       if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
       {
         return;
@@ -151,7 +160,7 @@ namespace Simulation::KernelInline
       {
         return;
       }
-
+      particles.ages(idx, 1) += d_t;
       auto local_c =
           Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx));
 
@@ -166,9 +175,6 @@ namespace Simulation::KernelInline
         }
         events.wrap_incr<MC::EventType::NewParticle>();
       };
-
-      // particles.template get_contributions<ComputeSpace, TeamMember>(
-      //     random_pool, idx, contribs_scatter, team_handle);
     }
 
     M::FloatType d_t;
@@ -179,7 +185,6 @@ namespace Simulation::KernelInline
     // kernelContribution contribs;
     MC::KernelConcentrationType limitation_factor;
     MC::EventContainer events;
-    MC::ContributionView block;
   };
 
 } // namespace Simulation::KernelInline

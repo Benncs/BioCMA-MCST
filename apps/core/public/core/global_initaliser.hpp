@@ -18,12 +18,17 @@
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/scalar_initializer.hpp>
-#include <simulation/simulation.hpp>
+// #include <simulation/simulation.hpp>
 #include <string>
 #include <transitionner/transitionner.hpp>
 #include <vector>
 
 class ILoadBalancer;
+
+namespace Simulation
+{
+  class SimulationUnit;
+}
 
 namespace Core
 {
