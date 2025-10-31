@@ -1,8 +1,8 @@
 #ifndef __PARTICLES_CONTAINER_HPP__
 #define __PARTICLES_CONTAINER_HPP__
 
-#include "biocma_cst_config.hpp"
 #include <Kokkos_Core.hpp>
+#include <biocma_cst_config.hpp>
 #include <common/common.hpp>
 #include <common/env_var.hpp>
 #include <common/has_serialize.hpp>

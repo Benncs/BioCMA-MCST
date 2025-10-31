@@ -14,13 +14,13 @@
 
 namespace
 {
-  using namespace Models;
-  using FloatType = Models::UdfModel::FloatType;
-
   void __attribute__((constructor)) on_load()
   {
+
     std::printf("[UDF]: Minimal model loaded\r\n"); // NOLINT
   }
+  using namespace Models;
+  using FloatType = Models::UdfModel::FloatType;
 
   constexpr FloatType glucose_to_biomass_yield = 0.5;
 
@@ -34,9 +34,6 @@ namespace
 
   constexpr FloatType phi_s_max =
       (l_dot_max * lin_density) / glucose_to_biomass_yield; // kg/s
-  // Distributions
-  const auto l_initial_dist = MC::Distributions::TruncatedNormal<float>(
-      l_max_m * 0.75, l_max_m / 10., l_min_m, l_max_m);
 
   enum class particle_var : uint8_t
   {
