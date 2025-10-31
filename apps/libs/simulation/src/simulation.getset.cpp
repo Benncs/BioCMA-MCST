@@ -115,12 +115,12 @@ namespace Simulation
 
   std::span<const double> SimulationUnit::getContributionData() const
   {
-    return liquid_scalar->getContributionData();
+    return liquid_scalar->contribution_span();
   }
 
   std::span<double> SimulationUnit::getContributionData_mut()
   {
-    return this->liquid_scalar->getContributionData_mut();
+    return this->liquid_scalar->contribution_span_mut();
   }
 
   std::span<double> SimulationUnit::getCliqData() const

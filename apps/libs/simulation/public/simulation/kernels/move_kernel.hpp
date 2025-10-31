@@ -167,10 +167,14 @@ namespace Simulation::KernelInline
       }
       std::size_t team_local = 0;
 
+      // Each team deal with ( end_idx-start_idx), create a scrach space and
+      // fill it with generator frand
+
       Kokkos::parallel_reduce(
           Kokkos::TeamThreadRange(team_handle, start_idx, end_idx),
           [&](int idx, std::size_t& local)
           {
+            // use pregenerated here
             ages(idx, 0) += d_t;
             handle_exit(idx, local);
           },
@@ -221,10 +225,10 @@ namespace Simulation::KernelInline
       KOKKOS_ASSERT(i_current_compartment < move.liquid_volume.extent(0));
 
       const bool mask_next =
-          probability_leaving(rng1,
-                              move.liquid_volume(i_current_compartment),
-                              move.diag_transition(i_current_compartment),
-                              d_t);
+          probability_leaving<int>(rng1,
+                                   move.liquid_volume(i_current_compartment),
+                                   move.diag_transition(i_current_compartment),
+                                   d_t);
 
       positions(idx) =
           (mask_next) ? __find_next_compartment(move.neighbors,
@@ -253,9 +257,9 @@ namespace Simulation::KernelInline
 
       for (std::size_t i = 0LU; i < n_flow; ++i)
       {
-        auto generator = random_pool.get_state();
+        // auto generator = random_pool.get_state();
         const float random_number = generator.frand(0., 1.);
-        random_pool.free_state(generator);
+        // random_pool.free_state(generator);
 
         const auto& [index, flow] = move.leaving_flow(i);
 

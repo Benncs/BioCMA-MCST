@@ -57,18 +57,20 @@ namespace Simulation
     // Getters
     [[nodiscard]] ColMajorMatrixtype& get_concentration();
     [[nodiscard]] ColMajorKokkosScalarMatrix get_device_concentration() const;
-    [[nodiscard]] std::span<double const> getVolumeData() const;
-    [[nodiscard]] std::span<double> getContributionData() const;
 
-    [[nodiscard]] std::span<double> getContributionData_mut();
+    [[nodiscard]] std::span<double const> volume_span() const;
+
+    [[nodiscard]] std::span<double> contribution_span() const;
+
+    [[nodiscard]] std::span<double> contribution_span_mut();
     [[nodiscard]] const DiagonalType& getVolume() const;
     [[nodiscard]] auto getConcentrationArray() const;
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
     [[nodiscard]] const ColMajorMatrixtype& get_mass_transfer() const;
     [[nodiscard]] std::span<double> getConcentrationData();
 
-    [[nodiscard]] std::size_t n_row() const;
-    [[nodiscard]] std::size_t n_col() const;
+    [[nodiscard]] std::size_t n_row() const noexcept;
+    [[nodiscard]] std::size_t n_col() const noexcept;
 
     // Setters
 
@@ -139,19 +141,19 @@ namespace Simulation
     return this->concentrations.get_span();
   }
 
-  inline std::span<double> ScalarSimulation::getContributionData() const
+  inline std::span<double> ScalarSimulation::contribution_span() const
   {
     return {this->sources.host.data(),
             static_cast<size_t>(this->sources.host.size())};
   }
 
-  inline std::span<double> ScalarSimulation::getContributionData_mut()
+  inline std::span<double> ScalarSimulation::contribution_span_mut()
   {
     return {this->sources.host.data(),
             static_cast<size_t>(this->sources.host.size())};
   }
 
-  inline std::span<double const> ScalarSimulation::getVolumeData() const
+  inline std::span<double const> ScalarSimulation::volume_span() const
   {
     return {m_volumes.diagonal().data(), static_cast<size_t>(m_volumes.rows())};
   }

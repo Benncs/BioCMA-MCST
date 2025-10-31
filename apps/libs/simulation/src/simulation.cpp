@@ -23,7 +23,6 @@
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
 #include <utility>
-
 namespace Simulation
 {
 
@@ -82,7 +81,7 @@ namespace Simulation
     std::span<double const> vg = state.gas->volume;
     if (liquid_scalar)
     {
-      std::span<double const> vl = liquid_scalar->getVolumeData();
+      std::span<double const> vl = liquid_scalar->volume_span();
       this->liquid_scalar->setVolumes(vl, state.liq->inverse_volume);
     }
 

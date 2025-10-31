@@ -17,7 +17,7 @@ namespace Simulation::KernelInline
   //          (-CommonMaths::_ln<_use_kokkos_log>(random_number) * volume);
   // }
 
-  template <typename FastSample = void>
+  template <typename FastSample = int>
   KOKKOS_INLINE_FUNCTION bool probability_leaving(float random_number,
                                                   double volume,
                                                   double flow,

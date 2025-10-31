@@ -9,7 +9,6 @@
 #include <common/common.hpp>
 #include <common/logger.hpp>
 #include <cstddef>
-#include <cstdint>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
 #include <mc/prng/prng.hpp>
@@ -144,6 +143,8 @@ namespace Simulation
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
 
     void post_init_concentration(const ScalarInitializer& scalar_init);
+
+    // std::unique_ptr<ScalarSimulationProxyBase> scalar_proxy;
 
     std::shared_ptr<ScalarSimulation> liquid_scalar;
     std::shared_ptr<ScalarSimulation> gas_scalar;

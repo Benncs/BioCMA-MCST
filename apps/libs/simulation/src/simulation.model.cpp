@@ -72,11 +72,11 @@ namespace Simulation
         }
       }
     };
-
+    auto& ls = *this->liquid_scalar;
     for (auto& feed : feed.liquid_feeds())
     {
       feed.update(t, d_t);
-      functor(*this->liquid_scalar, feed);
+      functor(ls, feed);
       // TODO: improve
       if (feed.output_position)
       {
@@ -89,10 +89,11 @@ namespace Simulation
 
     if (is_two_phase_flow)
     {
+      auto& gs = *this->gas_scalar;
       for (auto& feed : feed.gas_feeds())
       {
         feed.update(t, d_t);
-        functor(*this->gas_scalar, feed);
+        functor(gs, feed);
       }
     }
   }
