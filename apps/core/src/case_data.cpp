@@ -142,7 +142,7 @@ namespace Core
       {
         std::ostream& out_stream = std::cout;
         std::stringstream os;
-        Kokkos::print_configuration(os);
+        Kokkos::print_configuration(os, true);
         std::string line;
         std::ios_base::sync_with_stdio(false);
         while (std::getline(os, line))
@@ -156,6 +156,7 @@ namespace Core
                      << "Number of MPI nodes: " << size << '\n';
         }
         std::ios_base::sync_with_stdio(true);
+        std::flush(std::cout);
       }
     }
 

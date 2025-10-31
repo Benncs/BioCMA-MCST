@@ -78,13 +78,6 @@ namespace Models
              const SelfParticle& arr,
              const SelfParticle& buffer_arr);
 
-    KOKKOS_INLINE_FUNCTION static void
-    contribution(std::size_t idx,
-                 std::size_t position,
-                 double weight,
-                 const SelfParticle& arr,
-                 const MC::ContributionView& contributions);
-
     KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx,
                                               const SelfParticle& arr)
     {
