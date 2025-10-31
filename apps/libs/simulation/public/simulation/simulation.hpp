@@ -109,7 +109,7 @@ namespace Simulation
     void reset();
 
     template <typename Space, ModelType Model>
-    KernelInline::Functors<Space, Model>
+    KernelInline::CycleFunctors<Space, Model>
     init_functors(MC::ParticlesContainer<Model> container);
 
   private:
@@ -154,10 +154,9 @@ namespace Simulation
 
     std::shared_ptr<IO::Logger> logger;
 
-    template <typename Space, ModelType Model>
+    template <ModelType Model>
     void post_cycle(MC::ParticlesContainer<Model>& container,
-                    KernelInline::move_reducer_view_type<Space> out_total,
-                    KernelInline::cycle_reducer_view_type<Space> reducer_type);
+                    auto& cycle_functors);
 
     template <ModelType Model>
     void pre_cycle(MC::ParticlesContainer<Model>& container,
@@ -168,63 +167,33 @@ namespace Simulation
   template <ModelType Model>
   void SimulationUnit::pre_cycle(MC::ParticlesContainer<Model>& container,
                                  double d_t,
-                                 auto& functors)
+                                 auto& cycle_functors)
   {
     this->contribs_scatter.reset();
     this->move_info.cumulative_probability = get_kernel_cumulative_proba();
     this->move_info.diag_transition = get_kernel_diagonal();
     this->move_info.neighbors = mc_unit->domain.getNeighbors();
 
-    //TODO map through flowmap and find max flow, then true if max>0
-    bool enable_move = move_info.liquid_volume.size() > 1;
-    bool enable_leave = move_info.leaving_flow.size() != 0;
-
-    // FIXME: cycle_kernel: need to update container because we change:
-    // n_used_element counter which is size_t outside of kernel. As functor owns
-    // a copy of container this counter is not update between iterations.
-    // 1. Use n_used_element as a reference counter type
-    // 2. Manually update counter in update function (dirty way)
-
-    functors.cycle_kernel.update(d_t, container);
-
-    // TODO: Why need to update all views (where did we lost the refcount ? )
-    functors.move_kernel.update(d_t,
-                                container.n_particles(),
-                                this->move_info,
-                                container.position,
-                                container.status,
-                                container.ages,
-                                enable_move,
-                                enable_leave);
+    cycle_functors.update(d_t, container, this->move_info);
   }
 
   template <typename Space, ModelType Model>
-  KernelInline::Functors<Space, Model>
+  KernelInline::CycleFunctors<Space, Model>
   SimulationUnit::init_functors(MC::ParticlesContainer<Model> container)
   {
-    auto local_rng = mc_unit->rng;
-    auto events = mc_unit->events;
-    auto reaction_functor =
-        Simulation::KernelInline::CycleFunctor<Model>(container,
-                                                      local_rng.random_pool,
-                                                      getkernel_concentration(),
-                                                      contribs_scatter,
-                                                      events);
-    auto move_functor =
-        Simulation ::KernelInline ::MoveFunctor(container.position,
-                                                container.status,
-                                                move_info,
-                                                local_rng.random_pool,
-                                                events,
-                                                probes[ProbeType ::LeavingTime],
-                                                container.ages);
-
-    return KernelInline::Functors<Space, Model>(std::move(reaction_functor),
-                                                std::move(move_functor));
+    return KernelInline::CycleFunctors<Space, Model>(
+        container,
+        mc_unit->rng.random_pool,
+        getkernel_concentration(),
+        contribs_scatter,
+        mc_unit->events,
+        move_info,
+        probes[ProbeType ::LeavingTime]);
   }
 
-  void
-  SimulationUnit::cycleProcess(auto&& container, double d_t, auto& functors)
+  void SimulationUnit::cycleProcess(auto&& container,
+                                    double d_t,
+                                    auto& cycle_functors)
   {
 
     PROFILE_SECTION("cycleProcess")
@@ -236,38 +205,28 @@ namespace Simulation
       return;
     }
 
-    pre_cycle(container, d_t, functors);
+    pre_cycle(container, d_t, cycle_functors);
 
-    if (functors.move_kernel.need_launch())
+    if (cycle_functors.move_kernel.need_launch())
     {
-      functors.launch_move(n_particle);
+      cycle_functors.launch_move(n_particle);
     }
 
     if (f_reaction)
     {
-      functors.launch_model(n_particle);
+      cycle_functors.launch_model(n_particle);
     }
 
-    post_cycle<ComputeSpace, CurrentModel>(
-        container, functors.move_reducer, functors.cycle_reducer);
+    post_cycle<CurrentModel>(container, cycle_functors);
   }
 
-  template <typename Space, ModelType Model>
-  void SimulationUnit::post_cycle(
-      MC::ParticlesContainer<Model>& container,
-      KernelInline::move_reducer_view_type<Space> out_total,
-      KernelInline::cycle_reducer_view_type<Space> reducer_type)
+  template <ModelType Model>
+  void SimulationUnit::post_cycle(MC::ParticlesContainer<Model>& container,
+                                  auto& cycle_functors)
   {
-
     Kokkos::fence();
-
     this->scatter_contribute();
-
-    const auto host_red =
-        Kokkos::create_mirror_view_and_copy(HostSpace(), reducer_type)();
-
-    const auto host_out_counter =
-        Kokkos::create_mirror_view_and_copy(HostSpace(), out_total)();
+    auto [host_red, host_out_counter] = cycle_functors.get_host_reduction();
 
     container.update_and_remove_inactive(host_out_counter, host_red.dead_total);
 

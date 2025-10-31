@@ -102,13 +102,15 @@ namespace Simulation::KernelInline
     using TeamMember = TeamPolicy::member_type;
     using value_type = CycleReduceType;
 
+    CycleFunctor() = default;
+
     KOKKOS_INLINE_FUNCTION
     CycleFunctor(MC::ParticlesContainer<M> _particles,
                  MC::KPRNG::pool_type _random_pool,
                  MC::KernelConcentrationType&& _concentrations,
                  MC::ContributionView _contribs_scatter,
                  MC::EventContainer _event)
-        : d_t(0.), particles(_particles), random_pool(_random_pool),
+        : d_t(0.), particles(std::move(_particles)), random_pool(_random_pool),
           concentrations(std::move(_concentrations)),
           contribs_scatter(std::move(_contribs_scatter)),
           events(std::move(_event))
@@ -118,7 +120,7 @@ namespace Simulation::KernelInline
     void update(double _d_t, MC::ParticlesContainer<M> _particles)
     {
       this->d_t = _d_t;
-      this->particles = _particles;
+      this->particles = std::move(_particles);
     }
 
     // KOKKOS_INLINE_FUNCTION

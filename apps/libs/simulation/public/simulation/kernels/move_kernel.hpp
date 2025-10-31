@@ -63,6 +63,7 @@ namespace Simulation::KernelInline
 
   struct MoveFunctor
   {
+    MoveFunctor() = default;
     MoveFunctor(MC::ParticlePositions p,
                 MC::ParticleStatus _status,
                 MoveInfo<ComputeSpace> m,
@@ -84,7 +85,7 @@ namespace Simulation::KernelInline
 
     void update(double _d_t,
                 std::size_t n_p,
-                MoveInfo<ComputeSpace> move_i,
+                MoveInfo<ComputeSpace>&& move_i,
                 MC::ParticlePositions _positions,
                 MC::ParticleStatus _status,
                 MC::ParticleAges _ages,
@@ -118,8 +119,8 @@ namespace Simulation::KernelInline
           move(std::move(m)), random_pool(_random_pool),
           status(std::move(_status)), events(std::move(_events)),
           probes(std::move(_probes)), ages(std::move(_ages)),
-          enable_move(b_move), enable_leave(b_leave),
-          random("random_view", 0, 0) {};
+          random("random_view", 0, 0), enable_move(b_move),
+          enable_leave(b_leave) {};
 
     // KOKKOS_INLINE_FUNCTION void
     // operator()(const Kokkos::TeamPolicy<ComputeSpace>::member_type&
