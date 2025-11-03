@@ -41,3 +41,7 @@ model_selection_dep = declare_dependency(
   include_directories: [public_mc, models_list_def],
   compile_args: [cpp_args],
 )
+
+if build_test
+  subdir('mc/tests') # Needs to be there because needs mc + models dependencies
+endif
