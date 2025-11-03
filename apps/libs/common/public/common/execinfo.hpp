@@ -19,11 +19,11 @@ struct ExecInfo
 
 #if defined(__cpp_lib_hardware_interference_size)
   // default cacheline size from runtime
-  static constexpr size_t cache_line_size =
+  [[deprecated]] static constexpr size_t cache_line_size =
       std::hardware_destructive_interference_size;
 #else
   // most common cacheline size otherwise
-  static constexpr size_t cache_line_size = 64;
+  [[deprecated]] static constexpr size_t cache_line_size = 64;
 #endif
 
   template <class Archive, typename T = void>

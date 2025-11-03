@@ -46,7 +46,7 @@ void test()
     assert(i > 0. && i < 1.);
   }
 
-  const auto result5 = rng.double_uniform_view<n_sample_static>();
+  const auto result5 = rng.random_view<double, n_sample_static>();
   for (size_t i = 0; i < n_sample_static; ++i)
   {
     std::cout << result5[i] << std::endl;

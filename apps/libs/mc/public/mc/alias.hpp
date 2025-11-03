@@ -7,8 +7,17 @@
 
 namespace MC
 {
+
+  // NOLINTBEGIN(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+  template <uint64_t Nd, FloatingPointType F>
+  using ParticlesModel = Kokkos::View<F* [Nd], Kokkos::LayoutRight>;
+  template <FloatingPointType F>
+  using DynParticlesModel = Kokkos::View<F**, Kokkos::LayoutRight>;
   using ComputeSpace = Kokkos::DefaultExecutionSpace;
-} // namespace MC
+  using HostSpace = Kokkos::DefaultHostExecutionSpace;
+  // NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+
+}; // namespace MC
 
 using kernelMT = Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::RandomAccess |
                                       Kokkos::MemoryTraitsFlags::Atomic |

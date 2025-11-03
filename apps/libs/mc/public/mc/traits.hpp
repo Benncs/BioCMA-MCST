@@ -7,7 +7,6 @@
 #include <common/common.hpp>
 #include <common/traits.hpp>
 #include <concepts>
-#include <cstdint>
 #include <mc/alias.hpp>
 #include <mc/macros.hpp>
 #include <mc/prng/prng.hpp>
@@ -25,18 +24,6 @@ concat_arrays(const std::array<std::string_view, N1>& arr1,
   std::copy(arr2.begin(), arr2.end(), result.begin() + N1);
   return result;
 }
-
-namespace MC
-{
-
-  // NOLINTBEGIN(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-  template <uint64_t Nd, FloatingPointType F>
-  using ParticlesModel = Kokkos::View<F* [Nd], Kokkos::LayoutRight>;
-  template <FloatingPointType F>
-  using DynParticlesModel = Kokkos::View<F**, Kokkos::LayoutRight>;
-  // NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-
-}; // namespace MC
 
 template <typename T>
 concept ConfigurableInit = requires(T model,
