@@ -200,8 +200,8 @@ namespace Models
 
       constexpr auto yon = U::k_perm / 10.;
       constexpr auto yoff = U::k_perm * 5.;
-      constexpr auto alpha = (1. - 0.) / (yoff - yon);
-      constexpr auto beta = -yon * alpha;
+      // constexpr auto alpha = (1. - 0.) / (yoff - yon);
+      // constexpr auto beta = -yon * alpha;
 
       const FloatType ap2_star = (s >= yon) & (s < yoff);
       const FloatType ap3_star = (one - ap_1 * G);

@@ -59,7 +59,8 @@ namespace MC
     auto unit = std::make_unique<MonteCarloUnit>();
     unit->domain = ReactorDomain(volumes, neighbors);
     // bool flag_virtual = unit->domain.getNumberCompartments() == 1;
-    auto container = ParticlesContainer<Model>(n_particles);
+    auto container =
+        ParticlesContainer<Model>(load_tuning_constant(), n_particles);
     try
     {
       impl_init(total_mass,

@@ -1,7 +1,7 @@
 #ifndef __SIMULATION_KERNELS_HPP__
 #define __SIMULATION_KERNELS_HPP__
 
-#include "impl/Kokkos_Profiling.hpp"
+#include <common/kokkos_getpolicy.hpp>
 #include <mc/unit.hpp>
 #include <simulation/kernels/model_kernel.hpp>
 #include <simulation/kernels/move_kernel.hpp>
@@ -92,9 +92,11 @@ namespace Simulation::KernelInline
 
       if (move_kernel.enable_move)
       {
+        // const auto _policy_move =
+        //     Common::get_policy<move_kernel_type, KernelInline::TagMove>(
+        //         move_kernel, n_particle, false);
         const auto _policy_move =
-            MC::get_policy<move_kernel_type, KernelInline::TagMove>(
-                move_kernel, n_particle, false);
+            Common::get_policy<KernelInline::TagMove>(n_particle, false);
 
         Kokkos ::parallel_for("cycle_move", _policy_move, move_kernel);
       }
@@ -113,9 +115,12 @@ namespace Simulation::KernelInline
     void launch_model(const std::size_t n_particle) const
     {
       constexpr bool is_reduce = true;
-      const auto _policy =
-          MC::get_policy<cycle_kernel_type, KernelInline::TagSecondPass>(
-              cycle_kernel, n_particle, is_reduce);
+      // const auto _policy =
+      //     Common::get_policy<cycle_kernel_type, KernelInline::TagSecondPass>(
+      //         cycle_kernel, n_particle, is_reduce);
+      //
+      const auto _policy = Common::get_policy<KernelInline::TagSecondPass>(
+          n_particle, is_reduce);
 
       const auto scatter_policy =
           Kokkos::RangePolicy<KernelInline::TagFirstPass>(0, n_particle);

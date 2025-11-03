@@ -6,8 +6,10 @@
 
 namespace MC
 {
-  KPRNG::KPRNG(size_t _seed) : seed(_seed)
+
+  pool_type get_pool(std::size_t seed)
   {
+
     if (seed == 0)
     {
 #ifndef NDEBUG
@@ -16,7 +18,13 @@ namespace MC
       seed = std::random_device{}();
 #endif
     }
-    random_pool = pool_type(this->seed);
+    return (seed);
+  }
+
+  KPRNG::KPRNG(size_t _seed) : seed(_seed)
+  {
+
+    random_pool = get_pool(this->seed);
   };
 
   Kokkos::View<double*, ComputeSpace>
