@@ -11,7 +11,7 @@
 #  include <worker_specific.hpp>
 
 void workers_process(
-    std::shared_ptr<IO::Logger> logger,
+    [[maybe_unused]] std::shared_ptr<IO::Logger> logger,
     const ExecInfo& exec,
     Simulation::SimulationUnit& simulation,
     const Core::SimulationParameters& params,

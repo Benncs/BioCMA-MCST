@@ -136,12 +136,12 @@ namespace Models
                      GET_PROPERTY(Self::particle_var::l_max));
   }
 
-  KOKKOS_INLINE_FUNCTION void
-  FixedLength::division(const MC::KPRNG::pool_type& random_pool,
-                        std::size_t idx,
-                        std::size_t idx2,
-                        const SelfParticle& arr,
-                        const SelfParticle& buffer_arr)
+  KOKKOS_INLINE_FUNCTION void FixedLength::division(
+      [[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+      std::size_t idx,
+      std::size_t idx2,
+      const SelfParticle& arr,
+      const SelfParticle& buffer_arr)
   {
     const FloatType new_current_length =
         GET_PROPERTY(particle_var::length) / 2.F;

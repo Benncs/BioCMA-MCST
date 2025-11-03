@@ -16,7 +16,6 @@ namespace
 {
   void __attribute__((constructor)) on_load()
   {
-
     std::printf("[UDF]: Minimal model loaded\r\n"); // NOLINT
   }
   using namespace Models;
