@@ -124,12 +124,13 @@ namespace Models
     const auto s = static_cast<FloatType>(c(0));
     const FloatType g = s / (k + s);
     const FloatType phi_s = phi_s_max * g;
-    // const FloatType ldot = l_dot_max * static_cast<FloatType>(g > 0.1);
-    // GET_PROPERTY(Self::particle_var::length) += d_t * ldot;
+    const FloatType ldot = l_dot_max * static_cast<FloatType>(g > 0.1);
+    GET_PROPERTY(Self::particle_var::length) += d_t * ldot;
     //
-    const FloatType ldot = l_dot_max * g;
-    const FloatType d_length = d_t * ldot;
-    GET_PROPERTY(Self::particle_var::length) += d_length / (1.0 + d_t * ldot);
+    // const FloatType ldot = l_dot_max * g;
+    // const FloatType d_length = d_t * ldot;
+    // GET_PROPERTY(Self::particle_var::length) += d_length / (1.0 + d_t *
+    // ldot);
 
     GET_PROPERTY(Self::particle_var::phi_s) = -phi_s;
     return check_div(GET_PROPERTY(Self::particle_var::length),

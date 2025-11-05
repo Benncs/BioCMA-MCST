@@ -60,10 +60,11 @@ namespace Common
   }
 
   template <typename Tag = void>
-  Kokkos::TeamPolicy<ComputeSpace, Tag> get_policy_team()
+  Kokkos::TeamPolicy<ComputeSpace, Tag>
+  get_policy_team(std::size_t league_size = 1)
   {
-    const auto league_size = read_env_or("BIOMC_LEAGUE_SIZE", 1);
-    return Kokkos::TeamPolicy<ComputeSpace, Tag>(league_size, Kokkos::AUTO);
+    const auto _league_size = read_env_or("BIOMC_LEAGUE_SIZE", league_size);
+    return Kokkos::TeamPolicy<ComputeSpace, Tag>(_league_size, Kokkos::AUTO);
   }
 } // namespace Common
 #endif

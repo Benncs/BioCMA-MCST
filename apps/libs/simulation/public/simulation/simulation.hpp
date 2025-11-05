@@ -211,7 +211,6 @@ namespace Simulation
     {
       cycle_functors.launch_move(n_particle);
     }
-
     if (f_reaction)
     {
       cycle_functors.launch_model(n_particle);

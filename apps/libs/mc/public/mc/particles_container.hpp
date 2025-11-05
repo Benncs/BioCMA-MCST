@@ -10,8 +10,10 @@
 #include <mc/alias.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
+
 namespace MC
 {
+
   struct RuntimeParameters
   {
     uint64_t minimum_dead_particle_removal{};
@@ -91,8 +93,7 @@ namespace MC
       for (int i = begin; i < end; ++i)
       {
         const int rel = i - begin;
-        const double c = weight * model(idx, i);
-        access(rel, pos) += c;
+        access(rel, pos) += weight * model(idx, i);
       }
     }
 
