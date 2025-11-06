@@ -42,3 +42,7 @@ tmp*
 old/
 flake.nix
 flake.lock
+
+
+*.nsys-rep
+*.sqlite
