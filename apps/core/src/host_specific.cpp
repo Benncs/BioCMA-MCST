@@ -206,6 +206,7 @@ namespace
           PROFILE_SECTION("host:sync_update")
           simulation.update_feed(current_time, d_t);
           simulation.step(d_t);
+          // From here, contributions can be overwritten
           current_time += d_t;
         }
         sync_prepare_next(simulation);

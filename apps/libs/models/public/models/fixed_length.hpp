@@ -46,7 +46,7 @@ namespace Models
     MODEL_CONSTANT FloatType l_dot_max = 2e-6 / 3600.; // m
     MODEL_CONSTANT FloatType l_max_m = 2e-6;           // m
     MODEL_CONSTANT FloatType l_min_m = l_max_m / 2.;   // m
-    MODEL_CONSTANT FloatType k = 1e-6;                 // m
+    MODEL_CONSTANT FloatType k = 1e-3;                 // m
     MODEL_CONSTANT FloatType d_m = 0.6e-6;             // m
     MODEL_CONSTANT FloatType lin_density =
         c_linear_density(static_cast<FloatType>(1000), d_m);
@@ -124,7 +124,7 @@ namespace Models
     const auto s = static_cast<FloatType>(c(0));
     const FloatType g = s / (k + s);
     const FloatType phi_s = phi_s_max * g;
-    const FloatType ldot = l_dot_max * static_cast<FloatType>(g > 0.1);
+    const FloatType ldot = l_dot_max * g;
     GET_PROPERTY(Self::particle_var::length) += d_t * ldot;
     //
     // const FloatType ldot = l_dot_max * g;

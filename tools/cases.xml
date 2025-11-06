@@ -64,12 +64,12 @@
       <!-- <cma_case_path>/app/cma_data/0d_gas/</cma_case_path> -->
       <!-- <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path> -->
       <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
-      <final_time>5000</final_time>
-      <number_particle>100000</number_particle>
-      <delta_time>1</delta_time>
+      <final_time>6000</final_time>
+      <number_particle>10000</number_particle>
+      <delta_time>0.1</delta_time>
       <results_file_name>debug</results_file_name>
-      <number_exported_result>10</number_exported_result>
-      <model_name>fixed_length</model_name>
+      <number_exported_result>50</number_exported_result>
+      <model_name>monod</model_name>
        <!-- <initialiser_path /> -->
       <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>
    </control>
