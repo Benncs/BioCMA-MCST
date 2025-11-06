@@ -111,7 +111,7 @@ namespace Simulation::MassTransfer
     const auto ncol = liquid_scalar->n_col();
 
     _proxy = std::make_shared<MassTransferProxy>();
-    _proxy->mtr = ColMajorMatrixtype(nrow, ncol);
+    _proxy->mtr = ColMajorMatrixtype<double>(nrow, ncol);
     _proxy->kla = Eigen::ArrayXXd(nrow, ncol);
     _proxy->Henry = Eigen::ArrayXXd(liquid_scalar->n_row(), 1);
     _proxy->Henry.setZero();

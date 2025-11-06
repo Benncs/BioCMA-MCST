@@ -45,7 +45,7 @@ namespace Simulation
 
     void performStepGL(double d_t,
                        const FlowMatrixType& m_transition,
-                       const ColMajorMatrixtype& mtr,
+                       const ColMajorMatrixtype<double>& mtr,
                        MassTransfer::Sign sign);
 
     void performStep(double d_t, const FlowMatrixType& m_transition);
@@ -55,8 +55,9 @@ namespace Simulation
     // void performStep(double d_t, const FlowMatrixType& m_transition);
 
     // Getters
-    [[nodiscard]] ColMajorMatrixtype& get_concentration();
-    [[nodiscard]] ColMajorKokkosScalarMatrix get_device_concentration() const;
+    [[nodiscard]] ColMajorMatrixtype<double>& get_concentration();
+    [[nodiscard]] ColMajorKokkosScalarMatrix<double>
+    get_device_concentration() const;
 
     [[nodiscard]] std::span<double const> volume_span() const;
 
@@ -66,7 +67,7 @@ namespace Simulation
     [[nodiscard]] const DiagonalType& getVolume() const;
     [[nodiscard]] auto getConcentrationArray() const;
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
-    [[nodiscard]] const ColMajorMatrixtype& get_mass_transfer() const;
+    [[nodiscard]] const ColMajorMatrixtype<double>& get_mass_transfer() const;
     [[nodiscard]] std::span<double> getConcentrationData();
 
     [[nodiscard]] std::size_t n_row() const noexcept;
@@ -85,14 +86,14 @@ namespace Simulation
   private:
     std::size_t n_r;
     std::size_t n_c;
-    ColMajorMatrixtype total_mass;
+    ColMajorMatrixtype<double> total_mass;
     kernelContribution contribs;
 
     DiagonalType volumes_inverse;
     DiagonalType m_volumes;
     DiagonalType sink;
-    EigenKokkos concentrations;
-    RowMajorEigenKokkos sources;
+    EigenKokkos<double> concentrations;
+    RowMajorEigenKokkos<double> sources;
   };
 
   inline auto ScalarSimulation::getConcentrationArray() const

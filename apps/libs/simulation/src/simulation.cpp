@@ -71,6 +71,9 @@ namespace Simulation
   {
     auto contribs = get_kernel_contribution();
     Kokkos::Experimental::contribute(contribs, contribs_scatter);
+    // Warning syncrho deepcopy into contribs
+    //  Ok to do it here because scatter_contribute is called after
+    //  cycle_process when contribs is empty (ode step is done before)
     this->liquid_scalar->synchro_sources();
   }
 

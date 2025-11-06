@@ -42,7 +42,7 @@ namespace Simulation
     volumes_inverse = Eigen::DiagonalMatrix<double, -1>(n_col);
     volumes_inverse.setIdentity();
 
-    this->total_mass = ColMajorMatrixtype(n_row, n_col);
+    this->total_mass = ColMajorMatrixtype<double>(n_row, n_col);
     this->total_mass.setZero();
 
     this->sink = DiagonalType(n_col);
@@ -54,12 +54,13 @@ namespace Simulation
     Kokkos::deep_copy(sources.compute, contribs);
   }
 
-  [[nodiscard]] ColMajorMatrixtype& ScalarSimulation::get_concentration()
+  [[nodiscard]] ColMajorMatrixtype<double>&
+  ScalarSimulation::get_concentration()
   {
     return concentrations.eigen_data;
   }
 
-  [[nodiscard]] ColMajorKokkosScalarMatrix
+  [[nodiscard]] ColMajorKokkosScalarMatrix<double>
   ScalarSimulation::get_device_concentration() const
   {
     return concentrations.compute;
@@ -85,7 +86,7 @@ namespace Simulation
 
   void ScalarSimulation::performStepGL(double d_t,
                                        const FlowMatrixType& m_transition,
-                                       const ColMajorMatrixtype& mtr,
+                                       const ColMajorMatrixtype<double>& mtr,
                                        MassTransfer::Sign sign)
   {
     PROFILE_SECTION("performStep_gl")
