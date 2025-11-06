@@ -85,6 +85,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a4c3ef9393b340279cc4b323f766479d1" id="r_a4c3ef9393b340279cc4b323f766479d1"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
 <tr class="memitem:a4c3ef9393b340279cc4b323f766479d1 template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c3ef9393b340279cc4b323f766479d1">set_local_env</a> (std::string_view varname, T val)</td></tr>
 <tr class="memdesc:a4c3ef9393b340279cc4b323f766479d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper arround set_env.  <br /></td></tr>
+<tr class="memitem:ad3d68e79e4dbd7836f3090e662e01dba" id="r_ad3d68e79e4dbd7836f3090e662e01dba"><td class="memTemplParams" colspan="2">template&lt;typename FunctorType, typename Tag = int&gt; </td></tr>
+<tr class="memitem:ad3d68e79e4dbd7836f3090e662e01dba template"><td class="memItemLeft" align="right" valign="top">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3d68e79e4dbd7836f3090e662e01dba">get_policy</a> (const FunctorType &amp;f, std::size_t range, bool reduce=false)</td></tr>
+<tr class="memitem:a9322a1455f0f2a0626d66eae67412bda" id="r_a9322a1455f0f2a0626d66eae67412bda"><td class="memTemplParams" colspan="2">template&lt;typename Tag = int&gt; </td></tr>
+<tr class="memitem:a9322a1455f0f2a0626d66eae67412bda template"><td class="memItemLeft" align="right" valign="top">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9322a1455f0f2a0626d66eae67412bda">get_policy</a> (std::size_t range, bool reduce=false)</td></tr>
+<tr class="memitem:ad9c9fe6434c0c09218a2e33e17beee28" id="r_ad9c9fe6434c0c09218a2e33e17beee28"><td class="memTemplParams" colspan="2">template&lt;typename Tag = void&gt; </td></tr>
+<tr class="memitem:ad9c9fe6434c0c09218a2e33e17beee28 template"><td class="memItemLeft" align="right" valign="top">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad9c9fe6434c0c09218a2e33e17beee28">get_policy_team</a> (std::size_t league_size=1)</td></tr>
 <tr class="memitem:a961ab661d5ca3a66b845da6edd0a51aa" id="r_a961ab661d5ca3a66b845da6edd0a51aa"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
 <tr class="memitem:a961ab661d5ca3a66b845da6edd0a51aa template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a961ab661d5ca3a66b845da6edd0a51aa">read_env_or</a> (std::string_view varname, bool vdefault)</td></tr>
 <tr class="memitem:a6cef78dc6fcccfd08eb24504069712e8" id="r_a6cef78dc6fcccfd08eb24504069712e8"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
@@ -93,6 +99,96 @@ Functions</h2></td></tr>
 <tr class="memitem:a37ac0c5a89a3a4f054c886feaa901bec template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a37ac0c5a89a3a4f054c886feaa901bec">set_local_env&lt; bool &gt;</a> (std::string_view varname, bool val)</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="ad3d68e79e4dbd7836f3090e662e01dba" name="ad3d68e79e4dbd7836f3090e662e01dba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3d68e79e4dbd7836f3090e662e01dba">&#9670;&#160;</a></span>get_policy() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename FunctorType, typename Tag = int&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt; Common::get_policy </td>
+          <td>(</td>
+          <td class="paramtype">const FunctorType &amp;</td>          <td class="paramname"><span class="paramname"><em>f</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>range</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>reduce</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCommon_ad3d68e79e4dbd7836f3090e662e01dba_cgraph.svg" width="354" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCommon_ad3d68e79e4dbd7836f3090e662e01dba_icgraph.svg" width="399" height="99"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="a9322a1455f0f2a0626d66eae67412bda" name="a9322a1455f0f2a0626d66eae67412bda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9322a1455f0f2a0626d66eae67412bda">&#9670;&#160;</a></span>get_policy() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Tag = int&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt; Common::get_policy </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>range</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>reduce</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCommon_a9322a1455f0f2a0626d66eae67412bda_cgraph.svg" width="543" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="ad9c9fe6434c0c09218a2e33e17beee28" name="ad9c9fe6434c0c09218a2e33e17beee28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9c9fe6434c0c09218a2e33e17beee28">&#9670;&#160;</a></span>get_policy_team()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Tag = void&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt; Common::get_policy_team </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>league_size</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1</span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCommon_ad9c9fe6434c0c09218a2e33e17beee28_cgraph.svg" width="390" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
 <a id="a961ab661d5ca3a66b845da6edd0a51aa" name="a961ab661d5ca3a66b845da6edd0a51aa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a961ab661d5ca3a66b845da6edd0a51aa">&#9670;&#160;</a></span>read_env_or() <span class="overload">[1/2]</span></h2>
 
@@ -142,7 +238,7 @@ template&lt;typename T&gt; </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCommon_a7ca16dc3314f89cd1860091731cd7014_icgraph.svg" width="100%" height="525"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCommon_a7ca16dc3314f89cd1860091731cd7014_icgraph.svg" width="636" height="256"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

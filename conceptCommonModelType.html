@@ -88,7 +88,7 @@ $(function(){initNavTree('conceptCommonModelType.html','',''); });
 <div class="line">                                   <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#aad69f7f73ef6a017ee86ca89451a6271">MC::LocalConcentration</a>&amp; c,</div>
 <div class="line">                                   std::size_t position,</div>
 <div class="line">                                   <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#aa1b418b6e151ebc14d95164d7370e35b">MC::ContributionView</a>&amp; contributions,</div>
-<div class="line">                                   <span class="keyword">const</span> <a class="code hl_typedef" href="classMC_1_1KPRNG.html#a4d34d46754755b2291e25325c5759641">MC::KPRNG::pool_type</a>&amp; random_pool,</div>
+<div class="line">                                   <span class="keyword">const</span> <a class="code hl_typedef" href="classMC_1_1KPRNG.html#a7a1424e59a51eaec62c551d960598e15">MC::KPRNG::pool_type</a>&amp; random_pool,</div>
 <div class="line">                                   <span class="keyword">const</span> T::Config&amp; config) {</div>
 <div class="line">  {</div>
 <div class="line">    T::n_var</div>
@@ -135,13 +135,13 @@ $(function(){initNavTree('conceptCommonModelType.html','',''); });
 <div class="line"> </div>
 <div class="line">  <span class="keyword">requires</span> <a class="code hl_concept" href="conceptFloatingPointType.html">FloatingPointType&lt;typename T::FloatType&gt;</a>;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html_a4d34d46754755b2291e25325c5759641"><div class="ttname"><a href="classMC_1_1KPRNG.html#a4d34d46754755b2291e25325c5759641">MC::KPRNG::pool_type</a></div><div class="ttdeci">Kokkos::Random_XorShift1024_Pool&lt; Kokkos::DefaultExecutionSpace &gt; pool_type</div><div class="ttdef"><b>Definition</b> prng.hpp:33</div></div>
-<div class="ttc" id="aconceptCommonModelType_html"><div class="ttname"><a href="conceptCommonModelType.html">CommonModelType</a></div><div class="ttdoc">Concept to define a correct Model.</div><div class="ttdef"><b>Definition</b> traits.hpp:68</div></div>
-<div class="ttc" id="aconceptConfigurableInit_html"><div class="ttname"><a href="conceptConfigurableInit.html">ConfigurableInit</a></div><div class="ttdef"><b>Definition</b> traits.hpp:42</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_a7a1424e59a51eaec62c551d960598e15"><div class="ttname"><a href="classMC_1_1KPRNG.html#a7a1424e59a51eaec62c551d960598e15">MC::KPRNG::pool_type</a></div><div class="ttdeci">pool_type pool_type</div><div class="ttdef"><b>Definition</b> prng.hpp:21</div></div>
+<div class="ttc" id="aconceptCommonModelType_html"><div class="ttname"><a href="conceptCommonModelType.html">CommonModelType</a></div><div class="ttdoc">Concept to define a correct Model.</div><div class="ttdef"><b>Definition</b> traits.hpp:55</div></div>
+<div class="ttc" id="aconceptConfigurableInit_html"><div class="ttname"><a href="conceptConfigurableInit.html">ConfigurableInit</a></div><div class="ttdef"><b>Definition</b> traits.hpp:29</div></div>
 <div class="ttc" id="aconceptFloatingPointType_html"><div class="ttname"><a href="conceptFloatingPointType.html">FloatingPointType</a></div><div class="ttdef"><b>Definition</b> traits.hpp:20</div></div>
-<div class="ttc" id="aconceptNonConfigurableInit_html"><div class="ttname"><a href="conceptNonConfigurableInit.html">NonConfigurableInit</a></div><div class="ttdef"><b>Definition</b> traits.hpp:54</div></div>
-<div class="ttc" id="anamespaceMC_html_aa1b418b6e151ebc14d95164d7370e35b"><div class="ttname"><a href="namespaceMC.html#aa1b418b6e151ebc14d95164d7370e35b">MC::ContributionView</a></div><div class="ttdeci">decltype(Kokkos::Experimental::create_scatter_view(kernelContribution())) ContributionView</div><div class="ttdef"><b>Definition</b> alias.hpp:64</div></div>
-<div class="ttc" id="anamespaceMC_html_aad69f7f73ef6a017ee86ca89451a6271"><div class="ttname"><a href="namespaceMC.html#aad69f7f73ef6a017ee86ca89451a6271">MC::LocalConcentration</a></div><div class="ttdeci">Kokkos::Subview&lt; KernelConcentrationType, int, decltype(Kokkos::ALL)&gt; LocalConcentration</div><div class="ttdef"><b>Definition</b> alias.hpp:72</div></div>
+<div class="ttc" id="aconceptNonConfigurableInit_html"><div class="ttname"><a href="conceptNonConfigurableInit.html">NonConfigurableInit</a></div><div class="ttdef"><b>Definition</b> traits.hpp:41</div></div>
+<div class="ttc" id="anamespaceMC_html_aa1b418b6e151ebc14d95164d7370e35b"><div class="ttname"><a href="namespaceMC.html#aa1b418b6e151ebc14d95164d7370e35b">MC::ContributionView</a></div><div class="ttdeci">decltype(Kokkos::Experimental::create_scatter_view(kernelContribution())) ContributionView</div><div class="ttdef"><b>Definition</b> alias.hpp:76</div></div>
+<div class="ttc" id="anamespaceMC_html_aad69f7f73ef6a017ee86ca89451a6271"><div class="ttname"><a href="namespaceMC.html#aad69f7f73ef6a017ee86ca89451a6271">MC::LocalConcentration</a></div><div class="ttdeci">Kokkos::Subview&lt; KernelConcentrationType, int, decltype(Kokkos::ALL)&gt; LocalConcentration</div><div class="ttdef"><b>Definition</b> alias.hpp:84</div></div>
 </div><!-- fragment --><a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Concept to define a correct Model. </p>
 <p>Minimum model definition should validate this contract, the behaviour behind each function can vary but the order and signature should be the same </p>

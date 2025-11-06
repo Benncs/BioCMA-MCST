@@ -1,0 +1,5 @@
+<map id="Common::get_policy" name="Common::get_policy">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,147,30"/>
+<area shape="rect" id="Node000002" href="$namespaceCommon.html#a7ca16dc3314f89cd1860091731cd7014" title="Wrapper arround get_env to get envariable with fallback to default." alt="" coords="195,5,348,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="147,15,179,15,179,20,147,20"/>
+</map>

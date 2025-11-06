@@ -1,15 +1,10 @@
 <map id="MC::ReactorDomain::~ReactorDomain" name="MC::ReactorDomain::~ReactorDomain">
-<area shape="rect" id="Node000001" title="Default destructor." alt="" coords="5,131,154,169"/>
+<area shape="rect" id="Node000001" title="Default destructor." alt="" coords="5,68,154,107"/>
 <area shape="rect" id="Node000002" href="$classMC_1_1ReactorDomain.html#a33de8f72d0fc6a804a793093992f3175" title="Return a const reference to neighbors." alt="" coords="202,5,350,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,128,145,91,200,53,208,49,210,53,203,58,148,95,104,132"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="141,65,198,47,200,52,143,70"/>
 <area shape="rect" id="Node000003" href="$classMC_1_1ReactorDomain.html#a698b6d934e68ff38263b34705babc1e7" title="Return total volume of domain." alt="" coords="202,68,350,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="141,128,198,109,200,114,143,133"/>
-<area shape="rect" id="Node000004" href="$classMC_1_1ReactorDomain.html#ac1a6a026152760a9b6af77d5eeeec61f" title=" " alt="" coords="202,131,350,169"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="154,147,186,147,186,153,154,153"/>
-<area shape="rect" id="Node000005" href="$classMC_1_1ReactorDomain.html#ad520ec34d2ffda4f7e62959ed4676aea" title=" " alt="" coords="398,217,546,256"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="155,167,202,178,383,217,382,222,201,183,154,172"/>
-<area shape="rect" id="Node000006" href="$classMC_1_1ReactorDomain.html#a6c2cb1a737b21df58c90e0a0c91ebc0f" title="Return a unique domain from data obtained with MPI gather." alt="" coords="202,245,350,284"/>
-<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="113,168,203,224,224,235,221,240,200,228,110,172"/>
-<area shape="poly" id="edge5_Node000005_Node000005" title=" " alt="" coords="435,218,433,208,439,199,452,193,472,191,494,193,507,200,504,204,492,198,472,196,453,198,442,203,438,209,441,216"/>
-<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="350,251,382,247,383,252,351,257"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="154,85,186,85,186,90,154,90"/>
+<area shape="rect" id="Node000004" href="$classMC_1_1ReactorDomain.html#ad520ec34d2ffda4f7e62959ed4676aea" title=" " alt="" coords="202,155,350,193"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="126,105,217,145,215,150,124,110"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="239,155,236,145,242,136,256,130,276,128,298,130,310,137,308,142,296,136,276,133,257,135,246,140,242,146,244,154"/>
 </map>

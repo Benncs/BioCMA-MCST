@@ -1,10 +1,5 @@
 <map id="MC::ReactorDomain::ReactorDomain" name="MC::ReactorDomain::ReactorDomain">
-<area shape="rect" id="Node000001" title="Main constructor." alt="" coords="5,61,154,100"/>
-<area shape="rect" id="Node000002" href="$classMC_1_1ReactorDomain.html#a6c2cb1a737b21df58c90e0a0c91ebc0f" title="Return a unique domain from data obtained with MPI gather." alt="" coords="202,29,350,68"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,66,186,61,187,66,154,71"/>
-<area shape="rect" id="Node000004" href="$classMC_1_1ReactorDomain.html#a2db6d50d4789f107ef9d7e781127c310" title="Update neigbors of compartments." alt="" coords="202,92,350,131"/>
-<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="154,90,187,95,186,100,154,95"/>
-<area shape="rect" id="Node000003" href="$classMC_1_1ReactorDomain.html#ad520ec34d2ffda4f7e62959ed4676aea" title=" " alt="" coords="398,29,546,68"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="350,46,382,46,382,51,350,51"/>
-<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="435,30,433,20,439,11,452,5,472,3,494,5,507,12,504,16,492,10,472,8,453,10,442,15,438,21,441,28"/>
+<area shape="rect" id="Node000001" title="Main constructor." alt="" coords="5,5,154,44"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ReactorDomain.html#a2db6d50d4789f107ef9d7e781127c310" title="Update neigbors of compartments." alt="" coords="202,5,350,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,22,186,22,186,27,154,27"/>
 </map>

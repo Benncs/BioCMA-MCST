@@ -7,9 +7,11 @@ var namespaceMC =
     [ "MonteCarloUnit", "structMC_1_1MonteCarloUnit.html", "structMC_1_1MonteCarloUnit" ],
     [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html", "classMC_1_1ParticlesContainer" ],
     [ "ReactorDomain", "classMC_1_1ReactorDomain.html", "classMC_1_1ReactorDomain" ],
+    [ "RuntimeParameters", "structMC_1_1RuntimeParameters.html", "structMC_1_1RuntimeParameters" ],
     [ "ComputeSpace", "namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f", null ],
     [ "ContributionView", "namespaceMC.html#aa1b418b6e151ebc14d95164d7370e35b", null ],
     [ "DynParticlesModel", "namespaceMC.html#ae9182f33a07f97d9cc3851cf47529a04", null ],
+    [ "HostSpace", "namespaceMC.html#a1f3a005c06fe6a41d663e36a29667e0a", null ],
     [ "KernelConcentrationType", "namespaceMC.html#ac4db0c9d5b74f4c59a2ffcc7374cba1c", null ],
     [ "LocalConcentration", "namespaceMC.html#aad69f7f73ef6a017ee86ca89451a6271", null ],
     [ "NeighborsView", "namespaceMC.html#ad31fce592f5fd9b873839781863419d3", null ],
@@ -19,6 +21,7 @@ var namespaceMC =
     [ "ParticlesModel", "namespaceMC.html#ae36f8da8fd9f9f88aa5cff4f307cdc68", null ],
     [ "ParticleStatus", "namespaceMC.html#a2193e5e54bfdf96357f01505831e1072", null ],
     [ "ParticleWeigths", "namespaceMC.html#a193bca8fb4700ce9ddd472c1929e5ac1", null ],
+    [ "pool_type", "namespaceMC.html#a1ab210ba6b1f8813de78fd267390fe0a", null ],
     [ "PropertySubViewtype", "namespaceMC.html#a20fc03265c23b32637770a775864c720", null ],
     [ "restrict_mt", "namespaceMC.html#a427e7af7e25d874236fc70664ebfd0d6", null ],
     [ "EventType", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8", [
@@ -37,10 +40,10 @@ var namespaceMC =
       [ "Dead", "namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7ba183b62c7f067711f9c5a54913c054617", null ]
     ] ],
     [ "event_index", "namespaceMC.html#ae91609aafa31939cedd6775cc5adafc4", null ],
-    [ "get_policy", "namespaceMC.html#a539dfb1d0f4da32f27aae2d443ff6355", null ],
-    [ "get_policy_team", "namespaceMC.html#ad31b72294c4dab44321499cf193c9c0f", null ],
+    [ "get_pool", "namespaceMC.html#a6734cec020a2315d36542faad86c9125", null ],
     [ "impl_init", "namespaceMC.html#aabb3d28b6ac38413f8d34f525d26942f", null ],
     [ "init", "namespaceMC.html#a8c67a0954fafbfba6825f3077e3d0df8", null ],
+    [ "load_tuning_constant", "namespaceMC.html#a67a8a8fb99f617a67dd3702cd0f0b47f", null ],
     [ "post_init_weight", "namespaceMC.html#ac9b6a65d70e4c5007f4bc908509924a0", null ],
     [ "number_event_type", "namespaceMC.html#a2bac73e9eee491093b7ac10969645bfa", null ]
 ];

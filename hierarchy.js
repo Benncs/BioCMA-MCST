@@ -22,7 +22,7 @@ var hierarchy =
     [ "Simulation::Feed::DelayedConstant", "structSimulation_1_1Feed_1_1DelayedConstant.html", null ],
     [ "Simulation::Dimensions", "structSimulation_1_1Dimensions.html", null ],
     [ "DynamicDefaultModel", "structDynamicDefaultModel.html", null ],
-    [ "EigenKokkosBase< EigenLayout >", "structEigenKokkosBase.html", null ],
+    [ "EigenKokkosBase< EigenLayout, ftype >", "structEigenKokkosBase.html", null ],
     [ "std::enable_shared_from_this", null, [
       [ "IO::RedirectGuard", "classIO_1_1RedirectGuard.html", null ]
     ] ],
@@ -80,6 +80,7 @@ var hierarchy =
     [ "Simulation::MassTransfer::MassTransferModel", "classSimulation_1_1MassTransfer_1_1MassTransferModel.html", null ],
     [ "Simulation::MassTransfer::MassTransferProxy", "structSimulation_1_1MassTransfer_1_1MassTransferProxy.html", null ],
     [ "Simulation::Mixture", "classSimulation_1_1Mixture.html", null ],
+    [ "Models::Monod", "structModels_1_1Monod.html", null ],
     [ "MC::MonteCarloUnit", "structMC_1_1MonteCarloUnit.html", null ],
     [ "Simulation::KernelInline::MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", null ],
     [ "Simulation::KernelInline::MoveInfo< ExecSpace >", "structSimulation_1_1KernelInline_1_1MoveInfo.html", null ],
@@ -96,6 +97,7 @@ var hierarchy =
     [ "Simulation::Feed::Pulse", "structSimulation_1_1Feed_1_1Pulse.html", null ],
     [ "MC::ReactorDomain", "classMC_1_1ReactorDomain.html", null ],
     [ "IO::RedirectHandle", "classIO_1_1RedirectHandle.html", null ],
+    [ "MC::RuntimeParameters", "structMC_1_1RuntimeParameters.html", null ],
     [ "Simulation::ScalarInitializer", "structSimulation_1_1ScalarInitializer.html", null ],
     [ "Simulation::ScalarSimulation", "classSimulation_1_1ScalarSimulation.html", null ],
     [ "MC::Distributions::ScaledTruncatedNormal< F >", "structMC_1_1Distributions_1_1ScaledTruncatedNormal.html", null ],
@@ -110,11 +112,10 @@ var hierarchy =
     [ "Simulation::Specie", "structSimulation_1_1Specie.html", null ],
     [ "Simulation::Feed::Step", "structSimulation_1_1Feed_1_1Step.html", null ],
     [ "Success", "structSuccess.html", null ],
-    [ "TagDetector", "structTagDetector.html", null ],
-    [ "Simulation::KernelInline::TagFirstPass", "structSimulation_1_1KernelInline_1_1TagFirstPass.html", null ],
+    [ "Simulation::KernelInline::TagContribution", "structSimulation_1_1KernelInline_1_1TagContribution.html", null ],
+    [ "Simulation::KernelInline::TagCycle", "structSimulation_1_1KernelInline_1_1TagCycle.html", null ],
     [ "Simulation::KernelInline::TagLeave", "structSimulation_1_1KernelInline_1_1TagLeave.html", null ],
     [ "Simulation::KernelInline::TagMove", "structSimulation_1_1KernelInline_1_1TagMove.html", null ],
-    [ "Simulation::KernelInline::TagSecondPass", "structSimulation_1_1KernelInline_1_1TagSecondPass.html", null ],
     [ "std::true_type", null, [
       [ "has_uniform_weight< T, std::void_t< typename T::uniform_weight > >", "structhas__uniform__weight_3_01T_00_01std_1_1void__t_3_01typename_01T_1_1uniform__weight_01_4_01_4.html", null ]
     ] ],

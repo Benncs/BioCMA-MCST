@@ -1,5 +1,0 @@
-<map id="MC::ParticlesContainer::load_tuning_constant" name="MC::ParticlesContainer::load_tuning_constant">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,164,44"/>
-<area shape="rect" id="Node000002" href="$namespaceCommon.html#a7ca16dc3314f89cd1860091731cd7014" title="Wrapper arround get_env to get envariable with fallback to default." alt="" coords="212,12,365,37"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,22,196,22,196,27,164,27"/>
-</map>

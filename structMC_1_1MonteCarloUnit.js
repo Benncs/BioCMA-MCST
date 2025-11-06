@@ -13,5 +13,5 @@ var structMC_1_1MonteCarloUnit =
     [ "domain", "structMC_1_1MonteCarloUnit.html#a4a5160c7c9c8c764181e2e68cc2043f1", null ],
     [ "events", "structMC_1_1MonteCarloUnit.html#ad45c6e5c4abde83f09ba51ca1d2f2275", null ],
     [ "init_weight", "structMC_1_1MonteCarloUnit.html#a8c3ce0baf39cd5db028c0c7b6c280a3d", null ],
-    [ "rng", "structMC_1_1MonteCarloUnit.html#a86276d3ee4104cc9943fc6b082d6dee8", null ]
+    [ "rng", "structMC_1_1MonteCarloUnit.html#a0ed38ba60e8a80dc066fdb01b7e429a1", null ]
 ];

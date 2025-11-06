@@ -79,7 +79,8 @@ $(function(){initNavTree('classMC_1_1KPRNG.html','','classMC_1_1KPRNG-members');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a4d34d46754755b2291e25325c5759641" id="r_a4d34d46754755b2291e25325c5759641"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d34d46754755b2291e25325c5759641">pool_type</a></td></tr>
+<tr class="memitem:a7a1424e59a51eaec62c551d960598e15" id="r_a7a1424e59a51eaec62c551d960598e15"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a1424e59a51eaec62c551d960598e15">pool_type</a> = <a class="el" href="#a7a1424e59a51eaec62c551d960598e15">pool_type</a></td></tr>
+<tr class="memitem:ac45dd0af0ed06f16a4fe5d6b47ea2b25" id="r_ac45dd0af0ed06f16a4fe5d6b47ea2b25"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac45dd0af0ed06f16a4fe5d6b47ea2b25">generator_type</a> = pool_type::generator_type</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -90,8 +91,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4e5a211c8da3d21fd4f1940e154d9acb" id="r_a4e5a211c8da3d21fd4f1940e154d9acb"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> T&gt; </td></tr>
 <tr class="memitem:a4e5a211c8da3d21fd4f1940e154d9acb template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e5a211c8da3d21fd4f1940e154d9acb">uniform</a> (T a, T b) const</td></tr>
 <tr class="memitem:a6f04670114bc418789302204e3af4d2a" id="r_a6f04670114bc418789302204e3af4d2a"><td class="memItemLeft" align="right" valign="top">Kokkos::View&lt; double *, <a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f04670114bc418789302204e3af4d2a">double_uniform</a> (size_t n_sample, double a=0., double b=1.) const</td></tr>
-<tr class="memitem:a2c776ce5f7c9364a6fc58e6ad571f0db" id="r_a2c776ce5f7c9364a6fc58e6ad571f0db"><td class="memTemplParams" colspan="2">template&lt;size_t n_r&gt; </td></tr>
-<tr class="memitem:a2c776ce5f7c9364a6fc58e6ad571f0db template"><td class="memItemLeft" align="right" valign="top">Kokkos::View&lt; double[n_r], <a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c776ce5f7c9364a6fc58e6ad571f0db">double_uniform_view</a> () const</td></tr>
+<tr class="memitem:af85cf01aee88ac32a97c7ff84bdeb7f1" id="r_af85cf01aee88ac32a97c7ff84bdeb7f1"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> T, size_t n_r&gt; </td></tr>
+<tr class="memitem:af85cf01aee88ac32a97c7ff84bdeb7f1 template"><td class="memItemLeft" align="right" valign="top">Kokkos::View&lt; T[n_r], <a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af85cf01aee88ac32a97c7ff84bdeb7f1">random_view</a> () const</td></tr>
 <tr class="memitem:ad1c9b5acec76cbf1d01783be1e41e664" id="r_ad1c9b5acec76cbf1d01783be1e41e664"><td class="memTemplParams" colspan="2">template&lt;size_t n_r&gt; </td></tr>
 <tr class="memitem:ad1c9b5acec76cbf1d01783be1e41e664 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION std::array&lt; double, n_r &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1c9b5acec76cbf1d01783be1e41e664">double_uniform</a> () const</td></tr>
 <tr class="memitem:a067a194948465c4a636c41ebe13d313d" id="r_a067a194948465c4a636c41ebe13d313d"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a067a194948465c4a636c41ebe13d313d">uniform_u</a> (uint64_t a, uint64_t b) const</td></tr>
@@ -99,7 +100,7 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aee1afc51c8bbf7a7976e4804665dc85a" id="r_aee1afc51c8bbf7a7976e4804665dc85a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a4d34d46754755b2291e25325c5759641">pool_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee1afc51c8bbf7a7976e4804665dc85a">random_pool</a></td></tr>
+<tr class="memitem:aee1afc51c8bbf7a7976e4804665dc85a" id="r_aee1afc51c8bbf7a7976e4804665dc85a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a7a1424e59a51eaec62c551d960598e15">pool_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee1afc51c8bbf7a7976e4804665dc85a">random_pool</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -113,20 +114,32 @@ Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Utilities and wrap around kokkos random generator. </p>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
-<a id="a4d34d46754755b2291e25325c5759641" name="a4d34d46754755b2291e25325c5759641"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d34d46754755b2291e25325c5759641">&#9670;&#160;</a></span>pool_type</h2>
+<a id="ac45dd0af0ed06f16a4fe5d6b47ea2b25" name="ac45dd0af0ed06f16a4fe5d6b47ea2b25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac45dd0af0ed06f16a4fe5d6b47ea2b25">&#9670;&#160;</a></span>generator_type</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#a4d34d46754755b2291e25325c5759641">MC::KPRNG::pool_type</a></td>
+          <td class="memname">using <a class="el" href="#ac45dd0af0ed06f16a4fe5d6b47ea2b25">MC::KPRNG::generator_type</a> = pool_type::generator_type</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> </div>
-<div class="line">        Kokkos::Random_XorShift1024_Pool&lt;Kokkos::DefaultExecutionSpace&gt;</div>
-</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="example_model_8cxx-example.html#_a1">example_model.cxx</a>.</dd>
+
+</div>
+</div>
+<a id="a7a1424e59a51eaec62c551d960598e15" name="a7a1424e59a51eaec62c551d960598e15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a1424e59a51eaec62c551d960598e15">&#9670;&#160;</a></span>pool_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a7a1424e59a51eaec62c551d960598e15">MC::KPRNG::pool_type</a> = <a class="el" href="#a7a1424e59a51eaec62c551d960598e15">pool_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="example_model_8cxx-example.html#_a1">example_model.cxx</a>.</dd>
 </dl>
 
 </div>
@@ -154,6 +167,11 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1KPRNG_aa0f2f52072c2b6836234a098c709dd97_cgraph.svg" width="311" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -249,33 +267,6 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a2c776ce5f7c9364a6fc58e6ad571f0db" name="a2c776ce5f7c9364a6fc58e6ad571f0db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c776ce5f7c9364a6fc58e6ad571f0db">&#9670;&#160;</a></span>double_uniform_view()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;size_t n_r&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Kokkos::View&lt; double[n_r], <a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a> &gt; MC::KPRNG::double_uniform_view </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a704dfab53ca0915c944e9e9ae1854a04" name="a704dfab53ca0915c944e9e9ae1854a04"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a704dfab53ca0915c944e9e9ae1854a04">&#9670;&#160;</a></span>generate_uniform_impl()</h2>
 
@@ -331,6 +322,33 @@ Here is the caller graph for this function:</div>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af85cf01aee88ac32a97c7ff84bdeb7f1" name="af85cf01aee88ac32a97c7ff84bdeb7f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af85cf01aee88ac32a97c7ff84bdeb7f1">&#9670;&#160;</a></span>random_view()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> T, size_t n_r&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Kokkos::View&lt; T[n_r], <a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a> &gt; MC::KPRNG::random_view </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -432,7 +450,7 @@ template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a4d34d46754755b2291e25325c5759641">pool_type</a> MC::KPRNG::random_pool</td>
+          <td class="memname"><a class="el" href="#a7a1424e59a51eaec62c551d960598e15">pool_type</a> MC::KPRNG::random_pool</td>
         </tr>
       </table>
 </div><div class="memdoc">

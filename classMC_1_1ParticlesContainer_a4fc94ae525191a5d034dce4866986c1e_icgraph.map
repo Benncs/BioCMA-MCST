@@ -2,7 +2,7 @@
 <area shape="rect" id="Node000001" title=" " alt="" coords="924,164,1082,203"/>
 <area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" title="Insert particle buffer into the main container." alt="" coords="707,42,865,80"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="952,159,821,83,824,79,955,154"/>
-<area shape="rect" id="Node000005" href="$classMC_1_1ParticlesContainer.html#a31cc416a99cf6e26bd4c1cb0a154a5ac" title="Alias for the model used by the container." alt="" coords="707,164,865,203"/>
+<area shape="rect" id="Node000005" href="$classMC_1_1ParticlesContainer.html#a03a343614bef6821b8815902e3185e37" title="Alias for the model used by the container." alt="" coords="707,164,865,203"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="908,186,866,186,866,181,908,181"/>
 <area shape="rect" id="Node000011" href="$classMC_1_1ParticlesContainer.html#a57353f823ed074869300f29deb5c50b2" title="Removes inactive particles from the container." alt="" coords="696,352,876,391"/>
 <area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="970,215,811,354,808,350,966,211"/>
