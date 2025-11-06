@@ -5,6 +5,9 @@
 #include <Kokkos_ScatterView.hpp>
 #include <common/traits.hpp>
 
+// static_assert(FloatingPointType<Kokkos::Experimental::half_t>,
+//               "Kokkos half_t ok");
+
 namespace MC
 {
 
@@ -24,7 +27,7 @@ using kernelMT = Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::RandomAccess |
                                       Kokkos::MemoryTraitsFlags::Restrict>;
 
 using kernelContribution =
-    Kokkos::View<double**, Kokkos::LayoutLeft, MC::ComputeSpace, kernelMT>;
+    Kokkos::View<float**, Kokkos::LayoutLeft, MC::ComputeSpace, kernelMT>;
 namespace MC
 {
 
