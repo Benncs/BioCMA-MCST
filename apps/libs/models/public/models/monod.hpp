@@ -5,6 +5,7 @@
 #include "models/utils.hpp"
 #include <Kokkos_MathematicalConstants.hpp>
 #include <mc/alias.hpp>
+#include <mc/prng/prng_extension.hpp>
 #include <mc/traits.hpp>
 #include <optional>
 namespace Models
@@ -63,7 +64,7 @@ namespace Models
       GET_PROPERTY(particle_var::l_max) = l_max_m;
       GET_PROPERTY(particle_var::mu) = mu_0;
       GET_PROPERTY(particle_var::_init_only_cell_lenghtening) =
-          l0 / 2. / Kokkos::numbers::log2e_v<FloatType>;
+          l_max_m / 2. / 0.69314718056;
     }
 
     KOKKOS_INLINE_FUNCTION static double
@@ -88,9 +89,11 @@ namespace Models
       GET_PROPERTY(Self::particle_var::l) +=
           d_t * (mu_eff *
                  GET_PROPERTY(Self::particle_var::_init_only_cell_lenghtening));
+
       GET_PROPERTY(Self::particle_var::mu) +=
           d_t * (1.0 / tau_meta) *
           (mu_p - GET_PROPERTY(Self::particle_var::mu));
+
       GET_PROPERTY(Self::particle_var::phi_s_c) =
           -mu_eff * y_s_x * mass(idx, arr);
 
