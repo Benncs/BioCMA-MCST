@@ -18,8 +18,8 @@ extern "C"
 #ifdef __cplusplus
   typedef struct Api::SimulationInstance* Handle; // NOLINT
 #else
-typedef struct Opaque*
-    Handle; // NOLINT //In C we only need ptr type so Opaque doesn´t need to exist
+typedef struct Opaque* Handle; // NOLINT //In C we only need ptr type so Opaque
+                               // doesn´t need to exist
 #endif
   // /**
   //  * @brief Initialize a simulation instance handle
@@ -28,7 +28,8 @@ typedef struct Opaque*
   //  *
   //  * @param argc.
   //  * @param argv.
-  //  * @return A `Handle` to the simulation instance, or `NULL` if initialization failed.
+  //  * @return A `Handle` to the simulation instance, or `NULL` if
+  //  initialization failed.
   //  */
   Handle init_handle_raw(int argc, char** argv);
 
@@ -61,20 +62,24 @@ typedef struct Opaque*
   typedef struct wrap_c_param_t
   {
     double biomass_initial_concentration; ///< Initial concentration of biomass.
-    double final_time;                    ///< Final time for the simulation (in seconds).
-    double delta_time;                    ///< Time step for the simulation (in seconds).
-    uint64_t number_particle;             ///< Number of particles in the simulation.
-    int32_t n_thread;                     ///< Number of threads to use for simulation.
-    uint32_t number_exported_result;      ///< Number of results to be exported.
-    int recursive;                        ///< Flag to enable recursive processing.
-    int force_override;                   ///< Flag to allow overwriting of existing results.
+    double final_time;        ///< Final time for the simulation (in seconds).
+    double delta_time;        ///< Time step for the simulation (in seconds).
+    uint64_t number_particle; ///< Number of particles in the simulation.
+    int32_t n_thread;         ///< Number of threads to use for simulation.
+    uint32_t number_exported_result; ///< Number of results to be exported.
+    int recursive;                   ///< Flag to enable recursive processing.
+    int force_override; ///< Flag to allow overwriting of existing results.
     int load_serde;
     int save_serde;
+    int uniform_particle_init;
   } Param;
   // NOLINTEND
 
-  int set_scalar_buffer(
-      Handle handle, uint64_t rows, uint64_t cols, double* liquid, double* gas_ptr);
+  int set_scalar_buffer(Handle handle,
+                        uint64_t rows,
+                        uint64_t cols,
+                        double* liquid,
+                        double* gas_ptr);
 
   void show_user_param(const Param* params);
 
@@ -120,8 +125,9 @@ typedef struct Opaque*
                         int gas,
                         int fed_batch);
 
-  // /bool set_feed_constant(double _f, std::span<double> _target, std::span<std::size_t> _position,
-  // std::span<std::size_t> _species,bool gas=false);
+  // /bool set_feed_constant(double _f, std::span<double> _target,
+  // std::span<std::size_t> _position, std::span<std::size_t> _species,bool
+  // gas=false);
 
 #ifdef __cplusplus
 }

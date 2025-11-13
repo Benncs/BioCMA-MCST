@@ -142,23 +142,20 @@ convert_c_wrap_to_param(const wrap_c_param_t& params)
   bool force_override = params.force_override != 0;
   bool load_serde = (params.load_serde != 0);
   bool save_serde = (params.save_serde != 0);
-  return Core::UserControlParameters{
-      .biomass_initial_concentration = params.biomass_initial_concentration,
-      .final_time = params.final_time,
-      .delta_time = params.delta_time,
-      .number_particle = params.number_particle,
-      .n_thread = params.n_thread,
-      .number_exported_result = params.number_exported_result,
-      .recursive = force_override,
-      .force_override = recursive,
-      .load_serde = load_serde,
-      .save_serde = save_serde,
-      .initialiser_path = "",
-      .model_name = "",
-      .results_file_name = "",
-      .cma_case_path = "",
-      .serde_file = std::nullopt,
-  };
+  bool uniform_mc_init = (params.uniform_particle_init != 0);
+
+  auto p = Core::UserControlParameters::m_default();
+  p.biomass_initial_concentration = params.biomass_initial_concentration;
+  p.final_time = params.final_time, p.delta_time = params.delta_time;
+  p.number_particle = params.number_particle, p.n_thread = params.n_thread;
+  p.number_exported_result = params.number_exported_result;
+  p.recursive = force_override;
+  p.force_override = recursive;
+  p.load_serde = load_serde;
+  p.save_serde = save_serde;
+  p.uniform_mc_init = uniform_mc_init;
+
+  return p;
 }
 
 Param make_params(double biomass_initial_concentration,
@@ -177,7 +174,8 @@ Param make_params(double biomass_initial_concentration,
           f_false,
           f_false,
           f_false,
-          save};
+          save,
+          f_false};
 }
 
 Param* make_params_ptr(double biomass_initial_concentration,
@@ -187,16 +185,15 @@ Param* make_params_ptr(double biomass_initial_concentration,
                        uint32_t number_exported_result,
                        int save)
 {
-  return new Param{biomass_initial_concentration,
-                   final_time,
-                   delta_time,
-                   number_particle,
-                   1,
-                   number_exported_result,
-                   f_false,
-                   f_false,
-                   f_false,
-                   save};
+  // NOLINTBEGIN(cppcoreguidelines-owning-memory)
+  auto* const params = new Param(make_params(biomass_initial_concentration,
+                                             final_time,
+                                             delta_time,
+                                             number_particle,
+                                             number_exported_result,
+                                             save));
+  // NOLINTEND(cppcoreguidelines-owning-memory)
+  return params;
 }
 
 int set_scalar_buffer(Handle handle,
