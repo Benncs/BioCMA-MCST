@@ -18,6 +18,7 @@ namespace Models
       l = 0,
       l_max,
       mu,
+      mue,
       _init_only_cell_lenghtening,
       phi_s_c,
       __COUNT__
@@ -93,7 +94,7 @@ namespace Models
       GET_PROPERTY(Self::particle_var::mu) +=
           d_t * (1.0 / tau_meta) *
           (mu_p - GET_PROPERTY(Self::particle_var::mu));
-
+      GET_PROPERTY(Self::particle_var::mue) = mu_eff;
       GET_PROPERTY(Self::particle_var::phi_s_c) =
           -mu_eff * y_s_x * mass(idx, arr);
 
@@ -131,13 +132,14 @@ namespace Models
     {
       return {
 
-          "length", "mu"};
+          "length", "mu", "mu_eff"};
     }
 
     static std::vector<std::size_t> get_number()
     {
       return {INDEX_FROM_ENUM(particle_var::l),
-              INDEX_FROM_ENUM(particle_var::mu)};
+              INDEX_FROM_ENUM(particle_var::mu),
+              INDEX_FROM_ENUM(particle_var::mue)};
     }
   };
 
