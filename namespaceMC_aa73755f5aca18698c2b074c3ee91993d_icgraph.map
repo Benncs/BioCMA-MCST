@@ -1,0 +1,9 @@
+<map id="MC::sample_random_variables" name="MC::sample_random_variables">
+<area shape="rect" id="Node000001" title="Sample variable with RAI mecanism." alt="" coords="216,55,416,79"/>
+<area shape="rect" id="Node000002" href="$structModels_1_1Monod.html#a60e92ae2538c364505f78ecf3d83886c" title=" " alt="" coords="19,5,154,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="240,53,147,33,148,28,241,48"/>
+<area shape="rect" id="Node000003" href="$classMC_1_1KPRNG.html#a4e5a211c8da3d21fd4f1940e154d9acb" title=" " alt="" coords="12,55,161,79"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,70,161,70,161,64,200,64"/>
+<area shape="rect" id="Node000004" href="$classMC_1_1KPRNG.html#a067a194948465c4a636c41ebe13d313d" title=" " alt="" coords="5,104,168,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="241,86,148,106,147,101,240,81"/>
+</map>

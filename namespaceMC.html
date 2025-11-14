@@ -149,6 +149,8 @@ Functions</h2></td></tr>
 <tr class="memdesc:a8c67a0954fafbfba6825f3077e3d0df8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to initialize a <a class="el" href="structMC_1_1MonteCarloUnit.html" title="General-purpose Monte Carlo unit to carry out simulations.">MonteCarloUnit</a>.  <br /></td></tr>
 <tr class="memitem:ac9b6a65d70e4c5007f4bc908509924a0" id="r_ac9b6a65d70e4c5007f4bc908509924a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9b6a65d70e4c5007f4bc908509924a0">post_init_weight</a> (std::unique_ptr&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MonteCarloUnit</a> &gt; &amp;unit, double x0, double total_mass)</td></tr>
 <tr class="memitem:a6734cec020a2315d36542faad86c9125" id="r_a6734cec020a2315d36542faad86c9125"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6734cec020a2315d36542faad86c9125">get_pool</a> (std::size_t seed=0)</td></tr>
+<tr class="memitem:aa73755f5aca18698c2b074c3ee91993d" id="r_aa73755f5aca18698c2b074c3ee91993d"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa73755f5aca18698c2b074c3ee91993d">sample_random_variables</a> (const <a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a> &amp;p, auto functor)</td></tr>
+<tr class="memdesc:aa73755f5aca18698c2b074c3ee91993d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample variable with RAI mecanism.  <br /></td></tr>
 <tr class="memitem:a67a8a8fb99f617a67dd3702cd0f0b47f" id="r_a67a8a8fb99f617a67dd3702cd0f0b47f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMC_1_1RuntimeParameters.html">RuntimeParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67a8a8fb99f617a67dd3702cd0f0b47f">load_tuning_constant</a> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
@@ -705,6 +707,34 @@ Here is the caller graph for this function:</div>
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceMC_ac9b6a65d70e4c5007f4bc908509924a0_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+</div>
+
+</div>
+</div>
+<a id="aa73755f5aca18698c2b074c3ee91993d" name="aa73755f5aca18698c2b074c3ee91993d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa73755f5aca18698c2b074c3ee91993d">&#9670;&#160;</a></span>sample_random_variables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">KOKKOS_INLINE_FUNCTION auto MC::sample_random_variables </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>p</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">auto</td>          <td class="paramname"><span class="paramname"><em>functor</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sample variable with RAI mecanism. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceMC_aa73755f5aca18698c2b074c3ee91993d_icgraph.svg" width="422" height="135"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

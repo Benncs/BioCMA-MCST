@@ -72,6 +72,9 @@ $(function(){initNavTree('structModels_1_1Monod.html','','structModels_1_1Monod-
 </div><!--header-->
 <div class="contents">
 
+<p>Simplified <a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> model for glucose consumption and biomass growth.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="monod_8hpp_source.html">monod.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
@@ -79,13 +82,15 @@ Public Types</h2></td></tr>
 <tr class="memitem:a88c1b4116b5f33369fc1ad38e976abd3" id="r_a88c1b4116b5f33369fc1ad38e976abd3"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3">particle_var</a> : int { <br />
 &#160;&#160;<a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3a2db95e8e1a9267b7a1188556b2013b33">l</a> = 0
 , <a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3ab0f5cd9e46f45b2c99623457acfa8371">l_max</a>
-, <a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3a89aa4b196b48c8a13a6549bb1eaebd80">mu</a>
-, <a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3afc18f39be6cc5f527e4367ad907fd275">_init_only_cell_lenghtening</a>
+, <a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3a14fda20899197ec3c6efa3076106eaab">mu_p</a>
+, <a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3a17652180f8ef501edc196a83110d6014">mue</a>
 , <br />
-&#160;&#160;<a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3a755fd4289123facbfeb5c249a6034747">phi_s_c</a>
+&#160;&#160;<a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3afc18f39be6cc5f527e4367ad907fd275">_init_only_cell_lenghtening</a>
+, <a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3a755fd4289123facbfeb5c249a6034747">phi_s_c</a>
 , <a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3ac24f1659ef8e96af67e4a7d8663a3efb">__COUNT__</a>
 <br />
  }</td></tr>
+<tr class="memdesc:a88c1b4116b5f33369fc1ad38e976abd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration for the <a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> model variables.  <a href="#a88c1b4116b5f33369fc1ad38e976abd3">More...</a><br /></td></tr>
 <tr class="memitem:ad9cf89350b0af103dee5bf314f0d654e" id="r_ad9cf89350b0af103dee5bf314f0d654e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad9cf89350b0af103dee5bf314f0d654e">uniform_weight</a> = std::true_type</td></tr>
 <tr class="memitem:ac258b8a0d63256b003cd9fe0b3fc6a34" id="r_ac258b8a0d63256b003cd9fe0b3fc6a34"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac258b8a0d63256b003cd9fe0b3fc6a34">Self</a> = <a class="el" href="structModels_1_1Monod.html">Monod</a></td></tr>
 <tr class="memitem:a67330ad6d4003a24161c69e498b9261e" id="r_a67330ad6d4003a24161c69e498b9261e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67330ad6d4003a24161c69e498b9261e">FloatType</a> = float</td></tr>
@@ -105,20 +110,32 @@ Static Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ad24c23061a7b62321b5ff4cd3fa75bfc" id="r_ad24c23061a7b62321b5ff4cd3fa75bfc"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a67330ad6d4003a24161c69e498b9261e">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad24c23061a7b62321b5ff4cd3fa75bfc">y_s_x</a> = 2</td></tr>
+<tr class="memdesc:ad24c23061a7b62321b5ff4cd3fa75bfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Model constants used in biomass growth and cell elongation.  <br /></td></tr>
 <tr class="memitem:acb6dca5be883ed07d943186d7418d999" id="r_acb6dca5be883ed07d943186d7418d999"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a67330ad6d4003a24161c69e498b9261e">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb6dca5be883ed07d943186d7418d999">mu_max</a> = 0.77 / 3600.</td></tr>
+<tr class="memdesc:acb6dca5be883ed07d943186d7418d999"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum specific growth rate (1/s), converted from per hour.  <br /></td></tr>
 <tr class="memitem:a00c8e48debf00126ae97d1e283f867e5" id="r_a00c8e48debf00126ae97d1e283f867e5"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a67330ad6d4003a24161c69e498b9261e">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00c8e48debf00126ae97d1e283f867e5">tau_meta</a> = 1. / <a class="el" href="#acb6dca5be883ed07d943186d7418d999">mu_max</a></td></tr>
+<tr class="memdesc:a00c8e48debf00126ae97d1e283f867e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Metabolic time constant (s), inverse of max growth rate.  <br /></td></tr>
 <tr class="memitem:aa8186ac19484f299b899af62137fa2b8" id="r_aa8186ac19484f299b899af62137fa2b8"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a67330ad6d4003a24161c69e498b9261e">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8186ac19484f299b899af62137fa2b8">l_max_m</a> = 2e-6</td></tr>
+<tr class="memdesc:aa8186ac19484f299b899af62137fa2b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum cell length (m)  <br /></td></tr>
 <tr class="memitem:a85e20b2bfcb94a5c8f5a438897137c6c" id="r_a85e20b2bfcb94a5c8f5a438897137c6c"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a67330ad6d4003a24161c69e498b9261e">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85e20b2bfcb94a5c8f5a438897137c6c">l_min_m</a> = <a class="el" href="#aa8186ac19484f299b899af62137fa2b8">l_max_m</a> / 2.</td></tr>
+<tr class="memdesc:a85e20b2bfcb94a5c8f5a438897137c6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum cell length (m), half of maximum length.  <br /></td></tr>
 <tr class="memitem:ac89cc197b9f909938aa36f7cedf69ea5" id="r_ac89cc197b9f909938aa36f7cedf69ea5"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a67330ad6d4003a24161c69e498b9261e">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac89cc197b9f909938aa36f7cedf69ea5">k_s</a> = 1e-3</td></tr>
+<tr class="memdesc:ac89cc197b9f909938aa36f7cedf69ea5"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> constant for substrate concentration (m)  <br /></td></tr>
 <tr class="memitem:a4dfb0798cd514c20dcff71b706417322" id="r_a4dfb0798cd514c20dcff71b706417322"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a67330ad6d4003a24161c69e498b9261e">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4dfb0798cd514c20dcff71b706417322">d_m</a> = 0.6e-6</td></tr>
+<tr class="memdesc:a4dfb0798cd514c20dcff71b706417322"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cell diameter (m)  <br /></td></tr>
 <tr class="memitem:a9c62a7fdf69658dcf7af6c512146c3ee" id="r_a9c62a7fdf69658dcf7af6c512146c3ee"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a67330ad6d4003a24161c69e498b9261e">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c62a7fdf69658dcf7af6c512146c3ee">lin_density</a></td></tr>
+<tr class="memdesc:a9c62a7fdf69658dcf7af6c512146c3ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Linear density of the biomass (kg/m), calculated from cell diameter.  <br /></td></tr>
+<tr class="memitem:a1f78d22c4115c96d067d36f464faf82a" id="r_a1f78d22c4115c96d067d36f464faf82a"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f78d22c4115c96d067d36f464faf82a">initial_length_dist</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-attribs" class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a5ff42328578baf308f8862499e657836" id="r_a5ff42328578baf308f8862499e657836"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ff42328578baf308f8862499e657836">n_var</a></td></tr>
+<tr class="memitem:a5ff42328578baf308f8862499e657836" id="r_a5ff42328578baf308f8862499e657836"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ff42328578baf308f8862499e657836">n_var</a> = INDEX_FROM_ENUM(<a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3ac24f1659ef8e96af67e4a7d8663a3efb">particle_var::__COUNT__</a>)</td></tr>
 <tr class="memitem:a22e8cfaa6639d3aee230bc58c53d1d08" id="r_a22e8cfaa6639d3aee230bc58c53d1d08"><td class="memItemLeft" align="right" valign="top">static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22e8cfaa6639d3aee230bc58c53d1d08">name</a> = &quot;monod&quot;</td></tr>
 </table>
-<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Simplified <a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> model for glucose consumption and biomass growth. </p>
+<p>This model links glucose consumption and biomass growth using the <a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> equation. It models biomass growth through cell elongation for rod-shaped strains, and cell division is assumed to be deterministic. The primary purpose of this model is for validation and to demonstrate how the framework operates without requiring the typical formation. Instead, it focuses on the core dynamics of glucose consumption and biomass growth through the <a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> law. </p>
+</div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
 <a id="a9eeedc4a1a785084c7e3d2f6bd023aa2" name="a9eeedc4a1a785084c7e3d2f6bd023aa2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9eeedc4a1a785084c7e3d2f6bd023aa2">&#9670;&#160;</a></span>Config</h2>
 
@@ -209,13 +226,24 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Enumeration for the <a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> model variables. </p>
+<p>This enum represents the different variables used in the <a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> model. These variables do not strictly correspond to the state vector (xi), as some are auxiliary variables (e.g., phi_s_c) not part of the primary state. The <a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> factor is used to convert the growth rate into elongation rates. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3a2db95e8e1a9267b7a1188556b2013b33" name="a88c1b4116b5f33369fc1ad38e976abd3a2db95e8e1a9267b7a1188556b2013b33"></a>l&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3ab0f5cd9e46f45b2c99623457acfa8371" name="a88c1b4116b5f33369fc1ad38e976abd3ab0f5cd9e46f45b2c99623457acfa8371"></a>l_max&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3a89aa4b196b48c8a13a6549bb1eaebd80" name="a88c1b4116b5f33369fc1ad38e976abd3a89aa4b196b48c8a13a6549bb1eaebd80"></a>mu&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3afc18f39be6cc5f527e4367ad907fd275" name="a88c1b4116b5f33369fc1ad38e976abd3afc18f39be6cc5f527e4367ad907fd275"></a>_init_only_cell_lenghtening&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3a755fd4289123facbfeb5c249a6034747" name="a88c1b4116b5f33369fc1ad38e976abd3a755fd4289123facbfeb5c249a6034747"></a>phi_s_c&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3ac24f1659ef8e96af67e4a7d8663a3efb" name="a88c1b4116b5f33369fc1ad38e976abd3ac24f1659ef8e96af67e4a7d8663a3efb"></a>__COUNT__&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3a2db95e8e1a9267b7a1188556b2013b33" name="a88c1b4116b5f33369fc1ad38e976abd3a2db95e8e1a9267b7a1188556b2013b33"></a>l&#160;</td><td class="fielddoc"><p>Length of the cell. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3ab0f5cd9e46f45b2c99623457acfa8371" name="a88c1b4116b5f33369fc1ad38e976abd3ab0f5cd9e46f45b2c99623457acfa8371"></a>l_max&#160;</td><td class="fielddoc"><p>Maximum cell length (assumed constant for all cells) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3a14fda20899197ec3c6efa3076106eaab" name="a88c1b4116b5f33369fc1ad38e976abd3a14fda20899197ec3c6efa3076106eaab"></a>mu_p&#160;</td><td class="fielddoc"><p>Maximum specific growth rate (potential growth rate) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3a17652180f8ef501edc196a83110d6014" name="a88c1b4116b5f33369fc1ad38e976abd3a17652180f8ef501edc196a83110d6014"></a>mue&#160;</td><td class="fielddoc"><p>Effective growth rate (used for export purposes only) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3afc18f39be6cc5f527e4367ad907fd275" name="a88c1b4116b5f33369fc1ad38e976abd3afc18f39be6cc5f527e4367ad907fd275"></a>_init_only_cell_lenghtening&#160;</td><td class="fielddoc"><p>Factor for converting growth rate into elongation rate </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3a755fd4289123facbfeb5c249a6034747" name="a88c1b4116b5f33369fc1ad38e976abd3a755fd4289123facbfeb5c249a6034747"></a>phi_s_c&#160;</td><td class="fielddoc"><p>Instantaneous glucose consumption rate. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a88c1b4116b5f33369fc1ad38e976abd3ac24f1659ef8e96af67e4a7d8663a3efb" name="a88c1b4116b5f33369fc1ad38e976abd3ac24f1659ef8e96af67e4a7d8663a3efb"></a>__COUNT__&#160;</td><td class="fielddoc"><p>Helper for determining the size of the variable list. </p>
+</td></tr>
 </table>
 
 </div>
@@ -262,6 +290,7 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="section note"><dt>Note</dt><dd>Important to note that new_current_length is not l_max/2 but l/2 This is completly different but as growth is slow and time step has to be small it's ok</dd></dl>
 
 </div>
 </div>
@@ -346,6 +375,11 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structModels_1_1Monod_a60e92ae2538c364505f78ecf3d83886c_cgraph.svg" width="395" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -470,6 +504,28 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
+<p>Cell diameter (m) </p>
+
+</div>
+</div>
+<a id="a1f78d22c4115c96d067d36f464faf82a" name="a1f78d22c4115c96d067d36f464faf82a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f78d22c4115c96d067d36f464faf82a">&#9670;&#160;</a></span>initial_length_dist</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">MODEL_CONSTANT auto Models::Monod::initial_length_dist</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">        <a class="code hl_struct" href="structMC_1_1Distributions_1_1TruncatedNormal.html">MC::Distributions::TruncatedNormal&lt;FloatType&gt;</a>(</div>
+<div class="line">            <a class="code hl_variable" href="#aa8186ac19484f299b899af62137fa2b8">l_max_m</a> * 0.75, <a class="code hl_variable" href="#aa8186ac19484f299b899af62137fa2b8">l_max_m</a> * 0.75 / 4, <a class="code hl_variable" href="#a85e20b2bfcb94a5c8f5a438897137c6c">l_min_m</a>, <a class="code hl_variable" href="#aa8186ac19484f299b899af62137fa2b8">l_max_m</a>)</div>
+<div class="ttc" id="astructMC_1_1Distributions_1_1TruncatedNormal_html"><div class="ttname"><a href="structMC_1_1Distributions_1_1TruncatedNormal.html">MC::Distributions::TruncatedNormal</a></div><div class="ttdoc">Represents a TruncatedNormal (Gaussian) probability distribution.</div><div class="ttdef"><b>Definition</b> prng_extension.hpp:277</div></div>
+<div class="ttc" id="astructModels_1_1Monod_html_a85e20b2bfcb94a5c8f5a438897137c6c"><div class="ttname"><a href="#a85e20b2bfcb94a5c8f5a438897137c6c">Models::Monod::l_min_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_min_m</div><div class="ttdoc">Minimum cell length (m), half of maximum length.</div><div class="ttdef"><b>Definition</b> monod.hpp:69</div></div>
+<div class="ttc" id="astructModels_1_1Monod_html_aa8186ac19484f299b899af62137fa2b8"><div class="ttname"><a href="#aa8186ac19484f299b899af62137fa2b8">Models::Monod::l_max_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_max_m</div><div class="ttdoc">Maximum cell length (m)</div><div class="ttdef"><b>Definition</b> monod.hpp:68</div></div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="ac89cc197b9f909938aa36f7cedf69ea5" name="ac89cc197b9f909938aa36f7cedf69ea5"></a>
@@ -483,6 +539,8 @@ Here is the call graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p><a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> constant for substrate concentration (m) </p>
 
 </div>
 </div>
@@ -498,6 +556,8 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
+<p>Maximum cell length (m) </p>
+
 </div>
 </div>
 <a id="a85e20b2bfcb94a5c8f5a438897137c6c" name="a85e20b2bfcb94a5c8f5a438897137c6c"></a>
@@ -512,6 +572,8 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
+<p>Minimum cell length (m), half of maximum length. </p>
+
 </div>
 </div>
 <a id="a9c62a7fdf69658dcf7af6c512146c3ee" name="a9c62a7fdf69658dcf7af6c512146c3ee"></a>
@@ -525,12 +587,14 @@ Here is the call graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<b>Initial value:</b><div class="fragment"><div class="line">= </div>
 <div class="line">        <a class="code hl_function" href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">c_linear_density</a>(<span class="keyword">static_cast&lt;</span><a class="code hl_typedef" href="structModels_1_1FixedLength.html#ab10005608c96d8a014bc4f73653a81c4">FloatType</a><span class="keyword">&gt;</span>(1000), <a class="code hl_variable" href="structModels_1_1FixedLength.html#a78e6f7dba8a0a9cd7d385c2b99a77404">d_m</a>)</div>
 <div class="ttc" id="anamespaceModels_html_ae070357c43b64436202145d812e1e05c"><div class="ttname"><a href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">Models::c_linear_density</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION consteval F c_linear_density(F rho, F d)</div><div class="ttdef"><b>Definition</b> utils.hpp:47</div></div>
 <div class="ttc" id="astructModels_1_1FixedLength_html_a78e6f7dba8a0a9cd7d385c2b99a77404"><div class="ttname"><a href="structModels_1_1FixedLength.html#a78e6f7dba8a0a9cd7d385c2b99a77404">Models::FixedLength::d_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType d_m</div><div class="ttdef"><b>Definition</b> fixed_length.hpp:50</div></div>
 <div class="ttc" id="astructModels_1_1FixedLength_html_ab10005608c96d8a014bc4f73653a81c4"><div class="ttname"><a href="structModels_1_1FixedLength.html#ab10005608c96d8a014bc4f73653a81c4">Models::FixedLength::FloatType</a></div><div class="ttdeci">float FloatType</div><div class="ttdef"><b>Definition</b> fixed_length.hpp:30</div></div>
 </div><!-- fragment -->
+<p>Linear density of the biomass (kg/m), calculated from cell diameter. </p>
+
 </div>
 </div>
 <a id="acb6dca5be883ed07d943186d7418d999" name="acb6dca5be883ed07d943186d7418d999"></a>
@@ -545,6 +609,8 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
+<p>Maximum specific growth rate (1/s), converted from per hour. </p>
+
 </div>
 </div>
 <a id="a5ff42328578baf308f8862499e657836" name="a5ff42328578baf308f8862499e657836"></a>
@@ -557,7 +623,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::size_t Models::Monod::n_var</td>
+          <td class="memname">std::size_t Models::Monod::n_var = INDEX_FROM_ENUM(<a class="el" href="#a88c1b4116b5f33369fc1ad38e976abd3ac24f1659ef8e96af67e4a7d8663a3efb">particle_var::__COUNT__</a>)</td>
         </tr>
       </table>
   </td>
@@ -566,10 +632,7 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=</div>
-<div class="line">        INDEX_FROM_ENUM(<a class="code hl_enumvalue" href="#a88c1b4116b5f33369fc1ad38e976abd3ac24f1659ef8e96af67e4a7d8663a3efb">particle_var::__COUNT__</a>)</div>
-<div class="ttc" id="astructModels_1_1Monod_html_a88c1b4116b5f33369fc1ad38e976abd3ac24f1659ef8e96af67e4a7d8663a3efb"><div class="ttname"><a href="#a88c1b4116b5f33369fc1ad38e976abd3ac24f1659ef8e96af67e4a7d8663a3efb">Models::Monod::particle_var::__COUNT__</a></div><div class="ttdeci">@ __COUNT__</div><div class="ttdef"><b>Definition</b> monod.hpp:23</div></div>
-</div><!-- fragment -->
+
 </div>
 </div>
 <a id="a22e8cfaa6639d3aee230bc58c53d1d08" name="a22e8cfaa6639d3aee230bc58c53d1d08"></a>
@@ -606,6 +669,8 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
+<p>Metabolic time constant (s), inverse of max growth rate. </p>
+
 </div>
 </div>
 <a id="ad24c23061a7b62321b5ff4cd3fa75bfc" name="ad24c23061a7b62321b5ff4cd3fa75bfc"></a>
@@ -619,6 +684,9 @@ Here is the call graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Model constants used in biomass growth and cell elongation. </p>
+<p>These constants define various parameters for the model, including maximum growth rates, cell size, and other metabolic factors. The units are specified in meters (m) unless otherwise indicated. Specific yield of biomass per unit substrate (m) </p>
 
 </div>
 </div>

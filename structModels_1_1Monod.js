@@ -8,7 +8,8 @@ var structModels_1_1Monod =
     [ "particle_var", "structModels_1_1Monod.html#a88c1b4116b5f33369fc1ad38e976abd3", [
       [ "l", "structModels_1_1Monod.html#a88c1b4116b5f33369fc1ad38e976abd3a2db95e8e1a9267b7a1188556b2013b33", null ],
       [ "l_max", "structModels_1_1Monod.html#a88c1b4116b5f33369fc1ad38e976abd3ab0f5cd9e46f45b2c99623457acfa8371", null ],
-      [ "mu", "structModels_1_1Monod.html#a88c1b4116b5f33369fc1ad38e976abd3a89aa4b196b48c8a13a6549bb1eaebd80", null ],
+      [ "mu_p", "structModels_1_1Monod.html#a88c1b4116b5f33369fc1ad38e976abd3a14fda20899197ec3c6efa3076106eaab", null ],
+      [ "mue", "structModels_1_1Monod.html#a88c1b4116b5f33369fc1ad38e976abd3a17652180f8ef501edc196a83110d6014", null ],
       [ "_init_only_cell_lenghtening", "structModels_1_1Monod.html#a88c1b4116b5f33369fc1ad38e976abd3afc18f39be6cc5f527e4367ad907fd275", null ],
       [ "phi_s_c", "structModels_1_1Monod.html#a88c1b4116b5f33369fc1ad38e976abd3a755fd4289123facbfeb5c249a6034747", null ],
       [ "__COUNT__", "structModels_1_1Monod.html#a88c1b4116b5f33369fc1ad38e976abd3ac24f1659ef8e96af67e4a7d8663a3efb", null ]
@@ -21,6 +22,7 @@ var structModels_1_1Monod =
     [ "names", "structModels_1_1Monod.html#ac2d10502fd1157d9ce7b6d52aa0a3003", null ],
     [ "update", "structModels_1_1Monod.html#a83205dd1a7a0e8aaca185f81d74ddf40", null ],
     [ "d_m", "structModels_1_1Monod.html#a4dfb0798cd514c20dcff71b706417322", null ],
+    [ "initial_length_dist", "structModels_1_1Monod.html#a1f78d22c4115c96d067d36f464faf82a", null ],
     [ "k_s", "structModels_1_1Monod.html#ac89cc197b9f909938aa36f7cedf69ea5", null ],
     [ "l_max_m", "structModels_1_1Monod.html#aa8186ac19484f299b899af62137fa2b8", null ],
     [ "l_min_m", "structModels_1_1Monod.html#a85e20b2bfcb94a5c8f5a438897137c6c", null ],
