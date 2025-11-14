@@ -111,6 +111,15 @@ namespace
 
         delta_time = min_liquid_residen_time(*minElement) / 100.;
       }
+      else
+      {
+        // should throw  cause if delta <=0 we have incorrect timstep if first
+        // branch fails delta_time is unchanged.
+        // + If min_element fails flowmap might be invalid then default value is
+        // not needed
+        throw std::invalid_argument("No time step given and impossibe to "
+                                    "estimate it with given flowmap");
+      }
     }
 
     return delta_time;
