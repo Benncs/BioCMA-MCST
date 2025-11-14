@@ -1,6 +1,7 @@
 #ifndef __SIMULATION_MC_KERNEL_HPP
 #define __SIMULATION_MC_KERNEL_HPP
 
+#include "mc/alias.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
@@ -17,12 +18,18 @@
 #include <simulation/probe.hpp>
 #include <utility>
 
+#define CHECK_STATUS_OR_RETURN(__idx__)                                        \
+  if (particles.status(__idx__) != MC::Status::Idle) [[unlikely]]              \
+  {                                                                            \
+    return;                                                                    \
+  }
+
 namespace Simulation::KernelInline
 {
-  struct TagFirstPass
+  struct TagContribution
   {
   };
-  struct TagSecondPass
+  struct TagCycle
   {
   };
 
@@ -101,13 +108,15 @@ namespace Simulation::KernelInline
     using TeamMember = TeamPolicy::member_type;
     using value_type = CycleReduceType;
 
+    CycleFunctor() = default;
+
     KOKKOS_INLINE_FUNCTION
     CycleFunctor(MC::ParticlesContainer<M> _particles,
                  MC::KPRNG::pool_type _random_pool,
                  MC::KernelConcentrationType&& _concentrations,
                  MC::ContributionView _contribs_scatter,
                  MC::EventContainer _event)
-        : d_t(0.), particles(_particles), random_pool(_random_pool),
+        : d_t(0.), particles(std::move(_particles)), random_pool(_random_pool),
           concentrations(std::move(_concentrations)),
           contribs_scatter(std::move(_contribs_scatter)),
           events(std::move(_event))
@@ -117,41 +126,121 @@ namespace Simulation::KernelInline
     void update(double _d_t, MC::ParticlesContainer<M> _particles)
     {
       this->d_t = _d_t;
-      this->particles = _particles;
+      this->particles = std::move(_particles);
     }
 
-    void sblock(MC::ContributionView _block)
-    {
-      this->block = _block;
-    }
-
+    // KOKKOS_INLINE_FUNCTION
+    // void operator()(const TagFirstPass _tag,
+    //                 const TeamMember& team_handle) const
+    // {
+    //   (void)_tag;
+    //   GET_INDEX(particles.n_particles());
+    //   if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
+    //   {
+    //     return;
+    //   }
+    //   particles.get_contributions(idx, contribs_scatter);
+    // }
+    //
     KOKKOS_INLINE_FUNCTION
-    void operator()(const TagFirstPass _tag,
-                    const TeamMember& team_handle) const
+    void operator()(const TagContribution _tag, const std::size_t idx) const
     {
       (void)_tag;
-      GET_INDEX(particles.n_particles());
-      if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
-      {
-        return;
-      }
+      CHECK_STATUS_OR_RETURN(idx);
+
       particles.get_contributions(idx, contribs_scatter);
     }
 
-    KOKKOS_INLINE_FUNCTION void operator()(const TagSecondPass _tag,
-                                           const TeamMember& team_handle,
+    // KOKKOS_INLINE_FUNCTION void operator()(const TagCycle _tag,
+    //                                        const TeamMember& team_handle,
+    //                                        value_type& reduce_val) const
+    // {
+
+    //   (void)_tag;
+    //   (void)reduce_val.dead_total; // Counter not used currently because
+    //                                // there  is no cell mortality
+    //   // GET_INDEX(particles.n_particles());
+
+    //   std ::size_t start_idx =
+    //       (team_handle.league_rank() * team_handle.team_size());
+    //   std ::size_t idx = start_idx + team_handle.team_rank();
+    //   // if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
+    //   // {
+    //   //   return;
+    //   // }
+    //   const std::size_t n_species = concentrations.extent(0);
+    //   Kokkos::View<double**, Kokkos::MemoryTraits<Kokkos::Unmanaged>>
+    //       shmem_view(
+    //           team_handle.team_shmem(), team_handle.team_size(), n_species);
+
+    //   Kokkos::parallel_for(
+    //       Kokkos::TeamThreadRange(team_handle, 0, team_handle.team_size()),
+    //       [&](int i)
+    //       {
+    //         std::size_t particle_idx = start_idx + i;
+    //         const auto position = particles.position(particle_idx);
+    //         for (int s = 0; s < n_species; ++s)
+    //         {
+    //           shmem_view(i, s) = concentrations(s, position);
+    //         }
+    //       });
+    //   // team_handle.team_barrier();
+    //   CHECK_STATUS_OR_RETURN(idx);
+    //   if (idx > particles.n_particles())
+    //   {
+    //     return;
+    //   }
+    //   particles.ages(idx, 1) += d_t;
+
+    //   auto local_c =
+    //       Kokkos::subview(shmem_view, team_handle.team_rank(), Kokkos::ALL);
+
+    //   if (M::update(random_pool, d_t, idx, particles.model, local_c) ==
+    //       MC::Status::Division)
+    //   {
+    //     if (!particles.handle_division(random_pool, idx))
+    //     {
+    //       reduce_val.waiting_allocation_particle += 1;
+    //       events.wrap_incr<MC::EventType::Overflow>();
+    //       Kokkos::printf("[KERNEL] Division Overflow\r\n");
+    //     }
+    //     events.wrap_incr<MC::EventType::NewParticle>();
+    //   };
+    // }
+
+    KOKKOS_INLINE_FUNCTION void
+    operator()(TagCycle _tag,
+               const Kokkos::TeamPolicy<ComputeSpace>::member_type& team,
+               value_type& reduce_val) const
+    {
+      (void)_tag;
+      const auto team_size = team.team_size();
+
+      const auto work_stride = team_size * team.league_size();
+      const auto work_start = team.league_rank() * team_size + team.team_rank();
+
+      for (auto idx = work_start; idx < particles.n_particles();
+           idx += work_stride)
+      {
+        CHECK_STATUS_OR_RETURN(idx);
+        exec_per_particle(idx, reduce_val);
+      }
+    }
+
+    KOKKOS_INLINE_FUNCTION void operator()(const TagCycle _tag,
+                                           const std::size_t idx,
                                            value_type& reduce_val) const
     {
 
       (void)_tag;
-      (void)reduce_val.dead_total; // Counter not used currently because there
-                                   // is no cell mortality
-      GET_INDEX(particles.n_particles());
-      if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
-      {
-        return;
-      }
+      (void)reduce_val.dead_total;
+      exec_per_particle(idx, reduce_val);
+    }
 
+    KOKKOS_INLINE_FUNCTION void exec_per_particle(const std::size_t idx,
+                                                  value_type& reduce_val) const
+    {
+      particles.ages(idx, 1) += d_t;
       auto local_c =
           Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx));
 
@@ -167,8 +256,7 @@ namespace Simulation::KernelInline
         events.wrap_incr<MC::EventType::NewParticle>();
       };
 
-      // particles.template get_contributions<ComputeSpace, TeamMember>(
-      //     random_pool, idx, contribs_scatter, team_handle);
+      particles.get_contributions(idx, contribs_scatter);
     }
 
     M::FloatType d_t;
@@ -179,7 +267,6 @@ namespace Simulation::KernelInline
     // kernelContribution contribs;
     MC::KernelConcentrationType limitation_factor;
     MC::EventContainer events;
-    MC::ContributionView block;
   };
 
 } // namespace Simulation::KernelInline

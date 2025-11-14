@@ -12,7 +12,7 @@ if use_dynamic_module
   arg = [use_python_define]
 endif
 
-dep=[kokkos, kokkos_sampling]
+dep = [kokkos, kokkos_sampling]
 mc_lib = static_library(
   f'@project_name@_mc',
   mc_sources,
@@ -32,6 +32,3 @@ mc_dependency = declare_dependency(
   link_with: mc_lib,
   compile_args: [arg],
 )
-if build_test
-  subdir('tests')
-endif

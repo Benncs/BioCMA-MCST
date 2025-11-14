@@ -1,6 +1,7 @@
 #ifndef __SIMULATION_EIGEN_KOKKOS_HPP__
 #define __SIMULATION_EIGEN_KOKKOS_HPP__
 
+#include "common/traits.hpp"
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -63,14 +64,15 @@ constexpr auto EigenLayoutLeft = Eigen::ColMajor;
 constexpr auto CompileMatrixSizeEigen = -1;
 
 // Templated Eigen Matrix Type
-template <int Layout>
+template <int Layout, FloatingPointType ftype>
 using MatrixType = Eigen::
-    Matrix<double, CompileMatrixSizeEigen, CompileMatrixSizeEigen, Layout>;
+    Matrix<ftype, CompileMatrixSizeEigen, CompileMatrixSizeEigen, Layout>;
 
-using ColMajorMatrixtype = MatrixType<EigenLayoutLeft>;
+template <FloatingPointType ftype>
+using ColMajorMatrixtype = MatrixType<EigenLayoutLeft, ftype>;
 
-template <int Layout>
-using SparseMatrixType = Eigen::SparseMatrix<double, Layout>;
+template <int Layout, FloatingPointType ftype>
+using SparseMatrixType = Eigen::SparseMatrix<ftype, Layout>;
 
 using DiagonalType = Eigen::DiagonalMatrix<double, CompileMatrixSizeEigen>;
 
@@ -90,25 +92,31 @@ template <> struct KokkosLayoutMapper<Eigen::RowMajor>
   using type = Kokkos::LayoutRight;
 };
 
-template <typename ExecSpace, int EigenLayout, typename... MemoryTrait>
+template <typename ExecSpace,
+          int EigenLayout,
+          FloatingPointType ftype,
+          typename... MemoryTrait>
 using KokkosScalarMatrix =
-    Kokkos::View<double**,
+    Kokkos::View<ftype**,
                  typename KokkosLayoutMapper<EigenLayout>::type,
                  ExecSpace,
                  MemoryTrait...>;
 
+template <FloatingPointType ftype>
 using RowMajorKokkosScalarMatrix =
-    KokkosScalarMatrix<ComputeSpace, Eigen::RowMajor>;
+    KokkosScalarMatrix<ComputeSpace, Eigen::RowMajor, ftype>;
+template <FloatingPointType ftype>
 using ColMajorKokkosScalarMatrix =
-    KokkosScalarMatrix<ComputeSpace, Eigen::ColMajor>;
+    KokkosScalarMatrix<ComputeSpace, Eigen::ColMajor, ftype>;
 
-template <int EigenLayout> struct EigenKokkosBase
+template <int EigenLayout, FloatingPointType ftype> struct EigenKokkosBase
 {
-  using EigenMatrix = MatrixType<EigenLayout>;
-  using HostView = KokkosScalarMatrix<HostSpace, EigenLayout>;
+  using EigenMatrix = MatrixType<EigenLayout, ftype>;
+  using HostView = KokkosScalarMatrix<HostSpace, EigenLayout, ftype>;
   using ComputeView =
       KokkosScalarMatrix<ComputeSpace,
                          EigenLayout,
+                         ftype,
                          Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
   HostView host;
@@ -116,7 +124,7 @@ template <int EigenLayout> struct EigenKokkosBase
   EigenMatrix eigen_data;
 
   EigenKokkosBase(std::size_t n_row, std::size_t n_col)
-      : eigen_data(MatrixType<EigenLayout>(n_row, n_col))
+      : eigen_data(MatrixType<EigenLayout, ftype>(n_row, n_col))
   {
     eigen_data.setZero();
     host = HostView(eigen_data.data(), n_row, n_col);
@@ -145,9 +153,11 @@ template <int EigenLayout> struct EigenKokkosBase
 };
 
 // ColMajor version (default)
-using EigenKokkos = EigenKokkosBase<EigenLayoutLeft>;
+template <FloatingPointType ftype>
+using EigenKokkos = EigenKokkosBase<EigenLayoutLeft, ftype>;
 
 // RowMajor version
-using RowMajorEigenKokkos = EigenKokkosBase<EigenLayoutRight>;
+template <FloatingPointType ftype>
+using RowMajorEigenKokkos = EigenKokkosBase<EigenLayoutRight, ftype>;
 
 #endif

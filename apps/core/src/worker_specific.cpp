@@ -11,7 +11,7 @@
 #  include <worker_specific.hpp>
 
 void workers_process(
-    std::shared_ptr<IO::Logger> logger,
+    [[maybe_unused]] std::shared_ptr<IO::Logger> logger,
     const ExecInfo& exec,
     Simulation::SimulationUnit& simulation,
     const Core::SimulationParameters& params,
@@ -50,7 +50,7 @@ void workers_process(
 
         last_sync(exec, simulation);
 
-        container.clean_dead(simulation.dead_counter());
+        container.force_remove_dead();
 
         if (do_export)
         {
@@ -86,10 +86,9 @@ void workers_process(
                                                      payload.liquid_volumes,
                                                      payload.gas_volumes,
                                                      payload.neighbors));
-
+      simulation.update_feed(current_time, d_t, false);
       simulation.cycleProcess(container, d_t, functors);
 
-      simulation.update_feed(current_time, d_t);
       current_time += d_t;
 
       sync_step(exec, simulation);

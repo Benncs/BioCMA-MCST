@@ -3,6 +3,14 @@
 version = meson.project_version().split('.')
 assert(version.length() == 3)
 
+# Use smaller alloc factor bcause gpu memory is smaller
+default_particle_container_allocation_factor='2.5'
+default_MC_buffer_ratio='1'
+if use_cuda
+default_particle_container_allocation_factor = '1.5'
+default_MC_buffer_ratio='0.6'
+endif
+
 conf_data = configuration_data(
   {
     '_BIOMC_VERSION_MAJOR': version[0],
@@ -14,12 +22,14 @@ conf_data = configuration_data(
     'dump_particle_state': 'true',
     'use_probe': 'false',
     'const_number_simulation': 'false',
-    'default_particle_container_allocation_factor': '2.5',
+    'default_particle_container_allocation_factor': default_particle_container_allocation_factor,
     'MC_MAX_PARTICLE_BUFFER': '100e6',
     'debug_MC_RAND_DEFAULT_SEED': '2024',
     '_dead_particle_ratio_threshold': '0.01',
     'cma_data_folder_path': '"cma_data"',
     'enable_event_counter': 'true',
+    'shrink_ratio':'0.1',
+    'default_MC_buffer_ratio':default_MC_buffer_ratio
   },
 )
 result_dir = get_option('result_dir_path')
@@ -46,7 +56,7 @@ if not use_cuda and build_udf
 endif
 
 # model_list_name = ['two_meta','simple_model','two_meta_nb','fixed_length']
-model_list_name = ['fixed_length','two_meta_nb']
+model_list_name = ['fixed_length','two_meta_nb','monod']
 if not use_cuda and build_udf
   model_list_name = [model_list_name, 'udf_model']
 endif

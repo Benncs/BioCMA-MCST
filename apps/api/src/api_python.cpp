@@ -114,6 +114,10 @@ namespace PythonBindings
                      &wrap_c_param_t::biomass_initial_concentration)
       .def_readwrite("number_particle", &wrap_c_param_t::number_particle)
       .def_readwrite("save_serde", &wrap_c_param_t::save_serde)
+      .def_readwrite("uniform_particle_init", &wrap_c_param_t::uniform_particle_init)
+
+
+
       .def("__repr__", &wrap_repr)
       // TODO Write unittest
       .def(py::pickle(
@@ -150,7 +154,7 @@ namespace PythonBindings
             p.recursive = static_cast<int>(t[5].cast<bool>());
             p.biomass_initial_concentration = t[6].cast<double>();
             p.number_particle = t[7].cast<int>();
-            p.number_particle = t[8].cast<int>();
+            p.save_serde = t[8].cast<int>();
             // NOLINTEND
             return p;
           }));

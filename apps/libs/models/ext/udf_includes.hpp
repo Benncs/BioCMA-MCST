@@ -1,6 +1,7 @@
 #ifndef __BIO__EXT_MODULE_DEF__
 #define __BIO__EXT_MODULE_DEF__
 
+#include <utility>
 #ifdef DECLARE_EXPORT_UDF
 #  include <dynlib/dyn_module.hpp>
 #  include <dynlib/dynlib.hpp>
@@ -28,7 +29,8 @@ namespace UnsafeUDF
     static void (*init_udf)(
         const MC::KPRNG::pool_type& random_pool,
         std::size_t idx,
-        const Models::UdfModel::SelfParticle& arr); //< init function ptr
+        const Models::UdfModel::SelfParticle& arr,
+        const Models::UdfModel::Config& config); //< init function ptr
 
     static MC::Status (*update_udf)(
         const MC::KPRNG::pool_type& random_pool,
@@ -37,13 +39,9 @@ namespace UnsafeUDF
         const Models::UdfModel::SelfParticle& arr,
         const MC::LocalConcentration& c); //< update function ptr
 
-    static void (*contribution_udf)(
-        std::size_t idx,
-        std::size_t position,
-        double weight,
-        const Models::UdfModel::SelfParticle& arr,
-        const MC::ContributionView&
-            contributions); //< contribution function ptr
+    static MC::ContribIndexBounds (*get_bounds_udf)();
+
+    static Models::UdfModel::Config (*get_config_udf)(std::size_t n);
 
     static void (*division_udf)(const MC::KPRNG::pool_type& random_pool,
                                 std::size_t idx,
@@ -79,9 +77,11 @@ using init_udf_ptr =
     decltype(UnsafeUDF::Loader::init_udf); //< init function ptr type
 using update_udf_ptr =
     decltype(UnsafeUDF::Loader::update_udf); //< update function ptr type
-using contribution_udf_ptr =
-    decltype(UnsafeUDF::Loader::contribution_udf); //< contribution function ptr
-                                                   // type
+
+using get_bounds_udf_ptr = decltype(UnsafeUDF::Loader::get_bounds_udf);
+
+using get_config_udf_ptr = decltype(UnsafeUDF::Loader::get_config_udf);
+
 using division_udf_ptr =
     decltype(UnsafeUDF::Loader::division_udf); //< division function ptr type
 using mass_udf_ptr = decltype(UnsafeUDF::Loader::mass);
@@ -95,16 +95,17 @@ using get_number_udf_ptr =
 // clang-format off
 /**
   @brief Module declaration
-*/ 
+*/
 DEFINE_MODULE(
-              MODULE_ITEM(init_udf) 
+              MODULE_ITEM(init_udf)
               MODULE_ITEM(update_udf)
-              MODULE_ITEM(contribution_udf) 
               MODULE_ITEM(division_udf)
-              MODULE_ITEM(mass_udf)   
+              MODULE_ITEM(mass_udf)
               MODULE_ITEM(names_udf)
               MODULE_ITEM(get_number_udf)
-              MODULE_ITEM(set_nvar_udf)     
+              MODULE_ITEM(set_nvar_udf)
+              MODULE_ITEM(get_bounds_udf)
+              MODULE_ITEM(get_config_udf)
               )
 // clang-format on
 #endif

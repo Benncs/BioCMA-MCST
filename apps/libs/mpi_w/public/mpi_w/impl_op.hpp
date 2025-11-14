@@ -1,7 +1,7 @@
 #ifndef __IMPL_MPI_OP_HPP__
 #define __IMPL_MPI_OP_HPP__
 
-#include "common/common.hpp"
+#include <common/traits.hpp>
 #include <mpi_w/message_t.hpp>
 #include <mpi_w/mpi_types.hpp>
 

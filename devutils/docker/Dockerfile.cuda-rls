@@ -1,8 +1,7 @@
 FROM biocma_cuda_base AS build
 
 WORKDIR /app
-ENV APP_INSTALL_DIR=/opt/biomc
-ENV CXX=/app/wrap_cxx
+
 COPY ./apps /app/apps
 COPY ./subprojects/dynlib.wrap /app/subprojects/dynlib.wrap
 COPY ./subprojects/cereal.wrap /app/subprojects/cereal.wrap
@@ -17,7 +16,10 @@ COPY ./devutils/generate_model_loader.py /app/devutils/generate_model_loader.py
 COPY ./devutils/install_script.sh /app/devutils/install_script.sh
 COPY ./tools /app/tools
 COPY ./devutils/datamodel /app/devutils/datamodel
-COPY devutils/wrap_cxx /app/wrap_cxx
+COPY ./devutils/wrap_cxx /app/wrap_cxx
+
+ENV APP_INSTALL_DIR=/opt/biomc
+ENV CXX=/app/wrap_cxx
 
 RUN meson setup builddir \
 --buildtype=release \
@@ -28,10 +30,10 @@ RUN meson setup builddir \
 -Dbuild_python_api=false \
 -Dresult_dir_path=$APP_INSTALL_DIR/results/
 
-
 RUN ninja -C builddir && sh /app/devutils/install_script.sh $APP_INSTALL_DIR/results/
 
 FROM nvidia/cuda:12.6.0-runtime-ubuntu24.04  AS rls
+#FROM nvidia/cuda:13.0.1-runtime-ubuntu24.04 AS rls
 ENV APP_INSTALL_DIR=/opt/biomc
 RUN apt-get update && \
     apt-get install -y \
@@ -46,6 +48,7 @@ RUN apt-get update && \
 COPY --from=build $APP_INSTALL_DIR $APP_INSTALL_DIR
 COPY --from=build /app/builddir/apps/cli/biocma_mcst_cli_app_shared $APP_INSTALL_DIR/biocma_mcst_cli_app_shared
 COPY --from=build /app/builddir/apps/cli/biocma_mcst_cli_app $APP_INSTALL_DIR/biocma_mcst_cli_app
+COPY --from=build /app/tools/exec.py $APP_INSTALL_DIR/exec.py
 RUN ln -sf $APP_INSTALL_DIR/runner.py /usr/bin/biomc_runner
 WORKDIR /
 RUN rm -rf /app

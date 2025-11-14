@@ -25,7 +25,7 @@ namespace Simulation::MassTransfer
 {
   struct MassTransferProxy
   {
-    ColMajorMatrixtype mtr;
+    ColMajorMatrixtype<double> mtr;
     Eigen::ArrayXXd kla;
     Eigen::ArrayXd Henry;
     double db;

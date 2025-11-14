@@ -1,10 +1,10 @@
 #ifndef __MC_INIT_HPP__
 #define __MC_INIT_HPP__
 
-#include "common/logger.hpp"
 #include <biocma_cst_config.hpp>
 #include <cassert>
 #include <common/execinfo.hpp>
+#include <common/logger.hpp>
 #include <cstdint>
 #include <mc/domain.hpp>
 #include <mc/particles_container.hpp>
@@ -58,8 +58,9 @@ namespace MC
 
     auto unit = std::make_unique<MonteCarloUnit>();
     unit->domain = ReactorDomain(volumes, neighbors);
-    bool flag_virtual = unit->domain.getNumberCompartments() == 1;
-    auto container = ParticlesContainer<Model>(n_particles, flag_virtual);
+    // bool flag_virtual = unit->domain.getNumberCompartments() == 1;
+    auto container =
+        ParticlesContainer<Model>(load_tuning_constant(), n_particles);
     try
     {
       impl_init(total_mass,

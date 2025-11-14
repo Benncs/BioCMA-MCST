@@ -12,36 +12,17 @@
 #include <mc/unit.hpp>
 #include <memory>
 #include <optional>
+#include <scalar_init.hpp>
 #include <scalar_simulation.hpp>
 #include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/kernels/move_kernel.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
 #include <utility>
-
-namespace
-{
-  template <typename T>
-  std::vector<T>
-  layout_right_to_left(std::span<const T> input, size_t rows, size_t cols)
-  {
-    std::vector<T> output(input.size());
-
-    for (size_t i = 0; i < rows; ++i)
-    {
-      for (size_t j = 0; j < cols; ++j)
-      {
-        output[j * rows + i] = input[i * cols + j];
-      }
-    }
-
-    return output;
-  }
-} // namespace
-
 namespace Simulation
 {
 
@@ -50,8 +31,8 @@ namespace Simulation
   SimulationUnit::SimulationUnit(std::unique_ptr<MC::MonteCarloUnit>&& _unit,
                                  const ScalarInitializer& scalar_init,
                                  std::optional<Feed::SimulationFeed> _feed)
-      : mc_unit(std::move(_unit)), internal_counter_dead(0),
-        feed(_feed.value_or(Feed::SimulationFeed{std::nullopt, std::nullopt})),
+      : mc_unit(std::move(_unit)),
+        feed(_feed.value_or(Feed::SimulationFeed::empty())),
         is_two_phase_flow(scalar_init.gas_flow)
   {
 
@@ -72,21 +53,16 @@ namespace Simulation
 
     const std::size_t n_flows = this->feed.n_liquid_flow();
 
-    Kokkos::resize(move_info.index_leaving_flow, n_flows);
-    Kokkos::resize(move_info.leaving_flow, n_flows);
-    Kokkos::resize(move_info.liquid_volume,
-                   mc_unit->domain.getNumberCompartments());
-    Kokkos::resize(move_info.diag_transition,
-                   mc_unit->domain.getNumberCompartments());
+    move_info = KernelInline::MoveInfo<ComputeSpace>(
+        mc_unit->domain.getNumberCompartments(), n_flows);
 
     contribs_scatter =
         Kokkos::Experimental::create_scatter_view(get_kernel_contribution());
   }
 
-  void SimulationUnit::update(CmaUtils::IterationState&& newstate)
+  void SimulationUnit::update(CmaUtils::IterationState&& new_state)
   {
-    state = std::move(newstate);
-
+    state = std::move(new_state);
     setVolumes();
     mc_unit->domain.setLiquidNeighbors(state.neighbors);
   }
@@ -95,6 +71,9 @@ namespace Simulation
   {
     auto contribs = get_kernel_contribution();
     Kokkos::Experimental::contribute(contribs, contribs_scatter);
+    // Warning syncrho deepcopy into contribs
+    //  Ok to do it here because scatter_contribute is called after
+    //  cycle_process when contribs is empty (ode step is done before)
     this->liquid_scalar->synchro_sources();
   }
 
@@ -105,7 +84,7 @@ namespace Simulation
     std::span<double const> vg = state.gas->volume;
     if (liquid_scalar)
     {
-      std::span<double const> vl = liquid_scalar->getVolumeData();
+      std::span<double const> vl = liquid_scalar->volume_span();
       this->liquid_scalar->setVolumes(vl, state.liq->inverse_volume);
     }
 
@@ -126,79 +105,11 @@ namespace Simulation
     this->mc_unit->domain.setVolumes(vl);
   }
 
-  void SimulationUnit::post_init_concentration_file(
-      const ScalarInitializer& scalar_init)
-  {
-
-    if (!scalar_init.liquid_buffer.has_value())
-    {
-      throw SimulationException(ErrorCodes::BadInitialiser);
-    }
-    const std::size_t cols =
-        scalar_init.liquid_buffer->size() / scalar_init.n_species;
-    const auto layout_left_buffer = layout_right_to_left<double>(
-        *scalar_init.liquid_buffer, scalar_init.n_species, cols);
-
-    if (!this->liquid_scalar->deep_copy_concentration(layout_left_buffer))
-    {
-
-      throw SimulationException(ErrorCodes::MismatchSize);
-    }
-
-    if (is_two_phase_flow)
-    {
-      if (!scalar_init.gas_buffer.has_value())
-      {
-        throw SimulationException(ErrorCodes::BadInitialiser);
-      }
-      const auto layout_left_buffer = layout_right_to_left<double>(
-          *scalar_init.gas_buffer, scalar_init.n_species, cols);
-      if (!this->gas_scalar->deep_copy_concentration(layout_left_buffer))
-      {
-        throw SimulationException(ErrorCodes::MismatchSize);
-      }
-    }
-  }
-
-  void SimulationUnit::clear_mc()
-  {
-    mc_unit.reset();
-  }
-
   void SimulationUnit::reset()
   {
     liquid_scalar.reset();
     gas_scalar.reset();
     move_info = KernelInline::MoveInfo<ComputeSpace>();
-  }
-
-  void SimulationUnit::post_init_concentration_functor(
-      const ScalarInitializer& scalar_init)
-  {
-
-    auto& cliq = this->liquid_scalar->get_concentration();
-    decltype(&cliq) cgas = nullptr; // FIXME
-
-    if (is_two_phase_flow)
-    {
-      assert(this->gas_scalar != nullptr);
-      cgas = &this->gas_scalar->get_concentration();
-      assert(cgas->size() != 0);
-    }
-
-    const auto& fv = scalar_init.liquid_f_init.value();
-
-    for (decltype(cliq.rows()) i_row = 0; i_row < cliq.rows(); ++i_row)
-    {
-      for (decltype(cliq.cols()) i_col = 0; i_col < cliq.cols(); ++i_col)
-      {
-        cliq(i_row, i_col) = fv(i_row, i_col);
-        if (is_two_phase_flow)
-        {
-          (*cgas)(i_row, i_col) = scalar_init.gas_f_init.value()(i_row, i_col);
-        }
-      }
-    }
   }
 
   void
@@ -209,11 +120,14 @@ namespace Simulation
         scalar_init.type == ScalarInitialiserType::Local)
 
     {
-      post_init_concentration_functor(scalar_init);
+
+      impl::post_init_concentration_functor(
+          is_two_phase_flow, scalar_init, liquid_scalar, gas_scalar);
     }
     else
     {
-      post_init_concentration_file(scalar_init);
+      impl::post_init_concentration_file(
+          is_two_phase_flow, scalar_init, liquid_scalar, gas_scalar);
     }
 
     if ((this->liquid_scalar->getConcentrationArray() >= 0.).all())

@@ -5,11 +5,11 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <eigen_kokkos.hpp>
-#include <mc/domain.hpp>
-#include <mc/events.hpp>
-#include <mc/prng/prng.hpp>
-#include <mc/unit.hpp>
+// #include <hydro/impl_mass_transfer.hpp>
+// #include <mc/domain.hpp>
+// #include <mc/events.hpp>
+// #include <mc/prng/prng.hpp>
+// #include <mc/unit.hpp>
 #include <memory>
 #include <optional>
 #include <scalar_simulation.hpp>
@@ -20,27 +20,28 @@
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
-#include <traits/Kokkos_IterationPatternTrait.hpp>
-#include <utility>
+// #include <utility>
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
 #endif
-#include <Eigen/Core>
+// #include <Eigen/Core>
 #include <Eigen/Dense>
-#include <Eigen/Sparse>
+// #include <Eigen/Sparse>
+// #include <eigen_kokkos.hpp>
 #ifndef NDEBUG
 #  pragma GCC diagnostic pop
 #endif
-#include <hydro/impl_mass_transfer.hpp>
 
 namespace Simulation
 {
-  std::size_t SimulationUnit::dead_counter() const
-  {
-    return internal_counter_dead;
-  }
+  // std::size_t SimulationUnit::dead_counter() const
+  // {
+  //   return std::visit([](const auto& container)
+  //                     { return container.get_inactive(); },
+  //                     mc_unit->container);
+  // }
 
   bool SimulationUnit::two_phase_flow() const
   {
@@ -114,12 +115,12 @@ namespace Simulation
 
   std::span<const double> SimulationUnit::getContributionData() const
   {
-    return liquid_scalar->getContributionData();
+    return liquid_scalar->contribution_span();
   }
 
   std::span<double> SimulationUnit::getContributionData_mut()
   {
-    return this->liquid_scalar->getContributionData_mut();
+    return this->liquid_scalar->contribution_span_mut();
   }
 
   std::span<double> SimulationUnit::getCliqData() const
@@ -139,7 +140,8 @@ namespace Simulation
 
   [[nodiscard]] Dimensions SimulationUnit::getDimensions() const noexcept
   {
-    return {this->liquid_scalar->n_row(), this->liquid_scalar->n_col()};
+    return {.n_species = this->liquid_scalar->n_row(),
+            .n_compartment = this->liquid_scalar->n_col()};
   }
 
   [[nodiscard]] std::optional<std::span<const double>>

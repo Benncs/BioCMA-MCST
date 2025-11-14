@@ -13,6 +13,7 @@
 #  pragma GCC diagnostic pop
 #endif
 
+#include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 #include <vector>
 
