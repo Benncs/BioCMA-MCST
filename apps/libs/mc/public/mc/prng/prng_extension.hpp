@@ -186,6 +186,67 @@ namespace MC::Distributions
 
   /*DISTRIBUTIONS*/
 
+  template <FloatingPointType F> struct Uniform
+  {
+    F min; ///< min
+    F max; ///< Max
+
+    /**
+      @brief Draws a random sample from the distribution.
+      @tparam DeviceType The Kokkos execution device.
+      @param gen Kokkos random number generator.
+      @return A normally distributed random sample.
+    */
+    template <class DeviceType>
+    KOKKOS_INLINE_FUNCTION F
+    draw(Kokkos::Random_XorShift1024<DeviceType>& gen) const
+    {
+      return draw_from(gen, min, max);
+    }
+
+    /**
+      @brief Static method to draw a sample from N(μ, σ).
+      @tparam DeviceType The Kokkos execution device.
+      @param gen Kokkos random number generator.
+      @param mu Mean of the distribution.
+      @param sigma Standard deviation of the distribution.
+      @return A normally distributed random sample.
+    */
+    template <class DeviceType>
+    static KOKKOS_INLINE_FUNCTION F
+    draw_from(Kokkos::Random_XorShift1024<DeviceType>& gen, F min, F max)
+    {
+      return gen.drand(min, max);
+    }
+
+    /**
+      @brief Returns the mean of the distribution.
+      @return Mean (μ).
+    */
+    KOKKOS_INLINE_FUNCTION F mean() const
+    {
+      return (min + max) / F(2);
+    }
+
+    /**
+      @brief Returns the variance of the distribution.
+      @return Variance (σ²).
+    */
+    KOKKOS_INLINE_FUNCTION F var() const
+    {
+      return (max - min) * (max - min) / F(12);
+    }
+
+    /**
+      @brief Returns the skewness of the distribution.
+      @return Skewness (always 0 for a normal distribution).
+    */
+    KOKKOS_INLINE_FUNCTION F skewness() const
+    {
+      return F(0);
+    }
+  };
+
   /**
   @brief Represents a normal (Gaussian) probability distribution.
 
