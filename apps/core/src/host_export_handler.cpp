@@ -117,7 +117,7 @@ ExportHandler::ExportHandler(std::shared_ptr<Core::MainExporter> _main_exporter,
 // }
 //
 //
-void ExportHandler::operator()(double current_time,
+bool ExportHandler::operator()(double current_time,
                                size_t loop_counter,
                                Simulation::SimulationUnit& simulation,
                                Core::PartialExporter& partial_exporter)
@@ -127,7 +127,7 @@ void ExportHandler::operator()(double current_time,
   // Only proceed if the dump interval is reached
   if (++dump_counter != dump_interval)
   {
-    return;
+    return false;
   }
 
   // Prepare event span if event counter is enabled
@@ -180,6 +180,7 @@ void ExportHandler::operator()(double current_time,
 
   // Reset dump counter
   dump_counter = 0;
+  return true;
 }
 
 std::optional<std::span<std::size_t>>

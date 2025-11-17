@@ -197,8 +197,13 @@ namespace
 
         if (do_export)
         {
-          exporter_handler(
-              current_time, __loop_counter, simulation, partial_exporter);
+          // exporter_handler(
+          //     current_time, __loop_counter, simulation, partial_exporter);
+          if (exporter_handler(
+                  current_time, __loop_counter, simulation, partial_exporter))
+          {
+            // local_container._sort(500);
+          }
         }
 
         sync_step(exec, simulation);

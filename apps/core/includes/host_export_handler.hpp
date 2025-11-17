@@ -32,9 +32,10 @@ public:
    * @param simulation The simulation unit containing the state and data to
    * export.
    * @param partial_exporter The partial exporter for writing particle and probe
+   * @return true if export sucess
    * data.
    */
-  void operator()(double current_time,
+  bool operator()(double current_time,
                   size_t loop_counter,
                   Simulation::SimulationUnit& simulation,
                   Core::PartialExporter& partial_exporter);
