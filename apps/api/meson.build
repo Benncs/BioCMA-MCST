@@ -2,10 +2,9 @@ src_dir = './src'
 
 name = f'@project_name@_api'
 
-api_source = files(f'@src_dir@/api.cpp')
+api_source = files(f'@src_dir@/api.cpp', f'@src_dir@/udf_handle.cpp')
 
-includes = include_directories('./includes', 'public')
-
+includes = [include_directories('./includes', 'public'), ext_include]
 
 lib_api_shared = static_library(
   f'@name@_shared',
