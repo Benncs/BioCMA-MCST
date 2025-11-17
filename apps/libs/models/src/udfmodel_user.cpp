@@ -1,5 +1,6 @@
 // #ifdef DECLARE_EXPORT_UDF
 // #include "udf_includes.hpp"
+#include "common/common.hpp"
 #include "ext/udf_includes.hpp"
 #include <Kokkos_Core_fwd.hpp>
 #include <fwd/Kokkos_Fwd_OPENMP.hpp>
@@ -60,8 +61,8 @@ namespace Models
 
   UdfModel::Config UdfModel::get_config(std::size_t n)
   {
-
-    return UnsafeUDF::Loader::get_config_udf(n);
+    auto e = MC::HostSpace();
+    return UnsafeUDF::Loader::get_config_udf(e, n);
   }
 
   std::vector<std::size_t> UdfModel::get_number()

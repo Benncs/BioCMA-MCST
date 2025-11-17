@@ -1,6 +1,7 @@
 #ifndef __BIO__EXT_MODULE_DEF__
 #define __BIO__EXT_MODULE_DEF__
 
+#include "Kokkos_Core_fwd.hpp"
 #include <utility>
 #ifdef DECLARE_EXPORT_UDF
 #  include <dynlib/dyn_module.hpp>
@@ -41,7 +42,8 @@ namespace UnsafeUDF
 
     static MC::ContribIndexBounds (*get_bounds_udf)();
 
-    static Models::UdfModel::Config (*get_config_udf)(std::size_t n);
+    static Models::UdfModel::Config (*get_config_udf)(
+        Kokkos::DefaultHostExecutionSpace& ep, std::size_t n);
 
     static void (*division_udf)(const MC::KPRNG::pool_type& random_pool,
                                 std::size_t idx,

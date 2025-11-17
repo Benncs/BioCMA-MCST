@@ -6,6 +6,11 @@ api_source = files(f'@src_dir@/api.cpp', f'@src_dir@/udf_handle.cpp')
 
 includes = [include_directories('./includes', 'public'), ext_include]
 
+exe_link_args=[flto_flag]
+if not use_cuda and build_udf
+exe_link_args=[exe_link_args,'-rdynamic']
+endif
+
 lib_api_shared = static_library(
   f'@name@_shared',
   api_source,
@@ -13,6 +18,7 @@ lib_api_shared = static_library(
   dependencies: [core_shared_dependency],
   # cpp_args: ['-DNO_MPI'],
   install_rpath: project_name,
+  link_args:exe_link_args
 )
 
 lib_api_distributed = static_library(
@@ -22,18 +28,21 @@ lib_api_distributed = static_library(
   dependencies: [core_distributed_dependency_static, mpi_wrap_dependency],
   # cpp_args: ['-DNO_MPI'],
   install_rpath: project_name,
+  link_args:exe_link_args
 )
 
 lib_api_shared_dep = declare_dependency(
   link_with: lib_api_shared,
   include_directories: includes,
   dependencies: [core_shared_dependency, kokkos],
+  link_args:exe_link_args
 )
 
 lib_api_distributed_dep = declare_dependency(
   link_with: lib_api_distributed,
   include_directories: includes,
   dependencies: [core_distributed_dependency_static],
+  link_args:exe_link_args
 )
 
 build_python = get_option('build_python_api')
