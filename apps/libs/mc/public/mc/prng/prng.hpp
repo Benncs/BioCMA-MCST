@@ -35,7 +35,7 @@ namespace MC
   class KPRNG // TODO remove deprecated
   {
   public:
-    using pool_type = pool_type;
+    using pool_type = MC::pool_type;
     using generator_type = pool_type::generator_type;
 
     explicit KPRNG(size_t _seed = 0);
