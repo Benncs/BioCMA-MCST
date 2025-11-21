@@ -11,6 +11,7 @@
 #ifndef NDEBUG
 #  pragma GCC diagnostic pop
 #endif
+#include <cma_utils/d_transitionner.hpp>
 #include <cma_utils/iteration_state.hpp>
 #include <eigen_kokkos.hpp>
 #include <mc/domain.hpp>
@@ -39,21 +40,21 @@ namespace Simulation::MassTransfer
         const Eigen::ArrayXXd& liquid_concentration,
         const Eigen::ArrayXXd& gas_concentration,
         const Eigen::MatrixXd& liquid_volume,
-        const CmaUtils::IterationState& state);
+        const CmaUtils::IterationStatePtrType& state);
 
     void fixed_kla_gas_liquid_mass_transfer(
         MassTransferProxy& mtr,
         const Eigen::ArrayXXd& liquid_concentration,
         const Eigen::ArrayXXd& gas_concentration,
         const Eigen::MatrixXd& liquid_volume,
-        const CmaUtils::IterationState& state);
+        const CmaUtils::IterationStatePtrType& state);
 
     void flowmap_kla_gas_liquid_mass_transfer(
         MassTransferProxy& mtr,
         const Eigen::ArrayXXd& liquid_concentration,
         const Eigen::ArrayXXd& gas_concentration,
         const Eigen::MatrixXd& liquid_volume,
-        const CmaUtils::IterationState& state);
+        const CmaUtils::IterationStatePtrType& state);
 
   }; // namespace Impl
 

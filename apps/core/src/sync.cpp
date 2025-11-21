@@ -57,6 +57,7 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     WrapMPI::barrier();
     if (exec.current_rank == 0)
     {
+
       auto liquid_buffer =
           simulation.getContributionData_mut(); // Get the span of array on
                                                 // which reduction happend
@@ -70,6 +71,7 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     }
     else
     {
+
       const auto local_contribution =
           simulation.getContributionData(); // Get the span of array that are
                                             // add to reduction

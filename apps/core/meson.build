@@ -4,7 +4,6 @@ core_source = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ', ch
 
 dep_core = [
   kokkos,
-
   biomodel_dependency,
   mc_dependency,
   common_dependecy,

@@ -41,7 +41,7 @@ def get_executable(instal: str, mpi: bool = True):
     if instal:
         return f"/opt/biomc/{appname}"
     else:
-        return f"{ROOT}/builddir/host/apps/cli/{appname}"
+        return f"{ROOT}/builddir/test/apps/cli/{appname}"
 
 
 def mk_parser():

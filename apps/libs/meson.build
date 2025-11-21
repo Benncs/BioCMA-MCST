@@ -7,8 +7,8 @@ if use_dynamic_module
 endif
 
 subdir('common')
-subdir('mpi_w')
 subdir('cma_utils')
+subdir('mpi_w')
 subdir('mc')
 subdir('models')
 if use_dynamic_module

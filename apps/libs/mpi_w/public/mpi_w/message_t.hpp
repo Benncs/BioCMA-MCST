@@ -12,6 +12,7 @@ namespace WrapMPI
   enum class SIGNALS : char
   {
     STOP,
+    HydroUpdate,
     RUN,
     NOP,
     DUMP

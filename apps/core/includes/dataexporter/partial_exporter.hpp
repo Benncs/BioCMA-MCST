@@ -23,7 +23,7 @@ namespace Core
    * distributions, and writing probe data. It derives privately from
    * `DataExporter` to encapsulate its backend.
    */
-  class PartialExporter : public DataExporter
+  class PartialExporter final : public DataExporter
   {
   public:
     /**

@@ -1,6 +1,7 @@
 #ifndef __SIMULATION_HYDRO_MASS_TRANSFER_HPP__
 #define __SIMULATION_HYDRO_MASS_TRANSFER_HPP__
 
+#include <cma_utils/d_transitionner.hpp>
 #include <cma_utils/iteration_state.hpp>
 #include <memory>
 #include <variant>
@@ -58,7 +59,9 @@ namespace Simulation::MassTransfer
         std::shared_ptr<Simulation::ScalarSimulation> _liquid_scalar,
         std::shared_ptr<Simulation::ScalarSimulation> _gas_scalar);
 
-    void gas_liquid_mass_transfer(const CmaUtils::IterationState& state) const;
+    void gas_liquid_mass_transfer() const;
+
+    void update(const CmaUtils::IterationStatePtrType& state);
 
     [[nodiscard]] const std::shared_ptr<MassTransferProxy>& proxy() const;
 

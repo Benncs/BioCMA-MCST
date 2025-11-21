@@ -7,7 +7,7 @@ mpi_wrap_sources = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp 
 
 public_mpi_wrap = include_directories('public')
 
-dep = [mpi,common_dependecy,cma_dep]
+dep = [mpi,common_dependecy,cma_utils_dependency]
 
 mpi_wrap_lib = static_library(
    f'@project_name@_mpi_wrap',

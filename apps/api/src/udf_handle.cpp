@@ -4,6 +4,7 @@
 #  include <common/env_var.hpp>
 #  include <wrap_init_model_selector.hpp>
 #endif
+#include <memory>
 
 namespace Unsafe
 {
@@ -12,9 +13,8 @@ namespace Unsafe
   Result<std::shared_ptr<DynamicLibrary>, std::string>
   load_udf(std::string_view model_name)
   {
-    (void)path;
     (void)model_name;
-    return Result<std::shared_ptr<DynamicLibrary>, std::string>(nullptr);
+    return Result<std::shared_ptr<DynamicLibrary>, std::string>();
   };
 
 #else

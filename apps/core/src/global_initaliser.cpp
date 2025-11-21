@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <biocma_cst_config.hpp>
 #include <cassert>
 #include <cma_read/flow_iterator.hpp>
@@ -23,7 +24,6 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
-#include <transitionner/transitioner_factory.hpp>
 #include <utility>
 #include <vector>
 #include <wrap_init_model_selector.hpp>
@@ -54,7 +54,7 @@ namespace
 
   // TODO Move elsewhere
   double get_time_step(double user_deta_time,
-                       const std::unique_ptr<CmaRead::FlowIterator>& iterator)
+                       const CmaUtils::TransitionnerPtrType& iterator)
   {
 
     // internal hydrodynamic time scales. To account for this, the simulation's
@@ -64,52 +64,48 @@ namespace
     // without losing flow information.
     double delta_time = user_deta_time;
 
-    auto min_liquid_residen_time = [](const auto& state) -> double
+    if (delta_time <= 0)
     {
-      constexpr double init_residence_time = std::numeric_limits<double>::max();
-      double min_residence_time = init_residence_time;
 
-      for (size_t i = 0; i < state.n_compartments; ++i)
+      const std::size_t n_states = iterator->size();
+      double min_residence_time = std::numeric_limits<double>::max();
+      for (std::size_t i_state = 0; i_state < n_states; ++i_state)
       {
-        const auto view_flows = state.liquid_flow.getViewFlows();
-        double sum_flows = 0.;
-        for (size_t j = 0; j < state.n_compartments; ++j)
+        // Naive min-research, as COO is not sorted we can´t do better without
+        // convert COO to CSR/CSC or sort
+        // + function exececuted only once
+        const auto state = iterator->get_at(i_state);
+        const auto liquid = state->get_liquid();
+        const auto coo_matrix = liquid->transition();
+        const auto liquid_volumes = liquid->volume();
+        const auto data = coo_matrix->values();
+        const auto rows = coo_matrix->row_indices();
+        const auto cols = coo_matrix->col_indices();
+        for (std::size_t k = 0; k < data.size(); ++k)
         {
-          sum_flows += view_flows(i, j);
-        }
-        if (sum_flows != 0)
-        {
-          double residence_time = state.liquidVolume[i] / sum_flows;
-          if (residence_time < min_residence_time && residence_time != 0.)
+          // Only way to find diagonal with not sorted COO
+          if (rows[k] == cols[k])
           {
-            min_residence_time = residence_time;
+            const auto volume = liquid_volumes[rows[k]];
+            if (volume != 0.)
+            {
+              double residence_time =
+                  -data[k] / volume; // minus cause transition has negative
+                                     // diagonal (leaving flow)
+              if (residence_time < min_residence_time)
+              {
+                min_residence_time = residence_time;
+              }
+            }
           }
         }
       }
 
-      if (min_residence_time <= 0 || min_residence_time == init_residence_time)
-      {
-        throw std::invalid_argument("Flow map not valid");
-      }
-
-      return min_residence_time;
-    };
-
-    if (delta_time <= 0)
-    {
-      auto minElement = std::min_element(
-          iterator->begin(),
-          iterator->end(),
-          [&min_liquid_residen_time](const auto& state1, const auto& state2)
-          {
-            return min_liquid_residen_time(state1) <
-                   min_liquid_residen_time(state2);
-          });
-
-      if (minElement != iterator->end())
+      if (min_residence_time != std::numeric_limits<double>::max() &&
+          min_residence_time != 0.)
       {
 
-        delta_time = min_liquid_residen_time(*minElement) / 100.;
+        delta_time = min_residence_time / 100.;
       }
       else
       {
@@ -123,6 +119,70 @@ namespace
     }
 
     return delta_time;
+
+    // auto min_liquid_residen_time = [](const auto& state) -> double
+    // {
+    //   constexpr double init_residence_time =
+    //   std::numeric_limits<double>::max(); double min_residence_time =
+    //   init_residence_time;
+
+    //   for (size_t i = 0; i < state.n_compartments; ++i)
+    //   {
+    //     const auto view_flows = state.liquid_flow.getViewFlows();
+    //     double sum_flows = 0.;
+    //     for (size_t j = 0; j < state.n_compartments; ++j)
+    //     {
+    //       sum_flows += view_flows(i, j);
+    //     }
+    //     if (sum_flows != 0)
+    //     {
+    //       double residence_time = state.liquidVolume[i] / sum_flows;
+    //       if (residence_time < min_residence_time && residence_time != 0.)
+    //       {
+    //         min_residence_time = residence_time;
+    //       }
+    //     }
+    //   }
+
+    //   if (min_residence_time <= 0 || min_residence_time ==
+    //   init_residence_time)
+    //   {
+    //     throw std::invalid_argument("Flow map not valid");
+    //   }
+
+    //   return min_residence_time;
+    // };
+
+    // if (delta_time <= 0)
+    // {
+    //   auto minElement = std::min_element(
+    //       iterator->begin(),
+    //       iterator->end(),
+    //       [&min_liquid_residen_time](const auto& state1, const auto& state2)
+    //       {
+    //         return min_liquid_residen_time(state1) <
+    //                min_liquid_residen_time(state2);
+    //       });
+
+    //   if (minElement != iterator->end())
+    //   {
+
+    //     delta_time = min_liquid_residen_time(*minElement) / 100.;
+    //   }
+    //   else
+    //   {
+    //     // should throw  cause if delta <=0 we have incorrect timstep if
+    //     first
+    //     // branch fails delta_time is unchanged.
+    //     // + If min_element fails flowmap might be invalid then default value
+    //     is
+    //     // not needed
+    //     throw std::invalid_argument("No time step given and impossibe to "
+    //                                 "estimate it with given flowmap");
+    //   }
+    // }
+
+    // return delta_time;
   }
 
 } // namespace
@@ -137,7 +197,6 @@ namespace Core
 
   {
     set_logger(std::move(_logger));
-    std::unique_ptr<CmaUtils::FlowMapTransitionner> transitioner = nullptr;
 
     Core::check_results_file_name(user_params);
     params = SimulationParameters::init(user_params);
@@ -155,14 +214,15 @@ namespace Core
 
   template <typename T> using OptionalPtr = GlobalInitialiser::OptionalPtr<T>;
 
-  CmtCommons::cma_exported_paths_t
-  GlobalInitialiser::get_path_files(const std::string& cma_case_path)
-  {
-    CmtCommons::CMACaseInfo cma_case = CmtCommons::CMACaseInfoReader::load_case(
-        cma_case_path + std::string(AutoGenerated::expected_cma_case_name));
-    t_per_flowmap = cma_case.time_per_flowmap;
-    return cma_case.paths;
-  }
+  // CmtCommons::cma_exported_paths_t
+  // GlobalInitialiser::get_path_files(const std::string& cma_case_path)
+  // {
+  //   CmtCommons::CMACaseInfo cma_case =
+  //   CmtCommons::CMACaseInfoReader::load_case(
+  //       cma_case_path + std::string(AutoGenerated::expected_cma_case_name));
+  //   t_per_flowmap = cma_case.time_per_flowmap;
+  //   return cma_case.paths;
+  // }
 
   bool GlobalInitialiser::init_feed(
       std::optional<Simulation::Feed::SimulationFeed> _feed)
@@ -199,34 +259,135 @@ namespace Core
   }
 
   std::optional<bool> GlobalInitialiser::init_state(
-      std::unique_ptr<CmaRead::FlowIterator>& flow_handle)
+      const CmaUtils::TransitionnerPtrType& transiionner)
   {
-    if (!check_steps(InitStep::FlowIterator))
+    if (!check_steps(InitStep::Transitioner))
     {
       return std::nullopt;
     }
     if (is_host)
     {
-      if (!host_init_state(flow_handle).has_value())
+      if (!host_init_state(transiionner).has_value())
       {
         return std::nullopt;
       }
     }
     mpi_broadcast();
-    liquid_neighbors.set_row_major();
+    // liquid_neighbors.set_row_major();
     validate_step(InitStep::InitState);
     return true;
   }
 
-  OptionalPtr<CmaUtils::FlowMapTransitionner>
+  // OptionalPtr<CmaRead::FlowIterator> GlobalInitialiser::init_flow_iterator()
+  // {
+
+  //   if (!is_host)
+  //   {
+  //     validate_step(InitStep::FlowIterator);
+  //     return nullptr;
+  //   }
+
+  //   const auto flowmap_paths = get_path_files(user_params.cma_case_path);
+  //   params.flow_files.clear();
+  //   if (user_params.recursive)
+  //   {
+
+  //     recur_path(user_params.cma_case_path, params);
+  //   }
+  //   else
+  //   {
+  //     params.flow_files.emplace_back(user_params.cma_case_path);
+  //   }
+
+  //   if (params.flow_files.empty())
+  //   {
+  //     throw std::invalid_argument("Missing files path");
+  //   }
+
+  //   CmaRead::ReactorState const* state = nullptr;
+  //   std::unique_ptr<CmaRead::FlowIterator> flow_handle;
+  //   try
+  //   {
+  //     flow_handle =
+  //     std::make_unique<CmaRead::FlowIterator>(params.flow_files,
+  //                                                           flowmap_paths);
+  //     if (flow_handle == nullptr)
+  //     {
+  //       throw std::runtime_error("Flow map are not loaded");
+  //     }
+
+  //     state = &flow_handle->get_unchecked(0);
+  //     if (state == nullptr)
+  //     {
+  //       throw std::runtime_error("Reactor not correclty initialised");
+  //     }
+
+  //     if (logger)
+  //     {
+  //       // Note final "s"
+  //       const auto str = (flow_handle->size() > 1)
+  //                            ? std::string(" flowmaps loaded with ")
+  //                            : std::string(" flowmap loaded with ");
+  //       const auto compartment_str = (state->n_compartments > 1)
+  //                                        ? std::string(" compartments")
+  //                                        : std::string(" compartment");
+  //       logger->print("Initializer",
+  //                     IO::format(std::to_string(flow_handle->size()),
+  //                                str,
+  //                                std::to_string(state->n_compartments),
+  //                                compartment_str));
+  //     }
+  //   }
+  //   catch (const std::exception& e)
+  //   {
+  //     throw std::runtime_error(
+  //         IO::format("Error while reading files\t: ", e.what()));
+  //   }
+  //   if (flow_handle == nullptr)
+  //   {
+  //     return std::nullopt;
+  //   }
+
+  //   validate_step(InitStep::FlowIterator);
+  //   return flow_handle;
+  // }
+
+  std::optional<CmaUtils::TransitionnerPtrType>
   GlobalInitialiser::init_transitionner()
   {
-    auto handle = init_flow_iterator();
-    if (handle.has_value())
+
+    auto d_transition = (is_host)
+                            ? get_dtransitionner(user_params.cma_case_path)
+                            : CmaUtils::TransitionnerPtrType::from_raw(nullptr);
+
+    if (is_host)
     {
-      return init_transitionner(std::move(*handle));
+      // init_state(flow_handle);
+      // Calculate the total number of time steps
+      f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
+      const auto n_t =
+          static_cast<size_t>(user_params.final_time / params.d_t) + 1;
+      auto state = d_transition->get_current();
+      if (logger)
+      {
+        // Note final "s"
+        const auto str = (d_transition->size() > 1)
+                             ? std::string(" flowmaps loaded with ")
+                             : std::string(" flowmap loaded with ");
+        const auto compartment_str = (state->n_compartments() > 1)
+                                         ? std::string(" compartments")
+                                         : std::string(" compartment");
+        logger->print("Initializer",
+                      IO::format(std::to_string(d_transition->size()),
+                                 str,
+                                 std::to_string(state->n_compartments()),
+                                 compartment_str));
+      }
     }
-    return std::nullopt;
+
+    validate_step(InitStep::Transitioner);
+    init_state(d_transition);
+    return d_transition;
   }
 
   OptionalPtr<Simulation::SimulationUnit> GlobalInitialiser::init_simulation(
@@ -249,7 +410,7 @@ namespace Core
 
   OptionalPtr<MC::MonteCarloUnit> GlobalInitialiser::init_monte_carlo()
   {
-    if (!check_steps(InitStep::FlowIterator, InitStep::InitState))
+    if (!check_steps(InitStep::InitState))
     {
       return std::nullopt;
     }
@@ -285,14 +446,21 @@ namespace Core
       return std::nullopt;
     }
 
-    auto mc_unit = AutoGenerated::wrap_init_model_selector(
-        logger,
-        i_model,
-        particle_per_process,
-        liquid_volume,
-        CmaUtils::FlowMapTransitionner::get_neighbors_view(liquid_neighbors),
-        params.uniform_mc_init,
-        total_mass);
+    const auto n_rows = liquid_volume.size();
+    const auto n_cols = flat_neighobrs.size() / n_rows;
+    KOKKOS_ASSERT(n_rows * n_cols == flat_neighobrs.size() &&
+                  flat_neighobrs.size() % n_rows == 0);
+    const auto* chunk = flat_neighobrs.data();
+    CmaUtils::HostNeighsView neighbors_view(chunk, n_rows, n_cols);
+
+    auto mc_unit =
+        AutoGenerated::wrap_init_model_selector(logger,
+                                                i_model,
+                                                particle_per_process,
+                                                liquid_volume,
+                                                neighbors_view,
+                                                params.uniform_mc_init,
+                                                total_mass);
 
     if (mc_unit == nullptr)
     {
@@ -316,118 +484,47 @@ namespace Core
     return mc_unit;
   }
 
-  OptionalPtr<CmaRead::FlowIterator> GlobalInitialiser::init_flow_iterator()
-  {
+  // std::optional<CmaUtils::TransitionnerPtrType>
+  // GlobalInitialiser::init_transitionner(
+  //     std::unique_ptr<CmaRead::FlowIterator>&& flow_handle)
+  // {
+  //   if (!check_steps(InitStep::FlowIterator))
+  //   {
+  //     return std::nullopt;
+  //   }
+  //   init_state(flow_handle);
+  //   // Calculate the total number of time steps
+  //   f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
+  //   const auto n_t =
+  //       static_cast<size_t>(user_params.final_time / params.d_t) + 1;
 
-    if (!is_host)
-    {
-      validate_step(InitStep::FlowIterator);
-      return nullptr;
-    }
+  //   // Transitioner handles flowmap transition between time step, flowmaps
+  //   are
+  //   // only located in host but transitioner handles cache and receiving for
+  //   // workers
+  //   // auto transitioner = CmaUtils::get_transitioner(
+  //   //     logger,
+  //   //     CmaUtils::FlowmapTransitionMethod::Discontinuous,
+  //   //     params.n_different_maps,
+  //   //     params.n_per_flowmap,
+  //   //     n_t,
+  //   //     std::move(flow_handle),
+  //   //     f_init_gas_flow);
 
-    const auto flowmap_paths = get_path_files(user_params.cma_case_path);
-    params.flow_files.clear();
-    if (user_params.recursive)
-    {
+  //   CmaUtils::TransitionnerPtrType d_transition =
+  //       get_dtransitionner("/home_pers/casale/Documents/thesis/cfd/bench/");
 
-      recur_path(user_params.cma_case_path, params);
-    }
-    else
-    {
-      params.flow_files.emplace_back(user_params.cma_case_path);
-    }
+  //   validate_step(InitStep::Transitioner);
 
-    if (params.flow_files.empty())
-    {
-      throw std::invalid_argument("Missing files path");
-    }
-
-    CmaRead::ReactorState const* state = nullptr;
-    std::unique_ptr<CmaRead::FlowIterator> flow_handle;
-    try
-    {
-      flow_handle = std::make_unique<CmaRead::FlowIterator>(params.flow_files,
-                                                            flowmap_paths);
-      if (flow_handle == nullptr)
-      {
-        throw std::runtime_error("Flow map are not loaded");
-      }
-
-      state = &flow_handle->get_unchecked(0);
-      if (state == nullptr)
-      {
-        throw std::runtime_error("Reactor not correclty initialised");
-      }
-
-      if (logger)
-      {
-        // Note final "s"
-        const auto str = (flow_handle->size() > 1)
-                             ? std::string(" flowmaps loaded with ")
-                             : std::string(" flowmap loaded with ");
-        const auto compartment_str = (state->n_compartments > 1)
-                                         ? std::string(" compartments")
-                                         : std::string(" compartment");
-        logger->print("Initializer",
-                      IO::format(std::to_string(flow_handle->size()),
-                                 str,
-                                 std::to_string(state->n_compartments),
-                                 compartment_str));
-      }
-    }
-    catch (const std::exception& e)
-    {
-      throw std::runtime_error(
-          IO::format("Error while reading files\t: ", e.what()));
-    }
-    if (flow_handle == nullptr)
-    {
-      return std::nullopt;
-    }
-
-    validate_step(InitStep::FlowIterator);
-    return flow_handle;
-  }
-
-  OptionalPtr<CmaUtils::FlowMapTransitionner>
-  GlobalInitialiser::init_transitionner(
-      std::unique_ptr<CmaRead::FlowIterator>&& flow_handle)
-  {
-    if (!check_steps(InitStep::FlowIterator))
-    {
-      return std::nullopt;
-    }
-    init_state(flow_handle);
-    // Calculate the total number of time steps
-    f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
-    const auto n_t =
-        static_cast<size_t>(user_params.final_time / params.d_t) + 1;
-
-    // Transitioner handles flowmap transition between time step, flowmaps are
-    // only located in host but transitioner handles cache and receiving for
-    // workers
-    auto transitioner = CmaUtils::get_transitioner(
-        logger,
-        CmaUtils::FlowmapTransitionMethod::Discontinuous,
-        params.n_different_maps,
-        params.n_per_flowmap,
-        n_t,
-        std::move(flow_handle),
-        f_init_gas_flow);
-
-    validate_step(InitStep::Transitioner);
-
-    return transitioner;
-  }
+  //   return d_transition;
+  // }
 
   OptionalPtr<Simulation::SimulationUnit> GlobalInitialiser::init_simulation(
       std::unique_ptr<MC::MonteCarloUnit> _unit,
       const Simulation::ScalarInitializer& scalar_init)
   {
-    if (!check_steps(InitStep::FlowIterator,
-                     InitStep::Transitioner,
-                     InitStep::InitState,
-                     InitStep::Feed))
+    if (!check_steps(
+            InitStep::Transitioner, InitStep::InitState, InitStep::Feed))
     {
       VERBOSE_ERROR
       return std::nullopt;
@@ -497,7 +594,7 @@ namespace Core
 
   std::optional<Simulation::ScalarInitializer> GlobalInitialiser::init_scalar()
   {
-    if (!check_steps(InitStep::FlowIterator, InitStep::InitState))
+    if (!check_steps(InitStep::Transitioner, InitStep::InitState))
     {
       return std::nullopt;
     }
@@ -570,41 +667,51 @@ namespace Core
   }
 
   std::optional<bool> GlobalInitialiser::host_init_state(
-      std::unique_ptr<CmaRead::FlowIterator>& flow_handle)
+      const CmaUtils::TransitionnerPtrType& transiionner)
   {
-    if (flow_handle == nullptr)
-    {
-      throw std::runtime_error("Reactor not correclty initialised");
-    }
-    const auto* fstate = &flow_handle->get_unchecked(0);
-    if (fstate == nullptr)
-    {
-      throw std::runtime_error("Reactor not correclty initialised");
-    }
-    params.n_compartments = fstate->n_compartments;
-    liquid_neighbors = fstate->liquid_flow.getViewNeighors();
+    // if (flow_handle == nullptr)
+    // {
+    //   throw std::runtime_error("Reactor not correclty initialised");
+    // }
+    // const auto* fstate = &flow_handle->get_unchecked(0);
+    const auto& fstate = transiionner->get_current();
 
-    if (fstate->gas_flow.is_empty())
-    {
-      params.is_two_phase_flow = false;
-    }
+    params.n_compartments = fstate->n_compartments();
+    // liquid_neighbors = fstate->f
 
-    worker_neighbor_data = std::vector<size_t>(liquid_neighbors.data().begin(),
-                                               liquid_neighbors.data().end());
+    params.is_two_phase_flow = fstate->has_gas();
 
-    params.n_different_maps = flow_handle->size();
+    auto slice_neighbors = fstate->flat_neighobrs();
+    flat_neighobrs.resize(slice_neighbors.size());
+    std::copy(
+        slice_neighbors.begin(), slice_neighbors.end(), flat_neighobrs.begin());
 
-    liquid_volume = fstate->liquidVolume;
-    gas_volume = fstate->gasVolume;
+    // worker_neighbor_data =
+    // std::vector<size_t>(liquid_neighbors.data().begin(),
+    //                                            liquid_neighbors.data().end());
 
-    if (liquid_volume.empty())
+    params.n_different_maps = transiionner->size();
+    const auto lspan = fstate->get_liquid()->volume();
+    if (lspan.empty())
     {
       return std::nullopt;
     }
 
+    liquid_volume.clear();
+    liquid_volume.resize(lspan.size());
+    std::copy(lspan.begin(), lspan.end(), liquid_volume.begin());
+    gas_volume.clear();
+    gas_volume.resize(lspan.size());
+    if (fstate->has_gas())
+    {
+      auto gspan = fstate->get_gas()->volume();
+
+      std::copy(gspan.begin(), gspan.end(), gas_volume.begin());
+    }
+
     if (liquid_volume.size() > 1)
     {
-      params.d_t = get_time_step(user_params.delta_time, flow_handle);
+      params.d_t = get_time_step(user_params.delta_time, transiionner);
     }
     else
     {
@@ -633,33 +740,33 @@ namespace Core
     if constexpr (AutoGenerated::FlagCompileTime::use_mpi)
     {
 #ifndef NO_MPI
+      const std::size_t root_rank = 0;
       // Check once if we can broadcast integer, if not quit
-      if (WrapMPI::broadcast(params.n_different_maps, 0) != 0)
+      if (WrapMPI::broadcast(params.n_different_maps, root_rank) != 0)
       {
         WrapMPI::critical_error();
       }
       // broadcasting vector (malloc) is handled by WrapMPI so don't need to
       // resize before
-      WrapMPI::broadcast(params.d_t, 0);
-      WrapMPI::broadcast(params.n_per_flowmap, 0);
-      WrapMPI::broadcast(params.n_compartments, 0);
-      WrapMPI::broadcast(params.is_two_phase_flow, 0);
-      WrapMPI::broadcast(liquid_volume, 0, info.current_rank);
-      WrapMPI::broadcast(gas_volume, 0, info.current_rank);
-      WrapMPI::broadcast(worker_neighbor_data, 0, info.current_rank);
+      WrapMPI::broadcast(params.d_t, root_rank);
+      WrapMPI::broadcast(params.n_per_flowmap, root_rank);
+      WrapMPI::broadcast(params.n_compartments, root_rank);
+      WrapMPI::broadcast(params.is_two_phase_flow, root_rank);
+      WrapMPI::broadcast(liquid_volume, root_rank, info.current_rank);
+      WrapMPI::broadcast(gas_volume, root_rank, info.current_rank);
+      WrapMPI::broadcast(flat_neighobrs, root_rank, info.current_rank);
       // WrapMPI::bcst_iterator(_flow_handle, info.current_rank);
       if (!is_host)
       {
         // Neighbors data is a matrix with nrow the number of compartment (known
         // by host and workers) n_col is not directly known but the matrix size
         // is so we calculate column this way
-        assert(worker_neighbor_data.size() > params.n_compartments);
-        const size_t n_col =
-            worker_neighbor_data.size() / params.n_compartments;
-        assert(worker_neighbor_data.size() % params.n_compartments == 0);
+        // assert(slice_neighbors.size() > params.n_compartments);
+        // const size_t n_col = slice_neighbors.size() / params.n_compartments;
+        // assert(slice_neighbors.size() % params.n_compartments == 0);
 
-        liquid_neighbors = CmaRead::Neighbors::Neighbors_const_view_t(
-            worker_neighbor_data, params.n_compartments, n_col);
+        // liquid_neighbors = CmaRead::Neighbors::Neighbors_const_view_t(
+        //     slice_neighbors, params.n_compartments, n_col);
       }
       if constexpr (AutoGenerated::FlagCompileTime::use_mpi)
       {

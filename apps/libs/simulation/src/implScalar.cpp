@@ -1,3 +1,6 @@
+#include "cma_utils/cache_hydro_state.hpp"
+#include "cma_utils/d_transitionner.hpp"
+#include "eigen_kokkos.hpp"
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -38,6 +41,8 @@ namespace Simulation
         volumes.data(), static_cast<int>(volumes.size()));
 
     contribs = kernelContribution("contribs", n_r, n_c);
+
+    m_transition = FlowMatrixType(n_c, n_c);
 
     volumes_inverse = Eigen::DiagonalMatrix<double, -1>(n_col);
     volumes_inverse.setIdentity();
@@ -85,7 +90,6 @@ namespace Simulation
   }
 
   void ScalarSimulation::performStepGL(double d_t,
-                                       const FlowMatrixType& m_transition,
                                        const ColMajorMatrixtype<double>& mtr,
                                        MassTransfer::Sign sign)
   {
@@ -101,8 +105,7 @@ namespace Simulation
     concentrations.update_host_to_compute();
   }
 
-  void ScalarSimulation::performStep(double d_t,
-                                     const FlowMatrixType& m_transition)
+  void ScalarSimulation::performStep(double d_t)
   {
     PROFILE_SECTION("performStep_l")
 #define c concentrations.eigen_data
@@ -132,5 +135,15 @@ namespace Simulation
   void ScalarSimulation::set_mass()
   {
     total_mass = this->concentrations.eigen_data * m_volumes;
+  }
+
+  void
+  ScalarSimulation::set_transition(CmaUtils::StateCooMatrixType&& transition)
+  {
+    CmaUtils::sparse_from_coo(this->m_transition,
+                              transition->nrows(),
+                              transition->row_indices(),
+                              transition->col_indices(),
+                              transition->values());
   }
 } // namespace Simulation

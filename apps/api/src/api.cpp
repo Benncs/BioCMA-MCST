@@ -1,3 +1,4 @@
+#include "simulation/mass_transfer.hpp"
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
 #include <api/results.hpp>
@@ -23,7 +24,7 @@
 #include <udf_handle.hpp>
 #include <utility>
 #include <vector>
-static std::shared_ptr<DynamicLibrary> udf_handle = nullptr;
+static std::shared_ptr<Unsafe::DynamicLibrary> udf_handle = nullptr;
 constexpr int ID_VERIF = 2025;
 
 #define CHECK_OR_RETURN(cond, msg)                                             \
@@ -224,6 +225,7 @@ namespace Api
     Core::GlobalInitialiser global_initializer(_data.exec_info, params, logger);
 
     auto transitionner = global_initializer.init_transitionner();
+
     CHECK_OR_RETURN(!transitionner, "Error when apply: transitionner");
 
     CHECK_OR_RETURN(!global_initializer.init_feed(feed),
@@ -248,6 +250,8 @@ namespace Api
     }
 
     mtr_type = Simulation::MassTransfer::Type::FixedKla{kla};
+
+    // mtr_type = Simulation::MassTransfer::Type::FlowmapTurbulence{};
 
     if (mtr_type)
     {

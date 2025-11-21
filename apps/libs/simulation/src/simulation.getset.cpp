@@ -48,11 +48,11 @@ namespace Simulation
     return is_two_phase_flow;
   }
 
-  DiagonalView<ComputeSpace> SimulationUnit::get_kernel_diagonal() const
-  {
+  // DiagonalView<ComputeSpace> SimulationUnit::get_kernel_diagonal() const
+  // {
+  //   return state.liq->get_kernel_diagonal();
+  // }
 
-    return state.liq->get_kernel_diagonal();
-  }
   kernelContribution SimulationUnit::get_kernel_contribution() const
   {
     return this->liquid_scalar->get_kernel_contribution();
@@ -91,16 +91,16 @@ namespace Simulation
     probes[ProbeType::LeavingTime] = std::move(_probes);
   }
 
-  CumulativeProbabilityView<ComputeSpace>
-  SimulationUnit::get_kernel_cumulative_proba() const
-  {
-    auto& matrix = state.liq->cumulative_probability;
-    using layout_type = CumulativeProbabilityView<HostSpace>::array_layout;
-    CumulativeProbabilityView<HostSpace> rd(
-        matrix.data(), layout_type(matrix.rows(), matrix.cols()));
+  // CumulativeProbabilityView<ComputeSpace>
+  // SimulationUnit::get_kernel_cumulative_proba() const
+  // {
+  //   auto& matrix = state.liq->cumulative_probability;
+  //   using layout_type = CumulativeProbabilityView<HostSpace>::array_layout;
+  //   CumulativeProbabilityView<HostSpace> rd(
+  //       matrix.data(), layout_type(matrix.rows(), matrix.cols()));
 
-    return Kokkos::create_mirror_view_and_copy(ComputeSpace(), rd);
-  }
+  //   return Kokkos::create_mirror_view_and_copy(ComputeSpace(), rd);
+  // }
 
   void SimulationUnit::set_kernel_contribs_to_host()
   {
@@ -155,9 +155,9 @@ namespace Simulation
     return probes[ProbeType::LeavingTime];
   }
 
-  const CmaUtils::IterationState& SimulationUnit::getState() const
-  {
-    return state;
-  }
+  // const CmaUtils::IterationState& SimulationUnit::getState() const
+  // {
+  //   return state;
+  // }
 
 } // namespace Simulation

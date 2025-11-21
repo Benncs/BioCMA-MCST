@@ -1,6 +1,7 @@
 #ifndef __CMA_UTILS_HPP__
 #define __CMA_UTILS_HPP__
 
+#include "common/common.hpp"
 #include <cma_utils/cache_hydro_state.hpp>
 #include <string>
 #include <unordered_map>
@@ -13,6 +14,12 @@ namespace CmaUtils
                    Kokkos::LayoutRight,
                    Space,
                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+
+  using HostNeighsView = Kokkos::View<
+      const std::size_t**,
+      Kokkos::LayoutRight,
+      HostSpace,
+      Kokkos::MemoryTraits<Kokkos::RandomAccess | Kokkos::Unmanaged>>;
 
   /**
    * @brief Structure to store information about the reactor state during

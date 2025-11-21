@@ -1,6 +1,7 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
+#include "cma_utils/d_transitionner.hpp"
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -43,12 +44,13 @@ namespace Simulation
     bool deep_copy_concentration(const std::vector<double>& data);
     void reduce_contribs(std::span<const double> data);
 
+    void set_transition(CmaUtils::StateCooMatrixType&& transition);
+
     void performStepGL(double d_t,
-                       const FlowMatrixType& m_transition,
                        const ColMajorMatrixtype<double>& mtr,
                        MassTransfer::Sign sign);
 
-    void performStep(double d_t, const FlowMatrixType& m_transition);
+    void performStep(double d_t);
 
     void synchro_sources();
 
@@ -70,6 +72,11 @@ namespace Simulation
     [[nodiscard]] const ColMajorMatrixtype<double>& get_mass_transfer() const;
     [[nodiscard]] std::span<double> getConcentrationData();
 
+    const auto& getTransition() const
+    {
+      return m_transition;
+    }
+
     [[nodiscard]] std::size_t n_row() const noexcept;
     [[nodiscard]] std::size_t n_col() const noexcept;
 
@@ -88,6 +95,8 @@ namespace Simulation
     std::size_t n_c;
     ColMajorMatrixtype<double> total_mass;
     kernelContribution contribs;
+
+    FlowMatrixType m_transition;
 
     DiagonalType volumes_inverse;
     DiagonalType m_volumes;

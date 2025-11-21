@@ -1,6 +1,7 @@
 #ifndef __SIMULATION__MOVE_INFO_HPP__
 #define __SIMULATION__MOVE_INFO_HPP__
 
+#include "Kokkos_Assert.hpp"
 #include <Kokkos_Core_fwd.hpp>
 #include <cma_utils/cache_hydro_state.hpp>
 #include <mc/alias.hpp>
@@ -39,6 +40,34 @@ namespace Simulation::KernelInline
           liquid_volume("liquid_volume", n_compartments)
 
     {
+    }
+
+    void update(std::span<const double> newliquid_volume,
+                std::span<const double> diag,
+                std::span<const double> proba)
+    {
+      KOKKOS_ASSERT(newliquid_volume.size() == this->liquid_volume.extent(0));
+      const auto n_c = diag.size();
+      const auto n_neighbors = proba.size() / n_c;
+      KOKKOS_ASSERT(proba.size() % n_c == 0);
+
+      Kokkos::View<const double*, HostSpace> hostli(newliquid_volume.data(),
+                                                    newliquid_volume.size());
+      Kokkos::deep_copy(this->liquid_volume, hostli);
+
+      Kokkos::View<const double*,
+                   Kokkos::LayoutLeft,
+                   HostSpace,
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>
+          _diag_transition(diag.data(), n_c);
+
+      Kokkos::deep_copy(diag_transition, _diag_transition);
+
+      const auto* chunk_proba = proba.data();
+      CumulativeProbabilityView<HostSpace> cumproba_host(
+          chunk_proba, n_c, n_neighbors);
+      cumulative_probability =
+          Kokkos::create_mirror_view_and_copy(ComputeSpace(), cumproba_host);
     }
 
     void

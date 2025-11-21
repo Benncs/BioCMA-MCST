@@ -168,22 +168,18 @@ namespace Simulation
 
     if (is_two_phase_flow)
     {
-      mt_model.gas_liquid_mass_transfer(state);
+      mt_model.gas_liquid_mass_transfer();
       const auto& mtr = mt_model.proxy()->mtr;
 
-      this->gas_scalar->performStepGL(d_t,
-                                      state.gas->get_transition(),
-                                      mtr,
-                                      MassTransfer::Sign::GasToLiquid);
+      this->gas_scalar->performStepGL(
+          d_t, mtr, MassTransfer::Sign::GasToLiquid);
 
-      this->liquid_scalar->performStepGL(d_t,
-                                         state.liq->get_transition(),
-                                         mtr,
-                                         MassTransfer::Sign::LiquidToGas);
+      this->liquid_scalar->performStepGL(
+          d_t, mtr, MassTransfer::Sign::LiquidToGas);
     }
     else
     {
-      this->liquid_scalar->performStep(d_t, state.liq->get_transition());
+      this->liquid_scalar->performStep(d_t);
     }
   }
 } // namespace Simulation

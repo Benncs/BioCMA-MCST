@@ -1,6 +1,8 @@
+#include "cma_utils/d_transitionner.hpp"
+#include "common/common.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
-#include <cma_utils/iteration_state.hpp>
+// #include <cma_utils/iteration_state.hpp>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
@@ -60,11 +62,56 @@ namespace Simulation
         Kokkos::Experimental::create_scatter_view(get_kernel_contribution());
   }
 
-  void SimulationUnit::update(CmaUtils::IterationState&& new_state)
+  // void SimulationUnit::update(CmaUtils::IterationState&& new_state)
+  // {
+  //   state = std::move(new_state);
+  //   setVolumes();
+  //   mc_unit->domain.setLiquidNeighbors(state.neighbors);
+  // }
+
+  void
+  SimulationUnit::updateHydro(const CmaUtils::IterationStatePtrType& newstate)
   {
-    state = std::move(new_state);
-    setVolumes();
-    mc_unit->domain.setLiquidNeighbors(state.neighbors);
+    PROFILE_SECTION("simulation::updateHydro")
+
+    auto liquid = newstate->get_liquid();
+    auto vl = liquid->volume();
+
+    updateMCHydro(vl,
+                  newstate->flat_neighobrs(),
+                  newstate->flat_probability_leaving(),
+                  liquid->out_flows());
+
+    updateScalarHydro(newstate);
+  }
+
+  void SimulationUnit::updateMCHydro(std::span<const double> vl,
+                                     std::span<const std::size_t> neighors_flat,
+                                     std::span<const double> proba_flat,
+                                     std::span<const double> out_flows)
+  {
+    PROFILE_SECTION("simulation::updateMCHydro")
+    this->mc_unit->domain.setVolumes(vl);
+    this->mc_unit->domain.setLiquidNeighbors(neighors_flat);
+
+    this->move_info.update(vl, out_flows, proba_flat);
+  }
+
+  void SimulationUnit::updateScalarHydro(
+      const CmaUtils::IterationStatePtrType& newstate)
+  {
+    PROFILE_SECTION("simulation::updateScalarHydro")
+    this->setVolumes(newstate);
+
+    if (liquid_scalar)
+    {
+      liquid_scalar->set_transition(newstate->get_liquid()->transition());
+    }
+    if (newstate->has_gas() && gas_scalar)
+    {
+      gas_scalar->set_transition(newstate->get_gas()->transition());
+      mt_model.update(newstate);
+    }
   }
 
   void SimulationUnit::scatter_contribute()
@@ -77,32 +124,21 @@ namespace Simulation
     this->liquid_scalar->synchro_sources();
   }
 
-  void SimulationUnit::setVolumes() const
+  void SimulationUnit::setVolumes(
+      const CmaUtils::IterationStatePtrType& newstate) const
   {
-
-    std::span<double const> vl = state.liq->volume;
-    std::span<double const> vg = state.gas->volume;
+    auto liq = newstate->get_liquid();
+    std::span<double const> vl = liq->volume();
     if (liquid_scalar)
     {
-      std::span<double const> vl = liquid_scalar->volume_span();
-      this->liquid_scalar->setVolumes(vl, state.liq->inverse_volume);
+      this->liquid_scalar->setVolumes(vl, liq->inverse_volume());
     }
 
-    if (gas_scalar)
+    if (newstate->has_gas() && gas_scalar)
     {
-      this->gas_scalar->setVolumes(vg, state.gas->inverse_volume);
+      auto gas = newstate->get_gas();
+      this->gas_scalar->setVolumes(gas->volume(), gas->inverse_volume());
     }
-    else
-    {
-      vg = std::vector<double>(vl.size(), 0);
-    }
-
-    Kokkos::View<double*, HostSpace> hostli(state.liq->volume.data(),
-                                            vl.size());
-
-    Kokkos::deep_copy(this->move_info.liquid_volume, hostli);
-
-    this->mc_unit->domain.setVolumes(vl);
   }
 
   void SimulationUnit::reset()

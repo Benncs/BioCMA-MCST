@@ -24,7 +24,7 @@ namespace Core
    * simulation. It provides functionalities to handle both single-phase and
    * two-phase flow simulations.
    */
-  class MainExporter : public DataExporter
+  class MainExporter final : public DataExporter
   {
   public:
     /**

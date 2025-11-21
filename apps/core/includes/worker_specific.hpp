@@ -33,13 +33,11 @@ namespace CmaUtils
  * @param transitioner A unique pointer to the `Simulation::FlowMapTransitioner`
  * for handling flow map transitions.
  */
-void workers_process(
-    std::shared_ptr<IO::Logger> logger,
-    const ExecInfo& exec,
-    Simulation::SimulationUnit& simulation,
-    const Core::SimulationParameters& params,
-    std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,
-    Core::PartialExporter& partial_exporter);
+void workers_process(std::shared_ptr<IO::Logger> logger,
+                     const ExecInfo& exec,
+                     Simulation::SimulationUnit& simulation,
+                     const Core::SimulationParameters& params,
+                     Core::PartialExporter& partial_exporter);
 
 #  endif //__WORKER_SPECIFIC_HPP__
 

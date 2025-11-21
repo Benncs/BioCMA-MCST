@@ -1,15 +1,14 @@
 #ifndef __ITERATION_PAYLOAD_HPP__
 #define __ITERATION_PAYLOAD_HPP__
 
-#include <cma_read/flow_iterator.hpp>
-#include <cma_read/neighbors.hpp>
-#include <cma_read/reactorstate.hpp>
+#include <cma_utils/d_transitionner.hpp>
 #include <mpi.h>
 #include <span>
 #include <vector>
 
 namespace WrapMPI
 {
+
   /**
    * @class IterationPayload
    * @brief Represents the payload of data exchanged during an iteration.
@@ -20,21 +19,10 @@ namespace WrapMPI
   class IterationPayload
   {
   public:
-    /// Vector containing liquid flow values for the current iteration.
-    std::vector<double> liquid_flows;
-
-    /// Vector containing liquid volume values for the current iteration.
     std::vector<double> liquid_volumes;
-
-    /// Vector containing gas volume values for the current iteration.
-    std::vector<double> gas_volumes;
-
-    /// Vector containing raw neighbor indices for the current iteration.
-    std::vector<size_t> raw_neighbors;
-
-    /// Constant view of neighbor data for the current iteration.
-    CmaRead::Neighbors::Neighbors_const_view_t neighbors;
-
+    std::vector<std::size_t> liquid_neighbors_flat;
+    std::vector<double> proba_leaving_flat;
+    std::vector<double> liquid_out_flows;
     /**
      * @brief Constructs an IterationPayload with specified sizes for flows and
      * volumes.
@@ -45,7 +33,7 @@ namespace WrapMPI
      * @note: Size are needed to alloc vector, this allow to use preallocated
      * chunk when transfer
      */
-    explicit IterationPayload(size_t size_flows, size_t volumes);
+    explicit IterationPayload(size_t volumes);
 
     /**
      * @brief Receives data for this payload from a specified source.
@@ -72,20 +60,16 @@ namespace WrapMPI
   class HostIterationPayload
   {
   public:
-    /// View liquid flow values to be sent for the current iteration.
-    std::span<const double> liquid_flows;
-    /// View liquid volmes values to be sent for the current iteration.
-    std::span<const double> liquid_volumes;
-    /// View gas flow values to be sent for the current iteration.
-    std::span<const double> gas_volumes;
-    /// View neighbors values to be sent for the current iteration.
-    CmaRead::Neighbors::Neighbors_const_view_t neighbors;
-
-    void fill(const CmaRead::ReactorState& current_reactor_state);
+    void fill(const CmaUtils::IterationStatePtrType& current_reactor_state);
 
     [[nodiscard]] bool sendAll(std::size_t n_rank) noexcept;
 
   private:
+    std::span<const double> liquid_volumes;
+    std::span<const std::size_t> liquid_neighbors_flat;
+    std::span<const double> proba_leaving_flat;
+    std::span<const double> liquid_out_flows;
+
     /**
      * @brief Sends this payload to a specified MPI rank.
      *

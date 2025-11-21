@@ -1,6 +1,7 @@
 #ifndef __CASE_DATA__HPP__
 #define __CASE_DATA__HPP__
 
+#include "cma_utils/d_transitionner.hpp"
 #include <common/execinfo.hpp>
 #include <common/logger.hpp>
 #include <core/simulation_parameters.hpp>
@@ -36,6 +37,9 @@ namespace Core
    */
   struct CaseData
   {
+
+    CaseData();
+
     /**
      * @brief Unique pointer to the simulation unit.
      *
@@ -59,7 +63,9 @@ namespace Core
      * the simulation, ensuring consistency and accuracy in the simulation's
      * progression.
      */
-    std::unique_ptr<CmaUtils::FlowMapTransitionner> transitioner;
+    // std::unique_ptr<CmaUtils::FlowMapTransitionner> transitioner;
+
+    CmaUtils::TransitionnerPtrType transitioner;
 
     /**
      * @brief Information about the execution environment.

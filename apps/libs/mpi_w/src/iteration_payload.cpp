@@ -1,4 +1,4 @@
-#include <cma_read/neighbors.hpp>
+#include "mpi_w/impl_op.hpp"
 #include <cstddef>
 #include <mpi.h>
 #include <mpi_w/iteration_payload.hpp>
@@ -7,12 +7,17 @@
 namespace WrapMPI
 {
 
-  IterationPayload::IterationPayload(const size_t size_flows,
-                                     const size_t volumes)
+  enum TagExchange
   {
-    this->liquid_flows.resize(size_flows);
-    this->liquid_volumes.resize(volumes);
-    this->gas_volumes.resize(volumes);
+    volumes = 0,
+    flows,
+    proba,
+    neighbors
+  };
+
+  IterationPayload::IterationPayload(const size_t volumes)
+      : liquid_volumes(volumes), liquid_out_flows(volumes)
+  {
   }
 
   [[nodiscard]] bool HostIterationPayload::sendAll(std::size_t n_rank) noexcept
@@ -23,16 +28,11 @@ namespace WrapMPI
     {
       return true;
     }
-    // MPI_Request req_flag;
-    // for (size_t __macro_j = 1; __macro_j < n_rank; ++__macro_j)
-    // {
-    //   auto _ = WrapMPI::send(WrapMPI::SIGNALS::RUN, __macro_j,tag);
-    // }
-    // MPI_Wait(&req_flag, MPI_STATUS_IGNORE); // Wait for each send to finish
 
     for (size_t __macro_j = 1; __macro_j < n_rank; ++__macro_j)
     {
-      auto _ = WrapMPI::send(WrapMPI::SIGNALS::RUN, __macro_j);
+      auto _ = WrapMPI::send(WrapMPI::SIGNALS::HydroUpdate,
+                             __macro_j); // Need to be synchro
       flag = this->send(__macro_j);
     }
 
@@ -47,17 +47,18 @@ namespace WrapMPI
   bool HostIterationPayload::send(const size_t rank) noexcept
   {
     PROFILE_SECTION("host:to_node")
-    int rc1 = WrapMPI::Async::send_v<double>(
-        requests[0], liquid_flows, rank, 0, false);
 
-    int rc2 = WrapMPI::Async::send_v<double>(
-        requests[1], liquid_volumes, rank, 1, false);
+    int rc1 = WrapMPI::Async::send_v(
+        requests[0], liquid_volumes, rank, TagExchange::volumes, false);
 
-    int rc3 = WrapMPI::Async::send_v<double>(
-        requests[2], gas_volumes, rank, 2, false);
+    int rc2 = WrapMPI::Async::send_v(
+        requests[1], liquid_out_flows, rank, TagExchange::flows, false);
 
-    int rc4 =
-        WrapMPI::Async::send_v(requests[3], neighbors.data(), rank, 3, true);
+    int rc3 = WrapMPI::Async::send_v(
+        requests[2], proba_leaving_flat, rank, TagExchange::proba, true);
+
+    int rc4 = WrapMPI::Async::send_v(
+        requests[3], liquid_neighbors_flat, rank, TagExchange::neighbors, true);
 
     return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS && rc3 == MPI_SUCCESS &&
            rc4 == MPI_SUCCESS;
@@ -66,29 +67,37 @@ namespace WrapMPI
   bool IterationPayload::recv(const size_t source, MPI_Status* status) noexcept
   {
 
-    int rc1 = WrapMPI::recv_span<double>(liquid_flows, source, status, 0);
-    int rc2 = WrapMPI::recv_span<double>(liquid_volumes, source, status, 1);
-    int rc3 = WrapMPI::recv_span<double>(gas_volumes, source, status, 2);
+    int rc1 = WrapMPI::recv_span<double>(
+        liquid_volumes, source, status, TagExchange::volumes);
+    int rc2 = WrapMPI::recv_span<double>(
+        liquid_out_flows, source, status, TagExchange::flows);
 
-    auto opt = WrapMPI::recv_v<size_t>(source, status, 3);
+    auto opt_proba =
+        WrapMPI::recv_v<double>(source, status, TagExchange::proba);
+    if (!opt_proba.has_value())
+    {
+      return false;
+    }
+    proba_leaving_flat = opt_proba.value();
+
+    auto opt = WrapMPI::recv_v<size_t>(source, status, TagExchange::neighbors);
     if (!opt.has_value())
     {
       return false;
     }
-    raw_neighbors = opt.value();
-    auto n_col = raw_neighbors.size() / gas_volumes.size();
-    neighbors = CmaRead::Neighbors::Neighbors_const_view_t(
-        raw_neighbors, gas_volumes.size(), n_col, true);
-    return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS && rc3 == MPI_SUCCESS;
+
+    liquid_neighbors_flat = opt.value();
+
+    return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS;
   }
 
-  void
-  HostIterationPayload::fill(const CmaRead::ReactorState& current_reactor_state)
+  void HostIterationPayload::fill(const CmaUtils::IterationStatePtrType& state)
   {
-    liquid_flows = current_reactor_state.liquid_flow.getViewFlows().data();
-    liquid_volumes = current_reactor_state.liquidVolume;
-    gas_volumes = current_reactor_state.gasVolume;
-    neighbors = current_reactor_state.liquid_flow.getViewNeighors().to_const();
+    auto liq = state->get_liquid();
+    liquid_out_flows = liq->out_flows();
+    liquid_volumes = liq->volume();
+    liquid_neighbors_flat = state->flat_neighobrs();
+    proba_leaving_flat = state->flat_probability_leaving();
   }
 
 } // namespace WrapMPI

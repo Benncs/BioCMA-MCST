@@ -3,6 +3,7 @@
 
 // #include <common/common.hpp>
 
+#include "cma_utils/d_transitionner.hpp"
 #include <common/logger.hpp>
 #include <core/simulation_parameters.hpp>
 #include <dataexporter/partial_exporter.hpp>
@@ -39,7 +40,7 @@ void host_process(
     const ExecInfo& exec,
     Simulation::SimulationUnit& simulation,
     const Core::SimulationParameters& params,
-    std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,
+    CmaUtils::TransitionnerPtrType d_transition,
     Core::PartialExporter& partial_exporter);
 
 #endif //__HOST_SPECIFIC_HPP__

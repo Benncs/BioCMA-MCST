@@ -1,3 +1,5 @@
+#include "common/common.hpp"
+#include <stdexcept>
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -19,21 +21,24 @@ namespace
 
   constexpr double c_kinematic_viscosity(double temp);
 
-  inline auto get_gas_fraction(const CmaUtils::IterationState& state)
+  inline auto get_gas_fraction(const CmaUtils::IterationStatePtrType& state)
   {
-    const auto gas_array = Eigen::Map<Eigen::ArrayXd>(
-        const_cast<double*>(state.gas->volume.data()),
-        state.gas->volume.size());
+    using ArrayType = Eigen::ArrayXd;
+    using MapType = Eigen::Map<ArrayType>;
 
-    const auto liq_array = Eigen::Map<Eigen::ArrayXd>(
-        const_cast<double*>(state.liq->volume.data()),
-        state.liq->volume.size());
+    auto chunk = state->get_gas()->volume();
+    const MapType gas_array =
+        MapType(const_cast<double*>(chunk.data()), EIGEN_INDEX(chunk.size()));
+
+    auto chunk2 = state->get_liquid()->volume();
+    const MapType liq_array =
+        MapType(const_cast<double*>(chunk2.data()), EIGEN_INDEX(chunk2.size()));
 
     return (gas_array / (liq_array + gas_array));
   }
 
   inline auto get_interfacial_area(const double db,
-                                   const CmaUtils::IterationState& state)
+                                   const CmaUtils::IterationStatePtrType& state)
   {
     const auto alpha_g = get_gas_fraction(state);
     return 6. * alpha_g / (db * (1 - alpha_g));
@@ -100,14 +105,16 @@ namespace Simulation::MassTransfer
         const Eigen::ArrayXXd& liquid_concentration,
         const Eigen::ArrayXXd& gas_concentration,
         const Eigen::MatrixXd& liquid_volume,
-        const CmaUtils::IterationState& state)
+        const CmaUtils::IterationStatePtrType& state)
     {
 
       const double kinematic_viscosity = c_kinematic_viscosity(temperature);
 
       const double schmidtnumber =
           kinematic_viscosity / oxygen_diffusion_constant;
-      const auto eps = state.infos.at("energy_dissipation");
+
+      const auto eps = state->get_misc("energy_dissipation");
+
       const Eigen::Map<Eigen::ArrayXd> energy_dissipation_array =
           Eigen::Map<Eigen::ArrayXd>(const_cast<double*>(eps.data()),
                                      EIGEN_INDEX(eps.size()));
@@ -141,7 +148,7 @@ namespace Simulation::MassTransfer
         const Eigen::ArrayXXd& liquid_concentration,
         const Eigen::ArrayXXd& gas_concentration,
         const Eigen::MatrixXd& liquid_volume,
-        const CmaUtils::IterationState& state)
+        const CmaUtils::IterationStatePtrType& state)
     {
       (void)state;
       // mtr.mtr = impl_mtr(
@@ -158,9 +165,11 @@ namespace Simulation::MassTransfer
         const Eigen::ArrayXXd& liquid_concentration,
         const Eigen::ArrayXXd& gas_concentration,
         const Eigen::MatrixXd& liquid_volume,
-        const CmaUtils::IterationState& state)
+        const CmaUtils::IterationStatePtrType& state)
     {
-      const auto kla = state.infos.at("kla");
+      // const auto kla = state.infos.at("kla");
+      throw std::runtime_error(
+          "flowmap_kla_gas_liquid_mass_transfer: not implemented yet");
     }
 
   } // namespace Impl

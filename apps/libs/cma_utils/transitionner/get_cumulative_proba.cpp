@@ -1,3 +1,6 @@
+#include "Kokkos_Core.hpp"
+#include "cma_utils/iteration_state.hpp"
+#include "decl/Kokkos_Declare_OPENMP.hpp"
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -14,16 +17,16 @@
 
 namespace CmaUtils
 {
-  CumulativeProbaType get_cumulative_probabilities(
-      CmaRead::Neighbors::Neighbors_const_view_t neighbors,
-      const FlowMatrixType& m_transition)
+  CumulativeProbabilityView<ComputeSpace>
+  get_cumulative_probabilities(HostNeighsView neighbors,
+                               const FlowMatrixType& m_transition)
   {
     PROFILE_SECTION("host:get_cumulative_probabilities")
-    const size_t n_compartment = neighbors.getNRow();
+    const size_t n_compartment = neighbors.extent(0);
 
     // Initialize the cumulative probability matrix
-    CumulativeProbaType cumsum_proba = CumulativeProbaType::Zero(
-        static_cast<int>(n_compartment), static_cast<int>(neighbors.getNCol()));
+    CumulativeProbabilityView<HostSpace> cumsum_proba(
+        "cumsum_proba", n_compartment, neighbors.extent(1));
 
     // Iterate through each compartment to compute its cumulative probabilities
     // Use of int indices to be avoid casting when using Eigen
@@ -34,11 +37,14 @@ namespace CmaUtils
       int count_neighbor = 0; // Counter for the number of neighbors processed
 
       // Get the list of neighborsfor the current compartment
-      const auto row = neighbors.getRow(k_compartment);
+      // const auto row = neighbors.getRow(k_compartment);
+      const auto row = Kokkos::subview(neighbors, k_compartment, Kokkos::ALL);
 
       // Iterate through each neighbor of the current compartment
-      for (auto&& i_neighbor : row)
+      for (std::size_t i = 0; i < row.size(); ++i)
       {
+
+        const auto& i_neighbor = row(i);
         // Convert neighbor index to integer
         const auto colId = static_cast<int>(i_neighbor);
 
@@ -67,13 +73,16 @@ namespace CmaUtils
 
         // Compute the cumulative probability for the current neighbor
         const double p_cp = proba_out + cumsum;
-        cumsum_proba.coeffRef(k_compartment, count_neighbor) =
+        cumsum_proba(k_compartment, count_neighbor) =
             p_cp;            // Store the cumulative probability
         count_neighbor++;    // Increment the neighbor count
         cumsum += proba_out; // Update the cumulative sum
       }
     }
-    return cumsum_proba; // Return the computed cumulative probability matrix
+    auto device_cumsum_proba =
+        Kokkos::create_mirror_view_and_copy(ComputeSpace(), cumsum_proba);
+    return device_cumsum_proba; // Return the computed cumulative probability
+                                // matrix
   }
 
 } // namespace CmaUtils

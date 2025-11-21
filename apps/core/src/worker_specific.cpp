@@ -7,16 +7,13 @@
 #  include <mpi_w/wrap_mpi.hpp>
 #  include <simulation/simulation.hpp>
 #  include <sync.hpp>
-#  include <transitionner/transitionner.hpp>
 #  include <worker_specific.hpp>
 
-void workers_process(
-    [[maybe_unused]] std::shared_ptr<IO::Logger> logger,
-    const ExecInfo& exec,
-    Simulation::SimulationUnit& simulation,
-    const Core::SimulationParameters& params,
-    std::unique_ptr<CmaUtils::FlowMapTransitionner>&& transitioner,
-    Core::PartialExporter& partial_exporter)
+void workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
+                     const ExecInfo& exec,
+                     Simulation::SimulationUnit& simulation,
+                     const Core::SimulationParameters& params,
+                     Core::PartialExporter& partial_exporter)
 {
   double d_t = params.d_t;
   size_t n_compartments = simulation.mc_unit->domain.getNumberCompartments();
@@ -24,8 +21,7 @@ void workers_process(
 
   const bool do_export = true; // TODO
 
-  WrapMPI::IterationPayload payload(n_compartments * n_compartments,
-                                    n_compartments);
+  WrapMPI::IterationPayload payload(n_compartments);
 
   const auto loop_functor = [&](auto&& container)
   {
@@ -35,6 +31,7 @@ void workers_process(
     double current_time = 0;
     while (!stop)
     {
+
       signal = WrapMPI::try_recv<WrapMPI::SIGNALS>(0, &status);
       if (signal == WrapMPI::SIGNALS::STOP)
       {
@@ -80,19 +77,21 @@ void workers_process(
         continue;
       }
 
-      payload.recv(0, &status);
+      if (signal == WrapMPI::SIGNALS::HydroUpdate)
+      {
+        payload.recv(0, &status);
+        simulation.updateMCHydro(payload.liquid_volumes,
+                                 payload.liquid_neighbors_flat,
+                                 payload.proba_leaving_flat,
+                                 payload.liquid_out_flows);
+        continue;
+      }
 
-      simulation.update(transitioner->advance_worker(payload.liquid_flows,
-                                                     payload.liquid_volumes,
-                                                     payload.gas_volumes,
-                                                     payload.neighbors));
       simulation.update_feed(current_time, d_t, false);
       simulation.cycleProcess(container, d_t, functors);
-
       current_time += d_t;
 
       sync_step(exec, simulation);
-
       sync_prepare_next(simulation);
     }
   };

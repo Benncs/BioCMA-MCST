@@ -2,7 +2,7 @@
 #define __UDF_HANDLE_HPP__
 
 #include <common/results.hpp>
-
+#include <memory>
 #ifdef USE_UDF
 #  include <udf_includes.hpp>
 #endif
