@@ -22,7 +22,7 @@ namespace WrapMPI
 
   [[nodiscard]] bool HostIterationPayload::sendAll(std::size_t n_rank) noexcept
   {
-    PROFILE_SECTION("host:All")
+    PROFILE_SECTION("host:sendAll")
     bool flag = false;
     if (n_rank == 1)
     {
@@ -35,13 +35,21 @@ namespace WrapMPI
                              __macro_j); // Need to be synchro
       flag = this->send(__macro_j);
     }
-
-    for (auto& req : requests)
-    {
-      MPI_Wait(&req, MPI_STATUS_IGNORE); // Wait for each send to finish
-    }
+    to_wait = true;
 
     return flag;
+  }
+
+  void HostIterationPayload::wait() noexcept
+  {
+    if (to_wait)
+    {
+      for (auto& req : requests)
+      {
+        MPI_Wait(&req, MPI_STATUS_IGNORE); // Wait for each send to finish
+      }
+      to_wait = false;
+    }
   }
 
   bool HostIterationPayload::send(const size_t rank) noexcept

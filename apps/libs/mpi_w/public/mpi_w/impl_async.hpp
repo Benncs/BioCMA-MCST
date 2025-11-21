@@ -9,36 +9,42 @@
 #include <mpi_w/message_t.hpp>
 #include <mpi_w/mpi_types.hpp>
 #include <span>
-// #include <optional>
-// #include <limits>
-// #include <vector>
-// #include <stdexcept>
 
 namespace WrapMPI::Async
 {
+  namespace
+  {
+    template <POD_t DataType>
+    int _send_unsafe(MPI_Request& request,
+                     DataType* buf,
+                     size_t buf_size,
+                     size_t dest,
+                     size_t tag) noexcept
+    {
+      return MPI_Isend(buf,
+                       buf_size,
+                       get_type<DataType>(),
+                       dest,
+                       tag,
+                       MPI_COMM_WORLD,
+                       &request);
+    }
+
+  } // namespace
 
   inline MPI_Status wait(MPI_Request& request)
   {
+    PROFILE_SECTION("WrapMPI::wait");
     MPI_Status status;
     MPI_Wait(&request, &status);
     return status;
   }
 
-  template <POD_t DataType>
-  static int _send_unsafe(MPI_Request& request,
-                          DataType* buf,
-                          size_t buf_size,
-                          size_t dest,
-                          size_t tag) noexcept
+  inline void wait(MPI_Request& request, MPI_Status* status)
   {
-    return MPI_Isend(buf,
-                     buf_size,
-                     get_type<DataType>(),
-                     dest,
-                     tag,
-                     MPI_COMM_WORLD,
-                     &request);
+    MPI_Wait(&request, status);
   }
+
   template <POD_t DataType>
   int send(MPI_Request& request, DataType data, size_t dest, size_t tag)
   {
@@ -80,6 +86,57 @@ namespace WrapMPI::Async
                      tag,
                      MPI_COMM_WORLD,
                      &request);
+  }
+
+  template <POD_t DataType>
+  std::optional<DataType>
+  recv(size_t src, MPI_Request& request, size_t tag) noexcept
+  {
+    DataType buf;
+
+    int recv_status = MPI_Irecv(
+        &buf, sizeof(DataType), MPI_BYTE, src, tag, MPI_COMM_WORLD, &request);
+    if (recv_status != MPI_SUCCESS)
+    {
+      return std::nullopt;
+    }
+    return buf;
+  }
+
+  template <POD_t T>
+  int _broadcast_unsafe(T* data,
+                        size_t _size,
+                        size_t root,
+                        MPI_Request& request)
+  {
+    if (data == nullptr)
+    {
+      throw std::invalid_argument("Data pointer is null");
+    }
+    if (_size == 0 || _size > std::numeric_limits<size_t>::max())
+    {
+      throw std::invalid_argument("Error size");
+    }
+
+    int comm_size = 0;
+    MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+    if (root >= static_cast<size_t>(comm_size))
+    {
+      throw std::invalid_argument("Root process rank is out of range");
+    }
+
+    return MPI_Ibcast(data,
+                      _size,
+                      get_type<T>(),
+                      static_cast<int>(root),
+                      MPI_COMM_WORLD,
+                      &request);
+  }
+
+  template <POD_t T>
+  int broadcast_span(std::span<T> data, size_t root, MPI_Request& request)
+  {
+    return _broadcast_unsafe(data.data(), data.size(), root, request);
   }
 
 } // namespace WrapMPI::Async

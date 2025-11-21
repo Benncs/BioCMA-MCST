@@ -91,7 +91,8 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
   }
 }
 
-void sync_prepare_next(Simulation::SimulationUnit& simulation)
+void sync_prepare_next(Simulation::SimulationUnit& simulation,
+                       MPI_Request* request)
 {
   PROFILE_SECTION("sync_prepare_next")
   simulation.clearContribution();
@@ -104,8 +105,10 @@ void sync_prepare_next(Simulation::SimulationUnit& simulation)
         simulation.getCliqData(); // Get concentration ptr wrapped into span
 
     WrapMPI::barrier();
-    // We can use span here because we broadcast without changing size
-    WrapMPI::broadcast_span(data, 0);
+// We can use span here because we broadcast without changing size
+#ifndef NO_MPI
+    WrapMPI::Async::broadcast_span(data, 0, *request);
+#endif
   }
 }
 

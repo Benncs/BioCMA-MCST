@@ -65,6 +65,7 @@
 #  define SEND_MPI_SIG_STOP
 #  define INIT_PAYLOAD
 #  define SEND_MPI_SIG_RUN
+
 #endif
 
 #ifdef DEBUG
@@ -190,6 +191,8 @@ namespace
       exporter_handler.pre_post_export(current_time, simulation, d_transionner);
     }
 
+    MPI_Request req{};
+
     auto loop_functor = [&](auto&& local_container)
     {
       Core::SignalHandler sig;
@@ -232,6 +235,8 @@ namespace
           }
         }
 
+        mpi_payload.wait();
+
         sync_step(exec, simulation);
         {
           PROFILE_SECTION("host:sync_update")
@@ -240,8 +245,9 @@ namespace
           // From here, contributions can be overwritten
           current_time += d_t;
         }
-        sync_prepare_next(simulation);
-
+#ifndef NO_MPI
+        sync_prepare_next(simulation, &req);
+#endif
         simulation.cycleProcess(local_container, d_t, functors);
 
         if (Core::SignalHandler::is_usr1_raised()) [[unlikely]]
@@ -257,6 +263,8 @@ namespace
           }
           break;
         }
+        WrapMPI::Async::wait(req);
+
       } // end for
 
       local_container.force_remove_dead();

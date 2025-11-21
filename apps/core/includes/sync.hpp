@@ -8,6 +8,8 @@ namespace Simulation
   class SimulationUnit;
 }
 
+#include <mpi_w/wrap_mpi.hpp>
+
 /**
  * @brief Synchronization after particle processing.
  *
@@ -34,7 +36,8 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation);
  * @param simulation The `Simulation::SimulationUnit` object representing the
  * simulation being synchronized.
  */
-void sync_prepare_next(Simulation::SimulationUnit& simulation);
+void sync_prepare_next(Simulation::SimulationUnit& simulation,
+                       MPI_Request* request);
 
 /**
  * @brief Final synchronization before exporting results.

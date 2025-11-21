@@ -18,7 +18,7 @@ void workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
   double d_t = params.d_t;
   size_t n_compartments = simulation.mc_unit->domain.getNumberCompartments();
   MPI_Status status;
-
+  MPI_Request req;
   const bool do_export = true; // TODO
 
   WrapMPI::IterationPayload payload(n_compartments);
@@ -75,12 +75,13 @@ void workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
   const auto cycle_callback =
       [&](double& current_time, auto& container, auto& functors)
   {
+    sync_step(exec, simulation);
+    sync_prepare_next(simulation, &req);
     simulation.update_feed(current_time, d_t, false);
+    WrapMPI::Async::wait(req);
     simulation.cycleProcess(container, d_t, functors);
 
     current_time += d_t;
-    sync_step(exec, simulation);
-    sync_prepare_next(simulation);
   };
 
   const auto loop_functor = [&](auto&& container)
@@ -88,6 +89,7 @@ void workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
     auto functors = simulation.init_functors<ComputeSpace>(container);
     // bool stop = false;
     WrapMPI::SIGNALS signal{};
+
     double current_time = 0;
     while (true)
     {
