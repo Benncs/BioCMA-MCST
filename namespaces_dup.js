@@ -23,6 +23,9 @@ var namespaces_dup =
     ] ],
     [ "PythonWrap", "namespacePythonWrap.html", "namespacePythonWrap" ],
     [ "Simulation", "namespaceSimulation.html", "namespaceSimulation" ],
+    [ "Unsafe", "namespaceUnsafe.html", [
+      [ "load_udf", "namespaceUnsafe.html#a703f3b37e1e69e30af8da78870f09df4", null ]
+    ] ],
     [ "UnsafeUDF", "namespaceUnsafeUDF.html", "namespaceUnsafeUDF" ],
     [ "WrapMPI", "namespaceWrapMPI.html", "namespaceWrapMPI" ]
 ];

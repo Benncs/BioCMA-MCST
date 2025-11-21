@@ -4,10 +4,7 @@ var annotated_dup =
       [ "SimulationInstance", "structApi_1_1SimulationInstance.html", "structApi_1_1SimulationInstance" ]
     ] ],
     [ "CmaUtils", "namespaceCmaUtils.html", [
-      [ "DiscontinuousFMT", "classCmaUtils_1_1DiscontinuousFMT.html", "classCmaUtils_1_1DiscontinuousFMT" ],
-      [ "FlowMapTransitionner", "classCmaUtils_1_1FlowMapTransitionner.html", "classCmaUtils_1_1FlowMapTransitionner" ],
       [ "IterationState", "structCmaUtils_1_1IterationState.html", "structCmaUtils_1_1IterationState" ],
-      [ "LinterFMT", "classCmaUtils_1_1LinterFMT.html", "classCmaUtils_1_1LinterFMT" ],
       [ "PreCalculatedHydroState", "classCmaUtils_1_1PreCalculatedHydroState.html", "classCmaUtils_1_1PreCalculatedHydroState" ],
       [ "ProxyPreCalculatedHydroState", "classCmaUtils_1_1ProxyPreCalculatedHydroState.html", "classCmaUtils_1_1ProxyPreCalculatedHydroState" ]
     ] ],
@@ -47,7 +44,8 @@ var annotated_dup =
         [ "Normal", "structMC_1_1Distributions_1_1Normal.html", "structMC_1_1Distributions_1_1Normal" ],
         [ "ScaledTruncatedNormal", "structMC_1_1Distributions_1_1ScaledTruncatedNormal.html", "structMC_1_1Distributions_1_1ScaledTruncatedNormal" ],
         [ "SkewNormal", "structMC_1_1Distributions_1_1SkewNormal.html", "structMC_1_1Distributions_1_1SkewNormal" ],
-        [ "TruncatedNormal", "structMC_1_1Distributions_1_1TruncatedNormal.html", "structMC_1_1Distributions_1_1TruncatedNormal" ]
+        [ "TruncatedNormal", "structMC_1_1Distributions_1_1TruncatedNormal.html", "structMC_1_1Distributions_1_1TruncatedNormal" ],
+        [ "Uniform", "structMC_1_1Distributions_1_1Uniform.html", "structMC_1_1Distributions_1_1Uniform" ]
       ] ],
       [ "ContribIndexBounds", "structMC_1_1ContribIndexBounds.html", "structMC_1_1ContribIndexBounds" ],
       [ "EventContainer", "structMC_1_1EventContainer.html", "structMC_1_1EventContainer" ],

@@ -101,7 +101,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7f528da6440de7bfb8c5d33b36040fbd" id="r_a7f528da6440de7bfb8c5d33b36040fbd"><td class="memTemplParams" colspan="2">template&lt;typename CviewType&gt; </td></tr>
 <tr class="memitem:a7f528da6440de7bfb8c5d33b36040fbd template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f528da6440de7bfb8c5d33b36040fbd">get_contributions</a> (const std::size_t idx, const CviewType &amp;contributions) const</td></tr>
 <tr class="memdesc:a7f528da6440de7bfb8c5d33b36040fbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the contribution if particle at index idx.  <br /></td></tr>
-<tr class="memitem:a5d2f244aefe3e55bcebe1d3d8bf94ca2" id="r_a5d2f244aefe3e55bcebe1d3d8bf94ca2"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d2f244aefe3e55bcebe1d3d8bf94ca2">handle_division</a> (const <a class="el" href="classMC_1_1KPRNG.html#a7a1424e59a51eaec62c551d960598e15">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx1) const</td></tr>
+<tr class="memitem:a5d2f244aefe3e55bcebe1d3d8bf94ca2" id="r_a5d2f244aefe3e55bcebe1d3d8bf94ca2"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d2f244aefe3e55bcebe1d3d8bf94ca2">handle_division</a> (const <a class="el" href="classMC_1_1KPRNG.html#a762b10c38f7b947b5698d16cbbb008d7">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx1) const</td></tr>
 <tr class="memdesc:a5d2f244aefe3e55bcebe1d3d8bf94ca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to spawn a new particle by performing division on the specified particle.  <br /></td></tr>
 <tr class="memitem:aa2d3ed66b206a8c7fbad9acb23b5b878" id="r_aa2d3ed66b206a8c7fbad9acb23b5b878"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2d3ed66b206a8c7fbad9acb23b5b878">get_weight</a> (std::size_t idx) const</td></tr>
 <tr class="memdesc:aa2d3ed66b206a8c7fbad9acb23b5b878"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the particle weight.  <br /></td></tr>
@@ -126,6 +126,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a30b264e87ae019596f9791f2fc60d52f" id="r_a30b264e87ae019596f9791f2fc60d52f"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30b264e87ae019596f9791f2fc60d52f">n_particles</a> () const</td></tr>
 <tr class="memdesc:a30b264e87ae019596f9791f2fc60d52f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the number of particles in the container.  <br /></td></tr>
 <tr class="memitem:ae63651fa053f1aea28a10a7a05999fe9" id="r_ae63651fa053f1aea28a10a7a05999fe9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae63651fa053f1aea28a10a7a05999fe9">change_runtime</a> (<a class="el" href="structMC_1_1RuntimeParameters.html">RuntimeParameters</a> &amp;&amp;parameters) noexcept</td></tr>
+<tr class="memitem:ad6eaf6d6ce065232f40b2026551d1109" id="r_ad6eaf6d6ce065232f40b2026551d1109"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad6eaf6d6ce065232f40b2026551d1109">_sort</a> (size_t n_c)</td></tr>
 <tr class="memitem:a57353f823ed074869300f29deb5c50b2" id="r_a57353f823ed074869300f29deb5c50b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57353f823ed074869300f29deb5c50b2">remove_inactive_particles</a> (std::size_t to_remove)</td></tr>
 <tr class="memdesc:a57353f823ed074869300f29deb5c50b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes inactive particles from the container.  <br /></td></tr>
 <tr class="memitem:a7c693e0db50b6d4dd5186bc391a0f0c3" id="r_a7c693e0db50b6d4dd5186bc391a0f0c3"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c693e0db50b6d4dd5186bc391a0f0c3">get_buffer_index</a> () const</td></tr>
@@ -414,6 +415,25 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="ad6eaf6d6ce065232f40b2026551d1109" name="ad6eaf6d6ce065232f40b2026551d1109"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6eaf6d6ce065232f40b2026551d1109">&#9670;&#160;</a></span>_sort()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt;::_sort </td>
+          <td>(</td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>n_c</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6f8e762483a4d6589e89d03154f659b9" name="a6f8e762483a4d6589e89d03154f659b9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6f8e762483a4d6589e89d03154f659b9">&#9670;&#160;</a></span>capacity()</h2>
 
@@ -680,7 +700,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
         <tr>
           <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::handle_division </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classMC_1_1KPRNG.html#a7a1424e59a51eaec62c551d960598e15">MC::KPRNG::pool_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>random_pool</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="classMC_1_1KPRNG.html#a762b10c38f7b947b5698d16cbbb008d7">MC::KPRNG::pool_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>random_pool</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -762,7 +782,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_a8e95993fb1287c04427780d6372be565_icgraph.svg" width="616" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_a8e95993fb1287c04427780d6372be565_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -969,7 +989,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_a0047f4c96b02ae4aeb9ebd8963129687_icgraph.svg" width="654" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_a0047f4c96b02ae4aeb9ebd8963129687_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>

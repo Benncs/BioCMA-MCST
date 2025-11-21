@@ -1,17 +1,17 @@
 <map id="Simulation::SimulationUnit::cycleProcess" name="Simulation::SimulationUnit::cycleProcess">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,219,181,257"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a96e8f3fbde370c918a3710b0b910cd42" title=" " alt="" coords="229,156,404,195"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,216,230,197,231,202,165,221"/>
-<area shape="rect" id="Node000011" href="$classSimulation_1_1SimulationUnit.html#ad984b5d95455d6db475d8b6e20077a0c" title=" " alt="" coords="229,281,404,320"/>
-<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="165,255,231,274,230,279,163,260"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,157,181,196"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a96e8f3fbde370c918a3710b0b910cd42" title=" " alt="" coords="229,125,404,164"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,161,213,157,214,162,181,167"/>
+<area shape="rect" id="Node000011" href="$classSimulation_1_1SimulationUnit.html#ad984b5d95455d6db475d8b6e20077a0c" title=" " alt="" coords="229,188,404,227"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="181,186,214,191,213,196,181,191"/>
 <area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" title="Insert particle buffer into the main container." alt="" coords="471,31,629,69"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="339,153,389,116,451,78,462,73,464,78,453,83,392,120,343,158"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="355,122,451,78,467,72,469,77,453,83,357,127"/>
 <area shape="rect" id="Node000006" href="$classSimulation_1_1SimulationUnit.html#ae2077067788b0cb0535c62933724a1cf" title=" " alt="" coords="462,93,638,132"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="390,153,460,134,462,139,392,158"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="404,130,446,124,447,129,405,135"/>
 <area shape="rect" id="Node000008" href="$classSimulation_1_1SimulationUnit.html#ac396f393b4cf318b38364c5067254c80" title=" " alt="" coords="454,156,646,195"/>
-<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="404,173,439,173,439,178,404,178"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="405,154,439,158,438,163,404,159"/>
 <area shape="rect" id="Node000009" href="$classMC_1_1ParticlesContainer.html#a0047f4c96b02ae4aeb9ebd8963129687" title="Update the number of non&#45;idle particle and remove if total number exceeds threshold May call : remove..." alt="" coords="452,219,648,257"/>
-<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="392,193,462,212,460,217,390,198"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="381,162,405,173,429,189,453,205,465,210,463,215,451,210,426,194,403,178,379,167"/>
 <area shape="rect" id="Node000004" href="$classMC_1_1ParticlesContainer.html#a57fa06d3225acf04522e3fc2993847f0" title=" " alt="" coords="707,5,865,44"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="630,39,691,32,692,37,630,44"/>
 <area shape="rect" id="Node000005" href="$classMC_1_1ParticlesContainer.html#a4fc94ae525191a5d034dce4866986c1e" title=" " alt="" coords="924,128,1082,167"/>
@@ -21,8 +21,4 @@
 <area shape="rect" id="Node000010" href="$classMC_1_1ParticlesContainer.html#a57353f823ed074869300f29deb5c50b2" title="Removes inactive particles from the container." alt="" coords="696,188,876,227"/>
 <area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="648,223,680,218,681,224,649,228"/>
 <area shape="poly" id="edge10_Node000010_Node000005" title=" " alt="" coords="858,185,915,169,917,174,859,190"/>
-<area shape="rect" id="Node000012" href="$classSimulation_1_1SimulationUnit.html#ac3b83e6fb1638ace3cbfa35833c1affc" title=" " alt="" coords="452,281,648,320"/>
-<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="404,298,436,298,436,303,404,303"/>
-<area shape="rect" id="Node000013" href="$classSimulation_1_1SimulationUnit.html#a7f871ecc4425caa53838c0a620f3d686" title=" " alt="" coords="462,344,638,383"/>
-<area shape="poly" id="edge13_Node000011_Node000013" title=" " alt="" coords="392,318,462,337,460,342,390,323"/>
 </map>

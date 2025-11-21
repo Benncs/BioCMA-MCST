@@ -1,0 +1,5 @@
+<map id="MC::Distributions::Uniform::draw" name="MC::Distributions::Uniform::draw">
+<area shape="rect" id="Node000001" title="Draws a random sample from the distribution." alt="" coords="5,5,137,44"/>
+<area shape="rect" id="Node000002" href="$structMC_1_1Distributions_1_1Uniform.html#a75b51bac8cbfe576fa3626fbc33dd3a5" title="Static method to draw a sample from N(μ, σ)." alt="" coords="185,5,321,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,22,169,22,169,27,137,27"/>
+</map>

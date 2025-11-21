@@ -1,6 +1,0 @@
-<map id="Core::GlobalInitialiser::init_flow_iterator" name="Core::GlobalInitialiser::init_flow_iterator">
-<area shape="rect" id="Node000001" title="Initializes a flow iterator." alt="" coords="200,29,346,68"/>
-<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#a970cd4b504a4cbc3e066922d6944bc1f" title="Initializes a transitioner without parameters." alt="" coords="5,29,152,68"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,51,152,51,152,46,184,46"/>
-<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="110,16,99,10,78,8,60,10,49,15,45,21,47,28,42,30,40,20,45,11,58,5,79,3,100,5,113,12"/>
-</map>

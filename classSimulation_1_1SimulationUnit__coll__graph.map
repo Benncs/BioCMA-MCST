@@ -1,13 +1,9 @@
 <map id="Simulation::SimulationUnit" name="Simulation::SimulationUnit">
-<area shape="rect" id="Node000001" title=" " alt="" coords="614,85,789,110"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1Feed_1_1SimulationFeed.html" title=" " alt="" coords="282,5,499,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="500,31,591,51,673,82,671,87,589,56,499,36"/>
-<area shape="rect" id="Node000003" href="$structCmaUtils_1_1IterationState.html" title="Structure to store information about the reactor state during simulation." alt="" coords="309,56,472,81"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="487,75,614,87,613,92,487,80"/>
-<area shape="rect" id="Node000004" href="$classCmaUtils_1_1PreCalculatedHydroState.html" title="Structure to store hydrodynamic properties from a compartment mesh." alt="" coords="5,49,205,88"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="221,66,309,66,309,71,221,71"/>
-<area shape="rect" id="Node000005" href="$classSimulation_1_1MassTransfer_1_1MassTransferModel.html" title=" " alt="" coords="306,105,475,144"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="491,125,590,120,652,108,653,113,590,125,491,130"/>
-<area shape="rect" id="Node000006" href="$structSimulation_1_1KernelInline_1_1MoveInfo.html" title=" " alt="" coords="292,168,488,206"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="503,172,589,152,638,131,679,108,681,113,641,136,591,157,505,177"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="338,61,513,86"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1Feed_1_1SimulationFeed.html" title=" " alt="" coords="5,5,223,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="231,30,314,44,375,58,374,63,313,50,230,35"/>
+<area shape="rect" id="Node000003" href="$classSimulation_1_1MassTransfer_1_1MassTransferModel.html" title=" " alt="" coords="29,54,199,93"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,71,337,71,337,76,214,76"/>
+<area shape="rect" id="Node000004" href="$structSimulation_1_1KernelInline_1_1MoveInfo.html" title=" " alt="" coords="16,117,212,156"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="227,115,313,98,374,84,375,89,314,104,228,120"/>
 </map>

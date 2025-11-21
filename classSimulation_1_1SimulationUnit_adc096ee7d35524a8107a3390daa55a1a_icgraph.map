@@ -1,5 +1,0 @@
-<map id="Simulation::SimulationUnit::getState" name="Simulation::SimulationUnit::getState">
-<area shape="rect" id="Node000001" title=" " alt="" coords="222,5,397,44"/>
-<area shape="rect" id="Node000002" href="$classExportHandler.html#a51e7bc3719685192c28df6b57b7a9f37" title="Handles periodic export of simulation data." alt="" coords="5,12,174,37"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,27,174,27,174,22,206,22"/>
-</map>

@@ -49,7 +49,7 @@
 <script type="application/ecmascript">
 var viewWidth = 699;
 var viewHeight = 84;
-var sectionId = 'dynsection-11';
+var sectionId = 'dynsection-9';
 </script>
 <script type="application/ecmascript" xlink:href="svg.min.js"/>
 <svg id="graph" class="graph">
@@ -104,7 +104,7 @@ var sectionId = 'dynsection-11';
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="classCore_1_1GlobalInitialiser.html#a212a55abe2b9cb558932ba82e4cf6dbf" target="_top" xlink:title="Initializes the simulation state.">
+<g id="a_Node000003"><a xlink:href="classCore_1_1GlobalInitialiser.html#a97eff5566ced6ba6449eb532f0babadc" target="_top" xlink:title="Initializes a flow iterator.">
 <polygon fill="white" stroke="#666666" points="415.88,-76 306.12,-76 306.12,-47 415.88,-47 415.88,-76"/>
 <text xml:space="preserve" text-anchor="start" x="314.12" y="-62.5" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
 <text xml:space="preserve" text-anchor="middle" x="361" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00">::init_state</text>
@@ -123,7 +123,7 @@ var sectionId = 'dynsection-11';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="classCore_1_1GlobalInitialiser.html#a4fa32007b34a9e448be11ebd7d5e695f" target="_top" xlink:title="Initializes a transitioner with the provided flow iterator.">
+<g id="a_Node000004"><a xlink:href="classCore_1_1GlobalInitialiser.html#a0dc2da93c4202706b5f37453f355145c" target="_top" xlink:title="Initializes a transitioner with the provided flow iterator.">
 <polygon fill="white" stroke="#666666" points="265.25,-76 155.5,-76 155.5,-47 265.25,-47 265.25,-76"/>
 <text xml:space="preserve" text-anchor="start" x="163.5" y="-62.5" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
 <text xml:space="preserve" text-anchor="middle" x="210.38" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00">::init_transitionner</text>

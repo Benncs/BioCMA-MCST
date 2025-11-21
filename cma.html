@@ -106,14 +106,14 @@ Transition Matrix</h4>
 </ul>
 <h4 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
 Cumulative probability</h4>
-<p>This step is performed <a class="el" href="namespaceCmaUtils.html#ac0295574e384d9028eb114a0fffa784b">here</a>. The result is important to decide where the discrete particles moves.</p>
+<p>This step is performed <a class="el" href="namespaceCmaUtils.html#a9aff69bdff3b52945f2be00f4e25846d">here</a>. The result is important to decide where the discrete particles moves.</p>
 <p>The aim is to construct of discrete CDF to have to probability to go in a specific compartment knowning that the cell leaves a compartment. Let L the event to leave current compartment i, and let \(I_{j}\) the event to go the compartment i we have for each neighbors \(P(I_{j}|L)\).</p>
 <p>This function construct the CDF using the fact that </p><p class="formulaDsp">
 \[P(I_{j}|L)=\frac{F(i,j)}{\sum_{k} F(i,k)}\]
 </p>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
 FlowMapTransitionner</h3>
-<p>Additionally, <b><a class="el" href="namespaceCmaUtils.html" title="Namespace to handle algorithms and structures related to reading compartment mesh.">CmaUtils</a></b> implements the <a class="el" href="classCmaUtils_1_1FlowMapTransitionner.html">FlowMapTransitionner</a>—an abstraction designed for managing flow map transitions during the simulation. This component provides seamless access to the correct flow map based on the simulation time, abstracting away the details of data formats and file I/O. The transtionner supports flexible behaviors, such as:</p><ul>
+<p>Additionally, <b><a class="el" href="namespaceCmaUtils.html" title="Namespace to handle algorithms and structures related to reading compartment mesh.">CmaUtils</a></b> implements the FlowMapTransitionner—an abstraction designed for managing flow map transitions during the simulation. This component provides seamless access to the correct flow map based on the simulation time, abstracting away the details of data formats and file I/O. The transtionner supports flexible behaviors, such as:</p><ul>
 <li>Switching to the next flow map after a set time interval.</li>
 <li>Looping over available flow maps.</li>
 <li>Implementing caching mechanisms for improved performance.</li>

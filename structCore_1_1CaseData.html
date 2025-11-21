@@ -82,21 +82,43 @@ Collaboration diagram for Core::CaseData:</div>
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structCore_1_1CaseData__coll__graph.svg" width="294" height="131"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a7757610efc0f4c74c853498ea8933bed" id="r_a7757610efc0f4c74c853498ea8933bed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7757610efc0f4c74c853498ea8933bed">CaseData</a> ()</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a66f571c1a870c19665cc16252fb50e2f" id="r_a66f571c1a870c19665cc16252fb50e2f"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66f571c1a870c19665cc16252fb50e2f">simulation</a></td></tr>
 <tr class="memdesc:a66f571c1a870c19665cc16252fb50e2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique pointer to the simulation unit.  <br /></td></tr>
 <tr class="memitem:a0d09c865146c9ec49e178107cc0d608f" id="r_a0d09c865146c9ec49e178107cc0d608f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structCore_1_1SimulationParameters.html">SimulationParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d09c865146c9ec49e178107cc0d608f">params</a></td></tr>
 <tr class="memdesc:a0d09c865146c9ec49e178107cc0d608f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters that configure the simulation.  <br /></td></tr>
-<tr class="memitem:a2fc1aef6bfe4cd7d98b5fe5021ddc867" id="r_a2fc1aef6bfe4cd7d98b5fe5021ddc867"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classCmaUtils_1_1FlowMapTransitionner.html">CmaUtils::FlowMapTransitionner</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2fc1aef6bfe4cd7d98b5fe5021ddc867">transitioner</a></td></tr>
-<tr class="memdesc:a2fc1aef6bfe4cd7d98b5fe5021ddc867"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique pointer to the flow map transitioner.  <br /></td></tr>
+<tr class="memitem:aa53d6ed57f5833231b65f4bbb90af9a6" id="r_aa53d6ed57f5833231b65f4bbb90af9a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa53d6ed57f5833231b65f4bbb90af9a6">transitioner</a></td></tr>
+<tr class="memdesc:aa53d6ed57f5833231b65f4bbb90af9a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique pointer to the flow map transitioner.  <br /></td></tr>
 <tr class="memitem:a010236df0d5a4823945a593ef2abc0d3" id="r_a010236df0d5a4823945a593ef2abc0d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structExecInfo.html">ExecInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a010236df0d5a4823945a593ef2abc0d3">exec_info</a></td></tr>
 <tr class="memdesc:a010236df0d5a4823945a593ef2abc0d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Information about the execution environment.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Holds the data required to execute a simulation case. </p>
 <p>The <span class="tt"><a class="el" href="structCore_1_1CaseData.html" title="Holds the data required to execute a simulation case.">CaseData</a></span> struct encapsulates all the necessary components needed to perform a simulation. It includes the simulation unit, parameters, transitioner, and execution information. This structure is typically used to manage and transfer simulation data between different stages or components of the simulation process. </p>
-</div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a7757610efc0f4c74c853498ea8933bed" name="a7757610efc0f4c74c853498ea8933bed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7757610efc0f4c74c853498ea8933bed">&#9670;&#160;</a></span>CaseData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Core::CaseData::CaseData </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
 <a id="a010236df0d5a4823945a593ef2abc0d3" name="a010236df0d5a4823945a593ef2abc0d3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a010236df0d5a4823945a593ef2abc0d3">&#9670;&#160;</a></span>exec_info</h2>
 
@@ -148,14 +170,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a2fc1aef6bfe4cd7d98b5fe5021ddc867" name="a2fc1aef6bfe4cd7d98b5fe5021ddc867"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2fc1aef6bfe4cd7d98b5fe5021ddc867">&#9670;&#160;</a></span>transitioner</h2>
+<a id="aa53d6ed57f5833231b65f4bbb90af9a6" name="aa53d6ed57f5833231b65f4bbb90af9a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa53d6ed57f5833231b65f4bbb90af9a6">&#9670;&#160;</a></span>transitioner</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unique_ptr&lt;<a class="el" href="classCmaUtils_1_1FlowMapTransitionner.html">CmaUtils::FlowMapTransitionner</a>&gt; Core::CaseData::transitioner</td>
+          <td class="memname"><a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> Core::CaseData::transitioner</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -165,8 +187,9 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+<hr/>The documentation for this struct was generated from the following files:<ul>
 <li>apps/core/public/core/<a class="el" href="case__data_8hpp_source.html">case_data.hpp</a></li>
+<li>apps/core/src/<b>case_data.cpp</b></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

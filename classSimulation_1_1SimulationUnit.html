@@ -76,7 +76,7 @@ $(function(){initNavTree('classSimulation_1_1SimulationUnit.html','','classSimul
 <div class="dynheader">
 Collaboration diagram for Simulation::SimulationUnit:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit__coll__graph.svg" width="100%" height="459"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit__coll__graph.svg" width="519" height="162"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -106,7 +106,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af4d179bd1bf0d8da69d83f63fdd72412" id="r_af4d179bd1bf0d8da69d83f63fdd72412"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4d179bd1bf0d8da69d83f63fdd72412">step</a> (double d_t) const</td></tr>
 <tr class="memitem:aeb968caf58812bcab01534e72a63d552" id="r_aeb968caf58812bcab01534e72a63d552"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb968caf58812bcab01534e72a63d552">clearContribution</a> () const noexcept</td></tr>
 <tr class="memitem:a6fecb0563822fae0ef26d9f6209d0779" id="r_a6fecb0563822fae0ef26d9f6209d0779"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6fecb0563822fae0ef26d9f6209d0779">update_feed</a> (double t, double d_t, bool update_scalar=true) noexcept</td></tr>
-<tr class="memitem:ad68b5b710ed62a511e10dd6dd1a920f7" id="r_ad68b5b710ed62a511e10dd6dd1a920f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad68b5b710ed62a511e10dd6dd1a920f7">update</a> (<a class="el" href="structCmaUtils_1_1IterationState.html">CmaUtils::IterationState</a> &amp;&amp;new_state)</td></tr>
+<tr class="memitem:a57624461bad4807d5cacbd7d17e49b14" id="r_a57624461bad4807d5cacbd7d17e49b14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57624461bad4807d5cacbd7d17e49b14">updateHydro</a> (const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;newstate)</td></tr>
+<tr class="memitem:ac4417bd6943588aa09a442f6b89e388f" id="r_ac4417bd6943588aa09a442f6b89e388f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4417bd6943588aa09a442f6b89e388f">updateMCHydro</a> (std::span&lt; const double &gt; vl, std::span&lt; const std::size_t &gt; neighors_flat, std::span&lt; const double &gt; proba_flat, std::span&lt; const double &gt; out_flows)</td></tr>
 <tr class="memitem:aa12b65d19fa7e3eb74152b0252591a4d" id="r_aa12b65d19fa7e3eb74152b0252591a4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa12b65d19fa7e3eb74152b0252591a4d">reset</a> ()</td></tr>
 <tr class="memitem:a50e613289a3b6ca1abea7173e3eac01e" id="r_a50e613289a3b6ca1abea7173e3eac01e"><td class="memTemplParams" colspan="2">template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
 <tr class="memitem:a50e613289a3b6ca1abea7173e3eac01e template"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html">KernelInline::CycleFunctors</a>&lt; Space, Model &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50e613289a3b6ca1abea7173e3eac01e">init_functors</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt; container)</td></tr>
@@ -117,15 +118,14 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:aeb4997de646b6897f7879e1ad0a0b036" id="r_aeb4997de646b6897f7879e1ad0a0b036"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb4997de646b6897f7879e1ad0a0b036">setVolumes</a> () const</td></tr>
+<tr class="memitem:a325bd66b0afbb76176a6f8c607d9902b" id="r_a325bd66b0afbb76176a6f8c607d9902b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a325bd66b0afbb76176a6f8c607d9902b">updateScalarHydro</a> (const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;newstate)</td></tr>
+<tr class="memitem:aca22d485afff31beaed0ea9b508dac80" id="r_aca22d485afff31beaed0ea9b508dac80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca22d485afff31beaed0ea9b508dac80">setVolumes</a> (const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;newstate) const</td></tr>
 <tr class="memitem:a57ed01bdb3f08608bc945c745f33f3ab" id="r_a57ed01bdb3f08608bc945c745f33f3ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57ed01bdb3f08608bc945c745f33f3ab">setLiquidFlow</a> (<a class="el" href="classCmaUtils_1_1PreCalculatedHydroState.html">CmaUtils::PreCalculatedHydroState</a> *_flows_l)</td></tr>
 <tr class="memitem:a6ebf53048a2d93f04504352c79660c79" id="r_a6ebf53048a2d93f04504352c79660c79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ebf53048a2d93f04504352c79660c79">setGasFlow</a> (<a class="el" href="classCmaUtils_1_1PreCalculatedHydroState.html">CmaUtils::PreCalculatedHydroState</a> *_flows_g)</td></tr>
 <tr class="memitem:a4d9a0037502fc0784690c11c1a593a1f" id="r_a4d9a0037502fc0784690c11c1a593a1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d9a0037502fc0784690c11c1a593a1f">post_init_compartments</a> ()</td></tr>
 <tr class="memitem:a4295618336e99606be4e87b31feb848a" id="r_a4295618336e99606be4e87b31feb848a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#ac4db0c9d5b74f4c59a2ffcc7374cba1c">MC::KernelConcentrationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4295618336e99606be4e87b31feb848a">getkernel_concentration</a> () const</td></tr>
 <tr class="memitem:ae2077067788b0cb0535c62933724a1cf" id="r_ae2077067788b0cb0535c62933724a1cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2077067788b0cb0535c62933724a1cf">scatter_contribute</a> ()</td></tr>
 <tr class="memitem:ac396f393b4cf318b38364c5067254c80" id="r_ac396f393b4cf318b38364c5067254c80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac396f393b4cf318b38364c5067254c80">set_kernel_contribs_to_host</a> ()</td></tr>
-<tr class="memitem:a7f871ecc4425caa53838c0a620f3d686" id="r_a7f871ecc4425caa53838c0a620f3d686"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#a665208bc2eeca86defafa79514116981">DiagonalView</a>&lt; ComputeSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f871ecc4425caa53838c0a620f3d686">get_kernel_diagonal</a> () const</td></tr>
-<tr class="memitem:ac3b83e6fb1638ace3cbfa35833c1affc" id="r_ac3b83e6fb1638ace3cbfa35833c1affc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#a8d1e1d8236f8e2ff9c680bdbb2685c98">CumulativeProbabilityView</a>&lt; ComputeSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3b83e6fb1638ace3cbfa35833c1affc">get_kernel_cumulative_proba</a> () const</td></tr>
 <tr class="memitem:a9ea90cab13d8259f026f57baad1c989f" id="r_a9ea90cab13d8259f026f57baad1c989f"><td class="memItemLeft" align="right" valign="top">kernelContribution&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ea90cab13d8259f026f57baad1c989f">get_kernel_contribution</a> () const</td></tr>
 <tr class="memitem:ad3ffc3108a93d7f403e8f2b81cc24e6d" id="r_ad3ffc3108a93d7f403e8f2b81cc24e6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3ffc3108a93d7f403e8f2b81cc24e6d">post_init_concentration</a> (const <a class="el" href="structSimulation_1_1ScalarInitializer.html">ScalarInitializer</a> &amp;scalar_init)</td></tr>
 <tr class="memitem:a96e8f3fbde370c918a3710b0b910cd42" id="r_a96e8f3fbde370c918a3710b0b910cd42"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
@@ -138,7 +138,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:afcb68150cb8bd8788d31a3d1c54271df" id="r_afcb68150cb8bd8788d31a3d1c54271df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#aa1b418b6e151ebc14d95164d7370e35b">MC::ContributionView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcb68150cb8bd8788d31a3d1c54271df">contribs_scatter</a></td></tr>
 <tr class="memitem:a505fbf5573509d5d1d5674c436fe61f1" id="r_a505fbf5573509d5d1d5674c436fe61f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#af34adaabc60487412f7551db1dc83226">MapProbes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a505fbf5573509d5d1d5674c436fe61f1">probes</a></td></tr>
 <tr class="memitem:a2a7c5c496164e443222bc54de1edab70" id="r_a2a7c5c496164e443222bc54de1edab70"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a7c5c496164e443222bc54de1edab70">feed</a></td></tr>
-<tr class="memitem:aab3ff3f2caf2c3c94ebbe25786bea678" id="r_aab3ff3f2caf2c3c94ebbe25786bea678"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structCmaUtils_1_1IterationState.html">CmaUtils::IterationState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab3ff3f2caf2c3c94ebbe25786bea678">state</a></td></tr>
 <tr class="memitem:a448192ce085c5d0d5e71875a888e99b8" id="r_a448192ce085c5d0d5e71875a888e99b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a448192ce085c5d0d5e71875a888e99b8">const_number_simulation</a> = true</td></tr>
 <tr class="memitem:aaff5b41aa114de855a6296c31b47d474" id="r_aaff5b41aa114de855a6296c31b47d474"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaff5b41aa114de855a6296c31b47d474">is_two_phase_flow</a></td></tr>
 <tr class="memitem:a3471c9cb0e94d996538444e007b4f44a" id="r_a3471c9cb0e94d996538444e007b4f44a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3471c9cb0e94d996538444e007b4f44a">starting_time</a></td></tr>
@@ -294,6 +293,11 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aeb968caf58812bcab01534e72a63d552_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -323,7 +327,12 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a7b49fd171d4de8aa3949738da6c3810f_cgraph.svg" width="100%" height="591"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a7b49fd171d4de8aa3949738da6c3810f_cgraph.svg" width="100%" height="497"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a7b49fd171d4de8aa3949738da6c3810f_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -408,66 +417,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="ac3b83e6fb1638ace3cbfa35833c1affc" name="ac3b83e6fb1638ace3cbfa35833c1affc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3b83e6fb1638ace3cbfa35833c1affc">&#9670;&#160;</a></span>get_kernel_cumulative_proba()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespaceSimulation.html#a8d1e1d8236f8e2ff9c680bdbb2685c98">CumulativeProbabilityView</a>&lt; ComputeSpace &gt; Simulation::SimulationUnit::get_kernel_cumulative_proba </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ac3b83e6fb1638ace3cbfa35833c1affc_icgraph.svg" width="654" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<a id="a7f871ecc4425caa53838c0a620f3d686" name="a7f871ecc4425caa53838c0a620f3d686"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f871ecc4425caa53838c0a620f3d686">&#9670;&#160;</a></span>get_kernel_diagonal()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespaceSimulation.html#a665208bc2eeca86defafa79514116981">DiagonalView</a>&lt; ComputeSpace &gt; Simulation::SimulationUnit::get_kernel_diagonal </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a7f871ecc4425caa53838c0a620f3d686_icgraph.svg" width="634" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
 <a id="a0d675ed463b0caaeea75be8bd87d72cc" name="a0d675ed463b0caaeea75be8bd87d72cc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0d675ed463b0caaeea75be8bd87d72cc">&#9670;&#160;</a></span>get_probes()</h2>
 
@@ -540,7 +489,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_abee4f5b8a764dc6655ee5a91fcab7080_icgraph.svg" width="403" height="162"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_abee4f5b8a764dc6655ee5a91fcab7080_icgraph.svg" width="410" height="224"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -570,7 +519,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a3d0ee29e0a425f79fa8cbc620d2abb99_icgraph.svg" width="403" height="162"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a3d0ee29e0a425f79fa8cbc620d2abb99_icgraph.svg" width="410" height="224"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -597,6 +546,11 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a36218d1f9912967dd9a559cbf40c0b55_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -614,6 +568,11 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a401844c1e2eee70c2b043b949d86895d_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -672,7 +631,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a4295618336e99606be4e87b31feb848a_icgraph.svg" width="410" height="136"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a4295618336e99606be4e87b31feb848a_icgraph.svg" width="634" height="136"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -702,7 +661,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a95e094f9921c520f4a41e3b9a308b187_icgraph.svg" width="403" height="99"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a95e094f9921c520f4a41e3b9a308b187_icgraph.svg" width="410" height="162"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -730,9 +689,9 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 <div class="dynheader">
-Here is the caller graph for this function:</div>
+Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_adc096ee7d35524a8107a3390daa55a1a_icgraph.svg" width="403" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_adc096ee7d35524a8107a3390daa55a1a_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -757,6 +716,11 @@ template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a50e613289a3b6ca1abea7173e3eac01e_cgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a50e613289a3b6ca1abea7173e3eac01e_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -857,7 +821,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a96e8f3fbde370c918a3710b0b910cd42_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a96e8f3fbde370c918a3710b0b910cd42_icgraph.svg" width="634" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -961,14 +925,9 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
 </table>
 </div><div class="memdoc">
 <div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad984b5d95455d6db475d8b6e20077a0c_cgraph.svg" width="431" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad984b5d95455d6db475d8b6e20077a0c_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad984b5d95455d6db475d8b6e20077a0c_icgraph.svg" width="634" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -987,6 +946,11 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aa12b65d19fa7e3eb74152b0252591a4d_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -1020,7 +984,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ae2077067788b0cb0535c62933724a1cf_icgraph.svg" width="634" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ae2077067788b0cb0535c62933724a1cf_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -1050,7 +1014,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ac396f393b4cf318b38364c5067254c80_icgraph.svg" width="650" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ac396f393b4cf318b38364c5067254c80_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -1181,8 +1145,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="aeb4997de646b6897f7879e1ad0a0b036" name="aeb4997de646b6897f7879e1ad0a0b036"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb4997de646b6897f7879e1ad0a0b036">&#9670;&#160;</a></span>setVolumes()</h2>
+<a id="aca22d485afff31beaed0ea9b508dac80" name="aca22d485afff31beaed0ea9b508dac80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca22d485afff31beaed0ea9b508dac80">&#9670;&#160;</a></span>setVolumes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1193,7 +1157,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">void Simulation::SimulationUnit::setVolumes </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>newstate</em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -1206,7 +1170,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aeb4997de646b6897f7879e1ad0a0b036_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_aca22d485afff31beaed0ea9b508dac80_icgraph.svg" width="100%" height="396"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -1225,6 +1189,11 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_af4d179bd1bf0d8da69d83f63fdd72412_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -1250,27 +1219,10 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad68b5b710ed62a511e10dd6dd1a920f7" name="ad68b5b710ed62a511e10dd6dd1a920f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad68b5b710ed62a511e10dd6dd1a920f7">&#9670;&#160;</a></span>update()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Simulation::SimulationUnit::update </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structCmaUtils_1_1IterationState.html">CmaUtils::IterationState</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>new_state</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 <div class="dynheader">
-Here is the call graph for this function:</div>
+Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad68b5b710ed62a511e10dd6dd1a920f7_cgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a87b7ba2681ea64a4f8fa68dd423a3221_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -1306,6 +1258,109 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a6fecb0563822fae0ef26d9f6209d0779_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="a57624461bad4807d5cacbd7d17e49b14" name="a57624461bad4807d5cacbd7d17e49b14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57624461bad4807d5cacbd7d17e49b14">&#9670;&#160;</a></span>updateHydro()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Simulation::SimulationUnit::updateHydro </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>newstate</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a57624461bad4807d5cacbd7d17e49b14_cgraph.svg" width="634" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a57624461bad4807d5cacbd7d17e49b14_icgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="ac4417bd6943588aa09a442f6b89e388f" name="ac4417bd6943588aa09a442f6b89e388f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4417bd6943588aa09a442f6b89e388f">&#9670;&#160;</a></span>updateMCHydro()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Simulation::SimulationUnit::updateMCHydro </td>
+          <td>(</td>
+          <td class="paramtype">std::span&lt; const double &gt;</td>          <td class="paramname"><span class="paramname"><em>vl</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const std::size_t &gt;</td>          <td class="paramname"><span class="paramname"><em>neighors_flat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const double &gt;</td>          <td class="paramname"><span class="paramname"><em>proba_flat</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; const double &gt;</td>          <td class="paramname"><span class="paramname"><em>out_flows</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ac4417bd6943588aa09a442f6b89e388f_icgraph.svg" width="634" height="78"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="a325bd66b0afbb76176a6f8c607d9902b" name="a325bd66b0afbb76176a6f8c607d9902b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a325bd66b0afbb76176a6f8c607d9902b">&#9670;&#160;</a></span>updateScalarHydro()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Simulation::SimulationUnit::updateScalarHydro </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>newstate</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a325bd66b0afbb76176a6f8c607d9902b_cgraph.svg" width="410" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a325bd66b0afbb76176a6f8c607d9902b_icgraph.svg" width="634" height="78"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -1588,28 +1643,6 @@ Here is the call graph for this function:</div>
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">        0.</div>
 </div><!-- fragment -->
-</div>
-</div>
-<a id="aab3ff3f2caf2c3c94ebbe25786bea678" name="aab3ff3f2caf2c3c94ebbe25786bea678"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab3ff3f2caf2c3c94ebbe25786bea678">&#9670;&#160;</a></span>state</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structCmaUtils_1_1IterationState.html">CmaUtils::IterationState</a> Simulation::SimulationUnit::state</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>

@@ -6,6 +6,7 @@ var namespaceMC_1_1Distributions =
     [ "ScaledTruncatedNormal", "structMC_1_1Distributions_1_1ScaledTruncatedNormal.html", "structMC_1_1Distributions_1_1ScaledTruncatedNormal" ],
     [ "SkewNormal", "structMC_1_1Distributions_1_1SkewNormal.html", "structMC_1_1Distributions_1_1SkewNormal" ],
     [ "TruncatedNormal", "structMC_1_1Distributions_1_1TruncatedNormal.html", "structMC_1_1Distributions_1_1TruncatedNormal" ],
+    [ "Uniform", "structMC_1_1Distributions_1_1Uniform.html", "structMC_1_1Distributions_1_1Uniform" ],
     [ "ProbabilityLaw", "conceptMC_1_1Distributions_1_1ProbabilityLaw.html", null ],
     [ "erfinv", "namespaceMC_1_1Distributions.html#a351272c0fa13e73d23c7b1caf92e858f", null ],
     [ "norminv", "namespaceMC_1_1Distributions.html#a3c07f6cf61b1c67ea9b2b3e0d6c42cc7", null ],

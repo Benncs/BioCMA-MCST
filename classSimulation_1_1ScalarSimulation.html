@@ -89,8 +89,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9721b2cf4617bf55c133b7b1527a8879" id="r_a9721b2cf4617bf55c133b7b1527a8879"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9721b2cf4617bf55c133b7b1527a8879">~ScalarSimulation</a> ()=default</td></tr>
 <tr class="memitem:a90436e426f916e5b2540941b0dce8cc5" id="r_a90436e426f916e5b2540941b0dce8cc5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a90436e426f916e5b2540941b0dce8cc5">deep_copy_concentration</a> (const std::vector&lt; double &gt; &amp;data)</td></tr>
 <tr class="memitem:aa78bf7ac21d619b85feca2faba599965" id="r_aa78bf7ac21d619b85feca2faba599965"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa78bf7ac21d619b85feca2faba599965">reduce_contribs</a> (std::span&lt; const double &gt; data)</td></tr>
-<tr class="memitem:aaf6f2870a3ecebc9daa86342f1608a3e" id="r_aaf6f2870a3ecebc9daa86342f1608a3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf6f2870a3ecebc9daa86342f1608a3e">performStepGL</a> (double d_t, const FlowMatrixType &amp;m_transition, const ColMajorMatrixtype&lt; double &gt; &amp;mtr, <a class="el" href="namespaceSimulation_1_1MassTransfer.html#ae8feef3b084e54617612bce610be7c0b">MassTransfer::Sign</a> sign)</td></tr>
-<tr class="memitem:ac17e1fb2da810c4a21e94ce0caf09e17" id="r_ac17e1fb2da810c4a21e94ce0caf09e17"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac17e1fb2da810c4a21e94ce0caf09e17">performStep</a> (double d_t, const FlowMatrixType &amp;m_transition)</td></tr>
+<tr class="memitem:a86218581cacd5f727f67d2bce5757065" id="r_a86218581cacd5f727f67d2bce5757065"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86218581cacd5f727f67d2bce5757065">set_transition</a> (<a class="el" href="namespaceCmaUtils.html#a345f1e3ce09450d18c2de5f270cc75f6">CmaUtils::StateCooMatrixType</a> &amp;&amp;transition)</td></tr>
+<tr class="memitem:a1d85c6192c8108ffce96750cd3183a1b" id="r_a1d85c6192c8108ffce96750cd3183a1b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d85c6192c8108ffce96750cd3183a1b">performStepGL</a> (double d_t, const ColMajorMatrixtype&lt; double &gt; &amp;mtr, <a class="el" href="namespaceSimulation_1_1MassTransfer.html#ae8feef3b084e54617612bce610be7c0b">MassTransfer::Sign</a> sign)</td></tr>
+<tr class="memitem:a29bb82e073952adbe3175e1ad5c76425" id="r_a29bb82e073952adbe3175e1ad5c76425"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29bb82e073952adbe3175e1ad5c76425">performStep</a> (double d_t)</td></tr>
 <tr class="memitem:ae4b543a150df1ccde9002adad7f89e46" id="r_ae4b543a150df1ccde9002adad7f89e46"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4b543a150df1ccde9002adad7f89e46">synchro_sources</a> ()</td></tr>
 <tr class="memitem:a93d2263bb3d23c695326b34742617ca1" id="r_a93d2263bb3d23c695326b34742617ca1"><td class="memItemLeft" align="right" valign="top">ColMajorMatrixtype&lt; double &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93d2263bb3d23c695326b34742617ca1">get_concentration</a> ()</td></tr>
 <tr class="memitem:ad512fdf81a2b850d01330c7597a008af" id="r_ad512fdf81a2b850d01330c7597a008af"><td class="memItemLeft" align="right" valign="top">ColMajorKokkosScalarMatrix&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad512fdf81a2b850d01330c7597a008af">get_device_concentration</a> () const</td></tr>
@@ -102,6 +103,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acbf90360d259eea04a5672e3070cea8f" id="r_acbf90360d259eea04a5672e3070cea8f"><td class="memItemLeft" align="right" valign="top">kernelContribution&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acbf90360d259eea04a5672e3070cea8f">get_kernel_contribution</a> () const</td></tr>
 <tr class="memitem:ab395ffa28c8c371fdf46fb50261a5a76" id="r_ab395ffa28c8c371fdf46fb50261a5a76"><td class="memItemLeft" align="right" valign="top">const ColMajorMatrixtype&lt; double &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab395ffa28c8c371fdf46fb50261a5a76">get_mass_transfer</a> () const</td></tr>
 <tr class="memitem:afcf9b11b8de7215be6b83ed6a2aceaf0" id="r_afcf9b11b8de7215be6b83ed6a2aceaf0"><td class="memItemLeft" align="right" valign="top">std::span&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcf9b11b8de7215be6b83ed6a2aceaf0">getConcentrationData</a> ()</td></tr>
+<tr class="memitem:ad4f612748846283f7509a03767294eb3" id="r_ad4f612748846283f7509a03767294eb3"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad4f612748846283f7509a03767294eb3">getTransition</a> () const</td></tr>
 <tr class="memitem:aab5e48f3385a40d87dd678103097ec06" id="r_aab5e48f3385a40d87dd678103097ec06"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab5e48f3385a40d87dd678103097ec06">n_row</a> () const noexcept</td></tr>
 <tr class="memitem:a5ca5e122100fad91f418cbbea5bbb439" id="r_a5ca5e122100fad91f418cbbea5bbb439"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ca5e122100fad91f418cbbea5bbb439">n_col</a> () const noexcept</td></tr>
 <tr class="memitem:ae80baa6cc64f5e0bae5847d0b1b739fc" id="r_ae80baa6cc64f5e0bae5847d0b1b739fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae80baa6cc64f5e0bae5847d0b1b739fc">set_mass</a> ()</td></tr>
@@ -117,6 +119,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:afa3ac3185393ec60e84ea8b305c7ebc8" id="r_afa3ac3185393ec60e84ea8b305c7ebc8"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa3ac3185393ec60e84ea8b305c7ebc8">n_c</a></td></tr>
 <tr class="memitem:afa0934a601222e1b923d8dd4c9b77eab" id="r_afa0934a601222e1b923d8dd4c9b77eab"><td class="memItemLeft" align="right" valign="top">ColMajorMatrixtype&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa0934a601222e1b923d8dd4c9b77eab">total_mass</a></td></tr>
 <tr class="memitem:a7ba3ff343e635e84a6ed36991731510e" id="r_a7ba3ff343e635e84a6ed36991731510e"><td class="memItemLeft" align="right" valign="top">kernelContribution&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ba3ff343e635e84a6ed36991731510e">contribs</a></td></tr>
+<tr class="memitem:ab544cc3abbac4d3622ff1a1d60531001" id="r_ab544cc3abbac4d3622ff1a1d60531001"><td class="memItemLeft" align="right" valign="top">FlowMatrixType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab544cc3abbac4d3622ff1a1d60531001">m_transition</a></td></tr>
 <tr class="memitem:a898e819cf4c3e06cd089ca05c1add8df" id="r_a898e819cf4c3e06cd089ca05c1add8df"><td class="memItemLeft" align="right" valign="top">DiagonalType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a898e819cf4c3e06cd089ca05c1add8df">volumes_inverse</a></td></tr>
 <tr class="memitem:afcfe575dd87fccc56a014f84fe15fe1a" id="r_afcfe575dd87fccc56a014f84fe15fe1a"><td class="memItemLeft" align="right" valign="top">DiagonalType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcfe575dd87fccc56a014f84fe15fe1a">m_volumes</a></td></tr>
 <tr class="memitem:afe8d8df5f68be02f54478cff3abeb9f2" id="r_afe8d8df5f68be02f54478cff3abeb9f2"><td class="memItemLeft" align="right" valign="top">DiagonalType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe8d8df5f68be02f54478cff3abeb9f2">sink</a></td></tr>
@@ -410,11 +413,6 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1ScalarSimulation_ab395ffa28c8c371fdf46fb50261a5a76_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
 
 </div>
 </div>
@@ -478,6 +476,31 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="ad4f612748846283f7509a03767294eb3" name="ad4f612748846283f7509a03767294eb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4f612748846283f7509a03767294eb3">&#9670;&#160;</a></span>getTransition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto &amp; Simulation::ScalarSimulation::getTransition </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a7f914d5d6f893f873cac2697cc41682b" name="a7f914d5d6f893f873cac2697cc41682b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7f914d5d6f893f873cac2697cc41682b">&#9670;&#160;</a></span>getVolume()</h2>
 
@@ -528,7 +551,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1ScalarSimulation_a5ca5e122100fad91f418cbbea5bbb439_icgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1ScalarSimulation_a5ca5e122100fad91f418cbbea5bbb439_icgraph.svg" width="100%" height="580"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -623,8 +646,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="ac17e1fb2da810c4a21e94ce0caf09e17" name="ac17e1fb2da810c4a21e94ce0caf09e17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac17e1fb2da810c4a21e94ce0caf09e17">&#9670;&#160;</a></span>performStep()</h2>
+<a id="a29bb82e073952adbe3175e1ad5c76425" name="a29bb82e073952adbe3175e1ad5c76425"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29bb82e073952adbe3175e1ad5c76425">&#9670;&#160;</a></span>performStep()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -632,20 +655,16 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="memname">void Simulation::ScalarSimulation::performStep </td>
           <td>(</td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>d_t</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>d_t</em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">const FlowMatrixType &amp;</td>          <td class="paramname"><span class="paramname"><em>m_transition</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="aaf6f2870a3ecebc9daa86342f1608a3e" name="aaf6f2870a3ecebc9daa86342f1608a3e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf6f2870a3ecebc9daa86342f1608a3e">&#9670;&#160;</a></span>performStepGL()</h2>
+<a id="a1d85c6192c8108ffce96750cd3183a1b" name="a1d85c6192c8108ffce96750cd3183a1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d85c6192c8108ffce96750cd3183a1b">&#9670;&#160;</a></span>performStepGL()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -654,11 +673,6 @@ Here is the call graph for this function:</div>
           <td class="memname">void Simulation::ScalarSimulation::performStepGL </td>
           <td>(</td>
           <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>d_t</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const FlowMatrixType &amp;</td>          <td class="paramname"><span class="paramname"><em>m_transition</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -723,11 +737,6 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1ScalarSimulation_a5a793304a495454f9969fcd83e70f654_icgraph.svg" width="436" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
@@ -753,11 +762,6 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1ScalarSimulation_afb6dadda99cfce2c2172ad5fabc42682_icgraph.svg" width="439" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
@@ -775,11 +779,6 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1ScalarSimulation_ae80baa6cc64f5e0bae5847d0b1b739fc_icgraph.svg" width="436" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
@@ -809,10 +808,27 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a86218581cacd5f727f67d2bce5757065" name="a86218581cacd5f727f67d2bce5757065"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86218581cacd5f727f67d2bce5757065">&#9670;&#160;</a></span>set_transition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Simulation::ScalarSimulation::set_transition </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceCmaUtils.html#a345f1e3ce09450d18c2de5f270cc75f6">CmaUtils::StateCooMatrixType</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>transition</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 <div class="dynheader">
-Here is the caller graph for this function:</div>
+Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1ScalarSimulation_a2ec477ff4779eeeb0fc66eb443c5900a_icgraph.svg" width="436" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1ScalarSimulation_a86218581cacd5f727f67d2bce5757065_cgraph.svg" width="432" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -839,11 +855,6 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1ScalarSimulation_a699b0f56e5d0145718249e3b658a146c_icgraph.svg" width="436" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
@@ -877,11 +888,6 @@ Here is the caller graph for this function:</div>
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1ScalarSimulation_a45bff3c267cd20371ee730cb07ba4a37_cgraph.svg" width="436" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1ScalarSimulation_a45bff3c267cd20371ee730cb07ba4a37_icgraph.svg" width="436" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -962,6 +968,28 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">kernelContribution Simulation::ScalarSimulation::contribs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab544cc3abbac4d3622ff1a1d60531001" name="ab544cc3abbac4d3622ff1a1d60531001"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab544cc3abbac4d3622ff1a1d60531001">&#9670;&#160;</a></span>m_transition</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">FlowMatrixType Simulation::ScalarSimulation::m_transition</td>
         </tr>
       </table>
   </td>

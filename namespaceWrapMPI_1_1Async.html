@@ -75,18 +75,99 @@ $(function(){initNavTree('namespaceWrapMPI_1_1Async.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:adc3dcdbee2e0e82e429b5962cb3ce32c" id="r_adc3dcdbee2e0e82e429b5962cb3ce32c"><td class="memItemLeft" align="right" valign="top">MPI_Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc3dcdbee2e0e82e429b5962cb3ce32c">wait</a> (MPI_Request &amp;request)</td></tr>
-<tr class="memitem:a59ad59e497d926c7bdc45585bd715410" id="r_a59ad59e497d926c7bdc45585bd715410"><td class="memTemplParams" colspan="2">template&lt;POD_t DataType&gt; </td></tr>
-<tr class="memitem:a59ad59e497d926c7bdc45585bd715410 template"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59ad59e497d926c7bdc45585bd715410">_send_unsafe</a> (MPI_Request &amp;request, DataType *buf, size_t buf_size, size_t dest, size_t tag) noexcept</td></tr>
+<tr class="memitem:a308ff62d0a448ffee6da1ae29c229020" id="r_a308ff62d0a448ffee6da1ae29c229020"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a308ff62d0a448ffee6da1ae29c229020">wait</a> (MPI_Request &amp;request, MPI_Status *status)</td></tr>
 <tr class="memitem:aea9ea25d4513c086000ad935de0c2a63" id="r_aea9ea25d4513c086000ad935de0c2a63"><td class="memTemplParams" colspan="2">template&lt;POD_t DataType&gt; </td></tr>
 <tr class="memitem:aea9ea25d4513c086000ad935de0c2a63 template"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea9ea25d4513c086000ad935de0c2a63">send</a> (MPI_Request &amp;request, DataType data, size_t dest, size_t tag)</td></tr>
 <tr class="memitem:a14ced5fc699f316ee5512f66052ec8ad" id="r_a14ced5fc699f316ee5512f66052ec8ad"><td class="memTemplParams" colspan="2">template&lt;POD_t DataType&gt; </td></tr>
 <tr class="memitem:a14ced5fc699f316ee5512f66052ec8ad template"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a14ced5fc699f316ee5512f66052ec8ad">send_v</a> (MPI_Request &amp;request, std::span&lt; const DataType &gt; data, size_t dest, size_t tag, bool send_size) noexcept</td></tr>
 <tr class="memitem:a1c9861a120adf6ce7bd019204d20dafb" id="r_a1c9861a120adf6ce7bd019204d20dafb"><td class="memTemplParams" colspan="2">template&lt;POD_t DataType&gt; </td></tr>
 <tr class="memitem:a1c9861a120adf6ce7bd019204d20dafb template"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c9861a120adf6ce7bd019204d20dafb">recv_span</a> (MPI_Request &amp;request, std::span&lt; DataType &gt; buf, size_t src, size_t tag) noexcept</td></tr>
+<tr class="memitem:a78ae068bf02daca0e7272ac0e2f7ca45" id="r_a78ae068bf02daca0e7272ac0e2f7ca45"><td class="memTemplParams" colspan="2">template&lt;POD_t DataType&gt; </td></tr>
+<tr class="memitem:a78ae068bf02daca0e7272ac0e2f7ca45 template"><td class="memItemLeft" align="right" valign="top">std::optional&lt; DataType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78ae068bf02daca0e7272ac0e2f7ca45">recv</a> (size_t src, MPI_Request &amp;request, size_t tag) noexcept</td></tr>
+<tr class="memitem:ac5fbf6f40e01dc061922ca4f674b317e" id="r_ac5fbf6f40e01dc061922ca4f674b317e"><td class="memTemplParams" colspan="2">template&lt;POD_t T&gt; </td></tr>
+<tr class="memitem:ac5fbf6f40e01dc061922ca4f674b317e template"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5fbf6f40e01dc061922ca4f674b317e">_broadcast_unsafe</a> (T *data, size_t _size, size_t root, MPI_Request &amp;request)</td></tr>
+<tr class="memitem:a44540918e862462a382d03720d97e19a" id="r_a44540918e862462a382d03720d97e19a"><td class="memTemplParams" colspan="2">template&lt;POD_t T&gt; </td></tr>
+<tr class="memitem:a44540918e862462a382d03720d97e19a template"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a44540918e862462a382d03720d97e19a">broadcast_span</a> (std::span&lt; T &gt; data, size_t root, MPI_Request &amp;request)</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="a59ad59e497d926c7bdc45585bd715410" name="a59ad59e497d926c7bdc45585bd715410"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59ad59e497d926c7bdc45585bd715410">&#9670;&#160;</a></span>_send_unsafe()</h2>
+<a id="ac5fbf6f40e01dc061922ca4f674b317e" name="ac5fbf6f40e01dc061922ca4f674b317e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5fbf6f40e01dc061922ca4f674b317e">&#9670;&#160;</a></span>_broadcast_unsafe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;POD_t T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">int WrapMPI::Async::_broadcast_unsafe </td>
+          <td>(</td>
+          <td class="paramtype">T *</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>_size</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>root</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MPI_Request &amp;</td>          <td class="paramname"><span class="paramname"><em>request</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_1_1Async_ac5fbf6f40e01dc061922ca4f674b317e_cgraph.svg" width="382" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_1_1Async_ac5fbf6f40e01dc061922ca4f674b317e_icgraph.svg" width="468" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="a44540918e862462a382d03720d97e19a" name="a44540918e862462a382d03720d97e19a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44540918e862462a382d03720d97e19a">&#9670;&#160;</a></span>broadcast_span()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;POD_t T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">int WrapMPI::Async::broadcast_span </td>
+          <td>(</td>
+          <td class="paramtype">std::span&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>root</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MPI_Request &amp;</td>          <td class="paramname"><span class="paramname"><em>request</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_1_1Async_a44540918e862462a382d03720d97e19a_cgraph.svg" width="648" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="a78ae068bf02daca0e7272ac0e2f7ca45" name="a78ae068bf02daca0e7272ac0e2f7ca45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78ae068bf02daca0e7272ac0e2f7ca45">&#9670;&#160;</a></span>recv()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -97,24 +178,14 @@ template&lt;POD_t DataType&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int WrapMPI::Async::_send_unsafe </td>
+          <td class="memname">std::optional&lt; DataType &gt; WrapMPI::Async::recv </td>
           <td>(</td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>src</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">MPI_Request &amp;</td>          <td class="paramname"><span class="paramname"><em>request</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">DataType *</td>          <td class="paramname"><span class="paramname"><em>buf</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>buf_size</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>dest</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -124,20 +195,10 @@ template&lt;POD_t DataType&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel noexcept">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_1_1Async_a59ad59e497d926c7bdc45585bd715410_cgraph.svg" width="352" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_1_1Async_a59ad59e497d926c7bdc45585bd715410_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
-</div>
 
 </div>
 </div>
@@ -218,11 +279,6 @@ template&lt;POD_t DataType&gt; </div>
       </table>
 </div><div class="memdoc">
 <div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_1_1Async_aea9ea25d4513c086000ad935de0c2a63_cgraph.svg" width="555" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_1_1Async_aea9ea25d4513c086000ad935de0c2a63_icgraph.svg" width="634" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
@@ -276,7 +332,7 @@ template&lt;POD_t DataType&gt; </div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_1_1Async_a14ced5fc699f316ee5512f66052ec8ad_cgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_1_1Async_a14ced5fc699f316ee5512f66052ec8ad_cgraph.svg" width="382" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -287,7 +343,7 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <a id="adc3dcdbee2e0e82e429b5962cb3ce32c" name="adc3dcdbee2e0e82e429b5962cb3ce32c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adc3dcdbee2e0e82e429b5962cb3ce32c">&#9670;&#160;</a></span>wait()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adc3dcdbee2e0e82e429b5962cb3ce32c">&#9670;&#160;</a></span>wait() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -300,6 +356,40 @@ Here is the caller graph for this function:</div>
           <td>(</td>
           <td class="paramtype">MPI_Request &amp;</td>          <td class="paramname"><span class="paramname"><em>request</em></span></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_1_1Async_adc3dcdbee2e0e82e429b5962cb3ce32c_icgraph.svg" width="571" height="99"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="a308ff62d0a448ffee6da1ae29c229020" name="a308ff62d0a448ffee6da1ae29c229020"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a308ff62d0a448ffee6da1ae29c229020">&#9670;&#160;</a></span>wait() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void WrapMPI::Async::wait </td>
+          <td>(</td>
+          <td class="paramtype">MPI_Request &amp;</td>          <td class="paramname"><span class="paramname"><em>request</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MPI_Status *</td>          <td class="paramname"><span class="paramname"><em>status</em></span>&#160;)</td>
         </tr>
       </table>
   </td>

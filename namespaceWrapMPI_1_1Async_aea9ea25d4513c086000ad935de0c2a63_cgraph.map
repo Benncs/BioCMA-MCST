@@ -1,7 +1,0 @@
-<map id="WrapMPI::Async::send" name="WrapMPI::Async::send">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,12,160,37"/>
-<area shape="rect" id="Node000002" href="$namespaceWrapMPI_1_1Async.html#a59ad59e497d926c7bdc45585bd715410" title=" " alt="" coords="208,5,369,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,22,192,22,192,27,160,27"/>
-<area shape="rect" id="Node000003" href="$namespaceWrapMPI.html#adab3300a86b8c0227268b23134b57a24" title=" " alt="" coords="417,12,549,37"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="369,22,401,22,401,27,369,27"/>
-</map>

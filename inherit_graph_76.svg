@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structSimulation_1_1KernelInline_1_1LeavingFlow.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="structSimulation_1_1KernelInline_1_1CycleReduceType.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="118,-29 0,-29 0,0 118,0 118,-29"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::KernelInline</text>
-<text xml:space="preserve" text-anchor="middle" x="59" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::LeavingFlow</text>
+<text xml:space="preserve" text-anchor="middle" x="59" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::CycleReduceType</text>
 </a>
 </g>
 </g>

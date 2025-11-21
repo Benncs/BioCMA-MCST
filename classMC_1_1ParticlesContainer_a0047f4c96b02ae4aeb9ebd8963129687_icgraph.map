@@ -1,7 +1,9 @@
 <map id="MC::ParticlesContainer::update_and_remove_inactive" name="MC::ParticlesContainer::update_and_remove_inactive">
-<area shape="rect" id="Node000001" title="Update the number of non&#45;idle particle and remove if total number exceeds threshold May call : remove..." alt="" coords="452,5,648,44"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a96e8f3fbde370c918a3710b0b910cd42" title=" " alt="" coords="229,5,404,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="436,27,405,27,405,22,436,22"/>
-<area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#a7b49fd171d4de8aa3949738da6c3810f" title=" " alt="" coords="5,5,181,44"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="213,27,181,27,181,22,213,22"/>
+<area shape="rect" id="Node000001" title="Update the number of non&#45;idle particle and remove if total number exceeds threshold May call : remove..." alt="" coords="675,5,872,44"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a96e8f3fbde370c918a3710b0b910cd42" title=" " alt="" coords="452,5,627,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="660,27,628,27,628,22,660,22"/>
+<area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#a7b49fd171d4de8aa3949738da6c3810f" title=" " alt="" coords="229,5,404,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="437,27,404,27,404,22,437,22"/>
+<area shape="rect" id="Node000004" href="$classSimulation_1_1SimulationUnit.html#adc096ee7d35524a8107a3390daa55a1a" title=" " alt="" coords="5,5,181,44"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="213,27,181,27,181,22,213,22"/>
 </map>

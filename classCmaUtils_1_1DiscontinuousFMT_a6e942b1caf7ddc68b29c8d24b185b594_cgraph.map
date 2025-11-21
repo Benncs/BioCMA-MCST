@@ -1,5 +1,0 @@
-<map id="CmaUtils::DiscontinuousFMT::current_liq_hydro_state" name="CmaUtils::DiscontinuousFMT::current_liq_hydro_state">
-<area shape="rect" id="Node000001" title="Get current liquid state read from CmaRead." alt="" coords="5,5,200,44"/>
-<area shape="rect" id="Node000002" href="$classCmaUtils_1_1FlowMapTransitionner.html#a95f2c1ce2a5c0dcccb0e0be0341fa466" title="Return the index of the current ProxyPreCalculatedHydroState." alt="" coords="248,5,459,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,22,232,22,232,27,200,27"/>
-</map>

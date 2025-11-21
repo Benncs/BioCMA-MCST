@@ -1,0 +1,25 @@
+<map id="Core::GlobalInitialiser::init_transitionner" name="Core::GlobalInitialiser::init_transitionner">
+<area shape="rect" id="Node000001" title="Initializes a transitioner with the provided flow iterator." alt="" coords="5,131,152,169"/>
+<area shape="rect" id="Node000002" href="$namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383" title=" " alt="" coords="233,82,313,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="147,128,217,107,218,112,149,133"/>
+<area shape="rect" id="Node000003" href="$classCore_1_1GlobalInitialiser.html#a97eff5566ced6ba6449eb532f0babadc" title="Initializes a flow iterator." alt="" coords="200,131,346,169"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,147,185,147,185,153,152,153"/>
+<area shape="rect" id="Node000011" href="$classCore_1_1GlobalInitialiser.html#a3844076c910ed26f60f42bada71cc09e" title="Validates the specified initialization step and any additional steps." alt="" coords="394,193,540,232"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="152,167,200,178,292,192,379,202,378,208,292,198,199,183,151,172"/>
+<area shape="rect" id="Node000004" href="$classCore_1_1GlobalInitialiser.html#a5134f9db1f59d9124d5fdec88e3e99f3" title="Checks the validity of specified initialization steps." alt="" coords="394,5,540,44"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="326,128,344,116,359,100,368,85,377,70,392,53,396,50,400,55,396,57,381,73,372,88,363,104,348,120,329,132"/>
+<area shape="rect" id="Node000005" href="$classCore_1_1GlobalInitialiser.html#a36655d4a10ebb302f64512e2cda8649d" title="Host speciffic state init." alt="" coords="394,68,540,107"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="334,128,390,109,391,115,336,133"/>
+<area shape="rect" id="Node000006" href="$classCore_1_1GlobalInitialiser.html#aa042e8d396a5287c49fb6a8b81eba209" title="Performs MPI broadcast for synchronization." alt="" coords="394,131,540,169"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="347,147,379,147,379,153,347,153"/>
+<area shape="poly" id="edge11_Node000003_Node000011" title=" " alt="" coords="336,167,391,185,390,191,334,172"/>
+<area shape="rect" id="Node000007" href="$namespaceWrapMPI.html#a1a08bbe69602ac2f4f38e1a0d45275cb" title=" " alt="" coords="599,88,717,113"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="540,128,592,115,593,120,541,134"/>
+<area shape="rect" id="Node000008" href="$namespaceWrapMPI.html#aa924ad0d911109a9e6e3a20bebc3b316" title=" " alt="" coords="776,114,929,138"/>
+<area shape="poly" id="edge10_Node000006_Node000008" title=" " alt="" coords="541,143,760,129,761,134,541,148"/>
+<area shape="rect" id="Node000009" href="$namespaceWrapMPI.html#a372df5351a2085df252cc9f4cceae7de" title="Broadcasts a single data item to all processes." alt="" coords="588,187,728,212"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="541,166,593,180,592,185,540,172"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="718,106,760,111,760,117,717,111"/>
+<area shape="rect" id="Node000010" href="$namespaceWrapMPI.html#adab3300a86b8c0227268b23134b57a24" title=" " alt="" coords="786,187,918,212"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="728,197,771,197,771,202,728,202"/>
+</map>

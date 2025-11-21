@@ -9,8 +9,6 @@ var classSimulation_1_1SimulationUnit =
     [ "get_end_time_mut", "classSimulation_1_1SimulationUnit.html#a96dd3385c1572462045e9259c497ef39", null ],
     [ "get_feed", "classSimulation_1_1SimulationUnit.html#a11586c893be90a5bf77a2f054618a7da", null ],
     [ "get_kernel_contribution", "classSimulation_1_1SimulationUnit.html#a9ea90cab13d8259f026f57baad1c989f", null ],
-    [ "get_kernel_cumulative_proba", "classSimulation_1_1SimulationUnit.html#ac3b83e6fb1638ace3cbfa35833c1affc", null ],
-    [ "get_kernel_diagonal", "classSimulation_1_1SimulationUnit.html#a7f871ecc4425caa53838c0a620f3d686", null ],
     [ "get_probes", "classSimulation_1_1SimulationUnit.html#a0d675ed463b0caaeea75be8bd87d72cc", null ],
     [ "get_start_time_mut", "classSimulation_1_1SimulationUnit.html#a1fcb3049cd8fc7662896a1a69cdad0de", null ],
     [ "getCgasData", "classSimulation_1_1SimulationUnit.html#abee4f5b8a764dc6655ee5a91fcab7080", null ],
@@ -36,11 +34,13 @@ var classSimulation_1_1SimulationUnit =
     [ "setLogger", "classSimulation_1_1SimulationUnit.html#a3feb4071ee1e31a6a0972fa5dedf657f", null ],
     [ "setMtrModel", "classSimulation_1_1SimulationUnit.html#a94cfe4657d93316bd4609e1ddd2d64cc", null ],
     [ "setProbes", "classSimulation_1_1SimulationUnit.html#a81bf23a3b63cdcfedf4ec8c77057e82a", null ],
-    [ "setVolumes", "classSimulation_1_1SimulationUnit.html#aeb4997de646b6897f7879e1ad0a0b036", null ],
+    [ "setVolumes", "classSimulation_1_1SimulationUnit.html#aca22d485afff31beaed0ea9b508dac80", null ],
     [ "step", "classSimulation_1_1SimulationUnit.html#af4d179bd1bf0d8da69d83f63fdd72412", null ],
     [ "two_phase_flow", "classSimulation_1_1SimulationUnit.html#a87b7ba2681ea64a4f8fa68dd423a3221", null ],
-    [ "update", "classSimulation_1_1SimulationUnit.html#ad68b5b710ed62a511e10dd6dd1a920f7", null ],
     [ "update_feed", "classSimulation_1_1SimulationUnit.html#a6fecb0563822fae0ef26d9f6209d0779", null ],
+    [ "updateHydro", "classSimulation_1_1SimulationUnit.html#a57624461bad4807d5cacbd7d17e49b14", null ],
+    [ "updateMCHydro", "classSimulation_1_1SimulationUnit.html#ac4417bd6943588aa09a442f6b89e388f", null ],
+    [ "updateScalarHydro", "classSimulation_1_1SimulationUnit.html#a325bd66b0afbb76176a6f8c607d9902b", null ],
     [ "const_number_simulation", "classSimulation_1_1SimulationUnit.html#a448192ce085c5d0d5e71875a888e99b8", null ],
     [ "contribs_scatter", "classSimulation_1_1SimulationUnit.html#afcb68150cb8bd8788d31a3d1c54271df", null ],
     [ "end_time", "classSimulation_1_1SimulationUnit.html#a9e33559e309a9507b40b06c2209e1005", null ],
@@ -53,6 +53,5 @@ var classSimulation_1_1SimulationUnit =
     [ "move_info", "classSimulation_1_1SimulationUnit.html#a687da24a9467b5a6c8a8e522ac140786", null ],
     [ "mt_model", "classSimulation_1_1SimulationUnit.html#a1e473c7c7f7e31551bdb26188e56830d", null ],
     [ "probes", "classSimulation_1_1SimulationUnit.html#a505fbf5573509d5d1d5674c436fe61f1", null ],
-    [ "starting_time", "classSimulation_1_1SimulationUnit.html#a3471c9cb0e94d996538444e007b4f44a", null ],
-    [ "state", "classSimulation_1_1SimulationUnit.html#aab3ff3f2caf2c3c94ebbe25786bea678", null ]
+    [ "starting_time", "classSimulation_1_1SimulationUnit.html#a3471c9cb0e94d996538444e007b4f44a", null ]
 ];

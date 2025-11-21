@@ -46,7 +46,6 @@ var NAVTREE =
       ] ]
     ] ],
     [ "List of Kokkkos Kernels", "kernels.html", null ],
-    [ "Todo List", "todo.html", null ],
     [ "Bibliography", "citelist.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -80,17 +79,16 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"classCore_1_1GlobalInitialiser.html#a6d77d0995004ab9cf3c8116fb82bc5a4",
-"classIO_1_1RedirectGuard.html#a1ce0fb5b1a9285e75f1441dd9ea71aab",
-"classSimulation_1_1KernelInline_1_1CycleReducer.html#a7c83711b4495a0e3586864c8a2ebc7d4",
-"classSimulation_1_1SimulationUnit.html#aab3ff3f2caf2c3c94ebbe25786bea678",
-"namespaceIO_1_1AnsiCode.html#a0259aeae206d039e496a7e35d5bad370",
-"structApi_1_1SimulationInstance.html#ab938dea3b413538bfdaa40daa5d122a2",
-"structKokkosLayoutMapper_3_01Eigen_1_1ColMajor_01_4.html",
-"structModels_1_1Monod.html#a4d92df75ebb9dea8bafd872adcfa3b8e",
-"structModels_1_1TwoMetaNb.html#a931d4952583347d0bfe20c2895bf6042",
-"structSimulation_1_1Feed_1_1FeedDescriptor.html",
-"structSimulation_1_1Specie.html"
+"classCore_1_1SignalHandler.html#a3a233dad29fa8d15701c4a5faf4d5bdc",
+"classMC_1_1ParticlesContainer.html#a5d93b87f5a6e18c449e0ed62333e9d6e",
+"classSimulation_1_1ScalarSimulation.html#a5608de40ed00444c146a71642f882473",
+"conceptHasExportProperties.html",
+"namespacePostProcessing.html#aa0ae24f0ce5645b2835220796b2d7ff7",
+"structCore_1_1DataExporter_1_1MultiMatrixDescription.html#aee883659b330b875980960ce825986c1",
+"structMC_1_1Distributions_1_1ScaledTruncatedNormal.html#abcb310b8f251e96bd1fec91a39c1f8ea",
+"structModels_1_1Monod.html#ad9cf89350b0af103dee5bf314f0d654e",
+"structModels_1_1TwoMetaNb.html#ad80c292a948914648775266d1f0e6d86",
+"structSimulation_1_1KernelInline_1_1CycleFunctor.html#a59d67ee517fa13bcc75158567d2a1a36"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

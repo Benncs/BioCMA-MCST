@@ -79,19 +79,9 @@ $(function(){initNavTree('classWrapMPI_1_1HostIterationPayload.html','','classWr
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae1217f5c1b86f9abdbe764e2b6ac04aa" id="r_ae1217f5c1b86f9abdbe764e2b6ac04aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1217f5c1b86f9abdbe764e2b6ac04aa">fill</a> (const CmaRead::ReactorState &amp;current_reactor_state)</td></tr>
+<tr class="memitem:a7a3a02d86c82348e46d6b113cca0d16f" id="r_a7a3a02d86c82348e46d6b113cca0d16f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a3a02d86c82348e46d6b113cca0d16f">fill</a> (const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;current_reactor_state)</td></tr>
 <tr class="memitem:aeab0cc5f0ddfccc7fc3584a873072882" id="r_aeab0cc5f0ddfccc7fc3584a873072882"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeab0cc5f0ddfccc7fc3584a873072882">sendAll</a> (std::size_t n_rank) noexcept</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:aa49d6d78e7378f1c75096f1cd8d64082" id="r_aa49d6d78e7378f1c75096f1cd8d64082"><td class="memItemLeft" align="right" valign="top">std::span&lt; const double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa49d6d78e7378f1c75096f1cd8d64082">liquid_flows</a></td></tr>
-<tr class="memdesc:aa49d6d78e7378f1c75096f1cd8d64082"><td class="mdescLeft">&#160;</td><td class="mdescRight">View liquid flow values to be sent for the current iteration.  <br /></td></tr>
-<tr class="memitem:ae33fc06b16622917e2298b5e879a0dd5" id="r_ae33fc06b16622917e2298b5e879a0dd5"><td class="memItemLeft" align="right" valign="top">std::span&lt; const double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae33fc06b16622917e2298b5e879a0dd5">liquid_volumes</a></td></tr>
-<tr class="memdesc:ae33fc06b16622917e2298b5e879a0dd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">View liquid volmes values to be sent for the current iteration.  <br /></td></tr>
-<tr class="memitem:a241cde6f4c73d0a43cfc42b1ec2e51c4" id="r_a241cde6f4c73d0a43cfc42b1ec2e51c4"><td class="memItemLeft" align="right" valign="top">std::span&lt; const double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a241cde6f4c73d0a43cfc42b1ec2e51c4">gas_volumes</a></td></tr>
-<tr class="memdesc:a241cde6f4c73d0a43cfc42b1ec2e51c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">View gas flow values to be sent for the current iteration.  <br /></td></tr>
-<tr class="memitem:abde7d92e7d410c641c0ec3fbed264f61" id="r_abde7d92e7d410c641c0ec3fbed264f61"><td class="memItemLeft" align="right" valign="top">CmaRead::Neighbors::Neighbors_const_view_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abde7d92e7d410c641c0ec3fbed264f61">neighbors</a></td></tr>
-<tr class="memdesc:abde7d92e7d410c641c0ec3fbed264f61"><td class="mdescLeft">&#160;</td><td class="mdescRight">View neighbors values to be sent for the current iteration.  <br /></td></tr>
+<tr class="memitem:a31afae57b649b3db7d054d9e53cba329" id="r_a31afae57b649b3db7d054d9e53cba329"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31afae57b649b3db7d054d9e53cba329">wait</a> () noexcept</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -100,6 +90,11 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:ae33fc06b16622917e2298b5e879a0dd5" id="r_ae33fc06b16622917e2298b5e879a0dd5"><td class="memItemLeft" align="right" valign="top">std::span&lt; const double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae33fc06b16622917e2298b5e879a0dd5">liquid_volumes</a></td></tr>
+<tr class="memitem:a98bd5c424d765186c235c0ac075e77df" id="r_a98bd5c424d765186c235c0ac075e77df"><td class="memItemLeft" align="right" valign="top">std::span&lt; const std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98bd5c424d765186c235c0ac075e77df">liquid_neighbors_flat</a></td></tr>
+<tr class="memitem:ac1e43f2d6f3df3ebceb6322b319292e2" id="r_ac1e43f2d6f3df3ebceb6322b319292e2"><td class="memItemLeft" align="right" valign="top">std::span&lt; const double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac1e43f2d6f3df3ebceb6322b319292e2">proba_leaving_flat</a></td></tr>
+<tr class="memitem:ad7a158645451f2d1c045728323cb33fe" id="r_ad7a158645451f2d1c045728323cb33fe"><td class="memItemLeft" align="right" valign="top">std::span&lt; const double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7a158645451f2d1c045728323cb33fe">liquid_out_flows</a></td></tr>
+<tr class="memitem:a5b923225e9ed00c61a0066889efaacdc" id="r_a5b923225e9ed00c61a0066889efaacdc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b923225e9ed00c61a0066889efaacdc">to_wait</a></td></tr>
 <tr class="memitem:a3fedd93a5a729d747d34ee8833ea4661" id="r_a3fedd93a5a729d747d34ee8833ea4661"><td class="memItemLeft" align="right" valign="top">std::array&lt; MPI_Request, <a class="el" href="#af0ddb6bce08ce5250a325fc561e221d6">n_vector_send</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3fedd93a5a729d747d34ee8833ea4661">requests</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-static-attribs" class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
@@ -110,8 +105,8 @@ Static Private Attributes</h2></td></tr>
 <div class="textblock"><p>Represents the payload of data on the host side for an iteration. </p>
 <p>This class encapsulates the data to be sent </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="ae1217f5c1b86f9abdbe764e2b6ac04aa" name="ae1217f5c1b86f9abdbe764e2b6ac04aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1217f5c1b86f9abdbe764e2b6ac04aa">&#9670;&#160;</a></span>fill()</h2>
+<a id="a7a3a02d86c82348e46d6b113cca0d16f" name="a7a3a02d86c82348e46d6b113cca0d16f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a3a02d86c82348e46d6b113cca0d16f">&#9670;&#160;</a></span>fill()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -119,7 +114,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void WrapMPI::HostIterationPayload::fill </td>
           <td>(</td>
-          <td class="paramtype">const CmaRead::ReactorState &amp;</td>          <td class="paramname"><span class="paramname"><em>current_reactor_state</em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>current_reactor_state</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -162,7 +157,7 @@ Static Private Attributes</h2></td></tr>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classWrapMPI_1_1HostIterationPayload_a360c9268019c8ce8573f0abfe974414f_cgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classWrapMPI_1_1HostIterationPayload_a360c9268019c8ce8573f0abfe974414f_cgraph.svg" width="634" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -192,41 +187,78 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classWrapMPI_1_1HostIterationPayload_aeab0cc5f0ddfccc7fc3584a873072882_cgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classWrapMPI_1_1HostIterationPayload_aeab0cc5f0ddfccc7fc3584a873072882_cgraph.svg" width="571" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
+
+</div>
+</div>
+<a id="a31afae57b649b3db7d054d9e53cba329" name="a31afae57b649b3db7d054d9e53cba329"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31afae57b649b3db7d054d9e53cba329">&#9670;&#160;</a></span>wait()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void WrapMPI::HostIterationPayload::wait </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel noexcept">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="a241cde6f4c73d0a43cfc42b1ec2e51c4" name="a241cde6f4c73d0a43cfc42b1ec2e51c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a241cde6f4c73d0a43cfc42b1ec2e51c4">&#9670;&#160;</a></span>gas_volumes</h2>
+<a id="a98bd5c424d765186c235c0ac075e77df" name="a98bd5c424d765186c235c0ac075e77df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98bd5c424d765186c235c0ac075e77df">&#9670;&#160;</a></span>liquid_neighbors_flat</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::span&lt;const double&gt; WrapMPI::HostIterationPayload::gas_volumes</td>
+          <td class="memname">std::span&lt;const std::size_t&gt; WrapMPI::HostIterationPayload::liquid_neighbors_flat</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>View gas flow values to be sent for the current iteration. </p>
-
 </div>
 </div>
-<a id="aa49d6d78e7378f1c75096f1cd8d64082" name="aa49d6d78e7378f1c75096f1cd8d64082"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa49d6d78e7378f1c75096f1cd8d64082">&#9670;&#160;</a></span>liquid_flows</h2>
+<a id="ad7a158645451f2d1c045728323cb33fe" name="ad7a158645451f2d1c045728323cb33fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7a158645451f2d1c045728323cb33fe">&#9670;&#160;</a></span>liquid_out_flows</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::span&lt;const double&gt; WrapMPI::HostIterationPayload::liquid_flows</td>
+          <td class="memname">std::span&lt;const double&gt; WrapMPI::HostIterationPayload::liquid_out_flows</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-
-<p>View liquid flow values to be sent for the current iteration. </p>
 
 </div>
 </div>
@@ -235,14 +267,20 @@ Here is the call graph for this function:</div>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::span&lt;const double&gt; WrapMPI::HostIterationPayload::liquid_volumes</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-
-<p>View liquid volmes values to be sent for the current iteration. </p>
 
 </div>
 </div>
@@ -268,19 +306,25 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="abde7d92e7d410c641c0ec3fbed264f61" name="abde7d92e7d410c641c0ec3fbed264f61"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abde7d92e7d410c641c0ec3fbed264f61">&#9670;&#160;</a></span>neighbors</h2>
+<a id="ac1e43f2d6f3df3ebceb6322b319292e2" name="ac1e43f2d6f3df3ebceb6322b319292e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1e43f2d6f3df3ebceb6322b319292e2">&#9670;&#160;</a></span>proba_leaving_flat</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">CmaRead::Neighbors::Neighbors_const_view_t WrapMPI::HostIterationPayload::neighbors</td>
+          <td class="memname">std::span&lt;const double&gt; WrapMPI::HostIterationPayload::proba_leaving_flat</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-
-<p>View neighbors values to be sent for the current iteration. </p>
 
 </div>
 </div>
@@ -295,6 +339,28 @@ Here is the call graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">std::array&lt;MPI_Request, <a class="el" href="#af0ddb6bce08ce5250a325fc561e221d6">n_vector_send</a>&gt; WrapMPI::HostIterationPayload::requests</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5b923225e9ed00c61a0066889efaacdc" name="a5b923225e9ed00c61a0066889efaacdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b923225e9ed00c61a0066889efaacdc">&#9670;&#160;</a></span>to_wait</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool WrapMPI::HostIterationPayload::to_wait</td>
         </tr>
       </table>
   </td>

@@ -77,14 +77,8 @@ $(function(){initNavTree('namespaceCmaUtils.html','',''); });
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:DiscontinuousFMT" id="r_DiscontinuousFMT"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCmaUtils_1_1DiscontinuousFMT.html">DiscontinuousFMT</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Derived class to handle Discontinuous transition between flowmaps.  <a href="classCmaUtils_1_1DiscontinuousFMT.html#details">More...</a><br /></td></tr>
-<tr class="memitem:FlowMapTransitionner" id="r_FlowMapTransitionner"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCmaUtils_1_1FlowMapTransitionner.html">FlowMapTransitionner</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manages the reading, caching, and transitioning of flowmaps for simulation timesteps.  <a href="classCmaUtils_1_1FlowMapTransitionner.html#details">More...</a><br /></td></tr>
 <tr class="memitem:IterationState" id="r_IterationState"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCmaUtils_1_1IterationState.html">IterationState</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure to store information about the reactor state during simulation.  <a href="structCmaUtils_1_1IterationState.html#details">More...</a><br /></td></tr>
-<tr class="memitem:LinterFMT" id="r_LinterFMT"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCmaUtils_1_1LinterFMT.html">LinterFMT</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Derived class to handle Linear interpolation transition between flowmaps.  <a href="classCmaUtils_1_1LinterFMT.html#details">More...</a><br /></td></tr>
 <tr class="memitem:PreCalculatedHydroState" id="r_PreCalculatedHydroState"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCmaUtils_1_1PreCalculatedHydroState.html">PreCalculatedHydroState</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure to store hydrodynamic properties from a compartment mesh.  <a href="classCmaUtils_1_1PreCalculatedHydroState.html#details">More...</a><br /></td></tr>
 <tr class="memitem:ProxyPreCalculatedHydroState" id="r_ProxyPreCalculatedHydroState"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCmaUtils_1_1ProxyPreCalculatedHydroState.html">ProxyPreCalculatedHydroState</a></td></tr>
@@ -92,21 +86,19 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:a85594194a85a9cdfbc886dae4ebb41e9" id="r_a85594194a85a9cdfbc886dae4ebb41e9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85594194a85a9cdfbc886dae4ebb41e9">TransitionnerPtrType</a> = rust::Box&lt;TransionnerWrapper&gt;</td></tr>
+<tr class="memitem:abaa5bf700b9b06cc5888b42f15d9e259" id="r_abaa5bf700b9b06cc5888b42f15d9e259"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abaa5bf700b9b06cc5888b42f15d9e259">IterationStatePtrType</a> = ::rust::Box&lt;::IterationStateWrapper&gt;</td></tr>
+<tr class="memitem:a345f1e3ce09450d18c2de5f270cc75f6" id="r_a345f1e3ce09450d18c2de5f270cc75f6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a345f1e3ce09450d18c2de5f270cc75f6">StateCooMatrixType</a> = ::rust::Box&lt;::CooMatrixWrap&gt;</td></tr>
 <tr class="memitem:a8b9d76d2e60d6841b12cb317f0b32c5a" id="r_a8b9d76d2e60d6841b12cb317f0b32c5a"><td class="memTemplParams" colspan="2">template&lt;typename Space&gt; </td></tr>
 <tr class="memitem:a8b9d76d2e60d6841b12cb317f0b32c5a template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b9d76d2e60d6841b12cb317f0b32c5a">NeighborsView</a></td></tr>
+<tr class="memitem:a61c8854648750be0e53d33db1af8be09" id="r_a61c8854648750be0e53d33db1af8be09"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61c8854648750be0e53d33db1af8be09">HostNeighsView</a></td></tr>
 <tr class="memitem:a86cda1f46ba5e585a9630b6a9bf1d01e" id="r_a86cda1f46ba5e585a9630b6a9bf1d01e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86cda1f46ba5e585a9630b6a9bf1d01e">CumulativeProbaType</a> = Eigen::Matrix&lt;double, -1, -1, Eigen::RowMajor&gt;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:a4635cf3c33d8058b34a590c983639a60" id="r_a4635cf3c33d8058b34a590c983639a60"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4635cf3c33d8058b34a590c983639a60">FlowmapTransitionMethod</a> : char { <a class="el" href="#a4635cf3c33d8058b34a590c983639a60aa7c136d0368b3b78677670e35303a307">Discontinuous</a>
-, <a class="el" href="#a4635cf3c33d8058b34a590c983639a60ac34bc141c7bf0386d74277c7dd0f4643">InterpolationFO</a>
- }</td></tr>
-<tr class="memdesc:a4635cf3c33d8058b34a590c983639a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the transition methods used between flowmaps.  <a href="#a4635cf3c33d8058b34a590c983639a60">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a4db0dd1b3866bccb91f532fd68959905" id="r_a4db0dd1b3866bccb91f532fd68959905"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classCmaUtils_1_1FlowMapTransitionner.html">FlowMapTransitionner</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4db0dd1b3866bccb91f532fd68959905">get_transitioner</a> (const std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; &amp;logger, <a class="el" href="#a4635cf3c33d8058b34a590c983639a60">FlowmapTransitionMethod</a> method, std::size_t n_flowmap, std::size_t n_per_flowmap, std::size_t number_time_step, std::unique_ptr&lt; CmaRead::FlowIterator &gt; &amp;&amp;iterator=nullptr, bool is_two_phase_flow=false)</td></tr>
-<tr class="memdesc:a4db0dd1b3866bccb91f532fd68959905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transition factory according to the given method.  <br /></td></tr>
+<tr class="memitem:af765d2f2724559ad43a94a02f444262c" id="r_af765d2f2724559ad43a94a02f444262c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af765d2f2724559ad43a94a02f444262c">sparse_from_coo</a> (Eigen::SparseMatrix&lt; double &gt; &amp;res, std::size_t n_c, std::span&lt; const size_t &gt; rows, std::span&lt; const size_t &gt; cols, std::span&lt; const double &gt; vals)</td></tr>
+<tr class="memitem:a7c27ea82a65008c12a5a78319bef81e7" id="r_a7c27ea82a65008c12a5a78319bef81e7"><td class="memItemLeft" align="right" valign="top">DiagonalView&lt; ComputeSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c27ea82a65008c12a5a78319bef81e7">diagonal_from_sparse</a> (const Eigen::SparseMatrix&lt; double &gt; &amp;transition)</td></tr>
+<tr class="memitem:a9aff69bdff3b52945f2be00f4e25846d" id="r_a9aff69bdff3b52945f2be00f4e25846d"><td class="memItemLeft" align="right" valign="top">CumulativeProbabilityView&lt; ComputeSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9aff69bdff3b52945f2be00f4e25846d">get_cumulative_probabilities</a> (<a class="el" href="#a61c8854648750be0e53d33db1af8be09">HostNeighsView</a> neighbors, const FlowMatrixType &amp;m_transition)</td></tr>
 <tr class="memitem:ac0295574e384d9028eb114a0fffa784b" id="r_ac0295574e384d9028eb114a0fffa784b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a86cda1f46ba5e585a9630b6a9bf1d01e">CumulativeProbaType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0295574e384d9028eb114a0fffa784b">get_cumulative_probabilities</a> (CmaRead::Neighbors::Neighbors_const_view_t neighbors, const FlowMatrixType &amp;m_transition)</td></tr>
 <tr class="memdesc:ac0295574e384d9028eb114a0fffa784b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the cumulative probability matrix from the transition matrix and neighbor information.  <br /></td></tr>
 <tr class="memitem:a66366f852348c9e73718973e83e243f5" id="r_a66366f852348c9e73718973e83e243f5"><td class="memItemLeft" align="right" valign="top">FlowMatrixType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66366f852348c9e73718973e83e243f5">get_transition_matrix</a> (const CmaRead::FlowMap::FlowMap_const_view_t &amp;flows)</td></tr>
@@ -127,6 +119,39 @@ Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="#a86cda1f46ba5e585a9630b6a9bf1d01e">CmaUtils::CumulativeProbaType</a> = Eigen::Matrix&lt;double, -1, -1, Eigen::RowMajor&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a61c8854648750be0e53d33db1af8be09" name="a61c8854648750be0e53d33db1af8be09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61c8854648750be0e53d33db1af8be09">&#9670;&#160;</a></span>HostNeighsView</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a61c8854648750be0e53d33db1af8be09">CmaUtils::HostNeighsView</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line"> Kokkos::View&lt;</div>
+<div class="line">      <span class="keyword">const</span> std::size_t**,</div>
+<div class="line">      Kokkos::LayoutRight,</div>
+<div class="line">      HostSpace,</div>
+<div class="line">      Kokkos::MemoryTraits&lt;Kokkos::RandomAccess | Kokkos::Unmanaged&gt;&gt;</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="abaa5bf700b9b06cc5888b42f15d9e259" name="abaa5bf700b9b06cc5888b42f15d9e259"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abaa5bf700b9b06cc5888b42f15d9e259">&#9670;&#160;</a></span>IterationStatePtrType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> = ::rust::Box&lt;::IterationStateWrapper&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -154,40 +179,54 @@ template&lt;typename Space&gt; </div>
 </div><!-- fragment -->
 </div>
 </div>
-<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
-<a id="a4635cf3c33d8058b34a590c983639a60" name="a4635cf3c33d8058b34a590c983639a60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4635cf3c33d8058b34a590c983639a60">&#9670;&#160;</a></span>FlowmapTransitionMethod</h2>
+<a id="a345f1e3ce09450d18c2de5f270cc75f6" name="a345f1e3ce09450d18c2de5f270cc75f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a345f1e3ce09450d18c2de5f270cc75f6">&#9670;&#160;</a></span>StateCooMatrixType</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">enum class <a class="el" href="#a4635cf3c33d8058b34a590c983639a60">CmaUtils::FlowmapTransitionMethod</a> : char</td>
+          <td class="memname">using <a class="el" href="#a345f1e3ce09450d18c2de5f270cc75f6">CmaUtils::StateCooMatrixType</a> = ::rust::Box&lt;::CooMatrixWrap&gt;</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Defines the transition methods used between flowmaps. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4635cf3c33d8058b34a590c983639a60aa7c136d0368b3b78677670e35303a307" name="a4635cf3c33d8058b34a590c983639a60aa7c136d0368b3b78677670e35303a307"></a>Discontinuous&#160;</td><td class="fielddoc"><p>Represents a sharp, abrupt transition. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a4635cf3c33d8058b34a590c983639a60ac34bc141c7bf0386d74277c7dd0f4643" name="a4635cf3c33d8058b34a590c983639a60ac34bc141c7bf0386d74277c7dd0f4643"></a>InterpolationFO&#160;</td><td class="fielddoc"><p>Represents a smooth transition using first-order interpolation. </p>
-</td></tr>
-</table>
+</div>
+</div>
+<a id="a85594194a85a9cdfbc886dae4ebb41e9" name="a85594194a85a9cdfbc886dae4ebb41e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85594194a85a9cdfbc886dae4ebb41e9">&#9670;&#160;</a></span>TransitionnerPtrType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> = rust::Box&lt;TransionnerWrapper&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="a7c27ea82a65008c12a5a78319bef81e7" name="a7c27ea82a65008c12a5a78319bef81e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c27ea82a65008c12a5a78319bef81e7">&#9670;&#160;</a></span>diagonal_from_sparse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">DiagonalView&lt; ComputeSpace &gt; CmaUtils::diagonal_from_sparse </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::SparseMatrix&lt; double &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>transition</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac0295574e384d9028eb114a0fffa784b" name="ac0295574e384d9028eb114a0fffa784b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0295574e384d9028eb114a0fffa784b">&#9670;&#160;</a></span>get_cumulative_probabilities()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0295574e384d9028eb114a0fffa784b">&#9670;&#160;</a></span>get_cumulative_probabilities() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -215,10 +254,31 @@ template&lt;typename Space&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An Eigen::MatrixXd representing the cumulative probability matrix. </dd></dl>
+
+</div>
+</div>
+<a id="a9aff69bdff3b52945f2be00f4e25846d" name="a9aff69bdff3b52945f2be00f4e25846d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9aff69bdff3b52945f2be00f4e25846d">&#9670;&#160;</a></span>get_cumulative_probabilities() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">CumulativeProbabilityView&lt; ComputeSpace &gt; CmaUtils::get_cumulative_probabilities </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a61c8854648750be0e53d33db1af8be09">HostNeighsView</a></td>          <td class="paramname"><span class="paramname"><em>neighbors</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const FlowMatrixType &amp;</td>          <td class="paramname"><span class="paramname"><em>m_transition</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCmaUtils_ac0295574e384d9028eb114a0fffa784b_icgraph.svg" width="430" height="64"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCmaUtils_a9aff69bdff3b52945f2be00f4e25846d_icgraph.svg" width="430" height="64"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -285,67 +345,43 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a4db0dd1b3866bccb91f532fd68959905" name="a4db0dd1b3866bccb91f532fd68959905"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4db0dd1b3866bccb91f532fd68959905">&#9670;&#160;</a></span>get_transitioner()</h2>
+<a id="af765d2f2724559ad43a94a02f444262c" name="af765d2f2724559ad43a94a02f444262c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af765d2f2724559ad43a94a02f444262c">&#9670;&#160;</a></span>sparse_from_coo()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unique_ptr&lt; <a class="el" href="classCmaUtils_1_1FlowMapTransitionner.html">FlowMapTransitionner</a> &gt; CmaUtils::get_transitioner </td>
+          <td class="memname">void CmaUtils::sparse_from_coo </td>
           <td>(</td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>logger</em></span>, </td>
+          <td class="paramtype">Eigen::SparseMatrix&lt; double &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>res</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a4635cf3c33d8058b34a590c983639a60">FlowmapTransitionMethod</a></td>          <td class="paramname"><span class="paramname"><em>method</em></span>, </td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_c</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_flowmap</em></span>, </td>
+          <td class="paramtype">std::span&lt; const size_t &gt;</td>          <td class="paramname"><span class="paramname"><em>rows</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_per_flowmap</em></span>, </td>
+          <td class="paramtype">std::span&lt; const size_t &gt;</td>          <td class="paramname"><span class="paramname"><em>cols</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>number_time_step</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::unique_ptr&lt; CmaRead::FlowIterator &gt; &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>iterator</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>is_two_phase_flow</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+          <td class="paramtype">std::span&lt; const double &gt;</td>          <td class="paramname"><span class="paramname"><em>vals</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Transition factory according to the given method. </p>
-<p>Creates and returns a unique pointer to a <a class="el" href="classCmaUtils_1_1FlowMapTransitionner.html" title="Manages the reading, caching, and transitioning of flowmaps for simulation timesteps.">FlowMapTransitionner</a> based on the provided method and configuration parameters. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">method</td><td>The method to use for transition. </td></tr>
-    <tr><td class="paramname">n_flowmap</td><td>The number of flow maps. </td></tr>
-    <tr><td class="paramname">n_per_flowmap</td><td>The number of iteration per flow map. </td></tr>
-    <tr><td class="paramname">number_time_step</td><td>The number of time steps. </td></tr>
-    <tr><td class="paramname">iterator</td><td>Optional unique pointer to a FlowIterator. </td></tr>
-    <tr><td class="paramname">is_two_phase_flow</td><td>Boolean flag indicating whether the flow is two-phase. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Unique pointer to <a class="el" href="classCmaUtils_1_1FlowMapTransitionner.html" title="Manages the reading, caching, and transitioning of flowmaps for simulation timesteps.">FlowMapTransitionner</a>. </dd></dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCmaUtils_a4db0dd1b3866bccb91f532fd68959905_icgraph.svg" width="586" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCmaUtils_af765d2f2724559ad43a94a02f444262c_icgraph.svg" width="432" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

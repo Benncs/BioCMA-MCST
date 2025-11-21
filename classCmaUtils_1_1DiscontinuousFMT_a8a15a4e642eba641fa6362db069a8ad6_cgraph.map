@@ -1,7 +1,0 @@
-<map id="CmaUtils::DiscontinuousFMT::DiscontinuousFMT" name="CmaUtils::DiscontinuousFMT::DiscontinuousFMT">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,200,76"/>
-<area shape="rect" id="Node000002" href="$classCmaUtils_1_1FlowMapTransitionner.html#a32430d2706f3c8499a6f430115c721f9" title=" " alt="" coords="248,5,459,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,42,232,37,232,43,200,47"/>
-<area shape="rect" id="Node000003" href="$classCmaUtils_1_1FlowMapTransitionner.html#abb98a83b7db34307ef4e59ed7e33a71a" title="Checks whether a gas flowmap is provided." alt="" coords="248,68,459,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,66,232,70,232,75,200,71"/>
-</map>

@@ -8,6 +8,7 @@ var classMC_1_1ParticlesContainer =
     [ "~ParticlesContainer", "classMC_1_1ParticlesContainer.html#a23696c7b8b024aa8544b5f4deca12ac3", null ],
     [ "__allocate_buffer__", "classMC_1_1ParticlesContainer.html#a57fa06d3225acf04522e3fc2993847f0", null ],
     [ "_resize", "classMC_1_1ParticlesContainer.html#a4fc94ae525191a5d034dce4866986c1e", null ],
+    [ "_sort", "classMC_1_1ParticlesContainer.html#ad6eaf6d6ce065232f40b2026551d1109", null ],
     [ "capacity", "classMC_1_1ParticlesContainer.html#a6f8e762483a4d6589e89d03154f659b9", null ],
     [ "change_runtime", "classMC_1_1ParticlesContainer.html#ae63651fa053f1aea28a10a7a05999fe9", null ],
     [ "force_remove_dead", "classMC_1_1ParticlesContainer.html#a25d64f06c6f66817bc15bac225369a63", null ],

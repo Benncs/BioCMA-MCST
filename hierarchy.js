@@ -45,10 +45,6 @@ var hierarchy =
     [ "Simulation::MassTransfer::Type::FixedKla", "structSimulation_1_1MassTransfer_1_1Type_1_1FixedKla.html", null ],
     [ "Models::FixedLength", "structModels_1_1FixedLength.html", null ],
     [ "Simulation::MassTransfer::Type::FlowmapKla", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapKla.html", null ],
-    [ "CmaUtils::FlowMapTransitionner", "classCmaUtils_1_1FlowMapTransitionner.html", [
-      [ "CmaUtils::DiscontinuousFMT", "classCmaUtils_1_1DiscontinuousFMT.html", null ],
-      [ "CmaUtils::LinterFMT", "classCmaUtils_1_1LinterFMT.html", null ]
-    ] ],
     [ "Simulation::MassTransfer::Type::FlowmapTurbulence", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapTurbulence.html", null ],
     [ "foo", "structfoo.html", null ],
     [ "Core::ScalarFactory::FullCase", "structCore_1_1ScalarFactory_1_1FullCase.html", null ],
@@ -62,6 +58,7 @@ var hierarchy =
     ] ],
     [ "PythonWrap::PimpModel::Impl", "structPythonWrap_1_1PimpModel_1_1Impl.html", null ],
     [ "Core::DataExporter::impl", "classCore_1_1DataExporter_1_1impl.html", null ],
+    [ "Core::GlobalInitialiser::inner", "structCore_1_1GlobalInitialiser_1_1inner.html", null ],
     [ "Simulation::MassTransfer::InterfacialAreaFonctor", "structSimulation_1_1MassTransfer_1_1InterfacialAreaFonctor.html", null ],
     [ "WrapMPI::IterationPayload", "classWrapMPI_1_1IterationPayload.html", null ],
     [ "CmaUtils::IterationState", "structCmaUtils_1_1IterationState.html", null ],
@@ -124,6 +121,7 @@ var hierarchy =
     [ "Models::TwoMetaNb", "structModels_1_1TwoMetaNb.html", null ],
     [ "Models::UdfModel", "structModels_1_1UdfModel.html", null ],
     [ "Core::ScalarFactory::Uniform", "structCore_1_1ScalarFactory_1_1Uniform.html", null ],
+    [ "MC::Distributions::Uniform< F >", "structMC_1_1Distributions_1_1Uniform.html", null ],
     [ "Models::Uptake< U, M >", "structModels_1_1Uptake.html", null ],
     [ "Models::UptakeDefault< F >", "structModels_1_1UptakeDefault.html", null ],
     [ "Core::UserControlParameters", "structCore_1_1UserControlParameters.html", null ],

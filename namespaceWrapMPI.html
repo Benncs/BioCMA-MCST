@@ -92,20 +92,26 @@ Concepts</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a6f41a685e096490bf483a83cda372118" id="r_a6f41a685e096490bf483a83cda372118"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f41a685e096490bf483a83cda372118">SIGNALS</a> : char { <a class="el" href="#a6f41a685e096490bf483a83cda372118a615a46af313786fc4e349f34118be111">STOP</a>
+<tr class="memitem:a6f41a685e096490bf483a83cda372118" id="r_a6f41a685e096490bf483a83cda372118"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f41a685e096490bf483a83cda372118">SIGNALS</a> : char { <br />
+&#160;&#160;<a class="el" href="#a6f41a685e096490bf483a83cda372118a615a46af313786fc4e349f34118be111">STOP</a>
+, <a class="el" href="#a6f41a685e096490bf483a83cda372118ae979808902c0b821ef7c9ab8087f93e1">HydroUpdate</a>
 , <a class="el" href="#a6f41a685e096490bf483a83cda372118a855520d2a5b0b1a64b939e7e30889e2a">RUN</a>
 , <a class="el" href="#a6f41a685e096490bf483a83cda372118a1a004f5abe2b334db21328be1ea6b593">NOP</a>
-, <a class="el" href="#a6f41a685e096490bf483a83cda372118afd64ff1c60077b4fc01b2dfb1144abb4">DUMP</a>
+, <br />
+&#160;&#160;<a class="el" href="#a6f41a685e096490bf483a83cda372118afd64ff1c60077b4fc01b2dfb1144abb4">DUMP</a>
+<br />
+ }</td></tr>
+<tr class="memitem:af327946eefb8047d293b379a14d84407" id="r_af327946eefb8047d293b379a14d84407"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af327946eefb8047d293b379a14d84407">TagExchange</a> { <a class="el" href="#af327946eefb8047d293b379a14d84407a3ff9bc31300446713e4d51c4b20f5d39">volumes</a> = 0
+, <a class="el" href="#af327946eefb8047d293b379a14d84407a28aaf3f1e61291ecaf19af252934bc32">flows</a>
+, <a class="el" href="#af327946eefb8047d293b379a14d84407ad89a3bf6f168aa869997b899187fd9b2">proba</a>
+, <a class="el" href="#af327946eefb8047d293b379a14d84407a40a04162e08b77a2fa1c83d732a31428">neighbors</a>
  }</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:afbb56a1725c132d2e3f12bfb01634d55" id="r_afbb56a1725c132d2e3f12bfb01634d55"><td class="memTemplParams" colspan="2">template&lt;POD_t DataType&gt; </td></tr>
-<tr class="memitem:afbb56a1725c132d2e3f12bfb01634d55 template"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbb56a1725c132d2e3f12bfb01634d55">_send_unsafe</a> (DataType *buf, size_t buf_size, size_t dest, size_t tag=0) noexcept</td></tr>
-<tr class="memdesc:afbb56a1725c132d2e3f12bfb01634d55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends raw data to a destination in an unsafe manner.  <br /></td></tr>
 <tr class="memitem:a86bfb7bf3cbf18f5f0371c497167cfad" id="r_a86bfb7bf3cbf18f5f0371c497167cfad"><td class="memTemplParams" colspan="2">template&lt;POD_t DataType&gt; </td></tr>
 <tr class="memitem:a86bfb7bf3cbf18f5f0371c497167cfad template"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a86bfb7bf3cbf18f5f0371c497167cfad">send</a> (DataType data, size_t dest, size_t tag=0)</td></tr>
-<tr class="memdesc:a86bfb7bf3cbf18f5f0371c497167cfad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a single instance of data to a destination.  <br /></td></tr>
+<tr class="memdesc:a86bfb7bf3cbf18f5f0371c497167cfad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends raw data to a destination in an unsafe manner.  <br /></td></tr>
 <tr class="memitem:a22a26e394ab9485f5b50a6be7d277940" id="r_a22a26e394ab9485f5b50a6be7d277940"><td class="memTemplParams" colspan="2">template&lt;POD_t DataType&gt; </td></tr>
 <tr class="memitem:a22a26e394ab9485f5b50a6be7d277940 template"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22a26e394ab9485f5b50a6be7d277940">send_v</a> (std::span&lt; const DataType &gt; data, size_t dest, size_t tag=0, bool send_size=true) noexcept</td></tr>
 <tr class="memdesc:a22a26e394ab9485f5b50a6be7d277940"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a vector of data to a destination.  <br /></td></tr>
@@ -187,9 +193,30 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a6f41a685e096490bf483a83cda372118a615a46af313786fc4e349f34118be111" name="a6f41a685e096490bf483a83cda372118a615a46af313786fc4e349f34118be111"></a>STOP&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a6f41a685e096490bf483a83cda372118ae979808902c0b821ef7c9ab8087f93e1" name="a6f41a685e096490bf483a83cda372118ae979808902c0b821ef7c9ab8087f93e1"></a>HydroUpdate&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a6f41a685e096490bf483a83cda372118a855520d2a5b0b1a64b939e7e30889e2a" name="a6f41a685e096490bf483a83cda372118a855520d2a5b0b1a64b939e7e30889e2a"></a>RUN&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a6f41a685e096490bf483a83cda372118a1a004f5abe2b334db21328be1ea6b593" name="a6f41a685e096490bf483a83cda372118a1a004f5abe2b334db21328be1ea6b593"></a>NOP&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a6f41a685e096490bf483a83cda372118afd64ff1c60077b4fc01b2dfb1144abb4" name="a6f41a685e096490bf483a83cda372118afd64ff1c60077b4fc01b2dfb1144abb4"></a>DUMP&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="af327946eefb8047d293b379a14d84407" name="af327946eefb8047d293b379a14d84407"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af327946eefb8047d293b379a14d84407">&#9670;&#160;</a></span>TagExchange</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#af327946eefb8047d293b379a14d84407">WrapMPI::TagExchange</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af327946eefb8047d293b379a14d84407a3ff9bc31300446713e4d51c4b20f5d39" name="af327946eefb8047d293b379a14d84407a3ff9bc31300446713e4d51c4b20f5d39"></a>volumes&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af327946eefb8047d293b379a14d84407a28aaf3f1e61291ecaf19af252934bc32" name="af327946eefb8047d293b379a14d84407a28aaf3f1e61291ecaf19af252934bc32"></a>flows&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af327946eefb8047d293b379a14d84407ad89a3bf6f168aa869997b899187fd9b2" name="af327946eefb8047d293b379a14d84407ad89a3bf6f168aa869997b899187fd9b2"></a>proba&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af327946eefb8047d293b379a14d84407a40a04162e08b77a2fa1c83d732a31428" name="af327946eefb8047d293b379a14d84407a40a04162e08b77a2fa1c83d732a31428"></a>neighbors&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>
@@ -370,77 +397,6 @@ Here is the call graph for this function:</div>
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_abbfbd4027c90508fdf9fb2e8ec46958a_icgraph.svg" width="582" height="110"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<a id="afbb56a1725c132d2e3f12bfb01634d55" name="afbb56a1725c132d2e3f12bfb01634d55"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afbb56a1725c132d2e3f12bfb01634d55">&#9670;&#160;</a></span>_send_unsafe()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;POD_t DataType&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int WrapMPI::_send_unsafe </td>
-          <td>(</td>
-          <td class="paramtype">DataType *</td>          <td class="paramname"><span class="paramname"><em>buf</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>buf_size</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>dest</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>tag</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel nodiscard">nodiscard</span><span class="mlabel noexcept">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sends raw data to a destination in an unsafe manner. </p>
-<p>This function sends raw data of type <span class="tt">DataType</span> to the specified destination. It assumes the provided buffer and its size are valid</p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">DataType</td><td>A type satisfying the <span class="tt">POD</span> concept. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">buf</td><td>Pointer to the buffer containing data to send. </td></tr>
-    <tr><td class="paramname">buf_size</td><td>The size of the buffer in bytes. </td></tr>
-    <tr><td class="paramname">dest</td><td>The destination identifier for the data. </td></tr>
-    <tr><td class="paramname">tag</td><td>Optional tag to identify the message (default is 0). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>An integer indicating success or failure of the operation.</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>Use this function with caution as it performs no validation on the input. </dd></dl>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_afbb56a1725c132d2e3f12bfb01634d55_cgraph.svg" width="355" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_afbb56a1725c132d2e3f12bfb01634d55_icgraph.svg" width="586" height="99"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -1211,7 +1167,26 @@ template&lt;POD_t DataType&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Sends a single instance of data to a destination. </p>
+<p>Sends raw data to a destination in an unsafe manner. </p>
+<p>This function sends raw data of type <span class="tt">DataType</span> to the specified destination. It assumes the provided buffer and its size are valid</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">DataType</td><td>A type satisfying the <span class="tt">POD</span> concept. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buf</td><td>Pointer to the buffer containing data to send. </td></tr>
+    <tr><td class="paramname">buf_size</td><td>The size of the buffer in bytes. </td></tr>
+    <tr><td class="paramname">dest</td><td>The destination identifier for the data. </td></tr>
+    <tr><td class="paramname">tag</td><td>Optional tag to identify the message (default is 0). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An integer indicating success or failure of the operation.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Use this function with caution as it performs no validation on the input.</dd></dl>
+<p>Sends a single instance of data to a destination.</p>
 <p>This function sends a single object of type <span class="tt">DataType</span> to the specified destination.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -1231,7 +1206,7 @@ template&lt;POD_t DataType&gt; </div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_a86bfb7bf3cbf18f5f0371c497167cfad_cgraph.svg" width="514" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_a86bfb7bf3cbf18f5f0371c497167cfad_cgraph.svg" width="319" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -1301,7 +1276,7 @@ template&lt;POD_t DataType&gt; </div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_a22a26e394ab9485f5b50a6be7d277940_cgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_a22a26e394ab9485f5b50a6be7d277940_cgraph.svg" width="491" height="62"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

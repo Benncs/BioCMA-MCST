@@ -77,7 +77,8 @@ $(function(){initNavTree('classSimulation_1_1MassTransfer_1_1MassTransferModel.h
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a4ba335fa282826f2278f6a6012e79157" id="r_a4ba335fa282826f2278f6a6012e79157"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ba335fa282826f2278f6a6012e79157">MassTransferModel</a> (<a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#ad6c5be1bd24b21b8e79e41555ccf9bed">MassTransfer::Type::MtrTypeVariant</a> _type, std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">Simulation::ScalarSimulation</a> &gt; _liquid_scalar, std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">Simulation::ScalarSimulation</a> &gt; _gas_scalar)</td></tr>
-<tr class="memitem:a118465fa22b5d695b4b2ddf2adcb5c86" id="r_a118465fa22b5d695b4b2ddf2adcb5c86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a118465fa22b5d695b4b2ddf2adcb5c86">gas_liquid_mass_transfer</a> (const <a class="el" href="structCmaUtils_1_1IterationState.html">CmaUtils::IterationState</a> &amp;state) const</td></tr>
+<tr class="memitem:a337be47b64cb6f01a044bab7aa9c7aa7" id="r_a337be47b64cb6f01a044bab7aa9c7aa7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a337be47b64cb6f01a044bab7aa9c7aa7">gas_liquid_mass_transfer</a> () const</td></tr>
+<tr class="memitem:aee995ccf581bb50543d59981fcc29593" id="r_aee995ccf581bb50543d59981fcc29593"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee995ccf581bb50543d59981fcc29593">update</a> (const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;state)</td></tr>
 <tr class="memitem:a0d14a68ab9aa147cc4c2a59ac2a0fa02" id="r_a0d14a68ab9aa147cc4c2a59ac2a0fa02"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; <a class="el" href="structSimulation_1_1MassTransfer_1_1MassTransferProxy.html">MassTransferProxy</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d14a68ab9aa147cc4c2a59ac2a0fa02">proxy</a> () const</td></tr>
 <tr class="memitem:a16128aebad84c00c48ee88de7d2ee7e1" id="r_a16128aebad84c00c48ee88de7d2ee7e1"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::span&lt; const double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16128aebad84c00c48ee88de7d2ee7e1">mtr_data</a> () const</td></tr>
 <tr class="memitem:ad6ae5ab308505e1b5f6351645f803cba" id="r_ad6ae5ab308505e1b5f6351645f803cba"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad6ae5ab308505e1b5f6351645f803cba">MassTransferModel</a> (<a class="el" href="classSimulation_1_1MassTransfer_1_1MassTransferModel.html">MassTransferModel</a> &amp;&amp;rhs) noexcept</td></tr>
@@ -237,8 +238,8 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a118465fa22b5d695b4b2ddf2adcb5c86" name="a118465fa22b5d695b4b2ddf2adcb5c86"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a118465fa22b5d695b4b2ddf2adcb5c86">&#9670;&#160;</a></span>gas_liquid_mass_transfer()</h2>
+<a id="a337be47b64cb6f01a044bab7aa9c7aa7" name="a337be47b64cb6f01a044bab7aa9c7aa7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a337be47b64cb6f01a044bab7aa9c7aa7">&#9670;&#160;</a></span>gas_liquid_mass_transfer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,7 +247,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="memname">void Simulation::MassTransfer::MassTransferModel::gas_liquid_mass_transfer </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structCmaUtils_1_1IterationState.html">CmaUtils::IterationState</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>state</em></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -360,6 +361,23 @@ Here is the call graph for this function:</div>
 <span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aee995ccf581bb50543d59981fcc29593" name="aee995ccf581bb50543d59981fcc29593"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee995ccf581bb50543d59981fcc29593">&#9670;&#160;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Simulation::MassTransfer::MassTransferModel::update </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>state</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>

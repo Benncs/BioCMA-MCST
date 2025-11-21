@@ -1,30 +1,28 @@
 <map id="IO::format" name="IO::format">
-<area shape="rect" id="Node000001" title=" " alt="" coords="420,260,500,285"/>
-<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#af0e3ff388be6a2cb08edf9f69dd200b0" title="Checks if all initialization steps have been validated." alt="" coords="218,55,367,93"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="439,249,370,157,312,95,316,92,374,154,444,246"/>
-<area shape="rect" id="Node000004" href="$classIO_1_1Console.html#ad8e8490ed0b1b321bb75e9702c32fb8a" title=" " alt="" coords="219,167,366,192"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="431,253,371,211,333,195,336,190,373,206,434,248"/>
-<area shape="rect" id="Node000009" href="$structApi_1_1SimulationInstance.html#a3f04372728be84263fb69f5773ca5bd5" title="Execute the simulation." alt="" coords="213,221,372,260"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="404,265,372,258,373,253,405,260"/>
-<area shape="rect" id="Node000011" href="$namespacePostProcessing.html#a83c7126aaab1e7dbe0674b501f5a59a3" title=" " alt="" coords="220,284,365,323"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="405,285,366,293,365,287,404,280"/>
-<area shape="rect" id="Node000012" href="$classCore_1_1GlobalInitialiser.html#a980172ba3bb45d1eaac97d447b87bd4e" title="Initializes a flow iterator." alt="" coords="219,347,366,385"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="432,297,373,336,348,348,346,344,371,332,429,293"/>
-<area shape="rect" id="Node000014" href="$namespacePostProcessing.html#aa0ae24f0ce5645b2835220796b2d7ff7" title=" " alt="" coords="216,409,368,448"/>
-<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="449,301,419,351,398,377,374,400,357,411,354,407,370,396,394,373,414,348,444,298"/>
-<area shape="rect" id="Node000003" href="$structApi_1_1SimulationInstance.html#ae9bdd54076170f50eadcb7966d64c19d" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,5,165,44"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,55,165,46,166,41,203,50"/>
-<area shape="rect" id="Node000005" href="$classIO_1_1Console.html#afa53ede48496d2ff21c31a463d4c8e9e" title=" " alt="" coords="11,68,159,93"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="258,161,214,134,164,108,131,96,133,91,166,104,217,130,261,156"/>
-<area shape="rect" id="Node000006" href="$classIO_1_1Console.html#af5e8a2459163188ad1da3430b88001b6" title=" " alt="" coords="11,118,159,142"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="222,165,139,146,141,140,223,160"/>
-<area shape="rect" id="Node000007" href="$classIO_1_1Console.html#aac82dc12f9d262c7f44b22fe6f2dd49b" title=" " alt="" coords="8,167,162,192"/>
-<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="203,182,163,182,163,177,203,177"/>
-<area shape="rect" id="Node000008" href="$classIO_1_1Console.html#a2ae23124d355bfe39da66c91d3417caf" title=" " alt="" coords="8,216,162,241"/>
-<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="223,198,141,218,139,213,222,193"/>
-<area shape="rect" id="Node000010" href="$structApi_1_1SimulationInstance.html#afee07db8a6b57fe7982900ecaa943cc0" title="Default constructor." alt="" coords="5,265,165,304"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="198,263,166,270,164,265,197,258"/>
-<area shape="rect" id="Node000013" href="$classCore_1_1GlobalInitialiser.html#a970cd4b504a4cbc3e066922d6944bc1f" title="Initializes a transitioner without parameters." alt="" coords="12,352,158,391"/>
-<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="204,371,159,372,158,367,204,366"/>
-<area shape="poly" id="edge13_Node000013_Node000013" title=" " alt="" coords="119,339,107,333,85,331,65,333,53,337,49,343,51,351,46,352,44,342,50,333,64,327,85,325,108,328,121,334"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="420,251,500,275"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#af0e3ff388be6a2cb08edf9f69dd200b0" title="Checks if all initialization steps have been validated." alt="" coords="218,149,367,188"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="431,243,371,201,349,191,351,186,373,197,434,239"/>
+<area shape="rect" id="Node000004" href="$classIO_1_1Console.html#ad8e8490ed0b1b321bb75e9702c32fb8a" title=" " alt="" coords="219,100,366,125"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="445,238,416,187,395,161,370,139,351,128,353,123,374,134,399,157,420,184,450,235"/>
+<area shape="rect" id="Node000009" href="$structApi_1_1SimulationInstance.html#a3f04372728be84263fb69f5773ca5bd5" title="Execute the simulation." alt="" coords="213,337,372,376"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="432,287,373,327,348,339,346,334,371,322,429,283"/>
+<area shape="rect" id="Node000011" href="$namespacePostProcessing.html#a83c7126aaab1e7dbe0674b501f5a59a3" title=" " alt="" coords="220,274,365,313"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="405,276,366,283,365,278,404,270"/>
+<area shape="rect" id="Node000012" href="$classCore_1_1GlobalInitialiser.html#a0dc2da93c4202706b5f37453f355145c" title="Initializes a transitioner with the provided flow iterator." alt="" coords="219,212,366,250"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="404,255,365,248,366,242,405,250"/>
+<area shape="rect" id="Node000013" href="$namespacePostProcessing.html#aa0ae24f0ce5645b2835220796b2d7ff7" title=" " alt="" coords="216,400,368,438"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="448,291,418,340,398,366,374,389,354,401,352,397,370,385,394,362,414,337,444,288"/>
+<area shape="rect" id="Node000003" href="$structApi_1_1SimulationInstance.html#ae9bdd54076170f50eadcb7966d64c19d" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,209,165,248"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="209,195,155,211,154,206,207,190"/>
+<area shape="rect" id="Node000005" href="$classIO_1_1Console.html#afa53ede48496d2ff21c31a463d4c8e9e" title=" " alt="" coords="11,104,159,129"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="203,117,159,118,159,112,203,111"/>
+<area shape="rect" id="Node000006" href="$classIO_1_1Console.html#af5e8a2459163188ad1da3430b88001b6" title=" " alt="" coords="11,153,159,178"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="227,132,137,155,135,150,226,127"/>
+<area shape="rect" id="Node000007" href="$classIO_1_1Console.html#aac82dc12f9d262c7f44b22fe6f2dd49b" title=" " alt="" coords="8,5,162,30"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="256,94,213,69,164,45,130,33,132,28,166,41,215,65,259,89"/>
+<area shape="rect" id="Node000008" href="$classIO_1_1Console.html#a2ae23124d355bfe39da66c91d3417caf" title=" " alt="" coords="8,55,162,79"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="217,99,144,83,146,77,218,93"/>
+<area shape="rect" id="Node000010" href="$structApi_1_1SimulationInstance.html#afee07db8a6b57fe7982900ecaa943cc0" title="Default constructor." alt="" coords="5,337,165,376"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="197,359,165,359,165,354,197,354"/>
+<area shape="poly" id="edge12_Node000012_Node000003" title=" " alt="" coords="203,233,165,232,165,227,204,227"/>
 </map>

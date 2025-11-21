@@ -49,7 +49,7 @@
 <script type="application/ecmascript">
 var viewWidth = 870;
 var viewHeight = 145;
-var sectionId = 'dynsection-16';
+var sectionId = 'dynsection-14';
 </script>
 <script type="application/ecmascript" xlink:href="svg.min.js"/>
 <svg id="graph" class="graph">
@@ -167,7 +167,7 @@ var sectionId = 'dynsection-16';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="classCore_1_1GlobalInitialiser.html#a212a55abe2b9cb558932ba82e4cf6dbf" target="_top" xlink:title="Initializes the simulation state.">
+<g id="a_Node000004"><a xlink:href="classCore_1_1GlobalInitialiser.html#a97eff5566ced6ba6449eb532f0babadc" target="_top" xlink:title="Initializes a flow iterator.">
 <polygon fill="white" stroke="#666666" points="415.88,-136.75 306.12,-136.75 306.12,-107.75 415.88,-107.75 415.88,-136.75"/>
 <text xml:space="preserve" text-anchor="start" x="314.12" y="-123.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
 <text xml:space="preserve" text-anchor="middle" x="361" y="-112.75" font-family="Helvetica,sans-Serif" font-size="10.00">::init_state</text>
@@ -186,7 +186,7 @@ var sectionId = 'dynsection-16';
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="classCore_1_1GlobalInitialiser.html#a4fa32007b34a9e448be11ebd7d5e695f" target="_top" xlink:title="Initializes a transitioner with the provided flow iterator.">
+<g id="a_Node000005"><a xlink:href="classCore_1_1GlobalInitialiser.html#a0dc2da93c4202706b5f37453f355145c" target="_top" xlink:title="Initializes a transitioner with the provided flow iterator.">
 <polygon fill="white" stroke="#666666" points="265.25,-136.75 155.5,-136.75 155.5,-107.75 265.25,-107.75 265.25,-136.75"/>
 <text xml:space="preserve" text-anchor="start" x="163.5" y="-123.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
 <text xml:space="preserve" text-anchor="middle" x="210.38" y="-112.75" font-family="Helvetica,sans-Serif" font-size="10.00">::init_transitionner</text>

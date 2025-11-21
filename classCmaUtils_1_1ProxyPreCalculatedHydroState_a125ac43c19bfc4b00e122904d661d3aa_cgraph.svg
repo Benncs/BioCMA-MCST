@@ -33,7 +33,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="namespaceCmaUtils.html#ac0295574e384d9028eb114a0fffa784b" target="_top" xlink:title="Computes the cumulative probability matrix from the transition matrix and neighbor information.">
+<g id="a_Node000002"><a xlink:href="namespaceCmaUtils.html#a9aff69bdff3b52945f2be00f4e25846d" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="314,-34.25 185.5,-34.25 185.5,-5.25 314,-5.25 314,-34.25"/>
 <text xml:space="preserve" text-anchor="start" x="193.5" y="-20.75" font-family="Helvetica,sans-Serif" font-size="10.00">CmaUtils::get_cumulative</text>
 <text xml:space="preserve" text-anchor="middle" x="249.75" y="-10.25" font-family="Helvetica,sans-Serif" font-size="10.00">_probabilities</text>

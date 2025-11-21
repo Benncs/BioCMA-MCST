@@ -1,8 +1,10 @@
 <map id="Simulation::SimulationUnit::getkernel_concentration" name="Simulation::SimulationUnit::getkernel_concentration">
-<area shape="rect" id="Node000001" title=" " alt="" coords="229,49,404,88"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a50e613289a3b6ca1abea7173e3eac01e" title=" " alt="" coords="5,5,181,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,51,181,45,182,39,214,46"/>
-<area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#a6ebf53048a2d93f04504352c79660c79" title=" " alt="" coords="5,92,181,131"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,91,182,97,181,92,213,86"/>
-<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="130,79,116,73,93,71,71,73,58,77,54,83,57,91,52,93,49,82,55,73,70,67,93,65,118,68,132,74"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="452,49,627,88"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a50e613289a3b6ca1abea7173e3eac01e" title=" " alt="" coords="229,5,404,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="436,51,404,45,405,39,438,46"/>
+<area shape="rect" id="Node000004" href="$classSimulation_1_1SimulationUnit.html#a6ebf53048a2d93f04504352c79660c79" title=" " alt="" coords="229,92,404,131"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="438,91,405,97,404,92,436,86"/>
+<area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#adc096ee7d35524a8107a3390daa55a1a" title=" " alt="" coords="5,5,181,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="213,27,181,27,181,22,213,22"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="353,79,340,73,316,71,295,73,282,77,277,83,280,91,275,93,272,82,278,73,293,67,316,65,341,68,355,74"/>
 </map>

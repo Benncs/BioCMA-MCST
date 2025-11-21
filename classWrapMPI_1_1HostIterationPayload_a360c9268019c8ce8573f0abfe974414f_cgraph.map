@@ -2,11 +2,6 @@
 <area shape="rect" id="Node000001" title="Sends this payload to a specified MPI rank." alt="" coords="5,5,210,44"/>
 <area shape="rect" id="Node000002" href="$namespaceWrapMPI_1_1Async.html#a14ced5fc699f316ee5512f66052ec8ad" title=" " alt="" coords="258,12,426,37"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,22,242,22,242,27,210,27"/>
-<area shape="rect" id="Node000003" href="$namespaceWrapMPI_1_1Async.html#a59ad59e497d926c7bdc45585bd715410" title=" " alt="" coords="676,5,838,44"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="427,22,661,22,661,27,427,27"/>
-<area shape="rect" id="Node000005" href="$namespaceWrapMPI_1_1Async.html#aea9ea25d4513c086000ad935de0c2a63" title=" " alt="" coords="474,36,628,61"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="427,32,458,35,458,41,426,37"/>
-<area shape="rect" id="Node000004" href="$namespaceWrapMPI.html#adab3300a86b8c0227268b23134b57a24" title=" " alt="" coords="886,12,1018,37"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="838,22,870,22,870,27,838,27"/>
-<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="628,37,661,33,661,39,629,42"/>
+<area shape="rect" id="Node000003" href="$namespaceWrapMPI_1_1Async.html#aea9ea25d4513c086000ad935de0c2a63" title=" " alt="" coords="474,12,628,37"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="427,22,458,22,458,27,427,27"/>
 </map>

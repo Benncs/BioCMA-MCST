@@ -1,8 +1,10 @@
 <map id="Api::SimulationInstance::apply" name="Api::SimulationInstance::apply">
-<area shape="rect" id="Node000001" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,131,165,169"/>
-<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="46,131,44,121,50,112,64,106,85,104,108,106,121,113,119,118,107,112,85,109,65,111,53,116,49,122,51,130"/>
+<area shape="rect" id="Node000001" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,159,165,197"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="46,159,44,149,50,140,64,134,85,132,108,134,121,141,119,146,107,140,85,137,65,139,53,144,49,150,51,158"/>
 <area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#ad2abfa76ac4128d44b7c0c895f78b77b" title="Load ad apply the simulation configuration and prepare for execution based on file." alt="" coords="213,131,372,169"/>
-<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="165,147,197,147,197,153,165,153"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="165,165,197,160,198,165,165,170"/>
+<area shape="rect" id="Node000017" href="$namespaceUnsafe.html#a703f3b37e1e69e30af8da78870f09df4" title=" " alt="" coords="232,194,352,218"/>
+<area shape="poly" id="edge18_Node000001_Node000017" title=" " alt="" coords="165,186,217,193,217,199,165,191"/>
 <area shape="rect" id="Node000003" href="$namespaceCore.html#a8a3e4aa1d1921da2e211c43d5368acf1" title=" " alt="" coords="420,138,501,162"/>
 <area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="373,147,405,147,405,153,373,153"/>
 <area shape="rect" id="Node000004" href="$namespaceCore.html#ab6528e76111960864b7e4741327b3049" title="Start simulation." alt="" coords="549,138,634,162"/>

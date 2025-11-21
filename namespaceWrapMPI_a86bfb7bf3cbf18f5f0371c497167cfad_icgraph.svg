@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Sends a single instance of data to a destination.">
+<g id="a_Node000001"><a xlink:title="Sends raw data to a destination in an unsafe manner.">
 <polygon fill="#999999" stroke="#666666" points="272,-44.75 189.25,-44.75 189.25,-26.25 272,-26.25 272,-44.75"/>
 <text xml:space="preserve" text-anchor="middle" x="230.62" y="-31.25" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::send</text>
 </a>

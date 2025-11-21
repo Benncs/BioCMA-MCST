@@ -1,9 +1,0 @@
-<map id="Core::GlobalInitialiser::init_flow_iterator" name="Core::GlobalInitialiser::init_flow_iterator">
-<area shape="rect" id="Node000001" title="Initializes a flow iterator." alt="" coords="5,54,152,93"/>
-<area shape="rect" id="Node000002" href="$namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383" title=" " alt="" coords="233,5,313,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="147,51,217,31,218,36,149,56"/>
-<area shape="rect" id="Node000003" href="$classCore_1_1GlobalInitialiser.html#a751126aaf6e8da709d3b9c98f0a796fb" title="Retrieves path files based on the provided case path." alt="" coords="200,54,346,93"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,71,185,71,185,76,152,76"/>
-<area shape="rect" id="Node000004" href="$classCore_1_1GlobalInitialiser.html#a3844076c910ed26f60f42bada71cc09e" title="Validates the specified initialization step and any additional steps." alt="" coords="200,117,346,156"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="141,91,197,109,195,114,140,96"/>
-</map>

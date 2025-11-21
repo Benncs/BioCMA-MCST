@@ -1,30 +1,32 @@
 <map id="MC::ParticlesContainer::_resize" name="MC::ParticlesContainer::_resize">
-<area shape="rect" id="Node000001" title=" " alt="" coords="924,164,1082,203"/>
-<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" title="Insert particle buffer into the main container." alt="" coords="707,42,865,80"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="952,159,821,83,824,79,955,154"/>
-<area shape="rect" id="Node000005" href="$classMC_1_1ParticlesContainer.html#a03a343614bef6821b8815902e3185e37" title="Alias for the model used by the container." alt="" coords="707,164,865,203"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="908,186,866,186,866,181,908,181"/>
-<area shape="rect" id="Node000011" href="$classMC_1_1ParticlesContainer.html#a57353f823ed074869300f29deb5c50b2" title="Removes inactive particles from the container." alt="" coords="696,352,876,391"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="970,215,811,354,808,350,966,211"/>
-<area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#a96e8f3fbde370c918a3710b0b910cd42" title=" " alt="" coords="229,167,404,206"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="722,39,663,22,594,10,558,8,522,10,487,17,453,29,431,42,410,58,375,96,347,135,329,168,324,166,343,133,370,93,407,54,428,37,451,24,485,12,521,5,558,3,595,4,664,16,724,34"/>
-<area shape="rect" id="Node000004" href="$classSimulation_1_1SimulationUnit.html#a7b49fd171d4de8aa3949738da6c3810f" title=" " alt="" coords="5,167,181,206"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="213,189,181,189,181,184,213,184"/>
-<area shape="rect" id="Node000006" href="$classMC_1_1ParticlesContainer.html#ad499de971fbe1a2cf3e1adbe2bb151d6" title=" " alt="" coords="471,39,629,78"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="747,157,701,123,647,91,622,81,624,76,650,87,704,119,750,152"/>
-<area shape="rect" id="Node000007" href="$classMC_1_1ParticlesContainer.html#a5d93b87f5a6e18c449e0ed62333e9d6e" title=" " alt="" coords="471,102,629,140"/>
-<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="696,163,625,144,626,138,697,158"/>
-<area shape="rect" id="Node000008" href="$classMC_1_1ParticlesContainer.html#a5b4a66b67d3b4942557b22538958480a" title=" " alt="" coords="471,164,629,203"/>
-<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="691,186,630,186,630,181,691,181"/>
-<area shape="rect" id="Node000009" href="$classMC_1_1ParticlesContainer.html#adacba063d362632ca0899bae750b628a" title="Default copy and move constructors and assignment operators." alt="" coords="471,227,629,266"/>
-<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="697,210,626,229,625,224,696,205"/>
-<area shape="rect" id="Node000010" href="$classMC_1_1ParticlesContainer.html#ae0cd8cf83c2728db495167ec2f10d80a" title=" " alt="" coords="471,290,629,328"/>
-<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="750,215,703,248,650,279,621,292,619,287,647,275,700,244,747,211"/>
-<area shape="rect" id="Node000012" href="$classMC_1_1ParticlesContainer.html#a25d64f06c6f66817bc15bac225369a63" title="Clean all the non&#45;idle particle even if number smaller than threshold." alt="" coords="471,415,629,454"/>
-<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="697,398,626,417,625,412,696,393"/>
-<area shape="rect" id="Node000014" href="$classMC_1_1ParticlesContainer.html#a0047f4c96b02ae4aeb9ebd8963129687" title="Update the number of non&#45;idle particle and remove if total number exceeds threshold May call : remove..." alt="" coords="452,352,648,391"/>
-<area shape="poly" id="edge13_Node000011_Node000014" title=" " alt="" coords="681,374,649,374,649,369,681,369"/>
-<area shape="rect" id="Node000013" href="$namespacePostProcessing.html#a5c1775fa34193199d9c989e5740e2f84" title=" " alt="" coords="247,415,386,454"/>
-<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="456,437,387,437,387,432,456,432"/>
-<area shape="poly" id="edge14_Node000014_Node000003" title=" " alt="" coords="459,347,450,342,411,310,376,273,328,208,332,205,380,270,415,306,454,338,462,343"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="1147,164,1305,203"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" title="Insert particle buffer into the main container." alt="" coords="930,42,1088,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1176,159,1044,83,1047,79,1178,154"/>
+<area shape="rect" id="Node000006" href="$classMC_1_1ParticlesContainer.html#a03a343614bef6821b8815902e3185e37" title="Alias for the model used by the container." alt="" coords="930,164,1088,203"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1132,186,1089,186,1089,181,1132,181"/>
+<area shape="rect" id="Node000012" href="$classMC_1_1ParticlesContainer.html#a57353f823ed074869300f29deb5c50b2" title="Removes inactive particles from the container." alt="" coords="920,352,1099,391"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1193,215,1035,354,1031,350,1190,211"/>
+<area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#a96e8f3fbde370c918a3710b0b910cd42" title=" " alt="" coords="452,167,627,206"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="945,39,886,22,817,10,781,8,745,10,710,17,676,29,654,42,633,58,598,96,571,135,552,168,548,166,566,133,594,93,630,54,651,37,674,24,709,12,744,5,781,3,818,4,888,16,947,34"/>
+<area shape="rect" id="Node000004" href="$classSimulation_1_1SimulationUnit.html#a7b49fd171d4de8aa3949738da6c3810f" title=" " alt="" coords="229,167,404,206"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="437,189,404,189,404,184,437,184"/>
+<area shape="rect" id="Node000005" href="$classSimulation_1_1SimulationUnit.html#adc096ee7d35524a8107a3390daa55a1a" title=" " alt="" coords="5,167,181,206"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="213,189,181,189,181,184,213,184"/>
+<area shape="rect" id="Node000007" href="$classMC_1_1ParticlesContainer.html#ad499de971fbe1a2cf3e1adbe2bb151d6" title=" " alt="" coords="694,39,853,78"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="971,157,924,123,870,91,845,81,847,76,873,87,927,119,974,152"/>
+<area shape="rect" id="Node000008" href="$classMC_1_1ParticlesContainer.html#a5d93b87f5a6e18c449e0ed62333e9d6e" title=" " alt="" coords="694,102,853,140"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="919,163,848,144,850,138,921,158"/>
+<area shape="rect" id="Node000009" href="$classMC_1_1ParticlesContainer.html#a5b4a66b67d3b4942557b22538958480a" title=" " alt="" coords="694,164,853,203"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="914,186,853,186,853,181,914,181"/>
+<area shape="rect" id="Node000010" href="$classMC_1_1ParticlesContainer.html#adacba063d362632ca0899bae750b628a" title="Default copy and move constructors and assignment operators." alt="" coords="694,227,853,266"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="921,210,850,229,848,224,919,205"/>
+<area shape="rect" id="Node000011" href="$classMC_1_1ParticlesContainer.html#ae0cd8cf83c2728db495167ec2f10d80a" title=" " alt="" coords="694,290,853,328"/>
+<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="973,215,927,248,873,279,844,292,842,287,870,275,924,244,970,211"/>
+<area shape="rect" id="Node000013" href="$classMC_1_1ParticlesContainer.html#a25d64f06c6f66817bc15bac225369a63" title="Clean all the non&#45;idle particle even if number smaller than threshold." alt="" coords="694,415,853,454"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="921,398,850,417,848,412,919,393"/>
+<area shape="rect" id="Node000015" href="$classMC_1_1ParticlesContainer.html#a0047f4c96b02ae4aeb9ebd8963129687" title="Update the number of non&#45;idle particle and remove if total number exceeds threshold May call : remove..." alt="" coords="675,352,872,391"/>
+<area shape="poly" id="edge14_Node000012_Node000015" title=" " alt="" coords="904,374,872,374,872,369,904,369"/>
+<area shape="rect" id="Node000014" href="$namespacePostProcessing.html#a5c1775fa34193199d9c989e5740e2f84" title=" " alt="" coords="470,415,609,454"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="679,437,610,437,610,432,679,432"/>
+<area shape="poly" id="edge15_Node000015_Node000003" title=" " alt="" coords="683,347,674,342,634,310,600,273,551,208,555,205,604,270,638,306,677,338,685,343"/>
 </map>

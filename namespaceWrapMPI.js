@@ -1,25 +1,34 @@
 var namespaceWrapMPI =
 [
     [ "Async", "namespaceWrapMPI_1_1Async.html", [
-      [ "_send_unsafe", "namespaceWrapMPI_1_1Async.html#a59ad59e497d926c7bdc45585bd715410", null ],
+      [ "_broadcast_unsafe", "namespaceWrapMPI_1_1Async.html#ac5fbf6f40e01dc061922ca4f674b317e", null ],
+      [ "broadcast_span", "namespaceWrapMPI_1_1Async.html#a44540918e862462a382d03720d97e19a", null ],
+      [ "recv", "namespaceWrapMPI_1_1Async.html#a78ae068bf02daca0e7272ac0e2f7ca45", null ],
       [ "recv_span", "namespaceWrapMPI_1_1Async.html#a1c9861a120adf6ce7bd019204d20dafb", null ],
       [ "send", "namespaceWrapMPI_1_1Async.html#aea9ea25d4513c086000ad935de0c2a63", null ],
       [ "send_v", "namespaceWrapMPI_1_1Async.html#a14ced5fc699f316ee5512f66052ec8ad", null ],
-      [ "wait", "namespaceWrapMPI_1_1Async.html#adc3dcdbee2e0e82e429b5962cb3ce32c", null ]
+      [ "wait", "namespaceWrapMPI_1_1Async.html#adc3dcdbee2e0e82e429b5962cb3ce32c", null ],
+      [ "wait", "namespaceWrapMPI_1_1Async.html#a308ff62d0a448ffee6da1ae29c229020", null ]
     ] ],
     [ "HostIterationPayload", "classWrapMPI_1_1HostIterationPayload.html", "classWrapMPI_1_1HostIterationPayload" ],
     [ "IterationPayload", "classWrapMPI_1_1IterationPayload.html", "classWrapMPI_1_1IterationPayload" ],
     [ "POD_t", "conceptWrapMPI_1_1POD__t.html", null ],
     [ "SIGNALS", "namespaceWrapMPI.html#a6f41a685e096490bf483a83cda372118", [
       [ "STOP", "namespaceWrapMPI.html#a6f41a685e096490bf483a83cda372118a615a46af313786fc4e349f34118be111", null ],
+      [ "HydroUpdate", "namespaceWrapMPI.html#a6f41a685e096490bf483a83cda372118ae979808902c0b821ef7c9ab8087f93e1", null ],
       [ "RUN", "namespaceWrapMPI.html#a6f41a685e096490bf483a83cda372118a855520d2a5b0b1a64b939e7e30889e2a", null ],
       [ "NOP", "namespaceWrapMPI.html#a6f41a685e096490bf483a83cda372118a1a004f5abe2b334db21328be1ea6b593", null ],
       [ "DUMP", "namespaceWrapMPI.html#a6f41a685e096490bf483a83cda372118afd64ff1c60077b4fc01b2dfb1144abb4", null ]
     ] ],
+    [ "TagExchange", "namespaceWrapMPI.html#af327946eefb8047d293b379a14d84407", [
+      [ "volumes", "namespaceWrapMPI.html#af327946eefb8047d293b379a14d84407a3ff9bc31300446713e4d51c4b20f5d39", null ],
+      [ "flows", "namespaceWrapMPI.html#af327946eefb8047d293b379a14d84407a28aaf3f1e61291ecaf19af252934bc32", null ],
+      [ "proba", "namespaceWrapMPI.html#af327946eefb8047d293b379a14d84407ad89a3bf6f168aa869997b899187fd9b2", null ],
+      [ "neighbors", "namespaceWrapMPI.html#af327946eefb8047d293b379a14d84407a40a04162e08b77a2fa1c83d732a31428", null ]
+    ] ],
     [ "_broadcast_unsafe", "namespaceWrapMPI.html#aa70b62df6aa5755b0c794d24afa1cfdf", null ],
     [ "_gather_unsafe", "namespaceWrapMPI.html#af35b85e638478a00672758818ade9e38", null ],
     [ "_gather_unsafe_to_buffer", "namespaceWrapMPI.html#abbfbd4027c90508fdf9fb2e8ec46958a", null ],
-    [ "_send_unsafe", "namespaceWrapMPI.html#afbb56a1725c132d2e3f12bfb01634d55", null ],
     [ "all_reduce", "namespaceWrapMPI.html#a8237adbb04708d9bf4bae9e904d04f5f", null ],
     [ "barrier", "namespaceWrapMPI.html#a1a08bbe69602ac2f4f38e1a0d45275cb", null ],
     [ "broadcast", "namespaceWrapMPI.html#a372df5351a2085df252cc9f4cceae7de", null ],

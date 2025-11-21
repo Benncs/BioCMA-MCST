@@ -82,6 +82,10 @@ Collaboration diagram for Core::GlobalInitialiser:</div>
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser__coll__graph.svg" width="512" height="131"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:inner" id="r_inner"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCore_1_1GlobalInitialiser_1_1inner.html">inner</a></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a6d77d0995004ab9cf3c8116fb82bc5a4" id="r_a6d77d0995004ab9cf3c8116fb82bc5a4"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
@@ -92,14 +96,10 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6366cce5d23ddbb0f475288da17b9c9d" id="r_a6366cce5d23ddbb0f475288da17b9c9d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6366cce5d23ddbb0f475288da17b9c9d">GlobalInitialiser</a> (const <a class="el" href="structExecInfo.html">ExecInfo</a> &amp;_info, <a class="el" href="structCore_1_1UserControlParameters.html">UserControlParameters</a> _user_params, std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt;=nullptr)</td></tr>
 <tr class="memdesc:a6366cce5d23ddbb0f475288da17b9c9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classCore_1_1GlobalInitialiser.html" title="A class responsible for initializing various components of a simulation framework.">GlobalInitialiser</a> instance.  <br /></td></tr>
-<tr class="memitem:a980172ba3bb45d1eaac97d447b87bd4e" id="r_a980172ba3bb45d1eaac97d447b87bd4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; CmaRead::FlowIterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a980172ba3bb45d1eaac97d447b87bd4e">init_flow_iterator</a> ()</td></tr>
-<tr class="memdesc:a980172ba3bb45d1eaac97d447b87bd4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a flow iterator.  <br /></td></tr>
-<tr class="memitem:a212a55abe2b9cb558932ba82e4cf6dbf" id="r_a212a55abe2b9cb558932ba82e4cf6dbf"><td class="memItemLeft" align="right" valign="top">std::optional&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a212a55abe2b9cb558932ba82e4cf6dbf">init_state</a> (std::unique_ptr&lt; CmaRead::FlowIterator &gt; &amp;flow_handle)</td></tr>
-<tr class="memdesc:a212a55abe2b9cb558932ba82e4cf6dbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the simulation state.  <br /></td></tr>
-<tr class="memitem:a4fa32007b34a9e448be11ebd7d5e695f" id="r_a4fa32007b34a9e448be11ebd7d5e695f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; <a class="el" href="classCmaUtils_1_1FlowMapTransitionner.html">CmaUtils::FlowMapTransitionner</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4fa32007b34a9e448be11ebd7d5e695f">init_transitionner</a> (std::unique_ptr&lt; CmaRead::FlowIterator &gt; &amp;&amp;flow_handle)</td></tr>
-<tr class="memdesc:a4fa32007b34a9e448be11ebd7d5e695f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a transitioner with the provided flow iterator.  <br /></td></tr>
-<tr class="memitem:a970cd4b504a4cbc3e066922d6944bc1f" id="r_a970cd4b504a4cbc3e066922d6944bc1f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; <a class="el" href="classCmaUtils_1_1FlowMapTransitionner.html">CmaUtils::FlowMapTransitionner</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a970cd4b504a4cbc3e066922d6944bc1f">init_transitionner</a> ()</td></tr>
-<tr class="memdesc:a970cd4b504a4cbc3e066922d6944bc1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a transitioner without parameters.  <br /></td></tr>
+<tr class="memitem:a97eff5566ced6ba6449eb532f0babadc" id="r_a97eff5566ced6ba6449eb532f0babadc"><td class="memItemLeft" align="right" valign="top">std::optional&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97eff5566ced6ba6449eb532f0babadc">init_state</a> (const <a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> &amp;transiionner)</td></tr>
+<tr class="memdesc:a97eff5566ced6ba6449eb532f0babadc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a flow iterator.  <br /></td></tr>
+<tr class="memitem:a0dc2da93c4202706b5f37453f355145c" id="r_a0dc2da93c4202706b5f37453f355145c"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0dc2da93c4202706b5f37453f355145c">init_transitionner</a> ()</td></tr>
+<tr class="memdesc:a0dc2da93c4202706b5f37453f355145c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a transitioner with the provided flow iterator.  <br /></td></tr>
 <tr class="memitem:a00d0e7a7d549bf06886dfc3ba9de3e3d" id="r_a00d0e7a7d549bf06886dfc3ba9de3e3d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; <a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00d0e7a7d549bf06886dfc3ba9de3e3d">init_simulation</a> (std::optional&lt; <a class="el" href="namespaceCore_1_1ScalarFactory.html#aede963ff58e06bcac32b39866b14148d">Core::ScalarFactory::ScalarVariant</a> &gt; variant)</td></tr>
 <tr class="memdesc:a00d0e7a7d549bf06886dfc3ba9de3e3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a simulation unit.  <br /></td></tr>
 <tr class="memitem:afa96dd38c29284ca8a70bdb67017c70b" id="r_afa96dd38c29284ca8a70bdb67017c70b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; <a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa96dd38c29284ca8a70bdb67017c70b">init_simulation</a> (std::unique_ptr&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MC::MonteCarloUnit</a> &gt; _unit, const <a class="el" href="structSimulation_1_1ScalarInitializer.html">Simulation::ScalarInitializer</a> &amp;scalar_init)</td></tr>
@@ -120,13 +120,12 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pri-types" class="groupheader"><a id="pri-types" name="pri-types"></a>
 Private Types</h2></td></tr>
 <tr class="memitem:aed6035b1335dd789d51598a410e4dbae" id="r_aed6035b1335dd789d51598a410e4dbae"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed6035b1335dd789d51598a410e4dbae">InitStep</a> : std::size_t { <br />
-&#160;&#160;<a class="el" href="#aed6035b1335dd789d51598a410e4dbaea1bfd02c137f379a1ba6e5743771680de">FlowIterator</a> = 0
-, <a class="el" href="#aed6035b1335dd789d51598a410e4dbaeafa59184c0d82a51a129c92a9cc3e9dbe">Transitioner</a>
+&#160;&#160;<a class="el" href="#aed6035b1335dd789d51598a410e4dbaeafa59184c0d82a51a129c92a9cc3e9dbe">Transitioner</a> = 0
 , <a class="el" href="#aed6035b1335dd789d51598a410e4dbaea7531804ee40eed2b5a40056741d83be6">InitState</a>
 , <a class="el" href="#aed6035b1335dd789d51598a410e4dbaeaf60357a8d17e45793298323f1b372a74">Scalar</a>
+, <a class="el" href="#aed6035b1335dd789d51598a410e4dbaeaa80425472d94ae02c836da5b6f205b7b">Feed</a>
 , <br />
-&#160;&#160;<a class="el" href="#aed6035b1335dd789d51598a410e4dbaeaa80425472d94ae02c836da5b6f205b7b">Feed</a>
-, <a class="el" href="#aed6035b1335dd789d51598a410e4dbaea92a54b358b4cf53cca4095e4697e1004">MC</a>
+&#160;&#160;<a class="el" href="#aed6035b1335dd789d51598a410e4dbaea92a54b358b4cf53cca4095e4697e1004">MC</a>
 , <a class="el" href="#aed6035b1335dd789d51598a410e4dbaeae72c61b7a94c54fd6a574c64d5b5d4ca">SimulationUnit</a>
 , <a class="el" href="#aed6035b1335dd789d51598a410e4dbaeae93f994f01c537c4e2f7d8528c3eb5e9">Count</a>
 <br />
@@ -144,8 +143,8 @@ Private Member Functions</h2></td></tr>
 <tr class="memdesc:a3844076c910ed26f60f42bada71cc09e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates the specified initialization step and any additional steps.  <br /></td></tr>
 <tr class="memitem:a751126aaf6e8da709d3b9c98f0a796fb" id="r_a751126aaf6e8da709d3b9c98f0a796fb"><td class="memItemLeft" align="right" valign="top">CmtCommons::cma_exported_paths_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a751126aaf6e8da709d3b9c98f0a796fb">get_path_files</a> (const std::string &amp;cma_case_path)</td></tr>
 <tr class="memdesc:a751126aaf6e8da709d3b9c98f0a796fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves path files based on the provided case path.  <br /></td></tr>
-<tr class="memitem:ad6c43546eb4230a024ef3a43c470a9c5" id="r_ad6c43546eb4230a024ef3a43c470a9c5"><td class="memItemLeft" align="right" valign="top">std::optional&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad6c43546eb4230a024ef3a43c470a9c5">host_init_state</a> (std::unique_ptr&lt; CmaRead::FlowIterator &gt; &amp;flow_handle)</td></tr>
-<tr class="memdesc:ad6c43546eb4230a024ef3a43c470a9c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Host speciffic state init.  <br /></td></tr>
+<tr class="memitem:a36655d4a10ebb302f64512e2cda8649d" id="r_a36655d4a10ebb302f64512e2cda8649d"><td class="memItemLeft" align="right" valign="top">std::optional&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36655d4a10ebb302f64512e2cda8649d">host_init_state</a> (const <a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> &amp;transiionner)</td></tr>
+<tr class="memdesc:a36655d4a10ebb302f64512e2cda8649d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Host speciffic state init.  <br /></td></tr>
 <tr class="memitem:aa042e8d396a5287c49fb6a8b81eba209" id="r_aa042e8d396a5287c49fb6a8b81eba209"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa042e8d396a5287c49fb6a8b81eba209">mpi_broadcast</a> ()</td></tr>
 <tr class="memdesc:aa042e8d396a5287c49fb6a8b81eba209"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs MPI broadcast for synchronization.  <br /></td></tr>
 </table><table class="memberdecls">
@@ -159,9 +158,8 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a31081e57ece5a63560e461460f13b69c" id="r_a31081e57ece5a63560e461460f13b69c"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31081e57ece5a63560e461460f13b69c">particle_per_process</a></td></tr>
 <tr class="memitem:a725f6daa4a85b80447cef70134828f17" id="r_a725f6daa4a85b80447cef70134828f17"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a725f6daa4a85b80447cef70134828f17">liquid_volume</a></td></tr>
 <tr class="memitem:a6473c817f37aef07431930c9eb26177f" id="r_a6473c817f37aef07431930c9eb26177f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6473c817f37aef07431930c9eb26177f">gas_volume</a></td></tr>
-<tr class="memitem:a8ad6c39ccb88ecb69fe505ae3ecc2498" id="r_a8ad6c39ccb88ecb69fe505ae3ecc2498"><td class="memItemLeft" align="right" valign="top">CmaRead::Neighbors::Neighbors_const_view_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ad6c39ccb88ecb69fe505ae3ecc2498">liquid_neighbors</a></td></tr>
+<tr class="memitem:a436c4ecde5b60b9283ebee88b7dcd7a6" id="r_a436c4ecde5b60b9283ebee88b7dcd7a6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a436c4ecde5b60b9283ebee88b7dcd7a6">flat_neighobrs</a></td></tr>
 <tr class="memitem:a35b62706ff0548f4d9a873976e9e088b" id="r_a35b62706ff0548f4d9a873976e9e088b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35b62706ff0548f4d9a873976e9e088b">t_per_flowmap</a> {}</td></tr>
-<tr class="memitem:a75d25e8aff4b562b2fa4d6dec4bb7ff6" id="r_a75d25e8aff4b562b2fa4d6dec4bb7ff6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75d25e8aff4b562b2fa4d6dec4bb7ff6">worker_neighbor_data</a></td></tr>
 <tr class="memitem:a313871d644ef7de95dd32c5d5b95ef6d" id="r_a313871d644ef7de95dd32c5d5b95ef6d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a313871d644ef7de95dd32c5d5b95ef6d">f_init_gas_flow</a></td></tr>
 <tr class="memitem:a294c3c80bf2d45d32254d1dbc7d57acd" id="r_a294c3c80bf2d45d32254d1dbc7d57acd"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a294c3c80bf2d45d32254d1dbc7d57acd">feed</a></td></tr>
 <tr class="memitem:aa98171333e21bd0d7d7bf40a84f6b5d8" id="r_aa98171333e21bd0d7d7bf40a84f6b5d8"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa98171333e21bd0d7d7bf40a84f6b5d8">logger</a></td></tr>
@@ -215,9 +213,7 @@ template&lt;typename T&gt; </div>
 <p>Each member represents a distinct step in the initialization process, except for the last member, <span class="tt">Count</span>, which signifies the total number of initialization steps.</p>
 <dl class="section note"><dt>Note</dt><dd>This enum class leverages a C++ feature where if the first member is initialized to 0, the subsequent members are automatically assigned incrementing integer values. Thus, the <span class="tt">Count</span> member effectively represents the total number of steps (n), minus one for zero-based indexing. </dd></dl>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aed6035b1335dd789d51598a410e4dbaea1bfd02c137f379a1ba6e5743771680de" name="aed6035b1335dd789d51598a410e4dbaea1bfd02c137f379a1ba6e5743771680de"></a>FlowIterator&#160;</td><td class="fielddoc"><p>Step for initializing the flow iterator. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="aed6035b1335dd789d51598a410e4dbaeafa59184c0d82a51a129c92a9cc3e9dbe" name="aed6035b1335dd789d51598a410e4dbaeafa59184c0d82a51a129c92a9cc3e9dbe"></a>Transitioner&#160;</td><td class="fielddoc"><p>Step for initializing the transitioner. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aed6035b1335dd789d51598a410e4dbaeafa59184c0d82a51a129c92a9cc3e9dbe" name="aed6035b1335dd789d51598a410e4dbaeafa59184c0d82a51a129c92a9cc3e9dbe"></a>Transitioner&#160;</td><td class="fielddoc"><p>Step for initializing the transitioner. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="aed6035b1335dd789d51598a410e4dbaea7531804ee40eed2b5a40056741d83be6" name="aed6035b1335dd789d51598a410e4dbaea7531804ee40eed2b5a40056741d83be6"></a>InitState&#160;</td><td class="fielddoc"><p>Step for initializing the simulation state. </p>
 </td></tr>
@@ -356,7 +352,7 @@ template&lt;typename... Args&gt; </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a5134f9db1f59d9124d5fdec88e3e99f3_icgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a5134f9db1f59d9124d5fdec88e3e99f3_icgraph.svg" width="100%" height="596"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -422,16 +418,11 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A structure containing exported paths. </dd></dl>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a751126aaf6e8da709d3b9c98f0a796fb_icgraph.svg" width="546" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
-<a id="ad6c43546eb4230a024ef3a43c470a9c5" name="ad6c43546eb4230a024ef3a43c470a9c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6c43546eb4230a024ef3a43c470a9c5">&#9670;&#160;</a></span>host_init_state()</h2>
+<a id="a36655d4a10ebb302f64512e2cda8649d" name="a36655d4a10ebb302f64512e2cda8649d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36655d4a10ebb302f64512e2cda8649d">&#9670;&#160;</a></span>host_init_state()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -442,7 +433,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">std::optional&lt; bool &gt; Core::GlobalInitialiser::host_init_state </td>
           <td>(</td>
-          <td class="paramtype">std::unique_ptr&lt; CmaRead::FlowIterator &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>flow_handle</em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>transiionner</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -457,7 +448,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_ad6c43546eb4230a024ef3a43c470a9c5_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a36655d4a10ebb302f64512e2cda8649d_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -492,36 +483,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a980172ba3bb45d1eaac97d447b87bd4e" name="a980172ba3bb45d1eaac97d447b87bd4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a980172ba3bb45d1eaac97d447b87bd4e">&#9670;&#160;</a></span>init_flow_iterator()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; CmaRead::FlowIterator &gt; Core::GlobalInitialiser::init_flow_iterator </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initializes a flow iterator. </p>
-<dl class="section return"><dt>Returns</dt><dd>An optional unique pointer to the initialized flow iterator. </dd></dl>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a980172ba3bb45d1eaac97d447b87bd4e_cgraph.svg" width="352" height="162"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a980172ba3bb45d1eaac97d447b87bd4e_icgraph.svg" width="352" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
 <a id="a9b38d15538796d9cc115211890a6c081" name="a9b38d15538796d9cc115211890a6c081"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9b38d15538796d9cc115211890a6c081">&#9670;&#160;</a></span>init_monte_carlo()</h2>
 
@@ -542,7 +503,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a9b38d15538796d9cc115211890a6c081_cgraph.svg" width="598" height="322"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a9b38d15538796d9cc115211890a6c081_cgraph.svg" width="532" height="235"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -650,7 +611,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a00d0e7a7d549bf06886dfc3ba9de3e3d_cgraph.svg" width="100%" height="588"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a00d0e7a7d549bf06886dfc3ba9de3e3d_cgraph.svg" width="100%" height="523"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -697,8 +658,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a212a55abe2b9cb558932ba82e4cf6dbf" name="a212a55abe2b9cb558932ba82e4cf6dbf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a212a55abe2b9cb558932ba82e4cf6dbf">&#9670;&#160;</a></span>init_state()</h2>
+<a id="a97eff5566ced6ba6449eb532f0babadc" name="a97eff5566ced6ba6449eb532f0babadc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97eff5566ced6ba6449eb532f0babadc">&#9670;&#160;</a></span>init_state()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -706,13 +667,15 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="memname">std::optional&lt; bool &gt; Core::GlobalInitialiser::init_state </td>
           <td>(</td>
-          <td class="paramtype">std::unique_ptr&lt; CmaRead::FlowIterator &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>flow_handle</em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>transiionner</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Initializes the simulation state. </p>
+<p>Initializes a flow iterator. </p>
+<dl class="section return"><dt>Returns</dt><dd>An optional unique pointer to the initialized flow iterator.</dd></dl>
+<p>Initializes the simulation state.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">flow_handle</td><td>A unique pointer to the flow iterator used for state initialization. </td></tr>
@@ -723,56 +686,26 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a212a55abe2b9cb558932ba82e4cf6dbf_cgraph.svg" width="100%" height="478"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a97eff5566ced6ba6449eb532f0babadc_cgraph.svg" width="100%" height="478"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a212a55abe2b9cb558932ba82e4cf6dbf_icgraph.svg" width="559" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a97eff5566ced6ba6449eb532f0babadc_icgraph.svg" width="559" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="a970cd4b504a4cbc3e066922d6944bc1f" name="a970cd4b504a4cbc3e066922d6944bc1f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a970cd4b504a4cbc3e066922d6944bc1f">&#9670;&#160;</a></span>init_transitionner() <span class="overload">[1/2]</span></h2>
+<a id="a0dc2da93c4202706b5f37453f355145c" name="a0dc2da93c4202706b5f37453f355145c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dc2da93c4202706b5f37453f355145c">&#9670;&#160;</a></span>init_transitionner()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; <a class="el" href="classCmaUtils_1_1FlowMapTransitionner.html">CmaUtils::FlowMapTransitionner</a> &gt; Core::GlobalInitialiser::init_transitionner </td>
+          <td class="memname">std::optional&lt; <a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> &gt; Core::GlobalInitialiser::init_transitionner </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initializes a transitioner without parameters. </p>
-<dl class="section return"><dt>Returns</dt><dd>An optional unique pointer to the initialized flow map transitioner. </dd></dl>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a970cd4b504a4cbc3e066922d6944bc1f_cgraph.svg" width="546" height="162"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a970cd4b504a4cbc3e066922d6944bc1f_icgraph.svg" width="158" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<a id="a4fa32007b34a9e448be11ebd7d5e695f" name="a4fa32007b34a9e448be11ebd7d5e695f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4fa32007b34a9e448be11ebd7d5e695f">&#9670;&#160;</a></span>init_transitionner() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; <a class="el" href="classCmaUtils_1_1FlowMapTransitionner.html">CmaUtils::FlowMapTransitionner</a> &gt; Core::GlobalInitialiser::init_transitionner </td>
-          <td>(</td>
-          <td class="paramtype">std::unique_ptr&lt; CmaRead::FlowIterator &gt; &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>flow_handle</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -785,16 +718,18 @@ Here is the caller graph for this function:</div>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>An optional unique pointer to the initialized flow map transitioner.</dd></dl>
+<p>Initializes a transitioner without parameters.</p>
 <dl class="section return"><dt>Returns</dt><dd>An optional unique pointer to the initialized flow map transitioner. </dd></dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a4fa32007b34a9e448be11ebd7d5e695f_cgraph.svg" width="100%" height="478"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a0dc2da93c4202706b5f37453f355145c_cgraph.svg" width="100%" height="478"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a4fa32007b34a9e448be11ebd7d5e695f_icgraph.svg" width="364" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a0dc2da93c4202706b5f37453f355145c_icgraph.svg" width="364" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -932,7 +867,7 @@ template&lt;typename... Args&gt; </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a3844076c910ed26f60f42bada71cc09e_icgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a3844076c910ed26f60f42bada71cc09e_icgraph.svg" width="100%" height="584"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -971,6 +906,28 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">std::optional&lt;<a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a>&gt; Core::GlobalInitialiser::feed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a436c4ecde5b60b9283ebee88b7dcd7a6" name="a436c4ecde5b60b9283ebee88b7dcd7a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a436c4ecde5b60b9283ebee88b7dcd7a6">&#9670;&#160;</a></span>flat_neighobrs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::size_t&gt; Core::GlobalInitialiser::flat_neighobrs</td>
         </tr>
       </table>
   </td>
@@ -1047,28 +1004,6 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Flag indicating if this instance is the host. </p>
-
-</div>
-</div>
-<a id="a8ad6c39ccb88ecb69fe505ae3ecc2498" name="a8ad6c39ccb88ecb69fe505ae3ecc2498"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ad6c39ccb88ecb69fe505ae3ecc2498">&#9670;&#160;</a></span>liquid_neighbors</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">CmaRead::Neighbors::Neighbors_const_view_t Core::GlobalInitialiser::liquid_neighbors</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -1225,28 +1160,6 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Array to track validated initialization steps. </p>
-
-</div>
-</div>
-<a id="a75d25e8aff4b562b2fa4d6dec4bb7ff6" name="a75d25e8aff4b562b2fa4d6dec4bb7ff6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a75d25e8aff4b562b2fa4d6dec4bb7ff6">&#9670;&#160;</a></span>worker_neighbor_data</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;size_t&gt; Core::GlobalInitialiser::worker_neighbor_data</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

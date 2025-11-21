@@ -1,23 +1,25 @@
 <map id="MC::ParticlesContainer::__allocate_buffer__" name="MC::ParticlesContainer::__allocate_buffer__">
-<area shape="rect" id="Node000001" title=" " alt="" coords="658,68,817,107"/>
-<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#adae9af7cbb629530927d504f5fe75c90" title="Load data from ar for deserialization." alt="" coords="452,5,610,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="657,66,596,47,598,42,658,61"/>
-<area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" title="Insert particle buffer into the main container." alt="" coords="452,68,610,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="643,90,611,90,611,85,643,85"/>
-<area shape="rect" id="Node000006" href="$classMC_1_1ParticlesContainer.html#a03a343614bef6821b8815902e3185e37" title="Alias for the model used by the container." alt="" coords="452,177,610,216"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="687,117,571,179,568,174,685,112"/>
-<area shape="rect" id="Node000004" href="$classSimulation_1_1SimulationUnit.html#a96e8f3fbde370c918a3710b0b910cd42" title=" " alt="" coords="229,20,404,59"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="436,69,404,62,405,56,437,64"/>
-<area shape="rect" id="Node000005" href="$classSimulation_1_1SimulationUnit.html#a7b49fd171d4de8aa3949738da6c3810f" title=" " alt="" coords="5,20,181,59"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="213,42,181,42,181,37,213,37"/>
-<area shape="rect" id="Node000007" href="$classMC_1_1ParticlesContainer.html#ad499de971fbe1a2cf3e1adbe2bb151d6" title=" " alt="" coords="237,83,396,121"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="480,172,403,135,376,124,378,119,405,130,482,168"/>
-<area shape="rect" id="Node000008" href="$classMC_1_1ParticlesContainer.html#a5d93b87f5a6e18c449e0ed62333e9d6e" title=" " alt="" coords="237,145,396,184"/>
-<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="436,185,396,179,396,174,437,180"/>
-<area shape="rect" id="Node000009" href="$classMC_1_1ParticlesContainer.html#a5b4a66b67d3b4942557b22538958480a" title=" " alt="" coords="237,208,396,247"/>
-<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="437,213,396,219,396,213,436,208"/>
-<area shape="rect" id="Node000010" href="$classMC_1_1ParticlesContainer.html#adacba063d362632ca0899bae750b628a" title="Default copy and move constructors and assignment operators." alt="" coords="237,271,396,309"/>
-<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="479,226,405,260,375,273,373,268,403,256,477,221"/>
-<area shape="rect" id="Node000011" href="$classMC_1_1ParticlesContainer.html#ae0cd8cf83c2728db495167ec2f10d80a" title=" " alt="" coords="237,333,396,372"/>
-<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="507,230,462,277,405,323,382,335,380,330,403,318,459,273,503,226"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="882,68,1040,107"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#adae9af7cbb629530927d504f5fe75c90" title="Load data from ar for deserialization." alt="" coords="675,5,834,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="880,66,820,47,821,42,882,61"/>
+<area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" title="Insert particle buffer into the main container." alt="" coords="675,68,834,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="866,90,834,90,834,85,866,85"/>
+<area shape="rect" id="Node000007" href="$classMC_1_1ParticlesContainer.html#a03a343614bef6821b8815902e3185e37" title="Alias for the model used by the container." alt="" coords="675,177,834,216"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="911,117,794,179,792,174,908,112"/>
+<area shape="rect" id="Node000004" href="$classSimulation_1_1SimulationUnit.html#a96e8f3fbde370c918a3710b0b910cd42" title=" " alt="" coords="452,20,627,59"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="659,69,627,62,628,56,660,64"/>
+<area shape="rect" id="Node000005" href="$classSimulation_1_1SimulationUnit.html#a7b49fd171d4de8aa3949738da6c3810f" title=" " alt="" coords="229,20,404,59"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="437,42,404,42,404,37,437,37"/>
+<area shape="rect" id="Node000006" href="$classSimulation_1_1SimulationUnit.html#adc096ee7d35524a8107a3390daa55a1a" title=" " alt="" coords="5,20,181,59"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="213,42,181,42,181,37,213,37"/>
+<area shape="rect" id="Node000008" href="$classMC_1_1ParticlesContainer.html#ad499de971fbe1a2cf3e1adbe2bb151d6" title=" " alt="" coords="460,83,619,121"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="703,172,626,135,599,124,601,119,628,130,706,168"/>
+<area shape="rect" id="Node000009" href="$classMC_1_1ParticlesContainer.html#a5d93b87f5a6e18c449e0ed62333e9d6e" title=" " alt="" coords="460,145,619,184"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="659,185,619,179,620,174,660,180"/>
+<area shape="rect" id="Node000010" href="$classMC_1_1ParticlesContainer.html#a5b4a66b67d3b4942557b22538958480a" title=" " alt="" coords="460,208,619,247"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="660,213,620,219,619,213,659,208"/>
+<area shape="rect" id="Node000011" href="$classMC_1_1ParticlesContainer.html#adacba063d362632ca0899bae750b628a" title="Default copy and move constructors and assignment operators." alt="" coords="460,271,619,309"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="703,226,628,260,598,273,596,268,626,256,701,221"/>
+<area shape="rect" id="Node000012" href="$classMC_1_1ParticlesContainer.html#ae0cd8cf83c2728db495167ec2f10d80a" title=" " alt="" coords="460,333,619,372"/>
+<area shape="poly" id="edge11_Node000007_Node000012" title=" " alt="" coords="730,230,686,277,629,323,606,335,603,330,626,318,682,273,726,226"/>
 </map>

@@ -79,30 +79,24 @@ $(function(){initNavTree('classWrapMPI_1_1IterationPayload.html','','classWrapMP
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2c8c29533324156d5c504bddad7c8b27" id="r_a2c8c29533324156d5c504bddad7c8b27"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c8c29533324156d5c504bddad7c8b27">IterationPayload</a> (size_t size_flows, size_t volumes)</td></tr>
-<tr class="memdesc:a2c8c29533324156d5c504bddad7c8b27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an <a class="el" href="classWrapMPI_1_1IterationPayload.html" title="Represents the payload of data exchanged during an iteration.">IterationPayload</a> with specified sizes for flows and volumes.  <br /></td></tr>
+<tr class="memitem:a8fa4e159bd10f0250e7bdafdcc0d0902" id="r_a8fa4e159bd10f0250e7bdafdcc0d0902"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fa4e159bd10f0250e7bdafdcc0d0902">IterationPayload</a> (size_t <a class="el" href="namespaceWrapMPI.html#af327946eefb8047d293b379a14d84407a3ff9bc31300446713e4d51c4b20f5d39">volumes</a>)</td></tr>
+<tr class="memdesc:a8fa4e159bd10f0250e7bdafdcc0d0902"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an <a class="el" href="classWrapMPI_1_1IterationPayload.html" title="Represents the payload of data exchanged during an iteration.">IterationPayload</a> with specified sizes for flows and volumes.  <br /></td></tr>
 <tr class="memitem:a136036d66a6c16c18d4115905448380f" id="r_a136036d66a6c16c18d4115905448380f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a136036d66a6c16c18d4115905448380f">recv</a> (size_t source, MPI_Status *status) noexcept</td></tr>
 <tr class="memdesc:a136036d66a6c16c18d4115905448380f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receives data for this payload from a specified source.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aa40eff7a883cea1c6f2f847af6fb0945" id="r_aa40eff7a883cea1c6f2f847af6fb0945"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa40eff7a883cea1c6f2f847af6fb0945">liquid_flows</a></td></tr>
-<tr class="memdesc:aa40eff7a883cea1c6f2f847af6fb0945"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector containing liquid flow values for the current iteration.  <br /></td></tr>
 <tr class="memitem:ae0c206babd305cb96c510ce689e767c4" id="r_ae0c206babd305cb96c510ce689e767c4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0c206babd305cb96c510ce689e767c4">liquid_volumes</a></td></tr>
-<tr class="memdesc:ae0c206babd305cb96c510ce689e767c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector containing liquid volume values for the current iteration.  <br /></td></tr>
-<tr class="memitem:ab28ab36137a27e1989cb6be84b1c231c" id="r_ab28ab36137a27e1989cb6be84b1c231c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab28ab36137a27e1989cb6be84b1c231c">gas_volumes</a></td></tr>
-<tr class="memdesc:ab28ab36137a27e1989cb6be84b1c231c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector containing gas volume values for the current iteration.  <br /></td></tr>
-<tr class="memitem:adfc72461ec6b555318eed0dcc99c29e9" id="r_adfc72461ec6b555318eed0dcc99c29e9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfc72461ec6b555318eed0dcc99c29e9">raw_neighbors</a></td></tr>
-<tr class="memdesc:adfc72461ec6b555318eed0dcc99c29e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector containing raw neighbor indices for the current iteration.  <br /></td></tr>
-<tr class="memitem:adb7612eaa242c66046762498a24b5107" id="r_adb7612eaa242c66046762498a24b5107"><td class="memItemLeft" align="right" valign="top">CmaRead::Neighbors::Neighbors_const_view_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb7612eaa242c66046762498a24b5107">neighbors</a></td></tr>
-<tr class="memdesc:adb7612eaa242c66046762498a24b5107"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constant view of neighbor data for the current iteration.  <br /></td></tr>
+<tr class="memitem:a84cf806f041eb1bbd5f9adde35f5bb82" id="r_a84cf806f041eb1bbd5f9adde35f5bb82"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a84cf806f041eb1bbd5f9adde35f5bb82">liquid_neighbors_flat</a></td></tr>
+<tr class="memitem:aed15f44ad52beb50ee599e64d58ab93a" id="r_aed15f44ad52beb50ee599e64d58ab93a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed15f44ad52beb50ee599e64d58ab93a">proba_leaving_flat</a></td></tr>
+<tr class="memitem:ae3571383d0915126fde99b36538b14f7" id="r_ae3571383d0915126fde99b36538b14f7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3571383d0915126fde99b36538b14f7">liquid_out_flows</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the payload of data exchanged during an iteration. </p>
 <p>This class encapsulates the data related to liquid flows, liquid volumes, gas volumes, and neighbor information for a given iteration. </p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2c8c29533324156d5c504bddad7c8b27" name="a2c8c29533324156d5c504bddad7c8b27"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c8c29533324156d5c504bddad7c8b27">&#9670;&#160;</a></span>IterationPayload()</h2>
+<a id="a8fa4e159bd10f0250e7bdafdcc0d0902" name="a8fa4e159bd10f0250e7bdafdcc0d0902"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fa4e159bd10f0250e7bdafdcc0d0902">&#9670;&#160;</a></span>IterationPayload()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -113,12 +107,8 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">WrapMPI::IterationPayload::IterationPayload </td>
           <td>(</td>
-          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>size_flows</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>volumes</em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>volumes</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -187,35 +177,31 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="ab28ab36137a27e1989cb6be84b1c231c" name="ab28ab36137a27e1989cb6be84b1c231c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab28ab36137a27e1989cb6be84b1c231c">&#9670;&#160;</a></span>gas_volumes</h2>
+<a id="a84cf806f041eb1bbd5f9adde35f5bb82" name="a84cf806f041eb1bbd5f9adde35f5bb82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84cf806f041eb1bbd5f9adde35f5bb82">&#9670;&#160;</a></span>liquid_neighbors_flat</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;double&gt; WrapMPI::IterationPayload::gas_volumes</td>
+          <td class="memname">std::vector&lt;std::size_t&gt; WrapMPI::IterationPayload::liquid_neighbors_flat</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Vector containing gas volume values for the current iteration. </p>
-
 </div>
 </div>
-<a id="aa40eff7a883cea1c6f2f847af6fb0945" name="aa40eff7a883cea1c6f2f847af6fb0945"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa40eff7a883cea1c6f2f847af6fb0945">&#9670;&#160;</a></span>liquid_flows</h2>
+<a id="ae3571383d0915126fde99b36538b14f7" name="ae3571383d0915126fde99b36538b14f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3571383d0915126fde99b36538b14f7">&#9670;&#160;</a></span>liquid_out_flows</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;double&gt; WrapMPI::IterationPayload::liquid_flows</td>
+          <td class="memname">std::vector&lt;double&gt; WrapMPI::IterationPayload::liquid_out_flows</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Vector containing liquid flow values for the current iteration. </p>
 
 </div>
 </div>
@@ -231,39 +217,19 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Vector containing liquid volume values for the current iteration. </p>
-
 </div>
 </div>
-<a id="adb7612eaa242c66046762498a24b5107" name="adb7612eaa242c66046762498a24b5107"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb7612eaa242c66046762498a24b5107">&#9670;&#160;</a></span>neighbors</h2>
+<a id="aed15f44ad52beb50ee599e64d58ab93a" name="aed15f44ad52beb50ee599e64d58ab93a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed15f44ad52beb50ee599e64d58ab93a">&#9670;&#160;</a></span>proba_leaving_flat</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">CmaRead::Neighbors::Neighbors_const_view_t WrapMPI::IterationPayload::neighbors</td>
+          <td class="memname">std::vector&lt;double&gt; WrapMPI::IterationPayload::proba_leaving_flat</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Constant view of neighbor data for the current iteration. </p>
-
-</div>
-</div>
-<a id="adfc72461ec6b555318eed0dcc99c29e9" name="adfc72461ec6b555318eed0dcc99c29e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adfc72461ec6b555318eed0dcc99c29e9">&#9670;&#160;</a></span>raw_neighbors</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;size_t&gt; WrapMPI::IterationPayload::raw_neighbors</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Vector containing raw neighbor indices for the current iteration. </p>
 
 </div>
 </div>

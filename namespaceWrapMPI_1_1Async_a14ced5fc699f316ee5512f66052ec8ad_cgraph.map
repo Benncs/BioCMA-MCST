@@ -1,10 +1,5 @@
 <map id="WrapMPI::Async::send_v" name="WrapMPI::Async::send_v">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,12,174,37"/>
-<area shape="rect" id="Node000002" href="$namespaceWrapMPI_1_1Async.html#a59ad59e497d926c7bdc45585bd715410" title=" " alt="" coords="424,5,585,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,22,408,22,408,27,174,27"/>
-<area shape="rect" id="Node000004" href="$namespaceWrapMPI_1_1Async.html#aea9ea25d4513c086000ad935de0c2a63" title=" " alt="" coords="222,36,376,61"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="175,32,206,35,206,41,174,37"/>
-<area shape="rect" id="Node000003" href="$namespaceWrapMPI.html#adab3300a86b8c0227268b23134b57a24" title=" " alt="" coords="633,12,766,37"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="586,22,618,22,618,27,586,27"/>
-<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="376,37,408,33,409,39,377,42"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,174,30"/>
+<area shape="rect" id="Node000002" href="$namespaceWrapMPI_1_1Async.html#aea9ea25d4513c086000ad935de0c2a63" title=" " alt="" coords="222,5,376,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,15,206,15,206,20,174,20"/>
 </map>

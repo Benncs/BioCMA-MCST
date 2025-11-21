@@ -2,8 +2,8 @@ var classExportHandler =
 [
     [ "ExportHandler", "classExportHandler.html#af8b6276e13d983a4a7e59a8ab19c8eef", null ],
     [ "ExportHandler", "classExportHandler.html#afe3da51e618b8e7c488222301e3b1339", null ],
-    [ "operator()", "classExportHandler.html#a51e7bc3719685192c28df6b57b7a9f37", null ],
-    [ "pre_post_export", "classExportHandler.html#a840c47e423fb45dee277bbc0b3a0092c", null ],
+    [ "operator()", "classExportHandler.html#ad66ddd83a4245acb73446a86f3fcde6a", null ],
+    [ "pre_post_export", "classExportHandler.html#a6b0b35e1d567203c9de17039b98d1caa", null ],
     [ "prepareEventSpan", "classExportHandler.html#ad87b1d6ff0f86388337aae6b325ea796", null ],
     [ "dump_counter", "classExportHandler.html#aafb6506106fbe83c62746ac22f74ce9c", null ],
     [ "dump_interval", "classExportHandler.html#a4ecb11f51dda4bdae385deaa7480eeb0", null ],
