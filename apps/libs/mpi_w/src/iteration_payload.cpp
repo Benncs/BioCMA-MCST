@@ -26,6 +26,7 @@ namespace WrapMPI
     bool flag = false;
     if (n_rank == 1)
     {
+      to_wait = false;
       return true;
     }
 

@@ -108,7 +108,6 @@ namespace
     }
 
     return delta_time;
-
   }
 
 } // namespace
@@ -209,7 +208,7 @@ namespace Core
   {
 
     auto d_transition = (is_host)
-                            ? get_dtransitionner(user_params.cma_case_path)
+                            ? get_dtransitioner(user_params.cma_case_path)
                             : CmaUtils::TransitionnerPtrType::from_raw(nullptr);
 
     if (is_host)

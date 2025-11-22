@@ -7,10 +7,9 @@
 
 namespace CmaUtils
 {
-  using TransitionnerPtrType = rust::Box<TransionnerWrapper>;
+  using TransitionnerPtrType = rust::Box<TransitionerWrapper>;
   using IterationStatePtrType = ::rust::Box<::IterationStateWrapper>;
   using StateCooMatrixType = ::rust::Box<::CooMatrixWrap>;
-
 
 } // namespace CmaUtils
 
