@@ -109,69 +109,6 @@ namespace
 
     return delta_time;
 
-    // auto min_liquid_residen_time = [](const auto& state) -> double
-    // {
-    //   constexpr double init_residence_time =
-    //   std::numeric_limits<double>::max(); double min_residence_time =
-    //   init_residence_time;
-
-    //   for (size_t i = 0; i < state.n_compartments; ++i)
-    //   {
-    //     const auto view_flows = state.liquid_flow.getViewFlows();
-    //     double sum_flows = 0.;
-    //     for (size_t j = 0; j < state.n_compartments; ++j)
-    //     {
-    //       sum_flows += view_flows(i, j);
-    //     }
-    //     if (sum_flows != 0)
-    //     {
-    //       double residence_time = state.liquidVolume[i] / sum_flows;
-    //       if (residence_time < min_residence_time && residence_time != 0.)
-    //       {
-    //         min_residence_time = residence_time;
-    //       }
-    //     }
-    //   }
-
-    //   if (min_residence_time <= 0 || min_residence_time ==
-    //   init_residence_time)
-    //   {
-    //     throw std::invalid_argument("Flow map not valid");
-    //   }
-
-    //   return min_residence_time;
-    // };
-
-    // if (delta_time <= 0)
-    // {
-    //   auto minElement = std::min_element(
-    //       iterator->begin(),
-    //       iterator->end(),
-    //       [&min_liquid_residen_time](const auto& state1, const auto& state2)
-    //       {
-    //         return min_liquid_residen_time(state1) <
-    //                min_liquid_residen_time(state2);
-    //       });
-
-    //   if (minElement != iterator->end())
-    //   {
-
-    //     delta_time = min_liquid_residen_time(*minElement) / 100.;
-    //   }
-    //   else
-    //   {
-    //     // should throw  cause if delta <=0 we have incorrect timstep if
-    //     first
-    //     // branch fails delta_time is unchanged.
-    //     // + If min_element fails flowmap might be invalid then default value
-    //     is
-    //     // not needed
-    //     throw std::invalid_argument("No time step given and impossibe to "
-    //                                 "estimate it with given flowmap");
-    //   }
-    // }
-
-    // return delta_time;
   }
 
 } // namespace

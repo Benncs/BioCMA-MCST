@@ -35,7 +35,6 @@ def init_simulation(
     simulation_name: str,
     cma_path: str,
     params,
-    is_recursive: bool = False,
     _id: Optional[int] = None,
 ):
     sim_id = 0
@@ -58,7 +57,7 @@ def init_simulation(
     handle_module.register_result_path(handle, f"{full_out_dir}/{simulation_name}")
 
     # Register the CMA path
-    handle_module.register_cma_path(handle, cma_path, is_recursive)
+    handle_module.register_cma_path(handle, cma_path)
 
     return handle
 
@@ -83,7 +82,6 @@ def fast_run(
     n_compartment: int,
     s_feed: float,
     liquid_flow_rate: float = 0.0,
-    is_recursive: bool = False,
     is_serde: bool = False,
     f_init=None,
     serde_path=None,
@@ -93,7 +91,7 @@ def fast_run(
     # Prepare parameters
     params = handle_module.make_params(**params)
     handle = handle_module.init_simulation(
-        outfolder, name, cma_path, params, is_recursive
+        outfolder, name, cma_path, params
     )
 
     # Liquid feed configuration

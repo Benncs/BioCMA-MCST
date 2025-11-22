@@ -314,8 +314,7 @@ namespace Api
     return ApiResult(); // TODO
   }
 
-  bool SimulationInstance::register_cma_path(std::string_view path,
-                                             bool recursive)
+  bool SimulationInstance::register_cma_path(std::string_view path)
   {
 
     std::filesystem::path p(path);
@@ -331,7 +330,6 @@ namespace Api
       normalized += std::filesystem::path::preferred_separator;
     }
 
-    this->params.recursive = recursive;
     this->params.cma_case_path = normalized;
 
     return true;

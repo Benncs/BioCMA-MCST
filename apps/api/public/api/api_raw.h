@@ -51,7 +51,6 @@ typedef struct Opaque* Handle; // NOLINT //In C we only need ptr type so Opaque
 
   /* REGISTER */
   int register_result_path(Handle handle, const char* c);
-  int register_cma_path_recursive(Handle handle, const char* c);
   int register_cma_path(Handle handle, const char* c);
   int register_serde(Handle handle, const char* c);
   int register_model_name(Handle handle, const char* c);
@@ -67,7 +66,6 @@ typedef struct Opaque* Handle; // NOLINT //In C we only need ptr type so Opaque
     uint64_t number_particle; ///< Number of particles in the simulation.
     int32_t n_thread;         ///< Number of threads to use for simulation.
     uint32_t number_exported_result; ///< Number of results to be exported.
-    int recursive;                   ///< Flag to enable recursive processing.
     int force_override; ///< Flag to allow overwriting of existing results.
     int load_serde;
     int save_serde;
