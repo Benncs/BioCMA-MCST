@@ -1,9 +1,11 @@
 <map id="MC::ReactorDomain::getNumberCompartments" name="MC::ReactorDomain::getNumberCompartments">
-<area shape="rect" id="Node000001" title="Return the number of compartment in the domain." alt="" coords="317,26,489,65"/>
-<area shape="rect" id="Node000002" href="$namespaceMC.html#aabb3d28b6ac38413f8d34f525d26942f" title=" " alt="" coords="146,5,244,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="301,35,244,27,245,22,302,29"/>
-<area shape="rect" id="Node000004" href="$classMC_1_1ReactorDomain.html#a25f27e850c92b548606eb3a3fb06d39e" title=" " alt="" coords="121,54,269,93"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="302,62,270,66,269,61,301,57"/>
-<area shape="rect" id="Node000003" href="$namespaceMC.html#ade0c0af584516d4dfc554b9d6c045a74" title="Helper function to initialize a MonteCarloUnit." alt="" coords="5,5,73,30"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="130,20,73,20,73,15,130,15"/>
+<area shape="rect" id="Node000001" title="Return the number of compartment in the domain." alt="" coords="398,26,570,65"/>
+<area shape="rect" id="Node000002" href="$namespaceMC.html#aabb3d28b6ac38413f8d34f525d26942f" title=" " alt="" coords="227,5,325,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="382,35,325,27,326,22,383,29"/>
+<area shape="rect" id="Node000004" href="$classMC_1_1ReactorDomain.html#a25f27e850c92b548606eb3a3fb06d39e" title="Update neigbors of compartments." alt="" coords="202,54,350,93"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="383,62,351,66,350,61,382,57"/>
+<area shape="rect" id="Node000003" href="$namespaceMC.html#aea847035bda07533d03d9322ec032869" title="Helper function to initialize a MonteCarloUnit." alt="" coords="46,5,113,30"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="211,20,113,20,113,15,211,15"/>
+<area shape="rect" id="Node000005" href="$classMC_1_1ReactorDomain.html#a4ce1224958d3b5c83c06c1a6fcd2f005" title="Main constructor." alt="" coords="5,54,154,93"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="186,76,154,76,154,71,186,71"/>
 </map>

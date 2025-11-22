@@ -3,11 +3,6 @@ var annotated_dup =
     [ "Api", "namespaceApi.html", [
       [ "SimulationInstance", "structApi_1_1SimulationInstance.html", "structApi_1_1SimulationInstance" ]
     ] ],
-    [ "CmaUtils", "namespaceCmaUtils.html", [
-      [ "IterationState", "structCmaUtils_1_1IterationState.html", "structCmaUtils_1_1IterationState" ],
-      [ "PreCalculatedHydroState", "classCmaUtils_1_1PreCalculatedHydroState.html", "classCmaUtils_1_1PreCalculatedHydroState" ],
-      [ "ProxyPreCalculatedHydroState", "classCmaUtils_1_1ProxyPreCalculatedHydroState.html", "classCmaUtils_1_1ProxyPreCalculatedHydroState" ]
-    ] ],
     [ "Common", "namespaceCommon.html", [
       [ "ConfigFactory", "classCommon_1_1ConfigFactory.html", "classCommon_1_1ConfigFactory" ],
       [ "ConfigFile", "classCommon_1_1ConfigFile.html", "classCommon_1_1ConfigFile" ]

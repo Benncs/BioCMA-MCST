@@ -58,7 +58,7 @@ var sectionId = 'dynsection-6';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Host speciffic state init.">
+<g id="a_Node000001"><a xlink:title="Retrieves path files based on the provided case path.">
 <polygon fill="#999999" stroke="#666666" points="556.75,-29 447,-29 447,0 556.75,0 556.75,-29"/>
 <text xml:space="preserve" text-anchor="start" x="455" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
 <text xml:space="preserve" text-anchor="middle" x="501.88" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::host_init_state</text>

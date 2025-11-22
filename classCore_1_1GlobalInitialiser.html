@@ -141,10 +141,8 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a3844076c910ed26f60f42bada71cc09e" id="r_a3844076c910ed26f60f42bada71cc09e"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:a3844076c910ed26f60f42bada71cc09e template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3844076c910ed26f60f42bada71cc09e">validate_step</a> (<a class="el" href="#aed6035b1335dd789d51598a410e4dbae">InitStep</a> step, Args... args)</td></tr>
 <tr class="memdesc:a3844076c910ed26f60f42bada71cc09e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validates the specified initialization step and any additional steps.  <br /></td></tr>
-<tr class="memitem:a751126aaf6e8da709d3b9c98f0a796fb" id="r_a751126aaf6e8da709d3b9c98f0a796fb"><td class="memItemLeft" align="right" valign="top">CmtCommons::cma_exported_paths_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a751126aaf6e8da709d3b9c98f0a796fb">get_path_files</a> (const std::string &amp;cma_case_path)</td></tr>
-<tr class="memdesc:a751126aaf6e8da709d3b9c98f0a796fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves path files based on the provided case path.  <br /></td></tr>
 <tr class="memitem:a36655d4a10ebb302f64512e2cda8649d" id="r_a36655d4a10ebb302f64512e2cda8649d"><td class="memItemLeft" align="right" valign="top">std::optional&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36655d4a10ebb302f64512e2cda8649d">host_init_state</a> (const <a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> &amp;transiionner)</td></tr>
-<tr class="memdesc:a36655d4a10ebb302f64512e2cda8649d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Host speciffic state init.  <br /></td></tr>
+<tr class="memdesc:a36655d4a10ebb302f64512e2cda8649d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves path files based on the provided case path.  <br /></td></tr>
 <tr class="memitem:aa042e8d396a5287c49fb6a8b81eba209" id="r_aa042e8d396a5287c49fb6a8b81eba209"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa042e8d396a5287c49fb6a8b81eba209">mpi_broadcast</a> ()</td></tr>
 <tr class="memdesc:aa042e8d396a5287c49fb6a8b81eba209"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs MPI broadcast for synchronization.  <br /></td></tr>
 </table><table class="memberdecls">
@@ -387,40 +385,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a751126aaf6e8da709d3b9c98f0a796fb" name="a751126aaf6e8da709d3b9c98f0a796fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a751126aaf6e8da709d3b9c98f0a796fb">&#9670;&#160;</a></span>get_path_files()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">CmtCommons::cma_exported_paths_t Core::GlobalInitialiser::get_path_files </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>cma_case_path</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieves path files based on the provided case path. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">cma_case_path</td><td>The path for the CMA case. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A structure containing exported paths. </dd></dl>
-
-</div>
-</div>
 <a id="a36655d4a10ebb302f64512e2cda8649d" name="a36655d4a10ebb302f64512e2cda8649d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a36655d4a10ebb302f64512e2cda8649d">&#9670;&#160;</a></span>host_init_state()</h2>
 
@@ -444,7 +408,15 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p>Host speciffic state init. </p>
+<p>Retrieves path files based on the provided case path. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cma_case_path</td><td>The path for the CMA case. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A structure containing exported paths.</dd></dl>
+<p>Host speciffic state init </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">

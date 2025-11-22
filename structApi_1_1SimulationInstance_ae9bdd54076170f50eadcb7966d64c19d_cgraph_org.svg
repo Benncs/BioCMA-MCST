@@ -420,7 +420,7 @@
 <!-- Node18 -->
 <g id="Node000018" class="node">
 <title>Node18</title>
-<g id="a_Node000018"><a xlink:href="classCore_1_1GlobalInitialiser.html#a36655d4a10ebb302f64512e2cda8649d" target="_top" xlink:title="Host speciffic state init.">
+<g id="a_Node000018"><a xlink:href="classCore_1_1GlobalInitialiser.html#a36655d4a10ebb302f64512e2cda8649d" target="_top" xlink:title="Retrieves path files based on the provided case path.">
 <polygon fill="white" stroke="#666666" points="559,-29 449.25,-29 449.25,0 559,0 559,-29"/>
 <text xml:space="preserve" text-anchor="start" x="457.25" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
 <text xml:space="preserve" text-anchor="middle" x="504.12" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::host_init_state</text>

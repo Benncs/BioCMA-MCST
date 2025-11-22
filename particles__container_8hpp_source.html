@@ -755,31 +755,31 @@ $(function(){initNavTree('particles__container_8hpp_source.html','',''); });
 <div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>    <span class="keyword">auto</span> _model = <a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297">model</a>;</div>
 <div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span>    <span class="keyword">auto</span> _status = <a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#afa005cba9cbc87bc27b6bd0eaa066fac">status</a>;</div>
 <div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span> </div>
-<div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span>    <a class="code hl_typedef" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a> _tmp_p = Kokkos::create_mirror_view(<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#aab2bc872e28015fbbd9dd5ce78468e73">position</a>);</div>
-<div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span>    <span class="keyword">auto</span> _tmp_m = Kokkos::create_mirror_view(<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297">model</a>);</div>
-<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>    <span class="keyword">auto</span> _tmp_s = Kokkos::create_mirror_view(<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#afa005cba9cbc87bc27b6bd0eaa066fac">status</a>);</div>
-<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span>    Kokkos::parallel_for(</div>
-<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>        <span class="stringliteral">&quot;ParticlesContainer::sort&quot;</span>,</div>
-<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span>        Kokkos::RangePolicy&lt;&gt;(0, <a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#ae3d67d42ba1d139b0ad83d1d9395f3dc">n_allocated_elements</a>),</div>
-<div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span>        KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keywordtype">int</span>&amp; i) {</div>
-<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span>          <span class="keywordflow">if</span> (perm(i) &gt;= <a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#a7b4ed9c9e9938f71e1fc659dcf3ff66e">n_used_elements</a>)</div>
-<div class="line"><a id="l00779" name="l00779"></a><span class="lineno">  779</span>          {</div>
-<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span>            <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00781" name="l00781"></a><span class="lineno">  781</span>          }</div>
-<div class="line"><a id="l00782" name="l00782"></a><span class="lineno">  782</span>          <span class="keyword">const</span> <span class="keyword">auto</span> idx = src_offset + perm(i);</div>
-<div class="line"><a id="l00783" name="l00783"></a><span class="lineno">  783</span>          Kokkos::Impl::CopyOp&lt;<span class="keyword">decltype</span>(<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#aab2bc872e28015fbbd9dd5ce78468e73">position</a>), <span class="keyword">decltype</span>(<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#aab2bc872e28015fbbd9dd5ce78468e73">position</a>)&gt;::copy(</div>
-<div class="line"><a id="l00784" name="l00784"></a><span class="lineno">  784</span>              _tmp_p, i, _position, idx);</div>
+<div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span>    <span class="comment">// MC::ParticlePositions _tmp_p = Kokkos::create_mirror_view(position);</span></div>
+<div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span>    <span class="comment">// auto _tmp_m = Kokkos::create_mirror_view(model);</span></div>
+<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>    <span class="comment">// auto _tmp_s = Kokkos::create_mirror_view(status);</span></div>
+<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span>    <span class="comment">// Kokkos::parallel_for(</span></div>
+<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>    <span class="comment">//     &quot;ParticlesContainer::sort&quot;,</span></div>
+<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span>    <span class="comment">//     Kokkos::RangePolicy&lt;&gt;(0, n_allocated_elements),</span></div>
+<div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span>    <span class="comment">//     KOKKOS_LAMBDA(const int&amp; i) {</span></div>
+<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span>    <span class="comment">//       if (perm(i) &gt;= n_used_elements)</span></div>
+<div class="line"><a id="l00779" name="l00779"></a><span class="lineno">  779</span>    <span class="comment">//       {</span></div>
+<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span>    <span class="comment">//         return;</span></div>
+<div class="line"><a id="l00781" name="l00781"></a><span class="lineno">  781</span>    <span class="comment">//       }</span></div>
+<div class="line"><a id="l00782" name="l00782"></a><span class="lineno">  782</span>    <span class="comment">//       const auto idx = src_offset + perm(i);</span></div>
+<div class="line"><a id="l00783" name="l00783"></a><span class="lineno">  783</span>    <span class="comment">//       Kokkos::Impl::CopyOp&lt;decltype(position), decltype(position)&gt;::copy(</span></div>
+<div class="line"><a id="l00784" name="l00784"></a><span class="lineno">  784</span>    <span class="comment">//           _tmp_p, i, _position, idx);</span></div>
 <div class="line"><a id="l00785" name="l00785"></a><span class="lineno">  785</span> </div>
-<div class="line"><a id="l00786" name="l00786"></a><span class="lineno">  786</span>          Kokkos::Impl::CopyOp&lt;<span class="keyword">decltype</span>(<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297">model</a>), <span class="keyword">decltype</span>(<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297">model</a>), 2&gt;::copy(</div>
-<div class="line"><a id="l00787" name="l00787"></a><span class="lineno">  787</span>              _tmp_m, i, _model, idx);</div>
+<div class="line"><a id="l00786" name="l00786"></a><span class="lineno">  786</span>    <span class="comment">//       Kokkos::Impl::CopyOp&lt;decltype(model), decltype(model), 2&gt;::copy(</span></div>
+<div class="line"><a id="l00787" name="l00787"></a><span class="lineno">  787</span>    <span class="comment">//           _tmp_m, i, _model, idx);</span></div>
 <div class="line"><a id="l00788" name="l00788"></a><span class="lineno">  788</span> </div>
-<div class="line"><a id="l00789" name="l00789"></a><span class="lineno">  789</span>          Kokkos::Impl::CopyOp&lt;<span class="keyword">decltype</span>(<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#afa005cba9cbc87bc27b6bd0eaa066fac">status</a>), <span class="keyword">decltype</span>(<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#afa005cba9cbc87bc27b6bd0eaa066fac">status</a>)&gt;::copy(</div>
-<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span>              _tmp_s, i, _status, idx);</div>
-<div class="line"><a id="l00791" name="l00791"></a><span class="lineno">  791</span>        });</div>
-<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span>    Kokkos::fence();</div>
-<div class="line"><a id="l00793" name="l00793"></a><span class="lineno">  793</span>    Kokkos::deep_copy(<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#aab2bc872e28015fbbd9dd5ce78468e73">position</a>, _tmp_p);</div>
-<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span>    Kokkos::deep_copy(<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297">model</a>, _tmp_m);</div>
-<div class="line"><a id="l00795" name="l00795"></a><span class="lineno">  795</span>    Kokkos::deep_copy(<a class="code hl_variable" href="classMC_1_1ParticlesContainer.html#afa005cba9cbc87bc27b6bd0eaa066fac">status</a>, _tmp_s);</div>
+<div class="line"><a id="l00789" name="l00789"></a><span class="lineno">  789</span>    <span class="comment">//       Kokkos::Impl::CopyOp&lt;decltype(status), decltype(status)&gt;::copy(</span></div>
+<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span>    <span class="comment">//           _tmp_s, i, _status, idx);</span></div>
+<div class="line"><a id="l00791" name="l00791"></a><span class="lineno">  791</span>    <span class="comment">//     });</span></div>
+<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span>    <span class="comment">// Kokkos::fence();</span></div>
+<div class="line"><a id="l00793" name="l00793"></a><span class="lineno">  793</span>    <span class="comment">// Kokkos::deep_copy(position, _tmp_p);</span></div>
+<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span>    <span class="comment">// Kokkos::deep_copy(model, _tmp_m);</span></div>
+<div class="line"><a id="l00795" name="l00795"></a><span class="lineno">  795</span>    <span class="comment">// Kokkos::deep_copy(status, _tmp_s);</span></div>
 <div class="line"><a id="l00796" name="l00796"></a><span class="lineno">  796</span>  }</div>
 </div>
 <div class="line"><a id="l00797" name="l00797"></a><span class="lineno">  797</span> </div>

@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="namespaceMC.html#ade0c0af584516d4dfc554b9d6c045a74" target="_top" xlink:title="Helper function to initialize a MonteCarloUnit.">
+<g id="a_Node000002"><a xlink:href="namespaceMC.html#aea847035bda07533d03d9322ec032869" target="_top" xlink:title="Helper function to initialize a MonteCarloUnit.">
 <polygon fill="white" stroke="#666666" points="77.88,-83.75 27.38,-83.75 27.38,-65.25 77.88,-65.25 77.88,-83.75"/>
 <text xml:space="preserve" text-anchor="middle" x="52.62" y="-70.25" font-family="Helvetica,sans-Serif" font-size="10.00">MC::init</text>
 </a>

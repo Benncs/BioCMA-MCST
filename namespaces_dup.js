@@ -1,7 +1,11 @@
 var namespaces_dup =
 [
     [ "Api", "namespaceApi.html", "namespaceApi" ],
-    [ "CmaUtils", "namespaceCmaUtils.html", "namespaceCmaUtils" ],
+    [ "CmaUtils", "namespaceCmaUtils.html", [
+      [ "IterationStatePtrType", "namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259", null ],
+      [ "StateCooMatrixType", "namespaceCmaUtils.html#a345f1e3ce09450d18c2de5f270cc75f6", null ],
+      [ "TransitionnerPtrType", "namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9", null ]
+    ] ],
     [ "Common", "namespaceCommon.html", "namespaceCommon" ],
     [ "CommonMaths", "namespaceCommonMaths.html", [
       [ "_ln", "namespaceCommonMaths.html#ad4e27e17383f20d970bcd89fd00e36f0", null ],

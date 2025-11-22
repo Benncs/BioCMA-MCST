@@ -15,7 +15,6 @@ var classCore_1_1GlobalInitialiser =
     [ "check_init_terminate", "classCore_1_1GlobalInitialiser.html#af0e3ff388be6a2cb08edf9f69dd200b0", null ],
     [ "check_steps", "classCore_1_1GlobalInitialiser.html#a5134f9db1f59d9124d5fdec88e3e99f3", null ],
     [ "get_parameters", "classCore_1_1GlobalInitialiser.html#ae6d2f54a18d82dda373f9cd7ec923eac", null ],
-    [ "get_path_files", "classCore_1_1GlobalInitialiser.html#a751126aaf6e8da709d3b9c98f0a796fb", null ],
     [ "host_init_state", "classCore_1_1GlobalInitialiser.html#a36655d4a10ebb302f64512e2cda8649d", null ],
     [ "init_feed", "classCore_1_1GlobalInitialiser.html#aefbbc9e413134e0e080df2218316fe63", null ],
     [ "init_monte_carlo", "classCore_1_1GlobalInitialiser.html#a9b38d15538796d9cc115211890a6c081", null ],

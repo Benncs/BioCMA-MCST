@@ -79,8 +79,8 @@ Compartment Modelling Approach</h1>
 <p>This documentation focuses on the namespace <a class="el" href="namespaceCmaUtils.html">CmaUtils</a> and the functor <a class="el" href="structSimulation_1_1KernelInline_1_1MoveFunctor.html">MoveFunctor</a>.</p>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
 CmaUtils</h2>
-<p>The <b><a class="el" href="namespaceCmaUtils.html" title="Namespace to handle algorithms and structures related to reading compartment mesh.">CmaUtils</a></b> library serves as the interface between <b>CMtool</b> and <b>Kokkos</b>. While <b>CMtool</b> provides lightweight data accessors, it is not optimized for parallel simulation. Many operations require reading flow data efficiently in a parallel context—this is where <b><a class="el" href="namespaceCmaUtils.html" title="Namespace to handle algorithms and structures related to reading compartment mesh.">CmaUtils</a></b> bridges the gap.</p>
-<p>The library wraps <b>CMtool</b> and provides an abstraction layer over <b>Kokkos</b> to handle data reading and processing from flow maps within the simulation. This design ensures that simulation logic remains clean and focused on computations, while <b><a class="el" href="namespaceCmaUtils.html" title="Namespace to handle algorithms and structures related to reading compartment mesh.">CmaUtils</a></b> manages the complexity of data handling.</p>
+<p>The <b><a class="el" href="namespaceCmaUtils.html">CmaUtils</a></b> library serves as the interface between <b>CMtool</b> and <b>Kokkos</b>. While <b>CMtool</b> provides lightweight data accessors, it is not optimized for parallel simulation. Many operations require reading flow data efficiently in a parallel context—this is where <b><a class="el" href="namespaceCmaUtils.html">CmaUtils</a></b> bridges the gap.</p>
+<p>The library wraps <b>CMtool</b> and provides an abstraction layer over <b>Kokkos</b> to handle data reading and processing from flow maps within the simulation. This design ensures that simulation logic remains clean and focused on computations, while <b><a class="el" href="namespaceCmaUtils.html">CmaUtils</a></b> manages the complexity of data handling.</p>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
 Compartment Operations</h3>
 <p>Two main operations have to be performed to CMtool Rawdata in order to used them in simulation kernels.</p><ul>
@@ -98,22 +98,22 @@ Transition Matrix</h4>
 \[    \frac{dYV}{dt}=YM
 \]
 </p>
-<p>Implemented in <a class="el" href="namespaceCmaUtils.html#a66366f852348c9e73718973e83e243f5">get_transition_matrix</a>, this function construct the M matrix.</p>
+<p>Implemented in get_transition_matrix, this function construct the M matrix.</p>
 <p>Algorithmic Notes:</p>
 <p>The implemented method employs a straightforward sparse matrix assembly via triplet lists:</p><ul>
 <li>Off-diagonal terms are populated directly from the flow matrix F(i,j).</li>
-<li>Diagonal terms are computed as the negative sum of outbound flows from each compartment, ensuring local mass conservation. This structure yields a well-posed linear operator driving the Eulerian scalar transpors. For discrete stochastic transport, only the diagonal is used and extract with <a class="el" href="namespaceCmaUtils.html#a62072fff78d8de117e133499f87a2a0c">this function</a></li>
+<li>Diagonal terms are computed as the negative sum of outbound flows from each compartment, ensuring local mass conservation. This structure yields a well-posed linear operator driving the Eulerian scalar transpors. For discrete stochastic transport, only the diagonal is used and extract with this function</li>
 </ul>
 <h4 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
 Cumulative probability</h4>
-<p>This step is performed <a class="el" href="namespaceCmaUtils.html#a9aff69bdff3b52945f2be00f4e25846d">here</a>. The result is important to decide where the discrete particles moves.</p>
+<p>This step is performed here. The result is important to decide where the discrete particles moves.</p>
 <p>The aim is to construct of discrete CDF to have to probability to go in a specific compartment knowning that the cell leaves a compartment. Let L the event to leave current compartment i, and let \(I_{j}\) the event to go the compartment i we have for each neighbors \(P(I_{j}|L)\).</p>
 <p>This function construct the CDF using the fact that </p><p class="formulaDsp">
 \[P(I_{j}|L)=\frac{F(i,j)}{\sum_{k} F(i,k)}\]
 </p>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
 FlowMapTransitionner</h3>
-<p>Additionally, <b><a class="el" href="namespaceCmaUtils.html" title="Namespace to handle algorithms and structures related to reading compartment mesh.">CmaUtils</a></b> implements the FlowMapTransitionner—an abstraction designed for managing flow map transitions during the simulation. This component provides seamless access to the correct flow map based on the simulation time, abstracting away the details of data formats and file I/O. The transtionner supports flexible behaviors, such as:</p><ul>
+<p>Additionally, <b><a class="el" href="namespaceCmaUtils.html">CmaUtils</a></b> implements the FlowMapTransitionner—an abstraction designed for managing flow map transitions during the simulation. This component provides seamless access to the correct flow map based on the simulation time, abstracting away the details of data formats and file I/O. The transtionner supports flexible behaviors, such as:</p><ul>
 <li>Switching to the next flow map after a set time interval.</li>
 <li>Looping over available flow maps.</li>
 <li>Implementing caching mechanisms for improved performance.</li>

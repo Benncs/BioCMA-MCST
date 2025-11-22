@@ -1,0 +1,7 @@
+<map id="MC::ReactorDomain::ReactorDomain" name="MC::ReactorDomain::ReactorDomain">
+<area shape="rect" id="Node000001" title="Main constructor." alt="" coords="5,5,154,44"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ReactorDomain.html#a25f27e850c92b548606eb3a3fb06d39e" title="Update neigbors of compartments." alt="" coords="202,5,350,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,22,186,22,186,27,154,27"/>
+<area shape="rect" id="Node000003" href="$classMC_1_1ReactorDomain.html#adf8edb6cba4ee63f14c48ebadb73fb2e" title="Return the number of compartment in the domain." alt="" coords="398,5,570,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="350,22,382,22,382,27,350,27"/>
+</map>

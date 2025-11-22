@@ -1,7 +1,5 @@
 <map id="MC::ReactorDomain::setLiquidNeighbors" name="MC::ReactorDomain::setLiquidNeighbors">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,154,76"/>
+<area shape="rect" id="Node000001" title="Update neigbors of compartments." alt="" coords="5,5,154,44"/>
 <area shape="rect" id="Node000002" href="$classMC_1_1ReactorDomain.html#adf8edb6cba4ee63f14c48ebadb73fb2e" title="Return the number of compartment in the domain." alt="" coords="202,5,374,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,43,185,38,186,43,154,48"/>
-<area shape="rect" id="Node000003" href="$classMC_1_1ReactorDomain.html#a9a0ccc5fa6ab29dd6b921540903b94c1" title="Update neigbors of compartments." alt="" coords="214,68,362,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="154,65,199,72,198,77,154,70"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,22,186,22,186,27,154,27"/>
 </map>

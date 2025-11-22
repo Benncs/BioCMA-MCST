@@ -43,7 +43,7 @@
 <area shape="poly" id="edge24_Node000016_Node000017" title=" " alt="" coords="362,367,395,375,394,380,361,372"/>
 <area shape="poly" id="edge25_Node000017_Node000006" title=" " alt="" coords="502,375,528,346,554,312,568,285,575,261,583,238,602,213,605,211,609,215,606,217,588,240,580,263,573,287,559,315,532,349,506,378"/>
 <area shape="poly" id="edge33_Node000017_Node000007" title=" " alt="" coords="528,374,555,356,570,338,578,320,587,303,602,284,617,273,620,277,606,288,591,306,583,323,574,341,558,360,531,379"/>
-<area shape="rect" id="Node000018" href="$classCore_1_1GlobalInitialiser.html#a36655d4a10ebb302f64512e2cda8649d" title="Host speciffic state init." alt="" coords="604,377,751,416"/>
+<area shape="rect" id="Node000018" href="$classCore_1_1GlobalInitialiser.html#a36655d4a10ebb302f64512e2cda8649d" title="Retrieves path files based on the provided case path." alt="" coords="604,377,751,416"/>
 <area shape="poly" id="edge26_Node000017_Node000018" title=" " alt="" coords="557,394,589,394,589,399,557,399"/>
 <area shape="rect" id="Node000019" href="$classCore_1_1GlobalInitialiser.html#aa042e8d396a5287c49fb6a8b81eba209" title="Performs MPI broadcast for synchronization." alt="" coords="604,298,751,337"/>
 <area shape="poly" id="edge27_Node000017_Node000019" title=" " alt="" coords="532,374,612,341,614,346,534,379"/>

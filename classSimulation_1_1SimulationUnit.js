@@ -18,7 +18,6 @@ var classSimulation_1_1SimulationUnit =
     [ "getDimensions", "classSimulation_1_1SimulationUnit.html#a7b82dd15ce4828d8ee59ca0a9410f63d", null ],
     [ "getkernel_concentration", "classSimulation_1_1SimulationUnit.html#a4295618336e99606be4e87b31feb848a", null ],
     [ "getMTRData", "classSimulation_1_1SimulationUnit.html#a95e094f9921c520f4a41e3b9a308b187", null ],
-    [ "getState", "classSimulation_1_1SimulationUnit.html#adc096ee7d35524a8107a3390daa55a1a", null ],
     [ "init_functors", "classSimulation_1_1SimulationUnit.html#a50e613289a3b6ca1abea7173e3eac01e", null ],
     [ "operator=", "classSimulation_1_1SimulationUnit.html#a255b9ef06424a104581e8aab290e8281", null ],
     [ "operator=", "classSimulation_1_1SimulationUnit.html#aa8a28ba8699f0b719db0558d4eca98cf", null ],

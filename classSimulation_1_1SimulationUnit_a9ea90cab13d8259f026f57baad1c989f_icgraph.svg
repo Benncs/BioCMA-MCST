@@ -47,9 +47,9 @@
   </g>
 </defs>
 <script type="application/ecmascript">
-var viewWidth = 810;
+var viewWidth = 642;
 var viewHeight = 225;
-var sectionId = 'dynsection-8';
+var sectionId = 'dynsection-6';
 </script>
 <script type="application/ecmascript" xlink:href="svg.min.js"/>
 <svg id="graph" class="graph">
@@ -59,9 +59,9 @@ var sectionId = 'dynsection-8';
 <g id="Node000001" class="node">
 <title>Node1</title>
 <g id="a_Node000001"><a xlink:title=" ">
-<polygon fill="#999999" stroke="#666666" points="801.5,-146 670,-146 670,-117 801.5,-117 801.5,-146"/>
-<text xml:space="preserve" text-anchor="start" x="678" y="-132.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="735.75" y="-122" font-family="Helvetica,sans-Serif" font-size="10.00">::get_kernel_contribution</text>
+<polygon fill="#999999" stroke="#666666" points="634,-146 502.5,-146 502.5,-117 634,-117 634,-146"/>
+<text xml:space="preserve" text-anchor="start" x="510.5" y="-132.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
+<text xml:space="preserve" text-anchor="middle" x="568.25" y="-122" font-family="Helvetica,sans-Serif" font-size="10.00">::get_kernel_contribution</text>
 </a>
 </g>
 </g>
@@ -69,9 +69,9 @@ var sectionId = 'dynsection-8';
 <g id="Node000002" class="node">
 <title>Node2</title>
 <g id="a_Node000002"><a xlink:href="classSimulation_1_1SimulationUnit.html#ae2077067788b0cb0535c62933724a1cf" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="634,-193 502.5,-193 502.5,-164 634,-164 634,-193"/>
-<text xml:space="preserve" text-anchor="start" x="510.5" y="-179.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="568.25" y="-169" font-family="Helvetica,sans-Serif" font-size="10.00">::scatter_contribute</text>
+<polygon fill="white" stroke="#666666" points="466.5,-193 335,-193 335,-164 466.5,-164 466.5,-193"/>
+<text xml:space="preserve" text-anchor="start" x="343" y="-179.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
+<text xml:space="preserve" text-anchor="middle" x="400.75" y="-169" font-family="Helvetica,sans-Serif" font-size="10.00">::scatter_contribute</text>
 </a>
 </g>
 </g>
@@ -79,27 +79,27 @@ var sectionId = 'dynsection-8';
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node1&#45;&gt;Node2</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M671.75,-149.39C655.28,-154.07 637.71,-159.06 621.84,-163.56"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="672.27,-152.88 680.93,-146.78 670.35,-146.15 672.27,-152.88"/>
+<path fill="none" stroke="#63b8ff" d="M504.25,-149.39C487.78,-154.07 470.21,-159.06 454.34,-163.56"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="504.77,-152.88 513.43,-146.78 502.85,-146.15 504.77,-152.88"/>
 </a>
 </g>
 </g>
-<!-- Node6 -->
-<g id="Node000006" class="node">
-<title>Node6</title>
-<g id="a_Node000006"><a xlink:href="classSimulation_1_1SimulationUnit.html#a366f1f10c6148e01e79d3f10735ea0ea" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="634,-123 502.5,-123 502.5,-94 634,-94 634,-123"/>
-<text xml:space="preserve" text-anchor="start" x="510.5" y="-109.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="568.25" y="-99" font-family="Helvetica,sans-Serif" font-size="10.00">::SimulationUnit</text>
+<!-- Node5 -->
+<g id="Node000005" class="node">
+<title>Node5</title>
+<g id="a_Node000005"><a xlink:href="classSimulation_1_1SimulationUnit.html#a366f1f10c6148e01e79d3f10735ea0ea" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="466.5,-123 335,-123 335,-94 466.5,-94 466.5,-123"/>
+<text xml:space="preserve" text-anchor="start" x="343" y="-109.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
+<text xml:space="preserve" text-anchor="middle" x="400.75" y="-99" font-family="Helvetica,sans-Serif" font-size="10.00">::SimulationUnit</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node6 -->
-<g id="edge5_Node000001_Node000006" class="edge">
-<title>Node1&#45;&gt;Node6</title>
-<g id="a_edge5_Node000001_Node000006"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M658.47,-120.9C650.38,-119.78 642.21,-118.64 634.27,-117.54"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="657.93,-124.36 668.32,-122.27 658.89,-117.42 657.93,-124.36"/>
+<!-- Node1&#45;&gt;Node5 -->
+<g id="edge4_Node000001_Node000005" class="edge">
+<title>Node1&#45;&gt;Node5</title>
+<g id="a_edge4_Node000001_Node000005"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M490.97,-120.9C482.88,-119.78 474.71,-118.64 466.77,-117.54"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="490.43,-124.36 500.82,-122.27 491.39,-117.42 490.43,-124.36"/>
 </a>
 </g>
 </g>
@@ -107,9 +107,9 @@ var sectionId = 'dynsection-8';
 <g id="Node000003" class="node">
 <title>Node3</title>
 <g id="a_Node000003"><a xlink:href="classSimulation_1_1SimulationUnit.html#a96e8f3fbde370c918a3710b0b910cd42" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="466.5,-217 335,-217 335,-188 466.5,-188 466.5,-217"/>
-<text xml:space="preserve" text-anchor="start" x="343" y="-203.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="400.75" y="-193" font-family="Helvetica,sans-Serif" font-size="10.00">::post_cycle</text>
+<polygon fill="white" stroke="#666666" points="299,-217 167.5,-217 167.5,-188 299,-188 299,-217"/>
+<text xml:space="preserve" text-anchor="start" x="175.5" y="-203.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
+<text xml:space="preserve" text-anchor="middle" x="233.25" y="-193" font-family="Helvetica,sans-Serif" font-size="10.00">::post_cycle</text>
 </a>
 </g>
 </g>
@@ -117,8 +117,8 @@ var sectionId = 'dynsection-8';
 <g id="edge2_Node000002_Node000003" class="edge">
 <title>Node2&#45;&gt;Node3</title>
 <g id="a_edge2_Node000002_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M490.97,-189.56C482.88,-190.73 474.71,-191.92 466.77,-193.07"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="491.42,-193.03 500.82,-188.13 490.42,-186.11 491.42,-193.03"/>
+<path fill="none" stroke="#63b8ff" d="M323.47,-189.56C315.38,-190.73 307.21,-191.92 299.27,-193.07"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="323.92,-193.03 333.32,-188.13 322.92,-186.11 323.92,-193.03"/>
 </a>
 </g>
 </g>
@@ -126,9 +126,9 @@ var sectionId = 'dynsection-8';
 <g id="Node000004" class="node">
 <title>Node4</title>
 <g id="a_Node000004"><a xlink:href="classSimulation_1_1SimulationUnit.html#a7b49fd171d4de8aa3949738da6c3810f" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="299,-217 167.5,-217 167.5,-188 299,-188 299,-217"/>
-<text xml:space="preserve" text-anchor="start" x="175.5" y="-203.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="233.25" y="-193" font-family="Helvetica,sans-Serif" font-size="10.00">::cycleProcess</text>
+<polygon fill="white" stroke="#666666" points="131.5,-217 0,-217 0,-188 131.5,-188 131.5,-217"/>
+<text xml:space="preserve" text-anchor="start" x="8" y="-203.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
+<text xml:space="preserve" text-anchor="middle" x="65.75" y="-193" font-family="Helvetica,sans-Serif" font-size="10.00">::cycleProcess</text>
 </a>
 </g>
 </g>
@@ -136,103 +136,84 @@ var sectionId = 'dynsection-8';
 <g id="edge3_Node000003_Node000004" class="edge">
 <title>Node3&#45;&gt;Node4</title>
 <g id="a_edge3_Node000003_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M323.47,-202.5C315.38,-202.5 307.21,-202.5 299.27,-202.5"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="323.3,-206 333.3,-202.5 323.3,-199 323.3,-206"/>
-</a>
-</g>
-</g>
-<!-- Node5 -->
-<g id="Node000005" class="node">
-<title>Node5</title>
-<g id="a_Node000005"><a xlink:href="classSimulation_1_1SimulationUnit.html#adc096ee7d35524a8107a3390daa55a1a" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="131.5,-217 0,-217 0,-188 131.5,-188 131.5,-217"/>
-<text xml:space="preserve" text-anchor="start" x="8" y="-203.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="65.75" y="-193" font-family="Helvetica,sans-Serif" font-size="10.00">::getState</text>
-</a>
-</g>
-</g>
-<!-- Node4&#45;&gt;Node5 -->
-<g id="edge4_Node000004_Node000005" class="edge">
-<title>Node4&#45;&gt;Node5</title>
-<g id="a_edge4_Node000004_Node000005"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M155.97,-202.5C147.88,-202.5 139.71,-202.5 131.77,-202.5"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="155.8,-206 165.8,-202.5 155.8,-199 155.8,-206"/>
+</a>
+</g>
+</g>
+<!-- Node6 -->
+<g id="Node000006" class="node">
+<title>Node6</title>
+<g id="a_Node000006"><a xlink:href="classSimulation_1_1SimulationUnit.html#a255b9ef06424a104581e8aab290e8281" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="299,-170 167.5,-170 167.5,-141 299,-141 299,-170"/>
+<text xml:space="preserve" text-anchor="start" x="175.5" y="-156.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
+<text xml:space="preserve" text-anchor="middle" x="233.25" y="-146" font-family="Helvetica,sans-Serif" font-size="10.00">::operator=</text>
+</a>
+</g>
+</g>
+<!-- Node5&#45;&gt;Node6 -->
+<g id="edge5_Node000005_Node000006" class="edge">
+<title>Node5&#45;&gt;Node6</title>
+<g id="a_edge5_Node000005_Node000006"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M336.75,-126.39C320.28,-131.07 302.71,-136.06 286.84,-140.56"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="337.27,-129.88 345.93,-123.78 335.35,-123.15 337.27,-129.88"/>
 </a>
 </g>
 </g>
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="classSimulation_1_1SimulationUnit.html#a255b9ef06424a104581e8aab290e8281" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="466.5,-170 335,-170 335,-141 466.5,-141 466.5,-170"/>
-<text xml:space="preserve" text-anchor="start" x="343" y="-156.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="400.75" y="-146" font-family="Helvetica,sans-Serif" font-size="10.00">::operator=</text>
+<g id="a_Node000007"><a xlink:href="classSimulation_1_1SimulationUnit.html#aa8a28ba8699f0b719db0558d4eca98cf" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="299,-123 167.5,-123 167.5,-94 299,-94 299,-123"/>
+<text xml:space="preserve" text-anchor="start" x="175.5" y="-109.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
+<text xml:space="preserve" text-anchor="middle" x="233.25" y="-99" font-family="Helvetica,sans-Serif" font-size="10.00">::operator=</text>
 </a>
 </g>
 </g>
-<!-- Node6&#45;&gt;Node7 -->
-<g id="edge6_Node000006_Node000007" class="edge">
-<title>Node6&#45;&gt;Node7</title>
-<g id="a_edge6_Node000006_Node000007"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M504.25,-126.39C487.78,-131.07 470.21,-136.06 454.34,-140.56"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="504.77,-129.88 513.43,-123.78 502.85,-123.15 504.77,-129.88"/>
+<!-- Node5&#45;&gt;Node7 -->
+<g id="edge6_Node000005_Node000007" class="edge">
+<title>Node5&#45;&gt;Node7</title>
+<g id="a_edge6_Node000005_Node000007"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M323.47,-108.5C315.38,-108.5 307.21,-108.5 299.27,-108.5"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="323.3,-112 333.3,-108.5 323.3,-105 323.3,-112"/>
 </a>
 </g>
 </g>
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:href="classSimulation_1_1SimulationUnit.html#aa8a28ba8699f0b719db0558d4eca98cf" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="466.5,-123 335,-123 335,-94 466.5,-94 466.5,-123"/>
-<text xml:space="preserve" text-anchor="start" x="343" y="-109.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="400.75" y="-99" font-family="Helvetica,sans-Serif" font-size="10.00">::operator=</text>
+<g id="a_Node000008"><a xlink:href="classSimulation_1_1SimulationUnit.html#a8e019e0aff679d5c93b0b0e8a1f4542e" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="299,-76 167.5,-76 167.5,-47 299,-47 299,-76"/>
+<text xml:space="preserve" text-anchor="start" x="175.5" y="-62.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
+<text xml:space="preserve" text-anchor="middle" x="233.25" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00">::SimulationUnit</text>
 </a>
 </g>
 </g>
-<!-- Node6&#45;&gt;Node8 -->
-<g id="edge7_Node000006_Node000008" class="edge">
-<title>Node6&#45;&gt;Node8</title>
-<g id="a_edge7_Node000006_Node000008"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M490.97,-108.5C482.88,-108.5 474.71,-108.5 466.77,-108.5"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="490.8,-112 500.8,-108.5 490.8,-105 490.8,-112"/>
+<!-- Node5&#45;&gt;Node8 -->
+<g id="edge7_Node000005_Node000008" class="edge">
+<title>Node5&#45;&gt;Node8</title>
+<g id="a_edge7_Node000005_Node000008"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M336.75,-90.61C320.28,-85.93 302.71,-80.94 286.84,-76.44"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="335.35,-93.85 345.93,-93.22 337.27,-87.12 335.35,-93.85"/>
 </a>
 </g>
 </g>
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:href="classSimulation_1_1SimulationUnit.html#a8e019e0aff679d5c93b0b0e8a1f4542e" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="466.5,-76 335,-76 335,-47 466.5,-47 466.5,-76"/>
-<text xml:space="preserve" text-anchor="start" x="343" y="-62.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="400.75" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00">::SimulationUnit</text>
+<g id="a_Node000009"><a xlink:href="classSimulation_1_1SimulationUnit.html#aa1fba49aec41255dbf01e2c07067df2a" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="299,-29 167.5,-29 167.5,0 299,0 299,-29"/>
+<text xml:space="preserve" text-anchor="start" x="175.5" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
+<text xml:space="preserve" text-anchor="middle" x="233.25" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::SimulationUnit</text>
 </a>
 </g>
 </g>
-<!-- Node6&#45;&gt;Node9 -->
-<g id="edge8_Node000006_Node000009" class="edge">
-<title>Node6&#45;&gt;Node9</title>
-<g id="a_edge8_Node000006_Node000009"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M504.25,-90.61C487.78,-85.93 470.21,-80.94 454.34,-76.44"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="502.85,-93.85 513.43,-93.22 504.77,-87.12 502.85,-93.85"/>
-</a>
-</g>
-</g>
-<!-- Node10 -->
-<g id="Node000010" class="node">
-<title>Node10</title>
-<g id="a_Node000010"><a xlink:href="classSimulation_1_1SimulationUnit.html#aa1fba49aec41255dbf01e2c07067df2a" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="466.5,-29 335,-29 335,0 466.5,0 466.5,-29"/>
-<text xml:space="preserve" text-anchor="start" x="343" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::SimulationUnit</text>
-<text xml:space="preserve" text-anchor="middle" x="400.75" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">::SimulationUnit</text>
-</a>
-</g>
-</g>
-<!-- Node6&#45;&gt;Node10 -->
-<g id="edge9_Node000006_Node000010" class="edge">
-<title>Node6&#45;&gt;Node10</title>
-<g id="a_edge9_Node000006_Node000010"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M539.89,-86.66C520.28,-71.72 492.79,-52.22 466.5,-38.5 460.23,-35.23 453.41,-32.19 446.63,-29.45"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="537.6,-89.31 547.65,-92.65 541.88,-83.77 537.6,-89.31"/>
+<!-- Node5&#45;&gt;Node9 -->
+<g id="edge8_Node000005_Node000009" class="edge">
+<title>Node5&#45;&gt;Node9</title>
+<g id="a_edge8_Node000005_Node000009"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M372.39,-86.66C352.78,-71.72 325.29,-52.22 299,-38.5 292.73,-35.23 285.91,-32.19 279.13,-29.45"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="370.1,-89.31 380.15,-92.65 374.38,-83.77 370.1,-89.31"/>
 </a>
 </g>
 </g>

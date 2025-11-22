@@ -2,7 +2,7 @@
 <area shape="rect" id="Node000001" title="Initializes a flow iterator." alt="" coords="5,100,152,139"/>
 <area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#a5134f9db1f59d9124d5fdec88e3e99f3" title="Checks the validity of specified initialization steps." alt="" coords="200,5,346,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,97,198,53,208,48,211,53,201,58,116,102"/>
-<area shape="rect" id="Node000003" href="$classCore_1_1GlobalInitialiser.html#a36655d4a10ebb302f64512e2cda8649d" title="Host speciffic state init." alt="" coords="200,68,346,107"/>
+<area shape="rect" id="Node000003" href="$classCore_1_1GlobalInitialiser.html#a36655d4a10ebb302f64512e2cda8649d" title="Retrieves path files based on the provided case path." alt="" coords="200,68,346,107"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,105,184,99,185,104,153,110"/>
 <area shape="rect" id="Node000004" href="$classCore_1_1GlobalInitialiser.html#aa042e8d396a5287c49fb6a8b81eba209" title="Performs MPI broadcast for synchronization." alt="" coords="200,131,346,169"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="153,128,185,133,184,139,152,134"/>
