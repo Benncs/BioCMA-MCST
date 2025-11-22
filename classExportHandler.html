@@ -83,9 +83,9 @@ Collaboration diagram for ExportHandler:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af8b6276e13d983a4a7e59a8ab19c8eef" id="r_af8b6276e13d983a4a7e59a8ab19c8eef"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8b6276e13d983a4a7e59a8ab19c8eef">ExportHandler</a> ()=default</td></tr>
 <tr class="memitem:afe3da51e618b8e7c488222301e3b1339" id="r_afe3da51e618b8e7c488222301e3b1339"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe3da51e618b8e7c488222301e3b1339">ExportHandler</a> (std::shared_ptr&lt; <a class="el" href="classCore_1_1MainExporter.html">Core::MainExporter</a> &gt; _main_exporter, <a class="el" href="structExecInfo.html">ExecInfo</a> _exec, std::size_t _dump_interval, std::size_t _n_iter_simulation)</td></tr>
-<tr class="memitem:ad66ddd83a4245acb73446a86f3fcde6a" id="r_ad66ddd83a4245acb73446a86f3fcde6a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad66ddd83a4245acb73446a86f3fcde6a">operator()</a> (double current_time, size_t loop_counter, <a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &amp;simulation, <a class="el" href="classCore_1_1PartialExporter.html">Core::PartialExporter</a> &amp;partial_exporter, const <a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> &amp;transitioner)</td></tr>
+<tr class="memitem:ad66ddd83a4245acb73446a86f3fcde6a" id="r_ad66ddd83a4245acb73446a86f3fcde6a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad66ddd83a4245acb73446a86f3fcde6a">operator()</a> (double current_time, size_t loop_counter, <a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &amp;simulation, <a class="el" href="classCore_1_1PartialExporter.html">Core::PartialExporter</a> &amp;partial_exporter, const <a class="el" href="namespaceCmaUtils.html#a95181f7ed7bfd8d20f6ebda33204e8c8">CmaUtils::TransitionnerPtrType</a> &amp;transitioner)</td></tr>
 <tr class="memdesc:ad66ddd83a4245acb73446a86f3fcde6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles periodic export of simulation data.  <br /></td></tr>
-<tr class="memitem:a6b0b35e1d567203c9de17039b98d1caa" id="r_a6b0b35e1d567203c9de17039b98d1caa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b0b35e1d567203c9de17039b98d1caa">pre_post_export</a> (double current_time, const <a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &amp;simulation, const <a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> &amp;transitioner)</td></tr>
+<tr class="memitem:a6b0b35e1d567203c9de17039b98d1caa" id="r_a6b0b35e1d567203c9de17039b98d1caa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b0b35e1d567203c9de17039b98d1caa">pre_post_export</a> (double current_time, const <a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &amp;simulation, const <a class="el" href="namespaceCmaUtils.html#a95181f7ed7bfd8d20f6ebda33204e8c8">CmaUtils::TransitionnerPtrType</a> &amp;transitioner)</td></tr>
 <tr class="memdesc:a6b0b35e1d567203c9de17039b98d1caa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepares and updates the exporter with the current simulation state before/after main loop.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-static-methods" class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
@@ -189,7 +189,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>transitioner</em></span>&#160;)</td>
+          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#a95181f7ed7bfd8d20f6ebda33204e8c8">CmaUtils::TransitionnerPtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>transitioner</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -233,7 +233,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9">CmaUtils::TransitionnerPtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>transitioner</em></span>&#160;)</td>
+          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#a95181f7ed7bfd8d20f6ebda33204e8c8">CmaUtils::TransitionnerPtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>transitioner</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -97,7 +97,7 @@
 <!-- Node21 -->
 <g id="Node000021" class="node">
 <title>Node21</title>
-<g id="a_Node000021"><a xlink:href="structApi_1_1SimulationInstance.html#a6822ba41b450cdafeda69cd9eedc1cc4" target="_top" xlink:title="Register a path for CMA data.">
+<g id="a_Node000021"><a xlink:href="structApi_1_1SimulationInstance.html#a036c1568fb3949313e6d4e8664d325e1" target="_top" xlink:title="Register a path for CMA data.">
 <polygon fill="white" stroke="#666666" points="286.25,-511 166.75,-511 166.75,-482 286.25,-482 286.25,-511"/>
 <text xml:space="preserve" text-anchor="start" x="174.75" y="-497.5" font-family="Helvetica,sans-Serif" font-size="10.00">Api::SimulationInstance</text>
 <text xml:space="preserve" text-anchor="middle" x="226.5" y="-487" font-family="Helvetica,sans-Serif" font-size="10.00">::register_cma_path</text>

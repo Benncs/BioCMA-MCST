@@ -4,7 +4,7 @@ var namespaces_dup =
     [ "CmaUtils", "namespaceCmaUtils.html", [
       [ "IterationStatePtrType", "namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259", null ],
       [ "StateCooMatrixType", "namespaceCmaUtils.html#a345f1e3ce09450d18c2de5f270cc75f6", null ],
-      [ "TransitionnerPtrType", "namespaceCmaUtils.html#a85594194a85a9cdfbc886dae4ebb41e9", null ]
+      [ "TransitionnerPtrType", "namespaceCmaUtils.html#a95181f7ed7bfd8d20f6ebda33204e8c8", null ]
     ] ],
     [ "Common", "namespaceCommon.html", "namespaceCommon" ],
     [ "CommonMaths", "namespaceCommonMaths.html", [
@@ -22,7 +22,7 @@ var namespaces_dup =
       [ "declare_parameter", "namespacePythonBindings.html#a0dfed48d738fa5b895624a82e3cafc5c", null ],
       [ "exec", "namespacePythonBindings.html#a5b0860d26d117daf1f6178523b1340a5", null ],
       [ "init_handle", "namespacePythonBindings.html#a6abd1c98e507d86b69aab328f0c94650", null ],
-      [ "register_cma_path", "namespacePythonBindings.html#a83a11e5e5a505e07645b3b390ea150f1", null ],
+      [ "register_cma_path", "namespacePythonBindings.html#a4502f9b5f66f66a56922869e497b0ba0", null ],
       [ "set_initialiser_from_data", "namespacePythonBindings.html#a83bf7d72dda0016cf5ab544ad3bb33fb", null ]
     ] ],
     [ "PythonWrap", "namespacePythonWrap.html", "namespacePythonWrap" ],

@@ -8,7 +8,7 @@
 <area shape="poly" id="edge20_Node000001_Node000019" title=" " alt="" coords="86,568,97,514,120,439,136,399,156,360,181,323,211,291,214,288,217,292,215,295,185,326,161,363,141,402,125,441,103,515,92,569"/>
 <area shape="rect" id="Node000020" href="$structApi_1_1SimulationInstance.html#ab938dea3b413538bfdaa40daa5d122a2" title="Retrieve the simulation instance&#39;s unique identifier." alt="" coords="228,305,387,344"/>
 <area shape="poly" id="edge21_Node000001_Node000020" title=" " alt="" coords="89,568,103,524,128,467,163,406,186,378,211,353,215,350,218,354,214,357,190,382,168,409,133,469,108,526,94,570"/>
-<area shape="rect" id="Node000021" href="$structApi_1_1SimulationInstance.html#a6822ba41b450cdafeda69cd9eedc1cc4" title="Register a path for CMA data." alt="" coords="228,368,387,407"/>
+<area shape="rect" id="Node000021" href="$structApi_1_1SimulationInstance.html#a036c1568fb3949313e6d4e8664d325e1" title="Register a path for CMA data." alt="" coords="228,368,387,407"/>
 <area shape="poly" id="edge22_Node000001_Node000021" title=" " alt="" coords="93,568,137,494,171,452,211,416,217,412,220,417,214,420,175,456,142,497,98,571"/>
 <area shape="rect" id="Node000022" href="$structApi_1_1SimulationInstance.html#a7fe33427bbf42fbff934729f90242271" title=" " alt="" coords="223,431,392,469"/>
 <area shape="poly" id="edge23_Node000001_Node000022" title=" " alt="" coords="103,567,149,523,179,499,211,478,220,474,223,478,214,483,182,503,153,527,106,571"/>
