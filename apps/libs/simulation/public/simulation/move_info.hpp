@@ -1,9 +1,8 @@
 #ifndef __SIMULATION__MOVE_INFO_HPP__
 #define __SIMULATION__MOVE_INFO_HPP__
 
-#include "Kokkos_Assert.hpp"
+#include <common/common.hpp>
 #include <Kokkos_Core_fwd.hpp>
-#include <cma_utils/cache_hydro_state.hpp>
 #include <mc/alias.hpp>
 #include <simulation/alias.hpp>
 

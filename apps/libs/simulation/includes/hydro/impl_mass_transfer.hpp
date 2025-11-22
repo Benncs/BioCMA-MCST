@@ -11,8 +11,7 @@
 #ifndef NDEBUG
 #  pragma GCC diagnostic pop
 #endif
-#include <cma_utils/d_transitionner.hpp>
-#include <cma_utils/iteration_state.hpp>
+#include <cma_utils/alias.hpp>
 #include <eigen_kokkos.hpp>
 #include <mc/domain.hpp>
 #include <simulation/mass_transfer.hpp>

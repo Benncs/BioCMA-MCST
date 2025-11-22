@@ -29,32 +29,31 @@ namespace MC
   }
 
   ReactorDomain::ReactorDomain(std::span<double> volumes,
-                               const HostNeighsView& _neighbors)
+                               std::span<const size_t> neighbors)
       : _total_volume(std::reduce(volumes.begin(), volumes.end(), 0.)),
         size(volumes.size()),
         k_neighbor(Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"))
 
   {
 
-    setLiquidNeighbors(_neighbors);
-  }
-
-  void ReactorDomain::setLiquidNeighbors(const HostNeighsView& data)
-  {
-
-    Kokkos::resize(k_neighbor, data.extent(0), data.extent(1));
-    Kokkos::deep_copy(k_neighbor, data);
+    setLiquidNeighbors(neighbors);
   }
 
   void ReactorDomain::setLiquidNeighbors(std::span<const size_t> flat_data)
   {
+    using HostNeighsView = Kokkos::View<
+        const std::size_t**,
+        Kokkos::LayoutRight,
+        HostSpace,
+        Kokkos::MemoryTraits<Kokkos::RandomAccess | Kokkos::Unmanaged>>;
     const auto n_rows = this->getNumberCompartments();
     const auto n_cols = flat_data.size() / n_rows;
     KOKKOS_ASSERT(n_rows * n_cols == flat_data.size() &&
                   flat_data.size() % n_rows == 0);
     const auto* chunk = flat_data.data();
     HostNeighsView neighbors_view(chunk, n_rows, n_cols);
-    setLiquidNeighbors(neighbors_view);
+    Kokkos::resize(k_neighbor, n_rows, n_cols);
+    Kokkos::deep_copy(k_neighbor, neighbors_view);
   }
 
   ReactorDomain& ReactorDomain::operator=(ReactorDomain&& other) noexcept

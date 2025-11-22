@@ -8,7 +8,11 @@ namespace Simulation
   class SimulationUnit;
 }
 
-#include <mpi_w/wrap_mpi.hpp>
+#ifndef NO_MPI
+#  include <mpi_w/wrap_mpi.hpp>
+#else
+using MPI_Request = int;
+#endif
 
 /**
  * @brief Synchronization after particle processing.

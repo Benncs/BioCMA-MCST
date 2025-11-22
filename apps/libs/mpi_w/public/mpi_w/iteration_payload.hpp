@@ -1,7 +1,7 @@
 #ifndef __ITERATION_PAYLOAD_HPP__
 #define __ITERATION_PAYLOAD_HPP__
 
-#include <cma_utils/d_transitionner.hpp>
+#include <cma_utils/alias.hpp>
 #include <mpi.h>
 #include <span>
 #include <vector>

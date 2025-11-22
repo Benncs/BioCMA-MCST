@@ -19,11 +19,7 @@ namespace MC
                    Space,
                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
-  using HostNeighsView = Kokkos::View<
-      const std::size_t**,
-      Kokkos::LayoutRight,
-      HostSpace,
-      Kokkos::MemoryTraits<Kokkos::RandomAccess | Kokkos::Unmanaged>>;
+  
 
   /**
    * @brief Represents the spatial domain where Monte Carlo particles can exist.
@@ -64,7 +60,7 @@ namespace MC
     /**
      * @brief Main constructor
      */
-    ReactorDomain(std::span<double> volumes, const HostNeighsView& _neighbors);
+    ReactorDomain(std::span<double> volumes, std::span<const size_t> neighbors);
     /**
      * @brief Default destructor
      *
@@ -85,7 +81,6 @@ namespace MC
     /**
      * @brief Update neigbors of compartments
      */
-    void setLiquidNeighbors(const HostNeighsView& data);
 
     void setLiquidNeighbors(std::span<const size_t> flat_data);
 

@@ -1,12 +1,9 @@
 #ifndef __CORE_GLOBAL_INITIALLISER_HPP__
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
-#include "cma_utils/d_transitionner.hpp"
+#include <cma_utils/alias.hpp>
 #include "common/logger.hpp"
 #include <array>
-#include <cma_read/flow_iterator.hpp>
-#include <cma_read/neighbors.hpp>
-#include <cmt_common/cma_case.hpp>
 #include <common/execinfo.hpp>
 #include <core/scalar_factory.hpp>
 #include <core/simulation_parameters.hpp>
@@ -229,8 +226,8 @@ namespace Core
      * @param cma_case_path The path for the CMA case.
      * @return A structure containing exported paths.
      */
-    CmtCommons::cma_exported_paths_t
-    get_path_files(const std::string& cma_case_path);
+    // CmtCommons::cma_exported_paths_t
+    // get_path_files(const std::string& cma_case_path);
 
     /**
      * @brief Host speciffic state init

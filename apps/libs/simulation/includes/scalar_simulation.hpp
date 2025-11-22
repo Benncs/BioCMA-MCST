@@ -1,7 +1,6 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
-#include "cma_utils/d_transitionner.hpp"
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -14,7 +13,6 @@
 #  pragma GCC diagnostic pop
 #endif
 #include <Kokkos_Core.hpp>
-#include <cma_utils/cache_hydro_state.hpp>
 #include <common/common.hpp>
 #include <cstddef>
 #include <cstdint>
@@ -24,6 +22,7 @@
 #include <simulation/mass_transfer.hpp>
 #include <span>
 #include <vector>
+using FlowMatrixType = Eigen::SparseMatrix<double>;
 
 namespace Simulation
 {

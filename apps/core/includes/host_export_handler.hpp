@@ -1,7 +1,7 @@
 #ifndef __CORE_HOST_EXPORT_HANDLER_HPP__
 #define __CORE_HOST_EXPORT_HANDLER_HPP__
 
-#include <cma_utils/d_transitionner.hpp>
+#include <cma_utils/alias.hpp>
 #include <dataexporter/main_exporter.hpp>
 #include <dataexporter/partial_exporter.hpp>
 #include <optional>

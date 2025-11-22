@@ -2,7 +2,6 @@
 #include "common/logger.hpp"
 #include <algorithm> //for std::min
 #include <biocma_cst_config.hpp>
-#include <cma_read/reactorstate.hpp>
 #include <common/common.hpp>
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
@@ -16,7 +15,7 @@
 #include <mc/unit.hpp>
 #include <memory>
 
-#include <cma_utils/d_transitionner.hpp>
+#include <cma_utils/alias.hpp>
 #include <progress_bar.hpp>
 #include <signal_handling.hpp>
 #include <simulation/simulation.hpp>
@@ -57,6 +56,10 @@
       WrapMPI::host_dispatch(exec, WrapMPI::SIGNALS::RUN);                     \
     }
 #  define INIT_PAYLOAD WrapMPI::HostIterationPayload mpi_payload;
+
+#  define WAIT_PAYLOAD mpi_payload.wait();
+#  define WAIT_REQ WrapMPI::Async::wait(req);
+
 #else
 // Without MPI do nothing
 #  define BARRIER
@@ -65,7 +68,8 @@
 #  define SEND_MPI_SIG_STOP
 #  define INIT_PAYLOAD
 #  define SEND_MPI_SIG_RUN
-
+#  define WAIT_PAYLOAD
+#  define WAIT_REQ
 #endif
 
 #ifdef DEBUG
@@ -234,8 +238,7 @@ namespace
             // local_container._sort(500);
           }
         }
-
-        mpi_payload.wait();
+        WAIT_PAYLOAD
 
         sync_step(exec, simulation);
         {
@@ -263,7 +266,8 @@ namespace
           }
           break;
         }
-        WrapMPI::Async::wait(req);
+        WAIT_REQ
+
 
       } // end for
 

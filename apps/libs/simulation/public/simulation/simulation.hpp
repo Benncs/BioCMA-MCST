@@ -5,8 +5,7 @@
 #include <Kokkos_ScatterView.hpp>
 #include <biocma_cst_config.hpp>
 #include <cassert>
-#include <cma_utils/d_transitionner.hpp>
-#include <cma_utils/iteration_state.hpp>
+#include <cma_utils/alias.hpp>
 #include <common/common.hpp>
 #include <common/logger.hpp>
 #include <cstddef>
@@ -82,7 +81,7 @@ namespace Simulation
 
     [[nodiscard]] double& get_start_time_mut();
     [[nodiscard]] double& get_end_time_mut();
-    [[nodiscard]] const CmaUtils::IterationState& getState() const;
+    // [[nodiscard]] const CmaUtils::IterationState& getState() const;
     [[nodiscard]] Dimensions getDimensions() const noexcept;
     [[nodiscard]] std::span<double> getCliqData() const;
     [[nodiscard]] std::optional<std::span<const double>> getCgasData() const;
@@ -145,10 +144,7 @@ namespace Simulation
 
     void scatter_contribute();
     void set_kernel_contribs_to_host();
-    // Bounce methods to pimpl
-    // [[nodiscard]] DiagonalView<ComputeSpace> get_kernel_diagonal() const;
-    // [[nodiscard]] CumulativeProbabilityView<ComputeSpace>
-    // get_kernel_cumulative_proba() const;
+ 
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
 
     void post_init_concentration(const ScalarInitializer& scalar_init);

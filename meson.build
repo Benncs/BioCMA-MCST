@@ -231,32 +231,8 @@ if cmake.found()
 
 endif
 
-use_system_cmtool = false
-use_subprojects_cmtool = false
-if use_system_cmtool
-  cmt = dependency('cmtool', required: false, version: '>=1.2', method: 'pkg-config')
-  if cmt.found()
-    message('System cmtool')
-    cma_read_name = cmt.get_variable('cma_read', default_value: 'none')
-    cma_dep = dependency(cma_read_name, required: true, version: '>=1.2')
-  else
-    use_subprojects_cmtool = false
-  endif
-endif
+cma_dep = dependency('rcmtool', required: true, version: '>=0.1.0', static: true)
 
-if use_subprojects_cmtool or (not use_system_cmtool)
-  subproject(
-    'cmtool',
-    required: true,
-    default_options: [
-      'warning_level=3',
-      'b_colorout=always',
-      'b_coverage=false',
-      'build_all=false',
-    ],
-  ) # We only need native cmtool library in order to read flowmap so, no python neither executable
-  cma_dep = dependency('cma_read', required: true, version: '>=1.2', static: true) # Get shared lib
-endif
 add_project_arguments(cpp_args, language: 'cpp')
 subdir('apps')
 

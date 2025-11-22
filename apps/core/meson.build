@@ -11,7 +11,7 @@ dep_core = [
   simulation_lib_dependency,
   eigen_dep,
   blas,
-  transitionner_dependency,
+  cma_utils_dependency,
 ]
 
 if highfive_found

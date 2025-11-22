@@ -42,7 +42,7 @@ namespace MC
   init(const std::shared_ptr<IO::Logger>& _logger,
        uint64_t n_particles,
        std::span<double> volumes,
-       const HostNeighsView& neighbors,
+       std::span<const size_t> neighbors,
        bool uniform_mc_init,
        double& total_mass)
   {

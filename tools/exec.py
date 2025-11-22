@@ -49,7 +49,7 @@ def exec(command, n_thread, do_measure: bool = True, do_kokkos_measure=False, **
         # env_var["KOKKOS_TOOLS_LIBS"] = "/usr/local/lib64/libkp_memory_events.so"
         # env_var["KOKKOS_TOOLS_LIBS"]="/usr/local/lib64/libkp_kernel_timer.so"
         env_var["KOKKOS_TOOLS_LIBS"] = (
-            "/usr/local/lib/libkp_kernel_timer.so"  # libkp_memory_usage
+            "/usr/local/lib64/libkp_kernel_timer.so"  # libkp_memory_usage
         )
 
     result = command.replace("-", "\n-")

@@ -1,4 +1,4 @@
-#include "cma_utils/d_transitionner.hpp"
+#include "cma_utils/alias.hpp"
 #include "common/common.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>

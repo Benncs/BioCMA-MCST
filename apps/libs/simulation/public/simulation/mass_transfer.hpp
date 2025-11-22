@@ -1,8 +1,7 @@
 #ifndef __SIMULATION_HYDRO_MASS_TRANSFER_HPP__
 #define __SIMULATION_HYDRO_MASS_TRANSFER_HPP__
 
-#include <cma_utils/d_transitionner.hpp>
-#include <cma_utils/iteration_state.hpp>
+#include <cma_utils/alias.hpp>
 #include <memory>
 #include <variant>
 #include <vector>
