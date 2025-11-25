@@ -40,6 +40,25 @@ namespace Simulation
   //     this->liquid_scalar->reduce_contribs({&data[i * nr * nc], nr * nc});
   //   }
   // }
+  bool SimulationUnit::checkScalar() const
+  {
+
+    auto pred = [](auto&& val) { return val < 0.; };
+
+    auto cliq = this->getCliqData();
+
+    const auto it = std::ranges::find_if(cliq.begin(), cliq.end(), pred);
+    bool flag = it == cliq.end();
+
+    auto cgas = this->getCgasData();
+
+    if (cgas)
+    {
+      const auto it = std::find_if(cgas->begin(), cgas->end(), pred);
+      flag = it == cgas->end();
+    }
+    return flag;
+  }
 
   void SimulationUnit::clearContribution() const noexcept
   {

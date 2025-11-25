@@ -94,6 +94,13 @@ namespace SerDe
          case_data.exec_info);
       auto dim = case_data.simulation->getDimensions();
       auto cliq = case_data.simulation->getCliqData();
+
+      if (!case_data.simulation->checkScalar())
+      {
+        throw std::runtime_error(
+            "Simulation with negative value won´t be able to be loaded");
+      }
+
       auto cgas = case_data.simulation->getCgasData();
 
       std::optional<std::vector<double>> cgas_a =

@@ -110,6 +110,8 @@ namespace Simulation
                        std::span<const double> proba_flat,
                        std::span<const double> out_flows);
 
+    bool checkScalar() const;
+
     // Memory management
     void reset();
 
@@ -144,7 +146,7 @@ namespace Simulation
 
     void scatter_contribute();
     void set_kernel_contribs_to_host();
- 
+
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
 
     void post_init_concentration(const ScalarInitializer& scalar_init);
