@@ -29,14 +29,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-  
-      - name: Clone GitLab submodule
-        run: |
-          git clone --branch v1.3 https://${{ secrets.RCMTTOKEN }}@github.com/Benncs/rcmtool.git subprojects/rcmtool
-
-            
-
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -58,14 +50,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-docker-base-images
     steps:
+
       - uses: actions/checkout@v1  
-        with:
-          repository: Benncs/rcmtool.git
-          token: ${{ secrets.GITHUB_TOKEN }}
-           
-      - name: Clone GitHub submodule
+      
+      - name: Clone RMCTool
         run: |
-          git clone --branch v1.3 https://github.com/Benncs/rcmtool.git subprojects/rcmtool
+          git clone --branch v1.3 https://${{ secrets.RCMTTOKEN }}@github.com/Benncs/rcmtool.git subprojects/rcmtool
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
