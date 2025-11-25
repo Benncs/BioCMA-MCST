@@ -49,10 +49,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-docker-base-images
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
- 
-      - name: Clone GitLab submodule
+      - uses: actions/checkout@v1  
+        with:
+          repository: organization_name/repo_name
+          token: ${{ secrets.GITHUB_TOKEN }}
+           
+      - name: Clone GitHub submodule
         run: |
           git clone https://github.com/Benncs/rcmtool.git subprojects/rcmtool
 
