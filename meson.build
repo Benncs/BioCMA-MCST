@@ -22,7 +22,7 @@ add_global_arguments(
   '-DEIGEN_NO_CUDA=1',
   language: 'cpp',
 )
-add_global_arguments('-DEIGEN_DONT_VECTORIZE=1', language: 'cpp')
+# add_global_arguments('-DEIGEN_DONT_VECTORIZE=1', language: 'cpp')
 
 arch_specific_args = []
 
