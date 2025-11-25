@@ -40,7 +40,8 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation);
  * @param simulation The `Simulation::SimulationUnit` object representing the
  * simulation being synchronized.
  */
-void sync_prepare_next(Simulation::SimulationUnit& simulation,
+void sync_prepare_next(const ExecInfo& exec,
+                       Simulation::SimulationUnit& simulation,
                        MPI_Request* request);
 
 /**

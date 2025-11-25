@@ -1,9 +1,9 @@
 #ifndef __CORE_GLOBAL_INITIALLISER_HPP__
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
-#include <cma_utils/alias.hpp>
 #include "common/logger.hpp"
 #include <array>
+#include <cma_utils/alias.hpp>
 #include <common/execinfo.hpp>
 #include <core/scalar_factory.hpp>
 #include <core/simulation_parameters.hpp>

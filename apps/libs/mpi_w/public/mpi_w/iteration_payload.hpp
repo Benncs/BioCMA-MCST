@@ -19,10 +19,19 @@ namespace WrapMPI
   class IterationPayload
   {
   public:
-    std::vector<double> liquid_volumes;
-    std::vector<std::size_t> liquid_neighbors_flat;
-    std::vector<double> proba_leaving_flat;
-    std::vector<double> liquid_out_flows;
+    std::vector<double> liquid_volumes;             // n_c
+    std::vector<std::size_t> liquid_neighbors_flat; // m*n_c
+    std::vector<double> proba_leaving_flat;         // m*n_c
+    std::vector<double> liquid_out_flows;           // n_c
+
+    /*
+      Estimated payload size with
+      n_c = 500
+      m =6
+      size = 56000 bytes ≈ 54.69 KiB ≈ 0.055 MB > Eager limit MPI should
+      triggers SM
+    */
+
     /**
      * @brief Constructs an IterationPayload with specified sizes for flows and
      * volumes.

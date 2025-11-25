@@ -213,12 +213,8 @@ namespace Core
 
     if (is_host)
     {
-      // init_state(flow_handle);
-      // Calculate the total number of time steps
       f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
-      const auto n_t =
-          static_cast<size_t>(user_params.final_time / params.d_t) + 1;
-      auto state = d_transition->get_current();
+      const auto state = d_transition->get_current();
       if (logger)
       {
         // Note final "s"

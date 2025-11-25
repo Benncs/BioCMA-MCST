@@ -19,8 +19,6 @@ namespace MC
                    Space,
                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
-  
-
   /**
    * @brief Represents the spatial domain where Monte Carlo particles can exist.
    *

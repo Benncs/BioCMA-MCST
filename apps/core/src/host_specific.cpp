@@ -22,6 +22,7 @@
 #include <string>
 #include <sync.hpp>
 
+#include <tuple>
 #include <utility>
 #include <variant>
 #ifndef NO_MPI
@@ -94,6 +95,26 @@ namespace
                      const ExecInfo& exec,
                      const Core::SimulationParameters& params);
 
+  auto get_n_interval(const Core::SimulationParameters& params)
+  {
+
+    const auto n_iter_simulation =
+        static_cast<size_t>(params.final_time / params.d_t) + 1;
+
+    const size_t dump_number =
+        std::min(n_iter_simulation,
+                 static_cast<size_t>(params.number_exported_result)) -
+        1;
+
+    // FIXME when number_exported_result==0 and number_exported_result==1
+    const size_t dump_interval =
+        (params.number_exported_result != 0 && dump_number != 0)
+            ? (n_iter_simulation) / (dump_number) + 1
+            : n_iter_simulation + 1;
+
+    return std::make_tuple(n_iter_simulation, dump_number, dump_interval);
+  }
+
 } // namespace
 
 void host_process(std::shared_ptr<IO::Logger> logger,
@@ -154,32 +175,16 @@ namespace
                  Core::PartialExporter& partial_exporter)
   {
 
-    const bool do_export = main_exporter != nullptr;
-
     // const size_t n_update_feed = 0; //TODO: move elsewhere
-
-    const double d_t = params.d_t;
-
-    // const size_t n_iter_simulation = transitioner->get_n_timestep();
-
-    const auto n_iter_simulation =
-        static_cast<size_t>(params.final_time / params.d_t) + 1;
-
-    const size_t dump_number =
-        std::min(n_iter_simulation,
-                 static_cast<size_t>(params.number_exported_result)) -
-        1;
-
-    // FIXME when number_exported_result==0 and number_exported_result==1
-    const size_t dump_interval =
-        (params.number_exported_result != 0 && dump_number != 0)
-            ? (n_iter_simulation) / (dump_number) + 1
-            : n_iter_simulation + 1;
-
-    double current_time = simulation.get_start_time_mut();
     // size_t update_feed_counter = 0;
     // const size_t update_feed_interval = (n_update_feed==0)? n_iter_simulation
     // : (n_iter_simulation) / (n_update_feed) + 1;
+
+    const bool do_export = main_exporter != nullptr;
+
+    const auto [niter, dump_number, dump_interval] = get_n_interval(params);
+    const auto n_iter_simulation = niter;
+    double current_time = simulation.get_start_time_mut();
 
     // use ternary because ExportHandler doesnt provie assigment operator
     ExportHandler exporter_handler(
@@ -196,7 +201,7 @@ namespace
     }
 
     MPI_Request req{};
-
+    const double d_t = params.d_t;
     auto loop_functor = [&](auto&& local_container)
     {
       Core::SignalHandler sig;
@@ -204,7 +209,7 @@ namespace
       auto functors = simulation.init_functors<ComputeSpace>(local_container);
       // simulation.updateHydro(d_transionner->advance(current_time, d_t));
       {
-        auto new_current = d_transionner->advance(current_time, d_t);
+        const auto new_current = d_transionner->advance(current_time, d_t);
         simulation.updateHydro(new_current);
         FILL_PAYLOAD;
         MPI_DISPATCH_MAIN;
@@ -217,7 +222,7 @@ namespace
 
         if (d_transionner->need_advance(current_time, d_t))
         {
-          auto new_current = d_transionner->advance(current_time, d_t);
+          const auto new_current = d_transionner->advance(current_time, d_t);
           simulation.updateHydro(new_current);
 
           FILL_PAYLOAD;
@@ -249,7 +254,7 @@ namespace
           current_time += d_t;
         }
 #ifndef NO_MPI
-        sync_prepare_next(simulation, &req);
+        sync_prepare_next(exec, simulation, &req);
 #endif
         simulation.cycleProcess(local_container, d_t, functors);
 
@@ -267,7 +272,6 @@ namespace
           break;
         }
         WAIT_REQ
-
 
       } // end for
 

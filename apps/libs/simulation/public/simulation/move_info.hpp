@@ -1,8 +1,8 @@
 #ifndef __SIMULATION__MOVE_INFO_HPP__
 #define __SIMULATION__MOVE_INFO_HPP__
 
-#include <common/common.hpp>
 #include <Kokkos_Core_fwd.hpp>
+#include <common/common.hpp>
 #include <mc/alias.hpp>
 #include <simulation/alias.hpp>
 

@@ -47,8 +47,6 @@ namespace Simulation
     return is_two_phase_flow;
   }
 
-
-
   kernelContribution SimulationUnit::get_kernel_contribution() const
   {
     return this->liquid_scalar->get_kernel_contribution();
@@ -86,8 +84,6 @@ namespace Simulation
   {
     probes[ProbeType::LeavingTime] = std::move(_probes);
   }
-
-
 
   void SimulationUnit::set_kernel_contribs_to_host()
   {

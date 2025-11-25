@@ -76,7 +76,7 @@ void workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
       [&](double& current_time, auto& container, auto& functors)
   {
     sync_step(exec, simulation);
-    sync_prepare_next(simulation, &req);
+    sync_prepare_next(exec, simulation, &req);
     simulation.update_feed(current_time, d_t, false);
     WrapMPI::Async::wait(req);
     simulation.cycleProcess(container, d_t, functors);

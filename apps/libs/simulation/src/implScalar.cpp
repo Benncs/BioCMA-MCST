@@ -90,8 +90,6 @@ namespace
         UNROLL_CHECK(idx6, n)
       }
     }
-
-    // After filling the triplets, create the sparse matrix
     res.setFromTriplets(triplets.begin(), triplets.end());
     res.makeCompressed();
   }
