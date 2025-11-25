@@ -14,7 +14,7 @@
 CXX="clang++-18"
 #TARGET="fdist"
 TARGET="cullum_vicente"
-BUILD_DIR="./builddir/host"
+BUILD_DIR="./builddir/test"
 
 SRC_BD="/home_pers/casale/Documents/thesis/udf_models"
 SRC="$SRC_BD/$TARGET.cpp"

@@ -151,8 +151,6 @@ else
   kokkos_option.add_cmake_defines({'CMAKE_BUILD_TYPE': CMAKE_TYPE})
   kokkos_option.add_cmake_defines({'Kokkos_ENABLE_OPENMP': 'ON'})
   kokkos_option.add_cmake_defines({'Kokkos_ENABLE_HWLOC': 'ON'})
-  kokkos_option.add_cmake_defines({'Kokkos_ARCH_NATIVE': 'ON'})
-  kokkos.option.add_cmake_defines({'Kokkos_ARCH_AVX2':'ON'})
   kokkos_option.add_cmake_defines({'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'})
   kokkos_option.add_cmake_defines({'Kokkos_ENABLE_DEPRECATED_CODE_4': 'OFF'})
   kokkos_option.add_cmake_defines({'Kokkos_ENABLE_IMPL_VIEW_LEGACY': 'OFF'})
