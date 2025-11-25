@@ -4,6 +4,7 @@ var classSimulation_1_1SimulationUnit =
     [ "~SimulationUnit", "classSimulation_1_1SimulationUnit.html#aa408a657ba5cc3bbd07683d437ea3579", null ],
     [ "SimulationUnit", "classSimulation_1_1SimulationUnit.html#aa1fba49aec41255dbf01e2c07067df2a", null ],
     [ "SimulationUnit", "classSimulation_1_1SimulationUnit.html#a8e019e0aff679d5c93b0b0e8a1f4542e", null ],
+    [ "checkScalar", "classSimulation_1_1SimulationUnit.html#ad964b9f706ae4cac2e0d5d852131a7d2", null ],
     [ "clearContribution", "classSimulation_1_1SimulationUnit.html#aeb968caf58812bcab01534e72a63d552", null ],
     [ "cycleProcess", "classSimulation_1_1SimulationUnit.html#a7b49fd171d4de8aa3949738da6c3810f", null ],
     [ "get_end_time_mut", "classSimulation_1_1SimulationUnit.html#a96dd3385c1572462045e9259c497ef39", null ],

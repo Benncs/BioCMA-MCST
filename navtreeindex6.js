@@ -1,5 +1,7 @@
 var NAVTREEINDEX6 =
 {
+"structCore_1_1SimulationParameters.html#a7b3c980fd3186b45c0e1329fe668954d":[7,0,2,7,8],
+"structCore_1_1SimulationParameters.html#a800b07b4ed1487a2cf08ac7b7d83dcfe":[5,0,4,7,13],
 "structCore_1_1SimulationParameters.html#a800b07b4ed1487a2cf08ac7b7d83dcfe":[7,0,2,7,13],
 "structCore_1_1SimulationParameters.html#a99d226ca33273a07b776dae2bcf5e63d":[5,0,4,7,14],
 "structCore_1_1SimulationParameters.html#a99d226ca33273a07b776dae2bcf5e63d":[7,0,2,7,14],
@@ -247,7 +249,5 @@ var NAVTREEINDEX6 =
 "structMC_1_1EventContainer.html#a117575ad89e1abca8ad66cb704c18bd5":[7,0,4,2,9],
 "structMC_1_1EventContainer.html#a1241f99b1b9ba62462df5c09b8cb91ec":[5,0,6,2,4],
 "structMC_1_1EventContainer.html#a1241f99b1b9ba62462df5c09b8cb91ec":[7,0,4,2,4],
-"structMC_1_1EventContainer.html#a28c0bb33bbdfede8479523447c96b477":[5,0,6,2,8],
-"structMC_1_1EventContainer.html#a28c0bb33bbdfede8479523447c96b477":[7,0,4,2,8],
-"structMC_1_1EventContainer.html#a2fadba8d7bf92a3d9b3a3aeaf46f1cf9":[5,0,6,2,3]
+"structMC_1_1EventContainer.html#a28c0bb33bbdfede8479523447c96b477":[5,0,6,2,8]
 };
