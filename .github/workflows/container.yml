@@ -32,7 +32,7 @@ jobs:
   
       - name: Clone GitLab submodule
         run: |
-          git clone --branch v1.3 https://$RCMTTOKEN@github.com/Benncs/rcmtool.git subprojects/rcmtool
+          git clone --branch v1.3 https://${{ secrets.RCMTTOKEN }}@github.com/Benncs/rcmtool.git subprojects/rcmtool
 
             
 
