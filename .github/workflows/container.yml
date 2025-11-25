@@ -25,8 +25,16 @@ jobs:
             tag: biocma_omp_base:latest
             output: /tmp/biocma_omp_base.tar
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # - name: Checkout code
+      #   uses: actions/checkout@v4
+      - uses: actions/checkout@v1  
+        with:
+          repository: Benncs/rcmtool.git
+          token: ${{ secrets.GITHUB_TOKEN }}
+           
+      - name: Clone GitHub submodule
+        run: |
+          git clone --branch v1.3 https://github.com/Benncs/rcmtool.git subprojects/rcmtool
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -51,12 +59,12 @@ jobs:
     steps:
       - uses: actions/checkout@v1  
         with:
-          repository: Benncs/rcmtool
+          repository: Benncs/rcmtool.git
           token: ${{ secrets.GITHUB_TOKEN }}
            
       - name: Clone GitHub submodule
         run: |
-          git clone https://github.com/Benncs/rcmtool.git subprojects/rcmtool
+          git clone --branch v1.3 https://github.com/Benncs/rcmtool.git subprojects/rcmtool
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
