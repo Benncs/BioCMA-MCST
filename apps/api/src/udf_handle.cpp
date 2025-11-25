@@ -9,7 +9,6 @@
 namespace Unsafe
 {
 #ifndef USE_UDF
-  struct DynamicLibrary;
   Result<std::shared_ptr<DynamicLibrary>, std::string>
   load_udf(std::string_view model_name)
   {
