@@ -25,9 +25,9 @@ jobs:
             tag: biocma_omp_base:latest
             output: /tmp/biocma_omp_base.tar
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v4
-
 
       - name: "Setup Authenticated URL"
         shell: bash
@@ -40,8 +40,8 @@ jobs:
           git config --global credential.username "$GIT_USERNAME"
 
       
-       - name: Clone GitLab submodule
-         run: |
+      - name: Clone GitLab submodule
+        run: |
           git clone --branch v1.3 https://github.com/Benncs/rcmtool.git subprojects/rcmtool
 
             
