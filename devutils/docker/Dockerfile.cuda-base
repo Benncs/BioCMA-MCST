@@ -27,6 +27,10 @@ RUN apt-get update && \
 # Install Meson
 RUN pip install --no-cache-dir meson lxml --break-system-packages
 
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+ENV PATH="/root/.cargo/bin:${PATH}"
+
 
 # Create and set the working directory
 WORKDIR /app
