@@ -4,6 +4,7 @@
 #include <core/scalar_factory.hpp>
 #include <cstddef>
 #include <cstdlib>
+#include <exception>
 #include <memory>
 #include <pybind11/cast.h>
 #include <pybind11/detail/common.h>
@@ -52,9 +53,12 @@ namespace PythonBindings
   auto exec(std::shared_ptr<Api::SimulationInstance>& handle)
   {
     pybind11::gil_scoped_release release; // TODO check if really usefull ?
-    handle->exec();
+    const auto ret = handle->exec();
     pybind11::gil_scoped_acquire acquire;
-    return 0;
+    if (ret.invalid())
+    {
+      throw std::runtime_error(ret.get());
+    }
   }
 
   auto apply(std::shared_ptr<Api::SimulationInstance>& handle, bool to_load)

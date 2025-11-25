@@ -24,7 +24,7 @@
 #include <udf_handle.hpp>
 #include <utility>
 #include <vector>
-static std::shared_ptr<Unsafe::DynamicLibrary> udf_handle = nullptr;
+static std::shared_ptr<DynamicLibrary> udf_handle = nullptr;
 constexpr int ID_VERIF = 2025;
 
 #define CHECK_OR_RETURN(cond, msg)                                             \
@@ -181,6 +181,10 @@ namespace Api
       }
       catch (std::exception& e)
       {
+        if (logger)
+        {
+          logger->alert("EXEC", e.what());
+        }
         return ApiResult(e.what());
       }
     }

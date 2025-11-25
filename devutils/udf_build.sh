@@ -12,7 +12,8 @@
 # ---------------------------
 # Compiler and linker
 CXX="clang++-18"
-TARGET="fdist"
+#TARGET="fdist"
+TARGET="cullum_vicente"
 BUILD_DIR="./builddir/host"
 
 SRC_BD="/home_pers/casale/Documents/thesis/udf_models"
