@@ -27,13 +27,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        #with:
-          #token: '${{ secrets.PAT_TOKEN }}'
-#
-      - name: Clone GitLab submodule
-        run: |
-          git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
-          #git submodule update --init --recursive
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -58,13 +51,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        #with:
-          #token: '${{ secrets.PAT_TOKEN }}'
-#
+ 
       - name: Clone GitLab submodule
         run: |
-          git config --global credential.helper '!f() { echo "username=${{ secrets.USER_GITLAB }}"; echo "password=${{ secrets.PAT_GITLAB }}"; }; f'
-          git clone https://gitlab.com/codes_tim/compartment-modelling-tool.git subprojects/cmtool
+          git clone https://github.com/Benncs/rcmtool.git subprojects/rcmtool
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
