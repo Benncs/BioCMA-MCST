@@ -28,12 +28,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Checkout repo privé
+      - name: Checkout RCMTool
         uses: actions/checkout@v4
         with:
             repository: Benncs/rcmtool
             token: ${{ secrets.GITHUB_TOKEN }}
             path: subprojects/rcmtool
+            ref: v1.3
             
 
 
