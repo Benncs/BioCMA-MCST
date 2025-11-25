@@ -29,20 +29,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: "Setup Authenticated URL"
-        shell: bash
-        env:
-          GIT_AUTH_TOKEN: ${{ secrets.GIT_AUTH_TOKEN }}
-        run: |
-          git config --global --add url."https://oauth2:${GIT_AUTH_TOKEN}@github.com/".insteadOf "https://github.com/"
-          git config --global user.name "$GIT_AUTHOR_NAME"  
-          git config --global user.email "$GIT_AUTHOR_EMAIL"  
-          git config --global credential.username "$GIT_USERNAME"
-
-      
+  
       - name: Clone GitLab submodule
         run: |
-          git clone --branch v1.3 https://github.com/Benncs/rcmtool.git subprojects/rcmtool
+          git clone --branch v1.3 https://$RCMTTOKEN@github.com/Benncs/rcmtool.git subprojects/rcmtool
 
             
 
