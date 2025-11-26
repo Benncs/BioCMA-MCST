@@ -18,11 +18,9 @@ use_cuda = get_option('use_cuda')
 if not use_cuda and build_udf
   add_project_arguments('-DUSE_UDF', language: 'cpp')
 endif
-add_global_arguments(
-  '-DEIGEN_NO_CUDA=1',
-  language: 'cpp',
-)
-# add_global_arguments('-DEIGEN_DONT_VECTORIZE=1', language: 'cpp')
+
+
+no_mpi_flag = '-DNO_MPI'
 
 arch_specific_args = []
 
@@ -96,22 +94,24 @@ else
   use_kokkos_tools = true
 endif
 
+
+
 cpp_args = [arch_specific_args]
 if (use_kokkos_tools)
   message('Kokkos tool enable')
   cpp_args = [cpp_args, '-DENABLE_KOKKOS_PROFILING']
 endif
 
-no_mpi_flag = '-DNO_MPI'
 
 mpi = dependency('mpi', language: 'cpp', required: true)
 thread_dep = dependency('threads', required: true)
 omp = dependency('openmp')
 hwloc = dependency('hwloc')
-blas = dependency('blas', required: false) # Eigen can work without BLAS
 dl_dep = compiler.find_library('dl', required: true)
-eigen_dep = subproject('eigen', required: true).get_variable('eigen_dep')
-
+eigen_dep= dependency('eigen3', required: true,version:'>=5.0.1')
+blas = dependency('blas', required: false) # Eigen can work without BLAS
+cpp_args = [cpp_args, '-DEIGEN_NO_CUDA=1']
+# add_global_arguments('-DEIGEN_DONT_VECTORIZE=1', language: 'cpp')
 # if blas.found()
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 # endif

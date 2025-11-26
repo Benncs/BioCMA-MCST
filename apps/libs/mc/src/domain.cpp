@@ -24,7 +24,8 @@ namespace MC
   }
 
   ReactorDomain::ReactorDomain()
-      : k_neighbor(Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"))
+      : k_neighbor(
+            Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"), 0, 0)
   {
   }
 
@@ -32,7 +33,8 @@ namespace MC
                                std::span<const size_t> neighbors)
       : _total_volume(std::reduce(volumes.begin(), volumes.end(), 0.)),
         size(volumes.size()),
-        k_neighbor(Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"))
+        k_neighbor(
+            Kokkos::view_alloc(Kokkos::WithoutInitializing, "neighbors"), 0, 0)
 
   {
 
