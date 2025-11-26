@@ -138,13 +138,14 @@ bool ExportHandler::operator()(
     Core::PartialExporter& partial_exporter,
     const CmaUtils::TransitionnerPtrType& transitioner)
 {
-  PROFILE_SECTION("host:handle_export")
 
   // Only proceed if the dump interval is reached
   if (++dump_counter != dump_interval)
   {
     return false;
   }
+  // Declare profiling here to count only if we actually export
+  PROFILE_SECTION("host:handle_export")
 
   // Prepare event span if event counter is enabled
   const auto event_span = prepareEventSpan(simulation);

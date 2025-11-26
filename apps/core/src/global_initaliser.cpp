@@ -1,3 +1,4 @@
+#include "cma_utils/alias.hpp"
 #include <algorithm>
 #include <biocma_cst_config.hpp>
 #include <cassert>
@@ -45,7 +46,6 @@ namespace
                                  std::vector<double>({0, 0.}),
                                  std::vector<size_t>({0}));
 
-  // TODO Move elsewhere
   double get_time_step(double user_deta_time,
                        const CmaUtils::TransitionnerPtrType& iterator)
   {
@@ -56,40 +56,12 @@ namespace
     // that the fluid movement between two steps is accurately represented
     // without losing flow information.
     double delta_time = user_deta_time;
-
+    Kokkos::printf("up %f\r\n", delta_time);
     if (delta_time <= 0)
     {
 
-      const std::size_t n_states = iterator->size();
-      double min_residence_time = std::numeric_limits<double>::max();
-      for (std::size_t i_state = 0; i_state < n_states; ++i_state)
-      {
-        // Naive min-research, as COO is not sorted we can´t do better without
-        // convert COO to CSR/CSC or sort
-        // + function exececuted only once
-        const auto state = iterator->get_at(i_state);
-        const auto liquid = state->get_liquid();
-        const auto coo_matrix = liquid->transition();
-        const auto liquid_volumes = liquid->volume();
-        const auto data = coo_matrix->values();
-        const auto rows = coo_matrix->row_indices();
-        const auto cols = coo_matrix->col_indices();
-        for (std::size_t k = 0; k < data.size(); ++k)
-        {
-          // Only way to find diagonal with not sorted COO
-          if (rows[k] == cols[k])
-          {
-            const auto volume = liquid_volumes[rows[k]];
-            if (volume != 0.)
-            {
-              double residence_time =
-                  -data[k] / volume; // minus cause transition has negative
-                                     // diagonal (leaving flow)
-              min_residence_time = std::min(residence_time, min_residence_time);
-            }
-          }
-        }
-      }
+      const auto min_residence_time =
+          CmaUtils::get_min_residence_time(iterator);
 
       if (min_residence_time != std::numeric_limits<double>::max() &&
           min_residence_time != 0.)
