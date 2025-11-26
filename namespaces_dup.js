@@ -4,7 +4,8 @@ var namespaces_dup =
     [ "CmaUtils", "namespaceCmaUtils.html", [
       [ "IterationStatePtrType", "namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259", null ],
       [ "StateCooMatrixType", "namespaceCmaUtils.html#a345f1e3ce09450d18c2de5f270cc75f6", null ],
-      [ "TransitionnerPtrType", "namespaceCmaUtils.html#a95181f7ed7bfd8d20f6ebda33204e8c8", null ]
+      [ "TransitionnerPtrType", "namespaceCmaUtils.html#a95181f7ed7bfd8d20f6ebda33204e8c8", null ],
+      [ "get_min_residence_time", "namespaceCmaUtils.html#ad8870320c6b960ad8a16cca44e3a7514", null ]
     ] ],
     [ "Common", "namespaceCommon.html", "namespaceCommon" ],
     [ "CommonMaths", "namespaceCommonMaths.html", [
