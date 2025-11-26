@@ -29,7 +29,6 @@ namespace Core
     uint64_t number_particle; ///< Number of particles in the simulation.
     int32_t n_thread;         ///< Number of threads to use for simulation.
     uint32_t number_exported_result; ///< Number of results to be exported.
-    bool recursive;                  ///< Flag to enable recursive processing.
     bool force_override;  ///< Flag to allow overwriting of existing results.
     bool load_serde;      ///< Flag to enable serialization/deserialization.
     bool save_serde;      ///< Flag to enable serialization/deserialization.

@@ -24,7 +24,8 @@ namespace UnsafeUDF
 
   MC::ContribIndexBounds (*Loader::get_bounds_udf)() = nullptr;
 
-  Models::UdfModel::Config (*Loader::get_config_udf)(std::size_t n) = nullptr;
+  Models::UdfModel::Config (*Loader::get_config_udf)(
+      Kokkos::DefaultHostExecutionSpace& ep, std::size_t n) = nullptr;
 
   void (*Loader::division_udf)(
       const MC::KPRNG::pool_type& random_pool,

@@ -1,3 +1,4 @@
+#include "simulation/mass_transfer.hpp"
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
 #include <api/results.hpp>
@@ -20,8 +21,10 @@
 #include <span>
 #include <stdexcept>
 #include <string>
+#include <udf_handle.hpp>
 #include <utility>
 #include <vector>
+static std::shared_ptr<DynamicLibrary> udf_handle = nullptr;
 constexpr int ID_VERIF = 2025;
 
 #define CHECK_OR_RETURN(cond, msg)                                             \
@@ -65,6 +68,7 @@ namespace Api
 
   void finalise()
   {
+
     if (!Kokkos::is_finalized() && Kokkos::is_initialized())
     {
       Kokkos::finalize();
@@ -131,14 +135,15 @@ namespace Api
                                          std::optional<std::size_t> run_id)
       : id(ID_VERIF)
   {
+
     _data.exec_info = Core::runtime_init(argc, argv, run_id);
     std::atexit(Api::finalise);
   }
 
   SimulationInstance::~SimulationInstance()
   {
-
     _data = Core::CaseData(); // Explicity delete everything before
+    udf_handle.reset();
   }
 
   std::optional<std::unique_ptr<SimulationInstance>> SimulationInstance::init(
@@ -156,10 +161,12 @@ namespace Api
 
   ApiResult SimulationInstance::exec() noexcept
   {
+
     if (loaded || (registered && applied))
     {
       try
       {
+
         if (logger)
         {
           logger->print(
@@ -174,6 +181,10 @@ namespace Api
       }
       catch (std::exception& e)
       {
+        if (logger)
+        {
+          logger->alert("EXEC", e.what());
+        }
         return ApiResult(e.what());
       }
     }
@@ -218,6 +229,7 @@ namespace Api
     Core::GlobalInitialiser global_initializer(_data.exec_info, params, logger);
 
     auto transitionner = global_initializer.init_transitionner();
+
     CHECK_OR_RETURN(!transitionner, "Error when apply: transitionner");
 
     CHECK_OR_RETURN(!global_initializer.init_feed(feed),
@@ -242,6 +254,8 @@ namespace Api
     }
 
     mtr_type = Simulation::MassTransfer::Type::FixedKla{kla};
+
+    // mtr_type = Simulation::MassTransfer::Type::FlowmapTurbulence{};
 
     if (mtr_type)
     {
@@ -268,6 +282,11 @@ namespace Api
 
   ApiResult SimulationInstance::apply(bool to_load) noexcept
   {
+    auto opt_udf = Unsafe::load_udf(params.model_name);
+    if (opt_udf.valid())
+    {
+      udf_handle = opt_udf.gets();
+    }
     if (to_load)
     {
       return apply_load();
@@ -299,8 +318,7 @@ namespace Api
     return ApiResult(); // TODO
   }
 
-  bool SimulationInstance::register_cma_path(std::string_view path,
-                                             bool recursive)
+  bool SimulationInstance::register_cma_path(std::string_view path)
   {
 
     std::filesystem::path p(path);
@@ -316,7 +334,6 @@ namespace Api
       normalized += std::filesystem::path::preferred_separator;
     }
 
-    this->params.recursive = recursive;
     this->params.cma_case_path = normalized;
 
     return true;

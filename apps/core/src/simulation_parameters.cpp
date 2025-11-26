@@ -46,7 +46,6 @@ namespace Core
         .number_particle = 1,
         .n_thread = -1,
         .number_exported_result = 0,
-        .recursive = false,
         .force_override = false,
         .load_serde = false,
         .save_serde = false,
@@ -71,7 +70,6 @@ namespace Core
            << "  Number of Threads: " << params.n_thread << "\n"
            << "  Number of Exported Results: " << params.number_exported_result
            << "\n"
-           << "  Recursive: " << (params.recursive ? "true" : "false") << "\n"
            << "  Force Override: " << (params.force_override ? "true" : "false")
            << "\n"
            << "  Load Serde: " << (params.load_serde ? "true" : "false") << "\n"

@@ -69,7 +69,7 @@ def sanofi_1s():
     # liquid_sanofi[:, 0] = 5  # glucose g/l
     liquid_sanofi[0:] = 5  # glucose g/l
     liquid_sanofi[0, 0] = 5  # glucose g/l
-    liquid_sanofi[1, :] = 3e-3  # o2 g/l
+    liquid_sanofi[1, :] = 7e-3  # o2 g/l
 
     make_initial_concentration("./cma_data/sanofi_init.h5", liquid_sanofi, gas_sanofi)
 

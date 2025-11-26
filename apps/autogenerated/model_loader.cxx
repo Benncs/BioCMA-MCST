@@ -4,7 +4,7 @@
 #include <mc/mcinit.hpp>
 #include <string_view>
 #include <unordered_map> // IWYU pragma: keep
-
+#include <cma_utils/alias.hpp>
 /* ---------------------------------------------------------
  *                  BIOCMA_MC ST
  *
@@ -28,7 +28,7 @@
       const int i_model,
       uint64_t number_particle,
       std::span<double> liq_volume,
-      const ::MC::NeighborsView<HostSpace>& liquid_neighbors,
+      std::span<const size_t> liquid_neighbors,
       bool uniform_mc_init,
       double& total_mass) noexcept
   {

@@ -2,26 +2,26 @@
 #include <optional>
 
 #include "common_test.hpp"
+#include "core/simulation_parameters.hpp"
 
 #define INIT Api::SimulationInstance::init(argc, argv);
 
 Core::UserControlParameters gparams(std::string_view path)
 {
-  bool serde = false;
-  return {.biomass_initial_concentration = cx,
-          .final_time = ft,
-          .delta_time = dt,
-          .number_particle = np,
-          .n_thread = nt,
-          .number_exported_result = nex,
-          .recursive = false,
-          .force_override = true,
-          .load_serde = serde,
-          .initialiser_path = "",
-          .model_name = "None",
-          .results_file_name = tmp_dir,
-          .cma_case_path = std::string(path),
-          .serde_file = std::nullopt};
+  auto p = Core::UserControlParameters::m_default();
+
+  p.biomass_initial_concentration = cx;
+  p.final_time = ft;
+  p.delta_time = dt;
+  p.number_particle = np;
+  p.n_thread = nt;
+  p.number_exported_result = nex;
+  p.force_override = true;
+  p.load_serde = false;
+  p.results_file_name = tmp_dir;
+  p.cma_case_path = std::string(path);
+
+  return p;
 }
 
 void test_exec(std::string_view path)
@@ -57,10 +57,11 @@ void test_register_parameters(int argc, char** argv, std::string_view path)
   auto handle = *INIT;
   assert(handle->register_parameters(gparams(path)));
 }
-
+#include <iostream>
 int main(int argc, char** argv)
 {
   std::string cma_path = get_cma_path(argc, argv);
+  std::cout << cma_path << std::endl;
   test_init(argc, argv);
   test_apply_err(argc, argv);
   test_exec_err(argc, argv);

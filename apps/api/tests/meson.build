@@ -1,6 +1,5 @@
 cma_path = meson.current_source_dir() + '/data/0d/'
 
-
 test_api = executable('test_api', 'test_api.cpp',dependencies:[lib_api_shared_dep])
 test_api_bad_alloc = executable('test_api_bad_alloc', 'test_api_throw.cpp',dependencies:[lib_api_shared_dep])
 if build_c_api

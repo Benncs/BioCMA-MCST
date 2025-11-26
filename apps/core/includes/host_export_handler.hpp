@@ -1,14 +1,14 @@
 #ifndef __CORE_HOST_EXPORT_HANDLER_HPP__
 #define __CORE_HOST_EXPORT_HANDLER_HPP__
 
+#include <cma_utils/alias.hpp>
 #include <dataexporter/main_exporter.hpp>
 #include <dataexporter/partial_exporter.hpp>
 #include <optional>
 #include <progress_bar.hpp>
 #include <simulation/simulation.hpp>
 #include <span>
-#include <transitionner/transitionner.hpp>
-class ExportHandler
+class ExportHandler final
 {
 
 public:
@@ -32,12 +32,14 @@ public:
    * @param simulation The simulation unit containing the state and data to
    * export.
    * @param partial_exporter The partial exporter for writing particle and probe
+   * @return true if export sucess
    * data.
    */
-  void operator()(double current_time,
+  bool operator()(double current_time,
                   size_t loop_counter,
                   Simulation::SimulationUnit& simulation,
-                  Core::PartialExporter& partial_exporter);
+                  Core::PartialExporter& partial_exporter,
+                  const CmaUtils::TransitionnerPtrType& transitioner);
 
   /**
    * @brief Prepares and updates the exporter with the current simulation state
@@ -52,10 +54,9 @@ public:
    * @param transitioner The flow map transitioner providing access to the
    * reactor state.
    */
-  void pre_post_export(
-      double current_time,
-      const Simulation::SimulationUnit& simulation,
-      const std::unique_ptr<CmaUtils::FlowMapTransitionner>& transitioner);
+  void pre_post_export(double current_time,
+                       const Simulation::SimulationUnit& simulation,
+                       const CmaUtils::TransitionnerPtrType& transitioner);
 
 private:
   size_t dump_counter{};

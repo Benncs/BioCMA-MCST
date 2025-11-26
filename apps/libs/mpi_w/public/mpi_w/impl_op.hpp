@@ -1,15 +1,15 @@
 #ifndef __IMPL_MPI_OP_HPP__
 #define __IMPL_MPI_OP_HPP__
 
-#include <common/traits.hpp>
-#include <mpi_w/message_t.hpp>
-#include <mpi_w/mpi_types.hpp>
-
 #include <common/execinfo.hpp>
+#include <common/traits.hpp>
 #include <cstddef>
 #include <limits>
 #include <math.h>
 #include <mpi.h>
+#include <mpi_w/impl_async.hpp>
+#include <mpi_w/message_t.hpp>
+#include <mpi_w/mpi_types.hpp>
 #include <optional>
 #include <span>
 #include <stdexcept>
@@ -23,27 +23,27 @@ namespace WrapMPI
 
   // SENDING
 
-  /**
-   * @brief Sends raw data to a destination in an unsafe manner.
-   *
-   * This function sends raw data of type `DataType` to the specified
-   * destination. It assumes the provided buffer and its size are valid
-   *
-   * @tparam DataType A type satisfying the `POD` concept.
-   * @param buf Pointer to the buffer containing data to send.
-   * @param buf_size The size of the buffer in bytes.
-   * @param dest The destination identifier for the data.
-   * @param tag Optional tag to identify the message (default is 0).
-   * @return An integer indicating success or failure of the operation.
-   *
-   * @note Use this function with caution as it performs no validation on the
-   * input.
-   */
-  template <POD_t DataType>
-  [[nodiscard]] static int _send_unsafe(DataType* buf,
-                                        size_t buf_size,
-                                        size_t dest,
-                                        size_t tag = 0) noexcept;
+  // /**
+  //  * @brief Sends raw data to a destination in an unsafe manner.
+  //  *
+  //  * This function sends raw data of type `DataType` to the specified
+  //  * destination. It assumes the provided buffer and its size are valid
+  //  *
+  //  * @tparam DataType A type satisfying the `POD` concept.
+  //  * @param buf Pointer to the buffer containing data to send.
+  //  * @param buf_size The size of the buffer in bytes.
+  //  * @param dest The destination identifier for the data.
+  //  * @param tag Optional tag to identify the message (default is 0).
+  //  * @return An integer indicating success or failure of the operation.
+  //  *
+  //  * @note Use this function with caution as it performs no validation on the
+  //  * input.
+  //  */
+  // template <POD_t DataType>
+  // [[nodiscard]] static int _send_unsafe(DataType* buf,
+  //                                       size_t buf_size,
+  //                                       size_t dest,
+  //                                       size_t tag = 0) noexcept;
 
   /**
    * @brief Sends a single instance of data to a destination.
@@ -335,13 +335,6 @@ namespace WrapMPI
   //**
   // IMPL
   //**
-  template <POD_t DataType>
-  static int
-  _send_unsafe(DataType* buf, size_t buf_size, size_t dest, size_t tag) noexcept
-  {
-    return MPI_Send(
-        buf, buf_size, get_type<DataType>(), dest, tag, MPI_COMM_WORLD);
-  }
 
   template <POD_t DataType>
   DataType try_recv(size_t src, MPI_Status* status, size_t tag)
@@ -621,7 +614,10 @@ namespace WrapMPI
 
   template <POD_t DataType> int send(DataType data, size_t dest, size_t tag)
   {
-    return _send_unsafe<DataType>(&data, 1, dest, tag);
+    MPI_Request req;
+    auto res = WrapMPI::Async::_send_unsafe<DataType>(req, &data, 1, dest, tag);
+    WrapMPI::Async::wait(req);
+    return res;
   }
 
   template <POD_t DataType>
@@ -639,7 +635,12 @@ namespace WrapMPI
 
     if (send_status == MPI_SUCCESS)
     {
-      send_status = _send_unsafe(data.data(), data.size(), dest, tag);
+      MPI_Request req{};
+      auto res = WrapMPI::Async::_send_unsafe<DataType>(
+          req, data.data(), data.size(), dest, tag);
+      WrapMPI::Async::wait(req);
+
+      send_status = res;
     }
 
     return send_status;

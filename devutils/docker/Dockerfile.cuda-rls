@@ -6,9 +6,9 @@ COPY ./apps /app/apps
 COPY ./subprojects/dynlib.wrap /app/subprojects/dynlib.wrap
 COPY ./subprojects/cereal.wrap /app/subprojects/cereal.wrap
 COPY ./subprojects/highfive.wrap /app/subprojects/highfive.wrap
-COPY ./subprojects/cmtool.wrap /app/subprojects/cmtool.wrap
+COPY ./subprojects/rcmtool.wrap /app/subprojects/rcmtool.wrap
 COPY ./subprojects/eigen.wrap /app/subprojects/eigen.wrap
-COPY ./subprojects/cmtool /app/subprojects/cmtool
+COPY ./subprojects/rcmtool /app/subprojects/rcmtool
 COPY ./subprojects/kokkos_sampling.wrap /app/subprojects/kokkos_sampling.wrap
 COPY ./meson.build /app/meson.build
 COPY ./meson_options.txt /app/meson_options.txt

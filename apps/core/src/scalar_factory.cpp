@@ -1,6 +1,5 @@
 
 #include <algorithm>
-#include <cma_read/light_2d_view.hpp>
 #include <core/scalar_factory.hpp>
 #include <filesystem>
 #include <optional>

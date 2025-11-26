@@ -114,7 +114,8 @@ namespace
     return {INDEX_FROM_ENUM(particle_var::length)};
   }
 
-  UdfModel::Config _get_config_udf(const std::size_t n)
+  UdfModel::Config _get_config_udf(Kokkos::DefaultHostExecutionSpace& ep,
+                                   const std::size_t n)
   {
     (void)n;
     Kokkos::ScopeGuard g{};

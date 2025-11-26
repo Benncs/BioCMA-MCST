@@ -94,16 +94,7 @@ int register_cma_path(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
-    return (handle->register_cma_path(c, false)) ? 0 : -1;
-  }
-  return -1;
-}
-
-int register_cma_path_recursive(Handle handle, const char* c)
-{
-  if (handle != nullptr && c != nullptr)
-  {
-    return (handle->register_cma_path(c, true)) ? 0 : -1;
+    return (handle->register_cma_path(c)) ? 0 : -1;
   }
   return -1;
 }
@@ -135,10 +126,9 @@ int register_initializer_path(Handle handle, const char* c)
   return -1;
 }
 
-Core::UserControlParameters
+static Core::UserControlParameters
 convert_c_wrap_to_param(const wrap_c_param_t& params)
 {
-  bool recursive = params.recursive != 0;
   bool force_override = params.force_override != 0;
   bool load_serde = (params.load_serde != 0);
   bool save_serde = (params.save_serde != 0);
@@ -149,8 +139,7 @@ convert_c_wrap_to_param(const wrap_c_param_t& params)
   p.final_time = params.final_time, p.delta_time = params.delta_time;
   p.number_particle = params.number_particle, p.n_thread = params.n_thread;
   p.number_exported_result = params.number_exported_result;
-  p.recursive = force_override;
-  p.force_override = recursive;
+  p.force_override = force_override;
   p.load_serde = load_serde;
   p.save_serde = save_serde;
   p.uniform_mc_init = uniform_mc_init;
@@ -165,13 +154,13 @@ Param make_params(double biomass_initial_concentration,
                   uint32_t number_exported_result,
                   int save)
 {
+
   return {biomass_initial_concentration,
           final_time,
           delta_time,
           number_particle,
           1,
           number_exported_result,
-          f_false,
           f_false,
           f_false,
           save,

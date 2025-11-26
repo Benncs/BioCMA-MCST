@@ -7,8 +7,8 @@ if use_dynamic_module
 endif
 
 subdir('common')
-subdir('mpi_w')
 subdir('cma_utils')
+subdir('mpi_w')
 subdir('mc')
 subdir('models')
 if use_dynamic_module
@@ -30,7 +30,7 @@ model_selection = static_library(
   'model_selection',
   [generated_model_selection],
   include_directories: [public_mc, models_list_def],
-  dependencies: [kokkos, common_dependecy, cma_dep],
+  dependencies: [kokkos, common_dependecy, cma_utils_dependency],
   cpp_args: [cpp_args],
 )
 

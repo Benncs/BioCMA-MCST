@@ -4,7 +4,6 @@ core_source = run_command('sh', '-c', f'find @src_dir@ -type f -name *.cpp ', ch
 
 dep_core = [
   kokkos,
-
   biomodel_dependency,
   mc_dependency,
   common_dependecy,
@@ -12,7 +11,7 @@ dep_core = [
   simulation_lib_dependency,
   eigen_dep,
   blas,
-  transitionner_dependency,
+  cma_utils_lib_dependency,
 ]
 
 if highfive_found

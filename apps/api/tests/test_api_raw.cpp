@@ -46,7 +46,8 @@ void test_exec(int argc, char** argv, std::string_view path)
 
 void test_apply(int argc, char** argv, std::string_view path)
 {
-  Handle handle = INIT mock_prepre_apply(path, handle);
+  Handle handle = INIT;
+  mock_prepre_apply(path, handle);
   CHECK(apply(handle, 0));
   delete_handle(&handle);
 }
@@ -83,13 +84,13 @@ void test_register_initializer_path(int argc, char** argv)
 }
 void test_make_params(int argc, char** argv)
 {
-  Param params = PARAM assert(params.biomass_initial_concentration == cx);
+  Param params = PARAM;
+  assert(params.biomass_initial_concentration == cx);
   assert(params.final_time == ft);
   assert(params.delta_time == dt);
   assert(params.number_particle == np);
   assert(params.n_thread == 1); // Default value
   assert(params.number_exported_result == nex);
-  assert(params.recursive == 0);      // Default value
   assert(params.force_override == 0); // Default value
   assert(params.load_serde == 0);     // Default value
 }
@@ -105,8 +106,7 @@ void test_register_parameters(int argc, char** argv)
 // need existing directory
 void test_register_cma_path_recursive(int argc, char** argv)
 {
-  Handle handle = INIT int result =
-      register_cma_path_recursive(handle, "./tools");
+  Handle handle = INIT int result = register_cma_path(handle, "./tools");
   assert(result == 0);
   delete_handle(&handle);
 }
@@ -158,10 +158,6 @@ void test_branch_null(int argc, char** argv)
   CHECK_FALSE(register_result_path(NULL, "valid"));
   CHECK_FALSE(register_result_path(handle, NULL));
   CHECK_FALSE(register_result_path(NULL, NULL));
-
-  CHECK_FALSE(register_cma_path_recursive(NULL, "valid"));
-  CHECK_FALSE(register_cma_path_recursive(handle, NULL));
-  CHECK_FALSE(register_cma_path_recursive(NULL, NULL));
 
   CHECK_FALSE(register_serde(NULL, "valid"));
   CHECK_FALSE(register_serde(handle, NULL));

@@ -4,6 +4,7 @@
 #include <core/scalar_factory.hpp>
 #include <cstddef>
 #include <cstdlib>
+#include <exception>
 #include <memory>
 #include <pybind11/cast.h>
 #include <pybind11/detail/common.h>
@@ -52,9 +53,12 @@ namespace PythonBindings
   auto exec(std::shared_ptr<Api::SimulationInstance>& handle)
   {
     pybind11::gil_scoped_release release; // TODO check if really usefull ?
-    handle->exec();
+    const auto ret = handle->exec();
     pybind11::gil_scoped_acquire acquire;
-    return 0;
+    if (ret.invalid())
+    {
+      throw std::runtime_error(ret.get());
+    }
   }
 
   auto apply(std::shared_ptr<Api::SimulationInstance>& handle, bool to_load)
@@ -66,13 +70,10 @@ namespace PythonBindings
   }
 
   auto register_cma_path(std::shared_ptr<Api::SimulationInstance>& handle,
-                         const std::string& cma_path,
-                         bool recursive)
+                         const std::string& cma_path)
   {
 
-    return (recursive)
-               ? register_cma_path_recursive(handle.get(), cma_path.data())
-               : ::register_cma_path(handle.get(), cma_path.data());
+    return ::register_cma_path(handle.get(), cma_path.data());
   }
 
   auto
@@ -109,7 +110,6 @@ namespace PythonBindings
       .def_readwrite("force_override", &wrap_c_param_t::force_override)
       .def_readwrite("n_thread", &wrap_c_param_t::n_thread)
       .def_readwrite("number_exported_result", &wrap_c_param_t::number_exported_result)
-      .def_readwrite("recursive", &wrap_c_param_t::recursive)
       .def_readwrite("biomass_initial_concentration",
                      &wrap_c_param_t::biomass_initial_concentration)
       .def_readwrite("number_particle", &wrap_c_param_t::number_particle)
@@ -128,13 +128,12 @@ namespace PythonBindings
                                   p.force_override,
                                   p.n_thread,
                                   p.number_exported_result,
-                                  p.recursive,
                                   p.biomass_initial_concentration,
                                   p.number_particle,
                                   p.save_serde);
           },
           [](const py::tuple& t) { // __setstate__
-            constexpr std::size_t n_attributes = 9;
+            constexpr std::size_t n_attributes = 8;
             if (t.size() != n_attributes)
             {
               throw std::runtime_error("Pickle param invalid state, "
@@ -151,10 +150,9 @@ namespace PythonBindings
             p.force_override = static_cast<int>(t[2].cast<bool>());
             p.n_thread = t[3].cast<int>();
             p.number_exported_result = t[4].cast<int>();
-            p.recursive = static_cast<int>(t[5].cast<bool>());
-            p.biomass_initial_concentration = t[6].cast<double>();
-            p.number_particle = t[7].cast<int>();
-            p.save_serde = t[8].cast<int>();
+            p.biomass_initial_concentration = t[5].cast<double>();
+            p.number_particle = t[6].cast<int>();
+            p.save_serde = t[7].cast<int>();
             // NOLINTEND
             return p;
           }));
@@ -198,8 +196,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
   m.def("register_cma_path",
         &PythonBindings::register_cma_path,
         py::arg("handle"),
-        py::arg("cma_path"),
-        py::arg("recursive") = false);
+        py::arg("cma_path"));
 
   m.def("register_serde", &register_serde);
   m.def("register_parameters", &register_parameters);
