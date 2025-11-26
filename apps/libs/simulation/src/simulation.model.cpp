@@ -20,25 +20,44 @@
 namespace Simulation
 {
 
-  [[deprecated("perf:not useful")]] void
-  SimulationUnit::reduceContribs_per_rank(std::span<const double> data) const
+  //[[deprecated("perf:not useful")]] void
+  // SimulationUnit::reduceContribs_per_rank(std::span<const double> data) const
+  //{
+  //
+  // PROFILE_SECTION("host:reduceContribs_rank")
+  // this->liquid_scalar->reduce_contribs(data);
+  //}
+  //
+  // void SimulationUnit::reduceContribs(std::span<const double> data,
+  //                                     size_t n_rank) const
+  // {
+  //   PROFILE_SECTION("host:reduceContribs")
+  //   const auto [nr, nc] = getDimensions();
+  //   this->liquid_scalar->set_zero_contribs();
+
+  //   for (int i = 0; i < static_cast<int>(n_rank); ++i)
+  //   {
+  //     this->liquid_scalar->reduce_contribs({&data[i * nr * nc], nr * nc});
+  //   }
+  // }
+  bool SimulationUnit::checkScalar() const
   {
 
-    PROFILE_SECTION("host:reduceContribs_rank")
-    this->liquid_scalar->reduce_contribs(data);
-  }
+    auto pred = [](auto&& val) { return val < 0.; };
 
-  void SimulationUnit::reduceContribs(std::span<const double> data,
-                                      size_t n_rank) const
-  {
-    PROFILE_SECTION("host:reduceContribs")
-    const auto [nr, nc] = getDimensions();
-    this->liquid_scalar->set_zero_contribs();
+    auto cliq = this->getCliqData();
 
-    for (int i = 0; i < static_cast<int>(n_rank); ++i)
+    const auto it = std::ranges::find_if(cliq.begin(), cliq.end(), pred);
+    bool flag = it == cliq.end();
+
+    auto cgas = this->getCgasData();
+
+    if (cgas)
     {
-      this->liquid_scalar->reduce_contribs({&data[i * nr * nc], nr * nc});
+      const auto it = std::find_if(cgas->begin(), cgas->end(), pred);
+      flag = it == cgas->end();
     }
+    return flag;
   }
 
   void SimulationUnit::clearContribution() const noexcept
@@ -58,8 +77,6 @@ namespace Simulation
   {
     PROFILE_SECTION("host:update_feed")
     // Get references to the index_leaving_flow and leaving_flow data members
-    const auto& _index_leaving_flow = this->move_info.index_leaving_flow;
-    const auto& _leaving_flow = this->move_info.leaving_flow;
 
     auto functor = [update_scalar](auto& scl,
                                    const Feed::FeedDescriptor& fd) -> void
@@ -74,25 +91,28 @@ namespace Simulation
         }
       }
     };
-
+    auto& ls = *this->liquid_scalar;
     for (auto& feed : feed.liquid_feeds())
     {
       feed.update(t, d_t);
-      functor(*this->liquid_scalar, feed);
+      functor(ls, feed);
       // TODO: improve
       if (feed.output_position)
       {
-        _index_leaving_flow(0) = 0;
-        _leaving_flow(0) = feed.flow;
+        // _index_leaving_flow(0) = 0;
+        // _leaving_flow(0) = feed.flow;
+        //
+        move_info.set_flow(0, 0, feed.flow);
       }
     }
 
     if (is_two_phase_flow)
     {
+      auto& gs = *this->gas_scalar;
       for (auto& feed : feed.gas_feeds())
       {
         feed.update(t, d_t);
-        functor(*this->gas_scalar, feed);
+        functor(gs, feed);
       }
     }
   }
@@ -167,22 +187,18 @@ namespace Simulation
 
     if (is_two_phase_flow)
     {
-      mt_model.gas_liquid_mass_transfer(state);
+      mt_model.gas_liquid_mass_transfer();
       const auto& mtr = mt_model.proxy()->mtr;
 
-      this->gas_scalar->performStepGL(d_t,
-                                      state.gas->get_transition(),
-                                      mtr,
-                                      MassTransfer::Sign::GasToLiquid);
+      this->gas_scalar->performStepGL(
+          d_t, mtr, MassTransfer::Sign::GasToLiquid);
 
-      this->liquid_scalar->performStepGL(d_t,
-                                         state.liq->get_transition(),
-                                         mtr,
-                                         MassTransfer::Sign::LiquidToGas);
+      this->liquid_scalar->performStepGL(
+          d_t, mtr, MassTransfer::Sign::LiquidToGas);
     }
     else
     {
-      this->liquid_scalar->performStep(d_t, state.liq->get_transition());
+      this->liquid_scalar->performStep(d_t);
     }
   }
 } // namespace Simulation

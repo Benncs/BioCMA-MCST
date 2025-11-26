@@ -1,5 +1,8 @@
 #include <cassert>
 #include <iostream>
+#ifdef NDEBUG
+#  undef NDEBUG
+#endif
 #include <mpi_w/iteration_payload.hpp>
 
 int main(int argc, char** argv)
@@ -17,31 +20,32 @@ int main(int argc, char** argv)
   std::vector<double> gases = {7.7, 8.8, 9.9};
 
   std::vector<size_t> raw_neighbors = {1, 2, 3, 1, 2, 3, 1, 2, 3};
+  std::vector<double> flat_proba = {0, 0.5, 1, 0, 0.5, 1, 0, 0.5, 1};
 
-  CmaRead::L2DView<const size_t> n_view(raw_neighbors, 3);
   if (size != 1)
   {
 
     MPI_Status status;
     if (rank == 0)
+
     { // Sender
 
       WrapMPI::HostIterationPayload host_payload;
-      host_payload.liquid_flows = flows;
+      host_payload.liquid_out_flows = flows;
       host_payload.liquid_volumes = volumes;
-      host_payload.gas_volumes = gases;
-      host_payload.neighbors = n_view;
+      host_payload.liquid_neighbors_flat = raw_neighbors;
+      host_payload.proba_leaving_flat = flat_proba;
       auto _ = host_payload.sendAll(size);
     }
     else if (rank == 1)
     {
-      WrapMPI::IterationPayload payload(3, 3);
+      WrapMPI::IterationPayload payload(3);
       payload.recv(0, &status);
 
-      assert(payload.liquid_flows == flows);
+      assert(payload.liquid_out_flows == flows);
       assert(payload.liquid_volumes == volumes);
-      assert(payload.gas_volumes == gases);
-      assert(raw_neighbors == payload.raw_neighbors);
+      assert(payload.liquid_neighbors_flat == raw_neighbors);
+      assert(payload.proba_leaving_flat == payload.proba_leaving_flat);
     }
   }
   std::cout << "OK" << std::endl;

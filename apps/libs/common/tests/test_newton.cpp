@@ -1,8 +1,8 @@
 #include <cassert>
 #include <cmath>
+#include <common/alg.hpp>
 #include <common/common.hpp>
 #include <iostream>
-
 void validation_test()
 {
   auto sqrt_function = [](double x) { return x * x - 4; };

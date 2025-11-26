@@ -3,9 +3,7 @@
 
 #include "common/logger.hpp"
 #include <array>
-#include <cma_read/flow_iterator.hpp>
-#include <cma_read/neighbors.hpp>
-#include <cmt_common/cma_case.hpp>
+#include <cma_utils/alias.hpp>
 #include <common/execinfo.hpp>
 #include <core/scalar_factory.hpp>
 #include <core/simulation_parameters.hpp>
@@ -18,12 +16,17 @@
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/scalar_initializer.hpp>
-#include <simulation/simulation.hpp>
+// #include <simulation/simulation.hpp>
 #include <string>
-#include <transitionner/transitionner.hpp>
+// #include <transitionner/transitionner.hpp>
 #include <vector>
 
 class ILoadBalancer;
+
+namespace Simulation
+{
+  class SimulationUnit;
+}
 
 namespace Core
 {
@@ -61,7 +64,7 @@ namespace Core
      *
      * @return An optional unique pointer to the initialized flow iterator.
      */
-    OptionalPtr<CmaRead::FlowIterator> init_flow_iterator();
+    // OptionalPtr<CmaRead::FlowIterator> init_flow_iterator();
 
     /**
      * @brief Initializes the simulation state.
@@ -72,17 +75,17 @@ namespace Core
      * initialization.
      */
     std::optional<bool>
-    init_state(std::unique_ptr<CmaRead::FlowIterator>& flow_handle);
+    init_state(const CmaUtils::TransitionnerPtrType& transiionner);
 
-    /**
-     * @brief Initializes a transitioner with the provided flow iterator.
-     *
-     * @param flow_handle A unique pointer to the flow iterator.
-     * @return An optional unique pointer to the initialized flow map
-     * transitioner.
-     */
-    OptionalPtr<CmaUtils::FlowMapTransitionner>
-    init_transitionner(std::unique_ptr<CmaRead::FlowIterator>&& flow_handle);
+    // /**
+    //  * @brief Initializes a transitioner with the provided flow iterator.
+    //  *
+    //  * @param flow_handle A unique pointer to the flow iterator.
+    //  * @return An optional unique pointer to the initialized flow map
+    //  * transitioner.
+    //  */
+    // std::optional<CmaUtils::TransitionnerPtrType>
+    // init_transitionner(std::unique_ptr<CmaRead::FlowIterator>&& flow_handle);
 
     /**
      * @brief Initializes a transitioner without parameters.
@@ -90,7 +93,7 @@ namespace Core
      * @return An optional unique pointer to the initialized flow map
      * transitioner.
      */
-    OptionalPtr<CmaUtils::FlowMapTransitionner> init_transitionner();
+    std::optional<CmaUtils::TransitionnerPtrType> init_transitionner();
 
     /**
      * @brief Initializes a simulation unit.
@@ -170,8 +173,8 @@ namespace Core
      */
     enum class InitStep : std::size_t
     {
-      FlowIterator = 0, ///< Step for initializing the flow iterator.
-      Transitioner,     ///< Step for initializing the transitioner.
+      // FlowIterator = 0, ///< Step for initializing the flow iterator.
+      Transitioner = 0, ///< Step for initializing the transitioner.
       InitState,        ///< Step for initializing the simulation state.
       Scalar,           ///< Step for initializing scalar values.
       Feed,             ///< Step for initializing the simulation feed.
@@ -223,14 +226,14 @@ namespace Core
      * @param cma_case_path The path for the CMA case.
      * @return A structure containing exported paths.
      */
-    CmtCommons::cma_exported_paths_t
-    get_path_files(const std::string& cma_case_path);
+    // CmtCommons::cma_exported_paths_t
+    // get_path_files(const std::string& cma_case_path);
 
     /**
      * @brief Host speciffic state init
      */
     std::optional<bool>
-    host_init_state(std::unique_ptr<CmaRead::FlowIterator>& flow_handle);
+    host_init_state(const CmaUtils::TransitionnerPtrType& transiionner);
 
     /**
      * @brief Performs MPI broadcast for synchronization.
@@ -244,13 +247,19 @@ namespace Core
 
     UserControlParameters user_params;
 
+    struct inner
+    {
+    };
     /////INNER STRUCT
     uint64_t particle_per_process;
     std::vector<double> liquid_volume;
     std::vector<double> gas_volume;
-    CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors;
+    // CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors;
+
+    std::vector<std::size_t> flat_neighobrs;
+
     double t_per_flowmap{};
-    std::vector<size_t> worker_neighbor_data;
+    // std::vector<size_t> worker_neighbor_data;
     bool f_init_gas_flow;
     std::optional<Simulation::Feed::SimulationFeed> feed;
     std::shared_ptr<IO::Logger> logger;

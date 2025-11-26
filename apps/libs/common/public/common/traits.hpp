@@ -19,6 +19,10 @@
 template <typename T>
 concept FloatingPointType = std::is_floating_point_v<std::remove_cvref_t<T>>;
 
+static_assert(FloatingPointType<double>, "double ok");
+static_assert(FloatingPointType<float>, "float ok");
+static_assert(!FloatingPointType<int>, "int ok");
+
 constexpr double tolerance_equality_float = 1e-15;
 
 template <typename T>

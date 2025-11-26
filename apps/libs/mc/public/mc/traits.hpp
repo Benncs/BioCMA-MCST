@@ -7,7 +7,6 @@
 #include <common/common.hpp>
 #include <common/traits.hpp>
 #include <concepts>
-#include <cstdint>
 #include <mc/alias.hpp>
 #include <mc/macros.hpp>
 #include <mc/prng/prng.hpp>
@@ -25,17 +24,6 @@ concat_arrays(const std::array<std::string_view, N1>& arr1,
   std::copy(arr2.begin(), arr2.end(), result.begin() + N1);
   return result;
 }
-
-namespace MC
-{
-
-  // NOLINTBEGIN(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-  template <uint64_t Nd, FloatingPointType F>
-  using ParticlesModel = Kokkos::View<F* [Nd]>;
-  template <FloatingPointType F> using DynParticlesModel = Kokkos::View<F**>;
-  // NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-
-}; // namespace MC
 
 template <typename T>
 concept ConfigurableInit = requires(T model,
@@ -56,7 +44,7 @@ concept NonConfigurableInit = requires(T model,
                                        const typename T::SelfParticle& arr) {
   { model.init(random_pool, idx, arr) } -> std::same_as<void>;
 };
-
+using NonConfigType = std::nullopt_t;
 /**
   @brief Concept to define a correct Model
 
@@ -94,7 +82,7 @@ concept CommonModelType = requires(T model,
   //                                                             ConfigurableInit<T>);
 
   requires ConfigurableInit<T> ||
-               (std::is_same_v<typename T::Config, std::nullopt_t> &&
+               (std::is_same_v<typename T::Config, NonConfigType> &&
                 NonConfigurableInit<T>);
 
   // {

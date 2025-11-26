@@ -43,7 +43,8 @@ int main()
 
     Kokkos::ScopeGuard _guad;
     const std::size_t np = 100;
-    MC::ParticlesContainer<SerdeModel> container(np);
+    MC::RuntimeParameters foo = {1, 2, 3, 4};
+    MC::ParticlesContainer<SerdeModel> container(foo, np);
     MC::KPRNG::pool_type rng;
     Kokkos::parallel_for(
         np, KOKKOS_LAMBDA(const int i) {
@@ -59,6 +60,7 @@ int main()
     iarchive(container2);
 
     assert(container.n_particles() == container2.n_particles());
+    assert(container.get_allocation_factor() == foo.allocation_factor);
 
     Kokkos::parallel_for(
         np, KOKKOS_LAMBDA(const int i) {

@@ -13,7 +13,6 @@
 #  pragma GCC diagnostic pop
 #endif
 #include <Kokkos_Core.hpp>
-#include <cma_utils/cache_hydro_state.hpp>
 #include <common/common.hpp>
 #include <cstddef>
 #include <cstdint>
@@ -23,6 +22,7 @@
 #include <simulation/mass_transfer.hpp>
 #include <span>
 #include <vector>
+using FlowMatrixType = Eigen::SparseMatrix<double>;
 
 namespace Simulation
 {
@@ -43,32 +43,41 @@ namespace Simulation
     bool deep_copy_concentration(const std::vector<double>& data);
     void reduce_contribs(std::span<const double> data);
 
+    void set_transition(CmaUtils::StateCooMatrixType&& transition);
+
     void performStepGL(double d_t,
-                       const FlowMatrixType& m_transition,
-                       const ColMajorMatrixtype& mtr,
+                       const ColMajorMatrixtype<double>& mtr,
                        MassTransfer::Sign sign);
 
-    void performStep(double d_t, const FlowMatrixType& m_transition);
+    void performStep(double d_t);
 
     void synchro_sources();
 
     // void performStep(double d_t, const FlowMatrixType& m_transition);
 
     // Getters
-    [[nodiscard]] ColMajorMatrixtype& get_concentration();
-    [[nodiscard]] ColMajorKokkosScalarMatrix get_device_concentration() const;
-    [[nodiscard]] std::span<double const> getVolumeData() const;
-    [[nodiscard]] std::span<double> getContributionData() const;
+    [[nodiscard]] ColMajorMatrixtype<double>& get_concentration();
+    [[nodiscard]] ColMajorKokkosScalarMatrix<double>
+    get_device_concentration() const;
 
-    [[nodiscard]] std::span<double> getContributionData_mut();
+    [[nodiscard]] std::span<double const> volume_span() const;
+
+    [[nodiscard]] std::span<double> contribution_span() const;
+
+    [[nodiscard]] std::span<double> contribution_span_mut();
     [[nodiscard]] const DiagonalType& getVolume() const;
     [[nodiscard]] auto getConcentrationArray() const;
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
-    [[nodiscard]] const ColMajorMatrixtype& get_mass_transfer() const;
+    [[nodiscard]] const ColMajorMatrixtype<double>& get_mass_transfer() const;
     [[nodiscard]] std::span<double> getConcentrationData();
 
-    [[nodiscard]] std::size_t n_row() const;
-    [[nodiscard]] std::size_t n_col() const;
+    const auto& getTransition() const
+    {
+      return m_transition;
+    }
+
+    [[nodiscard]] std::size_t n_row() const noexcept;
+    [[nodiscard]] std::size_t n_col() const noexcept;
 
     // Setters
 
@@ -83,14 +92,16 @@ namespace Simulation
   private:
     std::size_t n_r;
     std::size_t n_c;
-    ColMajorMatrixtype total_mass;
+    ColMajorMatrixtype<double> total_mass;
     kernelContribution contribs;
+
+    FlowMatrixType m_transition;
 
     DiagonalType volumes_inverse;
     DiagonalType m_volumes;
     DiagonalType sink;
-    EigenKokkos concentrations;
-    RowMajorEigenKokkos sources;
+    EigenKokkos<double> concentrations;
+    RowMajorEigenKokkos<double> sources;
   };
 
   inline auto ScalarSimulation::getConcentrationArray() const
@@ -139,19 +150,19 @@ namespace Simulation
     return this->concentrations.get_span();
   }
 
-  inline std::span<double> ScalarSimulation::getContributionData() const
+  inline std::span<double> ScalarSimulation::contribution_span() const
   {
     return {this->sources.host.data(),
             static_cast<size_t>(this->sources.host.size())};
   }
 
-  inline std::span<double> ScalarSimulation::getContributionData_mut()
+  inline std::span<double> ScalarSimulation::contribution_span_mut()
   {
     return {this->sources.host.data(),
             static_cast<size_t>(this->sources.host.size())};
   }
 
-  inline std::span<double const> ScalarSimulation::getVolumeData() const
+  inline std::span<double const> ScalarSimulation::volume_span() const
   {
     return {m_volumes.diagonal().data(), static_cast<size_t>(m_volumes.rows())};
   }

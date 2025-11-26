@@ -7,3 +7,15 @@ repos:
         args: [--style=file:.clang-format]
       # - id: clang-tidy
       #   args: [./apps/*]
+  - repo:
+      https://github.com/astral-sh/ruff-pre-commit
+      # Ruff version.
+    rev: v0.14.1
+    hooks:
+      # Run the linter.
+      - id: ruff-check
+        args: ["--config", ".ruff.toml"]
+        #args: [--fix]
+        # Run the formatter.
+      - id: ruff-format
+        args: ["--config", ".ruff.toml"]

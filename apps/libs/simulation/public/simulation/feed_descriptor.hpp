@@ -138,6 +138,11 @@ namespace Simulation::Feed
       return std::ranges::subrange(std::vector<FeedDescriptor>::iterator(),
                                    std::vector<FeedDescriptor>::iterator());
     }
+
+    static SimulationFeed empty()
+    {
+      return {.liquid = std::nullopt, .gas = std::nullopt};
+    }
   };
 
 } // namespace Simulation::Feed

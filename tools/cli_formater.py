@@ -10,7 +10,7 @@ current_directory = os.path.dirname(current_file_path)
 
 
 def create_xml_parser(xsd):
-    XSD_PATH = xsd 
+    XSD_PATH = xsd
     # Load XSD schema
     with open(XSD_PATH, "r") as xsd_file:
         xsd_content = xsd_file.read()
@@ -90,11 +90,10 @@ def read_xml_values(xml_path, parser, target_name):
         print(f"Invalid XML: {str(e)}")
 
 
-def format_cli(args, file="cases.xml",global_install:bool=False):
+def format_cli(args, file="cases.xml", global_install: bool = False):
     if (len(args)) == 2:
         name = args[1]
 
-          
         xml_file_path = current_directory + "/" + file
         # Create XML parser with schema validation
         xsd_path = current_directory + "/../devutils/datamodel/input_scheme.xsd"

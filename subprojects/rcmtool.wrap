@@ -1,0 +1,8 @@
+[wrap-git]
+url = https://github.com/Benncs/rcmtool.git
+revision = v1.3
+depth = 1
+method = meson
+
+[provide]
+rcmtool = ext

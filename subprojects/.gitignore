@@ -6,3 +6,4 @@ kokkos-*
 packagecache
 */
 kokkos_sampling/
+rcmtool

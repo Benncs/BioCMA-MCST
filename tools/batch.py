@@ -7,6 +7,7 @@ import os
 import sys
 from contextlib import contextmanager
 
+
 @contextmanager
 def silence_stdout():
     old_target = sys.stdout
@@ -17,12 +18,13 @@ def silence_stdout():
     finally:
         sys.stdout = old_target
 
+
 file_header = """<?xml version="1.0" encoding="UTF-8"?>
 <cases>
 """
 
 
-duration = [500,3600,2*3600,4*3600,5*3600]
+duration = [500, 3600, 2 * 3600, 4 * 3600, 5 * 3600]
 
 rd = ""
 
@@ -46,13 +48,13 @@ full_file = file_header + rd + " </cases>"
 with open("./tools/batch.xml", "w") as file:
     file.write(full_file)
 
-def run_command(i):
 
-    cli,res_path = format_cli(["_", f"0d_{i}"], "batch.xml")
+def run_command(i):
+    cli, res_path = format_cli(["_", f"0d_{i}"], "batch.xml")
     print(f"Executing: {cli}")
     with silence_stdout():
         command = get_executable("release", False) + " " + cli + " -nt 6"
-        exec(command, '6',stdout=subprocess.PIPE)
+        exec(command, "6", stdout=subprocess.PIPE)
         main([res_path])
 
 
@@ -60,6 +62,7 @@ def _main():
     with multiprocessing.Pool(processes=2) as pool:
         pool.map(run_command, range(len(duration)))
 
-if __name__=="__main__":
-        _main()
-        print("All commands executed.")
+
+if __name__ == "__main__":
+    _main()
+    print("All commands executed.")

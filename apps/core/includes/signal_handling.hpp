@@ -15,7 +15,7 @@ namespace Core
    * provides mechanisms to check if signals have been raised and ensures proper
    * cleanup and handling.
    */
-  class SignalHandler
+  class SignalHandler final
   {
   public:
     /**

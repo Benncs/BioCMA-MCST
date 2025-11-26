@@ -54,11 +54,7 @@ namespace Models
     MODEL_CONSTANT FloatType phi_s_max =
         _get_phi_s_max<FloatType>(lin_density, l_dot_max); // kgS/s
 
-    MC::ContribIndexBounds static get_bounds()
-    {
-      int begin = INDEX_FROM_ENUM(Self::particle_var::phi_s);
-      return {.begin = begin, .end = begin + 1};
-    }
+    MC::ContribIndexBounds static get_bounds();
 
     static Self::Config get_config(std::size_t n);
 
@@ -81,13 +77,6 @@ namespace Models
              std::size_t idx2,
              const SelfParticle& arr,
              const SelfParticle& buffer_arr);
-
-    KOKKOS_INLINE_FUNCTION static void
-    contribution(std::size_t idx,
-                 std::size_t position,
-                 double weight,
-                 const SelfParticle& arr,
-                 const MC::ContributionView& contributions);
 
     KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx,
                                               const SelfParticle& arr)
@@ -117,59 +106,11 @@ namespace Models
                     const SelfParticle& arr,
                     const Config& config)
   {
-
-    // normal1
-    constexpr auto l_initial_dist = MC::Distributions::TruncatedNormal<float>(
-        l_max_m * 0.75, l_min_m / 5., l_min_m, l_max_m);
-
-    // normal2 lmin/2 lmin/2
-    // normal3 l_min*0.7
-    // norma4l
-    // constexpr auto l_initial_dist =
-    // MC::Distributions::TruncatedNormal<float>(
-    //    l_min_m, l_min_m / 2., 0., static_cast<double>(1));
-
-    // Normal1
-    // constexpr FloatType lambda =
-    //     0.69314718056 / l_max_m;
-    //
-    //     // lambda=-h/a WARN!!! use abs(lambda)
-    //  for exp(-lambda x) sampling
-    //     constexpr auto l_initial_dist =
-
     auto gen = random_pool.get_state();
-    // auto linit = l_initial_dist.draw(gen);
-    //  FloatType linit = 0.;
-    //  do
-    //  {
-    //    linit = lm / 2. + config().dist.draw(gen);
-    //  } while (linit > lm);
-    //
-    //
-    //
-    //
-    auto linit = config(idx); // linit = Kokkos::min(linit, lm);
-
-    // linit = Kokkos::max(linit, FloatType(lm / 2.));
-
-    //   auto linit = l_initial_dist.draw(
-    //       gen); // l_min_m; // gen.drand(l_min_m * .8, l_max_m);
-    //
+    const auto linit = config(idx);
     random_pool.free_state(gen);
     GET_PROPERTY(particle_var::length) = linit;
-    // Stochastic 1
-    //    auto gen = random_pool.get_state();
-    //    GET_PROPERTY(particle_var::l_max) = gen.drand(l_max_m * 0.9, l_max_m
-    //    * 1.1); random_pool.free_state(gen);
-
-    // Stochastic 2
-    // auto gen = random_pool.get_state();
-    // GET_PROPERTY(particle_var::l_max) = gen.drand(l_max_m * 0.8, l_max_m
-    // * 1.2); random_pool.free_state(gen);
     GET_PROPERTY(particle_var::l_max) = l_max_m;
-
-    //   GET_PROPERTY(particle_var::length) = l_max_m / 2.;
-
     GET_PROPERTY(particle_var::phi_s) = 0.;
   }
 
@@ -185,17 +126,23 @@ namespace Models
     const FloatType phi_s = phi_s_max * g;
     const FloatType ldot = l_dot_max * g;
     GET_PROPERTY(Self::particle_var::length) += d_t * ldot;
+    //
+    // const FloatType ldot = l_dot_max * g;
+    // const FloatType d_length = d_t * ldot;
+    // GET_PROPERTY(Self::particle_var::length) += d_length / (1.0 + d_t *
+    // ldot);
+
     GET_PROPERTY(Self::particle_var::phi_s) = -phi_s;
     return check_div(GET_PROPERTY(Self::particle_var::length),
                      GET_PROPERTY(Self::particle_var::l_max));
   }
 
-  KOKKOS_INLINE_FUNCTION void
-  FixedLength::division(const MC::KPRNG::pool_type& random_pool,
-                        std::size_t idx,
-                        std::size_t idx2,
-                        const SelfParticle& arr,
-                        const SelfParticle& buffer_arr)
+  KOKKOS_INLINE_FUNCTION void FixedLength::division(
+      [[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+      std::size_t idx,
+      std::size_t idx2,
+      const SelfParticle& arr,
+      const SelfParticle& buffer_arr)
   {
     const FloatType new_current_length =
         GET_PROPERTY(particle_var::length) / 2.F;
@@ -206,32 +153,12 @@ namespace Models
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::length) =
         new_current_length;
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = l_max_m;
-
-    // Stochastic 2
-    //    auto gen = random_pool.get_state();
-    //    GET_PROPERTY(particle_var::l_max) = gen.drand(l_max_m * 0.8, l_max_m
-    //    * 1.2); GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) =
-    //        gen.drand(l_max_m * 0.8, l_max_m * 1.2);
-    //    random_pool.free_state(gen);
-
-    // Stochastic 1
-    // auto gen = random_pool.get_state();
-    // GET_PROPERTY(particle_var::l_max) = gen.drand(l_max_m * 0.9, l_max_m
-    // * 1.1); GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) =
-    // gen.drand(l_max_m * 0.9, l_max_m * 1.1);
-    // random_pool.free_state(gen);
   }
 
-  KOKKOS_INLINE_FUNCTION void
-  FixedLength::contribution([[maybe_unused]] std::size_t idx,
-                            std::size_t position,
-                            double weight,
-                            [[maybe_unused]] const SelfParticle& arr,
-                            const MC::ContributionView& contributions)
+  inline MC::ContribIndexBounds FixedLength::get_bounds()
   {
-    auto access = contributions.access();
-    access(position, 0) +=
-        -weight * GET_PROPERTY(FixedLength::particle_var::phi_s); // NOLINT
+    int begin = INDEX_FROM_ENUM(Self::particle_var::phi_s);
+    return {.begin = begin, .end = begin + 1};
   }
 
 } // namespace Models

@@ -6,6 +6,7 @@
 #include <common/common.hpp>
 #include <cstddef>
 #include <cstdint>
+#include <mc/alias.hpp>
 #include <mc/traits.hpp>
 #include <span>
 
@@ -57,8 +58,7 @@ namespace MC
     /**
      * @brief Main constructor
      */
-    ReactorDomain(std::span<double> volumes,
-                  const NeighborsView<HostSpace>& _neighbors);
+    ReactorDomain(std::span<double> volumes, std::span<const size_t> neighbors);
     /**
      * @brief Default destructor
      *
@@ -79,7 +79,8 @@ namespace MC
     /**
      * @brief Update neigbors of compartments
      */
-    void setLiquidNeighbors(const NeighborsView<HostSpace>& data);
+
+    void setLiquidNeighbors(std::span<const size_t> flat_data);
 
     /**
      * @brief Return the number of compartment in the domain
@@ -95,15 +96,6 @@ namespace MC
      * @brief Return a const reference to neighbors
      */
     [[nodiscard]] ConstNeighborsView<ComputeSpace> getNeighbors() const;
-
-    /**
-    @brief Return a unique domain from data obtained with MPI gather
-    */
-    [[deprecated("Not needed anymore")]] static ReactorDomain
-    reduce(std::span<const size_t> data, size_t original_size, size_t n_rank);
-
-    [[deprecated("Not needed anymore")]] void in_place_reduce(
-        std::span<const size_t> data, size_t original_size, size_t n_rank);
 
     template <class Archive> void save(Archive& ar) const
     {

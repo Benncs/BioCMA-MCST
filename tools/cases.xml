@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <cases>
+   <control name="debug">
+	   <!-- <cma_case_path  >/home_pers/casale/Documents/thesis/cfd/bench/</cma_case_path>  -->
+	   <!--  <cma_case_path>./cma_data/0d_gas/</cma_case_path>  -->
+      <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path>
+      <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
+
+      <final_time>5</final_time>
+      <number_particle>6000000</number_particle>
+      <delta_time>0</delta_time>
+      <results_file_name>debug</results_file_name>
+      <number_exported_result>10</number_exported_result>
+      <model_name>monod</model_name>
+      <!--<initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path> -->
+      <!-- <initialiser_path>./cma_data/n14_init.h5</initialiser_path> -->
+       <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>
+   </control>
+
+ 
    <control name="n14">
       <cma_case_path
             recursive="true"
@@ -59,16 +77,17 @@
       <model_name>two_meta_div</model_name>
    </control>
 
-   <control name="debug">
+
+   <control name="bench">
 	   <cma_case_path>../poc/cma_data/0d_gas/</cma_case_path>
       <!-- <cma_case_path>/app/cma_data/0d_gas/</cma_case_path> -->
       <!-- <cma_case_path >/home_pers/casale/Documents/thesis/cfd/sanofi/</cma_case_path> -->
       <!-- <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path> -->
-      <final_time>360</final_time>
+      <final_time>10</final_time>
       <number_particle>1000000</number_particle>
-      <delta_time>0.1</delta_time>
-      <results_file_name>debug</results_file_name>
-      <number_exported_result>50</number_exported_result>
+      <delta_time>0.01</delta_time>
+      <results_file_name>bench</results_file_name>
+      <number_exported_result>0</number_exported_result>
       <model_name>fixed_length</model_name>
        <!-- <initialiser_path /> -->
       <initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path>

@@ -94,6 +94,13 @@ namespace SerDe
          case_data.exec_info);
       auto dim = case_data.simulation->getDimensions();
       auto cliq = case_data.simulation->getCliqData();
+
+      if (!case_data.simulation->checkScalar())
+      {
+        throw std::runtime_error(
+            "Simulation with negative value won´t be able to be loaded");
+      }
+
       auto cgas = case_data.simulation->getCgasData();
 
       std::optional<std::vector<double>> cgas_a =
@@ -149,6 +156,7 @@ namespace SerDe
     sc->liquid_buffer = read_c_liq;
     sc->n_species = dims.n_species;
     sc->type = Simulation::ScalarInitialiserType::File;
+    sc->gas_flow = sc->gas_buffer.has_value();
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);

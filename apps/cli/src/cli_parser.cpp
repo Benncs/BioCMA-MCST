@@ -128,7 +128,9 @@ parseArg(Core::UserControlParameters& user_control,
            { user_control.final_time = std::stod(std::string(value)); }},
           {"r",
            [&user_control](std::string_view)
-           { user_control.recursive = true; }},
+           {
+             (void)user_control; /*user_control.recursive = true;*/
+           }},                   // TODO REMOVE
           {"f",
            [&user_control](std::string_view value)
            { user_control.cma_case_path = std::string(value); }},

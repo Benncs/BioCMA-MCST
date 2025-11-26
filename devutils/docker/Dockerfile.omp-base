@@ -17,6 +17,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     apt-get install -y \
+    curl \ 
     git \
     lsb-release\
     wget \
@@ -35,6 +36,11 @@ RUN apt-get update && \
     ninja-build \
     cmake && \
     rm -rf /var/lib/apt/lists/*
+
+ENV HOME="/root"
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+ENV PATH="$HOME/.cargo/bin:${PATH}"
 
 
 # Install Meson
