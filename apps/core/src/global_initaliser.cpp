@@ -8,6 +8,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <dataexporter/data_exporter.hpp>
+#include <exception>
 #include <load_balancing/iload_balancer.hpp>
 #include <load_balancing/impl_lb.hpp>
 #include <mc/mcinit.hpp>
@@ -206,13 +207,24 @@ namespace Core
   std::optional<CmaUtils::TransitionnerPtrType>
   GlobalInitialiser::init_transitionner()
   {
-
-    auto d_transition = (is_host)
-                            ? get_dtransitioner(user_params.cma_case_path)
-                            : CmaUtils::TransitionnerPtrType::from_raw(nullptr);
+    auto d_transition = CmaUtils::TransitionnerPtrType::from_raw(nullptr);
 
     if (is_host)
     {
+      try
+      {
+        d_transition = (is_host)
+                           ? get_dtransitioner(user_params.cma_case_path)
+                           : CmaUtils::TransitionnerPtrType::from_raw(nullptr);
+      }
+      catch (std::exception& e)
+      {
+        if (logger)
+        {
+          logger->error(e.what());
+        }
+        return std::nullopt;
+      }
       f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
       const auto state = d_transition->get_current();
       if (logger)

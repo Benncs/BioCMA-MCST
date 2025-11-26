@@ -74,8 +74,9 @@ namespace WrapMPI
     [[nodiscard]] bool sendAll(std::size_t n_rank) noexcept;
 
     void wait() noexcept;
-
+#ifdef NDEBUG // FIXME Needed for unite test
   private:
+#endif
     std::span<const double> liquid_volumes;
     std::span<const std::size_t> liquid_neighbors_flat;
     std::span<const double> proba_leaving_flat;
