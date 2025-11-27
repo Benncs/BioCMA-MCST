@@ -22,6 +22,7 @@ namespace CommonMaths
            0.6931471806 * t;
     // NOLINTEND
   }
+
   template <bool use_kokkos_log>
   KOKKOS_INLINE_FUNCTION float _ln(float x)
     requires(use_kokkos_log)

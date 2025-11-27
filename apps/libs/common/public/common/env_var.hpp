@@ -3,12 +3,20 @@
 #include <cstdio>
 #include <cstdlib>
 #include <optional>
-#include <ostream>
+
 #include <sstream>
 #include <string_view>
+
+#ifdef _WIN32
+#  include <ostream>
+#endif
+
 namespace Common
 {
-
+  /**
+   * @brief Wrapper arround get_env to get optional envariable
+   * @note: UB if T is not trivial type
+   */
   template <typename T> std::optional<T> read_env(std::string_view varname)
   {
     const char* env_var = std::getenv(varname.data());

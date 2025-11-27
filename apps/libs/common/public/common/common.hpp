@@ -1,13 +1,8 @@
 #ifndef __COMMON_EXPORT_HPP__
 #define __COMMON_EXPORT_HPP__
 
-// #include <biocma_cst_config.hpp>
-// #include <common/alg.hpp>
-// #include <common/execinfo.hpp>
-// #include <common/traits.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <string_view>
-// TODO Remove
 
 using ComputeSpace = Kokkos::DefaultExecutionSpace;
 using HostSpace = Kokkos::DefaultHostExecutionSpace;

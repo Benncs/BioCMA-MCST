@@ -146,6 +146,7 @@ namespace IO
       owner_ptr->restore();
     }
   }
+  /// CONSOLE
 
   Console::Console()
       : flags(Flags::None), output(std::cout), err_output(std::cerr)
@@ -164,7 +165,7 @@ namespace IO
     }
   }
 
-  void Console::debug([[maybe_unused]] std::string_view message)
+  void Console::debug([[maybe_unused]] std::string_view message) noexcept
   {
 #ifndef NDEBUG
     if ((flags & Flags::Debug) != 0U)
@@ -174,7 +175,8 @@ namespace IO
 #endif
   }
 
-  void Console::print(std::string_view prefix, std::string_view message)
+  void Console::print(std::string_view prefix,
+                      std::string_view message) noexcept
   {
     if ((flags & Flags::Print) != 0U)
     {
@@ -183,7 +185,8 @@ namespace IO
     }
   }
 
-  void Console::alert(std::string_view prefix, std::string_view message)
+  void Console::alert(std::string_view prefix,
+                      std::string_view message) noexcept
   {
     if ((flags & Flags::Alert) != 0U)
     {
@@ -192,7 +195,8 @@ namespace IO
     }
   }
 
-  void Console::error(std::string_view message, std::source_location location)
+  void Console::error(std::string_view message,
+                      std::source_location location) noexcept
   {
     if ((flags & Flags::Error) != 0U)
     {
@@ -202,7 +206,7 @@ namespace IO
     }
   }
 
-  void Console::raw_log(std::string_view message)
+  void Console::raw_log(std::string_view message) noexcept
   {
     if ((flags & Flags::Error) != 0U)
     {
@@ -210,28 +214,28 @@ namespace IO
     }
   }
 
-  void Console::toggle_debug()
+  void Console::toggle_debug() noexcept
   {
 
     flags ^= Flags::Debug;
   }
 
-  void Console::toggle_all()
+  void Console::toggle_all() noexcept
   {
     flags ^= Flags::All;
   }
 
-  void Console::toggle_print()
+  void Console::toggle_print() noexcept
   {
     flags ^= Flags::Print;
   }
 
-  void Console::toggle_alert()
+  void Console::toggle_alert() noexcept
   {
     flags ^= Flags::Alert;
   }
 
-  void Console::toggle_error()
+  void Console::toggle_error() noexcept
   {
     flags ^= Flags::Error;
   }
