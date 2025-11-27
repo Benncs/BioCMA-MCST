@@ -46,24 +46,25 @@ COMPILE_FLAGS="
 
 COMPILE_FLAGS=$COMPILE_FLAGS+$RELEASE_FLAGS
 
+kokkosfolder="kokkos-5.0.0"
 
 # Kokkos include directories
-INCLUDE_KOKKOS="-I./$BUILD_DIR/subprojects/kokkos-4.7.01/__CMake_build
--I$BUILD_DIR/subprojects/kokkos-4.7.01/__CMake_build/core/src
--I$BUILD_DIR/subprojects/kokkos-4.7.01/__CMake_build/containers/src
--I$BUILD_DIR/subprojects/kokkos-4.7.01/__CMake_build/algorithms/src
--I$BUILD_DIR/subprojects/kokkos-4.7.01/__CMake_build/simd/src
--Isubprojects/kokkos-4.7.01/core/src
--Isubprojects/kokkos-4.7.01/tpls/desul/include
--Isubprojects/kokkos-4.7.01/tpls/mdspan/include
--Isubprojects/kokkos-4.7.01/containers/src
--Isubprojects/kokkos-4.7.01/algorithms/src
--Isubprojects/kokkos-4.7.01/simd/src
--Isubprojects/kokkos-4.7.01
+INCLUDE_KOKKOS="-I./$BUILD_DIR/subprojects/$kokkosfolder/__CMake_build
+-I$BUILD_DIR/subprojects/$kokkosfolder/__CMake_build/core/src
+-I$BUILD_DIR/subprojects/$kokkosfolder/__CMake_build/containers/src
+-I$BUILD_DIR/subprojects/$kokkosfolder/__CMake_build/algorithms/src
+-I$BUILD_DIR/subprojects/$kokkosfolder/__CMake_build/simd/src
+-Isubprojects/$kokkosfolder/core/src
+-Isubprojects/$kokkosfolder/tpls/desul/include
+-Isubprojects/$kokkosfolder/tpls/mdspan/include
+-Isubprojects/$kokkosfolder/containers/src
+-Isubprojects/$kokkosfolder/algorithms/src
+-Isubprojects/$kokkosfolder/simd/src
+-Isubprojects/$kokkosfolder
 -Isubprojects/kokkos_sampling/public
 -Isubprojects/dynlib/public
--isystem subprojects/kokkos-4.7.01/tpls/mdspan/include
--isystem subprojects/kokkos-4.7.01/tpls/desul/include"
+-isystem subprojects/$kokkosfolder/tpls/mdspan/include
+-isystem subprojects/$kokkosfolder/tpls/desul/include"
 
 # Include directories
 INCLUDE_DIRS="-Iapps/udf_model
@@ -79,10 +80,10 @@ COMMON_INCLUDE="-I/usr/include"
 # LINKER_FLAGS="-Wl,--as-needed -Wl,--no-undefined
 # -shared
 # -fPIC -Wl,-soname,libudf_model_tracker.so -Wl,--start-group $BUILD_DIR/apps/libs/mc/libbiocma_mcst_mc.a
-# $BUILD_DIR/subprojects/kokkos-4.7.01/libkokkoscore.a
-# $BUILD_DIR/subprojects/kokkos-4.7.01/libkokkossimd.a
-# $BUILD_DIR/subprojects/kokkos-4.7.01/libkokkoscontainers.a
-# $BUILD_DIR/subprojects/kokkos-4.7.01/libkokkosalgorithms.a
+# $BUILD_DIR/subprojects/$kokkosfolder/libkokkoscore.a
+# $BUILD_DIR/subprojects/$kokkosfolder/libkokkossimd.a
+# $BUILD_DIR/subprojects/$kokkosfolder/libkokkoscontainers.a
+# $BUILD_DIR/subprojects/$kokkosfolder/libkokkosalgorithms.a
 # -flto
 # -pthread
 # -fopenmp
@@ -97,7 +98,7 @@ LINKER_FLAGS="-rdynamic -Wl,--as-needed -Wl,--no-undefined
 
 -flto
 -fPIC -Wl,-soname,libudf_model_tracker.so -Wl,--start-group
-$BUILD_DIR/subprojects/kokkos-4.7.01/libkokkoscore.a
+$BUILD_DIR/subprojects/$kokkosfolder/libkokkoscore.a
 -pthread
 -fopenmp
 /usr/lib/x86_64-linux-gnu/libhwloc.so
