@@ -136,6 +136,9 @@ namespace Api
       : id(ID_VERIF)
   {
 
+    // TODO: How to register logger before runtime_init ?
+    // Need to log_start_up in API (not in main)
+    //  Log message in runtime_init is printed with ostream
     _data.exec_info = Core::runtime_init(argc, argv, run_id);
     std::atexit(Api::finalise);
   }

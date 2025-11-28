@@ -1,6 +1,8 @@
 #ifndef __SIMULATION_KERNELS_HPP__
 #define __SIMULATION_KERNELS_HPP__
 
+#include "Kokkos_Printf.hpp"
+#include "common/common.hpp"
 #include <common/kokkos_getpolicy.hpp>
 #include <mc/unit.hpp>
 #include <simulation/kernels/model_kernel.hpp>
@@ -27,12 +29,18 @@ namespace Simulation::KernelInline
 
     CycleFunctors() = default;
 
+    
     void update(double d_t,
                 MC::ParticlesContainer<Model> container,
                 MoveInfo<ComputeSpace> new_move)
     {
       bool enable_move = new_move.liquid_volume.size() > 1;
       bool enable_leave = new_move.leaving_flow.size() != 0;
+
+      auto n_sample = enable_move ? 2 : 0;
+      n_sample += enable_leave ? 1 : 0;
+      // std::cout<<n_sample<<std::endl;
+      container.change_nsample(n_sample);
 
       // FIXME: cycle_kernel: need to update container because we change:
       // n_used_element counter which is size_t outside of kernel. As functor
@@ -49,6 +57,7 @@ namespace Simulation::KernelInline
                          container.position,
                          container.status,
                          container.ages,
+                         container.random,
                          enable_move,
                          enable_leave);
     }
@@ -83,8 +92,12 @@ namespace Simulation::KernelInline
                       _random_pool,
                       _event,
                       _probes,
-                      container.ages)
+                      container.ages,
+                      container.random)
     {
+
+
+ 
     }
 
     void launch_move(const std::size_t n_particle) const

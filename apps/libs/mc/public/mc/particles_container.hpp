@@ -1,6 +1,7 @@
 #ifndef __PARTICLES_CONTAINER_HPP__
 #define __PARTICLES_CONTAINER_HPP__
 
+#include "Kokkos_Macros.hpp"
 #include <Kokkos_Core.hpp>
 #include <biocma_cst_config.hpp>
 #include <cmath>
@@ -58,7 +59,8 @@ namespace MC
      */
 
     explicit ParticlesContainer(RuntimeParameters rt_param,
-                                std::size_t n_particle);
+                                std::size_t n_particle,
+                                std::size_t _n_samples);
     ParticlesContainer(); //=default;
     /**
      * @brief Default copy and move constructors and assignment operators.
@@ -79,7 +81,19 @@ namespace MC
     MC::ParticleStatus status;
     ParticleWeigths weights;
     ParticleAges ages;
+    ParticleSamples random;
     // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
+
+    KOKKOS_INLINE_FUNCTION auto sample(const std::size_t idx,
+                                       const std::size_t i_sample) const
+    {
+      return random(idx, i_sample);
+    }
+
+    KOKKOS_INLINE_FUNCTION auto samples()
+    {
+      return random;
+    }
 
     /**
      * @brief Get the contribution if particle at index idx
@@ -156,6 +170,16 @@ namespace MC
      */
     [[nodiscard]] double get_allocation_factor() const noexcept;
 
+    void change_nsample(const std::size_t new_n_sample)
+    {
+      if(new_n_sample!=n_samples)
+      {
+        n_samples = new_n_sample;
+      Kokkos::resize(random,n_allocated_elements,n_samples);
+      }
+      
+    }
+
     /**
      * @brief Returns the total number of elements the container can hold
      * without reallocating.
@@ -217,9 +241,10 @@ namespace MC
     std::size_t n_allocated_elements;
     uint64_t n_used_elements;
     std::size_t inactive_counter;
+
     void __allocate_buffer__();
     void _resize(std::size_t new_size, bool force = false);
-
+    std::size_t n_samples;
     RuntimeParameters rt_params;
 
     int begin;
@@ -413,10 +438,10 @@ namespace MC
         auto range = M::n_var;
         const int i = team.league_rank();
 
-        Kokkos::parallel_for(
-            Kokkos::TeamVectorRange(team, range),
-            [&](const int& j)
-            { model(original_size + i, j) = buffer_model(i, j); });
+        Kokkos::parallel_for(Kokkos::TeamVectorRange(team, range),
+                             [&](const int& j) {
+                               model(original_size + i, j) = buffer_model(i, j);
+                             });
         position(original_size + i) = buffer_position(i);
 
         // Actually needs buffer to store mother's hydraulic time
@@ -598,6 +623,11 @@ namespace MC
         Kokkos::resize(status, n_allocated_elements);
         Kokkos::resize(ages, n_allocated_elements);
 
+        if (n_samples != 0)
+        {
+          Kokkos::resize(random, n_allocated_elements, n_samples);
+        }
+
         // Handle resizing for weights based on model type
         if constexpr (ConstWeightModelType<Model>)
         {
@@ -635,8 +665,10 @@ namespace MC
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer(RuntimeParameters rt_param,
-                                            std::size_t n_particle)
+                                            std::size_t n_particle,
+                                            std::size_t _n_samples)
       : model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_model"),
+              0,
               0),
         position(Kokkos::view_alloc(Kokkos::WithoutInitializing,
                                     "particle_position"),
@@ -649,11 +681,17 @@ namespace MC
             0),
         ages(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_age"),
              0),
+        random(
+            Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_random"),
+            0,
+            0),
         buffer_model("buffer_particle_model", 0),
         buffer_position("buffer_particle_position", 0),
         buffer_index("buffer_index"), n_allocated_elements(0),
-        n_used_elements(n_particle), inactive_counter(0), rt_params(rt_param)
+        n_used_elements(n_particle), inactive_counter(0), n_samples(_n_samples),
+        rt_params(rt_param), begin(0), end(0)
   {
+
     // load_tuning_constant();
 
     if (n_particle != 0)
@@ -669,7 +707,7 @@ namespace MC
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer()
-      : ParticlesContainer(RuntimeParameters{}, 0)
+      : ParticlesContainer(RuntimeParameters{}, 0, 0)
   {
   }
 
@@ -711,6 +749,12 @@ namespace MC
       KOKKOS_ASSERT(this->position.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->model.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->status.extent(0) == n_allocated_elements);
+      if (n_samples != 0)
+      {
+        KOKKOS_ASSERT(this->random.extent(0) == n_allocated_elements);
+        KOKKOS_ASSERT(this->random.extent(1) == n_samples);
+      }
+
       n_used_elements = new_used_item;
       if (static_cast<double>(n_used_elements) /
               static_cast<double>(n_allocated_elements) <=
@@ -745,28 +789,30 @@ namespace MC
 
   template <ModelType M> void ParticlesContainer<M>::_sort(std::size_t n_c)
   {
-    PROFILE_SECTION("SORT")
-    // const auto N = n_used_elements;
-    const int bin_size = 2048;
+    (void)n_c;
+    // PROFILE_SECTION("SORT")
+    // // const auto N = n_used_elements;
+    // const int bin_size = 2048;
 
-    // const auto sn =
-    //     Kokkos::subview(position, std::pair<int, int>(0, n_used_elements));
-    //
+    // // const auto sn =
+    // //     Kokkos::subview(position, std::pair<int, int>(0,
+    // n_used_elements));
+    // //
 
-    using ExecSpace = Kokkos::DefaultExecutionSpace;
-    using view_type = decltype(position);
-    auto binop = Kokkos::BinOp1D<view_type>(bin_size, 0, n_c);
+    // using ExecSpace = Kokkos::DefaultExecutionSpace;
+    // using view_type = decltype(position);
+    // auto binop = Kokkos::BinOp1D<view_type>(bin_size, 0, n_c);
 
-    auto sorter = Kokkos::BinSort<view_type, decltype(binop)>(
-        ExecSpace(), position, binop, true);
+    // auto sorter = Kokkos::BinSort<view_type, decltype(binop)>(
+    //     ExecSpace(), position, binop, true);
 
-    sorter.create_permute_vector();
-    auto perm = sorter.get_permute_vector();
+    // sorter.create_permute_vector();
+    // auto perm = sorter.get_permute_vector();
 
-    auto src_offset = 0;
-    auto _position = position;
-    auto _model = model;
-    auto _status = status;
+    // auto src_offset = 0;
+    // auto _position = position;
+    // auto _model = model;
+    // auto _status = status;
 
     // MC::ParticlePositions _tmp_p = Kokkos::create_mirror_view(position);
     // auto _tmp_m = Kokkos::create_mirror_view(model);

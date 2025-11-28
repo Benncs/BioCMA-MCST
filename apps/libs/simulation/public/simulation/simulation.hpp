@@ -9,6 +9,7 @@
 #include <common/common.hpp>
 #include <common/logger.hpp>
 #include <cstddef>
+#include <impl/Kokkos_Half_FloatingPointWrapper.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
 #include <mc/prng/prng.hpp>
@@ -93,7 +94,7 @@ namespace Simulation
 
     // Simulation methods
 
-    void cycleProcess(auto&& container, double d_t, auto& _functors);
+    void cycleProcess(auto& container, double d_t, auto& _functors);
     void step(double d_t) const;
     // void reduceContribs(std::span<const double> data, size_t n_rank) const;
 
@@ -176,7 +177,8 @@ namespace Simulation
                                  double d_t,
                                  auto& cycle_functors)
   {
-    this->contribs_scatter.reset();
+    PROFILE_SECTION("Simulation::pre_cycle")
+    // this->contribs_scatter.reset();
     // this->move_info.cumulative_probability = get_kernel_cumulative_proba();
     // this->move_info.diag_transition = get_kernel_diagonal();
     this->move_info.neighbors = mc_unit->domain.getNeighbors();
@@ -188,6 +190,7 @@ namespace Simulation
   KernelInline::CycleFunctors<Space, Model>
   SimulationUnit::init_functors(MC::ParticlesContainer<Model> container)
   {
+    
     return KernelInline::CycleFunctors<Space, Model>(
         container,
         mc_unit->rng.random_pool,
@@ -198,11 +201,10 @@ namespace Simulation
         probes[ProbeType ::LeavingTime]);
   }
 
-  void SimulationUnit::cycleProcess(auto&& container,
+  void SimulationUnit::cycleProcess( auto& container,
                                     double d_t,
                                     auto& cycle_functors)
   {
-
     PROFILE_SECTION("cycleProcess")
     using CurrentModel =
         typename std::remove_reference<decltype(container)>::type::UsedModel;
@@ -211,17 +213,20 @@ namespace Simulation
     {
       return;
     }
-
-    pre_cycle(container, d_t, cycle_functors);
-
-    if (cycle_functors.move_kernel.need_launch())
-    {
-      cycle_functors.launch_move(n_particle);
-    }
     if (f_reaction)
     {
+      this->contribs_scatter.reset();
       cycle_functors.launch_model(n_particle);
     }
+    pre_cycle(container, d_t, cycle_functors);
+    
+    
+    if (cycle_functors.move_kernel.need_launch())
+    {
+      
+      cycle_functors.launch_move(n_particle);
+    }
+    
 
     post_cycle<CurrentModel>(container, cycle_functors);
   }
@@ -230,6 +235,7 @@ namespace Simulation
   void SimulationUnit::post_cycle(MC::ParticlesContainer<Model>& container,
                                   auto& cycle_functors)
   {
+    PROFILE_SECTION("Simulation::post_cycle")
     Kokkos::fence();
     this->scatter_contribute();
     auto [host_red, host_out_counter] = cycle_functors.get_host_reduction();

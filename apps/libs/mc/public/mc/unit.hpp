@@ -61,13 +61,13 @@ namespace MC
 
     template <class Archive> void serialize(Archive& ar)
     {
-      ar(init_weight, events, domain, container);
+      ar(init_weight, events, domain,container);
 
       std::visit(
-          [&ar](auto& container)
+          [&ar](auto& _container)
           {
-            ar(container);
-            container.change_runtime(load_tuning_constant());
+            ar(_container);
+            _container.change_runtime(load_tuning_constant());
           },
           container);
     }
