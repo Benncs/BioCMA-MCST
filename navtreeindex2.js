@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"classMC_1_1ParticlesContainer.html#afa005cba9cbc87bc27b6bd0eaa066fac":[7,0,4,5,38],
 "classMC_1_1ReactorDomain.html":[5,0,6,6],
 "classMC_1_1ReactorDomain.html":[7,0,4,6],
 "classMC_1_1ReactorDomain.html#a24d8ad20cba0324a3e0c34d82d17d9d8":[5,0,6,6,15],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "classSimulation_1_1ScalarSimulation.html#ad4f612748846283f7509a03767294eb3":[7,0,8,9,13],
 "classSimulation_1_1ScalarSimulation.html#ad512fdf81a2b850d01330c7597a008af":[5,0,12,10,8],
 "classSimulation_1_1ScalarSimulation.html#ad512fdf81a2b850d01330c7597a008af":[7,0,8,9,8],
-"classSimulation_1_1ScalarSimulation.html#ad8d40e9ca3fdb498000508921375457b":[5,0,12,10,18],
-"classSimulation_1_1ScalarSimulation.html#ad8d40e9ca3fdb498000508921375457b":[7,0,8,9,18]
+"classSimulation_1_1ScalarSimulation.html#ad8d40e9ca3fdb498000508921375457b":[5,0,12,10,18]
 };

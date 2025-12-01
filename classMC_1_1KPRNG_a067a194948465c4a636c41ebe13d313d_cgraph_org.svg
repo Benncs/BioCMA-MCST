@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="namespaceMC.html#aa73755f5aca18698c2b074c3ee91993d" target="_top" xlink:title="Sample variable with RAI mecanism.">
+<g id="a_Node000002"><a xlink:href="namespaceMC.html#a2bd2179d1f9faf98a60f1dedfac0fc83" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="308,-18.5 157.75,-18.5 157.75,0 308,0 308,-18.5"/>
 <text xml:space="preserve" text-anchor="middle" x="232.88" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::sample_random_variables</text>
 </a>

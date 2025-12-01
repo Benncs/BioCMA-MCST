@@ -45,6 +45,6 @@ var namespaceMC =
     [ "init", "namespaceMC.html#aea847035bda07533d03d9322ec032869", null ],
     [ "load_tuning_constant", "namespaceMC.html#a67a8a8fb99f617a67dd3702cd0f0b47f", null ],
     [ "post_init_weight", "namespaceMC.html#ac9b6a65d70e4c5007f4bc908509924a0", null ],
-    [ "sample_random_variables", "namespaceMC.html#aa73755f5aca18698c2b074c3ee91993d", null ],
+    [ "sample_random_variables", "namespaceMC.html#a2bd2179d1f9faf98a60f1dedfac0fc83", null ],
     [ "number_event_type", "namespaceMC.html#a2bac73e9eee491093b7ac10969645bfa", null ]
 ];

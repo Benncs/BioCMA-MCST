@@ -1,5 +1,6 @@
 var NAVTREEINDEX0 =
 {
+"_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html":[8,1],
 "annotated.html":[7,0],
 "benches.html":[0,4],
 "citelist.html":[4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "classILoadBalancer.html#a0c14ef4a67e3960b28849b347d3518af":[7,0,26,0],
 "classILoadBalancer.html#a0ea1f8c452c4cc8ef53c981769fe7947":[7,0,26,11],
 "classILoadBalancer.html#a11305fecea49664648595dd5d61027b3":[7,0,26,5],
-"classILoadBalancer.html#a27fb1f345c6d7b6e428b2bd012429dc2":[7,0,26,6],
-"classILoadBalancer.html#a3c702bc154d71fece146e1857d27bf30":[7,0,26,4]
+"classILoadBalancer.html#a27fb1f345c6d7b6e428b2bd012429dc2":[7,0,26,6]
 };

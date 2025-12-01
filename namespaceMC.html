@@ -149,8 +149,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:aea847035bda07533d03d9322ec032869"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to initialize a <a class="el" href="structMC_1_1MonteCarloUnit.html" title="General-purpose Monte Carlo unit to carry out simulations.">MonteCarloUnit</a>.  <br /></td></tr>
 <tr class="memitem:ac9b6a65d70e4c5007f4bc908509924a0" id="r_ac9b6a65d70e4c5007f4bc908509924a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9b6a65d70e4c5007f4bc908509924a0">post_init_weight</a> (std::unique_ptr&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MonteCarloUnit</a> &gt; &amp;unit, double x0, double total_mass)</td></tr>
 <tr class="memitem:a6734cec020a2315d36542faad86c9125" id="r_a6734cec020a2315d36542faad86c9125"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6734cec020a2315d36542faad86c9125">get_pool</a> (std::size_t seed=0)</td></tr>
-<tr class="memitem:aa73755f5aca18698c2b074c3ee91993d" id="r_aa73755f5aca18698c2b074c3ee91993d"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa73755f5aca18698c2b074c3ee91993d">sample_random_variables</a> (const <a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a> &amp;p, auto functor)</td></tr>
-<tr class="memdesc:aa73755f5aca18698c2b074c3ee91993d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample variable with RAI mecanism.  <br /></td></tr>
+<tr class="memitem:a2bd2179d1f9faf98a60f1dedfac0fc83" id="r_a2bd2179d1f9faf98a60f1dedfac0fc83"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bd2179d1f9faf98a60f1dedfac0fc83">sample_random_variables</a> (const <a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a> &amp;pool, auto &amp;&amp;functor)</td></tr>
 <tr class="memitem:a67a8a8fb99f617a67dd3702cd0f0b47f" id="r_a67a8a8fb99f617a67dd3702cd0f0b47f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMC_1_1RuntimeParameters.html">RuntimeParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67a8a8fb99f617a67dd3702cd0f0b47f">load_tuning_constant</a> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
@@ -388,7 +387,9 @@ template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">Floa
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> </div>
 <div class="line">      Kokkos::Random_XorShift1024_Pool&lt;Kokkos::DefaultExecutionSpace&gt;</div>
-</div><!-- fragment -->
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a0">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+</dl>
+
 </div>
 </div>
 <a id="a20fc03265c23b32637770a775864c720" name="a20fc03265c23b32637770a775864c720"></a>
@@ -541,6 +542,8 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a1">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+</dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -711,8 +714,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="aa73755f5aca18698c2b074c3ee91993d" name="aa73755f5aca18698c2b074c3ee91993d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa73755f5aca18698c2b074c3ee91993d">&#9670;&#160;</a></span>sample_random_variables()</h2>
+<a id="a2bd2179d1f9faf98a60f1dedfac0fc83" name="a2bd2179d1f9faf98a60f1dedfac0fc83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bd2179d1f9faf98a60f1dedfac0fc83">&#9670;&#160;</a></span>sample_random_variables()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -720,21 +723,21 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">KOKKOS_INLINE_FUNCTION auto MC::sample_random_variables </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>p</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>pool</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">auto</td>          <td class="paramname"><span class="paramname"><em>functor</em></span>&#160;)</td>
+          <td class="paramtype">auto &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>functor</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Sample variable with RAI mecanism. </p>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a2">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+</dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceMC_aa73755f5aca18698c2b074c3ee91993d_icgraph.svg" width="422" height="135"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceMC_a2bd2179d1f9faf98a60f1dedfac0fc83_icgraph.svg" width="422" height="135"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
