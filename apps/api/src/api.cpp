@@ -220,6 +220,20 @@ namespace Api
     return ApiResult("Error loading");
   }
 
+  ApiResult SimulationInstance::set_mtr(
+      Simulation::MassTransfer::Type::MtrTypeVariant&& variant)
+  {
+    //??
+    mtr_type = variant;
+    auto_mtr = false;
+    return ApiResult();
+  }
+
+  void SimulationInstance::set_auto_mtr()
+  {
+    auto_mtr = true;
+  }
+
   ApiResult SimulationInstance::apply() noexcept
   {
 
@@ -249,20 +263,22 @@ namespace Api
     {
       simulation->setLogger(logger);
     }
-    // FIXME
-    std::vector<double> kla(simulation->getDimensions().n_species);
-    if (kla.size() > 1)
-    {
-      kla[1] = 0.2; // 700 h-1
-    }
-
-    mtr_type = Simulation::MassTransfer::Type::FixedKla{kla};
-
-    // mtr_type = Simulation::MassTransfer::Type::FlowmapTurbulence{};
 
     if (mtr_type)
     {
-      simulation->setMtrModel(std::move(*mtr_type));
+      global_initializer.init_mtr_model(*simulation, std::move(*mtr_type));
+    }
+    else if (auto_mtr)
+    {
+      std::vector<double> kla(simulation->getDimensions().n_species);
+      if (kla.size() > 1)
+      {
+        kla[1] = 0.2; // 700 h-1
+      }
+
+      auto auto_mtr_type = Simulation::MassTransfer::Type::FixedKla{kla};
+      global_initializer.init_mtr_model(*simulation, std::move(auto_mtr_type));
+      // TODO check if turburlence + fallback to kla
     }
 
     CHECK_OR_RETURN(!global_initializer.check_init_terminate(),

@@ -171,6 +171,10 @@ namespace Api
                                                  std::size_t output_position,
                                                  bool gas = false);
 
+    ApiResult set_mtr(Simulation::MassTransfer::Type::MtrTypeVariant&& variant);
+
+    void set_auto_mtr();
+
     // /**
     //  * @brief Configure feed constants for the simulation.
     //  *
@@ -261,6 +265,8 @@ namespace Api
         std::nullopt; ///< Optional feed configuration.
     std::optional<Simulation::MassTransfer::Type::MtrTypeVariant> mtr_type =
         std::nullopt;
+
+    bool auto_mtr;
   };
 
 } // namespace Api

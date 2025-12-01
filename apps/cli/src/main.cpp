@@ -116,6 +116,7 @@ int parse_callback_ok(
     return -1;
   }
   h->set_logger(std::cref(logger));
+  h->set_auto_mtr();
   // h->set_feed_constant(7.701635339554948e-06, 2, 0, 0);
   const auto load_serde = user_params.load_serde;
   // user_params.uniform_mc_init = false;

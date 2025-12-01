@@ -180,6 +180,7 @@ namespace Core
       Feed,             ///< Step for initializing the simulation feed.
       MC,               ///< Step for initializing the Monte Carlo unit.
       SimulationUnit,   ///< Step for initializing the simulation unit.
+      MTR,
       Count ///< Total number of steps in the initialization sequence.
     };
 

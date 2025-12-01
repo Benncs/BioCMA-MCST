@@ -371,6 +371,7 @@ namespace Core
     }
     unit.setMtrModel(std::move(variant));
 
+    validate_step(InitStep::MTR);
     // TODO
     return true;
   }
