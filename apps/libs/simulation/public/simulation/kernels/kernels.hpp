@@ -29,7 +29,6 @@ namespace Simulation::KernelInline
 
     CycleFunctors() = default;
 
-    
     void update(double d_t,
                 MC::ParticlesContainer<Model> container,
                 MoveInfo<ComputeSpace> new_move)
@@ -95,9 +94,6 @@ namespace Simulation::KernelInline
                       container.ages,
                       container.random)
     {
-
-
- 
     }
 
     void launch_move(const std::size_t n_particle) const

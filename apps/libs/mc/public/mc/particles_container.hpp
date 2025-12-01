@@ -172,12 +172,11 @@ namespace MC
 
     void change_nsample(const std::size_t new_n_sample)
     {
-      if(new_n_sample!=n_samples)
+      if (new_n_sample != n_samples)
       {
         n_samples = new_n_sample;
-      Kokkos::resize(random,n_allocated_elements,n_samples);
+        Kokkos::resize(random, n_allocated_elements, n_samples);
       }
-      
     }
 
     /**
@@ -438,10 +437,10 @@ namespace MC
         auto range = M::n_var;
         const int i = team.league_rank();
 
-        Kokkos::parallel_for(Kokkos::TeamVectorRange(team, range),
-                             [&](const int& j) {
-                               model(original_size + i, j) = buffer_model(i, j);
-                             });
+        Kokkos::parallel_for(
+            Kokkos::TeamVectorRange(team, range),
+            [&](const int& j)
+            { model(original_size + i, j) = buffer_model(i, j); });
         position(original_size + i) = buffer_position(i);
 
         // Actually needs buffer to store mother's hydraulic time

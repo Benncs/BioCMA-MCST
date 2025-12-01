@@ -190,7 +190,7 @@ namespace Simulation
   KernelInline::CycleFunctors<Space, Model>
   SimulationUnit::init_functors(MC::ParticlesContainer<Model> container)
   {
-    
+
     return KernelInline::CycleFunctors<Space, Model>(
         container,
         mc_unit->rng.random_pool,
@@ -201,7 +201,7 @@ namespace Simulation
         probes[ProbeType ::LeavingTime]);
   }
 
-  void SimulationUnit::cycleProcess( auto& container,
+  void SimulationUnit::cycleProcess(auto& container,
                                     double d_t,
                                     auto& cycle_functors)
   {
@@ -219,14 +219,12 @@ namespace Simulation
       cycle_functors.launch_model(n_particle);
     }
     pre_cycle(container, d_t, cycle_functors);
-    
-    
+
     if (cycle_functors.move_kernel.need_launch())
     {
-      
+
       cycle_functors.launch_move(n_particle);
     }
-    
 
     post_cycle<CurrentModel>(container, cycle_functors);
   }

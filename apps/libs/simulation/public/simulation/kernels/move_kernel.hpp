@@ -172,7 +172,6 @@ namespace Simulation::KernelInline
           random(std::move(_random)), enable_move(b_move),
           enable_leave(b_leave) {};
 
-   
     void update(double _d_t,
                 std::size_t n_p,
                 MoveInfo<ComputeSpace>&& move_i,
@@ -193,8 +192,8 @@ namespace Simulation::KernelInline
 
       this->positions = std::move(_positions);
       this->status = std::move(_status);
-      this->ages = std::move(_ages);  
-      
+      this->ages = std::move(_ages);
+
       Kokkos::fill_random(random, random_pool, 0., 1.);
     }
 
@@ -326,7 +325,8 @@ namespace Simulation::KernelInline
       //                         const float random_number =
       //                             _generator_state_.frand(0., 1.);)
 
-      // FIXME when move AND exit, take the same random number, is it really important ? 
+      // FIXME when move AND exit, take the same random number, is it really
+      // important ?
       const auto random_number = static_cast<float>(random(idx, 0));
       const auto& [index, flow] = move.leaving_flow(i_flow);
 

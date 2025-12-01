@@ -161,7 +161,7 @@ namespace SerDe
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
     assert(mc_unit != nullptr);
-    
+
     // auto mc = gi.init_mtr_model(sc);
 
     std::vector<double> kla(sc->n_species);

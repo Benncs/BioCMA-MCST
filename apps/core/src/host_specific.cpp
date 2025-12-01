@@ -204,9 +204,6 @@ namespace
     const double d_t = params.d_t;
     auto loop_functor = [&](auto&& local_container)
     {
-
-      
-
       Core::SignalHandler sig;
 
       auto functors = simulation.init_functors<ComputeSpace>(local_container);
