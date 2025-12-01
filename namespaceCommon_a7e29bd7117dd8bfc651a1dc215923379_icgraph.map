@@ -1,5 +1,5 @@
 <map id="Common::read_env" name="Common::read_env">
-<area shape="rect" id="Node000001" title=" " alt="" coords="678,100,814,125"/>
+<area shape="rect" id="Node000001" title="Wrapper arround get_env to get optional envariable." alt="" coords="678,100,814,125"/>
 <area shape="rect" id="Node000002" href="$namespaceCommon.html#a7ca16dc3314f89cd1860091731cd7014" title="Wrapper arround get_env to get envariable with fallback to default." alt="" coords="477,100,630,125"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="663,115,631,115,631,110,663,110"/>
 <area shape="rect" id="Node000003" href="$namespaceCommon.html#ad3d68e79e4dbd7836f3090e662e01dba" title=" " alt="" coords="270,51,411,75"/>

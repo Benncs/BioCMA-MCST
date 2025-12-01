@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="CONSOLE.">
 <polygon fill="#999999" stroke="#666666" points="262.25,-73.5 151.75,-73.5 151.75,-55 262.25,-55 262.25,-73.5"/>
 <text xml:space="preserve" text-anchor="middle" x="207" y="-60" font-family="Helvetica,sans-Serif" font-size="10.00">IO::Console::Console</text>
 </a>

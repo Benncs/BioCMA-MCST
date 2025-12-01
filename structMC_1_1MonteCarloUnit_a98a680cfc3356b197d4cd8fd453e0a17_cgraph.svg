@@ -113,7 +113,7 @@ var sectionId = 'dynsection-11';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="namespaceCommon.html#a7e29bd7117dd8bfc651a1dc215923379" target="_top" xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="namespaceCommon.html#a7e29bd7117dd8bfc651a1dc215923379" target="_top" xlink:title="Wrapper arround get_env to get optional envariable.">
 <polygon fill="white" stroke="#666666" points="559.75,-23.75 458.25,-23.75 458.25,-5.25 559.75,-5.25 559.75,-23.75"/>
 <text xml:space="preserve" text-anchor="middle" x="509" y="-10.25" font-family="Helvetica,sans-Serif" font-size="10.00">Common::read_env</text>
 </a>

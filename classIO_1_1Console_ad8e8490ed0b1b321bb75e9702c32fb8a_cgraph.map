@@ -1,9 +1,10 @@
 <map id="IO::Console::Console" name="IO::Console::Console">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,153,79"/>
-<area shape="rect" id="Node000002" href="$classIO_1_1Console.html#a3264d5b726931694ae11ab745d490300" title=" " alt="" coords="205,5,330,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,51,203,32,204,37,130,57"/>
-<area shape="rect" id="Node000003" href="$namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383" title=" " alt="" coords="228,55,308,79"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="153,64,212,64,212,70,153,70"/>
-<area shape="rect" id="Node000004" href="$classIO_1_1Console.html#a30df9915744a57ee5a4e3d753598f5d5" title=" " alt="" coords="201,104,335,142"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="124,77,186,96,185,101,123,83"/>
+<area shape="rect" id="Node000001" title="CONSOLE." alt="" coords="5,79,153,103"/>
+<area shape="rect" id="Node000002" href="$classIO_1_1Console.html#a6916d2842e77159b378551f044ebfd56" title="Log an alert message with a prefix." alt="" coords="205,5,330,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,76,200,41,218,33,220,38,202,45,113,81"/>
+<area shape="rect" id="Node000003" href="$namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383" title=" " alt="" coords="228,79,308,103"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="153,88,212,88,212,94,153,94"/>
+<area shape="rect" id="Node000004" href="$classIO_1_1Console.html#a6432a263ec2b4a3751b1776d73e2eb6b" title="Toggle the alert logging behavior on or off." alt="" coords="201,128,335,166"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="124,101,186,120,185,125,123,107"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="237,80,230,70,233,60,246,54,268,52,291,55,303,62,300,66,290,60,268,57,248,59,237,64,235,69,241,77"/>
 </map>

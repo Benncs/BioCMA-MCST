@@ -1,5 +1,6 @@
 <map id="PostProcessing::show_sumup_state" name="PostProcessing::show_sumup_state">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,158,44"/>
-<area shape="rect" id="Node000002" href="$namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383" title=" " alt="" coords="206,12,286,37"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,22,190,22,190,27,158,27"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,22,158,61"/>
+<area shape="rect" id="Node000002" href="$namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383" title=" " alt="" coords="206,29,286,54"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,39,190,39,190,44,158,44"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="218,30,213,21,216,11,227,5,246,3,266,5,277,12,274,16,264,10,246,8,229,10,220,15,218,20,223,28"/>
 </map>

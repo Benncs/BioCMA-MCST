@@ -72,6 +72,9 @@ $(function(){initNavTree('classIO_1_1Console.html','','classIO_1_1Console-member
 </div><!--header-->
 <div class="contents">
 
+<p>Concrete class logging system through console.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="console_8hpp_source.html">console.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for IO::Console:</div>
@@ -87,22 +90,32 @@ Collaboration diagram for IO::Console:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ad8e8490ed0b1b321bb75e9702c32fb8a" id="r_ad8e8490ed0b1b321bb75e9702c32fb8a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8e8490ed0b1b321bb75e9702c32fb8a">Console</a> ()</td></tr>
+<tr class="memdesc:ad8e8490ed0b1b321bb75e9702c32fb8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">CONSOLE.  <br /></td></tr>
 <tr class="memitem:a11495857e07d1d2df17ee5b554b0f93d" id="r_a11495857e07d1d2df17ee5b554b0f93d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11495857e07d1d2df17ee5b554b0f93d">~Console</a> () override=default</td></tr>
 <tr class="memitem:af5e8a2459163188ad1da3430b88001b6" id="r_af5e8a2459163188ad1da3430b88001b6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5e8a2459163188ad1da3430b88001b6">Console</a> (const <a class="el" href="classIO_1_1Console.html">Console</a> &amp;)=delete</td></tr>
 <tr class="memitem:afa53ede48496d2ff21c31a463d4c8e9e" id="r_afa53ede48496d2ff21c31a463d4c8e9e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa53ede48496d2ff21c31a463d4c8e9e">Console</a> (<a class="el" href="classIO_1_1Console.html">Console</a> &amp;&amp;)=delete</td></tr>
 <tr class="memitem:a2ae23124d355bfe39da66c91d3417caf" id="r_a2ae23124d355bfe39da66c91d3417caf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIO_1_1Console.html">Console</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ae23124d355bfe39da66c91d3417caf">operator=</a> (const <a class="el" href="classIO_1_1Console.html">Console</a> &amp;)=delete</td></tr>
 <tr class="memitem:aac82dc12f9d262c7f44b22fe6f2dd49b" id="r_aac82dc12f9d262c7f44b22fe6f2dd49b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIO_1_1Console.html">Console</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac82dc12f9d262c7f44b22fe6f2dd49b">operator=</a> (<a class="el" href="classIO_1_1Console.html">Console</a> &amp;&amp;)=delete</td></tr>
-<tr class="memitem:a3e1c8e6a0181f105e15616ce3e1ab324" id="r_a3e1c8e6a0181f105e15616ce3e1ab324"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e1c8e6a0181f105e15616ce3e1ab324">debug</a> (std::string_view message) final</td></tr>
-<tr class="memitem:aeba226705f7da68f4f1983eb620cc740" id="r_aeba226705f7da68f4f1983eb620cc740"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeba226705f7da68f4f1983eb620cc740">print</a> (std::string_view prefix, std::string_view message) final</td></tr>
-<tr class="memitem:a3264d5b726931694ae11ab745d490300" id="r_a3264d5b726931694ae11ab745d490300"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3264d5b726931694ae11ab745d490300">alert</a> (std::string_view prefix, std::string_view message) final</td></tr>
-<tr class="memitem:a7cc900898a8f3c15b8a22fccdffc3c60" id="r_a7cc900898a8f3c15b8a22fccdffc3c60"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7cc900898a8f3c15b8a22fccdffc3c60">error</a> (std::string_view message, std::source_location location=std::source_location::current()) final</td></tr>
-<tr class="memitem:aec12a87c700d80d6ba3c2e22e9860b20" id="r_aec12a87c700d80d6ba3c2e22e9860b20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec12a87c700d80d6ba3c2e22e9860b20">raw_log</a> (std::string_view message) final</td></tr>
-<tr class="memitem:a3700cb5f6b74ad82c88294ff19e65a73" id="r_a3700cb5f6b74ad82c88294ff19e65a73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3700cb5f6b74ad82c88294ff19e65a73">toggle_debug</a> () final</td></tr>
-<tr class="memitem:a881c653cd466b015ae4f7fb4ea6a25c9" id="r_a881c653cd466b015ae4f7fb4ea6a25c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a881c653cd466b015ae4f7fb4ea6a25c9">toggle_print</a> () final</td></tr>
-<tr class="memitem:a30df9915744a57ee5a4e3d753598f5d5" id="r_a30df9915744a57ee5a4e3d753598f5d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30df9915744a57ee5a4e3d753598f5d5">toggle_alert</a> () final</td></tr>
-<tr class="memitem:a36c7787cab704746aef50be735563659" id="r_a36c7787cab704746aef50be735563659"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36c7787cab704746aef50be735563659">toggle_error</a> () final</td></tr>
-<tr class="memitem:adf34eb9756f628025ad237f735f4f914" id="r_adf34eb9756f628025ad237f735f4f914"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf34eb9756f628025ad237f735f4f914">toggle_all</a> () final</td></tr>
-<tr class="memitem:a97be49c68302bef767208c930c62e633" id="r_a97be49c68302bef767208c930c62e633"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97be49c68302bef767208c930c62e633">get_output</a> ()</td></tr>
+<tr class="memitem:aa677309bf86c2d51f3e0a782263505a4" id="r_aa677309bf86c2d51f3e0a782263505a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa677309bf86c2d51f3e0a782263505a4">debug</a> (std::string_view message) noexcept final</td></tr>
+<tr class="memdesc:aa677309bf86c2d51f3e0a782263505a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Log a debug message.  <br /></td></tr>
+<tr class="memitem:abb9eeeb92b73f5e7da31c93a5509cec0" id="r_abb9eeeb92b73f5e7da31c93a5509cec0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb9eeeb92b73f5e7da31c93a5509cec0">print</a> (std::string_view prefix, std::string_view message) noexcept final</td></tr>
+<tr class="memdesc:abb9eeeb92b73f5e7da31c93a5509cec0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Log a regular print message with a prefix.  <br /></td></tr>
+<tr class="memitem:a6916d2842e77159b378551f044ebfd56" id="r_a6916d2842e77159b378551f044ebfd56"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6916d2842e77159b378551f044ebfd56">alert</a> (std::string_view prefix, std::string_view message) noexcept final</td></tr>
+<tr class="memdesc:a6916d2842e77159b378551f044ebfd56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Log an alert message with a prefix.  <br /></td></tr>
+<tr class="memitem:a454df4f0d018f7c882b57f19775c5864" id="r_a454df4f0d018f7c882b57f19775c5864"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a454df4f0d018f7c882b57f19775c5864">error</a> (std::string_view message, std::source_location location=std::source_location::current()) noexcept final</td></tr>
+<tr class="memdesc:a454df4f0d018f7c882b57f19775c5864"><td class="mdescLeft">&#160;</td><td class="mdescRight">Log an error message with optional location details.  <br /></td></tr>
+<tr class="memitem:ab31cb97ec1cf6eb93df760e11dacb8d4" id="r_ab31cb97ec1cf6eb93df760e11dacb8d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab31cb97ec1cf6eb93df760e11dacb8d4">raw_log</a> (std::string_view message) noexcept final</td></tr>
+<tr class="memdesc:ab31cb97ec1cf6eb93df760e11dacb8d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Log a raw message with no additional formatting.  <br /></td></tr>
+<tr class="memitem:af0656a646cdd7b3a22600298d9ab091e" id="r_af0656a646cdd7b3a22600298d9ab091e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af0656a646cdd7b3a22600298d9ab091e">toggle_debug</a> () noexcept final</td></tr>
+<tr class="memdesc:af0656a646cdd7b3a22600298d9ab091e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggle the debug logging behavior on or off.  <br /></td></tr>
+<tr class="memitem:a6021e7c7348f3922f449b927d11e588d" id="r_a6021e7c7348f3922f449b927d11e588d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6021e7c7348f3922f449b927d11e588d">toggle_print</a> () noexcept final</td></tr>
+<tr class="memdesc:a6021e7c7348f3922f449b927d11e588d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggle the print logging behavior on or off.  <br /></td></tr>
+<tr class="memitem:a6432a263ec2b4a3751b1776d73e2eb6b" id="r_a6432a263ec2b4a3751b1776d73e2eb6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6432a263ec2b4a3751b1776d73e2eb6b">toggle_alert</a> () noexcept final</td></tr>
+<tr class="memdesc:a6432a263ec2b4a3751b1776d73e2eb6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggle the alert logging behavior on or off.  <br /></td></tr>
+<tr class="memitem:a5502dfa2c06dfbcd17d0b235077e7068" id="r_a5502dfa2c06dfbcd17d0b235077e7068"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5502dfa2c06dfbcd17d0b235077e7068">toggle_error</a> () noexcept final</td></tr>
+<tr class="memdesc:a5502dfa2c06dfbcd17d0b235077e7068"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggle the error logging behavior on or off.  <br /></td></tr>
+<tr class="memitem:ac2951fbefae6e6e079c75ade2ec304ca" id="r_ac2951fbefae6e6e079c75ade2ec304ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2951fbefae6e6e079c75ade2ec304ca">toggle_all</a> () noexcept final</td></tr>
+<tr class="memdesc:ac2951fbefae6e6e079c75ade2ec304ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggle all logging types on or off.  <br /></td></tr>
 <tr class="inherit_header pub_methods_classIO_1_1Logger"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classIO_1_1Logger')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classIO_1_1Logger.html">IO::Logger</a></td></tr>
 <tr class="memitem:a935546ea699dc8c570c36c8e54cc4303 inherit pub_methods_classIO_1_1Logger" id="r_a935546ea699dc8c570c36c8e54cc4303"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a> ()=default</td></tr>
 <tr class="memitem:a65b8328d5ff4d12db12a2c14523fdff3 inherit pub_methods_classIO_1_1Logger" id="r_a65b8328d5ff4d12db12a2c14523fdff3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIO_1_1Logger.html#a65b8328d5ff4d12db12a2c14523fdff3">Logger</a> (const <a class="el" href="classIO_1_1Logger.html">Logger</a> &amp;)=default</td></tr>
@@ -117,7 +130,10 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:adfaaebd35a02ffb05cc80f120f111d46" id="r_adfaaebd35a02ffb05cc80f120f111d46"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfaaebd35a02ffb05cc80f120f111d46">output</a></td></tr>
 <tr class="memitem:a745bc2a6854fe8d0e0f2958e044ade8f" id="r_a745bc2a6854fe8d0e0f2958e044ade8f"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a745bc2a6854fe8d0e0f2958e044ade8f">err_output</a></td></tr>
 </table>
-<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Concrete class logging system through console. </p>
+<p>This class defines the interface for logging messages of various types </p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad8e8490ed0b1b321bb75e9702c32fb8a" name="ad8e8490ed0b1b321bb75e9702c32fb8a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8e8490ed0b1b321bb75e9702c32fb8a">&#9670;&#160;</a></span>Console() <span class="overload">[1/3]</span></h2>
 
@@ -132,10 +148,12 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>CONSOLE. </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_ad8e8490ed0b1b321bb75e9702c32fb8a_cgraph.svg" width="340" height="148"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_ad8e8490ed0b1b321bb75e9702c32fb8a_cgraph.svg" width="340" height="172"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -195,7 +213,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_af5e8a2459163188ad1da3430b88001b6_cgraph.svg" width="536" height="148"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_af5e8a2459163188ad1da3430b88001b6_cgraph.svg" width="536" height="172"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -225,14 +243,14 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_afa53ede48496d2ff21c31a463d4c8e9e_cgraph.svg" width="536" height="148"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_afa53ede48496d2ff21c31a463d4c8e9e_cgraph.svg" width="536" height="172"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a3264d5b726931694ae11ab745d490300" name="a3264d5b726931694ae11ab745d490300"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3264d5b726931694ae11ab745d490300">&#9670;&#160;</a></span>alert()</h2>
+<a id="a6916d2842e77159b378551f044ebfd56" name="a6916d2842e77159b378551f044ebfd56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6916d2842e77159b378551f044ebfd56">&#9670;&#160;</a></span>alert()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -253,22 +271,32 @@ Here is the call graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Log an alert message with a prefix. </p>
+<p>Logs an alert message that typically requires immediate attention.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prefix</td><td>A string prefix to prepend to the message. </td></tr>
+    <tr><td class="paramname">message</td><td>The message to log. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Implements <a class="el" href="classIO_1_1Logger.html#a8d35bb71fb8525d95a544d05ee676b26">IO::Logger</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a3264d5b726931694ae11ab745d490300_icgraph.svg" width="534" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a6916d2842e77159b378551f044ebfd56_icgraph.svg" width="534" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="a3e1c8e6a0181f105e15616ce3e1ab324" name="a3e1c8e6a0181f105e15616ce3e1ab324"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e1c8e6a0181f105e15616ce3e1ab324">&#9670;&#160;</a></span>debug()</h2>
+<a id="aa677309bf86c2d51f3e0a782263505a4" name="aa677309bf86c2d51f3e0a782263505a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa677309bf86c2d51f3e0a782263505a4">&#9670;&#160;</a></span>debug()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -285,17 +313,26 @@ Here is the caller graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Log a debug message. </p>
+<p>Logs a debug message with no prefix.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">message</td><td>The message to log. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Implements <a class="el" href="classIO_1_1Logger.html#a48b070043ac9d6e6d2f10e4b05fe7c37">IO::Logger</a>.</p>
 
 </div>
 </div>
-<a id="a7cc900898a8f3c15b8a22fccdffc3c60" name="a7cc900898a8f3c15b8a22fccdffc3c60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7cc900898a8f3c15b8a22fccdffc3c60">&#9670;&#160;</a></span>error()</h2>
+<a id="a454df4f0d018f7c882b57f19775c5864" name="a454df4f0d018f7c882b57f19775c5864"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a454df4f0d018f7c882b57f19775c5864">&#9670;&#160;</a></span>error()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -316,47 +353,22 @@ Here is the caller graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Log an error message with optional location details. </p>
+<p>Logs an error message, optionally including the location (file, line, function) where the error occurred.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">message</td><td>The error message to log. </td></tr>
+    <tr><td class="paramname">location</td><td>The source location of the error (default: current location). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Implements <a class="el" href="classIO_1_1Logger.html#a036581535b895db986f421cd329d3ec8">IO::Logger</a>.</p>
-
-</div>
-</div>
-<a id="a97be49c68302bef767208c930c62e633" name="a97be49c68302bef767208c930c62e633"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a97be49c68302bef767208c930c62e633">&#9670;&#160;</a></span>get_output()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::ostream &amp; IO::Console::get_output </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a97be49c68302bef767208c930c62e633_cgraph.svg" width="171" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a97be49c68302bef767208c930c62e633_icgraph.svg" width="171" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
@@ -385,7 +397,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_aac82dc12f9d262c7f44b22fe6f2dd49b_cgraph.svg" width="550" height="426"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_aac82dc12f9d262c7f44b22fe6f2dd49b_cgraph.svg" width="550" height="450"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -415,13 +427,13 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a2ae23124d355bfe39da66c91d3417caf_cgraph.svg" width="543" height="148"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a2ae23124d355bfe39da66c91d3417caf_cgraph.svg" width="543" height="172"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="aeba226705f7da68f4f1983eb620cc740" name="aeba226705f7da68f4f1983eb620cc740"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeba226705f7da68f4f1983eb620cc740">&#9670;&#160;</a></span>print()</h2>
+<a id="abb9eeeb92b73f5e7da31c93a5509cec0" name="abb9eeeb92b73f5e7da31c93a5509cec0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb9eeeb92b73f5e7da31c93a5509cec0">&#9670;&#160;</a></span>print()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -442,17 +454,27 @@ Here is the call graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Log a regular print message with a prefix. </p>
+<p>Logs a general message with the specified prefix. Typically used for general informational messages.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prefix</td><td>A string prefix to prepend to the message. </td></tr>
+    <tr><td class="paramname">message</td><td>The message to log. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Implements <a class="el" href="classIO_1_1Logger.html#aa2bd6d382c0f7a54b26e99a151c18a8e">IO::Logger</a>.</p>
 
 </div>
 </div>
-<a id="aec12a87c700d80d6ba3c2e22e9860b20" name="aec12a87c700d80d6ba3c2e22e9860b20"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec12a87c700d80d6ba3c2e22e9860b20">&#9670;&#160;</a></span>raw_log()</h2>
+<a id="ab31cb97ec1cf6eb93df760e11dacb8d4" name="ab31cb97ec1cf6eb93df760e11dacb8d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab31cb97ec1cf6eb93df760e11dacb8d4">&#9670;&#160;</a></span>raw_log()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -469,22 +491,31 @@ Here is the call graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Log a raw message with no additional formatting. </p>
+<p>Logs a raw message without any prefix or other enhancements.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">message</td><td>The raw message to log. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p>Implements <a class="el" href="classIO_1_1Logger.html#a215a5c067c23fc659a9b389edc738e53">IO::Logger</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_aec12a87c700d80d6ba3c2e22e9860b20_icgraph.svg" width="358" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_ab31cb97ec1cf6eb93df760e11dacb8d4_icgraph.svg" width="358" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="a30df9915744a57ee5a4e3d753598f5d5" name="a30df9915744a57ee5a4e3d753598f5d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30df9915744a57ee5a4e3d753598f5d5">&#9670;&#160;</a></span>toggle_alert()</h2>
+<a id="a6432a263ec2b4a3751b1776d73e2eb6b" name="a6432a263ec2b4a3751b1776d73e2eb6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6432a263ec2b4a3751b1776d73e2eb6b">&#9670;&#160;</a></span>toggle_alert()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -501,22 +532,25 @@ Here is the caller graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="classIO_1_1Logger.html#a317a4eb20da24eae74e4a9b13dea9c0b">IO::Logger</a>.</p>
+<p>Toggle the alert logging behavior on or off. </p>
+<p>Enables or disables the logging of alert messages. </p>
+
+<p>Implements <a class="el" href="classIO_1_1Logger.html#a094db6bb9eb2c533e4460b3efd7117cc">IO::Logger</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a30df9915744a57ee5a4e3d753598f5d5_icgraph.svg" width="543" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a6432a263ec2b4a3751b1776d73e2eb6b_icgraph.svg" width="543" height="184"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="adf34eb9756f628025ad237f735f4f914" name="adf34eb9756f628025ad237f735f4f914"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf34eb9756f628025ad237f735f4f914">&#9670;&#160;</a></span>toggle_all()</h2>
+<a id="ac2951fbefae6e6e079c75ade2ec304ca" name="ac2951fbefae6e6e079c75ade2ec304ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2951fbefae6e6e079c75ade2ec304ca">&#9670;&#160;</a></span>toggle_all()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -533,22 +567,25 @@ Here is the caller graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="classIO_1_1Logger.html#aa331590b18b24c34d9e93169f8de0ec1">IO::Logger</a>.</p>
+<p>Toggle all logging types on or off. </p>
+<p>Enables or disables all types of logging at once (debug, print, alert, error). </p>
+
+<p>Implements <a class="el" href="classIO_1_1Logger.html#ab4dd783c0127288ca31e6567b4dd7fbb">IO::Logger</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_adf34eb9756f628025ad237f735f4f914_icgraph.svg" width="368" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_ac2951fbefae6e6e079c75ade2ec304ca_icgraph.svg" width="368" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="a3700cb5f6b74ad82c88294ff19e65a73" name="a3700cb5f6b74ad82c88294ff19e65a73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3700cb5f6b74ad82c88294ff19e65a73">&#9670;&#160;</a></span>toggle_debug()</h2>
+<a id="af0656a646cdd7b3a22600298d9ab091e" name="af0656a646cdd7b3a22600298d9ab091e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0656a646cdd7b3a22600298d9ab091e">&#9670;&#160;</a></span>toggle_debug()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -565,22 +602,25 @@ Here is the caller graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="classIO_1_1Logger.html#a2a10bfc6cf50133c1f10383afcab1a68">IO::Logger</a>.</p>
+<p>Toggle the debug logging behavior on or off. </p>
+<p>Enables or disables the logging of debug messages. </p>
+
+<p>Implements <a class="el" href="classIO_1_1Logger.html#a11b10b15db7907c6de982609be2e7653">IO::Logger</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a3700cb5f6b74ad82c88294ff19e65a73_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_af0656a646cdd7b3a22600298d9ab091e_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="a36c7787cab704746aef50be735563659" name="a36c7787cab704746aef50be735563659"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a36c7787cab704746aef50be735563659">&#9670;&#160;</a></span>toggle_error()</h2>
+<a id="a5502dfa2c06dfbcd17d0b235077e7068" name="a5502dfa2c06dfbcd17d0b235077e7068"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5502dfa2c06dfbcd17d0b235077e7068">&#9670;&#160;</a></span>toggle_error()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -597,22 +637,25 @@ Here is the caller graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="classIO_1_1Logger.html#ae4722bccc68414233f910d62dd499fbf">IO::Logger</a>.</p>
+<p>Toggle the error logging behavior on or off. </p>
+<p>Enables or disables the logging of error messages. </p>
+
+<p>Implements <a class="el" href="classIO_1_1Logger.html#a1d0825ef2918987bfcdd7cea3c3ac442">IO::Logger</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a36c7787cab704746aef50be735563659_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a5502dfa2c06dfbcd17d0b235077e7068_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="a881c653cd466b015ae4f7fb4ea6a25c9" name="a881c653cd466b015ae4f7fb4ea6a25c9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a881c653cd466b015ae4f7fb4ea6a25c9">&#9670;&#160;</a></span>toggle_print()</h2>
+<a id="a6021e7c7348f3922f449b927d11e588d" name="a6021e7c7348f3922f449b927d11e588d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6021e7c7348f3922f449b927d11e588d">&#9670;&#160;</a></span>toggle_print()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -629,16 +672,19 @@ Here is the caller graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel final">final</span><span class="mlabel virtual">virtual</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="classIO_1_1Logger.html#aa5153f7f7627d0a04e00f31d01645d76">IO::Logger</a>.</p>
+<p>Toggle the print logging behavior on or off. </p>
+<p>Enables or disables the logging of print messages. </p>
+
+<p>Implements <a class="el" href="classIO_1_1Logger.html#aa65bfa27c78d53be7e270c2d63d2424e">IO::Logger</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a881c653cd466b015ae4f7fb4ea6a25c9_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classIO_1_1Console_a6021e7c7348f3922f449b927d11e588d_icgraph.svg" width="348" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

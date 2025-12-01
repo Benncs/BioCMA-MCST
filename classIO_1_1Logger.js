@@ -11,9 +11,9 @@ var classIO_1_1Logger =
     [ "operator=", "classIO_1_1Logger.html#a986fe4844161a9dbe0f8004794a0f02f", null ],
     [ "print", "classIO_1_1Logger.html#aa2bd6d382c0f7a54b26e99a151c18a8e", null ],
     [ "raw_log", "classIO_1_1Logger.html#a215a5c067c23fc659a9b389edc738e53", null ],
-    [ "toggle_alert", "classIO_1_1Logger.html#a317a4eb20da24eae74e4a9b13dea9c0b", null ],
-    [ "toggle_all", "classIO_1_1Logger.html#aa331590b18b24c34d9e93169f8de0ec1", null ],
-    [ "toggle_debug", "classIO_1_1Logger.html#a2a10bfc6cf50133c1f10383afcab1a68", null ],
-    [ "toggle_error", "classIO_1_1Logger.html#ae4722bccc68414233f910d62dd499fbf", null ],
-    [ "toggle_print", "classIO_1_1Logger.html#aa5153f7f7627d0a04e00f31d01645d76", null ]
+    [ "toggle_alert", "classIO_1_1Logger.html#a094db6bb9eb2c533e4460b3efd7117cc", null ],
+    [ "toggle_all", "classIO_1_1Logger.html#ab4dd783c0127288ca31e6567b4dd7fbb", null ],
+    [ "toggle_debug", "classIO_1_1Logger.html#a11b10b15db7907c6de982609be2e7653", null ],
+    [ "toggle_error", "classIO_1_1Logger.html#a1d0825ef2918987bfcdd7cea3c3ac442", null ],
+    [ "toggle_print", "classIO_1_1Logger.html#aa65bfa27c78d53be7e270c2d63d2424e", null ]
 ];

@@ -81,6 +81,7 @@ Classes</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a7e29bd7117dd8bfc651a1dc215923379" id="r_a7e29bd7117dd8bfc651a1dc215923379"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
 <tr class="memitem:a7e29bd7117dd8bfc651a1dc215923379 template"><td class="memItemLeft" align="right" valign="top">std::optional&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e29bd7117dd8bfc651a1dc215923379">read_env</a> (std::string_view varname)</td></tr>
+<tr class="memdesc:a7e29bd7117dd8bfc651a1dc215923379"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper arround get_env to get optional envariable.  <br /></td></tr>
 <tr class="memitem:a7ca16dc3314f89cd1860091731cd7014" id="r_a7ca16dc3314f89cd1860091731cd7014"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
 <tr class="memitem:a7ca16dc3314f89cd1860091731cd7014 template"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ca16dc3314f89cd1860091731cd7014">read_env_or</a> (std::string_view varname, T vdefault)</td></tr>
 <tr class="memdesc:a7ca16dc3314f89cd1860091731cd7014"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper arround get_env to get envariable with fallback to default.  <br /></td></tr>
@@ -207,6 +208,9 @@ template&lt;typename T&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Wrapper arround get_env to get optional envariable. </p>
+<dl class="section note"><dt>Note</dt><dd>: UB if T is not trivial type </dd></dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">

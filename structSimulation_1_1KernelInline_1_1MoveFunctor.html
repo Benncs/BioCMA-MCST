@@ -89,6 +89,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2013c3c924c8db817100a85a61175859" id="r_a2013c3c924c8db817100a85a61175859"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2013c3c924c8db817100a85a61175859">operator()</a> (<a class="el" href="structSimulation_1_1KernelInline_1_1TagLeave.html">TagLeave</a> _tag, const std::size_t &amp;idx, std::size_t &amp;local_dead_count) const</td></tr>
 <tr class="memitem:a6a622c9d14a761c2a7b35ce48ff36bb8" id="r_a6a622c9d14a761c2a7b35ce48ff36bb8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a622c9d14a761c2a7b35ce48ff36bb8">need_launch</a> () const</td></tr>
 <tr class="memitem:a2f5c4626adae4fe3d1c114dcb5f2c08b" id="r_a2f5c4626adae4fe3d1c114dcb5f2c08b"><td class="memItemLeft" align="right" valign="top">KOKKOS_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f5c4626adae4fe3d1c114dcb5f2c08b">handle_move</a> (const std::size_t idx) const</td></tr>
+<tr class="memitem:a1a92a71bde2d7d57e37e718ae8c45055" id="r_a1a92a71bde2d7d57e37e718ae8c45055"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a92a71bde2d7d57e37e718ae8c45055">inner_handle_exit</a> (const std::size_t i_flow, const std::size_t idx, std ::size_t &amp;dead_count, const double liquid_volume, const std::size_t position) const</td></tr>
 <tr class="memitem:abfafc032139a43b466331db3cea91e83" id="r_abfafc032139a43b466331db3cea91e83"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfafc032139a43b466331db3cea91e83">handle_exit</a> (std::size_t idx, std::size_t &amp;dead_count) const</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -300,7 +301,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_abfafc032139a43b466331db3cea91e83_cgraph.svg" width="578" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_abfafc032139a43b466331db3cea91e83_cgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -335,12 +336,66 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_a2f5c4626adae4fe3d1c114dcb5f2c08b_cgraph.svg" width="611" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_a2f5c4626adae4fe3d1c114dcb5f2c08b_cgraph.svg" width="431" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_a2f5c4626adae4fe3d1c114dcb5f2c08b_icgraph.svg" width="415" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="a1a92a71bde2d7d57e37e718ae8c45055" name="a1a92a71bde2d7d57e37e718ae8c45055"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a92a71bde2d7d57e37e718ae8c45055">&#9670;&#160;</a></span>inner_handle_exit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">KOKKOS_INLINE_FUNCTION void Simulation::KernelInline::MoveFunctor::inner_handle_exit </td>
+          <td>(</td>
+          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>i_flow</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>idx</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std ::size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>dead_count</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double</td>          <td class="paramname"><span class="paramname"><em>liquid_volume</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>position</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_a1a92a71bde2d7d57e37e718ae8c45055_cgraph.svg" width="614" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_a1a92a71bde2d7d57e37e718ae8c45055_icgraph.svg" width="666" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -438,7 +493,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_afa5da75e40c38337bf911c63d25c261d_cgraph.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_afa5da75e40c38337bf911c63d25c261d_cgraph.svg" width="646" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

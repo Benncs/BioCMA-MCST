@@ -5,6 +5,6 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,46,178,46,178,51,146,51"/>
 <area shape="rect" id="Node000003" href="$namespaceCommon.html#a7ca16dc3314f89cd1860091731cd7014" title="Wrapper arround get_env to get envariable with fallback to default." alt="" coords="415,36,568,61"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="367,46,400,46,400,51,367,51"/>
-<area shape="rect" id="Node000004" href="$namespaceCommon.html#a7e29bd7117dd8bfc651a1dc215923379" title=" " alt="" coords="616,36,752,61"/>
+<area shape="rect" id="Node000004" href="$namespaceCommon.html#a7e29bd7117dd8bfc651a1dc215923379" title="Wrapper arround get_env to get optional envariable." alt="" coords="616,36,752,61"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="569,46,601,46,601,51,569,51"/>
 </map>

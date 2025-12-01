@@ -5,6 +5,7 @@ var structSimulation_1_1KernelInline_1_1MoveFunctor =
     [ "MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#a1fd28655ee85dd46360f04e4b07f8c53", null ],
     [ "handle_exit", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#abfafc032139a43b466331db3cea91e83", null ],
     [ "handle_move", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#a2f5c4626adae4fe3d1c114dcb5f2c08b", null ],
+    [ "inner_handle_exit", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#a1a92a71bde2d7d57e37e718ae8c45055", null ],
     [ "need_launch", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#a6a622c9d14a761c2a7b35ce48ff36bb8", null ],
     [ "operator()", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#a2013c3c924c8db817100a85a61175859", null ],
     [ "operator()", "structSimulation_1_1KernelInline_1_1MoveFunctor.html#afa5da75e40c38337bf911c63d25c261d", null ],
