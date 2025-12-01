@@ -4,6 +4,7 @@
 #include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/traits.hpp>
+#include <traits/Kokkos_IterationPatternTrait.hpp>
 
 // static_assert(FloatingPointType<Kokkos::Experimental::half_t>,
 //               "Kokkos half_t ok");
@@ -65,7 +66,7 @@ namespace MC
   using ParticleAges = ParticleAgesBase<ComputeSpace>;
 
   using ParticleSamples = Kokkos::
-      View<Kokkos::Experimental::half_t**, Kokkos::LayoutLeft, ComputeSpace>;
+      View<Kokkos::Experimental::half_t**, Kokkos::LayoutRight, ComputeSpace>;
 
   template <typename MemorySpace>
   using ParticlePropertyViewType =

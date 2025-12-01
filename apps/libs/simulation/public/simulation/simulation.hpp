@@ -213,13 +213,16 @@ namespace Simulation
     {
       return;
     }
+
+    pre_cycle(container, d_t, cycle_functors);
+
     if (f_reaction)
     {
       this->contribs_scatter.reset();
       cycle_functors.launch_model(n_particle);
     }
-    pre_cycle(container, d_t, cycle_functors);
 
+    cycle_functors.move_space.fence();
     if (cycle_functors.move_kernel.need_launch())
     {
 

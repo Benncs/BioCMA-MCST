@@ -22,6 +22,8 @@ namespace Simulation::KernelInline
     using cycle_kernel_type = CycleFunctor<Model>;
     using move_kernel_type = MoveFunctor;
 
+    ComputeSpace move_space{};
+
     cycle_reducer_view_type<Space> cycle_reducer;
     move_reducer_view_type<Space> move_reducer;
     cycle_kernel_type cycle_kernel;
@@ -50,7 +52,8 @@ namespace Simulation::KernelInline
       cycle_kernel.update(d_t, container);
 
       // TODO: Why need to update all views (where did we lost the refcount ? )
-      move_kernel.update(d_t,
+      move_kernel.update(move_space,
+                         d_t,
                          container.n_particles(),
                          std::move(new_move),
                          container.position,

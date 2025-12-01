@@ -10,8 +10,8 @@
       <number_particle>5000</number_particle>
       <delta_time>0.001</delta_time>
       <results_file_name>debug</results_file_name>
-      <number_exported_result>10</number_exported_result>
-      <model_name>monod</model_name>
+      <number_exported_result>0</number_exported_result>
+      <model_name>none</model_name>
       <!--<initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path> -->
       <!-- <initialiser_path>./cma_data/n14_init.h5</initialiser_path> -->
        <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>

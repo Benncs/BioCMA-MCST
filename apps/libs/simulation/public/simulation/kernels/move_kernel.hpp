@@ -2,6 +2,7 @@
 #define __SIMULATION_MOVE_KERNEL_HPP__
 
 #include "Kokkos_Macros.hpp"
+#include "common/common.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
@@ -67,8 +68,7 @@ namespace Simulation::KernelInline
       const std::size_t i_compartment,
       const double random_number)
   {
-    const int mask_do_serch =
-        static_cast<int>(do_serch); // Image this is from another calculation
+    const int mask_do_serch = static_cast<int>(do_serch);
 
     const int max_neighbor = static_cast<int>(neighbors.extent(1));
 
@@ -172,7 +172,8 @@ namespace Simulation::KernelInline
           random(std::move(_random)), enable_move(b_move),
           enable_leave(b_leave) {};
 
-    void update(double _d_t,
+    void update(const ComputeSpace& ex,
+                double _d_t,
                 std::size_t n_p,
                 MoveInfo<ComputeSpace>&& move_i,
                 MC::ParticlePositions _positions,
@@ -194,7 +195,7 @@ namespace Simulation::KernelInline
       this->status = std::move(_status);
       this->ages = std::move(_ages);
 
-      Kokkos::fill_random(random, random_pool, 0., 1.);
+      Kokkos::fill_random(ex, random, random_pool, 0., 1.);
     }
 
     KOKKOS_INLINE_FUNCTION void operator()(
