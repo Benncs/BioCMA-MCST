@@ -95,8 +95,8 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a68ac7aac1215936a97dee2435fb8fa28" id="r_a68ac7aac1215936a97dee2435fb8fa28"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68ac7aac1215936a97dee2435fb8fa28">__find_next_compartment</a> (const ConstNeighborsView&lt; ComputeSpace &gt; &amp;neighbors, const <a class="el" href="namespaceSimulation.html#a8d1e1d8236f8e2ff9c680bdbb2685c98">CumulativeProbabilityView</a>&lt; ComputeSpace &gt; &amp;cumulative_probability, const std::size_t i_compartment, const double random_number)</td></tr>
-<tr class="memdesc:a68ac7aac1215936a97dee2435fb8fa28"><td class="mdescLeft">&#160;</td><td class="mdescRight">probably overkill binary search to find next compartment  <br /></td></tr>
+<tr class="memitem:ac8485f5e74c91ff03d46a41d00a01a19" id="r_ac8485f5e74c91ff03d46a41d00a01a19"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8485f5e74c91ff03d46a41d00a01a19">__find_next_compartment</a> (const bool do_serch, const ConstNeighborsView&lt; ComputeSpace &gt; &amp;neighbors, const <a class="el" href="namespaceSimulation.html#a8d1e1d8236f8e2ff9c680bdbb2685c98">CumulativeProbabilityView</a>&lt; ComputeSpace &gt; &amp;cumulative_probability, const std::size_t i_compartment, const double random_number)</td></tr>
+<tr class="memdesc:ac8485f5e74c91ff03d46a41d00a01a19"><td class="mdescLeft">&#160;</td><td class="mdescRight">probably overkill binary search to find next compartment  <br /></td></tr>
 <tr class="memitem:a648521674ead158dd3776a946da6722a" id="r_a648521674ead158dd3776a946da6722a"><td class="memTemplParams" colspan="2">template&lt;typename FastSample = int&gt; </td></tr>
 <tr class="memitem:a648521674ead158dd3776a946da6722a template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a648521674ead158dd3776a946da6722a">probability_leaving</a> (float random_number, double volume, double flow, double dt)</td></tr>
 <tr class="memitem:aac5971a17806db044f8dcf6254872e13" id="r_aac5971a17806db044f8dcf6254872e13"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
@@ -147,8 +147,8 @@ template&lt;typename Space&gt; </div>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="a68ac7aac1215936a97dee2435fb8fa28" name="a68ac7aac1215936a97dee2435fb8fa28"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68ac7aac1215936a97dee2435fb8fa28">&#9670;&#160;</a></span>__find_next_compartment()</h2>
+<a id="ac8485f5e74c91ff03d46a41d00a01a19" name="ac8485f5e74c91ff03d46a41d00a01a19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8485f5e74c91ff03d46a41d00a01a19">&#9670;&#160;</a></span>__find_next_compartment()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -156,6 +156,11 @@ template&lt;typename Space&gt; </div>
         <tr>
           <td class="memname">KOKKOS_INLINE_FUNCTION std::size_t Simulation::KernelInline::__find_next_compartment </td>
           <td>(</td>
+          <td class="paramtype">const bool</td>          <td class="paramname"><span class="paramname"><em>do_serch</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const ConstNeighborsView&lt; ComputeSpace &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>neighbors</em></span>, </td>
         </tr>
         <tr>
@@ -181,7 +186,7 @@ template&lt;typename Space&gt; </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_a68ac7aac1215936a97dee2435fb8fa28_icgraph.svg" width="643" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_ac8485f5e74c91ff03d46a41d00a01a19_icgraph.svg" width="643" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

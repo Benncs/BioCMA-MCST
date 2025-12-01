@@ -12,5 +12,6 @@ var structSimulation_1_1KernelInline_1_1CycleFunctors =
     [ "cycle_kernel", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#a1ce087876e977d1fb79b4144ea152b5f", null ],
     [ "cycle_reducer", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#ab7c05baee5924379a70ca3c584ff045c", null ],
     [ "move_kernel", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#a4f6f668e910066ea431b880faa54c70a", null ],
-    [ "move_reducer", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#abae9870130fcc9c6ee3223a56131558c", null ]
+    [ "move_reducer", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#abae9870130fcc9c6ee3223a56131558c", null ],
+    [ "move_space", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#aaf0100ce06c421975ca4af37cdd64bcd", null ]
 ];

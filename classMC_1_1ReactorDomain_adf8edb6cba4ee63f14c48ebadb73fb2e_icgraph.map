@@ -4,7 +4,7 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="382,35,325,27,326,22,383,29"/>
 <area shape="rect" id="Node000004" href="$classMC_1_1ReactorDomain.html#a25f27e850c92b548606eb3a3fb06d39e" title="Update neigbors of compartments." alt="" coords="202,54,350,93"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="383,62,351,66,350,61,382,57"/>
-<area shape="rect" id="Node000003" href="$namespaceMC.html#aea847035bda07533d03d9322ec032869" title="Helper function to initialize a MonteCarloUnit." alt="" coords="46,5,113,30"/>
+<area shape="rect" id="Node000003" href="$namespaceMC.html#a43055ea3fdccfa29c5095b5d37bec620" title="Helper function to initialize a MonteCarloUnit." alt="" coords="46,5,113,30"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="211,20,113,20,113,15,211,15"/>
 <area shape="rect" id="Node000005" href="$classMC_1_1ReactorDomain.html#a4ce1224958d3b5c83c06c1a6fcd2f005" title="Main constructor." alt="" coords="5,54,154,93"/>
 <area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="186,76,154,76,154,71,186,71"/>

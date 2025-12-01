@@ -1,7 +1,7 @@
 var classMC_1_1ParticlesContainer =
 [
     [ "UsedModel", "classMC_1_1ParticlesContainer.html#ac7a2519bfeea5192bb9e6a29254f1f88", null ],
-    [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html#a03a343614bef6821b8815902e3185e37", null ],
+    [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html#aa770c727ec0398c2116133dfa456d537", null ],
     [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html#a5b4a66b67d3b4942557b22538958480a", null ],
     [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html#adacba063d362632ca0899bae750b628a", null ],
     [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html#ae0cd8cf83c2728db495167ec2f10d80a", null ],
@@ -10,6 +10,7 @@ var classMC_1_1ParticlesContainer =
     [ "_resize", "classMC_1_1ParticlesContainer.html#a4fc94ae525191a5d034dce4866986c1e", null ],
     [ "_sort", "classMC_1_1ParticlesContainer.html#ad6eaf6d6ce065232f40b2026551d1109", null ],
     [ "capacity", "classMC_1_1ParticlesContainer.html#a6f8e762483a4d6589e89d03154f659b9", null ],
+    [ "change_nsample", "classMC_1_1ParticlesContainer.html#a03896f0d7bafe4c120ba454b227a0c2f", null ],
     [ "change_runtime", "classMC_1_1ParticlesContainer.html#ae63651fa053f1aea28a10a7a05999fe9", null ],
     [ "force_remove_dead", "classMC_1_1ParticlesContainer.html#a25d64f06c6f66817bc15bac225369a63", null ],
     [ "get_allocation_factor", "classMC_1_1ParticlesContainer.html#a1ccf09c885c6524e0132d81008e9a61f", null ],
@@ -24,6 +25,8 @@ var classMC_1_1ParticlesContainer =
     [ "operator=", "classMC_1_1ParticlesContainer.html#ad499de971fbe1a2cf3e1adbe2bb151d6", null ],
     [ "operator=", "classMC_1_1ParticlesContainer.html#a5d93b87f5a6e18c449e0ed62333e9d6e", null ],
     [ "remove_inactive_particles", "classMC_1_1ParticlesContainer.html#a57353f823ed074869300f29deb5c50b2", null ],
+    [ "sample", "classMC_1_1ParticlesContainer.html#a26c4c7d03bbf39b19b5d6d89df78a8e2", null ],
+    [ "samples", "classMC_1_1ParticlesContainer.html#af689a168bd1abaab3e1427cac75727d5", null ],
     [ "save", "classMC_1_1ParticlesContainer.html#aaf9c8e5f7b98db37614050c602e02d58", null ],
     [ "update_and_remove_inactive", "classMC_1_1ParticlesContainer.html#a0047f4c96b02ae4aeb9ebd8963129687", null ],
     [ "ages", "classMC_1_1ParticlesContainer.html#ac69ec6b2784cf095558d8f43f2a4cb0a", null ],
@@ -35,8 +38,10 @@ var classMC_1_1ParticlesContainer =
     [ "inactive_counter", "classMC_1_1ParticlesContainer.html#ab287b63249c0feaf15a20d26bfebc647", null ],
     [ "model", "classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297", null ],
     [ "n_allocated_elements", "classMC_1_1ParticlesContainer.html#ae3d67d42ba1d139b0ad83d1d9395f3dc", null ],
+    [ "n_samples", "classMC_1_1ParticlesContainer.html#aa3a969a6ac858a9152aeb2d48556fc19", null ],
     [ "n_used_elements", "classMC_1_1ParticlesContainer.html#a7b4ed9c9e9938f71e1fc659dcf3ff66e", null ],
     [ "position", "classMC_1_1ParticlesContainer.html#aab2bc872e28015fbbd9dd5ce78468e73", null ],
+    [ "random", "classMC_1_1ParticlesContainer.html#a40d9d132b19dc8baf2933bc1d8689a62", null ],
     [ "rt_params", "classMC_1_1ParticlesContainer.html#a0036ad1f84663d168f0a7df4571ba8a3", null ],
     [ "status", "classMC_1_1ParticlesContainer.html#afa005cba9cbc87bc27b6bd0eaa066fac", null ],
     [ "weights", "classMC_1_1ParticlesContainer.html#a393fc40e049e47aa2f7c6365cce02e4f", null ]

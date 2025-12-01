@@ -1,5 +1,8 @@
 <map id="Simulation::KernelInline::CycleFunctors::update" name="Simulation::KernelInline::CycleFunctors::update">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,167,44"/>
-<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f" title="Gets the number of particles in the container." alt="" coords="215,5,373,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,22,199,22,199,27,167,27"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,61,167,100"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#a03896f0d7bafe4c120ba454b227a0c2f" title=" " alt="" coords="215,29,373,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,66,199,61,200,66,168,71"/>
+<area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f" title="Gets the number of particles in the container." alt="" coords="215,92,373,131"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="168,90,200,95,199,100,167,95"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="255,30,252,20,258,11,272,5,294,3,317,5,330,12,328,16,315,10,294,8,274,10,262,15,258,21,260,28"/>
 </map>

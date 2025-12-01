@@ -1,6 +1,6 @@
 <map id="MC::ParticlesContainer::operator=" name="MC::ParticlesContainer::operator=">
 <area shape="rect" id="Node000001" title=" " alt="" coords="5,37,164,76"/>
-<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#a03a343614bef6821b8815902e3185e37" title="Alias for the model used by the container." alt="" coords="212,37,370,76"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#aa770c727ec0398c2116133dfa456d537" title="Alias for the model used by the container." alt="" coords="212,37,370,76"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,54,196,54,196,59,164,59"/>
 <area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a57fa06d3225acf04522e3fc2993847f0" title=" " alt="" coords="418,5,576,44"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="370,42,402,37,403,42,371,47"/>
