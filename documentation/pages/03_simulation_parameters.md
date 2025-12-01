@@ -1,6 +1,25 @@
 \page simparam  Simulation Configuration
 
-## Scalar initialisation
+## Runtime config 
+
+There are several runtime parameters can be changed before execution for specific usage. 
+
+
+| Name | Type | Description |
+| ---  | ---  | ---         |
+|  BIOMC_LIB_UDF    |  String    |      Path to .so model       |  
+| BIOMC_TEAM_SIZE | integer  | deprecated: controll team size of Kokkos league policy 
+| BIOMC_LEAGUE_SIZE | |  deprecated: controll league size of Kokkos league policy  | 
+| BIOMC_MC_REMOVE_RATIO_THRESHOLD | float | Maximum percentage of inactive particle  
+| BIOMC_MC_MINIMUM_REMOVAL | integer |  minimum number of inactive particle 
+| BIOMC_MC_BUFFER_RATIO | float |  ratio containersize/buffersize  
+| BIOMC_MC_ALLOC_FACTOR | float | Container preallocation factor  
+| BIOMC_MC_SHRINK_RATIO | float  | max ratio new_size / old_size before reduce preallocated memory 
+
+
+## CI 
+
+### Scalar initialisation
 
 There are different ways to initialize the initial concentration, but one simple method is to generate a .h5 file using the tools/init.py script.
 
@@ -23,7 +42,7 @@ def init_my_case():
 ~~~~~~~~~~~~~
 
 
-## CLI
+### Config 
 
 Running the simulation directly through the command line with arguments passed to the executable is not recommended due to the complexity involved. Instead, the preferred approach is to use the runner Python script and provide a specific case descriptor file.
 Below is a template for the case descriptor file, which should be in XML format:
