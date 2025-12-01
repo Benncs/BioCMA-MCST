@@ -88,7 +88,7 @@ namespace Models
 
       const auto [l0, mu] = MC::sample_random_variables(
           random_pool,
-          [](auto gen)
+          [](auto& gen)
           {
             const auto l0 = local_dist.draw(
                 gen); // Get initial fro given distribution (normal)

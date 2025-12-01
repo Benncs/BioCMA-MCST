@@ -14,14 +14,53 @@ namespace MC
       Kokkos::Random_XorShift1024_Pool<Kokkos::DefaultExecutionSpace>;
   pool_type get_pool(std::size_t seed = 0);
 
-  /** @brief Sample variable with RAI mecanism*/
-  KOKKOS_INLINE_FUNCTION auto sample_random_variables(const pool_type& p,
-                                                      auto functor)
+  /**
+   * @brief Samples random variables
+   * Use t wrap generator with RAII
+   *
+   * The functor must accept the generator by reference, not by value.
+   * Passing the generator by value (e.g., `[](auto gen){ ... }`) results in
+   * undefined behavior, because copying the generator state is not allowed.
+   * Instead, ensure the functor signature is `[](auto& gen){ ... }`.
+   *
+   * @tparam Functor A callable object that takes `generator_type&` and returns
+   * any tuple-like or user-defined result.
+   * @param pool     Random pool
+   * @param functor  A callable that operates on the generator and produces the
+   *                 desired random values.
+   *
+   * @return The value returned by the user-provided functor.
+   *
+   * @example
+   * // Example usage:
+   * const auto [a, b] = MC::sample_random_variables(
+   *       random_pool,
+   *       [](auto& gen)
+   *       {
+   *         const auto a = gen.urand64();
+   *         const auto b = gen.drand();
+   *         return std::make_tuple(a, b);
+   *       });
+   */
+
+  KOKKOS_INLINE_FUNCTION auto sample_random_variables(const pool_type& pool,
+                                                      auto&& functor)
   {
-    auto gen = p.get_state();
-    auto t = functor(gen);
-    p.free_state(gen);
-    return t;
+    // Be sure that generator is passed to functor as reference
+    // As functor can be lambda usually [](auto gen){return gen.rand();};
+    // If auto is passed as value, value generated is UB. Need auto& to avoid
+    // any problem
+    using gen_t = typename pool_type::generator_type;
+    using Functor = decltype(functor);
+    static_assert(std::is_invocable_v<Functor, gen_t&> &&
+                      !std::is_invocable_v<Functor, gen_t>,
+                  "Functor must accept generator by reference only");
+
+    auto gen = pool.get_state();
+    const auto result = functor(gen);
+    pool.free_state(gen);
+
+    return result;
   }
 
 #define SAMPLE_RANDOM_VARIABLES(_random_pool_, ...)                            \
@@ -89,7 +128,7 @@ namespace MC
     {
 
       return sample_random_variables(
-          random_pool, [a, b](auto gen) { return gen.urand64(a, b); });
+          random_pool, [a, b](auto& gen) { return gen.urand64(a, b); });
     }
 
     pool_type random_pool;
