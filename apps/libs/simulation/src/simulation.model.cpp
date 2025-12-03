@@ -102,7 +102,7 @@ namespace Simulation
         // _index_leaving_flow(0) = 0;
         // _leaving_flow(0) = feed.flow;
         //
-        move_info.set_flow(0, 0, feed.flow);
+        move_info.set_flow(0, *feed.output_position, feed.flow);
       }
     }
 
