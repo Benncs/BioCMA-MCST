@@ -41,8 +41,8 @@ var NAVTREE =
       ] ]
     ] ],
     [ "Documentation", "models.html", [
-      [ "Model declaration", "models.html#autotoc_md18", [
-        [ "Required Model Subkernels", "models.html#autotoc_md19", null ]
+      [ "Model declaration", "models.html#autotoc_md20", [
+        [ "Required Model Subkernels", "models.html#autotoc_md21", null ]
       ] ]
     ] ],
     [ "List of Kokkkos Kernels", "kernels.html", null ],
@@ -79,16 +79,16 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html",
-"classILoadBalancer.html#a3c702bc154d71fece146e1857d27bf30",
-"classMC_1_1ParticlesContainer.html#ae0cd8cf83c2728db495167ec2f10d80a",
-"classSimulation_1_1ScalarSimulation.html#ab544cc3abbac4d3622ff1a1d60531001",
-"functions_func_j.html",
-"namespaceSimulation_1_1KernelInline.html#ac8485f5e74c91ff03d46a41d00a01a19",
-"structCore_1_1SimulationParameters.html#a2aed82be70a9f9560b2f9e95693f3e13",
-"structMC_1_1Distributions_1_1Uniform.html#a8abe0036185f97783e45e99833f9ece2",
-"structModels_1_1TwoMeta.html#a0d6fc74f3d7420b619672841dcc0ac10",
-"structModels_1_1Uptake.html#a1ef1c1d66e57e083e2274a259102ac9f",
-"structSimulation_1_1KernelInline_1_1MoveFunctor.html#a03915f23d2cba642e8c245fd9d4da1d2"
+"classILoadBalancer.html#a11305fecea49664648595dd5d61027b3",
+"classMC_1_1ParticlesContainer.html#adae9af7cbb629530927d504f5fe75c90",
+"classSimulation_1_1ScalarSimulation.html#ab395ffa28c8c371fdf46fb50261a5a76",
+"functions_func_h.html",
+"namespaceSimulation_1_1KernelInline.html#a80366d1de1efc8a4e4c203cdceb3b6d1",
+"structCore_1_1ScalarFactory_1_1Visitor.html#ae0c53ca956bf4081ed7606b9e9d0202c",
+"structMC_1_1Distributions_1_1Uniform.html#a4f5ec8a4fb14a987e201ff356d87fe2b",
+"structModels_1_1SimpleModel.html#ad15d55900af7e9698acca28a16044233",
+"structModels_1_1Uptake.html",
+"structSimulation_1_1KernelInline_1_1CycleReduceType.html#a4a394e9e1f930c5e5fa5a79e363b458b"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

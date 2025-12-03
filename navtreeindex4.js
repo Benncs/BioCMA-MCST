@@ -1,5 +1,7 @@
 var NAVTREEINDEX4 =
 {
+"functions_func_h.html":[7,3,1,8],
+"functions_func_i.html":[7,3,1,9],
 "functions_func_j.html":[7,3,1,10],
 "functions_func_k.html":[7,3,1,11],
 "functions_func_l.html":[7,3,1,12],
@@ -74,8 +76,8 @@ var NAVTREEINDEX4 =
 "index.html#autotoc_md0":[0,0],
 "kernels.html":[3],
 "models.html":[2],
-"models.html#autotoc_md18":[2,0],
-"models.html#autotoc_md19":[2,0,0],
+"models.html#autotoc_md20":[2,0],
+"models.html#autotoc_md21":[2,0,0],
 "namespaceApi.html":[5,0,0],
 "namespaceApi.html#a43523f23b4fed2f495f0d6ca4e5aee32":[5,0,0,1],
 "namespaceApi.html#a56e4bc052032f53c3fec5a8a3b07b23e":[5,0,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX4 =
 "namespaceSimulation_1_1KernelInline.html#a3e6c212b4e4693a01483c60331e9fac1":[5,0,12,2,11],
 "namespaceSimulation_1_1KernelInline.html#a431c56faa51e10df7402c915d43931cf":[5,0,12,2,17],
 "namespaceSimulation_1_1KernelInline.html#a44b083c689a8840645847ffbbfb0b53d":[5,0,12,2,16],
-"namespaceSimulation_1_1KernelInline.html#a648521674ead158dd3776a946da6722a":[5,0,12,2,14],
-"namespaceSimulation_1_1KernelInline.html#a80366d1de1efc8a4e4c203cdceb3b6d1":[5,0,12,2,12],
-"namespaceSimulation_1_1KernelInline.html#aac5971a17806db044f8dcf6254872e13":[5,0,12,2,15]
+"namespaceSimulation_1_1KernelInline.html#a648521674ead158dd3776a946da6722a":[5,0,12,2,14]
 };

@@ -72,11 +72,11 @@ $(function(){initNavTree('example_model_8cxx-example.html','',''); });
 </div><!--header-->
 <div class="contents">
 <p>Example of minimum model declaration</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md20"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md22"></a>
 UDF</h2>
-<p>When Kokkos selected backend is on host, (either <em>Serial</em>, <em>OpenMP</em> or <em>Threads</em>), user-defined-model can be loaded at runtime and modified without compile the whole program. The UDF models can be program is the almost same way as regular model but with some limitations. The build can be done with the <b>udf_build</b> script, in order to select model user has to: set the model name as: <b>udf_model</b> and set the envar : <b>BIOMC_LIB_PATH</b> to the absolute .so path.</p>
-<p><span class="tt">export BIOMC_LIB_PATH=$(pwd)/path/lib_udf_model_custom.so</span></p>
-<p>UDF models can only be selected when the backend is set to host because the model definition and declaration are handled separately during the compilation step. The model is loaded through a shared library mechanism (e.g., dlopen on Linux), but this introduces some limitations. For instance, certain optimizations, such as the size of views, cannot be performed at runtime, which may result in slower performance in some cases. However, udf can't be used with device backend like CUDA, where the kernel must be known at compile time. While CUDA runtime can load PTX code dynamically, this would require writing and compiling CUDA code separately, which is not the intended approach in the Kokkos framework.</p>
+<p>When Kokkos selected backend is on host, (either <em>Serial</em>, <em>OpenMP</em> or <em>Threads</em>), user-defined-model can be loaded at runtime and modified without compile the whole program. The UDF models can be program is the almost same way as regular model but with some limitations. The build can be done with the <b>udf_build</b> script, in order to select model user has to: set the model name as: <b>udf_model</b> and set the envar : <b>BIOMC_LIB_UDF</b> to the absolute .so path.</p>
+<p><span class="tt">export BIOMC_LIB_UDF=$(pwd)/path/lib_udf_model_custom.so</span></p>
+<p>UDF models can only be selected when the backend is set to host because the model definition and declaration are handled separately during the compilation step. The model is loaded through a shared library mechanism (e.g., dlopen on Linux), but this introduces some limitations. For instance, some optimizations, such as the size of views, cannot be performed at runtime, which may result in slower performance in some cases. However, udf can't be used with device backend like CUDA, where the kernel must be known at compile time. While CUDA runtime can load PTX code dynamically, this would require writing and compiling CUDA code separately, which is not the intended approach in the Kokkos framework.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#ifndef __EXAMPLE_MODEL_HPP__</span></div>
 <div class="line"><span class="preprocessor">#define __EXAMPLE_MODEL_HPP__</span></div>
 <div class="line"> </div>

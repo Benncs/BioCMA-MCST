@@ -72,7 +72,32 @@ $(function(){initNavTree('simparam.html','',''); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h2 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
-Scalar initialisation</h2>
+Runtime config</h2>
+<p>There are several runtime parameters can be changed before execution for specific usage.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Name  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadNone">Description  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">BIOMC_LIB_UDF  </td><td class="markdownTableBodyNone">String  </td><td class="markdownTableBodyNone">Path to .so model  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">BIOMC_TEAM_SIZE  </td><td class="markdownTableBodyNone">integer  </td><td class="markdownTableBodyNone">deprecated: controll team size of Kokkos league policy  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">BIOMC_LEAGUE_SIZE  </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">deprecated: controll league size of Kokkos league policy  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">BIOMC_MC_REMOVE_RATIO_THRESHOLD  </td><td class="markdownTableBodyNone">float  </td><td class="markdownTableBodyNone">Maximum percentage of inactive particle  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">BIOMC_MC_MINIMUM_REMOVAL  </td><td class="markdownTableBodyNone">integer  </td><td class="markdownTableBodyNone">minimum number of inactive particle  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">BIOMC_MC_BUFFER_RATIO  </td><td class="markdownTableBodyNone">float  </td><td class="markdownTableBodyNone">ratio containersize/buffersize  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">BIOMC_MC_ALLOC_FACTOR  </td><td class="markdownTableBodyNone">float  </td><td class="markdownTableBodyNone">Container preallocation factor  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">BIOMC_MC_SHRINK_RATIO  </td><td class="markdownTableBodyNone">float  </td><td class="markdownTableBodyNone">max ratio new_size / old_size before reduce preallocated memory  </td></tr>
+</table>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
+CI</h2>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md18"></a>
+Scalar initialisation</h3>
 <p>There are different ways to initialize the initial concentration, but one simple method is to generate a .h5 file using the tools/init.py script.</p>
 <p>A template fonction to add to this script is</p>
 <div class="fragment"><div class="line"><span class="keyword">def </span>init_my_case():</div>
@@ -88,8 +113,8 @@ Scalar initialisation</h2>
 <div class="line">    liquid_phase[:,1]=0 <span class="comment"># g/l</span></div>
 <div class="line"> </div>
 <div class="line">    make_initial_concentration(<span class="stringliteral">&quot;./cma_data/my-case-init.h5&quot;</span>,liquid_phase,gas_phase)</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
-CLI</h2>
+</div><!-- fragment --><h3 class="doxsection"><a class="anchor" id="autotoc_md19"></a>
+Config</h3>
 <p>Running the simulation directly through the command line with arguments passed to the executable is not recommended due to the complexity involved. Instead, the preferred approach is to use the runner Python script and provide a specific case descriptor file. Below is a template for the case descriptor file, which should be in XML format: </p><div class="fragment"><div class="line">&lt;?<span class="keyword">xml</span> <span class="keyword">version</span>=<span class="stringliteral">&quot;1.0&quot;</span> <span class="keyword">encoding</span>=<span class="stringliteral">&quot;UTF-8&quot;</span>?&gt;</div>
 <div class="line"><span class="comment">&lt;!-- One file can contain multiple cases within this tag --&gt;</span></div>
 <div class="line">&lt;<span class="keywordtype">cases</span>&gt;</div>

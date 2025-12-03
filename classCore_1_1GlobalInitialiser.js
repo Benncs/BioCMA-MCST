@@ -9,6 +9,7 @@ var classCore_1_1GlobalInitialiser =
       [ "Feed", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeaa80425472d94ae02c836da5b6f205b7b", null ],
       [ "MC", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaea92a54b358b4cf53cca4095e4697e1004", null ],
       [ "SimulationUnit", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeae72c61b7a94c54fd6a574c64d5b5d4ca", null ],
+      [ "MTR", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaea7c6fab8b3b80d8d645c1638702cc0ce4", null ],
       [ "Count", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeae93f994f01c537c4e2f7d8528c3eb5e9", null ]
     ] ],
     [ "GlobalInitialiser", "classCore_1_1GlobalInitialiser.html#a6366cce5d23ddbb0f475288da17b9c9d", null ],

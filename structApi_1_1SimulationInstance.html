@@ -117,6 +117,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4508272c4bba7fdaa1e3695ee606f538" id="r_a4508272c4bba7fdaa1e3695ee606f538"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4508272c4bba7fdaa1e3695ee606f538">set_feed</a> (<a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">Simulation::Feed::FeedDescriptor</a> feed_variant, Phase phase=Phase::Liquid)</td></tr>
 <tr class="memitem:a5a689a100cbbf66d7a6d9171a8718cff" id="r_a5a689a100cbbf66d7a6d9171a8718cff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a689a100cbbf66d7a6d9171a8718cff">set_feed_constant</a> (double _flow, double _concentration, std::size_t _species, std::size_t _position, bool gas=false, bool fed_batch=false)</td></tr>
 <tr class="memitem:aec331d2ab718c45a574566727e463996" id="r_aec331d2ab718c45a574566727e463996"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec331d2ab718c45a574566727e463996">set_feed_constant_different_output</a> (double _flow, double _concentration, std::size_t _species, std::size_t input_position, std::size_t output_position, bool gas=false)</td></tr>
+<tr class="memitem:ad3dcce95a8552f794dfff2a0f382fcee" id="r_ad3dcce95a8552f794dfff2a0f382fcee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3dcce95a8552f794dfff2a0f382fcee">set_mtr</a> (<a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#ad6c5be1bd24b21b8e79e41555ccf9bed">Simulation::MassTransfer::Type::MtrTypeVariant</a> &amp;&amp;variant)</td></tr>
+<tr class="memitem:a73c191e86d9951411087785b68bf709e" id="r_a73c191e86d9951411087785b68bf709e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73c191e86d9951411087785b68bf709e">set_auto_mtr</a> ()</td></tr>
 <tr class="memitem:afb6d2f04368f71955e4773dd5452f2e2" id="r_afb6d2f04368f71955e4773dd5452f2e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb6d2f04368f71955e4773dd5452f2e2">register_scalar_initiazer</a> (<a class="el" href="namespaceCore_1_1ScalarFactory.html#aede963ff58e06bcac32b39866b14148d">Core::ScalarFactory::ScalarVariant</a> &amp;&amp;var)</td></tr>
 <tr class="memdesc:afb6d2f04368f71955e4773dd5452f2e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configure feed constants for the simulation.  <br /></td></tr>
 <tr class="memitem:ab938dea3b413538bfdaa40daa5d122a2" id="r_ab938dea3b413538bfdaa40daa5d122a2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab938dea3b413538bfdaa40daa5d122a2">get_id</a> () const</td></tr>
@@ -156,6 +158,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:adffecec66007edf92dca50b0824738ec" id="r_adffecec66007edf92dca50b0824738ec"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adffecec66007edf92dca50b0824738ec">feed</a></td></tr>
 <tr class="memdesc:adffecec66007edf92dca50b0824738ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional feed configuration.  <br /></td></tr>
 <tr class="memitem:a709fd2616844c521f647a0bb9d049bce" id="r_a709fd2616844c521f647a0bb9d049bce"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#ad6c5be1bd24b21b8e79e41555ccf9bed">Simulation::MassTransfer::Type::MtrTypeVariant</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a709fd2616844c521f647a0bb9d049bce">mtr_type</a></td></tr>
+<tr class="memitem:aa6dbd15f0fe1d1b15bf956d0e728c550" id="r_aa6dbd15f0fe1d1b15bf956d0e728c550"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6dbd15f0fe1d1b15bf956d0e728c550">auto_mtr</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents an instance of a simulation with customizable parameters and behaviors. </p>
@@ -935,6 +938,28 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a73c191e86d9951411087785b68bf709e" name="a73c191e86d9951411087785b68bf709e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73c191e86d9951411087785b68bf709e">&#9670;&#160;</a></span>set_auto_mtr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Api::SimulationInstance::set_auto_mtr </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a73c191e86d9951411087785b68bf709e_icgraph.svg" width="378" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
 <a id="a4508272c4bba7fdaa1e3695ee606f538" name="a4508272c4bba7fdaa1e3695ee606f538"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4508272c4bba7fdaa1e3695ee606f538">&#9670;&#160;</a></span>set_feed()</h2>
 
@@ -1098,6 +1123,28 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="ad3dcce95a8552f794dfff2a0f382fcee" name="ad3dcce95a8552f794dfff2a0f382fcee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3dcce95a8552f794dfff2a0f382fcee">&#9670;&#160;</a></span>set_mtr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structApiResult.html">ApiResult</a> Api::SimulationInstance::set_mtr </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#ad6c5be1bd24b21b8e79e41555ccf9bed">Simulation::MassTransfer::Type::MtrTypeVariant</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>variant</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_ad3dcce95a8552f794dfff2a0f382fcee_icgraph.svg" width="378" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
 <a id="a9602da52be8e78442654d6309f9d313a" name="a9602da52be8e78442654d6309f9d313a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9602da52be8e78442654d6309f9d313a">&#9670;&#160;</a></span>_data</h2>
@@ -1144,6 +1191,28 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Flag indicating if the configuration is applied. </p>
+
+</div>
+</div>
+<a id="aa6dbd15f0fe1d1b15bf956d0e728c550" name="aa6dbd15f0fe1d1b15bf956d0e728c550"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6dbd15f0fe1d1b15bf956d0e728c550">&#9670;&#160;</a></span>auto_mtr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Api::SimulationInstance::auto_mtr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

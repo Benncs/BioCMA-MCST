@@ -149,14 +149,16 @@ var NAVTREEINDEX0 =
 "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbae":[7,0,2,3,2],
 "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaea7531804ee40eed2b5a40056741d83be6":[5,0,4,3,2,1],
 "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaea7531804ee40eed2b5a40056741d83be6":[7,0,2,3,2,1],
+"classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaea7c6fab8b3b80d8d645c1638702cc0ce4":[5,0,4,3,2,6],
+"classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaea7c6fab8b3b80d8d645c1638702cc0ce4":[7,0,2,3,2,6],
 "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaea92a54b358b4cf53cca4095e4697e1004":[5,0,4,3,2,4],
 "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaea92a54b358b4cf53cca4095e4697e1004":[7,0,2,3,2,4],
 "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeaa80425472d94ae02c836da5b6f205b7b":[5,0,4,3,2,3],
 "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeaa80425472d94ae02c836da5b6f205b7b":[7,0,2,3,2,3],
 "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeae72c61b7a94c54fd6a574c64d5b5d4ca":[5,0,4,3,2,5],
 "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeae72c61b7a94c54fd6a574c64d5b5d4ca":[7,0,2,3,2,5],
-"classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeae93f994f01c537c4e2f7d8528c3eb5e9":[5,0,4,3,2,6],
-"classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeae93f994f01c537c4e2f7d8528c3eb5e9":[7,0,2,3,2,6],
+"classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeae93f994f01c537c4e2f7d8528c3eb5e9":[5,0,4,3,2,7],
+"classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeae93f994f01c537c4e2f7d8528c3eb5e9":[7,0,2,3,2,7],
 "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeaf60357a8d17e45793298323f1b372a74":[5,0,4,3,2,2],
 "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeaf60357a8d17e45793298323f1b372a74":[7,0,2,3,2,2],
 "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeafa59184c0d82a51a129c92a9cc3e9dbe":[5,0,4,3,2,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX0 =
 "classHostImportantLoadBalancer.html#a968eb70ea9c0f8e2d0ac9257333b23ee":[7,0,25,0],
 "classILoadBalancer.html":[7,0,26],
 "classILoadBalancer.html#a0c14ef4a67e3960b28849b347d3518af":[7,0,26,0],
-"classILoadBalancer.html#a0ea1f8c452c4cc8ef53c981769fe7947":[7,0,26,11],
-"classILoadBalancer.html#a11305fecea49664648595dd5d61027b3":[7,0,26,5],
-"classILoadBalancer.html#a27fb1f345c6d7b6e428b2bd012429dc2":[7,0,26,6]
+"classILoadBalancer.html#a0ea1f8c452c4cc8ef53c981769fe7947":[7,0,26,11]
 };
