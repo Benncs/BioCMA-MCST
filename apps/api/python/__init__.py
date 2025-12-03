@@ -10,6 +10,10 @@ __doc__ = handle_module.__doc__
 if hasattr(handle_module, "__all__"):
     __all__ = handle_module.__all__
 
+__all__.extend(
+    ["pyinit_handle", "init_simulation", "set_initial_concentrations", "fast_run"]
+)
+
 
 def pyinit_handle(sim_id: int):
     """
@@ -85,14 +89,17 @@ def fast_run(
     is_serde: bool = False,
     f_init=None,
     serde_path=None,
+    uniform=None,
 ):
     """Run the simulation with optional recursion or serde handling."""
 
     # Prepare parameters
     params = handle_module.make_params(**params)
-    handle = handle_module.init_simulation(
-        outfolder, name, cma_path, params
-    )
+
+    if uniform is not None:
+        params.is_uniform = True
+
+    handle = init_simulation(outfolder, name, cma_path, params)
 
     # Liquid feed configuration
     if liquid_flow_rate != 0:
@@ -102,7 +109,7 @@ def fast_run(
     if not is_serde:
         if f_init is None:
             raise ValueError("f_init must be provided when is_serde is False")
-        handle_module.set_initial_concentrations(handle, *f_init(n_compartment))
+        set_initial_concentrations(handle, *f_init(n_compartment))
         handle_module.register_model_name(handle, model_name)
     else:
         if not serde_path:
@@ -117,8 +124,3 @@ def fast_run(
 
     handle_module.exec(handle)
     return 0
-
-
-__all__.extend(
-    ["pyinit_handle", "init_simulation", "set_initial_concentrations", "fast_run"]
-)

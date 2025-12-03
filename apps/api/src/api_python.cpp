@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <exception>
+#include <iostream>
 #include <memory>
 #include <pybind11/cast.h>
 #include <pybind11/detail/common.h>
@@ -15,7 +16,6 @@
 #include <stdexcept>
 #include <string>
 #include <tuple>
-
 namespace py = pybind11;
 
 std::string wrap_repr(const wrap_c_param_t& m)
