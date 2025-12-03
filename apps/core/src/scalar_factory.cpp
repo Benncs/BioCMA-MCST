@@ -29,7 +29,7 @@
 namespace Core::ScalarFactory
 {
 
-  Simulation::ScalarInitializer scalar_factory(bool /*f_init_gas_flow*/,
+  Simulation::ScalarInitializer scalar_factory(bool f_init_gas_flow,
                                                std::span<double> gas_volume,
                                                std::span<double> liquid_volume,
                                                ScalarVariant arg_liq)
@@ -39,7 +39,7 @@ namespace Core::ScalarFactory
       throw std::invalid_argument("Error size of volume need to be the same");
     }
 
-    auto ret = std::visit(Visitor(), std::move(arg_liq));
+    auto ret = std::visit(Visitor{f_init_gas_flow}, std::move(arg_liq));
 
     ret.volumesgas = gas_volume;
     ret.volumesliq = liquid_volume;
@@ -59,7 +59,7 @@ namespace Core::ScalarFactory
     return ret;
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(Uniform args)
+  Simulation::ScalarInitializer Visitor::operator()(Uniform args) const
   {
     auto res = Simulation::ScalarInitializer();
     res.type = Simulation::ScalarInitialiserType::Uniform;
@@ -114,7 +114,7 @@ namespace Core::ScalarFactory
   //   return res;
   // }
 
-  Simulation::ScalarInitializer Visitor::operator()(Local args)
+  Simulation::ScalarInitializer Visitor::operator()(Local args) const
   {
     auto res = Simulation::ScalarInitializer();
     res.type = Simulation::ScalarInitialiserType::Local;
@@ -169,13 +169,15 @@ namespace Core::ScalarFactory
     return res;
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(FullCase data)
+  Simulation::ScalarInitializer Visitor::operator()(FullCase data) const
   {
     auto res = Simulation::ScalarInitializer();
     res.type = Simulation::ScalarInitialiserType::FullCase;
-    res.gas_flow = data.raw_gas.has_value();
+    res.gas_flow = this->init_gas;
+    auto has_gas_buffer = data.raw_gas.has_value();
+
     res.n_species = data.n_species;
-    if (res.gas_flow)
+    if (has_gas_buffer)
     {
       if (data.raw_gas->size() != data.raw_liquid.size())
       {
@@ -184,13 +186,17 @@ namespace Core::ScalarFactory
       }
       res.gas_buffer = std::move(*data.raw_gas);
     }
+    if (!has_gas_buffer && this->init_gas)
+    {
+      res.gas_buffer = std::vector<double>(data.raw_liquid.size());
+    }
 
     res.liquid_buffer = std::move(data.raw_liquid);
 
     return res;
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(File filepath)
+  Simulation::ScalarInitializer Visitor::operator()(File filepath) const
   {
 
 #ifdef USE_HIGHFIVE
@@ -255,7 +261,7 @@ namespace Core::ScalarFactory
 #endif
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(CustomScript /*path*/)
+  Simulation::ScalarInitializer Visitor::operator()(CustomScript /*path*/) const
   {
     throw std::invalid_argument("Not implemented yet");
   }
