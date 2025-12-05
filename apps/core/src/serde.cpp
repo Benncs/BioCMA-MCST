@@ -11,6 +11,7 @@
 #  include <cereal/types/variant.hpp> //MC::Unit use variant internally
 #  include <cereal/types/vector.hpp>  //MC::List use vector internally
 #  include <common/execinfo.hpp>
+#  include <core/global_initaliser.hpp>
 #  include <cstdint>
 #  include <fstream>
 #  include <ios>
@@ -156,19 +157,11 @@ namespace SerDe
     sc->liquid_buffer = read_c_liq;
     sc->n_species = dims.n_species;
     sc->type = Simulation::ScalarInitialiserType::File;
-    sc->gas_flow = sc->gas_buffer.has_value();
+    // sc->gas_flow = sc->gas_buffer.has_value();
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
     assert(mc_unit != nullptr);
-
-    // auto mc = gi.init_mtr_model(sc);
-
-    std::vector<double> kla(sc->n_species);
-    if (kla.size() > 1)
-    {
-      kla[1] = 0.2; // 700 h-1
-    }
 
 #  warning message("MTR model is not loaded")
     auto simulation = gi.init_simulation(std::move(mc_unit), *sc);
@@ -180,9 +173,17 @@ namespace SerDe
     }
 
     case_data.simulation = std::move(*simulation);
+    std::vector<double> kla(case_data.simulation->getDimensions().n_species);
+    if (kla.size() > 1)
+    {
+      kla[1] = 0.2; // 700 h-1
+    }
 
-    case_data.simulation->setMtrModel(
-        Simulation::MassTransfer::Type::FixedKla{kla});
+    auto auto_mtr_type = Simulation::MassTransfer::Type::FixedKla{kla};
+    gi.init_mtr_model(*case_data.simulation, std::move(auto_mtr_type));
+
+    // case_data.simulation->setMtrModel(
+    //     Simulation::MassTransfer::Type::FixedKla{kla});
 
     case_data.simulation->get_start_time_mut() = start_time;
     gi.set_initial_number_particle(np);

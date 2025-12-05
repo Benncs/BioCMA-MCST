@@ -217,7 +217,8 @@ namespace Api
     {
       return ApiResult(e.what());
     }
-    return ApiResult("Error loading");
+
+    return ApiResult("Error loading case");
   }
 
   ApiResult SimulationInstance::set_mtr(

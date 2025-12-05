@@ -197,8 +197,9 @@ namespace Core
         }
         return std::nullopt;
       }
-      f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
+
       const auto state = d_transition->get_current();
+      f_init_gas_flow = info.current_rank == 0 && state->has_gas();
       if (logger)
       {
         // Note final "s"
@@ -362,14 +363,17 @@ namespace Core
 
   std::optional<bool> GlobalInitialiser::init_mtr_model(
       Simulation::SimulationUnit& unit,
-      Simulation::MassTransfer::Type::MtrTypeVariant&& variant)
+      std::optional<Simulation::MassTransfer::Type::MtrTypeVariant>&& variant)
   {
     if (!check_steps(InitStep::SimulationUnit))
     {
       VERBOSE_ERROR
       return std::nullopt;
     }
-    unit.setMtrModel(std::move(variant));
+    if (variant)
+    {
+      unit.setMtrModel(std::move(*variant));
+    }
 
     validate_step(InitStep::MTR);
     // TODO

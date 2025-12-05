@@ -125,9 +125,11 @@ namespace Core
     std::optional<Simulation::ScalarInitializer>
     init_scalar(Core::ScalarFactory::ScalarVariant&& variant);
 
-    std::optional<bool>
-    init_mtr_model(Simulation::SimulationUnit& unit,
-                   Simulation::MassTransfer::Type::MtrTypeVariant&& variant);
+    // Use optional bcause we need to validate step even if theres no mtr
+    std::optional<bool> init_mtr_model(
+        Simulation::SimulationUnit& unit,
+        std::optional<Simulation::MassTransfer::Type::MtrTypeVariant>&&
+            variant);
 
     /**
      * @brief Initializes a simulation feed.
