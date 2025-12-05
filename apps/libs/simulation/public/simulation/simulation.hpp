@@ -143,7 +143,7 @@ namespace Simulation
     double starting_time =
         0.;            // Not used within calculation, only for export purposes
     double end_time{}; // Not used within calculation, only for export purposes
-    bool f_reaction = false; // FIXME
+    bool f_reaction = true; // FIXME
     void scatter_contribute();
     void set_kernel_contribs_to_host();
 
