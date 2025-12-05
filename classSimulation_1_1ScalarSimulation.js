@@ -13,7 +13,6 @@ var classSimulation_1_1ScalarSimulation =
     [ "get_mass_transfer", "classSimulation_1_1ScalarSimulation.html#ab395ffa28c8c371fdf46fb50261a5a76", null ],
     [ "getConcentrationArray", "classSimulation_1_1ScalarSimulation.html#ae2625817dffc02083227be2b82dfe534", null ],
     [ "getConcentrationData", "classSimulation_1_1ScalarSimulation.html#afcf9b11b8de7215be6b83ed6a2aceaf0", null ],
-    [ "getTransition", "classSimulation_1_1ScalarSimulation.html#ad4f612748846283f7509a03767294eb3", null ],
     [ "getVolume", "classSimulation_1_1ScalarSimulation.html#a7f914d5d6f893f873cac2697cc41682b", null ],
     [ "n_col", "classSimulation_1_1ScalarSimulation.html#a5ca5e122100fad91f418cbbea5bbb439", null ],
     [ "n_row", "classSimulation_1_1ScalarSimulation.html#aab5e48f3385a40d87dd678103097ec06", null ],

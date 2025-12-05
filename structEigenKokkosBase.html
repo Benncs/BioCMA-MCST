@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>BioCMAMC-ST: EigenKokkosBase&lt; EigenLayout, ftype &gt; Struct Template Reference</title>
+<title>BioCMAMC-ST: EigenKokkosBase&lt; EigenLayout, float_type &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -68,7 +68,7 @@ $(function(){initNavTree('structEigenKokkosBase.html','','structEigenKokkosBase-
 <div id="container">
 <div id="doc-content">
 <div class="header">
-  <div class="headertitle"><div class="title">EigenKokkosBase&lt; EigenLayout, ftype &gt; Struct Template Reference</div></div>
+  <div class="headertitle"><div class="title">EigenKokkosBase&lt; EigenLayout, float_type &gt; Struct Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -76,72 +76,72 @@ $(function(){initNavTree('structEigenKokkosBase.html','','structEigenKokkosBase-
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:afd988d66179bb9454150fc993b44e907" id="r_afd988d66179bb9454150fc993b44e907"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd988d66179bb9454150fc993b44e907">EigenMatrix</a> = MatrixType&lt;EigenLayout, ftype&gt;</td></tr>
-<tr class="memitem:a8f93905b8ed2a42f318c4ff2d74483e8" id="r_a8f93905b8ed2a42f318c4ff2d74483e8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f93905b8ed2a42f318c4ff2d74483e8">HostView</a> = KokkosScalarMatrix&lt;HostSpace, EigenLayout, ftype&gt;</td></tr>
-<tr class="memitem:a41385917f940b6a46881fbe5a5085f9b" id="r_a41385917f940b6a46881fbe5a5085f9b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41385917f940b6a46881fbe5a5085f9b">ComputeView</a></td></tr>
+<tr class="memitem:af9a8d447dad21bd4c82c38a96273f341" id="r_af9a8d447dad21bd4c82c38a96273f341"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9a8d447dad21bd4c82c38a96273f341">EigenMatrix</a> = MatrixType&lt;EigenLayout, float_type&gt;</td></tr>
+<tr class="memitem:a0e233b2fa796cfa9f74a9e78cc3b87f6" id="r_a0e233b2fa796cfa9f74a9e78cc3b87f6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e233b2fa796cfa9f74a9e78cc3b87f6">HostView</a> = KokkosScalarMatrix&lt;HostSpace, EigenLayout, float_type&gt;</td></tr>
+<tr class="memitem:a85b1ceea9e8c2fa8e9c86f51217e720f" id="r_a85b1ceea9e8c2fa8e9c86f51217e720f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85b1ceea9e8c2fa8e9c86f51217e720f">ComputeView</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3d8b6236566f8d8ab7ed30499d0981eb" id="r_a3d8b6236566f8d8ab7ed30499d0981eb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d8b6236566f8d8ab7ed30499d0981eb">EigenKokkosBase</a> (std::size_t n_row, std::size_t n_col)</td></tr>
-<tr class="memitem:a839f72e14228e9601221ba744c90ee15" id="r_a839f72e14228e9601221ba744c90ee15"><td class="memItemLeft" align="right" valign="top">std::span&lt; const double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a839f72e14228e9601221ba744c90ee15">get_span</a> () const</td></tr>
-<tr class="memitem:a66032e9d0aab8becd38fe458335acd7b" id="r_a66032e9d0aab8becd38fe458335acd7b"><td class="memItemLeft" align="right" valign="top">std::span&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66032e9d0aab8becd38fe458335acd7b">get_span</a> ()</td></tr>
-<tr class="memitem:a7fa8a800353bc4fec304ad7365c80c18" id="r_a7fa8a800353bc4fec304ad7365c80c18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fa8a800353bc4fec304ad7365c80c18">update_host_to_compute</a> () const</td></tr>
-<tr class="memitem:aa0291b1774ac1144c8bc77117d5ad8d3" id="r_aa0291b1774ac1144c8bc77117d5ad8d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa0291b1774ac1144c8bc77117d5ad8d3">update_compute_to_host</a> () const</td></tr>
+<tr class="memitem:a6113aa2917ef69b84bfa1556f4bb5806" id="r_a6113aa2917ef69b84bfa1556f4bb5806"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6113aa2917ef69b84bfa1556f4bb5806">EigenKokkosBase</a> (std::size_t n_row, std::size_t n_col)</td></tr>
+<tr class="memitem:a2728c5453338695f66331ae56387fba7" id="r_a2728c5453338695f66331ae56387fba7"><td class="memItemLeft" align="right" valign="top">std::span&lt; const double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2728c5453338695f66331ae56387fba7">get_span</a> () const</td></tr>
+<tr class="memitem:a314d318aa9beadabbf6b413710dfa8ff" id="r_a314d318aa9beadabbf6b413710dfa8ff"><td class="memItemLeft" align="right" valign="top">std::span&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a314d318aa9beadabbf6b413710dfa8ff">get_span</a> ()</td></tr>
+<tr class="memitem:a01bd508477976e135468704b912f3353" id="r_a01bd508477976e135468704b912f3353"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01bd508477976e135468704b912f3353">update_host_to_compute</a> () const</td></tr>
+<tr class="memitem:af03ed983178ca04f6217d47fd273b5f3" id="r_af03ed983178ca04f6217d47fd273b5f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af03ed983178ca04f6217d47fd273b5f3">update_compute_to_host</a> () const</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a751cf2d0a89e435181ad5a10f961990c" id="r_a751cf2d0a89e435181ad5a10f961990c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a8f93905b8ed2a42f318c4ff2d74483e8">HostView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a751cf2d0a89e435181ad5a10f961990c">host</a></td></tr>
-<tr class="memitem:a0e64bcacef6bef97c2700d8e373bec31" id="r_a0e64bcacef6bef97c2700d8e373bec31"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a41385917f940b6a46881fbe5a5085f9b">ComputeView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e64bcacef6bef97c2700d8e373bec31">compute</a></td></tr>
-<tr class="memitem:ad64aa364243cee9ab4136b1b065ab426" id="r_ad64aa364243cee9ab4136b1b065ab426"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#afd988d66179bb9454150fc993b44e907">EigenMatrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad64aa364243cee9ab4136b1b065ab426">eigen_data</a></td></tr>
+<tr class="memitem:a79ca6a3afa7adecd86ed9f160017c978" id="r_a79ca6a3afa7adecd86ed9f160017c978"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0e233b2fa796cfa9f74a9e78cc3b87f6">HostView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79ca6a3afa7adecd86ed9f160017c978">host</a></td></tr>
+<tr class="memitem:a2b0d963d29978defa493e1ea6282fc64" id="r_a2b0d963d29978defa493e1ea6282fc64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a85b1ceea9e8c2fa8e9c86f51217e720f">ComputeView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b0d963d29978defa493e1ea6282fc64">compute</a></td></tr>
+<tr class="memitem:addd943f9b3b02aaf669b21e547aaa86c" id="r_addd943f9b3b02aaf669b21e547aaa86c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#af9a8d447dad21bd4c82c38a96273f341">EigenMatrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addd943f9b3b02aaf669b21e547aaa86c">eigen_data</a></td></tr>
 </table>
 <a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
-<a id="a41385917f940b6a46881fbe5a5085f9b" name="a41385917f940b6a46881fbe5a5085f9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41385917f940b6a46881fbe5a5085f9b">&#9670;&#160;</a></span>ComputeView</h2>
+<a id="a85b1ceea9e8c2fa8e9c86f51217e720f" name="a85b1ceea9e8c2fa8e9c86f51217e720f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85b1ceea9e8c2fa8e9c86f51217e720f">&#9670;&#160;</a></span>ComputeView</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> ftype&gt; </div>
+template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> float_type&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, ftype &gt;::ComputeView</td>
+          <td class="memname">using <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, float_type &gt;::ComputeView</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> </div>
 <div class="line">      KokkosScalarMatrix&lt;ComputeSpace,</div>
 <div class="line">                         EigenLayout,</div>
-<div class="line">                         ftype,</div>
+<div class="line">                         float_type,</div>
 <div class="line">                         Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;</div>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="afd988d66179bb9454150fc993b44e907" name="afd988d66179bb9454150fc993b44e907"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd988d66179bb9454150fc993b44e907">&#9670;&#160;</a></span>EigenMatrix</h2>
+<a id="af9a8d447dad21bd4c82c38a96273f341" name="af9a8d447dad21bd4c82c38a96273f341"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9a8d447dad21bd4c82c38a96273f341">&#9670;&#160;</a></span>EigenMatrix</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> ftype&gt; </div>
+template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> float_type&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, ftype &gt;::EigenMatrix = MatrixType&lt;EigenLayout, ftype&gt;</td>
+          <td class="memname">using <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, float_type &gt;::EigenMatrix = MatrixType&lt;EigenLayout, float_type&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a8f93905b8ed2a42f318c4ff2d74483e8" name="a8f93905b8ed2a42f318c4ff2d74483e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8f93905b8ed2a42f318c4ff2d74483e8">&#9670;&#160;</a></span>HostView</h2>
+<a id="a0e233b2fa796cfa9f74a9e78cc3b87f6" name="a0e233b2fa796cfa9f74a9e78cc3b87f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e233b2fa796cfa9f74a9e78cc3b87f6">&#9670;&#160;</a></span>HostView</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> ftype&gt; </div>
+template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> float_type&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, ftype &gt;::HostView = KokkosScalarMatrix&lt;HostSpace, EigenLayout, ftype&gt;</td>
+          <td class="memname">using <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, float_type &gt;::HostView = KokkosScalarMatrix&lt;HostSpace, EigenLayout, float_type&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -149,19 +149,19 @@ template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">
 </div>
 </div>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a3d8b6236566f8d8ab7ed30499d0981eb" name="a3d8b6236566f8d8ab7ed30499d0981eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d8b6236566f8d8ab7ed30499d0981eb">&#9670;&#160;</a></span>EigenKokkosBase()</h2>
+<a id="a6113aa2917ef69b84bfa1556f4bb5806" name="a6113aa2917ef69b84bfa1556f4bb5806"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6113aa2917ef69b84bfa1556f4bb5806">&#9670;&#160;</a></span>EigenKokkosBase()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> ftype&gt; </div>
+template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> float_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, ftype &gt;<a class="el" href="structEigenKokkosBase.html">::EigenKokkosBase</a> </td>
+          <td class="memname"><a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, float_type &gt;<a class="el" href="structEigenKokkosBase.html">::EigenKokkosBase</a> </td>
           <td>(</td>
           <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_row</em></span>, </td>
         </tr>
@@ -181,19 +181,19 @@ template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a66032e9d0aab8becd38fe458335acd7b" name="a66032e9d0aab8becd38fe458335acd7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66032e9d0aab8becd38fe458335acd7b">&#9670;&#160;</a></span>get_span() <span class="overload">[1/2]</span></h2>
+<a id="a314d318aa9beadabbf6b413710dfa8ff" name="a314d318aa9beadabbf6b413710dfa8ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a314d318aa9beadabbf6b413710dfa8ff">&#9670;&#160;</a></span>get_span() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> ftype&gt; </div>
+template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> float_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::span&lt; double &gt; <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, ftype &gt;::get_span </td>
+          <td class="memname">std::span&lt; double &gt; <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, float_type &gt;::get_span </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -208,19 +208,19 @@ template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">
 
 </div>
 </div>
-<a id="a839f72e14228e9601221ba744c90ee15" name="a839f72e14228e9601221ba744c90ee15"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a839f72e14228e9601221ba744c90ee15">&#9670;&#160;</a></span>get_span() <span class="overload">[2/2]</span></h2>
+<a id="a2728c5453338695f66331ae56387fba7" name="a2728c5453338695f66331ae56387fba7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2728c5453338695f66331ae56387fba7">&#9670;&#160;</a></span>get_span() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> ftype&gt; </div>
+template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> float_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::span&lt; const double &gt; <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, ftype &gt;::get_span </td>
+          <td class="memname">std::span&lt; const double &gt; <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, float_type &gt;::get_span </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -235,19 +235,19 @@ template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">
 
 </div>
 </div>
-<a id="aa0291b1774ac1144c8bc77117d5ad8d3" name="aa0291b1774ac1144c8bc77117d5ad8d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0291b1774ac1144c8bc77117d5ad8d3">&#9670;&#160;</a></span>update_compute_to_host()</h2>
+<a id="af03ed983178ca04f6217d47fd273b5f3" name="af03ed983178ca04f6217d47fd273b5f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af03ed983178ca04f6217d47fd273b5f3">&#9670;&#160;</a></span>update_compute_to_host()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> ftype&gt; </div>
+template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> float_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, ftype &gt;::update_compute_to_host </td>
+          <td class="memname">void <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, float_type &gt;::update_compute_to_host </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -262,19 +262,19 @@ template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">
 
 </div>
 </div>
-<a id="a7fa8a800353bc4fec304ad7365c80c18" name="a7fa8a800353bc4fec304ad7365c80c18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7fa8a800353bc4fec304ad7365c80c18">&#9670;&#160;</a></span>update_host_to_compute()</h2>
+<a id="a01bd508477976e135468704b912f3353" name="a01bd508477976e135468704b912f3353"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01bd508477976e135468704b912f3353">&#9670;&#160;</a></span>update_host_to_compute()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> ftype&gt; </div>
+template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> float_type&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, ftype &gt;::update_host_to_compute </td>
+          <td class="memname">void <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, float_type &gt;::update_host_to_compute </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -290,48 +290,48 @@ template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="a0e64bcacef6bef97c2700d8e373bec31" name="a0e64bcacef6bef97c2700d8e373bec31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e64bcacef6bef97c2700d8e373bec31">&#9670;&#160;</a></span>compute</h2>
+<a id="a2b0d963d29978defa493e1ea6282fc64" name="a2b0d963d29978defa493e1ea6282fc64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b0d963d29978defa493e1ea6282fc64">&#9670;&#160;</a></span>compute</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> ftype&gt; </div>
+template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> float_type&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a41385917f940b6a46881fbe5a5085f9b">ComputeView</a> <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, ftype &gt;::compute</td>
+          <td class="memname"><a class="el" href="#a85b1ceea9e8c2fa8e9c86f51217e720f">ComputeView</a> <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, float_type &gt;::compute</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ad64aa364243cee9ab4136b1b065ab426" name="ad64aa364243cee9ab4136b1b065ab426"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad64aa364243cee9ab4136b1b065ab426">&#9670;&#160;</a></span>eigen_data</h2>
+<a id="addd943f9b3b02aaf669b21e547aaa86c" name="addd943f9b3b02aaf669b21e547aaa86c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addd943f9b3b02aaf669b21e547aaa86c">&#9670;&#160;</a></span>eigen_data</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> ftype&gt; </div>
+template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> float_type&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#afd988d66179bb9454150fc993b44e907">EigenMatrix</a> <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, ftype &gt;::eigen_data</td>
+          <td class="memname"><a class="el" href="#af9a8d447dad21bd4c82c38a96273f341">EigenMatrix</a> <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, float_type &gt;::eigen_data</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a751cf2d0a89e435181ad5a10f961990c" name="a751cf2d0a89e435181ad5a10f961990c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a751cf2d0a89e435181ad5a10f961990c">&#9670;&#160;</a></span>host</h2>
+<a id="a79ca6a3afa7adecd86ed9f160017c978" name="a79ca6a3afa7adecd86ed9f160017c978"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79ca6a3afa7adecd86ed9f160017c978">&#9670;&#160;</a></span>host</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> ftype&gt; </div>
+template&lt;int EigenLayout, <a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> float_type&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a8f93905b8ed2a42f318c4ff2d74483e8">HostView</a> <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, ftype &gt;::host</td>
+          <td class="memname"><a class="el" href="#a0e233b2fa796cfa9f74a9e78cc3b87f6">HostView</a> <a class="el" href="structEigenKokkosBase.html">EigenKokkosBase</a>&lt; EigenLayout, float_type &gt;::host</td>
         </tr>
       </table>
 </div><div class="memdoc">

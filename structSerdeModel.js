@@ -11,11 +11,11 @@ var structSerdeModel =
       [ "c", "structSerdeModel.html#a5eaf5f3d6b92e70c34174c338e35cc34a4a8a08f09d37b73795649038408b5f33", null ],
       [ "COUNT", "structSerdeModel.html#a5eaf5f3d6b92e70c34174c338e35cc34a4905ac9d6a22bdfc1ae096094ce6248d", null ]
     ] ],
-    [ "division", "structSerdeModel.html#a9a0e9ac0aa96fb1e97083d0e4d13b795", null ],
+    [ "division", "structSerdeModel.html#a7ce2717cfd5fd824c3dc8039308912e4", null ],
     [ "get_bounds", "structSerdeModel.html#a994d771f7a548cb98afd8afe39214daf", null ],
-    [ "init", "structSerdeModel.html#a5dda0a6e11d162aaba4e590c3adb9cff", null ],
+    [ "init", "structSerdeModel.html#aa1132555b0efc5add2bac13cb735092a", null ],
     [ "mass", "structSerdeModel.html#af3a9ddb352898e72e00a7786bfe2c78a", null ],
-    [ "update", "structSerdeModel.html#a5f486dce030633106fc853435caccc7a", null ],
+    [ "update", "structSerdeModel.html#a927c6afc6db918c548758f8868f0d68d", null ],
     [ "a_i", "structSerdeModel.html#afd6fbda8f9d78d6aeabc67fc4aa57260", null ],
     [ "n_var", "structSerdeModel.html#a5537938fc2b785951f1a1e33a49c721d", null ],
     [ "name", "structSerdeModel.html#a476f20d53fd965787e9846c6a0d5137b", null ]

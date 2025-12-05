@@ -11,6 +11,8 @@ var namespaceMC =
     [ "ComputeSpace", "namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f", null ],
     [ "ContributionView", "namespaceMC.html#aa1b418b6e151ebc14d95164d7370e35b", null ],
     [ "DynParticlesModel", "namespaceMC.html#ae9182f33a07f97d9cc3851cf47529a04", null ],
+    [ "gen_pool_type", "namespaceMC.html#afa8e42d43480d68f4616db1b86ffcc32", null ],
+    [ "generator_type", "namespaceMC.html#a938e5733c929dff0c4ac9f89df91a5cb", null ],
     [ "HostSpace", "namespaceMC.html#a1f3a005c06fe6a41d663e36a29667e0a", null ],
     [ "KernelConcentrationType", "namespaceMC.html#ac4db0c9d5b74f4c59a2ffcc7374cba1c", null ],
     [ "LocalConcentration", "namespaceMC.html#aad69f7f73ef6a017ee86ca89451a6271", null ],
@@ -22,7 +24,7 @@ var namespaceMC =
     [ "ParticlesModel", "namespaceMC.html#ae36f8da8fd9f9f88aa5cff4f307cdc68", null ],
     [ "ParticleStatus", "namespaceMC.html#a2193e5e54bfdf96357f01505831e1072", null ],
     [ "ParticleWeigths", "namespaceMC.html#a193bca8fb4700ce9ddd472c1929e5ac1", null ],
-    [ "pool_type", "namespaceMC.html#a1ab210ba6b1f8813de78fd267390fe0a", null ],
+    [ "pool_type", "namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5", null ],
     [ "PropertySubViewtype", "namespaceMC.html#a20fc03265c23b32637770a775864c720", null ],
     [ "restrict_mt", "namespaceMC.html#a427e7af7e25d874236fc70664ebfd0d6", null ],
     [ "EventType", "namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8", [

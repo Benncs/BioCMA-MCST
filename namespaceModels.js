@@ -18,7 +18,7 @@ var namespaceModels =
     [ "almost_equal", "namespaceModels.html#a960cb54a05fd1b8376bd187b46297140", null ],
     [ "c_linear_density", "namespaceModels.html#ae070357c43b64436202145d812e1e05c", null ],
     [ "check_div", "namespaceModels.html#a91f8e773246cdd315aada1f72f97983d", null ],
-    [ "check_probability_division", "namespaceModels.html#a4232bad81819956cdafafb24d9b6bc06", null ],
+    [ "check_probability_division", "namespaceModels.html#a029b4574d8251a785c7cdd89348342c2", null ],
     [ "f_saturation", "namespaceModels.html#a98711ac2ebacdd7d1adea1524f8fc43b", null ],
     [ "get_model_configuration", "namespaceModels.html#a30b98c5c9b1cc55a8c52a18fedcd720e", null ],
     [ "get_model_configuration", "namespaceModels.html#a6f6f1ff3a805e2d4c9435bb26e8afe20", null ],

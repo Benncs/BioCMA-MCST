@@ -1,14 +1,14 @@
 var structEigenKokkosBase =
 [
-    [ "ComputeView", "structEigenKokkosBase.html#a41385917f940b6a46881fbe5a5085f9b", null ],
-    [ "EigenMatrix", "structEigenKokkosBase.html#afd988d66179bb9454150fc993b44e907", null ],
-    [ "HostView", "structEigenKokkosBase.html#a8f93905b8ed2a42f318c4ff2d74483e8", null ],
-    [ "EigenKokkosBase", "structEigenKokkosBase.html#a3d8b6236566f8d8ab7ed30499d0981eb", null ],
-    [ "get_span", "structEigenKokkosBase.html#a66032e9d0aab8becd38fe458335acd7b", null ],
-    [ "get_span", "structEigenKokkosBase.html#a839f72e14228e9601221ba744c90ee15", null ],
-    [ "update_compute_to_host", "structEigenKokkosBase.html#aa0291b1774ac1144c8bc77117d5ad8d3", null ],
-    [ "update_host_to_compute", "structEigenKokkosBase.html#a7fa8a800353bc4fec304ad7365c80c18", null ],
-    [ "compute", "structEigenKokkosBase.html#a0e64bcacef6bef97c2700d8e373bec31", null ],
-    [ "eigen_data", "structEigenKokkosBase.html#ad64aa364243cee9ab4136b1b065ab426", null ],
-    [ "host", "structEigenKokkosBase.html#a751cf2d0a89e435181ad5a10f961990c", null ]
+    [ "ComputeView", "structEigenKokkosBase.html#a85b1ceea9e8c2fa8e9c86f51217e720f", null ],
+    [ "EigenMatrix", "structEigenKokkosBase.html#af9a8d447dad21bd4c82c38a96273f341", null ],
+    [ "HostView", "structEigenKokkosBase.html#a0e233b2fa796cfa9f74a9e78cc3b87f6", null ],
+    [ "EigenKokkosBase", "structEigenKokkosBase.html#a6113aa2917ef69b84bfa1556f4bb5806", null ],
+    [ "get_span", "structEigenKokkosBase.html#a314d318aa9beadabbf6b413710dfa8ff", null ],
+    [ "get_span", "structEigenKokkosBase.html#a2728c5453338695f66331ae56387fba7", null ],
+    [ "update_compute_to_host", "structEigenKokkosBase.html#af03ed983178ca04f6217d47fd273b5f3", null ],
+    [ "update_host_to_compute", "structEigenKokkosBase.html#a01bd508477976e135468704b912f3353", null ],
+    [ "compute", "structEigenKokkosBase.html#a2b0d963d29978defa493e1ea6282fc64", null ],
+    [ "eigen_data", "structEigenKokkosBase.html#addd943f9b3b02aaf669b21e547aaa86c", null ],
+    [ "host", "structEigenKokkosBase.html#a79ca6a3afa7adecd86ed9f160017c978", null ]
 ];

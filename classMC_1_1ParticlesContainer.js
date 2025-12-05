@@ -18,7 +18,7 @@ var classMC_1_1ParticlesContainer =
     [ "get_contributions", "classMC_1_1ParticlesContainer.html#a7f528da6440de7bfb8c5d33b36040fbd", null ],
     [ "get_inactive", "classMC_1_1ParticlesContainer.html#a6b2d263bc0d301abbeae8519797c1a4c", null ],
     [ "get_weight", "classMC_1_1ParticlesContainer.html#aa2d3ed66b206a8c7fbad9acb23b5b878", null ],
-    [ "handle_division", "classMC_1_1ParticlesContainer.html#a5d2f244aefe3e55bcebe1d3d8bf94ca2", null ],
+    [ "handle_division", "classMC_1_1ParticlesContainer.html#a3ad0f53899edc9c8343ca1122d722c29", null ],
     [ "load", "classMC_1_1ParticlesContainer.html#adae9af7cbb629530927d504f5fe75c90", null ],
     [ "merge_buffer", "classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565", null ],
     [ "n_particles", "classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f", null ],

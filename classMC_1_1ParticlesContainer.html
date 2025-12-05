@@ -103,8 +103,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7f528da6440de7bfb8c5d33b36040fbd" id="r_a7f528da6440de7bfb8c5d33b36040fbd"><td class="memTemplParams" colspan="2">template&lt;typename CviewType&gt; </td></tr>
 <tr class="memitem:a7f528da6440de7bfb8c5d33b36040fbd template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f528da6440de7bfb8c5d33b36040fbd">get_contributions</a> (const std::size_t idx, const CviewType &amp;contributions) const</td></tr>
 <tr class="memdesc:a7f528da6440de7bfb8c5d33b36040fbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the contribution if particle at index idx.  <br /></td></tr>
-<tr class="memitem:a5d2f244aefe3e55bcebe1d3d8bf94ca2" id="r_a5d2f244aefe3e55bcebe1d3d8bf94ca2"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d2f244aefe3e55bcebe1d3d8bf94ca2">handle_division</a> (const <a class="el" href="classMC_1_1KPRNG.html#a762b10c38f7b947b5698d16cbbb008d7">MC::KPRNG::pool_type</a> &amp;random_pool, std::size_t idx1) const</td></tr>
-<tr class="memdesc:a5d2f244aefe3e55bcebe1d3d8bf94ca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to spawn a new particle by performing division on the specified particle.  <br /></td></tr>
+<tr class="memitem:a3ad0f53899edc9c8343ca1122d722c29" id="r_a3ad0f53899edc9c8343ca1122d722c29"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ad0f53899edc9c8343ca1122d722c29">handle_division</a> (const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;random_pool, std::size_t idx1) const</td></tr>
+<tr class="memdesc:a3ad0f53899edc9c8343ca1122d722c29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to spawn a new particle by performing division on the specified particle.  <br /></td></tr>
 <tr class="memitem:aa2d3ed66b206a8c7fbad9acb23b5b878" id="r_aa2d3ed66b206a8c7fbad9acb23b5b878"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2d3ed66b206a8c7fbad9acb23b5b878">get_weight</a> (std::size_t idx) const</td></tr>
 <tr class="memdesc:aa2d3ed66b206a8c7fbad9acb23b5b878"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the particle weight.  <br /></td></tr>
 <tr class="memitem:a25d64f06c6f66817bc15bac225369a63" id="r_a25d64f06c6f66817bc15bac225369a63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25d64f06c6f66817bc15bac225369a63">force_remove_dead</a> ()</td></tr>
@@ -733,8 +733,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a5d2f244aefe3e55bcebe1d3d8bf94ca2" name="a5d2f244aefe3e55bcebe1d3d8bf94ca2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d2f244aefe3e55bcebe1d3d8bf94ca2">&#9670;&#160;</a></span>handle_division()</h2>
+<a id="a3ad0f53899edc9c8343ca1122d722c29" name="a3ad0f53899edc9c8343ca1122d722c29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ad0f53899edc9c8343ca1122d722c29">&#9670;&#160;</a></span>handle_division()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -747,7 +747,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
         <tr>
           <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::handle_division </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classMC_1_1KPRNG.html#a762b10c38f7b947b5698d16cbbb008d7">MC::KPRNG::pool_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>random_pool</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>random_pool</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

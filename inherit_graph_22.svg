@@ -14,7 +14,7 @@
 <g id="a_Node000000"><a xlink:href="structEigenKokkosBase.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="160,-29 0,-29 0,0 160,0 160,-29"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">EigenKokkosBase&lt; EigenLayout,</text>
-<text xml:space="preserve" text-anchor="middle" x="80" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00"> ftype &gt;</text>
+<text xml:space="preserve" text-anchor="middle" x="80" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00"> float_type &gt;</text>
 </a>
 </g>
 </g>

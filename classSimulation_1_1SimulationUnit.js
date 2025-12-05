@@ -44,6 +44,7 @@ var classSimulation_1_1SimulationUnit =
     [ "const_number_simulation", "classSimulation_1_1SimulationUnit.html#a448192ce085c5d0d5e71875a888e99b8", null ],
     [ "contribs_scatter", "classSimulation_1_1SimulationUnit.html#afcb68150cb8bd8788d31a3d1c54271df", null ],
     [ "end_time", "classSimulation_1_1SimulationUnit.html#a9e33559e309a9507b40b06c2209e1005", null ],
+    [ "f_reaction", "classSimulation_1_1SimulationUnit.html#a2d07d17c1d306d7808a51c812d5bcdd9", null ],
     [ "feed", "classSimulation_1_1SimulationUnit.html#a2a7c5c496164e443222bc54de1edab70", null ],
     [ "gas_scalar", "classSimulation_1_1SimulationUnit.html#a940ea662073390ec7e35866a822bd2e6", null ],
     [ "is_two_phase_flow", "classSimulation_1_1SimulationUnit.html#aaff5b41aa114de855a6296c31b47d474", null ],

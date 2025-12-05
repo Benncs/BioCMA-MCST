@@ -13,10 +13,10 @@ var structModels_1_1SimpleModel =
       [ "COUNT", "structModels_1_1SimpleModel.html#a7dd976c2e0986c61562d35e04d614cd6a4905ac9d6a22bdfc1ae096094ce6248d", null ]
     ] ],
     [ "contribution", "structModels_1_1SimpleModel.html#aa737402958e3f99134b0d7c2032caec8", null ],
-    [ "division", "structModels_1_1SimpleModel.html#a0c6a28fd790efe9193d1a3973f7239d7", null ],
-    [ "init", "structModels_1_1SimpleModel.html#a50c1e5de1921c8323b707df3c31834e5", null ],
+    [ "division", "structModels_1_1SimpleModel.html#a9f82fe106328b92b850fc2b432b19f84", null ],
+    [ "init", "structModels_1_1SimpleModel.html#ab79589a24572e4a5c97df8d053b1d0fe", null ],
     [ "mass", "structModels_1_1SimpleModel.html#a3275b23fdc1fd4309c896e24a1d3a45e", null ],
-    [ "update", "structModels_1_1SimpleModel.html#af7aeaedcc2c7fa2ecc72e1de31067c15", null ],
+    [ "update", "structModels_1_1SimpleModel.html#a912d0c81d46afd46b2ee3cff28a75fd1", null ],
     [ "d_m", "structModels_1_1SimpleModel.html#a85a67b1098b4a3a1fd56791dff7d0737", null ],
     [ "frequency_division", "structModels_1_1SimpleModel.html#a1ed4b66aa5212b759b0f1c105366ea91", null ],
     [ "l_c_m", "structModels_1_1SimpleModel.html#aace55d5d2b86f52f2ea31dcf11c2ae10", null ],

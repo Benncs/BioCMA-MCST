@@ -19,7 +19,7 @@ var classCore_1_1GlobalInitialiser =
     [ "host_init_state", "classCore_1_1GlobalInitialiser.html#a36655d4a10ebb302f64512e2cda8649d", null ],
     [ "init_feed", "classCore_1_1GlobalInitialiser.html#aefbbc9e413134e0e080df2218316fe63", null ],
     [ "init_monte_carlo", "classCore_1_1GlobalInitialiser.html#a9b38d15538796d9cc115211890a6c081", null ],
-    [ "init_mtr_model", "classCore_1_1GlobalInitialiser.html#a8b048fcce504154ce95e4b5a92689d5e", null ],
+    [ "init_mtr_model", "classCore_1_1GlobalInitialiser.html#adf72113e43a445c6afdb993c0fadeeca", null ],
     [ "init_scalar", "classCore_1_1GlobalInitialiser.html#aa84a61b25f475380b38306232e25aff6", null ],
     [ "init_scalar", "classCore_1_1GlobalInitialiser.html#a6c679d3dc5f4ee98dfd9ed4c35092f1c", null ],
     [ "init_simulation", "classCore_1_1GlobalInitialiser.html#a00d0e7a7d549bf06886dfc3ba9de3e3d", null ],

@@ -22,7 +22,7 @@ var hierarchy =
     [ "Simulation::Feed::DelayedConstant", "structSimulation_1_1Feed_1_1DelayedConstant.html", null ],
     [ "Simulation::Dimensions", "structSimulation_1_1Dimensions.html", null ],
     [ "DynamicDefaultModel", "structDynamicDefaultModel.html", null ],
-    [ "EigenKokkosBase< EigenLayout, ftype >", "structEigenKokkosBase.html", null ],
+    [ "EigenKokkosBase< EigenLayout, float_type >", "structEigenKokkosBase.html", null ],
     [ "std::enable_shared_from_this", null, [
       [ "IO::RedirectGuard", "classIO_1_1RedirectGuard.html", null ]
     ] ],

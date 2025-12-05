@@ -23,7 +23,7 @@
 <g id="a_Node000002"><a xlink:href="structEigenKokkosBase.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="157.75,-76 0,-76 0,-47 157.75,-47 157.75,-76"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-62.5" font-family="Helvetica,sans-Serif" font-size="10.00">EigenKokkosBase&lt; EigenLayout</text>
-<text xml:space="preserve" text-anchor="middle" x="78.88" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00">Left, ftype &gt;&lt; double &gt;</text>
+<text xml:space="preserve" text-anchor="middle" x="78.88" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00">Left, floatype &gt;&lt; double &gt;</text>
 </a>
 </g>
 </g>
@@ -43,7 +43,7 @@
 <g id="a_Node000003"><a xlink:href="structEigenKokkosBase.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="157.75,-29 0,-29 0,0 157.75,0 157.75,-29"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">EigenKokkosBase&lt; EigenLayout</text>
-<text xml:space="preserve" text-anchor="middle" x="78.88" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">Right, ftype &gt;&lt; double &gt;</text>
+<text xml:space="preserve" text-anchor="middle" x="78.88" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">Right, floatype &gt;&lt; double &gt;</text>
 </a>
 </g>
 </g>

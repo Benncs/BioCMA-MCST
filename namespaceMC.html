@@ -103,6 +103,10 @@ Typedefs</h2></td></tr>
 <tr class="memitem:ae9182f33a07f97d9cc3851cf47529a04 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9182f33a07f97d9cc3851cf47529a04">DynParticlesModel</a> = Kokkos::View&lt;F**, Kokkos::LayoutRight&gt;</td></tr>
 <tr class="memitem:aac73f6850f68fa6ced0d771f20a4af0f" id="r_aac73f6850f68fa6ced0d771f20a4af0f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a> = Kokkos::DefaultExecutionSpace</td></tr>
 <tr class="memitem:a1f3a005c06fe6a41d663e36a29667e0a" id="r_a1f3a005c06fe6a41d663e36a29667e0a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f3a005c06fe6a41d663e36a29667e0a">HostSpace</a> = Kokkos::DefaultHostExecutionSpace</td></tr>
+<tr class="memitem:afa8e42d43480d68f4616db1b86ffcc32" id="r_afa8e42d43480d68f4616db1b86ffcc32"><td class="memTemplParams" colspan="2">template&lt;typename ExecSpace&gt; </td></tr>
+<tr class="memitem:afa8e42d43480d68f4616db1b86ffcc32 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa8e42d43480d68f4616db1b86ffcc32">gen_pool_type</a> = Kokkos::Random_XorShift1024_Pool&lt;ExecSpace&gt;</td></tr>
+<tr class="memitem:a7e53098724df8c06b90824f1567f6bc5" id="r_a7e53098724df8c06b90824f1567f6bc5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e53098724df8c06b90824f1567f6bc5">pool_type</a> = <a class="el" href="#afa8e42d43480d68f4616db1b86ffcc32">gen_pool_type</a>&lt;Kokkos::DefaultExecutionSpace&gt;</td></tr>
+<tr class="memitem:a938e5733c929dff0c4ac9f89df91a5cb" id="r_a938e5733c929dff0c4ac9f89df91a5cb"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a938e5733c929dff0c4ac9f89df91a5cb">generator_type</a> = pool_type::generator_type</td></tr>
 <tr class="memitem:a427e7af7e25d874236fc70664ebfd0d6" id="r_a427e7af7e25d874236fc70664ebfd0d6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a427e7af7e25d874236fc70664ebfd0d6">restrict_mt</a> = Kokkos::MemoryTraits&lt;Kokkos::MemoryTraitsFlags::Restrict&gt;</td></tr>
 <tr class="memitem:a404d6db92035cbc2c86cbda6d98b6d8d" id="r_a404d6db92035cbc2c86cbda6d98b6d8d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a404d6db92035cbc2c86cbda6d98b6d8d">ParticlePositions</a> = Kokkos::View&lt;uint64_t*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
 <tr class="memitem:a2193e5e54bfdf96357f01505831e1072" id="r_a2193e5e54bfdf96357f01505831e1072"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2193e5e54bfdf96357f01505831e1072">ParticleStatus</a> = Kokkos::View&lt;<a class="el" href="#a69467f7d54b0dcb1a4e176fe425ffb7b">Status</a>*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
@@ -117,7 +121,6 @@ Typedefs</h2></td></tr>
 <tr class="memitem:aad69f7f73ef6a017ee86ca89451a6271" id="r_aad69f7f73ef6a017ee86ca89451a6271"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad69f7f73ef6a017ee86ca89451a6271">LocalConcentration</a></td></tr>
 <tr class="memitem:ad31fce592f5fd9b873839781863419d3" id="r_ad31fce592f5fd9b873839781863419d3"><td class="memTemplParams" colspan="2">template&lt;typename Space&gt; </td></tr>
 <tr class="memitem:ad31fce592f5fd9b873839781863419d3 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad31fce592f5fd9b873839781863419d3">NeighborsView</a></td></tr>
-<tr class="memitem:a1ab210ba6b1f8813de78fd267390fe0a" id="r_a1ab210ba6b1f8813de78fd267390fe0a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -149,8 +152,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a43055ea3fdccfa29c5095b5d37bec620 template"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MonteCarloUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43055ea3fdccfa29c5095b5d37bec620">init</a> (const std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; &amp;_logger, uint64_t n_particles, std::size_t n_samples, std::span&lt; double &gt; volumes, std::span&lt; const size_t &gt; neighbors, bool uniform_mc_init, double &amp;total_mass)</td></tr>
 <tr class="memdesc:a43055ea3fdccfa29c5095b5d37bec620"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to initialize a <a class="el" href="structMC_1_1MonteCarloUnit.html" title="General-purpose Monte Carlo unit to carry out simulations.">MonteCarloUnit</a>.  <br /></td></tr>
 <tr class="memitem:ac9b6a65d70e4c5007f4bc908509924a0" id="r_ac9b6a65d70e4c5007f4bc908509924a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9b6a65d70e4c5007f4bc908509924a0">post_init_weight</a> (std::unique_ptr&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MonteCarloUnit</a> &gt; &amp;unit, double x0, double total_mass)</td></tr>
-<tr class="memitem:a6734cec020a2315d36542faad86c9125" id="r_a6734cec020a2315d36542faad86c9125"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6734cec020a2315d36542faad86c9125">get_pool</a> (std::size_t seed=0)</td></tr>
-<tr class="memitem:a2bd2179d1f9faf98a60f1dedfac0fc83" id="r_a2bd2179d1f9faf98a60f1dedfac0fc83"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bd2179d1f9faf98a60f1dedfac0fc83">sample_random_variables</a> (const <a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a> &amp;pool, auto &amp;&amp;functor)</td></tr>
+<tr class="memitem:a6734cec020a2315d36542faad86c9125" id="r_a6734cec020a2315d36542faad86c9125"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a7e53098724df8c06b90824f1567f6bc5">pool_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6734cec020a2315d36542faad86c9125">get_pool</a> (std::size_t seed=0)</td></tr>
+<tr class="memitem:a2bd2179d1f9faf98a60f1dedfac0fc83" id="r_a2bd2179d1f9faf98a60f1dedfac0fc83"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bd2179d1f9faf98a60f1dedfac0fc83">sample_random_variables</a> (const <a class="el" href="#a7e53098724df8c06b90824f1567f6bc5">pool_type</a> &amp;pool, auto &amp;&amp;functor)</td></tr>
 <tr class="memitem:a67a8a8fb99f617a67dd3702cd0f0b47f" id="r_a67a8a8fb99f617a67dd3702cd0f0b47f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMC_1_1RuntimeParameters.html">RuntimeParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67a8a8fb99f617a67dd3702cd0f0b47f">load_tuning_constant</a> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
@@ -209,6 +212,36 @@ template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType
 
 </div>
 </div>
+<a id="afa8e42d43480d68f4616db1b86ffcc32" name="afa8e42d43480d68f4616db1b86ffcc32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa8e42d43480d68f4616db1b86ffcc32">&#9670;&#160;</a></span>gen_pool_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ExecSpace&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#afa8e42d43480d68f4616db1b86ffcc32">MC::gen_pool_type</a> = Kokkos::Random_XorShift1024_Pool&lt;ExecSpace&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a938e5733c929dff0c4ac9f89df91a5cb" name="a938e5733c929dff0c4ac9f89df91a5cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a938e5733c929dff0c4ac9f89df91a5cb">&#9670;&#160;</a></span>generator_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a938e5733c929dff0c4ac9f89df91a5cb">MC::generator_type</a> = pool_type::generator_type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a1f3a005c06fe6a41d663e36a29667e0a" name="a1f3a005c06fe6a41d663e36a29667e0a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1f3a005c06fe6a41d663e36a29667e0a">&#9670;&#160;</a></span>HostSpace</h2>
 
@@ -239,7 +272,7 @@ template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType
 <div class="line">                   Kokkos::LayoutLeft,</div>
 <div class="line">                   <a class="code hl_typedef" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>,</div>
 <div class="line">                   Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;</div>
-<div class="ttc" id="anamespaceMC_html_aac73f6850f68fa6ced0d771f20a4af0f"><div class="ttname"><a href="#aac73f6850f68fa6ced0d771f20a4af0f">MC::ComputeSpace</a></div><div class="ttdeci">Kokkos::DefaultExecutionSpace ComputeSpace</div><div class="ttdef"><b>Definition</b> alias.hpp:20</div></div>
+<div class="ttc" id="anamespaceMC_html_aac73f6850f68fa6ced0d771f20a4af0f"><div class="ttname"><a href="#aac73f6850f68fa6ced0d771f20a4af0f">MC::ComputeSpace</a></div><div class="ttdeci">Kokkos::DefaultExecutionSpace ComputeSpace</div><div class="ttdef"><b>Definition</b> alias.hpp:21</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -256,7 +289,7 @@ template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> </div>
 <div class="line">      Kokkos::Subview&lt;<a class="code hl_typedef" href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">KernelConcentrationType</a>, int, <span class="keyword">decltype</span>(Kokkos::ALL)&gt;</div>
-<div class="ttc" id="anamespaceMC_html_ac4db0c9d5b74f4c59a2ffcc7374cba1c"><div class="ttname"><a href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">MC::KernelConcentrationType</a></div><div class="ttdeci">Kokkos::View&lt; const double **, Kokkos::LayoutLeft, ComputeSpace, Kokkos::MemoryTraits&lt; Kokkos::RandomAccess &gt; &gt; KernelConcentrationType</div><div class="ttdef"><b>Definition</b> alias.hpp:83</div></div>
+<div class="ttc" id="anamespaceMC_html_ac4db0c9d5b74f4c59a2ffcc7374cba1c"><div class="ttname"><a href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">MC::KernelConcentrationType</a></div><div class="ttdeci">Kokkos::View&lt; const double **, Kokkos::LayoutLeft, ComputeSpace, Kokkos::MemoryTraits&lt; Kokkos::RandomAccess &gt; &gt; KernelConcentrationType</div><div class="ttdef"><b>Definition</b> alias.hpp:90</div></div>
 </div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="example_model_8cxx-example.html#_a3">example_model.cxx</a>.</dd>
 </dl>
 
@@ -391,20 +424,18 @@ template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">Floa
 
 </div>
 </div>
-<a id="a1ab210ba6b1f8813de78fd267390fe0a" name="a1ab210ba6b1f8813de78fd267390fe0a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ab210ba6b1f8813de78fd267390fe0a">&#9670;&#160;</a></span>pool_type</h2>
+<a id="a7e53098724df8c06b90824f1567f6bc5" name="a7e53098724df8c06b90824f1567f6bc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e53098724df8c06b90824f1567f6bc5">&#9670;&#160;</a></span>pool_type</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">MC::pool_type</a></td>
+          <td class="memname">using <a class="el" href="#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> = <a class="el" href="#afa8e42d43480d68f4616db1b86ffcc32">gen_pool_type</a>&lt;Kokkos::DefaultExecutionSpace&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> </div>
-<div class="line">      Kokkos::Random_XorShift1024_Pool&lt;Kokkos::DefaultExecutionSpace&gt;</div>
-</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a0">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a0">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>, and <a class="el" href="example_model_8cxx-example.html#_a1">example_model.cxx</a>.</dd>
 </dl>
 
 </div>
@@ -552,7 +583,7 @@ Here is the caller graph for this function:</div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a> MC::get_pool </td>
+          <td class="memname"><a class="el" href="#a7e53098724df8c06b90824f1567f6bc5">pool_type</a> MC::get_pool </td>
           <td>(</td>
           <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>seed</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span></td><td>)</td>
           <td></td>
@@ -745,7 +776,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">KOKKOS_INLINE_FUNCTION auto MC::sample_random_variables </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="#a1ab210ba6b1f8813de78fd267390fe0a">pool_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>pool</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="#a7e53098724df8c06b90824f1567f6bc5">pool_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>pool</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

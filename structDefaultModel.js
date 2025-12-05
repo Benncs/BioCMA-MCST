@@ -9,11 +9,11 @@ var structDefaultModel =
       [ "a", "structDefaultModel.html#ab3f2cdadb12c73b86d895d60cc36e465a0cc175b9c0f1b6a831c399e269772661", null ]
     ] ],
     [ "contribution", "structDefaultModel.html#a2453a483d8e5b552db78cee53c4e1a53", null ],
-    [ "division", "structDefaultModel.html#aec7ac923869363e0b4614d4dc3b0a5b7", null ],
+    [ "division", "structDefaultModel.html#abe41fd919e80919defb9ae3e97a471ae", null ],
     [ "get_bounds", "structDefaultModel.html#a3efef32df43d577edf410629fe42df74", null ],
-    [ "init", "structDefaultModel.html#a06fabbdf53a9d88026c535d2e11dcf1a", null ],
+    [ "init", "structDefaultModel.html#a691b88fa0387ea9393738b436d70d363", null ],
     [ "mass", "structDefaultModel.html#a73daf991fe2854519c1f3f48ab09fd73", null ],
-    [ "update", "structDefaultModel.html#a3131119ab9892e186e75608304208f17", null ],
+    [ "update", "structDefaultModel.html#af89a904f561cc0b0010bec29e797076b", null ],
     [ "n_var", "structDefaultModel.html#a7cde1229ff5a6d1f3449654f1c8e2f5b", null ],
     [ "name", "structDefaultModel.html#ab5f63244eed53b28fcc6ffcbf3c118bc", null ],
     [ "uniform_weigth", "structDefaultModel.html#a9be4da66649ce790ff5647291dd8582b", null ]

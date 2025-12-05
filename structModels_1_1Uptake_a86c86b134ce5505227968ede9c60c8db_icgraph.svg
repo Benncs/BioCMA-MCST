@@ -104,7 +104,7 @@ var sectionId = 'dynsection-7';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="structModels_1_1TwoMetaNb.html#af87eb2560275107bff615f9a54bfeeda" target="_top" xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="structModels_1_1TwoMetaNb.html#a52a8eff206df7bf87f87eada06a69a6f" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="111.25,-29 0,-29 0,0 111.25,0 111.25,-29"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">Models::TwoMetaNb::</text>
 <text xml:space="preserve" text-anchor="middle" x="55.62" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">update</text>
