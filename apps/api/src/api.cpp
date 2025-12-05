@@ -307,6 +307,15 @@ namespace Api
     {
       udf_handle = opt_udf.gets();
     }
+    else
+    {
+      if (logger)
+      {
+        logger->alert("UDF",
+                      "UDF shared library not found, fallback to default");
+      }
+      params.model_name = "None"; // Fallback
+    }
     if (to_load)
     {
       return apply_load();
