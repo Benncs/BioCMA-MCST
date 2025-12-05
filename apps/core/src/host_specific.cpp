@@ -232,16 +232,12 @@ namespace
 
         if (do_export)
         {
-          // exporter_handler(
-          //     current_time, __loop_counter, simulation, partial_exporter);
-          if (exporter_handler(current_time,
-                               __loop_counter,
-                               simulation,
-                               partial_exporter,
-                               d_transionner))
-          {
-            // local_container._sort(500);
-          }
+
+          auto _ = exporter_handler(current_time,
+                                    __loop_counter,
+                                    simulation,
+                                    partial_exporter,
+                                    d_transionner);
         }
         WAIT_PAYLOAD
 

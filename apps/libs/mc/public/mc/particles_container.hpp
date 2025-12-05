@@ -789,55 +789,6 @@ namespace MC
   template <ModelType M> void ParticlesContainer<M>::_sort(std::size_t n_c)
   {
     (void)n_c;
-    // PROFILE_SECTION("SORT")
-    // // const auto N = n_used_elements;
-    // const int bin_size = 2048;
-
-    // // const auto sn =
-    // //     Kokkos::subview(position, std::pair<int, int>(0,
-    // n_used_elements));
-    // //
-
-    // using ExecSpace = Kokkos::DefaultExecutionSpace;
-    // using view_type = decltype(position);
-    // auto binop = Kokkos::BinOp1D<view_type>(bin_size, 0, n_c);
-
-    // auto sorter = Kokkos::BinSort<view_type, decltype(binop)>(
-    //     ExecSpace(), position, binop, true);
-
-    // sorter.create_permute_vector();
-    // auto perm = sorter.get_permute_vector();
-
-    // auto src_offset = 0;
-    // auto _position = position;
-    // auto _model = model;
-    // auto _status = status;
-
-    // MC::ParticlePositions _tmp_p = Kokkos::create_mirror_view(position);
-    // auto _tmp_m = Kokkos::create_mirror_view(model);
-    // auto _tmp_s = Kokkos::create_mirror_view(status);
-    // Kokkos::parallel_for(
-    //     "ParticlesContainer::sort",
-    //     Kokkos::RangePolicy<>(0, n_allocated_elements),
-    //     KOKKOS_LAMBDA(const int& i) {
-    //       if (perm(i) >= n_used_elements)
-    //       {
-    //         return;
-    //       }
-    //       const auto idx = src_offset + perm(i);
-    //       Kokkos::Impl::CopyOp<decltype(position), decltype(position)>::copy(
-    //           _tmp_p, i, _position, idx);
-
-    //       Kokkos::Impl::CopyOp<decltype(model), decltype(model), 2>::copy(
-    //           _tmp_m, i, _model, idx);
-
-    //       Kokkos::Impl::CopyOp<decltype(status), decltype(status)>::copy(
-    //           _tmp_s, i, _status, idx);
-    //     });
-    // Kokkos::fence();
-    // Kokkos::deep_copy(position, _tmp_p);
-    // Kokkos::deep_copy(model, _tmp_m);
-    // Kokkos::deep_copy(status, _tmp_s);
   }
 
 } // namespace MC
