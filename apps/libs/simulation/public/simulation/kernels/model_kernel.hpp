@@ -112,7 +112,7 @@ namespace Simulation::KernelInline
 
     KOKKOS_INLINE_FUNCTION
     CycleFunctor(MC::ParticlesContainer<M> _particles,
-                 MC::KPRNG::pool_type _random_pool,
+                 MC::pool_type _random_pool,
                  MC::KernelConcentrationType&& _concentrations,
                  MC::ContributionView _contribs_scatter,
                  MC::EventContainer _event)
@@ -261,7 +261,7 @@ namespace Simulation::KernelInline
 
     M::FloatType d_t;
     MC::ParticlesContainer<M> particles;
-    MC::KPRNG::pool_type random_pool;
+    MC::pool_type random_pool;
     MC::KernelConcentrationType concentrations;
     MC::ContributionView contribs_scatter;
     // kernelContribution contribs;

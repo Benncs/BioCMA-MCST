@@ -133,8 +133,7 @@ namespace MC
      * @return `true` if the spawn was successful, `false` otherwise.
      */
     [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
-    handle_division(const MC::KPRNG::pool_type& random_pool,
-                    std::size_t idx1) const;
+    handle_division(const MC::pool_type& random_pool, std::size_t idx1) const;
 
     /**
      * @brief Return the particle weight
@@ -558,8 +557,9 @@ namespace MC
   }
 
   template <ModelType Model>
-  KOKKOS_INLINE_FUNCTION bool ParticlesContainer<Model>::handle_division(
-      const MC::KPRNG::pool_type& random_pool, std::size_t idx1) const
+  KOKKOS_INLINE_FUNCTION bool
+  ParticlesContainer<Model>::handle_division(const MC::pool_type& random_pool,
+                                             std::size_t idx1) const
   {
     if (Kokkos::atomic_load(&buffer_index()) < buffer_model.extent(0))
     {

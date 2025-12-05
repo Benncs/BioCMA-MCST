@@ -140,20 +140,19 @@ namespace Models
       //      Kokkos::printf("[Model]: PRENINIT:END\r\n");
     }
 
-    KOKKOS_INLINE_FUNCTION static void
-    init(const MC::KPRNG::pool_type& random_pool,
-         std::size_t idx,
-         const SelfParticle& arr);
+    KOKKOS_INLINE_FUNCTION static void init(const MC::pool_type& random_pool,
+                                            std::size_t idx,
+                                            const SelfParticle& arr);
 
     KOKKOS_INLINE_FUNCTION static MC::Status
-    update(const MC::KPRNG::pool_type& random_pool,
+    update(const MC::pool_type& random_pool,
            FloatType d_t,
            std::size_t idx,
            const SelfParticle& arr,
            const MC::LocalConcentration& c);
 
     KOKKOS_INLINE_FUNCTION static void
-    division(const MC::KPRNG::pool_type& random_pool,
+    division(const MC::pool_type& random_pool,
              std::size_t idx,
              std::size_t idx2,
              const SelfParticle& arr,
@@ -170,7 +169,7 @@ namespace Models
   CHECK_MODEL(TwoMetaNb)
 
   KOKKOS_INLINE_FUNCTION void
-  TwoMetaNb::init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  TwoMetaNb::init([[maybe_unused]] const MC::pool_type& random_pool,
                   std::size_t idx,
                   const SelfParticle& arr)
   {
@@ -199,7 +198,7 @@ namespace Models
   }
 
   KOKKOS_INLINE_FUNCTION MC::Status
-  TwoMetaNb::update([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  TwoMetaNb::update([[maybe_unused]] const MC::pool_type& random_pool,
                     FloatType d_t,
                     std::size_t idx,
                     const SelfParticle& arr,
@@ -277,7 +276,7 @@ namespace Models
   }
 
   KOKKOS_INLINE_FUNCTION void
-  TwoMetaNb::division(const MC::KPRNG::pool_type& random_pool,
+  TwoMetaNb::division(const MC::pool_type& random_pool,
                       std::size_t idx,
                       std::size_t idx2,
                       const SelfParticle& arr,

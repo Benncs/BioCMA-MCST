@@ -28,7 +28,7 @@ concat_arrays(const std::array<std::string_view, N1>& arr1,
 template <typename T>
 concept ConfigurableInit = requires(T model,
                                     const std::size_t size,
-                                    const MC::KPRNG::pool_type& random_pool,
+                                    const MC::pool_type& random_pool,
                                     std::size_t idx,
                                     const typename T::SelfParticle& arr,
                                     const T::Config& config) {
@@ -39,7 +39,7 @@ concept ConfigurableInit = requires(T model,
 
 template <typename T>
 concept NonConfigurableInit = requires(T model,
-                                       const MC::KPRNG::pool_type& random_pool,
+                                       const MC::pool_type& random_pool,
                                        std::size_t idx,
                                        const typename T::SelfParticle& arr) {
   { model.init(random_pool, idx, arr) } -> std::same_as<void>;
@@ -62,7 +62,7 @@ concept CommonModelType = requires(T model,
                                    const MC::LocalConcentration& c,
                                    std::size_t position,
                                    const MC::ContributionView& contributions,
-                                   const MC::KPRNG::pool_type& random_pool,
+                                   const MC::pool_type& random_pool,
                                    const T::Config& config) {
   {
     T::n_var

@@ -78,7 +78,7 @@ namespace Models
             l_max_m * 0.75, l_max_m * 0.75 / 4, l_min_m, l_max_m);
 
     KOKKOS_INLINE_FUNCTION static void
-    init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+    init([[maybe_unused]] const MC::pool_type& random_pool,
          [[maybe_unused]] std::size_t idx,
          [[maybe_unused]] const SelfParticle& arr)
     {
@@ -120,7 +120,7 @@ namespace Models
     }
 
     KOKKOS_INLINE_FUNCTION static MC::Status
-    update([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+    update([[maybe_unused]] const MC::pool_type& random_pool,
            [[maybe_unused]] FloatType d_t,
            [[maybe_unused]] std::size_t idx,
            [[maybe_unused]] const SelfParticle& arr,
@@ -157,7 +157,7 @@ namespace Models
     }
 
     KOKKOS_INLINE_FUNCTION static void
-    division([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+    division([[maybe_unused]] const MC::pool_type& random_pool,
              [[maybe_unused]] std::size_t idx,
              [[maybe_unused]] std::size_t idx2,
              [[maybe_unused]] const SelfParticle& arr,

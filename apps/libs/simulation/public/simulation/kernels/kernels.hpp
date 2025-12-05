@@ -76,7 +76,7 @@ namespace Simulation::KernelInline
     }
 
     CycleFunctors(MC::ParticlesContainer<Model> container,
-                  MC::KPRNG::pool_type _random_pool,
+                  MC::pool_type _random_pool,
                   MC::KernelConcentrationType&& _concentrations,
                   MC::ContributionView _contribs_scatter,
                   MC::EventContainer _event,

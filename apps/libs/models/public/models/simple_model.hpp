@@ -52,20 +52,19 @@ namespace Models
 
     MODEL_CONSTANT FloatType frequency_division = 1. / 1000; // Hz
 
-    KOKKOS_INLINE_FUNCTION static void
-    init(const MC::KPRNG::pool_type& random_pool,
-         std::size_t idx,
-         const SelfParticle& arr);
+    KOKKOS_INLINE_FUNCTION static void init(const MC::pool_type& random_pool,
+                                            std::size_t idx,
+                                            const SelfParticle& arr);
 
     KOKKOS_INLINE_FUNCTION static MC::Status
-    update(const MC::KPRNG::pool_type& random_pool,
+    update(const MC::pool_type& random_pool,
            FloatType d_t,
            std::size_t idx,
            const SelfParticle& arr,
            const MC::LocalConcentration& c);
 
     KOKKOS_INLINE_FUNCTION static void
-    division(const MC::KPRNG::pool_type& random_pool,
+    division(const MC::pool_type& random_pool,
              std::size_t idx,
              std::size_t idx2,
              const SelfParticle& arr,
@@ -98,7 +97,7 @@ namespace Models
   CHECK_MODEL(SimpleModel)
 
   KOKKOS_INLINE_FUNCTION void
-  SimpleModel::init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  SimpleModel::init([[maybe_unused]] const MC::pool_type& random_pool,
                     std::size_t idx,
                     const SelfParticle& arr)
   {
@@ -123,7 +122,7 @@ namespace Models
   }
 
   KOKKOS_INLINE_FUNCTION MC::Status
-  SimpleModel::update([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  SimpleModel::update([[maybe_unused]] const MC::pool_type& random_pool,
                       FloatType d_t,
                       std::size_t idx,
                       const SelfParticle& arr,
@@ -144,7 +143,7 @@ namespace Models
   }
 
   KOKKOS_INLINE_FUNCTION void
-  SimpleModel::division(const MC::KPRNG::pool_type& random_pool,
+  SimpleModel::division(const MC::pool_type& random_pool,
                         std::size_t idx,
                         std::size_t idx2,
                         const SelfParticle& arr,

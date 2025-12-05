@@ -1,6 +1,7 @@
 #ifndef __MC__ALIAS_HPP__
 #define __MC__ALIAS_HPP__
 
+#include "Kokkos_Random.hpp"
 #include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/traits.hpp>
@@ -31,6 +32,12 @@ using kernelContribution =
     Kokkos::View<float**, Kokkos::LayoutLeft, MC::ComputeSpace, kernelMT>;
 namespace MC
 {
+  template <typename ExecSpace>
+  using gen_pool_type = Kokkos::Random_XorShift1024_Pool<ExecSpace>;
+
+  using pool_type = gen_pool_type<Kokkos::DefaultExecutionSpace>;
+
+  using generator_type = pool_type::generator_type;
 
   using restrict_mt = Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>;
   namespace

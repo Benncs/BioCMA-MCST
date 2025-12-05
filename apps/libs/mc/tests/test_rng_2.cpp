@@ -30,7 +30,7 @@ template <typename T> void basic_test()
   Kokkos::View<T*> skew_results("skew_results", N);
   MC::Distributions::LogNormal<T> log(mu, sigma);
   MC::Distributions::SkewNormal<T> skewnormal{xi, omega, alpha};
-  MC::KPRNG::pool_type rand_pool(test_seed);
+  MC::pool_type rand_pool(test_seed);
   Kokkos::parallel_for(
       "TestKernel", N, KOKKOS_LAMBDA(const int i) {
         auto rand_gen = rand_pool.get_state();
@@ -77,7 +77,7 @@ void moment_test(F dist,
 {
 
   Kokkos::View<T[N]> results("results");
-  MC::KPRNG::pool_type rand_pool(seed);
+  MC::pool_type rand_pool(seed);
 
   T sum = 0;
   T sum_sq = 0;
@@ -167,7 +167,7 @@ template <int N> void test_norminv()
 template <int N> void test_truncated()
 {
   MC::Distributions::TruncatedNormal<double> dist(2, 2. / 3., 0., 4.);
-  MC::KPRNG::pool_type rand_pool(test_seed);
+  MC::pool_type rand_pool(test_seed);
   Kokkos::parallel_for(
       "test_truncated", N, KOKKOS_LAMBDA(const int _) {
         auto gen = rand_pool.get_state();

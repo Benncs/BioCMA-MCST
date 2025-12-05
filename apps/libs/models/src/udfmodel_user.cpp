@@ -10,7 +10,7 @@
 namespace Models
 {
 
-  KOKKOS_FUNCTION void UdfModel::init(const MC::KPRNG::pool_type& random_pool,
+  KOKKOS_FUNCTION void UdfModel::init(const MC::pool_type& random_pool,
                                       std::size_t idx,
                                       const UdfModel::SelfParticle& arr,
                                       const UdfModel::Config& config)
@@ -24,22 +24,20 @@ namespace Models
     return UnsafeUDF::Loader::mass(idx, arr);
   }
 
-  KOKKOS_FUNCTION MC::Status
-  UdfModel::update(const MC::KPRNG::pool_type& random_pool,
-                   FloatType d_t,
-                   std::size_t idx,
-                   const SelfParticle& arr,
-                   const MC::LocalConcentration& c)
+  KOKKOS_FUNCTION MC::Status UdfModel::update(const MC::pool_type& random_pool,
+                                              FloatType d_t,
+                                              std::size_t idx,
+                                              const SelfParticle& arr,
+                                              const MC::LocalConcentration& c)
   {
     return UnsafeUDF::Loader::update_udf(random_pool, d_t, idx, arr, c);
   }
 
-  KOKKOS_FUNCTION void
-  UdfModel::division(const MC::KPRNG::pool_type& random_pool,
-                     std::size_t idx,
-                     std::size_t idx2,
-                     const SelfParticle& arr,
-                     const SelfParticle& buffer_arr)
+  KOKKOS_FUNCTION void UdfModel::division(const MC::pool_type& random_pool,
+                                          std::size_t idx,
+                                          std::size_t idx2,
+                                          const SelfParticle& arr,
+                                          const SelfParticle& buffer_arr)
   {
     UnsafeUDF::Loader::division_udf(random_pool, idx, idx2, arr, buffer_arr);
   }

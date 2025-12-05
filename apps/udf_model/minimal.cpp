@@ -47,7 +47,7 @@ namespace
     return static_cast<size_t>(particle_var::__COUNT__);
   };
 
-  void _init_udf([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  void _init_udf([[maybe_unused]] const MC::pool_type& random_pool,
                  std::size_t idx,
                  const Models::UdfModel::SelfParticle& arr,
                  const UdfModel::Config& config)
@@ -56,12 +56,11 @@ namespace
     GET_PROPERTY(particle_var::l_max) = l_max_m;
   };
 
-  MC::Status
-  _update_udf([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-              [[maybe_unused]] float d_t,
-              std::size_t idx,
-              const Models::UdfModel::SelfParticle& arr,
-              const MC::LocalConcentration& c)
+  MC::Status _update_udf([[maybe_unused]] const MC::pool_type& random_pool,
+                         [[maybe_unused]] float d_t,
+                         std::size_t idx,
+                         const Models::UdfModel::SelfParticle& arr,
+                         const MC::LocalConcentration& c)
   {
     const auto s = static_cast<FloatType>(c(0));
     const FloatType g = s / (k + s);
@@ -82,7 +81,7 @@ namespace
   }
 
   void
-  _division_udf([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  _division_udf([[maybe_unused]] const MC::pool_type& random_pool,
                 [[maybe_unused]] std::size_t idx,
                 [[maybe_unused]] std::size_t idx2,
                 [[maybe_unused]] const MC::DynParticlesModel<float>& arr,

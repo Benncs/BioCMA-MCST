@@ -52,7 +52,7 @@ namespace Models
   static constexpr double tau_division_proba = 1e-7;
 
   KOKKOS_INLINE_FUNCTION bool check_probability_division(
-      double d_t, double gamma, MC::KPRNG::pool_type random_pool)
+      double d_t, double gamma, MC::pool_type random_pool)
   {
     (void)d_t;
     // const double proba_div =

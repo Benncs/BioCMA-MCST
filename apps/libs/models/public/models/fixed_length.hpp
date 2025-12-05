@@ -58,21 +58,20 @@ namespace Models
 
     static Self::Config get_config(std::size_t n);
 
-    KOKKOS_INLINE_FUNCTION static void
-    init(const MC::KPRNG::pool_type& random_pool,
-         std::size_t idx,
-         const SelfParticle& arr,
-         const Config& params);
+    KOKKOS_INLINE_FUNCTION static void init(const MC::pool_type& random_pool,
+                                            std::size_t idx,
+                                            const SelfParticle& arr,
+                                            const Config& params);
 
     KOKKOS_INLINE_FUNCTION static MC::Status
-    update(const MC::KPRNG::pool_type& random_pool,
+    update(const MC::pool_type& random_pool,
            FloatType d_t,
            std::size_t idx,
            const SelfParticle& arr,
            const MC::LocalConcentration& c);
 
     KOKKOS_INLINE_FUNCTION static void
-    division(const MC::KPRNG::pool_type& random_pool,
+    division(const MC::pool_type& random_pool,
              std::size_t idx,
              std::size_t idx2,
              const SelfParticle& arr,
@@ -101,7 +100,7 @@ namespace Models
   CHECK_MODEL(FixedLength)
 
   KOKKOS_INLINE_FUNCTION void
-  FixedLength::init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  FixedLength::init([[maybe_unused]] const MC::pool_type& random_pool,
                     std::size_t idx,
                     const SelfParticle& arr,
                     const Config& config)
@@ -115,7 +114,7 @@ namespace Models
   }
 
   KOKKOS_INLINE_FUNCTION MC::Status
-  FixedLength::update([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  FixedLength::update([[maybe_unused]] const MC::pool_type& random_pool,
                       FloatType d_t,
                       std::size_t idx,
                       const SelfParticle& arr,
@@ -137,12 +136,12 @@ namespace Models
                      GET_PROPERTY(Self::particle_var::l_max));
   }
 
-  KOKKOS_INLINE_FUNCTION void FixedLength::division(
-      [[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
-      std::size_t idx,
-      std::size_t idx2,
-      const SelfParticle& arr,
-      const SelfParticle& buffer_arr)
+  KOKKOS_INLINE_FUNCTION void
+  FixedLength::division([[maybe_unused]] const MC::pool_type& random_pool,
+                        std::size_t idx,
+                        std::size_t idx2,
+                        const SelfParticle& arr,
+                        const SelfParticle& buffer_arr)
   {
     const FloatType new_current_length =
         GET_PROPERTY(particle_var::length) / 2.F;

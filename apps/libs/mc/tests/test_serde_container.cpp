@@ -45,7 +45,7 @@ int main()
     const std::size_t np = 100;
     MC::RuntimeParameters foo = {1, 2, 3, 4};
     MC::ParticlesContainer<SerdeModel> container(foo, np);
-    MC::KPRNG::pool_type rng;
+    MC::pool_type rng;
     Kokkos::parallel_for(
         np, KOKKOS_LAMBDA(const int i) {
           SerdeModel::init(rng, i, container.model);

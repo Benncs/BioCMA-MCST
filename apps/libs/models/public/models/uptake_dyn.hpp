@@ -102,7 +102,7 @@ namespace Models
     //}
     //
     KOKKOS_INLINE_FUNCTION
-    static void init(const MC::KPRNG::pool_type& random_pool,
+    static void init(const MC::pool_type& random_pool,
                      std::size_t idx,
                      const SelfParticle& arr)
     {
@@ -216,7 +216,7 @@ namespace Models
     }
 
     KOKKOS_INLINE_FUNCTION static void
-    division(const MC::KPRNG::pool_type& random_pool,
+    division(const MC::pool_type& random_pool,
              std::size_t idx,
              std::size_t idx2,
              const SelfParticle& arr,

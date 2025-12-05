@@ -10,8 +10,6 @@
 namespace MC
 {
 
-  using pool_type =
-      Kokkos::Random_XorShift1024_Pool<Kokkos::DefaultExecutionSpace>;
   pool_type get_pool(std::size_t seed = 0);
 
   /**

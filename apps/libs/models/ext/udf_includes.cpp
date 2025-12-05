@@ -9,13 +9,13 @@ namespace UnsafeUDF
 {
   std::size_t (*Loader::set_nvar_udf)() = nullptr;
 
-  void (*Loader::init_udf)(const MC::KPRNG::pool_type& random_pool,
+  void (*Loader::init_udf)(const MC::pool_type& random_pool,
                            std::size_t idx,
                            const Models::UdfModel::SelfParticle& arr,
                            const Models::UdfModel::Config& config) =
       nullptr; //< init function ptr
 
-  MC::Status (*Loader::update_udf)(const MC::KPRNG::pool_type& random_pool,
+  MC::Status (*Loader::update_udf)(const MC::pool_type& random_pool,
                                    float d_t,
                                    std::size_t idx,
                                    const Models::UdfModel::SelfParticle& arr,
@@ -28,7 +28,7 @@ namespace UnsafeUDF
       Kokkos::DefaultHostExecutionSpace& ep, std::size_t n) = nullptr;
 
   void (*Loader::division_udf)(
-      const MC::KPRNG::pool_type& random_pool,
+      const MC::pool_type& random_pool,
       std::size_t idx,
       std::size_t idx2,
       const Models::UdfModel::SelfParticle& arr,

@@ -96,20 +96,19 @@ namespace Models
     // MODEL_CONSTANT auto length_c_dist =
     // MC::Distributions::TruncatedNormal<FloatType>(1.5*l_c_m, l_c_m / 7.,
     // 3*l_min_m, l_max_m);
-    KOKKOS_INLINE_FUNCTION static void
-    init(const MC::KPRNG::pool_type& random_pool,
-         std::size_t idx,
-         const SelfParticle& arr);
+    KOKKOS_INLINE_FUNCTION static void init(const MC::pool_type& random_pool,
+                                            std::size_t idx,
+                                            const SelfParticle& arr);
 
     KOKKOS_INLINE_FUNCTION static MC::Status
-    update(const MC::KPRNG::pool_type& random_pool,
+    update(const MC::pool_type& random_pool,
            FloatType d_t,
            std::size_t idx,
            const SelfParticle& arr,
            const MC::LocalConcentration& c);
 
     KOKKOS_INLINE_FUNCTION static void
-    division(const MC::KPRNG::pool_type& random_pool,
+    division(const MC::pool_type& random_pool,
              std::size_t idx,
              std::size_t idx2,
              const SelfParticle& arr,
@@ -160,7 +159,7 @@ namespace Models
   CHECK_MODEL(TwoMeta)
 
   KOKKOS_INLINE_FUNCTION void
-  TwoMeta::init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  TwoMeta::init([[maybe_unused]] const MC::pool_type& random_pool,
                 std::size_t idx,
                 const SelfParticle& arr)
   {
@@ -187,7 +186,7 @@ namespace Models
   }
 
   KOKKOS_INLINE_FUNCTION MC::Status
-  TwoMeta::update(const MC::KPRNG::pool_type& random_pool,
+  TwoMeta::update(const MC::pool_type& random_pool,
                   FloatType d_t,
                   std::size_t idx,
                   const SelfParticle& arr,
@@ -266,7 +265,7 @@ namespace Models
   }
 
   KOKKOS_INLINE_FUNCTION void
-  TwoMeta::division(const MC::KPRNG::pool_type& random_pool,
+  TwoMeta::division(const MC::pool_type& random_pool,
                     std::size_t idx,
                     std::size_t idx2,
                     const SelfParticle& arr,
