@@ -1,6 +1,6 @@
+#include <csignal>
 #include <signal_handling.hpp>
 
-#include <csignal>
 namespace Core
 {
 

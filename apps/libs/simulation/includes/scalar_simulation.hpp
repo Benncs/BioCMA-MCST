@@ -22,6 +22,7 @@
 #include <simulation/mass_transfer.hpp>
 #include <span>
 #include <vector>
+
 using FlowMatrixType = Eigen::SparseMatrix<double>;
 
 namespace Simulation
@@ -41,6 +42,7 @@ namespace Simulation
     ~ScalarSimulation() = default;
 
     bool deep_copy_concentration(const std::vector<double>& data);
+
     void reduce_contribs(std::span<const double> data);
 
     void set_transition(CmaUtils::StateCooMatrixType&& transition);
@@ -70,11 +72,6 @@ namespace Simulation
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
     [[nodiscard]] const ColMajorMatrixtype<double>& get_mass_transfer() const;
     [[nodiscard]] std::span<double> getConcentrationData();
-
-    const auto& getTransition() const
-    {
-      return m_transition;
-    }
 
     [[nodiscard]] std::size_t n_row() const noexcept;
     [[nodiscard]] std::size_t n_col() const noexcept;

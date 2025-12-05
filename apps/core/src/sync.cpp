@@ -31,15 +31,6 @@ namespace WrapMPI
                               [[maybe_unused]] size_t dest,
                               [[maybe_unused]] size_t tag,
                               [[maybe_unused]] bool send_size) noexcept {};
-
-  // namespace Async
-  // {
-
-  //   template <typename T>
-  //   [[maybe_unused]] int recv_span(MPI_Request& request, std::span<T> buf,
-  //   size_t src, size_t tag) noexcept; void wait(MPI_Request& request);
-
-  // } // namespace Async
 } // namespace WrapMPI
 // NOLINTEND
 #endif

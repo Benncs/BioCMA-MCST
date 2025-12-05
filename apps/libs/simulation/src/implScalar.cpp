@@ -20,7 +20,7 @@ namespace
 {
 
 #define UNROLL_CHECK(i, s)                                                     \
-  if (i < s)                                                                   \
+  if ((i) < (s))                                                               \
   {                                                                            \
     triplets[i] = T(rows[i], cols[i], vals[i]);                                \
   }
@@ -29,9 +29,9 @@ namespace
 
   void sparse_from_coo(Eigen::SparseMatrix<double>& res,
                        std::size_t n_c,
-                       std::span<const size_t> rows,
-                       std::span<const size_t> cols,
-                       std::span<const double> vals)
+                       std::span<const size_t>&& rows,
+                       std::span<const size_t>&& cols,
+                       std::span<const double>&& vals)
   {
 
     // KOKKOS_ASSERT(res.cols() == EIGEN_INDEX(n_c));
@@ -109,20 +109,19 @@ namespace Simulation
     {
       throw std::invalid_argument("Volumes size mismatch");
     }
-
     const int n_row = EIGEN_INDEX(n_r);
     const int n_col = EIGEN_INDEX(n_c);
 
-    m_volumes = Eigen::DiagonalMatrix<double, -1>(n_col);
+    m_volumes = DiagonalType(n_col);
 
     this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(
         volumes.data(), static_cast<int>(volumes.size()));
 
     contribs = kernelContribution("contribs", n_r, n_c);
 
-    m_transition = FlowMatrixType(n_c, n_c);
+    m_transition = FlowMatrixType(n_col, n_col);
 
-    volumes_inverse = Eigen::DiagonalMatrix<double, -1>(n_col);
+    volumes_inverse = DiagonalType(n_col);
     volumes_inverse.setIdentity();
 
     this->total_mass = ColMajorMatrixtype<double>(n_row, n_col);
@@ -174,9 +173,9 @@ namespace Simulation
     PROFILE_SECTION("performStep_gl")
 #define c concentrations.eigen_data
 
-    total_mass =
-        total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data +
-                            static_cast<float>(sign) * mtr);
+    total_mass.noalias() +=
+        d_t * (c * m_transition - c * sink + sources.eigen_data +
+               static_cast<float>(sign) * mtr);
     c = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
@@ -188,8 +187,8 @@ namespace Simulation
     PROFILE_SECTION("performStep_l")
 #define c concentrations.eigen_data
 
-    total_mass =
-        total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data);
+    total_mass.noalias() +=
+        d_t * (c * m_transition - c * sink + sources.eigen_data);
     c = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
