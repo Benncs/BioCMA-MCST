@@ -199,11 +199,22 @@ namespace Simulation::KernelInline
     }
 
     KOKKOS_INLINE_FUNCTION void operator()(
-        TagMove _tag,
+        TagMove /*tag*/,
         const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle) const
     {
-      (void)_tag;
       GET_INDEX(n_particles);
+      if (status(idx) != MC::Status::Idle) [[unlikely]]
+      {
+        return;
+      }
+
+      handle_move(idx);
+    }
+
+    KOKKOS_INLINE_FUNCTION void operator()(TagMove /*tag*/,
+                                           const std::size_t& idx) const
+    {
+
       if (status(idx) != MC::Status::Idle) [[unlikely]]
       {
         return;
@@ -234,6 +245,10 @@ namespace Simulation::KernelInline
                                            const std::size_t& idx,
                                            std::size_t& local_dead_count) const
     {
+      if (status(idx) != MC::Status::Idle) [[unlikely]]
+      {
+        return;
+      }
 
       ages(idx, 0) += d_t;
       handle_exit(idx, local_dead_count);

@@ -1,6 +1,7 @@
 #ifndef __SIMULATION_MC_KERNEL_HPP
 #define __SIMULATION_MC_KERNEL_HPP
 
+#include "Kokkos_Macros.hpp"
 #include "mc/alias.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
@@ -102,6 +103,7 @@ namespace Simulation::KernelInline
     result_view_type value;
     bool references_scalar_v;
   };
+
   template <ModelType M> struct CycleFunctor
   {
     using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
@@ -116,7 +118,8 @@ namespace Simulation::KernelInline
                  MC::KernelConcentrationType&& _concentrations,
                  MC::ContributionView _contribs_scatter,
                  MC::EventContainer _event)
-        : d_t(0.), particles(std::move(_particles)), random_pool(_random_pool),
+        : d_t(0.), particles(std::move(_particles)),
+          random_pool(std::move(_random_pool)),
           concentrations(std::move(_concentrations)),
           contribs_scatter(std::move(_contribs_scatter)),
           events(std::move(_event))
@@ -227,9 +230,9 @@ namespace Simulation::KernelInline
       }
     }
 
-    KOKKOS_INLINE_FUNCTION void operator()(const TagCycle _tag,
-                                           const std::size_t idx,
-                                           value_type& reduce_val) const
+    KOKKOS_FORCEINLINE_FUNCTION void operator()(const TagCycle _tag,
+                                                const std::size_t idx,
+                                                value_type& reduce_val) const
     {
 
       (void)_tag;
@@ -241,11 +244,11 @@ namespace Simulation::KernelInline
                                                   value_type& reduce_val) const
     {
       particles.ages(idx, 1) += d_t;
-      auto local_c =
+      const auto local_c =
           Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx));
-
-      if (M::update(random_pool, d_t, idx, particles.model, local_c) ==
-          MC::Status::Division)
+      const auto new_status =
+          M::update(random_pool, d_t, idx, particles.model, local_c);
+      if (new_status == MC::Status::Division)
       {
         if (!particles.handle_division(random_pool, idx))
         {

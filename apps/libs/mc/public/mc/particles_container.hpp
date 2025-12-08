@@ -104,18 +104,20 @@ namespace MC
     get_contributions(const std::size_t idx,
                       const CviewType& contributions) const
     {
-
-      static_assert(ConstWeightModelType<Model>,
-                    "ModelType: Constapply_weight()");
-
-      const double weight = get_weight(idx);
-      const auto pos = position(idx);
-      auto access = contributions.access();
-
-      for (int i = begin; i < end; ++i)
+      if (begin > end)
       {
-        const int rel = i - begin;
-        access(rel, pos) += weight * model(idx, i);
+        static_assert(ConstWeightModelType<Model>,
+                      "ModelType: Constapply_weight()");
+
+        const double weight = get_weight(idx);
+        const auto pos = position(idx);
+        auto access = contributions.access();
+
+        for (int i = begin; i < end; ++i)
+        {
+          const int rel = i - begin;
+          access(rel, pos) += weight * model(idx, i);
+        }
       }
     }
 

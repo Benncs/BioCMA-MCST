@@ -24,6 +24,8 @@ namespace Simulation::KernelInline
 
     ComputeSpace move_space{};
 
+    ComputeSpace model_space{};
+
     cycle_reducer_view_type<Space> cycle_reducer;
     move_reducer_view_type<Space> move_reducer;
     cycle_kernel_type cycle_kernel;
@@ -107,10 +109,13 @@ namespace Simulation::KernelInline
         // const auto _policy_move =
         //     Common::get_policy<move_kernel_type, KernelInline::TagMove>(
         //         move_kernel, n_particle, false);
-        const auto _policy_move =
-            Common::get_policy<KernelInline::TagMove>(n_particle, false);
+        // const auto _policy_move =
+        //     Common::get_policy<KernelInline::TagMove>(n_particle, false);
 
-        Kokkos ::parallel_for("cycle_move", _policy_move, move_kernel);
+        const auto _policy_leave = Kokkos::RangePolicy<KernelInline::TagMove>(
+            move_space, 0, n_particle);
+
+        Kokkos ::parallel_for("cycle_move", _policy_leave, move_kernel);
       }
       if (move_kernel.enable_leave)
       {
@@ -122,8 +127,8 @@ namespace Simulation::KernelInline
         // Kokkos ::parallel_reduce(
         //     "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
 
-        const auto _policy_leave =
-            Kokkos::RangePolicy<KernelInline::TagLeave>(0, n_particle);
+        const auto _policy_leave = Kokkos::RangePolicy<KernelInline::TagLeave>(
+            move_space, 0, n_particle);
         // const auto _policy_move = Kokkos::TeamPolicy<TagLeave>(56, 256);
         Kokkos ::parallel_reduce(
             "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
@@ -159,7 +164,7 @@ namespace Simulation::KernelInline
       //     KernelInline::CycleReducer<ComputeSpace>(cycle_reducer));
       //
 
-      auto _policy = Kokkos::RangePolicy<TagCycle>(0, n_particle);
+      auto _policy = Kokkos::RangePolicy<TagCycle>(model_space, 0, n_particle);
       Kokkos::parallel_reduce(
           "cycle_model",
           _policy,

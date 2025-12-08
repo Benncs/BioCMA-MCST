@@ -53,14 +53,14 @@ using NonConfigType = std::nullopt_t;
  */
 template <typename T, typename ViewType>
 concept CommonModelType = requires(T model,
-                                   T::FloatType d_t,
-                                   std::size_t idx,
-                                   std::size_t idx2,
-                                   double weight,
+                                   const T::FloatType d_t,
+                                   const std::size_t idx,
+                                   const std::size_t idx2,
+                                   const double weight,
                                    const T::SelfParticle& arr,
                                    const T::SelfParticle& buffer_arr,
                                    const MC::LocalConcentration& c,
-                                   std::size_t position,
+                                   const std::size_t position,
                                    const MC::ContributionView& contributions,
                                    const MC::pool_type& random_pool,
                                    const T::Config& config) {
