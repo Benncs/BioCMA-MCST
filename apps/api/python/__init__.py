@@ -97,7 +97,7 @@ def fast_run(
     params = handle_module.make_params(**params)
 
     if uniform is not None:
-        params.is_uniform = True
+        params.uniform_particle_init = True
 
     handle = init_simulation(outfolder, name, cma_path, params)
 
