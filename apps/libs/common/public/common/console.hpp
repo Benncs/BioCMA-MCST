@@ -56,6 +56,8 @@ namespace IO
     uint32_t flags;
     std::ostream& output;
     std::ostream& err_output;
+
+    bool do_flush;
   };
 
   // TODO move elsewhere

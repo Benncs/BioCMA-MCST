@@ -28,6 +28,17 @@ namespace
     All = Debug | Print | Alert | Error
   };
   // NOLINTEND(hicpp-signed-bitwise)
+
+  bool is_flag_set(uint32_t flags, Flags flag)
+  {
+    return (flags & flag) != 0U;
+  }
+
+  void set_flag(uint32_t& flags, Flags flag)
+  {
+    flags ^= flag;
+  }
+
 } // namespace
 
 namespace IO
@@ -148,10 +159,22 @@ namespace IO
   }
   /// CONSOLE
 
+  namespace
+  {
+    void flush_(bool do_flush, auto& stream)
+    {
+      if (do_flush)
+      {
+        stream << std::flush;
+      }
+    }
+  } // namespace
+
   Console::Console()
       : flags(Flags::None), output(std::cout), err_output(std::cerr)
   {
     std::ios::sync_with_stdio(false);
+    this->do_flush = true; // NOLINT
     try
     {
       std::locale::global(std::locale("en_US.utf8"));
@@ -168,9 +191,11 @@ namespace IO
   void Console::debug([[maybe_unused]] std::string_view message) noexcept
   {
 #ifndef NDEBUG
-    if ((flags & Flags::Debug) != 0U)
+    // if ((flags & Flags::Debug) != 0U)
+    if (is_flag_set(flags, Flags::Debug))
     {
       output << "[DEBUG]: " << message << "\r\n";
+      flush_(do_flush, output);
     }
 #endif
   }
@@ -178,37 +203,48 @@ namespace IO
   void Console::print(std::string_view prefix,
                       std::string_view message) noexcept
   {
-    if ((flags & Flags::Print) != 0U)
+    // if ((flags & Flags::Print) != 0U)
+    if (is_flag_set(flags, Flags::Print))
     {
       output << AnsiCode::blue << "[" << prefix << "]: " << AnsiCode::reset
              << message << "\r\n";
+
+      flush_(do_flush, output);
     }
   }
 
   void Console::alert(std::string_view prefix,
                       std::string_view message) noexcept
   {
-    if ((flags & Flags::Alert) != 0U)
+    // if ((flags & Flags::Alert) != 0U)
+    if (is_flag_set(flags, Flags::Alert))
     {
       output << AnsiCode::red << "[Warning: " << prefix << "]" << ": "
              << AnsiCode::reset << message << "\r\n";
+
+      flush_(do_flush, output);
     }
   }
 
   void Console::error(std::string_view message,
                       std::source_location location) noexcept
   {
-    if ((flags & Flags::Error) != 0U)
+    //    if ((flags & Flags::Error) != 0U)
+    if (is_flag_set(flags, Flags::Error))
     {
       err_output << AnsiCode::red
                  << "[Error] From: " << location.function_name()
                  << AnsiCode::reset << ": " << message << "\r\n";
+
+      flush_(do_flush, err_output);
     }
   }
 
   void Console::raw_log(std::string_view message) noexcept
   {
-    if ((flags & Flags::Error) != 0U)
+
+    // if ((flags & Flags::Error) != 0U)
+    if (is_flag_set(flags, Flags::Error))
     {
       err_output << message;
     }
@@ -217,27 +253,27 @@ namespace IO
   void Console::toggle_debug() noexcept
   {
 
-    flags ^= Flags::Debug;
+    set_flag(flags, Flags::Debug);
   }
 
   void Console::toggle_all() noexcept
   {
-    flags ^= Flags::All;
+    set_flag(flags, Flags::All);
   }
 
   void Console::toggle_print() noexcept
   {
-    flags ^= Flags::Print;
+    set_flag(flags, Flags::Print);
   }
 
   void Console::toggle_alert() noexcept
   {
-    flags ^= Flags::Alert;
+    set_flag(flags, Flags::Alert);
   }
 
   void Console::toggle_error() noexcept
   {
-    flags ^= Flags::Error;
+    set_flag(flags, Flags::Error);
   }
 
 } // namespace IO

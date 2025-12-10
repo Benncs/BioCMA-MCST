@@ -256,6 +256,10 @@ namespace
 
         if (Core::SignalHandler::is_usr1_raised()) [[unlikely]]
         {
+          if (logger)
+          {
+            logger->print("Host", "Save triggered");
+          }
           PostProcessing::save_particle_state(simulation, partial_exporter);
         }
 
@@ -263,7 +267,7 @@ namespace
         {
           if (logger)
           {
-            logger->print("[Host]", "User interruption");
+            logger->print("Host", "User interruption");
           }
           break;
         }
