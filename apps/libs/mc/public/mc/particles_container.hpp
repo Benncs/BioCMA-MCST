@@ -104,7 +104,7 @@ namespace MC
     get_contributions(const std::size_t idx,
                       const CviewType& contributions) const
     {
-      if (begin > end)
+      if (begin < end)
       {
         static_assert(ConstWeightModelType<Model>,
                       "ModelType: Constapply_weight()");
