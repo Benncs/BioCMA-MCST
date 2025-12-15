@@ -761,7 +761,9 @@ namespace MC
               static_cast<double>(n_allocated_elements) <=
           rt_params.shink_ratio)
       {
-        _resize(n_used_elements * rt_params.allocation_factor, false);
+        //        Kokkos::printf("SHRINK \r\n");
+        //force to true if we want to shrink
+        _resize(n_used_elements * rt_params.allocation_factor, true);
       }
       inactive_counter = inactive_counter - to_remove;
     };
