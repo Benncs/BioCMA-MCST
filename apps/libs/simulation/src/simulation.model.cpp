@@ -96,13 +96,10 @@ namespace Simulation
     {
       feed.update(t, d_t);
       functor(ls, feed);
-      // TODO: improve
       if (feed.output_position)
       {
-        // _index_leaving_flow(0) = 0;
-        // _leaving_flow(0) = feed.flow;
-        //
-        move_info.set_flow(0, *feed.output_position, feed.flow);
+        this->mc_unit->domain.set_leaving_flow(
+            0, *feed.output_position, feed.flow);
       }
     }
 

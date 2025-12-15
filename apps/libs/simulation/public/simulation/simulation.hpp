@@ -9,7 +9,6 @@
 #include <common/common.hpp>
 #include <common/logger.hpp>
 #include <cstddef>
-#include <impl/Kokkos_Half_FloatingPointWrapper.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
 #include <mc/prng/prng.hpp>
@@ -143,7 +142,7 @@ namespace Simulation
     double starting_time =
         0.;            // Not used within calculation, only for export purposes
     double end_time{}; // Not used within calculation, only for export purposes
-    bool f_reaction = false; // FIXME
+    bool f_reaction = true; // FIXME
     void scatter_contribute();
     void set_kernel_contribs_to_host();
 
@@ -157,7 +156,7 @@ namespace Simulation
     std::shared_ptr<ScalarSimulation> gas_scalar;
     MassTransfer::MassTransferModel
         mt_model; // TODO add default null value (no model)
-    KernelInline::MoveInfo<ComputeSpace> move_info;
+    // MC::MoveInfo<ComputeSpace> move_info;
 
     std::shared_ptr<IO::Logger> logger;
 
@@ -177,12 +176,9 @@ namespace Simulation
                                  auto& cycle_functors)
   {
     PROFILE_SECTION("Simulation::pre_cycle")
-    // this->contribs_scatter.reset();
-    // this->move_info.cumulative_probability = get_kernel_cumulative_proba();
-    // this->move_info.diag_transition = get_kernel_diagonal();
-    this->move_info.neighbors = mc_unit->domain.getNeighbors();
 
-    cycle_functors.update(d_t, container, this->move_info);
+    cycle_functors.update(
+        d_t, container, this->mc_unit->domain.get_const_inner());
   }
 
   template <typename Space, ModelType Model>
@@ -196,7 +192,7 @@ namespace Simulation
         getkernel_concentration(),
         contribs_scatter,
         mc_unit->events,
-        move_info,
+        mc_unit->domain.get_const_inner(),
         probes[ProbeType ::LeavingTime]);
   }
 

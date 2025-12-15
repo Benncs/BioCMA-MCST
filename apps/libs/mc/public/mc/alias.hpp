@@ -6,6 +6,7 @@
 #include <Kokkos_ScatterView.hpp>
 #include <common/traits.hpp>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
+#include <type_traits>
 
 // static_assert(FloatingPointType<Kokkos::Experimental::half_t>,
 //               "Kokkos half_t ok");
@@ -30,6 +31,7 @@ using kernelMT = Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::RandomAccess |
 
 using kernelContribution =
     Kokkos::View<float**, Kokkos::LayoutLeft, MC::ComputeSpace, kernelMT>;
+
 namespace MC
 {
   template <typename ExecSpace>
@@ -67,6 +69,8 @@ namespace MC
     int end;
   };
 
+  struct LeavingFlow;
+
   using ParticlePositions = Kokkos::View<uint64_t*, ComputeSpace>;
   using ParticleStatus = Kokkos::View<Status*, ComputeSpace>;
   using ParticleWeigths = Kokkos::View<double*, ComputeSpace>;
@@ -95,13 +99,55 @@ namespace MC
   using LocalConcentration =
       Kokkos::Subview<KernelConcentrationType, int, decltype(Kokkos::ALL)>;
 
+  //   template <class Scalar, class ExecSpace>
+  //   using VolumeView = std::enable_if_t<
+  //       std::is_same_v<std::remove_const_t<Scalar>, double>,
+  //       Kokkos::
+  //           View<Scalar*, ExecSpace,
+  //           Kokkos::MemoryTraits<Kokkos::RandomAccess>>>;
+
+  template <class ExecSpace, bool is_const>
+  using VolumeView = std::conditional_t<
+      is_const,
+      Kokkos::View<const double*,
+                   ExecSpace,
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>,
+      Kokkos::View<double*, ExecSpace>>;
+
+  template <class ExecSpace, bool is_const>
+  using DiagonalView = std::conditional_t<
+      is_const,
+      Kokkos::View<const double*,
+                   Kokkos::LayoutLeft,
+                   ExecSpace,
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>,
+      Kokkos::View<double*, Kokkos::LayoutLeft, ExecSpace>>;
+
+  template <bool is_const>
+  using LeavingFlowView = std::conditional_t<
+      is_const,
+      Kokkos::View<const LeavingFlow*, Kokkos::SharedHostPinnedSpace>,
+      Kokkos::View<LeavingFlow*, Kokkos::SharedHostPinnedSpace>>;
+
+  template <class ExecSpace, bool is_const>
+  using CumulativeProbabilityView = std::conditional_t<
+      is_const,
+      Kokkos::View<const double**,
+                   Kokkos::LayoutRight,
+                   ExecSpace,
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>,
+      Kokkos::View<double**, Kokkos::LayoutRight, ExecSpace>>;
+
+  template <class ExecSpace, bool is_const>
+  using NeighborsView = std::conditional_t<
+      is_const,
+      Kokkos::View<const std::size_t**,
+                   Kokkos::LayoutRight,
+                   ExecSpace,
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>,
+      Kokkos::View<std::size_t**, Kokkos::LayoutRight, ExecSpace>>;
+
 }; // namespace MC
 // FIXME
-template <typename Space>
-using ConstNeighborsView =
-    Kokkos::View<const std::size_t**,
-                 Kokkos::LayoutRight,
-                 Space,
-                 Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
 #endif

@@ -176,7 +176,7 @@ namespace Simulation
     total_mass.noalias() +=
         d_t * (c * m_transition - c * sink + sources.eigen_data +
                static_cast<float>(sign) * mtr);
-    c = total_mass * volumes_inverse;
+    c.noalias() = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
     concentrations.update_host_to_compute();
@@ -189,7 +189,7 @@ namespace Simulation
 
     total_mass.noalias() +=
         d_t * (c * m_transition - c * sink + sources.eigen_data);
-    c = total_mass * volumes_inverse;
+    c.noalias() = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
     concentrations.update_host_to_compute();

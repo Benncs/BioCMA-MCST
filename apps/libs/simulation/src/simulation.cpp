@@ -55,8 +55,7 @@ namespace Simulation
 
     const std::size_t n_flows = this->feed.n_liquid_flow();
 
-    move_info = KernelInline::MoveInfo<ComputeSpace>(
-        mc_unit->domain.getNumberCompartments(), n_flows);
+    mc_unit->domain.init_inner(n_flows);
 
     contribs_scatter =
         Kokkos::Experimental::create_scatter_view(get_kernel_contribution());
@@ -85,16 +84,15 @@ namespace Simulation
     updateScalarHydro(newstate);
   }
 
-  void SimulationUnit::updateMCHydro(std::span<const double> vl,
+  void SimulationUnit::updateMCHydro(std::span<const double> newliquid_volume,
                                      std::span<const std::size_t> neighors_flat,
                                      std::span<const double> proba_flat,
                                      std::span<const double> out_flows)
   {
     PROFILE_SECTION("simulation::updateMCHydro")
-    this->mc_unit->domain.setVolumes(vl);
-    this->mc_unit->domain.setLiquidNeighbors(neighors_flat);
-
-    this->move_info.update(vl, out_flows, proba_flat);
+    this->mc_unit->domain.update(
+        newliquid_volume, neighors_flat, out_flows, proba_flat);
+    // this->move_info = this->mc_unit->domain.inner;
   }
 
   void SimulationUnit::updateScalarHydro(
@@ -145,7 +143,7 @@ namespace Simulation
   {
     liquid_scalar.reset();
     gas_scalar.reset();
-    move_info = KernelInline::MoveInfo<ComputeSpace>();
+    mc_unit->domain.inner = MC::MoveInfo<ComputeSpace, false>();
   }
 
   void

@@ -95,12 +95,10 @@ namespace PostProcessing
   void show_sumup_state(const std::shared_ptr<IO::Logger>& logger,
                         const Simulation::SimulationUnit& simulation) noexcept
   {
-    // Assuming domain data is in sharedSpace
     if (logger)
     {
       for (auto&& c : simulation.mc_unit->getRepartition())
       {
-
         logger->raw_log(IO::format(std::to_string(c), " "));
       }
       logger->raw_log("\r\n");
@@ -154,3 +152,151 @@ namespace
   }
 
 } // namespace
+
+// #include <stdio.h>
+// #include <string_view>
+
+// template <int N>
+// constexpr void float_to_char(float value, char result[N]) {
+//     int int_part = static_cast<int>(value);
+//     int frac_part = static_cast<int>((value - int_part) * 100);
+//     int index = 0;
+//     if (int_part == 0) {
+//         result[index++] = '0';
+//         result[index++] = '0';
+//     } else {
+//         int temp = int_part;
+
+//         while (temp > 0) {
+//             result[index++] = '0' + temp % 10;
+//             temp /= 10;
+//         }
+//         if (int_part < 10) {
+//             result[index++] = '0';
+//         }
+
+//         for (int i = 0; i < index / 2; ++i) {
+//             char tmp = result[i];
+//             result[i] = result[index - 1 - i];
+//             result[index - 1 - i] = tmp;
+//         }
+//     }
+
+//     result[index++] = '.';
+//     result[index++] = '0' + (frac_part / 10);
+//     result[index++] = '0' + (frac_part % 10);
+// }
+
+// template <int N>
+// constexpr void fill(char arr[N]) {
+//     for (int i = 0; i < N - 1; ++i) {
+//         arr[i] = ' ';
+//     }
+//     arr[N] = '\0';
+// }
+
+// template<int PROGRESS_BAR_WIDTH,char PROGRESS_BAR_SYMBOL>
+// class ProgressBar {
+//    public:
+//     constexpr ProgressBar(std::size_t _total):total(_total) {
+//         constexpr auto offset = PROGRESS_BAR_WIDTH + init_size;
+
+//         fill<total_bar_width>(bar_buffer);
+//         fill<percentage_size>(percentage);
+
+//         bar_buffer[0] = '[';
+
+//         bar_buffer[offset + 1] = ']';
+//         bar_buffer[total_bar_width - 1] = '%';
+
+//         for (int i = 0; i < init.size(); ++i) {
+//             bar_buffer[i] = init[i];
+//         }
+//     }
+
+//     // ProgressBar(std::size_t _total,void* tag) {
+//     //     constexpr auto offset = PROGRESS_BAR_WIDTH + init_size;
+
+//     //     fill<total_bar_width>(bar_buffer);
+//     //     fill<percentage_size>(percentage);
+
+//     //     bar_buffer[0] = '[';
+
+//     //     bar_buffer[offset + 1] = ']';
+//     //     bar_buffer[total_bar_width - 1] = '%';
+
+//     //     for (int i = 0; i < init.size(); ++i) {
+//     //         bar_buffer[i] = init[i];
+//     //     }
+//     // }
+
+//    constexpr void update(std::size_t current_position) {
+//         const size_t progress = (current_position * PROGRESS_BAR_WIDTH) /
+//         (total-1); const float f = (static_cast<float>(current_position) *
+//         100.0f /
+//                          static_cast<float>(total-1));
+//         int current = init_size;
+//         for (; current < init_size+progress+1;++current) {
+//             bar_buffer[current] = PROGRESS_BAR_SYMBOL;
+//         }
+
+//         float_to_char<percentage_size>(f, percentage);
+//         // auto* ptr_c = &bar_buffer[percentage_position + 1];
+//         // auto* ptr_p = &percentage[0];
+//         // const auto* const p_end = &percentage[percentage_size];
+//         // while(ptr_p!=p_end){
+//         //     *(ptr_c++) = *(ptr_p++);
+//         // }
+//         current = percentage_position + 1;
+//         for(int i=0;i<percentage_size;++i,++current){
+//             bar_buffer[current]=percentage[i];
+//         }
+//     }
+
+//     void show(FILE* stream)
+//     {
+//         fprintf(stream,"%s\r\n",bar_buffer);
+//         fflush(stream);
+//     }
+
+//     const char* const get() const { return bar_buffer; }
+
+//    private:
+//     static constexpr std::string_view init = "Progress: [";
+//     static constexpr auto init_size = init.size();
+//     static constexpr size_t percentage_size = 6;
+//     static constexpr std::size_t total_bar_width = PROGRESS_BAR_WIDTH +
+//     init_size + 2 + percentage_size + 1 + 1;; static constexpr size_t
+//     percentage_position = init_size + PROGRESS_BAR_WIDTH + 2;
+
+//     char percentage[percentage_size + 1] = {};
+
+//     // static constexpr size_t total_bar_width = buffer_size();
+
+//     char bar_buffer[total_bar_width + 1] = {};
+//     std::size_t total;
+// };
+
+// void __attribute__((noinline)) foo(volatile int* a)
+// {
+//     volatile int* b = a;
+//     __asm__ volatile ("nop" : : : "memory");
+// }
+
+// int main() {
+//     constexpr auto total = 10;
+//     constexpr size_t _PROGRESS_BAR_WIDTH = 10;
+//     constexpr char _PROGRESS_BAR_SYMBOL = 'x';
+//     ProgressBar<_PROGRESS_BAR_WIDTH,_PROGRESS_BAR_SYMBOL> p(total);
+//     const auto* const ptr = p.get();
+//     volatile int a =1;
+//     constexpr auto ii =1 ;
+//     FILE* stream = stdout;
+//     for (int i = 0; i < total; ++i) {
+//         foo(&a);
+//         p.update(i);
+//         p.show(stream);
+//     }
+
+//     return ptr[0];
+// }

@@ -13,7 +13,7 @@
 # Compiler and linker
 CXX="clang++-18"
 #TARGET="fdist"
-TARGET="cullum_vicente"
+TARGET="fdist"
 BUILD_DIR="./builddir/host"
 
 SRC_BD=$1
