@@ -43,10 +43,11 @@ namespace MC
        uint64_t n_particles,
        std::size_t n_samples,
        std::span<double> volumes,
-       std::span<const size_t> neighbors,
+       std::span<const size_t> _neighbors,
        bool uniform_mc_init,
        double& total_mass)
   {
+    (void)_neighbors; // TODO remove
     if constexpr (ConstWeightModelType<Model>)
     {
       if (_logger)
@@ -58,7 +59,7 @@ namespace MC
     }
 
     auto unit = std::make_unique<MonteCarloUnit>();
-    unit->domain = ReactorDomain(volumes, neighbors);
+    unit->domain = ReactorDomain(volumes);
 
     // bool flag_virtual = unit->domain.getNumberCompartments() == 1;
     auto container = ParticlesContainer<Model>(

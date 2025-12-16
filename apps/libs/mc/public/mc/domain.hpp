@@ -93,7 +93,10 @@ namespace MC
     /**
      * @brief Main constructor
      */
-    ReactorDomain(std::span<double> volumes, std::span<const size_t> neighbors);
+    explicit ReactorDomain(std::span<double> volumes);
+
+    ReactorDomain(double total_volume, std::size_t size);
+
     /**
      * @brief Default destructor
      *

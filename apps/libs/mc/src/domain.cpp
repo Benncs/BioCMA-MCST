@@ -22,17 +22,24 @@ namespace MC
     Kokkos::deep_copy(this->inner.liquid_volume, tmp_host_volume);
   }
 
-  ReactorDomain::ReactorDomain() = default;
+  ReactorDomain::ReactorDomain(double total_volume, std::size_t size)
+      : _total_volume(total_volume), size(size)
+  {
+  }
 
-  ReactorDomain::ReactorDomain(std::span<double> volumes,
-                               std::span<const size_t> neighbors)
-      : _total_volume(std::reduce(volumes.begin(), volumes.end(), 0.)),
-        size(volumes.size())
+  ReactorDomain::ReactorDomain() : ReactorDomain(0, 0)
 
   {
     // const auto n_rows = this->getNumberCompartments();
     // const auto n_cols = neighbors.size() / n_rows;
     // setLiquidNeighbors(n_rows, n_cols, neighbors);
+  }
+
+  ReactorDomain::ReactorDomain(std::span<double> volumes)
+      : ReactorDomain(std::reduce(volumes.begin(), volumes.end(), 0.),
+                      volumes.size())
+
+  {
   }
 
   void ReactorDomain::update(std::span<const double> newliquid_volume,
