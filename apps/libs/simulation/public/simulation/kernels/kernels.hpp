@@ -1,8 +1,8 @@
 #ifndef __SIMULATION_KERNELS_HPP__
 #define __SIMULATION_KERNELS_HPP__
 
-#include "Kokkos_Printf.hpp"
-#include "common/common.hpp"
+#include <Kokkos_Core_fwd.hpp>
+#include <common/common.hpp>
 #include <common/kokkos_getpolicy.hpp>
 #include <mc/unit.hpp>
 #include <simulation/kernels/model_kernel.hpp>
@@ -137,32 +137,6 @@ namespace Simulation::KernelInline
 
     void launch_model(const std::size_t n_particle) const
     {
-      constexpr bool is_reduce = true;
-      // const auto _policy =
-      //     Common::get_policy<cycle_kernel_type, KernelInline::TagSecondPass>(
-      //         cycle_kernel, n_particle, is_reduce);
-
-      // auto _policy =
-      //     Common::get_policy<KernelInline::TagCycle>(n_particle, is_reduce);
-
-      // _policy.set_scratch_size(
-      //     0,
-      //     Kokkos::PerTeam(cycle_kernel.concentrations.extent(0) *
-      //                     _policy.team_size() * sizeof(double)));
-
-      // const auto scatter_policy =
-      //     Kokkos::RangePolicy<KernelInline::TagContribution>(0, n_particle);
-
-      // auto _policy = Kokkos::RangePolicy<KernelInline::TagCycle>(0,
-      // n_particle);
-
-      // auto _policy = Kokkos::TeamPolicy<TagCycle>(53, 256);
-      // Kokkos::parallel_reduce(
-      //     "cycle_model",
-      //     _policy,
-      //     cycle_kernel,
-      //     KernelInline::CycleReducer<ComputeSpace>(cycle_reducer));
-      //
 
       auto _policy = Kokkos::RangePolicy<TagCycle>(model_space, 0, n_particle);
       Kokkos::parallel_reduce(
@@ -170,14 +144,14 @@ namespace Simulation::KernelInline
           _policy,
           cycle_kernel,
           KernelInline::CycleReducer<ComputeSpace>(cycle_reducer));
+      Kokkos::fence(); // TODO needed ?
 
-      // Kokkos::parallel_reduce(
-      //     "cycle_model",
-      //     _policy,
-      //     cycle_kernel,
-      //     KernelInline::CycleReducer<ComputeSpace>(cycle_reducer));
-      // Kokkos::fence(); // TODO needed ?
-      // Kokkos::parallel_for("cycle_scatter", scatter_policy, cycle_kernel);
+      constexpr int PARTICLES_PER_TEAM = 256;
+      int league_size = Kokkos::ceil(n_particle / PARTICLES_PER_TEAM);
+
+      auto _policy2 = Kokkos::TeamPolicy<TagContribution>(
+          model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
+      Kokkos::parallel_for("cycle_model2", _policy2, cycle_kernel);
     }
   };
 

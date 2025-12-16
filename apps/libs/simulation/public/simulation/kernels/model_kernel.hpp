@@ -132,27 +132,51 @@ namespace Simulation::KernelInline
       this->particles = std::move(_particles);
     }
 
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const TagContribution _tag, const TeamMember& team) const
+    {
+      // (void)_tag;
+      // std ::size_t idx = (team_handle.league_rank() *
+      // team_handle.team_size()) +
+      //                    team_handle.team_rank();
+      // if (idx >= (particles.n_particles()))
+      // {
+      //   return;
+      // }
+      // if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
+      // {
+      //   return;
+      // }
+      constexpr int PARTICLES_PER_TEAM = 256;
+      // particles.get_contributions(idx, contribs_scatter);
+
+      const std::size_t p0 = team.league_rank() * PARTICLES_PER_TEAM;
+
+      Kokkos::parallel_for(Kokkos::TeamThreadRange(team, PARTICLES_PER_TEAM),
+                           [&](const int i)
+                           {
+                             const std::size_t p = p0 + i;
+                             if (p >= particles.n_particles())
+                             {
+                               return;
+                             }
+
+                             if (particles.status(p) != MC::Status::Idle)
+                             {
+                               return;
+                             }
+                             particles.get_contributions(p, contribs_scatter);
+                           });
+    }
+
     // KOKKOS_INLINE_FUNCTION
-    // void operator()(const TagFirstPass _tag,
-    //                 const TeamMember& team_handle) const
+    // void operator()(const TagContribution _tag, const std::size_t idx) const
     // {
     //   (void)_tag;
-    //   GET_INDEX(particles.n_particles());
-    //   if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
-    //   {
-    //     return;
-    //   }
+    //   CHECK_STATUS_OR_RETURN(idx);
+
     //   particles.get_contributions(idx, contribs_scatter);
     // }
-    //
-    KOKKOS_INLINE_FUNCTION
-    void operator()(const TagContribution _tag, const std::size_t idx) const
-    {
-      (void)_tag;
-      CHECK_STATUS_OR_RETURN(idx);
-
-      particles.get_contributions(idx, contribs_scatter);
-    }
 
     // KOKKOS_INLINE_FUNCTION void operator()(const TagCycle _tag,
     //                                        const TeamMember& team_handle,
@@ -258,8 +282,6 @@ namespace Simulation::KernelInline
         }
         events.wrap_incr<MC::EventType::NewParticle>();
       };
-
-      particles.get_contributions(idx, contribs_scatter);
     }
 
     M::FloatType d_t;
