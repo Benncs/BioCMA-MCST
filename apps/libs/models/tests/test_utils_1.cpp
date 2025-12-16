@@ -1,5 +1,5 @@
+#include <iostream>
 #include <models/utils.hpp>
-
 #define ASSERT_EQUALS(a, b)                                                    \
   if ((a) != (b))                                                              \
   {                                                                            \
