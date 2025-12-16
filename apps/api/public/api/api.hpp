@@ -136,7 +136,7 @@ namespace Api
      * @param recursive Flag indicating if recursive registration is required.
      * @return True if the path was successfully registered; false otherwise.
      */
-    bool register_cma_path(std::string_view path);
+    ApiResult register_cma_path(std::string_view path);
 
     /**
      * @brief Register a serialization/deserialization (serde) path.

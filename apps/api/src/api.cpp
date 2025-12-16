@@ -205,8 +205,10 @@ namespace Api
 
     try
     {
-      if (auto opt_case = Core::load(
-              this->_data.exec_info, std::move(this->params), this->feed))
+      if (auto opt_case = Core::load(logger,
+                                     this->_data.exec_info,
+                                     std::move(this->params),
+                                     this->feed))
       {
         this->_data = std::move(*opt_case);
         this->loaded = true;
@@ -348,14 +350,14 @@ namespace Api
     return ApiResult(); // TODO
   }
 
-  bool SimulationInstance::register_cma_path(std::string_view path)
+  ApiResult SimulationInstance::register_cma_path(std::string_view path)
   {
 
     std::filesystem::path p(path);
 
     if (!std::filesystem::exists(p) || !std::filesystem::is_directory(p))
     {
-      return false;
+      return ApiResult("Flowmap doesn´t exist or is invalid");
     }
 
     std::string normalized = p.string();
@@ -366,7 +368,7 @@ namespace Api
 
     this->params.cma_case_path = normalized;
 
-    return true;
+    return ApiResult();
   }
 
   ApiResult SimulationInstance::register_initial_condition(

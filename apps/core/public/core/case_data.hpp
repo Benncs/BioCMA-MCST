@@ -83,7 +83,8 @@ namespace Core
   void exec(std::shared_ptr<IO::Logger> logger, CaseData&& case_data);
 
   std::optional<Core::CaseData>
-  load(const ExecInfo& exec,
+  load(std::shared_ptr<IO::Logger>& logger,
+       const ExecInfo& exec,
        const UserControlParameters&& params,
        std::optional<Simulation::Feed::SimulationFeed> feed = std::nullopt);
 

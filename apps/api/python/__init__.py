@@ -105,12 +105,14 @@ def fast_run(
     if liquid_flow_rate != 0:
         handle_module.set_liquid_feed_constant(handle, liquid_flow_rate, s_feed, 0, 0)
 
+    handle_module.register_model_name(
+        handle, model_name
+    )  # Needed to set it even if serde with UDF
     # Model setup
     if not is_serde:
         if f_init is None:
             raise ValueError("f_init must be provided when is_serde is False")
         set_initial_concentrations(handle, *f_init(n_compartment))
-        handle_module.register_model_name(handle, model_name)
     else:
         if not serde_path:
             raise ValueError("serde_path must be provided when is_serde is True")
@@ -123,4 +125,4 @@ def fast_run(
         return -1
 
     handle_module.exec(handle)
-    return 0
+    return handle_module.i_rank(handle)

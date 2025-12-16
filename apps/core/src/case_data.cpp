@@ -114,12 +114,13 @@ namespace Core
   }
 
   std::optional<Core::CaseData>
-  load(const ExecInfo& exec,
+  load(std::shared_ptr<IO::Logger>& logger,
+       const ExecInfo& exec,
        const UserControlParameters&& params,
        std::optional<Simulation::Feed::SimulationFeed> feed)
   {
     return impl_load(
-        exec, std::forward<decltype(params)>(params), std::move(feed));
+        logger, exec, std::forward<decltype(params)>(params), std::move(feed));
   }
 
   ExecInfo

@@ -75,8 +75,11 @@ namespace PythonBindings
   auto register_cma_path(std::shared_ptr<Api::SimulationInstance>& handle,
                          const std::string& cma_path)
   {
-
-    return ::register_cma_path(handle.get(), cma_path.data());
+    auto retc = ::register_cma_path(handle.get(), cma_path.data());
+    if (retc != 0)
+    {
+      throw std::runtime_error("Invalid CMA Case");
+    }
   }
 
   auto
