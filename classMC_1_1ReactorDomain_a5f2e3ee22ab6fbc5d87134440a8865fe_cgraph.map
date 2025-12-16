@@ -1,10 +1,6 @@
 <map id="MC::ReactorDomain::~ReactorDomain" name="MC::ReactorDomain::~ReactorDomain">
-<area shape="rect" id="Node000001" title="Default destructor." alt="" coords="5,68,154,107"/>
-<area shape="rect" id="Node000002" href="$classMC_1_1ReactorDomain.html#a33de8f72d0fc6a804a793093992f3175" title="Return a const reference to neighbors." alt="" coords="202,5,350,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="141,65,198,47,200,52,143,70"/>
-<area shape="rect" id="Node000003" href="$classMC_1_1ReactorDomain.html#a698b6d934e68ff38263b34705babc1e7" title="Return total volume of domain." alt="" coords="202,68,350,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="154,85,186,85,186,90,154,90"/>
-<area shape="rect" id="Node000004" href="$classMC_1_1ReactorDomain.html#ad520ec34d2ffda4f7e62959ed4676aea" title=" " alt="" coords="202,155,350,193"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="126,105,217,145,215,150,124,110"/>
-<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="239,155,236,145,242,136,256,130,276,128,298,130,310,137,308,142,296,136,276,133,257,135,246,140,242,146,244,154"/>
+<area shape="rect" id="Node000001" title="Default destructor." alt="" coords="5,29,154,68"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ReactorDomain.html#ad520ec34d2ffda4f7e62959ed4676aea" title=" " alt="" coords="202,29,350,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,46,186,46,186,51,154,51"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="239,30,236,20,242,11,256,5,276,3,298,5,310,12,308,16,296,10,276,8,257,10,246,15,242,21,244,28"/>
 </map>

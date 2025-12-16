@@ -1,5 +1,5 @@
 <map id="IO::Console::Console" name="IO::Console::Console">
-<area shape="rect" id="Node000001" title="CONSOLE." alt="" coords="5,79,153,103"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,153,103"/>
 <area shape="rect" id="Node000002" href="$classIO_1_1Console.html#a6916d2842e77159b378551f044ebfd56" title="Log an alert message with a prefix." alt="" coords="205,5,330,30"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,76,200,41,218,33,220,38,202,45,113,81"/>
 <area shape="rect" id="Node000003" href="$namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383" title=" " alt="" coords="228,79,308,103"/>

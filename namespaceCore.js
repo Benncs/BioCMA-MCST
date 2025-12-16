@@ -14,7 +14,7 @@ var namespaceCore =
     [ "exec", "namespaceCore.html#ab6528e76111960864b7e4741327b3049", null ],
     [ "exporter_filename", "namespaceCore.html#a23e6f3d22fc51ef9decabb2c220b27c4", null ],
     [ "init_partial_exporter", "namespaceCore.html#afbce0beea293a7ccfdfc34a85b5e5e77", null ],
-    [ "load", "namespaceCore.html#a8a3e4aa1d1921da2e211c43d5368acf1", null ],
+    [ "load", "namespaceCore.html#a877563df5a407318a381e12311022377", null ],
     [ "operator<<", "namespaceCore.html#a557be83a6ebe2681db77cbf4726f2c35", null ],
     [ "runtime_init", "namespaceCore.html#ad98e98a441916916448cd3eb5c437bcf", null ]
 ];

@@ -66,7 +66,7 @@ var hierarchy =
     [ "KokkosLayoutMapper< Eigen::ColMajor >", "structKokkosLayoutMapper_3_01Eigen_1_1ColMajor_01_4.html", null ],
     [ "KokkosLayoutMapper< Eigen::RowMajor >", "structKokkosLayoutMapper_3_01Eigen_1_1RowMajor_01_4.html", null ],
     [ "MC::KPRNG", "classMC_1_1KPRNG.html", null ],
-    [ "Simulation::KernelInline::LeavingFlow", "structSimulation_1_1KernelInline_1_1LeavingFlow.html", null ],
+    [ "MC::LeavingFlow", "structMC_1_1LeavingFlow.html", null ],
     [ "UnsafeUDF::Loader", "structUnsafeUDF_1_1Loader.html", null ],
     [ "Core::ScalarFactory::Local", "structCore_1_1ScalarFactory_1_1Local.html", null ],
     [ "IO::Logger", "classIO_1_1Logger.html", [
@@ -79,7 +79,7 @@ var hierarchy =
     [ "Models::Monod", "structModels_1_1Monod.html", null ],
     [ "MC::MonteCarloUnit", "structMC_1_1MonteCarloUnit.html", null ],
     [ "Simulation::KernelInline::MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", null ],
-    [ "Simulation::KernelInline::MoveInfo< ExecSpace >", "structSimulation_1_1KernelInline_1_1MoveInfo.html", null ],
+    [ "MC::MoveInfo< ExecSpace, is_const >", "structMC_1_1MoveInfo.html", null ],
     [ "Core::DataExporter::MultiMatrixDescription", "structCore_1_1DataExporter_1_1MultiMatrixDescription.html", null ],
     [ "MC::Distributions::Normal< F >", "structMC_1_1Distributions_1_1Normal.html", null ],
     [ "OpaquePointer", "structOpaquePointer.html", null ],

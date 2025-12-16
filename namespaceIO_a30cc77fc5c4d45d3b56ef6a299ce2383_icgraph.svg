@@ -59,7 +59,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="classIO_1_1Console.html#ad8e8490ed0b1b321bb75e9702c32fb8a" target="_top" xlink:title="CONSOLE.">
+<g id="a_Node000004"><a xlink:href="classIO_1_1Console.html#ad8e8490ed0b1b321bb75e9702c32fb8a" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="270.5,-253.75 160,-253.75 160,-235.25 270.5,-235.25 270.5,-253.75"/>
 <text xml:space="preserve" text-anchor="middle" x="215.25" y="-240.25" font-family="Helvetica,sans-Serif" font-size="10.00">IO::Console::Console</text>
 </a>

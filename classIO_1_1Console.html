@@ -90,7 +90,6 @@ Collaboration diagram for IO::Console:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ad8e8490ed0b1b321bb75e9702c32fb8a" id="r_ad8e8490ed0b1b321bb75e9702c32fb8a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8e8490ed0b1b321bb75e9702c32fb8a">Console</a> ()</td></tr>
-<tr class="memdesc:ad8e8490ed0b1b321bb75e9702c32fb8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">CONSOLE.  <br /></td></tr>
 <tr class="memitem:a11495857e07d1d2df17ee5b554b0f93d" id="r_a11495857e07d1d2df17ee5b554b0f93d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11495857e07d1d2df17ee5b554b0f93d">~Console</a> () override=default</td></tr>
 <tr class="memitem:af5e8a2459163188ad1da3430b88001b6" id="r_af5e8a2459163188ad1da3430b88001b6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5e8a2459163188ad1da3430b88001b6">Console</a> (const <a class="el" href="classIO_1_1Console.html">Console</a> &amp;)=delete</td></tr>
 <tr class="memitem:afa53ede48496d2ff21c31a463d4c8e9e" id="r_afa53ede48496d2ff21c31a463d4c8e9e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa53ede48496d2ff21c31a463d4c8e9e">Console</a> (<a class="el" href="classIO_1_1Console.html">Console</a> &amp;&amp;)=delete</td></tr>
@@ -129,6 +128,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:acb0a97db04aa44a48f7dcee2e856250d" id="r_acb0a97db04aa44a48f7dcee2e856250d"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb0a97db04aa44a48f7dcee2e856250d">flags</a></td></tr>
 <tr class="memitem:adfaaebd35a02ffb05cc80f120f111d46" id="r_adfaaebd35a02ffb05cc80f120f111d46"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfaaebd35a02ffb05cc80f120f111d46">output</a></td></tr>
 <tr class="memitem:a745bc2a6854fe8d0e0f2958e044ade8f" id="r_a745bc2a6854fe8d0e0f2958e044ade8f"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a745bc2a6854fe8d0e0f2958e044ade8f">err_output</a></td></tr>
+<tr class="memitem:ab43a9f987ff5b9df7c791fd2ff8f1135" id="r_ab43a9f987ff5b9df7c791fd2ff8f1135"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab43a9f987ff5b9df7c791fd2ff8f1135">do_flush</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Concrete class logging system through console. </p>
@@ -148,8 +148,6 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>CONSOLE. </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -690,6 +688,28 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="ab43a9f987ff5b9df7c791fd2ff8f1135" name="ab43a9f987ff5b9df7c791fd2ff8f1135"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab43a9f987ff5b9df7c791fd2ff8f1135">&#9670;&#160;</a></span>do_flush</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool IO::Console::do_flush</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a745bc2a6854fe8d0e0f2958e044ade8f" name="a745bc2a6854fe8d0e0f2958e044ade8f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a745bc2a6854fe8d0e0f2958e044ade8f">&#9670;&#160;</a></span>err_output</h2>
 

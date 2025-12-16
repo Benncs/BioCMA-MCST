@@ -87,8 +87,10 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use to count events that occurs during Monte-Carlo processing cycles.  <a href="structMC_1_1EventContainer.html#details">More...</a><br /></td></tr>
 <tr class="memitem:KPRNG" id="r_KPRNG"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMC_1_1KPRNG.html">KPRNG</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utilities and wrap around kokkos random generator.  <a href="classMC_1_1KPRNG.html#details">More...</a><br /></td></tr>
+<tr class="memitem:LeavingFlow" id="r_LeavingFlow"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMC_1_1LeavingFlow.html">LeavingFlow</a></td></tr>
 <tr class="memitem:MonteCarloUnit" id="r_MonteCarloUnit"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMC_1_1MonteCarloUnit.html">MonteCarloUnit</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">General-purpose Monte Carlo unit to carry out simulations.  <a href="structMC_1_1MonteCarloUnit.html#details">More...</a><br /></td></tr>
+<tr class="memitem:MoveInfo" id="r_MoveInfo"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMC_1_1MoveInfo.html">MoveInfo</a></td></tr>
 <tr class="memitem:ParticlesContainer" id="r_ParticlesContainer"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMC_1_1ParticlesContainer.html">ParticlesContainer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main owning object for Monte-Carlo particles.  <a href="classMC_1_1ParticlesContainer.html#details">More...</a><br /></td></tr>
 <tr class="memitem:ReactorDomain" id="r_ReactorDomain"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMC_1_1ReactorDomain.html">ReactorDomain</a></td></tr>
@@ -119,8 +121,16 @@ Typedefs</h2></td></tr>
 <tr class="memitem:aa1b418b6e151ebc14d95164d7370e35b" id="r_aa1b418b6e151ebc14d95164d7370e35b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1b418b6e151ebc14d95164d7370e35b">ContributionView</a></td></tr>
 <tr class="memitem:ac4db0c9d5b74f4c59a2ffcc7374cba1c" id="r_ac4db0c9d5b74f4c59a2ffcc7374cba1c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">KernelConcentrationType</a></td></tr>
 <tr class="memitem:aad69f7f73ef6a017ee86ca89451a6271" id="r_aad69f7f73ef6a017ee86ca89451a6271"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad69f7f73ef6a017ee86ca89451a6271">LocalConcentration</a></td></tr>
-<tr class="memitem:ad31fce592f5fd9b873839781863419d3" id="r_ad31fce592f5fd9b873839781863419d3"><td class="memTemplParams" colspan="2">template&lt;typename Space&gt; </td></tr>
-<tr class="memitem:ad31fce592f5fd9b873839781863419d3 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad31fce592f5fd9b873839781863419d3">NeighborsView</a></td></tr>
+<tr class="memitem:a7a1a1a43d456f2d652a5a459d66d8cac" id="r_a7a1a1a43d456f2d652a5a459d66d8cac"><td class="memTemplParams" colspan="2">template&lt;class ExecSpace, bool is_const&gt; </td></tr>
+<tr class="memitem:a7a1a1a43d456f2d652a5a459d66d8cac template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a1a1a43d456f2d652a5a459d66d8cac">VolumeView</a></td></tr>
+<tr class="memitem:afbfa1eefd4af411bb28cc6b814580818" id="r_afbfa1eefd4af411bb28cc6b814580818"><td class="memTemplParams" colspan="2">template&lt;class ExecSpace, bool is_const&gt; </td></tr>
+<tr class="memitem:afbfa1eefd4af411bb28cc6b814580818 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbfa1eefd4af411bb28cc6b814580818">DiagonalView</a></td></tr>
+<tr class="memitem:ab07c77629281f83ba5873be3af4714eb" id="r_ab07c77629281f83ba5873be3af4714eb"><td class="memTemplParams" colspan="2">template&lt;bool is_const&gt; </td></tr>
+<tr class="memitem:ab07c77629281f83ba5873be3af4714eb template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab07c77629281f83ba5873be3af4714eb">LeavingFlowView</a></td></tr>
+<tr class="memitem:ad0d8ea884c3b32f3d99228e435997790" id="r_ad0d8ea884c3b32f3d99228e435997790"><td class="memTemplParams" colspan="2">template&lt;class ExecSpace, bool is_const&gt; </td></tr>
+<tr class="memitem:ad0d8ea884c3b32f3d99228e435997790 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0d8ea884c3b32f3d99228e435997790">CumulativeProbabilityView</a></td></tr>
+<tr class="memitem:a0338734b6c7022619c63f34662b34f75" id="r_a0338734b6c7022619c63f34662b34f75"><td class="memTemplParams" colspan="2">template&lt;class ExecSpace, bool is_const&gt; </td></tr>
+<tr class="memitem:a0338734b6c7022619c63f34662b34f75 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0338734b6c7022619c63f34662b34f75">NeighborsView</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -148,9 +158,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ae91609aafa31939cedd6775cc5adafc4 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION consteval size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae91609aafa31939cedd6775cc5adafc4">event_index</a> ()</td></tr>
 <tr class="memdesc:ae91609aafa31939cedd6775cc5adafc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">inline getter, converts event to its value in order to be use as array index  <br /></td></tr>
 <tr class="memitem:aabb3d28b6ac38413f8d34f525d26942f" id="r_aabb3d28b6ac38413f8d34f525d26942f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aabb3d28b6ac38413f8d34f525d26942f">impl_init</a> (double &amp;total_mass, uint64_t n_particles, <a class="el" href="structMC_1_1MonteCarloUnit.html">MonteCarloUnit</a> &amp;unit, AutoGenerated::ContainerVariant &amp;&amp;container, bool uniform_init)</td></tr>
-<tr class="memitem:a43055ea3fdccfa29c5095b5d37bec620" id="r_a43055ea3fdccfa29c5095b5d37bec620"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
-<tr class="memitem:a43055ea3fdccfa29c5095b5d37bec620 template"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MonteCarloUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43055ea3fdccfa29c5095b5d37bec620">init</a> (const std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; &amp;_logger, uint64_t n_particles, std::size_t n_samples, std::span&lt; double &gt; volumes, std::span&lt; const size_t &gt; neighbors, bool uniform_mc_init, double &amp;total_mass)</td></tr>
-<tr class="memdesc:a43055ea3fdccfa29c5095b5d37bec620"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to initialize a <a class="el" href="structMC_1_1MonteCarloUnit.html" title="General-purpose Monte Carlo unit to carry out simulations.">MonteCarloUnit</a>.  <br /></td></tr>
+<tr class="memitem:a321fdcab9f09e8611b6f76b834d4ba4b" id="r_a321fdcab9f09e8611b6f76b834d4ba4b"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
+<tr class="memitem:a321fdcab9f09e8611b6f76b834d4ba4b template"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MonteCarloUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a321fdcab9f09e8611b6f76b834d4ba4b">init</a> (const std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; &amp;_logger, uint64_t n_particles, std::size_t n_samples, std::span&lt; double &gt; volumes, std::span&lt; const size_t &gt; _neighbors, bool uniform_mc_init, double &amp;total_mass)</td></tr>
+<tr class="memdesc:a321fdcab9f09e8611b6f76b834d4ba4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to initialize a <a class="el" href="structMC_1_1MonteCarloUnit.html" title="General-purpose Monte Carlo unit to carry out simulations.">MonteCarloUnit</a>.  <br /></td></tr>
 <tr class="memitem:ac9b6a65d70e4c5007f4bc908509924a0" id="r_ac9b6a65d70e4c5007f4bc908509924a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9b6a65d70e4c5007f4bc908509924a0">post_init_weight</a> (std::unique_ptr&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MonteCarloUnit</a> &gt; &amp;unit, double x0, double total_mass)</td></tr>
 <tr class="memitem:a6734cec020a2315d36542faad86c9125" id="r_a6734cec020a2315d36542faad86c9125"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a7e53098724df8c06b90824f1567f6bc5">pool_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6734cec020a2315d36542faad86c9125">get_pool</a> (std::size_t seed=0)</td></tr>
 <tr class="memitem:a2bd2179d1f9faf98a60f1dedfac0fc83" id="r_a2bd2179d1f9faf98a60f1dedfac0fc83"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bd2179d1f9faf98a60f1dedfac0fc83">sample_random_variables</a> (const <a class="el" href="#a7e53098724df8c06b90824f1567f6bc5">pool_type</a> &amp;pool, auto &amp;&amp;functor)</td></tr>
@@ -194,6 +204,52 @@ Variables</h2></td></tr>
 </div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="example_model_8cxx-example.html#_a4">example_model.cxx</a>.</dd>
 </dl>
 
+</div>
+</div>
+<a id="ad0d8ea884c3b32f3d99228e435997790" name="ad0d8ea884c3b32f3d99228e435997790"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0d8ea884c3b32f3d99228e435997790">&#9670;&#160;</a></span>CumulativeProbabilityView</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ExecSpace, bool is_const&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#ad0d8ea884c3b32f3d99228e435997790">MC::CumulativeProbabilityView</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line"> std::conditional_t&lt;</div>
+<div class="line">      is_const,</div>
+<div class="line">      Kokkos::View&lt;<span class="keyword">const</span> <span class="keywordtype">double</span>**,</div>
+<div class="line">                   Kokkos::LayoutRight,</div>
+<div class="line">                   ExecSpace,</div>
+<div class="line">                   Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;,</div>
+<div class="line">      Kokkos::View&lt;double**, Kokkos::LayoutRight, ExecSpace&gt;&gt;</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="afbfa1eefd4af411bb28cc6b814580818" name="afbfa1eefd4af411bb28cc6b814580818"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbfa1eefd4af411bb28cc6b814580818">&#9670;&#160;</a></span>DiagonalView</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ExecSpace, bool is_const&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#afbfa1eefd4af411bb28cc6b814580818">MC::DiagonalView</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line"> std::conditional_t&lt;</div>
+<div class="line">      is_const,</div>
+<div class="line">      Kokkos::View&lt;<span class="keyword">const</span> <span class="keywordtype">double</span>*,</div>
+<div class="line">                   Kokkos::LayoutLeft,</div>
+<div class="line">                   ExecSpace,</div>
+<div class="line">                   Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;,</div>
+<div class="line">      Kokkos::View&lt;double*, Kokkos::LayoutLeft, ExecSpace&gt;&gt;</div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="ae9182f33a07f97d9cc3851cf47529a04" name="ae9182f33a07f97d9cc3851cf47529a04"></a>
@@ -272,7 +328,27 @@ template&lt;typename ExecSpace&gt; </div>
 <div class="line">                   Kokkos::LayoutLeft,</div>
 <div class="line">                   <a class="code hl_typedef" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>,</div>
 <div class="line">                   Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;</div>
-<div class="ttc" id="anamespaceMC_html_aac73f6850f68fa6ced0d771f20a4af0f"><div class="ttname"><a href="#aac73f6850f68fa6ced0d771f20a4af0f">MC::ComputeSpace</a></div><div class="ttdeci">Kokkos::DefaultExecutionSpace ComputeSpace</div><div class="ttdef"><b>Definition</b> alias.hpp:21</div></div>
+<div class="ttc" id="anamespaceMC_html_aac73f6850f68fa6ced0d771f20a4af0f"><div class="ttname"><a href="#aac73f6850f68fa6ced0d771f20a4af0f">MC::ComputeSpace</a></div><div class="ttdeci">Kokkos::DefaultExecutionSpace ComputeSpace</div><div class="ttdef"><b>Definition</b> alias.hpp:22</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ab07c77629281f83ba5873be3af4714eb" name="ab07c77629281f83ba5873be3af4714eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab07c77629281f83ba5873be3af4714eb">&#9670;&#160;</a></span>LeavingFlowView</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;bool is_const&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#ab07c77629281f83ba5873be3af4714eb">MC::LeavingFlowView</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line"> std::conditional_t&lt;</div>
+<div class="line">      is_const,</div>
+<div class="line">      Kokkos::View&lt;const LeavingFlow*, Kokkos::SharedHostPinnedSpace&gt;,</div>
+<div class="line">      Kokkos::View&lt;LeavingFlow*, Kokkos::SharedHostPinnedSpace&gt;&gt;</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -289,30 +365,32 @@ template&lt;typename ExecSpace&gt; </div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> </div>
 <div class="line">      Kokkos::Subview&lt;<a class="code hl_typedef" href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">KernelConcentrationType</a>, int, <span class="keyword">decltype</span>(Kokkos::ALL)&gt;</div>
-<div class="ttc" id="anamespaceMC_html_ac4db0c9d5b74f4c59a2ffcc7374cba1c"><div class="ttname"><a href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">MC::KernelConcentrationType</a></div><div class="ttdeci">Kokkos::View&lt; const double **, Kokkos::LayoutLeft, ComputeSpace, Kokkos::MemoryTraits&lt; Kokkos::RandomAccess &gt; &gt; KernelConcentrationType</div><div class="ttdef"><b>Definition</b> alias.hpp:90</div></div>
+<div class="ttc" id="anamespaceMC_html_ac4db0c9d5b74f4c59a2ffcc7374cba1c"><div class="ttname"><a href="#ac4db0c9d5b74f4c59a2ffcc7374cba1c">MC::KernelConcentrationType</a></div><div class="ttdeci">Kokkos::View&lt; const double **, Kokkos::LayoutLeft, ComputeSpace, Kokkos::MemoryTraits&lt; Kokkos::RandomAccess &gt; &gt; KernelConcentrationType</div><div class="ttdef"><b>Definition</b> alias.hpp:94</div></div>
 </div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="example_model_8cxx-example.html#_a3">example_model.cxx</a>.</dd>
 </dl>
 
 </div>
 </div>
-<a id="ad31fce592f5fd9b873839781863419d3" name="ad31fce592f5fd9b873839781863419d3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad31fce592f5fd9b873839781863419d3">&#9670;&#160;</a></span>NeighborsView</h2>
+<a id="a0338734b6c7022619c63f34662b34f75" name="a0338734b6c7022619c63f34662b34f75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0338734b6c7022619c63f34662b34f75">&#9670;&#160;</a></span>NeighborsView</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Space&gt; </div>
+template&lt;class ExecSpace, bool is_const&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#ad31fce592f5fd9b873839781863419d3">MC::NeighborsView</a></td>
+          <td class="memname">using <a class="el" href="#a0338734b6c7022619c63f34662b34f75">MC::NeighborsView</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> </div>
-<div class="line">      Kokkos::View&lt;std::size_t**,</div>
+<b>Initial value:</b><div class="fragment"><div class="line"> std::conditional_t&lt;</div>
+<div class="line">      is_const,</div>
+<div class="line">      Kokkos::View&lt;<span class="keyword">const</span> std::size_t**,</div>
 <div class="line">                   Kokkos::LayoutRight,</div>
-<div class="line">                   Space,</div>
-<div class="line">                   Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;</div>
+<div class="line">                   ExecSpace,</div>
+<div class="line">                   Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;,</div>
+<div class="line">      Kokkos::View&lt;std::size_t**, Kokkos::LayoutRight, ExecSpace&gt;&gt;</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -470,6 +548,28 @@ template&lt;uint64_t Nd, <a class="el" href="conceptFloatingPointType.html">Floa
       </table>
 </div><div class="memdoc">
 
+</div>
+</div>
+<a id="a7a1a1a43d456f2d652a5a459d66d8cac" name="a7a1a1a43d456f2d652a5a459d66d8cac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a1a1a43d456f2d652a5a459d66d8cac">&#9670;&#160;</a></span>VolumeView</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ExecSpace, bool is_const&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a7a1a1a43d456f2d652a5a459d66d8cac">MC::VolumeView</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line"> std::conditional_t&lt;</div>
+<div class="line">      is_const,</div>
+<div class="line">      Kokkos::View&lt;<span class="keyword">const</span> <span class="keywordtype">double</span>*,</div>
+<div class="line">                   ExecSpace,</div>
+<div class="line">                   Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;,</div>
+<div class="line">      Kokkos::View&lt;double*, ExecSpace&gt;&gt;</div>
+</div><!-- fragment -->
 </div>
 </div>
 <a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
@@ -646,8 +746,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a43055ea3fdccfa29c5095b5d37bec620" name="a43055ea3fdccfa29c5095b5d37bec620"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43055ea3fdccfa29c5095b5d37bec620">&#9670;&#160;</a></span>init()</h2>
+<a id="a321fdcab9f09e8611b6f76b834d4ba4b" name="a321fdcab9f09e8611b6f76b834d4ba4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a321fdcab9f09e8611b6f76b834d4ba4b">&#9670;&#160;</a></span>init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -677,7 +777,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::span&lt; const size_t &gt;</td>          <td class="paramname"><span class="paramname"><em>neighbors</em></span>, </td>
+          <td class="paramtype">std::span&lt; const size_t &gt;</td>          <td class="paramname"><span class="paramname"><em>_neighbors</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -704,7 +804,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceMC_a43055ea3fdccfa29c5095b5d37bec620_cgraph.svg" width="100%" height="374"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceMC_a321fdcab9f09e8611b6f76b834d4ba4b_cgraph.svg" width="100%" height="374"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>

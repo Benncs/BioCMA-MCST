@@ -1,6 +1,6 @@
 <map id="IO::Console::toggle_alert" name="IO::Console::toggle_alert">
 <area shape="rect" id="Node000001" title="Toggle the alert logging behavior on or off." alt="" coords="403,122,537,161"/>
-<area shape="rect" id="Node000002" href="$classIO_1_1Console.html#ad8e8490ed0b1b321bb75e9702c32fb8a" title="CONSOLE." alt="" coords="208,104,355,129"/>
+<area shape="rect" id="Node000002" href="$classIO_1_1Console.html#ad8e8490ed0b1b321bb75e9702c32fb8a" title=" " alt="" coords="208,104,355,129"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="387,133,355,129,356,124,388,128"/>
 <area shape="rect" id="Node000005" href="$classIO_1_1Console.html#aac82dc12f9d262c7f44b22fe6f2dd49b" title=" " alt="" coords="5,153,160,178"/>
 <area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="388,149,160,164,160,158,387,144"/>

@@ -3,7 +3,7 @@
 <area shape="poly" id="edge11_Node000001_Node000001" title=" " alt="" coords="489,238,479,232,460,229,443,231,433,236,431,241,437,249,432,252,426,242,429,232,441,226,460,224,481,227,492,234"/>
 <area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#af0e3ff388be6a2cb08edf9f69dd200b0" title="Checks if all initialization steps have been validated." alt="" coords="218,149,367,188"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="431,243,371,201,349,191,351,186,373,197,434,239"/>
-<area shape="rect" id="Node000004" href="$classIO_1_1Console.html#ad8e8490ed0b1b321bb75e9702c32fb8a" title="CONSOLE." alt="" coords="219,100,366,125"/>
+<area shape="rect" id="Node000004" href="$classIO_1_1Console.html#ad8e8490ed0b1b321bb75e9702c32fb8a" title=" " alt="" coords="219,100,366,125"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="445,238,416,187,395,161,370,139,351,128,353,123,374,134,399,157,420,184,450,235"/>
 <area shape="rect" id="Node000009" href="$structApi_1_1SimulationInstance.html#a3f04372728be84263fb69f5773ca5bd5" title="Execute the simulation." alt="" coords="213,337,372,376"/>
 <area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="432,287,373,327,348,339,346,334,371,322,429,283"/>

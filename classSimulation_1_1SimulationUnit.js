@@ -51,7 +51,6 @@ var classSimulation_1_1SimulationUnit =
     [ "liquid_scalar", "classSimulation_1_1SimulationUnit.html#acd3637570000536bb40abd15ef85ebb5", null ],
     [ "logger", "classSimulation_1_1SimulationUnit.html#ae3c7c244753f2d33fdd8efc40c7d325e", null ],
     [ "mc_unit", "classSimulation_1_1SimulationUnit.html#a6925f1d800356a29ab3b8e9cb3442672", null ],
-    [ "move_info", "classSimulation_1_1SimulationUnit.html#a687da24a9467b5a6c8a8e522ac140786", null ],
     [ "mt_model", "classSimulation_1_1SimulationUnit.html#a1e473c7c7f7e31551bdb26188e56830d", null ],
     [ "probes", "classSimulation_1_1SimulationUnit.html#a505fbf5573509d5d1d5674c436fe61f1", null ],
     [ "starting_time", "classSimulation_1_1SimulationUnit.html#a3471c9cb0e94d996538444e007b4f44a", null ]

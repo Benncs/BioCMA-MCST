@@ -98,10 +98,6 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a665208bc2eeca86defafa79514116981" id="r_a665208bc2eeca86defafa79514116981"><td class="memTemplParams" colspan="2">template&lt;typename ExecSpace&gt; </td></tr>
-<tr class="memitem:a665208bc2eeca86defafa79514116981 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a665208bc2eeca86defafa79514116981">DiagonalView</a></td></tr>
-<tr class="memitem:a8d1e1d8236f8e2ff9c680bdbb2685c98" id="r_a8d1e1d8236f8e2ff9c680bdbb2685c98"><td class="memTemplParams" colspan="2">template&lt;typename Space&gt; </td></tr>
-<tr class="memitem:a8d1e1d8236f8e2ff9c680bdbb2685c98 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d1e1d8236f8e2ff9c680bdbb2685c98">CumulativeProbabilityView</a></td></tr>
 <tr class="memitem:a9ae21a541b288006ad601f3ec8248a1c" id="r_a9ae21a541b288006ad601f3ec8248a1c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ae21a541b288006ad601f3ec8248a1c">LeavingFlowIndexType</a></td></tr>
 <tr class="memitem:ace226eabd36088b491c3ba8a93b7d7b3" id="r_ace226eabd36088b491c3ba8a93b7d7b3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace226eabd36088b491c3ba8a93b7d7b3">LeavingFlowType</a> = Kokkos::View&lt;double*, Kokkos::SharedHostPinnedSpace&gt;</td></tr>
 <tr class="memitem:a8a8043f8951284c90553aeb242416f4e" id="r_a8a8043f8951284c90553aeb242416f4e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a8043f8951284c90553aeb242416f4e">SpecieTable</a> = std::vector&lt;<a class="el" href="structSimulation_1_1Specie.html">Specie</a>&gt;</td></tr>
@@ -136,47 +132,6 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Namespace that contains classes and structures related to simulation handling. </p>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
-<a id="a8d1e1d8236f8e2ff9c680bdbb2685c98" name="a8d1e1d8236f8e2ff9c680bdbb2685c98"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d1e1d8236f8e2ff9c680bdbb2685c98">&#9670;&#160;</a></span>CumulativeProbabilityView</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Space&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="#a8d1e1d8236f8e2ff9c680bdbb2685c98">Simulation::CumulativeProbabilityView</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> </div>
-<div class="line">      Kokkos::View&lt;<span class="keyword">const</span> <span class="keywordtype">double</span>**,</div>
-<div class="line">                   Kokkos::LayoutRight,</div>
-<div class="line">                   Space,</div>
-<div class="line">                   Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;</div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="a665208bc2eeca86defafa79514116981" name="a665208bc2eeca86defafa79514116981"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a665208bc2eeca86defafa79514116981">&#9670;&#160;</a></span>DiagonalView</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename ExecSpace&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="#a665208bc2eeca86defafa79514116981">Simulation::DiagonalView</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> Kokkos::View&lt;<span class="keywordtype">double</span>*,</div>
-<div class="line">                                    Kokkos::LayoutLeft,</div>
-<div class="line">                                    ExecSpace,</div>
-<div class="line">                                    Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;</div>
-</div><!-- fragment -->
-</div>
-</div>
 <a id="aaee322090ebbd49ea6c9800cd56e1b35" name="aaee322090ebbd49ea6c9800cd56e1b35"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaee322090ebbd49ea6c9800cd56e1b35">&#9670;&#160;</a></span>init_scalar_f_t</h2>
 

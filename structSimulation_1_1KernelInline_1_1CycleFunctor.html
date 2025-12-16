@@ -90,9 +90,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a77a382779979e6e32e740c8a70df87c2" id="r_a77a382779979e6e32e740c8a70df87c2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77a382779979e6e32e740c8a70df87c2">CycleFunctor</a> ()=default</td></tr>
 <tr class="memitem:a65710ffd6cb5c6d2b16bf7353bf8aa80" id="r_a65710ffd6cb5c6d2b16bf7353bf8aa80"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65710ffd6cb5c6d2b16bf7353bf8aa80">CycleFunctor</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; _particles, <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> _random_pool, <a class="el" href="namespaceMC.html#ac4db0c9d5b74f4c59a2ffcc7374cba1c">MC::KernelConcentrationType</a> &amp;&amp;_concentrations, <a class="el" href="namespaceMC.html#aa1b418b6e151ebc14d95164d7370e35b">MC::ContributionView</a> _contribs_scatter, <a class="el" href="structMC_1_1EventContainer.html">MC::EventContainer</a> _event)</td></tr>
 <tr class="memitem:ae02dc3e4d2f3bbcd51f3e3396de6e9e3" id="r_ae02dc3e4d2f3bbcd51f3e3396de6e9e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae02dc3e4d2f3bbcd51f3e3396de6e9e3">update</a> (double _d_t, <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; _particles)</td></tr>
-<tr class="memitem:a10d4e4a44746aaff6c319db9150d532f" id="r_a10d4e4a44746aaff6c319db9150d532f"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10d4e4a44746aaff6c319db9150d532f">operator()</a> (const <a class="el" href="structSimulation_1_1KernelInline_1_1TagContribution.html">TagContribution</a> _tag, const std::size_t idx) const</td></tr>
+<tr class="memitem:aff52f67bc5e3e0f298767f35f5db7f8a" id="r_aff52f67bc5e3e0f298767f35f5db7f8a"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff52f67bc5e3e0f298767f35f5db7f8a">operator()</a> (const <a class="el" href="structSimulation_1_1KernelInline_1_1TagContribution.html">TagContribution</a> _tag, const <a class="el" href="#a51a40082c7b5e2c85653cb98a188894e">TeamMember</a> &amp;team) const</td></tr>
 <tr class="memitem:a65c360e6f2f258eeac64a74268b6ec93" id="r_a65c360e6f2f258eeac64a74268b6ec93"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65c360e6f2f258eeac64a74268b6ec93">operator()</a> (<a class="el" href="structSimulation_1_1KernelInline_1_1TagCycle.html">TagCycle</a> _tag, const Kokkos::TeamPolicy&lt; ComputeSpace &gt;::member_type &amp;team, <a class="el" href="#a54b7d670ca890df53c1f3557a7d6f0a8">value_type</a> &amp;reduce_val) const</td></tr>
-<tr class="memitem:a59d67ee517fa13bcc75158567d2a1a36" id="r_a59d67ee517fa13bcc75158567d2a1a36"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59d67ee517fa13bcc75158567d2a1a36">operator()</a> (const <a class="el" href="structSimulation_1_1KernelInline_1_1TagCycle.html">TagCycle</a> _tag, const std::size_t idx, <a class="el" href="#a54b7d670ca890df53c1f3557a7d6f0a8">value_type</a> &amp;reduce_val) const</td></tr>
+<tr class="memitem:a3438594e33a92a8d3cc8027a51e1679e" id="r_a3438594e33a92a8d3cc8027a51e1679e"><td class="memItemLeft" align="right" valign="top">KOKKOS_FORCEINLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3438594e33a92a8d3cc8027a51e1679e">operator()</a> (const <a class="el" href="structSimulation_1_1KernelInline_1_1TagCycle.html">TagCycle</a> _tag, const std::size_t idx, <a class="el" href="#a54b7d670ca890df53c1f3557a7d6f0a8">value_type</a> &amp;reduce_val) const</td></tr>
 <tr class="memitem:ad3c23e1bcb433eaabc464642ded3f180" id="r_ad3c23e1bcb433eaabc464642ded3f180"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3c23e1bcb433eaabc464642ded3f180">exec_per_particle</a> (const std::size_t idx, <a class="el" href="#a54b7d670ca890df53c1f3557a7d6f0a8">value_type</a> &amp;reduce_val) const</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -265,8 +265,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a10d4e4a44746aaff6c319db9150d532f" name="a10d4e4a44746aaff6c319db9150d532f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10d4e4a44746aaff6c319db9150d532f">&#9670;&#160;</a></span>operator()() <span class="overload">[1/3]</span></h2>
+<a id="aff52f67bc5e3e0f298767f35f5db7f8a" name="aff52f67bc5e3e0f298767f35f5db7f8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff52f67bc5e3e0f298767f35f5db7f8a">&#9670;&#160;</a></span>operator()() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -284,7 +284,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>idx</em></span>&#160;) const</td>
+          <td class="paramtype">const <a class="el" href="#a51a40082c7b5e2c85653cb98a188894e">TeamMember</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>team</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -296,8 +296,8 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 
 </div>
 </div>
-<a id="a59d67ee517fa13bcc75158567d2a1a36" name="a59d67ee517fa13bcc75158567d2a1a36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59d67ee517fa13bcc75158567d2a1a36">&#9670;&#160;</a></span>operator()() <span class="overload">[2/3]</span></h2>
+<a id="a3438594e33a92a8d3cc8027a51e1679e" name="a3438594e33a92a8d3cc8027a51e1679e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3438594e33a92a8d3cc8027a51e1679e">&#9670;&#160;</a></span>operator()() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -308,7 +308,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION void <a class="el" href="structSimulation_1_1KernelInline_1_1CycleFunctor.html">Simulation::KernelInline::CycleFunctor</a>&lt; M &gt;::operator() </td>
+          <td class="memname">KOKKOS_FORCEINLINE_FUNCTION void <a class="el" href="structSimulation_1_1KernelInline_1_1CycleFunctor.html">Simulation::KernelInline::CycleFunctor</a>&lt; M &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structSimulation_1_1KernelInline_1_1TagCycle.html">TagCycle</a></td>          <td class="paramname"><span class="paramname"><em>_tag</em></span>, </td>
         </tr>

@@ -114,7 +114,7 @@ var sectionId = 'dynsection-7';
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="namespaceCore.html#a8a3e4aa1d1921da2e211c43d5368acf1" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="namespaceCore.html#a877563df5a407318a381e12311022377" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="372,-117.75 311,-117.75 311,-99.25 372,-99.25 372,-117.75"/>
 <text xml:space="preserve" text-anchor="middle" x="341.5" y="-104.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::load</text>
 </a>

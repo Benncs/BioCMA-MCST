@@ -80,15 +80,15 @@ var NAVTREEINDEX =
 [
 "_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html",
 "classILoadBalancer.html#a11305fecea49664648595dd5d61027b3",
-"classMC_1_1ParticlesContainer.html#adae9af7cbb629530927d504f5fe75c90",
-"classSimulation_1_1ScalarSimulation.html#ab395ffa28c8c371fdf46fb50261a5a76",
-"functions_func_h.html",
-"namespaceSimulation_1_1KernelInline.html#a44b083c689a8840645847ffbbfb0b53d",
-"structCore_1_1ScalarFactory_1_1Visitor.html#aadf13ae921cd17ebaec52d77336bc871",
-"structMC_1_1Distributions_1_1Uniform.html",
-"structModels_1_1SimpleModel.html#ab79589a24572e4a5c97df8d053b1d0fe",
-"structModels_1_1UdfModel.html#afdf1202ba37e804ccd9d9042542dfbd4",
-"structSimulation_1_1KernelInline_1_1CycleReduceType.html#a02fb60e706b3dee27f5a35f11208b094"
+"classMC_1_1ParticlesContainer.html#adacba063d362632ca0899bae750b628a",
+"classSimulation_1_1ScalarSimulation.html#a93d2263bb3d23c695326b34742617ca1",
+"functions_func.html",
+"namespaceSimulation.html#afd80d46a94927c6389992f31509571aaa56b419b259c49fa979598027da1f6062",
+"structCore_1_1ScalarFactory_1_1Visitor.html",
+"structMC_1_1Distributions_1_1TruncatedNormal.html#a998e170cc3ed421c35b79d99177f2d85",
+"structModels_1_1SimpleModel.html#a63d897bdd222af5217d4d4131009d763",
+"structModels_1_1UdfModel.html#a3108247300844976bfd89856418ea55e",
+"structSimulation_1_1KernelInline_1_1CycleFunctors.html#a1ce087876e977d1fb79b4144ea152b5f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

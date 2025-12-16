@@ -15,7 +15,7 @@ var structApi_1_1SimulationInstance =
     [ "init", "structApi_1_1SimulationInstance.html#abdcc3b78881f75bd8fa06815ea08bd08", null ],
     [ "operator=", "structApi_1_1SimulationInstance.html#ae3b200eebeb9f7ac1881b04804a8162e", null ],
     [ "operator=", "structApi_1_1SimulationInstance.html#aa95ff2c5b7a00aa738eff843014b4cfd", null ],
-    [ "register_cma_path", "structApi_1_1SimulationInstance.html#a036c1568fb3949313e6d4e8664d325e1", null ],
+    [ "register_cma_path", "structApi_1_1SimulationInstance.html#ac8b52d1e9fa704e89d252d884aa6cf3d", null ],
     [ "register_initial_condition", "structApi_1_1SimulationInstance.html#a7fe33427bbf42fbff934729f90242271", null ],
     [ "register_initialiser_file_path", "structApi_1_1SimulationInstance.html#af7102c1a786cac7c27ad533ce1f29f06", null ],
     [ "register_model_name", "structApi_1_1SimulationInstance.html#a06b825ee4dcaf97e49ef5d3644a7301a", null ],

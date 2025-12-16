@@ -160,7 +160,7 @@ var sectionId = 'dynsection-6';
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="namespaceCore.html#a8a3e4aa1d1921da2e211c43d5368acf1" target="_top" xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="namespaceCore.html#a877563df5a407318a381e12311022377" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="402,-23.5 341,-23.5 341,-5 402,-5 402,-23.5"/>
 <text xml:space="preserve" text-anchor="middle" x="371.5" y="-10" font-family="Helvetica,sans-Serif" font-size="10.00">Core::load</text>
 </a>

@@ -16,6 +16,7 @@ var classIO_1_1Console =
     [ "toggle_debug", "classIO_1_1Console.html#af0656a646cdd7b3a22600298d9ab091e", null ],
     [ "toggle_error", "classIO_1_1Console.html#a5502dfa2c06dfbcd17d0b235077e7068", null ],
     [ "toggle_print", "classIO_1_1Console.html#a6021e7c7348f3922f449b927d11e588d", null ],
+    [ "do_flush", "classIO_1_1Console.html#ab43a9f987ff5b9df7c791fd2ff8f1135", null ],
     [ "err_output", "classIO_1_1Console.html#a745bc2a6854fe8d0e0f2958e044ade8f", null ],
     [ "flags", "classIO_1_1Console.html#acb0a97db04aa44a48f7dcee2e856250d", null ],
     [ "output", "classIO_1_1Console.html#adfaaebd35a02ffb05cc80f120f111d46", null ]

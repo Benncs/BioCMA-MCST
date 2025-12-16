@@ -17,8 +17,6 @@ var namespaceSimulation =
     [ "SimulationException", "classSimulation_1_1SimulationException.html", "classSimulation_1_1SimulationException" ],
     [ "SimulationUnit", "classSimulation_1_1SimulationUnit.html", "classSimulation_1_1SimulationUnit" ],
     [ "Specie", "structSimulation_1_1Specie.html", "structSimulation_1_1Specie" ],
-    [ "CumulativeProbabilityView", "namespaceSimulation.html#a8d1e1d8236f8e2ff9c680bdbb2685c98", null ],
-    [ "DiagonalView", "namespaceSimulation.html#a665208bc2eeca86defafa79514116981", null ],
     [ "init_scalar_f_t", "namespaceSimulation.html#aaee322090ebbd49ea6c9800cd56e1b35", null ],
     [ "LeavingFlowIndexType", "namespaceSimulation.html#a9ae21a541b288006ad601f3ec8248a1c", null ],
     [ "LeavingFlowType", "namespaceSimulation.html#ace226eabd36088b491c3ba8a93b7d7b3", null ],

@@ -1,6 +1,6 @@
 <map id="IO::Console::operator=" name="IO::Console::operator=">
 <area shape="rect" id="Node000001" title=" " alt="" coords="5,231,160,255"/>
-<area shape="rect" id="Node000002" href="$classIO_1_1Console.html#ad8e8490ed0b1b321bb75e9702c32fb8a" title="CONSOLE." alt="" coords="211,80,358,105"/>
+<area shape="rect" id="Node000002" href="$classIO_1_1Console.html#ad8e8490ed0b1b321bb75e9702c32fb8a" title=" " alt="" coords="211,80,358,105"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,228,139,179,171,150,206,123,232,109,235,114,209,128,175,154,143,183,97,232"/>
 <area shape="rect" id="Node000005" href="$classIO_1_1Console.html#a6432a263ec2b4a3751b1776d73e2eb6b" title="Toggle the alert logging behavior on or off." alt="" coords="410,128,544,166"/>
 <area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="98,228,145,196,175,180,207,167,254,155,303,147,394,142,395,147,304,153,255,160,208,172,177,185,148,201,101,232"/>
