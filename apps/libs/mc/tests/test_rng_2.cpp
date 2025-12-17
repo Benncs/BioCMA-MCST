@@ -11,7 +11,7 @@
 constexpr int N = 4000;
 constexpr double tolerance = 0.2;
 #else
-constexpr int N = 40 '000' 000;
+constexpr int N = 40000000;
 constexpr double tolerance = 0.05;
 #endif
 
