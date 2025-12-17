@@ -29,17 +29,18 @@
 namespace Core::ScalarFactory
 {
 
-  Simulation::ScalarInitializer scalar_factory(bool f_init_gas_flow,
-                                               std::span<double> gas_volume,
-                                               std::span<double> liquid_volume,
-                                               ScalarVariant arg_liq)
+  Simulation::ScalarInitializer
+  scalar_factory(bool f_init_gas_flow,
+                 std::span<double> gas_volume,
+                 std::span<double> liquid_volume,
+                 ScalarVariant arg_liq)
   {
     if (gas_volume.size() != liquid_volume.size())
     {
       throw std::invalid_argument("Error size of volume need to be the same");
     }
 
-    auto ret = std::visit(Visitor{f_init_gas_flow}, std::move(arg_liq));
+    auto ret = std::visit(Visitor{ f_init_gas_flow }, std::move(arg_liq));
 
     ret.volumesgas = gas_volume;
     ret.volumesliq = liquid_volume;
@@ -59,7 +60,8 @@ namespace Core::ScalarFactory
     return ret;
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(Uniform args) const
+  Simulation::ScalarInitializer
+  Visitor::operator()(Uniform args) const
   {
     auto res = Simulation::ScalarInitializer();
     res.type = Simulation::ScalarInitialiserType::Uniform;
@@ -114,7 +116,8 @@ namespace Core::ScalarFactory
   //   return res;
   // }
 
-  Simulation::ScalarInitializer Visitor::operator()(Local args) const
+  Simulation::ScalarInitializer
+  Visitor::operator()(Local args) const
   {
     auto res = Simulation::ScalarInitializer();
     res.type = Simulation::ScalarInitialiserType::Local;
@@ -169,7 +172,8 @@ namespace Core::ScalarFactory
     return res;
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(FullCase data) const
+  Simulation::ScalarInitializer
+  Visitor::operator()(FullCase data) const
   {
     auto res = Simulation::ScalarInitializer();
     res.type = Simulation::ScalarInitialiserType::FullCase;
@@ -196,7 +200,8 @@ namespace Core::ScalarFactory
     return res;
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(File filepath) const
+  Simulation::ScalarInitializer
+  Visitor::operator()(File filepath) const
   {
 
 #ifdef USE_HIGHFIVE
@@ -261,20 +266,22 @@ namespace Core::ScalarFactory
 #endif
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(CustomScript /*path*/) const
+  Simulation::ScalarInitializer
+  Visitor::operator()(CustomScript /*path*/) const
   {
     throw std::invalid_argument("Not implemented yet");
   }
 
-  bool sanitize(const Simulation::ScalarInitializer& res)
+  bool
+  sanitize(const Simulation::ScalarInitializer& res)
   {
 
     bool flag = false;
 
     auto test_functor = [](auto&& _res)
     {
-      bool _flag =
-          _res.liquid_f_init.has_value() && !_res.liquid_buffer.has_value();
+      bool _flag
+          = _res.liquid_f_init.has_value() && !_res.liquid_buffer.has_value();
 
       if (_res.gas_flow)
       {
@@ -300,12 +307,12 @@ namespace Core::ScalarFactory
     {
       // File doesn't need functor but buffer
       // First check initialiser has buffer and functor and not set
-      flag = res.liquid_buffer.has_value() &&
-             (!res.gas_f_init.has_value() && !res.liquid_f_init.has_value());
+      flag = res.liquid_buffer.has_value()
+             && (!res.gas_f_init.has_value() && !res.liquid_f_init.has_value());
       if (flag)
       {
-        flag =
-            res.liquid_buffer->size() != 0; // If buffer check that is not empty
+        flag = res.liquid_buffer->size()
+               != 0; // If buffer check that is not empty
       }
       break;
     }

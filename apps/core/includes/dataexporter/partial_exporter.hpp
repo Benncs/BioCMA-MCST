@@ -34,10 +34,10 @@ namespace Core
      * @param user_description Optional metadata describing the export
      * operation.
      */
-    PartialExporter(
-        const ExecInfo& info,
-        std::string_view _filename,
-        std::optional<export_metadata_t> user_description = std::nullopt);
+    PartialExporter(const ExecInfo& info,
+                    std::string_view _filename,
+                    std::optional<export_metadata_t> user_description
+                    = std::nullopt);
 
     /**
      * @brief Initializes the fields required for exporting data.

@@ -42,7 +42,9 @@ namespace Simulation
     std::size_t n_species{};
     std::size_t n_compartment{};
 
-    template <class Archive> void serialize(Archive& archive)
+    template <class Archive>
+    void
+    serialize(Archive& archive)
     {
       archive(n_species, n_compartment);
     }
@@ -82,10 +84,10 @@ namespace Simulation
     [[nodiscard]] double& get_end_time_mut();
     [[nodiscard]] Dimensions getDimensions() const noexcept;
     [[nodiscard]] std::span<double> getCliqData() const;
-    [[nodiscard]] std::optional<std::span<const double>> getCgasData() const;
+    [[nodiscard]] std::optional<std::span<const double> > getCgasData() const;
     [[nodiscard]] std::span<const double> getContributionData() const;
     [[nodiscard]] bool two_phase_flow() const;
-    [[nodiscard]] std::optional<std::span<const double>> getMTRData() const;
+    [[nodiscard]] std::optional<std::span<const double> > getMTRData() const;
     std::span<double> getContributionData_mut();
 
     // Simulation methods
@@ -125,8 +127,8 @@ namespace Simulation
 
     bool const_number_simulation = true;
     bool is_two_phase_flow;
-    double starting_time =
-        0.;            // Not used within calculation, only for export purposes
+    double starting_time
+        = 0.;          // Not used within calculation, only for export purposes
     double end_time{}; // Not used within calculation, only for export purposes
     bool f_reaction = true; // FIXME
     void scatter_contribute();
@@ -156,9 +158,10 @@ namespace Simulation
   };
 
   template <ModelType Model>
-  void SimulationUnit::pre_cycle(MC::ParticlesContainer<Model>& container,
-                                 double d_t,
-                                 auto& cycle_functors)
+  void
+  SimulationUnit::pre_cycle(MC::ParticlesContainer<Model>& container,
+                            double d_t,
+                            auto& cycle_functors)
   {
     PROFILE_SECTION("Simulation::pre_cycle")
 
@@ -181,9 +184,10 @@ namespace Simulation
         probes[ProbeType ::LeavingTime]);
   }
 
-  void SimulationUnit::cycleProcess(auto& container,
-                                    double d_t,
-                                    auto& cycle_functors)
+  void
+  SimulationUnit::cycleProcess(auto& container,
+                               double d_t,
+                               auto& cycle_functors)
   {
     PROFILE_SECTION("cycleProcess")
     using CurrentModel =
@@ -213,8 +217,9 @@ namespace Simulation
   }
 
   template <ModelType Model>
-  void SimulationUnit::post_cycle(MC::ParticlesContainer<Model>& container,
-                                  auto& cycle_functors)
+  void
+  SimulationUnit::post_cycle(MC::ParticlesContainer<Model>& container,
+                             auto& cycle_functors)
   {
     PROFILE_SECTION("Simulation::post_cycle")
     Kokkos::fence();

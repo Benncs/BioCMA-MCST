@@ -29,7 +29,9 @@ namespace MC
     double shink_ratio{};
     double dead_particle_ratio_threshold{};
 
-    template <class Archive> void serialize(Archive& ar)
+    template <class Archive>
+    void
+    serialize(Archive& ar)
     {
       ar(minimum_dead_particle_removal,
          buffer_ratio,
@@ -84,13 +86,14 @@ namespace MC
     ParticleSamples random;
     // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
 
-    KOKKOS_INLINE_FUNCTION auto sample(const std::size_t idx,
-                                       const std::size_t i_sample) const
+    KOKKOS_INLINE_FUNCTION auto
+    sample(const std::size_t idx, const std::size_t i_sample) const
     {
       return random(idx, i_sample);
     }
 
-    KOKKOS_INLINE_FUNCTION auto samples()
+    KOKKOS_INLINE_FUNCTION auto
+    samples()
     {
       return random;
     }
@@ -171,7 +174,8 @@ namespace MC
      */
     [[nodiscard]] double get_allocation_factor() const noexcept;
 
-    void change_nsample(const std::size_t new_n_sample)
+    void
+    change_nsample(const std::size_t new_n_sample)
     {
       if (new_n_sample != n_samples)
       {
@@ -350,13 +354,14 @@ namespace MC
           // container. The replacement must be alive (idle) and not the same as
           // the particle being removed.
           // Index of the particle that will "fill" the inactive slot
-          auto replacement_index =
-              last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
-          while (status(replacement_index) != MC::Status::Idle ||
-                 replacement_index == static_cast<std::size_t>(inactive_slot))
+          auto replacement_index
+              = last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
+          while (status(replacement_index) != MC::Status::Idle
+                 || replacement_index
+                        == static_cast<std::size_t>(inactive_slot))
           {
-            replacement_index =
-                last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
+            replacement_index
+                = last_used_index - Kokkos::atomic_fetch_add(&offset(), 1);
           }
 
           // Mark the removed particle's position as idle.
@@ -371,8 +376,8 @@ namespace MC
           for (std::size_t i_properties = 0; i_properties < M::n_var;
                ++i_properties)
           {
-            model(inactive_slot, i_properties) =
-                model(replacement_index, i_properties);
+            model(inactive_slot, i_properties)
+                = model(replacement_index, i_properties);
           }
           ages(inactive_slot, 0) = ages(replacement_index, 0);
           ages(inactive_slot, 1) = ages(replacement_index, 1);
@@ -433,7 +438,8 @@ namespace MC
       // contribs). Split model in two arrays?
 
       KOKKOS_INLINE_FUNCTION
-      void operator()(const TeamMember& team) const
+      void
+      operator()(const TeamMember& team) const
       {
         auto range = M::n_var;
         const int i = team.league_rank();
@@ -475,7 +481,9 @@ namespace MC
     return inactive_counter;
   }
 
-  template <ModelType Model> void ParticlesContainer<Model>::force_remove_dead()
+  template <ModelType Model>
+  void
+  ParticlesContainer<Model>::force_remove_dead()
   {
     this->remove_inactive_particles(this->inactive_counter);
   }
@@ -497,14 +505,16 @@ namespace MC
   }
 
   template <ModelType Model>
-  [[nodiscard]] std::size_t ParticlesContainer<Model>::capacity() const noexcept
+  [[nodiscard]] std::size_t
+  ParticlesContainer<Model>::capacity() const noexcept
   {
     return n_allocated_elements;
   }
 
   template <ModelType Model>
   template <class Archive>
-  void ParticlesContainer<Model>::load(Archive& ar)
+  void
+  ParticlesContainer<Model>::load(Archive& ar)
   {
     // Basically store everything that is usefull
     ar(n_allocated_elements, n_used_elements, rt_params);
@@ -525,7 +535,8 @@ namespace MC
 
   template <ModelType Model>
   template <class Archive>
-  void ParticlesContainer<Model>::save(Archive& ar) const
+  void
+  ParticlesContainer<Model>::save(Archive& ar) const
   {
 
     // Basically store everything that is usefull
@@ -548,8 +559,8 @@ namespace MC
 
     const auto _threshold = std::max(
         rt_params.minimum_dead_particle_removal,
-        static_cast<uint64_t>(static_cast<double>(n_used_elements) *
-                              rt_params.dead_particle_ratio_threshold));
+        static_cast<uint64_t>(static_cast<double>(n_used_elements)
+                              * rt_params.dead_particle_ratio_threshold));
 
     // TODO: May change threshold as container is now cleaned before exporting,
     if (inactive_counter > _threshold)
@@ -574,7 +585,9 @@ namespace MC
     return false;
   }
 
-  template <ModelType Model> void ParticlesContainer<Model>::merge_buffer()
+  template <ModelType Model>
+  void
+  ParticlesContainer<Model>::merge_buffer()
   {
     PROFILE_SECTION("ParticlesContainer::merge_buffer")
     const auto original_size = n_used_elements;
@@ -599,7 +612,8 @@ namespace MC
   }
 
   template <ModelType Model>
-  void ParticlesContainer<Model>::_resize(std::size_t new_size, bool force)
+  void
+  ParticlesContainer<Model>::_resize(std::size_t new_size, bool force)
   {
     PROFILE_SECTION("ParticlesContainer::_resize")
 
@@ -632,7 +646,8 @@ namespace MC
         // Handle resizing for weights based on model type
         if constexpr (ConstWeightModelType<Model>)
         {
-          Kokkos::resize(weights, 1); // Fixed size for ConstWeightModelType
+          Kokkos::resize(weights,
+                         1); // Fixed size for ConstWeightModelType
         }
         else
         {
@@ -643,14 +658,15 @@ namespace MC
   }
 
   template <ModelType Model>
-  void ParticlesContainer<Model>::__allocate_buffer__()
+  void
+  ParticlesContainer<Model>::__allocate_buffer__()
   {
     PROFILE_SECTION("ParticlesContainer::__allocate_buffer__")
     auto buffer_size = buffer_position.extent(0);
     const auto buffer_ratio = rt_params.buffer_ratio;
-    if (static_cast<double>(buffer_size) /
-            static_cast<double>(n_allocated_elements) <
-        buffer_ratio)
+    if (static_cast<double>(buffer_size)
+            / static_cast<double>(n_allocated_elements)
+        < buffer_ratio)
     {
       buffer_size = static_cast<std::size_t>(
           std::ceil(static_cast<double>(n_allocated_elements) * buffer_ratio));
@@ -713,7 +729,8 @@ namespace MC
   }
 
   template <ModelType M>
-  void ParticlesContainer<M>::remove_inactive_particles(std::size_t to_remove)
+  void
+  ParticlesContainer<M>::remove_inactive_particles(std::size_t to_remove)
   {
 
     PROFILE_SECTION("ParticlesContainer::remove_inactive_particles")
@@ -757,12 +774,12 @@ namespace MC
       }
 
       n_used_elements = new_used_item;
-      if (static_cast<double>(n_used_elements) /
-              static_cast<double>(n_allocated_elements) <=
-          rt_params.shink_ratio)
+      if (static_cast<double>(n_used_elements)
+              / static_cast<double>(n_allocated_elements)
+          <= rt_params.shink_ratio)
       {
         //        Kokkos::printf("SHRINK \r\n");
-        //force to true if we want to shrink
+        // force to true if we want to shrink
         _resize(n_used_elements * rt_params.allocation_factor, true);
       }
       inactive_counter = inactive_counter - to_remove;
@@ -790,7 +807,9 @@ namespace MC
     this->rt_params = parameters;
   }
 
-  template <ModelType M> void ParticlesContainer<M>::_sort(std::size_t n_c)
+  template <ModelType M>
+  void
+  ParticlesContainer<M>::_sort(std::size_t n_c)
   {
     (void)n_c;
   }

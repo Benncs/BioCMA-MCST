@@ -35,7 +35,8 @@ namespace WrapMPI
 // NOLINTEND
 #endif
 
-void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
+void
+sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
 {
 
   // Sync is not needed in shared mode because only one unit is used in this
@@ -49,9 +50,9 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     if (exec.current_rank == 0)
     {
 
-      auto liquid_buffer =
-          simulation.getContributionData_mut(); // Get the span of array on
-                                                // which reduction happend
+      auto liquid_buffer
+          = simulation.getContributionData_mut(); // Get the span of array on
+                                                  // which reduction happend
       MPI_Reduce(MPI_IN_PLACE,
                  liquid_buffer.data(),
                  liquid_buffer.size(),
@@ -63,9 +64,9 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     else
     {
 
-      const auto local_contribution =
-          simulation.getContributionData(); // Get the span of array that are
-                                            // add to reduction
+      const auto local_contribution
+          = simulation.getContributionData(); // Get the span of array
+                                              // that are add to reduction
       MPI_Reduce(local_contribution.data(),
                  nullptr,
                  local_contribution.size(),
@@ -82,9 +83,10 @@ void sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
   }
 }
 
-void sync_prepare_next(const ExecInfo& exec,
-                       Simulation::SimulationUnit& simulation,
-                       MPI_Request* request)
+void
+sync_prepare_next(const ExecInfo& exec,
+                  Simulation::SimulationUnit& simulation,
+                  MPI_Request* request)
 {
   PROFILE_SECTION("sync_prepare_next")
   simulation.clearContribution();
@@ -99,8 +101,8 @@ void sync_prepare_next(const ExecInfo& exec,
     // In multiple rank context, we also need to broadcast the updated liquid
     // concentration computed by the host during the current step
 
-    auto data =
-        simulation.getCliqData(); // Get concentration ptr wrapped into span
+    auto data
+        = simulation.getCliqData(); // Get concentration ptr wrapped into span
 
     WrapMPI::barrier();
 // We can use span here because we broadcast without changing size
@@ -110,7 +112,8 @@ void sync_prepare_next(const ExecInfo& exec,
   }
 }
 
-void last_sync(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
+void
+last_sync(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
 {
   // For the last synchronisation, the aim for the host rank is to retrive all
   // local information of worker ranks
@@ -127,20 +130,20 @@ void last_sync(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
 
       // We however have to declare events raw data as
       // vector to fit with WrapMPI API
-      std::vector<size_t> total_events_data =
-          WrapMPI::gather<size_t>(local_events.get_span(), exec.n_rank);
+      std::vector<size_t> total_events_data
+          = WrapMPI::gather<size_t>(local_events.get_span(), exec.n_rank);
 
       if (exec.current_rank == 0)
       {
-        // We could update 'local_events' for all ranks but it's useless as
-        // simulation is finished and programm is going to exit
+        // We could update 'local_events' for all ranks but it's useless
+        // as simulation is finished and programm is going to exit
         local_events = MC::EventContainer::reduce(total_events_data);
 
         // TODO: MERGE PARTICLELIST
       }
-      simulation.mc_unit->events =
-          local_events; // FIX IT because we will reduce
-                        // twice (here + post process)
+      simulation.mc_unit->events
+          = local_events; // FIX IT because we will reduce
+                          // twice (here + post process)
     }
   }
 }

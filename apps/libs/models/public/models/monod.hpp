@@ -73,8 +73,8 @@ namespace Models
         c_linear_density(static_cast<FloatType>(1000), d_m); ///< Linear density of the biomass (kg/m), calculated from cell diameter
     // clang-format on
 
-    MODEL_CONSTANT auto initial_length_dist =
-        MC::Distributions::TruncatedNormal<FloatType>(
+    MODEL_CONSTANT auto initial_length_dist
+        = MC::Distributions::TruncatedNormal<FloatType>(
             l_max_m * 0.75, l_max_m * 0.75 / 4, l_min_m, l_max_m);
 
     KOKKOS_INLINE_FUNCTION static void
@@ -97,8 +97,8 @@ namespace Models
           });
 
       GET_PROPERTY(particle_var::l) = l0;
-      GET_PROPERTY(particle_var::l_max) =
-          l_max_m; // Set the same length for everyone
+      GET_PROPERTY(particle_var::l_max)
+          = l_max_m; // Set the same length for everyone
       GET_PROPERTY(particle_var::mu_p) = mu_max;
 
       // born at l_max/2, divides at l_max
@@ -108,8 +108,8 @@ namespace Models
       // Monod factor to convert growth rate into elongation, it assumes
       // doubling in mass during generation time G=ln(2)/mu factor= DL/ln(2)
       // comes from mu=ln(2)/G
-      GET_PROPERTY(particle_var::_init_only_cell_lenghtening) =
-          dl / Kokkos::numbers::ln2;
+      GET_PROPERTY(particle_var::_init_only_cell_lenghtening)
+          = dl / Kokkos::numbers::ln2;
     }
 
     KOKKOS_INLINE_FUNCTION static double
@@ -126,31 +126,33 @@ namespace Models
            [[maybe_unused]] const SelfParticle& arr,
            [[maybe_unused]] const MC::LocalConcentration& c)
     {
-      const FloatType s =
-          static_cast<FloatType>(Kokkos::max(0., c(0))); // Bounded
+      const FloatType s
+          = static_cast<FloatType>(Kokkos::max(0., c(0))); // Bounded
       const FloatType mu = mu_max * s / (k_s + s); // Instantaneous mu from
                                                    // Monod
 
       // Efffective growth rate
-      const FloatType mu_eff =
-          Kokkos::min(GET_PROPERTY(Self::particle_var::mu_p), mu);
+      const FloatType mu_eff
+          = Kokkos::min(GET_PROPERTY(Self::particle_var::mu_p), mu);
 
       // Lengthening
-      GET_PROPERTY(Self::particle_var::l) +=
-          d_t * (mu_eff *
-                 GET_PROPERTY(Self::particle_var::_init_only_cell_lenghtening));
+      GET_PROPERTY(Self::particle_var::l)
+          += d_t
+             * (mu_eff
+                * GET_PROPERTY(
+                    Self::particle_var::_init_only_cell_lenghtening));
 
       // Growth rate
-      GET_PROPERTY(Self::particle_var::mu_p) +=
-          d_t * (1.0 / tau_meta) *
-          (mu - GET_PROPERTY(Self::particle_var::mu_p));
+      GET_PROPERTY(Self::particle_var::mu_p)
+          += d_t * (1.0 / tau_meta)
+             * (mu - GET_PROPERTY(Self::particle_var::mu_p));
 
       // Store only for being exported
       GET_PROPERTY(Self::particle_var::mue) = mu_eff;
 
       // Contributions
-      GET_PROPERTY(Self::particle_var::phi_s_c) =
-          -mu_eff * y_s_x * static_cast<FloatType>(mass(idx, arr));
+      GET_PROPERTY(Self::particle_var::phi_s_c)
+          = -mu_eff * y_s_x * static_cast<FloatType>(mass(idx, arr));
 
       return check_div(GET_PROPERTY(Self::particle_var::l),
                        GET_PROPERTY(Self::particle_var::l_max));
@@ -178,35 +180,39 @@ namespace Models
       GET_PROPERTY(particle_var::l) = new_current_length;
 
       const FloatType mu_p_value = GET_PROPERTY(particle_var::mu_p);
-      const FloatType cell_lenghtening_value =
-          GET_PROPERTY(particle_var::_init_only_cell_lenghtening);
+      const FloatType cell_lenghtening_value
+          = GET_PROPERTY(particle_var::_init_only_cell_lenghtening);
 
       GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l) = new_current_length;
       GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = l_max_m;
       GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::mu_p) = mu_p_value;
       GET_PROPERTY_FROM(
-          idx2, buffer_arr, particle_var::_init_only_cell_lenghtening) =
-          cell_lenghtening_value;
+          idx2, buffer_arr, particle_var::_init_only_cell_lenghtening)
+          = cell_lenghtening_value;
     }
 
-    static MC::ContribIndexBounds get_bounds()
+    static MC::ContribIndexBounds
+    get_bounds()
     {
       int begin = INDEX_FROM_ENUM(Self::particle_var::phi_s_c);
-      return {.begin = begin, .end = begin + 1};
+      return { .begin = begin, .end = begin + 1 };
     }
 
-    static std::vector<std::string_view> names()
+    static std::vector<std::string_view>
+    names()
     {
       return {
 
-          "length", "mu", "mu_eff"};
+        "length", "mu", "mu_eff"
+      };
     }
 
-    static std::vector<std::size_t> get_number()
+    static std::vector<std::size_t>
+    get_number()
     {
-      return {INDEX_FROM_ENUM(particle_var::l),
-              INDEX_FROM_ENUM(particle_var::mu_p),
-              INDEX_FROM_ENUM(particle_var::mue)};
+      return { INDEX_FROM_ENUM(particle_var::l),
+               INDEX_FROM_ENUM(particle_var::mu_p),
+               INDEX_FROM_ENUM(particle_var::mue) };
     }
   };
 

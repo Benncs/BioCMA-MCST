@@ -27,7 +27,8 @@ struct ExecInfo
   static std::string get_version();
 };
 
-inline std::ostream& operator<<(std::ostream& stream, const ExecInfo& obj)
+inline std::ostream&
+operator<<(std::ostream& stream, const ExecInfo& obj)
 {
   stream << obj.run_id << "\t" << obj.n_rank << "\t" << obj.thread_per_process
          << "\t";

@@ -7,7 +7,8 @@ namespace Simulation
     msg = this->getMessage();
   }
 
-  [[nodiscard]] std::string SimulationException::getMessage() const
+  [[nodiscard]] std::string
+  SimulationException::getMessage() const
   {
     switch (code_)
     {

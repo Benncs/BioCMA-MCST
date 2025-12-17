@@ -17,8 +17,8 @@ namespace Simulation
   // template <typename ExecSpace>
   // using CumulativeProbabilityView = MC::CumulativeProbabilityView<ExecSpace>;
 
-  using LeavingFlowIndexType =
-      Kokkos::View<std::size_t*, Kokkos::SharedHostPinnedSpace>;
+  using LeavingFlowIndexType
+      = Kokkos::View<std::size_t*, Kokkos::SharedHostPinnedSpace>;
   using LeavingFlowType = Kokkos::View<double*, Kokkos::SharedHostPinnedSpace>;
 
 } // namespace Simulation

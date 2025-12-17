@@ -39,10 +39,10 @@ namespace Core
      * @param _filename The filename for data export.
      * @param user_description Optional metadata describing the export.
      */
-    MainExporter(
-        const ExecInfo& info,
-        std::string_view _filename,
-        std::optional<export_metadata_t> user_description = std::nullopt);
+    MainExporter(const ExecInfo& info,
+                 std::string_view _filename,
+                 std::optional<export_metadata_t> user_description
+                 = std::nullopt);
 
     /**
      * @brief Writes initial simulation data to the output.
@@ -90,13 +90,14 @@ namespace Core
      * concentrations.
      * @param volume_gas Optional span of doubles for gas phase volumes.
      */
-    void update_fields(double t,
-                       std::span<double> concentration_liquid,
-                       std::span<const double> liquid_volume,
-                       std::optional<std::span<const double>> concentration_gas,
-                       std::optional<std::span<const double>> volume_gas,
-                       std::optional<std::span<const double>> mtr,
-                       std::optional<std::span<std::size_t>> events);
+    void
+    update_fields(double t,
+                  std::span<double> concentration_liquid,
+                  std::span<const double> liquid_volume,
+                  std::optional<std::span<const double> > concentration_gas,
+                  std::optional<std::span<const double> > volume_gas,
+                  std::optional<std::span<const double> > mtr,
+                  std::optional<std::span<std::size_t> > events);
 
   private:
     static const std::string

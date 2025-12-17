@@ -43,7 +43,8 @@ namespace CmaUtils
   //   }
 
   // Does this function should be moved into RCMTool ?
-  double get_min_residence_time(const TransitionnerPtrType& iterator) noexcept
+  double
+  get_min_residence_time(const TransitionnerPtrType& iterator) noexcept
   {
     /*
     This new implementation only determine minimum residence time defined as

@@ -14,9 +14,10 @@ namespace IO
     buffer = std::string(PROGRESS_BAR_WIDTH, ' ');
   }
 
-  void ProgressBar::show(std::ostream& out_stream,
-                         size_t total,
-                         size_t current_position)
+  void
+  ProgressBar::show(std::ostream& out_stream,
+                    size_t total,
+                    size_t current_position)
   {
 
     std::ios::sync_with_stdio(false);
@@ -25,19 +26,20 @@ namespace IO
     std::fill_n(buffer.begin(), progress, PROGRESS_BAR_SYMBOL);
     out_stream << "Progress: [" << buffer << "] " << std::fixed
                << std::setprecision(2)
-               << (static_cast<float>(current_position) * 100.0 /
-                   static_cast<float>(total))
+               << (static_cast<float>(current_position) * 100.0
+                   / static_cast<float>(total))
                << "%\r" << std::flush << std::setprecision(default_precision);
   }
 
-  void ProgressBar::show_percentage(std::ostream& out_stream,
-                                    size_t total,
-                                    size_t current_position) const
+  void
+  ProgressBar::show_percentage(std::ostream& out_stream,
+                               size_t total,
+                               size_t current_position) const
   {
     std::ios::sync_with_stdio(false);
     out_stream << "Progress: [" << std::fixed << std::setprecision(2)
-               << (static_cast<float>(current_position) * 100.0 /
-                   static_cast<float>(total))
+               << (static_cast<float>(current_position) * 100.0
+                   / static_cast<float>(total))
                << "%" << "]\r" << std::flush
                << std::setprecision(default_precision);
   }

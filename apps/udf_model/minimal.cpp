@@ -14,7 +14,8 @@
 
 namespace
 {
-  void __attribute__((constructor)) on_load()
+  void __attribute__((constructor))
+  on_load()
   {
     std::printf("[UDF]: Minimal model loaded\r\n"); // NOLINT
   }
@@ -28,11 +29,11 @@ namespace
   constexpr FloatType l_min_m = l_max_m / 2.;   // m
   constexpr FloatType k = 1e-3;                 // m
   constexpr FloatType d_m = 0.6e-6;             // m
-  constexpr FloatType lin_density =
-      c_linear_density(static_cast<FloatType>(1000), d_m);
+  constexpr FloatType lin_density
+      = c_linear_density(static_cast<FloatType>(1000), d_m);
 
-  constexpr FloatType phi_s_max =
-      (l_dot_max * lin_density) / glucose_to_biomass_yield; // kg/s
+  constexpr FloatType phi_s_max
+      = (l_dot_max * lin_density) / glucose_to_biomass_yield; // kg/s
 
   enum class particle_var : uint8_t
   {
@@ -42,25 +43,28 @@ namespace
     __COUNT__
   };
 
-  std::size_t _set_nvar()
+  std::size_t
+  _set_nvar()
   {
     return static_cast<size_t>(particle_var::__COUNT__);
   };
 
-  void _init_udf([[maybe_unused]] const MC::pool_type& random_pool,
-                 std::size_t idx,
-                 const Models::UdfModel::SelfParticle& arr,
-                 const UdfModel::Config& config)
+  void
+  _init_udf([[maybe_unused]] const MC::pool_type& random_pool,
+            std::size_t idx,
+            const Models::UdfModel::SelfParticle& arr,
+            const UdfModel::Config& config)
   {
     GET_PROPERTY(particle_var::length) = config(idx, 0);
     GET_PROPERTY(particle_var::l_max) = l_max_m;
   };
 
-  MC::Status _update_udf([[maybe_unused]] const MC::pool_type& random_pool,
-                         [[maybe_unused]] float d_t,
-                         std::size_t idx,
-                         const Models::UdfModel::SelfParticle& arr,
-                         const MC::LocalConcentration& c)
+  MC::Status
+  _update_udf([[maybe_unused]] const MC::pool_type& random_pool,
+              [[maybe_unused]] float d_t,
+              std::size_t idx,
+              const Models::UdfModel::SelfParticle& arr,
+              const MC::LocalConcentration& c)
   {
     const auto s = static_cast<FloatType>(c(0));
     const FloatType g = s / (k + s);
@@ -74,10 +78,11 @@ namespace
                      GET_PROPERTY(particle_var::l_max));
   }
 
-  MC::ContribIndexBounds _get_bounds_udf()
+  MC::ContribIndexBounds
+  _get_bounds_udf()
   {
     int begin = INDEX_FROM_ENUM(particle_var::phi_s);
-    return {.begin = begin, .end = begin + 1};
+    return { .begin = begin, .end = begin + 1 };
   }
 
   void
@@ -87,10 +92,10 @@ namespace
                 [[maybe_unused]] const MC::DynParticlesModel<float>& arr,
                 [[maybe_unused]] const MC::DynParticlesModel<float>& buffer_arr)
   {
-    const FloatType new_current_length =
-        GET_PROPERTY(particle_var::length) / 2.F;
-    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::length) =
-        new_current_length;
+    const FloatType new_current_length
+        = GET_PROPERTY(particle_var::length) / 2.F;
+    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::length)
+        = new_current_length;
 
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = l_max_m;
 
@@ -98,23 +103,26 @@ namespace
     GET_PROPERTY(particle_var::l_max) = l_max_m;
   }
 
-  double mass(std::size_t idx, const Models::UdfModel::SelfParticle& arr)
+  double
+  mass(std::size_t idx, const Models::UdfModel::SelfParticle& arr)
   {
     return GET_PROPERTY(particle_var::length) * lin_density;
   }
 
-  std::vector<std::string_view> _names()
+  std::vector<std::string_view>
+  _names()
   {
-    return {"length"};
+    return { "length" };
   };
 
-  std::vector<std::size_t> _get_number()
+  std::vector<std::size_t>
+  _get_number()
   {
-    return {INDEX_FROM_ENUM(particle_var::length)};
+    return { INDEX_FROM_ENUM(particle_var::length) };
   }
 
-  UdfModel::Config _get_config_udf(Kokkos::DefaultHostExecutionSpace& ep,
-                                   const std::size_t n)
+  UdfModel::Config
+  _get_config_udf(Kokkos::DefaultHostExecutionSpace& ep, const std::size_t n)
   {
     (void)n;
     Kokkos::ScopeGuard g{};

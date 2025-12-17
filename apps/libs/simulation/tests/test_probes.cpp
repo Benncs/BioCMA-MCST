@@ -5,7 +5,8 @@
 #include <iostream>
 #include <simulation/probe.hpp>
 
-void test_probes_set()
+void
+test_probes_set()
 {
   auto probe = Simulation::Probes<2>(); // Buffer size 2
   assert(probe.set(1) == true);
@@ -15,7 +16,8 @@ void test_probes_set()
   assert(probe.set(3) == false);
 }
 
-void test_probes_get()
+void
+test_probes_get()
 {
   constexpr std::size_t size_buff = 10;
   auto probe = Simulation::Probes<size_buff>(); // Buffer size 2
@@ -33,7 +35,8 @@ void test_probes_get()
     assert(rd[i] == static_cast<double>(i));
   }
 }
-void test_probes_clear()
+void
+test_probes_clear()
 {
   constexpr std::size_t size_buff = 20;
 
@@ -64,7 +67,8 @@ void test_probes_clear()
   assert(rd[2] == val_index_2);
 }
 
-int main()
+int
+main()
 {
 
   Kokkos::initialize();
@@ -181,7 +185,8 @@ void test_ptr()
     i = 0;
     j = 5;
     k = 2;
-    KOKKOS_ASSERT(ptr[i * (n_time_flush * n_sample) + j * n_sample + k] == M_PI)
+    KOKKOS_ASSERT(ptr[i * (n_time_flush * n_sample) + j * n_sample + k] ==
+M_PI)
   }
 
   {

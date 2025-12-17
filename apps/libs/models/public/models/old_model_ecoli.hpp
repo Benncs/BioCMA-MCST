@@ -96,8 +96,8 @@
 //     return a_permease * MONOD_RATIO(n_permease * phi_permease_specific, S,
 //     kppermease);
 //   }
-//   // static_assert(NPermease_max * phi_permease_specific == 5. * phi_pts_max,
-//   "pts/perm");
+//   // static_assert(NPermease_max * phi_permease_specific == 5. *
+//   phi_pts_max, "pts/perm");
 
 // } // namespace implEcoli
 
@@ -169,30 +169,33 @@
 //       using namespace ::implEcoli;
 //       // yield n for mode i, yields in mol/mol
 //       // E: ATP/G:glucose/O:Oxygen/A:Acetate
-//       constexpr double y1_b = (Yields::Y_EG + Yields::Yo_EG) / Yields::Yo_EG;
+//       constexpr double y1_b = (Yields::Y_EG + Yields::Yo_EG) /
+//       Yields::Yo_EG;
 //       // None constexpr double y2_b =
 //           (Yields::Y_EG + Yields::Yo_EG) /
 //           (Yields::Y_EG * Yields::Y_OG); // G/O //To modify divide by YO_EG
 //           not Y_Eg
-//       constexpr double y1_c = (Yields::Y_EG + Yields::Yf_EG) / Yields::Yf_EG;
+//       constexpr double y1_c = (Yields::Y_EG + Yields::Yf_EG) /
+//       Yields::Yf_EG;
 //       // None constexpr double y1_e = (Yields::Y_EA + Yields::Yo_EA) /
 //       Yields::Yo_EA; // None constexpr double y2_e =
-//           (Yields::Y_EA + Yields::Yo_EA) / (Yields::Yo_EA * Yields::Y_OA); //
-//           A/O
+//           (Yields::Y_EA + Yields::Yo_EA) / (Yields::Yo_EA * Yields::Y_OA);
+//           // A/O
 //       constexpr double yield_mol_S_O =
 //           1.; // Number of mol of S from mole of O for mode D conversion
 
 //       // Yield for specie for specifc mode: id oxygen mode b => y_o2_b
-//       constexpr double y_o2_b = (Yields::Y_EG * Yields::Y_OG) / (Yields::Y_EG
+//       constexpr double y_o2_b = (Yields::Y_EG * Yields::Y_OG) /
+//       (Yields::Y_EG
 //       + Yields::Yo_EG); constexpr double y_o2_e = (Yields::Y_EA *
-//       Yields::Y_OA) / (Yields::Y_EA + Yields::Yo_EA); constexpr double y_ac_c
-//       = (Yields::Y_AG * Yields::Y_EG) / (Yields::Y_EG + Yields::Yf_EG);
-//       constexpr double y_x_b =
+//       Yields::Y_OA) / (Yields::Y_EA + Yields::Yo_EA); constexpr double
+//       y_ac_c = (Yields::Y_AG * Yields::Y_EG) / (Yields::Y_EG +
+//       Yields::Yf_EG); constexpr double y_x_b =
 //           Yields::Y_XG * Yields::Yo_EG / (Yields::Y_EG + Yields::Yo_EG); //
 //           Y_xg /y1_b
-//       constexpr double y_x_c = Yields::Y_XG * Yields::Yf_EG / (Yields::Y_EG +
-//       Yields::Yf_EG); constexpr double y_x_e = Yields::Y_XA * Yields::Yo_EA /
-//       (Yields::Y_EA + Yields::Yo_EA);
+//       constexpr double y_x_c = Yields::Y_XG * Yields::Yf_EG / (Yields::Y_EG
+//       + Yields::Yf_EG); constexpr double y_x_e = Yields::Y_XA *
+//       Yields::Yo_EA / (Yields::Y_EA + Yields::Yo_EA);
 
 //       constexpr double y_phi_o2_residual =
 //           (Yields::Y_EG * Yields::Y_OG) / (Yields::Y_EG + Yields::Yo_EG); //
@@ -248,8 +251,8 @@
 //                       (y_ac_c * phi_mode_c + Yields::Y_AG * phi_mode_d -
 //                       phi_mode_e);
 
-//       rates.carbon_dioxide = -current_mass * MolarMass::co2 * (rates.oxygen /
-//       MolarMass::dioxygen);
+//       rates.carbon_dioxide = -current_mass * MolarMass::co2 * (rates.oxygen
+//       / MolarMass::dioxygen);
 
 //       rates.nu = MolarMass::X * (y_x_b * phi_mode_b + y_x_c * phi_mode_c +
 //       y_x_e * phi_mode_e);
@@ -305,7 +308,8 @@
 //           _rng.random_pool);
 //     }
 
-//     KOKKOS_FUNCTION Ecoli division(MC::ParticleDataHolder& p, MC::KPRNG _rng)
+//     KOKKOS_FUNCTION Ecoli division(MC::ParticleDataHolder& p, MC::KPRNG
+//     _rng)
 //     {
 //       using namespace implEcoli;
 //       const double original_length = this->length;
@@ -321,8 +325,8 @@
 //       {
 //         // auto generator = _rng.random_pool.get_state();
 //         // child.a_pts =
-//         //     Kokkos::min(max_pts, Kokkos::max(generator.normal(this->a_pts,
-//         this->a_pts / 2.),
+//         //     Kokkos::min(max_pts,
+//         Kokkos::max(generator.normal(this->a_pts, this->a_pts / 2.),
 //         //     0.));
 
 //         // child.a_permease = Kokkos::min(
@@ -355,8 +359,8 @@
 //       rates.glucose * p.weight;
 //       // access_contribs(_INDICES(Ac), p.current_container) += rates.acetate
 //       * p.weight;
-//       // access_contribs(_INDICES(O2), p.current_container) += rates.oxygen *
-//       p.weight;
+//       // access_contribs(_INDICES(O2), p.current_container) += rates.oxygen
+//       * p.weight;
 //       // access_contribs(_INDICES(CO2), p.current_container) +=
 //       rates.carbon_dioxide * p.weight;
 //     }

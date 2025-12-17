@@ -22,9 +22,11 @@ public:
 
 protected:
   [[nodiscard]] virtual double getRatio(uint64_t n,
-                                        uint32_t rank) const noexcept = 0;
+                                        uint32_t rank) const noexcept
+      = 0;
 
-  [[nodiscard]] inline auto size() const noexcept
+  [[nodiscard]] inline auto
+  size() const noexcept
   {
     return _size;
   }

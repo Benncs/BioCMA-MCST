@@ -17,7 +17,7 @@
 #endif
 
 template <typename T>
-concept FloatingPointType = std::is_floating_point_v<std::remove_cvref_t<T>>;
+concept FloatingPointType = std::is_floating_point_v<std::remove_cvref_t<T> >;
 
 static_assert(FloatingPointType<double>, "double ok");
 static_assert(FloatingPointType<float>, "float ok");
@@ -25,12 +25,12 @@ static_assert(!FloatingPointType<int>, "int ok");
 
 constexpr double tolerance_equality_float = 1e-15;
 
-template <typename T>
-concept IntegerType = requires(T n) {
-  requires std::is_integral_v<std::remove_cvref_t<T>>;
+template <typename T> concept IntegerType = requires(T n)
+{
+  requires std::is_integral_v<std::remove_cvref_t<T> >;
   requires !std::is_same_v<std::remove_cvref_t<T>, bool>;
   requires std::is_arithmetic_v<decltype(n + 1)>;
-  requires !std::is_pointer_v<std::remove_cvref_t<T>>;
+  requires !std::is_pointer_v<std::remove_cvref_t<T> >;
 };
 
 template <typename T>
@@ -38,37 +38,40 @@ concept NumberType = IntegerType<T> || FloatingPointType<T>;
 
 // General case: by value
 template <NumberType T>
-inline bool almost_equal(T val, T val2, T tolerance = tolerance_equality_float)
+inline bool
+almost_equal(T val, T val2, T tolerance = tolerance_equality_float)
 {
   using CommonT = std::common_type_t<T, T>;
-  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2)) <
-         static_cast<CommonT>(tolerance);
+  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2))
+         < static_cast<CommonT>(tolerance);
 }
 
 // Overload for references
 template <NumberType T>
-inline bool almost_equal(const T& val,
-                         const T& val2,
-                         T tolerance = tolerance_equality_float)
+inline bool
+almost_equal(const T& val,
+             const T& val2,
+             T tolerance = tolerance_equality_float)
 {
   using CommonT = std::common_type_t<T, T>;
-  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2)) <
-         static_cast<CommonT>(tolerance);
+  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2))
+         < static_cast<CommonT>(tolerance);
 }
 
 // Overload for pointers
 template <NumberType T>
-inline bool almost_equal(const T* val,
-                         const T* val2,
-                         T tolerance = tolerance_equality_float)
+inline bool
+almost_equal(const T* val,
+             const T* val2,
+             T tolerance = tolerance_equality_float)
 {
   if (!val || !val2)
   {
     return false; // Null pointer check
   }
   using CommonT = std::common_type_t<T, T>;
-  return std::abs(static_cast<CommonT>(*val) - static_cast<CommonT>(*val2)) <
-         static_cast<CommonT>(tolerance);
+  return std::abs(static_cast<CommonT>(*val) - static_cast<CommonT>(*val2))
+         < static_cast<CommonT>(tolerance);
 }
 
 // Overload for rvalue references
@@ -77,8 +80,8 @@ inline bool
 almost_equal(T&& val, T&& val2, T tolerance = tolerance_equality_float)
 {
   using CommonT = std::common_type_t<T, T>;
-  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2)) <
-         static_cast<CommonT>(tolerance);
+  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2))
+         < static_cast<CommonT>(tolerance);
 }
 
 #endif

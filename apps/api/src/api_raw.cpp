@@ -26,7 +26,8 @@ constexpr int ID_VERIF = 2025;
 //   Api::finalise();
 // }
 
-int apply(Handle handle, int to_load)
+int
+apply(Handle handle, int to_load)
 {
   if (handle != nullptr)
   {
@@ -40,7 +41,8 @@ int apply(Handle handle, int to_load)
   return -1;
 }
 
-Handle init_handle_raw(int argc, char** argv)
+Handle
+init_handle_raw(int argc, char** argv)
 {
   auto opt_handle = Api::SimulationInstance::init(argc, argv);
   if (opt_handle.has_value())
@@ -53,7 +55,8 @@ Handle init_handle_raw(int argc, char** argv)
   return nullptr;
 }
 
-void delete_handle(Handle* handle)
+void
+delete_handle(Handle* handle)
 {
   if (handle != nullptr)
   {
@@ -62,7 +65,8 @@ void delete_handle(Handle* handle)
   }
 }
 
-int exec(Handle handle)
+int
+exec(Handle handle)
 {
   if (handle != nullptr)
   {
@@ -81,7 +85,8 @@ int exec(Handle handle)
     REGISTER
 */
 
-int register_result_path(Handle handle, const char* c)
+int
+register_result_path(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
@@ -90,7 +95,8 @@ int register_result_path(Handle handle, const char* c)
   return -1;
 }
 
-int register_cma_path(Handle handle, const char* c)
+int
+register_cma_path(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
@@ -99,7 +105,8 @@ int register_cma_path(Handle handle, const char* c)
   return -1;
 }
 
-int register_serde(Handle handle, const char* c)
+int
+register_serde(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
@@ -108,7 +115,8 @@ int register_serde(Handle handle, const char* c)
   return -1;
 }
 
-int register_model_name(Handle handle, const char* c)
+int
+register_model_name(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
@@ -117,7 +125,8 @@ int register_model_name(Handle handle, const char* c)
   return -1;
 }
 
-int register_initializer_path(Handle handle, const char* c)
+int
+register_initializer_path(Handle handle, const char* c)
 {
   if (handle != nullptr && c != nullptr)
   {
@@ -147,32 +156,34 @@ convert_c_wrap_to_param(const wrap_c_param_t& params)
   return p;
 }
 
-Param make_params(double biomass_initial_concentration,
-                  double final_time,
-                  double delta_time,
-                  uint64_t number_particle,
-                  uint32_t number_exported_result,
-                  int save)
+Param
+make_params(double biomass_initial_concentration,
+            double final_time,
+            double delta_time,
+            uint64_t number_particle,
+            uint32_t number_exported_result,
+            int save)
 {
 
-  return {biomass_initial_concentration,
-          final_time,
-          delta_time,
-          number_particle,
-          1,
-          number_exported_result,
-          f_false,
-          f_false,
-          save,
-          f_false};
+  return { biomass_initial_concentration,
+           final_time,
+           delta_time,
+           number_particle,
+           1,
+           number_exported_result,
+           f_false,
+           f_false,
+           save,
+           f_false };
 }
 
-Param* make_params_ptr(double biomass_initial_concentration,
-                       double final_time,
-                       double delta_time,
-                       uint64_t number_particle,
-                       uint32_t number_exported_result,
-                       int save)
+Param*
+make_params_ptr(double biomass_initial_concentration,
+                double final_time,
+                double delta_time,
+                uint64_t number_particle,
+                uint32_t number_exported_result,
+                int save)
 {
   // NOLINTBEGIN(cppcoreguidelines-owning-memory)
   auto* const params = new Param(make_params(biomass_initial_concentration,
@@ -185,11 +196,12 @@ Param* make_params_ptr(double biomass_initial_concentration,
   return params;
 }
 
-int set_scalar_buffer(Handle handle,
-                      uint64_t rows,
-                      uint64_t cols,
-                      double* liquid,
-                      double* gas_ptr)
+int
+set_scalar_buffer(Handle handle,
+                  uint64_t rows,
+                  uint64_t cols,
+                  double* liquid,
+                  double* gas_ptr)
 {
   if (handle == nullptr || liquid == nullptr)
   {
@@ -212,18 +224,18 @@ int set_scalar_buffer(Handle handle,
     std::span<double> liquid_span(liquid, buffer_size);
     std::vector<double> liq(liquid_span.begin(), liquid_span.end());
 
-    std::optional<std::vector<double>> gas = std::nullopt;
+    std::optional<std::vector<double> > gas = std::nullopt;
     if (gas_ptr != nullptr)
     {
       std::span<double> gas_span(gas_ptr, buffer_size);
       gas = std::vector<double>(gas_span.begin(), gas_span.end());
     }
 
-    bool success =
-        handle
-            ->register_scalar_initiazer(Core::ScalarFactory::FullCase(
-                rows, std::move(liq), std::move(gas)))
-            .valid();
+    bool success
+        = handle
+              ->register_scalar_initiazer(Core::ScalarFactory::FullCase(
+                  rows, std::move(liq), std::move(gas)))
+              .valid();
 
     return success ? 0 : -1;
   }
@@ -237,7 +249,8 @@ int set_scalar_buffer(Handle handle,
   }
 }
 
-void delete_params(Param** params)
+void
+delete_params(Param** params)
 {
   if (params != nullptr)
   {
@@ -246,7 +259,8 @@ void delete_params(Param** params)
   }
 }
 
-int register_parameters(Handle handle, Param* raw_params)
+int
+register_parameters(Handle handle, Param* raw_params)
 {
   if (handle != nullptr && raw_params != nullptr)
   {
@@ -281,14 +295,15 @@ int register_parameters(Handle handle, Param* raw_params)
 //   return -1;
 // }
 
-int set_feed_constant(Handle handle,
-                      double flow,
-                      double concentraiton,
-                      size_t species,
-                      size_t position,
-                      int output_position,
-                      int gas,
-                      int fed_batch)
+int
+set_feed_constant(Handle handle,
+                  double flow,
+                  double concentraiton,
+                  size_t species,
+                  size_t position,
+                  int output_position,
+                  int gas,
+                  int fed_batch)
 {
   if (handle != nullptr)
   {
@@ -308,7 +323,8 @@ int set_feed_constant(Handle handle,
   return -1;
 }
 
-void show_user_param(const wrap_c_param_t* params)
+void
+show_user_param(const wrap_c_param_t* params)
 {
   if (params != nullptr)
   {
@@ -316,7 +332,8 @@ void show_user_param(const wrap_c_param_t* params)
   }
 }
 
-int n_rank(Handle handle)
+int
+n_rank(Handle handle)
 {
   if (handle == nullptr)
   {
@@ -324,7 +341,8 @@ int n_rank(Handle handle)
   }
   return static_cast<int>(handle->get_exec_info().n_rank);
 }
-int i_rank(Handle handle)
+int
+i_rank(Handle handle)
 {
   if (handle == nullptr)
   {
@@ -333,7 +351,8 @@ int i_rank(Handle handle)
   return static_cast<int>(handle->get_exec_info().current_rank);
 }
 
-void repr_user_param(const wrap_c_param_t* params, char** repr)
+void
+repr_user_param(const wrap_c_param_t* params, char** repr)
 {
   std::stringstream ss;
   ss << convert_c_wrap_to_param(*params);

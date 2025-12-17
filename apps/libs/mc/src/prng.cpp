@@ -7,7 +7,8 @@
 namespace MC
 {
 
-  pool_type get_pool(std::size_t seed)
+  pool_type
+  get_pool(std::size_t seed)
   {
 
     if (seed == 0)

@@ -3,7 +3,8 @@
 #include <common/alg.hpp>
 #include <common/common.hpp>
 #include <iostream>
-void validation_test()
+void
+validation_test()
 {
   auto sqrt_function = [](double x) { return x * x - 4; };
   bool success = false;
@@ -19,7 +20,8 @@ void validation_test()
   }
 }
 
-void validation_test_2()
+void
+validation_test_2()
 {
   auto invalid_function = [](double x) { return std::log(x); };
   bool success = false;
@@ -28,7 +30,8 @@ void validation_test_2()
   assert(!success && std::isnan(result));
 }
 
-int main()
+int
+main()
 {
   validation_test();
   validation_test_2();

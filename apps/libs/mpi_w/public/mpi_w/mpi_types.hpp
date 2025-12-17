@@ -8,11 +8,13 @@
 namespace WrapMPI
 {
 
-  template <typename T> constexpr MPI_Datatype get_type() noexcept
+  template <typename T>
+  constexpr MPI_Datatype
+  get_type() noexcept
   {
     MPI_Datatype datatype{};
 
-    using _type = std::remove_const_t<std::remove_reference_t<T>>;
+    using _type = std::remove_const_t<std::remove_reference_t<T> >;
 
     if constexpr (std::is_same_v<_type, size_t>)
     {
@@ -30,8 +32,8 @@ namespace WrapMPI
     {
       datatype = MPI_CXX_BOOL;
     }
-    else if constexpr (std::is_same_v<_type, char> ||
-                       std::is_same_v<_type, WrapMPI::SIGNALS>)
+    else if constexpr (std::is_same_v<_type, char>
+                       || std::is_same_v<_type, WrapMPI::SIGNALS>)
     {
       datatype = MPI_BYTE;
     }

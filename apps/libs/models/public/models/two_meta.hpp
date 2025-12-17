@@ -55,30 +55,30 @@ namespace Models
     MODEL_CONSTANT FloatType l_c_m = 3e-6;     // m
     MODEL_CONSTANT FloatType d_m = 0.5e-6;     // m
     MODEL_CONSTANT FloatType l_min_m = 0.9e-6; // m
-    MODEL_CONSTANT FloatType lin_density =
-        c_linear_density(static_cast<FloatType>(1000), d_m);
-    MODEL_CONSTANT FloatType MolarMassG =
-        Models::MolarMass::GramPerMole::glucose<float>;
-    MODEL_CONSTANT FloatType MolarMassO2 =
-        Models::MolarMass::GramPerMole::dioxygen<float>; // g/mol
+    MODEL_CONSTANT FloatType lin_density
+        = c_linear_density(static_cast<FloatType>(1000), d_m);
+    MODEL_CONSTANT FloatType MolarMassG
+        = Models::MolarMass::GramPerMole::glucose<float>;
+    MODEL_CONSTANT FloatType MolarMassO2
+        = Models::MolarMass::GramPerMole::dioxygen<float>; // g/mol
 
-    MODEL_CONSTANT FloatType y_sx_1 =
-        1. / 2.217737e+00;                         // Mode 1 S to X yield (mass)
+    MODEL_CONSTANT FloatType y_sx_1
+        = 1. / 2.217737e+00;                       // Mode 1 S to X yield (mass)
     MODEL_CONSTANT FloatType y_sx_2 = y_sx_1 / 3.; // Mode 2 S to X yield (mass)
     MODEL_CONSTANT FloatType y_sa = 0.8;           // S to A yield (mass)
     MODEL_CONSTANT FloatType y_os_molar = 3; // 3 mol o2 per mol for glucose
-    MODEL_CONSTANT FloatType k_o =
-        0.0001; // g/L: Anane et. al 2017 (Biochem. Eng. J) (g/g)
-    MODEL_CONSTANT FloatType dl_max_ms =
-        8 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
+    MODEL_CONSTANT FloatType k_o
+        = 0.0001; // g/L: Anane et. al 2017 (Biochem. Eng. J) (g/g)
+    MODEL_CONSTANT FloatType dl_max_ms
+        = 8 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
     MODEL_CONSTANT FloatType tau_1 = 1000.; // s
     MODEL_CONSTANT FloatType tau_2 = 1000.; // s
 
-    MODEL_CONSTANT FloatType phi_s_max =
-        (dl_max_ms * lin_density) * y_sx_1; // TODO should be /y
+    MODEL_CONSTANT FloatType phi_s_max
+        = (dl_max_ms * lin_density) * y_sx_1; // TODO should be /y
     MODEL_CONSTANT FloatType phi_perm_max = phi_s_max / 40.; // kgS/
-    MODEL_CONSTANT FloatType phi_o2_max =
-        10 * phi_s_max / MolarMassG * y_os_molar * MolarMassO2; // kgS/s
+    MODEL_CONSTANT FloatType phi_o2_max
+        = 10 * phi_s_max / MolarMassG * y_os_molar * MolarMassO2; // kgS/s
     MODEL_CONSTANT float nu_max_kg_s = dl_max_ms * lin_density;
 
     // MODEL_CONSTANT auto length_c_dist =
@@ -89,8 +89,8 @@ namespace Models
     // MC::Distributions::TruncatedNormal<FloatType>(
     // l_c_m, l_c_m / 2., l_min_m, l_max_m); // use in out_str_l3
     //
-    MODEL_CONSTANT auto adder_dist =
-        MC::Distributions::TruncatedNormal<FloatType>(
+    MODEL_CONSTANT auto adder_dist
+        = MC::Distributions::TruncatedNormal<FloatType>(
             1.567e-6, 0.24e-6, l_min_m, l_max_m); // use in out_str_l3
 
     // MODEL_CONSTANT auto length_c_dist =
@@ -121,38 +121,32 @@ namespace Models
                  const SelfParticle& arr,
                  const MC::ContributionView& contributions);
 
-    KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx,
-                                              const SelfParticle& arr)
+    KOKKOS_INLINE_FUNCTION static double
+    mass(std::size_t idx, const SelfParticle& arr)
     {
       return GET_PROPERTY(Self::particle_var::length) * lin_density;
     }
 
-    static std::vector<std::string_view> names()
+    static std::vector<std::string_view>
+    names()
     {
-      return {"age",
-              "length",
-              "nu1",
-              "nu2",
-              "nu_eff_1",
-              "nu_eff_2",
-              "a_perm",
-              "a_pts",
-              "phi_o2",
-              "phi_g"};
+      return { "age",      "length", "nu1",   "nu2",    "nu_eff_1",
+               "nu_eff_2", "a_perm", "a_pts", "phi_o2", "phi_g" };
     }
 
-    static std::vector<std::size_t> get_number()
+    static std::vector<std::size_t>
+    get_number()
     {
-      return {INDEX_FROM_ENUM(particle_var::age),
-              INDEX_FROM_ENUM(particle_var::length),
-              INDEX_FROM_ENUM(particle_var::nu1),
-              INDEX_FROM_ENUM(particle_var::nu2),
-              INDEX_FROM_ENUM(particle_var::nu_eff_1),
-              INDEX_FROM_ENUM(particle_var::nu_eff_2),
-              INDEX_FROM_ENUM(Uptakeparticle_var::ap_2),
-              INDEX_FROM_ENUM(Uptakeparticle_var::ap_1),
-              INDEX_FROM_ENUM(particle_var::contrib_phi_o2),
-              INDEX_FROM_ENUM(particle_var::contrib_phi_s)};
+      return { INDEX_FROM_ENUM(particle_var::age),
+               INDEX_FROM_ENUM(particle_var::length),
+               INDEX_FROM_ENUM(particle_var::nu1),
+               INDEX_FROM_ENUM(particle_var::nu2),
+               INDEX_FROM_ENUM(particle_var::nu_eff_1),
+               INDEX_FROM_ENUM(particle_var::nu_eff_2),
+               INDEX_FROM_ENUM(Uptakeparticle_var::ap_2),
+               INDEX_FROM_ENUM(Uptakeparticle_var::ap_1),
+               INDEX_FROM_ENUM(particle_var::contrib_phi_o2),
+               INDEX_FROM_ENUM(particle_var::contrib_phi_s) };
     }
   };
 
@@ -169,8 +163,8 @@ namespace Models
         1.5e-6, 0.19e-6, l_min_m, l_max_m);
 
     constexpr auto mu_nu_dist = nu_max_kg_s * 0.1;
-    constexpr auto nu_1_initial_dist =
-        MC::Distributions::TruncatedNormal<float>(
+    constexpr auto nu_1_initial_dist
+        = MC::Distributions::TruncatedNormal<float>(
             mu_nu_dist, mu_nu_dist / 7., 0., static_cast<double>(nu_max_kg_s));
 
     auto gen = random_pool.get_state();
@@ -193,18 +187,18 @@ namespace Models
                   const MC::LocalConcentration& concentrations)
   {
     (void)random_pool;
-    const auto phi_s =
-        Uptake<UptakeDefault<typename Self::FloatType>, Self>::uptake_step(
+    const auto phi_s
+        = Uptake<UptakeDefault<typename Self::FloatType>, Self>::uptake_step(
             phi_s_max, d_t, idx, arr, concentrations);
 
     const auto o = Kokkos::max(static_cast<float>(concentrations(1)), 0.F);
 
     const float phi_o2 = (phi_o2_max)*o / (o + k_o); // gO2/s
 
-    const float nu_1_star =
-        y_sx_1 * MolarMassG *
-        Kokkos::min(phi_s / MolarMassG,
-                    phi_o2 / MolarMassO2 / y_os_molar); // gX/s
+    const float nu_1_star
+        = y_sx_1 * MolarMassG
+          * Kokkos::min(phi_s / MolarMassG,
+                        phi_o2 / MolarMassO2 / y_os_molar); // gX/s
 
     const float s_1_star = (1 / y_sx_1 * nu_1_star);
 
@@ -213,17 +207,17 @@ namespace Models
 
     const float nu_2_star = y_sx_2 * phi_s_residual_1_star; // gX/s
 
-    GET_PROPERTY(Self::particle_var::nu_eff_1) =
-        Kokkos::min(nu_1_star, GET_PROPERTY(Self::particle_var::nu1)); // gX/s
+    GET_PROPERTY(Self::particle_var::nu_eff_1)
+        = Kokkos::min(nu_1_star, GET_PROPERTY(Self::particle_var::nu1)); // gX/s
 
     const float s_1 = (1 / y_sx_1 * GET_PROPERTY(Self::particle_var::nu_eff_1));
     const float phi_s_residual_1 = Kokkos::max(phi_s - s_1, 0.F);
-    GET_PROPERTY(Self::particle_var::nu_eff_2) =
-        Kokkos::min(y_sx_2 * phi_s_residual_1,
-                    GET_PROPERTY(Self::particle_var::nu2)); // gX/s
+    GET_PROPERTY(Self::particle_var::nu_eff_2)
+        = Kokkos::min(y_sx_2 * phi_s_residual_1,
+                      GET_PROPERTY(Self::particle_var::nu2)); // gX/s
 
-    const float s_growth =
-        s_1 + (1 / y_sx_2 * GET_PROPERTY(Self::particle_var::nu_eff_2));
+    const float s_growth
+        = s_1 + (1 / y_sx_2 * GET_PROPERTY(Self::particle_var::nu_eff_2));
 
     const float s_overflow = phi_s - s_growth;
 
@@ -232,34 +226,35 @@ namespace Models
 
     // CONTRIBS
     GET_PROPERTY(Self::particle_var::contrib_phi_s) = -phi_s;
-    GET_PROPERTY(Self::particle_var::contrib_phi_o2) =
-        -1 * ((1. / y_sx_1 / MolarMassG * y_os_molar * MolarMassO2 *
-               GET_PROPERTY(Self::particle_var::nu_eff_1)) +
-              0. * GET_PROPERTY(Self::particle_var::nu_eff_2));
+    GET_PROPERTY(Self::particle_var::contrib_phi_o2)
+        = -1
+          * ((1. / y_sx_1 / MolarMassG * y_os_molar * MolarMassO2
+              * GET_PROPERTY(Self::particle_var::nu_eff_1))
+             + 0. * GET_PROPERTY(Self::particle_var::nu_eff_2));
 
-    GET_PROPERTY(Self::particle_var::contrib_phi_ac) =
-        GET_PROPERTY(Self::particle_var::nu_eff_2) / y_sx_2 * y_sa +
-        (s_overflow > 0. ? y_sa * (s_overflow) : 0);
+    GET_PROPERTY(Self::particle_var::contrib_phi_ac)
+        = GET_PROPERTY(Self::particle_var::nu_eff_2) / y_sx_2 * y_sa
+          + (s_overflow > 0. ? y_sa * (s_overflow) : 0);
 
     // ODE
-    GET_PROPERTY(Self::particle_var::nu1) +=
-        static_cast<float>(d_t) *
-        ((nu_1_star - GET_PROPERTY(Self::particle_var::nu1)) / tau_1);
+    GET_PROPERTY(Self::particle_var::nu1)
+        += static_cast<float>(d_t)
+           * ((nu_1_star - GET_PROPERTY(Self::particle_var::nu1)) / tau_1);
 
-    GET_PROPERTY(Self::particle_var::nu2) +=
-        static_cast<float>(d_t) *
-        ((nu_2_star - GET_PROPERTY(Self::particle_var::nu2)) / tau_2);
+    GET_PROPERTY(Self::particle_var::nu2)
+        += static_cast<float>(d_t)
+           * ((nu_2_star - GET_PROPERTY(Self::particle_var::nu2)) / tau_2);
 
-    const auto sum_nu = (GET_PROPERTY(Self::particle_var::nu_eff_1) +
-                         GET_PROPERTY(Self::particle_var::nu_eff_2));
+    const auto sum_nu = (GET_PROPERTY(Self::particle_var::nu_eff_1)
+                         + GET_PROPERTY(Self::particle_var::nu_eff_2));
 
-    GET_PROPERTY(Self::particle_var::length) +=
-        static_cast<float>(d_t) * (sum_nu / lin_density);
+    GET_PROPERTY(Self::particle_var::length)
+        += static_cast<float>(d_t) * (sum_nu / lin_density);
 
     GET_PROPERTY(Self::particle_var::age) += d_t;
 
-    return (GET_PROPERTY(Self::particle_var::length) >
-            GET_PROPERTY(Self::particle_var::l_cp))
+    return (GET_PROPERTY(Self::particle_var::length)
+            > GET_PROPERTY(Self::particle_var::l_cp))
                ? MC::Status::Division
                : MC::Status::Idle;
   }
@@ -272,21 +267,21 @@ namespace Models
                     const SelfParticle& child_buffer_arr)
   {
     constexpr auto local_adder = adder_dist;
-    const FloatType new_current_length =
-        GET_PROPERTY(particle_var::length) / static_cast<FloatType>(2.);
+    const FloatType new_current_length
+        = GET_PROPERTY(particle_var::length) / static_cast<FloatType>(2.);
 
     GET_PROPERTY(Self::particle_var::length) = new_current_length;
     GET_PROPERTY(Self::particle_var::age) = 0;
 
-    GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::length) =
-        new_current_length;
+    GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::length)
+        = new_current_length;
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::age) = 0;
 
     auto nu_1_o = GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_1);
     auto nu_2_o = GET_PROPERTY_FROM(idx, arr, Self::particle_var::nu_eff_2);
     auto gen = random_pool.get_state();
-    GET_PROPERTY(Self::particle_var::l_cp) =
-        new_current_length + local_adder.draw(gen);
+    GET_PROPERTY(Self::particle_var::l_cp)
+        = new_current_length + local_adder.draw(gen);
 
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu1) = nu_1_o;
     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu2) = nu_2_o;
@@ -303,8 +298,8 @@ namespace Models
     // gen, nu_2_o, nu_2_o / 2., 0, 1.);
     //}
     //
-    GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::l_cp) =
-        new_current_length + local_adder.draw(gen);
+    GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::l_cp)
+        = new_current_length + local_adder.draw(gen);
     random_pool.free_state(gen);
 
     Uptake<UptakeDefault<typename Self::FloatType>, Self>::division(
@@ -319,12 +314,12 @@ namespace Models
                         const MC::ContributionView& contributions)
   {
     auto access = contributions.access();
-    access(0, position) +=
-        weight * GET_PROPERTY(Self::particle_var::contrib_phi_s); // NOLINT
-    access(1, position) +=
-        weight * GET_PROPERTY(Self::particle_var::contrib_phi_o2); // NOLINT
-    access(2, position) +=
-        weight * GET_PROPERTY(Self::particle_var::contrib_phi_ac); // NOLINT
+    access(0, position)
+        += weight * GET_PROPERTY(Self::particle_var::contrib_phi_s); // NOLINT
+    access(1, position)
+        += weight * GET_PROPERTY(Self::particle_var::contrib_phi_o2); // NOLINT
+    access(2, position)
+        += weight * GET_PROPERTY(Self::particle_var::contrib_phi_ac); // NOLINT
   }
 
   static_assert(HasExportProperties<TwoMeta>, "ee");

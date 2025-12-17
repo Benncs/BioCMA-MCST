@@ -31,8 +31,8 @@ namespace CmaUtils
  * simulation.
  * @param params The `SimulationParameters` object containing settings for the
  * simulation.
- * @param transitioner A unique pointer to the `Simulation::FlowMapTransitioner`
- * for handling flow map transitions.
+ * @param transitioner A unique pointer to the
+ * `Simulation::FlowMapTransitioner` for handling flow map transitions.
  */
 void host_process(
     std::shared_ptr<IO::Logger> logger, /*logger is passed by value because it

@@ -27,11 +27,12 @@ namespace
 
 #define UNROLL(idx) triplets[idx] = T(rows[idx], cols[idx], vals[idx]);
 
-  void sparse_from_coo(Eigen::SparseMatrix<double>& res,
-                       std::size_t n_c,
-                       std::span<const size_t>&& rows,
-                       std::span<const size_t>&& cols,
-                       std::span<const double>&& vals)
+  void
+  sparse_from_coo(Eigen::SparseMatrix<double>& res,
+                  std::size_t n_c,
+                  std::span<const size_t>&& rows,
+                  std::span<const size_t>&& cols,
+                  std::span<const double>&& vals)
   {
 
     // KOKKOS_ASSERT(res.cols() == EIGEN_INDEX(n_c));
@@ -131,7 +132,8 @@ namespace Simulation
     this->sink.setZero();
   }
 
-  void ScalarSimulation::synchro_sources()
+  void
+  ScalarSimulation::synchro_sources()
   {
     Kokkos::deep_copy(sources.compute, contribs);
   }
@@ -148,17 +150,20 @@ namespace Simulation
     return concentrations.compute;
   }
 
-  std::size_t ScalarSimulation::n_col() const noexcept
+  std::size_t
+  ScalarSimulation::n_col() const noexcept
   {
     return n_c;
   }
 
-  std::size_t ScalarSimulation::n_row() const noexcept
+  std::size_t
+  ScalarSimulation::n_row() const noexcept
   {
     return n_r;
   }
 
-  void ScalarSimulation::reduce_contribs(std::span<const double> data)
+  void
+  ScalarSimulation::reduce_contribs(std::span<const double> data)
   {
     assert(data.size() == (n_c * n_r));
     using eigen_type = decltype(sources)::EigenMatrix;
@@ -166,29 +171,31 @@ namespace Simulation
         const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
   }
 
-  void ScalarSimulation::performStepGL(double d_t,
-                                       const ColMajorMatrixtype<double>& mtr,
-                                       MassTransfer::Sign sign)
+  void
+  ScalarSimulation::performStepGL(double d_t,
+                                  const ColMajorMatrixtype<double>& mtr,
+                                  MassTransfer::Sign sign)
   {
     PROFILE_SECTION("performStep_gl")
 #define c concentrations.eigen_data
 
-    total_mass.noalias() +=
-        d_t * (c * m_transition - c * sink + sources.eigen_data +
-               static_cast<float>(sign) * mtr);
+    total_mass.noalias() += d_t
+                            * (c * m_transition - c * sink + sources.eigen_data
+                               + static_cast<float>(sign) * mtr);
     c.noalias() = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
     concentrations.update_host_to_compute();
   }
 
-  void ScalarSimulation::performStep(double d_t)
+  void
+  ScalarSimulation::performStep(double d_t)
   {
     PROFILE_SECTION("performStep_l")
 #define c concentrations.eigen_data
 
-    total_mass.noalias() +=
-        d_t * (c * m_transition - c * sink + sources.eigen_data);
+    total_mass.noalias()
+        += d_t * (c * m_transition - c * sink + sources.eigen_data);
     c.noalias() = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
@@ -209,7 +216,8 @@ namespace Simulation
     return true;
   }
 
-  void ScalarSimulation::set_mass()
+  void
+  ScalarSimulation::set_mass()
   {
     total_mass = this->concentrations.eigen_data * m_volumes;
   }

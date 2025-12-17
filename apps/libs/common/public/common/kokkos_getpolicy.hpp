@@ -9,7 +9,8 @@ namespace
 {
   template <typename T> struct TagDetector
   {
-    KOKKOS_FUNCTION void operator()(
+    KOKKOS_FUNCTION void
+    operator()(
         T _tag,
         const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle) const
     {
@@ -39,14 +40,14 @@ namespace Common
     (void)reduce;
     Kokkos::TeamPolicy<Tag> _policy;
 
-    const auto recommended_team_size =
-        _policy.team_size_recommended(f, Kokkos::ParallelForTag{});
+    const auto recommended_team_size
+        = _policy.team_size_recommended(f, Kokkos::ParallelForTag{});
 
-    const auto team_size =
-        Common::read_env_or("BIOMC_TEAM_SIZE", recommended_team_size);
+    const auto team_size
+        = Common::read_env_or("BIOMC_TEAM_SIZE", recommended_team_size);
 
-    const auto league_size =
-        (static_cast<int>(range) + team_size - 1) / team_size;
+    const auto league_size
+        = (static_cast<int>(range) + team_size - 1) / team_size;
 
     return Kokkos::TeamPolicy<ComputeSpace, Tag>(league_size, team_size);
   }

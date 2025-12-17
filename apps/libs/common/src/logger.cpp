@@ -29,12 +29,14 @@ namespace
   };
   // NOLINTEND(hicpp-signed-bitwise)
 
-  bool is_flag_set(uint32_t flags, Flags flag)
+  bool
+  is_flag_set(uint32_t flags, Flags flag)
   {
     return (flags & flag) != 0U;
   }
 
-  void set_flag(uint32_t& flags, Flags flag)
+  void
+  set_flag(uint32_t& flags, Flags flag)
   {
     flags ^= flag;
   }
@@ -57,12 +59,15 @@ namespace IO
   {
   }
 
-  RedirectHandle RedirectGuard::redirect()
+  RedirectHandle
+  RedirectGuard::redirect()
   {
 
     if (*active_flag)
     {
-      return {shared_from_this(), active_flag, false, RedirectionType::Buffer};
+      return {
+        shared_from_this(), active_flag, false, RedirectionType::Buffer
+      };
     }
 
     *active_flag = true;
@@ -78,14 +83,15 @@ namespace IO
       throw std::runtime_error("dup failed");
     }
 
-    return {shared_from_this(), active_flag, true, RedirectionType::Buffer};
+    return { shared_from_this(), active_flag, true, RedirectionType::Buffer };
   }
 
-  RedirectHandle RedirectGuard::redirect_to_file()
+  RedirectHandle
+  RedirectGuard::redirect_to_file()
   {
     if (*active_flag)
     {
-      return {shared_from_this(), active_flag, false, RedirectionType::File};
+      return { shared_from_this(), active_flag, false, RedirectionType::File };
     }
 
     *active_flag = true;
@@ -110,10 +116,11 @@ namespace IO
       std::cout.rdbuf(coutbuf);
     }
 
-    return {shared_from_this(), active_flag, true, RedirectionType::File};
+    return { shared_from_this(), active_flag, true, RedirectionType::File };
   }
 
-  void RedirectGuard::restore()
+  void
+  RedirectGuard::restore()
   {
     if (!*active_flag)
     {
@@ -140,7 +147,8 @@ namespace IO
     *active_flag = false;
   }
 
-  std::optional<std::string> RedirectGuard::getCapturedOutput() const
+  std::optional<std::string>
+  RedirectGuard::getCapturedOutput() const
   {
     if (has_been_redirected)
     {
@@ -161,7 +169,8 @@ namespace IO
 
   namespace
   {
-    void flush_(bool do_flush, auto& stream)
+    void
+    flush_(bool do_flush, auto& stream)
     {
       if (do_flush)
       {
@@ -188,7 +197,8 @@ namespace IO
     }
   }
 
-  void Console::debug([[maybe_unused]] std::string_view message) noexcept
+  void
+  Console::debug([[maybe_unused]] std::string_view message) noexcept
   {
 #ifndef NDEBUG
     // if ((flags & Flags::Debug) != 0U)
@@ -200,8 +210,8 @@ namespace IO
 #endif
   }
 
-  void Console::print(std::string_view prefix,
-                      std::string_view message) noexcept
+  void
+  Console::print(std::string_view prefix, std::string_view message) noexcept
   {
     // if ((flags & Flags::Print) != 0U)
     if (is_flag_set(flags, Flags::Print))
@@ -213,8 +223,8 @@ namespace IO
     }
   }
 
-  void Console::alert(std::string_view prefix,
-                      std::string_view message) noexcept
+  void
+  Console::alert(std::string_view prefix, std::string_view message) noexcept
   {
     // if ((flags & Flags::Alert) != 0U)
     if (is_flag_set(flags, Flags::Alert))
@@ -226,8 +236,9 @@ namespace IO
     }
   }
 
-  void Console::error(std::string_view message,
-                      std::source_location location) noexcept
+  void
+  Console::error(std::string_view message,
+                 std::source_location location) noexcept
   {
     //    if ((flags & Flags::Error) != 0U)
     if (is_flag_set(flags, Flags::Error))
@@ -240,7 +251,8 @@ namespace IO
     }
   }
 
-  void Console::raw_log(std::string_view message) noexcept
+  void
+  Console::raw_log(std::string_view message) noexcept
   {
 
     // if ((flags & Flags::Error) != 0U)
@@ -250,28 +262,33 @@ namespace IO
     }
   }
 
-  void Console::toggle_debug() noexcept
+  void
+  Console::toggle_debug() noexcept
   {
 
     set_flag(flags, Flags::Debug);
   }
 
-  void Console::toggle_all() noexcept
+  void
+  Console::toggle_all() noexcept
   {
     set_flag(flags, Flags::All);
   }
 
-  void Console::toggle_print() noexcept
+  void
+  Console::toggle_print() noexcept
   {
     set_flag(flags, Flags::Print);
   }
 
-  void Console::toggle_alert() noexcept
+  void
+  Console::toggle_alert() noexcept
   {
     set_flag(flags, Flags::Alert);
   }
 
-  void Console::toggle_error() noexcept
+  void
+  Console::toggle_error() noexcept
   {
     set_flag(flags, Flags::Error);
   }

@@ -9,13 +9,14 @@
 namespace MC
 {
 
-  void ReactorDomain::setVolumes(std::span<double const> volumes_liq)
+  void
+  ReactorDomain::setVolumes(std::span<double const> volumes_liq)
   {
 
     assert(volumes_liq.size() == size);
 
-    this->_total_volume =
-        std::reduce(volumes_liq.begin(), volumes_liq.end(), 0.);
+    this->_total_volume
+        = std::reduce(volumes_liq.begin(), volumes_liq.end(), 0.);
 
     Kokkos::View<const double*, HostSpace> tmp_host_volume(volumes_liq.data(),
                                                            volumes_liq.size());
@@ -42,10 +43,11 @@ namespace MC
   {
   }
 
-  void ReactorDomain::update(std::span<const double> newliquid_volume,
-                             std::span<const std::size_t> neighors_flat,
-                             std::span<const double> out_flows,
-                             std::span<const double> proba_flat)
+  void
+  ReactorDomain::update(std::span<const double> newliquid_volume,
+                        std::span<const std::size_t> neighors_flat,
+                        std::span<const double> out_flows,
+                        std::span<const double> proba_flat)
   {
 
     const auto n_rows = this->getNumberCompartments();
@@ -59,8 +61,8 @@ namespace MC
     this->setLiquidNeighbors(n_rows, n_cols, neighors_flat);
     this->setVolumes(newliquid_volume);
 
-    KOKKOS_ASSERT(newliquid_volume.size() ==
-                  this->inner.liquid_volume.extent(0));
+    KOKKOS_ASSERT(newliquid_volume.size()
+                  == this->inner.liquid_volume.extent(0));
 
     KOKKOS_ASSERT(proba_flat.size() % n_rows == 0);
 
@@ -76,15 +78,16 @@ namespace MC
     Kokkos::deep_copy(this->inner.cumulative_probability, tmp_host_proba);
   }
 
-  void ReactorDomain::setLiquidNeighbors(const std::size_t e1,
-                                         const std::size_t e2,
-                                         std::span<const size_t> flat_data)
+  void
+  ReactorDomain::setLiquidNeighbors(const std::size_t e1,
+                                    const std::size_t e2,
+                                    std::span<const size_t> flat_data)
   {
     using HostNeighsView = Kokkos::View<
         const std::size_t**,
         Kokkos::LayoutRight,
         HostSpace,
-        Kokkos::MemoryTraits<Kokkos::RandomAccess | Kokkos::Unmanaged>>;
+        Kokkos::MemoryTraits<Kokkos::RandomAccess | Kokkos::Unmanaged> >;
 
     KOKKOS_ASSERT(e1 * e2 == flat_data.size() && flat_data.size() % e1 == 0);
     const auto* chunk = flat_data.data();
@@ -93,14 +96,16 @@ namespace MC
     Kokkos::deep_copy(this->inner.neighbors, neighbors_view);
   }
 
-  void ReactorDomain::set_leaving_flow(const std::size_t i,
-                                       const std::size_t i_flow,
-                                       const double flow) const
+  void
+  ReactorDomain::set_leaving_flow(const std::size_t i,
+                                  const std::size_t i_flow,
+                                  const double flow) const
   {
-    this->inner.leaving_flow(i) = {.index = i_flow, .flow = flow};
+    this->inner.leaving_flow(i) = { .index = i_flow, .flow = flow };
   }
 
-  ReactorDomain& ReactorDomain::operator=(ReactorDomain&& other) noexcept
+  ReactorDomain&
+  ReactorDomain::operator=(ReactorDomain&& other) noexcept
   {
     if (this != &other)
     {
@@ -111,7 +116,8 @@ namespace MC
     return *this;
   }
 
-  void ReactorDomain::init_inner(const std::size_t n_flows)
+  void
+  ReactorDomain::init_inner(const std::size_t n_flows)
   {
     constexpr bool is_const = false;
     // inner = MoveInfo<ComputeSpace,false>(this->getNumberCompartments(),

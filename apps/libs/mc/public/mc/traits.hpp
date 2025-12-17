@@ -31,18 +31,26 @@ concept ConfigurableInit = requires(T model,
                                     const MC::pool_type& random_pool,
                                     std::size_t idx,
                                     const typename T::SelfParticle& arr,
-                                    const T::Config& config) {
-  { model.init(random_pool, idx, arr, config) } -> std::same_as<void>;
+                                    const T::Config& config)
+{
+  {
+    model.init(random_pool, idx, arr, config)
+  } -> std::same_as<void>;
 
-  { model.get_config(size) } -> std::same_as<typename T::Config>;
+  {
+    model.get_config(size)
+  } -> std::same_as<typename T::Config>;
 };
 
 template <typename T>
 concept NonConfigurableInit = requires(T model,
                                        const MC::pool_type& random_pool,
                                        std::size_t idx,
-                                       const typename T::SelfParticle& arr) {
-  { model.init(random_pool, idx, arr) } -> std::same_as<void>;
+                                       const typename T::SelfParticle& arr)
+{
+  {
+    model.init(random_pool, idx, arr)
+  } -> std::same_as<void>;
 };
 using NonConfigType = std::nullopt_t;
 /**
@@ -63,7 +71,8 @@ concept CommonModelType = requires(T model,
                                    const std::size_t position,
                                    const MC::ContributionView& contributions,
                                    const MC::pool_type& random_pool,
-                                   const T::Config& config) {
+                                   const T::Config& config)
+{
   {
     T::n_var
   } -> std::convertible_to<std::size_t>; ///< A model should declare the number
@@ -81,9 +90,9 @@ concept CommonModelType = requires(T model,
   //                                                             :
   //                                                             ConfigurableInit<T>);
 
-  requires ConfigurableInit<T> ||
-               (std::is_same_v<typename T::Config, NonConfigType> &&
-                NonConfigurableInit<T>);
+  requires ConfigurableInit<T>
+      || (std::is_same_v<typename T::Config, NonConfigType>
+          && NonConfigurableInit<T>);
 
   // {
   //   T::init(random_pool, idx, arr, config)
@@ -104,7 +113,9 @@ concept CommonModelType = requires(T model,
   // } -> std::same_as<void>; ///< Get the individual contribution for the MC
   // particle
 
-  { T::get_bounds() } -> std::same_as<MC::ContribIndexBounds>;
+  {
+    T::get_bounds()
+  } -> std::same_as<MC::ContribIndexBounds>;
 
   {
     T::division(random_pool, idx, idx2, arr, buffer_arr)
@@ -118,21 +129,20 @@ concept CommonModelType = requires(T model,
  * known at compile time
  */
 template <typename T>
-concept FixedModelType =
-    CommonModelType<T, MC::ParticlesModel<T::n_var, typename T::FloatType>>;
+concept FixedModelType
+    = CommonModelType<T, MC::ParticlesModel<T::n_var, typename T::FloatType> >;
 
-/** @brief  SFNIAE wau to declare a model with number of internal properties not
-known at compile time Alows to properly define User Defined Model but should be
-avoid in other cases
+/** @brief  SFNIAE wau to declare a model with number of internal properties
+not known at compile time Alows to properly define User Defined Model but
+should be avoid in other cases
  */
 template <typename T>
-concept DynModelType =
-    CommonModelType<T, MC::DynParticlesModel<typename T::FloatType>>;
+concept DynModelType
+    = CommonModelType<T, MC::DynParticlesModel<typename T::FloatType> >;
 
 /** @brief  Model type
  */
-template <typename T>
-concept ModelType = DynModelType<T> || FixedModelType<T>;
+template <typename T> concept ModelType = DynModelType<T> || FixedModelType<T>;
 
 template <typename T>
 concept NonConfigurableModel = ModelType<T> && NonConfigurableInit<T>;
@@ -143,27 +153,38 @@ concept ConfigurableModel = ModelType<T> && ConfigurableInit<T>;
 /** @brief SFNIAE way to check whether model allow internal value saving or not
  */
 template <std::size_t n, typename T>
-concept _HasExportProperties = requires(const T obj) {
-  { T::names() } -> std::convertible_to<std::array<std::string_view, n>>;
+concept _HasExportProperties = requires(const T obj)
+{
+  {
+    T::names()
+  } -> std::convertible_to<std::array<std::string_view, n> >;
 };
 
 /** @brief SFNIAE way to check whether model allow all value saving*/
 template <typename T>
-concept HasExportPropertiesFull = FixedModelType<T> && requires(const T obj) {
-  { T::names() } -> std::convertible_to<std::array<std::string_view, T::n_var>>;
+concept HasExportPropertiesFull = FixedModelType<T> && requires(const T obj)
+{
+  {
+    T::names()
+  } -> std::convertible_to<std::array<std::string_view, T::n_var> >;
 };
 
 /** @brief SFNIAE way to check whether model allow partial value saving */
 template <typename T>
-concept HasExportPropertiesPartial = ModelType<T> && requires(const T obj) {
-  { T::names() } -> std::convertible_to<std::vector<std::string_view>>;
-  { T::get_number() } -> std::convertible_to<std::vector<std::size_t>>;
+concept HasExportPropertiesPartial = ModelType<T> && requires(const T obj)
+{
+  {
+    T::names()
+  } -> std::convertible_to<std::vector<std::string_view> >;
+  {
+    T::get_number()
+  } -> std::convertible_to<std::vector<std::size_t> >;
 };
 
 /** @brief Model that can export properties */
 template <typename T>
-concept HasExportProperties =
-    HasExportPropertiesFull<T> || HasExportPropertiesPartial<T>;
+concept HasExportProperties
+    = HasExportPropertiesFull<T> || HasExportPropertiesPartial<T>;
 
 // Helper to detect if `uniform_weight` exists as a type alias (using `using`
 // keyword)
@@ -173,7 +194,7 @@ struct has_uniform_weight : std::false_type
 };
 
 template <typename T>
-struct has_uniform_weight<T, std::void_t<typename T::uniform_weight>>
+struct has_uniform_weight<T, std::void_t<typename T::uniform_weight> >
     : std::true_type
 {
 };
@@ -183,7 +204,9 @@ template <typename T>
 concept ConstWeightModelType = ModelType<T> && has_uniform_weight<T>::value;
 
 /** @brief Concept to check if a model type has `uniform_weight`*/
-template <typename T>
-concept PreInitModel = ModelType<T> && requires(T model) { T::preinit(); };
+template <typename T> concept PreInitModel = ModelType<T> && requires(T model)
+{
+  T::preinit();
+};
 
 #endif

@@ -20,7 +20,8 @@ namespace WrapMPI
   {
   }
 
-  [[nodiscard]] bool HostIterationPayload::sendAll(std::size_t n_rank) noexcept
+  [[nodiscard]] bool
+  HostIterationPayload::sendAll(std::size_t n_rank) noexcept
   {
     PROFILE_SECTION("host:sendAll")
     bool flag = false;
@@ -41,7 +42,8 @@ namespace WrapMPI
     return flag;
   }
 
-  void HostIterationPayload::wait() noexcept
+  void
+  HostIterationPayload::wait() noexcept
   {
     if (to_wait)
     {
@@ -53,7 +55,8 @@ namespace WrapMPI
     }
   }
 
-  bool HostIterationPayload::send(const size_t rank) noexcept
+  bool
+  HostIterationPayload::send(const size_t rank) noexcept
   {
     PROFILE_SECTION("host:to_node")
 
@@ -69,11 +72,12 @@ namespace WrapMPI
     int rc4 = WrapMPI::Async::send_v(
         requests[3], liquid_neighbors_flat, rank, TagExchange::neighbors, true);
 
-    return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS && rc3 == MPI_SUCCESS &&
-           rc4 == MPI_SUCCESS;
+    return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS && rc3 == MPI_SUCCESS
+           && rc4 == MPI_SUCCESS;
   }
 
-  bool IterationPayload::recv(const size_t source, MPI_Status* status) noexcept
+  bool
+  IterationPayload::recv(const size_t source, MPI_Status* status) noexcept
   {
 
     int rc1 = WrapMPI::recv_span<double>(
@@ -81,8 +85,8 @@ namespace WrapMPI
     int rc2 = WrapMPI::recv_span<double>(
         liquid_out_flows, source, status, TagExchange::flows);
 
-    auto opt_proba =
-        WrapMPI::recv_v<double>(source, status, TagExchange::proba);
+    auto opt_proba
+        = WrapMPI::recv_v<double>(source, status, TagExchange::proba);
     if (!opt_proba.has_value())
     {
       return false;
@@ -100,7 +104,8 @@ namespace WrapMPI
     return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS;
   }
 
-  void HostIterationPayload::fill(const CmaUtils::IterationStatePtrType& state)
+  void
+  HostIterationPayload::fill(const CmaUtils::IterationStatePtrType& state)
   {
     auto liq = state->get_liquid();
     liquid_out_flows = liq->out_flows();

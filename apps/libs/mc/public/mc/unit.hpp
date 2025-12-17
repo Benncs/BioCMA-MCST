@@ -42,14 +42,14 @@ namespace MC
     MC::KPRNG rng; ///< Random number generator used for Monte Carlo methods
     double init_weight{}; ///< Initial weight or factor used in the simulation
 
-    MonteCarloUnit(const MonteCarloUnit&) =
-        delete; ///< Prevent copying of the MonteCarloUnit
-    MonteCarloUnit& operator=(const MonteCarloUnit&) =
-        delete; ///< Prevent copying of the MonteCarloUnit
-    MonteCarloUnit& operator=(MonteCarloUnit&&) noexcept =
-        default; ///< Allow moving of the MonteCarloUn
-    MonteCarloUnit(MonteCarloUnit&&) noexcept =
-        default; ///< Allow moving of the MonteCarloUn
+    MonteCarloUnit(const MonteCarloUnit&)
+        = delete; ///< Prevent copying of the MonteCarloUnit
+    MonteCarloUnit& operator=(const MonteCarloUnit&)
+        = delete; ///< Prevent copying of the MonteCarloUnit
+    MonteCarloUnit& operator=(MonteCarloUnit&&) noexcept
+        = default; ///< Allow moving of the MonteCarloUn
+    MonteCarloUnit(MonteCarloUnit&&) noexcept
+        = default; ///< Allow moving of the MonteCarloUn
 
     MonteCarloUnit() = default;
 
@@ -59,7 +59,9 @@ namespace MC
 
     [[nodiscard]] std::vector<uint64_t> getRepartition() const;
 
-    template <class Archive> void serialize(Archive& ar)
+    template <class Archive>
+    void
+    serialize(Archive& ar)
     {
       ar(init_weight, events, domain, container);
 

@@ -11,8 +11,8 @@
 namespace Simulation::KernelInline
 {
   template <typename Space>
-  using cycle_reducer_view_type =
-      KernelInline::CycleReducer<Space>::result_view_type;
+  using cycle_reducer_view_type
+      = KernelInline::CycleReducer<Space>::result_view_type;
   template <typename Space>
   using move_reducer_view_type = Kokkos::View<std::size_t, Space>;
 
@@ -34,9 +34,10 @@ namespace Simulation::KernelInline
 
     CycleFunctors() = default;
 
-    void update(const double d_t,
-                MC::ParticlesContainer<Model> container,
-                MC::DomainState<ComputeSpace>&& new_move)
+    void
+    update(const double d_t,
+           MC::ParticlesContainer<Model> container,
+           MC::DomainState<ComputeSpace>&& new_move)
     {
       const bool enable_move = new_move.liquid_volume.size() > 1;
       const bool enable_leave = new_move.leaving_flow.size() != 0;
@@ -66,13 +67,14 @@ namespace Simulation::KernelInline
                          enable_leave);
     }
 
-    auto get_host_reduction()
+    auto
+    get_host_reduction()
     {
-      const auto host_red =
-          Kokkos::create_mirror_view_and_copy(HostSpace(), cycle_reducer)();
+      const auto host_red
+          = Kokkos::create_mirror_view_and_copy(HostSpace(), cycle_reducer)();
 
-      const auto host_out_counter =
-          Kokkos::create_mirror_view_and_copy(HostSpace(), move_reducer)();
+      const auto host_out_counter
+          = Kokkos::create_mirror_view_and_copy(HostSpace(), move_reducer)();
 
       return std::tuple(host_red, host_out_counter);
     }
@@ -101,7 +103,8 @@ namespace Simulation::KernelInline
     {
     }
 
-    void launch_move(const std::size_t n_particle) const
+    void
+    launch_move(const std::size_t n_particle) const
     {
 
       if (move_kernel.enable_move)
@@ -135,7 +138,8 @@ namespace Simulation::KernelInline
       }
     }
 
-    void launch_model(const std::size_t n_particle) const
+    void
+    launch_model(const std::size_t n_particle) const
     {
 
       auto _policy = Kokkos::RangePolicy<TagCycle>(model_space, 0, n_particle);

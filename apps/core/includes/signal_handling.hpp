@@ -31,13 +31,16 @@ namespace Core
      *
      * This function is used to query the state of the SIGUSR1 signal. If the
      * signal has
-     * been raised, the function returns `true` and resets the internal flag to `false`.
+     * been raised, the function returns `true` and resets the internal flag to
+     * `false`.
      *
      * @throws std::runtime_error If the SignalHandler instance has not been
      * initialized.
-     * @return `true` if SIGUSR1 was raised since the last query; `false` otherwise.
+     * @return `true` if SIGUSR1 was raised since the last query; `false`
+     * otherwise.
      */
-    [[nodiscard]] static inline bool is_usr1_raised() noexcept(false)
+    [[nodiscard]] static inline bool
+    is_usr1_raised() noexcept(false)
     {
       if (instance == nullptr)
       {
@@ -49,7 +52,8 @@ namespace Core
       return ret;
     }
 
-    [[nodiscard]] static inline bool is_usr2_raised() noexcept(false)
+    [[nodiscard]] static inline bool
+    is_usr2_raised() noexcept(false)
     {
       if (instance == nullptr)
       {
@@ -61,7 +65,8 @@ namespace Core
       return ret;
     }
 
-    [[nodiscard]] static inline bool is_sigint_raised() noexcept(false)
+    [[nodiscard]] static inline bool
+    is_sigint_raised() noexcept(false)
     {
       if (instance == nullptr)
       {

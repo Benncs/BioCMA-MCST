@@ -7,14 +7,16 @@
 #include <mc/particles_container.hpp>
 #include <mc/traits.hpp>
 #include <mc/unit.hpp>
-template <ModelType M> void basic_test()
+template <ModelType M>
+void
+basic_test()
 {
   const std::size_t size = 1000;
   MC::ParticlesContainer<M> container(MC::load_tuning_constant(), size, 0);
 
   KOKKOS_ASSERT(container.n_particles() == size)
-  KOKKOS_ASSERT(container.capacity() ==
-                size * container.get_allocation_factor());
+  KOKKOS_ASSERT(container.capacity()
+                == size * container.get_allocation_factor());
   KOKKOS_ASSERT(container.model.extent(0) == container.capacity());
   KOKKOS_ASSERT(container.model.extent(1) == M::n_var);
 
@@ -31,7 +33,9 @@ template <ModelType M> void basic_test()
   }
 }
 
-template <ModelType M> void team_member_test()
+template <ModelType M>
+void
+team_member_test()
 {
   const std::size_t size = 1000;
   MC::ParticlesContainer<M> container(MC::load_tuning_constant(), size, 0);
@@ -50,7 +54,9 @@ template <ModelType M> void team_member_test()
   KOKKOS_ASSERT(cumsum == size);
 }
 
-template <ModelType M> void div_test()
+template <ModelType M>
+void
+div_test()
 {
   const std::size_t size = 1000;
   const std::size_t ndiv = 10;
@@ -64,7 +70,9 @@ template <ModelType M> void div_test()
   KOKKOS_ASSERT(container.get_buffer_index() == ndiv);
 }
 
-template <ModelType M> void merge_test()
+template <ModelType M>
+void
+merge_test()
 {
   const std::size_t size = 1000;
   const std::size_t ndiv = 10;
@@ -82,8 +90,8 @@ template <ModelType M> void merge_test()
   KOKKOS_ASSERT(container.n_particles() == ndiv + size);
   KOKKOS_ASSERT(container.get_buffer_index() == 0);
 
-  KOKKOS_ASSERT(container.model.extent(0) == container.position.extent(0) &&
-                container.position.extent(0) == container.status.extent(0));
+  KOKKOS_ASSERT(container.model.extent(0) == container.position.extent(0)
+                && container.position.extent(0) == container.status.extent(0));
 
   if constexpr (ConstWeightModelType<M>)
   {
@@ -95,7 +103,9 @@ template <ModelType M> void merge_test()
   }
 }
 
-template <ModelType M> void clean_test()
+template <ModelType M>
+void
+clean_test()
 {
   const std::size_t size = 1000;
   const std::size_t to_remove = 10;
@@ -114,7 +124,9 @@ template <ModelType M> void clean_test()
   KOKKOS_ASSERT(container.n_particles() == size - to_remove);
 }
 
-template <ModelType M> void clean_test_and_shrink()
+template <ModelType M>
+void
+clean_test_and_shrink()
 {
   const std::size_t size = 100;
   const std::size_t to_remove = 99;
@@ -133,7 +145,8 @@ template <ModelType M> void clean_test_and_shrink()
   KOKKOS_ASSERT(container.n_particles() == size - to_remove);
 }
 
-int main()
+int
+main()
 {
   Kokkos::ScopeGuard guard;
   basic_test<DefaultModel>();

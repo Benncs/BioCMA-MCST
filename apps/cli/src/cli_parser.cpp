@@ -23,12 +23,14 @@ parseArg(Core::UserControlParameters& user_controll,
          std::string_view current_param,
          std::string_view current_value);
 
-static CliResults<Core::UserControlParameters> parse_user_param(
-    const std::shared_ptr<IO::Logger>& logger, int argc, char** argv)
+static CliResults<Core::UserControlParameters>
+parse_user_param(const std::shared_ptr<IO::Logger>& logger,
+                 int argc,
+                 char** argv)
 {
   using return_type = CliResults<Core::UserControlParameters>;
-  Core::UserControlParameters control =
-      Core::UserControlParameters::m_default();
+  Core::UserControlParameters control
+      = Core::UserControlParameters::m_default();
   if (argc <= 1)
   {
     return return_type("Need at leats one argument");
@@ -80,8 +82,10 @@ static CliResults<Core::UserControlParameters> parse_user_param(
   }
 }
 
-CliResults<Core::UserControlParameters> parse_cli(
-    const std::shared_ptr<IO::Logger>& logger, int argc, char** argv) noexcept
+CliResults<Core::UserControlParameters>
+parse_cli(const std::shared_ptr<IO::Logger>& logger,
+          int argc,
+          char** argv) noexcept
 {
   auto opt_control = parse_user_param(logger, argc, argv);
   if (!opt_control)
@@ -100,52 +104,52 @@ parseArg(Core::UserControlParameters& user_control,
 
   // Create a map to associate options with corresponding actions (lambdas)
   static const std::unordered_map<std::string_view,
-                                  std::function<void(std::string_view)>>
-      param_handlers = {
-          {"er",
-           [&user_control](std::string_view value)
-           { user_control.results_file_name = std::string(value); }},
-          {"mn",
-           [&user_control](std::string_view value)
-           { user_control.model_name = std::string(value); }},
-          {"nt",
-           [&user_control](std::string_view value)
-           { user_control.n_thread = std::stoi(std::string(value)); }},
-          {"np",
-           [&user_control](std::string_view value)
-           { user_control.number_particle = std::stol(std::string(value)); }},
-          {"nex",
-           [&user_control](std::string_view value)
-           {
-             user_control.number_exported_result =
-                 std::stol(std::string(value));
-           }},
-          {"dt",
-           [&user_control](std::string_view value)
-           { user_control.delta_time = std::stod(std::string(value)); }},
-          {"d",
-           [&user_control](std::string_view value)
-           { user_control.final_time = std::stod(std::string(value)); }},
-          {"r",
-           [&user_control](std::string_view)
-           {
-             (void)user_control; /*user_control.recursive = true;*/
-           }},                   // TODO REMOVE
-          {"f",
-           [&user_control](std::string_view value)
-           { user_control.cma_case_path = std::string(value); }},
-          {"force",
-           [&user_control](std::string_view)
-           { user_control.force_override = true; }},
-          {"fi",
-           [&user_control](std::string_view value)
-           { user_control.initialiser_path = std::string(value); }},
-          {"serde",
-           [&user_control](std::string_view value)
-           {
-             user_control.load_serde = true;
-             user_control.serde_file = std::string(value);
-           }}};
+                                  std::function<void(std::string_view)> >
+      param_handlers
+      = { { "er",
+            [&user_control](std::string_view value)
+            { user_control.results_file_name = std::string(value); } },
+          { "mn",
+            [&user_control](std::string_view value)
+            { user_control.model_name = std::string(value); } },
+          { "nt",
+            [&user_control](std::string_view value)
+            { user_control.n_thread = std::stoi(std::string(value)); } },
+          { "np",
+            [&user_control](std::string_view value)
+            { user_control.number_particle = std::stol(std::string(value)); } },
+          { "nex",
+            [&user_control](std::string_view value)
+            {
+              user_control.number_exported_result
+                  = std::stol(std::string(value));
+            } },
+          { "dt",
+            [&user_control](std::string_view value)
+            { user_control.delta_time = std::stod(std::string(value)); } },
+          { "d",
+            [&user_control](std::string_view value)
+            { user_control.final_time = std::stod(std::string(value)); } },
+          { "r",
+            [&user_control](std::string_view)
+            {
+              (void)user_control; /*user_control.recursive = true;*/
+            } },                  // TODO REMOVE
+          { "f",
+            [&user_control](std::string_view value)
+            { user_control.cma_case_path = std::string(value); } },
+          { "force",
+            [&user_control](std::string_view)
+            { user_control.force_override = true; } },
+          { "fi",
+            [&user_control](std::string_view value)
+            { user_control.initialiser_path = std::string(value); } },
+          { "serde",
+            [&user_control](std::string_view value)
+            {
+              user_control.load_serde = true;
+              user_control.serde_file = std::string(value);
+            } } };
 
   auto it = param_handlers.find(current_param);
   if (it != param_handlers.end())
@@ -284,7 +288,8 @@ sanitise_check_cli(Core::UserControlParameters&& params)
   return CliResults<Core::UserControlParameters>(std::move(params));
 }
 
-std::string get_help_message() noexcept
+std::string
+get_help_message() noexcept
 {
   std::stringstream os;
   os << "Usage: ";
@@ -322,12 +327,14 @@ std::string get_help_message() noexcept
 //   os << "\033[1;32m" << message << "\033[0m";
 // }
 
-static void print_red(std::ostream& os, std::string_view message)
+static void
+print_red(std::ostream& os, std::string_view message)
 {
   os << "\033[1;31m" << message << "\033[0m"; // ANSI escape code for red color
 }
 
-static void throw_bad_arg(std::string_view arg)
+static void
+throw_bad_arg(std::string_view arg)
 {
   std::string msg = "Unknown argument: ";
   msg += std::string(arg);

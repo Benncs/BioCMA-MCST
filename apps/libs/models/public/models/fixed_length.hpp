@@ -16,9 +16,8 @@
 namespace Models
 {
   template <FloatingPointType F>
-  static F consteval _get_phi_s_max(F density,
-                                    F dl,
-                                    F glucose_to_biomass_yield = 0.5)
+  static F consteval
+  _get_phi_s_max(F density, F dl, F glucose_to_biomass_yield = 0.5)
   {
     // dl and density must be same unit, dl*density -> mass and y is mass yield
     return (dl * density) / glucose_to_biomass_yield;
@@ -48,11 +47,11 @@ namespace Models
     MODEL_CONSTANT FloatType l_min_m = l_max_m / 2.;   // m
     MODEL_CONSTANT FloatType k = 1e-3;                 // m
     MODEL_CONSTANT FloatType d_m = 0.6e-6;             // m
-    MODEL_CONSTANT FloatType lin_density =
-        c_linear_density(static_cast<FloatType>(1000), d_m);
+    MODEL_CONSTANT FloatType lin_density
+        = c_linear_density(static_cast<FloatType>(1000), d_m);
 
-    MODEL_CONSTANT FloatType phi_s_max =
-        _get_phi_s_max<FloatType>(lin_density, l_dot_max); // kgS/s
+    MODEL_CONSTANT FloatType phi_s_max
+        = _get_phi_s_max<FloatType>(lin_density, l_dot_max); // kgS/s
 
     MC::ContribIndexBounds static get_bounds();
 
@@ -77,23 +76,25 @@ namespace Models
              const SelfParticle& arr,
              const SelfParticle& buffer_arr);
 
-    KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx,
-                                              const SelfParticle& arr)
+    KOKKOS_INLINE_FUNCTION static double
+    mass(std::size_t idx, const SelfParticle& arr)
     {
       return GET_PROPERTY(Self::particle_var::length) * lin_density;
     }
 
-    static std::vector<std::string_view> names()
+    static std::vector<std::string_view>
+    names()
     {
       return {
 
-          "length",
+        "length",
       };
     }
 
-    static std::vector<std::size_t> get_number()
+    static std::vector<std::size_t>
+    get_number()
     {
-      return {INDEX_FROM_ENUM(particle_var::length)};
+      return { INDEX_FROM_ENUM(particle_var::length) };
     }
   };
 
@@ -143,21 +144,22 @@ namespace Models
                         const SelfParticle& arr,
                         const SelfParticle& buffer_arr)
   {
-    const FloatType new_current_length =
-        GET_PROPERTY(particle_var::length) / 2.F;
+    const FloatType new_current_length
+        = GET_PROPERTY(particle_var::length) / 2.F;
 
     GET_PROPERTY(particle_var::length) = new_current_length;
     GET_PROPERTY(particle_var::l_max) = l_max_m;
 
-    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::length) =
-        new_current_length;
+    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::length)
+        = new_current_length;
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = l_max_m;
   }
 
-  inline MC::ContribIndexBounds FixedLength::get_bounds()
+  inline MC::ContribIndexBounds
+  FixedLength::get_bounds()
   {
     int begin = INDEX_FROM_ENUM(Self::particle_var::phi_s);
-    return {.begin = begin, .end = begin + 1};
+    return { .begin = begin, .end = begin + 1 };
   }
 
 } // namespace Models

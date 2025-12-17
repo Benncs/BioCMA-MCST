@@ -71,7 +71,7 @@ namespace Api
      * @return An optional containing a unique pointer to the instance if
      * successful, or std::nullopt if initialization failed.
      */
-    static std::optional<std::unique_ptr<SimulationInstance>>
+    static std::optional<std::unique_ptr<SimulationInstance> >
     init(int argc,
          char** argv,
          std::optional<std::size_t> run_id = std::nullopt) noexcept;
@@ -226,13 +226,15 @@ namespace Api
      */
     ApiResult exec() noexcept;
 
-    void set_logger(std::shared_ptr<IO::Logger> _logger)
+    void
+    set_logger(std::shared_ptr<IO::Logger> _logger)
     {
 
       logger = std::move(_logger);
     }
 
-    [[nodiscard]] auto& get_logger() const
+    [[nodiscard]] auto&
+    get_logger() const
     {
       return logger;
     }
@@ -254,17 +256,17 @@ namespace Api
 
     std::shared_ptr<IO::Logger> logger;
 
-    std::optional<Core::ScalarFactory::ScalarVariant>
-        scalar_initializer_variant = std::nullopt;
+    std::optional<Core::ScalarFactory::ScalarVariant> scalar_initializer_variant
+        = std::nullopt;
     Core::CaseData _data;               ///< Case data for the simulation.
     Core::UserControlParameters params; ///< User-defined control parameters.
     bool loaded = false;  ///< Flag indicating if the instance is loaded.
     bool applied = false; ///< Flag indicating if the configuration is applied.
     bool registered = false; ///< Flag indicating if resources are registered.
-    std::optional<Simulation::Feed::SimulationFeed> feed =
-        std::nullopt; ///< Optional feed configuration.
-    std::optional<Simulation::MassTransfer::Type::MtrTypeVariant> mtr_type =
-        std::nullopt;
+    std::optional<Simulation::Feed::SimulationFeed> feed
+        = std::nullopt; ///< Optional feed configuration.
+    std::optional<Simulation::MassTransfer::Type::MtrTypeVariant> mtr_type
+        = std::nullopt;
 
     bool auto_mtr;
   };

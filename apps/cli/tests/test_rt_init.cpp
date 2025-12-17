@@ -25,8 +25,8 @@
 //   assert(info.thread_per_process == 2); // Assertion
 // }
 
-// // Test case 2: One node with 16 threads, should have number of threads equal
-// to
+// // Test case 2: One node with 16 threads, should have number of threads
+// equal to
 // // the number of CPU cores
 // void test_set_openmp_threads_2()
 // {

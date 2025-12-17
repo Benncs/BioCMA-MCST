@@ -7,9 +7,10 @@ namespace Core
   class DataExporter::impl
   {
   };
-  void DataExporter::do_link(std::string_view filename,
-                             std::string_view link_name,
-                             std::string_view groupname)
+  void
+  DataExporter::do_link(std::string_view filename,
+                        std::string_view link_name,
+                        std::string_view groupname)
   {
   }
 
@@ -24,23 +25,27 @@ namespace Core
   }
   DataExporter::~DataExporter() = default;
 
-  void DataExporter::write_matrix(std::string_view name,
-                                  std::span<const double> values,
-                                  bool compress)
+  void
+  DataExporter::write_matrix(std::string_view name,
+                             std::span<const double> values,
+                             bool compress)
   {
   }
 
-  void DataExporter::prepare_matrix(MultiMatrixDescription description)
+  void
+  DataExporter::prepare_matrix(MultiMatrixDescription description)
   {
   }
 
-  void DataExporter::append_matrix(std::string_view name, matrix_variant_t data)
+  void
+  DataExporter::append_matrix(std::string_view name, matrix_variant_t data)
   {
   }
 
-  void DataExporter::append_array(std::string_view name,
-                                  std::span<const double> data,
-                                  uint64_t last_size)
+  void
+  DataExporter::append_array(std::string_view name,
+                             std::span<const double> data,
+                             uint64_t last_size)
   {
   }
 
@@ -50,21 +55,24 @@ namespace Core
   {
   }
 
-  void DataExporter::write_matrix(std::string_view name,
-                                  std::span<const double> values,
-                                  size_t n_row,
-                                  size_t n_col,
-                                  bool compress)
+  void
+  DataExporter::write_matrix(std::string_view name,
+                             std::span<const double> values,
+                             size_t n_row,
+                             size_t n_col,
+                             bool compress)
   {
   }
 
-  void DataExporter::write_simple(const export_initial_kv& values,
-                                  std::string_view root)
+  void
+  DataExporter::write_simple(const export_initial_kv& values,
+                             std::string_view root)
   {
   }
 
-  void DataExporter::write_simple(std::string specific_dataspace,
-                                  const simple_export_t& values)
+  void
+  DataExporter::write_simple(std::string specific_dataspace,
+                             const simple_export_t& values)
   {
   }
 } // namespace Core

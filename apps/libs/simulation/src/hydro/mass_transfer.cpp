@@ -27,7 +27,8 @@ namespace
     const std::shared_ptr<Simulation::MassTransfer::MassTransferProxy>& proxy;
     std::size_t nrow;
 
-    void operator()(Simulation::MassTransfer::Type::FixedKla& kla) const
+    void
+    operator()(Simulation::MassTransfer::Type::FixedKla& kla) const
     {
       if (kla.value.size() != nrow)
       {
@@ -42,11 +43,13 @@ namespace
       // proxy->kla(1,0)=0;
     }
 
-    void operator()(Simulation::MassTransfer::Type::FlowmapTurbulence&) const
+    void
+    operator()(Simulation::MassTransfer::Type::FlowmapTurbulence&) const
     {
       proxy->kla.setZero();
     }
-    void operator()(Simulation::MassTransfer::Type::FlowmapKla&) const
+    void
+    operator()(Simulation::MassTransfer::Type::FlowmapKla&) const
     {
       proxy->kla.setZero();
     }
@@ -59,7 +62,8 @@ namespace
     const std::shared_ptr<Simulation::ScalarSimulation>& gas_scalar;
     const CmaUtils::IterationStatePtrType& state;
 
-    void operator()(const Simulation::MassTransfer::Type::FixedKla& _) const
+    void
+    operator()(const Simulation::MassTransfer::Type::FixedKla& _) const
     {
       (void)_;
       Simulation::MassTransfer::Impl::fixed_kla_gas_liquid_mass_transfer(
@@ -82,7 +86,8 @@ namespace
           state);
     }
 
-    void operator()(const Simulation::MassTransfer::Type::FlowmapKla& _) const
+    void
+    operator()(const Simulation::MassTransfer::Type::FlowmapKla& _) const
     {
       (void)_;
       // Simulation::MassTransfer::Impl::flowmap_gas_liquid_mass_transfer(
@@ -117,12 +122,13 @@ namespace Simulation::MassTransfer
     _proxy->Henry.setZero();
     _proxy->Henry(1) = 3.181e-2;
 
-    std::visit(FunctorKla{_proxy, nrow}, _type);
+    std::visit(FunctorKla{ _proxy, nrow }, _type);
 
     _proxy->db = 5e-3; // FIXME
   }
 
-  void MassTransferModel::update(const CmaUtils::IterationStatePtrType& state)
+  void
+  MassTransferModel::update(const CmaUtils::IterationStatePtrType& state)
   {
     PROFILE_SECTION("gas_liquid_mass_transfer")
     if (gas_scalar == nullptr || _proxy == nullptr)
@@ -130,10 +136,11 @@ namespace Simulation::MassTransfer
       throw std::invalid_argument("gas_liquid_mass_transfer should not be "
                                   "called if gas not intialized");
     }
-    std::visit(MtrVisitor{_proxy, liquid_scalar, gas_scalar, state}, type);
+    std::visit(MtrVisitor{ _proxy, liquid_scalar, gas_scalar, state }, type);
   }
 
-  void MassTransferModel::gas_liquid_mass_transfer() const
+  void
+  MassTransferModel::gas_liquid_mass_transfer() const
   {
     PROFILE_SECTION("gas_liquid_mass_transfer")
     if (gas_scalar == nullptr || _proxy == nullptr)
@@ -147,18 +154,20 @@ namespace Simulation::MassTransfer
     auto liquid_concentration = this->liquid_scalar->getConcentrationArray();
     auto liquid_volume = this->liquid_scalar->getVolume();
 
-    _proxy->mtr = (_proxy->kla * (gas_concentration.colwise() * _proxy->Henry -
-                                  liquid_concentration))
-                      .matrix() *
-                  liquid_volume;
+    _proxy->mtr = (_proxy->kla
+                   * (gas_concentration.colwise() * _proxy->Henry
+                      - liquid_concentration))
+                      .matrix()
+                  * liquid_volume;
   }
 
-  std::optional<std::span<const double>> MassTransferModel::mtr_data() const
+  std::optional<std::span<const double> >
+  MassTransferModel::mtr_data() const
   {
     if (_proxy != nullptr)
     {
-      return std::make_optional<std::span<const double>>(
-          {_proxy->mtr.data(), static_cast<size_t>(_proxy->mtr.size())});
+      return std::make_optional<std::span<const double> >(
+          { _proxy->mtr.data(), static_cast<size_t>(_proxy->mtr.size()) });
     }
     return std::nullopt;
   }
@@ -177,10 +186,11 @@ namespace Simulation::MassTransfer
 
   MassTransferModel::~MassTransferModel() = default;
 
-  MassTransferModel::MassTransferModel(MassTransferModel&& rhs) noexcept =
-      default;
+  MassTransferModel::MassTransferModel(MassTransferModel&& rhs) noexcept
+      = default;
 
   MassTransferModel&
-  MassTransferModel::operator=(MassTransferModel&& rhs) noexcept = default;
+  MassTransferModel::operator=(MassTransferModel&& rhs) noexcept
+      = default;
 
 }; // namespace Simulation::MassTransfer

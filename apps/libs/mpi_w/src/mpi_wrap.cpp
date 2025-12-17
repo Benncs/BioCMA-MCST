@@ -6,7 +6,8 @@
 
 namespace WrapMPI
 {
-  bool is_initialized() noexcept
+  bool
+  is_initialized() noexcept
   {
     int initialized{};
 
@@ -15,17 +16,20 @@ namespace WrapMPI
     return initialized != 0;
   }
 
-  void finalize() noexcept
+  void
+  finalize() noexcept
   {
     MPI_Finalize();
   }
 
-  int critical_error() noexcept
+  int
+  critical_error() noexcept
   {
     return MPI_Abort(MPI_COMM_WORLD, 0);
   }
 
-  void barrier() noexcept
+  void
+  barrier() noexcept
   {
     if (MPI_Barrier(MPI_COMM_WORLD) != MPI_SUCCESS)
     {

@@ -55,8 +55,8 @@ namespace Simulation
 
     mc_unit->domain.init_inner(n_flows);
 
-    contribs_scatter =
-        Kokkos::Experimental::create_scatter_view(get_kernel_contribution());
+    contribs_scatter
+        = Kokkos::Experimental::create_scatter_view(get_kernel_contribution());
   }
 
   void
@@ -75,17 +75,19 @@ namespace Simulation
     updateScalarHydro(newstate);
   }
 
-  void SimulationUnit::updateMCHydro(std::span<const double> newliquid_volume,
-                                     std::span<const std::size_t> neighors_flat,
-                                     std::span<const double> proba_flat,
-                                     std::span<const double> out_flows) const
+  void
+  SimulationUnit::updateMCHydro(std::span<const double> newliquid_volume,
+                                std::span<const std::size_t> neighors_flat,
+                                std::span<const double> proba_flat,
+                                std::span<const double> out_flows) const
   {
     PROFILE_SECTION("simulation::updateMCHydro")
     this->mc_unit->domain.update(
         newliquid_volume, neighors_flat, out_flows, proba_flat);
   }
 
-  void SimulationUnit::updateScalarHydro(
+  void
+  SimulationUnit::updateScalarHydro(
       const CmaUtils::IterationStatePtrType& newstate)
   {
     PROFILE_SECTION("simulation::updateScalarHydro")
@@ -106,7 +108,8 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::scatter_contribute()
+  void
+  SimulationUnit::scatter_contribute()
   {
     auto contribs = this->get_kernel_contribution();
     Kokkos::Experimental::contribute(contribs, contribs_scatter);
@@ -116,7 +119,8 @@ namespace Simulation
     this->liquid_scalar->synchro_sources();
   }
 
-  void SimulationUnit::reset()
+  void
+  SimulationUnit::reset()
   {
     liquid_scalar.reset();
     gas_scalar.reset();
@@ -127,8 +131,8 @@ namespace Simulation
   SimulationUnit::post_init_concentration(const ScalarInitializer& scalar_init)
   {
 
-    if (scalar_init.type == ScalarInitialiserType::Uniform ||
-        scalar_init.type == ScalarInitialiserType::Local)
+    if (scalar_init.type == ScalarInitialiserType::Uniform
+        || scalar_init.type == ScalarInitialiserType::Local)
 
     {
 

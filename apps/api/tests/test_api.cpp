@@ -6,7 +6,8 @@
 
 #define INIT Api::SimulationInstance::init(argc, argv);
 
-Core::UserControlParameters gparams(std::string_view path)
+Core::UserControlParameters
+gparams(std::string_view path)
 {
   auto p = Core::UserControlParameters::m_default();
 
@@ -24,20 +25,24 @@ Core::UserControlParameters gparams(std::string_view path)
   return p;
 }
 
-void test_exec(std::string_view path)
+void
+test_exec(std::string_view path)
 {
 }
 
-void test_apply(std::string_view path)
+void
+test_apply(std::string_view path)
 {
 }
 
-void test_apply_from_param_serde(std::string_view path)
+void
+test_apply_from_param_serde(std::string_view path)
 {
   // TODO
 }
 
-void test_exec_from_param(int argc, char** argv, std::string_view path)
+void
+test_exec_from_param(int argc, char** argv, std::string_view path)
 {
   auto handle = *INIT;
   assert(handle->register_parameters(gparams(path)));
@@ -45,20 +50,23 @@ void test_exec_from_param(int argc, char** argv, std::string_view path)
   assert(handle->exec());
 }
 
-void test_apply_from_param(int argc, char** argv, std::string_view path)
+void
+test_apply_from_param(int argc, char** argv, std::string_view path)
 {
   auto handle = *INIT;
   assert(handle->register_parameters(gparams(path)));
   assert(handle->apply(false));
 }
 
-void test_register_parameters(int argc, char** argv, std::string_view path)
+void
+test_register_parameters(int argc, char** argv, std::string_view path)
 {
   auto handle = *INIT;
   assert(handle->register_parameters(gparams(path)));
 }
 #include <iostream>
-int main(int argc, char** argv)
+int
+main(int argc, char** argv)
 {
   std::string cma_path = get_cma_path(argc, argv);
   std::cout << cma_path << std::endl;
@@ -74,13 +82,15 @@ int main(int argc, char** argv)
   // FIXME test_exec_from_param(cma_path);
 }
 
-void test_exec_err(int argc, char** argv)
+void
+test_exec_err(int argc, char** argv)
 {
   auto handle = *INIT;
   assert(!handle->exec());
 }
 
-void test_init(int argc, char** argv)
+void
+test_init(int argc, char** argv)
 {
   auto handle = INIT;
 
@@ -91,13 +101,15 @@ void test_init(int argc, char** argv)
   assert(ptr != nullptr && "Init 2");
 }
 
-void test_register_result_path(int argc, char** argv)
+void
+test_register_result_path(int argc, char** argv)
 {
   auto handle = *INIT;
   assert(handle->register_result_path(tmp_dir.c_str()) == true);
 }
 
-void test_apply_err(int argc, char** argv)
+void
+test_apply_err(int argc, char** argv)
 {
   auto handle = *INIT
   {

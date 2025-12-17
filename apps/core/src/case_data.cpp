@@ -26,8 +26,8 @@
 namespace Core
 {
 
-  std::string exporter_filename(const ExecInfo& exec,
-                                const SimulationParameters& params)
+  std::string
+  exporter_filename(const ExecInfo& exec, const SimulationParameters& params)
   {
     std::stringstream filename;
     filename << params.results_file_name << "_partial_" << exec.current_rank
@@ -35,8 +35,9 @@ namespace Core
     return filename.str();
   }
 
-  void init_partial_exporter(Core::PartialExporter& partial_exporter,
-                             const CaseData& case_data)
+  void
+  init_partial_exporter(Core::PartialExporter& partial_exporter,
+                        const CaseData& case_data)
   {
     const auto [_, n_compartment] = case_data.simulation->getDimensions();
     partial_exporter.init_fields(case_data.params.number_exported_result,
@@ -56,13 +57,14 @@ namespace Core
   {
   }
 
-  void exec(std::shared_ptr<IO::Logger> logger, CaseData&& case_data)
+  void
+  exec(std::shared_ptr<IO::Logger> logger, CaseData&& case_data)
   {
     // TODO Find orphan profile_section : Kokkos::Profiling::popRegion() called
     // outside  of an actve region. Previous regions:
 
-    const auto filename =
-        exporter_filename(case_data.exec_info, case_data.params);
+    const auto filename
+        = exporter_filename(case_data.exec_info, case_data.params);
     Core::PartialExporter partial_exporter(ExecInfo(), filename);
     init_partial_exporter(partial_exporter, case_data);
     partial_exporter.set_logger(logger);
@@ -190,8 +192,8 @@ namespace Core
 
     const auto id_seed = (force_run_id.has_value())
                              ? *force_run_id
-                             : static_cast<size_t>(time(nullptr) * info.n_rank *
-                                                   info.thread_per_process);
+                             : static_cast<size_t>(time(nullptr) * info.n_rank
+                                                   * info.thread_per_process);
 
     std::string s = std::to_string(id_seed);
     info.run_id = std::hash<std::string>{}(s);

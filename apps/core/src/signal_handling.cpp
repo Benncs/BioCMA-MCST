@@ -21,7 +21,8 @@ namespace Core
     instance->f_sigint_raised = false;
   }
 
-  void SignalHandler::handle_SIGUSR1(int /*unused*/) noexcept
+  void
+  SignalHandler::handle_SIGUSR1(int /*unused*/) noexcept
   {
     if (instance != nullptr)
     {
@@ -29,7 +30,8 @@ namespace Core
     }
   }
 
-  void SignalHandler::handle_SIGUSR2(int /*unused*/) noexcept
+  void
+  SignalHandler::handle_SIGUSR2(int /*unused*/) noexcept
   {
     if (instance != nullptr)
     {
@@ -37,7 +39,8 @@ namespace Core
     }
   }
 
-  void SignalHandler::handle_SIGINT(int /*unused*/) noexcept
+  void
+  SignalHandler::handle_SIGINT(int /*unused*/) noexcept
   {
     if (instance != nullptr)
     {

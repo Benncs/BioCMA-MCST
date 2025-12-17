@@ -1,7 +1,8 @@
 #include <import_py.hpp>
 #include <iostream>
 
-void test_get_python_module()
+void
+test_get_python_module()
 {
   std::string module_path = "tests.test_pymodule";
   try
@@ -15,7 +16,8 @@ void test_get_python_module()
   }
 }
 
-int main()
+int
+main()
 {
   test_get_python_module();
 }

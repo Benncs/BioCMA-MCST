@@ -10,10 +10,10 @@
 /* Old Implementation
 
 
-#define __condition(__MACRO__)                                                 \
-  if (this->n_p == 0 || this->n_t == 0)                                        \
-  {                                                                            \
-    __MACRO__                                                                  \
+#define __condition(__MACRO__) \
+  if (this->n_p == 0 || this->n_t == 0) \
+  { \
+    __MACRO__ \
   }
 #define TEST_INIT __condition(return;)
 #define TEST_INIT_OPT __condition(return std::nullopt;)
@@ -95,7 +95,8 @@ buffer("buffer"),internal_counter("i_c")
 
   Probes::SubViewTimeType Probes::get()
   {
-    return Kokkos::subview(probes, Kokkos::ALL(), get_counter++, Kokkos::ALL());
+    return Kokkos::subview(probes, Kokkos::ALL(), get_counter++,
+Kokkos::ALL());
   }
 
   KOKKOS_FUNCTION std::optional<Probes::SubViewProbeType>

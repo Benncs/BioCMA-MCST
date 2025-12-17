@@ -61,7 +61,8 @@ namespace Simulation::KernelInline
   Compared with first impl it might not change anything
   Binary seach  is O(log(n)) vs first linear is (n)
   */
-  KOKKOS_INLINE_FUNCTION std::size_t __find_next_compartment(
+  KOKKOS_INLINE_FUNCTION std::size_t
+  __find_next_compartment(
       const bool do_serch,
       const MC::NeighborsView<ComputeSpace, true>& neighbors,
       const MC::CumulativeProbabilityView<ComputeSpace, true>&
@@ -84,8 +85,8 @@ namespace Simulation::KernelInline
       right = mask * right + (1 - mask) * mid;
     }
 
-    const auto ret = i_compartment * (1 - mask_do_serch) +
-                     neighbors(i_compartment, left) * mask_do_serch;
+    const auto ret = i_compartment * (1 - mask_do_serch)
+                     + neighbors(i_compartment, left) * mask_do_serch;
     return ret;
   }
 
@@ -173,16 +174,17 @@ namespace Simulation::KernelInline
           random(std::move(_random)), enable_move(b_move),
           enable_leave(b_leave) {};
 
-    void update(const ComputeSpace& ex,
-                double _d_t,
-                std::size_t n_p,
-                MC::DomainState<ComputeSpace> move_i,
-                MC::ParticlePositions _positions,
-                MC::ParticleStatus _status,
-                MC::ParticleAges _ages,
-                MC::ParticleSamples _random,
-                bool b_move,
-                bool b_leave)
+    void
+    update(const ComputeSpace& ex,
+           double _d_t,
+           std::size_t n_p,
+           MC::DomainState<ComputeSpace> move_i,
+           MC::ParticlePositions _positions,
+           MC::ParticleStatus _status,
+           MC::ParticleAges _ages,
+           MC::ParticleSamples _random,
+           bool b_move,
+           bool b_leave)
     {
 
       this->d_t = _d_t;
@@ -199,7 +201,8 @@ namespace Simulation::KernelInline
       Kokkos::fill_random(ex, random, random_pool, 0., 1.);
     }
 
-    KOKKOS_INLINE_FUNCTION void operator()(
+    KOKKOS_INLINE_FUNCTION void
+    operator()(
         TagMove /*tag*/,
         const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle) const
     {
@@ -212,8 +215,8 @@ namespace Simulation::KernelInline
       handle_move(idx);
     }
 
-    KOKKOS_INLINE_FUNCTION void operator()(TagMove /*tag*/,
-                                           const std::size_t& idx) const
+    KOKKOS_INLINE_FUNCTION void
+    operator()(TagMove /*tag*/, const std::size_t& idx) const
     {
 
       if (status(idx) != MC::Status::Idle) [[unlikely]]
@@ -242,9 +245,10 @@ namespace Simulation::KernelInline
     //   }
     // }
     //
-    KOKKOS_INLINE_FUNCTION void operator()([[maybe_unused]] TagLeave _tag,
-                                           const std::size_t& idx,
-                                           std::size_t& local_dead_count) const
+    KOKKOS_INLINE_FUNCTION void
+    operator()([[maybe_unused]] TagLeave _tag,
+               const std::size_t& idx,
+               std::size_t& local_dead_count) const
     {
       if (status(idx) != MC::Status::Idle) [[unlikely]]
       {
@@ -280,12 +284,14 @@ namespace Simulation::KernelInline
     //       });
     // }
 
-    [[nodiscard]] bool need_launch() const
+    [[nodiscard]] bool
+    need_launch() const
     {
       return enable_leave || enable_move;
     }
 
-    KOKKOS_FUNCTION void handle_move(const std::size_t idx) const
+    KOKKOS_FUNCTION void
+    handle_move(const std::size_t idx) const
     {
       // auto generator = random_pool.get_state();
       // const float rng1 = generator.frand(0., 1.);
@@ -299,11 +305,11 @@ namespace Simulation::KernelInline
 
       KOKKOS_ASSERT(i_current_compartment < move.liquid_volume.extent(0));
 
-      const bool mask_next =
-          probability_leaving<void>(rng1,
-                                    move.liquid_volume(i_current_compartment),
-                                    move.diag_transition(i_current_compartment),
-                                    d_t);
+      const bool mask_next = probability_leaving<void>(
+          rng1,
+          move.liquid_volume(i_current_compartment),
+          move.diag_transition(i_current_compartment),
+          d_t);
 
       positions(idx) = __find_next_compartment(mask_next,
                                                move.neighbors,
@@ -348,9 +354,9 @@ namespace Simulation::KernelInline
       const auto random_number = static_cast<float>(random(idx, 0));
       const auto& [index, flow] = leaving_flow(i_flow);
 
-      const bool is_leaving =
-          (position == index) &&
-          probability_leaving<void>(random_number, liquid_volume, flow, d_t);
+      const bool is_leaving = (position == index)
+                              && probability_leaving<void>(
+                                  random_number, liquid_volume, flow, d_t);
 
       const int leave_mask = static_cast<int>(is_leaving);
 
@@ -382,8 +388,8 @@ namespace Simulation::KernelInline
       ages(idx, 0) = leave_mask * 0 + (1 - leave_mask) * ages(idx, 0);
       // status(idx) = is_leaving ? MC::Status::Exit : status(idx);
       status(idx) = static_cast<MC::Status>(
-          static_cast<int>(MC::Status::Exit) * leave_mask +
-          (1 - leave_mask) * static_cast<int>(status(idx)));
+          static_cast<int>(MC::Status::Exit) * leave_mask
+          + (1 - leave_mask) * static_cast<int>(status(idx)));
     }
 
     KOKKOS_FORCEINLINE_FUNCTION void

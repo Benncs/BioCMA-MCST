@@ -47,28 +47,28 @@ template <typename ExecSpace,
           int EigenLayout,
           FloatingPointType ftype,
           typename... MemoryTrait>
-using KokkosScalarMatrix =
-    Kokkos::View<ftype**,
-                 typename KokkosLayoutMapper<EigenLayout>::type,
-                 ExecSpace,
-                 MemoryTrait...>;
+using KokkosScalarMatrix
+    = Kokkos::View<ftype**,
+                   typename KokkosLayoutMapper<EigenLayout>::type,
+                   ExecSpace,
+                   MemoryTrait...>;
 
 template <FloatingPointType ftype>
-using RowMajorKokkosScalarMatrix =
-    KokkosScalarMatrix<ComputeSpace, Eigen::RowMajor, ftype>;
+using RowMajorKokkosScalarMatrix
+    = KokkosScalarMatrix<ComputeSpace, Eigen::RowMajor, ftype>;
 template <FloatingPointType ftype>
-using ColMajorKokkosScalarMatrix =
-    KokkosScalarMatrix<ComputeSpace, Eigen::ColMajor, ftype>;
+using ColMajorKokkosScalarMatrix
+    = KokkosScalarMatrix<ComputeSpace, Eigen::ColMajor, ftype>;
 
 template <int EigenLayout, FloatingPointType float_type> struct EigenKokkosBase
 {
   using EigenMatrix = MatrixType<EigenLayout, float_type>;
   using HostView = KokkosScalarMatrix<HostSpace, EigenLayout, float_type>;
-  using ComputeView =
-      KokkosScalarMatrix<ComputeSpace,
-                         EigenLayout,
-                         float_type,
-                         Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+  using ComputeView
+      = KokkosScalarMatrix<ComputeSpace,
+                           EigenLayout,
+                           float_type,
+                           Kokkos::MemoryTraits<Kokkos::RandomAccess> >;
 
   HostView host;
   ComputeView compute;
@@ -82,22 +82,26 @@ template <int EigenLayout, FloatingPointType float_type> struct EigenKokkosBase
     compute = Kokkos::create_mirror_view_and_copy(ComputeSpace(), host);
   }
 
-  [[nodiscard]] std::span<const double> get_span() const
+  [[nodiscard]] std::span<const double>
+  get_span() const
   {
-    return {eigen_data.data(), static_cast<size_t>(eigen_data.size())};
+    return { eigen_data.data(), static_cast<size_t>(eigen_data.size()) };
   }
 
-  std::span<double> get_span()
+  std::span<double>
+  get_span()
   {
-    return {eigen_data.data(), static_cast<size_t>(eigen_data.size())};
+    return { eigen_data.data(), static_cast<size_t>(eigen_data.size()) };
   }
 
-  void update_host_to_compute() const
+  void
+  update_host_to_compute() const
   {
     Kokkos::deep_copy(compute, host);
   }
 
-  void update_compute_to_host() const
+  void
+  update_compute_to_host() const
   {
     Kokkos::deep_copy(host, compute);
   }

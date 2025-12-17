@@ -10,7 +10,8 @@
     std::cout << "Test passed: " << #a << " == " << #b << "\n";                \
   }
 
-int main()
+int
+main()
 {
   // Test cases to validate min_var
   double result;

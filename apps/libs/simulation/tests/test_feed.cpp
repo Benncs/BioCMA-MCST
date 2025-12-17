@@ -2,10 +2,12 @@
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
 
-void basic_insertion()
+void
+basic_insertion()
 {
-  auto constant_feed = Simulation::Feed::FeedDescriptor{
-      1, 1, 0, 1, 1, Simulation::Feed::Constant{}};
+  auto constant_feed
+      = Simulation::Feed::FeedDescriptor{ 1, 1, 0,
+                                          1, 1, Simulation::Feed::Constant{} };
 
   auto feeds = Simulation::Feed::SimulationFeed();
 
@@ -35,7 +37,8 @@ void basic_insertion()
   }
 }
 
-int main()
+int
+main()
 {
 
   basic_insertion();

@@ -10,60 +10,68 @@
 namespace Models
 {
 
-  KOKKOS_FUNCTION void UdfModel::init(const MC::pool_type& random_pool,
-                                      std::size_t idx,
-                                      const UdfModel::SelfParticle& arr,
-                                      const UdfModel::Config& config)
+  KOKKOS_FUNCTION void
+  UdfModel::init(const MC::pool_type& random_pool,
+                 std::size_t idx,
+                 const UdfModel::SelfParticle& arr,
+                 const UdfModel::Config& config)
   {
     UnsafeUDF::Loader::init_udf(random_pool, idx, arr, config);
   }
 
-  KOKKOS_FUNCTION double UdfModel::mass(std::size_t idx,
-                                        const UdfModel::SelfParticle& arr)
+  KOKKOS_FUNCTION double
+  UdfModel::mass(std::size_t idx, const UdfModel::SelfParticle& arr)
   {
     return UnsafeUDF::Loader::mass(idx, arr);
   }
 
-  KOKKOS_FUNCTION MC::Status UdfModel::update(const MC::pool_type& random_pool,
-                                              FloatType d_t,
-                                              std::size_t idx,
-                                              const SelfParticle& arr,
-                                              const MC::LocalConcentration& c)
+  KOKKOS_FUNCTION MC::Status
+  UdfModel::update(const MC::pool_type& random_pool,
+                   FloatType d_t,
+                   std::size_t idx,
+                   const SelfParticle& arr,
+                   const MC::LocalConcentration& c)
   {
     return UnsafeUDF::Loader::update_udf(random_pool, d_t, idx, arr, c);
   }
 
-  KOKKOS_FUNCTION void UdfModel::division(const MC::pool_type& random_pool,
-                                          std::size_t idx,
-                                          std::size_t idx2,
-                                          const SelfParticle& arr,
-                                          const SelfParticle& buffer_arr)
+  KOKKOS_FUNCTION void
+  UdfModel::division(const MC::pool_type& random_pool,
+                     std::size_t idx,
+                     std::size_t idx2,
+                     const SelfParticle& arr,
+                     const SelfParticle& buffer_arr)
   {
     UnsafeUDF::Loader::division_udf(random_pool, idx, idx2, arr, buffer_arr);
   }
 
-  void UdfModel::set_nvar()
+  void
+  UdfModel::set_nvar()
   {
     UdfModel::n_var = UnsafeUDF::Loader::set_nvar_udf();
   }
 
-  std::vector<std::string_view> UdfModel::names()
+  std::vector<std::string_view>
+  UdfModel::names()
   {
     return UnsafeUDF::Loader::names();
   }
 
-  MC::ContribIndexBounds UdfModel::get_bounds()
+  MC::ContribIndexBounds
+  UdfModel::get_bounds()
   {
     return UnsafeUDF::Loader::get_bounds_udf();
   }
 
-  UdfModel::Config UdfModel::get_config(std::size_t n)
+  UdfModel::Config
+  UdfModel::get_config(std::size_t n)
   {
     auto e = MC::HostSpace();
     return UnsafeUDF::Loader::get_config_udf(e, n);
   }
 
-  std::vector<std::size_t> UdfModel::get_number()
+  std::vector<std::size_t>
+  UdfModel::get_number()
   {
     return UnsafeUDF::Loader::get_number();
   }

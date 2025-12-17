@@ -9,8 +9,8 @@
 #include <mc/traits.hpp>
 
 template <typename MemorySpace>
-using ParticlePropertyViewType =
-    Kokkos::View<double**, Kokkos::LayoutRight, MemorySpace>;
+using ParticlePropertyViewType
+    = Kokkos::View<double**, Kokkos::LayoutRight, MemorySpace>;
 
 using SubViewtype = Kokkos::Subview<ParticlePropertyViewType<ComputeSpace>,
                                     decltype(Kokkos::ALL),
@@ -21,7 +21,7 @@ namespace PostProcessing
   {
     ParticlePropertyViewType<HostSpace> particle_values;
     ParticlePropertyViewType<HostSpace> spatial_values;
-    std::optional<ParticlePropertyViewType<HostSpace>> ages;
+    std::optional<ParticlePropertyViewType<HostSpace> > ages;
     std::vector<std::string> vnames;
   };
 
@@ -49,8 +49,9 @@ namespace PostProcessing
       }
 
       KOKKOS_INLINE_FUNCTION
-      void operator()(const int i_particle) const
-        requires(HasExportPropertiesFull<Model>)
+      void
+      operator()(const int i_particle) const
+          requires(HasExportPropertiesFull<Model>)
       {
         if (status(i_particle) != MC::Status::Idle)
         {
@@ -73,8 +74,9 @@ namespace PostProcessing
       }
 
       KOKKOS_INLINE_FUNCTION
-      void operator()(const int i_particle) const
-        requires(HasExportPropertiesPartial<Model>)
+      void
+      operator()(const int i_particle) const
+          requires(HasExportPropertiesPartial<Model>)
       {
         if (status(i_particle) != MC::Status::Idle)
         {
@@ -96,11 +98,12 @@ namespace PostProcessing
         ages_value(1, i_particle) = ages(i_particle, 1);
       }
 
-      void run()
+      void
+      run()
       {
 
-        scatter_spatial_values =
-            Kokkos::Experimental::create_scatter_view(spatial_values);
+        scatter_spatial_values
+            = Kokkos::Experimental::create_scatter_view(spatial_values);
 
         // Pour PartialExport, on initialise kindices
         if constexpr (HasExportPropertiesPartial<Model>)
@@ -112,8 +115,8 @@ namespace PostProcessing
           {
             host_index(i) = indices[i];
           }
-          kindices =
-              Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_index);
+          kindices
+              = Kokkos::create_mirror_view_and_copy(ComputeSpace(), host_index);
         }
 
         Kokkos::parallel_for("get_properties",
@@ -150,10 +153,10 @@ namespace PostProcessing
     {
       container.force_remove_dead();
       BonceBuffer properties;
-      const std::size_t n_p =
-          container.n_particles(); // USE list size not Kokkos View size.
-                                   // bcause container allocates more particles
-                                   // than needed
+      const std::size_t n_p
+          = container.n_particles(); // USE list size not Kokkos View size.
+                                     // bcause container allocates more
+                                     // particles than needed
       auto ar = M::names();
       properties.vnames = std::vector<std::string>(ar.begin(), ar.end());
       properties.vnames.emplace_back("mass");

@@ -24,8 +24,8 @@
 #  include <stdexcept>
 #  include <string_view>
 #  include <vector>
-static void write_to_file(const std::ostringstream& oss,
-                          std::string_view filename)
+static void
+write_to_file(const std::ostringstream& oss, std::string_view filename)
 {
 
   std::ofstream file(filename.data(), std::ios::binary);
@@ -38,7 +38,8 @@ static void write_to_file(const std::ostringstream& oss,
   file.close();
 }
 
-static void read_file(std::stringstream& buffer, std::string_view filename)
+static void
+read_file(std::stringstream& buffer, std::string_view filename)
 {
   std::fstream file;
   file.open(filename.data(), std::ios::binary | std::ios::in);
@@ -80,7 +81,8 @@ using iArchive_t = cereal::BinaryInputArchive;
 namespace SerDe
 {
 
-  void save_simulation(const Core::CaseData& case_data)
+  void
+  save_simulation(const Core::CaseData& case_data)
   {
 
     std::stringstream serde_name;
@@ -104,10 +106,10 @@ namespace SerDe
 
       auto cgas = case_data.simulation->getCgasData();
 
-      std::optional<std::vector<double>> cgas_a =
-          cgas.has_value() ? std::make_optional(std::vector<double>(
-                                 cgas->begin(), cgas->end()))
-                           : std::nullopt;
+      std::optional<std::vector<double> > cgas_a
+          = cgas.has_value() ? std::make_optional(std::vector<double>(
+                                   cgas->begin(), cgas->end()))
+                             : std::nullopt;
       ar(case_data.params.number_particle,
          dim,
          std::vector<double>(cliq.begin(), cliq.end()),
@@ -118,9 +120,10 @@ namespace SerDe
     write_to_file(buf, serde_name.str());
   }
 
-  bool load_simulation(Core::GlobalInitialiser& gi,
-                       Core::CaseData& case_data,
-                       std::string_view ser_filename)
+  bool
+  load_simulation(Core::GlobalInitialiser& gi,
+                  Core::CaseData& case_data,
+                  std::string_view ser_filename)
   {
 
     std::stringstream buffer;
@@ -137,7 +140,7 @@ namespace SerDe
     uint64_t np = 0;
     Simulation::Dimensions dims;
     std::vector<double> read_c_liq;
-    std::optional<std::vector<double>> read_c_gas;
+    std::optional<std::vector<double> > read_c_gas;
     double start_time{};
     ar(np, dims, read_c_liq, read_c_gas, start_time);
 
@@ -179,7 +182,7 @@ namespace SerDe
       kla[1] = 0.2; // 700 h-1
     }
 
-    auto auto_mtr_type = Simulation::MassTransfer::Type::FixedKla{kla};
+    auto auto_mtr_type = Simulation::MassTransfer::Type::FixedKla{ kla };
     gi.init_mtr_model(*case_data.simulation, std::move(auto_mtr_type));
 
     // case_data.simulation->setMtrModel(

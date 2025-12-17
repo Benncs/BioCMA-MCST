@@ -34,7 +34,7 @@ namespace Core::ScalarFactory
      * @brief Optional vector of gas phase concentrations, applied uniformly if
      * provided.
      */
-    std::optional<std::vector<double>> gas_concentration = std::nullopt;
+    std::optional<std::vector<double> > gas_concentration = std::nullopt;
   };
 
   /**
@@ -58,13 +58,13 @@ namespace Core::ScalarFactory
      * @brief Optional vector of gas phase concentrations, applied to specific
      * compartments if provided.
      */
-    std::optional<std::vector<double>> gas_concentration = std::nullopt;
+    std::optional<std::vector<double> > gas_concentration = std::nullopt;
 
     /**
      * @brief Optional vector of indices corresponding to compartments with
      * specified gas concentrations.
      */
-    std::optional<std::vector<size_t>> gas_indices = std::nullopt;
+    std::optional<std::vector<size_t> > gas_indices = std::nullopt;
   };
 
   /**
@@ -107,7 +107,7 @@ namespace Core::ScalarFactory
      */
     std::size_t n_species;
     std::vector<double> raw_liquid;
-    std::optional<std::vector<double>> raw_gas;
+    std::optional<std::vector<double> > raw_gas;
   };
 
   // /**
@@ -129,8 +129,8 @@ namespace Core::ScalarFactory
    * @typedef ScalarVariant
    * @brief A variant type representing different scalar data sources.
    */
-  using ScalarVariant =
-      std::variant<Uniform, Local, File, CustomScript, FullCase>;
+  using ScalarVariant
+      = std::variant<Uniform, Local, File, CustomScript, FullCase>;
 
   /**
    * @struct Visitor

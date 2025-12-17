@@ -3,7 +3,9 @@
 #include <iostream>
 #include <string_view>
 
-template <typename T> void check(std::string_view name, T value, T vd)
+template <typename T>
+void
+check(std::string_view name, T value, T vd)
 {
 
   T fallback_result = Common::read_env_or(name, vd);
@@ -18,7 +20,8 @@ template <typename T> void check(std::string_view name, T value, T vd)
 #endif
 }
 
-int main()
+int
+main()
 {
   std::string test_var = "MY_TEST_VAR";
   check<int>(test_var, 1, 2);

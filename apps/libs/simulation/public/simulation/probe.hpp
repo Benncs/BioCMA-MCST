@@ -35,8 +35,8 @@ namespace Simulation
   {
   public:
     template <typename Space>
-    using buffer_type =
-        Kokkos::View<double[buffer_size], Kokkos::LayoutRight, Space>;
+    using buffer_type
+        = Kokkos::View<double[buffer_size], Kokkos::LayoutRight, Space>;
     void clear();
 
     [[nodiscard]] KOKKOS_INLINE_FUNCTION bool set(double val) const;
@@ -73,14 +73,15 @@ namespace Simulation
       active = true;
       buffer = buffer_type<Kokkos::DefaultExecutionSpace>("probe_buffer");
       internal_counter = Kokkos::View<uint64_t, Kokkos::SharedSpace>("i_c");
-      host_buffer =
-          buffer_type<Kokkos::DefaultHostExecutionSpace>("host_buffer");
+      host_buffer
+          = buffer_type<Kokkos::DefaultHostExecutionSpace>("host_buffer");
     }
     clear();
   }
 
   template <std::size_t buffer_size>
-  KOKKOS_INLINE_FUNCTION bool Probes<buffer_size>::set(double val) const
+  KOKKOS_INLINE_FUNCTION bool
+  Probes<buffer_size>::set(double val) const
   {
     const auto i = (active) ? Kokkos::atomic_fetch_inc(&internal_counter()) : 0;
 
@@ -107,21 +108,25 @@ namespace Simulation
   }
 
   template <std::size_t buffer_size>
-  bool Probes<buffer_size>::need_export() const noexcept
+  bool
+  Probes<buffer_size>::need_export() const noexcept
   {
     return (internal_counter() >= buffer_size) && active;
   }
-  template <std::size_t buffer_size> void Probes<buffer_size>::clear()
+  template <std::size_t buffer_size>
+  void
+  Probes<buffer_size>::clear()
   {
     Kokkos::deep_copy(buffer, 0.);
     Kokkos::deep_copy(internal_counter, 0);
   }
 
   template <std::size_t buffer_size>
-  [[nodiscard]] std::span<const double> Probes<buffer_size>::get() const
+  [[nodiscard]] std::span<const double>
+  Probes<buffer_size>::get() const
   {
     Kokkos::deep_copy(host_buffer, buffer);
-    return {host_buffer.data(), std::min(buffer_size, internal_counter())};
+    return { host_buffer.data(), std::min(buffer_size, internal_counter()) };
   }
 } // namespace Simulation
 

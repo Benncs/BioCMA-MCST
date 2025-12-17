@@ -49,33 +49,38 @@ namespace Simulation::KernelInline
     using result_view_type = Kokkos::View<value_type, Space>;
 
     KOKKOS_INLINE_FUNCTION
-    void join(value_type& dest, const value_type& src) const
+    void
+    join(value_type& dest, const value_type& src) const
     {
       dest.dead_total += src.dead_total;
       dest.waiting_allocation_particle += src.waiting_allocation_particle;
     }
 
     KOKKOS_INLINE_FUNCTION
-    value_type& reference() const
+    value_type&
+    reference() const
     {
       return *value.data();
     }
 
     KOKKOS_INLINE_FUNCTION
-    result_view_type view() const
+    result_view_type
+    view() const
     {
       return value;
     }
 
     KOKKOS_INLINE_FUNCTION
-    bool references_scalar() const
+    bool
+    references_scalar() const
     {
       return references_scalar_v;
     }
 
     // Optional
     KOKKOS_INLINE_FUNCTION
-    void init(value_type& val) const
+    void
+    init(value_type& val) const
     {
       val.dead_total = 0;
       val.waiting_allocation_particle = 0;
@@ -126,14 +131,16 @@ namespace Simulation::KernelInline
     {
     }
 
-    void update(double _d_t, MC::ParticlesContainer<M> _particles)
+    void
+    update(double _d_t, MC::ParticlesContainer<M> _particles)
     {
       this->d_t = _d_t;
       this->particles = std::move(_particles);
     }
 
     KOKKOS_INLINE_FUNCTION
-    void operator()(const TagContribution _tag, const TeamMember& team) const
+    void
+    operator()(const TagContribution _tag, const TeamMember& team) const
     {
       // (void)_tag;
       // std ::size_t idx = (team_handle.league_rank() *
@@ -254,9 +261,10 @@ namespace Simulation::KernelInline
       }
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION void operator()(const TagCycle _tag,
-                                                const std::size_t idx,
-                                                value_type& reduce_val) const
+    KOKKOS_FORCEINLINE_FUNCTION void
+    operator()(const TagCycle _tag,
+               const std::size_t idx,
+               value_type& reduce_val) const
     {
 
       (void)_tag;
@@ -264,14 +272,14 @@ namespace Simulation::KernelInline
       exec_per_particle(idx, reduce_val);
     }
 
-    KOKKOS_INLINE_FUNCTION void exec_per_particle(const std::size_t idx,
-                                                  value_type& reduce_val) const
+    KOKKOS_INLINE_FUNCTION void
+    exec_per_particle(const std::size_t idx, value_type& reduce_val) const
     {
       particles.ages(idx, 1) += d_t;
-      const auto local_c =
-          Kokkos::subview(concentrations, Kokkos::ALL, particles.position(idx));
-      const auto new_status =
-          M::update(random_pool, d_t, idx, particles.model, local_c);
+      const auto local_c = Kokkos::subview(
+          concentrations, Kokkos::ALL, particles.position(idx));
+      const auto new_status
+          = M::update(random_pool, d_t, idx, particles.model, local_c);
       if (new_status == MC::Status::Division)
       {
         if (!particles.handle_division(random_pool, idx))

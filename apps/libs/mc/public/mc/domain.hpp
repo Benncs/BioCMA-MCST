@@ -108,13 +108,17 @@ namespace MC
     /**
      * @brief Return a const reference to neighbors
      */
-    template <class Archive> void save(Archive& ar) const
+    template <class Archive>
+    void
+    save(Archive& ar) const
     {
 
       ar(id, size, _total_volume);
     }
 
-    template <class Archive> void load(Archive& ar)
+    template <class Archive>
+    void
+    load(Archive& ar)
     {
       ar(id, size, _total_volume);
     }
@@ -143,12 +147,14 @@ namespace MC
   //   return this->inner.neighbors;
   // }
 
-  inline size_t ReactorDomain::getNumberCompartments() const noexcept
+  inline size_t
+  ReactorDomain::getNumberCompartments() const noexcept
   {
     return size;
   }
 
-  inline double ReactorDomain::getTotalVolume() const noexcept
+  inline double
+  ReactorDomain::getTotalVolume() const noexcept
   {
     return this->_total_volume;
   }
@@ -156,11 +162,11 @@ namespace MC
   [[nodiscard]] inline DomainState<ComputeSpace, true>
   ReactorDomain::get_const_inner()
   {
-    return {inner.neighbors,
-            inner.diag_transition,
-            inner.cumulative_probability,
-            inner.leaving_flow,
-            inner.liquid_volume};
+    return { inner.neighbors,
+             inner.diag_transition,
+             inner.cumulative_probability,
+             inner.leaving_flow,
+             inner.liquid_volume };
   }
 
 } // namespace MC

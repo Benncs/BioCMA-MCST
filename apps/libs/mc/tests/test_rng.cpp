@@ -3,21 +3,26 @@
 #include <iostream>
 #include <mc/prng/prng.hpp>
 
-template <FloatingPointType T> void test_default_range(MC::KPRNG& rng)
+template <FloatingPointType T>
+void
+test_default_range(MC::KPRNG& rng)
 {
   // Test 1: double_uniform() with default range
   auto result1 = rng.uniform<T>();
   assert(result1 > T(0.) && result1 < T(1.));
 }
 
-template <FloatingPointType T> void test_custom_range(MC::KPRNG& rng)
+template <FloatingPointType T>
+void
+test_custom_range(MC::KPRNG& rng)
 {
   // Test 2: double_uniform(a, b) with custom range
   T result = rng.uniform<T>(1.0, 3.0);
   assert(result > T(1.0) && result < T(3.0));
 }
 
-void test()
+void
+test()
 {
   MC::KPRNG rng;
 
@@ -60,7 +65,8 @@ void test()
   std::cout << "All tests passed!\n";
 }
 
-int main()
+int
+main()
 {
 
   Kokkos::initialize();

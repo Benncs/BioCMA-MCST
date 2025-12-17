@@ -20,7 +20,8 @@
 namespace Simulation
 {
 
-  bool SimulationUnit::checkScalar() const
+  bool
+  SimulationUnit::checkScalar() const
   {
 
     auto pred = [](auto&& val) { return val < 0.; };
@@ -40,7 +41,8 @@ namespace Simulation
     return flag;
   }
 
-  void SimulationUnit::clearContribution() const noexcept
+  void
+  SimulationUnit::clearContribution() const noexcept
   {
     if (is_two_phase_flow)
     {
@@ -49,15 +51,16 @@ namespace Simulation
     this->liquid_scalar->set_zero_contribs();
   }
 
-  void SimulationUnit::update_feed(const double t,
-                                   const double d_t,
-                                   const bool update_scalar) noexcept
+  void
+  SimulationUnit::update_feed(const double t,
+                              const double d_t,
+                              const bool update_scalar) noexcept
   {
     PROFILE_SECTION("host:update_feed")
     // Get references to the index_leaving_flow and leaving_flow data members
 
-    auto functor = [update_scalar](auto& scl,
-                                   const Feed::FeedDescriptor& fd) -> void
+    auto functor
+        = [update_scalar](auto& scl, const Feed::FeedDescriptor& fd) -> void
     {
       if (update_scalar)
       {
@@ -157,7 +160,8 @@ namespace Simulation
   //   }
   // }
 
-  void SimulationUnit::step(double d_t) const
+  void
+  SimulationUnit::step(double d_t) const
   {
 
     if (is_two_phase_flow)

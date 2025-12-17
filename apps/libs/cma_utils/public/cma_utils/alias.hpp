@@ -17,13 +17,13 @@ namespace CmaUtils
     @note: underlying type is rust box which has to be considered as a
     non-movable unique_ptr
   */
-  using IterationStatePtrType = ::rust::Box<::IterationStateWrapper>;
+  using IterationStatePtrType = ::rust::Box< ::IterationStateWrapper>;
 
   /** @brief Opaque type for Naive COO matrix
     @note: underlying type is rust box which has to be considered as a
     non-movable unique_ptr
   */
-  using StateCooMatrixType = ::rust::Box<::CooMatrixWrap>;
+  using StateCooMatrixType = ::rust::Box< ::CooMatrixWrap>;
 
   /** @brief Determine the smallest compartment residence time
       For cases with multiple flowmaps, all the different states are taken into

@@ -36,8 +36,8 @@ namespace IO
                std::string_view message) noexcept final;
 
     void error(std::string_view message,
-               std::source_location location =
-                   std::source_location::current()) noexcept final;
+               std::source_location location
+               = std::source_location::current()) noexcept final;
 
     void raw_log(std::string_view message) noexcept final;
 

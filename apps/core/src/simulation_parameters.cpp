@@ -4,11 +4,12 @@
 namespace Core
 {
 
-  SimulationParameters SimulationParameters::m_default()
+  SimulationParameters
+  SimulationParameters::m_default()
   {
     SimulationParameters params;
     params.n_species = 1;
-    params.flow_files = {"./cma_data/"};
+    params.flow_files = { "./cma_data/" };
     params.verbose = false;
     params.n_compartments = 0;
     params.t_per_flow_map = 0;
@@ -28,8 +29,8 @@ namespace Core
     auto params = SimulationParameters::m_default();
     params.number_exported_result = user_params.number_exported_result;
     params.number_particle = user_params.number_particle;
-    params.biomass_initial_concentration =
-        user_params.biomass_initial_concentration;
+    params.biomass_initial_concentration
+        = user_params.biomass_initial_concentration;
     params.final_time = user_params.final_time;
     params.results_file_name = user_params.results_file_name;
     params.save_final_serde = user_params.save_serde;
@@ -37,29 +38,30 @@ namespace Core
     return params;
   }
 
-  UserControlParameters UserControlParameters::m_default()
+  UserControlParameters
+  UserControlParameters::m_default()
   {
     return {
-        .biomass_initial_concentration = 1,
-        .final_time = 0,
-        .delta_time = 0.,
-        .number_particle = 1,
-        .n_thread = -1,
-        .number_exported_result = 0,
-        .force_override = false,
-        .load_serde = false,
-        .save_serde = false,
-        .uniform_mc_init = true,
-        .initialiser_path = "",
-        .model_name = "None",
-        .results_file_name = "",
-        .cma_case_path = "",
-        .serde_file = std::nullopt,
+      .biomass_initial_concentration = 1,
+      .final_time = 0,
+      .delta_time = 0.,
+      .number_particle = 1,
+      .n_thread = -1,
+      .number_exported_result = 0,
+      .force_override = false,
+      .load_serde = false,
+      .save_serde = false,
+      .uniform_mc_init = true,
+      .initialiser_path = "",
+      .model_name = "None",
+      .results_file_name = "",
+      .cma_case_path = "",
+      .serde_file = std::nullopt,
     };
   }
 
-  std::ostream& operator<<(std::ostream& stream,
-                           const UserControlParameters& params)
+  std::ostream&
+  operator<<(std::ostream& stream, const UserControlParameters& params)
   {
     stream << "UserControlParameters:\n"
            << "  Biomass Initial Concentration: "

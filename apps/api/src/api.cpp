@@ -35,19 +35,21 @@ constexpr int ID_VERIF = 2025;
 
 namespace
 {
-  bool check_required(const Core::UserControlParameters& params, bool to_load)
+  bool
+  check_required(const Core::UserControlParameters& params, bool to_load)
   {
     bool flag = true;
     flag = flag && params.final_time > 0;
     flag = flag && params.delta_time >= 0;
     flag = flag && !params.cma_case_path.empty();
-    flag = flag && ((params.load_serde && params.serde_file.has_value()) ||
-                    (!params.load_serde && !params.serde_file.has_value()));
+    flag = flag
+           && ((params.load_serde && params.serde_file.has_value())
+               || (!params.load_serde && !params.serde_file.has_value()));
     if (!to_load)
     {
-      flag =
-          flag && params.biomass_initial_concentration !=
-                      0; // Biomass could be 0 at start but OK to say that X>0
+      flag = flag
+             && params.biomass_initial_concentration
+                    != 0; // Biomass could be 0 at start but OK to say that X>0
       flag = flag && params.number_particle > 0;
       // flag = flag && params.initialiser_path != "";
       // flag = flag && params.model_name != "";
@@ -61,12 +63,14 @@ namespace
 namespace Api
 {
 
-  std::array<int, 3> get_version()
+  std::array<int, 3>
+  get_version()
   {
-    return {_BIOMC_VERSION_MAJOR, _BIOMC_VERSION_MINOR, _BIOMC_VERSION_DEV};
+    return { _BIOMC_VERSION_MAJOR, _BIOMC_VERSION_MINOR, _BIOMC_VERSION_DEV };
   }
 
-  void finalise()
+  void
+  finalise()
   {
 
     if (!Kokkos::is_finalized() && Kokkos::is_initialized())
@@ -75,12 +79,15 @@ namespace Api
     }
   }
 
-  [[nodiscard]] int SimulationInstance::get_id() const
+  [[nodiscard]] int
+  SimulationInstance::get_id() const
   {
     return id;
   }
 
-  template <typename T> std::vector<T> span_to_vec(std::span<T> rhs)
+  template <typename T>
+  std::vector<T>
+  span_to_vec(std::span<T> rhs)
   {
     return std::vector<T>(rhs.begin(), rhs.end());
   }
@@ -91,7 +98,7 @@ namespace Api
   {
     if (!feed.has_value())
     {
-      feed = Simulation::Feed::SimulationFeed{std::nullopt, std::nullopt};
+      feed = Simulation::Feed::SimulationFeed{ std::nullopt, std::nullopt };
     }
 
     this->feed->add_feed(move_allow_trivial(feed_variant), phase);
@@ -99,13 +106,14 @@ namespace Api
     return ApiResult(); // TODO FIX ERROR
   }
 
-  ApiResult SimulationInstance::set_feed_constant(double _flow,
-                                                  double _concentration,
-                                                  std::size_t _species,
-                                                  std::size_t _position,
+  ApiResult
+  SimulationInstance::set_feed_constant(double _flow,
+                                        double _concentration,
+                                        std::size_t _species,
+                                        std::size_t _position,
 
-                                                  bool gas,
-                                                  bool fed_batch)
+                                        bool gas,
+                                        bool fed_batch)
   {
     auto phase = gas ? Phase::Gas : Phase::Liquid;
 
@@ -115,7 +123,8 @@ namespace Api
     return set_feed(constant_feed, phase);
   }
 
-  ApiResult SimulationInstance::set_feed_constant_different_output(
+  ApiResult
+  SimulationInstance::set_feed_constant_different_output(
       double _flow,
       double _concentration,
       std::size_t _species,
@@ -149,8 +158,10 @@ namespace Api
     udf_handle.reset();
   }
 
-  std::optional<std::unique_ptr<SimulationInstance>> SimulationInstance::init(
-      int argc, char** argv, std::optional<std::size_t> run_id) noexcept
+  std::optional<std::unique_ptr<SimulationInstance> >
+  SimulationInstance::init(int argc,
+                           char** argv,
+                           std::optional<std::size_t> run_id) noexcept
   {
     PROFILE_SECTION("Initialisation")
     auto ptr = std::unique_ptr<SimulationInstance>(
@@ -162,7 +173,8 @@ namespace Api
     return ptr;
   }
 
-  ApiResult SimulationInstance::exec() noexcept
+  ApiResult
+  SimulationInstance::exec() noexcept
   {
 
     if (loaded || (registered && applied))
@@ -197,7 +209,8 @@ namespace Api
     }
   }
 
-  ApiResult SimulationInstance::apply_load() noexcept
+  ApiResult
+  SimulationInstance::apply_load() noexcept
   {
     // Checks
     CHECK_OR_RETURN(!check_required(this->params, true), "Check params");
@@ -223,7 +236,8 @@ namespace Api
     return ApiResult("Error loading case");
   }
 
-  ApiResult SimulationInstance::set_mtr(
+  ApiResult
+  SimulationInstance::set_mtr(
       Simulation::MassTransfer::Type::MtrTypeVariant&& variant)
   {
     //??
@@ -232,12 +246,14 @@ namespace Api
     return ApiResult();
   }
 
-  void SimulationInstance::set_auto_mtr()
+  void
+  SimulationInstance::set_auto_mtr()
   {
     auto_mtr = true;
   }
 
-  ApiResult SimulationInstance::apply() noexcept
+  ApiResult
+  SimulationInstance::apply() noexcept
   {
 
     // Checks
@@ -255,8 +271,8 @@ namespace Api
     CHECK_OR_RETURN(!global_initializer.init_feed(feed),
                     "Error when apply: feed");
 
-    auto __simulation =
-        global_initializer.init_simulation(this->scalar_initializer_variant);
+    auto __simulation
+        = global_initializer.init_simulation(this->scalar_initializer_variant);
 
     CHECK_OR_RETURN(!__simulation.has_value(), "Error when apply: simulation");
 
@@ -280,7 +296,7 @@ namespace Api
         kla[1] = 0.2; // 700 h-1
       }
 
-      auto auto_mtr_type = Simulation::MassTransfer::Type::FixedKla{kla};
+      auto auto_mtr_type = Simulation::MassTransfer::Type::FixedKla{ kla };
       global_initializer.init_mtr_model(*simulation, std::move(auto_mtr_type));
       // TODO check if turburlence + fallback to kla
     }
@@ -296,14 +312,16 @@ namespace Api
     return ApiResult();
   }
 
-  ApiResult SimulationInstance::register_scalar_initiazer(
+  ApiResult
+  SimulationInstance::register_scalar_initiazer(
       Core::ScalarFactory::ScalarVariant&& var)
   {
     this->scalar_initializer_variant = std::move(var);
     return ApiResult();
   }
 
-  ApiResult SimulationInstance::apply(bool to_load) noexcept
+  ApiResult
+  SimulationInstance::apply(bool to_load) noexcept
   {
     auto opt_udf = Unsafe::load_udf(params.model_name);
     if (opt_udf.valid())
@@ -327,7 +345,8 @@ namespace Api
     return apply();
   }
 
-  ApiResult SimulationInstance::register_parameters(
+  ApiResult
+  SimulationInstance::register_parameters(
       Core::UserControlParameters&& _params) noexcept
   {
     params = std::move(_params);
@@ -335,7 +354,8 @@ namespace Api
     return ApiResult();
   }
 
-  bool SimulationInstance::register_result_path(std::string_view path)
+  bool
+  SimulationInstance::register_result_path(std::string_view path)
   {
     // TODO Check path
     this->params.results_file_name = path;
@@ -350,7 +370,8 @@ namespace Api
     return ApiResult(); // TODO
   }
 
-  ApiResult SimulationInstance::register_cma_path(std::string_view path)
+  ApiResult
+  SimulationInstance::register_cma_path(std::string_view path)
   {
 
     std::filesystem::path p(path);
@@ -371,27 +392,31 @@ namespace Api
     return ApiResult();
   }
 
-  ApiResult SimulationInstance::register_initial_condition(
+  ApiResult
+  SimulationInstance::register_initial_condition(
       Core::ScalarFactory::ScalarVariant&& type)
   {
     scalar_initializer_variant = std::move(type);
     return ApiResult();
   }
 
-  bool SimulationInstance::register_serde(std::string_view path)
+  bool
+  SimulationInstance::register_serde(std::string_view path)
   {
     this->params.serde_file = path;
     this->params.load_serde = true;
     return true;
   }
 
-  ApiResult SimulationInstance::register_model_name(std::string_view path)
+  ApiResult
+  SimulationInstance::register_model_name(std::string_view path)
   {
     this->params.model_name = path;
     return ApiResult();
   }
 
-  [[nodiscard]] const ExecInfo& SimulationInstance::get_exec_info() const
+  [[nodiscard]] const ExecInfo&
+  SimulationInstance::get_exec_info() const
   {
     return _data.exec_info;
   }

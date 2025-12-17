@@ -15,7 +15,8 @@ namespace Models
 {
 
   template <FloatingPointType T>
-  KOKKOS_INLINE_FUNCTION MC::Status check_div(const T l, const T lc)
+  KOKKOS_INLINE_FUNCTION MC::Status
+  check_div(const T l, const T lc)
   {
     return (l >= lc) ? MC::Status::Division : MC::Status::Idle;
   }
@@ -44,15 +45,18 @@ namespace Models
   }; // namespace MolarMass
 
   template <FloatingPointType F>
-  KOKKOS_INLINE_FUNCTION consteval F c_linear_density(F rho, F d)
+  KOKKOS_INLINE_FUNCTION consteval F
+  c_linear_density(F rho, F d)
   {
     return rho * F(Kokkos::numbers::pi) * d * d / F(4.);
   }
 
   static constexpr double tau_division_proba = 1e-7;
 
-  KOKKOS_INLINE_FUNCTION bool check_probability_division(
-      double d_t, double gamma, MC::pool_type random_pool)
+  KOKKOS_INLINE_FUNCTION bool
+  check_probability_division(double d_t,
+                             double gamma,
+                             MC::pool_type random_pool)
   {
     (void)d_t;
     // const double proba_div =
@@ -95,11 +99,14 @@ namespace Models
   }
 
   template <typename... Args>
-  KOKKOS_INLINE_FUNCTION double min_var(Args... args)
+  KOKKOS_INLINE_FUNCTION double
+  min_var(Args... args)
   {
-    return (Kokkos::min)({args...});
+    return (Kokkos::min)({ args... });
   }
-  template <> KOKKOS_INLINE_FUNCTION double min_var()
+  template <>
+  KOKKOS_INLINE_FUNCTION double
+  min_var()
   {
     return 0.;
   }

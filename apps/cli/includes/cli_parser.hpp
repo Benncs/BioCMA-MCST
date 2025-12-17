@@ -22,12 +22,14 @@ template <typename S> struct CliResults : Result<S, std::string>
 
   explicit constexpr CliResults() noexcept = default;
 
-  explicit operator CliResults<S>() &&
+  explicit
+  operator CliResults<S>() &&
   {
     return CliResults<S>(std::move(*this));
   }
 
-  explicit operator CliResults<S>() const&
+  explicit
+  operator CliResults<S>() const&
   {
     return CliResults<S>(this->get());
   }

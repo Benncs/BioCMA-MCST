@@ -12,32 +12,32 @@ namespace UnsafeUDF
   void (*Loader::init_udf)(const MC::pool_type& random_pool,
                            std::size_t idx,
                            const Models::UdfModel::SelfParticle& arr,
-                           const Models::UdfModel::Config& config) =
-      nullptr; //< init function ptr
+                           const Models::UdfModel::Config& config)
+      = nullptr; //< init function ptr
 
   MC::Status (*Loader::update_udf)(const MC::pool_type& random_pool,
                                    float d_t,
                                    std::size_t idx,
                                    const Models::UdfModel::SelfParticle& arr,
-                                   const MC::LocalConcentration& c) =
-      nullptr; //< update function ptr
+                                   const MC::LocalConcentration& c)
+      = nullptr; //< update function ptr
 
   MC::ContribIndexBounds (*Loader::get_bounds_udf)() = nullptr;
 
   Models::UdfModel::Config (*Loader::get_config_udf)(
-      Kokkos::DefaultHostExecutionSpace& ep, std::size_t n) = nullptr;
+      Kokkos::DefaultHostExecutionSpace& ep, std::size_t n)
+      = nullptr;
 
-  void (*Loader::division_udf)(
-      const MC::pool_type& random_pool,
-      std::size_t idx,
-      std::size_t idx2,
-      const Models::UdfModel::SelfParticle& arr,
-      const Models::UdfModel::SelfParticle& buffer_arr) =
-      nullptr; //< division function ptr
+  void (*Loader::division_udf)(const MC::pool_type& random_pool,
+                               std::size_t idx,
+                               std::size_t idx2,
+                               const Models::UdfModel::SelfParticle& arr,
+                               const Models::UdfModel::SelfParticle& buffer_arr)
+      = nullptr; //< division function ptr
 
   double (*Loader::mass)(std::size_t idx,
-                         const Models::UdfModel::SelfParticle& arr) =
-      nullptr; //< mass function ptr
+                         const Models::UdfModel::SelfParticle& arr)
+      = nullptr; //< mass function ptr
 
   std::vector<std::string_view> (*Loader::names)() = nullptr;
 

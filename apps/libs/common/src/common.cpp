@@ -2,15 +2,18 @@
 #include <common/env_var.hpp>
 #include <common/execinfo.hpp>
 #include <string>
-std::string ExecInfo::get_version()
+std::string
+ExecInfo::get_version()
 {
-  return std::string("v" + std::to_string(_BIOMC_VERSION_MAJOR) + "." +
-                     std::to_string(_BIOMC_VERSION_MINOR) + "." +
-                     std::to_string(_BIOMC_VERSION_DEV));
+  return std::string("v" + std::to_string(_BIOMC_VERSION_MAJOR) + "."
+                     + std::to_string(_BIOMC_VERSION_MINOR) + "."
+                     + std::to_string(_BIOMC_VERSION_DEV));
 }
 namespace Common
 {
-  template <> bool read_env_or(std::string_view varname, bool vdefault)
+  template <>
+  bool
+  read_env_or(std::string_view varname, bool vdefault)
   {
     const char* env_var = std::getenv(varname.data());
     if (env_var != nullptr)
@@ -28,7 +31,8 @@ namespace Common
   }
 
   template <>
-  bool set_local_env<std::string>(std::string_view varname, std::string val)
+  bool
+  set_local_env<std::string>(std::string_view varname, std::string val)
   {
 #ifdef _WIN32
     std::cerr << "Not implemented for Win32" << std::endl;
@@ -38,7 +42,9 @@ namespace Common
 #endif
   }
 
-  template <> bool set_local_env<bool>(std::string_view varname, bool val)
+  template <>
+  bool
+  set_local_env<bool>(std::string_view varname, bool val)
   {
 #ifdef _WIN32
     std::cerr << "Not implemented for Win32" << std::endl;

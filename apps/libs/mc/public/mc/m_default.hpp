@@ -68,7 +68,7 @@ struct DefaultModel
   }
   MC::ContribIndexBounds static get_bounds()
   {
-    return {0, 0};
+    return { 0, 0 };
   }
 };
 
@@ -94,7 +94,8 @@ struct DynamicDefaultModel
   using Config = float;
   static constexpr bool uniform_weigth = false;
 
-  static Config get_config(const std::size_t size)
+  static Config
+  get_config(const std::size_t size)
   {
     (void)size;
     return 1.;
@@ -128,7 +129,7 @@ struct DynamicDefaultModel
 
   MC::ContribIndexBounds static get_bounds()
   {
-    return {0, 0};
+    return { 0, 0 };
   }
 
   KOKKOS_INLINE_FUNCTION static void

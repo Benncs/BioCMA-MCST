@@ -9,11 +9,12 @@
 #  include <sync.hpp>
 #  include <worker_specific.hpp>
 
-void workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
-                     const ExecInfo& exec,
-                     Simulation::SimulationUnit& simulation,
-                     const Core::SimulationParameters& params,
-                     Core::PartialExporter& partial_exporter)
+void
+workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
+                const ExecInfo& exec,
+                Simulation::SimulationUnit& simulation,
+                const Core::SimulationParameters& params,
+                Core::PartialExporter& partial_exporter)
 {
   double d_t = params.d_t;
   size_t n_compartments = simulation.mc_unit->domain.getNumberCompartments();
@@ -72,8 +73,8 @@ void workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
                              payload.liquid_out_flows);
   };
 
-  const auto cycle_callback =
-      [&](double& current_time, auto& container, auto& functors)
+  const auto cycle_callback
+      = [&](double& current_time, auto& container, auto& functors)
   {
     sync_step(exec, simulation);
     sync_prepare_next(exec, simulation, &req);

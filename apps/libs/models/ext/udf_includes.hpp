@@ -75,24 +75,24 @@ namespace UnsafeUDF
 
 #ifdef DECLARE_EXPORT_UDF
 
-using init_udf_ptr =
-    decltype(UnsafeUDF::Loader::init_udf); //< init function ptr type
-using update_udf_ptr =
-    decltype(UnsafeUDF::Loader::update_udf); //< update function ptr type
+using init_udf_ptr
+    = decltype(UnsafeUDF::Loader::init_udf); //< init function ptr type
+using update_udf_ptr
+    = decltype(UnsafeUDF::Loader::update_udf); //< update function ptr type
 
 using get_bounds_udf_ptr = decltype(UnsafeUDF::Loader::get_bounds_udf);
 
 using get_config_udf_ptr = decltype(UnsafeUDF::Loader::get_config_udf);
 
-using division_udf_ptr =
-    decltype(UnsafeUDF::Loader::division_udf); //< division function ptr type
+using division_udf_ptr
+    = decltype(UnsafeUDF::Loader::division_udf); //< division function ptr type
 using mass_udf_ptr = decltype(UnsafeUDF::Loader::mass);
-using set_nvar_udf_ptr =
-    decltype(UnsafeUDF::Loader::set_nvar_udf); //< division function ptr type
+using set_nvar_udf_ptr
+    = decltype(UnsafeUDF::Loader::set_nvar_udf); //< division function ptr type
 
 using names_udf_ptr = decltype(UnsafeUDF::Loader::names);
-using get_number_udf_ptr =
-    decltype(UnsafeUDF::Loader::get_number); //< division function ptr type
+using get_number_udf_ptr
+    = decltype(UnsafeUDF::Loader::get_number); //< division function ptr type
 
 // clang-format off
 /**

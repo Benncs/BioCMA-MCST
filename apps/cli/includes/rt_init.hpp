@@ -23,17 +23,20 @@
  `std::stringstream`).
  * @param stream The output stream to which the date and time will be appended.
  */
-template <typename Stream> void append_date_time(Stream& stream) noexcept
+template <typename Stream>
+void
+append_date_time(Stream& stream) noexcept
 {
-  auto now =
-      std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+  auto now
+      = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
   stream << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
 }
 
 // /**
 //  * @brief Appends the current date and time to a given string.
 //  *
-//  * @param string The string view to which the date and time will be appended.
+//  * @param string The string view to which the date and time will be
+//  appended.
 //  * @return A `std::string` containing the original string with the appended
 //  date
 //  * and time.
@@ -41,10 +44,12 @@ template <typename Stream> void append_date_time(Stream& stream) noexcept
 // std::string sappend_date_time(std::string_view string) noexcept;
 
 // /**
-//  * @brief Initializes the runtime environment based on command-line arguments
+//  * @brief Initializes the runtime environment based on command-line
+//  arguments
 //  * and simulation parameters.
 //  *
-//  * This function sets up the necessary runtime environment for the simulation
+//  * This function sets up the necessary runtime environment for the
+//  simulation
 //  * by:
 //  * - Initializing MPI (Message Passing Interface) if applicable.
 //  * - Setting up Kokkos for parallel programming.

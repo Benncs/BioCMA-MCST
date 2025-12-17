@@ -25,7 +25,8 @@ namespace
 
 namespace Simulation::impl
 {
-  void post_init_concentration_functor(
+  void
+  post_init_concentration_functor(
       bool is_two_phase_flow,
       const ScalarInitializer& scalar_init,
       const std::shared_ptr<ScalarSimulation>& liquid_scalar,
@@ -57,7 +58,8 @@ namespace Simulation::impl
     }
   }
 
-  void post_init_concentration_file(
+  void
+  post_init_concentration_file(
       bool is_two_phase_flow,
       const ScalarInitializer& scalar_init,
       const std::shared_ptr<ScalarSimulation>& liquid_scalar,
@@ -67,8 +69,8 @@ namespace Simulation::impl
     {
       throw SimulationException(ErrorCodes::BadInitialiser);
     }
-    const std::size_t cols =
-        scalar_init.liquid_buffer->size() / scalar_init.n_species;
+    const std::size_t cols
+        = scalar_init.liquid_buffer->size() / scalar_init.n_species;
     const auto layout_left_buffer = layout_right_to_left<double>(
         *scalar_init.liquid_buffer, scalar_init.n_species, cols);
 

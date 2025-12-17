@@ -1,21 +1,13 @@
 #include <cassert>
 #include <cli_parser.hpp>
 
-int main()
+int
+main()
 {
   {
-    const char* argv[] = {"program_name",
-                          "-er",
-                          "result.txt",
-                          "-mn",
-                          "model_1",
-                          "-nt",
-                          "8",
-                          "-np",
-                          "1000000",
-                          "-d",
-                          "3.14",
-                          "-r"};
+    const char* argv[] = { "program_name", "-er", "result.txt", "-mn",
+                           "model_1",      "-nt", "8",          "-np",
+                           "1000000",      "-d",  "3.14",       "-r" };
     int argc = 9;
     auto result = parse_cli(nullptr, argc, const_cast<char**>(argv));
 
@@ -36,7 +28,7 @@ int main()
     //     int argc = 1;
     //     auto result = parse_cli(argc, const_cast<char**>(argv));
 
-    //     assert(result == std::nullopt); // Should return std::nullopt because
-    //     of insufficient arguments
+    //     assert(result == std::nullopt); // Should return std::nullopt
+    //     because of insufficient arguments
   }
 }

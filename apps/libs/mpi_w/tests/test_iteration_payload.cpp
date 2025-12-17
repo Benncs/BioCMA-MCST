@@ -5,7 +5,8 @@
 #endif
 #include <mpi_w/iteration_payload.hpp>
 
-int main(int argc, char** argv)
+int
+main(int argc, char** argv)
 {
 
   int rank = 0;
@@ -15,12 +16,12 @@ int main(int argc, char** argv)
 
   MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-  std::vector<double> flows = {1.1, 2.2, 3.3};
-  std::vector<double> volumes = {4.4, 5.5, 6.6};
-  std::vector<double> gases = {7.7, 8.8, 9.9};
+  std::vector<double> flows = { 1.1, 2.2, 3.3 };
+  std::vector<double> volumes = { 4.4, 5.5, 6.6 };
+  std::vector<double> gases = { 7.7, 8.8, 9.9 };
 
-  std::vector<size_t> raw_neighbors = {1, 2, 3, 1, 2, 3, 1, 2, 3};
-  std::vector<double> flat_proba = {0, 0.5, 1, 0, 0.5, 1, 0, 0.5, 1};
+  std::vector<size_t> raw_neighbors = { 1, 2, 3, 1, 2, 3, 1, 2, 3 };
+  std::vector<double> flat_proba = { 0, 0.5, 1, 0, 0.5, 1, 0, 0.5, 1 };
 
   if (size != 1)
   {

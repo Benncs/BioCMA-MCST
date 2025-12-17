@@ -65,7 +65,8 @@ namespace Core
                  std::string_view link_name,
                  std::string_view groupname);
 
-    void set_logger(std::shared_ptr<IO::Logger> _logger)
+    void
+    set_logger(std::shared_ptr<IO::Logger> _logger)
     {
       logger = std::move(_logger);
     }
@@ -88,43 +89,46 @@ namespace Core
       std::string name;             ///< Dataset name
       std::vector<size_t> dims;     ///< Dataset dimensions
       std::vector<size_t> max_dims; ///< Expected dataset max dimensions
-      std::optional<std::vector<unsigned long long>>
+      std::optional<std::vector<unsigned long long> >
           chunk_dims;   ///< Data chunk along each dimension
       bool compression; ///< Matrix data has to be compressed or not
       bool is_integer;  ///< Matrix data is integer type or floating point
     };
 
     // Using type definitions with aligned comments
-    using export_metadata_t =
-        std::variant<uint64_t, int, std::string>; ///< Metadata types for export
-    using export_metadata_kv =
-        std::unordered_map<std::string,
-                           export_metadata_t>; ///< Key-value pairs for metadata
-    using ViewParticleProperties =
-        Kokkos::View<double**,
-                     Kokkos::LayoutRight,
-                     HostSpace>; ///< View for particle properties
+    using export_metadata_t
+        = std::variant<uint64_t, int, std::string>; ///< Metadata types for
+                                                    ///< export
+    using export_metadata_kv
+        = std::unordered_map<std::string,
+                             export_metadata_t>; ///< Key-value pairs for
+                                                 ///< metadata
+    using ViewParticleProperties
+        = Kokkos::View<double**,
+                       Kokkos::LayoutRight,
+                       HostSpace>; ///< View for particle properties
     using simple_export_t = std::variant<size_t,
                                          std::string,
                                          std::vector<size_t>,
                                          double,
                                          uint32_t>; ///< Simple export
                                                     ///< types
-    using export_initial_kv =
-        std::unordered_map<std::string,
-                           simple_export_t>; ///< Initial export key-value pairs
+    using export_initial_kv
+        = std::unordered_map<std::string,
+                             simple_export_t>; ///< Initial export key-value
+                                               ///< pairs
 
-    using matrix_variant_t =
-        std::variant<std::span<const double>,
-                     std::span<const std::size_t>,
-                     double>; ///< Variant for matrix data types
+    using matrix_variant_t
+        = std::variant<std::span<const double>,
+                       std::span<const std::size_t>,
+                       double>; ///< Variant for matrix data types
 
     // Methods
 
-    explicit DataExporter(
-        const ExecInfo& info,
-        std::string_view _filename,
-        std::optional<export_metadata_t> user_description = std::nullopt);
+    explicit DataExporter(const ExecInfo& info,
+                          std::string_view _filename,
+                          std::optional<export_metadata_t> user_description
+                          = std::nullopt);
     ~DataExporter();
 
     void write_matrix(std::string_view name,

@@ -9,7 +9,8 @@
 namespace Models
 {
 
-  FixedLength::Config FixedLength::get_config(const std::size_t n)
+  FixedLength::Config
+  FixedLength::get_config(const std::size_t n)
   {
     using float_t = Self::FloatType;
     float_t lambda = Kokkos::log(2) / 1e-6;
@@ -34,8 +35,8 @@ namespace Models
     }
     else
     {
-      constexpr FixedLength::FloatType mu =
-          1.3e-6; // maxlength is 2 and min i 1 so let be between
+      constexpr FixedLength::FloatType mu
+          = 1.3e-6; // maxlength is 2 and min i 1 so let be between
       constexpr FixedLength::FloatType sigma = 0.1;
 
       auto target_distribution = KOKKOS_LAMBDA(const FixedLength::FloatType x)

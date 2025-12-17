@@ -76,9 +76,10 @@ namespace IO
      * @param location The source location of the error (default: current
      * location).
      */
-    virtual void
-    error(std::string_view message,
-          std::source_location location = std::source_location::current()) = 0;
+    virtual void error(std::string_view message,
+                       std::source_location location
+                       = std::source_location::current())
+        = 0;
 
     /**
      * @brief Log a raw message with no additional formatting.
@@ -126,7 +127,9 @@ namespace IO
     virtual void toggle_all() noexcept = 0;
   };
 
-  template <typename... MsgType> std::string format(MsgType&&... msgs)
+  template <typename... MsgType>
+  std::string
+  format(MsgType&&... msgs)
   {
     std::string result;
     (result += ... += std::forward<MsgType>(msgs));

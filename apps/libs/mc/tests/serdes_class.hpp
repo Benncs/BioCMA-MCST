@@ -63,9 +63,10 @@ struct SerdeModel
   {
   }
 
-  static MC::ContribIndexBounds get_bounds()
+  static MC::ContribIndexBounds
+  get_bounds()
   {
-    return {0, 0};
+    return { 0, 0 };
   }
 };
 static_assert(ModelType<SerdeModel>, "Check non serde model");

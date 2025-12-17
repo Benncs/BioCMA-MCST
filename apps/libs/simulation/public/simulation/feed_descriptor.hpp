@@ -60,8 +60,8 @@ namespace Simulation::Feed
   {
   };
 
-  using FeedTypeVariant =
-      std::variant<Constant, Step, Pulse, Custom, DelayedConstant>;
+  using FeedTypeVariant
+      = std::variant<Constant, Step, Pulse, Custom, DelayedConstant>;
 
   FeedType get_type(const FeedTypeVariant& v);
 
@@ -78,13 +78,13 @@ namespace Simulation::Feed
 
   struct FeedFactory
   {
-    static FeedDescriptor
-    constant(double flow,
-             double concentration,
-             std::size_t species_index,
-             std::size_t input_position,
-             std::optional<std::size_t> _ouput_position = std::nullopt,
-             bool set_output = true);
+    static FeedDescriptor constant(double flow,
+                                   double concentration,
+                                   std::size_t species_index,
+                                   std::size_t input_position,
+                                   std::optional<std::size_t> _ouput_position
+                                   = std::nullopt,
+                                   bool set_output = true);
 
     // static FeedDescriptor delayedconstant(double _f,
     //                                      feed_value_t&& _target,
@@ -107,8 +107,8 @@ namespace Simulation::Feed
   class SimulationFeed
   {
   public:
-    std::optional<std::vector<FeedDescriptor>> liquid;
-    std::optional<std::vector<FeedDescriptor>> gas;
+    std::optional<std::vector<FeedDescriptor> > liquid;
+    std::optional<std::vector<FeedDescriptor> > gas;
 
     void add_liquid(FeedDescriptor&& fd);
 
@@ -119,7 +119,8 @@ namespace Simulation::Feed
     [[nodiscard]] std::size_t n_liquid_flow() const;
     [[nodiscard]] std::size_t n_gas_flow() const;
 
-    auto liquid_feeds()
+    auto
+    liquid_feeds()
     {
       if (liquid)
       {
@@ -129,7 +130,8 @@ namespace Simulation::Feed
                                    std::vector<FeedDescriptor>::iterator());
     }
 
-    auto gas_feeds()
+    auto
+    gas_feeds()
     {
       if (gas)
       {
@@ -139,9 +141,10 @@ namespace Simulation::Feed
                                    std::vector<FeedDescriptor>::iterator());
     }
 
-    static SimulationFeed empty()
+    static SimulationFeed
+    empty()
     {
-      return {.liquid = std::nullopt, .gas = std::nullopt};
+      return { .liquid = std::nullopt, .gas = std::nullopt };
     }
   };
 

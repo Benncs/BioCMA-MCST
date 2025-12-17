@@ -46,7 +46,8 @@ namespace Core
      * This template alias provides a way to represent an optional ownership of
      * a unique pointer of type T.
      */
-    template <typename T> using OptionalPtr = std::optional<std::unique_ptr<T>>;
+    template <typename T>
+    using OptionalPtr = std::optional<std::unique_ptr<T> >;
 
     /**
      * @brief Constructs a GlobalInitialiser instance.
@@ -136,8 +137,8 @@ namespace Core
      *
      * @return An optional simulation feed.
      */
-    bool init_feed(
-        std::optional<Simulation::Feed::SimulationFeed> feed = std::nullopt);
+    bool init_feed(std::optional<Simulation::Feed::SimulationFeed> feed
+                   = std::nullopt);
 
     /**
      * @brief Initializes a Monte Carlo unit.
@@ -199,7 +200,8 @@ namespace Core
      * @return A boolean indicating whether all specified steps are validated.
      */
     template <typename... Args>
-    [[nodiscard]] bool check_steps(InitStep step, Args... args) const
+    [[nodiscard]] bool
+    check_steps(InitStep step, Args... args) const
     {
       if (!validated_steps[static_cast<size_t>(step)]) // NOLINT
       {
@@ -216,11 +218,13 @@ namespace Core
      * @param step The current initialization step to validate.
      * @param args Additional steps to validate.
      */
-    template <typename... Args> void validate_step(InitStep step, Args... args)
+    template <typename... Args>
+    void
+    validate_step(InitStep step, Args... args)
     {
       validated_steps[static_cast<size_t>(step)] = true; // NOLINT
-      (void)std::initializer_list<int>{
-          (validated_steps[static_cast<size_t>(args)] = true, 0)...};
+      (void)std::initializer_list<int>{ (
+          validated_steps[static_cast<size_t>(args)] = true, 0)... };
     }
 
     /**
