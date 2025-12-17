@@ -510,17 +510,18 @@ namespace MC::Distributions
 
     KOKKOS_INLINE_FUNCTION F mean() const
     {
-      return Kokkos::exp(mu + sigma * sigma / 2);
+      return Kokkos::exp(mu + sigma * sigma / 2.);
     }
     KOKKOS_INLINE_FUNCTION F var() const
     {
       const auto sigma2 = sigma * sigma;
-      return (Kokkos::exp(sigma2) - 1) * Kokkos::exp(2 * mu + sigma2);
+      return (Kokkos::exp(sigma2) - 1.) * Kokkos::exp(2. * mu + sigma2);
     }
     KOKKOS_INLINE_FUNCTION F skewness() const
     {
       const auto sigma2 = sigma * sigma;
-      return (Kokkos::exp(sigma2) + 2) * Kokkos::sqrt(Kokkos::exp(sigma2) - 1);
+      return (Kokkos::exp(sigma2) + 2.) *
+             Kokkos::sqrt(Kokkos::exp(sigma2) - 1.);
     }
   };
 

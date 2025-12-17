@@ -20,26 +20,6 @@
 namespace Simulation
 {
 
-  //[[deprecated("perf:not useful")]] void
-  // SimulationUnit::reduceContribs_per_rank(std::span<const double> data) const
-  //{
-  //
-  // PROFILE_SECTION("host:reduceContribs_rank")
-  // this->liquid_scalar->reduce_contribs(data);
-  //}
-  //
-  // void SimulationUnit::reduceContribs(std::span<const double> data,
-  //                                     size_t n_rank) const
-  // {
-  //   PROFILE_SECTION("host:reduceContribs")
-  //   const auto [nr, nc] = getDimensions();
-  //   this->liquid_scalar->set_zero_contribs();
-
-  //   for (int i = 0; i < static_cast<int>(n_rank); ++i)
-  //   {
-  //     this->liquid_scalar->reduce_contribs({&data[i * nr * nc], nr * nc});
-  //   }
-  // }
   bool SimulationUnit::checkScalar() const
   {
 
@@ -62,8 +42,6 @@ namespace Simulation
 
   void SimulationUnit::clearContribution() const noexcept
   {
-    // this->liquid_scalar->vec_kla.setZero();
-    // Dont forget to clear kernel contribution
     if (is_two_phase_flow)
     {
       this->gas_scalar->set_zero_contribs();

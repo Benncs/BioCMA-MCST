@@ -21,6 +21,10 @@
 
 #define GET_PROPERTY(enum_name) GET_PROPERTY_FROM(idx, arr, enum_name)
 
+#define COPY_PROPERTY_TO(enum_name, __index__, __array_name__)                 \
+  GET_PROPERTY_FROM(__index__, __array_name__, enum_name) =                    \
+      GET_PROPERTY(enum_name);
+
 #define GET_INDEX(size)                                                        \
   std::size_t idx = (team_handle.league_rank() * team_handle.team_size()) +    \
                     team_handle.team_rank();                                   \

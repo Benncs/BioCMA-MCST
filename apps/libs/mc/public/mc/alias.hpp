@@ -1,8 +1,8 @@
 #ifndef __MC__ALIAS_HPP__
 #define __MC__ALIAS_HPP__
 
-#include "Kokkos_Random.hpp"
 #include <Kokkos_Core_fwd.hpp>
+#include <Kokkos_Random.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/traits.hpp>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
@@ -90,6 +90,16 @@ namespace MC
 
   using ContributionView =
       decltype(Kokkos::Experimental::create_scatter_view(kernelContribution()));
+
+  //   using contribution_op = Kokkos::Experimental::ScatterSum;
+  //   using contribution_dup = Kokkos::Experimental::ScatterNonDuplicated;
+  //   using contribution_at = Kokkos::Experimental::ScatterAtomic;
+  //   using ContributionView = Kokkos::Experimental::ScatterView<float**,
+  //                                                              Kokkos::LayoutLeft,
+  //                                                              MC::ComputeSpace,
+  //                                                              contribution_op,
+  //                                                              contribution_dup,
+  //                                                              contribution_at>;
 
   using KernelConcentrationType =
       Kokkos::View<const double**,

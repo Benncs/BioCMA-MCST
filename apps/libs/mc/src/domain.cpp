@@ -119,7 +119,7 @@ namespace MC
     const auto n_compartments = this->getNumberCompartments();
 
     // clang-format off
-    auto _inner = MoveInfo<ComputeSpace,is_const>{  };
+    auto _inner = DomainState<ComputeSpace,is_const>{  };
     _inner.neighbors = MC::NeighborsView<ComputeSpace,is_const>("neighbors", 0, 0);
     _inner.diag_transition = MC::DiagonalView<ComputeSpace,is_const>("diag_transition", n_compartments);
     _inner.leaving_flow = MC::LeavingFlowView<is_const>("leaving_flow", n_flows);

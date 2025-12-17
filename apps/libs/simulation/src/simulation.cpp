@@ -1,8 +1,7 @@
-#include "cma_utils/alias.hpp"
-#include "common/common.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
-// #include <cma_utils/iteration_state.hpp>
+#include <cma_utils/alias.hpp>
+#include <common/common.hpp>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
@@ -51,7 +50,6 @@ namespace Simulation
                            : nullptr;
 
     post_init_concentration(scalar_init);
-    post_init_compartments();
 
     const std::size_t n_flows = this->feed.n_liquid_flow();
 
@@ -61,20 +59,13 @@ namespace Simulation
         Kokkos::Experimental::create_scatter_view(get_kernel_contribution());
   }
 
-  // void SimulationUnit::update(CmaUtils::IterationState&& new_state)
-  // {
-  //   state = std::move(new_state);
-  //   setVolumes();
-  //   mc_unit->domain.setLiquidNeighbors(state.neighbors);
-  // }
-
   void
   SimulationUnit::updateHydro(const CmaUtils::IterationStatePtrType& newstate)
   {
     PROFILE_SECTION("simulation::updateHydro")
 
-    auto liquid = newstate->get_liquid();
-    auto vl = liquid->volume();
+    const auto& liquid = newstate->get_liquid();
+    const auto vl = liquid->volume();
 
     updateMCHydro(vl,
                   newstate->flat_neighobrs(),
@@ -87,26 +78,29 @@ namespace Simulation
   void SimulationUnit::updateMCHydro(std::span<const double> newliquid_volume,
                                      std::span<const std::size_t> neighors_flat,
                                      std::span<const double> proba_flat,
-                                     std::span<const double> out_flows)
+                                     std::span<const double> out_flows) const
   {
     PROFILE_SECTION("simulation::updateMCHydro")
     this->mc_unit->domain.update(
         newliquid_volume, neighors_flat, out_flows, proba_flat);
-    // this->move_info = this->mc_unit->domain.inner;
   }
 
   void SimulationUnit::updateScalarHydro(
       const CmaUtils::IterationStatePtrType& newstate)
   {
     PROFILE_SECTION("simulation::updateScalarHydro")
-    this->setVolumes(newstate);
 
     if (liquid_scalar)
     {
+      const auto& liq = newstate->get_liquid();
+      std::span<double const> vl = liq->volume();
+      this->liquid_scalar->setVolumes(vl, liq->inverse_volume());
       liquid_scalar->set_transition(newstate->get_liquid()->transition());
     }
     if (newstate->has_gas() && gas_scalar)
     {
+      const auto& gas = newstate->get_gas();
+      this->gas_scalar->setVolumes(gas->volume(), gas->inverse_volume());
       gas_scalar->set_transition(newstate->get_gas()->transition());
       mt_model.update(newstate);
     }
@@ -114,7 +108,7 @@ namespace Simulation
 
   void SimulationUnit::scatter_contribute()
   {
-    auto contribs = get_kernel_contribution();
+    auto contribs = this->get_kernel_contribution();
     Kokkos::Experimental::contribute(contribs, contribs_scatter);
     // Warning syncrho deepcopy into contribs
     //  Ok to do it here because scatter_contribute is called after
@@ -122,28 +116,11 @@ namespace Simulation
     this->liquid_scalar->synchro_sources();
   }
 
-  void SimulationUnit::setVolumes(
-      const CmaUtils::IterationStatePtrType& newstate) const
-  {
-    auto liq = newstate->get_liquid();
-    std::span<double const> vl = liq->volume();
-    if (liquid_scalar)
-    {
-      this->liquid_scalar->setVolumes(vl, liq->inverse_volume());
-    }
-
-    if (newstate->has_gas() && gas_scalar)
-    {
-      auto gas = newstate->get_gas();
-      this->gas_scalar->setVolumes(gas->volume(), gas->inverse_volume());
-    }
-  }
-
   void SimulationUnit::reset()
   {
     liquid_scalar.reset();
     gas_scalar.reset();
-    mc_unit->domain.inner = MC::MoveInfo<ComputeSpace, false>();
+    // mc_unit->domain.inner = MC::DomainState<ComputeSpace, false>();
   }
 
   void
@@ -186,22 +163,39 @@ namespace Simulation
     }
   }
 
-  void SimulationUnit::post_init_compartments()
-  {
-    // auto _compute_concentration = liquid_scalar->get_device_concentration();
-    // // auto _containers = mc_unit->domain.data();
+  // void SimulationUnit::setVolumes(
+  //     const CmaUtils::IterationStatePtrType& newstate) const
+  // {
+  //   auto liq = newstate->get_liquid();
+  //   std::span<double const> vl = liq->volume();
+  //   if (liquid_scalar)
+  //   {
+  //     this->liquid_scalar->setVolumes(vl, liq->inverse_volume());
+  //   }
 
-    // Kokkos::parallel_for(
-    //     "post_init_compartments",
-    //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0,
-    //                                                        mc_unit->domain.getNumberCompartments()),
-    //     KOKKOS_LAMBDA(const int i) {
-    //       // auto s = Kokkos::subview(_compute_concentration, i,
-    //       Kokkos::ALL); _containers(i).concentrations =
-    //       Kokkos::subview(_compute_concentration, Kokkos::ALL, i);
-    //     });
-    // Kokkos::fence();
-  }
+  //   if (newstate->has_gas() && gas_scalar)
+  //   {
+  //     auto gas = newstate->get_gas();
+  //     this->gas_scalar->setVolumes(gas->volume(), gas->inverse_volume());
+  //   }
+  // }
+
+  // void SimulationUnit::post_init_compartments()
+  // {
+  // auto _compute_concentration = liquid_scalar->get_device_concentration();
+  // // auto _containers = mc_unit->domain.data();
+
+  // Kokkos::parallel_for(
+  //     "post_init_compartments",
+  //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0,
+  //                                                        mc_unit->domain.getNumberCompartments()),
+  //     KOKKOS_LAMBDA(const int i) {
+  //       // auto s = Kokkos::subview(_compute_concentration, i,
+  //       Kokkos::ALL); _containers(i).concentrations =
+  //       Kokkos::subview(_compute_concentration, Kokkos::ALL, i);
+  //     });
+  // Kokkos::fence();
+  // }
 
   SimulationUnit::~SimulationUnit() = default;
 

@@ -95,9 +95,9 @@ COMMON_INCLUDE="-I/usr/include"
 #-fvisibility=hidden
 LINKER_FLAGS="-rdynamic -Wl,--as-needed -Wl,--no-undefined
 -shared
-
 -flto
 -fPIC -Wl,-soname,libudf_model_tracker.so -Wl,--start-group
+
 $BUILD_DIR/subprojects/$kokkosfolder/libkokkoscore.a
 -pthread
 -fopenmp
@@ -105,7 +105,10 @@ $BUILD_DIR/subprojects/$kokkosfolder/libkokkoscore.a
 -ldl -Wl,--end-group"
 
 
-
+LINKER_FLAGS2="
+-flto 
+-pthread
+-fopenmp"
 
 
 
@@ -120,6 +123,7 @@ mkdir -p "$BUILD_DIR"
 
 # Compile and link the project
 $CXX -o "$OUT" "$SRC" $LINKER_FLAGS $COMMON_INCLUDE $INCLUDE_DIRS $COMPILE_FLAGS $INCLUDE_KOKKOS --verbose
+# g++ -S  -c -o "/tmp/ams.S" -fverbose-asm   "$SRC"  $LINKER_FLAGS $INCLUDE_KOKKOS $COMPILE_FLAGS $INCLUDE_DIRS
 
 if [ $? -eq 0 ]; then
     echo "Build completed successfully!"
