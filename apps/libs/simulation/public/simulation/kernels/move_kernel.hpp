@@ -15,7 +15,6 @@
 #include <mc/events.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
-#include <simulation/alias.hpp>
 // #include <simulation/move_info.hpp>
 #include <simulation/probability_leaving.hpp>
 #include <simulation/probe.hpp>

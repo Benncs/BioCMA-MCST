@@ -1,4 +1,5 @@
 #include "eigen_kokkos.hpp"
+
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -13,7 +14,6 @@
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 #include <scalar_simulation.hpp>
-#include <simulation/alias.hpp>
 #include <stdexcept>
 
 namespace

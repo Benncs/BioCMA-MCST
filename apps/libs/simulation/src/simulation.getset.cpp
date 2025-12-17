@@ -12,7 +12,6 @@
 #include <memory>
 #include <optional>
 #include <scalar_simulation.hpp>
-#include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/probe.hpp>

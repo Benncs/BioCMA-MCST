@@ -22,7 +22,8 @@ namespace Common
       {
         return true;
       }
-      else if (std::string(env_var) == "false" || std::string(env_var) == "0")
+
+      if (std::string(env_var) == "false" || std::string(env_var) == "0")
       {
         return false;
       }

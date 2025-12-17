@@ -201,10 +201,7 @@ namespace Models
     static std::vector<std::string_view>
     names()
     {
-      return {
-
-        "length", "mu", "mu_eff"
-      };
+      return { "length", "mu", "mu_eff" };
     }
 
     static std::vector<std::size_t>

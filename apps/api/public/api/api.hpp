@@ -22,7 +22,11 @@
  */
 namespace Api
 {
-  std::array<int, 3> get_version();
+  constexpr std::array<int, 3>
+  get_version()
+  {
+    return { _BIOMC_VERSION_MAJOR, _BIOMC_VERSION_MINOR, _BIOMC_VERSION_DEV };
+  }
 
   void finalise();
 

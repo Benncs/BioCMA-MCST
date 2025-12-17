@@ -10,7 +10,6 @@
 #include <core/global_initaliser.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
-#include <cstdint>
 #include <exception>
 #include <filesystem>
 #include <memory>
@@ -18,13 +17,11 @@
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/simulation.hpp>
-#include <span>
-#include <stdexcept>
 #include <string>
 #include <udf_handle.hpp>
 #include <utility>
 #include <vector>
-static std::shared_ptr<DynamicLibrary> udf_handle = nullptr;
+
 constexpr int ID_VERIF = 2025;
 
 #define CHECK_OR_RETURN(cond, msg)                                             \
@@ -35,6 +32,8 @@ constexpr int ID_VERIF = 2025;
 
 namespace
 {
+  static std::shared_ptr<DynamicLibrary> udf_handle = nullptr;
+
   bool
   check_required(const Core::UserControlParameters& params, bool to_load)
   {
@@ -63,12 +62,6 @@ namespace
 namespace Api
 {
 
-  std::array<int, 3>
-  get_version()
-  {
-    return { _BIOMC_VERSION_MAJOR, _BIOMC_VERSION_MINOR, _BIOMC_VERSION_DEV };
-  }
-
   void
   finalise()
   {
@@ -83,13 +76,6 @@ namespace Api
   SimulationInstance::get_id() const
   {
     return id;
-  }
-
-  template <typename T>
-  std::vector<T>
-  span_to_vec(std::span<T> rhs)
-  {
-    return std::vector<T>(rhs.begin(), rhs.end());
   }
 
   ApiResult
@@ -142,7 +128,7 @@ namespace Api
   SimulationInstance::SimulationInstance(int argc,
                                          char** argv,
                                          std::optional<std::size_t> run_id)
-      : id(ID_VERIF)
+      : id(ID_VERIF), auto_mtr(false)
   {
 
     // TODO: How to register logger before runtime_init ?

@@ -7,11 +7,11 @@
       <cma_case_path >/home-local/casale/Documents/thesis/cfd-cma/cma_data/sanofi/</cma_case_path>
 
       <final_time>5000</final_time>
-      <number_particle>5</number_particle>
+      <number_particle>500000</number_particle>
       <delta_time>0.01</delta_time>
       <results_file_name>debug</results_file_name>
       <number_exported_result>10</number_exported_result>
-      <model_name>None</model_name>
+      <model_name>monod</model_name>
       <!--<initialiser_path>./cma_data/0d_4s_init.h5</initialiser_path> -->
       <!-- <initialiser_path>./cma_data/n14_init.h5</initialiser_path> -->
        <initialiser_path>./cma_data/sanofi_init.h5</initialiser_path>

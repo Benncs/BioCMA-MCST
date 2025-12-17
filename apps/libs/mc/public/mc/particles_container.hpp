@@ -40,6 +40,7 @@ namespace MC
          dead_particle_ratio_threshold);
     }
   };
+
   /**
    * @brief Main owning object for Monte-Carlo particles.
    *
@@ -86,17 +87,12 @@ namespace MC
     ParticleSamples random;
     // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
 
-    KOKKOS_INLINE_FUNCTION auto
-    sample(const std::size_t idx, const std::size_t i_sample) const
-    {
-      return random(idx, i_sample);
-    }
+    /** @brief get the sample at idx/i_sample position */
+    KOKKOS_INLINE_FUNCTION auto sample(std::size_t idx,
+                                       std::size_t i_sample) const;
 
-    KOKKOS_INLINE_FUNCTION auto
-    samples()
-    {
-      return random;
-    }
+    /** @brief get the sample view */
+    KOKKOS_INLINE_FUNCTION auto samples();
 
     /**
      * @brief Get the contribution if particle at index idx
@@ -174,16 +170,7 @@ namespace MC
      */
     [[nodiscard]] double get_allocation_factor() const noexcept;
 
-    void
-    change_nsample(const std::size_t new_n_sample)
-    {
-      if (new_n_sample != n_samples)
-      {
-        n_samples = new_n_sample;
-        Kokkos::resize(random, n_allocated_elements, n_samples);
-      }
-    }
-
+    void change_nsample(std::size_t new_n_sample);
     /**
      * @brief Returns the total number of elements the container can hold
      * without reallocating.
@@ -512,6 +499,20 @@ namespace MC
   }
 
   template <ModelType Model>
+  KOKKOS_INLINE_FUNCTION auto
+  ParticlesContainer<Model>::samples()
+  {
+    return random;
+  }
+  template <ModelType Model>
+  KOKKOS_INLINE_FUNCTION auto
+  ParticlesContainer<Model>::sample(const std::size_t idx,
+                                    const std::size_t i_sample) const
+  {
+    return random(idx, i_sample);
+  }
+
+  template <ModelType Model>
   template <class Archive>
   void
   ParticlesContainer<Model>::load(Archive& ar)
@@ -546,6 +547,17 @@ namespace MC
     serialize_view(ar, status);
     serialize_view(ar, model);
     serialize_view(ar, ages);
+  }
+
+  template <ModelType Model>
+  void
+  ParticlesContainer<Model>::change_nsample(const std::size_t new_n_sample)
+  {
+    if (new_n_sample != n_samples)
+    {
+      n_samples = new_n_sample;
+      Kokkos::resize(random, n_allocated_elements, n_samples);
+    }
   }
 
   template <ModelType Model>
@@ -717,7 +729,7 @@ namespace MC
       __allocate_buffer__();
     }
 
-    auto bounds = M::get_bounds();
+    const auto bounds = M::get_bounds();
     begin = bounds.begin;
     end = bounds.end;
   }

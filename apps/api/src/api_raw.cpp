@@ -152,7 +152,6 @@ convert_c_wrap_to_param(const wrap_c_param_t& params)
   p.load_serde = load_serde;
   p.save_serde = save_serde;
   p.uniform_mc_init = uniform_mc_init;
-
   return p;
 }
 

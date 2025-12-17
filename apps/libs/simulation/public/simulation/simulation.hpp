@@ -15,7 +15,6 @@
 #include <mc/unit.hpp>
 #include <memory>
 #include <optional>
-#include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/kernels/kernels.hpp>
 #include <simulation/mass_transfer.hpp>

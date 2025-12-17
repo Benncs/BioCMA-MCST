@@ -18,7 +18,6 @@
 #include <cstdint>
 #include <eigen_kokkos.hpp>
 #include <mc/traits.hpp>
-#include <simulation/alias.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <span>
 #include <vector>

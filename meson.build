@@ -19,7 +19,6 @@ if not use_cuda and build_udf
   add_project_arguments('-DUSE_UDF', language: 'cpp')
 endif
 
-
 no_mpi_flag = '-DNO_MPI'
 
 arch_specific_args = []
@@ -111,11 +110,11 @@ dl_dep = compiler.find_library('dl', required: true)
 eigen_dep= dependency('eigen3', required: true,version:'>=5.0.1')
 blas = dependency('blas', required: false) # Eigen can work without BLAS
 cpp_args = [cpp_args, '-DEIGEN_NO_CUDA=1']
+
 # add_global_arguments('-DEIGEN_DONT_VECTORIZE=1', language: 'cpp')
 # if blas.found()
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 # endif
-
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
 cmake = import('cmake', required: true)

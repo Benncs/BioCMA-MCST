@@ -15,7 +15,6 @@
 #include <optional>
 #include <scalar_init.hpp>
 #include <scalar_simulation.hpp>
-#include <simulation/alias.hpp>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/kernels/move_kernel.hpp>
 #include <simulation/mass_transfer.hpp>
@@ -91,7 +90,6 @@ namespace Simulation
       const CmaUtils::IterationStatePtrType& newstate)
   {
     PROFILE_SECTION("simulation::updateScalarHydro")
-
     if (liquid_scalar)
     {
       const auto& liq = newstate->get_liquid();
