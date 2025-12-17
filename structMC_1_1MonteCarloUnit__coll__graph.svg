@@ -69,10 +69,10 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="structMC_1_1MoveInfo.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="253.75,-171 96.75,-171 96.75,-142 253.75,-142 253.75,-171"/>
-<text xml:space="preserve" text-anchor="start" x="104.75" y="-157.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::MoveInfo&lt; ComputeSpace,</text>
-<text xml:space="preserve" text-anchor="middle" x="175.25" y="-147" font-family="Helvetica,sans-Serif" font-size="10.00"> false &gt;</text>
+<g id="a_Node000004"><a xlink:href="structMC_1_1DomainState.html" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="247,-171 103.5,-171 103.5,-142 247,-142 247,-171"/>
+<text xml:space="preserve" text-anchor="start" x="111.5" y="-157.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::DomainState&lt; Compute</text>
+<text xml:space="preserve" text-anchor="middle" x="175.25" y="-147" font-family="Helvetica,sans-Serif" font-size="10.00">Space, false &gt;</text>
 </a>
 </g>
 </g>

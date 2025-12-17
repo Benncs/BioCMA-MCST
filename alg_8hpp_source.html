@@ -73,14 +73,102 @@ $(function(){initNavTree('alg_8hpp_source.html','',''); });
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef __COMMON_ALG_HPP__</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define __COMMON_ALG_HPP__</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;functional&gt;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;limits&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="keywordtype">double</span> naive_newton(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">double</span>(<span class="keywordtype">double</span>)&gt;&amp; f,</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>                    <span class="keywordtype">double</span> x_init,</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>                    <span class="keywordtype">bool</span>* success,</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>                    <span class="keywordtype">double</span> tolerance = std::numeric_limits&lt;double&gt;::epsilon());</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#endif </span><span class="comment">//__COMMON_ALG_HPP__</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;Kokkos_Sort.hpp&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;common/common.hpp&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;functional&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;limits&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;sorting/Kokkos_BinSortPublicAPI.hpp&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;sorting/impl/Kokkos_CopyOpsForBinSortImpl.hpp&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;sorting/impl/Kokkos_SortByKeyImpl.hpp&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keywordtype">double</span> naive_newton(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">double</span>(<span class="keywordtype">double</span>)&gt;&amp; f,</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>                    <span class="keywordtype">double</span> x_init,</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>                    <span class="keywordtype">bool</span>* success,</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>                    <span class="keywordtype">double</span> tolerance = std::numeric_limits&lt;double&gt;::epsilon());</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="foldopen" id="foldopen00015" data-start="{" data-end="}">
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="namespaceSorting.html">   15</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceSorting.html">Sorting</a></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>{</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  <span class="keyword">namespace</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> PermType, <span class="keyword">typename</span>... Views&gt;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    copy_data(std::size_t n_allocated_elements,</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>              std::size_t n_used_elements,</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>              <span class="keyword">const</span> PermType&amp; perm,</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>              std::size_t src_offset,</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>              Views... views)</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>      <span class="comment">// The following may not work on GPU</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>      <span class="comment">// auto tmp_views = std::make_tuple(Kokkos::create_mirror(views)...);</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>      <span class="comment">// Kokkos::parallel_for(</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>      <span class="comment">//     &quot;Sort::copy_data&quot;,</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>      <span class="comment">//     Kokkos::RangePolicy&lt;&gt;(0, n_allocated_elements),</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>      <span class="comment">//     KOKKOS_LAMBDA(int i) {</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>      <span class="comment">//       if (perm(i) &gt;= n_used_elements)</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>      <span class="comment">//       {</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>      <span class="comment">//         return;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>      <span class="comment">//       }</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>      <span class="comment">//       const int idx = src_offset + perm(i);</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>      <span class="comment">//       std::apply(</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>      <span class="comment">//           [&amp;](auto&amp;... tmp)</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>      <span class="comment">//           {</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>      <span class="comment">//             ((Kokkos::Impl::CopyOp&lt;</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>      <span class="comment">//                  std::decay_t&lt;decltype(views)&gt;,</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>      <span class="comment">//                  std::decay_t&lt;decltype(views)&gt;&gt;::copy(tmp, i, views,</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>      <span class="comment">//                  idx)),</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>      <span class="comment">//              ...);</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>      <span class="comment">//           },</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>      <span class="comment">//           tmp_views);</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>      <span class="comment">//     });</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>      <span class="comment">// auto do_deep_copy = [](auto&amp; dst, auto&amp; src)</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>      <span class="comment">// { Kokkos::deep_copy(dst, src); };</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>      <span class="comment">// std::apply([&amp;](auto&amp;... tmps) { (do_deep_copy(views, tmps), ...); },</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>      <span class="comment">//            tmp_views);</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    }</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>  } <span class="comment">// namespace</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> RefView, <span class="keyword">typename</span>... ViewType&gt;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  <span class="keywordtype">void</span></div>
+<div class="foldopen" id="foldopen00065" data-start="{" data-end="}">
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="namespaceSorting.html#a12afa820b9f19158762908905a33779b">   65</a></span>  <a class="code hl_function" href="namespaceSorting.html#a12afa820b9f19158762908905a33779b">sort_soa</a>(std::size_t n0,</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>           std::size_t nn,</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>           std::size_t n_e,</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>           std::size_t n_max,</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>           RefView ref_sorting,</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>           ViewType... views)</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  {</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keyword">using </span>ExecSpace = Kokkos::DefaultExecutionSpace;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    PROFILE_SECTION(<span class="stringliteral">&quot;SORT&quot;</span>)</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keywordflow">if</span> (nn - n0 == 1 || nn &lt; n0)</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    {</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>      <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    }</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> bin_size = 2048;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="keyword">using </span>view_type = <span class="keyword">decltype</span>(ref_sorting);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keyword">auto</span> binop = Kokkos::BinOp1D&lt;view_type&gt;(bin_size, n0, nn);</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keyword">auto</span> sorter = Kokkos::BinSort&lt;view_type, decltype(binop)&gt;(</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        ExecSpace(), ref_sorting, 0, n_e, binop, <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    sorter.create_permute_vector();</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <span class="keyword">auto</span> perm = sorter.get_permute_vector();</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="keyword">auto</span> src_offset = 0;</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    copy_data(n_max, n_e, perm, src_offset, views...);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>  }</div>
+</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>} <span class="comment">// namespace Sorting</span></div>
+</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="preprocessor">#endif </span><span class="comment">//__COMMON_ALG_HPP__</span></div>
+<div class="ttc" id="anamespaceSorting_html"><div class="ttname"><a href="namespaceSorting.html">Sorting</a></div><div class="ttdef"><b>Definition</b> alg.hpp:16</div></div>
+<div class="ttc" id="anamespaceSorting_html_a12afa820b9f19158762908905a33779b"><div class="ttname"><a href="namespaceSorting.html#a12afa820b9f19158762908905a33779b">Sorting::sort_soa</a></div><div class="ttdeci">void sort_soa(std::size_t n0, std::size_t nn, std::size_t n_e, std::size_t n_max, RefView ref_sorting, ViewType... views)</div><div class="ttdef"><b>Definition</b> alg.hpp:65</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

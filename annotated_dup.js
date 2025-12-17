@@ -43,11 +43,11 @@ var annotated_dup =
         [ "Uniform", "structMC_1_1Distributions_1_1Uniform.html", "structMC_1_1Distributions_1_1Uniform" ]
       ] ],
       [ "ContribIndexBounds", "structMC_1_1ContribIndexBounds.html", "structMC_1_1ContribIndexBounds" ],
+      [ "DomainState", "structMC_1_1DomainState.html", "structMC_1_1DomainState" ],
       [ "EventContainer", "structMC_1_1EventContainer.html", "structMC_1_1EventContainer" ],
       [ "KPRNG", "classMC_1_1KPRNG.html", "classMC_1_1KPRNG" ],
       [ "LeavingFlow", "structMC_1_1LeavingFlow.html", "structMC_1_1LeavingFlow" ],
       [ "MonteCarloUnit", "structMC_1_1MonteCarloUnit.html", "structMC_1_1MonteCarloUnit" ],
-      [ "MoveInfo", "structMC_1_1MoveInfo.html", "structMC_1_1MoveInfo" ],
       [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html", "classMC_1_1ParticlesContainer" ],
       [ "ReactorDomain", "classMC_1_1ReactorDomain.html", "classMC_1_1ReactorDomain" ],
       [ "RuntimeParameters", "structMC_1_1RuntimeParameters.html", "structMC_1_1RuntimeParameters" ]

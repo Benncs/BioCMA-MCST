@@ -2,8 +2,8 @@ var namespaces_dup =
 [
     [ "Api", "namespaceApi.html", "namespaceApi" ],
     [ "CmaUtils", "namespaceCmaUtils.html", [
-      [ "IterationStatePtrType", "namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259", null ],
-      [ "StateCooMatrixType", "namespaceCmaUtils.html#a345f1e3ce09450d18c2de5f270cc75f6", null ],
+      [ "IterationStatePtrType", "namespaceCmaUtils.html#aac0e5de8b035afc259c0e7e929c0d377", null ],
+      [ "StateCooMatrixType", "namespaceCmaUtils.html#a8e5ac8b2481171a29d06e12e9d23f676", null ],
       [ "TransitionnerPtrType", "namespaceCmaUtils.html#a95181f7ed7bfd8d20f6ebda33204e8c8", null ],
       [ "get_min_residence_time", "namespaceCmaUtils.html#ad8870320c6b960ad8a16cca44e3a7514", null ]
     ] ],
@@ -28,6 +28,9 @@ var namespaces_dup =
     ] ],
     [ "PythonWrap", "namespacePythonWrap.html", "namespacePythonWrap" ],
     [ "Simulation", "namespaceSimulation.html", "namespaceSimulation" ],
+    [ "Sorting", "namespaceSorting.html", [
+      [ "sort_soa", "namespaceSorting.html#a12afa820b9f19158762908905a33779b", null ]
+    ] ],
     [ "Unsafe", "namespaceUnsafe.html", [
       [ "load_udf", "namespaceUnsafe.html#a703f3b37e1e69e30af8da78870f09df4", null ]
     ] ],

@@ -75,18 +75,31 @@ $(function(){initNavTree('conceptModels_1_1UptakeModel.html','',''); });
 <p><code>#include &lt;<a class="el" href="uptake__dyn_8hpp_source.html">uptake_dyn.hpp</a>&gt;</code></p>
 <h2 id="header-conceptdef" class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptModels_1_1UptakeModel.html">Models::UptakeModel</a> =  <span class="keyword">requires</span>(T model) {</div>
+<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptModels_1_1UptakeModel.html">Models::UptakeModel</a> =  <span class="keyword">requires</span>(T model)</div>
+<div class="line">  {</div>
 <div class="line">    </div>
 <div class="line"> </div>
 <div class="line">    </div>
 <div class="line"> </div>
-<div class="line">    { T::k } -&gt; std::convertible_to&lt;typename T::FloatType&gt;;</div>
-<div class="line">    { T::k_perm } -&gt; std::convertible_to&lt;typename T::FloatType&gt;;</div>
+<div class="line">    {</div>
+<div class="line">      T::k</div>
+<div class="line">    } -&gt; std::convertible_to&lt;typename T::FloatType&gt;;</div>
+<div class="line">    {</div>
+<div class="line">      T::k_perm</div>
+<div class="line">    } -&gt; std::convertible_to&lt;typename T::FloatType&gt;;</div>
 <div class="line"> </div>
-<div class="line">    { T::beta } -&gt; std::convertible_to&lt;typename T::FloatType&gt;;</div>
-<div class="line">    { T::tau_ap_1 } -&gt; std::convertible_to&lt;typename T::FloatType&gt;;</div>
-<div class="line">    { T::tau_ap_2 } -&gt; std::convertible_to&lt;typename T::FloatType&gt;;</div>
-<div class="line">    { T::tau_ap_2 } -&gt; std::convertible_to&lt;typename T::FloatType&gt;;</div>
+<div class="line">    {</div>
+<div class="line">      T::beta</div>
+<div class="line">    } -&gt; std::convertible_to&lt;typename T::FloatType&gt;;</div>
+<div class="line">    {</div>
+<div class="line">      T::tau_ap_1</div>
+<div class="line">    } -&gt; std::convertible_to&lt;typename T::FloatType&gt;;</div>
+<div class="line">    {</div>
+<div class="line">      T::tau_ap_2</div>
+<div class="line">    } -&gt; std::convertible_to&lt;typename T::FloatType&gt;;</div>
+<div class="line">    {</div>
+<div class="line">      T::tau_ap_2</div>
+<div class="line">    } -&gt; std::convertible_to&lt;typename T::FloatType&gt;;</div>
 <div class="line"> </div>
 <div class="line">    </div>
 <div class="line"> </div>
@@ -100,7 +113,7 @@ $(function(){initNavTree('conceptModels_1_1UptakeModel.html','',''); });
 <div class="line"> </div>
 <div class="line">    </div>
 <div class="line">  }</div>
-<div class="ttc" id="aconceptModels_1_1UptakeModel_html"><div class="ttname"><a href="conceptModels_1_1UptakeModel.html">Models::UptakeModel</a></div><div class="ttdef"><b>Definition</b> uptake_dyn.hpp:37</div></div>
+<div class="ttc" id="aconceptModels_1_1UptakeModel_html"><div class="ttname"><a href="conceptModels_1_1UptakeModel.html">Models::UptakeModel</a></div><div class="ttdef"><b>Definition</b> uptake_dyn.hpp:39</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

@@ -1,8 +1,4 @@
 <map id="Simulation::SimulationUnit::setGasFlow" name="Simulation::SimulationUnit::setGasFlow">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,181,76"/>
-<area shape="poly" id="edge3_Node000001_Node000001" title=" " alt="" coords="52,38,49,28,55,19,70,13,93,11,118,13,132,19,130,24,116,18,93,16,71,18,58,23,54,29,57,36"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a4295618336e99606be4e87b31feb848a" title=" " alt="" coords="229,5,404,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,41,213,37,214,42,181,47"/>
-<area shape="rect" id="Node000003" href="$classSimulation_1_1SimulationUnit.html#a4d9a0037502fc0784690c11c1a593a1f" title=" " alt="" coords="229,68,404,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,66,214,71,213,76,181,71"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,29,181,68"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="60,30,58,20,63,11,75,5,93,3,113,5,124,12,121,16,111,10,93,8,76,10,66,15,63,21,65,28"/>
 </map>

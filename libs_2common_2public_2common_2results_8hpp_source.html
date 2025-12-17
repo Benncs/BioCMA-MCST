@@ -86,92 +86,99 @@ $(function(){initNavTree('libs_2common_2public_2common_2results_8hpp_source.html
 <div class="foldopen" id="foldopen00011" data-start="{" data-end="};">
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="structResult.html">   11</a></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> S, <span class="keyword">typename</span> T&gt; <span class="keyword">struct </span><a class="code hl_function" href="structResult.html#af83cd1ef963ba1bd0a72133067675a11">Result</a> : <span class="keyword">protected</span> std::variant&lt;S, T&gt;</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>{</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="structResult.html#af83cd1ef963ba1bd0a72133067675a11">   13</a></span>  <span class="keyword">explicit</span> <span class="keyword">constexpr</span> <a class="code hl_function" href="structResult.html#af83cd1ef963ba1bd0a72133067675a11">Result</a>() noexcept : std::variant&lt;S, T&gt;{S{}} {};</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="structResult.html#af83cd1ef963ba1bd0a72133067675a11">   13</a></span>  <span class="keyword">explicit</span> <span class="keyword">constexpr</span> <a class="code hl_function" href="structResult.html#af83cd1ef963ba1bd0a72133067675a11">Result</a>() noexcept : std::variant&lt;S, T&gt;{ S{} } {};</div>
 <div class="foldopen" id="foldopen00014" data-start="{" data-end="}">
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="structResult.html#a53662abb0f08b614b773f713d43cde41">   14</a></span>  <span class="keyword">constexpr</span> <span class="keyword">explicit</span> <a class="code hl_function" href="structResult.html#a53662abb0f08b614b773f713d43cde41">Result</a>(T <span class="keyword">const</span>&amp;&amp; t) noexcept : std::variant&lt;S, T&gt;{t}</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="structResult.html#a53662abb0f08b614b773f713d43cde41">   14</a></span>  <span class="keyword">constexpr</span> <span class="keyword">explicit</span> <a class="code hl_function" href="structResult.html#a53662abb0f08b614b773f713d43cde41">Result</a>(T <span class="keyword">const</span>&amp;&amp; t) noexcept : std::variant&lt;S, T&gt;{ t }</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>  {</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  }</div>
 </div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
 <div class="foldopen" id="foldopen00018" data-start="{" data-end="}">
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="structResult.html#a1dfa21fe818711896cd7aa58192c4761">   18</a></span>  <span class="keyword">constexpr</span> <span class="keyword">explicit</span> <a class="code hl_function" href="structResult.html#a1dfa21fe818711896cd7aa58192c4761">Result</a>(S&amp;&amp; s) noexcept : std::variant&lt;S, T&gt;{std::move(s)}</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="structResult.html#a1dfa21fe818711896cd7aa58192c4761">   18</a></span>  <span class="keyword">constexpr</span> <span class="keyword">explicit</span> <a class="code hl_function" href="structResult.html#a1dfa21fe818711896cd7aa58192c4761">Result</a>(S&amp;&amp; s) noexcept : std::variant&lt;S, T&gt;{ std::move(s) }</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  {</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  }</div>
 </div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="foldopen" id="foldopen00022" data-start="{" data-end="}">
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="structResult.html#a7400f5fec52ef4c72646dedd35b4b0bf">   22</a></span>  <span class="keyword">constexpr</span> <span class="keyword">explicit</span> <span class="keyword">operator</span> bool() const noexcept</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  {</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">valid</a>();</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  }</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  <span class="keyword">constexpr</span> <span class="keyword">explicit</span></div>
+<div class="foldopen" id="foldopen00023" data-start="{" data-end="}">
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="structResult.html#a7400f5fec52ef4c72646dedd35b4b0bf">   23</a></span>  <span class="keyword">operator</span> bool() const noexcept</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>  {</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">valid</a>();</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>  }</div>
 </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="foldopen" id="foldopen00027" data-start="{" data-end="}">
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">   27</a></span>  [[nodiscard]] <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">valid</a>() const noexcept</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  {</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keywordflow">return</span> std::holds_alternative&lt;S&gt;(*<span class="keyword">this</span>);</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>  }</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  [[nodiscard]] <span class="keyword">constexpr</span> <span class="keywordtype">bool</span></div>
+<div class="foldopen" id="foldopen00029" data-start="{" data-end="}">
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">   29</a></span>  <a class="code hl_function" href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">valid</a>() const noexcept</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>  {</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordflow">return</span> std::holds_alternative&lt;S&gt;(*<span class="keyword">this</span>);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  }</div>
 </div>
-<div class="foldopen" id="foldopen00031" data-start="{" data-end="}">
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="structResult.html#ace8dba345682b9d6f32b18aedb9c4e99">   31</a></span>  [[nodiscard]] <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="structResult.html#ace8dba345682b9d6f32b18aedb9c4e99">invalid</a>() const noexcept</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  {</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordflow">return</span> !<a class="code hl_function" href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">valid</a>();</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>  }</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  [[nodiscard]] <span class="keyword">constexpr</span> <span class="keywordtype">bool</span></div>
+<div class="foldopen" id="foldopen00034" data-start="{" data-end="}">
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="structResult.html#ace8dba345682b9d6f32b18aedb9c4e99">   34</a></span>  <a class="code hl_function" href="structResult.html#ace8dba345682b9d6f32b18aedb9c4e99">invalid</a>() const noexcept</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>  {</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keywordflow">return</span> !<a class="code hl_function" href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">valid</a>();</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  }</div>
 </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="foldopen" id="foldopen00036" data-start="{" data-end="}">
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="structResult.html#a520ef0bb676aaa7e0b4c954e38345852">   36</a></span>  [[nodiscard]] <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_function" href="structResult.html#a520ef0bb676aaa7e0b4c954e38345852">get</a>() const noexcept -&gt; T</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  {</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keywordflow">return</span> (<a class="code hl_function" href="structResult.html#ace8dba345682b9d6f32b18aedb9c4e99">invalid</a>() ? std::get&lt;T&gt;(*<span class="keyword">this</span>) : T());</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  }</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  [[nodiscard]] <span class="keyword">constexpr</span> <span class="keyword">auto</span></div>
+<div class="foldopen" id="foldopen00040" data-start="{" data-end="}">
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="structResult.html#a520ef0bb676aaa7e0b4c954e38345852">   40</a></span>  <a class="code hl_function" href="structResult.html#a520ef0bb676aaa7e0b4c954e38345852">get</a>() const noexcept -&gt; T</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  {</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordflow">return</span> (<a class="code hl_function" href="structResult.html#ace8dba345682b9d6f32b18aedb9c4e99">invalid</a>() ? std::get&lt;T&gt;(*<span class="keyword">this</span>) : T());</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  }</div>
 </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="foldopen" id="foldopen00041" data-start="{" data-end="}">
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="structResult.html#aa554453abcf5cb6e6352ec121d204c61">   41</a></span>  [[nodiscard]] <span class="keyword">auto</span> <a class="code hl_function" href="structResult.html#aa554453abcf5cb6e6352ec121d204c61">gets</a>() const -&gt; S</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  {</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordflow">if</span> (!<a class="code hl_function" href="structResult.html#ace8dba345682b9d6f32b18aedb9c4e99">invalid</a>())</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    {</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>      <span class="keywordflow">return</span> std::move(std::get&lt;S&gt;(*<span class="keyword">this</span>));</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    }</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Deref None&quot;</span>);</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  }</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  [[nodiscard]] <span class="keyword">auto</span></div>
+<div class="foldopen" id="foldopen00046" data-start="{" data-end="}">
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="structResult.html#aa554453abcf5cb6e6352ec121d204c61">   46</a></span>  <a class="code hl_function" href="structResult.html#aa554453abcf5cb6e6352ec121d204c61">gets</a>() const -&gt; S</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  {</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordflow">if</span> (!<a class="code hl_function" href="structResult.html#ace8dba345682b9d6f32b18aedb9c4e99">invalid</a>())</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>      <span class="keywordflow">return</span> std::move(std::get&lt;S&gt;(*<span class="keyword">this</span>));</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    }</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Deref None&quot;</span>);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  }</div>
 </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  <span class="comment">// template &lt;typename Func, typename Err&gt; auto match_const(Func&amp;&amp; f, Err&amp;&amp; r)</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  <span class="comment">// const noexcept</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  <span class="comment">// {</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  <span class="comment">//   if (this-&gt;valid())</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  <span class="comment">//   {</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  <span class="comment">//     return f(std::get&lt;S&gt;(*this));</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  <span class="comment">//   }</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  <span class="comment">//   else</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  <span class="comment">//   {</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  <span class="comment">//     return r(std::get&lt;T&gt;(*this));</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  <span class="comment">//   }</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>  <span class="comment">// }</span></div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="foldopen" id="foldopen00063" data-start="{" data-end="}">
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="structResult.html#acdfac9fce3982dabd2bcf6c109128627">   63</a></span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Func, <span class="keyword">typename</span> Err&gt; <span class="keyword">auto</span> <a class="code hl_function" href="structResult.html#acdfac9fce3982dabd2bcf6c109128627">match</a>(Func&amp;&amp; f, Err&amp;&amp; r) <span class="keyword">noexcept</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  {</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keywordflow">if</span> (this-&gt;<a class="code hl_function" href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">valid</a>())</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    {</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>      <span class="keywordflow">return</span> f(std::forward&lt;S&gt;(std::get&lt;S&gt;(*<span class="keyword">this</span>)));</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    }</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keywordflow">return</span> r(std::forward&lt;T&gt;(std::get&lt;T&gt;(*<span class="keyword">this</span>)));</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  }</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  <span class="comment">// template &lt;typename Func, typename Err&gt; auto match_const(Func&amp;&amp; f, Err&amp;&amp; r)</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  <span class="comment">// const noexcept</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  <span class="comment">// {</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  <span class="comment">//   if (this-&gt;valid())</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  <span class="comment">//   {</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  <span class="comment">//     return f(std::get&lt;S&gt;(*this));</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>  <span class="comment">//   }</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  <span class="comment">//   else</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  <span class="comment">//   {</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  <span class="comment">//     return r(std::get&lt;T&gt;(*this));</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <span class="comment">//   }</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  <span class="comment">// }</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Func, <span class="keyword">typename</span> Err&gt;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="keyword">auto</span></div>
+<div class="foldopen" id="foldopen00070" data-start="{" data-end="}">
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="structResult.html#acdfac9fce3982dabd2bcf6c109128627">   70</a></span>  <a class="code hl_function" href="structResult.html#acdfac9fce3982dabd2bcf6c109128627">match</a>(Func&amp;&amp; f, Err&amp;&amp; r) <span class="keyword">noexcept</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  {</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordflow">if</span> (this-&gt;<a class="code hl_function" href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">valid</a>())</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    {</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>      <span class="keywordflow">return</span> f(std::forward&lt;S&gt;(std::get&lt;S&gt;(*<span class="keyword">this</span>)));</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    }</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordflow">return</span> r(std::forward&lt;T&gt;(std::get&lt;T&gt;(*<span class="keyword">this</span>)));</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  }</div>
 </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>};</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>};</div>
 </div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="astructResult_html_a11cf7bc977f5a46e32ebf166dc982239"><div class="ttname"><a href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">Result::valid</a></div><div class="ttdeci">constexpr bool valid() const noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:27</div></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="astructResult_html_a11cf7bc977f5a46e32ebf166dc982239"><div class="ttname"><a href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">Result::valid</a></div><div class="ttdeci">constexpr bool valid() const noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:29</div></div>
 <div class="ttc" id="astructResult_html_a1dfa21fe818711896cd7aa58192c4761"><div class="ttname"><a href="structResult.html#a1dfa21fe818711896cd7aa58192c4761">Result::Result</a></div><div class="ttdeci">constexpr Result(S &amp;&amp;s) noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:18</div></div>
-<div class="ttc" id="astructResult_html_a520ef0bb676aaa7e0b4c954e38345852"><div class="ttname"><a href="structResult.html#a520ef0bb676aaa7e0b4c954e38345852">Result::get</a></div><div class="ttdeci">constexpr auto get() const noexcept -&gt; T</div><div class="ttdef"><b>Definition</b> results.hpp:36</div></div>
+<div class="ttc" id="astructResult_html_a520ef0bb676aaa7e0b4c954e38345852"><div class="ttname"><a href="structResult.html#a520ef0bb676aaa7e0b4c954e38345852">Result::get</a></div><div class="ttdeci">constexpr auto get() const noexcept -&gt; T</div><div class="ttdef"><b>Definition</b> results.hpp:40</div></div>
 <div class="ttc" id="astructResult_html_a53662abb0f08b614b773f713d43cde41"><div class="ttname"><a href="structResult.html#a53662abb0f08b614b773f713d43cde41">Result::Result</a></div><div class="ttdeci">constexpr Result(T const &amp;&amp;t) noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:14</div></div>
-<div class="ttc" id="astructResult_html_aa554453abcf5cb6e6352ec121d204c61"><div class="ttname"><a href="structResult.html#aa554453abcf5cb6e6352ec121d204c61">Result::gets</a></div><div class="ttdeci">auto gets() const -&gt; S</div><div class="ttdef"><b>Definition</b> results.hpp:41</div></div>
-<div class="ttc" id="astructResult_html_acdfac9fce3982dabd2bcf6c109128627"><div class="ttname"><a href="structResult.html#acdfac9fce3982dabd2bcf6c109128627">Result::match</a></div><div class="ttdeci">auto match(Func &amp;&amp;f, Err &amp;&amp;r) noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:63</div></div>
-<div class="ttc" id="astructResult_html_ace8dba345682b9d6f32b18aedb9c4e99"><div class="ttname"><a href="structResult.html#ace8dba345682b9d6f32b18aedb9c4e99">Result::invalid</a></div><div class="ttdeci">constexpr bool invalid() const noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:31</div></div>
+<div class="ttc" id="astructResult_html_aa554453abcf5cb6e6352ec121d204c61"><div class="ttname"><a href="structResult.html#aa554453abcf5cb6e6352ec121d204c61">Result::gets</a></div><div class="ttdeci">auto gets() const -&gt; S</div><div class="ttdef"><b>Definition</b> results.hpp:46</div></div>
+<div class="ttc" id="astructResult_html_acdfac9fce3982dabd2bcf6c109128627"><div class="ttname"><a href="structResult.html#acdfac9fce3982dabd2bcf6c109128627">Result::match</a></div><div class="ttdeci">auto match(Func &amp;&amp;f, Err &amp;&amp;r) noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:70</div></div>
+<div class="ttc" id="astructResult_html_ace8dba345682b9d6f32b18aedb9c4e99"><div class="ttname"><a href="structResult.html#ace8dba345682b9d6f32b18aedb9c4e99">Result::invalid</a></div><div class="ttdeci">constexpr bool invalid() const noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:34</div></div>
 <div class="ttc" id="astructResult_html_af83cd1ef963ba1bd0a72133067675a11"><div class="ttname"><a href="structResult.html#af83cd1ef963ba1bd0a72133067675a11">Result::Result</a></div><div class="ttdeci">constexpr Result() noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:13</div></div>
 <div class="ttc" id="astructSuccess_html"><div class="ttname"><a href="structSuccess.html">Success</a></div><div class="ttdef"><b>Definition</b> results.hpp:8</div></div>
 </div><!-- fragment --></div><!-- contents -->

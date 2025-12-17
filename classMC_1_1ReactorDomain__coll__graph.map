@@ -1,5 +1,5 @@
 <map id="MC::ReactorDomain" name="MC::ReactorDomain">
-<area shape="rect" id="Node000001" title="Represents the spatial domain where Monte Carlo particles can exist." alt="" coords="40,114,180,139"/>
-<area shape="rect" id="Node000002" href="$structMC_1_1MoveInfo.html" title=" " alt="" coords="5,5,215,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,60,113,114,107,114,107,60"/>
+<area shape="rect" id="Node000001" title="Represents the spatial domain where Monte Carlo particles can exist." alt="" coords="31,114,171,139"/>
+<area shape="rect" id="Node000002" href="$structMC_1_1DomainState.html" title=" " alt="" coords="5,5,197,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,60,104,114,98,114,98,60"/>
 </map>

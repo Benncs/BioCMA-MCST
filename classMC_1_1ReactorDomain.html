@@ -79,7 +79,7 @@ $(function(){initNavTree('classMC_1_1ReactorDomain.html','','classMC_1_1ReactorD
 <div class="dynheader">
 Collaboration diagram for MC::ReactorDomain:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ReactorDomain__coll__graph.svg" width="220" height="144"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ReactorDomain__coll__graph.svg" width="203" height="144"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
@@ -103,8 +103,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a767b95c07cbc48f98c5841f94b564f20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move assignment operator.  <br /></td></tr>
 <tr class="memitem:a0b2fc75ebc4dff8a7eaf9d5b3a349aff" id="r_a0b2fc75ebc4dff8a7eaf9d5b3a349aff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b2fc75ebc4dff8a7eaf9d5b3a349aff">update</a> (std::span&lt; const double &gt; newliquid_volume, std::span&lt; const std::size_t &gt; neighors_flat, std::span&lt; const double &gt; out_flows, std::span&lt; const double &gt; proba_flat)</td></tr>
 <tr class="memitem:a312b0ed0339dfc1809da2673b9fcf02e" id="r_a312b0ed0339dfc1809da2673b9fcf02e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a312b0ed0339dfc1809da2673b9fcf02e">set_leaving_flow</a> (std::size_t i, std::size_t i_flow, double flow) const</td></tr>
-<tr class="memitem:ae9797022fe7a438c62bc84212577bc7f" id="r_ae9797022fe7a438c62bc84212577bc7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9797022fe7a438c62bc84212577bc7f">init_inner</a> (const std::size_t n_flows)</td></tr>
-<tr class="memitem:a67391f9c7e21f881ac14334f2e622d65" id="r_a67391f9c7e21f881ac14334f2e622d65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMC_1_1MoveInfo.html">MoveInfo</a>&lt; <a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, true &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67391f9c7e21f881ac14334f2e622d65">get_const_inner</a> ()</td></tr>
+<tr class="memitem:ab8227f7cb4e6e748e7ab06c31233712a" id="r_ab8227f7cb4e6e748e7ab06c31233712a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8227f7cb4e6e748e7ab06c31233712a">init_inner</a> (std::size_t n_flows)</td></tr>
+<tr class="memitem:a25d06d1d21a6f47b3443770c559855c0" id="r_a25d06d1d21a6f47b3443770c559855c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMC_1_1DomainState.html">DomainState</a>&lt; <a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, true &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25d06d1d21a6f47b3443770c559855c0">get_const_inner</a> ()</td></tr>
 <tr class="memitem:adf8edb6cba4ee63f14c48ebadb73fb2e" id="r_adf8edb6cba4ee63f14c48ebadb73fb2e"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf8edb6cba4ee63f14c48ebadb73fb2e">getNumberCompartments</a> () const noexcept</td></tr>
 <tr class="memdesc:adf8edb6cba4ee63f14c48ebadb73fb2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of compartment in the domain.  <br /></td></tr>
 <tr class="memitem:a698b6d934e68ff38263b34705babc1e7" id="r_a698b6d934e68ff38263b34705babc1e7"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a698b6d934e68ff38263b34705babc1e7">getTotalVolume</a> () const noexcept</td></tr>
@@ -114,10 +114,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ac1467552c26e3b30df515eda00273f1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a const reference to neighbors.  <br /></td></tr>
 <tr class="memitem:a642d96bfc217576921ac8f355d921c92" id="r_a642d96bfc217576921ac8f355d921c92"><td class="memTemplParams" colspan="2">template&lt;class Archive&gt; </td></tr>
 <tr class="memitem:a642d96bfc217576921ac8f355d921c92 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a642d96bfc217576921ac8f355d921c92">load</a> (Archive &amp;ar)</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:acb6794ba856a12358b597a1118a23b18" id="r_acb6794ba856a12358b597a1118a23b18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMC_1_1MoveInfo.html">MoveInfo</a>&lt; <a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, false &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb6794ba856a12358b597a1118a23b18">inner</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -134,6 +130,7 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:acc685edcf2203fe883d8f9232784d698"><td class="mdescLeft">&#160;</td><td class="mdescRight">Domain ID.  <br /></td></tr>
 <tr class="memitem:ab9f99e676da2e6e1be0840ac9bea101c" id="r_ab9f99e676da2e6e1be0840ac9bea101c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab9f99e676da2e6e1be0840ac9bea101c">size</a> = 0</td></tr>
 <tr class="memdesc:ab9f99e676da2e6e1be0840ac9bea101c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of compartment.  <br /></td></tr>
+<tr class="memitem:addcee9815bdabe3d88174114da0835d0" id="r_addcee9815bdabe3d88174114da0835d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMC_1_1DomainState.html">DomainState</a>&lt; <a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, false &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addcee9815bdabe3d88174114da0835d0">inner</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents the spatial domain where Monte Carlo particles can exist. </p>
@@ -330,14 +327,14 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ReactorDomain_a5f2e3ee22ab6fbc5d87134440a8865fe_cgraph.svg" width="356" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ReactorDomain_a5f2e3ee22ab6fbc5d87134440a8865fe_cgraph.svg" width="356" height="136"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a67391f9c7e21f881ac14334f2e622d65" name="a67391f9c7e21f881ac14334f2e622d65"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67391f9c7e21f881ac14334f2e622d65">&#9670;&#160;</a></span>get_const_inner()</h2>
+<a id="a25d06d1d21a6f47b3443770c559855c0" name="a25d06d1d21a6f47b3443770c559855c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25d06d1d21a6f47b3443770c559855c0">&#9670;&#160;</a></span>get_const_inner()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -346,7 +343,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structMC_1_1MoveInfo.html">MoveInfo</a>&lt; <a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, true &gt; MC::ReactorDomain::get_const_inner </td>
+          <td class="memname"><a class="el" href="structMC_1_1DomainState.html">DomainState</a>&lt; <a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, true &gt; MC::ReactorDomain::get_const_inner </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -417,11 +414,16 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Return total volume of domain. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ReactorDomain_a698b6d934e68ff38263b34705babc1e7_icgraph.svg" width="356" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
-<a id="ae9797022fe7a438c62bc84212577bc7f" name="ae9797022fe7a438c62bc84212577bc7f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae9797022fe7a438c62bc84212577bc7f">&#9670;&#160;</a></span>init_inner()</h2>
+<a id="ab8227f7cb4e6e748e7ab06c31233712a" name="ab8227f7cb4e6e748e7ab06c31233712a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8227f7cb4e6e748e7ab06c31233712a">&#9670;&#160;</a></span>init_inner()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -429,7 +431,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">void MC::ReactorDomain::init_inner </td>
           <td>(</td>
-          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_flows</em></span></td><td>)</td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_flows</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -437,7 +439,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ReactorDomain_ae9797022fe7a438c62bc84212577bc7f_cgraph.svg" width="380" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ReactorDomain_ab8227f7cb4e6e748e7ab06c31233712a_cgraph.svg" width="380" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -754,16 +756,24 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="acb6794ba856a12358b597a1118a23b18" name="acb6794ba856a12358b597a1118a23b18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb6794ba856a12358b597a1118a23b18">&#9670;&#160;</a></span>inner</h2>
+<a id="addcee9815bdabe3d88174114da0835d0" name="addcee9815bdabe3d88174114da0835d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addcee9815bdabe3d88174114da0835d0">&#9670;&#160;</a></span>inner</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structMC_1_1MoveInfo.html">MoveInfo</a>&lt;<a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, false&gt; MC::ReactorDomain::inner</td>
+          <td class="memname"><a class="el" href="structMC_1_1DomainState.html">DomainState</a>&lt;<a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, false&gt; MC::ReactorDomain::inner</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

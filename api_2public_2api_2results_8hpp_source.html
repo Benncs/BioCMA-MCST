@@ -88,20 +88,21 @@ $(function(){initNavTree('api_2public_2api_2results_8hpp_source.html','',''); })
 </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="structApiResult.html#a6b6577e957c58940438ddc4bc14f65b3">   14</a></span>  <span class="keyword">explicit</span> <span class="keyword">constexpr</span> <a class="code hl_function" href="structApiResult.html#a6b6577e957c58940438ddc4bc14f65b3">ApiResult</a>() noexcept = default;</div>
-<div class="foldopen" id="foldopen00015" data-start="{" data-end="}">
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="structApiResult.html#a401412cfead57ff16c55767754edcc5e">   15</a></span>  constexpr <span class="keywordtype">int</span> <a class="code hl_function" href="structApiResult.html#a401412cfead57ff16c55767754edcc5e">to_c_ret_code</a>()</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordflow">return</span> (<a class="code hl_function" href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">valid</a>()) ? 0 : -1;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  }</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>  constexpr <span class="keywordtype">int</span></div>
+<div class="foldopen" id="foldopen00016" data-start="{" data-end="}">
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="structApiResult.html#a401412cfead57ff16c55767754edcc5e">   16</a></span>  <a class="code hl_function" href="structApiResult.html#a401412cfead57ff16c55767754edcc5e">to_c_ret_code</a>()</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  {</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordflow">return</span> (<a class="code hl_function" href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">valid</a>()) ? 0 : -1;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  }</div>
 </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>};</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>};</div>
 </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="astructApiResult_html_a382046108c288e7e203bad665c28db1b"><div class="ttname"><a href="structApiResult.html#a382046108c288e7e203bad665c28db1b">ApiResult::ApiResult</a></div><div class="ttdeci">ApiResult(std::string_view t) noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:9</div></div>
-<div class="ttc" id="astructApiResult_html_a401412cfead57ff16c55767754edcc5e"><div class="ttname"><a href="structApiResult.html#a401412cfead57ff16c55767754edcc5e">ApiResult::to_c_ret_code</a></div><div class="ttdeci">constexpr int to_c_ret_code()</div><div class="ttdef"><b>Definition</b> results.hpp:15</div></div>
+<div class="ttc" id="astructApiResult_html_a401412cfead57ff16c55767754edcc5e"><div class="ttname"><a href="structApiResult.html#a401412cfead57ff16c55767754edcc5e">ApiResult::to_c_ret_code</a></div><div class="ttdeci">constexpr int to_c_ret_code()</div><div class="ttdef"><b>Definition</b> results.hpp:16</div></div>
 <div class="ttc" id="astructApiResult_html_a6b6577e957c58940438ddc4bc14f65b3"><div class="ttname"><a href="structApiResult.html#a6b6577e957c58940438ddc4bc14f65b3">ApiResult::ApiResult</a></div><div class="ttdeci">constexpr ApiResult() noexcept=default</div></div>
-<div class="ttc" id="astructResult_html_a11cf7bc977f5a46e32ebf166dc982239"><div class="ttname"><a href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">Result&lt; Success, std::string &gt;::valid</a></div><div class="ttdeci">constexpr bool valid() const noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:27</div></div>
+<div class="ttc" id="astructResult_html_a11cf7bc977f5a46e32ebf166dc982239"><div class="ttname"><a href="structResult.html#a11cf7bc977f5a46e32ebf166dc982239">Result&lt; Success, std::string &gt;::valid</a></div><div class="ttdeci">constexpr bool valid() const noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:29</div></div>
 <div class="ttc" id="astructResult_html_af83cd1ef963ba1bd0a72133067675a11"><div class="ttname"><a href="structResult.html#af83cd1ef963ba1bd0a72133067675a11">Result&lt; Success, std::string &gt;::Result</a></div><div class="ttdeci">constexpr Result() noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:13</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

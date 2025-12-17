@@ -21,6 +21,7 @@ var hierarchy =
     [ "DefaultModel", "structDefaultModel.html", null ],
     [ "Simulation::Feed::DelayedConstant", "structSimulation_1_1Feed_1_1DelayedConstant.html", null ],
     [ "Simulation::Dimensions", "structSimulation_1_1Dimensions.html", null ],
+    [ "MC::DomainState< ExecSpace, is_const >", "structMC_1_1DomainState.html", null ],
     [ "DynamicDefaultModel", "structDynamicDefaultModel.html", null ],
     [ "EigenKokkosBase< EigenLayout, float_type >", "structEigenKokkosBase.html", null ],
     [ "std::enable_shared_from_this", null, [
@@ -79,7 +80,6 @@ var hierarchy =
     [ "Models::Monod", "structModels_1_1Monod.html", null ],
     [ "MC::MonteCarloUnit", "structMC_1_1MonteCarloUnit.html", null ],
     [ "Simulation::KernelInline::MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", null ],
-    [ "MC::MoveInfo< ExecSpace, is_const >", "structMC_1_1MoveInfo.html", null ],
     [ "Core::DataExporter::MultiMatrixDescription", "structCore_1_1DataExporter_1_1MultiMatrixDescription.html", null ],
     [ "MC::Distributions::Normal< F >", "structMC_1_1Distributions_1_1Normal.html", null ],
     [ "OpaquePointer", "structOpaquePointer.html", null ],

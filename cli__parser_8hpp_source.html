@@ -100,33 +100,35 @@ $(function(){initNavTree('cli__parser_8hpp_source.html','',''); });
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="structCliResults.html#a17cc4717b346ddce900fe5d49c2f5b8b">   23</a></span>  <span class="keyword">explicit</span> <span class="keyword">constexpr</span> <a class="code hl_function" href="structCliResults.html#a17cc4717b346ddce900fe5d49c2f5b8b">CliResults</a>() noexcept = default;</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="foldopen" id="foldopen00025" data-start="{" data-end="}">
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="structCliResults.html#ab540fa793491d1d67c361d17fa43dc7e">   25</a></span>  explicit operator <a class="code hl_function" href="structCliResults.html#a09c1101614941851f6442bbc10f9ec76">CliResults</a>&lt;S&gt;() &amp;&amp;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>  {</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="structCliResults.html#a17cc4717b346ddce900fe5d49c2f5b8b">CliResults&lt;S&gt;</a>(std::move(*<span class="keyword">this</span>));</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  }</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  explicit</div>
+<div class="foldopen" id="foldopen00026" data-start="{" data-end="}">
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="structCliResults.html#ab540fa793491d1d67c361d17fa43dc7e">   26</a></span>  operator <a class="code hl_function" href="structCliResults.html#a09c1101614941851f6442bbc10f9ec76">CliResults</a>&lt;S&gt;() &amp;&amp;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>  {</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="structCliResults.html#a17cc4717b346ddce900fe5d49c2f5b8b">CliResults&lt;S&gt;</a>(std::move(*<span class="keyword">this</span>));</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>  }</div>
 </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="foldopen" id="foldopen00030" data-start="{" data-end="}">
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="structCliResults.html#a6f34aca7d53fc879455577e70770e02c">   30</a></span>  <span class="keyword">explicit</span> <span class="keyword">operator</span> <a class="code hl_function" href="structCliResults.html#a17cc4717b346ddce900fe5d49c2f5b8b">CliResults&lt;S&gt;</a>() const&amp;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  {</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="structCliResults.html#a17cc4717b346ddce900fe5d49c2f5b8b">CliResults&lt;S&gt;</a>(this-&gt;<a class="code hl_function" href="structResult.html#a520ef0bb676aaa7e0b4c954e38345852">get</a>());</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  }</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  <span class="keyword">explicit</span></div>
+<div class="foldopen" id="foldopen00032" data-start="{" data-end="}">
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="structCliResults.html#a6f34aca7d53fc879455577e70770e02c">   32</a></span>  <span class="keyword">operator</span> <a class="code hl_function" href="structCliResults.html#a17cc4717b346ddce900fe5d49c2f5b8b">CliResults&lt;S&gt;</a>() const&amp;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  {</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="structCliResults.html#a17cc4717b346ddce900fe5d49c2f5b8b">CliResults&lt;S&gt;</a>(this-&gt;<a class="code hl_function" href="structResult.html#a520ef0bb676aaa7e0b4c954e38345852">get</a>());</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>  }</div>
 </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>};</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>};</div>
 </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><a class="code hl_struct" href="structCliResults.html">CliResults&lt;Core::UserControlParameters&gt;</a> parse_cli(</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keyword">const</span> std::shared_ptr&lt;IO::Logger&gt;&amp; logger, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv) <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>std::string get_help_message() noexcept;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="preprocessor">#endif </span><span class="comment">//__CLI_PARSER_HPP__</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><a class="code hl_struct" href="structCliResults.html">CliResults&lt;Core::UserControlParameters&gt;</a> parse_cli(</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">const</span> std::shared_ptr&lt;IO::Logger&gt;&amp; logger, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>std::string get_help_message() noexcept;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="preprocessor">#endif </span><span class="comment">//__CLI_PARSER_HPP__</span></div>
 <div class="ttc" id="astructCliResults_html"><div class="ttname"><a href="structCliResults.html">CliResults</a></div><div class="ttdef"><b>Definition</b> cli_parser.hpp:12</div></div>
 <div class="ttc" id="astructCliResults_html_a09c1101614941851f6442bbc10f9ec76"><div class="ttname"><a href="structCliResults.html#a09c1101614941851f6442bbc10f9ec76">CliResults::CliResults</a></div><div class="ttdeci">CliResults(std::string_view t) noexcept</div><div class="ttdef"><b>Definition</b> cli_parser.hpp:13</div></div>
 <div class="ttc" id="astructCliResults_html_a17cc4717b346ddce900fe5d49c2f5b8b"><div class="ttname"><a href="structCliResults.html#a17cc4717b346ddce900fe5d49c2f5b8b">CliResults::CliResults</a></div><div class="ttdeci">constexpr CliResults() noexcept=default</div></div>
 <div class="ttc" id="astructCliResults_html_a812c8890b5a9e29c8c9db6ebb76793c0"><div class="ttname"><a href="structCliResults.html#a812c8890b5a9e29c8c9db6ebb76793c0">CliResults::CliResults</a></div><div class="ttdeci">CliResults(S &amp;&amp;value) noexcept</div><div class="ttdef"><b>Definition</b> cli_parser.hpp:18</div></div>
-<div class="ttc" id="astructResult_html_a520ef0bb676aaa7e0b4c954e38345852"><div class="ttname"><a href="structResult.html#a520ef0bb676aaa7e0b4c954e38345852">Result&lt; S, std::string &gt;::get</a></div><div class="ttdeci">constexpr auto get() const noexcept -&gt; std::string</div><div class="ttdef"><b>Definition</b> results.hpp:36</div></div>
+<div class="ttc" id="astructResult_html_a520ef0bb676aaa7e0b4c954e38345852"><div class="ttname"><a href="structResult.html#a520ef0bb676aaa7e0b4c954e38345852">Result&lt; S, std::string &gt;::get</a></div><div class="ttdeci">constexpr auto get() const noexcept -&gt; std::string</div><div class="ttdef"><b>Definition</b> results.hpp:40</div></div>
 <div class="ttc" id="astructResult_html_af83cd1ef963ba1bd0a72133067675a11"><div class="ttname"><a href="structResult.html#af83cd1ef963ba1bd0a72133067675a11">Result&lt; S, std::string &gt;::Result</a></div><div class="ttdeci">constexpr Result() noexcept</div><div class="ttdef"><b>Definition</b> results.hpp:13</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

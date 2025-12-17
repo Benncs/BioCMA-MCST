@@ -7,10 +7,10 @@ var classMC_1_1ReactorDomain =
     [ "ReactorDomain", "classMC_1_1ReactorDomain.html#ac9cd2a2070303459b9736d4aa705d39d", null ],
     [ "ReactorDomain", "classMC_1_1ReactorDomain.html#aad19328a4c70b4bd90a5b705fcfaba37", null ],
     [ "~ReactorDomain", "classMC_1_1ReactorDomain.html#a5f2e3ee22ab6fbc5d87134440a8865fe", null ],
-    [ "get_const_inner", "classMC_1_1ReactorDomain.html#a67391f9c7e21f881ac14334f2e622d65", null ],
+    [ "get_const_inner", "classMC_1_1ReactorDomain.html#a25d06d1d21a6f47b3443770c559855c0", null ],
     [ "getNumberCompartments", "classMC_1_1ReactorDomain.html#adf8edb6cba4ee63f14c48ebadb73fb2e", null ],
     [ "getTotalVolume", "classMC_1_1ReactorDomain.html#a698b6d934e68ff38263b34705babc1e7", null ],
-    [ "init_inner", "classMC_1_1ReactorDomain.html#ae9797022fe7a438c62bc84212577bc7f", null ],
+    [ "init_inner", "classMC_1_1ReactorDomain.html#ab8227f7cb4e6e748e7ab06c31233712a", null ],
     [ "load", "classMC_1_1ReactorDomain.html#a642d96bfc217576921ac8f355d921c92", null ],
     [ "operator=", "classMC_1_1ReactorDomain.html#a5b9c87cd27af77aec95a03b5b31ce8f8", null ],
     [ "operator=", "classMC_1_1ReactorDomain.html#a767b95c07cbc48f98c5841f94b564f20", null ],
@@ -21,6 +21,6 @@ var classMC_1_1ReactorDomain =
     [ "update", "classMC_1_1ReactorDomain.html#a0b2fc75ebc4dff8a7eaf9d5b3a349aff", null ],
     [ "_total_volume", "classMC_1_1ReactorDomain.html#a24d8ad20cba0324a3e0c34d82d17d9d8", null ],
     [ "id", "classMC_1_1ReactorDomain.html#acc685edcf2203fe883d8f9232784d698", null ],
-    [ "inner", "classMC_1_1ReactorDomain.html#acb6794ba856a12358b597a1118a23b18", null ],
+    [ "inner", "classMC_1_1ReactorDomain.html#addcee9815bdabe3d88174114da0835d0", null ],
     [ "size", "classMC_1_1ReactorDomain.html#ab9f99e676da2e6e1be0840ac9bea101c", null ]
 ];

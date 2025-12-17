@@ -1,7 +1,7 @@
 var classCore_1_1GlobalInitialiser =
 [
     [ "inner", "structCore_1_1GlobalInitialiser_1_1inner.html", null ],
-    [ "OptionalPtr", "classCore_1_1GlobalInitialiser.html#a6d77d0995004ab9cf3c8116fb82bc5a4", null ],
+    [ "OptionalPtr", "classCore_1_1GlobalInitialiser.html#a62b574b95334ad501c31822c5417dd82", null ],
     [ "InitStep", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbae", [
       [ "Transitioner", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeafa59184c0d82a51a129c92a9cc3e9dbe", null ],
       [ "InitState", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaea7531804ee40eed2b5a40056741d83be6", null ],
