@@ -93,21 +93,18 @@ else
   use_kokkos_tools = true
 endif
 
-
-
 cpp_args = [arch_specific_args]
 if (use_kokkos_tools)
   message('Kokkos tool enable')
   cpp_args = [cpp_args, '-DENABLE_KOKKOS_PROFILING']
 endif
 
-
 mpi = dependency('mpi', language: 'cpp', required: true)
 thread_dep = dependency('threads', required: true)
 omp = dependency('openmp')
 hwloc = dependency('hwloc')
 dl_dep = compiler.find_library('dl', required: true)
-eigen_dep= dependency('eigen3', required: true,version:'>=5.0.1')
+eigen_dep = dependency('eigen3', required: true, version: '>=5.0.1')
 blas = dependency('blas', required: false) # Eigen can work without BLAS
 cpp_args = [cpp_args, '-DEIGEN_NO_CUDA=1']
 
@@ -172,8 +169,7 @@ else
 endif
 
 kokkos_sampling = dependency('kokkos_sampling-1.0', required: true)
-magic_enum= dependency('magic_enum', required: true)
-
+# magic_enum= dependency('magic_enum', required: true)
 
 if build_udf
   dynlib_dep = dependency('dynlib-1.0', required: true)

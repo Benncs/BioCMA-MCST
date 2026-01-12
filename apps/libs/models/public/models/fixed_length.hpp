@@ -8,8 +8,6 @@
 #include "common/traits.hpp"
 #include "mc/macros.hpp"
 #include "models/utils.hpp"
-#include <magic_enum/magic_enum.hpp>
-#include <magic_enum/magic_enum_all.hpp>
 #include <mc/prng/prng_extension.hpp>
 #include <mc/traits.hpp>
 #include <string_view>
@@ -37,9 +35,11 @@ namespace Models
       length = 0,
       l_max,
       phi_s,
+      __COUNT__
     };
 
-    static constexpr std::size_t n_var = magic_enum::enum_count<particle_var>();
+    static constexpr std::size_t n_var
+        = INDEX_FROM_ENUM(particle_var::__COUNT__);
 
     static constexpr std::string_view name = "fixed-length";
     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
@@ -96,8 +96,7 @@ namespace Models
     static std::vector<std::size_t>
     get_number()
     {
-      //      return { INDEX_FROM_ENUM(particle_var::length) };
-      return { magic_enum::enum_underlying(particle_var::length) };
+      return { INDEX_FROM_ENUM(particle_var::length) };
     }
   };
 
