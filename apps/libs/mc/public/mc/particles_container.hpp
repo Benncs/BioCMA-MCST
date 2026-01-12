@@ -2,7 +2,6 @@
 #define __PARTICLES_CONTAINER_HPP__
 
 #include "Kokkos_Macros.hpp"
-#include "common/alg.hpp"
 #include <Kokkos_Core.hpp>
 #include <biocma_cst_config.hpp>
 #include <cmath>
@@ -824,14 +823,7 @@ namespace MC
   void
   ParticlesContainer<M>::_sort(std::size_t n_c)
   {
-    Sorting::sort_soa(0,
-                      n_c,
-                      n_used_elements,
-                      n_allocated_elements,
-                      position, // ref
-                      position,
-                      model,
-                      status);
+    (void)n_c;
   }
 
 } // namespace MC
