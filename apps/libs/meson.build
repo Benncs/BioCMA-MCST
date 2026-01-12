@@ -18,7 +18,7 @@ endif
 
 subdir('simulation')
 
-dep = [biomodel_dependency]
+dep = [biomodel_dependency,common_dependecy]
 cpp_args = []
 if use_dynamic_module
   # dep = [dep, py_dynamic_module]

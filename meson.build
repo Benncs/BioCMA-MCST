@@ -172,6 +172,8 @@ else
 endif
 
 kokkos_sampling = dependency('kokkos_sampling-1.0', required: true)
+magic_enum= dependency('magic_enum', required: true)
+
 
 if build_udf
   dynlib_dep = dependency('dynlib-1.0', required: true)

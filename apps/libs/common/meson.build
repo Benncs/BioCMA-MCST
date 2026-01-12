@@ -13,11 +13,11 @@ common_lib = static_library(
    f'@project_name@_common',
    common_sources,
    include_directories: incdirs,
-   dependencies: [kokkos],
+   dependencies: [kokkos,magic_enum],
 )
 
 common_dependecy = declare_dependency(
-   dependencies:[kokkos],
+   dependencies:[kokkos,magic_enum],
    include_directories: public_includes,
    link_with: common_lib,
    link_args: [flto_flag]
