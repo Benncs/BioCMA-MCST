@@ -99,9 +99,9 @@ check(std::vector<double>& theoretical,
 void
 fast_uniform_batch()
 {
-  constexpr size_t n_sample
-      = 10'000; std::vector<double> samples(n_sample); std::vector<double> theoretical(
-          n_sample);
+  constexpr size_t n_sample = 10'000;
+  std::vector<double> samples(n_sample);
+  std::vector<double> theoretical(n_sample);
   std::vector<double> std_sample(n_sample);
 
   std::mt19937 seed(std::random_device{}());

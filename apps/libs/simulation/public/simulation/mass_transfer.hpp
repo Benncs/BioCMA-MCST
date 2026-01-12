@@ -64,7 +64,7 @@ namespace Simulation::MassTransfer
 
     [[nodiscard]] const std::shared_ptr<MassTransferProxy>& proxy() const;
 
-    [[nodiscard]] std::optional<std::span<const double> > mtr_data() const;
+    [[nodiscard]] std::optional<std::span<const double>> mtr_data() const;
 
     MassTransferModel(MassTransferModel&& rhs) noexcept;
     MassTransferModel& operator=(MassTransferModel&& rhs) noexcept;

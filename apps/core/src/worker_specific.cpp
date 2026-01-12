@@ -24,7 +24,7 @@ workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
 
   WrapMPI::IterationPayload payload(n_compartments);
 
-  const auto export_callback = [&](const auto& container)
+  const auto export_callback = [&]([[maybe_unused]] const auto& container)
   {
     PROFILE_SECTION("worker:dump")
     partial_exporter.write_number_particle(

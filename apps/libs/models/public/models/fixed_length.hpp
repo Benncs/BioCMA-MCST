@@ -17,8 +17,9 @@
 namespace Models
 {
   template <FloatingPointType F>
-  static F consteval
-  _get_phi_s_max(F density, F dl, F glucose_to_biomass_yield = 0.5)
+  static F consteval _get_phi_s_max(F density,
+                                    F dl,
+                                    F glucose_to_biomass_yield = 0.5)
   {
     // dl and density must be same unit, dl*density -> mass and y is mass yield
     return (dl * density) / glucose_to_biomass_yield;
@@ -39,7 +40,7 @@ namespace Models
     };
 
     static constexpr std::size_t n_var = magic_enum::enum_count<particle_var>();
-    ;
+
     static constexpr std::string_view name = "fixed-length";
     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
 

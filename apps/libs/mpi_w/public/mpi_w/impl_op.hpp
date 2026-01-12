@@ -156,7 +156,7 @@ namespace WrapMPI
    * empty if the operation fails.
    */
   template <POD_t T>
-  std::optional<std::vector<T> >
+  std::optional<std::vector<T>>
   recv_v(size_t source, MPI_Status* status = nullptr, size_t tag = 0) noexcept;
 
   /**
@@ -356,7 +356,7 @@ namespace WrapMPI
   }
 
   template <POD_t T>
-  std::optional<std::vector<T> >
+  std::optional<std::vector<T>>
   recv_v(size_t source, MPI_Status* status, size_t tag) noexcept
   {
     std::vector<T> buf;
@@ -611,7 +611,7 @@ namespace WrapMPI
           {
             size_t s = 0;
             void* buf = nullptr;
-            if constexpr (std::is_same_v<std::decay_t<T>, std::span<double> >)
+            if constexpr (std::is_same_v<std::decay_t<T>, std::span<double>>)
             {
               s = arg.size();
               buf = arg.data();

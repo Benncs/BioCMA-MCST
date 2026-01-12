@@ -75,7 +75,7 @@ namespace Api
      * @return An optional containing a unique pointer to the instance if
      * successful, or std::nullopt if initialization failed.
      */
-    static std::optional<std::unique_ptr<SimulationInstance> >
+    static std::optional<std::unique_ptr<SimulationInstance>>
     init(int argc,
          char** argv,
          std::optional<std::size_t> run_id = std::nullopt) noexcept;

@@ -108,7 +108,7 @@ namespace
     KOKKOS_INLINE_FUNCTION
     void
     operator()(const int i, double& local_mass) const
-        requires(ConfigurableModel<Model>)
+      requires(ConfigurableModel<Model>)
     {
       particles.position(i) = rng.uniform_u(min_c, max_c);
       Model::init(rng.random_pool, i, particles.model, config);
@@ -119,7 +119,7 @@ namespace
     KOKKOS_INLINE_FUNCTION
     void
     operator()(const int i, double& local_mass) const
-        requires(NonConfigurableModel<Model>)
+      requires(NonConfigurableModel<Model>)
     {
       particles.position(i) = rng.uniform_u(min_c, max_c);
       Model::init(rng.random_pool, i, particles.model);

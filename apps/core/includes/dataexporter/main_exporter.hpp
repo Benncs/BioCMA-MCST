@@ -2,7 +2,7 @@
 #define __CORE_MAIN_EXPORTER_HPP__
 
 #include "mc/events.hpp"
-#include "simulation/simulation.hpp"
+
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
@@ -13,6 +13,13 @@
 #include <string>
 #include <string_view>
 #include <vector>
+
+namespace Simulation
+{
+  class SimulationUnit;
+
+}
+
 namespace Core
 {
   /**
@@ -62,7 +69,7 @@ namespace Core
      * @param distribution Final distribution of particles or entities across
      * compartments.
      */
-    void write_final(Simulation::SimulationUnit& simulation,
+    void write_final(const Simulation::SimulationUnit* simulation,
                      std::size_t number_particles);
 
     /**
@@ -90,14 +97,13 @@ namespace Core
      * concentrations.
      * @param volume_gas Optional span of doubles for gas phase volumes.
      */
-    void
-    update_fields(double t,
-                  std::span<double> concentration_liquid,
-                  std::span<const double> liquid_volume,
-                  std::optional<std::span<const double> > concentration_gas,
-                  std::optional<std::span<const double> > volume_gas,
-                  std::optional<std::span<const double> > mtr,
-                  std::optional<std::span<std::size_t> > events);
+    void update_fields(double t,
+                       std::span<double> concentration_liquid,
+                       std::span<const double> liquid_volume,
+                       std::optional<std::span<const double>> concentration_gas,
+                       std::optional<std::span<const double>> volume_gas,
+                       std::optional<std::span<const double>> mtr,
+                       std::optional<std::span<std::size_t>> events);
 
   private:
     static const std::string

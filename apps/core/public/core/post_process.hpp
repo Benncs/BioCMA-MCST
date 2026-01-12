@@ -21,7 +21,7 @@ namespace PostProcessing
   {
     ParticlePropertyViewType<HostSpace> particle_values;
     ParticlePropertyViewType<HostSpace> spatial_values;
-    std::optional<ParticlePropertyViewType<HostSpace> > ages;
+    std::optional<ParticlePropertyViewType<HostSpace>> ages;
     std::vector<std::string> vnames;
   };
 
@@ -51,7 +51,7 @@ namespace PostProcessing
       KOKKOS_INLINE_FUNCTION
       void
       operator()(const int i_particle) const
-          requires(HasExportPropertiesFull<Model>)
+        requires(HasExportPropertiesFull<Model>)
       {
         if (status(i_particle) != MC::Status::Idle)
         {
@@ -76,7 +76,7 @@ namespace PostProcessing
       KOKKOS_INLINE_FUNCTION
       void
       operator()(const int i_particle) const
-          requires(HasExportPropertiesPartial<Model>)
+        requires(HasExportPropertiesPartial<Model>)
       {
         if (status(i_particle) != MC::Status::Idle)
         {

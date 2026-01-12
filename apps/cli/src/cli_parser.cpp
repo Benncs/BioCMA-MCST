@@ -104,7 +104,7 @@ parseArg(Core::UserControlParameters& user_control,
 
   // Create a map to associate options with corresponding actions (lambdas)
   static const std::unordered_map<std::string_view,
-                                  std::function<void(std::string_view)> >
+                                  std::function<void(std::string_view)>>
       param_handlers
       = { { "er",
             [&user_control](std::string_view value)

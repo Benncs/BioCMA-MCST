@@ -36,31 +36,19 @@ namespace Models
     return x / (x + k);
   }
 
-  template <typename T> concept UptakeModel = requires(T model)
-  {
+  template <typename T>
+  concept UptakeModel = requires(T model) {
     // { T::NPermease_init } -> std::convertible_to<typename T::FloatType>;
 
     // { T::NPermease_max } -> std::convertible_to<typename T::FloatType>;
 
-    {
-      T::k
-    } -> std::convertible_to<typename T::FloatType>;
-    {
-      T::k_perm
-    } -> std::convertible_to<typename T::FloatType>;
+    { T::k } -> std::convertible_to<typename T::FloatType>;
+    { T::k_perm } -> std::convertible_to<typename T::FloatType>;
 
-    {
-      T::beta
-    } -> std::convertible_to<typename T::FloatType>;
-    {
-      T::tau_ap_1
-    } -> std::convertible_to<typename T::FloatType>;
-    {
-      T::tau_ap_2
-    } -> std::convertible_to<typename T::FloatType>;
-    {
-      T::tau_ap_2
-    } -> std::convertible_to<typename T::FloatType>;
+    { T::beta } -> std::convertible_to<typename T::FloatType>;
+    { T::tau_ap_1 } -> std::convertible_to<typename T::FloatType>;
+    { T::tau_ap_2 } -> std::convertible_to<typename T::FloatType>;
+    { T::tau_ap_2 } -> std::convertible_to<typename T::FloatType>;
 
     // { T::tau_new_permease } -> std::convertible_to<typename T::FloatType>;
 

@@ -223,7 +223,7 @@ set_scalar_buffer(Handle handle,
     std::span<double> liquid_span(liquid, buffer_size);
     std::vector<double> liq(liquid_span.begin(), liquid_span.end());
 
-    std::optional<std::vector<double> > gas = std::nullopt;
+    std::optional<std::vector<double>> gas = std::nullopt;
     if (gas_ptr != nullptr)
     {
       std::span<double> gas_span(gas_ptr, buffer_size);

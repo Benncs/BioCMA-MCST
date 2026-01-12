@@ -14,7 +14,7 @@ namespace WrapMPI
   {
     MPI_Datatype datatype{};
 
-    using _type = std::remove_const_t<std::remove_reference_t<T> >;
+    using _type = std::remove_const_t<std::remove_reference_t<T>>;
 
     if constexpr (std::is_same_v<_type, size_t>)
     {

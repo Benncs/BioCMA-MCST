@@ -89,7 +89,7 @@ namespace Core
       std::string name;             ///< Dataset name
       std::vector<size_t> dims;     ///< Dataset dimensions
       std::vector<size_t> max_dims; ///< Expected dataset max dimensions
-      std::optional<std::vector<unsigned long long> >
+      std::optional<std::vector<unsigned long long>>
           chunk_dims;   ///< Data chunk along each dimension
       bool compression; ///< Matrix data has to be compressed or not
       bool is_integer;  ///< Matrix data is integer type or floating point

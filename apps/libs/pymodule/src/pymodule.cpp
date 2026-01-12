@@ -24,7 +24,7 @@ PYBIND11_EMBEDDED_MODULE(cpp_module, m)
 void
 declare_opaque(py::module& m)
 {
-  py::class_<OpaquePointer, std::shared_ptr<OpaquePointer> >(
+  py::class_<OpaquePointer, std::shared_ptr<OpaquePointer>>(
       m, "OpaquePointer", py::call_guard<py::gil_scoped_release>())
       .def(py::init<>())
 

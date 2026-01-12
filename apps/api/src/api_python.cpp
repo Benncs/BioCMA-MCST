@@ -91,14 +91,14 @@ namespace PythonBindings
   set_initialiser_from_data(std::shared_ptr<Api::SimulationInstance>& handle,
                             std::size_t n_species,
                             const py::array_t<double_t>&& py_liquid,
-                            std::optional<py::array_t<double_t> >&& py_gas)
+                            std::optional<py::array_t<double_t>>&& py_gas)
 
   {
     auto buf = py_liquid.request();
     std::span<double> data(static_cast<double*>(buf.ptr), buf.size);
     std::vector<double> liq(data.begin(), data.end());
 
-    std::optional<std::vector<double> > gas = std::nullopt;
+    std::optional<std::vector<double>> gas = std::nullopt;
     if (py_gas.has_value())
     {
       auto buf = py_gas->request();
@@ -170,8 +170,8 @@ namespace PythonBindings
 PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 {
   // Wrapping the Handle structure
-  py::class_<Api::SimulationInstance,
-             std::shared_ptr<Api::SimulationInstance> >(m, "Handle");
+  py::class_<Api::SimulationInstance, std::shared_ptr<Api::SimulationInstance>>(
+      m, "Handle");
 
   m.def("get_version", Api::get_version);
 

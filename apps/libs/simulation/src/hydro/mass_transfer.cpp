@@ -161,12 +161,12 @@ namespace Simulation::MassTransfer
                   * liquid_volume;
   }
 
-  std::optional<std::span<const double> >
+  std::optional<std::span<const double>>
   MassTransferModel::mtr_data() const
   {
     if (_proxy != nullptr)
     {
-      return std::make_optional<std::span<const double> >(
+      return std::make_optional<std::span<const double>>(
           { _proxy->mtr.data(), static_cast<size_t>(_proxy->mtr.size()) });
     }
     return std::nullopt;

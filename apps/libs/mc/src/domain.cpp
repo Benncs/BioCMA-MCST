@@ -87,7 +87,7 @@ namespace MC
         const std::size_t**,
         Kokkos::LayoutRight,
         HostSpace,
-        Kokkos::MemoryTraits<Kokkos::RandomAccess | Kokkos::Unmanaged> >;
+        Kokkos::MemoryTraits<Kokkos::RandomAccess | Kokkos::Unmanaged>>;
 
     KOKKOS_ASSERT(e1 * e2 == flat_data.size() && flat_data.size() % e1 == 0);
     const auto* chunk = flat_data.data();

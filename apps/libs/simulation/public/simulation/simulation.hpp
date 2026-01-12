@@ -83,10 +83,10 @@ namespace Simulation
     [[nodiscard]] double& get_end_time_mut();
     [[nodiscard]] Dimensions getDimensions() const noexcept;
     [[nodiscard]] std::span<double> getCliqData() const;
-    [[nodiscard]] std::optional<std::span<const double> > getCgasData() const;
+    [[nodiscard]] std::optional<std::span<const double>> getCgasData() const;
     [[nodiscard]] std::span<const double> getContributionData() const;
     [[nodiscard]] bool two_phase_flow() const;
-    [[nodiscard]] std::optional<std::span<const double> > getMTRData() const;
+    [[nodiscard]] std::optional<std::span<const double>> getMTRData() const;
     std::span<double> getContributionData_mut();
 
     // Simulation methods

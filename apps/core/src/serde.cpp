@@ -106,7 +106,7 @@ namespace SerDe
 
       auto cgas = case_data.simulation->getCgasData();
 
-      std::optional<std::vector<double> > cgas_a
+      std::optional<std::vector<double>> cgas_a
           = cgas.has_value() ? std::make_optional(std::vector<double>(
                                    cgas->begin(), cgas->end()))
                              : std::nullopt;
@@ -140,7 +140,7 @@ namespace SerDe
     uint64_t np = 0;
     Simulation::Dimensions dims;
     std::vector<double> read_c_liq;
-    std::optional<std::vector<double> > read_c_gas;
+    std::optional<std::vector<double>> read_c_gas;
     double start_time{};
     ar(np, dims, read_c_liq, read_c_gas, start_time);
 

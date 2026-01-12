@@ -71,7 +71,7 @@ private:
    * @param simulation The simulation unit.
    * @return Optional span of event counts.
    */
-  static std::optional<std::span<std::size_t> >
+  static std::optional<std::span<std::size_t>>
   prepareEventSpan(Simulation::SimulationUnit& simulation);
 
   IO::ProgressBar progressbar;

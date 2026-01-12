@@ -122,7 +122,7 @@ namespace Simulation
     return this->liquid_scalar->getConcentrationData();
   }
 
-  [[nodiscard]] std::optional<std::span<const double> >
+  [[nodiscard]] std::optional<std::span<const double>>
   SimulationUnit::getCgasData() const
   {
     if (!gas_scalar)
@@ -139,7 +139,7 @@ namespace Simulation
              .n_compartment = this->liquid_scalar->n_col() };
   }
 
-  [[nodiscard]] std::optional<std::span<const double> >
+  [[nodiscard]] std::optional<std::span<const double>>
   SimulationUnit::getMTRData() const
   {
     return this->mt_model.mtr_data();

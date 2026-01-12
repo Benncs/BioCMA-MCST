@@ -366,7 +366,7 @@ namespace Simulation::KernelInline
 
         if (is_leaving)
         {
-          probes.set(ages(idx, 0));
+          const auto _ = probes.set(ages(idx, 0));
         }
 
         // if (is_leaving && !probes.set(probe_value))

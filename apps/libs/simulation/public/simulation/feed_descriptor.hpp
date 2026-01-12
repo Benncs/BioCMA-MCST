@@ -24,7 +24,8 @@ enum class FeedType : std::uint8_t
 };
 
 template <typename T>
-constexpr decltype(auto) move_allow_trivial(T&& t) noexcept
+constexpr decltype(auto)
+move_allow_trivial(T&& t) noexcept
 {
   return std::move(t); // NOLINT
 }
@@ -107,8 +108,8 @@ namespace Simulation::Feed
   class SimulationFeed
   {
   public:
-    std::optional<std::vector<FeedDescriptor> > liquid;
-    std::optional<std::vector<FeedDescriptor> > gas;
+    std::optional<std::vector<FeedDescriptor>> liquid;
+    std::optional<std::vector<FeedDescriptor>> gas;
 
     void add_liquid(FeedDescriptor&& fd);
 

@@ -144,7 +144,7 @@ namespace Api
     udf_handle.reset();
   }
 
-  std::optional<std::unique_ptr<SimulationInstance> >
+  std::optional<std::unique_ptr<SimulationInstance>>
   SimulationInstance::init(int argc,
                            char** argv,
                            std::optional<std::size_t> run_id) noexcept

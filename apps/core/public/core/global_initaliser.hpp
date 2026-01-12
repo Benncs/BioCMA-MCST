@@ -46,8 +46,7 @@ namespace Core
      * This template alias provides a way to represent an optional ownership of
      * a unique pointer of type T.
      */
-    template <typename T>
-    using OptionalPtr = std::optional<std::unique_ptr<T> >;
+    template <typename T> using OptionalPtr = std::optional<std::unique_ptr<T>>;
 
     /**
      * @brief Constructs a GlobalInitialiser instance.

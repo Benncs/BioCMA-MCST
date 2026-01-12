@@ -141,7 +141,7 @@ namespace Simulation::KernelInline
     void
     operator()(const TagContribution _tag, const TeamMember& team) const
     {
-      // (void)_tag;
+      (void)_tag;
       // std ::size_t idx = (team_handle.league_rank() *
       // team_handle.team_size()) +
       //                    team_handle.team_rank();

@@ -8,7 +8,8 @@ namespace CommonMaths
 
   template <bool use_kokkos_log>
   KOKKOS_INLINE_FUNCTION float
-  _ln(float x) requires(!use_kokkos_log)
+  _ln(float x)
+    requires(!use_kokkos_log)
   {
     // NOLINTBEGIN
     unsigned int bx = *reinterpret_cast<unsigned int*>(&x);
@@ -25,7 +26,8 @@ namespace CommonMaths
 
   template <bool use_kokkos_log>
   KOKKOS_INLINE_FUNCTION float
-  _ln(float x) requires(use_kokkos_log)
+  _ln(float x)
+    requires(use_kokkos_log)
   {
     return Kokkos::log(x);
   }

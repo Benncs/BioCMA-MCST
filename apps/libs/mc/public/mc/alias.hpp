@@ -88,8 +88,8 @@ namespace MC
                         decltype(Kokkos::ALL),
                         std::size_t>;
 
-  using ContributionView = decltype(
-      Kokkos::Experimental::create_scatter_view(kernelContribution()));
+  using ContributionView = decltype(Kokkos::Experimental::create_scatter_view(
+      kernelContribution()));
 
   //   using contribution_op = Kokkos::Experimental::ScatterSum;
   //   using contribution_dup = Kokkos::Experimental::ScatterNonDuplicated;
@@ -105,7 +105,7 @@ namespace MC
       = Kokkos::View<const double**,
                      Kokkos::LayoutLeft,
                      ComputeSpace,
-                     Kokkos::MemoryTraits<Kokkos::RandomAccess> >;
+                     Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
   using LocalConcentration
       = Kokkos::Subview<KernelConcentrationType, int, decltype(Kokkos::ALL)>;
 
@@ -121,8 +121,8 @@ namespace MC
       is_const,
       Kokkos::View<const double*,
                    ExecSpace,
-                   Kokkos::MemoryTraits<Kokkos::RandomAccess> >,
-      Kokkos::View<double*, ExecSpace> >;
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>,
+      Kokkos::View<double*, ExecSpace>>;
 
   template <class ExecSpace, bool is_const>
   using DiagonalView = std::conditional_t<
@@ -130,14 +130,14 @@ namespace MC
       Kokkos::View<const double*,
                    Kokkos::LayoutLeft,
                    ExecSpace,
-                   Kokkos::MemoryTraits<Kokkos::RandomAccess> >,
-      Kokkos::View<double*, Kokkos::LayoutLeft, ExecSpace> >;
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>,
+      Kokkos::View<double*, Kokkos::LayoutLeft, ExecSpace>>;
 
   template <bool is_const>
   using LeavingFlowView = std::conditional_t<
       is_const,
       Kokkos::View<const LeavingFlow*, Kokkos::SharedHostPinnedSpace>,
-      Kokkos::View<LeavingFlow*, Kokkos::SharedHostPinnedSpace> >;
+      Kokkos::View<LeavingFlow*, Kokkos::SharedHostPinnedSpace>>;
 
   template <class ExecSpace, bool is_const>
   using CumulativeProbabilityView = std::conditional_t<
@@ -145,8 +145,8 @@ namespace MC
       Kokkos::View<const double**,
                    Kokkos::LayoutRight,
                    ExecSpace,
-                   Kokkos::MemoryTraits<Kokkos::RandomAccess> >,
-      Kokkos::View<double**, Kokkos::LayoutRight, ExecSpace> >;
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>,
+      Kokkos::View<double**, Kokkos::LayoutRight, ExecSpace>>;
 
   template <class ExecSpace, bool is_const>
   using NeighborsView = std::conditional_t<
@@ -154,8 +154,8 @@ namespace MC
       Kokkos::View<const std::size_t**,
                    Kokkos::LayoutRight,
                    ExecSpace,
-                   Kokkos::MemoryTraits<Kokkos::RandomAccess> >,
-      Kokkos::View<std::size_t**, Kokkos::LayoutRight, ExecSpace> >;
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>,
+      Kokkos::View<std::size_t**, Kokkos::LayoutRight, ExecSpace>>;
 
 }; // namespace MC
 // FIXME

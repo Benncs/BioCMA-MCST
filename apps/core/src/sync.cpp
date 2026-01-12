@@ -84,9 +84,9 @@ sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
 }
 
 void
-sync_prepare_next(const ExecInfo& exec,
+sync_prepare_next([[maybe_unused]] const ExecInfo& exec,
                   Simulation::SimulationUnit& simulation,
-                  MPI_Request* request)
+                  [[maybe_unused]] MPI_Request* request)
 {
   PROFILE_SECTION("sync_prepare_next")
   simulation.clearContribution();
@@ -101,12 +101,12 @@ sync_prepare_next(const ExecInfo& exec,
     // In multiple rank context, we also need to broadcast the updated liquid
     // concentration computed by the host during the current step
 
+// We can use span here because we broadcast without changing size
+#ifndef NO_MPI
     auto data
         = simulation.getCliqData(); // Get concentration ptr wrapped into span
 
     WrapMPI::barrier();
-// We can use span here because we broadcast without changing size
-#ifndef NO_MPI
     WrapMPI::Async::broadcast_span(data, 0, *request);
 #endif
   }

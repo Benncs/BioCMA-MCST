@@ -50,21 +50,13 @@ namespace MC::Distributions
   template <typename T, typename F, class DeviceType>
   concept ProbabilityLaw
       = FloatingPointType<F>
-        && requires(const T& obj, Kokkos::Random_XorShift1024<DeviceType>& gen)
-  {
-    {
-      obj.draw(gen)
-    } -> std::same_as<F>;
-    {
-      obj.mean()
-    } -> std::same_as<F>;
-    {
-      obj.var()
-    } -> std::same_as<F>;
-    {
-      obj.skewness()
-    } -> std::same_as<F>;
-  };
+        && requires(const T& obj,
+                    Kokkos::Random_XorShift1024<DeviceType>& gen) {
+             { obj.draw(gen) } -> std::same_as<F>;
+             { obj.mean() } -> std::same_as<F>;
+             { obj.var() } -> std::same_as<F>;
+             { obj.skewness() } -> std::same_as<F>;
+           };
 
   /**
   @brief Computes an approximation of the inverse error function.
@@ -368,8 +360,7 @@ namespace MC::Distributions
 
     TruncatedNormal() = default;
 
-    KOKKOS_INLINE_FUNCTION constexpr
-    TruncatedNormal(F m, F s, F l, F u)
+    KOKKOS_INLINE_FUNCTION constexpr TruncatedNormal(F m, F s, F l, F u)
         : mu(m), sigma(s), lower(l), upper(u)
     {
       X_ASSERT(mu > lower);
@@ -471,8 +462,7 @@ namespace MC::Distributions
     F inverse_factor;
     TruncatedNormal<F> dist;
 
-    constexpr
-    ScaledTruncatedNormal(F factor, F m, F s, F l, F u)
+    constexpr ScaledTruncatedNormal(F factor, F m, F s, F l, F u)
         : scale_factor(factor), inverse_factor(1. / scale_factor),
           dist(scale_factor * m,
                s * scale_factor,

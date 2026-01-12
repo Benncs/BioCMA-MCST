@@ -1,4 +1,5 @@
 #include "biocma_cst_config.hpp"
+#include "simulation/simulation.hpp"
 #include <common/execinfo.hpp>
 #include <cstddef>
 #include <cstdint>
@@ -10,7 +11,6 @@
 #include <string>
 #include <string_view>
 #include <utility>
-
 namespace Core
 {
   const std::string MainExporter::base_group_name = "records/";
@@ -122,10 +122,10 @@ namespace Core
       double t,
       std::span<double> concentration_liquid,
       std::span<const double> liquid_volume,
-      std::optional<std::span<const double> > concentration_gas,
-      std::optional<std::span<const double> > volume_gas,
-      std::optional<std::span<const double> > mtr,
-      std::optional<std::span<std::size_t> > events)
+      std::optional<std::span<const double>> concentration_gas,
+      std::optional<std::span<const double>> volume_gas,
+      std::optional<std::span<const double>> mtr,
+      std::optional<std::span<std::size_t>> events)
   {
 
     if (export_counter >= n_expected_export)
@@ -157,11 +157,11 @@ namespace Core
   }
 
   void
-  MainExporter::write_final(Simulation::SimulationUnit& simulation,
+  MainExporter::write_final(const Simulation::SimulationUnit* const simulation,
                             std::size_t number_particles)
   {
-    ;
-    const auto& event = simulation.mc_unit->events;
+
+    const auto& event = simulation->mc_unit->events;
 
     export_initial_kv final_values;
     final_values["number_particles"] = number_particles;
@@ -176,17 +176,17 @@ namespace Core
       final_values["events/total_exit"] = event.get<MC::EventType::Exit>();
     }
 
-    const auto [n_row, n_col] = simulation.getDimensions();
+    const auto [n_row, n_col] = simulation->getDimensions();
 
     write_simple(final_values, "final_result/");
 
     write_matrix("final_result/concentration_liquid",
-                 simulation.getCliqData(),
+                 simulation->getCliqData(),
                  n_row,
                  n_col,
                  true);
 
-    auto opt_gas = simulation.getCgasData();
+    auto opt_gas = simulation->getCgasData();
     if (opt_gas.has_value())
     {
       write_matrix(

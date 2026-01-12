@@ -62,7 +62,7 @@ static bool override_result_path(const std::shared_ptr<IO::Logger>& logger,
 static int parse_callback_ok(
     std::shared_ptr<IO::Logger>&& logger,
     Core::UserControlParameters&& user_params,
-    std::optional<std::unique_ptr<Api::SimulationInstance> >& handle);
+    std::optional<std::unique_ptr<Api::SimulationInstance>>& handle);
 static std::string log_start_up();
 int
 main(int argc, char** argv)
@@ -108,7 +108,7 @@ int
 parse_callback_ok(
     std::shared_ptr<IO::Logger>&& logger,
     Core::UserControlParameters&& user_params,
-    std::optional<std::unique_ptr<Api::SimulationInstance> >& handle)
+    std::optional<std::unique_ptr<Api::SimulationInstance>>& handle)
 {
 
   auto& h = *handle;

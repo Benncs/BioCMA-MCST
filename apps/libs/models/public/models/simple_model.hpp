@@ -13,8 +13,7 @@
 namespace Models
 {
   template <FloatingPointType F>
-  static F consteval
-  get_phi_s_max(F density, F dl)
+  static F consteval get_phi_s_max(F density, F dl)
   {
     // dl and density must be same unit, dl*density -> mass and y is mass yield
     return (dl * density) * 0.5;
