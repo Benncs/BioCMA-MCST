@@ -26,9 +26,9 @@ namespace
 
   constexpr FloatType l_dot_max = 2e-6 / 3600.; // m
   constexpr FloatType l_max_m = 2e-6;           // m
-  constexpr FloatType l_min_m = l_max_m / 2.;   // m
-  constexpr FloatType k = 1e-3;                 // m
-  constexpr FloatType d_m = 0.6e-6;             // m
+  // constexpr FloatType l_min_m = l_max_m / 2.;   // m
+  constexpr FloatType k = 1e-3;     // m
+  constexpr FloatType d_m = 0.6e-6; // m
   constexpr FloatType lin_density
       = c_linear_density(static_cast<FloatType>(1000), d_m);
 
@@ -124,6 +124,7 @@ namespace
   UdfModel::Config
   _get_config_udf(Kokkos::DefaultHostExecutionSpace& ep, const std::size_t n)
   {
+    (void)ep;
     (void)n;
     Kokkos::ScopeGuard g{};
 

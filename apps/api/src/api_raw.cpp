@@ -31,6 +31,7 @@ apply(Handle handle, int to_load)
 {
   if (handle != nullptr)
   {
+    handle->set_auto_mtr();                // FIXME
     auto rc = handle->apply(to_load != 0); // TODO HANDLE ERROR
     if (!rc)
     {

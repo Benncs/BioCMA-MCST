@@ -257,7 +257,7 @@ namespace Core
     {
     };
     /////INNER STRUCT
-    uint64_t particle_per_process;
+    // uint64_t particle_per_process;
     std::vector<double> liquid_volume;
     std::vector<double> gas_volume;
     // CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors;

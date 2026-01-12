@@ -92,7 +92,8 @@ namespace Core
                                        UserControlParameters _user_params,
                                        std::shared_ptr<IO::Logger> _logger)
       : info(_info), user_params(std::move(_user_params)),
-        particle_per_process(0), is_host(info.current_rank == 0)
+        // particle_per_process(0)
+        is_host(info.current_rank == 0)
 
   {
     set_logger(std::move(_logger));

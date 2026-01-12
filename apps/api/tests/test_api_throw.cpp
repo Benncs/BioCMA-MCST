@@ -8,6 +8,8 @@
 void*
 operator new(std::size_t size, const std::nothrow_t& nothrow_value) noexcept
 {
+  (void)size;
+  (void)nothrow_value;
   return nullptr;
 }
 int

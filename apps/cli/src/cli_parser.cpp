@@ -16,7 +16,7 @@
 static CliResults<Core::UserControlParameters>
 sanitise_check_cli(Core::UserControlParameters&& params);
 static void print_red(std::ostream& os, std::string_view message);
-static void throw_bad_arg(std::string_view arg);
+// static void throw_bad_arg(std::string_view arg);
 
 static CliResults<Core::UserControlParameters>
 parseArg(Core::UserControlParameters& user_controll,
@@ -333,10 +333,10 @@ print_red(std::ostream& os, std::string_view message)
   os << "\033[1;31m" << message << "\033[0m"; // ANSI escape code for red color
 }
 
-static void
-throw_bad_arg(std::string_view arg)
-{
-  std::string msg = "Unknown argument: ";
-  msg += std::string(arg);
-  throw std::invalid_argument(msg);
-}
+// static void
+// throw_bad_arg(std::string_view arg)
+// {
+//   std::string msg = "Unknown argument: ";
+//   msg += std::string(arg);
+//   throw std::invalid_argument(msg);
+// }

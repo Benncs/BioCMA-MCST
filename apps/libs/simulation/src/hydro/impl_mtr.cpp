@@ -171,11 +171,11 @@ namespace Simulation::MassTransfer
 
     void
     flowmap_kla_gas_liquid_mass_transfer(
-        MassTransferProxy& mtr,
-        const Eigen::ArrayXXd& liquid_concentration,
-        const Eigen::ArrayXXd& gas_concentration,
-        const Eigen::MatrixXd& liquid_volume,
-        const CmaUtils::IterationStatePtrType& state)
+        [[maybe_unused]] MassTransferProxy& mtr,
+        [[maybe_unused]] const Eigen::ArrayXXd& liquid_concentration,
+        [[maybe_unused]] const Eigen::ArrayXXd& gas_concentration,
+        [[maybe_unused]] const Eigen::MatrixXd& liquid_volume,
+        [[maybe_unused]] const CmaUtils::IterationStatePtrType& state)
     {
       // const auto kla = state.infos.at("kla");
       throw std::runtime_error(
