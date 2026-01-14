@@ -26,7 +26,7 @@ namespace MC
     uint64_t minimum_dead_particle_removal{};
     double buffer_ratio{};
     double allocation_factor = {};
-    double shink_ratio{};
+    double shrink_ratio{};
     double dead_particle_ratio_threshold{};
 
     template <class Archive>
@@ -36,7 +36,7 @@ namespace MC
       ar(minimum_dead_particle_removal,
          buffer_ratio,
          allocation_factor,
-         shink_ratio,
+         shrink_ratio,
          dead_particle_ratio_threshold);
     }
   };
@@ -410,20 +410,6 @@ namespace MC
             buffer_position(std::move(_buffer_position))
       {
       }
-
-      // KOKKOS_INLINE_FUNCTION void operator()(const int i) const
-      // {
-      //   position(original_size + i) = buffer_position(i);
-      //   for (std::size_t j = 0; j < M::n_var; ++j)
-      //   {
-      //     model(original_size + i, j) = buffer_model(i, j);
-      //   }
-      // }
-
-      // TODO try this functor
-      // TODO find a way to organise data to not copy non needed  data (like
-      // contribs). Split model in two arrays?
-
       KOKKOS_INLINE_FUNCTION
       void
       operator()(const TeamMember& team) const
@@ -574,7 +560,6 @@ namespace MC
         static_cast<uint64_t>(static_cast<double>(n_used_elements)
                               * rt_params.dead_particle_ratio_threshold));
 
-    // TODO: May change threshold as container is now cleaned before exporting,
     if (inactive_counter > _threshold)
     {
       this->remove_inactive_particles(inactive_counter);
@@ -669,51 +654,63 @@ namespace MC
     }
   }
 
+  // template <ModelType Model>
+  // void
+  // ParticlesContainer<Model>::__allocate_buffer__()
+  // {
+  //   PROFILE_SECTION("ParticlesContainer::__allocate_buffer__")
+
+  //   std::size_t buffer_size = buffer_position.extent(0);
+
+  //   const double tmp = rt_params.buffer_ratio * n_allocated_elements;
+
+  //   const std::size_t buffer_threshold = static_cast<std::size_t>(tmp);
+
+  //   if (buffer_size < buffer_threshold)
+  //   {
+  //     buffer_size = static_cast<std::size_t>(
+  //         std::ceil(rt_params.buffer_ratio * n_allocated_elements));
+
+  //     // Realloc because not needed to keep buffer as it has been copied
+  //     Kokkos::realloc(buffer_position, buffer_size);
+  //     Kokkos::realloc(buffer_model, buffer_size, Model::n_var);
+  //     buffer_index() = 0;
+  //   }
+  // }
+
   template <ModelType Model>
   void
   ParticlesContainer<Model>::__allocate_buffer__()
   {
     PROFILE_SECTION("ParticlesContainer::__allocate_buffer__")
-    auto buffer_size = buffer_position.extent(0);
-    const auto buffer_ratio = rt_params.buffer_ratio;
-    if (static_cast<double>(buffer_size)
-            / static_cast<double>(n_allocated_elements)
-        < buffer_ratio)
-    {
-      buffer_size = static_cast<std::size_t>(
-          std::ceil(static_cast<double>(n_allocated_elements) * buffer_ratio));
 
+    const auto required_buffer_size = static_cast<std::size_t>(
+        std::ceil(rt_params.buffer_ratio * n_allocated_elements));
+
+    if (buffer_position.extent(0) < required_buffer_size)
+    {
       // Realloc because not needed to keep buffer as it has been copied
-      Kokkos::realloc(buffer_position, buffer_size);
-      Kokkos::realloc(buffer_model,
-                      buffer_size,
-                      Model::n_var); // use 2nd dim resize if dynamic
+      Kokkos::realloc(buffer_position, required_buffer_size);
+      Kokkos::realloc(buffer_model, required_buffer_size, Model::n_var);
       buffer_index() = 0;
     }
   }
+
+// NOLINTBEGIN
+#define alloc_without_init(name)                                               \
+  Kokkos::view_alloc(Kokkos::WithoutInitializing, name)
+  // NOLINTEND
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer(RuntimeParameters rt_param,
                                             std::size_t n_particle,
                                             std::size_t _n_samples)
-      : model(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_model"),
-              0,
-              0),
-        position(Kokkos::view_alloc(Kokkos::WithoutInitializing,
-                                    "particle_position"),
-                 0),
-        status(
-            Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_status"),
-            0),
-        weights(
-            Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_weigth"),
-            0),
-        ages(Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_age"),
-             0),
-        random(
-            Kokkos::view_alloc(Kokkos::WithoutInitializing, "particle_random"),
-            0,
-            0),
+      : model(alloc_without_init("particle_model"), 0, 0),
+        position(alloc_without_init("particle_position"), 0),
+        status(alloc_without_init("particle_status"), 0),
+        weights(alloc_without_init("particle_weigth"), 0),
+        ages(alloc_without_init("particle_age"), 0),
+        random(alloc_without_init("particle_random"), 0, 0),
         buffer_model("buffer_particle_model", 0),
         buffer_position("buffer_particle_position", 0),
         buffer_index("buffer_index"), n_allocated_elements(0),
@@ -779,18 +776,24 @@ namespace MC
       KOKKOS_ASSERT(this->position.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->model.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->status.extent(0) == n_allocated_elements);
+#ifndef NDEBUG
       if (n_samples != 0)
       {
         KOKKOS_ASSERT(this->random.extent(0) == n_allocated_elements);
         KOKKOS_ASSERT(this->random.extent(1) == n_samples);
       }
+#endif
 
       n_used_elements = new_used_item;
-      if (static_cast<double>(n_used_elements)
-              / static_cast<double>(n_allocated_elements)
-          <= rt_params.shink_ratio)
+      const bool do_shrink = n_used_elements <= static_cast<std::size_t>(
+                                 rt_params.shrink_ratio * n_allocated_elements);
+
+      if (do_shrink)
       {
-        //        Kokkos::printf("SHRINK \r\n");
+        _resize(n_used_elements * rt_params.allocation_factor, true);
+      }
+      if (do_shrink)
+      {
         // force to true if we want to shrink
         _resize(n_used_elements * rt_params.allocation_factor, true);
       }
@@ -800,7 +803,7 @@ namespace MC
 
   template <ModelType M>
   [[nodiscard]] KOKKOS_INLINE_FUNCTION double
-  ParticlesContainer<M>::get_weight(std::size_t idx) const
+  ParticlesContainer<M>::get_weight(const std::size_t idx) const
   {
     if constexpr (ConstWeightModelType<M>)
     {

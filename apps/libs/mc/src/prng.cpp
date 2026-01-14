@@ -24,7 +24,6 @@ namespace MC
 
   KPRNG::KPRNG(size_t _seed) : seed(_seed)
   {
-
     random_pool = get_pool(this->seed);
   };
 

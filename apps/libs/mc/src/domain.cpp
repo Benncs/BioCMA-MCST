@@ -1,3 +1,4 @@
+#include "Kokkos_Assert.hpp"
 #include "common/common.hpp"
 #include "mc/alias.hpp"
 #include <Kokkos_Core.hpp>
@@ -17,7 +18,6 @@ namespace MC
 
     this->_total_volume
         = std::reduce(volumes_liq.begin(), volumes_liq.end(), 0.);
-
     Kokkos::View<const double*, HostSpace> tmp_host_volume(volumes_liq.data(),
                                                            volumes_liq.size());
     Kokkos::deep_copy(this->inner.liquid_volume, tmp_host_volume);
@@ -31,9 +31,6 @@ namespace MC
   ReactorDomain::ReactorDomain() : ReactorDomain(0, 0)
 
   {
-    // const auto n_rows = this->getNumberCompartments();
-    // const auto n_cols = neighbors.size() / n_rows;
-    // setLiquidNeighbors(n_rows, n_cols, neighbors);
   }
 
   ReactorDomain::ReactorDomain(std::span<double> volumes)
@@ -69,8 +66,6 @@ namespace MC
     DiagonalView<HostSpace, true> _diag_transition(out_flows.data(), n_rows);
     Kokkos::deep_copy(this->inner.diag_transition, _diag_transition);
 
-    // Kokkos::deep_copy(this->inner.diag_transition, _diag_transition);
-
     const auto* chunk_proba = proba_flat.data();
     CumulativeProbabilityView<HostSpace, true> tmp_host_proba(
         chunk_proba, n_rows, n_cols);
@@ -83,13 +78,15 @@ namespace MC
                                     const std::size_t e2,
                                     std::span<const size_t> flat_data)
   {
+
+    KOKKOS_ASSERT(e1 * e2 == flat_data.size() && flat_data.size() % e1 == 0);
+
     using HostNeighsView = Kokkos::View<
         const std::size_t**,
         Kokkos::LayoutRight,
         HostSpace,
         Kokkos::MemoryTraits<Kokkos::RandomAccess | Kokkos::Unmanaged>>;
 
-    KOKKOS_ASSERT(e1 * e2 == flat_data.size() && flat_data.size() % e1 == 0);
     const auto* chunk = flat_data.data();
     HostNeighsView neighbors_view(chunk, e1, e2);
     Kokkos::resize(this->inner.neighbors, e1, e2);

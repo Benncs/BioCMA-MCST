@@ -91,16 +91,6 @@ namespace MC
   using ContributionView = decltype(Kokkos::Experimental::create_scatter_view(
       kernelContribution()));
 
-  //   using contribution_op = Kokkos::Experimental::ScatterSum;
-  //   using contribution_dup = Kokkos::Experimental::ScatterNonDuplicated;
-  //   using contribution_at = Kokkos::Experimental::ScatterAtomic;
-  //   using ContributionView = Kokkos::Experimental::ScatterView<float**,
-  //                                                              Kokkos::LayoutLeft,
-  //                                                              MC::ComputeSpace,
-  //                                                              contribution_op,
-  //                                                              contribution_dup,
-  //                                                              contribution_at>;
-
   using KernelConcentrationType
       = Kokkos::View<const double**,
                      Kokkos::LayoutLeft,
@@ -108,13 +98,6 @@ namespace MC
                      Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
   using LocalConcentration
       = Kokkos::Subview<KernelConcentrationType, int, decltype(Kokkos::ALL)>;
-
-  //   template <class Scalar, class ExecSpace>
-  //   using VolumeView = std::enable_if_t<
-  //       std::is_same_v<std::remove_const_t<Scalar>, double>,
-  //       Kokkos::
-  //           View<Scalar*, ExecSpace,
-  //           Kokkos::MemoryTraits<Kokkos::RandomAccess>>>;
 
   template <class ExecSpace, bool is_const>
   using VolumeView = std::conditional_t<
