@@ -43,6 +43,9 @@ typedef struct Opaque* Handle; // NOLINT //In C we only need ptr type so Opaque
    */
   void delete_handle(Handle* handle);
 
+  // TODO
+  void get_model_list(char** names, const int* n_model);
+  void free_model_list(char** names, int n_model);
   // void finalize(); //Do not use it
 
   int exec(Handle handle);

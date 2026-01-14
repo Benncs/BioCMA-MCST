@@ -42,6 +42,60 @@ apply(Handle handle, int to_load)
   return -1;
 }
 
+void
+get_model_list(char*** names, int* n_model)
+{
+  if (names == nullptr || n_model == nullptr)
+  {
+    return; // safety check
+  }
+
+  std::vector<std::string> models = Api::SimulationInstance::get_model_list();
+  *n_model = static_cast<int>(models.size());
+
+  // Allocate array of char* pointers
+  *names = static_cast<char**>(std::malloc(sizeof(char*) * (*n_model)));
+  if (*names == nullptr)
+  {
+    *n_model = 0;
+    return; // allocation failed
+  }
+
+  for (int i = 0; i < *n_model; ++i)
+  {
+    const std::string& s = models[i];
+    (*names)[i] = static_cast<char*>(std::malloc(s.size() + 1));
+    if (!(*names)[i])
+    {
+      // Allocation failed: free previously allocated memory
+      for (int j = 0; j < i; ++j)
+      {
+        std::free((*names)[j]);
+      }
+      std::free(*names);
+      *names = nullptr;
+      *n_model = 0;
+      return;
+    }
+    std::strcpy((*names)[i], s.c_str()); // safe, we allocated enough space
+  }
+}
+
+void
+free_model_list(char** names, int n_model)
+{
+  if (names == nullptr)
+  {
+    return;
+  }
+
+  for (int i = 0; i < n_model; ++i)
+  {
+    std::free(names[i]);
+  }
+  std::free(names);
+}
+
 Handle
 init_handle_raw(int argc, char** argv)
 {

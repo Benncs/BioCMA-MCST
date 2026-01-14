@@ -80,6 +80,8 @@ namespace Api
          char** argv,
          std::optional<std::size_t> run_id = std::nullopt) noexcept;
 
+    static std::vector<std::string> get_model_list() noexcept;
+
     /**
      * @brief Default constructor.
      */
