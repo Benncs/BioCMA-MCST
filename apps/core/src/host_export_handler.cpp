@@ -53,6 +53,9 @@ ExportHandler::pre_post_export(
     event_span = simulation.mc_unit->events.get_span();
   }
 
+  // TODO: Multi rank context : tally are not merged before exporting then
+  // events tally only correspond to rank 0
+
   // Update the main exporter with the current simulation data
   main_exporter->update_fields(current_time,
                                simulation.getCliqData(),

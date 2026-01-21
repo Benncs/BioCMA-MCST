@@ -115,6 +115,7 @@ delete_handle(Handle* handle)
 {
   if (handle != nullptr)
   {
+
     delete *handle; // NOLINT
     *handle = nullptr;
   }
