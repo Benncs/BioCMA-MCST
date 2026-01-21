@@ -1,7 +1,7 @@
 var classCore_1_1GlobalInitialiser =
 [
     [ "inner", "structCore_1_1GlobalInitialiser_1_1inner.html", null ],
-    [ "OptionalPtr", "classCore_1_1GlobalInitialiser.html#a62b574b95334ad501c31822c5417dd82", null ],
+    [ "OptionalPtr", "classCore_1_1GlobalInitialiser.html#a6d77d0995004ab9cf3c8116fb82bc5a4", null ],
     [ "InitStep", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbae", [
       [ "Transitioner", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaeafa59184c0d82a51a129c92a9cc3e9dbe", null ],
       [ "InitState", "classCore_1_1GlobalInitialiser.html#aed6035b1335dd789d51598a410e4dbaea7531804ee40eed2b5a40056741d83be6", null ],
@@ -39,7 +39,6 @@ var classCore_1_1GlobalInitialiser =
     [ "liquid_volume", "classCore_1_1GlobalInitialiser.html#a725f6daa4a85b80447cef70134828f17", null ],
     [ "logger", "classCore_1_1GlobalInitialiser.html#aa98171333e21bd0d7d7bf40a84f6b5d8", null ],
     [ "params", "classCore_1_1GlobalInitialiser.html#ad30aef1d7609757e7f0a3bacd2d10e66", null ],
-    [ "particle_per_process", "classCore_1_1GlobalInitialiser.html#a31081e57ece5a63560e461460f13b69c", null ],
     [ "t_per_flowmap", "classCore_1_1GlobalInitialiser.html#a35b62706ff0548f4d9a873976e9e088b", null ],
     [ "user_params", "classCore_1_1GlobalInitialiser.html#a8a12b7212682099e787297559d0b0a73", null ],
     [ "validated_steps", "classCore_1_1GlobalInitialiser.html#a8f4b514d28dc2b7798ba278ff1b13ca8", null ]

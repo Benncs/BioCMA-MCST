@@ -79,21 +79,13 @@ $(function(){initNavTree('conceptMC_1_1Distributions_1_1ProbabilityLaw.html','',
 <h2 id="header-conceptdef" class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> F, <span class="keyword">class</span> DeviceType&gt;</div>
 <div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptMC_1_1Distributions_1_1ProbabilityLaw.html">MC::Distributions::ProbabilityLaw</a> =  <a class="code hl_concept" href="conceptFloatingPointType.html">FloatingPointType&lt;F&gt;</a></div>
-<div class="line">        &amp;&amp; <span class="keyword">requires</span>(<span class="keyword">const</span> T&amp; obj, Kokkos::Random_XorShift1024&lt;DeviceType&gt;&amp; gen)</div>
-<div class="line">  {</div>
-<div class="line">    {</div>
-<div class="line">      obj.draw(gen)</div>
-<div class="line">    } -&gt; std::same_as&lt;F&gt;;</div>
-<div class="line">    {</div>
-<div class="line">      obj.mean()</div>
-<div class="line">    } -&gt; std::same_as&lt;F&gt;;</div>
-<div class="line">    {</div>
-<div class="line">      obj.var()</div>
-<div class="line">    } -&gt; std::same_as&lt;F&gt;;</div>
-<div class="line">    {</div>
-<div class="line">      obj.skewness()</div>
-<div class="line">    } -&gt; std::same_as&lt;F&gt;;</div>
-<div class="line">  }</div>
+<div class="line">        &amp;&amp; <span class="keyword">requires</span>(<span class="keyword">const</span> T&amp; obj,</div>
+<div class="line">                    Kokkos::Random_XorShift1024&lt;DeviceType&gt;&amp; gen) {</div>
+<div class="line">             { obj.draw(gen) } -&gt; std::same_as&lt;F&gt;;</div>
+<div class="line">             { obj.mean() } -&gt; std::same_as&lt;F&gt;;</div>
+<div class="line">             { obj.var() } -&gt; std::same_as&lt;F&gt;;</div>
+<div class="line">             { obj.skewness() } -&gt; std::same_as&lt;F&gt;;</div>
+<div class="line">           }</div>
 <div class="ttc" id="aconceptFloatingPointType_html"><div class="ttname"><a href="conceptFloatingPointType.html">FloatingPointType</a></div><div class="ttdef"><b>Definition</b> traits.hpp:20</div></div>
 <div class="ttc" id="aconceptMC_1_1Distributions_1_1ProbabilityLaw_html"><div class="ttname"><a href="conceptMC_1_1Distributions_1_1ProbabilityLaw.html">MC::Distributions::ProbabilityLaw</a></div><div class="ttdoc">Concept for probability distribution laws.</div><div class="ttdef"><b>Definition</b> prng_extension.hpp:52</div></div>
 </div><!-- fragment --><a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>

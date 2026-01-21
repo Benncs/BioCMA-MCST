@@ -1,6 +1,8 @@
 <map id="Unsafe::load_udf" name="Unsafe::load_udf">
-<area shape="rect" id="Node000001" title=" " alt="" coords="213,36,333,61"/>
-<area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#a3398ddd22faa3ceb16b454c51faeced0" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,29,165,68"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,51,165,51,165,46,197,46"/>
-<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="116,16,104,10,85,8,67,10,56,15,53,21,55,28,50,30,47,20,53,11,66,5,85,3,106,5,118,12"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="420,36,540,61"/>
+<area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#a3398ddd22faa3ceb16b454c51faeced0" title="Apply the simulation configuration and prepare for execution." alt="" coords="213,29,372,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="405,51,372,51,372,46,405,46"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="323,16,312,10,292,8,274,10,264,15,260,21,262,28,257,30,255,20,260,11,273,5,292,3,313,5,325,12"/>
+<area shape="rect" id="Node000003" href="$structApi_1_1SimulationInstance.html#afee07db8a6b57fe7982900ecaa943cc0" title="Default constructor." alt="" coords="5,29,165,68"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="197,51,165,51,165,46,197,46"/>
 </map>

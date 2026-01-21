@@ -12,6 +12,7 @@ var structApi_1_1SimulationInstance =
     [ "get_exec_info", "structApi_1_1SimulationInstance.html#a37448530b88fd5401cbad17e9bd3c0a6", null ],
     [ "get_id", "structApi_1_1SimulationInstance.html#ab938dea3b413538bfdaa40daa5d122a2", null ],
     [ "get_logger", "structApi_1_1SimulationInstance.html#a8b2893ee13b26735bdca41171202eb9d", null ],
+    [ "get_model_list", "structApi_1_1SimulationInstance.html#a24778e81bfcd2cc45e854eba6827d371", null ],
     [ "init", "structApi_1_1SimulationInstance.html#abdcc3b78881f75bd8fa06815ea08bd08", null ],
     [ "operator=", "structApi_1_1SimulationInstance.html#ae3b200eebeb9f7ac1881b04804a8162e", null ],
     [ "operator=", "structApi_1_1SimulationInstance.html#aa95ff2c5b7a00aa738eff843014b4cfd", null ],

@@ -5,5 +5,5 @@ var structMC_1_1RuntimeParameters =
     [ "buffer_ratio", "structMC_1_1RuntimeParameters.html#a825a51d9c818e86ae372f2d73912b00e", null ],
     [ "dead_particle_ratio_threshold", "structMC_1_1RuntimeParameters.html#a92e4316aa0659959c9aebc38a5b9f0f5", null ],
     [ "minimum_dead_particle_removal", "structMC_1_1RuntimeParameters.html#ad5bbf47ae53a1a58cb47e50db56df09a", null ],
-    [ "shink_ratio", "structMC_1_1RuntimeParameters.html#a19047b6451fd10986920290ccf2c44cc", null ]
+    [ "shrink_ratio", "structMC_1_1RuntimeParameters.html#ad626bac4ad6d99a9e78ec40d881225ed", null ]
 ];

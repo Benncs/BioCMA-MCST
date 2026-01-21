@@ -90,8 +90,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2013c3c924c8db817100a85a61175859" id="r_a2013c3c924c8db817100a85a61175859"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2013c3c924c8db817100a85a61175859">operator()</a> (<a class="el" href="structSimulation_1_1KernelInline_1_1TagLeave.html">TagLeave</a> _tag, const std::size_t &amp;idx, std::size_t &amp;local_dead_count) const</td></tr>
 <tr class="memitem:a6a622c9d14a761c2a7b35ce48ff36bb8" id="r_a6a622c9d14a761c2a7b35ce48ff36bb8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a622c9d14a761c2a7b35ce48ff36bb8">need_launch</a> () const</td></tr>
 <tr class="memitem:a2f5c4626adae4fe3d1c114dcb5f2c08b" id="r_a2f5c4626adae4fe3d1c114dcb5f2c08b"><td class="memItemLeft" align="right" valign="top">KOKKOS_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f5c4626adae4fe3d1c114dcb5f2c08b">handle_move</a> (const std::size_t idx) const</td></tr>
-<tr class="memitem:ad2169ac8529da243e8484321a333eec4" id="r_ad2169ac8529da243e8484321a333eec4"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2169ac8529da243e8484321a333eec4">inner_handle_exit</a> (const std::size_t i_flow, const std::size_t idx, const double liquid_volume, const std::size_t position, const <a class="el" href="namespaceMC.html#ac18a12ce08ff64996a0b102b1f349d31">MC::LeavingFlowView</a>&lt; true &gt; &amp;leaving_flow, std ::size_t &amp;dead_count) const</td></tr>
-<tr class="memitem:a50974bf6ba57832adef349fe00f5ff52" id="r_a50974bf6ba57832adef349fe00f5ff52"><td class="memItemLeft" align="right" valign="top">KOKKOS_FORCEINLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50974bf6ba57832adef349fe00f5ff52">handle_exit</a> (std::size_t idx, const <a class="el" href="namespaceMC.html#a62ffe92e487eb9762ba3494362b701f5">MC::VolumeView</a>&lt; ComputeSpace, true &gt; &amp;liquid_volumes, std::size_t &amp;dead_count) const</td></tr>
+<tr class="memitem:ad2169ac8529da243e8484321a333eec4" id="r_ad2169ac8529da243e8484321a333eec4"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2169ac8529da243e8484321a333eec4">inner_handle_exit</a> (const std::size_t i_flow, const std::size_t idx, const double liquid_volume, const std::size_t position, const <a class="el" href="namespaceMC.html#ab07c77629281f83ba5873be3af4714eb">MC::LeavingFlowView</a>&lt; true &gt; &amp;leaving_flow, std ::size_t &amp;dead_count) const</td></tr>
+<tr class="memitem:a50974bf6ba57832adef349fe00f5ff52" id="r_a50974bf6ba57832adef349fe00f5ff52"><td class="memItemLeft" align="right" valign="top">KOKKOS_FORCEINLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50974bf6ba57832adef349fe00f5ff52">handle_exit</a> (std::size_t idx, const <a class="el" href="namespaceMC.html#a7a1a1a43d456f2d652a5a459d66d8cac">MC::VolumeView</a>&lt; ComputeSpace, true &gt; &amp;liquid_volumes, std::size_t &amp;dead_count) const</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -300,7 +300,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceMC.html#a62ffe92e487eb9762ba3494362b701f5">MC::VolumeView</a>&lt; ComputeSpace, true &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>liquid_volumes</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="namespaceMC.html#a7a1a1a43d456f2d652a5a459d66d8cac">MC::VolumeView</a>&lt; ComputeSpace, true &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>liquid_volumes</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -394,7 +394,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceMC.html#ac18a12ce08ff64996a0b102b1f349d31">MC::LeavingFlowView</a>&lt; true &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>leaving_flow</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="namespaceMC.html#ab07c77629281f83ba5873be3af4714eb">MC::LeavingFlowView</a>&lt; true &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>leaving_flow</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

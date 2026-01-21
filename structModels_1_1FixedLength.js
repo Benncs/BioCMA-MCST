@@ -9,7 +9,7 @@ var structModels_1_1FixedLength =
       [ "length", "structModels_1_1FixedLength.html#a289b27afb1d56f6621f42bb29b219c59a2fa47f7c65fec19cc163b195725e3844", null ],
       [ "l_max", "structModels_1_1FixedLength.html#a289b27afb1d56f6621f42bb29b219c59ab0f5cd9e46f45b2c99623457acfa8371", null ],
       [ "phi_s", "structModels_1_1FixedLength.html#a289b27afb1d56f6621f42bb29b219c59a21fd14f94b25a41271352c09d16a3a8e", null ],
-      [ "COUNT", "structModels_1_1FixedLength.html#a289b27afb1d56f6621f42bb29b219c59a4905ac9d6a22bdfc1ae096094ce6248d", null ]
+      [ "__COUNT__", "structModels_1_1FixedLength.html#a289b27afb1d56f6621f42bb29b219c59ac24f1659ef8e96af67e4a7d8663a3efb", null ]
     ] ],
     [ "division", "structModels_1_1FixedLength.html#a3af0595af943ef427703842804ee28aa", null ],
     [ "get_bounds", "structModels_1_1FixedLength.html#a5586c94443df36f75570fadef7f98552", null ],

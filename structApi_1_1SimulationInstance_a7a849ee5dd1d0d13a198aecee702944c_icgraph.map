@@ -1,14 +1,16 @@
 <map id="Api::SimulationInstance::SimulationInstance" name="Api::SimulationInstance::SimulationInstance">
-<area shape="rect" id="Node000001" title="Deleted copy constructor to prevent copying." alt="" coords="398,100,557,139"/>
-<area shape="poly" id="edge5_Node000001_Node000001" title=" " alt="" coords="512,87,499,81,478,79,458,81,446,85,442,91,444,99,439,100,436,90,442,81,456,75,478,73,501,76,514,82"/>
+<area shape="rect" id="Node000001" title="Deleted copy constructor to prevent copying." alt="" coords="398,131,557,169"/>
+<area shape="poly" id="edge6_Node000001_Node000001" title=" " alt="" coords="512,118,499,112,478,109,458,111,446,116,442,122,444,130,439,131,436,121,442,112,456,106,478,104,501,106,514,113"/>
 <area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#abdcc3b78881f75bd8fa06815ea08bd08" title="Initialize a simulation instance." alt="" coords="191,5,350,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="424,95,349,58,324,47,326,42,351,53,427,90"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="441,123,398,90,349,58,327,47,329,42,351,53,401,85,444,118"/>
 <area shape="rect" id="Node000004" href="$structApi_1_1SimulationInstance.html#ae3b200eebeb9f7ac1881b04804a8162e" title="Deleted copy assignment operator to prevent copying." alt="" coords="191,68,350,107"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="382,107,350,102,351,97,383,102"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="396,128,336,110,337,105,398,123"/>
 <area shape="rect" id="Node000005" href="$structApi_1_1SimulationInstance.html#aa95ff2c5b7a00aa738eff843014b4cfd" title="Defaulted move assignment operator for efficient resource transfer." alt="" coords="191,131,350,169"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="383,136,351,141,350,136,382,131"/>
-<area shape="rect" id="Node000006" href="$structApi_1_1SimulationInstance.html#a11810f88e18f91e91cc312489367442b" title="Defaulted move constructor for efficient resource transfer." alt="" coords="191,193,350,232"/>
-<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="425,148,351,183,323,195,321,190,349,178,422,144"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="383,153,350,153,350,147,383,147"/>
+<area shape="rect" id="Node000006" href="$structApi_1_1SimulationInstance.html#afee07db8a6b57fe7982900ecaa943cc0" title="Default constructor." alt="" coords="191,193,350,232"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="398,177,337,195,336,190,396,172"/>
+<area shape="rect" id="Node000007" href="$structApi_1_1SimulationInstance.html#a11810f88e18f91e91cc312489367442b" title="Defaulted move constructor for efficient resource transfer." alt="" coords="191,256,350,295"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="443,182,400,214,351,246,327,258,324,253,349,241,397,210,440,177"/>
 <area shape="rect" id="Node000003" href="$namespacePythonBindings.html#a6abd1c98e507d86b69aab328f0c94650" title=" " alt="" coords="5,5,143,44"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="175,27,143,27,143,22,175,22"/>
 </map>

@@ -105,7 +105,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af4d179bd1bf0d8da69d83f63fdd72412" id="r_af4d179bd1bf0d8da69d83f63fdd72412"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4d179bd1bf0d8da69d83f63fdd72412">step</a> (double d_t) const</td></tr>
 <tr class="memitem:aeb968caf58812bcab01534e72a63d552" id="r_aeb968caf58812bcab01534e72a63d552"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb968caf58812bcab01534e72a63d552">clearContribution</a> () const noexcept</td></tr>
 <tr class="memitem:a6fecb0563822fae0ef26d9f6209d0779" id="r_a6fecb0563822fae0ef26d9f6209d0779"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6fecb0563822fae0ef26d9f6209d0779">update_feed</a> (double t, double d_t, bool update_scalar=true) noexcept</td></tr>
-<tr class="memitem:a57624461bad4807d5cacbd7d17e49b14" id="r_a57624461bad4807d5cacbd7d17e49b14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57624461bad4807d5cacbd7d17e49b14">updateHydro</a> (const <a class="el" href="namespaceCmaUtils.html#aac0e5de8b035afc259c0e7e929c0d377">CmaUtils::IterationStatePtrType</a> &amp;newstate)</td></tr>
+<tr class="memitem:a57624461bad4807d5cacbd7d17e49b14" id="r_a57624461bad4807d5cacbd7d17e49b14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57624461bad4807d5cacbd7d17e49b14">updateHydro</a> (const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;newstate)</td></tr>
 <tr class="memitem:a30514b0d71df785a793a60b5ea2f1b17" id="r_a30514b0d71df785a793a60b5ea2f1b17"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30514b0d71df785a793a60b5ea2f1b17">updateMCHydro</a> (std::span&lt; const double &gt; newliquid_volume, std::span&lt; const std::size_t &gt; neighors_flat, std::span&lt; const double &gt; proba_flat, std::span&lt; const double &gt; out_flows) const</td></tr>
 <tr class="memitem:ad964b9f706ae4cac2e0d5d852131a7d2" id="r_ad964b9f706ae4cac2e0d5d852131a7d2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad964b9f706ae4cac2e0d5d852131a7d2">checkScalar</a> () const</td></tr>
 <tr class="memitem:aa12b65d19fa7e3eb74152b0252591a4d" id="r_aa12b65d19fa7e3eb74152b0252591a4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa12b65d19fa7e3eb74152b0252591a4d">reset</a> ()</td></tr>
@@ -118,11 +118,11 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a325bd66b0afbb76176a6f8c607d9902b" id="r_a325bd66b0afbb76176a6f8c607d9902b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a325bd66b0afbb76176a6f8c607d9902b">updateScalarHydro</a> (const <a class="el" href="namespaceCmaUtils.html#aac0e5de8b035afc259c0e7e929c0d377">CmaUtils::IterationStatePtrType</a> &amp;newstate)</td></tr>
+<tr class="memitem:a325bd66b0afbb76176a6f8c607d9902b" id="r_a325bd66b0afbb76176a6f8c607d9902b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a325bd66b0afbb76176a6f8c607d9902b">updateScalarHydro</a> (const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;newstate)</td></tr>
 <tr class="memitem:a57ed01bdb3f08608bc945c745f33f3ab" id="r_a57ed01bdb3f08608bc945c745f33f3ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57ed01bdb3f08608bc945c745f33f3ab">setLiquidFlow</a> (CmaUtils::PreCalculatedHydroState *_flows_l)</td></tr>
 <tr class="memitem:a6ebf53048a2d93f04504352c79660c79" id="r_a6ebf53048a2d93f04504352c79660c79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ebf53048a2d93f04504352c79660c79">setGasFlow</a> (CmaUtils::PreCalculatedHydroState *_flows_g)</td></tr>
 <tr class="memitem:a4d9a0037502fc0784690c11c1a593a1f" id="r_a4d9a0037502fc0784690c11c1a593a1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d9a0037502fc0784690c11c1a593a1f">post_init_compartments</a> ()</td></tr>
-<tr class="memitem:a4295618336e99606be4e87b31feb848a" id="r_a4295618336e99606be4e87b31feb848a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a40986575a79ed983a09870597b955ceb">MC::KernelConcentrationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4295618336e99606be4e87b31feb848a">getkernel_concentration</a> () const</td></tr>
+<tr class="memitem:a4295618336e99606be4e87b31feb848a" id="r_a4295618336e99606be4e87b31feb848a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7">MC::KernelConcentrationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4295618336e99606be4e87b31feb848a">getkernel_concentration</a> () const</td></tr>
 <tr class="memitem:ae2077067788b0cb0535c62933724a1cf" id="r_ae2077067788b0cb0535c62933724a1cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2077067788b0cb0535c62933724a1cf">scatter_contribute</a> ()</td></tr>
 <tr class="memitem:ac396f393b4cf318b38364c5067254c80" id="r_ac396f393b4cf318b38364c5067254c80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac396f393b4cf318b38364c5067254c80">set_kernel_contribs_to_host</a> ()</td></tr>
 <tr class="memitem:a9ea90cab13d8259f026f57baad1c989f" id="r_a9ea90cab13d8259f026f57baad1c989f"><td class="memItemLeft" align="right" valign="top">kernelContribution&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ea90cab13d8259f026f57baad1c989f">get_kernel_contribution</a> () const</td></tr>
@@ -134,7 +134,7 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:afcb68150cb8bd8788d31a3d1c54271df" id="r_afcb68150cb8bd8788d31a3d1c54271df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#adf6243c1c8ab78e4d402a37f64e90e46">MC::ContributionView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcb68150cb8bd8788d31a3d1c54271df">contribs_scatter</a></td></tr>
+<tr class="memitem:afcb68150cb8bd8788d31a3d1c54271df" id="r_afcb68150cb8bd8788d31a3d1c54271df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcb68150cb8bd8788d31a3d1c54271df">contribs_scatter</a></td></tr>
 <tr class="memitem:a505fbf5573509d5d1d5674c436fe61f1" id="r_a505fbf5573509d5d1d5674c436fe61f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation.html#af34adaabc60487412f7551db1dc83226">MapProbes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a505fbf5573509d5d1d5674c436fe61f1">probes</a></td></tr>
 <tr class="memitem:a2a7c5c496164e443222bc54de1edab70" id="r_a2a7c5c496164e443222bc54de1edab70"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a7c5c496164e443222bc54de1edab70">feed</a></td></tr>
 <tr class="memitem:a448192ce085c5d0d5e71875a888e99b8" id="r_a448192ce085c5d0d5e71875a888e99b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a448192ce085c5d0d5e71875a888e99b8">const_number_simulation</a> = true</td></tr>
@@ -445,7 +445,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a0d675ed463b0caaeea75be8bd87d72cc_icgraph.svg" width="100%" height="405"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a0d675ed463b0caaeea75be8bd87d72cc_icgraph.svg" width="100%" height="436"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -617,7 +617,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceMC.html#a40986575a79ed983a09870597b955ceb">MC::KernelConcentrationType</a> Simulation::SimulationUnit::getkernel_concentration </td>
+          <td class="memname"><a class="el" href="namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7">MC::KernelConcentrationType</a> Simulation::SimulationUnit::getkernel_concentration </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -1196,7 +1196,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">void Simulation::SimulationUnit::updateHydro </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#aac0e5de8b035afc259c0e7e929c0d377">CmaUtils::IterationStatePtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>newstate</em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>newstate</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1257,7 +1257,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">void Simulation::SimulationUnit::updateScalarHydro </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#aac0e5de8b035afc259c0e7e929c0d377">CmaUtils::IterationStatePtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>newstate</em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>newstate</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1308,7 +1308,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceMC.html#adf6243c1c8ab78e4d402a37f64e90e46">MC::ContributionView</a> Simulation::SimulationUnit::contribs_scatter</td>
+          <td class="memname"><a class="el" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a> Simulation::SimulationUnit::contribs_scatter</td>
         </tr>
       </table>
   </td>

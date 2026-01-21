@@ -88,7 +88,7 @@ $(function(){initNavTree('mpi__types_8hpp_source.html','',''); });
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>  {</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    MPI_Datatype datatype{};</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keyword">using </span>_type = std::remove_const_t&lt;std::remove_reference_t&lt;T&gt; &gt;;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keyword">using </span>_type = std::remove_const_t&lt;std::remove_reference_t&lt;T&gt;&gt;;</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_same_v&lt;_type, size_t&gt;)</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    {</div>

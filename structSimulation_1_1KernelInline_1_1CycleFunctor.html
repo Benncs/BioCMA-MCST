@@ -88,7 +88,7 @@ Public Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a77a382779979e6e32e740c8a70df87c2" id="r_a77a382779979e6e32e740c8a70df87c2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77a382779979e6e32e740c8a70df87c2">CycleFunctor</a> ()=default</td></tr>
-<tr class="memitem:a65710ffd6cb5c6d2b16bf7353bf8aa80" id="r_a65710ffd6cb5c6d2b16bf7353bf8aa80"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65710ffd6cb5c6d2b16bf7353bf8aa80">CycleFunctor</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; _particles, <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> _random_pool, <a class="el" href="namespaceMC.html#a40986575a79ed983a09870597b955ceb">MC::KernelConcentrationType</a> &amp;&amp;_concentrations, <a class="el" href="namespaceMC.html#adf6243c1c8ab78e4d402a37f64e90e46">MC::ContributionView</a> _contribs_scatter, <a class="el" href="structMC_1_1EventContainer.html">MC::EventContainer</a> _event)</td></tr>
+<tr class="memitem:a65710ffd6cb5c6d2b16bf7353bf8aa80" id="r_a65710ffd6cb5c6d2b16bf7353bf8aa80"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65710ffd6cb5c6d2b16bf7353bf8aa80">CycleFunctor</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; _particles, <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> _random_pool, <a class="el" href="namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7">MC::KernelConcentrationType</a> &amp;&amp;_concentrations, <a class="el" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a> _contribs_scatter, <a class="el" href="structMC_1_1EventContainer.html">MC::EventContainer</a> _event)</td></tr>
 <tr class="memitem:ae02dc3e4d2f3bbcd51f3e3396de6e9e3" id="r_ae02dc3e4d2f3bbcd51f3e3396de6e9e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae02dc3e4d2f3bbcd51f3e3396de6e9e3">update</a> (double _d_t, <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; _particles)</td></tr>
 <tr class="memitem:aff52f67bc5e3e0f298767f35f5db7f8a" id="r_aff52f67bc5e3e0f298767f35f5db7f8a"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff52f67bc5e3e0f298767f35f5db7f8a">operator()</a> (const <a class="el" href="structSimulation_1_1KernelInline_1_1TagContribution.html">TagContribution</a> _tag, const <a class="el" href="#a51a40082c7b5e2c85653cb98a188894e">TeamMember</a> &amp;team) const</td></tr>
 <tr class="memitem:a65c360e6f2f258eeac64a74268b6ec93" id="r_a65c360e6f2f258eeac64a74268b6ec93"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65c360e6f2f258eeac64a74268b6ec93">operator()</a> (<a class="el" href="structSimulation_1_1KernelInline_1_1TagCycle.html">TagCycle</a> _tag, const Kokkos::TeamPolicy&lt; ComputeSpace &gt;::member_type &amp;team, <a class="el" href="#a54b7d670ca890df53c1f3557a7d6f0a8">value_type</a> &amp;reduce_val) const</td></tr>
@@ -100,9 +100,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a3d954b1a1896ffce1e73b8d30f3290c1" id="r_a3d954b1a1896ffce1e73b8d30f3290c1"><td class="memItemLeft" align="right" valign="top">M::FloatType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d954b1a1896ffce1e73b8d30f3290c1">d_t</a></td></tr>
 <tr class="memitem:a5036c5c725c1830d000f1a64a9530938" id="r_a5036c5c725c1830d000f1a64a9530938"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5036c5c725c1830d000f1a64a9530938">particles</a></td></tr>
 <tr class="memitem:aecf7b21536b97029b1b71e699599a781" id="r_aecf7b21536b97029b1b71e699599a781"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aecf7b21536b97029b1b71e699599a781">random_pool</a></td></tr>
-<tr class="memitem:a4afdbff73355e5a05d3dede23ff29bbd" id="r_a4afdbff73355e5a05d3dede23ff29bbd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a40986575a79ed983a09870597b955ceb">MC::KernelConcentrationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4afdbff73355e5a05d3dede23ff29bbd">concentrations</a></td></tr>
-<tr class="memitem:a40da7b403318204fb14ffdced8577e82" id="r_a40da7b403318204fb14ffdced8577e82"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#adf6243c1c8ab78e4d402a37f64e90e46">MC::ContributionView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40da7b403318204fb14ffdced8577e82">contribs_scatter</a></td></tr>
-<tr class="memitem:ae186ba8a41567eccdd9eeee6f8f4ae13" id="r_ae186ba8a41567eccdd9eeee6f8f4ae13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a40986575a79ed983a09870597b955ceb">MC::KernelConcentrationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae186ba8a41567eccdd9eeee6f8f4ae13">limitation_factor</a></td></tr>
+<tr class="memitem:a4afdbff73355e5a05d3dede23ff29bbd" id="r_a4afdbff73355e5a05d3dede23ff29bbd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7">MC::KernelConcentrationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4afdbff73355e5a05d3dede23ff29bbd">concentrations</a></td></tr>
+<tr class="memitem:a40da7b403318204fb14ffdced8577e82" id="r_a40da7b403318204fb14ffdced8577e82"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40da7b403318204fb14ffdced8577e82">contribs_scatter</a></td></tr>
+<tr class="memitem:ae186ba8a41567eccdd9eeee6f8f4ae13" id="r_ae186ba8a41567eccdd9eeee6f8f4ae13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7">MC::KernelConcentrationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae186ba8a41567eccdd9eeee6f8f4ae13">limitation_factor</a></td></tr>
 <tr class="memitem:a3818652e6f04c70a74688c6138f4afdf" id="r_a3818652e6f04c70a74688c6138f4afdf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMC_1_1EventContainer.html">MC::EventContainer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3818652e6f04c70a74688c6138f4afdf">events</a></td></tr>
 </table>
 <a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
@@ -206,12 +206,12 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceMC.html#a40986575a79ed983a09870597b955ceb">MC::KernelConcentrationType</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>_concentrations</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7">MC::KernelConcentrationType</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>_concentrations</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceMC.html#adf6243c1c8ab78e4d402a37f64e90e46">MC::ContributionView</a></td>          <td class="paramname"><span class="paramname"><em>_contribs_scatter</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a></td>          <td class="paramname"><span class="paramname"><em>_contribs_scatter</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -409,7 +409,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceMC.html#a40986575a79ed983a09870597b955ceb">MC::KernelConcentrationType</a> <a class="el" href="structSimulation_1_1KernelInline_1_1CycleFunctor.html">Simulation::KernelInline::CycleFunctor</a>&lt; M &gt;::concentrations</td>
+          <td class="memname"><a class="el" href="namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7">MC::KernelConcentrationType</a> <a class="el" href="structSimulation_1_1KernelInline_1_1CycleFunctor.html">Simulation::KernelInline::CycleFunctor</a>&lt; M &gt;::concentrations</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -425,7 +425,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceMC.html#adf6243c1c8ab78e4d402a37f64e90e46">MC::ContributionView</a> <a class="el" href="structSimulation_1_1KernelInline_1_1CycleFunctor.html">Simulation::KernelInline::CycleFunctor</a>&lt; M &gt;::contribs_scatter</td>
+          <td class="memname"><a class="el" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a> <a class="el" href="structSimulation_1_1KernelInline_1_1CycleFunctor.html">Simulation::KernelInline::CycleFunctor</a>&lt; M &gt;::contribs_scatter</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -473,7 +473,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceMC.html#a40986575a79ed983a09870597b955ceb">MC::KernelConcentrationType</a> <a class="el" href="structSimulation_1_1KernelInline_1_1CycleFunctor.html">Simulation::KernelInline::CycleFunctor</a>&lt; M &gt;::limitation_factor</td>
+          <td class="memname"><a class="el" href="namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7">MC::KernelConcentrationType</a> <a class="el" href="structSimulation_1_1KernelInline_1_1CycleFunctor.html">Simulation::KernelInline::CycleFunctor</a>&lt; M &gt;::limitation_factor</td>
         </tr>
       </table>
 </div><div class="memdoc">

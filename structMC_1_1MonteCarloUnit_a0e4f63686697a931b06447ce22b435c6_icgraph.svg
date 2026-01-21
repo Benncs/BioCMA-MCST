@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Prevent copying of the MonteCarloUnit.">
+<g id="a_Node000001"><a xlink:title=" ">
 <polygon fill="#999999" stroke="#666666" points="246.5,-123 141.25,-123 141.25,-94 246.5,-94 246.5,-123"/>
 <text xml:space="preserve" text-anchor="start" x="149.25" y="-109.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::MonteCarloUnit</text>
 <text xml:space="preserve" text-anchor="middle" x="193.88" y="-99" font-family="Helvetica,sans-Serif" font-size="10.00">::MonteCarloUnit</text>
@@ -60,7 +60,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="structMC_1_1MonteCarloUnit.html#a77a004790dcd9b39c4618146926e6e25" target="_top" xlink:title="Allow moving of the MonteCarloUn.">
+<g id="a_Node000003"><a xlink:href="structMC_1_1MonteCarloUnit.html#a77a004790dcd9b39c4618146926e6e25" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="105.25,-170 0,-170 0,-141 105.25,-141 105.25,-170"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-156.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::MonteCarloUnit</text>
 <text xml:space="preserve" text-anchor="middle" x="52.62" y="-146" font-family="Helvetica,sans-Serif" font-size="10.00">::MonteCarloUnit</text>
@@ -79,7 +79,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="structMC_1_1MonteCarloUnit.html#ac3a8f7a62805a7e290d537dea11c2425" target="_top" xlink:title="Prevent copying of the MonteCarloUnit.">
+<g id="a_Node000004"><a xlink:href="structMC_1_1MonteCarloUnit.html#ac3a8f7a62805a7e290d537dea11c2425" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="105.25,-123 0,-123 0,-94 105.25,-94 105.25,-123"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-109.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::MonteCarloUnit</text>
 <text xml:space="preserve" text-anchor="middle" x="52.62" y="-99" font-family="Helvetica,sans-Serif" font-size="10.00">::operator=</text>
@@ -98,7 +98,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="structMC_1_1MonteCarloUnit.html#ae6b8491d078820115a681eb2f0742739" target="_top" xlink:title="Allow moving of the MonteCarloUn.">
+<g id="a_Node000005"><a xlink:href="structMC_1_1MonteCarloUnit.html#ae6b8491d078820115a681eb2f0742739" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="105.25,-76 0,-76 0,-47 105.25,-47 105.25,-76"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-62.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::MonteCarloUnit</text>
 <text xml:space="preserve" text-anchor="middle" x="52.62" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00">::operator=</text>
