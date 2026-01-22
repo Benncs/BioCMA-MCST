@@ -150,6 +150,7 @@ namespace Api
   {
     _data = Core::CaseData(); // Explicity delete everything before
     udf_handle.reset();
+    // Api::finalise();
   }
 
   std::optional<std::unique_ptr<SimulationInstance>>
@@ -175,7 +176,6 @@ namespace Api
     {
       try
       {
-
         if (logger)
         {
           logger->print(
