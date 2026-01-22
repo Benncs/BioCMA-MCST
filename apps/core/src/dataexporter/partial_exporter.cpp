@@ -107,7 +107,7 @@ namespace Core
           ds_name + "age_hydro/", { ptr_ages, n_particles }, compress_data);
       ptr_ages = Kokkos::subview(*ages_values, 1, Kokkos::ALL).data();
       this->write_matrix(
-          ds_name + "age_div/", { ptr_ages, n_particles }, compress_data);
+          ds_name + "age/", { ptr_ages, n_particles }, compress_data);
     }
 
     for (size_t i_name = 0; i_name < bonce.vnames.size(); ++i_name)
