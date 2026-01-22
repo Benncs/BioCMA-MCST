@@ -1,6 +1,7 @@
 #include "biocma_cst_config.hpp"
 #include "common/logger.hpp"
 #include "mc/traits.hpp"
+#include "simulation/probe.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/execinfo.hpp>
@@ -29,7 +30,8 @@ namespace PostProcessing
               Core::PartialExporter& pde,
               bool force)
   {
-    auto& probes = simulation.get_probes();
+    // FIXME
+    auto& probes = simulation.get_probes(Simulation::ProbeType::DivisionTime);
 
     // TODO: Find out if comment is necessary or not
     if (probes.need_export() || force)

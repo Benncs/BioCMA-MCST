@@ -22,8 +22,8 @@ else:
     sys.path.append(dev_path)
 
 
-from exec import exec  # noqa: E402
 from cli_formater import format_cli  # noqa: E402
+from exec import exec  # noqa: E402
 
 __current_file_path = os.path.abspath(__file__)
 __current_directory = os.path.dirname(__current_file_path)
@@ -41,7 +41,7 @@ def get_executable(instal: str, mpi: bool = True):
     if instal:
         return f"/opt/biomc/{appname}"
     else:
-        return f"{ROOT}/builddir/gpu/apps/cli/{appname}"
+        return f"{ROOT}/builddir/test/apps/cli/{appname}"
 
 
 def mk_parser():

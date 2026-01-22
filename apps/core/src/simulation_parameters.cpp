@@ -42,7 +42,7 @@ namespace Core
   UserControlParameters::m_default()
   {
     return {
-      .biomass_initial_concentration = 1,
+      .biomass_initial_concentration = 0.1,
       .final_time = 0,
       .delta_time = 0.,
       .number_particle = 1,
