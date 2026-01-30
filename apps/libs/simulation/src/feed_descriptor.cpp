@@ -133,8 +133,9 @@ namespace Simulation::Feed
       _ouput_position = input_position;
     }
 
-    return { flow,           concentration,   species_index,
-             input_position, _ouput_position, Constant{} };
+    auto value = FeedValue{ concentration, species_index };
+
+    return { flow, { value }, input_position, _ouput_position, Constant{} };
   }
 
   // FeedDescriptor delayedconstant(double _f,

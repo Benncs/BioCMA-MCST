@@ -64,21 +64,27 @@ namespace Simulation
     {
       if (update_scalar)
       {
-        scl.set_feed(
-            fd.species_index, fd.input_position, fd.flow * fd.concentration);
+        // Set for each scalar, i.e for each line of the sytem, F=C_feed*Q
+        for (auto [concentration, index] : fd.values)
+        {
+          scl.set_feed(index, fd.input_position, fd.flow * concentration);
+        }
+        // But set -Q only once to not count flow more than once.
         if (fd.output_position)
         {
           scl.set_sink(*fd.output_position, fd.flow);
         }
       }
     };
-    auto& ls = *this->liquid_scalar;
+
+    auto& liquid_scalar = *this->liquid_scalar;
     for (auto& feed : feed.liquid_feeds())
     {
       feed.update(t, d_t);
-      functor(ls, feed);
+      functor(liquid_scalar, feed);
       if (feed.output_position)
       {
+        // set -Q only once to not count flow more than once.
         this->mc_unit->domain.set_leaving_flow(
             0, *feed.output_position, feed.flow);
       }
