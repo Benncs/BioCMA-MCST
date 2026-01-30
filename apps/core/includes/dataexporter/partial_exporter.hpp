@@ -10,6 +10,7 @@
 #include <span>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 #include <vector>
 
 namespace Core
@@ -68,11 +69,13 @@ namespace Core
      *
      * @param data A span of constant doubles containing the probe measurements.
      */
-    void write_probe(std::string_view probe_name, std::span<const double> data);
+    void write_probe(const std::string& probe_name,
+                     std::span<const double> data);
 
   private:
-    uint64_t probe_counter_n_element; /**< Counter for the number of probe
-                                         elements. */
+    // uint64_t probe_counter_n_element; /**< Counter for the number of probe
+    //                                      elements. */
+    std::unordered_map<std::string, uint64_t> probe_counter_n_element;
   };
 
 }; // namespace Core
