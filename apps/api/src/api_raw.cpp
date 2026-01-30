@@ -384,7 +384,8 @@ set_feed_constant(Handle handle,
   {
     ApiResult res;
 
-    const auto out_index = output_position == 0
+    // TODO check condition if output_position is <0 or ==0 ?
+    const auto out_index = output_position < 0
                                ? std::nullopt
                                : std::make_optional(output_position);
 
