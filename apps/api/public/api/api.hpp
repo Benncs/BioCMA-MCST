@@ -163,55 +163,9 @@ namespace Api
     ApiResult set_feed(Simulation::Feed::FeedDescriptor feed_variant,
                        Phase phase = Phase::Liquid);
 
-    ApiResult set_feed_constant(double _flow,
-                                double _concentration,
-                                std::size_t _species,
-                                std::size_t _position,
-                                bool gas = false,
-                                bool fed_batch = false);
-
-    ApiResult set_feed_constant_different_output(double _flow,
-                                                 double _concentration,
-                                                 std::size_t _species,
-                                                 std::size_t input_position,
-                                                 std::size_t output_position,
-                                                 bool gas = false);
-
     ApiResult set_mtr(Simulation::MassTransfer::Type::MtrTypeVariant&& variant);
 
     void set_auto_mtr();
-
-    // /**
-    //  * @brief Configure feed constants for the simulation.
-    //  *
-    //  * @param _flow A constant flow value.
-    //  * @param concentrations A span of concentrations values.
-    //  * @param _position A span of position indices.
-    //  * @param _species A span of species indices.
-    //  * @param gas Flag indicating whether the feed is gas-phase.
-    //  * @return True if the feed was successfully configured; false otherwise.
-    //  */
-    // [[deprecated]]bool set_feed_constant(double _flow,
-    //                        std::span<double> _concentration,
-    //                        std::span<std::size_t> _position,
-    //                        std::span<std::size_t> _species,
-    //                        bool gas = false,
-    //                        bool fed_batch = false);
-
-    // [[deprecated]]bool set_feed_constant_from_position(double _flow,
-    //                                      std::span<double> _concentration,
-    //                                      std::span<std::size_t> _position,
-    //                                      std::span<std::size_t> _species,
-    //                                      std::optional<std::vector<std::size_t>>
-    //                                      _output_position, bool gas = false,
-    //                                      bool fed_batch = false);
-
-    // [[deprecated]]bool set_feed_constant_from_rvalue(double _f,
-    //                                    std::vector<double>&& _target,
-    //                                    std::vector<std::size_t>&& _position,
-    //                                    std::vector<std::size_t>&& _species,
-    //                                    bool gas = false,
-    //                                    bool fed_batch = false);
 
     ApiResult
     register_scalar_initiazer(Core::ScalarFactory::ScalarVariant&& var);

@@ -76,7 +76,6 @@ namespace Simulation::Feed
   {
     double flow{};
     std::vector<FeedValue> values;
-
     std::size_t input_position{};
     std::optional<std::size_t> output_position;
     FeedTypeVariant extra;
