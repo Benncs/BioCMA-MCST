@@ -79,16 +79,14 @@ namespace Core
     export_counter++;
   }
 
-  // TODO add ProbeType argument to select correct array depending on type + add
-  // 2 probes_count_n_element.
-  //  Change probe_counter_n_element to std::vector<std::size_t> where size is
-  //  number of probe type
   void
   PartialExporter::write_probe(const std::string& probe_name,
                                std::span<const double> data)
   {
     std::string data_set_name = IO::format("probes/", probe_name);
-    auto& counter = this->probe_counter_n_element[probe_name];
+
+    auto& counter
+        = this->probe_counter_n_element.at(probe_name); // Throw if bad name
 
     append_array(data_set_name, data, counter);
     counter += data.size();

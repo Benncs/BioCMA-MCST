@@ -68,6 +68,7 @@ namespace Core
      * @brief Writes probe data to the export.
      *
      * @param data A span of constant doubles containing the probe measurements.
+     * @throw out_or_range if probe_name not already registered
      */
     void write_probe(const std::string& probe_name,
                      std::span<const double> data);
