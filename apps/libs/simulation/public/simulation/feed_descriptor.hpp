@@ -66,11 +66,16 @@ namespace Simulation::Feed
 
   FeedType get_type(const FeedTypeVariant& v);
 
+  struct FeedValue
+  {
+    double concentration;
+    std::size_t species_index;
+  };
+
   struct FeedDescriptor
   {
     double flow{};
-    double concentration{};
-    std::size_t species_index;
+    std::vector<FeedValue> values;
     std::size_t input_position{};
     std::optional<std::size_t> output_position;
     FeedTypeVariant extra;
