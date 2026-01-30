@@ -25,21 +25,37 @@ namespace
 namespace PostProcessing
 {
 
+  template <std::size_t buffer_size>
+  void
+  _save_probes(Simulation::ProbeType ptype,
+               const Simulation::Probes<buffer_size>& probes,
+               Core::PartialExporter& pde,
+               bool force)
+  {
+    // TODO: Find out if comment is necessary or not
+    if (probes.need_export() || force)
+    {
+
+      pde.write_probe(
+          Simulation::map_probe_name[static_cast<std::size_t>(ptype)],
+          probes.get()); // probe.get only returns the used chunk of memory id:
+                         // buffer_size if need export else internal counter
+      probes.clear();
+    }
+  }
+
   void
   save_probes(Simulation::SimulationUnit& simulation,
               Core::PartialExporter& pde,
               bool force)
   {
     // FIXME
-    auto& probes = simulation.get_probes(Simulation::ProbeType::DivisionTime);
+    // auto& probes =
+    // simulation.get_probes(Simulation::ProbeType::DivisionTime);
 
-    // TODO: Find out if comment is necessary or not
-    if (probes.need_export() || force)
+    for (auto& [ptype, probes] : simulation.it_probes())
     {
-      pde.write_probe(
-          probes.get()); // probe.get only returns the used chunk of memory id:
-                         // buffer_size if need export else internal counter
-      probes.clear();
+      _save_probes(ptype, probes, pde, force);
     }
   }
   static int counter

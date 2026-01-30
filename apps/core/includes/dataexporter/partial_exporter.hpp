@@ -68,7 +68,7 @@ namespace Core
      *
      * @param data A span of constant doubles containing the probe measurements.
      */
-    void write_probe(std::span<const double> data);
+    void write_probe(std::string_view probe_name, std::span<const double> data);
 
   private:
     uint64_t probe_counter_n_element; /**< Counter for the number of probe
