@@ -4,7 +4,7 @@ var structSimulation_1_1KernelInline_1_1CycleFunctors =
     [ "FModel", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#add7052bc91e74b3dcdb828dc7414cbbf", null ],
     [ "move_kernel_type", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#a3c6f84a046130d87477eac316d9cff6d", null ],
     [ "CycleFunctors", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#af9295ea4cdcfacc348fa8dccc1723c0e", null ],
-    [ "CycleFunctors", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#a6a3d0cae05b86890226458aa9056c3b5", null ],
+    [ "CycleFunctors", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#aa2b45ca354d633b6bc8ab1456916ec62", null ],
     [ "get_host_reduction", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#a9ca5143e3da79024a2d4aed4df2a9cd9", null ],
     [ "launch_model", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#ac662b26165c5a63622c71c52c3263709", null ],
     [ "launch_move", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#aa180fb540dd548aefdc0cead1e7c8205", null ],

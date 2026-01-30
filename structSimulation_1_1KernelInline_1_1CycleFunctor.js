@@ -4,7 +4,7 @@ var structSimulation_1_1KernelInline_1_1CycleFunctor =
     [ "TeamPolicy", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a9e9ed6bfc86b60cece967345e23f1e13", null ],
     [ "value_type", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a54b7d670ca890df53c1f3557a7d6f0a8", null ],
     [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a77a382779979e6e32e740c8a70df87c2", null ],
-    [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a65710ffd6cb5c6d2b16bf7353bf8aa80", null ],
+    [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a184b102f83b21d864dc98c046f74ba78", null ],
     [ "exec_per_particle", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#ad3c23e1bcb433eaabc464642ded3f180", null ],
     [ "operator()", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#aff52f67bc5e3e0f298767f35f5db7f8a", null ],
     [ "operator()", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a3438594e33a92a8d3cc8027a51e1679e", null ],
@@ -16,5 +16,6 @@ var structSimulation_1_1KernelInline_1_1CycleFunctor =
     [ "events", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a3818652e6f04c70a74688c6138f4afdf", null ],
     [ "limitation_factor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#ae186ba8a41567eccdd9eeee6f8f4ae13", null ],
     [ "particles", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a5036c5c725c1830d000f1a64a9530938", null ],
+    [ "probes", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a8a7b9df860e4b1ca9933a20974d84c5f", null ],
     [ "random_pool", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#aecf7b21536b97029b1b71e699599a781", null ]
 ];

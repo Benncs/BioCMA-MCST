@@ -42,6 +42,7 @@ var hierarchy =
     ] ],
     [ "Simulation::Feed::FeedDescriptor", "structSimulation_1_1Feed_1_1FeedDescriptor.html", null ],
     [ "Simulation::Feed::FeedFactory", "structSimulation_1_1Feed_1_1FeedFactory.html", null ],
+    [ "Simulation::Feed::FeedValue", "structSimulation_1_1Feed_1_1FeedValue.html", null ],
     [ "Core::ScalarFactory::File", "structCore_1_1ScalarFactory_1_1File.html", null ],
     [ "Simulation::MassTransfer::Type::FixedKla", "structSimulation_1_1MassTransfer_1_1Type_1_1FixedKla.html", null ],
     [ "Models::FixedLength", "structModels_1_1FixedLength.html", null ],

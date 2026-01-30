@@ -1,9 +1,11 @@
 <map id="Simulation::KernelInline::CycleFunctor&lt; M &gt;" name="Simulation::KernelInline::CycleFunctor&lt; M &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="118,195,275,233"/>
-<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html" title=" " alt="" coords="5,100,199,125"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,134,181,192,177,196,121,138"/>
-<area shape="rect" id="Node000003" href="$structMC_1_1RuntimeParameters.html" title=" " alt="" coords="18,5,186,30"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,46,105,100,99,100,99,46"/>
-<area shape="rect" id="Node000004" href="$structMC_1_1EventContainer.html" title="Use to count events that occurs during Monte&#45;Carlo processing cycles." alt="" coords="223,100,362,125"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="273,138,217,196,213,192,269,134"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="587,61,744,100"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html" title=" " alt="" coords="288,15,481,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="487,40,564,54,587,59,586,64,562,59,486,45"/>
+<area shape="rect" id="Node000003" href="$structMC_1_1RuntimeParameters.html" title=" " alt="" coords="5,15,173,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="188,25,287,25,287,30,188,30"/>
+<area shape="rect" id="Node000004" href="$structMC_1_1EventContainer.html" title="Use to count events that occurs during Monte&#45;Carlo processing cycles." alt="" coords="315,68,454,93"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="469,78,586,78,586,83,469,83"/>
+<area shape="rect" id="Node000005" href="$classSimulation_1_1Probes.html" title=" " alt="" coords="304,117,464,170"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="479,123,562,105,592,98,594,103,564,111,480,128"/>
 </map>

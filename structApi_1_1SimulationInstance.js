@@ -26,8 +26,6 @@ var structApi_1_1SimulationInstance =
     [ "register_serde", "structApi_1_1SimulationInstance.html#a44482022a20986f2f68163a5a3baf49f", null ],
     [ "set_auto_mtr", "structApi_1_1SimulationInstance.html#a73c191e86d9951411087785b68bf709e", null ],
     [ "set_feed", "structApi_1_1SimulationInstance.html#a4508272c4bba7fdaa1e3695ee606f538", null ],
-    [ "set_feed_constant", "structApi_1_1SimulationInstance.html#a5a689a100cbbf66d7a6d9171a8718cff", null ],
-    [ "set_feed_constant_different_output", "structApi_1_1SimulationInstance.html#aec331d2ab718c45a574566727e463996", null ],
     [ "set_logger", "structApi_1_1SimulationInstance.html#a4c86f7f374b57f0e90dc9e5adaac4018", null ],
     [ "set_mtr", "structApi_1_1SimulationInstance.html#ad3dcce95a8552f794dfff2a0f382fcee", null ],
     [ "_data", "structApi_1_1SimulationInstance.html#a9602da52be8e78442654d6309f9d313a", null ],

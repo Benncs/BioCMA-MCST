@@ -86,12 +86,57 @@ Functions</h2></td></tr>
 <tr class="memitem:a78ad4623d83b436cdd0ae9c8e1e5c7ac" id="r_a78ad4623d83b436cdd0ae9c8e1e5c7ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78ad4623d83b436cdd0ae9c8e1e5c7ac">reset_counter</a> ()</td></tr>
 <tr class="memitem:a5c1775fa34193199d9c989e5740e2f84" id="r_a5c1775fa34193199d9c989e5740e2f84"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </td></tr>
 <tr class="memitem:a5c1775fa34193199d9c989e5740e2f84 template"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c1775fa34193199d9c989e5740e2f84">get_properties</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;container, const std::size_t n_compartment, const bool with_age)</td></tr>
+<tr class="memitem:adae52b6b518e25be1c920f36f196ef65" id="r_adae52b6b518e25be1c920f36f196ef65"><td class="memTemplParams" colspan="2">template&lt;std::size_t buffer_size&gt; </td></tr>
+<tr class="memitem:adae52b6b518e25be1c920f36f196ef65 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adae52b6b518e25be1c920f36f196ef65">_save_probes</a> (<a class="el" href="namespaceSimulation.html#a3844f9fb0ce2978c66af04ff0a6eece6">Simulation::ProbeType</a> ptype, const <a class="el" href="classSimulation_1_1Probes.html">Simulation::Probes</a>&lt; buffer_size &gt; &amp;probes, <a class="el" href="classCore_1_1PartialExporter.html">Core::PartialExporter</a> &amp;pde, bool force)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:ac66969e38407ea67e644da56b23017eb" id="r_ac66969e38407ea67e644da56b23017eb"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac66969e38407ea67e644da56b23017eb">counter</a> = 0</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="adae52b6b518e25be1c920f36f196ef65" name="adae52b6b518e25be1c920f36f196ef65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adae52b6b518e25be1c920f36f196ef65">&#9670;&#160;</a></span>_save_probes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t buffer_size&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void PostProcessing::_save_probes </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceSimulation.html#a3844f9fb0ce2978c66af04ff0a6eece6">Simulation::ProbeType</a></td>          <td class="paramname"><span class="paramname"><em>ptype</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classSimulation_1_1Probes.html">Simulation::Probes</a>&lt; buffer_size &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>probes</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCore_1_1PartialExporter.html">Core::PartialExporter</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>pde</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>force</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_adae52b6b518e25be1c920f36f196ef65_cgraph.svg" width="554" height="258"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_adae52b6b518e25be1c920f36f196ef65_icgraph.svg" width="100%" height="436"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+</div>
+
+</div>
+</div>
 <a id="a83c7126aaab1e7dbe0674b501f5a59a3" name="a83c7126aaab1e7dbe0674b501f5a59a3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a83c7126aaab1e7dbe0674b501f5a59a3">&#9670;&#160;</a></span>final_post_processing()</h2>
 
@@ -235,7 +280,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_a0e06c75e06cf43e767d5e3e8afab62f2_cgraph.svg" width="566" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_a0e06c75e06cf43e767d5e3e8afab62f2_cgraph.svg" width="100%" height="493"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>

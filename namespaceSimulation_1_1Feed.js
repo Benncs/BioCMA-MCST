@@ -5,6 +5,7 @@ var namespaceSimulation_1_1Feed =
     [ "DelayedConstant", "structSimulation_1_1Feed_1_1DelayedConstant.html", "structSimulation_1_1Feed_1_1DelayedConstant" ],
     [ "FeedDescriptor", "structSimulation_1_1Feed_1_1FeedDescriptor.html", "structSimulation_1_1Feed_1_1FeedDescriptor" ],
     [ "FeedFactory", "structSimulation_1_1Feed_1_1FeedFactory.html", "structSimulation_1_1Feed_1_1FeedFactory" ],
+    [ "FeedValue", "structSimulation_1_1Feed_1_1FeedValue.html", "structSimulation_1_1Feed_1_1FeedValue" ],
     [ "Pulse", "structSimulation_1_1Feed_1_1Pulse.html", "structSimulation_1_1Feed_1_1Pulse" ],
     [ "SimulationFeed", "classSimulation_1_1Feed_1_1SimulationFeed.html", "classSimulation_1_1Feed_1_1SimulationFeed" ],
     [ "Step", "structSimulation_1_1Feed_1_1Step.html", "structSimulation_1_1Feed_1_1Step" ],
