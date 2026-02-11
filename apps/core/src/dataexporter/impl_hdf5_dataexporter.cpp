@@ -77,7 +77,7 @@ namespace Core
                                         ? *user_description
                                         : "Interesting results";
 
-    metadata["file_version"] = 7; // NOLINT
+    metadata["file_version"] = 8; // NOLINT
     metadata["creation_date"] = date_time();
     metadata["author"] = get_user_name();
     metadata["description"] = description;
@@ -275,11 +275,21 @@ namespace Core
   DataExporter::append_matrix(std::string_view name, matrix_variant_t data)
   {
     CHECK_PIMPL
-    auto& descriptor = descriptors.at(std::string(name));
+
+    std::vector<size_t> dims{};
+    try
+    {
+      auto& descriptor = descriptors.at(std::string(name));
+      dims = descriptor.dims;
+    }
+    catch (std::out_of_range& e)
+    {
+      throw std::runtime_error(
+          IO::format("DataExporter: unknown matrix: ", name));
+    }
 
     auto dataset = pimpl->file.getDataSet(name.data());
 
-    auto dims = descriptor.dims;
     auto new_size = dims;
     auto select_start = dims;
     auto select_size = dims;

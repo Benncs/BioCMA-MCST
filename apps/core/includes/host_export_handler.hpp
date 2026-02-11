@@ -66,14 +66,6 @@ private:
   [[maybe_unused]] ExecInfo exec{};
   std::shared_ptr<Core::MainExporter> main_exporter;
 
-  /**
-   * @brief Prepares the event span if the event counter is enabled.
-   * @param simulation The simulation unit.
-   * @return Optional span of event counts.
-   */
-  static std::optional<std::span<std::size_t>>
-  prepareEventSpan(Simulation::SimulationUnit& simulation);
-
   IO::ProgressBar progressbar;
 };
 

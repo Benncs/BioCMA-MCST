@@ -102,8 +102,7 @@ namespace Core
                        std::span<const double> liquid_volume,
                        std::optional<std::span<const double>> concentration_gas,
                        std::optional<std::span<const double>> volume_gas,
-                       std::optional<std::span<const double>> mtr,
-                       std::optional<std::span<std::size_t>> events);
+                       std::optional<std::span<const double>> mtr);
 
   private:
     static const std::string

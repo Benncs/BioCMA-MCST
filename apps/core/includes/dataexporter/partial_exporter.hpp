@@ -73,6 +73,15 @@ namespace Core
     void write_probe(const std::string& probe_name,
                      std::span<const double> data);
 
+    /**
+     * @brief Writes tally
+     *
+     * Tally is part of partial export to avoid to sync MPI nodes for the
+     * reduction It then takes n_nodes times the real tally size but can be
+     * neglicted pred to article data
+     */
+    void write_tally(std::span<const std::size_t> data);
+
   private:
     // uint64_t probe_counter_n_element; /**< Counter for the number of probe
     //                                      elements. */
