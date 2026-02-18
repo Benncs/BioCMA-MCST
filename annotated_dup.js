@@ -55,6 +55,7 @@ var annotated_dup =
     [ "Models", "namespaceModels.html", [
       [ "FixedLength", "structModels_1_1FixedLength.html", "structModels_1_1FixedLength" ],
       [ "Monod", "structModels_1_1Monod.html", "structModels_1_1Monod" ],
+      [ "SimpleAcetate", "structModels_1_1SimpleAcetate.html", "structModels_1_1SimpleAcetate" ],
       [ "SimpleModel", "structModels_1_1SimpleModel.html", "structModels_1_1SimpleModel" ],
       [ "TwoMeta", "structModels_1_1TwoMeta.html", "structModels_1_1TwoMeta" ],
       [ "TwoMetaNb", "structModels_1_1TwoMetaNb.html", "structModels_1_1TwoMetaNb" ],

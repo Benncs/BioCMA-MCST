@@ -99,6 +99,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a450fb0c92efa4ee81b4083fc01f5e665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the number of particles in each compartment.  <br /></td></tr>
 <tr class="memitem:a53c54ce796df99b407f410beb01074c5" id="r_a53c54ce796df99b407f410beb01074c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53c54ce796df99b407f410beb01074c5">write_probe</a> (const std::string &amp;probe_name, std::span&lt; const double &gt; data)</td></tr>
 <tr class="memdesc:a53c54ce796df99b407f410beb01074c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes probe data to the export.  <br /></td></tr>
+<tr class="memitem:ad8a5d2f9287f5f077e362d4b073c8082" id="r_ad8a5d2f9287f5f077e362d4b073c8082"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8a5d2f9287f5f077e362d4b073c8082">write_tally</a> (std::span&lt; const std::size_t &gt; data)</td></tr>
+<tr class="memdesc:ad8a5d2f9287f5f077e362d4b073c8082"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes tally.  <br /></td></tr>
 <tr class="inherit_header pub_methods_classCore_1_1DataExporter"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classCore_1_1DataExporter')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classCore_1_1DataExporter.html">Core::DataExporter</a></td></tr>
 <tr class="memitem:aa39b5e7514dd7c25024bb31c72e2e8e7 inherit pub_methods_classCore_1_1DataExporter" id="r_aa39b5e7514dd7c25024bb31c72e2e8e7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#aa39b5e7514dd7c25024bb31c72e2e8e7">DataExporter</a> (const <a class="el" href="classCore_1_1DataExporter.html">DataExporter</a> &amp;)=delete</td></tr>
 <tr class="memitem:ae48b541f166924ffb872b168fb09bc43 inherit pub_methods_classCore_1_1DataExporter" id="r_ae48b541f166924ffb872b168fb09bc43"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#ae48b541f166924ffb872b168fb09bc43">DataExporter</a> (<a class="el" href="classCore_1_1DataExporter.html">DataExporter</a> &amp;&amp;)=delete</td></tr>
@@ -342,6 +344,36 @@ Here is the call graph for this function:</div>
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1PartialExporter_a53c54ce796df99b407f410beb01074c5_icgraph.svg" width="100%" height="436"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+</div>
+
+</div>
+</div>
+<a id="ad8a5d2f9287f5f077e362d4b073c8082" name="ad8a5d2f9287f5f077e362d4b073c8082"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8a5d2f9287f5f077e362d4b073c8082">&#9670;&#160;</a></span>write_tally()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Core::PartialExporter::write_tally </td>
+          <td>(</td>
+          <td class="paramtype">std::span&lt; const std::size_t &gt;</td>          <td class="paramname"><span class="paramname"><em>data</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Writes tally. </p>
+<p>Tally is part of partial export to avoid to sync MPI nodes for the reduction It then takes n_nodes times the real tally size but can be neglicted pred to article data </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1PartialExporter_ad8a5d2f9287f5f077e362d4b073c8082_cgraph.svg" width="339" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1PartialExporter_ad8a5d2f9287f5f077e362d4b073c8082_icgraph.svg" width="372" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
