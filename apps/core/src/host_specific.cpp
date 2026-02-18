@@ -336,13 +336,13 @@ namespace
     for (std::size_t i_rank = 0; i_rank < exec.n_rank; ++i_rank)
     {
       // std::string group = "files/" + std::to_string(i_rank);
-      auto group = IO::format("files/", i_rank);
+      auto group = IO::format("files/", std::to_string(i_rank));
 
       // auto filename = params.results_file_name + "_partial_"
       //                 + std::to_string(i_rank) + ".h5";
 
-      auto filename
-          = IO::format(params.results_file_name, "_partial_", i_rank, ".h5");
+      auto filename = IO::format(
+          params.results_file_name, "_partial_", std::to_string(i_rank), ".h5");
 
       main_exporter->do_link(filename, group, "/");
     }
