@@ -304,6 +304,7 @@ namespace Core::ScalarFactory
       break;
     }
     case Simulation::ScalarInitialiserType::File:
+    case Simulation::ScalarInitialiserType::Serde:
     {
       // File doesn't need functor but buffer
       // First check initialiser has buffer and functor and not set
