@@ -17,6 +17,7 @@ namespace Simulation
     File,         // Need filepath
     CustomScript, // Need script path
     FullCase,     // Need script path
+    Serde,        // Need filepath
   };
 
   // using init_scalar_f_t =

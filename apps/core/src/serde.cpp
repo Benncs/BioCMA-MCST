@@ -159,7 +159,7 @@ namespace SerDe
     sc->gas_buffer = read_c_gas;
     sc->liquid_buffer = read_c_liq;
     sc->n_species = dims.n_species;
-    sc->type = Simulation::ScalarInitialiserType::File;
+    sc->type = Simulation::ScalarInitialiserType::Serde;
     // sc->gas_flow = sc->gas_buffer.has_value();
 
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;

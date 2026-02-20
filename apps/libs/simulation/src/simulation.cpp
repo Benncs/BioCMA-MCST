@@ -139,8 +139,13 @@ namespace Simulation
     }
     else
     {
-      impl::post_init_concentration_file(
-          is_two_phase_flow, scalar_init, liquid_scalar, gas_scalar);
+      bool change_layout = scalar_init.type != ScalarInitialiserType::Serde;
+
+      impl::post_init_concentration_file(is_two_phase_flow,
+                                         scalar_init,
+                                         liquid_scalar,
+                                         gas_scalar,
+                                         change_layout);
     }
 
     if ((this->liquid_scalar->getConcentrationArray() >= 0.).all())
