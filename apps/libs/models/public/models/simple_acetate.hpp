@@ -2,6 +2,7 @@
 #ifndef __SIMPLE_ACETATE_MODEL_HPP__
 #define __SIMPLE_ACETATE_MODEL_HPP__
 
+#include "Kokkos_Assert.hpp"
 #include "Kokkos_Core_fwd.hpp"
 #include "Kokkos_Macros.hpp"
 #include "common/common.hpp"
@@ -183,8 +184,8 @@ namespace Models
 
     GET_PROPERTY(particle_var::phi_s) = -1 * D[0] * lin_density * y[0];
     GET_PROPERTY(particle_var::phi_a)
-        = mask_pa * (-D[1] * lin_density * y[1])
-          + (1. - mask_pa) * (pa * lin_density * y[0] / y[1]);
+        = mask_pa * (-U[1] * lin_density * y[1])
+          + (1.F - mask_pa) * (pa * lin_density * y[0] / y[1]);
 
     return check_div(GET_PROPERTY(Self::particle_var::length),
                      GET_PROPERTY(Self::particle_var::l_max));
@@ -215,18 +216,18 @@ namespace Models
     const auto current_a_e = GET_PROPERTY(particle_var::a_e);
     auto gen = random_pool.get_state();
 
-    const FloatType sigma = 0.2;
-    const FloatType average = Kokkos::log(current_a_e) - sigma * sigma / 2;
+    const double sigma = 0.2;
+    const double average = Kokkos::log(current_a_e) - sigma * sigma / 2;
 
-    const auto dist = MC::Distributions::LogNormal<FloatType>(average, sigma);
+    const auto dist = MC::Distributions::LogNormal<double>(average, sigma);
+    const auto gen1 = static_cast<FloatType>(dist.draw(gen));
+    const auto gen2 = static_cast<FloatType>(dist.draw(gen));
 
     static constexpr auto local_l = l_max_dist;
+    const FloatType lmax1 = local_l.draw(gen);
+    const FloatType lmax2 = local_l.draw(gen);
 
-    FloatType lmax1 = local_l.draw(gen);
-    FloatType lmax2 = local_l.draw(gen);
-
-    FloatType gen1 = dist.draw(gen);
-    FloatType gen2 = dist.draw(gen);
+    KOKKOS_ASSERT(gen1 != 0 && gen2 != 0);
 
     GET_PROPERTY(particle_var::a_p) = gen1;
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::a_p) = gen2;
