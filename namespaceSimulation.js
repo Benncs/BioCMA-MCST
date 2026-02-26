@@ -2,7 +2,7 @@ var namespaceSimulation =
 [
     [ "Feed", "namespaceSimulation_1_1Feed.html", "namespaceSimulation_1_1Feed" ],
     [ "impl", "namespaceSimulation_1_1impl.html", [
-      [ "post_init_concentration_file", "namespaceSimulation_1_1impl.html#ae758467dce9da6b2605e79579b54db29", null ],
+      [ "post_init_concentration_file", "namespaceSimulation_1_1impl.html#a55672c412b144c5ec1b80c5b8ee129e3", null ],
       [ "post_init_concentration_functor", "namespaceSimulation_1_1impl.html#a8621c7c62e95e65b4403bbf991f30719", null ]
     ] ],
     [ "KernelInline", "namespaceSimulation_1_1KernelInline.html", "namespaceSimulation_1_1KernelInline" ],
@@ -37,7 +37,8 @@ var namespaceSimulation =
       [ "Local", "namespaceSimulation.html#afd80d46a94927c6389992f31509571aaa509820290d57f333403f490dde7316f4", null ],
       [ "File", "namespaceSimulation.html#afd80d46a94927c6389992f31509571aaa0b27918290ff5323bea1e3b78a9cf04e", null ],
       [ "CustomScript", "namespaceSimulation.html#afd80d46a94927c6389992f31509571aaa3e7683f51af33ba15b5abc5b1907621f", null ],
-      [ "FullCase", "namespaceSimulation.html#afd80d46a94927c6389992f31509571aaa56b419b259c49fa979598027da1f6062", null ]
+      [ "FullCase", "namespaceSimulation.html#afd80d46a94927c6389992f31509571aaa56b419b259c49fa979598027da1f6062", null ],
+      [ "Serde", "namespaceSimulation.html#afd80d46a94927c6389992f31509571aaa3aa078c74db7e488d0384999eccb7116", null ]
     ] ],
     [ "makeScalarSimulation", "namespaceSimulation.html#ae5bb8948e2a0bb4f4aef277baf4c0dff", null ],
     [ "map_probe_name", "namespaceSimulation.html#ad84b3a18b90cd099d733648503210f67", null ]
