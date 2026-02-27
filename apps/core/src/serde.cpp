@@ -91,12 +91,12 @@ namespace SerDe
 
     std::ostringstream buf(std::ios::binary);
     {
-
+      auto accessor = case_data.simulation->getter();
       Archive_t ar(buf);
       ar(cereal::make_nvp("version", ExecInfo::get_version()),
          case_data.exec_info);
-      auto dim = case_data.simulation->getDimensions();
-      auto cliq = case_data.simulation->getCliqData();
+      auto dim = accessor.getDimensions();
+      auto cliq = accessor.getCliqData();
 
       if (!case_data.simulation->checkScalar())
       {
@@ -104,7 +104,7 @@ namespace SerDe
             "Simulation with negative value won´t be able to be loaded");
       }
 
-      auto cgas = case_data.simulation->getCgasData();
+      auto cgas = accessor.getCgasData();
 
       std::optional<std::vector<double>> cgas_a
           = cgas.has_value() ? std::make_optional(std::vector<double>(
@@ -114,7 +114,7 @@ namespace SerDe
          dim,
          std::vector<double>(cliq.begin(), cliq.end()),
          cgas_a,
-         case_data.simulation->get_end_time_mut());
+         accessor.get_end_time_mut());
       ar(case_data.simulation->mc_unit);
     }
     write_to_file(buf, serde_name.str());
@@ -176,7 +176,8 @@ namespace SerDe
     }
 
     case_data.simulation = std::move(*simulation);
-    std::vector<double> kla(case_data.simulation->getDimensions().n_species);
+    std::vector<double> kla(
+        case_data.simulation->getter().getDimensions().n_species);
     if (kla.size() > 1)
     {
       kla[1] = 0.2; // 700 h-1
@@ -188,7 +189,7 @@ namespace SerDe
     // case_data.simulation->setMtrModel(
     //     Simulation::MassTransfer::Type::FixedKla{kla});
 
-    case_data.simulation->get_start_time_mut() = start_time;
+    case_data.simulation->getter().get_start_time_mut() = start_time;
     gi.set_initial_number_particle(np);
     std::cout << "SIMULATION: " << case_data.exec_info.run_id << " LOADED"
               << std::endl;

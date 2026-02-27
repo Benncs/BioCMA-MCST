@@ -4,10 +4,9 @@
 #include <cma_utils/alias.hpp>
 #include <dataexporter/main_exporter.hpp>
 #include <dataexporter/partial_exporter.hpp>
-#include <optional>
 #include <progress_bar.hpp>
-#include <simulation/simulation.hpp>
-#include <span>
+#include <simulation/simulation_getter.hpp>
+
 class ExportHandler final
 {
 
@@ -38,7 +37,7 @@ public:
    */
   bool operator()(double current_time,
                   size_t loop_counter,
-                  Simulation::SimulationUnit& simulation,
+                  const Simulation::Getter& getter,
                   Core::PartialExporter& partial_exporter,
                   const CmaUtils::TransitionnerPtrType& transitioner);
 
@@ -56,7 +55,8 @@ public:
    * reactor state.
    */
   void pre_post_export(double current_time,
-                       const Simulation::SimulationUnit& simulation,
+                       const Simulation::Getter& getter,
+
                        const CmaUtils::TransitionnerPtrType& transitioner);
 
 private:

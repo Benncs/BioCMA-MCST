@@ -1,5 +1,6 @@
 #include "biocma_cst_config.hpp"
 #include "simulation/simulation.hpp"
+#include "simulation/simulation_getter.hpp"
 #include <common/execinfo.hpp>
 #include <cstddef>
 #include <cstdint>
@@ -145,11 +146,10 @@ namespace Core
   }
 
   void
-  MainExporter::write_final(const Simulation::SimulationUnit* const simulation,
+  MainExporter::write_final(const Simulation::Getter& getter,
                             std::size_t number_particles)
   {
-
-    const auto& event = simulation->mc_unit->events;
+    const auto& event = getter.mc_unit()->events;
 
     export_initial_kv final_values;
     final_values["number_particles"] = number_particles;
@@ -163,17 +163,17 @@ namespace Core
       final_values["events/total_exit"] = event.get<MC::EventType::Exit>();
     }
 
-    const auto [n_row, n_col] = simulation->getDimensions();
+    const auto [n_row, n_col] = getter.getDimensions();
 
     write_simple(final_values, "final_result/");
 
     write_matrix("final_result/concentration_liquid",
-                 simulation->getCliqData(),
+                 getter.getCliqData(),
                  n_row,
                  n_col,
                  true);
 
-    auto opt_gas = simulation->getCgasData();
+    auto opt_gas = getter.getCgasData();
     if (opt_gas.has_value())
     {
       write_matrix(

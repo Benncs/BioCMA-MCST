@@ -1,8 +1,7 @@
 #ifndef __CORE_MAIN_EXPORTER_HPP__
 #define __CORE_MAIN_EXPORTER_HPP__
 
-#include "mc/events.hpp"
-
+#include "simulation/simulation_getter.hpp"
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
@@ -12,13 +11,6 @@
 #include <span>
 #include <string>
 #include <string_view>
-#include <vector>
-
-namespace Simulation
-{
-  class SimulationUnit;
-
-}
 
 namespace Core
 {
@@ -69,7 +61,7 @@ namespace Core
      * @param distribution Final distribution of particles or entities across
      * compartments.
      */
-    void write_final(const Simulation::SimulationUnit* simulation,
+    void write_final(const Simulation::Getter& getter,
                      std::size_t number_particles);
 
     /**

@@ -31,7 +31,7 @@ namespace Simulation
   SimulationUnit::SimulationUnit(std::unique_ptr<MC::MonteCarloUnit>&& _unit,
                                  const ScalarInitializer& scalar_init,
                                  std::optional<Feed::SimulationFeed> _feed)
-      : mc_unit(std::move(_unit)),
+      : accesor(this), mc_unit(std::move(_unit)),
         feed(_feed.value_or(Feed::SimulationFeed::empty())),
         is_two_phase_flow(scalar_init.gas_flow)
   {
@@ -56,6 +56,9 @@ namespace Simulation
 
     contribs_scatter
         = Kokkos::Experimental::create_scatter_view(get_kernel_contribution());
+
+    dims = { .n_species = this->liquid_scalar->n_row(),
+             .n_compartment = this->liquid_scalar->n_col() };
   }
 
   void

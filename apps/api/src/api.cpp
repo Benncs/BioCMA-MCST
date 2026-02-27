@@ -285,7 +285,7 @@ namespace Api
     else if (auto_mtr)
     {
 
-      std::vector<double> kla(simulation->getDimensions().n_species);
+      std::vector<double> kla(simulation->getter().getDimensions().n_species);
       if (kla.size() > 1)
       {
         kla[1] = 0.2; // 700 h-1

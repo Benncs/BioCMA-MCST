@@ -132,7 +132,8 @@ namespace
                Core::PartialExporter& partial_exporter,
                ExportHandler& exporter_handler)
   {
-    exporter_handler.pre_post_export(current_time, simulation, d_transitionner);
+    exporter_handler.pre_post_export(
+        current_time, simulation.getter(), d_transitionner);
     // FIXME:
     // WARNING write_tally must be  BEFORE write_number_particle because
     // partial_exporter increase iteration counter after write_number_particle
@@ -156,24 +157,19 @@ host_process(std::shared_ptr<IO::Logger> logger,
              CmaUtils::TransitionnerPtrType d_transition,
              Core::PartialExporter& partial_exporter)
 {
-
-  // auto i = d->advance(0,0.1);
-  // // logger->print("",IO::format(i->volume()[0]));
-  // std::cout<<i->volume()[0]<<std::endl;
-
-  // exit(0);
+  auto getter = simulation.getter();
   const auto main_exporter = make_main_exporter(logger, exec, params);
 
-  const auto [n_species, n_compartment] = simulation.getDimensions();
+  const auto [n_species, n_compartment] = getter.getDimensions();
 
   main_exporter->init_fields(params.number_exported_result,
                              n_compartment,
                              n_species,
-                             simulation.two_phase_flow());
+                             getter.two_phase_flow());
 
   main_exporter->write_initial(simulation.mc_unit->init_weight, params);
 
-  PostProcessing::show_sumup_state(logger, simulation);
+  PostProcessing::show_sumup_state(logger, getter);
 
   main_loop(logger,
             params,
@@ -183,14 +179,14 @@ host_process(std::shared_ptr<IO::Logger> logger,
             main_exporter,
             partial_exporter);
 
-  PostProcessing::show_sumup_state(logger, simulation);
+  PostProcessing::show_sumup_state(logger, getter);
 
   SEND_MPI_SIG_STOP;
 
-  PostProcessing::save_particle_state(simulation, partial_exporter);
+  PostProcessing::save_particle_state(getter, partial_exporter);
   last_sync(exec, simulation);
   PostProcessing::final_post_processing(
-      logger, exec, params, simulation, main_exporter);
+      logger, exec, params, getter, main_exporter);
 
   PostProcessing::reset_counter();
 }
@@ -214,11 +210,11 @@ namespace
     // : (n_iter_simulation) / (n_update_feed) + 1;
 
     const bool do_export = main_exporter != nullptr;
-
+    auto getter = simulation.getter();
     const auto [niter, dump_number, dump_interval] = get_n_interval(params);
     const double d_t = params.d_t;
     const auto n_iter_simulation = niter;
-    double current_time = simulation.get_start_time_mut();
+    double current_time = getter.get_start_time_mut();
 
     // use ternary because ExportHandler doesnt provie assigment operator
     ExportHandler exporter_handler(
@@ -231,7 +227,7 @@ namespace
 
     if (do_export)
     {
-      exporter_handler.pre_post_export(current_time, simulation, d_transionner);
+      exporter_handler.pre_post_export(current_time, getter, d_transionner);
     }
 
 #ifndef NO_MPI
@@ -262,7 +258,7 @@ namespace
 
           auto _ = exporter_handler(current_time,
                                     __loop_counter,
-                                    simulation,
+                                    getter,
                                     partial_exporter,
                                     d_transionner);
         }
@@ -288,7 +284,7 @@ namespace
           {
             logger->print("Host", "Save triggered");
           }
-          PostProcessing::save_particle_state(simulation, partial_exporter);
+          PostProcessing::save_particle_state(getter, partial_exporter);
         }
 
         if (Core::SignalHandler::is_sigint_raised()) [[unlikely]]
@@ -320,7 +316,7 @@ namespace
                    exporter_handler);
     }
 
-    simulation.get_end_time_mut() = current_time;
+    simulation.getter().get_end_time_mut() = current_time;
     // transitioner.reset();
   }
 

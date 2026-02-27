@@ -51,8 +51,9 @@ sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     {
 
       auto liquid_buffer
-          = simulation.getContributionData_mut(); // Get the span of array on
-                                                  // which reduction happend
+          = simulation.getter()
+                .getContributionData_mut(); // Get the span of array on
+                                            // which reduction happend
       MPI_Reduce(MPI_IN_PLACE,
                  liquid_buffer.data(),
                  liquid_buffer.size(),
@@ -65,8 +66,9 @@ sync_step(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
     {
 
       const auto local_contribution
-          = simulation.getContributionData(); // Get the span of array
-                                              // that are add to reduction
+          = simulation.getter()
+                .getContributionData(); // Get the span of array
+                                        // that are add to reduction
       MPI_Reduce(local_contribution.data(),
                  nullptr,
                  local_contribution.size(),
@@ -103,8 +105,8 @@ sync_prepare_next([[maybe_unused]] const ExecInfo& exec,
 
 // We can use span here because we broadcast without changing size
 #ifndef NO_MPI
-    auto data
-        = simulation.getCliqData(); // Get concentration ptr wrapped into span
+    auto data = simulation.getter()
+                    .getCliqData(); // Get concentration ptr wrapped into span
 
     WrapMPI::barrier();
     WrapMPI::Async::broadcast_span(data, 0, *request);

@@ -26,12 +26,12 @@ namespace Simulation
 
     auto pred = [](auto&& val) { return val < 0.; };
 
-    auto cliq = this->getCliqData();
+    auto cliq = this->accesor.getCliqData();
 
     const auto it = std::ranges::find_if(cliq.begin(), cliq.end(), pred);
     bool flag = it == cliq.end();
 
-    auto cgas = this->getCgasData();
+    auto cgas = this->accesor.getCgasData();
 
     if (cgas)
     {
