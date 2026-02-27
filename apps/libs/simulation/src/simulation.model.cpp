@@ -59,7 +59,7 @@ namespace Simulation
     PROFILE_SECTION("host:update_feed")
     // Get references to the index_leaving_flow and leaving_flow data members
 
-    auto functor
+    auto set_scalar_feed
         = [update_scalar](auto& scl, const Feed::FeedDescriptor& fd) -> void
     {
       if (update_scalar)
@@ -69,7 +69,6 @@ namespace Simulation
         {
           scl.set_feed(index, fd.input_position, fd.flow * concentration);
         }
-        // But set -Q only once to not count flow more than once.
         if (fd.output_position)
         {
           scl.set_sink(*fd.output_position, fd.flow);
@@ -78,15 +77,20 @@ namespace Simulation
     };
 
     auto& liquid_scalar = *this->liquid_scalar;
+    std::size_t mc_flow_counter = 0;
     for (auto& feed : feed.liquid_feeds())
     {
       feed.update(t, d_t);
-      functor(liquid_scalar, feed);
+      set_scalar_feed(liquid_scalar, feed);
       if (feed.output_position)
       {
-        // set -Q only once to not count flow more than once.
+
+        // this->mc_unit->domain.set_leaving_flow(
+        //     0, *feed.output_position, feed.flow);
+
         this->mc_unit->domain.set_leaving_flow(
-            0, *feed.output_position, feed.flow);
+            mc_flow_counter, *feed.output_position, feed.flow);
+        mc_flow_counter++;
       }
     }
 
@@ -96,7 +100,7 @@ namespace Simulation
       for (auto& feed : feed.gas_feeds())
       {
         feed.update(t, d_t);
-        functor(gs, feed);
+        set_scalar_feed(gs, feed);
       }
     }
   }

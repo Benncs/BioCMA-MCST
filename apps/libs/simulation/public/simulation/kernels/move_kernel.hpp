@@ -394,29 +394,44 @@ namespace Simulation::KernelInline
                 const MC::VolumeView<ComputeSpace, true>& liquid_volumes,
                 std::size_t& dead_count) const
     {
-      const auto position = positions(idx);
-      const auto liquid_volume = liquid_volumes(position);
+      const std::size_t position = positions(idx);
+      const double liquid_volume = liquid_volumes(position);
       const MC::LeavingFlowView<true>& leaving_flow = move.leaving_flow;
       const std::size_t n_flow = leaving_flow.size();
-      int leave_mask = 0; // 0 or 1
-      // Reuse the same random number as one used to move. Does it matter ?
-      // One random per flow ?
-      const auto random_number = static_cast<float>(random(idx, 0));
 
-      // const auto proba_rhs = d_t / (liquid_volume * random_number);
-      // const auto proba_rhs = (liquid_volume * random_number) / d_t;
+      // Reuse the same random number as one used to move.
+      // What does it change ?
 
-      for (std::size_t i_flow = 0; i_flow < n_flow; ++i_flow)
+      auto gen = random_pool.get_state();
+      auto random_number = gen.frand(0, 1);
+      random_pool.free_state(gen);
+
+      const auto& [index, flow] = leaving_flow(0);
+      const bool p = probability_leaving<precision_tag>(
+          random_number, liquid_volume, flow, d_t);
+      const bool ok_p = position == index;
+      const int m = static_cast<int>(ok_p) * static_cast<int>(p);
+      int leave_mask = m;
+
+      for (std::size_t i_flow = 1; i_flow < n_flow; ++i_flow)
       {
+
         const auto& [index, flow] = leaving_flow(i_flow);
-
-        const bool p
-            = probability_leaving<int>(random_number, liquid_volume, flow, d_t);
-        // const bool p = proba_rhs < flow;
         const bool ok_p = position == index;
-        const int m = static_cast<int>(ok_p) * static_cast<int>(p);
+        // if (!ok_p || leave_mask != 0)
+        // {
+        //   continue;
+        // }
 
-        leave_mask |= static_cast<int>(m);
+        auto gen = random_pool.get_state();
+        random_number = gen.frand(0, 1);
+        random_pool.free_state(gen);
+
+        const bool p = probability_leaving<precision_tag>(
+            random_number, liquid_volume, flow, d_t);
+
+        const int m = static_cast<int>(ok_p) * static_cast<int>(p);
+        leave_mask |= m;
       }
 
       dead_count += leave_mask;

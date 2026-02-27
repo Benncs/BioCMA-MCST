@@ -162,6 +162,7 @@ namespace MC
   [[nodiscard]] inline DomainState<ComputeSpace, true>
   ReactorDomain::get_const_inner()
   {
+
     return { inner.neighbors,
              inner.diag_transition,
              inner.cumulative_probability,
