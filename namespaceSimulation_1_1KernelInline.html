@@ -90,15 +90,17 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a1829eeb2a159b26f8e9c8019f115f094 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1829eeb2a159b26f8e9c8019f115f094">cycle_reducer_view_type</a> = <a class="el" href="classSimulation_1_1KernelInline_1_1CycleReducer.html">KernelInline::CycleReducer</a>&lt;Space&gt;::result_view_type</td></tr>
 <tr class="memitem:a80366d1de1efc8a4e4c203cdceb3b6d1" id="r_a80366d1de1efc8a4e4c203cdceb3b6d1"><td class="memTemplParams" colspan="2">template&lt;typename Space&gt; </td></tr>
 <tr class="memitem:a80366d1de1efc8a4e4c203cdceb3b6d1 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80366d1de1efc8a4e4c203cdceb3b6d1">move_reducer_view_type</a> = Kokkos::View&lt;std::size_t, Space&gt;</td></tr>
+<tr class="memitem:a69b2887c984af36974b98f0afb8d5f6c" id="r_a69b2887c984af36974b98f0afb8d5f6c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69b2887c984af36974b98f0afb8d5f6c">fast_tag</a> = void</td></tr>
+<tr class="memitem:abca8171ac403d55106511a251dca0e3a" id="r_abca8171ac403d55106511a251dca0e3a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abca8171ac403d55106511a251dca0e3a">precision_tag</a> = int</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a3fd8d8828a956f4420ac98126ddf427b" id="r_a3fd8d8828a956f4420ac98126ddf427b"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3fd8d8828a956f4420ac98126ddf427b">__find_next_compartment</a> (const bool do_serch, const <a class="el" href="namespaceMC.html#a0338734b6c7022619c63f34662b34f75">MC::NeighborsView</a>&lt; ComputeSpace, true &gt; &amp;neighbors, const <a class="el" href="namespaceMC.html#ad0d8ea884c3b32f3d99228e435997790">MC::CumulativeProbabilityView</a>&lt; ComputeSpace, true &gt; &amp;cumulative_probability, const std::size_t i_compartment, const double random_number)</td></tr>
 <tr class="memdesc:a3fd8d8828a956f4420ac98126ddf427b"><td class="mdescLeft">&#160;</td><td class="mdescRight">probably overkill binary search to find next compartment  <br /></td></tr>
-<tr class="memitem:a648521674ead158dd3776a946da6722a" id="r_a648521674ead158dd3776a946da6722a"><td class="memTemplParams" colspan="2">template&lt;typename FastSample = int&gt; </td></tr>
+<tr class="memitem:a648521674ead158dd3776a946da6722a" id="r_a648521674ead158dd3776a946da6722a"><td class="memTemplParams" colspan="2">template&lt;typename FastSample = precision_tag&gt; </td></tr>
 <tr class="memitem:a648521674ead158dd3776a946da6722a template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a648521674ead158dd3776a946da6722a">probability_leaving</a> (float random_number, double volume, double flow, double dt)</td></tr>
-<tr class="memitem:aac5971a17806db044f8dcf6254872e13" id="r_aac5971a17806db044f8dcf6254872e13"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
-<tr class="memitem:aac5971a17806db044f8dcf6254872e13 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac5971a17806db044f8dcf6254872e13">probability_leaving&lt; void &gt;</a> (float random_number, double volume, double flow, double dt)</td></tr>
+<tr class="memitem:ad465888b874fea5c0e8f9979dc490f94" id="r_ad465888b874fea5c0e8f9979dc490f94"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:ad465888b874fea5c0e8f9979dc490f94 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad465888b874fea5c0e8f9979dc490f94">probability_leaving&lt; fast_tag &gt;</a> (float random_number, double volume, double flow, double dt)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -125,6 +127,20 @@ template&lt;typename Space&gt; </div>
 
 </div>
 </div>
+<a id="a69b2887c984af36974b98f0afb8d5f6c" name="a69b2887c984af36974b98f0afb8d5f6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69b2887c984af36974b98f0afb8d5f6c">&#9670;&#160;</a></span>fast_tag</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a69b2887c984af36974b98f0afb8d5f6c">Simulation::KernelInline::fast_tag</a> = void</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a80366d1de1efc8a4e4c203cdceb3b6d1" name="a80366d1de1efc8a4e4c203cdceb3b6d1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a80366d1de1efc8a4e4c203cdceb3b6d1">&#9670;&#160;</a></span>move_reducer_view_type</h2>
 
@@ -135,6 +151,20 @@ template&lt;typename Space&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="#a80366d1de1efc8a4e4c203cdceb3b6d1">Simulation::KernelInline::move_reducer_view_type</a> = Kokkos::View&lt;std::size_t, Space&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abca8171ac403d55106511a251dca0e3a" name="abca8171ac403d55106511a251dca0e3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abca8171ac403d55106511a251dca0e3a">&#9670;&#160;</a></span>precision_tag</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#abca8171ac403d55106511a251dca0e3a">Simulation::KernelInline::precision_tag</a> = int</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -192,7 +222,7 @@ Here is the caller graph for this function:</div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename FastSample = int&gt; </div>
+template&lt;typename FastSample = precision_tag&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">KOKKOS_INLINE_FUNCTION bool Simulation::KernelInline::probability_leaving </td>
@@ -224,13 +254,13 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_a648521674ead158dd3776a946da6722a_icgraph.svg" width="646" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_a648521674ead158dd3776a946da6722a_icgraph.svg" width="646" height="175"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="aac5971a17806db044f8dcf6254872e13" name="aac5971a17806db044f8dcf6254872e13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac5971a17806db044f8dcf6254872e13">&#9670;&#160;</a></span>probability_leaving&lt; void &gt;()</h2>
+<a id="ad465888b874fea5c0e8f9979dc490f94" name="ad465888b874fea5c0e8f9979dc490f94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad465888b874fea5c0e8f9979dc490f94">&#9670;&#160;</a></span>probability_leaving&lt; fast_tag &gt;()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -238,7 +268,7 @@ Here is the caller graph for this function:</div>
 template&lt;&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="#a648521674ead158dd3776a946da6722a">Simulation::KernelInline::probability_leaving</a>&lt; void &gt; </td>
+          <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="#a648521674ead158dd3776a946da6722a">Simulation::KernelInline::probability_leaving</a>&lt; <a class="el" href="#a69b2887c984af36974b98f0afb8d5f6c">fast_tag</a> &gt; </td>
           <td>(</td>
           <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>random_number</em></span>, </td>
         </tr>
@@ -259,11 +289,6 @@ template&lt;&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_aac5971a17806db044f8dcf6254872e13_icgraph.svg" width="646" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>

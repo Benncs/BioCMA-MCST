@@ -198,17 +198,18 @@ $(function(){initNavTree('domain_8hpp_source.html','',''); });
 <div class="foldopen" id="foldopen00163" data-start="{" data-end="}">
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno"><a class="line" href="classMC_1_1ReactorDomain.html#a25d06d1d21a6f47b3443770c559855c0">  163</a></span>  <a class="code hl_function" href="classMC_1_1ReactorDomain.html#a25d06d1d21a6f47b3443770c559855c0">ReactorDomain::get_const_inner</a>()</div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>  {</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <span class="keywordflow">return</span> { <a class="code hl_variable" href="classMC_1_1ReactorDomain.html#addcee9815bdabe3d88174114da0835d0">inner</a>.neighbors,</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>             <a class="code hl_variable" href="classMC_1_1ReactorDomain.html#addcee9815bdabe3d88174114da0835d0">inner</a>.diag_transition,</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>             <a class="code hl_variable" href="classMC_1_1ReactorDomain.html#addcee9815bdabe3d88174114da0835d0">inner</a>.cumulative_probability,</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>             <a class="code hl_variable" href="classMC_1_1ReactorDomain.html#addcee9815bdabe3d88174114da0835d0">inner</a>.leaving_flow,</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>             <a class="code hl_variable" href="classMC_1_1ReactorDomain.html#addcee9815bdabe3d88174114da0835d0">inner</a>.liquid_volume };</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>  }</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <span class="keywordflow">return</span> { <a class="code hl_variable" href="classMC_1_1ReactorDomain.html#addcee9815bdabe3d88174114da0835d0">inner</a>.neighbors,</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>             <a class="code hl_variable" href="classMC_1_1ReactorDomain.html#addcee9815bdabe3d88174114da0835d0">inner</a>.diag_transition,</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>             <a class="code hl_variable" href="classMC_1_1ReactorDomain.html#addcee9815bdabe3d88174114da0835d0">inner</a>.cumulative_probability,</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>             <a class="code hl_variable" href="classMC_1_1ReactorDomain.html#addcee9815bdabe3d88174114da0835d0">inner</a>.leaving_flow,</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>             <a class="code hl_variable" href="classMC_1_1ReactorDomain.html#addcee9815bdabe3d88174114da0835d0">inner</a>.liquid_volume };</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>  }</div>
 </div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>} <span class="comment">// namespace MC</span></div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="preprocessor">#endif </span><span class="comment">//__MC_REACTORDOMAIN_HPP__</span></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>} <span class="comment">// namespace MC</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="preprocessor">#endif </span><span class="comment">//__MC_REACTORDOMAIN_HPP__</span></div>
 <div class="ttc" id="aclassMC_1_1ReactorDomain_html_a0b2fc75ebc4dff8a7eaf9d5b3a349aff"><div class="ttname"><a href="classMC_1_1ReactorDomain.html#a0b2fc75ebc4dff8a7eaf9d5b3a349aff">MC::ReactorDomain::update</a></div><div class="ttdeci">void update(std::span&lt; const double &gt; newliquid_volume, std::span&lt; const std::size_t &gt; neighors_flat, std::span&lt; const double &gt; out_flows, std::span&lt; const double &gt; proba_flat)</div><div class="ttdef"><b>Definition</b> domain.cpp:44</div></div>
 <div class="ttc" id="aclassMC_1_1ReactorDomain_html_a24d8ad20cba0324a3e0c34d82d17d9d8"><div class="ttname"><a href="classMC_1_1ReactorDomain.html#a24d8ad20cba0324a3e0c34d82d17d9d8">MC::ReactorDomain::_total_volume</a></div><div class="ttdeci">double _total_volume</div><div class="ttdoc">Domain total volume.</div><div class="ttdef"><b>Definition</b> domain.hpp:127</div></div>
 <div class="ttc" id="aclassMC_1_1ReactorDomain_html_a25d06d1d21a6f47b3443770c559855c0"><div class="ttname"><a href="classMC_1_1ReactorDomain.html#a25d06d1d21a6f47b3443770c559855c0">MC::ReactorDomain::get_const_inner</a></div><div class="ttdeci">DomainState&lt; ComputeSpace, true &gt; get_const_inner()</div><div class="ttdef"><b>Definition</b> domain.hpp:163</div></div>
