@@ -1,4 +1,5 @@
 #include "cma_utils/alias.hpp"
+#include "common/env_var.hpp"
 #include <algorithm>
 #include <biocma_cst_config.hpp>
 #include <cassert>
@@ -82,6 +83,21 @@ namespace
     }
 
     return delta_time;
+  }
+
+  // FIXME
+  std::unique_ptr<ILoadBalancer>
+  lb_factory(uint32_t s)
+  {
+    auto bounded = Common::read_env<uint32_t>("BIOMC_LBBOUND");
+    if (bounded)
+    {
+      return std::make_unique<BoundLoadBalancer>(s, *bounded);
+    }
+    else
+    {
+      return std::make_unique<UniformLoadBalancer>(s);
+    }
   }
 
 } // namespace
@@ -275,8 +291,7 @@ namespace Core
 
     double total_mass = 0.;
     // TODO Add this as user param
-    std::unique_ptr<ILoadBalancer> lb
-        = std::make_unique<UniformLoadBalancer>(info.n_rank);
+    std::unique_ptr<ILoadBalancer> lb = lb_factory(info.n_rank);
 
     const uint64_t particle_per_process
         = lb->balance(info.current_rank, user_params.number_particle);
