@@ -155,9 +155,14 @@ namespace Simulation::KernelInline
       constexpr int PARTICLES_PER_TEAM = 256;
       int league_size = Kokkos::ceil(n_particle / PARTICLES_PER_TEAM);
 
-      auto _policy2 = Kokkos::TeamPolicy<TagContribution>(
-          model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
-      Kokkos::parallel_for("cycle_model2", _policy2, cycle_kernel);
+      if (cycle_kernel.do_contribs())
+      {
+        static_assert(ConstWeightModelType<Model>,
+                      "ModelType:Constapply_weight()");
+        auto _policy2 = Kokkos::TeamPolicy<TagContribution>(
+            model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
+        Kokkos::parallel_for("cycle_model2", _policy2, cycle_kernel);
+      }
     }
   };
 

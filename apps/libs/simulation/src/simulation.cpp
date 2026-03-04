@@ -1,3 +1,4 @@
+#include "simulation/descriptors/dimensions.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <cma_utils/alias.hpp>
@@ -26,7 +27,23 @@
 namespace Simulation
 {
 
-  SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept = default;
+  // SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept = default;
+
+  SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept
+      : accesor(this), mc_unit(std::move(other.mc_unit)),
+        contribs_scatter(std::move(other.contribs_scatter)),
+        probes(std::move(other.probes)), dims(std::move(other.dims)),
+        feed(std::move(other.feed)),
+        const_number_simulation(other.const_number_simulation),
+        is_two_phase_flow(other.is_two_phase_flow),
+        starting_time(other.starting_time), end_time(other.end_time),
+        f_reaction(other.f_reaction),
+        liquid_scalar(std::move(other.liquid_scalar)),
+        gas_scalar(std::move(other.gas_scalar)),
+        mt_model(std::move(other.mt_model)), logger(std::move(other.logger))
+
+  {
+  }
 
   SimulationUnit::SimulationUnit(std::unique_ptr<MC::MonteCarloUnit>&& _unit,
                                  const ScalarInitializer& scalar_init,
@@ -125,6 +142,7 @@ namespace Simulation
   {
     liquid_scalar.reset();
     gas_scalar.reset();
+    mc_unit.reset();
     // mc_unit->domain.inner = MC::DomainState<ComputeSpace, false>();
   }
 

@@ -1,4 +1,5 @@
 #include <Kokkos_Core.hpp>
+#include <cassert>
 #include <common/common.hpp>
 #include <cstddef>
 #include <cstdio>
@@ -18,6 +19,7 @@
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
+#include <stdexcept>
 // #include <utility>
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
@@ -37,6 +39,11 @@
 namespace Simulation
 {
 
+  Getter::Getter(Getter&& m) noexcept : a_(m.a_)
+  {
+    m.a_ = nullptr;
+  };
+
   Getter
   SimulationUnit::getter() const
   {
@@ -45,6 +52,10 @@ namespace Simulation
 
   Getter::Getter(SimulationUnit* a) : a_(a)
   {
+    if (a_ == nullptr)
+    {
+      throw std::runtime_error("Simulation ptr is null");
+    }
   }
 
   // Getter::Getter(const std::unique_ptr<SimulationUnit>& a) : Getter(a.get())
@@ -58,6 +69,7 @@ namespace Simulation
   Getter::~Getter()
   {
     // Dont delete a
+    a_ = nullptr;
   }
 
   // std::size_t SimulationUnit::dead_counter() const
@@ -70,36 +82,62 @@ namespace Simulation
   bool
   Getter::two_phase_flow() const noexcept
   {
+    ;
+    assert(a_ != nullptr);
     return a_->is_two_phase_flow;
   }
 
-  [[nodiscard]] double&
-  Getter::get_start_time_mut() const noexcept
+  // [[nodiscard]] double&
+  // Getter::get_start_time_mut() const noexcept
+  // {
+  //   return a_->starting_time;
+  // }
+
+  [[nodiscard]] double
+  Getter::start_time() const noexcept
   {
+    assert(a_ != nullptr);
     return a_->starting_time;
   }
 
-  [[nodiscard]] double&
-  Getter::get_end_time_mut() noexcept
+  [[nodiscard]] double
+  Getter::endtime() const noexcept
   {
+    assert(a_ != nullptr);
     return a_->end_time;
   }
+
+  // [[nodiscard]] double&
+  // Getter::get_end_time_mut() noexcept
+  // {
+  //   return a_->end_time;
+  // }
 
   [[nodiscard]] Dimensions
   Getter::getDimensions() const noexcept
   {
+    assert(a_ != nullptr);
     return a_->dims;
   }
 
-  std::span<double>
+  std::span<const double>
   Getter::getCliqData() const
   {
+    assert(a_ != nullptr);
+    return a_->liquid_scalar->getConcentrationData();
+  }
+
+  [[nodiscard]] std::span<double>
+  Getter::getCliqData_mut() const
+  {
+    assert(a_ != nullptr);
     return a_->liquid_scalar->getConcentrationData();
   }
 
   [[nodiscard]] std::optional<std::span<const double>>
   Getter::getCgasData() const
   {
+    assert(a_ != nullptr);
     if (!a_->gas_scalar)
     {
       return std::nullopt;
@@ -110,36 +148,42 @@ namespace Simulation
   std::span<const double>
   Getter::getContributionData() const
   {
+    assert(a_ != nullptr);
     return a_->liquid_scalar->contribution_span();
   }
 
   [[nodiscard]] std::optional<std::span<const double>>
   Getter::getMTRData() const
   {
+    assert(a_ != nullptr);
     return a_->mt_model.mtr_data();
   }
 
   std::span<double>
   Getter::getContributionData_mut() const
   {
+    assert(a_ != nullptr);
     return a_->liquid_scalar->contribution_span_mut();
   }
 
   const Simulation::Feed::SimulationFeed&
   Getter::get_feed() const
   {
+    assert(a_ != nullptr);
     return a_->feed;
   }
 
   std::ranges::subrange<ProbeIterator, ProbeIterator>
   Getter::it_probes() const
   {
+    assert(a_ != nullptr);
     return std::ranges::subrange(a_->probes.cbegin(), a_->probes.cend());
   }
 
   const std::unique_ptr<MC::MonteCarloUnit>&
   Getter::mc_unit() const
   {
+    assert(a_ != nullptr);
     return a_->mc_unit;
   }
 
@@ -175,6 +219,18 @@ namespace Simulation
   SimulationUnit::getkernel_concentration() const
   {
     return this->liquid_scalar->get_device_concentration();
+  }
+
+  void
+  SimulationUnit::set_end_time(double _end_time) noexcept
+  {
+    this->end_time = _end_time;
+  }
+
+  void
+  SimulationUnit::overwrite_start_time(double _start_time) noexcept
+  {
+    this->starting_time = _start_time;
   }
 
   kernelContribution

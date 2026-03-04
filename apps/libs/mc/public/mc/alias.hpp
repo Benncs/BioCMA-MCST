@@ -76,8 +76,11 @@ namespace MC
   using ParticleWeigths = Kokkos::View<double*, ComputeSpace>;
   using ParticleAges = ParticleAgesBase<ComputeSpace>;
 
-  using ParticleSamples = Kokkos::
-      View<Kokkos::Experimental::half_t**, Kokkos::LayoutRight, ComputeSpace>;
+  // using ParticleSamples = Kokkos::
+  //     View<Kokkos::Experimental::half_t**, Kokkos::LayoutRight,
+  //     ComputeSpace>;
+  using ParticleSamples
+      = Kokkos::View<float**, Kokkos::LayoutRight, ComputeSpace>;
 
   template <typename MemorySpace>
   using ParticlePropertyViewType

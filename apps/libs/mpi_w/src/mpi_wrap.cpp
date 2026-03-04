@@ -19,6 +19,7 @@ namespace WrapMPI
   void
   finalize() noexcept
   {
+    barrier();
     MPI_Finalize();
   }
 

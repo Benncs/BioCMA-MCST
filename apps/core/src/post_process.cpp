@@ -13,7 +13,6 @@
 #include <memory>
 #include <numeric>
 #include <optional>
-// #include <simulation/simulation.hpp>
 #include <variant>
 namespace
 {

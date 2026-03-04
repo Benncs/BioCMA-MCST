@@ -90,7 +90,7 @@ namespace Core
      * @param volume_gas Optional span of doubles for gas phase volumes.
      */
     void update_fields(double t,
-                       std::span<double> concentration_liquid,
+                       std::span<const double> concentration_liquid,
                        std::span<const double> liquid_volume,
                        std::optional<std::span<const double>> concentration_gas,
                        std::optional<std::span<const double>> volume_gas,

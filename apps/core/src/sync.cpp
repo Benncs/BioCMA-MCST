@@ -105,8 +105,9 @@ sync_prepare_next([[maybe_unused]] const ExecInfo& exec,
 
 // We can use span here because we broadcast without changing size
 #ifndef NO_MPI
-    auto data = simulation.getter()
-                    .getCliqData(); // Get concentration ptr wrapped into span
+    auto data
+        = simulation.getter()
+              .getCliqData_mut(); // Get concentration ptr wrapped into span
 
     WrapMPI::barrier();
     WrapMPI::Async::broadcast_span(data, 0, *request);

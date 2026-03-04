@@ -1,14 +1,13 @@
-#include "biocma_cst_config.hpp"
-#include "simulation/simulation.hpp"
-#include "simulation/simulation_getter.hpp"
+#include <biocma_cst_config.hpp>
 #include <common/execinfo.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <dataexporter/main_exporter.hpp>
 #include <filesystem>
 #include <iomanip>
-#include <numeric>
 #include <optional>
+#include <simulation/descriptors/dimensions.hpp>
+#include <simulation/simulation_getter.hpp>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -113,7 +112,7 @@ namespace Core
   void
   MainExporter::update_fields(
       double t,
-      std::span<double> concentration_liquid,
+      std::span<const double> concentration_liquid,
       std::span<const double> liquid_volume,
       std::optional<std::span<const double>> concentration_gas,
       std::optional<std::span<const double>> volume_gas,

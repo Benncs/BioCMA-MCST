@@ -2,6 +2,7 @@
 #define __SIMULATION_MC_KERNEL_HPP
 
 #include "Kokkos_Macros.hpp"
+#include "impl/Kokkos_HostThreadTeam.hpp"
 #include "mc/alias.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
@@ -131,6 +132,12 @@ namespace Simulation::KernelInline
     {
     }
 
+    bool
+    do_contribs() const
+    {
+      return particles.begin < particles.end;
+    }
+
     void
     update(double _d_t, MC::ParticlesContainer<M> _particles)
     {
@@ -159,21 +166,35 @@ namespace Simulation::KernelInline
 
       const std::size_t p0 = team.league_rank() * PARTICLES_PER_TEAM;
 
-      Kokkos::parallel_for(Kokkos::TeamThreadRange(team, PARTICLES_PER_TEAM),
-                           [&](const int i)
-                           {
-                             const std::size_t p = p0 + i;
-                             if (p >= particles.n_particles())
-                             {
-                               return;
-                             }
+      Kokkos::parallel_for(
+          Kokkos::TeamThreadRange(team, PARTICLES_PER_TEAM),
+          [&](const int i)
+          {
+            const std::size_t p = p0 + i;
+            if (p >= particles.n_particles())
+            {
+              return;
+            }
 
-                             if (particles.status(p) != MC::Status::Idle)
-                             {
-                               return;
-                             }
-                             particles.get_contributions(p, contribs_scatter);
-                           });
+            if (particles.status(p) != MC::Status::Idle)
+            {
+              return;
+            }
+            // particles.get_contributions(p,
+            // contribs_scatter);
+
+            const double weight = particles.get_weight(p);
+            const auto pos = particles.position(p);
+            auto access = contribs_scatter.access();
+
+            Kokkos::parallel_for(
+                Kokkos::ThreadVectorRange(team, particles.begin, particles.end),
+                [&](const int j)
+                {
+                  const int rel = j - particles.begin;
+                  access(rel, pos) += weight * particles.model(p, j);
+                });
+          });
     }
 
     // KOKKOS_INLINE_FUNCTION

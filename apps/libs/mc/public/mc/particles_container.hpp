@@ -17,6 +17,7 @@
 #include <sorting/Kokkos_BinSortPublicAPI.hpp>
 #include <sorting/impl/Kokkos_CopyOpsForBinSortImpl.hpp>
 #include <sorting/impl/Kokkos_SortByKeyImpl.hpp>
+#include <stdexcept>
 #include <utility>
 namespace MC
 {
@@ -224,6 +225,8 @@ namespace MC
 #ifndef NDEBUG
     [[maybe_unused]] [[nodiscard]] auto get_buffer_index() const;
 #endif
+    int begin;
+    int end;
 
   private:
     Model::SelfParticle buffer_model;
@@ -238,8 +241,8 @@ namespace MC
     std::size_t n_samples;
     RuntimeParameters rt_params;
 
-    int begin;
-    int end;
+    // int begin;
+    // int end;
   };
 
 } // namespace MC
@@ -727,6 +730,12 @@ namespace MC
     }
 
     const auto bounds = M::get_bounds();
+
+    if (begin > end)
+    {
+      throw std::invalid_argument("Model begin should be > end");
+    }
+
     begin = bounds.begin;
     end = bounds.end;
   }

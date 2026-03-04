@@ -1,4 +1,4 @@
-#include "simulation/probe.hpp"
+#include "simulation/simulation_getter.hpp"
 #include <Kokkos_Core.hpp>
 #include <biocma_cst_config.hpp>
 #include <common/execinfo.hpp>
@@ -12,7 +12,9 @@
 #include <optional>
 #include <ostream>
 #include <serde.hpp>
+#include <simulation/descriptors/dimensions.hpp>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/probe.hpp>
 #include <simulation/simulation.hpp>
 #include <sstream>
 #include <stdexcept>
@@ -40,8 +42,8 @@ namespace Core
   init_partial_exporter(Core::PartialExporter& partial_exporter,
                         const CaseData& case_data)
   {
-    const auto [_, n_compartment]
-        = case_data.simulation->getter().getDimensions();
+    auto getter = case_data.simulation->getter();
+    const auto [_, n_compartment] = getter.getDimensions();
     partial_exporter.init_fields(case_data.params.number_exported_result,
                                  n_compartment);
 
@@ -59,10 +61,8 @@ namespace Core
                                       std::move(probes));
     }
 
-    partial_exporter.write_number_particle(
-        case_data.simulation->mc_unit->getRepartition());
-    PostProcessing::save_particle_state(case_data.simulation->getter(),
-                                        partial_exporter);
+    partial_exporter.write_number_particle(getter.mc_unit()->getRepartition());
+    PostProcessing::save_particle_state(getter, partial_exporter);
   }
 
   CaseData::CaseData()
@@ -127,7 +127,7 @@ namespace Core
       }
     }
 
-    case_data.simulation->mc_unit.reset();
+    case_data.simulation.reset();
   }
 
   std::optional<Core::CaseData>

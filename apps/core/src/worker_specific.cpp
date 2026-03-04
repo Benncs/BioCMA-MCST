@@ -16,12 +16,13 @@ workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
                 const Core::SimulationParameters& params,
                 Core::PartialExporter& partial_exporter)
 {
+  const auto getter = simulation.getter();
   double d_t = params.d_t;
-  size_t n_compartments = simulation.mc_unit->domain.getNumberCompartments();
+  size_t n_compartments = getter.mc_unit()->domain.getNumberCompartments();
   MPI_Status status;
   MPI_Request req;
   const bool do_export = true; // TODO
-  auto getter = simulation.getter();
+
   WrapMPI::IterationPayload payload(n_compartments);
 
   const auto export_callback = [&]([[maybe_unused]] const auto& container)
@@ -134,6 +135,6 @@ workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
       cycle_callback(current_time, container, functors);
     }
   };
-  std::visit(loop_functor, simulation.mc_unit->container);
+  std::visit(loop_functor, getter.mc_unit()->container);
 }
 #endif // NO_MPI

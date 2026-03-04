@@ -2,6 +2,7 @@
 #define __CASE_DATA__HPP__
 
 #include "cma_utils/alias.hpp"
+#include "simulation/simulation_getter.hpp"
 #include <common/execinfo.hpp>
 #include <common/logger.hpp>
 #include <core/simulation_parameters.hpp>

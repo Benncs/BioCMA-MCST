@@ -5,6 +5,7 @@
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/probe.hpp>
 #include <span>
+
 namespace Simulation
 {
   class SimulationUnit;
@@ -13,30 +14,35 @@ namespace Simulation
   class Getter
   {
   private:
-    SimulationUnit* const a_;
+    SimulationUnit* a_;
 
   public:
     explicit Getter(SimulationUnit* a);
-    // explicit Getter(const std::unique_ptr<SimulationUnit>& a);
 
     Getter(const Getter& m);
 
+    Getter(Getter&& m) noexcept;
+
+    Getter& operator=(const Getter& m) = delete;
+    Getter& operator=(Getter&& m) = delete;
+
     ~Getter();
 
+    [[nodiscard]] double start_time() const noexcept;
+    [[nodiscard]] double endtime() const noexcept;
+    [[nodiscard]] bool two_phase_flow() const noexcept;
+    [[nodiscard]] const std::unique_ptr<MC::MonteCarloUnit>& mc_unit() const;
     [[nodiscard]] const Simulation::Feed::SimulationFeed& get_feed() const;
-    [[nodiscard]] double& get_start_time_mut() const noexcept;
-    [[nodiscard]] double& get_end_time_mut() noexcept;
     [[nodiscard]] Dimensions getDimensions() const noexcept;
-    [[nodiscard]] std::span<double> getCliqData() const;
+    [[nodiscard]] std::span<const double> getCliqData() const;
     [[nodiscard]] std::optional<std::span<const double>> getCgasData() const;
     [[nodiscard]] std::span<const double> getContributionData() const;
-    [[nodiscard]] bool two_phase_flow() const noexcept;
     [[nodiscard]] std::optional<std::span<const double>> getMTRData() const;
+
+    [[nodiscard]] std::span<double> getCliqData_mut() const;
     [[nodiscard]] std::span<double> getContributionData_mut() const;
     [[nodiscard]] std::ranges::subrange<ProbeIterator, ProbeIterator>
     it_probes() const;
-
-    [[nodiscard]] const std::unique_ptr<MC::MonteCarloUnit>& mc_unit() const;
   };
 
 }; // namespace Simulation

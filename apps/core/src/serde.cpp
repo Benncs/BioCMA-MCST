@@ -110,12 +110,19 @@ namespace SerDe
           = cgas.has_value() ? std::make_optional(std::vector<double>(
                                    cgas->begin(), cgas->end()))
                              : std::nullopt;
+      // ar(case_data.params.number_particle,
+      //    dim,
+      //    std::vector<double>(cliq.begin(), cliq.end()),
+      //    cgas_a,
+      //    accessor.get_end_time_mut());
+
       ar(case_data.params.number_particle,
          dim,
          std::vector<double>(cliq.begin(), cliq.end()),
          cgas_a,
-         accessor.get_end_time_mut());
-      ar(case_data.simulation->mc_unit);
+         accessor.endtime());
+
+      ar(accessor.mc_unit());
     }
     write_to_file(buf, serde_name.str());
   }
@@ -189,7 +196,8 @@ namespace SerDe
     // case_data.simulation->setMtrModel(
     //     Simulation::MassTransfer::Type::FixedKla{kla});
 
-    case_data.simulation->getter().get_start_time_mut() = start_time;
+    // case_data.simulation->getter().get_start_time_mut() = start_time;
+    case_data.simulation->overwrite_start_time(start_time);
     gi.set_initial_number_particle(np);
     std::cout << "SIMULATION: " << case_data.exec_info.run_id << " LOADED"
               << std::endl;
