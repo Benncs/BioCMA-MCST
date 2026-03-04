@@ -1,0 +1,40 @@
+FROM biocma_omp_base AS build
+
+WORKDIR /app
+ENV CXX=clang++-20
+ENV CXX_LD=lld-20
+ENV APP_INSTALL_DIR=/opt/biomc
+# Copy files and directories into the Docker image
+COPY ./apps /app/apps
+COPY ./subprojects/dynlib.wrap /app/subprojects/dynlib.wrap
+COPY ./subprojects/cereal.wrap /app/subprojects/cereal.wrap
+COPY ./subprojects/highfive.wrap /app/subprojects/highfive.wrap
+COPY ./subprojects/rcmtool.wrap /app/subprojects/rcmtool.wrap
+COPY ./subprojects/eigen.wrap /app/subprojects/eigen.wrap
+COPY ./subprojects/rcmtool /app/subprojects/rcmtool
+COPY ./subprojects/kokkos_sampling.wrap /app/subprojects/kokkos_sampling.wrap
+COPY ./meson.build /app/meson.build
+COPY ./meson_options.txt /app/meson_options.txt
+COPY ./devutils/generate_model_loader.py /app/devutils/generate_model_loader.py
+COPY ./devutils/install_script.sh /app/devutils/install_script.sh
+COPY ./tools /app/tools
+COPY ./devutils/datamodel /app/devutils/datamodel
+COPY ./tools/exec.py /app/tools/exec.py
+
+RUN meson setup builddir\
+ --buildtype=release    \
+ -Dbuild_test=false     \
+ -Duse_system_kokkos=true\
+ -Duse_cuda=false        \
+ -Dbuild_c_api=true\
+ -Dbuild_python_api=false\
+ -Dresult_dir_path=$APP_INSTALL_DIR/results/
+
+RUN ninja -C builddir apps/api/libbiocma_mcst_api_c.so
+
+
+RUN mkdir $APP_INSTALL_DIR && cp  /app/builddir/apps/api/libbiocma_mcst_api_c.so  $APP_INSTALL_DIR && cp -r /app/apps/api/public $APP_INSTALL_DIR
+
+WORKDIR /
+RUN rm -rf /app
+
