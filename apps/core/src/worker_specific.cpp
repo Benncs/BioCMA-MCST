@@ -1,4 +1,5 @@
 
+
 #ifndef NO_MPI
 #  include "biocma_cst_config.hpp"
 #  include <csignal>
@@ -9,6 +10,21 @@
 #  include <sync.hpp>
 #  include <worker_specific.hpp>
 
+namespace
+{
+  inline void
+  update_callback(WrapMPI::IterationPayload& payload,
+                  MPI_Status& status,
+                  Simulation::SimulationUnit& simulation)
+  {
+    payload.recv(0, &status);
+    simulation.updateMCHydro(payload.liquid_volumes,
+                             payload.liquid_neighbors_flat,
+                             payload.proba_leaving_flat,
+                             payload.liquid_out_flows);
+  }
+}
+
 void
 workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
                 const ExecInfo& exec,
@@ -17,7 +33,7 @@ workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
                 Core::PartialExporter& partial_exporter)
 {
   const auto getter = simulation.getter();
-  double d_t = params.d_t;
+  const double d_t = params.d_t;
   size_t n_compartments = getter.mc_unit()->domain.getNumberCompartments();
   MPI_Status status;
   MPI_Request req;
@@ -25,7 +41,8 @@ workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
 
   WrapMPI::IterationPayload payload(n_compartments);
 
-  const auto export_callback = [&]([[maybe_unused]] const auto& container)
+  const auto export_callback
+      = [&partial_exporter, &getter]([[maybe_unused]] const auto& container)
   {
     PROFILE_SECTION("worker:dump")
     // FIXME:
@@ -50,7 +67,12 @@ workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
     }
   };
 
-  const auto stop_callback = [&](auto& container)
+  const auto stop_callback
+      = [&exec = std::as_const(exec),
+         &simulation,
+         &partial_exporter,
+         &getter,
+         &do_export = std::as_const(do_export)](auto& container)
   {
     if (do_export)
     {
@@ -83,17 +105,9 @@ workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
     PostProcessing::reset_counter();
   };
 
-  const auto update_callback = [&]()
-  {
-    payload.recv(0, &status);
-    simulation.updateMCHydro(payload.liquid_volumes,
-                             payload.liquid_neighbors_flat,
-                             payload.proba_leaving_flat,
-                             payload.liquid_out_flows);
-  };
-
   const auto cycle_callback
-      = [&](double& current_time, auto& container, auto& functors)
+      = [&exec = std::as_const(exec), &simulation, &req, d_t](
+            double& current_time, auto& container, auto& functors)
   {
     sync_step(exec, simulation);
     sync_prepare_next(exec, simulation, &req);
@@ -128,7 +142,7 @@ workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
 
       if (signal == WrapMPI::SIGNALS::HydroUpdate)
       {
-        update_callback();
+        update_callback(payload, status, simulation);
         continue;
       }
 

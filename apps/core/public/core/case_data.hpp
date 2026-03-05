@@ -81,7 +81,7 @@ namespace Core
   /**
    * @brief Start simulation
    */
-  void exec(std::shared_ptr<IO::Logger> logger, CaseData&& case_data);
+  void exec(std::shared_ptr<IO::Logger> logger, CaseData case_data);
 
   std::optional<Core::CaseData>
   load(std::shared_ptr<IO::Logger>& logger,

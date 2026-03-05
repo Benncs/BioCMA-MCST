@@ -23,7 +23,8 @@ namespace Simulation
              "gas concentration leads to negative values\r\nPlease check "
              "UDF "
              "and restart";
-
+    case ErrorCodes::MismatchSizeVolume:
+      return "Simulation: Size of volume and number of compartment mismatch";
     // default:
     //   return "Error: Unknown error.";
     case ErrorCodes::BadInitialiser:

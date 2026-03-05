@@ -125,7 +125,7 @@ namespace Simulation::Feed
                         std::size_t species_index,
                         std::size_t input_position,
                         std::optional<std::size_t> _ouput_position,
-                        bool set_output)
+                        bool set_output) noexcept
   {
 
     if (set_output && (!_ouput_position))
@@ -197,14 +197,20 @@ namespace Simulation::Feed
   }
 
   std::size_t
-  SimulationFeed::n_liquid_flow() const
+  SimulationFeed::n_liquid_flow() const noexcept
   {
     return (liquid) ? liquid->size() : 0;
   }
   std::size_t
-  SimulationFeed::n_gas_flow() const
+  SimulationFeed::n_gas_flow() const noexcept
   {
     return (gas) ? liquid->size() : 0;
+  }
+
+  SimulationFeed
+  SimulationFeed::empty() noexcept
+  {
+    return { .liquid = std::nullopt, .gas = std::nullopt };
   }
 
 } // namespace Simulation::Feed

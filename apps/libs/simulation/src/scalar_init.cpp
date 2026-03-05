@@ -9,8 +9,12 @@ namespace
   std::vector<T>
   layout_right_to_left(std::span<const T> input, size_t rows, size_t cols)
   {
+    if (input.size() != rows * cols)
+    {
+      throw Simulation::SimulationException(
+          Simulation::ErrorCodes::MismatchSize);
+    }
     std::vector<T> output(input.size());
-
     for (size_t i = 0; i < rows; ++i)
     {
       for (size_t j = 0; j < cols; ++j)
@@ -18,9 +22,28 @@ namespace
         output[j * rows + i] = input[i * cols + j];
       }
     }
-
     return output;
   }
+
+  template <typename T>
+  std::vector<T>
+  get_correct_layout_buffer(bool change_layout,
+                            std::vector<T>&& input,
+                            size_t rows,
+                            size_t cols)
+  {
+    std::vector<T> layout_buffer;
+    if (change_layout)
+    {
+      layout_buffer = layout_right_to_left<T>(input, rows, cols);
+    }
+    else
+    {
+      layout_buffer = std::move(input);
+    }
+    return layout_buffer;
+  }
+
 } // namespace
 
 namespace Simulation::impl
@@ -28,7 +51,7 @@ namespace Simulation::impl
   void
   post_init_concentration_functor(
       bool is_two_phase_flow,
-      const ScalarInitializer& scalar_init,
+      ScalarInitializer&& scalar_init,
       const std::shared_ptr<ScalarSimulation>& liquid_scalar,
       const std::shared_ptr<ScalarSimulation>& gas_scalar)
   {
@@ -61,7 +84,7 @@ namespace Simulation::impl
   void
   post_init_concentration_file(
       bool is_two_phase_flow,
-      const ScalarInitializer& scalar_init,
+      ScalarInitializer&& scalar_init,
       const std::shared_ptr<ScalarSimulation>& liquid_scalar,
       const std::shared_ptr<ScalarSimulation>& gas_scalar,
       bool change_layout)
@@ -73,20 +96,25 @@ namespace Simulation::impl
     const std::size_t cols
         = scalar_init.liquid_buffer->size() / scalar_init.n_species;
 
-    std::vector<double> layout_buffer;
-    if (change_layout)
-    {
-      layout_buffer = layout_right_to_left<double>(
-          *scalar_init.liquid_buffer, scalar_init.n_species, cols);
-    }
-    else
-    {
-      layout_buffer = *scalar_init.liquid_buffer;
-    }
+    // std::vector<double> layout_buffer;
+    // if (change_layout)
+    // {
+    //   layout_buffer = layout_right_to_left<double>(
+    //       *scalar_init.liquid_buffer, scalar_init.n_species, cols);
+    // }
+    // else
+    // {
+    //   layout_buffer = *scalar_init.liquid_buffer;
+    // }
+    const auto buffer = get_correct_layout_buffer<double>(
+        change_layout,
+        std::move(*scalar_init.liquid_buffer),
+        scalar_init.n_species,
+        cols);
 
-    if (!liquid_scalar->deep_copy_concentration(layout_buffer))
+    // Keep this even though get_correct_layout_buffer already may throw
+    if (!liquid_scalar->deep_copy_concentration(buffer))
     {
-
       throw SimulationException(ErrorCodes::MismatchSize);
     }
 
@@ -96,17 +124,22 @@ namespace Simulation::impl
       {
         throw SimulationException(ErrorCodes::BadInitialiser);
       }
-      if (change_layout)
-      {
-        layout_buffer = layout_right_to_left<double>(
-            *scalar_init.gas_buffer, scalar_init.n_species, cols);
-      }
-      else
-      {
-        layout_buffer = *scalar_init.gas_buffer;
-      }
+      // if (change_layout)
+      // {
+      //   layout_buffer = layout_right_to_left<double>(
+      //       *scalar_init.gas_buffer, scalar_init.n_species, cols);
+      // }
+      // else
+      // {
+      //   layout_buffer = *scalar_init.gas_buffer;
+      // }
+      const auto buffer = get_correct_layout_buffer<double>(
+          change_layout,
+          std::move(*scalar_init.gas_buffer),
+          scalar_init.n_species,
+          cols);
 
-      if (!gas_scalar->deep_copy_concentration(layout_buffer))
+      if (!gas_scalar->deep_copy_concentration(buffer))
       {
         throw SimulationException(ErrorCodes::MismatchSize);
       }

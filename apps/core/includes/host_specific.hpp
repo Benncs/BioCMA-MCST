@@ -1,9 +1,7 @@
 #ifndef __HOST_SPECIFIC_HPP__
 #define __HOST_SPECIFIC_HPP__
 
-// #include <common/common.hpp>
-
-#include "cma_utils/alias.hpp"
+#include <cma_utils/alias.hpp>
 #include <common/logger.hpp>
 #include <core/simulation_parameters.hpp>
 #include <dataexporter/partial_exporter.hpp>

@@ -1,10 +1,10 @@
 #ifndef __CORE_GLOBAL_INITIALLISER_HPP__
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
-#include "common/logger.hpp"
 #include <array>
 #include <cma_utils/alias.hpp>
 #include <common/execinfo.hpp>
+#include <common/logger.hpp>
 #include <core/scalar_factory.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
@@ -16,9 +16,7 @@
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/scalar_initializer.hpp>
-// #include <simulation/simulation.hpp>
 #include <string>
-// #include <transitionner/transitionner.hpp>
 #include <vector>
 
 class ILoadBalancer;
@@ -113,7 +111,7 @@ namespace Core
      */
     OptionalPtr<Simulation::SimulationUnit>
     init_simulation(std::unique_ptr<MC::MonteCarloUnit> _unit,
-                    const Simulation::ScalarInitializer& scalar_init);
+                    Simulation::ScalarInitializer&& scalar_init);
 
     /**
      * @brief Initializes a scalar component of the simulation.

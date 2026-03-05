@@ -97,25 +97,6 @@ namespace Core::ScalarFactory
     return res;
   }
 
-  // Simulation::ScalarInitializer Visitor::operator()(CustomFunctor func)
-  // {
-  //   auto res = Simulation::ScalarInitializer();
-  //   res.type = Simulation::ScalarInitialiserType::CustomFunctor;
-  //   res.n_species = func.n_species;
-
-  //   res.gas_flow = false;
-
-  //   res.liquid_f_init = func.liquid;
-
-  //   if (func.gas.has_value())
-  //   {
-  //     res.gas_f_init = *func.gas;
-  //     res.gas_flow = true;
-  //   }
-
-  //   return res;
-  // }
-
   Simulation::ScalarInitializer
   Visitor::operator()(Local args) const
   {
@@ -126,23 +107,6 @@ namespace Core::ScalarFactory
     const size_t n_species = concentrations.size();
     res.n_species = n_species;
     res.gas_flow = false;
-
-    // const auto wrap_functor = [n_species](auto&& i, auto&& c)
-    // {
-    //   return [n_species,
-    //           concentrations = std::forward<decltype(c)>(c),
-    //           _indices = std::forward<decltype(i)>(i)](size_t i,
-    //           CmaRead::L2DView<double>& view)
-    //   {
-    //     if (std::ranges::find(_indices, i) != _indices.end())
-    //     {
-    //       for (size_t i_species = 0; i_species < n_species; ++i_species)
-    //       {
-    //         view(i_species, i) = concentrations[i_species];
-    //       }
-    //     }
-    //   };
-    // };
 
     const auto wrap_functor = [](auto&& i, auto&& c)
     {
@@ -162,7 +126,6 @@ namespace Core::ScalarFactory
     };
 
     res.liquid_f_init = wrap_functor(indices, concentrations);
-
     if (args.gas_concentration.has_value() && args.gas_indices.has_value())
     {
       res.gas_f_init = wrap_functor(*args.gas_indices, *args.gas_concentration);
@@ -179,8 +142,8 @@ namespace Core::ScalarFactory
     res.type = Simulation::ScalarInitialiserType::FullCase;
     res.gas_flow = this->init_gas;
     auto has_gas_buffer = data.raw_gas.has_value();
-
     res.n_species = data.n_species;
+
     if (has_gas_buffer)
     {
       if (data.raw_gas->size() != data.raw_liquid.size())
@@ -190,6 +153,7 @@ namespace Core::ScalarFactory
       }
       res.gas_buffer = std::move(*data.raw_gas);
     }
+
     if (!has_gas_buffer && this->init_gas)
     {
       res.gas_buffer = std::vector<double>(data.raw_liquid.size());
@@ -250,7 +214,6 @@ namespace Core::ScalarFactory
 
     // First read the dimensions.
     // auto dims = liquid_dataset.getDimensions();
-
     // auto n_elements = dims[0] * dims[1];
     // if (n_elements >= arg.n_compartment)
     // {

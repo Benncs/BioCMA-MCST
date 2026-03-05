@@ -29,15 +29,22 @@ ExportHandler::pre_post_export(
 
   // Get gas concentration from the simulation; if available, also get the gas
   // volume
-  const auto gas_concentration = getter.getCgasData();
+
   std::optional<std::span<const double>> gas_volume = std::nullopt;
+  const auto gas_concentration = getter.getCgasData();
   if (current_reactor_state->has_gas())
   {
-    auto gv = current_reactor_state->get_gas()->volume();
-    gas_volume
-        = (!gas_concentration.has_value() || !current_reactor_state->has_gas())
-              ? std::nullopt
-              : std::make_optional(gv);
+
+    if (gas_concentration.has_value())
+    {
+      auto _gas_volume = current_reactor_state->get_gas()->volume();
+      gas_volume = std::make_optional(_gas_volume);
+    }
+    // gas_volume
+    //     = (!gas_concentration.has_value() ||
+    //     !current_reactor_state->has_gas())
+    //           ? std::nullopt
+    //           : std::make_optional(gv);
   }
 
   // Update the main exporter with the current simulation data

@@ -487,10 +487,9 @@ namespace Simulation::KernelInline
 
     MC::ParticleSamples random;
 
-    std::size_t index_random_leave;
-
     bool enable_move{};
     bool enable_leave{};
+    std::size_t index_random_leave;
   };
 } // namespace Simulation::KernelInline
 

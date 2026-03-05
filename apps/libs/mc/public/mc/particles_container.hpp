@@ -225,8 +225,6 @@ namespace MC
 #ifndef NDEBUG
     [[maybe_unused]] [[nodiscard]] auto get_buffer_index() const;
 #endif
-    int begin;
-    int end;
 
   private:
     Model::SelfParticle buffer_model;
@@ -240,6 +238,10 @@ namespace MC
     void _resize(std::size_t new_size, bool force = false);
     std::size_t n_samples;
     RuntimeParameters rt_params;
+    // FIXME
+  public:
+    int begin;
+    int end;
 
     // int begin;
     // int end;

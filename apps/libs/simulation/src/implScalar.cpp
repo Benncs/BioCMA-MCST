@@ -14,8 +14,8 @@
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 #include <scalar_simulation.hpp>
+#include <simulation/simulation_exception.hpp>
 #include <stdexcept>
-
 namespace
 {
 
@@ -108,8 +108,9 @@ namespace Simulation
   {
     if (volumes.size() != n_compartments)
     {
-      throw std::invalid_argument("Volumes size mismatch");
+      throw SimulationException(ErrorCodes::MismatchSizeVolume);
     }
+
     const int n_row = EIGEN_INDEX(n_r);
     const int n_col = EIGEN_INDEX(n_c);
 

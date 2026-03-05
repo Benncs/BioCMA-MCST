@@ -175,34 +175,37 @@ namespace Api
   SimulationInstance::exec() noexcept
   {
 
-    if (loaded || (registered && applied))
-    {
-      try
-      {
-        if (logger)
-        {
-          logger->print(
-              "Simulation",
-              IO::format("Running ",
-                         std::to_string(this->_data.exec_info.current_rank),
-                         "..."));
-        }
+    // if (!(loaded || (registered && applied)))
+    // {
+    //   return ApiResult("Error apply first");
+    // }
 
-        Core::exec(logger, std::forward<Core::CaseData>(this->_data));
-        return ApiResult();
-      }
-      catch (std::exception& e)
-      {
-        if (logger)
-        {
-          logger->alert("EXEC", e.what());
-        }
-        return ApiResult(e.what());
-      }
-    }
-    else
+    if (!loaded && (!registered || !applied))
     {
       return ApiResult("Error apply first");
+    }
+    if (logger)
+    {
+      logger->print(
+          "Simulation",
+          IO::format("Running ",
+                     std::to_string(this->_data.exec_info.current_rank),
+                     "..."));
+    }
+
+    try
+    {
+
+      Core::exec(logger, std::move(this->_data));
+      return ApiResult();
+    }
+    catch (std::exception& e)
+    {
+      if (logger)
+      {
+        logger->alert("EXEC", e.what());
+      }
+      return ApiResult(e.what());
     }
   }
 

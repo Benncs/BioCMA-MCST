@@ -13,6 +13,7 @@ namespace Simulation
     BadConcentrationInitGas,
     BadInitialiser,
     MismatchSize,
+    MismatchSizeVolume,
   };
 
   class SimulationException : public std::exception

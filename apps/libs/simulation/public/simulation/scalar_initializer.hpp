@@ -39,6 +39,9 @@ namespace Simulation
     bool gas_flow = false;
   };
 
+  static_assert(std::is_move_constructible_v<ScalarInitializer>);
+  static_assert(std::is_nothrow_move_constructible_v<ScalarInitializer>);
+
 } // namespace Simulation
 
 #endif

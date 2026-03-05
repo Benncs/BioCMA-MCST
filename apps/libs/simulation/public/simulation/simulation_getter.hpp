@@ -14,14 +14,12 @@ namespace Simulation
   class Getter
   {
   private:
-    SimulationUnit* a_;
+    SimulationUnit const* a_;
 
   public:
-    explicit Getter(SimulationUnit* a);
+    explicit Getter(SimulationUnit const* a);
 
     Getter(const Getter& m);
-
-    Getter(Getter&& m) noexcept;
 
     Getter& operator=(const Getter& m) = delete;
     Getter& operator=(Getter&& m) = delete;
@@ -31,9 +29,13 @@ namespace Simulation
     [[nodiscard]] double start_time() const noexcept;
     [[nodiscard]] double endtime() const noexcept;
     [[nodiscard]] bool two_phase_flow() const noexcept;
-    [[nodiscard]] const std::unique_ptr<MC::MonteCarloUnit>& mc_unit() const;
-    [[nodiscard]] const Simulation::Feed::SimulationFeed& get_feed() const;
     [[nodiscard]] Dimensions getDimensions() const noexcept;
+
+    [[nodiscard]] const std::unique_ptr<MC::MonteCarloUnit>&
+    mc_unit() const noexcept;
+    [[nodiscard]] const Simulation::Feed::SimulationFeed&
+    get_feed() const noexcept;
+
     [[nodiscard]] std::span<const double> getCliqData() const;
     [[nodiscard]] std::optional<std::span<const double>> getCgasData() const;
     [[nodiscard]] std::span<const double> getContributionData() const;

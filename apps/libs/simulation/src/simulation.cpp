@@ -27,8 +27,7 @@
 namespace Simulation
 {
 
-  // SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept = default;
-
+  // IMPORTANT to have non default to  BIND accesor(this)
   SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept
       : accesor(this), mc_unit(std::move(other.mc_unit)),
         contribs_scatter(std::move(other.contribs_scatter)),
@@ -45,12 +44,13 @@ namespace Simulation
   {
   }
 
+  // IMPORTANT to have non default to  BIND accesor(this)
   SimulationUnit::SimulationUnit(std::unique_ptr<MC::MonteCarloUnit>&& _unit,
-                                 const ScalarInitializer& scalar_init,
+                                 ScalarInitializer&& scalar_init,
                                  std::optional<Feed::SimulationFeed> _feed)
       : accesor(this), mc_unit(std::move(_unit)),
         feed(_feed.value_or(Feed::SimulationFeed::empty())),
-        is_two_phase_flow(scalar_init.gas_flow)
+        is_two_phase_flow(scalar_init.gas_flow), starting_time(0), end_time(0)
   {
 
     this->liquid_scalar = std::make_shared<ScalarSimulation>(
@@ -62,10 +62,13 @@ namespace Simulation
                            ? std::make_shared<ScalarSimulation>(
                                  mc_unit->domain.getNumberCompartments(),
                                  scalar_init.n_species,
-                                 scalar_init.volumesgas) // No contribs for gas
-                           : nullptr;
+                                 scalar_init.volumesgas)
+                           : nullptr; // No contribs for gas
 
-    post_init_concentration(scalar_init);
+    post_init_concentration(std::move(scalar_init));
+
+    //  scalar_init is totally moved-from here at the very end of impl
+    //  post_init_concentration
 
     const std::size_t n_flows = this->feed.n_liquid_flow();
 
@@ -76,6 +79,17 @@ namespace Simulation
 
     dims = { .n_species = this->liquid_scalar->n_row(),
              .n_compartment = this->liquid_scalar->n_col() };
+  }
+
+  SimulationUnit::~SimulationUnit() = default;
+
+  void
+  SimulationUnit::reset()
+  {
+    liquid_scalar.reset();
+    gas_scalar.reset();
+    mc_unit.reset();
+    // mc_unit->domain.inner = MC::DomainState<ComputeSpace, false>();
   }
 
   void
@@ -110,12 +124,12 @@ namespace Simulation
       const CmaUtils::IterationStatePtrType& newstate)
   {
     PROFILE_SECTION("simulation::updateScalarHydro")
-    if (liquid_scalar)
+    if (liquid_scalar) [[likely]]
     {
       const auto& liq = newstate->get_liquid();
       std::span<double const> vl = liq->volume();
       this->liquid_scalar->setVolumes(vl, liq->inverse_volume());
-      liquid_scalar->set_transition(newstate->get_liquid()->transition());
+      this->liquid_scalar->set_transition(newstate->get_liquid()->transition());
     }
     if (newstate->has_gas() && gas_scalar)
     {
@@ -138,16 +152,7 @@ namespace Simulation
   }
 
   void
-  SimulationUnit::reset()
-  {
-    liquid_scalar.reset();
-    gas_scalar.reset();
-    mc_unit.reset();
-    // mc_unit->domain.inner = MC::DomainState<ComputeSpace, false>();
-  }
-
-  void
-  SimulationUnit::post_init_concentration(const ScalarInitializer& scalar_init)
+  SimulationUnit::post_init_concentration(ScalarInitializer&& scalar_init)
   {
 
     if (scalar_init.type == ScalarInitialiserType::Uniform
@@ -156,18 +161,22 @@ namespace Simulation
     {
 
       impl::post_init_concentration_functor(
-          is_two_phase_flow, scalar_init, liquid_scalar, gas_scalar);
+          is_two_phase_flow, std::move(scalar_init), liquid_scalar, gas_scalar);
     }
     else
     {
       bool change_layout = scalar_init.type != ScalarInitialiserType::Serde;
 
       impl::post_init_concentration_file(is_two_phase_flow,
-                                         scalar_init,
+                                         std::move(scalar_init),
                                          liquid_scalar,
                                          gas_scalar,
                                          change_layout);
     }
+
+    // At this step scalar init is totally consumed and moved-from
+
+    // Check concentration >=0
 
     if ((this->liquid_scalar->getConcentrationArray() >= 0.).all())
     {
@@ -190,41 +199,5 @@ namespace Simulation
       }
     }
   }
-
-  // void SimulationUnit::setVolumes(
-  //     const CmaUtils::IterationStatePtrType& newstate) const
-  // {
-  //   auto liq = newstate->get_liquid();
-  //   std::span<double const> vl = liq->volume();
-  //   if (liquid_scalar)
-  //   {
-  //     this->liquid_scalar->setVolumes(vl, liq->inverse_volume());
-  //   }
-
-  //   if (newstate->has_gas() && gas_scalar)
-  //   {
-  //     auto gas = newstate->get_gas();
-  //     this->gas_scalar->setVolumes(gas->volume(), gas->inverse_volume());
-  //   }
-  // }
-
-  // void SimulationUnit::post_init_compartments()
-  // {
-  // auto _compute_concentration = liquid_scalar->get_device_concentration();
-  // // auto _containers = mc_unit->domain.data();
-
-  // Kokkos::parallel_for(
-  //     "post_init_compartments",
-  //     Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0,
-  //                                                        mc_unit->domain.getNumberCompartments()),
-  //     KOKKOS_LAMBDA(const int i) {
-  //       // auto s = Kokkos::subview(_compute_concentration, i,
-  //       Kokkos::ALL); _containers(i).concentrations =
-  //       Kokkos::subview(_compute_concentration, Kokkos::ALL, i);
-  //     });
-  // Kokkos::fence();
-  // }
-
-  SimulationUnit::~SimulationUnit() = default;
 
 } // namespace Simulation

@@ -90,7 +90,7 @@ namespace Simulation::Feed
                                    std::size_t input_position,
                                    std::optional<std::size_t> _ouput_position
                                    = std::nullopt,
-                                   bool set_output = true);
+                                   bool set_output = true) noexcept;
 
     // static FeedDescriptor delayedconstant(double _f,
     //                                      feed_value_t&& _target,
@@ -122,8 +122,8 @@ namespace Simulation::Feed
 
     void add_feed(FeedDescriptor&& fd, Phase phase);
 
-    [[nodiscard]] std::size_t n_liquid_flow() const;
-    [[nodiscard]] std::size_t n_gas_flow() const;
+    [[nodiscard]] std::size_t n_liquid_flow() const noexcept;
+    [[nodiscard]] std::size_t n_gas_flow() const noexcept;
 
     auto
     liquid_feeds()
@@ -147,11 +147,7 @@ namespace Simulation::Feed
                                    std::vector<FeedDescriptor>::iterator());
     }
 
-    static SimulationFeed
-    empty()
-    {
-      return { .liquid = std::nullopt, .gas = std::nullopt };
-    }
+    static SimulationFeed empty() noexcept;
   };
 
 } // namespace Simulation::Feed

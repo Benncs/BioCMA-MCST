@@ -157,7 +157,7 @@ host_process(std::shared_ptr<IO::Logger> logger,
              CmaUtils::TransitionnerPtrType d_transition,
              Core::PartialExporter& partial_exporter)
 {
-  auto getter = simulation.getter();
+  const auto getter = simulation.getter();
   const auto main_exporter = make_main_exporter(logger, exec, params);
 
   const auto [n_species, n_compartment] = getter.getDimensions();
@@ -315,7 +315,7 @@ namespace
                    partial_exporter,
                    exporter_handler);
     }
-    simulation.set_end_time(current_time);
+    simulation.setEndTime(current_time);
     // simulation.getter().get_end_time_mut() = current_time;
     // transitioner.reset();
   }

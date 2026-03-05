@@ -59,25 +59,6 @@ read_file(std::stringstream& buffer, std::string_view filename)
 using Archive_t = cereal::BinaryOutputArchive;
 using iArchive_t = cereal::BinaryInputArchive;
 
-// void read_archive(cereal::XMLInputArchive& ar,std::string_view filename)
-// {
-//   std::fstream file;
-//   file.open(filename.data(), std::ios::binary | std::ios::in);
-//   std::stringstream buffer;
-//   if (file.is_open())
-//   {
-//     buffer << file.rdbuf();
-//     file.close();
-//   }
-//   ar(buffer);
-//   file.close();
-// };
-
-// void read_archive(cereal::BinaryInputArchive& ar,std::string_view filename)
-// {
-
-// };
-
 namespace SerDe
 {
 
@@ -110,11 +91,6 @@ namespace SerDe
           = cgas.has_value() ? std::make_optional(std::vector<double>(
                                    cgas->begin(), cgas->end()))
                              : std::nullopt;
-      // ar(case_data.params.number_particle,
-      //    dim,
-      //    std::vector<double>(cliq.begin(), cliq.end()),
-      //    cgas_a,
-      //    accessor.get_end_time_mut());
 
       ar(case_data.params.number_particle,
          dim,
@@ -125,6 +101,47 @@ namespace SerDe
       ar(accessor.mc_unit());
     }
     write_to_file(buf, serde_name.str());
+  }
+
+  std::optional<Simulation::ScalarInitializer>
+  build_scalar_init(Core::GlobalInitialiser& gi,
+                    const Simulation::Dimensions& dims,
+                    std::vector<double>&& c_liq_buffer,
+                    std::optional<std::vector<double>>&& c_gas_buffer)
+  {
+    auto sc = gi.init_scalar();
+
+    if (!sc.has_value())
+    {
+
+      return std::nullopt;
+    }
+
+    if (c_liq_buffer.size() % sc->volumesliq.size() != 0)
+    {
+      throw std::invalid_argument(
+          "Liquid Concentration buffer and CM volume have incompatible sizes ");
+    }
+
+    if (c_gas_buffer)
+    {
+      if (c_gas_buffer->size() % sc->volumesgas.size() != 0)
+      {
+        throw std::invalid_argument(
+            "Gas Concentration buffer and CM volume have incompatible sizes ");
+      }
+    }
+
+    // FIXME
+    // Overwrite value set by initialiser
+    sc->liquid_f_init = std::nullopt;
+    sc->gas_f_init = std::nullopt;
+    sc->gas_buffer = std::move(c_gas_buffer);
+    sc->liquid_buffer = std::move(c_liq_buffer);
+    sc->n_species = dims.n_species;
+    sc->type = Simulation::ScalarInitialiserType::Serde;
+
+    return sc;
   }
 
   bool
@@ -151,7 +168,8 @@ namespace SerDe
     double start_time{};
     ar(np, dims, read_c_liq, read_c_gas, start_time);
 
-    auto sc = gi.init_scalar();
+    auto sc = build_scalar_init(
+        gi, dims, std::move(read_c_liq), std::move(read_c_gas));
 
     if (!sc.has_value())
     {
@@ -159,22 +177,12 @@ namespace SerDe
       return false;
     }
 
-    // FIXME
-    // Overwrite value set by initialiser
-    sc->liquid_f_init = std::nullopt;
-    sc->gas_f_init = std::nullopt;
-    sc->gas_buffer = read_c_gas;
-    sc->liquid_buffer = read_c_liq;
-    sc->n_species = dims.n_species;
-    sc->type = Simulation::ScalarInitialiserType::Serde;
-    // sc->gas_flow = sc->gas_buffer.has_value();
-
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
     assert(mc_unit != nullptr);
 
 #  warning message("MTR model is not loaded")
-    auto simulation = gi.init_simulation(std::move(mc_unit), *sc);
+    auto simulation = gi.init_simulation(std::move(mc_unit), std::move(*sc));
 
     if (!simulation.has_value())
     {
@@ -197,7 +205,7 @@ namespace SerDe
     //     Simulation::MassTransfer::Type::FixedKla{kla});
 
     // case_data.simulation->getter().get_start_time_mut() = start_time;
-    case_data.simulation->overwrite_start_time(start_time);
+    case_data.simulation->overwriteStartTime(start_time);
     gi.set_initial_number_particle(np);
     std::cout << "SIMULATION: " << case_data.exec_info.run_id << " LOADED"
               << std::endl;

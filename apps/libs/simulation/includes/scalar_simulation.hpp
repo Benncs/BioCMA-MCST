@@ -72,6 +72,8 @@ namespace Simulation
     [[nodiscard]] const ColMajorMatrixtype<double>& get_mass_transfer() const;
     [[nodiscard]] std::span<double> getConcentrationData();
 
+    [[nodiscard]] std::span<const double> getConcentrationData() const;
+
     [[nodiscard]] std::size_t n_row() const noexcept;
     [[nodiscard]] std::size_t n_col() const noexcept;
 
@@ -150,6 +152,12 @@ namespace Simulation
 
   inline std::span<double>
   ScalarSimulation::getConcentrationData()
+  {
+    return this->concentrations.get_span();
+  }
+
+  inline std::span<const double>
+  ScalarSimulation::getConcentrationData() const
   {
     return this->concentrations.get_span();
   }
