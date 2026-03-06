@@ -1,15 +1,14 @@
 #ifndef __SIMULATION_MC_KERNEL_HPP
 #define __SIMULATION_MC_KERNEL_HPP
 
-#include "Kokkos_Macros.hpp"
-#include "impl/Kokkos_HostThreadTeam.hpp"
-#include "mc/alias.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Macros.hpp>
 #include <Kokkos_Printf.hpp>
 #include <Kokkos_Random.hpp>
 #include <biocma_cst_config.hpp>
 #include <cassert>
+#include <mc/alias.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
 #include <mc/particles_container.hpp>
@@ -317,6 +316,13 @@ namespace Simulation::KernelInline
           Kokkos::printf("[KERNEL] Division Overflow\r\n");
         }
         events.wrap_incr<MC::EventType::NewParticle>();
+
+        /*
+        TODO, it seems that after some calculation (example cstr 0d)
+        size(division probes) = number of tally+1 where the last probe is 0
+        where size(leaving time) == tally
+        Is it a bug ?
+        */
       };
     }
 

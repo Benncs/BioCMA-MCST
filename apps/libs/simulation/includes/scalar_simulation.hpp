@@ -57,7 +57,11 @@ namespace Simulation
     // void performStep(double d_t, const FlowMatrixType& m_transition);
 
     // Getters
-    [[nodiscard]] ColMajorMatrixtype<double>& get_concentration();
+    [[nodiscard]] ColMajorMatrixtype<double>& get_concentration() noexcept;
+    [[nodiscard]] const DiagonalType& getVolume() const noexcept;
+    [[nodiscard]] std::size_t n_row() const noexcept;
+    [[nodiscard]] std::size_t n_col() const noexcept;
+
     [[nodiscard]] ColMajorKokkosScalarMatrix<double>
     get_device_concentration() const;
 
@@ -66,16 +70,13 @@ namespace Simulation
     [[nodiscard]] std::span<double> contribution_span() const;
 
     [[nodiscard]] std::span<double> contribution_span_mut();
-    [[nodiscard]] const DiagonalType& getVolume() const;
+
     [[nodiscard]] auto getConcentrationArray() const;
     [[nodiscard]] kernelContribution get_kernel_contribution() const;
-    [[nodiscard]] const ColMajorMatrixtype<double>& get_mass_transfer() const;
+
     [[nodiscard]] std::span<double> getConcentrationData();
 
     [[nodiscard]] std::span<const double> getConcentrationData() const;
-
-    [[nodiscard]] std::size_t n_row() const noexcept;
-    [[nodiscard]] std::size_t n_col() const noexcept;
 
     // Setters
 
@@ -145,7 +146,7 @@ namespace Simulation
   }
 
   inline const DiagonalType&
-  ScalarSimulation::getVolume() const
+  ScalarSimulation::getVolume() const noexcept
   {
     return m_volumes;
   }

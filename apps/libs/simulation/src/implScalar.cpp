@@ -133,22 +133,12 @@ namespace Simulation
     this->sink.setZero();
   }
 
-  void
-  ScalarSimulation::synchro_sources()
-  {
-    Kokkos::deep_copy(sources.compute, contribs);
-  }
+  // simple getters
 
   [[nodiscard]] ColMajorMatrixtype<double>&
-  ScalarSimulation::get_concentration()
+  ScalarSimulation::get_concentration() noexcept
   {
     return concentrations.eigen_data;
-  }
-
-  [[nodiscard]] ColMajorKokkosScalarMatrix<double>
-  ScalarSimulation::get_device_concentration() const
-  {
-    return concentrations.compute;
   }
 
   std::size_t
@@ -161,6 +151,18 @@ namespace Simulation
   ScalarSimulation::n_row() const noexcept
   {
     return n_r;
+  }
+
+  void
+  ScalarSimulation::synchro_sources()
+  {
+    Kokkos::deep_copy(sources.compute, contribs);
+  }
+
+  [[nodiscard]] ColMajorKokkosScalarMatrix<double>
+  ScalarSimulation::get_device_concentration() const
+  {
+    return concentrations.compute;
   }
 
   void

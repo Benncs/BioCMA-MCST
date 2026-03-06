@@ -116,7 +116,8 @@ sync_prepare_next([[maybe_unused]] const ExecInfo& exec,
 }
 
 void
-last_sync(const ExecInfo& exec, Simulation::SimulationUnit& simulation)
+last_sync([[maybe_unused]] const ExecInfo& exec,
+          [[maybe_unused]] Simulation::SimulationUnit& simulation)
 {
   // For the last synchronisation, the aim for the host rank is to retrive all
   // local information of worker ranks

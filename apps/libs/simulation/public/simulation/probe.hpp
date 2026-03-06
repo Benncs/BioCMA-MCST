@@ -24,6 +24,25 @@ namespace Simulation
   // sorting into bins when exporting it to avoid unnecessary amount of data
   //  Unordered map could be adapted
 
+  // TODO: dangerous struct where behaviour is based on active flag
+  // Active flag is set on constructor if constexpr flag use_probe is set
+  // set check active BUT the other dont, clear/get can crash if active==false
+  // then this is caller responsability
+
+  // Clean this api by remove active flag: use full c++20 template/requires
+  // style like this : template <typename T = void>
+  //   [[nodiscard]] KOKKOS_INLINE_FUNCTION bool set(double val) const
+  //      requires(use_probe == true){ usual impl }
+  // template <typename T = void>
+  //  [[nodiscard]] KOKKOS_INLINE_FUNCTION bool set(double val) const
+  //      requires(use_probe == false){ return false (or true whatever) }
+
+  /*
+  TODO, it seems that after some calculation (example cstr 0d) size(division
+  probes) = number of tally+1 where the last probe is 0 where size(leaving time)
+  == tally Is it a bug ?
+  */
+
   /**  @brief Class to store time event as bulk storage  */
   template <std::size_t buffer_size> class Probes
   {
@@ -31,6 +50,8 @@ namespace Simulation
     template <typename Space>
     using buffer_type
         = Kokkos::View<double[buffer_size], Kokkos::LayoutRight, Space>;
+
+    // WARNING : marked  const but mutates state
     void clear() const;
 
     [[nodiscard]] KOKKOS_INLINE_FUNCTION bool set(double val) const;
@@ -75,31 +96,61 @@ namespace Simulation
     clear();
   }
 
+  // template <std::size_t buffer_size>
+  // KOKKOS_INLINE_FUNCTION bool
+  // Probes<buffer_size>::set(double val) const
+  // {
+  //   const auto i = (active) ? Kokkos::atomic_fetch_inc(&internal_counter()) :
+  //   0;
+
+  //   // Innaccessible from host space if use CUDA because of direct assignment
+  //   if (active&&(i < buffer_size) )
+  //   {
+  //     // this->buffer(i) = val;
+  //     // if constexpr (is_view_accessible<decltype(buffer),
+  //     // Kokkos::DefaultExecutionSpace>())
+  //     {
+  //       this->buffer(i) = val;
+  //     }
+  //     // else
+  //     // {
+  //     //   // Kokkos::deep_copy(buffer(i), val);
+  //     //   Kokkos::View<double, Kokkos::DefaultHostExecutionSpace>
+  //     //   single_val("SingleValue"); single_val() = val;
+
+  //     //   Kokkos::deep_copy(buffer(i), single_val);
+  //     // }
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
   template <std::size_t buffer_size>
   KOKKOS_INLINE_FUNCTION bool
   Probes<buffer_size>::set(double val) const
   {
-    const auto i = (active) ? Kokkos::atomic_fetch_inc(&internal_counter()) : 0;
 
-    // Innaccessible from host space if use CUDA because of direct assignment
-    if ((i < buffer_size) && active)
+    //active is VERY LIKELY to be true if we get here then the
+    // Calling this function with a non active probe meant that there is
+    // something wrong in the caller If not active just do nothing, returns
+    // falls
+
+    // const auto i = (active) ? Kokkos::atomic_fetch_inc(&internal_counter()) :
+    // 0;
+
+    // TODO Innaccessible from host space if use CUDA because of direct
+    // assignment
+    //  TODO Use current space are template parameter
+    if (active) [[likely]]
     {
-      // this->buffer(i) = val;
-      // if constexpr (is_view_accessible<decltype(buffer),
-      // Kokkos::DefaultExecutionSpace>())
+      if (const auto i = Kokkos::atomic_fetch_inc(&internal_counter());
+          i < buffer_size)
       {
         this->buffer(i) = val;
+        return true;
       }
-      // else
-      // {
-      //   // Kokkos::deep_copy(buffer(i), val);
-      //   Kokkos::View<double, Kokkos::DefaultHostExecutionSpace>
-      //   single_val("SingleValue"); single_val() = val;
-
-      //   Kokkos::deep_copy(buffer(i), single_val);
-      // }
-      return true;
     }
+
     return false;
   }
 
@@ -107,8 +158,9 @@ namespace Simulation
   bool
   Probes<buffer_size>::need_export() const noexcept
   {
-    return (internal_counter() >= buffer_size) && active;
+    return active && (internal_counter() >= buffer_size);
   }
+
   template <std::size_t buffer_size>
   void
   Probes<buffer_size>::clear() const
@@ -121,8 +173,17 @@ namespace Simulation
   [[nodiscard]] std::span<const double>
   Probes<buffer_size>::get() const
   {
+    // TODO this should be alsway internal_counter(), but in case internal
+    // counter > buffersize (error in race condition) size never overrun
+    // buffer_size
+    const auto return_size = std::min(buffer_size, internal_counter());
+    assert(return_size <= buffer_size);
+    /*
+    // Safe: returning a span of size return_size is ok; the span may be smaller
+    than the full host_buffer
+    */
     Kokkos::deep_copy(host_buffer, buffer);
-    return { host_buffer.data(), std::min(buffer_size, internal_counter()) };
+    return { host_buffer.data(), return_size };
   }
 } // namespace Simulation
 
