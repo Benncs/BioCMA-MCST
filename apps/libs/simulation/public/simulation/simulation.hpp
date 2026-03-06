@@ -195,7 +195,6 @@ namespace Simulation
     cycle_functors.move_space.fence();
     if (cycle_functors.move_kernel.need_launch())
     {
-
       cycle_functors.launch_move(n_particle);
     }
 
