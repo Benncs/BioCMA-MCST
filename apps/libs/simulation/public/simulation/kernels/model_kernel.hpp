@@ -8,6 +8,7 @@
 #include <Kokkos_Random.hpp>
 #include <biocma_cst_config.hpp>
 #include <cassert>
+#include <common/common.hpp>
 #include <mc/alias.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
@@ -295,6 +296,7 @@ namespace Simulation::KernelInline
     KOKKOS_INLINE_FUNCTION void
     exec_per_particle(const std::size_t idx, value_type& reduce_val) const
     {
+      using mem_space = ComputeSpace::memory_space;
       particles.ages(idx, 1) += d_t;
       const auto local_c = Kokkos::subview(
           concentrations, Kokkos::ALL, particles.position(idx));
@@ -306,7 +308,8 @@ namespace Simulation::KernelInline
         {
           // Register probe here to sample BEFORE division and even if division
           // procedure fails to spawn new particle, the age is still the same
-          const auto _ = this->probes.set(particles.ages(idx, 1)); // Skip error
+          const auto _ = this->probes.template set<mem_space>(
+              particles.ages(idx, 1)); // Skip error
         }
 
         if (!particles.handle_division(random_pool, idx))

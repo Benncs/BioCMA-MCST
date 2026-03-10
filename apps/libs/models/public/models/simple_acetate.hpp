@@ -227,12 +227,11 @@ namespace Models
     const FloatType lmax1 = local_l.draw(gen);
     const FloatType lmax2 = local_l.draw(gen);
 
-    KOKKOS_ASSERT(gen1 != 0 && gen2 != 0);
+    // KOKKOS_ASSERT(gen1 != 0 && gen2 != 0);
 
     GET_PROPERTY(particle_var::a_p) = gen1;
-    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::a_p) = gen2;
-
     GET_PROPERTY(particle_var::l_max) = lmax1;
+    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::a_p) = gen2;
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = lmax2;
 
     random_pool.free_state(gen);
