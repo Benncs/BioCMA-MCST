@@ -116,7 +116,7 @@
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:href="classCore_1_1GlobalInitialiser.html#afa96dd38c29284ca8a70bdb67017c70b" target="_top" xlink:title="Initializes a simulation unit with specified parameters.">
+<g id="a_Node000009"><a xlink:href="classCore_1_1GlobalInitialiser.html#a696d0507fb8e2497d05a1fc84302c6dd" target="_top" xlink:title="Initializes a simulation unit with specified parameters.">
 <polygon fill="white" stroke="#666666" points="411,-100.46 301.25,-100.46 301.25,-71.46 411,-71.46 411,-100.46"/>
 <text xml:space="preserve" text-anchor="start" x="309.25" y="-86.96" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
 <text xml:space="preserve" text-anchor="middle" x="356.12" y="-76.46" font-family="Helvetica,sans-Serif" font-size="10.00">::init_simulation</text>

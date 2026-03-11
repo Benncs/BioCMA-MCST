@@ -2,13 +2,14 @@ var namespaceSimulation =
 [
     [ "Feed", "namespaceSimulation_1_1Feed.html", "namespaceSimulation_1_1Feed" ],
     [ "impl", "namespaceSimulation_1_1impl.html", [
-      [ "post_init_concentration_file", "namespaceSimulation_1_1impl.html#a55672c412b144c5ec1b80c5b8ee129e3", null ],
-      [ "post_init_concentration_functor", "namespaceSimulation_1_1impl.html#a8621c7c62e95e65b4403bbf991f30719", null ]
+      [ "post_init_concentration_file", "namespaceSimulation_1_1impl.html#ab56eb92724f12b4ed6c401939009519c", null ],
+      [ "post_init_concentration_functor", "namespaceSimulation_1_1impl.html#ae40eba3a10cbceb62fe3e6980dcc193f", null ]
     ] ],
     [ "KernelInline", "namespaceSimulation_1_1KernelInline.html", "namespaceSimulation_1_1KernelInline" ],
     [ "MassTransfer", "namespaceSimulation_1_1MassTransfer.html", "namespaceSimulation_1_1MassTransfer" ],
     [ "Dimensions", "structSimulation_1_1Dimensions.html", "structSimulation_1_1Dimensions" ],
     [ "EnvironementProperties", "structSimulation_1_1EnvironementProperties.html", "structSimulation_1_1EnvironementProperties" ],
+    [ "Getter", "classSimulation_1_1Getter.html", "classSimulation_1_1Getter" ],
     [ "Mixture", "classSimulation_1_1Mixture.html", "classSimulation_1_1Mixture" ],
     [ "Phase", "structSimulation_1_1Phase.html", "structSimulation_1_1Phase" ],
     [ "Probes", "classSimulation_1_1Probes.html", "classSimulation_1_1Probes" ],
@@ -26,7 +27,8 @@ var namespaceSimulation =
       [ "BadConcentrationInitLiq", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bdaab8d58e72483a0ad6bc6d000993cb04a", null ],
       [ "BadConcentrationInitGas", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bdabaf5b84ca77154d5e3258d24429ec242", null ],
       [ "BadInitialiser", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bdaea76fb02103cf3ff94efa52436f0d809", null ],
-      [ "MismatchSize", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bda2dc1045efdb911eef2fc5132ae1020c1", null ]
+      [ "MismatchSize", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bda2dc1045efdb911eef2fc5132ae1020c1", null ],
+      [ "MismatchSizeVolume", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bda6561e97a6a07364b61cda952b0a049a3", null ]
     ] ],
     [ "ProbeType", "namespaceSimulation.html#a3844f9fb0ce2978c66af04ff0a6eece6", [
       [ "LeavingTime", "namespaceSimulation.html#a3844f9fb0ce2978c66af04ff0a6eece6a5d4158e53cb4e4db894ba87313f46de3", null ],

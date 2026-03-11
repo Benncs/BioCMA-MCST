@@ -5,6 +5,7 @@ var structSimulation_1_1KernelInline_1_1CycleFunctor =
     [ "value_type", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a54b7d670ca890df53c1f3557a7d6f0a8", null ],
     [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a77a382779979e6e32e740c8a70df87c2", null ],
     [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a184b102f83b21d864dc98c046f74ba78", null ],
+    [ "do_contribs", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a1f4d7a1f2ff51a109b593bbd20f10290", null ],
     [ "exec_per_particle", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#ad3c23e1bcb433eaabc464642ded3f180", null ],
     [ "operator()", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#aff52f67bc5e3e0f298767f35f5db7f8a", null ],
     [ "operator()", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a3438594e33a92a8d3cc8027a51e1679e", null ],

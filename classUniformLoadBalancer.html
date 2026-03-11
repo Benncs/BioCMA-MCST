@@ -72,6 +72,9 @@ $(function(){initNavTree('classUniformLoadBalancer.html','','classUniformLoadBal
 </div><!--header-->
 <div class="contents">
 
+<p>Set the same number of particle for each rank.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="impl__lb_8hpp_source.html">impl_lb.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for UniformLoadBalancer:</div>
@@ -97,6 +100,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6c98abba439da620a0957093d84df382 inherit pub_methods_classILoadBalancer" id="r_a6c98abba439da620a0957093d84df382"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classILoadBalancer.html">ILoadBalancer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classILoadBalancer.html#a6c98abba439da620a0957093d84df382">operator=</a> (const <a class="el" href="classILoadBalancer.html">ILoadBalancer</a> &amp;)=delete</td></tr>
 <tr class="memitem:a27fb1f345c6d7b6e428b2bd012429dc2 inherit pub_methods_classILoadBalancer" id="r_a27fb1f345c6d7b6e428b2bd012429dc2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classILoadBalancer.html#a27fb1f345c6d7b6e428b2bd012429dc2">check</a> (uint64_t n=0) const</td></tr>
 <tr class="memitem:a11305fecea49664648595dd5d61027b3 inherit pub_methods_classILoadBalancer" id="r_a11305fecea49664648595dd5d61027b3"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classILoadBalancer.html#a11305fecea49664648595dd5d61027b3">balance</a> (uint32_t rank, uint64_t n)</td></tr>
+<tr class="memdesc:a11305fecea49664648595dd5d61027b3 inherit pub_methods_classILoadBalancer"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the number of particle for rank: 'rank' if the total number is 'n'  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -104,7 +108,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="inherit_header pro_methods_classILoadBalancer"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_classILoadBalancer')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Protected Member Functions inherited from <a class="el" href="classILoadBalancer.html">ILoadBalancer</a></td></tr>
 <tr class="memitem:a0ea1f8c452c4cc8ef53c981769fe7947 inherit pro_methods_classILoadBalancer" id="r_a0ea1f8c452c4cc8ef53c981769fe7947"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classILoadBalancer.html#a0ea1f8c452c4cc8ef53c981769fe7947">size</a> () const noexcept</td></tr>
 </table>
-<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Set the same number of particle for each rank. </p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1fed7b51f21c968e7b5120be870516ca" name="a1fed7b51f21c968e7b5120be870516ca"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1fed7b51f21c968e7b5120be870516ca">&#9670;&#160;</a></span>UniformLoadBalancer()</h2>
 

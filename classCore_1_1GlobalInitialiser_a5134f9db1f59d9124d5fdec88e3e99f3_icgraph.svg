@@ -163,7 +163,7 @@ var sectionId = 'dynsection-4';
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:href="classCore_1_1GlobalInitialiser.html#afa96dd38c29284ca8a70bdb67017c70b" target="_top" xlink:title="Initializes a simulation unit with specified parameters.">
+<g id="a_Node000008"><a xlink:href="classCore_1_1GlobalInitialiser.html#a696d0507fb8e2497d05a1fc84302c6dd" target="_top" xlink:title="Initializes a simulation unit with specified parameters.">
 <polygon fill="white" stroke="#666666" points="411,-76 301.25,-76 301.25,-47 411,-47 411,-76"/>
 <text xml:space="preserve" text-anchor="start" x="309.25" y="-62.5" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
 <text xml:space="preserve" text-anchor="middle" x="356.12" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00">::init_simulation</text>

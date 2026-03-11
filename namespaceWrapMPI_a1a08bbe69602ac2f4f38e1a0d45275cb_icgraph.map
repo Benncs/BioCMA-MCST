@@ -1,15 +1,18 @@
 <map id="WrapMPI::barrier" name="WrapMPI::barrier">
-<area shape="rect" id="Node000001" title=" " alt="" coords="809,44,927,69"/>
-<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#aa042e8d396a5287c49fb6a8b81eba209" title="Performs MPI broadcast for synchronization." alt="" coords="614,8,761,47"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="793,47,760,42,761,37,794,42"/>
-<area shape="rect" id="Node000006" href="$namespaceCore.html#ad98e98a441916916448cd3eb5c437bcf" title="Initializes the runtime environment based on command&#45;line arguments and simulation parameters." alt="" coords="625,72,750,97"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="794,71,751,78,750,72,793,66"/>
-<area shape="rect" id="Node000003" href="$classCore_1_1GlobalInitialiser.html#a97eff5566ced6ba6449eb532f0babadc" title="Initializes a flow iterator." alt="" coords="414,5,560,44"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="599,29,560,28,560,23,599,23"/>
-<area shape="rect" id="Node000004" href="$classCore_1_1GlobalInitialiser.html#a0dc2da93c4202706b5f37453f355145c" title="Initializes a transitioner with the provided flow iterator." alt="" coords="213,5,359,44"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="398,27,360,27,360,22,398,22"/>
-<area shape="rect" id="Node000005" href="$structApi_1_1SimulationInstance.html#ae9bdd54076170f50eadcb7966d64c19d" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,5,165,44"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="197,27,165,27,165,22,197,22"/>
-<area shape="rect" id="Node000007" href="$structApi_1_1SimulationInstance.html#aaba14d53cd780130378421e0bf990663" title="simulation instance constructor" alt="" coords="407,68,566,107"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="610,88,567,89,567,84,610,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="809,55,927,79"/>
+<area shape="rect" id="Node000002" href="$namespaceWrapMPI.html#aadc3308a0cd9aa92fb555a4eb2f26c97" title=" " alt="" coords="626,5,749,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="804,53,734,33,736,28,806,47"/>
+<area shape="rect" id="Node000003" href="$namespaceCore.html#ad98e98a441916916448cd3eb5c437bcf" title="Initializes the runtime environment based on command&#45;line arguments and simulation parameters." alt="" coords="431,28,555,53"/>
+<area shape="poly" id="edge8_Node000001_Node000003" title=" " alt="" coords="793,64,556,47,556,42,793,59"/>
+<area shape="rect" id="Node000005" href="$classCore_1_1GlobalInitialiser.html#aa042e8d396a5287c49fb6a8b81eba209" title="Performs MPI broadcast for synchronization." alt="" coords="614,105,761,144"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="813,87,751,107,750,102,811,82"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="611,29,556,36,555,30,611,24"/>
+<area shape="rect" id="Node000004" href="$structApi_1_1SimulationInstance.html#aaba14d53cd780130378421e0bf990663" title="simulation instance constructor" alt="" coords="213,21,372,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="416,43,372,43,372,38,416,38"/>
+<area shape="rect" id="Node000006" href="$classCore_1_1GlobalInitialiser.html#a97eff5566ced6ba6449eb532f0babadc" title="Initializes a flow iterator." alt="" coords="420,105,566,144"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="599,127,566,127,566,122,599,122"/>
+<area shape="rect" id="Node000007" href="$classCore_1_1GlobalInitialiser.html#a0dc2da93c4202706b5f37453f355145c" title="Initializes a transitioner with the provided flow iterator." alt="" coords="219,105,366,144"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="405,127,366,127,366,122,405,122"/>
+<area shape="rect" id="Node000008" href="$structApi_1_1SimulationInstance.html#ae9bdd54076170f50eadcb7966d64c19d" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,105,165,144"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="204,127,165,127,165,122,204,122"/>
 </map>

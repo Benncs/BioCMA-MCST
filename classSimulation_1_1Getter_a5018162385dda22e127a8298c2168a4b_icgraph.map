@@ -1,0 +1,11 @@
+<map id="Simulation::Getter::getCgasData" name="Simulation::Getter::getCgasData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="222,86,348,125"/>
+<area shape="rect" id="Node000002" href="$classExportHandler.html#a45d2f59eda0b665fe42c157adc4ee585" title="Handles periodic export of simulation data." alt="" coords="5,5,174,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="240,80,173,44,142,33,144,28,175,39,243,75"/>
+<area shape="rect" id="Node000003" href="$classSimulation_1_1Getter.html#aaa43464497c10db193f48f4f550c4933" title=" " alt="" coords="26,54,153,93"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="206,96,152,87,153,81,207,90"/>
+<area shape="rect" id="Node000004" href="$classExportHandler.html#a419a266bc87a73087c91bb8a11e0cdec" title="Prepares and updates the exporter with the current simulation state before/after main loop." alt="" coords="24,117,155,156"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="207,121,156,129,155,123,206,115"/>
+<area shape="rect" id="Node000005" href="$classCore_1_1MainExporter.html#a38765c9b7bcf5a1867e0e947a166e01b" title="Writes final simulation data to the output." alt="" coords="22,180,157,218"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="239,135,175,169,147,182,145,177,173,165,237,131"/>
+</map>

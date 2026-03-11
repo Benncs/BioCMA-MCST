@@ -106,6 +106,7 @@ var annotated_dup =
       ] ],
       [ "Dimensions", "structSimulation_1_1Dimensions.html", "structSimulation_1_1Dimensions" ],
       [ "EnvironementProperties", "structSimulation_1_1EnvironementProperties.html", "structSimulation_1_1EnvironementProperties" ],
+      [ "Getter", "classSimulation_1_1Getter.html", "classSimulation_1_1Getter" ],
       [ "Mixture", "classSimulation_1_1Mixture.html", "classSimulation_1_1Mixture" ],
       [ "Phase", "structSimulation_1_1Phase.html", "structSimulation_1_1Phase" ],
       [ "Probes", "classSimulation_1_1Probes.html", "classSimulation_1_1Probes" ],

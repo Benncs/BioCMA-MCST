@@ -25,7 +25,7 @@ var namespaceMC =
     [ "ParticleAges", "namespaceMC.html#a71308af240201ce951b6993271bec9d6", null ],
     [ "ParticlePositions", "namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d", null ],
     [ "ParticlePropertyViewType", "namespaceMC.html#abc5d7547f4d75b0ed71d943cbbb836c5", null ],
-    [ "ParticleSamples", "namespaceMC.html#ab0e896f20a2b47962aa82ac8576fc9c6", null ],
+    [ "ParticleSamples", "namespaceMC.html#a216249abfe5de512b198feceabe6916d", null ],
     [ "ParticlesModel", "namespaceMC.html#ae36f8da8fd9f9f88aa5cff4f307cdc68", null ],
     [ "ParticleStatus", "namespaceMC.html#a2193e5e54bfdf96357f01505831e1072", null ],
     [ "ParticleWeigths", "namespaceMC.html#a193bca8fb4700ce9ddd472c1929e5ac1", null ],

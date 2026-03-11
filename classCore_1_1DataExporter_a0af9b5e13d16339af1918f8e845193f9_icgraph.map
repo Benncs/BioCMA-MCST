@@ -1,6 +1,6 @@
 <map id="Core::DataExporter::append_matrix" name="Core::DataExporter::append_matrix">
 <area shape="rect" id="Node000001" title=" " alt="" coords="1391,68,1525,107"/>
-<area shape="rect" id="Node000002" href="$classCore_1_1MainExporter.html#a254d405eb56c60864f2d1614b93927e5" title="Updates fields with the current simulation state." alt="" coords="1196,5,1332,44"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1MainExporter.html#a8d527d39208ea9589ef0788a56305ca9" title="Updates fields with the current simulation state." alt="" coords="1196,5,1332,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1381,65,1325,47,1327,42,1382,60"/>
 <area shape="rect" id="Node000003" href="$classCore_1_1PartialExporter.html#a450fb0c92efa4ee81b4083fc01f5e665" title="Writes the number of particles in each compartment." alt="" coords="1185,68,1343,107"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1375,90,1343,90,1343,85,1375,85"/>
@@ -8,9 +8,9 @@
 <area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1382,114,1327,133,1325,128,1381,109"/>
 <area shape="rect" id="Node000004" href="$namespaceCore.html#afbce0beea293a7ccfdfc34a85b5e5e77" title=" " alt="" coords="994,68,1112,107"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1170,90,1112,90,1112,85,1170,85"/>
-<area shape="rect" id="Node000012" href="$classExportHandler.html#ad66ddd83a4245acb73446a86f3fcde6a" title="Handles periodic export of simulation data." alt="" coords="969,134,1137,158"/>
+<area shape="rect" id="Node000012" href="$classExportHandler.html#a45d2f59eda0b665fe42c157adc4ee585" title="Handles periodic export of simulation data." alt="" coords="969,134,1137,158"/>
 <area shape="poly" id="edge15_Node000003_Node000012" title=" " alt="" coords="1178,114,1101,136,1099,131,1177,109"/>
-<area shape="rect" id="Node000005" href="$namespaceCore.html#ab6528e76111960864b7e4741327b3049" title="Start simulation." alt="" coords="837,75,921,100"/>
+<area shape="rect" id="Node000005" href="$namespaceCore.html#a105cc1fc8005e6139954e3adce14f525" title="Start simulation." alt="" coords="837,75,921,100"/>
 <area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="979,90,922,90,922,85,979,85"/>
 <area shape="rect" id="Node000006" href="$structApi_1_1SimulationInstance.html#a3f04372728be84263fb69f5773ca5bd5" title="Execute the simulation." alt="" coords="420,19,579,57"/>
 <area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="821,73,788,66,679,51,579,44,580,39,680,46,789,61,822,68"/>

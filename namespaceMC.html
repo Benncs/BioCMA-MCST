@@ -116,7 +116,7 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a2193e5e54bfdf96357f01505831e1072" id="r_a2193e5e54bfdf96357f01505831e1072"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2193e5e54bfdf96357f01505831e1072">ParticleStatus</a> = Kokkos::View&lt;<a class="el" href="#a69467f7d54b0dcb1a4e176fe425ffb7b">Status</a>*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
 <tr class="memitem:a193bca8fb4700ce9ddd472c1929e5ac1" id="r_a193bca8fb4700ce9ddd472c1929e5ac1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a193bca8fb4700ce9ddd472c1929e5ac1">ParticleWeigths</a> = Kokkos::View&lt;double*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
 <tr class="memitem:a71308af240201ce951b6993271bec9d6" id="r_a71308af240201ce951b6993271bec9d6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71308af240201ce951b6993271bec9d6">ParticleAges</a> = ParticleAgesBase&lt;<a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
-<tr class="memitem:ab0e896f20a2b47962aa82ac8576fc9c6" id="r_ab0e896f20a2b47962aa82ac8576fc9c6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0e896f20a2b47962aa82ac8576fc9c6">ParticleSamples</a></td></tr>
+<tr class="memitem:a216249abfe5de512b198feceabe6916d" id="r_a216249abfe5de512b198feceabe6916d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a216249abfe5de512b198feceabe6916d">ParticleSamples</a> = Kokkos::View&lt;float**, Kokkos::LayoutRight, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
 <tr class="memitem:abc5d7547f4d75b0ed71d943cbbb836c5" id="r_abc5d7547f4d75b0ed71d943cbbb836c5"><td class="memTemplParams" colspan="2">template&lt;typename MemorySpace&gt; </td></tr>
 <tr class="memitem:abc5d7547f4d75b0ed71d943cbbb836c5 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc5d7547f4d75b0ed71d943cbbb836c5">ParticlePropertyViewType</a> = Kokkos::View&lt;double**, Kokkos::LayoutRight, MemorySpace&gt;</td></tr>
 <tr class="memitem:a5eb052bbb4512cad1955e1b62fc5920c" id="r_a5eb052bbb4512cad1955e1b62fc5920c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5eb052bbb4512cad1955e1b62fc5920c">PropertySubViewtype</a></td></tr>
@@ -438,20 +438,18 @@ template&lt;typename MemorySpace&gt; </div>
 
 </div>
 </div>
-<a id="ab0e896f20a2b47962aa82ac8576fc9c6" name="ab0e896f20a2b47962aa82ac8576fc9c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0e896f20a2b47962aa82ac8576fc9c6">&#9670;&#160;</a></span>ParticleSamples</h2>
+<a id="a216249abfe5de512b198feceabe6916d" name="a216249abfe5de512b198feceabe6916d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a216249abfe5de512b198feceabe6916d">&#9670;&#160;</a></span>ParticleSamples</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#ab0e896f20a2b47962aa82ac8576fc9c6">MC::ParticleSamples</a></td>
+          <td class="memname">using <a class="el" href="#a216249abfe5de512b198feceabe6916d">MC::ParticleSamples</a> = Kokkos::View&lt;float**, Kokkos::LayoutRight, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> Kokkos::</div>
-<div class="line">      View&lt;Kokkos::Experimental::half_t**, Kokkos::LayoutRight, ComputeSpace&gt;</div>
-</div><!-- fragment -->
+
 </div>
 </div>
 <a id="ae36f8da8fd9f9f88aa5cff4f307cdc68" name="ae36f8da8fd9f9f88aa5cff4f307cdc68"></a>

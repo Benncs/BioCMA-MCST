@@ -79,14 +79,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9667094be19d9dad5ade55954152c114" id="r_a9667094be19d9dad5ade55954152c114"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9667094be19d9dad5ade55954152c114">add_liquid</a> (<a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a> &amp;&amp;fd)</td></tr>
 <tr class="memitem:ad7afc07b815b158fa2aebe314ef1fee4" id="r_ad7afc07b815b158fa2aebe314ef1fee4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7afc07b815b158fa2aebe314ef1fee4">add_gas</a> (<a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a> &amp;&amp;fd)</td></tr>
 <tr class="memitem:aa2b3eb808219ab3d905de3eac9e249d8" id="r_aa2b3eb808219ab3d905de3eac9e249d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2b3eb808219ab3d905de3eac9e249d8">add_feed</a> (<a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a> &amp;&amp;fd, <a class="el" href="structSimulation_1_1Phase.html">Phase</a> phase)</td></tr>
-<tr class="memitem:ac41ed42f3b4099317ca8dba29eff62ff" id="r_ac41ed42f3b4099317ca8dba29eff62ff"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac41ed42f3b4099317ca8dba29eff62ff">n_liquid_flow</a> () const</td></tr>
-<tr class="memitem:a218a670b2999407dcde040958a4086c9" id="r_a218a670b2999407dcde040958a4086c9"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a218a670b2999407dcde040958a4086c9">n_gas_flow</a> () const</td></tr>
+<tr class="memitem:a25cf9afc1a5111df47b299ebd4b6cf8f" id="r_a25cf9afc1a5111df47b299ebd4b6cf8f"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25cf9afc1a5111df47b299ebd4b6cf8f">n_liquid_flow</a> () const noexcept</td></tr>
+<tr class="memitem:a72183d320ea791e9756670d2fedd23d0" id="r_a72183d320ea791e9756670d2fedd23d0"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a72183d320ea791e9756670d2fedd23d0">n_gas_flow</a> () const noexcept</td></tr>
 <tr class="memitem:a78cce7f33f1bdbb119b02aa78e4ca77e" id="r_a78cce7f33f1bdbb119b02aa78e4ca77e"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78cce7f33f1bdbb119b02aa78e4ca77e">liquid_feeds</a> ()</td></tr>
 <tr class="memitem:af671876091e35a940f31102b585b9bc5" id="r_af671876091e35a940f31102b585b9bc5"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af671876091e35a940f31102b585b9bc5">gas_feeds</a> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a910dc0d5cc8856da61f4e5a004fada16" id="r_a910dc0d5cc8856da61f4e5a004fada16"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">SimulationFeed</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a910dc0d5cc8856da61f4e5a004fada16">empty</a> ()</td></tr>
+<tr class="memitem:a75f042cf06f6ae549d7582c9af3ce65f" id="r_a75f042cf06f6ae549d7582c9af3ce65f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">SimulationFeed</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75f042cf06f6ae549d7582c9af3ce65f">empty</a> () noexcept</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -164,8 +164,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a910dc0d5cc8856da61f4e5a004fada16" name="a910dc0d5cc8856da61f4e5a004fada16"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a910dc0d5cc8856da61f4e5a004fada16">&#9670;&#160;</a></span>empty()</h2>
+<a id="a75f042cf06f6ae549d7582c9af3ce65f" name="a75f042cf06f6ae549d7582c9af3ce65f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75f042cf06f6ae549d7582c9af3ce65f">&#9670;&#160;</a></span>empty()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -182,7 +182,7 @@ Here is the call graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -236,11 +236,21 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1Feed_1_1SimulationFeed_a78cce7f33f1bdbb119b02aa78e4ca77e_cgraph.svg" width="199" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1Feed_1_1SimulationFeed_a78cce7f33f1bdbb119b02aa78e4ca77e_icgraph.svg" width="199" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
-<a id="a218a670b2999407dcde040958a4086c9" name="a218a670b2999407dcde040958a4086c9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a218a670b2999407dcde040958a4086c9">&#9670;&#160;</a></span>n_gas_flow()</h2>
+<a id="a72183d320ea791e9756670d2fedd23d0" name="a72183d320ea791e9756670d2fedd23d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72183d320ea791e9756670d2fedd23d0">&#9670;&#160;</a></span>n_gas_flow()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -257,15 +267,15 @@ Here is the call graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ac41ed42f3b4099317ca8dba29eff62ff" name="ac41ed42f3b4099317ca8dba29eff62ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac41ed42f3b4099317ca8dba29eff62ff">&#9670;&#160;</a></span>n_liquid_flow()</h2>
+<a id="a25cf9afc1a5111df47b299ebd4b6cf8f" name="a25cf9afc1a5111df47b299ebd4b6cf8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25cf9afc1a5111df47b299ebd4b6cf8f">&#9670;&#160;</a></span>n_liquid_flow()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -282,7 +292,7 @@ Here is the call graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span><span class="mlabel noexcept">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

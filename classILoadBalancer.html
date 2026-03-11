@@ -72,6 +72,9 @@ $(function(){initNavTree('classILoadBalancer.html','','classILoadBalancer-member
 </div><!--header-->
 <div class="contents">
 
+<p>interface to balance the number of particle accros ranks  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="iload__balancer_8hpp_source.html">iload_balancer.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for ILoadBalancer:</div>
@@ -90,6 +93,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6c98abba439da620a0957093d84df382" id="r_a6c98abba439da620a0957093d84df382"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classILoadBalancer.html">ILoadBalancer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c98abba439da620a0957093d84df382">operator=</a> (const <a class="el" href="classILoadBalancer.html">ILoadBalancer</a> &amp;)=delete</td></tr>
 <tr class="memitem:a27fb1f345c6d7b6e428b2bd012429dc2" id="r_a27fb1f345c6d7b6e428b2bd012429dc2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27fb1f345c6d7b6e428b2bd012429dc2">check</a> (uint64_t n=0) const</td></tr>
 <tr class="memitem:a11305fecea49664648595dd5d61027b3" id="r_a11305fecea49664648595dd5d61027b3"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11305fecea49664648595dd5d61027b3">balance</a> (uint32_t rank, uint64_t n)</td></tr>
+<tr class="memdesc:a11305fecea49664648595dd5d61027b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the number of particle for rank: 'rank' if the total number is 'n'  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -104,7 +108,9 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ab5cdbd80dbd31b7726f12faab62753bb" id="r_ab5cdbd80dbd31b7726f12faab62753bb"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5cdbd80dbd31b7726f12faab62753bb">_size</a></td></tr>
 </table>
-<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>interface to balance the number of particle accros ranks </p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0c14ef4a67e3960b28849b347d3518af" name="a0c14ef4a67e3960b28849b347d3518af"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0c14ef4a67e3960b28849b347d3518af">&#9670;&#160;</a></span>~ILoadBalancer()</h2>
 
@@ -264,6 +270,8 @@ Here is the call graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>returns the number of particle for rank: 'rank' if the total number is 'n' </p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">

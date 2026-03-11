@@ -95,12 +95,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aff142237053600bcd6c586c42c7c6bfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classCore_1_1MainExporter.html" title="Exporter for host-only data related to general-purpose simulation data (e.g., concentration,...">MainExporter</a> instance.  <br /></td></tr>
 <tr class="memitem:a652f5d26bbd6d056fb532cd09280bbbe" id="r_a652f5d26bbd6d056fb532cd09280bbbe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a652f5d26bbd6d056fb532cd09280bbbe">write_initial</a> (double weight, const <a class="el" href="structCore_1_1SimulationParameters.html">Core::SimulationParameters</a> &amp;params)</td></tr>
 <tr class="memdesc:a652f5d26bbd6d056fb532cd09280bbbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes initial simulation data to the output.  <br /></td></tr>
-<tr class="memitem:aa3f131727cb51225ae4e89537618c4ca" id="r_aa3f131727cb51225ae4e89537618c4ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3f131727cb51225ae4e89537618c4ca">write_final</a> (const <a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> *simulation, std::size_t number_particles)</td></tr>
-<tr class="memdesc:aa3f131727cb51225ae4e89537618c4ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes final simulation data to the output.  <br /></td></tr>
+<tr class="memitem:a38765c9b7bcf5a1867e0e947a166e01b" id="r_a38765c9b7bcf5a1867e0e947a166e01b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38765c9b7bcf5a1867e0e947a166e01b">write_final</a> (const <a class="el" href="classSimulation_1_1Getter.html">Simulation::Getter</a> &amp;getter, std::size_t number_particles)</td></tr>
+<tr class="memdesc:a38765c9b7bcf5a1867e0e947a166e01b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes final simulation data to the output.  <br /></td></tr>
 <tr class="memitem:a2651efc5b4bd42574fc58f47d66b4c04" id="r_a2651efc5b4bd42574fc58f47d66b4c04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2651efc5b4bd42574fc58f47d66b4c04">init_fields</a> (uint64_t n_iter, uint64_t n_compartments, uint64_t n_species, bool is_two_phase_flow)</td></tr>
 <tr class="memdesc:a2651efc5b4bd42574fc58f47d66b4c04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes fields required for simulation export.  <br /></td></tr>
-<tr class="memitem:a254d405eb56c60864f2d1614b93927e5" id="r_a254d405eb56c60864f2d1614b93927e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a254d405eb56c60864f2d1614b93927e5">update_fields</a> (double t, std::span&lt; double &gt; concentration_liquid, std::span&lt; const double &gt; liquid_volume, std::optional&lt; std::span&lt; const double &gt; &gt; concentration_gas, std::optional&lt; std::span&lt; const double &gt; &gt; volume_gas, std::optional&lt; std::span&lt; const double &gt; &gt; mtr)</td></tr>
-<tr class="memdesc:a254d405eb56c60864f2d1614b93927e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates fields with the current simulation state.  <br /></td></tr>
+<tr class="memitem:a8d527d39208ea9589ef0788a56305ca9" id="r_a8d527d39208ea9589ef0788a56305ca9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d527d39208ea9589ef0788a56305ca9">update_fields</a> (double t, std::span&lt; const double &gt; concentration_liquid, std::span&lt; const double &gt; liquid_volume, std::optional&lt; std::span&lt; const double &gt; &gt; concentration_gas, std::optional&lt; std::span&lt; const double &gt; &gt; volume_gas, std::optional&lt; std::span&lt; const double &gt; &gt; mtr)</td></tr>
+<tr class="memdesc:a8d527d39208ea9589ef0788a56305ca9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates fields with the current simulation state.  <br /></td></tr>
 <tr class="inherit_header pub_methods_classCore_1_1DataExporter"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classCore_1_1DataExporter')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="classCore_1_1DataExporter.html">Core::DataExporter</a></td></tr>
 <tr class="memitem:aa39b5e7514dd7c25024bb31c72e2e8e7 inherit pub_methods_classCore_1_1DataExporter" id="r_aa39b5e7514dd7c25024bb31c72e2e8e7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#aa39b5e7514dd7c25024bb31c72e2e8e7">DataExporter</a> (const <a class="el" href="classCore_1_1DataExporter.html">DataExporter</a> &amp;)=delete</td></tr>
 <tr class="memitem:ae48b541f166924ffb872b168fb09bc43 inherit pub_methods_classCore_1_1DataExporter" id="r_ae48b541f166924ffb872b168fb09bc43"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#ae48b541f166924ffb872b168fb09bc43">DataExporter</a> (<a class="el" href="classCore_1_1DataExporter.html">DataExporter</a> &amp;&amp;)=delete</td></tr>
@@ -266,8 +266,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a254d405eb56c60864f2d1614b93927e5" name="a254d405eb56c60864f2d1614b93927e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a254d405eb56c60864f2d1614b93927e5">&#9670;&#160;</a></span>update_fields()</h2>
+<a id="a8d527d39208ea9589ef0788a56305ca9" name="a8d527d39208ea9589ef0788a56305ca9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d527d39208ea9589ef0788a56305ca9">&#9670;&#160;</a></span>update_fields()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -280,7 +280,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::span&lt; double &gt;</td>          <td class="paramname"><span class="paramname"><em>concentration_liquid</em></span>, </td>
+          <td class="paramtype">std::span&lt; const double &gt;</td>          <td class="paramname"><span class="paramname"><em>concentration_liquid</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -319,13 +319,13 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1MainExporter_a254d405eb56c60864f2d1614b93927e5_cgraph.svg" width="328" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1MainExporter_a8d527d39208ea9589ef0788a56305ca9_cgraph.svg" width="328" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="aa3f131727cb51225ae4e89537618c4ca" name="aa3f131727cb51225ae4e89537618c4ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3f131727cb51225ae4e89537618c4ca">&#9670;&#160;</a></span>write_final()</h2>
+<a id="a38765c9b7bcf5a1867e0e947a166e01b" name="a38765c9b7bcf5a1867e0e947a166e01b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38765c9b7bcf5a1867e0e947a166e01b">&#9670;&#160;</a></span>write_final()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -333,7 +333,7 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="memname">void Core::MainExporter::write_final </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> *</td>          <td class="paramname"><span class="paramname"><em>simulation</em></span>, </td>
+          <td class="paramtype">const <a class="el" href="classSimulation_1_1Getter.html">Simulation::Getter</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>getter</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -354,7 +354,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1MainExporter_aa3f131727cb51225ae4e89537618c4ca_cgraph.svg" width="370" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1MainExporter_a38765c9b7bcf5a1867e0e947a166e01b_cgraph.svg" width="328" height="363"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

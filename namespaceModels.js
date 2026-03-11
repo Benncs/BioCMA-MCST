@@ -17,6 +17,7 @@ var namespaceModels =
     [ "UptakeModel", "conceptModels_1_1UptakeModel.html", null ],
     [ "_get_phi_s_max", "namespaceModels.html#aacffe777a75c70b9bdd3df39cb29cf44", null ],
     [ "almost_equal", "namespaceModels.html#a960cb54a05fd1b8376bd187b46297140", null ],
+    [ "almost_zero", "namespaceModels.html#a907817a40054fa2632fb1302d54f0dce", null ],
     [ "c_linear_density", "namespaceModels.html#ae070357c43b64436202145d812e1e05c", null ],
     [ "check_div", "namespaceModels.html#a91f8e773246cdd315aada1f72f97983d", null ],
     [ "check_probability_division", "namespaceModels.html#a029b4574d8251a785c7cdd89348342c2", null ],

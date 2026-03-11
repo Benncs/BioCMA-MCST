@@ -10,7 +10,7 @@
 <area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="591,208,554,215,452,226,359,229,359,224,452,220,553,210,590,203"/>
 <area shape="rect" id="Node000007" href="$classCore_1_1GlobalInitialiser.html#aa84a61b25f475380b38306232e25aff6" title="Initializes a scalar component of the simulation." alt="" coords="407,163,553,201"/>
 <area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="586,185,553,185,553,179,586,179"/>
-<area shape="rect" id="Node000008" href="$classCore_1_1GlobalInitialiser.html#afa96dd38c29284ca8a70bdb67017c70b" title="Initializes a simulation unit with specified parameters." alt="" coords="407,277,553,316"/>
+<area shape="rect" id="Node000008" href="$classCore_1_1GlobalInitialiser.html#a696d0507fb8e2497d05a1fc84302c6dd" title="Initializes a simulation unit with specified parameters." alt="" coords="407,277,553,316"/>
 <area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="632,212,555,260,521,279,519,274,552,256,629,208"/>
 <area shape="rect" id="Node000009" href="$classCore_1_1GlobalInitialiser.html#a97eff5566ced6ba6449eb532f0babadc" title="Initializes a flow iterator." alt="" coords="407,340,553,379"/>
 <area shape="poly" id="edge13_Node000001_Node000009" title=" " alt="" coords="655,216,613,273,585,303,555,329,536,342,533,337,552,325,582,299,609,269,651,213"/>

@@ -5,7 +5,7 @@ var classSimulation_1_1Probes =
     [ "clear", "classSimulation_1_1Probes.html#af54f1c8be6e49f63e8533d6a4e91cad3", null ],
     [ "get", "classSimulation_1_1Probes.html#a6345c8304e772a314dae935f742d518a", null ],
     [ "need_export", "classSimulation_1_1Probes.html#a2b8541ff7ad653204a955ff1feb78757", null ],
-    [ "set", "classSimulation_1_1Probes.html#ade14ae1c3a54c4d5f3154d7d0dc00e3c", null ],
+    [ "set", "classSimulation_1_1Probes.html#a06c9c805a725675c2027ffd23080e21e", null ],
     [ "active", "classSimulation_1_1Probes.html#ae0f88f2c9f2f2ed24d218efcf3f1c9cc", null ],
     [ "buffer", "classSimulation_1_1Probes.html#ac8077b5d10ecb50282a762c32d4bdc52", null ],
     [ "host_buffer", "classSimulation_1_1Probes.html#a28003771faa15f04e06c48e91d6548f8", null ],

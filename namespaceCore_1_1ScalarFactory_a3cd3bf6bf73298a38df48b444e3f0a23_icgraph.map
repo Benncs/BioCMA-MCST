@@ -1,6 +1,6 @@
 <map id="Core::ScalarFactory::sanitize" name="Core::ScalarFactory::sanitize">
 <area shape="rect" id="Node000001" title=" " alt="" coords="796,37,935,76"/>
-<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#afa96dd38c29284ca8a70bdb67017c70b" title="Initializes a simulation unit with specified parameters." alt="" coords="601,5,748,44"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#a696d0507fb8e2497d05a1fc84302c6dd" title="Initializes a simulation unit with specified parameters." alt="" coords="601,5,748,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="780,45,748,40,748,34,780,40"/>
 <area shape="rect" id="Node000003" href="$namespaceCore_1_1ScalarFactory.html#a8fb497033464776a1cda71cce1840cd8" title="Factory function to initialize scalar data based on the specified input source." alt="" coords="605,68,744,107"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="781,73,745,79,744,73,780,68"/>

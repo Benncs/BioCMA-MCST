@@ -50,6 +50,7 @@ var hierarchy =
     [ "Simulation::MassTransfer::Type::FlowmapTurbulence", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapTurbulence.html", null ],
     [ "foo", "structfoo.html", null ],
     [ "Core::ScalarFactory::FullCase", "structCore_1_1ScalarFactory_1_1FullCase.html", null ],
+    [ "Simulation::Getter", "classSimulation_1_1Getter.html", null ],
     [ "Core::GlobalInitialiser", "classCore_1_1GlobalInitialiser.html", null ],
     [ "WrapMPI::HostIterationPayload", "classWrapMPI_1_1HostIterationPayload.html", null ],
     [ "ILoadBalancer", "classILoadBalancer.html", [

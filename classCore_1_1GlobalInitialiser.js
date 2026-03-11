@@ -23,7 +23,7 @@ var classCore_1_1GlobalInitialiser =
     [ "init_scalar", "classCore_1_1GlobalInitialiser.html#aa84a61b25f475380b38306232e25aff6", null ],
     [ "init_scalar", "classCore_1_1GlobalInitialiser.html#a6c679d3dc5f4ee98dfd9ed4c35092f1c", null ],
     [ "init_simulation", "classCore_1_1GlobalInitialiser.html#a00d0e7a7d549bf06886dfc3ba9de3e3d", null ],
-    [ "init_simulation", "classCore_1_1GlobalInitialiser.html#afa96dd38c29284ca8a70bdb67017c70b", null ],
+    [ "init_simulation", "classCore_1_1GlobalInitialiser.html#a696d0507fb8e2497d05a1fc84302c6dd", null ],
     [ "init_state", "classCore_1_1GlobalInitialiser.html#a97eff5566ced6ba6449eb532f0babadc", null ],
     [ "init_transitionner", "classCore_1_1GlobalInitialiser.html#a0dc2da93c4202706b5f37453f355145c", null ],
     [ "mpi_broadcast", "classCore_1_1GlobalInitialiser.html#aa042e8d396a5287c49fb6a8b81eba209", null ],

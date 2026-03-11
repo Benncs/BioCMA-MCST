@@ -102,8 +102,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a0dc2da93c4202706b5f37453f355145c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a transitioner with the provided flow iterator.  <br /></td></tr>
 <tr class="memitem:a00d0e7a7d549bf06886dfc3ba9de3e3d" id="r_a00d0e7a7d549bf06886dfc3ba9de3e3d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; <a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00d0e7a7d549bf06886dfc3ba9de3e3d">init_simulation</a> (std::optional&lt; <a class="el" href="namespaceCore_1_1ScalarFactory.html#a1f251f574caf734fdff27f191ec09d1e">Core::ScalarFactory::ScalarVariant</a> &gt; variant)</td></tr>
 <tr class="memdesc:a00d0e7a7d549bf06886dfc3ba9de3e3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a simulation unit.  <br /></td></tr>
-<tr class="memitem:afa96dd38c29284ca8a70bdb67017c70b" id="r_afa96dd38c29284ca8a70bdb67017c70b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; <a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa96dd38c29284ca8a70bdb67017c70b">init_simulation</a> (std::unique_ptr&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MC::MonteCarloUnit</a> &gt; _unit, const <a class="el" href="structSimulation_1_1ScalarInitializer.html">Simulation::ScalarInitializer</a> &amp;scalar_init)</td></tr>
-<tr class="memdesc:afa96dd38c29284ca8a70bdb67017c70b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a simulation unit with specified parameters.  <br /></td></tr>
+<tr class="memitem:a696d0507fb8e2497d05a1fc84302c6dd" id="r_a696d0507fb8e2497d05a1fc84302c6dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; <a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a696d0507fb8e2497d05a1fc84302c6dd">init_simulation</a> (std::unique_ptr&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MC::MonteCarloUnit</a> &gt; _unit, <a class="el" href="structSimulation_1_1ScalarInitializer.html">Simulation::ScalarInitializer</a> &amp;&amp;scalar_init)</td></tr>
+<tr class="memdesc:a696d0507fb8e2497d05a1fc84302c6dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a simulation unit with specified parameters.  <br /></td></tr>
 <tr class="memitem:aa84a61b25f475380b38306232e25aff6" id="r_aa84a61b25f475380b38306232e25aff6"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structSimulation_1_1ScalarInitializer.html">Simulation::ScalarInitializer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa84a61b25f475380b38306232e25aff6">init_scalar</a> ()</td></tr>
 <tr class="memdesc:aa84a61b25f475380b38306232e25aff6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a scalar component of the simulation.  <br /></td></tr>
 <tr class="memitem:a6c679d3dc5f4ee98dfd9ed4c35092f1c" id="r_a6c679d3dc5f4ee98dfd9ed4c35092f1c"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structSimulation_1_1ScalarInitializer.html">Simulation::ScalarInitializer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c679d3dc5f4ee98dfd9ed4c35092f1c">init_scalar</a> (<a class="el" href="namespaceCore_1_1ScalarFactory.html#a1f251f574caf734fdff27f191ec09d1e">Core::ScalarFactory::ScalarVariant</a> &amp;&amp;variant)</td></tr>
@@ -599,8 +599,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="afa96dd38c29284ca8a70bdb67017c70b" name="afa96dd38c29284ca8a70bdb67017c70b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa96dd38c29284ca8a70bdb67017c70b">&#9670;&#160;</a></span>init_simulation() <span class="overload">[2/2]</span></h2>
+<a id="a696d0507fb8e2497d05a1fc84302c6dd" name="a696d0507fb8e2497d05a1fc84302c6dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a696d0507fb8e2497d05a1fc84302c6dd">&#9670;&#160;</a></span>init_simulation() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -613,7 +613,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structSimulation_1_1ScalarInitializer.html">Simulation::ScalarInitializer</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>scalar_init</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="structSimulation_1_1ScalarInitializer.html">Simulation::ScalarInitializer</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>scalar_init</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -631,7 +631,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_afa96dd38c29284ca8a70bdb67017c70b_cgraph.svg" width="352" height="175"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a696d0507fb8e2497d05a1fc84302c6dd_cgraph.svg" width="352" height="175"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
