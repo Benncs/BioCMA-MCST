@@ -1,3 +1,4 @@
+#include <Kokkos_Assert.hpp>
 #include <biocma_cst_config.hpp>
 #include <common/common.hpp>
 #include <common/logger.hpp>
@@ -122,7 +123,8 @@ namespace Core
       this->write_matrix(
           ds_name + "age/", { ptr_ages, n_particles }, compress_data);
     }
-
+    KOKKOS_ASSERT(particle_values.extent(0) == bonce.vnames.size());
+    // Warning UB  if len(kindex)!=len(vnames)
     for (size_t i_name = 0; i_name < bonce.vnames.size(); ++i_name)
     {
       const auto* ptr_particles

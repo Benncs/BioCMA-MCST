@@ -15,9 +15,12 @@
   static_assert(INDEX_FROM_ENUM(__index__) < __array_name__.static_extent(1),  \
                 "Index out of model bound");
 
+#define GET_PROPERTY_FROM_IDX(__index__, __array_name__, __idx__)              \
+  __array_name__(__index__, __idx__)
+
 // Main macro that uses bounds checking and array access
 #define GET_PROPERTY_FROM(__index__, __array_name__, enum_name)                \
-  __array_name__(__index__, INDEX_FROM_ENUM(enum_name))
+  GET_PROPERTY_FROM_IDX(__index__, __array_name__, INDEX_FROM_ENUM(enum_name))
 
 #define GET_PROPERTY(enum_name) GET_PROPERTY_FROM(idx, arr, enum_name)
 

@@ -8,7 +8,6 @@
 #include "common/common.hpp"
 #include "common/traits.hpp"
 #include "mc/macros.hpp"
-#include "models/fixed_length.hpp"
 #include "models/utils.hpp"
 #include <mc/prng/prng_extension.hpp>
 #include <mc/traits.hpp>

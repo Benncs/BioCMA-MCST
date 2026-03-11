@@ -7,6 +7,7 @@
 
 namespace UnsafeUDF
 {
+
   std::size_t (*Loader::set_nvar_udf)() = nullptr;
 
   void (*Loader::init_udf)(const MC::pool_type& random_pool,
