@@ -7,6 +7,7 @@
 #include <mc/alias.hpp>
 #include <mc/particles_container.hpp>
 #include <mc/traits.hpp>
+#include <stdexcept>
 
 template <typename MemorySpace>
 using ParticlePropertyViewType
@@ -105,10 +106,12 @@ namespace PostProcessing
         scatter_spatial_values
             = Kokkos::Experimental::create_scatter_view(spatial_values);
 
-        // Pour PartialExport, on initialise kindices
+        // Use kindices for partial to map with correct vector position
+        // Warning UB  if len(kindex)!=len(vnames)
         if constexpr (HasExportPropertiesPartial<Model>)
         {
           static const auto indices = Model::get_number();
+
           Kokkos::View<size_t*, HostSpace> host_index("host_index",
                                                       indices.size());
           for (size_t i = 0; i < indices.size(); ++i)
@@ -165,6 +168,11 @@ namespace PostProcessing
       if constexpr (HasExportPropertiesPartial<M>)
       {
         n_var = ar.size() + 1;
+        if (ar.size() != M::get_number().size())
+        {
+          throw std::invalid_argument("Partial export Model need to have same "
+                                      "number of name and indices");
+        }
       }
 
       ParticlePropertyViewType<ComputeSpace> spatial_values(
