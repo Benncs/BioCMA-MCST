@@ -25,10 +25,6 @@ arch_specific_args = []
 
 compiler = meson.get_compiler('cpp')
 
-if compiler.has_argument('-fno-math-errno')
-  arch_specific_args = [arch_specific_args, '-fno-math-errno']
-endif
-
 flto_flag = []
 
 if compiler.has_argument('-flto')
