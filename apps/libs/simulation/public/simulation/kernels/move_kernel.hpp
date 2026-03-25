@@ -9,7 +9,6 @@
 #include <Kokkos_Random.hpp>
 #include <biocma_cst_config.hpp>
 #include <cassert>
-#include <decl/Kokkos_Declare_OPENMP.hpp>
 #include <mc/alias.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
@@ -27,16 +26,18 @@ namespace Simulation::KernelInline
   constexpr bool disable_move = false;
   constexpr bool enable_move = true;
 
-  // KOKKOS_INLINE_FUNCTION std::size_t __find_next_compartment(
-  //     const ConstNeighborsView<ComputeSpace>& neighbors,
-  //     const CumulativeProbabilityView<ComputeSpace>& cumulative_probability,
+  // KOKKOS_INLINE_FUNCTION std::size_t
+  // __find_next_compartment(
+  //     const MC::NeighborsView<ComputeSpace, true>& neighbors,
+  //     const MC::CumulativeProbabilityView<ComputeSpace, true>&
+  //         cumulative_probability,
   //     const std::size_t i_compartment,
   //     const double random_number)
   // {
   //   const int max_neighbor = static_cast<int>(neighbors.extent(1));
 
-  //   std::size_t next =
-  //       neighbors(i_compartment, 0); // Default to the first neighbor
+  //   std::size_t next
+  //       = neighbors(i_compartment, 0); // Default to the first neighbor
 
   //   // Iterate through the neighbors to find the appropriate next compartment
   //   for (int k_neighbor = 0; k_neighbor < max_neighbor - 1; ++k_neighbor)
@@ -47,7 +48,10 @@ namespace Simulation::KernelInline
   //     const auto pn = cumulative_probability(i_compartment, k_neighbor + 1);
 
   //     // Use of a Condition mask to avoid branching.
-  //     next = (random_number <= pn && pi <= random_number)
+  //     // next = (random_number <= pn && pi <= random_number)
+  //     //            ? neighbors(i_compartment, k_neighbor + 1)
+  //     //            : next;
+  //     next = (random_number < pn && pi < random_number)
   //                ? neighbors(i_compartment, k_neighbor + 1)
   //                : next;
   //   }
@@ -70,14 +74,22 @@ namespace Simulation::KernelInline
       const double random_number)
   {
     const int mask_do_serch = static_cast<int>(do_serch);
-
     const int max_neighbor = static_cast<int>(neighbors.extent(1));
+
+    KOKKOS_ASSERT(max_neighbor >= 1);
+    KOKKOS_ASSERT(random_number <= 1. && random_number >= 0.);
+    KOKKOS_ASSERT(neighbors.extent(1) == cumulative_probability.extent(1));
+
+    // Do not use cumulative_probability(i_compartment, max_neighbor - 1)==1
+    // Bcause proba can be 0.999999999
+    KOKKOS_ASSERT(cumulative_probability(i_compartment, max_neighbor - 1)
+                  >= random_number);
 
     int left = 0;
     int right = mask_do_serch * (max_neighbor - 1);
     while (left < right)
     {
-      int mid = (left + right) >> 1; // NOLINT
+      const int mid = (left + right) >> 1; // NOLINT
       const auto pm = cumulative_probability(i_compartment, mid);
       const int mask = static_cast<int>(random_number > pm);
       left = mask * (mid + 1) + (1 - mask) * left;
@@ -88,40 +100,6 @@ namespace Simulation::KernelInline
                      + neighbors(i_compartment, left) * mask_do_serch;
     return ret;
   }
-
-  // KOKKOS_INLINE_FUNCTION std::size_t __find_next_compartment(
-  //     const bool do_serch,
-  //     const ConstNeighborsView<ComputeSpace>& neighbors,
-  //     const CumulativeProbabilityView<ComputeSpace>& cumulative_probability,
-  //     const std::size_t i_compartment,
-  //     const double random_number)
-  // {
-  //   const int mask_do_serch = static_cast<int>(do_serch);
-
-  //   const int max_neighbor =
-  //       mask_do_serch * static_cast<int>(neighbors.extent(1));
-
-  //   std::size_t next =
-  //       i_compartment * (1 - mask_do_serch) +
-  //       mask_do_serch *
-  //           neighbors(i_compartment, 0); // Default to the first neighbor
-
-  //   for (int k_neighbor = 0; k_neighbor < max_neighbor - 1; ++k_neighbor)
-  //   {
-
-  //     // Get the cumulative probability range for the current neighbor
-  //     const auto pi = cumulative_probability(i_compartment, k_neighbor);
-  //     const auto pn = cumulative_probability(i_compartment, k_neighbor + 1);
-
-  //     const auto cond =
-  //         static_cast<int>(random_number <= pn && pi <= random_number);
-
-  //     // Use of a Condition mask to avoid branching.
-  //     next = cond * neighbors(i_compartment, k_neighbor + 1) + cond * next;
-  //   }
-
-  //   return next;
-  // }
 
   struct TagMove
   {
@@ -301,19 +279,19 @@ namespace Simulation::KernelInline
     KOKKOS_FUNCTION void
     handle_move(const std::size_t idx) const
     {
-      // auto generator = random_pool.get_state();
-      // const float rng1 = generator.frand(0., 1.);
-      // const double rng2 = generator.drand(0., 1.);
-      // random_pool.free_state(generator);
 
       const auto rng1 = static_cast<float>(random(idx, 0));
       const auto rng2 = static_cast<float>(random(idx, 1));
 
+      KOKKOS_ASSERT(rng1 >= 0. && rng1 <= 1 && rng2 >= 0. && rng2 <= 1);
+
       const std::size_t i_current_compartment = positions(idx);
 
-      KOKKOS_ASSERT(i_current_compartment < move.liquid_volume.extent(0));
+      KOKKOS_ASSERT(
+          i_current_compartment < move.liquid_volume.extent(0)
+          && "Particle position is incorect (greater than compartment number)");
 
-      const bool mask_next = probability_leaving<void>(
+      const bool mask_next = probability_leaving<fast_tag>(
           rng1,
           move.liquid_volume(i_current_compartment),
           move.diag_transition(i_current_compartment),
@@ -325,14 +303,16 @@ namespace Simulation::KernelInline
                                                i_current_compartment,
                                                rng2);
 
-      // positions(idx) =
-      //     (mask_next) ? __find_next_compartment(move.neighbors,
-      //                                           move.cumulative_probability,
-      //                                           i_current_compartment,
-      //                                           rng2)
-      //                 : i_current_compartment;
+      // positions(idx)
+      //     = (mask_next) ? __find_next_compartment(move.neighbors,
+      //                                             move.cumulative_probability,
+      //                                             i_current_compartment,
+      //                                             rng2)
+      //                   : i_current_compartment;
 
-      KOKKOS_ASSERT(positions(idx) < move.liquid_volume.extent(0));
+      KOKKOS_ASSERT(
+          positions(idx) < move.liquid_volume.extent(0)
+          && " Position after move is greater than compartment number");
 
       if constexpr (AutoGenerated::FlagCompileTime::enable_event_counter)
       {

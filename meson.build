@@ -81,12 +81,15 @@ if build_type == 'debug'
   # NOTHING
   CMAKE_TYPE = 'Debug'
   add_global_arguments('-DDEBUG', language: 'cpp')
+  add_global_arguments('-DFIX_SEED', language: 'cpp')
   use_kokkos_tools = true
 elif build_type == 'debugoptimized'
   add_global_arguments('-DDEBUG', language: 'cpp')
+  add_global_arguments('-DKOKKOS_ENABLE_DEBUG', language: 'cpp')
   use_kokkos_tools = true
 else
   add_global_arguments('-DNDEBUG', language: 'cpp')
+  
   if compiler.has_argument('-ffast-math')
     arch_specific_args = [arch_specific_args, '-ffast-math']
   endif
