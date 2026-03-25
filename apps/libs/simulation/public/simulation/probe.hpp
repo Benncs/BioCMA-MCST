@@ -129,7 +129,11 @@ namespace Simulation
 
         clear();
       }
-      active = false;
+      else
+      {
+
+        active = false;
+      }
     }
 
   private:
