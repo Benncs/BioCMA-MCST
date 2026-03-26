@@ -48,7 +48,8 @@ simulation_lib = static_library(
    # install: true,
    install_rpath: global_install_dir,
    link_args: [flto_flag],
-   cpp_args:[]
+   cpp_args:[],
+   cpp_pch : 'pch/pch.h'
 )
 
 
@@ -73,6 +74,7 @@ if use_dynamic_module
       dependencies: [simulation_dyn_public_dep, private_dependencies],
       cpp_args: [use_python_define],
       install: false,
+        cpp_pch : 'pch/pch.h',
        install_rpath: global_install_dir
    )
 

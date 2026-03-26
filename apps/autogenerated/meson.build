@@ -30,6 +30,8 @@ conf_data = configuration_data(
     'enable_event_counter': 'true',
     'shrink_ratio': '0.1',
     'default_MC_buffer_ratio': default_MC_buffer_ratio,
+    '__f_compress_export__':'false',
+    '__f_export_age__':'true'
   },
 )
 result_dir = get_option('result_dir_path')

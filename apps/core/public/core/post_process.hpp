@@ -178,6 +178,7 @@ namespace PostProcessing
     {
       container.force_remove_dead();
       BonceBuffer properties;
+      properties.ages = std::nullopt;
       const std::size_t n_p
           = container.n_particles(); // USE list size not Kokkos View size.
                                      // bcause container allocates more
@@ -228,10 +229,6 @@ namespace PostProcessing
 
         properties.ages = Kokkos::create_mirror_view_and_copy(
             Kokkos::HostSpace(), ages_values);
-      }
-      else
-      {
-        properties.ages = std::nullopt;
       }
 
       return properties;

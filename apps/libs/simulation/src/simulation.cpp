@@ -1,4 +1,3 @@
-#include "simulation/descriptors/dimensions.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <cma_utils/alias.hpp>
@@ -16,6 +15,7 @@
 #include <optional>
 #include <scalar_init.hpp>
 #include <scalar_simulation.hpp>
+#include <simulation/descriptors/dimensions.hpp>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/kernels/move_kernel.hpp>
 #include <simulation/mass_transfer.hpp>

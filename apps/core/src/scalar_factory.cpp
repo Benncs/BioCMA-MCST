@@ -12,8 +12,7 @@
 
 #  ifndef NDEBUG
 #    pragma GCC diagnostic push
-#    pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#    pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
+#    pragma GCC diagnostic ignored "-w"
 #  endif
 #  include <Eigen/Dense>
 #  ifndef NDEBUG

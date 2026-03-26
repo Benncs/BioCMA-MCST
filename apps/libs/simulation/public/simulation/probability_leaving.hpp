@@ -1,7 +1,7 @@
 #ifndef __SIMULATION_PROBA_LEAVING_HPP__
 #define __SIMULATION_PROBA_LEAVING_HPP__
 
-#include "Kokkos_Assert.hpp"
+#include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <common/maths.hpp>
 

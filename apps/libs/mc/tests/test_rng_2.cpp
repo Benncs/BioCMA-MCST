@@ -172,6 +172,7 @@ test_truncated()
   MC::pool_type rand_pool(test_seed);
   Kokkos::parallel_for(
       "test_truncated", N, KOKKOS_LAMBDA(const int _) {
+        (void)_;
         auto gen = rand_pool.get_state();
         auto val = dist.draw(gen);
         KOKKOS_ASSERT(val >= 0.); // bounds should be ]a,b[ but test in [a,b]

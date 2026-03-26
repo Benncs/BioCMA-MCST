@@ -149,7 +149,7 @@ namespace Simulation::KernelInline
           status(std::move(_status)), events(std::move(_events)),
           probes(std::move(_probes)), ages(std::move(_ages)),
           random(std::move(_random)), enable_move(b_move),
-          enable_leave(b_leave), index_random_leave(0) {};
+          enable_leave(b_leave) {};
 
     void
     update(const ComputeSpace& ex,
@@ -547,7 +547,7 @@ namespace Simulation::KernelInline
 
     bool enable_move{};
     bool enable_leave{};
-    std::size_t index_random_leave;
+    std::size_t index_random_leave{};
   };
 } // namespace Simulation::KernelInline
 

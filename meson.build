@@ -3,8 +3,14 @@ project(
   'cpp',
   version: '1.0.01',
   meson_version: '>= 1.8.0',
-  default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
+  default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20','b_pch=true'],
 )
+
+use_cuda = get_option('use_cuda')
+
+if use_cuda and get_option('b_pch')
+  error('Precompiled header not supported for CUDA build\r\nPlease reconfigure the project turning b_pch to false\r\nmeson setup builddir --reconfigure -Db_pch=false')
+endif
 
 build_type = get_option('buildtype')
 python_install = get_option('python_install')
@@ -14,7 +20,7 @@ use_cereal = get_option('use_cereal')
 use_system_kokkos = get_option('use_system_kokkos')
 build_test = get_option('build_test')
 build_udf = get_option('build_udf')
-use_cuda = get_option('use_cuda')
+
 if not use_cuda and build_udf
   add_project_arguments('-DUSE_UDF', language: 'cpp')
 endif
@@ -78,18 +84,16 @@ if build_type == 'debug'
   CMAKE_TYPE = 'Debug'
   add_global_arguments('-DDEBUG', language: 'cpp')
   add_global_arguments('-DFIX_SEED', language: 'cpp')
-  use_kokkos_tools = true
 elif build_type == 'debugoptimized'
   add_global_arguments('-DDEBUG', language: 'cpp')
   add_global_arguments('-DKOKKOS_ENABLE_DEBUG', language: 'cpp')
-  use_kokkos_tools = true
 else
   add_global_arguments('-DNDEBUG', language: 'cpp')
   
   if compiler.has_argument('-ffast-math')
     arch_specific_args = [arch_specific_args, '-ffast-math']
   endif
-  use_kokkos_tools = true
+
 endif
 
 cpp_args = [arch_specific_args]
@@ -98,11 +102,12 @@ if (use_kokkos_tools)
   cpp_args = [cpp_args, '-DENABLE_KOKKOS_PROFILING']
 endif
 
-mpi = dependency('mpi', language: 'cpp', required: true)
-thread_dep = dependency('threads', required: true)
-omp = dependency('openmp')
-hwloc = dependency('hwloc')
-dl_dep = compiler.find_library('dl', required: true)
+mpi = dependency('mpi', language: 'cpp', required: true,include_type:'system')
+thread_dep = dependency('threads', required: true,include_type:'system')
+omp = dependency('openmp',include_type:'system')
+hwloc = dependency('hwloc',include_type:'system')
+dl_dep = dependency('dl', required: true,include_type:'system')
+
 eigen_dep = dependency('eigen3', required: true, version: '>=5.0.1')
 blas = dependency('blas', required: false) # Eigen can work without BLAS
 cpp_args = [cpp_args, '-DEIGEN_NO_CUDA=1']
@@ -126,6 +131,9 @@ if use_system_kokkos
   kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE', '-Wno-unknown-pragmas']
 
   if use_cuda
+
+    
+
     kokkos_compile_arg = [
       kokkos_compile_arg,
       '-extended-lambda',

@@ -92,8 +92,9 @@ test_register_initializer_path(int argc, char** argv)
   delete_handle(&handle);
 }
 void
-test_make_params(int argc, char** argv)
+test_make_params()
 {
+
   Param params = PARAM;
   assert(params.biomass_initial_concentration == cx);
   assert(params.final_time == ft);
@@ -182,6 +183,7 @@ test_branch_null(int argc, char** argv)
   CHECK_FALSE(register_parameters(NULL, NULL));
   Param params = PARAM;
   CHECK_FALSE(register_parameters(NULL, &params));
+  (void)params;
 
   delete_handle(&handle);
 }
@@ -199,7 +201,7 @@ main(int argc, char** argv)
 
   test_branch_null(argc, argv);
 
-  test_make_params(argc, argv);
+  test_make_params();
   test_register_parameters(argc, argv);
   test_register_result_path(argc, argv);
   test_register_initializer_path(argc, argv);
