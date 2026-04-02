@@ -2,6 +2,7 @@
 #define __COMMON_EXPORT_HPP__
 
 #include <Kokkos_Core_fwd.hpp>
+#include <biocma_cst_config.hpp>
 #include <string_view>
 
 using ComputeSpace = Kokkos::DefaultExecutionSpace;
@@ -16,6 +17,13 @@ using HostSpace = Kokkos::DefaultHostExecutionSpace;
 #endif
 
 #define EIGEN_INDEX(__VALUE__) static_cast<int>(__VALUE__)
+
+consteval bool
+check_version(std::array<int, 3> v)
+{
+  return (v[0] == _BIOMC_VERSION_MAJOR) && (v[1] == _BIOMC_VERSION_MINOR)
+         && (v[2] == _BIOMC_VERSION_DEV);
+}
 
 #ifndef NDEBUG
 #  include <iostream>

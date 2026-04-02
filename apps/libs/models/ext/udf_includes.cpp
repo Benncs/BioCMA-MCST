@@ -20,6 +20,7 @@ namespace UnsafeUDF
                                    float d_t,
                                    std::size_t idx,
                                    const Models::UdfModel::SelfParticle& arr,
+                                   const std::size_t position_index,
                                    const MC::LocalConcentration& c)
       = nullptr; //< update function ptr
 
@@ -48,6 +49,9 @@ namespace UnsafeUDF
   Loader::init_lib(std::string_view path)
   {
     auto _handle = DynamicLibrary::getLib(path);
+
+    
+
     auto _mod = DynamicLibrary::getModule<Module>(_handle);
 
     Loader::names = _mod._names_udf_m;

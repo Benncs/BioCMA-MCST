@@ -69,6 +69,7 @@ namespace Models
            FloatType d_t,
            std::size_t idx,
            const SelfParticle& arr,
+           std::size_t position_index,
            const MC::LocalConcentration& c);
 
     KOKKOS_INLINE_FUNCTION static void
@@ -121,9 +122,10 @@ namespace Models
                       FloatType d_t,
                       std::size_t idx,
                       const SelfParticle& arr,
+                      const std::size_t position_index,
                       const MC::LocalConcentration& c)
   {
-    const auto s = static_cast<FloatType>(c(0));
+    const auto s = static_cast<FloatType>(GET_CONCENTRATION(0));
     const FloatType g = s / (k + s);
     const FloatType phi_s = phi_s_max * g;
     const FloatType ldot = l_dot_max * g;

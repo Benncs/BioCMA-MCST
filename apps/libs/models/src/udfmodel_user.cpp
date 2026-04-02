@@ -30,9 +30,11 @@ namespace Models
                    FloatType d_t,
                    std::size_t idx,
                    const SelfParticle& arr,
+                   const std::size_t position_index,
                    const MC::LocalConcentration& c)
   {
-    return UnsafeUDF::Loader::update_udf(random_pool, d_t, idx, arr, c);
+    return UnsafeUDF::Loader::update_udf(
+        random_pool, d_t, idx, arr, position_index, c);
   }
 
   KOKKOS_FUNCTION void

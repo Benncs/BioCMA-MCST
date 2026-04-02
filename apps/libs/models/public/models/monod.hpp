@@ -124,10 +124,11 @@ namespace Models
            [[maybe_unused]] FloatType d_t,
            [[maybe_unused]] std::size_t idx,
            [[maybe_unused]] const SelfParticle& arr,
+           const std::size_t position_index,
            [[maybe_unused]] const MC::LocalConcentration& c)
     {
       const FloatType s
-          = static_cast<FloatType>(Kokkos::max(0., c(0))); // Bounded
+          = static_cast<FloatType>(Kokkos::max(0., GET_CONCENTRATION(0))); // Bounded
       const FloatType mu = mu_max * s / (k_s + s); // Instantaneous mu from
                                                    // Monod
 

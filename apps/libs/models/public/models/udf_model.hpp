@@ -35,6 +35,7 @@ namespace Models
            [[maybe_unused]] FloatType d_t,
            [[maybe_unused]] std::size_t idx,
            [[maybe_unused]] const SelfParticle& arr,
+           std::size_t position_index,
            [[maybe_unused]] const MC::LocalConcentration& c);
 
     KOKKOS_FUNCTION static void

@@ -1,6 +1,7 @@
 #ifndef __MC_EVENTS_HPP__
 #define __MC_EVENTS_HPP__
 
+#include <Kokkos_Core_fwd.hpp>
 #include "biocma_cst_config.hpp"
 #include <Kokkos_Core.hpp>
 #include <common/execinfo.hpp>
@@ -26,7 +27,6 @@ namespace MC
 
   constexpr size_t number_event_type = static_cast<std::size_t>(
       EventType::__COUNT__); //< Number of different events
-
   /**
    * @brief inline getter, converts event to its value in order to be use as
    * array index
@@ -129,13 +129,7 @@ namespace MC
       }
     }
 
-    /**
-     * @brief Transform a linear contiguous counter data obtained via MPI gather
-     * into EventContainer object
-     * @param _data obtained via multiple EventContainer merged together
-     * @warning _data size has to be a multiple of number_event_type
-     */
-    static EventContainer reduce(std::span<std::size_t> _data);
+   
 
     template <class Archive>
     void

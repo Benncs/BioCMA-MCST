@@ -99,8 +99,9 @@ namespace MC
                      Kokkos::LayoutLeft,
                      ComputeSpace,
                      Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
-  using LocalConcentration
-      = Kokkos::Subview<KernelConcentrationType, int, decltype(Kokkos::ALL)>;
+    using LocalConcentration = KernelConcentrationType;
+//   using LocalConcentration
+//       = Kokkos::Subview<KernelConcentrationType, int, decltype(Kokkos::ALL)>;
 
   template <class ExecSpace, bool is_const>
   using VolumeView = std::conditional_t<

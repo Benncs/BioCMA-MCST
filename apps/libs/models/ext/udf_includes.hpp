@@ -38,6 +38,7 @@ namespace UnsafeUDF
         float d_t,
         std::size_t idx,
         const Models::UdfModel::SelfParticle& arr,
+        const std::size_t position_index,
         const MC::LocalConcentration& c); //< update function ptr
 
     static MC::ContribIndexBounds (*get_bounds_udf)();

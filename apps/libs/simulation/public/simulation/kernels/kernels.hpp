@@ -152,8 +152,9 @@ namespace Simulation::KernelInline
           KernelInline::CycleReducer<ComputeSpace>(cycle_reducer));
       Kokkos::fence(); // TODO needed ?
 
-      constexpr int PARTICLES_PER_TEAM = 256;
-      int league_size = Kokkos::ceil(n_particle / PARTICLES_PER_TEAM);
+      constexpr int PARTICLES_PER_TEAM = cycle_kernel_type::PARTICLES_PER_TEAM;
+      // const int league_size = Kokkos::ceil(n_particle / PARTICLES_PER_TEAM);
+      const int league_size = (n_particle + PARTICLES_PER_TEAM - 1) / PARTICLES_PER_TEAM;
 
       if (cycle_kernel.do_contribs())
       {

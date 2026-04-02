@@ -43,6 +43,7 @@ struct DefaultModel
          [[maybe_unused]] FloatType d_t,
          [[maybe_unused]] std::size_t idx,
          [[maybe_unused]] const SelfParticle& arr,
+         [[maybe_unused]] const std::size_t position_index,
          [[maybe_unused]] const MC::LocalConcentration& c)
   {
 
@@ -121,6 +122,7 @@ struct DynamicDefaultModel
          [[maybe_unused]] FloatType d_t,
          [[maybe_unused]] std::size_t idx,
          [[maybe_unused]] const SelfParticle& arr,
+          [[maybe_unused]] const std::size_t position_index,
          [[maybe_unused]] const MC::LocalConcentration& c)
   {
 

@@ -96,7 +96,7 @@ concept CommonModelType = requires(T model,
   } -> std::same_as<double>; ///< Return the individual mass of particle
 
   {
-    T::update(random_pool, d_t, idx, arr, c)
+    T::update(random_pool, d_t, idx, arr,position, c)
   } -> std::convertible_to<MC::Status>; ///< Update state of MC particle
 
   // {
