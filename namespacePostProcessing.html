@@ -84,6 +84,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a262aae53c1f4dafed4795c687d6ea817" id="r_a262aae53c1f4dafed4795c687d6ea817"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a262aae53c1f4dafed4795c687d6ea817">save_particle_state</a> (const <a class="el" href="classSimulation_1_1Getter.html">Simulation::Getter</a> &amp;getter, <a class="el" href="classCore_1_1PartialExporter.html">Core::PartialExporter</a> &amp;pde)</td></tr>
 <tr class="memitem:abfe2a5894fae7c5534274da5d6d33e83" id="r_abfe2a5894fae7c5534274da5d6d33e83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfe2a5894fae7c5534274da5d6d33e83">save_probes</a> (const <a class="el" href="classSimulation_1_1Getter.html">Simulation::Getter</a> &amp;getter, <a class="el" href="classCore_1_1PartialExporter.html">Core::PartialExporter</a> &amp;pde, bool force=false)</td></tr>
 <tr class="memitem:a78ad4623d83b436cdd0ae9c8e1e5c7ac" id="r_a78ad4623d83b436cdd0ae9c8e1e5c7ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78ad4623d83b436cdd0ae9c8e1e5c7ac">reset_counter</a> ()</td></tr>
+<tr class="memitem:a80f3f8d7143933b6b2d9e58ff0de40d8" id="r_a80f3f8d7143933b6b2d9e58ff0de40d8"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </td></tr>
+<tr class="memitem:a80f3f8d7143933b6b2d9e58ff0de40d8 template"><td class="memItemLeft" align="right" valign="top">ParticlePropertyViewType&lt; ComputeSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80f3f8d7143933b6b2d9e58ff0de40d8">get_particle_age_only</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;container)</td></tr>
 <tr class="memitem:a5c1775fa34193199d9c989e5740e2f84" id="r_a5c1775fa34193199d9c989e5740e2f84"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </td></tr>
 <tr class="memitem:a5c1775fa34193199d9c989e5740e2f84 template"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c1775fa34193199d9c989e5740e2f84">get_properties</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;container, const std::size_t n_compartment, const bool with_age)</td></tr>
 <tr class="memitem:adae52b6b518e25be1c920f36f196ef65" id="r_adae52b6b518e25be1c920f36f196ef65"><td class="memTemplParams" colspan="2">template&lt;std::size_t buffer_size&gt; </td></tr>
@@ -178,6 +180,35 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a id="a80f3f8d7143933b6b2d9e58ff0de40d8" name="a80f3f8d7143933b6b2d9e58ff0de40d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80f3f8d7143933b6b2d9e58ff0de40d8">&#9670;&#160;</a></span>get_particle_age_only()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">ParticlePropertyViewType&lt; ComputeSpace &gt; PostProcessing::get_particle_age_only </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>container</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_a80f3f8d7143933b6b2d9e58ff0de40d8_cgraph.svg" width="356" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_a80f3f8d7143933b6b2d9e58ff0de40d8_icgraph.svg" width="338" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
 <a id="a5c1775fa34193199d9c989e5740e2f84" name="a5c1775fa34193199d9c989e5740e2f84"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5c1775fa34193199d9c989e5740e2f84">&#9670;&#160;</a></span>get_properties()</h2>
 
@@ -206,7 +237,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_a5c1775fa34193199d9c989e5740e2f84_cgraph.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_a5c1775fa34193199d9c989e5740e2f84_cgraph.svg" width="100%" height="405"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>

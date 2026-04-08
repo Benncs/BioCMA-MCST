@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"structMC_1_1Distributions_1_1ScaledTruncatedNormal.html#aec2b2b75526a3ef434144434331353c7":[7,0,4,0,3,3],
 "structMC_1_1Distributions_1_1SkewNormal.html":[5,0,6,0,4],
 "structMC_1_1Distributions_1_1SkewNormal.html":[7,0,4,0,4],
 "structMC_1_1Distributions_1_1SkewNormal.html#a1d420c61cdf3f52d4c5b19720d25b53c":[5,0,6,0,4,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX7 =
 "structModels_1_1Monod.html#aa8186ac19484f299b899af62137fa2b8":[7,0,5,1,16],
 "structModels_1_1Monod.html#ac258b8a0d63256b003cd9fe0b3fc6a34":[5,0,7,3,2],
 "structModels_1_1Monod.html#ac258b8a0d63256b003cd9fe0b3fc6a34":[7,0,5,1,2],
-"structModels_1_1Monod.html#ac2d10502fd1157d9ce7b6d52aa0a3003":[5,0,7,3,11],
-"structModels_1_1Monod.html#ac2d10502fd1157d9ce7b6d52aa0a3003":[7,0,5,1,11]
+"structModels_1_1Monod.html#ac2d10502fd1157d9ce7b6d52aa0a3003":[5,0,7,3,11]
 };

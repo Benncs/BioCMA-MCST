@@ -1,9 +1,7 @@
 <map id="Simulation::KernelInline::MoveFunctor::handle_move" name="Simulation::KernelInline::MoveFunctor::handle_move">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,194,76"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,40,194,79"/>
 <area shape="rect" id="Node000002" href="$namespaceSimulation_1_1KernelInline.html#a3fd8d8828a956f4420ac98126ddf427b" title="probably overkill binary search to find next compartment" alt="" coords="242,5,422,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,41,226,37,227,42,195,46"/>
-<area shape="rect" id="Node000003" href="$namespaceSimulation_1_1KernelInline.html#a648521674ead158dd3776a946da6722a" title=" " alt="" coords="253,68,410,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,66,238,72,237,78,194,72"/>
-<area shape="rect" id="Node000004" href="$namespaceCommonMaths.html#ad4e27e17383f20d970bcd89fd00e36f0" title=" " alt="" coords="470,75,605,100"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="411,85,454,85,454,90,411,90"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,43,226,38,227,43,195,48"/>
+<area shape="rect" id="Node000003" href="$namespaceSimulation_1_1KernelInline.html#ad465888b874fea5c0e8f9979dc490f94" title=" " alt="" coords="253,68,410,120"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,71,238,77,237,83,194,76"/>
 </map>
