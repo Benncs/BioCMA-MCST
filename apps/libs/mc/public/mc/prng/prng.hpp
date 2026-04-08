@@ -10,18 +10,55 @@
 namespace MC
 {
 
-  using pool_type =
-      Kokkos::Random_XorShift1024_Pool<Kokkos::DefaultExecutionSpace>;
   pool_type get_pool(std::size_t seed = 0);
 
-  /** @brief Sample variable with RAI mecanism*/
-  KOKKOS_INLINE_FUNCTION auto sample_random_variables(const pool_type& p,
-                                                      auto functor)
+  /**
+   * @brief Samples random variables
+   * Use t wrap generator with RAII
+   *
+   * The functor must accept the generator by reference, not by value.
+   * Passing the generator by value (e.g., `[](auto gen){ ... }`) results in
+   * undefined behavior, because copying the generator state is not allowed.
+   * Instead, ensure the functor signature is `[](auto& gen){ ... }`.
+   *
+   * @tparam Functor A callable object that takes `generator_type&` and returns
+   * any tuple-like or user-defined result.
+   * @param pool     Random pool
+   * @param functor  A callable that operates on the generator and produces the
+   *                 desired random values.
+   *
+   * @return The value returned by the user-provided functor.
+   *
+   * @example
+   * // Example usage:
+   * const auto [a, b] = MC::sample_random_variables(
+   *       random_pool,
+   *       [](auto& gen)
+   *       {
+   *         const auto a = gen.urand64();
+   *         const auto b = gen.drand();
+   *         return std::make_tuple(a, b);
+   *       });
+   */
+
+  KOKKOS_INLINE_FUNCTION auto
+  sample_random_variables(const pool_type& pool, auto&& functor)
   {
-    auto gen = p.get_state();
-    auto t = functor(gen);
-    p.free_state(gen);
-    return t;
+    // Be sure that generator is passed to functor as reference
+    // As functor can be lambda usually [](auto gen){return gen.rand();};
+    // If auto is passed as value, value generated is UB. Need auto& to avoid
+    // any problem
+    using gen_t = typename pool_type::generator_type;
+    using Functor = decltype(functor);
+    static_assert(std::is_invocable_v<Functor, gen_t&>
+                      && !std::is_invocable_v<Functor, gen_t>,
+                  "Functor must accept generator by reference only");
+
+    auto gen = pool.get_state();
+    const auto result = functor(gen);
+    pool.free_state(gen);
+
+    return result;
   }
 
 #define SAMPLE_RANDOM_VARIABLES(_random_pool_, ...)                            \
@@ -40,13 +77,16 @@ namespace MC
 
     explicit KPRNG(size_t _seed = 0);
 
-    template <FloatingPointType T> KOKKOS_INLINE_FUNCTION T uniform() const
+    template <FloatingPointType T>
+    KOKKOS_INLINE_FUNCTION T
+    uniform() const
     {
       return this->uniform<T>(0, 1);
     }
 
     template <FloatingPointType T>
-    KOKKOS_INLINE_FUNCTION T uniform(T a, T b) const
+    KOKKOS_INLINE_FUNCTION T
+    uniform(T a, T b) const
     {
       return sample_random_variables(
           random_pool,
@@ -69,7 +109,8 @@ namespace MC
     double_uniform(size_t n_sample, double a = 0., double b = 1.) const;
 
     template <FloatingPointType T, size_t n_r>
-    Kokkos::View<T[n_r], ComputeSpace> random_view() const
+    Kokkos::View<T[n_r], ComputeSpace>
+    random_view() const
     {
       Kokkos::View<T[n_r], ComputeSpace> A("random");
       Kokkos::fill_random(A, random_pool, 0., 1.);
@@ -84,17 +125,18 @@ namespace MC
           random_pool, std::make_index_sequence<n_r>{});
     }
 
-    [[nodiscard]] KOKKOS_INLINE_FUNCTION uint64_t uniform_u(uint64_t a,
-                                                            uint64_t b) const
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION uint64_t
+    uniform_u(uint64_t a, uint64_t b) const
     {
 
       return sample_random_variables(
-          random_pool, [a, b](auto gen) { return gen.urand64(a, b); });
+          random_pool, [a, b](auto& gen) { return gen.urand64(a, b); });
     }
 
     pool_type random_pool;
 
-    [[nodiscard]] auto get_seed() const
+    [[nodiscard]] auto
+    get_seed() const
     {
       return seed;
     } // TODO export this to result file
@@ -108,8 +150,8 @@ namespace MC
     {
       // Constexpr loopunrolling to fill the array
       auto generator = pool.get_state();
-      std::array<double, n_r> res = {
-          {(static_cast<void>(I), generator.drand(0., 1.))...}};
+      std::array<double, n_r> res
+          = { { (static_cast<void>(I), generator.drand(0., 1.))... } };
       pool.free_state(generator);
       return res;
     }

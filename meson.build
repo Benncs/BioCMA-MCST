@@ -1,10 +1,16 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '0.9.75',
-  meson_version: '>= 1.3.0',
-  default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20'],
+  version: '1.0.01',
+  meson_version: '>= 1.8.0',
+  default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20','b_pch=false'],
 )
+
+use_cuda = get_option('use_cuda')
+
+if use_cuda and get_option('b_pch')
+  error('Precompiled header not supported for CUDA build\r\nPlease reconfigure the project turning b_pch to false\r\nmeson setup builddir --reconfigure -Db_pch=false')
+endif
 
 build_type = get_option('buildtype')
 python_install = get_option('python_install')
@@ -14,23 +20,16 @@ use_cereal = get_option('use_cereal')
 use_system_kokkos = get_option('use_system_kokkos')
 build_test = get_option('build_test')
 build_udf = get_option('build_udf')
-use_cuda = get_option('use_cuda')
+
 if not use_cuda and build_udf
   add_project_arguments('-DUSE_UDF', language: 'cpp')
 endif
-add_global_arguments(
-  '-DEIGEN_NO_CUDA=1',
-  language: 'cpp',
-)
-# add_global_arguments('-DEIGEN_DONT_VECTORIZE=1', language: 'cpp')
+
+no_mpi_flag = '-DNO_MPI'
 
 arch_specific_args = []
 
 compiler = meson.get_compiler('cpp')
-
-if compiler.has_argument('-fno-math-errno')
-  arch_specific_args = [arch_specific_args, '-fno-math-errno']
-endif
 
 flto_flag = []
 
@@ -84,16 +83,17 @@ if build_type == 'debug'
   # NOTHING
   CMAKE_TYPE = 'Debug'
   add_global_arguments('-DDEBUG', language: 'cpp')
-  use_kokkos_tools = true
+  add_global_arguments('-DFIX_SEED', language: 'cpp')
 elif build_type == 'debugoptimized'
   add_global_arguments('-DDEBUG', language: 'cpp')
-  use_kokkos_tools = true
+  add_global_arguments('-DKOKKOS_ENABLE_DEBUG', language: 'cpp')
 else
   add_global_arguments('-DNDEBUG', language: 'cpp')
+  
   if compiler.has_argument('-ffast-math')
     arch_specific_args = [arch_specific_args, '-ffast-math']
   endif
-  use_kokkos_tools = true
+
 endif
 
 cpp_args = [arch_specific_args]
@@ -102,20 +102,20 @@ if (use_kokkos_tools)
   cpp_args = [cpp_args, '-DENABLE_KOKKOS_PROFILING']
 endif
 
-no_mpi_flag = '-DNO_MPI'
+mpi = dependency('mpi', language: 'cpp', required: true,include_type:'system')
+thread_dep = dependency('threads', required: true,include_type:'system')
+omp = dependency('openmp',include_type:'system')
+hwloc = dependency('hwloc',include_type:'system')
+dl_dep = dependency('dl', required: true,include_type:'system')
 
-mpi = dependency('mpi', language: 'cpp', required: true)
-thread_dep = dependency('threads', required: true)
-omp = dependency('openmp')
-hwloc = dependency('hwloc')
+eigen_dep = dependency('eigen3', required: true, version: '>=5.0.1')
 blas = dependency('blas', required: false) # Eigen can work without BLAS
-dl_dep = compiler.find_library('dl', required: true)
-eigen_dep = subproject('eigen', required: true).get_variable('eigen_dep')
+cpp_args = [cpp_args, '-DEIGEN_NO_CUDA=1']
 
+# add_global_arguments('-DEIGEN_DONT_VECTORIZE=1', language: 'cpp')
 # if blas.found()
 #   add_global_arguments('-DEIGEN_USE_BLAS', language: 'cpp')
 # endif
-
 #add_global_arguments('-DEIGEN_DONT_PARALLELIZE',language:'cpp')
 
 cmake = import('cmake', required: true)
@@ -131,6 +131,9 @@ if use_system_kokkos
   kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE', '-Wno-unknown-pragmas']
 
   if use_cuda
+
+    
+
     kokkos_compile_arg = [
       kokkos_compile_arg,
       '-extended-lambda',
@@ -173,6 +176,7 @@ else
 endif
 
 kokkos_sampling = dependency('kokkos_sampling-1.0', required: true)
+# magic_enum= dependency('magic_enum', required: true)
 
 if build_udf
   dynlib_dep = dependency('dynlib-1.0', required: true)

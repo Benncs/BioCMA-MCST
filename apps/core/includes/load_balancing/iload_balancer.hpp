@@ -5,6 +5,10 @@
 #include <cstdint>
 #include <memory>
 
+/**
+ * @brief interface to balance the number of particle accros ranks
+ *
+ */
 class ILoadBalancer
 {
 public:
@@ -18,13 +22,19 @@ public:
 
   [[nodiscard]] bool check(uint64_t n = 0) const;
 
+  /**
+   * @brief returns the number of particle for rank: 'rank' if the total number
+   * is 'n'
+   */
   uint64_t balance(uint32_t rank, uint64_t n);
 
 protected:
   [[nodiscard]] virtual double getRatio(uint64_t n,
-                                        uint32_t rank) const noexcept = 0;
+                                        uint32_t rank) const noexcept
+      = 0;
 
-  [[nodiscard]] inline auto size() const noexcept
+  [[nodiscard]] inline auto
+  size() const noexcept
   {
     return _size;
   }

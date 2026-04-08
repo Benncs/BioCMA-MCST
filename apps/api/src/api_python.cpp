@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <exception>
+#include <iostream>
 #include <memory>
 #include <pybind11/cast.h>
 #include <pybind11/detail/common.h>
@@ -15,10 +16,10 @@
 #include <stdexcept>
 #include <string>
 #include <tuple>
-
 namespace py = pybind11;
 
-std::string wrap_repr(const wrap_c_param_t& m)
+std::string
+wrap_repr(const wrap_c_param_t& m)
 {
   char* repr = nullptr;
   repr_user_param(&m, &repr); // This function perform dynamic allocation
@@ -29,7 +30,8 @@ std::string wrap_repr(const wrap_c_param_t& m)
 
 namespace PythonBindings
 {
-  auto init_handle(const std::vector<std::string>& args)
+  auto
+  init_handle(const std::vector<std::string>& args)
   {
     std::vector<const char*> c_args;
     c_args.reserve(args.size());
@@ -50,7 +52,8 @@ namespace PythonBindings
     throw std::runtime_error("Simulation handle initialisation failed");
   }
 
-  auto exec(std::shared_ptr<Api::SimulationInstance>& handle)
+  auto
+  exec(std::shared_ptr<Api::SimulationInstance>& handle)
   {
     pybind11::gil_scoped_release release; // TODO check if really usefull ?
     const auto ret = handle->exec();
@@ -61,19 +64,27 @@ namespace PythonBindings
     }
   }
 
-  auto apply(std::shared_ptr<Api::SimulationInstance>& handle, bool to_load)
+  auto
+  apply(std::shared_ptr<Api::SimulationInstance>& handle, bool to_load)
       -> std::tuple<bool, std::string>
   {
+    handle->set_auto_mtr(); // FIXME
+    std::cerr << "Set auto mtr for PythonBindings" << std::endl;
     auto rc = handle->apply(to_load);
+
     bool f = static_cast<bool>(rc);
-    return {f, rc.get()};
+    return { f, rc.get() };
   }
 
-  auto register_cma_path(std::shared_ptr<Api::SimulationInstance>& handle,
-                         const std::string& cma_path)
+  auto
+  register_cma_path(std::shared_ptr<Api::SimulationInstance>& handle,
+                    const std::string& cma_path)
   {
-
-    return ::register_cma_path(handle.get(), cma_path.data());
+    auto retc = ::register_cma_path(handle.get(), cma_path.data());
+    if (retc != 0)
+    {
+      throw std::runtime_error("Invalid CMA Case");
+    }
   }
 
   auto
@@ -101,58 +112,55 @@ namespace PythonBindings
     return 0;
   }
 
-  auto declare_parameter(auto& m)
+  auto
+  declare_parameter(auto& m)
   {
-    return py::class_<wrap_c_param_t>(m, "UserSimulationParam")
-      .def(py::init<>())
-      .def_readwrite("final_time", &wrap_c_param_t::final_time)
-      .def_readwrite("delta_time", &wrap_c_param_t::delta_time)
-      .def_readwrite("force_override", &wrap_c_param_t::force_override)
-      .def_readwrite("n_thread", &wrap_c_param_t::n_thread)
-      .def_readwrite("number_exported_result", &wrap_c_param_t::number_exported_result)
-      .def_readwrite("biomass_initial_concentration",
-                     &wrap_c_param_t::biomass_initial_concentration)
-      .def_readwrite("number_particle", &wrap_c_param_t::number_particle)
-      .def_readwrite("save_serde", &wrap_c_param_t::save_serde)
-      .def_readwrite("uniform_particle_init", &wrap_c_param_t::uniform_particle_init)
+    return py::class_<wrap_c_param_t> (m, "UserSimulationParam")
+      .def (py::init<> ())
+      .def_readwrite ("final_time", &wrap_c_param_t::final_time)
+      .def_readwrite ("delta_time", &wrap_c_param_t::delta_time)
+      .def_readwrite ("force_override", &wrap_c_param_t::force_override)
+      .def_readwrite ("n_thread", &wrap_c_param_t::n_thread)
+      .def_readwrite ("number_exported_result",
+                      &wrap_c_param_t::number_exported_result)
+      .def_readwrite ("biomass_initial_concentration",
+                      &wrap_c_param_t::biomass_initial_concentration)
+      .def_readwrite ("number_particle", &wrap_c_param_t::number_particle)
+      .def_readwrite ("save_serde", &wrap_c_param_t::save_serde)
+      .def_readwrite ("uniform_particle_init",
+                      &wrap_c_param_t::uniform_particle_init)
 
-
-
-      .def("__repr__", &wrap_repr)
+      .def ("__repr__", &wrap_repr)
       // TODO Write unittest
-      .def(py::pickle(
-          [](const wrap_c_param_t& p) { // __getstate__
+      .def (py::pickle (
+          [] (const wrap_c_param_t &p) { // __getstate__
             /* Return a tuple that fully encodes the state of the object */
-            return py::make_tuple(p.final_time,
-                                  p.delta_time,
-                                  p.force_override,
-                                  p.n_thread,
-                                  p.number_exported_result,
-                                  p.biomass_initial_concentration,
-                                  p.number_particle,
-                                  p.save_serde);
+            return py::make_tuple (
+                p.final_time, p.delta_time, p.force_override, p.n_thread,
+                p.number_exported_result, p.biomass_initial_concentration,
+                p.number_particle, p.save_serde);
           },
-          [](const py::tuple& t) { // __setstate__
+          [] (const py::tuple &t) { // __setstate__
             constexpr std::size_t n_attributes = 8;
-            if (t.size() != n_attributes)
-            {
-              throw std::runtime_error("Pickle param invalid state, "
-                                       "different number of attributes");
-            }
+            if (t.size () != n_attributes)
+              {
+                throw std::runtime_error ("Pickle param invalid state, "
+                                          "different number of attributes");
+              }
 
             /* Create a new C++ instance */
             wrap_c_param_t p{};
 
             // NOLINTBEGIN
             // Be careful using array indexing
-            p.final_time = t[0].cast<double>();
-            p.delta_time = t[1].cast<double>();
-            p.force_override = static_cast<int>(t[2].cast<bool>());
-            p.n_thread = t[3].cast<int>();
-            p.number_exported_result = t[4].cast<int>();
-            p.biomass_initial_concentration = t[5].cast<double>();
-            p.number_particle = t[6].cast<int>();
-            p.save_serde = t[7].cast<int>();
+            p.final_time = t[0].cast<double> ();
+            p.delta_time = t[1].cast<double> ();
+            p.force_override = static_cast<int> (t[2].cast<bool> ());
+            p.n_thread = t[3].cast<int> ();
+            p.number_exported_result = t[4].cast<int> ();
+            p.biomass_initial_concentration = t[5].cast<double> ();
+            p.number_particle = t[6].cast<int> ();
+            p.save_serde = t[7].cast<int> ();
             // NOLINTEND
             return p;
           }));

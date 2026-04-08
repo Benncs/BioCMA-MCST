@@ -1,9 +1,7 @@
 #ifndef __HOST_SPECIFIC_HPP__
 #define __HOST_SPECIFIC_HPP__
 
-// #include <common/common.hpp>
-
-#include "cma_utils/alias.hpp"
+#include <cma_utils/alias.hpp>
 #include <common/logger.hpp>
 #include <core/simulation_parameters.hpp>
 #include <dataexporter/partial_exporter.hpp>
@@ -31,8 +29,8 @@ namespace CmaUtils
  * simulation.
  * @param params The `SimulationParameters` object containing settings for the
  * simulation.
- * @param transitioner A unique pointer to the `Simulation::FlowMapTransitioner`
- * for handling flow map transitions.
+ * @param transitioner A unique pointer to the
+ * `Simulation::FlowMapTransitioner` for handling flow map transitions.
  */
 void host_process(
     std::shared_ptr<IO::Logger> logger, /*logger is passed by value because it

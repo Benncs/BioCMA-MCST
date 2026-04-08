@@ -64,7 +64,8 @@ static int parse_callback_ok(
     Core::UserControlParameters&& user_params,
     std::optional<std::unique_ptr<Api::SimulationInstance>>& handle);
 static std::string log_start_up();
-int main(int argc, char** argv)
+int
+main(int argc, char** argv)
 {
   auto logger = std::make_shared<IO::Console>();
   logger->toggle_print();
@@ -103,7 +104,8 @@ int main(int argc, char** argv)
   return rc;
 }
 
-int parse_callback_ok(
+int
+parse_callback_ok(
     std::shared_ptr<IO::Logger>&& logger,
     Core::UserControlParameters&& user_params,
     std::optional<std::unique_ptr<Api::SimulationInstance>>& handle)
@@ -116,9 +118,10 @@ int parse_callback_ok(
     return -1;
   }
   h->set_logger(std::cref(logger));
+  h->set_auto_mtr();
   // h->set_feed_constant(7.701635339554948e-06, 2, 0, 0);
   const auto load_serde = user_params.load_serde;
-  user_params.uniform_mc_init = false;
+  // user_params.uniform_mc_init = false;
   INTERPRETER_INIT
   {
     HANDLE_RC(h->register_parameters(
@@ -129,16 +132,16 @@ int parse_callback_ok(
   return 0;
 }
 
-bool override_result_path(const std::shared_ptr<IO::Logger>& logger,
-                          const Core::UserControlParameters& params,
-                          const ExecInfo& exec)
+bool
+override_result_path(const std::shared_ptr<IO::Logger>& logger,
+                     const Core::UserControlParameters& params,
+                     const ExecInfo& exec)
 {
   bool flag = true;
   if (exec.current_rank == 0)
   {
-    if (std::filesystem::exists(params.results_file_name +
-                                std::string(".h5")) &&
-        !params.force_override)
+    if (std::filesystem::exists(params.results_file_name + std::string(".h5"))
+        && !params.force_override)
     {
       std::ios_base::sync_with_stdio(true); // FIXME
       logger->print("", "Override results ? (y/n)");
@@ -155,7 +158,8 @@ bool override_result_path(const std::shared_ptr<IO::Logger>& logger,
   return flag;
 }
 
-static std::string log_start_up()
+static std::string
+log_start_up()
 {
   std::stringstream os;
   os << "--------" << std::endl;

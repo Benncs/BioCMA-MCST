@@ -103,7 +103,8 @@
 // matrix.rows(), matrix.cols(), false);
 // // }
 
-int main()
+int
+main()
 {
   //   test_valid_input();
   //   test_invalid_input();

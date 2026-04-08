@@ -36,8 +36,8 @@ namespace Simulation::MassTransfer
       std::vector<double> value;
     };
 
-    using MtrTypeVariant =
-        std::variant<FlowmapTurbulence, FixedKla, FlowmapKla>;
+    using MtrTypeVariant
+        = std::variant<FlowmapTurbulence, FixedKla, FlowmapKla>;
   } // namespace Type
 
   enum class Sign : int

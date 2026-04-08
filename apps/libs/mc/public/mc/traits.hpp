@@ -28,7 +28,7 @@ concat_arrays(const std::array<std::string_view, N1>& arr1,
 template <typename T>
 concept ConfigurableInit = requires(T model,
                                     const std::size_t size,
-                                    const MC::KPRNG::pool_type& random_pool,
+                                    const MC::pool_type& random_pool,
                                     std::size_t idx,
                                     const typename T::SelfParticle& arr,
                                     const T::Config& config) {
@@ -39,7 +39,7 @@ concept ConfigurableInit = requires(T model,
 
 template <typename T>
 concept NonConfigurableInit = requires(T model,
-                                       const MC::KPRNG::pool_type& random_pool,
+                                       const MC::pool_type& random_pool,
                                        std::size_t idx,
                                        const typename T::SelfParticle& arr) {
   { model.init(random_pool, idx, arr) } -> std::same_as<void>;
@@ -53,16 +53,16 @@ using NonConfigType = std::nullopt_t;
  */
 template <typename T, typename ViewType>
 concept CommonModelType = requires(T model,
-                                   T::FloatType d_t,
-                                   std::size_t idx,
-                                   std::size_t idx2,
-                                   double weight,
+                                   const T::FloatType d_t,
+                                   const std::size_t idx,
+                                   const std::size_t idx2,
+                                   const double weight,
                                    const T::SelfParticle& arr,
                                    const T::SelfParticle& buffer_arr,
                                    const MC::LocalConcentration& c,
-                                   std::size_t position,
+                                   const std::size_t position,
                                    const MC::ContributionView& contributions,
-                                   const MC::KPRNG::pool_type& random_pool,
+                                   const MC::pool_type& random_pool,
                                    const T::Config& config) {
   {
     T::n_var
@@ -81,9 +81,9 @@ concept CommonModelType = requires(T model,
   //                                                             :
   //                                                             ConfigurableInit<T>);
 
-  requires ConfigurableInit<T> ||
-               (std::is_same_v<typename T::Config, NonConfigType> &&
-                NonConfigurableInit<T>);
+  requires ConfigurableInit<T>
+               || (std::is_same_v<typename T::Config, NonConfigType>
+                   && NonConfigurableInit<T>);
 
   // {
   //   T::init(random_pool, idx, arr, config)
@@ -118,16 +118,16 @@ concept CommonModelType = requires(T model,
  * known at compile time
  */
 template <typename T>
-concept FixedModelType =
-    CommonModelType<T, MC::ParticlesModel<T::n_var, typename T::FloatType>>;
+concept FixedModelType
+    = CommonModelType<T, MC::ParticlesModel<T::n_var, typename T::FloatType>>;
 
-/** @brief  SFNIAE wau to declare a model with number of internal properties not
-known at compile time Alows to properly define User Defined Model but should be
-avoid in other cases
+/** @brief  SFNIAE wau to declare a model with number of internal properties
+not known at compile time Alows to properly define User Defined Model but
+should be avoid in other cases
  */
 template <typename T>
-concept DynModelType =
-    CommonModelType<T, MC::DynParticlesModel<typename T::FloatType>>;
+concept DynModelType
+    = CommonModelType<T, MC::DynParticlesModel<typename T::FloatType>>;
 
 /** @brief  Model type
  */
@@ -162,8 +162,8 @@ concept HasExportPropertiesPartial = ModelType<T> && requires(const T obj) {
 
 /** @brief Model that can export properties */
 template <typename T>
-concept HasExportProperties =
-    HasExportPropertiesFull<T> || HasExportPropertiesPartial<T>;
+concept HasExportProperties
+    = HasExportPropertiesFull<T> || HasExportPropertiesPartial<T>;
 
 // Helper to detect if `uniform_weight` exists as a type alias (using `using`
 // keyword)

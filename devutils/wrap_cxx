@@ -20,6 +20,8 @@
 #
 # This approach streamlines the setup process and avoids manual adjustments when combining Kokkos
 # with Meson.
+#
+# Note: when update kokkos system-wide do not forget to chec nvcc_wrapper default arch which may need to be set manually (id sm_75)
 # -----------------------------------------------------------------------------
 
 KOKKOS_COMPILER=clang++-18

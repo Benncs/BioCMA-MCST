@@ -28,6 +28,19 @@ namespace
     All = Debug | Print | Alert | Error
   };
   // NOLINTEND(hicpp-signed-bitwise)
+
+  bool
+  is_flag_set(uint32_t flags, Flags flag)
+  {
+    return (flags & flag) != 0U;
+  }
+
+  void
+  set_flag(uint32_t& flags, Flags flag)
+  {
+    flags ^= flag;
+  }
+
 } // namespace
 
 namespace IO
@@ -46,12 +59,15 @@ namespace IO
   {
   }
 
-  RedirectHandle RedirectGuard::redirect()
+  RedirectHandle
+  RedirectGuard::redirect()
   {
 
     if (*active_flag)
     {
-      return {shared_from_this(), active_flag, false, RedirectionType::Buffer};
+      return {
+        shared_from_this(), active_flag, false, RedirectionType::Buffer
+      };
     }
 
     *active_flag = true;
@@ -67,14 +83,15 @@ namespace IO
       throw std::runtime_error("dup failed");
     }
 
-    return {shared_from_this(), active_flag, true, RedirectionType::Buffer};
+    return { shared_from_this(), active_flag, true, RedirectionType::Buffer };
   }
 
-  RedirectHandle RedirectGuard::redirect_to_file()
+  RedirectHandle
+  RedirectGuard::redirect_to_file()
   {
     if (*active_flag)
     {
-      return {shared_from_this(), active_flag, false, RedirectionType::File};
+      return { shared_from_this(), active_flag, false, RedirectionType::File };
     }
 
     *active_flag = true;
@@ -99,10 +116,11 @@ namespace IO
       std::cout.rdbuf(coutbuf);
     }
 
-    return {shared_from_this(), active_flag, true, RedirectionType::File};
+    return { shared_from_this(), active_flag, true, RedirectionType::File };
   }
 
-  void RedirectGuard::restore()
+  void
+  RedirectGuard::restore()
   {
     if (!*active_flag)
     {
@@ -129,7 +147,8 @@ namespace IO
     *active_flag = false;
   }
 
-  std::optional<std::string> RedirectGuard::getCapturedOutput() const
+  std::optional<std::string>
+  RedirectGuard::getCapturedOutput() const
   {
     if (has_been_redirected)
     {
@@ -146,11 +165,25 @@ namespace IO
       owner_ptr->restore();
     }
   }
+  /// CONSOLE
+
+  namespace
+  {
+    void
+    flush_(bool do_flush, auto& stream)
+    {
+      if (do_flush)
+      {
+        stream << std::flush;
+      }
+    }
+  } // namespace
 
   Console::Console()
       : flags(Flags::None), output(std::cout), err_output(std::cerr)
   {
     std::ios::sync_with_stdio(false);
+    this->do_flush = true; // NOLINT
     try
     {
       std::locale::global(std::locale("en_US.utf8"));
@@ -164,76 +197,100 @@ namespace IO
     }
   }
 
-  void Console::debug([[maybe_unused]] std::string_view message)
+  void
+  Console::debug([[maybe_unused]] std::string_view message) noexcept
   {
 #ifndef NDEBUG
-    if ((flags & Flags::Debug) != 0U)
+    // if ((flags & Flags::Debug) != 0U)
+    if (is_flag_set(flags, Flags::Debug))
     {
       output << "[DEBUG]: " << message << "\r\n";
+      flush_(do_flush, output);
     }
 #endif
   }
 
-  void Console::print(std::string_view prefix, std::string_view message)
+  void
+  Console::print(std::string_view prefix, std::string_view message) noexcept
   {
-    if ((flags & Flags::Print) != 0U)
+    // if ((flags & Flags::Print) != 0U)
+    if (is_flag_set(flags, Flags::Print))
     {
       output << AnsiCode::blue << "[" << prefix << "]: " << AnsiCode::reset
              << message << "\r\n";
+
+      flush_(do_flush, output);
     }
   }
 
-  void Console::alert(std::string_view prefix, std::string_view message)
+  void
+  Console::alert(std::string_view prefix, std::string_view message) noexcept
   {
-    if ((flags & Flags::Alert) != 0U)
+    // if ((flags & Flags::Alert) != 0U)
+    if (is_flag_set(flags, Flags::Alert))
     {
       output << AnsiCode::red << "[Warning: " << prefix << "]" << ": "
              << AnsiCode::reset << message << "\r\n";
+
+      flush_(do_flush, output);
     }
   }
 
-  void Console::error(std::string_view message, std::source_location location)
+  void
+  Console::error(std::string_view message,
+                 std::source_location location) noexcept
   {
-    if ((flags & Flags::Error) != 0U)
+    //    if ((flags & Flags::Error) != 0U)
+    if (is_flag_set(flags, Flags::Error))
     {
       err_output << AnsiCode::red
                  << "[Error] From: " << location.function_name()
                  << AnsiCode::reset << ": " << message << "\r\n";
+
+      flush_(do_flush, err_output);
     }
   }
 
-  void Console::raw_log(std::string_view message)
+  void
+  Console::raw_log(std::string_view message) noexcept
   {
-    if ((flags & Flags::Error) != 0U)
+
+    // if ((flags & Flags::Error) != 0U)
+    if (is_flag_set(flags, Flags::Error))
     {
       err_output << message;
     }
   }
 
-  void Console::toggle_debug()
+  void
+  Console::toggle_debug() noexcept
   {
 
-    flags ^= Flags::Debug;
+    set_flag(flags, Flags::Debug);
   }
 
-  void Console::toggle_all()
+  void
+  Console::toggle_all() noexcept
   {
-    flags ^= Flags::All;
+    set_flag(flags, Flags::All);
   }
 
-  void Console::toggle_print()
+  void
+  Console::toggle_print() noexcept
   {
-    flags ^= Flags::Print;
+    set_flag(flags, Flags::Print);
   }
 
-  void Console::toggle_alert()
+  void
+  Console::toggle_alert() noexcept
   {
-    flags ^= Flags::Alert;
+    set_flag(flags, Flags::Alert);
   }
 
-  void Console::toggle_error()
+  void
+  Console::toggle_error() noexcept
   {
-    flags ^= Flags::Error;
+    set_flag(flags, Flags::Error);
   }
 
 } // namespace IO

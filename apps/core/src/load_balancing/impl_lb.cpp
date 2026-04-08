@@ -3,8 +3,8 @@
 #include <utility>
 
 UniformLoadBalancer::UniformLoadBalancer(uint32_t s) : ILoadBalancer(s) {};
-[[nodiscard]] double UniformLoadBalancer::getRatio(uint64_t n,
-                                                   uint32_t rank) const noexcept
+[[nodiscard]] double
+UniformLoadBalancer::getRatio(uint64_t n, uint32_t rank) const noexcept
 {
   (void)rank;
   (void)n;
@@ -45,8 +45,8 @@ CustomLoadBalancer::CustomLoadBalancer(uint32_t s, std::vector<double> _ratio)
         "Ratio size should be equal to number of MPI nodes");
   }
 }
-[[nodiscard]] double CustomLoadBalancer::getRatio(uint64_t n,
-                                                  uint32_t rank) const noexcept
+[[nodiscard]] double
+CustomLoadBalancer::getRatio(uint64_t n, uint32_t rank) const noexcept
 {
   (void)n;
   return ratios[rank];
@@ -57,8 +57,8 @@ BoundLoadBalancer::BoundLoadBalancer(uint32_t s, uint64_t _n_max)
 {
 }
 
-[[nodiscard]] double BoundLoadBalancer::getRatio(uint64_t n,
-                                                 uint32_t rank) const noexcept
+[[nodiscard]] double
+BoundLoadBalancer::getRatio(uint64_t n, uint32_t rank) const noexcept
 {
   if (n_max > n)
   {

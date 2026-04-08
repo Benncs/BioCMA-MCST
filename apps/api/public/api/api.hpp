@@ -22,7 +22,11 @@
  */
 namespace Api
 {
-  std::array<int, 3> get_version();
+  constexpr std::array<int, 3>
+  get_version()
+  {
+    return { _BIOMC_VERSION_MAJOR, _BIOMC_VERSION_MINOR, _BIOMC_VERSION_DEV };
+  }
 
   void finalise();
 
@@ -75,6 +79,8 @@ namespace Api
     init(int argc,
          char** argv,
          std::optional<std::size_t> run_id = std::nullopt) noexcept;
+
+    static std::vector<std::string> get_model_list() noexcept;
 
     /**
      * @brief Default constructor.
@@ -136,7 +142,7 @@ namespace Api
      * @param recursive Flag indicating if recursive registration is required.
      * @return True if the path was successfully registered; false otherwise.
      */
-    bool register_cma_path(std::string_view path);
+    ApiResult register_cma_path(std::string_view path);
 
     /**
      * @brief Register a serialization/deserialization (serde) path.
@@ -157,51 +163,9 @@ namespace Api
     ApiResult set_feed(Simulation::Feed::FeedDescriptor feed_variant,
                        Phase phase = Phase::Liquid);
 
-    ApiResult set_feed_constant(double _flow,
-                                double _concentration,
-                                std::size_t _species,
-                                std::size_t _position,
-                                bool gas = false,
-                                bool fed_batch = false);
+    ApiResult set_mtr(Simulation::MassTransfer::Type::MtrTypeVariant&& variant);
 
-    ApiResult set_feed_constant_different_output(double _flow,
-                                                 double _concentration,
-                                                 std::size_t _species,
-                                                 std::size_t input_position,
-                                                 std::size_t output_position,
-                                                 bool gas = false);
-
-    // /**
-    //  * @brief Configure feed constants for the simulation.
-    //  *
-    //  * @param _flow A constant flow value.
-    //  * @param concentrations A span of concentrations values.
-    //  * @param _position A span of position indices.
-    //  * @param _species A span of species indices.
-    //  * @param gas Flag indicating whether the feed is gas-phase.
-    //  * @return True if the feed was successfully configured; false otherwise.
-    //  */
-    // [[deprecated]]bool set_feed_constant(double _flow,
-    //                        std::span<double> _concentration,
-    //                        std::span<std::size_t> _position,
-    //                        std::span<std::size_t> _species,
-    //                        bool gas = false,
-    //                        bool fed_batch = false);
-
-    // [[deprecated]]bool set_feed_constant_from_position(double _flow,
-    //                                      std::span<double> _concentration,
-    //                                      std::span<std::size_t> _position,
-    //                                      std::span<std::size_t> _species,
-    //                                      std::optional<std::vector<std::size_t>>
-    //                                      _output_position, bool gas = false,
-    //                                      bool fed_batch = false);
-
-    // [[deprecated]]bool set_feed_constant_from_rvalue(double _f,
-    //                                    std::vector<double>&& _target,
-    //                                    std::vector<std::size_t>&& _position,
-    //                                    std::vector<std::size_t>&& _species,
-    //                                    bool gas = false,
-    //                                    bool fed_batch = false);
+    void set_auto_mtr();
 
     ApiResult
     register_scalar_initiazer(Core::ScalarFactory::ScalarVariant&& var);
@@ -222,13 +186,15 @@ namespace Api
      */
     ApiResult exec() noexcept;
 
-    void set_logger(std::shared_ptr<IO::Logger> _logger)
+    void
+    set_logger(std::shared_ptr<IO::Logger> _logger)
     {
 
       logger = std::move(_logger);
     }
 
-    [[nodiscard]] auto& get_logger() const
+    [[nodiscard]] auto&
+    get_logger() const
     {
       return logger;
     }
@@ -250,17 +216,19 @@ namespace Api
 
     std::shared_ptr<IO::Logger> logger;
 
-    std::optional<Core::ScalarFactory::ScalarVariant>
-        scalar_initializer_variant = std::nullopt;
+    std::optional<Core::ScalarFactory::ScalarVariant> scalar_initializer_variant
+        = std::nullopt;
     Core::CaseData _data;               ///< Case data for the simulation.
     Core::UserControlParameters params; ///< User-defined control parameters.
     bool loaded = false;  ///< Flag indicating if the instance is loaded.
     bool applied = false; ///< Flag indicating if the configuration is applied.
     bool registered = false; ///< Flag indicating if resources are registered.
-    std::optional<Simulation::Feed::SimulationFeed> feed =
-        std::nullopt; ///< Optional feed configuration.
-    std::optional<Simulation::MassTransfer::Type::MtrTypeVariant> mtr_type =
-        std::nullopt;
+    std::optional<Simulation::Feed::SimulationFeed> feed
+        = std::nullopt; ///< Optional feed configuration.
+    std::optional<Simulation::MassTransfer::Type::MtrTypeVariant> mtr_type
+        = std::nullopt;
+
+    bool auto_mtr;
   };
 
 } // namespace Api

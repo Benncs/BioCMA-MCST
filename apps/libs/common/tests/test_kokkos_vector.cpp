@@ -15,13 +15,15 @@ struct foo
   double a;
   int b;
 
-  bool operator==(const foo& other) const
+  bool
+  operator==(const foo& other) const
   {
     return a == other.a && b == other.b;
   }
 };
 
-void test_double()
+void
+test_double()
 {
   KokkosVector<double, Kokkos::HostSpace> vec(10);
   assert(vec.size() == 10);
@@ -57,7 +59,8 @@ void test_double()
   KOKKOS_ASSERT(vec.capacity() == 0);
 }
 
-void test_struct()
+void
+test_struct()
 {
   // Create a KokkosVector of foo structs
   KokkosVector<foo, Kokkos::HostSpace> vec(10);
@@ -67,8 +70,8 @@ void test_struct()
   assert(vec.capacity() == vec.size() * vec.get_allocation_factor());
 
   // Test adding elements
-  vec.emplace({1.1, 2});
-  vec.emplace({3.3, 4});
+  vec.emplace({ 1.1, 2 });
+  vec.emplace({ 3.3, 4 });
 
   assert(vec.size() == 12);
   assert(vec[10] == foo(1.1, 2));
@@ -91,7 +94,8 @@ void test_struct()
   std::cout << "test_struct passed!\n";
 }
 
-void test_migration()
+void
+test_migration()
 {
   // Create two KokkosVectors
   KokkosVector<double, Kokkos::HostSpace> src(10);
@@ -109,7 +113,8 @@ void test_migration()
   // assert(dest[1] == src[1]);
 }
 
-void test_resize_and_capacity()
+void
+test_resize_and_capacity()
 {
   // Create a KokkosVector
   KokkosVector<double, Kokkos::HostSpace> vec(5);
@@ -117,21 +122,22 @@ void test_resize_and_capacity()
   // Resize the vector
   vec.resize(10);
 
-  assert(vec.capacity() >=
-         10); // Capacity may be greater due to allocation factor
+  assert(vec.capacity()
+         >= 10); // Capacity may be greater due to allocation factor
   assert(vec.size() == 0);
 
   std::cout << "test_resize_and_capacity passed!\n";
 }
 
-void in_kernel_emplace()
+void
+in_kernel_emplace()
 {
-  KokkosVector<foo, Kokkos::DefaultExecutionSpace> vec =
-      KokkosVector<foo, Kokkos::DefaultExecutionSpace>::with_capacity(15);
+  KokkosVector<foo, Kokkos::DefaultExecutionSpace> vec
+      = KokkosVector<foo, Kokkos::DefaultExecutionSpace>::with_capacity(15);
 
   auto lambda = KOKKOS_LAMBDA(const int i)
   {
-    vec.emplace({5, i});
+    vec.emplace({ 5, i });
   };
   Kokkos::parallel_for("test_in_kernel_emplace", vec.capacity(), lambda);
 
@@ -141,7 +147,8 @@ void in_kernel_emplace()
   KOKKOS_ASSERT(l.size() >= 10); // Allocation factor 1.5
 }
 
-int main()
+int
+main()
 {
   Kokkos::initialize();
   {

@@ -129,8 +129,8 @@ namespace Core::ScalarFactory
    * @typedef ScalarVariant
    * @brief A variant type representing different scalar data sources.
    */
-  using ScalarVariant =
-      std::variant<Uniform, Local, File, CustomScript, FullCase>;
+  using ScalarVariant
+      = std::variant<Uniform, Local, File, CustomScript, FullCase>;
 
   /**
    * @struct Visitor
@@ -140,14 +140,15 @@ namespace Core::ScalarFactory
   struct Visitor
   {
 
-    Simulation::ScalarInitializer operator()(Uniform args);
+    Simulation::ScalarInitializer operator()(Uniform args) const;
 
-    Simulation::ScalarInitializer operator()(Local args);
+    Simulation::ScalarInitializer operator()(Local args) const;
 
-    Simulation::ScalarInitializer operator()(File filepath);
+    Simulation::ScalarInitializer operator()(File filepath) const;
 
-    Simulation::ScalarInitializer operator()(CustomScript path);
-    Simulation::ScalarInitializer operator()(FullCase data);
+    Simulation::ScalarInitializer operator()(CustomScript path) const;
+    Simulation::ScalarInitializer operator()(FullCase data) const;
+    bool init_gas;
     // Simulation::ScalarInitializer operator()(CustomFunctor func);
   };
 

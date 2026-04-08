@@ -11,7 +11,7 @@
 FROM debian:trixie-slim 
 
 ARG LLVM_VERSION=20
-ARG KOKKOS_VERSION=4.7.01
+ARG KOKKOS_VERSION=5.0.2
 # Set noninteractive mode for apt
 ENV DEBIAN_FRONTEND=noninteractive
 

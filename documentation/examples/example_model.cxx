@@ -33,27 +33,25 @@ struct ModelExample
   using SelfParticle =
       MC::ParticlesModel<Self::n_var, Self::FloatType>; // Mandatory Type alias
 
-  KOKKOS_INLINE_FUNCTION static void
-  init(const MC::KPRNG::pool_type& random_pool,
-       std::size_t idx,
-       const SelfParticle& arr);
+  KOKKOS_INLINE_FUNCTION static void init(const MC::pool_type& random_pool,
+                                          std::size_t idx,
+                                          const SelfParticle& arr);
 
   KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx,
                                             const SelfParticle& arr);
 
   KOKKOS_INLINE_FUNCTION static MC::Status
-  update(const MC::KPRNG::pool_type& random_pool,
+  update(const MC::pool_type& random_pool,
          FloatType d_t,
          std::size_t idx,
          const SelfParticle& arr,
          const MC::LocalConcentration& c);
 
-  KOKKOS_INLINE_FUNCTION static void
-  division(const MC::KPRNG::pool_type& random_pool,
-           std::size_t idx,
-           std::size_t idx2,
-           const SelfParticle& arr,
-           const SelfParticle& buffer_arr);
+  KOKKOS_INLINE_FUNCTION static void division(const MC::pool_type& random_pool,
+                                              std::size_t idx,
+                                              std::size_t idx2,
+                                              const SelfParticle& arr,
+                                              const SelfParticle& buffer_arr);
 
   KOKKOS_INLINE_FUNCTION static void
   contribution(std::size_t idx,

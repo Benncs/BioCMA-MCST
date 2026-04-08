@@ -17,6 +17,7 @@ namespace Simulation
     File,         // Need filepath
     CustomScript, // Need script path
     FullCase,     // Need script path
+    Serde,        // Need filepath
   };
 
   // using init_scalar_f_t =
@@ -37,6 +38,9 @@ namespace Simulation
     std::optional<std::vector<double>> gas_buffer = std::nullopt;
     bool gas_flow = false;
   };
+
+  static_assert(std::is_move_constructible_v<ScalarInitializer>);
+  static_assert(std::is_nothrow_move_constructible_v<ScalarInitializer>);
 
 } // namespace Simulation
 

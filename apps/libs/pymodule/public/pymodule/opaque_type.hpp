@@ -8,12 +8,12 @@
 namespace py = pybind11;
 struct OpaquePointer
 {
-  void* ptr{nullptr}; // Ensure ptr is initialized to nullptr by default
+  void* ptr{ nullptr }; // Ensure ptr is initialized to nullptr by default
 
   OpaquePointer() = default; // Default constructor
 
-  OpaquePointer(const OpaquePointer& rhs) noexcept =
-      default; // Default copy constructor
+  OpaquePointer(const OpaquePointer& rhs) noexcept
+      = default; // Default copy constructor
 
   OpaquePointer& operator=(const OpaquePointer& rhs) = default;
 
@@ -22,7 +22,8 @@ struct OpaquePointer
     rhs.ptr = nullptr;
   }
 
-  OpaquePointer& operator=(OpaquePointer&& rhs) noexcept
+  OpaquePointer&
+  operator=(OpaquePointer&& rhs) noexcept
   { // Move assignment operator
     if (this != &rhs)
     { // Prevent self-assignment

@@ -8,7 +8,8 @@
 
 namespace Simulation::Feed
 {
-  FeedType get_type(const FeedTypeVariant& v)
+  FeedType
+  get_type(const FeedTypeVariant& v)
   {
     return std::visit(
         [](auto&& arg) -> FeedType
@@ -37,7 +38,8 @@ namespace Simulation::Feed
         v);
   }
 
-  void FeedDescriptor::update(double t, double d_t) noexcept
+  void
+  FeedDescriptor::update(double t, double d_t) noexcept
   {
 
 #pragma message("Update feed not implemented")
@@ -123,7 +125,7 @@ namespace Simulation::Feed
                         std::size_t species_index,
                         std::size_t input_position,
                         std::optional<std::size_t> _ouput_position,
-                        bool set_output)
+                        bool set_output) noexcept
   {
 
     if (set_output && (!_ouput_position))
@@ -131,12 +133,9 @@ namespace Simulation::Feed
       _ouput_position = input_position;
     }
 
-    return {flow,
-            concentration,
-            species_index,
-            input_position,
-            _ouput_position,
-            Constant{}};
+    auto value = FeedValue{ concentration, species_index };
+
+    return { flow, { value }, input_position, _ouput_position, Constant{} };
   }
 
   // FeedDescriptor delayedconstant(double _f,
@@ -172,7 +171,8 @@ namespace Simulation::Feed
   //   //         set_output};
   // }
 
-  void SimulationFeed::add_feed(FeedDescriptor&& fd, Phase phase)
+  void
+  SimulationFeed::add_feed(FeedDescriptor&& fd, Phase phase)
   {
     auto& vec = phase == Phase::Liquid ? liquid : gas;
     if (!vec)
@@ -184,23 +184,33 @@ namespace Simulation::Feed
                                  // FeedDescriptor become non trivial
   }
 
-  void SimulationFeed::add_liquid(FeedDescriptor&& fd)
+  void
+  SimulationFeed::add_liquid(FeedDescriptor&& fd)
   {
     add_feed(move_allow_trivial(fd), Phase::Liquid);
   }
 
-  void SimulationFeed::add_gas(FeedDescriptor&& fd)
+  void
+  SimulationFeed::add_gas(FeedDescriptor&& fd)
   {
     add_feed(move_allow_trivial(fd), Phase::Gas);
   }
 
-  std::size_t SimulationFeed::n_liquid_flow() const
+  std::size_t
+  SimulationFeed::n_liquid_flow() const noexcept
   {
     return (liquid) ? liquid->size() : 0;
   }
-  std::size_t SimulationFeed::n_gas_flow() const
+  std::size_t
+  SimulationFeed::n_gas_flow() const noexcept
   {
     return (gas) ? liquid->size() : 0;
+  }
+
+  SimulationFeed
+  SimulationFeed::empty() noexcept
+  {
+    return { .liquid = std::nullopt, .gas = std::nullopt };
   }
 
 } // namespace Simulation::Feed

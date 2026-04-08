@@ -43,9 +43,11 @@ namespace Core
   {
   public:
     explicit impl(std::string_view _filename)
-        : filename(_filename),
-          file(HighFive::File(filename, HighFive::File::Truncate))
+        : filename(_filename), file(nullptr)
+
     {
+
+      open();
     }
 
     impl(const impl&) = delete;
@@ -53,15 +55,54 @@ namespace Core
     impl& operator=(const impl&) = delete;
     impl& operator=(impl&&) = delete;
 
-    ~impl() = default;
-
-    template <typename T> void write(std::string_view name, T val)
+    void
+    open()
     {
-      file.createAttribute<T>(std::string(name), val);
+      // const auto open_flag = HighFive::File::AccessMode::Truncate
+      //                        | HighFive::File::AccessMode::WriteSWMR;
+      // const auto open_flag = HighFive::File::AccessMode::WriteSWMR;
+
+      auto fapl = HighFive::FileAccessProps();
+      // fapl.add(
+      //     HighFive::FileVersionBounds(H5F_LIBVER_LATEST, H5F_LIBVER_LATEST));
+      this->file = new HighFive::File(
+          filename, HighFive::File::AccessMode::Truncate, fapl);
+      // delete this->file;
+      // this->file = new HighFive::File(filename, open_flag, fapl);
+
+      // this->file->startSWMRWrite();
+    }
+
+    void
+    close()
+    {
+      if (file != nullptr)
+      {
+        delete file;
+        file = nullptr;
+      }
+    }
+
+    ~impl()
+    {
+      close();
+    };
+
+    template <typename T>
+    void
+    write(std::string_view name, T val)
+    {
+      file->createAttribute<T>(std::string(name), val);
+    }
+
+    void
+    flush()
+    {
+      file->flush();
     }
 
     std::string filename;
-    HighFive::File file;
+    HighFive::File* file;
   };
 
   constexpr size_t hdf5_max_compression = 9;
@@ -75,22 +116,25 @@ namespace Core
                                         ? *user_description
                                         : "Interesting results";
 
-    metadata["file_version"] = 6; // NOLINT
+    metadata["file_version"] = 8; // NOLINT
     metadata["creation_date"] = date_time();
     metadata["author"] = get_user_name();
     metadata["description"] = description;
     metadata["run_id"] = info.run_id;
   }
 
-  void DataExporter::do_link(std::string_view filename,
-                             std::string_view link_name,
-                             std::string_view groupname)
+  void
+  DataExporter::do_link(std::string_view filename,
+                        std::string_view link_name,
+                        std::string_view groupname)
   {
-    pimpl->file.createExternalLink(
+    pimpl->file->createExternalLink(
         link_name.data(), filename.data(), groupname.data());
+    pimpl->flush();
   }
 
-  void DataExporter::write_properties(
+  void
+  DataExporter::write_properties(
       [[maybe_unused]] std::optional<std::string> specific_dataspace,
       const export_metadata_kv& values)
   {
@@ -112,10 +156,10 @@ namespace Core
           },
           value);
     }
-    pimpl->file.flush();
   }
 
-  void DataExporter::prepare_matrix(MultiMatrixDescription description)
+  void
+  DataExporter::prepare_matrix(MultiMatrixDescription description)
   {
     CHECK_PIMPL
 
@@ -150,29 +194,33 @@ namespace Core
 
     if (description.is_integer)
     {
-      pimpl->file.createDataSet<uint64_t>(description.name, dataspace, props);
+      pimpl->file->createDataSet<uint64_t>(description.name, dataspace, props);
     }
     else
     {
-      pimpl->file.createDataSet<double>(description.name, dataspace, props);
+      pimpl->file->createDataSet<double>(description.name, dataspace, props);
     }
     descriptors.emplace(description.name, description);
+    pimpl->flush();
   }
 
-  void DataExporter::write_simple(std::string specific_dataspace,
-                                  const simple_export_t& value)
+  void
+  DataExporter::write_simple(std::string specific_dataspace,
+                             const simple_export_t& value)
   {
     std::visit(
         [&](const auto& val)
         {
           using T = std::decay_t<decltype(val)>; // Get the actual type T of
-          pimpl->file.createDataSet<T>(specific_dataspace, val);
+          pimpl->file->createDataSet<T>(specific_dataspace, val);
         },
         value);
+    pimpl->flush();
   }
 
-  void DataExporter::write_simple(const export_initial_kv& values,
-                                  std::string_view root)
+  void
+  DataExporter::write_simple(const export_initial_kv& values,
+                             std::string_view root)
   {
 
     for (const auto& kv : values)
@@ -181,17 +229,17 @@ namespace Core
       const simple_export_t& value = kv.second;
       write_simple(path, value);
     }
-    pimpl->file.flush();
   }
 
-  void DataExporter::append_array(std::string_view name,
-                                  std::span<const double> data,
-                                  uint64_t last_size)
+  void
+  DataExporter::append_array(std::string_view name,
+                             std::span<const double> data,
+                             uint64_t last_size)
   {
     CHECK_PIMPL
     auto& descriptor = descriptors.at(std::string(name));
 
-    auto dataset = pimpl->file.getDataSet(name.data());
+    auto dataset = pimpl->file->getDataSet(name.data());
 
     auto dims = descriptor.dims;
     // Following are explicit copy
@@ -204,12 +252,13 @@ namespace Core
     dataset.resize(new_size);
 
     dataset.select(select_start, select_size).write_raw(data.data());
-    pimpl->file.flush();
+    dataset.flush();
   }
 
-  void DataExporter::write_matrix(std::string_view name,
-                                  std::span<const double> values,
-                                  bool compress)
+  void
+  DataExporter::write_matrix(std::string_view name,
+                             std::span<const double> values,
+                             bool compress)
   {
     CHECK_PIMPL
 
@@ -232,17 +281,18 @@ namespace Core
       ds_props.add(HighFive::Deflate(hdf5_max_compression));
     }
 
-    auto dataset =
-        pimpl->file.createDataSet<double>(name.data(), data_space, ds_props);
+    auto dataset
+        = pimpl->file->createDataSet<double>(name.data(), data_space, ds_props);
     dataset.write_raw(values.data());
-    pimpl->file.flush();
+    pimpl->file->flush();
   }
 
-  void DataExporter::write_matrix(std::string_view name,
-                                  std::span<const double> values,
-                                  size_t n_row,
-                                  size_t n_col,
-                                  bool compress)
+  void
+  DataExporter::write_matrix(std::string_view name,
+                             std::span<const double> values,
+                             size_t n_row,
+                             size_t n_col,
+                             bool compress)
   {
     CHECK_PIMPL
     // Caution to Eigen layout
@@ -250,25 +300,36 @@ namespace Core
                                             EIGEN_INDEX(n_row),
                                             EIGEN_INDEX(n_col));
     HighFive::DataSetCreateProps ds_props;
-    ds_props.add(HighFive::Chunking({n_row, n_col}));
+    ds_props.add(HighFive::Chunking({ n_row, n_col }));
     ds_props.add(HighFive::Shuffle());
     if (compress)
     {
       ds_props.add(HighFive::Deflate(hdf5_max_compression));
     }
-    pimpl->file.createDataSet(name.data(), data, ds_props);
+    pimpl->file->createDataSet(name.data(), data, ds_props);
 
-    pimpl->file.flush();
+    pimpl->file->flush();
   }
 
-  void DataExporter::append_matrix(std::string_view name, matrix_variant_t data)
+  void
+  DataExporter::append_matrix(std::string_view name, matrix_variant_t data)
   {
     CHECK_PIMPL
-    auto& descriptor = descriptors.at(std::string(name));
 
-    auto dataset = pimpl->file.getDataSet(name.data());
+    std::vector<size_t> dims{};
+    try
+    {
+      auto& descriptor = descriptors.at(std::string(name));
+      dims = descriptor.dims;
+    }
+    catch (std::out_of_range& e)
+    {
+      throw std::runtime_error(
+          IO::format("DataExporter: unknown matrix: ", name));
+    }
 
-    auto dims = descriptor.dims;
+    auto dataset = pimpl->file->getDataSet(name.data());
+
     auto new_size = dims;
     auto select_start = dims;
     auto select_size = dims;
@@ -296,7 +357,8 @@ namespace Core
           }
         },
         data);
-    pimpl->file.flush();
+    dataset.flush();
+    // pimpl->flush();
   }
 
   DataExporter::~DataExporter() = default;
@@ -305,16 +367,18 @@ namespace Core
 //
 namespace
 {
-  std::string date_time()
+  std::string
+  date_time()
   {
     // Non vedo l’ora che arrivi c++23-format
     std::stringstream ss;
-    auto now =
-        std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    auto now = std::chrono::system_clock::to_time_t(
+        std::chrono::system_clock::now());
     ss << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
     return ss.str();
   }
-  std::string get_user_name()
+  std::string
+  get_user_name()
   {
     std::string_view res = "someone";
 #  ifdef __linux__
@@ -329,7 +393,8 @@ namespace
     return std::string(res);
   }
 
-  std::size_t get_chunk_size(std::size_t data_length)
+  std::size_t
+  get_chunk_size(std::size_t data_length)
   {
     // NOLINTBEGIN
     if (data_length <= 1000)

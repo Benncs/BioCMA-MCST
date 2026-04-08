@@ -11,6 +11,7 @@
 #  include <cereal/types/variant.hpp> //MC::Unit use variant internally
 #  include <cereal/types/vector.hpp>  //MC::List use vector internally
 #  include <common/execinfo.hpp>
+#  include <core/global_initaliser.hpp>
 #  include <cstdint>
 #  include <fstream>
 #  include <ios>
@@ -23,8 +24,8 @@
 #  include <stdexcept>
 #  include <string_view>
 #  include <vector>
-static void write_to_file(const std::ostringstream& oss,
-                          std::string_view filename)
+static void
+write_to_file(const std::ostringstream& oss, std::string_view filename)
 {
 
   std::ofstream file(filename.data(), std::ios::binary);
@@ -37,7 +38,8 @@ static void write_to_file(const std::ostringstream& oss,
   file.close();
 }
 
-static void read_file(std::stringstream& buffer, std::string_view filename)
+static void
+read_file(std::stringstream& buffer, std::string_view filename)
 {
   std::fstream file;
   file.open(filename.data(), std::ios::binary | std::ios::in);
@@ -57,29 +59,11 @@ static void read_file(std::stringstream& buffer, std::string_view filename)
 using Archive_t = cereal::BinaryOutputArchive;
 using iArchive_t = cereal::BinaryInputArchive;
 
-// void read_archive(cereal::XMLInputArchive& ar,std::string_view filename)
-// {
-//   std::fstream file;
-//   file.open(filename.data(), std::ios::binary | std::ios::in);
-//   std::stringstream buffer;
-//   if (file.is_open())
-//   {
-//     buffer << file.rdbuf();
-//     file.close();
-//   }
-//   ar(buffer);
-//   file.close();
-// };
-
-// void read_archive(cereal::BinaryInputArchive& ar,std::string_view filename)
-// {
-
-// };
-
 namespace SerDe
 {
 
-  void save_simulation(const Core::CaseData& case_data)
+  void
+  save_simulation(const Core::CaseData& case_data)
   {
 
     std::stringstream serde_name;
@@ -88,12 +72,12 @@ namespace SerDe
 
     std::ostringstream buf(std::ios::binary);
     {
-
+      auto accessor = case_data.simulation->getter();
       Archive_t ar(buf);
       ar(cereal::make_nvp("version", ExecInfo::get_version()),
          case_data.exec_info);
-      auto dim = case_data.simulation->getDimensions();
-      auto cliq = case_data.simulation->getCliqData();
+      auto dim = accessor.getDimensions();
+      auto cliq = accessor.getCliqData();
 
       if (!case_data.simulation->checkScalar())
       {
@@ -101,25 +85,69 @@ namespace SerDe
             "Simulation with negative value won´t be able to be loaded");
       }
 
-      auto cgas = case_data.simulation->getCgasData();
+      auto cgas = accessor.getCgasData();
 
-      std::optional<std::vector<double>> cgas_a =
-          cgas.has_value() ? std::make_optional(std::vector<double>(
-                                 cgas->begin(), cgas->end()))
-                           : std::nullopt;
+      std::optional<std::vector<double>> cgas_a
+          = cgas.has_value() ? std::make_optional(std::vector<double>(
+                                   cgas->begin(), cgas->end()))
+                             : std::nullopt;
+
       ar(case_data.params.number_particle,
          dim,
          std::vector<double>(cliq.begin(), cliq.end()),
          cgas_a,
-         case_data.simulation->get_end_time_mut());
-      ar(case_data.simulation->mc_unit);
+         accessor.endtime());
+
+      ar(accessor.mc_unit());
     }
     write_to_file(buf, serde_name.str());
   }
 
-  bool load_simulation(Core::GlobalInitialiser& gi,
-                       Core::CaseData& case_data,
-                       std::string_view ser_filename)
+  std::optional<Simulation::ScalarInitializer>
+  build_scalar_init(Core::GlobalInitialiser& gi,
+                    const Simulation::Dimensions& dims,
+                    std::vector<double>&& c_liq_buffer,
+                    std::optional<std::vector<double>>&& c_gas_buffer)
+  {
+    auto sc = gi.init_scalar();
+
+    if (!sc.has_value())
+    {
+
+      return std::nullopt;
+    }
+
+    if (c_liq_buffer.size() % sc->volumesliq.size() != 0)
+    {
+      throw std::invalid_argument(
+          "Liquid Concentration buffer and CM volume have incompatible sizes ");
+    }
+
+    if (c_gas_buffer)
+    {
+      if (c_gas_buffer->size() % sc->volumesgas.size() != 0)
+      {
+        throw std::invalid_argument(
+            "Gas Concentration buffer and CM volume have incompatible sizes ");
+      }
+    }
+
+    // FIXME
+    // Overwrite value set by initialiser
+    sc->liquid_f_init = std::nullopt;
+    sc->gas_f_init = std::nullopt;
+    sc->gas_buffer = std::move(c_gas_buffer);
+    sc->liquid_buffer = std::move(c_liq_buffer);
+    sc->n_species = dims.n_species;
+    sc->type = Simulation::ScalarInitialiserType::Serde;
+
+    return sc;
+  }
+
+  bool
+  load_simulation(Core::GlobalInitialiser& gi,
+                  Core::CaseData& case_data,
+                  std::string_view ser_filename)
   {
 
     std::stringstream buffer;
@@ -140,7 +168,8 @@ namespace SerDe
     double start_time{};
     ar(np, dims, read_c_liq, read_c_gas, start_time);
 
-    auto sc = gi.init_scalar();
+    auto sc = build_scalar_init(
+        gi, dims, std::move(read_c_liq), std::move(read_c_gas));
 
     if (!sc.has_value())
     {
@@ -148,29 +177,12 @@ namespace SerDe
       return false;
     }
 
-    // FIXME
-    // Overwrite value set by initialiser
-    sc->liquid_f_init = std::nullopt;
-    sc->gas_f_init = std::nullopt;
-    sc->gas_buffer = read_c_gas;
-    sc->liquid_buffer = read_c_liq;
-    sc->n_species = dims.n_species;
-    sc->type = Simulation::ScalarInitialiserType::File;
-    sc->gas_flow = sc->gas_buffer.has_value();
-
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
     assert(mc_unit != nullptr);
-    // auto mc = gi.init_mtr_model(sc);
-
-    std::vector<double> kla(sc->n_species);
-    if (kla.size() > 1)
-    {
-      kla[1] = 0.2; // 700 h-1
-    }
 
 #  warning message("MTR model is not loaded")
-    auto simulation = gi.init_simulation(std::move(mc_unit), *sc);
+    auto simulation = gi.init_simulation(std::move(mc_unit), std::move(*sc));
 
     if (!simulation.has_value())
     {
@@ -179,11 +191,21 @@ namespace SerDe
     }
 
     case_data.simulation = std::move(*simulation);
+    std::vector<double> kla(
+        case_data.simulation->getter().getDimensions().n_species);
+    if (kla.size() > 1)
+    {
+      kla[1] = 0.2; // 700 h-1
+    }
 
-    case_data.simulation->setMtrModel(
-        Simulation::MassTransfer::Type::FixedKla{kla});
+    auto auto_mtr_type = Simulation::MassTransfer::Type::FixedKla{ kla };
+    gi.init_mtr_model(*case_data.simulation, std::move(auto_mtr_type));
 
-    case_data.simulation->get_start_time_mut() = start_time;
+    // case_data.simulation->setMtrModel(
+    //     Simulation::MassTransfer::Type::FixedKla{kla});
+
+    // case_data.simulation->getter().get_start_time_mut() = start_time;
+    case_data.simulation->overwriteStartTime(start_time);
     gi.set_initial_number_particle(np);
     std::cout << "SIMULATION: " << case_data.exec_info.run_id << " LOADED"
               << std::endl;

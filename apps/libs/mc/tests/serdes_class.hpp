@@ -29,7 +29,7 @@ struct SerdeModel
   MODEL_CONSTANT FloatType a_i = 5e-6; // m
 
   KOKKOS_INLINE_FUNCTION static void
-  init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  init([[maybe_unused]] const MC::pool_type& random_pool,
        std::size_t idx,
        const SelfParticle& arr)
   {
@@ -44,7 +44,7 @@ struct SerdeModel
   }
 
   KOKKOS_INLINE_FUNCTION static MC::Status
-  update([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  update([[maybe_unused]] const MC::pool_type& random_pool,
          [[maybe_unused]] FloatType d_t,
          [[maybe_unused]] std::size_t idx,
          [[maybe_unused]] const SelfParticle& arr,
@@ -55,7 +55,7 @@ struct SerdeModel
   }
 
   KOKKOS_INLINE_FUNCTION static void
-  division([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  division([[maybe_unused]] const MC::pool_type& random_pool,
            [[maybe_unused]] std::size_t idx,
            [[maybe_unused]] std::size_t idx2,
            [[maybe_unused]] const SelfParticle& arr,
@@ -63,9 +63,10 @@ struct SerdeModel
   {
   }
 
-  static MC::ContribIndexBounds get_bounds()
+  static MC::ContribIndexBounds
+  get_bounds()
   {
-    return {0, 0};
+    return { 0, 0 };
   }
 };
 static_assert(ModelType<SerdeModel>, "Check non serde model");

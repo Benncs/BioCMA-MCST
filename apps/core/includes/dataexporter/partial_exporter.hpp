@@ -10,6 +10,7 @@
 #include <span>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 #include <vector>
 
 namespace Core
@@ -34,10 +35,10 @@ namespace Core
      * @param user_description Optional metadata describing the export
      * operation.
      */
-    PartialExporter(
-        const ExecInfo& info,
-        std::string_view _filename,
-        std::optional<export_metadata_t> user_description = std::nullopt);
+    PartialExporter(const ExecInfo& info,
+                    std::string_view _filename,
+                    std::optional<export_metadata_t> user_description
+                    = std::nullopt);
 
     /**
      * @brief Initializes the fields required for exporting data.
@@ -67,12 +68,24 @@ namespace Core
      * @brief Writes probe data to the export.
      *
      * @param data A span of constant doubles containing the probe measurements.
+     * @throw out_or_range if probe_name not already registered
      */
-    void write_probe(std::span<const double> data);
+    void write_probe(const std::string& probe_name,
+                     std::span<const double> data);
+
+    /**
+     * @brief Writes tally
+     *
+     * Tally is part of partial export to avoid to sync MPI nodes for the
+     * reduction It then takes n_nodes times the real tally size but can be
+     * neglicted pred to article data
+     */
+    void write_tally(std::span<const std::size_t> data);
 
   private:
-    uint64_t probe_counter_n_element; /**< Counter for the number of probe
-                                         elements. */
+    // uint64_t probe_counter_n_element; /**< Counter for the number of probe
+    //                                      elements. */
+    std::unordered_map<std::string, uint64_t> probe_counter_n_element;
   };
 
 }; // namespace Core

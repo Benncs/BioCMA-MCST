@@ -4,10 +4,9 @@
 #include <cma_utils/alias.hpp>
 #include <dataexporter/main_exporter.hpp>
 #include <dataexporter/partial_exporter.hpp>
-#include <optional>
 #include <progress_bar.hpp>
-#include <simulation/simulation.hpp>
-#include <span>
+#include <simulation/simulation_getter.hpp>
+
 class ExportHandler final
 {
 
@@ -31,13 +30,14 @@ public:
    * @param loop_counter The current loop iteration counter.
    * @param simulation The simulation unit containing the state and data to
    * export.
-   * @param partial_exporter The partial exporter for writing particle and probe
+   * @param partial_exporter The partial exporter for writing particle and
+   * probe
    * @return true if export sucess
    * data.
    */
   bool operator()(double current_time,
                   size_t loop_counter,
-                  Simulation::SimulationUnit& simulation,
+                  const Simulation::Getter& getter,
                   Core::PartialExporter& partial_exporter,
                   const CmaUtils::TransitionnerPtrType& transitioner);
 
@@ -55,7 +55,8 @@ public:
    * reactor state.
    */
   void pre_post_export(double current_time,
-                       const Simulation::SimulationUnit& simulation,
+                       const Simulation::Getter& getter,
+
                        const CmaUtils::TransitionnerPtrType& transitioner);
 
 private:
@@ -64,14 +65,6 @@ private:
   size_t n_iter_simulation{};
   [[maybe_unused]] ExecInfo exec{};
   std::shared_ptr<Core::MainExporter> main_exporter;
-
-  /**
-   * @brief Prepares the event span if the event counter is enabled.
-   * @param simulation The simulation unit.
-   * @return Optional span of event counts.
-   */
-  static std::optional<std::span<std::size_t>>
-  prepareEventSpan(Simulation::SimulationUnit& simulation);
 
   IO::ProgressBar progressbar;
 };

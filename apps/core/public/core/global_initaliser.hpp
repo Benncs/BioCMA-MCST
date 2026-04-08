@@ -1,10 +1,10 @@
 #ifndef __CORE_GLOBAL_INITIALLISER_HPP__
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
-#include "common/logger.hpp"
 #include <array>
 #include <cma_utils/alias.hpp>
 #include <common/execinfo.hpp>
+#include <common/logger.hpp>
 #include <core/scalar_factory.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
@@ -16,9 +16,7 @@
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/scalar_initializer.hpp>
-// #include <simulation/simulation.hpp>
 #include <string>
-// #include <transitionner/transitionner.hpp>
 #include <vector>
 
 class ILoadBalancer;
@@ -113,7 +111,7 @@ namespace Core
      */
     OptionalPtr<Simulation::SimulationUnit>
     init_simulation(std::unique_ptr<MC::MonteCarloUnit> _unit,
-                    const Simulation::ScalarInitializer& scalar_init);
+                    Simulation::ScalarInitializer&& scalar_init);
 
     /**
      * @brief Initializes a scalar component of the simulation.
@@ -125,17 +123,19 @@ namespace Core
     std::optional<Simulation::ScalarInitializer>
     init_scalar(Core::ScalarFactory::ScalarVariant&& variant);
 
-    std::optional<bool>
-    init_mtr_model(Simulation::SimulationUnit& unit,
-                   Simulation::MassTransfer::Type::MtrTypeVariant&& variant);
+    // Use optional bcause we need to validate step even if theres no mtr
+    std::optional<bool> init_mtr_model(
+        Simulation::SimulationUnit& unit,
+        std::optional<Simulation::MassTransfer::Type::MtrTypeVariant>&&
+            variant);
 
     /**
      * @brief Initializes a simulation feed.
      *
      * @return An optional simulation feed.
      */
-    bool init_feed(
-        std::optional<Simulation::Feed::SimulationFeed> feed = std::nullopt);
+    bool init_feed(std::optional<Simulation::Feed::SimulationFeed> feed
+                   = std::nullopt);
 
     /**
      * @brief Initializes a Monte Carlo unit.
@@ -180,6 +180,7 @@ namespace Core
       Feed,             ///< Step for initializing the simulation feed.
       MC,               ///< Step for initializing the Monte Carlo unit.
       SimulationUnit,   ///< Step for initializing the simulation unit.
+      MTR,
       Count ///< Total number of steps in the initialization sequence.
     };
 
@@ -196,7 +197,8 @@ namespace Core
      * @return A boolean indicating whether all specified steps are validated.
      */
     template <typename... Args>
-    [[nodiscard]] bool check_steps(InitStep step, Args... args) const
+    [[nodiscard]] bool
+    check_steps(InitStep step, Args... args) const
     {
       if (!validated_steps[static_cast<size_t>(step)]) // NOLINT
       {
@@ -213,11 +215,13 @@ namespace Core
      * @param step The current initialization step to validate.
      * @param args Additional steps to validate.
      */
-    template <typename... Args> void validate_step(InitStep step, Args... args)
+    template <typename... Args>
+    void
+    validate_step(InitStep step, Args... args)
     {
       validated_steps[static_cast<size_t>(step)] = true; // NOLINT
-      (void)std::initializer_list<int>{
-          (validated_steps[static_cast<size_t>(args)] = true, 0)...};
+      (void)std::initializer_list<int>{ (
+          validated_steps[static_cast<size_t>(args)] = true, 0)... };
     }
 
     /**
@@ -251,7 +255,7 @@ namespace Core
     {
     };
     /////INNER STRUCT
-    uint64_t particle_per_process;
+    // uint64_t particle_per_process;
     std::vector<double> liquid_volume;
     std::vector<double> gas_volume;
     // CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors;

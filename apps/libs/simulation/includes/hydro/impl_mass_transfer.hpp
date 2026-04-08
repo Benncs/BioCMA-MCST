@@ -67,7 +67,8 @@ namespace Simulation::MassTransfer
 
   struct InterfacialAreaFonctor
   {
-    double operator()()
+    double
+    operator()()
     {
       return 1;
     }

@@ -9,13 +9,15 @@
 #define INIT init_handle_raw(argc, argv);
 #define PARAM make_params(cx, ft, dt, np, nex, 0);
 
-void test_init(int argc, char** argv)
+void
+test_init(int argc, char** argv)
 {
   Handle handle = INIT assert(handle != nullptr);
   delete_handle(&handle);
 }
 
-void test_delete_handle(int argc, char** argv)
+void
+test_delete_handle(int argc, char** argv)
 {
   Handle handle = INIT;
   assert(handle != nullptr);
@@ -23,7 +25,8 @@ void test_delete_handle(int argc, char** argv)
   assert(handle == nullptr);
 }
 
-void mock_prepre_apply(std::string_view path, Handle handle)
+void
+mock_prepre_apply(std::string_view path, Handle handle)
 {
   Param params = PARAM;
   auto rdir = std::string(tmp_dir) + "/";
@@ -35,7 +38,8 @@ void mock_prepre_apply(std::string_view path, Handle handle)
     CHECK(register_cma_path(handle, path.data()))
   }
 }
-void test_exec(int argc, char** argv, std::string_view path)
+void
+test_exec(int argc, char** argv, std::string_view path)
 {
   Handle handle = INIT mock_prepre_apply(path, handle);
   CHECK(apply(handle, 0));
@@ -44,7 +48,8 @@ void test_exec(int argc, char** argv, std::string_view path)
   delete_handle(&handle);
 }
 
-void test_apply(int argc, char** argv, std::string_view path)
+void
+test_apply(int argc, char** argv, std::string_view path)
 {
   Handle handle = INIT;
   mock_prepre_apply(path, handle);
@@ -52,14 +57,16 @@ void test_apply(int argc, char** argv, std::string_view path)
   delete_handle(&handle);
 }
 
-void test_apply_err(int argc, char** argv)
+void
+test_apply_err(int argc, char** argv)
 {
-  Handle handle =
-      INIT assert(apply(handle, 0) != 0); // THIS SHOULD RETURN ERROR
+  Handle handle
+      = INIT assert(apply(handle, 0) != 0); // THIS SHOULD RETURN ERROR
   delete_handle(&handle);
 }
 
-void test_exec_err(int argc, char** argv)
+void
+test_exec_err(int argc, char** argv)
 {
   Handle handle = INIT assert(exec(handle) != 0); // THIS SHOULD RETURN ERROR
   delete_handle(&handle);
@@ -67,7 +74,8 @@ void test_exec_err(int argc, char** argv)
 
 // TODO TEST APPLY/EXEC WITH LOAD
 
-void test_register_result_path(int argc, char** argv)
+void
+test_register_result_path(int argc, char** argv)
 {
   Handle handle = INIT int result = register_result_path(handle, "path");
   register_cma_path(handle, "path");
@@ -75,15 +83,18 @@ void test_register_result_path(int argc, char** argv)
   delete_handle(&handle);
 }
 
-void test_register_initializer_path(int argc, char** argv)
+void
+test_register_initializer_path(int argc, char** argv)
 {
   Handle handle = INIT;
   int result = register_initializer_path(handle, "path");
   assert(result == 0);
   delete_handle(&handle);
 }
-void test_make_params(int argc, char** argv)
+void
+test_make_params()
 {
+
   Param params = PARAM;
   assert(params.biomass_initial_concentration == cx);
   assert(params.final_time == ft);
@@ -95,30 +106,34 @@ void test_make_params(int argc, char** argv)
   assert(params.load_serde == 0);     // Default value
 }
 
-void test_register_parameters(int argc, char** argv)
+void
+test_register_parameters(int argc, char** argv)
 {
-  Handle handle = INIT Param params = PARAM int result =
-      register_parameters(handle, &params);
+  Handle handle = INIT Param params = PARAM int result
+      = register_parameters(handle, &params);
   assert(result == 0);
   delete_handle(&handle);
 }
 
 // need existing directory
-void test_register_cma_path_recursive(int argc, char** argv)
+void
+test_register_cma_path_recursive(int argc, char** argv)
 {
   Handle handle = INIT int result = register_cma_path(handle, "./tools");
   assert(result == 0);
   delete_handle(&handle);
 }
 // need existing directory
-void test_register_cma_path(int argc, char** argv)
+void
+test_register_cma_path(int argc, char** argv)
 {
   Handle handle = INIT int result = register_cma_path(handle, "./tools");
   assert(result == 0);
   delete_handle(&handle);
 }
 
-void test_register_serde(int argc, char** argv)
+void
+test_register_serde(int argc, char** argv)
 {
   Handle handle = INIT;
   int result = register_serde(handle, "serde");
@@ -126,7 +141,8 @@ void test_register_serde(int argc, char** argv)
   delete_handle(&handle);
 }
 
-void test_register_model_name(int argc, char** argv)
+void
+test_register_model_name(int argc, char** argv)
 {
   Handle handle = INIT;
   int result = register_model_name(handle, "model");
@@ -134,7 +150,8 @@ void test_register_model_name(int argc, char** argv)
   delete_handle(&handle);
 }
 
-void test_branch_null(int argc, char** argv)
+void
+test_branch_null(int argc, char** argv)
 {
   // We use NULL to mimic C behavior
   CHECK_FALSE(apply(NULL, 0));
@@ -166,11 +183,13 @@ void test_branch_null(int argc, char** argv)
   CHECK_FALSE(register_parameters(NULL, NULL));
   Param params = PARAM;
   CHECK_FALSE(register_parameters(NULL, &params));
+  (void)params;
 
   delete_handle(&handle);
 }
 
-int main(int argc, char** argv)
+int
+main(int argc, char** argv)
 {
   std::string cma_path = get_cma_path(argc, argv);
 
@@ -182,7 +201,7 @@ int main(int argc, char** argv)
 
   test_branch_null(argc, argv);
 
-  test_make_params(argc, argv);
+  test_make_params();
   test_register_parameters(argc, argv);
   test_register_result_path(argc, argv);
   test_register_initializer_path(argc, argv);

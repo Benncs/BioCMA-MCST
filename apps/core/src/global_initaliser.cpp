@@ -1,4 +1,5 @@
 #include "cma_utils/alias.hpp"
+#include "common/env_var.hpp"
 #include <algorithm>
 #include <biocma_cst_config.hpp>
 #include <cassert>
@@ -28,6 +29,7 @@
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
 #endif
+#include <iostream>
 
 #ifndef NDEBUG
 #  define VERBOSE_ERROR std::cerr << "Error LINE: " << __LINE__ << std::endl;
@@ -37,17 +39,18 @@
 
 namespace
 {
-  const Core::ScalarFactory::ScalarVariant DefaultIntialiser =
-      Core::ScalarFactory::Uniform({1.});
+  const Core::ScalarFactory::ScalarVariant DefaultIntialiser
+      = Core::ScalarFactory::Uniform({ 1. });
 
-  const Core::ScalarFactory::ScalarVariant DefaultIntialiserTPF =
-      Core::ScalarFactory::Local({0., 0.},
-                                 {0},
-                                 std::vector<double>({0, 0.}),
-                                 std::vector<size_t>({0}));
+  const Core::ScalarFactory::ScalarVariant DefaultIntialiserTPF
+      = Core::ScalarFactory::Local({ 0., 0. },
+                                   { 0 },
+                                   std::vector<double>({ 0, 0. }),
+                                   std::vector<size_t>({ 0 }));
 
-  double get_time_step(double user_deta_time,
-                       const CmaUtils::TransitionnerPtrType& iterator)
+  double
+  get_time_step(double user_deta_time,
+                const CmaUtils::TransitionnerPtrType& iterator)
   {
 
     // internal hydrodynamic time scales. To account for this, the simulation's
@@ -56,31 +59,45 @@ namespace
     // that the fluid movement between two steps is accurately represented
     // without losing flow information.
     double delta_time = user_deta_time;
-    Kokkos::printf("up %f\r\n", delta_time);
     if (delta_time <= 0)
     {
 
-      const auto min_residence_time =
-          CmaUtils::get_min_residence_time(iterator);
+      const auto min_residence_time
+          = CmaUtils::get_min_residence_time(iterator);
 
-      if (min_residence_time != std::numeric_limits<double>::max() &&
-          min_residence_time != 0.)
+      if (min_residence_time != std::numeric_limits<double>::max()
+          && min_residence_time != 0.)
       {
 
         delta_time = min_residence_time / 100.;
       }
       else
       {
-        // should throw  cause if delta <=0 we have incorrect timstep if first
-        // branch fails delta_time is unchanged.
-        // + If min_element fails flowmap might be invalid then default value is
-        // not needed
+        // should throw  cause if delta <=0 we have incorrect timstep if
+        // first branch fails delta_time is unchanged.
+        // + If min_element fails flowmap might be invalid then default value
+        // is not needed
         throw std::invalid_argument("No time step given and impossibe to "
                                     "estimate it with given flowmap");
       }
     }
 
     return delta_time;
+  }
+
+  // FIXME
+  std::unique_ptr<ILoadBalancer>
+  lb_factory(uint32_t s)
+  {
+    auto bounded = Common::read_env<uint32_t>("BIOMC_LBBOUND");
+    if (bounded)
+    {
+      return std::make_unique<BoundLoadBalancer>(s, *bounded);
+    }
+    else
+    {
+      return std::make_unique<UniformLoadBalancer>(s);
+    }
   }
 
 } // namespace
@@ -91,18 +108,20 @@ namespace Core
                                        UserControlParameters _user_params,
                                        std::shared_ptr<IO::Logger> _logger)
       : info(_info), user_params(std::move(_user_params)),
-        particle_per_process(0), is_host(info.current_rank == 0)
+        // particle_per_process(0)
+        is_host(info.current_rank == 0)
 
   {
     set_logger(std::move(_logger));
 
     Core::check_results_file_name(user_params);
     params = SimulationParameters::init(user_params);
-    f_init_gas_flow =
-        info.current_rank == 0 && params.is_two_phase_flow; // NOLINT
+    f_init_gas_flow
+        = info.current_rank == 0 && params.is_two_phase_flow; // NOLINT
   }
 
-  void GlobalInitialiser::set_logger(std::shared_ptr<IO::Logger> _logger)
+  void
+  GlobalInitialiser::set_logger(std::shared_ptr<IO::Logger> _logger)
   {
     if (_logger != nullptr)
     {
@@ -122,7 +141,8 @@ namespace Core
   //   return cma_case.paths;
   // }
 
-  bool GlobalInitialiser::init_feed(
+  bool
+  GlobalInitialiser::init_feed(
       std::optional<Simulation::Feed::SimulationFeed> _feed)
   {
     if (!check_steps(InitStep::InitState))
@@ -156,7 +176,8 @@ namespace Core
     return true;
   }
 
-  std::optional<bool> GlobalInitialiser::init_state(
+  std::optional<bool>
+  GlobalInitialiser::init_state(
       const CmaUtils::TransitionnerPtrType& transiionner)
   {
     if (!check_steps(InitStep::Transitioner))
@@ -197,8 +218,9 @@ namespace Core
         }
         return std::nullopt;
       }
-      f_init_gas_flow = info.current_rank == 0 && params.is_two_phase_flow;
+
       const auto state = d_transition->get_current();
+      f_init_gas_flow = info.current_rank == 0 && state->has_gas();
       if (logger)
       {
         // Note final "s"
@@ -221,33 +243,23 @@ namespace Core
     return d_transition;
   }
 
-  OptionalPtr<Simulation::SimulationUnit> GlobalInitialiser::init_simulation(
-      std::optional<Core::ScalarFactory::ScalarVariant> variant)
+  OptionalPtr<MC::MonteCarloUnit>
+  GlobalInitialiser::init_monte_carlo()
   {
-    if (!check_steps(InitStep::Feed))
-    {
-      return std::nullopt;
-    }
-    auto scalar =
-        variant.has_value() ? init_scalar(std::move(*variant)) : init_scalar();
-    auto mc = init_monte_carlo();
-    if (scalar.has_value() and mc.has_value())
-    {
-
-      return init_simulation(std::move(*mc), *scalar);
-    }
-    return std::nullopt;
-  }
-
-  OptionalPtr<MC::MonteCarloUnit> GlobalInitialiser::init_monte_carlo()
-  {
-    if (!check_steps(InitStep::InitState))
+    if (!check_steps(InitStep::InitState, InitStep::Feed))
     {
       return std::nullopt;
     }
 
-    const auto i_model =
-        AutoGenerated::get_model_index_from_name(user_params.model_name);
+    std::size_t n_samples = 0;
+    if (this->feed)
+    {
+      n_samples += (this->feed->n_liquid_flow() != 0) ? 1 : 0;
+    }
+    n_samples += (this->liquid_volume.size() > 1) ? 2 : 0;
+
+    const auto i_model
+        = AutoGenerated::get_model_index_from_name(user_params.model_name);
 
     if (i_model == -2)
     {
@@ -260,11 +272,10 @@ namespace Core
 
     double total_mass = 0.;
     // TODO Add this as user param
-    std::unique_ptr<ILoadBalancer> lb =
-        std::make_unique<UniformLoadBalancer>(info.n_rank);
+    std::unique_ptr<ILoadBalancer> lb = lb_factory(info.n_rank);
 
-    const uint64_t particle_per_process =
-        lb->balance(info.current_rank, user_params.number_particle);
+    const uint64_t particle_per_process
+        = lb->balance(info.current_rank, user_params.number_particle);
 
     if (particle_per_process == 0)
     {
@@ -277,14 +288,15 @@ namespace Core
       return std::nullopt;
     }
 
-    auto mc_unit =
-        AutoGenerated::wrap_init_model_selector(logger,
-                                                i_model,
-                                                particle_per_process,
-                                                liquid_volume,
-                                                flat_neighobrs,
-                                                params.uniform_mc_init,
-                                                total_mass);
+    auto mc_unit
+        = AutoGenerated::wrap_init_model_selector(logger,
+                                                  i_model,
+                                                  particle_per_process,
+                                                  n_samples,
+                                                  liquid_volume,
+                                                  flat_neighobrs,
+                                                  params.uniform_mc_init,
+                                                  total_mass);
 
     if (mc_unit == nullptr)
     {
@@ -308,9 +320,30 @@ namespace Core
     return mc_unit;
   }
 
-  OptionalPtr<Simulation::SimulationUnit> GlobalInitialiser::init_simulation(
+  OptionalPtr<Simulation::SimulationUnit>
+  GlobalInitialiser::init_simulation(
+      std::optional<Core::ScalarFactory::ScalarVariant> variant)
+  {
+    if (!check_steps(InitStep::Feed))
+    {
+      return std::nullopt;
+    }
+    auto scalar = variant.has_value() ? init_scalar(std::move(*variant))
+                                      : init_scalar();
+    auto mc = init_monte_carlo();
+    if (scalar.has_value() and mc.has_value())
+    {
+      // Start long forwarding of scalar_init all subsequent calls have && type
+      // and need to std::move(scalar)
+      return init_simulation(std::move(*mc), std::move(*scalar));
+    }
+    return std::nullopt;
+  }
+
+  OptionalPtr<Simulation::SimulationUnit>
+  GlobalInitialiser::init_simulation(
       std::unique_ptr<MC::MonteCarloUnit> _unit,
-      const Simulation::ScalarInitializer& scalar_init)
+      Simulation::ScalarInitializer&& scalar_init)
   {
     if (!check_steps(
             InitStep::Transitioner, InitStep::InitState, InitStep::Feed))
@@ -338,7 +371,7 @@ namespace Core
     // const auto type = Simulation::MassTransfer::Type::FixedKla{kla};
 
     auto simulation = std::make_unique<Simulation::SimulationUnit>(
-        std::move(_unit), scalar_init, std::move(feed));
+        std::move(_unit), std::move(scalar_init), std::move(feed));
 
     // // FIXME
     // if (AutoGenerated::get_model_index_from_name(user_params.model_name) == 4
@@ -352,17 +385,22 @@ namespace Core
     return simulation;
   }
 
-  std::optional<bool> GlobalInitialiser::init_mtr_model(
+  std::optional<bool>
+  GlobalInitialiser::init_mtr_model(
       Simulation::SimulationUnit& unit,
-      Simulation::MassTransfer::Type::MtrTypeVariant&& variant)
+      std::optional<Simulation::MassTransfer::Type::MtrTypeVariant>&& variant)
   {
     if (!check_steps(InitStep::SimulationUnit))
     {
       VERBOSE_ERROR
       return std::nullopt;
     }
-    unit.setMtrModel(std::move(variant));
+    if (variant)
+    {
+      unit.setMtrModel(std::move(*variant));
+    }
 
+    validate_step(InitStep::MTR);
     // TODO
     return true;
   }
@@ -381,7 +419,8 @@ namespace Core
     return scalar_init;
   }
 
-  std::optional<Simulation::ScalarInitializer> GlobalInitialiser::init_scalar()
+  std::optional<Simulation::ScalarInitializer>
+  GlobalInitialiser::init_scalar()
   {
     if (!check_steps(InitStep::Transitioner, InitStep::InitState))
     {
@@ -408,8 +447,8 @@ namespace Core
                                       user_params.initialiser_path);
     }
 
-    Simulation::ScalarInitializer scalar_init =
-        Core::ScalarFactory::scalar_factory(
+    Simulation::ScalarInitializer scalar_init
+        = Core::ScalarFactory::scalar_factory(
             f_init_gas_flow, gas_volume, liquid_volume, arg);
 
     if (info.current_rank != 0) // FIXME
@@ -422,12 +461,14 @@ namespace Core
     return scalar_init;
   }
 
-  void GlobalInitialiser::set_initial_number_particle(uint64_t np) noexcept
+  void
+  GlobalInitialiser::set_initial_number_particle(uint64_t np) noexcept
   {
     params.number_particle = np;
   }
 
-  bool GlobalInitialiser::check_init_terminate() const
+  bool
+  GlobalInitialiser::check_init_terminate() const
   {
     int i = 0;
 
@@ -449,13 +490,15 @@ namespace Core
     return true;
   }
 
-  [[nodiscard]] SimulationParameters GlobalInitialiser::get_parameters() const
+  [[nodiscard]] SimulationParameters
+  GlobalInitialiser::get_parameters() const
   {
 
     return params;
   }
 
-  std::optional<bool> GlobalInitialiser::host_init_state(
+  std::optional<bool>
+  GlobalInitialiser::host_init_state(
       const CmaUtils::TransitionnerPtrType& transiionner)
   {
     // if (flow_handle == nullptr)
@@ -512,17 +555,18 @@ namespace Core
     params.t_per_flow_map = t_per_flowmap;
 
     // TODO fix float/integer division
-    const auto n_per_flowmap =
-        (t_per_flowmap == 0 || params.n_different_maps == 1)
-            ? 1
-            : static_cast<size_t>(t_per_flowmap / params.d_t) + 1;
+    const auto n_per_flowmap
+        = (t_per_flowmap == 0 || params.n_different_maps == 1)
+              ? 1
+              : static_cast<size_t>(t_per_flowmap / params.d_t) + 1;
 
     params.n_per_flowmap = n_per_flowmap;
 
     return true;
   }
 
-  void GlobalInitialiser::mpi_broadcast() // NOLINT
+  void
+  GlobalInitialiser::mpi_broadcast() // NOLINT
   {
     if constexpr (AutoGenerated::FlagCompileTime::use_mpi)
     {
@@ -545,12 +589,13 @@ namespace Core
       // WrapMPI::bcst_iterator(_flow_handle, info.current_rank);
       if (!is_host)
       {
-        // Neighbors data is a matrix with nrow the number of compartment (known
-        // by host and workers) n_col is not directly known but the matrix size
-        // is so we calculate column this way
+        // Neighbors data is a matrix with nrow the number of compartment
+        // (known by host and workers) n_col is not directly known but the
+        // matrix size is so we calculate column this way
         // assert(slice_neighbors.size() > params.n_compartments);
-        // const size_t n_col = slice_neighbors.size() / params.n_compartments;
-        // assert(slice_neighbors.size() % params.n_compartments == 0);
+        // const size_t n_col = slice_neighbors.size() /
+        // params.n_compartments; assert(slice_neighbors.size() %
+        // params.n_compartments == 0);
 
         // liquid_neighbors = CmaRead::Neighbors::Neighbors_const_view_t(
         //     slice_neighbors, params.n_compartments, n_col);

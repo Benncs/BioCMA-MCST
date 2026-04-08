@@ -7,7 +7,8 @@
 #  undef NDEBUG
 #endif
 #include <cassert>
-float random_float(float min, float max)
+float
+random_float(float min, float max)
 {
   static std::random_device rd;
   static std::mt19937 gen(rd());
@@ -15,7 +16,8 @@ float random_float(float min, float max)
   return dis(gen);
 }
 
-double log_fast_ankerl(double a)
+double
+log_fast_ankerl(double a)
 {
   static_assert(__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__,
                 "Little endian is required!");
@@ -23,11 +25,12 @@ double log_fast_ankerl(double a)
   {
     double d;
     int x[2];
-  } u = {a};
+  } u = { a };
   return (u.x[1] - 1072632447) * 6.610368362777016e-7;
 }
 
-void test_ln()
+void
+test_ln()
 {
   float abs_epsilon = 1e-3; // Allowable error
   float rel_epsilon = 0.7;  // Allowable error
@@ -45,7 +48,8 @@ void test_ln()
   }
 }
 
-int main()
+int
+main()
 {
   Kokkos::initialize();
   test_ln();

@@ -38,37 +38,40 @@ concept NumberType = IntegerType<T> || FloatingPointType<T>;
 
 // General case: by value
 template <NumberType T>
-inline bool almost_equal(T val, T val2, T tolerance = tolerance_equality_float)
+inline bool
+almost_equal(T val, T val2, T tolerance = tolerance_equality_float)
 {
   using CommonT = std::common_type_t<T, T>;
-  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2)) <
-         static_cast<CommonT>(tolerance);
+  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2))
+         < static_cast<CommonT>(tolerance);
 }
 
 // Overload for references
 template <NumberType T>
-inline bool almost_equal(const T& val,
-                         const T& val2,
-                         T tolerance = tolerance_equality_float)
+inline bool
+almost_equal(const T& val,
+             const T& val2,
+             T tolerance = tolerance_equality_float)
 {
   using CommonT = std::common_type_t<T, T>;
-  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2)) <
-         static_cast<CommonT>(tolerance);
+  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2))
+         < static_cast<CommonT>(tolerance);
 }
 
 // Overload for pointers
 template <NumberType T>
-inline bool almost_equal(const T* val,
-                         const T* val2,
-                         T tolerance = tolerance_equality_float)
+inline bool
+almost_equal(const T* val,
+             const T* val2,
+             T tolerance = tolerance_equality_float)
 {
   if (!val || !val2)
   {
     return false; // Null pointer check
   }
   using CommonT = std::common_type_t<T, T>;
-  return std::abs(static_cast<CommonT>(*val) - static_cast<CommonT>(*val2)) <
-         static_cast<CommonT>(tolerance);
+  return std::abs(static_cast<CommonT>(*val) - static_cast<CommonT>(*val2))
+         < static_cast<CommonT>(tolerance);
 }
 
 // Overload for rvalue references
@@ -77,8 +80,8 @@ inline bool
 almost_equal(T&& val, T&& val2, T tolerance = tolerance_equality_float)
 {
   using CommonT = std::common_type_t<T, T>;
-  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2)) <
-         static_cast<CommonT>(tolerance);
+  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2))
+         < static_cast<CommonT>(tolerance);
 }
 
 #endif

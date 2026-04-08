@@ -13,15 +13,16 @@ namespace Simulation::impl
 {
   void post_init_concentration_functor(
       bool is_two_phase_flow,
-      const ScalarInitializer& scalar_init,
+      ScalarInitializer&& scalar_init,
       const std::shared_ptr<ScalarSimulation>& liquid_scalar,
       const std::shared_ptr<ScalarSimulation>& gas_scalar = nullptr);
 
   void post_init_concentration_file(
       bool is_two_phase_flow,
-      const ScalarInitializer& scalar_init,
+      ScalarInitializer&& scalar_init,
       const std::shared_ptr<ScalarSimulation>& liquid_scalar,
-      const std::shared_ptr<ScalarSimulation>& gas_scalar = nullptr);
+      const std::shared_ptr<ScalarSimulation>& gas_scalar = nullptr,
+      bool change_layout = true);
 } // namespace Simulation::impl
 
 #endif

@@ -15,11 +15,12 @@ namespace WrapMPI::Async
   namespace
   {
     template <POD_t DataType>
-    int _send_unsafe(MPI_Request& request,
-                     DataType* buf,
-                     size_t buf_size,
-                     size_t dest,
-                     size_t tag) noexcept
+    int
+    _send_unsafe(MPI_Request& request,
+                 DataType* buf,
+                 size_t buf_size,
+                 size_t dest,
+                 size_t tag) noexcept
     {
       return MPI_Isend(buf,
                        buf_size,
@@ -32,7 +33,8 @@ namespace WrapMPI::Async
 
   } // namespace
 
-  inline MPI_Status wait(MPI_Request& request)
+  inline MPI_Status
+  wait(MPI_Request& request)
   {
     PROFILE_SECTION("WrapMPI::wait");
     MPI_Status status;
@@ -40,23 +42,26 @@ namespace WrapMPI::Async
     return status;
   }
 
-  inline void wait(MPI_Request& request, MPI_Status* status)
+  inline void
+  wait(MPI_Request& request, MPI_Status* status)
   {
     MPI_Wait(&request, status);
   }
 
   template <POD_t DataType>
-  int send(MPI_Request& request, DataType data, size_t dest, size_t tag)
+  int
+  send(MPI_Request& request, DataType data, size_t dest, size_t tag)
   {
     return _send_unsafe<DataType>(request, &data, 1, dest, tag);
   }
 
   template <POD_t DataType>
-  int send_v(MPI_Request& request,
-             std::span<const DataType> data,
-             size_t dest,
-             size_t tag,
-             bool send_size) noexcept
+  int
+  send_v(MPI_Request& request,
+         std::span<const DataType> data,
+         size_t dest,
+         size_t tag,
+         bool send_size) noexcept
   {
     int send_status = MPI_SUCCESS;
 
@@ -74,10 +79,11 @@ namespace WrapMPI::Async
   }
 
   template <POD_t DataType>
-  int recv_span(MPI_Request& request,
-                std::span<DataType> buf,
-                size_t src,
-                size_t tag) noexcept
+  int
+  recv_span(MPI_Request& request,
+            std::span<DataType> buf,
+            size_t src,
+            size_t tag) noexcept
   {
     return MPI_Irecv(buf.data(),
                      buf.size(),
@@ -104,10 +110,8 @@ namespace WrapMPI::Async
   }
 
   template <POD_t T>
-  int _broadcast_unsafe(T* data,
-                        size_t _size,
-                        size_t root,
-                        MPI_Request& request)
+  int
+  _broadcast_unsafe(T* data, size_t _size, size_t root, MPI_Request& request)
   {
     if (data == nullptr)
     {
@@ -134,7 +138,8 @@ namespace WrapMPI::Async
   }
 
   template <POD_t T>
-  int broadcast_span(std::span<T> data, size_t root, MPI_Request& request)
+  int
+  broadcast_span(std::span<T> data, size_t root, MPI_Request& request)
   {
     return _broadcast_unsafe(data.data(), data.size(), root, request);
   }

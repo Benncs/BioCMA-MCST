@@ -2,6 +2,7 @@
 #define __CASE_DATA__HPP__
 
 #include "cma_utils/alias.hpp"
+#include "simulation/simulation_getter.hpp"
 #include <common/execinfo.hpp>
 #include <common/logger.hpp>
 #include <core/simulation_parameters.hpp>
@@ -80,10 +81,11 @@ namespace Core
   /**
    * @brief Start simulation
    */
-  void exec(std::shared_ptr<IO::Logger> logger, CaseData&& case_data);
+  void exec(std::shared_ptr<IO::Logger> logger, CaseData case_data);
 
   std::optional<Core::CaseData>
-  load(const ExecInfo& exec,
+  load(std::shared_ptr<IO::Logger>& logger,
+       const ExecInfo& exec,
        const UserControlParameters&& params,
        std::optional<Simulation::Feed::SimulationFeed> feed = std::nullopt);
 

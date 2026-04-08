@@ -3,12 +3,14 @@
 #include <load_balancing/iload_balancer.hpp>
 ILoadBalancer::ILoadBalancer(uint32_t s) : _size(s) {};
 
-uint64_t ILoadBalancer::get_alloc(uint64_t n, uint32_t rank) const noexcept
+uint64_t
+ILoadBalancer::get_alloc(uint64_t n, uint32_t rank) const noexcept
 {
   return static_cast<uint64_t>(static_cast<double>(n) * getRatio(n, rank));
 }
 
-bool ILoadBalancer::check(uint64_t n) const
+bool
+ILoadBalancer::check(uint64_t n) const
 {
   constexpr double tolerance = 1e-12;
   double cs = 0.;
@@ -19,7 +21,8 @@ bool ILoadBalancer::check(uint64_t n) const
   return (std::abs(cs - 1.) < tolerance);
 }
 
-uint64_t ILoadBalancer::balance(uint32_t rank, uint64_t n)
+uint64_t
+ILoadBalancer::balance(uint32_t rank, uint64_t n)
 {
   uint64_t allocated = 0;
 

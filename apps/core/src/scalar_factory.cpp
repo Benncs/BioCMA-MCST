@@ -12,8 +12,7 @@
 
 #  ifndef NDEBUG
 #    pragma GCC diagnostic push
-#    pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#    pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
+#    pragma GCC diagnostic ignored "-w"
 #  endif
 #  include <Eigen/Dense>
 #  ifndef NDEBUG
@@ -29,17 +28,18 @@
 namespace Core::ScalarFactory
 {
 
-  Simulation::ScalarInitializer scalar_factory(bool /*f_init_gas_flow*/,
-                                               std::span<double> gas_volume,
-                                               std::span<double> liquid_volume,
-                                               ScalarVariant arg_liq)
+  Simulation::ScalarInitializer
+  scalar_factory(bool f_init_gas_flow,
+                 std::span<double> gas_volume,
+                 std::span<double> liquid_volume,
+                 ScalarVariant arg_liq)
   {
     if (gas_volume.size() != liquid_volume.size())
     {
       throw std::invalid_argument("Error size of volume need to be the same");
     }
 
-    auto ret = std::visit(Visitor(), std::move(arg_liq));
+    auto ret = std::visit(Visitor{ f_init_gas_flow }, std::move(arg_liq));
 
     ret.volumesgas = gas_volume;
     ret.volumesliq = liquid_volume;
@@ -59,7 +59,8 @@ namespace Core::ScalarFactory
     return ret;
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(Uniform args)
+  Simulation::ScalarInitializer
+  Visitor::operator()(Uniform args) const
   {
     auto res = Simulation::ScalarInitializer();
     res.type = Simulation::ScalarInitialiserType::Uniform;
@@ -95,26 +96,8 @@ namespace Core::ScalarFactory
     return res;
   }
 
-  // Simulation::ScalarInitializer Visitor::operator()(CustomFunctor func)
-  // {
-  //   auto res = Simulation::ScalarInitializer();
-  //   res.type = Simulation::ScalarInitialiserType::CustomFunctor;
-  //   res.n_species = func.n_species;
-
-  //   res.gas_flow = false;
-
-  //   res.liquid_f_init = func.liquid;
-
-  //   if (func.gas.has_value())
-  //   {
-  //     res.gas_f_init = *func.gas;
-  //     res.gas_flow = true;
-  //   }
-
-  //   return res;
-  // }
-
-  Simulation::ScalarInitializer Visitor::operator()(Local args)
+  Simulation::ScalarInitializer
+  Visitor::operator()(Local args) const
   {
     auto res = Simulation::ScalarInitializer();
     res.type = Simulation::ScalarInitialiserType::Local;
@@ -123,23 +106,6 @@ namespace Core::ScalarFactory
     const size_t n_species = concentrations.size();
     res.n_species = n_species;
     res.gas_flow = false;
-
-    // const auto wrap_functor = [n_species](auto&& i, auto&& c)
-    // {
-    //   return [n_species,
-    //           concentrations = std::forward<decltype(c)>(c),
-    //           _indices = std::forward<decltype(i)>(i)](size_t i,
-    //           CmaRead::L2DView<double>& view)
-    //   {
-    //     if (std::ranges::find(_indices, i) != _indices.end())
-    //     {
-    //       for (size_t i_species = 0; i_species < n_species; ++i_species)
-    //       {
-    //         view(i_species, i) = concentrations[i_species];
-    //       }
-    //     }
-    //   };
-    // };
 
     const auto wrap_functor = [](auto&& i, auto&& c)
     {
@@ -159,7 +125,6 @@ namespace Core::ScalarFactory
     };
 
     res.liquid_f_init = wrap_functor(indices, concentrations);
-
     if (args.gas_concentration.has_value() && args.gas_indices.has_value())
     {
       res.gas_f_init = wrap_functor(*args.gas_indices, *args.gas_concentration);
@@ -169,13 +134,16 @@ namespace Core::ScalarFactory
     return res;
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(FullCase data)
+  Simulation::ScalarInitializer
+  Visitor::operator()(FullCase data) const
   {
     auto res = Simulation::ScalarInitializer();
     res.type = Simulation::ScalarInitialiserType::FullCase;
-    res.gas_flow = data.raw_gas.has_value();
+    res.gas_flow = this->init_gas;
+    auto has_gas_buffer = data.raw_gas.has_value();
     res.n_species = data.n_species;
-    if (res.gas_flow)
+
+    if (has_gas_buffer)
     {
       if (data.raw_gas->size() != data.raw_liquid.size())
       {
@@ -185,12 +153,18 @@ namespace Core::ScalarFactory
       res.gas_buffer = std::move(*data.raw_gas);
     }
 
+    if (!has_gas_buffer && this->init_gas)
+    {
+      res.gas_buffer = std::vector<double>(data.raw_liquid.size());
+    }
+
     res.liquid_buffer = std::move(data.raw_liquid);
 
     return res;
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(File filepath)
+  Simulation::ScalarInitializer
+  Visitor::operator()(File filepath) const
   {
 
 #ifdef USE_HIGHFIVE
@@ -239,7 +213,6 @@ namespace Core::ScalarFactory
 
     // First read the dimensions.
     // auto dims = liquid_dataset.getDimensions();
-
     // auto n_elements = dims[0] * dims[1];
     // if (n_elements >= arg.n_compartment)
     // {
@@ -255,20 +228,22 @@ namespace Core::ScalarFactory
 #endif
   }
 
-  Simulation::ScalarInitializer Visitor::operator()(CustomScript /*path*/)
+  Simulation::ScalarInitializer
+  Visitor::operator()(CustomScript /*path*/) const
   {
     throw std::invalid_argument("Not implemented yet");
   }
 
-  bool sanitize(const Simulation::ScalarInitializer& res)
+  bool
+  sanitize(const Simulation::ScalarInitializer& res)
   {
 
     bool flag = false;
 
     auto test_functor = [](auto&& _res)
     {
-      bool _flag =
-          _res.liquid_f_init.has_value() && !_res.liquid_buffer.has_value();
+      bool _flag
+          = _res.liquid_f_init.has_value() && !_res.liquid_buffer.has_value();
 
       if (_res.gas_flow)
       {
@@ -291,15 +266,16 @@ namespace Core::ScalarFactory
       break;
     }
     case Simulation::ScalarInitialiserType::File:
+    case Simulation::ScalarInitialiserType::Serde:
     {
       // File doesn't need functor but buffer
       // First check initialiser has buffer and functor and not set
-      flag = res.liquid_buffer.has_value() &&
-             (!res.gas_f_init.has_value() && !res.liquid_f_init.has_value());
+      flag = res.liquid_buffer.has_value()
+             && (!res.gas_f_init.has_value() && !res.liquid_f_init.has_value());
       if (flag)
       {
-        flag =
-            res.liquid_buffer->size() != 0; // If buffer check that is not empty
+        flag = res.liquid_buffer->size()
+               != 0; // If buffer check that is not empty
       }
       break;
     }

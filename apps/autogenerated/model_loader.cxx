@@ -1,10 +1,10 @@
 // NOLINTBEGIN
+#include <cma_utils/alias.hpp>
 #include <common/logger.hpp>
 #include <mc/m_default.hpp>
 #include <mc/mcinit.hpp>
 #include <string_view>
 #include <unordered_map> // IWYU pragma: keep
-#include <cma_utils/alias.hpp>
 /* ---------------------------------------------------------
  *                  BIOCMA_MC ST
  *
@@ -27,6 +27,7 @@
       const std::shared_ptr<IO::Logger>& _logger,
       const int i_model,
       uint64_t number_particle,
+      std::size_t n_samples,
       std::span<double> liq_volume,
       std::span<const size_t> liquid_neighbors,
       bool uniform_mc_init,
@@ -40,7 +41,7 @@
         case -1:
     {
       return ::MC::init<PythonWrap::PimpModel>(
-          _logger, number_particle, liq_volume, liquid_neighbors);
+          _logger, number_particle, n_samples,liq_volume, liquid_neighbors);
     }
 #endif
 
@@ -48,6 +49,7 @@
     {
       return ::MC::init<DefaultModel>(_logger,
                                       number_particle,
+                                      n_samples,
                                       liq_volume,
                                       liquid_neighbors,
                                       uniform_mc_init,

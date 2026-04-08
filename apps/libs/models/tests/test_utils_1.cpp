@@ -1,5 +1,5 @@
+#include <iostream>
 #include <models/utils.hpp>
-
 #define ASSERT_EQUALS(a, b)                                                    \
   if ((a) != (b))                                                              \
   {                                                                            \
@@ -10,7 +10,8 @@
     std::cout << "Test passed: " << #a << " == " << #b << "\n";                \
   }
 
-int main()
+int
+main()
 {
   // Test cases to validate min_var
   double result;

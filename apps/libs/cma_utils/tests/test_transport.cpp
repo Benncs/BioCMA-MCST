@@ -75,7 +75,8 @@
 //     // Assert that if there is flow, the last probability is 1; if no flow,
 //     it's
 //     // 0
-//     assert(cp.coeff(j, neighbor_max) == 1 || cp.coeff(j, neighbor_max) == 0);
+//     assert(cp.coeff(j, neighbor_max) == 1 || cp.coeff(j, neighbor_max) ==
+//     0);
 //   }
 // }
 

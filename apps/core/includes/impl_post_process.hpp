@@ -26,16 +26,16 @@ namespace PostProcessing
   void final_post_processing(const std::shared_ptr<IO::Logger>& logger,
                              const ExecInfo& exec,
                              const Core::SimulationParameters& params,
-                             Simulation::SimulationUnit& simulation,
+                             const Simulation::Getter& getter,
                              const std::shared_ptr<Core::MainExporter>& mde);
 
   void show_sumup_state(const std::shared_ptr<IO::Logger>& logger,
-                        const Simulation::SimulationUnit& simulation) noexcept;
+                        const Simulation::Getter& getter) noexcept;
 
-  void save_particle_state(Simulation::SimulationUnit& simulation,
+  void save_particle_state(const Simulation::Getter& getter,
                            Core::PartialExporter& pde);
 
-  void save_probes(Simulation::SimulationUnit& simulation,
+  void save_probes(const Simulation::Getter& getter,
                    Core::PartialExporter& pde,
                    bool force = false);
 

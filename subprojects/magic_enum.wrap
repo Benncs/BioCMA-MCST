@@ -1,0 +1,8 @@
+[wrap-git]
+url = https://github.com/Neargye/magic_enum
+revision = v0.9.7
+depth = 1
+method = meson
+
+[provide]
+magic_enum = magic_enum_dep

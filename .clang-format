@@ -1,4 +1,4 @@
-BasedOnStyle: llvm 
+BasedOnStyle: gnu 
 BraceWrapping:
   AfterFunction: true
 AllowShortFunctionsOnASingleLine: None

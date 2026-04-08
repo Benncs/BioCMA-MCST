@@ -4,7 +4,8 @@
 #include <span>
 namespace MC
 {
-  EventContainer EventContainer::reduce(std::span<std::size_t> _data)
+  EventContainer
+  EventContainer::reduce(std::span<std::size_t> _data)
   {
     EventContainer results;
     assert(_data.size() % number_event_type == 0);

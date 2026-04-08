@@ -13,10 +13,10 @@
 # Compiler and linker
 CXX="clang++-18"
 #TARGET="fdist"
-TARGET="cullum_vicente"
+TARGET=$1
 BUILD_DIR="./builddir/host"
 
-SRC_BD=$1
+SRC_BD=$2
 SRC="$SRC_BD/$TARGET.cpp"
 OUT="$BUILD_DIR/libudf_model_$TARGET.so"
 
@@ -24,7 +24,7 @@ OUT="$BUILD_DIR/libudf_model_$TARGET.so"
 
 
 
-DEBUG_FLAGS=" -g O2 -DDEBUG -DENABLE_KOKKOS_PROFILING"
+DEBUG_FLAGS=" -g -O1 -DDEBUG -DENABLE_KOKKOS_PROFILING"
 RELEASE_FLAGS=" -O3 -DNDEBUG "
 
 # Compilation flags
@@ -44,26 +44,28 @@ COMPILE_FLAGS="
 -mtune=native
 -DDECLARE_EXPORT_UDF=1"
 
-COMPILE_FLAGS=$COMPILE_FLAGS+$RELEASE_FLAGS
+#COMPILE_FLAGS=$COMPILE_FLAGS+$RELEASE_FLAGS
+COMPILE_FLAGS=$COMPILE_FLAGS+$DEBUG_FLAGS
 
+kokkosfolder="kokkos-5.0.0"
 
 # Kokkos include directories
-INCLUDE_KOKKOS="-I./$BUILD_DIR/subprojects/kokkos-4.7.01/__CMake_build
--I$BUILD_DIR/subprojects/kokkos-4.7.01/__CMake_build/core/src
--I$BUILD_DIR/subprojects/kokkos-4.7.01/__CMake_build/containers/src
--I$BUILD_DIR/subprojects/kokkos-4.7.01/__CMake_build/algorithms/src
--I$BUILD_DIR/subprojects/kokkos-4.7.01/__CMake_build/simd/src
--Isubprojects/kokkos-4.7.01/core/src
--Isubprojects/kokkos-4.7.01/tpls/desul/include
--Isubprojects/kokkos-4.7.01/tpls/mdspan/include
--Isubprojects/kokkos-4.7.01/containers/src
--Isubprojects/kokkos-4.7.01/algorithms/src
--Isubprojects/kokkos-4.7.01/simd/src
--Isubprojects/kokkos-4.7.01
+INCLUDE_KOKKOS="-I./$BUILD_DIR/subprojects/$kokkosfolder/__CMake_build
+-I$BUILD_DIR/subprojects/$kokkosfolder/__CMake_build/core/src
+-I$BUILD_DIR/subprojects/$kokkosfolder/__CMake_build/containers/src
+-I$BUILD_DIR/subprojects/$kokkosfolder/__CMake_build/algorithms/src
+-I$BUILD_DIR/subprojects/$kokkosfolder/__CMake_build/simd/src
+-Isubprojects/$kokkosfolder/core/src
+-Isubprojects/$kokkosfolder/tpls/desul/include
+-Isubprojects/$kokkosfolder/tpls/mdspan/include
+-Isubprojects/$kokkosfolder/containers/src
+-Isubprojects/$kokkosfolder/algorithms/src
+-Isubprojects/$kokkosfolder/simd/src
+-Isubprojects/$kokkosfolder
 -Isubprojects/kokkos_sampling/public
 -Isubprojects/dynlib/public
--isystem subprojects/kokkos-4.7.01/tpls/mdspan/include
--isystem subprojects/kokkos-4.7.01/tpls/desul/include"
+-isystem subprojects/$kokkosfolder/tpls/mdspan/include
+-isystem subprojects/$kokkosfolder/tpls/desul/include"
 
 # Include directories
 INCLUDE_DIRS="-Iapps/udf_model
@@ -79,10 +81,10 @@ COMMON_INCLUDE="-I/usr/include"
 # LINKER_FLAGS="-Wl,--as-needed -Wl,--no-undefined
 # -shared
 # -fPIC -Wl,-soname,libudf_model_tracker.so -Wl,--start-group $BUILD_DIR/apps/libs/mc/libbiocma_mcst_mc.a
-# $BUILD_DIR/subprojects/kokkos-4.7.01/libkokkoscore.a
-# $BUILD_DIR/subprojects/kokkos-4.7.01/libkokkossimd.a
-# $BUILD_DIR/subprojects/kokkos-4.7.01/libkokkoscontainers.a
-# $BUILD_DIR/subprojects/kokkos-4.7.01/libkokkosalgorithms.a
+# $BUILD_DIR/subprojects/$kokkosfolder/libkokkoscore.a
+# $BUILD_DIR/subprojects/$kokkosfolder/libkokkossimd.a
+# $BUILD_DIR/subprojects/$kokkosfolder/libkokkoscontainers.a
+# $BUILD_DIR/subprojects/$kokkosfolder/libkokkosalgorithms.a
 # -flto
 # -pthread
 # -fopenmp
@@ -94,17 +96,20 @@ COMMON_INCLUDE="-I/usr/include"
 #-fvisibility=hidden
 LINKER_FLAGS="-rdynamic -Wl,--as-needed -Wl,--no-undefined
 -shared
-
 -flto
 -fPIC -Wl,-soname,libudf_model_tracker.so -Wl,--start-group
-$BUILD_DIR/subprojects/kokkos-4.7.01/libkokkoscore.a
+
+$BUILD_DIR/subprojects/$kokkosfolder/libkokkoscore.a
 -pthread
 -fopenmp
 /usr/lib/x86_64-linux-gnu/libhwloc.so
 -ldl -Wl,--end-group"
 
 
-
+LINKER_FLAGS2="
+-flto 
+-pthread
+-fopenmp"
 
 
 
@@ -119,6 +124,7 @@ mkdir -p "$BUILD_DIR"
 
 # Compile and link the project
 $CXX -o "$OUT" "$SRC" $LINKER_FLAGS $COMMON_INCLUDE $INCLUDE_DIRS $COMPILE_FLAGS $INCLUDE_KOKKOS --verbose
+# g++ -S  -c -o "/tmp/ams.S" -fverbose-asm   "$SRC"  $LINKER_FLAGS $INCLUDE_KOKKOS $COMPILE_FLAGS $INCLUDE_DIRS
 
 if [ $? -eq 0 ]; then
     echo "Build completed successfully!"

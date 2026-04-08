@@ -24,7 +24,8 @@ enum class FeedType : std::uint8_t
 };
 
 template <typename T>
-constexpr decltype(auto) move_allow_trivial(T&& t) noexcept
+constexpr decltype(auto)
+move_allow_trivial(T&& t) noexcept
 {
   return std::move(t); // NOLINT
 }
@@ -60,16 +61,21 @@ namespace Simulation::Feed
   {
   };
 
-  using FeedTypeVariant =
-      std::variant<Constant, Step, Pulse, Custom, DelayedConstant>;
+  using FeedTypeVariant
+      = std::variant<Constant, Step, Pulse, Custom, DelayedConstant>;
 
   FeedType get_type(const FeedTypeVariant& v);
+
+  struct FeedValue
+  {
+    double concentration;
+    std::size_t species_index;
+  };
 
   struct FeedDescriptor
   {
     double flow{};
-    double concentration{};
-    std::size_t species_index;
+    std::vector<FeedValue> values;
     std::size_t input_position{};
     std::optional<std::size_t> output_position;
     FeedTypeVariant extra;
@@ -78,13 +84,13 @@ namespace Simulation::Feed
 
   struct FeedFactory
   {
-    static FeedDescriptor
-    constant(double flow,
-             double concentration,
-             std::size_t species_index,
-             std::size_t input_position,
-             std::optional<std::size_t> _ouput_position = std::nullopt,
-             bool set_output = true);
+    static FeedDescriptor constant(double flow,
+                                   double concentration,
+                                   std::size_t species_index,
+                                   std::size_t input_position,
+                                   std::optional<std::size_t> _ouput_position
+                                   = std::nullopt,
+                                   bool set_output = true) noexcept;
 
     // static FeedDescriptor delayedconstant(double _f,
     //                                      feed_value_t&& _target,
@@ -116,10 +122,11 @@ namespace Simulation::Feed
 
     void add_feed(FeedDescriptor&& fd, Phase phase);
 
-    [[nodiscard]] std::size_t n_liquid_flow() const;
-    [[nodiscard]] std::size_t n_gas_flow() const;
+    [[nodiscard]] std::size_t n_liquid_flow() const noexcept;
+    [[nodiscard]] std::size_t n_gas_flow() const noexcept;
 
-    auto liquid_feeds()
+    auto
+    liquid_feeds()
     {
       if (liquid)
       {
@@ -129,7 +136,8 @@ namespace Simulation::Feed
                                    std::vector<FeedDescriptor>::iterator());
     }
 
-    auto gas_feeds()
+    auto
+    gas_feeds()
     {
       if (gas)
       {
@@ -139,10 +147,7 @@ namespace Simulation::Feed
                                    std::vector<FeedDescriptor>::iterator());
     }
 
-    static SimulationFeed empty()
-    {
-      return {.liquid = std::nullopt, .gas = std::nullopt};
-    }
+    static SimulationFeed empty() noexcept;
   };
 
 } // namespace Simulation::Feed

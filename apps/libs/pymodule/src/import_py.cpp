@@ -25,15 +25,16 @@ _custom_interpreter_deleter(pybind11::scoped_interpreter* interpreter)
   }
 }
 
-EXPORT python_interpreter_t init_python_interpreter()
+EXPORT python_interpreter_t
+init_python_interpreter()
 {
   if (!interpreter_init)
   {
     std::cout << "PYTHON INTERPRETER INITIALIZATION" << std::endl;
     interpreter_init = true;
-    return {new pybind11::scoped_interpreter(), &_custom_interpreter_deleter};
+    return { new pybind11::scoped_interpreter(), &_custom_interpreter_deleter };
   }
-  return {nullptr, &_custom_interpreter_deleter};
+  return { nullptr, &_custom_interpreter_deleter };
 }
 
 // NOLINTBEGIN
@@ -44,7 +45,8 @@ EXPORT python_interpreter_t init_python_interpreter()
 namespace PythonWrap
 {
 
-  model_properties_detail_t convert_dict_to_map(const py::dict& kwargs)
+  model_properties_detail_t
+  convert_dict_to_map(const py::dict& kwargs)
   {
     model_properties_detail_t cpp_map;
 
@@ -73,7 +75,8 @@ namespace PythonWrap
     OpaquePointer _data;
   };
 
-  void PimpModel::Impl::initialize_pimpl()
+  void
+  PimpModel::Impl::initialize_pimpl()
   {
     current_module = pybind11::module_::import("modules.modules");
     init_f = current_module.attr("init");
@@ -107,7 +110,8 @@ namespace PythonWrap
     }
   }
 
-  PimpModel& PimpModel::operator=(const PimpModel& rhs)
+  PimpModel&
+  PimpModel::operator=(const PimpModel& rhs)
   {
     if (this == &rhs)
     {
@@ -143,7 +147,8 @@ namespace PythonWrap
     }
   }
 
-  PimpModel& PimpModel::operator=(PimpModel&& rhs) noexcept
+  PimpModel&
+  PimpModel::operator=(PimpModel&& rhs) noexcept
   {
     if (this == &rhs)
     {
@@ -175,7 +180,8 @@ namespace PythonWrap
   Biological model wrap
   **/
 
-  void PimpModel::init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
+  void
+  PimpModel::init(MC::ParticleDataHolder& p, MC::KPRNG _rng)
   {
     if (pimpl != nullptr)
     {
@@ -184,20 +190,21 @@ namespace PythonWrap
     }
   }
 
-  void PimpModel::update(const double d_t,
-                         MC::ParticleDataHolder& p,
-                         const LocalConcentrationView& concentration,
-                         MC::KPRNG _rng)
+  void
+  PimpModel::update(const double d_t,
+                    MC::ParticleDataHolder& p,
+                    const LocalConcentrationView& concentration,
+                    MC::KPRNG _rng)
   {
     if (pimpl != nullptr)
     {
-      auto bf =
-          pybind11::buffer_info(const_cast<double*>(concentration.data()),
-                                sizeof(double),
-                                pybind11::format_descriptor<double>::format(),
-                                1,
-                                {concentration.size()},
-                                {sizeof(double)});
+      auto bf
+          = pybind11::buffer_info(const_cast<double*>(concentration.data()),
+                                  sizeof(double),
+                                  pybind11::format_descriptor<double>::format(),
+                                  1,
+                                  { concentration.size() },
+                                  { sizeof(double) });
 
       pimpl->update_f(d_t,
                       PYTHON_CST_FWD(pimpl->_data),
@@ -206,7 +213,8 @@ namespace PythonWrap
     }
   }
 
-  PimpModel PimpModel::division(MC::ParticleDataHolder& p, MC::KPRNG k) noexcept
+  PimpModel
+  PimpModel::division(MC::ParticleDataHolder& p, MC::KPRNG k) noexcept
   {
     PimpModel child_model;
     if (pimpl != nullptr)
@@ -218,8 +226,9 @@ namespace PythonWrap
     return child_model;
   }
 
-  void PimpModel::contribution(MC::ParticleDataHolder& p,
-                               const ContributionView& contribution) noexcept
+  void
+  PimpModel::contribution(MC::ParticleDataHolder& p,
+                          const ContributionView& contribution) noexcept
   {
     if (pimpl != nullptr)
     {
@@ -235,9 +244,9 @@ namespace PythonWrap
               sizeof(double_t),                          // Size of each element
               py::format_descriptor<double_t>::format(), // Data type format
               2,                                         // Number of dimensions
-              {rows, cols},                              // Shape of the array
-              {sizeof(double_t) * cols,
-               sizeof(double_t)}), // Strides for each dimension
+              { rows, cols },                            // Shape of the array
+              { sizeof(double_t) * cols,
+                sizeof(double_t) }), // Strides for each dimension
           capsule);
 
       pimpl->contribution_f(
@@ -245,17 +254,19 @@ namespace PythonWrap
     }
   }
 
-  model_properties_detail_t PimpModel::get_properties() noexcept
+  model_properties_detail_t
+  PimpModel::get_properties() noexcept
   {
     if (pimpl != nullptr)
     {
       return convert_dict_to_map(
           pimpl->get_properties_f(PYTHON_CST_FWD(pimpl->_data)));
     }
-    return {{"None", 1.}};
+    return { { "None", 1. } };
   }
 
-  [[nodiscard]] double PimpModel::mass() const noexcept
+  [[nodiscard]] double
+  PimpModel::mass() const noexcept
   {
     if (pimpl != nullptr)
     {

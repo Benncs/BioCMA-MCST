@@ -20,37 +20,18 @@
 namespace Simulation
 {
 
-  //[[deprecated("perf:not useful")]] void
-  // SimulationUnit::reduceContribs_per_rank(std::span<const double> data) const
-  //{
-  //
-  // PROFILE_SECTION("host:reduceContribs_rank")
-  // this->liquid_scalar->reduce_contribs(data);
-  //}
-  //
-  // void SimulationUnit::reduceContribs(std::span<const double> data,
-  //                                     size_t n_rank) const
-  // {
-  //   PROFILE_SECTION("host:reduceContribs")
-  //   const auto [nr, nc] = getDimensions();
-  //   this->liquid_scalar->set_zero_contribs();
-
-  //   for (int i = 0; i < static_cast<int>(n_rank); ++i)
-  //   {
-  //     this->liquid_scalar->reduce_contribs({&data[i * nr * nc], nr * nc});
-  //   }
-  // }
-  bool SimulationUnit::checkScalar() const
+  bool
+  SimulationUnit::checkScalar() const
   {
-
+    // Ensure there is no negative values
     auto pred = [](auto&& val) { return val < 0.; };
 
-    auto cliq = this->getCliqData();
+    auto cliq = this->accesor.getCliqData();
 
     const auto it = std::ranges::find_if(cliq.begin(), cliq.end(), pred);
     bool flag = it == cliq.end();
 
-    auto cgas = this->getCgasData();
+    auto cgas = this->accesor.getCgasData();
 
     if (cgas)
     {
@@ -60,10 +41,10 @@ namespace Simulation
     return flag;
   }
 
-  void SimulationUnit::clearContribution() const noexcept
+  // TODO check if really noexcept
+  void
+  SimulationUnit::clearContribution() const noexcept
   {
-    // this->liquid_scalar->vec_kla.setZero();
-    // Dont forget to clear kernel contribution
     if (is_two_phase_flow)
     {
       this->gas_scalar->set_zero_contribs();
@@ -71,38 +52,47 @@ namespace Simulation
     this->liquid_scalar->set_zero_contribs();
   }
 
-  void SimulationUnit::update_feed(const double t,
-                                   const double d_t,
-                                   const bool update_scalar) noexcept
+  // TODO check if really noexcept
+  void
+  SimulationUnit::update_feed(const double t,
+                              const double d_t,
+                              const bool update_scalar) noexcept
   {
     PROFILE_SECTION("host:update_feed")
     // Get references to the index_leaving_flow and leaving_flow data members
 
-    auto functor = [update_scalar](auto& scl,
-                                   const Feed::FeedDescriptor& fd) -> void
+    auto set_scalar_feed
+        = [update_scalar](auto& scl, const Feed::FeedDescriptor& fd) -> void
     {
       if (update_scalar)
       {
-        scl.set_feed(
-            fd.species_index, fd.input_position, fd.flow * fd.concentration);
+        // Set for each scalar, i.e for each line of the sytem, F=C_feed*Q
+        for (auto [concentration, index] : fd.values)
+        {
+          scl.set_feed(index, fd.input_position, fd.flow * concentration);
+        }
         if (fd.output_position)
         {
           scl.set_sink(*fd.output_position, fd.flow);
         }
       }
     };
-    auto& ls = *this->liquid_scalar;
+
+    auto& liquid_scalar = *this->liquid_scalar;
+    std::size_t mc_flow_counter = 0;
     for (auto& feed : feed.liquid_feeds())
     {
       feed.update(t, d_t);
-      functor(ls, feed);
-      // TODO: improve
+      set_scalar_feed(liquid_scalar, feed);
       if (feed.output_position)
       {
-        // _index_leaving_flow(0) = 0;
-        // _leaving_flow(0) = feed.flow;
-        //
-        move_info.set_flow(0, 0, feed.flow);
+
+        // this->mc_unit->domain.set_leaving_flow(
+        //     0, *feed.output_position, feed.flow);
+
+        this->mc_unit->domain.set_leaving_flow(
+            mc_flow_counter, *feed.output_position, feed.flow);
+        mc_flow_counter++;
       }
     }
 
@@ -112,77 +102,13 @@ namespace Simulation
       for (auto& feed : feed.gas_feeds())
       {
         feed.update(t, d_t);
-        functor(gs, feed);
+        set_scalar_feed(gs, feed);
       }
     }
   }
 
-  // void
-  // SimulationUnit::update_feed(const double t, const double d_t, const bool
-  // update_scalar) noexcept
-  // {
-  //   PROFILE_SECTION("host:update_feed")
-  //   // Get references to the index_leaving_flow and leaving_flow data members
-  //   const auto& _index_leaving_flow = this->move_info.index_leaving_flow;
-  //   const auto& _leaving_flow = this->move_info.leaving_flow;
-
-  //   // Get the index of the exit compartment
-  //   // TODO exit is not necessarly at the index n-1, it should be given by
-  //   user const uint64_t i_exit = 0; //
-  //   mc_unit->domain.getNumberCompartments() - 1;
-
-  //   // Define the set_feed lambda function
-  //   auto set_feed =
-  //       [t, d_t, i_exit, &_index_leaving_flow, &_leaving_flow,
-  //       update_scalar](
-  //           const std::shared_ptr<ScalarSimulation>& scalar, auto&&
-  //           descritor, bool mc_f = false)
-
-  //   {
-  //     double flow = 0.; // Initialize the flow variable
-  //     bool set_exit = false;
-  //     // Iterate through each current_feed in the descriptor
-  //     for (auto&& current_feed : descritor)
-  //     {
-  //       current_feed.update(t, d_t);     // Update the current_feed
-  //       flow += current_feed.flow_value; // Get the flow_value of the
-  //       current_feed set_exit = current_feed.set_exit; if (update_scalar)
-  //       {
-  //         // Iterate through the species, positions, and values of the
-  //         // current_feed
-  //         for (std::size_t i_f = 0; i_f < current_feed.n_v; ++i_f)
-  //         {
-  //           const std::size_t i_species = current_feed.species[i_f];
-  //           scalar->set_feed(i_species, current_feed.position[i_f], flow *
-  //           current_feed.value[i_f]); if (set_exit)
-  //           {
-  //             scalar->set_sink(current_feed.ouput_position[i_f], flow);
-  //           }
-  //         }
-  //       }
-
-  //       //TODO use ouput position
-  //       if (set_exit && mc_f)
-  //       {
-  //         _index_leaving_flow(0) = 0;
-  //         _leaving_flow(0) = flow;
-  //       }
-  //     }
-
-  //   };
-
-  //   if (feed.liquid.has_value())
-  //   {
-  //     set_feed(this->liquid_scalar, *feed.liquid, true);
-  //   }
-
-  //   if (is_two_phase_flow && feed.gas.has_value())
-  //   {
-  //     set_feed(this->gas_scalar, *feed.gas);
-  //   }
-  // }
-
-  void SimulationUnit::step(double d_t) const
+  void
+  SimulationUnit::step(double d_t) const
   {
 
     if (is_two_phase_flow)

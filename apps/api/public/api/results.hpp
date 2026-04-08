@@ -12,7 +12,8 @@ struct ApiResult : Result<Success, std::string>
   }
 
   explicit constexpr ApiResult() noexcept = default;
-  constexpr int to_c_ret_code()
+  constexpr int
+  to_c_ret_code()
   {
     return (valid()) ? 0 : -1;
   }

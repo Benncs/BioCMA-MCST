@@ -3,13 +3,23 @@
 #include <cstdio>
 #include <cstdlib>
 #include <optional>
-#include <ostream>
+
 #include <sstream>
 #include <string_view>
+
+#ifdef _WIN32
+#  include <ostream>
+#endif
+
 namespace Common
 {
-
-  template <typename T> std::optional<T> read_env(std::string_view varname)
+  /**
+   * @brief Wrapper arround get_env to get optional envariable
+   * @note: UB if T is not trivial type
+   */
+  template <typename T>
+  std::optional<T>
+  read_env(std::string_view varname)
   {
     const char* env_var = std::getenv(varname.data());
     std::optional<T> ret = std::nullopt;
@@ -34,7 +44,9 @@ namespace Common
    * @brief Wrapper arround get_env to get envariable with fallback to default
    * @note: UB if T is not trivial type
    */
-  template <typename T> T read_env_or(std::string_view varname, T vdefault)
+  template <typename T>
+  T
+  read_env_or(std::string_view varname, T vdefault)
   {
     return read_env<T>(varname).value_or(vdefault);
   }
@@ -43,7 +55,9 @@ namespace Common
    * @brief Wrapper arround set_env
    * @note: UB if T is not trivial type
    */
-  template <typename T> bool set_local_env(std::string_view varname, T val)
+  template <typename T>
+  bool
+  set_local_env(std::string_view varname, T val)
   {
 #ifdef _WIN32
     // Windows-specific handling (not implemented)

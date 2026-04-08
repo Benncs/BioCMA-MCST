@@ -42,30 +42,29 @@ namespace Models
     MODEL_CONSTANT FloatType l_c_m = 3e-6;     // m
     MODEL_CONSTANT FloatType d_m = 0.6e-6;     // m
     MODEL_CONSTANT FloatType l_min_m = 0.9e-6; // m
-    MODEL_CONSTANT FloatType lin_density =
-        c_linear_density(static_cast<FloatType>(1000), d_m);
+    MODEL_CONSTANT FloatType lin_density
+        = c_linear_density(static_cast<FloatType>(1000), d_m);
 
-    MODEL_CONSTANT FloatType phi_s_max =
-        get_phi_s_max<FloatType>(lin_density, 8 * 2e-10); // kgS/s
+    MODEL_CONSTANT FloatType phi_s_max
+        = get_phi_s_max<FloatType>(lin_density, 8 * 2e-10); // kgS/s
 
     MODEL_CONSTANT FloatType phi_perm_max = phi_s_max / 40.; // kgS/
 
     MODEL_CONSTANT FloatType frequency_division = 1. / 1000; // Hz
 
-    KOKKOS_INLINE_FUNCTION static void
-    init(const MC::KPRNG::pool_type& random_pool,
-         std::size_t idx,
-         const SelfParticle& arr);
+    KOKKOS_INLINE_FUNCTION static void init(const MC::pool_type& random_pool,
+                                            std::size_t idx,
+                                            const SelfParticle& arr);
 
     KOKKOS_INLINE_FUNCTION static MC::Status
-    update(const MC::KPRNG::pool_type& random_pool,
+    update(const MC::pool_type& random_pool,
            FloatType d_t,
            std::size_t idx,
            const SelfParticle& arr,
            const MC::LocalConcentration& c);
 
     KOKKOS_INLINE_FUNCTION static void
-    division(const MC::KPRNG::pool_type& random_pool,
+    division(const MC::pool_type& random_pool,
              std::size_t idx,
              std::size_t idx2,
              const SelfParticle& arr,
@@ -78,8 +77,8 @@ namespace Models
                  const SelfParticle& arr,
                  const MC::ContributionView& contributions);
 
-    KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx,
-                                              const SelfParticle& arr)
+    KOKKOS_INLINE_FUNCTION static double
+    mass(std::size_t idx, const SelfParticle& arr)
     {
       return GET_PROPERTY(SimpleModel::particle_var::length) * lin_density;
     }
@@ -98,18 +97,18 @@ namespace Models
   CHECK_MODEL(SimpleModel)
 
   KOKKOS_INLINE_FUNCTION void
-  SimpleModel::init([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  SimpleModel::init([[maybe_unused]] const MC::pool_type& random_pool,
                     std::size_t idx,
                     const SelfParticle& arr)
   {
-    MODEL_CONSTANT auto division_time_d =
-        MC::Distributions::TruncatedNormal<FloatType>(
+    MODEL_CONSTANT auto division_time_d
+        = MC::Distributions::TruncatedNormal<FloatType>(
             500,
             500. / 2.,
             10,
             1200); //-Kokkos::log(random_number) / frequency_division;
-    MODEL_CONSTANT auto l_distribution =
-        MC::Distributions::TruncatedNormal<FloatType>(
+    MODEL_CONSTANT auto l_distribution
+        = MC::Distributions::TruncatedNormal<FloatType>(
             l_min_m, l_min_m / 5., l_min_m * 0.5, l_max_m);
     auto gen = random_pool.get_state();
     arr(idx, static_cast<int>(particle_var::length)) = l_distribution.draw(gen);
@@ -123,39 +122,39 @@ namespace Models
   }
 
   KOKKOS_INLINE_FUNCTION MC::Status
-  SimpleModel::update([[maybe_unused]] const MC::KPRNG::pool_type& random_pool,
+  SimpleModel::update([[maybe_unused]] const MC::pool_type& random_pool,
                       FloatType d_t,
                       std::size_t idx,
                       const SelfParticle& arr,
                       const MC::LocalConcentration& c)
   {
 
-    const auto phi_s =
-        Uptake<UptakeDefault<typename Self::FloatType>,
-               SimpleModel>::uptake_step(phi_s_max, d_t, idx, arr, c);
+    const auto phi_s
+        = Uptake<UptakeDefault<typename Self::FloatType>,
+                 SimpleModel>::uptake_step(phi_s_max, d_t, idx, arr, c);
 
     GET_PROPERTY(SimpleModel::particle_var::age) += d_t;
     GET_PROPERTY(SimpleModel::particle_var::phi_s) = phi_s;
 
-    return (GET_PROPERTY(SimpleModel::particle_var::t_div) <=
-            GET_PROPERTY(SimpleModel::particle_var::age))
+    return (GET_PROPERTY(SimpleModel::particle_var::t_div)
+            <= GET_PROPERTY(SimpleModel::particle_var::age))
                ? MC::Status::Division
                : MC::Status::Idle;
   }
 
   KOKKOS_INLINE_FUNCTION void
-  SimpleModel::division(const MC::KPRNG::pool_type& random_pool,
+  SimpleModel::division(const MC::pool_type& random_pool,
                         std::size_t idx,
                         std::size_t idx2,
                         const SelfParticle& arr,
                         const SelfParticle& buffer_arr)
   {
 
-    const FloatType new_current_length =
-        arr(idx, static_cast<int>(particle_var::length)) /
-        static_cast<FloatType>(2.);
-    buffer_arr(idx2, static_cast<int>(particle_var::length)) =
-        new_current_length;
+    const FloatType new_current_length
+        = arr(idx, static_cast<int>(particle_var::length))
+          / static_cast<FloatType>(2.);
+    buffer_arr(idx2, static_cast<int>(particle_var::length))
+        = new_current_length;
     arr(idx, static_cast<int>(particle_var::length)) = new_current_length;
 
     arr(idx, static_cast<int>(particle_var::age)) = 0;
@@ -179,8 +178,8 @@ namespace Models
                             const MC::ContributionView& contributions)
   {
     auto access = contributions.access();
-    access(position, 0) +=
-        -weight * GET_PROPERTY(SimpleModel::particle_var::phi_s); // NOLINT
+    access(position, 0)
+        += -weight * GET_PROPERTY(SimpleModel::particle_var::phi_s); // NOLINT
   }
 
 } // namespace Models

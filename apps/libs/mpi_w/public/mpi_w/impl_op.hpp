@@ -71,7 +71,8 @@ namespace WrapMPI
    * @param data A `std::span` containing the data to send.
    * @param dest The destination identifier for the data.
    * @param tag Optional tag to identify the message (default is 0).
-   * @param send_size If `true`, the size of the data will be sent before the data itself (default is `true`).
+   * @param send_size If `true`, the size of the data will be sent before the
+   * data itself (default is `true`).
    * @return An integer indicating success or failure of the operation.
    */
   template <POD_t DataType>
@@ -307,7 +308,9 @@ namespace WrapMPI
    */
   template <NumberType T> T gather_reduce(T data, size_t root = 0);
 
-  template <NumberType T> T all_reduce(T data)
+  template <NumberType T>
+  T
+  all_reduce(T data)
   {
     T global_sum{}; // global sum across all ran
     MPI_Allreduce(
@@ -337,7 +340,8 @@ namespace WrapMPI
   //**
 
   template <POD_t DataType>
-  DataType try_recv(size_t src, MPI_Status* status, size_t tag)
+  DataType
+  try_recv(size_t src, MPI_Status* status, size_t tag)
   {
     auto opt_data = WrapMPI::recv<DataType>(src, status, tag);
     if (!opt_data.has_value())
@@ -388,10 +392,11 @@ namespace WrapMPI
   }
 
   template <POD_t DataType>
-  int recv_span(std::span<DataType> buf,
-                size_t src,
-                MPI_Status* status,
-                size_t tag) noexcept
+  int
+  recv_span(std::span<DataType> buf,
+            size_t src,
+            MPI_Status* status,
+            size_t tag) noexcept
   {
     return MPI_Recv(buf.data(),
                     buf.size(),
@@ -403,7 +408,8 @@ namespace WrapMPI
   }
 
   template <POD_t T>
-  std::vector<T> try_recv_v(size_t src, MPI_Status* status, size_t tag)
+  std::vector<T>
+  try_recv_v(size_t src, MPI_Status* status, size_t tag)
   {
     auto opt_data = WrapMPI::recv_v<T>(src, status, tag);
     if (!opt_data.has_value())
@@ -416,7 +422,9 @@ namespace WrapMPI
     }
   }
 
-  template <POD_t DataType> int broadcast(DataType& data, size_t root) noexcept
+  template <POD_t DataType>
+  int
+  broadcast(DataType& data, size_t root) noexcept
   {
     return MPI_Bcast(
         &data, 1, get_type<DataType>(), static_cast<int>(root), MPI_COMM_WORLD);
@@ -432,7 +440,8 @@ namespace WrapMPI
   // }
 
   template <POD_t T>
-  int broadcast(std::vector<T>& data, size_t root, size_t current_rank)
+  int
+  broadcast(std::vector<T>& data, size_t root, size_t current_rank)
   {
 
     size_t data_size = 0;
@@ -453,7 +462,9 @@ namespace WrapMPI
                      MPI_COMM_WORLD);
   }
 
-  template <POD_t T> int _broadcast_unsafe(T* data, size_t _size, size_t root)
+  template <POD_t T>
+  int
+  _broadcast_unsafe(T* data, size_t _size, size_t root)
   {
 
     if (data == nullptr)
@@ -477,7 +488,9 @@ namespace WrapMPI
         data, _size, get_type<T>(), static_cast<int>(root), MPI_COMM_WORLD);
   }
 
-  template <POD_t T> int broadcast_span(std::span<T> data, size_t root)
+  template <POD_t T>
+  int
+  broadcast_span(std::span<T> data, size_t root)
   {
     return _broadcast_unsafe(data.data(), data.size(), root);
   }
@@ -498,8 +511,8 @@ namespace WrapMPI
     // {
     //   throw std::runtime_error("MPI_Gather failed");
     // }
-    if (_gather_unsafe_to_buffer(dest_data, src_data, size, root) !=
-        MPI_SUCCESS)
+    if (_gather_unsafe_to_buffer(dest_data, src_data, size, root)
+        != MPI_SUCCESS)
     {
       throw std::runtime_error("MPI_Gather failed");
     }
@@ -508,10 +521,11 @@ namespace WrapMPI
   }
 
   template <POD_t T>
-  int _gather_unsafe_to_buffer(T* const dest,
-                               T* src_data,
-                               size_t size,
-                               size_t root) noexcept
+  int
+  _gather_unsafe_to_buffer(T* const dest,
+                           T* src_data,
+                           size_t size,
+                           size_t root) noexcept
   {
     int src_size = static_cast<int>(size);
     auto mpi_type = get_type<T>();
@@ -541,7 +555,8 @@ namespace WrapMPI
   }
 
   template <POD_t T>
-  std::vector<T> gather(std::span<T> local_data, size_t n_rank, size_t root)
+  std::vector<T>
+  gather(std::span<T> local_data, size_t n_rank, size_t root)
   {
     return _gather_unsafe(local_data.data(), local_data.size(), n_rank, root);
   }
@@ -554,7 +569,9 @@ namespace WrapMPI
         const_cast<T*>(local_data.data()), local_data.size(), n_rank, root);
   }
 
-  template <NumberType T> T gather_reduce(T data, size_t root)
+  template <NumberType T>
+  T
+  gather_reduce(T data, size_t root)
   {
 
     T result{};
@@ -578,7 +595,8 @@ namespace WrapMPI
   }
 
   template <POD_t... Args>
-  void host_dispatch(const ExecInfo& info, SIGNALS sign, Args&&... args)
+  void
+  host_dispatch(const ExecInfo& info, SIGNALS sign, Args&&... args)
   {
 
     for (int j = 1; j < static_cast<int>(info.n_rank); ++j)
@@ -612,7 +630,9 @@ namespace WrapMPI
     }
   }
 
-  template <POD_t DataType> int send(DataType data, size_t dest, size_t tag)
+  template <POD_t DataType>
+  int
+  send(DataType data, size_t dest, size_t tag)
   {
     MPI_Request req;
     auto res = WrapMPI::Async::_send_unsafe<DataType>(req, &data, 1, dest, tag);
@@ -621,10 +641,11 @@ namespace WrapMPI
   }
 
   template <POD_t DataType>
-  int send_v(std::span<const DataType> data,
-             size_t dest,
-             size_t tag,
-             bool send_size) noexcept
+  int
+  send_v(std::span<const DataType> data,
+         size_t dest,
+         size_t tag,
+         bool send_size) noexcept
   {
     int send_status = MPI_SUCCESS;
 

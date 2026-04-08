@@ -1,8 +1,7 @@
 #ifndef __CORE_MAIN_EXPORTER_HPP__
 #define __CORE_MAIN_EXPORTER_HPP__
 
-#include "mc/events.hpp"
-#include "simulation/simulation.hpp"
+#include "simulation/simulation_getter.hpp"
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
@@ -12,7 +11,7 @@
 #include <span>
 #include <string>
 #include <string_view>
-#include <vector>
+
 namespace Core
 {
   /**
@@ -39,10 +38,10 @@ namespace Core
      * @param _filename The filename for data export.
      * @param user_description Optional metadata describing the export.
      */
-    MainExporter(
-        const ExecInfo& info,
-        std::string_view _filename,
-        std::optional<export_metadata_t> user_description = std::nullopt);
+    MainExporter(const ExecInfo& info,
+                 std::string_view _filename,
+                 std::optional<export_metadata_t> user_description
+                 = std::nullopt);
 
     /**
      * @brief Writes initial simulation data to the output.
@@ -62,7 +61,7 @@ namespace Core
      * @param distribution Final distribution of particles or entities across
      * compartments.
      */
-    void write_final(Simulation::SimulationUnit& simulation,
+    void write_final(const Simulation::Getter& getter,
                      std::size_t number_particles);
 
     /**
@@ -91,12 +90,11 @@ namespace Core
      * @param volume_gas Optional span of doubles for gas phase volumes.
      */
     void update_fields(double t,
-                       std::span<double> concentration_liquid,
+                       std::span<const double> concentration_liquid,
                        std::span<const double> liquid_volume,
                        std::optional<std::span<const double>> concentration_gas,
                        std::optional<std::span<const double>> volume_gas,
-                       std::optional<std::span<const double>> mtr,
-                       std::optional<std::span<std::size_t>> events);
+                       std::optional<std::span<const double>> mtr);
 
   private:
     static const std::string

@@ -29,7 +29,7 @@ current_pwd=$(pwd)
 back_end_omp=0
 back_end_cuda=0
 clang_version=-1
-kokkos_version="4.7.01"
+kokkos_version="5.0.0"
 while [[ "$#" -gt 0 ]]; do
   case $1 in
   --omp) back_end_omp=1 ;;
@@ -94,7 +94,7 @@ if [[ "$back_end_omp" == "1" ]]; then
 fi
 
 if [[ "$back_end_cuda" == "1" ]]; then
-  # flag_cmake="${flag_cmake} -DCUDA_ROOT=/usr/local/cuda-12.6/"
+  flag_cmake="${flag_cmake} -DCUDA_ROOT=/usr/local/cuda/"
   flag_cmake="${flag_cmake} -DKokkos_ARCH_TURING75=ON"
   flag_cmake="${flag_cmake} -DKokkos_ENABLE_CUDA=ON"
   flag_cmake="${flag_cmake} -DKokkos_ENABLE_CUDA_CONSTEXPR=ON"
@@ -111,4 +111,4 @@ else
 fi
 
 cd /tmp
-rm -rf /tmp/$tar_name /tmp/$folder_name
+#rm -rf /tmp/$tar_name /tmp/$folder_name

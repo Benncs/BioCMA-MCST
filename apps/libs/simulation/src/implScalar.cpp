@@ -1,4 +1,5 @@
 #include "eigen_kokkos.hpp"
+
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -13,25 +14,25 @@
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 #include <scalar_simulation.hpp>
-#include <simulation/alias.hpp>
+#include <simulation/simulation_exception.hpp>
 #include <stdexcept>
-
 namespace
 {
 
 #define UNROLL_CHECK(i, s)                                                     \
-  if (i < s)                                                                   \
+  if ((i) < (s))                                                               \
   {                                                                            \
     triplets[i] = T(rows[i], cols[i], vals[i]);                                \
   }
 
 #define UNROLL(idx) triplets[idx] = T(rows[idx], cols[idx], vals[idx]);
 
-  void sparse_from_coo(Eigen::SparseMatrix<double>& res,
-                       std::size_t n_c,
-                       std::span<const size_t> rows,
-                       std::span<const size_t> cols,
-                       std::span<const double> vals)
+  void
+  sparse_from_coo(Eigen::SparseMatrix<double>& res,
+                  std::size_t n_c,
+                  std::span<const size_t>&& rows,
+                  std::span<const size_t>&& cols,
+                  std::span<const double>&& vals)
   {
 
     // KOKKOS_ASSERT(res.cols() == EIGEN_INDEX(n_c));
@@ -107,22 +108,22 @@ namespace Simulation
   {
     if (volumes.size() != n_compartments)
     {
-      throw std::invalid_argument("Volumes size mismatch");
+      throw SimulationException(ErrorCodes::MismatchSizeVolume);
     }
 
     const int n_row = EIGEN_INDEX(n_r);
     const int n_col = EIGEN_INDEX(n_c);
 
-    m_volumes = Eigen::DiagonalMatrix<double, -1>(n_col);
+    m_volumes = DiagonalType(n_col);
 
     this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(
         volumes.data(), static_cast<int>(volumes.size()));
 
     contribs = kernelContribution("contribs", n_r, n_c);
 
-    m_transition = FlowMatrixType(n_c, n_c);
+    m_transition = FlowMatrixType(n_col, n_col);
 
-    volumes_inverse = Eigen::DiagonalMatrix<double, -1>(n_col);
+    volumes_inverse = DiagonalType(n_col);
     volumes_inverse.setIdentity();
 
     this->total_mass = ColMajorMatrixtype<double>(n_row, n_col);
@@ -132,15 +133,30 @@ namespace Simulation
     this->sink.setZero();
   }
 
-  void ScalarSimulation::synchro_sources()
-  {
-    Kokkos::deep_copy(sources.compute, contribs);
-  }
+  // simple getters
 
   [[nodiscard]] ColMajorMatrixtype<double>&
-  ScalarSimulation::get_concentration()
+  ScalarSimulation::get_concentration() noexcept
   {
     return concentrations.eigen_data;
+  }
+
+  std::size_t
+  ScalarSimulation::n_col() const noexcept
+  {
+    return n_c;
+  }
+
+  std::size_t
+  ScalarSimulation::n_row() const noexcept
+  {
+    return n_r;
+  }
+
+  void
+  ScalarSimulation::synchro_sources()
+  {
+    Kokkos::deep_copy(sources.compute, contribs);
   }
 
   [[nodiscard]] ColMajorKokkosScalarMatrix<double>
@@ -149,17 +165,8 @@ namespace Simulation
     return concentrations.compute;
   }
 
-  std::size_t ScalarSimulation::n_col() const noexcept
-  {
-    return n_c;
-  }
-
-  std::size_t ScalarSimulation::n_row() const noexcept
-  {
-    return n_r;
-  }
-
-  void ScalarSimulation::reduce_contribs(std::span<const double> data)
+  void
+  ScalarSimulation::reduce_contribs(std::span<const double> data)
   {
     assert(data.size() == (n_c * n_r));
     using eigen_type = decltype(sources)::EigenMatrix;
@@ -167,30 +174,32 @@ namespace Simulation
         const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
   }
 
-  void ScalarSimulation::performStepGL(double d_t,
-                                       const ColMajorMatrixtype<double>& mtr,
-                                       MassTransfer::Sign sign)
+  void
+  ScalarSimulation::performStepGL(double d_t,
+                                  const ColMajorMatrixtype<double>& mtr,
+                                  MassTransfer::Sign sign)
   {
     PROFILE_SECTION("performStep_gl")
 #define c concentrations.eigen_data
 
-    total_mass =
-        total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data +
-                            static_cast<float>(sign) * mtr);
-    c = total_mass * volumes_inverse;
+    total_mass.noalias() += d_t
+                            * (c * m_transition - c * sink + sources.eigen_data
+                               + static_cast<float>(sign) * mtr);
+    c.noalias() = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
     concentrations.update_host_to_compute();
   }
 
-  void ScalarSimulation::performStep(double d_t)
+  void
+  ScalarSimulation::performStep(double d_t)
   {
     PROFILE_SECTION("performStep_l")
 #define c concentrations.eigen_data
 
-    total_mass =
-        total_mass + d_t * (c * m_transition - c * sink + sources.eigen_data);
-    c = total_mass * volumes_inverse;
+    total_mass.noalias()
+        += d_t * (c * m_transition - c * sink + sources.eigen_data);
+    c.noalias() = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
     concentrations.update_host_to_compute();
@@ -210,7 +219,8 @@ namespace Simulation
     return true;
   }
 
-  void ScalarSimulation::set_mass()
+  void
+  ScalarSimulation::set_mass()
   {
     total_mass = this->concentrations.eigen_data * m_volumes;
   }

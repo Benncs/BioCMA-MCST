@@ -12,12 +12,25 @@
 
 namespace MC
 {
-  template <typename Space>
-  using NeighborsView =
-      Kokkos::View<std::size_t**,
-                   Kokkos::LayoutRight,
-                   Space,
-                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+
+  /** @brief Store position and value of volumic flow at outlet */
+  struct LeavingFlow
+  {
+    std::size_t index;
+    double flow;
+  };
+
+  /** @brief Structure to store information about domain needed during MC cycle
+    data is likely to change between each iteration
+  */
+  template <typename ExecSpace, bool is_const = true> struct DomainState
+  {
+    MC::NeighborsView<ExecSpace, is_const> neighbors;
+    DiagonalView<ExecSpace, is_const> diag_transition;
+    CumulativeProbabilityView<ExecSpace, is_const> cumulative_probability;
+    LeavingFlowView<is_const> leaving_flow;
+    VolumeView<ExecSpace, is_const> liquid_volume;
+  };
 
   /**
    * @brief Represents the spatial domain where Monte Carlo particles can exist.
@@ -46,7 +59,6 @@ namespace MC
 
     /**
      * @brief Default constructor
-     *
      */
     ReactorDomain();
 
@@ -58,29 +70,30 @@ namespace MC
     /**
      * @brief Main constructor
      */
-    ReactorDomain(std::span<double> volumes, std::span<const size_t> neighbors);
+    explicit ReactorDomain(std::span<double> volumes);
+
+    ReactorDomain(double total_volume, std::size_t size);
+
     /**
      * @brief Default destructor
-     *
      */
     ~ReactorDomain() = default;
 
     /**
      * @brief Move assignment operator
-     *
      */
     ReactorDomain& operator=(ReactorDomain&& other) noexcept;
 
-    /**
-    @brief Set volume of liquid and gas of each compartment
-    */
-    void setVolumes(std::span<double const> volumes_liq);
+    void update(std::span<const double> newliquid_volume,
+                std::span<const std::size_t> neighors_flat,
+                std::span<const double> out_flows,
+                std::span<const double> proba_flat);
 
-    /**
-     * @brief Update neigbors of compartments
-     */
+    void set_leaving_flow(std::size_t i, std::size_t i_flow, double flow) const;
 
-    void setLiquidNeighbors(std::span<const size_t> flat_data);
+    void init_inner(std::size_t n_flows);
+
+    [[nodiscard]] DomainState<ComputeSpace, true> get_const_inner();
 
     /**
      * @brief Return the number of compartment in the domain
@@ -95,15 +108,17 @@ namespace MC
     /**
      * @brief Return a const reference to neighbors
      */
-    [[nodiscard]] ConstNeighborsView<ComputeSpace> getNeighbors() const;
-
-    template <class Archive> void save(Archive& ar) const
+    template <class Archive>
+    void
+    save(Archive& ar) const
     {
 
       ar(id, size, _total_volume);
     }
 
-    template <class Archive> void load(Archive& ar)
+    template <class Archive>
+    void
+    load(Archive& ar)
     {
       ar(id, size, _total_volume);
     }
@@ -112,22 +127,47 @@ namespace MC
     double _total_volume = 0.; ///< Domain total volume
     size_t id = 0;             ///< Domain ID
     size_t size = 0;           ///< Number of compartment
-    NeighborsView<ComputeSpace> k_neighbor;
+    DomainState<ComputeSpace, false> inner;
+
+    /**
+    @brief Set volume of liquid and gas of each compartment
+    */
+    void setVolumes(std::span<double const> volumes_liq);
+
+    /**
+     * @brief Update neigbors of compartments
+     */
+    void setLiquidNeighbors(std::size_t e1,
+                            std::size_t e2,
+                            std::span<const size_t> flat_data);
   };
 
-  inline ConstNeighborsView<ComputeSpace> ReactorDomain::getNeighbors() const
-  {
-    return k_neighbor;
-  }
+  // inline NeighborsView<ComputeSpace, true> ReactorDomain::getNeighbors() const
+  // {
+  //   return this->inner.neighbors;
+  // }
 
-  inline size_t ReactorDomain::getNumberCompartments() const noexcept
+  inline size_t
+  ReactorDomain::getNumberCompartments() const noexcept
   {
     return size;
   }
 
-  inline double ReactorDomain::getTotalVolume() const noexcept
+  inline double
+  ReactorDomain::getTotalVolume() const noexcept
   {
     return this->_total_volume;
+  }
+
+  [[nodiscard]] inline DomainState<ComputeSpace, true>
+  ReactorDomain::get_const_inner()
+  {
+
+    return { inner.neighbors,
+             inner.diag_transition,
+             inner.cumulative_probability,
+             inner.leaving_flow,
+             inner.liquid_volume };
   }
 
 } // namespace MC

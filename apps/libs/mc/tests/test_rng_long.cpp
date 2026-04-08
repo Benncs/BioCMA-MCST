@@ -8,7 +8,8 @@
 #include <random>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
 
-void calculate_correlation(const std::vector<double>& samples, size_t n_sample)
+void
+calculate_correlation(const std::vector<double>& samples, size_t n_sample)
 {
   // Test de corrélation
   double sum_x = 0.0;
@@ -28,16 +29,17 @@ void calculate_correlation(const std::vector<double>& samples, size_t n_sample)
     sum_y2 += y * y;
   }
 
-  double correlation = (n_sample * sum_xy - sum_x * sum_y) /
-                       std::sqrt((n_sample * sum_x2 - sum_x * sum_x) *
-                                 (n_sample * sum_y2 - sum_y * sum_y));
+  double correlation = (n_sample * sum_xy - sum_x * sum_y)
+                       / std::sqrt((n_sample * sum_x2 - sum_x * sum_x)
+                                   * (n_sample * sum_y2 - sum_y * sum_y));
   std::cout << "Pearson correlation: " << correlation << std::endl;
 }
 
-void mean_variance(const std::vector<double>& samples, size_t n_sample)
+void
+mean_variance(const std::vector<double>& samples, size_t n_sample)
 {
-  double mean =
-      std::accumulate(samples.begin(), samples.end(), 0.0) / samples.size();
+  double mean
+      = std::accumulate(samples.begin(), samples.end(), 0.0) / samples.size();
 
   double variance = 0.0;
   for (double sample : samples)
@@ -50,7 +52,8 @@ void mean_variance(const std::vector<double>& samples, size_t n_sample)
   std::cout << "Variance : " << variance << std::endl;
 }
 
-double ks_statistic(std::vector<double>& sample1, std::vector<double>& sample2)
+double
+ks_statistic(std::vector<double>& sample1, std::vector<double>& sample2)
 {
 
   std::sort(sample1.begin(), sample1.end());
@@ -67,9 +70,10 @@ double ks_statistic(std::vector<double>& sample1, std::vector<double>& sample2)
   return d;
 }
 
-void check(std::vector<double>& theoretical,
-           std::vector<double>& samples,
-           size_t n_sample)
+void
+check(std::vector<double>& theoretical,
+      std::vector<double>& samples,
+      size_t n_sample)
 {
   calculate_correlation(samples, n_sample);
 
@@ -92,7 +96,8 @@ void check(std::vector<double>& theoretical,
   }
 }
 
-void fast_uniform_batch()
+void
+fast_uniform_batch()
 {
   constexpr size_t n_sample = 10'000;
   std::vector<double> samples(n_sample);
@@ -117,9 +122,10 @@ void fast_uniform_batch()
   check(theoretical, samples, n_sample);
 }
 
-void long_uniform_batch()
+void
+long_uniform_batch()
 {
-  constexpr size_t n_sample = 100'000'000;
+  constexpr size_t n_sample = 100 '000' 000;
   std::vector<double> samples(n_sample);
   std::vector<double> theoretical(n_sample);
   std::vector<double> std_sample(n_sample);
@@ -144,12 +150,13 @@ void long_uniform_batch()
   check(theoretical, samples, n_sample);
 }
 
-void bench()
+void
+bench()
 {
   std::cout << "BENCH SERIAL:" << std::endl;
 
   MC::KPRNG rng;
-  constexpr size_t n_sample = 100'000'000;
+  constexpr size_t n_sample = 100 '000' 000;
 
   std::mt19937 seed(std::random_device{}());
   std::uniform_real_distribution<> dist(0.0, 1.0);
@@ -164,8 +171,8 @@ void bench()
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-    auto duration =
-        std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    auto duration
+        = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
     std::cout << "MC:PRNG duration: " << duration.count() << " milliseconds"
               << std::endl;
@@ -184,8 +191,8 @@ void bench()
       std_sample[i] = dist(seed);
     }
     auto end = std::chrono::high_resolution_clock::now();
-    auto duration =
-        std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    auto duration
+        = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
     std::cout << "STD duration: " << duration.count() << " milliseconds"
               << std::endl;
@@ -233,7 +240,8 @@ void bench()
   }
 }
 
-int main()
+int
+main()
 {
   Kokkos::initialize();
 

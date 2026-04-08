@@ -1,6 +1,6 @@
 [wrap-git]
 url = https://github.com/Benncs/rcmtool.git
-revision = v1.3
+revision = v1.4
 depth = 1
 method = meson
 

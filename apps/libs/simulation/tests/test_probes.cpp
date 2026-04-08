@@ -1,3 +1,4 @@
+#include "Kokkos_Core_fwd.hpp"
 #include <Kokkos_Core.hpp>
 #include <cassert>
 #include <cmath>
@@ -5,25 +6,28 @@
 #include <iostream>
 #include <simulation/probe.hpp>
 
-void test_probes_set()
+void
+test_probes_set()
 {
   auto probe = Simulation::Probes<2>(); // Buffer size 2
-  assert(probe.set(1) == true);
+  assert(probe.set<Kokkos::HostSpace::memory_space>(1) == true);
   assert(probe.need_export() == false);
-  assert(probe.set(2) == true);
+  assert(probe.set<Kokkos::HostSpace::memory_space>(2) == true);
   assert(probe.need_export() == true);
-  assert(probe.set(3) == false);
+  assert(probe.set<Kokkos::HostSpace::memory_space>(3) == false);
 }
 
-void test_probes_get()
+void
+test_probes_get()
 {
   constexpr std::size_t size_buff = 10;
   auto probe = Simulation::Probes<size_buff>(); // Buffer size 2
   for (auto i = 0LU; i < size_buff; ++i)
   {
-    assert(probe.set(static_cast<double>(i)) == true);
+    assert(probe.set<Kokkos::HostSpace::memory_space>(static_cast<double>(i))
+           == true);
   }
-  assert(probe.set(55) == false);
+  assert(probe.set<Kokkos::HostSpace::memory_space>(55) == false);
   assert(probe.need_export() == true);
   auto rd = probe.get();
   assert(rd.size() == size_buff);
@@ -33,7 +37,8 @@ void test_probes_get()
     assert(rd[i] == static_cast<double>(i));
   }
 }
-void test_probes_clear()
+void
+test_probes_clear()
 {
   constexpr std::size_t size_buff = 20;
 
@@ -42,7 +47,9 @@ void test_probes_clear()
   auto probe = Simulation::Probes<size_buff>(); // Buffer size 2
   for (auto i = 0LU; i < size_buff; ++i)
   {
-    assert(probe.set(2. * static_cast<double>(i)) == true); // NOLINT
+    assert(
+        probe.set<Kokkos::HostSpace::memory_space>(2. * static_cast<double>(i))
+        == true); // NOLINT
   }
   assert(probe.need_export() == true);
   auto rd = probe.get();
@@ -57,14 +64,17 @@ void test_probes_clear()
   assert(probe.need_export() == false);
   for (auto i = 0LU; i < size_buff; ++i)
   {
-    assert(probe.set(2. * static_cast<double>(i)) == true); // NOLINT
+    assert(
+        probe.set<Kokkos::HostSpace::memory_space>(2. * static_cast<double>(i))
+        == true); // NOLINT
   }
   assert(probe.need_export() == true);
   rd = probe.get();
   assert(rd[2] == val_index_2);
 }
 
-int main()
+int
+main()
 {
 
   Kokkos::initialize();
@@ -181,7 +191,8 @@ void test_ptr()
     i = 0;
     j = 5;
     k = 2;
-    KOKKOS_ASSERT(ptr[i * (n_time_flush * n_sample) + j * n_sample + k] == M_PI)
+    KOKKOS_ASSERT(ptr[i * (n_time_flush * n_sample) + j * n_sample + k] ==
+M_PI)
   }
 
   {

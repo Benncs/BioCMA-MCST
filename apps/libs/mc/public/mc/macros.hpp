@@ -15,15 +15,22 @@
   static_assert(INDEX_FROM_ENUM(__index__) < __array_name__.static_extent(1),  \
                 "Index out of model bound");
 
+#define GET_PROPERTY_FROM_IDX(__index__, __array_name__, __idx__)              \
+  __array_name__(__index__, __idx__)
+
 // Main macro that uses bounds checking and array access
 #define GET_PROPERTY_FROM(__index__, __array_name__, enum_name)                \
-  __array_name__(__index__, INDEX_FROM_ENUM(enum_name))
+  GET_PROPERTY_FROM_IDX(__index__, __array_name__, INDEX_FROM_ENUM(enum_name))
 
 #define GET_PROPERTY(enum_name) GET_PROPERTY_FROM(idx, arr, enum_name)
 
+#define COPY_PROPERTY_TO(enum_name, __index__, __array_name__)                 \
+  GET_PROPERTY_FROM(__index__, __array_name__, enum_name)                      \
+      = GET_PROPERTY(enum_name);
+
 #define GET_INDEX(size)                                                        \
-  std::size_t idx = (team_handle.league_rank() * team_handle.team_size()) +    \
-                    team_handle.team_rank();                                   \
+  std::size_t idx = (team_handle.league_rank() * team_handle.team_size())      \
+                    + team_handle.team_rank();                                 \
   if (idx >= (size))                                                           \
   {                                                                            \
     return;                                                                    \

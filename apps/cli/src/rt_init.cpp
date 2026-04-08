@@ -42,7 +42,8 @@ std::string env_file_path() noexcept;
 void init_environment();
 size_t generate_run_id();
 
-void init_environment()
+void
+init_environment()
 {
 
   const auto env_path = env_file_path();
@@ -70,9 +71,9 @@ void init_environment()
       if (bmc_info_file.is_open())
       {
         std::filesystem::permissions(env_path,
-                                     std::filesystem::perms::owner_write |
-                                         std::filesystem::perms::owner_read |
-                                         std::filesystem::perms::others_read,
+                                     std::filesystem::perms::owner_write
+                                         | std::filesystem::perms::owner_read
+                                         | std::filesystem::perms::others_read,
                                      std::filesystem::perm_options::replace);
         append_date_time(bmc_info_file);
         bmc_info_file << std::endl;
@@ -89,23 +90,26 @@ void init_environment()
   }
 }
 
-std::string sappend_date_time(std::string_view string) noexcept
+std::string
+sappend_date_time(std::string_view string) noexcept
 {
   std::stringstream fd;
   fd << string;
-  auto now =
-      std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+  auto now
+      = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
   fd << std::put_time(std::localtime(&now), "%Y-%m-%d-%H:%M:%S");
   return fd.str();
 }
 
-std::string env_file_path() noexcept
+std::string
+env_file_path() noexcept
 {
   return ".bmc_info";
 }
 
-void register_run(const ExecInfo& exec,
-                  const Core::UserControlParameters& /*params*/) noexcept
+void
+register_run(const ExecInfo& exec,
+             const Core::UserControlParameters& /*params*/) noexcept
 {
   // Open the file in append mode
   std::ofstream env(env_file_path(), std::ios_base::app);

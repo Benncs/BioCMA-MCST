@@ -46,7 +46,8 @@ namespace
      * @brief Operator to update the particle container count.
      * @param i_particle The index of the particle being processed.
      */
-    KOKKOS_FUNCTION void operator()(const int i_particle) const
+    KOKKOS_FUNCTION void
+    operator()(const int i_particle) const
     {
       auto access_ = n_cells.access();
       // access_(list._owned_data(i_particle).properties.current_container) +=
@@ -55,39 +56,6 @@ namespace
       {
         access_(positions(i_particle)) += 1;
       }
-    }
-  };
-
-  /**
-   * @brief Functor to initialize particle weights after creation.
-   *
-   * This functor updates the weight property of all particles in the list.
-   *
-   * @tparam ListType The type of the particle list.
-   */
-  struct PostInitFunctor
-  {
-    MC::ParticleWeigths weights; ///< List of particles.
-    double new_weigth;           ///< The new weight assigned to each particle.
-
-    /**
-     * @brief Constructor for PostInitFunctor.
-     * @param _list The particle list.
-     * @param _new_weigth The new weight to be assigned to each particle.
-     */
-    PostInitFunctor(MC::ParticleWeigths _weights, double _new_weigth)
-        : weights(std::move(_weights)), new_weigth(_new_weigth)
-    {
-    }
-
-    /**
-     * @brief Operator to update particle weights.
-     * @param i_particle The index of the particle being processed.
-     */
-    KOKKOS_INLINE_FUNCTION void operator()(std::size_t i_particle) const
-    {
-      (void)i_particle;
-      // list._owned_data(i_particle).properties.weight = new_weigth;
     }
   };
 
@@ -104,7 +72,8 @@ namespace
     }
 
     KOKKOS_INLINE_FUNCTION
-    void operator()(const int i, double& local_mass) const
+    void
+    operator()(const int i, double& local_mass) const
       requires(ConfigurableModel<Model>)
     {
       particles.position(i) = rng.uniform_u(min_c, max_c);
@@ -114,7 +83,8 @@ namespace
     }
 
     KOKKOS_INLINE_FUNCTION
-    void operator()(const int i, double& local_mass) const
+    void
+    operator()(const int i, double& local_mass) const
       requires(NonConfigurableModel<Model>)
     {
       particles.position(i) = rng.uniform_u(min_c, max_c);
@@ -131,16 +101,17 @@ namespace
   };
 
   template <typename Model>
-  void initialize_model(const std::size_t n_particles,
-                        MC::ParticlesContainer<Model> particles,
-                        uint64_t min,
-                        uint64_t max,
-                        MC::KPRNG& rng,
-                        double& total_mass)
+  void
+  initialize_model(const std::size_t n_particles,
+                   MC::ParticlesContainer<Model> particles,
+                   uint64_t min,
+                   uint64_t max,
+                   MC::KPRNG& rng,
+                   double& total_mass)
   {
 
-    typename Model::Config config =
-        Models::get_model_configuration<Model>(n_particles);
+    typename Model::Config config
+        = Models::get_model_configuration<Model>(n_particles);
     Kokkos::parallel_reduce(
         "mc_init_first",
         Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, n_particles),
@@ -153,18 +124,20 @@ namespace
 namespace MC
 {
 
-  [[nodiscard]] uint64_t MonteCarloUnit::n_particle() const
+  [[nodiscard]] uint64_t
+  MonteCarloUnit::n_particle() const
   {
     return std::visit([](auto&& c) -> std::size_t
                       { return c.n_particles() - c.get_inactive(); },
                       container);
   }
 
-  [[nodiscard]] std::vector<uint64_t> MonteCarloUnit::getRepartition() const
+  [[nodiscard]] std::vector<uint64_t>
+  MonteCarloUnit::getRepartition() const
   {
     if (domain.getNumberCompartments() == 1)
     {
-      return {n_particle()};
+      return { n_particle() };
     }
     // Compute on-deman ncells as long as we don´t need it during simulation but
     // only while exporting. If ncells has to be known more often (id during
@@ -191,17 +164,18 @@ namespace MC
     return dist;
   }
 
-  void post_init_weight(std::unique_ptr<MonteCarloUnit>& unit,
-                        double x0,
-                        double total_mass)
+  void
+  post_init_weight(std::unique_ptr<MonteCarloUnit>& unit,
+                   double x0,
+                   double total_mass)
   {
     auto functor = [total_mass, x0, &unit](auto& container)
     {
       // TODO
 
       // const std::size_t n_p = container.n_particles();
-      const double new_weight =
-          (x0 * unit->domain.getTotalVolume()) / (total_mass);
+      const double new_weight
+          = (x0 * unit->domain.getTotalVolume()) / (total_mass);
       KOKKOS_ASSERT(new_weight > 0);
       using CurrentModel =
           typename std::remove_reference<decltype(container)>::type::UsedModel;
@@ -213,12 +187,7 @@ namespace MC
       {
         static_assert(!ConstWeightModelType<CurrentModel>,
                       "Multiple weights Not implemented yet");
-        // Kokkos::parallel_for("mc_init_apply",
-        //                    Kokkos::RangePolicy<ComputeSpace>(0, n_p),
-        //                    PostInitFunctor(container.weights, new_weight));
       }
-      // Kokkos::View<double, ComputeSpace> view_new_weight("view_new_weight");
-      // Kokkos::deep_copy(view_new_weight, new_weight);
 
       unit->init_weight = new_weight;
     };
@@ -226,11 +195,12 @@ namespace MC
     std::visit(functor, unit->container);
   }
 
-  void impl_init(double& total_mass,
-                 uint64_t n_particles,
-                 MonteCarloUnit& unit,
-                 AutoGenerated::ContainerVariant&& container,
-                 bool uniform_init)
+  void
+  impl_init(double& total_mass,
+            uint64_t n_particles,
+            MonteCarloUnit& unit,
+            AutoGenerated::ContainerVariant&& container,
+            bool uniform_init)
   {
     auto visitor = [&](auto&& container)
     {
@@ -245,12 +215,6 @@ namespace MC
         min_c = 0;
         max_c = 1;
       }
-
-      // if (max_c == 1 && uniform_init)
-      // {
-      //   max_c = 500;
-      // }
-
       /*
        * The mass of each cell in the reactor can be calculated after the model
        * initialization. To ensure that each cell has a unique weight based on
@@ -284,50 +248,91 @@ namespace MC
     unit.container = std::move(container);
   }
 
-  RuntimeParameters load_tuning_constant()
+  template <typename T>
+  T
+  get_valid_value_or(std::string_view varname,
+                     T vdefault,
+                     T min_value,
+                     T max_value)
   {
-    auto get_valid_value_or =
-        []<typename T>(
-            std::string_view varname, T vdefault, T min_value, T max_value)
+    T tmp_value = Common::read_env_or(varname, vdefault);
+    if (tmp_value > min_value && tmp_value <= max_value)
     {
-      T tmp_value = Common::read_env_or(varname, vdefault);
-      if (tmp_value > min_value && tmp_value <= max_value)
-      {
-        return tmp_value;
-      }
-      return vdefault;
-    };
+      return tmp_value;
+    }
+    return vdefault;
+  }
 
-    const auto dead_particle_ratio_threshold =
-        Common::read_env_or("BIOMC_MC_REMOVE_RATIO_THRESHOLD",
-                            AutoGenerated::MC::dead_particle_ratio_threshold);
+  RuntimeParameters
+  load_tuning_constant()
+  {
+    constexpr double max_alloc = 5.;
+
+    const auto dead_particle_ratio_threshold
+        = Common::read_env_or("BIOMC_MC_REMOVE_RATIO_THRESHOLD",
+                              AutoGenerated::MC::dead_particle_ratio_threshold);
 
     const auto minimum_dead_particle_removal = Common::read_env_or(
         "BIOMC_MC_MINIMUM_REMOVAL",
         AutoGenerated::MC::default_minimum_dead_particle_removal);
 
-    const auto buffer_ratio =
-        get_valid_value_or("BIOMC_MC_BUFFER_RATIO",
-                           AutoGenerated::MC::default_MC_buffer_ratio,
-                           0.,
-                           1.);
-    constexpr double max_alloc = 5.;
+    const auto buffer_ratio
+        = get_valid_value_or("BIOMC_MC_BUFFER_RATIO",
+                             AutoGenerated::MC::default_MC_buffer_ratio,
+                             0.,
+                             1.);
+
     const auto allocation_factor = get_valid_value_or(
         "BIOMC_MC_ALLOC_FACTOR",
         AutoGenerated::MC::default_particle_container_allocation_factor,
         0.,
         max_alloc);
 
-    const auto shink_ratio =
-        get_valid_value_or("BIOMC_MC_SHRINK_RATIO",
-                           AutoGenerated::MC::default_shink_ratio,
-                           0.,
-                           1.);
-    return {minimum_dead_particle_removal,
-            buffer_ratio,
-            allocation_factor,
-            shink_ratio,
-            dead_particle_ratio_threshold};
+    const auto shink_ratio
+        = get_valid_value_or("BIOMC_MC_SHRINK_RATIO",
+                             AutoGenerated::MC::default_shink_ratio,
+                             0.,
+                             1.);
+    return { minimum_dead_particle_removal,
+             buffer_ratio,
+             allocation_factor,
+             shink_ratio,
+             dead_particle_ratio_threshold };
   }
 
 } // namespace MC
+
+// /**
+//  * @brief Functor to initialize particle weights after creation.
+//  *
+//  * This functor updates the weight property of all particles in the list.
+//  *
+//  * @tparam ListType The type of the particle list.
+//  */
+// struct PostInitFunctor
+// {
+//   MC::ParticleWeigths weights; ///< List of particles.
+//   double new_weigth;           ///< The new weight assigned to each
+//   particle.
+
+//   /**
+//    * @brief Constructor for PostInitFunctor.
+//    * @param _list The particle list.
+//    * @param _new_weigth The new weight to be assigned to each particle.
+//    */
+//   PostInitFunctor(MC::ParticleWeigths _weights, double _new_weigth)
+//       : weights(std::move(_weights)), new_weigth(_new_weigth)
+//   {
+//   }
+
+//   /**
+//    * @brief Operator to update particle weights.
+//    * @param i_particle The index of the particle being processed.
+//    */
+//   KOKKOS_INLINE_FUNCTION void
+//   operator()(std::size_t i_particle) const
+//   {
+//     (void)i_particle;
+//     // list._owned_data(i_particle).properties.weight = new_weigth;
+//   }
+// };

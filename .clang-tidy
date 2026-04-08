@@ -26,6 +26,11 @@ Checks: |
   misc-include-cleaner,
   misc-use-internal-linkage,
   misc-use-anonymous-namespace,
+  misc-include-cleaner,
+  misc-const-correctness,
+  misc-static-assert
+  *unused*,
+
   hicpp-use-noexcept,
   -bugprone-exception-escape,
   -bugprone-reserved-identifier,

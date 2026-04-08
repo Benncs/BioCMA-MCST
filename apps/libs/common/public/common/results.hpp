@@ -10,35 +10,40 @@ struct Success
 // TODO WIP
 template <typename S, typename T> struct Result : protected std::variant<S, T>
 {
-  explicit constexpr Result() noexcept : std::variant<S, T>{S{}} {};
-  constexpr explicit Result(T const&& t) noexcept : std::variant<S, T>{t}
+  explicit constexpr Result() noexcept : std::variant<S, T>{ S{} } {};
+  constexpr explicit Result(T const&& t) noexcept : std::variant<S, T>{ t }
   {
   }
 
-  constexpr explicit Result(S&& s) noexcept : std::variant<S, T>{std::move(s)}
+  constexpr explicit Result(S&& s) noexcept : std::variant<S, T>{ std::move(s) }
   {
   }
 
-  constexpr explicit operator bool() const noexcept
+  constexpr explicit
+  operator bool() const noexcept
   {
     return valid();
   }
 
-  [[nodiscard]] constexpr bool valid() const noexcept
+  [[nodiscard]] constexpr bool
+  valid() const noexcept
   {
     return std::holds_alternative<S>(*this);
   }
-  [[nodiscard]] constexpr bool invalid() const noexcept
+  [[nodiscard]] constexpr bool
+  invalid() const noexcept
   {
     return !valid();
   }
 
-  [[nodiscard]] constexpr auto get() const noexcept -> T
+  [[nodiscard]] constexpr auto
+  get() const noexcept -> T
   {
     return (invalid() ? std::get<T>(*this) : T());
   }
 
-  [[nodiscard]] auto gets() const -> S
+  [[nodiscard]] auto
+  gets() const -> S
   {
     if (!invalid())
     {
@@ -60,7 +65,9 @@ template <typename S, typename T> struct Result : protected std::variant<S, T>
   //   }
   // }
 
-  template <typename Func, typename Err> auto match(Func&& f, Err&& r) noexcept
+  template <typename Func, typename Err>
+  auto
+  match(Func&& f, Err&& r) noexcept
   {
     if (this->valid())
     {

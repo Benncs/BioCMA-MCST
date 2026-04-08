@@ -17,7 +17,9 @@ enum Uptakeparticle_var : int
 };
 
 // TODO Put ELSEWHERE
-template <FloatingPointType F> consteval F freq(F tau)
+template <FloatingPointType F>
+consteval F
+freq(F tau)
 {
   return F(1) / tau;
 }
@@ -28,7 +30,8 @@ namespace Models
   // TODO Put ELSEWHERE
 
   template <FloatingPointType F>
-  KOKKOS_INLINE_FUNCTION constexpr F f_saturation(const F x, const F k) noexcept
+  KOKKOS_INLINE_FUNCTION constexpr F
+  f_saturation(const F x, const F k) noexcept
   {
     return x / (x + k);
   }
@@ -62,8 +65,8 @@ namespace Models
 
   template <UptakeModel U, ModelType M = U> struct Uptake
   {
-    static constexpr std::size_t n_var =
-        static_cast<std::size_t>(Uptakeparticle_var::COUNT);
+    static constexpr std::size_t n_var
+        = static_cast<std::size_t>(Uptakeparticle_var::COUNT);
     static constexpr std::string_view name = "uptake";
     using uniform_weight = std::true_type;
     using Self = Uptake;
@@ -102,32 +105,33 @@ namespace Models
     //}
     //
     KOKKOS_INLINE_FUNCTION
-    static void init(const MC::KPRNG::pool_type& random_pool,
-                     std::size_t idx,
-                     const SelfParticle& arr)
+    static void
+    init(const MC::pool_type& random_pool,
+         std::size_t idx,
+         const SelfParticle& arr)
     {
 
       // static constexpr FloatType half = FloatType(0.5);
       auto gen = random_pool.get_state();
       // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
-      GET_PROPERTY(Uptakeparticle_var::ap_1) =
-          MC::Distributions::TruncatedNormal<FloatType>::draw_from(
+      GET_PROPERTY(Uptakeparticle_var::ap_1)
+          = MC::Distributions::TruncatedNormal<FloatType>::draw_from(
               gen,
               FloatType(1e-3),
               FloatType(1e-4),
               FloatType(0.),
               FloatType(1.));
 
-      GET_PROPERTY(Uptakeparticle_var::ap_2) =
-          MC::Distributions::TruncatedNormal<FloatType>::draw_from(
+      GET_PROPERTY(Uptakeparticle_var::ap_2)
+          = MC::Distributions::TruncatedNormal<FloatType>::draw_from(
               gen,
               FloatType(0.8),
               FloatType(0.1),
               FloatType(0.),
               FloatType(1.));
 
-      GET_PROPERTY(Uptakeparticle_var::ap_3) =
-          MC::Distributions::TruncatedNormal<FloatType>::draw_from(
+      GET_PROPERTY(Uptakeparticle_var::ap_3)
+          = MC::Distributions::TruncatedNormal<FloatType>::draw_from(
               gen,
               FloatType(0.8),
               FloatType(0.1),
@@ -148,17 +152,17 @@ namespace Models
     {
       const auto s = c(0);
 
-      const FloatType phi_s_pts =
-          phi_pts(phi_max, GET_PROPERTY(Uptakeparticle_var::ap_1), s);
+      const FloatType phi_s_pts
+          = phi_pts(phi_max, GET_PROPERTY(Uptakeparticle_var::ap_1), s);
       if (r_phi_pts != nullptr)
       {
         *r_phi_pts = phi_s_pts;
       }
-      const auto phi_s_perm =
-          phi_permease(phi_max,
-                       GET_PROPERTY(Uptakeparticle_var::ap_1),
-                       GET_PROPERTY(Uptakeparticle_var::ap_2),
-                       s);
+      const auto phi_s_perm
+          = phi_permease(phi_max,
+                         GET_PROPERTY(Uptakeparticle_var::ap_1),
+                         GET_PROPERTY(Uptakeparticle_var::ap_2),
+                         s);
       if (r_phi_perm != nullptr)
       {
         *r_phi_perm = phi_s_perm;
@@ -216,7 +220,7 @@ namespace Models
     }
 
     KOKKOS_INLINE_FUNCTION static void
-    division(const MC::KPRNG::pool_type& random_pool,
+    division(const MC::pool_type& random_pool,
              std::size_t idx,
              std::size_t idx2,
              const SelfParticle& arr,
@@ -224,16 +228,16 @@ namespace Models
     {
       static constexpr FloatType half = FloatType(0.5);
       auto generator = random_pool.get_state();
-      GET_PROPERTY_FROM(idx2, buffer_arr, Uptakeparticle_var::ap_1) =
-          MC::Distributions::TruncatedNormal<FloatType>::draw_from(
+      GET_PROPERTY_FROM(idx2, buffer_arr, Uptakeparticle_var::ap_1)
+          = MC::Distributions::TruncatedNormal<FloatType>::draw_from(
               generator,
               GET_PROPERTY(Uptakeparticle_var::ap_1),
               GET_PROPERTY(Uptakeparticle_var::ap_1) * half,
               FloatType(0.),
               FloatType(1.));
 
-      GET_PROPERTY_FROM(idx2, buffer_arr, Uptakeparticle_var::ap_2) =
-          MC::Distributions::TruncatedNormal<FloatType>::draw_from(
+      GET_PROPERTY_FROM(idx2, buffer_arr, Uptakeparticle_var::ap_2)
+          = MC::Distributions::TruncatedNormal<FloatType>::draw_from(
               generator,
               GET_PROPERTY(Uptakeparticle_var::ap_1),
               GET_PROPERTY(Uptakeparticle_var::ap_2) * half,
@@ -242,8 +246,8 @@ namespace Models
 
       const auto new_n_permease = GET_PROPERTY(Uptakeparticle_var::ap_3) * half;
       GET_PROPERTY(Uptakeparticle_var::ap_3) = new_n_permease;
-      GET_PROPERTY_FROM(idx2, buffer_arr, Uptakeparticle_var::ap_3) =
-          new_n_permease;
+      GET_PROPERTY_FROM(idx2, buffer_arr, Uptakeparticle_var::ap_3)
+          = new_n_permease;
       random_pool.free_state(generator);
     }
 
@@ -256,18 +260,19 @@ namespace Models
     {
     }
 
-    KOKKOS_INLINE_FUNCTION static double mass(std::size_t idx,
-                                              const SelfParticle& arr)
+    KOKKOS_INLINE_FUNCTION static double
+    mass(std::size_t idx, const SelfParticle& arr)
     {
       (void)idx;
       (void)arr;
       return 0.;
     }
 
-    inline constexpr static std::array<std::string_view, n_var> names()
+    inline constexpr static std::array<std::string_view, n_var>
+    names()
     {
-      constexpr std::array<std::string_view, n_var> _names = {
-          "a_pts", "a_permease_1", "a_permease_2"};
+      constexpr std::array<std::string_view, n_var> _names
+          = { "a_pts", "a_permease_1", "a_permease_2" };
       static_assert(_names.size() == n_var);
       return _names;
     }

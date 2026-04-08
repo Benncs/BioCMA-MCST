@@ -2,6 +2,7 @@
 #define __SIMULATION_MOVE_KERNEL_HPP__
 
 #include "Kokkos_Macros.hpp"
+#include "common/common.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
@@ -13,11 +14,9 @@
 #include <mc/events.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
-#include <simulation/alias.hpp>
-#include <simulation/move_info.hpp>
+// #include <simulation/move_info.hpp>
 #include <simulation/probability_leaving.hpp>
 #include <simulation/probe.hpp>
-#include <type_traits>
 #include <utility>
 
 namespace Simulation::KernelInline
@@ -27,32 +26,79 @@ namespace Simulation::KernelInline
   constexpr bool disable_move = false;
   constexpr bool enable_move = true;
 
-  KOKKOS_INLINE_FUNCTION std::size_t __find_next_compartment(
-      const ConstNeighborsView<ComputeSpace>& neighbors,
-      const CumulativeProbabilityView<ComputeSpace>& cumulative_probability,
+  // KOKKOS_INLINE_FUNCTION std::size_t
+  // __find_next_compartment(
+  //     const MC::NeighborsView<ComputeSpace, true>& neighbors,
+  //     const MC::CumulativeProbabilityView<ComputeSpace, true>&
+  //         cumulative_probability,
+  //     const std::size_t i_compartment,
+  //     const double random_number)
+  // {
+  //   const int max_neighbor = static_cast<int>(neighbors.extent(1));
+
+  //   std::size_t next
+  //       = neighbors(i_compartment, 0); // Default to the first neighbor
+
+  //   // Iterate through the neighbors to find the appropriate next compartment
+  //   for (int k_neighbor = 0; k_neighbor < max_neighbor - 1; ++k_neighbor)
+  //   {
+
+  //     // Get the cumulative probability range for the current neighbor
+  //     const auto pi = cumulative_probability(i_compartment, k_neighbor);
+  //     const auto pn = cumulative_probability(i_compartment, k_neighbor + 1);
+
+  //     // Use of a Condition mask to avoid branching.
+  //     // next = (random_number <= pn && pi <= random_number)
+  //     //            ? neighbors(i_compartment, k_neighbor + 1)
+  //     //            : next;
+  //     next = (random_number < pn && pi < random_number)
+  //                ? neighbors(i_compartment, k_neighbor + 1)
+  //                : next;
+  //   }
+
+  //   return next; // Return the index of the chosen next compartment
+  // }
+
+  /** @brief probably overkill binary search to find next compartment
+
+  Compared with first impl it might not change anything
+  Binary seach  is O(log(n)) vs first linear is (n)
+  */
+  KOKKOS_INLINE_FUNCTION std::size_t
+  __find_next_compartment(
+      const bool do_serch,
+      const MC::NeighborsView<ComputeSpace, true>& neighbors,
+      const MC::CumulativeProbabilityView<ComputeSpace, true>&
+          cumulative_probability,
       const std::size_t i_compartment,
       const double random_number)
   {
+    const int mask_do_serch = static_cast<int>(do_serch);
     const int max_neighbor = static_cast<int>(neighbors.extent(1));
 
-    std::size_t next =
-        neighbors(i_compartment, 0); // Default to the first neighbor
+    KOKKOS_ASSERT(max_neighbor >= 1);
+    KOKKOS_ASSERT(random_number <= 1. && random_number >= 0.);
+    KOKKOS_ASSERT(neighbors.extent(1) == cumulative_probability.extent(1));
 
-    // Iterate through the neighbors to find the appropriate next compartment
-    for (int k_neighbor = 0; k_neighbor < max_neighbor - 1; ++k_neighbor)
+    // Do not use cumulative_probability(i_compartment, max_neighbor - 1)==1
+    // Bcause proba can be 0.999999999
+    KOKKOS_ASSERT(cumulative_probability(i_compartment, max_neighbor - 1)
+                  >= random_number);
+
+    int left = 0;
+    int right = mask_do_serch * (max_neighbor - 1);
+    while (left < right)
     {
-
-      // Get the cumulative probability range for the current neighbor
-      const auto pi = cumulative_probability(i_compartment, k_neighbor);
-      const auto pn = cumulative_probability(i_compartment, k_neighbor + 1);
-
-      // Use of a Condition mask to avoid branching.
-      next = (random_number <= pn && pi <= random_number)
-                 ? neighbors(i_compartment, k_neighbor + 1)
-                 : next;
+      const int mid = (left + right) >> 1; // NOLINT
+      const auto pm = cumulative_probability(i_compartment, mid);
+      const int mask = static_cast<int>(random_number > pm);
+      left = mask * (mid + 1) + (1 - mask) * left;
+      right = mask * right + (1 - mask) * mid;
     }
 
-    return next; // Return the index of the chosen next compartment
+    const auto ret = i_compartment * (1 - mask_do_serch)
+                     + neighbors(i_compartment, left) * mask_do_serch;
+    return ret;
   }
 
   struct TagMove
@@ -67,68 +113,98 @@ namespace Simulation::KernelInline
     MoveFunctor() = default;
     MoveFunctor(MC::ParticlePositions p,
                 MC::ParticleStatus _status,
-                MoveInfo<ComputeSpace> m,
-                MC::KPRNG::pool_type _random_pool,
+                MC::DomainState<ComputeSpace> m,
+                MC::pool_type _random_pool,
                 MC::EventContainer _events,
                 ProbeAutogeneratedBuffer _probes,
-                MC::ParticleAges _ages)
+                MC::ParticleAges _ages,
+                MC::ParticleSamples _random)
         : MoveFunctor(0,
-                      p,
-                      _status,
+                      std::move(p),
+                      std::move(_status),
                       0,
-                      m,
-                      _random_pool,
-                      _events,
-                      _probes,
-                      _ages,
+                      std::move(m),
+                      std::move(_random_pool),
+                      std::move(_events),
+                      std::move(_probes),
+                      std::move(_ages),
+                      std::move(_random),
                       false,
                       false) {};
 
-    void update(double _d_t,
-                std::size_t n_p,
-                MoveInfo<ComputeSpace>&& move_i,
-                MC::ParticlePositions _positions,
+    MoveFunctor(double _d_t,
+                MC::ParticlePositions p,
                 MC::ParticleStatus _status,
+                std::size_t n_p,
+                MC::DomainState<ComputeSpace> m,
+                MC::pool_type _random_pool,
+                MC::EventContainer _events,
+                ProbeAutogeneratedBuffer _probes,
                 MC::ParticleAges _ages,
+                MC::ParticleSamples _random,
                 bool b_move,
                 bool b_leave)
+        : d_t(_d_t), positions(std::move(p)), n_particles(n_p),
+          move(std::move(m)), random_pool(_random_pool), // NOLINT
+          status(std::move(_status)), events(std::move(_events)),
+          probes(std::move(_probes)), ages(std::move(_ages)),
+          random(std::move(_random)), enable_move(b_move),
+          enable_leave(b_leave) {};
+
+    void
+    update(const ComputeSpace& ex,
+           double _d_t,
+           std::size_t n_p,
+           MC::DomainState<ComputeSpace> move_i,
+           MC::ParticlePositions _positions,
+           MC::ParticleStatus _status,
+           MC::ParticleAges _ages,
+           MC::ParticleSamples _random,
+           bool b_move,
+           bool b_leave)
     {
+
       this->d_t = _d_t;
       this->n_particles = n_p;
       this->enable_leave = b_leave;
       this->enable_move = b_move;
       this->move = std::move(move_i);
-      // Kokkos::resize(random, this->n_particles,
-      // this->move.leaving_flow.size());
+      this->random = std::move(_random);
+
+      if (enable_move)
+      {
+        index_random_leave = 2;
+      }
+      else
+      {
+        index_random_leave = 0;
+      }
 
       this->positions = std::move(_positions);
       this->status = std::move(_status);
       this->ages = std::move(_ages);
-    }
-    MoveFunctor(double _d_t,
-                MC::ParticlePositions p,
-                MC::ParticleStatus _status,
-                std::size_t n_p,
-                MoveInfo<ComputeSpace> m,
-                MC::KPRNG::pool_type _random_pool,
-                MC::EventContainer _events,
-                ProbeAutogeneratedBuffer _probes,
-                MC::ParticleAges _ages,
-                bool b_move,
-                bool b_leave)
-        : d_t(_d_t), positions(std::move(p)), n_particles(n_p),
-          move(std::move(m)), random_pool(_random_pool),
-          status(std::move(_status)), events(std::move(_events)),
-          probes(std::move(_probes)), ages(std::move(_ages)),
-          random("random_view", 0, 0), enable_move(b_move),
-          enable_leave(b_leave) {};
 
-    KOKKOS_INLINE_FUNCTION void operator()(
-        TagMove _tag,
+      Kokkos::fill_random(ex, random, random_pool, 0., 1.);
+    }
+
+    KOKKOS_INLINE_FUNCTION void
+    operator()(
+        TagMove /*tag*/,
         const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle) const
     {
-      (void)_tag;
       GET_INDEX(n_particles);
+      if (status(idx) != MC::Status::Idle) [[unlikely]]
+      {
+        return;
+      }
+
+      handle_move(idx);
+    }
+
+    KOKKOS_INLINE_FUNCTION void
+    operator()(TagMove /*tag*/, const std::size_t& idx) const
+    {
+
       if (status(idx) != MC::Status::Idle) [[unlikely]]
       {
         return;
@@ -155,13 +231,18 @@ namespace Simulation::KernelInline
     //   }
     // }
     //
-    KOKKOS_INLINE_FUNCTION void operator()(TagLeave _tag,
-                                           const std::size_t& idx,
-                                           std::size_t& local_dead_count) const
+    KOKKOS_INLINE_FUNCTION void
+    operator()([[maybe_unused]] TagLeave _tag,
+               const std::size_t& idx,
+               std::size_t& local_dead_count) const
     {
+      if (status(idx) != MC::Status::Idle) [[unlikely]]
+      {
+        return;
+      }
 
       ages(idx, 0) += d_t;
-      handle_exit(idx, local_dead_count);
+      handle_exit(idx, move.liquid_volume, local_dead_count);
     }
 
     // KOKKOS_INLINE_FUNCTION void
@@ -189,36 +270,49 @@ namespace Simulation::KernelInline
     //       });
     // }
 
-    [[nodiscard]] bool need_launch() const
+    [[nodiscard]] bool
+    need_launch() const
     {
       return enable_leave || enable_move;
     }
 
-    KOKKOS_FUNCTION void handle_move(const std::size_t idx) const
+    KOKKOS_FUNCTION void
+    handle_move(const std::size_t idx) const
     {
-      auto generator = random_pool.get_state();
-      const float rng1 = generator.frand(0., 1.);
-      const double rng2 = generator.drand(0., 1.);
-      random_pool.free_state(generator);
+
+      const auto rng1 = static_cast<float>(random(idx, 0));
+      const auto rng2 = static_cast<float>(random(idx, 1));
+
+      KOKKOS_ASSERT(rng1 >= 0. && rng1 <= 1 && rng2 >= 0. && rng2 <= 1);
 
       const std::size_t i_current_compartment = positions(idx);
 
-      KOKKOS_ASSERT(i_current_compartment < move.liquid_volume.extent(0));
+      KOKKOS_ASSERT(
+          i_current_compartment < move.liquid_volume.extent(0)
+          && "Particle position is incorect (greater than compartment number)");
 
-      const bool mask_next =
-          probability_leaving<int>(rng1,
-                                   move.liquid_volume(i_current_compartment),
-                                   move.diag_transition(i_current_compartment),
-                                   d_t);
+      const bool mask_next = probability_leaving<fast_tag>(
+          rng1,
+          move.liquid_volume(i_current_compartment),
+          move.diag_transition(i_current_compartment),
+          d_t);
 
-      positions(idx) =
-          (mask_next) ? __find_next_compartment(move.neighbors,
-                                                move.cumulative_probability,
-                                                i_current_compartment,
-                                                rng2)
-                      : i_current_compartment;
+      positions(idx) = __find_next_compartment(mask_next,
+                                               move.neighbors,
+                                               move.cumulative_probability,
+                                               i_current_compartment,
+                                               rng2);
 
-      KOKKOS_ASSERT(positions(idx) < move.liquid_volume.extent(0));
+      // positions(idx)
+      //     = (mask_next) ? __find_next_compartment(move.neighbors,
+      //                                             move.cumulative_probability,
+      //                                             i_current_compartment,
+      //                                             rng2)
+      //                   : i_current_compartment;
+
+      KOKKOS_ASSERT(
+          positions(idx) < move.liquid_volume.extent(0)
+          && " Position after move is greater than compartment number");
 
       if constexpr (AutoGenerated::FlagCompileTime::enable_event_counter)
       {
@@ -229,67 +323,231 @@ namespace Simulation::KernelInline
       }
     }
 
-    KOKKOS_INLINE_FUNCTION void handle_exit(std::size_t idx,
-                                            std::size_t& dead_count) const
-    {
-      const auto position = positions(idx);
-      const std::size_t n_flow = move.leaving_flow.size();
-      const auto liquid_volume = move.liquid_volume(position);
+    // KOKKOS_INLINE_FUNCTION void
+    // inner_handle_exit(const std::size_t i_flow,
+    //                   const std::size_t idx,
+    //                   const double liquid_volume,
+    //                   const std::size_t position,
+    //                   const MC::LeavingFlowView<true>& leaving_flow,
+    //                   std ::size_t& dead_count) const
+    // {
+    //   // FIXME : when move AND exit, take the same random number,
+    //   // is it really important ?
+    //   const auto random_number = static_cast<float>(random(idx, 2));
+    //   const auto& [index, flow] = leaving_flow(i_flow);
 
-      for (std::size_t i = 0LU; i < n_flow; ++i)
+    //   const bool is_leaving = (position == index)
+    //                           && probability_leaving<void>(
+    //                               random_number, liquid_volume, flow, d_t);
+
+    //   const int leave_mask = static_cast<int>(is_leaving);
+
+    //   // If using probes
+    //   if constexpr (AutoGenerated::FlagCompileTime::use_probe)
+    //   {
+    //     // Execute probe set, but only actually do something if leaving
+    //     if (is_leaving)
+    //     {
+    //       const auto _ = probes.set(ages(idx, 0));
+    //     }
+    //   }
+    //   if constexpr (AutoGenerated::FlagCompileTime::enable_event_counter)
+    //   {
+
+    //     events.add<MC::EventType::Exit>(leave_mask);
+    //   }
+
+    //   dead_count += leave_mask;
+    //   ages(idx, 0) = (1 - leave_mask) * ages(idx, 0) /*leave_mask * 0 + */;
+    //   status(idx) = is_leaving ? MC::Status::Exit : status(idx);
+    // }
+
+    // KOKKOS_FORCEINLINE_FUNCTION void
+    // handle_exit(std::size_t idx,
+    //             const MC::VolumeView<ComputeSpace, true>& liquid_volumes,
+    //             std::size_t& dead_count) const
+    // {
+    //   const auto position = positions(idx);
+    //   const auto liquid_volume = liquid_volumes(position);
+    //   const MC::LeavingFlowView<true>& leaving_flow = move.leaving_flow;
+    //   const std::size_t n_flow = leaving_flow.size();
+    //   for (std::size_t i_flow = 0LU; i_flow < n_flow; ++i_flow)
+    //   {
+    //     inner_handle_exit(
+    //         i_flow, idx, liquid_volume, position, leaving_flow, dead_count);
+    //   }
+    // }
+
+    // KOKKOS_FORCEINLINE_FUNCTION void
+    // handle_exit(std::size_t idx,
+    //             const MC::VolumeView<ComputeSpace, true>& liquid_volumes,
+    //             std::size_t& dead_count) const
+    // {
+    //   const std::size_t position = positions(idx);
+    //   const double liquid_volume = liquid_volumes(position);
+    //   const MC::LeavingFlowView<true>& leaving_flow = move.leaving_flow;
+    //   const std::size_t n_flow = leaving_flow.size();
+
+    //   // Strategy: most of the time there is only one flow  (0d reactor or
+    //   // uniquement leaving point)
+    //   //  Then the first flow is out of the loop
+    //   //  For the first leaving flow use precomputed index_random_leave
+    //   //  If the particle position is correct probability to leave is high
+    //   //  then pregenerated only one number and get random on the fly in the
+    //   //  loop if needed
+
+    //   // One improvement is to use rng1 as long as as the we do consume it
+    //   //  If first ok_p is false, rng1 is then not used
+    //   //  This needs a branch ?
+
+    //   auto rng1 = static_cast<float>(random(idx, index_random_leave));
+
+    //   const auto& [index, flow] = leaving_flow(0);
+    //   const bool p
+    //       = probability_leaving<precision_tag>(rng1, liquid_volume, flow,
+    //       d_t);
+    //   const bool ok_p = position == index;
+    //   const int m = static_cast<int>(ok_p) * static_cast<int>(p);
+    //   int leave_mask = m;
+
+    //   for (std::size_t i_flow = 1; i_flow < n_flow; ++i_flow)
+    //   {
+    //     if (leave_mask != 0)
+    //     {
+    //       break;
+    //     }
+    //     const auto& [index, flow] = leaving_flow(i_flow);
+    //     const bool ok_p = position == index;
+    //     if (!ok_p)
+    //     {
+    //       continue;
+    //     }
+
+    //     // if (!ok_p || leave_mask != 0)
+    //     // {
+    //     //   continue;
+    //     // }
+    //     auto gen = random_pool.get_state();
+    //     rng1 = gen.frand(0, 1);
+    //     random_pool.free_state(gen);
+
+    //     const bool p = probability_leaving<precision_tag>(
+    //         rng1, liquid_volume, flow, d_t);
+
+    //     const int m = static_cast<int>(ok_p) * static_cast<int>(p);
+    //     leave_mask |= m;
+    //   }
+
+    //   dead_count += leave_mask;
+
+    //   // DO this betore age set to 0
+    //   if constexpr (AutoGenerated::FlagCompileTime::use_probe)
+    //   {
+    //     // Execute probe set, but only actually do something if leaving
+    //     if (leave_mask != 0)
+    //     {
+    //       // const auto _ = probes.template set<(ages(idx, 0));
+    //     }
+    //   }
+
+    //   ages(idx, 0) *= (1 - leave_mask);
+
+    //   // status(idx) = (leave_mask == 0) ? status(idx) : MC::Status::Exit;
+
+    //   status(idx) = static_cast<MC::Status>(
+    //       static_cast<int>(status(idx)) * (1 - leave_mask)
+    //       + static_cast<int>(MC::Status::Exit) * leave_mask);
+
+    //   if constexpr (AutoGenerated::FlagCompileTime::enable_event_counter)
+    //   {
+    //     events.add<MC::EventType::Exit>(leave_mask);
+    //   }
+    // }
+
+    KOKKOS_FORCEINLINE_FUNCTION void
+    handle_exit(std::size_t idx,
+                const MC::VolumeView<ComputeSpace, true>& liquid_volumes,
+                std::size_t& dead_count) const
+    {
+
+      using mem_space = ComputeSpace::memory_space;
+
+      const std::size_t position = positions(idx);
+      const double liquid_volume = liquid_volumes(position);
+      const MC::LeavingFlowView<true>& leaving_flow = move.leaving_flow;
+      const std::size_t n_flow = leaving_flow.size();
+      const auto rng1 = static_cast<float>(random(idx, index_random_leave));
+
+      // Strategy:
+      //  first find the value of leaving flow (0-> particle doesn´t leave)
+      //  do-while +early break is ok as n_flow is likely <10
+      // second: calculate probability leaving, flow=0 => p=0 theres no need to
+      // check condition
+      std::size_t i_flow = 0;
+      double val_flow = 0.;
+
+      // do-while because n_flow is likely to be 1
+      do
+      {
+        const auto& [index, flow] = leaving_flow(i_flow++);
+        if (position == index)
+        {
+          val_flow = flow;
+          break;
+        }
+      } while (i_flow < n_flow);
+
+      int leave_mask = 0;
+      // Cases
+      // 0D: one flow and position always 0 then (val_flow != 0.) is always true
+      // 3D: only for few particles
+      //
+      if (val_flow != 0.)
       {
 
-        // const float random_number = random(idx, i);
-        auto generator = random_pool.get_state();
-        const float random_number = generator.frand(0., 1.);
-        random_pool.free_state(generator);
+        const bool p = probability_leaving<precision_tag>(
+            rng1, liquid_volume, val_flow, d_t);
 
-        const auto& [index, flow] = move.leaving_flow(i);
-
-        const bool is_leaving =
-            (position == index) &&
-            probability_leaving(random_number, liquid_volume, flow, d_t);
-
-        const int leave_mask = static_cast<int>(is_leaving);
-
-        // If using probes
+        leave_mask = static_cast<int>(p);
+        // DO this betore age is reset to 0
+        // if (p)
+        // {
+        dead_count += leave_mask;
+        // }
         if constexpr (AutoGenerated::FlagCompileTime::use_probe)
         {
-          // Execute probe set, but only actually do something if leaving
-          const auto probe_value = ages(idx, 0);
-          if (is_leaving && !probes.set(probe_value))
+          if (leave_mask != 0)
           {
-            Kokkos::printf("[Kernel]: PROBES OVERFLOW\r\n");
+            const auto _ = probes.set<mem_space>(ages(idx, 0));
           }
         }
         if constexpr (AutoGenerated::FlagCompileTime::enable_event_counter)
         {
-          if (is_leaving)
-          {
-            events.incr<MC::EventType::Exit>();
-          }
+          events.add<MC::EventType::Exit>(leave_mask);
         }
-
-        dead_count += leave_mask;
-        ages(idx, 0) = leave_mask * 0 + (1 - leave_mask) * ages(idx, 0);
-        status(idx) = is_leaving ? MC::Status::Exit : status(idx);
-
-        // events.wrap_incr<MC::EventType::Exit>();
+        ages(idx, 0) *= (1 - leave_mask);
+        status(idx) = static_cast<MC::Status>(
+            static_cast<int>(status(idx)) * (1 - leave_mask)
+            + static_cast<int>(MC::Status::Exit) * leave_mask);
       }
     }
 
-    double d_t;
+    double d_t{};
     MC::ParticlePositions positions;
-    std::size_t n_particles;
-    MoveInfo<ComputeSpace> move;
-    MC::KPRNG::pool_type random_pool;
+    std::size_t n_particles{};
+    MC::DomainState<ComputeSpace, true> move;
+    MC::pool_type random_pool;
     MC::ParticleStatus status;
     MC::EventContainer events;
     ProbeAutogeneratedBuffer probes;
     MC::ParticleAges ages;
-    Kokkos::View<float**, Kokkos::LayoutLeft> random;
-    bool enable_move;
-    bool enable_leave;
+    // Kokkos::View<float**, Kokkos::LayoutLeft> random;
+
+    MC::ParticleSamples random;
+
+    bool enable_move{};
+    bool enable_leave{};
+    std::size_t index_random_leave{};
   };
 } // namespace Simulation::KernelInline
 
