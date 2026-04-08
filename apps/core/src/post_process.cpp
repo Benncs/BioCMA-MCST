@@ -1,4 +1,3 @@
-#include "biocma_cst_config.hpp.in"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <biocma_cst_config.hpp>
