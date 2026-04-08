@@ -115,55 +115,59 @@ namespace PythonBindings
   auto
   declare_parameter(auto& m)
   {
-    return py::class_<wrap_c_param_t> (m, "UserSimulationParam")
-      .def (py::init<> ())
-      .def_readwrite ("final_time", &wrap_c_param_t::final_time)
-      .def_readwrite ("delta_time", &wrap_c_param_t::delta_time)
-      .def_readwrite ("force_override", &wrap_c_param_t::force_override)
-      .def_readwrite ("n_thread", &wrap_c_param_t::n_thread)
-      .def_readwrite ("number_exported_result",
-                      &wrap_c_param_t::number_exported_result)
-      .def_readwrite ("biomass_initial_concentration",
-                      &wrap_c_param_t::biomass_initial_concentration)
-      .def_readwrite ("number_particle", &wrap_c_param_t::number_particle)
-      .def_readwrite ("save_serde", &wrap_c_param_t::save_serde)
-      .def_readwrite ("uniform_particle_init",
-                      &wrap_c_param_t::uniform_particle_init)
+    return py::class_<wrap_c_param_t>(m, "UserSimulationParam")
+        .def(py::init<>())
+        .def_readwrite("final_time", &wrap_c_param_t::final_time)
+        .def_readwrite("delta_time", &wrap_c_param_t::delta_time)
+        .def_readwrite("force_override", &wrap_c_param_t::force_override)
+        .def_readwrite("n_thread", &wrap_c_param_t::n_thread)
+        .def_readwrite("number_exported_result",
+                       &wrap_c_param_t::number_exported_result)
+        .def_readwrite("biomass_initial_concentration",
+                       &wrap_c_param_t::biomass_initial_concentration)
+        .def_readwrite("number_particle", &wrap_c_param_t::number_particle)
+        .def_readwrite("save_serde", &wrap_c_param_t::save_serde)
+        .def_readwrite("uniform_particle_init",
+                       &wrap_c_param_t::uniform_particle_init)
 
-      .def ("__repr__", &wrap_repr)
-      // TODO Write unittest
-      .def (py::pickle (
-          [] (const wrap_c_param_t &p) { // __getstate__
-            /* Return a tuple that fully encodes the state of the object */
-            return py::make_tuple (
-                p.final_time, p.delta_time, p.force_override, p.n_thread,
-                p.number_exported_result, p.biomass_initial_concentration,
-                p.number_particle, p.save_serde);
-          },
-          [] (const py::tuple &t) { // __setstate__
-            constexpr std::size_t n_attributes = 8;
-            if (t.size () != n_attributes)
+        .def("__repr__", &wrap_repr)
+        // TODO Write unittest
+        .def(py::pickle(
+            [](const wrap_c_param_t& p) { // __getstate__
+              /* Return a tuple that fully encodes the state of the object */
+              return py::make_tuple(p.final_time,
+                                    p.delta_time,
+                                    p.force_override,
+                                    p.n_thread,
+                                    p.number_exported_result,
+                                    p.biomass_initial_concentration,
+                                    p.number_particle,
+                                    p.save_serde);
+            },
+            [](const py::tuple& t) { // __setstate__
+              constexpr std::size_t n_attributes = 8;
+              if (t.size() != n_attributes)
               {
-                throw std::runtime_error ("Pickle param invalid state, "
-                                          "different number of attributes");
+                throw std::runtime_error("Pickle param invalid state, "
+                                         "different number of attributes");
               }
 
-            /* Create a new C++ instance */
-            wrap_c_param_t p{};
+              /* Create a new C++ instance */
+              wrap_c_param_t p{};
 
-            // NOLINTBEGIN
-            // Be careful using array indexing
-            p.final_time = t[0].cast<double> ();
-            p.delta_time = t[1].cast<double> ();
-            p.force_override = static_cast<int> (t[2].cast<bool> ());
-            p.n_thread = t[3].cast<int> ();
-            p.number_exported_result = t[4].cast<int> ();
-            p.biomass_initial_concentration = t[5].cast<double> ();
-            p.number_particle = t[6].cast<int> ();
-            p.save_serde = t[7].cast<int> ();
-            // NOLINTEND
-            return p;
-          }));
+              // NOLINTBEGIN
+              // Be careful using array indexing
+              p.final_time = t[0].cast<double>();
+              p.delta_time = t[1].cast<double>();
+              p.force_override = static_cast<int>(t[2].cast<bool>());
+              p.n_thread = t[3].cast<int>();
+              p.number_exported_result = t[4].cast<int>();
+              p.biomass_initial_concentration = t[5].cast<double>();
+              p.number_particle = t[6].cast<int>();
+              p.save_serde = t[7].cast<int>();
+              // NOLINTEND
+              return p;
+            }));
   }
 } // namespace PythonBindings
 
@@ -179,16 +183,16 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 
   // m.def("finalize", &finalize); //Do not use it
 
-  // m.def("exec", &PythonBindings::exec);
+  m.def("exec", &PythonBindings::exec);
 
-  m.def("exec",
-        [](std::shared_ptr<Api::SimulationInstance>& handle)
-        {
-          pybind11::gil_scoped_release
-              release; // TODO check if really usefull ? //NOLINT
-          handle->exec();
-          pybind11::gil_scoped_acquire acquire; // NOLINT
-        });
+  // m.def("exec",
+  //       [](std::shared_ptr<Api::SimulationInstance>& handle)
+  //       {
+  //         pybind11::gil_scoped_release
+  //             release; // TODO check if really usefull ? //NOLINT
+  //         handle->exec();
+  //         pybind11::gil_scoped_acquire acquire; // NOLINT
+  //       });
 
   m.def("apply", &PythonBindings::apply);
 

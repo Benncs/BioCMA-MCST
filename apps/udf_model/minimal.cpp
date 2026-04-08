@@ -39,7 +39,7 @@ namespace
   {
     length = 0,
     l_max,
-    phi_s,
+
     __COUNT__
   };
 
@@ -47,6 +47,12 @@ namespace
   _set_nvar()
   {
     return static_cast<size_t>(particle_var::__COUNT__);
+  };
+
+  std::size_t
+  _set_nc()
+  {
+    return 1;
   };
 
   void
@@ -64,6 +70,7 @@ namespace
               [[maybe_unused]] float d_t,
               std::size_t idx,
               const Models::UdfModel::SelfParticle& arr,
+              const Models::UdfModel::SelfContribs& arr_contribs,
               const std::size_t position_index,
               const MC::LocalConcentration& c)
   {
@@ -73,17 +80,10 @@ namespace
     const FloatType ldot = l_dot_max * g;
     const FloatType d_length = d_t * ldot;
     GET_PROPERTY(particle_var::length) += d_length / (1.0 + d_t * ldot);
-    GET_PROPERTY(particle_var::phi_s) = -phi_s;
+    GET_CONTRIBS(0) = -phi_s;
 
     return check_div(GET_PROPERTY(particle_var::length),
                      GET_PROPERTY(particle_var::l_max));
-  }
-
-  MC::ContribIndexBounds
-  _get_bounds_udf()
-  {
-    int begin = INDEX_FROM_ENUM(particle_var::phi_s);
-    return { .begin = begin, .end = begin + 1 };
   }
 
   void
@@ -151,6 +151,6 @@ EXPORT_MODULE(
     &_names,
     &_get_number,
     &_set_nvar,
-    &_get_bounds_udf,
+    &_set_nc,
     &_get_config_udf);
 //clang-format on

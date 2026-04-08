@@ -154,7 +154,8 @@ namespace Simulation::KernelInline
 
       constexpr int PARTICLES_PER_TEAM = cycle_kernel_type::PARTICLES_PER_TEAM;
       // const int league_size = Kokkos::ceil(n_particle / PARTICLES_PER_TEAM);
-      const int league_size = (n_particle + PARTICLES_PER_TEAM - 1) / PARTICLES_PER_TEAM;
+      const int league_size
+          = (n_particle + PARTICLES_PER_TEAM - 1) / PARTICLES_PER_TEAM;
 
       if (cycle_kernel.do_contribs())
       {

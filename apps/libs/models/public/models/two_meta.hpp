@@ -13,7 +13,8 @@
 
 // namespace
 // {
-//   // template <FloatingPointType F> static F consteval get_phi_s_max(F density,
+//   // template <FloatingPointType F> static F consteval get_phi_s_max(F
+//   density,
 //   // F dl)
 //   // {
 //   //   // dl and density must be same unit, dl*density -> mass and y is mass
@@ -38,8 +39,9 @@
 //       nu1,
 //       nu2,
 //       l_cp,
-//       nu_eff_1, // This is not itself a model property but stored to be exported
-//       nu_eff_2, // This is not itself a model property but stored to be exported
+//       nu_eff_1, // This is not itself a model property but stored to be
+//       exported nu_eff_2, // This is not itself a model property but stored to
+//       be exported
 //       // TODO FIND BETTER WAY TO STORE/GET CONTRIBUTIONS
 //       contrib_phi_s,
 //       contrib_phi_o2,
@@ -47,9 +49,10 @@
 //       COUNT
 //     };
 
-//     static constexpr std::size_t n_var = INDEX_FROM_ENUM(particle_var::COUNT);
-//     static constexpr std::string_view name = "simple";
-//     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
+//     static constexpr std::size_t n_var =
+//     INDEX_FROM_ENUM(particle_var::COUNT); static constexpr std::string_view
+//     name = "simple"; using SelfParticle = MC::ParticlesModel<Self::n_var,
+//     Self::FloatType>;
 
 //     MODEL_CONSTANT FloatType l_max_m = 5e-6;   // m
 //     MODEL_CONSTANT FloatType l_c_m = 3e-6;     // m
@@ -63,11 +66,12 @@
 //         = Models::MolarMass::GramPerMole::dioxygen<float>; // g/mol
 
 //     MODEL_CONSTANT FloatType y_sx_1
-//         = 1. / 2.217737e+00;                       // Mode 1 S to X yield (mass)
-//     MODEL_CONSTANT FloatType y_sx_2 = y_sx_1 / 3.; // Mode 2 S to X yield (mass)
-//     MODEL_CONSTANT FloatType y_sa = 0.8;           // S to A yield (mass)
-//     MODEL_CONSTANT FloatType y_os_molar = 3; // 3 mol o2 per mol for glucose
-//     MODEL_CONSTANT FloatType k_o
+//         = 1. / 2.217737e+00;                       // Mode 1 S to X yield
+//         (mass)
+//     MODEL_CONSTANT FloatType y_sx_2 = y_sx_1 / 3.; // Mode 2 S to X yield
+//     (mass) MODEL_CONSTANT FloatType y_sa = 0.8;           // S to A yield
+//     (mass) MODEL_CONSTANT FloatType y_os_molar = 3; // 3 mol o2 per mol for
+//     glucose MODEL_CONSTANT FloatType k_o
 //         = 0.0001; // g/L: Anane et. al 2017 (Biochem. Eng. J) (g/g)
 //     MODEL_CONSTANT FloatType dl_max_ms
 //         = 8 * 2e-10; // m/s  https://doi.org/10.7554/eLife.67495;
@@ -160,13 +164,15 @@
 //   {
 //     constexpr auto local_adder = adder_dist;
 
-//     constexpr auto length_dist = MC::Distributions::TruncatedNormal<FloatType>(
+//     constexpr auto length_dist =
+//     MC::Distributions::TruncatedNormal<FloatType>(
 //         1.5e-6, 0.19e-6, l_min_m, l_max_m);
 
 //     constexpr auto mu_nu_dist = nu_max_kg_s * 0.1;
 //     constexpr auto nu_1_initial_dist
 //         = MC::Distributions::TruncatedNormal<float>(
-//             mu_nu_dist, mu_nu_dist / 7., 0., static_cast<double>(nu_max_kg_s));
+//             mu_nu_dist, mu_nu_dist / 7., 0.,
+//             static_cast<double>(nu_max_kg_s));
 
 //     auto gen = random_pool.get_state();
 //     const auto l0 = length_dist.draw(gen);
@@ -210,10 +216,12 @@
 //     const float nu_2_star = y_sx_2 * phi_s_residual_1_star; // gX/s
 
 //     GET_PROPERTY(Self::particle_var::nu_eff_1)
-//         = Kokkos::min(nu_1_star, GET_PROPERTY(Self::particle_var::nu1)); // gX/s
+//         = Kokkos::min(nu_1_star, GET_PROPERTY(Self::particle_var::nu1)); //
+//         gX/s
 
-//     const float s_1 = (1 / y_sx_1 * GET_PROPERTY(Self::particle_var::nu_eff_1));
-//     const float phi_s_residual_1 = Kokkos::max(phi_s - s_1, 0.F);
+//     const float s_1 = (1 / y_sx_1 *
+//     GET_PROPERTY(Self::particle_var::nu_eff_1)); const float phi_s_residual_1
+//     = Kokkos::max(phi_s - s_1, 0.F);
 //     GET_PROPERTY(Self::particle_var::nu_eff_2)
 //         = Kokkos::min(y_sx_2 * phi_s_residual_1,
 //                       GET_PROPERTY(Self::particle_var::nu2)); // gX/s
@@ -285,8 +293,9 @@
 //     GET_PROPERTY(Self::particle_var::l_cp)
 //         = new_current_length + local_adder.draw(gen);
 
-//     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu1) = nu_1_o;
-//     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu2) = nu_2_o;
+//     GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu1) =
+//     nu_1_o; GET_PROPERTY_FROM(idx2, child_buffer_arr,
+//     Self::particle_var::nu2) = nu_2_o;
 //     // if (nu_1_o != 0)
 //     //{
 //     // GET_PROPERTY_FROM(idx2, child_buffer_arr, Self::particle_var::nu1) =
@@ -317,11 +326,14 @@
 //   {
 //     auto access = contributions.access();
 //     access(0, position)
-//         += weight * GET_PROPERTY(Self::particle_var::contrib_phi_s); // NOLINT
+//         += weight * GET_PROPERTY(Self::particle_var::contrib_phi_s); //
+//         NOLINT
 //     access(1, position)
-//         += weight * GET_PROPERTY(Self::particle_var::contrib_phi_o2); // NOLINT
+//         += weight * GET_PROPERTY(Self::particle_var::contrib_phi_o2); //
+//         NOLINT
 //     access(2, position)
-//         += weight * GET_PROPERTY(Self::particle_var::contrib_phi_ac); // NOLINT
+//         += weight * GET_PROPERTY(Self::particle_var::contrib_phi_ac); //
+//         NOLINT
 //   }
 
 //   static_assert(HasExportProperties<TwoMeta>, "ee");

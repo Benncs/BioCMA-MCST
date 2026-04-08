@@ -127,8 +127,8 @@ namespace Models
            const std::size_t position_index,
            [[maybe_unused]] const MC::LocalConcentration& c)
     {
-      const FloatType s
-          = static_cast<FloatType>(Kokkos::max(0., GET_CONCENTRATION(0))); // Bounded
+      const FloatType s = static_cast<FloatType>(
+          Kokkos::max(0., GET_CONCENTRATION(0)));  // Bounded
       const FloatType mu = mu_max * s / (k_s + s); // Instantaneous mu from
                                                    // Monod
 

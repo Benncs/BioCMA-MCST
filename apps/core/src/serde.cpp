@@ -189,6 +189,13 @@ namespace SerDe
       std::cout << "SIMULATION loaded failed" << std::endl;
       return false;
     }
+    // TODO the should be useless because of checks inside the simulation
+    // constructor
+    if (!(*simulation)->checkScalar())
+    {
+      std::cout << "SIMULATION loaded failed" << std::endl;
+      return false;
+    }
 
     case_data.simulation = std::move(*simulation);
     std::vector<double> kla(

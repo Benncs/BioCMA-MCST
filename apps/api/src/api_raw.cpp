@@ -79,6 +79,7 @@ int
 set_output_position(FeedHandle fh, uint64_t output_position)
 {
   int rc = -1;
+
   if (fh != nullptr)
   {
     fh->output_position = output_position;
@@ -88,9 +89,9 @@ set_output_position(FeedHandle fh, uint64_t output_position)
 }
 
 int
-delete_constant_feed_descriptor(FeedHandle** fd)
+delete_constant_feed_descriptor(FeedHandle* fd)
 {
-  if (fd != nullptr)
+  if (fd != nullptr && *fd != nullptr)
   {
     delete *fd; // NOLINT
     *fd = nullptr;
@@ -382,21 +383,37 @@ set_feed_constant(Handle handle,
 {
   if (handle != nullptr)
   {
-    ApiResult res;
+    FeedHandle fh = new_constant_feed_descriptor(flow, position);
+    add_species(fh, concentration, species);
 
-    // TODO check condition if output_position is <0 or ==0 ?
-    const auto out_index = output_position < 0
-                               ? std::nullopt
-                               : std::make_optional(output_position);
+    if (output_position >= 0)
+    {
+      set_output_position(fh, output_position);
+    }
+    if (fed_batch != 0)
+    {
+      set_fedbatch(fh);
+    }
 
-    const auto phase = gas != 0 ? Phase::Gas : Phase::Liquid;
-    // Negates fed_batch because expect set_output wich is !fed_batch
+    set_feed_descriptor(handle, fh, gas);
 
-    const auto constant_feed = Simulation::Feed::FeedFactory::constant(
-        flow, concentration, species, position, out_index, fed_batch != 0);
-    res = handle->set_feed(constant_feed, phase);
+    delete_constant_feed_descriptor(&fh);
+    // ApiResult res;
 
-    return res ? 0 : -1;
+    // // TODO check condition if output_position is <0 or ==0 ?
+    // const auto out_index = output_position < 0
+    //                            ? std::nullopt
+    //                            : std::make_optional(output_position);
+
+    // const auto phase = gas != 0 ? Phase::Gas : Phase::Liquid;
+    // // Negates fed_batch because expect set_output wich is !fed_batch
+    // const bool set_output = !(fed_batch != 0);
+
+    // const auto constant_feed = Simulation::Feed::FeedFactory::constant(
+    //     flow, concentration, species, position, out_index, set_output);
+    // res = handle->set_feed(constant_feed, phase);
+
+    // return res ? 0 : -1;
   }
   return -1;
 }

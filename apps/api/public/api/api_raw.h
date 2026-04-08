@@ -40,7 +40,7 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT //In C we only need ptr type so
 
   int set_output_position(FeedHandle fh, uint64_t output_position);
 
-  int delete_constant_feed_descriptor(FeedHandle** fd);
+  int delete_constant_feed_descriptor(FeedHandle* fd);
 
   /*FFI Parameters*/
 

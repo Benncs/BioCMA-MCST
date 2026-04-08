@@ -6,6 +6,7 @@
 #include "Kokkos_Macros.hpp"
 #include "common/common.hpp"
 #include "common/traits.hpp"
+#include "mc/alias.hpp"
 #include "mc/macros.hpp"
 #include "models/utils.hpp"
 #include <mc/prng/prng_extension.hpp>
@@ -34,15 +35,17 @@ namespace Models
     {
       length = 0,
       l_max,
-      phi_s,
       __COUNT__
     };
 
     static constexpr std::size_t n_var
         = INDEX_FROM_ENUM(particle_var::__COUNT__);
 
+    static constexpr std::size_t n_c = 1;
+
     static constexpr std::string_view name = "fixed-length";
     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
+    using SelfContribs = MC::ParticlesContribs<Self::n_c, Self::FloatType>;
 
     MODEL_CONSTANT FloatType l_dot_max = 2e-6 / 3600.; // m
     MODEL_CONSTANT FloatType l_max_m = 2e-6;           // m
@@ -69,6 +72,7 @@ namespace Models
            FloatType d_t,
            std::size_t idx,
            const SelfParticle& arr,
+           const SelfContribs& arr_contribs,
            std::size_t position_index,
            const MC::LocalConcentration& c);
 
@@ -114,7 +118,7 @@ namespace Models
     random_pool.free_state(gen);
     GET_PROPERTY(particle_var::length) = linit;
     GET_PROPERTY(particle_var::l_max) = l_max_m;
-    GET_PROPERTY(particle_var::phi_s) = 0.;
+    // GET_PROPERTY(particle_var::phi_s) = 0.;
   }
 
   KOKKOS_INLINE_FUNCTION MC::Status
@@ -122,6 +126,7 @@ namespace Models
                       FloatType d_t,
                       std::size_t idx,
                       const SelfParticle& arr,
+                      const SelfContribs& arr_contribs,
                       const std::size_t position_index,
                       const MC::LocalConcentration& c)
   {
@@ -135,8 +140,7 @@ namespace Models
     // const FloatType d_length = d_t * ldot;
     // GET_PROPERTY(Self::particle_var::length) += d_length / (1.0 + d_t *
     // ldot);
-
-    GET_PROPERTY(Self::particle_var::phi_s) = -phi_s;
+    GET_CONTRIBS(0) = -phi_s;
     return check_div(GET_PROPERTY(Self::particle_var::length),
                      GET_PROPERTY(Self::particle_var::l_max));
   }
@@ -157,13 +161,6 @@ namespace Models
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::length)
         = new_current_length;
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = l_max_m;
-  }
-
-  inline MC::ContribIndexBounds
-  FixedLength::get_bounds()
-  {
-    int begin = INDEX_FROM_ENUM(Self::particle_var::phi_s);
-    return { .begin = begin, .end = begin + 1 };
   }
 
 } // namespace Models

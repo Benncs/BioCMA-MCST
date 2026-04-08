@@ -15,8 +15,8 @@
 //   template <FloatingPointType F>
 //   static F consteval get_phi_s_max(F density, F dl)
 //   {
-//     // dl and density must be same unit, dl*density -> mass and y is mass yield
-//     return (dl * density) * 0.5;
+//     // dl and density must be same unit, dl*density -> mass and y is mass
+//     yield return (dl * density) * 0.5;
 //   }
 //   struct SimpleModel
 //   {
@@ -34,9 +34,10 @@
 //       COUNT
 //     };
 
-//     static constexpr std::size_t n_var = INDEX_FROM_ENUM(particle_var::COUNT);
-//     static constexpr std::string_view name = "simple";
-//     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
+//     static constexpr std::size_t n_var =
+//     INDEX_FROM_ENUM(particle_var::COUNT); static constexpr std::string_view
+//     name = "simple"; using SelfParticle = MC::ParticlesModel<Self::n_var,
+//     Self::FloatType>;
 
 //     MODEL_CONSTANT FloatType l_max_m = 5e-6;   // m
 //     MODEL_CONSTANT FloatType l_c_m = 3e-6;     // m
@@ -88,7 +89,8 @@
 //     //   constexpr std::size_t ln_var = n_var - Uptake<SimpleModel>::n_var;
 //     //   constexpr auto _names = concat_arrays<Uptake<SimpleModel>::n_var,
 //     //   ln_var>(
-//     //       Uptake<SimpleModel>::names(), {"length", "age", "phi_s", "t_div"});
+//     //       Uptake<SimpleModel>::names(), {"length", "age", "phi_s",
+//     "t_div"});
 
 //     //   return _names;
 //     // }
@@ -111,11 +113,11 @@
 //         = MC::Distributions::TruncatedNormal<FloatType>(
 //             l_min_m, l_min_m / 5., l_min_m * 0.5, l_max_m);
 //     auto gen = random_pool.get_state();
-//     arr(idx, static_cast<int>(particle_var::length)) = l_distribution.draw(gen);
-//     GET_PROPERTY(SimpleModel::particle_var::t_div) = division_time_d.draw(gen);
-//     random_pool.free_state(gen);
-//     arr(idx, static_cast<int>(particle_var::age)) = 0;
-//     arr(idx, static_cast<int>(particle_var::phi_s)) = 0;
+//     arr(idx, static_cast<int>(particle_var::length)) =
+//     l_distribution.draw(gen); GET_PROPERTY(SimpleModel::particle_var::t_div)
+//     = division_time_d.draw(gen); random_pool.free_state(gen); arr(idx,
+//     static_cast<int>(particle_var::age)) = 0; arr(idx,
+//     static_cast<int>(particle_var::phi_s)) = 0;
 
 //     Uptake<UptakeDefault<typename Self::FloatType>, SimpleModel>::init(
 //         random_pool, idx, arr);
@@ -161,7 +163,8 @@
 //     buffer_arr(idx2, static_cast<int>(particle_var::age)) = 0;
 
 //     // auto gen = random_pool.get_state();
-//     //  GET_PROPERTY_FROM(idx2, buffer_arr, SimpleModel::particle_var::t_div) =
+//     //  GET_PROPERTY_FROM(idx2, buffer_arr, SimpleModel::particle_var::t_div)
+//     =
 //     //  division_time_d.draw(gen);
 //     //  GET_PROPERTY(SimpleModel::particle_var::t_div) =
 //     //  division_time_d.draw(gen); random_pool.free_state(gen);
@@ -179,7 +182,8 @@
 //   {
 //     auto access = contributions.access();
 //     access(position, 0)
-//         += -weight * GET_PROPERTY(SimpleModel::particle_var::phi_s); // NOLINT
+//         += -weight * GET_PROPERTY(SimpleModel::particle_var::phi_s); //
+//         NOLINT
 //   }
 
 // } // namespace Models

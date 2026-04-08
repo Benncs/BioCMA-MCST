@@ -26,8 +26,9 @@
 //       nu1,
 //       nu2,
 //       l_cp,
-//       nu_eff_1, // This is not itself a model property but stored to be exported
-//       nu_eff_2, // This is not itself a model property but stored to be exported
+//       nu_eff_1, // This is not itself a model property but stored to be
+//       exported nu_eff_2, // This is not itself a model property but stored to
+//       be exported
 //       // TODO FIND BETTER WAY TO STORE/GET CONTRIBUTIONS
 //       phi_pts,
 //       contrib_phi_s,
@@ -36,9 +37,10 @@
 //       COUNT
 //     };
 
-//     static constexpr std::size_t n_var = INDEX_FROM_ENUM(particle_var::COUNT);
-//     static constexpr std::string_view name = "two_mode_nb";
-//     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
+//     static constexpr std::size_t n_var =
+//     INDEX_FROM_ENUM(particle_var::COUNT); static constexpr std::string_view
+//     name = "two_mode_nb"; using SelfParticle =
+//     MC::ParticlesModel<Self::n_var, Self::FloatType>;
 
 //     // Constants BEGIN
 //     MODEL_CONSTANT FloatType MolarMassG
@@ -58,10 +60,12 @@
 //         = c_linear_density(static_cast<FloatType>(1000), d_m);
 
 //     MODEL_CONSTANT FloatType y_sx_1
-//         = 1. / 2.217737e+00;                       // Mode 1 S to X yield (mass)
-//     MODEL_CONSTANT FloatType y_sx_2 = y_sx_1 / 3.; // Mode 2 S to X yield (mass)
-//     MODEL_CONSTANT FloatType y_sa = 0.8;           // S to A yield (mass)
-//     MODEL_CONSTANT FloatType y_os_molar = 3; // 3 mol o2 per mol for glucose
+//         = 1. / 2.217737e+00;                       // Mode 1 S to X yield
+//         (mass)
+//     MODEL_CONSTANT FloatType y_sx_2 = y_sx_1 / 3.; // Mode 2 S to X yield
+//     (mass) MODEL_CONSTANT FloatType y_sa = 0.8;           // S to A yield
+//     (mass) MODEL_CONSTANT FloatType y_os_molar = 3; // 3 mol o2 per mol for
+//     glucose
 
 //     MODEL_CONSTANT FloatType tau_1 = 1000.; // s
 //     MODEL_CONSTANT FloatType tau_2 = 1000.; // s
@@ -129,7 +133,8 @@
 //     preinit()
 //     {
 //       Kokkos::printf("[Model]: PRENINIT:BEGIN\r\n");
-//       //      Kokkos::printf("[Model]: phi_max:%.12f\r\n", phi_pts_max * 1e12);
+//       //      Kokkos::printf("[Model]: phi_max:%.12f\r\n", phi_pts_max *
+//       1e12);
 //       //      Kokkos::printf("[Model]: PRENINIT:END\r\n");
 //     }
 
@@ -170,13 +175,15 @@
 //     // auto& v = init_uptake_cst;
 //     constexpr auto local_ac = adder_dist;
 
-//     constexpr auto length_dist = MC::Distributions::TruncatedNormal<FloatType>(
+//     constexpr auto length_dist =
+//     MC::Distributions::TruncatedNormal<FloatType>(
 //         l_c_m / 2, l_c_m / 5., l_min_m, l_max_m);
 
 //     constexpr auto mu_nu_dist = nu_max_kg_s * 0.1;
 //     constexpr auto nu_1_initial_dist
 //         = MC::Distributions::TruncatedNormal<FloatType>(
-//             mu_nu_dist, mu_nu_dist / 7., 0., static_cast<double>(nu_max_kg_s));
+//             mu_nu_dist, mu_nu_dist / 7., 0.,
+//             static_cast<double>(nu_max_kg_s));
 
 //     auto gen = random_pool.get_state();
 //     auto l = length_dist.draw(gen);
@@ -205,7 +212,8 @@
 //                                     concentrations,
 //                                     &GET_PROPERTY(Self::particle_var::phi_pts));
 
-//     const auto o = Kokkos::max(static_cast<FloatType>(concentrations(1)), 0.F);
+//     const auto o = Kokkos::max(static_cast<FloatType>(concentrations(1)),
+//     0.F);
 
 //     const auto phi_o2 = (phi_o2_max)*o / (o + k_o); // gO2/s
 
@@ -247,7 +255,8 @@
 //     GET_PROPERTY(Self::particle_var::contrib_phi_s) = -phi_s;
 //     GET_PROPERTY(Self::particle_var::contrib_phi_o2)
 //         = -1.F
-//           * ((1.F / y_sx_1 / MolarMassG * y_os_molar * MolarMassO2 * nu_eff_1)
+//           * ((1.F / y_sx_1 / MolarMassG * y_os_molar * MolarMassO2 *
+//           nu_eff_1)
 //              + 0.F * nu_eff_2);
 
 //     GET_PROPERTY(Self::particle_var::contrib_phi_ac)
@@ -337,11 +346,14 @@
 //   // {
 //   //   auto access = contributions.access();
 //   //   access(0, position) +=
-//   //       weight * GET_PROPERTY(Self::particle_var::contrib_phi_s); // NOLINT
+//   //       weight * GET_PROPERTY(Self::particle_var::contrib_phi_s); //
+//   NOLINT
 //   //   access(1, position) +=
-//   //       weight * GET_PROPERTY(Self::particle_var::contrib_phi_o2); // NOLINT
+//   //       weight * GET_PROPERTY(Self::particle_var::contrib_phi_o2); //
+//   NOLINT
 //   //   access(2, position) +=
-//   //       weight * GET_PROPERTY(Self::particle_var::contrib_phi_ac); // NOLINT
+//   //       weight * GET_PROPERTY(Self::particle_var::contrib_phi_ac); //
+//   NOLINT
 //   // }
 
 //   static_assert(HasExportProperties<TwoMetaNb>, "ee");

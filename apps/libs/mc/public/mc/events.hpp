@@ -1,9 +1,9 @@
 #ifndef __MC_EVENTS_HPP__
 #define __MC_EVENTS_HPP__
 
-#include <Kokkos_Core_fwd.hpp>
 #include "biocma_cst_config.hpp"
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Core_fwd.hpp>
 #include <common/execinfo.hpp>
 #include <cstddef>
 #include <span>
@@ -128,8 +128,6 @@ namespace MC
         incr<event>();
       }
     }
-
-   
 
     template <class Archive>
     void

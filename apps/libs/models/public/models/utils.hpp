@@ -11,10 +11,6 @@
 #include <mc/prng/prng.hpp>
 #include <tuple>
 
-
-
-
-
 /**
   @brief Models definition
  */
@@ -26,18 +22,17 @@ namespace Models
                                  const std::size_t position_index,
                                  const std::size_t species_index)
   {
-    return static_cast<T>(
-        Kokkos::max(static_cast<typename MC::LocalConcentration::non_const_value_type>(0),
-                    GET_CONCENTRATION(species_index)));
+    return static_cast<T>(Kokkos::max(
+        static_cast<typename MC::LocalConcentration::non_const_value_type>(0),
+        GET_CONCENTRATION(species_index)));
   }
 
-#define GET_CLAMPED_CONCENTRATION_CAST(__T__, __species_index__)                  \
+#define GET_CLAMPED_CONCENTRATION_CAST(__T__, __species_index__)               \
   get_clamped_concentration_cast<__T__>(c, position_index, __species_index__)
 
-#define GET_CLAMPED_CONCENTRATION(__species_index__)                         \
+#define GET_CLAMPED_CONCENTRATION(__species_index__)                           \
   get_clamped_concentration_cast<MC::LocalConcentration::const_value_type>(    \
       c, position_index, __species_index__)
-
 
   // template<FloatingPointType T>
   // struct partiton_t
@@ -46,20 +41,19 @@ namespace Models
   //   T b;
   // };
 
-
-  template<FloatingPointType T>
-  KOKKOS_INLINE_FUNCTION Kokkos::pair<T,T> g_partition(T a,T p)
+  template <FloatingPointType T>
+  KOKKOS_INLINE_FUNCTION Kokkos::pair<T, T>
+  g_partition(T a, T p)
   {
-    const auto a1 = a*p;
-    const auto a2 = (static_cast<T>(1)-p)*a;
-    return Kokkos::pair(a1,a2);
+    const auto a1 = a * p;
+    const auto a2 = (static_cast<T>(1) - p) * a;
+    return Kokkos::pair(a1, a2);
   }
 
-
-
   template <FloatingPointType F>
-  static F consteval
-  _get_phi_s_max(F density, F dl, F glucose_to_biomass_yield = 0.5)
+  static F consteval _get_phi_s_max(F density,
+                                    F dl,
+                                    F glucose_to_biomass_yield = 0.5)
   {
     // dl and density must be same unit, dl*density -> mass and y is mass yield
     return (dl * density) / glucose_to_biomass_yield;

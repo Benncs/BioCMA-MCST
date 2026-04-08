@@ -131,15 +131,12 @@ namespace Simulation::KernelInline
           events(std::move(_event)), probes(std::move(_probes))
     {
     }
-    static constexpr int PARTICLES_PER_TEAM = 512;
-
-
-
+    static constexpr int PARTICLES_PER_TEAM = 1024;
 
     bool
     do_contribs() const
     {
-      return particles.begin < particles.end;
+      return particles.contribs.extent(1) > 0;
     }
 
     void
@@ -148,7 +145,6 @@ namespace Simulation::KernelInline
       this->d_t = _d_t;
       this->particles = std::move(_particles);
     }
-    
 
     KOKKOS_INLINE_FUNCTION
     void
@@ -166,40 +162,37 @@ namespace Simulation::KernelInline
       // {
       //   return;
       // }
-      
+
       // particles.get_contributions(idx, contribs_scatter);
 
       const std::size_t p0 = team.league_rank() * PARTICLES_PER_TEAM;
 
-      Kokkos::parallel_for(
-          Kokkos::TeamThreadRange(team, PARTICLES_PER_TEAM),
-          [&](const int i)
-          {
-            const std::size_t p = p0 + i;
-            if (p >= particles.n_particles())
-            {
-              return;
-            }
+      Kokkos::parallel_for(Kokkos::TeamThreadRange(team, PARTICLES_PER_TEAM),
+                           [&](const int i)
+                           {
+                             const std::size_t p = p0 + i;
+                             if (p >= particles.n_particles())
+                             {
+                               return;
+                             }
 
-            if (particles.status(p) != MC::Status::Idle)
-            {
-              return;
-            }
-            // particles.get_contributions(p,
-            // contribs_scatter);
+                             if (particles.status(p) != MC::Status::Idle)
+                             {
+                               return;
+                             }
+                             // particles.get_contributions(p,
+                             // contribs_scatter);
 
-            const double weight = particles.get_weight(p);
-            const auto pos = particles.position(p);
-            auto access = contribs_scatter.access();
+                             const double weight = particles.get_weight(p);
+                             const auto pos = particles.position(p);
+                             auto access = contribs_scatter.access();
+                             auto& c = particles.contribs;
 
-            Kokkos::parallel_for(
-                Kokkos::ThreadVectorRange(team, particles.begin, particles.end),
-                [&](const int j)
-                {
-                  const int rel = j - particles.begin;
-                  access(rel, pos) += weight * particles.model(p, j);
-                });
-          });
+                             Kokkos::parallel_for(
+                                 Kokkos::ThreadVectorRange(team, 0, M::n_c),
+                                 [&](const int j)
+                                 { access(j, pos) += weight * c(p, j); });
+                           });
     }
 
     // KOKKOS_INLINE_FUNCTION
@@ -305,8 +298,13 @@ namespace Simulation::KernelInline
       particles.ages(idx, 1) += d_t;
       // const auto local_c = Kokkos::subview(
       //     concentrations, Kokkos::ALL, particles.position(idx));
-      const auto new_status
-          = M::update(random_pool, d_t, idx, particles.model,particles.position(idx), concentrations);
+      const auto new_status = M::update(random_pool,
+                                        d_t,
+                                        idx,
+                                        particles.model,
+                                        particles.contribs,
+                                        particles.position(idx),
+                                        concentrations);
 
       if (new_status == MC::Status::Division)
       {

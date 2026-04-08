@@ -76,7 +76,8 @@
 //         = MC::Distributions::TruncatedNormal<FloatType>(
 //             l_max_m, l_max_m / 10., l_max_m * 0.7, 1.3 * l_max_m);
 
-//     MODEL_CONSTANT auto l_dist = MC::Distributions::TruncatedNormal<FloatType>(
+//     MODEL_CONSTANT auto l_dist =
+//     MC::Distributions::TruncatedNormal<FloatType>(
 //         l_max_m * 0.75, l_max_m / 10., 0.7 * l_min_m, l_max_m * 1.3);
 
 //     MC::ContribIndexBounds static get_bounds();
@@ -176,7 +177,8 @@
 //     U[1] = mask_pa * Kokkos::min(D[1], -pa) + (1 - mask_pa) * 0.F;
 //     GET_PROPERTY(particle_var::a_e) += U[1];
 
-//     GET_PROPERTY(particle_var::length) += d_t * GET_PROPERTY(particle_var::a_e);
+//     GET_PROPERTY(particle_var::length) += d_t *
+//     GET_PROPERTY(particle_var::a_e);
 
 //     GET_PROPERTY(particle_var::a_e_s) = U[0];
 //     GET_PROPERTY(particle_var::a_e_a) = U[1];

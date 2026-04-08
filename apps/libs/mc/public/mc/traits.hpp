@@ -58,6 +58,7 @@ concept CommonModelType = requires(T model,
                                    const std::size_t idx2,
                                    const double weight,
                                    const T::SelfParticle& arr,
+                                   const T::SelfContribs& contribs_arr,
                                    const T::SelfParticle& buffer_arr,
                                    const MC::LocalConcentration& c,
                                    const std::size_t position,
@@ -67,13 +68,22 @@ concept CommonModelType = requires(T model,
   {
     T::n_var
   } -> std::convertible_to<std::size_t>; ///< A model should declare the number
-                                         ///< of internal variable
+
+  {
+    T::n_c
+  } -> std::convertible_to<std::size_t>; ///< A model should declare the number
+
+  ///< of internal variable
   typename T::FloatType; ///< Type used internally by model to declare internal
                          ///< floating point values
   typename T::SelfParticle; ///< Equivalent to MC::ParticlesModel<Self::n_var,
                             ///< Self::FloatType>
-  typename T::Self;         ///< Model typename
-  typename T::Config;       ///< Model typename
+
+  typename T::SelfContribs; ///< Equivalent to MC::ParticlesModel<Self::n_var,
+                            ///< Self::FloatType>
+
+  typename T::Self;   ///< Model typename
+  typename T::Config; ///< Model typename
 
   // Check if the model is configurable
   // requires(std::is_same_v<typename T::Config, std::nullopt_t> ?
@@ -96,7 +106,7 @@ concept CommonModelType = requires(T model,
   } -> std::same_as<double>; ///< Return the individual mass of particle
 
   {
-    T::update(random_pool, d_t, idx, arr,position, c)
+    T::update(random_pool, d_t, idx, arr, contribs_arr, position, c)
   } -> std::convertible_to<MC::Status>; ///< Update state of MC particle
 
   // {
@@ -104,7 +114,7 @@ concept CommonModelType = requires(T model,
   // } -> std::same_as<void>; ///< Get the individual contribution for the MC
   // particle
 
-  { T::get_bounds() } -> std::same_as<MC::ContribIndexBounds>;
+  // { T::get_bounds() } -> std::same_as<MC::ContribIndexBounds>;
 
   {
     T::division(random_pool, idx, idx2, arr, buffer_arr)

@@ -1,4 +1,5 @@
 
+# PWD=/home-local/casale/scratch_remote/deploy_biomc/BioCMA-MCST/
 PWD=$(shell pwd)
 
 TARGET ?= model        
@@ -10,7 +11,7 @@ CXX ?= c++
 SRC := $(SRC_BD)/$(TARGET).cpp
 OUT := $(BUILD_DIR)/lib$(TARGET).so  
 
-DEBUG_FLAGS := -g -O2 -DENABLE_KOKKOS_PROFILING -DDEBUG -DKOKKOS_ENABLE_DEBUG -ffast-math
+DEBUG_FLAGS := -g -O2 -DENABLE_KOKKOS_PROFILING -DDEBUG -DKOKKOS_ENABLE_DEBUG 
 RELEASE_FLAGS :=  -O3 -DNDEBUG 
 
 ADDITIONAL_FLAGS ?= ""
@@ -26,7 +27,8 @@ BIOMC_FLAGS := \
 
 
 ERROR_FLAGS := -Wall -Wextra -Wpedantic -Winvalid-pch -Wshadow \
-            -Wcast-align  -Werror
+            -Wcast-align  \
+            # -Werror
 
 FLAGS := \
 	$(DEBUG_FLAGS) \
