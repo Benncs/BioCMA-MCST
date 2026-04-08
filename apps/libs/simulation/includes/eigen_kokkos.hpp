@@ -62,13 +62,14 @@ using ColMajorKokkosScalarMatrix
 
 template <int EigenLayout, FloatingPointType float_type> struct EigenKokkosBase
 {
+  using float_t = float_type;
   using EigenMatrix = MatrixType<EigenLayout, float_type>;
   using HostView = KokkosScalarMatrix<HostSpace, EigenLayout, float_type>;
   using ComputeView
       = KokkosScalarMatrix<ComputeSpace,
                            EigenLayout,
                            float_type,
-                           Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+                           Kokkos::MemoryTraits<Kokkos::RandomAccess> >;
 
   HostView host;
   ComputeView compute;

@@ -1,4 +1,6 @@
+#include "Kokkos_CheckUsage.hpp"
 #include "eigen_kokkos.hpp"
+#include <algorithm>
 
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
@@ -173,7 +175,7 @@ namespace Simulation
     sources.eigen_data.noalias() += Eigen::Map<eigen_type>(
         const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
   }
-
+#include <algorithm>
   void
   ScalarSimulation::performStepGL(double d_t,
                                   const ColMajorMatrixtype<double>& mtr,
@@ -202,6 +204,34 @@ namespace Simulation
     c.noalias() = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
+    concentrations.update_host_to_compute();
+  }
+
+  void
+  ScalarSimulation::clearNegs()
+  {
+    auto s = concentrations.get_span();
+    using float_t = decltype(concentrations)::float_t;
+    constexpr float_t TOL = -1e-8;
+    using space = decltype(concentrations)::HostView::execution_space;
+    auto hv = concentrations.host;
+    Kokkos::parallel_for(
+        "clear_negs",
+        Kokkos::MDRangePolicy<
+            space,
+            Kokkos::Rank<2, Kokkos::Iterate::Left, Kokkos::Iterate::Left> >(
+            { 0, 0 }, { n_r, n_c }),
+        KOKKOS_LAMBDA(int i, int j) {
+          auto val = hv(i, j);
+          if (val < static_cast<float_t>(0) && val >= TOL)
+          {
+            hv(i, j) = static_cast<float_t>(0);
+          }
+        });
+
+    // std::replace_if(
+    //     s.begin(), s.end(), [](auto&& f) { return f > TOL && f < 0.; }, 0.);
+
     concentrations.update_host_to_compute();
   }
 

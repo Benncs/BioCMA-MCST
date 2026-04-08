@@ -121,6 +121,8 @@ namespace Simulation
 
       this->liquid_scalar->performStepGL(
           d_t, mtr, MassTransfer::Sign::LiquidToGas);
+
+      this->liquid_scalar->clearNegs();
     }
     else
     {

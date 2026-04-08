@@ -88,6 +88,8 @@ namespace Simulation
     void setVolumes(std::span<const double> volumes,
                     std::span<const double> inv_volumes);
 
+    void clearNegs();
+
   private:
     std::size_t n_r;
     std::size_t n_c;
