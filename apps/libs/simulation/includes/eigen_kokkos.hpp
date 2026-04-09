@@ -43,6 +43,21 @@ template <> struct KokkosLayoutMapper<Eigen::RowMajor>
   using type = Kokkos::LayoutRight;
 };
 
+template <typename kokkoslayout> struct EigenLayoutMapper
+{
+  static constexpr int layout = 0;
+};
+
+template <> struct EigenLayoutMapper<Kokkos::LayoutLeft>
+{
+  static constexpr int layout = Eigen::ColMajor;
+};
+
+template <> struct EigenLayoutMapper<Kokkos::LayoutRight>
+{
+  static constexpr int layout = Eigen::RowMajor;
+};
+
 template <typename ExecSpace,
           int EigenLayout,
           FloatingPointType ftype,
@@ -69,7 +84,7 @@ template <int EigenLayout, FloatingPointType float_type> struct EigenKokkosBase
       = KokkosScalarMatrix<ComputeSpace,
                            EigenLayout,
                            float_type,
-                           Kokkos::MemoryTraits<Kokkos::RandomAccess> >;
+                           Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
 
   HostView host;
   ComputeView compute;

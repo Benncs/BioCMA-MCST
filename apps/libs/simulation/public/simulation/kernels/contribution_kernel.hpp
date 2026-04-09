@@ -1,0 +1,122 @@
+#ifndef __CONTRIBUTION_KERNEL_HPP__
+#define __CONTRIBUTION_KERNEL_HPP__
+#include <mc/particles_container.hpp>
+#include <mc/traits.hpp>
+
+template <ModelType M> struct ContributionFunctor
+{
+  struct Tag0D
+  {
+  };
+  struct Tag3D
+  {
+  };
+
+  using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
+  using TeamMember = TeamPolicy::member_type;
+
+  using ScratchView
+      = Kokkos::View<float_t*,
+                     TeamPolicy::execution_space::scratch_memory_space>;
+  using float_t = float;
+
+  ContributionFunctor(std::size_t particle_per_team,
+                      MC::ContributionView contribution_scatter,
+                      MC::ParticlesContainer<M> particles)
+      : m_particle_per_team(particle_per_team),
+        m_contribution_scatter(std::move(contribution_scatter)),
+        m_particles(std::move(particles))
+  {
+  }
+
+  void
+  update(MC::ParticlesContainer<M> _particles)
+
+  {
+    this->m_particles = std::move(_particles);
+  }
+
+  std::size_t m_particle_per_team;
+
+  MC::ContributionView m_contribution_scatter;
+  MC::ParticlesContainer<M> m_particles;
+
+  KOKKOS_INLINE_FUNCTION
+  void
+  operator()(Tag0D _tag, const TeamMember& team) const
+  {
+    (void)_tag;
+    const std::size_t p0 = team.league_rank() * m_particle_per_team;
+
+    ScratchView scratch(team.team_scratch(0), M::n_c);
+
+    Kokkos::parallel_for(Kokkos::TeamThreadRange(team, M::n_c),
+                         [&](const std::size_t j)
+                         { scratch(j) = float_t{ 0 }; });
+
+    team.team_barrier();
+    const std::size_t n_particle = m_particles.n_particles();
+    const auto& status = m_particles.status;
+    const auto& contribs = m_particles.contribs;
+    Kokkos::parallel_for(Kokkos::TeamThreadRange(team, m_particle_per_team),
+                         [&](const std::size_t i)
+                         {
+                           const std::size_t p = p0 + i;
+                           if (p >= n_particle || status(p) != MC::Status::Idle)
+                           {
+                             return;
+                           }
+
+                           const double weight = m_particles.get_weight(p);
+
+                           for (std::size_t j = 0; j < M::n_c; ++j)
+                           {
+                             scratch(j) += weight * contribs(p, j);
+                           }
+                         });
+
+    team.team_barrier();
+
+    Kokkos::single(Kokkos::PerTeam(team),
+                   [&]()
+                   {
+                     auto access = m_contribution_scatter.access();
+                     for (std::size_t j = 0; j < M::n_c; ++j)
+                     {
+                       access(j, 0) += scratch(j);
+                     }
+                   });
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void
+  operator()(const Tag3D _tag, const TeamMember& team) const
+  {
+    (void)_tag;
+
+    const std::size_t p0 = team.league_rank() * m_particle_per_team;
+    const auto& c = m_particles.contribs;
+    const auto& status = m_particles.status;
+    const auto n_particle = m_particles.n_particles();
+    const auto& positions = m_particles.position;
+    Kokkos::parallel_for(Kokkos::TeamThreadRange(team, m_particle_per_team),
+                         [&](const std::size_t i)
+                         {
+                           const std::size_t p = p0 + i;
+                           if (p >= n_particle || status(p) != MC::Status::Idle)
+                           {
+                             return;
+                           }
+                           auto access = m_contribution_scatter.access();
+                           const double weight = m_particles.get_weight(p);
+                           const auto pos = positions(p);
+
+                           Kokkos::parallel_for(
+                               Kokkos::ThreadVectorRange(team, 0, M::n_c),
+                               [&](const int j)
+                               { access(j, pos) += weight * c(p, j); });
+                         });
+  }
+};
+
+#endif

@@ -152,11 +152,21 @@ namespace MC
   using ContributionView = decltype(Kokkos::Experimental::create_scatter_view(
       kernelContribution()));
 
+  // //
+  // using ContributionView = class Kokkos::Experimental::ScatterView<
+  //     float**,
+  //     Kokkos::LayoutLeft,
+  //     ComputeSpace,
+  //     Kokkos::Experimental::ScatterSum,
+  //     Kokkos::Experimental::ScatterNonDuplicated,
+  //     Kokkos::Experimental::ScatterAtomic>;
+
   using KernelConcentrationType
       = Kokkos::View<const double**,
                      Kokkos::LayoutLeft,
                      ComputeSpace,
                      Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
+
   using LocalConcentration = KernelConcentrationType;
   //   using LocalConcentration
   //       = Kokkos::Subview<KernelConcentrationType, int,

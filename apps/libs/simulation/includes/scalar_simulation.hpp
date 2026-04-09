@@ -1,6 +1,7 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
+#include "mc/alias.hpp"
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -103,6 +104,8 @@ namespace Simulation
     DiagonalType sink;
     EigenKokkos<double> concentrations;
     RowMajorEigenKokkos<double> sources;
+
+    // Kokkos::View<float**, ComputeSpace::array_layout, ComputeSpace> kc;
   };
 
   inline auto

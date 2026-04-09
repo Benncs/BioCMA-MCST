@@ -1,6 +1,9 @@
 #include "Kokkos_CheckUsage.hpp"
 #include "eigen_kokkos.hpp"
+#include <Kokkos_Assert.hpp>
 #include <algorithm>
+#include <mc/alias.hpp>
+#include <type_traits>
 
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
@@ -20,6 +23,34 @@
 #include <stdexcept>
 namespace
 {
+
+  template <typename ViewType1, typename ViewType2>
+  void
+  smrt_deep_copy(ViewType1 dst, ViewType2 src)
+  {
+    if (dst.extent(0) != src.extent(0) || dst.extent(1) != dst.extent(1))
+    {
+      throw std::runtime_error("Dimension mismatch");
+    }
+
+    if constexpr (std::is_same_v<typename ViewType1::array_layout,
+                                 typename ViewType2::array_layout>
+                  && std::is_same_v<typename ViewType1::non_const_value_type,
+                                    typename ViewType2::non_const_value_type>)
+    {
+      Kokkos::deep_copy(dst, src);
+    }
+    else
+    {
+      Kokkos::parallel_for(
+          "synchro_source",
+          Kokkos::MDRangePolicy<
+              typename ViewType1::execution_space,
+              Kokkos::Rank<2, Kokkos::Iterate::Left, Kokkos::Iterate::Left>>(
+              { 0, 0 }, { src.extent(0), src.extent(1) }),
+          KOKKOS_LAMBDA(int i, int j) { dst(i, j) = src(i, j); });
+    }
+  }
 
 #define UNROLL_CHECK(i, s)                                                     \
   if ((i) < (s))                                                               \
@@ -164,6 +195,8 @@ namespace Simulation
   [[nodiscard]] ColMajorKokkosScalarMatrix<double>
   ScalarSimulation::get_device_concentration() const
   {
+    // smrt_deep_copy(kc, concentrations.compute);
+    // return kc;
     return concentrations.compute;
   }
 
@@ -175,7 +208,6 @@ namespace Simulation
     sources.eigen_data.noalias() += Eigen::Map<eigen_type>(
         const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
   }
-#include <algorithm>
   void
   ScalarSimulation::performStepGL(double d_t,
                                   const ColMajorMatrixtype<double>& mtr,
@@ -219,7 +251,7 @@ namespace Simulation
         "clear_negs",
         Kokkos::MDRangePolicy<
             space,
-            Kokkos::Rank<2, Kokkos::Iterate::Left, Kokkos::Iterate::Left> >(
+            Kokkos::Rank<2, Kokkos::Iterate::Left, Kokkos::Iterate::Left>>(
             { 0, 0 }, { n_r, n_c }),
         KOKKOS_LAMBDA(int i, int j) {
           auto val = hv(i, j);

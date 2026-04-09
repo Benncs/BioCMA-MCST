@@ -869,6 +869,20 @@ namespace MC
   ParticlesContainer<M>::_sort(std::size_t n_c)
   {
     (void)n_c;
+
+    // PROFILE_SECTION("SORT")
+    // // const auto N = n_used_elements;
+    const int bin_size = 2048;
+
+    const auto sn
+        = Kokkos::subview(position, std::pair<int, int>(0, n_used_elements));
+
+    using ExecSpace = Kokkos::DefaultExecutionSpace;
+    using view_type = decltype(position);
+    auto binop = Kokkos::BinOp1D<view_type>(bin_size, 0, n_c);
+
+    auto sorter = Kokkos::BinSort<view_type, decltype(binop)>(
+        ExecSpace(), sn, binop, true);
   }
 
 } // namespace MC

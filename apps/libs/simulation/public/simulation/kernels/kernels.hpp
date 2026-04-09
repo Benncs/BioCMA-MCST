@@ -1,6 +1,7 @@
 #ifndef __SIMULATION_KERNELS_HPP__
 #define __SIMULATION_KERNELS_HPP__
 
+#include "simulation/kernels/contribution_kernel.hpp"
 #include <Kokkos_Core_fwd.hpp>
 #include <common/common.hpp>
 #include <common/kokkos_getpolicy.hpp>
@@ -32,14 +33,20 @@ namespace Simulation::KernelInline
     cycle_kernel_type cycle_kernel;
     move_kernel_type move_kernel;
 
+    ContributionFunctor<Model> contribution_kernel;
+
     CycleFunctors() = default;
+
+    bool enable_move;
+
+    static constexpr std::size_t PARTICLES_PER_TEAM = 1024;
 
     void
     update(const double d_t,
            MC::ParticlesContainer<Model> container,
            MC::DomainState<ComputeSpace>&& new_move)
     {
-      const bool enable_move = new_move.liquid_volume.size() > 1;
+      enable_move = new_move.liquid_volume.size() > 1;
       const bool enable_leave = new_move.leaving_flow.size() != 0;
 
       auto n_sample = enable_move ? 2 : 0;
@@ -53,6 +60,8 @@ namespace Simulation::KernelInline
       // 2. Manually update counter in update function (dirty way)
 
       cycle_kernel.update(d_t, container);
+
+      contribution_kernel.update(container);
 
       // TODO: Why need to update all views (where did we lost the refcount ? )
       move_kernel.update(move_space,
@@ -101,7 +110,9 @@ namespace Simulation::KernelInline
                       _event,
                       _probes,
                       container.ages,
-                      container.random)
+                      container.random),
+          contribution_kernel(10, _contribs_scatter, container),
+          enable_move(false)
     {
     }
 
@@ -111,11 +122,6 @@ namespace Simulation::KernelInline
 
       if (move_kernel.enable_move)
       {
-        // const auto _policy_move =
-        //     Common::get_policy<move_kernel_type, KernelInline::TagMove>(
-        //         move_kernel, n_particle, false);
-        // const auto _policy_move =
-        //     Common::get_policy<KernelInline::TagMove>(n_particle, false);
 
         const auto _policy_move = Kokkos::RangePolicy<KernelInline::TagMove>(
             move_space, 0, n_particle);
@@ -125,16 +131,8 @@ namespace Simulation::KernelInline
       if (move_kernel.enable_leave)
       {
 
-        // const auto _policy_leave =
-        //     Kokkos::TeamPolicy<ComputeSpace, KernelInline::TagLeave>(
-        //         256, Kokkos::AUTO);
-
-        // Kokkos ::parallel_reduce(
-        //     "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
-
         const auto _policy_leave = Kokkos::RangePolicy<KernelInline::TagLeave>(
             move_space, 0, n_particle);
-        // const auto _policy_move = Kokkos::TeamPolicy<TagLeave>(56, 256);
         Kokkos ::parallel_reduce(
             "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
       }
@@ -151,9 +149,6 @@ namespace Simulation::KernelInline
           cycle_kernel,
           KernelInline::CycleReducer<ComputeSpace>(cycle_reducer));
       Kokkos::fence(); // TODO needed ?
-
-      constexpr int PARTICLES_PER_TEAM = cycle_kernel_type::PARTICLES_PER_TEAM;
-      // const int league_size = Kokkos::ceil(n_particle / PARTICLES_PER_TEAM);
       const int league_size
           = (n_particle + PARTICLES_PER_TEAM - 1) / PARTICLES_PER_TEAM;
 
@@ -161,9 +156,24 @@ namespace Simulation::KernelInline
       {
         static_assert(ConstWeightModelType<Model>,
                       "ModelType:Constapply_weight()");
-        auto _policy2 = Kokkos::TeamPolicy<TagContribution>(
-            model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
-        Kokkos::parallel_for("cycle_model2", _policy2, cycle_kernel);
+
+        if (enable_move)
+        {
+
+          auto policy_contribs
+              = Kokkos::TeamPolicy<typename ContributionFunctor<Model>::Tag3D>(
+                  model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
+          Kokkos::parallel_for(
+              "cycle_model_contribs", policy_contribs, contribution_kernel);
+        }
+        else
+        {
+          auto policy_contribs
+              = Kokkos::TeamPolicy<typename ContributionFunctor<Model>::Tag0D>(
+                  model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
+          Kokkos::parallel_for(
+              "cycle_model_contribs_0d", policy_contribs, contribution_kernel);
+        }
       }
     }
   };

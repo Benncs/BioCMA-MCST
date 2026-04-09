@@ -30,6 +30,9 @@ namespace Simulation::KernelInline
   struct TagContribution
   {
   };
+  struct TagContribution0D
+  {
+  };
   struct TagCycle
   {
   };
@@ -131,7 +134,7 @@ namespace Simulation::KernelInline
           events(std::move(_event)), probes(std::move(_probes))
     {
     }
-    static constexpr int PARTICLES_PER_TEAM = 1024;
+    static constexpr std::size_t PARTICLES_PER_TEAM = 1024;
 
     bool
     do_contribs() const
@@ -145,121 +148,6 @@ namespace Simulation::KernelInline
       this->d_t = _d_t;
       this->particles = std::move(_particles);
     }
-
-    KOKKOS_INLINE_FUNCTION
-    void
-    operator()(const TagContribution _tag, const TeamMember& team) const
-    {
-      (void)_tag;
-      // std ::size_t idx = (team_handle.league_rank() *
-      // team_handle.team_size()) +
-      //                    team_handle.team_rank();
-      // if (idx >= (particles.n_particles()))
-      // {
-      //   return;
-      // }
-      // if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
-      // {
-      //   return;
-      // }
-
-      // particles.get_contributions(idx, contribs_scatter);
-
-      const std::size_t p0 = team.league_rank() * PARTICLES_PER_TEAM;
-
-      Kokkos::parallel_for(Kokkos::TeamThreadRange(team, PARTICLES_PER_TEAM),
-                           [&](const int i)
-                           {
-                             const std::size_t p = p0 + i;
-                             if (p >= particles.n_particles())
-                             {
-                               return;
-                             }
-
-                             if (particles.status(p) != MC::Status::Idle)
-                             {
-                               return;
-                             }
-                             // particles.get_contributions(p,
-                             // contribs_scatter);
-
-                             const double weight = particles.get_weight(p);
-                             const auto pos = particles.position(p);
-                             auto access = contribs_scatter.access();
-                             auto& c = particles.contribs;
-
-                             Kokkos::parallel_for(
-                                 Kokkos::ThreadVectorRange(team, 0, M::n_c),
-                                 [&](const int j)
-                                 { access(j, pos) += weight * c(p, j); });
-                           });
-    }
-
-    // KOKKOS_INLINE_FUNCTION
-    // void operator()(const TagContribution _tag, const std::size_t idx) const
-    // {
-    //   (void)_tag;
-    //   CHECK_STATUS_OR_RETURN(idx);
-
-    //   particles.get_contributions(idx, contribs_scatter);
-    // }
-
-    // KOKKOS_INLINE_FUNCTION void operator()(const TagCycle _tag,
-    //                                        const TeamMember& team_handle,
-    //                                        value_type& reduce_val) const
-    // {
-
-    //   (void)_tag;
-    //   (void)reduce_val.dead_total; // Counter not used currently because
-    //                                // there  is no cell mortality
-    //   // GET_INDEX(particles.n_particles());
-
-    //   std ::size_t start_idx =
-    //       (team_handle.league_rank() * team_handle.team_size());
-    //   std ::size_t idx = start_idx + team_handle.team_rank();
-    //   // if (particles.status(idx) != MC::Status::Idle) [[unlikely]]
-    //   // {
-    //   //   return;
-    //   // }
-    //   const std::size_t n_species = concentrations.extent(0);
-    //   Kokkos::View<double**, Kokkos::MemoryTraits<Kokkos::Unmanaged>>
-    //       shmem_view(
-    //           team_handle.team_shmem(), team_handle.team_size(), n_species);
-
-    //   Kokkos::parallel_for(
-    //       Kokkos::TeamThreadRange(team_handle, 0, team_handle.team_size()),
-    //       [&](int i)
-    //       {
-    //         std::size_t particle_idx = start_idx + i;
-    //         const auto position = particles.position(particle_idx);
-    //         for (int s = 0; s < n_species; ++s)
-    //         {
-    //           shmem_view(i, s) = concentrations(s, position);
-    //         }
-    //       });
-    //   // team_handle.team_barrier();
-    //   CHECK_STATUS_OR_RETURN(idx);
-    //   if (idx > particles.n_particles())
-    //   {
-    //     return;
-    //   }
-    //   particles.ages(idx, 1) += d_t;
-
-    //   auto local_c =
-    //       Kokkos::subview(shmem_view, team_handle.team_rank(), Kokkos::ALL);
-
-    //   if (M::update(random_pool, d_t, idx, particles.model, local_c) ==
-    //       MC::Status::Division)
-    //   {
-    //     if (!particles.handle_division(random_pool, idx))
-    //     {
-    //       reduce_val.waiting_allocation_particle += 1;
-    //       events.wrap_incr<MC::EventType::Overflow>();
-    //       Kokkos::printf("[KERNEL] Division Overflow\r\n");
-    //     }
-    //     events.wrap_incr<MC::EventType::NewParticle>();
-    //   };
-    // }
 
     KOKKOS_INLINE_FUNCTION void
     operator()(TagCycle _tag,
