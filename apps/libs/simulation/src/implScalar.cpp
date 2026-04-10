@@ -25,10 +25,14 @@ namespace
 {
 
   template <typename ViewType1, typename ViewType2>
+    requires(ViewType1::rank() == ViewType2::rank()
+             && std::is_convertible_v<typename ViewType2::non_const_value_type,
+                                      typename ViewType1::non_const_value_type>)
   void
-  smrt_deep_copy(ViewType1 dst, ViewType2 src)
+  smrt_deep_copy2d(ViewType1 dst, const ViewType2& src)
   {
-    if (dst.extent(0) != src.extent(0) || dst.extent(1) != dst.extent(1))
+
+    if (dst.extent(0) != src.extent(0) || dst.extent(1) != src.extent(1))
     {
       throw std::runtime_error("Dimension mismatch");
     }
@@ -42,13 +46,15 @@ namespace
     }
     else
     {
+      using exec_space = typename ViewType1::execution_space;
+      auto src_view = Kokkos::create_mirror_view_and_copy(exec_space(), src);
       Kokkos::parallel_for(
-          "synchro_source",
+          "smrt_deep_copy",
           Kokkos::MDRangePolicy<
               typename ViewType1::execution_space,
               Kokkos::Rank<2, Kokkos::Iterate::Left, Kokkos::Iterate::Left>>(
               { 0, 0 }, { src.extent(0), src.extent(1) }),
-          KOKKOS_LAMBDA(int i, int j) { dst(i, j) = src(i, j); });
+          KOKKOS_LAMBDA(int i, int j) { dst(i, j) = src_view(i, j); });
     }
   }
 
