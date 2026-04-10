@@ -85,7 +85,7 @@ namespace MC
 
     MC::ParticlePositions position;
     MC::ParticleStatus status;
-    ParticleWeigths weights;
+    ParticleWeigths<typename Model::FloatType> weights;
     ParticleAges ages;
     ParticleSamples random;
     // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
@@ -142,7 +142,7 @@ namespace MC
     /**
      * @brief Return the particle weight
      */
-    [[nodiscard]] KOKKOS_INLINE_FUNCTION double
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION Model::FloatType
     get_weight(std::size_t idx) const;
 
     // HOST
@@ -844,7 +844,7 @@ namespace MC
   }
 
   template <ModelType M>
-  [[nodiscard]] KOKKOS_INLINE_FUNCTION double
+  [[nodiscard]] KOKKOS_INLINE_FUNCTION M::FloatType
   ParticlesContainer<M>::get_weight(const std::size_t idx) const
   {
     if constexpr (ConstWeightModelType<M>)

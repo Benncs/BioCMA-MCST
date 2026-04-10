@@ -55,13 +55,20 @@ namespace MC
                      ComputeSpace,
                      Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>>;
 
+  //   template <uint64_t Nc, FloatingPointType F>
+  //   using ParticlesContribs = Kokkos::View<
+  //       F* [Nc],
+  //       ComputeSpace::array_layout,
+  //       ComputeSpace,
+  //       Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict
+  //                            | Kokkos::MemoryTraitsFlags::Aligned>>;
+
   template <uint64_t Nc, FloatingPointType F>
-  using ParticlesContribs = Kokkos::View<
-      F* [Nc],
-      ComputeSpace::array_layout,
-      ComputeSpace,
-      Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict
-                           | Kokkos::MemoryTraitsFlags::Aligned>>;
+  using ParticlesContribs
+      = Kokkos::View<F* [Nc],
+                     ComputeSpace::array_layout,
+                     ComputeSpace,
+                     Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>>;
 
   template <FloatingPointType F>
   using DynParticlesModel
@@ -135,7 +142,8 @@ namespace MC
 
   using ParticlePositions = Kokkos::View<uint64_t*, ComputeSpace>;
   using ParticleStatus = Kokkos::View<Status*, ComputeSpace>;
-  using ParticleWeigths = Kokkos::View<double*, ComputeSpace>;
+  template <FloatingPointType ftype>
+  using ParticleWeigths = Kokkos::View<ftype*, ComputeSpace>;
   using ParticleAges = ParticleAgesBase<ComputeSpace>;
 
   // using ParticleSamples = Kokkos::
