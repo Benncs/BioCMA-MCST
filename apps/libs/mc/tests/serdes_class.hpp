@@ -23,8 +23,10 @@ struct SerdeModel
   };
 
   static constexpr std::size_t n_var = INDEX_FROM_ENUM(particle_var::COUNT);
+  static constexpr std::size_t n_c = 1;
   static constexpr std::string_view name = "simple";
   using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
+  using SelfContribs = MC::ParticlesContribs<Self::n_c, Self::FloatType>;
 
   MODEL_CONSTANT FloatType a_i = 5e-6; // m
 
@@ -47,7 +49,10 @@ struct SerdeModel
   update([[maybe_unused]] const MC::pool_type& random_pool,
          [[maybe_unused]] FloatType d_t,
          [[maybe_unused]] std::size_t idx,
+
          [[maybe_unused]] const SelfParticle& arr,
+         [[maybe_unused]] const SelfContribs& ac,
+         [[maybe_unused]] const std::size_t& position,
          [[maybe_unused]] const MC::LocalConcentration& c)
   {
 
@@ -61,12 +66,6 @@ struct SerdeModel
            [[maybe_unused]] const SelfParticle& arr,
            [[maybe_unused]] const SelfParticle& buffer_arr)
   {
-  }
-
-  static MC::ContribIndexBounds
-  get_bounds()
-  {
-    return { 0, 0 };
   }
 };
 static_assert(ModelType<SerdeModel>, "Check non serde model");

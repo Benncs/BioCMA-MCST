@@ -1,5 +1,3 @@
-#include "Kokkos_Macros.hpp"
-#include "serdes_class.hpp"
 #include <Kokkos_Core.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/xml.hpp>
@@ -17,6 +15,7 @@
 #include <iostream>
 #include <mc/particles_container.hpp>
 #include <mc/prng/prng.hpp>
+#include <serdes_class.hpp>
 #include <sstream>
 
 static constexpr std::size_t p_size = 100;

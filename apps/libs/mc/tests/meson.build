@@ -27,6 +27,10 @@ endif
 test_rng_2 = executable('test_rng_2', 'test_rng_2.cpp', dependencies: [mc_dependency], cpp_args: arg)
 test('test_rng_2', test_rng_2, timeout: -1)
 
+test_team_strategy = executable('test_team_strategy', 'test_team_strategy.cpp', dependencies: [mc_dependency], cpp_args: arg)
+test('test_team_strategy', test_team_strategy, timeout: -1)
+
+
 # if not ci_execution
 # t2 = executable('test_rng_long', 'test_rng_long.cpp',dependencies:[mc_dependency])
 # test('test_rng_long',t2,timeout: -1)
