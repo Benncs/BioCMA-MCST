@@ -1,5 +1,6 @@
 #ifndef __CONTRIBUTION_KERNEL_HPP__
 #define __CONTRIBUTION_KERNEL_HPP__
+#include <Kokkos_Core.hpp>
 #include <mc/particles_container.hpp>
 #include <mc/traits.hpp>
 
@@ -29,11 +30,14 @@ template <ModelType M> struct ContributionFunctor
   {
   }
 
+  size_t np{};
+
   void
   update(MC::ParticlesContainer<M> _particles)
 
   {
     this->m_particles = std::move(_particles);
+    np = m_particles.n_particles();
   }
 
   std::size_t m_particle_per_team;
@@ -47,40 +51,44 @@ template <ModelType M> struct ContributionFunctor
   {
     (void)_tag;
     const std::size_t p0 = team.league_rank() * m_particle_per_team;
+    const std::size_t n_particle = m_particles.n_particles();
+    const auto& status = m_particles.status;
+    const auto& contribs = m_particles.contribs;
+    static const auto n_c = M::n_c;
 
-    ScratchView scratch(team.team_scratch(0), M::n_c);
+    ScratchView scratch(team.team_scratch(0), n_c);
 
-    Kokkos::parallel_for(Kokkos::TeamThreadRange(team, M::n_c),
+    Kokkos::parallel_for(Kokkos::TeamVectorRange(team, n_c),
                          [&](const std::size_t j)
                          { scratch(j) = float_t{ 0 }; });
 
     team.team_barrier();
-    const std::size_t n_particle = m_particles.n_particles();
-    const auto& status = m_particles.status;
-    const auto& contribs = m_particles.contribs;
-    Kokkos::parallel_for(Kokkos::TeamThreadRange(team, m_particle_per_team),
-                         [&](const std::size_t i)
-                         {
-                           const std::size_t p = p0 + i;
-                           if (p >= n_particle || status(p) != MC::Status::Idle)
-                           {
-                             return;
-                           }
 
-                           const double weight = m_particles.get_weight(p);
-
-                           for (std::size_t j = 0; j < M::n_c; ++j)
-                           {
-                             scratch(j) += weight * contribs(p, j);
-                           }
-                         });
+    Kokkos::parallel_for(
+        Kokkos::TeamThreadRange(team, m_particle_per_team),
+        [&](const std::size_t relative_index)
+        {
+          const std::size_t flatten_index = p0 + relative_index;
+          if (flatten_index >= n_particle
+              || status(flatten_index) != MC::Status::Idle)
+          {
+            return;
+          }
+          const double weight = m_particles.get_weight(flatten_index);
+          for (std::size_t j = 0; j < n_c; ++j)
+          {
+            //  scratch(j) += weight * contribs(p, j);
+            Kokkos::atomic_add(&scratch(j),
+                               weight * contribs(flatten_index, j));
+          }
+        });
 
     team.team_barrier();
-
+    const auto& cs = m_contribution_scatter;
     Kokkos::single(Kokkos::PerTeam(team),
-                   [&]()
+                   [=]()
                    {
-                     auto access = m_contribution_scatter.access();
+                     auto access = cs.access();
                      for (std::size_t j = 0; j < M::n_c; ++j)
                      {
                        access(j, 0) += scratch(j);

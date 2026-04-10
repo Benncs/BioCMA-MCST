@@ -69,6 +69,7 @@ concept CommonModelType = requires(T model,
     T::n_var
   } -> std::convertible_to<std::size_t>; ///< A model should declare the number
 
+  // FIXME doesnt work with n_c==0
   {
     T::n_c
   } -> std::convertible_to<std::size_t>; ///< A model should declare the number
@@ -76,6 +77,7 @@ concept CommonModelType = requires(T model,
   ///< of internal variable
   typename T::FloatType; ///< Type used internally by model to declare internal
                          ///< floating point values
+
   typename T::SelfParticle; ///< Equivalent to MC::ParticlesModel<Self::n_var,
                             ///< Self::FloatType>
 
@@ -84,12 +86,6 @@ concept CommonModelType = requires(T model,
 
   typename T::Self;   ///< Model typename
   typename T::Config; ///< Model typename
-
-  // Check if the model is configurable
-  // requires(std::is_same_v<typename T::Config, std::nullopt_t> ?
-  // NonConfigurableInit<T>
-  //                                                             :
-  //                                                             ConfigurableInit<T>);
 
   requires ConfigurableInit<T>
                || (std::is_same_v<typename T::Config, NonConfigType>

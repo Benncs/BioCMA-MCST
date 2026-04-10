@@ -106,9 +106,15 @@ namespace MC
      * ages(i,0) -> hydraulic time (set to 0 when leave reactor)
      * ages(i,1) -> time since division (set to 0 when divide)
      **/
+    // template <typename Exec>
+    // using ParticleAgesBase = Kokkos::
+    //     View<double* [2], typename Exec::array_layout, Exec>; // NOLINT
+
+    // Force layout left because iteration on age(i,0)->age(i,1) is never done
+    // in compute kernel
     template <typename Exec>
-    using ParticleAgesBase = Kokkos::
-        View<double* [2], typename Exec::array_layout, Exec>; // NOLINT
+    using ParticleAgesBase
+        = Kokkos::View<float* [2], Kokkos::LayoutLeft, Exec>; // NOLINT
   } // namespace
 
   enum class Status : char
