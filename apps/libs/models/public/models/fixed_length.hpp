@@ -130,19 +130,17 @@ namespace Models
                       const std::size_t position_index,
                       const MC::LocalConcentration& c)
   {
+    auto& l = GET_PROPERTY(Self::particle_var::length);
+    const auto l_max = GET_PROPERTY(Self::particle_var::l_max);
     const auto s = static_cast<FloatType>(GET_CONCENTRATION(0));
+    auto& c_phi_s = GET_CONTRIBS(0);
+
     const FloatType g = s / (k + s);
     const FloatType phi_s = phi_s_max * g;
     const FloatType ldot = l_dot_max * g;
-    GET_PROPERTY(Self::particle_var::length) += d_t * ldot;
-    //
-    // const FloatType ldot = l_dot_max * g;
-    // const FloatType d_length = d_t * ldot;
-    // GET_PROPERTY(Self::particle_var::length) += d_length / (1.0 + d_t *
-    // ldot);
-    GET_CONTRIBS(0) = -phi_s;
-    return check_div(GET_PROPERTY(Self::particle_var::length),
-                     GET_PROPERTY(Self::particle_var::l_max));
+    l += d_t * ldot;
+    c_phi_s = -phi_s;
+    return check_div(l, l_max);
   }
 
   KOKKOS_INLINE_FUNCTION void
@@ -152,6 +150,7 @@ namespace Models
                         const SelfParticle& arr,
                         const SelfParticle& buffer_arr)
   {
+
     const FloatType new_current_length
         = GET_PROPERTY(particle_var::length) / 2.F;
 

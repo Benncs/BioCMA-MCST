@@ -174,43 +174,41 @@ namespace Simulation::KernelInline
       const auto& status = particles.status;
       const auto& ages = particles.ages;
 
-      // Try to use TeamVector to maximise SIMD
-      // To maximise SIMD we need to
-      // remove branching:
-      //- if particle is non idle -> particle is exit and
-      // will be reset
-      //- if p>n_particle should not be a problem because
-      // len(particle)>n_particle because of allocation
-      //
-      // Kokkos::parallel_for(Kokkos::TeamVectorRange(team, count),
-      //                      [=](std::size_t relative_index)
-      //                      {
-      //                        const std::size_t flatten_index
-      //                            = p0 + relative_index;
-      //                        //  if (p >= n_particle
-      //                        //      || status(p) != MC::Status::Idle)
-      //                        //  {
-      //                        //    return;
-      //                        //  }
-      //                        ages(flatten_index, 1) += _d_t;
-      //                      });
+      const auto upper_bound
+          = ((p0 + count) >= n_particle) ? n_particle - p0 : count;
+      KOKKOS_ASSERT(upper_bound > 0 && upper_bound < n_particle);
 
       value_type local;
       Kokkos::parallel_reduce(
-          Kokkos::TeamThreadRange(team, count),
+          Kokkos::TeamThreadRange(team, 0, upper_bound),
           [&](std::size_t relative_index, value_type& lv)
           {
             const std::size_t flatten_index = p0 + relative_index;
-            if (flatten_index >= n_particle
-                || status(flatten_index) != MC::Status::Idle)
-            {
-              return;
-            }
-            ages(flatten_index, 1) += _d_t;
+            const bool active = status(flatten_index) == MC::Status::Idle;
 
-            exec_per_particle(flatten_index, lv);
+            if (active)
+            {
+              ages(flatten_index, 1) += _d_t;
+              exec_per_particle(flatten_index, lv);
+            }
           },
           local);
+      // Kokkos::parallel_reduce(
+      //     Kokkos::TeamThreadRange(team, count),
+      //     [&](std::size_t relative_index, value_type& lv)
+      //     {
+      //       const std::size_t flatten_index = p0 + relative_index;
+      //       const bool active = flatten_index < n_particle
+      //                           && status(flatten_index) == MC::Status::Idle;
+
+      //       if (active)
+      //       {
+      //         ages(flatten_index, 1) += _d_t;
+
+      //         exec_per_particle(flatten_index, lv);
+      //       }
+      //     },
+      //     local);
       team.team_barrier();
       reduce_val += local;
     }
@@ -230,9 +228,7 @@ namespace Simulation::KernelInline
     exec_per_particle(const std::size_t idx, value_type& reduce_val) const
     {
       using mem_space = ComputeSpace::memory_space;
-      // particles.ages(idx, 1) += d_t;
-      // const auto local_c = Kokkos::subview(
-      //     concentrations, Kokkos::ALL, particles.position(idx));
+
       const auto new_status = M::update(random_pool,
                                         d_t,
                                         idx,
