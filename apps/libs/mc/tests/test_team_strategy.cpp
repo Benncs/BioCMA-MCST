@@ -58,7 +58,7 @@ template <typename exec_space> struct f_assert
     const auto npt = m_n_per_team;
     const std::size_t p0 = team.league_rank() * npt;
     const auto _ntot = n_tot;
-    std::size_t local_val = 0;
+    std::size_t local = 0;
     Kokkos::parallel_reduce(
         Kokkos::TeamThreadRange(team, npt),
         [=](int i, std::size_t& lv)
@@ -70,8 +70,8 @@ template <typename exec_space> struct f_assert
           }
           lv += 1;
         },
-        local_val);
-    reduce_val += local_val;
+        local);
+    Kokkos::single(Kokkos::PerTeam(team), [&]() { reduce_val += local; });
   }
 
   KOKKOS_INLINE_FUNCTION
@@ -82,8 +82,7 @@ template <typename exec_space> struct f_assert
     const auto npt = m_n_per_team;
     const std::size_t p0 = team.league_rank() * npt;
     const auto _ntot = n_tot;
-    std::size_t local_val = 0;
-
+    std::size_t local = 0;
     Kokkos::parallel_reduce(
         Kokkos::TeamVectorRange(team, npt),
         [=](int i, std::size_t& lv)
@@ -95,8 +94,9 @@ template <typename exec_space> struct f_assert
           }
           lv += 1;
         },
-        local_val);
-    reduce_val += local_val;
+        local);
+
+    Kokkos::single(Kokkos::PerTeam(team), [&]() { reduce_val += local; });
   }
 
   KOKKOS_INLINE_FUNCTION
@@ -107,7 +107,7 @@ template <typename exec_space> struct f_assert
     const auto npt = m_n_per_team;
     const std::size_t p0 = team.league_rank() * npt;
     const auto _ntot = n_tot;
-    std::size_t local_val = 0;
+
     Kokkos::parallel_for(Kokkos::TeamVectorRange(team, npt),
                          [=](int i)
                          {
@@ -117,6 +117,7 @@ template <typename exec_space> struct f_assert
                              return;
                            }
                          });
+    std::size_t local = 0;
     Kokkos::parallel_reduce(
         Kokkos::TeamThreadRange(team, npt),
         [=](int i, std::size_t& lv)
@@ -128,8 +129,8 @@ template <typename exec_space> struct f_assert
           }
           lv += 1;
         },
-        local_val);
-    reduce_val += local_val;
+        local);
+    Kokkos::single(Kokkos::PerTeam(team), [&]() { reduce_val += local; });
   }
 };
 

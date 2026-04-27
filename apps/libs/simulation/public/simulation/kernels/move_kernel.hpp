@@ -1,14 +1,14 @@
 #ifndef __SIMULATION_MOVE_KERNEL_HPP__
 #define __SIMULATION_MOVE_KERNEL_HPP__
 
-#include "Kokkos_Macros.hpp"
-#include "common/common.hpp"
+#include "Kokkos_Core_fwd.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
 #include <Kokkos_Random.hpp>
 #include <biocma_cst_config.hpp>
 #include <cassert>
+#include <common/common.hpp>
 #include <mc/alias.hpp>
 #include <mc/domain.hpp>
 #include <mc/events.hpp>
@@ -141,6 +141,8 @@ namespace Simulation::KernelInline
 
   struct MoveFunctor
   {
+    using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
+    using TeamMember = TeamPolicy::member_type;
     MoveFunctor() = default;
     MoveFunctor(MC::ParticlePositions p,
                 MC::ParticleStatus _status,
@@ -179,8 +181,10 @@ namespace Simulation::KernelInline
           move(std::move(m)), random_pool(_random_pool), // NOLINT
           status(std::move(_status)), events(std::move(_events)),
           probes(std::move(_probes)), ages(std::move(_ages)),
-          random(std::move(_random)), enable_move(b_move),
-          enable_leave(b_leave) {};
+          random(std::move(_random)), enable_move(b_move), enable_leave(b_leave)
+    {
+      m_p_team_leave = 1024;
+    };
 
     void
     update(const ComputeSpace& ex,
@@ -218,65 +222,221 @@ namespace Simulation::KernelInline
       // Kokkos::fill_random(ex, random, random_pool, 0., 1.);
       constexpr std::size_t CHUNK_SIZE = 128;
 
-      fill_random<MC::ComputeSpace,
-                  MC::ParticleSamples,
-                  MC::pool_type,
-                  int64_t,
-                  CHUNK_SIZE>(ex, random, random_pool, 0., 1.);
-    }
-
-    // KOKKOS_INLINE_FUNCTION void
-    // operator()(
-    //     TagMove /*tag*/,
-    //     const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle)
-    //     const
-    // {
-    // }
-
-    KOKKOS_INLINE_FUNCTION void
-    operator()(
-        TagMove /*tag*/,
-        const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle) const
-    {
-      GET_INDEX(n_particles);
-      if (status(idx) != MC::Status::Idle) [[unlikely]]
-      {
-        return;
-      }
-
-      handle_move(idx);
+      // fill_random<MC::ComputeSpace,
+      //             MC::ParticleSamples,
+      //             MC::pool_type,
+      //             int64_t,
+      //             CHUNK_SIZE>(ex, random, random_pool, 0., 1.);
     }
 
     KOKKOS_INLINE_FUNCTION void
-    operator()(TagMove /*tag*/, const std::size_t& idx) const
+    operator()(TagMove /*tag*/,
+               const Kokkos::TeamPolicy<ComputeSpace>::member_type& team) const
     {
+      const std::size_t count = m_p_team_leave;
+      const std::size_t p0 = team.league_rank() * count;
+      const std::size_t n_particle = n_particles;
 
-      if (status(idx) != MC::Status::Idle) [[unlikely]]
-      {
-        return;
-      }
+      const auto upper_bound
+          = ((p0 + count) >= n_particle) ? n_particle - p0 : count;
+      KOKKOS_ASSERT(upper_bound > 0 && upper_bound < n_particle);
+      const auto& rp = random_pool;
+      // std::size_t N = count * 2;
 
-      handle_move(idx);
+      // std::size_t p = team.team_size();
+      // std::size_t m = (N + p - 1) / p;
+
+      // using ScratchSpace
+      //     = Kokkos::TeamPolicy<>::execution_space::scratch_memory_space;
+      // using ScratchView = Kokkos::View<float*, ScratchSpace>;
+
+      // ScratchView rng(team.team_scratch(0), N);
+      // const auto& rp = random_pool;
+
+      // Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, p),
+      //                      [&rp, &rng, m, p, N](const std::size_t tid)
+      //                      {
+      //                        auto gen = rp.get_state();
+
+      //                        for (std::size_t k = 0; k < m; ++k)
+      //                        {
+      //                          const std::size_t i = tid + k * p;
+
+      //                          if (i >= N)
+      //                          {
+      //                            break;
+      //                          }
+
+      //                          rng(i) = gen.frand(0., 1.);
+      //                        }
+
+      //                        rp.free_state(gen);
+      //                      });
+      std::size_t N = count * 2;
+
+      // rng is actually a flat m*p array
+      std::size_t p = team.team_size();
+      std::size_t m = (N + p - 1) / p;
+
+      using ScratchSpace
+          = Kokkos::TeamPolicy<>::execution_space::scratch_memory_space;
+      using ScratchView = Kokkos::View<float*, ScratchSpace>;
+
+      ScratchView rng(team.team_scratch(0), N);
+
+      // Use "tiling" to minimize contention when aquired_state
+      // State is aquired m times instead of N, it is supposed to reduce
+      // contention
+      Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, m),
+                           [&rp, &rng, p, N](const std::size_t idx)
+                           {
+                             // Ok to use here, get_state should be called in
+                             // each thread
+                             auto gen = rp.get_state();
+
+                             const std::size_t base = idx * p;
+                             // current thread iteration p times with the same
+                             // state
+                             for (std::size_t k = 0; k < p; ++k)
+                             {
+                               const std::size_t i = base + k;
+                               if (i >= N)
+                               {
+                                 break;
+                               }
+
+                               rng(i) = gen.frand(0., 1.);
+                             }
+
+                             rp.free_state(gen);
+                           });
+      team.team_barrier();
+
+      // We can use flat array index here ordering of random doesnt matter
+      Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, upper_bound),
+                           [&](const std::size_t idx)
+                           {
+                             const auto flat_index = p0 + idx;
+                             const std::size_t base = idx * 2;
+                             KOKKOS_ASSERT(base + 1 < N);
+                             const auto rng1 = rng(base);
+                             const auto rng2 = rng(base + 1);
+                             handle_move(flat_index, rng1, rng2);
+                           });
+
+      // using ScratchSpace = TeamPolicy::execution_space::scratch_memory_space;
+      // using ScratchView = Kokkos::View<float* [2], ScratchSpace>;
+      // const auto rng = ScratchView(team.team_scratch(0), upper_bound, 2);
+      // Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, upper_bound),
+      //                      [&](const std::size_t idx)
+      //                      {
+      //                        auto gen = random_pool.get_state();
+      //                        const auto rng1 = gen.frand(0., 1.);
+      //                        const auto rng2 = gen.frand(0., 1.);
+      //                        random_pool.free_state(gen);
+      //                        rng(idx, 0) = rng1;
+      //                        rng(idx, 1) = rng2;
+      //                      });
+      // team.team_barrier();
+
+      // Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, upper_bound),
+      //                      [&](const std::size_t idx)
+      //                      {
+      //                        const auto flat_index = p0 + idx;
+      //                        //  auto gen = random_pool.get_state();
+      //                        //  const auto rng1 = gen.frand(0., 1.);
+      //                        //  const auto rng2 = gen.frand(0., 1.);
+      //                        //  random_pool.free_state(gen);
+
+      //                        handle_move(flat_index, rng(idx, 0), rng(idx,
+      //                        1));
+      //                      });
+      // handle_move(idx);
     }
 
     // KOKKOS_INLINE_FUNCTION void
-    // operator()(TagLeave _tag,
-    //            const Kokkos::TeamPolicy<ComputeSpace>::member_type& team,
-    //            std::size_t& local_dead_count) const
+    // operator()(TagMove /*tag*/, const std::size_t& idx) const
     // {
-    //   const auto work_stride = team.team_size() * team.league_size();
-    //   const auto work_end = n_particles;
 
-    //   std::size_t iwork =
-    //       team.league_rank() * team.team_size() + team.team_rank();
-
-    //   for (; iwork < work_end; iwork += work_stride)
+    //   if (status(idx) != MC::Status::Idle) [[unlikely]]
     //   {
-    //     ages(iwork, 0) += d_t;
-    //     handle_exit(iwork, local_dead_count);
+    //     return;
     //   }
+
+    //   handle_move(idx);
     // }
-    //
+
+    KOKKOS_INLINE_FUNCTION void
+    operator()(TagLeave _tag,
+               const TeamMember& team,
+               std::size_t& local_dead_count) const
+    {
+      (void)_tag;
+      const std::size_t count = m_p_team_leave;
+      const std::size_t p0 = team.league_rank() * count;
+      const std::size_t n_particle = n_particles;
+      const auto _d_t = static_cast<float>(d_t);
+
+      const auto upper_bound
+          = ((p0 + count) >= n_particle) ? n_particle - p0 : count;
+      KOKKOS_ASSERT(upper_bound > 0 && upper_bound < n_particle);
+
+      const std::size_t n_flow = move.leaving_flow.extent(0);
+
+      using ScratchSpace = TeamPolicy::execution_space::scratch_memory_space;
+      using ScratchView = Kokkos::View<MC::LeavingFlow*, ScratchSpace>;
+      const auto leaving_flow = ScratchView(team.team_scratch(0), n_flow);
+
+      // Kokkos::parallel_for(Kokkos::TeamVectorRange(team, n_flow),
+      //                      [&](const std::size_t j)
+      //                      { leaving_flow(j) = move.leaving_flow(j); });
+
+      Kokkos::single(Kokkos::PerTeam(team),
+                     [&]()
+                     {
+                       for (std::size_t j = 0; j < n_flow; ++j)
+                       {
+                         leaving_flow(j) = move.leaving_flow(j);
+                       }
+                     });
+
+      team.team_barrier();
+
+      std::size_t t_local = 0;
+      Kokkos::parallel_reduce(
+          Kokkos::TeamThreadRange(team, 0, upper_bound),
+          [&](const std::size_t relative_index,
+              std::size_t& thread_local_dead_count)
+          {
+            const std::size_t flatten_index = p0 + relative_index;
+            if (status(flatten_index) == MC::Status::Idle)
+            {
+              ages(flatten_index, 0) += _d_t;
+              handle_exit<ScratchSpace>(
+                  flatten_index, leaving_flow, thread_local_dead_count);
+            }
+          },
+          t_local);
+
+      team.team_barrier();
+
+      Kokkos::single(Kokkos::PerTeam(team),
+                     [&]()
+                     {
+                       Kokkos::single(Kokkos::PerThread(team),
+                                      [&]() { local_dead_count += t_local; });
+                     });
+      // Kokkos::single(Kokkos::PerTeam(team),
+      //                [&]()
+      //                {
+      //                  Kokkos::single(Kokkos::PerThread(team),
+      //                                 [&]() {
+      //                                 local_dead_count
+      //                                 += t_local;
+      //                                 });
+      //                });
+    }
+
     KOKKOS_INLINE_FUNCTION void
     operator()([[maybe_unused]] TagLeave _tag,
                const std::size_t& idx,
@@ -288,7 +448,7 @@ namespace Simulation::KernelInline
       }
 
       ages(idx, 0) += d_t;
-      handle_exit(idx, move.liquid_volume, local_dead_count);
+      handle_exit(idx, move.leaving_flow, local_dead_count);
     }
 
     // KOKKOS_INLINE_FUNCTION void
@@ -323,11 +483,11 @@ namespace Simulation::KernelInline
     }
 
     KOKKOS_FUNCTION void
-    handle_move(const std::size_t idx) const
+    handle_move(const std::size_t idx, const float rng1, const float rng2) const
     {
 
-      const auto rng1 = static_cast<float>(random(idx, 0));
-      const auto rng2 = static_cast<float>(random(idx, 1));
+      // const auto rng1 = static_cast<float>(random(idx, 0));
+      // const auto rng2 = static_cast<float>(random(idx, 1));
 
       KOKKOS_ASSERT(rng1 >= 0. && rng1 <= 1 && rng2 >= 0. && rng2 <= 1);
 
@@ -509,20 +669,20 @@ namespace Simulation::KernelInline
     //     events.add<MC::EventType::Exit>(leave_mask);
     //   }
     // }
-
-    KOKKOS_FORCEINLINE_FUNCTION void
-    handle_exit(std::size_t idx,
-                const MC::VolumeView<ComputeSpace, true>& liquid_volumes,
-                std::size_t& dead_count) const
+    template <typename ExecSpace>
+    KOKKOS_FORCEINLINE_FUNCTION std::size_t
+    handle_exit(
+        const std::size_t idx,
+        const Kokkos::View<const MC::LeavingFlow*, ExecSpace>& leaving_flow,
+        std::size_t& dead_count) const
     {
 
       using mem_space = ComputeSpace::memory_space;
 
       const std::size_t position = positions(idx);
-      const double liquid_volume = liquid_volumes(position);
-      const MC::LeavingFlowView<true>& leaving_flow = move.leaving_flow;
+      // const MC::LeavingFlowView<true>& leaving_flow = move.leaving_flow;
       const std::size_t n_flow = leaving_flow.size();
-      const auto rng1 = static_cast<float>(random(idx, index_random_leave));
+      // const auto rng1 = static_cast<float>(random(idx, index_random_leave));
 
       // Strategy:
       //  first find the value of leaving flow (0-> particle doesn´t leave)
@@ -531,14 +691,16 @@ namespace Simulation::KernelInline
       // check condition
       std::size_t i_flow = 0;
       double val_flow = 0.;
+      double _liquid_volume = 0.;
 
       // do-while because n_flow is likely to be 1
       do
       {
-        const auto& [index, flow] = leaving_flow(i_flow++);
+        const auto& [index, flow, liquid_volume] = leaving_flow(i_flow++);
         if (position == index)
         {
           val_flow = flow;
+          _liquid_volume = liquid_volume;
           break;
         }
       } while (i_flow < n_flow);
@@ -550,9 +712,14 @@ namespace Simulation::KernelInline
       //
       if (val_flow != 0.)
       {
+        auto gen = random_pool.get_state();
+        const auto rng1 = gen.frand(0., 1.);
+        random_pool.free_state(gen);
 
+        KOKKOS_ASSERT(_liquid_volume > 0.);
+        KOKKOS_ASSERT(val_flow > 0.);
         const bool p = probability_leaving<precision_tag>(
-            rng1, liquid_volume, val_flow, d_t);
+            rng1, _liquid_volume, val_flow, d_t);
 
         leave_mask = static_cast<int>(p);
         // DO this betore age is reset to 0
@@ -577,6 +744,8 @@ namespace Simulation::KernelInline
           events.add<MC::EventType::Exit>(leave_mask);
         }
       }
+
+      return 0;
     }
 
     double d_t{};
@@ -588,6 +757,7 @@ namespace Simulation::KernelInline
     MC::EventContainer events;
     ProbeAutogeneratedBuffer probes;
     MC::ParticleAges ages;
+    std::size_t m_p_team_leave;
     // Kokkos::View<float**, Kokkos::LayoutLeft> random;
 
     MC::ParticleSamples random;

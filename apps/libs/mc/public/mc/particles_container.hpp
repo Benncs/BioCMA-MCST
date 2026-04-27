@@ -568,7 +568,7 @@ namespace MC
     if (new_n_sample != n_samples)
     {
       n_samples = new_n_sample;
-      Kokkos::resize(random, n_allocated_elements, n_samples);
+      // Kokkos::resize(random, n_allocated_elements, n_samples);
     }
   }
 
@@ -666,7 +666,7 @@ namespace MC
 
         if (n_samples != 0)
         {
-          Kokkos::resize(random, n_allocated_elements, n_samples);
+          // Kokkos::resize(random, n_allocated_elements, n_samples);
         }
 
         // Handle resizing for weights based on model type
@@ -821,8 +821,8 @@ namespace MC
 #ifndef NDEBUG
       if (n_samples != 0)
       {
-        KOKKOS_ASSERT(this->random.extent(0) == n_allocated_elements);
-        KOKKOS_ASSERT(this->random.extent(1) == n_samples);
+        // KOKKOS_ASSERT(this->random.extent(0) == n_allocated_elements);
+        // KOKKOS_ASSERT(this->random.extent(1) == n_samples);
       }
 #endif
 

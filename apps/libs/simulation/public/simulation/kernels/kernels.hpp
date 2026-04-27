@@ -7,6 +7,7 @@
 #include <Kokkos_Core_fwd.hpp>
 #include <common/common.hpp>
 #include <common/kokkos_getpolicy.hpp>
+#include <mc/domain.hpp>
 #include <mc/unit.hpp>
 #include <simulation/kernels/model_kernel.hpp>
 #include <simulation/kernels/move_kernel.hpp>
@@ -141,14 +142,36 @@ namespace Simulation::KernelInline
 
       if (move_kernel.enable_move)
       {
+        const auto npt = move_kernel.m_p_team_leave;
+        // const auto _policy_move = Kokkos::RangePolicy<KernelInline::TagMove>(
+        //     move_space, 0, n_particle);
 
-        const auto _policy_move = Kokkos::RangePolicy<KernelInline::TagMove>(
-            move_space, 0, n_particle);
+        // Kokkos ::parallel_for("cycle_move", _policy_move, move_kernel);
+        std::size_t league_size = c_league_size(n_particle, npt);
 
-        Kokkos ::parallel_for("cycle_move", _policy_move, move_kernel);
+        auto cycle_policy
+            = Kokkos::TeamPolicy<TagMove>(model_space,
+                                          static_cast<int>(league_size),
+                                          Kokkos::AUTO(),
+                                          Kokkos::AUTO());
+
+        cycle_policy.set_scratch_size(
+            0, Kokkos::PerTeam(sizeof(float_t) * npt * 2));
+
+        Kokkos ::parallel_for("cycle_move", cycle_policy, move_kernel);
       }
       if (move_kernel.enable_leave)
       {
+        // const std::size_t league_size
+        //     = c_league_size(n_particle, move_kernel.m_p_team_leave);
+        // auto _policy_leave = Kokkos::TeamPolicy<KernelInline::TagLeave>(
+        //     move_space, league_size, Kokkos::AUTO());
+        // _policy_leave.set_scratch_size(
+        //     0,
+        //     Kokkos::PerTeam(sizeof(MC::LeavingFlow)
+        //                     * move_kernel.move.leaving_flow.extent(0)));
+        // Kokkos ::parallel_reduce(
+        //     "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
 
         const auto _policy_leave = Kokkos::RangePolicy<KernelInline::TagLeave>(
             move_space, 0, n_particle);

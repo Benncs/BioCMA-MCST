@@ -18,6 +18,7 @@ namespace MC
   {
     std::size_t index;
     double flow;
+    double volume;
   };
 
   /** @brief Structure to store information about domain needed during MC cycle
@@ -89,7 +90,10 @@ namespace MC
                 std::span<const double> out_flows,
                 std::span<const double> proba_flat);
 
-    void set_leaving_flow(std::size_t i, std::size_t i_flow, double flow) const;
+    void set_leaving_flow(std::size_t i,
+                          std::size_t i_flow,
+                          double flow,
+                          double volume) const;
 
     void init_inner(std::size_t n_flows);
 

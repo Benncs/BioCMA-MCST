@@ -1,3 +1,4 @@
+#include "Kokkos_Assert.hpp"
 #ifndef NDEBUG
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -89,9 +90,10 @@ namespace Simulation
 
         // this->mc_unit->domain.set_leaving_flow(
         //     0, *feed.output_position, feed.flow);
-
+        const auto volume = liquid_scalar.volume_span()[*feed.output_position];
+        KOKKOS_ASSERT(volume > 0.);
         this->mc_unit->domain.set_leaving_flow(
-            mc_flow_counter, *feed.output_position, feed.flow);
+            mc_flow_counter, *feed.output_position, feed.flow, volume);
         mc_flow_counter++;
       }
     }
