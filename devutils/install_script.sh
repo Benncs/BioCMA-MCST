@@ -21,7 +21,7 @@ fi
 cp $MESON_SOURCE_ROOT/tools/cases.xml "$INSTALL_DIR/cases.xml"
 cp $MESON_SOURCE_ROOT/tools/runner.py "$INSTALL_DIR/runner.py"
 cp $MESON_SOURCE_ROOT/tools/cli_formater.py "$INSTALL_DIR/cli_formater.py"
-cp $MESON_SOURCE_ROOT/devutils/exec.py "$INSTALL_DIR/exec.py"
+cp $MESON_SOURCE_ROOT/tools/exec.py "$INSTALL_DIR/exec.py"
 cp -r $MESON_SOURCE_ROOT/devutils/datamodel "$INSTALL_DIR/datamodel"
 
 # Create a symbolic link for the runner script

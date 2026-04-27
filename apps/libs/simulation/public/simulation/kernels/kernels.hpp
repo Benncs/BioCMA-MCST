@@ -203,6 +203,7 @@ namespace Simulation::KernelInline
           cycle_policy,
           cycle_kernel,
           KernelInline::CycleReducer<ComputeSpace>(cycle_reducer));
+      Kokkos::fence(); // TODO needed ?
 
       Kokkos::fence(); // TODO needed ?
 
