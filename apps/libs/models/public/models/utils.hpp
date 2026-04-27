@@ -59,15 +59,6 @@ namespace Models
     return Kokkos::pair(a1, a2);
   }
 
-  template <FloatingPointType F>
-  static F consteval _get_phi_s_max(F density,
-                                    F dl,
-                                    F glucose_to_biomass_yield = 0.5)
-  {
-    // dl and density must be same unit, dl*density -> mass and y is mass yield
-    return (dl * density) / glucose_to_biomass_yield;
-  }
-
   template <FloatingPointType T>
   KOKKOS_INLINE_FUNCTION MC::Status
   check_div(const T l, const T lc)

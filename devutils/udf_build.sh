@@ -48,9 +48,6 @@ COMPILE_FLAGS=$COMPILE_FLAGS+$RELEASE_FLAGS
 
 kokkosfolder="kokkos-5.0.0"
 
-
-kokkosfolder="kokkos-5.0.0"
-
 # Kokkos include directories
 INCLUDE_KOKKOS="-I./$BUILD_DIR/subprojects/$kokkosfolder/__CMake_build
 -I$BUILD_DIR/subprojects/$kokkosfolder/__CMake_build/core/src

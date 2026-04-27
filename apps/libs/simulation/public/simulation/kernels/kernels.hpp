@@ -205,8 +205,6 @@ namespace Simulation::KernelInline
           KernelInline::CycleReducer<ComputeSpace>(cycle_reducer));
       Kokkos::fence(); // TODO needed ?
 
-      Kokkos::fence(); // TODO needed ?
-
       // Assumptions
       // Newborn cells do not contribte in current time step
       // Mother cell doesn´t exist but
