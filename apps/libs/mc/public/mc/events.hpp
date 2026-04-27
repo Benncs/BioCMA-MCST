@@ -38,6 +38,111 @@ namespace MC
     return static_cast<size_t>(event);
   }
 
+  // class Events
+  // {
+  // public:
+  //   using value_type = Kokkos::Array<std::size_t, number_event_type>;
+  //   using view_type = Kokkos::View<value_type,
+  //   Kokkos::DefaultExecutionSpace>;
+
+  //   value_type counts;
+  //   // std::size_t counts[number_event_type];
+
+  //   KOKKOS_INLINE_FUNCTION void
+  //   add_into(Events& dst) const
+  //   {
+  //     for (std::size_t i = 0; i < number_event_type; ++i)
+  //     {
+  //       dst.counts[i] += counts[i];
+  //     }
+  //   }
+
+  //   KOKKOS_INLINE_FUNCTION
+  //   Events() : counts()
+  //   {
+  //     init();
+  //   }
+
+  //   KOKKOS_INLINE_FUNCTION
+  //   Events(const Events& rhs) : counts()
+  //   {
+  //     for (std::size_t i = 0; i < number_event_type; i++)
+  //     {
+  //       counts[i] = rhs.counts[i];
+  //     }
+  //   }
+
+  //   template <EventType Event>
+  //   KOKKOS_INLINE_FUNCTION void
+  //   inc()
+  //   {
+  //     counts[event_index<Event>()]++;
+  //   }
+  //   template <EventType Event>
+  //   KOKKOS_INLINE_FUNCTION void
+  //   add(std::size_t val)
+  //   {
+  //     counts[event_index<Event>()] += val;
+  //   }
+
+  //   KOKKOS_INLINE_FUNCTION
+  //   void
+  //   init()
+  //   {
+  //     for (std::size_t i = 0; i < number_event_type; i++)
+  //     {
+  //       counts[i] = 0;
+  //     }
+  //   }
+  // };
+
+  // struct TallyReducer
+  // {
+  //   using reducer = TallyReducer;
+  //   using value_type = Events;
+  //   using result_view_type = Kokkos::View<value_type, Kokkos::HostSpace>;
+
+  // private:
+  //   result_view_type result_;
+
+  // public:
+  //   explicit TallyReducer() : result_("reducer")
+  //   {
+  //   }
+
+  //   KOKKOS_INLINE_FUNCTION
+  //   void
+  //   join(value_type& dst, const value_type& src) const
+  //   {
+  //     src.add_into(dst);
+  //   }
+
+  //   KOKKOS_INLINE_FUNCTION
+  //   void
+  //   init(value_type& val) const
+  //   {
+  //     val.init();
+  //   }
+
+  //   [[nodiscard]] KOKKOS_INLINE_FUNCTION value_type&
+  //   reference() const
+  //   {
+  //     return *result_.data();
+  //   }
+
+  //   [[nodiscard]] KOKKOS_INLINE_FUNCTION result_view_type
+  //   view() const
+  //   {
+  //     return result_;
+  //   }
+
+  //   [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
+  //   references_scalar() const
+  //   {
+  //     return true;
+  //   }
+  // };
+
   /**
    * @brief Use to count events that occurs during Monte-Carlo processing cycles
    */
