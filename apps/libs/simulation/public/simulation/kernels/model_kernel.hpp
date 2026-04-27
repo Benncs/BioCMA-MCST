@@ -170,7 +170,7 @@ namespace Simulation::KernelInline
       const std::size_t count = m_p_team;
       const std::size_t p0 = team.league_rank() * count;
       const std::size_t n_particle = n_p;
-      const std::size_t _d_t = d_t;
+      const auto _d_t = d_t;
       const auto& status = particles.status;
       const auto& ages = particles.ages;
 
@@ -210,6 +210,7 @@ namespace Simulation::KernelInline
       //     },
       //     local);
       team.team_barrier();
+
       reduce_val += local;
     }
 

@@ -211,7 +211,7 @@ namespace Models
                           const SelfParticle& buffer_arr)
   {
     Kokkos::View<FloatType**,
-                 Kokkos::LayoutRight,
+                 ComputeSpace::array_layout,
                  Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>>
         buffer_e = buffer_arr;
 

@@ -1,5 +1,6 @@
 #ifndef __CONTRIBUTION_KERNEL_HPP__
 #define __CONTRIBUTION_KERNEL_HPP__
+#include "Kokkos_Assert.hpp"
 #include <Kokkos_Core.hpp>
 #include <mc/particles_container.hpp>
 #include <mc/traits.hpp>
@@ -118,6 +119,46 @@ template <ModelType M> struct ContributionFunctor
                    });
   }
 
+  // KOKKOS_INLINE_FUNCTION
+  // void
+  // operator()(const Tag3D _tag, const TeamMember& team) const
+  // {
+  //   (void)_tag;
+
+  //   const std::size_t p0 = team.league_rank() * m_particle_per_team;
+  //   const auto& c = m_particles.contribs;
+  //   const auto& status = m_particles.status;
+  //   const auto n_particle = m_particles.n_particles();
+  //   const auto& positions = m_particles.position;
+
+  //   const auto upper_bound = ((p0 + m_particle_per_team) >= n_particle)
+  //                                ? n_particle - p0 - 1
+  //                                : m_particle_per_team;
+  //   KOKKOS_ASSERT(upper_bound >= 0 && upper_bound < n_particle);
+
+  //   constexpr std::size_t work_per_thread = 32;
+  //   KOKKOS_ASSERT(m_particle_per_team%work_per_thread==0);
+
+  //   Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, upper_bound),
+  //                        [&](const std::size_t i)
+  //                        {
+  //                          const std::size_t p = p0 + i;
+  //                          if (status(p) != MC::Status::Idle)
+  //                          {
+  //                            return;
+  //                          }
+  //                          auto access = m_contribution_scatter.access();
+  //                          const double weight = m_particles.get_weight(p);
+  //                          const auto pos = positions(p);
+
+  //                          Kokkos::parallel_for(
+  //                              Kokkos::ThreadVectorRange(team, 0, M::n_c),
+  //                              [&](const int j)
+  //                              { access(j, pos) += weight * c(p, j); });
+  //                        });
+
+  // }
+
   KOKKOS_INLINE_FUNCTION
   void
   operator()(const Tag3D _tag, const TeamMember& team) const
@@ -129,48 +170,35 @@ template <ModelType M> struct ContributionFunctor
     const auto& status = m_particles.status;
     const auto n_particle = m_particles.n_particles();
     const auto& positions = m_particles.position;
+    constexpr std::size_t work_per_thread = 32;
 
     const auto upper_bound = ((p0 + m_particle_per_team) >= n_particle)
-                                 ? n_particle - p0 - 1
+                                 ? n_particle - p0
                                  : m_particle_per_team;
-    KOKKOS_ASSERT(upper_bound > 0 && upper_bound < n_particle);
+    KOKKOS_ASSERT(upper_bound >= 0 && upper_bound < n_particle);
+    const auto range = (upper_bound + work_per_thread - 1) / work_per_thread;
 
-    Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, upper_bound),
-                         [&](const std::size_t i)
-                         {
-                           const std::size_t p = p0 + i;
-                           if (status(p) != MC::Status::Idle)
-                           {
-                             return;
-                           }
-                           auto access = m_contribution_scatter.access();
-                           const double weight = m_particles.get_weight(p);
-                           const auto pos = positions(p);
+    KOKKOS_ASSERT(m_particle_per_team % work_per_thread == 0);
 
-                           Kokkos::parallel_for(
-                               Kokkos::ThreadVectorRange(team, 0, M::n_c),
-                               [&](const int j)
-                               { access(j, pos) += weight * c(p, j); });
-                         });
-
-    // Kokkos::parallel_for(Kokkos::TeamThreadRange(team, m_particle_per_team),
-    //                      [&](const std::size_t i)
-    //                      {
-    //                        const std::size_t p = p0 + i;
-    //                        if (p >= n_particle || status(p) !=
-    //                        MC::Status::Idle)
-    //                        {
-    //                          return;
-    //                        }
-    //                        auto access = m_contribution_scatter.access();
-    //                        const double weight = m_particles.get_weight(p);
-    //                        const auto pos = positions(p);
-
-    //                        Kokkos::parallel_for(
-    //                            Kokkos::ThreadVectorRange(team, 0, M::n_c),
-    //                            [&](const int j)
-    //                            { access(j, pos) += weight * c(p, j); });
-    //                      });
+    Kokkos::parallel_for(
+        Kokkos::TeamThreadRange(team, 0, range),
+        [&](const std::size_t i)
+        {
+          auto access = m_contribution_scatter.access();
+          for (std::size_t k = 0; k < work_per_thread; ++k)
+          {
+            const std::size_t p = p0 + i * work_per_thread + k;
+            if (status(p) != MC::Status::Idle || i >= n_particle)
+            {
+              return;
+            }
+            const double weight = m_particles.get_weight(p);
+            const auto pos = positions(p);
+            Kokkos::parallel_for(Kokkos::ThreadVectorRange(team, 0, M::n_c),
+                                 [&](const int j)
+                                 { access(j, pos) += weight * c(p, j); });
+          }
+        });
   }
 };
 
