@@ -4,6 +4,7 @@ var classSimulation_1_1ScalarSimulation =
     [ "ScalarSimulation", "classSimulation_1_1ScalarSimulation.html#a165176fdcee47d58d6ad3471ada56136", null ],
     [ "ScalarSimulation", "classSimulation_1_1ScalarSimulation.html#a5608de40ed00444c146a71642f882473", null ],
     [ "~ScalarSimulation", "classSimulation_1_1ScalarSimulation.html#a9721b2cf4617bf55c133b7b1527a8879", null ],
+    [ "clearNegs", "classSimulation_1_1ScalarSimulation.html#ab6881cc044f62a769c78b933231e820d", null ],
     [ "contribution_span", "classSimulation_1_1ScalarSimulation.html#a688bdcc99d9b6b6922129e55248a7b66", null ],
     [ "contribution_span_mut", "classSimulation_1_1ScalarSimulation.html#a7febcc0f5298fe8ec74e5080de08e2ac", null ],
     [ "deep_copy_concentration", "classSimulation_1_1ScalarSimulation.html#a90436e426f916e5b2540941b0dce8cc5", null ],

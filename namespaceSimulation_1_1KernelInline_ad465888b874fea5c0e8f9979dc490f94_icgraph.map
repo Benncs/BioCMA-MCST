@@ -1,9 +1,7 @@
 <map id="Simulation::KernelInline::probability_leaving&lt; fast_tag &gt;" name="Simulation::KernelInline::probability_leaving&lt; fast_tag &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="457,30,614,83"/>
-<area shape="rect" id="Node000002" href="$structSimulation_1_1KernelInline_1_1MoveFunctor.html#a2f5c4626adae4fe3d1c114dcb5f2c08b" title=" " alt="" coords="221,37,409,76"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="441,59,410,59,410,54,441,54"/>
-<area shape="rect" id="Node000003" href="$structSimulation_1_1KernelInline_1_1MoveFunctor.html#a44c3f09547671e80756f60afe399b12b" title=" " alt="" coords="5,5,173,44"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="205,44,173,39,173,34,205,38"/>
-<area shape="rect" id="Node000004" href="$structSimulation_1_1KernelInline_1_1MoveFunctor.html#a17c0c65bd46d0e0ff12d8f145dae4219" title=" " alt="" coords="5,68,173,107"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="205,74,173,79,173,73,205,69"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="457,5,614,58"/>
+<area shape="rect" id="Node000002" href="$structSimulation_1_1KernelInline_1_1MoveFunctor.html#a0b972ed7e2a323935a225728e3835fd5" title=" " alt="" coords="221,12,409,51"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="441,34,410,34,410,29,441,29"/>
+<area shape="rect" id="Node000003" href="$structSimulation_1_1KernelInline_1_1MoveFunctor.html#ad4127da565cf60c12fab5f3eba2907f2" title=" " alt="" coords="5,12,173,51"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="205,34,173,34,173,29,205,29"/>
 </map>

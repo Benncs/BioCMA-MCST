@@ -1,9 +1,7 @@
 <map id="Models::Uptake::phi_permease" name="Models::Uptake::phi_permease">
-<area shape="rect" id="Node000001" title=" " alt="" coords="646,5,784,44"/>
-<area shape="rect" id="Node000002" href="$structModels_1_1Uptake.html#a4f234fec9f9f9ab26e607310ab95291f" title=" " alt="" coords="440,12,598,37"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="631,27,599,27,599,22,631,22"/>
-<area shape="rect" id="Node000003" href="$structModels_1_1Uptake.html#aa49ff7f6c6612f124457541d05e080ae" title=" " alt="" coords="202,12,392,37"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="424,27,393,27,393,22,424,22"/>
-<area shape="rect" id="Node000004" href="$structModels_1_1TwoMetaNb.html#a52a8eff206df7bf87f87eada06a69a6f" title=" " alt="" coords="5,5,154,44"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="186,27,154,27,154,22,186,22"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="450,5,587,44"/>
+<area shape="rect" id="Node000002" href="$structModels_1_1Uptake.html#a4f234fec9f9f9ab26e607310ab95291f" title=" " alt="" coords="244,12,402,37"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="434,27,403,27,403,22,434,22"/>
+<area shape="rect" id="Node000003" href="$structModels_1_1Uptake.html#aa49ff7f6c6612f124457541d05e080ae" title=" " alt="" coords="5,12,196,37"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="228,27,196,27,196,22,228,22"/>
 </map>

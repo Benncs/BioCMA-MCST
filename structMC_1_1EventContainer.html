@@ -100,11 +100,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad3d580bd8ff4911a8ff717c41314a694" id="r_ad3d580bd8ff4911a8ff717c41314a694"><td class="memTemplParams" colspan="2">template&lt;class Archive&gt; </td></tr>
 <tr class="memitem:ad3d580bd8ff4911a8ff717c41314a694 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3d580bd8ff4911a8ff717c41314a694">load</a> (Archive &amp;ar)</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a94b14a168a64832d37a60b37ac065d09" id="r_a94b14a168a64832d37a60b37ac065d09"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structMC_1_1EventContainer.html">EventContainer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a94b14a168a64832d37a60b37ac065d09">reduce</a> (std::span&lt; std::size_t &gt; _data)</td></tr>
-<tr class="memdesc:a94b14a168a64832d37a60b37ac065d09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform a linear contiguous counter data obtained via MPI gather into <a class="el" href="structMC_1_1EventContainer.html" title="Use to count events that occurs during Monte-Carlo processing cycles.">EventContainer</a> object.  <br /></td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:aa55ed5252651b45acb21e87f12c57f7b" id="r_aa55ed5252651b45acb21e87f12c57f7b"><td class="memItemLeft" align="right" valign="top">Kokkos::View&lt; std::size_t[<a class="el" href="namespaceMC.html#a2bac73e9eee491093b7ac10969645bfa">number_event_type</a>], Kokkos::SharedSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa55ed5252651b45acb21e87f12c57f7b">_events</a></td></tr>
@@ -136,11 +131,6 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Default container, initalise counter. </p>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structMC_1_1EventContainer_a7ee3bc947df02387c92b56b8c4c86cc5_icgraph.svg" width="338" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
@@ -345,45 +335,6 @@ template&lt;class Archive&gt; </div>
 
 </div>
 </div>
-<a id="a94b14a168a64832d37a60b37ac065d09" name="a94b14a168a64832d37a60b37ac065d09"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a94b14a168a64832d37a60b37ac065d09">&#9670;&#160;</a></span>reduce()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structMC_1_1EventContainer.html">EventContainer</a> MC::EventContainer::reduce </td>
-          <td>(</td>
-          <td class="paramtype">std::span&lt; std::size_t &gt;</td>          <td class="paramname"><span class="paramname"><em>_data</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Transform a linear contiguous counter data obtained via MPI gather into <a class="el" href="structMC_1_1EventContainer.html" title="Use to count events that occurs during Monte-Carlo processing cycles.">EventContainer</a> object. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">_data</td><td>obtained via multiple <a class="el" href="structMC_1_1EventContainer.html" title="Use to count events that occurs during Monte-Carlo processing cycles.">EventContainer</a> merged together </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section warning"><dt>Warning</dt><dd>_data size has to be a multiple of number_event_type </dd></dl>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structMC_1_1EventContainer_a94b14a168a64832d37a60b37ac065d09_cgraph.svg" width="338" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
 <a id="a28c0bb33bbdfede8479523447c96b477" name="a28c0bb33bbdfede8479523447c96b477"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a28c0bb33bbdfede8479523447c96b477">&#9670;&#160;</a></span>save()</h2>
 
@@ -458,9 +409,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following files:<ul>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>apps/libs/mc/public/mc/<a class="el" href="events_8hpp_source.html">events.hpp</a></li>
-<li>apps/libs/mc/src/<b>events.cpp</b></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

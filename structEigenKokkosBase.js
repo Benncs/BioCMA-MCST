@@ -2,6 +2,7 @@ var structEigenKokkosBase =
 [
     [ "ComputeView", "structEigenKokkosBase.html#aa8cd099a39cbdb307bbbbca45a51dce3", null ],
     [ "EigenMatrix", "structEigenKokkosBase.html#af9a8d447dad21bd4c82c38a96273f341", null ],
+    [ "float_t", "structEigenKokkosBase.html#a1fcd5d40ef7e95793506923f43754176", null ],
     [ "HostView", "structEigenKokkosBase.html#a0e233b2fa796cfa9f74a9e78cc3b87f6", null ],
     [ "EigenKokkosBase", "structEigenKokkosBase.html#a6113aa2917ef69b84bfa1556f4bb5806", null ],
     [ "get_span", "structEigenKokkosBase.html#a314d318aa9beadabbf6b413710dfa8ff", null ],

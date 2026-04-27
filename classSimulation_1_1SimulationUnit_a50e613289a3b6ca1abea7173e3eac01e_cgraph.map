@@ -1,5 +1,9 @@
 <map id="Simulation::SimulationUnit::init_functors" name="Simulation::SimulationUnit::init_functors">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,181,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,33,181,72"/>
 <area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a4295618336e99606be4e87b31feb848a" title=" " alt="" coords="229,5,404,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,22,213,22,213,27,181,27"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,39,213,35,214,40,181,44"/>
+<area shape="rect" id="Node000003" href="$namespaceCommon.html#a7ca16dc3314f89cd1860091731cd7014" title="Wrapper arround get_env to get envariable with fallback to default." alt="" coords="240,68,393,93"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,61,224,66,224,72,181,66"/>
+<area shape="rect" id="Node000004" href="$namespaceCommon.html#a7e29bd7117dd8bfc651a1dc215923379" title="Wrapper arround get_env to get optional envariable." alt="" coords="452,68,587,93"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="394,78,436,78,436,83,394,83"/>
 </map>

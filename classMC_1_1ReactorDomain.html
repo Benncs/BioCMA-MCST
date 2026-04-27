@@ -102,7 +102,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a767b95c07cbc48f98c5841f94b564f20" id="r_a767b95c07cbc48f98c5841f94b564f20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMC_1_1ReactorDomain.html">ReactorDomain</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a767b95c07cbc48f98c5841f94b564f20">operator=</a> (<a class="el" href="classMC_1_1ReactorDomain.html">ReactorDomain</a> &amp;&amp;other) noexcept</td></tr>
 <tr class="memdesc:a767b95c07cbc48f98c5841f94b564f20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move assignment operator.  <br /></td></tr>
 <tr class="memitem:a0b2fc75ebc4dff8a7eaf9d5b3a349aff" id="r_a0b2fc75ebc4dff8a7eaf9d5b3a349aff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b2fc75ebc4dff8a7eaf9d5b3a349aff">update</a> (std::span&lt; const double &gt; newliquid_volume, std::span&lt; const std::size_t &gt; neighors_flat, std::span&lt; const double &gt; out_flows, std::span&lt; const double &gt; proba_flat)</td></tr>
-<tr class="memitem:a312b0ed0339dfc1809da2673b9fcf02e" id="r_a312b0ed0339dfc1809da2673b9fcf02e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a312b0ed0339dfc1809da2673b9fcf02e">set_leaving_flow</a> (std::size_t i, std::size_t i_flow, double flow) const</td></tr>
+<tr class="memitem:ad1f259784a915be5fd17671489ce2408" id="r_ad1f259784a915be5fd17671489ce2408"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1f259784a915be5fd17671489ce2408">set_leaving_flow</a> (std::size_t i, std::size_t i_flow, double flow, double volume) const</td></tr>
 <tr class="memitem:ab8227f7cb4e6e748e7ab06c31233712a" id="r_ab8227f7cb4e6e748e7ab06c31233712a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8227f7cb4e6e748e7ab06c31233712a">init_inner</a> (std::size_t n_flows)</td></tr>
 <tr class="memitem:a25d06d1d21a6f47b3443770c559855c0" id="r_a25d06d1d21a6f47b3443770c559855c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMC_1_1DomainState.html">DomainState</a>&lt; <a class="el" href="namespaceMC.html#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>, true &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25d06d1d21a6f47b3443770c559855c0">get_const_inner</a> ()</td></tr>
 <tr class="memitem:adf8edb6cba4ee63f14c48ebadb73fb2e" id="r_adf8edb6cba4ee63f14c48ebadb73fb2e"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf8edb6cba4ee63f14c48ebadb73fb2e">getNumberCompartments</a> () const noexcept</td></tr>
@@ -572,8 +572,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a312b0ed0339dfc1809da2673b9fcf02e" name="a312b0ed0339dfc1809da2673b9fcf02e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a312b0ed0339dfc1809da2673b9fcf02e">&#9670;&#160;</a></span>set_leaving_flow()</h2>
+<a id="ad1f259784a915be5fd17671489ce2408" name="ad1f259784a915be5fd17671489ce2408"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1f259784a915be5fd17671489ce2408">&#9670;&#160;</a></span>set_leaving_flow()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -591,7 +591,12 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>flow</em></span>&#160;) const</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>flow</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>volume</em></span>&#160;) const</td>
         </tr>
       </table>
 </div><div class="memdoc">

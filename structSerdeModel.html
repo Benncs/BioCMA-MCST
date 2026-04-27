@@ -85,15 +85,15 @@ Public Types</h2></td></tr>
 <tr class="memitem:aadfdf263ce095bf438571ae880b3c73c" id="r_aadfdf263ce095bf438571ae880b3c73c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aadfdf263ce095bf438571ae880b3c73c">Self</a> = <a class="el" href="structSerdeModel.html">SerdeModel</a></td></tr>
 <tr class="memitem:ab88ad507b9ba41f16877ea9cf95f03d3" id="r_ab88ad507b9ba41f16877ea9cf95f03d3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab88ad507b9ba41f16877ea9cf95f03d3">FloatType</a> = float</td></tr>
 <tr class="memitem:a9633f5fca8cfc7071d9fc085a38d58f7" id="r_a9633f5fca8cfc7071d9fc085a38d58f7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9633f5fca8cfc7071d9fc085a38d58f7">Config</a> = std::nullopt_t</td></tr>
-<tr class="memitem:add2cc33cdcc61366d2f6881a285b86fd" id="r_add2cc33cdcc61366d2f6881a285b86fd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add2cc33cdcc61366d2f6881a285b86fd">SelfParticle</a> = <a class="el" href="namespaceMC.html#ae36f8da8fd9f9f88aa5cff4f307cdc68">MC::ParticlesModel</a>&lt;<a class="el" href="#a5537938fc2b785951f1a1e33a49c721d">Self::n_var</a>, <a class="el" href="#ab88ad507b9ba41f16877ea9cf95f03d3">Self::FloatType</a>&gt;</td></tr>
+<tr class="memitem:add2cc33cdcc61366d2f6881a285b86fd" id="r_add2cc33cdcc61366d2f6881a285b86fd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add2cc33cdcc61366d2f6881a285b86fd">SelfParticle</a> = <a class="el" href="namespaceMC.html#ace6c0a253dfddbd8b670c249931c4b9c">MC::ParticlesModel</a>&lt;<a class="el" href="#a5537938fc2b785951f1a1e33a49c721d">Self::n_var</a>, <a class="el" href="#ab88ad507b9ba41f16877ea9cf95f03d3">Self::FloatType</a>&gt;</td></tr>
+<tr class="memitem:abeb72ab6738801e2b1bdf103f1159d11" id="r_abeb72ab6738801e2b1bdf103f1159d11"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abeb72ab6738801e2b1bdf103f1159d11">SelfContribs</a> = <a class="el" href="namespaceMC.html#ac403e8ebe307314885107e70feb4d341">MC::ParticlesContribs</a>&lt;<a class="el" href="#a95606d21e0bcd19bb2ccddad7a688d1e">Self::n_c</a>, <a class="el" href="#ab88ad507b9ba41f16877ea9cf95f03d3">Self::FloatType</a>&gt;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aa1132555b0efc5add2bac13cb735092a" id="r_aa1132555b0efc5add2bac13cb735092a"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1132555b0efc5add2bac13cb735092a">init</a> (const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;random_pool, std::size_t idx, const <a class="el" href="#add2cc33cdcc61366d2f6881a285b86fd">SelfParticle</a> &amp;arr)</td></tr>
 <tr class="memitem:af3a9ddb352898e72e00a7786bfe2c78a" id="r_af3a9ddb352898e72e00a7786bfe2c78a"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3a9ddb352898e72e00a7786bfe2c78a">mass</a> (std::size_t idx, const <a class="el" href="#add2cc33cdcc61366d2f6881a285b86fd">SelfParticle</a> &amp;arr)</td></tr>
-<tr class="memitem:a927c6afc6db918c548758f8868f0d68d" id="r_a927c6afc6db918c548758f8868f0d68d"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7b">MC::Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a927c6afc6db918c548758f8868f0d68d">update</a> (const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;random_pool, <a class="el" href="#ab88ad507b9ba41f16877ea9cf95f03d3">FloatType</a> d_t, std::size_t idx, const <a class="el" href="#add2cc33cdcc61366d2f6881a285b86fd">SelfParticle</a> &amp;arr, const <a class="el" href="namespaceMC.html#a014ee946d2a4f3e125803a71eefae77d">MC::LocalConcentration</a> &amp;<a class="el" href="#a5eaf5f3d6b92e70c34174c338e35cc34a4a8a08f09d37b73795649038408b5f33">c</a>)</td></tr>
+<tr class="memitem:a47ad35ae378325af2b75bbdada6ee60b" id="r_a47ad35ae378325af2b75bbdada6ee60b"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7b">MC::Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47ad35ae378325af2b75bbdada6ee60b">update</a> (const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;random_pool, <a class="el" href="#ab88ad507b9ba41f16877ea9cf95f03d3">FloatType</a> d_t, std::size_t idx, const <a class="el" href="#add2cc33cdcc61366d2f6881a285b86fd">SelfParticle</a> &amp;arr, const <a class="el" href="#abeb72ab6738801e2b1bdf103f1159d11">SelfContribs</a> &amp;ac, const std::size_t &amp;position, const <a class="el" href="namespaceMC.html#aa5a6942718ba877c62a9f91b87915901">MC::LocalConcentration</a> &amp;<a class="el" href="#a5eaf5f3d6b92e70c34174c338e35cc34a4a8a08f09d37b73795649038408b5f33">c</a>)</td></tr>
 <tr class="memitem:a7ce2717cfd5fd824c3dc8039308912e4" id="r_a7ce2717cfd5fd824c3dc8039308912e4"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ce2717cfd5fd824c3dc8039308912e4">division</a> (const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;random_pool, std::size_t idx, std::size_t idx2, const <a class="el" href="#add2cc33cdcc61366d2f6881a285b86fd">SelfParticle</a> &amp;arr, const <a class="el" href="#add2cc33cdcc61366d2f6881a285b86fd">SelfParticle</a> &amp;buffer_arr)</td></tr>
-<tr class="memitem:a994d771f7a548cb98afd8afe39214daf" id="r_a994d771f7a548cb98afd8afe39214daf"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structMC_1_1ContribIndexBounds.html">MC::ContribIndexBounds</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a994d771f7a548cb98afd8afe39214daf">get_bounds</a> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -102,6 +102,7 @@ Public Attributes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-attribs" class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a5537938fc2b785951f1a1e33a49c721d" id="r_a5537938fc2b785951f1a1e33a49c721d"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5537938fc2b785951f1a1e33a49c721d">n_var</a> = INDEX_FROM_ENUM(<a class="el" href="#a5eaf5f3d6b92e70c34174c338e35cc34a4905ac9d6a22bdfc1ae096094ce6248d">particle_var::COUNT</a>)</td></tr>
+<tr class="memitem:a95606d21e0bcd19bb2ccddad7a688d1e" id="r_a95606d21e0bcd19bb2ccddad7a688d1e"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95606d21e0bcd19bb2ccddad7a688d1e">n_c</a> = 1</td></tr>
 <tr class="memitem:a476f20d53fd965787e9846c6a0d5137b" id="r_a476f20d53fd965787e9846c6a0d5137b"><td class="memItemLeft" align="right" valign="top">static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a476f20d53fd965787e9846c6a0d5137b">name</a> = &quot;simple&quot;</td></tr>
 </table>
 <a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
@@ -147,6 +148,20 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="abeb72ab6738801e2b1bdf103f1159d11" name="abeb72ab6738801e2b1bdf103f1159d11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abeb72ab6738801e2b1bdf103f1159d11">&#9670;&#160;</a></span>SelfContribs</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#abeb72ab6738801e2b1bdf103f1159d11">SerdeModel::SelfContribs</a> = <a class="el" href="namespaceMC.html#ac403e8ebe307314885107e70feb4d341">MC::ParticlesContribs</a>&lt;<a class="el" href="#a95606d21e0bcd19bb2ccddad7a688d1e">Self::n_c</a>, <a class="el" href="#ab88ad507b9ba41f16877ea9cf95f03d3">Self::FloatType</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="add2cc33cdcc61366d2f6881a285b86fd" name="add2cc33cdcc61366d2f6881a285b86fd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#add2cc33cdcc61366d2f6881a285b86fd">&#9670;&#160;</a></span>SelfParticle</h2>
 
@@ -154,7 +169,7 @@ Static Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#add2cc33cdcc61366d2f6881a285b86fd">SerdeModel::SelfParticle</a> = <a class="el" href="namespaceMC.html#ae36f8da8fd9f9f88aa5cff4f307cdc68">MC::ParticlesModel</a>&lt;<a class="el" href="#a5537938fc2b785951f1a1e33a49c721d">Self::n_var</a>, <a class="el" href="#ab88ad507b9ba41f16877ea9cf95f03d3">Self::FloatType</a>&gt;</td>
+          <td class="memname">using <a class="el" href="#add2cc33cdcc61366d2f6881a285b86fd">SerdeModel::SelfParticle</a> = <a class="el" href="namespaceMC.html#ace6c0a253dfddbd8b670c249931c4b9c">MC::ParticlesModel</a>&lt;<a class="el" href="#a5537938fc2b785951f1a1e33a49c721d">Self::n_var</a>, <a class="el" href="#ab88ad507b9ba41f16877ea9cf95f03d3">Self::FloatType</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -249,31 +264,6 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a994d771f7a548cb98afd8afe39214daf" name="a994d771f7a548cb98afd8afe39214daf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a994d771f7a548cb98afd8afe39214daf">&#9670;&#160;</a></span>get_bounds()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structMC_1_1ContribIndexBounds.html">MC::ContribIndexBounds</a> SerdeModel::get_bounds </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aa1132555b0efc5add2bac13cb735092a" name="aa1132555b0efc5add2bac13cb735092a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa1132555b0efc5add2bac13cb735092a">&#9670;&#160;</a></span>init()</h2>
 
@@ -337,8 +327,8 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a927c6afc6db918c548758f8868f0d68d" name="a927c6afc6db918c548758f8868f0d68d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a927c6afc6db918c548758f8868f0d68d">&#9670;&#160;</a></span>update()</h2>
+<a id="a47ad35ae378325af2b75bbdada6ee60b" name="a47ad35ae378325af2b75bbdada6ee60b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47ad35ae378325af2b75bbdada6ee60b">&#9670;&#160;</a></span>update()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -369,7 +359,17 @@ Static Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceMC.html#a014ee946d2a4f3e125803a71eefae77d">MC::LocalConcentration</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>c</em></span>&#160;)</td>
+          <td class="paramtype">const <a class="el" href="#abeb72ab6738801e2b1bdf103f1159d11">SelfContribs</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ac</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::size_t &amp;</td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceMC.html#aa5a6942718ba877c62a9f91b87915901">MC::LocalConcentration</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>c</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -392,6 +392,28 @@ Static Public Attributes</h2></td></tr>
           <td class="memname">MODEL_CONSTANT <a class="el" href="#ab88ad507b9ba41f16877ea9cf95f03d3">FloatType</a> SerdeModel::a_i = 5e-6</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a95606d21e0bcd19bb2ccddad7a688d1e" name="a95606d21e0bcd19bb2ccddad7a688d1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95606d21e0bcd19bb2ccddad7a688d1e">&#9670;&#160;</a></span>n_c</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t SerdeModel::n_c = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

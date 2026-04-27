@@ -7,7 +7,6 @@ var structMC_1_1EventContainer =
     [ "get_span", "structMC_1_1EventContainer.html#a1241f99b1b9ba62462df5c09b8cb91ec", null ],
     [ "incr", "structMC_1_1EventContainer.html#a70d7122fe5d2521f91e871816ea83e61", null ],
     [ "load", "structMC_1_1EventContainer.html#ad3d580bd8ff4911a8ff717c41314a694", null ],
-    [ "reduce", "structMC_1_1EventContainer.html#a94b14a168a64832d37a60b37ac065d09", null ],
     [ "save", "structMC_1_1EventContainer.html#a28c0bb33bbdfede8479523447c96b477", null ],
     [ "wrap_incr", "structMC_1_1EventContainer.html#a117575ad89e1abca8ad66cb704c18bd5", null ],
     [ "_events", "structMC_1_1EventContainer.html#aa55ed5252651b45acb21e87f12c57f7b", null ]

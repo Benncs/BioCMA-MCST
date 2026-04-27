@@ -110,7 +110,7 @@ UDF</h2>
 <div class="line">  <span class="keyword">using </span>Self = ModelExample; <span class="comment">// Mandatory Type alias</span></div>
 <div class="line">  <span class="keyword">using </span>FloatType = float;   <span class="comment">// Mandatory Type alias</span></div>
 <div class="line">  <span class="keyword">using </span>SelfParticle =</div>
-<div class="line">      <a id="_a0" name="_a0"></a><a class="code hl_typedef" href="namespaceMC.html#ae36f8da8fd9f9f88aa5cff4f307cdc68">MC::ParticlesModel&lt;Self::n_var, Self::FloatType&gt;</a>; <span class="comment">// Mandatory Type alias</span></div>
+<div class="line">      <a id="_a0" name="_a0"></a><a class="code hl_typedef" href="namespaceMC.html#ace6c0a253dfddbd8b670c249931c4b9c">MC::ParticlesModel&lt;Self::n_var, Self::FloatType&gt;</a>; <span class="comment">// Mandatory Type alias</span></div>
 <div class="line"> </div>
 <div class="line">  KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <span class="keywordtype">void</span> init(<span class="keyword">const</span> <a id="_a1" name="_a1"></a><a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&amp; random_pool,</div>
 <div class="line">                                          std::size_t idx,</div>
@@ -124,7 +124,7 @@ UDF</h2>
 <div class="line">         FloatType d_t,</div>
 <div class="line">         std::size_t idx,</div>
 <div class="line">         <span class="keyword">const</span> SelfParticle&amp; arr,</div>
-<div class="line">         <span class="keyword">const</span> <a id="_a3" name="_a3"></a><a class="code hl_typedef" href="namespaceMC.html#a014ee946d2a4f3e125803a71eefae77d">MC::LocalConcentration</a>&amp; c);</div>
+<div class="line">         <span class="keyword">const</span> <a id="_a3" name="_a3"></a><a class="code hl_typedef" href="namespaceMC.html#aa5a6942718ba877c62a9f91b87915901">MC::LocalConcentration</a>&amp; c);</div>
 <div class="line"> </div>
 <div class="line">  KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <span class="keywordtype">void</span> division(<span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&amp; random_pool,</div>
 <div class="line">                                              std::size_t idx,</div>
@@ -143,11 +143,11 @@ UDF</h2>
 <div class="line">CHECK_MODEL(ModelExample)</div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="anamespaceMC_html_a014ee946d2a4f3e125803a71eefae77d"><div class="ttname"><a href="namespaceMC.html#a014ee946d2a4f3e125803a71eefae77d">MC::LocalConcentration</a></div><div class="ttdeci">Kokkos::Subview&lt; KernelConcentrationType, int, decltype(Kokkos::ALL)&gt; LocalConcentration</div><div class="ttdef"><b>Definition</b> alias.hpp:97</div></div>
-<div class="ttc" id="anamespaceMC_html_a508817d9913e12976cea3fef8dccc1f0"><div class="ttname"><a href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a></div><div class="ttdeci">decltype(Kokkos::Experimental::create_scatter_view( kernelContribution())) ContributionView</div><div class="ttdef"><b>Definition</b> alias.hpp:90</div></div>
-<div class="ttc" id="anamespaceMC_html_a69467f7d54b0dcb1a4e176fe425ffb7b"><div class="ttname"><a href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7b">MC::Status</a></div><div class="ttdeci">Status</div><div class="ttdef"><b>Definition</b> alias.hpp:58</div></div>
-<div class="ttc" id="anamespaceMC_html_a7e53098724df8c06b90824f1567f6bc5"><div class="ttname"><a href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a></div><div class="ttdeci">gen_pool_type&lt; Kokkos::DefaultExecutionSpace &gt; pool_type</div><div class="ttdef"><b>Definition</b> alias.hpp:39</div></div>
-<div class="ttc" id="anamespaceMC_html_ae36f8da8fd9f9f88aa5cff4f307cdc68"><div class="ttname"><a href="namespaceMC.html#ae36f8da8fd9f9f88aa5cff4f307cdc68">MC::ParticlesModel</a></div><div class="ttdeci">Kokkos::View&lt; F *[Nd], Kokkos::LayoutRight &gt; ParticlesModel</div><div class="ttdef"><b>Definition</b> alias.hpp:19</div></div>
+<div class="ttc" id="anamespaceMC_html_a508817d9913e12976cea3fef8dccc1f0"><div class="ttname"><a href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a></div><div class="ttdeci">decltype(Kokkos::Experimental::create_scatter_view( kernelContribution())) ContributionView</div><div class="ttdef"><b>Definition</b> alias.hpp:162</div></div>
+<div class="ttc" id="anamespaceMC_html_a69467f7d54b0dcb1a4e176fe425ffb7b"><div class="ttname"><a href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7b">MC::Status</a></div><div class="ttdeci">Status</div><div class="ttdef"><b>Definition</b> alias.hpp:127</div></div>
+<div class="ttc" id="anamespaceMC_html_a7e53098724df8c06b90824f1567f6bc5"><div class="ttname"><a href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a></div><div class="ttdeci">gen_pool_type&lt; Kokkos::DefaultExecutionSpace &gt; pool_type</div><div class="ttdef"><b>Definition</b> alias.hpp:102</div></div>
+<div class="ttc" id="anamespaceMC_html_aa5a6942718ba877c62a9f91b87915901"><div class="ttname"><a href="namespaceMC.html#aa5a6942718ba877c62a9f91b87915901">MC::LocalConcentration</a></div><div class="ttdeci">KernelConcentrationType LocalConcentration</div><div class="ttdef"><b>Definition</b> alias.hpp:170</div></div>
+<div class="ttc" id="anamespaceMC_html_ace6c0a253dfddbd8b670c249931c4b9c"><div class="ttname"><a href="namespaceMC.html#ace6c0a253dfddbd8b670c249931c4b9c">MC::ParticlesModel</a></div><div class="ttdeci">Kokkos::View&lt; F *[Nd], ComputeSpace::array_layout, ComputeSpace, Kokkos::MemoryTraits&lt; Kokkos::MemoryTraitsFlags::Restrict &gt; &gt; ParticlesModel</div><div class="ttdef"><b>Definition</b> alias.hpp:52</div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

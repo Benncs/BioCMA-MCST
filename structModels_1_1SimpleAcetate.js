@@ -3,6 +3,7 @@ var structModels_1_1SimpleAcetate =
     [ "Config", "structModels_1_1SimpleAcetate.html#a2ec813802cb7b506ae26dc08c0fd2758", null ],
     [ "FloatType", "structModels_1_1SimpleAcetate.html#a4a9764bc635d2da632560c2206b72264", null ],
     [ "Self", "structModels_1_1SimpleAcetate.html#a795cd335f01e0e985a1768afc8565d01", null ],
+    [ "SelfContribs", "structModels_1_1SimpleAcetate.html#a2534be6319023850accd860795f11dd4", null ],
     [ "SelfParticle", "structModels_1_1SimpleAcetate.html#a58b5420d00a9c7981124b9d3d7cb450f", null ],
     [ "uniform_weight", "structModels_1_1SimpleAcetate.html#a4ca8dcf63f399f3402764bccdb88f0cf", null ],
     [ "particle_var", "structModels_1_1SimpleAcetate.html#a1a5694e01e95d629baa2cc4b154e6956", [
@@ -18,11 +19,10 @@ var structModels_1_1SimpleAcetate =
       [ "__COUNT__", "structModels_1_1SimpleAcetate.html#a1a5694e01e95d629baa2cc4b154e6956ac24f1659ef8e96af67e4a7d8663a3efb", null ]
     ] ],
     [ "division", "structModels_1_1SimpleAcetate.html#aa4875be379cf8094f9678697bb8ec918", null ],
-    [ "get_bounds", "structModels_1_1SimpleAcetate.html#a6761deb6b401db28ee0be3387abf312c", null ],
     [ "init", "structModels_1_1SimpleAcetate.html#afa7e5fdc39188c01e694ef9474c6f729", null ],
     [ "mass", "structModels_1_1SimpleAcetate.html#ad951cd5a6c9a7bb3d69781c99d6868dc", null ],
     [ "names", "structModels_1_1SimpleAcetate.html#a26d252012aee25980ad5417e8a3849e5", null ],
-    [ "update", "structModels_1_1SimpleAcetate.html#a8061e0dac710b4cbde4ad80df9503643", null ],
+    [ "update", "structModels_1_1SimpleAcetate.html#a82f4d52c087dc701b08a613c1eb1df58", null ],
     [ "a_max_m", "structModels_1_1SimpleAcetate.html#aa2cd22d1c106de7f518215a80d06a92d", null ],
     [ "d_m", "structModels_1_1SimpleAcetate.html#aa799e40ada18ffb910abbbe7840ca40e", null ],
     [ "k", "structModels_1_1SimpleAcetate.html#a34ddbadec481c553536d21a5037277be", null ],
@@ -33,6 +33,7 @@ var structModels_1_1SimpleAcetate =
     [ "l_max_m", "structModels_1_1SimpleAcetate.html#aae0bd41b1814863cadf2c2b405b1dbfb", null ],
     [ "l_min_m", "structModels_1_1SimpleAcetate.html#aaa03860f784beaf1d4a260709d44c23b", null ],
     [ "lin_density", "structModels_1_1SimpleAcetate.html#a812807bea6f5561003ebc40ec1b112bb", null ],
+    [ "n_c", "structModels_1_1SimpleAcetate.html#ad28dae7238970569919568d3918dccc5", null ],
     [ "N_N", "structModels_1_1SimpleAcetate.html#ab962d4e29c06b7622eee404b60dbe430", null ],
     [ "n_var", "structModels_1_1SimpleAcetate.html#aed6e1e2b4384a2832dbacb83f8380bea", null ],
     [ "name", "structModels_1_1SimpleAcetate.html#ab958f0e86270a02a34f9f0794860de74", null ],
