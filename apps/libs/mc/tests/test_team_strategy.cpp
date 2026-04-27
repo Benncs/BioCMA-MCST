@@ -36,11 +36,10 @@ template <typename exec_space> struct f_assert
 
   using team_policy_t = Kokkos::TeamPolicy<exec_space>;
   using team_member_t = team_policy_t::member_type;
-
+  using _float_t = float;
   using scratch_view_t = Kokkos::View<
-      float_t*,
+      _float_t*,
       typename team_policy_t::execution_space::scratch_memory_space>;
-  using float_t = float;
 
   std::size_t n_tot;
   std::size_t m_n_per_team;
