@@ -501,6 +501,26 @@ def _do_scale(args):
         )
 
 
+def help_message(args=None):
+    print("""
+Usage: python script.py <command> [options]
+
+Commands:
+  gen     Generate json case template
+  Scale   Perform scaling 
+  plot    Plot data or results
+  add     Add entries or data to a dataset
+  fom     Plot figure of merit
+  fom_k   Compute figure of merit with k-factor scaling
+  
+  help    Show this help message
+
+Examples:
+  python benchmark.py plot [json file]
+
+""")
+
+
 if __name__ == "__main__":
     _cb = {
         "plot": _plot,
@@ -509,6 +529,7 @@ if __name__ == "__main__":
         "fom": _fom,
         "scale": _do_scale,
         "fom_k": _fom2,
+        "help": help_message,
     }
     args = sys.argv[1:]
 
@@ -516,5 +537,7 @@ if __name__ == "__main__":
         _cb[args[0]](args)
         sys.exit(0)
     else:
-        print("Error: Invalid argument. Usage: python script.py [plot | scale]")
+        print(
+            "Error: Invalid argument. Usage: python script.py [plot | scale | gen | add | fom | fom_k | help]"
+        )
         sys.exit(1)

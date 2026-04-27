@@ -1,5 +1,4 @@
 
-# PWD=/home-local/casale/scratch_remote/deploy_biomc/BioCMA-MCST/
 PWD=$(shell pwd)
 
 TARGET ?= model        
