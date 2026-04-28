@@ -109,6 +109,7 @@ namespace Simulation::KernelInline
                        _event,
                        _probes_div),
           move_kernel(options.m_p_p_team_move,
+                      options.m_p_p_team_leave,
                       container.position,
                       container.status,
                       std::move(m),
@@ -129,9 +130,9 @@ namespace Simulation::KernelInline
 
       if (move_kernel.enable_move)
       {
-        const auto npt = move_kernel.m_p_team_leave;
+        const auto npt = m_options.m_p_p_team_move;
 
-        std::size_t league_size = Common::c_league_size(n_particle, npt);
+        const std::size_t league_size = Common::c_league_size(n_particle, npt);
 
         auto cycle_policy
             = Kokkos::TeamPolicy<TagMove>(model_space,
@@ -144,6 +145,7 @@ namespace Simulation::KernelInline
 
         Kokkos ::parallel_for("cycle_move", cycle_policy, move_kernel);
       }
+
       if (move_kernel.enable_leave)
       {
 
