@@ -43,5 +43,6 @@ var namespaceSimulation =
       [ "Serde", "namespaceSimulation.html#afd80d46a94927c6389992f31509571aaa3aa078c74db7e488d0384999eccb7116", null ]
     ] ],
     [ "makeScalarSimulation", "namespaceSimulation.html#ae5bb8948e2a0bb4f4aef277baf4c0dff", null ],
+    [ "read_options", "namespaceSimulation.html#ac368de50ad1e634ea2d7ab3410f429ad", null ],
     [ "map_probe_name", "namespaceSimulation.html#ad84b3a18b90cd099d733648503210f67", null ]
 ];

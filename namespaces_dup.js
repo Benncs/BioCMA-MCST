@@ -13,6 +13,7 @@ var namespaces_dup =
       [ "_ln", "namespaceCommonMaths.html#a4c17801ee3f7b5fefd5a2f209df270d3", null ]
     ] ],
     [ "Core", "namespaceCore.html", "namespaceCore" ],
+    [ "EIGEN_DIAG_POP", "namespaceEIGEN__DIAG__POP.html", "namespaceEIGEN__DIAG__POP" ],
     [ "IO", "namespaceIO.html", "namespaceIO" ],
     [ "MC", "namespaceMC.html", "namespaceMC" ],
     [ "Models", "namespaceModels.html", "namespaceModels" ],

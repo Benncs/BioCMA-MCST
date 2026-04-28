@@ -25,6 +25,10 @@ var annotated_dup =
       [ "SimulationParameters", "structCore_1_1SimulationParameters.html", "structCore_1_1SimulationParameters" ],
       [ "UserControlParameters", "structCore_1_1UserControlParameters.html", "structCore_1_1UserControlParameters" ]
     ] ],
+    [ "EIGEN_DIAG_POP", "namespaceEIGEN__DIAG__POP.html", [
+      [ "FunctorKla", "structEIGEN__DIAG__POP_1_1FunctorKla.html", "structEIGEN__DIAG__POP_1_1FunctorKla" ],
+      [ "MtrVisitor", "structEIGEN__DIAG__POP_1_1MtrVisitor.html", "structEIGEN__DIAG__POP_1_1MtrVisitor" ]
+    ] ],
     [ "IO", "namespaceIO.html", [
       [ "Console", "classIO_1_1Console.html", "classIO_1_1Console" ],
       [ "Logger", "classIO_1_1Logger.html", "classIO_1_1Logger" ],
@@ -83,6 +87,7 @@ var annotated_dup =
         [ "CycleFunctors", "structSimulation_1_1KernelInline_1_1CycleFunctors.html", "structSimulation_1_1KernelInline_1_1CycleFunctors" ],
         [ "CycleReducer", "classSimulation_1_1KernelInline_1_1CycleReducer.html", "classSimulation_1_1KernelInline_1_1CycleReducer" ],
         [ "CycleReduceType", "structSimulation_1_1KernelInline_1_1CycleReduceType.html", "structSimulation_1_1KernelInline_1_1CycleReduceType" ],
+        [ "DispatchOptions", "structSimulation_1_1KernelInline_1_1DispatchOptions.html", "structSimulation_1_1KernelInline_1_1DispatchOptions" ],
         [ "MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", "structSimulation_1_1KernelInline_1_1MoveFunctor" ],
         [ "TagContribution", "structSimulation_1_1KernelInline_1_1TagContribution.html", null ],
         [ "TagContribution0D", "structSimulation_1_1KernelInline_1_1TagContribution0D.html", null ],

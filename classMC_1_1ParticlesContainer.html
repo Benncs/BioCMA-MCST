@@ -98,10 +98,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5d93b87f5a6e18c449e0ed62333e9d6e" id="r_a5d93b87f5a6e18c449e0ed62333e9d6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMC_1_1ParticlesContainer.html">ParticlesContainer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d93b87f5a6e18c449e0ed62333e9d6e">operator=</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">ParticlesContainer</a> &amp;&amp;)=default</td></tr>
 <tr class="memitem:a23696c7b8b024aa8544b5f4deca12ac3" id="r_a23696c7b8b024aa8544b5f4deca12ac3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23696c7b8b024aa8544b5f4deca12ac3">~ParticlesContainer</a> ()=default</td></tr>
 <tr class="memdesc:a23696c7b8b024aa8544b5f4deca12ac3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor.  <br /></td></tr>
-<tr class="memitem:aa60463df63b69cbea578e85421728dca" id="r_aa60463df63b69cbea578e85421728dca"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa60463df63b69cbea578e85421728dca">sample</a> (std::size_t idx, std::size_t i_sample) const</td></tr>
-<tr class="memdesc:aa60463df63b69cbea578e85421728dca"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the sample at idx/i_sample position  <br /></td></tr>
-<tr class="memitem:af689a168bd1abaab3e1427cac75727d5" id="r_af689a168bd1abaab3e1427cac75727d5"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af689a168bd1abaab3e1427cac75727d5">samples</a> ()</td></tr>
-<tr class="memdesc:af689a168bd1abaab3e1427cac75727d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the sample view  <br /></td></tr>
 <tr class="memitem:a3ad0f53899edc9c8343ca1122d722c29" id="r_a3ad0f53899edc9c8343ca1122d722c29"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ad0f53899edc9c8343ca1122d722c29">handle_division</a> (const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;random_pool, std::size_t idx1) const</td></tr>
 <tr class="memdesc:a3ad0f53899edc9c8343ca1122d722c29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the contribution if particle at index idx.  <br /></td></tr>
 <tr class="memitem:a81e8092b0be1c6e31cf6637a492a8e40" id="r_a81e8092b0be1c6e31cf6637a492a8e40"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION Model::FloatType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81e8092b0be1c6e31cf6637a492a8e40">get_weight</a> (std::size_t idx) const</td></tr>
@@ -118,7 +114,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:adae9af7cbb629530927d504f5fe75c90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load data from ar for deserialization.  <br /></td></tr>
 <tr class="memitem:a1ccf09c885c6524e0132d81008e9a61f" id="r_a1ccf09c885c6524e0132d81008e9a61f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ccf09c885c6524e0132d81008e9a61f">get_allocation_factor</a> () const noexcept</td></tr>
 <tr class="memdesc:a1ccf09c885c6524e0132d81008e9a61f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the allocation factor.  <br /></td></tr>
-<tr class="memitem:a5684187ca0e3665de9d1e51e76e2f65d" id="r_a5684187ca0e3665de9d1e51e76e2f65d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5684187ca0e3665de9d1e51e76e2f65d">change_nsample</a> (std::size_t new_n_sample)</td></tr>
 <tr class="memitem:a6f8e762483a4d6589e89d03154f659b9" id="r_a6f8e762483a4d6589e89d03154f659b9"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f8e762483a4d6589e89d03154f659b9">capacity</a> () const noexcept</td></tr>
 <tr class="memdesc:a6f8e762483a4d6589e89d03154f659b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total number of elements the container can hold without reallocating.  <br /></td></tr>
 <tr class="memitem:a6b2d263bc0d301abbeae8519797c1a4c" id="r_a6b2d263bc0d301abbeae8519797c1a4c"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b2d263bc0d301abbeae8519797c1a4c">get_inactive</a> () const noexcept</td></tr>
@@ -141,7 +136,6 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:afa005cba9cbc87bc27b6bd0eaa066fac" id="r_afa005cba9cbc87bc27b6bd0eaa066fac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a2193e5e54bfdf96357f01505831e1072">MC::ParticleStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa005cba9cbc87bc27b6bd0eaa066fac">status</a></td></tr>
 <tr class="memitem:ac9433de09e8e24838a2e058842b456d5" id="r_ac9433de09e8e24838a2e058842b456d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a9528ddf7d5ad7db729640d859dbc4c5e">ParticleWeigths</a>&lt; typename Model::FloatType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9433de09e8e24838a2e058842b456d5">weights</a></td></tr>
 <tr class="memitem:ac69ec6b2784cf095558d8f43f2a4cb0a" id="r_ac69ec6b2784cf095558d8f43f2a4cb0a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a71308af240201ce951b6993271bec9d6">ParticleAges</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac69ec6b2784cf095558d8f43f2a4cb0a">ages</a></td></tr>
-<tr class="memitem:a40d9d132b19dc8baf2933bc1d8689a62" id="r_a40d9d132b19dc8baf2933bc1d8689a62"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a216249abfe5de512b198feceabe6916d">ParticleSamples</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40d9d132b19dc8baf2933bc1d8689a62">random</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -156,7 +150,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ae3d67d42ba1d139b0ad83d1d9395f3dc" id="r_ae3d67d42ba1d139b0ad83d1d9395f3dc"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3d67d42ba1d139b0ad83d1d9395f3dc">n_allocated_elements</a></td></tr>
 <tr class="memitem:a7b4ed9c9e9938f71e1fc659dcf3ff66e" id="r_a7b4ed9c9e9938f71e1fc659dcf3ff66e"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b4ed9c9e9938f71e1fc659dcf3ff66e">n_used_elements</a></td></tr>
 <tr class="memitem:ab287b63249c0feaf15a20d26bfebc647" id="r_ab287b63249c0feaf15a20d26bfebc647"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab287b63249c0feaf15a20d26bfebc647">inactive_counter</a></td></tr>
-<tr class="memitem:aa3a969a6ac858a9152aeb2d48556fc19" id="r_aa3a969a6ac858a9152aeb2d48556fc19"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3a969a6ac858a9152aeb2d48556fc19">n_samples</a></td></tr>
 <tr class="memitem:a0036ad1f84663d168f0a7df4571ba8a3" id="r_a0036ad1f84663d168f0a7df4571ba8a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMC_1_1RuntimeParameters.html">RuntimeParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0036ad1f84663d168f0a7df4571ba8a3">rt_params</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
@@ -468,30 +461,6 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
 </div><div class="memdoc">
 
 <p>Returns the total number of elements the container can hold without reallocating. </p>
-
-</div>
-</div>
-<a id="a5684187ca0e3665de9d1e51e76e2f65d" name="a5684187ca0e3665de9d1e51e76e2f65d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5684187ca0e3665de9d1e51e76e2f65d">&#9670;&#160;</a></span>change_nsample()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::change_nsample </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>new_n_sample</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_a5684187ca0e3665de9d1e51e76e2f65d_icgraph.svg" width="379" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
@@ -924,52 +893,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="aa60463df63b69cbea578e85421728dca" name="aa60463df63b69cbea578e85421728dca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa60463df63b69cbea578e85421728dca">&#9670;&#160;</a></span>sample()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION auto <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::sample </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>idx</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>i_sample</em></span>&#160;) const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>get the sample at idx/i_sample position </p>
-
-</div>
-</div>
-<a id="af689a168bd1abaab3e1427cac75727d5" name="af689a168bd1abaab3e1427cac75727d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af689a168bd1abaab3e1427cac75727d5">&#9670;&#160;</a></span>samples()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION auto <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::samples </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>get the sample view </p>
-
-</div>
-</div>
 <a id="aaf9c8e5f7b98db37614050c602e02d58" name="aaf9c8e5f7b98db37614050c602e02d58"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaf9c8e5f7b98db37614050c602e02d58">&#9670;&#160;</a></span>save()</h2>
 
@@ -1197,30 +1120,6 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
 
 </div>
 </div>
-<a id="aa3a969a6ac858a9152aeb2d48556fc19" name="aa3a969a6ac858a9152aeb2d48556fc19"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3a969a6ac858a9152aeb2d48556fc19">&#9670;&#160;</a></span>n_samples</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::n_samples</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a7b4ed9c9e9938f71e1fc659dcf3ff66e" name="a7b4ed9c9e9938f71e1fc659dcf3ff66e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7b4ed9c9e9938f71e1fc659dcf3ff66e">&#9670;&#160;</a></span>n_used_elements</h2>
 
@@ -1255,22 +1154,6 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::position</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a40d9d132b19dc8baf2933bc1d8689a62" name="a40d9d132b19dc8baf2933bc1d8689a62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40d9d132b19dc8baf2933bc1d8689a62">&#9670;&#160;</a></span>random</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespaceMC.html#a216249abfe5de512b198feceabe6916d">ParticleSamples</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::random</td>
         </tr>
       </table>
 </div><div class="memdoc">

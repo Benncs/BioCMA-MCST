@@ -2,9 +2,9 @@ var namespaceCommon =
 [
     [ "ConfigFactory", "classCommon_1_1ConfigFactory.html", "classCommon_1_1ConfigFactory" ],
     [ "ConfigFile", "classCommon_1_1ConfigFile.html", "classCommon_1_1ConfigFile" ],
-    [ "get_policy", "namespaceCommon.html#ad3d68e79e4dbd7836f3090e662e01dba", null ],
-    [ "get_policy", "namespaceCommon.html#a9322a1455f0f2a0626d66eae67412bda", null ],
+    [ "c_league_size", "namespaceCommon.html#a618180f8964b0ffef461c9ff2f44d295", null ],
     [ "get_policy_team", "namespaceCommon.html#ad9c9fe6434c0c09218a2e33e17beee28", null ],
+    [ "get_policy_team_from_npt", "namespaceCommon.html#adb49dd62a0b04177404cae67015110cc", null ],
     [ "read_env", "namespaceCommon.html#a7e29bd7117dd8bfc651a1dc215923379", null ],
     [ "read_env_or", "namespaceCommon.html#a961ab661d5ca3a66b845da6edd0a51aa", null ],
     [ "read_env_or", "namespaceCommon.html#a7ca16dc3314f89cd1860091731cd7014", null ],
