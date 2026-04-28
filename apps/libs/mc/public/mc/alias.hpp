@@ -5,6 +5,7 @@
 #include <Kokkos_Random.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/traits.hpp>
+#include <decl/Kokkos_Declare_OPENMP.hpp>
 #include <traits/Kokkos_IterationPatternTrait.hpp>
 #include <type_traits>
 
@@ -13,14 +14,76 @@
 
 namespace MC
 {
+  using ComputeSpace = Kokkos::DefaultExecutionSpace;
+  using HostSpace = Kokkos::DefaultHostExecutionSpace;
+
+  using ComputeLayout = ComputeSpace::array_layout;
 
   // NOLINTBEGIN(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
   template <uint64_t Nd, FloatingPointType F>
-  using ParticlesModel = Kokkos::View<F* [Nd], Kokkos::LayoutRight>;
+  //   using ParticlesModel = Kokkos::View<
+  //       F* [Nd],
+  //       Kokkos::LayoutRight,
+  //       ComputeSpace,
+  //       Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict> >;
+
+  //   template <uint64_t Nc, FloatingPointType F>
+  //   using ParticlesContribs = Kokkos::View<
+  //       F* [Nc],
+  //       Kokkos::LayoutRight,
+  //       ComputeSpace,
+  //       Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict
+  //                            | Kokkos::MemoryTraitsFlags::Aligned> >;
+
+  //   template <FloatingPointType F>
+  //   using DynParticlesModel = Kokkos::View<
+  //       F**,
+  //       Kokkos::LayoutRight,
+  //       ComputeSpace,
+  //       Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict> >;
+
+  //   template <FloatingPointType F>
+  //   using DynParticlesContribs = Kokkos::View<
+  //       F**,
+  //       Kokkos::LayoutRight,
+  //       ComputeSpace,
+  //       Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict> >;
+
+  using ParticlesModel
+      = Kokkos::View<F* [Nd],
+                     ComputeSpace::array_layout,
+                     ComputeSpace,
+                     Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>>;
+
+  //   template <uint64_t Nc, FloatingPointType F>
+  //   using ParticlesContribs = Kokkos::View<
+  //       F* [Nc],
+  //       ComputeSpace::array_layout,
+  //       ComputeSpace,
+  //       Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict
+  //                            | Kokkos::MemoryTraitsFlags::Aligned>>;
+
+  template <uint64_t Nc, FloatingPointType F>
+  using ParticlesContribs
+      = Kokkos::View<F* [Nc],
+                     ComputeSpace::array_layout,
+                     ComputeSpace,
+                     Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>>;
+
   template <FloatingPointType F>
-  using DynParticlesModel = Kokkos::View<F**, Kokkos::LayoutRight>;
-  using ComputeSpace = Kokkos::DefaultExecutionSpace;
-  using HostSpace = Kokkos::DefaultHostExecutionSpace;
+  using DynParticlesModel
+      = Kokkos::View<F**,
+                     ComputeSpace::array_layout,
+                     ComputeSpace,
+                     Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>>;
+
+  template <FloatingPointType F>
+  using DynParticlesContribs
+      = Kokkos::View<F**,
+                     ComputeSpace::array_layout,
+                     ComputeSpace,
+                     Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>>;
+
   // NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
 }; // namespace MC
@@ -50,9 +113,15 @@ namespace MC
      * ages(i,0) -> hydraulic time (set to 0 when leave reactor)
      * ages(i,1) -> time since division (set to 0 when divide)
      **/
+    // template <typename Exec>
+    // using ParticleAgesBase = Kokkos::
+    //     View<double* [2], typename Exec::array_layout, Exec>; // NOLINT
+
+    // Force layout left because iteration on age(i,0)->age(i,1) is never done
+    // in compute kernel
     template <typename Exec>
     using ParticleAgesBase
-        = Kokkos::View<double* [2], Kokkos::LayoutLeft, Exec>; // NOLINT
+        = Kokkos::View<float* [2], Kokkos::LayoutLeft, Exec>; // NOLINT
   } // namespace
 
   enum class Status : char
@@ -73,12 +142,15 @@ namespace MC
 
   using ParticlePositions = Kokkos::View<uint64_t*, ComputeSpace>;
   using ParticleStatus = Kokkos::View<Status*, ComputeSpace>;
-  using ParticleWeigths = Kokkos::View<double*, ComputeSpace>;
+  template <FloatingPointType ftype>
+  using ParticleWeigths = Kokkos::View<ftype*, ComputeSpace>;
   using ParticleAges = ParticleAgesBase<ComputeSpace>;
 
   // using ParticleSamples = Kokkos::
   //     View<Kokkos::Experimental::half_t**, Kokkos::LayoutRight,
   //     ComputeSpace>;
+
+  // V1.0-rc: LayoutRight seems to lead to better perf than Left for GPU
   using ParticleSamples
       = Kokkos::View<float**, Kokkos::LayoutRight, ComputeSpace>;
 
@@ -99,8 +171,8 @@ namespace MC
                      Kokkos::LayoutLeft,
                      ComputeSpace,
                      Kokkos::MemoryTraits<Kokkos::RandomAccess>>;
-  using LocalConcentration
-      = Kokkos::Subview<KernelConcentrationType, int, decltype(Kokkos::ALL)>;
+
+  using LocalConcentration = KernelConcentrationType;
 
   template <class ExecSpace, bool is_const>
   using VolumeView = std::conditional_t<
@@ -125,6 +197,7 @@ namespace MC
       Kokkos::View<const LeavingFlow*, Kokkos::SharedHostPinnedSpace>,
       Kokkos::View<LeavingFlow*, Kokkos::SharedHostPinnedSpace>>;
 
+  // TODO Use execspace layout
   template <class ExecSpace, bool is_const>
   using CumulativeProbabilityView = std::conditional_t<
       is_const,

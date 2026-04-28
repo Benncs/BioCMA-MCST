@@ -35,4 +35,18 @@
   {                                                                            \
     return;                                                                    \
   }
+
+#define GET_CONCENTRATION(__species_index__)                                   \
+  c((__species_index__), position_index)
+// c(position_index, (__species_index__))
+
+#define GET_CONTRIBS_FROM_IDX(__index__, __array_name__, __idx__)              \
+  __array_name__(__index__, __idx__)
+
+// Main macro that uses bounds checking and array access
+#define GET_CONTRIBS_FROM(__index__, __array_name__, enum_name)                \
+  GET_PROPERTY_FROM_IDX(__index__, __array_name__, INDEX_FROM_ENUM(enum_name))
+
+#define GET_CONTRIBS(enum_name) GET_PROPERTY_FROM(idx, arr_contribs, enum_name)
+
 #endif

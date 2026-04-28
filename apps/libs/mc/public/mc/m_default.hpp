@@ -16,11 +16,13 @@ struct DefaultModel
     a = 0,
   };
   static constexpr std::size_t n_var = 1;
+  static constexpr std::size_t n_c = 1;
   static constexpr std::string_view name = "default_dynamic";
   using uniform_weight = std::true_type; // Using type alias
   using Self = DefaultModel;
   using FloatType = float;
   using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
+  using SelfContribs = MC::ParticlesModel<Self::n_c, Self::FloatType>;
   using Config = std::nullopt_t;
   static constexpr bool uniform_weigth = false;
 
@@ -43,6 +45,8 @@ struct DefaultModel
          [[maybe_unused]] FloatType d_t,
          [[maybe_unused]] std::size_t idx,
          [[maybe_unused]] const SelfParticle& arr,
+         [[maybe_unused]] const SelfContribs& contribs_arr,
+         [[maybe_unused]] const std::size_t position_index,
          [[maybe_unused]] const MC::LocalConcentration& c)
   {
 
@@ -58,14 +62,6 @@ struct DefaultModel
   {
   }
 
-  KOKKOS_INLINE_FUNCTION static void
-  contribution([[maybe_unused]] std::size_t idx,
-               [[maybe_unused]] std::size_t position,
-               [[maybe_unused]] double weight,
-               [[maybe_unused]] const SelfParticle& arr,
-               [[maybe_unused]] const MC::ContributionView& contributions)
-  {
-  }
   MC::ContribIndexBounds static get_bounds()
   {
     return { 0, 0 };
@@ -86,11 +82,13 @@ struct DynamicDefaultModel
   };
 
   static constexpr std::size_t n_var = 1;
+  static constexpr std::size_t n_c = 2;
   static constexpr std::string_view name = "default_dynamic";
   using uniform_weight = std::true_type; // Using type alias
   using Self = DynamicDefaultModel;
   using FloatType = float;
   using SelfParticle = MC::DynParticlesModel<FloatType>;
+  using SelfContribs = MC::DynParticlesContribs<FloatType>;
   using Config = float;
   static constexpr bool uniform_weigth = false;
 
@@ -121,6 +119,8 @@ struct DynamicDefaultModel
          [[maybe_unused]] FloatType d_t,
          [[maybe_unused]] std::size_t idx,
          [[maybe_unused]] const SelfParticle& arr,
+         [[maybe_unused]] const SelfContribs& contribs_arr,
+         [[maybe_unused]] const std::size_t position_index,
          [[maybe_unused]] const MC::LocalConcentration& c)
   {
 
@@ -138,15 +138,6 @@ struct DynamicDefaultModel
            [[maybe_unused]] std::size_t idx2,
            [[maybe_unused]] const SelfParticle& arr,
            [[maybe_unused]] const SelfParticle& buffer_arr)
-  {
-  }
-
-  KOKKOS_INLINE_FUNCTION static void
-  contribution([[maybe_unused]] std::size_t idx,
-               [[maybe_unused]] std::size_t position,
-               [[maybe_unused]] double weight,
-               [[maybe_unused]] const SelfParticle& arr,
-               [[maybe_unused]] const MC::ContributionView& contributions)
   {
   }
 };

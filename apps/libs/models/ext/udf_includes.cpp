@@ -9,6 +9,7 @@ namespace UnsafeUDF
 {
 
   std::size_t (*Loader::set_nvar_udf)() = nullptr;
+  std::size_t (*Loader::set_nc_udf)() = nullptr;
 
   void (*Loader::init_udf)(const MC::pool_type& random_pool,
                            std::size_t idx,
@@ -16,14 +17,15 @@ namespace UnsafeUDF
                            const Models::UdfModel::Config& config)
       = nullptr; //< init function ptr
 
-  MC::Status (*Loader::update_udf)(const MC::pool_type& random_pool,
-                                   float d_t,
-                                   std::size_t idx,
-                                   const Models::UdfModel::SelfParticle& arr,
-                                   const MC::LocalConcentration& c)
+  MC::Status (*Loader::update_udf)(
+      const MC::pool_type& random_pool,
+      float d_t,
+      std::size_t idx,
+      const Models::UdfModel::SelfParticle& arr,
+      const Models::UdfModel::SelfContribs& arr_contribs,
+      const std::size_t position_index,
+      const MC::LocalConcentration& c)
       = nullptr; //< update function ptr
-
-  MC::ContribIndexBounds (*Loader::get_bounds_udf)() = nullptr;
 
   Models::UdfModel::Config (*Loader::get_config_udf)(
       Kokkos::DefaultHostExecutionSpace& ep, std::size_t n)
@@ -48,6 +50,7 @@ namespace UnsafeUDF
   Loader::init_lib(std::string_view path)
   {
     auto _handle = DynamicLibrary::getLib(path);
+
     auto _mod = DynamicLibrary::getModule<Module>(_handle);
 
     Loader::names = _mod._names_udf_m;
@@ -55,10 +58,10 @@ namespace UnsafeUDF
     Loader::init_udf = _mod._init_udf_m;
     Loader::update_udf = _mod._update_udf_m;
     Loader::get_config_udf = _mod._get_config_udf_m;
-    Loader::get_bounds_udf = _mod._get_bounds_udf_m;
     Loader::division_udf = _mod._division_udf_m;
     Loader::mass = _mod._mass_udf_m;
     Loader::set_nvar_udf = _mod._set_nvar_udf_m;
+    Loader::set_nc_udf = _mod._set_nc_udf_m;
     Models::UdfModel::set_nvar();
     return _handle;
   }

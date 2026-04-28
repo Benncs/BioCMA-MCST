@@ -27,7 +27,14 @@ validation_test_2()
   bool success = false;
   double result = naive_newton(invalid_function, 0.0, &success);
   std::cerr << success << " " << result << '\n';
-  assert(!success && std::isnan(result));
+  if (_BIOMC_BUILD_MODE == "debug")
+  {
+    assert(!success && std::isnan(result));
+  }
+  else
+  {
+    assert(!success);
+  }
 }
 
 int

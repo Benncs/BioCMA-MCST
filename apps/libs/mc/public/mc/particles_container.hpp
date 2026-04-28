@@ -61,7 +61,6 @@ namespace MC
     /**
      * @brief Alias for the model used by the container.
      */
-
     explicit ParticlesContainer(RuntimeParameters rt_param,
                                 std::size_t n_particle,
                                 std::size_t _n_samples);
@@ -81,45 +80,39 @@ namespace MC
 
     // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes)
     Model::SelfParticle model;
+    Model::SelfContribs contribs;
+
     MC::ParticlePositions position;
     MC::ParticleStatus status;
-    ParticleWeigths weights;
+    ParticleWeigths<typename Model::FloatType> weights;
     ParticleAges ages;
-    ParticleSamples random;
     // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
-
-    /** @brief get the sample at idx/i_sample position */
-    KOKKOS_INLINE_FUNCTION auto sample(std::size_t idx,
-                                       std::size_t i_sample) const;
-
-    /** @brief get the sample view */
-    KOKKOS_INLINE_FUNCTION auto samples();
 
     /**
      * @brief Get the contribution if particle at index idx
      * @tparam CviewType: view type fo contribution
      */
-    template <typename CviewType>
-    KOKKOS_INLINE_FUNCTION void
-    get_contributions(const std::size_t idx,
-                      const CviewType& contributions) const
-    {
-      if (begin < end)
-      {
-        static_assert(ConstWeightModelType<Model>,
-                      "ModelType: Constapply_weight()");
+    // template <typename CviewType>
+    // KOKKOS_INLINE_FUNCTION void
+    // get_contributions(const std::size_t idx,
+    //                   const CviewType& contributions) const
+    // {
+    //   if (begin < end)
+    //   {
+    //     static_assert(ConstWeightModelType<Model>,
+    //                   "ModelType: Constapply_weight()");
 
-        const double weight = get_weight(idx);
-        const auto pos = position(idx);
-        auto access = contributions.access();
+    //     const double weight = get_weight(idx);
+    //     const auto pos = position(idx);
+    //     auto access = contributions.access();
 
-        for (int i = begin; i < end; ++i)
-        {
-          const int rel = i - begin;
-          access(rel, pos) += weight * model(idx, i);
-        }
-      }
-    }
+    //     for (int i = begin; i < end; ++i)
+    //     {
+    //       const int rel = i - begin;
+    //       access(rel, pos) += weight * model(idx, i);
+    //     }
+    //   }
+    // }
 
     /**
      * @brief Attempts to spawn a new particle by performing division on the
@@ -140,7 +133,7 @@ namespace MC
     /**
      * @brief Return the particle weight
      */
-    [[nodiscard]] KOKKOS_INLINE_FUNCTION double
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION Model::FloatType
     get_weight(std::size_t idx) const;
 
     // HOST
@@ -171,7 +164,6 @@ namespace MC
      */
     [[nodiscard]] double get_allocation_factor() const noexcept;
 
-    void change_nsample(std::size_t new_n_sample);
     /**
      * @brief Returns the total number of elements the container can hold
      * without reallocating.
@@ -236,12 +228,11 @@ namespace MC
 
     void __allocate_buffer__();
     void _resize(std::size_t new_size, bool force = false);
-    std::size_t n_samples;
     RuntimeParameters rt_params;
     // FIXME
   public:
-    int begin;
-    int end;
+    // int begin;
+    // int end;
 
     // int begin;
     // int end;
@@ -303,13 +294,14 @@ namespace MC
 
       CompactParticlesFunctor(MC::ParticleStatus _status,
                               M::SelfParticle _model,
+                              M::SelfContribs _contribs,
                               MC::ParticlePositions _position,
                               MC::ParticleAges _ages,
                               std::size_t _to_remove,
                               std::size_t _last_used_index)
           : status(std::move(_status)), model(std::move(_model)),
-            position(std::move(_position)), ages(std::move(_ages)),
-            offset("offset"), to_remove(_to_remove),
+            contribs(std::move(_contribs)), position(std::move(_position)),
+            ages(std::move(_ages)), offset("offset"), to_remove(_to_remove),
             last_used_index(_last_used_index)
       {
 
@@ -371,6 +363,12 @@ namespace MC
             model(inactive_slot, i_properties)
                 = model(replacement_index, i_properties);
           }
+
+          for (std::size_t i_c = 0; i_c < M::n_c; ++i_c)
+          {
+            contribs(inactive_slot, i_c) = contribs(replacement_index, i_c);
+          }
+
           ages(inactive_slot, 0) = ages(replacement_index, 0);
           ages(inactive_slot, 1) = ages(replacement_index, 1);
         }
@@ -378,6 +376,7 @@ namespace MC
 
       MC::ParticleStatus status;
       M::SelfParticle model;
+      M::SelfContribs contribs;
       MC::ParticlePositions position;
       MC::ParticleAges ages;
       Kokkos::View<std::size_t, ComputeSpace> offset;
@@ -490,20 +489,6 @@ namespace MC
   }
 
   template <ModelType Model>
-  KOKKOS_INLINE_FUNCTION auto
-  ParticlesContainer<Model>::samples()
-  {
-    return random;
-  }
-  template <ModelType Model>
-  KOKKOS_INLINE_FUNCTION auto
-  ParticlesContainer<Model>::sample(const std::size_t idx,
-                                    const std::size_t i_sample) const
-  {
-    return random(idx, i_sample);
-  }
-
-  template <ModelType Model>
   template <class Archive>
   void
   ParticlesContainer<Model>::load(Archive& ar)
@@ -517,6 +502,17 @@ namespace MC
     deserialize_view(ar, status);
     deserialize_view(ar, model);
     deserialize_view(ar, ages);
+
+    if (Model::n_var != model.extent(1))
+    {
+      throw std::runtime_error(
+          "Error when deserialze, model number of property mismatch");
+    }
+
+    Kokkos::resize(
+        this->contribs,
+        n_allocated_elements,
+        Model::n_c); // Dont forget to allocate contribs which is not saved yet
 #ifndef NDEBUG
     Kokkos::printf("ParticlesContainer::load: Check if load_tuning_constant "
                    "works with different value");
@@ -538,17 +534,6 @@ namespace MC
     serialize_view(ar, status);
     serialize_view(ar, model);
     serialize_view(ar, ages);
-  }
-
-  template <ModelType Model>
-  void
-  ParticlesContainer<Model>::change_nsample(const std::size_t new_n_sample)
-  {
-    if (new_n_sample != n_samples)
-    {
-      n_samples = new_n_sample;
-      Kokkos::resize(random, n_allocated_elements, n_samples);
-    }
   }
 
   template <ModelType Model>
@@ -637,13 +622,11 @@ namespace MC
         Kokkos::resize(model,
                        n_allocated_elements,
                        Model::n_var); // use 2nd dim resize if dynamic
+        Kokkos::resize(contribs,
+                       n_allocated_elements,
+                       Model::n_c); // use 2nd dim resize if dynamic
         Kokkos::resize(status, n_allocated_elements);
         Kokkos::resize(ages, n_allocated_elements);
-
-        if (n_samples != 0)
-        {
-          Kokkos::resize(random, n_allocated_elements, n_samples);
-        }
 
         // Handle resizing for weights based on model type
         if constexpr (ConstWeightModelType<Model>)
@@ -707,20 +690,21 @@ namespace MC
   // NOLINTEND
 
   template <ModelType M>
-  ParticlesContainer<M>::ParticlesContainer(RuntimeParameters rt_param,
-                                            std::size_t n_particle,
-                                            std::size_t _n_samples)
+  ParticlesContainer<M>::ParticlesContainer(
+      RuntimeParameters rt_param,
+      std::size_t n_particle,
+      [[maybe_unused]] std::size_t _n_samples)
       : model(alloc_without_init("particle_model"), 0, 0),
+
+        contribs(alloc_without_init("particle_contribs"), 0),
         position(alloc_without_init("particle_position"), 0),
         status(alloc_without_init("particle_status"), 0),
         weights(alloc_without_init("particle_weigth"), 0),
         ages(alloc_without_init("particle_age"), 0),
-        random(alloc_without_init("particle_random"), 0, 0),
         buffer_model("buffer_particle_model", 0),
         buffer_position("buffer_particle_position", 0),
         buffer_index("buffer_index"), n_allocated_elements(0),
-        n_used_elements(n_particle), inactive_counter(0), n_samples(_n_samples),
-        rt_params(rt_param), begin(0), end(0)
+        n_used_elements(n_particle), inactive_counter(0), rt_params(rt_param)
   {
 
     // load_tuning_constant();
@@ -731,15 +715,15 @@ namespace MC
       __allocate_buffer__();
     }
 
-    const auto bounds = M::get_bounds();
+    // const auto bounds = M::get_bounds();
 
-    if (begin > end)
-    {
-      throw std::invalid_argument("Model begin should be > end");
-    }
+    // if (begin > end)
+    // {
+    //   throw std::invalid_argument("Model begin should be > end");
+    // }
 
-    begin = bounds.begin;
-    end = bounds.end;
+    // begin = bounds.begin;
+    // end = bounds.end;
   }
 
   template <ModelType M>
@@ -780,20 +764,19 @@ namespace MC
       Kokkos::parallel_scan(
           "find_and_fill_gap",
           Kokkos::RangePolicy<ComputeSpace>(0, n_used_elements),
-          CompactParticlesFunctor<M>(
-              status, model, position, ages, to_remove, last_used_index));
+          CompactParticlesFunctor<M>(status,
+                                     model,
+                                     contribs,
+                                     position,
+                                     ages,
+                                     to_remove,
+                                     last_used_index));
 
       Kokkos::fence();
       KOKKOS_ASSERT(this->position.extent(0) == n_allocated_elements);
+      KOKKOS_ASSERT(this->contribs.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->model.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->status.extent(0) == n_allocated_elements);
-#ifndef NDEBUG
-      if (n_samples != 0)
-      {
-        KOKKOS_ASSERT(this->random.extent(0) == n_allocated_elements);
-        KOKKOS_ASSERT(this->random.extent(1) == n_samples);
-      }
-#endif
 
       n_used_elements = new_used_item;
       const bool do_shrink = n_used_elements <= static_cast<std::size_t>(
@@ -813,7 +796,7 @@ namespace MC
   }
 
   template <ModelType M>
-  [[nodiscard]] KOKKOS_INLINE_FUNCTION double
+  [[nodiscard]] KOKKOS_INLINE_FUNCTION M::FloatType
   ParticlesContainer<M>::get_weight(const std::size_t idx) const
   {
     if constexpr (ConstWeightModelType<M>)
@@ -838,6 +821,20 @@ namespace MC
   ParticlesContainer<M>::_sort(std::size_t n_c)
   {
     (void)n_c;
+
+    // PROFILE_SECTION("SORT")
+    // // const auto N = n_used_elements;
+    const int bin_size = 2048;
+
+    const auto sn
+        = Kokkos::subview(position, std::pair<int, int>(0, n_used_elements));
+
+    using ExecSpace = Kokkos::DefaultExecutionSpace;
+    using view_type = decltype(position);
+    auto binop = Kokkos::BinOp1D<view_type>(bin_size, 0, n_c);
+
+    auto sorter = Kokkos::BinSort<view_type, decltype(binop)>(
+        ExecSpace(), sn, binop, true);
   }
 
 } // namespace MC

@@ -26,6 +26,7 @@ namespace UnsafeUDF
   struct Loader
   {
     static std::size_t (*set_nvar_udf)();
+    static std::size_t (*set_nc_udf)();
 
     static void (*init_udf)(
         const MC::pool_type& random_pool,
@@ -38,9 +39,9 @@ namespace UnsafeUDF
         float d_t,
         std::size_t idx,
         const Models::UdfModel::SelfParticle& arr,
+        const Models::UdfModel::SelfContribs& arr_contribs,
+        const std::size_t position_index,
         const MC::LocalConcentration& c); //< update function ptr
-
-    static MC::ContribIndexBounds (*get_bounds_udf)();
 
     static Models::UdfModel::Config (*get_config_udf)(
         Kokkos::DefaultHostExecutionSpace& ep, std::size_t n);
@@ -80,8 +81,6 @@ using init_udf_ptr
 using update_udf_ptr
     = decltype(UnsafeUDF::Loader::update_udf); //< update function ptr type
 
-using get_bounds_udf_ptr = decltype(UnsafeUDF::Loader::get_bounds_udf);
-
 using get_config_udf_ptr = decltype(UnsafeUDF::Loader::get_config_udf);
 
 using division_udf_ptr
@@ -89,6 +88,9 @@ using division_udf_ptr
 using mass_udf_ptr = decltype(UnsafeUDF::Loader::mass);
 using set_nvar_udf_ptr
     = decltype(UnsafeUDF::Loader::set_nvar_udf); //< division function ptr type
+
+using set_nc_udf_ptr
+    = decltype(UnsafeUDF::Loader::set_nc_udf); //< division function ptr type
 
 using names_udf_ptr = decltype(UnsafeUDF::Loader::names);
 using get_number_udf_ptr
@@ -106,7 +108,7 @@ DEFINE_MODULE(
               MODULE_ITEM(names_udf)
               MODULE_ITEM(get_number_udf)
               MODULE_ITEM(set_nvar_udf)
-              MODULE_ITEM(get_bounds_udf)
+                MODULE_ITEM(set_nc_udf)
               MODULE_ITEM(get_config_udf)
               )
 // clang-format on

@@ -1,7 +1,7 @@
 project(
   'biocma_mcst',
   'cpp',
-  version: '1.0.01',
+  version: '1.1.0',
   meson_version: '>= 1.8.0',
   default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20','b_pch=false'],
 )
@@ -87,11 +87,14 @@ if build_type == 'debug'
 elif build_type == 'debugoptimized'
   add_global_arguments('-DDEBUG', language: 'cpp')
   add_global_arguments('-DKOKKOS_ENABLE_DEBUG', language: 'cpp')
+   if compiler.has_argument('-ffast-math')
+    arch_specific_args = [arch_specific_args, '-ffast-math','-Wno-nan-infinity-disabled']
+  endif
 else
   add_global_arguments('-DNDEBUG', language: 'cpp')
   
   if compiler.has_argument('-ffast-math')
-    arch_specific_args = [arch_specific_args, '-ffast-math']
+    arch_specific_args = [arch_specific_args, '-ffast-math','-Wno-nan-infinity-disabled']
   endif
 
 endif

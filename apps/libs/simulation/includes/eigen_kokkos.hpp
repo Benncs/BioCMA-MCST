@@ -1,9 +1,13 @@
 #ifndef __SIMULATION_EIGEN_KOKKOS_HPP__
 #define __SIMULATION_EIGEN_KOKKOS_HPP__
 
+#include <common/eigen_diag.hpp>
+EIGEN_DIAG_PUSH
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+EIGEN_DIAG_POP
+
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 #include <common/traits.hpp>
@@ -43,6 +47,21 @@ template <> struct KokkosLayoutMapper<Eigen::RowMajor>
   using type = Kokkos::LayoutRight;
 };
 
+template <typename kokkoslayout> struct EigenLayoutMapper
+{
+  static constexpr int layout = 0;
+};
+
+template <> struct EigenLayoutMapper<Kokkos::LayoutLeft>
+{
+  static constexpr int layout = Eigen::ColMajor;
+};
+
+template <> struct EigenLayoutMapper<Kokkos::LayoutRight>
+{
+  static constexpr int layout = Eigen::RowMajor;
+};
+
 template <typename ExecSpace,
           int EigenLayout,
           FloatingPointType ftype,
@@ -62,6 +81,7 @@ using ColMajorKokkosScalarMatrix
 
 template <int EigenLayout, FloatingPointType float_type> struct EigenKokkosBase
 {
+  using float_t = float_type;
   using EigenMatrix = MatrixType<EigenLayout, float_type>;
   using HostView = KokkosScalarMatrix<HostSpace, EigenLayout, float_type>;
   using ComputeView

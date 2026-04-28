@@ -1,14 +1,11 @@
-#ifndef NDEBUG
-#  pragma GCC diagnostic push
-#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
-#endif
+#include "Kokkos_Assert.hpp"
+#include <common/eigen_diag.hpp>
+EIGEN_DIAG_PUSH
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#ifndef NDEBUG
-#  pragma GCC diagnostic pop
-#endif
+EIGEN_DIAG_POP
+
 #include <common/common.hpp>
 #include <hydro/impl_mass_transfer.hpp>
 #include <mc/domain.hpp>
@@ -89,9 +86,10 @@ namespace Simulation
 
         // this->mc_unit->domain.set_leaving_flow(
         //     0, *feed.output_position, feed.flow);
-
+        const auto volume = liquid_scalar.volume_span()[*feed.output_position];
+        KOKKOS_ASSERT(volume > 0.);
         this->mc_unit->domain.set_leaving_flow(
-            mc_flow_counter, *feed.output_position, feed.flow);
+            mc_flow_counter, *feed.output_position, feed.flow, volume);
         mc_flow_counter++;
       }
     }
@@ -121,6 +119,8 @@ namespace Simulation
 
       this->liquid_scalar->performStepGL(
           d_t, mtr, MassTransfer::Sign::LiquidToGas);
+
+      this->liquid_scalar->clearNegs();
     }
     else
     {

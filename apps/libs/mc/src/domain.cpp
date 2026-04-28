@@ -96,9 +96,13 @@ namespace MC
   void
   ReactorDomain::set_leaving_flow(const std::size_t i,
                                   const std::size_t i_flow,
-                                  const double flow) const
+                                  const double flow,
+                                  const double volume) const
   {
-    this->inner.leaving_flow(i) = { .index = i_flow, .flow = flow };
+    KOKKOS_ASSERT(flow > 0 && volume > 0);
+
+    this->inner.leaving_flow(i)
+        = { .index = i_flow, .flow = flow, .volume = volume };
   }
 
   ReactorDomain&

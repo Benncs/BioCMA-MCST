@@ -1,4 +1,6 @@
+#include "Kokkos_Assert.hpp"
 #include <cmath>
+#include <optional>
 #include <simulation/feed_descriptor.hpp>
 #include <stdexcept>
 #include <variant>
@@ -179,6 +181,8 @@ namespace Simulation::Feed
     {
       vec = std::vector<FeedDescriptor>();
     }
+    KOKKOS_ASSERT(fd.flow >= 0.);
+
     vec->emplace_back(
         move_allow_trivial(fd)); // Use move_allow_trivial in case
                                  // FeedDescriptor become non trivial

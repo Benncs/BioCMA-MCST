@@ -33,26 +33,28 @@ basic_test()
   }
 }
 
-template <ModelType M>
-void
-team_member_test()
-{
-  const std::size_t size = 1000;
-  MC::ParticlesContainer<M> container(MC::load_tuning_constant(), size, 0);
-  using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
-  using TeamMember = TeamPolicy::member_type;
-  std::size_t cumsum = 0;
-  Kokkos::parallel_reduce(
-      "spawn",
-      Common::get_policy(size),
-      KOKKOS_LAMBDA(const TeamMember& team_handle, std::size_t& cs) {
-        GET_INDEX(size);
-        cs += 1;
-      },
-      cumsum);
-  Kokkos::fence();
-  KOKKOS_ASSERT(cumsum == size);
-}
+// v1.1: useless
+//  template <ModelType M>
+//  void
+//  team_member_test()
+//  {
+//    const std::size_t size = 1000;
+//    MC::ParticlesContainer<M> container(MC::load_tuning_constant(), size, 0);
+//    using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
+//    using TeamMember = TeamPolicy::member_type;
+//    std::size_t cumsum = 0;
+
+//   Kokkos::parallel_reduce(
+//       "spawn",
+//       Common::get_policy_team_from_npt(size, 32),
+//       KOKKOS_LAMBDA(const TeamMember& team_handle, std::size_t& cs) {
+//         GET_INDEX(size);
+//         cs += 1;
+//       },
+//       cumsum);
+//   Kokkos::fence();
+//   KOKKOS_ASSERT(cumsum == size);
+// }
 
 template <ModelType M>
 void
@@ -150,9 +152,13 @@ main()
 {
   Kokkos::ScopeGuard guard;
   basic_test<DefaultModel>();
-  team_member_test<DefaultModel>();
   div_test<DefaultModel>();
   merge_test<DefaultModel>();
   clean_test<DefaultModel>();
   clean_test_and_shrink<DefaultModel>();
 }
+
+// int
+// main()
+// {
+// }

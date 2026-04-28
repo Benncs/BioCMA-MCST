@@ -30,9 +30,12 @@ namespace Models
                    FloatType d_t,
                    std::size_t idx,
                    const SelfParticle& arr,
+                   const SelfContribs& arr_contribs,
+                   const std::size_t position_index,
                    const MC::LocalConcentration& c)
   {
-    return UnsafeUDF::Loader::update_udf(random_pool, d_t, idx, arr, c);
+    return UnsafeUDF::Loader::update_udf(
+        random_pool, d_t, idx, arr, arr_contribs, position_index, c);
   }
 
   KOKKOS_FUNCTION void
@@ -49,18 +52,13 @@ namespace Models
   UdfModel::set_nvar()
   {
     UdfModel::n_var = UnsafeUDF::Loader::set_nvar_udf();
+    UdfModel::n_c = UnsafeUDF::Loader::set_nc_udf();
   }
 
   std::vector<std::string_view>
   UdfModel::names()
   {
     return UnsafeUDF::Loader::names();
-  }
-
-  MC::ContribIndexBounds
-  UdfModel::get_bounds()
-  {
-    return UnsafeUDF::Loader::get_bounds_udf();
   }
 
   UdfModel::Config

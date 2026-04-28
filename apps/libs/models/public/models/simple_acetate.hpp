@@ -52,6 +52,10 @@ namespace Models
     static constexpr std::string_view name = "simple_acetate";
     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
 
+    static constexpr std::size_t n_c = 2;
+
+    using SelfContribs = MC::ParticlesContribs<Self::n_c, Self::FloatType>;
+
     MODEL_CONSTANT std::size_t N_N = 2;              // Number of species
     MODEL_CONSTANT FloatType a_max_m = 2e-6 / 3600.; // m
     MODEL_CONSTANT FloatType l_max_m = 2e-6;         // m
@@ -79,8 +83,6 @@ namespace Models
     MODEL_CONSTANT auto l_dist = MC::Distributions::TruncatedNormal<FloatType>(
         l_max_m * 0.75, l_max_m / 10., 0.7 * l_min_m, l_max_m * 1.3);
 
-    MC::ContribIndexBounds static get_bounds();
-
     // static Self::Config get_config(std::size_t n);
 
     KOKKOS_INLINE_FUNCTION static void init(const MC::pool_type& random_pool,
@@ -88,10 +90,12 @@ namespace Models
                                             const SelfParticle& arr);
 
     KOKKOS_INLINE_FUNCTION static MC::Status
-    update(const MC::pool_type& random_pool,
+    update([[maybe_unused]] const MC::pool_type& random_pool,
            FloatType d_t,
            std::size_t idx,
            const SelfParticle& arr,
+           const SelfContribs& arr_contribs,
+           std::size_t position_index,
            const MC::LocalConcentration& c);
 
     KOKKOS_INLINE_FUNCTION static void
@@ -152,6 +156,8 @@ namespace Models
                         FloatType d_t,
                         std::size_t idx,
                         const SelfParticle& arr,
+                        const SelfContribs& arr_contribs,
+                        const std::size_t position_index,
                         const MC::LocalConcentration& c)
   {
     Kokkos::Array<FloatType, N_N> adm
@@ -159,11 +165,13 @@ namespace Models
             GET_PROPERTY(particle_var::a_max) / 3 };
 
     Kokkos::Array<FloatType, N_N> D{};
+    const auto c0 = GET_CONCENTRATION(0);
+    const auto c1 = GET_CONCENTRATION(1);
 
-    FloatType inv = 1. / (c[0] + k[0]);
-    D[0] = adm[0] * c[0] * inv;
-    inv = 1. / (c[1] + k[1]);
-    D[1] = adm[1] * c[1] * inv;
+    FloatType inv = 1. / (c0 + k[0]);
+    D[0] = adm[0] * c0 * inv;
+    inv = 1. / (c1 + k[1]);
+    D[1] = adm[1] * c1 * inv;
 
     GET_PROPERTY(particle_var::a_e) = 0.;
     Kokkos::Array<FloatType, N_N> U{};
@@ -181,10 +189,15 @@ namespace Models
     GET_PROPERTY(particle_var::a_e_s) = U[0];
     GET_PROPERTY(particle_var::a_e_a) = U[1];
 
-    GET_PROPERTY(particle_var::phi_s) = -1 * D[0] * lin_density * y[0];
-    GET_PROPERTY(particle_var::phi_a)
-        = mask_pa * (-U[1] * lin_density * y[1])
-          + (1.F - mask_pa) * (pa * lin_density * y[0] / y[1]);
+    const auto phi_s = -1 * D[0] * lin_density * y[0];
+    const auto phi_a = mask_pa * (-U[1] * lin_density * y[1])
+                       + (1.F - mask_pa) * (pa * lin_density * y[0] / y[1]);
+
+    GET_PROPERTY(particle_var::phi_s) = phi_s;
+    GET_PROPERTY(particle_var::phi_a) = phi_a;
+
+    GET_CONTRIBS(0) = phi_s;
+    GET_CONTRIBS(1) = phi_a;
 
     return check_div(GET_PROPERTY(Self::particle_var::length),
                      GET_PROPERTY(Self::particle_var::l_max));
@@ -198,7 +211,7 @@ namespace Models
                           const SelfParticle& buffer_arr)
   {
     Kokkos::View<FloatType**,
-                 Kokkos::LayoutRight,
+                 ComputeSpace::array_layout,
                  Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>>
         buffer_e = buffer_arr;
 
@@ -234,13 +247,6 @@ namespace Models
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = lmax2;
 
     random_pool.free_state(gen);
-  }
-
-  inline MC::ContribIndexBounds
-  SimpleAcetate::get_bounds()
-  {
-    int begin = INDEX_FROM_ENUM(Self::particle_var::phi_s);
-    return { .begin = begin, .end = begin + 2 };
   }
 
 } // namespace Models

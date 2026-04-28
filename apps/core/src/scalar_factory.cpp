@@ -8,16 +8,13 @@
 #include <stdexcept>
 #include <utility>
 #include <variant>
-#ifdef USE_HIGHFIVE
 
-#  ifndef NDEBUG
-#    pragma GCC diagnostic push
-#    pragma GCC diagnostic ignored "-w"
-#  endif
+#ifdef USE_HIGHFIVE
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
 #  include <Eigen/Dense>
-#  ifndef NDEBUG
-#    pragma GCC diagnostic pop
-#  endif
+#  pragma GCC diagnostic pop
 #  include <highfive/H5DataSet.hpp>
 #  include <highfive/H5DataSpace.hpp>
 #  include <highfive/H5Easy.hpp>

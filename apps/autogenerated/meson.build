@@ -11,6 +11,16 @@ if use_cuda
   default_MC_buffer_ratio = '0.6'
 endif
 
+
+if use_cuda
+default_particle_per_team_contributions = 128
+default_particle_per_team_cycle=1024
+else
+default_particle_per_team_contributions=1024
+default_particle_per_team_cycle=1024
+endif
+
+
 conf_data = configuration_data(
   {
     '_BIOMC_VERSION_MAJOR': version[0],
@@ -31,7 +41,9 @@ conf_data = configuration_data(
     'shrink_ratio': '0.1',
     'default_MC_buffer_ratio': default_MC_buffer_ratio,
     '__f_compress_export__':'false',
-    '__f_export_age__':'true'
+    '__f_export_age__':'true',
+    'default_particle_per_team_contributions':default_particle_per_team_contributions,
+    'default_particle_per_team_cycle':default_particle_per_team_cycle
   },
 )
 result_dir = get_option('result_dir_path')
@@ -58,7 +70,7 @@ if not use_cuda and build_udf
 endif
 
 # model_list_name = ['two_meta','simple_model','two_meta_nb','fixed_length']
-model_list_name = ['fixed_length', 'two_meta_nb', 'monod', 'simple_acetate']
+model_list_name = ['fixed_length','simple_acetate']
 if not use_cuda and build_udf
   model_list_name = [model_list_name, 'udf_model']
 endif

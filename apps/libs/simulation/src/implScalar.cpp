@@ -1,16 +1,17 @@
+#include "Kokkos_CheckUsage.hpp"
 #include "eigen_kokkos.hpp"
+#include <Kokkos_Assert.hpp>
+#include <algorithm>
+#include <mc/alias.hpp>
+#include <type_traits>
 
-#ifndef NDEBUG
-#  pragma GCC diagnostic push
-#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
-#endif
+#include <common/eigen_diag.hpp>
+EIGEN_DIAG_PUSH
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#ifndef NDEBUG
-#  pragma GCC diagnostic pop
-#endif
+EIGEN_DIAG_POP
+
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 #include <scalar_simulation.hpp>
@@ -18,6 +19,40 @@
 #include <stdexcept>
 namespace
 {
+
+  template <typename ViewType1, typename ViewType2>
+    requires(ViewType1::rank() == ViewType2::rank()
+             && std::is_convertible_v<typename ViewType2::non_const_value_type,
+                                      typename ViewType1::non_const_value_type>)
+  void
+  smrt_deep_copy2d(ViewType1 dst, const ViewType2& src)
+  {
+
+    if (dst.extent(0) != src.extent(0) || dst.extent(1) != src.extent(1))
+    {
+      throw std::runtime_error("Dimension mismatch");
+    }
+
+    if constexpr (std::is_same_v<typename ViewType1::array_layout,
+                                 typename ViewType2::array_layout>
+                  && std::is_same_v<typename ViewType1::non_const_value_type,
+                                    typename ViewType2::non_const_value_type>)
+    {
+      Kokkos::deep_copy(dst, src);
+    }
+    else
+    {
+      using exec_space = typename ViewType1::execution_space;
+      auto src_view = Kokkos::create_mirror_view_and_copy(exec_space(), src);
+      Kokkos::parallel_for(
+          "smrt_deep_copy",
+          Kokkos::MDRangePolicy<
+              typename ViewType1::execution_space,
+              Kokkos::Rank<2, Kokkos::Iterate::Left, Kokkos::Iterate::Left>>(
+              { 0, 0 }, { src.extent(0), src.extent(1) }),
+          KOKKOS_LAMBDA(int i, int j) { dst(i, j) = src_view(i, j); });
+    }
+  }
 
 #define UNROLL_CHECK(i, s)                                                     \
   if ((i) < (s))                                                               \
@@ -162,6 +197,8 @@ namespace Simulation
   [[nodiscard]] ColMajorKokkosScalarMatrix<double>
   ScalarSimulation::get_device_concentration() const
   {
+    // smrt_deep_copy(kc, concentrations.compute);
+    // return kc;
     return concentrations.compute;
   }
 
@@ -173,7 +210,6 @@ namespace Simulation
     sources.eigen_data.noalias() += Eigen::Map<eigen_type>(
         const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
   }
-
   void
   ScalarSimulation::performStepGL(double d_t,
                                   const ColMajorMatrixtype<double>& mtr,
@@ -202,6 +238,34 @@ namespace Simulation
     c.noalias() = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
+    concentrations.update_host_to_compute();
+  }
+
+  void
+  ScalarSimulation::clearNegs()
+  {
+    auto s = concentrations.get_span();
+    using float_t = decltype(concentrations)::float_t;
+    constexpr float_t TOL = -1e-8;
+    using space = decltype(concentrations)::HostView::execution_space;
+    auto hv = concentrations.host;
+    Kokkos::parallel_for(
+        "clear_negs",
+        Kokkos::MDRangePolicy<
+            space,
+            Kokkos::Rank<2, Kokkos::Iterate::Left, Kokkos::Iterate::Left>>(
+            { 0, 0 }, { n_r, n_c }),
+        KOKKOS_LAMBDA(int i, int j) {
+          auto val = hv(i, j);
+          if (val < static_cast<float_t>(0) && val >= TOL)
+          {
+            hv(i, j) = static_cast<float_t>(0);
+          }
+        });
+
+    // std::replace_if(
+    //     s.begin(), s.end(), [](auto&& f) { return f > TOL && f < 0.; }, 0.);
+
     concentrations.update_host_to_compute();
   }
 
