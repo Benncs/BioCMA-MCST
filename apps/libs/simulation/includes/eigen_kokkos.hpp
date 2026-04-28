@@ -1,9 +1,13 @@
 #ifndef __SIMULATION_EIGEN_KOKKOS_HPP__
 #define __SIMULATION_EIGEN_KOKKOS_HPP__
 
+#include <common/eigen_diag.hpp>
+EIGEN_DIAG_PUSH
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+EIGEN_DIAG_POP
+
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 #include <common/traits.hpp>

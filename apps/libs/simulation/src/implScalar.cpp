@@ -5,17 +5,13 @@
 #include <mc/alias.hpp>
 #include <type_traits>
 
-#ifndef NDEBUG
-#  pragma GCC diagnostic push
-#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
-#endif
+#include <common/eigen_diag.hpp>
+EIGEN_DIAG_PUSH
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#ifndef NDEBUG
-#  pragma GCC diagnostic pop
-#endif
+EIGEN_DIAG_POP
+
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 #include <scalar_simulation.hpp>

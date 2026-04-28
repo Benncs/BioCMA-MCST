@@ -1,3 +1,4 @@
+#include "mc/unit.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
@@ -23,12 +24,6 @@ cn_per_team()
 
   const int m_n_per_team = l1_bytes / (n_arrays * elem_bytes);
   return std::pow(2, std::ceil(std::log(m_n_per_team) / std::log(2)));
-}
-
-std::size_t
-cleague_size(std::size_t n_tot, std::size_t n_per_team)
-{
-  return (n_tot + n_per_team - 1) / n_per_team;
 }
 
 template <typename exec_space> struct f_assert
@@ -142,7 +137,7 @@ test()
   const std::size_t n_per_team = cn_per_team();
   KOKKOS_ASSERT(n_per_team % 2 == 0);
 
-  const std::size_t league_size = cleague_size(n_tot, n_per_team);
+  const std::size_t league_size = Common::c_league_size(n_tot, n_per_team);
 
   auto policy
       = Kokkos::TeamPolicy<tag>(league_size, Kokkos::AUTO(), Kokkos::AUTO());
@@ -165,6 +160,37 @@ test()
   KOKKOS_ASSERT(count == n_tot);
 }
 
+template <typename tag>
+void
+test_smaller()
+{
+  const std::size_t n_tot = 52;
+  const std::size_t n_per_team = 1024;
+
+  const std::size_t league_size = Common::c_league_size(n_tot, n_per_team);
+  // n<n_perteam should return 1
+  KOKKOS_ASSERT(league_size == 1);
+
+  auto policy
+      = Kokkos::TeamPolicy<tag>(league_size, Kokkos::AUTO(), Kokkos::AUTO());
+
+  Kokkos::printf("N per team: %ld\r\n\tTeam "
+                 "policy:\r\n\tleague_size=%d\r\n\tteam_size=%d\r\n",
+                 n_per_team,
+                 league_size,
+                 policy.team_size());
+  KOKKOS_ASSERT(league_size * n_per_team * policy.team_size() >= n_tot);
+  std::size_t count = 0;
+  Kokkos::parallel_reduce(
+      policy,
+      f_assert<Kokkos::DefaultExecutionSpace>(n_tot, n_per_team),
+      count);
+
+  Kokkos::printf("n=%ld\tcount=%ld\r\n", n_tot, count);
+
+  KOKKOS_ASSERT(count == n_tot);
+}
+
 int
 main()
 {
@@ -173,6 +199,10 @@ main()
   test<tag1>();
   test<tag2>();
   test<tag3>();
+
+  test_smaller<tag1>();
+  test_smaller<tag2>();
+  test_smaller<tag3>();
 
   Kokkos::finalize();
 }

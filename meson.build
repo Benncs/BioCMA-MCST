@@ -88,13 +88,13 @@ elif build_type == 'debugoptimized'
   add_global_arguments('-DDEBUG', language: 'cpp')
   add_global_arguments('-DKOKKOS_ENABLE_DEBUG', language: 'cpp')
    if compiler.has_argument('-ffast-math')
-    arch_specific_args = [arch_specific_args, '-ffast-math']
+    arch_specific_args = [arch_specific_args, '-ffast-math','-Wno-nan-infinity-disabled']
   endif
 else
   add_global_arguments('-DNDEBUG', language: 'cpp')
   
   if compiler.has_argument('-ffast-math')
-    arch_specific_args = [arch_specific_args, '-ffast-math']
+    arch_specific_args = [arch_specific_args, '-ffast-math','-Wno-nan-infinity-disabled']
   endif
 
 endif

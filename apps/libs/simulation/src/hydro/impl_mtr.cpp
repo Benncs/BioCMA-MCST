@@ -1,16 +1,12 @@
 #include "common/common.hpp"
+#include <common/eigen_diag.hpp>
 #include <stdexcept>
-#ifndef NDEBUG
-#  pragma GCC diagnostic push
-#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
-#endif
+EIGEN_DIAG_PUSH
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#ifndef NDEBUG
-#  pragma GCC diagnostic pop
-#endif
+EIGEN_DIAG_POP
+
 #include <cassert>
 #include <hydro/impl_mass_transfer.hpp>
 #include <scalar_simulation.hpp>

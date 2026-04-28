@@ -61,7 +61,6 @@ namespace MC
     /**
      * @brief Alias for the model used by the container.
      */
-
     explicit ParticlesContainer(RuntimeParameters rt_param,
                                 std::size_t n_particle,
                                 std::size_t _n_samples);
@@ -87,15 +86,7 @@ namespace MC
     MC::ParticleStatus status;
     ParticleWeigths<typename Model::FloatType> weights;
     ParticleAges ages;
-    ParticleSamples random;
     // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
-
-    /** @brief get the sample at idx/i_sample position */
-    KOKKOS_INLINE_FUNCTION auto sample(std::size_t idx,
-                                       std::size_t i_sample) const;
-
-    /** @brief get the sample view */
-    KOKKOS_INLINE_FUNCTION auto samples();
 
     /**
      * @brief Get the contribution if particle at index idx
@@ -173,7 +164,6 @@ namespace MC
      */
     [[nodiscard]] double get_allocation_factor() const noexcept;
 
-    void change_nsample(std::size_t new_n_sample);
     /**
      * @brief Returns the total number of elements the container can hold
      * without reallocating.
@@ -238,7 +228,6 @@ namespace MC
 
     void __allocate_buffer__();
     void _resize(std::size_t new_size, bool force = false);
-    std::size_t n_samples;
     RuntimeParameters rt_params;
     // FIXME
   public:
@@ -500,20 +489,6 @@ namespace MC
   }
 
   template <ModelType Model>
-  KOKKOS_INLINE_FUNCTION auto
-  ParticlesContainer<Model>::samples()
-  {
-    return random;
-  }
-  template <ModelType Model>
-  KOKKOS_INLINE_FUNCTION auto
-  ParticlesContainer<Model>::sample(const std::size_t idx,
-                                    const std::size_t i_sample) const
-  {
-    return random(idx, i_sample);
-  }
-
-  template <ModelType Model>
   template <class Archive>
   void
   ParticlesContainer<Model>::load(Archive& ar)
@@ -559,17 +534,6 @@ namespace MC
     serialize_view(ar, status);
     serialize_view(ar, model);
     serialize_view(ar, ages);
-  }
-
-  template <ModelType Model>
-  void
-  ParticlesContainer<Model>::change_nsample(const std::size_t new_n_sample)
-  {
-    if (new_n_sample != n_samples)
-    {
-      n_samples = new_n_sample;
-      // Kokkos::resize(random, n_allocated_elements, n_samples);
-    }
   }
 
   template <ModelType Model>
@@ -664,11 +628,6 @@ namespace MC
         Kokkos::resize(status, n_allocated_elements);
         Kokkos::resize(ages, n_allocated_elements);
 
-        if (n_samples != 0)
-        {
-          // Kokkos::resize(random, n_allocated_elements, n_samples);
-        }
-
         // Handle resizing for weights based on model type
         if constexpr (ConstWeightModelType<Model>)
         {
@@ -731,21 +690,21 @@ namespace MC
   // NOLINTEND
 
   template <ModelType M>
-  ParticlesContainer<M>::ParticlesContainer(RuntimeParameters rt_param,
-                                            std::size_t n_particle,
-                                            std::size_t _n_samples)
+  ParticlesContainer<M>::ParticlesContainer(
+      RuntimeParameters rt_param,
+      std::size_t n_particle,
+      [[maybe_unused]] std::size_t _n_samples)
       : model(alloc_without_init("particle_model"), 0, 0),
-        position(alloc_without_init("particle_position"), 0),
+
         contribs(alloc_without_init("particle_contribs"), 0),
+        position(alloc_without_init("particle_position"), 0),
         status(alloc_without_init("particle_status"), 0),
         weights(alloc_without_init("particle_weigth"), 0),
         ages(alloc_without_init("particle_age"), 0),
-        random(alloc_without_init("particle_random"), 0, 0),
         buffer_model("buffer_particle_model", 0),
         buffer_position("buffer_particle_position", 0),
         buffer_index("buffer_index"), n_allocated_elements(0),
-        n_used_elements(n_particle), inactive_counter(0), n_samples(_n_samples),
-        rt_params(rt_param)
+        n_used_elements(n_particle), inactive_counter(0), rt_params(rt_param)
   {
 
     // load_tuning_constant();
@@ -818,13 +777,6 @@ namespace MC
       KOKKOS_ASSERT(this->contribs.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->model.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->status.extent(0) == n_allocated_elements);
-#ifndef NDEBUG
-      if (n_samples != 0)
-      {
-        // KOKKOS_ASSERT(this->random.extent(0) == n_allocated_elements);
-        // KOKKOS_ASSERT(this->random.extent(1) == n_samples);
-      }
-#endif
 
       n_used_elements = new_used_item;
       const bool do_shrink = n_used_elements <= static_cast<std::size_t>(

@@ -11,6 +11,20 @@ ExecInfo::get_version()
 }
 namespace Common
 {
+
+  std::size_t
+  c_league_size(std::size_t n_tot, std::size_t n_per_team) noexcept
+  {
+    if (n_tot <= n_per_team)
+    {
+      return 1;
+    }
+
+    KOKKOS_ASSERT(n_per_team % 2 == 0);
+    KOKKOS_ASSERT(n_tot > n_per_team);
+    return (n_tot + n_per_team - 1) / n_per_team;
+  }
+
   template <>
   bool
   read_env_or(std::string_view varname, bool vdefault)

@@ -25,6 +25,12 @@ check_version(std::array<int, 3> v)
          && (v[2] == _BIOMC_VERSION_DEV);
 }
 
+namespace Common
+{
+  std::size_t c_league_size(std::size_t n_tot, std::size_t n_per_team) noexcept;
+
+}
+
 #ifndef NDEBUG
 #  include <iostream>
 #  include <source_location>

@@ -1,16 +1,13 @@
 #ifndef __IMPL_HYDRO_MASS_TRANSFER_HPP__
 #define __IMPL_HYDRO_MASS_TRANSFER_HPP__
 
-#ifndef NDEBUG
-#  pragma GCC diagnostic push
-#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
-#endif
+#include <common/eigen_diag.hpp>
+EIGEN_DIAG_PUSH
 #include <Eigen/Core>
 #include <Eigen/Dense>
-#ifndef NDEBUG
-#  pragma GCC diagnostic pop
-#endif
+#include <Eigen/Sparse>
+EIGEN_DIAG_POP
+
 #include <cma_utils/alias.hpp>
 #include <eigen_kokkos.hpp>
 #include <mc/domain.hpp>

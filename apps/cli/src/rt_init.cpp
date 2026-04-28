@@ -1,18 +1,9 @@
-#ifndef NDEBUG
-#  pragma GCC diagnostic push
-#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#  pragma GCC diagnostic ignored "-Wnan-infinity-disabled"
-#endif
-#include <Eigen/Core>
-#ifndef NDEBUG
-#  pragma GCC diagnostic pop
-#endif
-
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
 #include <biocma_cst_config.hpp>
 #include <cassert>
 #include <chrono>
+#include <common/eigen_diag.hpp>
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstdlib>
@@ -25,7 +16,9 @@
 #include <sstream>
 #include <string>
 #include <string_view>
-
+EIGEN_DIAG_PUSH
+#include <Eigen/Core>
+EIGEN_DIAG_POP
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
 #endif
