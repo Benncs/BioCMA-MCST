@@ -190,7 +190,7 @@ namespace Simulation::KernelInline
         if (m_options.f_multi_compartment)
         {
 
-          auto policy_contribs
+          const auto policy_contribs
               = Kokkos::TeamPolicy<typename ContributionFunctor<Model>::Tag3D>(
                   model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
           Kokkos::parallel_for(

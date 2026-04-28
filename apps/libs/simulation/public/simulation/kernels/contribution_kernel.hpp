@@ -71,23 +71,6 @@ template <ModelType M> struct ContributionFunctor
                   && (p0 + upper_bound) <= n_particle);
 
     team.team_barrier();
-    // Kokkos::parallel_for(
-    //     Kokkos::TeamThreadRange(team, m_particle_per_team),
-    //     [&](const std::size_t relative_index)
-    //     {
-    //       const std::size_t flatten_index = p0 + relative_index;
-    //       if (flatten_index >= n_particle
-    //           || status(flatten_index) != MC::Status::Idle)
-    //       {
-    //         return;
-    //       }
-    //       const auto weight = m_particles.get_weight(flatten_index);
-    //       for (std::size_t j = 0; j < n_c; ++j)
-    //       {
-    //         Kokkos::atomic_add(&scratch(j),
-    //                            weight * contribs(flatten_index, j));
-    //       }
-    //     });
 
     Kokkos::parallel_for(
         Kokkos::TeamThreadRange(team, 0, upper_bound),

@@ -193,7 +193,6 @@ namespace Simulation
       cycle_functors.launch_model(n_particle);
     }
 
-    cycle_functors.move_space.fence();
     if (cycle_functors.move_kernel.need_launch())
     {
       cycle_functors.launch_move(n_particle);
@@ -210,7 +209,8 @@ namespace Simulation
     PROFILE_SECTION("Simulation::post_cycle")
     Kokkos::fence();
     this->scatter_contribute();
-    auto [host_red, host_out_counter] = cycle_functors.get_host_reduction();
+    const auto [host_red, host_out_counter]
+        = cycle_functors.get_host_reduction();
 
     container.update_and_remove_inactive(host_out_counter, host_red.dead_total);
 

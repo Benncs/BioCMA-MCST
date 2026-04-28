@@ -511,7 +511,7 @@ Commands:
   plot    Plot data or results
   add     Add entries or data to a dataset
   fom     Plot figure of merit
-  fom_k   Compute figure of merit with k-factor scaling
+  fom_k   Compute figure of merit of kernels
   
   help    Show this help message
 

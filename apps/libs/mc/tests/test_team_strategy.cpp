@@ -1,8 +1,8 @@
-#include "mc/unit.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_Printf.hpp>
+#include <common/kokkos_getpolicy.hpp>
 
 struct tag1
 {
