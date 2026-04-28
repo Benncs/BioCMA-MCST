@@ -2,26 +2,30 @@
 Script to perform bench scaling and profiling of an external running program.
 
 Author: CASALE Benjamin
-Date: 10/02/2025
-Version: 2.0
+Date: 28/04/2026
+Version: 3.0
 """
 
-from typing import Dict
+import glob
+import json
 import os
+import shutil
 import subprocess
+import sys
+from typing import Dict
+
 import matplotlib.pyplot as plt
 import numpy as np
-import sys
-import glob
-import shutil
-import json
-from matplotlib.backends.backend_pdf import PdfPages
 from cycler import cycler
+from matplotlib.backends.backend_pdf import PdfPages
+
+
+FOM_N_P = 106
 
 
 def format_with_k_notation(num):
     print(num)
-    if num >= 1000_000:
+    if num >= 1_000_000:
         return f"{num / 1_000_000:.1f}M"
     elif num >= 1_000:  # For thousands
         return f"{num / 1_000:.1f}K"
@@ -83,7 +87,7 @@ def format_cli(bench_config, case_config, number_particle, nt=None):
             "-r",
             "1",
         ]
-
+    result_path = "/tmp"  # "./tmp_result"
     common_cmd = [
         "-mn",
         case_config["model_name"],
@@ -97,7 +101,7 @@ def format_cli(bench_config, case_config, number_particle, nt=None):
         "-f",
         case_config["cma_path"],
         "-er",
-        f"./tmp_result/{bench_config['name']}",
+        f"{result_path}/{bench_config['name']}",
         "-nex",
         "0",
         "-force",
@@ -143,9 +147,9 @@ def execute(bench_config, n_thread, n_p, command):
     env_var["OMP_NUM_THREADS"] = str(n_thread)
     env_var["OMP_PLACES"] = "threads"
     env_var["OMP_PROC_BIND"] = "spread"
-    env_var["KOKKOS_TOOLS_LIBS"] = (
-        "/home_pers/casale/Documents/code/kokkos-tools/build/lib/libkp_kernel_timer.so"
-    )
+    env_var["KOKKOS_TOOLS_LIBS"] = os.environ["KOKKOS_TOOLS_LIBS"]
+    env_var["BIOMC_MC_ALLOC_FACTOR"] = "1.1"
+
     env_var["KOKKOS_TOOLS_TIMER_JSON"] = "1"
     commands = command
     os.makedirs(bench_config["folder"], exist_ok=True)
@@ -358,22 +362,26 @@ def plot_results(config, processed_results):
 ## MAIN
 
 
-def _fom2(args):
+def _fom_kernels(args):
     case = read_config(args[1])
     bc = case["bench_config"]
     data = read_dict(bc)
     keys = list(data.keys())
 
+    # info = "region-perf-info"
+    info = "kernel-perf-info"
+    maxt = max([int(data[keys[i]]["n_threads"]) for i in range(len(keys))])
+
     def plot_fom():
         figs = []
-        for i in range(0, len(keys), len(keys) // 4):
+        for i in range(0, len(keys)):
             datai = data[keys[i]]
-            region_perf_info = datai.get("kokkos-kernel-data", {}).get(
-                "region-perf-info", []
-            )
+            if int(datai["n_threads"]) != maxt:
+                continue
+            region_perf_info = datai.get("kokkos-kernel-data", {}).get(info, [])
+
             kernel_names = [entry["kernel-name"] for entry in region_perf_info]
             total_times = [entry["total-time"] for entry in region_perf_info]
-            print(kernel_names)
             sorted_kernels = sorted(
                 zip(kernel_names, total_times), key=lambda x: x[1], reverse=True
             )
@@ -430,7 +438,7 @@ def _fom(args):
     maxnt = np.max(all_nt)
     all_mpi = np.concatenate(all_mpi)
 
-    maxnp = 100e6  # np.max(all_np)
+    maxnp = FOM_N_P  # np.max(all_np)
     mask_name = True  # (names == "gpe_3d") | (names == "gpu_3d")
     mask_np = (all_np == maxnp) | (all_np == maxnp)
     mask_mpi = (all_nt == 1) & (all_mpi == 20)
@@ -439,7 +447,7 @@ def _fom(args):
 
     fig, ax = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
     ax[0].bar(names[mask], all_kt[mask], color="skyblue")
-    ax[0].set_title("Kernel Time (100M Particles)", fontsize=14)
+    ax[0].set_title(f"Kernel Time ({maxnp} Particles)", fontsize=14)
     ax[0].set_ylabel("Time [s]", fontsize=12)
     ax[0].grid(True, which="both", linestyle="--", alpha=0.7)
     ax[1].bar(names[mask], all_time[mask], color="#FF6347")
@@ -528,7 +536,7 @@ if __name__ == "__main__":
         "add": _add,
         "fom": _fom,
         "scale": _do_scale,
-        "fom_k": _fom2,
+        "fom_k": _fom_kernels,
         "help": help_message,
     }
     args = sys.argv[1:]
