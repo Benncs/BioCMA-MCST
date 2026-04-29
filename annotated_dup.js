@@ -36,6 +36,9 @@ var annotated_dup =
       [ "RedirectGuard", "classIO_1_1RedirectGuard.html", "classIO_1_1RedirectGuard" ],
       [ "RedirectHandle", "classIO_1_1RedirectHandle.html", "classIO_1_1RedirectHandle" ]
     ] ],
+    [ "KokkosEigen", "namespaceKokkosEigen.html", [
+      [ "KokkosEigen2D", "classKokkosEigen_1_1KokkosEigen2D.html", "classKokkosEigen_1_1KokkosEigen2D" ]
+    ] ],
     [ "MC", "namespaceMC.html", [
       [ "Distributions", "namespaceMC_1_1Distributions.html", [
         [ "Exponential", "structMC_1_1Distributions_1_1Exponential.html", "structMC_1_1Distributions_1_1Exponential" ],
@@ -136,10 +139,6 @@ var annotated_dup =
     [ "CustomLoadBalancer", "classCustomLoadBalancer.html", "classCustomLoadBalancer" ],
     [ "DefaultModel", "structDefaultModel.html", "structDefaultModel" ],
     [ "DynamicDefaultModel", "structDynamicDefaultModel.html", "structDynamicDefaultModel" ],
-    [ "EigenKokkosBase", "structEigenKokkosBase.html", "structEigenKokkosBase" ],
-    [ "EigenLayoutMapper", "structEigenLayoutMapper.html", "structEigenLayoutMapper" ],
-    [ "EigenLayoutMapper< Kokkos::LayoutLeft >", "structEigenLayoutMapper_3_01Kokkos_1_1LayoutLeft_01_4.html", "structEigenLayoutMapper_3_01Kokkos_1_1LayoutLeft_01_4" ],
-    [ "EigenLayoutMapper< Kokkos::LayoutRight >", "structEigenLayoutMapper_3_01Kokkos_1_1LayoutRight_01_4.html", "structEigenLayoutMapper_3_01Kokkos_1_1LayoutRight_01_4" ],
     [ "ExecInfo", "structExecInfo.html", "structExecInfo" ],
     [ "ExportHandler", "classExportHandler.html", "classExportHandler" ],
     [ "f_assert", "structf__assert.html", "structf__assert" ],
@@ -148,9 +147,6 @@ var annotated_dup =
     [ "has_uniform_weight< T, std::void_t< typename T::uniform_weight > >", "structhas__uniform__weight_3_01T_00_01std_1_1void__t_3_01typename_01T_1_1uniform__weight_01_4_01_4.html", null ],
     [ "HostImportantLoadBalancer", "classHostImportantLoadBalancer.html", "classHostImportantLoadBalancer" ],
     [ "ILoadBalancer", "classILoadBalancer.html", "classILoadBalancer" ],
-    [ "KokkosLayoutMapper", "structKokkosLayoutMapper.html", null ],
-    [ "KokkosLayoutMapper< Eigen::ColMajor >", "structKokkosLayoutMapper_3_01Eigen_1_1ColMajor_01_4.html", "structKokkosLayoutMapper_3_01Eigen_1_1ColMajor_01_4" ],
-    [ "KokkosLayoutMapper< Eigen::RowMajor >", "structKokkosLayoutMapper_3_01Eigen_1_1RowMajor_01_4.html", "structKokkosLayoutMapper_3_01Eigen_1_1RowMajor_01_4" ],
     [ "OpaquePointer", "structOpaquePointer.html", "structOpaquePointer" ],
     [ "Result", "structResult.html", "structResult" ],
     [ "SerdeModel", "structSerdeModel.html", "structSerdeModel" ],

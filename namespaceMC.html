@@ -126,6 +126,7 @@ Typedefs</h2></td></tr>
 <tr class="memitem:abc5d7547f4d75b0ed71d943cbbb836c5" id="r_abc5d7547f4d75b0ed71d943cbbb836c5"><td class="memTemplParams" colspan="2">template&lt;typename MemorySpace&gt; </td></tr>
 <tr class="memitem:abc5d7547f4d75b0ed71d943cbbb836c5 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc5d7547f4d75b0ed71d943cbbb836c5">ParticlePropertyViewType</a> = Kokkos::View&lt;double**, Kokkos::LayoutRight, MemorySpace&gt;</td></tr>
 <tr class="memitem:a5eb052bbb4512cad1955e1b62fc5920c" id="r_a5eb052bbb4512cad1955e1b62fc5920c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5eb052bbb4512cad1955e1b62fc5920c">PropertySubViewtype</a></td></tr>
+<tr class="memitem:a99d2523dbce1119cbd3c29d5ce0790f1" id="r_a99d2523dbce1119cbd3c29d5ce0790f1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a99d2523dbce1119cbd3c29d5ce0790f1">kernelContribution</a> = Kokkos::View&lt;float**, Kokkos::LayoutLeft, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">MC::ComputeSpace</a>, kernelMT&gt;</td></tr>
 <tr class="memitem:a508817d9913e12976cea3fef8dccc1f0" id="r_a508817d9913e12976cea3fef8dccc1f0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a508817d9913e12976cea3fef8dccc1f0">ContributionView</a></td></tr>
 <tr class="memitem:aafd7562bb9d44f57c7f63b3385299df7" id="r_aafd7562bb9d44f57c7f63b3385299df7"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafd7562bb9d44f57c7f63b3385299df7">KernelConcentrationType</a></td></tr>
 <tr class="memitem:aa5a6942718ba877c62a9f91b87915901" id="r_aa5a6942718ba877c62a9f91b87915901"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5a6942718ba877c62a9f91b87915901">LocalConcentration</a> = <a class="el" href="#aafd7562bb9d44f57c7f63b3385299df7">KernelConcentrationType</a></td></tr>
@@ -224,7 +225,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> <span class="keyword">decltype</span>(Kokkos::Experimental::create_scatter_view(</div>
-<div class="line">      kernelContribution()))</div>
+<div class="line">      <a class="code hl_typedef" href="#a99d2523dbce1119cbd3c29d5ce0790f1">kernelContribution</a>()))</div>
+<div class="ttc" id="anamespaceMC_html_a99d2523dbce1119cbd3c29d5ce0790f1"><div class="ttname"><a href="#a99d2523dbce1119cbd3c29d5ce0790f1">MC::kernelContribution</a></div><div class="ttdeci">Kokkos::View&lt; float **, Kokkos::LayoutLeft, MC::ComputeSpace, kernelMT &gt; kernelContribution</div><div class="ttdef"><b>Definition</b> alias.hpp:160</div></div>
 </div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="example_model_8cxx-example.html#_a4">example_model.cxx</a>.</dd>
 </dl>
 
@@ -377,6 +379,20 @@ template&lt;typename ExecSpace&gt; </div>
 <div class="line">                     <a class="code hl_typedef" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>,</div>
 <div class="line">                     Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt;</div>
 </div><!-- fragment -->
+</div>
+</div>
+<a id="a99d2523dbce1119cbd3c29d5ce0790f1" name="a99d2523dbce1119cbd3c29d5ce0790f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99d2523dbce1119cbd3c29d5ce0790f1">&#9670;&#160;</a></span>kernelContribution</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a99d2523dbce1119cbd3c29d5ce0790f1">MC::kernelContribution</a> = Kokkos::View&lt;float**, Kokkos::LayoutLeft, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">MC::ComputeSpace</a>, kernelMT&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
 </div>
 </div>
 <a id="ab07c77629281f83ba5873be3af4714eb" name="ab07c77629281f83ba5873be3af4714eb"></a>

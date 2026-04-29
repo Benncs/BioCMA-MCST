@@ -1,6 +1,5 @@
 <map id="Simulation::ScalarSimulation::getConcentrationArray" name="Simulation::ScalarSimulation::getConcentrationArray">
-<area shape="rect" id="Node000001" title=" " alt="" coords="242,29,430,68"/>
-<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="375,16,361,10,336,8,313,10,299,15,294,21,297,28,292,30,289,20,296,10,312,5,336,3,362,5,377,11"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1ScalarSimulation.html#a9721b2cf4617bf55c133b7b1527a8879" title=" " alt="" coords="5,29,194,68"/>
-<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="226,51,194,51,194,46,226,46"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="242,5,430,44"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1ScalarSimulation.html#a9721b2cf4617bf55c133b7b1527a8879" title=" " alt="" coords="5,5,194,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,27,194,27,194,22,226,22"/>
 </map>

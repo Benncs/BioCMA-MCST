@@ -21,6 +21,7 @@ var namespaceMC =
     [ "generator_type", "namespaceMC.html#a938e5733c929dff0c4ac9f89df91a5cb", null ],
     [ "HostSpace", "namespaceMC.html#a1f3a005c06fe6a41d663e36a29667e0a", null ],
     [ "KernelConcentrationType", "namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7", null ],
+    [ "kernelContribution", "namespaceMC.html#a99d2523dbce1119cbd3c29d5ce0790f1", null ],
     [ "LeavingFlowView", "namespaceMC.html#ab07c77629281f83ba5873be3af4714eb", null ],
     [ "LocalConcentration", "namespaceMC.html#aa5a6942718ba877c62a9f91b87915901", null ],
     [ "NeighborsView", "namespaceMC.html#a0338734b6c7022619c63f34662b34f75", null ],

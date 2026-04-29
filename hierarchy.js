@@ -25,10 +25,6 @@ var hierarchy =
     [ "Simulation::KernelInline::DispatchOptions", "structSimulation_1_1KernelInline_1_1DispatchOptions.html", null ],
     [ "MC::DomainState< ExecSpace, is_const >", "structMC_1_1DomainState.html", null ],
     [ "DynamicDefaultModel", "structDynamicDefaultModel.html", null ],
-    [ "EigenKokkosBase< EigenLayout, float_type >", "structEigenKokkosBase.html", null ],
-    [ "EigenLayoutMapper< kokkoslayout >", "structEigenLayoutMapper.html", null ],
-    [ "EigenLayoutMapper< Kokkos::LayoutLeft >", "structEigenLayoutMapper_3_01Kokkos_1_1LayoutLeft_01_4.html", null ],
-    [ "EigenLayoutMapper< Kokkos::LayoutRight >", "structEigenLayoutMapper_3_01Kokkos_1_1LayoutRight_01_4.html", null ],
     [ "std::enable_shared_from_this", null, [
       [ "IO::RedirectGuard", "classIO_1_1RedirectGuard.html", null ]
     ] ],
@@ -72,9 +68,7 @@ var hierarchy =
     [ "Simulation::MassTransfer::InterfacialAreaFonctor", "structSimulation_1_1MassTransfer_1_1InterfacialAreaFonctor.html", null ],
     [ "WrapMPI::IterationPayload", "classWrapMPI_1_1IterationPayload.html", null ],
     [ "Simulation::MassTransfer::KlFonctor", "structSimulation_1_1MassTransfer_1_1KlFonctor.html", null ],
-    [ "KokkosLayoutMapper< EigenLayout >", "structKokkosLayoutMapper.html", null ],
-    [ "KokkosLayoutMapper< Eigen::ColMajor >", "structKokkosLayoutMapper_3_01Eigen_1_1ColMajor_01_4.html", null ],
-    [ "KokkosLayoutMapper< Eigen::RowMajor >", "structKokkosLayoutMapper_3_01Eigen_1_1RowMajor_01_4.html", null ],
+    [ "KokkosEigen::KokkosEigen2D< data_type, layout, exec, args >", "classKokkosEigen_1_1KokkosEigen2D.html", null ],
     [ "MC::KPRNG", "classMC_1_1KPRNG.html", null ],
     [ "MC::LeavingFlow", "structMC_1_1LeavingFlow.html", null ],
     [ "UnsafeUDF::Loader", "structUnsafeUDF_1_1Loader.html", null ],

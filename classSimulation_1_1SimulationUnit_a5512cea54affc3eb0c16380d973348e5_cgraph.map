@@ -1,34 +1,32 @@
 <map id="Simulation::SimulationUnit::cycleProcess" name="Simulation::SimulationUnit::cycleProcess">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,193,181,232"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a96e8f3fbde370c918a3710b0b910cd42" title=" " alt="" coords="229,131,404,169"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,190,230,171,231,177,165,195"/>
-<area shape="rect" id="Node000011" href="$classSimulation_1_1SimulationUnit.html#ad984b5d95455d6db475d8b6e20077a0c" title=" " alt="" coords="229,236,404,275"/>
-<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="181,227,214,233,213,238,180,232"/>
-<area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" title="Insert particle buffer into the main container." alt="" coords="471,68,629,107"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="390,128,460,109,462,114,392,133"/>
-<area shape="rect" id="Node000006" href="$classSimulation_1_1SimulationUnit.html#ae2077067788b0cb0535c62933724a1cf" title=" " alt="" coords="462,131,638,169"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="404,147,447,147,447,153,404,153"/>
-<area shape="rect" id="Node000008" href="$classSimulation_1_1SimulationUnit.html#ac396f393b4cf318b38364c5067254c80" title=" " alt="" coords="454,193,646,232"/>
-<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="392,167,462,186,460,191,390,172"/>
-<area shape="rect" id="Node000009" href="$classMC_1_1ParticlesContainer.html#a0047f4c96b02ae4aeb9ebd8963129687" title="Update the number of non&#45;idle particle and remove if total number exceeds threshold May call : remove..." alt="" coords="452,5,648,44"/>
-<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="339,128,389,90,451,53,462,48,464,53,453,58,392,95,343,132"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,171,181,209"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html#a96e8f3fbde370c918a3710b0b910cd42" title=" " alt="" coords="229,117,404,156"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,168,217,158,218,163,177,173"/>
+<area shape="rect" id="Node000010" href="$classSimulation_1_1SimulationUnit.html#ad984b5d95455d6db475d8b6e20077a0c" title=" " alt="" coords="229,213,404,252"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="181,204,214,210,213,216,180,209"/>
+<area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" title="Insert particle buffer into the main container." alt="" coords="471,107,629,145"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="404,130,455,128,455,133,405,135"/>
+<area shape="rect" id="Node000006" href="$classSimulation_1_1SimulationUnit.html#ae2077067788b0cb0535c62933724a1cf" title=" " alt="" coords="462,169,638,208"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="405,154,448,163,447,168,404,159"/>
+<area shape="rect" id="Node000008" href="$classMC_1_1ParticlesContainer.html#a0047f4c96b02ae4aeb9ebd8963129687" title="Update the number of non&#45;idle particle and remove if total number exceeds threshold May call : remove..." alt="" coords="452,19,648,57"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="363,114,487,61,489,66,365,119"/>
 <area shape="rect" id="Node000004" href="$classMC_1_1ParticlesContainer.html#a57fa06d3225acf04522e3fc2993847f0" title=" " alt="" coords="707,68,865,107"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="630,85,691,85,691,90,630,90"/>
-<area shape="rect" id="Node000005" href="$classMC_1_1ParticlesContainer.html#a4fc94ae525191a5d034dce4866986c1e" title=" " alt="" coords="933,65,1092,104"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="630,104,697,115,786,122,875,115,929,106,930,111,876,121,786,127,696,121,630,110"/>
-<area shape="rect" id="Node000007" href="$classSimulation_1_1SimulationUnit.html#a9ea90cab13d8259f026f57baad1c989f" title=" " alt="" coords="698,188,874,227"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="633,167,689,181,688,186,632,172"/>
-<area shape="rect" id="Node000010" href="$classMC_1_1ParticlesContainer.html#a57353f823ed074869300f29deb5c50b2" title="Removes inactive particles from the container." alt="" coords="696,5,876,44"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="649,22,680,22,680,27,649,27"/>
-<area shape="poly" id="edge10_Node000010_Node000005" title=" " alt="" coords="863,42,923,58,921,63,861,47"/>
-<area shape="poly" id="edge12_Node000011_Node000011" title=" " alt="" coords="275,237,272,226,278,217,293,211,316,209,341,212,355,218,353,223,340,217,316,215,295,217,282,221,277,227,280,235"/>
-<area shape="rect" id="Node000012" href="$classSimulation_1_1SimulationUnit.html#a1278ad223b0cc8509f68a9f7d995bfd2" title=" " alt="" coords="462,256,638,295"/>
-<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="405,260,447,264,447,269,404,265"/>
-<area shape="poly" id="edge14_Node000012_Node000007" title=" " alt="" coords="619,253,701,229,702,234,620,258"/>
-<area shape="rect" id="Node000013" href="$classSimulation_1_1SimulationUnit.html#a36fb635150825e63055191740edaba84" title=" " alt="" coords="698,256,874,295"/>
-<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="638,273,683,273,683,278,638,278"/>
-<area shape="rect" id="Node000014" href="$namespaceSimulation_1_1impl.html#ab56eb92724f12b4ed6c401939009519c" title=" " alt="" coords="935,287,1090,325"/>
-<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="874,285,920,291,919,296,873,290"/>
-<area shape="rect" id="Node000015" href="$namespaceSimulation_1_1impl.html#ae40eba3a10cbceb62fe3e6980dcc193f" title=" " alt="" coords="924,224,1101,263"/>
-<area shape="poly" id="edge17_Node000013_Node000015" title=" " alt="" coords="873,260,908,255,909,261,874,266"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="629,110,691,100,692,105,630,116"/>
+<area shape="rect" id="Node000005" href="$classMC_1_1ParticlesContainer.html#a4fc94ae525191a5d034dce4866986c1e" title=" " alt="" coords="933,64,1092,103"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="630,126,746,126,875,115,930,104,931,110,876,121,746,131,630,132"/>
+<area shape="rect" id="Node000007" href="$classSimulation_1_1SimulationUnit.html#af5aeb9c124540ac219001b46b51b74a9" title=" " alt="" coords="698,183,874,221"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="638,191,683,193,682,199,638,196"/>
+<area shape="rect" id="Node000009" href="$classMC_1_1ParticlesContainer.html#a57353f823ed074869300f29deb5c50b2" title="Removes inactive particles from the container." alt="" coords="696,5,876,44"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="649,30,681,28,681,33,649,35"/>
+<area shape="poly" id="edge9_Node000009_Node000005" title=" " alt="" coords="864,42,921,57,920,62,862,47"/>
+<area shape="poly" id="edge11_Node000010_Node000010" title=" " alt="" coords="275,214,272,204,278,195,293,189,316,187,341,189,355,195,353,200,340,194,316,192,295,194,282,199,277,205,280,212"/>
+<area shape="rect" id="Node000011" href="$classSimulation_1_1SimulationUnit.html#a1278ad223b0cc8509f68a9f7d995bfd2" title=" " alt="" coords="462,232,638,271"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="405,237,447,240,447,246,404,242"/>
+<area shape="poly" id="edge13_Node000011_Node000007" title=" " alt="" coords="638,230,682,221,684,226,639,236"/>
+<area shape="rect" id="Node000012" href="$classSimulation_1_1SimulationUnit.html#a36fb635150825e63055191740edaba84" title=" " alt="" coords="698,245,874,284"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="638,254,683,256,682,261,638,259"/>
+<area shape="rect" id="Node000013" href="$namespaceSimulation_1_1impl.html#ab56eb92724f12b4ed6c401939009519c" title=" " alt="" coords="935,248,1090,287"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="874,263,920,264,920,269,874,268"/>
+<area shape="rect" id="Node000014" href="$namespaceSimulation_1_1impl.html#ae40eba3a10cbceb62fe3e6980dcc193f" title=" " alt="" coords="924,185,1101,224"/>
+<area shape="poly" id="edge16_Node000012_Node000014" title=" " alt="" coords="861,242,921,226,923,231,863,247"/>
 </map>

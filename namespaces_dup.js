@@ -15,6 +15,7 @@ var namespaces_dup =
     [ "Core", "namespaceCore.html", "namespaceCore" ],
     [ "EIGEN_DIAG_POP", "namespaceEIGEN__DIAG__POP.html", "namespaceEIGEN__DIAG__POP" ],
     [ "IO", "namespaceIO.html", "namespaceIO" ],
+    [ "KokkosEigen", "namespaceKokkosEigen.html", "namespaceKokkosEigen" ],
     [ "MC", "namespaceMC.html", "namespaceMC" ],
     [ "Models", "namespaceModels.html", "namespaceModels" ],
     [ "PostProcessing", "namespacePostProcessing.html", "namespacePostProcessing" ],
