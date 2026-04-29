@@ -120,7 +120,9 @@ namespace Simulation
       this->liquid_scalar->performStepGL(
           d_t, mtr, MassTransfer::Sign::LiquidToGas);
 
-      this->liquid_scalar->clearNegs();
+      // Uncoment this to avoid negative concentration especially when low
+      // oxygen concentration
+      //  this->liquid_scalar->clearNegs();
     }
     else
     {

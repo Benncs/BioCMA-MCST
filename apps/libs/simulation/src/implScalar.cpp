@@ -244,7 +244,7 @@ namespace Simulation
   void
   ScalarSimulation::clearNegs()
   {
-    auto s = concentrations.get_span();
+
     using float_t = decltype(concentrations)::float_t;
     constexpr float_t TOL = -1e-8;
     using space = decltype(concentrations)::HostView::execution_space;
@@ -262,9 +262,6 @@ namespace Simulation
             hv(i, j) = static_cast<float_t>(0);
           }
         });
-
-    // std::replace_if(
-    //     s.begin(), s.end(), [](auto&& f) { return f > TOL && f < 0.; }, 0.);
 
     concentrations.update_host_to_compute();
   }
