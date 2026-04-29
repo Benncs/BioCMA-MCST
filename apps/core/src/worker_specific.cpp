@@ -116,10 +116,10 @@ workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
     simulation.cycleProcess(container, d_t, functors);
     current_time += d_t;
   };
-
   const auto loop_functor = [&](auto&& container)
   {
-    auto functors = simulation.init_functors<ComputeSpace>(container);
+    auto functors = simulation.init_functors<ComputeSpace>(container,
+                                                           exec.kernel_options);
     // bool stop = false;
     WrapMPI::SIGNALS signal{};
 

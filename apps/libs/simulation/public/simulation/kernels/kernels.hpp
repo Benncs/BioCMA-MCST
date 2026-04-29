@@ -10,17 +10,10 @@
 #include <simulation/kernels/model_kernel.hpp>
 #include <simulation/kernels/move_kernel.hpp>
 
+#include <common/execinfo.hpp>
+
 namespace Simulation::KernelInline
 {
-
-  struct DispatchOptions
-  {
-    bool f_multi_compartment;
-    std::size_t m_p_p_team_model;
-    std::size_t m_p_p_team_contribs;
-    std::size_t m_p_p_team_move;
-    std::size_t m_p_p_team_leave;
-  };
 
   template <typename Space>
   using cycle_reducer_view_type
@@ -48,15 +41,17 @@ namespace Simulation::KernelInline
 
     CycleFunctors() = default;
 
-    DispatchOptions m_options{};
+    KernelDispatchOptions m_options{};
+
+    bool f_multi_compartment;
 
     void
     update(const double d_t,
            MC::ParticlesContainer<Model> container,
            MC::DomainState<ComputeSpace>&& new_move)
     {
-      m_options.f_multi_compartment = new_move.liquid_volume.size() > 1;
-      const bool enable_move = m_options.f_multi_compartment;
+      f_multi_compartment = new_move.liquid_volume.size() > 1;
+      const bool enable_move = f_multi_compartment;
       const bool enable_leave = new_move.leaving_flow.size() != 0;
 
       // FIXME: cycle_kernel: need to update container because we change:
@@ -92,7 +87,7 @@ namespace Simulation::KernelInline
       return std::tuple(host_red, host_out_counter);
     }
 
-    CycleFunctors(DispatchOptions options,
+    CycleFunctors(KernelDispatchOptions options,
                   MC::ParticlesContainer<Model> container,
                   MC::pool_type _random_pool,
                   MC::KernelConcentrationType _concentrations,
@@ -187,7 +182,7 @@ namespace Simulation::KernelInline
         static_assert(ConstWeightModelType<Model>,
                       "ModelType:Constapply_weight()");
 
-        if (m_options.f_multi_compartment)
+        if (f_multi_compartment)
         {
 
           const auto policy_contribs

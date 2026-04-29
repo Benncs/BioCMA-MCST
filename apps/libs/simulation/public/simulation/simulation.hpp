@@ -38,7 +38,6 @@ namespace CmaUtils
  */
 namespace Simulation
 {
-  KernelInline::DispatchOptions read_options() noexcept;
   class ScalarSimulation;
 
   class SimulationUnit
@@ -91,7 +90,8 @@ namespace Simulation
 
     template <typename Space, ModelType Model>
     KernelInline::CycleFunctors<Space, Model>
-    init_functors(MC::ParticlesContainer<Model> container);
+    init_functors(MC::ParticlesContainer<Model> container,
+                  KernelDispatchOptions options);
 
   private:
     std::unique_ptr<MC::MonteCarloUnit> mc_unit; // NOLINT
@@ -156,11 +156,12 @@ namespace Simulation
 
   template <typename Space, ModelType Model>
   KernelInline::CycleFunctors<Space, Model>
-  SimulationUnit::init_functors(MC::ParticlesContainer<Model> container)
+  SimulationUnit::init_functors(MC::ParticlesContainer<Model> container,
+                                KernelDispatchOptions options)
   {
 
     return KernelInline::CycleFunctors<Space, Model>(
-        read_options(),
+        options,
         container,
         mc_unit->rng.random_pool,
         getkernel_concentration(),

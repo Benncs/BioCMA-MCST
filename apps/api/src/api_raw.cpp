@@ -26,7 +26,7 @@ constexpr int ID_VERIF = 2025;
 int
 version_is_compatible(int major, int minor, int dev)
 {
-  return 0; // Api::version_is_compatible(major, minor, dev) ? 0 : -1;
+  return Api::version_is_compatible(major, minor, dev) ? 0 : -1;
 }
 
 FeedHandle

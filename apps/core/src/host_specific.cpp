@@ -231,12 +231,12 @@ namespace
 #ifndef NO_MPI
     MPI_Request req{};
 #endif
-
     auto loop_functor = [&](auto&& local_container)
     {
       Core::SignalHandler sig;
 
-      auto functors = simulation.init_functors<ComputeSpace>(local_container);
+      auto functors = simulation.init_functors<ComputeSpace>(
+          local_container, exec.kernel_options);
       UPDATE_HYDRO_STEP(current_time, d_t)
 
       for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
@@ -330,11 +330,7 @@ namespace
 
     for (std::size_t i_rank = 0; i_rank < exec.n_rank; ++i_rank)
     {
-      // std::string group = "files/" + std::to_string(i_rank);
       auto group = IO::format("files/", std::to_string(i_rank));
-
-      // auto filename = params.results_file_name + "_partial_"
-      //                 + std::to_string(i_rank) + ".h5";
 
       auto filename = IO::format(
           params.results_file_name, "_partial_", std::to_string(i_rank), ".h5");

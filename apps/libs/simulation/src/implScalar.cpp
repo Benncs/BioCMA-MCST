@@ -195,9 +195,11 @@ namespace Simulation
   {
 
     static_assert(Kokkos::SpaceAccessibility<
-                  decltype(contribs)::execution_space::memory_space,
-                  decltype(sources)::device_view_type::execution_space::
-                      memory_space>::accessible);
+                      decltype(contribs)::execution_space::memory_space,
+                      decltype(sources)::device_view_type::execution_space::
+                          memory_space>::accessible
+                  != 0U);
+
     Kokkos::deep_copy(sources.device_view(), contribs);
     sources.device_to_host_sync();
   }
