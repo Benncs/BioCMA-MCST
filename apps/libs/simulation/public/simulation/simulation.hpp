@@ -119,9 +119,9 @@ namespace Simulation
     double end_time;
     bool f_reaction = true; // FIXME
     void scatter_contribute();
-    void set_kernel_contribs_to_host();
+    // void set_kernel_contribs_to_host();
 
-    [[nodiscard]] kernelContribution get_kernel_contribution() const;
+    [[nodiscard]] MC::kernelContribution get_kernel_contribution() const;
 
     void post_init_concentration(ScalarInitializer&& scalar_init);
 
@@ -226,7 +226,7 @@ namespace Simulation
       }
     }
 
-    set_kernel_contribs_to_host();
+    // set_kernel_contribs_to_host();
   }
 
 } // namespace Simulation

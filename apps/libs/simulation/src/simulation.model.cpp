@@ -81,15 +81,17 @@ namespace Simulation
     {
       feed.update(t, d_t);
       set_scalar_feed(liquid_scalar, feed);
-      if (feed.output_position)
+      if (std::size_t output_position = *feed.output_position)
       {
 
         // this->mc_unit->domain.set_leaving_flow(
         //     0, *feed.output_position, feed.flow);
-        const auto volume = liquid_scalar.volume_span()[*feed.output_position];
+        // const auto volume =
+        // liquid_scalar.volume_span()[*feed.output_position];
+        const auto volume = liquid_scalar.volume_at(output_position);
         KOKKOS_ASSERT(volume > 0.);
         this->mc_unit->domain.set_leaving_flow(
-            mc_flow_counter, *feed.output_position, feed.flow, volume);
+            mc_flow_counter, output_position, feed.flow, volume);
         mc_flow_counter++;
       }
     }

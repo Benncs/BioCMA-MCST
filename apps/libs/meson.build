@@ -10,6 +10,7 @@ subdir('common')
 subdir('cma_utils')
 subdir('mpi_w')
 subdir('mc')
+subdir('kokkos-eigen')
 subdir('models')
 if use_dynamic_module
   # subdir('pymodule')

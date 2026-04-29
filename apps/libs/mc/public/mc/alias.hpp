@@ -92,9 +92,6 @@ using kernelMT = Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::RandomAccess
                                       | Kokkos::MemoryTraitsFlags::Atomic
                                       | Kokkos::MemoryTraitsFlags::Restrict>;
 
-using kernelContribution
-    = Kokkos::View<float**, Kokkos::LayoutLeft, MC::ComputeSpace, kernelMT>;
-
 namespace MC
 {
   template <typename ExecSpace>
@@ -162,6 +159,9 @@ namespace MC
       = Kokkos::Subview<ParticlePropertyViewType<ComputeSpace>,
                         decltype(Kokkos::ALL),
                         std::size_t>;
+
+  using kernelContribution
+      = Kokkos::View<float**, Kokkos::LayoutLeft, MC::ComputeSpace, kernelMT>;
 
   using ContributionView = decltype(Kokkos::Experimental::create_scatter_view(
       kernelContribution()));
