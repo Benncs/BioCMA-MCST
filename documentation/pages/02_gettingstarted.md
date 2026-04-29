@@ -7,7 +7,7 @@
 ## Dependencies 
 This tools is heavily based on 
 - [**Kokkos**](https://kokkos.org/) (\cite carter_edwards_kokkos_2014)
-- [**CMtool**](https://gitlab.com/codes_tim/compartment-modelling-tool)  
+- [**CMtool**](https://github.com/Benncs/rcmtool)  
 - [**HighFive**](https://github.com/highfive-devs/highfive)  (\cite devresse_highfive_2024)
 - [**Pybind11**](https://pybind11.readthedocs.io/en/stable/index.html) (\cite jakob_pybind11_2017)
 - [**Cereal**](http://uscilab.github.io/cereal/) (\cite grant_cereal_2017)
@@ -83,4 +83,15 @@ More information with
 
 ~~~~~~~~~~~~~bash
 python3 ./tools/runner.py --help
+~~~~~~~~~~~~~
+
+
+## Docker image 
+Docker images are available and follow a three-tier strategy. A base image (Dockerfile.xxx-base) provides the full build environment, a lighter release image (Dockerfile.xxx-rls) packages the CLI tool, and a dedicated image (Dockerfile.xxx-api) exposes the C API only. Currently, the OMP backend is fully supported, and CUDA builds have been validated on CUDA 12 systems with Turing architecture GPUs.
+
+~~~~~~~~~~~~~bash
+cd devutils/docker
+docker build -t biocma_omp_base -f Dockerfile.omp-base .
+cd ../../
+docker build -t biocma_omp-f Dockerfile.omp_rls .
 ~~~~~~~~~~~~~
