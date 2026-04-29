@@ -76,8 +76,15 @@ namespace Simulation::KernelInline
 
     // Do not use cumulative_probability(i_compartment, max_neighbor - 1)==1
     // Bcause proba can be 0.999999999
-    KOKKOS_ASSERT(cumulative_probability(i_compartment, max_neighbor - 1)
-                  >= random_number);
+    // KOKKOS_ASSERT(cumulative_probability(i_compartment, max_neighbor -
+    // 1)>0.95); //5% relative
+
+    // v1.1: This assert was there to be sure that the particle will leave but
+    // actually
+    // not needed because if rand< then left will be the last at the the ned of
+    // the loop
+    // KOKKOS_ASSERT(cumulative_probability(i_compartment, max_neighbor - 1)
+    //               >= random_number);
 
     int left = 0;
     int right = mask_do_serch * (max_neighbor - 1);
@@ -89,7 +96,7 @@ namespace Simulation::KernelInline
       left = mask * (mid + 1) + (1 - mask) * left;
       right = mask * right + (1 - mask) * mid;
     }
-
+    KOKKOS_ASSERT(left >= 0 && static_cast<size_t>(left) < neighbors.extent(1));
     const auto ret = i_compartment * (1 - mask_do_serch)
                      + neighbors(i_compartment, left) * mask_do_serch;
     return ret;

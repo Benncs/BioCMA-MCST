@@ -1,27 +1,23 @@
 <div align="left">
 
   [![License: Apache-2.0](https://img.shields.io/badge/License-Apache-blue.svg)](LICENSE)
-  [![Version: 1.0.0](https://img.shields.io/badge/Version-0.9.7-red.svg)](LICENSE)
+  [![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-red.svg)](LICENSE)
 </div>
 
 
 # BioCMA-MCST: A Biological Simulation Tool Using Monte Carlo and Compartment Modeling Approaches
 
-The **Biological by Compartment Modeling Approach Monte Carlo Simulation Tool** (BioCMA-MCST) is designed to deliver accurate biological simulations for real-world bioreactor scenarios. This tool provides both time and spatial resolution for complex biological processes.
 
-The main approaches to provides these features are **Monte Carlo** simulation, which provide a simple multi-agent framework for complex phenomena like biological strains behaviour. Furthermore, a **Compartment Modelling approach** for spatial resolution provides a good trade-off between CFD of real reactor and integrated/0D/simlplified geometry modelling.
+The **Biological by Compartment Modeling Approach Monte Carlo Simulation Tool** (BioCMA-MCST) aims to provide a efficient simulation tool for chemical engeenireing and bioprocesses for real-world bioreactors.
+
+The main approach is Hybrid Particl-based **Monte Carlo** simulation, which provide framework to solve Population Balance equation applied to biological population. Furthermore, a **Compartment Modelling approach** for spatial resolution provides a good trade-off between CFD of real reactor and integrated/0D/simlplified geometry modelling for details can be found [here](https://github.com/Benncs/rcmtool).
 
 The final goal of this tool is to provide an efficient and user-friendly solution for end-users in the field of biological simulation.
 
 ## Project Overview
 
-Biological simulations face a fundamental challenge: biochemical processes at the cellular level are incredibly complex, numerous, and highly variable. Simulating these processes within a real, complex reactor environment compounds the difficulty, as Computational Fluid Dynamics (CFD) — the standard method for such tasks — is notoriously time-consuming. When attempting to model both biological phenomena and reactor dynamics simultaneously, the computational cost can grow exponentially, making it impractical for large-scale simulations.
-
-To address these challenges, most models and tools for biological simulation employ two primary simplifications. The first simplification involves neglecting some hydrodynamic scales and phenomena, avoiding CFD to manage the biological processes more efficiently. The second simplification simplifies the biological models themselves, focusing only on select phenomena or averaging the behavior of entire populations. While these approaches reduce computational demands, they often result in significant trade-offs, potentially filtering out or overlooking critical factors necessary for understanding specific behaviors in an industrial setting.
-
-The aim of BioCMA-MCST is to maintain the accuracy of Computational Fluid Dynamics (CFD) while incorporating detailed biological models. By using Compartment Modeling, users can simulate CFD once and then reuse the results in subsequent simulations, significantly reducing the computational burden [more information](https://compartment-modelling-tool-codes-tim-1414a41277458b7f47f5759968.gitlab.io/).
-
-Additionally, the Monte Carlo method, while computationally intensive, captures the high diversity in biological populations and reactions, resulting in a more sensitive and realistic model compared to those that rely on averaged biological data. This combination of approaches enables BioCMA-MCST to provide detailed and accurate simulations, offering valuable insights into complex biological processes in industrial settings.
+Simulating biological processes within industrial reactors is computationally demanding: combining the complexity of cellular biochemistry with Computational Fluid Dynamics (CFD) can make costs grow exponentially. Most existing tools address this by either simplifying the fluid dynamics or averaging biological population behavior — trade-offs that risk overlooking critical factors relevant to real industrial settings.
+BioCMA-MCST tackles this by decoupling the two challenges. Compartment Modeling allows CFD to be run once and reused across simulations, drastically cutting computational overhead. Meanwhile, the Monte Carlo method captures the natural diversity of biological populations and reactions, producing a more realistic and sensitive model than averaged approaches. Together, these methods deliver detailed, accurate simulations without sacrificing the fidelity needed to understand complex bioprocesses at scale.
 
 ## Repository Structure
 
@@ -35,9 +31,11 @@ The repository is organized as follows:
 
 - **CASALE Benjamin**
 
-## Citation
+## Related work
 
-If you use this software, please cite it as the following [citation] file (./CITATION)
+This project is part a PhD work.
+
+If you use this software, please cite it as the following [citation](./CITATION)
 
 
 ### LICENSE

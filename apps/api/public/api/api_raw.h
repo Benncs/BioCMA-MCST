@@ -42,6 +42,8 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT //In C we only need ptr type so
 
   int delete_constant_feed_descriptor(FeedHandle* fd);
 
+  int version_is_compatible(int major, int minor, int dev);
+
   /*FFI Parameters*/
 
   // NOLINTBEGIN

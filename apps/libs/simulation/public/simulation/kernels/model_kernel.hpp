@@ -176,7 +176,9 @@ namespace Simulation::KernelInline
 
       const auto upper_bound
           = ((p0 + count) >= n_particle) ? n_particle - p0 : count;
-      KOKKOS_ASSERT(upper_bound > 0 && upper_bound < n_particle);
+
+      KOKKOS_ASSERT(upper_bound > 0);
+      KOKKOS_ASSERT(upper_bound < n_particle);
 
       value_type local;
       Kokkos::parallel_reduce(
