@@ -77,7 +77,7 @@ Getting Started</h1>
 Dependencies</h2>
 <p>This tools is heavily based on</p><ul>
 <li><a href="https://kokkos.org/"><b>Kokkos</b></a> (<a class="el" href="citelist.html#CITEREF_carter_edwards_kokkos_2014">[1]</a>)</li>
-<li><a href="https://gitlab.com/codes_tim/compartment-modelling-tool"><b>CMtool</b></a> <br  />
+<li><a href="https://github.com/Benncs/rcmtool"><b>CMtool</b></a> <br  />
 </li>
 <li><a href="https://github.com/highfive-devs/highfive"><b>HighFive</b></a> (<a class="el" href="citelist.html#CITEREF_devresse_highfive_2024">[2]</a>)</li>
 <li><a href="https://pybind11.readthedocs.io/en/stable/index.html"><b>Pybind11</b></a> (<a class="el" href="citelist.html#CITEREF_jakob_pybind11_2017">[4]</a>)</li>
@@ -133,6 +133,13 @@ Fast run</h2>
 <p>A simple run can be exectued with : </p><div class="fragment"><div class="line">python3 ./tools/runner.py [case_name] -n [number of thread] [-mpi]</div>
 </div><!-- fragment --><p> More information with</p>
 <div class="fragment"><div class="line">python3 ./tools/runner.py --help</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
+Docker image</h2>
+<p>Docker images are available and follow a three-tier strategy. A base image (Dockerfile.xxx-base) provides the full build environment, a lighter release image (Dockerfile.xxx-rls) packages the CLI tool, and a dedicated image (Dockerfile.xxx-api) exposes the C API only. Currently, the OMP backend is fully supported, and CUDA builds have been validated on CUDA 12 systems with Turing architecture GPUs.</p>
+<div class="fragment"><div class="line">cd devutils/docker</div>
+<div class="line">docker build -t biocma_omp_base -f Dockerfile.omp-base .</div>
+<div class="line">cd ../../</div>
+<div class="line">docker build -t biocma_omp-f Dockerfile.omp_rls .</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

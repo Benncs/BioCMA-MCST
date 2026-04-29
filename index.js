@@ -9,7 +9,8 @@ var index =
           [ "Cuda", "gettingstarted.html#autotoc_md5", null ],
           [ "Build options", "gettingstarted.html#autotoc_md6", null ]
         ] ],
-        [ "Fast run", "gettingstarted.html#autotoc_md7", null ]
+        [ "Fast run", "gettingstarted.html#autotoc_md7", null ],
+        [ "Docker image", "gettingstarted.html#autotoc_md8", null ]
       ] ]
     ] ],
     [ "Simulation Configuration", "simparam.html", null ],

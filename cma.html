@@ -71,24 +71,24 @@ $(function(){initNavTree('cma.html','',''); });
   <div class="headertitle"><div class="title">Documentation </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
 Compartment Modelling Approach</h1>
 <p>Instead of directly solving hydrodynamics equations, this tool utilizes pre-computed flow fields sourced from various origins and aggregated into a unified compartment formalism.</p>
 <p>A compartment represents a coarse mesh element that contains a small volume of fluid or gas where conditions are considered homogeneous. Values are integrated over each volume, preserving spatial heterogeneity while simplifying computations. Both liquid and gas phases are treated as Eulerian scalars transported between compartments using flow field data.</p>
 <p>For discrete particles, transport is also based on flow fields but incorporates stochastic methods to handle their movement through the domain.</p>
 <p>This documentation focuses on the namespace <a class="el" href="namespaceCmaUtils.html">CmaUtils</a> and the functor <a class="el" href="structSimulation_1_1KernelInline_1_1MoveFunctor.html">MoveFunctor</a>.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
 CmaUtils</h2>
 <p>The <b><a class="el" href="namespaceCmaUtils.html">CmaUtils</a></b> library serves as the interface between <b>CMtool</b> and <b>Kokkos</b>. While <b>CMtool</b> provides lightweight data accessors, it is not optimized for parallel simulation. Many operations require reading flow data efficiently in a parallel context—this is where <b><a class="el" href="namespaceCmaUtils.html">CmaUtils</a></b> bridges the gap.</p>
 <p>The library wraps <b>CMtool</b> and provides an abstraction layer over <b>Kokkos</b> to handle data reading and processing from flow maps within the simulation. This design ensures that simulation logic remains clean and focused on computations, while <b><a class="el" href="namespaceCmaUtils.html">CmaUtils</a></b> manages the complexity of data handling.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
 Compartment Operations</h3>
 <p>Two main operations have to be performed to CMtool Rawdata in order to used them in simulation kernels.</p><ul>
 <li>Construct a transition matrix based on in/out flow in each compartment</li>
 <li>Get the cumulative probabilty destination per compartment</li>
 </ul>
 <p>This operations has been already studied in <a class="el" href="citelist.html#CITEREF_morchain_dynamic_2024">[5]</a> </p>
-<h4 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
+<h4 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
 Transition Matrix</h4>
 <p>One can reformulate the mass balance over a scalar field y governed by compartmental flow velocities into matrix form. For each compartment ii, the differential mass balance reads:   </p><p class="formulaDsp">
 \[    \frac{dV_{i}y_{i}}{dt}=\sum_{j}y_{j}F(j,i)-y_{i}\sum_{j}y_{j}F(i,j)
@@ -104,14 +104,14 @@ Transition Matrix</h4>
 <li>Off-diagonal terms are populated directly from the flow matrix F(i,j).</li>
 <li>Diagonal terms are computed as the negative sum of outbound flows from each compartment, ensuring local mass conservation. This structure yields a well-posed linear operator driving the Eulerian scalar transpors. For discrete stochastic transport, only the diagonal is used and extract with this function</li>
 </ul>
-<h4 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
+<h4 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
 Cumulative probability</h4>
 <p>This step is performed here. The result is important to decide where the discrete particles moves.</p>
 <p>The aim is to construct of discrete CDF to have to probability to go in a specific compartment knowning that the cell leaves a compartment. Let L the event to leave current compartment i, and let \(I_{j}\) the event to go the compartment i we have for each neighbors \(P(I_{j}|L)\).</p>
 <p>This function construct the CDF using the fact that </p><p class="formulaDsp">
 \[P(I_{j}|L)=\frac{F(i,j)}{\sum_{k} F(i,k)}\]
 </p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
 FlowMapTransitionner</h3>
 <p>Additionally, <b><a class="el" href="namespaceCmaUtils.html">CmaUtils</a></b> implements the FlowMapTransitionner—an abstraction designed for managing flow map transitions during the simulation. This component provides seamless access to the correct flow map based on the simulation time, abstracting away the details of data formats and file I/O. The transtionner supports flexible behaviors, such as:</p><ul>
 <li>Switching to the next flow map after a set time interval.</li>
@@ -119,7 +119,7 @@ FlowMapTransitionner</h3>
 <li>Implementing caching mechanisms for improved performance.</li>
 <li>Interpolation between flowmaps. This flexibility ensures efficient and accurate simulation of field evolution over time.</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
 Move kernel</h2>
 <p>This operations has been already studied in <a class="el" href="citelist.html#CITEREF_morchain_dynamic_2024">[5]</a> and implementation is here.</p>
 <p>This kernel performs the following steps:</p><ul>
@@ -150,7 +150,7 @@ u \sim \mathcal{U}(0, 1) \\
 <li>\(V\) is the liquid volume of the compartment.</li>
 </ul>
 <p>This Poisson law formalism, based on the cumulative distribution function (CDF) of the leaving probability, is useful because it doesn't depend on the spatial structure or the number of neighboring compartments. It works the same whether a compartment has one neighbor or many. Leaving the reactor is, therefore, treated like moving to any other compartment.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
 Leaving reactor</h3>
 <p>At each time step, a particle can exit the system through a leaving flow. The total flow out of a compartment is defined as: \(F=F_{circulation}+F_{out}\). Where \(F=F_{circulation}\) comes from transition matrix and flowmap and \(F=F_{out}\)</p>
 <p>The probability of leaving the reactor is computed using the same inverse sampling method from the exponential (Poisson) law, replacing the internal flow with the specific flow leaving the reactor. </p>

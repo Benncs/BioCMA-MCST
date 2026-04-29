@@ -1,5 +1,8 @@
 var NAVTREEINDEX6 =
 {
+"structContributionFunctor.html#a7f3e9164ba1f472dfca32b8c7e01d8b0":[7,0,16,3],
+"structContributionFunctor.html#a7f64adb1ad8e296dd30cfc10d4f60fea":[7,0,16,5],
+"structContributionFunctor.html#a883fb1f4db15fe4a68a1cd51a85ef72f":[7,0,16,9],
 "structContributionFunctor.html#a9f281df659371ce13679e38d88bb663e":[7,0,16,2],
 "structContributionFunctor.html#aa110ef5d905b85b081c6dad67fbef3fd":[7,0,16,13],
 "structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475":[7,0,16,12],
@@ -246,8 +249,5 @@ var NAVTREEINDEX6 =
 "structExecInfo.html#a31b8d8deddf0bd3a73cd01a18767cd7d":[7,0,25,3],
 "structExecInfo.html#a91664b4757acd5486b03e81340f9c16e":[7,0,25,6],
 "structExecInfo.html#a94f2dce589e1cf2deaeab21e1521009d":[7,0,25,4],
-"structExecInfo.html#a97d024d761006b167e05e37f60797cfa":[7,0,25,1],
-"structExecInfo.html#ae35e030d9a03a4008709f2a252bf4082":[7,0,25,0],
-"structExecInfo.html#aff4d624a56d496f3d70b7820d41b12b1":[7,0,25,5],
-"structKokkosLayoutMapper.html":[7,0,33]
+"structExecInfo.html#a97d024d761006b167e05e37f60797cfa":[7,0,25,1]
 };
