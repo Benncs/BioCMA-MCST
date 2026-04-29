@@ -6,10 +6,11 @@ EIGEN_DIAG_PUSH
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#include <kokkos_eigen.hpp>
 EIGEN_DIAG_POP
 
 #include <cma_utils/alias.hpp>
-#include <eigen_kokkos.hpp>
+
 #include <mc/domain.hpp>
 #include <simulation/mass_transfer.hpp>
 
@@ -22,7 +23,7 @@ namespace Simulation::MassTransfer
 {
   struct MassTransferProxy
   {
-    ColMajorMatrixtype<double> mtr;
+    KokkosEigen::Alias::ColMajorMatrixtype<double> mtr;
     Eigen::ArrayXXd kla;
     Eigen::ArrayXd Henry;
     double db;

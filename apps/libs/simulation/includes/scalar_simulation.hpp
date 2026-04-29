@@ -1,35 +1,44 @@
 #ifndef __SCALAR_SIMULATION_HPP__
 #define __SCALAR_SIMULATION_HPP__
 
+#include "common/traits.hpp"
 #include "mc/alias.hpp"
 #include <common/eigen_diag.hpp>
 EIGEN_DIAG_PUSH
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#include <kokkos_eigen.hpp>
 EIGEN_DIAG_POP
 
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 #include <cstddef>
 #include <cstdint>
-#include <eigen_kokkos.hpp>
 #include <mc/traits.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <span>
 #include <vector>
 
-using FlowMatrixType = Eigen::SparseMatrix<double>;
-
 namespace Simulation
 {
-
+  template <FloatingPointType ftype>
+  using FlowMatrixType = Eigen::SparseMatrix<ftype>;
+  using mass_balance_float_type = double;
   class ScalarSimulation
   {
+    using concentration_t
+        = KokkosEigen::KokkosEigen2D<double,
+                                     Kokkos::LayoutLeft,
+                                     Kokkos::DefaultExecutionSpace>;
+
   public:
+    using concentration_view_t = concentration_t::host_view_type;
+    using concentration_float_type = concentration_view_t::value_type;
+
     ScalarSimulation(size_t n_compartments,
                      size_t n_species,
-                     std::span<double> volume);
+                     std::span<mass_balance_float_type> volume);
 
     ScalarSimulation(ScalarSimulation&& other) noexcept = delete;
     ScalarSimulation(const ScalarSimulation& other) noexcept = delete;
@@ -37,48 +46,59 @@ namespace Simulation
     ScalarSimulation operator=(ScalarSimulation&& other) = delete;
     ~ScalarSimulation() = default;
 
-    bool deep_copy_concentration(const std::vector<double>& data);
+    bool
+    deep_copy_concentration(const std::vector<concentration_float_type>& data);
 
-    void reduce_contribs(std::span<const double> data);
+    // void reduce_contribs(std::span<const mass_balance_float_type> data);
 
     void set_transition(CmaUtils::StateCooMatrixType&& transition);
 
-    void performStepGL(double d_t,
-                       const ColMajorMatrixtype<double>& mtr,
-                       MassTransfer::Sign sign);
+    void performStepGL(
+        double d_t,
+        const KokkosEigen::Alias::ColMajorMatrixtype<mass_balance_float_type>&
+            mtr,
+        MassTransfer::Sign sign);
 
     void performStep(double d_t);
 
     void synchro_sources();
 
-    // void performStep(double d_t, const FlowMatrixType& m_transition);
-
     // Getters
-    [[nodiscard]] ColMajorMatrixtype<double>& get_concentration() noexcept;
-    [[nodiscard]] const DiagonalType& getVolume() const noexcept;
+
     [[nodiscard]] std::size_t n_row() const noexcept;
     [[nodiscard]] std::size_t n_col() const noexcept;
 
-    [[nodiscard]] ColMajorKokkosScalarMatrix<double>
-    get_device_concentration() const;
+    // Concentrations
+    [[nodiscard]] concentration_view_t get_concentration() noexcept;
+    [[nodiscard]] MC::KernelConcentrationType get_device_concentration() const;
 
-    [[nodiscard]] std::span<double const> volume_span() const;
+    [[nodiscard]] std::span<concentration_float_type> getConcentrationData();
 
-    [[nodiscard]] std::span<double> contribution_span() const;
+    [[nodiscard]] std::span<const concentration_float_type>
+    getConcentrationData() const;
+
+    [[nodiscard]] auto getConcentrationArray() const;
+
+    //
+
+    [[nodiscard]] const KokkosEigen::Alias::DiagonalType<
+        mass_balance_float_type>&
+    getVolume() const noexcept;
+
+    [[deprecated]] [[nodiscard]] std::span<double const> volume_span() const;
+
+    double volume_at(std::size_t) const;
+
+    [[nodiscard]] std::span<const double> contribution_span() const;
 
     [[nodiscard]] std::span<double> contribution_span_mut();
 
-    [[nodiscard]] auto getConcentrationArray() const;
-    [[nodiscard]] kernelContribution get_kernel_contribution() const;
-
-    [[nodiscard]] std::span<double> getConcentrationData();
-
-    [[nodiscard]] std::span<const double> getConcentrationData() const;
+    [[nodiscard]] MC::kernelContribution get_kernel_contribution() const;
 
     // Setters
 
     void set_mass();
-    void set_kernel_contribs_to_host() const;
+    // void set_kernel_contribs_to_host();
     void set_feed(std::uint64_t i_r, std::uint64_t i_c, double val);
     void set_sink(std::uint64_t i_compartment, double val);
     void set_zero_contribs();
@@ -90,28 +110,49 @@ namespace Simulation
   private:
     std::size_t n_r;
     std::size_t n_c;
-    ColMajorMatrixtype<double> total_mass;
-    kernelContribution contribs;
 
-    FlowMatrixType m_transition;
+    KokkosEigen::Alias::ColMajorMatrixtype<mass_balance_float_type> total_mass;
 
-    DiagonalType volumes_inverse;
-    DiagonalType m_volumes;
-    DiagonalType sink;
-    EigenKokkos<double> concentrations;
-    RowMajorEigenKokkos<double> sources;
+    KokkosEigen::KokkosEigen2D<mass_balance_float_type,
+                               Kokkos::LayoutLeft,
+                               Kokkos::DefaultExecutionSpace>
+        concentrations;
+
+    // FIXME: Sources does not need to available on device because this is
+    // contribs which is scattered
+    KokkosEigen::KokkosEigen2D<mass_balance_float_type,
+                               Kokkos::LayoutRight,
+                               Kokkos::DefaultExecutionSpace>
+        sources;
+
+    MC::kernelContribution contribs;
+    FlowMatrixType<mass_balance_float_type> m_transition;
+
+    KokkosEigen::Alias::DiagonalType<mass_balance_float_type> m_volumes;
+    KokkosEigen::Alias::DiagonalType<mass_balance_float_type> volumes_inverse;
+    KokkosEigen::Alias::DiagonalType<mass_balance_float_type> sink;
+
+    // RowMajorEigenKokkos<double> sources;
+    //
 
     // Kokkos::View<float**, ComputeSpace::array_layout, ComputeSpace> kc;
   };
+
+  inline double
+  ScalarSimulation::volume_at(std::size_t index) const
+  {
+    KOKKOS_ASSERT(index < n_c);
+    return m_volumes.diagonal().coeff(EIGEN_INDEX(index));
+  }
 
   inline auto
   ScalarSimulation::getConcentrationArray() const
   {
     // return alloc_concentrations.array();
-    return concentrations.eigen_data.array();
+    return concentrations.as_array();
   }
 
-  inline kernelContribution
+  inline MC::kernelContribution
   ScalarSimulation::get_kernel_contribution() const
   {
     // return sources.compute;
@@ -121,23 +162,24 @@ namespace Simulation
   inline void
   ScalarSimulation::set_zero_contribs()
   {
-    sources.eigen_data.setZero();
-    Kokkos::deep_copy(contribs, 0);
-    Kokkos::deep_copy(sources.compute, 0);
+
+    sources.eigen().setZero();
     this->sink.setZero();
+    sources.host_to_device_sync();
+    Kokkos::deep_copy(contribs, 0);
   }
 
-  inline void
-  ScalarSimulation::set_kernel_contribs_to_host() const
-  {
-    sources.update_compute_to_host();
-  }
+  // inline void
+  // ScalarSimulation::set_kernel_contribs_to_host()
+  // {
+  //   // sources.update_compute_to_host();
+  //   sources.device_to_host_sync();
+  // }
 
   inline void
   ScalarSimulation::set_feed(uint64_t i_r, uint64_t i_c, double val)
   {
-    this->sources.eigen_data.coeffRef(EIGEN_INDEX(i_r), EIGEN_INDEX(i_c))
-        += val;
+    this->sources.eigen().coeffRef(EIGEN_INDEX(i_r), EIGEN_INDEX(i_c)) += val;
   }
 
   inline void
@@ -146,7 +188,7 @@ namespace Simulation
     this->sink.diagonal().coeffRef(EIGEN_INDEX(i_compartment)) += val;
   }
 
-  inline const DiagonalType&
+  inline const KokkosEigen::Alias::DiagonalType<mass_balance_float_type>&
   ScalarSimulation::getVolume() const noexcept
   {
     return m_volumes;
@@ -164,21 +206,19 @@ namespace Simulation
     return this->concentrations.get_span();
   }
 
-  inline std::span<double>
+  inline std::span<const double>
   ScalarSimulation::contribution_span() const
   {
-    return { this->sources.host.data(),
-             static_cast<size_t>(this->sources.host.size()) };
+    return this->sources.get_span();
   }
 
   inline std::span<double>
   ScalarSimulation::contribution_span_mut()
   {
-    return { this->sources.host.data(),
-             static_cast<size_t>(this->sources.host.size()) };
+    return this->sources.get_span();
   }
 
-  inline std::span<double const>
+  [[deprecated]] inline std::span<double const>
   ScalarSimulation::volume_span() const
   {
     return { m_volumes.diagonal().data(),

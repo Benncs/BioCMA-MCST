@@ -99,7 +99,9 @@ namespace MC
                                   const double flow,
                                   const double volume) const
   {
-    KOKKOS_ASSERT(flow > 0 && volume > 0);
+
+    KOKKOS_ASSERT(flow > 0);
+    KOKKOS_ASSERT(volume > 0.);
 
     this->inner.leaving_flow(i)
         = { .index = i_flow, .flow = flow, .volume = volume };

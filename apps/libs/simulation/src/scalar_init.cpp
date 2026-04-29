@@ -1,3 +1,5 @@
+#include <Kokkos_CheckUsage.hpp>
+#include <optional>
 #include <scalar_init.hpp>
 #include <scalar_simulation.hpp>
 #include <simulation/scalar_initializer.hpp>
@@ -56,29 +58,32 @@ namespace Simulation::impl
       const std::shared_ptr<ScalarSimulation>& gas_scalar)
   {
 
-    auto& cliq = liquid_scalar->get_concentration();
-    decltype(&cliq) cgas = nullptr; // FIXME
+    auto cliq = liquid_scalar->get_concentration();
+    std::optional<decltype(cliq)> cgas = std::nullopt; // FIXME
 
     if (is_two_phase_flow)
     {
       assert(gas_scalar != nullptr);
-      cgas = &gas_scalar->get_concentration();
+      cgas = gas_scalar->get_concentration();
       assert(cgas->size() != 0);
     }
 
     const auto& fv = scalar_init.liquid_f_init.value();
 
-    for (decltype(cliq.rows()) i_row = 0; i_row < cliq.rows(); ++i_row)
-    {
-      for (decltype(cliq.cols()) i_col = 0; i_col < cliq.cols(); ++i_col)
-      {
-        cliq(i_row, i_col) = fv(i_row, i_col);
-        if (is_two_phase_flow)
-        {
-          (*cgas)(i_row, i_col) = scalar_init.gas_f_init.value()(i_row, i_col);
-        }
-      }
-    }
+    Kokkos::parallel_for(
+        "clear_negs",
+        Kokkos::MDRangePolicy<
+            decltype(cliq)::execution_space,
+            Kokkos::Rank<2, Kokkos::Iterate::Left, Kokkos::Iterate::Left>>(
+            { 0, 0 }, { cliq.extent(0), cliq.extent(1) }),
+        KOKKOS_LAMBDA(int i, int j) {
+          cliq(i, j) = fv(i, j);
+
+          if (is_two_phase_flow)
+          {
+            (*cgas)(i, j) = scalar_init.gas_f_init.value()(i, j);
+          }
+        });
   }
 
   void

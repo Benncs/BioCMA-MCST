@@ -1,22 +1,19 @@
-#include "Kokkos_CheckUsage.hpp"
-#include "eigen_kokkos.hpp"
 #include <Kokkos_Assert.hpp>
-#include <algorithm>
+#include <common/eigen_diag.hpp>
 #include <mc/alias.hpp>
 #include <type_traits>
-
-#include <common/eigen_diag.hpp>
 EIGEN_DIAG_PUSH
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#include <kokkos_eigen.hpp>
 EIGEN_DIAG_POP
-
 #include <Kokkos_Core.hpp>
 #include <common/common.hpp>
 #include <scalar_simulation.hpp>
 #include <simulation/simulation_exception.hpp>
 #include <stdexcept>
+
 namespace
 {
 
@@ -54,6 +51,30 @@ namespace
     }
   }
 
+  // void
+  // sparse_from_coo(Eigen::SparseMatrix<double>& res,
+  //                 const std::size_t n_c,
+  //                 std::span<const size_t>&& rows,
+  //                 std::span<const size_t>&& cols,
+  //                 std::span<const double>&& vals)
+  // {
+  //   KOKKOS_ASSERT(res.cols() == EIGEN_INDEX(n_c));
+  //   using T = Eigen::Triplet<double>;
+  //   const auto n = vals.size();
+  //   KOKKOS_ASSERT(rows.size() == n);
+  //   KOKKOS_ASSERT(cols.size() == n);
+  //   KOKKOS_ASSERT(vals.size() == n);
+  //   std::vector<T> triplets(n);
+
+  //   for (std::size_t i = 0; i < n; i++)
+  //   {
+  //     triplets[i]
+  //         = T(static_cast<int>(rows[i]), static_cast<int>(cols[i]), vals[i]);
+  //   }
+  //   res.setFromTriplets(triplets.begin(), triplets.end());
+  //   res.makeCompressed();
+  // }
+
 #define UNROLL_CHECK(i, s)                                                     \
   if ((i) < (s))                                                               \
   {                                                                            \
@@ -61,7 +82,6 @@ namespace
   }
 
 #define UNROLL(idx) triplets[idx] = T(rows[idx], cols[idx], vals[idx]);
-
   void
   sparse_from_coo(Eigen::SparseMatrix<double>& res,
                   std::size_t n_c,
@@ -70,39 +90,23 @@ namespace
                   std::span<const double>&& vals)
   {
 
-    // KOKKOS_ASSERT(res.cols() == EIGEN_INDEX(n_c));
-    // using T = Eigen::Triplet<double>;
-    // std::vector<T> triplets(vals.size());
-
-    // triplets.reserve(vals.size());
-
-    // for (std::size_t i = 0; i < vals.size(); ++i)
-    // {
-    //   triplets[i] = T(rows[i], cols[i], vals[i]);
-    // }
-
-    // // res.
-    // res.setFromTriplets(triplets.begin(), triplets.end());
-    // res.makeCompressed();
-
     KOKKOS_ASSERT(res.cols() == EIGEN_INDEX(n_c));
 
     using T = Eigen::Triplet<double>;
     const auto n = vals.size();
     std::vector<T> triplets(n);
-    triplets.reserve(n);
 
     // #pragma omp simd
     for (std::size_t i = 0; i < n; i += 8)
     {
-      std::size_t idx0 = i;
-      std::size_t idx1 = i + 1;
-      std::size_t idx2 = i + 2;
-      std::size_t idx3 = i + 3;
-      std::size_t idx4 = i + 4;
-      std::size_t idx5 = i + 5;
-      std::size_t idx6 = i + 6;
-      std::size_t idx7 = i + 7;
+      const std::size_t idx0 = i;
+      const std::size_t idx1 = i + 1;
+      const std::size_t idx2 = i + 2;
+      const std::size_t idx3 = i + 3;
+      const std::size_t idx4 = i + 4;
+      const std::size_t idx5 = i + 5;
+      const std::size_t idx6 = i + 6;
+      const std::size_t idx7 = i + 7;
 
       if (idx7 < n)
       {
@@ -138,42 +142,40 @@ namespace Simulation
   ScalarSimulation::ScalarSimulation(size_t n_compartments,
                                      size_t n_species,
                                      std::span<double> volumes)
-      : n_r(n_species), n_c(n_compartments), concentrations(n_r, n_c),
-        sources(n_r, n_c)
+      : n_r(n_species), n_c(n_compartments), total_mass(n_r, n_c),
+        concentrations("concentrations", n_r, n_c),
+        sources("sources", n_r, n_c), contribs("contribs", n_r, n_c),
+        m_transition(
+            FlowMatrixType<double>(EIGEN_INDEX(n_c), EIGEN_INDEX(n_c))),
+        m_volumes(KokkosEigen::Alias::DiagonalType<mass_balance_float_type>(
+            EIGEN_INDEX(n_c))),
+        volumes_inverse(
+            KokkosEigen::Alias::DiagonalType<mass_balance_float_type>(
+                EIGEN_INDEX(n_c))),
+        sink(KokkosEigen::Alias::DiagonalType<mass_balance_float_type>(
+            EIGEN_INDEX(n_c)))
   {
     if (volumes.size() != n_compartments)
     {
       throw SimulationException(ErrorCodes::MismatchSizeVolume);
     }
 
-    const int n_row = EIGEN_INDEX(n_r);
-    const int n_col = EIGEN_INDEX(n_c);
-
-    m_volumes = DiagonalType(n_col);
-
     this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(
         volumes.data(), static_cast<int>(volumes.size()));
 
-    contribs = kernelContribution("contribs", n_r, n_c);
+    this->volumes_inverse.setIdentity();
 
-    m_transition = FlowMatrixType(n_col, n_col);
-
-    volumes_inverse = DiagonalType(n_col);
-    volumes_inverse.setIdentity();
-
-    this->total_mass = ColMajorMatrixtype<double>(n_row, n_col);
     this->total_mass.setZero();
 
-    this->sink = DiagonalType(n_col);
     this->sink.setZero();
   }
 
   // simple getters
 
-  [[nodiscard]] ColMajorMatrixtype<double>&
+  [[nodiscard]] ScalarSimulation::concentration_view_t
   ScalarSimulation::get_concentration() noexcept
   {
-    return concentrations.eigen_data;
+    return concentrations.host_view();
   }
 
   std::size_t
@@ -191,64 +193,82 @@ namespace Simulation
   void
   ScalarSimulation::synchro_sources()
   {
-    Kokkos::deep_copy(sources.compute, contribs);
+
+    static_assert(Kokkos::SpaceAccessibility<
+                  decltype(contribs)::execution_space::memory_space,
+                  decltype(sources)::device_view_type::execution_space::
+                      memory_space>::accessible);
+    Kokkos::deep_copy(sources.device_view(), contribs);
+    sources.device_to_host_sync();
   }
 
-  [[nodiscard]] ColMajorKokkosScalarMatrix<double>
+  [[nodiscard]] MC::KernelConcentrationType
   ScalarSimulation::get_device_concentration() const
   {
-    // smrt_deep_copy(kc, concentrations.compute);
-    // return kc;
-    return concentrations.compute;
+    return concentrations.device_view_cst();
   }
 
+  // void
+  // ScalarSimulation::reduce_contribs(std::span<const double> data)
+  // {
+  //   assert(data.size() == (n_c * n_r));
+  //   using eigen_map_type = decltype(sources)::eigen_map_type;
+
+  //   sources.eigen().noalias() += eigen_map_type(
+  //       const_cast<double*>(data.data()), EIGEN_INDEX(n_r),
+  //       EIGEN_INDEX(n_c));
+
+  //   // sources.eigen_data.noalias() += Eigen::Map<eigen_type>(
+  //   //     const_cast<double*>(data.data()), EIGEN_INDEX(n_r),
+  //   //     EIGEN_INDEX(n_c));
+  // }
+
   void
-  ScalarSimulation::reduce_contribs(std::span<const double> data)
-  {
-    assert(data.size() == (n_c * n_r));
-    using eigen_type = decltype(sources)::EigenMatrix;
-    sources.eigen_data.noalias() += Eigen::Map<eigen_type>(
-        const_cast<double*>(data.data()), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
-  }
-  void
-  ScalarSimulation::performStepGL(double d_t,
-                                  const ColMajorMatrixtype<double>& mtr,
-                                  MassTransfer::Sign sign)
+  ScalarSimulation::performStepGL(
+      double d_t,
+      const KokkosEigen::Alias::ColMajorMatrixtype<double>& mtr,
+      MassTransfer::Sign sign)
   {
     PROFILE_SECTION("performStep_gl")
-#define c concentrations.eigen_data
 
-    total_mass.noalias() += d_t
-                            * (c * m_transition - c * sink + sources.eigen_data
-                               + static_cast<float>(sign) * mtr);
+    auto& c = concentrations.eigen();
+    const auto& _sources = sources.eigen();
+
+    auto dmdt = c * m_transition - c * sink + _sources
+                + static_cast<float>(sign) * mtr;
+
+    total_mass.noalias() += d_t * dmdt;
+
     c.noalias() = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
-    concentrations.update_host_to_compute();
+    concentrations.host_to_device_sync();
   }
 
   void
   ScalarSimulation::performStep(double d_t)
   {
     PROFILE_SECTION("performStep_l")
-#define c concentrations.eigen_data
 
-    total_mass.noalias()
-        += d_t * (c * m_transition - c * sink + sources.eigen_data);
+    auto& c = concentrations.eigen();
+    const auto& _sources = sources.cst_eigen();
+    auto dmdt = c * m_transition - c * sink + _sources;
+
+    total_mass.noalias() += d_t * dmdt;
     c.noalias() = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
-    concentrations.update_host_to_compute();
+    concentrations.host_to_device_sync();
   }
 
   void
   ScalarSimulation::clearNegs()
   {
 
-    using float_t = decltype(concentrations)::float_t;
+    using float_t = decltype(concentrations)::float_type;
     constexpr float_t TOL = -1e-8;
-    using space = decltype(concentrations)::HostView::execution_space;
-    auto hv = concentrations.host;
+    using space = decltype(concentrations)::host_view_type::execution_space;
+    auto hv = concentrations.host_view();
     Kokkos::parallel_for(
         "clear_negs",
         Kokkos::MDRangePolicy<
@@ -256,14 +276,15 @@ namespace Simulation
             Kokkos::Rank<2, Kokkos::Iterate::Left, Kokkos::Iterate::Left>>(
             { 0, 0 }, { n_r, n_c }),
         KOKKOS_LAMBDA(int i, int j) {
-          auto val = hv(i, j);
+          const auto val = hv(i, j);
           if (val < static_cast<float_t>(0) && val >= TOL)
           {
             hv(i, j) = static_cast<float_t>(0);
           }
         });
 
-    concentrations.update_host_to_compute();
+    // concentrations.update_host_to_compute();
+    concentrations.host_to_device_sync();
   }
 
   bool
@@ -273,17 +294,20 @@ namespace Simulation
     {
       return false;
     }
-    using eigen_type = decltype(this->concentrations)::EigenMatrix;
-    Eigen::Map<const eigen_type> temp_map(
-        data.data(), EIGEN_INDEX(n_r), EIGEN_INDEX(n_c));
-    this->concentrations.eigen_data = temp_map; // Performs deep copy
+    using view_layout = decltype(this->concentrations)::view_layout;
+    Kokkos::View<const double**, view_layout> unmanaged_host_view(
+        data.data(), n_r, n_c);
+
+    Kokkos::deep_copy(concentrations.host_view(), unmanaged_host_view);
+    concentrations.host_to_device_sync();
+
     return true;
   }
 
   void
   ScalarSimulation::set_mass()
   {
-    total_mass = this->concentrations.eigen_data * m_volumes;
+    total_mass = this->concentrations.eigen() * m_volumes;
   }
 
   void
@@ -295,4 +319,5 @@ namespace Simulation
                     transition->col_indices(),
                     transition->values());
   }
+
 } // namespace Simulation
