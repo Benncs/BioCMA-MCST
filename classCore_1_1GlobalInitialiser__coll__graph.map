@@ -1,9 +1,11 @@
 <map id="Core::GlobalInitialiser" name="Core::GlobalInitialiser">
-<area shape="rect" id="Node000001" title="A class responsible for initializing various components of a simulation framework." alt="" coords="122,100,268,125"/>
-<area shape="rect" id="Node000002" href="$structExecInfo.html" title=" " alt="" coords="5,5,78,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,36,177,97,174,102,73,41"/>
-<area shape="rect" id="Node000003" href="$structCore_1_1SimulationParameters.html" title=" " alt="" coords="102,5,288,30"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,46,198,100,192,100,192,46"/>
-<area shape="rect" id="Node000004" href="$structCore_1_1UserControlParameters.html" title="A structure to hold user&#45;defined control parameters for simulation settings." alt="" coords="312,5,507,30"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="370,39,223,102,221,97,368,34"/>
+<area shape="rect" id="Node000001" title="A class responsible for initializing various components of a simulation framework." alt="" coords="163,195,309,219"/>
+<area shape="rect" id="Node000002" href="$structExecInfo.html" title=" " alt="" coords="46,100,119,125"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,131,218,192,215,196,114,135"/>
+<area shape="rect" id="Node000003" href="$structKernelDispatchOptions.html" title=" " alt="" coords="5,5,160,30"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="85,46,85,100,80,100,80,46"/>
+<area shape="rect" id="Node000004" href="$structCore_1_1SimulationParameters.html" title=" " alt="" coords="143,100,329,125"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="238,141,238,194,233,194,233,141"/>
+<area shape="rect" id="Node000005" href="$structCore_1_1UserControlParameters.html" title="A structure to hold user&#45;defined control parameters for simulation settings." alt="" coords="353,100,548,125"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="411,134,264,197,262,192,409,129"/>
 </map>

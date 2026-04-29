@@ -80,34 +80,44 @@ $(function(){initNavTree('kokkos__getpolicy_8hpp_source.html','',''); });
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceCommon.html">Common</a></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>{</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>  std::size_t <a class="code hl_function" href="namespaceCommon.html#a618180f8964b0ffef461c9ff2f44d295">c_league_size</a>(std::size_t n_tot, std::size_t n_per_team) <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Tag = <span class="keywordtype">void</span>&gt;</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>  Kokkos::TeamPolicy&lt;ComputeSpace, Tag&gt;</div>
-<div class="foldopen" id="foldopen00014" data-start="{" data-end="}">
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="namespaceCommon.html#ad9c9fe6434c0c09218a2e33e17beee28">   14</a></span>  <a class="code hl_function" href="namespaceCommon.html#ad9c9fe6434c0c09218a2e33e17beee28">get_policy_team</a>(std::size_t league_size = 1)</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>  {</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keyword">const</span> <span class="keyword">auto</span> _league_size = <a class="code hl_function" href="namespaceCommon.html#a7ca16dc3314f89cd1860091731cd7014">read_env_or</a>(<span class="stringliteral">&quot;BIOMC_LEAGUE_SIZE&quot;</span>, league_size);</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordflow">return</span> Kokkos::TeamPolicy&lt;ComputeSpace, Tag&gt;(_league_size, Kokkos::AUTO);</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  }</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>  <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="keywordtype">bool</span></div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="}">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="namespaceCommon.html#aef3f5fadf729a92859657cacc3ab9f53">   12</a></span>  <a class="code hl_function" href="namespaceCommon.html#aef3f5fadf729a92859657cacc3ab9f53">is_power_of_2</a>(std::size_t x)</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>  {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keywordflow">return</span> x != 0 &amp;&amp; (x &amp; (x - 1)) == 0;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>  }</div>
 </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Tag = <span class="keywordtype">void</span>&gt;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  Kokkos::TeamPolicy&lt;ComputeSpace, Tag&gt;</div>
-<div class="foldopen" id="foldopen00022" data-start="{" data-end="}">
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="namespaceCommon.html#adb49dd62a0b04177404cae67015110cc">   22</a></span>  <a class="code hl_function" href="namespaceCommon.html#adb49dd62a0b04177404cae67015110cc">get_policy_team_from_npt</a>(std::size_t n_tot, std::size_t n_per_team)</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  {</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordflow">return</span> Kokkos::TeamPolicy&lt;ComputeSpace, Tag&gt;(</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_function" href="namespaceCommon.html#a618180f8964b0ffef461c9ff2f44d295">c_league_size</a>(n_tot, n_per_team), Kokkos::AUTO(), Kokkos::AUTO());</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>  }</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  std::size_t <a class="code hl_function" href="namespaceCommon.html#a618180f8964b0ffef461c9ff2f44d295">c_league_size</a>(std::size_t n_tot, std::size_t n_per_team) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Tag = <span class="keywordtype">void</span>&gt;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  Kokkos::TeamPolicy&lt;ComputeSpace, Tag&gt;</div>
+<div class="foldopen" id="foldopen00021" data-start="{" data-end="}">
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="namespaceCommon.html#ad9c9fe6434c0c09218a2e33e17beee28">   21</a></span>  <a class="code hl_function" href="namespaceCommon.html#ad9c9fe6434c0c09218a2e33e17beee28">get_policy_team</a>(std::size_t league_size = 1)</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keyword">const</span> <span class="keyword">auto</span> _league_size = <a class="code hl_function" href="namespaceCommon.html#a7ca16dc3314f89cd1860091731cd7014">read_env_or</a>(<span class="stringliteral">&quot;BIOMC_LEAGUE_SIZE&quot;</span>, league_size);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordflow">return</span> Kokkos::TeamPolicy&lt;ComputeSpace, Tag&gt;(_league_size, Kokkos::AUTO);</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  }</div>
 </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>} <span class="comment">// namespace Common</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Tag = <span class="keywordtype">void</span>&gt;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  Kokkos::TeamPolicy&lt;ComputeSpace, Tag&gt;</div>
+<div class="foldopen" id="foldopen00029" data-start="{" data-end="}">
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="namespaceCommon.html#adb49dd62a0b04177404cae67015110cc">   29</a></span>  <a class="code hl_function" href="namespaceCommon.html#adb49dd62a0b04177404cae67015110cc">get_policy_team_from_npt</a>(std::size_t n_tot, std::size_t n_per_team)</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>  {</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordflow">return</span> Kokkos::TeamPolicy&lt;ComputeSpace, Tag&gt;(</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        <a class="code hl_function" href="namespaceCommon.html#a618180f8964b0ffef461c9ff2f44d295">c_league_size</a>(n_tot, n_per_team), Kokkos::AUTO(), Kokkos::AUTO());</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  }</div>
+</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>} <span class="comment">// namespace Common</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="anamespaceCommon_html"><div class="ttname"><a href="namespaceCommon.html">Common</a></div><div class="ttdef"><b>Definition</b> config_loader.hpp:8</div></div>
-<div class="ttc" id="anamespaceCommon_html_a618180f8964b0ffef461c9ff2f44d295"><div class="ttname"><a href="namespaceCommon.html#a618180f8964b0ffef461c9ff2f44d295">Common::c_league_size</a></div><div class="ttdeci">std::size_t c_league_size(std::size_t n_tot, std::size_t n_per_team) noexcept</div><div class="ttdef"><b>Definition</b> common.cpp:16</div></div>
+<div class="ttc" id="anamespaceCommon_html_a618180f8964b0ffef461c9ff2f44d295"><div class="ttname"><a href="namespaceCommon.html#a618180f8964b0ffef461c9ff2f44d295">Common::c_league_size</a></div><div class="ttdeci">std::size_t c_league_size(std::size_t n_tot, std::size_t n_per_team) noexcept</div><div class="ttdef"><b>Definition</b> common.cpp:17</div></div>
 <div class="ttc" id="anamespaceCommon_html_a7ca16dc3314f89cd1860091731cd7014"><div class="ttname"><a href="namespaceCommon.html#a7ca16dc3314f89cd1860091731cd7014">Common::read_env_or</a></div><div class="ttdeci">T read_env_or(std::string_view varname, T vdefault)</div><div class="ttdoc">Wrapper arround get_env to get envariable with fallback to default.</div><div class="ttdef"><b>Definition</b> env_var.hpp:49</div></div>
-<div class="ttc" id="anamespaceCommon_html_ad9c9fe6434c0c09218a2e33e17beee28"><div class="ttname"><a href="namespaceCommon.html#ad9c9fe6434c0c09218a2e33e17beee28">Common::get_policy_team</a></div><div class="ttdeci">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt; get_policy_team(std::size_t league_size=1)</div><div class="ttdef"><b>Definition</b> kokkos_getpolicy.hpp:14</div></div>
-<div class="ttc" id="anamespaceCommon_html_adb49dd62a0b04177404cae67015110cc"><div class="ttname"><a href="namespaceCommon.html#adb49dd62a0b04177404cae67015110cc">Common::get_policy_team_from_npt</a></div><div class="ttdeci">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt; get_policy_team_from_npt(std::size_t n_tot, std::size_t n_per_team)</div><div class="ttdef"><b>Definition</b> kokkos_getpolicy.hpp:22</div></div>
+<div class="ttc" id="anamespaceCommon_html_ad9c9fe6434c0c09218a2e33e17beee28"><div class="ttname"><a href="namespaceCommon.html#ad9c9fe6434c0c09218a2e33e17beee28">Common::get_policy_team</a></div><div class="ttdeci">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt; get_policy_team(std::size_t league_size=1)</div><div class="ttdef"><b>Definition</b> kokkos_getpolicy.hpp:21</div></div>
+<div class="ttc" id="anamespaceCommon_html_adb49dd62a0b04177404cae67015110cc"><div class="ttname"><a href="namespaceCommon.html#adb49dd62a0b04177404cae67015110cc">Common::get_policy_team_from_npt</a></div><div class="ttdeci">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt; get_policy_team_from_npt(std::size_t n_tot, std::size_t n_per_team)</div><div class="ttdef"><b>Definition</b> kokkos_getpolicy.hpp:29</div></div>
+<div class="ttc" id="anamespaceCommon_html_aef3f5fadf729a92859657cacc3ab9f53"><div class="ttname"><a href="namespaceCommon.html#aef3f5fadf729a92859657cacc3ab9f53">Common::is_power_of_2</a></div><div class="ttdeci">constexpr bool is_power_of_2(std::size_t x)</div><div class="ttdef"><b>Definition</b> kokkos_getpolicy.hpp:12</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

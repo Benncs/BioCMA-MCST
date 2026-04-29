@@ -22,7 +22,6 @@ var hierarchy =
     [ "DefaultModel", "structDefaultModel.html", null ],
     [ "Simulation::Feed::DelayedConstant", "structSimulation_1_1Feed_1_1DelayedConstant.html", null ],
     [ "Simulation::Dimensions", "structSimulation_1_1Dimensions.html", null ],
-    [ "Simulation::KernelInline::DispatchOptions", "structSimulation_1_1KernelInline_1_1DispatchOptions.html", null ],
     [ "MC::DomainState< ExecSpace, is_const >", "structMC_1_1DomainState.html", null ],
     [ "DynamicDefaultModel", "structDynamicDefaultModel.html", null ],
     [ "std::enable_shared_from_this", null, [
@@ -67,6 +66,7 @@ var hierarchy =
     [ "Core::GlobalInitialiser::inner", "structCore_1_1GlobalInitialiser_1_1inner.html", null ],
     [ "Simulation::MassTransfer::InterfacialAreaFonctor", "structSimulation_1_1MassTransfer_1_1InterfacialAreaFonctor.html", null ],
     [ "WrapMPI::IterationPayload", "classWrapMPI_1_1IterationPayload.html", null ],
+    [ "KernelDispatchOptions", "structKernelDispatchOptions.html", null ],
     [ "Simulation::MassTransfer::KlFonctor", "structSimulation_1_1MassTransfer_1_1KlFonctor.html", null ],
     [ "KokkosEigen::KokkosEigen2D< data_type, layout, exec, args >", "classKokkosEigen_1_1KokkosEigen2D.html", null ],
     [ "MC::KPRNG", "classMC_1_1KPRNG.html", null ],

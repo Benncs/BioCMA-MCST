@@ -16,6 +16,6 @@
 <area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="496,191,619,176,620,182,497,196"/>
 <area shape="rect" id="Node000009" href="$structMC_1_1RuntimeParameters.html" title=" " alt="" coords="5,194,173,218"/>
 <area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="188,203,287,203,287,209,188,209"/>
-<area shape="rect" id="Node000010" href="$structSimulation_1_1KernelInline_1_1DispatchOptions.html" title=" " alt="" coords="609,215,766,253"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="781,220,845,207,909,189,970,162,972,167,911,195,846,213,782,225"/>
+<area shape="rect" id="Node000010" href="$structKernelDispatchOptions.html" title=" " alt="" coords="610,215,765,240"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="780,217,844,206,909,189,970,162,973,167,911,195,845,211,781,222"/>
 </map>

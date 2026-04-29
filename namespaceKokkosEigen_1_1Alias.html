@@ -76,12 +76,16 @@ $(function(){initNavTree('namespaceKokkosEigen_1_1Alias.html','',''); });
 Typedefs</h2></td></tr>
 <tr class="memitem:a890551e8df24a6db27dc7a03faac10ac" id="r_a890551e8df24a6db27dc7a03faac10ac"><td class="memTemplParams" colspan="2">template&lt;typename ftype&gt; </td></tr>
 <tr class="memitem:a890551e8df24a6db27dc7a03faac10ac template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a890551e8df24a6db27dc7a03faac10ac">DiagonalType</a> = Eigen::DiagonalMatrix&lt;ftype, <a class="el" href="namespaceKokkosEigen.html#a166b3e2b72185df71909f9e11ce8183d">CompileMatrixSizeEigen</a>&gt;</td></tr>
+<tr class="memdesc:a890551e8df24a6db27dc7a03faac10ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template type for eigen diagonal object.  <br /></td></tr>
 <tr class="memitem:a7f9d7f27ee8ee1dfaccb582b915bf631" id="r_a7f9d7f27ee8ee1dfaccb582b915bf631"><td class="memTemplParams" colspan="2">template&lt;typename Layout, typename ftype&gt; </td></tr>
 <tr class="memitem:a7f9d7f27ee8ee1dfaccb582b915bf631 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f9d7f27ee8ee1dfaccb582b915bf631">MatrixType</a></td></tr>
+<tr class="memdesc:a7f9d7f27ee8ee1dfaccb582b915bf631"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template type for eigen matrix object.  <br /></td></tr>
 <tr class="memitem:ad201ef6de78eab206bd36f586f0dd6d3" id="r_ad201ef6de78eab206bd36f586f0dd6d3"><td class="memTemplParams" colspan="2">template&lt;typename ftype&gt; </td></tr>
 <tr class="memitem:ad201ef6de78eab206bd36f586f0dd6d3 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad201ef6de78eab206bd36f586f0dd6d3">ColMajorMatrixtype</a> = <a class="el" href="#a7f9d7f27ee8ee1dfaccb582b915bf631">MatrixType</a>&lt;Kokkos::LayoutLeft, ftype&gt;</td></tr>
+<tr class="memdesc:ad201ef6de78eab206bd36f586f0dd6d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template type for colmajor eigen matrix object.  <br /></td></tr>
 <tr class="memitem:a3d400de717f068f7e795b0573c48be1d" id="r_a3d400de717f068f7e795b0573c48be1d"><td class="memTemplParams" colspan="2">template&lt;typename Layout, typename ftype&gt; </td></tr>
 <tr class="memitem:a3d400de717f068f7e795b0573c48be1d template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d400de717f068f7e795b0573c48be1d">SparseMatrixType</a> = Eigen::SparseMatrix&lt;ftype, <a class="el" href="namespaceKokkosEigen.html#a81ea0a28d2d7e00dab105741726dbc0f">get_eigen_layout</a>&lt;Layout&gt;()&gt;</td></tr>
+<tr class="memdesc:a3d400de717f068f7e795b0573c48be1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Template type for eigen sparse matrix object.  <br /></td></tr>
 </table>
 <a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
 <a id="ad201ef6de78eab206bd36f586f0dd6d3" name="ad201ef6de78eab206bd36f586f0dd6d3"></a>
@@ -98,6 +102,14 @@ template&lt;typename ftype&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Template type for colmajor eigen matrix object. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ftype</td><td>template is the scalar type needs to be floating point type </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a890551e8df24a6db27dc7a03faac10ac" name="a890551e8df24a6db27dc7a03faac10ac"></a>
@@ -113,6 +125,14 @@ template&lt;typename ftype&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Template type for eigen diagonal object. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ftype</td><td>template is the scalar type needs to be floating point type </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -133,9 +153,18 @@ template&lt;typename Layout, typename ftype&gt; </div>
 <div class="line">                                     <a class="code hl_variable" href="namespaceKokkosEigen.html#a166b3e2b72185df71909f9e11ce8183d">CompileMatrixSizeEigen</a>,</div>
 <div class="line">                                     <a class="code hl_variable" href="namespaceKokkosEigen.html#a166b3e2b72185df71909f9e11ce8183d">CompileMatrixSizeEigen</a>,</div>
 <div class="line">                                     <a class="code hl_function" href="namespaceKokkosEigen.html#a81ea0a28d2d7e00dab105741726dbc0f">get_eigen_layout&lt;Layout&gt;</a>()&gt;</div>
-<div class="ttc" id="anamespaceKokkosEigen_html_a166b3e2b72185df71909f9e11ce8183d"><div class="ttname"><a href="namespaceKokkosEigen.html#a166b3e2b72185df71909f9e11ce8183d">KokkosEigen::CompileMatrixSizeEigen</a></div><div class="ttdeci">static constexpr int CompileMatrixSizeEigen</div><div class="ttdef"><b>Definition</b> kokkos_eigen.hpp:15</div></div>
-<div class="ttc" id="anamespaceKokkosEigen_html_a81ea0a28d2d7e00dab105741726dbc0f"><div class="ttname"><a href="namespaceKokkosEigen.html#a81ea0a28d2d7e00dab105741726dbc0f">KokkosEigen::get_eigen_layout</a></div><div class="ttdeci">static consteval auto get_eigen_layout()</div><div class="ttdoc">Maps a Kokkos layout type to its Eigen storage order equivalent.</div><div class="ttdef"><b>Definition</b> kokkos_eigen.hpp:25</div></div>
+<div class="ttc" id="anamespaceKokkosEigen_html_a166b3e2b72185df71909f9e11ce8183d"><div class="ttname"><a href="namespaceKokkosEigen.html#a166b3e2b72185df71909f9e11ce8183d">KokkosEigen::CompileMatrixSizeEigen</a></div><div class="ttdeci">static constexpr int CompileMatrixSizeEigen</div><div class="ttdef"><b>Definition</b> kokkos_eigen.hpp:13</div></div>
+<div class="ttc" id="anamespaceKokkosEigen_html_a81ea0a28d2d7e00dab105741726dbc0f"><div class="ttname"><a href="namespaceKokkosEigen.html#a81ea0a28d2d7e00dab105741726dbc0f">KokkosEigen::get_eigen_layout</a></div><div class="ttdeci">static consteval auto get_eigen_layout()</div><div class="ttdoc">Maps a Kokkos layout type to its Eigen storage order equivalent.</div><div class="ttdef"><b>Definition</b> kokkos_eigen.hpp:23</div></div>
 </div><!-- fragment -->
+<p>Template type for eigen matrix object. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Layout</td><td>is the disired data layout (Kokkos::LayoutLeft or LayoutRight) </td></tr>
+    <tr><td class="paramname">ftype</td><td>template is the scalar type needs to be floating point type </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a3d400de717f068f7e795b0573c48be1d" name="a3d400de717f068f7e795b0573c48be1d"></a>
@@ -151,6 +180,14 @@ template&lt;typename Layout, typename ftype&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Template type for eigen sparse matrix object. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ftype</td><td>template is the scalar type needs to be floating point type </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

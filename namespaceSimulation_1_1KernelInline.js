@@ -4,7 +4,6 @@ var namespaceSimulation_1_1KernelInline =
     [ "CycleFunctors", "structSimulation_1_1KernelInline_1_1CycleFunctors.html", "structSimulation_1_1KernelInline_1_1CycleFunctors" ],
     [ "CycleReducer", "classSimulation_1_1KernelInline_1_1CycleReducer.html", "classSimulation_1_1KernelInline_1_1CycleReducer" ],
     [ "CycleReduceType", "structSimulation_1_1KernelInline_1_1CycleReduceType.html", "structSimulation_1_1KernelInline_1_1CycleReduceType" ],
-    [ "DispatchOptions", "structSimulation_1_1KernelInline_1_1DispatchOptions.html", "structSimulation_1_1KernelInline_1_1DispatchOptions" ],
     [ "MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", "structSimulation_1_1KernelInline_1_1MoveFunctor" ],
     [ "TagContribution", "structSimulation_1_1KernelInline_1_1TagContribution.html", null ],
     [ "TagContribution0D", "structSimulation_1_1KernelInline_1_1TagContribution0D.html", null ],

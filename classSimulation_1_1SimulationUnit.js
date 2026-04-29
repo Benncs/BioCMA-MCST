@@ -10,7 +10,7 @@ var classSimulation_1_1SimulationUnit =
     [ "get_kernel_contribution", "classSimulation_1_1SimulationUnit.html#af5aeb9c124540ac219001b46b51b74a9", null ],
     [ "getkernel_concentration", "classSimulation_1_1SimulationUnit.html#a4295618336e99606be4e87b31feb848a", null ],
     [ "getter", "classSimulation_1_1SimulationUnit.html#a531f02efbffc1b6d63b52b7e1a4969be", null ],
-    [ "init_functors", "classSimulation_1_1SimulationUnit.html#a50e613289a3b6ca1abea7173e3eac01e", null ],
+    [ "init_functors", "classSimulation_1_1SimulationUnit.html#a7dba9aca522fbd2462d0d0fd3909d244", null ],
     [ "operator=", "classSimulation_1_1SimulationUnit.html#a255b9ef06424a104581e8aab290e8281", null ],
     [ "operator=", "classSimulation_1_1SimulationUnit.html#aa8a28ba8699f0b719db0558d4eca98cf", null ],
     [ "overwriteStartTime", "classSimulation_1_1SimulationUnit.html#a78ae42cfcc795bbf921e2bc6cfe3df88", null ],
