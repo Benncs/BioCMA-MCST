@@ -23,6 +23,12 @@ constexpr int ID_VERIF = 2025;
 
 /*FFI Feed descriptor*/
 
+int
+version_is_compatible(int major, int minor, int dev)
+{
+  return Api::version_is_compatible(major, minor, dev) ? 0 : -1;
+}
+
 FeedHandle
 new_constant_feed_descriptor(double flow, uint64_t input_position)
 {
@@ -129,7 +135,7 @@ make_params(double biomass_initial_concentration,
             uint32_t number_exported_result,
             int save)
 {
-
+  const auto f_uniform_init = f_false;
   return { biomass_initial_concentration,
            final_time,
            delta_time,
@@ -139,7 +145,7 @@ make_params(double biomass_initial_concentration,
            f_false,
            f_false,
            save,
-           f_false };
+           f_uniform_init };
 }
 
 Param*

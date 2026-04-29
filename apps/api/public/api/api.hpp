@@ -28,6 +28,25 @@ namespace Api
     return { _BIOMC_VERSION_MAJOR, _BIOMC_VERSION_MINOR, _BIOMC_VERSION_DEV };
   }
 
+  // concat 3*two bits
+  constexpr int
+  validate_version(int major, int minor, int dev)
+  {
+    auto cmp2 = [](int a, int b) -> int { return 1 + (a > b) - (a < b); };
+
+    return (cmp2(major, _BIOMC_VERSION_MAJOR) << 4)
+           | (cmp2(minor, _BIOMC_VERSION_MINOR) << 2)
+           | (cmp2(dev, _BIOMC_VERSION_DEV) << 0);
+  }
+
+  constexpr bool
+  version_is_compatible(int major, int minor, int dev)
+  {
+    // Reference value when all fields are equal
+    constexpr int VERSION_EQUAL = (1 << 4) | (1 << 2) | (1 << 0);
+    return validate_version(major, minor, dev) >= VERSION_EQUAL;
+  }
+
   void finalise();
 
   /**
