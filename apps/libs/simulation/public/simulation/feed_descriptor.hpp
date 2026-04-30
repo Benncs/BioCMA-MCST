@@ -17,10 +17,12 @@ enum class Phase
 enum class FeedType : std::uint8_t
 {
   Constant,
-  DelayedConstant,
-  Step,
-  Pulse,
-  Custom
+  Exponential,
+  Linear,
+  // DelayedConstant,
+  // Step,
+  // Pulse,
+  // Custom
 };
 
 template <typename T>
@@ -37,32 +39,46 @@ namespace Simulation::Feed
   {
   };
 
-  struct DelayedConstant
+  struct Exponential
   {
-    double t_init;
-    double t_end;
-    double stored_value;
+    double f0;
+    double alpha;
   };
 
-  struct Step
+  struct Linear
   {
-    double t_init = 0.;
+    double f0;
+    double df;
   };
 
-  struct Pulse
-  {
-    double t_init;
-    double t_end;
-    double frequency;
-    double stored_value;
-  };
+  // struct DelayedConstant
+  // {
+  //   double t_init;
+  //   double t_end;
+  //   double stored_value;
+  // };
 
-  struct Custom
-  {
-  };
+  // struct Step
+  // {
+  //   double t_init = 0.;
+  // };
 
-  using FeedTypeVariant
-      = std::variant<Constant, Step, Pulse, Custom, DelayedConstant>;
+  // struct Pulse
+  // {
+  //   double t_init;
+  //   double t_end;
+  //   double frequency;
+  //   double stored_value;
+  // };
+
+  // struct Custom
+  // {
+  // };
+
+  // using FeedTypeVariant
+  //     = std::variant<Constant, Step, Pulse, Custom, DelayedConstant>;
+
+  using FeedTypeVariant = std::variant<Constant, Linear, Exponential>;
 
   FeedType get_type(const FeedTypeVariant& v);
 
@@ -91,23 +107,6 @@ namespace Simulation::Feed
                                    std::optional<std::size_t> _ouput_position
                                    = std::nullopt,
                                    bool set_output = true) noexcept;
-
-    // static FeedDescriptor delayedconstant(double _f,
-    //                                      feed_value_t&& _target,
-    //                                      feed_position_t&& _position,
-    //                                      feed_species_t _species,
-    //                                      double t_init,
-    //                                      double t_end,
-    //                                      bool set_output = true);
-
-    // static FeedDescriptor pulse(double _f,
-    //                            feed_value_t&& _target,
-    //                            feed_position_t&& _position,
-    //                            feed_species_t _species,
-    //                            double t_init,
-    //                            double t_end,
-    //                            double frequency,
-    //                            bool set_output = true);
   };
 
   class SimulationFeed
