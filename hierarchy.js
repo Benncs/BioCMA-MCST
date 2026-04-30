@@ -8,7 +8,6 @@ var hierarchy =
     [ "Simulation::Feed::Constant", "structSimulation_1_1Feed_1_1Constant.html", null ],
     [ "MC::ContribIndexBounds", "structMC_1_1ContribIndexBounds.html", null ],
     [ "ContributionFunctor< M >", "structContributionFunctor.html", null ],
-    [ "Simulation::Feed::Custom", "structSimulation_1_1Feed_1_1Custom.html", null ],
     [ "CustomFunctor", "structCustomFunctor.html", null ],
     [ "Core::ScalarFactory::CustomScript", "structCore_1_1ScalarFactory_1_1CustomScript.html", null ],
     [ "Simulation::KernelInline::CycleFunctor< M >", "structSimulation_1_1KernelInline_1_1CycleFunctor.html", null ],
@@ -20,7 +19,6 @@ var hierarchy =
       [ "Core::PartialExporter", "classCore_1_1PartialExporter.html", null ]
     ] ],
     [ "DefaultModel", "structDefaultModel.html", null ],
-    [ "Simulation::Feed::DelayedConstant", "structSimulation_1_1Feed_1_1DelayedConstant.html", null ],
     [ "Simulation::Dimensions", "structSimulation_1_1Dimensions.html", null ],
     [ "MC::DomainState< ExecSpace, is_const >", "structMC_1_1DomainState.html", null ],
     [ "DynamicDefaultModel", "structDynamicDefaultModel.html", null ],
@@ -35,6 +33,7 @@ var hierarchy =
     ] ],
     [ "ExecInfo", "structExecInfo.html", null ],
     [ "MC::Distributions::Exponential< F >", "structMC_1_1Distributions_1_1Exponential.html", null ],
+    [ "Simulation::Feed::Exponential", "structSimulation_1_1Feed_1_1Exponential.html", null ],
     [ "ExportHandler", "classExportHandler.html", null ],
     [ "f_assert< exec_space >", "structf__assert.html", null ],
     [ "std::false_type", null, [
@@ -71,6 +70,7 @@ var hierarchy =
     [ "KokkosEigen::KokkosEigen2D< data_type, layout, exec, args >", "classKokkosEigen_1_1KokkosEigen2D.html", null ],
     [ "MC::KPRNG", "classMC_1_1KPRNG.html", null ],
     [ "MC::LeavingFlow", "structMC_1_1LeavingFlow.html", null ],
+    [ "Simulation::Feed::Linear", "structSimulation_1_1Feed_1_1Linear.html", null ],
     [ "UnsafeUDF::Loader", "structUnsafeUDF_1_1Loader.html", null ],
     [ "Core::ScalarFactory::Local", "structCore_1_1ScalarFactory_1_1Local.html", null ],
     [ "IO::Logger", "classIO_1_1Logger.html", [
@@ -92,7 +92,6 @@ var hierarchy =
     [ "PythonWrap::PimpModel", "classPythonWrap_1_1PimpModel.html", null ],
     [ "Simulation::Probes< buffer_size >", "classSimulation_1_1Probes.html", null ],
     [ "IO::ProgressBar", "classIO_1_1ProgressBar.html", null ],
-    [ "Simulation::Feed::Pulse", "structSimulation_1_1Feed_1_1Pulse.html", null ],
     [ "MC::ReactorDomain", "classMC_1_1ReactorDomain.html", null ],
     [ "IO::RedirectHandle", "classIO_1_1RedirectHandle.html", null ],
     [ "MC::RuntimeParameters", "structMC_1_1RuntimeParameters.html", null ],
@@ -108,7 +107,6 @@ var hierarchy =
     [ "Simulation::SimulationUnit", "classSimulation_1_1SimulationUnit.html", null ],
     [ "MC::Distributions::SkewNormal< F >", "structMC_1_1Distributions_1_1SkewNormal.html", null ],
     [ "Simulation::Specie", "structSimulation_1_1Specie.html", null ],
-    [ "Simulation::Feed::Step", "structSimulation_1_1Feed_1_1Step.html", null ],
     [ "Success", "structSuccess.html", null ],
     [ "ContributionFunctor< M >::Tag0D", "structContributionFunctor_1_1Tag0D.html", null ],
     [ "tag1", "structtag1.html", null ],

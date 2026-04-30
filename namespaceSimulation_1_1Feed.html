@@ -75,32 +75,30 @@ $(function(){initNavTree('namespaceSimulation_1_1Feed.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:Constant" id="r_Constant"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1Feed_1_1Constant.html">Constant</a></td></tr>
-<tr class="memitem:Custom" id="r_Custom"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1Feed_1_1Custom.html">Custom</a></td></tr>
-<tr class="memitem:DelayedConstant" id="r_DelayedConstant"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1Feed_1_1DelayedConstant.html">DelayedConstant</a></td></tr>
+<tr class="memitem:Exponential" id="r_Exponential"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1Feed_1_1Exponential.html">Exponential</a></td></tr>
 <tr class="memitem:FeedDescriptor" id="r_FeedDescriptor"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a></td></tr>
 <tr class="memitem:FeedFactory" id="r_FeedFactory"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1Feed_1_1FeedFactory.html">FeedFactory</a></td></tr>
 <tr class="memitem:FeedValue" id="r_FeedValue"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1Feed_1_1FeedValue.html">FeedValue</a></td></tr>
-<tr class="memitem:Pulse" id="r_Pulse"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1Feed_1_1Pulse.html">Pulse</a></td></tr>
+<tr class="memitem:Linear" id="r_Linear"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1Feed_1_1Linear.html">Linear</a></td></tr>
 <tr class="memitem:SimulationFeed" id="r_SimulationFeed"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">SimulationFeed</a></td></tr>
-<tr class="memitem:Step" id="r_Step"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1Feed_1_1Step.html">Step</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a79af6349f51698c17587144746aadb33" id="r_a79af6349f51698c17587144746aadb33"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79af6349f51698c17587144746aadb33">FeedTypeVariant</a> = std::variant&lt;<a class="el" href="structSimulation_1_1Feed_1_1Constant.html">Constant</a>, <a class="el" href="structSimulation_1_1Feed_1_1Step.html">Step</a>, <a class="el" href="structSimulation_1_1Feed_1_1Pulse.html">Pulse</a>, <a class="el" href="structSimulation_1_1Feed_1_1Custom.html">Custom</a>, <a class="el" href="structSimulation_1_1Feed_1_1DelayedConstant.html">DelayedConstant</a>&gt;</td></tr>
+<tr class="memitem:a93ce91103597fbf533bf1b3c74de1ded" id="r_a93ce91103597fbf533bf1b3c74de1ded"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93ce91103597fbf533bf1b3c74de1ded">FeedTypeVariant</a> = std::variant&lt;<a class="el" href="structSimulation_1_1Feed_1_1Constant.html">Constant</a>, <a class="el" href="structSimulation_1_1Feed_1_1Linear.html">Linear</a>, <a class="el" href="structSimulation_1_1Feed_1_1Exponential.html">Exponential</a>&gt;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ae2b43fd78e41337982a37fcb48f54a62" id="r_ae2b43fd78e41337982a37fcb48f54a62"><td class="memItemLeft" align="right" valign="top">FeedType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2b43fd78e41337982a37fcb48f54a62">get_type</a> (const <a class="el" href="#a79af6349f51698c17587144746aadb33">FeedTypeVariant</a> &amp;v)</td></tr>
+<tr class="memitem:ae2b43fd78e41337982a37fcb48f54a62" id="r_ae2b43fd78e41337982a37fcb48f54a62"><td class="memItemLeft" align="right" valign="top">FeedType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2b43fd78e41337982a37fcb48f54a62">get_type</a> (const <a class="el" href="#a93ce91103597fbf533bf1b3c74de1ded">FeedTypeVariant</a> &amp;v)</td></tr>
 </table>
 <a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
-<a id="a79af6349f51698c17587144746aadb33" name="a79af6349f51698c17587144746aadb33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79af6349f51698c17587144746aadb33">&#9670;&#160;</a></span>FeedTypeVariant</h2>
+<a id="a93ce91103597fbf533bf1b3c74de1ded" name="a93ce91103597fbf533bf1b3c74de1ded"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93ce91103597fbf533bf1b3c74de1ded">&#9670;&#160;</a></span>FeedTypeVariant</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#a79af6349f51698c17587144746aadb33">Simulation::Feed::FeedTypeVariant</a> = std::variant&lt;<a class="el" href="structSimulation_1_1Feed_1_1Constant.html">Constant</a>, <a class="el" href="structSimulation_1_1Feed_1_1Step.html">Step</a>, <a class="el" href="structSimulation_1_1Feed_1_1Pulse.html">Pulse</a>, <a class="el" href="structSimulation_1_1Feed_1_1Custom.html">Custom</a>, <a class="el" href="structSimulation_1_1Feed_1_1DelayedConstant.html">DelayedConstant</a>&gt;</td>
+          <td class="memname">using <a class="el" href="#a93ce91103597fbf533bf1b3c74de1ded">Simulation::Feed::FeedTypeVariant</a> = std::variant&lt;<a class="el" href="structSimulation_1_1Feed_1_1Constant.html">Constant</a>, <a class="el" href="structSimulation_1_1Feed_1_1Linear.html">Linear</a>, <a class="el" href="structSimulation_1_1Feed_1_1Exponential.html">Exponential</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -117,7 +115,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">FeedType Simulation::Feed::get_type </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="#a79af6349f51698c17587144746aadb33">FeedTypeVariant</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="#a93ce91103597fbf533bf1b3c74de1ded">FeedTypeVariant</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>

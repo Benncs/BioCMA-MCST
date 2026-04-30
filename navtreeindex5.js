@@ -125,8 +125,8 @@ var NAVTREEINDEX5 =
 "namespaceSimulation.html#afd80d46a94927c6389992f31509571aaa56b419b259c49fa979598027da1f6062":[5,0,14,24,4],
 "namespaceSimulation.html#afd80d46a94927c6389992f31509571aaaf19516d11f2946f894070e92fcb56b6d":[5,0,14,24,0],
 "namespaceSimulation_1_1Feed.html":[5,0,14,0],
-"namespaceSimulation_1_1Feed.html#a79af6349f51698c17587144746aadb33":[5,0,14,0,9],
-"namespaceSimulation_1_1Feed.html#ae2b43fd78e41337982a37fcb48f54a62":[5,0,14,0,10],
+"namespaceSimulation_1_1Feed.html#a93ce91103597fbf533bf1b3c74de1ded":[5,0,14,0,7],
+"namespaceSimulation_1_1Feed.html#ae2b43fd78e41337982a37fcb48f54a62":[5,0,14,0,8],
 "namespaceSimulation_1_1KernelInline.html":[5,0,14,2],
 "namespaceSimulation_1_1KernelInline.html#a0a987f5f49bd4923ea33364c44a5600e":[5,0,14,2,16],
 "namespaceSimulation_1_1KernelInline.html#a0cbad0e04b9de8fd69600694e9bc4201":[5,0,14,2,22],
@@ -249,5 +249,5 @@ var NAVTREEINDEX5 =
 "structApiResult.html#a6b6577e957c58940438ddc4bc14f65b3":[7,0,13,1],
 "structApi_1_1SimulationInstance.html":[5,0,0,0],
 "structApi_1_1SimulationInstance.html":[7,0,0,0],
-"structApi_1_1SimulationInstance.html#a06b825ee4dcaf97e49ef5d3644a7301a":[5,0,0,0,19]
+"structApi_1_1SimulationInstance.html#a06b825ee4dcaf97e49ef5d3644a7301a":[5,0,0,0,20]
 };

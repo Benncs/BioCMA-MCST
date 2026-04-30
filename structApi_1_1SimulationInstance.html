@@ -114,7 +114,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a44482022a20986f2f68163a5a3baf49f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a serialization/deserialization (serde) path.  <br /></td></tr>
 <tr class="memitem:a06b825ee4dcaf97e49ef5d3644a7301a" id="r_a06b825ee4dcaf97e49ef5d3644a7301a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a06b825ee4dcaf97e49ef5d3644a7301a">register_model_name</a> (std::string_view path)</td></tr>
 <tr class="memdesc:a06b825ee4dcaf97e49ef5d3644a7301a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the model name for the simulation.  <br /></td></tr>
-<tr class="memitem:a4508272c4bba7fdaa1e3695ee606f538" id="r_a4508272c4bba7fdaa1e3695ee606f538"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4508272c4bba7fdaa1e3695ee606f538">set_feed</a> (<a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">Simulation::Feed::FeedDescriptor</a> feed_variant, Phase phase=Phase::Liquid)</td></tr>
+<tr class="memitem:a3c33e075fd2930a740817b71e6c24151" id="r_a3c33e075fd2930a740817b71e6c24151"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c33e075fd2930a740817b71e6c24151">add_feed</a> (<a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">Simulation::Feed::FeedDescriptor</a> feed_type, Phase phase)</td></tr>
 <tr class="memitem:ad3dcce95a8552f794dfff2a0f382fcee" id="r_ad3dcce95a8552f794dfff2a0f382fcee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3dcce95a8552f794dfff2a0f382fcee">set_mtr</a> (<a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a7c63fea72839b458bd3076d15856b600">Simulation::MassTransfer::Type::MtrTypeVariant</a> &amp;&amp;variant)</td></tr>
 <tr class="memitem:a73c191e86d9951411087785b68bf709e" id="r_a73c191e86d9951411087785b68bf709e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73c191e86d9951411087785b68bf709e">set_auto_mtr</a> ()</td></tr>
 <tr class="memitem:afb6d2f04368f71955e4773dd5452f2e2" id="r_afb6d2f04368f71955e4773dd5452f2e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb6d2f04368f71955e4773dd5452f2e2">register_scalar_initiazer</a> (<a class="el" href="namespaceCore_1_1ScalarFactory.html#a1f251f574caf734fdff27f191ec09d1e">Core::ScalarFactory::ScalarVariant</a> &amp;&amp;var)</td></tr>
@@ -333,6 +333,32 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a3c33e075fd2930a740817b71e6c24151" name="a3c33e075fd2930a740817b71e6c24151"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c33e075fd2930a740817b71e6c24151">&#9670;&#160;</a></span>add_feed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structApiResult.html">ApiResult</a> Api::SimulationInstance::add_feed </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">Simulation::Feed::FeedDescriptor</a></td>          <td class="paramname"><span class="paramname"><em>feed_type</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Phase</td>          <td class="paramname"><span class="paramname"><em>phase</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a3c33e075fd2930a740817b71e6c24151_icgraph.svg" width="378" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
 <a id="ae9bdd54076170f50eadcb7966d64c19d" name="ae9bdd54076170f50eadcb7966d64c19d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae9bdd54076170f50eadcb7966d64c19d">&#9670;&#160;</a></span>apply() <span class="overload">[1/2]</span></h2>
 
@@ -966,32 +992,6 @@ Here is the caller graph for this function:</div>
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a73c191e86d9951411087785b68bf709e_icgraph.svg" width="378" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<a id="a4508272c4bba7fdaa1e3695ee606f538" name="a4508272c4bba7fdaa1e3695ee606f538"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4508272c4bba7fdaa1e3695ee606f538">&#9670;&#160;</a></span>set_feed()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structApiResult.html">ApiResult</a> Api::SimulationInstance::set_feed </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">Simulation::Feed::FeedDescriptor</a></td>          <td class="paramname"><span class="paramname"><em>feed_variant</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Phase</td>          <td class="paramname"><span class="paramname"><em>phase</em></span><span class="paramdefsep"> = </span><span class="paramdefval">Phase::Liquid</span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a4508272c4bba7fdaa1e3695ee606f538_icgraph.svg" width="378" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

@@ -76,14 +76,12 @@ var annotated_dup =
     [ "Simulation", "namespaceSimulation.html", [
       [ "Feed", "namespaceSimulation_1_1Feed.html", [
         [ "Constant", "structSimulation_1_1Feed_1_1Constant.html", null ],
-        [ "Custom", "structSimulation_1_1Feed_1_1Custom.html", null ],
-        [ "DelayedConstant", "structSimulation_1_1Feed_1_1DelayedConstant.html", "structSimulation_1_1Feed_1_1DelayedConstant" ],
+        [ "Exponential", "structSimulation_1_1Feed_1_1Exponential.html", "structSimulation_1_1Feed_1_1Exponential" ],
         [ "FeedDescriptor", "structSimulation_1_1Feed_1_1FeedDescriptor.html", "structSimulation_1_1Feed_1_1FeedDescriptor" ],
         [ "FeedFactory", "structSimulation_1_1Feed_1_1FeedFactory.html", "structSimulation_1_1Feed_1_1FeedFactory" ],
         [ "FeedValue", "structSimulation_1_1Feed_1_1FeedValue.html", "structSimulation_1_1Feed_1_1FeedValue" ],
-        [ "Pulse", "structSimulation_1_1Feed_1_1Pulse.html", "structSimulation_1_1Feed_1_1Pulse" ],
-        [ "SimulationFeed", "classSimulation_1_1Feed_1_1SimulationFeed.html", "classSimulation_1_1Feed_1_1SimulationFeed" ],
-        [ "Step", "structSimulation_1_1Feed_1_1Step.html", "structSimulation_1_1Feed_1_1Step" ]
+        [ "Linear", "structSimulation_1_1Feed_1_1Linear.html", "structSimulation_1_1Feed_1_1Linear" ],
+        [ "SimulationFeed", "classSimulation_1_1Feed_1_1SimulationFeed.html", "classSimulation_1_1Feed_1_1SimulationFeed" ]
       ] ],
       [ "KernelInline", "namespaceSimulation_1_1KernelInline.html", [
         [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html", "structSimulation_1_1KernelInline_1_1CycleFunctor" ],
