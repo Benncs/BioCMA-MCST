@@ -81,9 +81,9 @@ namespace Simulation
     {
       feed.update(t, d_t);
       set_scalar_feed(liquid_scalar, feed);
-      if (std::size_t output_position = *feed.output_position)
+      if (feed.output_position.has_value())
       {
-
+        const std::size_t output_position = *feed.output_position;
         // this->mc_unit->domain.set_leaving_flow(
         //     0, *feed.output_position, feed.flow);
         // const auto volume =
