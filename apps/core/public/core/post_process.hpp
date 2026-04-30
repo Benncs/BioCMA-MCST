@@ -224,8 +224,8 @@ namespace PostProcessing
 
       if (with_age)
       {
-        ParticlePropertyViewType<ComputeSpace> ages_values(
-            "ages_values", 2, n_p);
+        // ParticlePropertyViewType<ComputeSpace> ages_values(
+        //     "ages_values", 2, n_p);
 
         properties.ages = Kokkos::create_mirror_view_and_copy(
             Kokkos::HostSpace(), ages_values);
