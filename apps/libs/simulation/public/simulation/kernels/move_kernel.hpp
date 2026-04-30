@@ -247,76 +247,77 @@ namespace Simulation::KernelInline
                            });
     }
 
-    KOKKOS_INLINE_FUNCTION void
-    operator()(TagLeave _tag,
-               const TeamMember& team,
-               std::size_t& local_dead_count) const
-    {
-      (void)_tag;
-      const std::size_t count = m_p_team_leave;
-      const std::size_t p0 = team.league_rank() * count;
-      const std::size_t n_particle = n_particles;
-      const auto _d_t = static_cast<float>(d_t);
+    // KOKKOS_INLINE_FUNCTION void
+    // operator()(TagLeave _tag,
+    //            const TeamMember& team,
+    //            std::size_t& local_dead_count) const
+    // {
+    //   (void)_tag;
+    //   const std::size_t count = m_p_team_leave;
+    //   const std::size_t p0 = team.league_rank() * count;
+    //   const std::size_t n_particle = n_particles;
+    //   const auto _d_t = static_cast<float>(d_t);
 
-      const auto upper_bound
-          = ((p0 + count) >= n_particle) ? n_particle - p0 : count;
-      KOKKOS_ASSERT(upper_bound > 0 && upper_bound < n_particle);
+    //   const auto upper_bound
+    //       = ((p0 + count) >= n_particle) ? n_particle - p0 : count;
+    //   KOKKOS_ASSERT(upper_bound > 0 && upper_bound < n_particle);
 
-      const std::size_t n_flow = move.leaving_flow.extent(0);
+    //   const std::size_t n_flow = move.leaving_flow.extent(0);
 
-      using ScratchSpace = TeamPolicy::execution_space::scratch_memory_space;
-      using ScratchView = Kokkos::View<MC::LeavingFlow*, ScratchSpace>;
-      const auto leaving_flow = ScratchView(team.team_scratch(0), n_flow);
+    //   using ScratchSpace = TeamPolicy::execution_space::scratch_memory_space;
+    //   using ScratchView = Kokkos::View<MC::LeavingFlow*, ScratchSpace>;
+    //   const auto leaving_flow = ScratchView(team.team_scratch(0), n_flow);
 
-      // Kokkos::parallel_for(Kokkos::TeamVectorRange(team, n_flow),
-      //                      [&](const std::size_t j)
-      //                      { leaving_flow(j) = move.leaving_flow(j); });
+    //   // Kokkos::parallel_for(Kokkos::TeamVectorRange(team, n_flow),
+    //   //                      [&](const std::size_t j)
+    //   //                      { leaving_flow(j) = move.leaving_flow(j); });
 
-      Kokkos::single(Kokkos::PerTeam(team),
-                     [&]()
-                     {
-                       for (std::size_t j = 0; j < n_flow; ++j)
-                       {
-                         leaving_flow(j) = move.leaving_flow(j);
-                       }
-                     });
+    //   Kokkos::single(Kokkos::PerTeam(team),
+    //                  [&]()
+    //                  {
+    //                    for (std::size_t j = 0; j < n_flow; ++j)
+    //                    {
+    //                      leaving_flow(j) = move.leaving_flow(j);
+    //                    }
+    //                  });
 
-      team.team_barrier();
+    //   team.team_barrier();
 
-      std::size_t t_local = 0;
-      Kokkos::parallel_reduce(
-          Kokkos::TeamThreadRange(team, 0, upper_bound),
-          [&](const std::size_t relative_index,
-              std::size_t& thread_local_dead_count)
-          {
-            const std::size_t flatten_index = p0 + relative_index;
-            if (status(flatten_index) == MC::Status::Idle)
-            {
-              ages(flatten_index, 0) += _d_t;
-              handle_exit<ScratchSpace>(
-                  flatten_index, leaving_flow, thread_local_dead_count);
-            }
-          },
-          t_local);
+    //   std::size_t t_local = 0;
+    //   Kokkos::parallel_reduce(
+    //       Kokkos::TeamThreadRange(team, 0, upper_bound),
+    //       [&](const std::size_t relative_index,
+    //           std::size_t& thread_local_dead_count)
+    //       {
+    //         const std::size_t flatten_index = p0 + relative_index;
+    //         if (status(flatten_index) == MC::Status::Idle)
+    //         {
+    //           ages(flatten_index, 0) += _d_t;
+    //           handle_exit<ScratchSpace>(
+    //               flatten_index, leaving_flow, thread_local_dead_count);
+    //         }
+    //       },
+    //       t_local);
 
-      team.team_barrier();
+    //   team.team_barrier();
 
-      Kokkos::single(Kokkos::PerTeam(team),
-                     [&]()
-                     {
-                       Kokkos::single(Kokkos::PerThread(team),
-                                      [&]() { local_dead_count += t_local; });
-                     });
-      // Kokkos::single(Kokkos::PerTeam(team),
-      //                [&]()
-      //                {
-      //                  Kokkos::single(Kokkos::PerThread(team),
-      //                                 [&]() {
-      //                                 local_dead_count
-      //                                 += t_local;
-      //                                 });
-      //                });
-    }
+    //   Kokkos::single(Kokkos::PerTeam(team),
+    //                  [&]()
+    //                  {
+    //                    Kokkos::single(Kokkos::PerThread(team),
+    //                                   [&]() { local_dead_count += t_local;
+    //                                   });
+    //                  });
+    //   // Kokkos::single(Kokkos::PerTeam(team),
+    //   //                [&]()
+    //   //                {
+    //   //                  Kokkos::single(Kokkos::PerThread(team),
+    //   //                                 [&]() {
+    //   //                                 local_dead_count
+    //   //                                 += t_local;
+    //   //                                 });
+    //   //                });
+    // }
 
     KOKKOS_INLINE_FUNCTION void
     operator()([[maybe_unused]] TagLeave _tag,
