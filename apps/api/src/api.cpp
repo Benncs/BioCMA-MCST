@@ -89,7 +89,7 @@ namespace Api
   }
 
   ApiResult
-  SimulationInstance::set_feed(Simulation::Feed::FeedDescriptor feed_variant,
+  SimulationInstance::add_feed(Simulation::Feed::FeedDescriptor feed_type,
                                Phase phase)
   {
     if (!feed.has_value())
@@ -97,7 +97,7 @@ namespace Api
       feed = Simulation::Feed::SimulationFeed{ std::nullopt, std::nullopt };
     }
 
-    this->feed->add_feed(move_allow_trivial(feed_variant), phase);
+    this->feed->add_feed(move_allow_trivial(feed_type), phase);
 
     return ApiResult(); // TODO FIX ERROR
   }

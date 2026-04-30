@@ -139,7 +139,7 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT //In C we only need ptr type so
                         int gas,
                         int fed_batch);
 
-  int set_feed_descriptor(Handle, FeedHandle, int gas);
+  int add_feed_descriptor(Handle, FeedHandle, int gas);
 
 #ifdef __cplusplus
 }

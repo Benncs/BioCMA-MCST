@@ -1,9 +1,8 @@
-#include "common/console.hpp"
-#include "common/logger.hpp"
-#include "simulation/feed_descriptor.hpp"
 #include <api/api.hpp>
 #include <api/api_raw.h>
 #include <api/results.hpp>
+#include <common/console.hpp>
+#include <common/logger.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
 #include <cstdint>
@@ -12,6 +11,7 @@
 #include <iostream>
 #include <memory>
 #include <optional>
+#include <simulation/feed_descriptor.hpp>
 #include <span>
 #include <sstream>
 #include <string>
@@ -43,14 +43,14 @@ new_constant_feed_descriptor(double flow, uint64_t input_position)
 }
 
 int
-set_feed_descriptor(Handle handle, FeedHandle fd, int gas)
+add_feed_descriptor(Handle handle, FeedHandle fd, int gas)
 {
   const auto phase = gas != 0 ? Phase::Gas : Phase::Liquid;
   if (handle != nullptr)
   {
     if (fd != nullptr)
     {
-      return handle->set_feed(*fd, phase) ? 0 : -3;
+      return handle->add_feed(*fd, phase) ? 0 : -3;
     }
     return -2;
   }
@@ -401,7 +401,7 @@ set_feed_constant(Handle handle,
       set_fedbatch(fh);
     }
 
-    set_feed_descriptor(handle, fh, gas);
+    add_feed_descriptor(handle, fh, gas);
 
     delete_constant_feed_descriptor(&fh);
     // ApiResult res;
