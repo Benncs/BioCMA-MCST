@@ -210,11 +210,13 @@ namespace Core
       {
         folder_name.append(params.results_file_name);
         path.append(params.results_file_name);
-        path.append(params.results_file_name);
+        // path.append(params.results_file_name);
       }
-      std::filesystem::create_directory(folder_name);
+
+      //      std::filesystem::create_directory(folder_name);
       params.results_file_name = path.string();
-      return true;
+      return std::filesystem::exists(path);
+      //return true;
     }
     catch (...)
     {
