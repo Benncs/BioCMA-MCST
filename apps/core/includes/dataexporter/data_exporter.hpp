@@ -24,7 +24,9 @@ namespace Core
   //   return std::string(filename) + "_partial_" + std::to_string(current_rank)
   //   + ".h5";
   // }
-  bool check_results_file_name(Core::UserControlParameters& params);
+  bool
+  fill_and_check_result_file_path(const std::shared_ptr<IO::Logger>& logger,
+                                  Core::UserControlParameters& params);
   /**
    * @class DataExporter
    * @brief A class responsible for exporting various types of data such as

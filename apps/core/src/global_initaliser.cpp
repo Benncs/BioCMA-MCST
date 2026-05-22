@@ -114,7 +114,10 @@ namespace Core
   {
     set_logger(std::move(_logger));
 
-    Core::check_results_file_name(user_params);
+    if (!Core::fill_and_check_result_file_path(this->logger, user_params))
+    {
+      throw std::runtime_error("TODO bad path");
+    };
     params = SimulationParameters::init(user_params);
     f_init_gas_flow
         = info.current_rank == 0 && params.is_two_phase_flow; // NOLINT
