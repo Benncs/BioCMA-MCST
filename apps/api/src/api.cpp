@@ -37,27 +37,44 @@ namespace
 {
   static std::shared_ptr<DynamicLibrary> udf_handle = nullptr;
 
-  bool
+  ApiResult
   check_required(const Core::UserControlParameters& params, bool to_load)
   {
-    bool flag = true;
-    flag = flag && params.final_time > 0;
-    flag = flag && params.delta_time >= 0;
-    flag = flag && !params.cma_case_path.empty();
-    flag = flag
-           && ((params.load_serde && params.serde_file.has_value())
-               || (!params.load_serde && !params.serde_file.has_value()));
-    if (!to_load)
+
+    if (params.final_time <= 0)
     {
-      flag = flag
-             && params.biomass_initial_concentration
-                    != 0; // Biomass could be 0 at start but OK to say that X>0
-      flag = flag && params.number_particle > 0;
-      // flag = flag && params.initialiser_path != "";
-      // flag = flag && params.model_name != "";
+      return ApiResult("Final time must be positive");
     }
 
-    return flag;
+    if (params.delta_time <= 0)
+    {
+      return ApiResult("Delta time must be positive");
+    }
+    if (params.cma_case_path.empty())
+    {
+      return ApiResult("CM path is empty");
+    }
+
+    if ((!params.serde_file.has_value() && params.load_serde)
+        || (!params.load_serde && params.serde_file.has_value()))
+    {
+      return ApiResult("If serde, needs file path");
+    }
+
+    if (!to_load)
+    {
+      if (params.biomass_initial_concentration <= 0)
+      {
+        return ApiResult(
+            "biomass_initial_concentration should be strictly positive ");
+      }
+      if (params.number_particle == 0)
+      {
+        return ApiResult("Number of particle should be positive");
+      }
+    }
+
+    return ApiResult(); // Ok !
   }
 
 } // namespace
@@ -213,7 +230,13 @@ namespace Api
   SimulationInstance::apply_load() noexcept
   {
     // Checks
-    CHECK_OR_RETURN(!check_required(this->params, true), "Check params");
+    // CHECK_OR_RETURN(!check_required(this->params, true), "Check params");
+
+    if (auto r = check_required(this->params, true); r.invalid())
+    {
+      return r;
+    }
+
     CHECK_OR_RETURN(loaded, "Already loaded");
 
     try
@@ -257,7 +280,13 @@ namespace Api
   {
 
     // Checks
-    CHECK_OR_RETURN(!check_required(this->params, true), "Check params");
+    // CHECK_OR_RETURN(!check_required(this->params, true), "Check params");
+    //
+    if (auto r = check_required(this->params, true); r.invalid())
+    {
+      return r;
+    }
+
     CHECK_OR_RETURN(loaded, "Already loaded");
     CHECK_OR_RETURN(!registered, "Register first");
 
