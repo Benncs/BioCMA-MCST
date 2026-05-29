@@ -1,3 +1,4 @@
+#include "Kokkos_Assert.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/common.hpp>
@@ -174,8 +175,9 @@ namespace MC
       // TODO
 
       // const std::size_t n_p = container.n_particles();
-      const double new_weight
-          = (x0 * unit->domain.getTotalVolume()) / (total_mass);
+      const auto total_liquid_volume = unit->domain.getTotalVolume();
+      KOKKOS_ASSERT(total_liquid_volume > 0.);
+      const double new_weight = (x0 * total_liquid_volume) / (total_mass);
       KOKKOS_ASSERT(new_weight > 0);
       using CurrentModel =
           typename std::remove_reference<decltype(container)>::type::UsedModel;

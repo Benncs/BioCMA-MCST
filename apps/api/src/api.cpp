@@ -1,3 +1,4 @@
+#include "common/traits.hpp"
 #include "simulation/mass_transfer.hpp"
 #include "wrap_init_model_selector.hpp"
 #include <Kokkos_Core.hpp>
@@ -37,16 +38,25 @@ namespace
 {
   static std::shared_ptr<DynamicLibrary> udf_handle = nullptr;
 
+  // Simple helper
+  // TODO: specialized for floatpoin type and integer
+  template <typename T>
+  bool
+  is_strict_positive(const T& a)
+  {
+    return a > T(0);
+  }
+
   ApiResult
   check_required(const Core::UserControlParameters& params, bool to_load)
   {
 
-    if (params.final_time <= 0)
+    if (!is_strict_positive(params.final_time))
     {
       return ApiResult("Final time must be positive");
     }
 
-    if (params.delta_time <= 0)
+    if (!is_strict_positive(params.delta_time))
     {
       return ApiResult("Delta time must be positive");
     }
@@ -63,7 +73,7 @@ namespace
 
     if (!to_load)
     {
-      if (params.biomass_initial_concentration <= 0)
+      if (!is_strict_positive(params.biomass_initial_concentration))
       {
         return ApiResult(
             "biomass_initial_concentration should be strictly positive ");

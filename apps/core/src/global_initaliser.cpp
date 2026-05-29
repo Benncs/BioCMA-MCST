@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <dataexporter/data_exporter.hpp>
 #include <exception>
+#include <iterator>
 #include <load_balancing/iload_balancer.hpp>
 #include <load_balancing/impl_lb.hpp>
 #include <mc/mcinit.hpp>
@@ -313,13 +314,14 @@ namespace Core
 #ifndef NO_MPI
       correct_total_mass = WrapMPI::all_reduce(total_mass);
 #else
-      static_assert(false, "Not implemented ");
+      __builtin_unreachable(); // FIXME
+      throw std::runtime_error("ERROR MPI activate but not implemented ");
 #endif
     }
 
     if (correct_total_mass <= 0.)
     {
-      throw std::runtime_error("ERROR odel not found returns negative mass");
+      throw std::runtime_error("ERROR model not found returns negative mass");
     }
 
     MC::post_init_weight(
