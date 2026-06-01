@@ -16,13 +16,16 @@ The following kernels manage the particle container, including initialization, r
 ## Iteration Cycle Kernels
 Each iteration cycle launches the following kernels:
 
+Follow "team" policy is actually a way to deal with continous chunk of particle per team, the size of chunk is defined at compile time depending on the selected backend but can be overwritten with env variable.
+
+
 | Type         | Name                  | Policy                                      | Brief Description                                                                 | Number of Calls          |
 |--------------|-----------------------|---------------------------------------------|-----------------------------------------------------------------------------------|--------------------------|
-| for          | `cycle_move`          | `team: (static_cast<int>(range) + team_size - 1)/team_size, team_size` | Moves particles based on the flowmap (if `n_compartment > 1`).                   | `n_step`                 |
-| reduce       | `cycle_move_leave`    | `team: (256, auto)`                         | Returns the number of particles leaving (if continuous reactor with `feed != 0`). | `n_step`                 |
-| reduce       | `cycle_model`         | `team: (static_cast<int>(range) + team_size - 1)/team_size, team_size` | Updates the model, handles division, and returns the number of particles leaving and waiting for allocation. | `n_step`                 |
-| reduce       | `cycle_scatter`       | `team: range(size)`                         | Scatters particle contributions.                                                 | `n_step`                 |
-
+| for          | `cycle_move` | `team` | Moves particles based on the flowmap (if `n_compartment > 1`).  | `n_step`                 |
+| reduce       | `cycle_move_leave`| `range:` | Returns the number of particles leaving (if continuous reactor with `feed != 0`). | `n_step`                 |
+| reduce       | `cycle_model`| `team` | Updates the model, handles division, and returns the number of particles leaving and waiting for allocation. | `n_step`                 |
+| reduce       | `cycle_model_contribs`| `team` | Scatters particle contributions (general case) | `n_step`                 |
+| reduce       | `cycle_model_contribs_0d`| `team` | Scatters particle contributions (1D only) | `n_step`                 |
 ---
 
 ## Data Export Kernels

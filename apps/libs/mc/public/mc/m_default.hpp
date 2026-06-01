@@ -61,11 +61,6 @@ struct DefaultModel
            [[maybe_unused]] const SelfParticle& buffer_arr)
   {
   }
-
-  MC::ContribIndexBounds static get_bounds()
-  {
-    return { 0, 0 };
-  }
 };
 
 CHECK_MODEL(DefaultModel)

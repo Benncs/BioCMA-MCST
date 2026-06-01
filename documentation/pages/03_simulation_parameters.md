@@ -7,9 +7,7 @@ There are several runtime parameters can be changed before execution for specifi
 
 | Name | Type | Description |
 | ---  | ---  | ---         |
-|  BIOMC_LIB_UDF    |  String    |      Path to .so model       |  
-| BIOMC_TEAM_SIZE | integer  | deprecated: controll team size of Kokkos league policy 
-| BIOMC_LEAGUE_SIZE | |  deprecated: controll league size of Kokkos league policy  | 
+|  BIOMC_LIB_UDF    |  String    |      Path to .so model       |  | 
 | BIOMC_MC_REMOVE_RATIO_THRESHOLD | float | Maximum percentage of inactive particle  
 | BIOMC_MC_MINIMUM_REMOVAL | integer |  minimum number of inactive particle 
 | BIOMC_MC_BUFFER_RATIO | float |  ratio containersize/buffersize  

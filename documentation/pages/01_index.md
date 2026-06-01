@@ -1,21 +1,20 @@
 # BioCMA-MCST: A Biological Simulation Tool Using Monte Carlo and Compartment Modeling Approaches {#mainpage}
 
-
 \subpage gettingstarted
-
 
 \subpage simparam
 
-
-\subpage Documentation
-
+\subpage cma
 
 \subpage sim_examples
 
+\subpage models
 
 \subpage benches
 
+\subpage kernels
 
+\subpage api
 
 [TOC]
 

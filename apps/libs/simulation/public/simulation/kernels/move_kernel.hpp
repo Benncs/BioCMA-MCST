@@ -551,6 +551,12 @@ namespace Simulation::KernelInline
     //     events.add<MC::EventType::Exit>(leave_mask);
     //   }
     // }
+    //
+
+    // TODO Improvement 1D/3D:
+    // Assumption: given leaving_flow is valid (i_flow < n_compartment)
+    // Add templated free-function "find_flow"
+    // specialize function to empty with tag 0D
     template <typename ExecSpace>
     KOKKOS_FORCEINLINE_FUNCTION std::size_t
     handle_exit(
