@@ -1,6 +1,3 @@
-#include "common/traits.hpp"
-#include "simulation/mass_transfer.hpp"
-#include "wrap_init_model_selector.hpp"
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
 #include <api/results.hpp>
@@ -8,6 +5,7 @@
 #include <common/common.hpp>
 #include <common/execinfo.hpp>
 #include <common/logger.hpp>
+#include <common/traits.hpp>
 #include <core/case_data.hpp>
 #include <core/global_initaliser.hpp>
 #include <core/simulation_parameters.hpp>
@@ -18,11 +16,13 @@
 #include <new>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/mass_transfer.hpp>
 #include <simulation/simulation.hpp>
 #include <string>
 #include <udf_handle.hpp>
 #include <utility>
 #include <vector>
+#include <wrap_init_model_selector.hpp>
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
 #endif
@@ -47,6 +47,13 @@ namespace
     return a > T(0);
   }
 
+  template <typename T>
+  bool
+  is_positive(const T& a)
+  {
+    return a >= T(0);
+  }
+
   ApiResult
   check_required(const Core::UserControlParameters& params, bool to_load)
   {
@@ -56,7 +63,7 @@ namespace
       return ApiResult("Final time must be positive");
     }
 
-    if (!is_strict_positive(params.delta_time))
+    if (!is_positive(params.delta_time))
     {
       return ApiResult("Delta time must be positive");
     }
@@ -202,15 +209,11 @@ namespace Api
   SimulationInstance::exec() noexcept
   {
 
-    // if (!(loaded || (registered && applied)))
-    // {
-    //   return ApiResult("Error apply first");
-    // }
-
     if (!loaded && (!registered || !applied))
     {
       return ApiResult("Error apply first");
     }
+
     if (logger)
     {
       logger->print(
@@ -289,10 +292,7 @@ namespace Api
   SimulationInstance::apply() noexcept
   {
 
-    // Checks
-    // CHECK_OR_RETURN(!check_required(this->params, true), "Check params");
-    //
-    if (auto r = check_required(this->params, true); r.invalid())
+    if (auto r = check_required(this->params, false); r.invalid())
     {
       return r;
     }
@@ -300,12 +300,14 @@ namespace Api
     CHECK_OR_RETURN(loaded, "Already loaded");
     CHECK_OR_RETURN(!registered, "Register first");
 
-    // TODO Refractor with and_then when supported
     Core::GlobalInitialiser global_initializer(_data.exec_info, params, logger);
 
-    auto transitionner = global_initializer.init_transitionner();
+    {
+      auto transitionner = global_initializer.init_transitionner();
 
-    CHECK_OR_RETURN(!transitionner, "Error when apply: transitionner");
+      CHECK_OR_RETURN(!transitionner, "Error when apply: transitionner");
+      _data.transitioner = std::move(*transitionner);
+    }
 
     CHECK_OR_RETURN(!global_initializer.init_feed(feed),
                     "Error when apply: feed");
@@ -345,7 +347,7 @@ namespace Api
 
     _data.params = global_initializer.get_parameters();
     _data.simulation = std::move(simulation);
-    _data.transitioner = std::move(*transitionner);
+
     applied = true;
 
     return ApiResult();

@@ -157,7 +157,9 @@ template <ModelType M> struct ContributionFunctor
     const auto upper_bound = ((p0 + m_particle_per_team) >= n_particle)
                                  ? n_particle - p0
                                  : m_particle_per_team;
-    KOKKOS_ASSERT(upper_bound >= 0 && upper_bound < n_particle);
+    // KOKKOS_ASSERT(upper_bound >= 0 && upper_bound < n_particle);
+    KOKKOS_ASSERT(upper_bound < n_particle);
+
     const auto range = (upper_bound + work_per_thread - 1) / work_per_thread;
 
     KOKKOS_ASSERT(m_particle_per_team % work_per_thread == 0);

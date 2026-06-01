@@ -41,6 +41,8 @@ int
 main()
 {
   Kokkos::ScopeGuard g{};
-  example_1();
-  example_2();
+  {
+    example_1();
+    example_2();
+  }
 }

@@ -27,6 +27,12 @@ if not use_cuda and build_udf
     add_project_arguments('-DUSE_UDF', language: 'cpp')
 endif
 
+if use_cuda and build_udf
+    error(
+        'UDF model is not supported for CUDA build\r\nPlease reconfigure the project turning build_udf to false\r\nmeson setup builddir --reconfigure -Dbuild_udf=false',
+    )
+endif
+
 no_mpi_flag = '-DNO_MPI'
 
 arch_specific_args = []
@@ -180,7 +186,6 @@ endif
 
 kokkos_sampling = dependency('kokkos_sampling-1.0', required: true)
 # magic_enum= dependency('magic_enum', required: true)
-
 
 if build_udf
     dynlib_dep = dependency('dynlib-1.0', required: true)

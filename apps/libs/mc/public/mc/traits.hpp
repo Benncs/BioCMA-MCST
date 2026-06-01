@@ -45,6 +45,12 @@ concept NonConfigurableInit = requires(T model,
   { model.init(random_pool, idx, arr) } -> std::same_as<void>;
 };
 using NonConfigType = std::nullopt_t;
+
+template <typename T>
+concept has_name = requires(T t) {
+  { T::name } -> std::convertible_to<std::string>;
+};
+
 /**
   @brief Concept to define a correct Model
 
