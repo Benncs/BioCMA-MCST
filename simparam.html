@@ -74,26 +74,10 @@ $(function(){initNavTree('simparam.html','',''); });
 <div class="textblock"><h2 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
 Runtime config</h2>
 <p>There are several runtime parameters can be changed before execution for specific usage.</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Name  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadNone">Description  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">BIOMC_LIB_UDF  </td><td class="markdownTableBodyNone">String  </td><td class="markdownTableBodyNone">Path to .so model  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">BIOMC_TEAM_SIZE  </td><td class="markdownTableBodyNone">integer  </td><td class="markdownTableBodyNone">deprecated: controll team size of Kokkos league policy  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">BIOMC_LEAGUE_SIZE  </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">deprecated: controll league size of Kokkos league policy  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">BIOMC_MC_REMOVE_RATIO_THRESHOLD  </td><td class="markdownTableBodyNone">float  </td><td class="markdownTableBodyNone">Maximum percentage of inactive particle  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">BIOMC_MC_MINIMUM_REMOVAL  </td><td class="markdownTableBodyNone">integer  </td><td class="markdownTableBodyNone">minimum number of inactive particle  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">BIOMC_MC_BUFFER_RATIO  </td><td class="markdownTableBodyNone">float  </td><td class="markdownTableBodyNone">ratio containersize/buffersize  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">BIOMC_MC_ALLOC_FACTOR  </td><td class="markdownTableBodyNone">float  </td><td class="markdownTableBodyNone">Container preallocation factor  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">BIOMC_MC_SHRINK_RATIO  </td><td class="markdownTableBodyNone">float  </td><td class="markdownTableBodyNone">max ratio new_size / old_size before reduce preallocated memory  </td></tr>
-</table>
+<p>| Name | Type | Description | | &mdash; | &mdash; | &mdash; | | BIOMC_LIB_UDF | String | Path to .so model | | | BIOMC_MC_REMOVE_RATIO_THRESHOLD | float | Maximum percentage of inactive particle <br  />
+ | BIOMC_MC_MINIMUM_REMOVAL | integer | minimum number of inactive particle | BIOMC_MC_BUFFER_RATIO | float | ratio containersize/buffersize <br  />
+ | BIOMC_MC_ALLOC_FACTOR | float | Container preallocation factor <br  />
+ | BIOMC_MC_SHRINK_RATIO | float | max ratio new_size / old_size before reduce preallocated memory</p>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md18"></a>
 CI</h2>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md19"></a>

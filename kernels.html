@@ -90,20 +90,23 @@ Particle Container Management (MC)</h2>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md26"></a>
 Iteration Cycle Kernels</h2>
 <p>Each iteration cycle launches the following kernels:</p>
+<p>Follow "team" policy is actually a way to deal with continous chunk of particle per team, the size of chunk is defined at compile time depending on the selected backend but can be overwritten with env variable.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadNone">Name  </th><th class="markdownTableHeadNone">Policy  </th><th class="markdownTableHeadNone">Brief Description  </th><th class="markdownTableHeadNone">Number of Calls  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">for  </td><td class="markdownTableBodyNone"><span class="tt">cycle_move</span>  </td><td class="markdownTableBodyNone"><span class="tt">team: (static_cast&lt;int&gt;(range) + team_size - 1)/team_size, team_size</span>  </td><td class="markdownTableBodyNone">Moves particles based on the flowmap (if <span class="tt">n_compartment &gt; 1</span>).  </td><td class="markdownTableBodyNone"><span class="tt">n_step</span>  </td></tr>
+<td class="markdownTableBodyNone">for  </td><td class="markdownTableBodyNone"><span class="tt">cycle_move</span>  </td><td class="markdownTableBodyNone"><span class="tt">team</span>  </td><td class="markdownTableBodyNone">Moves particles based on the flowmap (if <span class="tt">n_compartment &gt; 1</span>).  </td><td class="markdownTableBodyNone"><span class="tt">n_step</span>  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">reduce  </td><td class="markdownTableBodyNone"><span class="tt">cycle_move_leave</span>  </td><td class="markdownTableBodyNone"><span class="tt">team: (256, auto)</span>  </td><td class="markdownTableBodyNone">Returns the number of particles leaving (if continuous reactor with <span class="tt">feed != 0</span>).  </td><td class="markdownTableBodyNone"><span class="tt">n_step</span>  </td></tr>
+<td class="markdownTableBodyNone">reduce  </td><td class="markdownTableBodyNone"><span class="tt">cycle_move_leave</span>  </td><td class="markdownTableBodyNone"><span class="tt">range:</span>  </td><td class="markdownTableBodyNone">Returns the number of particles leaving (if continuous reactor with <span class="tt">feed != 0</span>).  </td><td class="markdownTableBodyNone"><span class="tt">n_step</span>  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">reduce  </td><td class="markdownTableBodyNone"><span class="tt">cycle_model</span>  </td><td class="markdownTableBodyNone"><span class="tt">team: (static_cast&lt;int&gt;(range) + team_size - 1)/team_size, team_size</span>  </td><td class="markdownTableBodyNone">Updates the model, handles division, and returns the number of particles leaving and waiting for allocation.  </td><td class="markdownTableBodyNone"><span class="tt">n_step</span>  </td></tr>
+<td class="markdownTableBodyNone">reduce  </td><td class="markdownTableBodyNone"><span class="tt">cycle_model</span>  </td><td class="markdownTableBodyNone"><span class="tt">team</span>  </td><td class="markdownTableBodyNone">Updates the model, handles division, and returns the number of particles leaving and waiting for allocation.  </td><td class="markdownTableBodyNone"><span class="tt">n_step</span>  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">reduce  </td><td class="markdownTableBodyNone"><span class="tt">cycle_scatter</span>  </td><td class="markdownTableBodyNone"><span class="tt">team: range(size)</span>  </td><td class="markdownTableBodyNone">Scatters particle contributions.  </td><td class="markdownTableBodyNone"><span class="tt">n_step</span>  </td></tr>
+<td class="markdownTableBodyNone">reduce  </td><td class="markdownTableBodyNone"><span class="tt">cycle_model_contribs</span>  </td><td class="markdownTableBodyNone"><span class="tt">team</span>  </td><td class="markdownTableBodyNone">Scatters particle contributions (general case)  </td><td class="markdownTableBodyNone"><span class="tt">n_step</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">reduce  </td><td class="markdownTableBodyNone"><span class="tt">cycle_model_contribs_0d</span>  </td><td class="markdownTableBodyNone"><span class="tt">team</span>  </td><td class="markdownTableBodyNone">Scatters particle contributions (1D only)  </td><td class="markdownTableBodyNone"><span class="tt">n_step</span>  </td></tr>
 </table>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md28"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md27"></a>
 Data Export Kernels</h2>
 <p>The following kernel is used for exporting data:</p>
 <table class="markdownTable">
@@ -126,6 +129,7 @@ Data Export Kernels</h2>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
+    <li class="navelem"><a href="index.html">BioCMA-MCST: A Biological Simulation Tool Using Monte Carlo and Compartment Modeling Approaches</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

@@ -14,6 +14,27 @@ var index =
       ] ]
     ] ],
     [ "Simulation Configuration", "simparam.html", null ],
+    [ "Documentation", "cma.html", [
+      [ "Compartment Modelling Approach", "cma.html#autotoc_md9", [
+        [ "CmaUtils", "cma.html#autotoc_md10", [
+          [ "Compartment Operations", "cma.html#autotoc_md11", [
+            [ "Transition Matrix", "cma.html#autotoc_md12", null ],
+            [ "Cumulative probability", "cma.html#autotoc_md13", null ]
+          ] ],
+          [ "FlowMapTransitionner", "cma.html#autotoc_md14", null ]
+        ] ],
+        [ "Move kernel", "cma.html#autotoc_md15", [
+          [ "Leaving reactor", "cma.html#autotoc_md16", null ]
+        ] ]
+      ] ]
+    ] ],
     [ "Simulation Examples", "sim_examples.html", null ],
-    [ "Benchmarks", "benches.html", null ]
+    [ "Documentation", "models.html", [
+      [ "Model declaration", "models.html#autotoc_md21", [
+        [ "Required Model Subkernels", "models.html#autotoc_md22", null ]
+      ] ]
+    ] ],
+    [ "Benchmarks", "benches.html", null ],
+    [ "List of Kokkkos Kernels", "kernels.html", null ],
+    [ "Api Usage", "api.html", null ]
 ];

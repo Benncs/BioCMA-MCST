@@ -94,185 +94,184 @@ $(function(){initNavTree('contribution__kernel_8hpp_source.html','',''); });
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#a7f64adb1ad8e296dd30cfc10d4f60fea">   17</a></span>  <span class="keyword">using </span><a class="code hl_typedef" href="structContributionFunctor.html#a7f64adb1ad8e296dd30cfc10d4f60fea">TeamPolicy</a> = Kokkos::TeamPolicy&lt;ComputeSpace&gt;;</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba">   18</a></span>  <span class="keyword">using </span><a class="code hl_typedef" href="structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a> = TeamPolicy::member_type;</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90">   19</a></span>  <span class="keyword">using </span><a class="code hl_typedef" href="structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90">float_type</a> = float;</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#a010a7c6c95423d005735e06babcf004e">   20</a></span>  <span class="keyword">using </span><a class="code hl_typedef" href="structContributionFunctor.html#a010a7c6c95423d005735e06babcf004e">ScratchView</a></div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>      = Kokkos::View&lt;<a class="code hl_typedef" href="structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90">float_type</a>*,</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90">   22</a></span>                     TeamPolicy::execution_space::scratch_memory_space&gt;;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  <span class="keyword">using </span><a class="code hl_typedef" href="structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90">float_type</a> = float;</div>
-<div class="foldopen" id="foldopen00024" data-start="{" data-end="}">
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#a3a53db979c37994fd74984284f65a3b2">   24</a></span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  <a class="code hl_function" href="structContributionFunctor.html#a3a53db979c37994fd74984284f65a3b2">ContributionFunctor</a>(std::size_t particle_per_team,</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>                      <a class="code hl_typedef" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a> contribution_scatter,</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                      <a class="code hl_class" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer&lt;M&gt;</a> particles)</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>      : <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>(particle_per_team),</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <a class="code hl_variable" href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">m_contribution_scatter</a>(std::move(contribution_scatter)),</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>(std::move(particles))</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>                     TeamPolicy::execution_space::scratch_memory_space&gt;;</div>
+<div class="foldopen" id="foldopen00023" data-start="{" data-end="}">
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#a3a53db979c37994fd74984284f65a3b2">   23</a></span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>  <a class="code hl_function" href="structContributionFunctor.html#a3a53db979c37994fd74984284f65a3b2">ContributionFunctor</a>(std::size_t particle_per_team,</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>                      <a class="code hl_typedef" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a> contribution_scatter,</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>                      <a class="code hl_class" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer&lt;M&gt;</a> particles)</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>      : <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>(particle_per_team),</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <a class="code hl_variable" href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">m_contribution_scatter</a>(std::move(contribution_scatter)),</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>(std::move(particles))</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>  {</div>
 </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  }</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#aa110ef5d905b85b081c6dad67fbef3fd">   33</a></span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>  <span class="keywordtype">size_t</span> <a class="code hl_variable" href="structContributionFunctor.html#aa110ef5d905b85b081c6dad67fbef3fd">np</a>{};</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="foldopen" id="foldopen00036" data-start="{" data-end="}">
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#a883fb1f4db15fe4a68a1cd51a85ef72f">   36</a></span>  <span class="keywordtype">void</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  <a class="code hl_function" href="structContributionFunctor.html#a883fb1f4db15fe4a68a1cd51a85ef72f">update</a>(<a class="code hl_class" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer&lt;M&gt;</a> _particles)</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  {</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    this-&gt;<a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a> = std::move(_particles);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <a class="code hl_variable" href="structContributionFunctor.html#aa110ef5d905b85b081c6dad67fbef3fd">np</a> = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.n_particles();</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  }</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#aa110ef5d905b85b081c6dad67fbef3fd">   32</a></span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  <span class="keywordtype">size_t</span> <a class="code hl_variable" href="structContributionFunctor.html#aa110ef5d905b85b081c6dad67fbef3fd">np</a>{};</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="foldopen" id="foldopen00035" data-start="{" data-end="}">
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#a883fb1f4db15fe4a68a1cd51a85ef72f">   35</a></span>  <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  <a class="code hl_function" href="structContributionFunctor.html#a883fb1f4db15fe4a68a1cd51a85ef72f">update</a>(<a class="code hl_class" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer&lt;M&gt;</a> _particles)</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  {</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    this-&gt;<a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a> = std::move(_particles);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <a class="code hl_variable" href="structContributionFunctor.html#aa110ef5d905b85b081c6dad67fbef3fd">np</a> = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.n_particles();</div>
 </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  }</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">   43</a></span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  std::size_t <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">   45</a></span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">   46</a></span>  <a class="code hl_typedef" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a> <a class="code hl_variable" href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">m_contribution_scatter</a>;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <a class="code hl_class" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer&lt;M&gt;</a> <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  KOKKOS_INLINE_FUNCTION</div>
-<div class="foldopen" id="foldopen00050" data-start="{" data-end="}">
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#a17f19d2b6637bb74b64784c68202d066">   50</a></span>  <span class="keywordtype">void</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  <a class="code hl_function" href="structContributionFunctor.html#a17f19d2b6637bb74b64784c68202d066">operator()</a>(<a class="code hl_struct" href="structContributionFunctor_1_1Tag0D.html">Tag0D</a> _tag, <span class="keyword">const</span> <a class="code hl_typedef" href="structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a>&amp; team)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="keyword">  </span>{</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    (void)_tag;</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keyword">const</span> std::size_t p0 = team.league_rank() * <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>;</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">const</span> std::size_t n_particle = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.n_particles();</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; status = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.status;</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; contribs = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.contribs;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">auto</span> n_c = M::n_c;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <a class="code hl_typedef" href="structContributionFunctor.html#a010a7c6c95423d005735e06babcf004e">ScratchView</a> scratch(team.team_scratch(0), n_c);</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    Kokkos::parallel_for(Kokkos::TeamVectorRange(team, n_c),</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                         [&amp;](<span class="keyword">const</span> std::size_t j)</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                         { scratch(j) = <a class="code hl_typedef" href="structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90">float_type</a>{ 0 }; });</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keyword">const</span> <span class="keyword">auto</span> upper_bound = ((p0 + <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>) &gt;= n_particle)</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                                 ? n_particle - p0</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                                 : <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    KOKKOS_ASSERT(upper_bound &gt; 0 &amp;&amp; upper_bound &lt;= <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                  &amp;&amp; (p0 + upper_bound) &lt;= n_particle);</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    team.team_barrier();</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    Kokkos::parallel_for(</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        Kokkos::TeamThreadRange(team, 0, upper_bound),</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        [&amp;](<span class="keyword">const</span> std::size_t relative_index)</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        {</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>          <span class="keyword">const</span> std::size_t flatten_index = p0 + relative_index;</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>          <span class="keywordflow">if</span> (status(flatten_index) != <a class="code hl_enumvalue" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c">MC::Status::Idle</a>)</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>          {</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>            <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>          }</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>          <span class="keyword">const</span> <span class="keyword">auto</span> weight = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.get_weight(flatten_index);</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>          <span class="keywordflow">for</span> (std::size_t j = 0; j &lt; n_c; ++j)</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>          {</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>            Kokkos::atomic_add(&amp;scratch(j),</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                               weight * contribs(flatten_index, j));</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>          }</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        });</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    team.team_barrier();</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; cs = <a class="code hl_variable" href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">m_contribution_scatter</a>;</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    Kokkos::single(Kokkos::PerTeam(team),</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>                   [=]()</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>                   {</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>                     <span class="keyword">auto</span> access = cs.access();</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>                     <span class="keywordflow">for</span> (std::size_t j = 0; j &lt; M::n_c; ++j)</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>                     {</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>                       access(j, 0) += scratch(j);</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>                     }</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>                   });</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  }</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">   42</a></span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  std::size_t <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">   44</a></span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">   45</a></span>  <a class="code hl_typedef" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a> <a class="code hl_variable" href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">m_contribution_scatter</a>;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  <a class="code hl_class" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer&lt;M&gt;</a> <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  KOKKOS_INLINE_FUNCTION</div>
+<div class="foldopen" id="foldopen00049" data-start="{" data-end="}">
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#a17f19d2b6637bb74b64784c68202d066">   49</a></span>  <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  <a class="code hl_function" href="structContributionFunctor.html#a17f19d2b6637bb74b64784c68202d066">operator()</a>(<a class="code hl_struct" href="structContributionFunctor_1_1Tag0D.html">Tag0D</a> _tag, <span class="keyword">const</span> <a class="code hl_typedef" href="structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a>&amp; team)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keyword">  </span>{</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    (void)_tag;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keyword">const</span> std::size_t p0 = team.league_rank() * <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keyword">const</span> std::size_t n_particle = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.n_particles();</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; status = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.status;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; contribs = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.contribs;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">auto</span> n_c = M::n_c;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <a class="code hl_typedef" href="structContributionFunctor.html#a010a7c6c95423d005735e06babcf004e">ScratchView</a> scratch(team.team_scratch(0), n_c);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    Kokkos::parallel_for(Kokkos::TeamVectorRange(team, n_c),</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                         [&amp;](<span class="keyword">const</span> std::size_t j)</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                         { scratch(j) = <a class="code hl_typedef" href="structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90">float_type</a>{ 0 }; });</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keyword">const</span> <span class="keyword">auto</span> upper_bound = ((p0 + <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>) &gt;= n_particle)</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                                 ? n_particle - p0</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                                 : <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    KOKKOS_ASSERT(upper_bound &gt; 0 &amp;&amp; upper_bound &lt;= <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                  &amp;&amp; (p0 + upper_bound) &lt;= n_particle);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    team.team_barrier();</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    Kokkos::parallel_for(</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        Kokkos::TeamThreadRange(team, 0, upper_bound),</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        [&amp;](<span class="keyword">const</span> std::size_t relative_index)</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        {</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>          <span class="keyword">const</span> std::size_t flatten_index = p0 + relative_index;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>          <span class="keywordflow">if</span> (status(flatten_index) != <a class="code hl_enumvalue" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c">MC::Status::Idle</a>)</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>          {</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>            <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>          }</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>          <span class="keyword">const</span> <span class="keyword">auto</span> weight = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.get_weight(flatten_index);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>          <span class="keywordflow">for</span> (std::size_t j = 0; j &lt; n_c; ++j)</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>          {</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            Kokkos::atomic_add(&amp;scratch(j),</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                               weight * contribs(flatten_index, j));</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>          }</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        });</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    team.team_barrier();</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; cs = <a class="code hl_variable" href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">m_contribution_scatter</a>;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    Kokkos::single(Kokkos::PerTeam(team),</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>                   [=]()</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>                   {</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>                     <span class="keyword">auto</span> access = cs.access();</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>                     <span class="keywordflow">for</span> (std::size_t j = 0; j &lt; M::n_c; ++j)</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>                     {</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>                       access(j, 0) += scratch(j);</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>                     }</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>                   });</div>
 </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  }</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  <span class="comment">// KOKKOS_INLINE_FUNCTION</span></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>  <span class="comment">// void</span></div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>  <span class="comment">// operator()(const Tag3D _tag, const TeamMember&amp; team) const</span></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  <span class="comment">// {</span></div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>  <span class="comment">//   (void)_tag;</span></div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  <span class="comment">//   const std::size_t p0 = team.league_rank() * m_particle_per_team;</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  <span class="comment">//   const auto&amp; c = m_particles.contribs;</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  <span class="comment">//   const auto&amp; status = m_particles.status;</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>  <span class="comment">//   const auto n_particle = m_particles.n_particles();</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>  <span class="comment">//   const auto&amp; positions = m_particles.position;</span></div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>  <span class="comment">//   const auto upper_bound = ((p0 + m_particle_per_team) &gt;= n_particle)</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  <span class="comment">//                                ? n_particle - p0 - 1</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>  <span class="comment">//                                : m_particle_per_team;</span></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>  <span class="comment">//   KOKKOS_ASSERT(upper_bound &gt;= 0 &amp;&amp; upper_bound &lt; n_particle);</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>  <span class="comment">//   constexpr std::size_t work_per_thread = 32;</span></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  <span class="comment">//   KOKKOS_ASSERT(m_particle_per_team%work_per_thread==0);</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>  <span class="comment">//   Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, upper_bound),</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>  <span class="comment">//                        [&amp;](const std::size_t i)</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>  <span class="comment">//                        {</span></div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>  <span class="comment">//                          const std::size_t p = p0 + i;</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  <span class="comment">//                          if (status(p) != MC::Status::Idle)</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  <span class="comment">//                          {</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  <span class="comment">//                            return;</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  <span class="comment">//                          }</span></div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  <span class="comment">//                          auto access = m_contribution_scatter.access();</span></div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>  <span class="comment">//                          const double weight = m_particles.get_weight(p);</span></div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>  <span class="comment">//                          const auto pos = positions(p);</span></div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  <span class="comment">//                          Kokkos::parallel_for(</span></div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  <span class="comment">//                              Kokkos::ThreadVectorRange(team, 0, M::n_c),</span></div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>  <span class="comment">//                              [&amp;](const int j)</span></div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>  <span class="comment">//                              { access(j, pos) += weight * c(p, j); });</span></div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>  <span class="comment">//                        });</span></div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span> </div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>  <span class="comment">// }</span></div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>  KOKKOS_INLINE_FUNCTION</div>
-<div class="foldopen" id="foldopen00146" data-start="{" data-end="}">
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#ad0c03d2b5ff189633abab20f02805e15">  146</a></span>  <span class="keywordtype">void</span></div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  <a class="code hl_function" href="structContributionFunctor.html#a17f19d2b6637bb74b64784c68202d066">operator()</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structContributionFunctor_1_1Tag3D.html">Tag3D</a> _tag, <span class="keyword">const</span> <a class="code hl_typedef" href="structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a>&amp; team)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="keyword">  </span>{</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    (void)_tag;</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="keyword">const</span> std::size_t p0 = team.league_rank() * <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>;</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; c = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.contribs;</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; status = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.status;</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <span class="keyword">const</span> <span class="keyword">auto</span> n_particle = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.n_particles();</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; positions = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.position;</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    <span class="keyword">constexpr</span> std::size_t work_per_thread = 32;</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span> </div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <span class="keyword">const</span> <span class="keyword">auto</span> upper_bound = ((p0 + <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>) &gt;= n_particle)</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>                                 ? n_particle - p0</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>                                 : <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>;</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    KOKKOS_ASSERT(upper_bound &gt;= 0 &amp;&amp; upper_bound &lt; n_particle);</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    <span class="keyword">const</span> <span class="keyword">auto</span> range = (upper_bound + work_per_thread - 1) / work_per_thread;</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    KOKKOS_ASSERT(<a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a> % work_per_thread == 0);</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    Kokkos::parallel_for(</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        Kokkos::TeamThreadRange(team, 0, range),</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        [&amp;](<span class="keyword">const</span> std::size_t i)</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        {</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>          <span class="keyword">auto</span> access = <a class="code hl_variable" href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">m_contribution_scatter</a>.access();</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>          <span class="keywordflow">for</span> (std::size_t k = 0; k &lt; work_per_thread; ++k)</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>          {</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>            <span class="keyword">const</span> std::size_t p = p0 + i * work_per_thread + k;</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>            <span class="keywordflow">if</span> (status(p) != <a class="code hl_enumvalue" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c">MC::Status::Idle</a> || i &gt;= n_particle)</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>            {</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>              <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>            }</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>            <span class="keyword">const</span> <span class="keywordtype">double</span> weight = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.get_weight(p);</div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>            <span class="keyword">const</span> <span class="keyword">auto</span> pos = positions(p);</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>            Kokkos::parallel_for(Kokkos::ThreadVectorRange(team, 0, M::n_c),</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>                                 [&amp;](<span class="keyword">const</span> <span class="keywordtype">int</span> j)</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>                                 { access(j, pos) += weight * c(p, j); });</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>          }</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        });</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  }</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>  <span class="comment">// KOKKOS_INLINE_FUNCTION</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  <span class="comment">// void</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>  <span class="comment">// operator()(const Tag3D _tag, const TeamMember&amp; team) const</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>  <span class="comment">// {</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  <span class="comment">//   (void)_tag;</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>  <span class="comment">//   const std::size_t p0 = team.league_rank() * m_particle_per_team;</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  <span class="comment">//   const auto&amp; c = m_particles.contribs;</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  <span class="comment">//   const auto&amp; status = m_particles.status;</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  <span class="comment">//   const auto n_particle = m_particles.n_particles();</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>  <span class="comment">//   const auto&amp; positions = m_particles.position;</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>  <span class="comment">//   const auto upper_bound = ((p0 + m_particle_per_team) &gt;= n_particle)</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>  <span class="comment">//                                ? n_particle - p0 - 1</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  <span class="comment">//                                : m_particle_per_team;</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>  <span class="comment">//   KOKKOS_ASSERT(upper_bound &gt;= 0 &amp;&amp; upper_bound &lt; n_particle);</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  <span class="comment">//   constexpr std::size_t work_per_thread = 32;</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>  <span class="comment">//   KOKKOS_ASSERT(m_particle_per_team%work_per_thread==0);</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>  <span class="comment">//   Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, upper_bound),</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>  <span class="comment">//                        [&amp;](const std::size_t i)</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>  <span class="comment">//                        {</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>  <span class="comment">//                          const std::size_t p = p0 + i;</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>  <span class="comment">//                          if (status(p) != MC::Status::Idle)</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  <span class="comment">//                          {</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  <span class="comment">//                            return;</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  <span class="comment">//                          }</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  <span class="comment">//                          auto access = m_contribution_scatter.access();</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  <span class="comment">//                          const double weight = m_particles.get_weight(p);</span></div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>  <span class="comment">//                          const auto pos = positions(p);</span></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>  <span class="comment">//                          Kokkos::parallel_for(</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  <span class="comment">//                              Kokkos::ThreadVectorRange(team, 0, M::n_c),</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  <span class="comment">//                              [&amp;](const int j)</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>  <span class="comment">//                              { access(j, pos) += weight * c(p, j); });</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>  <span class="comment">//                        });</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>  <span class="comment">// }</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span> </div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>  KOKKOS_INLINE_FUNCTION</div>
+<div class="foldopen" id="foldopen00145" data-start="{" data-end="}">
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#ad0c03d2b5ff189633abab20f02805e15">  145</a></span>  <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  <a class="code hl_function" href="structContributionFunctor.html#a17f19d2b6637bb74b64784c68202d066">operator()</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structContributionFunctor_1_1Tag3D.html">Tag3D</a> _tag, <span class="keyword">const</span> <a class="code hl_typedef" href="structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a>&amp; team)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="keyword">  </span>{</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    (void)_tag;</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="keyword">const</span> std::size_t p0 = team.league_rank() * <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>;</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; c = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.contribs;</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; status = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.status;</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    <span class="keyword">const</span> <span class="keyword">auto</span> n_particle = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.n_particles();</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; positions = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.position;</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    <span class="keyword">constexpr</span> std::size_t work_per_thread = 32;</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    <span class="keyword">const</span> <span class="keyword">auto</span> upper_bound = ((p0 + <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>) &gt;= n_particle)</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>                                 ? n_particle - p0</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>                                 : <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    KOKKOS_ASSERT(upper_bound &gt;= 0 &amp;&amp; upper_bound &lt; n_particle);</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <span class="keyword">const</span> <span class="keyword">auto</span> range = (upper_bound + work_per_thread - 1) / work_per_thread;</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    KOKKOS_ASSERT(<a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a> % work_per_thread == 0);</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span> </div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    Kokkos::parallel_for(</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        Kokkos::TeamThreadRange(team, 0, range),</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        [&amp;](<span class="keyword">const</span> std::size_t i)</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        {</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>          <span class="keyword">auto</span> access = <a class="code hl_variable" href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">m_contribution_scatter</a>.access();</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>          <span class="keywordflow">for</span> (std::size_t k = 0; k &lt; work_per_thread; ++k)</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>          {</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>            <span class="keyword">const</span> std::size_t p = p0 + i * work_per_thread + k;</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>            <span class="keywordflow">if</span> (status(p) != <a class="code hl_enumvalue" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c">MC::Status::Idle</a> || i &gt;= n_particle)</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>            {</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>              <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>            }</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>            <span class="keyword">const</span> <span class="keywordtype">double</span> weight = <a class="code hl_variable" href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">m_particles</a>.get_weight(p);</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>            <span class="keyword">const</span> <span class="keyword">auto</span> pos = positions(p);</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>            Kokkos::parallel_for(Kokkos::ThreadVectorRange(team, 0, M::n_c),</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>                                 [&amp;](<span class="keyword">const</span> <span class="keywordtype">int</span> j)</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>                                 { access(j, pos) += weight * c(p, j); });</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>          }</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        });</div>
 </div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>  }</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>};</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>  }</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>};</div>
 </div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span> </div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span> </div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassMC_1_1ParticlesContainer_html"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a></div><div class="ttdoc">Main owning object for Monte-Carlo particles.</div><div class="ttdef"><b>Definition</b> particles_container.hpp:57</div></div>
 <div class="ttc" id="anamespaceMC_html_a508817d9913e12976cea3fef8dccc1f0"><div class="ttname"><a href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a></div><div class="ttdeci">decltype(Kokkos::Experimental::create_scatter_view( kernelContribution())) ContributionView</div><div class="ttdef"><b>Definition</b> alias.hpp:162</div></div>
 <div class="ttc" id="anamespaceMC_html_a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c"><div class="ttname"><a href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c">MC::Status::Idle</a></div><div class="ttdeci">@ Idle</div><div class="ttdef"><b>Definition</b> alias.hpp:126</div></div>
@@ -280,15 +279,15 @@ $(function(){initNavTree('contribution__kernel_8hpp_source.html','',''); });
 <div class="ttc" id="astructContributionFunctor_1_1Tag3D_html"><div class="ttname"><a href="structContributionFunctor_1_1Tag3D.html">ContributionFunctor::Tag3D</a></div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:14</div></div>
 <div class="ttc" id="astructContributionFunctor_html_a010a7c6c95423d005735e06babcf004e"><div class="ttname"><a href="structContributionFunctor.html#a010a7c6c95423d005735e06babcf004e">ContributionFunctor::ScratchView</a></div><div class="ttdeci">Kokkos::View&lt; float_type *, TeamPolicy::execution_space::scratch_memory_space &gt; ScratchView</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:20</div></div>
 <div class="ttc" id="astructContributionFunctor_html_a0ab57bf02382235f5e0d8c872e7659ba"><div class="ttname"><a href="structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba">ContributionFunctor::TeamMember</a></div><div class="ttdeci">TeamPolicy::member_type TeamMember</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:18</div></div>
-<div class="ttc" id="astructContributionFunctor_html_a17f19d2b6637bb74b64784c68202d066"><div class="ttname"><a href="structContributionFunctor.html#a17f19d2b6637bb74b64784c68202d066">ContributionFunctor::operator()</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION void operator()(Tag0D _tag, const TeamMember &amp;team) const</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:50</div></div>
-<div class="ttc" id="astructContributionFunctor_html_a3a53db979c37994fd74984284f65a3b2"><div class="ttname"><a href="structContributionFunctor.html#a3a53db979c37994fd74984284f65a3b2">ContributionFunctor::ContributionFunctor</a></div><div class="ttdeci">ContributionFunctor(std::size_t particle_per_team, MC::ContributionView contribution_scatter, MC::ParticlesContainer&lt; M &gt; particles)</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:24</div></div>
+<div class="ttc" id="astructContributionFunctor_html_a17f19d2b6637bb74b64784c68202d066"><div class="ttname"><a href="structContributionFunctor.html#a17f19d2b6637bb74b64784c68202d066">ContributionFunctor::operator()</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION void operator()(Tag0D _tag, const TeamMember &amp;team) const</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:49</div></div>
+<div class="ttc" id="astructContributionFunctor_html_a3a53db979c37994fd74984284f65a3b2"><div class="ttname"><a href="structContributionFunctor.html#a3a53db979c37994fd74984284f65a3b2">ContributionFunctor::ContributionFunctor</a></div><div class="ttdeci">ContributionFunctor(std::size_t particle_per_team, MC::ContributionView contribution_scatter, MC::ParticlesContainer&lt; M &gt; particles)</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:23</div></div>
 <div class="ttc" id="astructContributionFunctor_html_a7f64adb1ad8e296dd30cfc10d4f60fea"><div class="ttname"><a href="structContributionFunctor.html#a7f64adb1ad8e296dd30cfc10d4f60fea">ContributionFunctor::TeamPolicy</a></div><div class="ttdeci">Kokkos::TeamPolicy&lt; ComputeSpace &gt; TeamPolicy</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:17</div></div>
-<div class="ttc" id="astructContributionFunctor_html_a883fb1f4db15fe4a68a1cd51a85ef72f"><div class="ttname"><a href="structContributionFunctor.html#a883fb1f4db15fe4a68a1cd51a85ef72f">ContributionFunctor::update</a></div><div class="ttdeci">void update(MC::ParticlesContainer&lt; M &gt; _particles)</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:36</div></div>
-<div class="ttc" id="astructContributionFunctor_html_aa110ef5d905b85b081c6dad67fbef3fd"><div class="ttname"><a href="structContributionFunctor.html#aa110ef5d905b85b081c6dad67fbef3fd">ContributionFunctor::np</a></div><div class="ttdeci">size_t np</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:33</div></div>
-<div class="ttc" id="astructContributionFunctor_html_aa7f9dce06d260d972cb45960fdc40475"><div class="ttname"><a href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">ContributionFunctor::m_particles</a></div><div class="ttdeci">MC::ParticlesContainer&lt; M &gt; m_particles</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:46</div></div>
-<div class="ttc" id="astructContributionFunctor_html_aade88235d0802383f297c1de07fdfe90"><div class="ttname"><a href="structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90">ContributionFunctor::float_type</a></div><div class="ttdeci">float float_type</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:22</div></div>
-<div class="ttc" id="astructContributionFunctor_html_abdef4df64a7f2c64bd84baa429963747"><div class="ttname"><a href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">ContributionFunctor::m_contribution_scatter</a></div><div class="ttdeci">MC::ContributionView m_contribution_scatter</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:45</div></div>
-<div class="ttc" id="astructContributionFunctor_html_aead15742975a46469c2b96062dc119d1"><div class="ttname"><a href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">ContributionFunctor::m_particle_per_team</a></div><div class="ttdeci">std::size_t m_particle_per_team</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:43</div></div>
+<div class="ttc" id="astructContributionFunctor_html_a883fb1f4db15fe4a68a1cd51a85ef72f"><div class="ttname"><a href="structContributionFunctor.html#a883fb1f4db15fe4a68a1cd51a85ef72f">ContributionFunctor::update</a></div><div class="ttdeci">void update(MC::ParticlesContainer&lt; M &gt; _particles)</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:35</div></div>
+<div class="ttc" id="astructContributionFunctor_html_aa110ef5d905b85b081c6dad67fbef3fd"><div class="ttname"><a href="structContributionFunctor.html#aa110ef5d905b85b081c6dad67fbef3fd">ContributionFunctor::np</a></div><div class="ttdeci">size_t np</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:32</div></div>
+<div class="ttc" id="astructContributionFunctor_html_aa7f9dce06d260d972cb45960fdc40475"><div class="ttname"><a href="structContributionFunctor.html#aa7f9dce06d260d972cb45960fdc40475">ContributionFunctor::m_particles</a></div><div class="ttdeci">MC::ParticlesContainer&lt; M &gt; m_particles</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:45</div></div>
+<div class="ttc" id="astructContributionFunctor_html_aade88235d0802383f297c1de07fdfe90"><div class="ttname"><a href="structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90">ContributionFunctor::float_type</a></div><div class="ttdeci">float float_type</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:19</div></div>
+<div class="ttc" id="astructContributionFunctor_html_abdef4df64a7f2c64bd84baa429963747"><div class="ttname"><a href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">ContributionFunctor::m_contribution_scatter</a></div><div class="ttdeci">MC::ContributionView m_contribution_scatter</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:44</div></div>
+<div class="ttc" id="astructContributionFunctor_html_aead15742975a46469c2b96062dc119d1"><div class="ttname"><a href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">ContributionFunctor::m_particle_per_team</a></div><div class="ttdeci">std::size_t m_particle_per_team</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:42</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

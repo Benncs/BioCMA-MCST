@@ -98,19 +98,21 @@ UDF</h2>
 <div class="line">              <span class="comment">// defined property and there get the right size</span></div>
 <div class="line">  };</div>
 <div class="line"> </div>
+<div class="line">  <span class="comment">// Number of exchanged species</span></div>
+<div class="line">  <span class="keyword">static</span> <span class="keyword">constexpr</span> std::size_t n_c = 1;</div>
 <div class="line">  <span class="comment">// n_var is needed, if using __COUNT__ this line does not have to be modified</span></div>
 <div class="line">  <span class="keyword">static</span> <span class="keyword">constexpr</span> std::size_t n_var = INDEX_FROM_ENUM(particle_var::__COUNT__);</div>
-<div class="line">  <span class="keyword">static</span> <span class="keyword">constexpr</span> std::string_view name =</div>
-<div class="line">      <span class="stringliteral">&quot;example&quot;</span>; <span class="comment">// Name is optional refers to model name</span></div>
-<div class="line"> </div>
-<div class="line">  <span class="keyword">using </span>uniform_weight =</div>
-<div class="line">      std::true_type; <span class="comment">//  Define this line if models works if unique weight, if</span></div>
-<div class="line">                      <span class="comment">//  each MCparticle has</span></div>
+<div class="line">  <span class="comment">// Name is optional refers to model name</span></div>
+<div class="line">  <span class="keyword">static</span> <span class="keyword">constexpr</span> std::string_view name = <span class="stringliteral">&quot;example&quot;</span>;</div>
+<div class="line">  <span class="comment">//  Define this line if models works if unique weight, if  each MCparticle has</span></div>
+<div class="line">  <span class="keyword">using </span>uniform_weight = std::true_type;</div>
 <div class="line">  <span class="comment">//  specific weight comment this line</span></div>
 <div class="line">  <span class="keyword">using </span>Self = ModelExample; <span class="comment">// Mandatory Type alias</span></div>
 <div class="line">  <span class="keyword">using </span>FloatType = float;   <span class="comment">// Mandatory Type alias</span></div>
-<div class="line">  <span class="keyword">using </span>SelfParticle =</div>
-<div class="line">      <a id="_a0" name="_a0"></a><a class="code hl_typedef" href="namespaceMC.html#ace6c0a253dfddbd8b670c249931c4b9c">MC::ParticlesModel&lt;Self::n_var, Self::FloatType&gt;</a>; <span class="comment">// Mandatory Type alias</span></div>
+<div class="line">  <span class="keyword">using </span>Config = std::nullopt_t;</div>
+<div class="line">  <span class="comment">// Mandatory Type alias</span></div>
+<div class="line">  <span class="keyword">using </span>SelfParticle = <a id="_a0" name="_a0"></a><a class="code hl_typedef" href="namespaceMC.html#ace6c0a253dfddbd8b670c249931c4b9c">MC::ParticlesModel&lt;Self::n_var, Self::FloatType&gt;</a>;</div>
+<div class="line">  <span class="keyword">using </span>SelfContribs = <a class="code hl_typedef" href="namespaceMC.html#ace6c0a253dfddbd8b670c249931c4b9c">MC::ParticlesModel&lt;Self::n_c, Self::FloatType&gt;</a>;</div>
 <div class="line"> </div>
 <div class="line">  KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <span class="keywordtype">void</span> init(<span class="keyword">const</span> <a id="_a1" name="_a1"></a><a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&amp; random_pool,</div>
 <div class="line">                                          std::size_t idx,</div>
@@ -124,6 +126,8 @@ UDF</h2>
 <div class="line">         FloatType d_t,</div>
 <div class="line">         std::size_t idx,</div>
 <div class="line">         <span class="keyword">const</span> SelfParticle&amp; arr,</div>
+<div class="line">         <span class="keyword">const</span> SelfContribs&amp; contribs_arr,</div>
+<div class="line">         <span class="keyword">const</span> std::size_t position_index,</div>
 <div class="line">         <span class="keyword">const</span> <a id="_a3" name="_a3"></a><a class="code hl_typedef" href="namespaceMC.html#aa5a6942718ba877c62a9f91b87915901">MC::LocalConcentration</a>&amp; c);</div>
 <div class="line"> </div>
 <div class="line">  KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <span class="keywordtype">void</span> division(<span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&amp; random_pool,</div>

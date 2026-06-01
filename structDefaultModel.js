@@ -10,7 +10,6 @@ var structDefaultModel =
       [ "a", "structDefaultModel.html#ab3f2cdadb12c73b86d895d60cc36e465a0cc175b9c0f1b6a831c399e269772661", null ]
     ] ],
     [ "division", "structDefaultModel.html#abe41fd919e80919defb9ae3e97a471ae", null ],
-    [ "get_bounds", "structDefaultModel.html#a3efef32df43d577edf410629fe42df74", null ],
     [ "init", "structDefaultModel.html#a691b88fa0387ea9393738b436d70d363", null ],
     [ "mass", "structDefaultModel.html#a73daf991fe2854519c1f3f48ab09fd73", null ],
     [ "update", "structDefaultModel.html#a65745c13b7464c8af9590576ac5c1f0f", null ],

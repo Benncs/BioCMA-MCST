@@ -26,26 +26,6 @@ var NAVTREE =
 [
   [ "BioCMAMC-ST", "index.html", [
     [ "BioCMA-MCST: A Biological Simulation Tool Using Monte Carlo and Compartment Modeling Approaches", "index.html", "index" ],
-    [ "Documentation", "cma.html", [
-      [ "Compartment Modelling Approach", "cma.html#autotoc_md9", [
-        [ "CmaUtils", "cma.html#autotoc_md10", [
-          [ "Compartment Operations", "cma.html#autotoc_md11", [
-            [ "Transition Matrix", "cma.html#autotoc_md12", null ],
-            [ "Cumulative probability", "cma.html#autotoc_md13", null ]
-          ] ],
-          [ "FlowMapTransitionner", "cma.html#autotoc_md14", null ]
-        ] ],
-        [ "Move kernel", "cma.html#autotoc_md15", [
-          [ "Leaving reactor", "cma.html#autotoc_md16", null ]
-        ] ]
-      ] ]
-    ] ],
-    [ "Documentation", "models.html", [
-      [ "Model declaration", "models.html#autotoc_md21", [
-        [ "Required Model Subkernels", "models.html#autotoc_md22", null ]
-      ] ]
-    ] ],
-    [ "List of Kokkkos Kernels", "kernels.html", null ],
     [ "Bibliography", "citelist.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -79,13 +59,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html",
-"classILoadBalancer.html#a27fb1f345c6d7b6e428b2bd012429dc2",
-"classMC_1_1ParticlesContainer.html#a0047f4c96b02ae4aeb9ebd8963129687",
-"classSimulation_1_1MassTransfer_1_1MassTransferModel.html#a727d9549888058d625cd73fff8842e57",
-"classSimulation_1_1SimulationUnit.html#af5aeb9c124540ac219001b46b51b74a9",
-"namespaceMC.html#a2bd2179d1f9faf98a60f1dedfac0fc83",
+"classILoadBalancer.html#a11305fecea49664648595dd5d61027b3",
+"classMC_1_1ParticlesContainer.html#a0036ad1f84663d168f0a7df4571ba8a3",
+"classSimulation_1_1MassTransfer_1_1MassTransferModel.html#a4ba335fa282826f2278f6a6012e79157",
+"classSimulation_1_1SimulationUnit.html#af4d179bd1bf0d8da69d83f63fdd72412",
+"namespaceMC.html#a2bac73e9eee491093b7ac10969645bfa",
 "structApi_1_1SimulationInstance.html#a06b825ee4dcaf97e49ef5d3644a7301a",
-"structDefaultModel.html#a3efef32df43d577edf410629fe42df74",
+"structDefaultModel.html#a1a4f501ce356216bcf48e2a3e0ac4d4a",
 "structMC_1_1MonteCarloUnit.html#a0ed38ba60e8a80dc066fdb01b7e429a1",
 "structModels_1_1UdfModel.html#a3108247300844976bfd89856418ea55e",
 "structSimulation_1_1KernelInline_1_1CycleFunctors.html#a1fd301b1bc734575d095140126ae642d"
