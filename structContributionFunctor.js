@@ -2,8 +2,8 @@ var structContributionFunctor =
 [
     [ "Tag0D", "structContributionFunctor_1_1Tag0D.html", null ],
     [ "Tag3D", "structContributionFunctor_1_1Tag3D.html", null ],
-    [ "float_t", "structContributionFunctor.html#a9f281df659371ce13679e38d88bb663e", null ],
-    [ "ScratchView", "structContributionFunctor.html#a7f3e9164ba1f472dfca32b8c7e01d8b0", null ],
+    [ "float_type", "structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90", null ],
+    [ "ScratchView", "structContributionFunctor.html#a010a7c6c95423d005735e06babcf004e", null ],
     [ "TeamMember", "structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba", null ],
     [ "TeamPolicy", "structContributionFunctor.html#a7f64adb1ad8e296dd30cfc10d4f60fea", null ],
     [ "ContributionFunctor", "structContributionFunctor.html#a3a53db979c37994fd74984284f65a3b2", null ],

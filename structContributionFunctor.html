@@ -88,8 +88,8 @@ Classes</h2></td></tr>
 Public Types</h2></td></tr>
 <tr class="memitem:a7f64adb1ad8e296dd30cfc10d4f60fea" id="r_a7f64adb1ad8e296dd30cfc10d4f60fea"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f64adb1ad8e296dd30cfc10d4f60fea">TeamPolicy</a> = Kokkos::TeamPolicy&lt;ComputeSpace&gt;</td></tr>
 <tr class="memitem:a0ab57bf02382235f5e0d8c872e7659ba" id="r_a0ab57bf02382235f5e0d8c872e7659ba"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a> = TeamPolicy::member_type</td></tr>
-<tr class="memitem:a7f3e9164ba1f472dfca32b8c7e01d8b0" id="r_a7f3e9164ba1f472dfca32b8c7e01d8b0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f3e9164ba1f472dfca32b8c7e01d8b0">ScratchView</a></td></tr>
-<tr class="memitem:a9f281df659371ce13679e38d88bb663e" id="r_a9f281df659371ce13679e38d88bb663e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f281df659371ce13679e38d88bb663e">float_t</a> = float</td></tr>
+<tr class="memitem:a010a7c6c95423d005735e06babcf004e" id="r_a010a7c6c95423d005735e06babcf004e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a010a7c6c95423d005735e06babcf004e">ScratchView</a></td></tr>
+<tr class="memitem:aade88235d0802383f297c1de07fdfe90" id="r_aade88235d0802383f297c1de07fdfe90"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aade88235d0802383f297c1de07fdfe90">float_type</a> = float</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -106,8 +106,8 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:aa7f9dce06d260d972cb45960fdc40475" id="r_aa7f9dce06d260d972cb45960fdc40475"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7f9dce06d260d972cb45960fdc40475">m_particles</a></td></tr>
 </table>
 <a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
-<a id="a9f281df659371ce13679e38d88bb663e" name="a9f281df659371ce13679e38d88bb663e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f281df659371ce13679e38d88bb663e">&#9670;&#160;</a></span>float_t</h2>
+<a id="aade88235d0802383f297c1de07fdfe90" name="aade88235d0802383f297c1de07fdfe90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aade88235d0802383f297c1de07fdfe90">&#9670;&#160;</a></span>float_type</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -115,15 +115,15 @@ Public Attributes</h2></td></tr>
 template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structContributionFunctor.html">ContributionFunctor</a>&lt; M &gt;::float_t = float</td>
+          <td class="memname">using <a class="el" href="structContributionFunctor.html">ContributionFunctor</a>&lt; M &gt;::float_type = float</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a7f3e9164ba1f472dfca32b8c7e01d8b0" name="a7f3e9164ba1f472dfca32b8c7e01d8b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f3e9164ba1f472dfca32b8c7e01d8b0">&#9670;&#160;</a></span>ScratchView</h2>
+<a id="a010a7c6c95423d005735e06babcf004e" name="a010a7c6c95423d005735e06babcf004e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a010a7c6c95423d005735e06babcf004e">&#9670;&#160;</a></span>ScratchView</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -135,9 +135,9 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line"> Kokkos::View&lt;<a class="code hl_typedef" href="#a9f281df659371ce13679e38d88bb663e">float_t</a>*,</div>
+<b>Initial value:</b><div class="fragment"><div class="line"> Kokkos::View&lt;<a class="code hl_typedef" href="#aade88235d0802383f297c1de07fdfe90">float_type</a>*,</div>
 <div class="line">                     TeamPolicy::execution_space::scratch_memory_space&gt;</div>
-<div class="ttc" id="astructContributionFunctor_html_a9f281df659371ce13679e38d88bb663e"><div class="ttname"><a href="#a9f281df659371ce13679e38d88bb663e">ContributionFunctor::float_t</a></div><div class="ttdeci">float float_t</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:22</div></div>
+<div class="ttc" id="astructContributionFunctor_html_aade88235d0802383f297c1de07fdfe90"><div class="ttname"><a href="#aade88235d0802383f297c1de07fdfe90">ContributionFunctor::float_type</a></div><div class="ttdeci">float float_type</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:22</div></div>
 </div><!-- fragment -->
 </div>
 </div>

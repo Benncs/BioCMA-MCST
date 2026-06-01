@@ -1,6 +1,6 @@
 <map id="Core::GlobalInitialiser::GlobalInitialiser" name="Core::GlobalInitialiser::GlobalInitialiser">
 <area shape="rect" id="Node000001" title="Constructs a GlobalInitialiser instance." alt="" coords="5,68,152,107"/>
-<area shape="rect" id="Node000002" href="$namespaceCore.html#a6e3ef77e1bc9420c6557ebad29463b75" title=" " alt="" coords="224,5,362,44"/>
+<area shape="rect" id="Node000002" href="$namespaceCore.html#a62460a2fa2e93e22658a2c27dac1c9c1" title=" " alt="" coords="223,5,363,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,65,209,46,211,51,148,70"/>
 <area shape="rect" id="Node000003" href="$structCore_1_1SimulationParameters.html#aa4af6c014480bad09adc3054a11e7173" title=" " alt="" coords="200,68,386,107"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,85,184,85,184,90,152,90"/>

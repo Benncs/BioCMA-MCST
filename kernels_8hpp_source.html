@@ -217,8 +217,8 @@ $(function(){initNavTree('kernels_8hpp_source.html','',''); });
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>                                          Kokkos::AUTO(),</div>
 <div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>                                          Kokkos::AUTO());</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        cycle_policy.set_scratch_size(</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>            0, Kokkos::PerTeam(<span class="keyword">sizeof</span>(float_t) * npt * 2));</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        cycle_policy.set_scratch_size(0,</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>                                      Kokkos::PerTeam(<span class="keyword">sizeof</span>(<span class="keywordtype">float</span>) * npt * 2));</div>
 <div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
 <div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>        Kokkos ::parallel_for(<span class="stringliteral">&quot;cycle_move&quot;</span>, cycle_policy, <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#a4f6f668e910066ea431b880faa54c70a">move_kernel</a>);</div>
 <div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>      }</div>
@@ -281,7 +281,7 @@ $(function(){initNavTree('kernels_8hpp_source.html','',''); });
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>              = Kokkos::TeamPolicy&lt;typename ContributionFunctor&lt;Model&gt;::Tag0D&gt;(</div>
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>                  <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#a1fd301b1bc734575d095140126ae642d">model_space</a>, league_size, Kokkos::AUTO(), Kokkos::AUTO());</div>
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>          policy_contribs.set_scratch_size(</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>              0, Kokkos::PerTeam(<span class="keyword">sizeof</span>(float_t) * Model::n_c));</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>              0, Kokkos::PerTeam(<span class="keyword">sizeof</span>(<span class="keywordtype">float</span>) * Model::n_c));</div>
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>          Kokkos::parallel_for(</div>
 <div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>              <span class="stringliteral">&quot;cycle_model_contribs_0d&quot;</span>, policy_contribs, <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeaa14e61092684f6cfed1cf919f540cf">contribution_kernel</a>);</div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>        }</div>

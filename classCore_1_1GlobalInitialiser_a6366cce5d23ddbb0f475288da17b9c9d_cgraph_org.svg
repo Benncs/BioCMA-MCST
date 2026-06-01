@@ -21,10 +21,10 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="namespaceCore.html#a6e3ef77e1bc9420c6557ebad29463b75" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="267.5,-123 163.75,-123 163.75,-94 267.5,-94 267.5,-123"/>
-<text xml:space="preserve" text-anchor="start" x="171.75" y="-109.5" font-family="Helvetica,sans-Serif" font-size="10.00">Core::check_results</text>
-<text xml:space="preserve" text-anchor="middle" x="215.62" y="-99" font-family="Helvetica,sans-Serif" font-size="10.00">_file_name</text>
+<g id="a_Node000002"><a xlink:href="namespaceCore.html#a62460a2fa2e93e22658a2c27dac1c9c1" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="268.25,-123 163,-123 163,-94 268.25,-94 268.25,-123"/>
+<text xml:space="preserve" text-anchor="start" x="171" y="-109.5" font-family="Helvetica,sans-Serif" font-size="10.00">Core::fill_and_check</text>
+<text xml:space="preserve" text-anchor="middle" x="215.62" y="-99" font-family="Helvetica,sans-Serif" font-size="10.00">_result_file_path</text>
 </a>
 </g>
 </g>
