@@ -18,9 +18,9 @@ template <ModelType M> struct ContributionFunctor
   using TeamMember = TeamPolicy::member_type;
 
   using ScratchView
-      = Kokkos::View<float_t*,
+      = Kokkos::View<float_type*,
                      TeamPolicy::execution_space::scratch_memory_space>;
-  using float_t = float;
+  using float_type = float;
 
   ContributionFunctor(std::size_t particle_per_team,
                       MC::ContributionView contribution_scatter,
@@ -61,7 +61,7 @@ template <ModelType M> struct ContributionFunctor
 
     Kokkos::parallel_for(Kokkos::TeamVectorRange(team, n_c),
                          [&](const std::size_t j)
-                         { scratch(j) = float_t{ 0 }; });
+                         { scratch(j) = float_type{ 0 }; });
 
     const auto upper_bound = ((p0 + m_particle_per_team) >= n_particle)
                                  ? n_particle - p0

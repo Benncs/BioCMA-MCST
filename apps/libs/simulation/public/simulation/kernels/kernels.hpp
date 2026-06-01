@@ -135,8 +135,8 @@ namespace Simulation::KernelInline
                                           Kokkos::AUTO(),
                                           Kokkos::AUTO());
 
-        cycle_policy.set_scratch_size(
-            0, Kokkos::PerTeam(sizeof(float_t) * npt * 2));
+        cycle_policy.set_scratch_size(0,
+                                      Kokkos::PerTeam(sizeof(float) * npt * 2));
 
         Kokkos ::parallel_for("cycle_move", cycle_policy, move_kernel);
       }
@@ -197,7 +197,7 @@ namespace Simulation::KernelInline
               = Kokkos::TeamPolicy<typename ContributionFunctor<Model>::Tag0D>(
                   model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
           policy_contribs.set_scratch_size(
-              0, Kokkos::PerTeam(sizeof(float_t) * Model::n_c));
+              0, Kokkos::PerTeam(sizeof(float) * Model::n_c));
           Kokkos::parallel_for(
               "cycle_model_contribs_0d", policy_contribs, contribution_kernel);
         }

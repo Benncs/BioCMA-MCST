@@ -12,18 +12,18 @@ namespace Models
   FixedLength::Config
   FixedLength::get_config(const std::size_t n)
   {
-    using float_t = Self::FloatType;
-    float_t lambda = Kokkos::log(2) / 1e-6;
+    using float_type = Self::FloatType;
+    float_type lambda = Kokkos::log(2) / 1e-6;
     char* lambda_env = std::getenv("VLAMBDA");
 
     if (lambda_env != nullptr)
     {
-      lambda = static_cast<float_t>(std::stod(lambda_env));
+      lambda = static_cast<float_type>(std::stod(lambda_env));
       Kokkos::printf("[Config] use env value %f\r\n", lambda);
     }
 
     int rc = 0;
-    Kokkos::View<float_t*, ComputeSpace> samples("samples", n);
+    Kokkos::View<float_type*, ComputeSpace> samples("samples", n);
     if (lambda != 0.)
     {
       auto target = KOKKOS_LAMBDA(const FixedLength::FloatType x)
