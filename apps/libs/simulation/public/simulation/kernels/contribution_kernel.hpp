@@ -16,11 +16,10 @@ template <ModelType M> struct ContributionFunctor
 
   using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
   using TeamMember = TeamPolicy::member_type;
-
+  using float_type = float;
   using ScratchView
       = Kokkos::View<float_type*,
                      TeamPolicy::execution_space::scratch_memory_space>;
-  using float_type = float;
 
   ContributionFunctor(std::size_t particle_per_team,
                       MC::ContributionView contribution_scatter,
