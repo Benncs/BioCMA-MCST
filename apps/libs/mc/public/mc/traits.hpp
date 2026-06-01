@@ -48,7 +48,7 @@ using NonConfigType = std::nullopt_t;
 
 template <typename T>
 concept has_name = requires(T t) {
-  { T::name } -> std::convertible_to<std::string>;
+  { T::name } -> std::convertible_to<std::string_view>;
 };
 
 /**

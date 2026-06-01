@@ -1,8 +1,8 @@
 #ifndef __CORE_POST_PROCESS_PUBLIC_HPP__
 #define __CORE_POST_PROCESS_PUBLIC_HPP__
-#include "Kokkos_Macros.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
+#include <Kokkos_Macros.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/common.hpp>
 #include <mc/alias.hpp>
@@ -207,14 +207,16 @@ namespace PostProcessing
       // turned of, with_age controlls export but not postprocessing
       ParticlePropertyViewType<ComputeSpace> ages_values("ages_values", 2, n_p);
 
-      GetPropertiesFunctor<M, Kokkos::DefaultExecutionSpace>(n_p,
-                                                             container.position,
-                                                             container.model,
-                                                             container.ages,
-                                                             particle_values,
-                                                             spatial_values,
-                                                             ages_values,
-                                                             container.status)
+      using space = ComputeSpace;
+
+      GetPropertiesFunctor<M, space>(n_p,
+                                     container.position,
+                                     container.model,
+                                     container.ages,
+                                     particle_values,
+                                     spatial_values,
+                                     ages_values,
+                                     container.status)
           .run();
 
       properties.particle_values = Kokkos::create_mirror_view_and_copy(

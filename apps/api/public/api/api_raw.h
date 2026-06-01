@@ -1,7 +1,6 @@
 #ifndef __BIOMC_API_RAW_H__
 #define __BIOMC_API_RAW_H__
 
-#include <cstdint>
 #include <stddef.h> //NOLINT
 #include <stdint.h> //NOLINT
 
@@ -24,11 +23,11 @@ extern "C"
   typedef struct Simulation::Feed::FeedDescriptor* FeedHandle; // NOLINT
 
 #else
-typedef struct Opaque* Handle; // NOLINT //In C we only need ptr type so Opaque
-                               // doesn´t need to exist
+// In C we only need ptr type so Opaque doesn´t need to exist
+typedef struct Opaque* Handle; // NOLINT
 
-typedef struct OpaqueFeed* FeedHandle; // NOLINT //In C we only need ptr type so
-                                       // Opaque doesn´t need to exist
+// In C we only need ptr type so Opaque doesn´t need to exist
+typedef struct OpaqueFeed* FeedHandle; // NOLINT
 #endif
 
   /*FFI Feed descritptor*/
@@ -83,16 +82,16 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT //In C we only need ptr type so
 
   // FFI API
 
-  // /**
-  //  * @brief Initialize a simulation instance handle
-  //  *
-  //  * This function creates a simulation instance with a configuration
-  //  *
-  //  * @param argc.
-  //  * @param argv.
-  //  * @return A `Handle` to the simulation instance, or `NULL` if
-  //  initialization failed.
-  //  */
+  /**
+ * @brief Initialize a simulation instance handle
+   *
+   * This function creates a simulation instance with a configuration
+   *
+   * @param argc.
+   * @param argv.
+   * @return A `Handle` to the simulation instance, or `NULL` if
+   initialization failed.
+   */
   Handle init_handle_raw(int argc, char** argv);
 
   /**
@@ -105,30 +104,28 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT //In C we only need ptr type so
    */
   void delete_handle(Handle* handle);
 
-  // TODO
   void get_model_list(char** names, const int* n_model);
   void free_model_list(char** names, int n_model);
   // void finalize(); //Do not use it
 
+  int n_rank(Handle);
+  int i_rank(Handle);
+
   int exec(Handle);
-  int register_initial_condition(Handle*);
+
   int apply(Handle, int to_load);
 
   /* REGISTER */
+  int register_initial_condition(Handle*);
   int register_result_path(Handle, const char* c);
   int register_cma_path(Handle, const char* c);
   int register_serde(Handle, const char* c);
   int register_model_name(Handle, const char* c);
-
+  int register_parameters(Handle, Param* params);
   int register_initializer_path(Handle, const char* c);
 
   int set_scalar_buffer(
       Handle, uint64_t rows, uint64_t cols, double* liquid, double* gas_ptr);
-
-  int register_parameters(Handle, Param* params);
-
-  int n_rank(Handle);
-  int i_rank(Handle);
 
   int set_feed_constant(Handle,
                         double flow,

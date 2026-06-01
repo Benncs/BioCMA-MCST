@@ -104,8 +104,8 @@ namespace Core
       case_data.simulation->setProbes(Simulation::ProbeType::DivisionTime,
                                       std::move(probes));
     }
-
-    partial_exporter.write_number_particle(getter.mc_unit()->getRepartition());
+    const auto n_particle = getter.mc_unit()->getRepartition();
+    partial_exporter.write_number_particle(n_particle);
     PostProcessing::save_particle_state(getter, partial_exporter);
   }
 

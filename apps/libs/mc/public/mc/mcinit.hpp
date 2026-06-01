@@ -89,11 +89,15 @@ namespace MC
                 *unit,
                 std::move(container),
                 uniform_mc_init);
-
-      unit->container = std::move(container);
     }
     catch (const std::runtime_error& e)
     {
+
+      if (_logger)
+      {
+        _logger->error(e.what());
+      }
+
       return nullptr;
     }
 

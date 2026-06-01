@@ -1,5 +1,8 @@
-#include "Kokkos_Assert.hpp"
+#include "impl/Kokkos_Profiling.hpp"
+#include "mc/alias.hpp"
+#include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/common.hpp>
 #include <cstdint>
@@ -86,8 +89,6 @@ namespace
     operator()(const int i_particle) const
     {
       auto access_ = n_cells.access();
-      // access_(list._owned_data(i_particle).properties.current_container) +=
-      // 1;
       if (status(i_particle) == MC::Status::Idle)
       {
         access_(positions(i_particle)) += 1;
@@ -174,7 +175,8 @@ namespace MC
   [[nodiscard]] std::vector<uint64_t>
   MonteCarloUnit::getRepartition() const
   {
-    if (domain.getNumberCompartments() == 1)
+    const auto n_compartment = domain.getNumberCompartments();
+    if (n_compartment == 1)
     {
       return { n_particle() };
     }
@@ -182,22 +184,31 @@ namespace MC
     // only while exporting. If ncells has to be known more often (id during
     // iteration), n_cell view can be allocated in mc_unit and incremented
     // during kernel using atomic.
-    Kokkos::View<uint64_t*, ComputeSpace> n_cells(
-        "n_cell", this->domain.getNumberCompartments());
-    Kokkos::Experimental::ScatterView<uint64_t*> sn_cells(n_cells);
+    Kokkos::View<uint64_t*, ComputeSpace> n_cells("n_cell", n_compartment);
+    // Kokkos::Experimental::ScatterView<uint64_t*, ComputeSpace> sn_cells(
+    //     n_cells);
+
+    auto sn_cells = Kokkos::Experimental::create_scatter_view(n_cells);
+
     std::visit(
         [&sn_cells](auto&& _container)
         {
+          // static_assert(Kokkos::SpaceAccessibility<
+          //                   decltype(sn_cells)::memory_space,
+          //                   typename decltype(
+          //                       _container.position)::memory_space>::accessible,
+          //               "Space accessiblity");
+
           Kokkos::parallel_for(
               "get_repartition",
-              _container.n_particles(),
+              Kokkos::RangePolicy<ComputeSpace>(0, _container.n_particles()),
               NcellFunctor(_container.position, _container.status, sn_cells));
         },
         container);
     Kokkos::Experimental::contribute(n_cells, sn_cells);
     auto host = Kokkos::create_mirror_view_and_copy(HostSpace(), n_cells);
 
-    std::vector<uint64_t> dist(n_cells.extent(0));
+    std::vector<uint64_t> dist(n_compartment);
     std::memcpy(dist.data(), host.data(), host.size() * sizeof(uint64_t));
 
     return dist;
@@ -262,7 +273,7 @@ namespace MC
      * the weight is dependent on the total mass.
      */
     // Needs to reset min_c/max_c because of tuple deconstruction
-    auto visitor = [&, min_c = min_c, max_c = max_c](auto&& container)
+    auto visitor = [&, _min_c = min_c, _max_c = max_c](auto&& container)
     {
       using CurrentModel =
           typename std::remove_reference<decltype(container)>::type::UsedModel;
@@ -274,11 +285,12 @@ namespace MC
         CurrentModel::preinit();
       }
 
-      initialize_model(n_particles, container, min_c, max_c, rng, total_mass);
+      initialize_model(n_particles, container, _min_c, _max_c, rng, total_mass);
       Kokkos::fence();
     };
 
     std::visit(visitor, container);
+    unit.container = std::move(container);
   }
 
   RuntimeParameters
