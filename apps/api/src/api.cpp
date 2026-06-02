@@ -33,6 +33,11 @@ constexpr int ID_VERIF = 2025;
   {                                                                            \
     return ApiResult(msg);                                                     \
   }
+#ifndef NO_MPI
+#  define BARRIER WrapMPI::barrier();
+#else
+#  define BARRIER
+#endif
 
 namespace
 {
@@ -252,6 +257,8 @@ namespace Api
 
     CHECK_OR_RETURN(loaded, "Already loaded");
 
+    BARRIER
+
     try
     {
       if (auto opt_case = Core::load(logger,
@@ -299,7 +306,9 @@ namespace Api
 
     CHECK_OR_RETURN(loaded, "Already loaded");
     CHECK_OR_RETURN(!registered, "Register first");
-
+    // Sync here is optional but make initalization less error prone (file
+    // reading, file creation order)
+    BARRIER
     Core::GlobalInitialiser global_initializer(_data.exec_info, params, logger);
 
     {
@@ -416,6 +425,11 @@ namespace Api
   {
 
     std::filesystem::path p(path);
+    // Import to have barrier because API is also used in multinode context and
+    // depending on the way simulation is configured CM Model can be generated
+    // on the fly (usually by only one rank) then the other have to wait
+
+    BARRIER
 
     if (!std::filesystem::exists(p) || !std::filesystem::is_directory(p))
     {
