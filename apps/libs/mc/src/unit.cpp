@@ -176,13 +176,13 @@ namespace MC
   }
 
   [[nodiscard]] std::vector<std::string>
-  MonteCarloUnit::getModelList() const
+  MonteCarloUnit::getSpeciesNames() const
   {
     return std::visit(
         [](const auto& c)
         {
           using T = DETECT_MODEL_TYPE(c);
-          return impl::get_model_list_impl<T>();
+          return impl::get_species_names_impl<T>();
         },
         this->container);
   }

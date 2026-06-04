@@ -8,7 +8,7 @@ namespace impl
   template <ModelType T>
     requires(!has_species_name<T>)
   auto
-  get_model_list_impl()
+  get_species_names_impl()
   {
     std::vector<std::string> v(T::n_c);
 
@@ -21,7 +21,7 @@ namespace impl
   template <ModelType T>
     requires has_species_name<T>
   auto
-  get_model_list_impl()
+  get_species_names_impl()
   {
     auto rd = T::species();
 

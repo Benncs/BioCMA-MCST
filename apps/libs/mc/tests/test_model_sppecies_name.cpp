@@ -141,11 +141,11 @@ main()
 {
   assert(ModelWithNames::species().size() == 1);
 
-  auto list_1 = impl::get_model_list_impl<ModelWithNames>();
+  auto list_1 = impl::get_species_names_impl<ModelWithNames>();
 
   assert(list_1[0] == "S");
 
-  auto list_2 = impl::get_model_list_impl<ModelWONames>();
+  auto list_2 = impl::get_species_names_impl<ModelWONames>();
 
   assert(list_2.size() == ModelWONames::n_c);
   assert(list_2[0] == "0");

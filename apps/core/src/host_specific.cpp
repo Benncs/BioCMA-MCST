@@ -156,6 +156,7 @@ host_process(std::shared_ptr<IO::Logger> logger,
              Core::PartialExporter& partial_exporter)
 {
   const auto getter = simulation.getter();
+
   const auto main_exporter = make_main_exporter(logger, exec, params);
 
   const auto [n_species, n_compartment] = getter.getDimensions();
