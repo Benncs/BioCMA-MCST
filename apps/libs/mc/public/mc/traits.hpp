@@ -13,6 +13,8 @@
 #include <optional>
 #include <type_traits>
 
+using NonConfigType = std::nullopt_t;
+
 /** @brief Utility for compile time array concatenation  */
 template <std::size_t N1, std::size_t N2>
 constexpr std::array<std::string_view, N1 + N2>
@@ -44,12 +46,16 @@ concept NonConfigurableInit = requires(T model,
                                        const typename T::SelfParticle& arr) {
   { model.init(random_pool, idx, arr) } -> std::same_as<void>;
 };
-using NonConfigType = std::nullopt_t;
 
 template <typename T>
 concept has_name = requires(T t) {
   { T::name } -> std::convertible_to<std::string_view>;
 };
+
+template <typename T>
+concept has_species_name = requires(T t) {
+  { T::species() } -> std::ranges::range;
+} && std::convertible_to<std::ranges::range_value_t<decltype(T::species())>, std::string_view>;
 
 /**
   @brief Concept to define a correct Model

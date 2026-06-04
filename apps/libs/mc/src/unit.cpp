@@ -1,5 +1,3 @@
-#include "impl/Kokkos_Profiling.hpp"
-#include "mc/alias.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
@@ -7,14 +5,19 @@
 #include <common/common.hpp>
 #include <cstdint>
 #include <cstring>
+#include <mc/alias.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
 #include <mc/unit.hpp>
 #include <models/config_loader.hpp>
+#include <species_name_extractor.hpp>
 #include <tuple>
 #include <type_traits>
 #include <utility>
 #include <variant>
+
+#define DETECT_MODEL_TYPE(__c__)                                               \
+  typename std::remove_reference<decltype(__c__)>::type::UsedModel;
 
 namespace
 {
@@ -172,6 +175,18 @@ namespace MC
                       container);
   }
 
+  [[nodiscard]] std::vector<std::string>
+  MonteCarloUnit::getModelList() const
+  {
+    return std::visit(
+        [](const auto& c)
+        {
+          using T = DETECT_MODEL_TYPE(c);
+          return impl::get_model_list_impl<T>();
+        },
+        this->container);
+  }
+
   [[nodiscard]] std::vector<uint64_t>
   MonteCarloUnit::getRepartition() const
   {
@@ -225,8 +240,7 @@ namespace MC
     KOKKOS_ASSERT(new_weight > 0);
     auto functor = [new_weight](auto& container)
     {
-      using CurrentModel =
-          typename std::remove_reference<decltype(container)>::type::UsedModel;
+      using CurrentModel = DETECT_MODEL_TYPE(container);
       if constexpr (ConstWeightModelType<CurrentModel>)
       {
         Kokkos::deep_copy(container.weights, new_weight);
@@ -275,9 +289,7 @@ namespace MC
     // Needs to reset min_c/max_c because of tuple deconstruction
     auto visitor = [&, _min_c = min_c, _max_c = max_c](auto&& container)
     {
-      using CurrentModel =
-          typename std::remove_reference<decltype(container)>::type::UsedModel;
-
+      using CurrentModel = DETECT_MODEL_TYPE(container);
       auto rng = unit.rng;
 
       if constexpr (PreInitModel<CurrentModel>)
