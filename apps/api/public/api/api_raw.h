@@ -104,7 +104,7 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT
    */
   void delete_handle(Handle* handle);
 
-  void get_model_list(char** names, const int* n_model);
+  void get_model_list(char*** names, int* n_model);
   void free_model_list(char** names, int n_model);
   // void finalize(); //Do not use it
 
