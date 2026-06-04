@@ -1,6 +1,5 @@
-#include "Kokkos_Macros.hpp"
-#include "impl/Kokkos_Profiling.hpp"
 #include <Kokkos_Assert.hpp>
+#include <Kokkos_Macros.hpp>
 #include <kokkos_eigen.hpp>
 
 using namespace KokkosEigen;

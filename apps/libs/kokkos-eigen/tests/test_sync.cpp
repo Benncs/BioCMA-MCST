@@ -3,6 +3,7 @@
 #include <Kokkos_Macros.hpp>
 #include <Kokkos_Printf.hpp>
 #include <kokkos_eigen.hpp>
+
 using namespace KokkosEigen;
 
 template <typename layout>
