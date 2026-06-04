@@ -11,6 +11,7 @@
 #include <string>
 #include <string_view>
 #include <utility>
+
 namespace Core
 {
   const std::string MainExporter::base_group_name = "records/";
@@ -60,22 +61,24 @@ namespace Core
     {
       std::vector<unsigned long long> chunk = { 1, n_compartments, n_species };
       std::array<MultiMatrixDescription, n_growing_arrays_phase> growing;
+
       growing[index_concentration]
-          = { base_group_name + "concentration_" + phase_name,
-              { 1, n_compartments, n_species },
-              { n_expected_export, n_compartments, n_species },
-              chunk,
-              true,
-              false };
+          = { .name = base_group_name + "concentration_" + phase_name,
+              .dims = { 1, n_compartments, n_species },
+              .max_dims = { n_expected_export, n_compartments, n_species },
+              .chunk_dims = chunk,
+              .compression = true,
+              .is_integer = false };
 
       chunk = { 1, n_compartments };
 
-      growing[index_volumes] = { base_group_name + "volume_" + phase_name,
-                                 { 1, n_compartments },
-                                 { n_expected_export, n_compartments },
-                                 chunk,
-                                 true,
-                                 false };
+      growing[index_volumes]
+          = { .name = base_group_name + "volume_" + phase_name,
+              .dims = { 1, n_compartments },
+              .max_dims = { n_expected_export, n_compartments },
+              .chunk_dims = chunk,
+              .compression = true,
+              .is_integer = false };
 
       return growing;
     };
@@ -166,17 +169,21 @@ namespace Core
 
     write_simple(final_values, "final_result/");
 
+    // Compress data is encouraged, as final is only written once let always
+    // compress
+    const bool f_compress = true;
+
     write_matrix("final_result/concentration_liquid",
                  getter.getCliqData(),
                  n_row,
                  n_col,
-                 true);
+                 f_compress);
 
     auto opt_gas = getter.getCgasData();
     if (opt_gas.has_value())
     {
       write_matrix(
-          "final_result/concentration_gas", *opt_gas, n_row, n_col, true);
+          "final_result/concentration_gas", *opt_gas, n_row, n_col, f_compress);
     }
   }
 
