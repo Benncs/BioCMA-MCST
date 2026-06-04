@@ -11,6 +11,7 @@
 #include <simulation/kernels/move_kernel.hpp>
 
 #include <common/execinfo.hpp>
+#include <stdexcept>
 
 namespace Simulation::KernelInline
 {
@@ -126,6 +127,11 @@ namespace Simulation::KernelInline
       if (move_kernel.enable_move)
       {
         const auto npt = m_options.m_p_p_team_move;
+        if (n_particle <= npt)
+        {
+          // TODO
+          throw std::runtime_error("Nparticle<n per team");
+        }
 
         const std::size_t league_size = Common::c_league_size(n_particle, npt);
 
@@ -154,6 +160,12 @@ namespace Simulation::KernelInline
     void
     launch_model(const std::size_t n_particle) const
     {
+      if (n_particle <= m_options.m_p_p_team_model)
+      {
+        // TODO
+        throw std::runtime_error("Nparticle<n per team");
+      }
+
       std::size_t league_size
           = Common::c_league_size(n_particle, m_options.m_p_p_team_model);
 
@@ -177,6 +189,13 @@ namespace Simulation::KernelInline
 
       if (cycle_kernel.do_contribs())
       {
+
+        if (n_particle <= m_options.m_p_p_team_contribs)
+        {
+          // TODO
+          throw std::runtime_error("Nparticle<n per team");
+        }
+
         league_size
             = Common::c_league_size(n_particle, m_options.m_p_p_team_contribs);
         static_assert(ConstWeightModelType<Model>,
