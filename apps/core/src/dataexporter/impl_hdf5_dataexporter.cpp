@@ -122,7 +122,7 @@ namespace Core
                                         ? *user_description
                                         : "Interesting results";
 
-    metadata["file_version"] = 8; // NOLINT
+    metadata["file_version"] = 9; // NOLINT
     metadata["creation_date"] = date_time();
     metadata["author"] = get_user_name();
     metadata["description"] = description;

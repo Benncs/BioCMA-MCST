@@ -17,6 +17,7 @@ namespace Core
   const std::string MainExporter::base_group_name = "records/";
   MainExporter::MainExporter(const ExecInfo& info,
                              std::string_view _filename,
+                             const std::vector<std::string>& species_names,
                              std::optional<export_metadata_t> user_description)
       : DataExporter(info, _filename, std::move(user_description))
   {
@@ -24,6 +25,8 @@ namespace Core
     write_properties(std::nullopt, metadata);
     write_simple("misc/n_node_thread", info.thread_per_process);
     write_simple("misc/n_rank", info.n_rank);
+
+    write_simple("misc/species_names", species_names);
   };
 
   void

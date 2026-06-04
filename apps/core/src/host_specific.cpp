@@ -100,7 +100,8 @@ namespace
   std::shared_ptr<Core::MainExporter>
   make_main_exporter(std::shared_ptr<IO::Logger> logger,
                      const ExecInfo& exec,
-                     const Core::SimulationParameters& params);
+                     const Core::SimulationParameters& params,
+                     const std::vector<std::string>& species_names);
 
   auto
   get_n_interval(const Core::SimulationParameters& params)
@@ -156,8 +157,9 @@ host_process(std::shared_ptr<IO::Logger> logger,
              Core::PartialExporter& partial_exporter)
 {
   const auto getter = simulation.getter();
-
-  const auto main_exporter = make_main_exporter(logger, exec, params);
+  auto species_names = getter.mc_unit()->getSpeciesNames();
+  const auto main_exporter
+      = make_main_exporter(logger, exec, params, species_names);
 
   const auto [n_species, n_compartment] = getter.getDimensions();
 
@@ -323,11 +325,13 @@ namespace
   std::shared_ptr<Core::MainExporter>
   make_main_exporter(std::shared_ptr<IO::Logger> logger,
                      const ExecInfo& exec,
-                     const Core::SimulationParameters& params)
+                     const Core::SimulationParameters& params,
+                     const std::vector<std::string>& species_names)
   {
 
     const auto filename = IO::format(params.results_file_name, ".h5");
-    auto main_exporter = std::make_unique<Core::MainExporter>(exec, filename);
+    auto main_exporter
+        = std::make_unique<Core::MainExporter>(exec, filename, species_names);
 
     for (std::size_t i_rank = 0; i_rank < exec.n_rank; ++i_rank)
     {

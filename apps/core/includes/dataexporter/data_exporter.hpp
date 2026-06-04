@@ -131,6 +131,7 @@ namespace Core
     using simple_export_t = std::variant<size_t,
                                          std::string,
                                          std::vector<size_t>,
+                                         std::vector<std::string>,
                                          double,
                                          uint32_t>; ///< Simple export
                                                     ///< types
