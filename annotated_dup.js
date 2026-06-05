@@ -145,6 +145,8 @@ var annotated_dup =
     [ "HostImportantLoadBalancer", "classHostImportantLoadBalancer.html", "classHostImportantLoadBalancer" ],
     [ "ILoadBalancer", "classILoadBalancer.html", "classILoadBalancer" ],
     [ "KernelDispatchOptions", "structKernelDispatchOptions.html", "structKernelDispatchOptions" ],
+    [ "ModelWithNames", "structModelWithNames.html", "structModelWithNames" ],
+    [ "ModelWONames", "structModelWONames.html", "structModelWONames" ],
     [ "OpaquePointer", "structOpaquePointer.html", "structOpaquePointer" ],
     [ "Result", "structResult.html", "structResult" ],
     [ "SerdeModel", "structSerdeModel.html", "structSerdeModel" ],

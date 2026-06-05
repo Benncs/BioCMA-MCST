@@ -14,6 +14,10 @@ var namespaces_dup =
     ] ],
     [ "Core", "namespaceCore.html", "namespaceCore" ],
     [ "EIGEN_DIAG_POP", "namespaceEIGEN__DIAG__POP.html", "namespaceEIGEN__DIAG__POP" ],
+    [ "impl", "namespaceimpl.html", [
+      [ "get_species_names_impl", "namespaceimpl.html#a4b658362afe7887c2a0aad8644cfb264", null ],
+      [ "get_species_names_impl", "namespaceimpl.html#a255f7e239c9c9e68681b36da5c32121d", null ]
+    ] ],
     [ "IO", "namespaceIO.html", "namespaceIO" ],
     [ "KokkosEigen", "namespaceKokkosEigen.html", "namespaceKokkosEigen" ],
     [ "MC", "namespaceMC.html", "namespaceMC" ],

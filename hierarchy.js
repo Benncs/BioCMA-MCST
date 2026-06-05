@@ -80,6 +80,8 @@ var hierarchy =
     [ "Simulation::MassTransfer::MassTransferModel", "classSimulation_1_1MassTransfer_1_1MassTransferModel.html", null ],
     [ "Simulation::MassTransfer::MassTransferProxy", "structSimulation_1_1MassTransfer_1_1MassTransferProxy.html", null ],
     [ "Simulation::Mixture", "classSimulation_1_1Mixture.html", null ],
+    [ "ModelWithNames", "structModelWithNames.html", null ],
+    [ "ModelWONames", "structModelWONames.html", null ],
     [ "Models::Monod", "structModels_1_1Monod.html", null ],
     [ "MC::MonteCarloUnit", "structMC_1_1MonteCarloUnit.html", null ],
     [ "Simulation::KernelInline::MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", null ],

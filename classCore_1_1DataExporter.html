@@ -105,7 +105,7 @@ Protected Types</h2></td></tr>
 <tr class="memitem:a8df0b133d30a179f67a3b22dc6d59db9" id="r_a8df0b133d30a179f67a3b22dc6d59db9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8df0b133d30a179f67a3b22dc6d59db9">export_metadata_kv</a></td></tr>
 <tr class="memitem:ab2399d6169e81b2f616072e7b84ee6fd" id="r_ab2399d6169e81b2f616072e7b84ee6fd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab2399d6169e81b2f616072e7b84ee6fd">ViewParticleProperties</a></td></tr>
 <tr class="memdesc:ab2399d6169e81b2f616072e7b84ee6fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">View for particle properties.  <br /></td></tr>
-<tr class="memitem:a8172133fa069cf2d4c6251d667563527" id="r_a8172133fa069cf2d4c6251d667563527"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8172133fa069cf2d4c6251d667563527">simple_export_t</a></td></tr>
+<tr class="memitem:ada6e9f3eaa8f7d0f0eeea71ca3cc2d16" id="r_ada6e9f3eaa8f7d0f0eeea71ca3cc2d16"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada6e9f3eaa8f7d0f0eeea71ca3cc2d16">simple_export_t</a></td></tr>
 <tr class="memitem:ad0f5945b4caee2bd764d4acd0a2536f3" id="r_ad0f5945b4caee2bd764d4acd0a2536f3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0f5945b4caee2bd764d4acd0a2536f3">export_initial_kv</a></td></tr>
 <tr class="memitem:a2c69ef65ad99d769192459d131baeba8" id="r_a2c69ef65ad99d769192459d131baeba8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c69ef65ad99d769192459d131baeba8">matrix_variant_t</a></td></tr>
 <tr class="memdesc:a2c69ef65ad99d769192459d131baeba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variant for matrix data types.  <br /></td></tr>
@@ -121,7 +121,10 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a0b0b79f3932c4eb905704a852248c857" id="r_a0b0b79f3932c4eb905704a852248c857"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b0b79f3932c4eb905704a852248c857">append_array</a> (std::string_view name, std::span&lt; const double &gt; data, uint64_t last_size=0)</td></tr>
 <tr class="memitem:a7c1ccdd8fd75dacdf621d0a42757a555" id="r_a7c1ccdd8fd75dacdf621d0a42757a555"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c1ccdd8fd75dacdf621d0a42757a555">write_properties</a> (std::optional&lt; std::string &gt; specific_dataspace, const <a class="el" href="#a8df0b133d30a179f67a3b22dc6d59db9">export_metadata_kv</a> &amp;values)</td></tr>
 <tr class="memitem:a32fb6f00d4e951076a626120c1a4d9eb" id="r_a32fb6f00d4e951076a626120c1a4d9eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32fb6f00d4e951076a626120c1a4d9eb">write_simple</a> (const <a class="el" href="#ad0f5945b4caee2bd764d4acd0a2536f3">export_initial_kv</a> &amp;values, std::string_view root)</td></tr>
-<tr class="memitem:af340f4cf2e82a66d036f21f3c797fb86" id="r_af340f4cf2e82a66d036f21f3c797fb86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af340f4cf2e82a66d036f21f3c797fb86">write_simple</a> (std::string specific_dataspace, const <a class="el" href="#a8172133fa069cf2d4c6251d667563527">simple_export_t</a> &amp;values)</td></tr>
+<tr class="memitem:af340f4cf2e82a66d036f21f3c797fb86" id="r_af340f4cf2e82a66d036f21f3c797fb86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af340f4cf2e82a66d036f21f3c797fb86">write_simple</a> (std::string specific_dataspace, const <a class="el" href="#ada6e9f3eaa8f7d0f0eeea71ca3cc2d16">simple_export_t</a> &amp;values)</td></tr>
+<tr class="memitem:af6fcc205b9cbfedc9421889194c82e41" id="r_af6fcc205b9cbfedc9421889194c82e41"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6fcc205b9cbfedc9421889194c82e41">get_descriptor</a> (std::string_view name) const</td></tr>
+<tr class="memitem:a5e6e0347f65db5ed1755e2333be837af" id="r_a5e6e0347f65db5ed1755e2333be837af"><td class="memItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e6e0347f65db5ed1755e2333be837af">get_descriptor_mut</a> (std::string_view name)</td></tr>
+<tr class="memitem:af46e3eafbbd6d3332e9c25e293f51708" id="r_af46e3eafbbd6d3332e9c25e293f51708"><td class="memItemLeft" align="right" valign="top">std::span&lt; const std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af46e3eafbbd6d3332e9c25e293f51708">get_dim</a> (std::string_view name) const</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -131,7 +134,7 @@ Protected Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a33ee48bdb5b87aeeeb8208c4f15de01b" id="r_a33ee48bdb5b87aeeeb8208c4f15de01b"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, <a class="el" href="structCore_1_1DataExporter_1_1MultiMatrixDescription.html">MultiMatrixDescription</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a33ee48bdb5b87aeeeb8208c4f15de01b">descriptors</a></td></tr>
+<tr class="memitem:a74c1919d2cec68199a76e00bfd26169a" id="r_a74c1919d2cec68199a76e00bfd26169a"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, <a class="el" href="structCore_1_1DataExporter_1_1MultiMatrixDescription.html">MultiMatrixDescription</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74c1919d2cec68199a76e00bfd26169a">m_descriptors</a></td></tr>
 <tr class="memitem:ac971ba24f23d0ad43a077ce7a521624a" id="r_ac971ba24f23d0ad43a077ce7a521624a"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classCore_1_1DataExporter_1_1impl.html">impl</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac971ba24f23d0ad43a077ce7a521624a">pimpl</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
@@ -159,8 +162,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> std::unordered_map&lt;std::string,</div>
-<div class="line">                             <a class="code hl_typedef" href="#a8172133fa069cf2d4c6251d667563527">simple_export_t</a>&gt;</div>
-<div class="ttc" id="aclassCore_1_1DataExporter_html_a8172133fa069cf2d4c6251d667563527"><div class="ttname"><a href="#a8172133fa069cf2d4c6251d667563527">Core::DataExporter::simple_export_t</a></div><div class="ttdeci">std::variant&lt; size_t, std::string, std::vector&lt; size_t &gt;, double, uint32_t &gt; simple_export_t</div><div class="ttdef"><b>Definition</b> data_exporter.hpp:109</div></div>
+<div class="line">                             <a class="code hl_typedef" href="#ada6e9f3eaa8f7d0f0eeea71ca3cc2d16">simple_export_t</a>&gt;</div>
+<div class="ttc" id="aclassCore_1_1DataExporter_html_ada6e9f3eaa8f7d0f0eeea71ca3cc2d16"><div class="ttname"><a href="#ada6e9f3eaa8f7d0f0eeea71ca3cc2d16">Core::DataExporter::simple_export_t</a></div><div class="ttdeci">std::variant&lt; size_t, std::string, std::vector&lt; size_t &gt;, std::vector&lt; std::string &gt;, double, uint32_t &gt; simple_export_t</div><div class="ttdef"><b>Definition</b> data_exporter.hpp:128</div></div>
 </div><!-- fragment --><p>Initial export key-value pairs </p>
 
 </div>
@@ -186,7 +189,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> std::unordered_map&lt;std::string,</div>
 <div class="line">                             <a class="code hl_typedef" href="#a29c7eda5739faa0c91a4188410bca8bd">export_metadata_t</a>&gt;</div>
-<div class="ttc" id="aclassCore_1_1DataExporter_html_a29c7eda5739faa0c91a4188410bca8bd"><div class="ttname"><a href="#a29c7eda5739faa0c91a4188410bca8bd">Core::DataExporter::export_metadata_t</a></div><div class="ttdeci">std::variant&lt; uint64_t, int, std::string &gt; export_metadata_t</div><div class="ttdef"><b>Definition</b> data_exporter.hpp:101</div></div>
+<div class="ttc" id="aclassCore_1_1DataExporter_html_a29c7eda5739faa0c91a4188410bca8bd"><div class="ttname"><a href="#a29c7eda5739faa0c91a4188410bca8bd">Core::DataExporter::export_metadata_t</a></div><div class="ttdeci">std::variant&lt; uint64_t, int, std::string &gt; export_metadata_t</div><div class="ttdef"><b>Definition</b> data_exporter.hpp:120</div></div>
 </div><!-- fragment --><p>Key-value pairs for metadata </p>
 
 </div>
@@ -241,8 +244,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8172133fa069cf2d4c6251d667563527" name="a8172133fa069cf2d4c6251d667563527"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8172133fa069cf2d4c6251d667563527">&#9670;&#160;</a></span>simple_export_t</h2>
+<a id="ada6e9f3eaa8f7d0f0eeea71ca3cc2d16" name="ada6e9f3eaa8f7d0f0eeea71ca3cc2d16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada6e9f3eaa8f7d0f0eeea71ca3cc2d16">&#9670;&#160;</a></span>simple_export_t</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -251,7 +254,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#a8172133fa069cf2d4c6251d667563527">Core::DataExporter::simple_export_t</a></td>
+          <td class="memname">using <a class="el" href="#ada6e9f3eaa8f7d0f0eeea71ca3cc2d16">Core::DataExporter::simple_export_t</a></td>
         </tr>
       </table>
   </td>
@@ -263,6 +266,7 @@ Private Attributes</h2></td></tr>
 <b>Initial value:</b><div class="fragment"><div class="line"> std::variant&lt;size_t,</div>
 <div class="line">                                         std::string,</div>
 <div class="line">                                         std::vector&lt;size_t&gt;,</div>
+<div class="line">                                         std::vector&lt;std::string&gt;,</div>
 <div class="line">                                         double,</div>
 <div class="line">                                         uint32_t&gt;</div>
 </div><!-- fragment --><p>Simple export types </p>
@@ -557,6 +561,81 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="af6fcc205b9cbfedc9421889194c82e41" name="af6fcc205b9cbfedc9421889194c82e41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6fcc205b9cbfedc9421889194c82e41">&#9670;&#160;</a></span>get_descriptor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const auto &amp; Core::DataExporter::get_descriptor </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5e6e0347f65db5ed1755e2333be837af" name="a5e6e0347f65db5ed1755e2333be837af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e6e0347f65db5ed1755e2333be837af">&#9670;&#160;</a></span>get_descriptor_mut()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto &amp; Core::DataExporter::get_descriptor_mut </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af46e3eafbbd6d3332e9c25e293f51708" name="af46e3eafbbd6d3332e9c25e293f51708"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af46e3eafbbd6d3332e9c25e293f51708">&#9670;&#160;</a></span>get_dim()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::span&lt; const std::size_t &gt; Core::DataExporter::get_dim </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="afa2762f3923d101b037451effdd73c97" name="afa2762f3923d101b037451effdd73c97"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afa2762f3923d101b037451effdd73c97">&#9670;&#160;</a></span>operator=() <span class="overload">[1/2]</span></h2>
 
@@ -845,7 +924,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="#a8172133fa069cf2d4c6251d667563527">simple_export_t</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>values</em></span>&#160;)</td>
+          <td class="paramtype">const <a class="el" href="#ada6e9f3eaa8f7d0f0eeea71ca3cc2d16">simple_export_t</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>values</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -858,28 +937,6 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="a33ee48bdb5b87aeeeb8208c4f15de01b" name="a33ee48bdb5b87aeeeb8208c4f15de01b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33ee48bdb5b87aeeeb8208c4f15de01b">&#9670;&#160;</a></span>descriptors</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt;std::string, <a class="el" href="structCore_1_1DataExporter_1_1MultiMatrixDescription.html">MultiMatrixDescription</a>&gt; Core::DataExporter::descriptors</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a664e70090726aed7a359e2c0dde74460" name="a664e70090726aed7a359e2c0dde74460"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a664e70090726aed7a359e2c0dde74460">&#9670;&#160;</a></span>export_counter</h2>
 
@@ -918,6 +975,28 @@ Here is the caller graph for this function:</div>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a74c1919d2cec68199a76e00bfd26169a" name="a74c1919d2cec68199a76e00bfd26169a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74c1919d2cec68199a76e00bfd26169a">&#9670;&#160;</a></span>m_descriptors</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;std::string, <a class="el" href="structCore_1_1DataExporter_1_1MultiMatrixDescription.html">MultiMatrixDescription</a>&gt; Core::DataExporter::m_descriptors</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

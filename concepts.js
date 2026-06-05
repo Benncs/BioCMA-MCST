@@ -19,6 +19,8 @@ var concepts =
     [ "DynModelType", "conceptDynModelType.html", null ],
     [ "FixedModelType", "conceptFixedModelType.html", null ],
     [ "FloatingPointType", "conceptFloatingPointType.html", null ],
+    [ "has_name", "concepthas__name.html", null ],
+    [ "has_species_name", "concepthas__species__name.html", null ],
     [ "HasExportProperties", "conceptHasExportProperties.html", null ],
     [ "HasExportPropertiesFull", "conceptHasExportPropertiesFull.html", null ],
     [ "HasExportPropertiesPartial", "conceptHasExportPropertiesPartial.html", null ],

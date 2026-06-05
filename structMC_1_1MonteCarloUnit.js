@@ -5,6 +5,7 @@ var structMC_1_1MonteCarloUnit =
     [ "MonteCarloUnit", "structMC_1_1MonteCarloUnit.html#a41b8eca9d8c279dd555595021705c41b", null ],
     [ "~MonteCarloUnit", "structMC_1_1MonteCarloUnit.html#a65991633938cf0822cad4ce297f02ee8", null ],
     [ "getRepartition", "structMC_1_1MonteCarloUnit.html#a2e431bdcb96f1fa71525aca30d0457ba", null ],
+    [ "getSpeciesNames", "structMC_1_1MonteCarloUnit.html#af43611a21cb1a7ca18e13b5f34c9774b", null ],
     [ "n_particle", "structMC_1_1MonteCarloUnit.html#a9a63012c0c3a5d812abdfd77555a7f46", null ],
     [ "operator=", "structMC_1_1MonteCarloUnit.html#ac3a8f7a62805a7e290d537dea11c2425", null ],
     [ "operator=", "structMC_1_1MonteCarloUnit.html#ae6b8491d078820115a681eb2f0742739", null ],

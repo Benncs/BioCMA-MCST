@@ -1,12 +1,10 @@
 <map id="Core::ScalarFactory::scalar_factory" name="Core::ScalarFactory::scalar_factory">
-<area shape="rect" id="Node000001" title="Factory function to initialize scalar data based on the specified input source." alt="" coords="601,61,741,100"/>
-<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#aa84a61b25f475380b38306232e25aff6" title="Initializes a scalar component of the simulation." alt="" coords="407,29,553,68"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="585,69,553,64,554,58,586,64"/>
-<area shape="rect" id="Node000005" href="$classCore_1_1GlobalInitialiser.html#a6c679d3dc5f4ee98dfd9ed4c35092f1c" title=" " alt="" coords="407,92,553,131"/>
-<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="586,97,554,102,553,97,585,92"/>
-<area shape="rect" id="Node000003" href="$classCore_1_1GlobalInitialiser.html#a00d0e7a7d549bf06886dfc3ba9de3e3d" title="Initializes a simulation unit." alt="" coords="213,29,359,68"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="391,51,359,51,359,46,391,46"/>
-<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="318,16,306,10,286,8,267,10,256,15,252,21,255,28,249,30,247,20,253,11,266,5,286,3,307,5,320,12"/>
-<area shape="rect" id="Node000004" href="$structApi_1_1SimulationInstance.html#ae9bdd54076170f50eadcb7966d64c19d" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,29,165,68"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="197,51,165,51,165,46,197,46"/>
+<area shape="rect" id="Node000001" title="Factory function to initialize scalar data based on the specified input source." alt="" coords="394,61,533,100"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1GlobalInitialiser.html#aa84a61b25f475380b38306232e25aff6" title="Initializes a scalar component of the simulation." alt="" coords="200,29,346,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="378,69,346,64,347,58,379,64"/>
+<area shape="rect" id="Node000004" href="$classCore_1_1GlobalInitialiser.html#a6c679d3dc5f4ee98dfd9ed4c35092f1c" title=" " alt="" coords="200,92,346,131"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="379,97,347,102,346,97,378,92"/>
+<area shape="rect" id="Node000003" href="$classCore_1_1GlobalInitialiser.html#a00d0e7a7d549bf06886dfc3ba9de3e3d" title="Initializes a simulation unit." alt="" coords="5,29,152,68"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="184,51,152,51,152,46,184,46"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="110,16,99,10,78,8,60,10,49,15,45,21,47,28,42,30,40,20,45,11,58,5,79,3,100,5,113,12"/>
 </map>

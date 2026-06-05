@@ -18,6 +18,7 @@ var structModels_1_1FixedLength =
     [ "init", "structModels_1_1FixedLength.html#af52fca85c99c8da6440425a11f481215", null ],
     [ "mass", "structModels_1_1FixedLength.html#af95f402aa987c6d544670eff217691d7", null ],
     [ "names", "structModels_1_1FixedLength.html#a9b1f19a191f8cbdb23e7598ca2b06b75", null ],
+    [ "species", "structModels_1_1FixedLength.html#a6c80e16075ab427f9ac716b24d8020c1", null ],
     [ "update", "structModels_1_1FixedLength.html#aeddee340bd78bb133b427cb08f6030c9", null ],
     [ "d_m", "structModels_1_1FixedLength.html#a78e6f7dba8a0a9cd7d385c2b99a77404", null ],
     [ "k", "structModels_1_1FixedLength.html#aae62bd5939a4e9368d49a4083a1e3f08", null ],
@@ -25,8 +26,8 @@ var structModels_1_1FixedLength =
     [ "l_max_m", "structModels_1_1FixedLength.html#a4ae100a54c9e94d64d78055e51cae998", null ],
     [ "l_min_m", "structModels_1_1FixedLength.html#a64a7472b531af7e7c9e77087c7240250", null ],
     [ "lin_density", "structModels_1_1FixedLength.html#a872e4c2850d3996443ca0cac92af97c2", null ],
-    [ "n_c", "structModels_1_1FixedLength.html#a44b9e519d3d32ce2010781a390260475", null ],
-    [ "n_var", "structModels_1_1FixedLength.html#aee1107ee75abb2b5d929e468462dcc2a", null ],
-    [ "name", "structModels_1_1FixedLength.html#a1cb3604d28d69cd95f2082a6fe1f602b", null ],
+    [ "n_c", "structModels_1_1FixedLength.html#a09d7acb71de355acfcd72f08f471bee9", null ],
+    [ "n_var", "structModels_1_1FixedLength.html#a6d1da4c31b404b3215914b40c5feab2f", null ],
+    [ "name", "structModels_1_1FixedLength.html#a323e693355138e1696520eb7e7f0d24a", null ],
     [ "phi_s_max", "structModels_1_1FixedLength.html#a81c72e5094c1224f7a6590766f0cc516", null ]
 ];

@@ -54,7 +54,6 @@ var namespaceMC =
     ] ],
     [ "event_index", "namespaceMC.html#ae91609aafa31939cedd6775cc5adafc4", null ],
     [ "get_pool", "namespaceMC.html#a6734cec020a2315d36542faad86c9125", null ],
-    [ "get_valid_value_or", "namespaceMC.html#a607ded472d094b72eaa4e7d0cc01bce0", null ],
     [ "impl_init", "namespaceMC.html#aabb3d28b6ac38413f8d34f525d26942f", null ],
     [ "init", "namespaceMC.html#a321fdcab9f09e8611b6f76b834d4ba4b", null ],
     [ "load_tuning_constant", "namespaceMC.html#a67a8a8fb99f617a67dd3702cd0f0b47f", null ],
