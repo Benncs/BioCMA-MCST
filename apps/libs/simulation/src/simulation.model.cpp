@@ -124,7 +124,7 @@ namespace Simulation
 
       // Uncoment this to avoid negative concentration especially when low
       // oxygen concentration
-      //  this->liquid_scalar->clearNegs();
+      this->liquid_scalar->clearNegs();
     }
     else
     {
