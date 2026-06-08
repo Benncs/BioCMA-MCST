@@ -101,6 +101,31 @@ namespace Simulation::KernelInline
                      + neighbors(i_compartment, left) * mask_do_serch;
     return ret;
   }
+
+  template <typename ViewType1>
+  void
+  find_flow(const ViewType1& leaving_flow,
+            const std::size_t position,
+            MC::LeavingFlow::float_type& val_flow,
+            MC::LeavingFlow::float_type& _liquid_volume)
+  {
+    std::size_t i_flow = 0;
+    const std::size_t n_flow = leaving_flow.size();
+    val_flow = 0.;
+    _liquid_volume = 0.;
+    // do-while because n_flow is likely to be 1
+    do
+    {
+      const auto& [index, flow, liquid_volume] = leaving_flow(i_flow++);
+      if (position == index)
+      {
+        val_flow = flow;
+        _liquid_volume = liquid_volume;
+        break;
+      }
+    } while (i_flow < n_flow);
+  }
+
   struct TagRNG
   {
   };
@@ -552,6 +577,7 @@ namespace Simulation::KernelInline
     //   }
     // }
     //
+    //
 
     // TODO Improvement 1D/3D:
     // Assumption: given leaving_flow is valid (i_flow < n_compartment)
@@ -568,37 +594,22 @@ namespace Simulation::KernelInline
       using mem_space = ComputeSpace::memory_space;
 
       const std::size_t position = positions(idx);
-      // const MC::LeavingFlowView<true>& leaving_flow = move.leaving_flow;
-      const std::size_t n_flow = leaving_flow.size();
-      // const auto rng1 = static_cast<float>(random(idx, index_random_leave));
 
       // Strategy:
       //  first find the value of leaving flow (0-> particle doesn´t leave)
       //  do-while +early break is ok as n_flow is likely <10
-      // second: calculate probability leaving, flow=0 => p=0 theres no need to
-      // check condition
-      std::size_t i_flow = 0;
-      double val_flow = 0.;
-      double _liquid_volume = 0.;
-
-      // do-while because n_flow is likely to be 1
-      do
-      {
-        const auto& [index, flow, liquid_volume] = leaving_flow(i_flow++);
-        if (position == index)
-        {
-          val_flow = flow;
-          _liquid_volume = liquid_volume;
-          break;
-        }
-      } while (i_flow < n_flow);
+      // second: calculate probability leaving, flow=0 => p=0 theres no need
+      // to check condition
+      MC::LeavingFlow::float_type found_flow_value = 0.;
+      MC::LeavingFlow::float_type found_liquid_volume = 0.;
+      find_flow(leaving_flow, position, found_flow_value, found_liquid_volume);
 
       int leave_mask = 0;
       // Cases
       // 0D: one flow and position always 0 then (val_flow != 0.) is always true
       // 3D: only for few particles
       //
-      if (val_flow != 0.)
+      if (found_flow_value != 0.)
       {
         auto gen = random_pool.get_state();
         const auto rng1 = gen.frand(0., 1.);
@@ -607,7 +618,7 @@ namespace Simulation::KernelInline
         KOKKOS_ASSERT(_liquid_volume > 0.);
         KOKKOS_ASSERT(val_flow > 0.);
         const bool p = probability_leaving<precision_tag>(
-            rng1, _liquid_volume, val_flow, d_t);
+            rng1, found_liquid_volume, found_flow_value, d_t);
 
         leave_mask = static_cast<int>(p);
         // DO this betore age is reset to 0
