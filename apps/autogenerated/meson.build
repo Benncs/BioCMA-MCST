@@ -44,7 +44,7 @@ conf_data = configuration_data(
     'enable_event_counter': 'true',
     'shrink_ratio': '0.1',
     'default_MC_buffer_ratio': default_MC_buffer_ratio,
-    '__f_compress_export__':'false',
+    '__f_compress_export__':'true',
     '__f_export_age__':'true',
     'default_particle_per_team_contributions':default_particle_per_team_contributions,
     'default_particle_per_team_cycle':default_particle_per_team_cycle,

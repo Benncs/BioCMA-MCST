@@ -31,7 +31,8 @@
 #endif
 
 #ifndef NDEBUG
-#  define VERBOSE_ERROR std::cerr << "Error LINE: " << __LINE__ << std::endl;
+#  define VERBOSE_ERROR                                                        \
+    std::cerr << "Global initializer Error line: " << __LINE__ << std::endl;
 #else
 #  define VERBOSE_ERROR
 #endif
@@ -361,7 +362,9 @@ namespace Core
   GlobalInitialiser::init_simulation(
       std::unique_ptr<MC::MonteCarloUnit> _unit,
       Simulation::ScalarInitializer&& scalar_init)
-  {
+  { // FIXME
+    validate_step(InitStep::Scalar);
+    validate_step(InitStep::MC);
     if (!check_steps(InitStep::Transitioner,
                      InitStep::InitState,
                      InitStep::Feed,
