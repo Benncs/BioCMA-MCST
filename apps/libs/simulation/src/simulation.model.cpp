@@ -49,66 +49,89 @@ namespace Simulation
     this->liquid_scalar->set_zero_contribs();
   }
 
+  namespace
+  {
+    void
+    set_scalar_feed(ScalarSimulation& scl, const Feed::FeedDescriptor& fd)
+    {
+
+      // Set for each scalar, i.e for each line of the sytem, F=C_feed*Q
+      for (auto [concentration, index] : fd.values)
+      {
+        scl.set_feed(index, fd.input_position, fd.flow * concentration);
+      }
+      if (fd.output_position)
+      {
+        scl.set_sink(*fd.output_position, fd.flow);
+      }
+    }
+
+  }
+
   // TODO check if really noexcept
   void
-  SimulationUnit::update_feed(const double t,
-                              const double d_t,
+  SimulationUnit::update_feed(const double d_t,
                               const bool update_scalar) noexcept
   {
     PROFILE_SECTION("host:update_feed")
-    // Get references to the index_leaving_flow and leaving_flow data members
 
-    auto set_scalar_feed
-        = [update_scalar](auto& scl, const Feed::FeedDescriptor& fd) -> void
+    bool relative_time = false;
+
+    const auto time = this->accesor.absolute_time();
+
+    KOKKOS_ASSERT(time >= 0);
+
+    auto update_feed_scalar
+        = [time, d_t, update_scalar](auto& scl, Feed::FeedDescriptor& fd)
     {
+      fd.update(time, d_t);
       if (update_scalar)
       {
-        // Set for each scalar, i.e for each line of the sytem, F=C_feed*Q
-        for (auto [concentration, index] : fd.values)
-        {
-          scl.set_feed(index, fd.input_position, fd.flow * concentration);
-        }
-        if (fd.output_position)
-        {
-          scl.set_sink(*fd.output_position, fd.flow);
-        }
+        set_scalar_feed(scl, fd);
       }
     };
 
     auto& liquid_scalar = *this->liquid_scalar;
     std::size_t mc_flow_counter = 0;
-    for (auto& feed : feed.liquid_feeds())
-    {
-      feed.update(t, d_t);
-      set_scalar_feed(liquid_scalar, feed);
-      if (feed.output_position.has_value())
-      {
-        const std::size_t output_position = *feed.output_position;
-        // this->mc_unit->domain.set_leaving_flow(
-        //     0, *feed.output_position, feed.flow);
-        // const auto volume =
-        // liquid_scalar.volume_span()[*feed.output_position];
-        const auto volume = liquid_scalar.volume_at(output_position);
-        KOKKOS_ASSERT(volume > 0.);
-        this->mc_unit->domain.set_leaving_flow(
-            mc_flow_counter, output_position, feed.flow, volume);
-        mc_flow_counter++;
-      }
-    }
+
+    std::ranges::for_each(
+        m_feed.liquid_feeds(),
+        [&](auto& feed)
+        {
+          update_feed_scalar(liquid_scalar, feed);
+
+          // MC update
+          if (feed.output_position.has_value())
+          {
+            const std::size_t output_position = *feed.output_position;
+            const auto volume = liquid_scalar.volume_at(output_position);
+            KOKKOS_ASSERT(volume > 0.);
+            this->mc_unit->domain.set_leaving_flow(
+                mc_flow_counter, output_position, feed.flow, volume);
+            mc_flow_counter++;
+          }
+        });
 
     if (is_two_phase_flow)
     {
       auto& gs = *this->gas_scalar;
-      for (auto& feed : feed.gas_feeds())
-      {
-        feed.update(t, d_t);
-        set_scalar_feed(gs, feed);
-      }
+      auto range_feed_gas = m_feed.gas_feeds();
+
+      std::ranges::for_each(range_feed_gas,
+                            [&update_feed_scalar, &gs](auto& feed)
+                            { update_feed_scalar(gs, feed); });
     }
   }
 
+  double
+  SimulationUnit::advance(double d_t) noexcept
+  {
+    this->m_times.advance(d_t);
+    return m_times.absolute();
+  }
+
   void
-  SimulationUnit::step(double d_t) const
+  SimulationUnit::ode_step(double d_t) const
   {
 
     if (is_two_phase_flow)

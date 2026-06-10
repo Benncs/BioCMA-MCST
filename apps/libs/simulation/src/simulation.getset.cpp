@@ -14,6 +14,7 @@
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
 #include <simulation/simulation_getter.hpp>
+#include <simulation/simulation_times.hpp>
 #include <stdexcept>
 
 namespace Simulation
@@ -45,19 +46,26 @@ namespace Simulation
     return a_->is_two_phase_flow;
   }
 
-  [[nodiscard]] double
-  Getter::start_time() const noexcept
+  double
+  Getter::absolute_time() const noexcept
   {
     assert(a_ != nullptr);
-    return a_->starting_time;
+    return a_->m_times.absolute();
   }
 
-  [[nodiscard]] double
-  Getter::endtime() const noexcept
-  {
-    assert(a_ != nullptr);
-    return a_->end_time;
-  }
+  // [[nodiscard]] double
+  // Getter::start_time() const noexcept
+  // {
+  //   assert(a_ != nullptr);
+  //   return a_->starting_time;
+  // }
+
+  // [[nodiscard]] double
+  // Getter::endtime() const noexcept
+  // {
+  //   assert(a_ != nullptr);
+  //   return a_->end_time;
+  // }
 
   [[nodiscard]] Dimensions
   Getter::getDimensions() const noexcept
@@ -77,7 +85,7 @@ namespace Simulation
   Getter::get_feed() const noexcept
   {
     assert(a_ != nullptr);
-    return a_->feed;
+    return a_->m_feed;
   }
 
   // Wrapper getter
@@ -135,6 +143,13 @@ namespace Simulation
     return std::ranges::subrange(a_->probes.cbegin(), a_->probes.cend());
   }
 
+  [[nodiscard]] const SimulatimeTimes&
+  Getter::times() const noexcept
+  {
+    assert(a_ != nullptr);
+    return a_->m_times;
+  }
+
 } // namespace Simulation
 
 namespace Simulation
@@ -146,6 +161,12 @@ namespace Simulation
   {
     return accesor;
   }
+
+  // [[nodiscard]] double&
+  // SimulationUnit::getCurrentTimeMut() noexcept
+  // {
+  //   return this->m_times.relative_time;
+  // }
 
   void
   SimulationUnit::setLogger(std::shared_ptr<IO::Logger> _logger)
@@ -181,16 +202,16 @@ namespace Simulation
     return this->liquid_scalar->get_device_concentration();
   }
 
-  void
-  SimulationUnit::setEndTime(double _end_time) noexcept
-  {
-    this->end_time = _end_time;
-  }
+  // void
+  // SimulationUnit::setEndTime(double _end_time) noexcept
+  // {
+  //   this->m_times.end_time = _end_time;
+  // }
 
   void
   SimulationUnit::overwriteStartTime(double _start_time) noexcept
   {
-    this->starting_time = _start_time;
+    this->m_times.starting_time = _start_time;
   }
 
   MC::kernelContribution

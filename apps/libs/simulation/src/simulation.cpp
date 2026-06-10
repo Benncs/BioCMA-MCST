@@ -31,10 +31,10 @@ namespace Simulation
       : accesor(this), mc_unit(std::move(other.mc_unit)),
         contribs_scatter(std::move(other.contribs_scatter)),
         probes(std::move(other.probes)), dims(std::move(other.dims)),
-        feed(std::move(other.feed)),
+        m_feed(std::move(other.m_feed)),
         const_number_simulation(other.const_number_simulation),
-        is_two_phase_flow(other.is_two_phase_flow),
-        starting_time(other.starting_time), end_time(other.end_time),
+        is_two_phase_flow(other.is_two_phase_flow), m_times(other.m_times),
+
         f_reaction(other.f_reaction),
         liquid_scalar(std::move(other.liquid_scalar)),
         gas_scalar(std::move(other.gas_scalar)),
@@ -48,8 +48,8 @@ namespace Simulation
                                  ScalarInitializer&& scalar_init,
                                  std::optional<Feed::SimulationFeed> _feed)
       : accesor(this), mc_unit(std::move(_unit)),
-        feed(_feed.value_or(Feed::SimulationFeed::empty())),
-        is_two_phase_flow(scalar_init.gas_flow), starting_time(0), end_time(0)
+        m_feed(_feed.value_or(Feed::SimulationFeed::empty())),
+        is_two_phase_flow(scalar_init.gas_flow)
   {
 
     this->liquid_scalar = std::make_shared<ScalarSimulation>(
@@ -69,7 +69,7 @@ namespace Simulation
     //  scalar_init is totally moved-from here at the very end of impl
     //  post_init_concentration
 
-    const std::size_t n_flows = this->feed.n_liquid_flow();
+    const std::size_t n_flows = m_feed.n_liquid_flow();
 
     mc_unit->domain.init_inner(n_flows);
 

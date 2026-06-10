@@ -1,16 +1,15 @@
 #include <Kokkos_Assert.hpp>
 #include <cmath>
+#include <iostream>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
 #include <stdexcept>
 #include <variant>
-
 #define CHECK_TYPE_VARIANT(__variant_arg__, __ref__type)                       \
   std::is_same_v<std::decay_t<decltype(__variant_arg__)>, __ref__type>
 
 namespace
 {
-
   struct updateDispacther
   {
     Simulation::Feed::FeedDescriptor& self;

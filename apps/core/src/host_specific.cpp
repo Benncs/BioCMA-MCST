@@ -78,9 +78,9 @@
 #  define DEBUG_INSTRUCTION
 #endif
 
-#define UPDATE_HYDRO_STEP(_current_time, _dt_)                                 \
+#define UPDATE_HYDRO_STEP(_current_time_, _dt_)                                \
   {                                                                            \
-    const auto new_current = d_transionner->advance(current_time, d_t);        \
+    const auto new_current = d_transionner->advance((_current_time_), (d_t));  \
     simulation.updateHydro(new_current);                                       \
     FILL_PAYLOAD;                                                              \
     MPI_DISPATCH_MAIN;                                                         \
@@ -215,7 +215,8 @@ namespace
     const auto [niter, dump_number, dump_interval] = get_n_interval(params);
     const double d_t = params.d_t;
     const auto n_iter_simulation = niter;
-    double current_time = getter.start_time();
+    // double current_time = getter.start_time();
+    // double& current_time = simulation.getCurrentTimeMut();
 
     // use ternary because ExportHandler doesnt provie assigment operator
     ExportHandler exporter_handler(
@@ -223,13 +224,14 @@ namespace
                         main_exporter, exec, dump_interval, n_iter_simulation)
                   : ExportHandler());
 
-    simulation.update_feed(0, 0);
     INIT_PAYLOAD
 
     if (do_export)
     {
-      exporter_handler.pre_post_export(current_time, getter, d_transionner);
+      exporter_handler.pre_post_export(
+          getter.absolute_time(), getter, d_transionner);
     }
+    simulation.update_feed(d_t);
 
 #ifndef NO_MPI
     MPI_Request req{};
@@ -240,11 +242,12 @@ namespace
 
       auto functors = simulation.init_functors<ComputeSpace>(
           local_container, exec.kernel_options);
-      UPDATE_HYDRO_STEP(current_time, d_t)
-
+      UPDATE_HYDRO_STEP(getter.absolute_time(), d_t)
+      auto current_time = getter.absolute_time();
       for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
            ++__loop_counter)
       {
+
         DEBUG_INSTRUCTION
 
         if (d_transionner->need_advance(current_time, d_t))
@@ -270,10 +273,10 @@ namespace
         sync_step(exec, simulation);
         {
           PROFILE_SECTION("host:sync_update")
-          simulation.update_feed(current_time, d_t);
-          simulation.step(d_t);
+          simulation.update_feed(d_t);
+          simulation.ode_step(d_t);
+          current_time = simulation.advance(d_t);
           // From here, contributions can be overwritten
-          current_time += d_t;
         }
 #ifndef NO_MPI
         sync_prepare_next(exec, simulation, &req);
@@ -311,13 +314,13 @@ namespace
 
     if (do_export)
     {
-      final_export(current_time,
+      final_export(getter.absolute_time(),
                    d_transionner,
                    simulation,
                    partial_exporter,
                    exporter_handler);
     }
-    simulation.setEndTime(current_time);
+
     // simulation.getter().get_end_time_mut() = current_time;
     // transitioner.reset();
   }

@@ -96,7 +96,7 @@ namespace SerDe
          dim,
          std::vector<double>(cliq.begin(), cliq.end()),
          cgas_a,
-         accessor.endtime());
+         accessor.absolute_time());
 
       ar(accessor.mc_unit());
     }

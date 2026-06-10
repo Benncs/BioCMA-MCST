@@ -615,8 +615,8 @@ namespace Simulation::KernelInline
         const auto rng1 = gen.frand(0., 1.);
         random_pool.free_state(gen);
 
-        KOKKOS_ASSERT(_liquid_volume > 0.);
-        KOKKOS_ASSERT(val_flow > 0.);
+        KOKKOS_ASSERT(found_liquid_volume > 0.);
+        KOKKOS_ASSERT(found_flow_value > 0.);
         const bool p = probability_leaving<precision_tag>(
             rng1, found_liquid_volume, found_flow_value, d_t);
 
