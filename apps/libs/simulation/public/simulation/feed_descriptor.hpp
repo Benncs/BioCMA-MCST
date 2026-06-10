@@ -108,6 +108,15 @@ namespace Simulation::Feed
                                    std::optional<std::size_t> _ouput_position
                                    = std::nullopt,
                                    bool set_output = true) noexcept;
+
+    static FeedDescriptor linear(double flow,
+                                 double df,
+                                 double concentration,
+                                 std::size_t species_index,
+                                 std::size_t input_position,
+                                 std::optional<std::size_t> _ouput_position
+                                 = std::nullopt,
+                                 bool set_output = true) noexcept;
   };
 
   class SimulationFeed

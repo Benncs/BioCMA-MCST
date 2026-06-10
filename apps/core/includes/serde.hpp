@@ -25,8 +25,9 @@ template <typename T = void>
 void
 do_serde(Core::CaseData& case_data)
 {
-  std::cout << "Serialization..." << std::endl;
+  std::cout << "Serialization...";
   SerDe::save_simulation(case_data);
+  std::cout << "Done" << std::endl;
 }
 
 template <typename T = void>

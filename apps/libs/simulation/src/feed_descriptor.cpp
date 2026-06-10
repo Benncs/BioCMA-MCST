@@ -111,6 +111,24 @@ namespace Simulation::Feed
                        set_output);
   }
 
+  FeedDescriptor
+  FeedFactory::linear(double flow,
+                      double df,
+                      double concentration,
+                      std::size_t species_index,
+                      std::size_t input_position,
+                      std::optional<std::size_t> _ouput_position,
+                      bool set_output) noexcept
+  {
+    return gen_factory(Linear{ .f0 = flow, .df = df },
+                       flow,
+                       concentration,
+                       species_index,
+                       input_position,
+                       _ouput_position,
+                       set_output);
+  }
+
   void
   SimulationFeed::add_feed(FeedDescriptor&& fd, Phase phase)
   {

@@ -141,40 +141,6 @@ namespace Api
     return ApiResult(); // TODO FIX ERROR
   }
 
-  // ApiResult
-  // SimulationInstance::set_feed_constant(double _flow,
-  //                                       double _concentration,
-  //                                       std::size_t _species,
-  //                                       std::size_t _position,
-
-  //                                       bool gas,
-  //                                       bool fed_batch)
-  // {
-  //   auto phase = gas ? Phase::Gas : Phase::Liquid;
-
-  //   auto constant_feed = Simulation::Feed::FeedFactory::constant(
-  //       _flow, _concentration, _species, _position, std::nullopt,
-  //       !fed_batch);
-  //   // Negates fed_batch because expect set_output wich is !fed_batch
-  //   return set_feed(constant_feed, phase);
-  // }
-
-  // ApiResult
-  // SimulationInstance::set_feed_constant_different_output(
-  //     double _flow,
-  //     double _concentration,
-  //     std::size_t _species,
-  //     std::size_t input_position,
-  //     std::size_t output_position,
-
-  //     bool gas)
-  // {
-  //   auto phase = gas ? Phase::Gas : Phase::Liquid;
-  //   auto constant_feed = Simulation::Feed::FeedFactory::constant(
-  //       _flow, _concentration, _species, input_position, output_position, true);
-  //   return set_feed(constant_feed, phase);
-  // }
-
   SimulationInstance::SimulationInstance(int argc,
                                          char** argv,
                                          std::optional<std::size_t> run_id)

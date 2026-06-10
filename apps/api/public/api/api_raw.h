@@ -33,6 +33,9 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT
   /*FFI Feed descritptor*/
   FeedHandle new_constant_feed_descriptor(double flow, uint64_t input_position);
 
+  FeedHandle
+  new_linear_feed_descriptor(double flow, double df, uint64_t input_position);
+
   int add_species(FeedHandle fh, double value, uint64_t i_species);
 
   int set_fedbatch(FeedHandle fh);
@@ -126,15 +129,6 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT
 
   int set_scalar_buffer(
       Handle, uint64_t rows, uint64_t cols, double* liquid, double* gas_ptr);
-
-  int set_feed_constant(Handle,
-                        double flow,
-                        double concentration,
-                        size_t species,
-                        size_t position,
-                        int output_position,
-                        int gas,
-                        int fed_batch);
 
   int add_feed_descriptor(Handle, FeedHandle, int gas);
 

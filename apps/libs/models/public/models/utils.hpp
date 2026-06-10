@@ -42,7 +42,7 @@ namespace Models
   // };
 
   template <FloatingPointType F>
-  static F consteval _get_phi_s_max(F density,
+  static F constexpr _get_phi_s_max(F density,
                                     F dl,
                                     F glucose_to_biomass_yield = 0.5)
   {
