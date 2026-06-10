@@ -53,8 +53,9 @@ namespace
 
     const auto value
         = Simulation::Feed::FeedValue{ concentration, species_index };
-
-    return { flow, { value }, input_position, _ouput_position, variant };
+    const bool use_relative_time = true;
+    return { flow,    { value },        input_position, _ouput_position,
+             variant, use_relative_time };
   }
 
   template <typename variant> struct typeDispatcher

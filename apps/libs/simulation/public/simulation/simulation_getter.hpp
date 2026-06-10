@@ -35,6 +35,7 @@ namespace Simulation
     [[nodiscard]] const SimulatimeTimes& times() const noexcept;
 
     [[nodiscard]] double absolute_time() const noexcept;
+    [[nodiscard]] double relative_time() const noexcept;
 
     [[nodiscard]] bool two_phase_flow() const noexcept;
     [[nodiscard]] Dimensions getDimensions() const noexcept;

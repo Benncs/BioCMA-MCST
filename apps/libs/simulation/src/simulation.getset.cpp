@@ -150,6 +150,13 @@ namespace Simulation
     return a_->m_times;
   }
 
+  [[nodiscard]] double
+  Getter::relative_time() const noexcept
+  {
+    assert(a_ != nullptr);
+    return a_->m_times.relative_time;
+  }
+
 } // namespace Simulation
 
 namespace Simulation

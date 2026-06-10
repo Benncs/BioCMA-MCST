@@ -74,16 +74,14 @@ namespace Simulation
                               const bool update_scalar) noexcept
   {
     PROFILE_SECTION("host:update_feed")
+    const auto rel_t = this->accesor.relative_time();
+    const auto abs_t = this->accesor.absolute_time();
 
-    bool relative_time = false;
-
-    const auto time = this->accesor.absolute_time();
-
-    KOKKOS_ASSERT(time >= 0);
-
-    auto update_feed_scalar
-        = [time, d_t, update_scalar](auto& scl, Feed::FeedDescriptor& fd)
+    auto update_feed_scalar =
+        [rel_t, abs_t, d_t, update_scalar](auto& scl, Feed::FeedDescriptor& fd)
     {
+      const auto time = fd.use_relative_time ? rel_t : abs_t;
+      KOKKOS_ASSERT(time >= 0);
       fd.update(time, d_t);
       if (update_scalar)
       {
