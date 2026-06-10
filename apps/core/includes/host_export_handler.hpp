@@ -35,8 +35,7 @@ public:
    * @return true if export sucess
    * data.
    */
-  bool operator()(double current_time,
-                  size_t loop_counter,
+  bool operator()(size_t loop_counter,
                   const Simulation::Getter& getter,
                   Core::PartialExporter& partial_exporter,
                   const CmaUtils::TransitionnerPtrType& transitioner);
@@ -54,9 +53,7 @@ public:
    * @param transitioner The flow map transitioner providing access to the
    * reactor state.
    */
-  void pre_post_export(double current_time,
-                       const Simulation::Getter& getter,
-
+  void pre_post_export(const Simulation::Getter& getter,
                        const CmaUtils::TransitionnerPtrType& transitioner);
 
 private:

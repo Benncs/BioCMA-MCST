@@ -125,15 +125,14 @@ namespace
   }
 
   void
-  final_export(const double current_time,
-               const CmaUtils::TransitionnerPtrType& d_transitionner,
+  final_export(const CmaUtils::TransitionnerPtrType& d_transitionner,
                const Simulation::SimulationUnit& simulation,
                Core::PartialExporter& partial_exporter,
                ExportHandler& exporter_handler)
   {
     const auto accesor = simulation.getter();
     const auto& mc_unit = accesor.mc_unit();
-    exporter_handler.pre_post_export(current_time, accesor, d_transitionner);
+    exporter_handler.pre_post_export(accesor, d_transitionner);
     // FIXME:
     // WARNING write_tally must be  BEFORE write_number_particle because
     // partial_exporter increase iteration counter after write_number_particle
@@ -157,7 +156,8 @@ host_process(std::shared_ptr<IO::Logger> logger,
              Core::PartialExporter& partial_exporter)
 {
   const auto getter = simulation.getter();
-  auto species_names = getter.mc_unit()->getSpeciesNames();
+  const auto& mc_unit = getter.mc_unit();
+  auto species_names = mc_unit->getSpeciesNames();
   const auto main_exporter
       = make_main_exporter(logger, exec, params, species_names);
 
@@ -168,7 +168,7 @@ host_process(std::shared_ptr<IO::Logger> logger,
                              n_species,
                              getter.two_phase_flow());
 
-  main_exporter->write_initial(getter.mc_unit()->init_weight, params);
+  main_exporter->write_initial(mc_unit->init_weight, params);
 
   PostProcessing::show_sumup_state(logger, getter);
 
@@ -195,6 +195,22 @@ host_process(std::shared_ptr<IO::Logger> logger,
 namespace
 {
 
+  ExportHandler
+  export_factory(bool do_export,
+                 const ExecInfo& exec,
+                 auto n_iter_simulation,
+                 auto dump_interval,
+                 std::shared_ptr<Core::MainExporter> main_exporter)
+  {
+
+    // use ternary because ExportHandler doesnt provie assigment operator
+    return do_export ? ExportHandler(std::move(main_exporter),
+                                     exec,
+                                     dump_interval,
+                                     n_iter_simulation)
+                     : ExportHandler();
+  }
+
   void
   main_loop(const std::shared_ptr<IO::Logger>& logger,
             const Core::SimulationParameters& params,
@@ -212,24 +228,17 @@ namespace
 
     const bool do_export = main_exporter != nullptr;
     const auto getter = simulation.getter();
-    const auto [niter, dump_number, dump_interval] = get_n_interval(params);
+    const auto [n_iter, dump_number, dump_interval] = get_n_interval(params);
     const double d_t = params.d_t;
-    const auto n_iter_simulation = niter;
-    // double current_time = getter.start_time();
-    // double& current_time = simulation.getCurrentTimeMut();
-
-    // use ternary because ExportHandler doesnt provie assigment operator
-    ExportHandler exporter_handler(
-        do_export ? ExportHandler(
-                        main_exporter, exec, dump_interval, n_iter_simulation)
-                  : ExportHandler());
+    auto exporter_handler
+        = export_factory(do_export, exec, n_iter, dump_interval, main_exporter);
+    const auto n_iter_simulation = n_iter;
 
     INIT_PAYLOAD
 
     if (do_export)
     {
-      exporter_handler.pre_post_export(
-          getter.absolute_time(), getter, d_transionner);
+      exporter_handler.pre_post_export(getter, d_transionner);
     }
     simulation.update_feed(d_t);
 
@@ -242,6 +251,7 @@ namespace
 
       auto functors = simulation.init_functors<ComputeSpace>(
           local_container, exec.kernel_options);
+
       UPDATE_HYDRO_STEP(getter.absolute_time(), d_t)
       auto current_time = getter.absolute_time();
       for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
@@ -260,11 +270,8 @@ namespace
         if (do_export)
         {
 
-          auto _ = exporter_handler(current_time,
-                                    __loop_counter,
-                                    getter,
-                                    partial_exporter,
-                                    d_transionner);
+          auto _ = exporter_handler(
+              __loop_counter, getter, partial_exporter, d_transionner);
           (void)_;
         }
 
@@ -314,11 +321,8 @@ namespace
 
     if (do_export)
     {
-      final_export(getter.absolute_time(),
-                   d_transionner,
-                   simulation,
-                   partial_exporter,
-                   exporter_handler);
+      final_export(
+          d_transionner, simulation, partial_exporter, exporter_handler);
     }
 
     // simulation.getter().get_end_time_mut() = current_time;
