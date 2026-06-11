@@ -1,3 +1,4 @@
+#include "simulation/simulation_exception.hpp"
 #include <Kokkos_Assert.hpp>
 #include <cmath>
 #include <iostream>
@@ -44,11 +45,22 @@ namespace
               std::size_t species_index,
               std::size_t input_position,
               std::optional<std::size_t> _ouput_position,
-              bool set_output) noexcept
+              bool set_output)
   {
     if (set_output && (!_ouput_position))
     {
       _ouput_position = input_position;
+    }
+
+    if (flow < 0.)
+    {
+      throw Simulation::FeedException(
+          Simulation::FeedExceptionError::NegativeFlow);
+    }
+    if (concentration <= 0.)
+    {
+      throw Simulation::FeedException(
+          Simulation::FeedExceptionError::NegativeConcentration);
     }
 
     const auto value
@@ -99,7 +111,7 @@ namespace Simulation::Feed
                         std::size_t species_index,
                         std::size_t input_position,
                         std::optional<std::size_t> _ouput_position,
-                        bool set_output) noexcept
+                        bool set_output)
   {
 
     return gen_factory(Constant{},
@@ -118,7 +130,7 @@ namespace Simulation::Feed
                       std::size_t species_index,
                       std::size_t input_position,
                       std::optional<std::size_t> _ouput_position,
-                      bool set_output) noexcept
+                      bool set_output)
   {
     return gen_factory(Linear{ .f0 = flow, .df = df },
                        flow,

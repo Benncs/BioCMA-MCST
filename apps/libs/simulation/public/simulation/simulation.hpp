@@ -21,6 +21,7 @@
 #include <simulation/mass_transfer.hpp>
 #include <simulation/probe.hpp>
 #include <simulation/scalar_initializer.hpp>
+#include <simulation/simulation_exception.hpp>
 #include <simulation/simulation_getter.hpp>
 #include <simulation/simulation_times.hpp>
 // TODO Clean

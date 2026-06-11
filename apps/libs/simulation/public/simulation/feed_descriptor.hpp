@@ -107,7 +107,7 @@ namespace Simulation::Feed
                                    std::size_t input_position,
                                    std::optional<std::size_t> _ouput_position
                                    = std::nullopt,
-                                   bool set_output = true) noexcept;
+                                   bool set_output = true);
 
     static FeedDescriptor linear(double flow,
                                  double df,
@@ -116,7 +116,7 @@ namespace Simulation::Feed
                                  std::size_t input_position,
                                  std::optional<std::size_t> _ouput_position
                                  = std::nullopt,
-                                 bool set_output = true) noexcept;
+                                 bool set_output = true);
   };
 
   class SimulationFeed

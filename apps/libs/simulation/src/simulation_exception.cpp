@@ -1,41 +1,69 @@
 #include <simulation/simulation_exception.hpp>
-
+#if defined(_MSC_VER) && !defined(__clang__)
+#  define _unreachable __assume(false);
+#else
+#  define _unreachable __builtin_unreachable();
+#endif
 namespace Simulation
 {
-  SimulationException::SimulationException(ErrorCodes code) : code_(code)
+  BaseSimulationException::BaseSimulationException(ErrorCodes code,
+                                                   std::source_location loc)
+      : code_(code), loc_(loc)
   {
-    msg = this->getMessage();
   }
 
-  [[nodiscard]] std::string
-  SimulationException::getMessage() const
+  [[nodiscard]] const char*
+  BaseSimulationException::what() const noexcept
   {
     switch (code_)
     {
     case ErrorCodes::BadConcentrationInitLiq:
-      return "Simulation::post_init_concentration User Defined Function for "
-             "liquid concentration leads to negative values\r\nPlease check "
-             "UDF "
-             "and restart";
-
+      return "Simulation: UDF liquid concentration returned negative values";
     case ErrorCodes::BadConcentrationInitGas:
-      return "Simulation::post_init_concentration User Defined Function for "
-             "gas concentration leads to negative values\r\nPlease check "
-             "UDF "
-             "and restart";
+      return "Simulation: UDF gas concentration returned negative values";
     case ErrorCodes::MismatchSizeVolume:
-      return "Simulation: Size of volume and number of compartment mismatch";
-    // default:
-    //   return "Error: Unknown error.";
+      return "Simulation: volume size does not match compartment count";
     case ErrorCodes::BadInitialiser:
-      return "Bad initialiser";
+      return "Simulation: bad initialiser";
     case ErrorCodes::MismatchSize:
-      return "post_init_concentration: Mismatch Size";
+      return "Simulation: concentration array size mismatch";
+    case ErrorCodes::Unknown:
+      return "Simulation: unknown error";
     }
-#if defined(_MSC_VER) && !defined(__clang__) // MSVC
-    __assume(false);
-#else // GCC, Clang
-    __builtin_unreachable();
-#endif
+    _unreachable
   }
+
+  [[nodiscard]] const std::source_location&
+  BaseSimulationException::where() const noexcept
+  {
+    return loc_;
+  }
+
+  FeedException::FeedException(FeedExceptionError code,
+                               std::source_location loc)
+      : code_(code), loc_(loc)
+  {
+  }
+
+  [[nodiscard]] const char*
+  FeedException::what() const noexcept
+  {
+    switch (code_)
+    {
+    case FeedExceptionError::NegativeFlow:
+      return "Feed: negative flow value";
+    case FeedExceptionError::NegativeConcentration:
+      return "Feed: negative concentration value";
+    case FeedExceptionError::OutofRange:
+      return "Feed: position out of range";
+    }
+    _unreachable
+  }
+
+  [[nodiscard]] const std::source_location&
+  FeedException::where() const noexcept
+  {
+    return loc_;
+  }
+
 } // namespace Simulation

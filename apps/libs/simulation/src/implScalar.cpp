@@ -157,7 +157,7 @@ namespace Simulation
   {
     if (volumes.size() != n_compartments)
     {
-      throw SimulationException(ErrorCodes::MismatchSizeVolume);
+      throw BaseSimulationException(ErrorCodes::MismatchSizeVolume);
     }
 
     this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(

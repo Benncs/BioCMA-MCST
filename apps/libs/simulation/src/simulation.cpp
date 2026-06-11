@@ -183,7 +183,7 @@ namespace Simulation
     }
     else
     {
-      throw SimulationException(ErrorCodes::BadConcentrationInitLiq);
+      throw BaseSimulationException(ErrorCodes::BadConcentrationInitLiq);
     }
 
     if (is_two_phase_flow)
@@ -194,7 +194,7 @@ namespace Simulation
       }
       else
       {
-        throw SimulationException(ErrorCodes::BadConcentrationInitGas);
+        throw BaseSimulationException(ErrorCodes::BadConcentrationInitGas);
       }
     }
   }
