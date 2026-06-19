@@ -121,10 +121,11 @@ namespace Simulation::Feed
 
   class SimulationFeed
   {
-  public:
-    std::optional<std::vector<FeedDescriptor>> liquid;
-    std::optional<std::vector<FeedDescriptor>> gas;
+  private:
+    std::optional<std::vector<FeedDescriptor>> m_liquid;
+    std::optional<std::vector<FeedDescriptor>> m_gas;
 
+  public:
     void add_liquid(FeedDescriptor&& fd);
 
     void add_gas(FeedDescriptor&& fd);
@@ -137,9 +138,9 @@ namespace Simulation::Feed
     auto
     liquid_feeds()
     {
-      if (liquid)
+      if (m_liquid)
       {
-        return std::ranges::subrange(liquid->begin(), liquid->end());
+        return std::ranges::subrange(m_liquid->begin(), m_liquid->end());
       }
       return std::ranges::subrange(std::vector<FeedDescriptor>::iterator(),
                                    std::vector<FeedDescriptor>::iterator());
@@ -148,9 +149,9 @@ namespace Simulation::Feed
     auto
     gas_feeds()
     {
-      if (gas)
+      if (m_gas)
       {
-        return std::ranges::subrange(gas->begin(), gas->end());
+        return std::ranges::subrange(m_gas->begin(), m_gas->end());
       }
       return std::ranges::subrange(std::vector<FeedDescriptor>::iterator(),
                                    std::vector<FeedDescriptor>::iterator());

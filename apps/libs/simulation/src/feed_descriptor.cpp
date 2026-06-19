@@ -1,10 +1,8 @@
-#include "simulation/simulation_exception.hpp"
 #include <Kokkos_Assert.hpp>
 #include <cmath>
-#include <iostream>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
-#include <stdexcept>
+#include <simulation/simulation_exception.hpp>
 #include <variant>
 #define CHECK_TYPE_VARIANT(__variant_arg__, __ref__type)                       \
   std::is_same_v<std::decay_t<decltype(__variant_arg__)>, __ref__type>
@@ -63,8 +61,7 @@ namespace
           Simulation::FeedExceptionError::NegativeConcentration);
     }
 
-    const auto value
-        = Simulation::Feed::FeedValue{ concentration, species_index };
+    const Simulation::Feed::FeedValue value{ concentration, species_index };
     const bool use_relative_time = true;
     return { flow,    { value },        input_position, _ouput_position,
              variant, use_relative_time };
@@ -144,16 +141,16 @@ namespace Simulation::Feed
   void
   SimulationFeed::add_feed(FeedDescriptor&& fd, Phase phase)
   {
-    auto& vec = phase == Phase::Liquid ? liquid : gas;
+    auto& vec = phase == Phase::Liquid ? m_liquid : m_gas;
     if (!vec)
     {
       vec = std::vector<FeedDescriptor>();
     }
     KOKKOS_ASSERT(fd.flow >= 0.);
 
-    vec->emplace_back(
-        move_allow_trivial(fd)); // Use move_allow_trivial in case
-                                 // FeedDescriptor become non trivial
+    // Use move_allow_trivial in case
+    // FeedDescriptor become non trivial
+    vec->emplace_back(move_allow_trivial(fd));
   }
 
   void
@@ -171,18 +168,21 @@ namespace Simulation::Feed
   std::size_t
   SimulationFeed::n_liquid_flow() const noexcept
   {
-    return (liquid) ? liquid->size() : 0;
+    return (m_liquid) ? m_liquid->size() : 0;
   }
   std::size_t
   SimulationFeed::n_gas_flow() const noexcept
   {
-    return (gas) ? liquid->size() : 0;
+    return (m_gas) ? m_liquid->size() : 0;
   }
 
   SimulationFeed
   SimulationFeed::empty() noexcept
   {
-    return { .liquid = std::nullopt, .gas = std::nullopt };
+    SimulationFeed s;
+    s.m_liquid = std::nullopt;
+    s.m_gas = std::nullopt;
+    return s;
   }
 
 } // namespace Simulation::Feed
