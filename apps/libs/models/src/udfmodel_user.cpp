@@ -74,6 +74,12 @@ namespace Models
     return UnsafeUDF::Loader::get_number();
   }
 
+  std::vector<std::string_view>
+  UdfModel::species()
+  {
+    return UnsafeUDF::Loader::species();
+  }
+
 } // namespace Models
 
 // #endif

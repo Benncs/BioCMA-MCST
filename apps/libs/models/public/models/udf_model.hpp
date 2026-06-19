@@ -53,6 +53,8 @@ namespace Models
 
     static std::vector<std::size_t> get_number();
 
+    static std::vector<std::string_view> species();
+
     static void set_nvar();
   };
   inline std::size_t UdfModel::n_var = 0; // Need to be overwritte

@@ -46,6 +46,14 @@ namespace UnsafeUDF
 
   std::vector<std::size_t> (*Loader::get_number)() = nullptr;
 
+  std::vector<std::string_view> (*Loader::species)() = nullptr;
+
+  std::vector<std::string_view>
+  default_species()
+  {
+    return {};
+  }
+
   [[nodiscard]] std::shared_ptr<DynamicLibrary>
   Loader::init_lib(std::string_view path)
   {
@@ -62,6 +70,9 @@ namespace UnsafeUDF
     Loader::mass = _mod._mass_udf_m;
     Loader::set_nvar_udf = _mod._set_nvar_udf_m;
     Loader::set_nc_udf = _mod._set_nc_udf_m;
+
+    Loader::species = _mod._species_udf_m != nullptr ? _mod._species_udf_m
+                                                     : default_species;
     Models::UdfModel::set_nvar();
     return _handle;
   }
