@@ -133,7 +133,7 @@ namespace Api
   {
     if (!feed.has_value())
     {
-      feed = Simulation::Feed::SimulationFeed{ std::nullopt, std::nullopt };
+      feed = Simulation::Feed::SimulationFeed::empty();
     }
 
     this->feed->add_feed(move_allow_trivial(feed_type), phase);
