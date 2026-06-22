@@ -14,6 +14,7 @@ var structModels_1_1UdfModel =
     [ "mass", "structModels_1_1UdfModel.html#ae66a58b99f015fe832755e157a31b535", null ],
     [ "names", "structModels_1_1UdfModel.html#afdf1202ba37e804ccd9d9042542dfbd4", null ],
     [ "set_nvar", "structModels_1_1UdfModel.html#a40f184391806cbc69d12ebcece03f825", null ],
+    [ "species", "structModels_1_1UdfModel.html#adc8062a1404cda6af936827627f61c26", null ],
     [ "update", "structModels_1_1UdfModel.html#a48b7dd24f89d27163564ef70045c1252", null ],
     [ "n_c", "structModels_1_1UdfModel.html#a0a219e264fb8e7816cf2759ed0c112af", null ],
     [ "n_var", "structModels_1_1UdfModel.html#af1e9f6da86666e27f1ecf5f7106ae888", null ],

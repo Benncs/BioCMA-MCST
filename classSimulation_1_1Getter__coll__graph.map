@@ -1,12 +1,14 @@
 <map id="Simulation::Getter" name="Simulation::Getter">
-<area shape="rect" id="Node000001" title=" " alt="" coords="51,19,177,44"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html" title=" " alt="" coords="336,99,511,124"/>
-<area shape="poly" id="edge2_Node000002_Node000001" title=" " alt="" coords="193,23,252,25,312,37,342,49,369,65,410,97,407,101,366,70,339,54,311,42,252,30,193,28"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="357,97,164,47,166,42,358,92"/>
-<area shape="rect" id="Node000003" href="$structSimulation_1_1Dimensions.html" title=" " alt="" coords="34,99,194,124"/>
-<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="209,109,335,109,335,114,209,114"/>
-<area shape="rect" id="Node000004" href="$classSimulation_1_1Feed_1_1SimulationFeed.html" title=" " alt="" coords="5,153,223,177"/>
-<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="238,148,311,136,374,122,376,127,312,142,239,153"/>
-<area shape="rect" id="Node000005" href="$classSimulation_1_1MassTransfer_1_1MassTransferModel.html" title=" " alt="" coords="29,202,199,240"/>
-<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="213,202,262,190,311,174,362,148,403,122,406,127,364,153,313,179,264,195,215,207"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="51,16,177,41"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1SimulationUnit.html" title=" " alt="" coords="336,123,511,147"/>
+<area shape="poly" id="edge2_Node000002_Node000001" title=" " alt="" coords="193,21,253,25,313,41,344,58,373,79,413,120,410,124,369,83,341,62,311,46,252,30,192,26"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="375,119,311,95,156,44,158,39,313,90,377,114"/>
+<area shape="rect" id="Node000003" href="$structSimulation_1_1Dimensions.html" title=" " alt="" coords="34,96,194,121"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="210,114,335,125,335,130,209,119"/>
+<area shape="rect" id="Node000004" href="$classSimulation_1_1Feed_1_1SimulationFeed.html" title=" " alt="" coords="5,149,223,174"/>
+<area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="238,155,311,149,342,145,343,151,312,154,238,160"/>
+<area shape="rect" id="Node000005" href="$structSimulation_1_1SimulatimeTimes.html" title=" " alt="" coords="18,203,210,227"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="225,200,311,181,357,164,397,146,399,150,359,169,312,186,226,205"/>
+<area shape="rect" id="Node000006" href="$classSimulation_1_1MassTransfer_1_1MassTransferModel.html" title=" " alt="" coords="29,252,199,290"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="213,255,263,243,310,224,340,206,368,185,409,146,412,150,371,189,343,211,313,229,264,248,215,261"/>
 </map>

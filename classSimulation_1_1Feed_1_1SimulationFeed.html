@@ -88,10 +88,10 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a75f042cf06f6ae549d7582c9af3ce65f" id="r_a75f042cf06f6ae549d7582c9af3ce65f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">SimulationFeed</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75f042cf06f6ae549d7582c9af3ce65f">empty</a> () noexcept</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:ad655c3d6bb22483afc919182f0344eaf" id="r_ad655c3d6bb22483afc919182f0344eaf"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; <a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad655c3d6bb22483afc919182f0344eaf">liquid</a></td></tr>
-<tr class="memitem:a54d0310a0adf8e236f56ed7ef6622ef1" id="r_a54d0310a0adf8e236f56ed7ef6622ef1"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; <a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54d0310a0adf8e236f56ed7ef6622ef1">gas</a></td></tr>
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ad7c6c3598b18ae752a17527413c0e834" id="r_ad7c6c3598b18ae752a17527413c0e834"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; <a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7c6c3598b18ae752a17527413c0e834">m_liquid</a></td></tr>
+<tr class="memitem:a62a8733bbd1c8b3fa0cf6007ca44bd21" id="r_a62a8733bbd1c8b3fa0cf6007ca44bd21"><td class="memItemLeft" align="right" valign="top">std::optional&lt; std::vector&lt; <a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a62a8733bbd1c8b3fa0cf6007ca44bd21">m_gas</a></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
 <a id="aa2b3eb808219ab3d905de3eac9e249d8" name="aa2b3eb808219ab3d905de3eac9e249d8"></a>
@@ -186,6 +186,11 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1Feed_1_1SimulationFeed_a75f042cf06f6ae549d7582c9af3ce65f_icgraph.svg" width="614" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -300,30 +305,46 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="a54d0310a0adf8e236f56ed7ef6622ef1" name="a54d0310a0adf8e236f56ed7ef6622ef1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a54d0310a0adf8e236f56ed7ef6622ef1">&#9670;&#160;</a></span>gas</h2>
+<a id="a62a8733bbd1c8b3fa0cf6007ca44bd21" name="a62a8733bbd1c8b3fa0cf6007ca44bd21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62a8733bbd1c8b3fa0cf6007ca44bd21">&#9670;&#160;</a></span>m_gas</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::optional&lt;std::vector&lt;<a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a>&gt; &gt; Simulation::Feed::SimulationFeed::gas</td>
+          <td class="memname">std::optional&lt;std::vector&lt;<a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a>&gt; &gt; Simulation::Feed::SimulationFeed::m_gas</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ad655c3d6bb22483afc919182f0344eaf" name="ad655c3d6bb22483afc919182f0344eaf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad655c3d6bb22483afc919182f0344eaf">&#9670;&#160;</a></span>liquid</h2>
+<a id="ad7c6c3598b18ae752a17527413c0e834" name="ad7c6c3598b18ae752a17527413c0e834"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7c6c3598b18ae752a17527413c0e834">&#9670;&#160;</a></span>m_liquid</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::optional&lt;std::vector&lt;<a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a>&gt; &gt; Simulation::Feed::SimulationFeed::liquid</td>
+          <td class="memname">std::optional&lt;std::vector&lt;<a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a>&gt; &gt; Simulation::Feed::SimulationFeed::m_liquid</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

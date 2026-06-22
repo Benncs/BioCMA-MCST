@@ -12,7 +12,7 @@ var namespaceModels =
     [ "Uptake", "structModels_1_1Uptake.html", "structModels_1_1Uptake" ],
     [ "UptakeDefault", "structModels_1_1UptakeDefault.html", "structModels_1_1UptakeDefault" ],
     [ "UptakeModel", "conceptModels_1_1UptakeModel.html", null ],
-    [ "_get_phi_s_max", "namespaceModels.html#aacffe777a75c70b9bdd3df39cb29cf44", null ],
+    [ "_get_phi_s_max", "namespaceModels.html#ae80db106a8e52a9ccdbc722fed5303df", null ],
     [ "almost_equal", "namespaceModels.html#a960cb54a05fd1b8376bd187b46297140", null ],
     [ "almost_zero", "namespaceModels.html#a907817a40054fa2632fb1302d54f0dce", null ],
     [ "c_linear_density", "namespaceModels.html#ae070357c43b64436202145d812e1e05c", null ],

@@ -7,14 +7,17 @@ var namespaceSimulation =
     ] ],
     [ "KernelInline", "namespaceSimulation_1_1KernelInline.html", "namespaceSimulation_1_1KernelInline" ],
     [ "MassTransfer", "namespaceSimulation_1_1MassTransfer.html", "namespaceSimulation_1_1MassTransfer" ],
+    [ "BaseSimulationException", "classSimulation_1_1BaseSimulationException.html", "classSimulation_1_1BaseSimulationException" ],
     [ "Dimensions", "structSimulation_1_1Dimensions.html", "structSimulation_1_1Dimensions" ],
     [ "EnvironementProperties", "structSimulation_1_1EnvironementProperties.html", "structSimulation_1_1EnvironementProperties" ],
+    [ "FeedException", "classSimulation_1_1FeedException.html", "classSimulation_1_1FeedException" ],
     [ "Getter", "classSimulation_1_1Getter.html", "classSimulation_1_1Getter" ],
     [ "Mixture", "classSimulation_1_1Mixture.html", "classSimulation_1_1Mixture" ],
     [ "Phase", "structSimulation_1_1Phase.html", "structSimulation_1_1Phase" ],
     [ "Probes", "classSimulation_1_1Probes.html", "classSimulation_1_1Probes" ],
     [ "ScalarInitializer", "structSimulation_1_1ScalarInitializer.html", "structSimulation_1_1ScalarInitializer" ],
     [ "ScalarSimulation", "classSimulation_1_1ScalarSimulation.html", "classSimulation_1_1ScalarSimulation" ],
+    [ "SimulatimeTimes", "structSimulation_1_1SimulatimeTimes.html", "structSimulation_1_1SimulatimeTimes" ],
     [ "SimulationException", "classSimulation_1_1SimulationException.html", "classSimulation_1_1SimulationException" ],
     [ "SimulationUnit", "classSimulation_1_1SimulationUnit.html", "classSimulation_1_1SimulationUnit" ],
     [ "Specie", "structSimulation_1_1Specie.html", "structSimulation_1_1Specie" ],
@@ -26,11 +29,17 @@ var namespaceSimulation =
     [ "ProbeIterator", "namespaceSimulation.html#a1636006890c86890e493f8aeaf900ec7", null ],
     [ "SpecieTable", "namespaceSimulation.html#a8a8043f8951284c90553aeb242416f4e", null ],
     [ "ErrorCodes", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bd", [
+      [ "Unknown", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bda88183b946cc5f0e8c96b2e66e1c74a7e", null ],
       [ "BadConcentrationInitLiq", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bdaab8d58e72483a0ad6bc6d000993cb04a", null ],
       [ "BadConcentrationInitGas", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bdabaf5b84ca77154d5e3258d24429ec242", null ],
       [ "BadInitialiser", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bdaea76fb02103cf3ff94efa52436f0d809", null ],
       [ "MismatchSize", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bda2dc1045efdb911eef2fc5132ae1020c1", null ],
       [ "MismatchSizeVolume", "namespaceSimulation.html#afaa7a23513f9da60616c09d2e09717bda6561e97a6a07364b61cda952b0a049a3", null ]
+    ] ],
+    [ "FeedExceptionError", "namespaceSimulation.html#afb1f6023a0300f1e35101a2567237d40", [
+      [ "NegativeFlow", "namespaceSimulation.html#afb1f6023a0300f1e35101a2567237d40a762cb025e7a97d504539afd49bec9eb1", null ],
+      [ "NegativeConcentration", "namespaceSimulation.html#afb1f6023a0300f1e35101a2567237d40a4e0fee2fc72d989fe79c21f40aa6ca97", null ],
+      [ "OutofRange", "namespaceSimulation.html#afb1f6023a0300f1e35101a2567237d40a0c096c2b863821c79dd3d03583456bc7", null ]
     ] ],
     [ "ProbeType", "namespaceSimulation.html#a3844f9fb0ce2978c66af04ff0a6eece6", [
       [ "LeavingTime", "namespaceSimulation.html#a3844f9fb0ce2978c66af04ff0a6eece6a5d4158e53cb4e4db894ba87313f46de3", null ],

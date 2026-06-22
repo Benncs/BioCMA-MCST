@@ -29,7 +29,10 @@ var hierarchy =
     [ "Simulation::MassTransfer::EquilibriumFunctor", "structSimulation_1_1MassTransfer_1_1EquilibriumFunctor.html", null ],
     [ "MC::EventContainer", "structMC_1_1EventContainer.html", null ],
     [ "std::exception", null, [
-      [ "Simulation::SimulationException", "classSimulation_1_1SimulationException.html", null ]
+      [ "Simulation::SimulationException", "classSimulation_1_1SimulationException.html", [
+        [ "Simulation::BaseSimulationException", "classSimulation_1_1BaseSimulationException.html", null ],
+        [ "Simulation::FeedException", "classSimulation_1_1FeedException.html", null ]
+      ] ]
     ] ],
     [ "ExecInfo", "structExecInfo.html", null ],
     [ "MC::Distributions::Exponential< F >", "structMC_1_1Distributions_1_1Exponential.html", null ],
@@ -103,6 +106,7 @@ var hierarchy =
     [ "SerdeModel", "structSerdeModel.html", null ],
     [ "Core::SignalHandler", "classCore_1_1SignalHandler.html", null ],
     [ "Models::SimpleAcetate", "structModels_1_1SimpleAcetate.html", null ],
+    [ "Simulation::SimulatimeTimes", "structSimulation_1_1SimulatimeTimes.html", null ],
     [ "Simulation::Feed::SimulationFeed", "classSimulation_1_1Feed_1_1SimulationFeed.html", null ],
     [ "Api::SimulationInstance", "structApi_1_1SimulationInstance.html", null ],
     [ "Core::SimulationParameters", "structCore_1_1SimulationParameters.html", null ],

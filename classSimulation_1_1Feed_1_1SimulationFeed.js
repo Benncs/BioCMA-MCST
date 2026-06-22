@@ -8,6 +8,6 @@ var classSimulation_1_1Feed_1_1SimulationFeed =
     [ "liquid_feeds", "classSimulation_1_1Feed_1_1SimulationFeed.html#a78cce7f33f1bdbb119b02aa78e4ca77e", null ],
     [ "n_gas_flow", "classSimulation_1_1Feed_1_1SimulationFeed.html#a72183d320ea791e9756670d2fedd23d0", null ],
     [ "n_liquid_flow", "classSimulation_1_1Feed_1_1SimulationFeed.html#a25cf9afc1a5111df47b299ebd4b6cf8f", null ],
-    [ "gas", "classSimulation_1_1Feed_1_1SimulationFeed.html#a54d0310a0adf8e236f56ed7ef6622ef1", null ],
-    [ "liquid", "classSimulation_1_1Feed_1_1SimulationFeed.html#ad655c3d6bb22483afc919182f0344eaf", null ]
+    [ "m_gas", "classSimulation_1_1Feed_1_1SimulationFeed.html#a62a8733bbd1c8b3fa0cf6007ca44bd21", null ],
+    [ "m_liquid", "classSimulation_1_1Feed_1_1SimulationFeed.html#ad7c6c3598b18ae752a17527413c0e834", null ]
 ];

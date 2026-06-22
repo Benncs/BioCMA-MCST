@@ -17,6 +17,7 @@ var namespaceSimulation_1_1KernelInline =
     [ "precision_tag", "namespaceSimulation_1_1KernelInline.html#abca8171ac403d55106511a251dca0e3a", null ],
     [ "__find_next_compartment", "namespaceSimulation_1_1KernelInline.html#a3fd8d8828a956f4420ac98126ddf427b", null ],
     [ "fill_random", "namespaceSimulation_1_1KernelInline.html#a0a987f5f49bd4923ea33364c44a5600e", null ],
+    [ "find_flow", "namespaceSimulation_1_1KernelInline.html#afc7d2de2dd527f1c8190aa15145d05b0", null ],
     [ "probability_leaving", "namespaceSimulation_1_1KernelInline.html#a648521674ead158dd3776a946da6722a", null ],
     [ "probability_leaving< fast_tag >", "namespaceSimulation_1_1KernelInline.html#ad465888b874fea5c0e8f9979dc490f94", null ],
     [ "_use_kokkos_log", "namespaceSimulation_1_1KernelInline.html#a44b083c689a8840645847ffbbfb0b53d", null ],

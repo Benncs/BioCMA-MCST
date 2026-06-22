@@ -1,9 +1,0 @@
-<map id="ExportHandler::pre_post_export" name="ExportHandler::pre_post_export">
-<area shape="rect" id="Node000001" title="Prepares and updates the exporter with the current simulation state before/after main loop." alt="" coords="5,68,137,107"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1Getter.html#a5018162385dda22e127a8298c2168a4b" title=" " alt="" coords="185,5,311,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,65,176,47,178,52,128,70"/>
-<area shape="rect" id="Node000003" href="$classSimulation_1_1Getter.html#affeda285daf139206d57e11daad9cd73" title=" " alt="" coords="185,68,311,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="137,85,169,85,169,90,137,90"/>
-<area shape="rect" id="Node000004" href="$classSimulation_1_1Getter.html#ae6be177c881989ecc4fb7a5ebdfbd9ff" title=" " alt="" coords="185,131,311,169"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="128,105,178,122,176,127,127,110"/>
-</map>

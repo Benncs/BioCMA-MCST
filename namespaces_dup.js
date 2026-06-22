@@ -16,7 +16,8 @@ var namespaces_dup =
     [ "EIGEN_DIAG_POP", "namespaceEIGEN__DIAG__POP.html", "namespaceEIGEN__DIAG__POP" ],
     [ "impl", "namespaceimpl.html", [
       [ "get_species_names_impl", "namespaceimpl.html#a4b658362afe7887c2a0aad8644cfb264", null ],
-      [ "get_species_names_impl", "namespaceimpl.html#a255f7e239c9c9e68681b36da5c32121d", null ]
+      [ "get_species_names_impl", "namespaceimpl.html#a255f7e239c9c9e68681b36da5c32121d", null ],
+      [ "iota_species", "namespaceimpl.html#a1f45dc038ed3e9152927bf0dd7a45576", null ]
     ] ],
     [ "IO", "namespaceIO.html", "namespaceIO" ],
     [ "KokkosEigen", "namespaceKokkosEigen.html", "namespaceKokkosEigen" ],

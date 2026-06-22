@@ -108,14 +108,17 @@ var annotated_dup =
         [ "MassTransferModel", "classSimulation_1_1MassTransfer_1_1MassTransferModel.html", "classSimulation_1_1MassTransfer_1_1MassTransferModel" ],
         [ "MassTransferProxy", "structSimulation_1_1MassTransfer_1_1MassTransferProxy.html", "structSimulation_1_1MassTransfer_1_1MassTransferProxy" ]
       ] ],
+      [ "BaseSimulationException", "classSimulation_1_1BaseSimulationException.html", "classSimulation_1_1BaseSimulationException" ],
       [ "Dimensions", "structSimulation_1_1Dimensions.html", "structSimulation_1_1Dimensions" ],
       [ "EnvironementProperties", "structSimulation_1_1EnvironementProperties.html", "structSimulation_1_1EnvironementProperties" ],
+      [ "FeedException", "classSimulation_1_1FeedException.html", "classSimulation_1_1FeedException" ],
       [ "Getter", "classSimulation_1_1Getter.html", "classSimulation_1_1Getter" ],
       [ "Mixture", "classSimulation_1_1Mixture.html", "classSimulation_1_1Mixture" ],
       [ "Phase", "structSimulation_1_1Phase.html", "structSimulation_1_1Phase" ],
       [ "Probes", "classSimulation_1_1Probes.html", "classSimulation_1_1Probes" ],
       [ "ScalarInitializer", "structSimulation_1_1ScalarInitializer.html", "structSimulation_1_1ScalarInitializer" ],
       [ "ScalarSimulation", "classSimulation_1_1ScalarSimulation.html", "classSimulation_1_1ScalarSimulation" ],
+      [ "SimulatimeTimes", "structSimulation_1_1SimulatimeTimes.html", "structSimulation_1_1SimulatimeTimes" ],
       [ "SimulationException", "classSimulation_1_1SimulationException.html", "classSimulation_1_1SimulationException" ],
       [ "SimulationUnit", "classSimulation_1_1SimulationUnit.html", "classSimulation_1_1SimulationUnit" ],
       [ "Specie", "structSimulation_1_1Specie.html", "structSimulation_1_1Specie" ]
