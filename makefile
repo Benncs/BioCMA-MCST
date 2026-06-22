@@ -1,7 +1,7 @@
 
 PWD=$(shell pwd)
-
 TARGET ?= model
+
 BUILD_DIR ?= builddir/test
 SRC_BD ?= apps/udf_model
 KOKKOS_FOLDER:=kokkos-5.1.1

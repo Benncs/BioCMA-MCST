@@ -1,4 +1,3 @@
-#include <Kokkos_CheckUsage.hpp>
 #include <optional>
 #include <scalar_init.hpp>
 #include <scalar_simulation.hpp>
