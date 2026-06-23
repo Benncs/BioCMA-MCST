@@ -2,7 +2,7 @@
 <area shape="rect" id="Node000001" title="simulation instance constructor" alt="" coords="5,24,165,62"/>
 <area shape="rect" id="Node000002" href="$namespaceApi.html#a43523f23b4fed2f495f0d6ca4e5aee32" title=" " alt="" coords="230,5,320,30"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,30,214,23,215,28,166,35"/>
-<area shape="rect" id="Node000003" href="$namespaceCore.html#ad98e98a441916916448cd3eb5c437bcf" title="Initializes the runtime environment based on command&#45;line arguments and simulation parameters." alt="" coords="213,55,337,79"/>
+<area shape="rect" id="Node000003" href="$namespaceCore.html#a6c6e4326211ab0c19ffd363b832f4927" title="Initializes the runtime environment based on command&#45;line arguments and simulation parameters." alt="" coords="213,55,337,79"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="166,50,198,55,197,60,165,56"/>
 <area shape="rect" id="Node000004" href="$namespaceWrapMPI.html#a1a08bbe69602ac2f4f38e1a0d45275cb" title=" " alt="" coords="585,31,704,55"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="324,51,385,40,481,35,570,36,570,41,482,40,385,46,324,57"/>

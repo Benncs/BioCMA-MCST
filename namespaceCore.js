@@ -16,5 +16,5 @@ var namespaceCore =
     [ "init_partial_exporter", "namespaceCore.html#afbce0beea293a7ccfdfc34a85b5e5e77", null ],
     [ "load", "namespaceCore.html#a877563df5a407318a381e12311022377", null ],
     [ "operator<<", "namespaceCore.html#a557be83a6ebe2681db77cbf4726f2c35", null ],
-    [ "runtime_init", "namespaceCore.html#ad98e98a441916916448cd3eb5c437bcf", null ]
+    [ "runtime_init", "namespaceCore.html#a6c6e4326211ab0c19ffd363b832f4927", null ]
 ];
