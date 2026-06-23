@@ -10,6 +10,18 @@
 
 namespace Simulation
 {
+
+  struct Sparam
+  {
+    bool f_reaction;
+
+    static Sparam
+    fdefault()
+    {
+      return { .f_reaction = true };
+    }
+  };
+
   class SimulationUnit;
   struct Dimensions;
 

@@ -41,23 +41,22 @@ namespace Core
   UserControlParameters
   UserControlParameters::m_default()
   {
-    return {
-      .biomass_initial_concentration = 0.1,
-      .final_time = 0,
-      .delta_time = 0.,
-      .number_particle = 1,
-      .n_thread = -1,
-      .number_exported_result = 0,
-      .force_override = false,
-      .load_serde = false,
-      .save_serde = false,
-      .uniform_mc_init = true,
-      .initialiser_path = "",
-      .model_name = "None",
-      .results_file_name = "",
-      .cma_case_path = "",
-      .serde_file = std::nullopt,
-    };
+    return { .biomass_initial_concentration = 0.1,
+             .final_time = 0,
+             .delta_time = 0.,
+             .number_particle = 1,
+             .n_thread = -1,
+             .number_exported_result = 0,
+             .force_override = false,
+             .load_serde = false,
+             .save_serde = false,
+             .uniform_mc_init = true,
+             .initialiser_path = "",
+             .model_name = "None",
+             .results_file_name = "",
+             .cma_case_path = "",
+             .serde_file = std::nullopt,
+             .f_reaction = true };
   }
 
   std::ostream&

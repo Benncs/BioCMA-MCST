@@ -1,6 +1,7 @@
 #ifndef __SIMULATIONS_UNIT_HPP__
 #define __SIMULATIONS_UNIT_HPP__
 
+#include "mixture/species_descriptor.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <biocma_cst_config.hpp>
@@ -53,7 +54,9 @@ namespace Simulation
 
     SimulationUnit(std::unique_ptr<MC::MonteCarloUnit>&& _unit,
                    ScalarInitializer&& scalar_init,
-                   std::optional<Feed::SimulationFeed> _feed = std::nullopt);
+                   std::optional<Feed::SimulationFeed> _feed,
+                   std::shared_ptr<Mixture::SpecieTable> table,
+                   Sparam params);
 
     ~SimulationUnit();
 
@@ -100,6 +103,8 @@ namespace Simulation
   private:
     std::unique_ptr<MC::MonteCarloUnit> mc_unit; // NOLINT
 
+    std::shared_ptr<Mixture::SpecieTable> m_table;
+
     void updateScalarHydro(const CmaUtils::IterationStatePtrType& newstate);
 
     void setLiquidFlow(CmaUtils::PreCalculatedHydroState* _flows_l);
@@ -117,7 +122,7 @@ namespace Simulation
 
     bool const_number_simulation = true;
     bool is_two_phase_flow;
-
+    bool f_reaction;
     // // Not used within calculation, only for export purposes
     // double starting_time;
     // // Not used within calculation, only for export purposes
@@ -125,7 +130,6 @@ namespace Simulation
 
     SimulatimeTimes m_times;
 
-    bool f_reaction = true; // FIXME
     void scatter_contribute();
     // void set_kernel_contribs_to_host();
 

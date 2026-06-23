@@ -43,7 +43,7 @@ template <typename S, typename T> struct Result : protected std::variant<S, T>
   }
 
   [[nodiscard]] auto
-  gets() const -> S
+  gets() -> S
   {
     if (!invalid())
     {

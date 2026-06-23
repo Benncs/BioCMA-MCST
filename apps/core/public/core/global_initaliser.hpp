@@ -6,6 +6,7 @@
 #include <common/execinfo.hpp>
 #include <common/logger.hpp>
 #include <core/scalar_factory.hpp>
+#include <core/simulation_builder.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
 #include <cstdint>
@@ -157,7 +158,7 @@ namespace Core
 
   private:
     void set_logger(std::shared_ptr<IO::Logger> _logger);
-
+    Core::SimulationUnitBuilder m_builder{};
     /**
      * @brief Enum to define initialization steps.
      *
@@ -263,9 +264,7 @@ namespace Core
     double t_per_flowmap{};
     // std::vector<size_t> worker_neighbor_data;
     bool f_init_gas_flow;
-    std::optional<Simulation::Feed::SimulationFeed> m_feed;
     std::shared_ptr<IO::Logger> m_logger;
-
     /////
 
     bool is_host; ///< Flag indicating if this instance is the host.
