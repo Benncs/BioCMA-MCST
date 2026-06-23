@@ -2,7 +2,7 @@
 <area shape="rect" id="Node000001" title=" " alt="" coords="601,55,720,79"/>
 <area shape="rect" id="Node000002" href="$namespaceWrapMPI.html#aadc3308a0cd9aa92fb555a4eb2f26c97" title=" " alt="" coords="419,5,541,30"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="597,53,527,33,529,28,599,47"/>
-<area shape="rect" id="Node000003" href="$namespaceCore.html#a6c6e4326211ab0c19ffd363b832f4927" title="Initializes the runtime environment based on command&#45;line arguments and simulation parameters." alt="" coords="224,28,348,53"/>
+<area shape="rect" id="Node000003" href="$namespaceCore.html#ae86a8a5e09a74787e58f4fc476788413" title="Initializes the runtime environment based on command&#45;line arguments and simulation parameters." alt="" coords="224,28,348,53"/>
 <area shape="poly" id="edge7_Node000001_Node000003" title=" " alt="" coords="586,64,348,47,349,42,586,59"/>
 <area shape="rect" id="Node000005" href="$classCore_1_1GlobalInitialiser.html#aa042e8d396a5287c49fb6a8b81eba209" title="Performs MPI broadcast for synchronization." alt="" coords="407,105,553,144"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="606,87,544,107,542,102,604,82"/>
