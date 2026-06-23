@@ -1,7 +1,7 @@
 project(
     'biocma_mcst',
     'cpp',
-    version: '1.2.0',
+    version: '1.2.1',
     meson_version: '>= 1.8.0',
     default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20', 'b_pch=false'],
 )
@@ -25,6 +25,12 @@ build_udf = get_option('build_udf')
 
 if not use_cuda and build_udf
     add_project_arguments('-DUSE_UDF', language: 'cpp')
+endif
+
+if use_cuda and build_udf
+    error(
+        'UDF model is not supported for CUDA build\r\nPlease reconfigure the project turning build_udf to false\r\nmeson setup builddir --reconfigure -Dbuild_udf=false',
+    )
 endif
 
 no_mpi_flag = '-DNO_MPI'
@@ -79,7 +85,7 @@ use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  
 
 ## Get buildtype specific options
 
-use_kokkos_tools = true
+use_kokkos_tools = get_option('use_kokkos_tools')
 CMAKE_TYPE = 'Release'
 if build_type == 'debug'
     # NOTHING
@@ -103,7 +109,6 @@ endif
 
 cpp_args = [arch_specific_args]
 if (use_kokkos_tools)
-    message('Kokkos tool enable')
     cpp_args = [cpp_args, '-DENABLE_KOKKOS_PROFILING']
 endif
 
@@ -181,7 +186,6 @@ endif
 kokkos_sampling = dependency('kokkos_sampling-1.0', required: true)
 # magic_enum= dependency('magic_enum', required: true)
 
-
 if build_udf
     dynlib_dep = dependency('dynlib-1.0', required: true)
 endif
@@ -251,4 +255,10 @@ _r = run_command('sh', '-c', f'ln -s @outdir@/compile_commands.json .', check: f
 subdir('tools')
 if not python_install
     meson.add_install_script('devutils/install_script.sh', result_dir)
+endif
+
+
+message('select model(s)',get_option('model_list_name'))
+if (use_kokkos_tools)
+    message('Kokkos tool enable')
 endif

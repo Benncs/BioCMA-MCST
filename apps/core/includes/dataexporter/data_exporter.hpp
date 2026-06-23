@@ -15,6 +15,25 @@
 #include <unordered_map>
 #include <variant>
 #include <vector>
+
+namespace
+{
+  template <typename MapType>
+  auto&
+  get_descriptor_impl(MapType& descriptors, std::string_view name)
+  {
+    try
+    {
+      return descriptors.at(std::string(name));
+    }
+    catch (const std::out_of_range&)
+    {
+      throw std::runtime_error(
+          IO::format("DataExporter: unknown matrix: ", name));
+    }
+  }
+}
+
 namespace Core
 {
 
@@ -24,7 +43,9 @@ namespace Core
   //   return std::string(filename) + "_partial_" + std::to_string(current_rank)
   //   + ".h5";
   // }
-  bool check_results_file_name(Core::UserControlParameters& params);
+  bool
+  fill_and_check_result_file_path(const std::shared_ptr<IO::Logger>& logger,
+                                  Core::UserControlParameters& params);
   /**
    * @class DataExporter
    * @brief A class responsible for exporting various types of data such as
@@ -110,6 +131,7 @@ namespace Core
     using simple_export_t = std::variant<size_t,
                                          std::string,
                                          std::vector<size_t>,
+                                         std::vector<std::string>,
                                          double,
                                          uint32_t>; ///< Simple export
                                                     ///< types
@@ -160,8 +182,27 @@ namespace Core
     export_metadata_kv metadata;
     uint64_t export_counter = 0;
 
+    const auto&
+    get_descriptor(std::string_view name) const
+    {
+      return get_descriptor_impl(m_descriptors, name);
+    };
+
+    auto&
+    get_descriptor_mut(std::string_view name)
+    {
+      return get_descriptor_impl(m_descriptors, name);
+    };
+
+    std::span<const std::size_t>
+    get_dim(std::string_view name) const
+    {
+      const auto& dims = get_descriptor(name).dims;
+      return dims;
+    }
+
   private:
-    std::unordered_map<std::string, MultiMatrixDescription> descriptors;
+    std::unordered_map<std::string, MultiMatrixDescription> m_descriptors;
     class impl;
     std::unique_ptr<impl> pimpl;
   };

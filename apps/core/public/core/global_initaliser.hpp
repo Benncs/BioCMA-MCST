@@ -247,7 +247,7 @@ namespace Core
     void mpi_broadcast(); ///< Method for handling MPI broadcast communication.
 
     ExecInfo info;
-    SimulationParameters params;
+    SimulationParameters m_params;
 
     UserControlParameters user_params;
 
@@ -255,18 +255,16 @@ namespace Core
     {
     };
     /////INNER STRUCT
-    // uint64_t particle_per_process;
-    std::vector<double> liquid_volume;
-    std::vector<double> gas_volume;
-    // CmaRead::Neighbors::Neighbors_const_view_t liquid_neighbors;
+    std::vector<double> m_liquid_volume;
+    std::vector<double> m_gas_volume;
 
-    std::vector<std::size_t> flat_neighobrs;
+    std::vector<std::size_t> m_flat_neighobrs;
 
     double t_per_flowmap{};
     // std::vector<size_t> worker_neighbor_data;
     bool f_init_gas_flow;
-    std::optional<Simulation::Feed::SimulationFeed> feed;
-    std::shared_ptr<IO::Logger> logger;
+    std::optional<Simulation::Feed::SimulationFeed> m_feed;
+    std::shared_ptr<IO::Logger> m_logger;
 
     /////
 

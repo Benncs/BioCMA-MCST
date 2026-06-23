@@ -227,10 +227,8 @@ namespace Models
 
     const auto current_a_e = GET_PROPERTY(particle_var::a_e);
     auto gen = random_pool.get_state();
-
     const double sigma = 0.2;
     const double average = Kokkos::log(current_a_e) - sigma * sigma / 2;
-
     const auto dist = MC::Distributions::LogNormal<double>(average, sigma);
     const auto gen1 = static_cast<FloatType>(dist.draw(gen));
     const auto gen2 = static_cast<FloatType>(dist.draw(gen));

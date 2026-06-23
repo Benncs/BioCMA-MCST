@@ -20,10 +20,12 @@
 
 void
 ExportHandler::pre_post_export(
-    const double current_time,
+
     const Simulation::Getter& getter,
     const CmaUtils::TransitionnerPtrType& transitioner)
 {
+
+  const auto current_time = getter.absolute_time();
   // Retrieve the current reactor state from the transitioner
   const auto& current_reactor_state = transitioner->get_current();
 
@@ -66,13 +68,12 @@ ExportHandler::ExportHandler(std::shared_ptr<Core::MainExporter> _main_exporter,
 }
 
 bool
-ExportHandler::operator()(double current_time,
-                          size_t loop_counter,
+ExportHandler::operator()(size_t loop_counter,
                           const Simulation::Getter& getter,
                           Core::PartialExporter& partial_exporter,
                           const CmaUtils::TransitionnerPtrType& transitioner)
 {
-
+  const auto current_time = getter.absolute_time();
   // Only proceed if the dump interval is reached
   if (++dump_counter != dump_interval)
   {

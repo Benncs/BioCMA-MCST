@@ -1,10 +1,8 @@
 #ifndef __KOKKOS_EIGEN_HPP__
 #define __KOKKOS_EIGEN_HPP__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-enum-enum-conversion"
+
 #include <Eigen/Core>
 #include <Eigen/Sparse>
-#pragma GCC diagnostic pop
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 #include <type_traits>
@@ -112,16 +110,6 @@ namespace KokkosEigen
 
     KokkosEigen2D& operator=(KokkosEigen2D&& rhs) noexcept = delete;
 
-    // KokkosEigen2D&
-    // operator=(KokkosEigen2D&& rhs) noexcept
-    // {
-    //   this->m_view = std::move(rhs.m_view);
-    //   this->m_eigen_map = eigen_map_type(m_view.view_host().data(),
-    //                                      static_cast<int>(rhs.n_row()),
-    //                                      static_cast<int>(rhs.n_col()));
-    //   return *this;
-    // };
-
     KokkosEigen2D(KokkosEigen2D&&) = delete;
     KokkosEigen2D(const KokkosEigen2D&) = delete;
     ~KokkosEigen2D() = default;
@@ -228,20 +216,38 @@ namespace KokkosEigen
   namespace Alias
   {
 
+    /** @brief Template type for eigen diagonal object
+
+    @tparam ftype template is the scalar type needs to be floating point type
+    */
     template <typename ftype>
       requires(std::is_floating_point_v<ftype>)
     using DiagonalType = Eigen::DiagonalMatrix<ftype, CompileMatrixSizeEigen>;
 
+    /** @brief Template type for eigen matrix object
+
+    @tparam Layout is the disired data layout (Kokkos::LayoutLeft or
+    LayoutRight)
+    @tparam ftype template is the scalar type needs to be floating point type
+    */
     template <typename Layout, typename ftype>
     using MatrixType = Eigen::Matrix<ftype,
                                      CompileMatrixSizeEigen,
                                      CompileMatrixSizeEigen,
                                      get_eigen_layout<Layout>()>;
 
+    /** @brief Template type for colmajor eigen matrix object
+
+    @tparam ftype template is the scalar type needs to be floating point type
+    */
     template <typename ftype>
       requires(std::is_floating_point_v<ftype>)
     using ColMajorMatrixtype = MatrixType<Kokkos::LayoutLeft, ftype>;
 
+    /** @brief Template type for  eigen sparse matrix object
+
+    @tparam ftype template is the scalar type needs to be floating point type
+    */
     template <typename Layout, typename ftype>
       requires(std::is_floating_point_v<ftype>)
     using SparseMatrixType

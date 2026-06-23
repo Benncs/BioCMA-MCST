@@ -16,9 +16,10 @@ namespace MC
   /** @brief Store position and value of volumic flow at outlet */
   struct LeavingFlow
   {
+    using float_type = double;
     std::size_t index;
-    double flow;
-    double volume;
+    float_type flow;
+    float_type volume;
   };
 
   /** @brief Structure to store information about domain needed during MC cycle

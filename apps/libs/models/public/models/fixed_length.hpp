@@ -15,14 +15,7 @@
 
 namespace Models
 {
-  // template <FloatingPointType F>
-  // static F consteval _get_phi_s_max(F density,
-  //                                   F dl,
-  //                                   F glucose_to_biomass_yield = 0.5)
-  // {
-  //   // dl and density must be same unit, dl*density -> mass and y is mass
-  //   yield return (dl * density) / glucose_to_biomass_yield;
-  // }
+
   struct FixedLength
   {
     using uniform_weight = std::true_type;
@@ -38,12 +31,11 @@ namespace Models
       __COUNT__
     };
 
-    static constexpr std::size_t n_var
-        = INDEX_FROM_ENUM(particle_var::__COUNT__);
+    MODEL_CONSTANT std::size_t n_var = INDEX_FROM_ENUM(particle_var::__COUNT__);
 
-    static constexpr std::size_t n_c = 1;
+    MODEL_CONSTANT std::size_t n_c = 1;
 
-    static constexpr std::string_view name = "fixed-length";
+    MODEL_CONSTANT std::string_view name = "fixed-length";
     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
     using SelfContribs = MC::ParticlesContribs<Self::n_c, Self::FloatType>;
 
@@ -102,6 +94,12 @@ namespace Models
     get_number()
     {
       return { INDEX_FROM_ENUM(particle_var::length) };
+    }
+
+    static std::vector<std::string_view>
+    species()
+    {
+      return { "S" };
     }
   };
 

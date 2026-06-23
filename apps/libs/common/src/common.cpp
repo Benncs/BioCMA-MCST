@@ -1,6 +1,7 @@
 #include <biocma_cst_config.hpp>
 #include <common/env_var.hpp>
 #include <common/execinfo.hpp>
+#include <common/kokkos_getpolicy.hpp>
 #include <string>
 std::string
 ExecInfo::get_version()
@@ -20,7 +21,7 @@ namespace Common
       return 1;
     }
 
-    KOKKOS_ASSERT(n_per_team % 2 == 0);
+    KOKKOS_ASSERT(is_power_of_2(n_per_team));
     KOKKOS_ASSERT(n_tot > n_per_team);
     return (n_tot + n_per_team - 1) / n_per_team;
   }

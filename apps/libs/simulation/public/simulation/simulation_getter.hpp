@@ -1,9 +1,11 @@
 #ifndef __SIMULATIONS_UNIT_GETTER_HPP__
 #define __SIMULATIONS_UNIT_GETTER_HPP__
+
 #include <mc/unit.hpp>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/probe.hpp>
+#include <simulation/simulation_times.hpp>
 #include <span>
 
 namespace Simulation
@@ -26,8 +28,15 @@ namespace Simulation
 
     ~Getter();
 
-    [[nodiscard]] double start_time() const noexcept;
-    [[nodiscard]] double endtime() const noexcept;
+    // [[nodiscard]] double start_time() const noexcept;
+    // [[nodiscard]] double endtime() const noexcept;
+    //
+
+    [[nodiscard]] const SimulatimeTimes& times() const noexcept;
+
+    [[nodiscard]] double absolute_time() const noexcept;
+    [[nodiscard]] double relative_time() const noexcept;
+
     [[nodiscard]] bool two_phase_flow() const noexcept;
     [[nodiscard]] Dimensions getDimensions() const noexcept;
 

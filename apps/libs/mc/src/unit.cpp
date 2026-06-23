@@ -1,18 +1,60 @@
+#include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Core_fwd.hpp>
 #include <Kokkos_ScatterView.hpp>
 #include <common/common.hpp>
 #include <cstdint>
 #include <cstring>
+#include <mc/alias.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
 #include <mc/unit.hpp>
 #include <models/config_loader.hpp>
+#include <species_name_extractor.hpp>
+#include <tuple>
 #include <type_traits>
 #include <utility>
 #include <variant>
 
+#define DETECT_MODEL_TYPE(__c__)                                               \
+  typename std::remove_reference<decltype(__c__)>::type::UsedModel;
+
 namespace
 {
+
+  /**
+   * Read value from env variable, set default if not present and check validat
+   * range (min/max)
+   **/
+  template <typename T>
+  T
+  read_env_valid_or(std::string_view varname,
+                    T vdefault,
+                    T min_value,
+                    T max_value)
+  {
+    const T tmp_value = Common::read_env_or(varname, vdefault);
+    if (tmp_value > min_value && tmp_value <= max_value)
+    {
+      return tmp_value;
+    }
+    return vdefault;
+  }
+
+  std::tuple<uint64_t, uint64_t>
+  select_bounds_compartment(const uint64_t n_compartments, bool uniform_init)
+  {
+    uint64_t min_c = 0;
+    uint64_t max_c = n_compartments;
+
+    if (!uniform_init)
+    {
+      min_c = 0;
+      max_c = 1;
+    }
+    return std::make_tuple(min_c, max_c);
+  }
+
   /**
    * @brief Functor to count the number of particles in each container.
    *
@@ -50,8 +92,6 @@ namespace
     operator()(const int i_particle) const
     {
       auto access_ = n_cells.access();
-      // access_(list._owned_data(i_particle).properties.current_container) +=
-      // 1;
       if (status(i_particle) == MC::Status::Idle)
       {
         access_(positions(i_particle)) += 1;
@@ -76,8 +116,9 @@ namespace
     operator()(const int i, double& local_mass) const
       requires(ConfigurableModel<Model>)
     {
-      particles.position(i) = rng.uniform_u(min_c, max_c);
+      // Needs config argument here
       Model::init(rng.random_pool, i, particles.model, config);
+      particles.position(i) = rng.uniform_u(min_c, max_c);
       const double mass_i = Model::mass(i, particles.model);
       local_mass += mass_i;
     }
@@ -87,8 +128,10 @@ namespace
     operator()(const int i, double& local_mass) const
       requires(NonConfigurableModel<Model>)
     {
-      particles.position(i) = rng.uniform_u(min_c, max_c);
+
+      // Config is not needed
       Model::init(rng.random_pool, i, particles.model);
+      particles.position(i) = rng.uniform_u(min_c, max_c);
       const double mass_i = Model::mass(i, particles.model);
       local_mass += mass_i;
     }
@@ -132,10 +175,23 @@ namespace MC
                       container);
   }
 
+  [[nodiscard]] std::vector<std::string>
+  MonteCarloUnit::getSpeciesNames() const
+  {
+    return std::visit(
+        [](const auto& c)
+        {
+          using T = DETECT_MODEL_TYPE(c);
+          return impl::get_species_names_impl<T>();
+        },
+        this->container);
+  }
+
   [[nodiscard]] std::vector<uint64_t>
   MonteCarloUnit::getRepartition() const
   {
-    if (domain.getNumberCompartments() == 1)
+    const auto n_compartment = domain.getNumberCompartments();
+    if (n_compartment == 1)
     {
       return { n_particle() };
     }
@@ -143,22 +199,31 @@ namespace MC
     // only while exporting. If ncells has to be known more often (id during
     // iteration), n_cell view can be allocated in mc_unit and incremented
     // during kernel using atomic.
-    Kokkos::View<uint64_t*, ComputeSpace> n_cells(
-        "n_cell", this->domain.getNumberCompartments());
-    Kokkos::Experimental::ScatterView<uint64_t*> sn_cells(n_cells);
+    Kokkos::View<uint64_t*, ComputeSpace> n_cells("n_cell", n_compartment);
+    // Kokkos::Experimental::ScatterView<uint64_t*, ComputeSpace> sn_cells(
+    //     n_cells);
+
+    auto sn_cells = Kokkos::Experimental::create_scatter_view(n_cells);
+
     std::visit(
         [&sn_cells](auto&& _container)
         {
+          // static_assert(Kokkos::SpaceAccessibility<
+          //                   decltype(sn_cells)::memory_space,
+          //                   typename decltype(
+          //                       _container.position)::memory_space>::accessible,
+          //               "Space accessiblity");
+
           Kokkos::parallel_for(
               "get_repartition",
-              _container.n_particles(),
+              Kokkos::RangePolicy<ComputeSpace>(0, _container.n_particles()),
               NcellFunctor(_container.position, _container.status, sn_cells));
         },
         container);
     Kokkos::Experimental::contribute(n_cells, sn_cells);
     auto host = Kokkos::create_mirror_view_and_copy(HostSpace(), n_cells);
 
-    std::vector<uint64_t> dist(n_cells.extent(0));
+    std::vector<uint64_t> dist(n_compartment);
     std::memcpy(dist.data(), host.data(), host.size() * sizeof(uint64_t));
 
     return dist;
@@ -169,16 +234,13 @@ namespace MC
                    double x0,
                    double total_mass)
   {
-    auto functor = [total_mass, x0, &unit](auto& container)
+    const auto total_liquid_volume = unit->domain.getTotalVolume();
+    KOKKOS_ASSERT(total_liquid_volume > 0.);
+    const double new_weight = (x0 * total_liquid_volume) / (total_mass);
+    KOKKOS_ASSERT(new_weight > 0);
+    auto functor = [new_weight](auto& container)
     {
-      // TODO
-
-      // const std::size_t n_p = container.n_particles();
-      const double new_weight
-          = (x0 * unit->domain.getTotalVolume()) / (total_mass);
-      KOKKOS_ASSERT(new_weight > 0);
-      using CurrentModel =
-          typename std::remove_reference<decltype(container)>::type::UsedModel;
+      using CurrentModel = DETECT_MODEL_TYPE(container);
       if constexpr (ConstWeightModelType<CurrentModel>)
       {
         Kokkos::deep_copy(container.weights, new_weight);
@@ -188,9 +250,8 @@ namespace MC
         static_assert(!ConstWeightModelType<CurrentModel>,
                       "Multiple weights Not implemented yet");
       }
-
-      unit->init_weight = new_weight;
     };
+    unit->init_weight = new_weight;
 
     std::visit(functor, unit->container);
   }
@@ -202,65 +263,46 @@ namespace MC
             AutoGenerated::ContainerVariant&& container,
             bool uniform_init)
   {
-    auto visitor = [&](auto&& container)
+
+    const auto n_compartments = unit.domain.getNumberCompartments();
+    const auto [min_c, max_c]
+        = select_bounds_compartment(n_compartments, uniform_init);
+
+    /*
+     * The mass of each cell in the reactor can be calculated after the model
+     * initialization. To ensure that each cell has a unique weight based on
+     * the total mass, the following formula is used:
+     * weight = XV / m_tot
+     * Where: XV represents a certain property or value related to the cell
+     * (e.g., volume, particle count, etc.). m_tot the total mass of the
+     * cell or reactor, which needs to be determined first.
+     *
+     * In order to compute the weight correctly, the initialization process
+     * needs to be split into two phases:
+     * 1. The first phase is to calculate the total mass of the cell (m_tot).
+     * 2. The second phase is to apply the newly calculated weight to the cell
+     * using the formula above.
+     *
+     * This split ensures that the mass is determined before the weight, as
+     * the weight is dependent on the total mass.
+     */
+    // Needs to reset min_c/max_c because of tuple deconstruction
+    auto visitor = [&, _min_c = min_c, _max_c = max_c](auto&& container)
     {
+      using CurrentModel = DETECT_MODEL_TYPE(container);
       auto rng = unit.rng;
-
-      const auto n_compartments = unit.domain.getNumberCompartments();
-      uint64_t min_c = 0;
-      uint64_t max_c = n_compartments;
-
-      if (!uniform_init)
-      {
-        min_c = 0;
-        max_c = 1;
-      }
-      /*
-       * The mass of each cell in the reactor can be calculated after the model
-       * initialization. To ensure that each cell has a unique weight based on
-       * the total mass, the following formula is used: weight = XV / m_tot
-       * Where: XV  - represents a certain property or value related to the cell
-       * (e.g., volume, particle count, etc.). m_tot - the total mass of the
-       * cell or reactor, which needs to be determined first.
-       *
-       * In order to compute the weight correctly, the initialization process
-       * needs to be split into two phases:
-       * 1. The first phase is to calculate the total mass of the cell (m_tot).
-       * 2. The second phase is to apply the newly calculated weight to the cell
-       * using the formula above.
-       *
-       * This split ensures that the mass is determined before the weight, as
-       * the weight is dependent on the total mass.
-       */
-      using CurrentModel =
-          typename std::remove_reference<decltype(container)>::type::UsedModel;
 
       if constexpr (PreInitModel<CurrentModel>)
       {
         CurrentModel::preinit();
       }
 
-      initialize_model(n_particles, container, min_c, max_c, rng, total_mass);
+      initialize_model(n_particles, container, _min_c, _max_c, rng, total_mass);
       Kokkos::fence();
     };
 
     std::visit(visitor, container);
     unit.container = std::move(container);
-  }
-
-  template <typename T>
-  T
-  get_valid_value_or(std::string_view varname,
-                     T vdefault,
-                     T min_value,
-                     T max_value)
-  {
-    T tmp_value = Common::read_env_or(varname, vdefault);
-    if (tmp_value > min_value && tmp_value <= max_value)
-    {
-      return tmp_value;
-    }
-    return vdefault;
   }
 
   RuntimeParameters
@@ -277,22 +319,22 @@ namespace MC
         AutoGenerated::MC::default_minimum_dead_particle_removal);
 
     const auto buffer_ratio
-        = get_valid_value_or("BIOMC_MC_BUFFER_RATIO",
-                             AutoGenerated::MC::default_MC_buffer_ratio,
-                             0.,
-                             1.);
+        = read_env_valid_or("BIOMC_MC_BUFFER_RATIO",
+                            AutoGenerated::MC::default_MC_buffer_ratio,
+                            0.,
+                            1.);
 
-    const auto allocation_factor = get_valid_value_or(
+    const auto allocation_factor = read_env_valid_or(
         "BIOMC_MC_ALLOC_FACTOR",
         AutoGenerated::MC::default_particle_container_allocation_factor,
         0.,
         max_alloc);
 
     const auto shink_ratio
-        = get_valid_value_or("BIOMC_MC_SHRINK_RATIO",
-                             AutoGenerated::MC::default_shink_ratio,
-                             0.,
-                             1.);
+        = read_env_valid_or("BIOMC_MC_SHRINK_RATIO",
+                            AutoGenerated::MC::default_shink_ratio,
+                            0.,
+                            1.);
     return { minimum_dead_particle_removal,
              buffer_ratio,
              allocation_factor,

@@ -1,9 +1,8 @@
-#include "common/console.hpp"
-#include "common/logger.hpp"
-#include "simulation/feed_descriptor.hpp"
 #include <api/api.hpp>
 #include <api/api_raw.h>
 #include <api/results.hpp>
+#include <common/console.hpp>
+#include <common/logger.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
 #include <cstdint>
@@ -12,6 +11,7 @@
 #include <iostream>
 #include <memory>
 #include <optional>
+#include <simulation/feed_descriptor.hpp>
 #include <span>
 #include <sstream>
 #include <string>
@@ -26,7 +26,7 @@ constexpr int ID_VERIF = 2025;
 int
 version_is_compatible(int major, int minor, int dev)
 {
-  return 0; // Api::version_is_compatible(major, minor, dev) ? 0 : -1;
+  return Api::version_is_compatible(major, minor, dev) ? 0 : -1;
 }
 
 FeedHandle
@@ -42,15 +42,28 @@ new_constant_feed_descriptor(double flow, uint64_t input_position)
   return fd;
 }
 
+FeedHandle
+new_linear_feed_descriptor(double flow, double df, uint64_t input_position)
+{
+  Simulation::Feed::FeedDescriptor* fd        // NOLINT
+      = new Simulation::Feed::FeedDescriptor; // NOLINT
+  fd->input_position = input_position;
+  fd->output_position = input_position;
+  fd->flow = 0.;
+  fd->extra = Simulation::Feed::Linear{ flow, df };
+
+  return fd;
+}
+
 int
-set_feed_descriptor(Handle handle, FeedHandle fd, int gas)
+add_feed_descriptor(Handle handle, FeedHandle fd, int gas)
 {
   const auto phase = gas != 0 ? Phase::Gas : Phase::Liquid;
   if (handle != nullptr)
   {
     if (fd != nullptr)
     {
-      return handle->set_feed(*fd, phase) ? 0 : -3;
+      return handle->add_feed(*fd, phase) ? 0 : -3;
     }
     return -2;
   }
@@ -377,54 +390,7 @@ register_parameters(Handle handle, Param* raw_params)
   return -1;
 }
 
-int
-set_feed_constant(Handle handle,
-                  double flow,
-                  double concentration,
-                  size_t species,
-                  size_t position,
-                  int output_position,
-                  int gas,
-                  int fed_batch)
-{
-  if (handle != nullptr)
-  {
-    FeedHandle fh = new_constant_feed_descriptor(flow, position);
-    add_species(fh, concentration, species);
-
-    if (output_position >= 0)
-    {
-      set_output_position(fh, output_position);
-    }
-    if (fed_batch != 0)
-    {
-      set_fedbatch(fh);
-    }
-
-    set_feed_descriptor(handle, fh, gas);
-
-    delete_constant_feed_descriptor(&fh);
-    // ApiResult res;
-
-    // // TODO check condition if output_position is <0 or ==0 ?
-    // const auto out_index = output_position < 0
-    //                            ? std::nullopt
-    //                            : std::make_optional(output_position);
-
-    // const auto phase = gas != 0 ? Phase::Gas : Phase::Liquid;
-    // // Negates fed_batch because expect set_output wich is !fed_batch
-    // const bool set_output = !(fed_batch != 0);
-
-    // const auto constant_feed = Simulation::Feed::FeedFactory::constant(
-    //     flow, concentration, species, position, out_index, set_output);
-    // res = handle->set_feed(constant_feed, phase);
-
-    // return res ? 0 : -1;
-  }
-  return -1;
-}
-
-// PArameters
+// Parameters
 
 void
 show_user_param(const wrap_c_param_t* params)

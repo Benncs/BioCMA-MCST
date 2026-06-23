@@ -40,6 +40,7 @@ namespace Core
      */
     MainExporter(const ExecInfo& info,
                  std::string_view _filename,
+                 const std::vector<std::string>& species_names,
                  std::optional<export_metadata_t> user_description
                  = std::nullopt);
 

@@ -2,6 +2,7 @@
 #define __BIO__EXT_MODULE_DEF__
 
 #include "Kokkos_Core_fwd.hpp"
+#include <string_view>
 #include <utility>
 #ifdef DECLARE_EXPORT_UDF
 #  include <dynlib/dyn_module.hpp>
@@ -61,6 +62,8 @@ namespace UnsafeUDF
 
     static std::vector<std::size_t> (*get_number)();
 
+    static std::vector<std::string_view> (*species)();
+
     // static std::vector<std::string> (*names)(); //< names function ptr
 
 #ifdef DECLARE_EXPORT_UDF
@@ -85,16 +88,21 @@ using get_config_udf_ptr = decltype(UnsafeUDF::Loader::get_config_udf);
 
 using division_udf_ptr
     = decltype(UnsafeUDF::Loader::division_udf); //< division function ptr type
-using mass_udf_ptr = decltype(UnsafeUDF::Loader::mass);
+using mass_udf_ptr
+    = decltype(UnsafeUDF::Loader::mass); //< mass function ptr type
 using set_nvar_udf_ptr
-    = decltype(UnsafeUDF::Loader::set_nvar_udf); //< division function ptr type
+    = decltype(UnsafeUDF::Loader::set_nvar_udf); //< nvar function ptr type
 
 using set_nc_udf_ptr
-    = decltype(UnsafeUDF::Loader::set_nc_udf); //< division function ptr type
+    = decltype(UnsafeUDF::Loader::set_nc_udf); //< nc function ptr type
 
-using names_udf_ptr = decltype(UnsafeUDF::Loader::names);
+using names_udf_ptr
+    = decltype(UnsafeUDF::Loader::names); //< names function ptr type
 using get_number_udf_ptr
     = decltype(UnsafeUDF::Loader::get_number); //< division function ptr type
+
+using species_udf_ptr
+    = decltype(UnsafeUDF::Loader::species); //< division function ptr type
 
 // clang-format off
 /**
@@ -110,6 +118,7 @@ DEFINE_MODULE(
               MODULE_ITEM(set_nvar_udf)
                 MODULE_ITEM(set_nc_udf)
               MODULE_ITEM(get_config_udf)
+              MODULE_ITEM(species_udf)
               )
 // clang-format on
 #endif

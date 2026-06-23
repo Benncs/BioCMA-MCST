@@ -111,19 +111,19 @@ workers_process([[maybe_unused]] std::shared_ptr<IO::Logger> logger,
   {
     sync_step(exec, simulation);
     sync_prepare_next(exec, simulation, &req);
-    simulation.update_feed(current_time, d_t, false);
+    simulation.update_feed(d_t, false);
     WrapMPI::Async::wait(req);
     simulation.cycleProcess(container, d_t, functors);
-    current_time += d_t;
+    current_time = simulation.advance(d_t);
   };
-
   const auto loop_functor = [&](auto&& container)
   {
-    auto functors = simulation.init_functors<ComputeSpace>(container);
+    auto functors = simulation.init_functors<ComputeSpace>(container,
+                                                           exec.kernel_options);
     // bool stop = false;
     WrapMPI::SIGNALS signal{};
 
-    double current_time = 0;
+    double current_time = getter.absolute_time();
     while (true)
     {
 

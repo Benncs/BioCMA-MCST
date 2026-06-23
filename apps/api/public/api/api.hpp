@@ -1,9 +1,9 @@
 #ifndef __BIOMC_API_HPP__
 #define __BIOMC_API_HPP__
 
-#include "common/logger.hpp"
 #include <api/results.hpp>
 #include <common/execinfo.hpp>
+#include <common/logger.hpp>
 #include <core/case_data.hpp>
 #include <core/scalar_factory.hpp>
 #include <core/simulation_parameters.hpp>
@@ -12,7 +12,6 @@
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
-#include <span>
 #include <string_view>
 #include <utility>
 
@@ -179,8 +178,7 @@ namespace Api
      */
     ApiResult register_model_name(std::string_view path);
 
-    ApiResult set_feed(Simulation::Feed::FeedDescriptor feed_variant,
-                       Phase phase = Phase::Liquid);
+    ApiResult add_feed(Simulation::Feed::FeedDescriptor feed_type, Phase phase);
 
     ApiResult set_mtr(Simulation::MassTransfer::Type::MtrTypeVariant&& variant);
 

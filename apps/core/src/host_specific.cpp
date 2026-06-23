@@ -78,9 +78,9 @@
 #  define DEBUG_INSTRUCTION
 #endif
 
-#define UPDATE_HYDRO_STEP(_current_time, _dt_)                                 \
+#define UPDATE_HYDRO_STEP(_current_time_, _dt_)                                \
   {                                                                            \
-    const auto new_current = d_transionner->advance(current_time, d_t);        \
+    const auto new_current = d_transionner->advance((_current_time_), (d_t));  \
     simulation.updateHydro(new_current);                                       \
     FILL_PAYLOAD;                                                              \
     MPI_DISPATCH_MAIN;                                                         \
@@ -100,7 +100,8 @@ namespace
   std::shared_ptr<Core::MainExporter>
   make_main_exporter(std::shared_ptr<IO::Logger> logger,
                      const ExecInfo& exec,
-                     const Core::SimulationParameters& params);
+                     const Core::SimulationParameters& params,
+                     const std::vector<std::string>& species_names);
 
   auto
   get_n_interval(const Core::SimulationParameters& params)
@@ -124,15 +125,14 @@ namespace
   }
 
   void
-  final_export(const double current_time,
-               const CmaUtils::TransitionnerPtrType& d_transitionner,
+  final_export(const CmaUtils::TransitionnerPtrType& d_transitionner,
                const Simulation::SimulationUnit& simulation,
                Core::PartialExporter& partial_exporter,
                ExportHandler& exporter_handler)
   {
     const auto accesor = simulation.getter();
     const auto& mc_unit = accesor.mc_unit();
-    exporter_handler.pre_post_export(current_time, accesor, d_transitionner);
+    exporter_handler.pre_post_export(accesor, d_transitionner);
     // FIXME:
     // WARNING write_tally must be  BEFORE write_number_particle because
     // partial_exporter increase iteration counter after write_number_particle
@@ -156,7 +156,10 @@ host_process(std::shared_ptr<IO::Logger> logger,
              Core::PartialExporter& partial_exporter)
 {
   const auto getter = simulation.getter();
-  const auto main_exporter = make_main_exporter(logger, exec, params);
+  const auto& mc_unit = getter.mc_unit();
+  auto species_names = mc_unit->getSpeciesNames();
+  const auto main_exporter
+      = make_main_exporter(logger, exec, params, species_names);
 
   const auto [n_species, n_compartment] = getter.getDimensions();
 
@@ -165,7 +168,7 @@ host_process(std::shared_ptr<IO::Logger> logger,
                              n_species,
                              getter.two_phase_flow());
 
-  main_exporter->write_initial(getter.mc_unit()->init_weight, params);
+  main_exporter->write_initial(mc_unit->init_weight, params);
 
   PostProcessing::show_sumup_state(logger, getter);
 
@@ -192,6 +195,22 @@ host_process(std::shared_ptr<IO::Logger> logger,
 namespace
 {
 
+  ExportHandler
+  export_factory(bool do_export,
+                 const ExecInfo& exec,
+                 auto n_iter_simulation,
+                 auto dump_interval,
+                 std::shared_ptr<Core::MainExporter> main_exporter)
+  {
+
+    // use ternary because ExportHandler doesnt provie assigment operator
+    return do_export ? ExportHandler(std::move(main_exporter),
+                                     exec,
+                                     dump_interval,
+                                     n_iter_simulation)
+                     : ExportHandler();
+  }
+
   void
   main_loop(const std::shared_ptr<IO::Logger>& logger,
             const Core::SimulationParameters& params,
@@ -209,39 +228,36 @@ namespace
 
     const bool do_export = main_exporter != nullptr;
     const auto getter = simulation.getter();
-    const auto [niter, dump_number, dump_interval] = get_n_interval(params);
+    const auto [n_iter, dump_number, dump_interval] = get_n_interval(params);
     const double d_t = params.d_t;
-    const auto n_iter_simulation = niter;
-    double current_time = getter.start_time();
+    auto exporter_handler
+        = export_factory(do_export, exec, n_iter, dump_interval, main_exporter);
+    const auto n_iter_simulation = n_iter;
 
-    // use ternary because ExportHandler doesnt provie assigment operator
-    ExportHandler exporter_handler(
-        do_export ? ExportHandler(
-                        main_exporter, exec, dump_interval, n_iter_simulation)
-                  : ExportHandler());
-
-    simulation.update_feed(0, 0);
     INIT_PAYLOAD
 
     if (do_export)
     {
-      exporter_handler.pre_post_export(current_time, getter, d_transionner);
+      exporter_handler.pre_post_export(getter, d_transionner);
     }
+    simulation.update_feed(d_t);
 
 #ifndef NO_MPI
     MPI_Request req{};
 #endif
-
     auto loop_functor = [&](auto&& local_container)
     {
       Core::SignalHandler sig;
 
-      auto functors = simulation.init_functors<ComputeSpace>(local_container);
-      UPDATE_HYDRO_STEP(current_time, d_t)
+      auto functors = simulation.init_functors<ComputeSpace>(
+          local_container, exec.kernel_options);
 
+      UPDATE_HYDRO_STEP(getter.absolute_time(), d_t)
+      auto current_time = getter.absolute_time();
       for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
            ++__loop_counter)
       {
+
         DEBUG_INSTRUCTION
 
         if (d_transionner->need_advance(current_time, d_t))
@@ -254,11 +270,8 @@ namespace
         if (do_export)
         {
 
-          auto _ = exporter_handler(current_time,
-                                    __loop_counter,
-                                    getter,
-                                    partial_exporter,
-                                    d_transionner);
+          auto _ = exporter_handler(
+              __loop_counter, getter, partial_exporter, d_transionner);
           (void)_;
         }
 
@@ -267,10 +280,10 @@ namespace
         sync_step(exec, simulation);
         {
           PROFILE_SECTION("host:sync_update")
-          simulation.update_feed(current_time, d_t);
-          simulation.step(d_t);
+          simulation.update_feed(d_t);
+          simulation.ode_step(d_t);
+          current_time = simulation.advance(d_t);
           // From here, contributions can be overwritten
-          current_time += d_t;
         }
 #ifndef NO_MPI
         sync_prepare_next(exec, simulation, &req);
@@ -308,13 +321,10 @@ namespace
 
     if (do_export)
     {
-      final_export(current_time,
-                   d_transionner,
-                   simulation,
-                   partial_exporter,
-                   exporter_handler);
+      final_export(
+          d_transionner, simulation, partial_exporter, exporter_handler);
     }
-    simulation.setEndTime(current_time);
+
     // simulation.getter().get_end_time_mut() = current_time;
     // transitioner.reset();
   }
@@ -322,19 +332,17 @@ namespace
   std::shared_ptr<Core::MainExporter>
   make_main_exporter(std::shared_ptr<IO::Logger> logger,
                      const ExecInfo& exec,
-                     const Core::SimulationParameters& params)
+                     const Core::SimulationParameters& params,
+                     const std::vector<std::string>& species_names)
   {
 
     const auto filename = IO::format(params.results_file_name, ".h5");
-    auto main_exporter = std::make_unique<Core::MainExporter>(exec, filename);
+    auto main_exporter
+        = std::make_unique<Core::MainExporter>(exec, filename, species_names);
 
     for (std::size_t i_rank = 0; i_rank < exec.n_rank; ++i_rank)
     {
-      // std::string group = "files/" + std::to_string(i_rank);
       auto group = IO::format("files/", std::to_string(i_rank));
-
-      // auto filename = params.results_file_name + "_partial_"
-      //                 + std::to_string(i_rank) + ".h5";
 
       auto filename = IO::format(
           params.results_file_name, "_partial_", std::to_string(i_rank), ".h5");

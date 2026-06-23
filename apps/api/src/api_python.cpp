@@ -1,3 +1,4 @@
+#include "simulation/feed_descriptor.hpp"
 #include <api/api.hpp>
 #include <api/api_raw.h>
 #include <common/console.hpp>
@@ -7,6 +8,7 @@
 #include <exception>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <pybind11/cast.h>
 #include <pybind11/detail/common.h>
 #include <pybind11/numpy.h>
@@ -15,6 +17,7 @@
 #include <pybind11/stl.h>
 #include <stdexcept>
 #include <string>
+#include <sys/select.h>
 #include <tuple>
 namespace py = pybind11;
 
@@ -234,11 +237,15 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       [](std::shared_ptr<Api::SimulationInstance>& handle,
          double flow,
          double concentration,
-         std::size_t _species,
-         std::size_t _position)
+         std::size_t species,
+         std::size_t position)
       {
-        return set_feed_constant(
-            handle.get(), flow, concentration, _species, _position, -1, 0, 0);
+        // in and out at same location
+        auto fd = Simulation::Feed::FeedFactory::constant(
+            flow, concentration, species, position, position, true);
+        auto rc = handle->add_feed(fd, Phase::Liquid);
+
+        return static_cast<bool>(rc);
       },
       py::arg("handle"),
       py::arg("flow"),
@@ -251,11 +258,16 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       [](std::shared_ptr<Api::SimulationInstance>& handle,
          double flow,
          double concentration,
-         std::size_t _species,
-         std::size_t _position)
+         std::size_t species,
+         std::size_t position)
       {
-        return set_feed_constant(
-            handle.get(), flow, concentration, _species, _position, -1, 0, 1);
+        // nullpot + false = fedbatch
+        auto fd = Simulation::Feed::FeedFactory::constant(
+            flow, concentration, species, position, std::nullopt, false);
+
+        auto rc = handle->add_feed(fd, Phase::Liquid);
+
+        return static_cast<bool>(rc);
       },
       py::arg("handle"),
       py::arg("flow"),
@@ -268,18 +280,20 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       [](std::shared_ptr<Api::SimulationInstance>& handle,
          double flow,
          double concentration,
-         std::size_t _species,
+         std::size_t species,
          std::size_t input_position,
          std::size_t output_position)
       {
-        return set_feed_constant(handle.get(),
-                                 flow,
-                                 concentration,
-                                 _species,
-                                 input_position,
-                                 static_cast<int>(output_position),
-                                 0,
-                                 0);
+        auto fd = Simulation::Feed::FeedFactory::constant(flow,
+                                                          concentration,
+                                                          species,
+                                                          input_position,
+                                                          output_position,
+                                                          true);
+
+        auto rc = handle->add_feed(fd, Phase::Liquid);
+
+        return static_cast<bool>(rc);
       },
       py::arg("handle"),
       py::arg("flow"),
@@ -296,16 +310,12 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
          std::size_t species,
          std::size_t position)
       {
-        constexpr int output_position = -1;
-        constexpr int gas = 1;
-        return set_feed_constant(handle.get(),
-                                 flow,
-                                 concentration,
-                                 species,
-                                 position,
-                                 output_position,
-                                 gas,
-                                 0);
+        // in and out at same location
+        auto fd = Simulation::Feed::FeedFactory::constant(
+            flow, concentration, species, position, position, true);
+        auto rc = handle->add_feed(fd, Phase::Gas);
+
+        return static_cast<bool>(rc);
       },
       py::arg("handle"),
       py::arg("flow"),
@@ -318,18 +328,20 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       [](std::shared_ptr<Api::SimulationInstance>& handle,
          double flow,
          double concentration,
-         std::size_t _species,
+         std::size_t species,
          std::size_t input_position,
          std::size_t output_position)
       {
-        return set_feed_constant(handle.get(),
-                                 flow,
-                                 concentration,
-                                 _species,
-                                 input_position,
-                                 static_cast<int>(output_position),
-                                 1,
-                                 0);
+        auto fd = Simulation::Feed::FeedFactory::constant(flow,
+                                                          concentration,
+                                                          species,
+                                                          input_position,
+                                                          output_position,
+                                                          true);
+
+        auto rc = handle->add_feed(fd, Phase::Gas);
+
+        return static_cast<bool>(rc);
       },
       py::arg("handle"),
       py::arg("flow"),
@@ -344,6 +356,30 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
         py::arg("n_species"),
         py::arg("liquid value"),
         py::arg("gas") = std::nullopt);
+
+  m.def(
+      "set_liquid_feed_linear_fed_batch",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         double flow,
+         double df,
+         double concentration,
+         std::size_t species,
+         std::size_t position)
+      {
+        // nullpot + false = fedbatch
+        auto fd = Simulation::Feed::FeedFactory::linear(
+            flow, df, concentration, species, position, std::nullopt, false);
+
+        auto rc = handle->add_feed(fd, Phase::Liquid);
+
+        return static_cast<bool>(rc);
+      },
+      py::arg("handle"),
+      py::arg("flow"),
+      py::arg("df"),
+      py::arg("concentration_value"),
+      py::arg("species"),
+      py::arg("position"));
 }
 
 /**

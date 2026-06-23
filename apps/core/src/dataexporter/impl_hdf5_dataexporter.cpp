@@ -1,5 +1,6 @@
-#include <stdexcept>
+
 #ifdef USE_HIGHFIVE
+#  include <Kokkos_Assert.hpp>
 #  include <chrono>
 #  include <common/common.hpp>
 #  include <cstddef>
@@ -13,6 +14,7 @@
 #  include <iomanip>
 #  include <span>
 #  include <sstream>
+#  include <stdexcept>
 #  include <string>
 #  include <string_view>
 #  include <type_traits>
@@ -33,6 +35,10 @@ namespace
   std::string date_time();
   std::string get_user_name();
   std::size_t get_chunk_size(std::size_t data_length);
+
+  Eigen::Map<Eigen::MatrixXd> mk_eigen_view(std::span<const double> values,
+                                            std::size_t n_row,
+                                            std::size_t n_col);
 
 } // namespace
 
@@ -116,7 +122,7 @@ namespace Core
                                         ? *user_description
                                         : "Interesting results";
 
-    metadata["file_version"] = 8; // NOLINT
+    metadata["file_version"] = 9; // NOLINT
     metadata["creation_date"] = date_time();
     metadata["author"] = get_user_name();
     metadata["description"] = description;
@@ -163,28 +169,18 @@ namespace Core
   {
     CHECK_PIMPL
 
+    auto ensure_conversion
+        = [](const std::vector<unsigned long long>& chunk_dims)
+    { return std::vector<hsize_t>(chunk_dims.begin(), chunk_dims.end()); };
+
     HighFive::DataSpace dataspace(description.dims, description.max_dims);
     HighFive::DataSetCreateProps props;
 
     if (description.chunk_dims.has_value())
     {
       auto chunk_dims = description.chunk_dims.value();
-      std::vector<hsize_t> _chunk_dims; // FIXME
-      _chunk_dims.reserve(chunk_dims.size());
-      for (auto&& i : chunk_dims)
-      {
-        _chunk_dims.push_back(i);
-      }
-
-      // FIXME
-      if (chunk_dims.size() != chunk_dims.size())
-      {
-        throw std::invalid_argument("prepare_matrix(HDF5): container and "
-                                    "chunkdimensions and  don´t match");
-      }
-
       props.add(HighFive::Shuffle());
-      props.add(HighFive::Chunking(_chunk_dims));
+      props.add(HighFive::Chunking(ensure_conversion(chunk_dims)));
     }
 
     if (description.compression)
@@ -200,7 +196,7 @@ namespace Core
     {
       pimpl->file->createDataSet<double>(description.name, dataspace, props);
     }
-    descriptors.emplace(description.name, description);
+    m_descriptors.emplace(description.name, description);
     pimpl->flush();
   }
 
@@ -237,16 +233,15 @@ namespace Core
                              uint64_t last_size)
   {
     CHECK_PIMPL
-    auto& descriptor = descriptors.at(std::string(name));
-
     auto dataset = pimpl->file->getDataSet(name.data());
+    const std::span<const std::size_t> dims = this->get_dim(name);
 
-    auto dims = descriptor.dims;
     // Following are explicit copy
-    auto new_size = dims;
-    auto select_start = dims;
-    auto select_size = dims;
+    std::vector<std::size_t> new_size(dims.begin(), dims.end());
+    std::vector<std::size_t> select_start = new_size;
+    std::vector<std::size_t> select_size = new_size;
     new_size[0] = last_size + data.size();
+    // TODO check if it is last_size -1 or not last_size
     select_start[0] = (last_size > 0) ? last_size - 1 : 0;
     select_size[0] = data.size();
     dataset.resize(new_size);
@@ -295,10 +290,9 @@ namespace Core
                              bool compress)
   {
     CHECK_PIMPL
+
     // Caution to Eigen layout
-    auto data = Eigen::Map<Eigen::MatrixXd>(const_cast<double*>(values.data()),
-                                            EIGEN_INDEX(n_row),
-                                            EIGEN_INDEX(n_col));
+    auto data = mk_eigen_view(values, n_row, n_col);
     HighFive::DataSetCreateProps ds_props;
     ds_props.add(HighFive::Chunking({ n_row, n_col }));
     ds_props.add(HighFive::Shuffle());
@@ -316,29 +310,16 @@ namespace Core
   {
     CHECK_PIMPL
 
-    std::vector<size_t> dims{};
-    try
-    {
-      auto& descriptor = descriptors.at(std::string(name));
-      dims = descriptor.dims;
-    }
-    catch (std::out_of_range& e)
-    {
-      throw std::runtime_error(
-          IO::format("DataExporter: unknown matrix: ", name));
-    }
+    const std::span<const std::size_t> dims = this->get_dim(name);
 
     auto dataset = pimpl->file->getDataSet(name.data());
+    const std::size_t dim0_time = export_counter;
+    std::vector<std::size_t> new_size(dims.begin(), dims.end());
+    std::vector<std::size_t> select_start(dims.size(), 0);
+    std::vector<std::size_t> select_size = new_size;
 
-    auto new_size = dims;
-    auto select_start = dims;
-    auto select_size = dims;
-    new_size[0] = (export_counter) + 1;
-    select_start[0] = export_counter;
-    for (auto i = 1UL; i < select_start.size(); ++i)
-    {
-      select_start[i] = 0;
-    }
+    new_size[0] = (dim0_time) + 1;
+    select_start[0] = dim0_time;
     select_size[0] = 1;
 
     dataset.resize(new_size);
@@ -414,6 +395,17 @@ namespace
       return 65536;
     }
     // NOLINTEND
+  }
+
+  Eigen::Map<Eigen::MatrixXd>
+  mk_eigen_view(std::span<const double> values,
+                const std::size_t n_row,
+                const std::size_t n_col)
+  {
+    KOKKOS_ASSERT(values.size() == n_row * n_col);
+    return { const_cast<double*>(values.data()),
+             EIGEN_INDEX(n_row),
+             EIGEN_INDEX(n_col) };
   }
 
 } // namespace

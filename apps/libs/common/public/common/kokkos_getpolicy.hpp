@@ -7,6 +7,13 @@
 
 namespace Common
 {
+
+  inline constexpr bool
+  is_power_of_2(std::size_t x)
+  {
+    return x != 0 && (x & (x - 1)) == 0;
+  }
+
   std::size_t c_league_size(std::size_t n_tot, std::size_t n_per_team) noexcept;
 
   template <typename Tag = void>

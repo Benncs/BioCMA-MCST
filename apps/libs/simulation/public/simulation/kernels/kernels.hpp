@@ -10,17 +10,11 @@
 #include <simulation/kernels/model_kernel.hpp>
 #include <simulation/kernels/move_kernel.hpp>
 
+#include <common/execinfo.hpp>
+#include <stdexcept>
+
 namespace Simulation::KernelInline
 {
-
-  struct DispatchOptions
-  {
-    bool f_multi_compartment;
-    std::size_t m_p_p_team_model;
-    std::size_t m_p_p_team_contribs;
-    std::size_t m_p_p_team_move;
-    std::size_t m_p_p_team_leave;
-  };
 
   template <typename Space>
   using cycle_reducer_view_type
@@ -48,15 +42,17 @@ namespace Simulation::KernelInline
 
     CycleFunctors() = default;
 
-    DispatchOptions m_options{};
+    KernelDispatchOptions m_options{};
+
+    bool f_multi_compartment;
 
     void
     update(const double d_t,
            MC::ParticlesContainer<Model> container,
            MC::DomainState<ComputeSpace>&& new_move)
     {
-      m_options.f_multi_compartment = new_move.liquid_volume.size() > 1;
-      const bool enable_move = m_options.f_multi_compartment;
+      f_multi_compartment = new_move.liquid_volume.size() > 1;
+      const bool enable_move = f_multi_compartment;
       const bool enable_leave = new_move.leaving_flow.size() != 0;
 
       // FIXME: cycle_kernel: need to update container because we change:
@@ -92,7 +88,7 @@ namespace Simulation::KernelInline
       return std::tuple(host_red, host_out_counter);
     }
 
-    CycleFunctors(DispatchOptions options,
+    CycleFunctors(KernelDispatchOptions options,
                   MC::ParticlesContainer<Model> container,
                   MC::pool_type _random_pool,
                   MC::KernelConcentrationType _concentrations,
@@ -131,6 +127,11 @@ namespace Simulation::KernelInline
       if (move_kernel.enable_move)
       {
         const auto npt = m_options.m_p_p_team_move;
+        if (n_particle <= npt)
+        {
+          // TODO
+          throw std::runtime_error("Nparticle<n per team");
+        }
 
         const std::size_t league_size = Common::c_league_size(n_particle, npt);
 
@@ -140,8 +141,8 @@ namespace Simulation::KernelInline
                                           Kokkos::AUTO(),
                                           Kokkos::AUTO());
 
-        cycle_policy.set_scratch_size(
-            0, Kokkos::PerTeam(sizeof(float_t) * npt * 2));
+        cycle_policy.set_scratch_size(0,
+                                      Kokkos::PerTeam(sizeof(float) * npt * 2));
 
         Kokkos ::parallel_for("cycle_move", cycle_policy, move_kernel);
       }
@@ -159,6 +160,12 @@ namespace Simulation::KernelInline
     void
     launch_model(const std::size_t n_particle) const
     {
+      if (n_particle <= m_options.m_p_p_team_model)
+      {
+        // TODO
+        throw std::runtime_error("Nparticle<n per team");
+      }
+
       std::size_t league_size
           = Common::c_league_size(n_particle, m_options.m_p_p_team_model);
 
@@ -182,12 +189,19 @@ namespace Simulation::KernelInline
 
       if (cycle_kernel.do_contribs())
       {
+
+        if (n_particle <= m_options.m_p_p_team_contribs)
+        {
+          // TODO
+          throw std::runtime_error("Nparticle<n per team");
+        }
+
         league_size
             = Common::c_league_size(n_particle, m_options.m_p_p_team_contribs);
         static_assert(ConstWeightModelType<Model>,
                       "ModelType:Constapply_weight()");
 
-        if (m_options.f_multi_compartment)
+        if (f_multi_compartment)
         {
 
           const auto policy_contribs
@@ -202,7 +216,7 @@ namespace Simulation::KernelInline
               = Kokkos::TeamPolicy<typename ContributionFunctor<Model>::Tag0D>(
                   model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
           policy_contribs.set_scratch_size(
-              0, Kokkos::PerTeam(sizeof(float_t) * Model::n_c));
+              0, Kokkos::PerTeam(sizeof(float) * Model::n_c));
           Kokkos::parallel_for(
               "cycle_model_contribs_0d", policy_contribs, contribution_kernel);
         }

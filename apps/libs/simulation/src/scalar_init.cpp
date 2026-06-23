@@ -1,4 +1,3 @@
-#include <Kokkos_CheckUsage.hpp>
 #include <optional>
 #include <scalar_init.hpp>
 #include <scalar_simulation.hpp>
@@ -13,7 +12,7 @@ namespace
   {
     if (input.size() != rows * cols)
     {
-      throw Simulation::SimulationException(
+      throw Simulation::BaseSimulationException(
           Simulation::ErrorCodes::MismatchSize);
     }
     std::vector<T> output(input.size());
@@ -96,7 +95,7 @@ namespace Simulation::impl
   {
     if (!scalar_init.liquid_buffer.has_value())
     {
-      throw SimulationException(ErrorCodes::BadInitialiser);
+      throw BaseSimulationException(ErrorCodes::BadInitialiser);
     }
     const std::size_t cols
         = scalar_init.liquid_buffer->size() / scalar_init.n_species;
@@ -120,14 +119,14 @@ namespace Simulation::impl
     // Keep this even though get_correct_layout_buffer already may throw
     if (!liquid_scalar->deep_copy_concentration(buffer))
     {
-      throw SimulationException(ErrorCodes::MismatchSize);
+      throw BaseSimulationException(ErrorCodes::MismatchSize);
     }
 
     if (is_two_phase_flow)
     {
       if (!scalar_init.gas_buffer.has_value())
       {
-        throw SimulationException(ErrorCodes::BadInitialiser);
+        throw BaseSimulationException(ErrorCodes::BadInitialiser);
       }
       // if (change_layout)
       // {
@@ -146,7 +145,7 @@ namespace Simulation::impl
 
       if (!gas_scalar->deep_copy_concentration(buffer))
       {
-        throw SimulationException(ErrorCodes::MismatchSize);
+        throw BaseSimulationException(ErrorCodes::MismatchSize);
       }
     }
   }

@@ -19,19 +19,21 @@ struct ModelExample
               // defined property and there get the right size
   };
 
+  // Number of exchanged species
+  static constexpr std::size_t n_c = 1;
   // n_var is needed, if using __COUNT__ this line does not have to be modified
   static constexpr std::size_t n_var = INDEX_FROM_ENUM(particle_var::__COUNT__);
-  static constexpr std::string_view name =
-      "example"; // Name is optional refers to model name
-
-  using uniform_weight =
-      std::true_type; //  Define this line if models works if unique weight, if
-                      //  each MCparticle has
+  // Name is optional refers to model name
+  static constexpr std::string_view name = "example";
+  //  Define this line if models works if unique weight, if  each MCparticle has
+  using uniform_weight = std::true_type;
   //  specific weight comment this line
   using Self = ModelExample; // Mandatory Type alias
   using FloatType = float;   // Mandatory Type alias
-  using SelfParticle =
-      MC::ParticlesModel<Self::n_var, Self::FloatType>; // Mandatory Type alias
+  using Config = std::nullopt_t;
+  // Mandatory Type alias
+  using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
+  using SelfContribs = MC::ParticlesModel<Self::n_c, Self::FloatType>;
 
   KOKKOS_INLINE_FUNCTION static void init(const MC::pool_type& random_pool,
                                           std::size_t idx,
@@ -45,6 +47,8 @@ struct ModelExample
          FloatType d_t,
          std::size_t idx,
          const SelfParticle& arr,
+         const SelfContribs& contribs_arr,
+         const std::size_t position_index,
          const MC::LocalConcentration& c);
 
   KOKKOS_INLINE_FUNCTION static void division(const MC::pool_type& random_pool,

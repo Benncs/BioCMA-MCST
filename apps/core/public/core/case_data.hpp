@@ -112,6 +112,7 @@ namespace Core
    */
   ExecInfo runtime_init(int argc,
                         char** argv,
+                        std::ostream& out_stream,
                         std::optional<std::size_t> force_run_id = std::nullopt);
 } // namespace Core
 

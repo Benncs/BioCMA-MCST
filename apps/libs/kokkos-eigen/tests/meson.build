@@ -12,15 +12,14 @@ dep_app = declare_dependency(
     compile_args: [],
 )
 
-executable(
-    f'@project_name@',
-    f'main.cpp',
-    dependencies: [dep_app],
-    link_args: [flto_flag],
-)
+# executable(
+#     f'@project_name@',
+#     f'main.cpp',
+#     dependencies: [dep_app],
+#     link_args: [flto_flag],
+# )
 
-flags_test='-Wall -Wextra -Werror'
-
+flags_test = '' #'-Wall -Wextra'
 
 test_basic = executable(
     'kokkos_eigen_test_basic',

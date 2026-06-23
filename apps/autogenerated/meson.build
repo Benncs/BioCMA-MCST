@@ -7,52 +7,56 @@ assert(version.length() == 3)
 default_particle_container_allocation_factor = '2.5'
 default_MC_buffer_ratio = '1'
 if use_cuda
-  default_particle_container_allocation_factor = '1.5'
-  default_MC_buffer_ratio = '0.6'
+    default_particle_container_allocation_factor = '1.5'
+    default_MC_buffer_ratio = '0.6'
 endif
-
 
 if use_cuda
-default_particle_per_team_contributions = 128
-default_particle_per_team_cycle=1024
+    default_particle_per_team_contributions = 128
+    default_particle_per_team_cycle = 1024
+    default_particle_per_team_moves = 1024
+    default_particle_per_team_leave = 0
 else
-default_particle_per_team_contributions=1024
-default_particle_per_team_cycle=1024
+    default_particle_per_team_contributions = 1024
+    default_particle_per_team_cycle = 1024
+    default_particle_per_team_moves = 1024
+    default_particle_per_team_leave = 0
 endif
 
-
 conf_data = configuration_data(
-  {
-    '_BIOMC_VERSION_MAJOR': version[0],
-    '_BIOMC_VERSION_MINOR': version[1],
-    '_BIOMC_VERSION_DEV': version[2],
-    'probe_buffer_size': '10e3',
-    '__f__redirect__': 'false',
-    '__f_verbose__': 'true',
-    'dump_particle_state': 'true',
-    'use_probe': 'false',
-    'const_number_simulation': 'false',
-    'default_particle_container_allocation_factor': default_particle_container_allocation_factor,
-    'MC_MAX_PARTICLE_BUFFER': '100e6',
-    'debug_MC_RAND_DEFAULT_SEED': '2024',
-    '_dead_particle_ratio_threshold': '0.01',
-    'cma_data_folder_path': '"cma_data"',
-    'enable_event_counter': 'true',
-    'shrink_ratio': '0.1',
-    'default_MC_buffer_ratio': default_MC_buffer_ratio,
-    '__f_compress_export__':'false',
-    '__f_export_age__':'true',
-    'default_particle_per_team_contributions':default_particle_per_team_contributions,
-    'default_particle_per_team_cycle':default_particle_per_team_cycle
-  },
+    {
+        '_BIOMC_VERSION_MAJOR': version[0],
+        '_BIOMC_VERSION_MINOR': version[1],
+        '_BIOMC_VERSION_DEV': version[2],
+        'probe_buffer_size': '10e3',
+        '__f__redirect__': 'false',
+        '__f_verbose__': 'true',
+        'dump_particle_state': 'true',
+        'use_probe': 'false',
+        'const_number_simulation': 'false',
+        'default_particle_container_allocation_factor': default_particle_container_allocation_factor,
+        'MC_MAX_PARTICLE_BUFFER': '100e6',
+        'debug_MC_RAND_DEFAULT_SEED': '2024',
+        '_dead_particle_ratio_threshold': '0.01',
+        'cma_data_folder_path': '"cma_data"',
+        'enable_event_counter': 'true',
+        'shrink_ratio': '0.1',
+        'default_MC_buffer_ratio': default_MC_buffer_ratio,
+        '__f_compress_export__': 'true',
+        '__f_export_age__': 'true',
+        'default_particle_per_team_contributions': default_particle_per_team_contributions,
+        'default_particle_per_team_cycle': default_particle_per_team_cycle,
+        'default_particle_per_team_move': default_particle_per_team_moves,
+        'default_particle_per_team_leave': default_particle_per_team_leave,
+    },
 )
 result_dir = get_option('result_dir_path')
 conf_data.set_quoted('result_dir_path', result_dir)
 conf_data.set_quoted('_BIOMC_BUILD_MODE', build_type)
 configure_file(
-  input: 'biocma_cst_config.hpp.in',
-  output: 'biocma_cst_config.hpp',
-  configuration: conf_data,
+    input: 'biocma_cst_config.hpp.in',
+    output: 'biocma_cst_config.hpp',
+    configuration: conf_data,
 )
 prog_python = find_program('python3')
 template_model_loader = meson.current_source_dir() + '/model_loader.cxx'
@@ -61,42 +65,41 @@ template_variant_model = meson.current_source_dir() + '/variant_model.hxx'
 
 arg_includ_py = ''
 if use_dynamic_module
-  arg_includ_py = '1'
+    arg_includ_py = '1'
 endif
 
 arg_udf = ''
 if not use_cuda and build_udf
-  arg_udf = '1'
+    arg_udf = '1'
 endif
 
-# model_list_name = ['two_meta','simple_model','two_meta_nb','fixed_length']
-model_list_name = ['fixed_length','simple_acetate']
+model_list_name = get_option('model_list_name')
 if not use_cuda and build_udf
-  model_list_name = [model_list_name, 'udf_model']
+    model_list_name = [model_list_name, 'udf_model']
 endif
 
 model_folder_root = f'@root@/apps/libs/models'
 
 generated_model_selection = custom_target(
-  'generated_model_selection.[ch]',
-  output: [
-    'wrap_init_model_selector.cpp',
-    'wrap_init_model_selector.hpp',
-    'variant_model.hpp',
-  ],
-  input: f'@root@/devutils/generate_model_loader.py',
-  command: [
-    prog_python,
-    '@INPUT@',
-    model_folder_root,
-    template_model_loader,
-    template_model_loader_header,
-    template_variant_model,
-    '@OUTPUT0@',
-    '@OUTPUT1@',
-    '@OUTPUT2@',
-    arg_includ_py,
-    arg_udf,
-    model_list_name,
-  ],
+    'generated_model_selection.[ch]',
+    output: [
+        'wrap_init_model_selector.cpp',
+        'wrap_init_model_selector.hpp',
+        'variant_model.hpp',
+    ],
+    input: f'@root@/devutils/generate_model_loader.py',
+    command: [
+        prog_python,
+        '@INPUT@',
+        model_folder_root,
+        template_model_loader,
+        template_model_loader_header,
+        template_variant_model,
+        '@OUTPUT0@',
+        '@OUTPUT1@',
+        '@OUTPUT2@',
+        arg_includ_py,
+        arg_udf,
+        model_list_name,
+    ],
 )

@@ -157,7 +157,7 @@ namespace Simulation
   {
     if (volumes.size() != n_compartments)
     {
-      throw SimulationException(ErrorCodes::MismatchSizeVolume);
+      throw BaseSimulationException(ErrorCodes::MismatchSizeVolume);
     }
 
     this->m_volumes.diagonal() = Eigen::Map<const Eigen::VectorXd>(
@@ -195,9 +195,11 @@ namespace Simulation
   {
 
     static_assert(Kokkos::SpaceAccessibility<
-                  decltype(contribs)::execution_space::memory_space,
-                  decltype(sources)::device_view_type::execution_space::
-                      memory_space>::accessible);
+                      decltype(contribs)::execution_space::memory_space,
+                      decltype(sources)::device_view_type::execution_space::
+                          memory_space>::accessible
+                  != 0U);
+
     Kokkos::deep_copy(sources.device_view(), contribs);
     sources.device_to_host_sync();
   }
@@ -265,8 +267,15 @@ namespace Simulation
   ScalarSimulation::clearNegs()
   {
 
-    using float_t = decltype(concentrations)::float_type;
-    constexpr float_t TOL = -1e-8;
+    using float_type = decltype(concentrations)::float_type;
+    // constexpr float_type TOL = -1e-8;
+    // order of magniture species to clip
+    constexpr float_type max_species_value = 5e-3;
+    // O(d_t)=1e-4
+    constexpr float_type scheme_relative_error = 1e-4;
+
+    constexpr float_type TOL = scheme_relative_error * max_species_value;
+
     using space = decltype(concentrations)::host_view_type::execution_space;
     auto hv = concentrations.host_view();
     Kokkos::parallel_for(
@@ -277,9 +286,9 @@ namespace Simulation
             { 0, 0 }, { n_r, n_c }),
         KOKKOS_LAMBDA(int i, int j) {
           const auto val = hv(i, j);
-          if (val < static_cast<float_t>(0) && val >= TOL)
+          if (val < static_cast<float_type>(0) && Kokkos::abs(val) < TOL)
           {
-            hv(i, j) = static_cast<float_t>(0);
+            hv(i, j) = static_cast<float_type>(0);
           }
         });
 

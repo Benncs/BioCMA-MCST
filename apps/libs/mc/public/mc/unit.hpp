@@ -55,6 +55,8 @@ namespace MC
 
     [[nodiscard]] std::vector<uint64_t> getRepartition() const;
 
+    [[nodiscard]] std::vector<std::string> getSpeciesNames() const;
+
     template <class Archive>
     void
     serialize(Archive& ar)

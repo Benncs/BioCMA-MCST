@@ -43,7 +43,7 @@ def generate_list_body(model_files: List[str]) -> str:
     return function_body
 
 
-def generate_selection_body(model_files: List[str]) -> str:
+def genrate_map_model_list(model_files: List[str]) -> str:
     body = ""
 
     map_elements = ", ".join(
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     includes = generate_includes(model_list_name)
     loader_body = generate_loader_body(model_list_name)
     # # list_body = generate_list_body(files)
-    map_selection = generate_selection_body(model_list_name)
+    map_selection = genrate_map_model_list(model_list_name)
 
     # # Generate the C++ file
     generate_cpp_file(
