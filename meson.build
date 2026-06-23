@@ -85,7 +85,7 @@ use_python_define = '-DUSE_PYTHON_MODULE' # Define flag to pass to compiler if  
 
 ## Get buildtype specific options
 
-use_kokkos_tools = true
+use_kokkos_tools = get_option('use_kokkos_tools')
 CMAKE_TYPE = 'Release'
 if build_type == 'debug'
     # NOTHING
@@ -109,7 +109,6 @@ endif
 
 cpp_args = [arch_specific_args]
 if (use_kokkos_tools)
-    message('Kokkos tool enable')
     cpp_args = [cpp_args, '-DENABLE_KOKKOS_PROFILING']
 endif
 
@@ -256,4 +255,10 @@ _r = run_command('sh', '-c', f'ln -s @outdir@/compile_commands.json .', check: f
 subdir('tools')
 if not python_install
     meson.add_install_script('devutils/install_script.sh', result_dir)
+endif
+
+
+message('select model(s)',get_option('model_list_name'))
+if (use_kokkos_tools)
+    message('Kokkos tool enable')
 endif

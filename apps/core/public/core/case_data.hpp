@@ -112,7 +112,8 @@ namespace Core
    */
   ExecInfo runtime_init(int argc,
                         char** argv,
-                        std::optional<std::size_t> force_run_id = std::nullopt);
+                        std::optional<std::size_t> force_run_id = std::nullopt,
+                        std::ostream& out_stream = std::cout);
 } // namespace Core
 
 #endif //!__CASE_DATA__HPP__

@@ -1,12 +1,23 @@
-option('use_dynamic_module', type: 'boolean', value: false)
+
+option('model_list_name',type:'array',value: ['fixed_length','simple_acetate'])
+
+# Kokkos
 option('use_cuda', type: 'boolean', value: false)
 option('use_system_kokkos', type: 'boolean', value: false)
-option('python_install',type: 'boolean',value:false)
-option('use_cereal',type: 'boolean',value:true)
-option('compile_tools',type: 'boolean',value:false)
-option('ci_execution',type: 'boolean',value:false)
+option('use_kokkos_tools',type:'boolean',value:true)
+
+# Targets
+option('build_udf', type : 'boolean', value : false)
 option('build_test',type: 'boolean',value:false)
 option('build_c_api',type: 'boolean',value:true)
 option('build_python_api',type: 'boolean',value:true)
+
+# Dependencies
+option('use_cereal',type: 'boolean',value:true)
+
+# Misc
+option('ci_execution',type: 'boolean',value:false)
+option('python_install',type: 'boolean',value:false)
 option('result_dir_path', type : 'string', value : './results/', yield : true)
-option('build_udf', type : 'boolean', value : false)
+option('use_dynamic_module', type: 'boolean', value: false) # deprecated
+option('compile_tools',type: 'boolean',value:false) # deprecated

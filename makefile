@@ -88,6 +88,7 @@ LDFLAGS := \
     $(BUILD_DIR)/apps/libs/mc/libbiocma_mcst_mc.a \
     $(BUILD_DIR)/apps/libs/common/libbiocma_mcst_common.a \
     /usr/lib/x86_64-linux-gnu/libhwloc.so \
+    -ldl \
     -Wl,--end-group \
     -flto \
     -fPIC   \
