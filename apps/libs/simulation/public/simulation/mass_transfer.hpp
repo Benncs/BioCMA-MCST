@@ -3,6 +3,7 @@
 
 #include <cma_utils/alias.hpp>
 #include <memory>
+#include <mixture/species_descriptor.hpp>
 #include <variant>
 #include <vector>
 
@@ -54,6 +55,7 @@ namespace Simulation::MassTransfer
   {
   public:
     explicit MassTransferModel(
+        const Mixture::SpecieTable& species,
         MassTransfer::Type::MtrTypeVariant _type,
         std::shared_ptr<Simulation::ScalarSimulation> _liquid_scalar,
         std::shared_ptr<Simulation::ScalarSimulation> _gas_scalar);
