@@ -210,21 +210,6 @@ namespace Simulation
     return concentrations.device_view_cst();
   }
 
-  // void
-  // ScalarSimulation::reduce_contribs(std::span<const double> data)
-  // {
-  //   assert(data.size() == (n_c * n_r));
-  //   using eigen_map_type = decltype(sources)::eigen_map_type;
-
-  //   sources.eigen().noalias() += eigen_map_type(
-  //       const_cast<double*>(data.data()), EIGEN_INDEX(n_r),
-  //       EIGEN_INDEX(n_c));
-
-  //   // sources.eigen_data.noalias() += Eigen::Map<eigen_type>(
-  //   //     const_cast<double*>(data.data()), EIGEN_INDEX(n_r),
-  //   //     EIGEN_INDEX(n_c));
-  // }
-
   void
   ScalarSimulation::performStepGL(
       double d_t,
@@ -295,7 +280,6 @@ namespace Simulation
     // concentrations.update_host_to_compute();
     concentrations.host_to_device_sync();
   }
-
   bool
   ScalarSimulation::deep_copy_concentration(const std::vector<double>& data)
   {

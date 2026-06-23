@@ -72,6 +72,7 @@ namespace PythonBindings
       -> std::tuple<bool, std::string>
   {
     handle->set_auto_mtr(); // FIXME
+
     std::cerr << "Set auto mtr for PythonBindings" << std::endl;
     auto rc = handle->apply(to_load);
 

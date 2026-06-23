@@ -1,5 +1,6 @@
 
 
+#include "mixture/species_descriptor.hpp"
 #ifdef USE_CEAREAL
 #  include <cereal/archives/binary.hpp>
 #  include <cereal/archives/xml.hpp>
@@ -78,6 +79,7 @@ namespace SerDe
          case_data.exec_info);
       auto dim = accessor.getDimensions();
       auto cliq = accessor.getCliqData();
+      auto t = case_data.simulation->table();
 
       if (!case_data.simulation->checkScalar())
       {
@@ -91,7 +93,7 @@ namespace SerDe
           = cgas.has_value() ? std::make_optional(std::vector<double>(
                                    cgas->begin(), cgas->end()))
                              : std::nullopt;
-
+      ar(*t);
       ar(case_data.params.number_particle,
          dim,
          std::vector<double>(cliq.begin(), cliq.end()),
@@ -113,7 +115,6 @@ namespace SerDe
 
     if (!sc.has_value())
     {
-
       return std::nullopt;
     }
 
@@ -165,8 +166,11 @@ namespace SerDe
     Simulation::Dimensions dims;
     std::vector<double> read_c_liq;
     std::optional<std::vector<double>> read_c_gas;
+    Mixture::SpecieTable t;
+    ar(t);
     double start_time{};
     ar(np, dims, read_c_liq, read_c_gas, start_time);
+    gi.set_table(std::make_shared<Mixture::SpecieTable>(t));
 
     auto sc = build_scalar_init(
         gi, dims, std::move(read_c_liq), std::move(read_c_gas));
@@ -180,6 +184,15 @@ namespace SerDe
     std::unique_ptr<MC::MonteCarloUnit> mc_unit;
     ar(mc_unit);
     assert(mc_unit != nullptr);
+
+    // std::vector<double> kla(dims.n_species);
+    // if (kla.size() > 1)
+    // {
+    //   kla[1] = 0.2; // 700 h-1
+    // }
+
+    // auto auto_mtr_type = Simulation::MassTransfer::Type::FixedKla{ kla };
+    gi.init_mtr_model_auto();
 
 #  warning message("MTR model is not loaded")
     auto simulation = gi.init_simulation(std::move(mc_unit), std::move(*sc));
@@ -198,15 +211,6 @@ namespace SerDe
     }
 
     case_data.simulation = std::move(*simulation);
-    std::vector<double> kla(
-        case_data.simulation->getter().getDimensions().n_species);
-    if (kla.size() > 1)
-    {
-      kla[1] = 0.2; // 700 h-1
-    }
-
-    auto auto_mtr_type = Simulation::MassTransfer::Type::FixedKla{ kla };
-    gi.init_mtr_model(*case_data.simulation, std::move(auto_mtr_type));
 
     // case_data.simulation->setMtrModel(
     //     Simulation::MassTransfer::Type::FixedKla{kla});

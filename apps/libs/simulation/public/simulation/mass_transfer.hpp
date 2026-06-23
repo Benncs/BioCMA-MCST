@@ -38,6 +38,7 @@ namespace Simulation::MassTransfer
     };
 
     using MtrTypeVariant
+
         = std::variant<FlowmapTurbulence, FixedKla, FlowmapKla>;
   } // namespace Type
 

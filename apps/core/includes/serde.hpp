@@ -41,7 +41,7 @@ impl_load(std::shared_ptr<IO::Logger>& logger,
   Core::CaseData case_data;
   case_data.exec_info = exec;
 
-  Core::GlobalInitialiser gi(exec, params);
+  Core::GlobalInitialiser gi(exec, params, nullptr, logger);
   auto transition = gi.init_transitionner();
   if (!transition.has_value())
   {

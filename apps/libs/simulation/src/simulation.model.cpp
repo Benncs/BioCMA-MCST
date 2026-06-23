@@ -134,8 +134,8 @@ namespace Simulation
 
     if (is_two_phase_flow)
     {
-      mt_model.gas_liquid_mass_transfer();
-      const auto& mtr = mt_model.proxy()->mtr;
+      m_mt_model.gas_liquid_mass_transfer();
+      const auto& mtr = m_mt_model.proxy()->mtr;
 
       this->gas_scalar->performStepGL(
           d_t, mtr, MassTransfer::Sign::GasToLiquid);

@@ -1,6 +1,7 @@
 #ifndef __BIOMC_API_HPP__
 #define __BIOMC_API_HPP__
 
+#include "mixture/species_descriptor.hpp"
 #include <api/results.hpp>
 #include <common/execinfo.hpp>
 #include <common/logger.hpp>
@@ -8,6 +9,7 @@
 #include <core/scalar_factory.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstdlib>
+#include <initializer_list>
 #include <memory>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
@@ -133,6 +135,9 @@ namespace Api
      */
     ApiResult apply_load() noexcept;
 
+    ApiResult register_mixture_composition(
+        std::initializer_list<std::string_view> names) noexcept;
+
     /**
      * @brief Register user control parameters for the simulation.
      *
@@ -232,6 +237,8 @@ namespace Api
                        std::optional<std::size_t> run_id);
 
     std::shared_ptr<IO::Logger> logger;
+
+    std::shared_ptr<Mixture::SpecieTable> m_table;
 
     std::optional<Core::ScalarFactory::ScalarVariant> scalar_initializer_variant
         = std::nullopt;

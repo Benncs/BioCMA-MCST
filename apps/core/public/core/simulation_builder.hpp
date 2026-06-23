@@ -1,6 +1,7 @@
 #ifndef __SIMULATION_BUILDER_HPP__
 #define __SIMULATION_BUILDER_HPP__
 
+#include "simulation/mass_transfer.hpp"
 #include <common/results.hpp>
 #include <expected>
 #include <mc/unit.hpp>
@@ -23,6 +24,7 @@ namespace Core
     MissingUnit,
     MissingScalarInit,
     MissingSpecieTable,
+    ErrorSimulation,
   };
 
   struct BuildError
@@ -43,19 +45,22 @@ namespace Core
     SimulationUnitBuilder(SimulationUnitBuilder&&) = default;
     SimulationUnitBuilder& operator=(SimulationUnitBuilder&&) = default;
 
-    SimulationUnitBuilder&&
-    with_unit(std::unique_ptr<MC::MonteCarloUnit>&& unit);
+    SimulationUnitBuilder with_unit(std::unique_ptr<MC::MonteCarloUnit>&& unit);
 
-    SimulationUnitBuilder&&
-    with_scalar_init(Simulation::ScalarInitializer&& scalar_init);
+    SimulationUnitBuilder
+    with_scalar(Simulation::ScalarInitializer&& scalar_init);
 
-    SimulationUnitBuilder&&
+    SimulationUnitBuilder
     with_specie_table(std::shared_ptr<Mixture::SpecieTable> specie_table);
 
-    SimulationUnitBuilder&& with_params(Simulation::Sparam params);
+    SimulationUnitBuilder with_params(Simulation::Sparam params);
+
+    SimulationUnitBuilder with_mt_model(
+        std::optional<Simulation::MassTransfer::Type::MtrTypeVariant>&&
+            mt_model_variant);
 
     // Truly optional
-    SimulationUnitBuilder&& with_feed(Simulation::Feed::SimulationFeed feed);
+    SimulationUnitBuilder with_feed(Simulation::Feed::SimulationFeed feed);
 
     [[nodiscard]] Result<std::unique_ptr<Simulation::SimulationUnit>,
                          BuildError>
@@ -65,6 +70,9 @@ namespace Core
     std::unique_ptr<MC::MonteCarloUnit> m_unit;
     std::optional<Simulation::ScalarInitializer> m_scalar_init;
     std::shared_ptr<Mixture::SpecieTable> m_specie_table;
+
+    std::optional<Simulation::MassTransfer::Type::MtrTypeVariant>
+        m_mt_model_variant;
 
     // Default value
     Simulation::Sparam m_params = Simulation::Sparam::fdefault();

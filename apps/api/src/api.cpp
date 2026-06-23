@@ -1,3 +1,4 @@
+#include "mixture/species_descriptor.hpp"
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
 #include <api/results.hpp>
@@ -19,6 +20,8 @@
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/simulation.hpp>
+#include <sstream>
+#include <stdexcept>
 #include <string>
 #include <udf_handle.hpp>
 #include <utility>
@@ -122,6 +125,36 @@ namespace Api
       Kokkos::finalize();
     }
   }
+  ApiResult
+  SimulationInstance::register_mixture_composition(
+      std::initializer_list<std::string_view> names) noexcept
+  {
+    m_table = std::make_shared<Mixture::SpecieTable>();
+    for (auto&& n : names)
+    {
+      if (auto specie = Mixture::query_species(n); specie.has_value())
+      {
+        m_table->add(std::move(*specie));
+      }
+      else
+      {
+        if (logger)
+        {
+          logger->alert("Mixture",
+                        IO::format("Species ", n, " not found in database"));
+        }
+        m_table->add(Mixture::new_specie(n));
+      }
+    }
+    if (logger)
+    {
+      std::ostringstream os;
+      os << (*m_table);
+      os << std::endl;
+      logger->raw_log(os.str());
+    }
+    return ApiResult();
+  }
 
   [[nodiscard]] int
   SimulationInstance::get_id() const
@@ -177,6 +210,7 @@ namespace Api
     {
       return std::nullopt;
     }
+
     return ptr;
   }
 
@@ -279,7 +313,8 @@ namespace Api
     // Sync here is optional but make initalization less error prone (file
     // reading, file creation order)
     BARRIER
-    Core::GlobalInitialiser global_initializer(_data.exec_info, params, logger);
+    Core::GlobalInitialiser global_initializer(
+        _data.exec_info, params, m_table, logger);
 
     {
       auto transitionner = global_initializer.init_transitionner();
@@ -291,6 +326,17 @@ namespace Api
     CHECK_OR_RETURN(!global_initializer.init_feed(feed),
                     "Error when apply: feed");
 
+    if (auto_mtr)
+    {
+      CHECK_OR_RETURN(!global_initializer.init_mtr_model_auto(),
+                      "Error when apply: MTR")
+    }
+    else
+    {
+      CHECK_OR_RETURN(!global_initializer.init_mtr_model(std::move(mtr_type)),
+                      "Error when apply: MTR")
+    }
+
     auto __simulation
         = global_initializer.init_simulation(this->scalar_initializer_variant);
 
@@ -301,24 +347,6 @@ namespace Api
     if (logger)
     {
       simulation->setLogger(logger);
-    }
-
-    if (mtr_type)
-    {
-      global_initializer.init_mtr_model(*simulation, std::move(*mtr_type));
-    }
-    else if (auto_mtr)
-    {
-
-      std::vector<double> kla(simulation->getter().getDimensions().n_species);
-      if (kla.size() > 1)
-      {
-        kla[1] = 0.2; // 700 h-1
-      }
-
-      auto auto_mtr_type = Simulation::MassTransfer::Type::FixedKla{ kla };
-      global_initializer.init_mtr_model(*simulation, std::move(auto_mtr_type));
-      // TODO check if turburlence + fallback to kla
     }
 
     CHECK_OR_RETURN(!global_initializer.check_init_terminate(),
@@ -343,6 +371,8 @@ namespace Api
   ApiResult
   SimulationInstance::apply(bool to_load) noexcept
   {
+    register_mixture_composition({ "glucose", "o2", "acetate", "co2" });
+
     auto opt_udf = Unsafe::load_udf(params.model_name);
     if (opt_udf.valid())
     {

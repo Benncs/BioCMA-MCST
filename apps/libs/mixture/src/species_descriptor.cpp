@@ -1,66 +1,53 @@
 #include <algorithm>
+#include <iomanip>
 #include <mixture/species_descriptor.hpp>
 #include <optional>
-
-namespace
-{
-
-  constexpr Mixture::Specie Glucose = {
-    "glucose",
-    180.,
-    std::nullopt,
-  };
-
-  constexpr Mixture::Specie Oxygen = {
-    "oxygen",
-    32.,
-    3.181e-2,
-  };
-
-  template <class R, class T>
-  bool
-  contains(std::initializer_list<R> r, const T& v)
-  {
-    return std::ranges::find(r, v) != std::ranges::end(r);
-  }
-
-  std::string
-  to_lowercase(std::string s)
-  {
-    for (auto& c : s)
-    {
-      c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-    }
-
-    return s;
-  }
-
-}
-
+#include <ostream>
 namespace Mixture
 {
 
-  std::optional<Specie>
-  query_species(std::string_view name)
+  std::ostream&
+  operator<<(std::ostream& os, const Specie& s)
   {
-    std::string n = to_lowercase(std::string(name));
-    if (contains({ "g", "s", "gl", "glucose" }, n))
-    {
-      // overwrite name by user provided no avoid problem
-      auto s = Glucose;
-      s.name = name;
-      return s;
-    }
+    os << "{ "
+       << "name=" << std::setw(10) << std::left << s.name << " "
+       << "mw=" << std::setw(8) << (s.molar_weight ? *s.molar_weight : 0) << " "
+       << "henry=" << std::setw(8) << (s.henry ? *s.henry : 0) << " }";
 
-    if (contains({ "o2", "oxygen" }, n))
-    {
-      // overwrite name by user provided no avoid problem
-      auto s = Oxygen;
-      s.name = name;
-      return s;
-    }
+    return os;
+  }
 
-    return std::nullopt;
+  std::ostream&
+  operator<<(std::ostream& os, const SpecieTable& table)
+  {
+    os << "Species (" << table.m_table.size() << "):\n";
+    for (std::size_t i = 0; i < table.m_table.size(); ++i)
+    {
+      os << "  [" << i << "] " << table.m_table[i] << '\n';
+    }
+    return os;
+  }
+
+  Specie
+  new_specie(std::string_view _name,
+             double molar_weight,
+             std::optional<double> henry)
+  {
+    return {
+      .name = std::string(_name),
+      .molar_weight = molar_weight,
+      .henry = henry,
+    };
+  }
+
+  Specie
+  new_specie(std::string_view _name)
+  {
+    return {
+      .name = std::string(_name),
+      .molar_weight = std::nullopt,
+      .henry = std::nullopt,
+    };
   }
 
   [[nodiscard]] std::size_t
@@ -86,6 +73,14 @@ namespace Mixture
     }
 
     return it - m_table.begin();
+  }
+
+  SpecieTable::SpecieTable(std::size_t n)
+  {
+    for (std::size_t i = 0LU; i < n; ++i)
+    {
+      add(new_specie(std::to_string(i)));
+    }
   }
 
   [[nodiscard]] bool
@@ -119,4 +114,4 @@ namespace Mixture
     return std::nullopt;
   }
 
-}
+} // namespace Mixture

@@ -130,9 +130,24 @@ namespace Simulation::MassTransfer
     _proxy->mtr = KokkosEigen::Alias::ColMajorMatrixtype<double>(nrow, ncol);
     _proxy->kla = Eigen::ArrayXXd(nrow, ncol);
 
-    fill_henry(_proxy->Henry, species);
+    // fill_henry(_proxy->Henry, species);
+
+    const auto henry = species.henry();
+
+    _proxy->Henry.resize(EIGEN_INDEX(henry.size()), 1);
 
     std::visit(FunctorKla{ _proxy, nrow }, _type);
+
+    int i = 0;
+    for (const auto& h : henry)
+    {
+      if (h == 0.)
+      {
+        _proxy->kla.row(EIGEN_INDEX(i)).setConstant(0.);
+      }
+      _proxy->Henry.coeffRef(i, 0) = h;
+      i++;
+    }
 
     _proxy->db = 5e-3; // FIXME
   }
