@@ -9,6 +9,7 @@ EIGEN_DIAG_POP
 #include <common/common.hpp>
 #include <hydro/impl_mass_transfer.hpp>
 #include <memory>
+#include <mixture/species_descriptor.hpp>
 #include <optional>
 #include <scalar_simulation.hpp>
 #include <simulation/mass_transfer.hpp>
@@ -99,7 +100,22 @@ namespace
 namespace Simulation::MassTransfer
 {
 
+  void
+  fill_henry(Eigen::ArrayXd& arr_henry, const Mixture::SpecieTable& species)
+  {
+    const auto henry = species.henry();
+
+    arr_henry.resize(EIGEN_INDEX(henry.size()), 1);
+
+    int i = 0;
+    for (const auto& h : henry)
+    {
+      arr_henry.coeffRef(i++, 0) = h;
+    }
+  }
+
   MassTransferModel::MassTransferModel(
+      const Mixture::SpecieTable& species,
       MassTransfer::Type::MtrTypeVariant _type,
       std::shared_ptr<Simulation::ScalarSimulation> _liquid_scalar,
       std::shared_ptr<Simulation::ScalarSimulation> _gas_scalar)
@@ -113,9 +129,8 @@ namespace Simulation::MassTransfer
     _proxy = std::make_shared<MassTransferProxy>();
     _proxy->mtr = KokkosEigen::Alias::ColMajorMatrixtype<double>(nrow, ncol);
     _proxy->kla = Eigen::ArrayXXd(nrow, ncol);
-    _proxy->Henry = Eigen::ArrayXXd(liquid_scalar->n_row(), 1);
-    _proxy->Henry.setZero();
-    _proxy->Henry(1) = 3.181e-2;
+
+    fill_henry(_proxy->Henry, species);
 
     std::visit(FunctorKla{ _proxy, nrow }, _type);
 
