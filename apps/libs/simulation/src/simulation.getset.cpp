@@ -1,3 +1,4 @@
+#include "mixture/species_descriptor.hpp"
 #include <Kokkos_Core.hpp>
 #include <cassert>
 #include <common/common.hpp>
@@ -186,9 +187,12 @@ namespace Simulation
   {
     if (is_two_phase_flow)
     {
-
-      this->mt_model = Simulation::MassTransfer::MassTransferModel(
-          std::move(variant), liquid_scalar, gas_scalar);
+      // TODO
+      this->mt_model
+          = Simulation::MassTransfer::MassTransferModel(Mixture::SpecieTable(),
+                                                        std::move(variant),
+                                                        liquid_scalar,
+                                                        gas_scalar);
     }
   }
 
