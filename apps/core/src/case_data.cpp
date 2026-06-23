@@ -194,8 +194,8 @@ namespace Core
   ExecInfo
   runtime_init(int argc,
                char** argv,
-               std::optional<std::size_t> force_run_id,
-               std::ostream& out_stream)
+               std::ostream& out_stream,
+               std::optional<std::size_t> force_run_id)
   {
     ExecInfo info{};
 

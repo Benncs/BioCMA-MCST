@@ -152,7 +152,7 @@ namespace Api
     //  Log message in runtime_init is printed with ostream
     //
     std::ostream& out_stream = std::cout;
-    _data.exec_info = Core::runtime_init(argc, argv, run_id, out_stream);
+    _data.exec_info = Core::runtime_init(argc, argv, out_stream, run_id);
     std::atexit(Api::finalise);
   }
 
