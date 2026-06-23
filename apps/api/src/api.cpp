@@ -12,6 +12,7 @@
 #include <cstddef>
 #include <exception>
 #include <filesystem>
+#include <iostream>
 #include <memory>
 #include <new>
 #include <optional>
@@ -23,6 +24,7 @@
 #include <utility>
 #include <vector>
 #include <wrap_init_model_selector.hpp>
+
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
 #endif
