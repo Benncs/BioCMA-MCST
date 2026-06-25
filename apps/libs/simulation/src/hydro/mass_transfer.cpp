@@ -49,6 +49,14 @@ namespace
     {
       proxy->kla.setZero();
     }
+    void
+    operator()(Simulation::MassTransfer::Type::Auto&) const
+    {
+      for (std::size_t i = 0; i < nrow; ++i)
+      {
+        proxy->kla.row(EIGEN_INDEX(i)).setConstant(0.2); // 700h/1
+      }
+    }
   };
 
   struct MtrVisitor
@@ -57,6 +65,18 @@ namespace
     const std::shared_ptr<Simulation::ScalarSimulation>& liquid_scalar;
     const std::shared_ptr<Simulation::ScalarSimulation>& gas_scalar;
     const CmaUtils::IterationStatePtrType& state;
+
+    void
+    operator()(const Simulation::MassTransfer::Type::Auto& _) const
+    {
+      (void)_;
+      Simulation::MassTransfer::Impl::fixed_kla_gas_liquid_mass_transfer(
+          *proxy,
+          liquid_scalar->getConcentrationArray(),
+          gas_scalar->getConcentrationArray(),
+          liquid_scalar->getVolume(),
+          state);
+    }
 
     void
     operator()(const Simulation::MassTransfer::Type::FixedKla& _) const
@@ -100,20 +120,6 @@ namespace
 namespace Simulation::MassTransfer
 {
 
-  void
-  fill_henry(Eigen::ArrayXd& arr_henry, const Mixture::SpecieTable& species)
-  {
-    const auto henry = species.henry();
-
-    arr_henry.resize(EIGEN_INDEX(henry.size()), 1);
-
-    int i = 0;
-    for (const auto& h : henry)
-    {
-      arr_henry.coeffRef(i++, 0) = h;
-    }
-  }
-
   MassTransferModel::MassTransferModel(
       const Mixture::SpecieTable& species,
       MassTransfer::Type::MtrTypeVariant _type,
@@ -123,28 +129,30 @@ namespace Simulation::MassTransfer
         gas_scalar(std::move(_gas_scalar))
   {
 
-    const auto nrow = liquid_scalar->n_row();
-    const auto ncol = liquid_scalar->n_col();
+    const auto nrow = liquid_scalar->n_row(); // nspecies
+    const auto ncol = liquid_scalar->n_col(); // n compartment
 
     _proxy = std::make_shared<MassTransferProxy>();
     _proxy->mtr = KokkosEigen::Alias::ColMajorMatrixtype<double>(nrow, ncol);
     _proxy->kla = Eigen::ArrayXXd(nrow, ncol);
-
-    // fill_henry(_proxy->Henry, species);
+    _proxy->flag_transfer = Eigen::ArrayXXd(nrow, 1);
 
     const auto henry = species.henry();
 
     _proxy->Henry.resize(EIGEN_INDEX(henry.size()), 1);
 
     std::visit(FunctorKla{ _proxy, nrow }, _type);
-
+    // Fixme, how to desactivate transfer
+    // Set kla to 0
     int i = 0;
     for (const auto& h : henry)
     {
-      if (h == 0.)
-      {
-        _proxy->kla.row(EIGEN_INDEX(i)).setConstant(0.);
-      }
+      _proxy->flag_transfer.coeffRef(i, 0) = (h == 0.) ? 0. : 1.;
+
+      // if (h == 0.)
+      // {
+      //   _proxy->kla.row(EIGEN_INDEX(i)).setConstant(0.);
+      // }
       _proxy->Henry.coeffRef(i, 0) = h;
       i++;
     }
@@ -179,11 +187,32 @@ namespace Simulation::MassTransfer
     auto liquid_concentration = this->liquid_scalar->getConcentrationArray();
     auto liquid_volume = this->liquid_scalar->getVolume();
 
-    _proxy->mtr = (_proxy->kla
-                   * (gas_concentration.colwise() * _proxy->Henry
-                      - liquid_concentration))
-                      .matrix()
-                  * liquid_volume;
+    auto& flag = this->_proxy->flag_transfer;
+
+    // _proxy->mtr = (_proxy->kla
+    //                * (gas_concentration.colwise() * _proxy->Henry
+    //                   - liquid_concentration))
+    //                   .matrix()
+    //               * liquid_volume ;
+
+    // _proxy->mtr = ((_proxy->kla
+    //                 * (gas_concentration.colwise() * _proxy->Henry
+    //                    - liquid_concentration))
+    //                    .matrix()
+    //                * liquid_volume)
+    //                   .array()
+    //                   .colwise()
+    //               * flag.array();
+
+    // Using temp variable shouln't theoretically introduce overhead because of
+    // Eigen laziness
+
+    auto concentration_diff
+        = gas_concentration.colwise() * _proxy->Henry - liquid_concentration;
+
+    auto flux = (_proxy->kla * concentration_diff).matrix() * liquid_volume;
+
+    _proxy->mtr = flux.array().colwise() * flag.array();
   }
 
   std::optional<std::span<const double>>

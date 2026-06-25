@@ -26,6 +26,7 @@ namespace Simulation::MassTransfer
     KokkosEigen::Alias::ColMajorMatrixtype<double> mtr;
     Eigen::ArrayXXd kla;
     Eigen::ArrayXd Henry;
+    Eigen::ArrayXd flag_transfer;
     double db;
   };
 

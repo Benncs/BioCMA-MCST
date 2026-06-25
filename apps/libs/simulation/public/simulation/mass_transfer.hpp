@@ -10,7 +10,7 @@
 namespace Simulation
 {
   class ScalarSimulation;
-};
+}; // namespace Simulation
 
 namespace Simulation::MassTransfer
 {
@@ -37,9 +37,13 @@ namespace Simulation::MassTransfer
       std::vector<double> value;
     };
 
-    using MtrTypeVariant
+    struct Auto
+    {
+    };
 
-        = std::variant<FlowmapTurbulence, FixedKla, FlowmapKla>;
+    using MtrTypeVariant
+        = std::variant<FlowmapTurbulence, FixedKla, FlowmapKla, Auto>;
+
   } // namespace Type
 
   enum class Sign : int

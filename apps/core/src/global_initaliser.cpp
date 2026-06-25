@@ -352,12 +352,6 @@ namespace Core
       return std::nullopt;
     }
 
-    if (!_init_mtr_model_auto())
-    {
-      VERBOSE_ERROR
-      return std::nullopt;
-    }
-
     // TODO
     m_builder = m_builder.with_params({ .f_reaction = true });
 
@@ -392,48 +386,11 @@ namespace Core
     return true;
   }
 
-  std::optional<bool>
-  GlobalInitialiser::init_mtr_model_auto()
-  {
-    // defer auto init mtr because needs to know the number of species and
-    // we need to wait scalar initialisation to know
-    defered_mtr = true;
-    // Actually need to say that step is validated to be coherent with api check
-    // caller of deferer _init_mtr_model_auto  must check return code
-    validate_step(InitStep::MTR);
-    return true;
-  }
-
   void
   GlobalInitialiser::set_table(std::shared_ptr<Mixture::SpecieTable> t) noexcept
   {
     m_table = t;
     m_builder = m_builder.with_specie_table(t);
-  }
-
-  std::optional<bool>
-  GlobalInitialiser::_init_mtr_model_auto()
-  {
-    if (m_table != nullptr)
-    {
-      std::vector<double> kla(m_table->n_species());
-      auto h = m_table->henry();
-      // for (int i = 0; i < h.size(); ++i)
-      // {
-      //   kla[i] = (h[i] == 0.) ? 0. : 0.2;
-      // }
-      // kla[1] = 0.2;
-      for (auto& k : kla)
-      {
-        k = 0.2; // 70h-1
-      }
-      auto mtr_type = Simulation::MassTransfer::Type::FixedKla{ kla };
-      m_builder = m_builder.with_mt_model(std::move(mtr_type));
-      validate_step(InitStep::MTR);
-      // TODO
-      return true;
-    }
-    return false;
   }
 
   std::optional<Simulation::ScalarInitializer>

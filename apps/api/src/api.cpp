@@ -328,7 +328,8 @@ namespace Api
 
     if (auto_mtr)
     {
-      CHECK_OR_RETURN(!global_initializer.init_mtr_model_auto(),
+      CHECK_OR_RETURN(!global_initializer.init_mtr_model(
+                          Simulation::MassTransfer::Type::Auto{}),
                       "Error when apply: MTR")
     }
     else

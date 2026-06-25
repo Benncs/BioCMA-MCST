@@ -131,8 +131,6 @@ namespace Core
         std::optional<Simulation::MassTransfer::Type::MtrTypeVariant>&&
             variant);
 
-    std::optional<bool> init_mtr_model_auto();
-
     /**
      * @brief Initializes a simulation feed.
      *
@@ -165,7 +163,7 @@ namespace Core
     void set_logger(std::shared_ptr<IO::Logger> _logger);
     std::shared_ptr<Mixture::SpecieTable> m_table;
     Core::SimulationUnitBuilder m_builder{};
-    std::optional<bool> _init_mtr_model_auto();
+
     /**
      * @brief Enum to define initialization steps.
      *
@@ -273,7 +271,6 @@ namespace Core
     bool f_init_gas_flow;
     std::shared_ptr<IO::Logger> m_logger;
     /////
-    bool defered_mtr = false;
     bool is_host; ///< Flag indicating if this instance is the host.
   };
 
