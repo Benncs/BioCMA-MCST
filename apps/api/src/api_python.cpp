@@ -381,6 +381,29 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("concentration_value"),
       py::arg("species"),
       py::arg("position"));
+
+  m.def(
+      "set_liquid_feed_linear",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         double flow,
+         double df,
+         double concentration,
+         std::size_t species,
+         std::size_t position)
+      {
+        auto fd = Simulation::Feed::FeedFactory::linear(
+            flow, df, concentration, species, position, position, true);
+
+        auto rc = handle->add_feed(fd, Phase::Liquid);
+
+        return static_cast<bool>(rc);
+      },
+      py::arg("handle"),
+      py::arg("flow"),
+      py::arg("df"),
+      py::arg("concentration_value"),
+      py::arg("species"),
+      py::arg("position"));
 }
 
 /**

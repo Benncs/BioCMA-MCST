@@ -221,10 +221,15 @@ apply(Handle handle, int to_load)
   {
     handle->set_auto_mtr(); // FIXME
 
-    auto rc = handle->apply(to_load != 0); // TODO HANDLE ERROR
+    ApiResult rc = handle->apply(to_load != 0); // TODO HANDLE ERROR
     if (!rc)
     {
-      handle->get_logger()->error(IO::format(" ", rc.get()));
+      std::string s = rc.get();
+      auto msg = IO::format(" ", s);
+      if (const auto& l = handle->get_logger(); l != nullptr)
+      {
+        l->error(IO::format(" ", s));
+      }
     }
     return rc.to_c_ret_code();
   }

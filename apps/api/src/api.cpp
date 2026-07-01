@@ -72,7 +72,6 @@ namespace
     {
       return ApiResult("Final time must be positive");
     }
-
     if (!is_positive(params.delta_time))
     {
       return ApiResult("Delta time must be positive");
@@ -81,13 +80,11 @@ namespace
     {
       return ApiResult("CM path is empty");
     }
-
     if ((!params.serde_file.has_value() && params.load_serde)
         || (!params.load_serde && params.serde_file.has_value()))
     {
       return ApiResult("If serde, needs file path");
     }
-
     if (!to_load)
     {
       if (!is_strict_positive(params.biomass_initial_concentration))
@@ -100,7 +97,6 @@ namespace
         return ApiResult("Number of particle should be positive");
       }
     }
-
     return ApiResult(); // Ok !
   }
 
@@ -302,12 +298,11 @@ namespace Api
   ApiResult
   SimulationInstance::apply() noexcept
   {
-
     if (auto r = check_required(this->params, false); r.invalid())
     {
+
       return r;
     }
-
     CHECK_OR_RETURN(loaded, "Already loaded");
     CHECK_OR_RETURN(!registered, "Register first");
     // Sync here is optional but make initalization less error prone (file
@@ -372,7 +367,12 @@ namespace Api
   ApiResult
   SimulationInstance::apply(bool to_load) noexcept
   {
-    register_mixture_composition({ "glucose", "o2", "acetate", "co2" });
+    if (auto ret
+        = register_mixture_composition({ "glucose", "o2", "acetate", "co2" });
+        ret.invalid())
+    {
+      return ret;
+    }
 
     auto opt_udf = Unsafe::load_udf(params.model_name);
     if (opt_udf.valid())
