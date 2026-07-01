@@ -102,6 +102,8 @@ namespace Core
         base_group_name; /**< Base group name for exported data organization. */
     uint64_t n_expected_export{}; /**< Expected number of exports for tracking
                                      purposes. */
+
+    void export_feed(const Simulation::Getter& g);
   };
 
 } // namespace Core

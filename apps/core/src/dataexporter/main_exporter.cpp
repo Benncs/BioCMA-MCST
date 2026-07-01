@@ -1,3 +1,4 @@
+#include "common/logger.hpp"
 #include <biocma_cst_config.hpp>
 #include <common/execinfo.hpp>
 #include <cstddef>
@@ -188,6 +189,50 @@ namespace Core
       write_matrix(
           "final_result/concentration_gas", *opt_gas, n_row, n_col, f_compress);
     }
+
+    this->export_feed(getter);
+  }
+
+  void
+  MainExporter::export_feed(const Simulation::Getter& getter)
+  {
+    export_initial_kv feed_values;
+    const auto& feed = getter.get_feed();
+
+    const auto& liquid_feeds = feed.liquid_feeds();
+
+    auto phase_feed
+        = [&feed_values](std::string_view phase_name, const auto& feed)
+    {
+      for (int feed_idx = 0; feed_idx < static_cast<int>(feed.size());
+           ++feed_idx)
+      {
+        const auto& liquid = feed[feed_idx];
+        const auto feed_path = IO::format("feed/", phase_name, "/", feed_idx);
+
+        feed_values[IO::format(feed_path, "/flow")] = liquid.flow;
+
+        std::vector<double> concentrations;
+        std::vector<std::size_t> indices;
+
+        concentrations.reserve(liquid.values.size());
+        indices.reserve(liquid.values.size());
+
+        for (const auto& species : liquid.values)
+        {
+          concentrations.emplace_back(species.concentration);
+          indices.emplace_back(species.species_index);
+        }
+
+        feed_values[IO::format(feed_path, "/concentration")] = concentrations;
+        feed_values[IO::format(feed_path, "/index")] = indices;
+      }
+    };
+
+    phase_feed("liquid", liquid_feeds);
+    phase_feed("gas", feed.gas_feeds());
+
+    write_simple(feed_values, "final_result/");
   }
 
   bool

@@ -135,6 +135,30 @@ namespace Simulation::Feed
     [[nodiscard]] std::size_t n_liquid_flow() const noexcept;
     [[nodiscard]] std::size_t n_gas_flow() const noexcept;
 
+    [[nodiscard]] auto
+    liquid_feeds() const
+    {
+      if (m_liquid)
+      {
+        return std::ranges::subrange(m_liquid->begin(), m_liquid->end());
+      }
+      return std::ranges::subrange(
+          std::vector<FeedDescriptor>::const_iterator(),
+          std::vector<FeedDescriptor>::const_iterator());
+    }
+
+    [[nodiscard]] auto
+    gas_feeds() const
+    {
+      if (m_gas)
+      {
+        return std::ranges::subrange(m_gas->begin(), m_gas->end());
+      }
+      return std::ranges::subrange(
+          std::vector<FeedDescriptor>::const_iterator(),
+          std::vector<FeedDescriptor>::const_iterator());
+    }
+
     auto
     liquid_feeds()
     {
