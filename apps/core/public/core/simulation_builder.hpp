@@ -3,7 +3,6 @@
 
 #include "simulation/mass_transfer.hpp"
 #include <common/results.hpp>
-#include <expected>
 #include <mc/unit.hpp>
 #include <memory>
 #include <mixture/species_descriptor.hpp>
@@ -11,6 +10,7 @@
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation_getter.hpp>
+
 namespace Simulation
 {
   class SimulationUnit;

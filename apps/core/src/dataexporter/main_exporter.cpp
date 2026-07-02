@@ -1,6 +1,6 @@
-#include "common/logger.hpp"
 #include <biocma_cst_config.hpp>
 #include <common/execinfo.hpp>
+#include <common/logger.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <dataexporter/main_exporter.hpp>
@@ -12,7 +12,6 @@
 #include <string>
 #include <string_view>
 #include <utility>
-
 namespace Core
 {
   const std::string MainExporter::base_group_name = "records/";
@@ -199,8 +198,6 @@ namespace Core
     export_initial_kv feed_values;
     const auto& feed = getter.get_feed();
 
-    const auto& liquid_feeds = feed.liquid_feeds();
-
     auto phase_feed
         = [&feed_values](std::string_view phase_name, const auto& feed)
     {
@@ -229,7 +226,7 @@ namespace Core
       }
     };
 
-    phase_feed("liquid", liquid_feeds);
+    phase_feed("liquid", feed.liquid_feeds());
     phase_feed("gas", feed.gas_feeds());
 
     write_simple(feed_values, "final_result/");

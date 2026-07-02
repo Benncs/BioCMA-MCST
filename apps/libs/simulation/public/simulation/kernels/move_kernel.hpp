@@ -1,6 +1,7 @@
 #ifndef __SIMULATION_MOVE_KERNEL_HPP__
 #define __SIMULATION_MOVE_KERNEL_HPP__
 
+#include "Kokkos_Macros.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
@@ -103,7 +104,7 @@ namespace Simulation::KernelInline
   }
 
   template <typename ViewType1>
-  void
+  KOKKOS_INLINE_FUNCTION void
   find_flow(const ViewType1& leaving_flow,
             const std::size_t position,
             MC::LeavingFlow::float_type& val_flow,
