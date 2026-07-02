@@ -121,16 +121,23 @@ namespace Simulation::KernelInline
     }
 
     void
-    launch_move(const std::size_t n_particle) const
+    launch_move(const std::size_t n_particle)
     {
 
       if (move_kernel.enable_move)
       {
-        const auto npt = m_options.m_p_p_team_move;
+        // const auto npt = m_options.m_p_p_team_move;
+        // if (n_particle <= npt)
+        // {
+        //   // TODO
+        //   throw std::runtime_error("Nparticle<n per team");
+        // }
+        std::size_t npt = m_options.m_p_p_team_move;
+
         if (n_particle <= npt)
         {
-          // TODO
-          throw std::runtime_error("Nparticle<n per team");
+          move_kernel.m_p_team_move = 1;
+          npt = 1;
         }
 
         const std::size_t league_size = Common::c_league_size(n_particle, npt);
@@ -158,16 +165,22 @@ namespace Simulation::KernelInline
     }
 
     void
-    launch_model(const std::size_t n_particle) const
+    launch_model(const std::size_t n_particle)
     {
-      if (n_particle <= m_options.m_p_p_team_model)
+      // if (n_particle <= m_options.m_p_p_team_model)
+      // {
+      //   // TODO
+      //   throw std::runtime_error("Nparticle<n per team");
+      // }
+      std::size_t npt = m_options.m_p_p_team_model;
+
+      if (n_particle <= npt)
       {
-        // TODO
-        throw std::runtime_error("Nparticle<n per team");
+        cycle_kernel.m_p_team = 1;
+        npt = 1;
       }
 
-      std::size_t league_size
-          = Common::c_league_size(n_particle, m_options.m_p_p_team_model);
+      std::size_t league_size = Common::c_league_size(n_particle, npt);
 
       const auto cycle_policy
           = Kokkos::TeamPolicy<TagCycle>(model_space,
@@ -190,14 +203,14 @@ namespace Simulation::KernelInline
       if (cycle_kernel.do_contribs())
       {
 
-        if (n_particle <= m_options.m_p_p_team_contribs)
+        std::size_t npt = m_options.m_p_p_team_contribs;
+        if (n_particle <= npt)
         {
-          // TODO
-          throw std::runtime_error("Nparticle<n per team");
+          contribution_kernel.m_particle_per_team = 1;
+          npt = 1;
         }
 
-        league_size
-            = Common::c_league_size(n_particle, m_options.m_p_p_team_contribs);
+        league_size = Common::c_league_size(n_particle, npt);
         static_assert(ConstWeightModelType<Model>,
                       "ModelType:Constapply_weight()");
 
