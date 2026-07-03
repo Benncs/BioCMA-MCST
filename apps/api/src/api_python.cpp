@@ -179,6 +179,24 @@ namespace PythonBindings
               return p;
             }));
   }
+
+  auto
+  register_mixture_composition(std::shared_ptr<Api::SimulationInstance>& handle,
+                               std::span<std::string> names)
+  {
+
+    return handle->register_mixture_composition(names).match(
+        [](auto) { return 0; },
+        [&](auto err)
+        {
+          if (handle->get_logger())
+          {
+            handle->get_logger()->error(err);
+          }
+          return -1;
+        });
+  }
+
 } // namespace PythonBindings
 
 PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
@@ -219,6 +237,11 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
         &PythonBindings::register_cma_path,
         py::arg("handle"),
         py::arg("cma_path"));
+
+  m.def("register_mixture_composition",
+        &PythonBindings::register_mixture_composition,
+        py::arg("handle"),
+        py::arg("names"));
 
   m.def("register_serde", &register_serde);
   m.def("register_parameters", &register_parameters);

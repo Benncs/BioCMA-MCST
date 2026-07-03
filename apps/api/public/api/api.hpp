@@ -1,7 +1,6 @@
 #ifndef __BIOMC_API_HPP__
 #define __BIOMC_API_HPP__
 
-#include "mixture/species_descriptor.hpp"
 #include <api/results.hpp>
 #include <common/execinfo.hpp>
 #include <common/logger.hpp>
@@ -11,7 +10,9 @@
 #include <cstdlib>
 #include <initializer_list>
 #include <memory>
+#include <mixture/species_descriptor.hpp>
 #include <optional>
+#include <ranges>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <string_view>
@@ -87,22 +88,6 @@ namespace Api
     SimulationInstance& operator=(SimulationInstance&&) = default;
 
     /**
-     * @brief Initialize a simulation instance
-     *
-     * @param argc Number of runtime argument.
-     * @param argv Tuntime arguments.
-     * @param id A unique identifier for the simulation instance (optional).
-     * @return An optional containing a unique pointer to the instance if
-     * successful, or std::nullopt if initialization failed.
-     */
-    static std::optional<std::unique_ptr<SimulationInstance>>
-    init(int argc,
-         char** argv,
-         std::optional<std::size_t> run_id = std::nullopt) noexcept;
-
-    static std::vector<std::string> get_model_list() noexcept;
-
-    /**
      * @brief Default constructor.
      */
     SimulationInstance() = delete;
@@ -134,6 +119,9 @@ namespace Api
      * @return An ApiResult indicating the success or failure of the operation.
      */
     ApiResult apply_load() noexcept;
+
+    ApiResult
+    register_mixture_composition(std::span<std::string> names) noexcept;
 
     ApiResult register_mixture_composition(
         std::initializer_list<std::string_view> names) noexcept;
@@ -220,6 +208,22 @@ namespace Api
     {
       return logger;
     }
+
+    /**
+     * @brief Initialize a simulation instance
+     *
+     * @param argc Number of runtime argument.
+     * @param argv Tuntime arguments.
+     * @param id A unique identifier for the simulation instance (optional).
+     * @return An optional containing a unique pointer to the instance if
+     * successful, or std::nullopt if initialization failed.
+     */
+    static std::optional<std::unique_ptr<SimulationInstance>>
+    init(int argc,
+         char** argv,
+         std::optional<std::size_t> run_id = std::nullopt) noexcept;
+
+    static std::vector<std::string> get_model_list() noexcept;
 
   private:
     int id{}; ///< The unique identifier to connect with c api.

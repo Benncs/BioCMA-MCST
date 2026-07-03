@@ -1,4 +1,3 @@
-#include "mixture/species_descriptor.hpp"
 #include <Kokkos_Core.hpp>
 #include <api/api.hpp>
 #include <api/results.hpp>
@@ -15,6 +14,7 @@
 #include <filesystem>
 #include <iostream>
 #include <memory>
+#include <mixture/species_descriptor.hpp>
 #include <new>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
@@ -121,34 +121,64 @@ namespace Api
       Kokkos::finalize();
     }
   }
+
+  namespace
+  {
+    template <typename It>
+    void
+    _register_mixture_composition(
+        std::shared_ptr<IO::Logger>& logger,
+        std::shared_ptr<Mixture::SpecieTable>& m_table,
+        It begin,
+        It end)
+    {
+      for (auto n = begin; n != end; ++n)
+      {
+        auto& name = *n;
+        if (auto specie = Mixture::query_species(name); specie.has_value())
+        {
+          m_table->add(std::move(*specie));
+        }
+        else
+        {
+          if (logger)
+          {
+            logger->alert(
+                "Mixture",
+                IO::format("Species ", name, " not found in database"));
+          }
+          m_table->add(Mixture::new_specie(name));
+        }
+      }
+
+      if (logger)
+      {
+        std::ostringstream os;
+        os << (*m_table);
+        os << std::endl;
+        logger->raw_log(os.str());
+      }
+    }
+
+  } // namespace
+
   ApiResult
   SimulationInstance::register_mixture_composition(
       std::initializer_list<std::string_view> names) noexcept
   {
     m_table = std::make_shared<Mixture::SpecieTable>();
-    for (auto&& n : names)
-    {
-      if (auto specie = Mixture::query_species(n); specie.has_value())
-      {
-        m_table->add(std::move(*specie));
-      }
-      else
-      {
-        if (logger)
-        {
-          logger->alert("Mixture",
-                        IO::format("Species ", n, " not found in database"));
-        }
-        m_table->add(Mixture::new_specie(n));
-      }
-    }
-    if (logger)
-    {
-      std::ostringstream os;
-      os << (*m_table);
-      os << std::endl;
-      logger->raw_log(os.str());
-    }
+    _register_mixture_composition(logger, m_table, names.begin(), names.end());
+
+    return ApiResult();
+  }
+
+  ApiResult
+  SimulationInstance::register_mixture_composition(
+      std::span<std::string> names) noexcept
+  {
+    m_table = std::make_shared<Mixture::SpecieTable>();
+    _register_mixture_composition(logger, m_table, names.begin(), names.end());
+
     return ApiResult();
   }
 
@@ -367,12 +397,6 @@ namespace Api
   ApiResult
   SimulationInstance::apply(bool to_load) noexcept
   {
-    if (auto ret
-        = register_mixture_composition({ "glucose", "o2", "acetate", "co2" });
-        ret.invalid())
-    {
-      return ret;
-    }
 
     auto opt_udf = Unsafe::load_udf(params.model_name);
     if (opt_udf.valid())

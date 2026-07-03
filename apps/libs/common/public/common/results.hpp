@@ -64,6 +64,7 @@ template <typename S, typename T> struct Result : protected std::variant<S, T>
   //     return r(std::get<T>(*this));
   //   }
   // }
+  //
 
   template <typename Func, typename Err>
   auto

@@ -56,6 +56,36 @@ new_linear_feed_descriptor(double flow, double df, uint64_t input_position)
 }
 
 int
+set_mixture_composition(Handle handle, char** names, int n_species)
+{
+
+  if (handle != nullptr)
+  {
+    if (names != nullptr)
+    {
+      std::vector<std::string> species_names(n_species);
+      for (int i = 0; i < n_species; ++i)
+      {
+        std::string_view current_s_n = names[i];
+        species_names.emplace_back(current_s_n);
+      }
+      handle->register_mixture_composition(species_names)
+          .match([](auto) { return 0; },
+                 [&](auto)
+                 {
+                   // if(handle->get_logger())
+                   // {
+
+                   // }
+                   return -2;
+                 });
+    }
+    return -1;
+  }
+  return -1;
+}
+
+int
 add_feed_descriptor(Handle handle, FeedHandle fd, int gas)
 {
   const auto phase = gas != 0 ? Phase::Gas : Phase::Liquid;
@@ -242,10 +272,19 @@ init_handle_raw(int argc, char** argv)
   auto opt_handle = Api::SimulationInstance::init(argc, argv);
   if (opt_handle.has_value())
   {
-    auto logger = std::make_shared<IO::Console>();
-    logger->toggle_all();
-    (*opt_handle)->set_logger(logger);
-    return opt_handle->release();
+
+    std::unique_ptr<Api::SimulationInstance> handle = std::move(*opt_handle);
+    if (handle->get_exec_info().n_rank == 0)
+    {
+      auto logger = std::make_shared<IO::Console>();
+      logger->toggle_all();
+      handle->set_logger(logger);
+    }
+    // FIXME
+    auto ret = handle->register_mixture_composition(
+        { "glucose", "o2", "acetate", "co2" });
+
+    return handle.release();
   }
   return nullptr;
 }

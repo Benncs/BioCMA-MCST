@@ -109,13 +109,13 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT
 
   void get_model_list(char*** names, int* n_model);
   void free_model_list(char** names, int n_model);
-  // void finalize(); //Do not use it
+
+  int set_mixture_composition(Handle handle, char** names, int n_species);
+  // void free_mixture_composition(char** names, int n_species);
 
   int n_rank(Handle);
   int i_rank(Handle);
-
   int exec(Handle);
-
   int apply(Handle, int to_load);
 
   /* REGISTER */
