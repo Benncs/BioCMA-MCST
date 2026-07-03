@@ -46,10 +46,16 @@ namespace PythonBindings
                                              const_cast<char**>(c_args.data()));
     if (opt.has_value())
     {
-      auto logger = std::make_shared<IO::Console>();
-      logger->toggle_all();
+
       auto* ptr = opt.value().release();
-      ptr->set_logger(logger);
+      // Set logger only if host rank
+      if (ptr->get_exec_info().n_rank == 0)
+      {
+        auto logger = std::make_shared<IO::Console>();
+        logger->toggle_all();
+        ptr->set_logger(logger);
+      }
+
       return std::shared_ptr<Api::SimulationInstance>(ptr);
     }
     throw std::runtime_error("Simulation handle initialisation failed");
