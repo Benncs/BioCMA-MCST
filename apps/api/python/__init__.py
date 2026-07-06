@@ -1,5 +1,6 @@
 import os
 import sys
+from collections.abc import Callable
 from typing import Optional
 
 import numpy as np
@@ -98,6 +99,7 @@ def config_and_run(
     params: dict,
     cma_path: str,
     model_name: str,
+    is_serde: bool,
     callback_pre: Optional[Callable] = None,
     callback_post: Optional[Callable] = None,
 ):
@@ -166,7 +168,7 @@ def fast_run(
             extra(handle)
 
     return config_and_run(
-        outfolder, name, params, cma_path, model_name, callback_pre, callback_post
+        outfolder, name, params, cma_path, model_name, is_serde, cb_pre, cb_post
     )
 
 
