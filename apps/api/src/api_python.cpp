@@ -51,7 +51,7 @@ namespace PythonBindings
 
       auto* ptr = opt.value().release();
       // Set logger only if host rank
-      if (ptr->get_exec_info().n_rank == 0)
+      if (ptr->get_exec_info().current_rank == 0)
       {
         auto logger = std::make_shared<IO::Console>();
         logger->toggle_all();
