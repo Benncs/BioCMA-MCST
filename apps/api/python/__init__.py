@@ -35,7 +35,7 @@ def set_sim_env(num_threads: str = "1", udf_path: str = None, **kwargs):
     os.environ["KOKKOS_NUM_THREADS"] = num_threads
     if udf_path is not None:
         os.environ["BIOMC_LIB_UDF"] = udf_path
-    for k, v in kwargs:
+    for k, v in kwargs.items():
         os.environ[k] = v
 
 

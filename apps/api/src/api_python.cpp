@@ -184,7 +184,7 @@ namespace PythonBindings
 
   auto
   register_mixture_composition(std::shared_ptr<Api::SimulationInstance>& handle,
-                               std::span<std::string> names)
+                               std::vector<std::string> names)
   {
 
     return handle->register_mixture_composition(names).match(
