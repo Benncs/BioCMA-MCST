@@ -34,7 +34,8 @@ wrap_repr(const wrap_c_param_t& m)
 namespace PythonBindings
 {
   auto
-  init_handle(const std::vector<std::string>& args)
+  init_handle(const std::vector<std::string>& args,
+              std::optional<std::size_t> sim_id)
   {
     std::vector<const char*> c_args;
     c_args.reserve(args.size());
@@ -43,7 +44,8 @@ namespace PythonBindings
       c_args.push_back(arg.c_str());
     }
     auto opt = Api::SimulationInstance::init(static_cast<int>(c_args.size()),
-                                             const_cast<char**>(c_args.data()));
+                                             const_cast<char**>(c_args.data()),
+                                             sim_id);
     if (opt.has_value())
     {
 
@@ -207,7 +209,10 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 
   m.def("get_version", Api::get_version);
 
-  m.def("init_handle", PythonBindings::init_handle, py::arg("argv"));
+  m.def("init_handle",
+        PythonBindings::init_handle,
+        py::arg("argv"),
+        py::arg("simulation_id") = std::nullopt);
 
   // m.def("finalize", &finalize); //Do not use it
 
