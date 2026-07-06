@@ -100,6 +100,41 @@ namespace
     return ApiResult(); // Ok !
   }
 
+  template <typename It>
+  void
+  _register_mixture_composition(
+      const std::shared_ptr<IO::Logger>& logger,
+      const std::shared_ptr<Mixture::SpecieTable>& m_table,
+      It begin,
+      It end)
+  {
+    for (auto n = begin; n != end; ++n)
+    {
+      auto& name = *n;
+      if (auto specie = Mixture::query_species(name); specie.has_value())
+      {
+        m_table->add(std::move(*specie));
+      }
+      else
+      {
+        if (logger)
+        {
+          logger->alert("Mixture",
+                        IO::format("Species ", name, " not found in database"));
+        }
+        m_table->add(Mixture::new_specie(name));
+      }
+    }
+
+    if (logger)
+    {
+      std::ostringstream os;
+      os << (*m_table);
+      os << std::endl;
+      logger->raw_log(os.str());
+    }
+  }
+
 } // namespace
 
 namespace Api
@@ -186,20 +221,6 @@ namespace Api
   SimulationInstance::get_id() const
   {
     return id;
-  }
-
-  ApiResult
-  SimulationInstance::add_feed(Simulation::Feed::FeedDescriptor feed_type,
-                               Phase phase)
-  {
-    if (!feed.has_value())
-    {
-      feed = Simulation::Feed::SimulationFeed::empty();
-    }
-
-    this->feed->add_feed(move_allow_trivial(feed_type), phase);
-
-    return ApiResult(); // TODO FIX ERROR
   }
 
   SimulationInstance::SimulationInstance(int argc,
@@ -309,16 +330,6 @@ namespace Api
     return ApiResult("Error loading case");
   }
 
-  ApiResult
-  SimulationInstance::set_mtr(
-      Simulation::MassTransfer::Type::MtrTypeVariant&& variant)
-  {
-    //??
-    mtr_type = variant;
-    auto_mtr = false;
-    return ApiResult();
-  }
-
   void
   SimulationInstance::set_auto_mtr()
   {
@@ -387,14 +398,6 @@ namespace Api
   }
 
   ApiResult
-  SimulationInstance::register_scalar_initiazer(
-      Core::ScalarFactory::ScalarVariant&& var)
-  {
-    this->scalar_initializer_variant = std::move(var);
-    return ApiResult();
-  }
-
-  ApiResult
   SimulationInstance::apply(bool to_load) noexcept
   {
 
@@ -421,28 +424,17 @@ namespace Api
   }
 
   ApiResult
-  SimulationInstance::register_parameters(
-      Core::UserControlParameters&& _params) noexcept
+  SimulationInstance::add_feed(Simulation::Feed::FeedDescriptor feed_type,
+                               Phase phase)
   {
-    params = std::move(_params);
-    registered = true;
-    return ApiResult();
-  }
+    if (!feed.has_value())
+    {
+      feed = Simulation::Feed::SimulationFeed::empty();
+    }
 
-  bool
-  SimulationInstance::register_result_path(std::string_view path)
-  {
-    // TODO Check path
-    this->params.results_file_name = path;
+    this->feed->add_feed(move_allow_trivial(feed_type), phase);
 
-    return true; // TODO
-  }
-
-  ApiResult
-  SimulationInstance::register_initialiser_file_path(std::string_view path)
-  {
-    this->params.initialiser_path = path;
-    return ApiResult(); // TODO
+    return ApiResult(); // TODO FIX ERROR
   }
 
   ApiResult
@@ -470,6 +462,72 @@ namespace Api
     this->params.cma_case_path = normalized;
 
     return ApiResult();
+  }
+
+  ApiResult
+  SimulationInstance::register_mixture_composition(
+      std::initializer_list<std::string_view> names) noexcept
+  {
+    m_table = std::make_shared<Mixture::SpecieTable>();
+    _register_mixture_composition(logger, m_table, names.begin(), names.end());
+
+    return ApiResult();
+  }
+
+  ApiResult
+  SimulationInstance::register_mixture_composition(
+      std::span<std::string> names) noexcept
+  {
+    m_table = std::make_shared<Mixture::SpecieTable>();
+    _register_mixture_composition(logger, m_table, names.begin(), names.end());
+
+    return ApiResult();
+  }
+
+  // Setter with not specificlogic nor checking
+  // TODO: improve way of handling bad values
+
+  ApiResult
+  SimulationInstance::set_mtr(
+      Simulation::MassTransfer::Type::MtrTypeVariant&& variant)
+  {
+    //??
+    mtr_type = variant;
+    auto_mtr = false;
+    return ApiResult();
+  }
+
+  ApiResult
+  SimulationInstance::register_parameters(
+      Core::UserControlParameters&& _params) noexcept
+  {
+    params = std::move(_params);
+    registered = true;
+    return ApiResult();
+  }
+
+  ApiResult
+  SimulationInstance::register_scalar_initiazer(
+      Core::ScalarFactory::ScalarVariant&& var)
+  {
+    this->scalar_initializer_variant = std::move(var);
+    return ApiResult();
+  }
+
+  bool
+  SimulationInstance::register_result_path(std::string_view path)
+  {
+    // TODO Check path
+    this->params.results_file_name = path;
+
+    return true; // TODO
+  }
+
+  ApiResult
+  SimulationInstance::register_initialiser_file_path(std::string_view path)
+  {
+    this->params.initialiser_path = path;
+    return ApiResult(); // TODO
   }
 
   ApiResult
