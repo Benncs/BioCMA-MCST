@@ -29,7 +29,7 @@ var namespaces_dup =
       [ "apply", "namespacePythonBindings.html#ae15ec276f6c0fb04ec8c0ab6b9703bbd", null ],
       [ "declare_parameter", "namespacePythonBindings.html#a0dfed48d738fa5b895624a82e3cafc5c", null ],
       [ "exec", "namespacePythonBindings.html#a5b0860d26d117daf1f6178523b1340a5", null ],
-      [ "init_handle", "namespacePythonBindings.html#a6abd1c98e507d86b69aab328f0c94650", null ],
+      [ "init_handle", "namespacePythonBindings.html#a6d7fcbd0afddcc3dc7809f4fa7ef248b", null ],
       [ "register_cma_path", "namespacePythonBindings.html#a4502f9b5f66f66a56922869e497b0ba0", null ],
       [ "set_initialiser_from_data", "namespacePythonBindings.html#a83bf7d72dda0016cf5ab544ad3bb33fb", null ]
     ] ],
