@@ -157,66 +157,6 @@ namespace Api
     }
   }
 
-  namespace
-  {
-    template <typename It>
-    void
-    _register_mixture_composition(
-        std::shared_ptr<IO::Logger>& logger,
-        std::shared_ptr<Mixture::SpecieTable>& m_table,
-        It begin,
-        It end)
-    {
-      for (auto n = begin; n != end; ++n)
-      {
-        auto& name = *n;
-        if (auto specie = Mixture::query_species(name); specie.has_value())
-        {
-          m_table->add(std::move(*specie));
-        }
-        else
-        {
-          if (logger)
-          {
-            logger->alert(
-                "Mixture",
-                IO::format("Species ", name, " not found in database"));
-          }
-          m_table->add(Mixture::new_specie(name));
-        }
-      }
-
-      if (logger)
-      {
-        std::ostringstream os;
-        os << (*m_table);
-        os << std::endl;
-        logger->raw_log(os.str());
-      }
-    }
-
-  } // namespace
-
-  ApiResult
-  SimulationInstance::register_mixture_composition(
-      std::initializer_list<std::string_view> names) noexcept
-  {
-    m_table = std::make_shared<Mixture::SpecieTable>();
-    _register_mixture_composition(logger, m_table, names.begin(), names.end());
-
-    return ApiResult();
-  }
-
-  ApiResult
-  SimulationInstance::register_mixture_composition(
-      std::span<std::string> names) noexcept
-  {
-    m_table = std::make_shared<Mixture::SpecieTable>();
-    _register_mixture_composition(logger, m_table, names.begin(), names.end());
-
-    return ApiResult();
-  }
-
   [[nodiscard]] int
   SimulationInstance::get_id() const
   {
