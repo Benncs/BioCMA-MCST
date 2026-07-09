@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>BioCMAMC-ST: apps/libs/simulation/public/simulation/descriptors/mixture.hpp Source File</title>
+<title>BioCMAMC-ST: apps/libs/mixture/public/mixture/mixture.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -88,13 +88,13 @@ $(function(){initNavTree('mixture_8hpp_source.html','',''); });
 </div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
 <div class="foldopen" id="foldopen00015" data-start="{" data-end="};">
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="classSimulation_1_1Mixture.html">   15</a></span>  <span class="keyword">class </span><a class="code hl_function" href="classSimulation_1_1Mixture.html#a628c29c044d2628802c88e7a5dd887f4">Mixture</a></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="classSimulation_1_1Mixture.html">   15</a></span>  <span class="keyword">class </span><a class="code hl_namespace" href="namespaceMixture.html">Mixture</a></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  {</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="classSimulation_1_1Mixture.html#ae9e8b0c1bcbd3a86632d7df93b4088ef">   17</a></span>    <a class="code hl_struct" href="structSimulation_1_1Phase.html">Phase</a> <a class="code hl_variable" href="classSimulation_1_1Mixture.html#ae9e8b0c1bcbd3a86632d7df93b4088ef">continuous</a>;</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="classSimulation_1_1Mixture.html#ab64b885756e47079d7f329587dcb292b">   18</a></span>    std::optional&lt;Phase&gt; <a class="code hl_variable" href="classSimulation_1_1Mixture.html#ab64b885756e47079d7f329587dcb292b">dispersed</a>;</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classSimulation_1_1Mixture.html#aa4502698f192c8d6bd89b872eab1dd55">   21</a></span>    <span class="keyword">static</span> <a class="code hl_function" href="classSimulation_1_1Mixture.html#a628c29c044d2628802c88e7a5dd887f4">Mixture</a> <a class="code hl_function" href="classSimulation_1_1Mixture.html#aa4502698f192c8d6bd89b872eab1dd55">new_tpf</a>();</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="classSimulation_1_1Mixture.html#a81eeb4316962e0725783f5cb6bf02dac">   23</a></span>    <span class="keyword">static</span> <a class="code hl_function" href="classSimulation_1_1Mixture.html#a628c29c044d2628802c88e7a5dd887f4">Mixture</a> <a class="code hl_function" href="classSimulation_1_1Mixture.html#a81eeb4316962e0725783f5cb6bf02dac">new_mf</a>();</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classSimulation_1_1Mixture.html#aa4502698f192c8d6bd89b872eab1dd55">   21</a></span>    <span class="keyword">static</span> <a class="code hl_namespace" href="namespaceMixture.html">Mixture</a> <a class="code hl_function" href="classSimulation_1_1Mixture.html#aa4502698f192c8d6bd89b872eab1dd55">new_tpf</a>();</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="classSimulation_1_1Mixture.html#a81eeb4316962e0725783f5cb6bf02dac">   23</a></span>    <span class="keyword">static</span> <a class="code hl_namespace" href="namespaceMixture.html">Mixture</a> <a class="code hl_function" href="classSimulation_1_1Mixture.html#a81eeb4316962e0725783f5cb6bf02dac">new_mf</a>();</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="classSimulation_1_1Mixture.html#adaa4db11d79c1d78e25632614cac5e1c">   25</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="classSimulation_1_1Mixture.html#adaa4db11d79c1d78e25632614cac5e1c">alpha</a>();</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classSimulation_1_1Mixture.html#a3dbcd35585bf7d07fbb63bec99b77d8a">   26</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="classSimulation_1_1Mixture.html#a3dbcd35585bf7d07fbb63bec99b77d8a">rho</a>();</div>
@@ -114,6 +114,7 @@ $(function(){initNavTree('mixture_8hpp_source.html','',''); });
 <div class="ttc" id="aclassSimulation_1_1Mixture_html_ab64b885756e47079d7f329587dcb292b"><div class="ttname"><a href="classSimulation_1_1Mixture.html#ab64b885756e47079d7f329587dcb292b">Simulation::Mixture::dispersed</a></div><div class="ttdeci">std::optional&lt; Phase &gt; dispersed</div><div class="ttdef"><b>Definition</b> mixture.hpp:18</div></div>
 <div class="ttc" id="aclassSimulation_1_1Mixture_html_adaa4db11d79c1d78e25632614cac5e1c"><div class="ttname"><a href="classSimulation_1_1Mixture.html#adaa4db11d79c1d78e25632614cac5e1c">Simulation::Mixture::alpha</a></div><div class="ttdeci">double alpha()</div></div>
 <div class="ttc" id="aclassSimulation_1_1Mixture_html_ae9e8b0c1bcbd3a86632d7df93b4088ef"><div class="ttname"><a href="classSimulation_1_1Mixture.html#ae9e8b0c1bcbd3a86632d7df93b4088ef">Simulation::Mixture::continuous</a></div><div class="ttdeci">Phase continuous</div><div class="ttdef"><b>Definition</b> mixture.hpp:17</div></div>
+<div class="ttc" id="anamespaceMixture_html"><div class="ttname"><a href="namespaceMixture.html">Mixture</a></div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:10</div></div>
 <div class="ttc" id="anamespaceSimulation_html"><div class="ttname"><a href="namespaceSimulation.html">Simulation</a></div><div class="ttdoc">Namespace that contains classes and structures related to simulation handling.</div><div class="ttdef"><b>Definition</b> host_specific.hpp:12</div></div>
 <div class="ttc" id="astructSimulation_1_1Phase_html"><div class="ttname"><a href="structSimulation_1_1Phase.html">Simulation::Phase</a></div><div class="ttdef"><b>Definition</b> mixture.hpp:10</div></div>
 <div class="ttc" id="astructSimulation_1_1Phase_html_a9e019b1631671f5c0e2a5594ac5f14ae"><div class="ttname"><a href="structSimulation_1_1Phase.html#a9e019b1631671f5c0e2a5594ac5f14ae">Simulation::Phase::rho</a></div><div class="ttdeci">double rho</div><div class="ttdef"><b>Definition</b> mixture.hpp:12</div></div>
@@ -124,7 +125,7 @@ $(function(){initNavTree('mixture_8hpp_source.html','',''); });
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_9654b8d08f4bba4e84b362c5fd320bee.html">apps</a></li><li class="navelem"><a href="dir_875b80e4933768785723d9192abcaf1c.html">libs</a></li><li class="navelem"><a href="dir_025087c2f06cd1d8ba2849de0aaee01b.html">simulation</a></li><li class="navelem"><a href="dir_8c5444b33675d8a39b8c4d4e83061356.html">public</a></li><li class="navelem"><a href="dir_638c9ee455e4ea636879452d604beeaf.html">simulation</a></li><li class="navelem"><a href="dir_cd49851748a19b5d76f8b4e2c7080a3d.html">descriptors</a></li><li class="navelem"><b>mixture.hpp</b></li>
+    <li class="navelem"><a href="dir_9654b8d08f4bba4e84b362c5fd320bee.html">apps</a></li><li class="navelem"><a href="dir_875b80e4933768785723d9192abcaf1c.html">libs</a></li><li class="navelem"><a href="dir_860290c0f09d484b15e461525a736c13.html">mixture</a></li><li class="navelem"><a href="dir_06108510afca767dbb61681269a20a5d.html">public</a></li><li class="navelem"><a href="dir_05253738bf9a5cd29b2a31d4962714c9.html">mixture</a></li><li class="navelem"><b>mixture.hpp</b></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

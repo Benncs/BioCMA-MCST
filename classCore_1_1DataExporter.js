@@ -6,7 +6,7 @@ var classCore_1_1DataExporter =
     [ "export_metadata_kv", "classCore_1_1DataExporter.html#a8df0b133d30a179f67a3b22dc6d59db9", null ],
     [ "export_metadata_t", "classCore_1_1DataExporter.html#a29c7eda5739faa0c91a4188410bca8bd", null ],
     [ "matrix_variant_t", "classCore_1_1DataExporter.html#a2c69ef65ad99d769192459d131baeba8", null ],
-    [ "simple_export_t", "classCore_1_1DataExporter.html#ada6e9f3eaa8f7d0f0eeea71ca3cc2d16", null ],
+    [ "simple_export_t", "classCore_1_1DataExporter.html#abfa0ecc8ce0d463285884891eccaf91c", null ],
     [ "ViewParticleProperties", "classCore_1_1DataExporter.html#ab2399d6169e81b2f616072e7b84ee6fd", null ],
     [ "DataExporter", "classCore_1_1DataExporter.html#aa39b5e7514dd7c25024bb31c72e2e8e7", null ],
     [ "DataExporter", "classCore_1_1DataExporter.html#ae48b541f166924ffb872b168fb09bc43", null ],

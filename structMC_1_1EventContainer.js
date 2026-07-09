@@ -4,6 +4,7 @@ var structMC_1_1EventContainer =
     [ "add", "structMC_1_1EventContainer.html#a9d889f4f53b7008b152b1353729c087a", null ],
     [ "clear", "structMC_1_1EventContainer.html#a91480259898d031657179adf1bf7988a", null ],
     [ "get", "structMC_1_1EventContainer.html#a2fadba8d7bf92a3d9b3a3aeaf46f1cf9", null ],
+    [ "get_cumulative", "structMC_1_1EventContainer.html#a23d9c60a73107c67bd68ecf09a93bd1d", null ],
     [ "get_span", "structMC_1_1EventContainer.html#a1241f99b1b9ba62462df5c09b8cb91ec", null ],
     [ "incr", "structMC_1_1EventContainer.html#a70d7122fe5d2521f91e871816ea83e61", null ],
     [ "load", "structMC_1_1EventContainer.html#ad3d580bd8ff4911a8ff717c41314a694", null ],

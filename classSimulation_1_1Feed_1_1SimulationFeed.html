@@ -81,6 +81,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa2b3eb808219ab3d905de3eac9e249d8" id="r_aa2b3eb808219ab3d905de3eac9e249d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2b3eb808219ab3d905de3eac9e249d8">add_feed</a> (<a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">FeedDescriptor</a> &amp;&amp;fd, <a class="el" href="structSimulation_1_1Phase.html">Phase</a> phase)</td></tr>
 <tr class="memitem:a25cf9afc1a5111df47b299ebd4b6cf8f" id="r_a25cf9afc1a5111df47b299ebd4b6cf8f"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25cf9afc1a5111df47b299ebd4b6cf8f">n_liquid_flow</a> () const noexcept</td></tr>
 <tr class="memitem:a72183d320ea791e9756670d2fedd23d0" id="r_a72183d320ea791e9756670d2fedd23d0"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a72183d320ea791e9756670d2fedd23d0">n_gas_flow</a> () const noexcept</td></tr>
+<tr class="memitem:a324b9f7c54f56726cf2b409800d38815" id="r_a324b9f7c54f56726cf2b409800d38815"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a324b9f7c54f56726cf2b409800d38815">liquid_feeds</a> () const</td></tr>
+<tr class="memitem:a88ae2ee5ecb3fb7ca510ac7a2a852ec9" id="r_a88ae2ee5ecb3fb7ca510ac7a2a852ec9"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a88ae2ee5ecb3fb7ca510ac7a2a852ec9">gas_feeds</a> () const</td></tr>
 <tr class="memitem:a78cce7f33f1bdbb119b02aa78e4ca77e" id="r_a78cce7f33f1bdbb119b02aa78e4ca77e"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78cce7f33f1bdbb119b02aa78e4ca77e">liquid_feeds</a> ()</td></tr>
 <tr class="memitem:af671876091e35a940f31102b585b9bc5" id="r_af671876091e35a940f31102b585b9bc5"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af671876091e35a940f31102b585b9bc5">gas_feeds</a> ()</td></tr>
 </table><table class="memberdecls">
@@ -195,7 +197,7 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <a id="af671876091e35a940f31102b585b9bc5" name="af671876091e35a940f31102b585b9bc5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af671876091e35a940f31102b585b9bc5">&#9670;&#160;</a></span>gas_feeds()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af671876091e35a940f31102b585b9bc5">&#9670;&#160;</a></span>gas_feeds() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -219,8 +221,33 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a88ae2ee5ecb3fb7ca510ac7a2a852ec9" name="a88ae2ee5ecb3fb7ca510ac7a2a852ec9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88ae2ee5ecb3fb7ca510ac7a2a852ec9">&#9670;&#160;</a></span>gas_feeds() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto Simulation::Feed::SimulationFeed::gas_feeds </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a78cce7f33f1bdbb119b02aa78e4ca77e" name="a78cce7f33f1bdbb119b02aa78e4ca77e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a78cce7f33f1bdbb119b02aa78e4ca77e">&#9670;&#160;</a></span>liquid_feeds()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a78cce7f33f1bdbb119b02aa78e4ca77e">&#9670;&#160;</a></span>liquid_feeds() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -241,15 +268,40 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a324b9f7c54f56726cf2b409800d38815" name="a324b9f7c54f56726cf2b409800d38815"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a324b9f7c54f56726cf2b409800d38815">&#9670;&#160;</a></span>liquid_feeds() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto Simulation::Feed::SimulationFeed::liquid_feeds </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1Feed_1_1SimulationFeed_a78cce7f33f1bdbb119b02aa78e4ca77e_cgraph.svg" width="199" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1Feed_1_1SimulationFeed_a324b9f7c54f56726cf2b409800d38815_cgraph.svg" width="199" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1Feed_1_1SimulationFeed_a78cce7f33f1bdbb119b02aa78e4ca77e_icgraph.svg" width="199" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1Feed_1_1SimulationFeed_a324b9f7c54f56726cf2b409800d38815_icgraph.svg" width="199" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

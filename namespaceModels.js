@@ -21,8 +21,8 @@ var namespaceModels =
     [ "f_saturation", "namespaceModels.html#a98711ac2ebacdd7d1adea1524f8fc43b", null ],
     [ "g_partition", "namespaceModels.html#a55696dfd1663a05cdd95853c51cb9b90", null ],
     [ "get_clamped_concentration_cast", "namespaceModels.html#a4d088462ce42b82c04cd4cd531863b00", null ],
-    [ "get_model_configuration", "namespaceModels.html#a30b98c5c9b1cc55a8c52a18fedcd720e", null ],
-    [ "get_model_configuration", "namespaceModels.html#a6f6f1ff3a805e2d4c9435bb26e8afe20", null ],
+    [ "get_model_configuration", "namespaceModels.html#a8d5a8fbe989c3e2952079101a34eaa10", null ],
+    [ "get_model_configuration", "namespaceModels.html#ae28143927a18ade81aa226959b41c2b2", null ],
     [ "min_var", "namespaceModels.html#a762c1e1dcf75381362aabbef1c4f79a7", null ],
     [ "min_var", "namespaceModels.html#aeb5cecf73dd99777ef0554d1b129252e", null ],
     [ "tau_division_proba", "namespaceModels.html#af990d8f8c467e200680a53e35c3327a6", null ]

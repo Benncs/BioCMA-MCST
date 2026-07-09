@@ -102,6 +102,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ae9bdd54076170f50eadcb7966d64c19d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply the simulation configuration and prepare for execution.  <br /></td></tr>
 <tr class="memitem:ad2abfa76ac4128d44b7c0c895f78b77b" id="r_ad2abfa76ac4128d44b7c0c895f78b77b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2abfa76ac4128d44b7c0c895f78b77b">apply_load</a> () noexcept</td></tr>
 <tr class="memdesc:ad2abfa76ac4128d44b7c0c895f78b77b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load ad apply the simulation configuration and prepare for execution based on file.  <br /></td></tr>
+<tr class="memitem:a532619cf3b5e25ecfaa2809dd8763dff" id="r_a532619cf3b5e25ecfaa2809dd8763dff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a532619cf3b5e25ecfaa2809dd8763dff">register_mixture_composition</a> (std::span&lt; std::string &gt; names) noexcept</td></tr>
+<tr class="memitem:a73f7669e7456ce43927152fe2eda548b" id="r_a73f7669e7456ce43927152fe2eda548b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73f7669e7456ce43927152fe2eda548b">register_mixture_composition</a> (std::initializer_list&lt; std::string_view &gt; names) noexcept</td></tr>
 <tr class="memitem:ad54f1c021ad6af49979c42edf10b207b" id="r_ad54f1c021ad6af49979c42edf10b207b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad54f1c021ad6af49979c42edf10b207b">register_parameters</a> (<a class="el" href="structCore_1_1UserControlParameters.html">Core::UserControlParameters</a> &amp;&amp;<a class="el" href="#ae4f96d5c15493b6f950517afbe53caa2">params</a>) noexcept</td></tr>
 <tr class="memdesc:ad54f1c021ad6af49979c42edf10b207b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register user control parameters for the simulation.  <br /></td></tr>
 <tr class="memitem:a19af55accb633781f80c6100a3508284" id="r_a19af55accb633781f80c6100a3508284"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19af55accb633781f80c6100a3508284">register_result_path</a> (std::string_view path)</td></tr>
@@ -115,7 +117,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a06b825ee4dcaf97e49ef5d3644a7301a" id="r_a06b825ee4dcaf97e49ef5d3644a7301a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a06b825ee4dcaf97e49ef5d3644a7301a">register_model_name</a> (std::string_view path)</td></tr>
 <tr class="memdesc:a06b825ee4dcaf97e49ef5d3644a7301a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the model name for the simulation.  <br /></td></tr>
 <tr class="memitem:a3c33e075fd2930a740817b71e6c24151" id="r_a3c33e075fd2930a740817b71e6c24151"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c33e075fd2930a740817b71e6c24151">add_feed</a> (<a class="el" href="structSimulation_1_1Feed_1_1FeedDescriptor.html">Simulation::Feed::FeedDescriptor</a> feed_type, Phase phase)</td></tr>
-<tr class="memitem:ad3dcce95a8552f794dfff2a0f382fcee" id="r_ad3dcce95a8552f794dfff2a0f382fcee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3dcce95a8552f794dfff2a0f382fcee">set_mtr</a> (<a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a7c63fea72839b458bd3076d15856b600">Simulation::MassTransfer::Type::MtrTypeVariant</a> &amp;&amp;variant)</td></tr>
+<tr class="memitem:ad3dcce95a8552f794dfff2a0f382fcee" id="r_ad3dcce95a8552f794dfff2a0f382fcee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3dcce95a8552f794dfff2a0f382fcee">set_mtr</a> (<a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a3a93022950ca342e910c2283f1db31ef">Simulation::MassTransfer::Type::MtrTypeVariant</a> &amp;&amp;variant)</td></tr>
 <tr class="memitem:a73c191e86d9951411087785b68bf709e" id="r_a73c191e86d9951411087785b68bf709e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73c191e86d9951411087785b68bf709e">set_auto_mtr</a> ()</td></tr>
 <tr class="memitem:afb6d2f04368f71955e4773dd5452f2e2" id="r_afb6d2f04368f71955e4773dd5452f2e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structApiResult.html">ApiResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb6d2f04368f71955e4773dd5452f2e2">register_scalar_initiazer</a> (<a class="el" href="namespaceCore_1_1ScalarFactory.html#a1f251f574caf734fdff27f191ec09d1e">Core::ScalarFactory::ScalarVariant</a> &amp;&amp;var)</td></tr>
 <tr class="memitem:ab938dea3b413538bfdaa40daa5d122a2" id="r_ab938dea3b413538bfdaa40daa5d122a2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab938dea3b413538bfdaa40daa5d122a2">get_id</a> () const</td></tr>
@@ -142,6 +144,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:af3cb057a26abf0843017d9946f2e8e85" id="r_af3cb057a26abf0843017d9946f2e8e85"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3cb057a26abf0843017d9946f2e8e85">id</a> {}</td></tr>
 <tr class="memdesc:af3cb057a26abf0843017d9946f2e8e85"><td class="mdescLeft">&#160;</td><td class="mdescRight">The unique identifier to connect with c api.  <br /></td></tr>
 <tr class="memitem:ab6aa2713cc7da5e3099b18dd7eab9418" id="r_ab6aa2713cc7da5e3099b18dd7eab9418"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab6aa2713cc7da5e3099b18dd7eab9418">logger</a></td></tr>
+<tr class="memitem:a36ea2a00b2512e7920b695a71fbce907" id="r_a36ea2a00b2512e7920b695a71fbce907"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classMixture_1_1SpecieTable.html">Mixture::SpecieTable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36ea2a00b2512e7920b695a71fbce907">m_table</a></td></tr>
 <tr class="memitem:a17e532a259c7b00d4faea06107176c35" id="r_a17e532a259c7b00d4faea06107176c35"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespaceCore_1_1ScalarFactory.html#a1f251f574caf734fdff27f191ec09d1e">Core::ScalarFactory::ScalarVariant</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17e532a259c7b00d4faea06107176c35">scalar_initializer_variant</a> = std::nullopt</td></tr>
 <tr class="memitem:a9602da52be8e78442654d6309f9d313a" id="r_a9602da52be8e78442654d6309f9d313a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structCore_1_1CaseData.html">Core::CaseData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9602da52be8e78442654d6309f9d313a">_data</a></td></tr>
 <tr class="memdesc:a9602da52be8e78442654d6309f9d313a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Case data for the simulation.  <br /></td></tr>
@@ -155,7 +158,7 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a2e73d324fc4d48d13dd9cc5bb9b1654f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating if resources are registered.  <br /></td></tr>
 <tr class="memitem:adffecec66007edf92dca50b0824738ec" id="r_adffecec66007edf92dca50b0824738ec"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adffecec66007edf92dca50b0824738ec">feed</a> = std::nullopt</td></tr>
 <tr class="memdesc:adffecec66007edf92dca50b0824738ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional feed configuration.  <br /></td></tr>
-<tr class="memitem:a709fd2616844c521f647a0bb9d049bce" id="r_a709fd2616844c521f647a0bb9d049bce"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a7c63fea72839b458bd3076d15856b600">Simulation::MassTransfer::Type::MtrTypeVariant</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a709fd2616844c521f647a0bb9d049bce">mtr_type</a> = std::nullopt</td></tr>
+<tr class="memitem:a709fd2616844c521f647a0bb9d049bce" id="r_a709fd2616844c521f647a0bb9d049bce"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a3a93022950ca342e910c2283f1db31ef">Simulation::MassTransfer::Type::MtrTypeVariant</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a709fd2616844c521f647a0bb9d049bce">mtr_type</a> = std::nullopt</td></tr>
 <tr class="memitem:aa6dbd15f0fe1d1b15bf956d0e728c550" id="r_aa6dbd15f0fe1d1b15bf956d0e728c550"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6dbd15f0fe1d1b15bf956d0e728c550">auto_mtr</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
@@ -195,7 +198,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a7a849ee5dd1d0d13a198aecee702944c_icgraph.svg" width="563" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a7a849ee5dd1d0d13a198aecee702944c_icgraph.svg" width="563" height="238"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -426,12 +429,12 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a3398ddd22faa3ceb16b454c51faeced0_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a3398ddd22faa3ceb16b454c51faeced0_cgraph.svg" width="100%" height="556"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a3398ddd22faa3ceb16b454c51faeced0_icgraph.svg" width="378" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a3398ddd22faa3ceb16b454c51faeced0_icgraph.svg" width="171" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -464,12 +467,12 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_ad2abfa76ac4128d44b7c0c895f78b77b_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_ad2abfa76ac4128d44b7c0c895f78b77b_cgraph.svg" width="100%" height="556"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_ad2abfa76ac4128d44b7c0c895f78b77b_icgraph.svg" width="586" height="103"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_ad2abfa76ac4128d44b7c0c895f78b77b_icgraph.svg" width="378" height="136"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -502,7 +505,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a3f04372728be84263fb69f5773ca5bd5_cgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a3f04372728be84263fb69f5773ca5bd5_cgraph.svg" width="100%" height="492"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -820,6 +823,61 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a73f7669e7456ce43927152fe2eda548b" name="a73f7669e7456ce43927152fe2eda548b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73f7669e7456ce43927152fe2eda548b">&#9670;&#160;</a></span>register_mixture_composition() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structApiResult.html">ApiResult</a> Api::SimulationInstance::register_mixture_composition </td>
+          <td>(</td>
+          <td class="paramtype">std::initializer_list&lt; std::string_view &gt;</td>          <td class="paramname"><span class="paramname"><em>names</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel noexcept">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a532619cf3b5e25ecfaa2809dd8763dff" name="a532619cf3b5e25ecfaa2809dd8763dff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a532619cf3b5e25ecfaa2809dd8763dff">&#9670;&#160;</a></span>register_mixture_composition() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structApiResult.html">ApiResult</a> Api::SimulationInstance::register_mixture_composition </td>
+          <td>(</td>
+          <td class="paramtype">std::span&lt; std::string &gt;</td>          <td class="paramname"><span class="paramname"><em>names</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel noexcept">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structApi_1_1SimulationInstance_a532619cf3b5e25ecfaa2809dd8763dff_icgraph.svg" width="418" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
 <a id="a06b825ee4dcaf97e49ef5d3644a7301a" name="a06b825ee4dcaf97e49ef5d3644a7301a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a06b825ee4dcaf97e49ef5d3644a7301a">&#9670;&#160;</a></span>register_model_name()</h2>
 
@@ -1040,7 +1098,7 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname"><a class="el" href="structApiResult.html">ApiResult</a> Api::SimulationInstance::set_mtr </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a7c63fea72839b458bd3076d15856b600">Simulation::MassTransfer::Type::MtrTypeVariant</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>variant</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a3a93022950ca342e910c2283f1db31ef">Simulation::MassTransfer::Type::MtrTypeVariant</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>variant</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1218,6 +1276,28 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a36ea2a00b2512e7920b695a71fbce907" name="a36ea2a00b2512e7920b695a71fbce907"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36ea2a00b2512e7920b695a71fbce907">&#9670;&#160;</a></span>m_table</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classMixture_1_1SpecieTable.html">Mixture::SpecieTable</a>&gt; Api::SimulationInstance::m_table</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a709fd2616844c521f647a0bb9d049bce" name="a709fd2616844c521f647a0bb9d049bce"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a709fd2616844c521f647a0bb9d049bce">&#9670;&#160;</a></span>mtr_type</h2>
 
@@ -1228,7 +1308,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::optional&lt;<a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a7c63fea72839b458bd3076d15856b600">Simulation::MassTransfer::Type::MtrTypeVariant</a>&gt; Api::SimulationInstance::mtr_type = std::nullopt</td>
+          <td class="memname">std::optional&lt;<a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a3a93022950ca342e910c2283f1db31ef">Simulation::MassTransfer::Type::MtrTypeVariant</a>&gt; Api::SimulationInstance::mtr_type = std::nullopt</td>
         </tr>
       </table>
   </td>

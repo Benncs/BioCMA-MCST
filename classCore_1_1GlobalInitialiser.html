@@ -79,7 +79,7 @@ $(function(){initNavTree('classCore_1_1GlobalInitialiser.html','','classCore_1_1
 <div class="dynheader">
 Collaboration diagram for Core::GlobalInitialiser:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser__coll__graph.svg" width="554" height="226"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser__coll__graph.svg" width="100%" height="454"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
@@ -94,8 +94,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6366cce5d23ddbb0f475288da17b9c9d" id="r_a6366cce5d23ddbb0f475288da17b9c9d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6366cce5d23ddbb0f475288da17b9c9d">GlobalInitialiser</a> (const <a class="el" href="structExecInfo.html">ExecInfo</a> &amp;_info, <a class="el" href="structCore_1_1UserControlParameters.html">UserControlParameters</a> _user_params, std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt;=nullptr)</td></tr>
-<tr class="memdesc:a6366cce5d23ddbb0f475288da17b9c9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classCore_1_1GlobalInitialiser.html" title="A class responsible for initializing various components of a simulation framework.">GlobalInitialiser</a> instance.  <br /></td></tr>
+<tr class="memitem:af64724fbb5df8d75887873b2d252a661" id="r_af64724fbb5df8d75887873b2d252a661"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af64724fbb5df8d75887873b2d252a661">GlobalInitialiser</a> (const <a class="el" href="structExecInfo.html">ExecInfo</a> &amp;_info, <a class="el" href="structCore_1_1UserControlParameters.html">UserControlParameters</a> _user_params, std::shared_ptr&lt; <a class="el" href="classMixture_1_1SpecieTable.html">Mixture::SpecieTable</a> &gt; table, std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt;=nullptr)</td></tr>
+<tr class="memdesc:af64724fbb5df8d75887873b2d252a661"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classCore_1_1GlobalInitialiser.html" title="A class responsible for initializing various components of a simulation framework.">GlobalInitialiser</a> instance.  <br /></td></tr>
 <tr class="memitem:a97eff5566ced6ba6449eb532f0babadc" id="r_a97eff5566ced6ba6449eb532f0babadc"><td class="memItemLeft" align="right" valign="top">std::optional&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97eff5566ced6ba6449eb532f0babadc">init_state</a> (const <a class="el" href="namespaceCmaUtils.html#a95181f7ed7bfd8d20f6ebda33204e8c8">CmaUtils::TransitionnerPtrType</a> &amp;transiionner)</td></tr>
 <tr class="memdesc:a97eff5566ced6ba6449eb532f0babadc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a flow iterator.  <br /></td></tr>
 <tr class="memitem:a0dc2da93c4202706b5f37453f355145c" id="r_a0dc2da93c4202706b5f37453f355145c"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="namespaceCmaUtils.html#a95181f7ed7bfd8d20f6ebda33204e8c8">CmaUtils::TransitionnerPtrType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0dc2da93c4202706b5f37453f355145c">init_transitionner</a> ()</td></tr>
@@ -107,7 +107,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa84a61b25f475380b38306232e25aff6" id="r_aa84a61b25f475380b38306232e25aff6"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structSimulation_1_1ScalarInitializer.html">Simulation::ScalarInitializer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa84a61b25f475380b38306232e25aff6">init_scalar</a> ()</td></tr>
 <tr class="memdesc:aa84a61b25f475380b38306232e25aff6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a scalar component of the simulation.  <br /></td></tr>
 <tr class="memitem:a6c679d3dc5f4ee98dfd9ed4c35092f1c" id="r_a6c679d3dc5f4ee98dfd9ed4c35092f1c"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structSimulation_1_1ScalarInitializer.html">Simulation::ScalarInitializer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c679d3dc5f4ee98dfd9ed4c35092f1c">init_scalar</a> (<a class="el" href="namespaceCore_1_1ScalarFactory.html#a1f251f574caf734fdff27f191ec09d1e">Core::ScalarFactory::ScalarVariant</a> &amp;&amp;variant)</td></tr>
-<tr class="memitem:adf72113e43a445c6afdb993c0fadeeca" id="r_adf72113e43a445c6afdb993c0fadeeca"><td class="memItemLeft" align="right" valign="top">std::optional&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf72113e43a445c6afdb993c0fadeeca">init_mtr_model</a> (<a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &amp;unit, std::optional&lt; <a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a7c63fea72839b458bd3076d15856b600">Simulation::MassTransfer::Type::MtrTypeVariant</a> &gt; &amp;&amp;variant)</td></tr>
+<tr class="memitem:a8195a20ea3870cd9f1496341997ddeb4" id="r_a8195a20ea3870cd9f1496341997ddeb4"><td class="memItemLeft" align="right" valign="top">std::optional&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8195a20ea3870cd9f1496341997ddeb4">init_mtr_model</a> (std::optional&lt; <a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a3a93022950ca342e910c2283f1db31ef">Simulation::MassTransfer::Type::MtrTypeVariant</a> &gt; &amp;&amp;variant)</td></tr>
 <tr class="memitem:aefbbc9e413134e0e080df2218316fe63" id="r_aefbbc9e413134e0e080df2218316fe63"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aefbbc9e413134e0e080df2218316fe63">init_feed</a> (std::optional&lt; <a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a> &gt; feed=std::nullopt)</td></tr>
 <tr class="memdesc:aefbbc9e413134e0e080df2218316fe63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a simulation feed.  <br /></td></tr>
 <tr class="memitem:a9b38d15538796d9cc115211890a6c081" id="r_a9b38d15538796d9cc115211890a6c081"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6d77d0995004ab9cf3c8116fb82bc5a4">OptionalPtr</a>&lt; <a class="el" href="structMC_1_1MonteCarloUnit.html">MC::MonteCarloUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b38d15538796d9cc115211890a6c081">init_monte_carlo</a> ()</td></tr>
@@ -116,6 +116,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:af0e3ff388be6a2cb08edf9f69dd200b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if all initialization steps have been validated.  <br /></td></tr>
 <tr class="memitem:ae6d2f54a18d82dda373f9cd7ec923eac" id="r_ae6d2f54a18d82dda373f9cd7ec923eac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structCore_1_1SimulationParameters.html">SimulationParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6d2f54a18d82dda373f9cd7ec923eac">get_parameters</a> () const</td></tr>
 <tr class="memitem:a24d71bdae3fd837feba104673462b7cf" id="r_a24d71bdae3fd837feba104673462b7cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24d71bdae3fd837feba104673462b7cf">set_initial_number_particle</a> (uint64_t np) noexcept</td></tr>
+<tr class="memitem:a4c200c7679f07fbe76b1ff0b3d773b36" id="r_a4c200c7679f07fbe76b1ff0b3d773b36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c200c7679f07fbe76b1ff0b3d773b36">set_table</a> (std::shared_ptr&lt; <a class="el" href="classMixture_1_1SpecieTable.html">Mixture::SpecieTable</a> &gt; t) noexcept</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-types" class="groupheader"><a id="pri-types" name="pri-types"></a>
 Private Types</h2></td></tr>
@@ -149,6 +150,8 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a1528d80108b0fb5e549959672ddd8748" id="r_a1528d80108b0fb5e549959672ddd8748"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classMixture_1_1SpecieTable.html">Mixture::SpecieTable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1528d80108b0fb5e549959672ddd8748">m_table</a></td></tr>
+<tr class="memitem:a9409017498c1f24aa499c54f0a90ebd9" id="r_a9409017498c1f24aa499c54f0a90ebd9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCore_1_1SimulationUnitBuilder.html">Core::SimulationUnitBuilder</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9409017498c1f24aa499c54f0a90ebd9">m_builder</a> {}</td></tr>
 <tr class="memitem:a8f4b514d28dc2b7798ba278ff1b13ca8" id="r_a8f4b514d28dc2b7798ba278ff1b13ca8"><td class="memItemLeft" align="right" valign="top">std::array&lt; bool, static_cast&lt; size_t &gt;(<a class="el" href="#aed6035b1335dd789d51598a410e4dbaeae93f994f01c537c4e2f7d8528c3eb5e9">InitStep::Count</a>)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f4b514d28dc2b7798ba278ff1b13ca8">validated_steps</a> {}</td></tr>
 <tr class="memdesc:a8f4b514d28dc2b7798ba278ff1b13ca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array to track validated initialization steps.  <br /></td></tr>
 <tr class="memitem:a031ac7ab576c4addfa9cf44a672e8f1d" id="r_a031ac7ab576c4addfa9cf44a672e8f1d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structExecInfo.html">ExecInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a031ac7ab576c4addfa9cf44a672e8f1d">info</a></td></tr>
@@ -159,7 +162,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a93c5f3b593962d6736b44eff42021895" id="r_a93c5f3b593962d6736b44eff42021895"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93c5f3b593962d6736b44eff42021895">m_flat_neighobrs</a></td></tr>
 <tr class="memitem:a35b62706ff0548f4d9a873976e9e088b" id="r_a35b62706ff0548f4d9a873976e9e088b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35b62706ff0548f4d9a873976e9e088b">t_per_flowmap</a> {}</td></tr>
 <tr class="memitem:a313871d644ef7de95dd32c5d5b95ef6d" id="r_a313871d644ef7de95dd32c5d5b95ef6d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a313871d644ef7de95dd32c5d5b95ef6d">f_init_gas_flow</a></td></tr>
-<tr class="memitem:a2f0f08ab0a8ef51fc2a8549b1d400abe" id="r_a2f0f08ab0a8ef51fc2a8549b1d400abe"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f0f08ab0a8ef51fc2a8549b1d400abe">m_feed</a></td></tr>
 <tr class="memitem:a95201313bfc65ef8c2ccd559ad320320" id="r_a95201313bfc65ef8c2ccd559ad320320"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95201313bfc65ef8c2ccd559ad320320">m_logger</a></td></tr>
 <tr class="memitem:ad67d984fd42e038abfd4839c6dc01664" id="r_ad67d984fd42e038abfd4839c6dc01664"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad67d984fd42e038abfd4839c6dc01664">is_host</a></td></tr>
 <tr class="memdesc:ad67d984fd42e038abfd4839c6dc01664"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating if this instance is the host.  <br /></td></tr>
@@ -231,8 +233,8 @@ template&lt;typename T&gt; </div>
 </div>
 </div>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a6366cce5d23ddbb0f475288da17b9c9d" name="a6366cce5d23ddbb0f475288da17b9c9d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6366cce5d23ddbb0f475288da17b9c9d">&#9670;&#160;</a></span>GlobalInitialiser()</h2>
+<a id="af64724fbb5df8d75887873b2d252a661" name="af64724fbb5df8d75887873b2d252a661"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af64724fbb5df8d75887873b2d252a661">&#9670;&#160;</a></span>GlobalInitialiser()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,6 +248,11 @@ template&lt;typename T&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structCore_1_1UserControlParameters.html">UserControlParameters</a></td>          <td class="paramname"><span class="paramname"><em>_user_params</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classMixture_1_1SpecieTable.html">Mixture::SpecieTable</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>table</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -266,7 +273,7 @@ template&lt;typename T&gt; </div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a6366cce5d23ddbb0f475288da17b9c9d_cgraph.svg" width="626" height="175"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_af64724fbb5df8d75887873b2d252a661_cgraph.svg" width="626" height="175"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -300,7 +307,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_af0e3ff388be6a2cb08edf9f69dd200b0_cgraph.svg" width="288" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_af0e3ff388be6a2cb08edf9f69dd200b0_cgraph.svg" width="424" height="67"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -346,7 +353,7 @@ template&lt;typename... Args&gt; </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a5134f9db1f59d9124d5fdec88e3e99f3_icgraph.svg" width="546" height="415"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a5134f9db1f59d9124d5fdec88e3e99f3_icgraph.svg" width="546" height="352"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -471,8 +478,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="adf72113e43a445c6afdb993c0fadeeca" name="adf72113e43a445c6afdb993c0fadeeca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf72113e43a445c6afdb993c0fadeeca">&#9670;&#160;</a></span>init_mtr_model()</h2>
+<a id="a8195a20ea3870cd9f1496341997ddeb4" name="a8195a20ea3870cd9f1496341997ddeb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8195a20ea3870cd9f1496341997ddeb4">&#9670;&#160;</a></span>init_mtr_model()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -480,19 +487,15 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="memname">std::optional&lt; bool &gt; Core::GlobalInitialiser::init_mtr_model </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classSimulation_1_1SimulationUnit.html">Simulation::SimulationUnit</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>unit</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">std::optional&lt; <a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a3a93022950ca342e910c2283f1db31ef">Simulation::MassTransfer::Type::MtrTypeVariant</a> &gt; &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>variant</em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">std::optional&lt; <a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a7c63fea72839b458bd3076d15856b600">Simulation::MassTransfer::Type::MtrTypeVariant</a> &gt; &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>variant</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_adf72113e43a445c6afdb993c0fadeeca_cgraph.svg" width="380" height="175"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a8195a20ea3870cd9f1496341997ddeb4_cgraph.svg" width="352" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -682,7 +685,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a0dc2da93c4202706b5f37453f355145c_cgraph.svg" width="100%" height="478"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a0dc2da93c4202706b5f37453f355145c_cgraph.svg" width="100%" height="533"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -777,6 +780,31 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1GlobalInitialiser_a75225c576e7e17ef5361c9078a31797e_icgraph.svg" width="352" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
+
+</div>
+</div>
+<a id="a4c200c7679f07fbe76b1ff0b3d773b36" name="a4c200c7679f07fbe76b1ff0b3d773b36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c200c7679f07fbe76b1ff0b3d773b36">&#9670;&#160;</a></span>set_table()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Core::GlobalInitialiser::set_table </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classMixture_1_1SpecieTable.html">Mixture::SpecieTable</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>t</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel noexcept">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -894,8 +922,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a2f0f08ab0a8ef51fc2a8549b1d400abe" name="a2f0f08ab0a8ef51fc2a8549b1d400abe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f0f08ab0a8ef51fc2a8549b1d400abe">&#9670;&#160;</a></span>m_feed</h2>
+<a id="a9409017498c1f24aa499c54f0a90ebd9" name="a9409017498c1f24aa499c54f0a90ebd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9409017498c1f24aa499c54f0a90ebd9">&#9670;&#160;</a></span>m_builder</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -904,7 +932,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::optional&lt;<a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a>&gt; Core::GlobalInitialiser::m_feed</td>
+          <td class="memname"><a class="el" href="classCore_1_1SimulationUnitBuilder.html">Core::SimulationUnitBuilder</a> Core::GlobalInitialiser::m_builder {}</td>
         </tr>
       </table>
   </td>
@@ -1015,6 +1043,28 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="structCore_1_1SimulationParameters.html">SimulationParameters</a> Core::GlobalInitialiser::m_params</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1528d80108b0fb5e549959672ddd8748" name="a1528d80108b0fb5e549959672ddd8748"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1528d80108b0fb5e549959672ddd8748">&#9670;&#160;</a></span>m_table</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classMixture_1_1SpecieTable.html">Mixture::SpecieTable</a>&gt; Core::GlobalInitialiser::m_table</td>
         </tr>
       </table>
   </td>

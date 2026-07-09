@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>BioCMAMC-ST: apps/libs/simulation/public/simulation/descriptors/species_descriptor.hpp Source File</title>
+<title>BioCMAMC-ST: apps/libs/mixture/public/mixture/species_descriptor.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,52 +71,143 @@ $(function(){initNavTree('species__descriptor_8hpp_source.html','',''); });
   <div class="headertitle"><div class="title">species_descriptor.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef __SIMULATION_SPECIES_DESCRIPTOR_HPP__</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define __SIMULATION_SPECIES_DESCRIPTOR_HPP__</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;optional&gt;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceSimulation.html">Simulation</a></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>{</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="foldopen" id="foldopen00009" data-start="{" data-end="};">
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="structSimulation_1_1Specie.html">    9</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structSimulation_1_1Specie.html">Specie</a></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>  {</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="structSimulation_1_1Specie.html#a473af9e123c07220ce296a0fb9874440">   11</a></span>    std::string <a class="code hl_variable" href="structSimulation_1_1Specie.html#a473af9e123c07220ce296a0fb9874440">name</a>;</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="structSimulation_1_1Specie.html#aca90833106014e728ae67852bf6969e5">   12</a></span>    std::optional&lt;double&gt; <a class="code hl_variable" href="structSimulation_1_1Specie.html#aca90833106014e728ae67852bf6969e5">molar_weight</a>;</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="structSimulation_1_1Specie.html#a876c03470aadbb6334790cdccd728b34">   13</a></span>    std::optional&lt;double&gt; <a class="code hl_variable" href="structSimulation_1_1Specie.html#a876c03470aadbb6334790cdccd728b34">henry</a>;</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>  };</div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef __MIXTURE_SPECIES_DESCRIPTOR_HPP__</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define __MIXTURE_SPECIES_DESCRIPTOR_HPP__</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;initializer_list&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;optional&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;ostream&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;ranges&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="foldopen" id="foldopen00009" data-start="{" data-end="}">
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="namespaceMixture.html">    9</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceMixture.html">Mixture</a></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>{</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="structMixture_1_1Specie.html">   12</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structMixture_1_1Specie.html">Specie</a></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>  {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="structMixture_1_1Specie.html#a13dd353c108000f23d17aed9052cb81f">   14</a></span>    std::string <a class="code hl_variable" href="structMixture_1_1Specie.html#a13dd353c108000f23d17aed9052cb81f">name</a>;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="structMixture_1_1Specie.html#a8c104a63e47f2cba97746dbfa01d487d">   15</a></span>    std::optional&lt;double&gt; <a class="code hl_variable" href="structMixture_1_1Specie.html#a8c104a63e47f2cba97746dbfa01d487d">molar_weight</a>;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="comment">// dimensionless</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structMixture_1_1Specie.html#a7d9f702b2e921853a5b327a50a402b93">   17</a></span>    std::optional&lt;double&gt; <a class="code hl_variable" href="structMixture_1_1Specie.html#a7d9f702b2e921853a5b327a50a402b93">henry</a>;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Archive&gt;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordtype">void</span></div>
+<div class="foldopen" id="foldopen00021" data-start="{" data-end="}">
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="structMixture_1_1Specie.html#ae257b2dbadef58bb081f9ee3238d7865">   21</a></span>    <a class="code hl_function" href="structMixture_1_1Specie.html#ae257b2dbadef58bb081f9ee3238d7865">serialize</a>(Archive&amp; archive)</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>      archive(<a class="code hl_variable" href="structMixture_1_1Specie.html#a13dd353c108000f23d17aed9052cb81f">name</a>, <a class="code hl_variable" href="structMixture_1_1Specie.html#a8c104a63e47f2cba97746dbfa01d487d">molar_weight</a>, <a class="code hl_variable" href="structMixture_1_1Specie.html#a7d9f702b2e921853a5b327a50a402b93">henry</a>);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    }</div>
 </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="namespaceSimulation.html#a8a8043f8951284c90553aeb242416f4e">   16</a></span>  <span class="keyword">using </span><a class="code hl_typedef" href="namespaceSimulation.html#a8a8043f8951284c90553aeb242416f4e">SpecieTable</a> = std::vector&lt;Specie&gt;;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="foldopen" id="foldopen00018" data-start="{" data-end="};">
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="structSimulation_1_1EnvironementProperties.html">   18</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structSimulation_1_1EnvironementProperties.html">EnvironementProperties</a></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="structSimulation_1_1EnvironementProperties.html#ad0b43770821e8471125e3966e937cc3f">   20</a></span>    std::vector&lt;Specie&gt; <a class="code hl_variable" href="structSimulation_1_1EnvironementProperties.html#ad0b43770821e8471125e3966e937cc3f">species</a>;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="structSimulation_1_1EnvironementProperties.html#a36d780c9efe2d2a2ebd476bd90a3ee7f">   21</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structSimulation_1_1EnvironementProperties.html#a36d780c9efe2d2a2ebd476bd90a3ee7f">bubble_diameter</a>;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  };</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  };</div>
 </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>} <span class="comment">// namespace Simulation</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#endif </span><span class="comment">//__SIMULATION_SPECIES_DESCRIPTOR_HPP__</span></div>
-<div class="ttc" id="anamespaceSimulation_html"><div class="ttname"><a href="namespaceSimulation.html">Simulation</a></div><div class="ttdoc">Namespace that contains classes and structures related to simulation handling.</div><div class="ttdef"><b>Definition</b> host_specific.hpp:12</div></div>
-<div class="ttc" id="anamespaceSimulation_html_a8a8043f8951284c90553aeb242416f4e"><div class="ttname"><a href="namespaceSimulation.html#a8a8043f8951284c90553aeb242416f4e">Simulation::SpecieTable</a></div><div class="ttdeci">std::vector&lt; Specie &gt; SpecieTable</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:16</div></div>
-<div class="ttc" id="astructSimulation_1_1EnvironementProperties_html"><div class="ttname"><a href="structSimulation_1_1EnvironementProperties.html">Simulation::EnvironementProperties</a></div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:19</div></div>
-<div class="ttc" id="astructSimulation_1_1EnvironementProperties_html_a36d780c9efe2d2a2ebd476bd90a3ee7f"><div class="ttname"><a href="structSimulation_1_1EnvironementProperties.html#a36d780c9efe2d2a2ebd476bd90a3ee7f">Simulation::EnvironementProperties::bubble_diameter</a></div><div class="ttdeci">double bubble_diameter</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:21</div></div>
-<div class="ttc" id="astructSimulation_1_1EnvironementProperties_html_ad0b43770821e8471125e3966e937cc3f"><div class="ttname"><a href="structSimulation_1_1EnvironementProperties.html#ad0b43770821e8471125e3966e937cc3f">Simulation::EnvironementProperties::species</a></div><div class="ttdeci">std::vector&lt; Specie &gt; species</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:20</div></div>
-<div class="ttc" id="astructSimulation_1_1Specie_html"><div class="ttname"><a href="structSimulation_1_1Specie.html">Simulation::Specie</a></div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:10</div></div>
-<div class="ttc" id="astructSimulation_1_1Specie_html_a473af9e123c07220ce296a0fb9874440"><div class="ttname"><a href="structSimulation_1_1Specie.html#a473af9e123c07220ce296a0fb9874440">Simulation::Specie::name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:11</div></div>
-<div class="ttc" id="astructSimulation_1_1Specie_html_a876c03470aadbb6334790cdccd728b34"><div class="ttname"><a href="structSimulation_1_1Specie.html#a876c03470aadbb6334790cdccd728b34">Simulation::Specie::henry</a></div><div class="ttdeci">std::optional&lt; double &gt; henry</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:13</div></div>
-<div class="ttc" id="astructSimulation_1_1Specie_html_aca90833106014e728ae67852bf6969e5"><div class="ttname"><a href="structSimulation_1_1Specie.html#aca90833106014e728ae67852bf6969e5">Simulation::Specie::molar_weight</a></div><div class="ttdeci">std::optional&lt; double &gt; molar_weight</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:12</div></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>  Specie <a class="code hl_function" href="namespaceMixture.html#ad72e8e0685923414e92b83dc6f52736d">new_specie</a>(std::string_view _name,</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>                    <span class="keywordtype">double</span> molar_weight,</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                    std::optional&lt;double&gt; henry);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  Specie <a class="code hl_function" href="namespaceMixture.html#ad72e8e0685923414e92b83dc6f52736d">new_specie</a>(std::string_view _name);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  std::optional&lt;Specie&gt; <a class="code hl_function" href="namespaceMixture.html#ae1645642e7ae69236cee1fa8d0c334d1">query_species</a>(std::string_view);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="foldopen" id="foldopen00035" data-start="{" data-end="};">
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classMixture_1_1SpecieTable.html">   35</a></span>  <span class="keyword">class </span><a class="code hl_function" href="classMixture_1_1SpecieTable.html#a92ce7f85dcdf3cdd9b0320b229631c6e">SpecieTable</a></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  {</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="classMixture_1_1SpecieTable.html#abf8afe9a15bec85984d1e086297ea286">   38</a></span>    std::vector&lt;Specie&gt; <a class="code hl_variable" href="classMixture_1_1SpecieTable.html#abf8afe9a15bec85984d1e086297ea286">m_table</a>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keyword">friend</span> std::ostream&amp; <a class="code hl_friend" href="classMixture_1_1SpecieTable.html#aea576868c93893410037840e4f11b5e9">operator&lt;&lt;</a>(std::ostream&amp;, <span class="keyword">const</span> <a class="code hl_function" href="classMixture_1_1SpecieTable.html#a92ce7f85dcdf3cdd9b0320b229631c6e">SpecieTable</a>&amp;);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    [[nodiscard]] std::size_t <a class="code hl_function" href="classMixture_1_1SpecieTable.html#aba67fd66ac2f0f5a9c898d69a4b4f447">n_species</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <a class="code hl_function" href="classMixture_1_1SpecieTable.html#a939cd68cd68c21bb5c56cd1b83ea821c">SpecieTable</a>(std::initializer_list&lt;Specie&gt; values);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Archive&gt;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">void</span></div>
+<div class="foldopen" id="foldopen00047" data-start="{" data-end="}">
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="classMixture_1_1SpecieTable.html#abc1ce37e246e5bcea14d6d6f6a8ccf45">   47</a></span>    <a class="code hl_function" href="classMixture_1_1SpecieTable.html#abc1ce37e246e5bcea14d6d6f6a8ccf45">serialize</a>(Archive&amp; archive)</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    {</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>      archive(<a class="code hl_variable" href="classMixture_1_1SpecieTable.html#abf8afe9a15bec85984d1e086297ea286">m_table</a>);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    }</div>
+</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classMixture_1_1SpecieTable.html#a939cd68cd68c21bb5c56cd1b83ea821c">SpecieTable</a>(std::size_t n);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classMixture_1_1SpecieTable.html#a939cd68cd68c21bb5c56cd1b83ea821c">   54</a></span>    <a class="code hl_function" href="classMixture_1_1SpecieTable.html#a939cd68cd68c21bb5c56cd1b83ea821c">SpecieTable</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    std::optional&lt;std::reference_wrapper&lt;const Specie&gt;&gt; <a class="code hl_function" href="classMixture_1_1SpecieTable.html#a2540d35782c61cf03a65e2e553581943">add</a>(<a class="code hl_struct" href="structMixture_1_1Specie.html">Specie</a>&amp;&amp; s);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    [[nodiscard]] std::optional&lt;std::reference_wrapper&lt;const Specie&gt;&gt;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <a class="code hl_function" href="classMixture_1_1SpecieTable.html#a22fcb75d926642a4e4c1f426420ab0e8">get</a>(std::string_view name) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    [[nodiscard]] std::optional&lt;size_t&gt; <a class="code hl_function" href="classMixture_1_1SpecieTable.html#a14eefd40d86f8e0f7c48f017d41f0477">index_of</a>(std::string_view name) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    [[nodiscard]] <span class="keywordtype">bool</span> <a class="code hl_function" href="classMixture_1_1SpecieTable.html#a731166b736b7a3a585e38d1c7508135f">has</a>(std::string_view name) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    [[nodiscard]] <span class="keyword">auto</span></div>
+<div class="foldopen" id="foldopen00064" data-start="{" data-end="}">
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="classMixture_1_1SpecieTable.html#ad5c1ff7b54a04c7d48c908cf66960dea">   64</a></span>    <a class="code hl_function" href="classMixture_1_1SpecieTable.html#ad5c1ff7b54a04c7d48c908cf66960dea">henry</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>      <span class="keywordflow">return</span> <a class="code hl_variable" href="classMixture_1_1SpecieTable.html#abf8afe9a15bec85984d1e086297ea286">m_table</a></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>             | std::views::transform([](<span class="keyword">const</span> <a class="code hl_struct" href="structMixture_1_1Specie.html">Specie</a>&amp; e)</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                                     { <span class="keywordflow">return</span> e.<a class="code hl_variable" href="structMixture_1_1Specie.html#a7d9f702b2e921853a5b327a50a402b93">henry</a>.value_or(0.0); });</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    }</div>
+</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    [[nodiscard]] <span class="keyword">auto</span></div>
+<div class="foldopen" id="foldopen00072" data-start="{" data-end="}">
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="classMixture_1_1SpecieTable.html#a43190230a2c2bb6a641b6764199551ee">   72</a></span>    <a class="code hl_function" href="classMixture_1_1SpecieTable.html#a43190230a2c2bb6a641b6764199551ee">species_list</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>      <span class="keywordflow">return</span> <a class="code hl_variable" href="classMixture_1_1SpecieTable.html#abf8afe9a15bec85984d1e086297ea286">m_table</a></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>             | std::views::transform([](<span class="keyword">const</span> <a class="code hl_struct" href="structMixture_1_1Specie.html">Specie</a>&amp; e) { <span class="keywordflow">return</span> e.<a class="code hl_variable" href="structMixture_1_1Specie.html#a13dd353c108000f23d17aed9052cb81f">name</a>; });</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    }</div>
+</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  };</div>
+</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  std::ostream&amp; <a class="code hl_function" href="namespaceMixture.html#a4c663716df1b9c0906875102fc2dba55">operator&lt;&lt;</a>(std::ostream&amp; os, <span class="keyword">const</span> Specie&amp; s);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  std::ostream&amp; <a class="code hl_function" href="namespaceMixture.html#a4c663716df1b9c0906875102fc2dba55">operator&lt;&lt;</a>(std::ostream&amp; os, <span class="keyword">const</span> SpecieTable&amp; table);</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="foldopen" id="foldopen00082" data-start="{" data-end="};">
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno"><a class="line" href="structMixture_1_1EnvironementProperties.html">   82</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structMixture_1_1EnvironementProperties.html">EnvironementProperties</a></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  {</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="structMixture_1_1EnvironementProperties.html#a21ca0ef5b1cbf16be82afc38bcd8ad26">   84</a></span>    std::vector&lt;Specie&gt; <a class="code hl_variable" href="structMixture_1_1EnvironementProperties.html#a21ca0ef5b1cbf16be82afc38bcd8ad26">species</a>;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="structMixture_1_1EnvironementProperties.html#a2dd44a32ac0595ccc25ef108a0bd6c8c">   85</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structMixture_1_1EnvironementProperties.html#a2dd44a32ac0595ccc25ef108a0bd6c8c">bubble_diameter</a>;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  };</div>
+</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>} <span class="comment">// namespace Mixture</span></div>
+</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="preprocessor">#endif </span><span class="comment">//__SIMULATION_SPECIES_DESCRIPTOR_HPP__</span></div>
+<div class="ttc" id="aclassMixture_1_1SpecieTable_html_a14eefd40d86f8e0f7c48f017d41f0477"><div class="ttname"><a href="classMixture_1_1SpecieTable.html#a14eefd40d86f8e0f7c48f017d41f0477">Mixture::SpecieTable::index_of</a></div><div class="ttdeci">std::optional&lt; size_t &gt; index_of(std::string_view name) const</div><div class="ttdef"><b>Definition</b> species_descriptor.cpp:65</div></div>
+<div class="ttc" id="aclassMixture_1_1SpecieTable_html_a22fcb75d926642a4e4c1f426420ab0e8"><div class="ttname"><a href="classMixture_1_1SpecieTable.html#a22fcb75d926642a4e4c1f426420ab0e8">Mixture::SpecieTable::get</a></div><div class="ttdeci">std::optional&lt; std::reference_wrapper&lt; const Specie &gt; &gt; get(std::string_view name) const</div><div class="ttdef"><b>Definition</b> species_descriptor.cpp:105</div></div>
+<div class="ttc" id="aclassMixture_1_1SpecieTable_html_a2540d35782c61cf03a65e2e553581943"><div class="ttname"><a href="classMixture_1_1SpecieTable.html#a2540d35782c61cf03a65e2e553581943">Mixture::SpecieTable::add</a></div><div class="ttdeci">std::optional&lt; std::reference_wrapper&lt; const Specie &gt; &gt; add(Specie &amp;&amp;s)</div><div class="ttdef"><b>Definition</b> species_descriptor.cpp:93</div></div>
+<div class="ttc" id="aclassMixture_1_1SpecieTable_html_a43190230a2c2bb6a641b6764199551ee"><div class="ttname"><a href="classMixture_1_1SpecieTable.html#a43190230a2c2bb6a641b6764199551ee">Mixture::SpecieTable::species_list</a></div><div class="ttdeci">auto species_list() const</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:72</div></div>
+<div class="ttc" id="aclassMixture_1_1SpecieTable_html_a731166b736b7a3a585e38d1c7508135f"><div class="ttname"><a href="classMixture_1_1SpecieTable.html#a731166b736b7a3a585e38d1c7508135f">Mixture::SpecieTable::has</a></div><div class="ttdeci">bool has(std::string_view name) const</div><div class="ttdef"><b>Definition</b> species_descriptor.cpp:87</div></div>
+<div class="ttc" id="aclassMixture_1_1SpecieTable_html_a92ce7f85dcdf3cdd9b0320b229631c6e"><div class="ttname"><a href="classMixture_1_1SpecieTable.html#a92ce7f85dcdf3cdd9b0320b229631c6e">Mixture::SpecieTable::SpecieTable</a></div><div class="ttdeci">SpecieTable(std::initializer_list&lt; Specie &gt; values)</div><div class="ttdef"><b>Definition</b> species_descriptor.cpp:59</div></div>
+<div class="ttc" id="aclassMixture_1_1SpecieTable_html_a939cd68cd68c21bb5c56cd1b83ea821c"><div class="ttname"><a href="classMixture_1_1SpecieTable.html#a939cd68cd68c21bb5c56cd1b83ea821c">Mixture::SpecieTable::SpecieTable</a></div><div class="ttdeci">SpecieTable()=default</div></div>
+<div class="ttc" id="aclassMixture_1_1SpecieTable_html_aba67fd66ac2f0f5a9c898d69a4b4f447"><div class="ttname"><a href="classMixture_1_1SpecieTable.html#aba67fd66ac2f0f5a9c898d69a4b4f447">Mixture::SpecieTable::n_species</a></div><div class="ttdeci">std::size_t n_species() const</div><div class="ttdef"><b>Definition</b> species_descriptor.cpp:54</div></div>
+<div class="ttc" id="aclassMixture_1_1SpecieTable_html_abc1ce37e246e5bcea14d6d6f6a8ccf45"><div class="ttname"><a href="classMixture_1_1SpecieTable.html#abc1ce37e246e5bcea14d6d6f6a8ccf45">Mixture::SpecieTable::serialize</a></div><div class="ttdeci">void serialize(Archive &amp;archive)</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:47</div></div>
+<div class="ttc" id="aclassMixture_1_1SpecieTable_html_abf8afe9a15bec85984d1e086297ea286"><div class="ttname"><a href="classMixture_1_1SpecieTable.html#abf8afe9a15bec85984d1e086297ea286">Mixture::SpecieTable::m_table</a></div><div class="ttdeci">std::vector&lt; Specie &gt; m_table</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:38</div></div>
+<div class="ttc" id="aclassMixture_1_1SpecieTable_html_ad5c1ff7b54a04c7d48c908cf66960dea"><div class="ttname"><a href="classMixture_1_1SpecieTable.html#ad5c1ff7b54a04c7d48c908cf66960dea">Mixture::SpecieTable::henry</a></div><div class="ttdeci">auto henry() const</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:64</div></div>
+<div class="ttc" id="aclassMixture_1_1SpecieTable_html_aea576868c93893410037840e4f11b5e9"><div class="ttname"><a href="classMixture_1_1SpecieTable.html#aea576868c93893410037840e4f11b5e9">Mixture::SpecieTable::operator&lt;&lt;</a></div><div class="ttdeci">friend std::ostream &amp; operator&lt;&lt;(std::ostream &amp;, const SpecieTable &amp;)</div><div class="ttdef"><b>Definition</b> species_descriptor.cpp:21</div></div>
+<div class="ttc" id="anamespaceMixture_html"><div class="ttname"><a href="namespaceMixture.html">Mixture</a></div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:10</div></div>
+<div class="ttc" id="anamespaceMixture_html_a4c663716df1b9c0906875102fc2dba55"><div class="ttname"><a href="namespaceMixture.html#a4c663716df1b9c0906875102fc2dba55">Mixture::operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, const Specie &amp;s)</div><div class="ttdef"><b>Definition</b> species_descriptor.cpp:10</div></div>
+<div class="ttc" id="anamespaceMixture_html_ad72e8e0685923414e92b83dc6f52736d"><div class="ttname"><a href="namespaceMixture.html#ad72e8e0685923414e92b83dc6f52736d">Mixture::new_specie</a></div><div class="ttdeci">Specie new_specie(std::string_view _name, double molar_weight, std::optional&lt; double &gt; henry)</div><div class="ttdef"><b>Definition</b> species_descriptor.cpp:32</div></div>
+<div class="ttc" id="anamespaceMixture_html_ae1645642e7ae69236cee1fa8d0c334d1"><div class="ttname"><a href="namespaceMixture.html#ae1645642e7ae69236cee1fa8d0c334d1">Mixture::query_species</a></div><div class="ttdeci">std::optional&lt; Specie &gt; query_species(std::string_view)</div><div class="ttdef"><b>Definition</b> query_species.cpp:56</div></div>
+<div class="ttc" id="astructMixture_1_1EnvironementProperties_html"><div class="ttname"><a href="structMixture_1_1EnvironementProperties.html">Mixture::EnvironementProperties</a></div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:83</div></div>
+<div class="ttc" id="astructMixture_1_1EnvironementProperties_html_a21ca0ef5b1cbf16be82afc38bcd8ad26"><div class="ttname"><a href="structMixture_1_1EnvironementProperties.html#a21ca0ef5b1cbf16be82afc38bcd8ad26">Mixture::EnvironementProperties::species</a></div><div class="ttdeci">std::vector&lt; Specie &gt; species</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:84</div></div>
+<div class="ttc" id="astructMixture_1_1EnvironementProperties_html_a2dd44a32ac0595ccc25ef108a0bd6c8c"><div class="ttname"><a href="structMixture_1_1EnvironementProperties.html#a2dd44a32ac0595ccc25ef108a0bd6c8c">Mixture::EnvironementProperties::bubble_diameter</a></div><div class="ttdeci">double bubble_diameter</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:85</div></div>
+<div class="ttc" id="astructMixture_1_1Specie_html"><div class="ttname"><a href="structMixture_1_1Specie.html">Mixture::Specie</a></div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:13</div></div>
+<div class="ttc" id="astructMixture_1_1Specie_html_a13dd353c108000f23d17aed9052cb81f"><div class="ttname"><a href="structMixture_1_1Specie.html#a13dd353c108000f23d17aed9052cb81f">Mixture::Specie::name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:14</div></div>
+<div class="ttc" id="astructMixture_1_1Specie_html_a7d9f702b2e921853a5b327a50a402b93"><div class="ttname"><a href="structMixture_1_1Specie.html#a7d9f702b2e921853a5b327a50a402b93">Mixture::Specie::henry</a></div><div class="ttdeci">std::optional&lt; double &gt; henry</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:17</div></div>
+<div class="ttc" id="astructMixture_1_1Specie_html_a8c104a63e47f2cba97746dbfa01d487d"><div class="ttname"><a href="structMixture_1_1Specie.html#a8c104a63e47f2cba97746dbfa01d487d">Mixture::Specie::molar_weight</a></div><div class="ttdeci">std::optional&lt; double &gt; molar_weight</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:15</div></div>
+<div class="ttc" id="astructMixture_1_1Specie_html_ae257b2dbadef58bb081f9ee3238d7865"><div class="ttname"><a href="structMixture_1_1Specie.html#ae257b2dbadef58bb081f9ee3238d7865">Mixture::Specie::serialize</a></div><div class="ttdeci">void serialize(Archive &amp;archive)</div><div class="ttdef"><b>Definition</b> species_descriptor.hpp:21</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="dir_9654b8d08f4bba4e84b362c5fd320bee.html">apps</a></li><li class="navelem"><a href="dir_875b80e4933768785723d9192abcaf1c.html">libs</a></li><li class="navelem"><a href="dir_025087c2f06cd1d8ba2849de0aaee01b.html">simulation</a></li><li class="navelem"><a href="dir_8c5444b33675d8a39b8c4d4e83061356.html">public</a></li><li class="navelem"><a href="dir_638c9ee455e4ea636879452d604beeaf.html">simulation</a></li><li class="navelem"><a href="dir_cd49851748a19b5d76f8b4e2c7080a3d.html">descriptors</a></li><li class="navelem"><b>species_descriptor.hpp</b></li>
+    <li class="navelem"><a href="dir_9654b8d08f4bba4e84b362c5fd320bee.html">apps</a></li><li class="navelem"><a href="dir_875b80e4933768785723d9192abcaf1c.html">libs</a></li><li class="navelem"><a href="dir_860290c0f09d484b15e461525a736c13.html">mixture</a></li><li class="navelem"><a href="dir_06108510afca767dbb61681269a20a5d.html">public</a></li><li class="navelem"><a href="dir_05253738bf9a5cd29b2a31d4962714c9.html">mixture</a></li><li class="navelem"><b>species_descriptor.hpp</b></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

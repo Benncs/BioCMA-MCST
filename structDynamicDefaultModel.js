@@ -11,7 +11,7 @@ var structDynamicDefaultModel =
     ] ],
     [ "division", "structDynamicDefaultModel.html#a939a8aed13902dc99efbb94f48607387", null ],
     [ "get_bounds", "structDynamicDefaultModel.html#a91d9a8dc0932f57b7371c9fee4670830", null ],
-    [ "get_config", "structDynamicDefaultModel.html#a52a681839006fc38b3a0886971f51d37", null ],
+    [ "get_config", "structDynamicDefaultModel.html#a1c7399fdb332451b45cfadd2aceebe0a", null ],
     [ "init", "structDynamicDefaultModel.html#aa829eaa5033bc09a36ee1e9f78a798fe", null ],
     [ "mass", "structDynamicDefaultModel.html#a968fff01adc149e4fea157d122539da7", null ],
     [ "update", "structDynamicDefaultModel.html#a8d21c1d6c4b1adc633eb3217321a2e79", null ],

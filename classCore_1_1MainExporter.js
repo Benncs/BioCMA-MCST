@@ -2,6 +2,7 @@ var classCore_1_1MainExporter =
 [
     [ "MainExporter", "classCore_1_1MainExporter.html#a55de288d22175b4403438b9ce81db011", null ],
     [ "MainExporter", "classCore_1_1MainExporter.html#a7e9b68f93532daebf132adc466c04cc1", null ],
+    [ "export_feed", "classCore_1_1MainExporter.html#a80e5f35847d4bcb67ac13e94dd03b205", null ],
     [ "init_fields", "classCore_1_1MainExporter.html#a2651efc5b4bd42574fc58f47d66b4c04", null ],
     [ "update_fields", "classCore_1_1MainExporter.html#a8d527d39208ea9589ef0788a56305ca9", null ],
     [ "write_final", "classCore_1_1MainExporter.html#a38765c9b7bcf5a1867e0e947a166e01b", null ],

@@ -1,7 +1,6 @@
 var namespacePostProcessing =
 [
     [ "BonceBuffer", "structPostProcessing_1_1BonceBuffer.html", "structPostProcessing_1_1BonceBuffer" ],
-    [ "_save_probes", "namespacePostProcessing.html#adae52b6b518e25be1c920f36f196ef65", null ],
     [ "final_post_processing", "namespacePostProcessing.html#a4ab2f40acb429b9c449457ac83604ab7", null ],
     [ "get_particle_age_only", "namespacePostProcessing.html#a80f3f8d7143933b6b2d9e58ff0de40d8", null ],
     [ "get_properties", "namespacePostProcessing.html#a5c1775fa34193199d9c989e5740e2f84", null ],

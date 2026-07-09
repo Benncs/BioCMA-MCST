@@ -111,6 +111,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a0d426b6faf4c05d6ac7e65ea2dd014d3 inherit pub_methods_classCore_1_1DataExporter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a link to a specified file.  <br /></td></tr>
 <tr class="memitem:ad3b98151595b0962c089a7afcdb2a642 inherit pub_methods_classCore_1_1DataExporter" id="r_ad3b98151595b0962c089a7afcdb2a642"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#ad3b98151595b0962c089a7afcdb2a642">set_logger</a> (std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; _logger)</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a80e5f35847d4bcb67ac13e94dd03b205" id="r_a80e5f35847d4bcb67ac13e94dd03b205"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80e5f35847d4bcb67ac13e94dd03b205">export_feed</a> (const <a class="el" href="classSimulation_1_1Getter.html">Simulation::Getter</a> &amp;g)</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ae61d70c02573f67de4a08ebbc8c2a0d0" id="r_ae61d70c02573f67de4a08ebbc8c2a0d0"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae61d70c02573f67de4a08ebbc8c2a0d0">n_expected_export</a> {}</td></tr>
@@ -126,7 +130,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a8df0b133d30a179f67a3b22dc6d59db9 inherit pro_types_classCore_1_1DataExporter" id="r_a8df0b133d30a179f67a3b22dc6d59db9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#a8df0b133d30a179f67a3b22dc6d59db9">export_metadata_kv</a></td></tr>
 <tr class="memitem:ab2399d6169e81b2f616072e7b84ee6fd inherit pro_types_classCore_1_1DataExporter" id="r_ab2399d6169e81b2f616072e7b84ee6fd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#ab2399d6169e81b2f616072e7b84ee6fd">ViewParticleProperties</a></td></tr>
 <tr class="memdesc:ab2399d6169e81b2f616072e7b84ee6fd inherit pro_types_classCore_1_1DataExporter"><td class="mdescLeft">&#160;</td><td class="mdescRight">View for particle properties.  <br /></td></tr>
-<tr class="memitem:ada6e9f3eaa8f7d0f0eeea71ca3cc2d16 inherit pro_types_classCore_1_1DataExporter" id="r_ada6e9f3eaa8f7d0f0eeea71ca3cc2d16"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#ada6e9f3eaa8f7d0f0eeea71ca3cc2d16">simple_export_t</a></td></tr>
+<tr class="memitem:abfa0ecc8ce0d463285884891eccaf91c inherit pro_types_classCore_1_1DataExporter" id="r_abfa0ecc8ce0d463285884891eccaf91c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#abfa0ecc8ce0d463285884891eccaf91c">simple_export_t</a></td></tr>
 <tr class="memitem:ad0f5945b4caee2bd764d4acd0a2536f3 inherit pro_types_classCore_1_1DataExporter" id="r_ad0f5945b4caee2bd764d4acd0a2536f3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#ad0f5945b4caee2bd764d4acd0a2536f3">export_initial_kv</a></td></tr>
 <tr class="memitem:a2c69ef65ad99d769192459d131baeba8 inherit pro_types_classCore_1_1DataExporter" id="r_a2c69ef65ad99d769192459d131baeba8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#a2c69ef65ad99d769192459d131baeba8">matrix_variant_t</a></td></tr>
 <tr class="memdesc:a2c69ef65ad99d769192459d131baeba8 inherit pro_types_classCore_1_1DataExporter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variant for matrix data types.  <br /></td></tr>
@@ -140,7 +144,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a0b0b79f3932c4eb905704a852248c857 inherit pro_methods_classCore_1_1DataExporter" id="r_a0b0b79f3932c4eb905704a852248c857"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#a0b0b79f3932c4eb905704a852248c857">append_array</a> (std::string_view name, std::span&lt; const double &gt; data, uint64_t last_size=0)</td></tr>
 <tr class="memitem:a7c1ccdd8fd75dacdf621d0a42757a555 inherit pro_methods_classCore_1_1DataExporter" id="r_a7c1ccdd8fd75dacdf621d0a42757a555"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#a7c1ccdd8fd75dacdf621d0a42757a555">write_properties</a> (std::optional&lt; std::string &gt; specific_dataspace, const <a class="el" href="classCore_1_1DataExporter.html#a8df0b133d30a179f67a3b22dc6d59db9">export_metadata_kv</a> &amp;values)</td></tr>
 <tr class="memitem:a32fb6f00d4e951076a626120c1a4d9eb inherit pro_methods_classCore_1_1DataExporter" id="r_a32fb6f00d4e951076a626120c1a4d9eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#a32fb6f00d4e951076a626120c1a4d9eb">write_simple</a> (const <a class="el" href="classCore_1_1DataExporter.html#ad0f5945b4caee2bd764d4acd0a2536f3">export_initial_kv</a> &amp;values, std::string_view root)</td></tr>
-<tr class="memitem:af340f4cf2e82a66d036f21f3c797fb86 inherit pro_methods_classCore_1_1DataExporter" id="r_af340f4cf2e82a66d036f21f3c797fb86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#af340f4cf2e82a66d036f21f3c797fb86">write_simple</a> (std::string specific_dataspace, const <a class="el" href="classCore_1_1DataExporter.html#ada6e9f3eaa8f7d0f0eeea71ca3cc2d16">simple_export_t</a> &amp;values)</td></tr>
+<tr class="memitem:af340f4cf2e82a66d036f21f3c797fb86 inherit pro_methods_classCore_1_1DataExporter" id="r_af340f4cf2e82a66d036f21f3c797fb86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#af340f4cf2e82a66d036f21f3c797fb86">write_simple</a> (std::string specific_dataspace, const <a class="el" href="classCore_1_1DataExporter.html#abfa0ecc8ce0d463285884891eccaf91c">simple_export_t</a> &amp;values)</td></tr>
 <tr class="memitem:af6fcc205b9cbfedc9421889194c82e41 inherit pro_methods_classCore_1_1DataExporter" id="r_af6fcc205b9cbfedc9421889194c82e41"><td class="memItemLeft" align="right" valign="top">const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#af6fcc205b9cbfedc9421889194c82e41">get_descriptor</a> (std::string_view name) const</td></tr>
 <tr class="memitem:a5e6e0347f65db5ed1755e2333be837af inherit pro_methods_classCore_1_1DataExporter" id="r_a5e6e0347f65db5ed1755e2333be837af"><td class="memItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#a5e6e0347f65db5ed1755e2333be837af">get_descriptor_mut</a> (std::string_view name)</td></tr>
 <tr class="memitem:af46e3eafbbd6d3332e9c25e293f51708 inherit pro_methods_classCore_1_1DataExporter" id="r_af46e3eafbbd6d3332e9c25e293f51708"><td class="memItemLeft" align="right" valign="top">std::span&lt; const std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DataExporter.html#af46e3eafbbd6d3332e9c25e293f51708">get_dim</a> (std::string_view name) const</td></tr>
@@ -227,6 +231,41 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a80e5f35847d4bcb67ac13e94dd03b205" name="a80e5f35847d4bcb67ac13e94dd03b205"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80e5f35847d4bcb67ac13e94dd03b205">&#9670;&#160;</a></span>export_feed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Core::MainExporter::export_feed </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classSimulation_1_1Getter.html">Simulation::Getter</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>g</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1MainExporter_a80e5f35847d4bcb67ac13e94dd03b205_cgraph.svg" width="464" height="186"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1MainExporter_a80e5f35847d4bcb67ac13e94dd03b205_icgraph.svg" width="330" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
 <a id="a2651efc5b4bd42574fc58f47d66b4c04" name="a2651efc5b4bd42574fc58f47d66b4c04"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2651efc5b4bd42574fc58f47d66b4c04">&#9670;&#160;</a></span>init_fields()</h2>
 
@@ -362,7 +401,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1MainExporter_a38765c9b7bcf5a1867e0e947a166e01b_cgraph.svg" width="328" height="363"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCore_1_1MainExporter_a38765c9b7bcf5a1867e0e947a166e01b_cgraph.svg" width="647" height="492"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

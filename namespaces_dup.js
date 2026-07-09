@@ -22,16 +22,18 @@ var namespaces_dup =
     [ "IO", "namespaceIO.html", "namespaceIO" ],
     [ "KokkosEigen", "namespaceKokkosEigen.html", "namespaceKokkosEigen" ],
     [ "MC", "namespaceMC.html", "namespaceMC" ],
+    [ "Mixture", "namespaceMixture.html", "namespaceMixture" ],
     [ "Models", "namespaceModels.html", "namespaceModels" ],
     [ "PostProcessing", "namespacePostProcessing.html", "namespacePostProcessing" ],
     [ "pybind11", "namespacepybind11.html", null ],
     [ "PythonBindings", "namespacePythonBindings.html", [
-      [ "apply", "namespacePythonBindings.html#ae15ec276f6c0fb04ec8c0ab6b9703bbd", null ],
+      [ "apply", "namespacePythonBindings.html#a2e8bee7a735e09a3b1f59b24fd895a9c", null ],
       [ "declare_parameter", "namespacePythonBindings.html#a0dfed48d738fa5b895624a82e3cafc5c", null ],
-      [ "exec", "namespacePythonBindings.html#a5b0860d26d117daf1f6178523b1340a5", null ],
+      [ "exec", "namespacePythonBindings.html#a74e0c2f79521ec82a1f28edf156e3b2c", null ],
       [ "init_handle", "namespacePythonBindings.html#a6d7fcbd0afddcc3dc7809f4fa7ef248b", null ],
       [ "register_cma_path", "namespacePythonBindings.html#a4502f9b5f66f66a56922869e497b0ba0", null ],
-      [ "set_initialiser_from_data", "namespacePythonBindings.html#a83bf7d72dda0016cf5ab544ad3bb33fb", null ]
+      [ "register_mixture_composition", "namespacePythonBindings.html#a1a7f90f53c587f913aba3d182ea14eb6", null ],
+      [ "set_initialiser_from_data", "namespacePythonBindings.html#a8ff39f86aa64d3b9b13edf970e62ee77", null ]
     ] ],
     [ "PythonWrap", "namespacePythonWrap.html", "namespacePythonWrap" ],
     [ "Simulation", "namespaceSimulation.html", "namespaceSimulation" ],

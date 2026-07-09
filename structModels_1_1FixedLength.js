@@ -13,7 +13,7 @@ var structModels_1_1FixedLength =
     ] ],
     [ "division", "structModels_1_1FixedLength.html#a3af0595af943ef427703842804ee28aa", null ],
     [ "get_bounds", "structModels_1_1FixedLength.html#aa9ad5b8958fad66791be3a8ce3835f87", null ],
-    [ "get_config", "structModels_1_1FixedLength.html#ad2fbacbf94c199f2b375481a6b8f1dab", null ],
+    [ "get_config", "structModels_1_1FixedLength.html#aed497b383ebf939a11c29e444a9bc16e", null ],
     [ "get_number", "structModels_1_1FixedLength.html#a510a7132bbef294b660877f2f4b7b4ff", null ],
     [ "init", "structModels_1_1FixedLength.html#af52fca85c99c8da6440425a11f481215", null ],
     [ "mass", "structModels_1_1FixedLength.html#af95f402aa987c6d544670eff217691d7", null ],

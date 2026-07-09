@@ -18,6 +18,8 @@ var namespaceIO =
       [ "Buffer", "namespaceIO.html#ab9eac12535dcbd46b28d922fc4cfada7aef3428b560e9f68dfb0b2f685858059c", null ],
       [ "File", "namespaceIO.html#ab9eac12535dcbd46b28d922fc4cfada7a409c35fd70c7118c4fbef3e7f90f5fc4", null ]
     ] ],
+    [ "_format", "namespaceIO.html#a509531f022970c6536cb9c30f236fb2e", null ],
+    [ "_format", "namespaceIO.html#af410cee54042c854040249aac3ae6ab6", null ],
     [ "format", "namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383", null ],
     [ "PROGRESS_BAR_SYMBOL", "namespaceIO.html#a075d2e094da9387b2caaee5b8f84085c", null ],
     [ "PROGRESS_BAR_WIDTH", "namespaceIO.html#a7abfa25f825da6a5507e7642fde4f9ab", null ]

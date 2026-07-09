@@ -88,6 +88,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2fadba8d7bf92a3d9b3a3aeaf46f1cf9" id="r_a2fadba8d7bf92a3d9b3a3aeaf46f1cf9"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8">EventType</a> event&gt; </td></tr>
 <tr class="memitem:a2fadba8d7bf92a3d9b3a3aeaf46f1cf9 template"><td class="memItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2fadba8d7bf92a3d9b3a3aeaf46f1cf9">get</a> () const</td></tr>
 <tr class="memdesc:a2fadba8d7bf92a3d9b3a3aeaf46f1cf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter to specific event counter.  <br /></td></tr>
+<tr class="memitem:a23d9c60a73107c67bd68ecf09a93bd1d" id="r_a23d9c60a73107c67bd68ecf09a93bd1d"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8">EventType</a> event&gt; </td></tr>
+<tr class="memitem:a23d9c60a73107c67bd68ecf09a93bd1d template"><td class="memItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23d9c60a73107c67bd68ecf09a93bd1d">get_cumulative</a> () const</td></tr>
+<tr class="memdesc:a23d9c60a73107c67bd68ecf09a93bd1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter to specific event counter.  <br /></td></tr>
 <tr class="memitem:a70d7122fe5d2521f91e871816ea83e61" id="r_a70d7122fe5d2521f91e871816ea83e61"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8">EventType</a> event&gt; </td></tr>
 <tr class="memitem:a70d7122fe5d2521f91e871816ea83e61 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_FORCEINLINE_FUNCTION constexpr void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a70d7122fe5d2521f91e871816ea83e61">incr</a> () const</td></tr>
 <tr class="memdesc:a70d7122fe5d2521f91e871816ea83e61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increment specific event counter.  <br /></td></tr>
@@ -231,6 +234,47 @@ template&lt;<a class="el" href="namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structMC_1_1EventContainer_a2fadba8d7bf92a3d9b3a3aeaf46f1cf9_cgraph.svg" width="344" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="a23d9c60a73107c67bd68ecf09a93bd1d" name="a23d9c60a73107c67bd68ecf09a93bd1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23d9c60a73107c67bd68ecf09a93bd1d">&#9670;&#160;</a></span>get_cumulative()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8">EventType</a> event&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t MC::EventContainer::get_cumulative </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel nodiscard">nodiscard</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Getter to specific event counter. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Event</td><td>to get </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Warning</dt><dd>This function is thread_safe because we get a copy of the current counter </dd></dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structMC_1_1EventContainer_a23d9c60a73107c67bd68ecf09a93bd1d_cgraph.svg" width="318" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

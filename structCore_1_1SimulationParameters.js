@@ -4,6 +4,7 @@ var structCore_1_1SimulationParameters =
     [ "m_default", "structCore_1_1SimulationParameters.html#a16fac412f57df6243d2e7b1dc14d6e01", null ],
     [ "biomass_initial_concentration", "structCore_1_1SimulationParameters.html#ae020b2aad6b29d33f2362b599bd5c508", null ],
     [ "d_t", "structCore_1_1SimulationParameters.html#a1ece79ed1bf860d772a198d4b739fe73", null ],
+    [ "f_reaction", "structCore_1_1SimulationParameters.html#ac9fa135a13346ff532fd76c02526d1a0", null ],
     [ "final_time", "structCore_1_1SimulationParameters.html#ac881f227b526dce35fe1b457c28dcbc7", null ],
     [ "flow_files", "structCore_1_1SimulationParameters.html#a7a5396f1ca08e77e46b964a398d543a5", null ],
     [ "is_two_phase_flow", "structCore_1_1SimulationParameters.html#a55463de3d512e3d46139f60ead55548b", null ],

@@ -1,0 +1,12 @@
+<map id="Core::SimulationUnitBuilder::build" name="Core::SimulationUnitBuilder::build">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,78,188,117"/>
+<area shape="rect" id="Node000002" href="$namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383" title=" " alt="" coords="286,29,366,54"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,75,271,52,272,57,179,80"/>
+<area shape="rect" id="Node000004" href="$classSimulation_1_1BaseSimulationException.html#a1914eac16910be8ad80a834e4836e8c5" title=" " alt="" coords="236,78,417,117"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="188,95,220,95,220,100,188,100"/>
+<area shape="rect" id="Node000005" href="$classSimulation_1_1BaseSimulationException.html#afb654a0a15eb8a42e4350e021ce1b0c2" title=" " alt="" coords="236,141,417,180"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="170,115,239,134,237,139,169,120"/>
+<area shape="rect" id="Node000003" href="$namespaceIO.html#a509531f022970c6536cb9c30f236fb2e" title=" " alt="" coords="465,29,552,54"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="367,39,450,39,450,44,367,44"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="478,31,472,21,475,11,488,5,509,3,531,5,543,12,540,17,530,10,509,8,489,10,479,15,477,20,483,27"/>
+</map>

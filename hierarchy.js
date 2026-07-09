@@ -1,6 +1,8 @@
 var hierarchy =
 [
+    [ "Simulation::MassTransfer::Type::Auto", "structSimulation_1_1MassTransfer_1_1Type_1_1Auto.html", null ],
     [ "PostProcessing::BonceBuffer", "structPostProcessing_1_1BonceBuffer.html", null ],
+    [ "Core::BuildError", "structCore_1_1BuildError.html", null ],
     [ "Canary", "classCanary.html", null ],
     [ "Core::CaseData", "structCore_1_1CaseData.html", null ],
     [ "Common::ConfigFactory", "classCommon_1_1ConfigFactory.html", null ],
@@ -25,7 +27,7 @@ var hierarchy =
     [ "std::enable_shared_from_this", null, [
       [ "IO::RedirectGuard", "classIO_1_1RedirectGuard.html", null ]
     ] ],
-    [ "Simulation::EnvironementProperties", "structSimulation_1_1EnvironementProperties.html", null ],
+    [ "Mixture::EnvironementProperties", "structMixture_1_1EnvironementProperties.html", null ],
     [ "Simulation::MassTransfer::EquilibriumFunctor", "structSimulation_1_1MassTransfer_1_1EquilibriumFunctor.html", null ],
     [ "MC::EventContainer", "structMC_1_1EventContainer.html", null ],
     [ "std::exception", null, [
@@ -111,8 +113,11 @@ var hierarchy =
     [ "Api::SimulationInstance", "structApi_1_1SimulationInstance.html", null ],
     [ "Core::SimulationParameters", "structCore_1_1SimulationParameters.html", null ],
     [ "Simulation::SimulationUnit", "classSimulation_1_1SimulationUnit.html", null ],
+    [ "Core::SimulationUnitBuilder", "classCore_1_1SimulationUnitBuilder.html", null ],
     [ "MC::Distributions::SkewNormal< F >", "structMC_1_1Distributions_1_1SkewNormal.html", null ],
-    [ "Simulation::Specie", "structSimulation_1_1Specie.html", null ],
+    [ "Simulation::Sparam", "structSimulation_1_1Sparam.html", null ],
+    [ "Mixture::Specie", "structMixture_1_1Specie.html", null ],
+    [ "Mixture::SpecieTable", "classMixture_1_1SpecieTable.html", null ],
     [ "Success", "structSuccess.html", null ],
     [ "ContributionFunctor< M >::Tag0D", "structContributionFunctor_1_1Tag0D.html", null ],
     [ "tag1", "structtag1.html", null ],

@@ -8,7 +8,7 @@ var structModels_1_1UdfModel =
     [ "uniform_weight", "structModels_1_1UdfModel.html#ac8eeb9f3ad1c608b84cb3befe2192869", null ],
     [ "division", "structModels_1_1UdfModel.html#a3df5092aa65a45af46d819334fe2cbd6", null ],
     [ "get_bounds", "structModels_1_1UdfModel.html#a85a4efd3959adc8f663ffc85cd4a0efb", null ],
-    [ "get_config", "structModels_1_1UdfModel.html#aceeb8fc00983588774521d62dfa547d9", null ],
+    [ "get_config", "structModels_1_1UdfModel.html#a238582e2cb1f251bf49c3f40ebe145a0", null ],
     [ "get_number", "structModels_1_1UdfModel.html#a3108247300844976bfd89856418ea55e", null ],
     [ "init", "structModels_1_1UdfModel.html#a88724458002eedef950455b42bb3a697", null ],
     [ "mass", "structModels_1_1UdfModel.html#ae66a58b99f015fe832755e157a31b535", null ],

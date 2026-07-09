@@ -76,6 +76,7 @@ $(function(){initNavTree('conceptConfigurableInit.html','',''); });
 <h2 id="header-conceptdef" class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptConfigurableInit.html">ConfigurableInit</a> =  <span class="keyword">requires</span>(T model,</div>
+<div class="line">                                    <span class="keyword">const</span> <a class="code hl_struct" href="structExecInfo.html">ExecInfo</a>&amp; info,</div>
 <div class="line">                                    <span class="keyword">const</span> std::size_t size,</div>
 <div class="line">                                    <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&amp; random_pool,</div>
 <div class="line">                                    std::size_t idx,</div>
@@ -83,10 +84,11 @@ $(function(){initNavTree('conceptConfigurableInit.html','',''); });
 <div class="line">                                    <span class="keyword">const</span> T::Config&amp; config) {</div>
 <div class="line">  { model.init(random_pool, idx, arr, config) } -&gt; std::same_as&lt;void&gt;;</div>
 <div class="line"> </div>
-<div class="line">  { model.get_config(size) } -&gt; std::same_as&lt;typename T::Config&gt;;</div>
+<div class="line">  { model.get_config(info, size) } -&gt; std::same_as&lt;typename T::Config&gt;;</div>
 <div class="line">}</div>
-<div class="ttc" id="aconceptConfigurableInit_html"><div class="ttname"><a href="conceptConfigurableInit.html">ConfigurableInit</a></div><div class="ttdef"><b>Definition</b> traits.hpp:31</div></div>
+<div class="ttc" id="aconceptConfigurableInit_html"><div class="ttname"><a href="conceptConfigurableInit.html">ConfigurableInit</a></div><div class="ttdef"><b>Definition</b> traits.hpp:32</div></div>
 <div class="ttc" id="anamespaceMC_html_a7e53098724df8c06b90824f1567f6bc5"><div class="ttname"><a href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a></div><div class="ttdeci">gen_pool_type&lt; Kokkos::DefaultExecutionSpace &gt; pool_type</div><div class="ttdef"><b>Definition</b> alias.hpp:100</div></div>
+<div class="ttc" id="astructExecInfo_html"><div class="ttname"><a href="structExecInfo.html">ExecInfo</a></div><div class="ttdef"><b>Definition</b> execinfo.hpp:21</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

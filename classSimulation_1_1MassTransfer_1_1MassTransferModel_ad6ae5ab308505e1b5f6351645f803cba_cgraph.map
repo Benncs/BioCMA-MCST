@@ -1,5 +1,7 @@
 <map id="Simulation::MassTransfer::MassTransferModel::MassTransferModel" name="Simulation::MassTransfer::MassTransferModel::MassTransferModel">
 <area shape="rect" id="Node000001" title=" " alt="" coords="5,5,271,44"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1MassTransfer_1_1MassTransferModel.html#a4ba335fa282826f2278f6a6012e79157" title=" " alt="" coords="319,5,584,44"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1MassTransfer_1_1MassTransferModel.html#a3a4e8cee44bd30e5298558b617e9429e" title=" " alt="" coords="319,5,584,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="271,22,303,22,303,27,271,27"/>
+<area shape="rect" id="Node000003" href="$classMixture_1_1SpecieTable.html#ad5c1ff7b54a04c7d48c908cf66960dea" title=" " alt="" coords="632,5,775,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="584,22,616,22,616,27,584,27"/>
 </map>

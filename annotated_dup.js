@@ -16,6 +16,7 @@ var annotated_dup =
         [ "Uniform", "structCore_1_1ScalarFactory_1_1Uniform.html", "structCore_1_1ScalarFactory_1_1Uniform" ],
         [ "Visitor", "structCore_1_1ScalarFactory_1_1Visitor.html", "structCore_1_1ScalarFactory_1_1Visitor" ]
       ] ],
+      [ "BuildError", "structCore_1_1BuildError.html", "structCore_1_1BuildError" ],
       [ "CaseData", "structCore_1_1CaseData.html", "structCore_1_1CaseData" ],
       [ "DataExporter", "classCore_1_1DataExporter.html", "classCore_1_1DataExporter" ],
       [ "GlobalInitialiser", "classCore_1_1GlobalInitialiser.html", "classCore_1_1GlobalInitialiser" ],
@@ -23,6 +24,7 @@ var annotated_dup =
       [ "PartialExporter", "classCore_1_1PartialExporter.html", "classCore_1_1PartialExporter" ],
       [ "SignalHandler", "classCore_1_1SignalHandler.html", "classCore_1_1SignalHandler" ],
       [ "SimulationParameters", "structCore_1_1SimulationParameters.html", "structCore_1_1SimulationParameters" ],
+      [ "SimulationUnitBuilder", "classCore_1_1SimulationUnitBuilder.html", "classCore_1_1SimulationUnitBuilder" ],
       [ "UserControlParameters", "structCore_1_1UserControlParameters.html", "structCore_1_1UserControlParameters" ]
     ] ],
     [ "EIGEN_DIAG_POP", "namespaceEIGEN__DIAG__POP.html", [
@@ -58,6 +60,11 @@ var annotated_dup =
       [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html", "classMC_1_1ParticlesContainer" ],
       [ "ReactorDomain", "classMC_1_1ReactorDomain.html", "classMC_1_1ReactorDomain" ],
       [ "RuntimeParameters", "structMC_1_1RuntimeParameters.html", "structMC_1_1RuntimeParameters" ]
+    ] ],
+    [ "Mixture", "namespaceMixture.html", [
+      [ "EnvironementProperties", "structMixture_1_1EnvironementProperties.html", "structMixture_1_1EnvironementProperties" ],
+      [ "Specie", "structMixture_1_1Specie.html", "structMixture_1_1Specie" ],
+      [ "SpecieTable", "classMixture_1_1SpecieTable.html", "classMixture_1_1SpecieTable" ]
     ] ],
     [ "Models", "namespaceModels.html", [
       [ "FixedLength", "structModels_1_1FixedLength.html", "structModels_1_1FixedLength" ],
@@ -98,6 +105,7 @@ var annotated_dup =
       ] ],
       [ "MassTransfer", "namespaceSimulation_1_1MassTransfer.html", [
         [ "Type", "namespaceSimulation_1_1MassTransfer_1_1Type.html", [
+          [ "Auto", "structSimulation_1_1MassTransfer_1_1Type_1_1Auto.html", null ],
           [ "FixedKla", "structSimulation_1_1MassTransfer_1_1Type_1_1FixedKla.html", "structSimulation_1_1MassTransfer_1_1Type_1_1FixedKla" ],
           [ "FlowmapKla", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapKla.html", null ],
           [ "FlowmapTurbulence", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapTurbulence.html", null ]
@@ -110,7 +118,6 @@ var annotated_dup =
       ] ],
       [ "BaseSimulationException", "classSimulation_1_1BaseSimulationException.html", "classSimulation_1_1BaseSimulationException" ],
       [ "Dimensions", "structSimulation_1_1Dimensions.html", "structSimulation_1_1Dimensions" ],
-      [ "EnvironementProperties", "structSimulation_1_1EnvironementProperties.html", "structSimulation_1_1EnvironementProperties" ],
       [ "FeedException", "classSimulation_1_1FeedException.html", "classSimulation_1_1FeedException" ],
       [ "Getter", "classSimulation_1_1Getter.html", "classSimulation_1_1Getter" ],
       [ "Mixture", "classSimulation_1_1Mixture.html", "classSimulation_1_1Mixture" ],
@@ -121,7 +128,7 @@ var annotated_dup =
       [ "SimulatimeTimes", "structSimulation_1_1SimulatimeTimes.html", "structSimulation_1_1SimulatimeTimes" ],
       [ "SimulationException", "classSimulation_1_1SimulationException.html", "classSimulation_1_1SimulationException" ],
       [ "SimulationUnit", "classSimulation_1_1SimulationUnit.html", "classSimulation_1_1SimulationUnit" ],
-      [ "Specie", "structSimulation_1_1Specie.html", "structSimulation_1_1Specie" ]
+      [ "Sparam", "structSimulation_1_1Sparam.html", "structSimulation_1_1Sparam" ]
     ] ],
     [ "UnsafeUDF", "namespaceUnsafeUDF.html", [
       [ "Loader", "structUnsafeUDF_1_1Loader.html", "structUnsafeUDF_1_1Loader" ]

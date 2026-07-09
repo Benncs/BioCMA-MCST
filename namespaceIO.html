@@ -95,6 +95,12 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a509531f022970c6536cb9c30f236fb2e" id="r_a509531f022970c6536cb9c30f236fb2e"><td class="memTemplParams" colspan="2">template&lt;typename MsgType&gt; <br />
+requires (std::is_integral_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt; || std::is_floating_point_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt;)</td></tr>
+<tr class="memitem:a509531f022970c6536cb9c30f236fb2e template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a509531f022970c6536cb9c30f236fb2e">_format</a> (std::string &amp;result, MsgType &amp;&amp;msg)</td></tr>
+<tr class="memitem:af410cee54042c854040249aac3ae6ab6" id="r_af410cee54042c854040249aac3ae6ab6"><td class="memTemplParams" colspan="2">template&lt;typename MsgType&gt; <br />
+requires (!(std::is_integral_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt; || std::is_floating_point_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt;))</td></tr>
+<tr class="memitem:af410cee54042c854040249aac3ae6ab6 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af410cee54042c854040249aac3ae6ab6">_format</a> (std::string &amp;result, MsgType &amp;&amp;msg)</td></tr>
 <tr class="memitem:a30cc77fc5c4d45d3b56ef6a299ce2383" id="r_a30cc77fc5c4d45d3b56ef6a299ce2383"><td class="memTemplParams" colspan="2">template&lt;typename... MsgType&gt; </td></tr>
 <tr class="memitem:a30cc77fc5c4d45d3b56ef6a299ce2383 template"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30cc77fc5c4d45d3b56ef6a299ce2383">format</a> (MsgType &amp;&amp;... msgs)</td></tr>
 </table><table class="memberdecls">
@@ -123,6 +129,64 @@ Variables</h2></td></tr>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="a509531f022970c6536cb9c30f236fb2e" name="a509531f022970c6536cb9c30f236fb2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a509531f022970c6536cb9c30f236fb2e">&#9670;&#160;</a></span>_format() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MsgType&gt; <br />
+requires (std::is_integral_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt; || std::is_floating_point_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt;)</div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void IO::_format </td>
+          <td>(</td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MsgType &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>msg</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceIO_a509531f022970c6536cb9c30f236fb2e_cgraph.svg" width="99" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceIO_a509531f022970c6536cb9c30f236fb2e_icgraph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+</div>
+
+</div>
+</div>
+<a id="af410cee54042c854040249aac3ae6ab6" name="af410cee54042c854040249aac3ae6ab6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af410cee54042c854040249aac3ae6ab6">&#9670;&#160;</a></span>_format() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MsgType&gt; <br />
+requires (!(std::is_integral_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt; || std::is_floating_point_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt;))</div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void IO::_format </td>
+          <td>(</td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MsgType &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>msg</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a30cc77fc5c4d45d3b56ef6a299ce2383" name="a30cc77fc5c4d45d3b56ef6a299ce2383"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a30cc77fc5c4d45d3b56ef6a299ce2383">&#9670;&#160;</a></span>format()</h2>
 
@@ -142,7 +206,7 @@ template&lt;typename... MsgType&gt; </div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceIO_a30cc77fc5c4d45d3b56ef6a299ce2383_cgraph.svg" width="91" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceIO_a30cc77fc5c4d45d3b56ef6a299ce2383_cgraph.svg" width="227" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>

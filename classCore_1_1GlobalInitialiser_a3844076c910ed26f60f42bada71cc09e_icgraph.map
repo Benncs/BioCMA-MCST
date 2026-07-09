@@ -4,7 +4,7 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="450,212,409,135,379,94,344,57,329,47,332,42,348,53,383,90,413,132,454,210"/>
 <area shape="rect" id="Node000003" href="$classCore_1_1GlobalInitialiser.html#a9b38d15538796d9cc115211890a6c081" title="Initializes a Monte Carlo unit." alt="" coords="200,68,346,107"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="440,215,398,167,344,120,326,110,329,105,348,116,402,163,444,211"/>
-<area shape="rect" id="Node000005" href="$classCore_1_1GlobalInitialiser.html#adf72113e43a445c6afdb993c0fadeeca" title=" " alt="" coords="200,131,346,169"/>
+<area shape="rect" id="Node000005" href="$classCore_1_1GlobalInitialiser.html#a8195a20ea3870cd9f1496341997ddeb4" title=" " alt="" coords="200,131,346,169"/>
 <area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="416,220,345,183,321,172,323,167,347,178,419,215"/>
 <area shape="rect" id="Node000006" href="$classCore_1_1GlobalInitialiser.html#aa84a61b25f475380b38306232e25aff6" title="Initializes a scalar component of the simulation." alt="" coords="200,193,346,232"/>
 <area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="378,233,346,227,347,222,379,227"/>

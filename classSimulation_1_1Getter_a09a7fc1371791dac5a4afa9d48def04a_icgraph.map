@@ -1,5 +1,9 @@
 <map id="Simulation::Getter::get_feed" name="Simulation::Getter::get_feed">
-<area shape="rect" id="Node000001" title=" " alt="" coords="180,5,306,44"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1Getter.html#aaa43464497c10db193f48f4f550c4933" title=" " alt="" coords="5,5,132,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,27,132,27,132,22,164,22"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="372,37,498,76"/>
+<area shape="rect" id="Node000002" href="$classCore_1_1MainExporter.html#a80e5f35847d4bcb67ac13e94dd03b205" title=" " alt="" coords="189,5,324,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="356,45,324,39,325,34,357,40"/>
+<area shape="rect" id="Node000004" href="$classSimulation_1_1Getter.html#aaa43464497c10db193f48f4f550c4933" title=" " alt="" coords="193,68,320,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="357,73,320,79,319,74,356,67"/>
+<area shape="rect" id="Node000003" href="$classCore_1_1MainExporter.html#a38765c9b7bcf5a1867e0e947a166e01b" title="Writes final simulation data to the output." alt="" coords="5,5,141,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="173,27,141,27,141,22,173,22"/>
 </map>

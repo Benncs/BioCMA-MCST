@@ -222,51 +222,102 @@ $(function(){initNavTree('feed__descriptor_8hpp_source.html','',''); });
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    [[nodiscard]] std::size_t <a class="code hl_function" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a25cf9afc1a5111df47b299ebd4b6cf8f">n_liquid_flow</a>() const noexcept;</div>
 <div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    [[nodiscard]] std::<span class="keywordtype">size_t</span> <a class="code hl_function" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a72183d320ea791e9756670d2fedd23d0">n_gas_flow</a>() const noexcept;</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    auto</div>
-<div class="foldopen" id="foldopen00139" data-start="{" data-end="}">
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno"><a class="line" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a78cce7f33f1bdbb119b02aa78e4ca77e">  139</a></span>    <a class="code hl_function" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a78cce7f33f1bdbb119b02aa78e4ca77e">liquid_feeds</a>()</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    {</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>      <span class="keywordflow">if</span> (<a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#ad7c6c3598b18ae752a17527413c0e834">m_liquid</a>)</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>      {</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        <span class="keywordflow">return</span> std::ranges::subrange(<a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#ad7c6c3598b18ae752a17527413c0e834">m_liquid</a>-&gt;begin(), <a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#ad7c6c3598b18ae752a17527413c0e834">m_liquid</a>-&gt;end());</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>      }</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>      <span class="keywordflow">return</span> std::ranges::subrange(std::vector&lt;FeedDescriptor&gt;::iterator(),</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>                                   std::vector&lt;FeedDescriptor&gt;::iterator());</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    }</div>
-</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <span class="keyword">auto</span></div>
-<div class="foldopen" id="foldopen00150" data-start="{" data-end="}">
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="classSimulation_1_1Feed_1_1SimulationFeed.html#af671876091e35a940f31102b585b9bc5">  150</a></span>    <a class="code hl_function" href="classSimulation_1_1Feed_1_1SimulationFeed.html#af671876091e35a940f31102b585b9bc5">gas_feeds</a>()</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    {</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>      <span class="keywordflow">if</span> (<a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a62a8733bbd1c8b3fa0cf6007ca44bd21">m_gas</a>)</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>      {</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        <span class="keywordflow">return</span> std::ranges::subrange(<a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a62a8733bbd1c8b3fa0cf6007ca44bd21">m_gas</a>-&gt;begin(), <a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a62a8733bbd1c8b3fa0cf6007ca44bd21">m_gas</a>-&gt;end());</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>      }</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>      <span class="keywordflow">return</span> std::ranges::subrange(std::vector&lt;FeedDescriptor&gt;::iterator(),</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>                                   std::vector&lt;FeedDescriptor&gt;::iterator());</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    }</div>
-</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    <span class="keyword">static</span> <a class="code hl_class" href="classSimulation_1_1Feed_1_1SimulationFeed.html">SimulationFeed</a> <a class="code hl_function" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a75f042cf06f6ae549d7582c9af3ce65f">empty</a>() noexcept;</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>  };</div>
-</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    <span class="comment">// [[nodiscard]] auto</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    <span class="comment">// liquid_feeds() const</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    <span class="comment">// {</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="comment">//   if (m_liquid)</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    <span class="comment">//   {</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    <span class="comment">//     return std::ranges::subrange(m_liquid-&gt;cbegin(), m_liquid-&gt;cend());</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    <span class="comment">//   }</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    <span class="comment">//   return std::ranges::subrange(</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <span class="comment">//       std::vector&lt;FeedDescriptor&gt;::const_iterator(),</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    <span class="comment">//       std::vector&lt;FeedDescriptor&gt;::const_iterator());</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    <span class="comment">// }</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="comment">// [[nodiscard]] auto</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="comment">// gas_feeds() const</span></div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <span class="comment">// {</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    <span class="comment">//   if (m_gas)</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <span class="comment">//   {</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    <span class="comment">//     return std::ranges::subrange(m_gas-&gt;cbegin(), m_gas-&gt;cend());</span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    <span class="comment">//   }</span></div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    <span class="comment">//   return std::ranges::subrange(</span></div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <span class="comment">//       std::vector&lt;FeedDescriptor&gt;::const_iterator(),</span></div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    <span class="comment">//       std::vector&lt;FeedDescriptor&gt;::const_iterator());</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    <span class="comment">// }</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <span class="comment">//</span></div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>} <span class="comment">// namespace Simulation::Feed</span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    [[nodiscard]] auto</div>
+<div class="foldopen" id="foldopen00164" data-start="{" data-end="}">
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno"><a class="line" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a324b9f7c54f56726cf2b409800d38815">  164</a></span>    <a class="code hl_function" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a324b9f7c54f56726cf2b409800d38815">liquid_feeds</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>      <span class="keywordflow">if</span> (<a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#ad7c6c3598b18ae752a17527413c0e834">m_liquid</a>)</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>      {</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        <span class="keywordflow">return</span> *<a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#ad7c6c3598b18ae752a17527413c0e834">m_liquid</a>;</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>      }</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>      <span class="keywordflow">return</span> std::vector&lt;FeedDescriptor&gt;();</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    }</div>
 </div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span> </div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    [[nodiscard]] <span class="keyword">auto</span></div>
+<div class="foldopen" id="foldopen00174" data-start="{" data-end="}">
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno"><a class="line" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a88ae2ee5ecb3fb7ca510ac7a2a852ec9">  174</a></span>    <a class="code hl_function" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a88ae2ee5ecb3fb7ca510ac7a2a852ec9">gas_feeds</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>      <span class="keywordflow">if</span> (<a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a62a8733bbd1c8b3fa0cf6007ca44bd21">m_gas</a>)</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>      {</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        <span class="keywordflow">return</span> *<a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a62a8733bbd1c8b3fa0cf6007ca44bd21">m_gas</a>;</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>      }</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>      <span class="keywordflow">return</span> std::vector&lt;FeedDescriptor&gt;();</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    }</div>
+</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    <span class="keyword">auto</span></div>
+<div class="foldopen" id="foldopen00184" data-start="{" data-end="}">
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno"><a class="line" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a78cce7f33f1bdbb119b02aa78e4ca77e">  184</a></span>    <a class="code hl_function" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a78cce7f33f1bdbb119b02aa78e4ca77e">liquid_feeds</a>()</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    {</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>      <span class="keywordflow">if</span> (<a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#ad7c6c3598b18ae752a17527413c0e834">m_liquid</a>)</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>      {</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        <span class="keywordflow">return</span> std::ranges::subrange(<a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#ad7c6c3598b18ae752a17527413c0e834">m_liquid</a>-&gt;begin(), <a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#ad7c6c3598b18ae752a17527413c0e834">m_liquid</a>-&gt;end());</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>      }</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>      <span class="keywordflow">return</span> std::ranges::subrange(std::vector&lt;FeedDescriptor&gt;::iterator(),</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>                                   std::vector&lt;FeedDescriptor&gt;::iterator());</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    }</div>
+</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="keyword">auto</span></div>
+<div class="foldopen" id="foldopen00195" data-start="{" data-end="}">
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno"><a class="line" href="classSimulation_1_1Feed_1_1SimulationFeed.html#af671876091e35a940f31102b585b9bc5">  195</a></span>    <a class="code hl_function" href="classSimulation_1_1Feed_1_1SimulationFeed.html#af671876091e35a940f31102b585b9bc5">gas_feeds</a>()</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    {</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>      <span class="keywordflow">if</span> (<a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a62a8733bbd1c8b3fa0cf6007ca44bd21">m_gas</a>)</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>      {</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>        <span class="keywordflow">return</span> std::ranges::subrange(<a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a62a8733bbd1c8b3fa0cf6007ca44bd21">m_gas</a>-&gt;begin(), <a class="code hl_variable" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a62a8733bbd1c8b3fa0cf6007ca44bd21">m_gas</a>-&gt;end());</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>      }</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>      <span class="keywordflow">return</span> std::ranges::subrange(std::vector&lt;FeedDescriptor&gt;::iterator(),</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>                                   std::vector&lt;FeedDescriptor&gt;::iterator());</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    }</div>
+</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span> </div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    <span class="keyword">static</span> <a class="code hl_class" href="classSimulation_1_1Feed_1_1SimulationFeed.html">SimulationFeed</a> <a class="code hl_function" href="classSimulation_1_1Feed_1_1SimulationFeed.html#a75f042cf06f6ae549d7582c9af3ce65f">empty</a>() noexcept;</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>  };</div>
+</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>} <span class="comment">// namespace Simulation::Feed</span></div>
+</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span> </div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a></div><div class="ttdef"><b>Definition</b> feed_descriptor.hpp:123</div></div>
 <div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_a25cf9afc1a5111df47b299ebd4b6cf8f"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#a25cf9afc1a5111df47b299ebd4b6cf8f">Simulation::Feed::SimulationFeed::n_liquid_flow</a></div><div class="ttdeci">std::size_t n_liquid_flow() const noexcept</div><div class="ttdef"><b>Definition</b> feed_descriptor.cpp:169</div></div>
+<div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_a324b9f7c54f56726cf2b409800d38815"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#a324b9f7c54f56726cf2b409800d38815">Simulation::Feed::SimulationFeed::liquid_feeds</a></div><div class="ttdeci">auto liquid_feeds() const</div><div class="ttdef"><b>Definition</b> feed_descriptor.hpp:164</div></div>
 <div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_a62a8733bbd1c8b3fa0cf6007ca44bd21"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#a62a8733bbd1c8b3fa0cf6007ca44bd21">Simulation::Feed::SimulationFeed::m_gas</a></div><div class="ttdeci">std::optional&lt; std::vector&lt; FeedDescriptor &gt; &gt; m_gas</div><div class="ttdef"><b>Definition</b> feed_descriptor.hpp:126</div></div>
 <div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_a72183d320ea791e9756670d2fedd23d0"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#a72183d320ea791e9756670d2fedd23d0">Simulation::Feed::SimulationFeed::n_gas_flow</a></div><div class="ttdeci">std::size_t n_gas_flow() const noexcept</div><div class="ttdef"><b>Definition</b> feed_descriptor.cpp:174</div></div>
 <div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_a75f042cf06f6ae549d7582c9af3ce65f"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#a75f042cf06f6ae549d7582c9af3ce65f">Simulation::Feed::SimulationFeed::empty</a></div><div class="ttdeci">static SimulationFeed empty() noexcept</div><div class="ttdef"><b>Definition</b> feed_descriptor.cpp:180</div></div>
-<div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_a78cce7f33f1bdbb119b02aa78e4ca77e"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#a78cce7f33f1bdbb119b02aa78e4ca77e">Simulation::Feed::SimulationFeed::liquid_feeds</a></div><div class="ttdeci">auto liquid_feeds()</div><div class="ttdef"><b>Definition</b> feed_descriptor.hpp:139</div></div>
+<div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_a78cce7f33f1bdbb119b02aa78e4ca77e"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#a78cce7f33f1bdbb119b02aa78e4ca77e">Simulation::Feed::SimulationFeed::liquid_feeds</a></div><div class="ttdeci">auto liquid_feeds()</div><div class="ttdef"><b>Definition</b> feed_descriptor.hpp:184</div></div>
+<div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_a88ae2ee5ecb3fb7ca510ac7a2a852ec9"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#a88ae2ee5ecb3fb7ca510ac7a2a852ec9">Simulation::Feed::SimulationFeed::gas_feeds</a></div><div class="ttdeci">auto gas_feeds() const</div><div class="ttdef"><b>Definition</b> feed_descriptor.hpp:174</div></div>
 <div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_a9667094be19d9dad5ade55954152c114"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#a9667094be19d9dad5ade55954152c114">Simulation::Feed::SimulationFeed::add_liquid</a></div><div class="ttdeci">void add_liquid(FeedDescriptor &amp;&amp;fd)</div><div class="ttdef"><b>Definition</b> feed_descriptor.cpp:157</div></div>
 <div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_aa2b3eb808219ab3d905de3eac9e249d8"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#aa2b3eb808219ab3d905de3eac9e249d8">Simulation::Feed::SimulationFeed::add_feed</a></div><div class="ttdeci">void add_feed(FeedDescriptor &amp;&amp;fd, Phase phase)</div><div class="ttdef"><b>Definition</b> feed_descriptor.cpp:142</div></div>
 <div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_ad7afc07b815b158fa2aebe314ef1fee4"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#ad7afc07b815b158fa2aebe314ef1fee4">Simulation::Feed::SimulationFeed::add_gas</a></div><div class="ttdeci">void add_gas(FeedDescriptor &amp;&amp;fd)</div><div class="ttdef"><b>Definition</b> feed_descriptor.cpp:163</div></div>
 <div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_ad7c6c3598b18ae752a17527413c0e834"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#ad7c6c3598b18ae752a17527413c0e834">Simulation::Feed::SimulationFeed::m_liquid</a></div><div class="ttdeci">std::optional&lt; std::vector&lt; FeedDescriptor &gt; &gt; m_liquid</div><div class="ttdef"><b>Definition</b> feed_descriptor.hpp:125</div></div>
-<div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_af671876091e35a940f31102b585b9bc5"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#af671876091e35a940f31102b585b9bc5">Simulation::Feed::SimulationFeed::gas_feeds</a></div><div class="ttdeci">auto gas_feeds()</div><div class="ttdef"><b>Definition</b> feed_descriptor.hpp:150</div></div>
+<div class="ttc" id="aclassSimulation_1_1Feed_1_1SimulationFeed_html_af671876091e35a940f31102b585b9bc5"><div class="ttname"><a href="classSimulation_1_1Feed_1_1SimulationFeed.html#af671876091e35a940f31102b585b9bc5">Simulation::Feed::SimulationFeed::gas_feeds</a></div><div class="ttdeci">auto gas_feeds()</div><div class="ttdef"><b>Definition</b> feed_descriptor.hpp:195</div></div>
 <div class="ttc" id="anamespaceSimulation_1_1Feed_html"><div class="ttname"><a href="namespaceSimulation_1_1Feed.html">Simulation::Feed</a></div><div class="ttdef"><b>Definition</b> feed_descriptor.hpp:36</div></div>
 <div class="ttc" id="anamespaceSimulation_1_1Feed_html_a93ce91103597fbf533bf1b3c74de1ded"><div class="ttname"><a href="namespaceSimulation_1_1Feed.html#a93ce91103597fbf533bf1b3c74de1ded">Simulation::Feed::FeedTypeVariant</a></div><div class="ttdeci">std::variant&lt; Constant, Linear, Exponential &gt; FeedTypeVariant</div><div class="ttdef"><b>Definition</b> feed_descriptor.hpp:81</div></div>
 <div class="ttc" id="anamespaceSimulation_1_1Feed_html_ae2b43fd78e41337982a37fcb48f54a62"><div class="ttname"><a href="namespaceSimulation_1_1Feed.html#ae2b43fd78e41337982a37fcb48f54a62">Simulation::Feed::get_type</a></div><div class="ttdeci">FeedType get_type(const FeedTypeVariant &amp;v)</div><div class="ttdef"><b>Definition</b> feed_descriptor.cpp:91</div></div>
