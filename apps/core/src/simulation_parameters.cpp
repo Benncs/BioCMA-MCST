@@ -15,7 +15,7 @@ namespace Core
     params.t_per_flow_map = 0;
     params.save_final_serde = false;
     params.uniform_mc_init = true;
-
+    params.f_reaction = true;
     // params.user_params = UserControlParameters::m_default();
 
     return params;
@@ -35,6 +35,7 @@ namespace Core
     params.results_file_name = user_params.results_file_name;
     params.save_final_serde = user_params.save_serde;
     params.uniform_mc_init = user_params.uniform_mc_init;
+    params.f_reaction = user_params.f_reaction;
     return params;
   }
 

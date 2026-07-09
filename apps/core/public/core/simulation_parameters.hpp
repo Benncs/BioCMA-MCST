@@ -73,6 +73,7 @@ namespace Core
     double final_time;
     bool save_final_serde;
     bool uniform_mc_init;
+    bool f_reaction;
 
     static SimulationParameters m_default();
     static SimulationParameters init(const UserControlParameters& user_params);

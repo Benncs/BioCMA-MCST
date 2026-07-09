@@ -157,6 +157,7 @@ convert_c_wrap_to_param(const wrap_c_param_t& params)
   bool load_serde = (params.load_serde != 0);
   bool save_serde = (params.save_serde != 0);
   bool uniform_mc_init = (params.uniform_particle_init != 0);
+  bool f_reaction = (params.f_reaction != 0);
 
   auto p = Core::UserControlParameters::m_default();
   p.biomass_initial_concentration = params.biomass_initial_concentration;
@@ -167,6 +168,7 @@ convert_c_wrap_to_param(const wrap_c_param_t& params)
   p.load_serde = load_serde;
   p.save_serde = save_serde;
   p.uniform_mc_init = uniform_mc_init;
+  p.f_reaction = f_reaction;
   return p;
 }
 
@@ -179,16 +181,19 @@ make_params(double biomass_initial_concentration,
             int save)
 {
   const auto f_uniform_init = f_false;
+  const auto f_reaction = f_true;
+  const auto n_thread = 1; // TODO Remove
   return { biomass_initial_concentration,
            final_time,
            delta_time,
            number_particle,
-           1,
+           n_thread,
            number_exported_result,
            f_false,
            f_false,
            save,
-           f_uniform_init };
+           f_uniform_init,
+           f_reaction };
 }
 
 Param*

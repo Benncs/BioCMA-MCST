@@ -61,6 +61,7 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT
     int load_serde;
     int save_serde;
     int uniform_particle_init;
+    int f_reaction;
   } Param;
   // NOLINTEND
 

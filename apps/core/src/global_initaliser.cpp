@@ -352,8 +352,7 @@ namespace Core
       return std::nullopt;
     }
 
-    // TODO
-    m_builder = m_builder.with_params({ .f_reaction = true });
+    m_builder = m_builder.with_params({ .f_reaction = m_params.f_reaction });
 
     m_builder = m_builder.with_unit(std::move(_unit));
     m_builder = m_builder.with_scalar(std::move(scalar_init));

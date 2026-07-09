@@ -141,7 +141,7 @@ namespace PythonBindings
         .def_readwrite("save_serde", &wrap_c_param_t::save_serde)
         .def_readwrite("uniform_particle_init",
                        &wrap_c_param_t::uniform_particle_init)
-
+        .def_readwrite("f_reaction", &wrap_c_param_t::f_reaction)
         .def("__repr__", &wrap_repr)
         // TODO Write unittest
         .def(py::pickle(
@@ -154,10 +154,12 @@ namespace PythonBindings
                                     p.number_exported_result,
                                     p.biomass_initial_concentration,
                                     p.number_particle,
-                                    p.save_serde);
+                                    p.save_serde,
+                                    p.uniform_particle_init,
+                                    p.f_reaction);
             },
             [](const py::tuple& t) { // __setstate__
-              constexpr std::size_t n_attributes = 8;
+              constexpr std::size_t n_attributes = 10;
               if (t.size() != n_attributes)
               {
                 throw std::runtime_error("Pickle param invalid state, "
@@ -177,6 +179,8 @@ namespace PythonBindings
               p.biomass_initial_concentration = t[5].cast<double>();
               p.number_particle = t[6].cast<int>();
               p.save_serde = t[7].cast<int>();
+              p.uniform_particle_init = t[8].cast<int>();
+              p.f_reaction = t[9].cast<int>();
               // NOLINTEND
               return p;
             }));
