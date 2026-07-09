@@ -1,6 +1,7 @@
 #ifndef __MODEL_CONFIG_LOADER__
 #define __MODEL_CONFIG_LOADER__
 
+#include <common/execinfo.hpp>
 #include <mc/particles_container.hpp>
 #include <mc/traits.hpp>
 #include <variant_model.hpp>
@@ -15,9 +16,9 @@ namespace Models
              && ConfigurableModel<Model>)
 
   Model::Config
-  get_model_configuration(std::size_t n)
+  get_model_configuration(const ExecInfo& info, std::size_t n)
   {
-    return Model::get_config(n);
+    return Model::get_config(info, n);
   }
   template <typename Model>
 
@@ -26,9 +27,10 @@ namespace Models
              && NonConfigurableModel<Model>)
 
   Model::Config
-  get_model_configuration(std::size_t n)
+  get_model_configuration(const ExecInfo& info, std::size_t n)
   {
     (void)n;
+    (void)info;
     return std::nullopt;
   }
 

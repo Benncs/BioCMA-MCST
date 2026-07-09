@@ -24,7 +24,7 @@ def generate_loader_body(model_files: List[str]) -> str:
         function_body += f"""
     case {i}:
     {{
-        return ::MC::init<Models::{to_camel_case(model_name)}>(_logger,
+        return ::MC::init<Models::{to_camel_case(model_name)}>(_logger,info,
              number_particle, n_samples,liq_volume, liquid_neighbors,uniform_mc_init,total_mass);
     }}
     """

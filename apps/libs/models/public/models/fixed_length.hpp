@@ -52,7 +52,7 @@ namespace Models
 
     MC::ContribIndexBounds static get_bounds();
 
-    static Self::Config get_config(std::size_t n);
+    static Self::Config get_config(const ExecInfo& info, std::size_t n);
 
     KOKKOS_INLINE_FUNCTION static void init(const MC::pool_type& random_pool,
                                             std::size_t idx,

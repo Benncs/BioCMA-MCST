@@ -31,7 +31,7 @@ namespace Models
 
     static MC::ContribIndexBounds get_bounds();
 
-    static Self::Config get_config(std::size_t n);
+    static Self::Config get_config(const ExecInfo& info, std::size_t n);
 
     KOKKOS_FUNCTION static MC::Status
     update([[maybe_unused]] const MC::pool_type& random_pool,
