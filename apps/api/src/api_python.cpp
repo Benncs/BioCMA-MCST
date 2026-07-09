@@ -63,7 +63,7 @@ namespace PythonBindings
     throw std::runtime_error("Simulation handle initialisation failed");
   }
 
-  auto
+  void
   exec(std::shared_ptr<Api::SimulationInstance>& handle)
   {
     pybind11::gil_scoped_release release; // TODO check if really usefull ?
@@ -75,31 +75,33 @@ namespace PythonBindings
     }
   }
 
-  auto
+  void
   apply(std::shared_ptr<Api::SimulationInstance>& handle, bool to_load)
-      -> std::tuple<bool, std::string>
   {
     handle->set_auto_mtr(); // FIXME
 
     std::cerr << "Set auto mtr for PythonBindings" << std::endl;
-    auto rc = handle->apply(to_load);
+    const auto rc = handle->apply(to_load);
 
-    bool f = static_cast<bool>(rc);
-    return { f, rc.get() };
+    if (rc.invalid())
+    {
+      throw std::runtime_error(rc.get());
+    }
   }
 
   auto
   register_cma_path(std::shared_ptr<Api::SimulationInstance>& handle,
                     const std::string& cma_path)
   {
-    auto retc = ::register_cma_path(handle.get(), cma_path.data());
-    if (retc != 0)
+
+    const auto rc = handle->register_cma_path(cma_path);
+    if (rc.invalid())
     {
-      throw std::runtime_error("Invalid CMA Case");
+      throw std::runtime_error(rc.get());
     }
   }
 
-  auto
+  void
   set_initialiser_from_data(std::shared_ptr<Api::SimulationInstance>& handle,
                             std::size_t n_species,
                             const py::array_t<double_t>&& py_liquid,
@@ -118,10 +120,13 @@ namespace PythonBindings
       gas = std::vector<double>(data.begin(), data.end());
     }
 
-    handle->register_scalar_initiazer(Core::ScalarFactory::FullCase(
+    auto rc = handle->register_scalar_initiazer(Core::ScalarFactory::FullCase(
         n_species, std::move(liq), std::move(gas)));
 
-    return 0;
+    if (rc.invalid())
+    {
+      throw std::runtime_error(rc.get());
+    }
   }
 
   auto
@@ -218,18 +223,7 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
         py::arg("argv"),
         py::arg("simulation_id") = std::nullopt);
 
-  // m.def("finalize", &finalize); //Do not use it
-
   m.def("exec", &PythonBindings::exec);
-
-  // m.def("exec",
-  //       [](std::shared_ptr<Api::SimulationInstance>& handle)
-  //       {
-  //         pybind11::gil_scoped_release
-  //             release; // TODO check if really usefull ? //NOLINT
-  //         handle->exec();
-  //         pybind11::gil_scoped_acquire acquire; // NOLINT
-  //       });
 
   m.def("apply", &PythonBindings::apply);
 

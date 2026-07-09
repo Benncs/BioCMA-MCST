@@ -1,6 +1,7 @@
 #include <api/api_raw.h>
 
 #include <cassert>
+#include <cstddef>
 #include <cstring>
 #include <string_view>
 
@@ -192,9 +193,35 @@ test_branch_null(int argc, char** argv)
 }
 
 int
+test_err()
+{
+  {
+    const auto* msg = get_last_error();
+    std::string_view v_msg = msg;
+    assert(v_msg.empty());
+  }
+
+  {
+    int r = n_rank(nullptr);
+    assert(r != 0);
+    const auto* msg = get_last_error();
+    std::string_view v_msg = msg;
+    assert(!v_msg.empty());
+
+    const auto* msg2 = get_last_error();
+    std::string_view v_msg2 = msg2;
+    assert(v_msg2.empty());
+  }
+
+  return 0;
+}
+
+int
 main(int argc, char** argv)
 {
   std::string cma_path = get_cma_path(argc, argv);
+
+  test_err();
 
   test_init(argc, argv);
   test_delete_handle(argc, argv);
