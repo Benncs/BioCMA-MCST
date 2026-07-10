@@ -179,68 +179,69 @@ $(function(){initNavTree('m__default_8hpp_source.html','',''); });
 <div class="foldopen" id="foldopen00091" data-start="{" data-end="}">
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="structDynamicDefaultModel.html#a1c7399fdb332451b45cfadd2aceebe0a">   91</a></span>  <a class="code hl_function" href="structDynamicDefaultModel.html#a1c7399fdb332451b45cfadd2aceebe0a">get_config</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structExecInfo.html">ExecInfo</a>&amp; info, <span class="keyword">const</span> std::size_t size)</div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  {</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    (void)size;</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keywordflow">return</span> 1.;</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  };</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    (void)info;</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    (void)size;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="keywordflow">return</span> 1.;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  };</div>
 </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00098" data-start="{" data-end="}">
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="structDynamicDefaultModel.html#aa829eaa5033bc09a36ee1e9f78a798fe">   98</a></span>  <a class="code hl_function" href="structDynamicDefaultModel.html#aa829eaa5033bc09a36ee1e9f78a798fe">init</a>([[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&amp; random_pool,</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>       [[maybe_unused]] std::size_t idx,</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>       [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a>&amp; arr,</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>       [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#afa1198dceed930117847bd33dfa4cf27">Config</a>&amp; config)</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  {</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  }</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>  KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <span class="keywordtype">void</span></div>
+<div class="foldopen" id="foldopen00099" data-start="{" data-end="}">
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="structDynamicDefaultModel.html#aa829eaa5033bc09a36ee1e9f78a798fe">   99</a></span>  <a class="code hl_function" href="structDynamicDefaultModel.html#aa829eaa5033bc09a36ee1e9f78a798fe">init</a>([[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&amp; random_pool,</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>       [[maybe_unused]] std::size_t idx,</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>       [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a>&amp; arr,</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>       [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#afa1198dceed930117847bd33dfa4cf27">Config</a>&amp; config)</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  {</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>  }</div>
 </div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <span class="keywordtype">double</span></div>
-<div class="foldopen" id="foldopen00106" data-start="{" data-end="}">
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno"><a class="line" href="structDynamicDefaultModel.html#a968fff01adc149e4fea157d122539da7">  106</a></span>  <a class="code hl_function" href="structDynamicDefaultModel.html#a968fff01adc149e4fea157d122539da7">mass</a>([[maybe_unused]] std::size_t idx,</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>       [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a>&amp; arr)</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  {</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    <span class="keywordflow">return</span> 1.;</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>  }</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>  KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <span class="keywordtype">double</span></div>
+<div class="foldopen" id="foldopen00107" data-start="{" data-end="}">
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="structDynamicDefaultModel.html#a968fff01adc149e4fea157d122539da7">  107</a></span>  <a class="code hl_function" href="structDynamicDefaultModel.html#a968fff01adc149e4fea157d122539da7">mass</a>([[maybe_unused]] std::size_t idx,</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>       [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a>&amp; arr)</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>  {</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keywordflow">return</span> 1.;</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  }</div>
 </div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <a class="code hl_enumeration" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7b">MC::Status</a></div>
-<div class="foldopen" id="foldopen00113" data-start="{" data-end="}">
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno"><a class="line" href="structDynamicDefaultModel.html#a8d21c1d6c4b1adc633eb3217321a2e79">  113</a></span>  <a class="code hl_function" href="structDynamicDefaultModel.html#a8d21c1d6c4b1adc633eb3217321a2e79">update</a>([[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&amp; random_pool,</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>         [[maybe_unused]] <a class="code hl_typedef" href="structDynamicDefaultModel.html#aa2d9a9f425170654189dd0f2463a368b">FloatType</a> d_t,</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>         [[maybe_unused]] std::size_t idx,</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>         [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a>&amp; arr,</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>         [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#a0f085066ed7072e8b8439eeb7eee3aff">SelfContribs</a>&amp; contribs_arr,</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>         [[maybe_unused]] <span class="keyword">const</span> std::size_t position_index,</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>         [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#aa5a6942718ba877c62a9f91b87915901">MC::LocalConcentration</a>&amp; c)</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>  {</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keywordflow">return</span> <a class="code hl_enumvalue" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c">MC::Status::Idle</a>;</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  }</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <a class="code hl_enumeration" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7b">MC::Status</a></div>
+<div class="foldopen" id="foldopen00114" data-start="{" data-end="}">
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno"><a class="line" href="structDynamicDefaultModel.html#a8d21c1d6c4b1adc633eb3217321a2e79">  114</a></span>  <a class="code hl_function" href="structDynamicDefaultModel.html#a8d21c1d6c4b1adc633eb3217321a2e79">update</a>([[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&amp; random_pool,</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>         [[maybe_unused]] <a class="code hl_typedef" href="structDynamicDefaultModel.html#aa2d9a9f425170654189dd0f2463a368b">FloatType</a> d_t,</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>         [[maybe_unused]] std::size_t idx,</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>         [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a>&amp; arr,</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>         [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#a0f085066ed7072e8b8439eeb7eee3aff">SelfContribs</a>&amp; contribs_arr,</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>         [[maybe_unused]] <span class="keyword">const</span> std::size_t position_index,</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>         [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#aa5a6942718ba877c62a9f91b87915901">MC::LocalConcentration</a>&amp; c)</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  {</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="keywordflow">return</span> <a class="code hl_enumvalue" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c">MC::Status::Idle</a>;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>  }</div>
 </div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="foldopen" id="foldopen00125" data-start="{" data-end="}">
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno"><a class="line" href="structDynamicDefaultModel.html#a91d9a8dc0932f57b7371c9fee4670830">  125</a></span>  <a class="code hl_struct" href="structMC_1_1ContribIndexBounds.html">MC::ContribIndexBounds</a> <span class="keyword">static</span> <a class="code hl_function" href="structDynamicDefaultModel.html#a91d9a8dc0932f57b7371c9fee4670830">get_bounds</a>()</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>  {</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    <span class="keywordflow">return</span> { 0, 0 };</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>  }</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
+<div class="foldopen" id="foldopen00126" data-start="{" data-end="}">
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno"><a class="line" href="structDynamicDefaultModel.html#a91d9a8dc0932f57b7371c9fee4670830">  126</a></span>  <a class="code hl_struct" href="structMC_1_1ContribIndexBounds.html">MC::ContribIndexBounds</a> <span class="keyword">static</span> <a class="code hl_function" href="structDynamicDefaultModel.html#a91d9a8dc0932f57b7371c9fee4670830">get_bounds</a>()</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>  {</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    <span class="keywordflow">return</span> { 0, 0 };</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  }</div>
 </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00131" data-start="{" data-end="}">
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="structDynamicDefaultModel.html#a939a8aed13902dc99efbb94f48607387">  131</a></span>  <a class="code hl_function" href="structDynamicDefaultModel.html#a939a8aed13902dc99efbb94f48607387">division</a>([[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&amp; random_pool,</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>           [[maybe_unused]] std::size_t idx,</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>           [[maybe_unused]] std::size_t idx2,</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>           [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a>&amp; arr,</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>           [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a>&amp; buffer_arr)</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>  {</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  }</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  KOKKOS_INLINE_FUNCTION <span class="keyword">static</span> <span class="keywordtype">void</span></div>
+<div class="foldopen" id="foldopen00132" data-start="{" data-end="}">
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno"><a class="line" href="structDynamicDefaultModel.html#a939a8aed13902dc99efbb94f48607387">  132</a></span>  <a class="code hl_function" href="structDynamicDefaultModel.html#a939a8aed13902dc99efbb94f48607387">division</a>([[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&amp; random_pool,</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>           [[maybe_unused]] std::size_t idx,</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>           [[maybe_unused]] std::size_t idx2,</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>           [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a>&amp; arr,</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>           [[maybe_unused]] <span class="keyword">const</span> <a class="code hl_typedef" href="structDynamicDefaultModel.html#ac0c30471aed8077445bef26d40f0d745">SelfParticle</a>&amp; buffer_arr)</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  {</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  }</div>
 </div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>};</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>};</div>
 </div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>CHECK_MODEL(<a class="code hl_struct" href="structDynamicDefaultModel.html">DynamicDefaultModel</a>)</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>CHECK_MODEL(<a class="code hl_struct" href="structDynamicDefaultModel.html">DynamicDefaultModel</a>)</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span> </div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="anamespaceMC_html_a63ef8b7e64014eaf45e63908694458aa"><div class="ttname"><a href="namespaceMC.html#a63ef8b7e64014eaf45e63908694458aa">MC::DynParticlesContribs</a></div><div class="ttdeci">Kokkos::View&lt; F **, ComputeSpace::array_layout, ComputeSpace, Kokkos::MemoryTraits&lt; Kokkos::MemoryTraitsFlags::Restrict &gt; &gt; DynParticlesContribs</div><div class="ttdef"><b>Definition</b> alias.hpp:78</div></div>
 <div class="ttc" id="anamespaceMC_html_a69467f7d54b0dcb1a4e176fe425ffb7b"><div class="ttname"><a href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7b">MC::Status</a></div><div class="ttdeci">Status</div><div class="ttdef"><b>Definition</b> alias.hpp:125</div></div>
 <div class="ttc" id="anamespaceMC_html_a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c"><div class="ttname"><a href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c">MC::Status::Idle</a></div><div class="ttdeci">@ Idle</div><div class="ttdef"><b>Definition</b> alias.hpp:126</div></div>
@@ -273,14 +274,14 @@ $(function(){initNavTree('m__default_8hpp_source.html','',''); });
 <div class="ttc" id="astructDynamicDefaultModel_html_a5361a4e5dfdcc52db648da1b2e86aa15"><div class="ttname"><a href="structDynamicDefaultModel.html#a5361a4e5dfdcc52db648da1b2e86aa15">DynamicDefaultModel::n_c</a></div><div class="ttdeci">static constexpr std::size_t n_c</div><div class="ttdef"><b>Definition</b> m_default.hpp:80</div></div>
 <div class="ttc" id="astructDynamicDefaultModel_html_a68be00422e1ce6b1943edab4492d4147"><div class="ttname"><a href="structDynamicDefaultModel.html#a68be00422e1ce6b1943edab4492d4147">DynamicDefaultModel::n_var</a></div><div class="ttdeci">static constexpr std::size_t n_var</div><div class="ttdef"><b>Definition</b> m_default.hpp:79</div></div>
 <div class="ttc" id="astructDynamicDefaultModel_html_a895417d913ec6370003e861d869282e0"><div class="ttname"><a href="structDynamicDefaultModel.html#a895417d913ec6370003e861d869282e0">DynamicDefaultModel::Self</a></div><div class="ttdeci">DynamicDefaultModel Self</div><div class="ttdef"><b>Definition</b> m_default.hpp:83</div></div>
-<div class="ttc" id="astructDynamicDefaultModel_html_a8d21c1d6c4b1adc633eb3217321a2e79"><div class="ttname"><a href="structDynamicDefaultModel.html#a8d21c1d6c4b1adc633eb3217321a2e79">DynamicDefaultModel::update</a></div><div class="ttdeci">static KOKKOS_INLINE_FUNCTION MC::Status update(const MC::pool_type &amp;random_pool, FloatType d_t, std::size_t idx, const SelfParticle &amp;arr, const SelfContribs &amp;contribs_arr, const std::size_t position_index, const MC::LocalConcentration &amp;c)</div><div class="ttdef"><b>Definition</b> m_default.hpp:113</div></div>
-<div class="ttc" id="astructDynamicDefaultModel_html_a91d9a8dc0932f57b7371c9fee4670830"><div class="ttname"><a href="structDynamicDefaultModel.html#a91d9a8dc0932f57b7371c9fee4670830">DynamicDefaultModel::get_bounds</a></div><div class="ttdeci">static MC::ContribIndexBounds get_bounds()</div><div class="ttdef"><b>Definition</b> m_default.hpp:125</div></div>
-<div class="ttc" id="astructDynamicDefaultModel_html_a939a8aed13902dc99efbb94f48607387"><div class="ttname"><a href="structDynamicDefaultModel.html#a939a8aed13902dc99efbb94f48607387">DynamicDefaultModel::division</a></div><div class="ttdeci">static KOKKOS_INLINE_FUNCTION void division(const MC::pool_type &amp;random_pool, std::size_t idx, std::size_t idx2, const SelfParticle &amp;arr, const SelfParticle &amp;buffer_arr)</div><div class="ttdef"><b>Definition</b> m_default.hpp:131</div></div>
-<div class="ttc" id="astructDynamicDefaultModel_html_a968fff01adc149e4fea157d122539da7"><div class="ttname"><a href="structDynamicDefaultModel.html#a968fff01adc149e4fea157d122539da7">DynamicDefaultModel::mass</a></div><div class="ttdeci">static KOKKOS_INLINE_FUNCTION double mass(std::size_t idx, const SelfParticle &amp;arr)</div><div class="ttdef"><b>Definition</b> m_default.hpp:106</div></div>
+<div class="ttc" id="astructDynamicDefaultModel_html_a8d21c1d6c4b1adc633eb3217321a2e79"><div class="ttname"><a href="structDynamicDefaultModel.html#a8d21c1d6c4b1adc633eb3217321a2e79">DynamicDefaultModel::update</a></div><div class="ttdeci">static KOKKOS_INLINE_FUNCTION MC::Status update(const MC::pool_type &amp;random_pool, FloatType d_t, std::size_t idx, const SelfParticle &amp;arr, const SelfContribs &amp;contribs_arr, const std::size_t position_index, const MC::LocalConcentration &amp;c)</div><div class="ttdef"><b>Definition</b> m_default.hpp:114</div></div>
+<div class="ttc" id="astructDynamicDefaultModel_html_a91d9a8dc0932f57b7371c9fee4670830"><div class="ttname"><a href="structDynamicDefaultModel.html#a91d9a8dc0932f57b7371c9fee4670830">DynamicDefaultModel::get_bounds</a></div><div class="ttdeci">static MC::ContribIndexBounds get_bounds()</div><div class="ttdef"><b>Definition</b> m_default.hpp:126</div></div>
+<div class="ttc" id="astructDynamicDefaultModel_html_a939a8aed13902dc99efbb94f48607387"><div class="ttname"><a href="structDynamicDefaultModel.html#a939a8aed13902dc99efbb94f48607387">DynamicDefaultModel::division</a></div><div class="ttdeci">static KOKKOS_INLINE_FUNCTION void division(const MC::pool_type &amp;random_pool, std::size_t idx, std::size_t idx2, const SelfParticle &amp;arr, const SelfParticle &amp;buffer_arr)</div><div class="ttdef"><b>Definition</b> m_default.hpp:132</div></div>
+<div class="ttc" id="astructDynamicDefaultModel_html_a968fff01adc149e4fea157d122539da7"><div class="ttname"><a href="structDynamicDefaultModel.html#a968fff01adc149e4fea157d122539da7">DynamicDefaultModel::mass</a></div><div class="ttdeci">static KOKKOS_INLINE_FUNCTION double mass(std::size_t idx, const SelfParticle &amp;arr)</div><div class="ttdef"><b>Definition</b> m_default.hpp:107</div></div>
 <div class="ttc" id="astructDynamicDefaultModel_html_aa2d9a9f425170654189dd0f2463a368b"><div class="ttname"><a href="structDynamicDefaultModel.html#aa2d9a9f425170654189dd0f2463a368b">DynamicDefaultModel::FloatType</a></div><div class="ttdeci">float FloatType</div><div class="ttdef"><b>Definition</b> m_default.hpp:84</div></div>
 <div class="ttc" id="astructDynamicDefaultModel_html_aa3ad333fdeeb2e7eee5c54a1ac58a3c9"><div class="ttname"><a href="structDynamicDefaultModel.html#aa3ad333fdeeb2e7eee5c54a1ac58a3c9">DynamicDefaultModel::particle_var</a></div><div class="ttdeci">particle_var</div><div class="ttdef"><b>Definition</b> m_default.hpp:75</div></div>
 <div class="ttc" id="astructDynamicDefaultModel_html_aa3ad333fdeeb2e7eee5c54a1ac58a3c9a0cc175b9c0f1b6a831c399e269772661"><div class="ttname"><a href="structDynamicDefaultModel.html#aa3ad333fdeeb2e7eee5c54a1ac58a3c9a0cc175b9c0f1b6a831c399e269772661">DynamicDefaultModel::particle_var::a</a></div><div class="ttdeci">@ a</div><div class="ttdef"><b>Definition</b> m_default.hpp:76</div></div>
-<div class="ttc" id="astructDynamicDefaultModel_html_aa829eaa5033bc09a36ee1e9f78a798fe"><div class="ttname"><a href="structDynamicDefaultModel.html#aa829eaa5033bc09a36ee1e9f78a798fe">DynamicDefaultModel::init</a></div><div class="ttdeci">static KOKKOS_INLINE_FUNCTION void init(const MC::pool_type &amp;random_pool, std::size_t idx, const SelfParticle &amp;arr, const Config &amp;config)</div><div class="ttdef"><b>Definition</b> m_default.hpp:98</div></div>
+<div class="ttc" id="astructDynamicDefaultModel_html_aa829eaa5033bc09a36ee1e9f78a798fe"><div class="ttname"><a href="structDynamicDefaultModel.html#aa829eaa5033bc09a36ee1e9f78a798fe">DynamicDefaultModel::init</a></div><div class="ttdeci">static KOKKOS_INLINE_FUNCTION void init(const MC::pool_type &amp;random_pool, std::size_t idx, const SelfParticle &amp;arr, const Config &amp;config)</div><div class="ttdef"><b>Definition</b> m_default.hpp:99</div></div>
 <div class="ttc" id="astructDynamicDefaultModel_html_ac0c30471aed8077445bef26d40f0d745"><div class="ttname"><a href="structDynamicDefaultModel.html#ac0c30471aed8077445bef26d40f0d745">DynamicDefaultModel::SelfParticle</a></div><div class="ttdeci">MC::DynParticlesModel&lt; FloatType &gt; SelfParticle</div><div class="ttdef"><b>Definition</b> m_default.hpp:85</div></div>
 <div class="ttc" id="astructDynamicDefaultModel_html_af7d2eca889712f32c5353359a639307a"><div class="ttname"><a href="structDynamicDefaultModel.html#af7d2eca889712f32c5353359a639307a">DynamicDefaultModel::uniform_weight</a></div><div class="ttdeci">std::true_type uniform_weight</div><div class="ttdef"><b>Definition</b> m_default.hpp:82</div></div>
 <div class="ttc" id="astructDynamicDefaultModel_html_afa1198dceed930117847bd33dfa4cf27"><div class="ttname"><a href="structDynamicDefaultModel.html#afa1198dceed930117847bd33dfa4cf27">DynamicDefaultModel::Config</a></div><div class="ttdeci">float Config</div><div class="ttdef"><b>Definition</b> m_default.hpp:87</div></div>
