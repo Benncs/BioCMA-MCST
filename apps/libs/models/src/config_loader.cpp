@@ -1,5 +1,6 @@
 #include "Kokkos_Macros.hpp"
 #include "Kokkos_MathematicalFunctions.hpp"
+#include "common/env_var.hpp"
 #include <models/config_loader.hpp>
 
 #include <models/fixed_length.hpp>
@@ -26,7 +27,8 @@ namespace Models
 
       const size_t current_rank = info.current_rank;
 
-      std::size_t Ntot = n * n_rank;
+      std::size_t Ntot
+          = Common::read_env_or("__N_TOTAL_PARTICLE__", n * n_rank);
 
       const std::size_t n_edges = nbin + 1;
       const float_type dl

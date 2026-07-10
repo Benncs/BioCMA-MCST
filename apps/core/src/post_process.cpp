@@ -86,12 +86,14 @@ namespace PostProcessing
   }
 
   void
-  final_post_processing(const std::shared_ptr<IO::Logger>& logger,
-                        [[maybe_unused]] const ExecInfo& exec,
-                        const Core::SimulationParameters& params,
-                        const Simulation::Getter& getter,
-                        const std::shared_ptr<Core::MainExporter>& mde)
+  final_post_processing(
+      const std::shared_ptr<IO::Logger>& logger,
+      [[maybe_unused]] const ExecInfo& exec,
+      [[maybe_unused]] const Core::SimulationParameters& params,
+      const Simulation::Getter& getter,
+      const std::shared_ptr<Core::MainExporter>& mde)
   {
+
     if (logger)
     {
       logger->print("Post Processing", "Saving final results...");

@@ -90,6 +90,7 @@ struct DynamicDefaultModel
   static Config
   get_config(const ExecInfo& info, const std::size_t size)
   {
+    (void)info;
     (void)size;
     return 1.;
   };

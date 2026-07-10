@@ -82,6 +82,11 @@ namespace Core
 
     if (!Core::fill_and_check_result_file_path(this->m_logger, user_params))
     {
+      if (m_logger)
+      {
+        m_logger->error(IO::format("Non exisisting result file ",
+                                   user_params.results_file_name));
+      }
       throw std::runtime_error("TODO bad path");
     };
     m_params = SimulationParameters::init(user_params);
@@ -230,6 +235,9 @@ namespace Core
     double total_mass = 0.;
     // TODO Add this as user param
     std::unique_ptr<ILoadBalancer> lb = lb_factory(info.n_rank);
+
+    // FIXME
+    Common::set_local_env("__N_TOTAL_PARTICLE__", user_params.number_particle);
 
     const uint64_t particle_per_process
         = lb->balance(info.current_rank, user_params.number_particle);

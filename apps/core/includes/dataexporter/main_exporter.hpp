@@ -1,13 +1,13 @@
 #ifndef __CORE_MAIN_EXPORTER_HPP__
 #define __CORE_MAIN_EXPORTER_HPP__
 
-#include "simulation/simulation_getter.hpp"
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <dataexporter/data_exporter.hpp>
 #include <optional>
+#include <simulation/simulation_getter.hpp>
 #include <span>
 #include <string>
 #include <string_view>
