@@ -2,9 +2,9 @@
 #define __COMMON_EXPORT_HPP__
 
 #include <Kokkos_Core_fwd.hpp>
+#include <array>
 #include <biocma_cst_config.hpp>
 #include <string_view>
-
 using ComputeSpace = Kokkos::DefaultExecutionSpace;
 using HostSpace = Kokkos::DefaultHostExecutionSpace;
 
