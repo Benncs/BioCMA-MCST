@@ -13,12 +13,9 @@ namespace Simulation::KernelInline
 
   static constexpr bool _use_kokkos_log = true; // FIXME
 
-  template <typename FastSample = precision_tag>
+  template <typename T, typename FastSample = precision_tag>
   KOKKOS_INLINE_FUNCTION bool
-  probability_leaving(float random_number,
-                      double volume,
-                      double flow,
-                      double dt)
+  probability_leaving(T random_number, double volume, double flow, double dt)
   {
     KOKKOS_ASSERT(random_number >= 0. && random_number <= 1.);
     KOKKOS_ASSERT(volume >= 0.);
@@ -32,10 +29,26 @@ namespace Simulation::KernelInline
   // Specialization for when FastSample is provided
   template <>
   KOKKOS_INLINE_FUNCTION bool
-  probability_leaving<fast_tag>(float random_number,
-                                double volume,
-                                double flow,
-                                double dt)
+  probability_leaving<float, fast_tag>(float random_number,
+                                       double volume,
+                                       double flow,
+                                       double dt)
+  {
+    KOKKOS_ASSERT(random_number >= 0. && random_number <= 1.);
+    KOKKOS_ASSERT(volume >= 0.);
+    KOKKOS_ASSERT(flow >= 0.);
+    KOKKOS_ASSERT(dt >= 0.);
+    // Fast version without ln
+    return (dt * flow / volume) > random_number;
+  }
+
+  // Specialization for when FastSample is provided
+  template <>
+  KOKKOS_INLINE_FUNCTION bool
+  probability_leaving<double, fast_tag>(double random_number,
+                                        double volume,
+                                        double flow,
+                                        double dt)
   {
     KOKKOS_ASSERT(random_number >= 0. && random_number <= 1.);
     KOKKOS_ASSERT(volume >= 0.);

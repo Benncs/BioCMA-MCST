@@ -405,7 +405,7 @@ namespace Simulation::KernelInline
           i_current_compartment < move.liquid_volume.extent(0)
           && "Particle position is incorect (greater than compartment number)");
 
-      const bool mask_next = probability_leaving<fast_tag>(
+      const bool mask_next = probability_leaving<float, fast_tag>(
           rng1,
           move.liquid_volume(i_current_compartment),
           move.diag_transition(i_current_compartment),
@@ -613,12 +613,12 @@ namespace Simulation::KernelInline
       if (found_flow_value != 0.)
       {
         auto gen = random_pool.get_state();
-        const auto rng1 = gen.frand(0., 1.);
+        const auto rng1 = gen.drand(0., 1.);
         random_pool.free_state(gen);
 
         KOKKOS_ASSERT(found_liquid_volume > 0.);
         KOKKOS_ASSERT(found_flow_value > 0.);
-        const bool p = probability_leaving<precision_tag>(
+        const bool p = probability_leaving<decltype(rng1), precision_tag>(
             rng1, found_liquid_volume, found_flow_value, d_t);
 
         leave_mask = static_cast<int>(p);
