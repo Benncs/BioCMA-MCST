@@ -98,9 +98,13 @@ if [[ "$back_end_cuda" == "1" ]]; then
   flag_cmake="${flag_cmake} -DKokkos_ARCH_TURING75=ON"
   flag_cmake="${flag_cmake} -DKokkos_ENABLE_CUDA=ON"
   flag_cmake="${flag_cmake} -DKokkos_ENABLE_CUDA_CONSTEXPR=ON"
+  # flag_cmake="${flag_cmake} -DKokkos_ENABLE_MULTIPLE_CMAKE_LANGUAGES=ON"
+  #  flag_cmake="${flag_cmake} -DKokkos_ENABLE_COMPILE_AS_CMAKE_LANGUAGE=OFF"
 fi
 
 flag_cmake="${flag_cmake} -DKokkos_ENABLE_HWLOC=ON"
+flag_cmake="${flag_cmake} -DKokkos_ENABLE_AGGRESSIVE_VECTORIZATION=ON"
+# flag_cmake="${flag_cmake} -DKokkos_ENABLE_DEPRECATED_CODE_5=OFF"
 cmake $flag_cmake
 cmake --build .
 
@@ -110,5 +114,5 @@ else
   cmake --install .
 fi
 
-cd /tmp
+# cd /tmp
 #rm -rf /tmp/$tar_name /tmp/$folder_name

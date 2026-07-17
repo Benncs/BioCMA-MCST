@@ -16,12 +16,15 @@
 # Usage example:
 # Set the `CXX` environment variable to this script's path, and then configure the build:
 #
-#   CXX=$(pwd)/devutils/kokkos_wrap/wrap_cxx meson setup builddir
+#   CXX=$(pwd)/devutils/wrap_cxx meson setup builddir
 #
 # This approach streamlines the setup process and avoids manual adjustments when combining Kokkos
 # with Meson.
 #
-# Note: when update kokkos system-wide do not forget to chec nvcc_wrapper default arch which may need to be set manually (id sm_75)
+# Note:
+# - when update kokkos system-wide do not forget to chec nvcc_wrapper default arch which may need to be set manually (id sm_75)
+# - Using same compile to build kokkos and to compile project is better, mix between g++ and clang may work but not always
+# - With this setup, gpu build only works without debug information (maybe due to different compiler), if linking
 # -----------------------------------------------------------------------------
 
 KOKKOS_COMPILER=clang++-18
