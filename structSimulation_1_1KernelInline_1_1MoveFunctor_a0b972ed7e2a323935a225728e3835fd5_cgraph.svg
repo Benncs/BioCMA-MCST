@@ -51,11 +51,11 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="namespaceSimulation_1_1KernelInline.html#ad465888b874fea5c0e8f9979dc490f94" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="namespaceSimulation_1_1KernelInline.html#ad7c0e734167cdff7b5ac0f9b114309c2" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="303.88,-39.5 185.88,-39.5 185.88,0 303.88,0 303.88,-39.5"/>
 <text xml:space="preserve" text-anchor="start" x="193.88" y="-26" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::KernelInline</text>
 <text xml:space="preserve" text-anchor="start" x="193.88" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">::probability_leaving&lt;</text>
-<text xml:space="preserve" text-anchor="middle" x="244.88" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00"> fast_tag &gt;</text>
+<text xml:space="preserve" text-anchor="middle" x="244.88" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00"> float, fast_tag &gt;</text>
 </a>
 </g>
 </g>

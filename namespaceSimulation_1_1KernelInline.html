@@ -103,10 +103,12 @@ Functions</h2></td></tr>
 <tr class="memdesc:a3fd8d8828a956f4420ac98126ddf427b"><td class="mdescLeft">&#160;</td><td class="mdescRight">probably overkill binary search to find next compartment  <br /></td></tr>
 <tr class="memitem:a9f40fb96346148acf9abc68864c9347c" id="r_a9f40fb96346148acf9abc68864c9347c"><td class="memTemplParams" colspan="2">template&lt;typename ViewType1&gt; </td></tr>
 <tr class="memitem:a9f40fb96346148acf9abc68864c9347c template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f40fb96346148acf9abc68864c9347c">find_flow</a> (const ViewType1 &amp;leaving_flow, const std::size_t position, <a class="el" href="structMC_1_1LeavingFlow.html#afc4c25351656dc618efaff65994583ce">MC::LeavingFlow::float_type</a> &amp;val_flow, <a class="el" href="structMC_1_1LeavingFlow.html#afc4c25351656dc618efaff65994583ce">MC::LeavingFlow::float_type</a> &amp;_liquid_volume)</td></tr>
-<tr class="memitem:a648521674ead158dd3776a946da6722a" id="r_a648521674ead158dd3776a946da6722a"><td class="memTemplParams" colspan="2">template&lt;typename FastSample = precision_tag&gt; </td></tr>
-<tr class="memitem:a648521674ead158dd3776a946da6722a template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a648521674ead158dd3776a946da6722a">probability_leaving</a> (float random_number, double volume, double flow, double dt)</td></tr>
-<tr class="memitem:ad465888b874fea5c0e8f9979dc490f94" id="r_ad465888b874fea5c0e8f9979dc490f94"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
-<tr class="memitem:ad465888b874fea5c0e8f9979dc490f94 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad465888b874fea5c0e8f9979dc490f94">probability_leaving&lt; fast_tag &gt;</a> (float random_number, double volume, double flow, double dt)</td></tr>
+<tr class="memitem:aa200f06ca1c673e861c76d52ce3ceeec" id="r_aa200f06ca1c673e861c76d52ce3ceeec"><td class="memTemplParams" colspan="2">template&lt;typename T, typename FastSample = precision_tag&gt; </td></tr>
+<tr class="memitem:aa200f06ca1c673e861c76d52ce3ceeec template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa200f06ca1c673e861c76d52ce3ceeec">probability_leaving</a> (T random_number, double volume, double flow, double dt)</td></tr>
+<tr class="memitem:ad7c0e734167cdff7b5ac0f9b114309c2" id="r_ad7c0e734167cdff7b5ac0f9b114309c2"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:ad7c0e734167cdff7b5ac0f9b114309c2 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7c0e734167cdff7b5ac0f9b114309c2">probability_leaving&lt; float, fast_tag &gt;</a> (float random_number, double volume, double flow, double dt)</td></tr>
+<tr class="memitem:a10d393d598957683ed438012f2080cd0" id="r_a10d393d598957683ed438012f2080cd0"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a10d393d598957683ed438012f2080cd0 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10d393d598957683ed438012f2080cd0">probability_leaving&lt; double, fast_tag &gt;</a> (double random_number, double volume, double flow, double dt)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -298,18 +300,18 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a648521674ead158dd3776a946da6722a" name="a648521674ead158dd3776a946da6722a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a648521674ead158dd3776a946da6722a">&#9670;&#160;</a></span>probability_leaving()</h2>
+<a id="aa200f06ca1c673e861c76d52ce3ceeec" name="aa200f06ca1c673e861c76d52ce3ceeec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa200f06ca1c673e861c76d52ce3ceeec">&#9670;&#160;</a></span>probability_leaving()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename FastSample = precision_tag&gt; </div>
+template&lt;typename T, typename FastSample = precision_tag&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">KOKKOS_INLINE_FUNCTION bool Simulation::KernelInline::probability_leaving </td>
           <td>(</td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>random_number</em></span>, </td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>random_number</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -331,18 +333,18 @@ template&lt;typename FastSample = precision_tag&gt; </div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_a648521674ead158dd3776a946da6722a_cgraph.svg" width="352" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_aa200f06ca1c673e861c76d52ce3ceeec_cgraph.svg" width="352" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_a648521674ead158dd3776a946da6722a_icgraph.svg" width="610" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_aa200f06ca1c673e861c76d52ce3ceeec_icgraph.svg" width="610" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
 </div>
-<a id="ad465888b874fea5c0e8f9979dc490f94" name="ad465888b874fea5c0e8f9979dc490f94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad465888b874fea5c0e8f9979dc490f94">&#9670;&#160;</a></span>probability_leaving&lt; fast_tag &gt;()</h2>
+<a id="a10d393d598957683ed438012f2080cd0" name="a10d393d598957683ed438012f2080cd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10d393d598957683ed438012f2080cd0">&#9670;&#160;</a></span>probability_leaving&lt; double, fast_tag &gt;()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -350,7 +352,40 @@ Here is the caller graph for this function:</div>
 template&lt;&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="#a648521674ead158dd3776a946da6722a">Simulation::KernelInline::probability_leaving</a>&lt; <a class="el" href="#a69b2887c984af36974b98f0afb8d5f6c">fast_tag</a> &gt; </td>
+          <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="#aa200f06ca1c673e861c76d52ce3ceeec">Simulation::KernelInline::probability_leaving</a>&lt; double, <a class="el" href="#a69b2887c984af36974b98f0afb8d5f6c">fast_tag</a> &gt; </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>random_number</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>volume</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>flow</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>dt</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad7c0e734167cdff7b5ac0f9b114309c2" name="ad7c0e734167cdff7b5ac0f9b114309c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7c0e734167cdff7b5ac0f9b114309c2">&#9670;&#160;</a></span>probability_leaving&lt; float, fast_tag &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="#aa200f06ca1c673e861c76d52ce3ceeec">Simulation::KernelInline::probability_leaving</a>&lt; float, <a class="el" href="#a69b2887c984af36974b98f0afb8d5f6c">fast_tag</a> &gt; </td>
           <td>(</td>
           <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>random_number</em></span>, </td>
         </tr>
@@ -374,7 +409,7 @@ template&lt;&gt; </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_ad465888b874fea5c0e8f9979dc490f94_icgraph.svg" width="620" height="64"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_ad7c0e734167cdff7b5ac0f9b114309c2_icgraph.svg" width="620" height="64"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

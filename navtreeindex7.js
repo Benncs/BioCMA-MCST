@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"structCore_1_1CaseData.html#a7757610efc0f4c74c853498ea8933bed":[4,0,2,2,0],
 "structCore_1_1CaseData.html#aa53d6ed57f5833231b65f4bbb90af9a6":[2,0,4,2,4],
 "structCore_1_1CaseData.html#aa53d6ed57f5833231b65f4bbb90af9a6":[4,0,2,2,4],
 "structCore_1_1DataExporter_1_1MultiMatrixDescription.html":[2,0,4,3,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX7 =
 "structMC_1_1Distributions_1_1LogNormal.html":[2,0,9,0,1],
 "structMC_1_1Distributions_1_1LogNormal.html":[4,0,6,0,1],
 "structMC_1_1Distributions_1_1LogNormal.html#a3590ce6c2cead5acdab4e02bb63455c9":[2,0,9,0,1,0],
-"structMC_1_1Distributions_1_1LogNormal.html#a3590ce6c2cead5acdab4e02bb63455c9":[4,0,6,0,1,0],
-"structMC_1_1Distributions_1_1LogNormal.html#a4653ce761038a8812f1e17a773e9e7d0":[2,0,9,0,1,5]
+"structMC_1_1Distributions_1_1LogNormal.html#a3590ce6c2cead5acdab4e02bb63455c9":[4,0,6,0,1,0]
 };
