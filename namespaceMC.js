@@ -53,6 +53,7 @@ var namespaceMC =
       [ "Dead", "namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7ba183b62c7f067711f9c5a54913c054617", null ]
     ] ],
     [ "event_index", "namespaceMC.html#ae91609aafa31939cedd6775cc5adafc4", null ],
+    [ "fill_random", "namespaceMC.html#a280b2c4607eee876da29d5e51c813695", null ],
     [ "get_pool", "namespaceMC.html#a6734cec020a2315d36542faad86c9125", null ],
     [ "impl_init", "namespaceMC.html#a3c593ea5f6af406116befde0c9595b7c", null ],
     [ "init", "namespaceMC.html#adb43176dfee4e4e265e7c72171024093", null ],

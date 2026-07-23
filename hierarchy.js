@@ -128,8 +128,8 @@ var hierarchy =
     [ "Simulation::KernelInline::TagContribution0D", "structSimulation_1_1KernelInline_1_1TagContribution0D.html", null ],
     [ "Simulation::KernelInline::TagCycle", "structSimulation_1_1KernelInline_1_1TagCycle.html", null ],
     [ "Simulation::KernelInline::TagLeave", "structSimulation_1_1KernelInline_1_1TagLeave.html", null ],
+    [ "Simulation::KernelInline::TagLeaveB0D", "structSimulation_1_1KernelInline_1_1TagLeaveB0D.html", null ],
     [ "Simulation::KernelInline::TagMove", "structSimulation_1_1KernelInline_1_1TagMove.html", null ],
-    [ "Simulation::KernelInline::TagRNG", "structSimulation_1_1KernelInline_1_1TagRNG.html", null ],
     [ "std::true_type", null, [
       [ "has_uniform_weight< T, std::void_t< typename T::uniform_weight > >", "structhas__uniform__weight_3_01T_00_01std_1_1void__t_3_01typename_01T_1_1uniform__weight_01_4_01_4.html", null ]
     ] ],

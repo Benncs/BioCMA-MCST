@@ -83,8 +83,8 @@ Classes</h2></td></tr>
 <tr class="memitem:TagContribution0D" id="r_TagContribution0D"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1KernelInline_1_1TagContribution0D.html">TagContribution0D</a></td></tr>
 <tr class="memitem:TagCycle" id="r_TagCycle"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1KernelInline_1_1TagCycle.html">TagCycle</a></td></tr>
 <tr class="memitem:TagLeave" id="r_TagLeave"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1KernelInline_1_1TagLeave.html">TagLeave</a></td></tr>
+<tr class="memitem:TagLeaveB0D" id="r_TagLeaveB0D"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1KernelInline_1_1TagLeaveB0D.html">TagLeaveB0D</a></td></tr>
 <tr class="memitem:TagMove" id="r_TagMove"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1KernelInline_1_1TagMove.html">TagMove</a></td></tr>
-<tr class="memitem:TagRNG" id="r_TagRNG"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1KernelInline_1_1TagRNG.html">TagRNG</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -97,12 +97,12 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0a987f5f49bd4923ea33364c44a5600e" id="r_a0a987f5f49bd4923ea33364c44a5600e"><td class="memTemplParams" colspan="2">template&lt;class ExecutionSpace, class ViewType, class RandomPool, class IndexType = int64_t, const std::size_t CHUNK_SIZE&gt; </td></tr>
-<tr class="memitem:a0a987f5f49bd4923ea33364c44a5600e template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a987f5f49bd4923ea33364c44a5600e">fill_random</a> (const ExecutionSpace &amp;exec, ViewType a, RandomPool g, typename ViewType::const_value_type begin, typename ViewType::const_value_type end)</td></tr>
 <tr class="memitem:a3fd8d8828a956f4420ac98126ddf427b" id="r_a3fd8d8828a956f4420ac98126ddf427b"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3fd8d8828a956f4420ac98126ddf427b">__find_next_compartment</a> (const bool do_serch, const <a class="el" href="namespaceMC.html#a0338734b6c7022619c63f34662b34f75">MC::NeighborsView</a>&lt; ComputeSpace, true &gt; &amp;neighbors, const <a class="el" href="namespaceMC.html#ad0d8ea884c3b32f3d99228e435997790">MC::CumulativeProbabilityView</a>&lt; ComputeSpace, true &gt; &amp;cumulative_probability, const std::size_t i_compartment, const double random_number)</td></tr>
 <tr class="memdesc:a3fd8d8828a956f4420ac98126ddf427b"><td class="mdescLeft">&#160;</td><td class="mdescRight">probably overkill binary search to find next compartment  <br /></td></tr>
 <tr class="memitem:a9f40fb96346148acf9abc68864c9347c" id="r_a9f40fb96346148acf9abc68864c9347c"><td class="memTemplParams" colspan="2">template&lt;typename ViewType1&gt; </td></tr>
 <tr class="memitem:a9f40fb96346148acf9abc68864c9347c template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f40fb96346148acf9abc68864c9347c">find_flow</a> (const ViewType1 &amp;leaving_flow, const std::size_t position, <a class="el" href="structMC_1_1LeavingFlow.html#afc4c25351656dc618efaff65994583ce">MC::LeavingFlow::float_type</a> &amp;val_flow, <a class="el" href="structMC_1_1LeavingFlow.html#afc4c25351656dc618efaff65994583ce">MC::LeavingFlow::float_type</a> &amp;_liquid_volume)</td></tr>
+<tr class="memitem:a67fb2c259e89725850cc8f17b25254b1" id="r_a67fb2c259e89725850cc8f17b25254b1"><td class="memTemplParams" colspan="2">template&lt;typename T, typename FastSample = precision_tag&gt; </td></tr>
+<tr class="memitem:a67fb2c259e89725850cc8f17b25254b1 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67fb2c259e89725850cc8f17b25254b1">probability_leaving</a> (const T random_number, const double lambda)</td></tr>
 <tr class="memitem:aa200f06ca1c673e861c76d52ce3ceeec" id="r_aa200f06ca1c673e861c76d52ce3ceeec"><td class="memTemplParams" colspan="2">template&lt;typename T, typename FastSample = precision_tag&gt; </td></tr>
 <tr class="memitem:aa200f06ca1c673e861c76d52ce3ceeec template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa200f06ca1c673e861c76d52ce3ceeec">probability_leaving</a> (T random_number, double volume, double flow, double dt)</td></tr>
 <tr class="memitem:ad7c0e734167cdff7b5ac0f9b114309c2" id="r_ad7c0e734167cdff7b5ac0f9b114309c2"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
@@ -224,44 +224,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a0a987f5f49bd4923ea33364c44a5600e" name="a0a987f5f49bd4923ea33364c44a5600e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a987f5f49bd4923ea33364c44a5600e">&#9670;&#160;</a></span>fill_random()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class ExecutionSpace, class ViewType, class RandomPool, class IndexType = int64_t, const std::size_t CHUNK_SIZE&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void Simulation::KernelInline::fill_random </td>
-          <td>(</td>
-          <td class="paramtype">const ExecutionSpace &amp;</td>          <td class="paramname"><span class="paramname"><em>exec</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ViewType</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">RandomPool</td>          <td class="paramname"><span class="paramname"><em>g</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">typename ViewType::const_value_type</td>          <td class="paramname"><span class="paramname"><em>begin</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">typename ViewType::const_value_type</td>          <td class="paramname"><span class="paramname"><em>end</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a9f40fb96346148acf9abc68864c9347c" name="a9f40fb96346148acf9abc68864c9347c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9f40fb96346148acf9abc68864c9347c">&#9670;&#160;</a></span>find_flow()</h2>
 
@@ -300,8 +262,41 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a67fb2c259e89725850cc8f17b25254b1" name="a67fb2c259e89725850cc8f17b25254b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67fb2c259e89725850cc8f17b25254b1">&#9670;&#160;</a></span>probability_leaving() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T, typename FastSample = precision_tag&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">KOKKOS_INLINE_FUNCTION bool Simulation::KernelInline::probability_leaving </td>
+          <td>(</td>
+          <td class="paramtype">const T</td>          <td class="paramname"><span class="paramname"><em>random_number</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double</td>          <td class="paramname"><span class="paramname"><em>lambda</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_a67fb2c259e89725850cc8f17b25254b1_cgraph.svg" width="352" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_a67fb2c259e89725850cc8f17b25254b1_icgraph.svg" width="610" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
 <a id="aa200f06ca1c673e861c76d52ce3ceeec" name="aa200f06ca1c673e861c76d52ce3ceeec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa200f06ca1c673e861c76d52ce3ceeec">&#9670;&#160;</a></span>probability_leaving()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa200f06ca1c673e861c76d52ce3ceeec">&#9670;&#160;</a></span>probability_leaving() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -335,11 +330,6 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_aa200f06ca1c673e861c76d52ce3ceeec_cgraph.svg" width="352" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1KernelInline_aa200f06ca1c673e861c76d52ce3ceeec_icgraph.svg" width="610" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
@@ -352,7 +342,7 @@ Here is the caller graph for this function:</div>
 template&lt;&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="#aa200f06ca1c673e861c76d52ce3ceeec">Simulation::KernelInline::probability_leaving</a>&lt; double, <a class="el" href="#a69b2887c984af36974b98f0afb8d5f6c">fast_tag</a> &gt; </td>
+          <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="#a67fb2c259e89725850cc8f17b25254b1">Simulation::KernelInline::probability_leaving</a>&lt; double, <a class="el" href="#a69b2887c984af36974b98f0afb8d5f6c">fast_tag</a> &gt; </td>
           <td>(</td>
           <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>random_number</em></span>, </td>
         </tr>
@@ -385,7 +375,7 @@ template&lt;&gt; </div>
 template&lt;&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="#aa200f06ca1c673e861c76d52ce3ceeec">Simulation::KernelInline::probability_leaving</a>&lt; float, <a class="el" href="#a69b2887c984af36974b98f0afb8d5f6c">fast_tag</a> &gt; </td>
+          <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="#a67fb2c259e89725850cc8f17b25254b1">Simulation::KernelInline::probability_leaving</a>&lt; float, <a class="el" href="#a69b2887c984af36974b98f0afb8d5f6c">fast_tag</a> &gt; </td>
           <td>(</td>
           <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>random_number</em></span>, </td>
         </tr>
