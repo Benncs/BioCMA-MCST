@@ -157,6 +157,35 @@ namespace MC
     }
   };
 
+  template <class ExecutionSpace,
+            class ViewType,
+            class RandomPool,
+            class IndexType = int64_t,
+            const std::size_t CHUNK_SIZE>
+  void
+  fill_random(const ExecutionSpace& exec,
+              ViewType a,
+              RandomPool g,
+              typename ViewType::const_value_type begin,
+              typename ViewType::const_value_type end)
+  {
+    int64_t LDA = a.extent(0);
+
+    if (LDA > 0)
+    {
+      Kokkos::parallel_for(
+          "Kokkos::fill_random",
+          Kokkos::RangePolicy<ExecutionSpace>(
+              exec, 0, (LDA + (CHUNK_SIZE - 1)) / CHUNK_SIZE),
+          Kokkos::Impl::fill_random_functor_begin_end<ViewType,
+                                                      RandomPool,
+                                                      CHUNK_SIZE,
+                                                      ViewType::rank,
+                                                      IndexType>(
+              a, g, begin, end));
+    }
+  }
+
 } // namespace MC
 
 #endif //__MC_PRNG_HPP__

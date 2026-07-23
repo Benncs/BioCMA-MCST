@@ -13,6 +13,21 @@ namespace Simulation::KernelInline
 
   static constexpr bool _use_kokkos_log = true; // FIXME
 
+  // template <typename T>
+  // KOKKOS_INLINE_FUNCTION bool
+  // bernouilli_proba(T volume, T flow, T dt)
+  // {
+  //   const auto _lambda = dt * flow / volume;
+  //   return T{ 1 } - Kokkos::exp(-_lambda);
+  // }
+
+  template <typename T, typename FastSample = precision_tag>
+  KOKKOS_INLINE_FUNCTION bool
+  probability_leaving(const T random_number, const double lambda)
+  {
+    return lambda > -CommonMaths::_ln<_use_kokkos_log>(random_number);
+  }
+
   template <typename T, typename FastSample = precision_tag>
   KOKKOS_INLINE_FUNCTION bool
   probability_leaving(T random_number, double volume, double flow, double dt)

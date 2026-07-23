@@ -1,9 +1,11 @@
 #ifndef __SIMULATION_KERNELS_HPP__
 #define __SIMULATION_KERNELS_HPP__
 
+#include "mc/alias.hpp"
 #include <Kokkos_Core_fwd.hpp>
 #include <common/common.hpp>
 #include <common/kokkos_getpolicy.hpp>
+#include <impl/Kokkos_Profiling.hpp>
 #include <mc/domain.hpp>
 #include <mc/unit.hpp>
 #include <simulation/kernels/contribution_kernel.hpp>
@@ -123,15 +125,10 @@ namespace Simulation::KernelInline
     void
     launch_move(const std::size_t n_particle)
     {
-
-      if (move_kernel.enable_move)
+      bool is_0d_reactor = move_kernel.do_move();
+      if (is_0d_reactor)
       {
-        // const auto npt = m_options.m_p_p_team_move;
-        // if (n_particle <= npt)
-        // {
-        //   // TODO
-        //   throw std::runtime_error("Nparticle<n per team");
-        // }
+
         std::size_t npt = m_options.m_p_p_team_move;
 
         if (n_particle <= npt)
@@ -154,13 +151,44 @@ namespace Simulation::KernelInline
         Kokkos ::parallel_for("cycle_move", cycle_policy, move_kernel);
       }
 
-      if (move_kernel.enable_leave)
+      if (move_kernel.do_leave())
       {
 
-        const auto _policy_leave = Kokkos::RangePolicy<KernelInline::TagLeave>(
-            move_space, 0, n_particle);
-        Kokkos ::parallel_reduce(
-            "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
+        std::size_t npt = move_kernel.m_p_team_leave;
+        if (n_particle <= npt)
+        {
+          move_kernel.m_p_team_leave = 1;
+          npt = 1;
+        }
+        const std::size_t league_size = Common::c_league_size(n_particle, npt);
+
+        // This is duplicated code but there is no simple alternative to select
+        // policy tag at runtime
+        if (!is_0d_reactor)
+        {
+          auto _policy_leave
+              = Kokkos::TeamPolicy<TagLeaveB0D>(move_space,
+                                                static_cast<int>(league_size),
+                                                Kokkos::AUTO(),
+                                                Kokkos::AUTO());
+
+          Kokkos::parallel_reduce(
+              "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
+        }
+        else
+        {
+          auto _policy_leave
+              = Kokkos::TeamPolicy<TagLeave>(move_space,
+                                             static_cast<int>(league_size),
+                                             Kokkos::AUTO(),
+                                             Kokkos::AUTO());
+
+          // auto _policy_leave
+          //     = Kokkos::RangePolicy<TagLeave>(move_space, 0, n_particle);
+
+          Kokkos::parallel_reduce(
+              "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
+        }
       }
     }
 
