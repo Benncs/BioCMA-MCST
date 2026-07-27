@@ -117,10 +117,7 @@ def config_and_run(
         callback_post(handle)
 
     # Apply and execute
-    ok, msg = handle_module.apply(handle, is_serde)
-    if not ok:
-        print(msg)
-        return -1
+    handle_module.apply(handle, is_serde)
 
     handle_module.exec(handle)
     return handle_module.i_rank(handle)
