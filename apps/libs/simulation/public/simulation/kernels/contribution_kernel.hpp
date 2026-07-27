@@ -101,46 +101,6 @@ template <ModelType M> struct ContributionFunctor
                    });
   }
 
-  // KOKKOS_INLINE_FUNCTION
-  // void
-  // operator()(const Tag3D _tag, const TeamMember& team) const
-  // {
-  //   (void)_tag;
-
-  //   const std::size_t p0 = team.league_rank() * m_particle_per_team;
-  //   const auto& c = m_particles.contribs;
-  //   const auto& status = m_particles.status;
-  //   const auto n_particle = m_particles.n_particles();
-  //   const auto& positions = m_particles.position;
-
-  //   const auto upper_bound = ((p0 + m_particle_per_team) >= n_particle)
-  //                                ? n_particle - p0 - 1
-  //                                : m_particle_per_team;
-  //   KOKKOS_ASSERT(upper_bound >= 0 && upper_bound < n_particle);
-
-  //   constexpr std::size_t work_per_thread = 32;
-  //   KOKKOS_ASSERT(m_particle_per_team%work_per_thread==0);
-
-  //   Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, upper_bound),
-  //                        [&](const std::size_t i)
-  //                        {
-  //                          const std::size_t p = p0 + i;
-  //                          if (status(p) != MC::Status::Idle)
-  //                          {
-  //                            return;
-  //                          }
-  //                          auto access = m_contribution_scatter.access();
-  //                          const double weight = m_particles.get_weight(p);
-  //                          const auto pos = positions(p);
-
-  //                          Kokkos::parallel_for(
-  //                              Kokkos::ThreadVectorRange(team, 0, M::n_c),
-  //                              [&](const int j)
-  //                              { access(j, pos) += weight * c(p, j); });
-  //                        });
-
-  // }
-
   KOKKOS_INLINE_FUNCTION
   void
   operator()(const Tag3D _tag, const TeamMember& team) const

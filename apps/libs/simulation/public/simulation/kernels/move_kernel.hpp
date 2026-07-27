@@ -214,22 +214,22 @@ namespace Simulation::KernelInline
       // Use "tiling" to minimize contention when aquired_state
       // State is aquired m times instead of N, it is supposed to reduce
       // contention
-      //
+
       // TODO: iteration order is inverted. We need p iteration (one per thread)
       // and m internal (per-thread) In cpu doesnt change because p =1 but in
       // GPU, we need to fill the p thread in the team Currently, typically m=16
       // << p = 128
-      Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, m),
-                           [&rp, &rng, p, N](const std::size_t idx)
+      Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, p),
+                           [&rp, &rng, p, N, m](const std::size_t idx)
                            {
                              // Ok to use here, get_state should be called in
                              // each thread
                              auto gen = rp.get_state();
 
-                             const std::size_t base = idx * p;
+                             const std::size_t base = idx * m;
                              // current thread iteration p times with the same
                              // state
-                             for (std::size_t k = 0; k < p; ++k)
+                             for (std::size_t k = 0; k < m; ++k)
                              {
                                const std::size_t i = base + k;
                                if (i >= N)

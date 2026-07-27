@@ -195,11 +195,7 @@ namespace Simulation::KernelInline
     void
     launch_model(const std::size_t n_particle)
     {
-      // if (n_particle <= m_options.m_p_p_team_model)
-      // {
-      //   // TODO
-      //   throw std::runtime_error("Nparticle<n per team");
-      // }
+
       std::size_t npt = m_options.m_p_p_team_model;
 
       if (n_particle <= npt)
