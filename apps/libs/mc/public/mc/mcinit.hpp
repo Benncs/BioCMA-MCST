@@ -1,6 +1,7 @@
 #ifndef __MC_INIT_HPP__
 #define __MC_INIT_HPP__
 
+#include "mc/prng/prng.hpp"
 #include <biocma_cst_config.hpp>
 #include <cassert>
 #include <common/execinfo.hpp>
@@ -71,7 +72,7 @@ namespace MC
   init(const std::shared_ptr<IO::Logger>& _logger,
        const ExecInfo& info,
        uint64_t n_particles,
-       std::size_t n_samples,
+       std::size_t seed,
        std::span<double> volumes,
        std::span<const size_t> _neighbors,
        bool uniform_mc_init,
@@ -82,9 +83,9 @@ namespace MC
 
     auto unit = std::make_unique<MonteCarloUnit>();
     unit->domain = ReactorDomain(volumes);
+    unit->rng = KPRNG(seed);
 
-    auto container = ParticlesContainer<Model>(
-        load_tuning_constant(), n_particles, n_samples);
+    ParticlesContainer<Model> container(load_tuning_constant(), n_particles);
     try
     {
       impl_init(info,

@@ -62,8 +62,7 @@ namespace MC
      * @brief Alias for the model used by the container.
      */
     explicit ParticlesContainer(RuntimeParameters rt_param,
-                                std::size_t n_particle,
-                                std::size_t _n_samples);
+                                std::size_t n_particle);
     ParticlesContainer(); //=default;
     /**
      * @brief Default copy and move constructors and assignment operators.
@@ -690,10 +689,8 @@ namespace MC
   // NOLINTEND
 
   template <ModelType M>
-  ParticlesContainer<M>::ParticlesContainer(
-      RuntimeParameters rt_param,
-      std::size_t n_particle,
-      [[maybe_unused]] std::size_t _n_samples)
+  ParticlesContainer<M>::ParticlesContainer(RuntimeParameters rt_param,
+                                            std::size_t n_particle)
       : model(alloc_without_init("particle_model"), 0, 0),
 
         contribs(alloc_without_init("particle_contribs"), 0),
@@ -728,7 +725,7 @@ namespace MC
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer()
-      : ParticlesContainer(RuntimeParameters{}, 0, 0)
+      : ParticlesContainer(RuntimeParameters{}, 0)
   {
   }
 

@@ -220,7 +220,7 @@ namespace Simulation::KernelInline
       // GPU, we need to fill the p thread in the team Currently, typically m=16
       // << p = 128
       Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, p),
-                           [&rp, &rng, p, N, m](const std::size_t idx)
+                           [&rp, &rng, N, m](const std::size_t idx)
                            {
                              // Ok to use here, get_state should be called in
                              // each thread
@@ -329,7 +329,6 @@ namespace Simulation::KernelInline
     {
 
       (void)_tag;
-      using mem_space = ComputeSpace::memory_space;
 
       const auto& lf = move.leaving_flow;
 

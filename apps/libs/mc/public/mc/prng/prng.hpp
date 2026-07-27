@@ -12,6 +12,9 @@ namespace MC
 
   pool_type get_pool(std::size_t seed = 0);
 
+  uint64_t master_seed();
+  uint64_t next_splitmix64(uint64_t& x) noexcept;
+
   /**
    * @brief Samples random variables
    * Use t wrap generator with RAII
@@ -75,7 +78,31 @@ namespace MC
     using pool_type = MC::pool_type;
     using generator_type = pool_type::generator_type;
 
-    explicit KPRNG(size_t _seed = 0);
+    KPRNG() = default;
+
+    explicit KPRNG(uint64_t seed);
+
+    /**
+     * @brief Save data into ar for serialization
+     */
+    template <class Archive>
+    void
+    save(Archive& ar) const
+    {
+      ar(this->seed);
+    }
+
+    /**
+     * @brief Load data from ar for deserialization
+     */
+    template <class Archive>
+    void
+    load(Archive& ar)
+    {
+      uint64_t _seed = 0;
+      ar(_seed);
+      this->random_pool = get_pool(_seed);
+    }
 
     template <FloatingPointType T>
     KOKKOS_INLINE_FUNCTION T
