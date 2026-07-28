@@ -76,7 +76,7 @@ $(function(){initNavTree('structContributionFunctor.html','','structContribution
 <div class="dynheader">
 Collaboration diagram for ContributionFunctor&lt; M &gt;:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor__coll__graph.svg" width="204" height="226"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor__coll__graph.svg" width="368" height="226"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
@@ -93,8 +93,9 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3a53db979c37994fd74984284f65a3b2" id="r_a3a53db979c37994fd74984284f65a3b2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a53db979c37994fd74984284f65a3b2">ContributionFunctor</a> (std::size_t particle_per_team, <a class="el" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a> contribution_scatter, <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; particles)</td></tr>
-<tr class="memitem:a883fb1f4db15fe4a68a1cd51a85ef72f" id="r_a883fb1f4db15fe4a68a1cd51a85ef72f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a883fb1f4db15fe4a68a1cd51a85ef72f">update</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; _particles)</td></tr>
+<tr class="memitem:a25473302fb9066546c2ea727dbce8cf5" id="r_a25473302fb9066546c2ea727dbce8cf5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25473302fb9066546c2ea727dbce8cf5">ContributionFunctor</a> (std::size_t particle_per_team, <a class="el" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a> contribution_scatter, <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; particles, <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> rp, <a class="el" href="namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7">MC::KernelConcentrationType</a> _concentrations, <a class="el" href="structMC_1_1EventContainer.html">MC::EventContainer</a> _event)</td></tr>
+<tr class="memitem:adfafb7739fadf5f209c9a65412fe50e6" id="r_adfafb7739fadf5f209c9a65412fe50e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfafb7739fadf5f209c9a65412fe50e6">update</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; _particles, double _d_t)</td></tr>
+<tr class="memitem:af67be8fc4cddd1a36b2862e9d4ce7b68" id="r_af67be8fc4cddd1a36b2862e9d4ce7b68"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af67be8fc4cddd1a36b2862e9d4ce7b68">division</a> (const std::size_t idx) const</td></tr>
 <tr class="memitem:a17f19d2b6637bb74b64784c68202d066" id="r_a17f19d2b6637bb74b64784c68202d066"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17f19d2b6637bb74b64784c68202d066">operator()</a> (<a class="el" href="structContributionFunctor_1_1Tag0D.html">Tag0D</a> _tag, const <a class="el" href="#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a> &amp;team) const</td></tr>
 <tr class="memitem:ad0c03d2b5ff189633abab20f02805e15" id="r_ad0c03d2b5ff189633abab20f02805e15"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0c03d2b5ff189633abab20f02805e15">operator()</a> (const <a class="el" href="structContributionFunctor_1_1Tag3D.html">Tag3D</a> _tag, const <a class="el" href="#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a> &amp;team) const</td></tr>
 </table><table class="memberdecls">
@@ -104,6 +105,10 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:aead15742975a46469c2b96062dc119d1" id="r_aead15742975a46469c2b96062dc119d1"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a></td></tr>
 <tr class="memitem:abdef4df64a7f2c64bd84baa429963747" id="r_abdef4df64a7f2c64bd84baa429963747"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a508817d9913e12976cea3fef8dccc1f0">MC::ContributionView</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abdef4df64a7f2c64bd84baa429963747">m_contribution_scatter</a></td></tr>
 <tr class="memitem:aa7f9dce06d260d972cb45960fdc40475" id="r_aa7f9dce06d260d972cb45960fdc40475"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7f9dce06d260d972cb45960fdc40475">m_particles</a></td></tr>
+<tr class="memitem:a8c76d9de68c1997c888ff44dd92ebc7f" id="r_a8c76d9de68c1997c888ff44dd92ebc7f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c76d9de68c1997c888ff44dd92ebc7f">random_pool</a></td></tr>
+<tr class="memitem:ab853aa4b541745f9ca95e6d9f578b3d7" id="r_ab853aa4b541745f9ca95e6d9f578b3d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7">MC::KernelConcentrationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab853aa4b541745f9ca95e6d9f578b3d7">concentrations</a></td></tr>
+<tr class="memitem:a18298c30d3e5a7785bc5ec5eac285852" id="r_a18298c30d3e5a7785bc5ec5eac285852"><td class="memItemLeft" align="right" valign="top">M::FloatType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18298c30d3e5a7785bc5ec5eac285852">d_t</a></td></tr>
+<tr class="memitem:a89edb6cd328693285ac2f734c18ccbc4" id="r_a89edb6cd328693285ac2f734c18ccbc4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMC_1_1EventContainer.html">MC::EventContainer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89edb6cd328693285ac2f734c18ccbc4">events</a></td></tr>
 </table>
 <a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
 <a id="aade88235d0802383f297c1de07fdfe90" name="aade88235d0802383f297c1de07fdfe90"></a>
@@ -137,7 +142,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> Kokkos::View&lt;<a class="code hl_typedef" href="#aade88235d0802383f297c1de07fdfe90">float_type</a>*,</div>
 <div class="line">                     TeamPolicy::execution_space::scratch_memory_space&gt;</div>
-<div class="ttc" id="astructContributionFunctor_html_aade88235d0802383f297c1de07fdfe90"><div class="ttname"><a href="#aade88235d0802383f297c1de07fdfe90">ContributionFunctor::float_type</a></div><div class="ttdeci">float float_type</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:19</div></div>
+<div class="ttc" id="astructContributionFunctor_html_aade88235d0802383f297c1de07fdfe90"><div class="ttname"><a href="#aade88235d0802383f297c1de07fdfe90">ContributionFunctor::float_type</a></div><div class="ttdeci">float float_type</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:22</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -174,8 +179,8 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 </div>
 </div>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a3a53db979c37994fd74984284f65a3b2" name="a3a53db979c37994fd74984284f65a3b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a53db979c37994fd74984284f65a3b2">&#9670;&#160;</a></span>ContributionFunctor()</h2>
+<a id="a25473302fb9066546c2ea727dbce8cf5" name="a25473302fb9066546c2ea727dbce8cf5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25473302fb9066546c2ea727dbce8cf5">&#9670;&#160;</a></span>ContributionFunctor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,7 +203,22 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt;</td>          <td class="paramname"><span class="paramname"><em>particles</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt;</td>          <td class="paramname"><span class="paramname"><em>particles</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a></td>          <td class="paramname"><span class="paramname"><em>rp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7">MC::KernelConcentrationType</a></td>          <td class="paramname"><span class="paramname"><em>_concentrations</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structMC_1_1EventContainer.html">MC::EventContainer</a></td>          <td class="paramname"><span class="paramname"><em>_event</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -211,6 +231,38 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="af67be8fc4cddd1a36b2862e9d4ce7b68" name="af67be8fc4cddd1a36b2862e9d4ce7b68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af67be8fc4cddd1a36b2862e9d4ce7b68">&#9670;&#160;</a></span>division()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">KOKKOS_INLINE_FUNCTION void <a class="el" href="structContributionFunctor.html">ContributionFunctor</a>&lt; M &gt;::division </td>
+          <td>(</td>
+          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>idx</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_af67be8fc4cddd1a36b2862e9d4ce7b68_icgraph.svg" width="330" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
 <a id="ad0c03d2b5ff189633abab20f02805e15" name="ad0c03d2b5ff189633abab20f02805e15"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad0c03d2b5ff189633abab20f02805e15">&#9670;&#160;</a></span>operator()() <span class="overload">[1/2]</span></h2>
 
@@ -239,6 +291,11 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_ad0c03d2b5ff189633abab20f02805e15_cgraph.svg" width="330" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -270,11 +327,16 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_a17f19d2b6637bb74b64784c68202d066_cgraph.svg" width="330" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
-<a id="a883fb1f4db15fe4a68a1cd51a85ef72f" name="a883fb1f4db15fe4a68a1cd51a85ef72f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a883fb1f4db15fe4a68a1cd51a85ef72f">&#9670;&#160;</a></span>update()</h2>
+<a id="adfafb7739fadf5f209c9a65412fe50e6" name="adfafb7739fadf5f209c9a65412fe50e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfafb7739fadf5f209c9a65412fe50e6">&#9670;&#160;</a></span>update()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -287,8 +349,12 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
         <tr>
           <td class="memname">void <a class="el" href="structContributionFunctor.html">ContributionFunctor</a>&lt; M &gt;::update </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt;</td>          <td class="paramname"><span class="paramname"><em>_particles</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt;</td>          <td class="paramname"><span class="paramname"><em>_particles</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>_d_t</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -301,6 +367,54 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="ab853aa4b541745f9ca95e6d9f578b3d7" name="ab853aa4b541745f9ca95e6d9f578b3d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab853aa4b541745f9ca95e6d9f578b3d7">&#9670;&#160;</a></span>concentrations</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceMC.html#aafd7562bb9d44f57c7f63b3385299df7">MC::KernelConcentrationType</a> <a class="el" href="structContributionFunctor.html">ContributionFunctor</a>&lt; M &gt;::concentrations</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a18298c30d3e5a7785bc5ec5eac285852" name="a18298c30d3e5a7785bc5ec5eac285852"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18298c30d3e5a7785bc5ec5eac285852">&#9670;&#160;</a></span>d_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">M::FloatType <a class="el" href="structContributionFunctor.html">ContributionFunctor</a>&lt; M &gt;::d_t</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a89edb6cd328693285ac2f734c18ccbc4" name="a89edb6cd328693285ac2f734c18ccbc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89edb6cd328693285ac2f734c18ccbc4">&#9670;&#160;</a></span>events</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structMC_1_1EventContainer.html">MC::EventContainer</a> <a class="el" href="structContributionFunctor.html">ContributionFunctor</a>&lt; M &gt;::events</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="abdef4df64a7f2c64bd84baa429963747" name="abdef4df64a7f2c64bd84baa429963747"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abdef4df64a7f2c64bd84baa429963747">&#9670;&#160;</a></span>m_contribution_scatter</h2>
 
@@ -359,6 +473,22 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
       <table class="memname">
         <tr>
           <td class="memname">size_t <a class="el" href="structContributionFunctor.html">ContributionFunctor</a>&lt; M &gt;::np {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8c76d9de68c1997c888ff44dd92ebc7f" name="a8c76d9de68c1997c888ff44dd92ebc7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c76d9de68c1997c888ff44dd92ebc7f">&#9670;&#160;</a></span>random_pool</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> <a class="el" href="structContributionFunctor.html">ContributionFunctor</a>&lt; M &gt;::random_pool</td>
         </tr>
       </table>
 </div><div class="memdoc">

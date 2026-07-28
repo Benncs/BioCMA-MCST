@@ -9,7 +9,6 @@ var structf__assert =
     [ "operator()", "structf__assert.html#aa39fd04c93cbefa23dad306942fd0bed", null ],
     [ "operator()", "structf__assert.html#ae9623e57b3f48751e5b629807c423268", null ],
     [ "operator()", "structf__assert.html#ac6ebc4c6eb075f64a92aed474395026f", null ],
-    [ "operator()", "structf__assert.html#a0ef6e3985a3542eefa85472e440ebc5f", null ],
     [ "m_n_per_team", "structf__assert.html#a0c359e9aa211f400f218f0d1c4513f74", null ],
     [ "n_tot", "structf__assert.html#aebbf7ca2eb3a011599b9b35a6cc1a774", null ]
 ];
