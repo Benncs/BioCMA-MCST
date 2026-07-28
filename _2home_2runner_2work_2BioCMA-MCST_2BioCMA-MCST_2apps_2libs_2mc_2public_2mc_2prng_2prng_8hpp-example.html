@@ -101,10 +101,13 @@ $(function(){initNavTree('_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2
 <div class="line">{</div>
 <div class="line"> </div>
 <div class="line">  <a id="a0" name="a0"></a><a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">pool_type</a> <a id="a1" name="a1"></a><a class="code hl_function" href="namespaceMC.html#a6734cec020a2315d36542faad86c9125">get_pool</a>(std::size_t seed = 0);</div>
+<div class="line"> </div>
+<div class="line">  uint64_t <a id="a2" name="a2"></a><a class="code hl_function" href="namespaceMC.html#aa68fd5fea506331f369d20b49904dafd">master_seed</a>();</div>
+<div class="line">  uint64_t <a id="a3" name="a3"></a><a class="code hl_function" href="namespaceMC.html#af7f8e9154582097b61aaed45e6b53e28">next_splitmix64</a>(uint64_t&amp; x) <span class="keyword">noexcept</span>;</div>
 <div class="line"></div>
 <div class="line"> </div>
 <div class="line">  KOKKOS_INLINE_FUNCTION <span class="keyword">auto</span></div>
-<div class="line">  <a id="a2" name="a2"></a><a class="code hl_function" href="namespaceMC.html#a2bd2179d1f9faf98a60f1dedfac0fc83">sample_random_variables</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">pool_type</a>&amp; pool, <span class="keyword">auto</span>&amp;&amp; functor)</div>
+<div class="line">  <a id="a4" name="a4"></a><a class="code hl_function" href="namespaceMC.html#a2bd2179d1f9faf98a60f1dedfac0fc83">sample_random_variables</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">pool_type</a>&amp; pool, <span class="keyword">auto</span>&amp;&amp; functor)</div>
 <div class="line">  {</div>
 <div class="line">    <span class="comment">// Be sure that generator is passed to functor as reference</span></div>
 <div class="line">    <span class="comment">// As functor can be lambda usually [](auto gen){return gen.rand();};</span></div>
@@ -131,14 +134,32 @@ $(function(){initNavTree('_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2
 <div class="line">  <span class="keyword">class </span>KPRNG <span class="comment">// TODO remove deprecated</span></div>
 <div class="line">  {</div>
 <div class="line">  <span class="keyword">public</span>:</div>
-<div class="line">    <span class="keyword">using </span><a id="a3" name="a3"></a><a class="code hl_typedef" href="classMC_1_1KPRNG.html#a762b10c38f7b947b5698d16cbbb008d7">pool_type</a> = <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>;</div>
-<div class="line">    <span class="keyword">using </span><a id="a4" name="a4"></a><a class="code hl_typedef" href="classMC_1_1KPRNG.html#ac45dd0af0ed06f16a4fe5d6b47ea2b25">generator_type</a> = pool_type::generator_type;</div>
+<div class="line">    <span class="keyword">using </span><a id="a5" name="a5"></a><a class="code hl_typedef" href="classMC_1_1KPRNG.html#a762b10c38f7b947b5698d16cbbb008d7">pool_type</a> = <a class="code hl_typedef" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a>;</div>
+<div class="line">    <span class="keyword">using </span><a id="a6" name="a6"></a><a class="code hl_typedef" href="classMC_1_1KPRNG.html#ac45dd0af0ed06f16a4fe5d6b47ea2b25">generator_type</a> = pool_type::generator_type;</div>
 <div class="line"> </div>
-<div class="line">    <span class="keyword">explicit</span> <a id="a5" name="a5"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#aa0f2f52072c2b6836234a098c709dd97">KPRNG</a>(<span class="keywordtype">size_t</span> _seed = 0);</div>
+<div class="line">    <a id="a7" name="a7"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#abd562fd40ea20dbd396ed9781ab40bf2">KPRNG</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">explicit</span> <a class="code hl_function" href="classMC_1_1KPRNG.html#abd562fd40ea20dbd396ed9781ab40bf2">KPRNG</a>(uint64_t <a id="a8" name="a8"></a><a class="code hl_variable" href="classMC_1_1KPRNG.html#afa1cb38dd2c56c82f2e720784ff7c922">seed</a>);</div>
+<div class="line"></div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Archive&gt;</div>
+<div class="line">    <span class="keywordtype">void</span></div>
+<div class="line">    <a id="a9" name="a9"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#af62d069cb1797ffa37dac31f4e89efe0">save</a>(Archive&amp; ar)<span class="keyword"> const</span></div>
+<div class="line"><span class="keyword">    </span>{</div>
+<div class="line">      ar(this-&gt;seed);</div>
+<div class="line">    }</div>
+<div class="line"></div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Archive&gt;</div>
+<div class="line">    <span class="keywordtype">void</span></div>
+<div class="line">    <a id="a10" name="a10"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#a7d843a28f75ec535805a347592461a45">load</a>(Archive&amp; ar)</div>
+<div class="line">    {</div>
+<div class="line">      uint64_t _seed = 0;</div>
+<div class="line">      ar(_seed);</div>
+<div class="line">      this-&gt;<a id="a11" name="a11"></a><a class="code hl_variable" href="classMC_1_1KPRNG.html#aee1afc51c8bbf7a7976e4804665dc85a">random_pool</a> = <a class="code hl_function" href="namespaceMC.html#a6734cec020a2315d36542faad86c9125">get_pool</a>(_seed);</div>
+<div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="keyword">template</span> &lt;FloatingPo<span class="keywordtype">int</span>Type T&gt;</div>
 <div class="line">    KOKKOS_INLINE_FUNCTION T</div>
-<div class="line">    <a id="a6" name="a6"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#a3c6b73ae8161b91229f9929f15a1b2fe">uniform</a>()<span class="keyword"> const</span></div>
+<div class="line">    <a id="a12" name="a12"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#a3c6b73ae8161b91229f9929f15a1b2fe">uniform</a>()<span class="keyword"> const</span></div>
 <div class="line"><span class="keyword">    </span>{</div>
 <div class="line">      <span class="keywordflow">return</span> this-&gt;<a class="code hl_function" href="classMC_1_1KPRNG.html#a3c6b73ae8161b91229f9929f15a1b2fe">uniform&lt;T&gt;</a>(0, 1);</div>
 <div class="line">    }</div>
@@ -148,7 +169,7 @@ $(function(){initNavTree('_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2
 <div class="line">    <a class="code hl_function" href="classMC_1_1KPRNG.html#a3c6b73ae8161b91229f9929f15a1b2fe">uniform</a>(T a, T b)<span class="keyword"> const</span></div>
 <div class="line"><span class="keyword">    </span>{</div>
 <div class="line">      <span class="keywordflow">return</span> <a class="code hl_function" href="namespaceMC.html#a2bd2179d1f9faf98a60f1dedfac0fc83">sample_random_variables</a>(</div>
-<div class="line">          <a id="a7" name="a7"></a><a class="code hl_variable" href="classMC_1_1KPRNG.html#aee1afc51c8bbf7a7976e4804665dc85a">random_pool</a>,</div>
+<div class="line">          <a class="code hl_variable" href="classMC_1_1KPRNG.html#aee1afc51c8bbf7a7976e4804665dc85a">random_pool</a>,</div>
 <div class="line">          [a, b](<span class="keyword">auto</span> gen)</div>
 <div class="line">          {</div>
 <div class="line">            T x;</div>
@@ -165,11 +186,11 @@ $(function(){initNavTree('_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    [[deprecated]] [[nodiscard]] Kokkos::View&lt;double*, ComputeSpace&gt;</div>
-<div class="line">    <a id="a8" name="a8"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#ad1c9b5acec76cbf1d01783be1e41e664">double_uniform</a>(<span class="keywordtype">size_t</span> n_sample, <span class="keywordtype">double</span> a = 0., <span class="keywordtype">double</span> b = 1.) <span class="keyword">const</span>;</div>
+<div class="line">    <a id="a13" name="a13"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#ad1c9b5acec76cbf1d01783be1e41e664">double_uniform</a>(<span class="keywordtype">size_t</span> n_sample, <span class="keywordtype">double</span> a = 0., <span class="keywordtype">double</span> b = 1.) <span class="keyword">const</span>;</div>
 <div class="line"> </div>
 <div class="line">    <span class="keyword">template</span> &lt;FloatingPo<span class="keywordtype">int</span>Type T, <span class="keywordtype">size_t</span> n_r&gt;</div>
 <div class="line">    Kokkos::View&lt;T[n_r], ComputeSpace&gt;</div>
-<div class="line">    <a id="a9" name="a9"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#af85cf01aee88ac32a97c7ff84bdeb7f1">random_view</a>()<span class="keyword"> const</span></div>
+<div class="line">    <a id="a14" name="a14"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#af85cf01aee88ac32a97c7ff84bdeb7f1">random_view</a>()<span class="keyword"> const</span></div>
 <div class="line"><span class="keyword">    </span>{</div>
 <div class="line">      Kokkos::View&lt;T[n_r], ComputeSpace&gt; A(<span class="stringliteral">&quot;random&quot;</span>);</div>
 <div class="line">      Kokkos::fill_random(A, <a class="code hl_variable" href="classMC_1_1KPRNG.html#aee1afc51c8bbf7a7976e4804665dc85a">random_pool</a>, 0., 1.);</div>
@@ -180,12 +201,12 @@ $(function(){initNavTree('_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2
 <div class="line">    [[deprecated]] KOKKOS_INLINE_FUNCTION std::array&lt;double, n_r&gt;</div>
 <div class="line">    <a class="code hl_function" href="classMC_1_1KPRNG.html#ad1c9b5acec76cbf1d01783be1e41e664">double_uniform</a>()<span class="keyword"> const</span></div>
 <div class="line"><span class="keyword">    </span>{</div>
-<div class="line">      <span class="keywordflow">return</span> <a id="a10" name="a10"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#a704dfab53ca0915c944e9e9ae1854a04">generate_uniform_impl&lt;pool_type, n_r&gt;</a>(</div>
+<div class="line">      <span class="keywordflow">return</span> <a id="a15" name="a15"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#a704dfab53ca0915c944e9e9ae1854a04">generate_uniform_impl&lt;pool_type, n_r&gt;</a>(</div>
 <div class="line">          <a class="code hl_variable" href="classMC_1_1KPRNG.html#aee1afc51c8bbf7a7976e4804665dc85a">random_pool</a>, std::make_index_sequence&lt;n_r&gt;{});</div>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    [[nodiscard]] KOKKOS_INLINE_FUNCTION uint64_t</div>
-<div class="line">    <a id="a11" name="a11"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#a067a194948465c4a636c41ebe13d313d">uniform_u</a>(uint64_t a, uint64_t b)<span class="keyword"> const</span></div>
+<div class="line">    <a id="a16" name="a16"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#a067a194948465c4a636c41ebe13d313d">uniform_u</a>(uint64_t a, uint64_t b)<span class="keyword"> const</span></div>
 <div class="line"><span class="keyword">    </span>{</div>
 <div class="line"> </div>
 <div class="line">      <span class="keywordflow">return</span> <a class="code hl_function" href="namespaceMC.html#a2bd2179d1f9faf98a60f1dedfac0fc83">sample_random_variables</a>(</div>
@@ -195,9 +216,9 @@ $(function(){initNavTree('_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2
 <div class="line">    <a class="code hl_typedef" href="classMC_1_1KPRNG.html#a762b10c38f7b947b5698d16cbbb008d7">pool_type</a> <a class="code hl_variable" href="classMC_1_1KPRNG.html#aee1afc51c8bbf7a7976e4804665dc85a">random_pool</a>;</div>
 <div class="line"> </div>
 <div class="line">    [[nodiscard]] <span class="keyword">auto</span></div>
-<div class="line">    <a id="a12" name="a12"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#a70bc13040a7ecb8e23f9c30d57db1acb">get_seed</a>()<span class="keyword"> const</span></div>
+<div class="line">    <a id="a17" name="a17"></a><a class="code hl_function" href="classMC_1_1KPRNG.html#a70bc13040a7ecb8e23f9c30d57db1acb">get_seed</a>()<span class="keyword"> const</span></div>
 <div class="line"><span class="keyword">    </span>{</div>
-<div class="line">      <span class="keywordflow">return</span> <a id="a13" name="a13"></a><a class="code hl_variable" href="classMC_1_1KPRNG.html#afa1cb38dd2c56c82f2e720784ff7c922">seed</a>;</div>
+<div class="line">      <span class="keywordflow">return</span> <a class="code hl_variable" href="classMC_1_1KPRNG.html#afa1cb38dd2c56c82f2e720784ff7c922">seed</a>;</div>
 <div class="line">    } <span class="comment">// TODO export this to result file</span></div>
 <div class="line"> </div>
 <div class="line">  <span class="keyword">private</span>:</div>
@@ -222,7 +243,7 @@ $(function(){initNavTree('_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2
 <div class="line">            <span class="keyword">class </span>IndexType = int64_t,</div>
 <div class="line">            <span class="keyword">const</span> std::size_t CHUNK_SIZE&gt;</div>
 <div class="line">  <span class="keywordtype">void</span></div>
-<div class="line">  <a id="a14" name="a14"></a><a class="code hl_function" href="namespaceMC.html#a280b2c4607eee876da29d5e51c813695">fill_random</a>(<span class="keyword">const</span> ExecutionSpace&amp; exec,</div>
+<div class="line">  <a id="a18" name="a18"></a><a class="code hl_function" href="namespaceMC.html#a280b2c4607eee876da29d5e51c813695">fill_random</a>(<span class="keyword">const</span> ExecutionSpace&amp; exec,</div>
 <div class="line">              ViewType a,</div>
 <div class="line">              RandomPool g,</div>
 <div class="line">              <span class="keyword">typename</span> ViewType::const_value_type begin,</div>
@@ -248,22 +269,26 @@ $(function(){initNavTree('_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2
 <div class="line">} <span class="comment">// namespace MC</span></div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#endif </span><span class="comment">//__MC_PRNG_HPP__</span></div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html_a067a194948465c4a636c41ebe13d313d"><div class="ttname"><a href="classMC_1_1KPRNG.html#a067a194948465c4a636c41ebe13d313d">MC::KPRNG::uniform_u</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION uint64_t uniform_u(uint64_t a, uint64_t b) const</div><div class="ttdef"><b>Definition</b> prng.hpp:129</div></div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html_a3c6b73ae8161b91229f9929f15a1b2fe"><div class="ttname"><a href="classMC_1_1KPRNG.html#a3c6b73ae8161b91229f9929f15a1b2fe">MC::KPRNG::uniform</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION T uniform() const</div><div class="ttdef"><b>Definition</b> prng.hpp:82</div></div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html_a704dfab53ca0915c944e9e9ae1854a04"><div class="ttname"><a href="classMC_1_1KPRNG.html#a704dfab53ca0915c944e9e9ae1854a04">MC::KPRNG::generate_uniform_impl</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION std::array&lt; double, n_r &gt; generate_uniform_impl(random_pool_t pool, std::index_sequence&lt; I... &gt;) const</div><div class="ttdef"><b>Definition</b> prng.hpp:148</div></div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html_a70bc13040a7ecb8e23f9c30d57db1acb"><div class="ttname"><a href="classMC_1_1KPRNG.html#a70bc13040a7ecb8e23f9c30d57db1acb">MC::KPRNG::get_seed</a></div><div class="ttdeci">auto get_seed() const</div><div class="ttdef"><b>Definition</b> prng.hpp:139</div></div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html_a762b10c38f7b947b5698d16cbbb008d7"><div class="ttname"><a href="classMC_1_1KPRNG.html#a762b10c38f7b947b5698d16cbbb008d7">MC::KPRNG::pool_type</a></div><div class="ttdeci">MC::pool_type pool_type</div><div class="ttdef"><b>Definition</b> prng.hpp:75</div></div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html_aa0f2f52072c2b6836234a098c709dd97"><div class="ttname"><a href="classMC_1_1KPRNG.html#aa0f2f52072c2b6836234a098c709dd97">MC::KPRNG::KPRNG</a></div><div class="ttdeci">KPRNG(size_t _seed=0)</div><div class="ttdef"><b>Definition</b> prng.cpp:30</div></div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html_ac45dd0af0ed06f16a4fe5d6b47ea2b25"><div class="ttname"><a href="classMC_1_1KPRNG.html#ac45dd0af0ed06f16a4fe5d6b47ea2b25">MC::KPRNG::generator_type</a></div><div class="ttdeci">pool_type::generator_type generator_type</div><div class="ttdef"><b>Definition</b> prng.hpp:76</div></div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html_ad1c9b5acec76cbf1d01783be1e41e664"><div class="ttname"><a href="classMC_1_1KPRNG.html#ad1c9b5acec76cbf1d01783be1e41e664">MC::KPRNG::double_uniform</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION std::array&lt; double, n_r &gt; double_uniform() const</div><div class="ttdef"><b>Definition</b> prng.hpp:122</div></div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html_aee1afc51c8bbf7a7976e4804665dc85a"><div class="ttname"><a href="classMC_1_1KPRNG.html#aee1afc51c8bbf7a7976e4804665dc85a">MC::KPRNG::random_pool</a></div><div class="ttdeci">pool_type random_pool</div><div class="ttdef"><b>Definition</b> prng.hpp:136</div></div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html_af85cf01aee88ac32a97c7ff84bdeb7f1"><div class="ttname"><a href="classMC_1_1KPRNG.html#af85cf01aee88ac32a97c7ff84bdeb7f1">MC::KPRNG::random_view</a></div><div class="ttdeci">Kokkos::View&lt; T[n_r], ComputeSpace &gt; random_view() const</div><div class="ttdef"><b>Definition</b> prng.hpp:113</div></div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html_afa1cb38dd2c56c82f2e720784ff7c922"><div class="ttname"><a href="classMC_1_1KPRNG.html#afa1cb38dd2c56c82f2e720784ff7c922">MC::KPRNG::seed</a></div><div class="ttdeci">std::size_t seed</div><div class="ttdef"><b>Definition</b> prng.hpp:145</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_a067a194948465c4a636c41ebe13d313d"><div class="ttname"><a href="classMC_1_1KPRNG.html#a067a194948465c4a636c41ebe13d313d">MC::KPRNG::uniform_u</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION uint64_t uniform_u(uint64_t a, uint64_t b) const</div><div class="ttdef"><b>Definition</b> prng.hpp:156</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_a3c6b73ae8161b91229f9929f15a1b2fe"><div class="ttname"><a href="classMC_1_1KPRNG.html#a3c6b73ae8161b91229f9929f15a1b2fe">MC::KPRNG::uniform</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION T uniform() const</div><div class="ttdef"><b>Definition</b> prng.hpp:109</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_a704dfab53ca0915c944e9e9ae1854a04"><div class="ttname"><a href="classMC_1_1KPRNG.html#a704dfab53ca0915c944e9e9ae1854a04">MC::KPRNG::generate_uniform_impl</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION std::array&lt; double, n_r &gt; generate_uniform_impl(random_pool_t pool, std::index_sequence&lt; I... &gt;) const</div><div class="ttdef"><b>Definition</b> prng.hpp:175</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_a70bc13040a7ecb8e23f9c30d57db1acb"><div class="ttname"><a href="classMC_1_1KPRNG.html#a70bc13040a7ecb8e23f9c30d57db1acb">MC::KPRNG::get_seed</a></div><div class="ttdeci">auto get_seed() const</div><div class="ttdef"><b>Definition</b> prng.hpp:166</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_a762b10c38f7b947b5698d16cbbb008d7"><div class="ttname"><a href="classMC_1_1KPRNG.html#a762b10c38f7b947b5698d16cbbb008d7">MC::KPRNG::pool_type</a></div><div class="ttdeci">MC::pool_type pool_type</div><div class="ttdef"><b>Definition</b> prng.hpp:78</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_a7d843a28f75ec535805a347592461a45"><div class="ttname"><a href="classMC_1_1KPRNG.html#a7d843a28f75ec535805a347592461a45">MC::KPRNG::load</a></div><div class="ttdeci">void load(Archive &amp;ar)</div><div class="ttdoc">Load data from ar for deserialization.</div><div class="ttdef"><b>Definition</b> prng.hpp:100</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_abd562fd40ea20dbd396ed9781ab40bf2"><div class="ttname"><a href="classMC_1_1KPRNG.html#abd562fd40ea20dbd396ed9781ab40bf2">MC::KPRNG::KPRNG</a></div><div class="ttdeci">KPRNG()=default</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_ac45dd0af0ed06f16a4fe5d6b47ea2b25"><div class="ttname"><a href="classMC_1_1KPRNG.html#ac45dd0af0ed06f16a4fe5d6b47ea2b25">MC::KPRNG::generator_type</a></div><div class="ttdeci">pool_type::generator_type generator_type</div><div class="ttdef"><b>Definition</b> prng.hpp:79</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_ad1c9b5acec76cbf1d01783be1e41e664"><div class="ttname"><a href="classMC_1_1KPRNG.html#ad1c9b5acec76cbf1d01783be1e41e664">MC::KPRNG::double_uniform</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION std::array&lt; double, n_r &gt; double_uniform() const</div><div class="ttdef"><b>Definition</b> prng.hpp:149</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_aee1afc51c8bbf7a7976e4804665dc85a"><div class="ttname"><a href="classMC_1_1KPRNG.html#aee1afc51c8bbf7a7976e4804665dc85a">MC::KPRNG::random_pool</a></div><div class="ttdeci">pool_type random_pool</div><div class="ttdef"><b>Definition</b> prng.hpp:163</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_af62d069cb1797ffa37dac31f4e89efe0"><div class="ttname"><a href="classMC_1_1KPRNG.html#af62d069cb1797ffa37dac31f4e89efe0">MC::KPRNG::save</a></div><div class="ttdeci">void save(Archive &amp;ar) const</div><div class="ttdoc">Save data into ar for serialization.</div><div class="ttdef"><b>Definition</b> prng.hpp:90</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_af85cf01aee88ac32a97c7ff84bdeb7f1"><div class="ttname"><a href="classMC_1_1KPRNG.html#af85cf01aee88ac32a97c7ff84bdeb7f1">MC::KPRNG::random_view</a></div><div class="ttdeci">Kokkos::View&lt; T[n_r], ComputeSpace &gt; random_view() const</div><div class="ttdef"><b>Definition</b> prng.hpp:140</div></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html_afa1cb38dd2c56c82f2e720784ff7c922"><div class="ttname"><a href="classMC_1_1KPRNG.html#afa1cb38dd2c56c82f2e720784ff7c922">MC::KPRNG::seed</a></div><div class="ttdeci">std::size_t seed</div><div class="ttdef"><b>Definition</b> prng.hpp:172</div></div>
 <div class="ttc" id="anamespaceMC_html"><div class="ttname"><a href="namespaceMC.html">MC</a></div><div class="ttdoc">Namespace that contains classes and structures related to Monte Carlo (MC) simulations.</div><div class="ttdef"><b>Definition</b> alias.hpp:16</div></div>
-<div class="ttc" id="anamespaceMC_html_a280b2c4607eee876da29d5e51c813695"><div class="ttname"><a href="namespaceMC.html#a280b2c4607eee876da29d5e51c813695">MC::fill_random</a></div><div class="ttdeci">void fill_random(const ExecutionSpace &amp;exec, ViewType a, RandomPool g, typename ViewType::const_value_type begin, typename ViewType::const_value_type end)</div><div class="ttdef"><b>Definition</b> prng.hpp:166</div></div>
-<div class="ttc" id="anamespaceMC_html_a2bd2179d1f9faf98a60f1dedfac0fc83"><div class="ttname"><a href="namespaceMC.html#a2bd2179d1f9faf98a60f1dedfac0fc83">MC::sample_random_variables</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION auto sample_random_variables(const pool_type &amp;pool, auto &amp;&amp;functor)</div><div class="ttdef"><b>Definition</b> prng.hpp:45</div></div>
-<div class="ttc" id="anamespaceMC_html_a6734cec020a2315d36542faad86c9125"><div class="ttname"><a href="namespaceMC.html#a6734cec020a2315d36542faad86c9125">MC::get_pool</a></div><div class="ttdeci">pool_type get_pool(std::size_t seed=0)</div><div class="ttdef"><b>Definition</b> prng.cpp:11</div></div>
+<div class="ttc" id="anamespaceMC_html_a280b2c4607eee876da29d5e51c813695"><div class="ttname"><a href="namespaceMC.html#a280b2c4607eee876da29d5e51c813695">MC::fill_random</a></div><div class="ttdeci">void fill_random(const ExecutionSpace &amp;exec, ViewType a, RandomPool g, typename ViewType::const_value_type begin, typename ViewType::const_value_type end)</div><div class="ttdef"><b>Definition</b> prng.hpp:193</div></div>
+<div class="ttc" id="anamespaceMC_html_a2bd2179d1f9faf98a60f1dedfac0fc83"><div class="ttname"><a href="namespaceMC.html#a2bd2179d1f9faf98a60f1dedfac0fc83">MC::sample_random_variables</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION auto sample_random_variables(const pool_type &amp;pool, auto &amp;&amp;functor)</div><div class="ttdef"><b>Definition</b> prng.hpp:48</div></div>
+<div class="ttc" id="anamespaceMC_html_a6734cec020a2315d36542faad86c9125"><div class="ttname"><a href="namespaceMC.html#a6734cec020a2315d36542faad86c9125">MC::get_pool</a></div><div class="ttdeci">pool_type get_pool(std::size_t seed=0)</div><div class="ttdef"><b>Definition</b> prng.cpp:29</div></div>
 <div class="ttc" id="anamespaceMC_html_a7e53098724df8c06b90824f1567f6bc5"><div class="ttname"><a href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a></div><div class="ttdeci">gen_pool_type&lt; Kokkos::DefaultExecutionSpace &gt; pool_type</div><div class="ttdef"><b>Definition</b> alias.hpp:100</div></div>
+<div class="ttc" id="anamespaceMC_html_aa68fd5fea506331f369d20b49904dafd"><div class="ttname"><a href="namespaceMC.html#aa68fd5fea506331f369d20b49904dafd">MC::master_seed</a></div><div class="ttdeci">uint64_t master_seed()</div><div class="ttdef"><b>Definition</b> prng.cpp:23</div></div>
+<div class="ttc" id="anamespaceMC_html_af7f8e9154582097b61aaed45e6b53e28"><div class="ttname"><a href="namespaceMC.html#af7f8e9154582097b61aaed45e6b53e28">MC::next_splitmix64</a></div><div class="ttdeci">uint64_t next_splitmix64(uint64_t &amp;x) noexcept</div><div class="ttdef"><b>Definition</b> prng.cpp:13</div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

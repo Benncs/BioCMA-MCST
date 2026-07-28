@@ -84,7 +84,14 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa0f2f52072c2b6836234a098c709dd97" id="r_aa0f2f52072c2b6836234a098c709dd97"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa0f2f52072c2b6836234a098c709dd97">KPRNG</a> (size_t _seed=0)</td></tr>
+<tr class="memitem:abd562fd40ea20dbd396ed9781ab40bf2" id="r_abd562fd40ea20dbd396ed9781ab40bf2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd562fd40ea20dbd396ed9781ab40bf2">KPRNG</a> ()=default</td></tr>
+<tr class="memitem:acf4b9c5ad9a4150ed14ef1da9e94b588" id="r_acf4b9c5ad9a4150ed14ef1da9e94b588"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf4b9c5ad9a4150ed14ef1da9e94b588">KPRNG</a> (uint64_t <a class="el" href="#afa1cb38dd2c56c82f2e720784ff7c922">seed</a>)</td></tr>
+<tr class="memitem:af62d069cb1797ffa37dac31f4e89efe0" id="r_af62d069cb1797ffa37dac31f4e89efe0"><td class="memTemplParams" colspan="2">template&lt;class Archive&gt; </td></tr>
+<tr class="memitem:af62d069cb1797ffa37dac31f4e89efe0 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af62d069cb1797ffa37dac31f4e89efe0">save</a> (Archive &amp;ar) const</td></tr>
+<tr class="memdesc:af62d069cb1797ffa37dac31f4e89efe0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save data into ar for serialization.  <br /></td></tr>
+<tr class="memitem:a7d843a28f75ec535805a347592461a45" id="r_a7d843a28f75ec535805a347592461a45"><td class="memTemplParams" colspan="2">template&lt;class Archive&gt; </td></tr>
+<tr class="memitem:a7d843a28f75ec535805a347592461a45 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d843a28f75ec535805a347592461a45">load</a> (Archive &amp;ar)</td></tr>
+<tr class="memdesc:a7d843a28f75ec535805a347592461a45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load data from ar for deserialization.  <br /></td></tr>
 <tr class="memitem:a3c6b73ae8161b91229f9929f15a1b2fe" id="r_a3c6b73ae8161b91229f9929f15a1b2fe"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> T&gt; </td></tr>
 <tr class="memitem:a3c6b73ae8161b91229f9929f15a1b2fe template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c6b73ae8161b91229f9929f15a1b2fe">uniform</a> () const</td></tr>
 <tr class="memitem:a4e5a211c8da3d21fd4f1940e154d9acb" id="r_a4e5a211c8da3d21fd4f1940e154d9acb"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> T&gt; </td></tr>
@@ -124,7 +131,7 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a4">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a6">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
 </dl>
 
 </div>
@@ -140,14 +147,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a3">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a5">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
 </dl>
 
 </div>
 </div>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aa0f2f52072c2b6836234a098c709dd97" name="aa0f2f52072c2b6836234a098c709dd97"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0f2f52072c2b6836234a098c709dd97">&#9670;&#160;</a></span>KPRNG()</h2>
+<a id="abd562fd40ea20dbd396ed9781ab40bf2" name="abd562fd40ea20dbd396ed9781ab40bf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd562fd40ea20dbd396ed9781ab40bf2">&#9670;&#160;</a></span>KPRNG() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -158,7 +165,34 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">MC::KPRNG::KPRNG </td>
           <td>(</td>
-          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>_seed</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel default">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a7">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+</dl>
+
+</div>
+</div>
+<a id="acf4b9c5ad9a4150ed14ef1da9e94b588" name="acf4b9c5ad9a4150ed14ef1da9e94b588"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf4b9c5ad9a4150ed14ef1da9e94b588">&#9670;&#160;</a></span>KPRNG() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">MC::KPRNG::KPRNG </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t</td>          <td class="paramname"><span class="paramname"><em>seed</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -168,13 +202,6 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a5">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
-</dl>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1KPRNG_aa0f2f52072c2b6836234a098c709dd97_cgraph.svg" width="311" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
 
 </div>
 </div>
@@ -203,7 +230,7 @@ template&lt;size_t n_r&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a8">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a13">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
 </dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
@@ -244,6 +271,16 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1KPRNG_a6f04670114bc418789302204e3af4d2a_cgraph.svg" width="204" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1KPRNG_a6f04670114bc418789302204e3af4d2a_icgraph.svg" width="204" height="60"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -275,7 +312,7 @@ template&lt;typename random_pool_t, size_t n_r, size_t... I&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a10">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a15">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
 </dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
@@ -307,8 +344,44 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a12">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a17">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
 </dl>
+
+</div>
+</div>
+<a id="a7d843a28f75ec535805a347592461a45" name="a7d843a28f75ec535805a347592461a45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d843a28f75ec535805a347592461a45">&#9670;&#160;</a></span>load()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Archive&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MC::KPRNG::load </td>
+          <td>(</td>
+          <td class="paramtype">Archive &amp;</td>          <td class="paramname"><span class="paramname"><em>ar</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Load data from ar for deserialization. </p>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a10">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+</dl>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1KPRNG_a7d843a28f75ec535805a347592461a45_cgraph.svg" width="288" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 
 </div>
 </div>
@@ -336,6 +409,37 @@ template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a14">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+</dl>
+
+</div>
+</div>
+<a id="af62d069cb1797ffa37dac31f4e89efe0" name="af62d069cb1797ffa37dac31f4e89efe0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af62d069cb1797ffa37dac31f4e89efe0">&#9670;&#160;</a></span>save()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Archive&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MC::KPRNG::save </td>
+          <td>(</td>
+          <td class="paramtype">Archive &amp;</td>          <td class="paramname"><span class="paramname"><em>ar</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Save data into ar for serialization. </p>
 <dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a9">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
 </dl>
 
@@ -365,7 +469,7 @@ template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a6">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a12">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
 </dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
@@ -442,7 +546,7 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a11">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a16">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
 </dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
@@ -464,7 +568,7 @@ Here is the call graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a7">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a11">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
 </dl>
 
 </div>
@@ -488,7 +592,7 @@ Here is the call graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a13">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="_2home_2runner_2work_2BioCMA-MCST_2BioCMA-MCST_2apps_2libs_2mc_2public_2mc_2prng_2prng_8hpp-example.html#a8">/home/runner/work/BioCMA-MCST/BioCMA-MCST/apps/libs/mc/public/mc/prng/prng.hpp</a>.</dd>
 </dl>
 
 </div>

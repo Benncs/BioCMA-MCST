@@ -56,8 +56,10 @@ var namespaceMC =
     [ "fill_random", "namespaceMC.html#a280b2c4607eee876da29d5e51c813695", null ],
     [ "get_pool", "namespaceMC.html#a6734cec020a2315d36542faad86c9125", null ],
     [ "impl_init", "namespaceMC.html#a3c593ea5f6af406116befde0c9595b7c", null ],
-    [ "init", "namespaceMC.html#adb43176dfee4e4e265e7c72171024093", null ],
+    [ "init", "namespaceMC.html#ac14d08555263d7a9d7f22696c7604211", null ],
     [ "load_tuning_constant", "namespaceMC.html#a67a8a8fb99f617a67dd3702cd0f0b47f", null ],
+    [ "master_seed", "namespaceMC.html#aa68fd5fea506331f369d20b49904dafd", null ],
+    [ "next_splitmix64", "namespaceMC.html#af7f8e9154582097b61aaed45e6b53e28", null ],
     [ "post_init_weight", "namespaceMC.html#ac9b6a65d70e4c5007f4bc908509924a0", null ],
     [ "sample_random_variables", "namespaceMC.html#a2bd2179d1f9faf98a60f1dedfac0fc83", null ],
     [ "number_event_type", "namespaceMC.html#a2bac73e9eee491093b7ac10969645bfa", null ]

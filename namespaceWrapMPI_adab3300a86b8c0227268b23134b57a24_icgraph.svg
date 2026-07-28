@@ -161,87 +161,87 @@ var sectionId = 'dynsection-21';
 <g id="Node000015" class="node">
 <title>Node15</title>
 <g id="a_Node000015"><a xlink:href="namespaceWrapMPI.html#a166c6e5ac2d338a1d6f554532dd43b80" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="425.62,-203.5 321.12,-203.5 321.12,-185 425.62,-185 425.62,-203.5"/>
-<text xml:space="preserve" text-anchor="middle" x="373.38" y="-190" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::broadcast</text>
+<polygon fill="white" stroke="#666666" points="425.62,-208.5 321.12,-208.5 321.12,-190 425.62,-190 425.62,-208.5"/>
+<text xml:space="preserve" text-anchor="middle" x="373.38" y="-195" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::broadcast</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node15 -->
-<g id="edge20_Node000001_Node000015" class="edge">
+<g id="edge22_Node000001_Node000015" class="edge">
 <title>Node1&#45;&gt;Node15</title>
-<g id="a_edge20_Node000001_Node000015"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M658.24,-182.71C592.4,-185.38 488.13,-189.62 425.97,-192.15"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="658.31,-186.21 668.16,-182.3 658.02,-179.21 658.31,-186.21"/>
-</a>
-</g>
-</g>
-<!-- Node19 -->
-<g id="Node000019" class="node">
-<title>Node19</title>
-<g id="a_Node000019"><a xlink:href="namespaceWrapMPI.html#a89ff50c459e42b25a69f4a3d45443fe3" target="_top" xlink:title="Gathers and reduces data to a single value.">
-<polygon fill="white" stroke="#666666" points="624.25,-134.5 501,-134.5 501,-116 624.25,-116 624.25,-134.5"/>
-<text xml:space="preserve" text-anchor="middle" x="562.62" y="-121" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::gather_reduce</text>
-</a>
-</g>
-</g>
-<!-- Node1&#45;&gt;Node19 -->
-<g id="edge21_Node000001_Node000019" class="edge">
-<title>Node1&#45;&gt;Node19</title>
-<g id="a_edge21_Node000001_Node000019"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M687.78,-165.91C671.92,-158.85 652.14,-150.52 634,-144.25 624.19,-140.86 613.45,-137.69 603.37,-134.95"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="686.14,-169.01 696.69,-169.94 689.02,-162.63 686.14,-169.01"/>
+<g id="a_edge22_Node000001_Node000015"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M658.24,-183.58C592.4,-187.22 488.13,-192.97 425.97,-196.4"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="658.36,-187.08 668.16,-183.04 657.98,-180.09 658.36,-187.08"/>
 </a>
 </g>
 </g>
 <!-- Node20 -->
 <g id="Node000020" class="node">
 <title>Node20</title>
-<g id="a_Node000020"><a xlink:href="namespaceWrapMPI_1_1Async.html#a1c9861a120adf6ce7bd019204d20dafb" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="632.5,-97.5 492.75,-97.5 492.75,-79 632.5,-79 632.5,-97.5"/>
-<text xml:space="preserve" text-anchor="middle" x="562.62" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::Async::recv_span</text>
+<g id="a_Node000020"><a xlink:href="namespaceWrapMPI.html#a89ff50c459e42b25a69f4a3d45443fe3" target="_top" xlink:title="Gathers and reduces data to a single value.">
+<polygon fill="white" stroke="#666666" points="624.25,-134.5 501,-134.5 501,-116 624.25,-116 624.25,-134.5"/>
+<text xml:space="preserve" text-anchor="middle" x="562.62" y="-121" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::gather_reduce</text>
 </a>
 </g>
 </g>
 <!-- Node1&#45;&gt;Node20 -->
-<g id="edge22_Node000001_Node000020" class="edge">
+<g id="edge23_Node000001_Node000020" class="edge">
 <title>Node1&#45;&gt;Node20</title>
-<g id="a_edge22_Node000001_Node000020"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M702.5,-162.33C686.62,-145.73 660.9,-121.52 634,-107.25 626.96,-103.51 619.12,-100.47 611.3,-97.99"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="699.85,-164.61 709.22,-169.55 704.97,-159.84 699.85,-164.61"/>
+<g id="a_edge23_Node000001_Node000020"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M687.78,-165.91C671.92,-158.85 652.14,-150.52 634,-144.25 624.19,-140.86 613.45,-137.69 603.37,-134.95"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="686.14,-169.01 696.69,-169.94 689.02,-162.63 686.14,-169.01"/>
 </a>
 </g>
 </g>
 <!-- Node21 -->
 <g id="Node000021" class="node">
 <title>Node21</title>
-<g id="a_Node000021"><a xlink:href="namespaceWrapMPI.html#a74f34d02c61dba38e414425bdf71d74c" target="_top" xlink:title="Receives data into a span buffer.">
+<g id="a_Node000021"><a xlink:href="namespaceWrapMPI_1_1Async.html#a1c9861a120adf6ce7bd019204d20dafb" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="632.5,-97.5 492.75,-97.5 492.75,-79 632.5,-79 632.5,-97.5"/>
+<text xml:space="preserve" text-anchor="middle" x="562.62" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::Async::recv_span</text>
+</a>
+</g>
+</g>
+<!-- Node1&#45;&gt;Node21 -->
+<g id="edge24_Node000001_Node000021" class="edge">
+<title>Node1&#45;&gt;Node21</title>
+<g id="a_edge24_Node000001_Node000021"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M702.5,-162.33C686.62,-145.73 660.9,-121.52 634,-107.25 626.96,-103.51 619.12,-100.47 611.3,-97.99"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="699.85,-164.61 709.22,-169.55 704.97,-159.84 699.85,-164.61"/>
+</a>
+</g>
+</g>
+<!-- Node22 -->
+<g id="Node000022" class="node">
+<title>Node22</title>
+<g id="a_Node000022"><a xlink:href="namespaceWrapMPI.html#a74f34d02c61dba38e414425bdf71d74c" target="_top" xlink:title="Receives data into a span buffer.">
 <polygon fill="white" stroke="#666666" points="616,-60.5 509.25,-60.5 509.25,-42 616,-42 616,-60.5"/>
 <text xml:space="preserve" text-anchor="middle" x="562.62" y="-47" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::recv_span</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node21 -->
-<g id="edge23_Node000001_Node000021" class="edge">
-<title>Node1&#45;&gt;Node21</title>
-<g id="a_edge23_Node000001_Node000021"><a xlink:title=" ">
+<!-- Node1&#45;&gt;Node22 -->
+<g id="edge25_Node000001_Node000022" class="edge">
+<title>Node1&#45;&gt;Node22</title>
+<g id="a_edge25_Node000001_Node000022"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M708.74,-160.55C695.25,-135.72 668.74,-93.48 634,-70.25 628.32,-66.45 621.9,-63.41 615.32,-60.98"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="705.56,-162.03 713.3,-169.27 711.76,-158.78 705.56,-162.03"/>
 </a>
 </g>
 </g>
-<!-- Node23 -->
-<g id="Node000023" class="node">
-<title>Node23</title>
-<g id="a_Node000023"><a xlink:href="namespaceWrapMPI.html#adfe55cebcaa7d941006e23c69a5a3bcf" target="_top" xlink:title="Receives a vector of data items from a source.">
+<!-- Node24 -->
+<g id="Node000024" class="node">
+<title>Node24</title>
+<g id="a_Node000024"><a xlink:href="namespaceWrapMPI.html#adfe55cebcaa7d941006e23c69a5a3bcf" target="_top" xlink:title="Receives a vector of data items from a source.">
 <polygon fill="white" stroke="#666666" points="608.12,-23.5 517.12,-23.5 517.12,-5 608.12,-5 608.12,-23.5"/>
 <text xml:space="preserve" text-anchor="middle" x="562.62" y="-10" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::recv_v</text>
 </a>
 </g>
 </g>
-<!-- Node1&#45;&gt;Node23 -->
-<g id="edge25_Node000001_Node000023" class="edge">
-<title>Node1&#45;&gt;Node23</title>
-<g id="a_edge25_Node000001_Node000023"><a xlink:title=" ">
+<!-- Node1&#45;&gt;Node24 -->
+<g id="edge27_Node000001_Node000024" class="edge">
+<title>Node1&#45;&gt;Node24</title>
+<g id="a_edge27_Node000001_Node000024"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M712.57,-159.98C701.99,-128.08 677.04,-66.38 634,-33.25 626.58,-27.54 617.57,-23.54 608.51,-20.74"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="709.13,-160.7 715.48,-169.18 715.81,-158.59 709.13,-160.7"/>
 </a>
@@ -269,8 +269,8 @@ var sectionId = 'dynsection-21';
 <g id="Node000005" class="node">
 <title>Node5</title>
 <g id="a_Node000005"><a xlink:href="namespaceWrapMPI_1_1Async.html#a44540918e862462a382d03720d97e19a" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="455.25,-361.5 291.5,-361.5 291.5,-343 455.25,-343 455.25,-361.5"/>
-<text xml:space="preserve" text-anchor="middle" x="373.38" y="-348" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::Async::broadcast_span</text>
+<polygon fill="white" stroke="#666666" points="455.25,-356.5 291.5,-356.5 291.5,-338 455.25,-338 455.25,-356.5"/>
+<text xml:space="preserve" text-anchor="middle" x="373.38" y="-343" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::Async::broadcast_span</text>
 </a>
 </g>
 </g>
@@ -278,8 +278,8 @@ var sectionId = 'dynsection-21';
 <g id="edge4_Node000004_Node000005" class="edge">
 <title>Node4&#45;&gt;Node5</title>
 <g id="a_edge4_Node000004_Node000005"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M479.39,-347.2C471.5,-347.58 463.51,-347.97 455.63,-348.34"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="479.5,-350.7 489.32,-346.73 479.17,-343.71 479.5,-350.7"/>
+<path fill="none" stroke="#63b8ff" d="M479.39,-345.01C471.5,-345.18 463.51,-345.35 455.63,-345.51"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="479.4,-348.51 489.32,-344.79 479.25,-341.51 479.4,-348.51"/>
 </a>
 </g>
 </g>
@@ -287,8 +287,8 @@ var sectionId = 'dynsection-21';
 <g id="Node000007" class="node">
 <title>Node7</title>
 <g id="a_Node000007"><a xlink:href="namespaceWrapMPI.html#af35b85e638478a00672758818ade9e38" target="_top" xlink:title="Gathers raw data from all processes in an unsafe manner.">
-<polygon fill="white" stroke="#666666" points="437.62,-324.5 309.12,-324.5 309.12,-306 437.62,-306 437.62,-324.5"/>
-<text xml:space="preserve" text-anchor="middle" x="373.38" y="-311" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::_gather_unsafe</text>
+<polygon fill="white" stroke="#666666" points="437.62,-319.5 309.12,-319.5 309.12,-301 437.62,-301 437.62,-319.5"/>
+<text xml:space="preserve" text-anchor="middle" x="373.38" y="-306" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::_gather_unsafe</text>
 </a>
 </g>
 </g>
@@ -296,8 +296,8 @@ var sectionId = 'dynsection-21';
 <g id="edge6_Node000006_Node000007" class="edge">
 <title>Node6&#45;&gt;Node7</title>
 <g id="a_edge6_Node000006_Node000007"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M486.88,-303.83C470.64,-305.48 453.61,-307.21 437.85,-308.81"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="486.87,-307.35 496.46,-302.86 486.16,-300.39 486.87,-307.35"/>
+<path fill="none" stroke="#63b8ff" d="M486.88,-301.84C470.64,-303.05 453.61,-304.33 437.85,-305.5"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="486.75,-305.36 496.46,-301.12 486.23,-298.38 486.75,-305.36"/>
 </a>
 </g>
 </g>
@@ -305,8 +305,8 @@ var sectionId = 'dynsection-21';
 <g id="Node000010" class="node">
 <title>Node10</title>
 <g id="a_Node000010"><a xlink:href="namespaceWrapMPI.html#af7356272883f4a6063a5f393042201dd" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="430.88,-287.5 315.88,-287.5 315.88,-269 430.88,-269 430.88,-287.5"/>
-<text xml:space="preserve" text-anchor="middle" x="373.38" y="-274" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::gather_span</text>
+<polygon fill="white" stroke="#666666" points="430.88,-282.5 315.88,-282.5 315.88,-264 430.88,-264 430.88,-282.5"/>
+<text xml:space="preserve" text-anchor="middle" x="373.38" y="-269" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::gather_span</text>
 </a>
 </g>
 </g>
@@ -314,8 +314,8 @@ var sectionId = 'dynsection-21';
 <g id="edge9_Node000006_Node000010" class="edge">
 <title>Node6&#45;&gt;Node10</title>
 <g id="a_edge9_Node000006_Node000010"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M486.63,-289.04C468.17,-287.27 448.71,-285.4 431.26,-283.72"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="486.17,-292.51 496.46,-289.99 486.84,-285.55 486.17,-292.51"/>
+<path fill="none" stroke="#63b8ff" d="M486.63,-287.04C468.17,-284.77 448.71,-282.38 431.26,-280.24"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="486.12,-290.5 496.47,-288.25 486.97,-283.55 486.12,-290.5"/>
 </a>
 </g>
 </g>
@@ -323,8 +323,8 @@ var sectionId = 'dynsection-21';
 <g id="Node000008" class="node">
 <title>Node8</title>
 <g id="a_Node000008"><a xlink:href="namespaceWrapMPI.html#a5cd65b924b505503f88fae43fb8270ee" target="_top" xlink:title="Gathers data from all processes.">
-<polygon fill="white" stroke="#666666" points="245,-351.5 156.25,-351.5 156.25,-333 245,-333 245,-351.5"/>
-<text xml:space="preserve" text-anchor="middle" x="200.62" y="-338" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::gather</text>
+<polygon fill="white" stroke="#666666" points="245,-337.5 156.25,-337.5 156.25,-319 245,-319 245,-337.5"/>
+<text xml:space="preserve" text-anchor="middle" x="200.62" y="-324" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::gather</text>
 </a>
 </g>
 </g>
@@ -332,8 +332,8 @@ var sectionId = 'dynsection-21';
 <g id="edge7_Node000007_Node000008" class="edge">
 <title>Node7&#45;&gt;Node8</title>
 <g id="a_edge7_Node000007_Node000008"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M299.38,-326.79C280.95,-329.71 261.72,-332.75 245.25,-335.35"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="299.9,-330.25 309.24,-325.23 298.81,-323.34 299.9,-330.25"/>
+<path fill="none" stroke="#63b8ff" d="M297.5,-318.14C279.66,-320.02 261.2,-321.97 245.3,-323.65"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="297.71,-321.64 307.29,-317.11 296.98,-314.68 297.71,-321.64"/>
 </a>
 </g>
 </g>
@@ -341,8 +341,8 @@ var sectionId = 'dynsection-21';
 <g id="Node000009" class="node">
 <title>Node9</title>
 <g id="a_Node000009"><a xlink:href="namespaceWrapMPI.html#a6c82ee24a6d0fe8ee85a173f65f39907" target="_top" xlink:title="Gathers a vector of data from all processes.">
-<polygon fill="white" stroke="#666666" points="250.25,-314.5 151,-314.5 151,-296 250.25,-296 250.25,-314.5"/>
-<text xml:space="preserve" text-anchor="middle" x="200.62" y="-301" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::gather_v</text>
+<polygon fill="white" stroke="#666666" points="250.25,-300.5 151,-300.5 151,-282 250.25,-282 250.25,-300.5"/>
+<text xml:space="preserve" text-anchor="middle" x="200.62" y="-287" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::gather_v</text>
 </a>
 </g>
 </g>
@@ -350,8 +350,8 @@ var sectionId = 'dynsection-21';
 <g id="edge8_Node000007_Node000009" class="edge">
 <title>Node7&#45;&gt;Node9</title>
 <g id="a_edge8_Node000007_Node000009"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M297.37,-310.86C281.51,-309.93 265.17,-308.97 250.58,-308.12"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="297.1,-314.35 307.28,-311.44 297.5,-307.36 297.1,-314.35"/>
+<path fill="none" stroke="#63b8ff" d="M297.37,-301.9C281.51,-300.14 265.17,-298.32 250.58,-296.7"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="296.96,-305.38 307.29,-303.01 297.74,-298.42 296.96,-305.38"/>
 </a>
 </g>
 </g>
@@ -368,9 +368,9 @@ var sectionId = 'dynsection-21';
 <g id="Node000012" class="node">
 <title>Node12</title>
 <g id="a_Node000012"><a xlink:href="classCore_1_1GlobalInitialiser.html#a9b38d15538796d9cc115211890a6c081" target="_top" xlink:title="Initializes a Monte Carlo unit.">
-<polygon fill="white" stroke="#666666" points="428.25,-250.75 318.5,-250.75 318.5,-221.75 428.25,-221.75 428.25,-250.75"/>
-<text xml:space="preserve" text-anchor="start" x="326.5" y="-237.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
-<text xml:space="preserve" text-anchor="middle" x="373.38" y="-226.75" font-family="Helvetica,sans-Serif" font-size="10.00">::init_monte_carlo</text>
+<polygon fill="white" stroke="#666666" points="255.5,-213.75 145.75,-213.75 145.75,-184.75 255.5,-184.75 255.5,-213.75"/>
+<text xml:space="preserve" text-anchor="start" x="153.75" y="-200.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
+<text xml:space="preserve" text-anchor="middle" x="200.62" y="-189.75" font-family="Helvetica,sans-Serif" font-size="10.00">::init_monte_carlo</text>
 </a>
 </g>
 </g>
@@ -378,8 +378,8 @@ var sectionId = 'dynsection-21';
 <g id="edge12_Node000011_Node000012" class="edge">
 <title>Node11&#45;&gt;Node12</title>
 <g id="a_edge12_Node000011_Node000012"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M498.25,-236.25C475.61,-236.25 450.33,-236.25 428.54,-236.25"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="497.95,-239.75 507.95,-236.25 497.95,-232.75 497.95,-239.75"/>
+<path fill="none" stroke="#63b8ff" d="M497.84,-234.06C442.95,-231.62 361.75,-226.72 291.5,-217.25 279.83,-215.68 267.4,-213.51 255.62,-211.22"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="497.48,-237.54 507.62,-234.47 497.78,-230.55 497.48,-237.54"/>
 </a>
 </g>
 </g>
@@ -387,9 +387,9 @@ var sectionId = 'dynsection-21';
 <g id="Node000013" class="node">
 <title>Node13</title>
 <g id="a_Node000013"><a xlink:href="classCore_1_1GlobalInitialiser.html#a00d0e7a7d549bf06886dfc3ba9de3e3d" target="_top" xlink:title="Initializes a simulation unit.">
-<polygon fill="white" stroke="#666666" points="255.5,-250.75 145.75,-250.75 145.75,-221.75 255.5,-221.75 255.5,-250.75"/>
-<text xml:space="preserve" text-anchor="start" x="153.75" y="-237.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
-<text xml:space="preserve" text-anchor="middle" x="200.62" y="-226.75" font-family="Helvetica,sans-Serif" font-size="10.00">::init_simulation</text>
+<polygon fill="white" stroke="#666666" points="109.75,-213.75 0,-213.75 0,-184.75 109.75,-184.75 109.75,-213.75"/>
+<text xml:space="preserve" text-anchor="start" x="8" y="-200.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
+<text xml:space="preserve" text-anchor="middle" x="54.88" y="-189.75" font-family="Helvetica,sans-Serif" font-size="10.00">::init_simulation</text>
 </a>
 </g>
 </g>
@@ -397,8 +397,8 @@ var sectionId = 'dynsection-21';
 <g id="edge13_Node000012_Node000013" class="edge">
 <title>Node12&#45;&gt;Node13</title>
 <g id="a_edge13_Node000012_Node000013"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M306.89,-236.25C290.04,-236.25 272.1,-236.25 255.89,-236.25"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="306.84,-239.75 316.84,-236.25 306.84,-232.75 306.84,-239.75"/>
+<path fill="none" stroke="#63b8ff" d="M133.97,-199.25C125.89,-199.25 117.7,-199.25 109.82,-199.25"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="133.77,-202.75 143.77,-199.25 133.77,-195.75 133.77,-202.75"/>
 </a>
 </g>
 </g>
@@ -406,8 +406,8 @@ var sectionId = 'dynsection-21';
 <g id="edge14_Node000013_Node000013" class="edge">
 <title>Node13&#45;&gt;Node13</title>
 <g id="a_edge14_Node000013_Node000013"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M225.36,-262.31C221.48,-266.16 213.23,-268.75 200.62,-268.75 177.57,-268.75 169.1,-260.07 175.23,-250.96"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="228.85,-262.65 225.94,-252.47 221.86,-262.25 228.85,-262.65"/>
+<path fill="none" stroke="#63b8ff" d="M79.61,-225.31C75.73,-229.16 67.48,-231.75 54.88,-231.75 31.82,-231.75 23.35,-223.07 29.48,-213.96"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="83.1,-225.65 80.19,-215.47 76.11,-225.25 83.1,-225.65"/>
 </a>
 </g>
 </g>
@@ -415,18 +415,17 @@ var sectionId = 'dynsection-21';
 <g id="edge16_Node000014_Node000015" class="edge">
 <title>Node14&#45;&gt;Node15</title>
 <g id="a_edge16_Node000014_Node000015"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M498.61,-173.02C474.95,-177.06 448.36,-181.61 425.87,-185.45"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="499.2,-176.47 508.47,-171.33 498.02,-169.57 499.2,-176.47"/>
+<path fill="none" stroke="#63b8ff" d="M501.19,-174.19C476.09,-179.15 447.34,-184.83 423.57,-189.53"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="501.81,-177.64 510.94,-172.26 500.45,-170.77 501.81,-177.64"/>
 </a>
 </g>
 </g>
 <!-- Node16 -->
 <g id="Node000016" class="node">
 <title>Node16</title>
-<g id="a_Node000016"><a xlink:href="classCore_1_1GlobalInitialiser.html#aa042e8d396a5287c49fb6a8b81eba209" target="_top" xlink:title="Performs MPI broadcast for synchronization.">
-<polygon fill="white" stroke="#666666" points="428.25,-166.75 318.5,-166.75 318.5,-137.75 428.25,-137.75 428.25,-166.75"/>
-<text xml:space="preserve" text-anchor="start" x="326.5" y="-153.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
-<text xml:space="preserve" text-anchor="middle" x="373.38" y="-142.75" font-family="Helvetica,sans-Serif" font-size="10.00">::mpi_broadcast</text>
+<g id="a_Node000016"><a xlink:href="namespaceCore.html#a0e2d8a570d24a93cf81c2765b319ed8c" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="424.12,-171.5 322.62,-171.5 322.62,-153 424.12,-153 424.12,-171.5"/>
+<text xml:space="preserve" text-anchor="middle" x="373.38" y="-158" font-family="Helvetica,sans-Serif" font-size="10.00">Core::get_rng_seed</text>
 </a>
 </g>
 </g>
@@ -434,90 +433,118 @@ var sectionId = 'dynsection-21';
 <g id="edge17_Node000014_Node000016" class="edge">
 <title>Node14&#45;&gt;Node16</title>
 <g id="a_edge17_Node000014_Node000016"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M498.69,-158.89C475.92,-157.67 450.43,-156.31 428.48,-155.14"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="498.28,-162.37 508.45,-159.41 498.65,-155.38 498.28,-162.37"/>
+<path fill="none" stroke="#63b8ff" d="M498.75,-162.25C474.6,-162.25 447.38,-162.25 424.58,-162.25"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="498.45,-165.75 508.45,-162.25 498.45,-158.75 498.45,-165.75"/>
 </a>
 </g>
 </g>
 <!-- Node17 -->
 <g id="Node000017" class="node">
 <title>Node17</title>
-<g id="a_Node000017"><a xlink:href="classCore_1_1GlobalInitialiser.html#a97eff5566ced6ba6449eb532f0babadc" target="_top" xlink:title="Initializes a flow iterator.">
-<polygon fill="white" stroke="#666666" points="255.5,-166.75 145.75,-166.75 145.75,-137.75 255.5,-137.75 255.5,-166.75"/>
-<text xml:space="preserve" text-anchor="start" x="153.75" y="-153.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
-<text xml:space="preserve" text-anchor="middle" x="200.62" y="-142.75" font-family="Helvetica,sans-Serif" font-size="10.00">::init_state</text>
+<g id="a_Node000017"><a xlink:href="classCore_1_1GlobalInitialiser.html#aa042e8d396a5287c49fb6a8b81eba209" target="_top" xlink:title="Performs MPI broadcast for synchronization.">
+<polygon fill="white" stroke="#666666" points="428.25,-134.75 318.5,-134.75 318.5,-105.75 428.25,-105.75 428.25,-134.75"/>
+<text xml:space="preserve" text-anchor="start" x="326.5" y="-121.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
+<text xml:space="preserve" text-anchor="middle" x="373.38" y="-110.75" font-family="Helvetica,sans-Serif" font-size="10.00">::mpi_broadcast</text>
 </a>
 </g>
 </g>
-<!-- Node16&#45;&gt;Node17 -->
-<g id="edge18_Node000016_Node000017" class="edge">
-<title>Node16&#45;&gt;Node17</title>
-<g id="a_edge18_Node000016_Node000017"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M306.89,-152.25C290.04,-152.25 272.1,-152.25 255.89,-152.25"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="306.84,-155.75 316.84,-152.25 306.84,-148.75 306.84,-155.75"/>
+<!-- Node14&#45;&gt;Node17 -->
+<g id="edge19_Node000014_Node000017" class="edge">
+<title>Node14&#45;&gt;Node17</title>
+<g id="a_edge19_Node000014_Node000017"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M507.19,-150.04C482.47,-144.5 453.32,-137.96 428.63,-132.42"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="506.19,-153.4 516.72,-152.18 507.73,-146.57 506.19,-153.4"/>
+</a>
+</g>
+</g>
+<!-- Node16&#45;&gt;Node12 -->
+<g id="edge18_Node000016_Node000012" class="edge">
+<title>Node16&#45;&gt;Node12</title>
+<g id="a_edge18_Node000016_Node000012"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M316.38,-174.38C296.95,-178.59 275.21,-183.3 255.92,-187.48"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="317,-177.83 326.03,-172.29 315.52,-170.99 317,-177.83"/>
 </a>
 </g>
 </g>
 <!-- Node18 -->
 <g id="Node000018" class="node">
 <title>Node18</title>
-<g id="a_Node000018"><a xlink:href="classCore_1_1GlobalInitialiser.html#a0dc2da93c4202706b5f37453f355145c" target="_top" xlink:title="Initializes a transitioner with the provided flow iterator.">
-<polygon fill="white" stroke="#666666" points="109.75,-166.75 0,-166.75 0,-137.75 109.75,-137.75 109.75,-166.75"/>
-<text xml:space="preserve" text-anchor="start" x="8" y="-153.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
-<text xml:space="preserve" text-anchor="middle" x="54.88" y="-142.75" font-family="Helvetica,sans-Serif" font-size="10.00">::init_transitionner</text>
+<g id="a_Node000018"><a xlink:href="classCore_1_1GlobalInitialiser.html#a97eff5566ced6ba6449eb532f0babadc" target="_top" xlink:title="Initializes a flow iterator.">
+<polygon fill="white" stroke="#666666" points="255.5,-134.75 145.75,-134.75 145.75,-105.75 255.5,-105.75 255.5,-134.75"/>
+<text xml:space="preserve" text-anchor="start" x="153.75" y="-121.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
+<text xml:space="preserve" text-anchor="middle" x="200.62" y="-110.75" font-family="Helvetica,sans-Serif" font-size="10.00">::init_state</text>
 </a>
 </g>
 </g>
 <!-- Node17&#45;&gt;Node18 -->
-<g id="edge19_Node000017_Node000018" class="edge">
+<g id="edge20_Node000017_Node000018" class="edge">
 <title>Node17&#45;&gt;Node18</title>
-<g id="a_edge19_Node000017_Node000018"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M133.97,-152.25C125.89,-152.25 117.7,-152.25 109.82,-152.25"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="133.77,-155.75 143.77,-152.25 133.77,-148.75 133.77,-155.75"/>
+<g id="a_edge20_Node000017_Node000018"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M306.89,-120.25C290.04,-120.25 272.1,-120.25 255.89,-120.25"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="306.84,-123.75 316.84,-120.25 306.84,-116.75 306.84,-123.75"/>
 </a>
 </g>
 </g>
-<!-- Node22 -->
-<g id="Node000022" class="node">
-<title>Node22</title>
-<g id="a_Node000022"><a xlink:href="classWrapMPI_1_1IterationPayload.html#a136036d66a6c16c18d4115905448380f" target="_top" xlink:title="Receives data for this payload from a specified source.">
+<!-- Node19 -->
+<g id="Node000019" class="node">
+<title>Node19</title>
+<g id="a_Node000019"><a xlink:href="classCore_1_1GlobalInitialiser.html#a0dc2da93c4202706b5f37453f355145c" target="_top" xlink:title="Initializes a transitioner with the provided flow iterator.">
+<polygon fill="white" stroke="#666666" points="109.75,-134.75 0,-134.75 0,-105.75 109.75,-105.75 109.75,-134.75"/>
+<text xml:space="preserve" text-anchor="start" x="8" y="-121.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::GlobalInitialiser</text>
+<text xml:space="preserve" text-anchor="middle" x="54.88" y="-110.75" font-family="Helvetica,sans-Serif" font-size="10.00">::init_transitionner</text>
+</a>
+</g>
+</g>
+<!-- Node18&#45;&gt;Node19 -->
+<g id="edge21_Node000018_Node000019" class="edge">
+<title>Node18&#45;&gt;Node19</title>
+<g id="a_edge21_Node000018_Node000019"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M133.97,-120.25C125.89,-120.25 117.7,-120.25 109.82,-120.25"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="133.77,-123.75 143.77,-120.25 133.77,-116.75 133.77,-123.75"/>
+</a>
+</g>
+</g>
+<!-- Node23 -->
+<g id="Node000023" class="node">
+<title>Node23</title>
+<g id="a_Node000023"><a xlink:href="classWrapMPI_1_1IterationPayload.html#a136036d66a6c16c18d4115905448380f" target="_top" xlink:title="Receives data for this payload from a specified source.">
 <polygon fill="white" stroke="#666666" points="439.5,-65.75 307.25,-65.75 307.25,-36.75 439.5,-36.75 439.5,-65.75"/>
 <text xml:space="preserve" text-anchor="start" x="315.25" y="-52.25" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::IterationPayload</text>
 <text xml:space="preserve" text-anchor="middle" x="373.38" y="-41.75" font-family="Helvetica,sans-Serif" font-size="10.00">::recv</text>
 </a>
 </g>
 </g>
-<!-- Node21&#45;&gt;Node22 -->
-<g id="edge24_Node000021_Node000022" class="edge">
-<title>Node21&#45;&gt;Node22</title>
-<g id="a_edge24_Node000021_Node000022"><a xlink:title=" ">
+<!-- Node22&#45;&gt;Node23 -->
+<g id="edge26_Node000022_Node000023" class="edge">
+<title>Node22&#45;&gt;Node23</title>
+<g id="a_edge26_Node000022_Node000023"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M497.64,-51.25C479.03,-51.25 458.69,-51.25 439.98,-51.25"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="497.45,-54.75 507.45,-51.25 497.45,-47.75 497.45,-54.75"/>
 </a>
 </g>
 </g>
-<!-- Node23&#45;&gt;Node22 -->
-<g id="edge26_Node000023_Node000022" class="edge">
-<title>Node23&#45;&gt;Node22</title>
-<g id="a_edge26_Node000023_Node000022"><a xlink:title=" ">
+<!-- Node24&#45;&gt;Node23 -->
+<g id="edge28_Node000024_Node000023" class="edge">
+<title>Node24&#45;&gt;Node23</title>
+<g id="a_edge28_Node000024_Node000023"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M505.6,-25.32C484.89,-29.41 461.24,-34.09 439.77,-38.33"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="506.16,-28.78 515.29,-23.41 504.8,-21.91 506.16,-28.78"/>
 </a>
 </g>
 </g>
-<!-- Node24 -->
-<g id="Node000024" class="node">
-<title>Node24</title>
-<g id="a_Node000024"><a xlink:href="namespaceWrapMPI.html#a0dd428096701cba57a4230514acaf0b1" target="_top" xlink:title="Attempts to receive a vector of data items from a source.">
+<!-- Node25 -->
+<g id="Node000025" class="node">
+<title>Node25</title>
+<g id="a_Node000025"><a xlink:href="namespaceWrapMPI.html#a0dd428096701cba57a4230514acaf0b1" target="_top" xlink:title="Attempts to receive a vector of data items from a source.">
 <polygon fill="white" stroke="#666666" points="427.5,-18.5 319.25,-18.5 319.25,0 427.5,0 427.5,-18.5"/>
 <text xml:space="preserve" text-anchor="middle" x="373.38" y="-5" font-family="Helvetica,sans-Serif" font-size="10.00">WrapMPI::try_recv_v</text>
 </a>
 </g>
 </g>
-<!-- Node23&#45;&gt;Node24 -->
-<g id="edge27_Node000023_Node000024" class="edge">
-<title>Node23&#45;&gt;Node24</title>
-<g id="a_edge27_Node000023_Node000024"><a xlink:title=" ">
+<!-- Node24&#45;&gt;Node25 -->
+<g id="edge29_Node000024_Node000025" class="edge">
+<title>Node24&#45;&gt;Node25</title>
+<g id="a_edge29_Node000024_Node000025"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M505.43,-12.75C480.84,-12.09 452.13,-11.33 427.85,-10.68"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="505.17,-16.24 515.26,-13.01 505.36,-9.25 505.17,-16.24"/>
 </a>

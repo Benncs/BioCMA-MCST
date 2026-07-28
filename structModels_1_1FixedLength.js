@@ -1,7 +1,7 @@
 var structModels_1_1FixedLength =
 [
     [ "Config", "structModels_1_1FixedLength.html#af98ee38e88201bed889f8bdf5c53d922", null ],
-    [ "FloatType", "structModels_1_1FixedLength.html#ab10005608c96d8a014bc4f73653a81c4", null ],
+    [ "FloatType", "structModels_1_1FixedLength.html#a3b1edbb9e624ac0a14180e77437bf6a9", null ],
     [ "Self", "structModels_1_1FixedLength.html#a1b5eda221ac912eb5b9e1046f50857cb", null ],
     [ "SelfContribs", "structModels_1_1FixedLength.html#aafe79c9e2c6d3125bab34c8d9006840d", null ],
     [ "SelfParticle", "structModels_1_1FixedLength.html#a0279d1d6c1862c6dafcc4390cd8aa3f7", null ],

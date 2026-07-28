@@ -7,7 +7,6 @@ var structSimulation_1_1KernelInline_1_1CycleFunctor =
     [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a5dc76fe0696dea2c47cee3c755489226", null ],
     [ "do_contribs", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#afe5b5b5c599f4ad79df4107a45da8600", null ],
     [ "exec_per_particle", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#ad3c23e1bcb433eaabc464642ded3f180", null ],
-    [ "operator()", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a3438594e33a92a8d3cc8027a51e1679e", null ],
     [ "operator()", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a707d52d23d084c315daa4f8ef6352d6c", null ],
     [ "update", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#ae02dc3e4d2f3bbcd51f3e3396de6e9e3", null ],
     [ "concentrations", "structSimulation_1_1KernelInline_1_1CycleFunctor.html#a4afdbff73355e5a05d3dede23ff29bbd", null ],

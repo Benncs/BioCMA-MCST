@@ -164,5 +164,7 @@ var annotated_dup =
     [ "tag1", "structtag1.html", null ],
     [ "tag2", "structtag2.html", null ],
     [ "tag3", "structtag3.html", null ],
+    [ "tag4_tile", "structtag4__tile.html", null ],
+    [ "tag_mlp", "structtag__mlp.html", null ],
     [ "UniformLoadBalancer", "classUniformLoadBalancer.html", "classUniformLoadBalancer" ]
 ];

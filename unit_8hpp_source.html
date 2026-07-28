@@ -115,24 +115,25 @@ $(function(){initNavTree('unit_8hpp_source.html','',''); });
 <div class="foldopen" id="foldopen00062" data-start="{" data-end="}">
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="structMC_1_1MonteCarloUnit.html#a98a680cfc3356b197d4cd8fd453e0a17">   62</a></span>    <a class="code hl_function" href="structMC_1_1MonteCarloUnit.html#a98a680cfc3356b197d4cd8fd453e0a17">serialize</a>(Archive&amp; ar)</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    {</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>      ar(<a class="code hl_variable" href="structMC_1_1MonteCarloUnit.html#a8c3ce0baf39cd5db028c0c7b6c280a3d">init_weight</a>, <a class="code hl_variable" href="structMC_1_1MonteCarloUnit.html#ad45c6e5c4abde83f09ba51ca1d2f2275">events</a>, <a class="code hl_variable" href="structMC_1_1MonteCarloUnit.html#a4a5160c7c9c8c764181e2e68cc2043f1">domain</a>, <a class="code hl_variable" href="structMC_1_1MonteCarloUnit.html#ab80e02ed51e14d38592095a253f96e72">container</a>);</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>      std::visit(</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>          [&amp;ar](<span class="keyword">auto</span>&amp; _container)</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>          {</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            ar(_container);</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>            _container.change_runtime(<a class="code hl_function" href="namespaceMC.html#a67a8a8fb99f617a67dd3702cd0f0b47f">load_tuning_constant</a>());</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>          },</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>          <a class="code hl_variable" href="structMC_1_1MonteCarloUnit.html#ab80e02ed51e14d38592095a253f96e72">container</a>);</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    }</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>      ar(<a class="code hl_variable" href="structMC_1_1MonteCarloUnit.html#a8c3ce0baf39cd5db028c0c7b6c280a3d">init_weight</a>, <a class="code hl_variable" href="structMC_1_1MonteCarloUnit.html#ad45c6e5c4abde83f09ba51ca1d2f2275">events</a>, <a class="code hl_variable" href="structMC_1_1MonteCarloUnit.html#a4a5160c7c9c8c764181e2e68cc2043f1">domain</a>, <a class="code hl_variable" href="structMC_1_1MonteCarloUnit.html#ab80e02ed51e14d38592095a253f96e72">container</a>, <a class="code hl_variable" href="structMC_1_1MonteCarloUnit.html#a0ed38ba60e8a80dc066fdb01b7e429a1">rng</a>);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>      std::visit(</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>          [&amp;ar](<span class="keyword">auto</span>&amp; _container)</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>          {</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>            ar(_container);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>            _container.change_runtime(<a class="code hl_function" href="namespaceMC.html#a67a8a8fb99f617a67dd3702cd0f0b47f">load_tuning_constant</a>());</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>          },</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>          <a class="code hl_variable" href="structMC_1_1MonteCarloUnit.html#ab80e02ed51e14d38592095a253f96e72">container</a>);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    }</div>
 </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  };</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>  };</div>
 </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>} <span class="comment">// namespace MC</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="preprocessor">#endif </span><span class="comment">//__MC_UNIT_HPP__</span></div>
-<div class="ttc" id="aclassMC_1_1KPRNG_html"><div class="ttname"><a href="classMC_1_1KPRNG.html">MC::KPRNG</a></div><div class="ttdoc">Utilities and wrap around kokkos random generator.</div><div class="ttdef"><b>Definition</b> prng.hpp:73</div></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>} <span class="comment">// namespace MC</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="preprocessor">#endif </span><span class="comment">//__MC_UNIT_HPP__</span></div>
+<div class="ttc" id="aclassMC_1_1KPRNG_html"><div class="ttname"><a href="classMC_1_1KPRNG.html">MC::KPRNG</a></div><div class="ttdoc">Utilities and wrap around kokkos random generator.</div><div class="ttdef"><b>Definition</b> prng.hpp:76</div></div>
 <div class="ttc" id="aclassMC_1_1ReactorDomain_html"><div class="ttname"><a href="classMC_1_1ReactorDomain.html">MC::ReactorDomain</a></div><div class="ttdoc">Represents the spatial domain where Monte Carlo particles can exist.</div><div class="ttdef"><b>Definition</b> domain.hpp:56</div></div>
 <div class="ttc" id="anamespaceMC_html"><div class="ttname"><a href="namespaceMC.html">MC</a></div><div class="ttdoc">Namespace that contains classes and structures related to Monte Carlo (MC) simulations.</div><div class="ttdef"><b>Definition</b> alias.hpp:16</div></div>
 <div class="ttc" id="anamespaceMC_html_a67a8a8fb99f617a67dd3702cd0f0b47f"><div class="ttname"><a href="namespaceMC.html#a67a8a8fb99f617a67dd3702cd0f0b47f">MC::load_tuning_constant</a></div><div class="ttdeci">RuntimeParameters load_tuning_constant()</div><div class="ttdef"><b>Definition</b> unit.cpp:312</div></div>

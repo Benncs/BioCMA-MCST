@@ -124,6 +124,8 @@ var hierarchy =
     [ "tag2", "structtag2.html", null ],
     [ "tag3", "structtag3.html", null ],
     [ "ContributionFunctor< M >::Tag3D", "structContributionFunctor_1_1Tag3D.html", null ],
+    [ "tag4_tile", "structtag4__tile.html", null ],
+    [ "tag_mlp", "structtag__mlp.html", null ],
     [ "Simulation::KernelInline::TagContribution", "structSimulation_1_1KernelInline_1_1TagContribution.html", null ],
     [ "Simulation::KernelInline::TagContribution0D", "structSimulation_1_1KernelInline_1_1TagContribution0D.html", null ],
     [ "Simulation::KernelInline::TagCycle", "structSimulation_1_1KernelInline_1_1TagCycle.html", null ],
