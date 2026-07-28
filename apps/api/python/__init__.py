@@ -103,11 +103,11 @@ def config_and_run(
     callback_pre: Optional[Callable] = None,
     callback_post: Optional[Callable] = None,
 ):
-    if callback_pre is not None:
-        callback_pre(outfolder, name, params, model_name)
-
     # Prepare parameters
     params = handle_module.make_params(**params)
+
+    if callback_pre is not None:
+        callback_pre(outfolder, name, params, model_name)
 
     handle = init_simulation(outfolder, name, cma_path, params)
 
@@ -149,7 +149,7 @@ def fast_run(
         # Liquid feed configuration
         if liquid_flow_rate != 0:
             handle_module.set_liquid_feed_constant(
-                handle, liquid_flow_rate, s_feed, 0, 0
+                handle, liquid_flow_rate, s_feed, 0, n_compartment - 1
             )
         # Model setup
         if not is_serde:
