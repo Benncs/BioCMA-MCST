@@ -207,10 +207,11 @@ namespace Simulation::KernelInline
       std::size_t league_size = Common::c_league_size(n_particle, npt);
 
       const auto cycle_policy
-          = Kokkos::TeamPolicy<TagCycle>(model_space,
-                                         static_cast<int>(league_size),
-                                         Kokkos::AUTO(),
-                                         Kokkos::AUTO());
+          = Kokkos::TeamPolicy<TagCycle, Kokkos::Schedule<Kokkos::Dynamic>>(
+              model_space,
+              static_cast<int>(league_size),
+              Kokkos::AUTO(),
+              Kokkos::AUTO());
 
       Kokkos::parallel_reduce(
           "cycle_model",

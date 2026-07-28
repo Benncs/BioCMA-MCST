@@ -76,15 +76,14 @@ template <ModelType M> struct ContributionFunctor
         [&](const std::size_t relative_index)
         {
           const std::size_t flatten_index = p0 + relative_index;
-          if (status(flatten_index) != MC::Status::Idle)
+          if (status(flatten_index) == MC::Status::Idle)
           {
-            return;
-          }
-          const auto weight = m_particles.get_weight(flatten_index);
-          for (std::size_t j = 0; j < n_c; ++j)
-          {
-            Kokkos::atomic_add(&scratch(j),
-                               weight * contribs(flatten_index, j));
+            const auto weight = m_particles.get_weight(flatten_index);
+            for (std::size_t j = 0; j < n_c; ++j)
+            {
+              Kokkos::atomic_add(&scratch(j),
+                                 weight * contribs(flatten_index, j));
+            }
           }
         });
 
@@ -134,7 +133,7 @@ template <ModelType M> struct ContributionFunctor
             const std::size_t p = p0 + i * work_per_thread + k;
             if (status(p) != MC::Status::Idle || i >= n_particle)
             {
-              return;
+              continue;
             }
             const double weight = m_particles.get_weight(p);
             const auto pos = positions(p);

@@ -15,7 +15,7 @@ if use_cuda
     default_particle_per_team_contributions = 128
     default_particle_per_team_cycle = 1024
     default_particle_per_team_moves = 1024
-    default_particle_per_team_leave = 16384
+    default_particle_per_team_leave = 256
 else
     default_particle_per_team_contributions = 1024
     default_particle_per_team_cycle = 1024

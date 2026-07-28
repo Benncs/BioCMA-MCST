@@ -15,12 +15,11 @@
 
 namespace Models
 {
-
   struct FixedLength
   {
     using uniform_weight = std::true_type;
     using Self = FixedLength;
-    using FloatType = float;
+    using FloatType = double;
 
     using Config = Kokkos::View<const FloatType*, ComputeSpace>;
 
@@ -133,10 +132,14 @@ namespace Models
     const auto s = static_cast<FloatType>(GET_CONCENTRATION(0));
     auto& c_phi_s = GET_CONTRIBS(0);
 
-    const FloatType g = s / (k + s);
+    const FloatType g = 1; // s / (k + s);
     const FloatType phi_s = phi_s_max * g;
     const FloatType ldot = l_dot_max * g;
-    l += d_t * ldot;
+    //    auto gen = random_pool.get_state();
+    const auto alpha = 0.F; // Kokkos::sqrt(2.F * 1e-17 * d_t) * gen.normal();
+                            //   random_pool.free_state(gen);
+
+    l += d_t * ldot + alpha;
     c_phi_s = -phi_s;
     return check_div(l, l_max);
   }
@@ -149,8 +152,12 @@ namespace Models
                         const SelfParticle& buffer_arr)
   {
 
+    // const FloatType new_current_length
+    //     = GET_PROPERTY(particle_var::length) / 2.F;
+
     const FloatType new_current_length
-        = GET_PROPERTY(particle_var::length) / 2.F;
+        = GET_PROPERTY(particle_var::length)
+          - GET_PROPERTY(particle_var::l_max) / 2.F;
 
     GET_PROPERTY(particle_var::length) = new_current_length;
     GET_PROPERTY(particle_var::l_max) = l_max_m;

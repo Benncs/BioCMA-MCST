@@ -178,54 +178,77 @@ namespace Simulation::KernelInline
           = ((p0 + count) >= n_particle) ? n_particle - p0 : count;
 
       KOKKOS_ASSERT(upper_bound > 0);
-      KOKKOS_ASSERT(upper_bound < n_particle);
+      KOKKOS_ASSERT(upper_bound <= n_particle);
 
       value_type local;
-      Kokkos::parallel_reduce(
-          Kokkos::TeamThreadRange(team, 0, upper_bound),
-          [&](std::size_t relative_index, value_type& lv)
-          {
-            const std::size_t flatten_index = p0 + relative_index;
-            const bool active = status(flatten_index) == MC::Status::Idle;
-
-            if (active)
-            {
-              ages(flatten_index, 1) += _d_t;
-              exec_per_particle(flatten_index, lv);
-            }
-          },
-          local);
       // Kokkos::parallel_reduce(
-      //     Kokkos::TeamThreadRange(team, count),
+      //     Kokkos::TeamThreadRange(team, 0, upper_bound),
       //     [&](std::size_t relative_index, value_type& lv)
       //     {
       //       const std::size_t flatten_index = p0 + relative_index;
-      //       const bool active = flatten_index < n_particle
-      //                           && status(flatten_index) == MC::Status::Idle;
+      //       KOKKOS_ASSERT(flatten_index < upper_bound);
+      //       const bool active = status(flatten_index) == MC::Status::Idle;
 
       //       if (active)
       //       {
       //         ages(flatten_index, 1) += _d_t;
-
       //         exec_per_particle(flatten_index, lv);
       //       }
       //     },
       //     local);
+
+      Kokkos::parallel_reduce(
+          Kokkos::TeamThreadRange(team, 0, (upper_bound + 3) / 4),
+          [&](std::size_t relative_index, value_type& lv)
+          {
+            const std::size_t flatten_index = p0 + relative_index * 4;
+
+            if (flatten_index < upper_bound
+                && status(flatten_index) == MC::Status::Idle)
+            {
+              ages(flatten_index, 1) += _d_t;
+              exec_per_particle(flatten_index, lv);
+            }
+
+            if (flatten_index + 1 < upper_bound
+                && status(flatten_index + 1) == MC::Status::Idle)
+            {
+              ages(flatten_index + 1, 1) += _d_t;
+              exec_per_particle(flatten_index + 1, lv);
+            }
+
+            if (flatten_index + 2 < upper_bound
+                && status(flatten_index + 2) == MC::Status::Idle)
+            {
+              ages(flatten_index + 2, 1) += _d_t;
+              exec_per_particle(flatten_index + 2, lv);
+            }
+
+            if (flatten_index + 3 < upper_bound
+                && status(flatten_index + 3) == MC::Status::Idle)
+            {
+              ages(flatten_index + 3, 1) += _d_t;
+              exec_per_particle(flatten_index + 3, lv);
+            }
+          },
+          local);
+
       team.team_barrier();
 
-      reduce_val += local;
+      Kokkos::single(Kokkos::PerTeam(team), [&]() { reduce_val += local; });
+      // reduce_val += local;
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION void
-    operator()(const TagCycle _tag,
-               const std::size_t idx,
-               value_type& reduce_val) const
-    {
+    // KOKKOS_FORCEINLINE_FUNCTION void
+    // operator()(const TagCycle _tag,
+    //            const std::size_t idx,
+    //            value_type& reduce_val) const
+    // {
 
-      (void)_tag;
-      (void)reduce_val.dead_total;
-      exec_per_particle(idx, reduce_val);
-    }
+    //   (void)_tag;
+    //   (void)reduce_val.dead_total;
+    //   exec_per_particle(idx, reduce_val);
+    // }
 
     KOKKOS_INLINE_FUNCTION void
     exec_per_particle(const std::size_t idx, value_type& reduce_val) const

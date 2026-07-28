@@ -215,23 +215,19 @@ namespace Simulation::KernelInline
       // State is aquired m times instead of N, it is supposed to reduce
       // contention
 
-      // TODO: iteration order is inverted. We need p iteration (one per thread)
-      // and m internal (per-thread) In cpu doesnt change because p =1 but in
-      // GPU, we need to fill the p thread in the team Currently, typically m=16
-      // << p = 128
       Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, p),
-                           [&rp, &rng, N, m](const std::size_t idx)
+                           [&rp, &rng, N, m, p](const std::size_t idx)
                            {
                              // Ok to use here, get_state should be called in
                              // each thread
                              auto gen = rp.get_state();
 
-                             const std::size_t base = idx * m;
                              // current thread iteration p times with the same
                              // state
                              for (std::size_t k = 0; k < m; ++k)
                              {
-                               const std::size_t i = base + k;
+                               const std::size_t i = idx + k * p; // stride p
+
                                if (i >= N)
                                {
                                  break;
@@ -249,27 +245,18 @@ namespace Simulation::KernelInline
                            [&](const std::size_t idx)
                            {
                              const auto flat_index = p0 + idx;
-                             const std::size_t base = idx * 2;
-                             KOKKOS_ASSERT(base + 1 < N);
-                             const auto rng1 = rng(base);
-                             const auto rng2 = rng(base + 1);
-                             handle_move(flat_index, rng1, rng2);
+
+                             if (status(flat_index) == MC::Status::Idle)
+                             {
+
+                               const std::size_t base = idx * 2;
+                               KOKKOS_ASSERT(base + 1 < N);
+                               const auto rng1 = rng(base);
+                               const auto rng2 = rng(base + 1);
+                               handle_move(flat_index, rng1, rng2);
+                             }
                            });
     }
-
-    // KOKKOS_INLINE_FUNCTION void
-    // operator()([[maybe_unused]] TagLeave _tag,
-    //            const std::size_t& idx,
-    //            std::size_t& local_dead_count) const
-    // {
-    //   if (status(idx) != MC::Status::Idle) [[unlikely]]
-    //   {
-    //     return;
-    //   }
-
-    //   ages(idx, 0) += d_t;
-    //   handle_exit(idx, move.leaving_flow, local_dead_count);
-    // }
 
     KOKKOS_INLINE_FUNCTION void
     operator()(TagLeave _tag,
@@ -284,7 +271,7 @@ namespace Simulation::KernelInline
       const auto upper_bound
           = ((p0 + count) >= n_particle) ? n_particle - p0 : count;
 
-      KOKKOS_ASSERT(upper_bound > 0 && upper_bound < n_particle);
+      KOKKOS_ASSERT(upper_bound > 0 && upper_bound <= n_particle);
       std::size_t team_dead_count = 0;
       const auto& lf = move.leaving_flow;
       Kokkos::parallel_reduce(
@@ -292,7 +279,7 @@ namespace Simulation::KernelInline
           [&](const std::size_t idx, std::size_t& thread_dead_count)
           {
             const auto flat_index = p0 + idx;
-            ages(flat_index, 0) += d_t;
+            // ages(flat_index, 0) += d_t;
             handle_exit(flat_index, lf, thread_dead_count);
           },
           team_dead_count);
@@ -335,10 +322,10 @@ namespace Simulation::KernelInline
       // In 0d, the flow is the same for every particle
       // Only one member of the team calculate lambda and
       // broadcast it to other members
-      float lambda = 0.;
+      double lambda = 0.;
       Kokkos::single(
           Kokkos::PerTeam(team_handle),
-          [&lf, dt = this->d_t](float& local_lambda)
+          [&lf, dt = this->d_t](double& local_lambda)
           {
             const auto& [_, flow_value, liquid_volume] = lf(0);
 
@@ -357,39 +344,43 @@ namespace Simulation::KernelInline
       }
       const std::size_t N = m_p_team_leave;
       const std::size_t p0 = team_handle.league_rank() * N;
-      const std::size_t n_particle = n_particles;
+      const auto upper_bound = ((p0 + N) >= n_particles) ? n_particles - p0 : N;
 
-      const auto upper_bound = ((p0 + N) >= n_particle) ? n_particle - p0 : N;
-
-      KOKKOS_ASSERT(upper_bound > 0 && upper_bound < n_particle);
+      KOKKOS_ASSERT(upper_bound > 0 && upper_bound <= n_particles);
 
       const auto& rp = random_pool;
 
       const std::size_t p = team_handle.team_size();
+
       const std::size_t m = (upper_bound + p - 1) / p;
 
       std::size_t team_dead_count = 0;
 
       // For each thread of the team we assigm m iterations
       // This divide the number of call of get_state by m and may reduce
-      // contention especially on CPU typically P = 1 on cpu then m is rougly
+      // contention especially on CPU typically P = 1 on cpu then m is
       // equal to npt (128-4096)
       Kokkos::parallel_reduce(
           Kokkos::TeamThreadRange(team_handle, 0, p),
           [&](const std::size_t tid, std::size_t& dead_count)
           {
             auto gen = rp.get_state();
-            const std::size_t base = tid * m;
+
             for (std::size_t k = 0; k < m; ++k)
             {
-              const std::size_t idx = base + k;
+              const std::size_t idx = tid + k * p; // stride p
+
               if (idx >= upper_bound)
               {
                 break;
               }
-
               const std::size_t flat_index = p0 + idx;
-              const float r = gen.frand(0., 1.);
+
+              if (status(flat_index) != MC::Status::Idle)
+              {
+                continue;
+              }
+              const double r = gen.drand(0., 1.);
 
               perform_exit(
                   probability_leaving<decltype(r), precision_tag>(r, lambda),
@@ -410,7 +401,6 @@ namespace Simulation::KernelInline
             {
               events.add<MC::EventType::Exit>(team_dead_count);
             }
-
             local_dead_count += team_dead_count;
           });
     }
@@ -518,6 +508,10 @@ namespace Simulation::KernelInline
 
         ages(idx, 0) = 0;
         status(idx) = MC::Status::Exit;
+      }
+      else
+      {
+        ages(idx, 0) += d_t;
       }
     }
 
