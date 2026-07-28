@@ -1,3 +1,8 @@
+#include "Kokkos_Macros.hpp"
+#ifdef NDEBUG
+#  undef NDEBUG
+#endif
+
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
@@ -12,6 +17,14 @@ struct tag2
 };
 
 struct tag3
+{
+};
+
+struct tag4_tile
+{
+};
+
+struct tag_mlp
 {
 };
 
@@ -42,6 +55,107 @@ template <typename exec_space> struct f_assert
   explicit f_assert(std::size_t _n, std::size_t n_per_team)
       : n_tot(_n), m_n_per_team(n_per_team)
   {
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void
+  operator()(tag_mlp _t,
+             const team_member_t& team,
+             std::size_t& reduce_val) const
+  {
+    (void)_t;
+    const std::size_t N = m_n_per_team;
+    const std::size_t p0 = team.league_rank() * N;
+
+    const auto _ntot = n_tot;
+    KOKKOS_ASSERT(p0 < _ntot)
+    const auto upper_bound = ((p0 + N) >= n_tot) ? n_tot - p0 : N;
+
+    KOKKOS_ASSERT(upper_bound > 0 && upper_bound <= n_tot);
+
+    const std::size_t p = team.team_size();
+
+    const std::size_t m = (upper_bound + p - 1) / p;
+
+    std::size_t counter = 0;
+    constexpr std::size_t U = 4;
+    Kokkos::parallel_reduce(
+        Kokkos::TeamThreadRange(team, 0, p),
+        [&](const std::size_t tid, std::size_t& local)
+        {
+          for (std::size_t k = 0; k < m; k += U)
+          {
+            for (std::size_t u = 0; u < U; ++u)
+            {
+              const std::size_t idx = tid + (k + u) * p;
+
+              if (idx >= upper_bound)
+              {
+                break;
+              }
+
+              const std::size_t flat_index = p0 + idx;
+
+              KOKKOS_ASSERT(flat_index < _ntot);
+
+              // Perform calculation here
+              local += 1;
+            }
+          }
+        },
+        counter);
+
+    team.team_barrier();
+
+    Kokkos::single(Kokkos::PerTeam(team), [&]() { reduce_val += counter; });
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void
+  operator()(tag4_tile _t,
+             const team_member_t& team,
+             std::size_t& reduce_val) const
+  {
+    (void)_t;
+    const std::size_t N = m_n_per_team;
+    const std::size_t p0 = team.league_rank() * N;
+
+    const auto _ntot = n_tot;
+    KOKKOS_ASSERT(p0 < _ntot)
+    const auto upper_bound = ((p0 + N) >= n_tot) ? n_tot - p0 : N;
+
+    KOKKOS_ASSERT(upper_bound > 0 && upper_bound <= n_tot);
+
+    const std::size_t p = team.team_size();
+
+    const std::size_t m = (upper_bound + p - 1) / p;
+
+    std::size_t counter = 0;
+
+    Kokkos::parallel_reduce(
+        Kokkos::TeamThreadRange(team, 0, p),
+        [&](const std::size_t tid, std::size_t& local)
+        {
+          for (std::size_t k = 0; k < m; ++k)
+          {
+            const std::size_t idx = tid + k * p; // stride p
+            const std::size_t flat_index = p0 + idx;
+            if (idx >= upper_bound)
+            {
+              break;
+            }
+
+            KOKKOS_ASSERT(flat_index < _ntot);
+
+            // Perform calculation here
+            local += 1;
+          }
+        },
+        counter);
+
+    team.team_barrier();
+
+    Kokkos::single(Kokkos::PerTeam(team), [&]() { reduce_val += counter; });
   }
 
   KOKKOS_INLINE_FUNCTION
@@ -199,10 +313,13 @@ main()
   test<tag1>();
   test<tag2>();
   test<tag3>();
-
+  test<tag4_tile>();
+  test<tag_mlp>();
   test_smaller<tag1>();
   test_smaller<tag2>();
   test_smaller<tag3>();
-
+  test_smaller<tag4_tile>();
+  test_smaller<tag_mlp>();
+  ;
   Kokkos::finalize();
 }

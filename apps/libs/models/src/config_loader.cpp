@@ -75,7 +75,8 @@ namespace Models
     using float_type = Self::FloatType;
     Kokkos::View<float_type*, ComputeSpace> samples("samples", n);
 
-    float_type lambda = Kokkos::log(2.F) / 1e-6F;
+    auto lambda = static_cast<float_type>(Kokkos::numbers::ln2
+                                          / (Self::l_max_m - Self::l_min_m));
 
     lambda = Common::read_env_or("VLAMBDA", lambda);
 

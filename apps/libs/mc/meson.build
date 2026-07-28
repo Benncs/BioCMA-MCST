@@ -34,3 +34,12 @@ mc_dependency = declare_dependency(
     link_with: mc_lib,
     compile_args: [arg],
 )
+
+
+test_team_strategy = executable(
+    'test_team_strategy',
+    'tests/test_team_strategy.cpp',
+    dependencies: [mc_dependency],
+    cpp_args: arg,
+)
+test('test_team_strategy', test_team_strategy, timeout: -1)

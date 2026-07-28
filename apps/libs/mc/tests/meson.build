@@ -32,13 +32,7 @@ test_rng_2 = executable(
 )
 test('test_rng_2', test_rng_2, timeout: -1)
 
-test_team_strategy = executable(
-    'test_team_strategy',
-    'test_team_strategy.cpp',
-    dependencies: [mc_dependency],
-    cpp_args: arg,
-)
-test('test_team_strategy', test_team_strategy, timeout: -1)
+
 
 test_model_sppecies_name = executable(
     'test_model_sppecies_name',
