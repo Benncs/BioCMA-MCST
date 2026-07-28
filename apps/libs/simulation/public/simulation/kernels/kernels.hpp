@@ -65,7 +65,7 @@ namespace Simulation::KernelInline
 
       cycle_kernel.update(d_t, container);
 
-      contribution_kernel.update(container);
+      contribution_kernel.update(container, d_t);
 
       // TODO: Why need to update all views (where did we lost the refcount ? )
       move_kernel.update(d_t,
@@ -103,7 +103,7 @@ namespace Simulation::KernelInline
           cycle_kernel(options.m_p_p_team_model,
                        container,
                        _random_pool,
-                       std::move(_concentrations),
+                       _concentrations,
                        _event,
                        _probes_div),
           move_kernel(options.m_p_p_team_move,
@@ -115,8 +115,14 @@ namespace Simulation::KernelInline
                       _event,
                       _probes,
                       container.ages),
-          contribution_kernel(
-              options.m_p_p_team_contribs, _contribs_scatter, container),
+          // contribution_kernel(
+          //     options.m_p_p_team_contribs, _contribs_scatter, container),
+          contribution_kernel(options.m_p_p_team_contribs,
+                              _contribs_scatter,
+                              container,
+                              _random_pool,
+                              _concentrations,
+                              _event),
           m_options(options)
 
     {
@@ -206,24 +212,24 @@ namespace Simulation::KernelInline
 
       std::size_t league_size = Common::c_league_size(n_particle, npt);
 
-      const auto cycle_policy
-          = Kokkos::TeamPolicy<TagCycle, Kokkos::Schedule<Kokkos::Dynamic>>(
-              model_space,
-              static_cast<int>(league_size),
-              Kokkos::AUTO(),
-              Kokkos::AUTO());
+      // const auto cycle_policy
+      //     = Kokkos::TeamPolicy<TagCycle, Kokkos::Schedule<Kokkos::Dynamic>>(
+      //         model_space,
+      //         static_cast<int>(league_size),
+      //         Kokkos::AUTO(),
+      //         Kokkos::AUTO());
 
-      Kokkos::parallel_reduce(
-          "cycle_model",
-          cycle_policy,
-          cycle_kernel,
-          KernelInline::CycleReducer<ComputeSpace>(cycle_reducer));
-      Kokkos::fence(); // TODO needed ?
+      // Kokkos::parallel_reduce(
+      //     "cycle_model",
+      //     cycle_policy,
+      //     cycle_kernel,
+      //     KernelInline::CycleReducer<ComputeSpace>(cycle_reducer));
+      // Kokkos::fence(); // TODO needed ?
 
-      // Assumptions
-      // Newborn cells do not contribte in current time step
-      // Mother cell doesn´t exist but
-      // Contribution array is not changed during division and
+      // // Assumptions
+      // // Newborn cells do not contribte in current time step
+      // // Mother cell doesn´t exist but
+      // // Contribution array is not changed during division and
 
       if (cycle_kernel.do_contribs())
       {
