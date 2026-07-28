@@ -252,20 +252,20 @@ namespace
       auto functors = simulation.init_functors<ComputeSpace>(
           local_container, exec.kernel_options);
 
-      UPDATE_HYDRO_STEP(getter.absolute_time(), d_t)
+      UPDATE_HYDRO_STEP(getter.absolute_time(), d_t);
       auto current_time = getter.absolute_time();
       for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
            ++__loop_counter)
       {
 
-        DEBUG_INSTRUCTION
+        DEBUG_INSTRUCTION;
 
         if (d_transionner->need_advance(current_time, d_t))
         {
-          UPDATE_HYDRO_STEP(current_time, d_t)
+          UPDATE_HYDRO_STEP(current_time, d_t);
         }
 
-        SEND_MPI_SIG_RUN
+        SEND_MPI_SIG_RUN;
 
         if (do_export)
         {
@@ -275,7 +275,7 @@ namespace
           (void)_;
         }
 
-        WAIT_PAYLOAD
+        WAIT_PAYLOAD;
 
         sync_step(exec, simulation);
         {

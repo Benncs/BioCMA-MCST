@@ -86,11 +86,12 @@ ExportHandler::operator()(size_t loop_counter,
   // Declare profiling here to count only if we actually export
   PROFILE_SECTION("host:handle_export")
 
+  // Send MPI dump signal
+  SEND_MPI_SIG_DUMP
+
   // Retrieve the current simulation state
   const auto& state = transitioner->get_current();
 
-  // Send MPI dump signal
-  SEND_MPI_SIG_DUMP
   std::optional<std::span<const double>> volume_gas = std::nullopt;
   if (state->has_gas())
   {
