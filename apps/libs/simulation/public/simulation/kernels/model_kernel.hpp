@@ -16,6 +16,7 @@
 #include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
 // #include <simulation/probability_leaving.hpp>
+#include <simulation/kernels/cycle_reducer.hpp>
 #include <simulation/probe.hpp>
 #include <utility>
 
@@ -37,94 +38,11 @@ namespace Simulation::KernelInline
   {
   };
 
-  struct CycleReduceType
-  {
-    std::size_t waiting_allocation_particle;
-    std::size_t dead_total;
-
-    KOKKOS_INLINE_FUNCTION CycleReduceType&
-    operator+=(const CycleReduceType& a)
-    {
-      this->waiting_allocation_particle += a.waiting_allocation_particle;
-      this->dead_total += a.dead_total;
-      return *this;
-    }
-  };
-
-  template <class Space> class CycleReducer
-  {
-  public:
-    // Required for Concept
-    using reducer = CycleReducer;
-    using value_type = CycleReduceType;
-    using result_view_type = Kokkos::View<value_type, Space>;
-
-    KOKKOS_INLINE_FUNCTION
-    void
-    join(value_type& dest, const value_type& src) const
-    {
-      // dest.dead_total += src.dead_total;
-      // dest.waiting_allocation_particle += src.waiting_allocation_particle;
-      dest += src;
-    }
-
-    [[nodiscard]] KOKKOS_INLINE_FUNCTION value_type&
-    reference() const
-    {
-      return *value.data();
-    }
-
-    KOKKOS_INLINE_FUNCTION
-    result_view_type
-    view() const
-    {
-      return value;
-    }
-
-    [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
-    references_scalar() const
-    {
-      return references_scalar_v;
-    }
-
-    // Optional
-    KOKKOS_INLINE_FUNCTION
-    void
-    init(value_type& val) const
-    {
-      val.dead_total = 0;
-      val.waiting_allocation_particle = 0;
-    }
-
-    // KOKKOS_INLINE_FUNCTION
-    // void final(value_type& val) const
-    // {
-    //   // NOP
-    // }
-
-    // Part of Build-In reducers for Kokkos
-    KOKKOS_INLINE_FUNCTION
-    explicit CycleReducer(value_type& value_)
-        : value(&value_), references_scalar_v(true)
-    {
-    }
-
-    KOKKOS_INLINE_FUNCTION
-    explicit CycleReducer(const result_view_type& value_)
-        : value(value_), references_scalar_v(false)
-    {
-    }
-
-  private:
-    result_view_type value;
-    bool references_scalar_v;
-  };
-
   template <ModelType M> struct CycleFunctor
   {
     using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
     using TeamMember = TeamPolicy::member_type;
-    using value_type = CycleReduceType;
+    using value_type = CycleReducerType;
 
     CycleFunctor() = default;
 

@@ -122,7 +122,8 @@ namespace Simulation::KernelInline
                               container,
                               _random_pool,
                               _concentrations,
-                              _event),
+                              _event,
+                              _probes_div),
           m_options(options)
 
     {
@@ -244,15 +245,17 @@ namespace Simulation::KernelInline
         league_size = Common::c_league_size(n_particle, npt);
         static_assert(ConstWeightModelType<Model>,
                       "ModelType:Constapply_weight()");
-
+        KernelInline::CycleReducer<ComputeSpace> reducer(cycle_reducer);
         if (f_multi_compartment)
         {
 
           const auto policy_contribs
               = Kokkos::TeamPolicy<typename ContributionFunctor<Model>::Tag3D>(
                   model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
-          Kokkos::parallel_for(
-              "cycle_model_contribs", policy_contribs, contribution_kernel);
+          Kokkos::parallel_reduce("cycle_model_contribs",
+                                  policy_contribs,
+                                  contribution_kernel,
+                                  reducer);
         }
         else
         {
@@ -261,8 +264,10 @@ namespace Simulation::KernelInline
                   model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
           policy_contribs.set_scratch_size(
               0, Kokkos::PerTeam(sizeof(float) * Model::n_c));
-          Kokkos::parallel_for(
-              "cycle_model_contribs_0d", policy_contribs, contribution_kernel);
+          Kokkos::parallel_reduce("cycle_model_contribs_0d",
+                                  policy_contribs,
+                                  contribution_kernel,
+                                  reducer);
         }
       }
     }

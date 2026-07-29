@@ -186,8 +186,8 @@ namespace IO
     this->do_flush = true; // NOLINT
     try
     {
-      // std::locale::global(std::locale("en_US.utf8"));
-      std::locale::global(std::locale::classic());
+      std::locale::global(std::locale("en_US.utf8"));
+      // std::locale::global(std::locale::classic());
     }
     catch (const std::runtime_error& e)
     {
