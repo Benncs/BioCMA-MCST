@@ -69,6 +69,9 @@ namespace
 
 namespace Models
 {
+  bool FixedLength::use_contribs
+      = Common::read_env_or("BIOMC_USE_CONTRIBD", true);
+
   FixedLength::Config
   FixedLength::get_config(const ExecInfo& info, const std::size_t n)
   {

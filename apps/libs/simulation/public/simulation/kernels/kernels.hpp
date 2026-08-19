@@ -232,7 +232,7 @@ namespace Simulation::KernelInline
       // // Mother cell doesn´t exist but
       // // Contribution array is not changed during division and
 
-      if (cycle_kernel.do_contribs())
+      // if (cycle_kernel.do_contribs())
       {
 
         std::size_t npt = m_options.m_p_p_team_contribs;
