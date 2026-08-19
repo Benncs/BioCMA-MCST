@@ -790,10 +790,6 @@ namespace MC
 
       if (do_shrink)
       {
-        _resize(n_used_elements * rt_params.allocation_factor, true);
-      }
-      if (do_shrink)
-      {
         // force to true if we want to shrink
         _resize(n_used_elements * rt_params.allocation_factor, true);
       }
