@@ -1,5 +1,5 @@
 
-option('model_list_name',type:'array',value: ['fixed_length','simple_acetate'])
+option('model_list_name',type:'array',value: ['fixed_length','simple_acetate','acetate'])
 
 # Kokkos
 option('use_cuda', type: 'boolean', value: false)

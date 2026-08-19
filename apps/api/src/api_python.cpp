@@ -1,3 +1,4 @@
+#include "simulation/mass_transfer.hpp"
 #include <api/api.hpp>
 #include <api/api_raw.h>
 #include <common/console.hpp>
@@ -79,6 +80,8 @@ namespace PythonBindings
   apply(std::shared_ptr<Api::SimulationInstance>& handle, bool to_load)
   {
     handle->set_auto_mtr(); // FIXME
+    //
+    // handle->set_mtr(Simulation::MassTransfer::Type::FlowmapTurbulence{});
 
     std::cerr << "Set auto mtr for PythonBindings" << std::endl;
     const auto rc = handle->apply(to_load);
