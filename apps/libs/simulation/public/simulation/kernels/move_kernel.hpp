@@ -2,7 +2,6 @@
 #define __SIMULATION_MOVE_KERNEL_HPP__
 
 #include "Kokkos_Macros.hpp"
-#include "decl/Kokkos_Declare_OPENMP.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
@@ -212,7 +211,7 @@ namespace Simulation::KernelInline
       ScratchView rng(team.team_scratch(0), N);
 
       // Use "tiling" to minimize contention when aquired_state
-      // State is aquired m times instead of N, it is supposed to reduce
+      // State is aquired p times instead of N, it is supposed to reduce
       // contention
 
       Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, p),
@@ -279,7 +278,7 @@ namespace Simulation::KernelInline
           [&](const std::size_t idx, std::size_t& thread_dead_count)
           {
             const auto flat_index = p0 + idx;
-            // ages(flat_index, 0) += d_t;
+            ages(flat_index, 0) += d_t;
             handle_exit(flat_index, lf, thread_dead_count);
           },
           team_dead_count);
@@ -511,7 +510,7 @@ namespace Simulation::KernelInline
       }
       else
       {
-        ages(idx, 0) += d_t;
+        // ages(idx, 0) += d_t;
       }
     }
 
