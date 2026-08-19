@@ -53,6 +53,8 @@ namespace Models
 
     static Self::Config get_config(const ExecInfo& info, std::size_t n);
 
+    static bool use_contribs;
+
     KOKKOS_INLINE_FUNCTION static void init(const MC::pool_type& random_pool,
                                             std::size_t idx,
                                             const SelfParticle& arr,
@@ -92,6 +94,7 @@ namespace Models
     static std::vector<std::size_t>
     get_number()
     {
+
       return { INDEX_FROM_ENUM(particle_var::length) };
     }
 
@@ -131,8 +134,10 @@ namespace Models
     const auto l_max = GET_PROPERTY(Self::particle_var::l_max);
     const auto s = static_cast<FloatType>(GET_CONCENTRATION(0));
     auto& c_phi_s = GET_CONTRIBS(0);
-
-    const FloatType g = 1; // s / (k + s);
+    //    static auto f_c = use_contribs;
+    //
+    auto f_c = false;
+    const FloatType g = (f_c) ? s / (k + s) : FloatType{ 1 };
     const FloatType phi_s = phi_s_max * g;
     const FloatType ldot = l_dot_max * g;
     //    auto gen = random_pool.get_state();
