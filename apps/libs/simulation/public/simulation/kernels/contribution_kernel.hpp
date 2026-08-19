@@ -252,12 +252,12 @@ template <ModelType M> struct ContributionFunctor
 
             KOKKOS_ASSERT(flat_index < _ntot);
 
-            const double weight = m_particles.get_weight(p);
-            const auto pos = positions(p);
+            const double weight = m_particles.get_weight(flat_index);
+            const auto pos = positions(flat_index);
             Kokkos::parallel_for(
                 Kokkos::ThreadVectorRange(team, 0, M::n_c),
                 [&](const int j)
-                { access(j, pos) += weight * contribs(p, j); });
+                { access(j, pos) += weight * contribs(flat_index, j); });
           }
         });
   }
