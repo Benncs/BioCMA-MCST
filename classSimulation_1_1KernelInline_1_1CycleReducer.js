@@ -2,7 +2,7 @@ var classSimulation_1_1KernelInline_1_1CycleReducer =
 [
     [ "reducer", "classSimulation_1_1KernelInline_1_1CycleReducer.html#ad6144520a937986ec6ffee88ef1f9da6", null ],
     [ "result_view_type", "classSimulation_1_1KernelInline_1_1CycleReducer.html#a10d8355951a5002da74f0bb559d92387", null ],
-    [ "value_type", "classSimulation_1_1KernelInline_1_1CycleReducer.html#a7c83711b4495a0e3586864c8a2ebc7d4", null ],
+    [ "value_type", "classSimulation_1_1KernelInline_1_1CycleReducer.html#a51327d0b6df42a9aab706c9f5b0912bf", null ],
     [ "CycleReducer", "classSimulation_1_1KernelInline_1_1CycleReducer.html#aa869bf96129576bd2cb6f50bb2c51bb4", null ],
     [ "CycleReducer", "classSimulation_1_1KernelInline_1_1CycleReducer.html#a19e5c358513db6a18ccb19ab39f007cb", null ],
     [ "init", "classSimulation_1_1KernelInline_1_1CycleReducer.html#a65ab358cac20a15569c0d9e504981596", null ],

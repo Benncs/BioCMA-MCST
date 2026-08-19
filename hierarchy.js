@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "Models::Acetate", "structModels_1_1Acetate.html", null ],
     [ "Simulation::MassTransfer::Type::Auto", "structSimulation_1_1MassTransfer_1_1Type_1_1Auto.html", null ],
     [ "PostProcessing::BonceBuffer", "structPostProcessing_1_1BonceBuffer.html", null ],
     [ "Core::BuildError", "structCore_1_1BuildError.html", null ],
@@ -15,7 +16,7 @@ var hierarchy =
     [ "Simulation::KernelInline::CycleFunctor< M >", "structSimulation_1_1KernelInline_1_1CycleFunctor.html", null ],
     [ "Simulation::KernelInline::CycleFunctors< Space, Model >", "structSimulation_1_1KernelInline_1_1CycleFunctors.html", null ],
     [ "Simulation::KernelInline::CycleReducer< Space >", "classSimulation_1_1KernelInline_1_1CycleReducer.html", null ],
-    [ "Simulation::KernelInline::CycleReduceType", "structSimulation_1_1KernelInline_1_1CycleReduceType.html", null ],
+    [ "Simulation::KernelInline::CycleReducerType", "structSimulation_1_1KernelInline_1_1CycleReducerType.html", null ],
     [ "Core::DataExporter", "classCore_1_1DataExporter.html", [
       [ "Core::MainExporter", "classCore_1_1MainExporter.html", null ],
       [ "Core::PartialExporter", "classCore_1_1PartialExporter.html", null ]

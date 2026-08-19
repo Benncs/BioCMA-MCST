@@ -111,6 +111,10 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a78e6f7dba8a0a9cd7d385c2b99a77404" id="r_a78e6f7dba8a0a9cd7d385c2b99a77404"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a3b1edbb9e624ac0a14180e77437bf6a9">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78e6f7dba8a0a9cd7d385c2b99a77404">d_m</a> = 0.6e-6</td></tr>
 <tr class="memitem:a872e4c2850d3996443ca0cac92af97c2" id="r_a872e4c2850d3996443ca0cac92af97c2"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a3b1edbb9e624ac0a14180e77437bf6a9">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a872e4c2850d3996443ca0cac92af97c2">lin_density</a> = <a class="el" href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">c_linear_density</a>(static_cast&lt;<a class="el" href="#a3b1edbb9e624ac0a14180e77437bf6a9">FloatType</a>&gt;(1000), <a class="el" href="#a78e6f7dba8a0a9cd7d385c2b99a77404">d_m</a>)</td></tr>
 <tr class="memitem:a81c72e5094c1224f7a6590766f0cc516" id="r_a81c72e5094c1224f7a6590766f0cc516"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#a3b1edbb9e624ac0a14180e77437bf6a9">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81c72e5094c1224f7a6590766f0cc516">phi_s_max</a> = <a class="el" href="namespaceModels.html#ae80db106a8e52a9ccdbc722fed5303df">_get_phi_s_max</a>&lt;<a class="el" href="#a3b1edbb9e624ac0a14180e77437bf6a9">FloatType</a>&gt;(<a class="el" href="#a872e4c2850d3996443ca0cac92af97c2">lin_density</a>, <a class="el" href="#a637a630f4f54d4f26147b064b317e0d5">l_dot_max</a>)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-attribs" class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a6677edb1e54ab5183a9f1bde31804947" id="r_a6677edb1e54ab5183a9f1bde31804947"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6677edb1e54ab5183a9f1bde31804947">use_contribs</a> = <a class="el" href="namespaceCommon.html#a7ca16dc3314f89cd1860091731cd7014">Common::read_env_or</a>(&quot;BIOMC_USE_CONTRIBD&quot;, true)</td></tr>
 </table>
 <a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
 <a id="af98ee38e88201bed889f8bdf5c53d922" name="af98ee38e88201bed889f8bdf5c53d922"></a>
@@ -668,6 +672,28 @@ Here is the call graph for this function:</div>
           <td class="memname">MODEL_CONSTANT <a class="el" href="#a3b1edbb9e624ac0a14180e77437bf6a9">FloatType</a> Models::FixedLength::phi_s_max = <a class="el" href="namespaceModels.html#ae80db106a8e52a9ccdbc722fed5303df">_get_phi_s_max</a>&lt;<a class="el" href="#a3b1edbb9e624ac0a14180e77437bf6a9">FloatType</a>&gt;(<a class="el" href="#a872e4c2850d3996443ca0cac92af97c2">lin_density</a>, <a class="el" href="#a637a630f4f54d4f26147b064b317e0d5">l_dot_max</a>)</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6677edb1e54ab5183a9f1bde31804947" name="a6677edb1e54ab5183a9f1bde31804947"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6677edb1e54ab5183a9f1bde31804947">&#9670;&#160;</a></span>use_contribs</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Models::FixedLength::use_contribs = <a class="el" href="namespaceCommon.html#a7ca16dc3314f89cd1860091731cd7014">Common::read_env_or</a>(&quot;BIOMC_USE_CONTRIBD&quot;, true)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

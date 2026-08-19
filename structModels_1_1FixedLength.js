@@ -29,5 +29,6 @@ var structModels_1_1FixedLength =
     [ "n_c", "structModels_1_1FixedLength.html#a09d7acb71de355acfcd72f08f471bee9", null ],
     [ "n_var", "structModels_1_1FixedLength.html#a6d1da4c31b404b3215914b40c5feab2f", null ],
     [ "name", "structModels_1_1FixedLength.html#a323e693355138e1696520eb7e7f0d24a", null ],
-    [ "phi_s_max", "structModels_1_1FixedLength.html#a81c72e5094c1224f7a6590766f0cc516", null ]
+    [ "phi_s_max", "structModels_1_1FixedLength.html#a81c72e5094c1224f7a6590766f0cc516", null ],
+    [ "use_contribs", "structModels_1_1FixedLength.html#a6677edb1e54ab5183a9f1bde31804947", null ]
 ];

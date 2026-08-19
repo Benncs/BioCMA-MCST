@@ -67,6 +67,7 @@ var annotated_dup =
       [ "SpecieTable", "classMixture_1_1SpecieTable.html", "classMixture_1_1SpecieTable" ]
     ] ],
     [ "Models", "namespaceModels.html", [
+      [ "Acetate", "structModels_1_1Acetate.html", "structModels_1_1Acetate" ],
       [ "FixedLength", "structModels_1_1FixedLength.html", "structModels_1_1FixedLength" ],
       [ "Monod", "structModels_1_1Monod.html", "structModels_1_1Monod" ],
       [ "SimpleAcetate", "structModels_1_1SimpleAcetate.html", "structModels_1_1SimpleAcetate" ],
@@ -94,7 +95,7 @@ var annotated_dup =
         [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html", "structSimulation_1_1KernelInline_1_1CycleFunctor" ],
         [ "CycleFunctors", "structSimulation_1_1KernelInline_1_1CycleFunctors.html", "structSimulation_1_1KernelInline_1_1CycleFunctors" ],
         [ "CycleReducer", "classSimulation_1_1KernelInline_1_1CycleReducer.html", "classSimulation_1_1KernelInline_1_1CycleReducer" ],
-        [ "CycleReduceType", "structSimulation_1_1KernelInline_1_1CycleReduceType.html", "structSimulation_1_1KernelInline_1_1CycleReduceType" ],
+        [ "CycleReducerType", "structSimulation_1_1KernelInline_1_1CycleReducerType.html", "structSimulation_1_1KernelInline_1_1CycleReducerType" ],
         [ "MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", "structSimulation_1_1KernelInline_1_1MoveFunctor" ],
         [ "TagContribution", "structSimulation_1_1KernelInline_1_1TagContribution.html", null ],
         [ "TagContribution0D", "structSimulation_1_1KernelInline_1_1TagContribution0D.html", null ],

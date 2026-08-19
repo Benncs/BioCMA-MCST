@@ -72,22 +72,22 @@ $(function(){initNavTree('classSimulation_1_1KernelInline_1_1CycleReducer.html',
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="model__kernel_8hpp_source.html">model_kernel.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="cycle__reducer_8hpp_source.html">cycle_reducer.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:ad6144520a937986ec6ffee88ef1f9da6" id="r_ad6144520a937986ec6ffee88ef1f9da6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad6144520a937986ec6ffee88ef1f9da6">reducer</a> = <a class="el" href="classSimulation_1_1KernelInline_1_1CycleReducer.html">CycleReducer</a></td></tr>
-<tr class="memitem:a7c83711b4495a0e3586864c8a2ebc7d4" id="r_a7c83711b4495a0e3586864c8a2ebc7d4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a> = <a class="el" href="structSimulation_1_1KernelInline_1_1CycleReduceType.html">CycleReduceType</a></td></tr>
-<tr class="memitem:a10d8355951a5002da74f0bb559d92387" id="r_a10d8355951a5002da74f0bb559d92387"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10d8355951a5002da74f0bb559d92387">result_view_type</a> = Kokkos::View&lt;<a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a>, Space&gt;</td></tr>
+<tr class="memitem:a51327d0b6df42a9aab706c9f5b0912bf" id="r_a51327d0b6df42a9aab706c9f5b0912bf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a> = <a class="el" href="structSimulation_1_1KernelInline_1_1CycleReducerType.html">CycleReducerType</a></td></tr>
+<tr class="memitem:a10d8355951a5002da74f0bb559d92387" id="r_a10d8355951a5002da74f0bb559d92387"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10d8355951a5002da74f0bb559d92387">result_view_type</a> = Kokkos::View&lt;<a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a>, Space&gt;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7ba66511251c0437737968b3dc9b6c68" id="r_a7ba66511251c0437737968b3dc9b6c68"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ba66511251c0437737968b3dc9b6c68">join</a> (<a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a> &amp;dest, const <a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a> &amp;src) const</td></tr>
-<tr class="memitem:aa8861a2e3f9663dc284e30da7bad494d" id="r_aa8861a2e3f9663dc284e30da7bad494d"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION <a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8861a2e3f9663dc284e30da7bad494d">reference</a> () const</td></tr>
+<tr class="memitem:a7ba66511251c0437737968b3dc9b6c68" id="r_a7ba66511251c0437737968b3dc9b6c68"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ba66511251c0437737968b3dc9b6c68">join</a> (<a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a> &amp;dest, const <a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a> &amp;src) const</td></tr>
+<tr class="memitem:aa8861a2e3f9663dc284e30da7bad494d" id="r_aa8861a2e3f9663dc284e30da7bad494d"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION <a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8861a2e3f9663dc284e30da7bad494d">reference</a> () const</td></tr>
 <tr class="memitem:a79004920992b64084793cb691a03e4b8" id="r_a79004920992b64084793cb691a03e4b8"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION <a class="el" href="#a10d8355951a5002da74f0bb559d92387">result_view_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79004920992b64084793cb691a03e4b8">view</a> () const</td></tr>
 <tr class="memitem:a2ab0a8958631f8b25f76966f516a3c1a" id="r_a2ab0a8958631f8b25f76966f516a3c1a"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ab0a8958631f8b25f76966f516a3c1a">references_scalar</a> () const</td></tr>
-<tr class="memitem:a65ab358cac20a15569c0d9e504981596" id="r_a65ab358cac20a15569c0d9e504981596"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65ab358cac20a15569c0d9e504981596">init</a> (<a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a> &amp;val) const</td></tr>
-<tr class="memitem:aa869bf96129576bd2cb6f50bb2c51bb4" id="r_aa869bf96129576bd2cb6f50bb2c51bb4"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa869bf96129576bd2cb6f50bb2c51bb4">CycleReducer</a> (<a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a> &amp;value_)</td></tr>
+<tr class="memitem:a65ab358cac20a15569c0d9e504981596" id="r_a65ab358cac20a15569c0d9e504981596"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65ab358cac20a15569c0d9e504981596">init</a> (<a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a> &amp;val) const</td></tr>
+<tr class="memitem:aa869bf96129576bd2cb6f50bb2c51bb4" id="r_aa869bf96129576bd2cb6f50bb2c51bb4"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa869bf96129576bd2cb6f50bb2c51bb4">CycleReducer</a> (<a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a> &amp;value_)</td></tr>
 <tr class="memitem:a19e5c358513db6a18ccb19ab39f007cb" id="r_a19e5c358513db6a18ccb19ab39f007cb"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19e5c358513db6a18ccb19ab39f007cb">CycleReducer</a> (const <a class="el" href="#a10d8355951a5002da74f0bb559d92387">result_view_type</a> &amp;value_)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
@@ -121,15 +121,15 @@ template&lt;class Space&gt; </div>
 template&lt;class Space&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classSimulation_1_1KernelInline_1_1CycleReducer.html">Simulation::KernelInline::CycleReducer</a>&lt; Space &gt;::result_view_type = Kokkos::View&lt;<a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a>, Space&gt;</td>
+          <td class="memname">using <a class="el" href="classSimulation_1_1KernelInline_1_1CycleReducer.html">Simulation::KernelInline::CycleReducer</a>&lt; Space &gt;::result_view_type = Kokkos::View&lt;<a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a>, Space&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a7c83711b4495a0e3586864c8a2ebc7d4" name="a7c83711b4495a0e3586864c8a2ebc7d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7c83711b4495a0e3586864c8a2ebc7d4">&#9670;&#160;</a></span>value_type</h2>
+<a id="a51327d0b6df42a9aab706c9f5b0912bf" name="a51327d0b6df42a9aab706c9f5b0912bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51327d0b6df42a9aab706c9f5b0912bf">&#9670;&#160;</a></span>value_type</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -137,7 +137,7 @@ template&lt;class Space&gt; </div>
 template&lt;class Space&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classSimulation_1_1KernelInline_1_1CycleReducer.html">Simulation::KernelInline::CycleReducer</a>&lt; Space &gt;::value_type = <a class="el" href="structSimulation_1_1KernelInline_1_1CycleReduceType.html">CycleReduceType</a></td>
+          <td class="memname">using <a class="el" href="classSimulation_1_1KernelInline_1_1CycleReducer.html">Simulation::KernelInline::CycleReducer</a>&lt; Space &gt;::value_type = <a class="el" href="structSimulation_1_1KernelInline_1_1CycleReducerType.html">CycleReducerType</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -159,7 +159,7 @@ template&lt;class Space&gt; </div>
         <tr>
           <td class="memname">KOKKOS_INLINE_FUNCTION <a class="el" href="classSimulation_1_1KernelInline_1_1CycleReducer.html">Simulation::KernelInline::CycleReducer</a>&lt; Space &gt;::CycleReducer </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>value_</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>value_</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -214,7 +214,7 @@ template&lt;class Space&gt; </div>
         <tr>
           <td class="memname">KOKKOS_INLINE_FUNCTION void <a class="el" href="classSimulation_1_1KernelInline_1_1CycleReducer.html">Simulation::KernelInline::CycleReducer</a>&lt; Space &gt;::init </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>val</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>val</em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -241,12 +241,12 @@ template&lt;class Space&gt; </div>
         <tr>
           <td class="memname">KOKKOS_INLINE_FUNCTION void <a class="el" href="classSimulation_1_1KernelInline_1_1CycleReducer.html">Simulation::KernelInline::CycleReducer</a>&lt; Space &gt;::join </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>dest</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>dest</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>src</em></span>&#160;) const</td>
+          <td class="paramtype">const <a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>src</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -270,7 +270,7 @@ template&lt;class Space&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION <a class="el" href="#a7c83711b4495a0e3586864c8a2ebc7d4">value_type</a> &amp; <a class="el" href="classSimulation_1_1KernelInline_1_1CycleReducer.html">Simulation::KernelInline::CycleReducer</a>&lt; Space &gt;::reference </td>
+          <td class="memname">KOKKOS_INLINE_FUNCTION <a class="el" href="#a51327d0b6df42a9aab706c9f5b0912bf">value_type</a> &amp; <a class="el" href="classSimulation_1_1KernelInline_1_1CycleReducer.html">Simulation::KernelInline::CycleReducer</a>&lt; Space &gt;::reference </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
@@ -389,7 +389,7 @@ template&lt;class Space&gt; </div>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>apps/libs/simulation/public/simulation/kernels/<a class="el" href="model__kernel_8hpp_source.html">model_kernel.hpp</a></li>
+<li>apps/libs/simulation/public/simulation/kernels/<a class="el" href="cycle__reducer_8hpp_source.html">cycle_reducer.hpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

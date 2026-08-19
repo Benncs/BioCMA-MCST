@@ -163,8 +163,8 @@ $(function(){initNavTree('mc_2public_2mc_2alias_8hpp_source.html','',''); });
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>}; <span class="comment">// namespace MC</span></div>
 </div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="keyword">using </span>kernelMT = Kokkos::MemoryTraits&lt;Kokkos::MemoryTraitsFlags::RandomAccess</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>                                      | Kokkos::MemoryTraitsFlags::Atomic</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">// Atomicity comes from the ScatterView policy, not the underlying view.</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="keyword">using </span>kernelMT = Kokkos::MemoryTraits&lt;Kokkos::MemoryTraitsFlags::RandomAccess</div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>                                      | Kokkos::MemoryTraitsFlags::Restrict&gt;;</div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceMC.html">MC</a></div>

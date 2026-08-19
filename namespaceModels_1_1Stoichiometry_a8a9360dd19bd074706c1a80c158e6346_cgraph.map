@@ -1,0 +1,5 @@
+<map id="Models::Stoichiometry::y_o2_ox" name="Models::Stoichiometry::y_o2_ox">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,158,44"/>
+<area shape="rect" id="Node000002" href="$namespaceModels_1_1Stoichiometry.html#a213e08f6ba45c9336959bde0e1f2b1b8" title=" " alt="" coords="206,5,358,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,22,190,22,190,27,158,27"/>
+</map>

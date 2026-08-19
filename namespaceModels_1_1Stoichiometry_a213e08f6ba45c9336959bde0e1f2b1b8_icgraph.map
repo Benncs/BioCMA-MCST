@@ -1,0 +1,7 @@
+<map id="Models::Stoichiometry::e_surplus" name="Models::Stoichiometry::e_surplus">
+<area shape="rect" id="Node000001" title=" " alt="" coords="206,37,358,76"/>
+<area shape="rect" id="Node000002" href="$namespaceModels_1_1Stoichiometry.html#ad4ddb18054ea72684ec9dda0ff893c8d" title="sub &#45;&gt; X + Ac + CO2 (+H2O) : gAc per g of substrate" alt="" coords="5,5,158,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,45,157,39,158,34,191,39"/>
+<area shape="rect" id="Node000003" href="$namespaceModels_1_1Stoichiometry.html#a8a9360dd19bd074706c1a80c158e6346" title=" " alt="" coords="5,68,158,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="191,73,158,78,158,73,190,68"/>
+</map>
