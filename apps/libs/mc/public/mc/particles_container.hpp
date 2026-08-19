@@ -508,10 +508,8 @@ namespace MC
           "Error when deserialze, model number of property mismatch");
     }
 
-    Kokkos::resize(
-        this->contribs,
-        n_allocated_elements,
-        Model::n_c); // Dont forget to allocate contribs which is not saved yet
+    // contribs is not serialized and is rewritten every step: allocate, don't copy
+    Kokkos::realloc(this->contribs, n_allocated_elements, Model::n_c);
 #ifndef NDEBUG
     Kokkos::printf("ParticlesContainer::load: Check if load_tuning_constant "
                    "works with different value");
@@ -621,9 +619,8 @@ namespace MC
         Kokkos::resize(model,
                        n_allocated_elements,
                        Model::n_var); // use 2nd dim resize if dynamic
-        Kokkos::resize(contribs,
-                       n_allocated_elements,
-                       Model::n_c); // use 2nd dim resize if dynamic
+        // realloc, not resize: contribs is rewritten every step before it is read
+        Kokkos::realloc(contribs, n_allocated_elements, Model::n_c);
         Kokkos::resize(status, n_allocated_elements);
         Kokkos::resize(ages, n_allocated_elements);
 
