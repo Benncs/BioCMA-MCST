@@ -29,27 +29,32 @@ namespace Simulation
   // IMPORTANT to have non default to  BIND accesor(this)
   SimulationUnit::SimulationUnit(SimulationUnit&& other) noexcept
       : accesor(this), mc_unit(std::move(other.mc_unit)),
+        m_table(std::move(other.m_table)),
         contribs_scatter(std::move(other.contribs_scatter)),
         probes(std::move(other.probes)), dims(std::move(other.dims)),
         m_feed(std::move(other.m_feed)),
         const_number_simulation(other.const_number_simulation),
-        is_two_phase_flow(other.is_two_phase_flow), m_times(other.m_times),
-
-        f_reaction(other.f_reaction),
+        is_two_phase_flow(other.is_two_phase_flow),
+        f_reaction(other.f_reaction), m_times(other.m_times),
         liquid_scalar(std::move(other.liquid_scalar)),
         gas_scalar(std::move(other.gas_scalar)),
-        mt_model(std::move(other.mt_model)), logger(std::move(other.logger))
+        m_mt_model(std::move(other.m_mt_model)), logger(std::move(other.logger))
 
   {
   }
 
   // IMPORTANT to have non default to  BIND accesor(this)
-  SimulationUnit::SimulationUnit(std::unique_ptr<MC::MonteCarloUnit>&& _unit,
-                                 ScalarInitializer&& scalar_init,
-                                 std::optional<Feed::SimulationFeed> _feed)
-      : accesor(this), mc_unit(std::move(_unit)),
+  SimulationUnit::SimulationUnit(
+      std::unique_ptr<MC::MonteCarloUnit>&& _unit,
+      ScalarInitializer&& scalar_init,
+      std::optional<Feed::SimulationFeed> _feed,
+      std::shared_ptr<Mixture::SpecieTable> table,
+      std::optional<MassTransfer::Type::MtrTypeVariant>&& mt_model_variant,
+      Sparam params)
+      : accesor(this), mc_unit(std::move(_unit)), m_table(std::move(table)),
         m_feed(_feed.value_or(Feed::SimulationFeed::empty())),
-        is_two_phase_flow(scalar_init.gas_flow)
+        is_two_phase_flow(scalar_init.gas_flow), f_reaction(params.f_reaction)
+
   {
 
     this->liquid_scalar = std::make_shared<ScalarSimulation>(
@@ -66,6 +71,10 @@ namespace Simulation
 
     post_init_concentration(std::move(scalar_init));
 
+    if (mt_model_variant)
+    {
+      setMtrModel(std::move(*mt_model_variant));
+    }
     //  scalar_init is totally moved-from here at the very end of impl
     //  post_init_concentration
 
@@ -135,7 +144,8 @@ namespace Simulation
       const auto& gas = newstate->get_gas();
       this->gas_scalar->setVolumes(gas->volume(), gas->inverse_volume());
       gas_scalar->set_transition(newstate->get_gas()->transition());
-      mt_model.update(newstate);
+
+      m_mt_model.update(newstate);
     }
   }
 

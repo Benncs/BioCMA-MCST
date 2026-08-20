@@ -132,6 +132,7 @@ namespace Core
                                          std::string,
                                          std::vector<size_t>,
                                          std::vector<std::string>,
+                                         std::vector<double>,
                                          double,
                                          uint32_t>; ///< Simple export
                                                     ///< types

@@ -41,6 +41,7 @@ namespace Core
     std::string cma_case_path; ///< Path to the CMA case file.
     std::optional<std::string>
         serde_file; ///< Optional file path for serialized data.
+    bool f_reaction;
 
     /**
      * @brief Provides default settings for the UserControlParameters structure.
@@ -72,6 +73,8 @@ namespace Core
     double final_time;
     bool save_final_serde;
     bool uniform_mc_init;
+    bool f_reaction;
+
     static SimulationParameters m_default();
     static SimulationParameters init(const UserControlParameters& user_params);
   };

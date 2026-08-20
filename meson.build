@@ -1,7 +1,7 @@
 project(
     'biocma_mcst',
     'cpp',
-    version: '1.2.1',
+    version: '1.3.0',
     meson_version: '>= 1.8.0',
     default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20', 'b_pch=false'],
 )
@@ -165,6 +165,8 @@ else
     kokkos_option.add_cmake_defines({'CMAKE_POSITION_INDEPENDENT_CODE': 'ON'})
     kokkos_option.add_cmake_defines({'Kokkos_ENABLE_DEPRECATED_CODE_4': 'OFF'})
     kokkos_option.add_cmake_defines({'Kokkos_ENABLE_IMPL_VIEW_LEGACY': 'OFF'})
+    kokkos_option.add_cmake_defines({'Kokkos_ARCH_NATIVE': 'ON'})
+
     kokkos_option.set_install(false)
     sub_kokkos = cmake.subproject('kokkos', required: true, options: kokkos_option)
 
@@ -257,8 +259,7 @@ if not python_install
     meson.add_install_script('devutils/install_script.sh', result_dir)
 endif
 
-
-message('select model(s)',get_option('model_list_name'))
+message('select model(s)', get_option('model_list_name'))
 if (use_kokkos_tools)
     message('Kokkos tool enable')
 endif

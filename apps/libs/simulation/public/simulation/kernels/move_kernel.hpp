@@ -1,6 +1,7 @@
 #ifndef __SIMULATION_MOVE_KERNEL_HPP__
 #define __SIMULATION_MOVE_KERNEL_HPP__
 
+#include "Kokkos_Macros.hpp"
 #include <Kokkos_Assert.hpp>
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Printf.hpp>
@@ -24,34 +25,17 @@ namespace Simulation::KernelInline
   constexpr bool disable_move = false;
   constexpr bool enable_move = true;
 
-  template <class ExecutionSpace,
-            class ViewType,
-            class RandomPool,
-            class IndexType = int64_t,
-            const std::size_t CHUNK_SIZE>
-  void
-  fill_random(const ExecutionSpace& exec,
-              ViewType a,
-              RandomPool g,
-              typename ViewType::const_value_type begin,
-              typename ViewType::const_value_type end)
+  struct TagMove
   {
-    int64_t LDA = a.extent(0);
+  };
 
-    if (LDA > 0)
-    {
-      Kokkos::parallel_for(
-          "Kokkos::fill_random",
-          Kokkos::RangePolicy<ExecutionSpace>(
-              exec, 0, (LDA + (CHUNK_SIZE - 1)) / CHUNK_SIZE),
-          Kokkos::Impl::fill_random_functor_begin_end<ViewType,
-                                                      RandomPool,
-                                                      CHUNK_SIZE,
-                                                      ViewType::rank,
-                                                      IndexType>(
-              a, g, begin, end));
-    }
-  }
+  struct TagLeave
+  {
+  };
+
+  struct TagLeaveB0D
+  {
+  };
 
   /** @brief probably overkill binary search to find next compartment
 
@@ -103,7 +87,7 @@ namespace Simulation::KernelInline
   }
 
   template <typename ViewType1>
-  void
+  KOKKOS_INLINE_FUNCTION void
   find_flow(const ViewType1& leaving_flow,
             const std::size_t position,
             MC::LeavingFlow::float_type& val_flow,
@@ -125,16 +109,6 @@ namespace Simulation::KernelInline
       }
     } while (i_flow < n_flow);
   }
-
-  struct TagRNG
-  {
-  };
-  struct TagMove
-  {
-  };
-  struct TagLeave
-  {
-  };
 
   struct MoveFunctor
   {
@@ -182,7 +156,7 @@ namespace Simulation::KernelInline
           status(std::move(_status)), events(std::move(_events)),
           probes(std::move(_probes)), ages(std::move(_ages)),
           m_p_team_leave(p_team_leave), m_p_team_move(p_team_move),
-          enable_move(b_move), enable_leave(b_leave) {};
+          m_enable_move(b_move), m_enable_leave(b_leave) {};
 
     void
     update(double _d_t,
@@ -197,13 +171,18 @@ namespace Simulation::KernelInline
 
       this->d_t = _d_t;
       this->n_particles = n_p;
-      this->enable_leave = b_leave;
-      this->enable_move = b_move;
+      m_enable_leave = b_leave;
+      m_enable_move = b_move;
       this->move = std::move(move_i);
-
       this->positions = std::move(_positions);
       this->status = std::move(_status);
       this->ages = std::move(_ages);
+    }
+
+    [[nodiscard]] bool
+    need_launch() const
+    {
+      return m_enable_leave || m_enable_move;
     }
 
     KOKKOS_INLINE_FUNCTION void
@@ -232,21 +211,22 @@ namespace Simulation::KernelInline
       ScratchView rng(team.team_scratch(0), N);
 
       // Use "tiling" to minimize contention when aquired_state
-      // State is aquired m times instead of N, it is supposed to reduce
+      // State is aquired p times instead of N, it is supposed to reduce
       // contention
-      Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, m),
-                           [&rp, &rng, p, N](const std::size_t idx)
+
+      Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, p),
+                           [&rp, &rng, N, m, p](const std::size_t idx)
                            {
                              // Ok to use here, get_state should be called in
                              // each thread
                              auto gen = rp.get_state();
 
-                             const std::size_t base = idx * p;
                              // current thread iteration p times with the same
                              // state
-                             for (std::size_t k = 0; k < p; ++k)
+                             for (std::size_t k = 0; k < m; ++k)
                              {
-                               const std::size_t i = base + k;
+                               const std::size_t i = idx + k * p; // stride p
+
                                if (i >= N)
                                {
                                  break;
@@ -264,129 +244,164 @@ namespace Simulation::KernelInline
                            [&](const std::size_t idx)
                            {
                              const auto flat_index = p0 + idx;
-                             const std::size_t base = idx * 2;
-                             KOKKOS_ASSERT(base + 1 < N);
-                             const auto rng1 = rng(base);
-                             const auto rng2 = rng(base + 1);
-                             handle_move(flat_index, rng1, rng2);
+
+                             if (status(flat_index) == MC::Status::Idle)
+                             {
+
+                               const std::size_t base = idx * 2;
+                               KOKKOS_ASSERT(base + 1 < N);
+                               const auto rng1 = rng(base);
+                               const auto rng2 = rng(base + 1);
+                               handle_move(flat_index, rng1, rng2);
+                             }
                            });
     }
 
-    // KOKKOS_INLINE_FUNCTION void
-    // operator()(TagLeave _tag,
-    //            const TeamMember& team,
-    //            std::size_t& local_dead_count) const
-    // {
-    //   (void)_tag;
-    //   const std::size_t count = m_p_team_leave;
-    //   const std::size_t p0 = team.league_rank() * count;
-    //   const std::size_t n_particle = n_particles;
-    //   const auto _d_t = static_cast<float>(d_t);
-
-    //   const auto upper_bound
-    //       = ((p0 + count) >= n_particle) ? n_particle - p0 : count;
-    //   KOKKOS_ASSERT(upper_bound > 0 && upper_bound < n_particle);
-
-    //   const std::size_t n_flow = move.leaving_flow.extent(0);
-
-    //   using ScratchSpace = TeamPolicy::execution_space::scratch_memory_space;
-    //   using ScratchView = Kokkos::View<MC::LeavingFlow*, ScratchSpace>;
-    //   const auto leaving_flow = ScratchView(team.team_scratch(0), n_flow);
-
-    //   // Kokkos::parallel_for(Kokkos::TeamVectorRange(team, n_flow),
-    //   //                      [&](const std::size_t j)
-    //   //                      { leaving_flow(j) = move.leaving_flow(j); });
-
-    //   Kokkos::single(Kokkos::PerTeam(team),
-    //                  [&]()
-    //                  {
-    //                    for (std::size_t j = 0; j < n_flow; ++j)
-    //                    {
-    //                      leaving_flow(j) = move.leaving_flow(j);
-    //                    }
-    //                  });
-
-    //   team.team_barrier();
-
-    //   std::size_t t_local = 0;
-    //   Kokkos::parallel_reduce(
-    //       Kokkos::TeamThreadRange(team, 0, upper_bound),
-    //       [&](const std::size_t relative_index,
-    //           std::size_t& thread_local_dead_count)
-    //       {
-    //         const std::size_t flatten_index = p0 + relative_index;
-    //         if (status(flatten_index) == MC::Status::Idle)
-    //         {
-    //           ages(flatten_index, 0) += _d_t;
-    //           handle_exit<ScratchSpace>(
-    //               flatten_index, leaving_flow, thread_local_dead_count);
-    //         }
-    //       },
-    //       t_local);
-
-    //   team.team_barrier();
-
-    //   Kokkos::single(Kokkos::PerTeam(team),
-    //                  [&]()
-    //                  {
-    //                    Kokkos::single(Kokkos::PerThread(team),
-    //                                   [&]() { local_dead_count += t_local;
-    //                                   });
-    //                  });
-    //   // Kokkos::single(Kokkos::PerTeam(team),
-    //   //                [&]()
-    //   //                {
-    //   //                  Kokkos::single(Kokkos::PerThread(team),
-    //   //                                 [&]() {
-    //   //                                 local_dead_count
-    //   //                                 += t_local;
-    //   //                                 });
-    //   //                });
-    // }
-
     KOKKOS_INLINE_FUNCTION void
-    operator()([[maybe_unused]] TagLeave _tag,
-               const std::size_t& idx,
+    operator()(TagLeave _tag,
+               const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle,
                std::size_t& local_dead_count) const
     {
-      if (status(idx) != MC::Status::Idle) [[unlikely]]
+      (void)_tag;
+      const std::size_t count = m_p_team_leave;
+      const std::size_t p0 = team_handle.league_rank() * count;
+      const std::size_t n_particle = n_particles;
+
+      const auto upper_bound
+          = ((p0 + count) >= n_particle) ? n_particle - p0 : count;
+
+      KOKKOS_ASSERT(upper_bound > 0 && upper_bound <= n_particle);
+      std::size_t team_dead_count = 0;
+      const auto& lf = move.leaving_flow;
+      Kokkos::parallel_reduce(
+          Kokkos::TeamThreadRange(team_handle, 0, upper_bound),
+          [&](const std::size_t idx, std::size_t& thread_dead_count)
+          {
+            const auto flat_index = p0 + idx;
+            ages(flat_index, 0) += d_t;
+            handle_exit(flat_index, lf, thread_dead_count);
+          },
+          team_dead_count);
+
+      team_handle.team_barrier();
+      Kokkos::single(
+          Kokkos::PerTeam(team_handle),
+          [&]()
+          {
+            if constexpr (AutoGenerated::FlagCompileTime::enable_event_counter)
+            {
+              events.add<MC::EventType::Exit>(team_dead_count);
+            }
+            local_dead_count += team_dead_count;
+          });
+    }
+
+    bool
+    do_move() const
+    {
+      return this->m_enable_move;
+    }
+
+    bool
+    do_leave() const
+    {
+      return m_enable_leave;
+    }
+
+    KOKKOS_INLINE_FUNCTION void
+    operator()(TagLeaveB0D _tag,
+               const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle,
+               std::size_t& local_dead_count) const
+    {
+
+      (void)_tag;
+
+      const auto& lf = move.leaving_flow;
+
+      // In 0d, the flow is the same for every particle
+      // Only one member of the team calculate lambda and
+      // broadcast it to other members
+      double lambda = 0.;
+      Kokkos::single(
+          Kokkos::PerTeam(team_handle),
+          [&lf, dt = this->d_t](double& local_lambda)
+          {
+            const auto& [_, flow_value, liquid_volume] = lf(0);
+
+            local_lambda = dt * flow_value / liquid_volume;
+          },
+          lambda);
+
+      team_handle.team_barrier();
+      // In 0d context we can even be sure that flow will never be 0
+      // Note: if flow is 0, proba will be 0 and then the result will be the
+      // same Can we remove the condition?
+      //
+      if (lambda == 0.)
       {
         return;
       }
+      const std::size_t N = m_p_team_leave;
+      const std::size_t p0 = team_handle.league_rank() * N;
+      const auto upper_bound = ((p0 + N) >= n_particles) ? n_particles - p0 : N;
 
-      ages(idx, 0) += d_t;
-      handle_exit(idx, move.leaving_flow, local_dead_count);
-    }
+      KOKKOS_ASSERT(upper_bound > 0 && upper_bound <= n_particles);
 
-    // KOKKOS_INLINE_FUNCTION void
-    // operator()(TagLeave _tag,
-    //            const Kokkos::TeamPolicy<ComputeSpace>::member_type&
-    //            team_handle, std::size_t& local_dead_count) const
-    // {
-    //   (void)_tag;
-    //   const std::size_t league_size = team_handle.league_size();
-    //   const std::size_t league_rank = team_handle.league_rank();
-    //   const std::size_t start_idx = league_rank * (n_particles /
-    //   league_size); std::size_t end_idx = (league_rank + 1) * (n_particles /
-    //   league_size);
+      const auto& rp = random_pool;
 
-    //   if (league_rank == (league_size - 1))
-    //   {
-    //     end_idx = n_particles;
-    //   }
-    //   Kokkos::parallel_for(
-    //       Kokkos::TeamThreadRange(team_handle, start_idx, end_idx),
-    //       [&](int idx)
-    //       {
-    //         ages(idx, 0) += d_t;
-    //         handle_exit(idx, local_dead_count);
-    //       });
-    // }
+      const std::size_t p = team_handle.team_size();
 
-    [[nodiscard]] bool
-    need_launch() const
-    {
-      return enable_leave || enable_move;
+      const std::size_t m = (upper_bound + p - 1) / p;
+
+      std::size_t team_dead_count = 0;
+
+      // For each thread of the team we assigm m iterations
+      // This divide the number of call of get_state by m and may reduce
+      // contention especially on CPU typically P = 1 on cpu then m is
+      // equal to npt (128-4096)
+      Kokkos::parallel_reduce(
+          Kokkos::TeamThreadRange(team_handle, 0, p),
+          [&](const std::size_t tid, std::size_t& dead_count)
+          {
+            auto gen = rp.get_state();
+
+            for (std::size_t k = 0; k < m; ++k)
+            {
+              const std::size_t idx = tid + k * p; // stride p
+
+              if (idx >= upper_bound)
+              {
+                break;
+              }
+              const std::size_t flat_index = p0 + idx;
+
+              if (status(flat_index) != MC::Status::Idle)
+              {
+                continue;
+              }
+              const double r = gen.drand(0., 1.);
+
+              perform_exit(
+                  probability_leaving<decltype(r), precision_tag>(r, lambda),
+                  flat_index,
+                  dead_count);
+            }
+            rp.free_state(gen);
+          },
+          team_dead_count);
+
+      team_handle.team_barrier();
+
+      Kokkos::single(
+          Kokkos::PerTeam(team_handle),
+          [&]()
+          {
+            if constexpr (AutoGenerated::FlagCompileTime::enable_event_counter)
+            {
+              events.add<MC::EventType::Exit>(team_dead_count);
+            }
+            local_dead_count += team_dead_count;
+          });
     }
 
     KOKKOS_FUNCTION void
@@ -404,7 +419,7 @@ namespace Simulation::KernelInline
           i_current_compartment < move.liquid_volume.extent(0)
           && "Particle position is incorect (greater than compartment number)");
 
-      const bool mask_next = probability_leaving<fast_tag>(
+      const bool mask_next = probability_leaving<float, fast_tag>(
           rng1,
           move.liquid_volume(i_current_compartment),
           move.diag_transition(i_current_compartment),
@@ -436,153 +451,6 @@ namespace Simulation::KernelInline
       }
     }
 
-    // KOKKOS_INLINE_FUNCTION void
-    // inner_handle_exit(const std::size_t i_flow,
-    //                   const std::size_t idx,
-    //                   const double liquid_volume,
-    //                   const std::size_t position,
-    //                   const MC::LeavingFlowView<true>& leaving_flow,
-    //                   std ::size_t& dead_count) const
-    // {
-    //   // FIXME : when move AND exit, take the same random number,
-    //   // is it really important ?
-    //   const auto random_number = static_cast<float>(random(idx, 2));
-    //   const auto& [index, flow] = leaving_flow(i_flow);
-
-    //   const bool is_leaving = (position == index)
-    //                           && probability_leaving<void>(
-    //                               random_number, liquid_volume, flow, d_t);
-
-    //   const int leave_mask = static_cast<int>(is_leaving);
-
-    //   // If using probes
-    //   if constexpr (AutoGenerated::FlagCompileTime::use_probe)
-    //   {
-    //     // Execute probe set, but only actually do something if leaving
-    //     if (is_leaving)
-    //     {
-    //       const auto _ = probes.set(ages(idx, 0));
-    //     }
-    //   }
-    //   if constexpr (AutoGenerated::FlagCompileTime::enable_event_counter)
-    //   {
-
-    //     events.add<MC::EventType::Exit>(leave_mask);
-    //   }
-
-    //   dead_count += leave_mask;
-    //   ages(idx, 0) = (1 - leave_mask) * ages(idx, 0) /*leave_mask * 0 + */;
-    //   status(idx) = is_leaving ? MC::Status::Exit : status(idx);
-    // }
-
-    // KOKKOS_FORCEINLINE_FUNCTION void
-    // handle_exit(std::size_t idx,
-    //             const MC::VolumeView<ComputeSpace, true>& liquid_volumes,
-    //             std::size_t& dead_count) const
-    // {
-    //   const auto position = positions(idx);
-    //   const auto liquid_volume = liquid_volumes(position);
-    //   const MC::LeavingFlowView<true>& leaving_flow = move.leaving_flow;
-    //   const std::size_t n_flow = leaving_flow.size();
-    //   for (std::size_t i_flow = 0LU; i_flow < n_flow; ++i_flow)
-    //   {
-    //     inner_handle_exit(
-    //         i_flow, idx, liquid_volume, position, leaving_flow, dead_count);
-    //   }
-    // }
-
-    // KOKKOS_FORCEINLINE_FUNCTION void
-    // handle_exit(std::size_t idx,
-    //             const MC::VolumeView<ComputeSpace, true>& liquid_volumes,
-    //             std::size_t& dead_count) const
-    // {
-    //   const std::size_t position = positions(idx);
-    //   const double liquid_volume = liquid_volumes(position);
-    //   const MC::LeavingFlowView<true>& leaving_flow = move.leaving_flow;
-    //   const std::size_t n_flow = leaving_flow.size();
-
-    //   // Strategy: most of the time there is only one flow  (0d reactor or
-    //   // uniquement leaving point)
-    //   //  Then the first flow is out of the loop
-    //   //  For the first leaving flow use precomputed index_random_leave
-    //   //  If the particle position is correct probability to leave is high
-    //   //  then pregenerated only one number and get random on the fly in the
-    //   //  loop if needed
-
-    //   // One improvement is to use rng1 as long as as the we do consume it
-    //   //  If first ok_p is false, rng1 is then not used
-    //   //  This needs a branch ?
-
-    //   auto rng1 = static_cast<float>(random(idx, index_random_leave));
-
-    //   const auto& [index, flow] = leaving_flow(0);
-    //   const bool p
-    //       = probability_leaving<precision_tag>(rng1, liquid_volume, flow,
-    //       d_t);
-    //   const bool ok_p = position == index;
-    //   const int m = static_cast<int>(ok_p) * static_cast<int>(p);
-    //   int leave_mask = m;
-
-    //   for (std::size_t i_flow = 1; i_flow < n_flow; ++i_flow)
-    //   {
-    //     if (leave_mask != 0)
-    //     {
-    //       break;
-    //     }
-    //     const auto& [index, flow] = leaving_flow(i_flow);
-    //     const bool ok_p = position == index;
-    //     if (!ok_p)
-    //     {
-    //       continue;
-    //     }
-
-    //     // if (!ok_p || leave_mask != 0)
-    //     // {
-    //     //   continue;
-    //     // }
-    //     auto gen = random_pool.get_state();
-    //     rng1 = gen.frand(0, 1);
-    //     random_pool.free_state(gen);
-
-    //     const bool p = probability_leaving<precision_tag>(
-    //         rng1, liquid_volume, flow, d_t);
-
-    //     const int m = static_cast<int>(ok_p) * static_cast<int>(p);
-    //     leave_mask |= m;
-    //   }
-
-    //   dead_count += leave_mask;
-
-    //   // DO this betore age set to 0
-    //   if constexpr (AutoGenerated::FlagCompileTime::use_probe)
-    //   {
-    //     // Execute probe set, but only actually do something if leaving
-    //     if (leave_mask != 0)
-    //     {
-    //       // const auto _ = probes.template set<(ages(idx, 0));
-    //     }
-    //   }
-
-    //   ages(idx, 0) *= (1 - leave_mask);
-
-    //   // status(idx) = (leave_mask == 0) ? status(idx) : MC::Status::Exit;
-
-    //   status(idx) = static_cast<MC::Status>(
-    //       static_cast<int>(status(idx)) * (1 - leave_mask)
-    //       + static_cast<int>(MC::Status::Exit) * leave_mask);
-
-    //   if constexpr (AutoGenerated::FlagCompileTime::enable_event_counter)
-    //   {
-    //     events.add<MC::EventType::Exit>(leave_mask);
-    //   }
-    // }
-    //
-    //
-
-    // TODO Improvement 1D/3D:
-    // Assumption: given leaving_flow is valid (i_flow < n_compartment)
-    // Add templated free-function "find_flow"
-    // specialize function to empty with tag 0D
     template <typename ExecSpace>
     KOKKOS_FORCEINLINE_FUNCTION std::size_t
     handle_exit(
@@ -591,10 +459,7 @@ namespace Simulation::KernelInline
         std::size_t& dead_count) const
     {
 
-      using mem_space = ComputeSpace::memory_space;
-
       const std::size_t position = positions(idx);
-
       // Strategy:
       //  first find the value of leaving flow (0-> particle doesn´t leave)
       //  do-while +early break is ok as n_flow is likely <10
@@ -604,47 +469,49 @@ namespace Simulation::KernelInline
       MC::LeavingFlow::float_type found_liquid_volume = 0.;
       find_flow(leaving_flow, position, found_flow_value, found_liquid_volume);
 
-      int leave_mask = 0;
       // Cases
-      // 0D: one flow and position always 0 then (val_flow != 0.) is always true
-      // 3D: only for few particles
-      //
+      // only for few particles
       if (found_flow_value != 0.)
       {
+
         auto gen = random_pool.get_state();
-        const auto rng1 = gen.frand(0., 1.);
+        const auto r = gen.frand(0., 1.);
         random_pool.free_state(gen);
 
         KOKKOS_ASSERT(found_liquid_volume > 0.);
         KOKKOS_ASSERT(found_flow_value > 0.);
-        const bool p = probability_leaving<precision_tag>(
-            rng1, found_liquid_volume, found_flow_value, d_t);
-
-        leave_mask = static_cast<int>(p);
-        // DO this betore age is reset to 0
-        // if (p)
-        // {
-        dead_count += leave_mask;
-        // }
-        if constexpr (AutoGenerated::FlagCompileTime::use_probe)
-        {
-          if (leave_mask != 0)
-          {
-            const auto _ = probes.set<mem_space>(ages(idx, 0));
-          }
-        }
-        ages(idx, 0) *= (1 - leave_mask);
-        status(idx) = static_cast<MC::Status>(
-            static_cast<int>(status(idx)) * (1 - leave_mask)
-            + static_cast<int>(MC::Status::Exit) * leave_mask);
-
-        if constexpr (AutoGenerated::FlagCompileTime::enable_event_counter)
-        {
-          events.add<MC::EventType::Exit>(leave_mask);
-        }
+        const bool p = probability_leaving<decltype(r), precision_tag>(
+            r, found_liquid_volume, found_flow_value, d_t);
+        perform_exit(p, idx, dead_count);
       }
 
       return 0;
+    }
+
+    KOKKOS_INLINE_FUNCTION void
+    perform_exit(const bool proba,
+                 const std::size_t idx,
+                 std::size_t& dead_count) const
+    {
+
+      if (proba)
+      {
+        ++dead_count;
+
+        if constexpr (AutoGenerated::FlagCompileTime::use_probe)
+        {
+          using mem_space = ComputeSpace::memory_space;
+          // DO this betore age is reset to 0
+          const auto _ = probes.set<mem_space>(ages(idx, 0));
+        }
+
+        ages(idx, 0) = 0;
+        status(idx) = MC::Status::Exit;
+      }
+      else
+      {
+        // ages(idx, 0) += d_t;
+      }
     }
 
     double d_t{};
@@ -659,10 +526,8 @@ namespace Simulation::KernelInline
     std::size_t m_p_team_leave{};
     std::size_t m_p_team_move{};
 
-    // Kokkos::View<float**, Kokkos::LayoutLeft> random;
-
-    bool enable_move{};
-    bool enable_leave{};
+    bool m_enable_move{};
+    bool m_enable_leave{};
   };
 } // namespace Simulation::KernelInline
 

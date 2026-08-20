@@ -100,16 +100,6 @@ namespace Simulation::impl
     const std::size_t cols
         = scalar_init.liquid_buffer->size() / scalar_init.n_species;
 
-    // std::vector<double> layout_buffer;
-    // if (change_layout)
-    // {
-    //   layout_buffer = layout_right_to_left<double>(
-    //       *scalar_init.liquid_buffer, scalar_init.n_species, cols);
-    // }
-    // else
-    // {
-    //   layout_buffer = *scalar_init.liquid_buffer;
-    // }
     const auto buffer = get_correct_layout_buffer<double>(
         change_layout,
         std::move(*scalar_init.liquid_buffer),

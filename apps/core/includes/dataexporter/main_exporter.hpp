@@ -1,13 +1,13 @@
 #ifndef __CORE_MAIN_EXPORTER_HPP__
 #define __CORE_MAIN_EXPORTER_HPP__
 
-#include "simulation/simulation_getter.hpp"
 #include <common/execinfo.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
 #include <cstdint>
 #include <dataexporter/data_exporter.hpp>
 #include <optional>
+#include <simulation/simulation_getter.hpp>
 #include <span>
 #include <string>
 #include <string_view>
@@ -102,6 +102,8 @@ namespace Core
         base_group_name; /**< Base group name for exported data organization. */
     uint64_t n_expected_export{}; /**< Expected number of exports for tracking
                                      purposes. */
+
+    void export_feed(const Simulation::Getter& g);
   };
 
 } // namespace Core

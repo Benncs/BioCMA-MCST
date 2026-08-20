@@ -1,11 +1,13 @@
 #ifndef __CORE_GLOBAL_INITIALLISER_HPP__
 #define __CORE_GLOBAL_INITIALLISER_HPP__
 
+#include "mixture/species_descriptor.hpp"
 #include <array>
 #include <cma_utils/alias.hpp>
 #include <common/execinfo.hpp>
 #include <common/logger.hpp>
 #include <core/scalar_factory.hpp>
+#include <core/simulation_builder.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
 #include <cstdint>
@@ -55,6 +57,7 @@ namespace Core
      */
     GlobalInitialiser(const ExecInfo& _info,
                       UserControlParameters _user_params,
+                      std::shared_ptr<Mixture::SpecieTable> table,
                       std::shared_ptr<IO::Logger> = nullptr);
 
     /**
@@ -125,7 +128,6 @@ namespace Core
 
     // Use optional bcause we need to validate step even if theres no mtr
     std::optional<bool> init_mtr_model(
-        Simulation::SimulationUnit& unit,
         std::optional<Simulation::MassTransfer::Type::MtrTypeVariant>&&
             variant);
 
@@ -155,8 +157,12 @@ namespace Core
 
     void set_initial_number_particle(uint64_t np) noexcept;
 
+    void set_table(std::shared_ptr<Mixture::SpecieTable> t) noexcept;
+
   private:
     void set_logger(std::shared_ptr<IO::Logger> _logger);
+    std::shared_ptr<Mixture::SpecieTable> m_table;
+    Core::SimulationUnitBuilder m_builder{};
 
     /**
      * @brief Enum to define initialization steps.
@@ -263,11 +269,8 @@ namespace Core
     double t_per_flowmap{};
     // std::vector<size_t> worker_neighbor_data;
     bool f_init_gas_flow;
-    std::optional<Simulation::Feed::SimulationFeed> m_feed;
     std::shared_ptr<IO::Logger> m_logger;
-
     /////
-
     bool is_host; ///< Flag indicating if this instance is the host.
   };
 

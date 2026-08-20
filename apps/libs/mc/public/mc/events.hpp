@@ -2,6 +2,7 @@
 #define __MC_EVENTS_HPP__
 
 #include "biocma_cst_config.hpp"
+#include "impl/Kokkos_Profiling.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <common/execinfo.hpp>
@@ -156,13 +157,21 @@ namespace MC
     Kokkos::View<std::size_t[number_event_type], Kokkos::SharedSpace> // NOLINT
         _events; // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
+    // Kokkos::View<std::size_t[number_event_type], Kokkos::SharedSpace> //
+    // NOLINT
+    //     m_cumulative; //
+    //     NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+
     /**
      * @brief Default container, initalise counter
      */
     EventContainer() : _events("events")
+    // , m_cumulative("cumulativr_events")
     {
 
       Kokkos::deep_copy(_events, 0); // Ensure all event to 0 occurence
+
+      // Kokkos::deep_copy(m_cumulative, 0); // Ensure all event to 0 occurence
     }
     /**
      * @brief Get std const view of _events counter
@@ -181,6 +190,13 @@ namespace MC
     KOKKOS_INLINE_FUNCTION void
     clear() const
     {
+
+      // const auto& cumview = m_cumulative;
+      // const auto& evview = _events;
+      // Kokkos::parallel_for(
+      //     "_sync_cumulative_event",
+      //     number_event_type,
+      //     KOKKOS_LAMBDA(const int i) { cumview[i] += evview[i]; });
       Kokkos::deep_copy(_events, 0);
     }
 
@@ -197,6 +213,21 @@ namespace MC
       static_assert(event != EventType::__COUNT__,
                     "Count is not a valid event");
       return _events(event_index<event>());
+    }
+
+    /**
+     * @brief Getter to specific event counter
+     * @tparam Event to get
+     * @warning This function is thread_safe because we get a copy of the
+     * current counter
+     */
+    template <EventType event>
+    [[nodiscard]] constexpr std::size_t
+    get_cumulative() const
+    {
+      static_assert(event != EventType::__COUNT__,
+                    "Count is not a valid event");
+      return m_cumulative(event_index<event>());
     }
 
     /**
@@ -241,10 +272,15 @@ namespace MC
       std::array<std::size_t, number_event_type> array{};
 
       auto rd = std::span<std::size_t>(_events.data(), number_event_type);
-
       std::copy(rd.begin(), rd.end(), array.begin());
       assert(rd[0] == _events[0] && rd[0] == array[0]);
 
+      // std::array<std::size_t, number_event_type> array_cumulative{};
+      // rd = std::span<std::size_t>(m_cumulative.data(), number_event_type);
+      // std::copy(rd.begin(), rd.end(), array_cumulative.begin());
+      // assert(rd[0] == m_cumulative[0] && rd[0] == array_cumulative[0]);
+      // ar(array, array_cumulative);
+      //
       ar(array);
     }
 
@@ -254,12 +290,17 @@ namespace MC
     {
 
       std::array<std::size_t, number_event_type> array{};
+      // std::array<std::size_t, number_event_type> array_cumulative{};
+      // ar(array, array_cumulative);
       ar(array);
 
       auto rd = std::span<std::size_t>(_events.data(), number_event_type);
-
       std::copy(array.begin(), array.end(), rd.begin());
       assert(rd[0] == _events[0]);
+
+      // rd = std::span<std::size_t>(m_cumulative.data(), number_event_type);
+      // std::copy(array_cumulative.begin(), array_cumulative.end(),
+      // rd.begin()); assert(rd[0] == m_cumulative[0]);
     }
   };
 

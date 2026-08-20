@@ -4,7 +4,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <mc/unit.hpp>
 #include <memory>
+#include <mixture/species_descriptor.hpp>
 #include <optional>
 #include <scalar_simulation.hpp>
 #include <simulation/feed_descriptor.hpp>
@@ -16,7 +18,7 @@
 #include <simulation/simulation_getter.hpp>
 #include <simulation/simulation_times.hpp>
 #include <stdexcept>
-
+#include <variant>
 namespace Simulation
 {
 
@@ -126,7 +128,7 @@ namespace Simulation
   Getter::getMTRData() const
   {
     assert(a_ != nullptr);
-    return a_->mt_model.mtr_data();
+    return a_->m_mt_model.mtr_data();
   }
 
   std::span<double>
@@ -169,12 +171,6 @@ namespace Simulation
     return accesor;
   }
 
-  // [[nodiscard]] double&
-  // SimulationUnit::getCurrentTimeMut() noexcept
-  // {
-  //   return this->m_times.relative_time;
-  // }
-
   void
   SimulationUnit::setLogger(std::shared_ptr<IO::Logger> _logger)
   {
@@ -184,11 +180,11 @@ namespace Simulation
   void
   SimulationUnit::setMtrModel(MassTransfer::Type::MtrTypeVariant&& variant)
   {
-    if (is_two_phase_flow)
+    if (is_two_phase_flow && liquid_scalar != nullptr && gas_scalar != nullptr)
     {
-
-      this->mt_model = Simulation::MassTransfer::MassTransferModel(
-          std::move(variant), liquid_scalar, gas_scalar);
+      // TODO
+      m_mt_model = Simulation::MassTransfer::MassTransferModel(
+          *m_table, std::move(variant), liquid_scalar, gas_scalar);
     }
   }
 
@@ -198,23 +194,11 @@ namespace Simulation
     probes[type] = std::move(_probes);
   }
 
-  // void
-  // SimulationUnit::set_kernel_contribs_to_host()
-  // {
-  //   this->liquid_scalar->set_kernel_contribs_to_host();
-  // }
-
   [[nodiscard]] MC::KernelConcentrationType
   SimulationUnit::getkernel_concentration() const
   {
     return this->liquid_scalar->get_device_concentration();
   }
-
-  // void
-  // SimulationUnit::setEndTime(double _end_time) noexcept
-  // {
-  //   this->m_times.end_time = _end_time;
-  // }
 
   void
   SimulationUnit::overwriteStartTime(double _start_time) noexcept

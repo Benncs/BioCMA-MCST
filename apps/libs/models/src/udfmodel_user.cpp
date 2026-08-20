@@ -62,8 +62,9 @@ namespace Models
   }
 
   UdfModel::Config
-  UdfModel::get_config(std::size_t n)
+  UdfModel::get_config(const ExecInfo& info, std::size_t n)
   {
+    (void)info;
     auto e = MC::HostSpace();
     return UnsafeUDF::Loader::get_config_udf(e, n);
   }

@@ -88,8 +88,8 @@ namespace MC
 
 }; // namespace MC
 
+// Atomicity comes from the ScatterView policy, not the underlying view.
 using kernelMT = Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::RandomAccess
-                                      | Kokkos::MemoryTraitsFlags::Atomic
                                       | Kokkos::MemoryTraitsFlags::Restrict>;
 
 namespace MC

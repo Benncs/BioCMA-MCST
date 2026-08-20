@@ -127,12 +127,40 @@ namespace IO
     virtual void toggle_all() noexcept = 0;
   };
 
+  // template <typename... MsgType>
+  // std::string
+  // format(MsgType&&... msgs)
+  // {
+  //   std::string result;
+  //   (result += ... += std::forward<MsgType>(msgs));
+  //   return result;
+  // }
+  //
+  template <typename MsgType>
+    requires(std::is_integral_v<std::remove_cvref_t<MsgType>>
+             || std::is_floating_point_v<std::remove_cvref_t<MsgType>>)
+  void
+  _format(std::string& result, MsgType&& msg)
+  {
+    result += std::to_string(std::forward<MsgType>(msg));
+  }
+
+  template <typename MsgType>
+    requires(!(std::is_integral_v<std::remove_cvref_t<MsgType>>
+               || std::is_floating_point_v<std::remove_cvref_t<MsgType>>))
+  void
+  _format(std::string& result, MsgType&& msg)
+  {
+
+    result += std::forward<MsgType>(msg);
+  }
+
   template <typename... MsgType>
   std::string
   format(MsgType&&... msgs)
   {
     std::string result;
-    (result += ... += std::forward<MsgType>(msgs));
+    (_format(result, std::forward<MsgType>(msgs)), ...);
     return result;
   }
 

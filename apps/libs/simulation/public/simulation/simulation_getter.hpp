@@ -1,15 +1,31 @@
 #ifndef __SIMULATIONS_UNIT_GETTER_HPP__
 #define __SIMULATIONS_UNIT_GETTER_HPP__
 
-#include <mc/unit.hpp>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/probe.hpp>
 #include <simulation/simulation_times.hpp>
 #include <span>
 
+namespace MC
+{
+  struct MonteCarloUnit;
+} // namespace MC
+
 namespace Simulation
 {
+
+  struct Sparam
+  {
+    bool f_reaction;
+
+    static Sparam
+    fdefault()
+    {
+      return { .f_reaction = true };
+    }
+  };
+
   class SimulationUnit;
   struct Dimensions;
 

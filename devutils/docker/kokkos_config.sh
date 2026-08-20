@@ -26,6 +26,7 @@ get_kokkos_source() {
 set -e # Exit immediately if a command exits with a non-zero status
 
 current_pwd=$(pwd)
+install_dir=/usr/local/
 back_end_omp=0
 back_end_cuda=0
 clang_version=-1
@@ -80,6 +81,7 @@ cd kokkos_build || {
 }
 
 flag_cmake="-DCMAKE_POSITION_INDEPENDENT_CODE=ON  -DCMAKE_CXX_STANDARD=20 -B . -S .. -DCMAKE_BUILD_TYPE=Release"
+flag_cmake="${flag_cmake} -DCMAKE_INSTALL_PREFIX=$install_dir"
 
 if [[ "$clang_version" != "-1" ]]; then
   flag_cmake="${flag_cmake} -DCMAKE_CXX_COMPILER=clang++-$clang_version"
@@ -98,9 +100,13 @@ if [[ "$back_end_cuda" == "1" ]]; then
   flag_cmake="${flag_cmake} -DKokkos_ARCH_TURING75=ON"
   flag_cmake="${flag_cmake} -DKokkos_ENABLE_CUDA=ON"
   flag_cmake="${flag_cmake} -DKokkos_ENABLE_CUDA_CONSTEXPR=ON"
+  # flag_cmake="${flag_cmake} -DKokkos_ENABLE_MULTIPLE_CMAKE_LANGUAGES=ON"
+  #  flag_cmake="${flag_cmake} -DKokkos_ENABLE_COMPILE_AS_CMAKE_LANGUAGE=OFF"
 fi
 
 flag_cmake="${flag_cmake} -DKokkos_ENABLE_HWLOC=ON"
+flag_cmake="${flag_cmake} -DKokkos_ENABLE_AGGRESSIVE_VECTORIZATION=ON"
+# flag_cmake="${flag_cmake} -DKokkos_ENABLE_DEPRECATED_CODE_5=OFF"
 cmake $flag_cmake
 cmake --build .
 
@@ -110,5 +116,5 @@ else
   cmake --install .
 fi
 
-cd /tmp
+# cd /tmp
 #rm -rf /tmp/$tar_name /tmp/$folder_name

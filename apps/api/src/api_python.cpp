@@ -1,4 +1,4 @@
-#include "simulation/feed_descriptor.hpp"
+#include "simulation/mass_transfer.hpp"
 #include <api/api.hpp>
 #include <api/api_raw.h>
 #include <common/console.hpp>
@@ -15,6 +15,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
+#include <simulation/feed_descriptor.hpp>
 #include <stdexcept>
 #include <string>
 #include <sys/select.h>
@@ -34,7 +35,8 @@ wrap_repr(const wrap_c_param_t& m)
 namespace PythonBindings
 {
   auto
-  init_handle(const std::vector<std::string>& args)
+  init_handle(const std::vector<std::string>& args,
+              std::optional<std::size_t> sim_id)
   {
     std::vector<const char*> c_args;
     c_args.reserve(args.size());
@@ -43,19 +45,26 @@ namespace PythonBindings
       c_args.push_back(arg.c_str());
     }
     auto opt = Api::SimulationInstance::init(static_cast<int>(c_args.size()),
-                                             const_cast<char**>(c_args.data()));
+                                             const_cast<char**>(c_args.data()),
+                                             sim_id);
     if (opt.has_value())
     {
-      auto logger = std::make_shared<IO::Console>();
-      logger->toggle_all();
+
       auto* ptr = opt.value().release();
-      ptr->set_logger(logger);
+      // Set logger only if host rank
+      if (ptr->get_exec_info().current_rank == 0)
+      {
+        auto logger = std::make_shared<IO::Console>();
+        logger->toggle_all();
+        ptr->set_logger(logger);
+      }
+
       return std::shared_ptr<Api::SimulationInstance>(ptr);
     }
     throw std::runtime_error("Simulation handle initialisation failed");
   }
 
-  auto
+  void
   exec(std::shared_ptr<Api::SimulationInstance>& handle)
   {
     pybind11::gil_scoped_release release; // TODO check if really usefull ?
@@ -67,30 +76,35 @@ namespace PythonBindings
     }
   }
 
-  auto
+  void
   apply(std::shared_ptr<Api::SimulationInstance>& handle, bool to_load)
-      -> std::tuple<bool, std::string>
   {
     handle->set_auto_mtr(); // FIXME
-    std::cerr << "Set auto mtr for PythonBindings" << std::endl;
-    auto rc = handle->apply(to_load);
+    //
+    // handle->set_mtr(Simulation::MassTransfer::Type::FlowmapTurbulence{});
 
-    bool f = static_cast<bool>(rc);
-    return { f, rc.get() };
+    std::cerr << "Set auto mtr for PythonBindings" << std::endl;
+    const auto rc = handle->apply(to_load);
+
+    if (rc.invalid())
+    {
+      throw std::runtime_error(rc.get());
+    }
   }
 
   auto
   register_cma_path(std::shared_ptr<Api::SimulationInstance>& handle,
                     const std::string& cma_path)
   {
-    auto retc = ::register_cma_path(handle.get(), cma_path.data());
-    if (retc != 0)
+
+    const auto rc = handle->register_cma_path(cma_path);
+    if (rc.invalid())
     {
-      throw std::runtime_error("Invalid CMA Case");
+      throw std::runtime_error(rc.get());
     }
   }
 
-  auto
+  void
   set_initialiser_from_data(std::shared_ptr<Api::SimulationInstance>& handle,
                             std::size_t n_species,
                             const py::array_t<double_t>&& py_liquid,
@@ -109,10 +123,13 @@ namespace PythonBindings
       gas = std::vector<double>(data.begin(), data.end());
     }
 
-    handle->register_scalar_initiazer(Core::ScalarFactory::FullCase(
+    auto rc = handle->register_scalar_initiazer(Core::ScalarFactory::FullCase(
         n_species, std::move(liq), std::move(gas)));
 
-    return 0;
+    if (rc.invalid())
+    {
+      throw std::runtime_error(rc.get());
+    }
   }
 
   auto
@@ -132,7 +149,7 @@ namespace PythonBindings
         .def_readwrite("save_serde", &wrap_c_param_t::save_serde)
         .def_readwrite("uniform_particle_init",
                        &wrap_c_param_t::uniform_particle_init)
-
+        .def_readwrite("f_reaction", &wrap_c_param_t::f_reaction)
         .def("__repr__", &wrap_repr)
         // TODO Write unittest
         .def(py::pickle(
@@ -145,10 +162,12 @@ namespace PythonBindings
                                     p.number_exported_result,
                                     p.biomass_initial_concentration,
                                     p.number_particle,
-                                    p.save_serde);
+                                    p.save_serde,
+                                    p.uniform_particle_init,
+                                    p.f_reaction);
             },
             [](const py::tuple& t) { // __setstate__
-              constexpr std::size_t n_attributes = 8;
+              constexpr std::size_t n_attributes = 10;
               if (t.size() != n_attributes)
               {
                 throw std::runtime_error("Pickle param invalid state, "
@@ -168,10 +187,30 @@ namespace PythonBindings
               p.biomass_initial_concentration = t[5].cast<double>();
               p.number_particle = t[6].cast<int>();
               p.save_serde = t[7].cast<int>();
+              p.uniform_particle_init = t[8].cast<int>();
+              p.f_reaction = t[9].cast<int>();
               // NOLINTEND
               return p;
             }));
   }
+
+  auto
+  register_mixture_composition(std::shared_ptr<Api::SimulationInstance>& handle,
+                               std::vector<std::string> names)
+  {
+
+    return handle->register_mixture_composition(names).match(
+        [](auto) { return 0; },
+        [&](auto err)
+        {
+          if (handle->get_logger())
+          {
+            handle->get_logger()->error(err);
+          }
+          return -1;
+        });
+  }
+
 } // namespace PythonBindings
 
 PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
@@ -182,20 +221,12 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 
   m.def("get_version", Api::get_version);
 
-  m.def("init_handle", PythonBindings::init_handle, py::arg("argv"));
-
-  // m.def("finalize", &finalize); //Do not use it
+  m.def("init_handle",
+        PythonBindings::init_handle,
+        py::arg("argv"),
+        py::arg("simulation_id") = std::nullopt);
 
   m.def("exec", &PythonBindings::exec);
-
-  // m.def("exec",
-  //       [](std::shared_ptr<Api::SimulationInstance>& handle)
-  //       {
-  //         pybind11::gil_scoped_release
-  //             release; // TODO check if really usefull ? //NOLINT
-  //         handle->exec();
-  //         pybind11::gil_scoped_acquire acquire; // NOLINT
-  //       });
 
   m.def("apply", &PythonBindings::apply);
 
@@ -212,6 +243,11 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
         &PythonBindings::register_cma_path,
         py::arg("handle"),
         py::arg("cma_path"));
+
+  m.def("register_mixture_composition",
+        &PythonBindings::register_mixture_composition,
+        py::arg("handle"),
+        py::arg("names"));
 
   m.def("register_serde", &register_serde);
   m.def("register_parameters", &register_parameters);
@@ -369,6 +405,29 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
         // nullpot + false = fedbatch
         auto fd = Simulation::Feed::FeedFactory::linear(
             flow, df, concentration, species, position, std::nullopt, false);
+
+        auto rc = handle->add_feed(fd, Phase::Liquid);
+
+        return static_cast<bool>(rc);
+      },
+      py::arg("handle"),
+      py::arg("flow"),
+      py::arg("df"),
+      py::arg("concentration_value"),
+      py::arg("species"),
+      py::arg("position"));
+
+  m.def(
+      "set_liquid_feed_linear",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         double flow,
+         double df,
+         double concentration,
+         std::size_t species,
+         std::size_t position)
+      {
+        auto fd = Simulation::Feed::FeedFactory::linear(
+            flow, df, concentration, species, position, position, true);
 
         auto rc = handle->add_feed(fd, Phase::Liquid);
 

@@ -187,6 +187,7 @@ namespace IO
     try
     {
       std::locale::global(std::locale("en_US.utf8"));
+      // std::locale::global(std::locale::classic());
     }
     catch (const std::runtime_error& e)
     {

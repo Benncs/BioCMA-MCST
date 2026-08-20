@@ -6,15 +6,17 @@
 #include <common/logger.hpp>
 #include <core/global_initaliser.hpp>
 #include <core/scalar_factory.hpp>
+#include <core/simulation_builder.hpp>
 #include <core/simulation_parameters.hpp>
 #include <cstddef>
 #include <cstdio>
 #include <dataexporter/data_exporter.hpp>
 #include <exception>
-#include <load_balancing/iload_balancer.hpp>
-#include <load_balancing/impl_lb.hpp>
+#include <get_time_step.hpp>
+#include <load_balancing/factory.hpp>
 #include <mc/mcinit.hpp>
 #include <memory>
+#include <mixture/species_descriptor.hpp>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
@@ -25,10 +27,11 @@
 #include <utility>
 #include <vector>
 #include <wrap_init_model_selector.hpp>
-
 #ifndef NO_MPI
 #  include <mpi_w/wrap_mpi.hpp>
 #endif
+#include <core/init_rng_seed.hpp>
+#include <iostream>
 
 #ifndef NDEBUG
 #  define VERBOSE_ERROR                                                        \
@@ -48,58 +51,6 @@ namespace
                                    std::vector<double>({ 0, 0. }),
                                    std::vector<size_t>({ 0 }));
 
-  double
-  get_time_step(double user_deta_time,
-                const CmaUtils::TransitionnerPtrType& iterator)
-  {
-
-    // internal hydrodynamic time scales. To account for this, the simulation's
-    // explicit time step is calculated to approximate a CFL condition, with the
-    // formula: time_step = min(residence_time) / 100. This approach ensures
-    // that the fluid movement between two steps is accurately represented
-    // without losing flow information.
-    double delta_time = user_deta_time;
-    if (delta_time <= 0)
-    {
-
-      const auto min_residence_time
-          = CmaUtils::get_min_residence_time(iterator);
-
-      if (min_residence_time != std::numeric_limits<double>::max()
-          && min_residence_time != 0.)
-      {
-
-        delta_time = min_residence_time / 100.;
-      }
-      else
-      {
-        // should throw  cause if delta <=0 we have incorrect timstep if
-        // first branch fails delta_time is unchanged.
-        // + If min_element fails flowmap might be invalid then default value
-        // is not needed
-        throw std::invalid_argument("No time step given and impossibe to "
-                                    "estimate it with given flowmap");
-      }
-    }
-
-    return delta_time;
-  }
-
-  // FIXME
-  std::unique_ptr<ILoadBalancer>
-  lb_factory(uint32_t s)
-  {
-    auto bounded = Common::read_env<uint32_t>("BIOMC_LBBOUND");
-    if (bounded)
-    {
-      return std::make_unique<BoundLoadBalancer>(s, *bounded);
-    }
-    else
-    {
-      return std::make_unique<UniformLoadBalancer>(s);
-    }
-  }
-
   size_t
   compute_n_per_flowmap(double t_per_flowmap,
                         size_t n_different_maps,
@@ -118,20 +69,33 @@ namespace
 namespace Core
 {
   template <typename T> using OptionalPtr = GlobalInitialiser::OptionalPtr<T>;
-  GlobalInitialiser::GlobalInitialiser(const ExecInfo& _info,
-                                       UserControlParameters _user_params,
-                                       std::shared_ptr<IO::Logger> _logger)
-      : info(_info), user_params(std::move(_user_params)),
-        is_host(info.current_rank == 0)
+  GlobalInitialiser::GlobalInitialiser(
+      const ExecInfo& _info,
+      UserControlParameters _user_params,
+      std::shared_ptr<Mixture::SpecieTable> table,
+      std::shared_ptr<IO::Logger> _logger)
+      : m_table(std::move(table)), info(_info),
+        user_params(std::move(_user_params)), is_host(info.current_rank == 0)
 
   {
     set_logger(std::move(_logger));
 
     if (!Core::fill_and_check_result_file_path(this->m_logger, user_params))
     {
+      if (m_logger)
+      {
+        m_logger->error(IO::format("Non exisisting result file ",
+                                   user_params.results_file_name));
+      }
       throw std::runtime_error("TODO bad path");
     };
     m_params = SimulationParameters::init(user_params);
+
+    if (m_table)
+    {
+      m_builder = m_builder.with_specie_table(m_table);
+    }
+
     f_init_gas_flow
         = info.current_rank == 0 && m_params.is_two_phase_flow; // NOLINT
   }
@@ -154,25 +118,31 @@ namespace Core
     {
       return false;
     }
-    if (_feed) // TODO Improve error handling
+    if (!_feed)
     {
-      auto index_max_compartments = m_liquid_volume.size() - 1;
+      validate_step(InitStep::Feed);
 
-      auto pred = [&index_max_compartments](const auto& i)
-      { return i.output_position <= index_max_compartments; };
-
-      if (!std::ranges::all_of(_feed->liquid_feeds(), pred))
-      {
-        return false;
-      }
-
-      if (!std::ranges::all_of(_feed->gas_feeds(), pred))
-      {
-        return false;
-      }
+      return true;
     }
+
+    auto index_max_compartments = m_liquid_volume.size() - 1;
+
+    auto pred = [&index_max_compartments](const auto& i)
+    { return i.output_position <= index_max_compartments; };
+
+    if (!std::ranges::all_of(_feed->liquid_feeds(), pred))
+    {
+      return false;
+    }
+
+    if (!std::ranges::all_of(_feed->gas_feeds(), pred))
+    {
+      return false;
+    }
+    m_builder = m_builder.with_feed(std::move(*_feed));
+
     validate_step(InitStep::Feed);
-    this->m_feed = std::move(_feed);
+
     return true;
   }
 
@@ -192,7 +162,6 @@ namespace Core
       }
     }
     mpi_broadcast();
-    // liquid_neighbors.set_row_major();
     validate_step(InitStep::InitState);
     return true;
   }
@@ -251,13 +220,6 @@ namespace Core
       return std::nullopt;
     }
 
-    std::size_t n_samples = 0;
-    if (this->m_feed)
-    {
-      n_samples += (this->m_feed->n_liquid_flow() != 0) ? 1 : 0;
-    }
-    n_samples += (this->m_liquid_volume.size() > 1) ? 2 : 0;
-
     const auto i_model
         = AutoGenerated::get_model_index_from_name(user_params.model_name);
 
@@ -274,6 +236,9 @@ namespace Core
     // TODO Add this as user param
     std::unique_ptr<ILoadBalancer> lb = lb_factory(info.n_rank);
 
+    // FIXME
+    Common::set_local_env("__N_TOTAL_PARTICLE__", user_params.number_particle);
+
     const uint64_t particle_per_process
         = lb->balance(info.current_rank, user_params.number_particle);
 
@@ -288,11 +253,14 @@ namespace Core
       return std::nullopt;
     }
 
+    const uint64_t rng_seed = get_rng_seed(info);
+
     auto mc_unit
         = AutoGenerated::wrap_init_model_selector(m_logger,
+                                                  info,
+                                                  rng_seed,
                                                   i_model,
                                                   particle_per_process,
-                                                  n_samples,
                                                   m_liquid_volume,
                                                   m_flat_neighobrs,
                                                   m_params.uniform_mc_init,
@@ -340,8 +308,20 @@ namespace Core
                                       : init_scalar();
 
     auto mc = init_monte_carlo();
+
     if (scalar.has_value() && mc.has_value())
     {
+      if (!m_table)
+      {
+        m_table = std::make_shared<Mixture::SpecieTable>(scalar->n_species);
+        if (m_logger)
+        {
+          m_logger->alert("Initialiaser",
+                          "Dissolved species non specified, use predefined "
+                          "names, may not work as intended");
+        }
+        m_builder = m_builder.with_specie_table(m_table);
+      }
 
       if ((*mc)->getSpeciesNames().size() > (*scalar).n_species)
       {
@@ -385,44 +365,44 @@ namespace Core
       return std::nullopt;
     }
 
-    // std::vector<double> kla(scalar_init.n_species);
-    // kla[1] = 0.2; // 700 h-1
-    // const auto type = Simulation::MassTransfer::Type::FixedKla{kla};
+    m_builder = m_builder.with_params({ .f_reaction = m_params.f_reaction });
 
-    auto simulation = std::make_unique<Simulation::SimulationUnit>(
-        std::move(_unit), std::move(scalar_init), std::move(m_feed));
+    m_builder = m_builder.with_unit(std::move(_unit));
+    m_builder = m_builder.with_scalar(std::move(scalar_init));
 
-    // // FIXME
-    // if (AutoGenerated::get_model_index_from_name(user_params.model_name) ==
-    // 4
-    // &&
-    //     simulation->getDimensions().n_species < 4)
-    // {
-    //   throw std::runtime_error("Model must have 4 species concentrations");
-    // }
+    auto opt = m_builder.build();
+
+    if (opt.invalid())
+    {
+      if (m_logger)
+      {
+        m_logger->error(opt.get().message);
+      }
+      return std::nullopt;
+    }
+
     validate_step(InitStep::SimulationUnit);
 
-    return simulation;
+    return opt.gets();
   }
 
   std::optional<bool>
   GlobalInitialiser::init_mtr_model(
-      Simulation::SimulationUnit& unit,
       std::optional<Simulation::MassTransfer::Type::MtrTypeVariant>&& variant)
   {
-    if (!check_steps(InitStep::SimulationUnit))
-    {
-      VERBOSE_ERROR
-      return std::nullopt;
-    }
-    if (variant)
-    {
-      unit.setMtrModel(std::move(*variant));
-    }
+
+    m_builder = m_builder.with_mt_model(std::move(variant));
 
     validate_step(InitStep::MTR);
     // TODO
     return true;
+  }
+
+  void
+  GlobalInitialiser::set_table(std::shared_ptr<Mixture::SpecieTable> t) noexcept
+  {
+    m_table = t;
+    m_builder = m_builder.with_specie_table(t);
   }
 
   std::optional<Simulation::ScalarInitializer>
@@ -468,9 +448,8 @@ namespace Core
                                       user_params.initialiser_path);
     }
 
-    Simulation::ScalarInitializer scalar_init
-        = Core::ScalarFactory::scalar_factory(
-            f_init_gas_flow, m_gas_volume, m_liquid_volume, arg);
+    auto scalar_init = Core::ScalarFactory::scalar_factory(
+        f_init_gas_flow, m_gas_volume, m_liquid_volume, arg);
 
     if (info.current_rank != 0) // FIXME
     {

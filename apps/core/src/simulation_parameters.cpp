@@ -15,7 +15,7 @@ namespace Core
     params.t_per_flow_map = 0;
     params.save_final_serde = false;
     params.uniform_mc_init = true;
-
+    params.f_reaction = true;
     // params.user_params = UserControlParameters::m_default();
 
     return params;
@@ -35,29 +35,29 @@ namespace Core
     params.results_file_name = user_params.results_file_name;
     params.save_final_serde = user_params.save_serde;
     params.uniform_mc_init = user_params.uniform_mc_init;
+    params.f_reaction = user_params.f_reaction;
     return params;
   }
 
   UserControlParameters
   UserControlParameters::m_default()
   {
-    return {
-      .biomass_initial_concentration = 0.1,
-      .final_time = 0,
-      .delta_time = 0.,
-      .number_particle = 1,
-      .n_thread = -1,
-      .number_exported_result = 0,
-      .force_override = false,
-      .load_serde = false,
-      .save_serde = false,
-      .uniform_mc_init = true,
-      .initialiser_path = "",
-      .model_name = "None",
-      .results_file_name = "",
-      .cma_case_path = "",
-      .serde_file = std::nullopt,
-    };
+    return { .biomass_initial_concentration = 0.1,
+             .final_time = 0,
+             .delta_time = 0.,
+             .number_particle = 1,
+             .n_thread = -1,
+             .number_exported_result = 0,
+             .force_override = false,
+             .load_serde = false,
+             .save_serde = false,
+             .uniform_mc_init = true,
+             .initialiser_path = "",
+             .model_name = "None",
+             .results_file_name = "",
+             .cma_case_path = "",
+             .serde_file = std::nullopt,
+             .f_reaction = true };
   }
 
   std::ostream&

@@ -15,7 +15,7 @@ public_simulation_includes = include_directories('public')
 
 private_simulation_includes = include_directories('includes')
 
-project_dependencies = [biomodel_dependency, mc_dependency, common_dependecy]
+project_dependencies = [biomodel_dependency, mc_dependency, common_dependecy, mixture_dependency]
 
 # Private dependencies needed to compile .so
 private_dependencies = [kokkos_eigen, eigen_dep, blas]

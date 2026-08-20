@@ -3,13 +3,14 @@
 
 #include <cma_utils/alias.hpp>
 #include <memory>
+#include <mixture/species_descriptor.hpp>
 #include <variant>
 #include <vector>
 
 namespace Simulation
 {
   class ScalarSimulation;
-};
+}; // namespace Simulation
 
 namespace Simulation::MassTransfer
 {
@@ -36,8 +37,13 @@ namespace Simulation::MassTransfer
       std::vector<double> value;
     };
 
+    struct Auto
+    {
+    };
+
     using MtrTypeVariant
-        = std::variant<FlowmapTurbulence, FixedKla, FlowmapKla>;
+        = std::variant<FlowmapTurbulence, FixedKla, FlowmapKla, Auto>;
+
   } // namespace Type
 
   enum class Sign : int
@@ -54,6 +60,7 @@ namespace Simulation::MassTransfer
   {
   public:
     explicit MassTransferModel(
+        const Mixture::SpecieTable& species,
         MassTransfer::Type::MtrTypeVariant _type,
         std::shared_ptr<Simulation::ScalarSimulation> _liquid_scalar,
         std::shared_ptr<Simulation::ScalarSimulation> _gas_scalar);

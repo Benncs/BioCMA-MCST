@@ -17,9 +17,44 @@
 #include <string>
 #include <utility>
 
-constexpr int ID_VERIF = 2025;
-[[maybe_unused]] constexpr int f_true = 1;
-[[maybe_unused]] constexpr int f_false = 0;
+#define CHECK_HANDLE_OR_RETURN                                                 \
+  if (handle == nullptr)                                                       \
+  {                                                                            \
+    set_error_msg(handle_null_err_msg);                                        \
+    return -1;                                                                 \
+  }
+
+namespace
+{
+  std::string last_error_msg;
+  bool has_error = false;
+
+  void
+  set_error_msg(std::string_view e)
+  {
+    last_error_msg = e;
+    has_error = true;
+  }
+
+  constexpr auto lambda_ok = [](auto) { return 0; };
+
+  int
+  set_and_log_error(Handle handle, auto e)
+  {
+    set_error_msg(e);
+    if (const auto& log = handle->get_logger(); log != nullptr)
+    {
+      log->error(IO::format(" ", e));
+    }
+    return -3;
+  }
+
+  constexpr int ID_VERIF = 2025;
+  [[maybe_unused]] constexpr int f_true = 1;
+  [[maybe_unused]] constexpr int f_false = 0;
+
+  constexpr std::string_view handle_null_err_msg = "API handle is invalid ";
+} // namespace
 
 /*FFI Feed descriptor*/
 
@@ -27,6 +62,18 @@ int
 version_is_compatible(int major, int minor, int dev)
 {
   return Api::version_is_compatible(major, minor, dev) ? 0 : -1;
+}
+
+// exposed to api
+const char*
+get_last_error()
+{
+  if (!has_error)
+  {
+    return "";
+  }
+  has_error = false;
+  return last_error_msg.c_str();
 }
 
 FeedHandle
@@ -56,18 +103,43 @@ new_linear_feed_descriptor(double flow, double df, uint64_t input_position)
 }
 
 int
-add_feed_descriptor(Handle handle, FeedHandle fd, int gas)
+register_mixture_composition(Handle handle, char** names, int n_species)
 {
-  const auto phase = gas != 0 ? Phase::Gas : Phase::Liquid;
-  if (handle != nullptr)
+
+  CHECK_HANDLE_OR_RETURN
+
+  if (names == nullptr)
   {
-    if (fd != nullptr)
-    {
-      return handle->add_feed(*fd, phase) ? 0 : -3;
-    }
     return -2;
   }
-  return -1;
+
+  std::vector<std::string> species_names;
+  species_names.reserve(n_species);
+  for (int i = 0; i < n_species; ++i)
+  {
+    std::string_view current_s_n = names[i]; // NOLINT
+    species_names.emplace_back(current_s_n);
+  }
+
+  return handle->register_mixture_composition(species_names)
+      .match([](auto) { return 0; },
+             [&](auto e) { return set_and_log_error(handle, e); });
+}
+
+int
+add_feed_descriptor(Handle handle, FeedHandle fd, int gas)
+{
+  CHECK_HANDLE_OR_RETURN
+
+  if (fd == nullptr)
+  {
+    return -2;
+  }
+
+  const auto phase = gas != 0 ? Phase::Gas : Phase::Liquid;
+
+  return handle->add_feed(*fd, phase)
+      .match(lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
 }
 
 int
@@ -127,6 +199,7 @@ convert_c_wrap_to_param(const wrap_c_param_t& params)
   bool load_serde = (params.load_serde != 0);
   bool save_serde = (params.save_serde != 0);
   bool uniform_mc_init = (params.uniform_particle_init != 0);
+  bool f_reaction = (params.f_reaction != 0);
 
   auto p = Core::UserControlParameters::m_default();
   p.biomass_initial_concentration = params.biomass_initial_concentration;
@@ -137,6 +210,7 @@ convert_c_wrap_to_param(const wrap_c_param_t& params)
   p.load_serde = load_serde;
   p.save_serde = save_serde;
   p.uniform_mc_init = uniform_mc_init;
+  p.f_reaction = f_reaction;
   return p;
 }
 
@@ -149,16 +223,19 @@ make_params(double biomass_initial_concentration,
             int save)
 {
   const auto f_uniform_init = f_false;
+  const auto f_reaction = f_true;
+  const auto n_thread = 1; // TODO Remove
   return { biomass_initial_concentration,
            final_time,
            delta_time,
            number_particle,
-           1,
+           n_thread,
            number_exported_result,
            f_false,
            f_false,
            save,
-           f_uniform_init };
+           f_uniform_init,
+           f_reaction };
 }
 
 Param*
@@ -217,17 +294,12 @@ repr_user_param(const wrap_c_param_t* params, char** repr)
 int
 apply(Handle handle, int to_load)
 {
-  if (handle != nullptr)
-  {
-    handle->set_auto_mtr();                // FIXME
-    auto rc = handle->apply(to_load != 0); // TODO HANDLE ERROR
-    if (!rc)
-    {
-      handle->get_logger()->error(IO::format(" ", rc.get()));
-    }
-    return rc.to_c_ret_code();
-  }
-  return -1;
+  CHECK_HANDLE_OR_RETURN
+
+  handle->set_auto_mtr(); // FIXME
+
+  return handle->apply(to_load != 0)
+      .match(lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
 }
 
 Handle
@@ -236,10 +308,16 @@ init_handle_raw(int argc, char** argv)
   auto opt_handle = Api::SimulationInstance::init(argc, argv);
   if (opt_handle.has_value())
   {
-    auto logger = std::make_shared<IO::Console>();
-    logger->toggle_all();
-    (*opt_handle)->set_logger(logger);
-    return opt_handle->release();
+
+    std::unique_ptr<Api::SimulationInstance> handle = std::move(*opt_handle);
+    if (handle->get_exec_info().current_rank == 0)
+    {
+      auto logger = std::make_shared<IO::Console>();
+      logger->toggle_all();
+      handle->set_logger(logger);
+    }
+
+    return handle.release();
   }
   return nullptr;
 }
@@ -247,6 +325,7 @@ init_handle_raw(int argc, char** argv)
 void
 delete_handle(Handle* handle)
 {
+
   if (handle != nullptr)
   {
 
@@ -258,17 +337,16 @@ delete_handle(Handle* handle)
 int
 exec(Handle handle)
 {
-  if (handle != nullptr)
-  {
-    if (handle->get_id() == ID_VERIF)
-    {
-      auto rc = handle->exec();
+  CHECK_HANDLE_OR_RETURN;
 
-      return rc ? 0 : -1;
-    }
-    return -2;
+  if (handle->get_id() != ID_VERIF)
+  {
+    set_error_msg("API handle version is not valid");
+    return -1;
   }
-  return -3;
+
+  return handle->exec().match(
+      lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
 }
 
 /*
@@ -278,51 +356,70 @@ exec(Handle handle)
 int
 register_result_path(Handle handle, const char* c)
 {
-  if (handle != nullptr && c != nullptr)
+  CHECK_HANDLE_OR_RETURN;
+
+  if (c == nullptr)
   {
-    return (handle->register_result_path(c)) ? 0 : -1;
+    return -2;
   }
-  return -1;
+
+  return (handle->register_result_path(c)) ? 0 : -1;
 }
 
 int
 register_cma_path(Handle handle, const char* c)
 {
-  if (handle != nullptr && c != nullptr)
+  CHECK_HANDLE_OR_RETURN;
+
+  if (c == nullptr)
   {
-    return (handle->register_cma_path(c)) ? 0 : -1;
+    return -2;
   }
-  return -1;
+
+  return handle->register_cma_path(c).match(
+      lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
 }
 
 int
 register_serde(Handle handle, const char* c)
 {
-  if (handle != nullptr && c != nullptr)
+
+  CHECK_HANDLE_OR_RETURN;
+
+  if (c == nullptr)
   {
-    return (handle->register_serde(c)) ? 0 : -1;
+    return -2;
   }
-  return -1;
+
+  return (handle->register_serde(c)) ? 0 : -1;
 }
 
 int
 register_model_name(Handle handle, const char* c)
 {
-  if (handle != nullptr && c != nullptr)
+  CHECK_HANDLE_OR_RETURN;
+
+  if (c == nullptr)
   {
-    return (handle->register_model_name(c)) ? 0 : -1;
+    return -2;
   }
-  return -1;
+
+  return handle->register_model_name(c).match(
+      lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
 }
 
 int
 register_initializer_path(Handle handle, const char* c)
 {
-  if (handle != nullptr && c != nullptr)
+  CHECK_HANDLE_OR_RETURN;
+
+  if (c == nullptr)
   {
-    return (handle->register_initialiser_file_path(c)) ? 0 : -1;
+    return -2;
   }
-  return -1;
+
+  return handle->register_initialiser_file_path(c).match(
+      lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
 }
 
 int
@@ -332,9 +429,12 @@ set_scalar_buffer(Handle handle,
                   double* liquid,
                   double* gas_ptr)
 {
-  if (handle == nullptr || liquid == nullptr)
+
+  CHECK_HANDLE_OR_RETURN;
+
+  if (liquid == nullptr)
   {
-    return -1;
+    return -2;
   }
 
   if (rows == 0 || cols == 0)
@@ -342,10 +442,6 @@ set_scalar_buffer(Handle handle,
     return -1;
   }
 
-  // uint64_t buffer_size=0;
-  // if (__builtin_umull_overflow(rows, cols, &buffer_size)) {
-  //     return -1;
-  // }
   const auto buffer_size = rows * cols;
 
   try
@@ -360,20 +456,19 @@ set_scalar_buffer(Handle handle,
       gas = std::vector<double>(gas_span.begin(), gas_span.end());
     }
 
-    bool success
-        = handle
-              ->register_scalar_initiazer(Core::ScalarFactory::FullCase(
-                  rows, std::move(liq), std::move(gas)))
-              .valid();
-
-    return success ? 0 : -1;
+    return handle
+        ->register_scalar_initiazer(
+            Core::ScalarFactory::FullCase(rows, std::move(liq), std::move(gas)))
+        .match(lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
   }
   catch (const std::bad_alloc& e)
   {
+    set_error_msg(e.what());
     return -1;
   }
   catch (const std::exception& e)
   {
+    set_error_msg(e.what());
     return -1;
   }
 }
@@ -381,13 +476,16 @@ set_scalar_buffer(Handle handle,
 int
 register_parameters(Handle handle, Param* raw_params)
 {
-  if (handle != nullptr && raw_params != nullptr)
+  CHECK_HANDLE_OR_RETURN;
+
+  if (raw_params == nullptr)
   {
-    auto params = convert_c_wrap_to_param(*raw_params);
-    handle->register_parameters(std::move(params));
-    return 0;
+    return -2;
   }
-  return -1;
+
+  auto params = convert_c_wrap_to_param(*raw_params);
+  return handle->register_parameters(std::move(params))
+      .match(lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
 }
 
 // Parameters
@@ -404,19 +502,13 @@ show_user_param(const wrap_c_param_t* params)
 int
 n_rank(Handle handle)
 {
-  if (handle == nullptr)
-  {
-    return 0;
-  }
+  CHECK_HANDLE_OR_RETURN;
   return static_cast<int>(handle->get_exec_info().n_rank);
 }
 int
 i_rank(Handle handle)
 {
-  if (handle == nullptr)
-  {
-    return 0;
-  }
+  CHECK_HANDLE_OR_RETURN;
   return static_cast<int>(handle->get_exec_info().current_rank);
 }
 

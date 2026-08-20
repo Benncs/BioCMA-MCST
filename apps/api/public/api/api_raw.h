@@ -44,8 +44,6 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT
 
   int delete_constant_feed_descriptor(FeedHandle* fd);
 
-  int version_is_compatible(int major, int minor, int dev);
-
   /*FFI Parameters*/
 
   // NOLINTBEGIN
@@ -61,6 +59,7 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT
     int load_serde;
     int save_serde;
     int uniform_particle_init;
+    int f_reaction;
   } Param;
   // NOLINTEND
 
@@ -84,6 +83,10 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT
   void delete_params(Param** params);
 
   // FFI API
+
+  int version_is_compatible(int major, int minor, int dev);
+
+  const char* get_last_error();
 
   /**
  * @brief Initialize a simulation instance handle
@@ -109,13 +112,13 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT
 
   void get_model_list(char*** names, int* n_model);
   void free_model_list(char** names, int n_model);
-  // void finalize(); //Do not use it
+
+  int register_mixture_composition(Handle handle, char** names, int n_species);
+  // void free_mixture_composition(char** names, int n_species);
 
   int n_rank(Handle);
   int i_rank(Handle);
-
   int exec(Handle);
-
   int apply(Handle, int to_load);
 
   /* REGISTER */

@@ -1,6 +1,7 @@
 #include <api/api_raw.h>
 
 #include <cassert>
+#include <cstddef>
 #include <cstring>
 #include <string_view>
 
@@ -60,15 +61,16 @@ test_apply(int argc, char** argv, std::string_view path)
 void
 test_apply_err(int argc, char** argv)
 {
-  Handle handle
-      = INIT assert(apply(handle, 0) != 0); // THIS SHOULD RETURN ERROR
+  Handle handle = INIT;
+  assert(apply(handle, 0) != 0); // THIS SHOULD RETURN ERROR
   delete_handle(&handle);
 }
 
 void
 test_exec_err(int argc, char** argv)
 {
-  Handle handle = INIT assert(exec(handle) != 0); // THIS SHOULD RETURN ERROR
+  Handle handle = INIT;
+  assert(exec(handle) != 0); // THIS SHOULD RETURN ERROR
   delete_handle(&handle);
 }
 
@@ -109,8 +111,8 @@ test_make_params()
 void
 test_register_parameters(int argc, char** argv)
 {
-  Handle handle = INIT Param params = PARAM int result
-      = register_parameters(handle, &params);
+  Handle handle = INIT;
+  Param params = PARAM int result = register_parameters(handle, &params);
   assert(result == 0);
   delete_handle(&handle);
 }
@@ -119,7 +121,8 @@ test_register_parameters(int argc, char** argv)
 void
 test_register_cma_path_recursive(int argc, char** argv)
 {
-  Handle handle = INIT int result = register_cma_path(handle, "./tools");
+  Handle handle = INIT;
+  int result = register_cma_path(handle, "./tools");
   assert(result == 0);
   delete_handle(&handle);
 }
@@ -127,7 +130,8 @@ test_register_cma_path_recursive(int argc, char** argv)
 void
 test_register_cma_path(int argc, char** argv)
 {
-  Handle handle = INIT int result = register_cma_path(handle, "./tools");
+  Handle handle = INIT;
+  int result = register_cma_path(handle, "./tools");
   assert(result == 0);
   delete_handle(&handle);
 }
@@ -189,9 +193,35 @@ test_branch_null(int argc, char** argv)
 }
 
 int
+test_err()
+{
+  {
+    const auto* msg = get_last_error();
+    std::string_view v_msg = msg;
+    assert(v_msg.empty());
+  }
+
+  {
+    int r = n_rank(nullptr);
+    assert(r != 0);
+    const auto* msg = get_last_error();
+    std::string_view v_msg = msg;
+    assert(!v_msg.empty());
+
+    const auto* msg2 = get_last_error();
+    std::string_view v_msg2 = msg2;
+    assert(v_msg2.empty());
+  }
+
+  return 0;
+}
+
+int
 main(int argc, char** argv)
 {
   std::string cma_path = get_cma_path(argc, argv);
+
+  test_err();
 
   test_init(argc, argv);
   test_delete_handle(argc, argv);

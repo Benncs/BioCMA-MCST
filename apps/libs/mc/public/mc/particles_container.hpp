@@ -62,8 +62,7 @@ namespace MC
      * @brief Alias for the model used by the container.
      */
     explicit ParticlesContainer(RuntimeParameters rt_param,
-                                std::size_t n_particle,
-                                std::size_t _n_samples);
+                                std::size_t n_particle);
     ParticlesContainer(); //=default;
     /**
      * @brief Default copy and move constructors and assignment operators.
@@ -388,17 +387,9 @@ namespace MC
      * @brief Copies particle data from a buffer to the main container in
      * parallel.
      *
-     * This functor is designed to be executed by a Kokkos team to:
-     * 1. Copy model properties from buffer to main container with
-     * back-insertion
-     * 2. Copy the particle's position from `buffer_position` to the main
-     * `position` container.
-     * 3. Reset the particle's age values (hydraulic time) to 0 to avoid
-     * additional buffer allocation.
-     *
-     *
-     * @param team The Kokkos team member executing this functor.
-     *             `team.league_rank()` determines the particle index `i`.
+     * TagRow copies the model properties over a 2D (particle, property)
+     * range; TagScalar copies the position and resets the ages over a 1D
+     * (particle) range.
      */
     template <ModelType M> struct InsertFunctor
     {
@@ -414,17 +405,24 @@ namespace MC
             buffer_position(std::move(_buffer_position))
       {
       }
+      struct TagRow
+      {
+      };
+      struct TagScalar
+      {
+      };
+
       KOKKOS_INLINE_FUNCTION
       void
-      operator()(const TeamMember& team) const
+      operator()(TagRow, const std::size_t i, const std::size_t j) const
       {
-        auto range = M::n_var;
-        const int i = team.league_rank();
+        model(original_size + i, j) = buffer_model(i, j);
+      }
 
-        Kokkos::parallel_for(
-            Kokkos::TeamVectorRange(team, range),
-            [&](const int& j)
-            { model(original_size + i, j) = buffer_model(i, j); });
+      KOKKOS_INLINE_FUNCTION
+      void
+      operator()(TagScalar, const std::size_t i) const
+      {
         position(original_size + i) = buffer_position(i);
 
         // Actually needs buffer to store mother's hydraulic time
@@ -509,10 +507,9 @@ namespace MC
           "Error when deserialze, model number of property mismatch");
     }
 
-    Kokkos::resize(
-        this->contribs,
-        n_allocated_elements,
-        Model::n_c); // Dont forget to allocate contribs which is not saved yet
+    // contribs is not serialized and is rewritten every step: allocate, don't
+    // copy
+    Kokkos::realloc(this->contribs, n_allocated_elements, Model::n_c);
 #ifndef NDEBUG
     Kokkos::printf("ParticlesContainer::load: Check if load_tuning_constant "
                    "works with different value");
@@ -584,14 +581,25 @@ namespace MC
       return;
     }
     _resize(original_size + n_add_item);
-    Kokkos::parallel_for("insert_merge",
-                         TeamPolicy(n_add_item, Kokkos::AUTO, Model::n_var),
-                         InsertFunctor<Model>(original_size,
-                                              model,
-                                              position,
-                                              ages,
-                                              buffer_model,
-                                              buffer_position));
+
+    using functor_type = InsertFunctor<Model>;
+    const functor_type functor(
+        original_size, model, position, ages, buffer_model, buffer_position);
+
+    Kokkos::parallel_for("insert_merge_rows",
+                         Kokkos::MDRangePolicy<typename functor_type::TagRow,
+                                               ComputeSpace,
+                                               Kokkos::Rank<2>>(
+                             { 0, 0 },
+                             { static_cast<int64_t>(n_add_item),
+                               static_cast<int64_t>(Model::n_var) }),
+                         functor);
+
+    Kokkos::parallel_for(
+        "insert_merge_scalars",
+        Kokkos::RangePolicy<typename functor_type::TagScalar, ComputeSpace>(
+            0, n_add_item),
+        functor);
 
     buffer_index() = 0;
     n_used_elements += n_add_item;
@@ -622,9 +630,9 @@ namespace MC
         Kokkos::resize(model,
                        n_allocated_elements,
                        Model::n_var); // use 2nd dim resize if dynamic
-        Kokkos::resize(contribs,
-                       n_allocated_elements,
-                       Model::n_c); // use 2nd dim resize if dynamic
+        // realloc, not resize: contribs is rewritten every step before it is
+        // read
+        Kokkos::realloc(contribs, n_allocated_elements, Model::n_c);
         Kokkos::resize(status, n_allocated_elements);
         Kokkos::resize(ages, n_allocated_elements);
 
@@ -690,10 +698,8 @@ namespace MC
   // NOLINTEND
 
   template <ModelType M>
-  ParticlesContainer<M>::ParticlesContainer(
-      RuntimeParameters rt_param,
-      std::size_t n_particle,
-      [[maybe_unused]] std::size_t _n_samples)
+  ParticlesContainer<M>::ParticlesContainer(RuntimeParameters rt_param,
+                                            std::size_t n_particle)
       : model(alloc_without_init("particle_model"), 0, 0),
 
         contribs(alloc_without_init("particle_contribs"), 0),
@@ -728,7 +734,7 @@ namespace MC
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer()
-      : ParticlesContainer(RuntimeParameters{}, 0, 0)
+      : ParticlesContainer(RuntimeParameters{}, 0)
   {
   }
 
@@ -782,10 +788,6 @@ namespace MC
       const bool do_shrink = n_used_elements <= static_cast<std::size_t>(
                                  rt_params.shrink_ratio * n_allocated_elements);
 
-      if (do_shrink)
-      {
-        _resize(n_used_elements * rt_params.allocation_factor, true);
-      }
       if (do_shrink)
       {
         // force to true if we want to shrink

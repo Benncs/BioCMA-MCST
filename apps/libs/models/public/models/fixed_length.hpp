@@ -2,25 +2,24 @@
 #ifndef __FIXED_LENGTH_MODEL_HPP__
 #define __FIXED_LENGTH_MODEL_HPP__
 
-#include "Kokkos_Core_fwd.hpp"
-#include "Kokkos_Macros.hpp"
-#include "common/common.hpp"
-#include "common/traits.hpp"
-#include "mc/alias.hpp"
-#include "mc/macros.hpp"
-#include "models/utils.hpp"
+#include <Kokkos_Core_fwd.hpp>
+#include <Kokkos_Macros.hpp>
+#include <common/common.hpp>
+#include <common/traits.hpp>
+#include <mc/alias.hpp>
+#include <mc/macros.hpp>
 #include <mc/prng/prng_extension.hpp>
 #include <mc/traits.hpp>
+#include <models/utils.hpp>
 #include <string_view>
 
 namespace Models
 {
-
   struct FixedLength
   {
     using uniform_weight = std::true_type;
     using Self = FixedLength;
-    using FloatType = float;
+    using FloatType = double;
 
     using Config = Kokkos::View<const FloatType*, ComputeSpace>;
 
@@ -39,11 +38,11 @@ namespace Models
     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
     using SelfContribs = MC::ParticlesContribs<Self::n_c, Self::FloatType>;
 
-    MODEL_CONSTANT FloatType l_dot_max = 2e-6 / 3600.; // m
-    MODEL_CONSTANT FloatType l_max_m = 2e-6;           // m
-    MODEL_CONSTANT FloatType l_min_m = l_max_m / 2.;   // m
-    MODEL_CONSTANT FloatType k = 1e-3;                 // m
-    MODEL_CONSTANT FloatType d_m = 0.6e-6;             // m
+    MODEL_CONSTANT FloatType l_dot_max = 20e-6 / 3600.; // m
+    MODEL_CONSTANT FloatType l_max_m = 2e-6;            // m
+    MODEL_CONSTANT FloatType l_min_m = l_max_m / 2.;    // m
+    MODEL_CONSTANT FloatType k = 1e-3;                  // m
+    MODEL_CONSTANT FloatType d_m = 0.6e-6;              // m
     MODEL_CONSTANT FloatType lin_density
         = c_linear_density(static_cast<FloatType>(1000), d_m);
 
@@ -52,7 +51,9 @@ namespace Models
 
     MC::ContribIndexBounds static get_bounds();
 
-    static Self::Config get_config(std::size_t n);
+    static Self::Config get_config(const ExecInfo& info, std::size_t n);
+
+    static bool use_contribs;
 
     KOKKOS_INLINE_FUNCTION static void init(const MC::pool_type& random_pool,
                                             std::size_t idx,
@@ -93,6 +94,7 @@ namespace Models
     static std::vector<std::size_t>
     get_number()
     {
+
       return { INDEX_FROM_ENUM(particle_var::length) };
     }
 
@@ -132,11 +134,17 @@ namespace Models
     const auto l_max = GET_PROPERTY(Self::particle_var::l_max);
     const auto s = static_cast<FloatType>(GET_CONCENTRATION(0));
     auto& c_phi_s = GET_CONTRIBS(0);
-
-    const FloatType g = s / (k + s);
+    //    static auto f_c = use_contribs;
+    //
+    auto f_c = false;
+    const FloatType g = (f_c) ? s / (k + s) : FloatType{ 1 };
     const FloatType phi_s = phi_s_max * g;
     const FloatType ldot = l_dot_max * g;
-    l += d_t * ldot;
+    //    auto gen = random_pool.get_state();
+    const auto alpha = 0.F; // Kokkos::sqrt(2.F * 1e-17 * d_t) * gen.normal();
+                            //   random_pool.free_state(gen);
+
+    l += d_t * ldot + alpha;
     c_phi_s = -phi_s;
     return check_div(l, l_max);
   }
@@ -149,8 +157,12 @@ namespace Models
                         const SelfParticle& buffer_arr)
   {
 
+    // const FloatType new_current_length
+    //     = GET_PROPERTY(particle_var::length) / 2.F;
+
     const FloatType new_current_length
-        = GET_PROPERTY(particle_var::length) / 2.F;
+        = GET_PROPERTY(particle_var::length)
+          - GET_PROPERTY(particle_var::l_max) / 2.F;
 
     GET_PROPERTY(particle_var::length) = new_current_length;
     GET_PROPERTY(particle_var::l_max) = l_max_m;

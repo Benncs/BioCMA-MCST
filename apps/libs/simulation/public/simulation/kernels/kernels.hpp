@@ -1,9 +1,11 @@
 #ifndef __SIMULATION_KERNELS_HPP__
 #define __SIMULATION_KERNELS_HPP__
 
+#include "mc/alias.hpp"
 #include <Kokkos_Core_fwd.hpp>
 #include <common/common.hpp>
 #include <common/kokkos_getpolicy.hpp>
+#include <impl/Kokkos_Profiling.hpp>
 #include <mc/domain.hpp>
 #include <mc/unit.hpp>
 #include <simulation/kernels/contribution_kernel.hpp>
@@ -63,7 +65,7 @@ namespace Simulation::KernelInline
 
       cycle_kernel.update(d_t, container);
 
-      contribution_kernel.update(container);
+      contribution_kernel.update(container, d_t);
 
       // TODO: Why need to update all views (where did we lost the refcount ? )
       move_kernel.update(d_t,
@@ -101,7 +103,7 @@ namespace Simulation::KernelInline
           cycle_kernel(options.m_p_p_team_model,
                        container,
                        _random_pool,
-                       std::move(_concentrations),
+                       _concentrations,
                        _event,
                        _probes_div),
           move_kernel(options.m_p_p_team_move,
@@ -113,24 +115,33 @@ namespace Simulation::KernelInline
                       _event,
                       _probes,
                       container.ages),
-          contribution_kernel(
-              options.m_p_p_team_contribs, _contribs_scatter, container),
+          // contribution_kernel(
+          //     options.m_p_p_team_contribs, _contribs_scatter, container),
+          contribution_kernel(options.m_p_p_team_contribs,
+                              _contribs_scatter,
+                              container,
+                              _random_pool,
+                              _concentrations,
+                              _event,
+                              _probes_div),
           m_options(options)
 
     {
     }
 
     void
-    launch_move(const std::size_t n_particle) const
+    launch_move(const std::size_t n_particle)
     {
-
-      if (move_kernel.enable_move)
+      bool is_0d_reactor = move_kernel.do_move();
+      if (is_0d_reactor)
       {
-        const auto npt = m_options.m_p_p_team_move;
+
+        std::size_t npt = m_options.m_p_p_team_move;
+
         if (n_particle <= npt)
         {
-          // TODO
-          throw std::runtime_error("Nparticle<n per team");
+          move_kernel.m_p_team_move = 1;
+          npt = 1;
         }
 
         const std::size_t league_size = Common::c_league_size(n_particle, npt);
@@ -147,68 +158,104 @@ namespace Simulation::KernelInline
         Kokkos ::parallel_for("cycle_move", cycle_policy, move_kernel);
       }
 
-      if (move_kernel.enable_leave)
+      if (move_kernel.do_leave())
       {
 
-        const auto _policy_leave = Kokkos::RangePolicy<KernelInline::TagLeave>(
-            move_space, 0, n_particle);
-        Kokkos ::parallel_reduce(
-            "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
+        std::size_t npt = move_kernel.m_p_team_leave;
+        if (n_particle <= npt)
+        {
+          move_kernel.m_p_team_leave = 1;
+          npt = 1;
+        }
+        const std::size_t league_size = Common::c_league_size(n_particle, npt);
+
+        // This is duplicated code but there is no simple alternative to select
+        // policy tag at runtime
+        if (!is_0d_reactor)
+        {
+          auto _policy_leave
+              = Kokkos::TeamPolicy<TagLeaveB0D>(move_space,
+                                                static_cast<int>(league_size),
+                                                Kokkos::AUTO(),
+                                                Kokkos::AUTO());
+
+          Kokkos::parallel_reduce(
+              "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
+        }
+        else
+        {
+          auto _policy_leave
+              = Kokkos::TeamPolicy<TagLeave>(move_space,
+                                             static_cast<int>(league_size),
+                                             Kokkos::AUTO(),
+                                             Kokkos::AUTO());
+
+          // auto _policy_leave
+          //     = Kokkos::RangePolicy<TagLeave>(move_space, 0, n_particle);
+
+          Kokkos::parallel_reduce(
+              "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
+        }
       }
     }
 
     void
-    launch_model(const std::size_t n_particle) const
+    launch_model(const std::size_t n_particle)
     {
-      if (n_particle <= m_options.m_p_p_team_model)
+
+      std::size_t npt = m_options.m_p_p_team_model;
+
+      if (n_particle <= npt)
       {
-        // TODO
-        throw std::runtime_error("Nparticle<n per team");
+        cycle_kernel.m_p_team = 1;
+        npt = 1;
       }
 
-      std::size_t league_size
-          = Common::c_league_size(n_particle, m_options.m_p_p_team_model);
+      std::size_t league_size = Common::c_league_size(n_particle, npt);
 
-      const auto cycle_policy
-          = Kokkos::TeamPolicy<TagCycle>(model_space,
-                                         static_cast<int>(league_size),
-                                         Kokkos::AUTO(),
-                                         Kokkos::AUTO());
+      // const auto cycle_policy
+      //     = Kokkos::TeamPolicy<TagCycle, Kokkos::Schedule<Kokkos::Dynamic>>(
+      //         model_space,
+      //         static_cast<int>(league_size),
+      //         Kokkos::AUTO(),
+      //         Kokkos::AUTO());
 
-      Kokkos::parallel_reduce(
-          "cycle_model",
-          cycle_policy,
-          cycle_kernel,
-          KernelInline::CycleReducer<ComputeSpace>(cycle_reducer));
-      Kokkos::fence(); // TODO needed ?
+      // Kokkos::parallel_reduce(
+      //     "cycle_model",
+      //     cycle_policy,
+      //     cycle_kernel,
+      //     KernelInline::CycleReducer<ComputeSpace>(cycle_reducer));
+      // Kokkos::fence(); // TODO needed ?
 
-      // Assumptions
-      // Newborn cells do not contribte in current time step
-      // Mother cell doesn´t exist but
-      // Contribution array is not changed during division and
+      // // Assumptions
+      // // Newborn cells do not contribte in current time step
+      // // Mother cell doesn´t exist but
+      // // Contribution array is not changed during division and
 
-      if (cycle_kernel.do_contribs())
+      // if (cycle_kernel.do_contribs())
       {
 
-        if (n_particle <= m_options.m_p_p_team_contribs)
+        std::size_t npt = m_options.m_p_p_team_contribs;
+        if (n_particle <= npt)
         {
-          // TODO
-          throw std::runtime_error("Nparticle<n per team");
+          contribution_kernel.m_particle_per_team = 1;
+          npt = 1;
         }
 
-        league_size
-            = Common::c_league_size(n_particle, m_options.m_p_p_team_contribs);
+        league_size = Common::c_league_size(n_particle, npt);
         static_assert(ConstWeightModelType<Model>,
                       "ModelType:Constapply_weight()");
-
+        KernelInline::CycleReducer<ComputeSpace> reducer(cycle_reducer);
         if (f_multi_compartment)
         {
 
           const auto policy_contribs
               = Kokkos::TeamPolicy<typename ContributionFunctor<Model>::Tag3D>(
                   model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
-          Kokkos::parallel_for(
-              "cycle_model_contribs", policy_contribs, contribution_kernel);
+          Kokkos::parallel_reduce("cycle_model_contribs",
+                                  policy_contribs,
+                                  contribution_kernel,
+                                  reducer);
         }
         else
         {
@@ -217,8 +264,10 @@ namespace Simulation::KernelInline
                   model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
           policy_contribs.set_scratch_size(
               0, Kokkos::PerTeam(sizeof(float) * Model::n_c));
-          Kokkos::parallel_for(
-              "cycle_model_contribs_0d", policy_contribs, contribution_kernel);
+          Kokkos::parallel_reduce("cycle_model_contribs_0d",
+                                  policy_contribs,
+                                  contribution_kernel,
+                                  reducer);
         }
       }
     }

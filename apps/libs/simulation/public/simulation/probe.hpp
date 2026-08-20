@@ -14,12 +14,14 @@ namespace Simulation
   enum class ProbeType : unsigned
   {
     LeavingTime = 0,
-    DivisionTime
+    DivisionTime,
+    __COUNT__
   };
 
   // The name are namely used during export
-  static const std::array<std::string, 2> map_probe_name
-      = { "LeavingTime", "DivisionTime" };
+  static const std::array<std::string,
+                          static_cast<std::size_t>(ProbeType::__COUNT__)>
+      map_probe_name = { "LeavingTime", "DivisionTime" };
 
   // TODO: keep thi structure as a bulkstorage for fast compute but consider
   // sorting into bins when exporting it to avoid unnecessary amount of data
