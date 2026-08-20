@@ -17,6 +17,7 @@
 #include <progress_bar.hpp>
 #include <signal_handling.hpp>
 #include <simulation/simulation.hpp>
+#include <stdexcept>
 #include <string>
 #include <sync.hpp>
 #include <tuple>
@@ -287,7 +288,12 @@ namespace
         }
 #ifndef NO_MPI
         sync_prepare_next(exec, simulation, &req);
+#else
+        throw std::runtime_error(
+            "Runnning withouth MPI impl, following needs to clear contribs "
+            "which is not implemented for non MPI build");
 #endif
+
         simulation.cycleProcess(local_container, d_t, functors);
 
         if (Core::SignalHandler::is_usr1_raised()) [[unlikely]]
