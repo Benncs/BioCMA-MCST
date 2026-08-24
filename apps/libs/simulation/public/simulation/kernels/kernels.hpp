@@ -129,73 +129,101 @@ namespace Simulation::KernelInline
     {
     }
 
+    /// Move-only, multi-compartment domain.
     void
-    launch_move(const std::size_t n_particle)
+    launch_move_3d(const std::size_t n_particle)
     {
-      bool is_0d_reactor = move_kernel.do_move();
-      if (is_0d_reactor)
+      std::size_t npt = m_options.m_p_p_team_move;
+      if (n_particle <= npt)
       {
-
-        std::size_t npt = m_options.m_p_p_team_move;
-
-        if (n_particle <= npt)
-        {
-          move_kernel.m_p_team_move = 1;
-          npt = 1;
-        }
-
-        const std::size_t league_size = Common::c_league_size(n_particle, npt);
-
-        auto cycle_policy
-            = Kokkos::TeamPolicy<TagMove>(model_space,
-                                          static_cast<int>(league_size),
-                                          Kokkos::AUTO(),
-                                          Kokkos::AUTO());
-
-        cycle_policy.set_scratch_size(0,
-                                      Kokkos::PerTeam(sizeof(float) * npt * 2));
-
-        Kokkos ::parallel_for("cycle_move", cycle_policy, move_kernel);
+        move_kernel.m_p_team_move = 1;
+        npt = 1;
       }
+      const std::size_t league_size = Common::c_league_size(n_particle, npt);
 
-      if (move_kernel.do_leave())
-      {
-
-        std::size_t npt = move_kernel.m_p_team_leave;
-        if (n_particle <= npt)
-        {
-          move_kernel.m_p_team_leave = 1;
-          npt = 1;
-        }
-        const std::size_t league_size = Common::c_league_size(n_particle, npt);
-
-        // This is duplicated code but there is no simple alternative to select
-        // policy tag at runtime
-        if (!is_0d_reactor)
-        {
-          auto _policy_leave
-              = Kokkos::TeamPolicy<TagLeaveB0D>(move_space,
+      auto policy = Kokkos::TeamPolicy<TagMove>(model_space,
                                                 static_cast<int>(league_size),
                                                 Kokkos::AUTO(),
                                                 Kokkos::AUTO());
+      policy.set_scratch_size(0, Kokkos::PerTeam(sizeof(float) * npt * 2));
 
-          Kokkos::parallel_reduce(
-              "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
+      Kokkos::parallel_for("cycle_move", policy, move_kernel);
+    }
+
+    /// Move and outlet test in a single pass over the particles. Both are
+    /// memory bound and stream `positions` back to back, so running them as
+    /// two kernels pays for that array twice.
+    /// Reported as "cycle_move": it is the move plus the exit test.
+    void
+    launch_move_leave_3d(const std::size_t n_particle)
+    {
+      std::size_t npt = m_options.m_p_p_team_move;
+      if (n_particle <= npt)
+      {
+        move_kernel.m_p_team_move = 1;
+        npt = 1;
+      }
+      const std::size_t league_size = Common::c_league_size(n_particle, npt);
+
+      auto policy = Kokkos::TeamPolicy<TagMoveLeave>(
+          move_space,
+          static_cast<int>(league_size),
+          Kokkos::AUTO(),
+          Kokkos::AUTO());
+
+      Kokkos::parallel_reduce("cycle_move", policy, move_kernel, move_reducer);
+    }
+
+    /// Outlet test in a single-compartment domain: every particle sees the
+    /// same flow, so the lambda is computed once per team.
+    void
+    launch_leave_0d(const std::size_t n_particle)
+    {
+      std::size_t npt = move_kernel.m_p_team_leave;
+      if (n_particle <= npt)
+      {
+        move_kernel.m_p_team_leave = 1;
+        npt = 1;
+      }
+      const std::size_t league_size = Common::c_league_size(n_particle, npt);
+
+      auto policy = Kokkos::TeamPolicy<TagLeaveB0D>(
+          move_space,
+          static_cast<int>(league_size),
+          Kokkos::AUTO(),
+          Kokkos::AUTO());
+
+      Kokkos::parallel_reduce(
+          "cycle_move_leave", policy, move_kernel, move_reducer);
+    }
+
+    void
+    launch_move(const std::size_t n_particle)
+    {
+      // The domain shape decides which kernels are legal:
+      //   multi-compartment (3D) : move, or move + leave
+      //   single compartment (0D): leave, or nothing -- there is nowhere to
+      //                            move to, so the move kernel never applies.
+      // do_move() is exactly "the domain has more than one compartment".
+      const bool is_multi_compartment = move_kernel.do_move();
+      const bool has_outlet = move_kernel.do_leave();
+
+      if (is_multi_compartment)
+      {
+        if (has_outlet)
+        {
+          launch_move_leave_3d(n_particle);
         }
         else
         {
-          auto _policy_leave
-              = Kokkos::TeamPolicy<TagLeave>(move_space,
-                                             static_cast<int>(league_size),
-                                             Kokkos::AUTO(),
-                                             Kokkos::AUTO());
-
-          // auto _policy_leave
-          //     = Kokkos::RangePolicy<TagLeave>(move_space, 0, n_particle);
-
-          Kokkos::parallel_reduce(
-              "cycle_move_leave", _policy_leave, move_kernel, move_reducer);
+          launch_move_3d(n_particle);
         }
+        return;
+      }
+
+      if (has_outlet)
+      {
+        launch_leave_0d(n_particle);
       }
     }
 
