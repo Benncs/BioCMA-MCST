@@ -6,6 +6,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
 #include <common/execinfo.hpp>
+#include <array>
 #include <cstddef>
 #include <span>
 
@@ -38,6 +39,22 @@ namespace MC
   {
     return static_cast<size_t>(event);
   }
+
+  /**
+   * @brief Number of std::size_t slots reserved per counter.
+   *
+   * Counters are updated with atomics from every thread of the node. Packing
+   * them contiguously puts all of them on a single cache line, so unrelated
+   * tallies (typically Move and Exit) false-share and serialise against each
+   * other. One counter per cache line removes that coupling.
+   *
+   * @note Kokkos::AllowPadding does not help here: it only rounds the leading
+   * dimension of a rank>=2 view up to Impl::MEMORY_ALIGNMENT, and its rank-1
+   * specialisation is explicitly the "no padding / striding" one. The stride is
+   * instead carried by the layout trait, Kokkos::LayoutStride, which keeps the
+   * view rank-1 and lets Kokkos own the offset arithmetic.
+   */
+  constexpr std::size_t event_stride = 64 / sizeof(std::size_t);
 
   // class Events
   // {
@@ -154,8 +171,14 @@ namespace MC
     // be shared between Host and Device According to SharedHostPinnedSpace
     // documentation, the size of this data can fit into one cache line so
     // transfer is not a botteneck
-    Kokkos::View<std::size_t[number_event_type], Kokkos::SharedSpace> // NOLINT
-        _events; // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+    // Rank-1, but with event_stride elements between two consecutive counters
+    // so each one owns a cache line. LayoutStride::span() is
+    // max(extent * stride) == number_event_type * event_stride, so the
+    // allocation covers every counter.
+    using event_view_type = Kokkos::
+        View<std::size_t*, Kokkos::LayoutStride, Kokkos::SharedSpace>;
+
+    event_view_type _events;
 
     // Kokkos::View<std::size_t[number_event_type], Kokkos::SharedSpace> //
     // NOLINT
@@ -165,7 +188,9 @@ namespace MC
     /**
      * @brief Default container, initalise counter
      */
-    EventContainer() : _events("events")
+    EventContainer()
+        : _events("events",
+                  Kokkos::LayoutStride(number_event_type, event_stride))
     // , m_cumulative("cumulativr_events")
     {
 
@@ -174,14 +199,22 @@ namespace MC
       // Kokkos::deep_copy(m_cumulative, 0); // Ensure all event to 0 occurence
     }
     /**
-     * @brief Get std const view of _events counter
+     * @brief Get a packed copy of the event counters
+     *
+     * Storage is padded (see event_stride) so the counters are not contiguous
+     * any more: return a packed snapshot instead of a view of the raw buffer.
      */
-    [[nodiscard]] std::span<std::size_t>
+    [[nodiscard]] std::array<std::size_t, number_event_type>
     get_span() const
     {
       // As we use SharedHostPinnedSpace, we can deal with classic std
       // containers to use host manipulation
-      return { _events.data(), number_event_type };
+      std::array<std::size_t, number_event_type> packed{};
+      for (std::size_t i = 0; i < number_event_type; ++i)
+      {
+        packed[i] = _events(i);
+      }
+      return packed;
     }
 
     /**
@@ -243,7 +276,7 @@ namespace MC
     {
       static_assert(event != EventType::__COUNT__,
                     "Count is not a valid event");
-      Kokkos::atomic_add(&_events[event_index<event>()], 1);
+      Kokkos::atomic_add(&_events(event_index<event>()), 1);
     }
 
     template <EventType event>
@@ -252,7 +285,7 @@ namespace MC
     {
       static_assert(event != EventType::__COUNT__,
                     "Count is not a valid event");
-      Kokkos::atomic_add(&_events[event_index<event>()], val);
+      Kokkos::atomic_add(&_events(event_index<event>()), val);
     }
 
     template <EventType event>
@@ -269,11 +302,8 @@ namespace MC
     void
     save(Archive& ar) const
     {
-      std::array<std::size_t, number_event_type> array{};
-
-      auto rd = std::span<std::size_t>(_events.data(), number_event_type);
-      std::copy(rd.begin(), rd.end(), array.begin());
-      assert(rd[0] == _events[0] && rd[0] == array[0]);
+      const std::array<std::size_t, number_event_type> array = get_span();
+      assert(array[0] == _events(0));
 
       // std::array<std::size_t, number_event_type> array_cumulative{};
       // rd = std::span<std::size_t>(m_cumulative.data(), number_event_type);
@@ -294,9 +324,11 @@ namespace MC
       // ar(array, array_cumulative);
       ar(array);
 
-      auto rd = std::span<std::size_t>(_events.data(), number_event_type);
-      std::copy(array.begin(), array.end(), rd.begin());
-      assert(rd[0] == _events[0]);
+      for (std::size_t i = 0; i < number_event_type; ++i)
+      {
+        _events(i) = array[i];
+      }
+      assert(array[0] == _events(0));
 
       // rd = std::span<std::size_t>(m_cumulative.data(), number_event_type);
       // std::copy(array_cumulative.begin(), array_cumulative.end(),
