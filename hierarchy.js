@@ -91,6 +91,7 @@ var hierarchy =
     [ "Models::Monod", "structModels_1_1Monod.html", null ],
     [ "MC::MonteCarloUnit", "structMC_1_1MonteCarloUnit.html", null ],
     [ "Simulation::KernelInline::MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", null ],
+    [ "Simulation::KernelInline::MoveLeaveTally", "structSimulation_1_1KernelInline_1_1MoveLeaveTally.html", null ],
     [ "EIGEN_DIAG_POP::MtrVisitor", "structEIGEN__DIAG__POP_1_1MtrVisitor.html", null ],
     [ "Core::DataExporter::MultiMatrixDescription", "structCore_1_1DataExporter_1_1MultiMatrixDescription.html", null ],
     [ "MC::Distributions::Normal< F >", "structMC_1_1Distributions_1_1Normal.html", null ],
@@ -102,6 +103,7 @@ var hierarchy =
     [ "IO::ProgressBar", "classIO_1_1ProgressBar.html", null ],
     [ "MC::ReactorDomain", "classMC_1_1ReactorDomain.html", null ],
     [ "IO::RedirectHandle", "classIO_1_1RedirectHandle.html", null ],
+    [ "Kokkos::reduction_identity< Simulation::KernelInline::MoveLeaveTally >", "structKokkos_1_1reduction__identity_3_01Simulation_1_1KernelInline_1_1MoveLeaveTally_01_4.html", null ],
     [ "MC::RuntimeParameters", "structMC_1_1RuntimeParameters.html", null ],
     [ "Simulation::ScalarInitializer", "structSimulation_1_1ScalarInitializer.html", null ],
     [ "Simulation::ScalarSimulation", "classSimulation_1_1ScalarSimulation.html", null ],
@@ -133,6 +135,7 @@ var hierarchy =
     [ "Simulation::KernelInline::TagLeave", "structSimulation_1_1KernelInline_1_1TagLeave.html", null ],
     [ "Simulation::KernelInline::TagLeaveB0D", "structSimulation_1_1KernelInline_1_1TagLeaveB0D.html", null ],
     [ "Simulation::KernelInline::TagMove", "structSimulation_1_1KernelInline_1_1TagMove.html", null ],
+    [ "Simulation::KernelInline::TagMoveLeave", "structSimulation_1_1KernelInline_1_1TagMoveLeave.html", null ],
     [ "std::true_type", null, [
       [ "has_uniform_weight< T, std::void_t< typename T::uniform_weight > >", "structhas__uniform__weight_3_01T_00_01std_1_1void__t_3_01typename_01T_1_1uniform__weight_01_4_01_4.html", null ]
     ] ],

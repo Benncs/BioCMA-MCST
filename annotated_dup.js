@@ -38,6 +38,9 @@ var annotated_dup =
       [ "RedirectGuard", "classIO_1_1RedirectGuard.html", "classIO_1_1RedirectGuard" ],
       [ "RedirectHandle", "classIO_1_1RedirectHandle.html", "classIO_1_1RedirectHandle" ]
     ] ],
+    [ "Kokkos", "namespaceKokkos.html", [
+      [ "reduction_identity< Simulation::KernelInline::MoveLeaveTally >", "structKokkos_1_1reduction__identity_3_01Simulation_1_1KernelInline_1_1MoveLeaveTally_01_4.html", "structKokkos_1_1reduction__identity_3_01Simulation_1_1KernelInline_1_1MoveLeaveTally_01_4" ]
+    ] ],
     [ "KokkosEigen", "namespaceKokkosEigen.html", [
       [ "KokkosEigen2D", "classKokkosEigen_1_1KokkosEigen2D.html", "classKokkosEigen_1_1KokkosEigen2D" ]
     ] ],
@@ -97,12 +100,14 @@ var annotated_dup =
         [ "CycleReducer", "classSimulation_1_1KernelInline_1_1CycleReducer.html", "classSimulation_1_1KernelInline_1_1CycleReducer" ],
         [ "CycleReducerType", "structSimulation_1_1KernelInline_1_1CycleReducerType.html", "structSimulation_1_1KernelInline_1_1CycleReducerType" ],
         [ "MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", "structSimulation_1_1KernelInline_1_1MoveFunctor" ],
+        [ "MoveLeaveTally", "structSimulation_1_1KernelInline_1_1MoveLeaveTally.html", "structSimulation_1_1KernelInline_1_1MoveLeaveTally" ],
         [ "TagContribution", "structSimulation_1_1KernelInline_1_1TagContribution.html", null ],
         [ "TagContribution0D", "structSimulation_1_1KernelInline_1_1TagContribution0D.html", null ],
         [ "TagCycle", "structSimulation_1_1KernelInline_1_1TagCycle.html", null ],
         [ "TagLeave", "structSimulation_1_1KernelInline_1_1TagLeave.html", null ],
         [ "TagLeaveB0D", "structSimulation_1_1KernelInline_1_1TagLeaveB0D.html", null ],
-        [ "TagMove", "structSimulation_1_1KernelInline_1_1TagMove.html", null ]
+        [ "TagMove", "structSimulation_1_1KernelInline_1_1TagMove.html", null ],
+        [ "TagMoveLeave", "structSimulation_1_1KernelInline_1_1TagMoveLeave.html", null ]
       ] ],
       [ "MassTransfer", "namespaceSimulation_1_1MassTransfer.html", [
         [ "Type", "namespaceSimulation_1_1MassTransfer_1_1Type.html", [

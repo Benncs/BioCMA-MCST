@@ -1,7 +1,9 @@
 <map id="Simulation::KernelInline::MoveFunctor::handle_move" name="Simulation::KernelInline::MoveFunctor::handle_move">
 <area shape="rect" id="Node000001" title=" " alt="" coords="5,40,194,79"/>
-<area shape="rect" id="Node000002" href="$namespaceSimulation_1_1KernelInline.html#a3fd8d8828a956f4420ac98126ddf427b" title="probably overkill binary search to find next compartment" alt="" coords="242,5,422,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,43,226,38,227,43,195,48"/>
-<area shape="rect" id="Node000003" href="$namespaceSimulation_1_1KernelInline.html#ad7c0e734167cdff7b5ac0f9b114309c2" title=" " alt="" coords="253,68,410,120"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,71,238,77,237,83,194,76"/>
+<area shape="rect" id="Node000002" href="$structSimulation_1_1KernelInline_1_1MoveFunctor.html#a3bb11478456221f4943878120c2f9bf4" title=" " alt="" coords="242,40,463,79"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,57,226,57,226,62,194,62"/>
+<area shape="rect" id="Node000003" href="$namespaceSimulation_1_1KernelInline.html#a3fd8d8828a956f4420ac98126ddf427b" title="probably overkill binary search to find next compartment" alt="" coords="511,5,691,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="463,41,495,37,496,42,464,47"/>
+<area shape="rect" id="Node000004" href="$namespaceSimulation_1_1KernelInline.html#ad7c0e734167cdff7b5ac0f9b114309c2" title=" " alt="" coords="522,68,680,120"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="464,72,507,78,506,84,463,77"/>
 </map>

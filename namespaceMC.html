@@ -78,7 +78,7 @@ $(function(){initNavTree('namespaceMC.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:Distributions" id="r_Distributions"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceMC_1_1Distributions.html">Distributions</a></td></tr>
-<tr class="memdesc:namespaceMC_1_1Distributions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kokkos compatible method to draw from specific probability distribution. <br /></td></tr>
+<tr class="memdesc:namespaceMC_1_1Distributions"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceKokkos.html">Kokkos</a> compatible method to draw from specific probability distribution. <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -1109,7 +1109,7 @@ Here is the caller graph for this function:</div>
 
 <p>Number of std::size_t slots reserved per counter. </p>
 <p>Counters are updated with atomics from every thread of the node. Packing them contiguously puts all of them on a single cache line, so unrelated tallies (typically Move and Exit) false-share and serialise against each other. One counter per cache line removes that coupling.</p>
-<dl class="section note"><dt>Note</dt><dd>Kokkos::AllowPadding does not help here: it only rounds the leading dimension of a rank&gt;=2 view up to Impl::MEMORY_ALIGNMENT, and its rank-1 specialisation is explicitly the "no padding / striding" one. The stride is instead carried by the layout trait, Kokkos::LayoutStride, which keeps the view rank-1 and lets Kokkos own the offset arithmetic. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Kokkos::AllowPadding does not help here: it only rounds the leading dimension of a rank&gt;=2 view up to Impl::MEMORY_ALIGNMENT, and its rank-1 specialisation is explicitly the "no padding / striding" one. The stride is instead carried by the layout trait, Kokkos::LayoutStride, which keeps the view rank-1 and lets <a class="el" href="namespaceKokkos.html">Kokkos</a> own the offset arithmetic. </dd></dl>
 
 </div>
 </div>

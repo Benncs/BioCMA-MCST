@@ -20,6 +20,7 @@ var namespaces_dup =
       [ "iota_species", "namespaceimpl.html#a1f45dc038ed3e9152927bf0dd7a45576", null ]
     ] ],
     [ "IO", "namespaceIO.html", "namespaceIO" ],
+    [ "Kokkos", "namespaceKokkos.html", "namespaceKokkos" ],
     [ "KokkosEigen", "namespaceKokkosEigen.html", "namespaceKokkosEigen" ],
     [ "MC", "namespaceMC.html", "namespaceMC" ],
     [ "Mixture", "namespaceMixture.html", "namespaceMixture" ],
