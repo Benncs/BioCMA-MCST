@@ -182,6 +182,8 @@ Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a2bac73e9eee491093b7ac10969645bfa" id="r_a2bac73e9eee491093b7ac10969645bfa"><td class="memItemLeft" align="right" valign="top">constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bac73e9eee491093b7ac10969645bfa">number_event_type</a></td></tr>
+<tr class="memitem:a91734793e86441df7f694ca71c3d4a37" id="r_a91734793e86441df7f694ca71c3d4a37"><td class="memItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a91734793e86441df7f694ca71c3d4a37">event_stride</a> = 64 / sizeof(std::size_t)</td></tr>
+<tr class="memdesc:a91734793e86441df7f694ca71c3d4a37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of std::size_t slots reserved per counter.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Namespace that contains classes and structures related to Monte Carlo (<a class="el" href="namespaceMC.html" title="Namespace that contains classes and structures related to Monte Carlo (MC) simulations.">MC</a>) simulations. </p>
@@ -1085,6 +1087,32 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
+<a id="a91734793e86441df7f694ca71c3d4a37" name="a91734793e86441df7f694ca71c3d4a37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91734793e86441df7f694ca71c3d4a37">&#9670;&#160;</a></span>event_stride</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t MC::event_stride = 64 / sizeof(std::size_t)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of std::size_t slots reserved per counter. </p>
+<p>Counters are updated with atomics from every thread of the node. Packing them contiguously puts all of them on a single cache line, so unrelated tallies (typically Move and Exit) false-share and serialise against each other. One counter per cache line removes that coupling.</p>
+<dl class="section note"><dt>Note</dt><dd>Kokkos::AllowPadding does not help here: it only rounds the leading dimension of a rank&gt;=2 view up to Impl::MEMORY_ALIGNMENT, and its rank-1 specialisation is explicitly the "no padding / striding" one. The stride is instead carried by the layout trait, Kokkos::LayoutStride, which keeps the view rank-1 and lets Kokkos own the offset arithmetic. </dd></dl>
+
+</div>
+</div>
 <a id="a2bac73e9eee491093b7ac10969645bfa" name="a2bac73e9eee491093b7ac10969645bfa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2bac73e9eee491093b7ac10969645bfa">&#9670;&#160;</a></span>number_event_type</h2>
 
@@ -1106,7 +1134,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(</div>
 <div class="line">      <a class="code hl_enumvalue" href="#a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb">EventType::__COUNT__</a>)</div>
-<div class="ttc" id="anamespaceMC_html_a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb"><div class="ttname"><a href="#a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb">MC::EventType::__COUNT__</a></div><div class="ttdeci">@ __COUNT__</div><div class="ttdef"><b>Definition</b> events.hpp:26</div></div>
+<div class="ttc" id="anamespaceMC_html_a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb"><div class="ttname"><a href="#a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb">MC::EventType::__COUNT__</a></div><div class="ttdeci">@ __COUNT__</div><div class="ttdef"><b>Definition</b> events.hpp:27</div></div>
 </div><!-- fragment -->
 </div>
 </div>

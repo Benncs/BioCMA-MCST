@@ -62,5 +62,6 @@ var namespaceMC =
     [ "next_splitmix64", "namespaceMC.html#af7f8e9154582097b61aaed45e6b53e28", null ],
     [ "post_init_weight", "namespaceMC.html#ac9b6a65d70e4c5007f4bc908509924a0", null ],
     [ "sample_random_variables", "namespaceMC.html#a2bd2179d1f9faf98a60f1dedfac0fc83", null ],
+    [ "event_stride", "namespaceMC.html#a91734793e86441df7f694ca71c3d4a37", null ],
     [ "number_event_type", "namespaceMC.html#a2bac73e9eee491093b7ac10969645bfa", null ]
 ];

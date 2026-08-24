@@ -96,7 +96,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0cd302aaea55180581c5a259d6367ba1" id="r_a0cd302aaea55180581c5a259d6367ba1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0cd302aaea55180581c5a259d6367ba1">do_move</a> () const</td></tr>
 <tr class="memitem:af32d642b459f6b63bfe27b1f27d695ce" id="r_af32d642b459f6b63bfe27b1f27d695ce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af32d642b459f6b63bfe27b1f27d695ce">do_leave</a> () const</td></tr>
 <tr class="memitem:a587515e3d777185ba5d0d1730b640e6d" id="r_a587515e3d777185ba5d0d1730b640e6d"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a587515e3d777185ba5d0d1730b640e6d">operator()</a> (<a class="el" href="structSimulation_1_1KernelInline_1_1TagLeaveB0D.html">TagLeaveB0D</a> _tag, const Kokkos::TeamPolicy&lt; ComputeSpace &gt;::member_type &amp;team_handle, std::size_t &amp;local_dead_count) const</td></tr>
-<tr class="memitem:a0b972ed7e2a323935a225728e3835fd5" id="r_a0b972ed7e2a323935a225728e3835fd5"><td class="memItemLeft" align="right" valign="top">KOKKOS_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b972ed7e2a323935a225728e3835fd5">handle_move</a> (const std::size_t idx, const float rng1, const float rng2) const</td></tr>
+<tr class="memitem:ad24de9023e7806a87a46e7f0a8915953" id="r_ad24de9023e7806a87a46e7f0a8915953"><td class="memItemLeft" align="right" valign="top">KOKKOS_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad24de9023e7806a87a46e7f0a8915953">handle_move</a> (const std::size_t idx, const float rng1, const float rng2) const</td></tr>
 <tr class="memitem:a8e0863dee060e2be7b265537c3fffbc4" id="r_a8e0863dee060e2be7b265537c3fffbc4"><td class="memTemplParams" colspan="2">template&lt;typename ExecSpace&gt; </td></tr>
 <tr class="memitem:a8e0863dee060e2be7b265537c3fffbc4 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_FORCEINLINE_FUNCTION std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e0863dee060e2be7b265537c3fffbc4">handle_exit</a> (const std::size_t idx, const Kokkos::View&lt; const <a class="el" href="structMC_1_1LeavingFlow.html">MC::LeavingFlow</a> *, ExecSpace &gt; &amp;leaving_flow, std::size_t &amp;dead_count) const</td></tr>
 <tr class="memitem:ac51a303bfb5a6d6c56e4a4b2c9b3f5c4" id="r_ac51a303bfb5a6d6c56e4a4b2c9b3f5c4"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac51a303bfb5a6d6c56e4a4b2c9b3f5c4">perform_exit</a> (const bool proba, const std::size_t idx, std::size_t &amp;dead_count) const</td></tr>
@@ -427,8 +427,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a0b972ed7e2a323935a225728e3835fd5" name="a0b972ed7e2a323935a225728e3835fd5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b972ed7e2a323935a225728e3835fd5">&#9670;&#160;</a></span>handle_move()</h2>
+<a id="ad24de9023e7806a87a46e7f0a8915953" name="ad24de9023e7806a87a46e7f0a8915953"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad24de9023e7806a87a46e7f0a8915953">&#9670;&#160;</a></span>handle_move()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -437,7 +437,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">KOKKOS_FUNCTION void Simulation::KernelInline::MoveFunctor::handle_move </td>
+          <td class="memname">KOKKOS_FUNCTION bool Simulation::KernelInline::MoveFunctor::handle_move </td>
           <td>(</td>
           <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>idx</em></span>, </td>
         </tr>
@@ -458,15 +458,16 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>true if the particle changed compartment. The caller is responsible for tallying: a per-particle atomic on the shared Move counter serialises the whole kernel above ~16 threads. </dd></dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_a0b972ed7e2a323935a225728e3835fd5_cgraph.svg" width="428" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_ad24de9023e7806a87a46e7f0a8915953_cgraph.svg" width="428" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_a0b972ed7e2a323935a225728e3835fd5_icgraph.svg" width="415" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structSimulation_1_1KernelInline_1_1MoveFunctor_ad24de9023e7806a87a46e7f0a8915953_icgraph.svg" width="415" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
