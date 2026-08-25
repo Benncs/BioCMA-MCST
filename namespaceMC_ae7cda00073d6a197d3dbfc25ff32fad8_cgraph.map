@@ -1,0 +1,9 @@
+<map id="MC::resize_first_touch" name="MC::resize_first_touch">
+<area shape="rect" id="Node000001" title="Kokkos::resize, but with the first touch placed by us." alt="" coords="5,5,159,30"/>
+<area shape="rect" id="Node000002" href="$namespaceMC.html#afce410cbcc9bdb026806eeb0f4e0c7c1" title="Write&#45;touch [begin, end) with the move kernel&#39;s team decomposition." alt="" coords="207,5,319,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,15,191,15,191,20,159,20"/>
+<area shape="rect" id="Node000003" href="$namespaceCommon.html#a618180f8964b0ffef461c9ff2f44d295" title=" " alt="" coords="367,5,531,30"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="319,15,352,15,352,20,319,20"/>
+<area shape="rect" id="Node000004" href="$namespaceCommon.html#aef3f5fadf729a92859657cacc3ab9f53" title=" " alt="" coords="579,5,745,30"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="532,15,564,15,564,20,532,20"/>
+</map>

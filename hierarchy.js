@@ -50,6 +50,7 @@ var hierarchy =
     [ "Simulation::Feed::FeedFactory", "structSimulation_1_1Feed_1_1FeedFactory.html", null ],
     [ "Simulation::Feed::FeedValue", "structSimulation_1_1Feed_1_1FeedValue.html", null ],
     [ "Core::ScalarFactory::File", "structCore_1_1ScalarFactory_1_1File.html", null ],
+    [ "MC::Impl::FirstTouchFunctor< ViewType >", "structMC_1_1Impl_1_1FirstTouchFunctor.html", null ],
     [ "Simulation::MassTransfer::Type::FixedKla", "structSimulation_1_1MassTransfer_1_1Type_1_1FixedKla.html", null ],
     [ "Models::FixedLength", "structModels_1_1FixedLength.html", null ],
     [ "Simulation::MassTransfer::Type::FlowmapKla", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapKla.html", null ],

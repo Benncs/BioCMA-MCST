@@ -1,6 +1,7 @@
 var namespaceMC =
 [
     [ "Distributions", "namespaceMC_1_1Distributions.html", "namespaceMC_1_1Distributions" ],
+    [ "Impl", "namespaceMC_1_1Impl.html", "namespaceMC_1_1Impl" ],
     [ "ContribIndexBounds", "structMC_1_1ContribIndexBounds.html", "structMC_1_1ContribIndexBounds" ],
     [ "DomainState", "structMC_1_1DomainState.html", "structMC_1_1DomainState" ],
     [ "EventContainer", "structMC_1_1EventContainer.html", "structMC_1_1EventContainer" ],
@@ -55,6 +56,7 @@ var namespaceMC =
     ] ],
     [ "event_index", "namespaceMC.html#ae91609aafa31939cedd6775cc5adafc4", null ],
     [ "fill_random", "namespaceMC.html#a280b2c4607eee876da29d5e51c813695", null ],
+    [ "first_touch", "namespaceMC.html#afce410cbcc9bdb026806eeb0f4e0c7c1", null ],
     [ "get_pool", "namespaceMC.html#a6734cec020a2315d36542faad86c9125", null ],
     [ "impl_init", "namespaceMC.html#a3c593ea5f6af406116befde0c9595b7c", null ],
     [ "init", "namespaceMC.html#ac14d08555263d7a9d7f22696c7604211", null ],
@@ -62,6 +64,7 @@ var namespaceMC =
     [ "master_seed", "namespaceMC.html#aa68fd5fea506331f369d20b49904dafd", null ],
     [ "next_splitmix64", "namespaceMC.html#af7f8e9154582097b61aaed45e6b53e28", null ],
     [ "post_init_weight", "namespaceMC.html#ac9b6a65d70e4c5007f4bc908509924a0", null ],
+    [ "resize_first_touch", "namespaceMC.html#ae7cda00073d6a197d3dbfc25ff32fad8", null ],
     [ "sample_random_variables", "namespaceMC.html#a2bd2179d1f9faf98a60f1dedfac0fc83", null ],
     [ "event_stride", "namespaceMC.html#a91734793e86441df7f694ca71c3d4a37", null ],
     [ "number_event_type", "namespaceMC.html#a2bac73e9eee491093b7ac10969645bfa", null ]

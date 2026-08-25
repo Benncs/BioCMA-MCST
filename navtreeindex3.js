@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"classSimulation_1_1BaseSimulationException.html#a1914eac16910be8ad80a834e4836e8c5":[4,0,12,3,1],
+"classSimulation_1_1BaseSimulationException.html#aa6249c4c6a403146a6fc861667f315eb":[2,0,17,4,3],
 "classSimulation_1_1BaseSimulationException.html#aa6249c4c6a403146a6fc861667f315eb":[4,0,12,3,3],
 "classSimulation_1_1BaseSimulationException.html#aacb074ed237f1460e9181d07b6c508cd":[2,0,17,4,0],
 "classSimulation_1_1BaseSimulationException.html#aacb074ed237f1460e9181d07b6c508cd":[4,0,12,3,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "classSimulation_1_1ScalarSimulation.html#aab5e48f3385a40d87dd678103097ec06":[4,0,12,11,19],
 "classSimulation_1_1ScalarSimulation.html#aac1fe78e553195b4df1cacc574eb5e81":[2,0,17,12,8],
 "classSimulation_1_1ScalarSimulation.html#aac1fe78e553195b4df1cacc574eb5e81":[4,0,12,11,8],
-"classSimulation_1_1ScalarSimulation.html#ab610e2b4570e9d2f39633e39b3625368":[2,0,17,12,23],
-"classSimulation_1_1ScalarSimulation.html#ab610e2b4570e9d2f39633e39b3625368":[4,0,12,11,23],
-"classSimulation_1_1ScalarSimulation.html#ab6881cc044f62a769c78b933231e820d":[2,0,17,12,7]
+"classSimulation_1_1ScalarSimulation.html#ab610e2b4570e9d2f39633e39b3625368":[2,0,17,12,23]
 };

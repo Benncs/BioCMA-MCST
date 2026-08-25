@@ -1,5 +1,7 @@
 <map id="MC::ParticlesContainer&lt; Model &gt;" name="MC::ParticlesContainer&lt; Model &gt;">
-<area shape="rect" id="Node000001" title="Main owning object for Monte&#45;Carlo particles." alt="" coords="10,100,168,139"/>
-<area shape="rect" id="Node000002" href="$structMC_1_1RuntimeParameters.html" title=" " alt="" coords="5,5,173,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,45,92,99,86,99,86,45"/>
+<area shape="rect" id="Node000001" title="Main owning object for Monte&#45;Carlo particles." alt="" coords="95,100,254,139"/>
+<area shape="rect" id="Node000002" href="$structKernelDispatchOptions.html" title=" " alt="" coords="5,5,160,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,39,159,98,155,101,101,43"/>
+<area shape="rect" id="Node000003" href="$structMC_1_1RuntimeParameters.html" title=" " alt="" coords="184,5,352,30"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="257,45,232,78,205,102,201,98,229,74,252,42"/>
 </map>

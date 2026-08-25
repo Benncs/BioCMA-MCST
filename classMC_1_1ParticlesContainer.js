@@ -1,7 +1,7 @@
 var classMC_1_1ParticlesContainer =
 [
     [ "UsedModel", "classMC_1_1ParticlesContainer.html#ac7a2519bfeea5192bb9e6a29254f1f88", null ],
-    [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html#a03a343614bef6821b8815902e3185e37", null ],
+    [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html#ae05e5dc4d00760e72cf22ae921f3bbfd", null ],
     [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html#a5b4a66b67d3b4942557b22538958480a", null ],
     [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html#adacba063d362632ca0899bae750b628a", null ],
     [ "ParticlesContainer", "classMC_1_1ParticlesContainer.html#ae0cd8cf83c2728db495167ec2f10d80a", null ],
@@ -31,6 +31,7 @@ var classMC_1_1ParticlesContainer =
     [ "buffer_position", "classMC_1_1ParticlesContainer.html#aa90d0178c200214e2ecf3f4e5ef2196d", null ],
     [ "contribs", "classMC_1_1ParticlesContainer.html#a208eb3dca279e4dfa4f358a1fb3d5dc9", null ],
     [ "inactive_counter", "classMC_1_1ParticlesContainer.html#ab287b63249c0feaf15a20d26bfebc647", null ],
+    [ "kernel_options", "classMC_1_1ParticlesContainer.html#a4be567ebb26d7228955af28e501c6b84", null ],
     [ "model", "classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297", null ],
     [ "n_allocated_elements", "classMC_1_1ParticlesContainer.html#ae3d67d42ba1d139b0ad83d1d9395f3dc", null ],
     [ "n_used_elements", "classMC_1_1ParticlesContainer.html#a7b4ed9c9e9938f71e1fc659dcf3ff66e", null ],

@@ -4,4 +4,12 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,22,196,22,196,27,164,27"/>
 <area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a4fc94ae525191a5d034dce4866986c1e" title=" " alt="" coords="439,5,597,44"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="392,22,423,22,423,27,392,27"/>
+<area shape="rect" id="Node000004" href="$namespaceMC.html#ae7cda00073d6a197d3dbfc25ff32fad8" title="Kokkos::resize, but with the first touch placed by us." alt="" coords="645,12,799,37"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="598,22,630,22,630,27,598,27"/>
+<area shape="rect" id="Node000005" href="$namespaceMC.html#afce410cbcc9bdb026806eeb0f4e0c7c1" title="Write&#45;touch [begin, end) with the move kernel&#39;s team decomposition." alt="" coords="847,12,959,37"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="799,22,831,22,831,27,799,27"/>
+<area shape="rect" id="Node000006" href="$namespaceCommon.html#a618180f8964b0ffef461c9ff2f44d295" title=" " alt="" coords="1007,12,1171,37"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="959,22,992,22,992,27,959,27"/>
+<area shape="rect" id="Node000007" href="$namespaceCommon.html#aef3f5fadf729a92859657cacc3ab9f53" title=" " alt="" coords="1219,12,1385,37"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1172,22,1204,22,1204,27,1172,27"/>
 </map>

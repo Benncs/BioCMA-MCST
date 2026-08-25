@@ -54,6 +54,9 @@ var annotated_dup =
         [ "TruncatedNormal", "structMC_1_1Distributions_1_1TruncatedNormal.html", "structMC_1_1Distributions_1_1TruncatedNormal" ],
         [ "Uniform", "structMC_1_1Distributions_1_1Uniform.html", "structMC_1_1Distributions_1_1Uniform" ]
       ] ],
+      [ "Impl", "namespaceMC_1_1Impl.html", [
+        [ "FirstTouchFunctor", "structMC_1_1Impl_1_1FirstTouchFunctor.html", "structMC_1_1Impl_1_1FirstTouchFunctor" ]
+      ] ],
       [ "ContribIndexBounds", "structMC_1_1ContribIndexBounds.html", "structMC_1_1ContribIndexBounds" ],
       [ "DomainState", "structMC_1_1DomainState.html", "structMC_1_1DomainState" ],
       [ "EventContainer", "structMC_1_1EventContainer.html", "structMC_1_1EventContainer" ],
