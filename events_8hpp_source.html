@@ -78,8 +78,8 @@ $(function(){initNavTree('events_8hpp_source.html','',''); });
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;impl/Kokkos_Profiling.hpp&quot;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;Kokkos_Core.hpp&gt;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Kokkos_Core_fwd.hpp&gt;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;common/execinfo.hpp&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;array&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;array&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;common/execinfo.hpp&gt;</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;cstddef&gt;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;span&gt;</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
@@ -228,18 +228,19 @@ $(function(){initNavTree('events_8hpp_source.html','',''); });
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    <span class="comment">// so each one owns a cache line. LayoutStride::span() is</span></div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="comment">// max(extent * stride) == number_event_type * event_stride, so the</span></div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <span class="comment">// allocation covers every counter.</span></div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#ac99ed19d82c6d11712dea32692ebf434">  178</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structMC_1_1EventContainer.html#ac99ed19d82c6d11712dea32692ebf434">event_view_type</a> = Kokkos::</div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        View&lt;std::size_t*, Kokkos::LayoutStride, Kokkos::SharedSpace&gt;;</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span> </div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">  181</a></span>    <a class="code hl_typedef" href="structMC_1_1EventContainer.html#ac99ed19d82c6d11712dea32692ebf434">event_view_type</a> <a class="code hl_variable" href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">_events</a>;</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#ae06d2f546089944c11ae57b7d271960b">  178</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structMC_1_1EventContainer.html#ae06d2f546089944c11ae57b7d271960b">event_view_type</a></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        = Kokkos::View&lt;std::size_t*, Kokkos::LayoutStride, Kokkos::SharedSpace&gt;;</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">  180</a></span> </div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    <a class="code hl_typedef" href="structMC_1_1EventContainer.html#ae06d2f546089944c11ae57b7d271960b">event_view_type</a> <a class="code hl_variable" href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">_events</a>;</div>
 <div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
 <div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    <span class="comment">// Kokkos::View&lt;std::size_t[number_event_type], Kokkos::SharedSpace&gt; //</span></div>
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    <span class="comment">// NOLINT</span></div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <span class="comment">//     m_cumulative; //</span></div>
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    <span class="comment">//     NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)</span></div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span></div>
-<div class="foldopen" id="foldopen00191" data-start="{" data-end="}">
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a7ee3bc947df02387c92b56b8c4c86cc5">  191</a></span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a7ee3bc947df02387c92b56b8c4c86cc5">EventContainer</a>()</div>
+<div class="foldopen" id="foldopen00190" data-start="{" data-end="}">
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a7ee3bc947df02387c92b56b8c4c86cc5">  190</a></span><span class="comment">     */</span></div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a7ee3bc947df02387c92b56b8c4c86cc5">EventContainer</a>()</div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        : <a class="code hl_variable" href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">_events</a>(<span class="stringliteral">&quot;events&quot;</span>,</div>
 <div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                  <a class="code hl_namespace" href="namespaceKokkos.html">Kokkos</a>::LayoutStride(<a class="code hl_variable" href="namespaceMC.html#a2bac73e9eee491093b7ac10969645bfa">number_event_type</a>, <a class="code hl_variable" href="namespaceMC.html#a91734793e86441df7f694ca71c3d4a37">event_stride</a>))</div>
 <div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="comment">// , m_cumulative(&quot;cumulativr_events&quot;)</span></div>
@@ -248,12 +249,11 @@ $(function(){initNavTree('events_8hpp_source.html','',''); });
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>      Kokkos::deep_copy(<a class="code hl_variable" href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">_events</a>, 0); <span class="comment">// Ensure all event to 0 occurence</span></div>
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>      <span class="comment">// Kokkos::deep_copy(m_cumulative, 0); // Ensure all event to 0 occurence</span></div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    }</div>
 </div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span></div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    [[nodiscard]] std::array&lt;std::size_t, number_event_type&gt;</div>
-<div class="foldopen" id="foldopen00208" data-start="{" data-end="}">
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#ae21a42a02b01fe30ea15210f3f31cb8e">  208</a></span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#ae21a42a02b01fe30ea15210f3f31cb8e">get_span</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    }</div>
+<div class="foldopen" id="foldopen00207" data-start="{" data-end="}">
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#ae21a42a02b01fe30ea15210f3f31cb8e">  207</a></span>    [[nodiscard]] std::array&lt;std::size_t, number_event_type&gt;</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#ae21a42a02b01fe30ea15210f3f31cb8e">get_span</a>()<span class="keyword"> const</span></div>
 <div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span><span class="keyword">    </span>{</div>
 <div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>      <span class="comment">// As we use SharedHostPinnedSpace, we can deal with classic std</span></div>
 <div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>      <span class="comment">// containers to use host manipulation</span></div>
@@ -263,12 +263,12 @@ $(function(){initNavTree('events_8hpp_source.html','',''); });
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        packed[i] = <a class="code hl_variable" href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">_events</a>(i);</div>
 <div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>      }</div>
 <div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>      <span class="keywordflow">return</span> packed;</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    }</div>
 </div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    }</div>
 <div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span></div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    KOKKOS_INLINE_FUNCTION <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00224" data-start="{" data-end="}">
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a91480259898d031657179adf1bf7988a">  224</a></span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a91480259898d031657179adf1bf7988a">clear</a>()<span class="keyword"> const</span></div>
+<div class="foldopen" id="foldopen00223" data-start="{" data-end="}">
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a91480259898d031657179adf1bf7988a">  223</a></span>    KOKKOS_INLINE_FUNCTION <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a91480259898d031657179adf1bf7988a">clear</a>()<span class="keyword"> const</span></div>
 <div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span><span class="keyword">    </span>{</div>
 <div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
 <div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>      <span class="comment">// const auto&amp; cumview = m_cumulative;</span></div>
@@ -278,69 +278,69 @@ $(function(){initNavTree('events_8hpp_source.html','',''); });
 <div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>      <span class="comment">//     number_event_type,</span></div>
 <div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>      <span class="comment">//     KOKKOS_LAMBDA(const int i) { cumview[i] += evview[i]; });</span></div>
 <div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>      Kokkos::deep_copy(<a class="code hl_variable" href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">_events</a>, 0);</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    }</div>
 </div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    }</div>
 <div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span></div>
 <div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    <span class="keyword">template</span> &lt;EventType event&gt;</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    [[nodiscard]] <span class="keyword">constexpr</span> std::size_t</div>
-<div class="foldopen" id="foldopen00244" data-start="{" data-end="}">
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a2fadba8d7bf92a3d9b3a3aeaf46f1cf9">  244</a></span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a2fadba8d7bf92a3d9b3a3aeaf46f1cf9">get</a>()<span class="keyword"> const</span></div>
+<div class="foldopen" id="foldopen00243" data-start="{" data-end="}">
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a2fadba8d7bf92a3d9b3a3aeaf46f1cf9">  243</a></span>    [[nodiscard]] <span class="keyword">constexpr</span> std::size_t</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a2fadba8d7bf92a3d9b3a3aeaf46f1cf9">get</a>()<span class="keyword"> const</span></div>
 <div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span><span class="keyword">    </span>{</div>
 <div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>      <span class="keyword">static_assert</span>(<span class="keyword">event</span> != <a class="code hl_enumvalue" href="namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb">EventType::__COUNT__</a>,</div>
 <div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>                    <span class="stringliteral">&quot;Count is not a valid event&quot;</span>);</div>
 <div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>      <span class="keywordflow">return</span> <a class="code hl_variable" href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">_events</a>(<a class="code hl_function" href="namespaceMC.html#ae91609aafa31939cedd6775cc5adafc4">event_index&lt;event&gt;</a>());</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    }</div>
 </div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    }</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span></div>
 <div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    <span class="keyword">template</span> &lt;EventType event&gt;</div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    [[nodiscard]] <span class="keyword">constexpr</span> std::size_t</div>
-<div class="foldopen" id="foldopen00259" data-start="{" data-end="}">
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a23d9c60a73107c67bd68ecf09a93bd1d">  259</a></span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a23d9c60a73107c67bd68ecf09a93bd1d">get_cumulative</a>()<span class="keyword"> const</span></div>
+<div class="foldopen" id="foldopen00258" data-start="{" data-end="}">
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a23d9c60a73107c67bd68ecf09a93bd1d">  258</a></span>    [[nodiscard]] <span class="keyword">constexpr</span> std::size_t</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a23d9c60a73107c67bd68ecf09a93bd1d">get_cumulative</a>()<span class="keyword"> const</span></div>
 <div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="keyword">    </span>{</div>
 <div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>      <span class="keyword">static_assert</span>(<span class="keyword">event</span> != <a class="code hl_enumvalue" href="namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb">EventType::__COUNT__</a>,</div>
 <div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>                    <span class="stringliteral">&quot;Count is not a valid event&quot;</span>);</div>
 <div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>      <span class="keywordflow">return</span> m_cumulative(<a class="code hl_function" href="namespaceMC.html#ae91609aafa31939cedd6775cc5adafc4">event_index&lt;event&gt;</a>());</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>    }</div>
 </div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>    }</div>
 <div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span></div>
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    <span class="keyword">template</span> &lt;EventType event&gt;</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    KOKKOS_FORCEINLINE_FUNCTION <span class="keyword">constexpr</span> <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00275" data-start="{" data-end="}">
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a70d7122fe5d2521f91e871816ea83e61">  275</a></span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a70d7122fe5d2521f91e871816ea83e61">incr</a>()<span class="keyword"> const</span></div>
+<div class="foldopen" id="foldopen00274" data-start="{" data-end="}">
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a70d7122fe5d2521f91e871816ea83e61">  274</a></span>    KOKKOS_FORCEINLINE_FUNCTION <span class="keyword">constexpr</span> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a70d7122fe5d2521f91e871816ea83e61">incr</a>()<span class="keyword"> const</span></div>
 <div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span><span class="keyword">    </span>{</div>
 <div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>      <span class="keyword">static_assert</span>(<span class="keyword">event</span> != <a class="code hl_enumvalue" href="namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb">EventType::__COUNT__</a>,</div>
 <div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>                    <span class="stringliteral">&quot;Count is not a valid event&quot;</span>);</div>
 <div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>      Kokkos::atomic_add(&amp;<a class="code hl_variable" href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">_events</a>(<a class="code hl_function" href="namespaceMC.html#ae91609aafa31939cedd6775cc5adafc4">event_index&lt;event&gt;</a>()), 1);</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    }</div>
 </div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    }</div>
 <div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
 <div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    <span class="keyword">template</span> &lt;EventType event&gt;</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    KOKKOS_FORCEINLINE_FUNCTION <span class="keyword">constexpr</span> <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00284" data-start="{" data-end="}">
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a9d889f4f53b7008b152b1353729c087a">  284</a></span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a9d889f4f53b7008b152b1353729c087a">add</a>(<span class="keywordtype">size_t</span> val)<span class="keyword"> const</span></div>
+<div class="foldopen" id="foldopen00283" data-start="{" data-end="}">
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a9d889f4f53b7008b152b1353729c087a">  283</a></span>    KOKKOS_FORCEINLINE_FUNCTION <span class="keyword">constexpr</span> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a9d889f4f53b7008b152b1353729c087a">add</a>(<span class="keywordtype">size_t</span> val)<span class="keyword"> const</span></div>
 <div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="keyword">    </span>{</div>
 <div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>      <span class="keyword">static_assert</span>(<span class="keyword">event</span> != <a class="code hl_enumvalue" href="namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8ac24f1659ef8e96af67e4a7d8663a3efb">EventType::__COUNT__</a>,</div>
 <div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>                    <span class="stringliteral">&quot;Count is not a valid event&quot;</span>);</div>
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>      Kokkos::atomic_add(&amp;<a class="code hl_variable" href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">_events</a>(<a class="code hl_function" href="namespaceMC.html#ae91609aafa31939cedd6775cc5adafc4">event_index&lt;event&gt;</a>()), val);</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    }</div>
 </div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    }</div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span> </div>
 <div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    <span class="keyword">template</span> &lt;EventType event&gt;</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    KOKKOS_FORCEINLINE_FUNCTION <span class="keyword">constexpr</span> <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00293" data-start="{" data-end="}">
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a117575ad89e1abca8ad66cb704c18bd5">  293</a></span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a117575ad89e1abca8ad66cb704c18bd5">wrap_incr</a>()<span class="keyword"> const</span></div>
+<div class="foldopen" id="foldopen00292" data-start="{" data-end="}">
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a117575ad89e1abca8ad66cb704c18bd5">  292</a></span>    KOKKOS_FORCEINLINE_FUNCTION <span class="keyword">constexpr</span> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a117575ad89e1abca8ad66cb704c18bd5">wrap_incr</a>()<span class="keyword"> const</span></div>
 <div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span><span class="keyword">    </span>{</div>
 <div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>      <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (AutoGenerated::FlagCompileTime::enable_event_counter)</div>
 <div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>      {</div>
 <div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>        <a class="code hl_function" href="structMC_1_1EventContainer.html#a70d7122fe5d2521f91e871816ea83e61">incr&lt;event&gt;</a>();</div>
 <div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>      }</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    }</div>
 </div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    }</div>
 <div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span> </div>
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Archive&gt;</div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00303" data-start="{" data-end="}">
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a28c0bb33bbdfede8479523447c96b477">  303</a></span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a28c0bb33bbdfede8479523447c96b477">save</a>(Archive&amp; ar)<span class="keyword"> const</span></div>
+<div class="foldopen" id="foldopen00302" data-start="{" data-end="}">
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#a28c0bb33bbdfede8479523447c96b477">  302</a></span>    <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#a28c0bb33bbdfede8479523447c96b477">save</a>(Archive&amp; ar)<span class="keyword"> const</span></div>
 <div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span><span class="keyword">    </span>{</div>
 <div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>      <span class="keyword">const</span> std::array&lt;std::size_t, number_event_type&gt; array = <a class="code hl_function" href="structMC_1_1EventContainer.html#ae21a42a02b01fe30ea15210f3f31cb8e">get_span</a>();</div>
 <div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>      assert(array[0] == <a class="code hl_variable" href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">_events</a>(0));</div>
@@ -352,13 +352,13 @@ $(function(){initNavTree('events_8hpp_source.html','',''); });
 <div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>      <span class="comment">// ar(array, array_cumulative);</span></div>
 <div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>      <span class="comment">//</span></div>
 <div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>      ar(array);</div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>    }</div>
 </div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>    }</div>
 <div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span> </div>
 <div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Archive&gt;</div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>    <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00319" data-start="{" data-end="}">
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#ad3d580bd8ff4911a8ff717c41314a694">  319</a></span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#ad3d580bd8ff4911a8ff717c41314a694">load</a>(Archive&amp; ar)</div>
+<div class="foldopen" id="foldopen00318" data-start="{" data-end="}">
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno"><a class="line" href="structMC_1_1EventContainer.html#ad3d580bd8ff4911a8ff717c41314a694">  318</a></span>    <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    <a class="code hl_function" href="structMC_1_1EventContainer.html#ad3d580bd8ff4911a8ff717c41314a694">load</a>(Archive&amp; ar)</div>
 <div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>    {</div>
 <div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span> </div>
 <div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>      std::array&lt;std::size_t, number_event_type&gt; array{};</div>
@@ -375,15 +375,15 @@ $(function(){initNavTree('events_8hpp_source.html','',''); });
 <div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>      <span class="comment">// rd = std::span&lt;std::size_t&gt;(m_cumulative.data(), number_event_type);</span></div>
 <div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>      <span class="comment">// std::copy(array_cumulative.begin(), array_cumulative.end(),</span></div>
 <div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>      <span class="comment">// rd.begin()); assert(rd[0] == m_cumulative[0]);</span></div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>    }</div>
 </div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>    }</div>
 <div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>  };</div>
 </div>
 <div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span> </div>
 <div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>}; <span class="comment">// namespace MC</span></div>
 <div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span> </div>
 <div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span><span class="preprocessor">#endif </span><span class="comment">//__MC_EVENTS_HPP__</span></div>
-<div class="ttc" id="anamespaceKokkos_html"><div class="ttname"><a href="namespaceKokkos.html">Kokkos</a></div><div class="ttdef"><b>Definition</b> move_kernel.hpp:682</div></div>
+<div class="ttc" id="anamespaceKokkos_html"><div class="ttname"><a href="namespaceKokkos.html">Kokkos</a></div><div class="ttdef"><b>Definition</b> move_kernel.hpp:631</div></div>
 <div class="ttc" id="anamespaceMC_html"><div class="ttname"><a href="namespaceMC.html">MC</a></div><div class="ttdoc">Namespace that contains classes and structures related to Monte Carlo (MC) simulations.</div><div class="ttdef"><b>Definition</b> alias.hpp:16</div></div>
 <div class="ttc" id="anamespaceMC_html_a2bac73e9eee491093b7ac10969645bfa"><div class="ttname"><a href="namespaceMC.html#a2bac73e9eee491093b7ac10969645bfa">MC::number_event_type</a></div><div class="ttdeci">constexpr size_t number_event_type</div><div class="ttdef"><b>Definition</b> events.hpp:30</div></div>
 <div class="ttc" id="anamespaceMC_html_a4abe28e303ac1f2bcdc889c01e9064b8"><div class="ttname"><a href="namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8">MC::EventType</a></div><div class="ttdeci">EventType</div><div class="ttdoc">Enumeration that represents events that can occurs during a Monte-Carlo cycle.</div><div class="ttdef"><b>Definition</b> events.hpp:20</div></div>
@@ -396,18 +396,18 @@ $(function(){initNavTree('events_8hpp_source.html','',''); });
 <div class="ttc" id="anamespaceMC_html_a69467f7d54b0dcb1a4e176fe425ffb7bafef46e5063ce3dc78b8ae64fa474241d"><div class="ttname"><a href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bafef46e5063ce3dc78b8ae64fa474241d">MC::Status::Exit</a></div><div class="ttdeci">@ Exit</div><div class="ttdef"><b>Definition</b> alias.hpp:128</div></div>
 <div class="ttc" id="anamespaceMC_html_a91734793e86441df7f694ca71c3d4a37"><div class="ttname"><a href="namespaceMC.html#a91734793e86441df7f694ca71c3d4a37">MC::event_stride</a></div><div class="ttdeci">constexpr std::size_t event_stride</div><div class="ttdoc">Number of std::size_t slots reserved per counter.</div><div class="ttdef"><b>Definition</b> events.hpp:57</div></div>
 <div class="ttc" id="anamespaceMC_html_ae91609aafa31939cedd6775cc5adafc4"><div class="ttname"><a href="namespaceMC.html#ae91609aafa31939cedd6775cc5adafc4">MC::event_index</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION consteval size_t event_index()</div><div class="ttdoc">inline getter, converts event to its value in order to be use as array index</div><div class="ttdef"><b>Definition</b> events.hpp:38</div></div>
-<div class="ttc" id="astructMC_1_1EventContainer_html_a117575ad89e1abca8ad66cb704c18bd5"><div class="ttname"><a href="structMC_1_1EventContainer.html#a117575ad89e1abca8ad66cb704c18bd5">MC::EventContainer::wrap_incr</a></div><div class="ttdeci">KOKKOS_FORCEINLINE_FUNCTION constexpr void wrap_incr() const</div><div class="ttdef"><b>Definition</b> events.hpp:293</div></div>
-<div class="ttc" id="astructMC_1_1EventContainer_html_a23d9c60a73107c67bd68ecf09a93bd1d"><div class="ttname"><a href="structMC_1_1EventContainer.html#a23d9c60a73107c67bd68ecf09a93bd1d">MC::EventContainer::get_cumulative</a></div><div class="ttdeci">constexpr std::size_t get_cumulative() const</div><div class="ttdoc">Getter to specific event counter.</div><div class="ttdef"><b>Definition</b> events.hpp:259</div></div>
-<div class="ttc" id="astructMC_1_1EventContainer_html_a28c0bb33bbdfede8479523447c96b477"><div class="ttname"><a href="structMC_1_1EventContainer.html#a28c0bb33bbdfede8479523447c96b477">MC::EventContainer::save</a></div><div class="ttdeci">void save(Archive &amp;ar) const</div><div class="ttdef"><b>Definition</b> events.hpp:303</div></div>
-<div class="ttc" id="astructMC_1_1EventContainer_html_a2fadba8d7bf92a3d9b3a3aeaf46f1cf9"><div class="ttname"><a href="structMC_1_1EventContainer.html#a2fadba8d7bf92a3d9b3a3aeaf46f1cf9">MC::EventContainer::get</a></div><div class="ttdeci">constexpr std::size_t get() const</div><div class="ttdoc">Getter to specific event counter.</div><div class="ttdef"><b>Definition</b> events.hpp:244</div></div>
-<div class="ttc" id="astructMC_1_1EventContainer_html_a70d7122fe5d2521f91e871816ea83e61"><div class="ttname"><a href="structMC_1_1EventContainer.html#a70d7122fe5d2521f91e871816ea83e61">MC::EventContainer::incr</a></div><div class="ttdeci">KOKKOS_FORCEINLINE_FUNCTION constexpr void incr() const</div><div class="ttdoc">Increment specific event counter.</div><div class="ttdef"><b>Definition</b> events.hpp:275</div></div>
-<div class="ttc" id="astructMC_1_1EventContainer_html_a7ee3bc947df02387c92b56b8c4c86cc5"><div class="ttname"><a href="structMC_1_1EventContainer.html#a7ee3bc947df02387c92b56b8c4c86cc5">MC::EventContainer::EventContainer</a></div><div class="ttdeci">EventContainer()</div><div class="ttdoc">Default container, initalise counter.</div><div class="ttdef"><b>Definition</b> events.hpp:191</div></div>
-<div class="ttc" id="astructMC_1_1EventContainer_html_a7fce13cdacf92126dbcda804470af1c2"><div class="ttname"><a href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">MC::EventContainer::_events</a></div><div class="ttdeci">event_view_type _events</div><div class="ttdef"><b>Definition</b> events.hpp:181</div></div>
-<div class="ttc" id="astructMC_1_1EventContainer_html_a91480259898d031657179adf1bf7988a"><div class="ttname"><a href="structMC_1_1EventContainer.html#a91480259898d031657179adf1bf7988a">MC::EventContainer::clear</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION void clear() const</div><div class="ttdoc">Reset counters.</div><div class="ttdef"><b>Definition</b> events.hpp:224</div></div>
-<div class="ttc" id="astructMC_1_1EventContainer_html_a9d889f4f53b7008b152b1353729c087a"><div class="ttname"><a href="structMC_1_1EventContainer.html#a9d889f4f53b7008b152b1353729c087a">MC::EventContainer::add</a></div><div class="ttdeci">KOKKOS_FORCEINLINE_FUNCTION constexpr void add(size_t val) const</div><div class="ttdef"><b>Definition</b> events.hpp:284</div></div>
-<div class="ttc" id="astructMC_1_1EventContainer_html_ac99ed19d82c6d11712dea32692ebf434"><div class="ttname"><a href="structMC_1_1EventContainer.html#ac99ed19d82c6d11712dea32692ebf434">MC::EventContainer::event_view_type</a></div><div class="ttdeci">Kokkos:: View&lt; std::size_t *, Kokkos::LayoutStride, Kokkos::SharedSpace &gt; event_view_type</div><div class="ttdef"><b>Definition</b> events.hpp:178</div></div>
-<div class="ttc" id="astructMC_1_1EventContainer_html_ad3d580bd8ff4911a8ff717c41314a694"><div class="ttname"><a href="structMC_1_1EventContainer.html#ad3d580bd8ff4911a8ff717c41314a694">MC::EventContainer::load</a></div><div class="ttdeci">void load(Archive &amp;ar)</div><div class="ttdef"><b>Definition</b> events.hpp:319</div></div>
-<div class="ttc" id="astructMC_1_1EventContainer_html_ae21a42a02b01fe30ea15210f3f31cb8e"><div class="ttname"><a href="structMC_1_1EventContainer.html#ae21a42a02b01fe30ea15210f3f31cb8e">MC::EventContainer::get_span</a></div><div class="ttdeci">std::array&lt; std::size_t, number_event_type &gt; get_span() const</div><div class="ttdoc">Get a packed copy of the event counters.</div><div class="ttdef"><b>Definition</b> events.hpp:208</div></div>
+<div class="ttc" id="astructMC_1_1EventContainer_html_a117575ad89e1abca8ad66cb704c18bd5"><div class="ttname"><a href="structMC_1_1EventContainer.html#a117575ad89e1abca8ad66cb704c18bd5">MC::EventContainer::wrap_incr</a></div><div class="ttdeci">KOKKOS_FORCEINLINE_FUNCTION constexpr void wrap_incr() const</div><div class="ttdef"><b>Definition</b> events.hpp:292</div></div>
+<div class="ttc" id="astructMC_1_1EventContainer_html_a23d9c60a73107c67bd68ecf09a93bd1d"><div class="ttname"><a href="structMC_1_1EventContainer.html#a23d9c60a73107c67bd68ecf09a93bd1d">MC::EventContainer::get_cumulative</a></div><div class="ttdeci">constexpr std::size_t get_cumulative() const</div><div class="ttdoc">Getter to specific event counter.</div><div class="ttdef"><b>Definition</b> events.hpp:258</div></div>
+<div class="ttc" id="astructMC_1_1EventContainer_html_a28c0bb33bbdfede8479523447c96b477"><div class="ttname"><a href="structMC_1_1EventContainer.html#a28c0bb33bbdfede8479523447c96b477">MC::EventContainer::save</a></div><div class="ttdeci">void save(Archive &amp;ar) const</div><div class="ttdef"><b>Definition</b> events.hpp:302</div></div>
+<div class="ttc" id="astructMC_1_1EventContainer_html_a2fadba8d7bf92a3d9b3a3aeaf46f1cf9"><div class="ttname"><a href="structMC_1_1EventContainer.html#a2fadba8d7bf92a3d9b3a3aeaf46f1cf9">MC::EventContainer::get</a></div><div class="ttdeci">constexpr std::size_t get() const</div><div class="ttdoc">Getter to specific event counter.</div><div class="ttdef"><b>Definition</b> events.hpp:243</div></div>
+<div class="ttc" id="astructMC_1_1EventContainer_html_a70d7122fe5d2521f91e871816ea83e61"><div class="ttname"><a href="structMC_1_1EventContainer.html#a70d7122fe5d2521f91e871816ea83e61">MC::EventContainer::incr</a></div><div class="ttdeci">KOKKOS_FORCEINLINE_FUNCTION constexpr void incr() const</div><div class="ttdoc">Increment specific event counter.</div><div class="ttdef"><b>Definition</b> events.hpp:274</div></div>
+<div class="ttc" id="astructMC_1_1EventContainer_html_a7ee3bc947df02387c92b56b8c4c86cc5"><div class="ttname"><a href="structMC_1_1EventContainer.html#a7ee3bc947df02387c92b56b8c4c86cc5">MC::EventContainer::EventContainer</a></div><div class="ttdeci">EventContainer()</div><div class="ttdoc">Default container, initalise counter.</div><div class="ttdef"><b>Definition</b> events.hpp:190</div></div>
+<div class="ttc" id="astructMC_1_1EventContainer_html_a7fce13cdacf92126dbcda804470af1c2"><div class="ttname"><a href="structMC_1_1EventContainer.html#a7fce13cdacf92126dbcda804470af1c2">MC::EventContainer::_events</a></div><div class="ttdeci">event_view_type _events</div><div class="ttdef"><b>Definition</b> events.hpp:180</div></div>
+<div class="ttc" id="astructMC_1_1EventContainer_html_a91480259898d031657179adf1bf7988a"><div class="ttname"><a href="structMC_1_1EventContainer.html#a91480259898d031657179adf1bf7988a">MC::EventContainer::clear</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION void clear() const</div><div class="ttdoc">Reset counters.</div><div class="ttdef"><b>Definition</b> events.hpp:223</div></div>
+<div class="ttc" id="astructMC_1_1EventContainer_html_a9d889f4f53b7008b152b1353729c087a"><div class="ttname"><a href="structMC_1_1EventContainer.html#a9d889f4f53b7008b152b1353729c087a">MC::EventContainer::add</a></div><div class="ttdeci">KOKKOS_FORCEINLINE_FUNCTION constexpr void add(size_t val) const</div><div class="ttdef"><b>Definition</b> events.hpp:283</div></div>
+<div class="ttc" id="astructMC_1_1EventContainer_html_ad3d580bd8ff4911a8ff717c41314a694"><div class="ttname"><a href="structMC_1_1EventContainer.html#ad3d580bd8ff4911a8ff717c41314a694">MC::EventContainer::load</a></div><div class="ttdeci">void load(Archive &amp;ar)</div><div class="ttdef"><b>Definition</b> events.hpp:318</div></div>
+<div class="ttc" id="astructMC_1_1EventContainer_html_ae06d2f546089944c11ae57b7d271960b"><div class="ttname"><a href="structMC_1_1EventContainer.html#ae06d2f546089944c11ae57b7d271960b">MC::EventContainer::event_view_type</a></div><div class="ttdeci">Kokkos::View&lt; std::size_t *, Kokkos::LayoutStride, Kokkos::SharedSpace &gt; event_view_type</div><div class="ttdef"><b>Definition</b> events.hpp:178</div></div>
+<div class="ttc" id="astructMC_1_1EventContainer_html_ae21a42a02b01fe30ea15210f3f31cb8e"><div class="ttname"><a href="structMC_1_1EventContainer.html#ae21a42a02b01fe30ea15210f3f31cb8e">MC::EventContainer::get_span</a></div><div class="ttdeci">std::array&lt; std::size_t, number_event_type &gt; get_span() const</div><div class="ttdoc">Get a packed copy of the event counters.</div><div class="ttdef"><b>Definition</b> events.hpp:207</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

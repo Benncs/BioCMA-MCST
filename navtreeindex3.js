@@ -1,5 +1,13 @@
 var NAVTREEINDEX3 =
 {
+"classSimulation_1_1BaseSimulationException.html#aa6249c4c6a403146a6fc861667f315eb":[4,0,12,3,3],
+"classSimulation_1_1BaseSimulationException.html#aacb074ed237f1460e9181d07b6c508cd":[2,0,17,4,0],
+"classSimulation_1_1BaseSimulationException.html#aacb074ed237f1460e9181d07b6c508cd":[4,0,12,3,0],
+"classSimulation_1_1BaseSimulationException.html#abc25df7799a81d7cc49c7c59b2fa5f45":[2,0,17,4,4],
+"classSimulation_1_1BaseSimulationException.html#abc25df7799a81d7cc49c7c59b2fa5f45":[4,0,12,3,4],
+"classSimulation_1_1BaseSimulationException.html#afb654a0a15eb8a42e4350e021ce1b0c2":[2,0,17,4,2],
+"classSimulation_1_1BaseSimulationException.html#afb654a0a15eb8a42e4350e021ce1b0c2":[4,0,12,3,2],
+"classSimulation_1_1FeedException.html":[2,0,17,6],
 "classSimulation_1_1FeedException.html":[4,0,12,5],
 "classSimulation_1_1FeedException.html#a01ddcdd837de70a3ae5a8009bb4e8253":[2,0,17,6,3],
 "classSimulation_1_1FeedException.html#a01ddcdd837de70a3ae5a8009bb4e8253":[4,0,12,5,3],
@@ -241,13 +249,5 @@ var NAVTREEINDEX3 =
 "classSimulation_1_1ScalarSimulation.html#aac1fe78e553195b4df1cacc574eb5e81":[4,0,12,11,8],
 "classSimulation_1_1ScalarSimulation.html#ab610e2b4570e9d2f39633e39b3625368":[2,0,17,12,23],
 "classSimulation_1_1ScalarSimulation.html#ab610e2b4570e9d2f39633e39b3625368":[4,0,12,11,23],
-"classSimulation_1_1ScalarSimulation.html#ab6881cc044f62a769c78b933231e820d":[2,0,17,12,7],
-"classSimulation_1_1ScalarSimulation.html#ab6881cc044f62a769c78b933231e820d":[4,0,12,11,7],
-"classSimulation_1_1ScalarSimulation.html#abaed6452a2de12afbdb23ae5c7daf079":[2,0,17,12,33],
-"classSimulation_1_1ScalarSimulation.html#abaed6452a2de12afbdb23ae5c7daf079":[4,0,12,11,33],
-"classSimulation_1_1ScalarSimulation.html#ac25ac61714d1668e17452a88a4245c0d":[2,0,17,12,17],
-"classSimulation_1_1ScalarSimulation.html#ac25ac61714d1668e17452a88a4245c0d":[4,0,12,11,17],
-"classSimulation_1_1ScalarSimulation.html#ac3cdfc29cde1cb96d8e7dd2e0cfdcacc":[2,0,17,12,3],
-"classSimulation_1_1ScalarSimulation.html#ac3cdfc29cde1cb96d8e7dd2e0cfdcacc":[4,0,12,11,3],
-"classSimulation_1_1ScalarSimulation.html#ad3a68e95acbaebba654fa2dec2b7cbb8":[2,0,17,12,32]
+"classSimulation_1_1ScalarSimulation.html#ab6881cc044f62a769c78b933231e820d":[2,0,17,12,7]
 };

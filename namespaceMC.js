@@ -24,6 +24,7 @@ var namespaceMC =
     [ "kernelContribution", "namespaceMC.html#a99d2523dbce1119cbd3c29d5ce0790f1", null ],
     [ "LeavingFlowView", "namespaceMC.html#ab07c77629281f83ba5873be3af4714eb", null ],
     [ "LocalConcentration", "namespaceMC.html#aa5a6942718ba877c62a9f91b87915901", null ],
+    [ "MoveProbabilityView", "namespaceMC.html#a09521e66cdcee651ee77b9988b113f2b", null ],
     [ "NeighborsView", "namespaceMC.html#a0338734b6c7022619c63f34662b34f75", null ],
     [ "ParticleAges", "namespaceMC.html#a71308af240201ce951b6993271bec9d6", null ],
     [ "ParticlePositions", "namespaceMC.html#a404d6db92035cbc2c86cbda6d98b6d8d", null ],
