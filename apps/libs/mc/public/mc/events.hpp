@@ -5,8 +5,8 @@
 #include "impl/Kokkos_Profiling.hpp"
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Core_fwd.hpp>
-#include <common/execinfo.hpp>
 #include <array>
+#include <common/execinfo.hpp>
 #include <cstddef>
 #include <span>
 
@@ -175,8 +175,8 @@ namespace MC
     // so each one owns a cache line. LayoutStride::span() is
     // max(extent * stride) == number_event_type * event_stride, so the
     // allocation covers every counter.
-    using event_view_type = Kokkos::
-        View<std::size_t*, Kokkos::LayoutStride, Kokkos::SharedSpace>;
+    using event_view_type
+        = Kokkos::View<std::size_t*, Kokkos::LayoutStride, Kokkos::SharedSpace>;
 
     event_view_type _events;
 

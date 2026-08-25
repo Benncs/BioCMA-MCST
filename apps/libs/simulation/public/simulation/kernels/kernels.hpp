@@ -141,19 +141,15 @@ namespace Simulation::KernelInline
       }
       const std::size_t league_size = Common::c_league_size(n_particle, npt);
 
-      auto policy = Kokkos::TeamPolicy<TagMove>(model_space,
+      auto policy = Kokkos::TeamPolicy<TagMove>(move_space,
                                                 static_cast<int>(league_size),
                                                 Kokkos::AUTO(),
                                                 Kokkos::AUTO());
-      policy.set_scratch_size(0, Kokkos::PerTeam(sizeof(float) * npt * 2));
 
       Kokkos::parallel_for("cycle_move", policy, move_kernel);
     }
 
-    /// Move and outlet test in a single pass over the particles. Both are
-    /// memory bound and stream `positions` back to back, so running them as
-    /// two kernels pays for that array twice.
-    /// Reported as "cycle_move": it is the move plus the exit test.
+    // Fused move + leave
     void
     launch_move_leave_3d(const std::size_t n_particle)
     {
@@ -165,17 +161,15 @@ namespace Simulation::KernelInline
       }
       const std::size_t league_size = Common::c_league_size(n_particle, npt);
 
-      auto policy = Kokkos::TeamPolicy<TagMoveLeave>(
-          move_space,
-          static_cast<int>(league_size),
-          Kokkos::AUTO(),
-          Kokkos::AUTO());
+      auto policy
+          = Kokkos::TeamPolicy<TagMoveLeave>(move_space,
+                                             static_cast<int>(league_size),
+                                             Kokkos::AUTO(),
+                                             Kokkos::AUTO());
 
       Kokkos::parallel_reduce("cycle_move", policy, move_kernel, move_reducer);
     }
 
-    /// Outlet test in a single-compartment domain: every particle sees the
-    /// same flow, so the lambda is computed once per team.
     void
     launch_leave_0d(const std::size_t n_particle)
     {
@@ -187,11 +181,11 @@ namespace Simulation::KernelInline
       }
       const std::size_t league_size = Common::c_league_size(n_particle, npt);
 
-      auto policy = Kokkos::TeamPolicy<TagLeaveB0D>(
-          move_space,
-          static_cast<int>(league_size),
-          Kokkos::AUTO(),
-          Kokkos::AUTO());
+      auto policy
+          = Kokkos::TeamPolicy<TagLeaveB0D>(move_space,
+                                            static_cast<int>(league_size),
+                                            Kokkos::AUTO(),
+                                            Kokkos::AUTO());
 
       Kokkos::parallel_reduce(
           "cycle_move_leave", policy, move_kernel, move_reducer);
@@ -202,8 +196,7 @@ namespace Simulation::KernelInline
     {
       // The domain shape decides which kernels are legal:
       //   multi-compartment (3D) : move, or move + leave
-      //   single compartment (0D): leave, or nothing -- there is nowhere to
-      //                            move to, so the move kernel never applies.
+      //   single compartment (0D): leave, or nothing
       // do_move() is exactly "the domain has more than one compartment".
       const bool is_multi_compartment = move_kernel.do_move();
       const bool has_outlet = move_kernel.do_leave();
