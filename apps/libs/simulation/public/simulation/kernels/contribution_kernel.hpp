@@ -127,7 +127,8 @@ template <ModelType M> struct ContributionFunctor
 
           if (active)
           {
-            const auto pos = m_particles.position(flatten_index);
+            // const auto pos = m_particles.position(flatten_index);
+            const auto pos = 0; // Position is always 0 in 0D
             const auto weight = m_particles.get_weight(flatten_index);
             const auto new_status = M::update(random_pool,
                                               d_t,

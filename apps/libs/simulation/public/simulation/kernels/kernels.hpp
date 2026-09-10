@@ -178,7 +178,8 @@ namespace Simulation::KernelInline
                                              Kokkos::AUTO(),
                                              Kokkos::AUTO());
 
-      Kokkos::parallel_reduce("cycle_move", policy, move_kernel, move_reducer);
+      Kokkos::parallel_reduce(
+          "cycle_move_leave", policy, move_kernel, move_reducer);
     }
 
     void
