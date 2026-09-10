@@ -12,6 +12,7 @@
 #include <memory>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
+#include <simulation/mass_transfer.hpp>
 #include <span>
 #include <sstream>
 #include <string>
@@ -296,8 +297,6 @@ apply(Handle handle, int to_load)
 {
   CHECK_HANDLE_OR_RETURN
 
-  handle->set_auto_mtr(); // FIXME
-
   return handle->apply(to_load != 0)
       .match(lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
 }
@@ -564,4 +563,33 @@ free_model_list(char** names, int n_model)
     std::free(names[i]);
   }
   std::free(names);
+}
+
+/* MTR */
+
+int
+set_mtr_auto(Handle handle)
+{
+  CHECK_HANDLE_OR_RETURN
+
+  return handle->set_mtr(Simulation::MassTransfer::Type::Auto{})
+      .match(lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
+}
+
+int
+set_mtr_flowmap_turbulence(Handle handle)
+{
+  CHECK_HANDLE_OR_RETURN
+
+  return handle->set_mtr(Simulation::MassTransfer::Type::FlowmapTurbulence{})
+      .match(lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
+}
+
+int
+set_mtr_flowmap_kla(Handle handle)
+{
+  CHECK_HANDLE_OR_RETURN
+
+  return handle->set_mtr(Simulation::MassTransfer::Type::FlowmapKla{})
+      .match(lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
 }
