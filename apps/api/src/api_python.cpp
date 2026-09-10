@@ -81,7 +81,7 @@ namespace PythonBindings
   {
     handle->set_auto_mtr(); // FIXME
     //
-    handle->set_mtr(Simulation::MassTransfer::Type::FlowmapTurbulence{});
+    // handle->set_mtr(Simulation::MassTransfer::Type::FlowmapTurbulence{});
 
     std::cerr << "Set auto mtr for PythonBindings" << std::endl;
     const auto rc = handle->apply(to_load);

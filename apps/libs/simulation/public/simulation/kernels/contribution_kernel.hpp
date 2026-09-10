@@ -128,6 +128,8 @@ template <ModelType M> struct ContributionFunctor
           if (active)
           {
             // const auto pos = m_particles.position(flatten_index);
+            // TODO: position array is useless in 0d, do not resize position
+            // array in 0D could be interessting
             const auto pos = 0; // Position is always 0 in 0D
             const auto weight = m_particles.get_weight(flatten_index);
             const auto new_status = M::update(random_pool,
