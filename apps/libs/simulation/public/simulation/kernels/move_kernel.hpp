@@ -468,7 +468,7 @@ namespace Simulation::KernelInline
                 continue;
               }
               const double r = gen.drand(0., 1.);
-
+              ages(flat_index, 0)++;
               perform_exit(
                   probability_leaving<decltype(r), precision_tag>(r, lambda),
                   flat_index,
@@ -486,7 +486,6 @@ namespace Simulation::KernelInline
 
     /// Pure form of the move: no access to `positions`, so the caller keeps the
     /// compartment in a register.
-
     /// @return the compartment the particle ends up in; `moved` is set when it
     /// actually changed compartment.
     template <typename GenType>

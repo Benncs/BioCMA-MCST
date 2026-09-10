@@ -200,7 +200,7 @@ namespace Simulation::KernelInline
                                             Kokkos::AUTO());
 
       Kokkos::parallel_reduce(
-          "cycle_move_leave", policy, move_kernel, move_reducer);
+          "cycle_leave_0D", policy, move_kernel, move_reducer);
     }
 
     void
