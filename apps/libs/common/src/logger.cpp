@@ -1,6 +1,7 @@
 #include <biocma_cst_config.hpp>
 #include <common/console.hpp>
 #include <common/logger.hpp>
+#include <common/redirection.hpp>
 #include <cstdio>
 #include <iostream>
 #include <memory>
@@ -10,7 +11,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <streambuf>
-
 #include <unistd.h> //dup2
 
 constexpr bool f_redirect = true;
