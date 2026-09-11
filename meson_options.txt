@@ -15,6 +15,10 @@ option('build_python_api',type: 'boolean',value:true)
 # Dependencies
 option('use_cereal',type: 'boolean',value:true)
 
+# Probes
+option('use_probe',type: 'boolean',value:false)
+option('probe_buffer_size', type : 'string', value : '10e3')
+
 # Misc
 option('ci_execution',type: 'boolean',value:false)
 option('python_install',type: 'boolean',value:false)
