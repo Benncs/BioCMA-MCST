@@ -3,6 +3,7 @@
 
 #include <common/logger.hpp>
 
+#include <cstdint>
 #include <ostream>
 #include <source_location>
 
