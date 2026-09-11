@@ -85,9 +85,16 @@ Functions</h2></td></tr>
 <tr class="memitem:a7ca16dc3314f89cd1860091731cd7014" id="r_a7ca16dc3314f89cd1860091731cd7014"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
 <tr class="memitem:a7ca16dc3314f89cd1860091731cd7014 template"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ca16dc3314f89cd1860091731cd7014">read_env_or</a> (std::string_view varname, T vdefault)</td></tr>
 <tr class="memdesc:a7ca16dc3314f89cd1860091731cd7014"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper arround get_env to get envariable with fallback to default.  <br /></td></tr>
+<tr class="memitem:a961ab661d5ca3a66b845da6edd0a51aa" id="r_a961ab661d5ca3a66b845da6edd0a51aa"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a961ab661d5ca3a66b845da6edd0a51aa template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a961ab661d5ca3a66b845da6edd0a51aa">read_env_or</a> (std::string_view varname, bool vdefault)</td></tr>
+<tr class="memdesc:a961ab661d5ca3a66b845da6edd0a51aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">bool accepts "true"/"false" as well as 1/0, operator&gt;&gt; does not  <br /></td></tr>
 <tr class="memitem:a4c3ef9393b340279cc4b323f766479d1" id="r_a4c3ef9393b340279cc4b323f766479d1"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
 <tr class="memitem:a4c3ef9393b340279cc4b323f766479d1 template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c3ef9393b340279cc4b323f766479d1">set_local_env</a> (std::string_view varname, T val)</td></tr>
 <tr class="memdesc:a4c3ef9393b340279cc4b323f766479d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper arround set_env.  <br /></td></tr>
+<tr class="memitem:a6cef78dc6fcccfd08eb24504069712e8" id="r_a6cef78dc6fcccfd08eb24504069712e8"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a6cef78dc6fcccfd08eb24504069712e8 template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6cef78dc6fcccfd08eb24504069712e8">set_local_env&lt; std::string &gt;</a> (std::string_view varname, std::string val)</td></tr>
+<tr class="memitem:a37ac0c5a89a3a4f054c886feaa901bec" id="r_a37ac0c5a89a3a4f054c886feaa901bec"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
+<tr class="memitem:a37ac0c5a89a3a4f054c886feaa901bec template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a37ac0c5a89a3a4f054c886feaa901bec">set_local_env&lt; bool &gt;</a> (std::string_view varname, bool val)</td></tr>
 <tr class="memitem:aef3f5fadf729a92859657cacc3ab9f53" id="r_aef3f5fadf729a92859657cacc3ab9f53"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef3f5fadf729a92859657cacc3ab9f53">is_power_of_2</a> (std::size_t x)</td></tr>
 <tr class="memitem:a618180f8964b0ffef461c9ff2f44d295" id="r_a618180f8964b0ffef461c9ff2f44d295"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a618180f8964b0ffef461c9ff2f44d295">c_league_size</a> (std::size_t n_tot, std::size_t n_per_team) noexcept</td></tr>
 <tr class="memitem:ad9c9fe6434c0c09218a2e33e17beee28" id="r_ad9c9fe6434c0c09218a2e33e17beee28"><td class="memTemplParams" colspan="2">template&lt;typename Tag = void&gt; </td></tr>
@@ -96,6 +103,7 @@ Functions</h2></td></tr>
 <tr class="memitem:adb49dd62a0b04177404cae67015110cc template"><td class="memItemLeft" align="right" valign="top">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb49dd62a0b04177404cae67015110cc">get_policy_team_from_npt</a> (std::size_t n_tot, std::size_t n_per_team)</td></tr>
 <tr class="memitem:a961ab661d5ca3a66b845da6edd0a51aa" id="r_a961ab661d5ca3a66b845da6edd0a51aa"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
 <tr class="memitem:a961ab661d5ca3a66b845da6edd0a51aa template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a961ab661d5ca3a66b845da6edd0a51aa">read_env_or</a> (std::string_view varname, bool vdefault)</td></tr>
+<tr class="memdesc:a961ab661d5ca3a66b845da6edd0a51aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">bool accepts "true"/"false" as well as 1/0, operator&gt;&gt; does not  <br /></td></tr>
 <tr class="memitem:a6cef78dc6fcccfd08eb24504069712e8" id="r_a6cef78dc6fcccfd08eb24504069712e8"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
 <tr class="memitem:a6cef78dc6fcccfd08eb24504069712e8 template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6cef78dc6fcccfd08eb24504069712e8">set_local_env&lt; std::string &gt;</a> (std::string_view varname, std::string val)</td></tr>
 <tr class="memitem:a37ac0c5a89a3a4f054c886feaa901bec" id="r_a37ac0c5a89a3a4f054c886feaa901bec"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
@@ -251,7 +259,7 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <a id="a961ab661d5ca3a66b845da6edd0a51aa" name="a961ab661d5ca3a66b845da6edd0a51aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a961ab661d5ca3a66b845da6edd0a51aa">&#9670;&#160;</a></span>read_env_or() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a961ab661d5ca3a66b845da6edd0a51aa">&#9670;&#160;</a></span>read_env_or() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -271,10 +279,39 @@ template&lt;&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>bool accepts "true"/"false" as well as 1/0, operator&gt;&gt; does not </p>
+<dl class="section note"><dt>Note</dt><dd>Declared here to not use generic instead of this specialisation </dd></dl>
+
+</div>
+</div>
+<a id="a961ab661d5ca3a66b845da6edd0a51aa" name="a961ab661d5ca3a66b845da6edd0a51aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a961ab661d5ca3a66b845da6edd0a51aa">&#9670;&#160;</a></span>read_env_or() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Common::read_env_or </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>vdefault</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>bool accepts "true"/"false" as well as 1/0, operator&gt;&gt; does not </p>
+<dl class="section note"><dt>Note</dt><dd>Declared here to not use generic instead of this specialisation </dd></dl>
+
 </div>
 </div>
 <a id="a7ca16dc3314f89cd1860091731cd7014" name="a7ca16dc3314f89cd1860091731cd7014"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ca16dc3314f89cd1860091731cd7014">&#9670;&#160;</a></span>read_env_or() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ca16dc3314f89cd1860091731cd7014">&#9670;&#160;</a></span>read_env_or() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -341,7 +378,30 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <a id="a37ac0c5a89a3a4f054c886feaa901bec" name="a37ac0c5a89a3a4f054c886feaa901bec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37ac0c5a89a3a4f054c886feaa901bec">&#9670;&#160;</a></span>set_local_env&lt; bool &gt;()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a37ac0c5a89a3a4f054c886feaa901bec">&#9670;&#160;</a></span>set_local_env&lt; bool &gt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="#a4c3ef9393b340279cc4b323f766479d1">Common::set_local_env</a>&lt; bool &gt; </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>val</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a37ac0c5a89a3a4f054c886feaa901bec" name="a37ac0c5a89a3a4f054c886feaa901bec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37ac0c5a89a3a4f054c886feaa901bec">&#9670;&#160;</a></span>set_local_env&lt; bool &gt;() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -364,7 +424,30 @@ template&lt;&gt; </div>
 </div>
 </div>
 <a id="a6cef78dc6fcccfd08eb24504069712e8" name="a6cef78dc6fcccfd08eb24504069712e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6cef78dc6fcccfd08eb24504069712e8">&#9670;&#160;</a></span>set_local_env&lt; std::string &gt;()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cef78dc6fcccfd08eb24504069712e8">&#9670;&#160;</a></span>set_local_env&lt; std::string &gt;() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="#a4c3ef9393b340279cc4b323f766479d1">Common::set_local_env</a>&lt; std::string &gt; </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view</td>          <td class="paramname"><span class="paramname"><em>varname</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>val</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6cef78dc6fcccfd08eb24504069712e8" name="a6cef78dc6fcccfd08eb24504069712e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cef78dc6fcccfd08eb24504069712e8">&#9670;&#160;</a></span>set_local_env&lt; std::string &gt;() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

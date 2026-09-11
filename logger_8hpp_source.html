@@ -77,109 +77,110 @@ $(function(){initNavTree('logger_8hpp_source.html','',''); });
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;source_location&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;string_view&gt;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceIO.html">IO</a></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>{</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="foldopen" id="foldopen00011" data-start="{" data-end="}">
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="namespaceIO_1_1AnsiCode.html">   11</a></span>  <span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceIO_1_1AnsiCode.html">AnsiCode</a></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>  {</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="namespaceIO_1_1AnsiCode.html#acb39e2fd8d280dbda2fedc5b5dae1052">   13</a></span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_variable" href="namespaceIO_1_1AnsiCode.html#acb39e2fd8d280dbda2fedc5b5dae1052">blue</a> = <span class="stringliteral">&quot;\033[34m&quot;</span>;</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="namespaceIO_1_1AnsiCode.html#a0259aeae206d039e496a7e35d5bad370">   14</a></span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_variable" href="namespaceIO_1_1AnsiCode.html#a0259aeae206d039e496a7e35d5bad370">red</a> = <span class="stringliteral">&quot;\033[31m&quot;</span>;</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="namespaceIO_1_1AnsiCode.html#a8ff1e10eb364202f94f5ec74fb26b730">   15</a></span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_variable" href="namespaceIO_1_1AnsiCode.html#a8ff1e10eb364202f94f5ec74fb26b730">reset</a> = <span class="stringliteral">&quot;\033[0m&quot;</span>;</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="namespaceIO_1_1AnsiCode.html#a805a4429d6a1114ba5f1531aef392a2f">   16</a></span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_variable" href="namespaceIO_1_1AnsiCode.html#a805a4429d6a1114ba5f1531aef392a2f">green</a> = <span class="stringliteral">&quot;\033[32m&quot;</span>;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  } <span class="comment">// namespace AnsiCode</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;type_traits&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceIO.html">IO</a></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>{</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="}">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="namespaceIO_1_1AnsiCode.html">   12</a></span>  <span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceIO_1_1AnsiCode.html">AnsiCode</a></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>  {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="namespaceIO_1_1AnsiCode.html#acb39e2fd8d280dbda2fedc5b5dae1052">   14</a></span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_variable" href="namespaceIO_1_1AnsiCode.html#acb39e2fd8d280dbda2fedc5b5dae1052">blue</a> = <span class="stringliteral">&quot;\033[34m&quot;</span>;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="namespaceIO_1_1AnsiCode.html#a0259aeae206d039e496a7e35d5bad370">   15</a></span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_variable" href="namespaceIO_1_1AnsiCode.html#a0259aeae206d039e496a7e35d5bad370">red</a> = <span class="stringliteral">&quot;\033[31m&quot;</span>;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="namespaceIO_1_1AnsiCode.html#a8ff1e10eb364202f94f5ec74fb26b730">   16</a></span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_variable" href="namespaceIO_1_1AnsiCode.html#a8ff1e10eb364202f94f5ec74fb26b730">reset</a> = <span class="stringliteral">&quot;\033[0m&quot;</span>;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="namespaceIO_1_1AnsiCode.html#a805a4429d6a1114ba5f1531aef392a2f">   17</a></span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_variable" href="namespaceIO_1_1AnsiCode.html#a805a4429d6a1114ba5f1531aef392a2f">green</a> = <span class="stringliteral">&quot;\033[32m&quot;</span>;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  } <span class="comment">// namespace AnsiCode</span></div>
 </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="foldopen" id="foldopen00019" data-start="{" data-end="}">
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="namespaceIO_1_1Unicode.html">   19</a></span>  <span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceIO_1_1Unicode.html">Unicode</a></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  {</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="namespaceIO_1_1Unicode.html#adc0dbd30d818d2a89e34679b323ccf78">   21</a></span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_variable" href="namespaceIO_1_1Unicode.html#adc0dbd30d818d2a89e34679b323ccf78">red_circle</a> = <span class="stringliteral">&quot;\U0001F534&quot;</span>;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  } <span class="comment">// namespace Unicode</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="foldopen" id="foldopen00020" data-start="{" data-end="}">
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="namespaceIO_1_1Unicode.html">   20</a></span>  <span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceIO_1_1Unicode.html">Unicode</a></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="namespaceIO_1_1Unicode.html#adc0dbd30d818d2a89e34679b323ccf78">   22</a></span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> <a class="code hl_variable" href="namespaceIO_1_1Unicode.html#adc0dbd30d818d2a89e34679b323ccf78">red_circle</a> = <span class="stringliteral">&quot;\U0001F534&quot;</span>;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  } <span class="comment">// namespace Unicode</span></div>
 </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span></div>
-<div class="foldopen" id="foldopen00029" data-start="{" data-end="};">
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html">   29</a></span>  <span class="keyword">class </span><a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>  {</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">   32</a></span>    <a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a65b8328d5ff4d12db12a2c14523fdff3">   33</a></span>    <a class="code hl_function" href="classIO_1_1Logger.html#a65b8328d5ff4d12db12a2c14523fdff3">Logger</a>(<span class="keyword">const</span> <a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>&amp;) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#ac626c1a1dd4ed0039a570ad133140816">   34</a></span>    <a class="code hl_function" href="classIO_1_1Logger.html#ac626c1a1dd4ed0039a570ad133140816">Logger</a>(<a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>&amp;&amp;) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a080a54b8e00c81d33b9a31b217b82cf5">   35</a></span>    <a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>&amp; <a class="code hl_function" href="classIO_1_1Logger.html#a080a54b8e00c81d33b9a31b217b82cf5">operator=</a>(<span class="keyword">const</span> <a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>&amp;) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a986fe4844161a9dbe0f8004794a0f02f">   36</a></span>    <a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>&amp; <a class="code hl_function" href="classIO_1_1Logger.html#a986fe4844161a9dbe0f8004794a0f02f">operator=</a>(<a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>&amp;&amp;) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a83712c6542640e72f040e5adfa72fcb3">   37</a></span>    <span class="keyword">virtual</span> <a class="code hl_function" href="classIO_1_1Logger.html#a83712c6542640e72f040e5adfa72fcb3">~Logger</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a48b070043ac9d6e6d2f10e4b05fe7c37">   46</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a48b070043ac9d6e6d2f10e4b05fe7c37">debug</a>(std::string_view message) = 0;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#aa2bd6d382c0f7a54b26e99a151c18a8e">   57</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#aa2bd6d382c0f7a54b26e99a151c18a8e">print</a>(std::string_view prefix, std::string_view message) = 0;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a8d35bb71fb8525d95a544d05ee676b26">   67</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a8d35bb71fb8525d95a544d05ee676b26">alert</a>(std::string_view prefix, std::string_view message) = 0;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a036581535b895db986f421cd329d3ec8">   79</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a036581535b895db986f421cd329d3ec8">error</a>(std::string_view message,</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>                       std::source_location location</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                       = std::source_location::current())</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        = 0;</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a215a5c067c23fc659a9b389edc738e53">   91</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a215a5c067c23fc659a9b389edc738e53">raw_log</a>(std::string_view message) = 0;</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a11b10b15db7907c6de982609be2e7653">   98</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a11b10b15db7907c6de982609be2e7653">toggle_debug</a>() noexcept = 0;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#aa65bfa27c78d53be7e270c2d63d2424e">  105</a></span>    virtual <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#aa65bfa27c78d53be7e270c2d63d2424e">toggle_print</a>() noexcept = 0;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a094db6bb9eb2c533e4460b3efd7117cc">  112</a></span>    virtual <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a094db6bb9eb2c533e4460b3efd7117cc">toggle_alert</a>() noexcept = 0;</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a1d0825ef2918987bfcdd7cea3c3ac442">  119</a></span>    virtual <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a1d0825ef2918987bfcdd7cea3c3ac442">toggle_error</a>() noexcept = 0;</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#ab4dd783c0127288ca31e6567b4dd7fbb">  127</a></span>    virtual <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#ab4dd783c0127288ca31e6567b4dd7fbb">toggle_all</a>() noexcept = 0;</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>  };</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span></div>
+<div class="foldopen" id="foldopen00030" data-start="{" data-end="};">
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html">   30</a></span>  <span class="keyword">class </span><a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  {</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">   33</a></span>    <a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a65b8328d5ff4d12db12a2c14523fdff3">   34</a></span>    <a class="code hl_function" href="classIO_1_1Logger.html#a65b8328d5ff4d12db12a2c14523fdff3">Logger</a>(<span class="keyword">const</span> <a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>&amp;) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#ac626c1a1dd4ed0039a570ad133140816">   35</a></span>    <a class="code hl_function" href="classIO_1_1Logger.html#ac626c1a1dd4ed0039a570ad133140816">Logger</a>(<a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>&amp;&amp;) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a080a54b8e00c81d33b9a31b217b82cf5">   36</a></span>    <a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>&amp; <a class="code hl_function" href="classIO_1_1Logger.html#a080a54b8e00c81d33b9a31b217b82cf5">operator=</a>(<span class="keyword">const</span> <a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>&amp;) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a986fe4844161a9dbe0f8004794a0f02f">   37</a></span>    <a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>&amp; <a class="code hl_function" href="classIO_1_1Logger.html#a986fe4844161a9dbe0f8004794a0f02f">operator=</a>(<a class="code hl_function" href="classIO_1_1Logger.html#a935546ea699dc8c570c36c8e54cc4303">Logger</a>&amp;&amp;) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a83712c6542640e72f040e5adfa72fcb3">   38</a></span>    <span class="keyword">virtual</span> <a class="code hl_function" href="classIO_1_1Logger.html#a83712c6542640e72f040e5adfa72fcb3">~Logger</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a48b070043ac9d6e6d2f10e4b05fe7c37">   47</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a48b070043ac9d6e6d2f10e4b05fe7c37">debug</a>(std::string_view message) = 0;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#aa2bd6d382c0f7a54b26e99a151c18a8e">   58</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#aa2bd6d382c0f7a54b26e99a151c18a8e">print</a>(std::string_view prefix, std::string_view message) = 0;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a8d35bb71fb8525d95a544d05ee676b26">   68</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a8d35bb71fb8525d95a544d05ee676b26">alert</a>(std::string_view prefix, std::string_view message) = 0;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a036581535b895db986f421cd329d3ec8">   80</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a036581535b895db986f421cd329d3ec8">error</a>(std::string_view message,</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                       std::source_location location</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                       = std::source_location::current())</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        = 0;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a215a5c067c23fc659a9b389edc738e53">   92</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a215a5c067c23fc659a9b389edc738e53">raw_log</a>(std::string_view message) = 0;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a11b10b15db7907c6de982609be2e7653">   99</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a11b10b15db7907c6de982609be2e7653">toggle_debug</a>() noexcept = 0;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#aa65bfa27c78d53be7e270c2d63d2424e">  106</a></span>    virtual <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#aa65bfa27c78d53be7e270c2d63d2424e">toggle_print</a>() noexcept = 0;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a094db6bb9eb2c533e4460b3efd7117cc">  113</a></span>    virtual <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a094db6bb9eb2c533e4460b3efd7117cc">toggle_alert</a>() noexcept = 0;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#a1d0825ef2918987bfcdd7cea3c3ac442">  120</a></span>    virtual <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#a1d0825ef2918987bfcdd7cea3c3ac442">toggle_error</a>() noexcept = 0;</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno"><a class="line" href="classIO_1_1Logger.html#ab4dd783c0127288ca31e6567b4dd7fbb">  128</a></span>    virtual <span class="keywordtype">void</span> <a class="code hl_function" href="classIO_1_1Logger.html#ab4dd783c0127288ca31e6567b4dd7fbb">toggle_all</a>() noexcept = 0;</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  };</div>
 </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  <span class="comment">// template &lt;typename... MsgType&gt;</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  <span class="comment">// std::string</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  <span class="comment">// format(MsgType&amp;&amp;... msgs)</span></div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  <span class="comment">// {</span></div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>  <span class="comment">//   std::string result;</span></div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>  <span class="comment">//   (result += ... += std::forward&lt;MsgType&gt;(msgs));</span></div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>  <span class="comment">//   return result;</span></div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  <span class="comment">// }</span></div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  <span class="comment">//</span></div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>  template &lt;typename MsgType&gt;</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    requires(std::is_integral_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt;</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>             || std::is_floating_point_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt;)</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>  <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00143" data-start="{" data-end="}">
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno"><a class="line" href="namespaceIO.html#a509531f022970c6536cb9c30f236fb2e">  143</a></span>  <a class="code hl_function" href="namespaceIO.html#a509531f022970c6536cb9c30f236fb2e">_format</a>(std::<span class="keywordtype">string</span>&amp; result, MsgType&amp;&amp; msg)</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>  {</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    result += std::to_string(std::forward&lt;MsgType&gt;(msg));</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  }</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  <span class="comment">// template &lt;typename... MsgType&gt;</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  <span class="comment">// std::string</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  <span class="comment">// format(MsgType&amp;&amp;... msgs)</span></div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>  <span class="comment">// {</span></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>  <span class="comment">//   std::string result;</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>  <span class="comment">//   (result += ... += std::forward&lt;MsgType&gt;(msgs));</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  <span class="comment">//   return result;</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  <span class="comment">// }</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>  <span class="comment">//</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>  template &lt;typename MsgType&gt;</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    requires(std::is_integral_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt;</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>             || std::is_floating_point_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt;)</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>  <span class="keywordtype">void</span></div>
+<div class="foldopen" id="foldopen00144" data-start="{" data-end="}">
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno"><a class="line" href="namespaceIO.html#a509531f022970c6536cb9c30f236fb2e">  144</a></span>  <a class="code hl_function" href="namespaceIO.html#a509531f022970c6536cb9c30f236fb2e">_format</a>(std::<span class="keywordtype">string</span>&amp; result, MsgType&amp;&amp; msg)</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>  {</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    result += std::to_string(std::forward&lt;MsgType&gt;(msg));</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  }</div>
 </div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> MsgType&gt;</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <span class="keyword">requires</span>(!(std::is_integral_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt;</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>               || std::is_floating_point_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt;))</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>  <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00152" data-start="{" data-end="}">
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno"><a class="line" href="namespaceIO.html#af410cee54042c854040249aac3ae6ab6">  152</a></span>  <a class="code hl_function" href="namespaceIO.html#a509531f022970c6536cb9c30f236fb2e">_format</a>(std::string&amp; result, MsgType&amp;&amp; msg)</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>  {</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    result += std::forward&lt;MsgType&gt;(msg);</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>  }</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> MsgType&gt;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="keyword">requires</span>(!(std::is_integral_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt;</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>               || std::is_floating_point_v&lt;std::remove_cvref_t&lt;MsgType&gt;&gt;))</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  <span class="keywordtype">void</span></div>
+<div class="foldopen" id="foldopen00153" data-start="{" data-end="}">
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno"><a class="line" href="namespaceIO.html#af410cee54042c854040249aac3ae6ab6">  153</a></span>  <a class="code hl_function" href="namespaceIO.html#a509531f022970c6536cb9c30f236fb2e">_format</a>(std::string&amp; result, MsgType&amp;&amp; msg)</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>  {</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    result += std::forward&lt;MsgType&gt;(msg);</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>  }</div>
 </div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span> </div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... MsgType&gt;</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>  std::string</div>
-<div class="foldopen" id="foldopen00160" data-start="{" data-end="}">
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno"><a class="line" href="namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383">  160</a></span>  <a class="code hl_function" href="namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383">format</a>(MsgType&amp;&amp;... msgs)</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>  {</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    std::string result;</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    (<a class="code hl_function" href="namespaceIO.html#a509531f022970c6536cb9c30f236fb2e">_format</a>(result, std::forward&lt;MsgType&gt;(msgs)), ...);</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>  }</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span> </div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... MsgType&gt;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>  std::string</div>
+<div class="foldopen" id="foldopen00161" data-start="{" data-end="}">
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383">  161</a></span>  <a class="code hl_function" href="namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383">format</a>(MsgType&amp;&amp;... msgs)</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>  {</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    std::string result;</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    (<a class="code hl_function" href="namespaceIO.html#a509531f022970c6536cb9c30f236fb2e">_format</a>(result, std::forward&lt;MsgType&gt;(msgs)), ...);</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>  }</div>
 </div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>} <span class="comment">// namespace IO</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>} <span class="comment">// namespace IO</span></div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassIO_1_1Logger_html_a036581535b895db986f421cd329d3ec8"><div class="ttname"><a href="classIO_1_1Logger.html#a036581535b895db986f421cd329d3ec8">IO::Logger::error</a></div><div class="ttdeci">virtual void error(std::string_view message, std::source_location location=std::source_location::current())=0</div><div class="ttdoc">Log an error message with optional location details.</div></div>
 <div class="ttc" id="aclassIO_1_1Logger_html_a080a54b8e00c81d33b9a31b217b82cf5"><div class="ttname"><a href="classIO_1_1Logger.html#a080a54b8e00c81d33b9a31b217b82cf5">IO::Logger::operator=</a></div><div class="ttdeci">Logger &amp; operator=(const Logger &amp;)=default</div></div>
 <div class="ttc" id="aclassIO_1_1Logger_html_a094db6bb9eb2c533e4460b3efd7117cc"><div class="ttname"><a href="classIO_1_1Logger.html#a094db6bb9eb2c533e4460b3efd7117cc">IO::Logger::toggle_alert</a></div><div class="ttdeci">virtual void toggle_alert() noexcept=0</div><div class="ttdoc">Toggle the alert logging behavior on or off.</div></div>
@@ -196,16 +197,16 @@ $(function(){initNavTree('logger_8hpp_source.html','',''); });
 <div class="ttc" id="aclassIO_1_1Logger_html_aa65bfa27c78d53be7e270c2d63d2424e"><div class="ttname"><a href="classIO_1_1Logger.html#aa65bfa27c78d53be7e270c2d63d2424e">IO::Logger::toggle_print</a></div><div class="ttdeci">virtual void toggle_print() noexcept=0</div><div class="ttdoc">Toggle the print logging behavior on or off.</div></div>
 <div class="ttc" id="aclassIO_1_1Logger_html_ab4dd783c0127288ca31e6567b4dd7fbb"><div class="ttname"><a href="classIO_1_1Logger.html#ab4dd783c0127288ca31e6567b4dd7fbb">IO::Logger::toggle_all</a></div><div class="ttdeci">virtual void toggle_all() noexcept=0</div><div class="ttdoc">Toggle all logging types on or off.</div></div>
 <div class="ttc" id="aclassIO_1_1Logger_html_ac626c1a1dd4ed0039a570ad133140816"><div class="ttname"><a href="classIO_1_1Logger.html#ac626c1a1dd4ed0039a570ad133140816">IO::Logger::Logger</a></div><div class="ttdeci">Logger(Logger &amp;&amp;)=default</div></div>
-<div class="ttc" id="anamespaceIO_1_1AnsiCode_html"><div class="ttname"><a href="namespaceIO_1_1AnsiCode.html">IO::AnsiCode</a></div><div class="ttdef"><b>Definition</b> logger.hpp:12</div></div>
-<div class="ttc" id="anamespaceIO_1_1AnsiCode_html_a0259aeae206d039e496a7e35d5bad370"><div class="ttname"><a href="namespaceIO_1_1AnsiCode.html#a0259aeae206d039e496a7e35d5bad370">IO::AnsiCode::red</a></div><div class="ttdeci">constexpr auto red</div><div class="ttdef"><b>Definition</b> logger.hpp:14</div></div>
-<div class="ttc" id="anamespaceIO_1_1AnsiCode_html_a805a4429d6a1114ba5f1531aef392a2f"><div class="ttname"><a href="namespaceIO_1_1AnsiCode.html#a805a4429d6a1114ba5f1531aef392a2f">IO::AnsiCode::green</a></div><div class="ttdeci">constexpr auto green</div><div class="ttdef"><b>Definition</b> logger.hpp:16</div></div>
-<div class="ttc" id="anamespaceIO_1_1AnsiCode_html_a8ff1e10eb364202f94f5ec74fb26b730"><div class="ttname"><a href="namespaceIO_1_1AnsiCode.html#a8ff1e10eb364202f94f5ec74fb26b730">IO::AnsiCode::reset</a></div><div class="ttdeci">constexpr auto reset</div><div class="ttdef"><b>Definition</b> logger.hpp:15</div></div>
-<div class="ttc" id="anamespaceIO_1_1AnsiCode_html_acb39e2fd8d280dbda2fedc5b5dae1052"><div class="ttname"><a href="namespaceIO_1_1AnsiCode.html#acb39e2fd8d280dbda2fedc5b5dae1052">IO::AnsiCode::blue</a></div><div class="ttdeci">constexpr auto blue</div><div class="ttdef"><b>Definition</b> logger.hpp:13</div></div>
-<div class="ttc" id="anamespaceIO_1_1Unicode_html"><div class="ttname"><a href="namespaceIO_1_1Unicode.html">IO::Unicode</a></div><div class="ttdef"><b>Definition</b> logger.hpp:20</div></div>
-<div class="ttc" id="anamespaceIO_1_1Unicode_html_adc0dbd30d818d2a89e34679b323ccf78"><div class="ttname"><a href="namespaceIO_1_1Unicode.html#adc0dbd30d818d2a89e34679b323ccf78">IO::Unicode::red_circle</a></div><div class="ttdeci">constexpr auto red_circle</div><div class="ttdef"><b>Definition</b> logger.hpp:21</div></div>
+<div class="ttc" id="anamespaceIO_1_1AnsiCode_html"><div class="ttname"><a href="namespaceIO_1_1AnsiCode.html">IO::AnsiCode</a></div><div class="ttdef"><b>Definition</b> logger.hpp:13</div></div>
+<div class="ttc" id="anamespaceIO_1_1AnsiCode_html_a0259aeae206d039e496a7e35d5bad370"><div class="ttname"><a href="namespaceIO_1_1AnsiCode.html#a0259aeae206d039e496a7e35d5bad370">IO::AnsiCode::red</a></div><div class="ttdeci">constexpr auto red</div><div class="ttdef"><b>Definition</b> logger.hpp:15</div></div>
+<div class="ttc" id="anamespaceIO_1_1AnsiCode_html_a805a4429d6a1114ba5f1531aef392a2f"><div class="ttname"><a href="namespaceIO_1_1AnsiCode.html#a805a4429d6a1114ba5f1531aef392a2f">IO::AnsiCode::green</a></div><div class="ttdeci">constexpr auto green</div><div class="ttdef"><b>Definition</b> logger.hpp:17</div></div>
+<div class="ttc" id="anamespaceIO_1_1AnsiCode_html_a8ff1e10eb364202f94f5ec74fb26b730"><div class="ttname"><a href="namespaceIO_1_1AnsiCode.html#a8ff1e10eb364202f94f5ec74fb26b730">IO::AnsiCode::reset</a></div><div class="ttdeci">constexpr auto reset</div><div class="ttdef"><b>Definition</b> logger.hpp:16</div></div>
+<div class="ttc" id="anamespaceIO_1_1AnsiCode_html_acb39e2fd8d280dbda2fedc5b5dae1052"><div class="ttname"><a href="namespaceIO_1_1AnsiCode.html#acb39e2fd8d280dbda2fedc5b5dae1052">IO::AnsiCode::blue</a></div><div class="ttdeci">constexpr auto blue</div><div class="ttdef"><b>Definition</b> logger.hpp:14</div></div>
+<div class="ttc" id="anamespaceIO_1_1Unicode_html"><div class="ttname"><a href="namespaceIO_1_1Unicode.html">IO::Unicode</a></div><div class="ttdef"><b>Definition</b> logger.hpp:21</div></div>
+<div class="ttc" id="anamespaceIO_1_1Unicode_html_adc0dbd30d818d2a89e34679b323ccf78"><div class="ttname"><a href="namespaceIO_1_1Unicode.html#adc0dbd30d818d2a89e34679b323ccf78">IO::Unicode::red_circle</a></div><div class="ttdeci">constexpr auto red_circle</div><div class="ttdef"><b>Definition</b> logger.hpp:22</div></div>
 <div class="ttc" id="anamespaceIO_html"><div class="ttname"><a href="namespaceIO.html">IO</a></div><div class="ttdef"><b>Definition</b> impl_post_process.hpp:11</div></div>
-<div class="ttc" id="anamespaceIO_html_a30cc77fc5c4d45d3b56ef6a299ce2383"><div class="ttname"><a href="namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383">IO::format</a></div><div class="ttdeci">std::string format(MsgType &amp;&amp;... msgs)</div><div class="ttdef"><b>Definition</b> logger.hpp:160</div></div>
-<div class="ttc" id="anamespaceIO_html_a509531f022970c6536cb9c30f236fb2e"><div class="ttname"><a href="namespaceIO.html#a509531f022970c6536cb9c30f236fb2e">IO::_format</a></div><div class="ttdeci">void _format(std::string &amp;result, MsgType &amp;&amp;msg)</div><div class="ttdef"><b>Definition</b> logger.hpp:143</div></div>
+<div class="ttc" id="anamespaceIO_html_a30cc77fc5c4d45d3b56ef6a299ce2383"><div class="ttname"><a href="namespaceIO.html#a30cc77fc5c4d45d3b56ef6a299ce2383">IO::format</a></div><div class="ttdeci">std::string format(MsgType &amp;&amp;... msgs)</div><div class="ttdef"><b>Definition</b> logger.hpp:161</div></div>
+<div class="ttc" id="anamespaceIO_html_a509531f022970c6536cb9c30f236fb2e"><div class="ttname"><a href="namespaceIO.html#a509531f022970c6536cb9c30f236fb2e">IO::_format</a></div><div class="ttdeci">void _format(std::string &amp;result, MsgType &amp;&amp;msg)</div><div class="ttdef"><b>Definition</b> logger.hpp:144</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
