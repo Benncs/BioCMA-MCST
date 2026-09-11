@@ -122,7 +122,7 @@ template <ModelType M> struct ContributionFunctor
         [&](std::size_t relative_index, value_type& local_value_reduce)
         {
           const std::size_t flatten_index = p0 + relative_index;
-          KOKKOS_ASSERT(flatten_index < upper_bound);
+          KOKKOS_ASSERT(flatten_index < n_particle);
           const bool active = status(flatten_index) == MC::Status::Idle;
 
           if (active)
@@ -204,7 +204,7 @@ template <ModelType M> struct ContributionFunctor
         [&](const std::size_t i, value_type& local_value_reduce)
         {
           const std::size_t flatten_index = p0 + i;
-          KOKKOS_ASSERT(flatten_index < upper_bound);
+          KOKKOS_ASSERT(flatten_index < _ntot);
           const bool active = status(flatten_index) == MC::Status::Idle;
           if (active)
           {
