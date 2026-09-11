@@ -23,7 +23,7 @@ test_fits_in_one_team()
 }
 
 void
-test_ceil_division()
+test_ceil()
 {
   // 1 team of 1024, 1 team of 1
   assert(Common::c_league_size(1025, 1024) == 2);
@@ -50,6 +50,6 @@ int
 main()
 {
   test_fits_in_one_team();
-  test_ceil_division();
+  test_ceil();
   test_covers_every_particle();
 }
