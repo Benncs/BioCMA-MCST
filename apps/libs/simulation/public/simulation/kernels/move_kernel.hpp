@@ -468,7 +468,7 @@ namespace Simulation::KernelInline
                 continue;
               }
               const double r = gen.drand(0., 1.);
-              ages(flat_index, 0)++;
+              ages(flat_index, 0) += d_t;
               perform_exit(
                   probability_leaving<decltype(r), precision_tag>(r, lambda),
                   flat_index,
