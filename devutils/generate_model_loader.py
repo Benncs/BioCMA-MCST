@@ -101,7 +101,7 @@ def generate_variant(
             content = template_content.replace("@INCLUDES@", includes)
             body = "::MC::ParticlesContainer<DefaultModel>,"
             for model in model_files:
-                body += f"::MC::ParticlesContainer<Models::{to_camel_case(model)}>,"
+                body += f"\r\n::MC::ParticlesContainer<Models::{to_camel_case(model)}>,"
 
             body = body[:-1]
             if add_py_variant:
