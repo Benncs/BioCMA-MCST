@@ -13,7 +13,7 @@
 #include <streambuf>
 #include <unistd.h> //dup2
 
-constexpr bool f_redirect = true;
+[[maybe_unused]] constexpr bool f_redirect = true;
 
 namespace
 {

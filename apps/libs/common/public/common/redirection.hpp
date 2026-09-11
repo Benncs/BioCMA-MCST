@@ -3,6 +3,7 @@
 #include <memory>
 #include <optional>
 #include <sstream>
+#include <string>
 namespace IO
 {
   enum RedirectionType
@@ -33,7 +34,7 @@ namespace IO
     std::shared_ptr<RedirectGuard> owner_ptr;
     std::shared_ptr<bool> active_flag;
     bool owns_guard = false;
-    RedirectionType type;
+    [[maybe_unused]] RedirectionType type;
   };
 
   class RedirectGuard : public std::enable_shared_from_this<RedirectGuard>
@@ -59,5 +60,5 @@ namespace IO
 
     std::shared_ptr<bool> active_flag;
   };
-}
+} // namespace IO
 #endif
