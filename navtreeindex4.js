@@ -190,7 +190,7 @@ var NAVTREEINDEX4 =
 "conceptMC_1_1Distributions_1_1ProbabilityLaw.html":[2,0,10,0,7],
 "conceptMC_1_1Distributions_1_1ProbabilityLaw.html":[3,0,0,0],
 "conceptModelType.html":[3,17],
-"conceptModels_1_1UptakeModel.html":[2,0,12,10],
+"conceptModels_1_1UptakeModel.html":[2,0,12,11],
 "conceptModels_1_1UptakeModel.html":[3,1,0],
 "conceptNonConfigurableInit.html":[3,18],
 "conceptNonConfigurableModel.html":[3,19],

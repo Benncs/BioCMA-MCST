@@ -142,6 +142,7 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a11a0a31650904ac9654cd5113579192e" id="r_a11a0a31650904ac9654cd5113579192e"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11a0a31650904ac9654cd5113579192e">k_s</a> = 1e-3</td></tr>
 <tr class="memdesc:a11a0a31650904ac9654cd5113579192e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> affinity constants [kg/m^3].  <br /></td></tr>
 <tr class="memitem:a7fcadd4493f129db3966385389591119" id="r_a7fcadd4493f129db3966385389591119"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fcadd4493f129db3966385389591119">k_o</a> = 1e-5</td></tr>
+<tr class="memdesc:a7fcadd4493f129db3966385389591119"><td class="mdescLeft">&#160;</td><td class="mdescRight">Anane et. al 2017 (Biochem. Eng. J).  <br /></td></tr>
 <tr class="memitem:a4e5fd130d3f77da2a14a69376a80b1ba" id="r_a4e5fd130d3f77da2a14a69376a80b1ba"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e5fd130d3f77da2a14a69376a80b1ba">k_a</a> = 1e-4</td></tr>
 <tr class="memitem:a275381a42478535b72fbebc51df25793" id="r_a275381a42478535b72fbebc51df25793"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a275381a42478535b72fbebc51df25793">y_x_go</a> = 0.5F</td></tr>
 <tr class="memdesc:a275381a42478535b72fbebc51df25793"><td class="mdescLeft">&#160;</td><td class="mdescRight">gX/gS  <br /></td></tr>
@@ -191,15 +192,7 @@ Static Public Attributes</h2></td></tr>
 <li><code>i_ov</code> S -&gt; Ac overflow, no growth</li>
 <li><code>i_fe</code> S -&gt; X + Ac + CO2 fermentation</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="balance"></a>
-Mass balance</h1>
-<p><a class="el" href="structModels_1_1Acetate.html" title="Acetate model with explicit oxygen limitation.">Acetate</a> moves according to the two limitations of the cell and to nothing else:</p>
-<ul>
-<li><b>a_p</b>. The glucose that oxygen could have supported but that the growth capacity cannot handle leaves as acetate through <code>i_ov</code>. This is the classic overflow, active even at oxygen saturation.</li>
-<li><b>O2</b>. The glucose that the growth capacity could have handled but that oxygen cannot support is fermented through <code>i_fe</code>, which also releases acetate.</li>
-<li><a class="el" href="structModels_1_1Acetate.html" title="Acetate model with explicit oxygen limitation.">Acetate</a> is taken back up by <code>i_ao</code> alone, on the oxygen <em>and</em> on the growth capacity left over by <code>i_go</code>. Both residuals are zero as soon as the cell overflows or ferments, so acetate is never produced and consumed in the same step.</li>
-</ul>
-<p>As in <a class="el" href="structModels_1_1SimpleAcetate.html">SimpleAcetate</a> the internal currency is the elongation rate <code>a</code> [m/s], converted to a mass flux through the linear density. </p>
+<p>As in <a class="el" href="structModels_1_1SimpleAcetate.html">SimpleAcetate</a> the internal unit is the elongation rate a [m/s], converted to a mass flux through the linear density. </p>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
 <a id="a201f28cbc440feacecf6d9089cb70e30" name="a201f28cbc440feacecf6d9089cb70e30"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a201f28cbc440feacecf6d9089cb70e30">&#9670;&#160;</a></span>Config</h2>
@@ -386,7 +379,7 @@ Mass balance</h1>
 </div><div class="memdoc">
 
 <p>Species indices, O2 has to stay at index 1 (gas/liquid transfer) </p>
-<dl class="section note"><dt>Note</dt><dd>Plain enumerators, not MODEL_CONSTANT: they are used as runtime subscripts of Kokkos::Array in the device kernels and nvcc rejects a <span class="tt">static constexpr</span> scalar there ("undefined in device code"). An enumerator has no storage, so it is always usable on the device. </dd></dl>
+<p>Use enumeration, not MODEL_CONSTANT: they are used as runtime subscripts of Kokkos::Array in the device kernels and nvcc rejects a <span class="tt">static constexpr</span> scalar there ("undefined in device code"). An enumerator has no storage, so it is always usable on the device. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a0641bdb73e6a8d4100356e683d5183fbabe2d76ad8af0c4e64ec3780cc22f5d5c" name="a0641bdb73e6a8d4100356e683d5183fbabe2d76ad8af0c4e64ec3780cc22f5d5c"></a>S&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a0641bdb73e6a8d4100356e683d5183fba597d528c07bd65a481d5240ec8b15622" name="a0641bdb73e6a8d4100356e683d5183fba597d528c07bd65a481d5240ec8b15622"></a>O2&#160;</td><td class="fielddoc"></td></tr>
@@ -810,7 +803,8 @@ Here is the call graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Anane et. al 2017 (Biochem. Eng. J). The sharp switch this gives is what the uptake cap of positivity makes affordable explicitly. </p>
+
+<p>Anane et. al 2017 (Biochem. Eng. J). </p>
 
 </div>
 </div>
@@ -844,8 +838,8 @@ Here is the call graph for this function:</div>
 <b>Initial value:</b><div class="fragment"><div class="line">= <a class="code hl_struct" href="structMC_1_1Distributions_1_1TruncatedNormal.html">MC::Distributions::TruncatedNormal&lt;FloatType&gt;</a>(</div>
 <div class="line">        <a class="code hl_variable" href="#a2b761b05bb73e9b1309ce0221427eba0">l_max_m</a> * 0.75, <a class="code hl_variable" href="#a2b761b05bb73e9b1309ce0221427eba0">l_max_m</a> / 10., 0.7 * <a class="code hl_variable" href="#a7e6d4aad21fe26e842163e61c7abff8e">l_min_m</a>, <a class="code hl_variable" href="#a2b761b05bb73e9b1309ce0221427eba0">l_max_m</a> * 1.3)</div>
 <div class="ttc" id="astructMC_1_1Distributions_1_1TruncatedNormal_html"><div class="ttname"><a href="structMC_1_1Distributions_1_1TruncatedNormal.html">MC::Distributions::TruncatedNormal</a></div><div class="ttdoc">Represents a TruncatedNormal (Gaussian) probability distribution.</div><div class="ttdef"><b>Definition</b> prng_extension.hpp:354</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_a2b761b05bb73e9b1309ce0221427eba0"><div class="ttname"><a href="#a2b761b05bb73e9b1309ce0221427eba0">Models::Acetate::l_max_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_max_m</div><div class="ttdef"><b>Definition</b> acetate.hpp:174</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_a7e6d4aad21fe26e842163e61c7abff8e"><div class="ttname"><a href="#a7e6d4aad21fe26e842163e61c7abff8e">Models::Acetate::l_min_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_min_m</div><div class="ttdef"><b>Definition</b> acetate.hpp:175</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_a2b761b05bb73e9b1309ce0221427eba0"><div class="ttname"><a href="#a2b761b05bb73e9b1309ce0221427eba0">Models::Acetate::l_max_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_max_m</div><div class="ttdef"><b>Definition</b> acetate.hpp:156</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_a7e6d4aad21fe26e842163e61c7abff8e"><div class="ttname"><a href="#a7e6d4aad21fe26e842163e61c7abff8e">Models::Acetate::l_min_m</a></div><div class="ttdeci">MODEL_CONSTANT FloatType l_min_m</div><div class="ttdef"><b>Definition</b> acetate.hpp:157</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1022,8 +1016,8 @@ Here is the call graph for this function:</div>
 <div class="ttc" id="anamespaceModels_1_1Stoichiometry_html_aac492f2032ea6f4fc5d3b304bc2869a2"><div class="ttname"><a href="namespaceModels_1_1Stoichiometry.html#aac492f2032ea6f4fc5d3b304bc2869a2">Models::Stoichiometry::m_cmol_glucose</a></div><div class="ttdeci">constexpr double m_cmol_glucose</div><div class="ttdoc">C6H12O6, 180/6 [g/Cmol].</div><div class="ttdef"><b>Definition</b> acetate.hpp:34</div></div>
 <div class="ttc" id="anamespaceModels_1_1Stoichiometry_html_ad4ddb18054ea72684ec9dda0ff893c8d"><div class="ttname"><a href="namespaceModels_1_1Stoichiometry.html#ad4ddb18054ea72684ec9dda0ff893c8d">Models::Stoichiometry::y_ac_fer</a></div><div class="ttdeci">constexpr double y_ac_fer(double m_cmol_sub, double gamma_sub, double y_x)</div><div class="ttdoc">sub -&gt; X + Ac + CO2 (+H2O) : gAc per g of substrate</div><div class="ttdef"><b>Definition</b> acetate.hpp:63</div></div>
 <div class="ttc" id="anamespaceModels_1_1Stoichiometry_html_af643e89621999496b1dfb2f0032fa60c"><div class="ttname"><a href="namespaceModels_1_1Stoichiometry.html#af643e89621999496b1dfb2f0032fa60c">Models::Stoichiometry::gamma_glucose</a></div><div class="ttdeci">constexpr double gamma_glucose</div><div class="ttdoc">Degree of reduction per C-mole.</div><div class="ttdef"><b>Definition</b> acetate.hpp:39</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_a8b2e2373cfda25748dd4cecee78729bc"><div class="ttname"><a href="#a8b2e2373cfda25748dd4cecee78729bc">Models::Acetate::y_x_fe</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_fe</div><div class="ttdoc">gX/gS</div><div class="ttdef"><b>Definition</b> acetate.hpp:190</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_aae57334c5743749c120e532e0fb49568"><div class="ttname"><a href="#aae57334c5743749c120e532e0fb49568">Models::Acetate::FloatType</a></div><div class="ttdeci">float FloatType</div><div class="ttdef"><b>Definition</b> acetate.hpp:113</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_a8b2e2373cfda25748dd4cecee78729bc"><div class="ttname"><a href="#a8b2e2373cfda25748dd4cecee78729bc">Models::Acetate::y_x_fe</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_fe</div><div class="ttdoc">gX/gS</div><div class="ttdef"><b>Definition</b> acetate.hpp:171</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_aae57334c5743749c120e532e0fb49568"><div class="ttname"><a href="#aae57334c5743749c120e532e0fb49568">Models::Acetate::FloatType</a></div><div class="ttdeci">float FloatType</div><div class="ttdef"><b>Definition</b> acetate.hpp:94</div></div>
 </div><!-- fragment -->
 <p>gAc/gS produced by fermentation, 0.808 </p>
 
@@ -1044,7 +1038,7 @@ Here is the call graph for this function:</div>
 <div class="line">        <a class="code hl_function" href="namespaceModels_1_1Stoichiometry.html#ad4ddb18054ea72684ec9dda0ff893c8d">Stoichiometry::y_ac_fer</a>(<a class="code hl_variable" href="namespaceModels_1_1Stoichiometry.html#aac492f2032ea6f4fc5d3b304bc2869a2">Stoichiometry::m_cmol_glucose</a>,</div>
 <div class="line">                                <a class="code hl_variable" href="namespaceModels_1_1Stoichiometry.html#af643e89621999496b1dfb2f0032fa60c">Stoichiometry::gamma_glucose</a>,</div>
 <div class="line">                                <a class="code hl_variable" href="#a7b067a80e98de343643cbec8002ecfb5">y_x_ov</a>))</div>
-<div class="ttc" id="astructModels_1_1Acetate_html_a7b067a80e98de343643cbec8002ecfb5"><div class="ttname"><a href="#a7b067a80e98de343643cbec8002ecfb5">Models::Acetate::y_x_ov</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_ov</div><div class="ttdoc">overflow does not grow</div><div class="ttdef"><b>Definition</b> acetate.hpp:191</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_a7b067a80e98de343643cbec8002ecfb5"><div class="ttname"><a href="#a7b067a80e98de343643cbec8002ecfb5">Models::Acetate::y_x_ov</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_ov</div><div class="ttdoc">overflow does not grow</div><div class="ttdef"><b>Definition</b> acetate.hpp:172</div></div>
 </div><!-- fragment -->
 <p>gAc/gS produced by overflow. C6H12O6 -&gt; 3 C2H4O2 balances as is, so 1 </p>
 
@@ -1068,7 +1062,7 @@ Here is the call graph for this function:</div>
 <div class="ttc" id="anamespaceModels_1_1Stoichiometry_html_a8a9360dd19bd074706c1a80c158e6346"><div class="ttname"><a href="namespaceModels_1_1Stoichiometry.html#a8a9360dd19bd074706c1a80c158e6346">Models::Stoichiometry::y_o2_ox</a></div><div class="ttdeci">constexpr double y_o2_ox(double m_cmol_sub, double gamma_sub, double y_x)</div><div class="ttdef"><b>Definition</b> acetate.hpp:56</div></div>
 <div class="ttc" id="anamespaceModels_1_1Stoichiometry_html_abb0f954ddbd1500205e680b0023f9a04"><div class="ttname"><a href="namespaceModels_1_1Stoichiometry.html#abb0f954ddbd1500205e680b0023f9a04">Models::Stoichiometry::m_cmol_acetate</a></div><div class="ttdeci">constexpr double m_cmol_acetate</div><div class="ttdoc">C2H4O2, 60/2 [g/Cmol].</div><div class="ttdef"><b>Definition</b> acetate.hpp:35</div></div>
 <div class="ttc" id="anamespaceModels_1_1Stoichiometry_html_adedb6f6173bb2fa715d76d4500aa5e68"><div class="ttname"><a href="namespaceModels_1_1Stoichiometry.html#adedb6f6173bb2fa715d76d4500aa5e68">Models::Stoichiometry::gamma_acetate</a></div><div class="ttdeci">constexpr double gamma_acetate</div><div class="ttdoc">(2*4 + 4 - 2*2)/2</div><div class="ttdef"><b>Definition</b> acetate.hpp:40</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_affe613615af6cc37fb405fab4aba980d"><div class="ttname"><a href="#affe613615af6cc37fb405fab4aba980d">Models::Acetate::y_x_ao</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_ao</div><div class="ttdoc">gX/gAc</div><div class="ttdef"><b>Definition</b> acetate.hpp:192</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_affe613615af6cc37fb405fab4aba980d"><div class="ttname"><a href="#affe613615af6cc37fb405fab4aba980d">Models::Acetate::y_x_ao</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_ao</div><div class="ttdoc">gX/gAc</div><div class="ttdef"><b>Definition</b> acetate.hpp:173</div></div>
 </div><!-- fragment -->
 <p>gO2/gAc </p>
 
@@ -1089,7 +1083,7 @@ Here is the call graph for this function:</div>
 <div class="line">        <a class="code hl_function" href="namespaceModels_1_1Stoichiometry.html#a8a9360dd19bd074706c1a80c158e6346">Stoichiometry::y_o2_ox</a>(<a class="code hl_variable" href="namespaceModels_1_1Stoichiometry.html#aac492f2032ea6f4fc5d3b304bc2869a2">Stoichiometry::m_cmol_glucose</a>,</div>
 <div class="line">                               <a class="code hl_variable" href="namespaceModels_1_1Stoichiometry.html#af643e89621999496b1dfb2f0032fa60c">Stoichiometry::gamma_glucose</a>,</div>
 <div class="line">                               <a class="code hl_variable" href="#a275381a42478535b72fbebc51df25793">y_x_go</a>))</div>
-<div class="ttc" id="astructModels_1_1Acetate_html_a275381a42478535b72fbebc51df25793"><div class="ttname"><a href="#a275381a42478535b72fbebc51df25793">Models::Acetate::y_x_go</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_go</div><div class="ttdoc">gX/gS</div><div class="ttdef"><b>Definition</b> acetate.hpp:189</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_a275381a42478535b72fbebc51df25793"><div class="ttname"><a href="#a275381a42478535b72fbebc51df25793">Models::Acetate::y_x_go</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_go</div><div class="ttdoc">gX/gS</div><div class="ttdef"><b>Definition</b> acetate.hpp:170</div></div>
 </div><!-- fragment -->
 <p>gO2/gS, 0.384 </p>
 

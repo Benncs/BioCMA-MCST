@@ -77,6 +77,7 @@ var annotated_dup =
       [ "FixedLength", "structModels_1_1FixedLength.html", "structModels_1_1FixedLength" ],
       [ "Monod", "structModels_1_1Monod.html", "structModels_1_1Monod" ],
       [ "SimpleAcetate", "structModels_1_1SimpleAcetate.html", "structModels_1_1SimpleAcetate" ],
+      [ "SimpleModel", "structModels_1_1SimpleModel.html", "structModels_1_1SimpleModel" ],
       [ "UdfModel", "structModels_1_1UdfModel.html", "structModels_1_1UdfModel" ],
       [ "Uptake", "structModels_1_1Uptake.html", "structModels_1_1Uptake" ],
       [ "UptakeDefault", "structModels_1_1UptakeDefault.html", "structModels_1_1UptakeDefault" ]

@@ -112,6 +112,7 @@ var hierarchy =
     [ "SerdeModel", "structSerdeModel.html", null ],
     [ "Core::SignalHandler", "classCore_1_1SignalHandler.html", null ],
     [ "Models::SimpleAcetate", "structModels_1_1SimpleAcetate.html", null ],
+    [ "Models::SimpleModel", "structModels_1_1SimpleModel.html", null ],
     [ "Simulation::SimulatimeTimes", "structSimulation_1_1SimulatimeTimes.html", null ],
     [ "Simulation::Feed::SimulationFeed", "classSimulation_1_1Feed_1_1SimulationFeed.html", null ],
     [ "Api::SimulationInstance", "structApi_1_1SimulationInstance.html", null ],
