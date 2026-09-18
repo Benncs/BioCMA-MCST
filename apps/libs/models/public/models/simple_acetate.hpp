@@ -141,10 +141,17 @@ namespace Models
 
     static constexpr auto ld = l_dist;
     static constexpr auto lm = l_dist;
+    // GET_PROPERTY(particle_var::length) = ld.draw(gen);
+
     auto gen = random_pool.get_state();
-    GET_PROPERTY(particle_var::length) = ld.draw(gen);
+    const FloatType u = static_cast<FloatType>(gen.drand());
     GET_PROPERTY(particle_var::l_max) = lm.draw(gen);
-    GET_PROPERTY(particle_var::a_p) = a_max_m / 2.;
+    GET_PROPERTY(particle_var::a_p) = a_max_dist.draw(gen);
+    random_pool.free_state(gen);
+    const FloatType l_b = 0.5F * ld.mean();
+    GET_PROPERTY(particle_var::length)
+        = l_b * (1.F - Kokkos::log2(1.F - 0.5F * u));
+
     GET_PROPERTY(particle_var::a_max) = a_max_dist.mean();
     random_pool.free_state(gen);
 

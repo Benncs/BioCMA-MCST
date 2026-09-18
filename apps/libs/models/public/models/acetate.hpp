@@ -83,28 +83,9 @@ namespace Models
    *  - @c i_ov  S -> Ac                overflow, no growth
    *  - @c i_fe  S -> X + Ac + CO2      fermentation
    *
-   * @section balance Mass balance
    *
-   * Acetate moves according to the two limitations of the cell and to nothing
-   * else:
-   *
-   *  - @b a_p. The glucose that oxygen could have supported but that the
-   *    growth capacity cannot handle leaves as acetate through @c i_ov. This
-   *    is the classic overflow, active even at oxygen saturation.
-   *  - @b O2. The glucose that the growth capacity could have handled but that
-   *    oxygen cannot support is fermented through @c i_fe, which also releases
-   *    acetate.
-   *  - Acetate is taken back up by @c i_ao alone, on the oxygen *and* on the
-   *    growth capacity left over by @c i_go. Both residuals are zero as soon
-   *    as the cell overflows or ferments, so acetate is never produced and
-   *    consumed in the same step.
-   *
-
-
-
-   *
-   * As in SimpleAcetate the internal currency is the elongation rate
-   * @c a [m/s], converted to a mass flux through the linear density.
+   * As in SimpleAcetate the internal unit is the elongation rate
+   * a [m/s], converted to a mass flux through the linear density.
    */
   struct Acetate
   {
@@ -143,7 +124,8 @@ namespace Models
     using SelfContribs = MC::ParticlesContribs<Self::n_c, Self::FloatType>;
 
     /**
-     * @note Plain enumerators, not MODEL_CONSTANT: they are used as runtime
+     *
+     * Use enumeration, not MODEL_CONSTANT: they are used as runtime
      * subscripts of Kokkos::Array in the device kernels and nvcc rejects a
      * `static constexpr` scalar there ("undefined in device code"). An
      * enumerator has no storage, so it is always usable on the device.
@@ -179,8 +161,7 @@ namespace Models
 
     /// Monod affinity constants [kg/m^3]
     MODEL_CONSTANT FloatType k_s = 1e-3;
-    /// Anane et. al 2017 (Biochem. Eng. J). The sharp switch this gives is
-    /// what the uptake cap of @ref positivity makes affordable explicitly.
+    /// Anane et. al 2017 (Biochem. Eng. J).
     MODEL_CONSTANT FloatType k_o = 1e-5;
     MODEL_CONSTANT FloatType k_a = 1e-4;
 
@@ -425,14 +406,14 @@ namespace Models
     phi[O2] = Kokkos::min(phi_o2_max_p * c_o2 / (c_o2 + k_o), share * c_o2);
     phi[Ac] = Kokkos::min(phi_ac_max_p * c_ac / (c_ac + k_a), share * c_ac);
 
-    // Growth capacity of the individual, inherited at division and kept in
-    // ]0, a_max] by division()
+    // Growth capacity of the individual, in ]0, a_max] by division()
     const FloatType nu_p = GET_PROPERTY(particle_var::a_p) * lin_density;
 
     FloatType nu = 0.F;
     const reaction_rates r = metabolism(phi, nu_p, nu);
 
-    const FloatType inv_lin_density = static_cast<FloatType>(1) / lin_density;
+    constexpr FloatType inv_lin_density
+        = static_cast<FloatType>(1) / lin_density;
     const FloatType a_e = nu * inv_lin_density;
 
     GET_PROPERTY(particle_var::a_e) = a_e;
