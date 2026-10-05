@@ -104,30 +104,6 @@ new_linear_feed_descriptor(double flow, double df, uint64_t input_position)
 }
 
 int
-register_mixture_composition(Handle handle, char** names, int n_species)
-{
-
-  CHECK_HANDLE_OR_RETURN
-
-  if (names == nullptr)
-  {
-    return -2;
-  }
-
-  std::vector<std::string> species_names;
-  species_names.reserve(n_species);
-  for (int i = 0; i < n_species; ++i)
-  {
-    std::string_view current_s_n = names[i]; // NOLINT
-    species_names.emplace_back(current_s_n);
-  }
-
-  return handle->register_mixture_composition(species_names)
-      .match([](auto) { return 0; },
-             [&](auto e) { return set_and_log_error(handle, e); });
-}
-
-int
 add_feed_descriptor(Handle handle, FeedHandle fd, int gas)
 {
   CHECK_HANDLE_OR_RETURN
@@ -189,6 +165,30 @@ delete_constant_feed_descriptor(FeedHandle* fd)
     *fd = nullptr;
   }
   return 0;
+}
+
+int
+register_mixture_composition(Handle handle, char** names, int n_species)
+{
+
+  CHECK_HANDLE_OR_RETURN
+
+  if (names == nullptr)
+  {
+    return -2;
+  }
+
+  std::vector<std::string> species_names;
+  species_names.reserve(n_species);
+  for (int i = 0; i < n_species; ++i)
+  {
+    std::string_view current_s_n = names[i]; // NOLINT
+    species_names.emplace_back(current_s_n);
+  }
+
+  return handle->register_mixture_composition(species_names)
+      .match([](auto) { return 0; },
+             [&](auto e) { return set_and_log_error(handle, e); });
 }
 
 /*FFI Parameters */

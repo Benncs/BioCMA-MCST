@@ -302,6 +302,7 @@ namespace Core
   {
     if (!check_steps(InitStep::Feed))
     {
+      throw std::invalid_argument("TODO error Feed");
       return std::nullopt;
     }
     auto scalar = variant.has_value() ? init_scalar(std::move(*variant))
@@ -325,9 +326,8 @@ namespace Core
 
       if ((*mc)->getSpeciesNames().size() > (*scalar).n_species)
       {
-        // throw std::invalid_argument("Should declare at least number of
-        // species "
-        //                             "required by chosen model");
+        throw std::invalid_argument("Should declare at least number of species "
+                                    "required by chosen model");
         return std::nullopt;
       }
 
