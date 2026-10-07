@@ -1,6 +1,6 @@
 <map id="Api::SimulationInstance::apply_load" name="Api::SimulationInstance::apply_load">
 <area shape="rect" id="Node000001" title="Load ad apply the simulation configuration and prepare for execution based on file." alt="" coords="5,172,165,210"/>
-<area shape="rect" id="Node000002" href="$namespaceCore.html#a877563df5a407318a381e12311022377" title=" " alt="" coords="213,179,294,203"/>
+<area shape="rect" id="Node000002" href="$namespaceCore.html#a3c0aea9cf6b202a7db4e14c993c43396" title=" " alt="" coords="213,179,294,203"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,188,197,188,197,194,165,194"/>
 <area shape="rect" id="Node000003" href="$namespaceCore.html#a105cc1fc8005e6139954e3adce14f525" title="Start simulation." alt="" coords="342,179,426,203"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="295,188,327,188,327,194,295,194"/>

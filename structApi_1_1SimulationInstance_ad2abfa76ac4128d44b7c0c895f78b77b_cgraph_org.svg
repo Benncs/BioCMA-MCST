@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="namespaceCore.html#a877563df5a407318a381e12311022377" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="namespaceCore.html#a3c0aea9cf6b202a7db4e14c993c43396" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="216.5,-117.75 155.5,-117.75 155.5,-99.25 216.5,-99.25 216.5,-117.75"/>
 <text xml:space="preserve" text-anchor="middle" x="186" y="-104.25" font-family="Helvetica,sans-Serif" font-size="10.00">Core::load</text>
 </a>

@@ -118,7 +118,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a62460a2fa2e93e22658a2c27dac1c9c1" id="r_a62460a2fa2e93e22658a2c27dac1c9c1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a62460a2fa2e93e22658a2c27dac1c9c1">fill_and_check_result_file_path</a> (const std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; &amp;logger, <a class="el" href="structCore_1_1UserControlParameters.html">Core::UserControlParameters</a> &amp;params)</td></tr>
 <tr class="memitem:a105cc1fc8005e6139954e3adce14f525" id="r_a105cc1fc8005e6139954e3adce14f525"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a105cc1fc8005e6139954e3adce14f525">exec</a> (std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; logger, <a class="el" href="structCore_1_1CaseData.html">CaseData</a> case_data)</td></tr>
 <tr class="memdesc:a105cc1fc8005e6139954e3adce14f525"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start simulation.  <br /></td></tr>
-<tr class="memitem:a877563df5a407318a381e12311022377" id="r_a877563df5a407318a381e12311022377"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structCore_1_1CaseData.html">Core::CaseData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a877563df5a407318a381e12311022377">load</a> (std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; &amp;logger, const <a class="el" href="structExecInfo.html">ExecInfo</a> &amp;<a class="el" href="#a105cc1fc8005e6139954e3adce14f525">exec</a>, const <a class="el" href="structCore_1_1UserControlParameters.html">UserControlParameters</a> &amp;&amp;params, std::optional&lt; <a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a> &gt; feed=std::nullopt)</td></tr>
+<tr class="memitem:a3c0aea9cf6b202a7db4e14c993c43396" id="r_a3c0aea9cf6b202a7db4e14c993c43396"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structCore_1_1CaseData.html">Core::CaseData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c0aea9cf6b202a7db4e14c993c43396">load</a> (std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt; &amp;logger, const <a class="el" href="structExecInfo.html">ExecInfo</a> &amp;<a class="el" href="#a105cc1fc8005e6139954e3adce14f525">exec</a>, const <a class="el" href="structCore_1_1UserControlParameters.html">UserControlParameters</a> &amp;&amp;params, std::optional&lt; <a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a3a93022950ca342e910c2283f1db31ef">Simulation::MassTransfer::Type::MtrTypeVariant</a> &gt; mtr_type, std::optional&lt; <a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a> &gt; feed=std::nullopt)</td></tr>
 <tr class="memitem:ae86a8a5e09a74787e58f4fc476788413" id="r_ae86a8a5e09a74787e58f4fc476788413"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structExecInfo.html">ExecInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae86a8a5e09a74787e58f4fc476788413">runtime_init</a> (int argc, char **argv, std::ostream &amp;out_stream, std::optional&lt; std::size_t &gt; force_run_id=std::nullopt)</td></tr>
 <tr class="memdesc:ae86a8a5e09a74787e58f4fc476788413"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the runtime environment based on command-line arguments and simulation parameters.  <br /></td></tr>
 <tr class="memitem:a0e2d8a570d24a93cf81c2765b319ed8c" id="r_a0e2d8a570d24a93cf81c2765b319ed8c"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e2d8a570d24a93cf81c2765b319ed8c">get_rng_seed</a> (const <a class="el" href="structExecInfo.html">ExecInfo</a> &amp;info)</td></tr>
@@ -323,8 +323,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a877563df5a407318a381e12311022377" name="a877563df5a407318a381e12311022377"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a877563df5a407318a381e12311022377">&#9670;&#160;</a></span>load()</h2>
+<a id="a3c0aea9cf6b202a7db4e14c993c43396" name="a3c0aea9cf6b202a7db4e14c993c43396"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c0aea9cf6b202a7db4e14c993c43396">&#9670;&#160;</a></span>load()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -347,6 +347,11 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">std::optional&lt; <a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a3a93022950ca342e910c2283f1db31ef">Simulation::MassTransfer::Type::MtrTypeVariant</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>mtr_type</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">std::optional&lt; <a class="el" href="classSimulation_1_1Feed_1_1SimulationFeed.html">Simulation::Feed::SimulationFeed</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>feed</em></span><span class="paramdefsep"> = </span><span class="paramdefval">std::nullopt</span>&#160;)</td>
         </tr>
       </table>
@@ -354,12 +359,12 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCore_a877563df5a407318a381e12311022377_cgraph.svg" width="100%" height="556"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCore_a3c0aea9cf6b202a7db4e14c993c43396_cgraph.svg" width="100%" height="556"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCore_a877563df5a407318a381e12311022377_icgraph.svg" width="507" height="136"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCore_a3c0aea9cf6b202a7db4e14c993c43396_icgraph.svg" width="507" height="136"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
