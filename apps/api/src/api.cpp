@@ -252,9 +252,15 @@ namespace Api
 
     try
     {
+      // Pass mtr_type and feed to load, meaning that the feed and mtr_type are
+      // not:
+      //  saved nor loaded
+      //  if new simu doesnt set new mtr and new feed it will be set to auto
+      //  settings for mtr this is auto mtr (wip) for feed this is no feed
       if (auto opt_case = Core::load(logger,
                                      this->_data.exec_info,
                                      std::move(this->params),
+                                     mtr_type,
                                      this->feed))
       {
         this->_data = std::move(*opt_case);
