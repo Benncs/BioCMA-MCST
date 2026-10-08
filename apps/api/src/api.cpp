@@ -166,7 +166,7 @@ namespace Api
   SimulationInstance::SimulationInstance(int argc,
                                          char** argv,
                                          std::optional<std::size_t> run_id)
-      : id(ID_VERIF), auto_mtr(false)
+      : id(ID_VERIF), mtr_type(Simulation::MassTransfer::Type::Auto{})
   {
 
     // TODO: How to register logger before runtime_init ?
@@ -252,9 +252,15 @@ namespace Api
 
     try
     {
+      // Pass mtr_type and feed to load, meaning that the feed and mtr_type are
+      // not:
+      //  saved nor loaded
+      //  if new simu doesnt set new mtr and new feed it will be set to auto
+      //  settings for mtr this is auto mtr (wip) for feed this is no feed
       if (auto opt_case = Core::load(logger,
                                      this->_data.exec_info,
                                      std::move(this->params),
+                                     mtr_type,
                                      this->feed))
       {
         this->_data = std::move(*opt_case);
@@ -268,12 +274,6 @@ namespace Api
     }
 
     return ApiResult("Error loading case");
-  }
-
-  void
-  SimulationInstance::set_auto_mtr()
-  {
-    auto_mtr = true;
   }
 
   ApiResult
@@ -302,17 +302,11 @@ namespace Api
     CHECK_OR_RETURN(!global_initializer.init_feed(feed),
                     "Error when apply: feed");
 
-    if (auto_mtr)
-    {
-      CHECK_OR_RETURN(!global_initializer.init_mtr_model(
-                          Simulation::MassTransfer::Type::Auto{}),
-                      "Error when apply: MTR")
-    }
-    else
-    {
-      CHECK_OR_RETURN(!global_initializer.init_mtr_model(std::move(mtr_type)),
-                      "Error when apply: MTR")
-    }
+    // auto mtr is the mtr_type by default this is safe to call this here even
+    // though it was not registered
+
+    CHECK_OR_RETURN(!global_initializer.init_mtr_model(std::move(mtr_type)),
+                    "Error when apply: MTR")
 
     auto __simulation
         = global_initializer.init_simulation(this->scalar_initializer_variant);
@@ -431,9 +425,7 @@ namespace Api
   SimulationInstance::set_mtr(
       Simulation::MassTransfer::Type::MtrTypeVariant&& variant)
   {
-    //??
     mtr_type = variant;
-    auto_mtr = false;
     return ApiResult();
   }
 

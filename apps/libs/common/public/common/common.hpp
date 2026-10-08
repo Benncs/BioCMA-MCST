@@ -1,5 +1,5 @@
-#ifndef __COMMON_EXPORT_HPP__
-#define __COMMON_EXPORT_HPP__
+#ifndef __COMMON_COMMON_HPP__
+#define __COMMON_COMMON_HPP__
 
 #include <Kokkos_Core_fwd.hpp>
 #include <array>
@@ -58,4 +58,4 @@ private:
 #  define MkCanary(x)
 #endif
 
-#endif //__COMMON_EXPORT_HPP__
+#endif //__COMMON_COMMON_HPP__

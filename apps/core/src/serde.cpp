@@ -193,9 +193,9 @@ namespace SerDe
 
     // auto auto_mtr_type = Simulation::MassTransfer::Type::FixedKla{ kla };
     // gi.init_mtr_model_auto();
-    gi.init_mtr_model(Simulation::MassTransfer::Type::Auto{});
+    //     gi.init_mtr_model(Simulation::MassTransfer::Type::Auto{});
 
-#  warning message("MTR model is not loaded")
+    // #  warning message("MTR model is not loaded")
     auto simulation = gi.init_simulation(std::move(mc_unit), std::move(*sc));
 
     if (!simulation.has_value())

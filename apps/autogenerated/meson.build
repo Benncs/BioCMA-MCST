@@ -23,16 +23,18 @@ else
     default_particle_per_team_leave = 1024
 endif
 
+use_probe = get_option('use_probe')
+
 conf_data = configuration_data(
     {
         '_BIOMC_VERSION_MAJOR': version[0],
         '_BIOMC_VERSION_MINOR': version[1],
         '_BIOMC_VERSION_DEV': version[2],
-        'probe_buffer_size': '10e3',
+        'probe_buffer_size': get_option('probe_buffer_size'),
         '__f__redirect__': 'false',
         '__f_verbose__': 'true',
         'dump_particle_state': 'true',
-        'use_probe': 'false',
+        'use_probe': use_probe ? 'true' : 'false',
         'const_number_simulation': 'false',
         'default_particle_container_allocation_factor': default_particle_container_allocation_factor,
         'MC_MAX_PARTICLE_BUFFER': '100e6',

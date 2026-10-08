@@ -7,7 +7,7 @@
 struct Success
 {
 };
-// TODO WIP
+// WIP
 template <typename S, typename T> struct Result : protected std::variant<S, T>
 {
   explicit constexpr Result() noexcept : std::variant<S, T>{ S{} } {};

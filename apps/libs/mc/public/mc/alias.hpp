@@ -182,6 +182,15 @@ namespace MC
                    Kokkos::MemoryTraits<Kokkos::RandomAccess>>,
       Kokkos::View<double*, ExecSpace>>;
 
+  /// d_t * flow / volume per compartment. Owned by ReactorDomain
+  template <class ExecSpace, bool is_const>
+  using MoveProbabilityView = std::conditional_t<
+      is_const,
+      Kokkos::View<const double*,
+                   ExecSpace,
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>,
+      Kokkos::View<double*, ExecSpace>>;
+
   template <class ExecSpace, bool is_const>
   using DiagonalView = std::conditional_t<
       is_const,

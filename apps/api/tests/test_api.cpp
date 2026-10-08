@@ -46,7 +46,6 @@ test_exec_from_param(int argc, char** argv, std::string_view path)
 {
   auto handle = *INIT;
   assert(handle->register_parameters(gparams(path)));
-  handle->set_auto_mtr();
   assert(handle->apply(false));
   assert(handle->exec());
 }
@@ -55,7 +54,6 @@ void
 test_apply_from_param(int argc, char** argv, std::string_view path)
 {
   auto handle = *INIT;
-  handle->set_auto_mtr();
   assert(handle->register_parameters(gparams(path)));
   auto ret = handle->apply(false);
   if (!ret)

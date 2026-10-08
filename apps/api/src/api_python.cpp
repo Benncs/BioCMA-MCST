@@ -6,7 +6,6 @@
 #include <cstddef>
 #include <cstdlib>
 #include <exception>
-#include <iostream>
 #include <memory>
 #include <optional>
 #include <pybind11/cast.h>
@@ -79,11 +78,6 @@ namespace PythonBindings
   void
   apply(std::shared_ptr<Api::SimulationInstance>& handle, bool to_load)
   {
-    handle->set_auto_mtr(); // FIXME
-    //
-    // handle->set_mtr(Simulation::MassTransfer::Type::FlowmapTurbulence{});
-
-    std::cerr << "Set auto mtr for PythonBindings" << std::endl;
     const auto rc = handle->apply(to_load);
 
     if (rc.invalid())
@@ -385,6 +379,37 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("species"),
       py::arg("position"),
       py::arg("output_position"));
+
+  m.def(
+      "set_mtr_auto",
+      [](std::shared_ptr<Api::SimulationInstance>& handle)
+      {
+        auto rc = handle->set_mtr(Simulation::MassTransfer::Type::Auto{});
+
+        return static_cast<bool>(rc);
+      },
+      py::arg("handle"));
+
+  m.def(
+      "set_mtr_flowmap_turbulence",
+      [](std::shared_ptr<Api::SimulationInstance>& handle)
+      {
+        auto rc = handle->set_mtr(
+            Simulation::MassTransfer::Type::FlowmapTurbulence{});
+
+        return static_cast<bool>(rc);
+      },
+      py::arg("handle"));
+
+  m.def(
+      "set_mtr_flowmap_kla",
+      [](std::shared_ptr<Api::SimulationInstance>& handle)
+      {
+        auto rc = handle->set_mtr(Simulation::MassTransfer::Type::FlowmapKla{});
+
+        return static_cast<bool>(rc);
+      },
+      py::arg("handle"));
 
   m.def("set_initialiser_from_data",
         &PythonBindings::set_initialiser_from_data,
