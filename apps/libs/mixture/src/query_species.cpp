@@ -5,25 +5,25 @@
 namespace
 {
 
-  constexpr Mixture::Specie Glucose = {
+  static const Mixture::Specie Glucose = {
     "glucose",
     180.,
     std::nullopt,
   };
 
-  constexpr Mixture::Specie Oxygen = {
+  static const Mixture::Specie Oxygen = {
     "oxygen",
     32.,
     3.181e-2,
   };
 
-  constexpr Mixture::Specie Acetate = {
+  static const Mixture::Specie Acetate = {
     "acetate",
     60.,
     std::nullopt,
   };
 
-  constexpr Mixture::Specie CarbonDioxide = {
+  static const Mixture::Specie CarbonDioxide = {
     "co2",
     44.,
     8.3e-1,

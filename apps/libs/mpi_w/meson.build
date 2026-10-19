@@ -14,7 +14,7 @@ mpi_wrap_lib = static_library(
    mpi_wrap_sources,
    include_directories: [public_mpi_wrap],
    dependencies: dep,
-   # pic: true,
+    pic: true,
    # install: true,
    install_rpath: global_install_dir,
 )

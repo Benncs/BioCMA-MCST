@@ -1,7 +1,7 @@
 project(
     'biocma_mcst',
     'cpp',
-    version: '1.4.0',
+    version: '1.3.0',
     meson_version: '>= 1.8.0',
     default_options: ['warning_level=3', 'b_colorout=always', 'cpp_std=c++20', 'b_pch=false'],
 )
@@ -138,15 +138,16 @@ if use_system_kokkos
         modules: ['Kokkos::kokkos'],
     )
 
-    kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE', '-Wno-unknown-pragmas']
+    #kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE', '-Wno-unknown-pragmas']
+    kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE' ]
 
     if use_cuda
 
         kokkos_compile_arg = [
             kokkos_compile_arg,
-            '-extended-lambda',
-            '-Wext-lambda-captures-this',
-            '--expt-relaxed-constexpr',
+	    '-extended-lambda',
+		 #'-Wext-lambda-captures-this',
+		 '--expt-relaxed-constexpr',
         ]
 
     endif
