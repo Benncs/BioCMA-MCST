@@ -74,7 +74,7 @@ $(function(){initNavTree('namespaceSimulation_1_1MassTransfer_1_1Impl.html','','
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab71699c59806c5e754b57f66c238d540" id="r_ab71699c59806c5e754b57f66c238d540"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab71699c59806c5e754b57f66c238d540">flowmap_gas_liquid_mass_transfer</a> (<a class="el" href="structSimulation_1_1MassTransfer_1_1MassTransferProxy.html">MassTransferProxy</a> &amp;mtr, const Eigen::ArrayXXd &amp;liquid_concentration, const Eigen::ArrayXXd &amp;gas_concentration, const Eigen::MatrixXd &amp;liquid_volume, const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;state)</td></tr>
+<tr class="memitem:a6039ec94e977befd7654b491b9e91f79" id="r_a6039ec94e977befd7654b491b9e91f79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6039ec94e977befd7654b491b9e91f79">flowmap_gas_liquid_mass_transfer</a> (<a class="el" href="structSimulation_1_1MassTransfer_1_1MassTransferProxy.html">MassTransferProxy</a> &amp;mtr, double db, const Eigen::ArrayXXd &amp;liquid_concentration, const Eigen::ArrayXXd &amp;gas_concentration, const Eigen::MatrixXd &amp;liquid_volume, const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;state)</td></tr>
 <tr class="memitem:a62dca890ffba20e5f9b3b8d8e9b26723" id="r_a62dca890ffba20e5f9b3b8d8e9b26723"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a62dca890ffba20e5f9b3b8d8e9b26723">fixed_kla_gas_liquid_mass_transfer</a> (<a class="el" href="structSimulation_1_1MassTransfer_1_1MassTransferProxy.html">MassTransferProxy</a> &amp;mtr, const Eigen::ArrayXXd &amp;liquid_concentration, const Eigen::ArrayXXd &amp;gas_concentration, const Eigen::MatrixXd &amp;liquid_volume, const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;state)</td></tr>
 <tr class="memitem:a3b65bc3e061ab10cac8decb4fe41b90e" id="r_a3b65bc3e061ab10cac8decb4fe41b90e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b65bc3e061ab10cac8decb4fe41b90e">flowmap_kla_gas_liquid_mass_transfer</a> (<a class="el" href="structSimulation_1_1MassTransfer_1_1MassTransferProxy.html">MassTransferProxy</a> &amp;mtr, const Eigen::ArrayXXd &amp;liquid_concentration, const Eigen::ArrayXXd &amp;gas_concentration, const Eigen::MatrixXd &amp;liquid_volume, const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;state)</td></tr>
 </table><table class="memberdecls">
@@ -125,8 +125,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="ab71699c59806c5e754b57f66c238d540" name="ab71699c59806c5e754b57f66c238d540"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab71699c59806c5e754b57f66c238d540">&#9670;&#160;</a></span>flowmap_gas_liquid_mass_transfer()</h2>
+<a id="a6039ec94e977befd7654b491b9e91f79" name="a6039ec94e977befd7654b491b9e91f79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6039ec94e977befd7654b491b9e91f79">&#9670;&#160;</a></span>flowmap_gas_liquid_mass_transfer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -135,6 +135,11 @@ Here is the caller graph for this function:</div>
           <td class="memname">void Simulation::MassTransfer::Impl::flowmap_gas_liquid_mass_transfer </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structSimulation_1_1MassTransfer_1_1MassTransferProxy.html">MassTransferProxy</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>mtr</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>db</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -161,7 +166,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1MassTransfer_1_1Impl_ab71699c59806c5e754b57f66c238d540_icgraph.svg" width="436" height="64"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1MassTransfer_1_1Impl_a6039ec94e977befd7654b491b9e91f79_icgraph.svg" width="436" height="64"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

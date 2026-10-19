@@ -6,6 +6,17 @@
 <!-- Title: EIGEN_DIAG_POP::MtrVisitor::operator() Pages: 1 -->
 <svg width="327pt" height="48pt"
  viewBox="0.00 0.00 327.00 48.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<svg id="main" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
+
+<style type="text/css"><![CDATA[
+.node, .edge {opacity: 0.7;}
+.node.selected, .edge.selected {opacity: 1;}
+.edge:hover path { stroke: red; }
+.edge:hover polygon { stroke: red; fill: red; }
+]]></style>
+<script type="application/ecmascript" xlink:href="svg.min.js"/>
+<svg id="graph" class="graph">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 43.5)">
 <title>EIGEN_DIAG_POP::MtrVisitor::operator()</title>
 <!-- Node1 -->
@@ -21,7 +32,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="namespaceSimulation_1_1MassTransfer_1_1Impl.html#ab71699c59806c5e754b57f66c238d540" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="namespaceSimulation_1_1MassTransfer_1_1Impl.html#a6039ec94e977befd7654b491b9e91f79" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="319.25,-39.5 187,-39.5 187,0 319.25,0 319.25,-39.5"/>
 <text xml:space="preserve" text-anchor="start" x="195" y="-26" font-family="Helvetica,sans-Serif" font-size="10.00">Simulation::MassTransfer</text>
 <text xml:space="preserve" text-anchor="start" x="195" y="-15.5" font-family="Helvetica,sans-Serif" font-size="10.00">::Impl::flowmap_gas_liquid</text>
@@ -39,4 +50,19 @@
 </g>
 </g>
 </g>
+</svg>
+</svg>
+
+<style type='text/css'>
+<![CDATA[
+[data-mouse-over-selected='false'] { opacity: 0.7; }
+[data-mouse-over-selected='true']  { opacity: 1.0; }
+]]>
+</style>
+<script type="application/ecmascript"><![CDATA[
+document.addEventListener('DOMContentLoaded', (event) => {
+  highlightEdges();
+  highlightAdjacentNodes();
+});
+]]></script>
 </svg>

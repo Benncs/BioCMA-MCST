@@ -93,6 +93,7 @@ var hierarchy =
     [ "MC::MonteCarloUnit", "structMC_1_1MonteCarloUnit.html", null ],
     [ "Simulation::KernelInline::MoveFunctor", "structSimulation_1_1KernelInline_1_1MoveFunctor.html", null ],
     [ "Simulation::KernelInline::MoveLeaveTally", "structSimulation_1_1KernelInline_1_1MoveLeaveTally.html", null ],
+    [ "Simulation::MassTransfer::Type::MtrVariantName", "structSimulation_1_1MassTransfer_1_1Type_1_1MtrVariantName.html", null ],
     [ "EIGEN_DIAG_POP::MtrVisitor", "structEIGEN__DIAG__POP_1_1MtrVisitor.html", null ],
     [ "Core::DataExporter::MultiMatrixDescription", "structCore_1_1DataExporter_1_1MultiMatrixDescription.html", null ],
     [ "MC::Distributions::Normal< F >", "structMC_1_1Distributions_1_1Normal.html", null ],

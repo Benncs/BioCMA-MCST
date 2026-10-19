@@ -118,7 +118,8 @@ var annotated_dup =
           [ "Auto", "structSimulation_1_1MassTransfer_1_1Type_1_1Auto.html", null ],
           [ "FixedKla", "structSimulation_1_1MassTransfer_1_1Type_1_1FixedKla.html", "structSimulation_1_1MassTransfer_1_1Type_1_1FixedKla" ],
           [ "FlowmapKla", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapKla.html", null ],
-          [ "FlowmapTurbulence", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapTurbulence.html", null ]
+          [ "FlowmapTurbulence", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapTurbulence.html", "structSimulation_1_1MassTransfer_1_1Type_1_1FlowmapTurbulence" ],
+          [ "MtrVariantName", "structSimulation_1_1MassTransfer_1_1Type_1_1MtrVariantName.html", "structSimulation_1_1MassTransfer_1_1Type_1_1MtrVariantName" ]
         ] ],
         [ "EquilibriumFunctor", "structSimulation_1_1MassTransfer_1_1EquilibriumFunctor.html", "structSimulation_1_1MassTransfer_1_1EquilibriumFunctor" ],
         [ "InterfacialAreaFonctor", "structSimulation_1_1MassTransfer_1_1InterfacialAreaFonctor.html", "structSimulation_1_1MassTransfer_1_1InterfacialAreaFonctor" ],

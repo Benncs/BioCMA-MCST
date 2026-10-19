@@ -1,0 +1,7 @@
+<map id="Simulation::MassTransfer::Type::mtr_variant_info" name="Simulation::MassTransfer::Type::mtr_variant_info">
+<area shape="rect" id="Node000001" title=" " alt="" coords="420,5,589,44"/>
+<area shape="rect" id="Node000002" href="$structApi_1_1SimulationInstance.html#ad3dcce95a8552f794dfff2a0f382fcee" title=" " alt="" coords="213,5,372,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="405,27,372,27,372,22,405,22"/>
+<area shape="rect" id="Node000003" href="$structApi_1_1SimulationInstance.html#afee07db8a6b57fe7982900ecaa943cc0" title="Default constructor." alt="" coords="5,5,165,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="197,27,165,27,165,22,197,22"/>
+</map>

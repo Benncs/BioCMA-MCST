@@ -37,7 +37,9 @@ var namespaceSimulation =
     [ "FeedExceptionError", "namespaceSimulation.html#afb1f6023a0300f1e35101a2567237d40", [
       [ "NegativeFlow", "namespaceSimulation.html#afb1f6023a0300f1e35101a2567237d40a762cb025e7a97d504539afd49bec9eb1", null ],
       [ "NegativeConcentration", "namespaceSimulation.html#afb1f6023a0300f1e35101a2567237d40a4e0fee2fc72d989fe79c21f40aa6ca97", null ],
-      [ "OutofRange", "namespaceSimulation.html#afb1f6023a0300f1e35101a2567237d40a0c096c2b863821c79dd3d03583456bc7", null ]
+      [ "OutofRange", "namespaceSimulation.html#afb1f6023a0300f1e35101a2567237d40a0c096c2b863821c79dd3d03583456bc7", null ],
+      [ "MismatchSize", "namespaceSimulation.html#afb1f6023a0300f1e35101a2567237d40a2dc1045efdb911eef2fc5132ae1020c1", null ],
+      [ "UnbalancedFlow", "namespaceSimulation.html#afb1f6023a0300f1e35101a2567237d40ab65e065341f0cc0fa58d7a2decba4128", null ]
     ] ],
     [ "ProbeType", "namespaceSimulation.html#a3844f9fb0ce2978c66af04ff0a6eece6", [
       [ "LeavingTime", "namespaceSimulation.html#a3844f9fb0ce2978c66af04ff0a6eece6a5d4158e53cb4e4db894ba87313f46de3", null ],
