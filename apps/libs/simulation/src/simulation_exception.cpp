@@ -29,6 +29,8 @@ namespace Simulation
       return "Simulation: concentration array size mismatch";
     case ErrorCodes::Unknown:
       return "Simulation: unknown error";
+    default:
+      return "Simulation: unknown error not handled";
     }
     _unreachable
   }
@@ -56,6 +58,12 @@ namespace Simulation
       return "Feed: negative concentration value";
     case FeedExceptionError::OutofRange:
       return "Feed: position out of range";
+    case Simulation::FeedExceptionError::UnbalancedFlow:
+      return "Feed: unbalanced inlet and outlet flows";
+    case Simulation::FeedExceptionError::MismatchSize:
+      return "Feed: Mismatch size inlet and oulet";
+    default:
+      return "Simulation: unknown error not handled";
     }
     _unreachable
   }
