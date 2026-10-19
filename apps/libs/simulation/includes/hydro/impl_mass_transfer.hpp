@@ -27,7 +27,7 @@ namespace Simulation::MassTransfer
     Eigen::ArrayXXd kla;
     Eigen::ArrayXd Henry;
     Eigen::ArrayXd flag_transfer;
-    double db;
+    // double db;
   };
 
   namespace Impl
@@ -35,6 +35,7 @@ namespace Simulation::MassTransfer
 
     void flowmap_gas_liquid_mass_transfer(
         MassTransferProxy& mtr,
+        double db,
         const Eigen::ArrayXXd& liquid_concentration,
         const Eigen::ArrayXXd& gas_concentration,
         const Eigen::MatrixXd& liquid_volume,

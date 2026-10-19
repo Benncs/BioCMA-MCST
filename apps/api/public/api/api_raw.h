@@ -138,7 +138,7 @@ typedef struct OpaqueFeed* FeedHandle; // NOLINT
   // Mass transfer
 
   int set_mtr_auto(Handle);
-  int set_mtr_flowmap_turbulence(Handle);
+  int set_mtr_flowmap_turbulence(Handle, double db);
   int set_mtr_flowmap_kla(Handle);
 
 #ifdef __cplusplus

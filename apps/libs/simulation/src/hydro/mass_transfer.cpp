@@ -91,11 +91,14 @@ namespace
     }
 
     void
-    operator()(const Simulation::MassTransfer::Type::FlowmapTurbulence& _) const
+    operator()(
+        const Simulation::MassTransfer::Type::FlowmapTurbulence& variant) const
     {
-      (void)_;
+      const double db = variant.db;
+
       Simulation::MassTransfer::Impl::flowmap_gas_liquid_mass_transfer(
           *proxy,
+          db,
           liquid_scalar->getConcentrationArray(),
           gas_scalar->getConcentrationArray(),
           liquid_scalar->getVolume(),
@@ -119,6 +122,42 @@ namespace
 
 namespace Simulation::MassTransfer
 {
+
+  namespace Type
+  {
+    struct MtrVariantName
+    {
+      std::string
+      operator()(const Auto&) const
+      {
+        return "auto mtr";
+      }
+
+      std::string
+      operator()(const FixedKla&) const
+      {
+        return "Fixed kla mtr";
+      }
+
+      std::string
+      operator()(const FlowmapKla&) const
+      {
+        return "Flowmap kla mtr";
+      }
+
+      std::string
+      operator()(const FlowmapTurbulence& v) const
+      {
+        return "Flowmap turb with db=" + std::to_string(v.db);
+      }
+    };
+
+    std::string
+    mtr_variant_info(Simulation::MassTransfer::Type::MtrTypeVariant& v) noexcept
+    {
+      return std::visit(MtrVariantName{}, v);
+    }
+  } // namespace Type
 
   MassTransferModel::MassTransferModel(
       const Mixture::SpecieTable& species,
@@ -157,7 +196,7 @@ namespace Simulation::MassTransfer
       i++;
     }
 
-    _proxy->db = 5e-3; // FIXME
+    // _proxy->db = 5e-3; // FIXME
   }
 
   void

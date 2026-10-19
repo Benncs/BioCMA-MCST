@@ -425,6 +425,11 @@ namespace Api
   SimulationInstance::set_mtr(
       Simulation::MassTransfer::Type::MtrTypeVariant&& variant)
   {
+    if (logger)
+    {
+      logger->print("[Simulation]",
+                    Simulation::MassTransfer::Type::mtr_variant_info(variant));
+    }
     mtr_type = variant;
     return ApiResult();
   }

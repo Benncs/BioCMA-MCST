@@ -577,11 +577,18 @@ set_mtr_auto(Handle handle)
 }
 
 int
-set_mtr_flowmap_turbulence(Handle handle)
+set_mtr_flowmap_turbulence(Handle handle, double db)
 {
   CHECK_HANDLE_OR_RETURN
 
-  return handle->set_mtr(Simulation::MassTransfer::Type::FlowmapTurbulence{})
+  if (db <= 0)
+  {
+    db = Simulation::MassTransfer::Type::FlowmapTurbulence::
+        default_bubble_diameter;
+  }
+
+  return handle
+      ->set_mtr(Simulation::MassTransfer::Type::FlowmapTurbulence{ db })
       .match(lambda_ok, [&](auto e) { return set_and_log_error(handle, e); });
 }
 

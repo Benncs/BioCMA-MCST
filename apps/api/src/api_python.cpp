@@ -1,3 +1,4 @@
+#include "api/results.hpp"
 #include "simulation/mass_transfer.hpp"
 #include <api/api.hpp>
 #include <api/api_raw.h>
@@ -340,7 +341,6 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
          std::size_t species,
          std::size_t position)
       {
-        // in and out at same location
         auto fd = Simulation::Feed::FeedFactory::constant(
             flow, concentration, species, position, position, true);
         auto rc = handle->add_feed(fd, Phase::Gas);
@@ -352,6 +352,44 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
       py::arg("concentration_value"),
       py::arg("species"),
       py::arg("position"));
+
+  m.def(
+      "set_gas_feed",
+      [](std::shared_ptr<Api::SimulationInstance>& handle,
+         double concentration,
+         std::size_t species_index,
+         std::vector<std::size_t> inlet_i,
+         std::vector<double> inlet_f,
+         std::vector<std::size_t> outlet_i,
+         std::vector<double> outlet_f,
+         double tol)
+      {
+        const auto fd = Simulation::Feed::FeedFactory::gas_feed(concentration,
+                                                                species_index,
+                                                                inlet_i,
+                                                                inlet_f,
+                                                                outlet_i,
+                                                                outlet_f,
+                                                                tol);
+        ApiResult rc;
+        for (const auto& f : fd)
+        {
+          rc = handle->add_feed(f, Phase::Gas);
+          if (rc.invalid())
+          {
+            return false;
+          }
+        }
+        return static_cast<bool>(rc);
+      },
+      py::arg("handle"),
+      py::arg("concentration"),
+      py::arg("species_index"),
+      py::arg("inlet_i"),
+      py::arg("inlet_f"),
+      py::arg("outlet_i"),
+      py::arg("outlet_f"),
+      py::arg("tol") = 1e-10);
 
   m.def(
       "set_gas_feed_constant_with_output",
@@ -392,14 +430,16 @@ PYBIND11_MODULE(handle_module, m) // NOLINT (Pybind11 MACRO)
 
   m.def(
       "set_mtr_flowmap_turbulence",
-      [](std::shared_ptr<Api::SimulationInstance>& handle)
+      [](std::shared_ptr<Api::SimulationInstance>& handle, double db)
       {
         auto rc = handle->set_mtr(
-            Simulation::MassTransfer::Type::FlowmapTurbulence{});
+            Simulation::MassTransfer::Type::FlowmapTurbulence{ db });
 
         return static_cast<bool>(rc);
       },
-      py::arg("handle"));
+      py::arg("handle"),
+      py::arg("db") = Simulation::MassTransfer::Type::FlowmapTurbulence::
+          default_bubble_diameter);
 
   m.def(
       "set_mtr_flowmap_kla",
