@@ -138,15 +138,16 @@ if use_system_kokkos
         modules: ['Kokkos::kokkos'],
     )
 
-    kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE', '-Wno-unknown-pragmas']
+    #kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE', '-Wno-unknown-pragmas']
+    kokkos_compile_arg = ['-DKOKKOS_DEPENDENCE' ]
 
     if use_cuda
 
         kokkos_compile_arg = [
             kokkos_compile_arg,
-            '-extended-lambda',
-            '-Wext-lambda-captures-this',
-            '--expt-relaxed-constexpr',
+	    '-extended-lambda',
+		 #'-Wext-lambda-captures-this',
+		 '--expt-relaxed-constexpr',
         ]
 
     endif
