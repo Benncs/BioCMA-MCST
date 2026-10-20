@@ -168,12 +168,12 @@ namespace Simulation::Feed
   {
     if (inlet_f.size() != inlet_i.size())
     {
-      throw Simulation::FeedException(FeedExceptionError::MistmatchSize);
+      throw Simulation::FeedException(FeedExceptionError::MismatchSize);
     }
 
     if (outlet_i.size() != outlet_f.size())
     {
-      throw Simulation::FeedException(FeedExceptionError::MistmatchSize);
+      throw Simulation::FeedException(FeedExceptionError::MismatchSize);
     }
 
     const double q_in = std::accumulate(inlet_f.begin(), inlet_f.end(), 0.);
