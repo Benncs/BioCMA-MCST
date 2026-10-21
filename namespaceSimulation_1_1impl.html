@@ -72,14 +72,139 @@ $(function(){initNavTree('namespaceSimulation_1_1impl.html','',''); });
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:PhaseView" id="r_PhaseView"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1impl_1_1PhaseView.html">PhaseView</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Views on one phase block of <a class="el" href="structSimulation_1_1impl_1_1SystemScalar.html" title="Augmented system: phases are stacked by columns, every matrix is n_species x (n_phase * n_compartment...">SystemScalar</a>, built once.  <a href="structSimulation_1_1impl_1_1PhaseView.html#details">More...</a><br /></td></tr>
+<tr class="memitem:ScalarPhase" id="r_ScalarPhase"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1impl_1_1ScalarPhase.html">ScalarPhase</a></td></tr>
+<tr class="memitem:ScalarSimulation" id="r_ScalarSimulation"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimulation_1_1impl_1_1ScalarSimulation.html">ScalarSimulation</a></td></tr>
+<tr class="memitem:SystemScalar" id="r_SystemScalar"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1impl_1_1SystemScalar.html">SystemScalar</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Augmented system: phases are stacked by columns, every matrix is n_species x (n_phase * n_compartments) = [ L | G ].  <a href="structSimulation_1_1impl_1_1SystemScalar.html#details">More...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a01a1ac2c966c17617ede390d60e8e852" id="r_a01a1ac2c966c17617ede390d60e8e852"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01a1ac2c966c17617ede390d60e8e852">FlowMatrix</a> = Eigen::SparseMatrix&lt;<a class="el" href="namespaceSimulation.html#ac311553520a11e210bd4cb69fba64f9b">mass_balance_float_type</a>&gt;</td></tr>
+<tr class="memitem:a6a61ecd26dbbf5bf046cfb7b969ee4c0" id="r_a6a61ecd26dbbf5bf046cfb7b969ee4c0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a61ecd26dbbf5bf046cfb7b969ee4c0">Mat</a> = <a class="el" href="namespaceKokkosEigen_1_1Alias.html#ad201ef6de78eab206bd36f586f0dd6d3">KokkosEigen::Alias::ColMajorMatrixtype</a>&lt;<a class="el" href="namespaceSimulation.html#ac311553520a11e210bd4cb69fba64f9b">mass_balance_float_type</a>&gt;</td></tr>
+<tr class="memitem:a1a97cf404f2dbcca67c7e2c954451d6f" id="r_a1a97cf404f2dbcca67c7e2c954451d6f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a97cf404f2dbcca67c7e2c954451d6f">Diag</a> = <a class="el" href="namespaceKokkosEigen_1_1Alias.html#a890551e8df24a6db27dc7a03faac10ac">KokkosEigen::Alias::DiagonalType</a>&lt;<a class="el" href="namespaceSimulation.html#ac311553520a11e210bd4cb69fba64f9b">mass_balance_float_type</a>&gt;</td></tr>
+<tr class="memitem:ab29ac213506dca343863167c64129ce3" id="r_ab29ac213506dca343863167c64129ce3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab29ac213506dca343863167c64129ce3">KokkosMat</a></td></tr>
+<tr class="memitem:aa3c24aea18c9b468fd454ee7f883277a" id="r_aa3c24aea18c9b468fd454ee7f883277a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3c24aea18c9b468fd454ee7f883277a">MatBlock</a> = Mat::ColsBlockXpr</td></tr>
+<tr class="memitem:a041ab5a810626849987ba7c643ac6a0f" id="r_a041ab5a810626849987ba7c643ac6a0f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a041ab5a810626849987ba7c643ac6a0f">MapBlock</a> = KokkosMat::eigen_map_type::ColsBlockXpr</td></tr>
+<tr class="memitem:abb5562b015365988afca668bda6c4efb" id="r_abb5562b015365988afca668bda6c4efb"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb5562b015365988afca668bda6c4efb">VecBlock</a></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ae40eba3a10cbceb62fe3e6980dcc193f" id="r_ae40eba3a10cbceb62fe3e6980dcc193f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae40eba3a10cbceb62fe3e6980dcc193f">post_init_concentration_functor</a> (bool is_two_phase_flow, <a class="el" href="structSimulation_1_1ScalarInitializer.html">ScalarInitializer</a> &amp;&amp;scalar_init, const std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a> &gt; &amp;liquid_scalar, const std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a> &gt; &amp;gas_scalar=nullptr)</td></tr>
-<tr class="memitem:ab56eb92724f12b4ed6c401939009519c" id="r_ab56eb92724f12b4ed6c401939009519c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab56eb92724f12b4ed6c401939009519c">post_init_concentration_file</a> (bool is_two_phase_flow, <a class="el" href="structSimulation_1_1ScalarInitializer.html">ScalarInitializer</a> &amp;&amp;scalar_init, const std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a> &gt; &amp;liquid_scalar, const std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a> &gt; &amp;gas_scalar=nullptr, bool change_layout=true)</td></tr>
+<tr class="memitem:acab1210cff5f9a511f75978ea7ebdb9d" id="r_acab1210cff5f9a511f75978ea7ebdb9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acab1210cff5f9a511f75978ea7ebdb9d">post_init_concentration_functor</a> (bool is_two_phase_flow, <a class="el" href="structSimulation_1_1ScalarInitializer.html">ScalarInitializer</a> &amp;&amp;scalar_init, const std::shared_ptr&lt; <a class="el" href="classSimulation_1_1impl_1_1ScalarSimulation.html">ScalarSimulation</a> &gt; &amp;scalar)</td></tr>
+<tr class="memitem:a94b3527bbb6209fb2cf2d802a7edd450" id="r_a94b3527bbb6209fb2cf2d802a7edd450"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a94b3527bbb6209fb2cf2d802a7edd450">post_init_concentration_file</a> (bool is_two_phase_flow, <a class="el" href="structSimulation_1_1ScalarInitializer.html">ScalarInitializer</a> &amp;&amp;scalar_init, const std::shared_ptr&lt; <a class="el" href="classSimulation_1_1impl_1_1ScalarSimulation.html">ScalarSimulation</a> &gt; &amp;scalar, bool change_layout=true)</td></tr>
 </table>
+<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
+<a id="a1a97cf404f2dbcca67c7e2c954451d6f" name="a1a97cf404f2dbcca67c7e2c954451d6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a97cf404f2dbcca67c7e2c954451d6f">&#9670;&#160;</a></span>Diag</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a1a97cf404f2dbcca67c7e2c954451d6f">Simulation::impl::Diag</a> = <a class="el" href="namespaceKokkosEigen_1_1Alias.html#a890551e8df24a6db27dc7a03faac10ac">KokkosEigen::Alias::DiagonalType</a>&lt;<a class="el" href="namespaceSimulation.html#ac311553520a11e210bd4cb69fba64f9b">mass_balance_float_type</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a01a1ac2c966c17617ede390d60e8e852" name="a01a1ac2c966c17617ede390d60e8e852"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01a1ac2c966c17617ede390d60e8e852">&#9670;&#160;</a></span>FlowMatrix</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a01a1ac2c966c17617ede390d60e8e852">Simulation::impl::FlowMatrix</a> = Eigen::SparseMatrix&lt;<a class="el" href="namespaceSimulation.html#ac311553520a11e210bd4cb69fba64f9b">mass_balance_float_type</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab29ac213506dca343863167c64129ce3" name="ab29ac213506dca343863167c64129ce3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab29ac213506dca343863167c64129ce3">&#9670;&#160;</a></span>KokkosMat</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#ab29ac213506dca343863167c64129ce3">Simulation::impl::KokkosMat</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line"> <a class="code hl_class" href="classKokkosEigen_1_1KokkosEigen2D.html">KokkosEigen::KokkosEigen2D</a>&lt;<a class="code hl_typedef" href="namespaceSimulation.html#ac311553520a11e210bd4cb69fba64f9b">mass_balance_float_type</a>,</div>
+<div class="line">                                                 Kokkos::LayoutLeft,</div>
+<div class="line">                                                 Kokkos::DefaultExecutionSpace&gt;</div>
+<div class="ttc" id="aclassKokkosEigen_1_1KokkosEigen2D_html"><div class="ttname"><a href="classKokkosEigen_1_1KokkosEigen2D.html">KokkosEigen::KokkosEigen2D</a></div><div class="ttdoc">Wraps a Kokkos 2D View as an Eigen matrix map.</div><div class="ttdef"><b>Definition</b> kokkos_eigen.hpp:52</div></div>
+<div class="ttc" id="anamespaceSimulation_html_ac311553520a11e210bd4cb69fba64f9b"><div class="ttname"><a href="namespaceSimulation.html#ac311553520a11e210bd4cb69fba64f9b">Simulation::mass_balance_float_type</a></div><div class="ttdeci">double mass_balance_float_type</div><div class="ttdef"><b>Definition</b> scalar.hpp:25</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a041ab5a810626849987ba7c643ac6a0f" name="a041ab5a810626849987ba7c643ac6a0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a041ab5a810626849987ba7c643ac6a0f">&#9670;&#160;</a></span>MapBlock</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a041ab5a810626849987ba7c643ac6a0f">Simulation::impl::MapBlock</a> = KokkosMat::eigen_map_type::ColsBlockXpr</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6a61ecd26dbbf5bf046cfb7b969ee4c0" name="a6a61ecd26dbbf5bf046cfb7b969ee4c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a61ecd26dbbf5bf046cfb7b969ee4c0">&#9670;&#160;</a></span>Mat</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a6a61ecd26dbbf5bf046cfb7b969ee4c0">Simulation::impl::Mat</a> = <a class="el" href="namespaceKokkosEigen_1_1Alias.html#ad201ef6de78eab206bd36f586f0dd6d3">KokkosEigen::Alias::ColMajorMatrixtype</a>&lt;<a class="el" href="namespaceSimulation.html#ac311553520a11e210bd4cb69fba64f9b">mass_balance_float_type</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa3c24aea18c9b468fd454ee7f883277a" name="aa3c24aea18c9b468fd454ee7f883277a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3c24aea18c9b468fd454ee7f883277a">&#9670;&#160;</a></span>MatBlock</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#aa3c24aea18c9b468fd454ee7f883277a">Simulation::impl::MatBlock</a> = Mat::ColsBlockXpr</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abb5562b015365988afca668bda6c4efb" name="abb5562b015365988afca668bda6c4efb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb5562b015365988afca668bda6c4efb">&#9670;&#160;</a></span>VecBlock</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#abb5562b015365988afca668bda6c4efb">Simulation::impl::VecBlock</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line"> std::remove_reference_t&lt;</div>
+<div class="line">        <span class="keyword">decltype</span>(std::declval&lt;Diag&amp;&gt;().diagonal())&gt;::SegmentReturnType</div>
+</div><!-- fragment -->
+</div>
+</div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="ab56eb92724f12b4ed6c401939009519c" name="ab56eb92724f12b4ed6c401939009519c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab56eb92724f12b4ed6c401939009519c">&#9670;&#160;</a></span>post_init_concentration_file()</h2>
+<a id="a94b3527bbb6209fb2cf2d802a7edd450" name="a94b3527bbb6209fb2cf2d802a7edd450"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94b3527bbb6209fb2cf2d802a7edd450">&#9670;&#160;</a></span>post_init_concentration_file()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -97,12 +222,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>liquid_scalar</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>gas_scalar</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>, </td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classSimulation_1_1impl_1_1ScalarSimulation.html">ScalarSimulation</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>scalar</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -114,13 +234,13 @@ Functions</h2></td></tr>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1impl_ab56eb92724f12b4ed6c401939009519c_icgraph.svg" width="100%" height="525"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1impl_a94b3527bbb6209fb2cf2d802a7edd450_icgraph.svg" width="100%" height="525"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
 </div>
-<a id="ae40eba3a10cbceb62fe3e6980dcc193f" name="ae40eba3a10cbceb62fe3e6980dcc193f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae40eba3a10cbceb62fe3e6980dcc193f">&#9670;&#160;</a></span>post_init_concentration_functor()</h2>
+<a id="acab1210cff5f9a511f75978ea7ebdb9d" name="acab1210cff5f9a511f75978ea7ebdb9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acab1210cff5f9a511f75978ea7ebdb9d">&#9670;&#160;</a></span>post_init_concentration_functor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -138,19 +258,14 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>liquid_scalar</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>gas_scalar</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;)</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classSimulation_1_1impl_1_1ScalarSimulation.html">ScalarSimulation</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>scalar</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1impl_ae40eba3a10cbceb62fe3e6980dcc193f_icgraph.svg" width="100%" height="525"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceSimulation_1_1impl_acab1210cff5f9a511f75978ea7ebdb9d_icgraph.svg" width="100%" height="525"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>

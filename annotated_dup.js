@@ -98,6 +98,12 @@ var annotated_dup =
         [ "Linear", "structSimulation_1_1Feed_1_1Linear.html", "structSimulation_1_1Feed_1_1Linear" ],
         [ "SimulationFeed", "classSimulation_1_1Feed_1_1SimulationFeed.html", "classSimulation_1_1Feed_1_1SimulationFeed" ]
       ] ],
+      [ "impl", "namespaceSimulation_1_1impl.html", [
+        [ "PhaseView", "structSimulation_1_1impl_1_1PhaseView.html", "structSimulation_1_1impl_1_1PhaseView" ],
+        [ "ScalarPhase", "structSimulation_1_1impl_1_1ScalarPhase.html", "structSimulation_1_1impl_1_1ScalarPhase" ],
+        [ "ScalarSimulation", "classSimulation_1_1impl_1_1ScalarSimulation.html", "classSimulation_1_1impl_1_1ScalarSimulation" ],
+        [ "SystemScalar", "structSimulation_1_1impl_1_1SystemScalar.html", "structSimulation_1_1impl_1_1SystemScalar" ]
+      ] ],
       [ "KernelInline", "namespaceSimulation_1_1KernelInline.html", [
         [ "CycleFunctor", "structSimulation_1_1KernelInline_1_1CycleFunctor.html", "structSimulation_1_1KernelInline_1_1CycleFunctor" ],
         [ "CycleFunctors", "structSimulation_1_1KernelInline_1_1CycleFunctors.html", "structSimulation_1_1KernelInline_1_1CycleFunctors" ],

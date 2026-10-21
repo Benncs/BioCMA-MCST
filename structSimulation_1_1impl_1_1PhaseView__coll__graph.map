@@ -1,0 +1,5 @@
+<map id="Simulation::impl::PhaseView" name="Simulation::impl::PhaseView">
+<area shape="rect" id="Node000001" title="Views on one phase block of SystemScalar, built once." alt="" coords="5,100,194,125"/>
+<area shape="rect" id="Node000002" href="$structSimulation_1_1Phase.html" title=" " alt="" coords="36,5,163,30"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,46,102,100,97,100,97,46"/>
+</map>

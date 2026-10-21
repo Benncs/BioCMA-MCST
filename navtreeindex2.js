@@ -248,6 +248,6 @@ var NAVTREEINDEX2 =
 "classPythonWrap_1_1PimpModel.html#a8d77e878c1069cba40ed0702f755f3ae":[2,0,16,0,13],
 "classPythonWrap_1_1PimpModel.html#a8d77e878c1069cba40ed0702f755f3ae":[4,0,11,0,13],
 "classSimulation_1_1BaseSimulationException.html":[2,0,17,4],
-"classSimulation_1_1BaseSimulationException.html":[4,0,12,3],
+"classSimulation_1_1BaseSimulationException.html":[4,0,12,4],
 "classSimulation_1_1BaseSimulationException.html#a1914eac16910be8ad80a834e4836e8c5":[2,0,17,4,1]
 };
