@@ -1,5 +1,6 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_ScatterView.hpp>
+#include <algorithm>
 #include <cma_utils/alias.hpp>
 #include <common/common.hpp>
 #include <cstddef>
@@ -12,8 +13,8 @@
 #include <mc/unit.hpp>
 #include <memory>
 #include <optional>
+#include <scalar.hpp>
 #include <scalar_init.hpp>
-#include <scalar_simulation.hpp>
 #include <simulation/descriptors/dimensions.hpp>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/kernels/move_kernel.hpp>
@@ -22,6 +23,7 @@
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation.hpp>
 #include <simulation/simulation_exception.hpp>
+#include <stdexcept>
 #include <utility>
 namespace Simulation
 {
@@ -36,8 +38,7 @@ namespace Simulation
         const_number_simulation(other.const_number_simulation),
         is_two_phase_flow(other.is_two_phase_flow),
         f_reaction(other.f_reaction), m_times(other.m_times),
-        liquid_scalar(std::move(other.liquid_scalar)),
-        gas_scalar(std::move(other.gas_scalar)),
+        scalar(std::move(other.scalar)),
         m_mt_model(std::move(other.m_mt_model)), logger(std::move(other.logger))
 
   {
@@ -57,17 +58,18 @@ namespace Simulation
 
   {
 
-    this->liquid_scalar = std::make_shared<ScalarSimulation>(
-        mc_unit->domain.getNumberCompartments(),
-        scalar_init.n_species,
-        scalar_init.volumesliq);
+    const auto n_compartments = mc_unit->domain.getNumberCompartments();
 
-    this->gas_scalar = (is_two_phase_flow)
-                           ? std::make_shared<ScalarSimulation>(
-                                 mc_unit->domain.getNumberCompartments(),
-                                 scalar_init.n_species,
-                                 scalar_init.volumesgas)
-                           : nullptr; // No contribs for gas
+    this->scalar
+        = (is_two_phase_flow)
+              ? std::make_shared<impl::ScalarSimulation>(n_compartments,
+                                                         scalar_init.n_species,
+                                                         scalar_init.volumesliq,
+                                                         scalar_init.volumesgas)
+              : std::make_shared<impl::ScalarSimulation>(
+                    n_compartments,
+                    scalar_init.n_species,
+                    scalar_init.volumesliq);
 
     post_init_concentration(std::move(scalar_init));
 
@@ -85,8 +87,8 @@ namespace Simulation
     contribs_scatter
         = Kokkos::Experimental::create_scatter_view(get_kernel_contribution());
 
-    dims = { .n_species = this->liquid_scalar->n_row(),
-             .n_compartment = this->liquid_scalar->n_col() };
+    dims = { .n_species = this->scalar->n_species(),
+             .n_compartment = this->scalar->n_compartments() };
   }
 
   SimulationUnit::~SimulationUnit() = default;
@@ -94,8 +96,7 @@ namespace Simulation
   void
   SimulationUnit::reset()
   {
-    liquid_scalar.reset();
-    gas_scalar.reset();
+    scalar.reset();
     mc_unit.reset();
     // mc_unit->domain.inner = MC::DomainState<ComputeSpace, false>();
   }
@@ -132,20 +133,28 @@ namespace Simulation
       const CmaUtils::IterationStatePtrType& newstate)
   {
     PROFILE_SECTION("simulation::updateScalarHydro")
-    if (liquid_scalar) [[likely]]
+    if (!scalar) [[unlikely]]
     {
-      const auto& liq = newstate->get_liquid();
-      std::span<double const> vl = liq->volume();
-      this->liquid_scalar->setVolumes(vl, liq->inverse_volume());
-      this->liquid_scalar->set_transition(newstate->get_liquid()->transition());
+      throw std::runtime_error("No scalar defined");
     }
-    if (newstate->has_gas() && gas_scalar)
+
+    const auto& liq = newstate->get_liquid();
+    this->scalar->set_volumes(
+        Phase::Liquid, liq->volume(), liq->inverse_volume());
+
+    if (scalar->has_gas())
     {
       const auto& gas = newstate->get_gas();
-      this->gas_scalar->setVolumes(gas->volume(), gas->inverse_volume());
-      gas_scalar->set_transition(newstate->get_gas()->transition());
+      this->scalar->set_volumes(
+          Phase::Gas, gas->volume(), gas->inverse_volume());
+      this->scalar->set_transition_two_phase(liq->transition(),
+                                             gas->transition());
 
       m_mt_model.update(newstate);
+    }
+    else
+    {
+      this->scalar->set_transition(liq->transition());
     }
   }
 
@@ -157,7 +166,7 @@ namespace Simulation
     // Warning syncrho deepcopy into contribs
     //  Ok to do it here because scatter_contribute is called after
     //  cycle_process when contribs is empty (ode step is done before)
-    this->liquid_scalar->synchro_sources();
+    this->scalar->synchro_sources();
   }
 
   void
@@ -170,43 +179,36 @@ namespace Simulation
     {
 
       impl::post_init_concentration_functor(
-          is_two_phase_flow, std::move(scalar_init), liquid_scalar, gas_scalar);
+          is_two_phase_flow, std::move(scalar_init), scalar);
     }
     else
     {
       bool change_layout = scalar_init.type != ScalarInitialiserType::Serde;
 
-      impl::post_init_concentration_file(is_two_phase_flow,
-                                         std::move(scalar_init),
-                                         liquid_scalar,
-                                         gas_scalar,
-                                         change_layout);
+      impl::post_init_concentration_file(
+          is_two_phase_flow, std::move(scalar_init), scalar, change_layout);
     }
 
     // At this step scalar init is totally consumed and moved-from
 
     // Check concentration >=0
 
-    if ((this->liquid_scalar->getConcentrationArray() >= 0.).all())
-    {
-      this->liquid_scalar->set_mass();
-    }
-    else
+    auto positive = [](double c) { return c >= 0.; };
+
+    if (!std::ranges::all_of(this->scalar->concentration_data(Phase::Liquid),
+                             positive))
     {
       throw BaseSimulationException(ErrorCodes::BadConcentrationInitLiq);
     }
 
-    if (is_two_phase_flow)
+    if (is_two_phase_flow
+        && !std::ranges::all_of(this->scalar->concentration_data(Phase::Gas),
+                                positive))
     {
-      if ((this->gas_scalar->getConcentrationArray() >= 0.).all())
-      {
-        this->gas_scalar->set_mass();
-      }
-      else
-      {
-        throw BaseSimulationException(ErrorCodes::BadConcentrationInitGas);
-      }
+      throw BaseSimulationException(ErrorCodes::BadConcentrationInitGas);
     }
+
+    this->scalar->set_mass();
   }
 
 } // namespace Simulation

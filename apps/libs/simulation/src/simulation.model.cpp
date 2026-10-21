@@ -10,7 +10,7 @@ EIGEN_DIAG_POP
 #include <hydro/impl_mass_transfer.hpp>
 #include <mc/domain.hpp>
 #include <optional>
-#include <scalar_simulation.hpp>
+#include <scalar.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/simulation.hpp>
 
@@ -42,27 +42,25 @@ namespace Simulation
   void
   SimulationUnit::clearContribution() const noexcept
   {
-    if (is_two_phase_flow)
-    {
-      this->gas_scalar->set_zero_contribs();
-    }
-    this->liquid_scalar->set_zero_contribs();
+    this->scalar->set_zero_contribs();
   }
 
   namespace
   {
     void
-    set_scalar_feed(ScalarSimulation& scl, const Feed::FeedDescriptor& fd)
+    set_scalar_feed(impl::ScalarSimulation& scl,
+                    Phase phase,
+                    const Feed::FeedDescriptor& fd)
     {
 
       // Set for each scalar, i.e for each line of the sytem, F=C_feed*Q
       for (auto [concentration, index] : fd.values)
       {
-        scl.set_feed(index, fd.input_position, fd.flow * concentration);
+        scl.set_feed(phase, index, fd.input_position, fd.flow * concentration);
       }
       if (fd.output_position)
       {
-        scl.set_sink(*fd.output_position, fd.flow);
+        scl.set_sink(phase, *fd.output_position, fd.flow);
       }
     }
 
@@ -77,32 +75,34 @@ namespace Simulation
     const auto rel_t = this->accesor.relative_time();
     const auto abs_t = this->accesor.absolute_time();
 
-    auto update_feed_scalar =
-        [rel_t, abs_t, d_t, update_scalar](auto& scl, Feed::FeedDescriptor& fd)
+    auto update_feed_scalar
+        = [rel_t, abs_t, d_t, update_scalar](
+              auto& scl, Phase phase, Feed::FeedDescriptor& fd)
     {
       const auto time = fd.use_relative_time ? rel_t : abs_t;
       KOKKOS_ASSERT(time >= 0);
       fd.update(time, d_t);
       if (update_scalar)
       {
-        set_scalar_feed(scl, fd);
+        set_scalar_feed(scl, phase, fd);
       }
     };
 
-    auto& liquid_scalar = *this->liquid_scalar;
+    auto& scalar = *this->scalar;
     std::size_t mc_flow_counter = 0;
 
     std::ranges::for_each(
         m_feed.liquid_feeds(),
         [&](auto& feed)
         {
-          update_feed_scalar(liquid_scalar, feed);
+          update_feed_scalar(scalar, Phase::Liquid, feed);
 
           // MC update
           if (feed.output_position.has_value())
           {
             const std::size_t output_position = *feed.output_position;
-            const auto volume = liquid_scalar.volume_at(output_position);
+            const auto volume
+                = scalar.volume_at(Phase::Liquid, output_position);
             KOKKOS_ASSERT(volume > 0.);
             this->mc_unit->domain.set_leaving_flow(
                 mc_flow_counter, output_position, feed.flow, volume);
@@ -112,12 +112,11 @@ namespace Simulation
 
     if (is_two_phase_flow)
     {
-      auto& gs = *this->gas_scalar;
       auto range_feed_gas = m_feed.gas_feeds();
 
       std::ranges::for_each(range_feed_gas,
-                            [&update_feed_scalar, &gs](auto& feed)
-                            { update_feed_scalar(gs, feed); });
+                            [&update_feed_scalar, &scalar](auto& feed)
+                            { update_feed_scalar(scalar, Phase::Gas, feed); });
     }
   }
 
@@ -135,21 +134,16 @@ namespace Simulation
     if (is_two_phase_flow)
     {
       m_mt_model.gas_liquid_mass_transfer();
-      const auto& mtr = m_mt_model.proxy()->mtr;
+      this->scalar->set_mass_transfer(m_mt_model.proxy()->mtr);
+    }
 
-      this->gas_scalar->performStepGL(
-          d_t, mtr, MassTransfer::Sign::GasToLiquid);
+    this->scalar->step_explicit(d_t);
 
-      this->liquid_scalar->performStepGL(
-          d_t, mtr, MassTransfer::Sign::LiquidToGas);
-
+    if (is_two_phase_flow)
+    {
       // Uncoment this to avoid negative concentration especially when low
       // oxygen concentration
-      this->liquid_scalar->clearNegs();
-    }
-    else
-    {
-      this->liquid_scalar->performStep(d_t);
+      this->scalar->clear_negs();
     }
   }
 } // namespace Simulation

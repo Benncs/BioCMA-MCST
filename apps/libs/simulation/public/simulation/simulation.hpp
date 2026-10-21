@@ -40,7 +40,10 @@ namespace CmaUtils
  */
 namespace Simulation
 {
-  class ScalarSimulation;
+  namespace impl
+  {
+    class ScalarSimulation;
+  }
 
   class SimulationUnit
   {
@@ -141,8 +144,7 @@ namespace Simulation
 
     void post_init_concentration(ScalarInitializer&& scalar_init);
 
-    std::shared_ptr<ScalarSimulation> liquid_scalar;
-    std::shared_ptr<ScalarSimulation> gas_scalar;
+    std::shared_ptr<impl::ScalarSimulation> scalar;
     // TODO add default null value (no model)
     MassTransfer::MassTransferModel m_mt_model;
 

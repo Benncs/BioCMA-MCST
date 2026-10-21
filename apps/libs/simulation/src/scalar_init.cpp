@@ -1,6 +1,6 @@
 #include <optional>
+#include <scalar.hpp>
 #include <scalar_init.hpp>
-#include <scalar_simulation.hpp>
 #include <simulation/scalar_initializer.hpp>
 #include <simulation/simulation_exception.hpp>
 
@@ -53,17 +53,16 @@ namespace Simulation::impl
   post_init_concentration_functor(
       bool is_two_phase_flow,
       ScalarInitializer&& scalar_init,
-      const std::shared_ptr<ScalarSimulation>& liquid_scalar,
-      const std::shared_ptr<ScalarSimulation>& gas_scalar)
+      const std::shared_ptr<ScalarSimulation>& scalar)
   {
 
-    auto cliq = liquid_scalar->get_concentration();
+    auto cliq = scalar->concentration_host_view(Phase::Liquid);
     std::optional<decltype(cliq)> cgas = std::nullopt; // FIXME
 
     if (is_two_phase_flow)
     {
-      assert(gas_scalar != nullptr);
-      cgas = gas_scalar->get_concentration();
+      assert(scalar->has_gas());
+      cgas = scalar->concentration_host_view(Phase::Gas);
       assert(cgas->size() != 0);
     }
 
@@ -86,12 +85,10 @@ namespace Simulation::impl
   }
 
   void
-  post_init_concentration_file(
-      bool is_two_phase_flow,
-      ScalarInitializer&& scalar_init,
-      const std::shared_ptr<ScalarSimulation>& liquid_scalar,
-      const std::shared_ptr<ScalarSimulation>& gas_scalar,
-      bool change_layout)
+  post_init_concentration_file(bool is_two_phase_flow,
+                               ScalarInitializer&& scalar_init,
+                               const std::shared_ptr<ScalarSimulation>& scalar,
+                               bool change_layout)
   {
     if (!scalar_init.liquid_buffer.has_value())
     {
@@ -107,7 +104,7 @@ namespace Simulation::impl
         cols);
 
     // Keep this even though get_correct_layout_buffer already may throw
-    if (!liquid_scalar->deep_copy_concentration(buffer))
+    if (!scalar->deep_copy_concentration(Phase::Liquid, buffer))
     {
       throw BaseSimulationException(ErrorCodes::MismatchSize);
     }
@@ -133,7 +130,7 @@ namespace Simulation::impl
           scalar_init.n_species,
           cols);
 
-      if (!gas_scalar->deep_copy_concentration(buffer))
+      if (!scalar->deep_copy_concentration(Phase::Gas, buffer))
       {
         throw BaseSimulationException(ErrorCodes::MismatchSize);
       }

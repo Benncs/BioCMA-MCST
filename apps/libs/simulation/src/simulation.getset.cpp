@@ -8,7 +8,7 @@
 #include <memory>
 #include <mixture/species_descriptor.hpp>
 #include <optional>
-#include <scalar_simulation.hpp>
+#include <scalar.hpp>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <simulation/probe.hpp>
@@ -96,32 +96,32 @@ namespace Simulation
   Getter::getCliqData() const
   {
     assert(a_ != nullptr);
-    return a_->liquid_scalar->getConcentrationData();
+    return a_->scalar->concentration_data(Phase::Liquid);
   }
 
   [[nodiscard]] std::span<double>
   Getter::getCliqData_mut() const
   {
     assert(a_ != nullptr);
-    return a_->liquid_scalar->getConcentrationData();
+    return a_->scalar->concentration_data(Phase::Liquid);
   }
 
   [[nodiscard]] std::optional<std::span<const double>>
   Getter::getCgasData() const
   {
     assert(a_ != nullptr);
-    if (!a_->gas_scalar)
+    if (!a_->scalar->has_gas())
     {
       return std::nullopt;
     }
-    return a_->gas_scalar->getConcentrationData();
+    return a_->scalar->concentration_data(Phase::Gas);
   }
 
   std::span<const double>
   Getter::getContributionData() const
   {
     assert(a_ != nullptr);
-    return a_->liquid_scalar->contribution_span();
+    return a_->scalar->source_data(Phase::Liquid);
   }
 
   [[nodiscard]] std::optional<std::span<const double>>
@@ -135,7 +135,7 @@ namespace Simulation
   Getter::getContributionData_mut() const
   {
     assert(a_ != nullptr);
-    return a_->liquid_scalar->contribution_span_mut();
+    return a_->scalar->source_data(Phase::Liquid);
   }
 
   std::ranges::subrange<ProbeIterator, ProbeIterator>
@@ -180,11 +180,11 @@ namespace Simulation
   void
   SimulationUnit::setMtrModel(MassTransfer::Type::MtrTypeVariant&& variant)
   {
-    if (is_two_phase_flow && liquid_scalar != nullptr && gas_scalar != nullptr)
+    if (is_two_phase_flow && scalar != nullptr && scalar->has_gas())
     {
       // TODO
       m_mt_model = Simulation::MassTransfer::MassTransferModel(
-          *m_table, std::move(variant), liquid_scalar, gas_scalar);
+          *m_table, std::move(variant), scalar);
     }
   }
 
@@ -197,7 +197,7 @@ namespace Simulation
   [[nodiscard]] MC::KernelConcentrationType
   SimulationUnit::getkernel_concentration() const
   {
-    return this->liquid_scalar->get_device_concentration();
+    return this->scalar->get_device_concentration();
   }
 
   void
@@ -209,7 +209,7 @@ namespace Simulation
   MC::kernelContribution
   SimulationUnit::get_kernel_contribution() const
   {
-    return this->liquid_scalar->get_kernel_contribution();
+    return this->scalar->get_kernel_contribution();
   }
 
 } // namespace Simulation

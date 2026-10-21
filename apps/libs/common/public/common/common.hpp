@@ -8,6 +8,13 @@
 using ComputeSpace = Kokkos::DefaultExecutionSpace;
 using HostSpace = Kokkos::DefaultHostExecutionSpace;
 
+// TODO put elsewhere
+enum class Phase
+{
+  Liquid,
+  Gas
+};
+
 #ifdef ENABLE_KOKKOS_PROFILING
 #  include <Kokkos_Profiling_ScopedRegion.hpp>
 #  define PROFILE_SECTION(__label_section__)                                   \

@@ -25,6 +25,25 @@ namespace Simulation
   template <FloatingPointType ftype>
   using FlowMatrixType = Eigen::SparseMatrix<ftype>;
   using mass_balance_float_type = double;
+
+  namespace impl
+  {
+    struct ScalarPhase
+    {
+      Phase identifier;
+      KokkosEigen::Alias::ColMajorMatrixtype<mass_balance_float_type>
+          total_mass;
+
+      KokkosEigen::KokkosEigen2D<mass_balance_float_type,
+                                 Kokkos::LayoutLeft,
+                                 Kokkos::DefaultExecutionSpace>
+          concentrations;
+
+      KokkosEigen::Alias::DiagonalType<mass_balance_float_type> m_volumes;
+      KokkosEigen::Alias::DiagonalType<mass_balance_float_type> volumes_inverse;
+    };
+  } // namespace impl
+
   class ScalarSimulation
   {
     using concentration_t
@@ -110,6 +129,8 @@ namespace Simulation
   private:
     std::size_t n_r;
     std::size_t n_c;
+
+    void calculate_concentration();
 
     KokkosEigen::Alias::ColMajorMatrixtype<mass_balance_float_type> total_mass;
 

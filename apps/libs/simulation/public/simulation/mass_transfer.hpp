@@ -7,10 +7,10 @@
 #include <variant>
 #include <vector>
 
-namespace Simulation
+namespace Simulation::impl
 {
   class ScalarSimulation;
-}; // namespace Simulation
+}; // namespace Simulation::impl
 
 namespace Simulation::MassTransfer::Type
 {
@@ -64,8 +64,7 @@ namespace Simulation::MassTransfer
     explicit MassTransferModel(
         const Mixture::SpecieTable& species,
         MassTransfer::Type::MtrTypeVariant _type,
-        std::shared_ptr<Simulation::ScalarSimulation> _liquid_scalar,
-        std::shared_ptr<Simulation::ScalarSimulation> _gas_scalar);
+        std::shared_ptr<Simulation::impl::ScalarSimulation> _scalar);
 
     void gas_liquid_mass_transfer() const;
 
@@ -88,8 +87,7 @@ namespace Simulation::MassTransfer
   private:
     MassTransfer::Type::MtrTypeVariant type;
     std::shared_ptr<MassTransferProxy> _proxy;
-    std::shared_ptr<Simulation::ScalarSimulation> liquid_scalar;
-    std::shared_ptr<Simulation::ScalarSimulation> gas_scalar;
+    std::shared_ptr<Simulation::impl::ScalarSimulation> scalar;
   };
 
   static_assert(static_cast<float>(Sign::GasToLiquid) == -1., "Sign mtr");

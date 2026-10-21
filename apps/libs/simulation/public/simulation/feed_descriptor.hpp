@@ -8,11 +8,7 @@
 #include <variant>
 #include <vector>
 
-enum class Phase
-{
-  Liquid,
-  Gas
-};
+#include <common/common.hpp>
 
 enum class FeedType : std::uint8_t
 {

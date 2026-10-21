@@ -11,7 +11,7 @@ EIGEN_DIAG_POP
 #include <memory>
 #include <mixture/species_descriptor.hpp>
 #include <optional>
-#include <scalar_simulation.hpp>
+#include <scalar.hpp>
 #include <simulation/mass_transfer.hpp>
 #include <stdexcept>
 #include <utility>
@@ -54,7 +54,9 @@ namespace
     {
       for (std::size_t i = 0; i < nrow; ++i)
       {
-        proxy->kla.row(EIGEN_INDEX(i)).setConstant(0.2); // 700h/1
+        // proxy->kla.row(EIGEN_INDEX(i)).setConstant(0.2); // 700h/1
+
+        proxy->kla.row(EIGEN_INDEX(i)).setConstant(0.011); // 700h/1
       }
     }
   };
@@ -62,8 +64,7 @@ namespace
   struct MtrVisitor
   {
     const std::shared_ptr<Simulation::MassTransfer::MassTransferProxy>& proxy;
-    const std::shared_ptr<Simulation::ScalarSimulation>& liquid_scalar;
-    const std::shared_ptr<Simulation::ScalarSimulation>& gas_scalar;
+    const std::shared_ptr<Simulation::impl::ScalarSimulation>& scalar;
     const CmaUtils::IterationStatePtrType& state;
 
     void
@@ -72,9 +73,9 @@ namespace
       (void)_;
       Simulation::MassTransfer::Impl::fixed_kla_gas_liquid_mass_transfer(
           *proxy,
-          liquid_scalar->getConcentrationArray(),
-          gas_scalar->getConcentrationArray(),
-          liquid_scalar->getVolume(),
+          scalar->phase(Phase::Liquid).concentration.array(),
+          scalar->phase(Phase::Gas).concentration.array(),
+          scalar->phase(Phase::Liquid).volume.asDiagonal(),
           state);
     }
 
@@ -84,9 +85,9 @@ namespace
       (void)_;
       Simulation::MassTransfer::Impl::fixed_kla_gas_liquid_mass_transfer(
           *proxy,
-          liquid_scalar->getConcentrationArray(),
-          gas_scalar->getConcentrationArray(),
-          liquid_scalar->getVolume(),
+          scalar->phase(Phase::Liquid).concentration.array(),
+          scalar->phase(Phase::Gas).concentration.array(),
+          scalar->phase(Phase::Liquid).volume.asDiagonal(),
           state);
     }
 
@@ -99,9 +100,9 @@ namespace
       Simulation::MassTransfer::Impl::flowmap_gas_liquid_mass_transfer(
           *proxy,
           db,
-          liquid_scalar->getConcentrationArray(),
-          gas_scalar->getConcentrationArray(),
-          liquid_scalar->getVolume(),
+          scalar->phase(Phase::Liquid).concentration.array(),
+          scalar->phase(Phase::Gas).concentration.array(),
+          scalar->phase(Phase::Liquid).volume.asDiagonal(),
           state);
     }
 
@@ -162,14 +163,12 @@ namespace Simulation::MassTransfer
   MassTransferModel::MassTransferModel(
       const Mixture::SpecieTable& species,
       MassTransfer::Type::MtrTypeVariant _type,
-      std::shared_ptr<Simulation::ScalarSimulation> _liquid_scalar,
-      std::shared_ptr<Simulation::ScalarSimulation> _gas_scalar)
-      : type(_type), liquid_scalar(std::move(_liquid_scalar)),
-        gas_scalar(std::move(_gas_scalar))
+      std::shared_ptr<Simulation::impl::ScalarSimulation> _scalar)
+      : type(_type), scalar(std::move(_scalar))
   {
 
-    const auto nrow = liquid_scalar->n_row(); // nspecies
-    const auto ncol = liquid_scalar->n_col(); // n compartment
+    const auto nrow = scalar->n_species();      // nspecies
+    const auto ncol = scalar->n_compartments(); // n compartment
 
     _proxy = std::make_shared<MassTransferProxy>();
     _proxy->mtr = KokkosEigen::Alias::ColMajorMatrixtype<double>(nrow, ncol);
@@ -203,28 +202,31 @@ namespace Simulation::MassTransfer
   MassTransferModel::update(const CmaUtils::IterationStatePtrType& state)
   {
     PROFILE_SECTION("gas_liquid_mass_transfer")
-    if (gas_scalar == nullptr || _proxy == nullptr)
+    if (scalar == nullptr || !scalar->has_gas() || _proxy == nullptr)
     {
       throw std::invalid_argument("gas_liquid_mass_transfer should not be "
                                   "called if gas not intialized");
     }
-    std::visit(MtrVisitor{ _proxy, liquid_scalar, gas_scalar, state }, type);
+    std::visit(MtrVisitor{ _proxy, scalar, state }, type);
   }
 
   void
   MassTransferModel::gas_liquid_mass_transfer() const
   {
     PROFILE_SECTION("gas_liquid_mass_transfer")
-    if (gas_scalar == nullptr || _proxy == nullptr)
+    if (scalar == nullptr || !scalar->has_gas() || _proxy == nullptr)
     {
       throw std::invalid_argument("gas_liquid_mass_transfer should not be "
                                   "called if gas not intialized");
     }
     // std::visit(MtrVisitor{_proxy, liquid_scalar, gas_scalar, state}, type);
 
-    auto gas_concentration = this->gas_scalar->getConcentrationArray();
-    auto liquid_concentration = this->liquid_scalar->getConcentrationArray();
-    auto liquid_volume = this->liquid_scalar->getVolume();
+    const auto& liquid = this->scalar->phase(Phase::Liquid);
+    const auto& gas = this->scalar->phase(Phase::Gas);
+
+    auto gas_concentration = gas.concentration.array();
+    auto liquid_concentration = liquid.concentration.array();
+    auto liquid_volume = liquid.volume.asDiagonal();
 
     auto& flag = this->_proxy->flag_transfer;
 
@@ -266,8 +268,7 @@ namespace Simulation::MassTransfer
   }
 
   MassTransferModel::MassTransferModel()
-      : type(Type::FlowmapTurbulence{}), _proxy(nullptr),
-        liquid_scalar(nullptr), gas_scalar(nullptr)
+      : type(Type::FlowmapTurbulence{}), _proxy(nullptr), scalar(nullptr)
   {
   }
 

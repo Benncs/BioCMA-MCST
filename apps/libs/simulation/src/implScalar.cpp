@@ -226,6 +226,13 @@ namespace Simulation
 
     total_mass.noalias() += d_t * dmdt;
 
+    this->calculate_concentration();
+  }
+
+  void
+  ScalarSimulation::calculate_concentration()
+  {
+    auto& c = concentrations.eigen();
     c.noalias() = total_mass * volumes_inverse;
 
     // Make accessible new computed concentration to ComputeSpace
@@ -240,12 +247,9 @@ namespace Simulation
     auto& c = concentrations.eigen();
     const auto& _sources = sources.cst_eigen();
     auto dmdt = c * m_transition - c * sink + _sources;
-
     total_mass.noalias() += d_t * dmdt;
-    c.noalias() = total_mass * volumes_inverse;
 
-    // Make accessible new computed concentration to ComputeSpace
-    concentrations.host_to_device_sync();
+    this->calculate_concentration();
   }
 
   void
@@ -262,6 +266,7 @@ namespace Simulation
     constexpr float_type TOL = scheme_relative_error * max_species_value;
 
     using space = decltype(concentrations)::host_view_type::execution_space;
+
     auto hv = concentrations.host_view();
     Kokkos::parallel_for(
         "clear_negs",
