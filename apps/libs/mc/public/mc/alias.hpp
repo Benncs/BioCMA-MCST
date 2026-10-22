@@ -137,7 +137,10 @@ namespace MC
 
   struct LeavingFlow;
 
-  using ParticlePositions = Kokkos::View<uint64_t*, ComputeSpace>;
+  template <typename Exec>
+  using ParticlePositionT = Kokkos::View<uint64_t*, Exec>;
+
+  using ParticlePositions = ParticlePositionT<ComputeSpace>;
   using ParticleStatus = Kokkos::View<Status*, ComputeSpace>;
   template <FloatingPointType ftype>
   using ParticleWeigths = Kokkos::View<ftype*, ComputeSpace>;

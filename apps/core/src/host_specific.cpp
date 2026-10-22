@@ -289,9 +289,11 @@ namespace
 #ifndef NO_MPI
         sync_prepare_next(exec, simulation, &req);
 #else
-        throw std::runtime_error(
-            "Runnning withouth MPI impl, following needs to clear contribs "
-            "which is not implemented for non MPI build");
+        // throw std::runtime_error(
+        //     "Runnning withouth MPI impl, following needs to clear contribs "
+        //     "which is not implemented for non MPI build");
+        simulation.clearContribution();
+
 #endif
 
         simulation.cycleProcess(local_container, d_t, functors);

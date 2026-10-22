@@ -28,12 +28,17 @@
 # -----------------------------------------------------------------------------
 
 LOG=0
-local_dir=$HOME/local_arm
-KOKKOS_COMPILER=g++
-HOST_COMPILER=g++
+# local_dir=$HOME/local_arm
+local_dir=/usr/local
 
-export NVCC_WRAPPER_DEFAULT_COMPILER=g++
-export CUDAHOSTCXX=g++
+_CUDAHOSTCXX=clang++-18
+KOKKOS_COMPILER=clang++-18
+HOST_COMPILER=clang++-18
+_NVCC_WRAPPER_DEFAULT_COMPILER=clang++-18
+
+
+export NVCC_WRAPPER_DEFAULT_COMPILER=$_NVCC_WRAPPER_DEFAULT_COMPILER
+export CUDAHOSTCXX=$_CUDAHOSTCXX
 export NVCC_WRAPPER_EXTRA_ARGS="--expt-relaxed-constexpr -extended-lambda"
 
 wrap_cxx="$local_dir/bin/kokkos_launch_compiler $local_dir/bin/nvcc_wrapper  ${KOKKOS_COMPILER}  ${HOST_COMPILER}"

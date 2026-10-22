@@ -46,6 +46,7 @@ conf_data = configuration_data(
         'default_MC_buffer_ratio': default_MC_buffer_ratio,
         '__f_compress_export__': 'true',
         '__f_export_age__': 'true',
+        '__f_export_position__':'true',
         'default_particle_per_team_contributions': default_particle_per_team_contributions,
         'default_particle_per_team_cycle': default_particle_per_team_cycle,
         'default_particle_per_team_move': default_particle_per_team_moves,

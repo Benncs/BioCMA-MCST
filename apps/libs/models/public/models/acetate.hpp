@@ -312,10 +312,10 @@ namespace Models
             a_max_m, a_max_m / 2., 0.5 * a_max_m, a_max_m * 1.5);
 
     static constexpr auto ld = l_dist;
-//    static constexpr auto lm = l_dist;
+    //    static constexpr auto lm = l_dist;
     auto gen = random_pool.get_state();
     GET_PROPERTY(particle_var::length) = ld.draw(gen);
-    GET_PROPERTY(particle_var::l_max) = l_max_m; 
+    GET_PROPERTY(particle_var::l_max) = l_max_m;
     GET_PROPERTY(particle_var::a_p) = a_max_m / 2.;
     GET_PROPERTY(particle_var::a_max) = a_max_dist.mean();
     random_pool.free_state(gen);
