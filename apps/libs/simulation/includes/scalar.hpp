@@ -144,9 +144,8 @@ namespace Simulation
 
       void step_explicit(double d_t);
 
-      // mtr as computed by MassTransferModel (n_species x n_compartments),
-      // added to liquid and removed from gas
-      void set_mass_transfer(const Mat& mtr_liquid);
+      void step_explicit_two_phase(
+          double d_t, const MassTransfer::MassTransferProxy& mass_transfer);
 
       void clear_negs();
 
@@ -198,19 +197,20 @@ namespace Simulation
 
       [[nodiscard]] bool has_gas() const noexcept;
 
-      // Lib internal access (mass transfer)
-      [[nodiscard]] const PhaseView& phase(Phase phase) const;
-
-      [[nodiscard]] PhaseView& phase(Phase phase);
+      // Views given once to MassTransferModel
+      [[nodiscard]] MassTransfer::MtrInput mtr_input();
 
     private:
+      [[nodiscard]] PhaseView& phase(Phase phase);
+      [[nodiscard]] const PhaseView& phase(Phase phase) const;
+      [[nodiscard]] bool is_valid_phase(Phase phase) const;
+
       [[nodiscard]] std::size_t offset(Phase phase) const noexcept;
 
       std::size_t n_s;
       std::size_t n_c;
       std::size_t n_phase;
 
-      // Declared before the views: member order is construction order
       SystemScalar system;
       PhaseView liquid;
       std::optional<PhaseView> gas;

@@ -14,15 +14,15 @@ EIGEN_DIAG_POP
 #include <mc/domain.hpp>
 #include <simulation/mass_transfer.hpp>
 
-namespace Simulation
-{
-  class ScalarSimulation;
-};
-
 namespace Simulation::MassTransfer
 {
   struct MassTransferProxy
   {
+    // Views on the scalar
+    Eigen::Map<const Eigen::ArrayXXd> liquid_concentration;
+    Eigen::Map<const Eigen::ArrayXXd> gas_concentration;
+    Eigen::Map<const Eigen::VectorXd> liquid_volume;
+
     KokkosEigen::Alias::ColMajorMatrixtype<double> mtr;
     Eigen::ArrayXXd kla;
     Eigen::ArrayXd Henry;
@@ -36,24 +36,13 @@ namespace Simulation::MassTransfer
     void flowmap_gas_liquid_mass_transfer(
         MassTransferProxy& mtr,
         double db,
-        const Eigen::ArrayXXd& liquid_concentration,
-        const Eigen::ArrayXXd& gas_concentration,
-        const Eigen::MatrixXd& liquid_volume,
         const CmaUtils::IterationStatePtrType& state);
 
     void fixed_kla_gas_liquid_mass_transfer(
-        MassTransferProxy& mtr,
-        const Eigen::ArrayXXd& liquid_concentration,
-        const Eigen::ArrayXXd& gas_concentration,
-        const Eigen::MatrixXd& liquid_volume,
-        const CmaUtils::IterationStatePtrType& state);
+        MassTransferProxy& mtr, const CmaUtils::IterationStatePtrType& state);
 
     void flowmap_kla_gas_liquid_mass_transfer(
-        MassTransferProxy& mtr,
-        const Eigen::ArrayXXd& liquid_concentration,
-        const Eigen::ArrayXXd& gas_concentration,
-        const Eigen::MatrixXd& liquid_volume,
-        const CmaUtils::IterationStatePtrType& state);
+        MassTransferProxy& mtr, const CmaUtils::IterationStatePtrType& state);
 
   }; // namespace Impl
 

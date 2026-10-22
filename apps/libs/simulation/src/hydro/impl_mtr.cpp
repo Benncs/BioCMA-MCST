@@ -9,7 +9,6 @@ EIGEN_DIAG_POP
 
 #include <cassert>
 #include <hydro/impl_mass_transfer.hpp>
-#include <scalar.hpp>
 #include <simulation/mass_transfer.hpp>
 
 namespace
@@ -105,11 +104,10 @@ namespace Simulation::MassTransfer
     flowmap_gas_liquid_mass_transfer(
         MassTransferProxy& mtr,
         const double db,
-        const Eigen::ArrayXXd& liquid_concentration,
-        const Eigen::ArrayXXd& gas_concentration,
-        const Eigen::MatrixXd& liquid_volume,
         const CmaUtils::IterationStatePtrType& state)
     {
+      const auto& liquid_concentration = mtr.liquid_concentration;
+      const auto& gas_concentration = mtr.gas_concentration;
 
       const double kinematic_viscosity = c_kinematic_viscosity(temperature);
 
@@ -133,6 +131,8 @@ namespace Simulation::MassTransfer
       assert(mtr.kla.cols() == gas_concentration.cols()
              && "kla gas size mtr check");
 
+      // TODO use mixture
+      // FIXME: doesnt depend on specie ? then why select only one row ?
       mtr.kla.row(1)
           = (kl_correlation(
                  schmidtnumber, kinematic_viscosity, energy_dissipation_array)
@@ -144,18 +144,16 @@ namespace Simulation::MassTransfer
           = (mtr.kla
              * (gas_concentration.colwise() * mtr.Henry - liquid_concentration))
                 .matrix()
-            * liquid_volume;
+            * mtr.liquid_volume.asDiagonal();
     }
 
     void
     fixed_kla_gas_liquid_mass_transfer(
-        MassTransferProxy& mtr,
-        const Eigen::ArrayXXd& liquid_concentration,
-        const Eigen::ArrayXXd& gas_concentration,
-        const Eigen::MatrixXd& liquid_volume,
-        const CmaUtils::IterationStatePtrType& state)
+        MassTransferProxy& mtr, const CmaUtils::IterationStatePtrType& state)
     {
       (void)state;
+      const auto& liquid_concentration = mtr.liquid_concentration;
+      const auto& gas_concentration = mtr.gas_concentration;
       // mtr.mtr = impl_mtr(
       //     mtr.kla, liquid_concentration, gas_concentration.colwise() *
       //     mtr.Henry, liquid_volume);
@@ -163,15 +161,12 @@ namespace Simulation::MassTransfer
           = (mtr.kla
              * (gas_concentration.colwise() * mtr.Henry - liquid_concentration))
                 .matrix()
-            * liquid_volume;
+            * mtr.liquid_volume.asDiagonal();
     }
 
     void
     flowmap_kla_gas_liquid_mass_transfer(
         [[maybe_unused]] MassTransferProxy& mtr,
-        [[maybe_unused]] const Eigen::ArrayXXd& liquid_concentration,
-        [[maybe_unused]] const Eigen::ArrayXXd& gas_concentration,
-        [[maybe_unused]] const Eigen::MatrixXd& liquid_volume,
         [[maybe_unused]] const CmaUtils::IterationStatePtrType& state)
     {
       // const auto kla = state.infos.at("kla");

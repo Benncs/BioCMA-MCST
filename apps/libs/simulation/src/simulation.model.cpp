@@ -134,16 +134,15 @@ namespace Simulation
     if (is_two_phase_flow)
     {
       m_mt_model.gas_liquid_mass_transfer();
-      this->scalar->set_mass_transfer(m_mt_model.proxy()->mtr);
-    }
+      this->scalar->step_explicit_two_phase(d_t, *m_mt_model.proxy());
 
-    this->scalar->step_explicit(d_t);
-
-    if (is_two_phase_flow)
-    {
       // Uncoment this to avoid negative concentration especially when low
       // oxygen concentration
       this->scalar->clear_negs();
+    }
+    else
+    {
+      this->scalar->step_explicit(d_t);
     }
   }
 } // namespace Simulation

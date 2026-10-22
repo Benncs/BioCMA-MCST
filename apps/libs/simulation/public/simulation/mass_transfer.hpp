@@ -1,16 +1,12 @@
 #ifndef __SIMULATION_HYDRO_MASS_TRANSFER_HPP__
 #define __SIMULATION_HYDRO_MASS_TRANSFER_HPP__
 
+#include <Kokkos_Core.hpp>
 #include <cma_utils/alias.hpp>
 #include <memory>
 #include <mixture/species_descriptor.hpp>
 #include <variant>
 #include <vector>
-
-namespace Simulation::impl
-{
-  class ScalarSimulation;
-}; // namespace Simulation::impl
 
 namespace Simulation::MassTransfer::Type
 {
@@ -58,13 +54,38 @@ namespace Simulation::MassTransfer
 
   struct MassTransferProxy;
 
+  // Host views on the scalar storage, n_species x n_compartments
+  using MtrConcentrationView
+      = Kokkos::View<const double**,
+                     Kokkos::LayoutLeft,
+                     Kokkos::HostSpace,
+                     Kokkos::MemoryTraits<Kokkos::Unmanaged>>;
+
+  // n_compartments
+  using MtrVolumeView = Kokkos::View<const double*,
+                                     Kokkos::LayoutLeft,
+                                     Kokkos::HostSpace,
+                                     Kokkos::MemoryTraits<Kokkos::Unmanaged>>;
+
+  /**
+   * @brief data read by the mass transfer, build and use only once
+   *
+   * Valid as long as the scalar storage lives (same lifetime as the
+   * simulation, never resized).
+   */
+  struct MtrInput
+  {
+    MtrConcentrationView liquid_concentration;
+    MtrConcentrationView gas_concentration;
+    MtrVolumeView liquid_volume;
+  };
+
   class MassTransferModel
   {
   public:
-    explicit MassTransferModel(
-        const Mixture::SpecieTable& species,
-        MassTransfer::Type::MtrTypeVariant _type,
-        std::shared_ptr<Simulation::impl::ScalarSimulation> _scalar);
+    explicit MassTransferModel(const Mixture::SpecieTable& species,
+                               MassTransfer::Type::MtrTypeVariant _type,
+                               const MtrInput& input);
 
     void gas_liquid_mass_transfer() const;
 
@@ -87,7 +108,6 @@ namespace Simulation::MassTransfer
   private:
     MassTransfer::Type::MtrTypeVariant type;
     std::shared_ptr<MassTransferProxy> _proxy;
-    std::shared_ptr<Simulation::impl::ScalarSimulation> scalar;
   };
 
   static_assert(static_cast<float>(Sign::GasToLiquid) == -1., "Sign mtr");

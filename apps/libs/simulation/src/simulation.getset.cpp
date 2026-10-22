@@ -184,7 +184,7 @@ namespace Simulation
     {
       // TODO
       m_mt_model = Simulation::MassTransfer::MassTransferModel(
-          *m_table, std::move(variant), scalar);
+          *m_table, std::move(variant), scalar->mtr_input());
     }
   }
 

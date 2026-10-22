@@ -10,11 +10,18 @@ EIGEN_DIAG_POP
 #include <Kokkos_Core.hpp>
 #include <algorithm>
 #include <common/common.hpp>
+#include <hydro/impl_mass_transfer.hpp>
 #include <scalar.hpp>
 #include <simulation/simulation_exception.hpp>
 #include <stdexcept>
 #include <utility>
 #include <vector>
+
+#define CHECK_PHASE(__phase__)                                                 \
+  if (!is_valid_phase(phase))                                                  \
+  {                                                                            \
+    throw std::invalid_argument("ScalarSimulation: no gas phase");             \
+  }
 
 namespace
 {
@@ -217,16 +224,20 @@ namespace Simulation::impl
   }
 
   void
-  ScalarSimulation::set_mass_transfer(const Mat& mtr_liquid)
+  ScalarSimulation::step_explicit_two_phase(
+      double d_t, const MassTransfer::MassTransferProxy& mass_transfer)
   {
     if (!has_gas())
     {
-      throw std::invalid_argument("set_mass_transfer: system has no gas phase");
+      throw std::invalid_argument(
+          "step_explicit_two_phase: system has no gas phase");
     }
     // Same convention as MassTransfer::Sign: LiquidToGas=+1 on liquid,
     // GasToLiquid=-1 on gas
-    liquid.mtr = mtr_liquid;
-    gas->mtr = -mtr_liquid;
+    liquid.mtr = mass_transfer.mtr;
+    gas->mtr = -mass_transfer.mtr;
+
+    system.step_explicit(d_t);
   }
 
   void
@@ -331,7 +342,7 @@ namespace Simulation::impl
   std::span<const double>
   ScalarSimulation::concentration_data(Phase phase) const
   {
-    (void)this->phase(phase); // throws if gas is missing
+    CHECK_PHASE(phase)
     return system.concentrations.get_span().subspan(offset(phase) * n_s,
                                                     n_s * n_c);
   }
@@ -339,7 +350,9 @@ namespace Simulation::impl
   std::span<double>
   ScalarSimulation::concentration_data(Phase phase)
   {
-    (void)this->phase(phase);
+
+    CHECK_PHASE(phase)
+
     return system.concentrations.get_span().subspan(offset(phase) * n_s,
                                                     n_s * n_c);
   }
@@ -347,7 +360,7 @@ namespace Simulation::impl
   KokkosMat::host_view_type
   ScalarSimulation::concentration_host_view(Phase phase)
   {
-    (void)this->phase(phase);
+    CHECK_PHASE(phase)
     return Kokkos::subview(system.concentrations.host_view(),
                            Kokkos::ALL,
                            std::make_pair(offset(phase), offset(phase) + n_c));
@@ -356,14 +369,14 @@ namespace Simulation::impl
   std::span<const double>
   ScalarSimulation::source_data(Phase phase) const
   {
-    (void)this->phase(phase);
+    CHECK_PHASE(phase)
     return system.sources.get_span().subspan(offset(phase) * n_s, n_s * n_c);
   }
 
   std::span<double>
   ScalarSimulation::source_data(Phase phase)
   {
-    (void)this->phase(phase);
+    CHECK_PHASE(phase)
     return system.sources.get_span().subspan(offset(phase) * n_s, n_s * n_c);
   }
 
@@ -407,6 +420,16 @@ namespace Simulation::impl
     return gas.has_value();
   }
 
+  [[nodiscard]] bool
+  ScalarSimulation::is_valid_phase(Phase phase) const
+  {
+    if (phase == Phase::Liquid)
+    {
+      return true;
+    }
+    return has_gas();
+  }
+
   const PhaseView&
   ScalarSimulation::phase(Phase phase) const
   {
@@ -414,7 +437,7 @@ namespace Simulation::impl
     {
       return liquid;
     }
-    if (!gas.has_value())
+    if (!has_gas())
     {
       throw std::invalid_argument("ScalarSimulation: no gas phase");
     }
@@ -428,7 +451,7 @@ namespace Simulation::impl
     {
       return liquid;
     }
-    if (!gas.has_value())
+    if (!has_gas())
     {
       throw std::invalid_argument("ScalarSimulation: no gas phase");
     }
@@ -439,6 +462,17 @@ namespace Simulation::impl
   ScalarSimulation::offset(Phase phase) const noexcept
   {
     return phase_column(phase, n_c);
+  }
+
+  MassTransfer::MtrInput
+  ScalarSimulation::mtr_input()
+  {
+    MassTransfer::MtrInput input
+        = { concentration_host_view(Phase::Liquid),
+            concentration_host_view(Phase::Gas),
+            MassTransfer::MtrVolumeView(liquid.volume.data(), n_c) };
+
+    return input;
   }
 
 } // namespace Simulation::impl
