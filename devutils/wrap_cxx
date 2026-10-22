@@ -27,9 +27,17 @@
 # - With this setup, gpu build only works without debug information (maybe due to different compiler), if linking
 # -----------------------------------------------------------------------------
 
-KOKKOS_COMPILER=clang++-18
 LOG=0
-wrap_cxx="/usr/local/bin/kokkos_launch_compiler /usr/local/bin/nvcc_wrapper ${KOKKOS_COMPILER} ${KOKKOS_COMPILER}"
+local_dir=$HOME/local_arm
+KOKKOS_COMPILER=g++
+HOST_COMPILER=g++
+
+export NVCC_WRAPPER_DEFAULT_COMPILER=g++
+export CUDAHOSTCXX=g++
+export NVCC_WRAPPER_EXTRA_ARGS="--expt-relaxed-constexpr -extended-lambda"
+
+wrap_cxx="$local_dir/bin/kokkos_launch_compiler $local_dir/bin/nvcc_wrapper  ${KOKKOS_COMPILER}  ${HOST_COMPILER}"
+
 args="$@"
 args=$(echo "$args" | sed 's/-MQ /-MT /g') #Cmake and Ninja don´t use the same link semantic
 cmd="$wrap_cxx  $args"
