@@ -105,9 +105,9 @@ namespace Simulation::MassTransfer
     flowmap_gas_liquid_mass_transfer(
         MassTransferProxy& mtr,
         const double db,
-        const Eigen::ArrayXXd& liquid_concentration,
-        const Eigen::ArrayXXd& gas_concentration,
-        const Eigen::MatrixXd& liquid_volume,
+        [[maybe_unused]] const Eigen::ArrayXXd& liquid_concentration,
+        [[maybe_unused]] const Eigen::ArrayXXd& gas_concentration,
+        [[maybe_unused]] const Eigen::MatrixXd& liquid_volume,
         const CmaUtils::IterationStatePtrType& state)
     {
 
@@ -138,32 +138,18 @@ namespace Simulation::MassTransfer
                  schmidtnumber, kinematic_viscosity, energy_dissipation_array)
              * get_interfacial_area(db, state))
                 .transpose();
-
-      // FIXME impl_mtr with template doesn´t work with Eigen type deduction
-      mtr.mtr
-          = (mtr.kla
-             * (gas_concentration.colwise() * mtr.Henry - liquid_concentration))
-                .matrix()
-            * liquid_volume;
     }
 
     void
     fixed_kla_gas_liquid_mass_transfer(
-        MassTransferProxy& mtr,
-        const Eigen::ArrayXXd& liquid_concentration,
-        const Eigen::ArrayXXd& gas_concentration,
-        const Eigen::MatrixXd& liquid_volume,
-        const CmaUtils::IterationStatePtrType& state)
+        [[maybe_unused]] MassTransferProxy& mtr,
+        [[maybe_unused]] const Eigen::ArrayXXd& liquid_concentration,
+        [[maybe_unused]] const Eigen::ArrayXXd& gas_concentration,
+        [[maybe_unused]] const Eigen::MatrixXd& liquid_volume,
+        [[maybe_unused]] const CmaUtils::IterationStatePtrType& state)
     {
-      (void)state;
-      // mtr.mtr = impl_mtr(
-      //     mtr.kla, liquid_concentration, gas_concentration.colwise() *
-      //     mtr.Henry, liquid_volume);
-      mtr.mtr
-          = (mtr.kla
-             * (gas_concentration.colwise() * mtr.Henry - liquid_concentration))
-                .matrix()
-            * liquid_volume;
+      // kla is fixed at construction, mtr is computed by
+      // gas_liquid_mass_transfer
     }
 
     void
