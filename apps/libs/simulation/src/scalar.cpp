@@ -73,8 +73,15 @@ namespace
     auto volume_inverse = std::span(volumes_inverse + column, n_compartments);
     auto sink = std::span(sinks + column, n_compartments);
 
-    return Simulation::impl::PhaseView(
-        id, concentration, mass, source, mtr, volume, volume_inverse, sink);
+    // some nvcc does not support C++20 aggregate init with parentheses
+    return Simulation::impl::PhaseView{ .identifier = id,
+                                        .concentration = concentration,
+                                        .mass = mass,
+                                        .source = source,
+                                        .mtr = mtr,
+                                        .volume = volume,
+                                        .volume_inverse = volume_inverse,
+                                        .sink = sink };
   }
 
   void

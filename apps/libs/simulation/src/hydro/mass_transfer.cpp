@@ -169,8 +169,12 @@ namespace Simulation::MassTransfer
     const auto liquid_volume = Eigen::Map<const Eigen::VectorXd>(
         input.liquid_volume.data(), EIGEN_INDEX(ncol));
 
+    // some nvcc does not support C++20 aggregate init with parentheses
+    // (make_shared<Aggregate>(args...))
     _proxy = std::make_shared<MassTransferProxy>(
-        liquid_concentration, gas_concentration, liquid_volume);
+        MassTransferProxy{ .liquid_concentration = liquid_concentration,
+                           .gas_concentration = gas_concentration,
+                           .liquid_volume = liquid_volume });
     _proxy->mtr = KokkosEigen::Alias::ColMajorMatrixtype<double>(nrow, ncol);
     // zero init to avoid weird initialize export
     _proxy->mtr.setZero();
