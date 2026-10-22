@@ -33,6 +33,50 @@ namespace
     return (phase == Phase::Gas) ? n_compartments : 0;
   }
 
+  // Builds the views of one phase on the augmented system
+
+  Simulation::impl::PhaseView
+  make_phase_view(Phase id,
+                  Simulation::impl::SystemScalar& system,
+                  std::size_t n_species,
+                  std::size_t n_compartments)
+  {
+    // First column of the phase in the augmented system
+    const auto column = phase_column(id, n_compartments);
+
+    // Species x compartments matrices: phases are stacked one after the other
+    // in storage order (liquid then gas), so each phase is one contiguous
+    // block mapped as its own matrix, whatever the layout
+    const auto offset = column * n_species;
+    const auto rows = EIGEN_INDEX(n_species);
+    const auto cols = EIGEN_INDEX(n_compartments);
+
+    auto* concentrations = system.concentrations.eigen().data();
+    auto* masses = system.total_mass.data();
+    auto* sources = system.sources.eigen().data();
+    auto* mtrs = system.mtr.data();
+
+    auto concentration = Eigen::Map<Simulation::impl::Mat>(
+        concentrations + offset, rows, cols);
+    auto mass = Eigen::Map<Simulation::impl::Mat>(masses + offset, rows, cols);
+    auto source
+        = Eigen::Map<Simulation::impl::Mat>(sources + offset, rows, cols);
+    auto mtr = Eigen::Map<Simulation::impl::Mat>(mtrs + offset, rows, cols);
+
+    // Volumes and sink are diagonals: the phase part is the slice of the
+    // diagonal coefficients belonging to its compartments
+    auto* volumes = system.volumes.diagonal().data();
+    auto* volumes_inverse = system.volumes_inverse.diagonal().data();
+    auto* sinks = system.sink.diagonal().data();
+
+    auto volume = std::span(volumes + column, n_compartments);
+    auto volume_inverse = std::span(volumes_inverse + column, n_compartments);
+    auto sink = std::span(sinks + column, n_compartments);
+
+    return Simulation::impl::PhaseView(
+        id, concentration, mass, source, mtr, volume, volume_inverse, sink);
+  }
+
   void
   append_triplets(std::vector<Triplet>& triplets,
                   const CmaUtils::StateCooMatrixType& transition,
@@ -52,9 +96,10 @@ namespace
   }
 
   void
-  copy_volume(Simulation::impl::VecBlock& dst, std::span<const double> src)
+  copy_volume(std::span<Simulation::mass_balance_float_type> dst,
+              std::span<const Simulation::mass_balance_float_type> src)
   {
-    if (std::cmp_not_equal(src.size(), dst.size()))
+    if (src.size() != dst.size())
     {
       throw Simulation::BaseSimulationException(
           Simulation::ErrorCodes::MismatchSizeVolume);
@@ -108,44 +153,15 @@ namespace Simulation::impl
     concentrations.host_to_device_sync();
   }
 
-  // PhaseView
-
-  PhaseView::PhaseView(Phase id,
-                       SystemScalar& system,
-                       std::size_t n_species,
-                       std::size_t n_compartments)
-      : identifier(id), concentration(system.concentrations.eigen().middleCols(
-                            EIGEN_INDEX(phase_column(id, n_compartments)),
-                            EIGEN_INDEX(n_compartments))),
-        mass(system.total_mass.middleCols(
-            EIGEN_INDEX(phase_column(id, n_compartments)),
-            EIGEN_INDEX(n_compartments))),
-        source(system.sources.eigen().middleCols(
-            EIGEN_INDEX(phase_column(id, n_compartments)),
-            EIGEN_INDEX(n_compartments))),
-        mtr(system.mtr.middleCols(EIGEN_INDEX(phase_column(id, n_compartments)),
-                                  EIGEN_INDEX(n_compartments))),
-        volume(system.volumes.diagonal().segment(
-            EIGEN_INDEX(phase_column(id, n_compartments)),
-            EIGEN_INDEX(n_compartments))),
-        volume_inverse(system.volumes_inverse.diagonal().segment(
-            EIGEN_INDEX(phase_column(id, n_compartments)),
-            EIGEN_INDEX(n_compartments))),
-        sink(system.sink.diagonal().segment(
-            EIGEN_INDEX(phase_column(id, n_compartments)),
-            EIGEN_INDEX(n_compartments)))
-  {
-    KOKKOS_ASSERT(std::cmp_equal(concentration.rows(), n_species));
-  }
-
   // ScalarSimulation
 
   ScalarSimulation::ScalarSimulation(
       std::size_t n_compartments,
       std::size_t n_species,
       std::span<const mass_balance_float_type> volume_liq)
-      : n_s(n_species), n_c(n_compartments), n_phase(1),
-        system(n_s, n_phase * n_c), liquid(Phase::Liquid, system, n_s, n_c),
+      : n_s(n_species), n_c(n_compartments), n_phase(1), system(n_s, n_c),
+        liquid(make_phase_view(Phase::Liquid, system, n_s, n_c)),
+        liquid_concentration_device(system.concentrations.device_view_cst()),
         contribs("contribs", n_s, n_c)
   {
     copy_volume(liquid.volume, volume_liq);
@@ -156,9 +172,14 @@ namespace Simulation::impl
       std::size_t n_species,
       std::span<const mass_balance_float_type> volume_liq,
       std::span<const mass_balance_float_type> volume_gas)
-      : n_s(n_species), n_c(n_compartments), n_phase(2),
-        system(n_s, n_phase * n_c), liquid(Phase::Liquid, system, n_s, n_c),
-        gas(std::in_place, Phase::Gas, system, n_s, n_c),
+      : n_s(n_species), n_c(n_compartments), n_phase(2), system(n_s, 2 * n_c),
+        liquid(make_phase_view(Phase::Liquid, system, n_s, n_c)),
+        gas(make_phase_view(Phase::Gas, system, n_s, n_c)),
+        // Liquid is the first phase
+        liquid_concentration_device(
+            Kokkos::subview(system.concentrations.device_view_cst(),
+                            Kokkos::ALL,
+                            std::make_pair(std::size_t{ 0 }, n_c))),
         contribs("contribs", n_s, n_c)
   {
     copy_volume(liquid.volume, volume_liq);
@@ -289,7 +310,7 @@ namespace Simulation::impl
   void
   ScalarSimulation::set_sink(Phase phase, std::size_t i_compartment, double val)
   {
-    this->phase(phase).sink.coeffRef(EIGEN_INDEX(i_compartment)) += val;
+    this->phase(phase).sink[i_compartment] += val;
   }
 
   void
@@ -298,21 +319,15 @@ namespace Simulation::impl
     system.sources.eigen().setZero();
     system.sink.setZero();
     system.sources.host_to_device_sync();
-    Kokkos::deep_copy(contribs, 0);
+    Kokkos::deep_copy(contribs.device_view(), 0);
   }
 
   void
   ScalarSimulation::synchro_sources()
   {
-    // Only liquid columns come from MC, gas columns on host are left untouched
-    const auto liquid_cols = std::make_pair(std::size_t{ 0 }, n_c);
-    auto device_liquid = Kokkos::subview(
-        system.sources.device_view(), Kokkos::ALL, liquid_cols);
-    auto host_liquid
-        = Kokkos::subview(system.sources.host_view(), Kokkos::ALL, liquid_cols);
-
-    Kokkos::deep_copy(device_liquid, contribs);
-    Kokkos::deep_copy(host_liquid, device_liquid);
+    // MC contributions only concern the liquid, sources are zero here
+    contribs.device_to_host_sync();
+    liquid.source += contribs.cst_eigen().cast<mass_balance_float_type>();
   }
 
   // Init
@@ -342,19 +357,17 @@ namespace Simulation::impl
   std::span<const double>
   ScalarSimulation::concentration_data(Phase phase) const
   {
-    CHECK_PHASE(phase)
-    return system.concentrations.get_span().subspan(offset(phase) * n_s,
-                                                    n_s * n_c);
+    const auto& concentration = this->phase(phase).concentration;
+    return std::span<const double>(
+        concentration.data(), static_cast<std::size_t>(concentration.size()));
   }
 
   std::span<double>
   ScalarSimulation::concentration_data(Phase phase)
   {
-
-    CHECK_PHASE(phase)
-
-    return system.concentrations.get_span().subspan(offset(phase) * n_s,
-                                                    n_s * n_c);
+    auto& concentration = this->phase(phase).concentration;
+    return std::span<double>(concentration.data(),
+                             static_cast<std::size_t>(concentration.size()));
   }
 
   KokkosMat::host_view_type
@@ -369,37 +382,36 @@ namespace Simulation::impl
   std::span<const double>
   ScalarSimulation::source_data(Phase phase) const
   {
-    CHECK_PHASE(phase)
-    return system.sources.get_span().subspan(offset(phase) * n_s, n_s * n_c);
+    const auto& source = this->phase(phase).source;
+    return std::span<const double>(source.data(),
+                                   static_cast<std::size_t>(source.size()));
   }
 
   std::span<double>
   ScalarSimulation::source_data(Phase phase)
   {
-    CHECK_PHASE(phase)
-    return system.sources.get_span().subspan(offset(phase) * n_s, n_s * n_c);
+    auto& source = this->phase(phase).source;
+    return std::span<double>(source.data(),
+                             static_cast<std::size_t>(source.size()));
   }
 
   double
   ScalarSimulation::volume_at(Phase phase, std::size_t i_compartment) const
   {
     KOKKOS_ASSERT(i_compartment < n_c);
-    return this->phase(phase).volume.coeff(EIGEN_INDEX(i_compartment));
+    return this->phase(phase).volume[i_compartment];
   }
 
   MC::KernelConcentrationType
   ScalarSimulation::get_device_concentration() const
   {
-    // Liquid columns only: contiguous in LayoutLeft, stays LayoutLeft
-    return Kokkos::subview(system.concentrations.device_view_cst(),
-                           Kokkos::ALL,
-                           std::make_pair(std::size_t{ 0 }, n_c));
+    return liquid_concentration_device;
   }
 
   MC::kernelContribution
   ScalarSimulation::get_kernel_contribution() const
   {
-    return contribs;
+    return contribs.device_view();
   }
 
   std::size_t

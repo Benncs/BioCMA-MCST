@@ -36,12 +36,6 @@ namespace Simulation
                                                  Kokkos::LayoutLeft,
                                                  Kokkos::DefaultExecutionSpace>;
 
-    // Column blocks of ColMajor storage are contiguous (InnerPanel=true)
-    using MatBlock = Mat::ColsBlockXpr;
-    using MapBlock = KokkosMat::eigen_map_type::ColsBlockXpr;
-    using VecBlock = std::remove_reference_t<
-        decltype(std::declval<Diag&>().diagonal())>::SegmentReturnType;
-
     /**
      * @brief Augmented system: phases are stacked by columns,
      * every matrix is n_species x (n_phase * n_compartments) = [ L | G ].
@@ -86,24 +80,14 @@ namespace Simulation
     struct PhaseView
     {
       Phase identifier;
-      MapBlock concentration;
-      MatBlock mass;
-      MapBlock source;
-      MatBlock mtr;
-      VecBlock volume;
-      VecBlock volume_inverse;
-      VecBlock sink;
-
-      PhaseView(Phase id,
-                SystemScalar& system,
-                std::size_t n_species,
-                std::size_t n_compartments);
-
-      PhaseView(const PhaseView&) = delete;
-      PhaseView(PhaseView&&) = delete;
-      PhaseView& operator=(const PhaseView&) = delete;
-      PhaseView& operator=(PhaseView&&) = delete;
-      ~PhaseView() = default;
+      Eigen::Map<Mat> concentration;
+      Eigen::Map<Mat> mass;
+      Eigen::Map<Mat> source;
+      Eigen::Map<Mat> mtr;
+      // Diagonal coefficients of the phase
+      std::span<mass_balance_float_type> volume;
+      std::span<mass_balance_float_type> volume_inverse;
+      std::span<mass_balance_float_type> sink;
     };
 
     class ScalarSimulation
@@ -215,7 +199,14 @@ namespace Simulation
       PhaseView liquid;
       std::optional<PhaseView> gas;
 
-      MC::kernelContribution contribs;
+      // Subview on the liquid concentrations (device), for the MC kernels
+      MC::KernelConcentrationType liquid_concentration_device;
+
+      // MC contributions, device for the kernels, host to add to sources
+      KokkosEigen::KokkosEigen2D<MC::kernelContribution::non_const_value_type,
+                                 Kokkos::LayoutLeft,
+                                 MC::ComputeSpace>
+          contribs;
     };
 
   } // namespace impl
