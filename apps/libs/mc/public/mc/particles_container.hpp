@@ -7,9 +7,11 @@
 #include <cmath>
 #include <common/common.hpp>
 #include <common/env_var.hpp>
+#include <common/execinfo.hpp>
 #include <common/has_serialize.hpp>
 #include <cstdint>
 #include <mc/alias.hpp>
+#include <mc/first_touch.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
 
@@ -62,7 +64,8 @@ namespace MC
      * @brief Alias for the model used by the container.
      */
     explicit ParticlesContainer(RuntimeParameters rt_param,
-                                std::size_t n_particle);
+                                std::size_t n_particle,
+                                KernelDispatchOptions kernel_opts = {});
     ParticlesContainer(); //=default;
     /**
      * @brief Default copy and move constructors and assignment operators.
@@ -224,6 +227,9 @@ namespace MC
     std::size_t n_allocated_elements;
     uint64_t n_used_elements;
     std::size_t inactive_counter;
+    /// Only m_p_p_team_move is used: the particle arrays are first-touched
+    /// with the same decomposition the move kernel walks them with.
+    KernelDispatchOptions kernel_options{};
 
     void __allocate_buffer__();
     void _resize(std::size_t new_size, bool force = false);
@@ -625,16 +631,19 @@ namespace MC
         // Update the allocated size
         n_allocated_elements = new_allocated_size;
 
-        // Perform the resizing on all relevant data containers
-        Kokkos::resize(position, n_allocated_elements);
-        Kokkos::resize(model,
-                       n_allocated_elements,
-                       Model::n_var); // use 2nd dim resize if dynamic
-        // realloc, not resize: contribs is rewritten every step before it is
-        // read
-        Kokkos::realloc(contribs, n_allocated_elements, Model::n_c);
-        Kokkos::resize(status, n_allocated_elements);
-        Kokkos::resize(ages, n_allocated_elements);
+        // Perform the resizing on all relevant data containers.
+        // resize_first_touch, not Kokkos::resize: same result, but the pages
+        // of the live range [0, new_size) for correct first touch
+        const auto npt = kernel_options.m_p_p_team_move;
+        resize_first_touch(position, n_allocated_elements, new_size, npt);
+        resize_first_touch(
+            model, n_allocated_elements, new_size, npt, Model::n_var);
+        // contribs is rewritten every step before it is read, so its previous
+        // contents do not need preserving -- only its placement matters.
+        resize_first_touch(
+            contribs, n_allocated_elements, new_size, npt, Model::n_c);
+        resize_first_touch(status, n_allocated_elements, new_size, npt);
+        resize_first_touch(ages, n_allocated_elements, new_size, npt);
 
         // Handle resizing for weights based on model type
         if constexpr (ConstWeightModelType<Model>)
@@ -685,9 +694,17 @@ namespace MC
 
     if (buffer_position.extent(0) < required_buffer_size)
     {
-      // Realloc because not needed to keep buffer as it has been copied
-      Kokkos::realloc(buffer_position, required_buffer_size);
-      Kokkos::realloc(buffer_model, required_buffer_size, Model::n_var);
+      // Realloc because not needed to keep buffer as it has been copied.
+      // The buffer is written by whichever team creates the new particle, so
+      // touch it the same way the container itself is touched.
+      const auto npt = kernel_options.m_p_p_team_move;
+      resize_first_touch(
+          buffer_position, required_buffer_size, required_buffer_size, npt);
+      resize_first_touch(buffer_model,
+                         required_buffer_size,
+                         required_buffer_size,
+                         npt,
+                         Model::n_var);
       buffer_index() = 0;
     }
   }
@@ -699,7 +716,8 @@ namespace MC
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer(RuntimeParameters rt_param,
-                                            std::size_t n_particle)
+                                            std::size_t n_particle,
+                                            KernelDispatchOptions kernel_opts)
       : model(alloc_without_init("particle_model"), 0, 0),
 
         contribs(alloc_without_init("particle_contribs"), 0),
@@ -710,7 +728,8 @@ namespace MC
         buffer_model("buffer_particle_model", 0),
         buffer_position("buffer_particle_position", 0),
         buffer_index("buffer_index"), n_allocated_elements(0),
-        n_used_elements(n_particle), inactive_counter(0), rt_params(rt_param)
+        n_used_elements(n_particle), inactive_counter(0),
+        kernel_options(kernel_opts), rt_params(rt_param)
   {
 
     // load_tuning_constant();
@@ -734,7 +753,7 @@ namespace MC
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer()
-      : ParticlesContainer(RuntimeParameters{}, 0)
+      : ParticlesContainer(RuntimeParameters{}, 0, KernelDispatchOptions{})
   {
   }
 

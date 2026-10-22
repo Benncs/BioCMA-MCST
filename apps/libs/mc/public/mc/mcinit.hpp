@@ -85,7 +85,8 @@ namespace MC
     unit->domain = ReactorDomain(volumes);
     unit->rng = KPRNG(seed);
 
-    ParticlesContainer<Model> container(load_tuning_constant(), n_particles);
+    ParticlesContainer<Model> container(
+        load_tuning_constant(), n_particles, info.kernel_options);
     try
     {
       impl_init(info,

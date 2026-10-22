@@ -21,6 +21,7 @@ namespace MC
     Kokkos::View<const double*, HostSpace> tmp_host_volume(volumes_liq.data(),
                                                            volumes_liq.size());
     Kokkos::deep_copy(this->inner.liquid_volume, tmp_host_volume);
+    Kokkos::deep_copy(this->host_liquid_volume, tmp_host_volume);
   }
 
   ReactorDomain::ReactorDomain(double total_volume, std::size_t size)
@@ -65,6 +66,7 @@ namespace MC
 
     DiagonalView<HostSpace, true> _diag_transition(out_flows.data(), n_rows);
     Kokkos::deep_copy(this->inner.diag_transition, _diag_transition);
+    Kokkos::deep_copy(this->host_diag_transition, _diag_transition);
 
     const auto* chunk_proba = proba_flat.data();
     CumulativeProbabilityView<HostSpace, true> tmp_host_proba(
@@ -120,6 +122,26 @@ namespace MC
   }
 
   void
+  ReactorDomain::set_move_probability(const double d_t) const
+  {
+    const auto n_compartments = host_move_probability.extent(0);
+    if (n_compartments == 0)
+    {
+      return;
+    }
+
+    // A few hundred compartments at most host + deepcopy is faster than
+    // dispatch
+    for (std::size_t i = 0; i < n_compartments; ++i)
+    {
+      host_move_probability(i)
+          = d_t * host_diag_transition(i) / host_liquid_volume(i);
+    }
+
+    Kokkos::deep_copy(this->inner.move_probability, host_move_probability);
+  }
+
+  void
   ReactorDomain::init_inner(const std::size_t n_flows)
   {
     constexpr bool is_const = false;
@@ -134,6 +156,15 @@ namespace MC
     _inner.leaving_flow = MC::LeavingFlowView<is_const>("leaving_flow", n_flows);
     _inner.liquid_volume = MC::VolumeView<ComputeSpace,is_const>("liquid_volume", n_compartments);
     _inner.cumulative_probability = MC::CumulativeProbabilityView<ComputeSpace,is_const>("cumulative_proba",  0, 0);
+    _inner.move_probability = MC::MoveProbabilityView<ComputeSpace,is_const>("move_probability", n_compartments);
+    // clang-format on
+    this->host_liquid_volume
+        = Kokkos::View<double*, HostSpace>("h_liquid_volume", n_compartments);
+    this->host_diag_transition
+        = Kokkos::View<double*, HostSpace>("h_diag_transition", n_compartments);
+    this->host_move_probability = Kokkos::View<double*, HostSpace>(
+        "h_move_probability", n_compartments);
+    // clang-format off
     // clang-format on
     this->inner = _inner;
   }

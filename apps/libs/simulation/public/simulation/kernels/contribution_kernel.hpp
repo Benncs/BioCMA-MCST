@@ -122,12 +122,15 @@ template <ModelType M> struct ContributionFunctor
         [&](std::size_t relative_index, value_type& local_value_reduce)
         {
           const std::size_t flatten_index = p0 + relative_index;
-          KOKKOS_ASSERT(flatten_index < upper_bound);
+          KOKKOS_ASSERT(flatten_index < n_particle);
           const bool active = status(flatten_index) == MC::Status::Idle;
 
           if (active)
           {
-            const auto pos = m_particles.position(flatten_index);
+            // const auto pos = m_particles.position(flatten_index);
+            // TODO: position array is useless in 0d, do not resize position
+            // array in 0D could be interessting
+            const auto pos = 0; // Position is always 0 in 0D
             const auto weight = m_particles.get_weight(flatten_index);
             const auto new_status = M::update(random_pool,
                                               d_t,
@@ -201,7 +204,7 @@ template <ModelType M> struct ContributionFunctor
         [&](const std::size_t i, value_type& local_value_reduce)
         {
           const std::size_t flatten_index = p0 + i;
-          KOKKOS_ASSERT(flatten_index < upper_bound);
+          KOKKOS_ASSERT(flatten_index < _ntot);
           const bool active = status(flatten_index) == MC::Status::Idle;
           if (active)
           {

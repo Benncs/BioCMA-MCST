@@ -158,6 +158,10 @@ namespace Core
                       std::span<const double> values,
                       bool compress = false);
 
+    void write_matrix_u64(std::string_view name,
+                          std::span<const uint64_t> values,
+                          bool compress = false);
+
     void write_matrix(std::string_view name,
                       std::span<const double> values,
                       size_t n_row,

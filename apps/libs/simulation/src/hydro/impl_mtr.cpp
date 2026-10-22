@@ -104,6 +104,7 @@ namespace Simulation::MassTransfer
     void
     flowmap_gas_liquid_mass_transfer(
         MassTransferProxy& mtr,
+        const double db,
         const Eigen::ArrayXXd& liquid_concentration,
         const Eigen::ArrayXXd& gas_concentration,
         const Eigen::MatrixXd& liquid_volume,
@@ -135,7 +136,7 @@ namespace Simulation::MassTransfer
       mtr.kla.row(1)
           = (kl_correlation(
                  schmidtnumber, kinematic_viscosity, energy_dissipation_array)
-             * get_interfacial_area(mtr.db, state))
+             * get_interfacial_area(db, state))
                 .transpose();
 
       // FIXME impl_mtr with template doesn´t work with Eigen type deduction

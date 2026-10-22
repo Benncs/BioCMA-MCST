@@ -1,5 +1,7 @@
 #include <Kokkos_Assert.hpp>
+#include <algorithm>
 #include <cmath>
+#include <numeric>
 #include <optional>
 #include <simulation/feed_descriptor.hpp>
 #include <simulation/simulation_exception.hpp>
@@ -121,6 +123,23 @@ namespace Simulation::Feed
   }
 
   FeedDescriptor
+  FeedFactory::sink(double flow, std::size_t _ouput_position)
+  {
+    if (flow < 0.)
+    {
+      throw Simulation::FeedException(
+          Simulation::FeedExceptionError::NegativeFlow);
+    }
+    FeedDescriptor fd;
+    fd.flow = flow;
+    fd.extra = Constant{};
+    fd.input_position = 0;
+    fd.values = {};
+    fd.output_position = _ouput_position;
+    return fd;
+  }
+
+  FeedDescriptor
   FeedFactory::linear(double flow,
                       double df,
                       double concentration,
@@ -136,6 +155,55 @@ namespace Simulation::Feed
                        input_position,
                        _ouput_position,
                        set_output);
+  }
+
+  std::vector<FeedDescriptor>
+  FeedFactory::gas_feed(double concentration,
+                        std::size_t species_index,
+                        std::span<std::size_t> inlet_i,
+                        std::span<double> inlet_f,
+                        std::span<std::size_t> outlet_i,
+                        std::span<double> outlet_f,
+                        double tol)
+  {
+    if (inlet_f.size() != inlet_i.size())
+    {
+      throw Simulation::FeedException(FeedExceptionError::MismatchSize);
+    }
+
+    if (outlet_i.size() != outlet_f.size())
+    {
+      throw Simulation::FeedException(FeedExceptionError::MismatchSize);
+    }
+
+    const double q_in = std::accumulate(inlet_f.begin(), inlet_f.end(), 0.);
+    const double q_out = std::accumulate(outlet_f.begin(), outlet_f.end(), 0.);
+    if (std::abs(q_in - q_out) > tol * std::max(q_in, q_out))
+    {
+      throw Simulation::FeedException(FeedExceptionError::UnbalancedFlow);
+    }
+
+    std::vector<FeedDescriptor> vi;
+    vi.reserve(inlet_i.size() + outlet_i.size());
+    for (std::size_t i = 0; i < inlet_i.size(); ++i)
+    {
+      FeedDescriptor fd = FeedFactory::constant(inlet_f[i],
+                                                concentration,
+                                                species_index,
+                                                inlet_i[i],
+                                                std::nullopt,
+                                                false);
+      // this->add_gas(std::move(fd));
+      vi.emplace_back(fd);
+    }
+    for (std::size_t i = 0; i < outlet_i.size(); ++i)
+    {
+      FeedDescriptor fd = FeedFactory::sink(outlet_f[i], outlet_i[i]);
+      // this->add_gas(std::move(fd));
+      vi.emplace_back(fd);
+    }
+
+    return vi;
   }
 
   void

@@ -137,7 +137,10 @@ namespace MC
 
   struct LeavingFlow;
 
-  using ParticlePositions = Kokkos::View<uint64_t*, ComputeSpace>;
+  template <typename Exec>
+  using ParticlePositionT = Kokkos::View<uint64_t*, Exec>;
+
+  using ParticlePositions = ParticlePositionT<ComputeSpace>;
   using ParticleStatus = Kokkos::View<Status*, ComputeSpace>;
   template <FloatingPointType ftype>
   using ParticleWeigths = Kokkos::View<ftype*, ComputeSpace>;
@@ -176,6 +179,15 @@ namespace MC
 
   template <class ExecSpace, bool is_const>
   using VolumeView = std::conditional_t<
+      is_const,
+      Kokkos::View<const double*,
+                   ExecSpace,
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>,
+      Kokkos::View<double*, ExecSpace>>;
+
+  /// d_t * flow / volume per compartment. Owned by ReactorDomain
+  template <class ExecSpace, bool is_const>
+  using MoveProbabilityView = std::conditional_t<
       is_const,
       Kokkos::View<const double*,
                    ExecSpace,

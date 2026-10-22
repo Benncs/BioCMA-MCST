@@ -18,6 +18,13 @@ if ceral_found and not use_cuda
     )
     test('test_serde_kview', test_serde_kview)
     test('test_serde_container', test_serde_container)
+
+    test_events_tally = executable(
+        'test_events_tally',
+        'test_events_tally.cpp',
+        dependencies: [mc_dependency, cereal_dependency],
+    )
+    test('test_events_tally', test_events_tally)
 endif
 
 arg = []
