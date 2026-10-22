@@ -1,10 +1,8 @@
 <map id="Simulation::ScalarSimulation::n_col" name="Simulation::ScalarSimulation::n_col">
-<area shape="rect" id="Node000001" title=" " alt="" coords="478,37,666,76"/>
-<area shape="rect" id="Node000002" href="$classSimulation_1_1ScalarSimulation.html#a1034fc44c2cd348c7ce38589749f9335" title=" " alt="" coords="242,5,430,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="462,44,430,40,431,35,463,39"/>
-<area shape="rect" id="Node000003" href="$classSimulation_1_1ScalarSimulation.html#a45bff3c267cd20371ee730cb07ba4a37" title=" " alt="" coords="242,68,430,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="463,74,431,78,430,72,462,68"/>
-<area shape="rect" id="Node000004" href="$classSimulation_1_1ScalarSimulation.html#a2ec477ff4779eeeb0fc66eb443c5900a" title=" " alt="" coords="5,68,194,107"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="226,90,194,90,194,85,226,85"/>
-<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="139,55,124,49,99,47,76,49,63,53,58,59,61,67,56,69,53,58,60,49,75,43,100,41,126,44,141,50"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="478,35,666,73"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1ScalarSimulation.html#a45bff3c267cd20371ee730cb07ba4a37" title=" " alt="" coords="242,5,430,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="462,43,430,39,431,34,463,38"/>
+<area shape="rect" id="Node000003" href="$classSimulation_1_1ScalarSimulation.html#a9721b2cf4617bf55c133b7b1527a8879" title=" " alt="" coords="5,35,194,73"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="463,58,430,58,242,58,194,58,194,52,242,53,430,53,463,52"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="226,41,194,45,194,40,226,36"/>
 </map>

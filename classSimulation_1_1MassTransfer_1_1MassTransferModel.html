@@ -76,7 +76,7 @@ $(function(){initNavTree('classSimulation_1_1MassTransfer_1_1MassTransferModel.h
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a184523167d02ebca69388a551c318802" id="r_a184523167d02ebca69388a551c318802"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a184523167d02ebca69388a551c318802">MassTransferModel</a> (const <a class="el" href="classMixture_1_1SpecieTable.html">Mixture::SpecieTable</a> &amp;species, <a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a3a93022950ca342e910c2283f1db31ef">MassTransfer::Type::MtrTypeVariant</a> _type, std::shared_ptr&lt; <a class="el" href="classSimulation_1_1impl_1_1ScalarSimulation.html">Simulation::impl::ScalarSimulation</a> &gt; _scalar)</td></tr>
+<tr class="memitem:a3a4e8cee44bd30e5298558b617e9429e" id="r_a3a4e8cee44bd30e5298558b617e9429e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a4e8cee44bd30e5298558b617e9429e">MassTransferModel</a> (const <a class="el" href="classMixture_1_1SpecieTable.html">Mixture::SpecieTable</a> &amp;species, <a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a3a93022950ca342e910c2283f1db31ef">MassTransfer::Type::MtrTypeVariant</a> _type, std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">Simulation::ScalarSimulation</a> &gt; _liquid_scalar, std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">Simulation::ScalarSimulation</a> &gt; _gas_scalar)</td></tr>
 <tr class="memitem:a337be47b64cb6f01a044bab7aa9c7aa7" id="r_a337be47b64cb6f01a044bab7aa9c7aa7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a337be47b64cb6f01a044bab7aa9c7aa7">gas_liquid_mass_transfer</a> () const</td></tr>
 <tr class="memitem:aee995ccf581bb50543d59981fcc29593" id="r_aee995ccf581bb50543d59981fcc29593"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee995ccf581bb50543d59981fcc29593">update</a> (const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;state)</td></tr>
 <tr class="memitem:a0d14a68ab9aa147cc4c2a59ac2a0fa02" id="r_a0d14a68ab9aa147cc4c2a59ac2a0fa02"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; <a class="el" href="structSimulation_1_1MassTransfer_1_1MassTransferProxy.html">MassTransferProxy</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d14a68ab9aa147cc4c2a59ac2a0fa02">proxy</a> () const</td></tr>
@@ -92,11 +92,12 @@ Public Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aca8e48cb094766f91539fb9a18f72903" id="r_aca8e48cb094766f91539fb9a18f72903"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceSimulation_1_1MassTransfer_1_1Type.html#a3a93022950ca342e910c2283f1db31ef">MassTransfer::Type::MtrTypeVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca8e48cb094766f91539fb9a18f72903">type</a></td></tr>
 <tr class="memitem:ab514e8d69934c19287297501d4e65db7" id="r_ab514e8d69934c19287297501d4e65db7"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structSimulation_1_1MassTransfer_1_1MassTransferProxy.html">MassTransferProxy</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab514e8d69934c19287297501d4e65db7">_proxy</a></td></tr>
-<tr class="memitem:aec6a426a6127c452264ae6eda512ac82" id="r_aec6a426a6127c452264ae6eda512ac82"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classSimulation_1_1impl_1_1ScalarSimulation.html">Simulation::impl::ScalarSimulation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec6a426a6127c452264ae6eda512ac82">scalar</a></td></tr>
+<tr class="memitem:a7eb1cf617b5b1c2edc2d12b07ef9ce24" id="r_a7eb1cf617b5b1c2edc2d12b07ef9ce24"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">Simulation::ScalarSimulation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7eb1cf617b5b1c2edc2d12b07ef9ce24">liquid_scalar</a></td></tr>
+<tr class="memitem:afacc4db6d36f582e377d4d29c57df4e3" id="r_afacc4db6d36f582e377d4d29c57df4e3"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">Simulation::ScalarSimulation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afacc4db6d36f582e377d4d29c57df4e3">gas_scalar</a></td></tr>
 </table>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a184523167d02ebca69388a551c318802" name="a184523167d02ebca69388a551c318802"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a184523167d02ebca69388a551c318802">&#9670;&#160;</a></span>MassTransferModel() <span class="overload">[1/4]</span></h2>
+<a id="a3a4e8cee44bd30e5298558b617e9429e" name="a3a4e8cee44bd30e5298558b617e9429e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a4e8cee44bd30e5298558b617e9429e">&#9670;&#160;</a></span>MassTransferModel() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -117,7 +118,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classSimulation_1_1impl_1_1ScalarSimulation.html">Simulation::impl::ScalarSimulation</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>_scalar</em></span>&#160;)</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">Simulation::ScalarSimulation</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>_liquid_scalar</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">Simulation::ScalarSimulation</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>_gas_scalar</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -129,12 +135,12 @@ Private Attributes</h2></td></tr>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1MassTransfer_1_1MassTransferModel_a184523167d02ebca69388a551c318802_cgraph.svg" width="468" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1MassTransfer_1_1MassTransferModel_a3a4e8cee44bd30e5298558b617e9429e_cgraph.svg" width="468" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1MassTransfer_1_1MassTransferModel_a184523167d02ebca69388a551c318802_icgraph.svg" width="590" height="238"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1MassTransfer_1_1MassTransferModel_a3a4e8cee44bd30e5298558b617e9429e_icgraph.svg" width="590" height="238"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -409,8 +415,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="aec6a426a6127c452264ae6eda512ac82" name="aec6a426a6127c452264ae6eda512ac82"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec6a426a6127c452264ae6eda512ac82">&#9670;&#160;</a></span>scalar</h2>
+<a id="afacc4db6d36f582e377d4d29c57df4e3" name="afacc4db6d36f582e377d4d29c57df4e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afacc4db6d36f582e377d4d29c57df4e3">&#9670;&#160;</a></span>gas_scalar</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -419,7 +425,29 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classSimulation_1_1impl_1_1ScalarSimulation.html">Simulation::impl::ScalarSimulation</a>&gt; Simulation::MassTransfer::MassTransferModel::scalar</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classSimulation_1_1ScalarSimulation.html">Simulation::ScalarSimulation</a>&gt; Simulation::MassTransfer::MassTransferModel::gas_scalar</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7eb1cf617b5b1c2edc2d12b07ef9ce24" name="a7eb1cf617b5b1c2edc2d12b07ef9ce24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eb1cf617b5b1c2edc2d12b07ef9ce24">&#9670;&#160;</a></span>liquid_scalar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classSimulation_1_1ScalarSimulation.html">Simulation::ScalarSimulation</a>&gt; Simulation::MassTransfer::MassTransferModel::liquid_scalar</td>
         </tr>
       </table>
   </td>

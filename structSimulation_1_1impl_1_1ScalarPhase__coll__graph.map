@@ -1,7 +1,0 @@
-<map id="Simulation::impl::ScalarPhase" name="Simulation::impl::ScalarPhase">
-<area shape="rect" id="Node000001" title=" " alt="" coords="342,33,501,72"/>
-<area shape="rect" id="Node000002" href="$structSimulation_1_1Phase.html" title=" " alt="" coords="39,5,167,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,24,341,41,341,46,182,29"/>
-<area shape="rect" id="Node000003" href="$classKokkosEigen_1_1KokkosEigen2D.html" title=" " alt="" coords="5,54,201,120"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,75,317,65,341,62,342,67,318,70,217,81"/>
-</map>

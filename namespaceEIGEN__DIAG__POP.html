@@ -77,10 +77,6 @@ Classes</h2></td></tr>
 <tr class="memitem:FunctorKla" id="r_FunctorKla"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEIGEN__DIAG__POP_1_1FunctorKla.html">FunctorKla</a></td></tr>
 <tr class="memitem:MtrVisitor" id="r_MtrVisitor"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEIGEN__DIAG__POP_1_1MtrVisitor.html">MtrVisitor</a></td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:ab42cc392b87a72b46b1812f427be33af" id="r_ab42cc392b87a72b46b1812f427be33af"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab42cc392b87a72b46b1812f427be33af">Triplet</a> = Eigen::Triplet&lt;double&gt;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a1a41b60d3f77fce3742070348af6bb55" id="r_a1a41b60d3f77fce3742070348af6bb55"><td class="memItemLeft" align="right" valign="top">constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a41b60d3f77fce3742070348af6bb55">c_kinematic_viscosity</a> (double temp)</td></tr>
@@ -92,62 +88,8 @@ Functions</h2></td></tr>
 requires (ViewType1::rank() == ViewType2::rank() &amp;&amp; std::is_convertible_v&lt;typename ViewType2::non_const_value_type, typename ViewType1::non_const_value_type&gt;)</td></tr>
 <tr class="memitem:a74bd05f677deea8567739a0e0aca8ad1 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74bd05f677deea8567739a0e0aca8ad1">smrt_deep_copy2d</a> (ViewType1 dst, const ViewType2 &amp;src)</td></tr>
 <tr class="memitem:a8745f741a8815d2fecdee393be791023" id="r_a8745f741a8815d2fecdee393be791023"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8745f741a8815d2fecdee393be791023">sparse_from_coo</a> (Eigen::SparseMatrix&lt; double &gt; &amp;res, std::size_t n_c, std::span&lt; const size_t &gt; &amp;&amp;rows, std::span&lt; const size_t &gt; &amp;&amp;cols, std::span&lt; const double &gt; &amp;&amp;vals)</td></tr>
-<tr class="memitem:a39eb396bb711453f12ec54c231f0c640" id="r_a39eb396bb711453f12ec54c231f0c640"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39eb396bb711453f12ec54c231f0c640">phase_column</a> (Phase phase, std::size_t n_compartments) noexcept</td></tr>
-<tr class="memitem:abfa8086068aeb0eda5f8f3b24f5ced01" id="r_abfa8086068aeb0eda5f8f3b24f5ced01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfa8086068aeb0eda5f8f3b24f5ced01">append_triplets</a> (std::vector&lt; <a class="el" href="#ab42cc392b87a72b46b1812f427be33af">Triplet</a> &gt; &amp;triplets, const <a class="el" href="namespaceCmaUtils.html#a345f1e3ce09450d18c2de5f270cc75f6">CmaUtils::StateCooMatrixType</a> &amp;transition, std::size_t offset)</td></tr>
-<tr class="memitem:ad3da8f8325b50b26994dd2d82197ac8e" id="r_ad3da8f8325b50b26994dd2d82197ac8e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3da8f8325b50b26994dd2d82197ac8e">copy_volume</a> (<a class="el" href="namespaceSimulation_1_1impl.html#abb5562b015365988afca668bda6c4efb">Simulation::impl::VecBlock</a> &amp;dst, std::span&lt; const double &gt; src)</td></tr>
 </table>
-<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
-<a id="ab42cc392b87a72b46b1812f427be33af" name="ab42cc392b87a72b46b1812f427be33af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab42cc392b87a72b46b1812f427be33af">&#9670;&#160;</a></span>Triplet</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using EIGEN_DIAG_POP::Triplet = Eigen::Triplet&lt;double&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="abfa8086068aeb0eda5f8f3b24f5ced01" name="abfa8086068aeb0eda5f8f3b24f5ced01"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfa8086068aeb0eda5f8f3b24f5ced01">&#9670;&#160;</a></span>append_triplets()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void EIGEN_DIAG_POP::append_triplets </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="#ab42cc392b87a72b46b1812f427be33af">Triplet</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>triplets</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceCmaUtils.html#a345f1e3ce09450d18c2de5f270cc75f6">CmaUtils::StateCooMatrixType</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>transition</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>offset</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceEIGEN__DIAG__POP_abfa8086068aeb0eda5f8f3b24f5ced01_cgraph.svg" width="199" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceEIGEN__DIAG__POP_abfa8086068aeb0eda5f8f3b24f5ced01_icgraph.svg" width="199" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
 <a id="a1a41b60d3f77fce3742070348af6bb55" name="a1a41b60d3f77fce3742070348af6bb55"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1a41b60d3f77fce3742070348af6bb55">&#9670;&#160;</a></span>c_kinematic_viscosity()</h2>
 
@@ -179,37 +121,6 @@ Here is the call graph for this function:</div>
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceEIGEN__DIAG__POP_a1a41b60d3f77fce3742070348af6bb55_icgraph.svg" width="227" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<a id="ad3da8f8325b50b26994dd2d82197ac8e" name="ad3da8f8325b50b26994dd2d82197ac8e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad3da8f8325b50b26994dd2d82197ac8e">&#9670;&#160;</a></span>copy_volume()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void EIGEN_DIAG_POP::copy_volume </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceSimulation_1_1impl.html#abb5562b015365988afca668bda6c4efb">Simulation::impl::VecBlock</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>dst</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::span&lt; const double &gt;</td>          <td class="paramname"><span class="paramname"><em>src</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceEIGEN__DIAG__POP_ad3da8f8325b50b26994dd2d82197ac8e_cgraph.svg" width="184" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceEIGEN__DIAG__POP_ad3da8f8325b50b26994dd2d82197ac8e_icgraph.svg" width="184" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -330,45 +241,6 @@ Here is the call graph for this function:</div>
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceEIGEN__DIAG__POP_ad0c0b884964172c1b94fb91b7643a885_icgraph.svg" width="167" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<a id="a39eb396bb711453f12ec54c231f0c640" name="a39eb396bb711453f12ec54c231f0c640"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39eb396bb711453f12ec54c231f0c640">&#9670;&#160;</a></span>phase_column()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::size_t EIGEN_DIAG_POP::phase_column </td>
-          <td>(</td>
-          <td class="paramtype">Phase</td>          <td class="paramname"><span class="paramname"><em>phase</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_compartments</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel noexcept">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceEIGEN__DIAG__POP_a39eb396bb711453f12ec54c231f0c640_cgraph.svg" width="191" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceEIGEN__DIAG__POP_a39eb396bb711453f12ec54c231f0c640_icgraph.svg" width="191" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

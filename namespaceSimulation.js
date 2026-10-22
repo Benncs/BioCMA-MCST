@@ -1,7 +1,10 @@
 var namespaceSimulation =
 [
     [ "Feed", "namespaceSimulation_1_1Feed.html", "namespaceSimulation_1_1Feed" ],
-    [ "impl", "namespaceSimulation_1_1impl.html", "namespaceSimulation_1_1impl" ],
+    [ "impl", "namespaceSimulation_1_1impl.html", [
+      [ "post_init_concentration_file", "namespaceSimulation_1_1impl.html#ab56eb92724f12b4ed6c401939009519c", null ],
+      [ "post_init_concentration_functor", "namespaceSimulation_1_1impl.html#ae40eba3a10cbceb62fe3e6980dcc193f", null ]
+    ] ],
     [ "KernelInline", "namespaceSimulation_1_1KernelInline.html", "namespaceSimulation_1_1KernelInline" ],
     [ "MassTransfer", "namespaceSimulation_1_1MassTransfer.html", "namespaceSimulation_1_1MassTransfer" ],
     [ "BaseSimulationException", "classSimulation_1_1BaseSimulationException.html", "classSimulation_1_1BaseSimulationException" ],
