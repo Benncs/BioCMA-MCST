@@ -16,8 +16,11 @@
 
 using MtrSetter = int (*)(Handle);
 
+// db <= 0 selects the default bubble diameter
 static constexpr std::array<MtrSetter, 3> mtr_setters
-    = { set_mtr_auto, set_mtr_flowmap_turbulence, set_mtr_flowmap_kla };
+    = { set_mtr_auto,
+        [](Handle h) { return set_mtr_flowmap_turbulence(h, 0.); },
+        set_mtr_flowmap_kla };
 
 void
 mock_prepare_apply(std::string_view path, Handle handle)
