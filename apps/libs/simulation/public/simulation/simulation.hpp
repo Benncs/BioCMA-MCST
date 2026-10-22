@@ -95,6 +95,8 @@ namespace Simulation
                        std::span<const double> proba_flat,
                        std::span<const double> out_flows) const;
 
+    void calculate_mtr();
+
     bool checkScalar() const;
 
     // Memory management

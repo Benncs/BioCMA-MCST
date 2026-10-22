@@ -106,8 +106,10 @@ namespace Simulation::MassTransfer
         const double db,
         const CmaUtils::IterationStatePtrType& state)
     {
-      const auto& liquid_concentration = mtr.liquid_concentration;
-      const auto& gas_concentration = mtr.gas_concentration;
+      // Only used by the size checks
+      [[maybe_unused]] const auto& liquid_concentration
+          = mtr.liquid_concentration;
+      [[maybe_unused]] const auto& gas_concentration = mtr.gas_concentration;
 
       const double kinematic_viscosity = c_kinematic_viscosity(temperature);
 
@@ -138,30 +140,15 @@ namespace Simulation::MassTransfer
                  schmidtnumber, kinematic_viscosity, energy_dissipation_array)
              * get_interfacial_area(db, state))
                 .transpose();
-
-      // FIXME impl_mtr with template doesn´t work with Eigen type deduction
-      mtr.mtr
-          = (mtr.kla
-             * (gas_concentration.colwise() * mtr.Henry - liquid_concentration))
-                .matrix()
-            * mtr.liquid_volume.asDiagonal();
     }
 
     void
     fixed_kla_gas_liquid_mass_transfer(
-        MassTransferProxy& mtr, const CmaUtils::IterationStatePtrType& state)
+        [[maybe_unused]] MassTransferProxy& mtr,
+        [[maybe_unused]] const CmaUtils::IterationStatePtrType& state)
     {
-      (void)state;
-      const auto& liquid_concentration = mtr.liquid_concentration;
-      const auto& gas_concentration = mtr.gas_concentration;
-      // mtr.mtr = impl_mtr(
-      //     mtr.kla, liquid_concentration, gas_concentration.colwise() *
-      //     mtr.Henry, liquid_volume);
-      mtr.mtr
-          = (mtr.kla
-             * (gas_concentration.colwise() * mtr.Henry - liquid_concentration))
-                .matrix()
-            * mtr.liquid_volume.asDiagonal();
+      // kla is fixed at construction, mtr is computed by
+      // gas_liquid_mass_transfer
     }
 
     void
