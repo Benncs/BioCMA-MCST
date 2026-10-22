@@ -9,7 +9,7 @@ EIGEN_DIAG_POP
 
 #include <cassert>
 #include <hydro/impl_mass_transfer.hpp>
-#include <scalar_simulation.hpp>
+#include <scalar.hpp>
 #include <simulation/mass_transfer.hpp>
 
 namespace
