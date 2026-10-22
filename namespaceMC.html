@@ -118,7 +118,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a7e53098724df8c06b90824f1567f6bc5" id="r_a7e53098724df8c06b90824f1567f6bc5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e53098724df8c06b90824f1567f6bc5">pool_type</a> = <a class="el" href="#afa8e42d43480d68f4616db1b86ffcc32">gen_pool_type</a>&lt;Kokkos::DefaultExecutionSpace&gt;</td></tr>
 <tr class="memitem:a938e5733c929dff0c4ac9f89df91a5cb" id="r_a938e5733c929dff0c4ac9f89df91a5cb"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a938e5733c929dff0c4ac9f89df91a5cb">generator_type</a> = pool_type::generator_type</td></tr>
 <tr class="memitem:a427e7af7e25d874236fc70664ebfd0d6" id="r_a427e7af7e25d874236fc70664ebfd0d6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a427e7af7e25d874236fc70664ebfd0d6">restrict_mt</a> = Kokkos::MemoryTraits&lt;Kokkos::MemoryTraitsFlags::Restrict&gt;</td></tr>
-<tr class="memitem:a404d6db92035cbc2c86cbda6d98b6d8d" id="r_a404d6db92035cbc2c86cbda6d98b6d8d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a404d6db92035cbc2c86cbda6d98b6d8d">ParticlePositions</a> = Kokkos::View&lt;uint64_t*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
+<tr class="memitem:a73016185d932f106f641405cf6f6c5b4" id="r_a73016185d932f106f641405cf6f6c5b4"><td class="memTemplParams" colspan="2">template&lt;typename Exec&gt; </td></tr>
+<tr class="memitem:a73016185d932f106f641405cf6f6c5b4 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73016185d932f106f641405cf6f6c5b4">ParticlePositionT</a> = Kokkos::View&lt;uint64_t*, Exec&gt;</td></tr>
+<tr class="memitem:a546cc81f7d42793c9c48edf7b3008448" id="r_a546cc81f7d42793c9c48edf7b3008448"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a546cc81f7d42793c9c48edf7b3008448">ParticlePositions</a> = <a class="el" href="#a73016185d932f106f641405cf6f6c5b4">ParticlePositionT</a>&lt;<a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
 <tr class="memitem:a2193e5e54bfdf96357f01505831e1072" id="r_a2193e5e54bfdf96357f01505831e1072"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2193e5e54bfdf96357f01505831e1072">ParticleStatus</a> = Kokkos::View&lt;<a class="el" href="#a69467f7d54b0dcb1a4e176fe425ffb7b">Status</a>*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
 <tr class="memitem:a9528ddf7d5ad7db729640d859dbc4c5e" id="r_a9528ddf7d5ad7db729640d859dbc4c5e"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptFloatingPointType.html">FloatingPointType</a> ftype&gt; </td></tr>
 <tr class="memitem:a9528ddf7d5ad7db729640d859dbc4c5e template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9528ddf7d5ad7db729640d859dbc4c5e">ParticleWeigths</a> = Kokkos::View&lt;ftype*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td></tr>
@@ -240,7 +242,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> <span class="keyword">decltype</span>(Kokkos::Experimental::create_scatter_view(</div>
 <div class="line">      <a class="code hl_typedef" href="#a99d2523dbce1119cbd3c29d5ce0790f1">kernelContribution</a>()))</div>
-<div class="ttc" id="anamespaceMC_html_a99d2523dbce1119cbd3c29d5ce0790f1"><div class="ttname"><a href="#a99d2523dbce1119cbd3c29d5ce0790f1">MC::kernelContribution</a></div><div class="ttdeci">Kokkos::View&lt; float **, Kokkos::LayoutLeft, MC::ComputeSpace, kernelMT &gt; kernelContribution</div><div class="ttdef"><b>Definition</b> alias.hpp:160</div></div>
+<div class="ttc" id="anamespaceMC_html_a99d2523dbce1119cbd3c29d5ce0790f1"><div class="ttname"><a href="#a99d2523dbce1119cbd3c29d5ce0790f1">MC::kernelContribution</a></div><div class="ttdeci">Kokkos::View&lt; float **, Kokkos::LayoutLeft, MC::ComputeSpace, kernelMT &gt; kernelContribution</div><div class="ttdef"><b>Definition</b> alias.hpp:163</div></div>
 </div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="example_model_8cxx-example.html#_a4">example_model.cxx</a>.</dd>
 </dl>
 
@@ -506,14 +508,30 @@ template&lt;class ExecSpace, bool is_const&gt; </div>
 
 </div>
 </div>
-<a id="a404d6db92035cbc2c86cbda6d98b6d8d" name="a404d6db92035cbc2c86cbda6d98b6d8d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a404d6db92035cbc2c86cbda6d98b6d8d">&#9670;&#160;</a></span>ParticlePositions</h2>
+<a id="a546cc81f7d42793c9c48edf7b3008448" name="a546cc81f7d42793c9c48edf7b3008448"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a546cc81f7d42793c9c48edf7b3008448">&#9670;&#160;</a></span>ParticlePositions</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#a404d6db92035cbc2c86cbda6d98b6d8d">MC::ParticlePositions</a> = Kokkos::View&lt;uint64_t*, <a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td>
+          <td class="memname">using <a class="el" href="#a546cc81f7d42793c9c48edf7b3008448">MC::ParticlePositions</a> = <a class="el" href="#a73016185d932f106f641405cf6f6c5b4">ParticlePositionT</a>&lt;<a class="el" href="#aac73f6850f68fa6ced0d771f20a4af0f">ComputeSpace</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a73016185d932f106f641405cf6f6c5b4" name="a73016185d932f106f641405cf6f6c5b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73016185d932f106f641405cf6f6c5b4">&#9670;&#160;</a></span>ParticlePositionT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Exec&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a73016185d932f106f641405cf6f6c5b4">MC::ParticlePositionT</a> = Kokkos::View&lt;uint64_t*, Exec&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">

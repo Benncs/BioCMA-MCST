@@ -1,5 +1,8 @@
 var NAVTREEINDEX7 =
 {
+"structApi_1_1SimulationInstance.html#af3cb057a26abf0843017d9946f2e8e85":[2,0,0,0,32],
+"structApi_1_1SimulationInstance.html#af3cb057a26abf0843017d9946f2e8e85":[4,0,0,0,32],
+"structApi_1_1SimulationInstance.html#af7102c1a786cac7c27ad533ce1f29f06":[2,0,0,0,19],
 "structApi_1_1SimulationInstance.html#af7102c1a786cac7c27ad533ce1f29f06":[4,0,0,0,19],
 "structApi_1_1SimulationInstance.html#afb6d2f04368f71955e4773dd5452f2e2":[2,0,0,0,25],
 "structApi_1_1SimulationInstance.html#afb6d2f04368f71955e4773dd5452f2e2":[4,0,0,0,25],
@@ -246,8 +249,5 @@ var NAVTREEINDEX7 =
 "structEIGEN__DIAG__POP_1_1FunctorKla.html#a4a0ac7161bd22e319967d2c1c8963ce3":[4,0,3,0,4],
 "structEIGEN__DIAG__POP_1_1FunctorKla.html#a782548dc0eca808588284f05d7d9d5f9":[2,0,5,0,1],
 "structEIGEN__DIAG__POP_1_1FunctorKla.html#a782548dc0eca808588284f05d7d9d5f9":[4,0,3,0,1],
-"structEIGEN__DIAG__POP_1_1FunctorKla.html#a818627f5023a23830315c9bc58eade6d":[2,0,5,0,0],
-"structEIGEN__DIAG__POP_1_1FunctorKla.html#a818627f5023a23830315c9bc58eade6d":[4,0,3,0,0],
-"structEIGEN__DIAG__POP_1_1FunctorKla.html#ad6dd5a3f894cc670ea496bcf13aac475":[2,0,5,0,2],
-"structEIGEN__DIAG__POP_1_1FunctorKla.html#ad6dd5a3f894cc670ea496bcf13aac475":[4,0,3,0,2]
+"structEIGEN__DIAG__POP_1_1FunctorKla.html#a818627f5023a23830315c9bc58eade6d":[2,0,5,0,0]
 };

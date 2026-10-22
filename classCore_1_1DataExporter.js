@@ -25,6 +25,7 @@ var classCore_1_1DataExporter =
     [ "set_logger", "classCore_1_1DataExporter.html#ad3b98151595b0962c089a7afcdb2a642", null ],
     [ "write_matrix", "classCore_1_1DataExporter.html#a6078190744bea0d5319dedc207ab68b2", null ],
     [ "write_matrix", "classCore_1_1DataExporter.html#ae96d1f9c963c6a477dfae7ef00053da5", null ],
+    [ "write_matrix_u64", "classCore_1_1DataExporter.html#a0e78c869e0a4bd7029ee6cb6b0edd955", null ],
     [ "write_properties", "classCore_1_1DataExporter.html#a7c1ccdd8fd75dacdf621d0a42757a555", null ],
     [ "write_simple", "classCore_1_1DataExporter.html#a32fb6f00d4e951076a626120c1a4d9eb", null ],
     [ "write_simple", "classCore_1_1DataExporter.html#af340f4cf2e82a66d036f21f3c797fb86", null ],
