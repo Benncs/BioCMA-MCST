@@ -173,6 +173,8 @@ namespace Simulation::MassTransfer
 
     _proxy = std::make_shared<MassTransferProxy>();
     _proxy->mtr = KokkosEigen::Alias::ColMajorMatrixtype<double>(nrow, ncol);
+    // zero init to avoid weird initialize export
+    _proxy->mtr.setZero();
     _proxy->kla = Eigen::ArrayXXd(nrow, ncol);
     _proxy->flag_transfer = Eigen::ArrayXXd(nrow, 1);
 
