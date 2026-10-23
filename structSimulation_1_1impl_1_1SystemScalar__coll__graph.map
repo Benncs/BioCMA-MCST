@@ -1,0 +1,5 @@
+<map id="Simulation::impl::SystemScalar" name="Simulation::impl::SystemScalar">
+<area shape="rect" id="Node000001" title="Augmented system: phases are stacked by columns, every matrix is n_species x (n_phase * n_compartment..." alt="" coords="342,27,508,66"/>
+<area shape="rect" id="Node000002" href="$classKokkosEigen_1_1KokkosEigen2D.html" title=" " alt="" coords="5,13,201,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,44,341,44,341,49,216,49"/>
+</map>

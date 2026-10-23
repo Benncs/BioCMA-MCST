@@ -84,6 +84,13 @@ Classes</h2></td></tr>
 <tr class="memitem:KlFonctor" id="r_KlFonctor"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1MassTransfer_1_1KlFonctor.html">KlFonctor</a></td></tr>
 <tr class="memitem:MassTransferModel" id="r_MassTransferModel"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSimulation_1_1MassTransfer_1_1MassTransferModel.html">MassTransferModel</a></td></tr>
 <tr class="memitem:MassTransferProxy" id="r_MassTransferProxy"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1MassTransfer_1_1MassTransferProxy.html">MassTransferProxy</a></td></tr>
+<tr class="memitem:MtrInput" id="r_MtrInput"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSimulation_1_1MassTransfer_1_1MtrInput.html">MtrInput</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">data read by the mass transfer, build and use only once  <a href="structSimulation_1_1MassTransfer_1_1MtrInput.html#details">More...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a0a167b8c935a616554b235d648133645" id="r_a0a167b8c935a616554b235d648133645"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a167b8c935a616554b235d648133645">MtrConcentrationView</a></td></tr>
+<tr class="memitem:adfa79b1a7666b4b42e330ec0ae8ba862" id="r_adfa79b1a7666b4b42e330ec0ae8ba862"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfa79b1a7666b4b42e330ec0ae8ba862">MtrVolumeView</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -96,6 +103,43 @@ Functions</h2></td></tr>
 <tr class="memitem:ac660308203c3ffef879d8dd8fe1be9b5" id="r_ac660308203c3ffef879d8dd8fe1be9b5"><td class="memTemplParams" colspan="2">template&lt;typename T, typename G&gt; </td></tr>
 <tr class="memitem:ac660308203c3ffef879d8dd8fe1be9b5 template"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac660308203c3ffef879d8dd8fe1be9b5">impl_mtr</a> (const T &amp;kla, const Eigen::ArrayXd &amp;Cl, const G &amp;Cs, const Eigen::MatrixXd &amp;Vliq)</td></tr>
 </table>
+<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
+<a id="a0a167b8c935a616554b235d648133645" name="a0a167b8c935a616554b235d648133645"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a167b8c935a616554b235d648133645">&#9670;&#160;</a></span>MtrConcentrationView</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a0a167b8c935a616554b235d648133645">Simulation::MassTransfer::MtrConcentrationView</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line"> Kokkos::View&lt;<span class="keyword">const</span> <span class="keywordtype">double</span>**,</div>
+<div class="line">                     Kokkos::LayoutLeft,</div>
+<div class="line">                     Kokkos::HostSpace,</div>
+<div class="line">                     Kokkos::MemoryTraits&lt;Kokkos::Unmanaged&gt;&gt;</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="adfa79b1a7666b4b42e330ec0ae8ba862" name="adfa79b1a7666b4b42e330ec0ae8ba862"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfa79b1a7666b4b42e330ec0ae8ba862">&#9670;&#160;</a></span>MtrVolumeView</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#adfa79b1a7666b4b42e330ec0ae8ba862">Simulation::MassTransfer::MtrVolumeView</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line"> Kokkos::View&lt;<span class="keyword">const</span> <span class="keywordtype">double</span>*,</div>
+<div class="line">                                     Kokkos::LayoutLeft,</div>
+<div class="line">                                     Kokkos::HostSpace,</div>
+<div class="line">                                     Kokkos::MemoryTraits&lt;Kokkos::Unmanaged&gt;&gt;</div>
+</div><!-- fragment -->
+</div>
+</div>
 <a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
 <a id="ae8feef3b084e54617612bce610be7c0b" name="ae8feef3b084e54617612bce610be7c0b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae8feef3b084e54617612bce610be7c0b">&#9670;&#160;</a></span>Sign</h2>

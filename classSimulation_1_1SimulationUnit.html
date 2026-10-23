@@ -98,6 +98,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5a5eca304112ed84b2ad40af5c808b0f" id="r_a5a5eca304112ed84b2ad40af5c808b0f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a5eca304112ed84b2ad40af5c808b0f">advance</a> (double d_t) noexcept</td></tr>
 <tr class="memitem:a57624461bad4807d5cacbd7d17e49b14" id="r_a57624461bad4807d5cacbd7d17e49b14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57624461bad4807d5cacbd7d17e49b14">updateHydro</a> (const <a class="el" href="namespaceCmaUtils.html#abaa5bf700b9b06cc5888b42f15d9e259">CmaUtils::IterationStatePtrType</a> &amp;newstate)</td></tr>
 <tr class="memitem:a30514b0d71df785a793a60b5ea2f1b17" id="r_a30514b0d71df785a793a60b5ea2f1b17"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30514b0d71df785a793a60b5ea2f1b17">updateMCHydro</a> (std::span&lt; const double &gt; newliquid_volume, std::span&lt; const std::size_t &gt; neighors_flat, std::span&lt; const double &gt; proba_flat, std::span&lt; const double &gt; out_flows) const</td></tr>
+<tr class="memitem:ad1a3af070a8b98cdbbfb78f8f03c8b28" id="r_ad1a3af070a8b98cdbbfb78f8f03c8b28"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1a3af070a8b98cdbbfb78f8f03c8b28">calculate_mtr</a> ()</td></tr>
 <tr class="memitem:ad964b9f706ae4cac2e0d5d852131a7d2" id="r_ad964b9f706ae4cac2e0d5d852131a7d2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad964b9f706ae4cac2e0d5d852131a7d2">checkScalar</a> () const</td></tr>
 <tr class="memitem:aa12b65d19fa7e3eb74152b0252591a4d" id="r_aa12b65d19fa7e3eb74152b0252591a4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa12b65d19fa7e3eb74152b0252591a4d">reset</a> ()</td></tr>
 <tr class="memitem:a7dba9aca522fbd2462d0d0fd3909d244" id="r_a7dba9aca522fbd2462d0d0fd3909d244"><td class="memTemplParams" colspan="2">template&lt;typename Space, <a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </td></tr>
@@ -133,8 +134,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:aaff5b41aa114de855a6296c31b47d474" id="r_aaff5b41aa114de855a6296c31b47d474"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaff5b41aa114de855a6296c31b47d474">is_two_phase_flow</a></td></tr>
 <tr class="memitem:a2d07d17c1d306d7808a51c812d5bcdd9" id="r_a2d07d17c1d306d7808a51c812d5bcdd9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d07d17c1d306d7808a51c812d5bcdd9">f_reaction</a></td></tr>
 <tr class="memitem:a22c34bc69d05181ab5fd31eac389c1bf" id="r_a22c34bc69d05181ab5fd31eac389c1bf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSimulation_1_1SimulatimeTimes.html">SimulatimeTimes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22c34bc69d05181ab5fd31eac389c1bf">m_times</a></td></tr>
-<tr class="memitem:acd3637570000536bb40abd15ef85ebb5" id="r_acd3637570000536bb40abd15ef85ebb5"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acd3637570000536bb40abd15ef85ebb5">liquid_scalar</a></td></tr>
-<tr class="memitem:a940ea662073390ec7e35866a822bd2e6" id="r_a940ea662073390ec7e35866a822bd2e6"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a940ea662073390ec7e35866a822bd2e6">gas_scalar</a></td></tr>
+<tr class="memitem:a4e3c079f2ea7eac00ca5c3f51557ebeb" id="r_a4e3c079f2ea7eac00ca5c3f51557ebeb"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classSimulation_1_1impl_1_1ScalarSimulation.html">impl::ScalarSimulation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e3c079f2ea7eac00ca5c3f51557ebeb">scalar</a></td></tr>
 <tr class="memitem:ad69b58805f4c276c257bceb7e014e9e3" id="r_ad69b58805f4c276c257bceb7e014e9e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classSimulation_1_1MassTransfer_1_1MassTransferModel.html">MassTransfer::MassTransferModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad69b58805f4c276c257bceb7e014e9e3">m_mt_model</a></td></tr>
 <tr class="memitem:ae3c7c244753f2d33fdd8efc40c7d325e" id="r_ae3c7c244753f2d33fdd8efc40c7d325e"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classIO_1_1Logger.html">IO::Logger</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3c7c244753f2d33fdd8efc40c7d325e">logger</a></td></tr>
 </table><table class="memberdecls">
@@ -316,6 +316,33 @@ Here is the call graph for this function:</div>
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_a5a5eca304112ed84b2ad40af5c808b0f_icgraph.svg" width="410" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="ad1a3af070a8b98cdbbfb78f8f03c8b28" name="ad1a3af070a8b98cdbbfb78f8f03c8b28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1a3af070a8b98cdbbfb78f8f03c8b28">&#9670;&#160;</a></span>calculate_mtr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Simulation::SimulationUnit::calculate_mtr </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad1a3af070a8b98cdbbfb78f8f03c8b28_cgraph.svg" width="187" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classSimulation_1_1SimulationUnit_ad1a3af070a8b98cdbbfb78f8f03c8b28_icgraph.svg" width="410" height="74"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -1257,28 +1284,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a940ea662073390ec7e35866a822bd2e6" name="a940ea662073390ec7e35866a822bd2e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a940ea662073390ec7e35866a822bd2e6">&#9670;&#160;</a></span>gas_scalar</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a>&gt; Simulation::SimulationUnit::gas_scalar</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aaff5b41aa114de855a6296c31b47d474" name="aaff5b41aa114de855a6296c31b47d474"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaff5b41aa114de855a6296c31b47d474">&#9670;&#160;</a></span>is_two_phase_flow</h2>
 
@@ -1290,28 +1295,6 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">bool Simulation::SimulationUnit::is_two_phase_flow</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="acd3637570000536bb40abd15ef85ebb5" name="acd3637570000536bb40abd15ef85ebb5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acd3637570000536bb40abd15ef85ebb5">&#9670;&#160;</a></span>liquid_scalar</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classSimulation_1_1ScalarSimulation.html">ScalarSimulation</a>&gt; Simulation::SimulationUnit::liquid_scalar</td>
         </tr>
       </table>
   </td>
@@ -1466,6 +1449,28 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespaceSimulation.html#af34adaabc60487412f7551db1dc83226">MapProbes</a> Simulation::SimulationUnit::probes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4e3c079f2ea7eac00ca5c3f51557ebeb" name="a4e3c079f2ea7eac00ca5c3f51557ebeb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e3c079f2ea7eac00ca5c3f51557ebeb">&#9670;&#160;</a></span>scalar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classSimulation_1_1impl_1_1ScalarSimulation.html">impl::ScalarSimulation</a>&gt; Simulation::SimulationUnit::scalar</td>
         </tr>
       </table>
   </td>

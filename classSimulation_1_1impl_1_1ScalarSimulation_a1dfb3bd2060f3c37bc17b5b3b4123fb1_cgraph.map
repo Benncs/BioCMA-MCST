@@ -1,0 +1,9 @@
+<map id="Simulation::impl::ScalarSimulation::phase" name="Simulation::impl::ScalarSimulation::phase">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,165,44"/>
+<area shape="rect" id="Node000002" href="$classSimulation_1_1impl_1_1ScalarSimulation.html#a5d219223856a4594d7aea6714b31652f" title=" " alt="" coords="420,5,579,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,10,212,6,292,3,372,6,405,9,404,14,372,11,292,8,213,11,165,16"/>
+<area shape="rect" id="Node000003" href="$classSimulation_1_1impl_1_1ScalarSimulation.html#ad12aa237a2c458a8028767b636c544dd" title=" " alt="" coords="213,45,372,84"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="165,37,198,44,197,49,164,43"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="372,47,404,40,405,46,373,52"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="254,46,251,36,257,27,271,21,292,19,315,21,329,28,326,32,314,26,292,24,272,26,260,31,256,37,259,44"/>
+</map>

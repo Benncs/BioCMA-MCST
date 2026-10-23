@@ -5,6 +5,7 @@ var classSimulation_1_1SimulationUnit =
     [ "SimulationUnit", "classSimulation_1_1SimulationUnit.html#aa1fba49aec41255dbf01e2c07067df2a", null ],
     [ "SimulationUnit", "classSimulation_1_1SimulationUnit.html#a8e019e0aff679d5c93b0b0e8a1f4542e", null ],
     [ "advance", "classSimulation_1_1SimulationUnit.html#a5a5eca304112ed84b2ad40af5c808b0f", null ],
+    [ "calculate_mtr", "classSimulation_1_1SimulationUnit.html#ad1a3af070a8b98cdbbfb78f8f03c8b28", null ],
     [ "checkScalar", "classSimulation_1_1SimulationUnit.html#ad964b9f706ae4cac2e0d5d852131a7d2", null ],
     [ "clearContribution", "classSimulation_1_1SimulationUnit.html#aeb968caf58812bcab01534e72a63d552", null ],
     [ "cycleProcess", "classSimulation_1_1SimulationUnit.html#a5512cea54affc3eb0c16380d973348e5", null ],
@@ -38,14 +39,13 @@ var classSimulation_1_1SimulationUnit =
     [ "contribs_scatter", "classSimulation_1_1SimulationUnit.html#afcb68150cb8bd8788d31a3d1c54271df", null ],
     [ "dims", "classSimulation_1_1SimulationUnit.html#a569e92c47416423651c8e7e264623ec1", null ],
     [ "f_reaction", "classSimulation_1_1SimulationUnit.html#a2d07d17c1d306d7808a51c812d5bcdd9", null ],
-    [ "gas_scalar", "classSimulation_1_1SimulationUnit.html#a940ea662073390ec7e35866a822bd2e6", null ],
     [ "is_two_phase_flow", "classSimulation_1_1SimulationUnit.html#aaff5b41aa114de855a6296c31b47d474", null ],
-    [ "liquid_scalar", "classSimulation_1_1SimulationUnit.html#acd3637570000536bb40abd15ef85ebb5", null ],
     [ "logger", "classSimulation_1_1SimulationUnit.html#ae3c7c244753f2d33fdd8efc40c7d325e", null ],
     [ "m_feed", "classSimulation_1_1SimulationUnit.html#a68a254750f076559e2784c2bc55f5825", null ],
     [ "m_mt_model", "classSimulation_1_1SimulationUnit.html#ad69b58805f4c276c257bceb7e014e9e3", null ],
     [ "m_table", "classSimulation_1_1SimulationUnit.html#a4855691792efbc7b84ced7a508c8cb74", null ],
     [ "m_times", "classSimulation_1_1SimulationUnit.html#a22c34bc69d05181ab5fd31eac389c1bf", null ],
     [ "mc_unit", "classSimulation_1_1SimulationUnit.html#a6925f1d800356a29ab3b8e9cb3442672", null ],
-    [ "probes", "classSimulation_1_1SimulationUnit.html#a505fbf5573509d5d1d5674c436fe61f1", null ]
+    [ "probes", "classSimulation_1_1SimulationUnit.html#a505fbf5573509d5d1d5674c436fe61f1", null ],
+    [ "scalar", "classSimulation_1_1SimulationUnit.html#a4e3c079f2ea7eac00ca5c3f51557ebeb", null ]
 ];

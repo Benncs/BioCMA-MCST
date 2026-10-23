@@ -1,10 +1,7 @@
 var namespaceSimulation =
 [
     [ "Feed", "namespaceSimulation_1_1Feed.html", "namespaceSimulation_1_1Feed" ],
-    [ "impl", "namespaceSimulation_1_1impl.html", [
-      [ "post_init_concentration_file", "namespaceSimulation_1_1impl.html#ab56eb92724f12b4ed6c401939009519c", null ],
-      [ "post_init_concentration_functor", "namespaceSimulation_1_1impl.html#ae40eba3a10cbceb62fe3e6980dcc193f", null ]
-    ] ],
+    [ "impl", "namespaceSimulation_1_1impl.html", "namespaceSimulation_1_1impl" ],
     [ "KernelInline", "namespaceSimulation_1_1KernelInline.html", "namespaceSimulation_1_1KernelInline" ],
     [ "MassTransfer", "namespaceSimulation_1_1MassTransfer.html", "namespaceSimulation_1_1MassTransfer" ],
     [ "BaseSimulationException", "classSimulation_1_1BaseSimulationException.html", "classSimulation_1_1BaseSimulationException" ],
@@ -15,12 +12,10 @@ var namespaceSimulation =
     [ "Phase", "structSimulation_1_1Phase.html", "structSimulation_1_1Phase" ],
     [ "Probes", "classSimulation_1_1Probes.html", "classSimulation_1_1Probes" ],
     [ "ScalarInitializer", "structSimulation_1_1ScalarInitializer.html", "structSimulation_1_1ScalarInitializer" ],
-    [ "ScalarSimulation", "classSimulation_1_1ScalarSimulation.html", "classSimulation_1_1ScalarSimulation" ],
     [ "SimulatimeTimes", "structSimulation_1_1SimulatimeTimes.html", "structSimulation_1_1SimulatimeTimes" ],
     [ "SimulationException", "classSimulation_1_1SimulationException.html", "classSimulation_1_1SimulationException" ],
     [ "SimulationUnit", "classSimulation_1_1SimulationUnit.html", "classSimulation_1_1SimulationUnit" ],
     [ "Sparam", "structSimulation_1_1Sparam.html", "structSimulation_1_1Sparam" ],
-    [ "FlowMatrixType", "namespaceSimulation.html#a29a3f98c8bc803dc2f80c1d77250225b", null ],
     [ "init_scalar_f_t", "namespaceSimulation.html#aaee322090ebbd49ea6c9800cd56e1b35", null ],
     [ "MapProbes", "namespaceSimulation.html#af34adaabc60487412f7551db1dc83226", null ],
     [ "mass_balance_float_type", "namespaceSimulation.html#ac311553520a11e210bd4cb69fba64f9b", null ],
@@ -54,6 +49,5 @@ var namespaceSimulation =
       [ "FullCase", "namespaceSimulation.html#afd80d46a94927c6389992f31509571aaa56b419b259c49fa979598027da1f6062", null ],
       [ "Serde", "namespaceSimulation.html#afd80d46a94927c6389992f31509571aaa3aa078c74db7e488d0384999eccb7116", null ]
     ] ],
-    [ "makeScalarSimulation", "namespaceSimulation.html#ae5bb8948e2a0bb4f4aef277baf4c0dff", null ],
     [ "map_probe_name", "namespaceSimulation.html#a103c46a91b53ce0dc998cb7b703e06d4", null ]
 ];

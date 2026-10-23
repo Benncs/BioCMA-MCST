@@ -1,0 +1,13 @@
+<map id="Simulation::impl::ScalarSimulation" name="Simulation::impl::ScalarSimulation">
+<area shape="rect" id="Node000001" title=" " alt="" coords="671,94,830,133"/>
+<area shape="rect" id="Node000002" href="$structSimulation_1_1impl_1_1SystemScalar.html" title="Augmented system: phases are stacked by columns, every matrix is n_species x (n_phase * n_compartment..." alt="" coords="372,30,538,69"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="554,63,648,83,680,91,679,96,646,88,553,69"/>
+<area shape="rect" id="Node000003" href="$classKokkosEigen_1_1KokkosEigen2D.html" title=" " alt="" coords="5,12,201,79"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="216,44,372,46,372,51,216,49"/>
+<area shape="rect" id="Node000004" href="$structSimulation_1_1impl_1_1PhaseView.html" title="Views on one phase block of SystemScalar, built once." alt="" coords="361,101,550,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="565,111,671,111,671,116,565,116"/>
+<area shape="rect" id="Node000005" href="$structSimulation_1_1Phase.html" title=" " alt="" coords="39,102,167,127"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="182,112,361,111,361,116,182,117"/>
+<area shape="rect" id="Node000006" href="$classKokkosEigen_1_1KokkosEigen2D.html" title=" " alt="" coords="342,149,569,216"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="583,153,646,138,676,131,677,136,648,143,585,158"/>
+</map>
