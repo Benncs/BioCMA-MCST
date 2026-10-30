@@ -232,13 +232,14 @@ namespace Models
     /// Lowest admissible growth capacity [m/s]. a_p has to stay *strictly*
     /// positive: it is the only thing that lets a starved lineage grow again,
     /// and log(a_p) is taken at every division.
-    MODEL_CONSTANT FloatType a_p_min = 1e-3F * a_max_m;
+    MODEL_CONSTANT FloatType a_p_min = 1e-5F * a_max_m;
 
-    /// Regression of the newborn capacity toward its own a_max at division.
-    /// a_e <= a_p holds by construction, so a redistribution centred on the
-    /// performance of the mother alone (0) is a one way ratchet: the capacity
-    /// of a lineage can only decrease and collapses to 0 over the generations.
-    MODEL_CONSTANT FloatType a_p_recovery = 0.25F;
+    // /// Regression of the newborn capacity toward its own a_max at division.
+    // /// a_e <= a_p holds by construction, so a redistribution centred on the
+    // /// performance of the mother alone (0) is a one way ratchet: the
+    // capacity
+    // /// of a lineage can only decrease and collapses to 0 over the
+    // generations. MODEL_CONSTANT FloatType a_p_recovery = 0.25F;
 
     MODEL_CONSTANT auto l_max_dist
         = MC::Distributions::TruncatedNormal<FloatType>(
@@ -352,8 +353,10 @@ namespace Models
     // over by i_go.  so
     // acetate is never produced and consumed at the same time.
     const FloatType o2_res = Kokkos::max(phi[O2] - (r[i_go] * y_o2_go), zero);
-    r[i_ao] = Kokkos::min(Kokkos::min(phi[Ac], o2_res / y_o2_ao),
-                          Kokkos::max(nu_p - nu, zero) / y_x_ao);
+
+    const FloatType a_ox_max = Kokkos::min(phi[Ac], o2_res / y_o2_ao);
+    const FloatType growth_aox = Kokkos::max(nu_p - nu, zero) / y_x_ao;
+    r[i_ao] = Kokkos::min(a_ox_max, growth_aox);
     nu += r[i_ao] * y_x_ao;
 
     // i_fe: fermentation, lowest priority.
@@ -457,6 +460,13 @@ namespace Models
         buffer_e = buffer_arr;
 
     const FloatType current_l = GET_PROPERTY(particle_var::length);
+    const FloatType current_a_e = GET_PROPERTY(particle_var::a_e);
+    const FloatType currernt_a_max = GET_PROPERTY(particle_var::a_max);
+    // Local copies: nvcc rejects a static constexpr member passed by reference
+    // to Kokkos::min/max/clamp ("undefined in device code")
+    constexpr FloatType ap_min = a_p_min;
+    static constexpr auto local_l = l_max_dist;
+
     const FloatType new_current_length = current_l / 2.F;
     GET_PROPERTY(particle_var::length) = new_current_length;
     constexpr auto binf = INDEX_FROM_ENUM(particle_var::length);
@@ -466,46 +476,46 @@ namespace Models
       COPY_PROPERTY_TO(i, idx2, buffer_e);
     }
 
-    // Local copies: nvcc rejects a static constexpr member passed by reference
-    // to Kokkos::min/max/clamp ("undefined in device code")
-    const FloatType ap_min = a_p_min;
-    const FloatType a_max_i
-        = Kokkos::max(GET_PROPERTY(particle_var::a_max), ap_min);
+    const FloatType a_max_i = 2.F * Kokkos::max(currernt_a_max, ap_min);
 
     // Effective elongation of the mother, floored: a fully starved cell would
     // otherwise give log(0)
-    const FloatType a_e_i
-        = Kokkos::clamp(GET_PROPERTY(particle_var::a_e), ap_min, a_max_i);
-
+    // const FloatType a_e_i = Kokkos::clamp(current_a_e, ap_min, a_max_i);
     // Centre of the redistribution. a_e <= a_p always holds, so centring on
     // a_e alone makes the capacity of a lineage a decreasing sequence that
     // converges to 0; the pull toward a_max keeps a_p away from 0 and lets a
     // starved lineage recover when the environment improves.
-    const FloatType a_target = a_e_i + (a_p_recovery * (a_max_i - a_e_i));
+    // const auto a_target
+    //     = static_cast<double>(a_e_i + (a_p_recovery * (a_max_i - a_e_i)));
+    // const double average = Kokkos::log(a_target) - sigma * sigma / 2;
 
-    auto gen = random_pool.get_state();
-    const double sigma = 0.2;
-    const double average
-        = Kokkos::log(static_cast<double>(a_target)) - sigma * sigma / 2;
+    constexpr double sigma = 0.2;
+
+    //
+    //
+    // Centre of the redistribution.
+    // The log-normal distribution is centred on a_e, allowing a_p
+    // to naturally follow environmental improvements. Even when
+    // a_e == a_p, the distribution retains a non-zero probability
+    // of producing a higher a_p, allowing gradual lineage recovery.
+    const double average = Kokkos::log(current_a_e) - sigma * sigma / 2;
     const auto dist = MC::Distributions::LogNormal<double>(average, sigma);
 
-    // Clamped to [a_p_min, a_max]: a null capacity freezes the sub-lineage for
-    // the rest of the run
-    const auto gen1 = Kokkos::clamp(
-        static_cast<FloatType>(dist.draw(gen)), ap_min, a_max_i);
-    const auto gen2 = Kokkos::clamp(
-        static_cast<FloatType>(dist.draw(gen)), ap_min, a_max_i);
-
-    static constexpr auto local_l = l_max_dist;
+    auto gen = random_pool.get_state();
+    const auto ap_gen_1 = static_cast<FloatType>(dist.draw(gen));
+    const auto ap_gen_2 = static_cast<FloatType>(dist.draw(gen));
     const FloatType lmax1 = local_l.draw(gen);
     const FloatType lmax2 = local_l.draw(gen);
-
-    GET_PROPERTY(particle_var::a_p) = gen1;
-    GET_PROPERTY(particle_var::l_max) = lmax1;
-    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::a_p) = gen2;
-    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = lmax2;
-
     random_pool.free_state(gen);
+
+    // Clamped to [a_p_min, a_max]
+    const auto ap_1 = Kokkos::clamp(ap_gen_1, ap_min, a_max_i);
+    const auto ap_2 = Kokkos::clamp(ap_gen_2, ap_min, a_max_i);
+
+    GET_PROPERTY(particle_var::a_p) = ap_1;
+    GET_PROPERTY(particle_var::l_max) = lmax1;
+    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::a_p) = ap_2;
+    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = lmax2;
   }
 
 } // namespace Models
