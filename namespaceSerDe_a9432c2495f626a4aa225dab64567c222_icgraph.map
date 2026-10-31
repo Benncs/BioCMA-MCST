@@ -1,0 +1,12 @@
+<map id="SerDe::load" name="SerDe::load">
+<area shape="rect" id="Node000001" title=" " alt="" coords="549,68,640,93"/>
+<area shape="rect" id="Node000002" href="$namespaceCore.html#a3c0aea9cf6b202a7db4e14c993c43396" title=" " alt="" coords="420,68,501,93"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="533,83,502,83,502,78,533,78"/>
+<area shape="rect" id="Node000003" href="$structApi_1_1SimulationInstance.html#ad2abfa76ac4128d44b7c0c895f78b77b" title="Load ad apply the simulation configuration and prepare for execution based on file." alt="" coords="213,61,372,100"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="404,83,372,83,372,78,404,78"/>
+<area shape="rect" id="Node000004" href="$structApi_1_1SimulationInstance.html#a3398ddd22faa3ceb16b454c51faeced0" title="Apply the simulation configuration and prepare for execution." alt="" coords="5,29,165,68"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="197,69,165,64,165,58,198,63"/>
+<area shape="rect" id="Node000005" href="$structApi_1_1SimulationInstance.html#afee07db8a6b57fe7982900ecaa943cc0" title="Default constructor." alt="" coords="5,92,165,131"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="198,97,165,102,165,97,197,92"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="119,16,107,10,85,8,65,10,53,15,49,21,51,28,46,30,44,20,50,11,64,5,85,3,108,5,121,12"/>
+</map>
