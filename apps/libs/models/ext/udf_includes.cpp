@@ -24,12 +24,10 @@ namespace UnsafeUDF
       const Models::UdfModel::SelfParticle& arr,
       const Models::UdfModel::SelfContribs& arr_contribs,
       const std::size_t position_index,
-      const MC::LocalConcentration& c)
-      = nullptr; //< update function ptr
+      const MC::LocalConcentration& c) = nullptr; //< update function ptr
 
   Models::UdfModel::Config (*Loader::get_config_udf)(
-      Kokkos::DefaultHostExecutionSpace& ep, std::size_t n)
-      = nullptr;
+      Kokkos::DefaultHostExecutionSpace& ep, std::size_t n) = nullptr;
 
   void (*Loader::division_udf)(const MC::pool_type& random_pool,
                                std::size_t idx,

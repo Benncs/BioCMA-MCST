@@ -79,8 +79,7 @@ namespace IO
      */
     virtual void error(std::string_view message,
                        std::source_location location
-                       = std::source_location::current())
-        = 0;
+                       = std::source_location::current()) = 0;
 
     /**
      * @brief Log a raw message with no additional formatting.

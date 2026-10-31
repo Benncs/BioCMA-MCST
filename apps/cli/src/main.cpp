@@ -119,6 +119,8 @@ parse_callback_ok(
   }
   h->set_logger(std::cref(logger));
 
+  user_params.save_serde = true;
+
   const auto load_serde = user_params.load_serde;
   // user_params.uniform_mc_init = false;
   INTERPRETER_INIT

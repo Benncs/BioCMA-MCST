@@ -159,6 +159,22 @@ namespace Simulation
     return a_->m_times.relative_time;
   }
 
+  [[nodiscard]] const std::shared_ptr<Mixture::SpecieTable>&
+  Getter::table() const noexcept
+  {
+
+    assert(a_ != nullptr);
+    return a_->m_table;
+  }
+
+  [[nodiscard]] std::shared_ptr<Mixture::SpecieTable>
+  Getter::table_ownable() const noexcept
+  {
+
+    assert(a_ != nullptr);
+    return a_->m_table;
+  }
+
 } // namespace Simulation
 
 namespace Simulation
@@ -186,6 +202,12 @@ namespace Simulation
       m_mt_model = Simulation::MassTransfer::MassTransferModel(
           *m_table, std::move(variant), liquid_scalar, gas_scalar);
     }
+  }
+
+  [[nodiscard]] std::unique_ptr<MC::MonteCarloUnit>
+  SimulationUnit::move_mcu() noexcept
+  {
+    return std::move(this->mc_unit);
   }
 
   void

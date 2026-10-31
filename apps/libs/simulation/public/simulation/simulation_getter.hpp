@@ -12,6 +12,13 @@ namespace MC
   struct MonteCarloUnit;
 } // namespace MC
 
+namespace Mixture
+{
+
+  class SpecieTable;
+
+} // namespace Mixture
+
 namespace Simulation
 {
 
@@ -56,8 +63,19 @@ namespace Simulation
     [[nodiscard]] bool two_phase_flow() const noexcept;
     [[nodiscard]] Dimensions getDimensions() const noexcept;
 
+    [[nodiscard]] const std::shared_ptr<Mixture::SpecieTable>&
+    table() const noexcept;
+
+    /**brief Get new owner of SpecieTable
+     *
+     * WARNING: internal mutability
+     */
+    [[nodiscard]] std::shared_ptr<Mixture::SpecieTable>
+    table_ownable() const noexcept;
+
     [[nodiscard]] const std::unique_ptr<MC::MonteCarloUnit>&
     mc_unit() const noexcept;
+
     [[nodiscard]] const Simulation::Feed::SimulationFeed&
     get_feed() const noexcept;
 

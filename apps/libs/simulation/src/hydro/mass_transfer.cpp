@@ -283,7 +283,6 @@ namespace Simulation::MassTransfer
       = default;
 
   MassTransferModel&
-  MassTransferModel::operator=(MassTransferModel&& rhs) noexcept
-      = default;
+  MassTransferModel::operator=(MassTransferModel&& rhs) noexcept = default;
 
 }; // namespace Simulation::MassTransfer

@@ -76,6 +76,13 @@ namespace Simulation
 
     Getter getter() const noexcept;
 
+    /**brief Move out the MCU
+     * WARNING: if this method is called, simulation is no longer valid
+     * afterwards
+     * TODO: FIXME
+     */
+    [[nodiscard]] std::unique_ptr<MC::MonteCarloUnit> move_mcu() noexcept;
+
     // Getters
 
     // Simulation methods
@@ -101,11 +108,6 @@ namespace Simulation
     KernelInline::CycleFunctors<Space, Model>
     init_functors(MC::ParticlesContainer<Model> container,
                   KernelDispatchOptions options);
-    auto
-    table()
-    {
-      return m_table;
-    }
 
   private:
     std::unique_ptr<MC::MonteCarloUnit> mc_unit; // NOLINT
