@@ -34,6 +34,7 @@ namespace Models
     inline constexpr double m_cmol_glucose = 30.0; ///< C6H12O6, 180/6 [g/Cmol]
     inline constexpr double m_cmol_acetate = 30.0; ///< C2H4O2, 60/2   [g/Cmol]
     inline constexpr double m_cmol_biomass = 24.6; ///< CH1.8O0.5N0.2  [g/Cmol]
+    inline constexpr double m_co2 = 44.0;          ///< [g/mol]
 
     /// Degree of reduction per C-mole
     inline constexpr double gamma_glucose = 4.0; ///< 4 + 2 - 2
@@ -47,6 +48,15 @@ namespace Models
     e_surplus(double m_cmol_sub, double gamma_sub, double y_x)
     {
       return gamma_sub / m_cmol_sub - gamma_biomass * y_x / m_cmol_biomass;
+    }
+
+    /// Carbon balance: gCO2 per g of substrate
+    constexpr double
+    y_co2(double m_cmol_sub, double y_x, double y_ac = 0.0)
+    {
+      return m_co2
+             * (1.0 / m_cmol_sub - y_x / m_cmol_biomass
+                - y_ac / m_cmol_acetate);
     }
 
     /// sub + O2 -> X + CO2 (+H2O) : gO2 per g of substrate.
@@ -118,8 +128,8 @@ namespace Models
     static constexpr std::string_view name = "acetate";
     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
 
-    /// Liquid species: glucose, dioxygen, acetate
-    static constexpr std::size_t n_c = 3;
+    /// Liquid species: glucose, dioxygen, acetate, Co2
+    static constexpr std::size_t n_c = 4;
 
     using SelfContribs = MC::ParticlesContribs<Self::n_c, Self::FloatType>;
 
@@ -136,6 +146,7 @@ namespace Models
       S = 0,
       O2 = 1,
       Ac = 2,
+      Co2 = 3,
       N_N = n_c
     };
 
@@ -193,6 +204,22 @@ namespace Models
         Stoichiometry::y_ac_fer(Stoichiometry::m_cmol_glucose,
                                 Stoichiometry::gamma_glucose,
                                 y_x_ov));
+
+    /// gCO2/gS
+    MODEL_CONSTANT FloatType y_co2_go = static_cast<FloatType>(
+        Stoichiometry::y_co2(Stoichiometry::m_cmol_glucose, y_x_go, 0));
+
+    /// gCO2/gAc
+    MODEL_CONSTANT FloatType y_co2_ao = static_cast<FloatType>(
+        Stoichiometry::y_co2(Stoichiometry::m_cmol_acetate, y_x_ao, 0));
+
+    /// gCO2/gS
+    MODEL_CONSTANT FloatType y_co2_fe = static_cast<FloatType>(
+        Stoichiometry::y_co2(Stoichiometry::m_cmol_glucose, y_x_fe, y_ac_fe));
+
+    /// gCO2/gS (no growth: y_x = 0)
+    MODEL_CONSTANT FloatType y_co2_ov = static_cast<FloatType>(
+        Stoichiometry::y_co2(Stoichiometry::m_cmol_glucose, 0, y_ac_ov));
 
     // A reaction cannot need a negative amount of O2 or acetate, nor build
     // more carbon than its substrate carries.
@@ -435,6 +462,9 @@ namespace Models
     const FloatType phi_a
         = ((r[i_fe] * y_ac_fe) + (r[i_ov] * y_ac_ov)) - r[i_ao];
 
+    const FloatType phi_co2 = r[i_go] * y_co2_go + r[i_fe] * y_co2_fe
+                              + r[i_ov] * y_co2_ov + r[i_ao] * y_co2_ao;
+
     GET_PROPERTY(particle_var::phi_s) = phi_s;
     GET_PROPERTY(particle_var::phi_o2) = phi_o2;
     GET_PROPERTY(particle_var::phi_a) = phi_a;
@@ -442,6 +472,7 @@ namespace Models
     GET_CONTRIBS(S) = phi_s;
     GET_CONTRIBS(O2) = phi_o2;
     GET_CONTRIBS(Ac) = phi_a;
+    GET_CONTRIBS(Co2) = phi_a;
 
     return check_div(GET_PROPERTY(Self::particle_var::length),
                      GET_PROPERTY(Self::particle_var::l_max));
