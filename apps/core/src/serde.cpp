@@ -1,6 +1,5 @@
 
 
-#include "mixture/species_descriptor.hpp"
 #ifdef USE_CEAREAL
 #  include <cereal/archives/binary.hpp>
 #  include <cereal/archives/xml.hpp>
@@ -18,6 +17,7 @@
 #  include <ios>
 #  include <mc/unit.hpp>
 #  include <memory>
+#  include <mixture/species_descriptor.hpp>
 #  include <optional>
 #  include <serde.hpp>
 #  include <simulation/scalar_initializer.hpp>
@@ -62,6 +62,35 @@ using iArchive_t = cereal::BinaryInputArchive;
 
 namespace SerDe
 {
+
+  struct SerdePayload
+  {
+    std::string version;
+    ExecInfo serde_exec;
+    Mixture::SpecieTable t;
+    uint64_t np = 0;
+    Simulation::Dimensions dims;
+    std::vector<double> read_c_liq;
+    std::optional<std::vector<double>> read_c_gas;
+    double start_time{};
+    std::unique_ptr<MC::MonteCarloUnit> mc_unit;
+
+    template <class Archive>
+    void
+    load(Archive& ar)
+    {
+
+      ar(this->version,
+         this->serde_exec,
+         this->t,
+         this->np,
+         this->dims,
+         this->read_c_liq,
+         this->read_c_gas,
+         this->start_time,
+         this->mc_unit);
+    }
+  };
 
   void
   save_simulation(const Core::CaseData& case_data)
@@ -145,7 +174,17 @@ namespace SerDe
     return sc;
   }
 
-  bool
+  template <typename Archive>
+  ExecInfo
+  load_exec_info(Archive& ar)
+  {
+    std::string version; // TODO version is not read
+    ExecInfo serde_exec{};
+    ar(version, serde_exec);
+    return serde_exec;
+  }
+
+  static bool
   load_simulation(Core::GlobalInitialiser& gi,
                   Core::CaseData& case_data,
                   std::string_view ser_filename)
@@ -153,27 +192,21 @@ namespace SerDe
 
     std::stringstream buffer;
     read_file(buffer, ser_filename);
-
     iArchive_t ar(buffer);
 
-    std::string version;
-    ExecInfo serde_exec{};
-    ar(version, serde_exec);
+    SerdePayload payload;
+    ar(payload);
 
-    case_data.exec_info.run_id = serde_exec.run_id;
+    // From here ar is entirely read
 
-    uint64_t np = 0;
-    Simulation::Dimensions dims;
-    std::vector<double> read_c_liq;
-    std::optional<std::vector<double>> read_c_gas;
-    Mixture::SpecieTable t;
-    ar(t);
-    double start_time{};
-    ar(np, dims, read_c_liq, read_c_gas, start_time);
-    gi.set_table(std::make_shared<Mixture::SpecieTable>(t));
+    case_data.exec_info.run_id = payload.serde_exec.run_id;
 
-    auto sc = build_scalar_init(
-        gi, dims, std::move(read_c_liq), std::move(read_c_gas));
+    gi.set_table(std::make_shared<Mixture::SpecieTable>(payload.t));
+
+    auto sc = build_scalar_init(gi,
+                                payload.dims,
+                                std::move(payload.read_c_liq),
+                                std::move(payload.read_c_gas));
 
     if (!sc.has_value())
     {
@@ -181,9 +214,7 @@ namespace SerDe
       return false;
     }
 
-    std::unique_ptr<MC::MonteCarloUnit> mc_unit;
-    ar(mc_unit);
-    assert(mc_unit != nullptr);
+    assert(payload.mc_unit != nullptr);
 
     // std::vector<double> kla(dims.n_species);
     // if (kla.size() > 1)
@@ -196,7 +227,8 @@ namespace SerDe
     //     gi.init_mtr_model(Simulation::MassTransfer::Type::Auto{});
 
     // #  warning message("MTR model is not loaded")
-    auto simulation = gi.init_simulation(std::move(mc_unit), std::move(*sc));
+    auto simulation
+        = gi.init_simulation(std::move(payload.mc_unit), std::move(*sc));
 
     if (!simulation.has_value())
     {
@@ -217,11 +249,79 @@ namespace SerDe
     //     Simulation::MassTransfer::Type::FixedKla{kla});
 
     // case_data.simulation->getter().get_start_time_mut() = start_time;
-    case_data.simulation->overwriteStartTime(start_time);
-    gi.set_initial_number_particle(np);
+    case_data.simulation->overwriteStartTime(payload.start_time);
+    gi.set_initial_number_particle(payload.np);
     std::cout << "SIMULATION: " << case_data.exec_info.run_id << " LOADED"
               << std::endl;
     return true;
+  }
+
+  std::optional<Core::CaseData>
+  impl_load(
+      std::shared_ptr<IO::Logger>& logger,
+      const ExecInfo& exec,
+      const Core::UserControlParameters&& params,
+      std::optional<Simulation::Feed::SimulationFeed>&& feed,
+      std::optional<Simulation::MassTransfer::Type::MtrTypeVariant>&& mtr_type)
+  {
+    Core::CaseData case_data;
+    case_data.exec_info = exec;
+
+    Core::GlobalInitialiser gi(exec, params, nullptr, logger);
+    auto transition = gi.init_transitionner();
+    if (!transition.has_value())
+    {
+      return std::nullopt;
+    }
+
+    case_data.transitioner = std::move(*transition);
+    gi.init_feed(std::move(feed));
+    gi.init_mtr_model(std::move(mtr_type));
+    try
+    {
+      if (!params.serde_file.has_value())
+      {
+        return std::nullopt;
+      }
+      std::string serde_filename
+          = *params.serde_file + std::to_string(exec.current_rank) + ".raw";
+      if (logger)
+      {
+        logger->print("Serde", serde_filename);
+      }
+      const bool ok_init
+          = SerDe::load_simulation(gi, case_data, serde_filename);
+
+      if (!gi.check_init_terminate() || !ok_init)
+      {
+        return std::nullopt;
+      }
+    }
+    catch (std::exception& e)
+    {
+      auto err = "CORE::load::load_simulation:" + std::string(e.what());
+      throw std::runtime_error(err);
+    }
+
+    case_data.params = gi.get_parameters();
+    // TODO: Check integreity between transitionner and read value
+    // (transitionner and simulation tpf
+    // + n_species)
+
+    return case_data;
+  }
+
+  std::unique_ptr<MC::MonteCarloUnit>
+  load_mc(std::string_view path)
+  {
+    std::stringstream buffer;
+    read_file(buffer, path);
+    iArchive_t ar(buffer);
+
+    SerdePayload payload;
+    ar(payload);
+
+    return std::move(payload.mc_unit);
   }
 
 } // namespace SerDe

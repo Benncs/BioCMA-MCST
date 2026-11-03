@@ -115,6 +115,9 @@ namespace Core
                         char** argv,
                         std::ostream& out_stream,
                         std::optional<std::size_t> force_run_id = std::nullopt);
+
+  std::unique_ptr<MC::MonteCarloUnit> load_mc(std::string_view path);
+
 } // namespace Core
 
 #endif //!__CASE_DATA__HPP__

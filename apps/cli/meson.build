@@ -63,6 +63,8 @@ executable(
   link_args: exe_link_args,
 )
 
+
+
 executable(
   f'@name@_shared',
   f'@src_dir@/main.cpp',
@@ -104,6 +106,20 @@ if use_dynamic_module
   #   install: true,
   # )
 endif
+
+
+executable(
+  f'@project_name@_resampler',
+  f'@src_dir@/resampler.cpp',
+  include_directories: includes,
+  dependencies: [app_dependency, udf_loader],
+  install: true,
+  install_rpath: global_install_dir,
+  install_dir: global_install_dir,
+  link_args: exe_link_args,
+)
+
+
 
 if build_test
   subdir('tests')

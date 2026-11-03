@@ -194,6 +194,8 @@ namespace MC
 
     void change_runtime(RuntimeParameters&& parameters) noexcept;
 
+    [[nodiscard]] const RuntimeParameters& get_runtime() const;
+
     void _sort(size_t n_c);
 
     /**
@@ -856,6 +858,12 @@ namespace MC
 
     auto sorter = Kokkos::BinSort<view_type, decltype(binop)>(
         ExecSpace(), sn, binop, true);
+  }
+  template <ModelType M>
+  [[nodiscard]] const RuntimeParameters&
+  ParticlesContainer<M>::get_runtime() const
+  {
+    return rt_params;
   }
 
 } // namespace MC
