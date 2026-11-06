@@ -13,6 +13,12 @@
 #include <stdexcept>
 #include <variant>
 
+struct Args
+{
+  std::size_t n_target;
+  double weight;
+};
+
 template <ModelType Model>
 void
 copy_particle_to(MC::ParticlesContainer<Model> container1,
@@ -56,17 +62,15 @@ copy_particle_to(MC::ParticlesContainer<Model> container1,
 
 template <ModelType Model>
 void
-resampling(MC::ParticlesContainer<Model> container,
-           std::size_t n_target,
-           double initial_weight)
+resampling(MC::ParticlesContainer<Model> container, Args args)
 {
-  if (n_target >= container.n_particles())
+  if (args.n_target >= container.n_particles())
   {
     return;
   }
 
   MC::ParticlesContainer<Model> resampled_container(container.get_runtime(),
-                                                    n_target);
+                                                    args.n_target);
 
   std::cout << "N particle  Before " << container.n_particles() << std::endl;
   std::cout << "N particle  After" << resampled_container.n_particles()
@@ -89,19 +93,23 @@ resampling(MC::ParticlesContainer<Model> container,
     throw std::runtime_error("Not implemented");
   }
 
-  Kokkos::View<std::size_t*> kept_idx("kept_idx", n_target);
+  Kokkos::View<std::size_t*> kept_idx("kept_idx", args.n_target);
 
   Kokkos::Random_XorShift1024_Pool pool{ 1025 };
 
   Kokkos::parallel_for(
-      "select_idx", Kokkos::RangePolicy(0, n_target), KOKKOS_LAMBDA(int i) {
+      "select_idx",
+      Kokkos::RangePolicy(0, args.n_target),
+      KOKKOS_LAMBDA(int i) {
         auto gen = pool.get_state();
         kept_idx(i) = gen.urand64(0, n0);
         pool.free_state(gen);
       });
 
   Kokkos::parallel_for(
-      "swap_particles", Kokkos::RangePolicy(0, n_target), KOKKOS_LAMBDA(int i) {
+      "swap_particles",
+      Kokkos::RangePolicy(0, args.n_target),
+      KOKKOS_LAMBDA(int i) {
         auto idx = kept_idx(i);
         copy_particle_to(resampled_container, container, i, idx);
       });
@@ -126,7 +134,10 @@ main()
 {
   Kokkos::ScopeGuard g{};
 
-  auto mc = Core::load_mc("/tmp/debug_serde_0.raw");
+  auto serde_ref_path = "/tmp/debug_serde_0.raw";
+  auto new_serde_path = "/tmp/debug_rs_serde_0.raw";
+  auto mc = Core::load_mc(serde_ref_path);
+  std::cout << "" << std::endl;
 
   if (mc == nullptr)
   {
@@ -137,10 +148,11 @@ main()
   const size_t n_target = 1000;
   const auto initial_weight = mc->init_weight;
 
-  std::cout << "" << std::endl;
+  Args args{ n_target, initial_weight };
 
-  auto callback = [n_target, initial_weight](auto&& container)
-  { resampling(container, n_target, initial_weight); };
+  auto callback = [args](auto&& container) { resampling(container, args); };
 
   std::visit(callback, mc->container);
+
+  Core::swap_mc(std::move(mc), serde_ref_path, new_serde_path);
 }

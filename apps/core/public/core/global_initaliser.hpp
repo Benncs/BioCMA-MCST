@@ -116,6 +116,7 @@ namespace Core
     init_simulation(std::unique_ptr<MC::MonteCarloUnit> _unit,
                     Simulation::ScalarInitializer&& scalar_init);
 
+    // TODO: Scalar init is not optional
     /**
      * @brief Initializes a scalar component of the simulation.
      *

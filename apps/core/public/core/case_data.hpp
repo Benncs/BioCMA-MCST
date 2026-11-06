@@ -118,6 +118,10 @@ namespace Core
 
   std::unique_ptr<MC::MonteCarloUnit> load_mc(std::string_view path);
 
+  void swap_mc(std::unique_ptr<MC::MonteCarloUnit>&& mcu,
+               std::string_view ref_path,
+               std::string_view new_path);
+
 } // namespace Core
 
 #endif //!__CASE_DATA__HPP__

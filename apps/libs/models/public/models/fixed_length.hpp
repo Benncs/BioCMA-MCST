@@ -136,7 +136,7 @@ namespace Models
     auto& c_phi_s = GET_CONTRIBS(0);
     //    static auto f_c = use_contribs;
     //
-    auto f_c = false;
+    auto f_c = true;
     const FloatType g = (f_c) ? s / (k + s) : FloatType{ 1 };
     const FloatType phi_s = phi_s_max * g;
     const FloatType ldot = l_dot_max * g;

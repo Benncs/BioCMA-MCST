@@ -308,6 +308,8 @@ namespace Core
     auto scalar = variant.has_value() ? init_scalar(std::move(*variant))
                                       : init_scalar();
 
+    // TODO: Scalar init is not optional
+
     auto mc = init_monte_carlo();
 
     if (scalar.has_value() && mc.has_value())
