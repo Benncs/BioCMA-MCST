@@ -5,6 +5,7 @@ var classSimulation_1_1SimulationUnit =
     [ "SimulationUnit", "classSimulation_1_1SimulationUnit.html#aa1fba49aec41255dbf01e2c07067df2a", null ],
     [ "SimulationUnit", "classSimulation_1_1SimulationUnit.html#a8e019e0aff679d5c93b0b0e8a1f4542e", null ],
     [ "advance", "classSimulation_1_1SimulationUnit.html#a5a5eca304112ed84b2ad40af5c808b0f", null ],
+    [ "calculate_mtr", "classSimulation_1_1SimulationUnit.html#ad1a3af070a8b98cdbbfb78f8f03c8b28", null ],
     [ "checkScalar", "classSimulation_1_1SimulationUnit.html#ad964b9f706ae4cac2e0d5d852131a7d2", null ],
     [ "clearContribution", "classSimulation_1_1SimulationUnit.html#aeb968caf58812bcab01534e72a63d552", null ],
     [ "cycleProcess", "classSimulation_1_1SimulationUnit.html#a5512cea54affc3eb0c16380d973348e5", null ],

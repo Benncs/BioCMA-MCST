@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "Models::Acetate", "structModels_1_1Acetate.html", null ],
+    [ "Args", "structArgs.html", null ],
     [ "Simulation::MassTransfer::Type::Auto", "structSimulation_1_1MassTransfer_1_1Type_1_1Auto.html", null ],
     [ "PostProcessing::BonceBuffer", "structPostProcessing_1_1BonceBuffer.html", null ],
     [ "Core::BuildError", "structCore_1_1BuildError.html", null ],

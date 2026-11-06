@@ -41,7 +41,9 @@ var namespaces_dup =
       [ "do_serde", "namespaceSerDe.html#a36039f9766f370f99cb348d7816d5fd5", null ],
       [ "impl_load", "namespaceSerDe.html#a0e6c3f225cbfc91ae854ea0435f82e52", null ],
       [ "load", "namespaceSerDe.html#a9432c2495f626a4aa225dab64567c222", null ],
-      [ "save_simulation", "namespaceSerDe.html#a02ab11cee31189039f0dcb1a7e975990", null ]
+      [ "load_mc", "namespaceSerDe.html#aa542e69adaae5ea1daf8647553498c34", null ],
+      [ "save_simulation", "namespaceSerDe.html#a02ab11cee31189039f0dcb1a7e975990", null ],
+      [ "swap_mc", "namespaceSerDe.html#af4f35183e89befefd222c3d5e931341f", null ]
     ] ],
     [ "Simulation", "namespaceSimulation.html", "namespaceSimulation" ],
     [ "Unsafe", "namespaceUnsafe.html", [

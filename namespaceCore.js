@@ -24,6 +24,8 @@ var namespaceCore =
     [ "get_rng_seed", "namespaceCore.html#a0e2d8a570d24a93cf81c2765b319ed8c", null ],
     [ "init_partial_exporter", "namespaceCore.html#afbce0beea293a7ccfdfc34a85b5e5e77", null ],
     [ "load", "namespaceCore.html#a3c0aea9cf6b202a7db4e14c993c43396", null ],
+    [ "load_mc", "namespaceCore.html#ac633519c1e25e8a44134debda54042c2", null ],
     [ "operator<<", "namespaceCore.html#a557be83a6ebe2681db77cbf4726f2c35", null ],
-    [ "runtime_init", "namespaceCore.html#ae86a8a5e09a74787e58f4fc476788413", null ]
+    [ "runtime_init", "namespaceCore.html#ae86a8a5e09a74787e58f4fc476788413", null ],
+    [ "swap_mc", "namespaceCore.html#afdf3243c98d2f0f7f8ec8ff61f4f7da9", null ]
 ];

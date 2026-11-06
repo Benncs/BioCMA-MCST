@@ -78,6 +78,8 @@ $(function(){initNavTree('namespaceModels_1_1Stoichiometry.html','',''); });
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a213e08f6ba45c9336959bde0e1f2b1b8" id="r_a213e08f6ba45c9336959bde0e1f2b1b8"><td class="memItemLeft" align="right" valign="top">constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a213e08f6ba45c9336959bde0e1f2b1b8">e_surplus</a> (double m_cmol_sub, double gamma_sub, double y_x)</td></tr>
+<tr class="memitem:ad2f96216eebfc8473429b2d74b4d5f8e" id="r_ad2f96216eebfc8473429b2d74b4d5f8e"><td class="memItemLeft" align="right" valign="top">constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2f96216eebfc8473429b2d74b4d5f8e">y_co2</a> (double m_cmol_sub, double y_x, double y_ac=0.0)</td></tr>
+<tr class="memdesc:ad2f96216eebfc8473429b2d74b4d5f8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Carbon balance: gCO2 per g of substrate.  <br /></td></tr>
 <tr class="memitem:a8a9360dd19bd074706c1a80c158e6346" id="r_a8a9360dd19bd074706c1a80c158e6346"><td class="memItemLeft" align="right" valign="top">constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a9360dd19bd074706c1a80c158e6346">y_o2_ox</a> (double m_cmol_sub, double gamma_sub, double y_x)</td></tr>
 <tr class="memitem:ad4ddb18054ea72684ec9dda0ff893c8d" id="r_ad4ddb18054ea72684ec9dda0ff893c8d"><td class="memItemLeft" align="right" valign="top">constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad4ddb18054ea72684ec9dda0ff893c8d">y_ac_fer</a> (double m_cmol_sub, double gamma_sub, double y_x)</td></tr>
 <tr class="memdesc:ad4ddb18054ea72684ec9dda0ff893c8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">sub -&gt; X + Ac + CO2 (+H2O) : gAc per g of substrate  <br /></td></tr>
@@ -92,6 +94,8 @@ Variables</h2></td></tr>
 <tr class="memdesc:abb0f954ddbd1500205e680b0023f9a04"><td class="mdescLeft">&#160;</td><td class="mdescRight">C2H4O2, 60/2 [g/Cmol].  <br /></td></tr>
 <tr class="memitem:aa5c1f241acbe7bca6a36cfc6910690a8" id="r_aa5c1f241acbe7bca6a36cfc6910690a8"><td class="memItemLeft" align="right" valign="top">constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5c1f241acbe7bca6a36cfc6910690a8">m_cmol_biomass</a> = 24.6</td></tr>
 <tr class="memdesc:aa5c1f241acbe7bca6a36cfc6910690a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">CH1.8O0.5N0.2 [g/Cmol].  <br /></td></tr>
+<tr class="memitem:a0cb2e0dfb9e519791e134981b3cfd684" id="r_a0cb2e0dfb9e519791e134981b3cfd684"><td class="memItemLeft" align="right" valign="top">constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0cb2e0dfb9e519791e134981b3cfd684">m_co2</a> = 44.0</td></tr>
+<tr class="memdesc:a0cb2e0dfb9e519791e134981b3cfd684"><td class="mdescLeft">&#160;</td><td class="mdescRight">[g/mol]  <br /></td></tr>
 <tr class="memitem:af643e89621999496b1dfb2f0032fa60c" id="r_af643e89621999496b1dfb2f0032fa60c"><td class="memItemLeft" align="right" valign="top">constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af643e89621999496b1dfb2f0032fa60c">gamma_glucose</a> = 4.0</td></tr>
 <tr class="memdesc:af643e89621999496b1dfb2f0032fa60c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Degree of reduction per C-mole.  <br /></td></tr>
 <tr class="memitem:adedb6f6173bb2fa715d76d4500aa5e68" id="r_adedb6f6173bb2fa715d76d4500aa5e68"><td class="memItemLeft" align="right" valign="top">constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adedb6f6173bb2fa715d76d4500aa5e68">gamma_acetate</a> = 4.0</td></tr>
@@ -182,6 +186,42 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceModels_1_1Stoichiometry_ad4ddb18054ea72684ec9dda0ff893c8d_cgraph.svg" width="364" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
+
+</div>
+</div>
+<a id="ad2f96216eebfc8473429b2d74b4d5f8e" name="ad2f96216eebfc8473429b2d74b4d5f8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2f96216eebfc8473429b2d74b4d5f8e">&#9670;&#160;</a></span>y_co2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Models::Stoichiometry::y_co2 </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>m_cmol_sub</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>y_x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>y_ac</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.0</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Carbon balance: gCO2 per g of substrate. </p>
 
 </div>
 </div>
@@ -368,6 +408,30 @@ Here is the call graph for this function:</div>
 </div><div class="memdoc">
 
 <p>C6H12O6, 180/6 [g/Cmol]. </p>
+
+</div>
+</div>
+<a id="a0cb2e0dfb9e519791e134981b3cfd684" name="a0cb2e0dfb9e519791e134981b3cfd684"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cb2e0dfb9e519791e134981b3cfd684">&#9670;&#160;</a></span>m_co2</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Models::Stoichiometry::m_co2 = 44.0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>[g/mol] </p>
 
 </div>
 </div>

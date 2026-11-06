@@ -8,6 +8,7 @@ var namespaceModels =
     [ "Stoichiometry", "namespaceModels_1_1Stoichiometry.html", [
       [ "e_surplus", "namespaceModels_1_1Stoichiometry.html#a213e08f6ba45c9336959bde0e1f2b1b8", null ],
       [ "y_ac_fer", "namespaceModels_1_1Stoichiometry.html#ad4ddb18054ea72684ec9dda0ff893c8d", null ],
+      [ "y_co2", "namespaceModels_1_1Stoichiometry.html#ad2f96216eebfc8473429b2d74b4d5f8e", null ],
       [ "y_o2_ox", "namespaceModels_1_1Stoichiometry.html#a8a9360dd19bd074706c1a80c158e6346", null ],
       [ "gamma_acetate", "namespaceModels_1_1Stoichiometry.html#adedb6f6173bb2fa715d76d4500aa5e68", null ],
       [ "gamma_biomass", "namespaceModels_1_1Stoichiometry.html#a24de86cec683a97db34a193d64960fc6", null ],
@@ -15,6 +16,7 @@ var namespaceModels =
       [ "m_cmol_acetate", "namespaceModels_1_1Stoichiometry.html#abb0f954ddbd1500205e680b0023f9a04", null ],
       [ "m_cmol_biomass", "namespaceModels_1_1Stoichiometry.html#aa5c1f241acbe7bca6a36cfc6910690a8", null ],
       [ "m_cmol_glucose", "namespaceModels_1_1Stoichiometry.html#aac492f2032ea6f4fc5d3b304bc2869a2", null ],
+      [ "m_co2", "namespaceModels_1_1Stoichiometry.html#a0cb2e0dfb9e519791e134981b3cfd684", null ],
       [ "m_o2", "namespaceModels_1_1Stoichiometry.html#a861038ff8300cd9b852526033974e271", null ]
     ] ],
     [ "Acetate", "structModels_1_1Acetate.html", "structModels_1_1Acetate" ],

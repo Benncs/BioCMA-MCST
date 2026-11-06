@@ -15,6 +15,7 @@ var classMC_1_1ParticlesContainer =
     [ "get_allocation_factor", "classMC_1_1ParticlesContainer.html#a1ccf09c885c6524e0132d81008e9a61f", null ],
     [ "get_buffer_index", "classMC_1_1ParticlesContainer.html#a7c693e0db50b6d4dd5186bc391a0f0c3", null ],
     [ "get_inactive", "classMC_1_1ParticlesContainer.html#a6b2d263bc0d301abbeae8519797c1a4c", null ],
+    [ "get_runtime", "classMC_1_1ParticlesContainer.html#a22be7b00a6064ed4dd7ca4d0ff31fc3a", null ],
     [ "get_weight", "classMC_1_1ParticlesContainer.html#a81e8092b0be1c6e31cf6637a492a8e40", null ],
     [ "handle_division", "classMC_1_1ParticlesContainer.html#a3ad0f53899edc9c8343ca1122d722c29", null ],
     [ "load", "classMC_1_1ParticlesContainer.html#adae9af7cbb629530927d504f5fe75c90", null ],

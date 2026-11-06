@@ -149,6 +149,7 @@ var annotated_dup =
       [ "IterationPayload", "classWrapMPI_1_1IterationPayload.html", "classWrapMPI_1_1IterationPayload" ]
     ] ],
     [ "ApiResult", "structApiResult.html", "structApiResult" ],
+    [ "Args", "structArgs.html", "structArgs" ],
     [ "BoundLoadBalancer", "classBoundLoadBalancer.html", "classBoundLoadBalancer" ],
     [ "Canary", "classCanary.html", "classCanary" ],
     [ "CliResults", "structCliResults.html", "structCliResults" ],
