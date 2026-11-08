@@ -171,6 +171,7 @@ var annotated_dup =
     [ "ModelWONames", "structModelWONames.html", "structModelWONames" ],
     [ "OpaquePointer", "structOpaquePointer.html", "structOpaquePointer" ],
     [ "Result", "structResult.html", "structResult" ],
+    [ "SamplingInvariants", "structSamplingInvariants.html", "structSamplingInvariants" ],
     [ "SerdeModel", "structSerdeModel.html", "structSerdeModel" ],
     [ "Success", "structSuccess.html", null ],
     [ "tag1", "structtag1.html", null ],

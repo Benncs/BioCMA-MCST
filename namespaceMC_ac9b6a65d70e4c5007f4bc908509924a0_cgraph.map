@@ -1,0 +1,10 @@
+<map id="MC::post_init_weight" name="MC::post_init_weight">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,44,149,69"/>
+<area shape="rect" id="Node000002" href="$namespaceMC.html#a41b98543acc724dbe6ebe87901aaa7c7" title=" " alt="" coords="197,44,311,69"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,54,181,54,181,59,149,59"/>
+<area shape="poly" id="edge4_Node000002_Node000002" title=" " alt="" coords="224,45,218,36,221,26,234,20,254,18,276,20,287,27,284,32,274,25,254,23,235,25,225,30,223,35,229,43"/>
+<area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a81e8092b0be1c6e31cf6637a492a8e40" title="Return the particle weight." alt="" coords="359,5,517,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="311,44,343,38,344,44,312,49"/>
+<area shape="rect" id="Node000004" href="$classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f" title="Gets the number of particles in the container." alt="" coords="359,68,517,107"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="312,64,344,69,343,74,311,69"/>
+</map>

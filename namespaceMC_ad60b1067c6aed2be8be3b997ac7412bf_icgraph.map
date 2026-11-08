@@ -1,0 +1,9 @@
+<map id="MC::mean_mass" name="MC::mean_mass">
+<area shape="rect" id="Node000001" title=" " alt="" coords="372,44,493,69"/>
+<area shape="rect" id="Node000002" href="$structSamplingInvariants.html#a86d247f3d7c14afc99e1aef93809b740" title=" " alt="" coords="185,37,324,76"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="356,59,324,59,324,54,356,54"/>
+<area shape="rect" id="Node000003" href="$structSamplingInvariants.html#a853262b92b6faf8de1fc119b72cde138" title=" " alt="" coords="5,5,137,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="169,44,136,39,137,33,170,39"/>
+<area shape="rect" id="Node000004" href="$structSamplingInvariants.html#ab3131c092d6f7a13b7882be79957753c" title=" " alt="" coords="5,68,137,107"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="170,73,137,79,136,74,169,68"/>
+</map>

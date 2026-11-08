@@ -1,5 +1,15 @@
 var NAVTREEINDEX13 =
 {
+"structSimulation_1_1ScalarInitializer.html#a3bd553e21cd6d09e022ae2131dfca97f":[2,0,18,11,3],
+"structSimulation_1_1ScalarInitializer.html#a3bd553e21cd6d09e022ae2131dfca97f":[4,0,12,10,3],
+"structSimulation_1_1ScalarInitializer.html#a470809f169062200e03a9c0f12a8a271":[2,0,18,11,2],
+"structSimulation_1_1ScalarInitializer.html#a470809f169062200e03a9c0f12a8a271":[4,0,12,10,2],
+"structSimulation_1_1ScalarInitializer.html#a60c8d4a25d67476c894ed11140806eba":[2,0,18,11,4],
+"structSimulation_1_1ScalarInitializer.html#a60c8d4a25d67476c894ed11140806eba":[4,0,12,10,4],
+"structSimulation_1_1ScalarInitializer.html#a6cacfbb0393acb77fd19d3a7cf49d8a4":[2,0,18,11,5],
+"structSimulation_1_1ScalarInitializer.html#a6cacfbb0393acb77fd19d3a7cf49d8a4":[4,0,12,10,5],
+"structSimulation_1_1ScalarInitializer.html#abce976f142833a36acc55ee047326a5b":[2,0,18,11,6],
+"structSimulation_1_1ScalarInitializer.html#abce976f142833a36acc55ee047326a5b":[4,0,12,10,6],
 "structSimulation_1_1ScalarInitializer.html#adef95b0083bbeae2173a67da7f822197":[2,0,18,11,1],
 "structSimulation_1_1ScalarInitializer.html#adef95b0083bbeae2173a67da7f822197":[4,0,12,10,1],
 "structSimulation_1_1ScalarInitializer.html#ae638129f64f4a788174b8129fed950cf":[2,0,18,11,8],
@@ -26,7 +36,7 @@ var NAVTREEINDEX13 =
 "structSimulation_1_1Sparam.html#a23133fb92f18b945778771dcc74cf156":[4,0,12,15,1],
 "structSimulation_1_1Sparam.html#ab68f340483b0c2480139a29a59871adf":[2,0,18,16,0],
 "structSimulation_1_1Sparam.html#ab68f340483b0c2480139a29a59871adf":[4,0,12,15,0],
-"structSuccess.html":[4,0,39],
+"structSuccess.html":[4,0,40],
 "structUnsafeUDF_1_1Loader.html":[2,0,20,0],
 "structUnsafeUDF_1_1Loader.html":[4,0,13,0],
 "structUnsafeUDF_1_1Loader.html#a0176f3c00aaa28c9a243980195727e00":[2,0,20,0,8],
@@ -67,9 +77,9 @@ var NAVTREEINDEX13 =
 "structfoo.html#ab2f0bc3d9aa5a6e7489499878898c321":[4,0,28,2],
 "structhas__uniform__weight.html":[4,0,29],
 "structhas__uniform__weight_3_01T_00_01std_1_1void__t_3_01typename_01T_1_1uniform__weight_01_4_01_4.html":[4,0,30],
-"structtag1.html":[4,0,40],
-"structtag2.html":[4,0,41],
-"structtag3.html":[4,0,42],
-"structtag4__tile.html":[4,0,43],
-"structtag__mlp.html":[4,0,44]
+"structtag1.html":[4,0,41],
+"structtag2.html":[4,0,42],
+"structtag3.html":[4,0,43],
+"structtag4__tile.html":[4,0,44],
+"structtag__mlp.html":[4,0,45]
 };

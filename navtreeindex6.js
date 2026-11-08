@@ -1,5 +1,8 @@
 var NAVTREEINDEX6 =
 {
+"namespaceModels_1_1Stoichiometry.html#aac492f2032ea6f4fc5d3b304bc2869a2":[2,0,12,2,9],
+"namespaceModels_1_1Stoichiometry.html#abb0f954ddbd1500205e680b0023f9a04":[2,0,12,2,7],
+"namespaceModels_1_1Stoichiometry.html#ad2f96216eebfc8473429b2d74b4d5f8e":[2,0,12,2,2],
 "namespaceModels_1_1Stoichiometry.html#ad4ddb18054ea72684ec9dda0ff893c8d":[2,0,12,2,1],
 "namespaceModels_1_1Stoichiometry.html#adedb6f6173bb2fa715d76d4500aa5e68":[2,0,12,2,4],
 "namespaceModels_1_1Stoichiometry.html#af643e89621999496b1dfb2f0032fa60c":[2,0,12,2,6],
@@ -246,8 +249,5 @@ var NAVTREEINDEX6 =
 "structApi_1_1SimulationInstance.html#ab938dea3b413538bfdaa40daa5d122a2":[2,0,0,0,11],
 "structApi_1_1SimulationInstance.html#ab938dea3b413538bfdaa40daa5d122a2":[4,0,0,0,11],
 "structApi_1_1SimulationInstance.html#abdcc3b78881f75bd8fa06815ea08bd08":[2,0,0,0,14],
-"structApi_1_1SimulationInstance.html#abdcc3b78881f75bd8fa06815ea08bd08":[4,0,0,0,14],
-"structApi_1_1SimulationInstance.html#ac8b52d1e9fa704e89d252d884aa6cf3d":[2,0,0,0,17],
-"structApi_1_1SimulationInstance.html#ac8b52d1e9fa704e89d252d884aa6cf3d":[4,0,0,0,17],
-"structApi_1_1SimulationInstance.html#ad2abfa76ac4128d44b7c0c895f78b77b":[2,0,0,0,8]
+"structApi_1_1SimulationInstance.html#abdcc3b78881f75bd8fa06815ea08bd08":[4,0,0,0,14]
 };

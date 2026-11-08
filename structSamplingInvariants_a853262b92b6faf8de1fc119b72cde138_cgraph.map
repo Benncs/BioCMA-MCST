@@ -1,0 +1,21 @@
+<map id="SamplingInvariants::operator==" name="SamplingInvariants::operator==">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,84,137,122"/>
+<area shape="rect" id="Node000002" href="$structSamplingInvariants.html#a86d247f3d7c14afc99e1aef93809b740" title=" " alt="" coords="185,84,324,122"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,100,169,100,169,106,137,106"/>
+<area shape="rect" id="Node000003" href="$namespaceMC.html#a6a8bd760b348db9e378ae10b310c6fe1" title=" " alt="" coords="543,141,654,166"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="325,110,529,141,528,146,324,116"/>
+<area shape="rect" id="Node000006" href="$namespaceMC.html#ad60b1067c6aed2be8be3b997ac7412bf" title=" " alt="" coords="372,31,493,55"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="313,80,378,58,380,63,315,85"/>
+<area shape="rect" id="Node000007" href="$namespaceMC.html#a41b98543acc724dbe6ebe87901aaa7c7" title=" " alt="" coords="541,92,656,117"/>
+<area shape="poly" id="edge12_Node000002_Node000007" title=" " alt="" coords="324,101,526,101,526,107,324,106"/>
+<area shape="rect" id="Node000004" href="$classMC_1_1ParticlesContainer.html#a81e8092b0be1c6e31cf6637a492a8e40" title="Return the particle weight." alt="" coords="704,48,862,86"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="629,138,654,126,702,95,712,91,714,95,705,100,657,131,632,143"/>
+<area shape="rect" id="Node000005" href="$classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f" title="Gets the number of particles in the container." alt="" coords="704,110,862,149"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="653,144,688,139,689,145,654,149"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="469,27,541,10,599,3,656,10,697,22,734,38,732,43,695,27,655,15,599,8,542,15,470,33"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="494,34,573,35,616,41,657,54,672,63,682,74,692,85,705,95,714,101,712,105,702,100,688,88,678,77,669,67,655,59,614,47,572,40,494,39"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="469,53,550,84,548,89,467,58"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="656,90,688,83,689,89,657,95"/>
+<area shape="poly" id="edge10_Node000007_Node000005" title=" " alt="" coords="657,110,688,114,687,119,656,115"/>
+<area shape="poly" id="edge11_Node000007_Node000007" title=" " alt="" coords="571,93,565,83,568,74,580,67,599,65,619,68,630,75,627,79,617,73,598,71,581,73,572,77,570,83,575,90"/>
+</map>

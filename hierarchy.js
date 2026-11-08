@@ -108,6 +108,7 @@ var hierarchy =
     [ "IO::RedirectHandle", "classIO_1_1RedirectHandle.html", null ],
     [ "Kokkos::reduction_identity< Simulation::KernelInline::MoveLeaveTally >", "structKokkos_1_1reduction__identity_3_01Simulation_1_1KernelInline_1_1MoveLeaveTally_01_4.html", null ],
     [ "MC::RuntimeParameters", "structMC_1_1RuntimeParameters.html", null ],
+    [ "SamplingInvariants", "structSamplingInvariants.html", null ],
     [ "Simulation::ScalarInitializer", "structSimulation_1_1ScalarInitializer.html", null ],
     [ "Simulation::ScalarSimulation", "classSimulation_1_1ScalarSimulation.html", null ],
     [ "MC::Distributions::ScaledTruncatedNormal< F >", "structMC_1_1Distributions_1_1ScaledTruncatedNormal.html", null ],
