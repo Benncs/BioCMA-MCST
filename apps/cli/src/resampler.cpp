@@ -68,6 +68,7 @@ struct SamplingInvariants
   double total_mass;
   double mean_mass;
   double mean_age;
+  std::vector<double> mean;
 
   template <ModelType M>
   explicit SamplingInvariants(const MC::ParticlesContainer<M>& container)
@@ -75,6 +76,7 @@ struct SamplingInvariants
     total_mass = MC::total_mass(container);
     mean_mass = MC::mean_mass(container);
     mean_age = MC::mean_age(container);
+    mean = MC::mean_properties(container);
   }
 
   static bool
@@ -85,6 +87,12 @@ struct SamplingInvariants
     std::cout << "total mass: " << before.total_mass << std::endl;
     std::cout << "mean mass: " << before.mean_mass << std::endl;
     std::cout << "mean age: " << before.mean_age << std::endl;
+
+    for (auto&& i : before.mean)
+    {
+      std::cout << "P :" << i << std::endl;
+    }
+
     std::cout << "After " << std::endl;
 
     double var
@@ -97,6 +105,11 @@ struct SamplingInvariants
     var = (before.mean_age - after.mean_age) / (before.mean_age) * 100.;
     std::cout << "mean age: " << after.mean_age << "(" << var << "%)"
               << std::endl;
+
+    for (auto&& i : after.mean)
+    {
+      std::cout << "P :" << i << std::endl;
+    }
 
     // FIXME: almost_equal is not enough, need to check rel and abs error
     // This way, rel can be fixed once for all invariants
@@ -138,8 +151,9 @@ resampling(MC::ParticlesContainer<Model>& container, Args args)
   MC::ParticlesContainer<Model> resampled_container(container.get_runtime(),
                                                     args.n_target);
 
-  std::cout << "N particle " << container.n_particles() << std::endl;
-  std::cout << "N particle " << resampled_container.n_particles() << std::endl;
+  std::cout << "N particle before " << container.n_particles() << std::endl;
+  std::cout << "N particle after " << resampled_container.n_particles()
+            << std::endl;
   auto n0 = container.n_particles();
 
   if constexpr (ConstWeightModelType<Model>)
