@@ -1,38 +1,41 @@
 <map id="MC::ParticlesContainer::n_particles" name="MC::ParticlesContainer::n_particles">
-<area shape="rect" id="Node000001" title="Gets the number of particles in the container." alt="" coords="795,137,953,176"/>
-<area shape="rect" id="Node000002" href="$namespacePostProcessing.html#a80f3f8d7143933b6b2d9e58ff0de40d8" title=" " alt="" coords="596,5,736,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="835,129,745,66,710,47,713,42,748,61,838,125"/>
-<area shape="rect" id="Node000003" href="$namespacePostProcessing.html#a5c1775fa34193199d9c989e5740e2f84" title=" " alt="" coords="396,29,535,68"/>
-<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="812,134,746,110,635,82,535,62,536,57,637,77,747,105,814,129"/>
-<area shape="rect" id="Node000004" href="$namespaceMC.html#a6a8bd760b348db9e378ae10b310c6fe1" title=" " alt="" coords="611,119,721,144"/>
-<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="779,148,721,141,722,135,780,143"/>
-<area shape="rect" id="Node000008" href="$namespaceMC.html#ad60b1067c6aed2be8be3b997ac7412bf" title=" " alt="" coords="405,168,526,193"/>
-<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="779,165,527,180,526,174,779,160"/>
-<area shape="rect" id="Node000009" href="$namespaceMC.html#a41b98543acc724dbe6ebe87901aaa7c7" title=" " alt="" coords="609,242,723,266"/>
-<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="818,185,695,244,693,239,816,181"/>
-<area shape="rect" id="Node000015" href="$structSimulation_1_1KernelInline_1_1CycleFunctors.html#afa64e46d0b29f84edbd5bef4f19069ed" title=" " alt="" coords="585,291,747,329"/>
-<area shape="poly" id="edge21_Node000001_Node000015" title=" " alt="" coords="848,190,804,235,748,280,726,292,723,288,745,276,800,231,845,186"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="582,37,536,43,535,38,581,32"/>
-<area shape="rect" id="Node000005" href="$structSamplingInvariants.html#a86d247f3d7c14afc99e1aef93809b740" title=" " alt="" coords="203,161,342,200"/>
-<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="596,138,500,147,394,159,343,168,343,163,394,154,499,141,595,133"/>
-<area shape="rect" id="Node000006" href="$structSamplingInvariants.html#a853262b92b6faf8de1fc119b72cde138" title=" " alt="" coords="13,131,144,169"/>
-<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="188,170,144,163,145,158,188,165"/>
-<area shape="rect" id="Node000007" href="$structSamplingInvariants.html#ab3131c092d6f7a13b7882be79957753c" title=" " alt="" coords="13,193,144,232"/>
-<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="188,197,145,204,144,199,188,192"/>
-<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="390,183,343,183,343,178,390,178"/>
-<area shape="poly" id="edge19_Node000009_Node000005" title=" " alt="" coords="593,244,394,207,342,197,343,192,394,202,594,239"/>
-<area shape="poly" id="edge14_Node000009_Node000008" title=" " alt="" coords="615,238,501,196,502,191,617,233"/>
-<area shape="poly" id="edge20_Node000009_Node000009" title=" " alt="" coords="701,229,689,223,666,220,645,222,633,227,631,232,637,240,633,243,626,233,630,223,643,217,666,215,691,218,703,225"/>
-<area shape="rect" id="Node000010" href="$namespaceMC.html#a3c593ea5f6af406116befde0c9595b7c" title=" " alt="" coords="416,267,515,292"/>
-<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="594,266,516,276,515,271,593,260"/>
-<area shape="rect" id="Node000011" href="$namespaceMC.html#ac14d08555263d7a9d7f22696c7604211" title="Helper function to initialize a MonteCarloUnit." alt="" coords="239,288,306,313"/>
-<area shape="poly" id="edge13_Node000009_Node000011" title=" " alt="" coords="603,274,586,280,563,294,538,306,474,316,411,318,307,309,307,304,411,312,474,311,537,301,561,290,584,276,601,269"/>
-<area shape="rect" id="Node000012" href="$namespaceMC.html#ac9b6a65d70e4c5007f4bc908509924a0" title=" " alt="" coords="394,366,537,390"/>
-<area shape="poly" id="edge15_Node000009_Node000012" title=" " alt="" coords="596,274,587,280,571,296,563,313,555,331,539,349,508,367,506,363,536,345,551,328,558,311,567,293,584,276,593,270"/>
-<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="401,289,307,300,307,294,401,284"/>
-<area shape="rect" id="Node000013" href="$classCore_1_1GlobalInitialiser.html#a9b38d15538796d9cc115211890a6c081" title="Initializes a Monte Carlo unit." alt="" coords="200,359,346,397"/>
-<area shape="poly" id="edge16_Node000012_Node000013" title=" " alt="" coords="378,381,346,381,346,375,378,375"/>
-<area shape="rect" id="Node000014" href="$classCore_1_1GlobalInitialiser.html#a00d0e7a7d549bf06886dfc3ba9de3e3d" title="Initializes a simulation unit." alt="" coords="5,359,152,397"/>
-<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="184,381,152,381,152,375,184,375"/>
-<area shape="poly" id="edge18_Node000014_Node000014" title=" " alt="" coords="110,346,99,340,78,337,60,339,49,344,45,350,47,358,42,359,40,349,45,340,58,334,79,332,100,334,113,341"/>
+<area shape="rect" id="Node000001" title="Gets the number of particles in the container." alt="" coords="795,147,953,185"/>
+<area shape="rect" id="Node000002" href="$namespacePostProcessing.html#a80f3f8d7143933b6b2d9e58ff0de40d8" title=" " alt="" coords="596,40,736,79"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="823,141,745,100,708,82,710,77,748,96,825,137"/>
+<area shape="rect" id="Node000003" href="$namespacePostProcessing.html#a5c1775fa34193199d9c989e5740e2f84" title=" " alt="" coords="396,11,535,49"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="852,135,833,107,809,78,779,50,746,30,693,14,638,8,584,10,536,17,535,11,584,5,638,3,694,9,748,25,783,46,813,74,837,104,856,132"/>
+<area shape="rect" id="Node000004" href="$namespaceMC.html#a6a8bd760b348db9e378ae10b310c6fe1" title=" " alt="" coords="410,104,521,129"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="779,150,746,145,626,131,521,123,522,117,626,126,747,139,780,145"/>
+<area shape="rect" id="Node000008" href="$namespaceMC.html#ad60b1067c6aed2be8be3b997ac7412bf" title=" " alt="" coords="405,203,526,228"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="780,187,747,193,630,206,527,214,526,209,629,201,746,187,779,182"/>
+<area shape="rect" id="Node000009" href="$namespaceMC.html#adf01d74603ae2e70b78432db5ecba09c" title=" " alt="" coords="592,154,740,178"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="779,169,740,169,740,163,779,163"/>
+<area shape="rect" id="Node000010" href="$namespaceMC.html#a41b98543acc724dbe6ebe87901aaa7c7" title=" " alt="" coords="609,276,723,301"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="828,196,690,278,687,274,825,191"/>
+<area shape="rect" id="Node000016" href="$structSimulation_1_1KernelInline_1_1CycleFunctors.html#afa64e46d0b29f84edbd5bef4f19069ed" title=" " alt="" coords="585,325,747,364"/>
+<area shape="poly" id="edge23_Node000001_Node000016" title=" " alt="" coords="854,200,809,258,780,288,748,315,728,327,725,322,745,311,777,284,805,254,850,197"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="581,50,535,43,536,38,582,44"/>
+<area shape="rect" id="Node000005" href="$structSamplingInvariants.html#a86d247f3d7c14afc99e1aef93809b740" title=" " alt="" coords="203,172,342,211"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="419,137,326,174,324,169,417,133"/>
+<area shape="rect" id="Node000006" href="$structSamplingInvariants.html#a853262b92b6faf8de1fc119b72cde138" title=" " alt="" coords="13,204,144,243"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="188,208,145,215,144,210,188,203"/>
+<area shape="rect" id="Node000007" href="$structSamplingInvariants.html#ab3131c092d6f7a13b7882be79957753c" title=" " alt="" coords="13,141,144,180"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="188,181,144,174,145,168,188,175"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="389,209,343,203,343,197,390,203"/>
+<area shape="poly" id="edge11_Node000009_Node000005" title=" " alt="" coords="577,174,343,190,343,184,576,169"/>
+<area shape="poly" id="edge21_Node000010_Node000005" title=" " alt="" coords="593,282,498,266,393,242,317,214,319,209,395,237,499,261,594,277"/>
+<area shape="poly" id="edge16_Node000010_Node000008" title=" " alt="" coords="615,273,501,231,502,226,617,268"/>
+<area shape="poly" id="edge22_Node000010_Node000010" title=" " alt="" coords="701,264,689,258,666,255,645,257,633,262,631,267,637,274,633,278,626,268,630,258,643,252,666,250,691,252,703,259"/>
+<area shape="rect" id="Node000011" href="$namespaceMC.html#a3c593ea5f6af406116befde0c9595b7c" title=" " alt="" coords="416,302,515,326"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="594,300,516,310,515,305,593,295"/>
+<area shape="rect" id="Node000012" href="$namespaceMC.html#ac14d08555263d7a9d7f22696c7604211" title="Helper function to initialize a MonteCarloUnit." alt="" coords="239,323,306,348"/>
+<area shape="poly" id="edge15_Node000010_Node000012" title=" " alt="" coords="603,309,586,315,563,329,538,341,474,351,411,352,307,344,307,338,411,347,474,345,537,335,561,324,584,310,601,304"/>
+<area shape="rect" id="Node000013" href="$namespaceMC.html#ac9b6a65d70e4c5007f4bc908509924a0" title=" " alt="" coords="394,400,537,425"/>
+<area shape="poly" id="edge17_Node000010_Node000013" title=" " alt="" coords="596,309,587,315,571,331,563,348,555,366,539,384,508,402,506,397,536,380,551,363,558,346,567,328,584,311,593,305"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="401,324,307,334,307,329,401,318"/>
+<area shape="rect" id="Node000014" href="$classCore_1_1GlobalInitialiser.html#a9b38d15538796d9cc115211890a6c081" title="Initializes a Monte Carlo unit." alt="" coords="200,393,346,432"/>
+<area shape="poly" id="edge18_Node000013_Node000014" title=" " alt="" coords="378,415,346,415,346,410,378,410"/>
+<area shape="rect" id="Node000015" href="$classCore_1_1GlobalInitialiser.html#a00d0e7a7d549bf06886dfc3ba9de3e3d" title="Initializes a simulation unit." alt="" coords="5,393,152,432"/>
+<area shape="poly" id="edge19_Node000014_Node000015" title=" " alt="" coords="184,415,152,415,152,410,184,410"/>
+<area shape="poly" id="edge20_Node000015_Node000015" title=" " alt="" coords="110,380,99,374,78,372,60,374,49,379,45,385,47,392,42,394,40,384,45,375,58,369,79,367,100,369,113,376"/>
 </map>

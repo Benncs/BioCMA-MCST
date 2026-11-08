@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"structModels_1_1SimpleModel.html#a7dd976c2e0986c61562d35e04d614cd6a21fd14f94b25a41271352c09d16a3a8e":[2,0,12,7,6,3],
 "structModels_1_1SimpleModel.html#a7dd976c2e0986c61562d35e04d614cd6a21fd14f94b25a41271352c09d16a3a8e":[4,0,9,4,6,3],
 "structModels_1_1SimpleModel.html#a7dd976c2e0986c61562d35e04d614cd6a2fa47f7c65fec19cc163b195725e3844":[2,0,12,7,6,0],
 "structModels_1_1SimpleModel.html#a7dd976c2e0986c61562d35e04d614cd6a2fa47f7c65fec19cc163b195725e3844":[4,0,9,4,6,0],
@@ -180,11 +181,12 @@ var NAVTREEINDEX11 =
 "structResult.html#ace8dba345682b9d6f32b18aedb9c4e99":[4,0,37,5],
 "structResult.html#af83cd1ef963ba1bd0a72133067675a11":[4,0,37,0],
 "structSamplingInvariants.html":[4,0,38],
-"structSamplingInvariants.html#a31e472610ba46eb1cab322e2e1bb85b5":[4,0,38,4],
-"structSamplingInvariants.html#a5c82fe6cfe45b18cdba4fc72a0b22448":[4,0,38,3],
+"structSamplingInvariants.html#a31e472610ba46eb1cab322e2e1bb85b5":[4,0,38,5],
+"structSamplingInvariants.html#a54f03e0c101fc6fbed6a5d7f3f40c09e":[4,0,38,3],
+"structSamplingInvariants.html#a5c82fe6cfe45b18cdba4fc72a0b22448":[4,0,38,4],
 "structSamplingInvariants.html#a853262b92b6faf8de1fc119b72cde138":[4,0,38,1],
 "structSamplingInvariants.html#a86d247f3d7c14afc99e1aef93809b740":[4,0,38,0],
-"structSamplingInvariants.html#a94ba09c2952bb0787f6e21bfdf0c4322":[4,0,38,5],
+"structSamplingInvariants.html#a94ba09c2952bb0787f6e21bfdf0c4322":[4,0,38,6],
 "structSamplingInvariants.html#ab3131c092d6f7a13b7882be79957753c":[4,0,38,2],
 "structSerdeModel.html":[4,0,39],
 "structSerdeModel.html#a476f20d53fd965787e9846c6a0d5137b":[4,0,39,14],
@@ -247,7 +249,5 @@ var NAVTREEINDEX11 =
 "structSimulation_1_1Feed_1_1FeedFactory.html#ad67572164ac3ac30ccfacb0754e2fbab":[2,0,18,0,3,0],
 "structSimulation_1_1Feed_1_1FeedFactory.html#ad67572164ac3ac30ccfacb0754e2fbab":[4,0,12,0,3,0],
 "structSimulation_1_1Feed_1_1FeedFactory.html#ae19fa645ec2f233e4e5d978e8975e1eb":[2,0,18,0,3,3],
-"structSimulation_1_1Feed_1_1FeedFactory.html#ae19fa645ec2f233e4e5d978e8975e1eb":[4,0,12,0,3,3],
-"structSimulation_1_1Feed_1_1FeedValue.html":[2,0,18,0,4],
-"structSimulation_1_1Feed_1_1FeedValue.html":[4,0,12,0,4]
+"structSimulation_1_1Feed_1_1FeedFactory.html#ae19fa645ec2f233e4e5d978e8975e1eb":[4,0,12,0,3,3]
 };

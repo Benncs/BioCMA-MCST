@@ -65,6 +65,7 @@ var namespaceMC =
     [ "master_seed", "namespaceMC.html#aa68fd5fea506331f369d20b49904dafd", null ],
     [ "mean_age", "namespaceMC.html#a6a8bd760b348db9e378ae10b310c6fe1", null ],
     [ "mean_mass", "namespaceMC.html#ad60b1067c6aed2be8be3b997ac7412bf", null ],
+    [ "mean_properties", "namespaceMC.html#adf01d74603ae2e70b78432db5ecba09c", null ],
     [ "next_splitmix64", "namespaceMC.html#af7f8e9154582097b61aaed45e6b53e28", null ],
     [ "post_init_weight", "namespaceMC.html#ac9b6a65d70e4c5007f4bc908509924a0", null ],
     [ "resize_first_touch", "namespaceMC.html#ae7cda00073d6a197d3dbfc25ff32fad8", null ],
