@@ -1,7 +1,9 @@
 <map id="WrapMPI::send" name="WrapMPI::send">
-<area shape="rect" id="Node000001" title="Sends raw data to a destination in an unsafe manner." alt="" coords="258,33,368,58"/>
-<area shape="rect" id="Node000002" href="$namespaceWrapMPI.html#a22a26e394ab9485f5b50a6be7d277940" title="Sends a vector of data to a destination." alt="" coords="45,5,170,30"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="242,39,170,29,170,23,243,33"/>
-<area shape="rect" id="Node000003" href="$classWrapMPI_1_1HostIterationPayload.html#aeab0cc5f0ddfccc7fc3584a873072882" title=" " alt="" coords="5,54,210,93"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,58,211,62,210,57,242,53"/>
+<area shape="rect" id="Node000001" title="Sends raw data to a destination in an unsafe manner." alt="" coords="258,68,368,93"/>
+<area shape="rect" id="Node000002" href="$classWrapMPI_1_1HostIterationPayload.html#a360c9268019c8ce8573f0abfe974414f" title="Sends this payload to a specified MPI rank." alt="" coords="5,5,210,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="249,66,180,47,182,42,251,61"/>
+<area shape="rect" id="Node000003" href="$namespaceWrapMPI.html#a22a26e394ab9485f5b50a6be7d277940" title="Sends a vector of data to a destination." alt="" coords="45,68,170,93"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,83,170,83,170,78,242,78"/>
+<area shape="rect" id="Node000004" href="$classWrapMPI_1_1HostIterationPayload.html#aeab0cc5f0ddfccc7fc3584a873072882" title=" " alt="" coords="5,117,210,156"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="251,100,182,119,180,114,249,95"/>
 </map>

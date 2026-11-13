@@ -140,7 +140,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a02249d7a05ab6697d5c9dd3f06f681a0 template"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02249d7a05ab6697d5c9dd3f06f681a0">broadcast_span</a> (std::span&lt; T &gt; data, size_t root)</td></tr>
 <tr class="memdesc:a02249d7a05ab6697d5c9dd3f06f681a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Broadcasts data stored in a span to all processes.  <br /></td></tr>
 <tr class="memitem:ab5247505f87f0bc01c8aa3d39a134776" id="r_ab5247505f87f0bc01c8aa3d39a134776"><td class="memTemplParams" colspan="2">template&lt;POD_t... Args&gt; </td></tr>
-<tr class="memitem:ab5247505f87f0bc01c8aa3d39a134776 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5247505f87f0bc01c8aa3d39a134776">host_dispatch</a> (const <a class="el" href="structExecInfo.html">ExecInfo</a> &amp;info, <a class="el" href="#a6f41a685e096490bf483a83cda372118">SIGNALS</a> sign, <a class="el" href="structArgs.html">Args</a> &amp;&amp;... args)</td></tr>
+<tr class="memitem:ab5247505f87f0bc01c8aa3d39a134776 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5247505f87f0bc01c8aa3d39a134776">host_dispatch</a> (const <a class="el" href="structExecInfo.html">ExecInfo</a> &amp;info, <a class="el" href="#a6f41a685e096490bf483a83cda372118">SIGNALS</a> sign, Args &amp;&amp;... args)</td></tr>
 <tr class="memdesc:ab5247505f87f0bc01c8aa3d39a134776"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatches a task to the host with signal and arguments.  <br /></td></tr>
 <tr class="memitem:af35b85e638478a00672758818ade9e38" id="r_af35b85e638478a00672758818ade9e38"><td class="memTemplParams" colspan="2">template&lt;POD_t T&gt; </td></tr>
 <tr class="memitem:af35b85e638478a00672758818ade9e38 template"><td class="memItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af35b85e638478a00672758818ade9e38">_gather_unsafe</a> (T *src_data, size_t size, size_t n_rank, size_t root=0)</td></tr>
@@ -899,7 +899,7 @@ template&lt;POD_t... Args&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structArgs.html">Args</a> &amp;&amp;...</td>          <td class="paramname"><span class="paramname"><em>args</em></span>&#160;)</td>
+          <td class="paramtype">Args &amp;&amp;...</td>          <td class="paramname"><span class="paramname"><em>args</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -908,7 +908,7 @@ template&lt;POD_t... Args&gt; </div>
 <p>This function sends execution information and arguments to the host for processing, triggered by a specific signal.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname"><a class="el" href="structArgs.html">Args</a></td><td>Variadic template types for the arguments. </td></tr>
+    <tr><td class="paramname">Args</td><td>Variadic template types for the arguments. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1216,7 +1216,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_a86bfb7bf3cbf18f5f0371c497167cfad_icgraph.svg" width="374" height="99"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceWrapMPI_a86bfb7bf3cbf18f5f0371c497167cfad_icgraph.svg" width="374" height="162"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

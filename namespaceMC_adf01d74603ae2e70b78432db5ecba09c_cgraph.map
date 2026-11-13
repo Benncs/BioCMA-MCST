@@ -1,7 +1,0 @@
-<map id="MC::mean_properties" name="MC::mean_properties">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,44,153,69"/>
-<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#a81e8092b0be1c6e31cf6637a492a8e40" title="Return the particle weight." alt="" coords="201,5,359,44"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,42,185,37,185,42,153,48"/>
-<area shape="rect" id="Node000003" href="$classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f" title="Gets the number of particles in the container." alt="" coords="201,68,359,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="153,65,185,70,185,76,153,71"/>
-</map>

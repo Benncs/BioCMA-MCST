@@ -17,8 +17,6 @@ var classSimulation_1_1Getter =
     [ "operator=", "classSimulation_1_1Getter.html#a82f113bfbad96a242116af95d305672c", null ],
     [ "operator=", "classSimulation_1_1Getter.html#aaa43464497c10db193f48f4f550c4933", null ],
     [ "relative_time", "classSimulation_1_1Getter.html#a8dd00f800b1b4fd46e2361dd6991422c", null ],
-    [ "table", "classSimulation_1_1Getter.html#a628ce024e2f1987c235ff5dc2afbd065", null ],
-    [ "table_ownable", "classSimulation_1_1Getter.html#a27f1ba02d5c069dc99073aee7b941a90", null ],
     [ "times", "classSimulation_1_1Getter.html#acc13a2792624a2c0013317667a4a75fc", null ],
     [ "two_phase_flow", "classSimulation_1_1Getter.html#a13654b5d78fc3844a5a984902ace6b4d", null ],
     [ "a_", "classSimulation_1_1Getter.html#acc920c838a287466db069b81bc1d8e83", null ]
