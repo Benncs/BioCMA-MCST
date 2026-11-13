@@ -109,6 +109,8 @@ namespace Simulation::Feed
                                    = std::nullopt,
                                    bool set_output = true);
 
+    static FeedDescriptor sink(double flow, std::size_t _ouput_position);
+
     static FeedDescriptor linear(double flow,
                                  double df,
                                  double concentration,
@@ -117,6 +119,14 @@ namespace Simulation::Feed
                                  std::optional<std::size_t> _ouput_position
                                  = std::nullopt,
                                  bool set_output = true);
+
+    static std::vector<FeedDescriptor> gas_feed(double concentration,
+                                                std::size_t species_index,
+                                                std::span<std::size_t> inlet_i,
+                                                std::span<double> inlet_f,
+                                                std::span<std::size_t> outlet_i,
+                                                std::span<double> outlet_f,
+                                                double tol = 1e-10);
   };
 
   class SimulationFeed

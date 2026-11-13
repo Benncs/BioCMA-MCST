@@ -17,6 +17,7 @@
 #include <progress_bar.hpp>
 #include <signal_handling.hpp>
 #include <simulation/simulation.hpp>
+#include <stdexcept>
 #include <string>
 #include <sync.hpp>
 #include <tuple>
@@ -236,15 +237,20 @@ namespace
 
     INIT_PAYLOAD
 
+#ifndef NO_MPI
+    MPI_Request req{};
+#endif
+
+    // calculate mtr here is ok because we do have concentration
+    //  and this is needed because pre_post
+    UPDATE_HYDRO_STEP(getter.absolute_time(), d_t);
+    simulation.calculate_mtr();
     if (do_export)
     {
       exporter_handler.pre_post_export(getter, d_transionner);
     }
     simulation.update_feed(d_t);
 
-#ifndef NO_MPI
-    MPI_Request req{};
-#endif
     auto loop_functor = [&](auto&& local_container)
     {
       Core::SignalHandler sig;
@@ -252,7 +258,6 @@ namespace
       auto functors = simulation.init_functors<ComputeSpace>(
           local_container, exec.kernel_options);
 
-      UPDATE_HYDRO_STEP(getter.absolute_time(), d_t);
       auto current_time = getter.absolute_time();
       for (size_t __loop_counter = 0; __loop_counter < n_iter_simulation;
            ++__loop_counter)
@@ -287,7 +292,14 @@ namespace
         }
 #ifndef NO_MPI
         sync_prepare_next(exec, simulation, &req);
+#else
+        // throw std::runtime_error(
+        //     "Runnning withouth MPI impl, following needs to clear contribs "
+        //     "which is not implemented for non MPI build");
+        simulation.clearContribution();
+
 #endif
+
         simulation.cycleProcess(local_container, d_t, functors);
 
         if (Core::SignalHandler::is_usr1_raised()) [[unlikely]]

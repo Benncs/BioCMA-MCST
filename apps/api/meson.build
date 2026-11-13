@@ -18,7 +18,8 @@ lib_api_shared = static_library(
   dependencies: [core_shared_dependency],
   # cpp_args: ['-DNO_MPI'],
   install_rpath: project_name,
-  link_args:exe_link_args
+  link_args:exe_link_args,
+  pic:true
 )
 
 lib_api_distributed = static_library(
@@ -28,7 +29,8 @@ lib_api_distributed = static_library(
   dependencies: [core_distributed_dependency_static, mpi_wrap_dependency],
   # cpp_args: ['-DNO_MPI'],
   install_rpath: project_name,
-  link_args:exe_link_args
+  link_args:exe_link_args,
+  pic:true
 )
 
 lib_api_shared_dep = declare_dependency(
@@ -61,6 +63,7 @@ if build_c_api
     include_directories: includes,
     dependencies: [lib_api_distributed_dep],
     install_rpath: project_name,
+    pic:true
   )
 
   lib_api_c_shared = library(

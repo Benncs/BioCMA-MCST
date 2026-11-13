@@ -10,3 +10,5 @@ EIGEN_DIAG_POP
 #include <biocma_cst_config.hpp>
 #include <common/common.hpp>
 #include <mc/unit.hpp>
+#include <simulation/feed_descriptor.hpp>
+#include <simulation/mass_transfer.hpp>

@@ -35,8 +35,8 @@ core_shared = static_library(
     include_directories: [private_core_includes, public_core_includes],
     dependencies: [dep_core],
     cpp_args: [no_mpi_flag],
-    cpp_pch: ['pch/pch.h']
-    # pic: true,,,
+    cpp_pch: ['pch/pch.h'],
+    pic: true,
 )
 
 core_distributed = static_library(
@@ -44,8 +44,8 @@ core_distributed = static_library(
     core_source,
     include_directories: [private_core_includes, public_core_includes],
     dependencies: [dep_core_mpi],
-    cpp_pch: 'pch/pch.h'
-    # pic: true,,
+    cpp_pch: 'pch/pch.h',
+    pic: true,
 )
 
 core_shared_dependency = declare_dependency(

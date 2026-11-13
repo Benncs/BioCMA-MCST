@@ -1,5 +1,6 @@
 #ifndef __COMMON_TRAITS_HPP__
 #define __COMMON_TRAITS_HPP__
+#include <cassert>
 #include <cmath>
 #include <type_traits>
 
@@ -36,52 +37,29 @@ concept IntegerType = requires(T n) {
 template <typename T>
 concept NumberType = IntegerType<T> || FloatingPointType<T>;
 
-// General case: by value
-template <NumberType T>
+// One parameter per argument, so mixed types compare in their common type.
+// Numbers are cheap to copy, by value covers lvalue and rvalue alike
+template <NumberType T, NumberType U, NumberType Tol = double>
 inline bool
-almost_equal(T val, T val2, T tolerance = tolerance_equality_float)
+almost_equal(T val, U val2, Tol tolerance = tolerance_equality_float)
 {
-  using CommonT = std::common_type_t<T, T>;
-  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2))
-         < static_cast<CommonT>(tolerance);
-}
-
-// Overload for references
-template <NumberType T>
-inline bool
-almost_equal(const T& val,
-             const T& val2,
-             T tolerance = tolerance_equality_float)
-{
-  using CommonT = std::common_type_t<T, T>;
+  using CommonT = std::common_type_t<T, U>;
   return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2))
          < static_cast<CommonT>(tolerance);
 }
 
 // Overload for pointers
-template <NumberType T>
+template <NumberType T, NumberType U, NumberType Tol = double>
 inline bool
 almost_equal(const T* val,
-             const T* val2,
-             T tolerance = tolerance_equality_float)
+             const U* val2,
+             Tol tolerance = tolerance_equality_float)
 {
-  if (!val || !val2)
+  if (val == nullptr || val2 == nullptr)
   {
     return false; // Null pointer check
   }
-  using CommonT = std::common_type_t<T, T>;
-  return std::abs(static_cast<CommonT>(*val) - static_cast<CommonT>(*val2))
-         < static_cast<CommonT>(tolerance);
-}
-
-// Overload for rvalue references
-template <NumberType T>
-inline bool
-almost_equal(T&& val, T&& val2, T tolerance = tolerance_equality_float)
-{
-  using CommonT = std::common_type_t<T, T>;
-  return std::abs(static_cast<CommonT>(val) - static_cast<CommonT>(val2))
-         < static_cast<CommonT>(tolerance);
+  return almost_equal(*val, *val2, tolerance);
 }
 
 #endif

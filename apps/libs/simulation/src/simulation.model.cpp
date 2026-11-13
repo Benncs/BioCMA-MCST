@@ -129,6 +129,15 @@ namespace Simulation
   }
 
   void
+  SimulationUnit::calculate_mtr()
+  {
+    if (is_two_phase_flow)
+    {
+      m_mt_model.gas_liquid_mass_transfer();
+    }
+  }
+
+  void
   SimulationUnit::ode_step(double d_t) const
   {
 

@@ -34,6 +34,7 @@ namespace Models
     inline constexpr double m_cmol_glucose = 30.0; ///< C6H12O6, 180/6 [g/Cmol]
     inline constexpr double m_cmol_acetate = 30.0; ///< C2H4O2, 60/2   [g/Cmol]
     inline constexpr double m_cmol_biomass = 24.6; ///< CH1.8O0.5N0.2  [g/Cmol]
+    inline constexpr double m_co2 = 44.0;          ///< [g/mol]
 
     /// Degree of reduction per C-mole
     inline constexpr double gamma_glucose = 4.0; ///< 4 + 2 - 2
@@ -47,6 +48,15 @@ namespace Models
     e_surplus(double m_cmol_sub, double gamma_sub, double y_x)
     {
       return gamma_sub / m_cmol_sub - gamma_biomass * y_x / m_cmol_biomass;
+    }
+
+    /// Carbon balance: gCO2 per g of substrate
+    constexpr double
+    y_co2(double m_cmol_sub, double y_x, double y_ac = 0.0)
+    {
+      return m_co2
+             * (1.0 / m_cmol_sub - y_x / m_cmol_biomass
+                - y_ac / m_cmol_acetate);
     }
 
     /// sub + O2 -> X + CO2 (+H2O) : gO2 per g of substrate.
@@ -83,28 +93,9 @@ namespace Models
    *  - @c i_ov  S -> Ac                overflow, no growth
    *  - @c i_fe  S -> X + Ac + CO2      fermentation
    *
-   * @section balance Mass balance
    *
-   * Acetate moves according to the two limitations of the cell and to nothing
-   * else:
-   *
-   *  - @b a_p. The glucose that oxygen could have supported but that the
-   *    growth capacity cannot handle leaves as acetate through @c i_ov. This
-   *    is the classic overflow, active even at oxygen saturation.
-   *  - @b O2. The glucose that the growth capacity could have handled but that
-   *    oxygen cannot support is fermented through @c i_fe, which also releases
-   *    acetate.
-   *  - Acetate is taken back up by @c i_ao alone, on the oxygen *and* on the
-   *    growth capacity left over by @c i_go. Both residuals are zero as soon
-   *    as the cell overflows or ferments, so acetate is never produced and
-   *    consumed in the same step.
-   *
-
-
-
-   *
-   * As in SimpleAcetate the internal currency is the elongation rate
-   * @c a [m/s], converted to a mass flux through the linear density.
+   * As in SimpleAcetate the internal unit is the elongation rate
+   * a [m/s], converted to a mass flux through the linear density.
    */
   struct Acetate
   {
@@ -137,13 +128,14 @@ namespace Models
     static constexpr std::string_view name = "acetate";
     using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
 
-    /// Liquid species: glucose, dioxygen, acetate
-    static constexpr std::size_t n_c = 3;
+    /// Liquid species: glucose, dioxygen, acetate, Co2
+    static constexpr std::size_t n_c = 4;
 
     using SelfContribs = MC::ParticlesContribs<Self::n_c, Self::FloatType>;
 
     /**
-     * @note Plain enumerators, not MODEL_CONSTANT: they are used as runtime
+     *
+     * Use enumeration, not MODEL_CONSTANT: they are used as runtime
      * subscripts of Kokkos::Array in the device kernels and nvcc rejects a
      * `static constexpr` scalar there ("undefined in device code"). An
      * enumerator has no storage, so it is always usable on the device.
@@ -154,6 +146,7 @@ namespace Models
       S = 0,
       O2 = 1,
       Ac = 2,
+      Co2 = 3,
       N_N = n_c
     };
 
@@ -179,8 +172,7 @@ namespace Models
 
     /// Monod affinity constants [kg/m^3]
     MODEL_CONSTANT FloatType k_s = 1e-3;
-    /// Anane et. al 2017 (Biochem. Eng. J). The sharp switch this gives is
-    /// what the uptake cap of @ref positivity makes affordable explicitly.
+    /// Anane et. al 2017 (Biochem. Eng. J).
     MODEL_CONSTANT FloatType k_o = 1e-5;
     MODEL_CONSTANT FloatType k_a = 1e-4;
 
@@ -212,6 +204,22 @@ namespace Models
         Stoichiometry::y_ac_fer(Stoichiometry::m_cmol_glucose,
                                 Stoichiometry::gamma_glucose,
                                 y_x_ov));
+
+    /// gCO2/gS
+    MODEL_CONSTANT FloatType y_co2_go = static_cast<FloatType>(
+        Stoichiometry::y_co2(Stoichiometry::m_cmol_glucose, y_x_go, 0));
+
+    /// gCO2/gAc
+    MODEL_CONSTANT FloatType y_co2_ao = static_cast<FloatType>(
+        Stoichiometry::y_co2(Stoichiometry::m_cmol_acetate, y_x_ao, 0));
+
+    /// gCO2/gS
+    MODEL_CONSTANT FloatType y_co2_fe = static_cast<FloatType>(
+        Stoichiometry::y_co2(Stoichiometry::m_cmol_glucose, y_x_fe, y_ac_fe));
+
+    /// gCO2/gS (no growth: y_x = 0)
+    MODEL_CONSTANT FloatType y_co2_ov = static_cast<FloatType>(
+        Stoichiometry::y_co2(Stoichiometry::m_cmol_glucose, 0, y_ac_ov));
 
     // A reaction cannot need a negative amount of O2 or acetate, nor build
     // more carbon than its substrate carries.
@@ -251,13 +259,14 @@ namespace Models
     /// Lowest admissible growth capacity [m/s]. a_p has to stay *strictly*
     /// positive: it is the only thing that lets a starved lineage grow again,
     /// and log(a_p) is taken at every division.
-    MODEL_CONSTANT FloatType a_p_min = 1e-3F * a_max_m;
+    MODEL_CONSTANT FloatType a_p_min = 1e-5F * a_max_m;
 
-    /// Regression of the newborn capacity toward its own a_max at division.
-    /// a_e <= a_p holds by construction, so a redistribution centred on the
-    /// performance of the mother alone (0) is a one way ratchet: the capacity
-    /// of a lineage can only decrease and collapses to 0 over the generations.
-    MODEL_CONSTANT FloatType a_p_recovery = 0.25F;
+    // /// Regression of the newborn capacity toward its own a_max at division.
+    // /// a_e <= a_p holds by construction, so a redistribution centred on the
+    // /// performance of the mother alone (0) is a one way ratchet: the
+    // capacity
+    // /// of a lineage can only decrease and collapses to 0 over the
+    // generations. MODEL_CONSTANT FloatType a_p_recovery = 0.25F;
 
     MODEL_CONSTANT auto l_max_dist
         = MC::Distributions::TruncatedNormal<FloatType>(
@@ -331,10 +340,10 @@ namespace Models
             a_max_m, a_max_m / 2., 0.5 * a_max_m, a_max_m * 1.5);
 
     static constexpr auto ld = l_dist;
-    static constexpr auto lm = l_dist;
+    //    static constexpr auto lm = l_dist;
     auto gen = random_pool.get_state();
     GET_PROPERTY(particle_var::length) = ld.draw(gen);
-    GET_PROPERTY(particle_var::l_max) = lm.draw(gen);
+    GET_PROPERTY(particle_var::l_max) = l_max_m;
     GET_PROPERTY(particle_var::a_p) = a_max_m / 2.;
     GET_PROPERTY(particle_var::a_max) = a_max_dist.mean();
     random_pool.free_state(gen);
@@ -371,8 +380,10 @@ namespace Models
     // over by i_go.  so
     // acetate is never produced and consumed at the same time.
     const FloatType o2_res = Kokkos::max(phi[O2] - (r[i_go] * y_o2_go), zero);
-    r[i_ao] = Kokkos::min(Kokkos::min(phi[Ac], o2_res / y_o2_ao),
-                          Kokkos::max(nu_p - nu, zero) / y_x_ao);
+
+    const FloatType a_ox_max = Kokkos::min(phi[Ac], o2_res / y_o2_ao);
+    const FloatType growth_aox = Kokkos::max(nu_p - nu, zero) / y_x_ao;
+    r[i_ao] = Kokkos::min(a_ox_max, growth_aox);
     nu += r[i_ao] * y_x_ao;
 
     // i_fe: fermentation, lowest priority.
@@ -425,14 +436,14 @@ namespace Models
     phi[O2] = Kokkos::min(phi_o2_max_p * c_o2 / (c_o2 + k_o), share * c_o2);
     phi[Ac] = Kokkos::min(phi_ac_max_p * c_ac / (c_ac + k_a), share * c_ac);
 
-    // Growth capacity of the individual, inherited at division and kept in
-    // ]0, a_max] by division()
+    // Growth capacity of the individual, in ]0, a_max] by division()
     const FloatType nu_p = GET_PROPERTY(particle_var::a_p) * lin_density;
 
     FloatType nu = 0.F;
     const reaction_rates r = metabolism(phi, nu_p, nu);
 
-    const FloatType inv_lin_density = static_cast<FloatType>(1) / lin_density;
+    constexpr FloatType inv_lin_density
+        = static_cast<FloatType>(1) / lin_density;
     const FloatType a_e = nu * inv_lin_density;
 
     GET_PROPERTY(particle_var::a_e) = a_e;
@@ -451,6 +462,9 @@ namespace Models
     const FloatType phi_a
         = ((r[i_fe] * y_ac_fe) + (r[i_ov] * y_ac_ov)) - r[i_ao];
 
+    const FloatType phi_co2 = r[i_go] * y_co2_go + r[i_fe] * y_co2_fe
+                              + r[i_ov] * y_co2_ov + r[i_ao] * y_co2_ao;
+
     GET_PROPERTY(particle_var::phi_s) = phi_s;
     GET_PROPERTY(particle_var::phi_o2) = phi_o2;
     GET_PROPERTY(particle_var::phi_a) = phi_a;
@@ -458,6 +472,7 @@ namespace Models
     GET_CONTRIBS(S) = phi_s;
     GET_CONTRIBS(O2) = phi_o2;
     GET_CONTRIBS(Ac) = phi_a;
+    GET_CONTRIBS(Co2) = phi_a;
 
     return check_div(GET_PROPERTY(Self::particle_var::length),
                      GET_PROPERTY(Self::particle_var::l_max));
@@ -476,6 +491,13 @@ namespace Models
         buffer_e = buffer_arr;
 
     const FloatType current_l = GET_PROPERTY(particle_var::length);
+    const FloatType current_a_e = GET_PROPERTY(particle_var::a_e);
+    const FloatType currernt_a_max = GET_PROPERTY(particle_var::a_max);
+    // Local copies: nvcc rejects a static constexpr member passed by reference
+    // to Kokkos::min/max/clamp ("undefined in device code")
+    constexpr FloatType ap_min = a_p_min;
+    static constexpr auto local_l = l_max_dist;
+
     const FloatType new_current_length = current_l / 2.F;
     GET_PROPERTY(particle_var::length) = new_current_length;
     constexpr auto binf = INDEX_FROM_ENUM(particle_var::length);
@@ -485,46 +507,46 @@ namespace Models
       COPY_PROPERTY_TO(i, idx2, buffer_e);
     }
 
-    // Local copies: nvcc rejects a static constexpr member passed by reference
-    // to Kokkos::min/max/clamp ("undefined in device code")
-    const FloatType ap_min = a_p_min;
-    const FloatType a_max_i
-        = Kokkos::max(GET_PROPERTY(particle_var::a_max), ap_min);
+    const FloatType a_max_i = 2.F * Kokkos::max(currernt_a_max, ap_min);
 
     // Effective elongation of the mother, floored: a fully starved cell would
     // otherwise give log(0)
-    const FloatType a_e_i
-        = Kokkos::clamp(GET_PROPERTY(particle_var::a_e), ap_min, a_max_i);
-
+    // const FloatType a_e_i = Kokkos::clamp(current_a_e, ap_min, a_max_i);
     // Centre of the redistribution. a_e <= a_p always holds, so centring on
     // a_e alone makes the capacity of a lineage a decreasing sequence that
     // converges to 0; the pull toward a_max keeps a_p away from 0 and lets a
     // starved lineage recover when the environment improves.
-    const FloatType a_target = a_e_i + (a_p_recovery * (a_max_i - a_e_i));
+    // const auto a_target
+    //     = static_cast<double>(a_e_i + (a_p_recovery * (a_max_i - a_e_i)));
+    // const double average = Kokkos::log(a_target) - sigma * sigma / 2;
 
-    auto gen = random_pool.get_state();
-    const double sigma = 0.2;
-    const double average
-        = Kokkos::log(static_cast<double>(a_target)) - sigma * sigma / 2;
+    constexpr double sigma = 0.2;
+
+    //
+    //
+    // Centre of the redistribution.
+    // The log-normal distribution is centred on a_e, allowing a_p
+    // to naturally follow environmental improvements. Even when
+    // a_e == a_p, the distribution retains a non-zero probability
+    // of producing a higher a_p, allowing gradual lineage recovery.
+    const double average = Kokkos::log(current_a_e) - sigma * sigma / 2;
     const auto dist = MC::Distributions::LogNormal<double>(average, sigma);
 
-    // Clamped to [a_p_min, a_max]: a null capacity freezes the sub-lineage for
-    // the rest of the run
-    const auto gen1 = Kokkos::clamp(
-        static_cast<FloatType>(dist.draw(gen)), ap_min, a_max_i);
-    const auto gen2 = Kokkos::clamp(
-        static_cast<FloatType>(dist.draw(gen)), ap_min, a_max_i);
-
-    static constexpr auto local_l = l_max_dist;
+    auto gen = random_pool.get_state();
+    const auto ap_gen_1 = static_cast<FloatType>(dist.draw(gen));
+    const auto ap_gen_2 = static_cast<FloatType>(dist.draw(gen));
     const FloatType lmax1 = local_l.draw(gen);
     const FloatType lmax2 = local_l.draw(gen);
-
-    GET_PROPERTY(particle_var::a_p) = gen1;
-    GET_PROPERTY(particle_var::l_max) = lmax1;
-    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::a_p) = gen2;
-    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = lmax2;
-
     random_pool.free_state(gen);
+
+    // Clamped to [a_p_min, a_max]
+    const auto ap_1 = Kokkos::clamp(ap_gen_1, ap_min, a_max_i);
+    const auto ap_2 = Kokkos::clamp(ap_gen_2, ap_min, a_max_i);
+
+    GET_PROPERTY(particle_var::a_p) = ap_1;
+    GET_PROPERTY(particle_var::l_max) = lmax1;
+    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::a_p) = ap_2;
+    GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = lmax2;
   }
 
 } // namespace Models

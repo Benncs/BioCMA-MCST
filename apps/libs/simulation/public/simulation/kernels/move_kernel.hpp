@@ -37,21 +37,45 @@ namespace Simulation::KernelInline
   {
   };
 
+  /// Fused move+leave, used when the domain has several compartments AND an
+  /// outlet. Both kernels are memory bound and stream the same `positions`
+  /// array back to back, so running them separately pays for that array twice.
+  struct TagMoveLeave
+  {
+  };
+
+  /// Reduction value carried by every move kernel. Both counters ride the
+  /// league-wide reduction and reach the EventContainer once per launch,
+  /// from the host, in CycleFunctors::get_host_reduction.
+  struct MoveLeaveTally
+  {
+    std::size_t moved;
+    std::size_t dead;
+
+    KOKKOS_INLINE_FUNCTION MoveLeaveTally&
+    operator+=(const MoveLeaveTally& other)
+    {
+      moved += other.moved;
+      dead += other.dead;
+      return *this;
+    }
+  };
+
   /** @brief probably overkill binary search to find next compartment
 
-  Compared with first impl it might not change anything
-  Binary seach  is O(log(n)) vs first linear is (n)
+  O(log n) over the cumulative transition probabilities of the current
+  compartment, against the first impl which was O(n).
+  Only reached by particles that actually leave, so no branchless mask here:
+  the caller has already decided.
   */
   KOKKOS_INLINE_FUNCTION std::size_t
   __find_next_compartment(
-      const bool do_serch,
       const MC::NeighborsView<ComputeSpace, true>& neighbors,
       const MC::CumulativeProbabilityView<ComputeSpace, true>&
           cumulative_probability,
       const std::size_t i_compartment,
       const double random_number)
   {
-    const int mask_do_serch = static_cast<int>(do_serch);
     const int max_neighbor = static_cast<int>(neighbors.extent(1));
 
     KOKKOS_ASSERT(max_neighbor >= 1);
@@ -71,7 +95,7 @@ namespace Simulation::KernelInline
     //               >= random_number);
 
     int left = 0;
-    int right = mask_do_serch * (max_neighbor - 1);
+    int right = max_neighbor - 1;
     while (left < right)
     {
       const int mid = (left + right) >> 1; // NOLINT
@@ -81,9 +105,7 @@ namespace Simulation::KernelInline
       right = mask * right + (1 - mask) * mid;
     }
     KOKKOS_ASSERT(left >= 0 && static_cast<size_t>(left) < neighbors.extent(1));
-    const auto ret = i_compartment * (1 - mask_do_serch)
-                     + neighbors(i_compartment, left) * mask_do_serch;
-    return ret;
+    return neighbors(i_compartment, left);
   }
 
   template <typename ViewType1>
@@ -187,74 +209,59 @@ namespace Simulation::KernelInline
 
     KOKKOS_INLINE_FUNCTION void
     operator()(TagMove /*tag*/,
-               const Kokkos::TeamPolicy<ComputeSpace>::member_type& team) const
+               const Kokkos::TeamPolicy<ComputeSpace>::member_type& team,
+               MoveLeaveTally& local_tally) const
     {
-      using ScratchSpace
-          = Kokkos::TeamPolicy<>::execution_space::scratch_memory_space;
-      using ScratchView = Kokkos::View<float*, ScratchSpace>;
+      const std::size_t N = m_p_team_move;
+      const std::size_t p0 = team.league_rank() * N;
+      const auto upper_bound = ((p0 + N) >= n_particles) ? n_particles - p0 : N;
 
-      const std::size_t count = m_p_team_move;
-      const std::size_t p0 = team.league_rank() * count;
-      const std::size_t n_particle = n_particles;
+      KOKKOS_ASSERT(upper_bound > 0 && upper_bound <= n_particles);
 
-      const auto upper_bound
-          = ((p0 + count) >= n_particle) ? n_particle - p0 : count;
-      KOKKOS_ASSERT(upper_bound > 0 && upper_bound < n_particle);
       const auto& rp = random_pool;
-
-      const std::size_t N = count * 2;
-
-      // rng is actually a flat m*p array
+      const auto& proba = move.move_probability;
       const std::size_t p = team.team_size();
-      const std::size_t m = (N + p - 1) / p;
+      const std::size_t m = (upper_bound + p - 1) / p;
 
-      ScratchView rng(team.team_scratch(0), N);
+      std::size_t team_move_count = 0;
+      Kokkos::parallel_reduce(
+          Kokkos::TeamThreadRange(team, 0, p),
+          [&](const std::size_t tid, std::size_t& moved_count)
+          {
+            auto gen = rp.get_state();
 
-      // Use "tiling" to minimize contention when aquired_state
-      // State is aquired p times instead of N, it is supposed to reduce
-      // contention
+            for (std::size_t k = 0; k < m; ++k)
+            {
+              const std::size_t idx = tid + k * p; // stride p
 
-      Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, p),
-                           [&rp, &rng, N, m, p](const std::size_t idx)
-                           {
-                             // Ok to use here, get_state should be called in
-                             // each thread
-                             auto gen = rp.get_state();
+              if (idx >= upper_bound)
+              {
+                break;
+              }
+              const std::size_t flat_index = p0 + idx;
 
-                             // current thread iteration p times with the same
-                             // state
-                             for (std::size_t k = 0; k < m; ++k)
-                             {
-                               const std::size_t i = idx + k * p; // stride p
+              if (status(flat_index) != MC::Status::Idle)
+              {
+                continue;
+              }
 
-                               if (i >= N)
-                               {
-                                 break;
-                               }
+              bool moved = false;
+              const std::size_t next
+                  = next_compartment(positions(flat_index), proba, gen, moved);
+              if (moved)
+              {
+                positions(flat_index) = next;
+                ++moved_count;
+              }
+            }
 
-                               rng(i) = gen.frand(0., 1.);
-                             }
+            rp.free_state(gen);
+          },
+          team_move_count);
 
-                             rp.free_state(gen);
-                           });
       team.team_barrier();
-
-      // We can use flat array index here ordering of random doesnt matter
-      Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, upper_bound),
-                           [&](const std::size_t idx)
-                           {
-                             const auto flat_index = p0 + idx;
-
-                             if (status(flat_index) == MC::Status::Idle)
-                             {
-
-                               const std::size_t base = idx * 2;
-                               KOKKOS_ASSERT(base + 1 < N);
-                               const auto rng1 = rng(base);
-                               const auto rng2 = rng(base + 1);
-                               handle_move(flat_index, rng1, rng2);
-                             }
-                           });
+      Kokkos::single(Kokkos::PerTeam(team),
+                     [&]() { local_tally.moved += team_move_count; });
     }
 
     KOKKOS_INLINE_FUNCTION void
@@ -296,6 +303,87 @@ namespace Simulation::KernelInline
           });
     }
 
+    /// Fused move + leave.
+    ///
+
+    /// Each thread holds one generator for its whole strided chunk, the same
+    /// way TagLeaveB0D does.
+    KOKKOS_INLINE_FUNCTION void
+    operator()(TagMoveLeave /*tag*/,
+               const Kokkos::TeamPolicy<ComputeSpace>::member_type& team,
+               MoveLeaveTally& local_tally) const
+    {
+      const std::size_t N = m_p_team_move;
+      const std::size_t p0 = team.league_rank() * N;
+      const auto upper_bound = ((p0 + N) >= n_particles) ? n_particles - p0 : N;
+
+      KOKKOS_ASSERT(upper_bound > 0 && upper_bound <= n_particles);
+
+      const auto& rp = random_pool;
+      const auto& lf = move.leaving_flow;
+      const auto& proba = move.move_probability;
+
+      const std::size_t p = team.team_size();
+      const std::size_t m = (upper_bound + p - 1) / p;
+
+      MoveLeaveTally team_tally{ 0, 0 };
+
+      Kokkos::parallel_reduce(
+          Kokkos::TeamThreadRange(team, 0, p),
+          [&](const std::size_t tid, MoveLeaveTally& acc)
+          {
+            auto gen = rp.get_state();
+
+            for (std::size_t k = 0; k < m; ++k)
+            {
+              const std::size_t idx = tid + k * p; // stride p
+
+              if (idx >= upper_bound)
+              {
+                break;
+              }
+              const std::size_t flat_index = p0 + idx;
+
+              const bool is_idle = status(flat_index) == MC::Status::Idle;
+              std::size_t position = positions(flat_index);
+
+              if (is_idle)
+              {
+                bool moved = false;
+                const std::size_t next
+                    = next_compartment(position, proba, gen, moved);
+                // Only movers write back. Most particles stay put in a
+                // step, so an unconditional store dirties every cache line of
+                // `positions` to rewrite the value it already held.
+                if (moved)
+                {
+                  positions(flat_index) = next;
+                  position = next;
+                  ++acc.moved;
+                }
+              }
+
+              ages(flat_index, 0) += d_t;
+
+              // Only idle particles may exit: an already-Exit one in an
+              // outlet compartment would otherwise be recounted every step
+              // and overshoot inactive_counter.
+              if (is_idle)
+              {
+                handle_exit_at(flat_index, lf, position, gen, acc.dead);
+              }
+            }
+
+            rp.free_state(gen);
+          },
+          team_tally);
+
+      team.team_barrier();
+
+      Kokkos::single(Kokkos::PerTeam(team),
+                     [&]() { local_tally += team_tally; });
+    }
+
     bool
     do_move() const
     {
@@ -311,7 +399,7 @@ namespace Simulation::KernelInline
     KOKKOS_INLINE_FUNCTION void
     operator()(TagLeaveB0D _tag,
                const Kokkos::TeamPolicy<ComputeSpace>::member_type& team_handle,
-               std::size_t& local_dead_count) const
+               MoveLeaveTally& local_tally) const
     {
 
       (void)_tag;
@@ -380,7 +468,7 @@ namespace Simulation::KernelInline
                 continue;
               }
               const double r = gen.drand(0., 1.);
-
+              ages(flat_index, 0) += d_t;
               perform_exit(
                   probability_leaving<decltype(r), precision_tag>(r, lambda),
                   flat_index,
@@ -392,62 +480,69 @@ namespace Simulation::KernelInline
 
       team_handle.team_barrier();
 
-      Kokkos::single(
-          Kokkos::PerTeam(team_handle),
-          [&]()
-          {
-            if constexpr (AutoGenerated::FlagCompileTime::enable_event_counter)
-            {
-              events.add<MC::EventType::Exit>(team_dead_count);
-            }
-            local_dead_count += team_dead_count;
-          });
+      Kokkos::single(Kokkos::PerTeam(team_handle),
+                     [&]() { local_tally.dead += team_dead_count; });
     }
 
-    KOKKOS_FUNCTION void
-    handle_move(const std::size_t idx, const float rng1, const float rng2) const
+    /// Pure form of the move: no access to `positions`, so the caller keeps the
+    /// compartment in a register.
+    /// @return the compartment the particle ends up in; `moved` is set when it
+    /// actually changed compartment.
+    template <typename GenType>
+    KOKKOS_FORCEINLINE_FUNCTION std::size_t
+    next_compartment(
+        const std::size_t i_current_compartment,
+        const MC::MoveProbabilityView<ComputeSpace, true>& move_probability,
+        GenType& gen,
+        bool& moved) const
     {
-
-      // const auto rng1 = static_cast<float>(random(idx, 0));
-      // const auto rng2 = static_cast<float>(random(idx, 1));
-
-      KOKKOS_ASSERT(rng1 >= 0. && rng1 <= 1 && rng2 >= 0. && rng2 <= 1);
-
-      const std::size_t i_current_compartment = positions(idx);
-
       KOKKOS_ASSERT(
           i_current_compartment < move.liquid_volume.extent(0)
           && "Particle position is incorect (greater than compartment number)");
 
-      const bool mask_next = probability_leaving<float, fast_tag>(
-          rng1,
-          move.liquid_volume(i_current_compartment),
-          move.diag_transition(i_current_compartment),
-          d_t);
+      moved = move_probability(i_current_compartment) > gen.frand(0.F, 1.F);
 
-      positions(idx) = __find_next_compartment(mask_next,
-                                               move.neighbors,
-                                               move.cumulative_probability,
-                                               i_current_compartment,
-                                               rng2);
-
-      // positions(idx)
-      //     = (mask_next) ? __find_next_compartment(move.neighbors,
-      //                                             move.cumulative_probability,
-      //                                             i_current_compartment,
-      //                                             rng2)
-      //                   : i_current_compartment;
-
-      KOKKOS_ASSERT(
-          positions(idx) < move.liquid_volume.extent(0)
-          && " Position after move is greater than compartment number");
-
-      if constexpr (AutoGenerated::FlagCompileTime::enable_event_counter)
+      if (!moved)
       {
-        if (mask_next)
-        {
-          events.wrap_incr<MC::EventType::Move>();
-        }
+        return i_current_compartment;
+      }
+
+      const auto next = __find_next_compartment(move.neighbors,
+                                                move.cumulative_probability,
+                                                i_current_compartment,
+                                                gen.frand(0.F, 1.F));
+      KOKKOS_ASSERT(
+          next < move.liquid_volume.extent(0)
+          && " Position after move is greater than compartment number");
+      return next;
+    }
+
+    /// Exit test for a particle whose position the caller already holds, using
+    /// a generator the caller already owns. Avoids both the re-read of
+    /// `positions` and the per-particle get_state/free_state round trip.
+    template <typename ExecSpace, typename GenType>
+    KOKKOS_FORCEINLINE_FUNCTION void
+    handle_exit_at(
+        const std::size_t idx,
+        const Kokkos::View<const MC::LeavingFlow*, ExecSpace>& leaving_flow,
+        const std::size_t position,
+        GenType& gen,
+        std::size_t& dead_count) const
+    {
+      MC::LeavingFlow::float_type found_flow_value = 0.;
+      MC::LeavingFlow::float_type found_liquid_volume = 0.;
+      find_flow(leaving_flow, position, found_flow_value, found_liquid_volume);
+
+      // Only a few particles sit in an outlet compartment
+      if (found_flow_value != 0.)
+      {
+        const auto r = gen.frand(0., 1.);
+        KOKKOS_ASSERT(found_liquid_volume > 0.);
+        KOKKOS_ASSERT(found_flow_value > 0.);
+        perform_exit(probability_leaving<decltype(r), precision_tag>(
+                         r, found_liquid_volume, found_flow_value, d_t),
+                     idx,
+                     dead_count);
       }
     }
 
@@ -530,5 +625,18 @@ namespace Simulation::KernelInline
     bool m_enable_leave{};
   };
 } // namespace Simulation::KernelInline
+
+namespace Kokkos
+{
+  template <>
+  struct reduction_identity<Simulation::KernelInline::MoveLeaveTally>
+  {
+    KOKKOS_FORCEINLINE_FUNCTION static Simulation::KernelInline::MoveLeaveTally
+    sum()
+    {
+      return { 0, 0 };
+    }
+  };
+} // namespace Kokkos
 
 #endif

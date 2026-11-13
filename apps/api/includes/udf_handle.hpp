@@ -3,6 +3,8 @@
 
 #include <common/results.hpp>
 #include <memory>
+#include <string>
+#include <string_view>
 #ifdef USE_UDF
 #  include <udf_includes.hpp>
 #endif

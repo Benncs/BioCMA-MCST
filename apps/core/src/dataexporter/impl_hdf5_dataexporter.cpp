@@ -32,6 +32,8 @@
     }
 namespace
 {
+
+  constexpr size_t hdf5_max_compression = 9;
   std::string date_time();
   std::string get_user_name();
   std::size_t get_chunk_size(std::size_t data_length);
@@ -39,6 +41,40 @@ namespace
   Eigen::Map<Eigen::MatrixXd> mk_eigen_view(std::span<const double> values,
                                             std::size_t n_row,
                                             std::size_t n_col);
+
+  template <typename T, typename PimplType>
+  void
+  write_matrix_gen(std::string_view name,
+                   std::span<const T> values,
+                   bool compress,
+                   std::unique_ptr<PimplType>& pimpl)
+  {
+    CHECK_PIMPL
+
+    HighFive::DataSetCreateProps ds_props;
+    // Minimum chunk size is 1 and leads to error if size<chunk
+    // With size=0, nothing will be saved it will not change anything to skip
+    // property in this case
+    // TODO: if values is 0 early return ?
+    if (values.size() > 1)
+    {
+      // If error occurs, try to debug with fixed chunk of 1
+      ds_props.add(HighFive::Chunking(
+          std::min(get_chunk_size(values.size()), values.size())));
+      ds_props.add(HighFive::Shuffle());
+    }
+    const auto data_space = HighFive::DataSpace(values.size());
+
+    if (compress)
+    {
+      ds_props.add(HighFive::Deflate(hdf5_max_compression));
+    }
+
+    auto dataset = pimpl->file->template createDataSet<T>(
+        name.data(), data_space, ds_props);
+    dataset.write_raw(values.data());
+    pimpl->file->flush();
+  }
 
 } // namespace
 
@@ -111,7 +147,6 @@ namespace Core
     HighFive::File* file;
   };
 
-  constexpr size_t hdf5_max_compression = 9;
   DataExporter::DataExporter(const ExecInfo& info,
                              std::string_view _filename,
 
@@ -251,35 +286,19 @@ namespace Core
   }
 
   void
+  DataExporter::write_matrix_u64(std::string_view name,
+                                 std::span<const uint64_t> values,
+                                 bool compress)
+  {
+    write_matrix_gen(name, values, compress, pimpl);
+  }
+
+  void
   DataExporter::write_matrix(std::string_view name,
                              std::span<const double> values,
                              bool compress)
   {
-    CHECK_PIMPL
-
-    HighFive::DataSetCreateProps ds_props;
-    // Minimum chunk size is 1 and leads to error if size<chunk
-    // With size=0, nothing will be saved it will not change anything to skip
-    // property in this case
-    // TODO: if values is 0 early return ?
-    if (values.size() > 1)
-    {
-      // If error occurs, try to debug with fixed chunk of 1
-      ds_props.add(HighFive::Chunking(
-          std::min(get_chunk_size(values.size()), values.size())));
-      ds_props.add(HighFive::Shuffle());
-    }
-    const auto data_space = HighFive::DataSpace(values.size());
-
-    if (compress)
-    {
-      ds_props.add(HighFive::Deflate(hdf5_max_compression));
-    }
-
-    auto dataset
-        = pimpl->file->createDataSet<double>(name.data(), data_space, ds_props);
-    dataset.write_raw(values.data());
-    pimpl->file->flush();
+    write_matrix_gen(name, values, compress, pimpl);
   }
 
   void

@@ -92,6 +92,8 @@ namespace Simulation
                        std::span<const double> proba_flat,
                        std::span<const double> out_flows) const;
 
+    void calculate_mtr();
+
     bool checkScalar() const;
 
     // Memory management
@@ -165,6 +167,10 @@ namespace Simulation
                             auto& cycle_functors)
   {
     PROFILE_SECTION("Simulation::pre_cycle")
+
+    // Must precede the move kernel: it consumes move_probability, which is
+    // only valid for this d_t and this flowmap.
+    this->mc_unit->domain.set_move_probability(d_t);
 
     cycle_functors.update(
         d_t, container, this->mc_unit->domain.get_const_inner());

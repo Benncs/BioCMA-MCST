@@ -37,7 +37,7 @@ source_config = [f'@src_dir@/config_loader.cpp']
 
 dep = [mc_dependency, common_dependecy, kokkos,udf_loader]
 # TODO make it .so if possible (linkage not working with nvcc currently)
-config_lib = static_library('config_loader',source_config,include_directories:[public_include_dir],dependencies:dep)
+config_lib = static_library('config_loader',source_config,include_directories:[public_include_dir],dependencies:dep,pic:true)
 if not use_cuda and build_udf
   biomodel_dependency = declare_dependency(
     link_with: [model_lib,config_lib],

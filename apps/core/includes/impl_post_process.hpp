@@ -40,13 +40,6 @@ namespace PostProcessing
                    bool force = false);
 
   void reset_counter();
-  // get_particle_properties(unit,
-
-  //                         aggregated_values,
-  //                         spatial,
-  //                         distribution.size(),
-  //                         model_properties,
-  //                         true);
 
 } // namespace PostProcessing
 

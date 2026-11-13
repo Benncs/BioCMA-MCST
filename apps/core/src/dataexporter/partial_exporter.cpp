@@ -10,6 +10,11 @@
 #include <utility>
 #include <vector>
 
+// namespace
+// {
+//   std::string
+// } //namespace
+
 namespace Core
 {
   PartialExporter::PartialExporter(
@@ -109,7 +114,7 @@ namespace Core
                                        bool compress_data)
   {
     PROFILE_SECTION("write_particle_data")
-    const auto& [_particle_values, _spatial_values, _ages_values, _names]
+    const auto& [_particle_values, _spatial_values, _ages_values, _names, _pos]
         = bonce;
 
     ;
@@ -136,6 +141,15 @@ namespace Core
       const size_t n_compartments = spatial_values.extent(1);
 
       KOKKOS_ASSERT(particle_values.extent(0) == names.size());
+
+      if (_pos.has_value())
+      {
+        const auto* ptr_pos = _pos->data();
+        this->write_matrix_u64(IO::format(ds_name, "position"),
+                               { ptr_pos, n_particles },
+                               compress_data);
+      }
+
       // Warning UB  if len(kindex)!=len(vnames)
       for (size_t i_name = 0; i_name < names.size(); ++i_name)
       {

@@ -12,47 +12,49 @@ namespace Simulation
   class ScalarSimulation;
 }; // namespace Simulation
 
+namespace Simulation::MassTransfer::Type
+{
+  enum class Names
+  {
+    FlowmapTurb,
+    FixedKla,
+    FlowmapKla
+  };
+
+  struct FlowmapTurbulence
+  {
+    static constexpr double default_bubble_diameter = 5e-3;
+    double db = default_bubble_diameter;
+  };
+
+  struct FlowmapKla
+  {
+  };
+
+  struct FixedKla
+  {
+    std::vector<double> value;
+  };
+
+  struct Auto
+  {
+  };
+
+  using MtrTypeVariant
+      = std::variant<FlowmapTurbulence, FixedKla, FlowmapKla, Auto>;
+
+  std::string mtr_variant_info(MtrTypeVariant& v) noexcept;
+
+} // namespace Simulation::MassTransfer::Type
+
 namespace Simulation::MassTransfer
 {
-
-  namespace Type
-  {
-    enum class Names
-    {
-      FlowmapTurb,
-      FixedKla,
-      FlowmapKla
-    };
-
-    struct FlowmapTurbulence
-    {
-    };
-
-    struct FlowmapKla
-    {
-    };
-
-    struct FixedKla
-    {
-      std::vector<double> value;
-    };
-
-    struct Auto
-    {
-    };
-
-    using MtrTypeVariant
-        = std::variant<FlowmapTurbulence, FixedKla, FlowmapKla, Auto>;
-
-  } // namespace Type
 
   enum class Sign : int
   {
     GasToLiquid = -1,
     LiquidToGas = 1,
   };
-
-  static_assert(static_cast<float>(Sign::GasToLiquid) == -1., "Sign mtr");
 
   struct MassTransferProxy;
 
@@ -89,6 +91,8 @@ namespace Simulation::MassTransfer
     std::shared_ptr<Simulation::ScalarSimulation> liquid_scalar;
     std::shared_ptr<Simulation::ScalarSimulation> gas_scalar;
   };
+
+  static_assert(static_cast<float>(Sign::GasToLiquid) == -1., "Sign mtr");
 
 } // namespace Simulation::MassTransfer
 

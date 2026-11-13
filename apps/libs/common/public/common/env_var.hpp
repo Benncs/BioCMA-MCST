@@ -5,10 +5,11 @@
 #include <optional>
 
 #include <sstream>
+#include <string>
 #include <string_view>
 
 #ifdef _WIN32
-#  include <ostream>
+#  include <iostream>
 #endif
 
 namespace Common
@@ -52,6 +53,12 @@ namespace Common
   }
 
   /**
+   * @brief bool accepts "true"/"false" as well as 1/0, operator>> does not
+   * @note Declared here to not use generic instead of this specialisation
+   */
+  template <> bool read_env_or(std::string_view varname, bool vdefault);
+
+  /**
    * @brief Wrapper arround set_env
    * @note: UB if T is not trivial type
    */
@@ -71,6 +78,11 @@ namespace Common
     return setenv(varname.data(), str_value.c_str(), 1) == 0;
 #endif
   }
+
+  template <>
+  bool set_local_env<std::string>(std::string_view varname, std::string val);
+
+  template <> bool set_local_env<bool>(std::string_view varname, bool val);
 
 } // namespace Common
 

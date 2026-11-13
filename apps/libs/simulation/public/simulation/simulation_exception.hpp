@@ -15,13 +15,16 @@ namespace Simulation
     BadInitialiser,
     MismatchSize,
     MismatchSizeVolume,
+
   };
 
   enum class FeedExceptionError
   {
     NegativeFlow,
     NegativeConcentration,
-    OutofRange
+    OutofRange,
+    MismatchSize,
+    UnbalancedFlow
   };
 
   class SimulationException : public std::exception

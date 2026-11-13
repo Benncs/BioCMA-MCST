@@ -2,6 +2,7 @@
 #include <common/alg.hpp>
 
 #include <functional>
+#include <limits>
 
 double
 naive_newton(const std::function<double(double)>& f,

@@ -5,6 +5,7 @@
 #include <common/has_serialize.hpp>
 #include <cstddef>
 #include <cstdint>
+#include <ostream>
 #include <string>
 
 // clang-format off

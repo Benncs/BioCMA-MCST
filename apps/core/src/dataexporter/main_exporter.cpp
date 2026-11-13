@@ -221,7 +221,7 @@ namespace Core
           concentrations.emplace_back(species.concentration);
           indices.emplace_back(species.species_index);
         }
-
+        // concentration and indices may be empty
         feed_values[IO::format(feed_path, "/concentration")] = concentrations;
         feed_values[IO::format(feed_path, "/index")] = indices;
       }

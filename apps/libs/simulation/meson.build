@@ -42,7 +42,7 @@ simulation_lib = static_library(
         private_dependencies,
         cma_utils_dependency,
     ],
-    # pic: true,
+    pic: true,
     # install: true,
     install_rpath: global_install_dir,
     link_args: [flto_flag],

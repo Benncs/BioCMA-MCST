@@ -26,6 +26,7 @@ mc_lib = static_library(
     install_rpath: global_install_dir,
     link_args: [flto_flag],
     cpp_args: [arg],
+    pic:true
 )
 
 mc_dependency = declare_dependency(

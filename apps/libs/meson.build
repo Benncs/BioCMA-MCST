@@ -32,7 +32,7 @@ model_selection = static_library(
     [generated_model_selection],
     include_directories: [public_mc, models_list_def],
     dependencies: [kokkos, common_dependecy, cma_utils_dependency],
-    cpp_args: [cpp_args],
+    cpp_args: [cpp_args],pic:true
 )
 
 model_selection_dep = declare_dependency(

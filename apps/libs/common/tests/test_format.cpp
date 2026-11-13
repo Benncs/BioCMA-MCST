@@ -7,7 +7,7 @@ static constexpr std::string_view ref_2 = "Ssssava";
 
 static constexpr std::string_view ref_3 = "2025 1 07 Sssaa";
 
-static constexpr std::string_view ref_4 = "9.44 Sss";
+[[maybe_unused]] static constexpr std::string_view ref_4 = "9.44 Sss";
 #include <iostream>
 
 int
@@ -45,4 +45,25 @@ main()
   //  auto test4 = IO::format(p, " ", t);
   //  std::cerr << "test_format_5 " << test4 << std::endl;
   //  assert(test4 == ref_4);
+
+  // Compare with to_string instead of a literal
+  float p = 9.44; // NOLINT
+  std::string t = "Sss";
+  auto test4 = IO::format(p, " ", t);
+  std::cerr << "test_format_5: " << test4 << std::endl;
+  assert(test4 == std::to_string(p) + " " + t);
+
+  // No argument at all is an empty string, not a crash
+  assert(IO::format().empty());
+
+  // A single argument of each kind
+  assert(IO::format("only") == "only");
+  assert(IO::format(7) == "7");
+  assert(IO::format(std::string("s")) == "s");
+
+  // Signed values keep their sign
+  assert(IO::format(-42) == "-42");
+  assert(IO::format("n=", -1, "/", 2) == "n=-1/2");
+
+  std::cerr << "test_format_6" << std::endl;
 }
