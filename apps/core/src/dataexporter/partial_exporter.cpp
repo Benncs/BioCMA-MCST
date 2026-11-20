@@ -117,17 +117,29 @@ namespace Core
     const auto& [_particle_values, _spatial_values, _ages_values, _names, _pos]
         = bonce;
 
-    ;
-
     if (_ages_values.has_value())
     {
       const size_t n_particles = _ages_values->extent(1);
-      auto* ptr_ages = Kokkos::subview(*_ages_values, 0, Kokkos::ALL).data();
+      const auto* ptr_ages
+          = Kokkos::subview(*_ages_values, 0, Kokkos::ALL).data();
+
+      const auto* ptr_ages_2
+          = Kokkos::subview(*_ages_values, 1, Kokkos::ALL).data();
+
       this->write_matrix(
           ds_name + "age_hydro/", { ptr_ages, n_particles }, compress_data);
-      ptr_ages = Kokkos::subview(*_ages_values, 1, Kokkos::ALL).data();
+
       this->write_matrix(
-          ds_name + "age/", { ptr_ages, n_particles }, compress_data);
+          ds_name + "age/", { ptr_ages_2, n_particles }, compress_data);
+    }
+
+    if (_pos.has_value())
+    {
+      const size_t n_particles = _pos->extent(0);
+      const auto* ptr_pos = _pos->data();
+      this->write_matrix_u64(IO::format(ds_name, "position"),
+                             { ptr_pos, n_particles },
+                             compress_data);
     }
 
     if (_particle_values.has_value() && _spatial_values.has_value(),
@@ -141,14 +153,6 @@ namespace Core
       const size_t n_compartments = spatial_values.extent(1);
 
       KOKKOS_ASSERT(particle_values.extent(0) == names.size());
-
-      if (_pos.has_value())
-      {
-        const auto* ptr_pos = _pos->data();
-        this->write_matrix_u64(IO::format(ds_name, "position"),
-                               { ptr_pos, n_particles },
-                               compress_data);
-      }
 
       // Warning UB  if len(kindex)!=len(vnames)
       for (size_t i_name = 0; i_name < names.size(); ++i_name)
