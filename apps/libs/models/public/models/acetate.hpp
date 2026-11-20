@@ -101,7 +101,7 @@ namespace Models
   {
     using uniform_weight = std::true_type;
     using Self = Acetate;
-    using FloatType = float;
+    using FloatType = double;
     using Config = std::nullopt_t;
 
     enum class particle_var : int // NOLINT
@@ -261,6 +261,10 @@ namespace Models
     /// and log(a_p) is taken at every division.
     MODEL_CONSTANT FloatType a_p_min = 1e-5F * a_max_m;
 
+    static FloatType ap_0;
+
+    MODEL_CONSTANT FloatType sigma_log_inheritance = 0.2;
+
     // /// Regression of the newborn capacity toward its own a_max at division.
     // /// a_e <= a_p holds by construction, so a redistribution centred on the
     // /// performance of the mother alone (0) is a one way ratchet: the
@@ -338,13 +342,17 @@ namespace Models
     MODEL_CONSTANT auto a_max_dist
         = MC::Distributions::TruncatedNormal<FloatType>(
             a_max_m, a_max_m / 2., 0.5 * a_max_m, a_max_m * 1.5);
+    const auto _ap_0 = Kokkos::log(0.5 * a_max_m)
+                       - sigma_log_inheritance * sigma_log_inheritance / 2;
 
+    auto dist_ap
+        = MC::Distributions::LogNormal<FloatType>(_ap_0, sigma_log_inheritance);
     static constexpr auto ld = l_dist;
     //    static constexpr auto lm = l_dist;
     auto gen = random_pool.get_state();
     GET_PROPERTY(particle_var::length) = ld.draw(gen);
     GET_PROPERTY(particle_var::l_max) = l_max_m;
-    GET_PROPERTY(particle_var::a_p) = a_max_m / 2.;
+    GET_PROPERTY(particle_var::a_p) = dist_ap.draw(gen);
     GET_PROPERTY(particle_var::a_max) = a_max_dist.mean();
     random_pool.free_state(gen);
 
@@ -472,7 +480,7 @@ namespace Models
     GET_CONTRIBS(S) = phi_s;
     GET_CONTRIBS(O2) = phi_o2;
     GET_CONTRIBS(Ac) = phi_a;
-    GET_CONTRIBS(Co2) = phi_a;
+    GET_CONTRIBS(Co2) = phi_co2;
 
     return check_div(GET_PROPERTY(Self::particle_var::length),
                      GET_PROPERTY(Self::particle_var::l_max));
@@ -520,7 +528,7 @@ namespace Models
     //     = static_cast<double>(a_e_i + (a_p_recovery * (a_max_i - a_e_i)));
     // const double average = Kokkos::log(a_target) - sigma * sigma / 2;
 
-    constexpr double sigma = 0.2;
+    const double sigma = Self::sigma_log_inheritance;
 
     //
     //
