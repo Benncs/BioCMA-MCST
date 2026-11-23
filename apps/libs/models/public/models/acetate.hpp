@@ -361,7 +361,7 @@ namespace Models
     static std::array<std::string_view, Self::n_c>
     species()
     {
-      return { "glucose", "O2", "acetate" };
+      return { "glucose", "O2", "acetate", "co2" };
     }
 
     /**
