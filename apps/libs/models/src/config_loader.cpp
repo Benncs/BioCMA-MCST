@@ -69,6 +69,19 @@ namespace
 
 namespace Models
 {
+
+  // Acetate::FloatType Acetate::ap_0
+  //     = Common::read_env_or("BIOMC_ACETATE_AP0", 0.5);
+  // ;
+
+  Acetate::Config
+  Acetate::get_config([[maybe_unused]] const ExecInfo& info,
+                      [[maybe_unused]] const std::size_t n)
+  {
+    return Common::read_env_or("BIOMC_ACETATE_AP0",
+                               static_cast<Acetate::FloatType>(0.5));
+  }
+
   bool FixedLength::use_contribs
       = Common::read_env_or("BIOMC_USE_CONTRIBD", true);
 

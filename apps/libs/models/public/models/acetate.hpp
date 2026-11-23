@@ -5,6 +5,7 @@
 #include "Kokkos_Core_fwd.hpp"
 #include "Kokkos_Macros.hpp"
 #include "common/common.hpp"
+#include "common/static_for.hpp"
 #include "common/traits.hpp"
 #include "mc/macros.hpp"
 #include "models/utils.hpp"
@@ -101,8 +102,11 @@ namespace Models
   {
     using uniform_weight = std::true_type;
     using Self = Acetate;
-    using FloatType = double;
-    using Config = std::nullopt_t;
+    using FloatType = float;
+    /// Initial growth capacity a_p, as a fraction of a_max_m (mean of the
+    /// initial log-normal draw). Read on the host by get_config() and passed
+    /// by value to init(), so it reaches the device.
+    using Config = FloatType;
 
     enum class particle_var : int // NOLINT
     {
@@ -221,6 +225,36 @@ namespace Models
     MODEL_CONSTANT FloatType y_co2_ov = static_cast<FloatType>(
         Stoichiometry::y_co2(Stoichiometry::m_cmol_glucose, 0, y_ac_ov));
 
+    /// Inverse yields: metabolism_v2 multiplies instead of dividing
+    MODEL_CONSTANT FloatType inv_y_x_go = static_cast<FloatType>(1) / y_x_go;
+    MODEL_CONSTANT FloatType inv_y_x_fe = static_cast<FloatType>(1) / y_x_fe;
+    MODEL_CONSTANT FloatType inv_y_x_ao = static_cast<FloatType>(1) / y_x_ao;
+    MODEL_CONSTANT FloatType inv_y_o2_go = static_cast<FloatType>(1) / y_o2_go;
+    MODEL_CONSTANT FloatType inv_y_o2_ao = static_cast<FloatType>(1) / y_o2_ao;
+
+    /// Rows of the stoichiometric matrix: the liquid species, then biomass
+    enum stoichiometry_row : std::size_t
+    {
+      X = N_N,
+      N_ROWS = N_N + 1
+    };
+
+    using species_rates = Kokkos::Array<FloatType, N_ROWS>;
+    using stoichiometry_matrix
+        = Kokkos::Array<Kokkos::Array<FloatType, N_R>, N_ROWS>;
+
+    /// Stoichiometric matrix [g/g of substrate], species x reactions.
+    /// Columns follow reaction_index, rows follow species_index then X.
+    /// Negative = consumed, positive = produced.
+    MODEL_CONSTANT stoichiometry_matrix stoichiometry = { {
+        //   go         fe        ov        ao
+        { { -1, -1, -1, 0 } },                          // S
+        { { -y_o2_go, 0, 0, -y_o2_ao } },               // O2
+        { { 0, y_ac_fe, y_ac_ov, -1 } },                // Ac
+        { { y_co2_go, y_co2_fe, y_co2_ov, y_co2_ao } }, // Co2
+        { { y_x_go, y_x_fe, y_x_ov, y_x_ao } },         // X
+    } };
+
     // A reaction cannot need a negative amount of O2 or acetate, nor build
     // more carbon than its substrate carries.
     static_assert(y_o2_go > 0.F
@@ -261,8 +295,6 @@ namespace Models
     /// and log(a_p) is taken at every division.
     MODEL_CONSTANT FloatType a_p_min = 1e-5F * a_max_m;
 
-    static FloatType ap_0;
-
     MODEL_CONSTANT FloatType sigma_log_inheritance = 0.2;
 
     // /// Regression of the newborn capacity toward its own a_max at division.
@@ -279,9 +311,13 @@ namespace Models
     MODEL_CONSTANT auto l_dist = MC::Distributions::TruncatedNormal<FloatType>(
         l_max_m * 0.75, l_max_m / 10., 0.7 * l_min_m, l_max_m * 1.3);
 
+    /// Host side, see Config. Defined in config_loader.cpp
+    static Config get_config(const ExecInfo& info, std::size_t n);
+
     KOKKOS_INLINE_FUNCTION static void init(const MC::pool_type& random_pool,
                                             std::size_t idx,
-                                            const SelfParticle& arr);
+                                            const SelfParticle& arr,
+                                            const Config& ap_0);
 
     KOKKOS_INLINE_FUNCTION static MC::Status
     update([[maybe_unused]] const MC::pool_type& random_pool,
@@ -306,8 +342,6 @@ namespace Models
      * @param nu    out: growth rate effectively realised [kgX/s]
      * @return the reaction fluxes [kg of substrate/s]
      */
-    KOKKOS_INLINE_FUNCTION static reaction_rates
-    metabolism(const uptake_rates& phi, FloatType nu_p, FloatType& nu);
 
     KOKKOS_INLINE_FUNCTION static double
     mass(std::size_t idx, const SelfParticle& arr)
@@ -329,6 +363,85 @@ namespace Models
     {
       return { "glucose", "O2", "acetate" };
     }
+
+    /**
+     * @brief Uptake potentials of one cell [kg/s], indexed by species.
+     *
+     * Monod on each substrate, scaled by the capacity of the cell (a_max).
+     * O2 and acetate are also capped by @c share: the largest uptake one cell
+     * may take from its compartment during the step without the explicit
+     * liquid update going negative. Glucose is not capped.
+     *
+     * @param c_s, c_o2, c_ac  local concentrations, clamped >= 0 [kg/m^3]
+     * @param a_max            elongation capacity of the cell [m/s]
+     * @param length           length of the cell [m]
+     * @param d_t              time step [s]
+     */
+    KOKKOS_INLINE_FUNCTION static uptake_rates
+    uptake(const FloatType c_s,
+           const FloatType c_o2,
+           const FloatType c_ac,
+           const FloatType a_max,
+           const FloatType length,
+           const FloatType d_t)
+    {
+      const FloatType phi_s_max_p = a_max * lin_density * inv_y_x_go;
+      const FloatType phi_o2_max_p = f_o2_max * y_o2_go * phi_s_max_p;
+      const FloatType phi_ac_max_p = f_ac_max * phi_s_max_p;
+
+      const FloatType share
+          = (length * lin_density) / ((f_pos * x_c_max * d_t) + d_t_floor);
+
+      // Monod factors, one division for the three
+      const auto [m_s, m_o2, m_ac]
+          = monod_batch(c_s, k_s, c_o2, k_o, c_ac, k_a);
+
+      uptake_rates phi{};
+      phi[S] = phi_s_max_p * m_s;
+      phi[O2] = Kokkos::min(phi_o2_max_p * m_o2, share * c_o2);
+      phi[Ac] = Kokkos::min(phi_ac_max_p * m_ac, share * c_ac);
+      return phi;
+    }
+
+    /**
+     * @brief  metabolism().
+     *
+     * go = min(phi_S, phi_O2/y_o2_go, nu_p/y_x_go); whichever term is the
+     * smallest leaves exactly one secondary reaction active:
+     * glucose limited -> ao, oxygen limited -> fe, growth limited -> ov.
+     * Every secondary reaction is therefore written against go only and the
+     * inactive ones vanish by themselves.
+     */
+    KOKKOS_INLINE_FUNCTION static reaction_rates
+    metabolism(const uptake_rates& phi, const FloatType nu_p)
+    {
+      constexpr auto zero = static_cast<FloatType>(0);
+      reaction_rates r = {}; // zero initialised
+
+      const FloatType s_ox = Kokkos::min(phi[S], phi[O2] * inv_y_o2_go);
+      const FloatType go = Kokkos::min(s_ox, nu_p * inv_y_x_go);
+
+      const FloatType growth_res = Kokkos::max(nu_p - go * y_x_go, zero);
+      const FloatType o2_res = Kokkos::max(phi[O2] - go * y_o2_go, zero);
+
+      r[i_go] = go;
+
+      //>0 iff nu_p limits
+      r[i_ov] = s_ox - go;
+
+      //>0 iff o2 limits
+      // phi_s limits -> phis=s_0x, phi_s-s_ox=0
+      // nu limits -> go = nu <phi_s
+      r[i_fe] = Kokkos::min(phi[S] - s_ox, growth_res * inv_y_x_fe);
+
+      //>0 iff gl limits
+      const FloatType ox_growth_res
+          = Kokkos::min(o2_res * inv_y_o2_ao, growth_res * inv_y_x_ao);
+
+      r[i_ao] = Kokkos::min(phi[Ac], ox_growth_res);
+
+      return r;
+    }
   };
 
   CHECK_MODEL(Acetate)
@@ -336,14 +449,16 @@ namespace Models
   KOKKOS_INLINE_FUNCTION void
   Acetate::init([[maybe_unused]] const MC::pool_type& random_pool,
                 std::size_t idx,
-                const SelfParticle& arr)
+                const SelfParticle& arr,
+                const Config& ap_0)
   {
 
     MODEL_CONSTANT auto a_max_dist
         = MC::Distributions::TruncatedNormal<FloatType>(
             a_max_m, a_max_m / 2., 0.5 * a_max_m, a_max_m * 1.5);
-    const auto _ap_0 = Kokkos::log(0.5 * a_max_m)
-                       - sigma_log_inheritance * sigma_log_inheritance / 2;
+    const auto _ap_0 = static_cast<FloatType>(
+        Kokkos::log(ap_0 * a_max_m)
+        - sigma_log_inheritance * sigma_log_inheritance / 2);
 
     auto dist_ap
         = MC::Distributions::LogNormal<FloatType>(_ap_0, sigma_log_inheritance);
@@ -365,56 +480,6 @@ namespace Models
     GET_PROPERTY(particle_var::phi_a) = 0.;
   }
 
-  KOKKOS_INLINE_FUNCTION Acetate::reaction_rates
-  Acetate::metabolism(const uptake_rates& phi,
-                      const FloatType nu_p,
-                      FloatType& nu)
-  {
-    constexpr auto zero = static_cast<FloatType>(0);
-    reaction_rates r = {}; // zero initialised
-
-    // i_go: respiration, highest priority. Bounded by the glucose, by the
-    // oxygen and by the
-    // growth capacity.
-    const FloatType s_ox_max = Kokkos::min(phi[S], phi[O2] / y_o2_go); // kgS/s
-    r[i_go] = Kokkos::min(s_ox_max, nu_p / y_x_go);
-    nu = r[i_go] * y_x_go;
-
-    // i_ov: overflow. Glucose that oxygen could have supported but that the
-    // growth capacity cannot handle, excreted as acetate. a_p driven branch.
-    r[i_ov] = Kokkos::max(s_ox_max - r[i_go], zero);
-
-    // i_ao: acetate re-uptake, on the oxygen and on the growth capacity left
-    // over by i_go.  so
-    // acetate is never produced and consumed at the same time.
-    const FloatType o2_res = Kokkos::max(phi[O2] - (r[i_go] * y_o2_go), zero);
-
-    const FloatType a_ox_max = Kokkos::min(phi[Ac], o2_res / y_o2_ao);
-    const FloatType growth_aox = Kokkos::max(nu_p - nu, zero) / y_x_ao;
-    r[i_ao] = Kokkos::min(a_ox_max, growth_aox);
-    nu += r[i_ao] * y_x_ao;
-
-    // i_fe: fermentation, lowest priority.
-    const FloatType s_res = Kokkos::max(phi[S] - r[i_go] - r[i_ov], zero);
-    r[i_fe] = Kokkos::min(s_res, Kokkos::max(nu_p - nu, zero) / y_x_fe);
-    nu += r[i_fe] * y_x_fe;
-
-    KOKKOS_ASSERT(r[i_go] >= zero);
-    KOKKOS_ASSERT(r[i_fe] >= zero);
-    KOKKOS_ASSERT(r[i_ov] >= zero);
-    KOKKOS_ASSERT(r[i_ao] >= zero);
-    KOKKOS_ASSERT(nu >= zero && nu <= nu_p * static_cast<FloatType>(1.001));
-    // No reaction may draw more than the uptake made available: this is what
-    // carries the uptake cap over to the liquid contributions
-    KOKKOS_ASSERT(r[i_go] + r[i_fe] + r[i_ov]
-                  <= phi[S] * static_cast<FloatType>(1.001));
-    KOKKOS_ASSERT((r[i_go] * y_o2_go) + (r[i_ao] * y_o2_ao)
-                  <= phi[O2] * static_cast<FloatType>(1.001));
-    KOKKOS_ASSERT(r[i_ao] <= phi[Ac] * static_cast<FloatType>(1.001));
-
-    return r;
-  }
-
   KOKKOS_INLINE_FUNCTION MC::Status
   Acetate::update([[maybe_unused]] const MC::pool_type& random_pool,
                   FloatType d_t,
@@ -424,35 +489,25 @@ namespace Models
                   const std::size_t position_index,
                   const MC::LocalConcentration& c)
   {
-    const auto c_s = GET_CLAMPED_CONCENTRATION_CAST(FloatType, S);
-    const auto c_o2 = GET_CLAMPED_CONCENTRATION_CAST(FloatType, O2);
-    const auto c_ac = GET_CLAMPED_CONCENTRATION_CAST(FloatType, Ac);
-
-    const FloatType phi_s_max_p
-        = GET_PROPERTY(particle_var::a_max) * lin_density / y_x_go;
-    const FloatType phi_o2_max_p = f_o2_max * y_o2_go * phi_s_max_p;
-    const FloatType phi_ac_max_p = f_ac_max * phi_s_max_p;
-
-    // Largest uptake one cell may take from the compartment during this step
-    // without the explicit liquid update going negative
-    const FloatType share = (GET_PROPERTY(particle_var::length) * lin_density)
-                            / ((f_pos * x_c_max * d_t) + d_t_floor);
-
-    // Monod uptake potentials [kg/s].
-    uptake_rates phi{};
-    phi[S] = phi_s_max_p * c_s / (c_s + k_s);
-    phi[O2] = Kokkos::min(phi_o2_max_p * c_o2 / (c_o2 + k_o), share * c_o2);
-    phi[Ac] = Kokkos::min(phi_ac_max_p * c_ac / (c_ac + k_a), share * c_ac);
+    const uptake_rates phi
+        = uptake(GET_CLAMPED_CONCENTRATION_CAST(FloatType, S),
+                 GET_CLAMPED_CONCENTRATION_CAST(FloatType, O2),
+                 GET_CLAMPED_CONCENTRATION_CAST(FloatType, Ac),
+                 GET_PROPERTY(particle_var::a_max),
+                 GET_PROPERTY(particle_var::length),
+                 d_t);
 
     // Growth capacity of the individual, in ]0, a_max] by division()
     const FloatType nu_p = GET_PROPERTY(particle_var::a_p) * lin_density;
 
-    FloatType nu = 0.F;
-    const reaction_rates r = metabolism(phi, nu_p, nu);
+    const reaction_rates r = metabolism(phi, nu_p);
+
+    // Liquid contributions [kg/s] and realised growth nu [kgX/s]
+    const species_rates d = apply_stoichiometry<stoichiometry>(r);
 
     constexpr FloatType inv_lin_density
         = static_cast<FloatType>(1) / lin_density;
-    const FloatType a_e = nu * inv_lin_density;
+    const FloatType a_e = d[X] * inv_lin_density;
 
     GET_PROPERTY(particle_var::a_e) = a_e;
     GET_PROPERTY(particle_var::a_go) = r[i_go] * y_x_go * inv_lin_density;
@@ -461,26 +516,14 @@ namespace Models
 
     GET_PROPERTY(particle_var::length) += d_t * a_e;
 
-    // Glucose: consumed by respiration, fermentation and overflow
-    const FloatType phi_s = -(r[i_go] + r[i_fe] + r[i_ov]);
-    // Oxygen: only consumed, it is fed to the liquid by the gas/liquid transfer
-    const FloatType phi_o2 = -((r[i_go] * y_o2_go) + (r[i_ao] * y_o2_ao));
-    // Acetate: produced by fermentation (O2 limited) and by overflow (a_p
-    // limited), consumed by acetate oxidation
-    const FloatType phi_a
-        = ((r[i_fe] * y_ac_fe) + (r[i_ov] * y_ac_ov)) - r[i_ao];
+    GET_PROPERTY(particle_var::phi_s) = d[S];
+    GET_PROPERTY(particle_var::phi_o2) = d[O2];
+    GET_PROPERTY(particle_var::phi_a) = d[Ac];
 
-    const FloatType phi_co2 = r[i_go] * y_co2_go + r[i_fe] * y_co2_fe
-                              + r[i_ov] * y_co2_ov + r[i_ao] * y_co2_ao;
-
-    GET_PROPERTY(particle_var::phi_s) = phi_s;
-    GET_PROPERTY(particle_var::phi_o2) = phi_o2;
-    GET_PROPERTY(particle_var::phi_a) = phi_a;
-
-    GET_CONTRIBS(S) = phi_s;
-    GET_CONTRIBS(O2) = phi_o2;
-    GET_CONTRIBS(Ac) = phi_a;
-    GET_CONTRIBS(Co2) = phi_co2;
+    GET_CONTRIBS(S) = d[S];
+    GET_CONTRIBS(O2) = d[O2];
+    GET_CONTRIBS(Ac) = d[Ac];
+    GET_CONTRIBS(Co2) = d[Co2];
 
     return check_div(GET_PROPERTY(Self::particle_var::length),
                      GET_PROPERTY(Self::particle_var::l_max));
@@ -524,8 +567,10 @@ namespace Models
     // a_e alone makes the capacity of a lineage a decreasing sequence that
     // converges to 0; the pull toward a_max keeps a_p away from 0 and lets a
     // starved lineage recover when the environment improves.
-    // const auto a_target
-    //     = static_cast<double>(a_e_i + (a_p_recovery * (a_max_i - a_e_i)));
+    //
+    constexpr FloatType a_p_recovery = 0.1;
+    const auto a_target = static_cast<double>(
+        current_a_e + (a_p_recovery * (a_max_i - current_a_e)));
     // const double average = Kokkos::log(a_target) - sigma * sigma / 2;
 
     const double sigma = Self::sigma_log_inheritance;
@@ -537,7 +582,7 @@ namespace Models
     // to naturally follow environmental improvements. Even when
     // a_e == a_p, the distribution retains a non-zero probability
     // of producing a higher a_p, allowing gradual lineage recovery.
-    const double average = Kokkos::log(current_a_e) - sigma * sigma / 2;
+    const double average = Kokkos::log(a_target) - sigma * sigma / 2;
     const auto dist = MC::Distributions::LogNormal<double>(average, sigma);
 
     auto gen = random_pool.get_state();

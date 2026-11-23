@@ -5,6 +5,7 @@ test_league_size = executable('test_league_size', 'test_league_size.cpp', depend
 test_maths = executable('test_maths', 'test_maths.cpp', dependencies: [common_dependecy])
 test_traits = executable('test_traits', 'test_traits.cpp', dependencies: [common_dependecy])
 test_results = executable('test_results', 'test_results.cpp', dependencies: [common_dependecy])
+test_static_for = executable('test_static_for', 'test_static_for.cpp', dependencies: [common_dependecy])
 
 
 
@@ -17,3 +18,4 @@ test('test_league_size', test_league_size)
 test('test_maths', test_maths)
 test('test_traits', test_traits)
 test('test_results', test_results)
+test('test_static_for', test_static_for)

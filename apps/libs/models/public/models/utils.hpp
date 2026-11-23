@@ -5,7 +5,9 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_MathematicalConstants.hpp>
 #include <Kokkos_Random.hpp>
+#include <common/static_for.hpp>
 #include <common/traits.hpp>
+#include <cstddef>
 #include <mc/alias.hpp>
 #include <mc/macros.hpp>
 #include <mc/prng/prng.hpp>
@@ -160,6 +162,133 @@ namespace Models
   min_var()
   {
     return 0.;
+  }
+
+  namespace impl
+  {
+    /// 1/x[i] for every i with a single division
+    /// (https://medium.com/eryxcoop/montgomerys-trick-for-batch-galois-field-inversion-9b6d0f399da2)
+    ///
+    /// 3(N-1) multiplications + 1 division instead of N divisions.
+    template <typename T, std::size_t N>
+    KOKKOS_INLINE_FUNCTION constexpr Kokkos::Array<T, N>
+    batch_reciprocal(const Kokkos::Array<T, N>& x)
+    {
+      static_assert(N > 0, "batch_reciprocal needs at least one value");
+
+      Kokkos::Array<T, N> prefix{};
+      prefix[0] = x[0];
+      Common::static_for<N - 1>(
+          [&](auto k)
+          {
+            constexpr std::size_t i = decltype(k)::value + 1;
+            prefix[i] = prefix[i - 1] * x[i];
+          });
+
+      T inv = static_cast<T>(1) / prefix[N - 1];
+
+      Kokkos::Array<T, N> out{};
+      Common::static_for<N - 1>(
+          [&](auto k)
+          {
+            constexpr std::size_t i = N - 1 - decltype(k)::value;
+            out[i] = inv * prefix[i - 1];
+            inv *= x[i];
+          });
+      out[0] = inv;
+
+      return out;
+    }
+  } // namespace impl
+
+  /**
+   * @brief Monod factors c_i / (c_i + k_i) of several substrates, with a
+   * single division for all of them.
+   *
+   * Arguments are (c, k) pairs, read the result with structured bindings:
+   * @code
+   * const auto [m_s, m_o2] = monod_batch(c_s, k_s, c_o2, k_o);
+   * @endcode
+   *
+   * @warning c must be clamped >= 0: every denominator is then >= its k > 0
+   * and the product of all of them stays finite and non zero.
+   */
+  template <typename... Ts>
+  KOKKOS_INLINE_FUNCTION constexpr auto
+  monod_batch(Ts... args)
+  {
+    using T = std::common_type_t<Ts...>;
+    static_assert(FloatingPointType<T>, "monod_batch: floating point only");
+    static_assert(sizeof...(Ts) > 0 && sizeof...(Ts) % 2 == 0,
+                  "monod_batch: arguments are (c, k) pairs");
+    constexpr std::size_t n = sizeof...(Ts) / 2;
+
+    const Kokkos::Array<T, 2 * n> ck = { { static_cast<T>(args)... } };
+
+    Kokkos::Array<T, n> denominators{};
+    Common::static_for<n>(
+        [&](auto i)
+        {
+          constexpr std::size_t j = decltype(i)::value;
+          denominators[j] = ck[2 * j] + ck[(2 * j) + 1];
+        });
+
+    const auto inv = impl::batch_reciprocal(denominators);
+
+    Kokkos::Array<T, n> m{};
+    Common::static_for<n>(
+        [&](auto i)
+        {
+          constexpr std::size_t j = decltype(i)::value;
+          m[j] = ck[2 * j] * inv[j];
+        });
+    return m;
+  }
+
+  /**
+   * @brief Production rate of every row of a stoichiometric matrix:
+   * Stoichiometry . r.
+   *
+   * The matrix is a template parameter (rows x reactions, Kokkos::Array of
+   * Kokkos::Array), so each entry is a constant expression: the product is
+   * unrolled by Common::static_for and zero entries are skipped at compile
+   * time, no multiplication by 0 is emitted.
+   * @code
+   * const auto d = apply_stoichiometry<stoichiometry>(r);
+   * @endcode
+   */
+  template <auto Stoichiometry, typename Rates>
+  KOKKOS_INLINE_FUNCTION constexpr auto
+  apply_stoichiometry(const Rates& r)
+  {
+    // clang sees the template parameter object as a const reference
+    using matrix_type = std::remove_cvref_t<decltype(Stoichiometry)>;
+    using row_type = typename matrix_type::value_type;
+    using T = typename row_type::value_type;
+    constexpr std::size_t n_rows = matrix_type::size();
+    constexpr std::size_t n_reactions = row_type::size();
+    static_assert(n_reactions == Rates::size(),
+                  "apply_stoichiometry: one rate per matrix column");
+
+    Kokkos::Array<T, n_rows> d{};
+    Common::static_for<n_rows>(
+        [&](auto j)
+        {
+          Common::static_for<n_reactions>(
+              [&](auto k)
+              {
+                // Local copies: nvcc rejects integral_constant::value used as
+                // a runtime subscript ("undefined in device code")
+                constexpr std::size_t row = decltype(j)::value;
+                constexpr std::size_t col = decltype(k)::value;
+                constexpr T n_jk = Stoichiometry[row][col];
+                if constexpr (n_jk != 0)
+                {
+                  d[row] += n_jk * r[col];
+                }
+              });
+        });
+    return d;
   }
 
 } // namespace Models

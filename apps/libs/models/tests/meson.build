@@ -11,5 +11,12 @@
   include_directories: [public_include_dir])
 
 
+  test_monod = executable(
+  'test_monod',
+  'test_monod.cpp',
+  dependencies: [biomodel_dependency],
+  include_directories: [public_include_dir])
+
 # test('test_backward_euler',test_backward_euler)
 test('test_utils_1',test_utils_1)
+test('test_monod',test_monod)
