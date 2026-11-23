@@ -72,6 +72,10 @@ $(function(){initNavTree('namespaceCommon.html','',''); });
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:impl" id="r_impl"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCommon_1_1impl.html">impl</a></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:ConfigFactory" id="r_ConfigFactory"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCommon_1_1ConfigFactory.html">ConfigFactory</a></td></tr>
@@ -101,6 +105,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ad9c9fe6434c0c09218a2e33e17beee28 template"><td class="memItemLeft" align="right" valign="top">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad9c9fe6434c0c09218a2e33e17beee28">get_policy_team</a> (std::size_t league_size=1)</td></tr>
 <tr class="memitem:adb49dd62a0b04177404cae67015110cc" id="r_adb49dd62a0b04177404cae67015110cc"><td class="memTemplParams" colspan="2">template&lt;typename Tag = void&gt; </td></tr>
 <tr class="memitem:adb49dd62a0b04177404cae67015110cc template"><td class="memItemLeft" align="right" valign="top">Kokkos::TeamPolicy&lt; ComputeSpace, Tag &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb49dd62a0b04177404cae67015110cc">get_policy_team_from_npt</a> (std::size_t n_tot, std::size_t n_per_team)</td></tr>
+<tr class="memitem:a5e5f44631fbe37de82b3435221eedbcb" id="r_a5e5f44631fbe37de82b3435221eedbcb"><td class="memTemplParams" colspan="2">template&lt;std::size_t N, typename F&gt; </td></tr>
+<tr class="memitem:a5e5f44631fbe37de82b3435221eedbcb template"><td class="memItemLeft" align="right" valign="top">KOKKOS_FORCEINLINE_FUNCTION constexpr void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e5f44631fbe37de82b3435221eedbcb">static_for</a> (F &amp;&amp;f)</td></tr>
+<tr class="memdesc:a5e5f44631fbe37de82b3435221eedbcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compile time loop: calls f(integral_constant&lt;0&gt;) ... f(integral_constant&lt;N-1&gt;), in order.  <br /></td></tr>
 <tr class="memitem:a961ab661d5ca3a66b845da6edd0a51aa" id="r_a961ab661d5ca3a66b845da6edd0a51aa"><td class="memItemLeft" align="right" valign="top">template&lt;&gt; </td></tr>
 <tr class="memitem:a961ab661d5ca3a66b845da6edd0a51aa template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a961ab661d5ca3a66b845da6edd0a51aa">read_env_or</a> (std::string_view varname, bool vdefault)</td></tr>
 <tr class="memdesc:a961ab661d5ca3a66b845da6edd0a51aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">bool accepts "true"/"false" as well as 1/0, operator&gt;&gt; does not  <br /></td></tr>
@@ -253,7 +260,7 @@ template&lt;typename T&gt; </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCommon_a7e29bd7117dd8bfc651a1dc215923379_icgraph.svg" width="100%" height="446"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCommon_a7e29bd7117dd8bfc651a1dc215923379_icgraph.svg" width="100%" height="493"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 
 </div>
@@ -341,7 +348,7 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCommon_a7ca16dc3314f89cd1860091731cd7014_icgraph.svg" width="578" height="195"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCommon_a7ca16dc3314f89cd1860091731cd7014_icgraph.svg" width="578" height="258"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -466,6 +473,46 @@ template&lt;&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5e5f44631fbe37de82b3435221eedbcb" name="a5e5f44631fbe37de82b3435221eedbcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e5f44631fbe37de82b3435221eedbcb">&#9670;&#160;</a></span>static_for()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t N, typename F&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">KOKKOS_FORCEINLINE_FUNCTION constexpr void Common::static_for </td>
+          <td>(</td>
+          <td class="paramtype">F &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>f</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compile time loop: calls f(integral_constant&lt;0&gt;) ... f(integral_constant&lt;N-1&gt;), in order. </p>
+<p>Unrolled by construction (fold expression), so it does not rely on the optimiser, on the host as on the device. The index reaches f as an integral_constant: inside f, <span class="tt">decltype(i)::value</span> is a constant expression (usable in <span class="tt">if constexpr</span> or as a template argument). </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCommon_a5e5f44631fbe37de82b3435221eedbcb_cgraph.svg" width="342" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespaceCommon_a5e5f44631fbe37de82b3435221eedbcb_icgraph.svg" width="100%" height="388"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+</div>
 
 </div>
 </div>

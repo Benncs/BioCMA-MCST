@@ -1,0 +1,7 @@
+<map id="Models::apply_stoichiometry" name="Models::apply_stoichiometry">
+<area shape="rect" id="Node000001" title="Production rate of every row of a stoichiometric matrix: Stoichiometry . r." alt="" coords="5,12,194,37"/>
+<area shape="rect" id="Node000002" href="$namespaceCommon.html#a5e5f44631fbe37de82b3435221eedbcb" title="Compile time loop: calls f(integral_constant&lt;0&gt;) ... f(integral_constant&lt;N&#45;1&gt;), in order." alt="" coords="242,12,378,37"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,22,226,22,226,27,194,27"/>
+<area shape="rect" id="Node000003" href="$namespaceCommon_1_1impl.html#a92cc3f0488c74bc32b4279277fe48909" title=" " alt="" coords="426,5,572,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="379,22,410,22,410,27,379,27"/>
+</map>

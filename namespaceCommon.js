@@ -1,5 +1,8 @@
 var namespaceCommon =
 [
+    [ "impl", "namespaceCommon_1_1impl.html", [
+      [ "static_for_impl", "namespaceCommon_1_1impl.html#a92cc3f0488c74bc32b4279277fe48909", null ]
+    ] ],
     [ "ConfigFactory", "classCommon_1_1ConfigFactory.html", "classCommon_1_1ConfigFactory" ],
     [ "ConfigFile", "classCommon_1_1ConfigFile.html", "classCommon_1_1ConfigFile" ],
     [ "c_league_size", "namespaceCommon.html#a618180f8964b0ffef461c9ff2f44d295", null ],
@@ -14,5 +17,6 @@ var namespaceCommon =
     [ "set_local_env< bool >", "namespaceCommon.html#a37ac0c5a89a3a4f054c886feaa901bec", null ],
     [ "set_local_env< bool >", "namespaceCommon.html#a37ac0c5a89a3a4f054c886feaa901bec", null ],
     [ "set_local_env< std::string >", "namespaceCommon.html#a6cef78dc6fcccfd08eb24504069712e8", null ],
-    [ "set_local_env< std::string >", "namespaceCommon.html#a6cef78dc6fcccfd08eb24504069712e8", null ]
+    [ "set_local_env< std::string >", "namespaceCommon.html#a6cef78dc6fcccfd08eb24504069712e8", null ],
+    [ "static_for", "namespaceCommon.html#a5e5f44631fbe37de82b3435221eedbcb", null ]
 ];

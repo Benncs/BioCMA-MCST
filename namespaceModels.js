@@ -4,6 +4,9 @@ var namespaceModels =
       [ "logistic", "namespaceModels_1_1GammaDivision.html#acf88eee4fc351f8a29a44610f36d761d", null ],
       [ "threshold_linear", "namespaceModels_1_1GammaDivision.html#acee9355f9fe219b04920306ac65c4ac3", null ]
     ] ],
+    [ "impl", "namespaceModels_1_1impl.html", [
+      [ "batch_reciprocal", "namespaceModels_1_1impl.html#a52902f23b1af661990c3b71c38cb7088", null ]
+    ] ],
     [ "MolarMass", "namespaceModels_1_1MolarMass.html", "namespaceModels_1_1MolarMass" ],
     [ "Stoichiometry", "namespaceModels_1_1Stoichiometry.html", [
       [ "e_surplus", "namespaceModels_1_1Stoichiometry.html#a213e08f6ba45c9336959bde0e1f2b1b8", null ],
@@ -31,6 +34,7 @@ var namespaceModels =
     [ "_get_phi_s_max", "namespaceModels.html#ae80db106a8e52a9ccdbc722fed5303df", null ],
     [ "almost_equal", "namespaceModels.html#a960cb54a05fd1b8376bd187b46297140", null ],
     [ "almost_zero", "namespaceModels.html#a907817a40054fa2632fb1302d54f0dce", null ],
+    [ "apply_stoichiometry", "namespaceModels.html#a3a3e358b40d777cc5c92aef0d55d2275", null ],
     [ "c_linear_density", "namespaceModels.html#ae070357c43b64436202145d812e1e05c", null ],
     [ "check_div", "namespaceModels.html#a91f8e773246cdd315aada1f72f97983d", null ],
     [ "check_probability_division", "namespaceModels.html#a029b4574d8251a785c7cdd89348342c2", null ],
@@ -41,5 +45,6 @@ var namespaceModels =
     [ "get_model_configuration", "namespaceModels.html#ae28143927a18ade81aa226959b41c2b2", null ],
     [ "min_var", "namespaceModels.html#a762c1e1dcf75381362aabbef1c4f79a7", null ],
     [ "min_var", "namespaceModels.html#aeb5cecf73dd99777ef0554d1b129252e", null ],
+    [ "monod_batch", "namespaceModels.html#ae8d627f7bf034251ceea1f43d075344e", null ],
     [ "tau_division_proba", "namespaceModels.html#af990d8f8c467e200680a53e35c3327a6", null ]
 ];

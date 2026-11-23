@@ -86,8 +86,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a78ad4623d83b436cdd0ae9c8e1e5c7ac" id="r_a78ad4623d83b436cdd0ae9c8e1e5c7ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78ad4623d83b436cdd0ae9c8e1e5c7ac">reset_counter</a> ()</td></tr>
 <tr class="memitem:a80f3f8d7143933b6b2d9e58ff0de40d8" id="r_a80f3f8d7143933b6b2d9e58ff0de40d8"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </td></tr>
 <tr class="memitem:a80f3f8d7143933b6b2d9e58ff0de40d8 template"><td class="memItemLeft" align="right" valign="top">ParticlePropertyViewType&lt; ComputeSpace &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80f3f8d7143933b6b2d9e58ff0de40d8">get_particle_age_only</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;container)</td></tr>
-<tr class="memitem:a5c1775fa34193199d9c989e5740e2f84" id="r_a5c1775fa34193199d9c989e5740e2f84"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </td></tr>
-<tr class="memitem:a5c1775fa34193199d9c989e5740e2f84 template"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c1775fa34193199d9c989e5740e2f84">get_properties</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;container, const std::size_t n_compartment, const bool with_age)</td></tr>
+<tr class="memitem:a142347a828fa7757ae9e66b4c5e96c51" id="r_a142347a828fa7757ae9e66b4c5e96c51"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; <br />
+requires <a class="el" href="conceptHasExportProperties.html">HasExportProperties</a>&lt;M&gt;</td></tr>
+<tr class="memitem:a142347a828fa7757ae9e66b4c5e96c51 template"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a142347a828fa7757ae9e66b4c5e96c51">get_properties</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;container, const std::size_t n_compartment, const bool with_age, const bool export_position)</td></tr>
+<tr class="memitem:ad32af85b99a4b93012f0de85a07369b1" id="r_ad32af85b99a4b93012f0de85a07369b1"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; <br />
+requires (!<a class="el" href="conceptHasExportProperties.html">HasExportProperties</a>&lt;M&gt;)</td></tr>
+<tr class="memitem:ad32af85b99a4b93012f0de85a07369b1 template"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad32af85b99a4b93012f0de85a07369b1">get_properties</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;container, const std::size_t n_compartment, const bool with_age, const bool export_position)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -164,13 +168,14 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a5c1775fa34193199d9c989e5740e2f84" name="a5c1775fa34193199d9c989e5740e2f84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c1775fa34193199d9c989e5740e2f84">&#9670;&#160;</a></span>get_properties()</h2>
+<a id="a142347a828fa7757ae9e66b4c5e96c51" name="a142347a828fa7757ae9e66b4c5e96c51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a142347a828fa7757ae9e66b4c5e96c51">&#9670;&#160;</a></span>get_properties() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; <br />
+requires <a class="el" href="conceptHasExportProperties.html">HasExportProperties</a>&lt;M&gt;</div>
       <table class="memname">
         <tr>
           <td class="memname">std::optional&lt; <a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &gt; PostProcessing::get_properties </td>
@@ -185,14 +190,58 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const bool</td>          <td class="paramname"><span class="paramname"><em>with_age</em></span>&#160;)</td>
+          <td class="paramtype">const bool</td>          <td class="paramname"><span class="paramname"><em>with_age</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool</td>          <td class="paramname"><span class="paramname"><em>export_position</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_a5c1775fa34193199d9c989e5740e2f84_cgraph.svg" width="100%" height="405"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_a142347a828fa7757ae9e66b4c5e96c51_cgraph.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+</div>
+
+</div>
+</div>
+<a id="ad32af85b99a4b93012f0de85a07369b1" name="ad32af85b99a4b93012f0de85a07369b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad32af85b99a4b93012f0de85a07369b1">&#9670;&#160;</a></span>get_properties() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; <br />
+requires (!<a class="el" href="conceptHasExportProperties.html">HasExportProperties</a>&lt;M&gt;)</div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt; <a class="el" href="structPostProcessing_1_1BonceBuffer.html">PostProcessing::BonceBuffer</a> &gt; PostProcessing::get_properties </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>container</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>n_compartment</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool</td>          <td class="paramname"><span class="paramname"><em>with_age</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool</td>          <td class="paramname"><span class="paramname"><em>export_position</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="namespacePostProcessing_ad32af85b99a4b93012f0de85a07369b1_cgraph.svg" width="544" height="79"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
