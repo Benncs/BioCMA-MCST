@@ -117,22 +117,39 @@ namespace MC
     // }
 
     /**
-     * @brief Attempts to spawn a new particle by performing division on the
-     * specified particle.
+     * @brief Reserve a buffer slot for the division of particle idx1.
      *
-     * Executes container and buffer manipulations to spawn a new particle and
-     * invokes `Model::division`. The operation may fail if conditions for
-     * division are not met (e.g., insufficient space or invalid state).
+     *
+     * @param idx1 index of the particle
+     * @return true if a slot was reserved, false if the buffer is full.
+     */
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
+    register_division(std::size_t idx1) const;
+
+    /**
+     * @brief Perform the division registered in buffer slot idx2.
+     *
+     * Invokes `Model::division` on the registered particle, the new particle
+     * is written in slot idx2.
      *
      * @param random_pool The random number generator pool for stochastic
      * operations.
-     * @param idx1 The index of the particle to undergo division.
-     * @return `true` if the spawn was successful, `false` otherwise.
+     * @param idx2 The buffer slot, lower than `n_division()`.
      */
-    [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
-    handle_division(MC::ParticleRefTime::value_type abolute_time,
+    KOKKOS_INLINE_FUNCTION void
+    handle_division(MC::ParticleRefTime::value_type absolute_time,
                     const MC::pool_type& random_pool,
-                    std::size_t idx1) const;
+                    std::size_t idx2) const;
+
+    /**
+     * @brief Number of divisions registered in the buffer
+     */
+    [[nodiscard]] std::size_t n_division() const;
+
+    /**
+     * @brief Number of divisions that did not get a buffer slot
+     */
+    [[nodiscard]] std::size_t n_division_overflow() const;
 
     /**
      * @brief Return the particle weight
@@ -565,21 +582,46 @@ namespace MC
 
   template <ModelType Model>
   KOKKOS_INLINE_FUNCTION bool
-  ParticlesContainer<Model>::handle_division(
-      const MC::ParticleRefTime::value_type abolute_time,
-      const MC::pool_type& random_pool,
-      std::size_t idx1) const
+  ParticlesContainer<Model>::register_division(std::size_t idx1) const
   {
-    if (Kokkos::atomic_load(&buffer_index()) < buffer_model.extent(0))
+    const auto idx2 = Kokkos::atomic_fetch_add(&buffer_index(), 1);
+    if (idx2 < buffer_position.extent(0))
     {
-      const auto idx2 = Kokkos::atomic_fetch_add(&buffer_index(), 1);
-      Model::division(random_pool, idx1, idx2, model, buffer_model);
-      buffer_position(idx2) = position(idx1);
-      t_ref(idx1, 1) = abolute_time;
-
+      // Warning: in position we first store the idx of the mother
+      buffer_position(idx2) = idx1;
       return true;
     }
     return false;
+  }
+
+  template <ModelType Model>
+  KOKKOS_INLINE_FUNCTION void
+  ParticlesContainer<Model>::handle_division(
+      const MC::ParticleRefTime::value_type absolute_time,
+      const MC::pool_type& random_pool,
+      std::size_t idx2) const
+  {
+    // Warning: in position we first store the idx of the mother
+    // idx1 is the index of the mother of the newborn idx2
+    const std::size_t idx1 = buffer_position(idx2);
+    Model::division(random_pool, idx1, idx2, model, buffer_model);
+    // Warning: put the real poisition of the newbordel cell
+    buffer_position(idx2) = position(idx1);
+    t_ref(idx1, 1) = absolute_time;
+  }
+
+  template <ModelType Model>
+  [[nodiscard]] std::size_t
+  ParticlesContainer<Model>::n_division() const
+  {
+    return Kokkos::min(buffer_index(), buffer_position.extent(0));
+  }
+
+  template <ModelType Model>
+  [[nodiscard]] std::size_t
+  ParticlesContainer<Model>::n_division_overflow() const
+  {
+    return buffer_index() - n_division();
   }
 
   template <ModelType Model>
@@ -589,7 +631,8 @@ namespace MC
   {
     PROFILE_SECTION("ParticlesContainer::merge_buffer")
     const auto original_size = n_used_elements;
-    const auto n_add_item = buffer_index();
+    // if buffer is full, buffer_index can be bigger than extent
+    const auto n_add_item = Kokkos::min(buffer_index(), buffer_model.extent(0));
     if (n_add_item == 0)
     {
       return;

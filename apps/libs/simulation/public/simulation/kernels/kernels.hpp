@@ -68,6 +68,7 @@ namespace Simulation::KernelInline
       // post_cycle tallies the reducer either way: clear it here so a step that
       // launches nothing cannot re-count the previous step's events.
       Kokkos::deep_copy(move_reducer, MoveLeaveTally{ 0, 0 });
+      Kokkos::deep_copy(cycle_reducer, KernelInline::CycleReducerType{ 0, 0 });
 
       // cycle_kernel.update(d_t, container);
 
@@ -140,6 +141,7 @@ namespace Simulation::KernelInline
           m_options(options)
 
     {
+      contribution_kernel.cycle_reducer = cycle_reducer;
     }
 
     /// Move-only, multi-compartment domain.
@@ -280,29 +282,46 @@ namespace Simulation::KernelInline
         league_size = Common::c_league_size(n_particle, npt);
         static_assert(ConstWeightModelType<Model>,
                       "ModelType:Constapply_weight()");
-        KernelInline::CycleReducer<ComputeSpace> reducer(cycle_reducer);
         if (f_multi_compartment)
         {
 
           const auto policy_contribs
               = Kokkos::TeamPolicy<typename ContributionFunctor<Model>::Tag3D>(
                   model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
-          Kokkos::parallel_reduce("cycle_model_contribs",
-                                  policy_contribs,
-                                  contribution_kernel,
-                                  reducer);
+          Kokkos::parallel_for(
+              "cycle_model_contribs", policy_contribs, contribution_kernel);
         }
         else
         {
-          auto policy_contribs
+          const auto policy_contribs
               = Kokkos::TeamPolicy<typename ContributionFunctor<Model>::Tag0D>(
                   model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
-          policy_contribs.set_scratch_size(
-              0, Kokkos::PerTeam(sizeof(float) * Model::n_c));
-          Kokkos::parallel_reduce("cycle_model_contribs_0d",
-                                  policy_contribs,
-                                  contribution_kernel,
-                                  reducer);
+          Kokkos::parallel_for(
+              "cycle_model_contribs_0d", policy_contribs, contribution_kernel);
+        }
+
+        // buffer_index is read on the host
+        model_space.fence();
+        const auto& particles = contribution_kernel.m_particles;
+        const std::size_t n_division = particles.n_division();
+        if (n_division != 0)
+        {
+          contribution_kernel.n_division = n_division;
+          const auto policy_division = Kokkos::TeamPolicy<
+              typename ContributionFunctor<Model>::TagDivision>(
+              model_space,
+              Common::c_league_size(n_division,
+                                    contribution_kernel.m_particle_per_team),
+              Kokkos::AUTO(),
+              Kokkos::AUTO());
+          Kokkos::parallel_for(
+              "cycle_model_division", policy_division, contribution_kernel);
+        }
+
+        const std::size_t n_overflow = particles.n_division_overflow();
+        if (n_overflow != 0) [[unlikely]]
+        {
+          Kokkos::printf("[KERNEL] Division Overflow x%zu\r\n", n_overflow);
         }
       }
     }
