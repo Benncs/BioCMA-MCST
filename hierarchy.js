@@ -135,6 +135,7 @@ var hierarchy =
     [ "Simulation::KernelInline::TagContribution", "structSimulation_1_1KernelInline_1_1TagContribution.html", null ],
     [ "Simulation::KernelInline::TagContribution0D", "structSimulation_1_1KernelInline_1_1TagContribution0D.html", null ],
     [ "Simulation::KernelInline::TagCycle", "structSimulation_1_1KernelInline_1_1TagCycle.html", null ],
+    [ "ContributionFunctor< M >::TagDivision", "structContributionFunctor_1_1TagDivision.html", null ],
     [ "Simulation::KernelInline::TagLeave", "structSimulation_1_1KernelInline_1_1TagLeave.html", null ],
     [ "Simulation::KernelInline::TagLeaveB0D", "structSimulation_1_1KernelInline_1_1TagLeaveB0D.html", null ],
     [ "Simulation::KernelInline::TagMove", "structSimulation_1_1KernelInline_1_1TagMove.html", null ],

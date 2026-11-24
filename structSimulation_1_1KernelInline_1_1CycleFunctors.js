@@ -1,6 +1,5 @@
 var structSimulation_1_1KernelInline_1_1CycleFunctors =
 [
-    [ "cycle_kernel_type", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#a075d8095acfd14f1eb1d543a454993d5", null ],
     [ "FModel", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#add7052bc91e74b3dcdb828dc7414cbbf", null ],
     [ "move_kernel_type", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#a3c6f84a046130d87477eac316d9cff6d", null ],
     [ "CycleFunctors", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#af9295ea4cdcfacc348fa8dccc1723c0e", null ],
@@ -11,9 +10,8 @@ var structSimulation_1_1KernelInline_1_1CycleFunctors =
     [ "launch_move", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#ad2fc32bf23892ce86533e9f069051003", null ],
     [ "launch_move_3d", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#a93806164ba8ca7f9488220d50c086911", null ],
     [ "launch_move_leave_3d", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeec086c1c5c1c7032496f0a7ac67f801", null ],
-    [ "update", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#afa64e46d0b29f84edbd5bef4f19069ed", null ],
+    [ "update", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#aa311a5a3c6e54dbba29fd026f4e070c7", null ],
     [ "contribution_kernel", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeaa14e61092684f6cfed1cf919f540cf", null ],
-    [ "cycle_kernel", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#a1ce087876e977d1fb79b4144ea152b5f", null ],
     [ "cycle_reducer", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#ab7c05baee5924379a70ca3c584ff045c", null ],
     [ "f_multi_compartment", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#a467db6a3291dfadfa3bc9c385d6a015d", null ],
     [ "m_options", "structSimulation_1_1KernelInline_1_1CycleFunctors.html#aa251b4425fbab966b50d6616c3db07a3", null ],

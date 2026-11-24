@@ -241,10 +241,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:ac8ac8a928e14a156a380c3d6c79c8a87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Distribute the available uptake fluxes over the four reactions.  <br /></td></tr>
 <tr class="memitem:a410b85c009e82c146cbb7548f45697aa" id="r_a410b85c009e82c146cbb7548f45697aa"><td class="memItemLeft" align="right" valign="top">static std::array&lt; std::string_view, <a class="el" href="#a6085b0e40bbdf9a56a699d44062dd644">Self::n_var</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a410b85c009e82c146cbb7548f45697aa">names</a> ()</td></tr>
 <tr class="memitem:a65af484bb077f6e291bb82eb00ebe6d0" id="r_a65af484bb077f6e291bb82eb00ebe6d0"><td class="memItemLeft" align="right" valign="top">static std::array&lt; std::string_view, <a class="el" href="#abd8c7605f3c0e20c396753147a06c950">Self::n_c</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65af484bb077f6e291bb82eb00ebe6d0">species</a> ()</td></tr>
-<tr class="memitem:a19975d0209240d16388a541c39b66654" id="r_a19975d0209240d16388a541c39b66654"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="#a85acc66fd68f212916a4f8b1778f1627">uptake_rates</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19975d0209240d16388a541c39b66654">uptake</a> (const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> c_s, const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> c_o2, const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> c_ac, const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> <a class="el" href="#aa1fa524f95aa637df217a32c9d8397b7aeae17837675ab72960a5c64d5ba1cca2">a_max</a>, const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> <a class="el" href="#aa1fa524f95aa637df217a32c9d8397b7a2fa47f7c65fec19cc163b195725e3844">length</a>, const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> d_t)</td></tr>
-<tr class="memdesc:a19975d0209240d16388a541c39b66654"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structModels_1_1Uptake.html">Uptake</a> potentials of one cell [kg/s], indexed by species.  <br /></td></tr>
-<tr class="memitem:ae4e65774a0ca1448b391b1c35cd0ea47" id="r_ae4e65774a0ca1448b391b1c35cd0ea47"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="#aa813cd71de7be75595428b636aaeeffb">reaction_rates</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4e65774a0ca1448b391b1c35cd0ea47">metabolism</a> (const <a class="el" href="#a85acc66fd68f212916a4f8b1778f1627">uptake_rates</a> &amp;phi, const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> nu_p)</td></tr>
-<tr class="memdesc:ae4e65774a0ca1448b391b1c35cd0ea47"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="#ae4e65774a0ca1448b391b1c35cd0ea47" title="metabolism().">metabolism()</a>.  <br /></td></tr>
+<tr class="memitem:ae1bf1a40f5c6c70e90e321717ee5e967" id="r_ae1bf1a40f5c6c70e90e321717ee5e967"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="#a85acc66fd68f212916a4f8b1778f1627">uptake_rates</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1bf1a40f5c6c70e90e321717ee5e967">uptake</a> (const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> c_s, const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> c_o2, const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> c_ac, const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> <a class="el" href="#aa1fa524f95aa637df217a32c9d8397b7aeae17837675ab72960a5c64d5ba1cca2">a_max</a>, const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> <a class="el" href="#aa1fa524f95aa637df217a32c9d8397b7a2fa47f7c65fec19cc163b195725e3844">length</a>, const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> d_t)</td></tr>
+<tr class="memdesc:ae1bf1a40f5c6c70e90e321717ee5e967"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structModels_1_1Uptake.html">Uptake</a> potentials of one cell [kg/s], indexed by species.  <br /></td></tr>
+<tr class="memitem:a8c52994ff7bc58e3b8b05ed40541f468" id="r_a8c52994ff7bc58e3b8b05ed40541f468"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="#aa813cd71de7be75595428b636aaeeffb">reaction_rates</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c52994ff7bc58e3b8b05ed40541f468">metabolism</a> (const <a class="el" href="#a85acc66fd68f212916a4f8b1778f1627">uptake_rates</a> &amp;phi, const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> nu_p)</td></tr>
+<tr class="memdesc:a8c52994ff7bc58e3b8b05ed40541f468"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="#a8c52994ff7bc58e3b8b05ed40541f468" title="metabolism().">metabolism()</a>.  <br /></td></tr>
 <tr class="memitem:ae84c07cf9c25b5d7a6b1bf6d5ca4e594" id="r_ae84c07cf9c25b5d7a6b1bf6d5ca4e594"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae84c07cf9c25b5d7a6b1bf6d5ca4e594">init</a> (const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;random_pool, std::size_t idx, const <a class="el" href="#a649f5eeaf49d87b47de15272329238a3">SelfParticle</a> &amp;arr)</td></tr>
 <tr class="memitem:aec3831e64d8623eab9841e865828547d" id="r_aec3831e64d8623eab9841e865828547d"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION <a class="el" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7b">MC::Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec3831e64d8623eab9841e865828547d">update</a> (const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;random_pool, <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> d_t, std::size_t idx, const <a class="el" href="#a649f5eeaf49d87b47de15272329238a3">SelfParticle</a> &amp;arr, const <a class="el" href="#a3327d5428c0734211adbc2bb1ddf2d92">SelfContribs</a> &amp;arr_contribs, std::size_t position_index, const <a class="el" href="namespaceMC.html#aa5a6942718ba877c62a9f91b87915901">MC::LocalConcentration</a> &amp;c)</td></tr>
 <tr class="memitem:aa98d3f075f045133f4d420850d0a2b4b" id="r_aa98d3f075f045133f4d420850d0a2b4b"><td class="memItemLeft" align="right" valign="top">static KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa98d3f075f045133f4d420850d0a2b4b">division</a> (const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;random_pool, std::size_t idx, std::size_t idx2, const <a class="el" href="#a649f5eeaf49d87b47de15272329238a3">SelfParticle</a> &amp;arr, const <a class="el" href="#a649f5eeaf49d87b47de15272329238a3">SelfParticle</a> &amp;buffer_arr)</td></tr>
@@ -1083,8 +1083,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="ae4e65774a0ca1448b391b1c35cd0ea47" name="ae4e65774a0ca1448b391b1c35cd0ea47"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4e65774a0ca1448b391b1c35cd0ea47">&#9670;&#160;</a></span>metabolism() <span class="overload">[1/2]</span></h2>
+<a id="a8c52994ff7bc58e3b8b05ed40541f468" name="a8c52994ff7bc58e3b8b05ed40541f468"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c52994ff7bc58e3b8b05ed40541f468">&#9670;&#160;</a></span>metabolism() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1093,7 +1093,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION <a class="el" href="#aa813cd71de7be75595428b636aaeeffb">reaction_rates</a> Models::Acetate::metabolism </td>
+          <td class="memname">KOKKOS_INLINE_FUNCTION <a class="el" href="#aa813cd71de7be75595428b636aaeeffb">Acetate::reaction_rates</a> Models::Acetate::metabolism </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="#a85acc66fd68f212916a4f8b1778f1627">uptake_rates</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>phi</em></span>, </td>
         </tr>
@@ -1105,17 +1105,17 @@ Here is the call graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="#ae4e65774a0ca1448b391b1c35cd0ea47" title="metabolism().">metabolism()</a>. </p>
+<p><a class="el" href="#a8c52994ff7bc58e3b8b05ed40541f468" title="metabolism().">metabolism()</a>. </p>
 <p>go = min(phi_S, phi_O2/y_o2_go, nu_p/y_x_go); whichever term is the smallest leaves exactly one secondary reaction active: glucose limited -&gt; ao, oxygen limited -&gt; fe, growth limited -&gt; ov. Every secondary reaction is therefore written against go only and the inactive ones vanish by themselves. </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structModels_1_1Acetate_ae4e65774a0ca1448b391b1c35cd0ea47_icgraph.svg" width="414" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structModels_1_1Acetate_a8c52994ff7bc58e3b8b05ed40541f468_icgraph.svg" width="414" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -1378,8 +1378,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a19975d0209240d16388a541c39b66654" name="a19975d0209240d16388a541c39b66654"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a19975d0209240d16388a541c39b66654">&#9670;&#160;</a></span>uptake()</h2>
+<a id="ae1bf1a40f5c6c70e90e321717ee5e967" name="ae1bf1a40f5c6c70e90e321717ee5e967"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1bf1a40f5c6c70e90e321717ee5e967">&#9670;&#160;</a></span>uptake()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1388,7 +1388,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION <a class="el" href="#a85acc66fd68f212916a4f8b1778f1627">uptake_rates</a> Models::Acetate::uptake </td>
+          <td class="memname">KOKKOS_INLINE_FUNCTION <a class="el" href="#a85acc66fd68f212916a4f8b1778f1627">Acetate::uptake_rates</a> Models::Acetate::uptake </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a></td>          <td class="paramname"><span class="paramname"><em>c_s</em></span>, </td>
         </tr>
@@ -1420,7 +1420,7 @@ Here is the call graph for this function:</div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1439,12 +1439,12 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structModels_1_1Acetate_a19975d0209240d16388a541c39b66654_cgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structModels_1_1Acetate_ae1bf1a40f5c6c70e90e321717ee5e967_cgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structModels_1_1Acetate_a19975d0209240d16388a541c39b66654_icgraph.svg" width="384" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structModels_1_1Acetate_ae1bf1a40f5c6c70e90e321717ee5e967_icgraph.svg" width="384" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

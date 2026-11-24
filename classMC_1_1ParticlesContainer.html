@@ -98,14 +98,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5d93b87f5a6e18c449e0ed62333e9d6e" id="r_a5d93b87f5a6e18c449e0ed62333e9d6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMC_1_1ParticlesContainer.html">ParticlesContainer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d93b87f5a6e18c449e0ed62333e9d6e">operator=</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">ParticlesContainer</a> &amp;&amp;)=default</td></tr>
 <tr class="memitem:a23696c7b8b024aa8544b5f4deca12ac3" id="r_a23696c7b8b024aa8544b5f4deca12ac3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23696c7b8b024aa8544b5f4deca12ac3">~ParticlesContainer</a> ()=default</td></tr>
 <tr class="memdesc:a23696c7b8b024aa8544b5f4deca12ac3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor.  <br /></td></tr>
-<tr class="memitem:a3ad0f53899edc9c8343ca1122d722c29" id="r_a3ad0f53899edc9c8343ca1122d722c29"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ad0f53899edc9c8343ca1122d722c29">handle_division</a> (const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;random_pool, std::size_t idx1) const</td></tr>
-<tr class="memdesc:a3ad0f53899edc9c8343ca1122d722c29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the contribution if particle at index idx.  <br /></td></tr>
+<tr class="memitem:a44806ed4776ee3fa81ea2dea71429f35" id="r_a44806ed4776ee3fa81ea2dea71429f35"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a44806ed4776ee3fa81ea2dea71429f35">register_division</a> (std::size_t idx1) const</td></tr>
+<tr class="memdesc:a44806ed4776ee3fa81ea2dea71429f35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the contribution if particle at index idx.  <br /></td></tr>
+<tr class="memitem:ace5b780536be02298d843bd2dfc481f3" id="r_ace5b780536be02298d843bd2dfc481f3"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace5b780536be02298d843bd2dfc481f3">handle_division</a> (MC::ParticleRefTime::value_type absolute_time, const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;random_pool, std::size_t idx2) const</td></tr>
+<tr class="memdesc:ace5b780536be02298d843bd2dfc481f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform the division registered in buffer slot idx2.  <br /></td></tr>
+<tr class="memitem:afaae04dbfe786a51ae201a1d5efa54b6" id="r_afaae04dbfe786a51ae201a1d5efa54b6"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afaae04dbfe786a51ae201a1d5efa54b6">n_division</a> () const</td></tr>
+<tr class="memdesc:afaae04dbfe786a51ae201a1d5efa54b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of divisions registered in the buffer.  <br /></td></tr>
+<tr class="memitem:aff52cea7724824580acc8cb6442f220d" id="r_aff52cea7724824580acc8cb6442f220d"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff52cea7724824580acc8cb6442f220d">n_division_overflow</a> () const</td></tr>
+<tr class="memdesc:aff52cea7724824580acc8cb6442f220d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of divisions that did not get a buffer slot.  <br /></td></tr>
 <tr class="memitem:a81e8092b0be1c6e31cf6637a492a8e40" id="r_a81e8092b0be1c6e31cf6637a492a8e40"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION Model::FloatType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81e8092b0be1c6e31cf6637a492a8e40">get_weight</a> (std::size_t idx) const</td></tr>
 <tr class="memdesc:a81e8092b0be1c6e31cf6637a492a8e40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the particle weight.  <br /></td></tr>
 <tr class="memitem:a25d64f06c6f66817bc15bac225369a63" id="r_a25d64f06c6f66817bc15bac225369a63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25d64f06c6f66817bc15bac225369a63">force_remove_dead</a> ()</td></tr>
 <tr class="memdesc:a25d64f06c6f66817bc15bac225369a63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clean all the non-idle particle even if number smaller than threshold.  <br /></td></tr>
-<tr class="memitem:a8e95993fb1287c04427780d6372be565" id="r_a8e95993fb1287c04427780d6372be565"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e95993fb1287c04427780d6372be565">merge_buffer</a> ()</td></tr>
-<tr class="memdesc:a8e95993fb1287c04427780d6372be565"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert particle buffer into the main container.  <br /></td></tr>
+<tr class="memitem:abe55e35190a77b786ab3563d31fac4ab" id="r_abe55e35190a77b786ab3563d31fac4ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe55e35190a77b786ab3563d31fac4ab">merge_buffer</a> (MC::ParticleRefTime::value_type absolute_time)</td></tr>
+<tr class="memdesc:abe55e35190a77b786ab3563d31fac4ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert particle buffer into the main container.  <br /></td></tr>
 <tr class="memitem:aaf9c8e5f7b98db37614050c602e02d58" id="r_aaf9c8e5f7b98db37614050c602e02d58"><td class="memTemplParams" colspan="2">template&lt;class Archive&gt; </td></tr>
 <tr class="memitem:aaf9c8e5f7b98db37614050c602e02d58 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf9c8e5f7b98db37614050c602e02d58">save</a> (Archive &amp;ar) const</td></tr>
 <tr class="memdesc:aaf9c8e5f7b98db37614050c602e02d58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save data into ar for serialization.  <br /></td></tr>
@@ -135,7 +141,7 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:aab2bc872e28015fbbd9dd5ce78468e73" id="r_aab2bc872e28015fbbd9dd5ce78468e73"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a546cc81f7d42793c9c48edf7b3008448">MC::ParticlePositions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab2bc872e28015fbbd9dd5ce78468e73">position</a></td></tr>
 <tr class="memitem:afa005cba9cbc87bc27b6bd0eaa066fac" id="r_afa005cba9cbc87bc27b6bd0eaa066fac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a2193e5e54bfdf96357f01505831e1072">MC::ParticleStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa005cba9cbc87bc27b6bd0eaa066fac">status</a></td></tr>
 <tr class="memitem:ac9433de09e8e24838a2e058842b456d5" id="r_ac9433de09e8e24838a2e058842b456d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a9528ddf7d5ad7db729640d859dbc4c5e">ParticleWeigths</a>&lt; typename Model::FloatType &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9433de09e8e24838a2e058842b456d5">weights</a></td></tr>
-<tr class="memitem:ac69ec6b2784cf095558d8f43f2a4cb0a" id="r_ac69ec6b2784cf095558d8f43f2a4cb0a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a71308af240201ce951b6993271bec9d6">ParticleAges</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac69ec6b2784cf095558d8f43f2a4cb0a">ages</a></td></tr>
+<tr class="memitem:a11609ea9df23b4c0f887160c88a42cd8" id="r_a11609ea9df23b4c0f887160c88a42cd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceMC.html#a05b8b85ee3be9da3a75a3494a58a3d7f">ParticleRefTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11609ea9df23b4c0f887160c88a42cd8">t_ref</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -647,52 +653,41 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 
 </div>
 </div>
-<a id="a3ad0f53899edc9c8343ca1122d722c29" name="a3ad0f53899edc9c8343ca1122d722c29"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ad0f53899edc9c8343ca1122d722c29">&#9670;&#160;</a></span>handle_division()</h2>
+<a id="ace5b780536be02298d843bd2dfc481f3" name="ace5b780536be02298d843bd2dfc481f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace5b780536be02298d843bd2dfc481f3">&#9670;&#160;</a></span>handle_division()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::handle_division </td>
+          <td class="memname">KOKKOS_INLINE_FUNCTION void <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::handle_division </td>
           <td>(</td>
+          <td class="paramtype">MC::ParticleRefTime::value_type</td>          <td class="paramname"><span class="paramname"><em>absolute_time</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const <a class="el" href="namespaceMC.html#a7e53098724df8c06b90824f1567f6bc5">MC::pool_type</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>random_pool</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>idx1</em></span>&#160;) const</td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>idx2</em></span>&#160;) const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Get the contribution if particle at index idx. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">CviewType</td><td>view type fo contribution</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Attempts to spawn a new particle by performing division on the specified particle.</p>
-<p>Executes container and buffer manipulations to spawn a new particle and invokes <span class="tt">Model::division</span>. The operation may fail if conditions for division are not met (e.g., insufficient space or invalid state).</p>
+<p>Perform the division registered in buffer slot idx2. </p>
+<p>Invokes <span class="tt">Model::division</span> on the registered particle, the new particle is written in slot idx2.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">random_pool</td><td>The random number generator pool for stochastic operations. </td></tr>
-    <tr><td class="paramname">idx1</td><td>The index of the particle to undergo division. </td></tr>
+    <tr><td class="paramname">idx2</td><td>The buffer slot, lower than <span class="tt"><a class="el" href="#afaae04dbfe786a51ae201a1d5efa54b6" title="Number of divisions registered in the buffer.">n_division()</a></span>. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><span class="tt">true</span> if the spawn was successful, <span class="tt">false</span> otherwise. </dd></dl>
 
 </div>
 </div>
@@ -724,8 +719,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a8e95993fb1287c04427780d6372be565" name="a8e95993fb1287c04427780d6372be565"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e95993fb1287c04427780d6372be565">&#9670;&#160;</a></span>merge_buffer()</h2>
+<a id="abe55e35190a77b786ab3563d31fac4ab" name="abe55e35190a77b786ab3563d31fac4ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe55e35190a77b786ab3563d31fac4ab">&#9670;&#160;</a></span>merge_buffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -735,7 +730,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
         <tr>
           <td class="memname">void <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::merge_buffer </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">MC::ParticleRefTime::value_type</td>          <td class="paramname"><span class="paramname"><em>absolute_time</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -745,12 +740,80 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_a8e95993fb1287c04427780d6372be565_cgraph.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_abe55e35190a77b786ab3563d31fac4ab_cgraph.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_a8e95993fb1287c04427780d6372be565_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_abe55e35190a77b786ab3563d31fac4ab_icgraph.svg" width="100%" height="300"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+</div>
+
+</div>
+</div>
+<a id="afaae04dbfe786a51ae201a1d5efa54b6" name="afaae04dbfe786a51ae201a1d5efa54b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afaae04dbfe786a51ae201a1d5efa54b6">&#9670;&#160;</a></span>n_division()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::n_division </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of divisions registered in the buffer. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_afaae04dbfe786a51ae201a1d5efa54b6_icgraph.svg" width="376" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+
+</div>
+</div>
+<a id="aff52cea7724824580acc8cb6442f220d" name="aff52cea7724824580acc8cb6442f220d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff52cea7724824580acc8cb6442f220d">&#9670;&#160;</a></span>n_division_overflow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::n_division_overflow </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Number of divisions that did not get a buffer slot. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_aff52cea7724824580acc8cb6442f220d_cgraph.svg" width="376" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -851,6 +914,49 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="classMC_1_1ParticlesContainer_a5d93b87f5a6e18c449e0ed62333e9d6e_cgraph.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 </div>
+
+</div>
+</div>
+<a id="a44806ed4776ee3fa81ea2dea71429f35" name="a44806ed4776ee3fa81ea2dea71429f35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44806ed4776ee3fa81ea2dea71429f35">&#9670;&#160;</a></span>register_division()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">KOKKOS_INLINE_FUNCTION bool <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::register_division </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>idx1</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the contribution if particle at index idx. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">CviewType</td><td>view type fo contribution</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Reserve a buffer slot for the division of particle idx1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">idx1</td><td>index of the particle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if a slot was reserved, false if the buffer is full. </dd></dl>
 
 </div>
 </div>
@@ -963,22 +1069,6 @@ Here is the caller graph for this function:</div>
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="ac69ec6b2784cf095558d8f43f2a4cb0a" name="ac69ec6b2784cf095558d8f43f2a4cb0a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac69ec6b2784cf095558d8f43f2a4cb0a">&#9670;&#160;</a></span>ages</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespaceMC.html#a71308af240201ce951b6993271bec9d6">ParticleAges</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::ages</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a4f96ea2b382665e1f5d7d2fcae915424" name="a4f96ea2b382665e1f5d7d2fcae915424"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4f96ea2b382665e1f5d7d2fcae915424">&#9670;&#160;</a></span>buffer_index</h2>
 
@@ -1230,6 +1320,22 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; <
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespaceMC.html#a2193e5e54bfdf96357f01505831e1072">MC::ParticleStatus</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::status</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a11609ea9df23b4c0f887160c88a42cd8" name="a11609ea9df23b4c0f887160c88a42cd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11609ea9df23b4c0f887160c88a42cd8">&#9670;&#160;</a></span>t_ref</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> Model&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceMC.html#a05b8b85ee3be9da3a75a3494a58a3d7f">ParticleRefTime</a> <a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; Model &gt;::t_ref</td>
         </tr>
       </table>
 </div><div class="memdoc">

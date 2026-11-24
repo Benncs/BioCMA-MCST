@@ -324,7 +324,7 @@
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:href="classMC_1_1ParticlesContainer.html#a8e95993fb1287c04427780d6372be565" target="_top" xlink:title="Insert particle buffer into the main container.">
+<g id="a_Node000008"><a xlink:href="classMC_1_1ParticlesContainer.html#abe55e35190a77b786ab3563d31fac4ab" target="_top" xlink:title="Insert particle buffer into the main container.">
 <polygon fill="white" stroke="#666666" points="843.12,-504 724.38,-504 724.38,-475 843.12,-475 843.12,-504"/>
 <text xml:space="preserve" text-anchor="start" x="732.38" y="-490.5" font-family="Helvetica,sans-Serif" font-size="10.00">MC::ParticlesContainer</text>
 <text xml:space="preserve" text-anchor="middle" x="783.75" y="-480" font-family="Helvetica,sans-Serif" font-size="10.00">::merge_buffer</text>

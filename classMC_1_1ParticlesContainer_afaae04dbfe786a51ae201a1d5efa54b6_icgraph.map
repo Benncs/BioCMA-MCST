@@ -1,0 +1,5 @@
+<map id="MC::ParticlesContainer::n_division" name="MC::ParticlesContainer::n_division">
+<area shape="rect" id="Node000001" title="Number of divisions registered in the buffer." alt="" coords="212,5,370,44"/>
+<area shape="rect" id="Node000002" href="$classMC_1_1ParticlesContainer.html#aff52cea7724824580acc8cb6442f220d" title="Number of divisions that did not get a buffer slot." alt="" coords="5,5,164,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,27,164,27,164,22,196,22"/>
+</map>
