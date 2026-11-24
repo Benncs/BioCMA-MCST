@@ -175,8 +175,6 @@ namespace Api
 
     ApiResult set_mtr(Simulation::MassTransfer::Type::MtrTypeVariant&& variant);
 
-    void set_auto_mtr();
-
     ApiResult
     register_scalar_initiazer(Core::ScalarFactory::ScalarVariant&& var);
 
@@ -253,10 +251,7 @@ namespace Api
     bool registered = false; ///< Flag indicating if resources are registered.
     std::optional<Simulation::Feed::SimulationFeed> feed
         = std::nullopt; ///< Optional feed configuration.
-    std::optional<Simulation::MassTransfer::Type::MtrTypeVariant> mtr_type
-        = std::nullopt;
-
-    bool auto_mtr;
+    std::optional<Simulation::MassTransfer::Type::MtrTypeVariant> mtr_type;
   };
 
 } // namespace Api

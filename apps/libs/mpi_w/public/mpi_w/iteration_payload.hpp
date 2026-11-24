@@ -99,6 +99,7 @@ namespace WrapMPI
 
     static constexpr std::size_t n_vector_send = 4;
     std::array<MPI_Request, n_vector_send> requests;
+    std::vector<MPI_Request> pending;
   };
 
 } // namespace WrapMPI

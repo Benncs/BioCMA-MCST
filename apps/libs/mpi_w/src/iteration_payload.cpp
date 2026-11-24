@@ -30,12 +30,20 @@ namespace WrapMPI
       to_wait = false;
       return true;
     }
-
+    // Hotfix: introduce pending vector to store all requests done by all rank
+    // size of 'requests' array is not sufficient and all request object are
+    // lost (then maybe unclosed) except the last one
+    // TODO: make requests a vector resized at construction with n_rank and use
+    // the correct index in HostIterationPayload::send
     for (size_t __macro_j = 1; __macro_j < n_rank; ++__macro_j)
     {
       auto _ = WrapMPI::send(WrapMPI::SIGNALS::HydroUpdate,
                              __macro_j); // Need to be synchro
       flag = this->send(__macro_j);
+      for (auto& req : requests)
+      {
+        pending.emplace_back(req);
+      }
     }
     to_wait = true;
 
@@ -47,10 +55,11 @@ namespace WrapMPI
   {
     if (to_wait)
     {
-      for (auto& req : requests)
+      for (auto& req : pending)
       {
         MPI_Wait(&req, MPI_STATUS_IGNORE); // Wait for each send to finish
       }
+      pending.clear();
       to_wait = false;
     }
   }
@@ -60,17 +69,31 @@ namespace WrapMPI
   {
     PROFILE_SECTION("host:to_node")
 
+    // Hotfix: sending local variable size via async crash in some condition
+    // in send_v size is a local vriable that live out of scope then with async
+    // this is UB (ARM 72 ranks)
+    // TODO: stabilize the send_v function to correctly send the size of the
+    // array.
+    // Sending the size as a sync operation prevent crash but this is a bit
+    // non-sens to have sync operation amoung asyncs
     int rc1 = WrapMPI::Async::send_v(
         requests[0], liquid_volumes, rank, TagExchange::volumes, false);
 
     int rc2 = WrapMPI::Async::send_v(
         requests[1], liquid_out_flows, rank, TagExchange::flows, false);
 
+    auto _s3 = WrapMPI::send<size_t>(
+        proba_leaving_flat.size(), rank, TagExchange::proba);
     int rc3 = WrapMPI::Async::send_v(
-        requests[2], proba_leaving_flat, rank, TagExchange::proba, true);
+        requests[2], proba_leaving_flat, rank, TagExchange::proba, false);
 
-    int rc4 = WrapMPI::Async::send_v(
-        requests[3], liquid_neighbors_flat, rank, TagExchange::neighbors, true);
+    auto _s4 = WrapMPI::send<size_t>(
+        liquid_neighbors_flat.size(), rank, TagExchange::neighbors);
+    int rc4 = WrapMPI::Async::send_v(requests[3],
+                                     liquid_neighbors_flat,
+                                     rank,
+                                     TagExchange::neighbors,
+                                     false);
 
     return rc1 == MPI_SUCCESS && rc2 == MPI_SUCCESS && rc3 == MPI_SUCCESS
            && rc4 == MPI_SUCCESS;

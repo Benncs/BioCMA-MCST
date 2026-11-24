@@ -13,7 +13,7 @@ common_lib = static_library(
   common_sources,
   include_directories: incdirs,
   dependencies: [kokkos],
-  cpp_args:[]
+  cpp_args:[],pic:true
 )
 
 common_dependecy = declare_dependency(

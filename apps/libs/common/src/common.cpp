@@ -2,7 +2,13 @@
 #include <common/env_var.hpp>
 #include <common/execinfo.hpp>
 #include <common/kokkos_getpolicy.hpp>
+#include <cstdlib>
 #include <string>
+
+#ifdef _WIN32
+#  include <iostream>
+#endif
+
 std::string
 ExecInfo::get_version()
 {

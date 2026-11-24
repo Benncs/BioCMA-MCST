@@ -189,10 +189,14 @@ namespace Core
   load(std::shared_ptr<IO::Logger>& logger,
        const ExecInfo& exec,
        const UserControlParameters&& params,
+       std::optional<Simulation::MassTransfer::Type::MtrTypeVariant> mtr_type,
        std::optional<Simulation::Feed::SimulationFeed> feed)
   {
-    return impl_load(
-        logger, exec, std::forward<decltype(params)>(params), std::move(feed));
+    return impl_load(logger,
+                     exec,
+                     std::forward<decltype(params)>(params),
+                     std::move(feed),
+                     std::move(mtr_type));
   }
 
   ExecInfo

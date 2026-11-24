@@ -7,9 +7,11 @@
 #include <cmath>
 #include <common/common.hpp>
 #include <common/env_var.hpp>
+#include <common/execinfo.hpp>
 #include <common/has_serialize.hpp>
 #include <cstdint>
 #include <mc/alias.hpp>
+#include <mc/first_touch.hpp>
 #include <mc/prng/prng.hpp>
 #include <mc/traits.hpp>
 
@@ -62,7 +64,8 @@ namespace MC
      * @brief Alias for the model used by the container.
      */
     explicit ParticlesContainer(RuntimeParameters rt_param,
-                                std::size_t n_particle);
+                                std::size_t n_particle,
+                                KernelDispatchOptions kernel_opts = {});
     ParticlesContainer(); //=default;
     /**
      * @brief Default copy and move constructors and assignment operators.
@@ -84,7 +87,7 @@ namespace MC
     MC::ParticlePositions position;
     MC::ParticleStatus status;
     ParticleWeigths<typename Model::FloatType> weights;
-    ParticleAges ages;
+    ParticleRefTime t_ref;
     // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
 
     /**
@@ -114,20 +117,39 @@ namespace MC
     // }
 
     /**
-     * @brief Attempts to spawn a new particle by performing division on the
-     * specified particle.
+     * @brief Reserve a buffer slot for the division of particle idx1.
      *
-     * Executes container and buffer manipulations to spawn a new particle and
-     * invokes `Model::division`. The operation may fail if conditions for
-     * division are not met (e.g., insufficient space or invalid state).
+     *
+     * @param idx1 index of the particle
+     * @return true if a slot was reserved, false if the buffer is full.
+     */
+    [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
+    register_division(std::size_t idx1) const;
+
+    /**
+     * @brief Perform the division registered in buffer slot idx2.
+     *
+     * Invokes `Model::division` on the registered particle, the new particle
+     * is written in slot idx2.
      *
      * @param random_pool The random number generator pool for stochastic
      * operations.
-     * @param idx1 The index of the particle to undergo division.
-     * @return `true` if the spawn was successful, `false` otherwise.
+     * @param idx2 The buffer slot, lower than `n_division()`.
      */
-    [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
-    handle_division(const MC::pool_type& random_pool, std::size_t idx1) const;
+    KOKKOS_INLINE_FUNCTION void
+    handle_division(MC::ParticleRefTime::value_type absolute_time,
+                    const MC::pool_type& random_pool,
+                    std::size_t idx2) const;
+
+    /**
+     * @brief Number of divisions registered in the buffer
+     */
+    [[nodiscard]] std::size_t n_division() const;
+
+    /**
+     * @brief Number of divisions that did not get a buffer slot
+     */
+    [[nodiscard]] std::size_t n_division_overflow() const;
 
     /**
      * @brief Return the particle weight
@@ -146,7 +168,7 @@ namespace MC
     /**
      * @brief Insert particle buffer into the main container
      */
-    void merge_buffer();
+    void merge_buffer(MC::ParticleRefTime::value_type absolute_time);
 
     /**
      * @brief Save data into ar for serialization
@@ -224,6 +246,9 @@ namespace MC
     std::size_t n_allocated_elements;
     uint64_t n_used_elements;
     std::size_t inactive_counter;
+    /// Only m_p_p_team_move is used: the particle arrays are first-touched
+    /// with the same decomposition the move kernel walks them with.
+    KernelDispatchOptions kernel_options{};
 
     void __allocate_buffer__();
     void _resize(std::size_t new_size, bool force = false);
@@ -295,12 +320,12 @@ namespace MC
                               M::SelfParticle _model,
                               M::SelfContribs _contribs,
                               MC::ParticlePositions _position,
-                              MC::ParticleAges _ages,
+                              MC::ParticleRefTime _t_ref,
                               std::size_t _to_remove,
                               std::size_t _last_used_index)
           : status(std::move(_status)), model(std::move(_model)),
             contribs(std::move(_contribs)), position(std::move(_position)),
-            ages(std::move(_ages)), offset("offset"), to_remove(_to_remove),
+            t_ref(std::move(_t_ref)), offset("offset"), to_remove(_to_remove),
             last_used_index(_last_used_index)
       {
 
@@ -368,8 +393,8 @@ namespace MC
             contribs(inactive_slot, i_c) = contribs(replacement_index, i_c);
           }
 
-          ages(inactive_slot, 0) = ages(replacement_index, 0);
-          ages(inactive_slot, 1) = ages(replacement_index, 1);
+          t_ref(inactive_slot, 0) = t_ref(replacement_index, 0);
+          t_ref(inactive_slot, 1) = t_ref(replacement_index, 1);
         }
       }
 
@@ -377,7 +402,7 @@ namespace MC
       M::SelfParticle model;
       M::SelfContribs contribs;
       MC::ParticlePositions position;
-      MC::ParticleAges ages;
+      MC::ParticleRefTime t_ref;
       Kokkos::View<std::size_t, ComputeSpace> offset;
       std::size_t to_remove;
       std::size_t last_used_index;
@@ -388,19 +413,21 @@ namespace MC
      * parallel.
      *
      * TagRow copies the model properties over a 2D (particle, property)
-     * range; TagScalar copies the position and resets the ages over a 1D
+     * range; TagScalar copies the position and resets the time over a 1D
      * (particle) range.
      */
     template <ModelType M> struct InsertFunctor
     {
-      InsertFunctor(std::size_t _original_size,
+      InsertFunctor(double _current_time,
+                    std::size_t _original_size,
                     M::SelfParticle _model,
                     MC::ParticlePositions _position,
-                    MC::ParticleAges _ages,
+                    MC::ParticleRefTime _t_ref,
                     M::SelfParticle _buffer_model,
                     MC::ParticlePositions _buffer_position)
-          : original_size(_original_size), model(std::move(_model)),
-            ages(std::move(_ages)), position(std::move(_position)),
+          : current_time(_current_time), original_size(_original_size),
+            model(std::move(_model)), t_ref(std::move(_t_ref)),
+            position(std::move(_position)),
             buffer_model(std::move(_buffer_model)),
             buffer_position(std::move(_buffer_position))
       {
@@ -428,13 +455,13 @@ namespace MC
         // Actually needs buffer to store mother's hydraulic time
         // But set new hydraulic time to 0 to not create new buffer a save
         // memory usage
-        ages(original_size + i, 0) = 0;
-        ages(original_size + i, 1) = 0;
+        t_ref(original_size + i, 0) = current_time;
+        t_ref(original_size + i, 1) = current_time;
       }
-
+      double current_time;
       std::size_t original_size;
       M::SelfParticle model;
-      MC::ParticleAges ages;
+      MC::ParticleRefTime t_ref;
       MC::ParticlePositions position;
       M::SelfParticle buffer_model;
       MC::ParticlePositions buffer_position;
@@ -499,7 +526,7 @@ namespace MC
     deserialize_view(ar, position);
     deserialize_view(ar, status);
     deserialize_view(ar, model);
-    deserialize_view(ar, ages);
+    deserialize_view(ar, t_ref);
 
     if (Model::n_var != model.extent(1))
     {
@@ -530,7 +557,7 @@ namespace MC
     serialize_view(ar, position);
     serialize_view(ar, status);
     serialize_view(ar, model);
-    serialize_view(ar, ages);
+    serialize_view(ar, t_ref);
   }
 
   template <ModelType Model>
@@ -555,36 +582,70 @@ namespace MC
 
   template <ModelType Model>
   KOKKOS_INLINE_FUNCTION bool
-  ParticlesContainer<Model>::handle_division(const MC::pool_type& random_pool,
-                                             std::size_t idx1) const
+  ParticlesContainer<Model>::register_division(std::size_t idx1) const
   {
-    if (Kokkos::atomic_load(&buffer_index()) < buffer_model.extent(0))
+    const auto idx2 = Kokkos::atomic_fetch_add(&buffer_index(), 1);
+    if (idx2 < buffer_position.extent(0))
     {
-      const auto idx2 = Kokkos::atomic_fetch_add(&buffer_index(), 1);
-      Model::division(random_pool, idx1, idx2, model, buffer_model);
-      buffer_position(idx2) = position(idx1);
-      ages(idx1, 1) = 0;
+      // Warning: in position we first store the idx of the mother
+      buffer_position(idx2) = idx1;
       return true;
     }
     return false;
   }
 
   template <ModelType Model>
+  KOKKOS_INLINE_FUNCTION void
+  ParticlesContainer<Model>::handle_division(
+      const MC::ParticleRefTime::value_type absolute_time,
+      const MC::pool_type& random_pool,
+      std::size_t idx2) const
+  {
+    // Warning: in position we first store the idx of the mother
+    // idx1 is the index of the mother of the newborn idx2
+    const std::size_t idx1 = buffer_position(idx2);
+    Model::division(random_pool, idx1, idx2, model, buffer_model);
+    // Warning: put the real poisition of the newbordel cell
+    buffer_position(idx2) = position(idx1);
+    t_ref(idx1, 1) = absolute_time;
+  }
+
+  template <ModelType Model>
+  [[nodiscard]] std::size_t
+  ParticlesContainer<Model>::n_division() const
+  {
+    return Kokkos::min(buffer_index(), buffer_position.extent(0));
+  }
+
+  template <ModelType Model>
+  [[nodiscard]] std::size_t
+  ParticlesContainer<Model>::n_division_overflow() const
+  {
+    return buffer_index() - n_division();
+  }
+
+  template <ModelType Model>
   void
-  ParticlesContainer<Model>::merge_buffer()
+  ParticlesContainer<Model>::merge_buffer(
+      const MC::ParticleRefTime::value_type absolute_time)
   {
     PROFILE_SECTION("ParticlesContainer::merge_buffer")
     const auto original_size = n_used_elements;
-    const auto n_add_item = buffer_index();
+    // if buffer is full, buffer_index can be bigger than extent
+    const auto n_add_item = Kokkos::min(buffer_index(), buffer_model.extent(0));
     if (n_add_item == 0)
     {
       return;
     }
     _resize(original_size + n_add_item);
-
     using functor_type = InsertFunctor<Model>;
-    const functor_type functor(
-        original_size, model, position, ages, buffer_model, buffer_position);
+    const functor_type functor(absolute_time,
+                               original_size,
+                               model,
+                               position,
+                               t_ref,
+                               buffer_model,
+                               buffer_position);
 
     Kokkos::parallel_for("insert_merge_rows",
                          Kokkos::MDRangePolicy<typename functor_type::TagRow,
@@ -625,16 +686,19 @@ namespace MC
         // Update the allocated size
         n_allocated_elements = new_allocated_size;
 
-        // Perform the resizing on all relevant data containers
-        Kokkos::resize(position, n_allocated_elements);
-        Kokkos::resize(model,
-                       n_allocated_elements,
-                       Model::n_var); // use 2nd dim resize if dynamic
-        // realloc, not resize: contribs is rewritten every step before it is
-        // read
-        Kokkos::realloc(contribs, n_allocated_elements, Model::n_c);
-        Kokkos::resize(status, n_allocated_elements);
-        Kokkos::resize(ages, n_allocated_elements);
+        // Perform the resizing on all relevant data containers.
+        // resize_first_touch, not Kokkos::resize: same result, but the pages
+        // of the live range [0, new_size) for correct first touch
+        const auto npt = kernel_options.m_p_p_team_move;
+        resize_first_touch(position, n_allocated_elements, new_size, npt);
+        resize_first_touch(
+            model, n_allocated_elements, new_size, npt, Model::n_var);
+        // contribs is rewritten every step before it is read, so its previous
+        // contents do not need preserving -- only its placement matters.
+        resize_first_touch(
+            contribs, n_allocated_elements, new_size, npt, Model::n_c);
+        resize_first_touch(status, n_allocated_elements, new_size, npt);
+        resize_first_touch(t_ref, n_allocated_elements, new_size, npt);
 
         // Handle resizing for weights based on model type
         if constexpr (ConstWeightModelType<Model>)
@@ -650,30 +714,6 @@ namespace MC
     }
   }
 
-  // template <ModelType Model>
-  // void
-  // ParticlesContainer<Model>::__allocate_buffer__()
-  // {
-  //   PROFILE_SECTION("ParticlesContainer::__allocate_buffer__")
-
-  //   std::size_t buffer_size = buffer_position.extent(0);
-
-  //   const double tmp = rt_params.buffer_ratio * n_allocated_elements;
-
-  //   const std::size_t buffer_threshold = static_cast<std::size_t>(tmp);
-
-  //   if (buffer_size < buffer_threshold)
-  //   {
-  //     buffer_size = static_cast<std::size_t>(
-  //         std::ceil(rt_params.buffer_ratio * n_allocated_elements));
-
-  //     // Realloc because not needed to keep buffer as it has been copied
-  //     Kokkos::realloc(buffer_position, buffer_size);
-  //     Kokkos::realloc(buffer_model, buffer_size, Model::n_var);
-  //     buffer_index() = 0;
-  //   }
-  // }
-
   template <ModelType Model>
   void
   ParticlesContainer<Model>::__allocate_buffer__()
@@ -685,9 +725,17 @@ namespace MC
 
     if (buffer_position.extent(0) < required_buffer_size)
     {
-      // Realloc because not needed to keep buffer as it has been copied
-      Kokkos::realloc(buffer_position, required_buffer_size);
-      Kokkos::realloc(buffer_model, required_buffer_size, Model::n_var);
+      // Realloc because not needed to keep buffer as it has been copied.
+      // The buffer is written by whichever team creates the new particle, so
+      // touch it the same way the container itself is touched.
+      const auto npt = kernel_options.m_p_p_team_move;
+      resize_first_touch(
+          buffer_position, required_buffer_size, required_buffer_size, npt);
+      resize_first_touch(buffer_model,
+                         required_buffer_size,
+                         required_buffer_size,
+                         npt,
+                         Model::n_var);
       buffer_index() = 0;
     }
   }
@@ -699,18 +747,20 @@ namespace MC
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer(RuntimeParameters rt_param,
-                                            std::size_t n_particle)
+                                            std::size_t n_particle,
+                                            KernelDispatchOptions kernel_opts)
       : model(alloc_without_init("particle_model"), 0, 0),
 
         contribs(alloc_without_init("particle_contribs"), 0),
         position(alloc_without_init("particle_position"), 0),
         status(alloc_without_init("particle_status"), 0),
         weights(alloc_without_init("particle_weigth"), 0),
-        ages(alloc_without_init("particle_age"), 0),
+        t_ref(alloc_without_init("particle_reference_time"), 0),
         buffer_model("buffer_particle_model", 0),
         buffer_position("buffer_particle_position", 0),
         buffer_index("buffer_index"), n_allocated_elements(0),
-        n_used_elements(n_particle), inactive_counter(0), rt_params(rt_param)
+        n_used_elements(n_particle), inactive_counter(0),
+        kernel_options(kernel_opts), rt_params(rt_param)
   {
 
     // load_tuning_constant();
@@ -720,21 +770,11 @@ namespace MC
       _resize(n_particle);
       __allocate_buffer__();
     }
-
-    // const auto bounds = M::get_bounds();
-
-    // if (begin > end)
-    // {
-    //   throw std::invalid_argument("Model begin should be > end");
-    // }
-
-    // begin = bounds.begin;
-    // end = bounds.end;
   }
 
   template <ModelType M>
   ParticlesContainer<M>::ParticlesContainer()
-      : ParticlesContainer(RuntimeParameters{}, 0)
+      : ParticlesContainer(RuntimeParameters{}, 0, KernelDispatchOptions{})
   {
   }
 
@@ -774,7 +814,7 @@ namespace MC
                                      model,
                                      contribs,
                                      position,
-                                     ages,
+                                     t_ref,
                                      to_remove,
                                      last_used_index));
 

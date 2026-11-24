@@ -41,6 +41,8 @@ namespace CmaUtils
   //     }
   //     return min_residence_time;
   //   }
+  //
+  //
 
   // Does this function should be moved into RCMTool ?
   double
@@ -52,25 +54,58 @@ namespace CmaUtils
     determined the smaller flow min(flowi/vi) which leads to smaller value
     */
     const std::size_t n_states = iterator->size();
+    bool has_gas = iterator->get_current()->has_gas();
     double min_residence_time = std::numeric_limits<double>::max();
+    double min_residence_time_gas = std::numeric_limits<double>::max();
+
+    auto callback_phase = [](auto& phase, double& current_min)
+    {
+      const auto out_flows = phase->out_flows();
+      const auto volumes = phase->volume();
+      KOKKOS_ASSERT(volumes.size() == out_flows.size());
+      for (std::size_t k = 0; k < out_flows.size(); ++k)
+      {
+        const auto volume = volumes[k];
+        // if (volume > 0.)
+        // {
+        //   const double residence_time = out_flows[k] / volume;
+        //   current_min = std::min(residence_time, current_min);
+        // }
+        if (out_flows[k] > 0.)
+        {
+          const double residence_time = volume / out_flows[k];
+          current_min = std::min(residence_time, current_min);
+        }
+      }
+    };
+
     for (std::size_t i_state = 0; i_state < n_states; ++i_state)
     {
       const auto state = iterator->get_at(i_state);
       const auto liquid = state->get_liquid();
-      const auto out_flows = liquid->out_flows();
-      const auto liquid_volumes = liquid->volume();
-      KOKKOS_ASSERT(liquid_volumes.size() == out_flows.size());
-      for (std::size_t k = 0; k < out_flows.size(); ++k)
+      callback_phase(liquid, min_residence_time);
+      if (has_gas)
       {
-        const auto volume = liquid_volumes[k];
-        if (volume > 0.)
-        {
-          const double residence_time = out_flows[k] / volume;
-          min_residence_time = std::min(residence_time, min_residence_time);
-        }
+        const auto gas = state->get_gas();
+        // TODO check if box may carry nullptr
+        //  if yes, add a check
+
+        callback_phase(gas, min_residence_time_gas);
       }
+      // const auto out_flows = liquid->out_flows();
+      // const auto liquid_volumes = liquid->volume();
+      // KOKKOS_ASSERT(liquid_volumes.size() == out_flows.size());
+      // for (std::size_t k = 0; k < out_flows.size(); ++k)
+      // {
+      //   const auto volume = liquid_volumes[k];
+      //   if (volume > 0.)
+      //   {
+      //     const double residence_time = out_flows[k] / volume;
+      //     min_residence_time = std::min(residence_time, min_residence_time);
+      //   }
+      // }
     }
-    return min_residence_time;
+    return std::min(min_residence_time, min_residence_time_gas);
   }
 
 } // namespace CmaUtils

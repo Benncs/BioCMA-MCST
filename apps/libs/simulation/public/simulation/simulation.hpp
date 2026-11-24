@@ -92,6 +92,8 @@ namespace Simulation
                        std::span<const double> proba_flat,
                        std::span<const double> out_flows) const;
 
+    void calculate_mtr();
+
     bool checkScalar() const;
 
     // Memory management
@@ -166,8 +168,14 @@ namespace Simulation
   {
     PROFILE_SECTION("Simulation::pre_cycle")
 
-    cycle_functors.update(
-        d_t, container, this->mc_unit->domain.get_const_inner());
+    // Must precede the move kernel: it consumes move_probability, which is
+    // only valid for this d_t and this flowmap.
+    this->mc_unit->domain.set_move_probability(d_t);
+
+    cycle_functors.update(m_times.absolute(),
+                          d_t,
+                          container,
+                          this->mc_unit->domain.get_const_inner());
   }
 
   template <typename Space, ModelType Model>
@@ -231,7 +239,7 @@ namespace Simulation
 
     container.update_and_remove_inactive(host_out_counter, host_red.dead_total);
 
-    container.merge_buffer();
+    container.merge_buffer(m_times.absolute());
 
     if (host_red.waiting_allocation_particle != 0)
     {

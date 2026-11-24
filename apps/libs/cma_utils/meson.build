@@ -11,7 +11,7 @@ cma_utils = static_library(
   cma_utils_src,
   include_directories: [public, private],
   dependencies: [deps],
-  # pic: true,
+   pic: true,
   # install: true,
   install_rpath: global_install_dir,
   link_args: [flto_flag],

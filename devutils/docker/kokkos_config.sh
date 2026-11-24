@@ -30,7 +30,7 @@ install_dir=/usr/local/
 back_end_omp=0
 back_end_cuda=0
 clang_version=-1
-kokkos_version="5.0.0"
+kokkos_version="5.2.0"
 while [[ "$#" -gt 0 ]]; do
   case $1 in
   --omp) back_end_omp=1 ;;
@@ -68,7 +68,7 @@ cd /tmp || {
 }
 
 get_kokkos_source "$tar_url" "$tar_name"
-
+exit 0 
 cd "$folder_name" || {
   echo "Error: Failed to change directory to $folder_name"
   exit 1

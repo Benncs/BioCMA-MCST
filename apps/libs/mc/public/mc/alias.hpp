@@ -137,15 +137,16 @@ namespace MC
 
   struct LeavingFlow;
 
-  using ParticlePositions = Kokkos::View<uint64_t*, ComputeSpace>;
+  template <typename Exec>
+  using ParticlePositionT = Kokkos::View<uint64_t*, Exec>;
+
+  using ParticlePositions = ParticlePositionT<ComputeSpace>;
   using ParticleStatus = Kokkos::View<Status*, ComputeSpace>;
   template <FloatingPointType ftype>
   using ParticleWeigths = Kokkos::View<ftype*, ComputeSpace>;
-  using ParticleAges = ParticleAgesBase<ComputeSpace>;
+  // using ParticleAges = ParticleAgesBase<ComputeSpace>;
 
-  // using ParticleSamples = Kokkos::
-  //     View<Kokkos::Experimental::half_t**, Kokkos::LayoutRight,
-  //     ComputeSpace>;
+  using ParticleRefTime = ParticleAgesBase<ComputeSpace>;
 
   // V1.0-rc: LayoutRight seems to lead to better perf than Left for GPU
   using ParticleSamples
@@ -176,6 +177,15 @@ namespace MC
 
   template <class ExecSpace, bool is_const>
   using VolumeView = std::conditional_t<
+      is_const,
+      Kokkos::View<const double*,
+                   ExecSpace,
+                   Kokkos::MemoryTraits<Kokkos::RandomAccess>>,
+      Kokkos::View<double*, ExecSpace>>;
+
+  /// d_t * flow / volume per compartment. Owned by ReactorDomain
+  template <class ExecSpace, bool is_const>
+  using MoveProbabilityView = std::conditional_t<
       is_const,
       Kokkos::View<const double*,
                    ExecSpace,

@@ -32,6 +32,7 @@ namespace MC
     CumulativeProbabilityView<ExecSpace, is_const> cumulative_probability;
     LeavingFlowView<is_const> leaving_flow;
     VolumeView<ExecSpace, is_const> liquid_volume;
+    MoveProbabilityView<ExecSpace, is_const> move_probability;
   };
 
   /**
@@ -96,6 +97,11 @@ namespace MC
                           double flow,
                           double volume) const;
 
+    /** @brief Refresh the per-compartment move probability for this time step.
+    Must be called before the move kernel whenever d_t or the flowmap changes.
+    */
+    void set_move_probability(double d_t) const;
+
     void init_inner(std::size_t n_flows);
 
     [[nodiscard]] DomainState<ComputeSpace, true> get_const_inner();
@@ -134,6 +140,14 @@ namespace MC
     size_t size = 0;           ///< Number of compartment
     DomainState<ComputeSpace, false> inner;
 
+    /// Host copies of the two inputs to the move probability. update() already
+    /// receives both as host spans, so keeping them here makes the per-step
+    /// refresh a serial loop plus one small copy: no kernel dispatch, and no
+    /// device-to-host round trip.
+    Kokkos::View<double*, HostSpace> host_liquid_volume;
+    Kokkos::View<double*, HostSpace> host_diag_transition;
+    Kokkos::View<double*, HostSpace> host_move_probability;
+
     /**
     @brief Set volume of liquid and gas of each compartment
     */
@@ -168,11 +182,10 @@ namespace MC
   ReactorDomain::get_const_inner()
   {
 
-    return { inner.neighbors,
-             inner.diag_transition,
-             inner.cumulative_probability,
-             inner.leaving_flow,
-             inner.liquid_volume };
+    return {
+      inner.neighbors,    inner.diag_transition, inner.cumulative_probability,
+      inner.leaving_flow, inner.liquid_volume,   inner.move_probability
+    };
   }
 
 } // namespace MC

@@ -24,6 +24,7 @@ lib_app = static_library(
   dependencies: [lib_api_distributed_dep],
   cpp_args: [],
   install_rpath: project_name,
+  pic:true
 )
 
 lib_app_shared = static_library(
@@ -33,6 +34,7 @@ lib_app_shared = static_library(
   dependencies: [lib_api_shared_dep],
   # cpp_args: ['-DNO_MPI'],
   install_rpath: project_name,
+  pic:true
 )
 
 app_dependency = declare_dependency(
