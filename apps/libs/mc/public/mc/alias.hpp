@@ -144,11 +144,9 @@ namespace MC
   using ParticleStatus = Kokkos::View<Status*, ComputeSpace>;
   template <FloatingPointType ftype>
   using ParticleWeigths = Kokkos::View<ftype*, ComputeSpace>;
-  using ParticleAges = ParticleAgesBase<ComputeSpace>;
+  // using ParticleAges = ParticleAgesBase<ComputeSpace>;
 
-  // using ParticleSamples = Kokkos::
-  //     View<Kokkos::Experimental::half_t**, Kokkos::LayoutRight,
-  //     ComputeSpace>;
+  using ParticleRefTime = ParticleAgesBase<ComputeSpace>;
 
   // V1.0-rc: LayoutRight seems to lead to better perf than Left for GPU
   using ParticleSamples

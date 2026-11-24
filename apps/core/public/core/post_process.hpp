@@ -37,16 +37,19 @@ namespace PostProcessing
       using ComputeSpace = typename ExecutionSpace::memory_space;
 
       GetPropertiesFunctor(
+          double absolute_time,
           std::size_t n_p,
           MC::ParticlePositions position,
           typename Model::SelfParticle model,
-          MC::ParticleAges ages,
+          MC::ParticleRefTime t_ref,
           ParticlePropertyViewType<ComputeSpace> particle_values,
           ParticlePropertyViewType<ComputeSpace> spatial_values,
           ParticlePropertyViewType<ComputeSpace> ages_value,
           MC::ParticleStatus status)
-          : n_p(n_p), position(std::move(position)), model(std::move(model)),
-            ages(std::move(ages)), particle_values(std::move(particle_values)),
+          : current_time(absolute_time), n_p(n_p),
+            position(std::move(position)), model(std::move(model)),
+            t_ref(std::move(t_ref)),
+            particle_values(std::move(particle_values)),
             spatial_values(std::move(spatial_values)),
             ages_value(std::move(ages_value)), status(std::move(status))
       {
@@ -73,8 +76,8 @@ namespace PostProcessing
         const auto mass = Model::mass(i_particle, model);
         access(Model::n_var, position(i_particle)) += mass;
         particle_values(Model::n_var, i_particle) = mass;
-        ages_value(0, i_particle) = ages(i_particle, 0);
-        ages_value(1, i_particle) = ages(i_particle, 1);
+        ages_value(0, i_particle) = current_time - t_ref(i_particle, 0);
+        ages_value(1, i_particle) = current_time - t_ref(i_particle, 1);
       }
 
       KOKKOS_INLINE_FUNCTION
@@ -98,8 +101,8 @@ namespace PostProcessing
         const auto mass = Model::mass(i_particle, model);
         access(kindices.extent(0), position(i_particle)) += mass;
         particle_values(kindices.extent(0), i_particle) = mass;
-        ages_value(0, i_particle) = ages(i_particle, 0);
-        ages_value(1, i_particle) = ages(i_particle, 1);
+        ages_value(0, i_particle) = current_time - t_ref(i_particle, 0);
+        ages_value(1, i_particle) = current_time - t_ref(i_particle, 1);
       }
 
       void
@@ -133,11 +136,11 @@ namespace PostProcessing
         Kokkos::Experimental::contribute(spatial_values,
                                          scatter_spatial_values);
       }
-
+      double current_time;
       std::size_t n_p;
       MC::ParticlePositions position;
       typename Model::SelfParticle model;
-      MC::ParticleAges ages;
+      MC::ParticleRefTime t_ref;
       ParticlePropertyViewType<ComputeSpace> particle_values;
       ParticlePropertyViewType<ComputeSpace> spatial_values;
       ParticlePropertyViewType<ComputeSpace> ages_value;
@@ -151,21 +154,22 @@ namespace PostProcessing
 
   template <ModelType M>
   ParticlePropertyViewType<ComputeSpace>
-  get_particle_age_only(MC::ParticlesContainer<M>& container)
+  get_particle_age_only(double absolute_time,
+                        MC::ParticlesContainer<M>& container)
   {
     // USE list size not Kokkos View size.
     // bcause container allocates more
     // particles than needed
     const std::size_t n_p = container.n_particles();
-    auto p_age = container.ages;
+    auto p_tref = container.t_ref;
     ParticlePropertyViewType<ComputeSpace> ages_values("ages_values", 2, n_p);
 
     Kokkos::parallel_for(
         "get_age",
         Kokkos::RangePolicy<ComputeSpace>(0, n_p),
         KOKKOS_LAMBDA(const std::size_t i_particle) {
-          ages_values(0, i_particle) = p_age(i_particle, 0);
-          ages_values(1, i_particle) = p_age(i_particle, 1);
+          ages_values(0, i_particle) = absolute_time - p_tref(i_particle, 0);
+          ages_values(1, i_particle) = absolute_time - p_tref(i_particle, 1);
         });
     return ages_values;
   }
@@ -173,7 +177,8 @@ namespace PostProcessing
   template <ModelType M>
     requires HasExportProperties<M>
   std::optional<PostProcessing::BonceBuffer>
-  get_properties(MC::ParticlesContainer<M>& container,
+  get_properties(const double absolute_time,
+                 MC::ParticlesContainer<M>& container,
                  const std::size_t n_compartment,
                  const bool with_age,
                  const bool export_position)
@@ -212,10 +217,11 @@ namespace PostProcessing
 
     using space = ComputeSpace;
 
-    GetPropertiesFunctor<M, space>(n_p,
+    GetPropertiesFunctor<M, space>(absolute_time,
+                                   n_p,
                                    container.position,
                                    container.model,
-                                   container.ages,
+                                   container.t_ref,
                                    particle_values,
                                    spatial_values,
                                    ages_values,
@@ -256,7 +262,8 @@ namespace PostProcessing
   template <ModelType M>
     requires(!HasExportProperties<M>)
   std::optional<PostProcessing::BonceBuffer>
-  get_properties(MC::ParticlesContainer<M>& container,
+  get_properties(const double absolute_time,
+                 MC::ParticlesContainer<M>& container,
                  const std::size_t n_compartment,
                  const bool with_age,
                  const bool export_position)
@@ -288,7 +295,7 @@ namespace PostProcessing
       }
 
       properties->ages = Kokkos::create_mirror_view_and_copy(
-          Kokkos::HostSpace(), get_particle_age_only(container));
+          Kokkos::HostSpace(), get_particle_age_only(absolute_time, container));
       return properties;
     }
 

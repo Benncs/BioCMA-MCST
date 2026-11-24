@@ -66,7 +66,7 @@ div_test()
   MC::pool_type rng;
   Kokkos::parallel_for(
       "spawn", ndiv, KOKKOS_LAMBDA(const int i) {
-        KOKKOS_ASSERT(container.handle_division(rng, i));
+        KOKKOS_ASSERT(container.handle_division(0, rng, i));
       });
   Kokkos::fence();
   KOKKOS_ASSERT(container.get_buffer_index() == ndiv);
@@ -82,12 +82,12 @@ merge_test()
   MC::pool_type rng;
   Kokkos::parallel_for(
       "spawn", ndiv, KOKKOS_LAMBDA(const int i) {
-        KOKKOS_ASSERT(container.handle_division(rng, i));
+        KOKKOS_ASSERT(container.handle_division(0, rng, i));
       });
   Kokkos::fence();
   KOKKOS_ASSERT(container.get_buffer_index() == ndiv);
 
-  container.merge_buffer();
+  container.merge_buffer(0.);
 
   KOKKOS_ASSERT(container.n_particles() == ndiv + size);
   KOKKOS_ASSERT(container.get_buffer_index() == 0);

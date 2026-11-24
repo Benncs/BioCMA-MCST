@@ -126,7 +126,7 @@ namespace Simulation::KernelInline
               }
               else
               {
-                particles.ages(flatten_index, 1) += d_t;
+                // particles.ages(flatten_index, 1) += d_t;
               }
             }
           },
@@ -149,7 +149,7 @@ namespace Simulation::KernelInline
             particles.ages(idx, 1)); // Skip error
       }
 
-      if (!particles.handle_division(random_pool, idx)) [[unlikely]]
+      // if (!particles.handle_division(random_pool, idx)) [[unlikely]]
       {
         reduce_val.waiting_allocation_particle += 1;
         events.wrap_incr<MC::EventType::Overflow>();

@@ -377,31 +377,12 @@ namespace Models
      * @param length           length of the cell [m]
      * @param d_t              time step [s]
      */
-    KOKKOS_INLINE_FUNCTION static uptake_rates
-    uptake(const FloatType c_s,
-           const FloatType c_o2,
-           const FloatType c_ac,
-           const FloatType a_max,
-           const FloatType length,
-           const FloatType d_t)
-    {
-      const FloatType phi_s_max_p = a_max * lin_density * inv_y_x_go;
-      const FloatType phi_o2_max_p = f_o2_max * y_o2_go * phi_s_max_p;
-      const FloatType phi_ac_max_p = f_ac_max * phi_s_max_p;
-
-      const FloatType share
-          = (length * lin_density) / ((f_pos * x_c_max * d_t) + d_t_floor);
-
-      // Monod factors, one division for the three
-      const auto [m_s, m_o2, m_ac]
-          = monod_batch(c_s, k_s, c_o2, k_o, c_ac, k_a);
-
-      uptake_rates phi{};
-      phi[S] = phi_s_max_p * m_s;
-      phi[O2] = Kokkos::min(phi_o2_max_p * m_o2, share * c_o2);
-      phi[Ac] = Kokkos::min(phi_ac_max_p * m_ac, share * c_ac);
-      return phi;
-    }
+    KOKKOS_INLINE_FUNCTION static uptake_rates uptake(const FloatType c_s,
+                                                      const FloatType c_o2,
+                                                      const FloatType c_ac,
+                                                      const FloatType a_max,
+                                                      const FloatType length,
+                                                      const FloatType d_t);
 
     /**
      * @brief  metabolism().
@@ -413,38 +394,64 @@ namespace Models
      * inactive ones vanish by themselves.
      */
     KOKKOS_INLINE_FUNCTION static reaction_rates
-    metabolism(const uptake_rates& phi, const FloatType nu_p)
-    {
-      constexpr auto zero = static_cast<FloatType>(0);
-      reaction_rates r = {}; // zero initialised
-
-      const FloatType s_ox = Kokkos::min(phi[S], phi[O2] * inv_y_o2_go);
-      const FloatType go = Kokkos::min(s_ox, nu_p * inv_y_x_go);
-
-      const FloatType growth_res = Kokkos::max(nu_p - go * y_x_go, zero);
-      const FloatType o2_res = Kokkos::max(phi[O2] - go * y_o2_go, zero);
-
-      r[i_go] = go;
-
-      //>0 iff nu_p limits
-      r[i_ov] = s_ox - go;
-
-      //>0 iff o2 limits
-      // phi_s limits -> phis=s_0x, phi_s-s_ox=0
-      // nu limits -> go = nu <phi_s
-      r[i_fe] = Kokkos::min(phi[S] - s_ox, growth_res * inv_y_x_fe);
-
-      //>0 iff gl limits
-      const FloatType ox_growth_res
-          = Kokkos::min(o2_res * inv_y_o2_ao, growth_res * inv_y_x_ao);
-
-      r[i_ao] = Kokkos::min(phi[Ac], ox_growth_res);
-
-      return r;
-    }
+    metabolism(const uptake_rates& phi, const FloatType nu_p);
   };
 
-  CHECK_MODEL(Acetate)
+  KOKKOS_INLINE_FUNCTION Acetate::uptake_rates
+  Acetate::uptake(const FloatType c_s,
+                  const FloatType c_o2,
+                  const FloatType c_ac,
+                  const FloatType a_max,
+                  const FloatType length,
+                  const FloatType d_t)
+  {
+    const FloatType phi_s_max_p = a_max * lin_density * inv_y_x_go;
+    const FloatType phi_o2_max_p = f_o2_max * y_o2_go * phi_s_max_p;
+    const FloatType phi_ac_max_p = f_ac_max * phi_s_max_p;
+
+    const FloatType share
+        = (length * lin_density) / ((f_pos * x_c_max * d_t) + d_t_floor);
+
+    // Monod factors, one division for the three
+    const auto [m_s, m_o2, m_ac] = monod_batch(c_s, k_s, c_o2, k_o, c_ac, k_a);
+
+    uptake_rates phi{};
+    phi[S] = phi_s_max_p * m_s;
+    phi[O2] = Kokkos::min(phi_o2_max_p * m_o2, share * c_o2);
+    phi[Ac] = Kokkos::min(phi_ac_max_p * m_ac, share * c_ac);
+    return phi;
+  }
+
+  KOKKOS_INLINE_FUNCTION Acetate::reaction_rates
+  Acetate::metabolism(const uptake_rates& phi, const FloatType nu_p)
+  {
+    constexpr auto zero = static_cast<FloatType>(0);
+    reaction_rates r = {}; // zero initialised
+
+    const FloatType s_ox = Kokkos::min(phi[S], phi[O2] * inv_y_o2_go);
+    const FloatType go = Kokkos::min(s_ox, nu_p * inv_y_x_go);
+
+    const FloatType growth_res = Kokkos::max(nu_p - go * y_x_go, zero);
+    const FloatType o2_res = Kokkos::max(phi[O2] - go * y_o2_go, zero);
+
+    r[i_go] = go;
+
+    //>0 iff nu_p limits
+    r[i_ov] = s_ox - go;
+
+    //>0 iff o2 limits
+    // phi_s limits -> phis=s_0x, phi_s-s_ox=0
+    // nu limits -> go = nu <phi_s
+    r[i_fe] = Kokkos::min(phi[S] - s_ox, growth_res * inv_y_x_fe);
+
+    //>0 iff gl limits
+    const FloatType ox_growth_res
+        = Kokkos::min(o2_res * inv_y_o2_ao, growth_res * inv_y_x_ao);
+
+    r[i_ao] = Kokkos::min(phi[Ac], ox_growth_res);
+
+    return r;
+  }
 
   KOKKOS_INLINE_FUNCTION void
   Acetate::init([[maybe_unused]] const MC::pool_type& random_pool,
@@ -558,8 +565,6 @@ namespace Models
       COPY_PROPERTY_TO(i, idx2, buffer_e);
     }
 
-    const FloatType a_max_i = 2.F * Kokkos::max(currernt_a_max, ap_min);
-
     // Effective elongation of the mother, floored: a fully starved cell would
     // otherwise give log(0)
     // const FloatType a_e_i = Kokkos::clamp(current_a_e, ap_min, a_max_i);
@@ -568,9 +573,21 @@ namespace Models
     // converges to 0; the pull toward a_max keeps a_p away from 0 and lets a
     // starved lineage recover when the environment improves.
     //
-    constexpr FloatType a_p_recovery = 0.1;
+    // constexpr FloatType a_p_recovery = 0.1;
+
+    // const auto a_target = static_cast<double>(
+    //     current_a_e
+    //     + (a_p_recovery * (GET_PROPERTY(particle_var::a_p) - current_a_e)));
+    //
+    //
+    const FloatType r = 0.2;
+    const auto satisfaction = current_a_e / GET_PROPERTY(particle_var::a_p);
+    const auto a_max = GET_PROPERTY(particle_var::a_max);
     const auto a_target = static_cast<double>(
-        current_a_e + (a_p_recovery * (a_max_i - current_a_e)));
+        current_a_e + r * satisfaction * (a_max - current_a_e)
+
+    );
+
     // const double average = Kokkos::log(a_target) - sigma * sigma / 2;
 
     const double sigma = Self::sigma_log_inheritance;
@@ -592,15 +609,18 @@ namespace Models
     const FloatType lmax2 = local_l.draw(gen);
     random_pool.free_state(gen);
 
+    const FloatType a_up = 1.5 * a_max;
     // Clamped to [a_p_min, a_max]
-    const auto ap_1 = Kokkos::clamp(ap_gen_1, ap_min, a_max_i);
-    const auto ap_2 = Kokkos::clamp(ap_gen_2, ap_min, a_max_i);
+    const auto ap_1 = Kokkos::clamp(ap_gen_1, ap_min, a_up);
+    const auto ap_2 = Kokkos::clamp(ap_gen_2, ap_min, a_up);
 
     GET_PROPERTY(particle_var::a_p) = ap_1;
     GET_PROPERTY(particle_var::l_max) = lmax1;
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::a_p) = ap_2;
     GET_PROPERTY_FROM(idx2, buffer_arr, particle_var::l_max) = lmax2;
   }
+
+  CHECK_MODEL(Acetate)
 
 } // namespace Models
 

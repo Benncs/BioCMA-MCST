@@ -87,7 +87,7 @@ namespace MC
     MC::ParticlePositions position;
     MC::ParticleStatus status;
     ParticleWeigths<typename Model::FloatType> weights;
-    ParticleAges ages;
+    ParticleRefTime t_ref;
     // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
 
     /**
@@ -130,7 +130,9 @@ namespace MC
      * @return `true` if the spawn was successful, `false` otherwise.
      */
     [[nodiscard]] KOKKOS_INLINE_FUNCTION bool
-    handle_division(const MC::pool_type& random_pool, std::size_t idx1) const;
+    handle_division(MC::ParticleRefTime::value_type abolute_time,
+                    const MC::pool_type& random_pool,
+                    std::size_t idx1) const;
 
     /**
      * @brief Return the particle weight
@@ -149,7 +151,7 @@ namespace MC
     /**
      * @brief Insert particle buffer into the main container
      */
-    void merge_buffer();
+    void merge_buffer(MC::ParticleRefTime::value_type absolute_time);
 
     /**
      * @brief Save data into ar for serialization
@@ -301,12 +303,12 @@ namespace MC
                               M::SelfParticle _model,
                               M::SelfContribs _contribs,
                               MC::ParticlePositions _position,
-                              MC::ParticleAges _ages,
+                              MC::ParticleRefTime _t_ref,
                               std::size_t _to_remove,
                               std::size_t _last_used_index)
           : status(std::move(_status)), model(std::move(_model)),
             contribs(std::move(_contribs)), position(std::move(_position)),
-            ages(std::move(_ages)), offset("offset"), to_remove(_to_remove),
+            t_ref(std::move(_t_ref)), offset("offset"), to_remove(_to_remove),
             last_used_index(_last_used_index)
       {
 
@@ -374,8 +376,8 @@ namespace MC
             contribs(inactive_slot, i_c) = contribs(replacement_index, i_c);
           }
 
-          ages(inactive_slot, 0) = ages(replacement_index, 0);
-          ages(inactive_slot, 1) = ages(replacement_index, 1);
+          t_ref(inactive_slot, 0) = t_ref(replacement_index, 0);
+          t_ref(inactive_slot, 1) = t_ref(replacement_index, 1);
         }
       }
 
@@ -383,7 +385,7 @@ namespace MC
       M::SelfParticle model;
       M::SelfContribs contribs;
       MC::ParticlePositions position;
-      MC::ParticleAges ages;
+      MC::ParticleRefTime t_ref;
       Kokkos::View<std::size_t, ComputeSpace> offset;
       std::size_t to_remove;
       std::size_t last_used_index;
@@ -394,19 +396,21 @@ namespace MC
      * parallel.
      *
      * TagRow copies the model properties over a 2D (particle, property)
-     * range; TagScalar copies the position and resets the ages over a 1D
+     * range; TagScalar copies the position and resets the time over a 1D
      * (particle) range.
      */
     template <ModelType M> struct InsertFunctor
     {
-      InsertFunctor(std::size_t _original_size,
+      InsertFunctor(double _current_time,
+                    std::size_t _original_size,
                     M::SelfParticle _model,
                     MC::ParticlePositions _position,
-                    MC::ParticleAges _ages,
+                    MC::ParticleRefTime _t_ref,
                     M::SelfParticle _buffer_model,
                     MC::ParticlePositions _buffer_position)
-          : original_size(_original_size), model(std::move(_model)),
-            ages(std::move(_ages)), position(std::move(_position)),
+          : current_time(_current_time), original_size(_original_size),
+            model(std::move(_model)), t_ref(std::move(_t_ref)),
+            position(std::move(_position)),
             buffer_model(std::move(_buffer_model)),
             buffer_position(std::move(_buffer_position))
       {
@@ -434,13 +438,13 @@ namespace MC
         // Actually needs buffer to store mother's hydraulic time
         // But set new hydraulic time to 0 to not create new buffer a save
         // memory usage
-        ages(original_size + i, 0) = 0;
-        ages(original_size + i, 1) = 0;
+        t_ref(original_size + i, 0) = current_time;
+        t_ref(original_size + i, 1) = current_time;
       }
-
+      double current_time;
       std::size_t original_size;
       M::SelfParticle model;
-      MC::ParticleAges ages;
+      MC::ParticleRefTime t_ref;
       MC::ParticlePositions position;
       M::SelfParticle buffer_model;
       MC::ParticlePositions buffer_position;
@@ -505,7 +509,7 @@ namespace MC
     deserialize_view(ar, position);
     deserialize_view(ar, status);
     deserialize_view(ar, model);
-    deserialize_view(ar, ages);
+    deserialize_view(ar, t_ref);
 
     if (Model::n_var != model.extent(1))
     {
@@ -536,7 +540,7 @@ namespace MC
     serialize_view(ar, position);
     serialize_view(ar, status);
     serialize_view(ar, model);
-    serialize_view(ar, ages);
+    serialize_view(ar, t_ref);
   }
 
   template <ModelType Model>
@@ -561,15 +565,18 @@ namespace MC
 
   template <ModelType Model>
   KOKKOS_INLINE_FUNCTION bool
-  ParticlesContainer<Model>::handle_division(const MC::pool_type& random_pool,
-                                             std::size_t idx1) const
+  ParticlesContainer<Model>::handle_division(
+      const MC::ParticleRefTime::value_type abolute_time,
+      const MC::pool_type& random_pool,
+      std::size_t idx1) const
   {
     if (Kokkos::atomic_load(&buffer_index()) < buffer_model.extent(0))
     {
       const auto idx2 = Kokkos::atomic_fetch_add(&buffer_index(), 1);
       Model::division(random_pool, idx1, idx2, model, buffer_model);
       buffer_position(idx2) = position(idx1);
-      ages(idx1, 1) = 0;
+      t_ref(idx1, 1) = abolute_time;
+
       return true;
     }
     return false;
@@ -577,7 +584,8 @@ namespace MC
 
   template <ModelType Model>
   void
-  ParticlesContainer<Model>::merge_buffer()
+  ParticlesContainer<Model>::merge_buffer(
+      const MC::ParticleRefTime::value_type absolute_time)
   {
     PROFILE_SECTION("ParticlesContainer::merge_buffer")
     const auto original_size = n_used_elements;
@@ -587,10 +595,14 @@ namespace MC
       return;
     }
     _resize(original_size + n_add_item);
-
     using functor_type = InsertFunctor<Model>;
-    const functor_type functor(
-        original_size, model, position, ages, buffer_model, buffer_position);
+    const functor_type functor(absolute_time,
+                               original_size,
+                               model,
+                               position,
+                               t_ref,
+                               buffer_model,
+                               buffer_position);
 
     Kokkos::parallel_for("insert_merge_rows",
                          Kokkos::MDRangePolicy<typename functor_type::TagRow,
@@ -643,7 +655,7 @@ namespace MC
         resize_first_touch(
             contribs, n_allocated_elements, new_size, npt, Model::n_c);
         resize_first_touch(status, n_allocated_elements, new_size, npt);
-        resize_first_touch(ages, n_allocated_elements, new_size, npt);
+        resize_first_touch(t_ref, n_allocated_elements, new_size, npt);
 
         // Handle resizing for weights based on model type
         if constexpr (ConstWeightModelType<Model>)
@@ -658,30 +670,6 @@ namespace MC
       }
     }
   }
-
-  // template <ModelType Model>
-  // void
-  // ParticlesContainer<Model>::__allocate_buffer__()
-  // {
-  //   PROFILE_SECTION("ParticlesContainer::__allocate_buffer__")
-
-  //   std::size_t buffer_size = buffer_position.extent(0);
-
-  //   const double tmp = rt_params.buffer_ratio * n_allocated_elements;
-
-  //   const std::size_t buffer_threshold = static_cast<std::size_t>(tmp);
-
-  //   if (buffer_size < buffer_threshold)
-  //   {
-  //     buffer_size = static_cast<std::size_t>(
-  //         std::ceil(rt_params.buffer_ratio * n_allocated_elements));
-
-  //     // Realloc because not needed to keep buffer as it has been copied
-  //     Kokkos::realloc(buffer_position, buffer_size);
-  //     Kokkos::realloc(buffer_model, buffer_size, Model::n_var);
-  //     buffer_index() = 0;
-  //   }
-  // }
 
   template <ModelType Model>
   void
@@ -724,7 +712,7 @@ namespace MC
         position(alloc_without_init("particle_position"), 0),
         status(alloc_without_init("particle_status"), 0),
         weights(alloc_without_init("particle_weigth"), 0),
-        ages(alloc_without_init("particle_age"), 0),
+        t_ref(alloc_without_init("particle_reference_time"), 0),
         buffer_model("buffer_particle_model", 0),
         buffer_position("buffer_particle_position", 0),
         buffer_index("buffer_index"), n_allocated_elements(0),
@@ -739,16 +727,6 @@ namespace MC
       _resize(n_particle);
       __allocate_buffer__();
     }
-
-    // const auto bounds = M::get_bounds();
-
-    // if (begin > end)
-    // {
-    //   throw std::invalid_argument("Model begin should be > end");
-    // }
-
-    // begin = bounds.begin;
-    // end = bounds.end;
   }
 
   template <ModelType M>
@@ -793,7 +771,7 @@ namespace MC
                                      model,
                                      contribs,
                                      position,
-                                     ages,
+                                     t_ref,
                                      to_remove,
                                      last_used_index));
 
