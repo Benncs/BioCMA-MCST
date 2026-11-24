@@ -37,7 +37,7 @@ namespace impl
       return iota_species(T::n_c);
     }
 
-    if (rd.size() != T::n_c || rd.size() != 0)
+    if (rd.size() != T::n_c && rd.size() != 0)
     {
       throw std::invalid_argument("Missing species names");
     }
