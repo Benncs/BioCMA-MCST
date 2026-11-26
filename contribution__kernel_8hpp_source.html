@@ -314,51 +314,59 @@ $(function(){initNavTree('contribution__kernel_8hpp_source.html','',''); });
 <div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>        [&amp;](<span class="keyword">const</span> std::size_t tid)</div>
 <div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        {</div>
 <div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>          <span class="keyword">auto</span> access = <a class="code hl_variable" href="structContributionFunctor.html#abdef4df64a7f2c64bd84baa429963747">m_contribution_scatter</a>.access();</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>          <span class="keywordflow">for</span> (std::size_t k = 0; k &lt; m; ++k)</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>          {</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>            <span class="keyword">const</span> std::size_t base = tid + k * p; <span class="comment">// stride p</span></div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>            <span class="keyword">const</span> std::size_t flat_index = p0 + base;</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>            <span class="keywordflow">if</span> (base &gt;= upper_bound)</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>            {</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>              <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>            }</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>            <span class="keywordflow">if</span> (status(flat_index) != <a class="code hl_enumvalue" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c">MC::Status::Idle</a>)</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>            {</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>              <span class="keywordflow">continue</span>;</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>            }</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span> </div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>            <span class="keyword">const</span> <span class="keywordtype">double</span> weight = <a class="code hl_variable" href="structContributionFunctor.html#a783a377602814aff9743cf6ac9eef2d1">m_particles</a>.get_weight(flat_index);</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>            <span class="keyword">const</span> <span class="keyword">auto</span> pos = positions(flat_index);</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>            Kokkos::parallel_for(</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>                Kokkos::ThreadVectorRange(team, 0, M::n_c),</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>                [&amp;](<span class="keyword">const</span> <span class="keywordtype">int</span> j)</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>                { access(j, pos) += weight * contribs(flat_index, j); });</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>          }</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        });</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>  }</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>          <span class="comment">// Neighbour threads start at a different species: threads in the</span></div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>          <span class="comment">// same compartment hit different addresses at the same time</span></div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>          <span class="keyword">const</span> <span class="keywordtype">int</span> first_species = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(tid % M::n_c);</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>          <span class="keywordflow">for</span> (std::size_t k = 0; k &lt; m; ++k)</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>          {</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>            <span class="keyword">const</span> std::size_t base = tid + k * p; <span class="comment">// stride p</span></div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>            <span class="keyword">const</span> std::size_t flat_index = p0 + base;</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>            <span class="keywordflow">if</span> (base &gt;= upper_bound)</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>            {</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>              <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>            }</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>            <span class="keywordflow">if</span> (status(flat_index) != <a class="code hl_enumvalue" href="namespaceMC.html#a69467f7d54b0dcb1a4e176fe425ffb7bae599161956d626eda4cb0a5ffb85271c">MC::Status::Idle</a>)</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>            {</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>              <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>            }</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span> </div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>            <span class="keyword">const</span> <span class="keywordtype">double</span> weight = <a class="code hl_variable" href="structContributionFunctor.html#a783a377602814aff9743cf6ac9eef2d1">m_particles</a>.get_weight(flat_index);</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>            <span class="keyword">const</span> <span class="keyword">auto</span> pos = positions(flat_index);</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>            Kokkos::parallel_for(</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>                Kokkos::ThreadVectorRange(team, 0, M::n_c),</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>                [&amp;](<span class="keyword">const</span> <span class="keywordtype">int</span> i)</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>                {</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>                  <span class="keyword">const</span> <span class="keywordtype">int</span> j = (i + first_species &lt; M::n_c)</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>                                    ? i + first_species</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>                                    : i + first_species - M::n_c;</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>                  access(j, pos) += weight * contribs(flat_index, j);</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>                });</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>          }</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        });</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>  }</div>
 </div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span> </div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>  KOKKOS_INLINE_FUNCTION</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>  <span class="keywordtype">void</span></div>
-<div class="foldopen" id="foldopen00251" data-start="{" data-end="}">
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#a0360d252e174468ea7338548b573ebb3">  251</a></span>  <a class="code hl_function" href="structContributionFunctor.html#a0360d252e174468ea7338548b573ebb3">operator()</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structContributionFunctor_1_1TagDivision.html">TagDivision</a> _tag, <span class="keyword">const</span> <a class="code hl_typedef" href="structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a>&amp; team)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span><span class="keyword">  </span>{</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>    (void)_tag;</div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    <span class="keyword">const</span> std::size_t N = <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>;</div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    <span class="keyword">const</span> std::size_t i0 = team.league_rank() * N;</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    <span class="keyword">const</span> <span class="keyword">auto</span> upper_bound = ((i0 + N) &gt;= <a class="code hl_variable" href="structContributionFunctor.html#a4c52b47ddbd7d2c3126a3c606bb03b52">n_division</a>) ? <a class="code hl_variable" href="structContributionFunctor.html#a4c52b47ddbd7d2c3126a3c606bb03b52">n_division</a> - i0 : N;</div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    Kokkos::parallel_for(</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>        Kokkos::TeamThreadRange(team, 0, upper_bound),</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>        [&amp;](<span class="keyword">const</span> std::size_t i)</div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>        { <a class="code hl_variable" href="structContributionFunctor.html#a783a377602814aff9743cf6ac9eef2d1">m_particles</a>.handle_division(<a class="code hl_variable" href="structContributionFunctor.html#a0028a0d2dd980b937022eaeefaf1fdda">current_time</a>, <a class="code hl_variable" href="structContributionFunctor.html#a8c76d9de68c1997c888ff44dd92ebc7f">random_pool</a>, i0 + i); });</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>  }</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span> </div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>  KOKKOS_INLINE_FUNCTION</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>  <span class="keywordtype">void</span></div>
+<div class="foldopen" id="foldopen00259" data-start="{" data-end="}">
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno"><a class="line" href="structContributionFunctor.html#a0360d252e174468ea7338548b573ebb3">  259</a></span>  <a class="code hl_function" href="structContributionFunctor.html#a0360d252e174468ea7338548b573ebb3">operator()</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structContributionFunctor_1_1TagDivision.html">TagDivision</a> _tag, <span class="keyword">const</span> <a class="code hl_typedef" href="structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a>&amp; team)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="keyword">  </span>{</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>    (void)_tag;</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span> </div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>    <span class="keyword">const</span> std::size_t N = <a class="code hl_variable" href="structContributionFunctor.html#aead15742975a46469c2b96062dc119d1">m_particle_per_team</a>;</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>    <span class="keyword">const</span> std::size_t i0 = team.league_rank() * N;</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>    <span class="keyword">const</span> <span class="keyword">auto</span> upper_bound = ((i0 + N) &gt;= <a class="code hl_variable" href="structContributionFunctor.html#a4c52b47ddbd7d2c3126a3c606bb03b52">n_division</a>) ? <a class="code hl_variable" href="structContributionFunctor.html#a4c52b47ddbd7d2c3126a3c606bb03b52">n_division</a> - i0 : N;</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span> </div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    Kokkos::parallel_for(</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>        Kokkos::TeamThreadRange(team, 0, upper_bound),</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>        [&amp;](<span class="keyword">const</span> std::size_t i)</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>        { <a class="code hl_variable" href="structContributionFunctor.html#a783a377602814aff9743cf6ac9eef2d1">m_particles</a>.handle_division(<a class="code hl_variable" href="structContributionFunctor.html#a0028a0d2dd980b937022eaeefaf1fdda">current_time</a>, <a class="code hl_variable" href="structContributionFunctor.html#a8c76d9de68c1997c888ff44dd92ebc7f">random_pool</a>, i0 + i); });</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>  }</div>
 </div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>};</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>};</div>
 </div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassMC_1_1ParticlesContainer_html"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a></div><div class="ttdoc">Main owning object for Monte-Carlo particles.</div><div class="ttdef"><b>Definition</b> particles_container.hpp:59</div></div>
 <div class="ttc" id="aclassSimulation_1_1KernelInline_1_1CycleReducer_html_a10d8355951a5002da74f0bb559d92387"><div class="ttname"><a href="classSimulation_1_1KernelInline_1_1CycleReducer.html#a10d8355951a5002da74f0bb559d92387">Simulation::KernelInline::CycleReducer::result_view_type</a></div><div class="ttdeci">Kokkos::View&lt; value_type, Space &gt; result_view_type</div><div class="ttdef"><b>Definition</b> cycle_reducer.hpp:36</div></div>
 <div class="ttc" id="anamespaceMC_html_a4abe28e303ac1f2bcdc889c01e9064b8a129e8109f319870e328cc7a1d5b5cae3"><div class="ttname"><a href="namespaceMC.html#a4abe28e303ac1f2bcdc889c01e9064b8a129e8109f319870e328cc7a1d5b5cae3">MC::EventType::Overflow</a></div><div class="ttdeci">@ Overflow</div><div class="ttdef"><b>Definition</b> events.hpp:25</div></div>
@@ -373,7 +381,7 @@ $(function(){initNavTree('contribution__kernel_8hpp_source.html','',''); });
 <div class="ttc" id="astructContributionFunctor_1_1Tag3D_html"><div class="ttname"><a href="structContributionFunctor_1_1Tag3D.html">ContributionFunctor::Tag3D</a></div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:24</div></div>
 <div class="ttc" id="astructContributionFunctor_1_1TagDivision_html"><div class="ttname"><a href="structContributionFunctor_1_1TagDivision.html">ContributionFunctor::TagDivision</a></div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:27</div></div>
 <div class="ttc" id="astructContributionFunctor_html_a0028a0d2dd980b937022eaeefaf1fdda"><div class="ttname"><a href="structContributionFunctor.html#a0028a0d2dd980b937022eaeefaf1fdda">ContributionFunctor::current_time</a></div><div class="ttdeci">double current_time</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:44</div></div>
-<div class="ttc" id="astructContributionFunctor_html_a0360d252e174468ea7338548b573ebb3"><div class="ttname"><a href="structContributionFunctor.html#a0360d252e174468ea7338548b573ebb3">ContributionFunctor::operator()</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION void operator()(const TagDivision _tag, const TeamMember &amp;team) const</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:251</div></div>
+<div class="ttc" id="astructContributionFunctor_html_a0360d252e174468ea7338548b573ebb3"><div class="ttname"><a href="structContributionFunctor.html#a0360d252e174468ea7338548b573ebb3">ContributionFunctor::operator()</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION void operator()(const TagDivision _tag, const TeamMember &amp;team) const</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:259</div></div>
 <div class="ttc" id="astructContributionFunctor_html_a0ab57bf02382235f5e0d8c872e7659ba"><div class="ttname"><a href="structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba">ContributionFunctor::TeamMember</a></div><div class="ttdeci">TeamPolicy::member_type TeamMember</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:31</div></div>
 <div class="ttc" id="astructContributionFunctor_html_a0cdbc94a1d04881aff9295b70dff52b2"><div class="ttname"><a href="structContributionFunctor.html#a0cdbc94a1d04881aff9295b70dff52b2">ContributionFunctor::cycle_reducer</a></div><div class="ttdeci">Simulation::KernelInline::CycleReducer&lt; ComputeSpace &gt;::result_view_type cycle_reducer</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:48</div></div>
 <div class="ttc" id="astructContributionFunctor_html_a17f19d2b6637bb74b64784c68202d066"><div class="ttname"><a href="structContributionFunctor.html#a17f19d2b6637bb74b64784c68202d066">ContributionFunctor::operator()</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION void operator()(Tag0D _tag, const TeamMember &amp;team) const</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:160</div></div>

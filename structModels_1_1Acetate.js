@@ -159,6 +159,8 @@ var structModels_1_1Acetate =
     [ "l_max_m", "structModels_1_1Acetate.html#a2b761b05bb73e9b1309ce0221427eba0", null ],
     [ "l_min_m", "structModels_1_1Acetate.html#a7e6d4aad21fe26e842163e61c7abff8e", null ],
     [ "lin_density", "structModels_1_1Acetate.html#ab08977ab19f00f9a6c4d0c2dd0fb0512", null ],
+    [ "lin_density_pg", "structModels_1_1Acetate.html#a67d6a8b681a0f1f0e92f7999e122d7b5", null ],
+    [ "mass_scale", "structModels_1_1Acetate.html#a97a4b9006286bc476d07240697358318", null ],
     [ "n_c", "structModels_1_1Acetate.html#abd8c7605f3c0e20c396753147a06c950", null ],
     [ "n_var", "structModels_1_1Acetate.html#a6085b0e40bbdf9a56a699d44062dd644", null ],
     [ "name", "structModels_1_1Acetate.html#a4d0ab6ec6461782aa7f1dd6fc9852045", null ],
