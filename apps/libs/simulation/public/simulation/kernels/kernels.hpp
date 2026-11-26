@@ -287,7 +287,11 @@ namespace Simulation::KernelInline
 
           const auto policy_contribs
               = Kokkos::TeamPolicy<typename ContributionFunctor<Model>::Tag3D>(
-                  model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
+                    model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO())
+                    .set_scratch_size(
+                        0,
+                        Kokkos::PerThread(sizeof(typename Model::FloatType)
+                                          * Model::n_c));
           Kokkos::parallel_for(
               "cycle_model_contribs", policy_contribs, contribution_kernel);
         }
@@ -295,7 +299,15 @@ namespace Simulation::KernelInline
         {
           const auto policy_contribs
               = Kokkos::TeamPolicy<typename ContributionFunctor<Model>::Tag0D>(
-                  model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO());
+                    model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO())
+                    .set_scratch_size(
+                        0,
+                        Kokkos::PerTeam(
+                            sizeof(
+                                typename ContributionFunctor<Model>::float_type)
+                            * Model::n_c),
+                        Kokkos::PerThread(sizeof(typename Model::FloatType)
+                                          * Model::n_c));
           Kokkos::parallel_for(
               "cycle_model_contribs_0d", policy_contribs, contribution_kernel);
         }

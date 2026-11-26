@@ -30,6 +30,9 @@ template <ModelType M> struct ContributionFunctor
   using TeamPolicy = Kokkos::TeamPolicy<ComputeSpace>;
   using TeamMember = TeamPolicy::member_type;
   using float_type = float;
+  using ScratchView
+      = Kokkos::View<float_type*,
+                     TeamPolicy::execution_space::scratch_memory_space>;
 
   std::size_t m_particle_per_team;
 
@@ -107,13 +110,15 @@ template <ModelType M> struct ContributionFunctor
   }
 
   KOKKOS_FORCEINLINE_FUNCTION void
-  update_particle(const std::size_t flatten_index, const std::size_t pos) const
+  update_particle(const typename M::SelfContribs& contribs,
+                  const std::size_t flatten_index,
+                  const std::size_t pos) const
   {
     const auto new_status = M::update(random_pool,
                                       d_t,
                                       flatten_index,
                                       m_particles.model,
-                                      m_particles.contribs,
+                                      contribs,
                                       pos,
                                       concentrations);
     if (new_status == MC::Status::Division)
@@ -127,13 +132,25 @@ template <ModelType M> struct ContributionFunctor
     // }
   }
 
-  template <typename Tag>
-  KOKKOS_INLINE_FUNCTION void
-  update_block(const TeamMember& team,
-               const std::size_t p0,
-               const std::size_t upper_bound) const
+  KOKKOS_INLINE_FUNCTION
+  void
+  operator()(Tag0D _tag, const TeamMember& team) const
   {
+    (void)_tag;
+    const std::size_t n_c = M::n_c;
+    const std::size_t p0 = team.league_rank() * m_particle_per_team;
+    const auto upper_bound = team_upper_bound(team);
     const auto& status = m_particles.status;
+    const typename M::SelfContribs contribs(
+        team.thread_scratch(0),
+        Kokkos::LayoutStride(m_particles.n_particles(), 0, n_c, 1));
+
+    ScratchView scratch(team.team_scratch(0), n_c);
+    Kokkos::parallel_for(Kokkos::TeamVectorRange(team, n_c),
+                         [&](const std::size_t j)
+                         { scratch(j) = float_type{ 0 }; });
+    team.team_barrier();
+
     Kokkos::parallel_for(
         Kokkos::TeamThreadRange(team, 0, upper_bound),
         [&](const std::size_t i)
@@ -143,58 +160,28 @@ template <ModelType M> struct ContributionFunctor
           {
             return;
           }
-          if constexpr (std::is_same_v<Tag, Tag0D>)
+          // Position is always 0 in 0D
+          update_particle(contribs, flatten_index, 0);
+          const auto weight = m_particles.get_weight(flatten_index);
+          for (std::size_t j = 0; j < n_c; ++j)
           {
-            // Position is always 0 in 0D
-            update_particle(flatten_index, 0);
-          }
-          else
-          {
-            update_particle(flatten_index, m_particles.position(flatten_index));
+            Kokkos::atomic_add(
+                &scratch(j),
+                static_cast<float_type>(weight * contribs(flatten_index, j)));
           }
         });
-  }
-
-  KOKKOS_INLINE_FUNCTION
-  void
-  operator()(Tag0D _tag, const TeamMember& team) const
-  {
-    (void)_tag;
-    const std::size_t p0 = team.league_rank() * m_particle_per_team;
-    const auto upper_bound = team_upper_bound(team);
-    const auto& contribs = m_particles.contribs;
-    const auto& status = m_particles.status;
-
-    update_block<Tag0D>(team, p0, upper_bound);
 
     team.team_barrier();
 
-    // One iteration per species n_c is typicall in [2,10]
-    // n_c*upper_bound itreation but less atomic, less contention
-    for (std::size_t j = 0; j < M::n_c; ++j)
-    {
-      float_type sum = 0;
-      Kokkos::parallel_reduce(
-          Kokkos::TeamThreadRange(team, 0, upper_bound),
-          [&](const std::size_t i, float_type& local_sum)
-          {
-            const std::size_t flatten_index = p0 + i;
-            if (status(flatten_index) == MC::Status::Idle)
-            {
-              local_sum += static_cast<float_type>(
-                  m_particles.get_weight(flatten_index)
-                  * contribs(flatten_index, j));
-            }
-          },
-          sum);
-
-      Kokkos::single(Kokkos::PerTeam(team),
-                     [&]()
+    Kokkos::single(Kokkos::PerTeam(team),
+                   [&]()
+                   {
+                     auto access = m_contribution_scatter.access();
+                     for (std::size_t j = 0; j < n_c; ++j)
                      {
-                       auto access = m_contribution_scatter.access();
-                       access(j, 0) += sum;
-                     });
-    }
+                       access(j, 0) += scratch(j);
+                     }
+                   });
   }
 
   KOKKOS_INLINE_FUNCTION
@@ -209,12 +196,10 @@ template <ModelType M> struct ContributionFunctor
     const std::size_t m = (upper_bound + p - 1) / p;
 
     const auto& positions = m_particles.position;
-    const auto& contribs = m_particles.contribs;
     const auto& status = m_particles.status;
-
-    update_block<Tag3D>(team, p0, upper_bound);
-
-    team.team_barrier();
+    const typename M::SelfContribs contribs(
+        team.thread_scratch(0),
+        Kokkos::LayoutStride(m_particles.n_particles(), 0, M::n_c, 1));
 
     // Stategy here is to reduce contention to acess (scatterview)
     // One team performs m iteration with one access
@@ -239,8 +224,9 @@ template <ModelType M> struct ContributionFunctor
               continue;
             }
 
-            const double weight = m_particles.get_weight(flat_index);
             const auto pos = positions(flat_index);
+            update_particle(contribs, flat_index, pos);
+            const double weight = m_particles.get_weight(flat_index);
             Kokkos::parallel_for(
                 Kokkos::ThreadVectorRange(team, 0, M::n_c),
                 [&](const int i)

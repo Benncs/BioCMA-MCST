@@ -22,7 +22,7 @@ struct DefaultModel
   using Self = DefaultModel;
   using FloatType = float;
   using SelfParticle = MC::ParticlesModel<Self::n_var, Self::FloatType>;
-  using SelfContribs = MC::ParticlesModel<Self::n_c, Self::FloatType>;
+  using SelfContribs = MC::ParticlesContribs<Self::n_c, Self::FloatType>;
   using Config = std::nullopt_t;
   static constexpr bool uniform_weigth = false;
 

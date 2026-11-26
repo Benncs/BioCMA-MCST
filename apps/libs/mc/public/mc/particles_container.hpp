@@ -82,7 +82,6 @@ namespace MC
 
     // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes)
     Model::SelfParticle model;
-    Model::SelfContribs contribs;
 
     MC::ParticlePositions position;
     MC::ParticleStatus status;
@@ -318,14 +317,13 @@ namespace MC
 
       CompactParticlesFunctor(MC::ParticleStatus _status,
                               M::SelfParticle _model,
-                              M::SelfContribs _contribs,
                               MC::ParticlePositions _position,
                               MC::ParticleRefTime _t_ref,
                               std::size_t _to_remove,
                               std::size_t _last_used_index)
           : status(std::move(_status)), model(std::move(_model)),
-            contribs(std::move(_contribs)), position(std::move(_position)),
-            t_ref(std::move(_t_ref)), offset("offset"), to_remove(_to_remove),
+            position(std::move(_position)), t_ref(std::move(_t_ref)),
+            offset("offset"), to_remove(_to_remove),
             last_used_index(_last_used_index)
       {
 
@@ -388,11 +386,6 @@ namespace MC
                 = model(replacement_index, i_properties);
           }
 
-          for (std::size_t i_c = 0; i_c < M::n_c; ++i_c)
-          {
-            contribs(inactive_slot, i_c) = contribs(replacement_index, i_c);
-          }
-
           t_ref(inactive_slot, 0) = t_ref(replacement_index, 0);
           t_ref(inactive_slot, 1) = t_ref(replacement_index, 1);
         }
@@ -400,7 +393,6 @@ namespace MC
 
       MC::ParticleStatus status;
       M::SelfParticle model;
-      M::SelfContribs contribs;
       MC::ParticlePositions position;
       MC::ParticleRefTime t_ref;
       Kokkos::View<std::size_t, ComputeSpace> offset;
@@ -534,9 +526,6 @@ namespace MC
           "Error when deserialze, model number of property mismatch");
     }
 
-    // contribs is not serialized and is rewritten every step: allocate, don't
-    // copy
-    Kokkos::realloc(this->contribs, n_allocated_elements, Model::n_c);
 #ifndef NDEBUG
     Kokkos::printf("ParticlesContainer::load: Check if load_tuning_constant "
                    "works with different value");
@@ -693,10 +682,6 @@ namespace MC
         resize_first_touch(position, n_allocated_elements, new_size, npt);
         resize_first_touch(
             model, n_allocated_elements, new_size, npt, Model::n_var);
-        // contribs is rewritten every step before it is read, so its previous
-        // contents do not need preserving -- only its placement matters.
-        resize_first_touch(
-            contribs, n_allocated_elements, new_size, npt, Model::n_c);
         resize_first_touch(status, n_allocated_elements, new_size, npt);
         resize_first_touch(t_ref, n_allocated_elements, new_size, npt);
 
@@ -751,7 +736,6 @@ namespace MC
                                             KernelDispatchOptions kernel_opts)
       : model(alloc_without_init("particle_model"), 0, 0),
 
-        contribs(alloc_without_init("particle_contribs"), 0),
         position(alloc_without_init("particle_position"), 0),
         status(alloc_without_init("particle_status"), 0),
         weights(alloc_without_init("particle_weigth"), 0),
@@ -810,17 +794,11 @@ namespace MC
       Kokkos::parallel_scan(
           "find_and_fill_gap",
           Kokkos::RangePolicy<ComputeSpace>(0, n_used_elements),
-          CompactParticlesFunctor<M>(status,
-                                     model,
-                                     contribs,
-                                     position,
-                                     t_ref,
-                                     to_remove,
-                                     last_used_index));
+          CompactParticlesFunctor<M>(
+              status, model, position, t_ref, to_remove, last_used_index));
 
       Kokkos::fence();
       KOKKOS_ASSERT(this->position.extent(0) == n_allocated_elements);
-      KOKKOS_ASSERT(this->contribs.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->model.extent(0) == n_allocated_elements);
       KOKKOS_ASSERT(this->status.extent(0) == n_allocated_elements);
 

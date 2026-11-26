@@ -66,9 +66,9 @@ namespace MC
   template <uint64_t Nc, FloatingPointType F>
   using ParticlesContribs
       = Kokkos::View<F* [Nc],
-                     ComputeSpace::array_layout,
-                     ComputeSpace,
-                     Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>>;
+                     Kokkos::LayoutStride,
+                     ComputeSpace::scratch_memory_space,
+                     Kokkos::MemoryTraits<Kokkos::Unmanaged> >;
 
   template <FloatingPointType F>
   using DynParticlesModel
@@ -80,9 +80,9 @@ namespace MC
   template <FloatingPointType F>
   using DynParticlesContribs
       = Kokkos::View<F**,
-                     ComputeSpace::array_layout,
-                     ComputeSpace,
-                     Kokkos::MemoryTraits<Kokkos::MemoryTraitsFlags::Restrict>>;
+                     Kokkos::LayoutStride,
+                     ComputeSpace::scratch_memory_space,
+                     Kokkos::MemoryTraits<Kokkos::Unmanaged> >;
 
   // NOLINTEND(hicpp-avoid-c-arrays,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 
