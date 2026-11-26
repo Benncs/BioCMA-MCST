@@ -93,6 +93,7 @@ Public Types</h2></td></tr>
 <tr class="memitem:a7f64adb1ad8e296dd30cfc10d4f60fea" id="r_a7f64adb1ad8e296dd30cfc10d4f60fea"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f64adb1ad8e296dd30cfc10d4f60fea">TeamPolicy</a> = Kokkos::TeamPolicy&lt;ComputeSpace&gt;</td></tr>
 <tr class="memitem:a0ab57bf02382235f5e0d8c872e7659ba" id="r_a0ab57bf02382235f5e0d8c872e7659ba"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a> = TeamPolicy::member_type</td></tr>
 <tr class="memitem:aade88235d0802383f297c1de07fdfe90" id="r_aade88235d0802383f297c1de07fdfe90"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aade88235d0802383f297c1de07fdfe90">float_type</a> = float</td></tr>
+<tr class="memitem:a010a7c6c95423d005735e06babcf004e" id="r_a010a7c6c95423d005735e06babcf004e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a010a7c6c95423d005735e06babcf004e">ScratchView</a></td></tr>
 <tr class="memitem:a7f64adb1ad8e296dd30cfc10d4f60fea" id="r_a7f64adb1ad8e296dd30cfc10d4f60fea"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f64adb1ad8e296dd30cfc10d4f60fea">TeamPolicy</a> = Kokkos::TeamPolicy&lt;ComputeSpace&gt;</td></tr>
 <tr class="memitem:a0ab57bf02382235f5e0d8c872e7659ba" id="r_a0ab57bf02382235f5e0d8c872e7659ba"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a> = TeamPolicy::member_type</td></tr>
 <tr class="memitem:aade88235d0802383f297c1de07fdfe90" id="r_aade88235d0802383f297c1de07fdfe90"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aade88235d0802383f297c1de07fdfe90">float_type</a> = float</td></tr>
@@ -104,9 +105,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af22402ef6dc15537692c7284ef2be956" id="r_af22402ef6dc15537692c7284ef2be956"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af22402ef6dc15537692c7284ef2be956">update</a> (<a class="el" href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a>&lt; M &gt; _particles, double _d_t, double absolute_time)</td></tr>
 <tr class="memitem:a3096a888dc03f8ca6a88fcb13ad13927" id="r_a3096a888dc03f8ca6a88fcb13ad13927"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3096a888dc03f8ca6a88fcb13ad13927">team_upper_bound</a> (const <a class="el" href="#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a> &amp;team) const</td></tr>
 <tr class="memitem:af67be8fc4cddd1a36b2862e9d4ce7b68" id="r_af67be8fc4cddd1a36b2862e9d4ce7b68"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af67be8fc4cddd1a36b2862e9d4ce7b68">division</a> (const std::size_t idx) const</td></tr>
-<tr class="memitem:afe42c9a498c95e04a8a1620f548df161" id="r_afe42c9a498c95e04a8a1620f548df161"><td class="memItemLeft" align="right" valign="top">KOKKOS_FORCEINLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe42c9a498c95e04a8a1620f548df161">update_particle</a> (const std::size_t flatten_index, const std::size_t pos) const</td></tr>
-<tr class="memitem:ad0b0730f8e8a33a842508153d15d3c02" id="r_ad0b0730f8e8a33a842508153d15d3c02"><td class="memTemplParams" colspan="2">template&lt;typename Tag&gt; </td></tr>
-<tr class="memitem:ad0b0730f8e8a33a842508153d15d3c02 template"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0b0730f8e8a33a842508153d15d3c02">update_block</a> (const <a class="el" href="#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a> &amp;team, const std::size_t p0, const std::size_t upper_bound) const</td></tr>
+<tr class="memitem:a9dd5559eb56d94f2ee3709dfb1cb52f3" id="r_a9dd5559eb56d94f2ee3709dfb1cb52f3"><td class="memItemLeft" align="right" valign="top">KOKKOS_FORCEINLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9dd5559eb56d94f2ee3709dfb1cb52f3">update_particle</a> (const typename M::SelfContribs &amp;contribs, const std::size_t flatten_index, const std::size_t pos) const</td></tr>
 <tr class="memitem:a17f19d2b6637bb74b64784c68202d066" id="r_a17f19d2b6637bb74b64784c68202d066"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17f19d2b6637bb74b64784c68202d066">operator()</a> (<a class="el" href="structContributionFunctor_1_1Tag0D.html">Tag0D</a> _tag, const <a class="el" href="#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a> &amp;team) const</td></tr>
 <tr class="memitem:ad0c03d2b5ff189633abab20f02805e15" id="r_ad0c03d2b5ff189633abab20f02805e15"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0c03d2b5ff189633abab20f02805e15">operator()</a> (const <a class="el" href="structContributionFunctor_1_1Tag3D.html">Tag3D</a> _tag, const <a class="el" href="#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a> &amp;team) const</td></tr>
 <tr class="memitem:a0360d252e174468ea7338548b573ebb3" id="r_a0360d252e174468ea7338548b573ebb3"><td class="memItemLeft" align="right" valign="top">KOKKOS_INLINE_FUNCTION void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0360d252e174468ea7338548b573ebb3">operator()</a> (const <a class="el" href="structContributionFunctor_1_1TagDivision.html">TagDivision</a> _tag, const <a class="el" href="#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a> &amp;team) const</td></tr>
@@ -167,7 +166,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 </div>
 </div>
 <a id="a010a7c6c95423d005735e06babcf004e" name="a010a7c6c95423d005735e06babcf004e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a010a7c6c95423d005735e06babcf004e">&#9670;&#160;</a></span>ScratchView</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a010a7c6c95423d005735e06babcf004e">&#9670;&#160;</a></span>ScratchView <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -182,6 +181,24 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 <b>Initial value:</b><div class="fragment"><div class="line"> Kokkos::View&lt;<a class="code hl_typedef" href="#aade88235d0802383f297c1de07fdfe90">float_type</a>*,</div>
 <div class="line">                     TeamPolicy::execution_space::scratch_memory_space&gt;</div>
 <div class="ttc" id="astructContributionFunctor_html_aade88235d0802383f297c1de07fdfe90"><div class="ttname"><a href="#aade88235d0802383f297c1de07fdfe90">ContributionFunctor::float_type</a></div><div class="ttdeci">float float_type</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:32</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a010a7c6c95423d005735e06babcf004e" name="a010a7c6c95423d005735e06babcf004e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a010a7c6c95423d005735e06babcf004e">&#9670;&#160;</a></span>ScratchView <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structContributionFunctor.html">ContributionFunctor</a>&lt; M &gt;::ScratchView</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line"> Kokkos::View&lt;<a class="code hl_typedef" href="#aade88235d0802383f297c1de07fdfe90">float_type</a>*,</div>
+<div class="line">                     TeamPolicy::execution_space::scratch_memory_space&gt;</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -370,7 +387,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_af67be8fc4cddd1a36b2862e9d4ce7b68_icgraph.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_af67be8fc4cddd1a36b2862e9d4ce7b68_icgraph.svg" width="514" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -406,7 +423,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_ad0c03d2b5ff189633abab20f02805e15_cgraph.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_ad0c03d2b5ff189633abab20f02805e15_cgraph.svg" width="518" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -504,7 +521,7 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_a17f19d2b6637bb74b64784c68202d066_cgraph.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_a17f19d2b6637bb74b64784c68202d066_cgraph.svg" width="518" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -635,56 +652,8 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 
 </div>
 </div>
-<a id="ad0b0730f8e8a33a842508153d15d3c02" name="ad0b0730f8e8a33a842508153d15d3c02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad0b0730f8e8a33a842508153d15d3c02">&#9670;&#160;</a></span>update_block()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div>
-<div class="memtemplate">
-template&lt;typename Tag&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">KOKKOS_INLINE_FUNCTION void <a class="el" href="structContributionFunctor.html">ContributionFunctor</a>&lt; M &gt;::update_block </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="#a0ab57bf02382235f5e0d8c872e7659ba">TeamMember</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>team</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>p0</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>upper_bound</em></span>&#160;) const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_ad0b0730f8e8a33a842508153d15d3c02_cgraph.svg" width="514" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_ad0b0730f8e8a33a842508153d15d3c02_icgraph.svg" width="330" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
-</div>
-
-</div>
-</div>
-<a id="afe42c9a498c95e04a8a1620f548df161" name="afe42c9a498c95e04a8a1620f548df161"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe42c9a498c95e04a8a1620f548df161">&#9670;&#160;</a></span>update_particle()</h2>
+<a id="a9dd5559eb56d94f2ee3709dfb1cb52f3" name="a9dd5559eb56d94f2ee3709dfb1cb52f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dd5559eb56d94f2ee3709dfb1cb52f3">&#9670;&#160;</a></span>update_particle()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -697,6 +666,11 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
         <tr>
           <td class="memname">KOKKOS_FORCEINLINE_FUNCTION void <a class="el" href="structContributionFunctor.html">ContributionFunctor</a>&lt; M &gt;::update_particle </td>
           <td>(</td>
+          <td class="paramtype">const typename M::SelfContribs &amp;</td>          <td class="paramname"><span class="paramname"><em>contribs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const std::size_t</td>          <td class="paramname"><span class="paramname"><em>flatten_index</em></span>, </td>
         </tr>
         <tr>
@@ -714,12 +688,12 @@ template&lt;<a class="el" href="conceptModelType.html">ModelType</a> M&gt; </div
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_afe42c9a498c95e04a8a1620f548df161_cgraph.svg" width="330" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_a9dd5559eb56d94f2ee3709dfb1cb52f3_cgraph.svg" width="330" height="50"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_afe42c9a498c95e04a8a1620f548df161_icgraph.svg" width="514" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="structContributionFunctor_a9dd5559eb56d94f2ee3709dfb1cb52f3_icgraph.svg" width="330" height="112"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>

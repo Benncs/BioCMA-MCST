@@ -1,4 +1,4 @@
-<map id="ContributionFunctor::update_block" name="ContributionFunctor::update_block">
+<map id="ContributionFunctor::update_particle" name="ContributionFunctor::update_particle">
 <area shape="rect" id="Node000001" title=" " alt="" coords="189,37,324,76"/>
 <area shape="rect" id="Node000002" href="$structContributionFunctor.html#ad0c03d2b5ff189633abab20f02805e15" title=" " alt="" coords="5,5,141,44"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,45,140,39,141,34,174,40"/>

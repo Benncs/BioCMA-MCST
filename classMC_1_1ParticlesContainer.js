@@ -31,7 +31,6 @@ var classMC_1_1ParticlesContainer =
     [ "buffer_index", "classMC_1_1ParticlesContainer.html#a4f96ea2b382665e1f5d7d2fcae915424", null ],
     [ "buffer_model", "classMC_1_1ParticlesContainer.html#a9d347f73227fb358d6e5be5e98770c1a", null ],
     [ "buffer_position", "classMC_1_1ParticlesContainer.html#aa90d0178c200214e2ecf3f4e5ef2196d", null ],
-    [ "contribs", "classMC_1_1ParticlesContainer.html#a208eb3dca279e4dfa4f358a1fb3d5dc9", null ],
     [ "inactive_counter", "classMC_1_1ParticlesContainer.html#ab287b63249c0feaf15a20d26bfebc647", null ],
     [ "kernel_options", "classMC_1_1ParticlesContainer.html#a4be567ebb26d7228955af28e501c6b84", null ],
     [ "model", "classMC_1_1ParticlesContainer.html#a2b64b07b72efe145ffc2c9ef491b2297", null ],

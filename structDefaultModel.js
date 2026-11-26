@@ -3,7 +3,7 @@ var structDefaultModel =
     [ "Config", "structDefaultModel.html#ad813594c4c826e562ef3cd02a617e1c4", null ],
     [ "FloatType", "structDefaultModel.html#a1a4f501ce356216bcf48e2a3e0ac4d4a", null ],
     [ "Self", "structDefaultModel.html#a5dc249b0a48315687d93955c707a75c1", null ],
-    [ "SelfContribs", "structDefaultModel.html#af0910c8d7272fa1de9ca868c03f69397", null ],
+    [ "SelfContribs", "structDefaultModel.html#a241efe6e65790362ac1743a59c431598", null ],
     [ "SelfParticle", "structDefaultModel.html#aabe828b7f5c62566cab630af8d7d318b", null ],
     [ "uniform_weight", "structDefaultModel.html#a953cb302038dc4793a136f7fa515e9ce", null ],
     [ "particle_var", "structDefaultModel.html#ab3f2cdadb12c73b86d895d60cc36e465", [

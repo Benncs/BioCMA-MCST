@@ -1,7 +1,5 @@
 var NAVTREEINDEX9 =
 {
-"structMC_1_1Impl_1_1FirstTouchFunctor.html#ae9136ccad799852b50963bea12ff0ce7":[4,0,7,1,0,1],
-"structMC_1_1LeavingFlow.html":[2,0,10,6],
 "structMC_1_1LeavingFlow.html":[4,0,7,6],
 "structMC_1_1LeavingFlow.html#a0a75412ec8fd8ac9ea9c73d1ec67f9fb":[2,0,10,6,2],
 "structMC_1_1LeavingFlow.html#a0a75412ec8fd8ac9ea9c73d1ec67f9fb":[4,0,7,6,2],
@@ -249,5 +247,7 @@ var NAVTREEINDEX9 =
 "structModels_1_1Acetate.html#a947cfab603cf7ba4486699523b9382fa":[2,0,12,4,20],
 "structModels_1_1Acetate.html#a947cfab603cf7ba4486699523b9382fa":[2,0,12,4,21],
 "structModels_1_1Acetate.html#a947cfab603cf7ba4486699523b9382fa":[4,0,9,0,20],
-"structModels_1_1Acetate.html#a947cfab603cf7ba4486699523b9382fa":[4,0,9,0,21]
+"structModels_1_1Acetate.html#a947cfab603cf7ba4486699523b9382fa":[4,0,9,0,21],
+"structModels_1_1Acetate.html#a947cfab603cf7ba4486699523b9382faa0c940eddd5b93fc417947698f9a5c34d":[2,0,12,4,20,2],
+"structModels_1_1Acetate.html#a947cfab603cf7ba4486699523b9382faa0c940eddd5b93fc417947698f9a5c34d":[2,0,12,4,20,7]
 };
