@@ -223,7 +223,7 @@ make_params(double biomass_initial_concentration,
             uint32_t number_exported_result,
             int save)
 {
-  const auto f_uniform_init = f_false;
+  const auto f_uniform_init = f_true;//f_false;
   const auto f_reaction = f_true;
   const auto n_thread = 1; // TODO Remove
   return { biomass_initial_concentration,

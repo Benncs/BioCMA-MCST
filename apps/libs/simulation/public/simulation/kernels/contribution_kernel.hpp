@@ -223,6 +223,9 @@ template <ModelType M> struct ContributionFunctor
         [&](const std::size_t tid)
         {
           auto access = m_contribution_scatter.access();
+          // Neighbour threads start at a different species: threads in the
+          // same compartment hit different addresses at the same time
+          const int first_species = static_cast<int>(tid % M::n_c);
           for (std::size_t k = 0; k < m; ++k)
           {
             const std::size_t base = tid + k * p; // stride p
@@ -240,8 +243,13 @@ template <ModelType M> struct ContributionFunctor
             const auto pos = positions(flat_index);
             Kokkos::parallel_for(
                 Kokkos::ThreadVectorRange(team, 0, M::n_c),
-                [&](const int j)
-                { access(j, pos) += weight * contribs(flat_index, j); });
+                [&](const int i)
+                {
+                  const int j = (i + first_species < M::n_c)
+                                    ? i + first_species
+                                    : i + first_species - M::n_c;
+                  access(j, pos) += weight * contribs(flat_index, j);
+                });
           }
         });
   }
