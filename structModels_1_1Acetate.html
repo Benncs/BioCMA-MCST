@@ -261,9 +261,6 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a7e6d4aad21fe26e842163e61c7abff8e" id="r_a7e6d4aad21fe26e842163e61c7abff8e"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e6d4aad21fe26e842163e61c7abff8e">l_min_m</a> = <a class="el" href="#a2b761b05bb73e9b1309ce0221427eba0">l_max_m</a> / 2.</td></tr>
 <tr class="memitem:ae425e370d5451c893268a855beaf528e" id="r_ae425e370d5451c893268a855beaf528e"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae425e370d5451c893268a855beaf528e">d_m</a> = 0.6e-6</td></tr>
 <tr class="memitem:ab08977ab19f00f9a6c4d0c2dd0fb0512" id="r_ab08977ab19f00f9a6c4d0c2dd0fb0512"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab08977ab19f00f9a6c4d0c2dd0fb0512">lin_density</a> = <a class="el" href="namespaceModels.html#ae070357c43b64436202145d812e1e05c">c_linear_density</a>(static_cast&lt;<a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a>&gt;(1000), <a class="el" href="#ae425e370d5451c893268a855beaf528e">d_m</a>)</td></tr>
-<tr class="memitem:a97a4b9006286bc476d07240697358318" id="r_a97a4b9006286bc476d07240697358318"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97a4b9006286bc476d07240697358318">mass_scale</a> = 1e15F</td></tr>
-<tr class="memdesc:a97a4b9006286bc476d07240697358318"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> affinity constants [kg/m^3].  <br /></td></tr>
-<tr class="memitem:a67d6a8b681a0f1f0e92f7999e122d7b5" id="r_a67d6a8b681a0f1f0e92f7999e122d7b5"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67d6a8b681a0f1f0e92f7999e122d7b5">lin_density_pg</a> = <a class="el" href="#ab08977ab19f00f9a6c4d0c2dd0fb0512">lin_density</a> * <a class="el" href="#a97a4b9006286bc476d07240697358318">mass_scale</a></td></tr>
 <tr class="memitem:a11a0a31650904ac9654cd5113579192e" id="r_a11a0a31650904ac9654cd5113579192e"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11a0a31650904ac9654cd5113579192e">k_s</a> = 1e-3</td></tr>
 <tr class="memdesc:a11a0a31650904ac9654cd5113579192e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> affinity constants [kg/m^3].  <br /></td></tr>
 <tr class="memitem:a7fcadd4493f129db3966385389591119" id="r_a7fcadd4493f129db3966385389591119"><td class="memItemLeft" align="right" valign="top">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fcadd4493f129db3966385389591119">k_o</a> = 1e-5</td></tr>
@@ -1776,36 +1773,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a67d6a8b681a0f1f0e92f7999e122d7b5" name="a67d6a8b681a0f1f0e92f7999e122d7b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67d6a8b681a0f1f0e92f7999e122d7b5">&#9670;&#160;</a></span>lin_density_pg</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> Models::Acetate::lin_density_pg = <a class="el" href="#ab08977ab19f00f9a6c4d0c2dd0fb0512">lin_density</a> * <a class="el" href="#a97a4b9006286bc476d07240697358318">mass_scale</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a97a4b9006286bc476d07240697358318" name="a97a4b9006286bc476d07240697358318"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a97a4b9006286bc476d07240697358318">&#9670;&#160;</a></span>mass_scale</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">MODEL_CONSTANT <a class="el" href="#aae57334c5743749c120e532e0fb49568">FloatType</a> Models::Acetate::mass_scale = 1e15F</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p><a class="el" href="structModels_1_1Monod.html" title="Simplified Monod model for glucose consumption and biomass growth.">Monod</a> affinity constants [kg/m^3]. </p>
-
-</div>
-</div>
 <a id="abd8c7605f3c0e20c396753147a06c950" name="abd8c7605f3c0e20c396753147a06c950"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abd8c7605f3c0e20c396753147a06c950">&#9670;&#160;</a></span>n_c</h2>
 
@@ -1921,18 +1888,18 @@ Here is the caller graph for this function:</div>
 <div class="line">        { { <a class="code hl_variable" href="#adc42079c2f4d638fd0a4df17313a3f33">y_co2_go</a>, <a class="code hl_variable" href="#a63accbba2a80c712ef2a4fe00a2db863">y_co2_fe</a>, <a class="code hl_variable" href="#ae8bc7f6d71e6e79870c8039276ea82f7">y_co2_ov</a>, <a class="code hl_variable" href="#a8d7699f0863a852a9d91449c60f662b5">y_co2_ao</a> } }, </div>
 <div class="line">        { { <a class="code hl_variable" href="#a275381a42478535b72fbebc51df25793">y_x_go</a>, <a class="code hl_variable" href="#a8b2e2373cfda25748dd4cecee78729bc">y_x_fe</a>, <a class="code hl_variable" href="#a7b067a80e98de343643cbec8002ecfb5">y_x_ov</a>, <a class="code hl_variable" href="#affe613615af6cc37fb405fab4aba980d">y_x_ao</a> } },         </div>
 <div class="line">    } }</div>
-<div class="ttc" id="astructModels_1_1Acetate_html_a275381a42478535b72fbebc51df25793"><div class="ttname"><a href="#a275381a42478535b72fbebc51df25793">Models::Acetate::y_x_go</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_go</div><div class="ttdoc">gX/gS</div><div class="ttdef"><b>Definition</b> acetate.hpp:189</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_a63accbba2a80c712ef2a4fe00a2db863"><div class="ttname"><a href="#a63accbba2a80c712ef2a4fe00a2db863">Models::Acetate::y_co2_fe</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_co2_fe</div><div class="ttdoc">gCO2/gS</div><div class="ttdef"><b>Definition</b> acetate.hpp:225</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_a7b067a80e98de343643cbec8002ecfb5"><div class="ttname"><a href="#a7b067a80e98de343643cbec8002ecfb5">Models::Acetate::y_x_ov</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_ov</div><div class="ttdoc">overflow does not grow</div><div class="ttdef"><b>Definition</b> acetate.hpp:191</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_a8b1ec6b2ed301e3348e1b25b99b1a724"><div class="ttname"><a href="#a8b1ec6b2ed301e3348e1b25b99b1a724">Models::Acetate::y_o2_ao</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_o2_ao</div><div class="ttdoc">gO2/gAc</div><div class="ttdef"><b>Definition</b> acetate.hpp:200</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_a8b2e2373cfda25748dd4cecee78729bc"><div class="ttname"><a href="#a8b2e2373cfda25748dd4cecee78729bc">Models::Acetate::y_x_fe</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_fe</div><div class="ttdoc">gX/gS</div><div class="ttdef"><b>Definition</b> acetate.hpp:190</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_a8d7699f0863a852a9d91449c60f662b5"><div class="ttname"><a href="#a8d7699f0863a852a9d91449c60f662b5">Models::Acetate::y_co2_ao</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_co2_ao</div><div class="ttdoc">gCO2/gAc</div><div class="ttdef"><b>Definition</b> acetate.hpp:221</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_ad0b6cfc4f5a78aebd208c0562704c05c"><div class="ttname"><a href="#ad0b6cfc4f5a78aebd208c0562704c05c">Models::Acetate::y_o2_go</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_o2_go</div><div class="ttdoc">gO2/gS, 0.384</div><div class="ttdef"><b>Definition</b> acetate.hpp:195</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_adc42079c2f4d638fd0a4df17313a3f33"><div class="ttname"><a href="#adc42079c2f4d638fd0a4df17313a3f33">Models::Acetate::y_co2_go</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_co2_go</div><div class="ttdoc">gCO2/gS</div><div class="ttdef"><b>Definition</b> acetate.hpp:217</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_ae8bc7f6d71e6e79870c8039276ea82f7"><div class="ttname"><a href="#ae8bc7f6d71e6e79870c8039276ea82f7">Models::Acetate::y_co2_ov</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_co2_ov</div><div class="ttdoc">gCO2/gS (no growth: y_x = 0)</div><div class="ttdef"><b>Definition</b> acetate.hpp:229</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_af27e1da2c7f7e9df63094f687b9b55b9"><div class="ttname"><a href="#af27e1da2c7f7e9df63094f687b9b55b9">Models::Acetate::y_ac_fe</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_ac_fe</div><div class="ttdoc">gAc/gS produced by fermentation, 0.808</div><div class="ttdef"><b>Definition</b> acetate.hpp:206</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_afa2970272f6b09ba295c5212781301a1"><div class="ttname"><a href="#afa2970272f6b09ba295c5212781301a1">Models::Acetate::y_ac_ov</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_ac_ov</div><div class="ttdoc">gAc/gS produced by overflow. C6H12O6 -&gt; 3 C2H4O2 balances as is, so 1</div><div class="ttdef"><b>Definition</b> acetate.hpp:211</div></div>
-<div class="ttc" id="astructModels_1_1Acetate_html_affe613615af6cc37fb405fab4aba980d"><div class="ttname"><a href="#affe613615af6cc37fb405fab4aba980d">Models::Acetate::y_x_ao</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_ao</div><div class="ttdoc">gX/gAc</div><div class="ttdef"><b>Definition</b> acetate.hpp:192</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_a275381a42478535b72fbebc51df25793"><div class="ttname"><a href="#a275381a42478535b72fbebc51df25793">Models::Acetate::y_x_go</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_go</div><div class="ttdoc">gX/gS</div><div class="ttdef"><b>Definition</b> acetate.hpp:185</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_a63accbba2a80c712ef2a4fe00a2db863"><div class="ttname"><a href="#a63accbba2a80c712ef2a4fe00a2db863">Models::Acetate::y_co2_fe</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_co2_fe</div><div class="ttdoc">gCO2/gS</div><div class="ttdef"><b>Definition</b> acetate.hpp:221</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_a7b067a80e98de343643cbec8002ecfb5"><div class="ttname"><a href="#a7b067a80e98de343643cbec8002ecfb5">Models::Acetate::y_x_ov</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_ov</div><div class="ttdoc">overflow does not grow</div><div class="ttdef"><b>Definition</b> acetate.hpp:187</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_a8b1ec6b2ed301e3348e1b25b99b1a724"><div class="ttname"><a href="#a8b1ec6b2ed301e3348e1b25b99b1a724">Models::Acetate::y_o2_ao</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_o2_ao</div><div class="ttdoc">gO2/gAc</div><div class="ttdef"><b>Definition</b> acetate.hpp:196</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_a8b2e2373cfda25748dd4cecee78729bc"><div class="ttname"><a href="#a8b2e2373cfda25748dd4cecee78729bc">Models::Acetate::y_x_fe</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_fe</div><div class="ttdoc">gX/gS</div><div class="ttdef"><b>Definition</b> acetate.hpp:186</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_a8d7699f0863a852a9d91449c60f662b5"><div class="ttname"><a href="#a8d7699f0863a852a9d91449c60f662b5">Models::Acetate::y_co2_ao</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_co2_ao</div><div class="ttdoc">gCO2/gAc</div><div class="ttdef"><b>Definition</b> acetate.hpp:217</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_ad0b6cfc4f5a78aebd208c0562704c05c"><div class="ttname"><a href="#ad0b6cfc4f5a78aebd208c0562704c05c">Models::Acetate::y_o2_go</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_o2_go</div><div class="ttdoc">gO2/gS, 0.384</div><div class="ttdef"><b>Definition</b> acetate.hpp:191</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_adc42079c2f4d638fd0a4df17313a3f33"><div class="ttname"><a href="#adc42079c2f4d638fd0a4df17313a3f33">Models::Acetate::y_co2_go</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_co2_go</div><div class="ttdoc">gCO2/gS</div><div class="ttdef"><b>Definition</b> acetate.hpp:213</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_ae8bc7f6d71e6e79870c8039276ea82f7"><div class="ttname"><a href="#ae8bc7f6d71e6e79870c8039276ea82f7">Models::Acetate::y_co2_ov</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_co2_ov</div><div class="ttdoc">gCO2/gS (no growth: y_x = 0)</div><div class="ttdef"><b>Definition</b> acetate.hpp:225</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_af27e1da2c7f7e9df63094f687b9b55b9"><div class="ttname"><a href="#af27e1da2c7f7e9df63094f687b9b55b9">Models::Acetate::y_ac_fe</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_ac_fe</div><div class="ttdoc">gAc/gS produced by fermentation, 0.808</div><div class="ttdef"><b>Definition</b> acetate.hpp:202</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_afa2970272f6b09ba295c5212781301a1"><div class="ttname"><a href="#afa2970272f6b09ba295c5212781301a1">Models::Acetate::y_ac_ov</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_ac_ov</div><div class="ttdoc">gAc/gS produced by overflow. C6H12O6 -&gt; 3 C2H4O2 balances as is, so 1</div><div class="ttdef"><b>Definition</b> acetate.hpp:207</div></div>
+<div class="ttc" id="astructModels_1_1Acetate_html_affe613615af6cc37fb405fab4aba980d"><div class="ttname"><a href="#affe613615af6cc37fb405fab4aba980d">Models::Acetate::y_x_ao</a></div><div class="ttdeci">MODEL_CONSTANT FloatType y_x_ao</div><div class="ttdoc">gX/gAc</div><div class="ttdef"><b>Definition</b> acetate.hpp:188</div></div>
 </div><!-- fragment --><p>Stoichiometric matrix [g/g of substrate], species x reactions. Columns follow <a class="el" href="#a947cfab603cf7ba4486699523b9382fa" title="Reaction indices.">reaction_index</a>, rows follow <a class="el" href="#a0641bdb73e6a8d4100356e683d5183fb" title="Species indices, O2 has to stay at index 1 (gas/liquid transfer)">species_index</a> then X. Negative = consumed, positive = produced. </p>
 
 </div>

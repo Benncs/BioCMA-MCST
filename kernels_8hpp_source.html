@@ -390,48 +390,46 @@ $(function(){initNavTree('kernels_8hpp_source.html','',''); });
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>                    <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#a1fd301b1bc734575d095140126ae642d">model_space</a>, league_size, Kokkos::AUTO(), Kokkos::AUTO())</div>
 <div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>                    .set_scratch_size(</div>
 <div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>                        0,</div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>                        Kokkos::PerTeam(</div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>                            <span class="keyword">sizeof</span>(</div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>                                <span class="keyword">typename</span> <a class="code hl_typedef" href="structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90">ContributionFunctor&lt;Model&gt;::float_type</a>)</div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>                            * Model::n_c),</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>                        Kokkos::PerThread(<span class="keyword">sizeof</span>(<span class="keyword">typename</span> Model::FloatType)</div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>                                          * Model::n_c));</div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>          Kokkos::parallel_for(</div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>              <span class="stringliteral">&quot;cycle_model_contribs_0d&quot;</span>, policy_contribs, <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeaa14e61092684f6cfed1cf919f540cf">contribution_kernel</a>);</div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>        }</div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span> </div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>        <span class="comment">// buffer_index is read on the host</span></div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>        <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#a1fd301b1bc734575d095140126ae642d">model_space</a>.fence();</div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; particles = <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeaa14e61092684f6cfed1cf919f540cf">contribution_kernel</a>.m_particles;</div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>        <span class="keyword">const</span> std::size_t n_division = particles.n_division();</div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>        <span class="keywordflow">if</span> (n_division != 0)</div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>        {</div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>          <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeaa14e61092684f6cfed1cf919f540cf">contribution_kernel</a>.n_division = n_division;</div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>          <span class="keyword">const</span> <span class="keyword">auto</span> policy_division = Kokkos::TeamPolicy&lt;</div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>              <span class="keyword">typename</span> <a class="code hl_struct" href="structContributionFunctor_1_1TagDivision.html">ContributionFunctor&lt;Model&gt;::TagDivision</a>&gt;(</div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>              <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#a1fd301b1bc734575d095140126ae642d">model_space</a>,</div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>              <a class="code hl_function" href="namespaceCommon.html#a618180f8964b0ffef461c9ff2f44d295">Common::c_league_size</a>(n_division,</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>                                    <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeaa14e61092684f6cfed1cf919f540cf">contribution_kernel</a>.m_particle_per_team),</div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>              Kokkos::AUTO(),</div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>              Kokkos::AUTO());</div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>          Kokkos::parallel_for(</div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>              <span class="stringliteral">&quot;cycle_model_division&quot;</span>, policy_division, <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeaa14e61092684f6cfed1cf919f540cf">contribution_kernel</a>);</div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>        }</div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span> </div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>        <span class="keyword">const</span> std::size_t n_overflow = particles.n_division_overflow();</div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>        <span class="keywordflow">if</span> (n_overflow != 0) [[unlikely]]</div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>        {</div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>          Kokkos::printf(<span class="stringliteral">&quot;[KERNEL] Division Overflow x%zu\r\n&quot;</span>, n_overflow);</div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>        }</div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>      }</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>                        Kokkos::PerThread((<span class="keyword">sizeof</span>(<span class="keyword">typename</span> <a class="code hl_struct" href="structContributionFunctor.html">ContributionFunctor</a>&lt;</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>                                                  Model&gt;::float_type)</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>                                           + <span class="keyword">sizeof</span>(<span class="keyword">typename</span> Model::FloatType))</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>                                          * Model::n_c));</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>          Kokkos::parallel_for(</div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>              <span class="stringliteral">&quot;cycle_model_contribs_0d&quot;</span>, policy_contribs, <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeaa14e61092684f6cfed1cf919f540cf">contribution_kernel</a>);</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>        }</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span> </div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>        <span class="comment">// buffer_index is read on the host</span></div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>        <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#a1fd301b1bc734575d095140126ae642d">model_space</a>.fence();</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; particles = <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeaa14e61092684f6cfed1cf919f540cf">contribution_kernel</a>.m_particles;</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>        <span class="keyword">const</span> std::size_t n_division = particles.n_division();</div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>        <span class="keywordflow">if</span> (n_division != 0)</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>        {</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>          <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeaa14e61092684f6cfed1cf919f540cf">contribution_kernel</a>.n_division = n_division;</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>          <span class="keyword">const</span> <span class="keyword">auto</span> policy_division = Kokkos::TeamPolicy&lt;</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>              <span class="keyword">typename</span> <a class="code hl_struct" href="structContributionFunctor_1_1TagDivision.html">ContributionFunctor&lt;Model&gt;::TagDivision</a>&gt;(</div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>              <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#a1fd301b1bc734575d095140126ae642d">model_space</a>,</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>              <a class="code hl_function" href="namespaceCommon.html#a618180f8964b0ffef461c9ff2f44d295">Common::c_league_size</a>(n_division,</div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>                                    <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeaa14e61092684f6cfed1cf919f540cf">contribution_kernel</a>.m_particle_per_team),</div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>              Kokkos::AUTO(),</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>              Kokkos::AUTO());</div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>          Kokkos::parallel_for(</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>              <span class="stringliteral">&quot;cycle_model_division&quot;</span>, policy_division, <a class="code hl_variable" href="structSimulation_1_1KernelInline_1_1CycleFunctors.html#aeaa14e61092684f6cfed1cf919f540cf">contribution_kernel</a>);</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>        }</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span> </div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>        <span class="keyword">const</span> std::size_t n_overflow = particles.n_division_overflow();</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>        <span class="keywordflow">if</span> (n_overflow != 0) [[unlikely]]</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>        {</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>          Kokkos::printf(<span class="stringliteral">&quot;[KERNEL] Division Overflow x%zu\r\n&quot;</span>, n_overflow);</div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>        }</div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>      }</div>
 </div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>    }</div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>    }</div>
 </div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>  };</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>  };</div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span> </div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>} <span class="comment">// namespace Simulation::KernelInline</span></div>
 <div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span> </div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>} <span class="comment">// namespace Simulation::KernelInline</span></div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassMC_1_1ParticlesContainer_html"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html">MC::ParticlesContainer</a></div><div class="ttdoc">Main owning object for Monte-Carlo particles.</div><div class="ttdef"><b>Definition</b> particles_container.hpp:59</div></div>
 <div class="ttc" id="aclassMC_1_1ParticlesContainer_html_a11609ea9df23b4c0f887160c88a42cd8"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html#a11609ea9df23b4c0f887160c88a42cd8">MC::ParticlesContainer::t_ref</a></div><div class="ttdeci">ParticleRefTime t_ref</div><div class="ttdef"><b>Definition</b> particles_container.hpp:89</div></div>
 <div class="ttc" id="aclassMC_1_1ParticlesContainer_html_a30b264e87ae019596f9791f2fc60d52f"><div class="ttname"><a href="classMC_1_1ParticlesContainer.html#a30b264e87ae019596f9791f2fc60d52f">MC::ParticlesContainer::n_particles</a></div><div class="ttdeci">KOKKOS_INLINE_FUNCTION std::size_t n_particles() const</div><div class="ttdoc">Gets the number of particles in the container.</div><div class="ttdef"><b>Definition</b> particles_container.hpp:466</div></div>
@@ -453,7 +451,6 @@ $(function(){initNavTree('kernels_8hpp_source.html','',''); });
 <div class="ttc" id="anamespaceSimulation_html_a7e205e1192f8faf89b55c1d6525413f8"><div class="ttname"><a href="namespaceSimulation.html#a7e205e1192f8faf89b55c1d6525413f8">Simulation::ProbeAutogeneratedBuffer</a></div><div class="ttdeci">Probes&lt; AutoGenerated::probe_buffer_size &gt; ProbeAutogeneratedBuffer</div><div class="ttdef"><b>Definition</b> probe.hpp:150</div></div>
 <div class="ttc" id="astructContributionFunctor_1_1TagDivision_html"><div class="ttname"><a href="structContributionFunctor_1_1TagDivision.html">ContributionFunctor::TagDivision</a></div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:27</div></div>
 <div class="ttc" id="astructContributionFunctor_html"><div class="ttname"><a href="structContributionFunctor.html">ContributionFunctor</a></div><div class="ttdoc">Model update and contributions and divison TODO: rename.</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:18</div></div>
-<div class="ttc" id="astructContributionFunctor_html_aade88235d0802383f297c1de07fdfe90"><div class="ttname"><a href="structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90">ContributionFunctor::float_type</a></div><div class="ttdeci">float float_type</div><div class="ttdef"><b>Definition</b> contribution_kernel.hpp:32</div></div>
 <div class="ttc" id="astructKernelDispatchOptions_html"><div class="ttname"><a href="structKernelDispatchOptions.html">KernelDispatchOptions</a></div><div class="ttdef"><b>Definition</b> execinfo.hpp:13</div></div>
 <div class="ttc" id="astructMC_1_1DomainState_html"><div class="ttname"><a href="structMC_1_1DomainState.html">MC::DomainState</a></div><div class="ttdoc">Structure to store information about domain needed during MC cycle data is likely to change between e...</div><div class="ttdef"><b>Definition</b> domain.hpp:29</div></div>
 <div class="ttc" id="astructMC_1_1EventContainer_html"><div class="ttname"><a href="structMC_1_1EventContainer.html">MC::EventContainer</a></div><div class="ttdoc">Use to count events that occurs during Monte-Carlo processing cycles.</div><div class="ttdef"><b>Definition</b> events.hpp:168</div></div>

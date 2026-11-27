@@ -5,7 +5,7 @@ var structContributionFunctor =
     [ "TagDivision", "structContributionFunctor_1_1TagDivision.html", null ],
     [ "float_type", "structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90", null ],
     [ "float_type", "structContributionFunctor.html#aade88235d0802383f297c1de07fdfe90", null ],
-    [ "ScratchView", "structContributionFunctor.html#a010a7c6c95423d005735e06babcf004e", null ],
+    [ "ScratchView", "structContributionFunctor.html#ab59594df9988e6f2b4d2cb7a30b3def2", null ],
     [ "ScratchView", "structContributionFunctor.html#a010a7c6c95423d005735e06babcf004e", null ],
     [ "TeamMember", "structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba", null ],
     [ "TeamMember", "structContributionFunctor.html#a0ab57bf02382235f5e0d8c872e7659ba", null ],
