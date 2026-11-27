@@ -175,10 +175,6 @@ namespace Models
         = c_linear_density(static_cast<FloatType>(1000), d_m); // kg/m
 
     /// Monod affinity constants [kg/m^3]
-    // Fluxes of one cell are ~1e-19 kg/s: computed in pg (1e-15 kg) so that
-    // products with small concentrations stay normal floats
-    MODEL_CONSTANT FloatType mass_scale = 1e15F; // pg/kg
-    MODEL_CONSTANT FloatType lin_density_pg = lin_density * mass_scale; // pg/m
     MODEL_CONSTANT FloatType k_s = 1e-3;
     /// Anane et. al 2017 (Biochem. Eng. J).
     MODEL_CONSTANT FloatType k_o = 1e-5;
@@ -409,12 +405,12 @@ namespace Models
                   const FloatType length,
                   const FloatType d_t)
   {
-    const FloatType phi_s_max_p = a_max * lin_density_pg * inv_y_x_go;
+    const FloatType phi_s_max_p = a_max * lin_density * inv_y_x_go;
     const FloatType phi_o2_max_p = f_o2_max * y_o2_go * phi_s_max_p;
     const FloatType phi_ac_max_p = f_ac_max * phi_s_max_p;
 
     const FloatType share
-        = (length * lin_density_pg) / ((f_pos * x_c_max * d_t) + d_t_floor);
+        = (length * lin_density) / ((f_pos * x_c_max * d_t) + d_t_floor);
 
     // Monod factors, one division for the three
     const auto [m_s, m_o2, m_ac] = monod_batch(c_s, k_s, c_o2, k_o, c_ac, k_a);
@@ -509,7 +505,7 @@ namespace Models
                  d_t);
 
     // Growth capacity of the individual, in ]0, a_max] by division()
-    const FloatType nu_p = GET_PROPERTY(particle_var::a_p) * lin_density_pg;
+    const FloatType nu_p = GET_PROPERTY(particle_var::a_p) * lin_density;
 
     const reaction_rates r = metabolism(phi, nu_p);
 
@@ -517,7 +513,7 @@ namespace Models
     const species_rates d = apply_stoichiometry<stoichiometry>(r);
 
     constexpr FloatType inv_lin_density
-        = static_cast<FloatType>(1) / lin_density_pg;
+        = static_cast<FloatType>(1) / lin_density;
     const FloatType a_e = d[X] * inv_lin_density;
 
     GET_PROPERTY(particle_var::a_e) = a_e;
@@ -527,16 +523,14 @@ namespace Models
 
     GET_PROPERTY(particle_var::length) += d_t * a_e;
 
-    // Outputs back in kg/s
-    constexpr FloatType inv_mass_scale = static_cast<FloatType>(1) / mass_scale;
-    GET_PROPERTY(particle_var::phi_s) = d[S] * inv_mass_scale;
-    GET_PROPERTY(particle_var::phi_o2) = d[O2] * inv_mass_scale;
-    GET_PROPERTY(particle_var::phi_a) = d[Ac] * inv_mass_scale;
+    GET_PROPERTY(particle_var::phi_s) = d[S];
+    GET_PROPERTY(particle_var::phi_o2) = d[O2];
+    GET_PROPERTY(particle_var::phi_a) = d[Ac];
 
-    GET_CONTRIBS(S) = d[S] * inv_mass_scale;
-    GET_CONTRIBS(O2) = d[O2] * inv_mass_scale;
-    GET_CONTRIBS(Ac) = d[Ac] * inv_mass_scale;
-    GET_CONTRIBS(Co2) = d[Co2] * inv_mass_scale;
+    GET_CONTRIBS(S) = d[S];
+    GET_CONTRIBS(O2) = d[O2];
+    GET_CONTRIBS(Ac) = d[Ac];
+    GET_CONTRIBS(Co2) = d[Co2];
 
     return check_div(GET_PROPERTY(Self::particle_var::length),
                      GET_PROPERTY(Self::particle_var::l_max));

@@ -302,11 +302,9 @@ namespace Simulation::KernelInline
                     model_space, league_size, Kokkos::AUTO(), Kokkos::AUTO())
                     .set_scratch_size(
                         0,
-                        Kokkos::PerTeam(
-                            sizeof(
-                                typename ContributionFunctor<Model>::float_type)
-                            * Model::n_c),
-                        Kokkos::PerThread(sizeof(typename Model::FloatType)
+                        Kokkos::PerThread((sizeof(typename ContributionFunctor<
+                                                  Model>::float_type)
+                                           + sizeof(typename Model::FloatType))
                                           * Model::n_c));
           Kokkos::parallel_for(
               "cycle_model_contribs_0d", policy_contribs, contribution_kernel);

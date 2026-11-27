@@ -31,7 +31,8 @@ template <ModelType M> struct ContributionFunctor
   using TeamMember = TeamPolicy::member_type;
   using float_type = float;
   using ScratchView
-      = Kokkos::View<float_type*,
+      = Kokkos::View<float_type**,
+                     Kokkos::LayoutRight,
                      TeamPolicy::execution_space::scratch_memory_space>;
 
   std::size_t m_particle_per_team;
@@ -139,49 +140,64 @@ template <ModelType M> struct ContributionFunctor
     (void)_tag;
     const std::size_t n_c = M::n_c;
     const std::size_t p0 = team.league_rank() * m_particle_per_team;
+    const std::size_t p = team.team_size();
     const auto upper_bound = team_upper_bound(team);
+    const std::size_t m = (upper_bound + p - 1) / p;
     const auto& status = m_particles.status;
     const typename M::SelfContribs contribs(
         team.thread_scratch(0),
         Kokkos::LayoutStride(m_particles.n_particles(), 0, n_c, 1));
+    const ScratchView sums(team.team_scratch(0), p, n_c);
 
-    ScratchView scratch(team.team_scratch(0), n_c);
-    Kokkos::parallel_for(Kokkos::TeamVectorRange(team, n_c),
-                         [&](const std::size_t j)
-                         { scratch(j) = float_type{ 0 }; });
+    Kokkos::parallel_for(Kokkos::TeamThreadRange(team, 0, p),
+                         [&](const std::size_t tid)
+                         {
+                           for (std::size_t j = 0; j < n_c; ++j)
+                           {
+                             sums(tid, j) = 0;
+                           }
+                           for (std::size_t k = 0; k < m; ++k)
+                           {
+                             const std::size_t base = tid + k * p;
+                             const std::size_t flat_index = p0 + base;
+                             if (base >= upper_bound)
+                             {
+                               break;
+                             }
+                             if (status(flat_index) != MC::Status::Idle)
+                             {
+                               continue;
+                             }
+                             // Position is always 0 in 0D
+                             update_particle(contribs, flat_index, 0);
+                             const auto weight
+                                 = m_particles.get_weight(flat_index);
+                             for (std::size_t j = 0; j < n_c; ++j)
+                             {
+                               sums(tid, j) += static_cast<float_type>(
+                                   weight * contribs(flat_index, j));
+                             }
+                           }
+                         });
+
     team.team_barrier();
 
-    Kokkos::parallel_for(
-        Kokkos::TeamThreadRange(team, 0, upper_bound),
-        [&](const std::size_t i)
-        {
-          const std::size_t flatten_index = p0 + i;
-          if (status(flatten_index) != MC::Status::Idle)
-          {
-            return;
-          }
-          // Position is always 0 in 0D
-          update_particle(contribs, flatten_index, 0);
-          const auto weight = m_particles.get_weight(flatten_index);
-          for (std::size_t j = 0; j < n_c; ++j)
-          {
-            Kokkos::atomic_add(
-                &scratch(j),
-                static_cast<float_type>(weight * contribs(flatten_index, j)));
-          }
-        });
+    for (std::size_t j = 0; j < n_c; ++j)
+    {
+      float_type sum = 0;
+      Kokkos::parallel_reduce(
+          Kokkos::TeamThreadRange(team, 0, p),
+          [&](const std::size_t tid, float_type& local_sum)
+          { local_sum += sums(tid, j); },
+          sum);
 
-    team.team_barrier();
-
-    Kokkos::single(Kokkos::PerTeam(team),
-                   [&]()
-                   {
-                     auto access = m_contribution_scatter.access();
-                     for (std::size_t j = 0; j < n_c; ++j)
+      Kokkos::single(Kokkos::PerTeam(team),
+                     [&]()
                      {
-                       access(j, 0) += scratch(j);
-                     }
-                   });
+                       auto access = m_contribution_scatter.access();
+                       access(j, 0) += sum;
+                     });
+    }
   }
 
   KOKKOS_INLINE_FUNCTION
